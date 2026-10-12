@@ -22,9 +22,9 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … primogeniture_scaled` | once a game, a week after the first state takes Primogeniture's farm line (a Primogeniture country's first yearly state pulse) | the engine sums a script-only type on a state modifier scaled by its multiplier (`added` ≈ `expected`) | `added` reads 0.1 (the multiplier is ignored) or 0 (the type isn't summed): Primogeniture's farm births are wrong in every game | Plan B of `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`, Task 9 |
+| `TE_SELF_CHECK … primogeniture_scaled` | once a game: `START` when the first state with a farm share between 0.1 and 0.9 takes Primogeniture's farm line fresh (a Primogeniture country's first yearly state pulse), the verdict a week later | the engine sums a script-only type on a state modifier scaled by its multiplier (`added` ≈ `expected`) | `added` reads 0.1 (the multiplier is ignored) or 0 (the type isn't summed): Primogeniture's farm births are wrong in every game | Plan B of `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`, Task 9 |
 
-No `TE_SELF_CHECK` line at all after a game's first year means no country had Primogeniture; enact it in a test game.
+No `TE_SELF_CHECK` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game.
 
 ## Late Marriage and Birth Spacing (#906)
 

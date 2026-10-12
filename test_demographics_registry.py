@@ -1394,7 +1394,10 @@ class TestPrimogenitureUnderFull(unittest.TestCase):
         for needle in ("NOT = { has_global_variable = te_inh_pr_selfcheck_done }",
                        "NOT = { has_local_variable = te_inh_pr_was }",
                        "value = modifier:state_demog_absorbed_birth_rate_mult",
-                       "trigger_event = { id = te_debug_demog.5 days = 7 }"):
+                       "trigger_event = { id = te_debug_demog.5 days = 7 }",
+                       # the review's I1: near 0 or 1 an unsummed or unscaled line reads like the scaled one
+                       "var:te_inh_agrarian_share > 0.1", "var:te_inh_agrarian_share < 0.9",
+                       "TE_SELF_CHECK START primogeniture_scaled"):
             self.assertIn(needle, start)
 
     def test_the_self_check_expects_the_modifiers_value(self):
@@ -4827,7 +4830,7 @@ class TestConsole(unittest.TestCase):
                          r"state_demog_absorbed_birth_rate_mult = 0\.1\b")
         start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_start")
         self.assertIn("add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }", start)
-        self.assertIn("trigger_event = { id = te_debug_demog.2 days = 1 }", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.2 days = 7 }", start)
         after = _block(console, "te_debug_demog.2")
         self.assertIn("remove_modifier = te_debug_demog_scaled_probe", after)
         values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")

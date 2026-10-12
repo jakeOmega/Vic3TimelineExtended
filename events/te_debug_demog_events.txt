@@ -37,7 +37,7 @@
 #        on-top scales of its last step and its reads (TE_DEMOG_RATES)
 #   o    the engine-scaling probe (Task 9 of the late-marriage plan): a script-only type on
 #        the capital's state modifier at multiplier 0.62 (TE_DEMOG_PROBE), logged before and
-#        a day after by the hidden te_debug_demog.2
+#        a week after by the hidden te_debug_demog.2
 #   q    the owner-change probe (the late-marriage plan, Stop B's I1): one of our states, alone
 #        in its region, given to a neighbour and logged before, in on_state_owner_change and a
 #        day after by the hidden te_debug_demog.4 (TE_DEMOG_PROBE_OWNER). It really changes
@@ -332,7 +332,7 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 	}
 }
 
-# The probe's second half (option o): a day after the add, the state's sum and the probe off again.
+# The probe's second half (option o): a week after the add, the state's sum and the probe off again.
 te_debug_demog.2 = {
 	type = state_event
 	hidden = yes

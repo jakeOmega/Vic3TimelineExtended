@@ -254,7 +254,8 @@ of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
 rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
-and mild starvation. The rest, such as the family-policy laws and the late
+mild starvation, and Primogeniture's larger farm families, which late marriage
+replaces. The rest, such as the family-policy laws and the late
 medical technologies, it applies at its own rate, as it does an effect on the
 whole state, such as pollution, devastation or a decree. Either way, a new law
 or technology takes effect at the state's next census step, up to a year later.
