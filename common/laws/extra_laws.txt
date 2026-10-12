@@ -2740,6 +2740,8 @@ law_communal_child_rearing = {
 
 	unlocking_technologies = { anarchism }
 
+	# Births -20%, which a State Youth Center's Communal Child-Rearing method (+20%) cancels where one stands
+	# (owner, 2026-10-12: fair for so radical a law). The law's description names the offset.
 	modifier = {
 		state_demog_ontop_birth_rate_mult = -0.2
 		state_working_adult_ratio_add = 0.1
