@@ -719,6 +719,9 @@ def engine_curves(o, d):
 #   deaths: + its class's state_<type>_mortality_mult, its workplace's building_<type>_ and
 #           building_group_<group>[_<type>]_mortality_mult, working_conditions by workplace
 #           group, the starvation penalties, and non-homeland mortality.
+# Both starvation penalties apply x the pop's starvation value, clamp((0.4 - food security) x 2.5, 0, 1): mild's
+# up to 0.5, severe's 0.5 to 1 (the famine probe, 2026-10-11; the walk took severe flat until then, and its famine
+# deaths ran 1.5-1.7x the engine's). The walk reads both in 0.05 steps of food security.
 # Only registered modifier types are read: modifiers.log lists ~1,100 mortality keys, but an
 # unregistered one cannot be set by anything and reads as 'none' on every pop. A registered one
 # that nothing sets reads 0 (the first launch: no 'Value of wrong type' at the game-start walk).
@@ -790,32 +793,41 @@ def _group_gate(group, parents):
     return "OR = { " + " ".join(f"is_building_group = {g}" for g in groups) + " }"
 
 
-def _starvation_buckets():
-    """[(lower food security, scale)] for mild starvation, top step first; the scale at each step's middle."""
-    hi, lo = P.FOOD_SECURITY_STARVATION_THRESHOLD, P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD
+def _starvation_buckets(severe=False):
+    """[(lower food security, scale)], top step first, in STARVATION_BUCKET steps of food security: mild starvation's
+    from the starvation threshold down to the severe one, or severe starvation's from there down to 0. The scale is
+    the engine's starvation value at each step's middle (demographics_model.starvation_value, always measured from the
+    starvation threshold), which both penalties take (the famine probe, 2026-10-11): mild's at most
+    STARVATION_MILD_CAP, severe's 0.5 to 1."""
+    hi = P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD if severe else P.FOOD_SECURITY_STARVATION_THRESHOLD
+    lo = 0.0 if severe else P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD
+    cap = P.STARVATION_VALUE_MAX if severe else P.STARVATION_MILD_CAP
     out, top = [], hi
     while top - P.STARVATION_BUCKET >= lo - 1e-9:
         lower = round(top - P.STARVATION_BUCKET, 5)
-        mid = (top + lower) / 2
-        out.append((lower, min((hi - mid) * P.STARVATION_EFFECTS_SCALING_FACTOR,
-                               (hi - lo) * P.STARVATION_EFFECTS_SCALING_FACTOR)))
+        out.append((lower, min(M.starvation_value((top + lower) / 2), cap)))
         top = lower
     return out
 
 
+def _starvation_ladder(o, coefficient, buckets):
+    """The food-security steps as an if / else_if chain, the last step an else: coefficient x each step's scale."""
+    for i, (lower, scale) in enumerate(buckets):
+        if i == len(buckets) - 1:
+            o(f"else = {{ add = {lit(coefficient * scale)} }}")
+        else:
+            o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ food_security >= {lit(lower)} }} add = {lit(coefficient * scale)} }}")
+
+
 def _starvation(o, key, mild, severe):
+    """Pop scope: both starvation terms, each penalty x the starvation value read in food-security steps."""
     o("if = {")
     o("limit = { is_in_severe_starvation = yes }")
-    o(f"add = {lit(severe[key])}")
+    _starvation_ladder(o, severe[key], _starvation_buckets(severe=True))
     o("}")
     o("else_if = {")
     o("limit = { is_in_mild_starvation = yes }")
-    buckets = _starvation_buckets()
-    for i, (lower, scale) in enumerate(buckets):
-        if i == len(buckets) - 1:
-            o(f"else = {{ add = {lit(mild[key] * scale)} }}")
-        else:
-            o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ food_security >= {lit(lower)} }} add = {lit(mild[key] * scale)} }}")
+    _starvation_ladder(o, mild[key], _starvation_buckets())
     o("}")
 
 
@@ -826,12 +838,7 @@ def _mild_starvation(o, key, mild):
     o("is_in_severe_starvation = no")
     o("is_in_mild_starvation = yes")
     o("}")
-    buckets = _starvation_buckets()
-    for i, (lower, scale) in enumerate(buckets):
-        if i == len(buckets) - 1:
-            o(f"else = {{ add = {lit(mild[key] * scale)} }}")
-        else:
-            o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ food_security >= {lit(lower)} }} add = {lit(mild[key] * scale)} }}")
+    _starvation_ladder(o, mild[key], _starvation_buckets())
     o("}")
 
 
@@ -875,8 +882,8 @@ def absorbed_walk(o, root):
     o("# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed) and multipliers (te_dg_p_mb,")
     o("# te_dg_p_md): its bare births and deaths x what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr")
     o("# (te_demog_rates_refresh); and its bare curves into te_dg_w_eb0m / _ed0m unless the engine floors its")
-    o("# multiplier at 0 (severe starvation's births), which a change in the census's term then doesn't reach (the")
-    o("# trapezoid's start rate). Full only.")
+    o("# multiplier at 0 (severe starvation's births, in its lower food-security steps or under a low term), which a")
+    o("# change in the census's term then doesn't reach (the trapezoid's start rate). Full only.")
     o("te_demog_absorbed_walk_pop = {")
     o("if = {")
     o("limit = { local_var:te_dg_w_rep > 0 }")
@@ -924,7 +931,8 @@ def engine_rate_terms(o, root):
         pairs.setdefault((group, ptype), {"read": False, "table": 0.0})["table"] = value
 
     o("# Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult")
-    o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties, floored at 0.")
+    o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties (each x the pop's")
+    o("# starvation value, in 0.05 steps of food security), floored at 0.")
     o("# x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).")
     o("te_demog_pop_birth_mult = {")
     o("value = 1")
@@ -937,7 +945,7 @@ def engine_rate_terms(o, root):
     o("# Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult")
     o("# + its class's, its workplace's and its workplace's groups' mortality modifiers + working_conditions")
     o("# (the building-group reads do not carry it: the probe's buildings read 0 where the table gave 0.1)")
-    o("# + the starvation penalties + non-homeland mortality, floored at 0. Turmoil and wealth mortality are")
+    o("# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are")
     o("# left out: their scaling is unknown and the probe measured both at about 0.")
     o("te_demog_pop_death_mult = {")
     o("value = 1")

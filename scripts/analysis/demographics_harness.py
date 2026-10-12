@@ -801,10 +801,12 @@ def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, added_b=0.0, ad
     top), never applied: under Full they are script-only and the census models them.
 
     Each pop gets bare x max(0, 1 + M + every term the engine still applies): literacy's -0.1 and mild starvation's,
-    which M nets out, and severe starvation's, which stay. Terms on top a save doesn't hold are left out: turmoil, events,
-    low_pop_state, unemployment, workplace mortality. The script reads mild starvation in 0.05 steps of food security;
-    this takes it exact. Reported: the starving slope below SoL 4 (absorbed: owner, 2026-10-10) and each absorbed group's
-    events at the bare curves."""
+    which M nets out, and severe starvation's, which stay. Both starvation penalties apply x the pop's starvation value
+    (the famine probe, 2026-10-11, for severe). Terms on top a save doesn't hold are left out: turmoil, events,
+    low_pop_state, unemployment, workplace mortality. The script reads both starvation terms in 0.05 steps of food
+    security; this takes each pop's exact starvation value from its food security (demographics_model.starvation_value,
+    which equals the save's food_security={ starvation= }). Reported: the starving slope below SoL 4 (absorbed: owner,
+    2026-10-10) and each absorbed group's events at the bare curves."""
     people = sum(p.size for p in pops)
     bare = [(p, p.size * G.monthly_birthrate(p.sol, d) * 12, p.size * G.monthly_mortality(p.sol, d) * 12)
             for p in pops]

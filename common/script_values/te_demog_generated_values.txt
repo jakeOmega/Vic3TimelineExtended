@@ -98,7 +98,8 @@ te_demog_pop_absorbed_deaths = {
 }
 
 # Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult
-# + -0.1 x its literacy (literacy_penalty) + the starvation penalties, floored at 0.
+# + -0.1 x its literacy (literacy_penalty) + the starvation penalties (each x the pop's
+# starvation value, in 0.05 steps of food security), floored at 0.
 # x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).
 te_demog_pop_birth_mult = {
 	value = 1
@@ -106,7 +107,10 @@ te_demog_pop_birth_mult = {
 	add = { value = literacy_rate multiply = -0.1 }
 	if = {
 		limit = { is_in_severe_starvation = yes }
-		add = -0.9
+		if = { limit = { food_security >= 0.15 } add = -0.50625 }
+		else_if = { limit = { food_security >= 0.1 } add = -0.61875 }
+		else_if = { limit = { food_security >= 0.05 } add = -0.73125 }
+		else = { add = -0.84375 }
 	}
 	else_if = {
 		limit = { is_in_mild_starvation = yes }
@@ -121,7 +125,7 @@ te_demog_pop_birth_mult = {
 # Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult
 # + its class's, its workplace's and its workplace's groups' mortality modifiers + working_conditions
 # (the building-group reads do not carry it: the probe's buildings read 0 where the table gave 0.1)
-# + the starvation penalties + non-homeland mortality, floored at 0. Turmoil and wealth mortality are
+# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are
 # left out: their scaling is unknown and the probe measured both at about 0.
 te_demog_pop_death_mult = {
 	value = 1
@@ -1257,7 +1261,10 @@ te_demog_pop_death_mult = {
 	}
 	if = {
 		limit = { is_in_severe_starvation = yes }
-		add = 1
+		if = { limit = { food_security >= 0.15 } add = 0.5625 }
+		else_if = { limit = { food_security >= 0.1 } add = 0.6875 }
+		else_if = { limit = { food_security >= 0.05 } add = 0.8125 }
+		else = { add = 0.9375 }
 	}
 	else_if = {
 		limit = { is_in_mild_starvation = yes }
