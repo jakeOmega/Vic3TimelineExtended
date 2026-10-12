@@ -2100,7 +2100,7 @@ values, and the script gets the practices only in Task 8, so a game in between w
   - `test_demographics_harness.py`, as the suite shows.
 - Regenerate: `te_demog_generated_values.txt` (the wealth curve)
 
-- [ ] **Step 1: Check the build question and pick the saves**
+- [x] **Step 1: Check the build question and pick the saves**
 
 ```bash
 F=scripts/analysis/demographics_save_inputs.py
@@ -2118,7 +2118,7 @@ Expected:
 
 `predict` does not run from this branch on these saves (D8).
 
-- [ ] **Step 2: Today, before anything changes** (no practices, the 6.0 curve)
+- [x] **Step 2: Today, before anything changes** (no practices, the 6.0 curve)
 
 #904's state-years with its peacetime filter, written again with its defaults so the file is known:
 
@@ -2126,12 +2126,14 @@ Expected:
 RR=/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/session-notes-2026-10-11/regional-rates
 python3 $RR/analyze.py $RR/data --json /tmp/claude-1000/lm-peacetime-rows.json > /tmp/claude-1000/lm-peacetime-today.txt
 ROWS=/tmp/claude-1000/lm-peacetime-rows.json; A=/mnt/d/vic3te-data/history-anchors-2026-10-10/anchors.csv
-$V scripts/analysis/demographics_harness.py practices-fit $SAVES --anchors $A --peacetime $ROWS --s 1.0 --lm 0 --bs 0 --at 1,0,0,0 > /tmp/claude-1000/lm-today-fit.txt
+$V scripts/analysis/demographics_harness.py practices-fit $SAVES --anchors $A --peacetime $ROWS --s 1.0 --lm 0 --bs 0 --at 1,0,0,0,0 > /tmp/claude-1000/lm-today-fit.txt
 $V scripts/analysis/demographics_harness.py history $S1837 $S1887 --anchors $A --incorporated-only --no-practices > /tmp/claude-1000/lm-today-history.txt
 $V scripts/analysis/demographics_harness.py medicine; $V scripts/analysis/demographics_harness.py fertility
 ```
 
-Expected: the `--at 1,0,0,0` (no raise, no cut) regional table's "projected" equals its "measured", and both equal #904's peacetime
+(`--at`'s fifth value gives East Asia's share: with no cut the search can't move China and would walk to its cap.)
+
+Expected: the `--at 1,0,0,0,0` (no raise, no cut) regional table's "projected" equals its "measured", and both equal #904's peacetime
 column to 0.1: China +6.5, India +11.7, Europe +11.1, …, World +8.8. A mismatch means the rows or the grouping differ
 from #904's; stop and find out why. Record "today" in the results doc:
 - the world's children per woman for 1837 and 1887 and each anchor country;
@@ -2140,7 +2142,7 @@ from #904's; stop and find out why. Record "today" in the results doc:
 
 (Spec §5.2's 5.96 / 5.74 and +1.08 / +0.98 were 6.2-era figures, D1.)
 
-- [ ] **Step 3: The drift replay at the starting values**
+- [x] **Step 3: The drift replay at the starting values**
 
 ```bash
 $V scripts/analysis/demographics_harness.py practices-replay $SAVES --out /tmp/claude-1000/lm-replay.json
@@ -2150,7 +2152,7 @@ Expected: no `GATE` line up to 1887. If one prints, it names the region and figu
 targets. A Western state far below 0.8 by 1887 means era-3 contraception reached it early. That is a finding for the
 results doc and Stop A, not a retune here.
 
-- [ ] **Step 4: The fertility fit, each raise**
+- [x] **Step 4: The fertility fit, each raise**
 
 ```bash
 $V scripts/analysis/demographics_harness.py practices-fit $SAVES --anchors $A --peacetime $ROWS --shares /tmp/claude-1000/lm-replay.json \
@@ -2167,7 +2169,10 @@ Each row is a raise s, with:
 - the high group's range, reported only;
 - how many gate items fail with today's mortality.
 
-- [ ] **Step 5: Mortality and the means pair, from the smallest raise up** (call 8)
+If a row's best cut sits on the grid's floor (as at s 1.00 and 1.05 on 2026-10-12), run that raise again with the grid
+extended down (`--lm 0.05,…,0.25 --bs 0.10,…,0.30`): an edge is not the fit's answer. Same knobs, wider range.
+
+- [x] **Step 5: Mortality and the means pair, from the smallest raise up** (call 8)
 
 For each s in ascending order, at that row's cuts and India's rounded held share (East Asia's share is chosen at each
 point):
@@ -2216,7 +2221,7 @@ Expect some of this:
 
 Don't widen the grid beyond the spec's knobs.
 
-- [ ] **Step 6: Apply the chosen values**
+- [x] **Step 6: Apply the chosen values**
 
 In `demographics_params.py`:
 - `WEALTH_TFR_LOW` = 6.0 × s and `WEALTH_TFR_HIGH` = round(3.5 × s, 2). Keep the comment's history line and add:
@@ -2236,7 +2241,7 @@ In `demographics_harness.py`, after `PRACTICE_SCENARIOS`, add `FERTILITY_SCENARI
 $V scripts/generators/gen_demographics.py
 ```
 
-- [ ] **Step 7: Update the tests that pin today's figures, and run the suite**
+- [x] **Step 7: Update the tests that pin today's figures, and run the suite**
 
 - `test_wealth_term_endpoints`: the new `WEALTH_TFR_LOW` and `WEALTH_TFR_HIGH`.
 - `test_sketch_cases`: give each scenario its shares from `_SCENARIO_PRACTICES` (Britain 1836 and France 1836
@@ -2254,7 +2259,7 @@ $V scripts/analysis/demographics_harness.py fertility; $V scripts/analysis/demog
 
 Expected: `OK`; neither command prints `OUT`.
 
-- [ ] **Step 8: After, on the same saves**
+- [x] **Step 8: After, on the same saves**
 
 ```bash
 $V scripts/analysis/demographics_harness.py practices-replay $SAVES --out /tmp/claude-1000/lm-replay-fitted.json
@@ -2266,7 +2271,7 @@ re-run on the applied build: with the raise in the curve, "today" would be the n
 children per woman (this `history`) must match Step 5's `--at` table to 0.02, since the applied values are the same
 point.
 
-- [ ] **Step 9: Write the results doc** (`docs/testing/demographics-late-marriage-<date>.md`)
+- [x] **Step 9: Write the results doc** (`docs/testing/demographics-late-marriage-<date>.md`)
 
 Its sections:
 - **The build and the data:** this branch's commit; the saves (D8: the reader is unchanged since ec304526 but for
@@ -2288,7 +2293,7 @@ Its sections:
   - Korea's, which has no data-based anchor.
 - **The gate**, item by item, each pass or fail with its figure.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add scripts/analysis/demographics_params.py scripts/analysis/demographics_harness.py common/script_values/te_demog_generated_values.txt docs/testing/demographics-late-marriage-<date>.md test_demographics_model.py test_demographics_save_inputs.py test_demographics_harness.py
