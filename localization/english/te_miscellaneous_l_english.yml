@@ -2725,6 +2725,8 @@
  gm_name_has_typed_tt:0 "The monument has a name of our own"
  gm_name_honours_evt:0 "the [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of [SCOPE.sState('monument_state').GetCustom('gm_honours_name')]"
  gm_name_honours_row:0 "The [State.GetCustom('gm_form_name')] of [State.GetCustom('gm_honours_name')]"
+ gm_name_landmark_evt:0 "[SCOPE.sState('monument_state').GetCustom('gm_landmark_name_evt')]"
+ gm_name_landmark_row:0 "[State.GetCustom('gm_skin_name')]"
  gm_name_one_at_a_time_tt:0 "Another monument is being named: use or cancel that name first"
  gm_name_pending:0 "New name: #b [JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting]#!"
  gm_name_ruler_evt:0 "[SCOPE.sState('monument_state').MakeScope.Var('gm_name_char').GetCharacter.GetFirstNameNoFormatting]'s [SCOPE.sState('monument_state').GetCustom('gm_form_name')]"

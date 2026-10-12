@@ -1939,7 +1939,7 @@ class ReviewFixTests(unittest.TestCase):
     def test_name_events_check_the_owner(self):
         ev = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.25\s*=\s*\{"))
         self.assertIn("save_scope_as = monument_owner", ev)
-        self.assertEqual(ev.count("owner = scope:monument_owner"), 6, "every choice but Keep")
+        self.assertEqual(ev.count("owner = scope:monument_owner"), 7, "every choice but Keep")
 
     def test_a_cession_clears_the_commission_mark(self):
         self.assertIn("gm_remove_state_var = { VAR = gm_unveiled_for_com }",
@@ -2004,7 +2004,9 @@ BUILDING_SKINS = {
 # namesake -> its pattern keys (gm_name_<pattern>_row / _evt).
 NAMESAKES = {"city": ("city",), "state": ("state",), "ruler": ("ruler",), "honours": ("honours",),
              "year": ("year",),
-             "occasion": ("victory", "defeat", "centenary", "space_orbital", "space_moon_landing")}
+             "occasion": ("victory", "defeat", "centenary", "space_orbital", "space_moon_landing"),
+             # A landmark's historical name (phase 4 §4).
+             "landmark": ("landmark",)}
 NAME_RECORDS = ("gm_namesake", "gm_name_year", "gm_name_char", "gm_name_occasion", "gm_name_enemy_cap",
                 "gm_name_from_com")
 
@@ -2905,6 +2907,32 @@ class LandmarkLockTests(unittest.TestCase):
         ai = squash(block(self.e, "gm_ai_decide_contests"))
         self.assertIn("10 = { modifier = { if = { limit = { var:gm_grandeur >= 10 } add = 10 } "
                       "if = { limit = { gm_state_is_landmark = yes } multiply = 3 } } gm_state_preserve = yes }", ai)
+
+
+class LandmarkNameTests(unittest.TestCase):
+    """Phase 4 §3.3 and §4: its historical name, and a rededication's new one."""
+
+    def test_the_historical_name_comes_before_the_year(self):
+        L = loc()
+        custom = read(CUSTOM_LOC)
+        for ctx in ("row", "evt"):
+            family = squash(block(custom, f"gm_monument_name_{ctx}"))
+            branch = (f"text = {{ trigger = {{ gm_state_namesake_is = {{ NAMESAKE = landmark }} }} "
+                      f"localization_key = gm_name_landmark_{ctx} }}")
+            self.assertIn(branch, family, ctx)
+            self.assertLess(family.index(branch), family.index(f"gm_name_year_{ctx}"), "never a year")
+        self.assertEqual(L["gm_name_landmark_row"], "[State.GetCustom('gm_skin_name')]")
+        self.assertEqual(L["gm_name_landmark_evt"], "[SCOPE.sState('monument_state').GetCustom('gm_landmark_name_evt')]")
+
+    def test_the_namesake_choice_offers_it_back(self):
+        L = loc()
+        ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.25\s*=\s*\{")))
+        self.assertIn("name = monument_events.25.landmark trigger = { owner = scope:monument_owner "
+                      "gm_state_is_landmark = yes NOT = { gm_state_namesake_is = { NAMESAKE = landmark } } } "
+                      "gm_state_choose_namesake = { NAMESAKE = landmark }", ev)
+        self.assertLess(ev.index("monument_events.25.landmark "), ev.index("monument_events.25.city "))
+        self.assertIn("$gm_name_landmark_evt$", L["monument_events.25.landmark"])
+        self.assertEqual(L["monument_events.25.keep_landmark"], "Keep the name: $gm_name_landmark_evt$")
 
 if __name__ == "__main__":
     unittest.main()

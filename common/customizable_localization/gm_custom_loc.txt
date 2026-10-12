@@ -1232,6 +1232,11 @@ gm_monument_name_row = {
 		}
 		localization_key = gm_name_space_moon_landing_row
 	}
+	# A landmark's historical name (phase 4 §4): the skin's, never a year.
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
+		localization_key = gm_name_landmark_row
+	}
 	# The year: its own namesake, and the fallback of the ruler and victory names.
 	text = {
 		trigger = { has_variable = gm_namesake has_variable = gm_name_year }
@@ -1318,6 +1323,11 @@ gm_monument_name_evt = {
 			var:gm_name_occasion = flag:space_moon_landing
 		}
 		localization_key = gm_name_space_moon_landing_evt
+	}
+	# A landmark's historical name (phase 4 §4): the skin's, never a year.
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
+		localization_key = gm_name_landmark_evt
 	}
 	# The year: its own namesake, and the fallback of the ruler and victory names.
 	text = {
