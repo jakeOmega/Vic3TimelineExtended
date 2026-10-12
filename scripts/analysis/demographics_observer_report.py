@@ -3,7 +3,7 @@
 
 Usage: python3 scripts/analysis/demographics_observer_report.py DEBUG_LOG [MORE_LOGS ...]
            [--step 25] [--tag GBR ...] [--top N] [--json] [--closed-borders SAVE [SAVE ...]]
-           [--phase2 [--to-year 1900] [--saves SAVE [SAVE ...]] [--band 1.4 1.65]]
+           [--phase2 [--to-year 1900] [--saves SAVE [SAVE ...]] [--band 1.4 1.65]] [--work]
 
 --phase2 checks phase 2's gate (demographics phase 2 step 4, plan Task 12): the world's multiple to
 --to-year within the band, no country of 20M or more losing people ten census years running with no war
@@ -30,6 +30,13 @@ Nian revolts, China's 1876-79 famine and India's famines in it; without those it
 x1.6-x1.65. The upper end is that no-catastrophe estimate: a run that grows faster outgrows history even
 with none of its catastrophes. The lower end is history as it happened, since a game can have catastrophes
 of its own. The old band, x1.3-x1.7, let a run with no catastrophes pass at x1.7.
+
+--work (phase 2 step 2; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6) reads
+the TE_DEMOG_WORKC lines the census log writes beside each TE_DEMOG_CENSUS line under this build, and checks the
+observer gate's three items for countries of WORK_BIG people or more: the game's own workforce share within
+WORK_FOLLOW_TOLERANCE of the ratio the census sets (the pull's lag), no state's set ratio past WORK_SET_BAND, and the
+pension bill's share of revenue (printed by decade, the design's 15-30% band for a rich country at Standard). It
+exits 1 when a state's ratio leaves the band.
 
 --closed-borders reads the migration law of each country from plain-text saves (debug mode writes
 them) and prints net migration per 1,000 for Closed Borders countries against the rest. Under Closed
@@ -73,6 +80,12 @@ import demographics_params as P  # noqa: E402
 from demographics_harness import _ungroup  # noqa: E402
 
 PREFIX = "TE_DEMOG_CENSUS: "
+# phase 2 step 2's work line (te_debug_demog_work_census_line): tag and year, then numbers
+WORK_PREFIX = "TE_DEMOG_WORKC: "
+WORK_FIELDS = ("wf", "wf_engine", "set", "target", "set_min", "set_max", "w", "pens", "bill", "health", "pos", "age")
+WORK_BIG = 20e6                      # the gate's great powers: countries of this many people or more
+WORK_FOLLOW_TOLERANCE = 0.02         # workforce_follows_target's tolerance (te_debug_demog_wft_tolerance)
+WORK_SET_BAND = (0.1, 0.8)           # no state's ratio past 0.8 or under 0.1 (the design §2.6)
 FIELDS = ("tag", "year", "people", "median", "tfr", "e0", "e65", "imr", "cbr", "cdr", "mig", "young",
           "working", "old", "sex_balance", "gini", "wc", "primacy", "crisis", "devastation", "turmoil")
 # fields later lines carry: mig_raw per 1,000 people, signed; lag a count; from phase 2 step 4, the census's
@@ -237,6 +250,78 @@ def read_records(lines):
         except ValueError as e:
             unresolved.append(f"unreadable ({e}): {text[:200]}")
     return records, unresolved
+
+
+def read_work_records(lines):
+    """[record] from the TE_DEMOG_WORKC lines among `lines` (phase 2 step 2): {tag, year, date?, and WORK_FIELDS as
+    floats, those a line lacks left out}; a line whose template didn't render, or without a tag or year, is skipped."""
+    records = []
+    for line in lines:
+        if WORK_PREFIX not in line:
+            continue
+        text = line.split(WORK_PREFIX, 1)[1].strip()
+        if "[" in text or "]" in text:
+            continue
+        fields = {}
+        for part in text.split(";"):
+            key, sep, value = part.strip().partition("=")
+            if sep:
+                fields[key.strip()] = value.strip()
+        try:
+            r = {"tag": fields["tag"], "year": int(fields["year"])}
+            for k in WORK_FIELDS:
+                if k in fields:
+                    r[k] = float(fields[k])
+        except (KeyError, ValueError):
+            continue
+        if "date" in fields:
+            r["date"] = fields["date"]
+        records.append(r)
+    return records
+
+
+def work_check(work, records, big=WORK_BIG, step=10):
+    """The observer gate's work items (the design §2.6) over the TE_DEMOG_WORKC lines `work`, the countries judged by
+    their people in the matching TE_DEMOG_CENSUS `records`: {"rows": [(tag, year, record)] for great powers every
+    `step` years, "lag": [(tag, year, engine - set)] past WORK_FOLLOW_TOLERANCE where a term is in force,
+    "out_of_band": [(tag, year, set_min, set_max)] past WORK_SET_BAND, "bill": (min, max) of the great powers' bill
+    shares with a bill}."""
+    people = {(r["tag"], r["year"]): r["people"] for r in records}
+    rows, lag, out, bills = [], [], [], []
+    lo, hi = WORK_SET_BAND
+    for w in sorted(work, key=lambda r: (r["tag"], r["year"])):
+        if people.get((w["tag"], w["year"]), 0) < big:
+            continue
+        if w["year"] % step == 0:
+            rows.append((w["tag"], w["year"], w))
+        if w.get("w", 0) and "wf_engine" in w and "set" in w and w["wf_engine"] >= 0:
+            gap = w["wf_engine"] - w["set"]
+            if abs(gap) > WORK_FOLLOW_TOLERANCE:
+                lag.append((w["tag"], w["year"], gap))
+        if "set_min" in w and "set_max" in w and (w["set_min"] < lo or w["set_max"] > hi):
+            out.append((w["tag"], w["year"], w["set_min"], w["set_max"]))
+        if w.get("bill", 0) > 0:
+            bills.append(w["bill"])
+    return {"rows": rows, "lag": lag, "out_of_band": out, "bill": (min(bills), max(bills)) if bills else None}
+
+
+def _print_work(check):
+    print("\nWork and retirement (TE_DEMOG_WORKC; countries of 20M people or more, every 10 years):")
+    print(f"  {'tag':5s} {'year':>5s} {'wf':>6s} {'engine':>7s} {'set':>6s} {'target':>7s} {'min':>6s} {'max':>6s} "
+          f"{'w':>7s} {'pens':>6s} {'bill':>6s} {'health':>7s} {'pos':>4s} {'age':>4s}")
+    for tag, year, w in check["rows"]:
+        print(f"  {tag:5s} {year:5d} {w.get('wf', -1):6.3f} {w.get('wf_engine', -1):7.3f} {w.get('set', -1):6.3f} "
+              f"{w.get('target', -1):7.3f} {w.get('set_min', -1):6.3f} {w.get('set_max', -1):6.3f} "
+              f"{w.get('w', 0):+7.3f} {w.get('pens', -1):6.3f} {w.get('bill', 0):6.1%} {w.get('health', -1):+7.3f} "
+              f"{w.get('pos', 0):4.0f} {w.get('age', -1):4.0f}")
+    print(f"  the game's figure more than {WORK_FOLLOW_TOLERANCE:g} from the set ratio under a term: "
+          f"{len(check['lag'])} country-years" + (f" (e.g. {check['lag'][0]})" if check["lag"] else ""))
+    lo, hi = WORK_SET_BAND
+    print(f"  a state's set ratio outside {lo:g}-{hi:g}: {len(check['out_of_band'])} country-years"
+          + (f" (e.g. {check['out_of_band'][0]})" if check["out_of_band"] else "") + ("" if not check["out_of_band"]
+                                                                                   else "  FAIL"))
+    b = check["bill"]
+    print("  the pension bill's share of revenue: " + (f"{b[0]:.1%} to {b[1]:.1%}" if b else "no bill logged"))
 
 
 def row_years(years, step):
@@ -503,6 +588,10 @@ def main(argv=None):
                         help="plain-text saves (normal-speed runs only): --phase2 judges the world's multiple from every "
                              "state's people in the earliest and the one nearest 1 January after --to-year, not the "
                              "census log's")
+    parser.add_argument("--work", action="store_true",
+                        help="phase 2 step 2's observer items from the TE_DEMOG_WORKC lines: the game's workforce "
+                             "against the census's, every state's ratio within 0.1-0.8, the pension bill; exit 1 "
+                             "when a state's ratio leaves the band")
     parser.add_argument("--band", type=float, nargs=2, metavar=("LO", "HI"), default=WORLD_BAND,
                         help="--phase2's band for the world's multiple (default %(default)s: history as it "
                              "happened to history without its catastrophes, #894)")
@@ -511,12 +600,15 @@ def main(argv=None):
         parser.error("--band: LO above HI")
     if args.saves and not args.phase2:
         parser.error("--saves is read only by --phase2")
-    records, unresolved = [], []
+    records, unresolved, work = [], [], []
     for path in args.logs:
         with path.open(encoding="utf-8-sig", errors="replace") as lines:
-            got, bad = read_records(lines)
+            text = list(lines)
+        got, bad = read_records(text)
         records += got
         unresolved += bad
+        if args.work:
+            work += read_work_records(text)
     if not records:
         print("no TE_DEMOG_CENSUS lines", file=sys.stderr)
         return 1
@@ -533,6 +625,11 @@ def main(argv=None):
         check = phase2_check(records, to_year=args.to_year, band=tuple(args.band), saves_world=saves_world)
         _print_phase2(check, args.to_year)
         if not check["world_in_band"] or check["shrinking"]:
+            return 1
+    if args.work:
+        check = work_check(work, records)
+        _print_work(check)
+        if check["out_of_band"]:
             return 1
     return 0
 

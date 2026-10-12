@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
 from test_demographics_registry import (  # noqa: E402  (helpers and paths only: no TestCase)
-    CONSOLE_EFFECTS, DEBUG_EVENTS, DEMOG_MODIFIERS, EFFECTS, FAST_EFFECTS, TRIGGERS, WORK_EFFECTS, WORK_VALUES,
+    CONSOLE_EFFECTS, DEBUG_EVENTS, DEMOG_MODIFIERS, EFFECTS, FAST_EFFECTS, WORK_EFFECTS, WORK_VALUES,
     _block, _CountryEngine, _Engine, _engine_for, _gui_type, _raw_blocks, _text)
 
 DEBUG_VALUES = ROOT / "common" / "script_values" / "te_debug_demog_values.txt"

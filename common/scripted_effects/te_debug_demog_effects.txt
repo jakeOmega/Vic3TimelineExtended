@@ -814,3 +814,58 @@ te_debug_demog_pension_term_end = {
 	}
 	debug_log = "TE_DEMOG_PENSION term ended by the console pos=[THIS.ScriptValue('te_demog_pension_pos')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
+
+# ---- The census log's work line (phase 2 step 2; option b) ------------------------------------------------------
+# THIS = ROOT = a country, from te_demog_work_country_store inside its census while the census log is on (its local
+# te_dg_c_people, as te_debug_demog_census_line): one TE_DEMOG_WORKC line beside its TE_DEMOG_CENSUS line, for
+# demographics_observer_report.py --work (the design §2.6's observer gate). wf is the census's workforce share
+# (workers over people), wf_engine the game's own, set the ratio the states' pops are set to and target the census's
+# engine-scale aim (both people-weighted over the census states the walk has read; set_min and set_max the extremes),
+# w the term in force (0 outside Full), pens the pensioners' share, bill the pension bill's share of revenue, health
+# the health bill's term, pos and age the pension setting. A country under a million people writes nothing.
+te_debug_demog_work_census_line = {
+	if = {
+		limit = {
+			local_var:te_dg_c_people >= 1000000
+			has_variable = te_dg_wa_share
+			has_variable = te_dg_at_work
+		}
+		set_local_variable = { name = te_dg_dbg_wk_p value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_set value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_target value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_w value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_max value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_min value = 9 }
+		every_scope_state = {
+			limit = {
+				te_demog_has_census = yes
+				has_variable = te_dg_wbase
+				has_variable = te_dg_wa_share
+				has_variable = te_dg_at_work
+			}
+			change_local_variable = { name = te_dg_dbg_wk_p add = var:te_dg_people }
+			change_local_variable = { name = te_dg_dbg_wk_set add = { value = te_demog_wf_set multiply = var:te_dg_people } }
+			change_local_variable = { name = te_dg_dbg_wk_target add = { value = te_demog_wf_engine_target multiply = var:te_dg_people } }
+			change_local_variable = { name = te_dg_dbg_wk_w add = { value = te_demog_census_workforce_applied multiply = var:te_dg_people } }
+			if = {
+				limit = { te_demog_wf_set > local_var:te_dg_dbg_wk_max }
+				set_local_variable = { name = te_dg_dbg_wk_max value = te_demog_wf_set }
+			}
+			if = {
+				limit = { te_demog_wf_set < local_var:te_dg_dbg_wk_min }
+				set_local_variable = { name = te_dg_dbg_wk_min value = te_demog_wf_set }
+			}
+		}
+		set_variable = { name = te_dg_dbg_wk_set value = { value = local_var:te_dg_dbg_wk_set divide = { value = local_var:te_dg_dbg_wk_p min = 1 } } }
+		set_variable = { name = te_dg_dbg_wk_target value = { value = local_var:te_dg_dbg_wk_target divide = { value = local_var:te_dg_dbg_wk_p min = 1 } } }
+		set_variable = { name = te_dg_dbg_wk_w value = { value = local_var:te_dg_dbg_wk_w divide = { value = local_var:te_dg_dbg_wk_p min = 1 } } }
+		set_variable = { name = te_dg_dbg_wk_max value = local_var:te_dg_dbg_wk_max }
+		set_variable = { name = te_dg_dbg_wk_min value = local_var:te_dg_dbg_wk_min }
+		debug_log = "TE_DEMOG_WORKC: tag=[THIS.GetCountry.GetTagName]; year=[THIS.ScriptValue('te_demog_year')|0]; wf=[THIS.ScriptValue('te_demog_wk_share')|4]; wf_engine=[THIS.ScriptValue('te_debug_demog_country_wf_engine')|4]; set=[THIS.Var('te_dg_dbg_wk_set').GetValue|4]; target=[THIS.Var('te_dg_dbg_wk_target').GetValue|4]; set_min=[THIS.Var('te_dg_dbg_wk_min').GetValue|4]; set_max=[THIS.Var('te_dg_dbg_wk_max').GetValue|4]; w=[THIS.Var('te_dg_dbg_wk_w').GetValue|4]; pens=[THIS.ScriptValue('te_debug_demog_country_pensioners')|4]; bill=[THIS.ScriptValue('te_demog_pension_bill_share')|4]; health=[THIS.ScriptValue('te_debug_demog_health_term_read')|4]; pos=[THIS.ScriptValue('te_demog_pension_pos')|0]; age=[THIS.ScriptValue('te_debug_demog_country_pension_age')|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
+		remove_variable = te_dg_dbg_wk_set
+		remove_variable = te_dg_dbg_wk_target
+		remove_variable = te_dg_dbg_wk_w
+		remove_variable = te_dg_dbg_wk_max
+		remove_variable = te_dg_dbg_wk_min
+	}
+}

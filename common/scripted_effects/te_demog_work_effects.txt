@@ -202,6 +202,11 @@ te_demog_work_country_store = {
 		set_variable = { name = te_dg_wf_engine value = { value = local_var:te_dg_c_wfe_w divide = { value = local_var:te_dg_c_wfe_pm min = 0.00001 } } }
 	}
 	te_demog_bills_refresh = yes
+	# the console's census log (te_debug_demog.1 option b): a TE_DEMOG_WORKC line (te_debug_demog_effects.txt)
+	if = {
+		limit = { te_demog_census_log_on = yes }
+		te_debug_demog_work_census_line = yes
+	}
 }
 
 # ---- The bills (§2.3, §2.4) -------------------------------------------------------------------------------------

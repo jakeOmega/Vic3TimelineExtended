@@ -1190,3 +1190,35 @@ class TestWorkforceCommand(unittest.TestCase):
             self.assertEqual(H.main(["workforce"]), 0)
         for name, _kw, _low in H.WORKFORCE_SCENARIOS:
             self.assertIn(name, out.getvalue())
+
+
+class TestPensionsCommand(unittest.TestCase):
+    """Phase 2 step 2: the pension bill fitted against the game's revenue, the health bill (the design §5)."""
+
+    def test_revenue_share_is_the_largest_economies_median(self):
+        budgets = {"A": {"gdp": 1000.0, "income": 1000 * 0.2 / 52}, "B": {"gdp": 500.0, "income": 500 * 0.3 / 52},
+                   "C": {"gdp": 10.0, "income": 10 * 0.9 / 52}}
+        median, ratios = H.revenue_share(budgets, top=2)
+        self.assertAlmostEqual(median, 0.25)
+        self.assertEqual([t for t, _ in ratios], ["A", "B"])
+
+    def test_b_centres_the_band(self):
+        b = H.fitted_b(0.27)
+        self.assertAlmostEqual(0.2 * b * H.PENSION_LEVEL / 0.27, sum(P.PENSION_BILL_BAND) / 2)
+
+    def test_the_fitted_b_meets_the_band_at_the_1953_ratio(self):
+        """The fit (2026-10-12): the 1953 save's 15 largest economies' median revenue over GDP was 0.273; at it the
+        bill for 18-22% pensioners at Social Security 5 sits inside 15-30% of revenue."""
+        for share in H.PENSION_SHARES:
+            bill = M.pension_bill_gdp_share(share, H.PENSION_LEVEL) / 0.273
+            self.assertTrue(P.PENSION_BILL_BAND[0] <= bill <= P.PENSION_BILL_BAND[1], (share, bill))
+
+    def test_the_health_bill_meets_its_bands(self):
+        for label, _need, term, (lo, hi) in H.health_rows():
+            self.assertTrue(lo <= term <= hi, (label, term))
+
+    def test_the_command_runs_without_a_save(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["pensions"]), 0)
+        self.assertIn("The health bill", out.getvalue())

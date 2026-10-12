@@ -816,3 +816,4 @@ te_debug_demog_pension_bill_read = { value = -1 if = { limit = { has_variable = 
 te_debug_demog_health_term_read = { value = -1 if = { limit = { has_variable = te_dg_health_term } value = var:te_dg_health_term } }
 te_debug_demog_health_term_now = { value = -1 if = { limit = { has_variable = te_dg_need } value = te_demog_health_term_now } }
 te_debug_demog_country_pension_age = { value = -1 if = { limit = { has_variable = te_dg_pension_age } value = var:te_dg_pension_age } }
+te_debug_demog_country_wf_engine = { value = -1 if = { limit = { has_variable = te_dg_wf_engine } value = var:te_dg_wf_engine } }
