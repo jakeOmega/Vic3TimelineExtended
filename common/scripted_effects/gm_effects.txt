@@ -18,7 +18,17 @@
 # dedicated. One no ceremony has asked about is the engine's copy, which
 # gm_state_reset_copied_dedication sends to the ceremony first.
 gm_state_first_sight = {
+	# A panel pick without its technology goes to the ceremony, which asks for
+	# it (phase 4 §6): its answer replaces the pick, as for the engine's copy.
 	if = {
+		limit = {
+			gm_state_lacks_dedication_tech = yes
+			NOT = { has_variable = gm_seen }
+			NOT = { has_variable = gm_ceremony_pending }
+		}
+		gm_state_start_ceremony = yes
+	}
+	else_if = {
 		limit = {
 			gm_state_is_dedicated = yes
 			NOT = { has_variable = gm_seen }

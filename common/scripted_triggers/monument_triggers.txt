@@ -134,6 +134,29 @@ gm_state_has_copied_dedication = {
 	NOT = { has_variable = gm_ceremony_pending }
 }
 
+# A dedication the building panel offered without its technology: the Grand
+# Opera House, Botanical Gardens and Grand Observatory have their technology
+# checked in the ceremony, not on the production method (phase 4 §6;
+# grand_monument_pms.txt). A landmark is exempt: it stands on its historical
+# dedication whatever its owner has researched.
+gm_state_lacks_dedication_tech = {
+	gm_state_is_landmark = no
+	OR = {
+		AND = {
+			gm_state_has_pm = { PM = pm_monument_artistic }
+			owner = { NOT = { has_technology_researched = romanticism } }
+		}
+		AND = {
+			gm_state_has_pm = { PM = pm_monument_naturalist }
+			owner = { NOT = { has_technology_researched = romanticism } }
+		}
+		AND = {
+			gm_state_has_pm = { PM = pm_monument_scientific }
+			owner = { NOT = { has_technology_researched = empiricism } }
+		}
+	}
+}
+
 # ---- Landmarks (phase 4, spec 2026-10-12 §3.2) ----------------------------------
 # A landmark keeps its skin and form, and so its picture, while it stands:
 # through contest, heritage, Rededicate, conquest and civil war. Pull Down or

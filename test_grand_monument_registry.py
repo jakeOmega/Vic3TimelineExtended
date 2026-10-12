@@ -85,6 +85,11 @@ BY_KEY = {d.key: d for d in DEDICATIONS}
 BOUND = tuple(d.key for d in DEDICATIONS if d.kind != "timeless")
 TECH_GATES = {"artistic": "romanticism", "naturalist": "romanticism", "scientific": "empiricism",
               "industrial": "marketing_research", "athletic": "television_broadcasting"}
+# The gates still on the production method. The other three moved to the
+# ceremony and first sight (phase 4 §6): the engine switches a building off a
+# method whose technology its owner lacks, which would strip five landmarks of
+# their dedications.
+PM_TECH_GATES = {k: TECH_GATES[k] for k in ("industrial", "athletic")}
 # Dedications that take heritage skins (spec §1.1; the War Memorial takes no
 # faith skin, plan decision 4).
 HERITAGE_SKINNED = ("crown", "republic", "revolution", "leader", "civic", "war_memorial")
@@ -403,8 +408,8 @@ class PMTests(unittest.TestCase):
         text = read(PMS)
         for d in DEDICATIONS:
             body = squash(block(text, f"pm_monument_{d.key}"))
-            if d.key in TECH_GATES:
-                self.assertIn(f"unlocking_technologies = {{ {TECH_GATES[d.key]} }}", body, d.key)
+            if d.key in PM_TECH_GATES:
+                self.assertIn(f"unlocking_technologies = {{ {PM_TECH_GATES[d.key]} }}", body, d.key)
             else:
                 self.assertNotIn("unlocking_technologies", body, d.key)
 
@@ -2987,6 +2992,24 @@ class LandmarkPictureTests(unittest.TestCase):
         self.assertEqual(squash(block(e, "gm_state_picture_landmark")),
                          "if = { limit = { has_variable = gm_landmark var:gm_landmark = flag:$KEY$ } "
                          "set_variable = { name = gm_picture_code value = $CODE$ } }")
+
+
+class LandmarkTechTests(unittest.TestCase):
+    """Phase 4 §6: three dedications' technologies leave the production method."""
+
+    def test_first_sight_sends_an_untaught_pick_to_the_ceremony(self):
+        t = squash(block(read(TRIGGERS), "gm_state_lacks_dedication_tech"))
+        self.assertTrue(t.startswith("gm_state_is_landmark = no OR = {"), "a landmark is exempt")
+        moved = [k for k in TECH_GATES if k not in PM_TECH_GATES]
+        self.assertEqual(moved, ["artistic", "naturalist", "scientific"])
+        for k in moved:
+            self.assertIn(f"AND = {{ gm_state_has_pm = {{ PM = pm_monument_{k} }} "
+                          f"owner = {{ NOT = {{ has_technology_researched = {TECH_GATES[k]} }} }} }}", t, k)
+        first = squash(block(read(EFFECTS), "gm_state_first_sight"))
+        self.assertTrue(first.startswith(
+            "if = { limit = { gm_state_lacks_dedication_tech = yes NOT = { has_variable = gm_seen } "
+            "NOT = { has_variable = gm_ceremony_pending } } gm_state_start_ceremony = yes } else_if = { "
+            "limit = { gm_state_is_dedicated = yes"), first)
 
 if __name__ == "__main__":
     unittest.main()
