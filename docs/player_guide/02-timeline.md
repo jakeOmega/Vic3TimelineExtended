@@ -517,7 +517,9 @@ When a level of an undedicated monument finishes, a dedication ceremony asks
 what it honors. A new monument gets the ceremony too: while it is under
 construction its building panel shows what your other monuments honor, and the
 ceremony's answer replaces that. The choice is permanent, and the ceremony's
-tooltips list each dedication's effects. An undedicated monument gives only the
+tooltips list each dedication's effects. The ceremony lists every dedication:
+one you can't raise yet is greyed out, with what it needs. An undedicated
+monument, draped until its unveiling, gives only the
 prestige, tourism and cultural pull above; the ceremony asks again at its next
 level.
 
@@ -590,21 +592,30 @@ itself.
 ### Monument names and forms
 
 A monument to the Crown, the Republic, the Revolution, the Leader or the nation,
-or a War Memorial, can take the form of your primary cultures' classical
+or a War Memorial, can take the style of your primary cultures' classical
 heritage: a forum and triumphal column for a Romance-speaking country, a hall of
 dynasties for a Chinese, Japanese or Korean one, an Aksumite stele for an
 Amharic or Tigrinya one, and so on through the classical languages that language
-reform can revive. A Grand Shrine takes the form of your state religion's great
-building: a basilica, a great mosque, a great temple, a pagoda. When more than
-one form fits, an event asks which; the AI keeps the most specific form without
-being asked. The form changes the monument's name and look, not what it does.
+reform can revive. A Grand Shrine takes the style of your state religion's great
+building: a basilica, a great mosque, a great temple, a pagoda. An opera house,
+gardens, an observatory or a stadium can take a style where your heritage has a
+tradition of its own, such as a Greek open-air theatre, a Persian garden, a
+Jantar Mantar or a Roman amphitheatre; for these the style changes only the
+look. When more than one style fits, an event asks which, and each style's
+option names what makes it fit; the AI keeps the most specific style without
+being asked. The style changes the monument's name and look, not what it does.
+Each monument shows a picture of its style and form in its row of the journal
+entry and on its state's monument card. The picture's frame marks how many
+grandeur steps the monument has reached: plain below the first, then bronze,
+bronze and silver, silver and gold, gold, and from the fifth step gold set with
+rubies.
 If you have revived the matching language under a state-led language reform,
 the monument's row says its dedication is carved in it.
 
 Every dedicated monument has a name, from what it is named for and its form:
 the Lisbon Gate, Victoria's Column, the Arch of 1856. After the style, two events
 ask: The Form It Takes, when the style offers more than one form (a column, an
-arch, a gate, a pagoda), and A Name for the Monument, which names it for its
+arch, a gate, a pagoda, a sun stone), and A Name for the Monument, which names it for its
 city, its state, the ruler, what it honors (the Crown, the Republic, the
 Revolution, the Nation, the Faith or the Fallen), the year, or the occasion a
 commission marks. Each event keeps what was proposed unless you pick another.

@@ -16782,7 +16782,7 @@ building_zastava_kragujevac_arsenal = {
 # --- Megastructure Consortium ---
 building_megastructure_consortium_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	icon = "gfx/interface/icons/company_icons/company_megastructure_consortium.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes

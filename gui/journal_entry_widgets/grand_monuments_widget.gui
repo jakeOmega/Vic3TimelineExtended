@@ -214,15 +214,453 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### A monument's status: an icon, the status word beneath. The instance
-	### sets the texture, the `visible` (one status code each) and a tooltip
-	### that reads nothing (gotcha #24).
+	### A monument's picture (spec 2026-10-11 §3.4): one icon per picture code
+	### (gm_picture_effects.txt; the PICTURES table in
+	### test_grand_monument_registry.py), shown on gm_disp_picture_code. The
+	### instance sets the size; every icon fills it. In the row and on the
+	### state card (te_state_panel_widgets.gui).
+	type gm_picture = widget {
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)1' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/undedicated.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)10' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)11' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__arch.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)12' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__obelisk.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)13' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)14' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)15' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)16' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)100' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_latin__column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)101' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_latin__arch.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)102' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_latin__forum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)110' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_hebrew__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)111' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_hebrew__court.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)112' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_hebrew__pillar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)113' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_hebrew__menorah.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)120' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_sanskrit__pillar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)121' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_sanskrit__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)130' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_geez__stele.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)131' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_geez__rock_hewn_church.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)140' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_slavonic__memorial_church.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)141' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_slavonic__column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)142' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_slavonic__bell_tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)150' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_avestan__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)151' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_avestan__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)160' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_arabic__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)161' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_arabic__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)170' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_chinese__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)171' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_chinese__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)172' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_chinese__pagoda.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)180' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_greek__pantheon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)181' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_greek__column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)182' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_greek__stoa.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)190' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_irish__round_tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)191' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_irish__high_cross.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)200' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_nahuatl__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)201' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_nahuatl__sun_stone.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)210' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_norse__rune_stone.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)211' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_norse__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)220' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_gothic__hall_of_fame.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)221' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_gothic__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)230' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_mayan__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)231' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_mayan__stela.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)240' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_prussian__hill_shrine.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)241' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_prussian__sacred_oak.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)250' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_aramaic__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)251' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_aramaic__colonnade.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)300' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_catholic__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)301' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_protestant__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)302' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_orthodox__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)303' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_oriental_orthodox__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)304' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_sunni__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)305' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_shiite__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)306' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_ibadi__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)307' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_jewish__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)308' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_mahayana__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)309' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_gelugpa__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)310' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_theravada__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)311' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_confucian__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)312' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_hindu__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)313' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_shinto__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)314' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_sikh__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)315' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/faith_animist__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)400' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__opera_house.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)401' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_chinese__opera_house.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)402' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_greek__opera_house.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)410' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__gardens.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)411' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_avestan__gardens.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)412' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_arabic__gardens.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)413' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_chinese__gardens.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)420' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__observatory.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)421' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_sanskrit__observatory.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)422' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_avestan__observatory.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)423' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_chinese__observatory.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)424' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_mayan__observatory.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)430' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__exhibition_hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)440' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/generic__stadium.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)441' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_latin__stadium.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)442' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_greek__stadium.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)443' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_nahuatl__stadium.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)444' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/heritage_mayan__stadium.dds"
+		}
+		### Its grandeur frame over it (spec §3.5): none below the first step.
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)1' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_1.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)2' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_2.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)3' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_3.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)4' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_4.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)5' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_5.dds"
+		}
+	}
+
+	### A monument's status over its picture: a badge at the picture's
+	### top-left corner, the status word beneath the picture. The instance sets
+	### the texture, the `visible` (one status code each) and a tooltip that
+	### reads nothing (gotcha #24); the state card widens it to its picture.
 	type gm_row_status = widget {
-		size = { 96 58 }
+		block "status_size" {
+			size = { 96 116 }
+		}
 
 		icon = {
-			size = { 36 36 }
-			parentanchor = top|hcenter
+			size = { 28 28 }
+			parentanchor = top|left
+			position = { 2 2 }
 			block "status_texture" {}
 		}
 		textbox = {
@@ -405,32 +843,40 @@ types grand_monuments_widget_types
 			ignoreinvisible = yes
 			spacing = 8
 
-			gm_row_status = {
-				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)1' )]"
-				tooltip = "gm_je_status_undedicated_tt"
-				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
+			widget = {
+				size = { 96 116 }
+
+				gm_picture = {
+					size = { 96 96 }
+					parentanchor = top|hcenter
 				}
-			}
-			gm_row_status = {
-				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2' )]"
-				tooltip = "gm_je_status_upheld_tt"
-				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)1' )]"
+					tooltip = "gm_je_status_undedicated_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
+					}
 				}
-			}
-			gm_row_status = {
-				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)3' )]"
-				tooltip = "gm_je_status_heritage_tt"
-				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2' )]"
+					tooltip = "gm_je_status_upheld_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
+					}
 				}
-			}
-			gm_row_status = {
-				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
-				tooltip = "gm_je_status_contested_tt"
-				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/gm_icons/status_contested.dds"
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)3' )]"
+					tooltip = "gm_je_status_heritage_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
+					}
+				}
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
+					tooltip = "gm_je_status_contested_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_contested.dds"
+					}
 				}
 			}
 

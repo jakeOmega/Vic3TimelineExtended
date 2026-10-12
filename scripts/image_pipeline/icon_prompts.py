@@ -181,6 +181,11 @@ _GUI_FILES = {
 # `generate_icons.py` produces also names where its entities live
 # (`entity_dir`) and the field holding the icon path (`field`); its icons are
 # written to gfx/interface/icons/<folder>/<key>.dds.
+# The framed diorama of vanilla's building icons, also the Grand Monument pictures'.
+BUILDING_STYLE = ("aerial three-quarter view of {subject}, detailed painted illustration "
+                  "of a miniature diorama, warm golden afternoon light, muted earthy "
+                  "palette, surrounding landscape, the building fills the center of the image")
+
 CATEGORIES = {
     "technology": dict(
         folder="invention_icons", size=256, mode="cutout", fill=0.92,
@@ -205,10 +210,17 @@ CATEGORIES = {
     # Up to 0.5 the repaint adds texture but keeps a flat picture flat; the brushwork shows from 0.625.
     "building": dict(
         folder="building_icons", size=256, mode="framed", restyle_strengths=(0.0, 0.375, 0.5, 0.625, 0.75),
-        entity_dir="common/buildings", field="icon",
-        style=("aerial three-quarter view of {subject}, detailed painted illustration "
-               "of a miniature diorama, warm golden afternoon light, muted earthy "
-               "palette, surrounding landscape, the building fills the center of the image")),
+        entity_dir="common/buildings", field="icon", style=BUILDING_STYLE),
+    # Grand Monument pictures (spec 2026-10-11): one per style and form, shown in
+    # the journal entry's monument rows and on the state card through the
+    # gm_picture type, so GUI-hosted (keys are file names, written to
+    # gm_pictures/<key>.dds). Framed like the building icons, whose frame and
+    # neighbours they borrow: there is no vanilla gm_pictures folder.
+    "gm_picture": dict(
+        folder="gm_pictures", size=256, mode="framed", template_folder="building_icons",
+        neighbours="building_icons",
+        gui=("gui/journal_entry_widgets/grand_monuments_widget.gui", "gui/te_state_panel_widgets.gui"),
+        style=BUILDING_STYLE),
     # Ideology icons are read only from `icon =` (Ideology.GetTexture). IG
     # ideologies are gold on a crimson disc; leader (character) ideologies
     # silver on teal, in ideology_leader/. Vanilla gives an ideology held by
@@ -336,6 +348,22 @@ CATEGORIES = {
     "prestige_good": dict(
         folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92, grade_strength=0.4,
         entity_dir="common/prestige_goods", field="texture",
+        style="{subject}, one chunky readable object, " + PAINTED),
+    # Vanilla's own prestige goods the mod renamed (localization/english/replace/),
+    # whose picture no longer fits the name. The mod defines no entity to wire,
+    # so the key is vanilla's file name and writing it over vanilla's path is
+    # the whole change, as for the goods.
+    "prestige_good_vanilla": dict(
+        folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92, grade_strength=0.4,
+        gui=(), style="{subject}, one chunky readable object, " + PAINTED),
+    # War goals and diplomatic plays (160 px, `texture =` in common/diplomatic_plays).
+    # Vanilla's 33 are painted objects on transparency in muted slate blue with
+    # dark red accents: chess pieces, flags on map tiles, documents. Measured:
+    # objects span 0.78-0.99 of the side (median 0.86), median saturation 0.33
+    # and value 0.43.
+    "war_goal": dict(
+        folder="war_goals", size=160, mode="cutout", fill=0.86, grade_strength=0.5,
+        entity_dir="common/diplomatic_plays", field="texture",
         style="{subject}, one chunky readable object, " + PAINTED),
     "journal_entry": dict(
         folder="event_icons", size=150, mode="cutout", fill=0.89, panel_preview=True,
@@ -1496,10 +1524,15 @@ ICONS: dict[str, dict[str, dict]] = {
         "company_basic_autarky": {"subject": "a black rubber tyre leaning against an oil barrel in front of a tall distillation tower", "seed": 1},
         "company_basic_synthetics": {"subject": "spools of brightly dyed red, blue and yellow thread beside a glass flask of purple dye", "seed": 1},
         # On vanilla's basic_construction until 2026-10-08, which vanilla's power bloc construction company keeps.
-        # Megastructure stays on it too: three subjects (a space elevator, a lattice tower, an orbital ring)
-        # drew a radio mast, an oil derrick and a station on a pale disc that broke the badge style.
         "company_infrastructure": {"subject": "a steel truss railway bridge with a train crossing it, a concrete highway running underneath", "seed": 1},
         "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
+        # Batch 5. Megastructure was left on basic_construction in batch 4: a space elevator, a lattice
+        # tower and an orbital ring drew a radio mast, an oil derrick and a station on a pale disc that
+        # broke the badge style. Batch 5: the tower above clouds mostly lost its disc (the sky was matted
+        # out with the ground); the owner took s3, whose disc partly survives (2026-10-11).
+        "company_megastructure_consortium": {"subject": "a colossal stepped skyscraper tower rising high above a layer of white clouds, two tiny construction cranes on its unfinished top", "seed": 3},
+        # "Unnamed Monument", the Grand Monuments name carrier: shown in the rename popup while a monument is named.
+        "company_gm_name_carrier": {"subject": "a blank smooth grey granite dedication plaque standing upright, a stonemason's wooden mallet and steel chisel resting against its foot", "seed": 2},
     },
     # The PLACEHOLDER cards of gen_placeholder_company_icons.py: the company's trade, no logo or lettering.
     # Interim for the seventeen real companies: the owner may draw their real logos (2026-10-07); drop an
@@ -1563,6 +1596,33 @@ ICONS: dict[str, dict[str, dict]] = {
                         "now": f"{_GI}/goods_icons/tech_metals.dds"},
         "tourism": {"subject": "a brown leather suitcase with a camera on a strap and a straw sun hat resting on top", "seed": 2,
                     "now": f"{_GI}/goods_icons/tourism.dds"},
+        # Batch 5: vanilla goods the mod renamed, written over vanilla's file so the
+        # text icon (@fertilizer!, @opium!) follows. Chemicals showed the basic
+        # chemicals company badge (REPLACE:fertilizer's texture, pointed back at
+        # goods_icons/fertilizer.dds) and its text icon vanilla's potted plant.
+        # Not bottles, which Dye is. Next subject if it misses: a dented blue steel
+        # drum beside a round-bottomed glass flask of green liquid.
+        "fertilizer": {"subject": "a large round green glass carboy of clear liquid with a cork stopper, held in a wooden crate packed with straw", "seed": 1,
+                       "now": f"{_GI}/company_icons/basic_chemicals.dds"},
+        # Drugs, which includes medicines, on vanilla's opium pipe and poppy pods.
+        # Reroll: "a dried poppy seed pod" drew a brown burr.
+        "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": 3,
+                  "now": f"{_GI}/goods_icons/opium.dds"},
+    },
+    # Batch 5: the two renamed prestige goods of the goods above, each a finer
+    # version of its good's idea (bulk carboy -> small reagent vials).
+    "prestige_good_vanilla": {
+        # Specialty Reagents (vanilla's Enriched Fertilizer, a fertilizer sack).
+        "generic_fertilizer_prestige": {"subject": "a polished wooden laboratory rack holding a row of slender stoppered glass vials of bright red, blue, green and amber liquids", "seed": 1,
+                                        "now": f"{_GI}/goods_icons/prestige_goods/generic_fertilizer_prestige.dds"},
+        # Potent Formulations (vanilla's Pure Opium, an opium box and pipe).
+        "generic_opium_prestige": {"subject": "a small open silver pillbox lined with blue velvet, full of glossy red-and-white capsules", "seed": 1,
+                                   "now": f"{_GI}/goods_icons/prestige_goods/generic_opium_prestige.dds"},
+    },
+    # Batch 5: the mod's diplomatic plays on a vanilla war goal's picture.
+    "war_goal": {
+        # War After a Nuclear Exchange, on Humiliation's boots on a flag. s3, the owner's pick (2026-10-11).
+        "dp_nuclear_exchange": {"subject": "a cracked and scorched slate-blue map tile of land with a small grey mushroom cloud rising from its centre, muted slate-blue and grey colours", "seed": 3},
     },
     # The Timeline Extended window's launcher, on vanilla's Journal button until now.
     "sidebar_button": {
@@ -1957,6 +2017,171 @@ ICONS: dict[str, dict[str, dict]] = {
         "colony_dwarf": {"subject": "a small round tan-and-rust-brown dwarf planet with a pale heart-shaped patch and "
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+    },
+    # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
+    # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.
+    "gm_picture": {
+        "undedicated": {"subject": "a tall monument entirely hidden under a huge pale canvas drape tied with ropes, scaffolding poles beside it, a small crowd waiting in the plaza, loosely hand-painted with visible brush strokes", "seed": 1,
+                       "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__column": {"subject": "a tall fluted marble column topped by a bronze statue of a figure, on a stepped pedestal in a city square", "seed": 1,
+                           "now": f"{_BI}/building_grand_monument.dds"},
+        # s1 is retouched: lettering on its attic panel (owner's pick, 2026-10-11).
+        "generic__arch": {"subject": "a massive neoclassical triumphal arch of pale stone with carved reliefs, a wide avenue running through it", "seed": 1,
+                         "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__obelisk": {"subject": "a tall plain white stone obelisk with a pointed pyramid tip, standing centred on a wide stepped stone plaza in a park", "seed": 1,
+                            "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__statue": {"subject": "a colossal bronze equestrian statue of a rider on a rearing horse, on a tall granite pedestal in a city square", "seed": 0,
+                           "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__gate": {"subject": "a monumental neoclassical city gate of twelve Doric columns forming five passages under a plain flat entablature, nothing on its roof, at the end of a wide boulevard", "seed": 1,
+                         "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__hall": {"subject": "a grand neoclassical hall with a long colonnade and wide steps, on a hill above a river", "seed": 1,
+                         "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__mausoleum": {"subject": "a domed neoclassical marble mausoleum with a columned portico, among dark cypress trees", "seed": 0,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_latin__column": {"subject": "a Roman triumphal column wrapped in a spiralling carved frieze, a bronze statue on top, in a paved forum", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_latin__arch": {"subject": "a Roman triumphal arch with three passages, carved reliefs and a bronze four-horse chariot on top", "seed": 1,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_latin__forum": {"subject": "a Roman forum, a paved open square ringed by temples with Corinthian columns and a long basilica", "seed": 0,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_hebrew__gate": {"subject": "a massive city gate of golden limestone with a pointed arch between two crenellated towers", "seed": 1,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_hebrew__court": {"subject": "a great colonnaded courtyard of golden limestone around a fountain, a grand domed hall at its far end", "seed": 1,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_hebrew__pillar": {"subject": "a single tall golden limestone memorial pillar on a stepped base, carved with grapevines and pomegranates", "seed": 1,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_hebrew__menorah": {"subject": "a giant bronze candelabrum sculpture with exactly seven smooth plain branches, three curving up on each side of a central stem, on a stepped stone plinth in a plaza", "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_sanskrit__pillar": {"subject": "a tall polished sandstone pillar crowned by four stone lions back to back, on a stone platform", "seed": 1,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_sanskrit__gate": {"subject": "a sandstone gateway of two square pillars carrying three curved stone crossbeams one above another, carved elephants on the beams, at the edge of a grassy terrace", "seed": 2,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_geez__stele": {"subject": "a towering carved granite stele with false windows and doors carved up its face, among smaller stelae", "seed": 0,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_geez__rock_hewn_church": {"subject": "a rectangular church carved down out of a single block of red rock, its flat roof level with the ground, carved windows on its sides, standing in a deep trench cut around it", "seed": 2,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_slavonic__memorial_church": {"subject": "a white stone memorial church with gilded onion domes", "seed": 0,
+                                              "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_slavonic__column": {"subject": "a tall red granite column topped by a bronze angel, in a vast palace square", "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_slavonic__bell_tower": {"subject": "a tall white tiered bell tower with a golden dome and open arched bell chambers", "seed": 0,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_avestan__gate": {"subject": "a monumental Persian palace gate guarded by huge stone winged bulls, tall columns rising behind it", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_avestan__hall": {"subject": "a vast Persian columned audience hall on a raised stone terrace, with carved processional stairways", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_arabic__hall": {"subject": "a great palace hall with rows of red and white striped horseshoe arches under a carved dome", "seed": 0,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_arabic__gate": {"subject": "a monumental gate with a tall pointed arch covered in blue and turquoise tilework, between two slender towers", "seed": 1,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_chinese__hall": {"subject": "a grand Chinese palace hall with a double-eaved golden-yellow tiled roof on a three-tiered white marble terrace", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_chinese__gate": {"subject": "a tall Chinese ceremonial archway of red lacquered pillars and green-and-gold tiled roofs", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_chinese__pagoda": {"subject": "a tall nine-storey Chinese pagoda with upturned eaves at every level, beside a lake", "seed": 0,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_greek__pantheon": {"subject": "a Greek Doric temple of white marble with a sculpted pediment, on a rocky hilltop", "seed": 0,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_greek__column": {"subject": "a single tall Ionic marble column bearing a winged victory statue, in a Greek plaza", "seed": 1,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_greek__stoa": {"subject": "a long two-storey Greek stoa colonnade of white marble lining a market square", "seed": 1,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_irish__round_tower": {"subject": "a tall slender Irish stone round tower with a conical stone cap, beside a ruined chapel in green hills", "seed": 1,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_irish__high_cross": {"subject": "a tall carved Celtic stone high cross with a ring around its head, in a green churchyard", "seed": 1,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_nahuatl__pyramid": {"subject": "a stepped Aztec pyramid with twin temples on top and a steep double staircase, in a plaza", "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_nahuatl__sun_stone": {"subject": "a giant round carved stone sun calendar disc standing upright on a plinth in a plaza", "seed": 1,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_norse__rune_stone": {"subject": "a tall rune stone carved with a looping serpent band, on a grassy burial mound by a fjord", "seed": 0,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_norse__hall": {"subject": "a long Viking mead hall with a curved turf roof and carved dragon heads on its gables", "seed": 1,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_gothic__hall_of_fame": {"subject": "a white marble Greek-temple hall of fame on a high terraced hill above a wide river", "seed": 0,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_gothic__tower": {"subject": "a massive square memorial tower of dark granite on a hilltop, ringed near its top by huge stone warrior figures, its plain walls and base uncarved", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_mayan__pyramid": {"subject": "a steep Maya temple-pyramid with a roof-comb temple on top, rising from the jungle", "seed": 1,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_mayan__stela": {"subject": "a tall Maya stone stela carved with a richly dressed ruler, beside a round altar stone in a jungle plaza", "seed": 1,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_prussian__hill_shrine": {"subject": "a grassy terraced hill fort with a wooden palisade and a small wooden shrine on its summit", "seed": 1,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_prussian__sacred_oak": {"subject": "an enormous ancient oak tree in a clearing, ringed by carved wooden posts around a stone altar", "seed": 0,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_aramaic__rock_cut": {"subject": "a tall classical temple facade carved straight into a rose-red sandstone cliff", "seed": 1,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_aramaic__colonnade": {"subject": "a long desert colonnade of weathered sandstone columns with a monumental arch, palm trees around it", "seed": 0,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_catholic__faith": {"subject": "a great domed basilica with twin bell towers and a colonnaded forecourt", "seed": 0,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_protestant__faith": {"subject": "a tall Gothic cathedral of grey stone with a single soaring spire", "seed": 0,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_orthodox__faith": {"subject": "a large Orthodox cathedral with five gilded onion domes and white walls", "seed": 0,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_oriental_orthodox__faith": {"subject": "an ancient stone church with a tall conical dome on a high plateau", "seed": 1,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_sunni__faith": {"subject": "a great mosque with a broad central dome, cascading half-domes and four slender minarets", "seed": 0,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_shiite__faith": {"subject": "a Persian shrine mosque with a golden onion dome on a tall tiled drum, two slender golden minarets and a tall tiled entrance arch facing a courtyard", "seed": 2,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_ibadi__faith": {"subject": "a plain whitewashed mosque with a square minaret and a small low dome, beside date palms", "seed": 0,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_jewish__faith": {"subject": "a grand domed synagogue in Moorish revival style with two towers and horseshoe arches", "seed": 0,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_mahayana__faith": {"subject": "a tall multi-storey wooden Buddhist pagoda with red pillars and upturned eaves among pine trees", "seed": 0,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_gelugpa__faith": {"subject": "a vast white and red Tibetan monastery climbing a mountainside, with golden roofs", "seed": 0,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_theravada__faith": {"subject": "a huge golden bell-shaped stupa with a tall pointed spire, ringed by smaller shrines", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_confucian__faith": {"subject": "a Confucian temple of red walls and yellow-tiled halls around a courtyard of old cypress trees", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_hindu__faith": {"subject": "a Hindu temple complex with tall carved stone gateway towers and a stepped water tank", "seed": 1,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_shinto__faith": {"subject": "a Shinto grand shrine of unpainted cypress wood with a thatched roof, approached through a large torii gate in a cedar forest", "seed": 1,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_sikh__faith": {"subject": "a white marble gurdwara with a ribbed central dome and small domed kiosks, beside a large pool", "seed": 0,
+                             "now": f"{_BI}/building_grand_monument.dds"},
+        "faith_animist__faith": {"subject": "a sacred grove of giant trees hung with ribbons, carved wooden totems around a stone circle in a clearing", "seed": 0,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__opera_house": {"subject": "a grand Beaux-Arts opera house with a green copper dome and gilded statues on its facade", "seed": 0,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_chinese__opera_house": {"subject": "a Chinese opera stage pavilion with sweeping red and gold roofs, facing a courtyard of seats", "seed": 0,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_greek__opera_house": {"subject": "a great semicircular open-air Greek stone theatre cut into a hillside, a stage building at its foot", "seed": 0,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__gardens": {"subject": "botanical gardens with a great Victorian glass and iron palm house among formal flower beds", "seed": 0,
+                            "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_avestan__gardens": {"subject": "a Persian garden divided into four by long water channels, a pavilion at its centre and rows of cypresses", "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_arabic__gardens": {"subject": "an Andalusian courtyard garden with a long reflecting pool, orange trees and arcades of slender columns", "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_chinese__gardens": {"subject": "a Chinese scholar's garden with a zigzag bridge, rockeries, a pond and a pavilion", "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__observatory": {"subject": "a grand domed astronomical observatory on a hilltop, its dome slit open to the sky", "seed": 0,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_sanskrit__observatory": {"subject": "a courtyard of huge pink stone astronomical instruments: a giant triangular sundial wall with a staircase up its sloping edge and curved quadrant scales on both sides", "seed": 0,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_avestan__observatory": {"subject": "a great curved stone meridian arc descending into a round blue-tiled building", "seed": 0,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_chinese__observatory": {"subject": "an ancient Chinese observatory on a city wall tower, with large bronze armillary spheres", "seed": 1,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_mayan__observatory": {"subject": "a Maya round observatory tower on a stepped stone platform in the jungle", "seed": 0,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__exhibition_hall": {"subject": "a vast glass and iron exhibition palace with a barrel-vaulted transept, flags flying", "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "generic__stadium": {"subject": "a large modern oval sports stadium with floodlights and a green pitch inside", "seed": 1,
+                            "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_latin__stadium": {"subject": "a great oval Roman amphitheatre arena of tiered stone arches", "seed": 1,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_greek__stadium": {"subject": "a long horseshoe-shaped white marble stadium with tiered stone seats", "seed": 0,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_nahuatl__stadium": {"subject": "an Aztec ball court shaped like a capital I with stone rings set in its walls, in a plaza", "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "heritage_mayan__stadium": {"subject": "a Maya ball court between two long sloping stone walls with stone rings set high on them", "seed": 0,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
     },
 }
 

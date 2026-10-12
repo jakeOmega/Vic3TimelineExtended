@@ -1133,5 +1133,38 @@ class StyleOverrideTests(unittest.TestCase):
         self.assertEqual(seen["jobs"], [("building__building_station", want, 0)])
 
 
+class TemplateFolderTests(unittest.TestCase):
+    """A framed category with no vanilla folder of its own borrows another's frame."""
+
+    def test_framed_template_comes_from_template_folder(self):
+        try:
+            import icon_render
+            from PIL import Image
+        except ImportError:
+            self.skipTest("Pillow/numpy are not installed")
+        seen = []
+        saved = icon_render.vanilla_template
+        icon_render.vanilla_template = lambda folder, size: seen.append((folder, size)) or ("t", "s")
+        saved_framed = icon_render.compose_framed
+        icon_render.compose_framed = lambda raw, spec, tmpl: tmpl
+        try:
+            c = icon_render.Composer()
+            out = c.compose(Image.new("RGB", (8, 8)), "gm_picture",
+                            {"mode": "framed", "folder": "gm_pictures", "template_folder": "building_icons",
+                             "size": 256})
+        finally:
+            icon_render.vanilla_template = saved
+            icon_render.compose_framed = saved_framed
+        self.assertEqual(seen, [("building_icons", 256)])
+        self.assertEqual(out, ("t", "s"))
+
+    def test_gm_picture_category(self):
+        spec = ip.CATEGORIES["gm_picture"]
+        self.assertEqual((spec["folder"], spec["size"], spec["mode"]), ("gm_pictures", 256, "framed"))
+        self.assertEqual(spec["template_folder"], "building_icons")
+        self.assertEqual(spec["style"], ip.CATEGORIES["building"]["style"])
+        self.assertIn("gui/journal_entry_widgets/grand_monuments_widget.gui", spec["gui"])
+
+
 if __name__ == "__main__":
     unittest.main()

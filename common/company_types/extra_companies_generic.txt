@@ -810,7 +810,7 @@ INJECT:company_basic_mineral_mining = {
 
 # --- Megastructure Consortium ---
 company_megastructure_consortium = {
-	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	icon = "gfx/interface/icons/company_icons/company_megastructure_consortium.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_harbor_shipbuilding.dds"
 
 	uses_dynamic_naming = yes

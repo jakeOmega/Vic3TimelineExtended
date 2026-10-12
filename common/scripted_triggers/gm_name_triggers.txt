@@ -119,15 +119,7 @@ gm_state_form_fits_hall = {
 
 gm_state_form_fits_tower = {
 	gm_state_takes_monument_forms = yes
-	OR = {
-		gm_state_skin_is = { SKIN = generic GENERIC = yes }
-		gm_state_skin_is = { SKIN = heritage_gothic GENERIC = no }
-	}
-}
-
-gm_state_form_fits_memorial = {
-	gm_state_takes_monument_forms = yes
-	gm_state_skin_is = { SKIN = generic GENERIC = yes }
+	gm_state_skin_is = { SKIN = heritage_gothic GENERIC = no }
 }
 
 # A mausoleum only for a late ruler's commission (§2.2), or a monument already one.
@@ -227,6 +219,43 @@ gm_state_form_fits_rock_cut = {
 	gm_state_skin_is = { SKIN = heritage_aramaic GENERIC = no }
 }
 
+# Added 2026-10-11 (spec §2.3): a second form for the one-form heritage skins,
+# and the forms the Hebrew and Slavonic skins' names promised.
+gm_state_form_fits_menorah = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_hebrew GENERIC = no }
+}
+
+gm_state_form_fits_bell_tower = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_slavonic GENERIC = no }
+}
+
+gm_state_form_fits_rock_hewn_church = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_geez GENERIC = no }
+}
+
+gm_state_form_fits_sun_stone = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_nahuatl GENERIC = no }
+}
+
+gm_state_form_fits_stela = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_mayan GENERIC = no }
+}
+
+gm_state_form_fits_sacred_oak = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_prussian GENERIC = no }
+}
+
+gm_state_form_fits_colonnade = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_aramaic GENERIC = no }
+}
+
 gm_state_form_fits_faith = {
 	gm_state_is_dedicated = yes
 	gm_state_has_building_form = no
@@ -269,6 +298,11 @@ gm_state_has_form_choice = {
 		gm_state_skin_is = { SKIN = heritage_irish GENERIC = no }
 		gm_state_skin_is = { SKIN = heritage_norse GENERIC = no }
 		gm_state_skin_is = { SKIN = heritage_gothic GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_geez GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_nahuatl GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_mayan GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_prussian GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_aramaic GENERIC = no }
 	}
 }
 
@@ -301,7 +335,6 @@ gm_state_com_form_fits = {
 		AND = { owner = { var:gm_com_form = flag:gate } gm_state_form_fits_gate = yes }
 		AND = { owner = { var:gm_com_form = flag:hall } gm_state_form_fits_hall = yes }
 		AND = { owner = { var:gm_com_form = flag:tower } gm_state_form_fits_tower = yes }
-		AND = { owner = { var:gm_com_form = flag:memorial } gm_state_form_fits_memorial = yes }
 		AND = { owner = { var:gm_com_form = flag:mausoleum } gm_state_form_fits_mausoleum = yes }
 	}
 }
@@ -336,7 +369,6 @@ gm_state_current_form_fits = {
 		AND = { var:gm_form = flag:gate gm_state_form_fits_gate = yes }
 		AND = { var:gm_form = flag:hall gm_state_form_fits_hall = yes }
 		AND = { var:gm_form = flag:tower gm_state_form_fits_tower = yes }
-		AND = { var:gm_form = flag:memorial gm_state_form_fits_memorial = yes }
 		AND = { var:gm_form = flag:mausoleum gm_state_form_fits_mausoleum = yes }
 		AND = { var:gm_form = flag:forum gm_state_form_fits_forum = yes }
 		AND = { var:gm_form = flag:pantheon gm_state_form_fits_pantheon = yes }
@@ -353,6 +385,13 @@ gm_state_current_form_fits = {
 		AND = { var:gm_form = flag:hall_of_fame gm_state_form_fits_hall_of_fame = yes }
 		AND = { var:gm_form = flag:hill_shrine gm_state_form_fits_hill_shrine = yes }
 		AND = { var:gm_form = flag:rock_cut gm_state_form_fits_rock_cut = yes }
+		AND = { var:gm_form = flag:menorah gm_state_form_fits_menorah = yes }
+		AND = { var:gm_form = flag:bell_tower gm_state_form_fits_bell_tower = yes }
+		AND = { var:gm_form = flag:rock_hewn_church gm_state_form_fits_rock_hewn_church = yes }
+		AND = { var:gm_form = flag:sun_stone gm_state_form_fits_sun_stone = yes }
+		AND = { var:gm_form = flag:stela gm_state_form_fits_stela = yes }
+		AND = { var:gm_form = flag:sacred_oak gm_state_form_fits_sacred_oak = yes }
+		AND = { var:gm_form = flag:colonnade gm_state_form_fits_colonnade = yes }
 		AND = { var:gm_form = flag:faith gm_state_form_fits_faith = yes }
 		AND = { var:gm_form = flag:opera_house gm_state_form_fits_opera_house = yes }
 		AND = { var:gm_form = flag:gardens gm_state_form_fits_gardens = yes }
