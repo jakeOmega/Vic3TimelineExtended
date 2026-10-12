@@ -47,6 +47,7 @@ class Inputs:
     pension_age: float | None = None     # the owner's pension age under Old Age Pension; None = the Standard position
     birth_limit: float = 0.0             # Birth Limit's part of P.DESIRED_TYPE (its modifier's line: 0, -0.3 or -0.45;
                                          # the script's te_demog_ms_birth_limit_part), which the Rural Exemption relieves
+    malaria: int = 0                     # the state region's malaria trait level (P.MALARIA_TRAITS; calibration step 3)
 
 
 def clamp(x, lo, hi):
@@ -128,6 +129,9 @@ def cause_factors(inp):
             return plain_multiplier(inp, cause)
         if factor == "turmoil":
             return 1 + P.TURMOIL_EXTERNAL_WEIGHT * clamp(inp.turmoil, 0.0, 1.0)
+        if factor == "malaria":
+            control = clamp(inp.mods.get(P.MALARIA_CONTROL_TYPE, 0.0), 0.0, 1.0)
+            return 1 + P.MALARIA_INFECTION.get(inp.malaria, 0.0) * (1 - control)
         raise KeyError(factor)
     return {cause: {f: one(f, cause) for f in factors} for cause, factors in P.CAUSE_FACTORS.items()}
 

@@ -154,8 +154,7 @@ class TestMaternal(unittest.TestCase):
     def test_the_stored_input_and_the_factor_match_the_model(self):
         for line in (0.0, 0.25, -0.9):
             inp = M.Inputs(mods={P.MATERNAL_TYPE: line})
-            eng = _Engine({**_fixtures(MATERNAL_TYPE=line), "turmoil": 0.0,
-                           **{f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}})
+            eng = _Engine(R._mod_fixtures(inp))   # every read the store makes (calibration step 3's malaria too)
             eng.vars.update(te_dg_sol=8.0, te_dg_lit=0.0)
             eng.call("te_demog_cause_inputs_store")
             self.assertAlmostEqual(eng.vars["te_dg_in_mat"], line)

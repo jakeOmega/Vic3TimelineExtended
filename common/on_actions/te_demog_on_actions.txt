@@ -35,6 +35,8 @@ te_demog_country_monthly_on_action = {
 		te_demog_ms_monthly = yes
 		# phase 2 step 1's once-a-game self-checks (te_debug_demog_effects.txt; they gate on the census themselves)
 		te_debug_demog_wf_selfchecks = yes
+		# calibration step 3's (te_debug_demog_effects.txt)
+		te_debug_demog_step3_selfchecks = yes
 	}
 }
 

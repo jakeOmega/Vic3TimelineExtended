@@ -3,6 +3,7 @@ regional report read (docs/superpowers/plans/2026-10-11-demographics-late-marria
 
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -47,6 +48,29 @@ class TestSnapshot(unittest.TestCase):
         named = [r for _label, regions, _hist in R.REPORT_REGIONS for r in regions]
         self.assertEqual(len(named), len(set(named)))
         self.assertEqual(set(named), set(self.table))
+
+
+class TestMalariaLevels(unittest.TestCase):
+    """Calibration step 3 (the spec's §2.2): vanilla's malaria traits by state region, from the map files."""
+
+    def test_the_traits_cover_africa_oceania_and_three_indonesian_regions(self):
+        levels, of = R.malaria_levels(), R.strategic_region_of()
+        self.assertEqual((levels["STATE_CONGO"], levels["STATE_GOLD_COAST"]), (2, 1))
+        self.assertNotIn("STATE_JAVA", levels)
+        africa = dict((label, regions) for label, regions, _band in R.REPORT_REGIONS)["Africa"]
+        where = {of[s] for s in levels}
+        self.assertLessEqual(where, set(africa) | {"region_oceania", "region_indonesia"})
+        self.assertEqual(sum(1 for s in levels if of[s] == "region_indonesia"), 3)
+        self.assertEqual((len(levels), sum(1 for v in levels.values() if v == 2)), (75, 26))
+
+    def test_a_region_with_both_traits_takes_the_severe_one(self):
+        levels = {"state_trait_malaria": 1, "state_trait_severe_malaria": 2}
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "00_test.txt").write_text(
+                'STATE_A = {\n\ttraits = { "state_trait_malaria" "state_trait_severe_malaria" }\n}\n'
+                'STATE_B = {\n\ttraits = { "state_trait_natural_harbors" }\n}\nSTATE_C = {\n\tid = 3\n}\n',
+                encoding="utf-8")
+            self.assertEqual(R.malaria_levels(levels, state_regions=d), {"STATE_A": 2})
 
 
 if __name__ == "__main__":

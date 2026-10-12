@@ -194,7 +194,11 @@ CAPACITY_TYPE = "state_work_capacity_mult"                       # capacity x (1
 PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYPE)
 # Every census input type: the mortality and fertility inputs, the spread of medicine and call 3's participation inputs
 # (demographics_modifier_types.txt, which a release comments out with their carriers' lines).
-DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES
+# Calibration step 3's malaria control (the malaria factor's off switch, with the factor below): 0 to 1, on
+# malaria_prevention at 1 (te_demog_tech_injections.txt).
+MALARIA_CONTROL_TYPE = "state_malaria_control_add"
+DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES
+               + (MALARIA_CONTROL_TYPE,))
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of
@@ -313,7 +317,7 @@ CROWDING_INFECTION_MAX = 0.5             # at most +50%, just past ten times the
 # factor (te_demog_f_<cause>_<factor>) and each te_demog_mult_<cause> as their product; the state subtab's Causes of
 # Death section reads the same values, so the display and the census can't disagree.
 CAUSE_FACTORS = {
-    "infection": ("medicine", "sol", "poverty", "literacy", "crowding"),
+    "infection": ("medicine", "sol", "poverty", "literacy", "crowding", "malaria"),
     "work": ("laws",),
     "external": ("laws", "turmoil"),
     "maternal": ("medicine", "laws"),   # laws: phase 2 step 3b's state_maternal_mortality_mult
@@ -321,6 +325,41 @@ CAUSE_FACTORS = {
 }
 # Short names of the state variables (te_dg_m_<short>, te_dg_trt_<short>, te_dg_in_<short>).
 CAUSE_SHORT = {"infection": "inf", "work": "work", "external": "ext", "maternal": "mat", "chronic": "chr"}
+
+# ---- Calibration step 3: the regional mortality gap (owner, 2026-10-12; #894) ----------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md. Owner calls 1-3 approved 2026-10-12.
+# The malaria factor (§2.2, call 2): infection x (1 + the excess) in a state with one of vanilla's malaria traits, the
+# only geographic input that reaches a region needing more deaths (Africa) and nothing that needs fewer. The factor is
+# 1 + the trait's excess x (1 - the state's MALARIA_CONTROL_TYPE, 0 to 1). The trait's level (0 none,
+# 1 state_trait_malaria, 2 state_trait_severe_malaria) and the control are the step's inputs te_dg_in_mal and
+# te_dg_in_malc. Malaria Prevention (era 4) carries the control at 1, so it ends the factor. Quinine leaves it alone:
+# vanilla's traits are colonists' mortality, and quinine protected colonists, not the people who lived there. The
+# census's infection treatment reaches it through the medicine factor, which multiplies the whole infection rate, this
+# factor included. The severe trait's excess is the mild one's x vanilla's own ratio for colonists (0.25 against 0.15),
+# to 0.01. Fitted with `demographics_harness.py ontop-fit` against Africa's band on the overnight observer run of
+# 2026-10-12 (the spec's §3).
+MALARIA_TRAITS = {"state_trait_malaria": 1, "state_trait_severe_malaria": 2}
+MALARIA_SEVERE_RATIO = 0.25 / 0.15
+MALARIA_INFECTION = {1: 0.08, 2: 0.13}
+# The fallback for spec §6's P3 (the malaria_trait_read self-check): True reads the trait from the state regions the
+# map files give it (map_data/state_regions) instead of has_state_trait, should the check find the trait unreadable
+# once a disabling technology has switched its modifier off.
+MALARIA_READS_REGION_LIST = False
+# The Landowners' famine reserves (§2.1, call 1): under Full the census absorbs, per pop, the country-scope lines on these
+# building groups' mortality keys, as it absorbs mild starvation: each pop working in the group adds its owner's read
+# of building_group_<g>_mortality_mult x COUNTRY_ABSORBED_SCALE to the walk's absorbed sum, so M nets it. Today the only
+# country carrier of the key is vanilla's ig_trait_famine_reserves (agriculture -0.10). The country's read carries the
+# interest group's power: a powerful group's traits count double (POWERFUL_IG_TRAIT_BONUS), so in 1836 India it reads
+# -0.20, the size the walk measured on farm pops (the spec's "doubled" line). Building-scope lines (working conditions,
+# production methods, company lines, executives' traits) stay on top at the bare curve's weight. That the country's read
+# carries the doubling, and reads a building-group key at all, is inferred from the saves until the self-check
+# famine_reserves_absorbed (spec §6's P1) logs OK. Its two fallbacks: should the walk read a farm pop's line at k x the
+# country's, set the scale to k; should the country's read be 0, set COUNTRY_ABSORBED_FROM_FARM, which absorbs the
+# workplace's own read on subsistence farms only. No company owns one, so that read holds only the trait (no
+# building-scope line), but it leaves the trait on top for commercial farms' workers (the other agriculture groups).
+COUNTRY_ABSORBED_GROUPS = ("bg_agriculture",)
+COUNTRY_ABSORBED_SCALE = 1.0
+COUNTRY_ABSORBED_FROM_FARM = False
 # Turmoil (owner, 2026-10-11): accidents and violence x (1 + this x the state's turmoil, a 0-1 share). Vanilla's
 # state_turmoil modifiers carry no mortality; state_mortality_turmoil_mult's carriers (Violent Suppression, Militarized
 # Police, events) stay engine lines on top, which the walk leaves out (scaling unknown, measured about 0).

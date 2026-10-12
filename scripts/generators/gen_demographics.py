@@ -793,6 +793,9 @@ def medicine_effects(o):
     o("set_variable = { name = te_dg_in_crowd value = { value = var:migration_crowding_mult_applied "
       f"multiply = {lit(P.MIGRATION_CROWDING_PULL_PER_MULT)} }} }}")
     o("}")
+    o("# calibration step 3: the state's malaria trait (te_demog_malaria_level) and its control, 0 to 1")
+    o("set_variable = { name = te_dg_in_mal value = te_demog_malaria_level }")
+    o(f"set_variable = {{ name = te_dg_in_malc value = {{ value = modifier:{P.MALARIA_CONTROL_TYPE} min = 0 max = 1 }} }}")
     o("}")
     o("")
     pairs = [("te_dg_acc", "te_demog_access_target")]
@@ -1051,6 +1054,7 @@ def absorbed_terms(o, root, literacy, mild):
     its terms M under Full through the walk's sums: literacy's term and mild starvation's. The laws', technologies'
     and institutions' birth and mortality lines are script-only since 2026-10-11 (the engine-lines plan), so the engine
     never applies them under Full and there is nothing of theirs to net."""
+    country_absorbed_terms(o, root)
     o("# Pop scope: the terms the census absorbs per pop: literacy's (literacy_penalty) and mild starvation's")
     o("# (starvation_penalty). Severe starvation stays on top (owner amendment B). The laws', technologies' and")
     o("# institutions' lines are script-only (owner, 2026-10-11), so the census has none of theirs to net.")
@@ -1062,7 +1066,62 @@ def absorbed_terms(o, root, literacy, mild):
     o("te_demog_pop_absorbed_deaths = {")
     o("value = 0")
     _mild_starvation(o, "state_mortality_mult", mild)
+    o("add = te_demog_pop_country_absorbed_deaths")
     o("}")
+    o("")
+
+
+def _country_absorbed_gates(root):
+    """[(the building group's mortality key, its workplace gate)] for P.COUNTRY_ABSORBED_GROUPS: the key the walk adds
+    for a pop employed in the group or a descendant (te_demog_pop_death_mult reads every registered group key for
+    every pop type)."""
+    reg, parents = registered_modifier_types(root), building_group_parents(root)
+    out = []
+    for group in P.COUNTRY_ABSORBED_GROUPS:
+        key = f"building_group_{group}_mortality_mult"
+        assert key in reg and group in parents, f"{key}: not a registered type the walk reads"
+        out.append((key, _group_gate(group, parents)))
+    return out
+
+
+def country_absorbed_terms(o, root):
+    """Calibration step 3, call 1 (owner, 2026-10-12; the spec's §2.1): the country-scope lines the census absorbs per
+    pop under Full, the Landowners' famine reserves today. Each pop employed in a P.COUNTRY_ABSORBED_GROUPS group adds
+    its owner's read of the group's mortality key (x P.COUNTRY_ABSORBED_SCALE, the self-check's fallback) to the
+    walk's absorbed sum (te_demog_pop_absorbed_deaths), so M nets it: the line only moves deaths between a state's farm
+    workers and the rest. The owner's read carries the interest group's power (a powerful group's traits count double),
+    the size the walk reads at the workplace. A second value reads what the walk reads for the same keys at the
+    workplace, which also holds the building's own lines (executives' traits): the self-check famine_reserves_absorbed
+    compares the two on a subsistence farm, which no company owns."""
+    gates = _country_absorbed_gates(root)
+    farm_only = P.COUNTRY_ABSORBED_FROM_FARM   # the self-check's fallback: the farm's own read, subsistence farms only
+    for name, reader, scaled, note in (
+            ("te_demog_pop_country_absorbed_deaths", "workplace" if farm_only else "owner", True,
+             ("the country-scope lines the census absorbs per pop under",
+              "Full (the Landowners' famine reserves): its owner's read of each key where the walk adds that key")),
+            ("te_demog_pop_country_line_walk_read", "workplace", False,
+             ("what the walk reads for the same keys at the pop's",
+              "workplace, which also holds the building's own lines (the self-check famine_reserves_absorbed)"))):
+        o(f"# Pop scope (calibration step 3, call 1): {note[0]}")
+        o(f"# {note[1]}.")
+        o(f"{name} = {{")
+        o("value = 0")
+        o("if = {")
+        o("limit = {")
+        o("is_employed = yes")
+        o("exists = workplace")
+        o("}")
+        for key, gate in gates:
+            if farm_only and name == "te_demog_pop_country_absorbed_deaths":
+                gate = "is_building_group = bg_subsistence_agriculture"
+            o("if = {")
+            o(f"limit = {{ workplace = {{ {gate} }} }}")
+            o(f"add = {reader}.modifier:{key}")
+            o("}")
+        o("}")
+        if scaled and P.COUNTRY_ABSORBED_SCALE != 1.0:
+            o(f"multiply = {lit(P.COUNTRY_ABSORBED_SCALE)}")
+        o("}")
     o("")
 
 
@@ -1269,6 +1328,23 @@ def _factor_body(o, cause, factor):
         o(f"value = 1 add = var:te_dg_in_{s} min = {lit(P.MORTALITY_MULT_FLOOR)}")
     elif factor == "turmoil":
         o(f"value = var:te_dg_in_turm multiply = {lit(P.TURMOIL_EXTERNAL_WEIGHT)} add = 1")
+    elif factor == "malaria":
+        # calibration step 3: 1 + the trait's excess x (1 - the control); a step from before it stored neither, so the
+        # factor reads 1 until the state's next step
+        o("value = 0")
+        o("if = {")
+        o("limit = {")
+        o("has_variable = te_dg_in_mal")
+        o("has_variable = te_dg_in_malc")
+        o("}")
+        for i, level in enumerate(sorted(P.MALARIA_INFECTION, reverse=True)):
+            o(f"{'if' if i == 0 else 'else_if'} = {{")
+            o(f"limit = {{ var:te_dg_in_mal >= {level} }}")
+            o(f"add = {lit(P.MALARIA_INFECTION[level])}")
+            o("}")
+        o("multiply = { value = 1 subtract = var:te_dg_in_malc }")
+        o("}")
+        o("add = 1")
     else:
         raise KeyError(factor)
 
@@ -1301,6 +1377,47 @@ def medicine_target_values(o):
         o("value = 1")
         o(f"subtract = {{ value = te_demog_access_target multiply = te_demog_treatment_target_{cause} }}")
         o("}")
+    o("")
+
+
+def malaria_values(o, root):
+    """Calibration step 3, call 2 (owner, 2026-10-12; the spec's §2.2): the state's malaria level, which the step stores
+    as te_dg_in_mal (P.MALARIA_TRAITS: 1 malaria, 2 severe) beside the control P.MALARIA_CONTROL_TYPE (te_dg_in_malc;
+    malaria_prevention's line, not quinine's). The trait is read with has_state_trait, as vanilla reads it beside its own
+    quinine test (cultural_community_values.txt), which only makes sense if the trait outlasts the technology that
+    disables its modifier. The second value reads the same level from the state regions the map files give the traits:
+    the self-check malaria_trait_read's ground truth, and the census's read instead of has_state_trait under
+    P.MALARIA_READS_REGION_LIST (its fallback)."""
+    by_level = {}
+    for region, level in sorted(R.malaria_levels(state_regions=root / "map_data" / "state_regions").items()):
+        by_level.setdefault(level, []).append(region)
+    by_trait = {level: trait for trait, level in P.MALARIA_TRAITS.items()}
+    o("# State scope (calibration step 3): the state's malaria level from its state region's trait in the map files.")
+    o("te_demog_malaria_level_listed = {")
+    o("value = 0")
+    for i, level in enumerate(sorted(by_level, reverse=True)):
+        o(f"{'if' if i == 0 else 'else_if'} = {{")
+        o("limit = {")
+        o("OR = {")
+        for region in by_level[level]:
+            o(f"state_region = s:{region}")
+        o("}")
+        o("}")
+        o(f"add = {level}")
+        o("}")
+    o("}")
+    o("# State scope (calibration step 3): the malaria level the step stores (te_dg_in_mal).")
+    o("te_demog_malaria_level = {")
+    if P.MALARIA_READS_REGION_LIST:
+        o("value = te_demog_malaria_level_listed")
+    else:
+        o("value = 0")
+        for i, level in enumerate(sorted(by_trait, reverse=True)):
+            o(f"{'if' if i == 0 else 'else_if'} = {{")
+            o(f"limit = {{ has_state_trait = {by_trait[level]} }}")
+            o(f"add = {level}")
+            o("}")
+    o("}")
     o("")
 
 
@@ -1678,6 +1795,7 @@ def render_values(root):
     o("")
     engine_curves(o, G.read_defines(root / "common" / "defines" / "extra_defines.txt"))
     engine_rate_terms(o, root)
+    malaria_values(o, root)
     multipliers(o)
     practices(o)
     land_term(o, root)
