@@ -471,6 +471,15 @@ profile mixes three kinds of migrant:
 
 None of it is scripted by date.
 
+**Amended (the migrant booking, 2026-10-12; `docs/testing/demographics-migrant-booking-2026-10-12.md`).** The residual
+is the engine's own migration, and the engine's flows run far past history's: states lost or gained 2–7% of their
+people a year for decades, and booked by the profile every year their men fell to 2 per 100 women or rose to 200. Two
+rules now bound it: a step's profile adds to a class and sex at most 5% of its people and takes at most 3%, the rest
+booked over every age and both sexes (whole families moving), and the labour kind's women's share moves to half as a
+state's men per 100 women aged 20–59 fall from 95 to 91 or rise from 105 to 115. The places left behind still grow
+older within the cap, but no state passes about 90–110 by migration alone, so the frontier fills with families, not
+young men: the price of phase 2's "under 2% of states at a sex-balance effect in peace".
+
 ### 2.6 Starting values and new states
 
 - **1836.** Each state starts at the equilibrium of its own inputs, taken from a lookup by fertility and life

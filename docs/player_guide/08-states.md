@@ -306,9 +306,28 @@ technology (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
 two fifths more for a rich country today. Outside Full none of this changes
 anything, and the buttons are greyed.
 
-The census also counts each state's men of fighting age, 20 to 39, and its
-young adults, and takes war dead from the men of fighting age. The tab shows
-both counts; neither changes conscription or unrest.
+The census also counts each state's men of fighting age, 20 to 39, its young
+adults and its men per 100 women aged 20 to 59, and takes war dead from the men
+of fighting age. Under Full each count sets a state modifier, refreshed at the
+state's yearly census:
+
+- **Census: Fighting-Age Men** scales the state's conscription by its share of
+  men of fighting age against 1836's: a state short of young men raises fewer
+  conscripts, and one rich in them up to a quarter more. An aging country loses
+  conscripts as its people grow older.
+- **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
+  18% of the people while work is short. At full strength (24% young adults and
+  a fifth of the workforce without work) radicals from movements rise by 15% and
+  the effects of turmoil by 10%.
+- **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
+  many dead. Fewer women marry, so children per woman fall with the balance (by
+  at most a fifth), more women work, and support for women's rights movements
+  rises, by up to 10% at 80. **Census: More Men** appears from 110 men per 100
+  women and raises radicals from movements, by up to 10% at 150.
+
+The census books migration as whole families once a state gains or loses many
+people in a year, so migration alone seldom carries a state's balance past 90
+or 110.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
@@ -324,7 +343,7 @@ them, and some break the figure down for your capital.
 | Section | What it shows |
 |---|---|
 | Overview | Median age, children per woman, life expectancy, the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short. |
-| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age. |
+| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age with the conscription they give. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
