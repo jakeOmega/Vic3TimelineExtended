@@ -2334,7 +2334,7 @@ Add `te_demog_tech_injections.txt` to the `git add` if Step 6 changed it.
   - effects `te_demog_practices_seed`, `_step`, `_country_init`, `_country_add`, `_country_store`, each calling
     `te_demog_practice_<name> = { P = <p> }` for p in `P.PRACTICES`.
 
-- [ ] **Step 1: Write the failing tests** (append to `TestGenerated` in `test_gen_demographics.py`)
+- [x] **Step 1: Write the failing tests** (append to `TestGenerated` in `test_gen_demographics.py`)
 
 ```python
     def test_the_practices_values(self):
@@ -2371,12 +2371,12 @@ Add `te_demog_tech_injections.txt` to the `git add` if Step 6 changed it.
             self.assertEqual(re.findall(rf"te_demog_practice_{name} = \{{ P = (\w+) \}}", body), list(P.PRACTICES))
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `$V -m unittest test_gen_demographics`
 Expected: FAIL (`te_demog_pr_start_lm` not found).
 
-- [ ] **Step 3: Write the generator functions**
+- [x] **Step 3: Write the generator functions**
 
 ```python
 def _by_value(table):
@@ -2429,8 +2429,8 @@ def practices(o):
         o(f"te_demog_pr_erosion_{p} = {{")
         o("value = te_demog_pr_erosion_contraception")
         if P.PRACTICE_EROSION_ACCESS[p]:
-            o(f"add = {{ value = modifier:{P.ACCESS_TYPE} divide = {lit(P.PRACTICE_ACCESS_SPAN)} min = 0 max = 1 "
-              f"multiply = {lit(P.PRACTICE_EROSION_ACCESS[p])} }}")
+            o(f"add = {{ value = var:te_dg_acc subtract = te_demog_k_base_access divide = {lit(P.PRACTICE_ACCESS_SPAN)} "
+              f"min = 0 max = 1 multiply = {lit(P.PRACTICE_EROSION_ACCESS[p])} }}")
         o("max = 1")
         o("}")
         o(f"te_demog_pr_seed_{p} = {{")
@@ -2507,10 +2507,23 @@ def practice_loops(o):
 
 Add `"practice_rate": P.PRACTICE_RATE` to `constants`' dict.
 
+**Amended at the build (2026-10-12):**
+- **Birth Spacing's health-care erosion reads the access medicine has reached**, `var:te_dg_acc` less
+  `te_demog_k_base_access`, not `modifier:state_health_care_access_add`. Since #916 the census's access drifts toward
+  its target, and the owner approved the drift. It is a default flagged for the owner. `te_dg_acc` is set before any
+  practice reads it: by `te_demog_medicine_at_target` at a seed and `te_demog_medicine_drift` at a step. The model
+  reads the stored `te_dg_acc` where a save holds it (`census_inputs`), else the target, which is the modifier, so the
+  fit on the pre-#916 saves is unchanged.
+- **The ladder leaves out entries that change nothing** (`_start_entries`): a strategic region at 0, and a state region
+  at its strategic region's value. The fit set India's and East Asia's held shares to 0, which would otherwise write
+  dead tests. `test_the_start_ladders_give_every_state_its_start` reads each ladder as the engine does and checks
+  every land state region against `demographics_model.practice_start`. The plan's per-entry `assertIn` loops gave way
+  to that check.
+
 `practices` hard-codes `te_dg_pr_lm` and `te_dg_pr_bs` in the panel's two values: they are Late Marriage's and Birth
 Spacing's, not every practice's.
 
-- [ ] **Step 4: Regenerate and run the tests**
+- [x] **Step 4: Regenerate and run the tests**
 
 ```bash
 $V scripts/generators/gen_demographics.py
@@ -2518,7 +2531,7 @@ $V -m unittest test_gen_demographics test_demographics_registry > /tmp/claude-10
 ```
 Expected: `OK`. Nothing calls the new values yet.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add scripts/generators/gen_demographics.py common/script_values/te_demog_generated_values.txt common/scripted_effects/te_demog_generated_effects.txt test_gen_demographics.py

@@ -249,6 +249,64 @@ class TestGenerated(unittest.TestCase):
             self.assertNotIn(gone, self.values)
 
 
+    def test_the_practices_values(self):
+        """Late Marriage and Birth Spacing (the late-marriage plan, Task 7): the start ladders, erosions, seeds,
+        targets and terms."""
+        for p in P.PRACTICES:
+            start = self.values.split(f"te_demog_pr_start_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            # the state regions come after the strategic regions, so they win
+            if "region = sr:" in start and "state_region = s:" in start:
+                self.assertLess(start.rindex("region = sr:"), start.index("state_region = s:"))
+            term = self.values.split(f"te_demog_pr_term_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            self.assertIn(f"limit = {{ has_variable = te_dg_pr_{p} }}", term)
+            self.assertIn(f"multiply = {gen.lit(P.PRACTICE_CUT[p])}", term)
+            self.assertIn(f"te_demog_pr_target_{p} = {{", self.values)
+            seed = self.values.split(f"te_demog_pr_seed_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            self.assertIn(f"value = te_demog_pr_erosion_{p}", seed)
+            self.assertIn(f"multiply = te_demog_pr_start_{p}", seed)
+            self.assertIn(f"value = te_demog_pr_seed_{p}", self.values.split(f"te_demog_pr_target_{p} = {{", 1)[1])
+            self.assertIn(f"multiply = te_demog_pr_term_{p}", self.values.split("te_demog_pr_terms = {", 1)[1])
+        lm = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("te_inh_has_undivided_farms = yes", lm)
+        self.assertIn("has_law = law_type:law_primogeniture", lm)
+        erosion_lm = self.values.split("te_demog_pr_erosion_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertNotIn("te_dg_acc", erosion_lm, "health care erodes Birth Spacing only")
+        erosion_bs = self.values.split("te_demog_pr_erosion_bs = {", 1)[1].split("\n}\n", 1)[0]
+        # the access medicine has reached above the base (#916's drifted te_dg_acc), not the law's modifier
+        self.assertIn("value = var:te_dg_acc subtract = te_demog_k_base_access", erosion_bs)
+        self.assertNotIn(f"modifier:{P.ACCESS_TYPE}", erosion_bs)
+        self.assertIn(f"te_demog_k_practice_rate = {{ value = {gen.lit(P.PRACTICE_RATE)} }}", self.values)
+
+    def test_the_start_ladders_give_every_state_its_start(self):
+        """Each ladder, read in order as the engine reads it (a later if wins), gives every land state region the
+        start demographics_model.practice_start gives it, with the entries that change nothing left out."""
+        import demographics_model as M
+        import demographics_regions as R
+        for p in P.PRACTICES:
+            ladder = self.values.split(f"te_demog_pr_start_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            blocks = []
+            for line in ladder.splitlines():
+                line = line.strip()
+                named = re.fullmatch(r"(?:region = sr:|state_region = s:)(\w+)", line)
+                value = re.fullmatch(r"value = ([\d.]+)", line)
+                if line == "if = {":
+                    blocks.append([set(), None])
+                elif named:
+                    blocks[-1][0].add(named.group(1))
+                elif blocks and value:
+                    blocks[-1][1] = float(value.group(1))
+            for state, region in R.strategic_region_of().items():
+                got = 0.0
+                for names, v in blocks:
+                    if state in names or region in names:
+                        got = v
+                self.assertAlmostEqual(got, M.practice_start(p, state, region), msg=f"{p} {state}")
+
+    def test_the_practice_loops_call_every_practice(self):
+        for name in ("seed", "step", "country_init", "country_add", "country_store"):
+            body = self.effects.split(f"te_demog_practices_{name} = {{", 1)[1].split("\n}\n", 1)[0]
+            self.assertEqual(re.findall(rf"te_demog_practice_{name} = \{{ P = (\w+) \}}", body), list(P.PRACTICES))
+
 class TestEngineRateTerms(unittest.TestCase):
     """The expected births and deaths the migration residual is measured against: each pop's curves x the
     engine's own multiplier for it (docs/testing/demographics-growth-probe-results-2026-10-09.md)."""
