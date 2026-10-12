@@ -1300,6 +1300,11 @@ Expected: FAIL/ERROR.
     o("}")
     ```
     and amend the two comments: "the replaced sums, and under Full the deaths-on-top split's".
+  - **Fallback, if the benchmark (Task 10 Step 4, item 10) shows the walk slower:** `te_demog_absorbed_walk_pop`
+    evaluates `te_demog_pop_absorbed_deaths` twice per pop (for `te_dg_w_edr` and, through
+    `te_demog_pop_state_death_mult`, for `te_dg_w_eds`). Evaluate it once into a local (`te_dg_p_ad`), and sum
+    `local_var:te_dg_p_ed × max(0, 1 + state.modifier:state_mortality_mult + local_var:te_dg_p_ad)` inline. Keep
+    `te_demog_pop_state_death_mult` for the test, or test the inline form.
   - Regenerate.
 
 - [ ] **Step 4: The walk and the refresh**
@@ -2164,7 +2169,10 @@ Commit: "Demographics harness: fidelity reads the step's own inputs".
       `te_dg_ed ÷ te_dg_ed_state`), and why os_d can't split dz;
     - the red threshold, the clamp side and the severe-starvation share;
     - the #894 note that the walk's severe term (+1.0) and the step-day snapshot move the figure;
-    - the release's handling of the decree.
+    - the release's handling of the decree;
+    - the decree's placeholder icon (`gui_style_guide.md` rule 10). The texture is vanilla's
+      `decree_emergency_relief.dds`, set in `common/decrees/extra_decrees.txt`. The final art's subject: a doctor's bag
+      over a map pin. Its proposed path: `gfx/interface/icons/decree/decree_medical_outreach.dds`.
   - **"Owner checks in game":** items 11–13 from Step 4 below, short.
   - **`gen_demographics.py`'s bullet:** "the cause multipliers are products of one script value per factor
     (`P.CAUSE_FACTORS`), on the step's stored inputs".
@@ -2213,6 +2221,10 @@ Commit: "Demographics harness: fidelity reads the step's own inputs".
   8. **An old save** from before this build: the section reads "after its next count" until each state's step.
   9. **`debug.log`:** no "Failed to fetch variable" or errors from `te_demog_f_*`, `te_dg_acc`, `te_dg_in_*` or the
      decree.
+  10. **Cost.** Run the benchmark (option d) in a late-game save under Full, before and after this branch. Task 5 adds
+      per-pop work to the walk: a second read of the mild-starvation buckets and the severe-starvation test. The yearly
+      cost should stay near the 1836 figure per occupied slot (mod_systems' owner check 5). If it moves, apply Task 5's
+      fallback.
 
 - [ ] **Step 5: Run the whole suite and the checks:**
   - `.venv/bin/python -m unittest discover -s . -p 'test_*.py'` (read the summary with `grep -E '^(Ran |OK|FAILED)'`);
