@@ -599,13 +599,21 @@ minor_events_timelineextended.7 = {
 	}
 
 	immediate = {
+		# A saved scope rides into events triggered from `after`, so a crashed origin's contagion_crashed would reach
+		# every country it spreads to: clear any inherited one before this event's own roll.
+		if = {
+			limit = { exists = scope:contagion_crashed }
+			clear_saved_scope = contagion_crashed
+		}
 		banking_contagion_crash_check = yes
-		# The roll, kept for this event alone. Two contagion events can reach a country at once (two origins in one
-		# wave), and the first one's `after` removes contagion_crash before the second resolves, so the options and
-		# `after` read this saved scope, not the variable (observer run, 2026-10-12: three unset reads in a second).
+		# The roll, kept for this event alone. Two contagion events can be open for one country at once (a second
+		# origin's crash in the same pulse re-runs banking_crisis_wave_init, which clears the reached marks), and the
+		# first one's `after` removes contagion_crash before the second resolves, so the options and `after` read
+		# this saved scope, not the variable (observer run, 2026-10-12: three unset reads in a second). An object
+		# scope (the country), since `exists` on object scopes has vanilla precedent.
 		if = {
 			limit = { var:contagion_crash > 0 }
-			save_scope_value_as = { name = contagion_crashed value = 1 }
+			save_scope_as = contagion_crashed
 		}
 	}
 
@@ -800,6 +808,7 @@ minor_events_timelineextended.7 = {
 			# Track this crash in the crisis wave (Great Depression mechanic)
 			banking_crisis_wave_increment = yes
 			save_scope_as = banking_crash_origin_country
+			clear_saved_scope = contagion_crashed	# this event's roll, not the targets' (their immediate also clears it)
 			banking_cycle_spread_contagion = yes
 			# Check if enough countries have crashed for Great Depression
 			banking_crisis_wave_check_great_depression = yes

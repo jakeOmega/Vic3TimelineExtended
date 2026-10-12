@@ -359,6 +359,29 @@ class EveryCrashOptionTest(unittest.TestCase):
                                 self.assertNotIn(prior, it.vars)
 
 
+class ContagionRollScopeTest(unittest.TestCase):
+    """Event .7 keeps its roll in a saved scope, cleared before its own roll (scopes ride into events `after` triggers)."""
+
+    def blocks(self):
+        return {key: val for key, _, val in MINOR_EVENTS["minor_events_timelineextended.7"]
+                if key in ("immediate", "after")}
+
+    def test_immediate_clears_an_inherited_roll_before_saving_its_own(self):
+        text = repr(self.blocks()["immediate"])
+        self.assertIn("clear_saved_scope", text)
+        self.assertLess(text.index("clear_saved_scope"), text.index("banking_contagion_crash_check"))
+        self.assertLess(text.index("banking_contagion_crash_check"), text.index("save_scope_as"))
+
+    def test_after_clears_the_roll_before_spreading(self):
+        text = repr(self.blocks()["after"])
+        self.assertLess(text.index("clear_saved_scope"), text.index("banking_cycle_spread_contagion"))
+
+    def test_no_option_or_after_reads_the_variable(self):
+        for key, _, val in MINOR_EVENTS["minor_events_timelineextended.7"]:
+            if key in ("option", "after"):
+                self.assertNotIn("var:contagion_crash", repr(val), key)
+
+
 class LocTest(unittest.TestCase):
     def test_the_no_raise_line_has_text(self):
         text = (ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml").read_text(

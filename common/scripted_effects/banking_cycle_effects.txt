@@ -1806,7 +1806,7 @@ banking_crisis_wave_init = {
 }
 
 # Increment wave tracking when a contagion crash triggers in a target country.
-# Called from event .7 after block when contagion_crash > 0.
+# Called from event .7 after block when its own roll crashed (scope:contagion_crashed).
 banking_crisis_wave_increment = {
 	if = {
 		limit = { NOT = { has_variable = banking_crisis_wave_counted } }
