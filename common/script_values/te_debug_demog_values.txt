@@ -547,3 +547,45 @@ te_debug_demog_mult_work = {
 te_debug_demog_line_absorbed_b = {
 	value = modifier:state_demog_absorbed_birth_rate_mult
 }
+
+# ---- l: the practices (the late-marriage plan, Task 10) -----------------------------------
+# THIS = a state: its Late Marriage and Birth Spacing shares (0 with none) and their targets. The targets read the walk's
+# variables, so a state with no census (an unincorporated one, or the rule off) shows -1, as the cause multipliers do.
+te_debug_demog_pr_lm = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pr_lm }
+		value = var:te_dg_pr_lm
+	}
+}
+te_debug_demog_pr_bs = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pr_bs }
+		value = var:te_dg_pr_bs
+	}
+}
+te_debug_demog_pr_target_lm = {
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_lit
+			has_variable = te_dg_acc
+			has_variable = te_dg_agr_share
+			has_variable = te_dg_fjob_share
+		}
+		value = te_demog_pr_target_lm
+	}
+}
+te_debug_demog_pr_target_bs = {
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_lit
+			has_variable = te_dg_acc
+			has_variable = te_dg_agr_share
+			has_variable = te_dg_fjob_share
+		}
+		value = te_demog_pr_target_bs
+	}
+}

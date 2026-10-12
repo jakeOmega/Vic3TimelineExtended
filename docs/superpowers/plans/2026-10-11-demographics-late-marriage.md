@@ -3244,7 +3244,7 @@ only the files it touched.
   `common/script_values/te_debug_demog_values.txt`
 - Test: `test_demographics_registry.py`
 
-- [ ] **Step 1: Write the failing tests** (in `TestNaturalFertilityScript`, beside the tooltip tests)
+- [x] **Step 1: Write the failing tests** (in `TestNaturalFertilityScript`, beside the tooltip tests)
 
 ```python
     def test_the_tfr_tooltips_list_the_practices(self):
@@ -3284,12 +3284,12 @@ only the files it touched.
             self.assertIn(f" {key}=[THIS.ScriptValue('{sv}')|3]", line)
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `$V -m unittest test_demographics_registry.TestNaturalFertilityScript`
 Expected: FAIL.
 
-- [ ] **Step 3: The loc.** Keep each key's existing lines and splice in the new ones.
+- [x] **Step 3: The loc.** Keep each key's existing lines and splice in the new ones.
 
 `te_demog_st_tfr_terms`: after the `Women's legal standing` line, add
 
@@ -3315,7 +3315,7 @@ health care too; women's paid work and farms that pass whole to one heir make la
 
 The country tooltip keeps its "the states' figures, weighted by their women aged 15 to 49" clause.
 
-- [ ] **Step 4: The console's line** (`te_debug_demog_values.txt`)
+- [x] **Step 4: The console's line** (`te_debug_demog_values.txt`)
 
 ```
 te_debug_demog_pr_lm = { value = 0 if = { limit = { has_variable = te_dg_pr_lm } value = var:te_dg_pr_lm } }
@@ -3330,7 +3330,7 @@ Format them as the file's other blocks (one field a line). `te_debug_demog_line_
 
 Add `lm=`, `bs=`, `lm_target=`, `bs_target=` and `absorbed_b=` to the header comment's description of option l's line.
 
-- [ ] **Step 5: Run the tests and the loc checks**
+- [x] **Step 5: Run the tests and the loc checks**
 
 ```bash
 python3 organize_loc.py
@@ -3340,7 +3340,14 @@ python3 scripts/analysis/check_gui_lint.py
 ```
 Expected: `OK`; every check exits 0.
 
-- [ ] **Step 6: Commit**
+**Amended at the build (2026-10-12):**
+- `state_natural_fertility_mult_desc` now reads "through their standing inside marriage … they have more say over how
+  many children they have" (the owner's wording for the natural term), and the test checks it no longer claims who
+  marries.
+- The console's two targets read -1 on a state with no census, as option l's cause multipliers do. Option l also logs
+  an unincorporated state, where the walk's variables the targets read don't exist.
+
+- [x] **Step 6: Commit**
 
 ```bash
 git add localization/english/ common/scripted_effects/te_debug_demog_effects.txt common/script_values/te_debug_demog_values.txt test_demographics_registry.py

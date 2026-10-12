@@ -2694,6 +2694,52 @@ class TestNaturalFertilityScript(unittest.TestCase):
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_natural_shown")), 0.85)
 
 
+    def test_the_tfr_tooltips_list_the_practices(self):
+        """Spec 5.3: the two practices beside wealth, women's legal standing, education, child survival, urban life
+        and the means, with women's age at first marriage; the country tab adds the country's own means."""
+        loc = _text(MISC_LOC)
+        for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            for sv in ("te_demog_pr_term_lm", "te_demog_pr_term_bs", "te_demog_marriage_age"):
+                self.assertIn(f"ScriptValue('{sv}')", line, f"{key}: {sv}")
+        capital = re.search(r"(?m)^ te_demog_ov_tfr_capital:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
+        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
+        for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt", "te_demog_how_fertility"):
+            text = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            self.assertNotIn("who marries", text, "women's legal standing no longer claims marriage (plan D2)")
+            self.assertIn("late marriage", text)
+            self.assertIn("birth spacing", text)
+        mods = _text(ROOT / "localization" / "english" / "te_modifiers_l_english.yml")
+        desc = re.search(r"(?m)^ state_natural_fertility_mult_desc:0 \"(.*)\"$", mods).group(1)
+        self.assertNotRegex(desc, r"\bmarr(?:y|ies)\b", "the type is women's standing inside marriage; who marries is "
+                                                          "Late Marriage's")
+
+    def test_the_terms_read_one_before_any_share(self):
+        """Review Focus 5: an old save's state before its next step shows x1.00 for each, beside a headline that has
+        no practice in it."""
+        eng = _Engine({})
+        for p in P.PRACTICES:
+            self.assertEqual(eng.value(eng._tree(eng.values, f"te_demog_pr_term_{p}")), 1.0)
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_marriage_age")), P.MARRIAGE_AGE_AT_ZERO)
+        eng.vars.update(te_dg_pr_lm=1.0, te_dg_pr_bs=0.5)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_pr_term_lm")), 1 - P.PRACTICE_CUT["lm"])
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_marriage_age")),
+                               P.MARRIAGE_AGE_AT_ZERO + P.MARRIAGE_AGE_SPAN)
+
+    def test_option_l_logs_the_practices(self):
+        line = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"), "te_debug_demog_mods_line")
+        for key, sv in (("lm", "te_debug_demog_pr_lm"), ("bs", "te_debug_demog_pr_bs"),
+                        ("lm_target", "te_debug_demog_pr_target_lm"), ("bs_target", "te_debug_demog_pr_target_bs"),
+                        ("absorbed_b", "te_debug_demog_line_absorbed_b")):
+            self.assertIn(f" {key}=[THIS.ScriptValue('{sv}')|3]", line)
+        # option l also logs a state with no census (an unincorporated one, or the rule off): the targets read the
+        # walk's variables, so they show -1 there, as the cause multipliers do, instead of reading a missing variable
+        eng = _Engine({})
+        eng.values.update(_raw_blocks([ROOT / "common" / "script_values" / "te_debug_demog_values.txt"]))
+        for p in P.PRACTICES:
+            self.assertEqual(eng.value(eng._tree(eng.values, f"te_debug_demog_pr_target_{p}")), -1)
+
 class TestPracticesScript(unittest.TestCase):
     """Late Marriage and Birth Spacing (te_demog_practice_effects.txt and the generated values) against the model:
     docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Task 8."""
