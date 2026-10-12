@@ -297,6 +297,7 @@ gm_clear_state = {
 	# Its name (v2 §3, gm_name_effects.txt): a rebuilt monument is named again.
 	gm_state_clear_namesake = yes
 	gm_remove_state_var = { VAR = gm_form }
+	gm_remove_state_var = { VAR = gm_picture_code }
 	gm_remove_state_var = { VAR = gm_name }
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
 	gm_remove_state_var = { VAR = gm_unveil_pending }
@@ -513,6 +514,7 @@ gm_country_refresh = {
 			gm_state_unveil = yes
 		}
 		gm_state_name_if_unnamed = yes
+		gm_state_update_picture = yes
 		# A ceremony a finished level's hook missed.
 		gm_state_offer_missed_ceremony = yes
 		owner = {

@@ -2425,5 +2425,104 @@ class CopiedDedicationTests(unittest.TestCase):
             self.assertIn(f"te_debug_monuments.3.{k}", L)
         self.assertNotIn("te_debug_monuments.3.d", L)
 
+
+# ==== Pictures (spec 2026-10-11 §3) =====================================================
+PICTURE_EFFECTS = "common/scripted_effects/gm_picture_effects.txt"
+
+
+def _skin_forms(skin):
+    """A skin's forms in picture order: its default first, then the rest as
+    FORMS lists them."""
+    rest = [f for f, skins in FORMS.items() if skin in skins and f != DEFAULT_FORM[skin]]
+    return [DEFAULT_FORM[skin]] + rest
+
+
+def _pictures():
+    out = {1: ("undedicated", None, None)}
+    for i, form in enumerate(("column", "arch", "obelisk", "statue", "gate", "hall", "mausoleum")):
+        out[10 + i] = ("generic", form, None)
+    for b, h in enumerate(HERITAGE_SKINS):
+        for i, form in enumerate(_skin_forms(f"heritage_{h}")):
+            out[100 + 10 * b + i] = (f"heritage_{h}", form, None)
+    for i, f in enumerate(FAITHS):
+        out[300 + i] = (f"faith_{f}", "faith", None)
+    for b, (key, form) in enumerate(BUILDING_FORMS.items()):
+        out[400 + 10 * b] = ("generic", form, key)
+        for i, h in enumerate(BUILDING_SKINS[key]):
+            out[400 + 10 * b + 1 + i] = (f"heritage_{h}", form, key)
+    return out
+
+
+# code -> (skin, form, civic-progress dedication or None). Append-only: a code
+# never moves or is reused (a retired pair keeps its number).
+PICTURES = _pictures()
+
+
+def picture_key(code):
+    skin, form, _ = PICTURES[code]
+    return "undedicated" if skin == "undedicated" else f"{skin}__{form}"
+
+
+class PictureTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(PICTURE_EFFECTS)
+        cls.body = squash(block(cls.e, "gm_state_update_picture"))
+
+    def test_the_table(self):
+        self.assertEqual(len(PICTURES), 80)
+        # Every reachable pair has a picture.
+        pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
+        for form, skins in FORMS.items():
+            for skin in skins:
+                self.assertIn((skin, form), pairs, (skin, form))
+        # Fixed codes that must never move (append-only).
+        self.assertEqual(picture_key(10), "generic__column")
+        self.assertEqual(picture_key(102), "heritage_latin__forum")
+        self.assertEqual(picture_key(300), "faith_catholic__faith")
+        self.assertEqual(picture_key(444), "heritage_mayan__stadium")
+
+    def test_helper_sets_every_code_in_order(self):
+        b = self.body
+        self.assertTrue(b.startswith("set_variable = { name = gm_picture_code value = 1 }"))
+        skins_start = b.index("gm_state_picture_skin =")
+        pairs_start = b.index("gm_state_picture_pair =")
+        buildings_start = b.index("gm_state_picture_building =")
+        self.assertLess(skins_start, pairs_start, "skin defaults first: an unknown pair falls back to them")
+        self.assertLess(pairs_start, buildings_start, "a building's lines last: its form outranks its skin")
+        for code, (skin, form, key) in PICTURES.items():
+            if code == 1:
+                continue
+            generic = "yes" if skin == "generic" else "no"
+            if key is not None and skin == "generic":
+                self.assertIn(f"gm_state_picture_building = {{ FORM = {form} CODE = {code} }}", b, code)
+            elif key is not None:
+                self.assertIn(f"gm_state_picture_building_skin = {{ FORM = {form} SKIN = {skin} CODE = {code} }}",
+                              b, code)
+            elif form == "faith":
+                self.assertIn(f"gm_state_picture_skin = {{ SKIN = {skin} GENERIC = no CODE = {code} }}", b, code)
+            else:
+                self.assertIn(f"gm_state_picture_pair = {{ SKIN = {skin} GENERIC = {generic} FORM = {form} "
+                              f"CODE = {code} }}", b, code)
+        for skin, default in DEFAULT_FORM.items():
+            code = next(c for c, (s, f, k) in PICTURES.items() if s == skin and f == default and k is None)
+            self.assertIn(f"gm_state_picture_skin = {{ SKIN = {skin} GENERIC = {'yes' if skin == 'generic' else 'no'} "
+                          f"CODE = {code} }}", b, skin)
+
+    def test_called_wherever_skin_or_form_changes(self):
+        names = read(NAME_EFFECTS)
+        for effect in ("gm_state_set_default_form", "gm_state_take_commission_name", "gm_state_unveil"):
+            self.assertTrue(squash(block(names, effect)).endswith("gm_state_update_picture = yes"), effect)
+        self.assertIn("set_variable = { name = gm_form value = flag:$FORM$ } gm_state_update_picture = yes",
+                      squash(block(names, "gm_state_choose_form")))
+        e = read(EFFECTS)
+        self.assertIn("gm_state_name_if_unnamed = yes gm_state_update_picture = yes",
+                      squash(block(e, "gm_country_refresh")))
+        self.assertIn("gm_remove_state_var = { VAR = gm_picture_code }", squash(block(e, "gm_clear_state")))
+
+    def test_display_value_defaults_to_the_draped_picture(self):
+        v = squash(block(read(VALUES), "gm_disp_picture_code"))
+        self.assertEqual(v, "value = 1 if = { limit = { has_variable = gm_picture_code } value = var:gm_picture_code }")
+
 if __name__ == "__main__":
     unittest.main()

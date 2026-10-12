@@ -166,6 +166,16 @@ gm_state_has_typed_name = {
 	}
 }
 
+# The monument's picture (gm_picture_effects.txt), for the gm_picture type: the
+# stored code, or the draped picture until the refresh has set one.
+gm_disp_picture_code = {
+	value = 1
+	if = {
+		limit = { has_variable = gm_picture_code }
+		value = var:gm_picture_code
+	}
+}
+
 gm_is_being_named = {
 	value = 0
 	if = {

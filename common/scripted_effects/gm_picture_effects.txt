@@ -1,0 +1,158 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — the monument's picture (spec 2026-10-11 §3)
+# ============================================================================
+# State scope. gm_picture_code numbers the picture the journal entry's row and
+# the state card show (the gm_picture type in grand_monuments_widget.gui), from
+# the state's gm_skin and gm_form. Codes are append-only:
+# test_grand_monument_registry.py's PICTURES table is the list, and a retired
+# pair keeps its number. Set wherever the skin or form changes and on every
+# refresh; gm_clear_state removes it, so a rebuilt monument shows the draped
+# picture (1) again.
+
+gm_state_update_picture = {
+	set_variable = { name = gm_picture_code value = 1 }
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			has_variable = gm_form
+		}
+		# A skin's default form: the picture of a pair with none of its own (a retired form).
+		gm_state_picture_skin = { SKIN = generic GENERIC = yes CODE = 10 }
+		gm_state_picture_skin = { SKIN = heritage_latin GENERIC = no CODE = 100 }
+		gm_state_picture_skin = { SKIN = heritage_greek GENERIC = no CODE = 180 }
+		gm_state_picture_skin = { SKIN = heritage_hebrew GENERIC = no CODE = 110 }
+		gm_state_picture_skin = { SKIN = heritage_sanskrit GENERIC = no CODE = 120 }
+		gm_state_picture_skin = { SKIN = heritage_geez GENERIC = no CODE = 130 }
+		gm_state_picture_skin = { SKIN = heritage_slavonic GENERIC = no CODE = 140 }
+		gm_state_picture_skin = { SKIN = heritage_avestan GENERIC = no CODE = 150 }
+		gm_state_picture_skin = { SKIN = heritage_arabic GENERIC = no CODE = 160 }
+		gm_state_picture_skin = { SKIN = heritage_chinese GENERIC = no CODE = 170 }
+		gm_state_picture_skin = { SKIN = heritage_irish GENERIC = no CODE = 190 }
+		gm_state_picture_skin = { SKIN = heritage_nahuatl GENERIC = no CODE = 200 }
+		gm_state_picture_skin = { SKIN = heritage_mayan GENERIC = no CODE = 230 }
+		gm_state_picture_skin = { SKIN = heritage_norse GENERIC = no CODE = 210 }
+		gm_state_picture_skin = { SKIN = heritage_gothic GENERIC = no CODE = 220 }
+		gm_state_picture_skin = { SKIN = heritage_prussian GENERIC = no CODE = 240 }
+		gm_state_picture_skin = { SKIN = heritage_aramaic GENERIC = no CODE = 250 }
+		# A faith's building.
+		gm_state_picture_skin = { SKIN = faith_catholic GENERIC = no CODE = 300 }
+		gm_state_picture_skin = { SKIN = faith_protestant GENERIC = no CODE = 301 }
+		gm_state_picture_skin = { SKIN = faith_orthodox GENERIC = no CODE = 302 }
+		gm_state_picture_skin = { SKIN = faith_oriental_orthodox GENERIC = no CODE = 303 }
+		gm_state_picture_skin = { SKIN = faith_sunni GENERIC = no CODE = 304 }
+		gm_state_picture_skin = { SKIN = faith_shiite GENERIC = no CODE = 305 }
+		gm_state_picture_skin = { SKIN = faith_ibadi GENERIC = no CODE = 306 }
+		gm_state_picture_skin = { SKIN = faith_jewish GENERIC = no CODE = 307 }
+		gm_state_picture_skin = { SKIN = faith_mahayana GENERIC = no CODE = 308 }
+		gm_state_picture_skin = { SKIN = faith_gelugpa GENERIC = no CODE = 309 }
+		gm_state_picture_skin = { SKIN = faith_theravada GENERIC = no CODE = 310 }
+		gm_state_picture_skin = { SKIN = faith_confucian GENERIC = no CODE = 311 }
+		gm_state_picture_skin = { SKIN = faith_hindu GENERIC = no CODE = 312 }
+		gm_state_picture_skin = { SKIN = faith_shinto GENERIC = no CODE = 313 }
+		gm_state_picture_skin = { SKIN = faith_sikh GENERIC = no CODE = 314 }
+		gm_state_picture_skin = { SKIN = faith_animist GENERIC = no CODE = 315 }
+		# Every style and form.
+		gm_state_picture_pair = { SKIN = generic GENERIC = yes FORM = column CODE = 10 }
+		gm_state_picture_pair = { SKIN = generic GENERIC = yes FORM = arch CODE = 11 }
+		gm_state_picture_pair = { SKIN = generic GENERIC = yes FORM = obelisk CODE = 12 }
+		gm_state_picture_pair = { SKIN = generic GENERIC = yes FORM = statue CODE = 13 }
+		gm_state_picture_pair = { SKIN = generic GENERIC = yes FORM = gate CODE = 14 }
+		gm_state_picture_pair = { SKIN = generic GENERIC = yes FORM = hall CODE = 15 }
+		gm_state_picture_pair = { SKIN = generic GENERIC = yes FORM = mausoleum CODE = 16 }
+		gm_state_picture_pair = { SKIN = heritage_latin GENERIC = no FORM = column CODE = 100 }
+		gm_state_picture_pair = { SKIN = heritage_latin GENERIC = no FORM = arch CODE = 101 }
+		gm_state_picture_pair = { SKIN = heritage_latin GENERIC = no FORM = forum CODE = 102 }
+		gm_state_picture_pair = { SKIN = heritage_hebrew GENERIC = no FORM = gate CODE = 110 }
+		gm_state_picture_pair = { SKIN = heritage_hebrew GENERIC = no FORM = court CODE = 111 }
+		gm_state_picture_pair = { SKIN = heritage_hebrew GENERIC = no FORM = pillar CODE = 112 }
+		gm_state_picture_pair = { SKIN = heritage_hebrew GENERIC = no FORM = menorah CODE = 113 }
+		gm_state_picture_pair = { SKIN = heritage_sanskrit GENERIC = no FORM = pillar CODE = 120 }
+		gm_state_picture_pair = { SKIN = heritage_sanskrit GENERIC = no FORM = gate CODE = 121 }
+		gm_state_picture_pair = { SKIN = heritage_geez GENERIC = no FORM = stele CODE = 130 }
+		gm_state_picture_pair = { SKIN = heritage_geez GENERIC = no FORM = rock_hewn_church CODE = 131 }
+		gm_state_picture_pair = { SKIN = heritage_slavonic GENERIC = no FORM = memorial_church CODE = 140 }
+		gm_state_picture_pair = { SKIN = heritage_slavonic GENERIC = no FORM = column CODE = 141 }
+		gm_state_picture_pair = { SKIN = heritage_slavonic GENERIC = no FORM = bell_tower CODE = 142 }
+		gm_state_picture_pair = { SKIN = heritage_avestan GENERIC = no FORM = gate CODE = 150 }
+		gm_state_picture_pair = { SKIN = heritage_avestan GENERIC = no FORM = hall CODE = 151 }
+		gm_state_picture_pair = { SKIN = heritage_arabic GENERIC = no FORM = hall CODE = 160 }
+		gm_state_picture_pair = { SKIN = heritage_arabic GENERIC = no FORM = gate CODE = 161 }
+		gm_state_picture_pair = { SKIN = heritage_chinese GENERIC = no FORM = hall CODE = 170 }
+		gm_state_picture_pair = { SKIN = heritage_chinese GENERIC = no FORM = gate CODE = 171 }
+		gm_state_picture_pair = { SKIN = heritage_chinese GENERIC = no FORM = pagoda CODE = 172 }
+		gm_state_picture_pair = { SKIN = heritage_greek GENERIC = no FORM = pantheon CODE = 180 }
+		gm_state_picture_pair = { SKIN = heritage_greek GENERIC = no FORM = column CODE = 181 }
+		gm_state_picture_pair = { SKIN = heritage_greek GENERIC = no FORM = stoa CODE = 182 }
+		gm_state_picture_pair = { SKIN = heritage_irish GENERIC = no FORM = round_tower CODE = 190 }
+		gm_state_picture_pair = { SKIN = heritage_irish GENERIC = no FORM = high_cross CODE = 191 }
+		gm_state_picture_pair = { SKIN = heritage_nahuatl GENERIC = no FORM = pyramid CODE = 200 }
+		gm_state_picture_pair = { SKIN = heritage_nahuatl GENERIC = no FORM = sun_stone CODE = 201 }
+		gm_state_picture_pair = { SKIN = heritage_norse GENERIC = no FORM = rune_stone CODE = 210 }
+		gm_state_picture_pair = { SKIN = heritage_norse GENERIC = no FORM = hall CODE = 211 }
+		gm_state_picture_pair = { SKIN = heritage_gothic GENERIC = no FORM = hall_of_fame CODE = 220 }
+		gm_state_picture_pair = { SKIN = heritage_gothic GENERIC = no FORM = tower CODE = 221 }
+		gm_state_picture_pair = { SKIN = heritage_mayan GENERIC = no FORM = pyramid CODE = 230 }
+		gm_state_picture_pair = { SKIN = heritage_mayan GENERIC = no FORM = stela CODE = 231 }
+		gm_state_picture_pair = { SKIN = heritage_prussian GENERIC = no FORM = hill_shrine CODE = 240 }
+		gm_state_picture_pair = { SKIN = heritage_prussian GENERIC = no FORM = sacred_oak CODE = 241 }
+		gm_state_picture_pair = { SKIN = heritage_aramaic GENERIC = no FORM = rock_cut CODE = 250 }
+		gm_state_picture_pair = { SKIN = heritage_aramaic GENERIC = no FORM = colonnade CODE = 251 }
+		# The civic-progress buildings: the building, then its styles.
+		gm_state_picture_building = { FORM = opera_house CODE = 400 }
+		gm_state_picture_building_skin = { FORM = opera_house SKIN = heritage_chinese CODE = 401 }
+		gm_state_picture_building_skin = { FORM = opera_house SKIN = heritage_greek CODE = 402 }
+		gm_state_picture_building = { FORM = gardens CODE = 410 }
+		gm_state_picture_building_skin = { FORM = gardens SKIN = heritage_avestan CODE = 411 }
+		gm_state_picture_building_skin = { FORM = gardens SKIN = heritage_arabic CODE = 412 }
+		gm_state_picture_building_skin = { FORM = gardens SKIN = heritage_chinese CODE = 413 }
+		gm_state_picture_building = { FORM = observatory CODE = 420 }
+		gm_state_picture_building_skin = { FORM = observatory SKIN = heritage_sanskrit CODE = 421 }
+		gm_state_picture_building_skin = { FORM = observatory SKIN = heritage_avestan CODE = 422 }
+		gm_state_picture_building_skin = { FORM = observatory SKIN = heritage_chinese CODE = 423 }
+		gm_state_picture_building_skin = { FORM = observatory SKIN = heritage_mayan CODE = 424 }
+		gm_state_picture_building = { FORM = exhibition_hall CODE = 430 }
+		gm_state_picture_building = { FORM = stadium CODE = 440 }
+		gm_state_picture_building_skin = { FORM = stadium SKIN = heritage_latin CODE = 441 }
+		gm_state_picture_building_skin = { FORM = stadium SKIN = heritage_greek CODE = 442 }
+		gm_state_picture_building_skin = { FORM = stadium SKIN = heritage_nahuatl CODE = 443 }
+		gm_state_picture_building_skin = { FORM = stadium SKIN = heritage_mayan CODE = 444 }
+	}
+}
+
+# A skin alone: its default form's picture, or a faith's building.
+gm_state_picture_skin = {
+	if = {
+		limit = { gm_state_skin_is = { SKIN = $SKIN$ GENERIC = $GENERIC$ } }
+		set_variable = { name = gm_picture_code value = $CODE$ }
+	}
+}
+
+gm_state_picture_pair = {
+	if = {
+		limit = {
+			gm_state_skin_is = { SKIN = $SKIN$ GENERIC = $GENERIC$ }
+			var:gm_form = flag:$FORM$
+		}
+		set_variable = { name = gm_picture_code value = $CODE$ }
+	}
+}
+
+# A civic-progress building in the generic style, or a style its building
+# doesn't list.
+gm_state_picture_building = {
+	if = {
+		limit = { var:gm_form = flag:$FORM$ }
+		set_variable = { name = gm_picture_code value = $CODE$ }
+	}
+}
+
+gm_state_picture_building_skin = {
+	if = {
+		limit = {
+			var:gm_form = flag:$FORM$
+			has_variable = gm_skin
+			var:gm_skin = flag:$SKIN$
+		}
+		set_variable = { name = gm_picture_code value = $CODE$ }
+	}
+}
