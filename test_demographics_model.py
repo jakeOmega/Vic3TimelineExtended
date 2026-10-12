@@ -740,3 +740,25 @@ class TestCausesOfDeath(unittest.TestCase):
         _ring, last = M.run_constant(inp, years=60)
         qf, qm, _mmr = M.group_rates(inp)
         self.assertAlmostEqual(last["e0"], (M.life_table(qf)["e0"] + M.life_table(qm)["e0"]) / 2, places=9)
+
+
+class TestOnTopSplit(unittest.TestCase):
+    """demographics_model.on_top_split (the Causes of Death plan, Task 6, re-planned on #907's window): the window's
+    events less the pops' own lines over the same window, each end weighted as window_events weighs the rate."""
+
+    def test_no_start_is_the_snapshot(self):
+        events, state, sev = M.on_top_split((1500.0, 400.0, 300.0))
+        self.assertEqual(events, 1500.0)
+        self.assertAlmostEqual(state, 1100.0)
+        self.assertAlmostEqual(sev, 300.0)
+
+    def test_each_part_is_weighted_as_the_rate(self):
+        w = P.WINDOW_START_WEIGHT
+        events, state, sev = M.on_top_split((1600.0, 600.0, 600.0), start=(1000.0, 100.0, 0.0))
+        self.assertAlmostEqual(events, M.window_events(1600.0, 1000.0))
+        self.assertAlmostEqual(events - state, w * 100.0 + (1 - w) * 600.0)
+        self.assertAlmostEqual(sev, (1 - w) * 600.0, msg="a famine only at the end books (1 - w) of it")
+
+    def test_the_whole_states_part_is_never_below_zero(self):
+        self.assertEqual(M.on_top_split((100.0, 300.0, 0.0))[1], 0.0)
+

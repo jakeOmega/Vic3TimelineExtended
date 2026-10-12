@@ -269,3 +269,31 @@ te_demog_state_pyramid_max = {
 		min = var:te_dg_bm17
 	}
 }
+
+# ============================================================================
+# Deaths Added on Top (the Causes of Death section, the state subtab; docs/superpowers/plans/
+# 2026-10-11-demographics-causes-of-death.md, Task 6). State scope, under Full, read under the row's gate (Task 8).
+# ============================================================================
+# 1 + te_dg_dz: how far the engine's deaths over the last step ran from the census's own (te_demog_on_top_scales).
+te_demog_deaths_on_top = {
+	value = var:te_dg_dz
+	add = 1
+}
+# Its split over the same window (te_demog_on_top_split, Full only): the whole state's part (the state-level lines, the
+# moved lines' on-top family, the census's own lag since its last count), severe starvation's, and the other lines on
+# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top unless dz hit either
+# end of its range; a division's min = 1 (a person) bites only on a tiny state, and te_dg_ed_state's floor at 0 only
+# where M's change moved a pop across the engine's floor inside the window.
+te_demog_deaths_whole_state = {
+	value = var:te_dg_ed_state
+	divide = { value = var:te_dg_ed_target min = 1 }
+}
+te_demog_deaths_severe = {
+	value = var:te_dg_ed_state
+	add = var:te_dg_ed_sev
+	divide = { value = var:te_dg_ed_state min = 1 }
+}
+te_demog_deaths_other = {
+	value = var:te_dg_ed
+	divide = { value = var:te_dg_ed_state add = var:te_dg_ed_sev min = 1 }
+}

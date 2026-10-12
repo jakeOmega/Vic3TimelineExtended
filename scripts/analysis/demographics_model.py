@@ -454,6 +454,21 @@ def window_events(end_rate, start_rate=None):
     return max(0.0, P.WINDOW_START_WEIGHT * start_rate + (1 - P.WINDOW_START_WEIGHT) * end_rate)
 
 
+def on_top_split(end, start=None):
+    """(events, the whole state's part, severe starvation's part) over a step's window (the Causes of Death plan, Task 6;
+    the script's te_demog_on_top_split). end, start: (the engine's rate, the pops' own lines in it, severe
+    starvation's part of those) at that end of the window, in one unit; start None where the window took the
+    snapshot. Each part is weighted as window_events weighs the rate; the whole state's part is the events less the
+    pops' own lines, at least 0."""
+    events = window_events(end[0], None if start is None else start[0])
+    if start is None:
+        own, severe = end[1], end[2]
+    else:
+        w = P.WINDOW_START_WEIGHT
+        own, severe = w * start[1] + (1 - w) * end[1], w * start[2] + (1 - w) * end[2]
+    return events, max(0.0, events - own), severe
+
+
 def starvation_value(food_security):
     """The engine's starvation value for a pop at this food security: clamp((FOOD_SECURITY_STARVATION_THRESHOLD - food
     security) x STARVATION_EFFECTS_SCALING_FACTOR, 0, STARVATION_VALUE_MAX) (vanilla 00_defines.txt's comment). The

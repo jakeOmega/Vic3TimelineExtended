@@ -17,6 +17,9 @@
 #                       Under Full, the mean of the engine's rate at the window's start
 #                       and today's (the trapezoid, te_demog_window_events in
 #                       te_demog_rate_effects.txt)
+#   te_dg_ed_state, te_dg_ed_sev, te_dg_sev_share  under Full, the split of te_dg_ed for the
+#                       Causes of Death section (te_demog_on_top_split): the deaths less the pops'
+#                       own lines, severe starvation's part, the share of people severely starving
 #   te_dg_agr_share     Peasants + Farmers over the state's population, 0-1;
 #                       inheritance's rural modifiers' multiplier (probe-checked,
 #                       London 0.174)
@@ -251,6 +254,8 @@ te_demog_walks = {
 	}
 	# under Full, the window's events: the mean of the engine's rate at its start and today's (the trapezoid; owner, 2026-10-11)
 	te_demog_window_events = yes
+	# the Causes of Death section's split of the window's deaths (Full only)
+	te_demog_on_top_split = yes
 	set_variable = { name = te_dg_agr_share value = { value = local_var:te_dg_w_agr divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }
 	set_variable = { name = te_dg_soldiers value = local_var:te_dg_w_sold }
 	set_variable = { name = te_dg_bureaucrats value = local_var:te_dg_w_bur }
@@ -602,7 +607,8 @@ te_demog_seed = {
 	set_variable = { name = te_dg_dz value = 0 }
 	set_variable = { name = te_dg_eb_target value = 0 }
 	set_variable = { name = te_dg_ed_target value = 0 }
-	# and the window's start rate (te_demog_window_events): the next window has none
+	# and the window's start rate (te_demog_window_events) with its parts (te_demog_on_top_split): the next window has
+	# none
 	if = {
 		limit = { has_variable = te_dg_sr_b }
 		remove_variable = te_dg_sr_b
@@ -610,6 +616,14 @@ te_demog_seed = {
 	if = {
 		limit = { has_variable = te_dg_sr_d }
 		remove_variable = te_dg_sr_d
+	}
+	if = {
+		limit = { has_variable = te_dg_sp_d }
+		remove_variable = te_dg_sp_d
+	}
+	if = {
+		limit = { has_variable = te_dg_ss_d }
+		remove_variable = te_dg_ss_d
 	}
 	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	te_demog_set_scale = yes

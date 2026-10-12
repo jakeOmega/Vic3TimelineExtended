@@ -28,6 +28,12 @@
 #                       that ends at the next step (the trapezoid, te_demog_window_events), a month x
 #                       100,000: the walk's rate with the terms the step left in force. Stored by the
 #                       refresh, moved by fast mode's term, removed by a seed and outside Full
+#   te_dg_sp_d, te_dg_ss_d  the pops' own lines and severe starvation's part of them in that start rate, per head
+#                       (the Causes of Death section's split, te_demog_on_top_split): stored, moved and removed with
+#                       te_dg_sr_d
+#   te_dg_rate_clamp_d  which clamp bit the last refresh's deaths term: 0 none, 1 the floor, 2 the cap
+#   te_dg_ed_clamp_d    its copy for the window the step's dz measured (te_demog_on_top_clamp_copy)
+#   te_dg_ed_state, te_dg_ed_sev, te_dg_sev_share  the split of the window's deaths (te_demog_on_top_split; Full only)
 # The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
 # bare births and deaths a month x 100,000; te_dg_w_ebr and te_dg_w_edr, the replaced sums: each
 # pop's bare curves x what the census absorbs for it (te_demog_absorbed_walk_pop, generated);
@@ -109,11 +115,153 @@ te_demog_window_events = {
 	}
 }
 
+# THIS = a state, the walk's tail, straight after te_demog_window_events: the Causes of Death section's split of the
+# window's deaths (docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md, Task 6). Under Full:
+#   te_dg_ed_state  te_dg_ed less the pops' own lines over the window, at least 0: the state-level lines and the moved
+#                   lines' on-top family, the absorbed lines M nets, and the census's own lag (M a window old, the
+#                   model's rate drifting)
+#   te_dg_ed_sev    severe starvation's part of the pops' own lines over the window
+#   te_dg_sev_share the share of the state's people in severe starvation at the walk
+# Each end as te_demog_window_events weighs it. Today's from the walk: the engine's rate less what it would be without
+# any pop's own lines, w_ed - w_edr - (1 + read) x w_ed0 (a floored pop's own lines took its deaths to 0), and
+# te_dg_w_sevd. The start's from the refresh that stored te_dg_sr_d: te_dg_sp_d and te_dg_ss_d, per head. A start
+# rate without them (a save from before this build) leaves no split, so the row waits for the next count. Outside
+# Full the three go. te_dg_ed_state's floor at 0 is the one place the split stops multiplying back to te_dg_ed over
+# the target: the read's floor and the absorbed deaths keep it above 0 unless M's change moved a pop across the
+# engine's floor inside the window (te_demog_window_events' second-order note).
+te_demog_on_top_split = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		# today's: the pops' own lines in the engine's rate, a month x 100,000
+		set_local_variable = {
+			name = te_dg_split_own
+			value = {
+				value = modifier:state_mortality_mult
+				add = 1
+				multiply = local_var:te_dg_w_ed0
+				add = local_var:te_dg_w_edr
+				multiply = -1
+				add = local_var:te_dg_w_ed
+			}
+		}
+		set_local_variable = { name = te_dg_split_sev value = local_var:te_dg_w_sevd }
+		set_local_variable = { name = te_dg_split_ok value = 1 }
+		# te_demog_window_events' limit: there the window took the start's rate, so the split takes the start's parts
+		if = {
+			limit = {
+				has_variable = te_dg_sr_b
+				has_variable = te_dg_sr_d
+			}
+			if = {
+				limit = {
+					has_variable = te_dg_sp_d
+					has_variable = te_dg_ss_d
+				}
+				set_local_variable = {
+					name = te_dg_split_own
+					value = {
+						value = var:te_dg_sp_d
+						multiply = state_population
+						subtract = local_var:te_dg_split_own
+						multiply = te_demog_k_window_start_weight
+						add = local_var:te_dg_split_own
+					}
+				}
+				set_local_variable = {
+					name = te_dg_split_sev
+					value = {
+						value = var:te_dg_ss_d
+						multiply = state_population
+						subtract = local_var:te_dg_split_sev
+						multiply = te_demog_k_window_start_weight
+						add = local_var:te_dg_split_sev
+					}
+				}
+			}
+			else = {
+				set_local_variable = { name = te_dg_split_ok value = 0 }
+			}
+		}
+		if = {
+			limit = { local_var:te_dg_split_ok > 0 }
+			set_variable = {
+				name = te_dg_ed_state
+				value = {
+					value = local_var:te_dg_split_own
+					multiply = te_demog_step_months
+					divide = 100000
+					multiply = -1
+					add = var:te_dg_ed
+					min = 0
+				}
+			}
+			set_variable = {
+				name = te_dg_ed_sev
+				value = {
+					value = local_var:te_dg_split_sev
+					multiply = te_demog_step_months
+					divide = 100000
+					min = 0
+				}
+			}
+			set_variable = {
+				name = te_dg_sev_share
+				value = {
+					value = local_var:te_dg_w_sev
+					divide = { value = local_var:te_dg_w_pop min = 1 }
+					max = 1
+				}
+			}
+		}
+		else = {
+			te_demog_on_top_split_clear = yes
+		}
+	}
+	else = {
+		te_demog_on_top_split_clear = yes
+	}
+}
+
+te_demog_on_top_split_clear = {
+	if = {
+		limit = { has_variable = te_dg_ed_state }
+		remove_variable = te_dg_ed_state
+	}
+	if = {
+		limit = { has_variable = te_dg_ed_sev }
+		remove_variable = te_dg_ed_sev
+	}
+	if = {
+		limit = { has_variable = te_dg_sev_share }
+		remove_variable = te_dg_sev_share
+	}
+}
+
+# THIS = a state, at the top of te_demog_on_top_scales: the deaths clamp of the refresh whose M the window just
+# measured ran on, before this step's refresh writes the next window's (te_dg_rate_clamp_d). With none (not Full, the
+# first Full step after a seed or after Display only, an old save), the copy goes and the section's row waits for the
+# next count.
+te_demog_on_top_clamp_copy = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_rate_clamp_d
+		}
+		set_variable = { name = te_dg_ed_clamp_d value = var:te_dg_rate_clamp_d }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_ed_clamp_d }
+		remove_variable = te_dg_ed_clamp_d
+	}
+}
+
 # THIS = a state at the start of its step, straight after te_demog_prepare and te_demog_flows:
 # the year's rates scaled by how far the engine's expected births and deaths over the window
 # (te_dg_eb, te_dg_ed, from this step's walk) ran from the model's rates that M aimed at, at
 # today's population. Under Full only, and only once a step has stored the model's rates.
 te_demog_on_top_scales = {
+	# the clamp that bit the window this step measures, for the Causes of Death section's hover
+	te_demog_on_top_clamp_copy = yes
 	set_local_variable = { name = te_dg_bz value = 0 }
 	set_local_variable = { name = te_dg_dz value = 0 }
 	set_variable = { name = te_dg_eb_target value = 0 }
@@ -338,6 +486,8 @@ te_demog_rates_refresh = {
 				}
 			}
 			te_demog_rate_clamp = yes
+			# which clamp bit deaths, for the next window: 0 none, 1 the floor, 2 the cap (te_demog_on_top_clamp_copy)
+			set_variable = { name = te_dg_rate_clamp_d value = local_var:te_dg_rate_side }
 			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_d value = local_var:te_dg_rate_tb }
 			set_variable = { name = te_dg_os_d value = local_var:te_dg_rate_os }
@@ -386,6 +536,24 @@ te_demog_rates_refresh = {
 					divide = { value = state_population min = 1 }
 				}
 			}
+			# the start's own lines and severe starvation's part, per head (te_demog_on_top_split): today's, less the
+			# change in the census's term on the pops the engine floors at 0, which it doesn't reach (te_dg_sr_d moves
+			# by it on the others)
+			set_variable = {
+				name = te_dg_sp_d
+				value = {
+					value = var:te_dg_md
+					subtract = local_var:te_dg_rate_prev_d
+					subtract = local_var:te_dg_rate_lines_d
+					multiply = { value = local_var:te_dg_w_ed0 subtract = local_var:te_dg_w_ed0m }
+					multiply = -1
+					add = local_var:te_dg_w_ed
+					subtract = local_var:te_dg_w_edr
+					subtract = { value = modifier:state_mortality_mult add = 1 multiply = local_var:te_dg_w_ed0 }
+					divide = { value = state_population min = 1 }
+				}
+			}
+			set_variable = { name = te_dg_ss_d value = { value = local_var:te_dg_w_sevd divide = { value = state_population min = 1 } } }
 			set_local_variable = { name = te_dg_rate_sr value = 1 }
 			te_demog_rates_apply = yes
 			set_local_variable = { name = te_dg_rate_new_b value = var:te_dg_mb }
@@ -404,20 +572,32 @@ te_demog_rates_refresh = {
 			limit = { has_variable = te_dg_sr_d }
 			remove_variable = te_dg_sr_d
 		}
+		if = {
+			limit = { has_variable = te_dg_sp_d }
+			remove_variable = te_dg_sp_d
+		}
+		if = {
+			limit = { has_variable = te_dg_ss_d }
+			remove_variable = te_dg_ss_d
+		}
 	}
 }
 
-# local te_dg_rate_m into local_var:te_dg_rate_lo .. te_demog_k_rate_term_max, noting a clamp.
+# local te_dg_rate_m into local_var:te_dg_rate_lo .. te_demog_k_rate_term_max, noting a clamp, and which side bit
+# this term in te_dg_rate_side (0 none, 1 the floor, 2 the cap; reset at each call, so deaths never keep births').
 te_demog_rate_clamp = {
+	set_local_variable = { name = te_dg_rate_side value = 0 }
 	if = {
 		limit = { local_var:te_dg_rate_m < local_var:te_dg_rate_lo }
 		set_local_variable = { name = te_dg_rate_m value = local_var:te_dg_rate_lo }
 		set_local_variable = { name = te_dg_rate_clamped value = 1 }
+		set_local_variable = { name = te_dg_rate_side value = 1 }
 	}
 	else_if = {
 		limit = { local_var:te_dg_rate_m > te_demog_k_rate_term_max }
 		set_local_variable = { name = te_dg_rate_m value = te_demog_k_rate_term_max }
 		set_local_variable = { name = te_dg_rate_clamped value = 1 }
+		set_local_variable = { name = te_dg_rate_side value = 2 }
 	}
 }
 
@@ -537,5 +717,21 @@ te_demog_rates_clear = {
 	if = {
 		limit = { has_variable = te_dg_sr_d }
 		remove_variable = te_dg_sr_d
+	}
+	if = {
+		limit = { has_variable = te_dg_sp_d }
+		remove_variable = te_dg_sp_d
+	}
+	if = {
+		limit = { has_variable = te_dg_ss_d }
+		remove_variable = te_dg_ss_d
+	}
+	if = {
+		limit = { has_variable = te_dg_rate_clamp_d }
+		remove_variable = te_dg_rate_clamp_d
+	}
+	if = {
+		limit = { has_variable = te_dg_ed_clamp_d }
+		remove_variable = te_dg_ed_clamp_d
 	}
 }

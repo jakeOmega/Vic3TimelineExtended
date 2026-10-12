@@ -171,6 +171,29 @@ class TestGenerated(unittest.TestCase):
             self.assertIn(f"modifier:{name}", both, name)
             self.assertNotIn(f"owner.modifier:{name}", both, name)
 
+    def test_the_walk_sums_severe_starvation_under_full(self):
+        """The Causes of Death section's split (Task 6): one Full-only severe-starvation test per pop, beside the walk's
+        other Full-only sums. Its people count unconditionally; its deaths' severe term only where the engine doesn't
+        floor the pop, and the term is the very ladder te_demog_pop_death_mult holds."""
+        init = self.effects.split("te_demog_absorbed_walk_init = {", 1)[1].split("\n}\n", 1)[0]
+        pop = self.effects.split("te_demog_absorbed_walk_pop = {", 1)[1].split("\n}\n", 1)[0]
+        before_guard = init.split("te_demog_effects_run = yes", 1)[0]
+        for name in ("te_dg_w_sev", "te_dg_w_sevd"):
+            self.assertIn(f"set_local_variable = {{ name = {name} value = 0 }}", before_guard)
+        guarded = pop.split("local_var:te_dg_w_rep > 0", 1)[1]
+        self.assertEqual(pop.count("is_in_severe_starvation = yes"), 1)
+        severe = guarded.split("is_in_severe_starvation = yes", 1)[1]
+        self.assertIn("change_local_variable = { name = te_dg_w_sev add = total_size }", severe)
+        floored = severe.split("local_var:te_dg_p_md > 0", 1)
+        self.assertEqual(len(floored), 2, "the deaths sit inside the engine's floor test")
+        self.assertNotIn("te_dg_w_sevd", floored[0])
+        ladder = self.values.split("te_demog_pop_death_mult = {", 1)[1].split("\n}\n", 1)[0]
+        ladder = ladder.split("limit = { is_in_severe_starvation = yes }", 1)[1].split("else_if = {\n\t\tlimit = { is_in_mild", 1)[0]
+        want = [line.strip() for line in ladder.strip().splitlines() if line.strip() != "}"]
+        got = [line.strip() for line in floored[1].split("value = 0", 1)[1].strip().splitlines()][:len(want)]
+        self.assertEqual(got, want)
+        self.assertNotIn("te_demog_pop_severe", self.values + self.effects, "no new per-pop script value")
+
     def test_replay_values_are_one_sequential_block(self):
         self.assertNotIn("te_demog_dbg_unit", self.values)
         share = "multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 }"

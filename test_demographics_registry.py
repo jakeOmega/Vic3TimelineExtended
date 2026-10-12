@@ -1307,7 +1307,7 @@ class TestRatesScript(unittest.TestCase):
                        "modifier:state_mortality_mult": read_d, **families},
                       triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
         eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebr=ebr, te_dg_w_edr=edr, te_dg_w_eb=eb0,
-                          te_dg_w_ed=ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0)
+                          te_dg_w_ed=ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
         eng.vars.update(te_dg_stepped=stepped, te_dg_cbr_model=cbr, te_dg_cdr_model=cdr)
         return eng
 
@@ -1604,7 +1604,7 @@ class TestRatesScript(unittest.TestCase):
         eb0, ed0 = 475.0 * pop, 400.0 * pop
         walk = "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_w_eb0", eb0), ("te_dg_w_ed0", ed0), ("te_dg_w_ebr", P.LITERACY_BIRTH_PENALTY * 0.35 * eb0), ("te_dg_w_edr", 0.0), ("te_dg_w_eb", eb0),
-            ("te_dg_w_ed", ed0), ("te_dg_w_eb0m", eb0), ("te_dg_w_ed0m", ed0)))
+            ("te_dg_w_ed", ed0), ("te_dg_w_eb0m", eb0), ("te_dg_w_ed0m", ed0), ("te_dg_w_sev", 0.0), ("te_dg_w_sevd", 0.0)))
         walk += "\n" + "\n".join(f"set_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_eb", eb0 * 12 / 1e5), ("te_dg_ed", ed0 * 12 / 1e5), ("te_dg_walk_pop", pop)))
         stubs = {"te_demog_walks": walk, "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
@@ -1760,7 +1760,7 @@ class TestWindowEvents(unittest.TestCase):
     def walk(self, pops, read_b, read_d):
         """The walk's sums for these pops under these reads (te_demog_walks)."""
         w = dict(te_dg_w_eb0=0.0, te_dg_w_ed0=0.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=0.0, te_dg_w_ed=0.0,
-                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0)
+                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
         for bare_b, bare_d, abs_b, abs_d, top_b, top_d in pops:
             mult_b, mult_d = max(0.0, 1 + read_b + abs_b + top_b), max(0.0, 1 + read_d + abs_d + top_d)
             w["te_dg_w_eb0"] += bare_b
@@ -2045,6 +2045,318 @@ class TestWindowEvents(unittest.TestCase):
         self.assertAlmostEqual(rows[6]["ed"] - rows[6]["snap"], -(rows[7]["ed"] - rows[7]["snap"]), delta=1.0)
 
 
+class _SPop(tuple):
+    """One pop group for TestOnTopSplitScript: _Pop's fields, severe starvation's part of its own deaths terms (sev_d,
+    inside top_d) and its people."""
+    __slots__ = ()
+
+    def __new__(cls, bare_b, bare_d, abs_b=0.0, abs_d=0.0, top_b=0.0, top_d=0.0, sev_d=0.0, people=0.0):
+        return tuple.__new__(cls, (bare_b, bare_d, abs_b, abs_d, top_b, top_d, sev_d, people))
+
+
+def _s_mild(bare_b, bare_d, people, food=0.21):
+    b, d = demographics_model.starvation_terms(food)
+    return _SPop(bare_b, bare_d, abs_b=b, abs_d=d, people=people)
+
+
+def _s_severe(bare_b, bare_d, people, food=0.13, other_d=0.0):
+    """Severely starving (on top, x the starvation value), with other_d of other own lines on its deaths."""
+    b, d = demographics_model.starvation_terms(food)
+    return _SPop(bare_b, bare_d, top_b=b, top_d=d + other_d, sev_d=d, people=people)
+
+
+class TestOnTopSplitScript(unittest.TestCase):
+    """The Causes of Death section's split of the deaths added on top (Task 6, re-planned on #907's window):
+    te_demog_on_top_split, at the walk's tail after te_demog_window_events, with the start's parts the refresh stores
+    beside te_dg_sr_d (te_dg_sp_d, te_dg_ss_d).
+
+    Each case is checked against an engine built from pops, as TestWindowEvents is. Each pop gives bare x max(0, 1 +
+    read + absorbed + own). At each end the whole state's part is the engine without any pop's own lines, unfloored
+    (bare x (1 + read + absorbed)), and severe starvation's part is bare x its severe term over the pops the engine
+    doesn't floor. The window is the mean of the two ends x the window's months; the start runs under the terms the
+    refresh left in force."""
+
+    POP = 1_000_000.0
+    CBR, CDR = 38.0, 31.0
+    _engine = TestWindowEvents._engine
+    _set_reads = TestWindowEvents._set_reads
+    SAFE = _SPop(300e6, 260e6, people=600e3)
+    LABORERS = _SPop(175e6, 170e6, people=400e3)
+
+    @staticmethod
+    def walk(pops, read_b, read_d):
+        """The walk's sums for these pops (te_demog_walks, te_demog_absorbed_walk_pop)."""
+        w = dict(te_dg_w_eb0=0.0, te_dg_w_ed0=0.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=0.0, te_dg_w_ed=0.0,
+                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_pop=0.0)
+        for bare_b, bare_d, abs_b, abs_d, top_b, top_d, sev_d, people in pops:
+            mult_b, mult_d = max(0.0, 1 + read_b + abs_b + top_b), max(0.0, 1 + read_d + abs_d + top_d)
+            w["te_dg_w_eb0"] += bare_b
+            w["te_dg_w_ed0"] += bare_d
+            w["te_dg_w_ebr"] += bare_b * abs_b
+            w["te_dg_w_edr"] += bare_d * abs_d
+            w["te_dg_w_eb"] += bare_b * mult_b
+            w["te_dg_w_ed"] += bare_d * mult_d
+            w["te_dg_w_eb0m"] += bare_b if mult_b > 0 else 0.0
+            w["te_dg_w_ed0m"] += bare_d if mult_d > 0 else 0.0
+            w["te_dg_w_pop"] += people
+            if sev_d:
+                w["te_dg_w_sev"] += people
+                w["te_dg_w_sevd"] += bare_d * sev_d if mult_d > 0 else 0.0
+        return w
+
+    @staticmethod
+    def truth(pops, read_d):
+        """(the engine's deaths, the whole state's part, severe starvation's part) at one end, a month x 100,000."""
+        total = sum(p[1] * max(0.0, 1 + read_d + p[3] + p[5]) for p in pops)
+        whole = sum(p[1] * (1 + read_d + p[3]) for p in pops)
+        sev = sum(p[1] * p[6] for p in pops if p[6] and 1 + read_d + p[3] + p[5] > 0)
+        return total, whole, sev
+
+    def window(self, start_pops, end_pops, os_start=(0.02, 0.05), os_end=(0.02, 0.05), m_prev=(-0.3, -0.25),
+               months=12, fast_k=None, lines=(0.0, 0.0), full=True, refresh=True, drop_start_parts=False):
+        """TestWindowEvents.window, then the split and the step's scales. refresh False: no step at the start (the
+        first step after a seed: the window takes the snapshot). Returns the engine and the window's truth: {ed,
+        state, sev} in people and the end's severe share of people."""
+        eng = self._engine(full)
+        mb, md = m_prev
+        eng.modifiers.update({"te_demog_census_births_down" if mb < 0 else "te_demog_census_births_up": abs(mb),
+                              "te_demog_census_deaths_down" if md < 0 else "te_demog_census_deaths_up": abs(md)})
+        eng.vars.update(te_dg_mb=mb, te_dg_md=md, te_dg_stepped=1.0, te_dg_cbr_model=self.CBR,
+                        te_dg_cdr_model=self.CDR)
+        if lines != (0.0, 0.0):
+            eng.modifiers.update(te_demog_line_births_down=-lines[0], te_demog_line_deaths_down=-lines[1])
+            eng.vars.update(te_dg_ln_births=lines[0], te_dg_ln_deaths=lines[1])
+        if fast_k is not None:
+            eng.trigger_fixtures["te_demog_clock_on"] = True
+            eng.fixtures["global_var:te_demog_months_per_step"] = 12.0 / fast_k
+            eng.fixtures["global_var:te_demog_window_months"] = 12.0 / fast_k
+        if refresh:
+            read = self._set_reads(eng, *os_start, lines=lines)
+            eng.locals.update(self.walk(start_pops, *read))
+            eng.call("te_demog_rates_refresh")
+            if fast_k is not None:
+                eng.call("te_demog_fast_refresh_rates")
+            eng.locals.clear()
+        if fast_k is not None:
+            eng.fixtures["global_var:te_demog_window_months"] = float(months)
+        if drop_start_parts:
+            for name in ("te_dg_sp_d", "te_dg_ss_d"):
+                eng.vars.pop(name, None)
+        read_start = self._set_reads(eng, *os_start)
+        start = self.truth(start_pops, read_start[1])
+        read_end = self._set_reads(eng, *os_end)
+        end_sums = self.walk(end_pops, *read_end)
+        end = self.truth(end_pops, read_end[1])
+        eng.locals.update(end_sums)
+        eng.vars.update(te_dg_eb=end_sums["te_dg_w_eb"] * months / 1e5, te_dg_ed=end_sums["te_dg_w_ed"] * months / 1e5)
+        eng.call("te_demog_window_events")
+        eng.call("te_demog_on_top_split")
+        eng.locals.update(te_dg_tfr=1.0, te_dg_m_inf=1.0, te_dg_m_ext=1.0, te_dg_m_chr=1.0, te_dg_m_work_f=1.0,
+                          te_dg_m_work_m=1.0)
+        eng.call("te_demog_on_top_scales")
+        if refresh and "te_dg_sr_d" in eng.vars:
+            ends = [(a + b) / 2 * months / 1e5 for a, b in zip(start, end)]
+        else:
+            ends = [x * months / 1e5 for x in end]
+        share = end_sums["te_dg_w_sev"] / end_sums["te_dg_w_pop"]
+        return eng, dict(ed=ends[0], state=ends[1], sev=ends[2], share=share)
+
+    def value(self, eng, name):
+        return eng.value(eng._tree(eng.values, name))
+
+    def assert_split(self, eng, true, rel=1e-6):
+        got = {"ed": eng.vars["te_dg_ed"], "state": eng.vars["te_dg_ed_state"], "sev": eng.vars["te_dg_ed_sev"],
+               "share": eng.vars["te_dg_sev_share"]}
+        for k, want in true.items():
+            self.assertAlmostEqual(got[k], want, delta=rel * max(abs(want), 1.0), msg=k)
+        product = (self.value(eng, "te_demog_deaths_whole_state") * self.value(eng, "te_demog_deaths_severe")
+                   * self.value(eng, "te_demog_deaths_other"))
+        self.assertAlmostEqual(product, self.value(eng, "te_demog_deaths_on_top"), delta=1e-6, msg="the product")
+        return got
+
+    def test_a_famine_inside_the_window_is_severe_starvations(self):
+        """Hannover 1897-98: mildly starving when the window began (absorbed: M nets it, so the whole state's), severely
+        on the step's day (on top, so some of its people's). Half the end's severe deaths are severe starvation's."""
+        eng, true = self.window([self.SAFE, _s_mild(175e6, 170e6, 400e3)], [self.SAFE, _s_severe(175e6, 170e6, 400e3)])
+        got = self.assert_split(eng, true)
+        severe_d = demographics_model.starvation_terms(0.13)[1]
+        self.assertAlmostEqual(got["sev"], 170e6 * severe_d / 2 * 12 / 1e5, delta=1e-3)
+        self.assertAlmostEqual(got["share"], 0.4)
+        self.assertGreater(self.value(eng, "te_demog_deaths_severe"), 1.05)
+        self.assertAlmostEqual(self.value(eng, "te_demog_deaths_other"), 1.0, places=6)
+
+    def test_a_famine_ending_in_the_window(self):
+        eng, true = self.window([self.SAFE, _s_severe(175e6, 170e6, 400e3)],
+                                [self.SAFE, _s_mild(175e6, 170e6, 400e3, food=0.37)])
+        got = self.assert_split(eng, true)
+        self.assertGreater(got["sev"], 0.0, "the start's famine still counts")
+        self.assertEqual(got["share"], 0.0, "nobody severely starving at the count")
+
+    def test_a_state_level_change_stays_with_the_whole_state(self):
+        """Devastation from nothing to +0.3 inside the window: the whole state's, both factors on some of its people
+        x1.00."""
+        steady = [self.SAFE, self.LABORERS]
+        eng, true = self.window(steady, steady, os_start=(0.0, 0.0), os_end=(-0.1, 0.3))
+        self.assert_split(eng, true)
+        self.assertAlmostEqual(self.value(eng, "te_demog_deaths_severe"), 1.0, places=6)
+        self.assertAlmostEqual(self.value(eng, "te_demog_deaths_other"), 1.0, places=6)
+        self.assertEqual(eng.vars["te_dg_ed_state"], eng.vars["te_dg_ed"])
+
+    def test_other_lines_on_some_people(self):
+        """A dangerous workplace (+0.2 on the laborers' deaths) at both ends: other effects above 1, severe x1.00."""
+        pops = [self.SAFE, _SPop(175e6, 170e6, top_d=0.2, people=400e3)]
+        eng, true = self.window(pops, pops)
+        self.assert_split(eng, true)
+        # the workplace line over the whole state's deaths: (whole + bare x 0.2) / whole, from the pops
+        own = 170e6 * 0.2 * 12 / 1e5
+        self.assertAlmostEqual(self.value(eng, "te_demog_deaths_other"), (true["state"] + own) / true["state"],
+                               delta=1e-6)
+        self.assertGreater(self.value(eng, "te_demog_deaths_other"), 1.05)
+        self.assertAlmostEqual(self.value(eng, "te_demog_deaths_severe"), 1.0, places=6)
+
+    def test_the_whole_state_part_is_the_window_without_the_pops_own_lines(self):
+        """Review Focus 3: the same state with every pop's own lines taken away at both ends books, as its whole
+        window, what the first books as its whole state's part."""
+        start = [self.SAFE, _s_mild(175e6, 170e6, 400e3)]
+        end = [_SPop(300e6, 260e6, top_d=0.15, people=600e3), _s_severe(175e6, 170e6, 400e3, other_d=0.1)]
+        eng, _true = self.window(start, end)
+        bare = [p[:4] + (0.0, 0.0, 0.0, p[7]) for p in end]
+        plain, _ = self.window([p[:4] + (0.0, 0.0, 0.0, p[7]) for p in start], [_SPop(*p) for p in bare])
+        self.assertAlmostEqual(eng.vars["te_dg_ed_state"], plain.vars["te_dg_ed"], delta=1e-3)
+
+    def test_a_floored_pop_under_a_changing_m(self):
+        """A pop whose own lines take its deaths to 0 (-3 on top), while the refresh moves M a long way (+0.6 to the
+        fitted term): the change in M doesn't reach it, so its own lines absorb it at the window's start. Reading the
+        change on every pop's bare curves (te_dg_w_ed0 for te_dg_w_ed0m) books the whole state's part wrong here and
+        nowhere else."""
+        pops = [self.SAFE, _SPop(175e6, 170e6, top_d=-3.0, people=400e3)]
+        eng, true = self.window(pops, pops, m_prev=(0.4, 0.6))
+        self.assert_split(eng, true)
+        self.assertLess(self.value(eng, "te_demog_deaths_other"), 0.9)
+
+    def test_fast_mode_moves_the_start_part(self):
+        """K = 4: the clock's term moves the start's rate on the unfloored pops; the start's own lines move by it on
+        the floored ones."""
+        start = [self.SAFE, _SPop(175e6, 170e6, top_d=-3.0, people=400e3)]
+        end = [self.SAFE, _SPop(175e6, 170e6, top_d=-3.0, people=400e3)]
+        eng, true = self.window(start, end, fast_k=4, months=3)
+        self.assertIn("te_demog_fast_deaths", eng.modifiers)
+        self.assert_split(eng, true)
+
+    def test_no_start_rate_splits_the_snapshot(self):
+        """The first step after a seed (or a new state, an old save): the window is the snapshot, and so is the split."""
+        eng, true = self.window([], [self.SAFE, _s_severe(175e6, 170e6, 400e3)], refresh=False)
+        self.assertNotIn("te_dg_sr_d", eng.vars)
+        self.assert_split(eng, true)
+
+    def test_a_start_from_before_this_build_waits(self):
+        """A save from #907 but before this build has the start's rate and none of its parts: the window can't be
+        split as it was booked, so the split's variables go and the row waits for the next count."""
+        eng = self._engine()
+        eng.vars.update(te_dg_ed_state=1.0, te_dg_ed_sev=1.0, te_dg_sev_share=0.1)
+        eng, _true = self.window([self.SAFE, self.LABORERS], [self.SAFE, _s_severe(175e6, 170e6, 400e3)],
+                                 drop_start_parts=True)
+        self.assertIn("te_dg_sr_d", eng.vars)
+        for name in ("te_dg_ed_state", "te_dg_ed_sev", "te_dg_sev_share"):
+            self.assertNotIn(name, eng.vars, name)
+
+    def test_outside_full_the_split_goes(self):
+        eng = self._engine(full=False)
+        eng.vars.update(te_dg_ed_state=1.0, te_dg_ed_sev=1.0, te_dg_sev_share=0.1)
+        eng.call("te_demog_on_top_split")
+        for name in ("te_dg_ed_state", "te_dg_ed_sev", "te_dg_sev_share"):
+            self.assertNotIn(name, eng.vars, name)
+
+    def test_where_dz_is_clamped_the_product_is_not(self):
+        """Deaths over five times the census's: dz stops at +4, the split still multiplies to the window over the
+        target (the hover's clamp text says why the row and the product differ, Task 8)."""
+        pops = [self.SAFE, _SPop(175e6, 170e6, top_d=12.0, people=400e3)]
+        eng, true = self.window(pops, pops)
+        got = {k: eng.vars[v] for k, v in (("state", "te_dg_ed_state"), ("sev", "te_dg_ed_sev"))}
+        self.assertAlmostEqual(got["state"], true["state"], delta=1e-6 * true["state"])
+        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MAX)
+        product = (self.value(eng, "te_demog_deaths_whole_state") * self.value(eng, "te_demog_deaths_severe")
+                   * self.value(eng, "te_demog_deaths_other"))
+        self.assertAlmostEqual(product, eng.vars["te_dg_ed"] / eng.vars["te_dg_ed_target"], places=6)
+        self.assertGreater(product, 1 + P.ON_TOP_SCALE_MAX)
+
+    def test_the_start_parts_go_with_the_start_rate(self):
+        """Wherever te_dg_sr_d goes, the start's parts go too: the refresh outside Full (te_demog_rates_clear), a
+        refresh that stores no start (a seed's), te_demog_seed, and fast mode's clear."""
+        parts = dict(te_dg_sr_b=1.0, te_dg_sr_d=1.0, te_dg_sp_d=0.1, te_dg_ss_d=0.05)
+        cases = {}
+        eng = TestRatesScript._eng(TestRatesScript(), full=False)
+        eng.locals.update(te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+        eng.vars.update(parts)
+        eng.call("te_demog_rates_refresh")
+        cases["not Full"] = eng
+        eng = TestRatesScript._eng(TestRatesScript(), stepped=0.0)
+        eng.locals.update(te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+        eng.vars.update(parts)
+        eng.call("te_demog_rates_refresh")
+        cases["a seed's refresh"] = eng
+        eng = _engine_for(TestCohortScript.INP, 1836, 250000.0)
+        eng.vars.update(parts)
+        eng.call("te_demog_seed")
+        cases["te_demog_seed"] = eng
+        eng = self._engine()
+        eng.modifiers["te_demog_fast_deaths"] = 0.5
+        eng.vars.update(parts)
+        eng.call("te_demog_fast_clear_rates")
+        cases["fast mode's clear"] = eng
+        for label, eng in cases.items():
+            for name in parts:
+                with self.subTest(label, name=name):
+                    self.assertNotIn(name, eng.vars)
+
+
+class TestOnTopClampSide(unittest.TestCase):
+    """Which clamp bit the census's deaths term (te_dg_rate_clamp_d), and its copy for the window dz measured
+    (te_dg_ed_clamp_d): the hover names the clamp that bit the window it describes (Task 6; Review Focus 3)."""
+
+    def _eng(self, **kw):
+        eng = TestRatesScript._eng(TestRatesScript(), **kw)
+        eng.locals.update(te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+        return eng
+
+    def test_the_deaths_clamp_records_its_side(self):
+        """1 at the floor, 2 at the cap, 0 when deaths weren't clamped; births clamped alone leave 0."""
+        for kw, side in ((dict(cdr=400.0), 2), (dict(cdr=0.5, read_d=-0.5), 1),
+                         (dict(cbr=2.0, read_b=-0.5), 0), ({}, 0)):
+            eng = self._eng(**kw)
+            eng.call("te_demog_rates_refresh")
+            with self.subTest(kw=kw):
+                self.assertEqual(eng.vars["te_dg_rate_clamp_d"], side)
+                if kw.get("cbr"):
+                    self.assertEqual(eng.vars["te_dg_rate_clamped"], 1, "births did clamp")
+
+    def test_the_measured_window_keeps_its_clamp(self):
+        """dz measures the window that ran on the last refresh's M: the step copies that refresh's flag before this
+        step's refresh overwrites it; with none (the first Full step after Display only or a seed) the copy goes."""
+        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng.vars["te_dg_rate_clamp_d"] = 2.0
+        eng.call("te_demog_on_top_clamp_copy")
+        self.assertEqual(eng.vars["te_dg_ed_clamp_d"], 2.0)
+        del eng.vars["te_dg_rate_clamp_d"]
+        eng.call("te_demog_on_top_clamp_copy")
+        self.assertNotIn("te_dg_ed_clamp_d", eng.vars)
+        eng.vars["te_dg_rate_clamp_d"] = 1.0
+        eng.trigger_fixtures["te_demog_effects_run"] = False
+        eng.vars["te_dg_ed_clamp_d"] = 1.0
+        eng.call("te_demog_on_top_clamp_copy")
+        self.assertNotIn("te_dg_ed_clamp_d", eng.vars, "outside Full")
+        scales = [k for k, _, _ in _parse_script(_raw_blocks([RATE_EFFECTS])["te_demog_on_top_scales"])]
+        self.assertEqual(scales[0], "te_demog_on_top_clamp_copy")
+
+    def test_rates_clear_takes_the_clamp_and_the_start_parts(self):
+        eng = _Engine({}, triggers={"te_demog_effects_run": False})
+        names = ("te_dg_rate_clamp_d", "te_dg_ed_clamp_d", "te_dg_sp_d", "te_dg_ss_d")
+        eng.vars.update(dict.fromkeys(names, 1.0))
+        eng.call("te_demog_rates_clear")
+        for name in names:
+            self.assertNotIn(name, eng.vars, name)
+
+
 class _OwnerEngine(_Engine):
     """_Engine with an owner's laws, techs and institution levels and one pop's type: enough to run the generated
     absorbed terms. owner = { } and state = { } read the same facts (one state, one owner, one pop); the state's
@@ -2084,7 +2396,7 @@ class TestAbsorbedScript(unittest.TestCase):
 
     def _run(self, laws=(), techs=(), levels=None, incorporated=True, pop_type="clerks", food=1.0, literacy=0.0,
              full=True, impact=0.0):
-        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food,
+        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food, "total_size": 1000.0,
                             "modifier:state_institution_impact_add": impact}, laws=laws, techs=techs, levels=levels,
                            pop_type=pop_type,
                            triggers={"is_incorporated": incorporated, "is_in_severe_starvation": food < 0.2,
@@ -2141,6 +2453,31 @@ class TestAbsorbedScript(unittest.TestCase):
                         loop.index("te_demog_absorbed_walk_pop = yes"))
         self.assertLess(loop.index("set_local_variable = { name = te_dg_p_md value = te_demog_pop_death_mult }"),
                         loop.index("te_demog_absorbed_walk_pop = yes"))
+
+    def test_the_walk_sums_severe_starvation(self):
+        """The Causes of Death section's split (Task 6): a severe pop adds its people, and its bare deaths x the severe
+        term te_demog_pop_death_mult gives it, read in the same food-security steps, unless the engine floors it at 0
+        (people only). A mild pop adds nothing; outside Full nothing is summed."""
+        def run(food, md=1.0, full=True, people=1000.0):
+            eng = _OwnerEngine({"literacy_rate": 0.0, "food_security": food, "total_size": people},
+                               pop_type="laborers",
+                               triggers={"te_demog_effects_run": full, "is_in_severe_starvation": food < 0.2,
+                                         "is_in_mild_starvation": 0.2 <= food < 0.4})
+            eng.call("te_demog_absorbed_walk_init")
+            eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED, te_dg_p_mb=1.0, te_dg_p_md=md)
+            eng.call("te_demog_absorbed_walk_pop")
+            return eng.locals["te_dg_w_sev"], eng.locals["te_dg_w_sevd"]
+
+        for food in (0.199, 0.15, 0.12, 0.07, 0.0):
+            with self.subTest(food=food):
+                term = TestPopMultiplierScript()._term("te_demog_pop_death_mult", food)
+                self.assertEqual(run(food), (1000.0, self.P_ED * term))
+                self.assertAlmostEqual(term, P.STARVATION_SEVERE["deaths"] * demographics_model.starvation_value(food),
+                                       delta=P.STARVATION_BUCKET * 2.5 / 2 + 1e-9)
+        self.assertEqual(run(0.12, md=0.0), (1000.0, 0.0), "floored: its people, not its deaths")
+        self.assertEqual(run(0.3), (0.0, 0.0), "mild starvation")
+        self.assertEqual(run(1.0), (0.0, 0.0))
+        self.assertEqual(run(0.12, full=False), (0.0, 0.0), "outside Full")
 
     def test_literacy_and_mild_starvation_are_absorbed_per_pop(self):
         """Mild starvation (starvation_penalty x (0.4 - food security) x 2.5, read in 0.05 steps) is absorbed;
@@ -4048,7 +4385,10 @@ class TestConsole(unittest.TestCase):
                            ("tb_b", "te_dg_tb_b"), ("tb_d", "te_dg_tb_d"), ("os_b", "te_dg_os_b"), ("os_d", "te_dg_os_d"),
                            ("q_b", "te_dg_q_b"), ("q_d", "te_dg_q_d"), ("w", "te_dg_w"),
                            # the trapezoid's start rate for the next window (te_demog_window_events)
-                           ("sr_b", "te_dg_sr_b"), ("sr_d", "te_dg_sr_d")):
+                           ("sr_b", "te_dg_sr_b"), ("sr_d", "te_dg_sr_d"),
+                           # the Causes of Death section's split (te_demog_on_top_split) and the start's parts
+                           ("ed_state", "te_dg_ed_state"), ("ed_sev", "te_dg_ed_sev"), ("sev", "te_dg_sev_share"),
+                           ("clamp_d", "te_dg_ed_clamp_d"), ("sp_d", "te_dg_sp_d"), ("ss_d", "te_dg_ss_d")):
             self.assertIn(f"{field}=[THIS.Var('te_dg_dbg_", line, field)
             self.assertIn(var, body, var)
         self.assertIn("te_demog_cohorts_run = yes", console[console.rindex("option = {", 0, console.index(call)):
@@ -4091,7 +4431,7 @@ class TestFastMode(unittest.TestCase):
     def _refresh(self, eng, eb, eb0, ed, ed0):
         # fast mode's refresh alone: the census refresh before it left no census terms (Display only, no M yet)
         eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_eb0m=eb0,
-                          te_dg_w_ed0m=ed0, te_dg_rate_prev_b=0.0,
+                          te_dg_w_ed0m=ed0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_rate_prev_b=0.0,
                           te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0,
                           te_dg_rate_lines_b=0.0, te_dg_rate_lines_d=0.0)
         eng.call("te_demog_fast_refresh_rates")
@@ -4101,7 +4441,8 @@ class TestFastMode(unittest.TestCase):
     def _both(self, eng, eb, eb0, ed, ed0):
         """A clock step's two refreshes, as te_demog_state_clock_step runs them."""
         eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_ebr=0.0,
-                          te_dg_w_edr=0.0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0)
+                          te_dg_w_edr=0.0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0, te_dg_w_sev=0.0,
+                          te_dg_w_sevd=0.0)
         eng.call("te_demog_rates_refresh")
         eng.call("te_demog_fast_refresh_rates")
 
@@ -4127,7 +4468,8 @@ class TestFastMode(unittest.TestCase):
         Hide it from the fast refresh and the term must still come through, from the refresh's locals."""
         eng = self._eng_full()
         eng.locals.update(te_dg_w_eb=1.05 * 475e3, te_dg_w_eb0=475e3, te_dg_w_ed=0.98 * 430e3, te_dg_w_ed0=430e3,
-                          te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb0m=475e3, te_dg_w_ed0m=430e3)
+                          te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb0m=475e3, te_dg_w_ed0m=430e3,
+                          te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
         eng.call("te_demog_rates_refresh")
         self.assertIn("te_dg_mb", eng.vars)   # the applied branch ran (Full, a step's figures)
         mb, md = eng.vars["te_dg_mb"], eng.vars["te_dg_md"]
@@ -4198,7 +4540,8 @@ class TestFastMode(unittest.TestCase):
                                  "modifier:state_mortality_mult": o_d + md + fd})
             eng.locals.update(te_dg_w_eb=(1 + o_b + a_b + mb + fb) * eb0, te_dg_w_eb0=eb0,
                               te_dg_w_ed=(1 + o_d + a_d + md + fd) * ed0, te_dg_w_ed0=ed0,
-                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0)
+                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0,
+                              te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
             eng.call("te_demog_rates_refresh")
             eng.call("te_demog_fast_refresh_rates")
             return eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"], eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]
