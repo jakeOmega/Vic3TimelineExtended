@@ -460,13 +460,14 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-Thirty-one monuments already stand when a game begins, among them the Arc de
+Thirty-four monuments already stand when a game begins, among them the Arc de
 Triomphe in Paris, the Alexander Column in Saint Petersburg, the Temple of
 Heaven in Beijing, Topkapı Palace, La Scala in Milan and the Jantar Mantar in
-Jaipur. Eight stand where the great powers' armies and collectors took the
-most: the Parthenon, the Obelisks of Karnak, the royal palaces of Benin and
-Kumasi, the Bukgwan Victory Stele in Korea, the Imperial City of Huế,
-Persepolis and the Red Fort in Delhi. Most monuments to a crown or a republic stand in countries that still
+Jaipur. Eleven stand where the great powers' armies and collectors took the
+most: the Parthenon, the Obelisks of Karnak, the royal palaces of Benin,
+Kumasi and Abomey, Great Zimbabwe, the Bukgwan Victory Stele in Korea, the
+Imperial City of Huế, Klungkung Palace on Bali, Persepolis and the Red Fort
+in Delhi. Most monuments to a crown or a republic stand in countries that still
 honor them; two start contested: the Lion of Saint Mark, the old Venetian
 Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
 Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,
@@ -781,12 +782,13 @@ is rebuilt with its name, style and dedication. Its owner gains The Homecoming,
 the trophy off itself: bringing home what you took from your own colony only
 moves it.
 
-Nine trophies are already abroad when a game begins: the Parthenon's marbles,
-the Rosetta Stone and Tipu's Tiger in London; the Dendera Zodiac, the Luxor
+Ten trophies are already abroad when a game begins: the Parthenon's marbles,
+the Rosetta Stone and Tipu's Tiger in London, and the throne of the kings of
+Kandy at Windsor; the Dendera Zodiac, the Luxor
 Obelisk and the Venus de Milo in Paris; Baba Merzoug, the great cannon of
 Algiers, at Brest; and the Piraeus Lion and the Horses of Saint Mark in Venice.
-Greece, Egypt, the Ottoman Empire, Mysore and Mascara see theirs under Held
-Abroad from the start. A trophy from a historical monument has a Historical
+Greece, Egypt, the Ottoman Empire, Mysore, Mascara and British Ceylon see
+theirs under Held Abroad from the start. A trophy from a historical monument has a Historical
 monument line in its row; hover it for how it came to stand abroad.
 
 The AI carries off monuments in the states it occupies, more often when its

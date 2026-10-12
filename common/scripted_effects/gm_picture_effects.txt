@@ -165,6 +165,10 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = horses_of_saint_mark CODE = 13 }
 	gm_state_picture_landmark = { KEY = tipus_tiger CODE = 13 }
 	gm_state_picture_landmark = { KEY = baba_merzoug CODE = 10 }
+	gm_state_picture_landmark = { KEY = great_zimbabwe CODE = 190 }
+	gm_state_picture_landmark = { KEY = royal_palaces_of_abomey CODE = 15 }
+	gm_state_picture_landmark = { KEY = klungkung_palace CODE = 121 }
+	gm_state_picture_landmark = { KEY = royal_palace_of_kandy CODE = 15 }
 }
 
 gm_state_picture_landmark = {

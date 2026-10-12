@@ -51,6 +51,9 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = imperial_city_of_hue STATE = STATE_ANNAM TAG = DAI DEDICATION = crown FORM = gate LEVEL = 10 }
 	gm_seed_landmark = { KEY = persepolis STATE = STATE_FARS TAG = PER DEDICATION = civic FORM = hall LEVEL = 5 }
 	gm_seed_landmark = { KEY = red_fort STATE = STATE_DELHI TAG = MUG DEDICATION = crown FORM = gate LEVEL = 10 }
+	gm_seed_landmark = { KEY = great_zimbabwe STATE = STATE_ZAMBEZI TAG = MSH DEDICATION = civic FORM = round_tower LEVEL = 5 }
+	gm_seed_landmark = { KEY = royal_palaces_of_abomey STATE = STATE_DAHOMEY TAG = DAH DEDICATION = crown FORM = hall LEVEL = 5 }
+	gm_seed_landmark = { KEY = klungkung_palace STATE = STATE_SUNDA_ISLANDS TAG = BAL DEDICATION = crown FORM = gate LEVEL = 5 }
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
@@ -135,6 +138,10 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = horses_of_saint_mark }
 	gm_debug_log_landmark = { KEY = tipus_tiger }
 	gm_debug_log_landmark = { KEY = baba_merzoug }
+	gm_debug_log_landmark = { KEY = great_zimbabwe }
+	gm_debug_log_landmark = { KEY = royal_palaces_of_abomey }
+	gm_debug_log_landmark = { KEY = klungkung_palace }
+	gm_debug_log_landmark = { KEY = royal_palace_of_kandy }
 }
 
 gm_debug_log_landmark = {

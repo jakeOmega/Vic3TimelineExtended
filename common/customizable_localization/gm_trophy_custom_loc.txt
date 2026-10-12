@@ -297,6 +297,22 @@ gm_tr_part_name = {
 		localization_key = gm_tr_part_mughal_regalia
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:great_zimbabwe }
+		localization_key = gm_tr_part_soapstone_birds
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:royal_palaces_of_abomey }
+		localization_key = gm_tr_part_thrones_and_statues
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:klungkung_palace }
+		localization_key = gm_tr_part_royal_regalia
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:royal_palace_of_kandy }
+		localization_key = gm_tr_part_throne
+	}
+	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:arch }
 		localization_key = gm_tr_part_reliefs
 	}
@@ -567,6 +583,22 @@ gm_tr_landmark_name = {
 		localization_key = gm_skin_landmark_baba_merzoug
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:great_zimbabwe }
+		localization_key = gm_skin_landmark_great_zimbabwe
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:royal_palaces_of_abomey }
+		localization_key = gm_skin_landmark_royal_palaces_of_abomey
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:klungkung_palace }
+		localization_key = gm_skin_landmark_klungkung_palace
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:royal_palace_of_kandy }
+		localization_key = gm_skin_landmark_royal_palace_of_kandy
+	}
+	text = {
 		localization_key = gm_form_monument
 	}
 }
@@ -733,6 +765,22 @@ gm_tr_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:baba_merzoug }
 		localization_key = gm_landmark_baba_merzoug_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:great_zimbabwe }
+		localization_key = gm_landmark_great_zimbabwe_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:royal_palaces_of_abomey }
+		localization_key = gm_landmark_royal_palaces_of_abomey_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:klungkung_palace }
+		localization_key = gm_landmark_klungkung_palace_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:royal_palace_of_kandy }
+		localization_key = gm_landmark_royal_palace_of_kandy_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

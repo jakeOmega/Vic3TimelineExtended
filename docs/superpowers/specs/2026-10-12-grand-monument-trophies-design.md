@@ -6,8 +6,8 @@ this spec's, open to review on the PR.
 **Builds on:** `2026-10-05-grand-monuments-v2-design.md` (§6, "v2" below) and the landmarks spec's Appendix A
 (`2026-10-12-grand-monuments-landmarks-design.md`).
 **Replaces:** v2 §6 in full.
-**Extended by:** `2026-10-12-grand-monument-loot-and-1836-trophies-design.md` (eight landmarks to loot, and the
-nine trophies already abroad in 1836).
+**Extended by:** `2026-10-12-grand-monument-loot-and-1836-trophies-design.md` (eleven landmarks to loot, and the
+ten trophies already abroad in 1836).
 
 ## Context
 

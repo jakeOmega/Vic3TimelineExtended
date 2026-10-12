@@ -447,6 +447,22 @@ gm_skin_name = {
 		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_baba_merzoug }
 		localization_key = gm_skin_landmark_baba_merzoug
 	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_great_zimbabwe }
+		localization_key = gm_skin_landmark_great_zimbabwe
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palaces_of_abomey }
+		localization_key = gm_skin_landmark_royal_palaces_of_abomey
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_klungkung_palace }
+		localization_key = gm_skin_landmark_klungkung_palace
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_kandy }
+		localization_key = gm_skin_landmark_royal_palace_of_kandy
+	}
 	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
 	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
@@ -765,6 +781,22 @@ gm_landmark_name_evt = {
 		localization_key = gm_landmark_baba_merzoug_evt
 	}
 	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_great_zimbabwe }
+		localization_key = gm_landmark_great_zimbabwe_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palaces_of_abomey }
+		localization_key = gm_landmark_royal_palaces_of_abomey_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_klungkung_palace }
+		localization_key = gm_landmark_klungkung_palace_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_kandy }
+		localization_key = gm_landmark_royal_palace_of_kandy_evt
+	}
+	text = {
 		localization_key = gm_landmark_name_evt_none
 	}
 }
@@ -930,6 +962,22 @@ gm_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_landmark var:gm_landmark = flag:baba_merzoug }
 		localization_key = gm_landmark_baba_merzoug_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:great_zimbabwe }
+		localization_key = gm_landmark_great_zimbabwe_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:royal_palaces_of_abomey }
+		localization_key = gm_landmark_royal_palaces_of_abomey_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:klungkung_palace }
+		localization_key = gm_landmark_klungkung_palace_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:royal_palace_of_kandy }
+		localization_key = gm_landmark_royal_palace_of_kandy_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

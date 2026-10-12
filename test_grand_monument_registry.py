@@ -1145,6 +1145,14 @@ LANDMARKS = (
              False),
     Landmark("tipus_tiger", "STATE_MYSORE", "MYS", "civic", "statue", ("generic", "statue"), None, False),
     Landmark("baba_merzoug", "STATE_ALGIERS", "MAS", "war_memorial", "column", ("generic", "column"), None, False),
+    # Added 2026-10-12 (owner: the Throne of Kandy, and looted places in
+    # decentralized territory). Great Zimbabwe is in the Mashona's part of
+    # Zambezi (Harare and Bulawayo are its hubs), Klungkung in Bali's part of
+    # the Sunda Islands (Denpasar is its port). Abomey is Dahomey's.
+    Landmark("great_zimbabwe", "STATE_ZAMBEZI", "MSH", "civic", "round_tower", ("heritage_irish", "round_tower"), 5),
+    Landmark("royal_palaces_of_abomey", "STATE_DAHOMEY", "DAH", "crown", "hall", ("generic", "hall"), 5),
+    Landmark("klungkung_palace", "STATE_SUNDA_ISLANDS", "BAL", "crown", "gate", ("heritage_sanskrit", "gate"), 5),
+    Landmark("royal_palace_of_kandy", "STATE_CEYLON", "BCE", "civic", "hall", ("generic", "hall"), None, False),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000

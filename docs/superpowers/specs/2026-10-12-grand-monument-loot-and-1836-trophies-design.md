@@ -17,10 +17,10 @@ thirty-four.
 
 This change does two things:
 
-1. **Eight new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
-   Persia, Korea and Vietnam (§1).
-2. **Nine trophies already abroad on 1 January 1836**, seeded as trophies at game start: the Parthenon Marbles, the
-   Rosetta Stone, and seven more (§2). Most are still claimed today, so they start as the diplomatic friction the
+1. **Eleven new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
+   Persia, Korea, Vietnam, and in decentralized territory Great Zimbabwe and Bali (§1, §1.1).
+2. **Ten trophies already abroad on 1 January 1836**, seeded as trophies at game start: the Parthenon Marbles, the
+   Rosetta Stone, and eight more (§2). Most are still claimed today, so they start as the diplomatic friction the
    trophy system already models: the claimant sees them under Held Abroad, and its AI asks for them back.
 
 ## Engine facts and data this rests on
@@ -103,6 +103,41 @@ means Athens, the Red Fort Indian sovereignty. The grievance is the taking, whic
 **Phase 6's Panathenaic Stadium** (landmarks spec, Appendix B) would need Attica, which the Parthenon now holds. If phase 6
 is built, its stadium adds its levels to the standing monument, or is dropped.
 
+### 1.1 Added on the owner's second ask: decentralized territory (2026-10-12)
+
+The owner confirmed that a building can be placed in a decentralized country's state, and asked for looted places
+there, with the Throne of Kandy (§2).
+
+| # | Key | Name | State | 1836 owner | Dedication | Form (share) | Stand-in | Level |
+|---|---|---|---|---|---|---|---|---|
+| 40 | `great_zimbabwe` | Great Zimbabwe | `STATE_ZAMBEZI` (the Mashona's part) | MSH | To the Nation | Round tower (piece) | Irish · Round tower | 5 |
+| 41 | `royal_palaces_of_abomey` | Royal Palaces of Abomey | `STATE_DAHOMEY` (Dahomey's part) | DAH | To the Crown | Hall (token) | Generic · Hall | 5 |
+| 42 | `klungkung_palace` | Klungkung Palace | `STATE_SUNDA_ISLANDS` (Bali's part) | BAL | To the Crown | Gate (piece) | Sanskrit · Gate | 5 |
+
+- **Great Zimbabwe.** Its piece is "the soapstone birds": Willi Posselt and Cecil Rhodes took them in 1889–1891, and South
+  Africa (1981) and Germany (2003) gave them back. The bird is on Zimbabwe's flag. The form is the round tower (the
+  Great Enclosure's conical tower), so a looter takes a quarter. *(design)* It bends phase 4's rule for ancient
+  monuments: in 1836 its weight was local and religious, not political. Drop it if that rule should hold.
+- **Royal Palaces of Abomey.** Dahomey is centralized, so this belonged in §1 and was missed. French troops took the
+  palaces' thrones and royal statues in 1892, and France gave 26 of them back to Benin in 2021, under a law passed for
+  that return. The piece is "the thrones and royal statues".
+- **Klungkung Palace.** The Dewa Agung was Bali's paramount king. The Dutch took the regalia in 1908, and the Kris of
+  Klungkung came back in 2023. The piece is "the royal regalia". Bali's part of the Sunda Islands is two provinces
+  beside the Dutch East Indies' eight.
+
+**Considered and left out.**
+
+- **The moai Hoa Hakananai'a** (Rapa Nui's request to the British Museum): `STATE_EASTER_ISLAND` has no owner in 1836.
+- **Māori meeting houses** (Mataatua, Hinemihi) and **the Nisga'a and Haisla poles** returned from Edinburgh and Sweden:
+  carved after 1836.
+- **Bamum's throne, Mandu Yenu** (Berlin): made after 1836.
+- **The Ngonnso** (Nso's founding figure, returned from Berlin in 2022): a sacred figure that still serves its people's
+  rites, which phase 4's holy-site rule keeps out.
+- **The Cape Cross padrão** (Berlin, returned to Namibia in 2019): a Portuguese marker of a claim, not Herero or Nama work.
+- **The Lombok treasure** (2023's Dutch return): the obvious Lombok site, Cakranegara, may not be in Bali's two
+  provinces, and one Balinese palace is enough.
+- **Tibet's monasteries** (1903–1904): holy sites.
+
 ## 2. The trophies of 1836
 
 ### 2.1 Which
@@ -112,6 +147,7 @@ is built, its stadium adds its levels to the standing monument, or is dropped.
 | Parthenon — the Marbles | `parthenon` (§1) | `STATE_ATTICA` (GRE) | `STATE_HOME_COUNTIES` (GBR) | 1801 | 5 | piece |
 | Rosetta Stone | `rosetta_stone` | `STATE_LOWER_EGYPT` (EGY) | `STATE_HOME_COUNTIES` (GBR) | 1801 | 3 | whole |
 | Tipu's Tiger | `tipus_tiger` | `STATE_MYSORE` (MYS) | `STATE_HOME_COUNTIES` (GBR) | 1799 | 2 | whole |
+| Royal Palace of Kandy — the throne | `royal_palace_of_kandy` | `STATE_CEYLON` (BCE) | `STATE_HOME_COUNTIES` (GBR, at Windsor) | 1815 | 2 | piece |
 | Temple of Dendera — the Zodiac | `temple_of_dendera` | `STATE_UPPER_EGYPT` (EGY) | `STATE_ILE_DE_FRANCE` (FRA) | 1821 | 2 | piece |
 | Luxor Obelisk | `luxor_obelisk` | `STATE_UPPER_EGYPT` (EGY) | `STATE_ILE_DE_FRANCE` (FRA) | 1831 | 5 | whole |
 | Venus de Milo | `venus_de_milo` | `STATE_WEST_AEGEAN_ISLANDS` (GRE) | `STATE_ILE_DE_FRANCE` (FRA) | 1820 | 3 | whole |
@@ -121,13 +157,16 @@ is built, its stadium adds its levels to the standing monument, or is dropped.
 
 - **Still claimed today:** the Marbles (Greece's demand, the 2023 cancelled meeting), the Rosetta Stone and the Dendera
   Zodiac (Egypt's 2022 petitions), Baba Merzoug (Algeria's request, renewed since 1962), and Tipu's relics.
+- **The Throne of Kandy** (added on the owner's ask): sent to Windsor in 1815 and given back to Ceylon in 1934. Its
+  claimant is British Ceylon, Britain's own colony, until it goes free. It is a piece of the Royal Palace of Kandy, a
+  landmark that is never placed (§2.2), so a returned throne rebuilds the palace.
 - **The precedents:** the Horses of Saint Mark were taken twice (1204, 1797) and returned once (1815), and the Piraeus Lion
   has guarded Venice's Arsenal since 1687. Both stand in Venice, so whoever holds Venetia holds them: Austria, and Italy
   after 1866, as history went. An occupier of Venetia can carry them off again, as Napoleon did.
 - **Two were not taken by force** *(design)*: Muhammad Ali gave the Luxor Obelisk to France in 1830, and the Venus de Milo
   was bought from the Ottoman authorities in 1820. Each still counts as abroad, and its history line says how it left.
 - **Levels** *(design)*: 5 for the largest (the marbles, a whole obelisk, the four horses), 3 for a famous single
-  object, 2 for the rest. Each counts for half abroad, rounded up: Britain starts with 6 standing grandeur from
+  object, 2 for the rest. Each counts for half abroad, rounded up: Britain starts with 7 standing grandeur from
   trophies, France 7, Austria 4. France's Arc de Triomphe alone is 15.
 - **Share:** whole for an object, piece for what was cut from a building (the marbles, the zodiac). The share picks the
   title: a piece reads "Parthenon — the Marbles".
@@ -136,8 +175,6 @@ is built, its stadium adds its levels to the standing monument, or is dropped.
 
 **Left out.**
 
-- **The Throne of Kandy** (Windsor since 1815, returned 1934): its claimant would be British Ceylon, Britain's own
-  subject, until Ceylon goes free. It could be added; nothing in the mechanics stops it.
 - **Diponegoro's kris:** a weapon, not a monument. Its claimant would be Yogyakarta, not the Netherlands.
 - **Not monuments:** the Koh-i-Noor (in Lahore in 1836), Moctezuma's headdress (Vienna) and the Gweagal shield.
 - **Since returned:** the Quadriga (1814), the Laocoön and Napoleon's other Italian spoils (1815–1816).
@@ -149,7 +186,8 @@ is built, its stadium adds its levels to the standing monument, or is dropped.
 A trophy with no standing monument of its own (all but the Marbles) gets a landmark row, marked `placed = False` in
 `LANDMARKS`. It has every landmark site except the seeding call: its name, history line, name in running text,
 trophy name, picture branch (its stand-in's code) and debug log line. Its state and owner are its origin's, checked
-against the trophy row. Picture codes follow `LANDMARKS` order, so these take 1,000,032 to 1,000,039.
+against the trophy row. Picture codes follow `LANDMARKS` order, so these take 1,000,032 to 1,000,039, and Kandy's,
+added after §1.1's three, 1,000,043.
 
 | # | Key | Name | Form | Stand-in |
 |---|---|---|---|---|
@@ -161,6 +199,7 @@ against the trophy row. Picture codes follow `LANDMARKS` order, so these take 1,
 | 37 | `horses_of_saint_mark` | Horses of Saint Mark | Statue | Generic · Statue |
 | 38 | `tipus_tiger` | Tipu's Tiger | Statue | Generic · Statue |
 | 39 | `baba_merzoug` | Baba Merzoug | Column | Generic · Column |
+| 43 | `royal_palace_of_kandy` | Royal Palace of Kandy | Hall | Generic · Hall |
 
 "One per state" counts placed rows only: the Dendera Zodiac and the Luxor Obelisk come from Upper Egypt, where the
 Obelisks of Karnak stand. A trophy that goes home to a state with a monument adds its levels to it, as the Quadriga goes
@@ -265,11 +304,12 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 
 ## 6. In-game checks
 
-1. A new game: the eight new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
+1. A new game: the eleven new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
    logged. Benin and Asante are both centralized in 1836 (owner, 2026-10-12), and a building can be placed in a
    decentralized country's state too.
-2. Britain's Trophies section lists the Marbles, the Rosetta Stone and Tipu's Tiger. France's lists four and Austria's
-   two. Greece, Egypt, the Ottomans, Mysore and Mascara each list theirs under Held Abroad.
+2. Britain's Trophies section lists the Marbles, the Rosetta Stone, Tipu's Tiger and the Kandyan throne. France's lists
+   four and Austria's two. Greece, Egypt, the Ottomans, Mysore, Mascara and British Ceylon each list theirs under Held
+   Abroad.
 3. The history line's tooltip on a trophy row reads its landmark's line.
 4. Return the Marbles (debug `te_debug_monuments.6` option c, as Britain): the Parthenon grows by 5. Return the Rosetta
    Stone: a "Rosetta Stone" landmark stands in Lower Egypt with its stand-in picture.
@@ -281,7 +321,8 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 ## Known limits
 
 - **A split state that merges loses its monument's records.** A landmark in a country's part of a state (the Red Fort in
-  the Mughals' province of Delhi, the Jantar Mantar, the Shalimar Gardens, Aksum) is recorded on that part. If the
+  the Mughals' province of Delhi, the Jantar Mantar, the Shalimar Gardens, Aksum, and from §1.1 Great Zimbabwe,
+  Abomey and Klungkung) is recorded on that part. If the
   country holding the rest annexes it (the Company annexing the Mughals), the engine merges the two. The records go with
   the merged part, and the building reads as an unrecorded monument. This is a phase 4 limit and is not fixed here: it
   needs the landmark's identity kept by state region and restored after a merge (issue #936, with the engine reads it

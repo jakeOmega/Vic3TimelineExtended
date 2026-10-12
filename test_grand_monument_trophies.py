@@ -64,6 +64,10 @@ LANDMARK_PARTS = {
     "imperial_city_of_hue": "gm_tr_part_imperial_treasury",
     "persepolis": "gm_tr_part_reliefs",
     "red_fort": "gm_tr_part_mughal_regalia",
+    "great_zimbabwe": "gm_tr_part_soapstone_birds",
+    "royal_palaces_of_abomey": "gm_tr_part_thrones_and_statues",
+    "klungkung_palace": "gm_tr_part_royal_regalia",
+    "royal_palace_of_kandy": "gm_tr_part_throne",
 }
 # The occasion patterns of NAMESAKES, plus the namesakes with one pattern.
 NAME_PATTERNS = [p for patterns in NAMESAKES.values() for p in patterns]
@@ -449,6 +453,8 @@ TROPHIES_1836 = (
     Trophy1836("parthenon", "STATE_ATTICA", "GRE", "STATE_HOME_COUNTIES", "GBR", 5, "piece", 1801),
     Trophy1836("rosetta_stone", "STATE_LOWER_EGYPT", "EGY", "STATE_HOME_COUNTIES", "GBR", 3, "whole", 1801),
     Trophy1836("tipus_tiger", "STATE_MYSORE", "MYS", "STATE_HOME_COUNTIES", "GBR", 2, "whole", 1799),
+    # Windsor. Its claimant is British Ceylon, Britain's own colony, until it goes free.
+    Trophy1836("royal_palace_of_kandy", "STATE_CEYLON", "BCE", "STATE_HOME_COUNTIES", "GBR", 2, "piece", 1815),
     Trophy1836("temple_of_dendera", "STATE_UPPER_EGYPT", "EGY", "STATE_ILE_DE_FRANCE", "FRA", 2, "piece", 1821),
     Trophy1836("luxor_obelisk", "STATE_UPPER_EGYPT", "EGY", "STATE_ILE_DE_FRANCE", "FRA", 5, "whole", 1831),
     Trophy1836("venus_de_milo", "STATE_WEST_AEGEAN_ISLANDS", "GRE", "STATE_ILE_DE_FRANCE", "FRA", 3, "whole", 1820),
