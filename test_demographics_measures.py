@@ -196,11 +196,13 @@ class TestCatalogue(unittest.TestCase):
 
     def test_money_upkeep_sits_on_its_own_cost_modifier(self):
         """scripting_best_practices.md, "Expense Scaling with GDP": country_expenses_add = 1, the multiplier the
-        weekly cost; no measure modifier carries money itself."""
+        weekly cost, with the Budget Breakdown's mirror (its Family Policy row); no measure modifier carries money
+        itself."""
         for key in CATALOGUE:
             cost = self.mods.get(f"te_demog_ms_{key}_cost")
             if key in MONEY:
-                self.assertEqual(_lines(cost), {"country_expenses_add": 1.0}, key)
+                self.assertEqual(_lines(cost), {"country_expenses_add": 1.0, "country_te_budget_expense_family_add": 1.0},
+                                 key)
             else:
                 self.assertIsNone(cost, key)
         for name, body in self.mods.items():
@@ -210,7 +212,8 @@ class TestCatalogue(unittest.TestCase):
 
     def test_every_line_is_an_engine_modifier_or_a_registered_type(self):
         engine = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
-        types = set(re.findall(r"^(\w+) = \{", _text(TYPES_FILE), re.M))
+        types = {name for path in (ROOT / "common" / "modifier_type_definitions").glob("*.txt")
+                 for name in re.findall(r"^(\w+) = \{", _text(path), re.M)}
         for name, body in self.mods.items():
             for field in _lines(body):
                 self.assertTrue(field in engine or field in types, f"{name}: {field}")

@@ -8,7 +8,8 @@
 # authority upkeep (a flat country_authority_add: authority doesn't scale with size) and any other effect. A money
 # upkeep sits on a separate _cost modifier, country_expenses_add = 1, applied with a GDP-scaled weekly multiplier
 # (te_demog_ms_cost_<measure>, refreshed by the country's yearly census: scripting_best_practices.md, "Expense Scaling
-# with GDP"). A bureaucracy upkeep is an institution's cost multiplier, so it scales with the country.
+# with GDP"), with the Budget Breakdown's mirror line (its Family Policy row: scripts/generators/gen_budget_breakdown.py).
+# A bureaucracy upkeep is an institution's cost multiplier, so it scales with the country.
 # Birth Limit has one modifier a setting (two children, one child). The interest groups' lines are
 # interest_group_ig_<group>_approval_add on a country modifier, as vanilla's re_media_moderation.
 # A release comments the census types' lines out (comment_out_census_inputs.py, rule 1); every modifier keeps a line
@@ -27,6 +28,7 @@ te_demog_ms_child_allowance = {
 te_demog_ms_child_allowance_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
 }
 
 # Family Housing: Pro-Natalist Policy, State-Sponsored Family Planning. Half the urban term cancelled.
@@ -40,6 +42,7 @@ te_demog_ms_family_housing = {
 te_demog_ms_family_housing_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
 }
 
 # Honours for Large Families: Traditional Family Structure, Pro-Natalist Policy. The Soviet "Mother Heroine" (1944).
@@ -75,6 +78,7 @@ te_demog_ms_parental_leave = {
 te_demog_ms_parental_leave_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
 }
 
 # Free Contraception: State-Sponsored Family Planning, Population Control Measures. The means line is the census's own
@@ -90,6 +94,7 @@ te_demog_ms_free_contraception = {
 te_demog_ms_free_contraception_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
 }
 
 # Sex Education: State-Sponsored Family Planning, Population Control Measures. Upkeep: the schools' bureaucracy cost.

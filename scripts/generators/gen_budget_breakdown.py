@@ -44,6 +44,10 @@ SOURCES = {
         "nuclear_taboo": ("Nuclear Civil Defence", ("nd_taboo_civil_defence",)),
         "space": ("Space Race", ("we_se_debris_clearance",)),
         "drugs": ("Drug Shortage Response", ("drugs_shortage_spending",)),
+        "family": ("Family Policy", (
+            "te_demog_ms_child_allowance_cost", "te_demog_ms_family_housing_cost", "te_demog_ms_parental_leave_cost",
+            "te_demog_ms_free_contraception_cost",
+        )),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),
