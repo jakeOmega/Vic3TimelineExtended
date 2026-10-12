@@ -13,8 +13,8 @@
 > per-state Wealth Concentration and the rule) is built in PR 2 (branch `demographics-phase1`). It applies nothing to
 > population yet: what waits for phases 2 and 3 is listed in `docs/systems/mod_systems.md` § Demographics.
 > The late game (biological age, the pension age, fertility under life extension, who gets life extension, its costs
-> and display) is scoped in `2026-10-11-demographics-late-game-design.md` (draft), which amends §1, §7, §8.2, §8.3,
-> §10 and §13.
+> and display) is scoped in `2026-10-11-demographics-late-game-design.md` (draft), which amends §1, design rule 3,
+> §7, §8.2, §8.3, §10 and §13.
 > Numbers are starting proposals for the calibration harness (§12), not decisions.
 
 ## Context

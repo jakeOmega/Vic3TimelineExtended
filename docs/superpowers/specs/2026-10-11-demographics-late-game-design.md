@@ -1,9 +1,10 @@
 # Demographics in the late game: old age, work, children and who lives longest — design (scoping draft)
 
-> **Status: scoping draft, 2026-10-11, first round.** It answers the owner's request of 2026-10-11: scope the late
-> game's demography as one model before phase 2's workforce, pension and health work bakes in early-game assumptions.
-> Parent spec: `2026-10-08-demographics-design.md` (cited as "parent §n"); this draft amends its §1 ("Ages past 95
-> and the late eras"), §7, §8.2, §8.3, §10 and §13 ("Fertility without ageing") where it says so. It builds on #894's
+> **Status: scoping draft, 2026-10-11, second round** (revised after an independent review the same day: who is treated
+> is now tracked per band, §1.2–§1.3). It answers the owner's request of 2026-10-11: scope the late game's demography as
+> one model before phase 2's workforce, pension and health work bakes in early-game assumptions. Parent spec:
+> `2026-10-08-demographics-design.md` (cited as "parent §n"); this draft amends its §1 ("Ages past 95 and the late
+> eras"), design rule 3, §7, §8.2, §8.3, §10 and §13 ("Fertility without ageing") where it says so. It builds on #894's
 > rulings (workforce from participation; who pays for the old) and on two plans in flight: Causes of Death (draft PR
 > #905, branch `feat/demog-causes-of-death`) and Late Marriage and Birth Spacing (draft PR #906). No code here. Every
 > number is a starting proposal for the harness. Figures marked *sketch* come from a throwaway Python run of the
@@ -43,7 +44,8 @@ extension come to the rich earlier, how is all this displayed, etc."
 The three era-10 to era-12 lines sit in `ENGINE_LINES_ON_TOP` (`demographics_params.py:263`) with the note "revisit
 with step 6". The game ends on 1 January 2136 (`extra_defines.txt:153`); the tech audit places era 11 at about
 2030–2060 and era 12 from 2060 (`docs/audits/tech_era_appropriateness_audit.md:16-17`). So immortality has between a
-few and seventy years to play out, and nobody reaches the pool at 150 except in the most extreme games.
+few and seventy years to play out, and the pool at 150 does fill: 1.3% of people by the game's end if immortality
+comes in 2080, about 14% if it comes in 2056 (§1.4).
 
 **The risk the owner named.** Phase 2 is about to write the workforce effect (ages 15–64, an over-65 share), the
 pension bill (a 65+ count) and the health bill (a 65+ share). Each would be wrong by the late game: 65 stops meaning
@@ -72,8 +74,8 @@ both sexes' mean. "Ageing 0.75" means the treated age three-quarters of a year e
   were fitted to the 19th century; late, they are the whole death rate (§1.4).
 
 One rich state from today's stable structure at 1.6 children per woman, 60 years on (calendar fertility timing;
-"workforce" is the share of all people at work under modern women's participation and §2.1's capacity table, with a
-pension at 65 or none):
+everyone treated in the slowing and immortality rows, §1.3 for partial care; "workforce" is the share of all people at
+work under modern women's participation and §2.1's capacity table, with a pension at 65 or none):
 
 | Case | People at 30 / 60 years | Deaths per 1,000 at 30 | Calendar 65+ at 60 | Mean biological age | Health need (1836 = 0.97) | Workforce at 60: pension 65 / none |
 |---|---|---|---|---|---|---|
@@ -81,7 +83,7 @@ pension at 65 or none):
 | Era 11 medicine, no slowing | 0.88 / 0.68 | 14.6 | 42% | 56 | 2.11 | 0.38 / 0.49 |
 | Ageing 0.75 | 0.93 / 0.79 | 11.1 | 50% | 54 | 1.94 | 0.35 / 0.55 |
 | Ageing 0.5 | 0.97 / 0.90 | 8.6 | 56% | 50 | 1.69 | 0.33 / 0.61 |
-| Immortality, pulled 10% a year toward 35 | 1.13 / 1.22 | 2.2 | 67% | 29 | 0.79 | 0.29 / 0.77 |
+| Immortality, pulled 3% a year toward 35 | 1.10 / 1.19 | 2.4 | 67% | 31 | 0.79 | 0.29 / 0.77 |
 
 Three things fall out, and the rest of the draft is built on them:
 1. **Medicine that treats without slowing ageing makes a society older and sicker** (health need 1.73 → 2.11). Only
@@ -89,8 +91,10 @@ Three things fall out, and the rest of the draft is built on them:
    an end (§5.2).
 2. **A pension at calendar 65 under immortality makes two-thirds of the people pensioners**, and the workforce falls
    to 0.29 against 0.77 with no retirement. The pension age must be able to follow longevity (§2.2).
-3. **Whether immortality is a population shock depends on which clock fertility reads** (§3.3): ×1.19 in 50 years when
-   families are timed by calendar age, ×2.29 and rising when fertility reads biological age with no bound.
+3. **Whether immortality is a population shock depends on which clock fertility reads** (§3.3): ×1.17 in 50 years when
+   families are timed by calendar age, ×1.86 and rising when fertility reads biological age with no bound.
+4. **Who is treated must be tracked per band, not as one state share** (§1.3): a single share applied to every cohort
+   each year kills half again as many as tracking does when half the state is treated.
 
 ## Rulings this draft keeps
 
@@ -121,7 +125,7 @@ biological age, and changes nothing else about how a table is read.
 | Ability to work (capacity) | biological | frailty, not the calendar, ends work without a pension |
 | Health need | biological | care follows illness |
 | Unplanned births (the share the means don't reach) | biological | they follow fecundity |
-| Planned births (the wanted family) | calendar | families are formed at a stage of life (§3.1) |
+| Planned births (the wanted family) | calendar for their timing, biological for whether the body allows them | families form at a stage of life; a postponed birth needs a fertile body (§3.2) |
 | Pension eligibility | calendar | the law reads a birth date |
 | Schooling and child labour (the working ages' lower bound) | calendar | law |
 | Conscription's ages, war dead (18–40), youth bulge (20–29), migrant classes | calendar | law and life stage |
@@ -152,16 +156,35 @@ law and family formation are social, so they get the social clock.
 
 ### 1.2 Biological age: who is treated, and how fast they age
 
-**Two state figures and a deficit per cohort.**
-- **The treated share A** (0–1): the share of the state's adults with life-extension care. Access sets it (§4).
-- **The ageing rate r** of the treated: biological years per calendar year. 1 until the first carrier; read from a new
-  script-only state type, `state_ageing_rate_add` (negative), as the census reads its other types.
-- **The deficit d** per cohort: calendar age − biological age of its treated part. The untreated part is at its
-  calendar age. Children are not slowed: the deficit grows only past maturity (25).
+**Three state figures:**
+- **Eligibility E** (0–1): the share of the state's people within reach of longevity care (§4.2), from the wealth
+  bands and the laws. It drifts toward that target at the Causes of Death plan's medical-diffusion rate (0.1 +
+  `state_medical_diffusion_add` of the gap a year), both ways: care rolls out, and a ban phases it out as clinics
+  close.
+- **The ageing rate r** of those in care: biological years per calendar year. 1 until the first carrier; read from a
+  new script-only state type, `state_ageing_rate_add` (negative), as the census reads its other types.
+- **Cover c** (0–1): the share of everyone ever treated who is still in care. 1 normally; when E falls, c falls in
+  proportion.
 
-Each year, for each adult cohort: d += (1 − r); and when A rises, the newly treated arrive with no deficit, so
-d × A_old ÷ A_new before the year's growth (when A falls, the leavers take the mean, and d stays). The pool keeps one
-deficit like its mean age.
+**Two figures per five-year birth band**, adults only (children are not slowed; a cohort reaching 25 joins at the
+state's E):
+- **The treated share s**: the share of the band's people who have been in care.
+- **The deficit d**: their mean calendar age − biological age. The untreated are at their calendar age.
+
+**Each year, per band:**
+1. **Deaths**: the treated part at its biological age, the rest at its calendar age (§1.3).
+2. **Selection**: s becomes the treated survivors ÷ all survivors. The untreated die faster, so the old become more
+   treated, as the rich already are among the very old.
+3. **Ageing**: d += c × (1 − r), plus the pull under immortality × c (§1.4). Bodies out of care age at 1 from where
+   they are. They never snap back to their calendar age (#894: drift over jumps).
+4. **Joining**: when E rises, cover returns first; past that, the same share of every band's untreated joins with no
+   deficit, so d × s_old ÷ s_new.
+5. **Migrants**: emigrants leave with their band's mix. Immigrants are the census's residual and have no known
+   origin, so they join at the destination's mix: care follows where people live. Moves the census does know
+   (Internal Resettlement) carry their origin band's share and deficit.
+
+**The pool** (150+) keeps a share and a deficit like its mean age. **A state seeded after era 11** (a new or split
+state) starts each band at s = E and d = (1 − r) × (calendar − 25), the steady state of its current rate.
 
 **Carriers (proposal; speculation):**
 
@@ -179,23 +202,49 @@ threshold past the ring (§9, call 3).
 
 ### 1.3 How the ring carries it
 
-The sweep reads each slot's rates at its biological index. For the treated part that is a lookup, not the running
-pointer: precompute each group's rates once per step (31 groups, two sexes, as locals), then take a slot's treated
-rates by a generated five-comparison tree on its biological age. A cohort's deaths are A × the treated rate + (1 − A)
-× the calendar rate. The sum of rates, not a mean age, because deaths are convex in age: on women's chronic base, half
-a cohort at 60 and half at 90 die at (1,700 + 22,000) ÷ 2 per 100,000, not at 75's 6,200.
+The sweep reads each slot's rates twice: the untreated part's at its calendar index (the running pointer, as now) and
+the treated part's at its biological index. The second is a lookup: precompute each group's rates once per step (31
+groups, two sexes, as locals), then take a slot's treated rates by a generated five-comparison tree on its biological
+age (the form `te_demog_enter_group` already has). Treated and untreated die apart, not at a blended rate, because
+deaths are convex in age: on women's chronic base, half a cohort at 60 and half at 90 die at (1,700 + 22,000) ÷ 2 per
+100,000, not at 75's 6,200.
 
-**Three ways to store the deficit** (each from era 11 only, in states with A > 0):
+**Who is treated: the first draft's rule was wrong** (independent review, 2026-10-11). It kept one state share A and
+gave each cohort, every year, deaths = A × the treated rate + (1 − A) × the calendar rate. That draws the untreated
+share afresh from survivors who are by then mostly treated, so it kills too many. Tracked per cohort (treated,
+formerly treated and untreated apart) against the rules, year 50, era 11's rates, immortality pulled 3% a year
+(sketch; the shares are each cohort's at onset and of the newborn, and rise by selection):
 
-| Option | Variables a state | Exact? | Notes |
+| Case | Truth: deaths per 1,000, people | First draft | Share and deficit per band | One deficit per band |
+|---|---|---|---|---|
+| Immortality, 20% treated | 12.0, ×0.83 | 14.4, ×0.78 | 12.0, ×0.82 | 8.6, ×0.92 |
+| Immortality, 50% treated | 7.6, ×0.95 | 11.4, ×0.88 | 7.5, ×0.95 | 3.3, ×1.09 |
+| Immortality, 90% treated | 3.1, ×1.13 | 4.6, ×1.09 | 3.1, ×1.13 | 2.3, ×1.16 |
+| Rich-first: eligible 0 → 60% over 40 years | 6.9, ×0.90 | 9.7, ×0.87 | 7.0, ×0.90 | 4.0, ×0.96 |
+| Era 11 (r 0.75), 50% treated | 13.7, ×0.79 | 14.0, ×0.78 | 13.7, ×0.79 | 13.6, ×0.79 |
+| Everyone treated for 50 years, then a ban | 2.2 → 2.4 over five years | 42.6 the next year | 2.2 → 2.3 | 2.2 → 2.4 |
+
+- **A share and a deficit per band** (recommended) tracks the truth within 0.1 per 1,000 in every case. The ring's
+  treated and untreated parts die at the rates of §4.3's two life tables, so the longevity gap the panel shows is the
+  gap the ring has.
+- **One deficit per band over the whole cohort**, growing by E × (1 − r) (the review's simpler alternative), has no
+  selection error and no snap-back, and is right under era 11's slowing. Under immortality with partial access it makes
+  every member of a half-treated cohort half-immortal: deaths at less than half the truth, and a population that should
+  shrink (×0.95) grows (×1.09). It also leaves the ring with no treated and untreated parts, so the gap becomes display
+  only.
+- The ban row is the rule above: bodies keep their age. The first draft put the formerly treated back at their
+  calendar age at once.
+
+**Storage** (each from era 11 only, in states with someone treated):
+
+| Option | Variables a state | Fit | Save, full late game |
 |---|---|---|---|
-| **Per slot** (the parent's) | up to 125 (adult slots) + pool | yes, up to the mean over the treated | simplest code; about 8 MB more in a full late save |
-| **Per five-year birth band** (recommended) | up to 25 + pool | within a year, except a band crossing maturity or under a strong pull (the band's five cohorts sit within ±2 years of each other) | band = birth year ÷ 5 mod 30, which nests in the ring's 150; the display bands are five years anyway; about 1.6 MB |
-| **Parametric** | 2: the years not aged since onset, D, and r | exact only while r has been constant since onset: biological = calendar − min(D, (1 − r)(calendar − 25)) | breaks at era 12, under rejuvenation and when A changes, which are the late game's events |
+| **Share and deficit per five-year birth band** (recommended) | up to 50, the pool's 2, E and c | the truth within 0.1 per 1,000 (table above) | about 3.4 MB |
+| One deficit per band | up to 25 and the pool's | wrong under immortality with partial access (table above) | about 1.7 MB |
+| Share and deficit per slot | up to 250 | exact | about 15 MB |
 
-Migrants join their destination's cohort and take its deficit and access: care follows where people live. A state
-seeded after era 11 (a new or split state) seeds its deficits at the steady state of its current r: (1 − r) ×
-(calendar − 25).
+Bands are birth year ÷ 5 mod 30, which nests in the ring's 150 slots; the display bands are five years anyway. A band's
+five cohorts sit within ±2 years of each other, which the table's runs include.
 
 ### 1.4 Biological Immortality
 
@@ -216,6 +265,9 @@ seeded after era 11 (a new or split state) seeds its deficits at the steady stat
   2000–2020 adult mortality (15–49) is phase 3's first task.
 - **`biological_immortality`'s −20% on top moves into the census under Full** (it is the ageing rate now); outside
   Full it stays as the flat line. The same for the other two lines above (§8.4).
+- **The pool at 150 fills** (sketch, everyone treated, 3% pull): 0.4% of people after 50 years of immortality, 1.3%
+  after 56 (immortality in 2080 and the game's end), 14% after 80 (immortality in 2056). It keeps its mean age, share
+  and deficit, so its deaths stay right; the calendar pyramid's top bar reads 150+.
 
 ### 1.5 Old age from: the old-age threshold
 
@@ -223,8 +275,13 @@ seeded after era 11 (a new or split state) seeds its deficits at the steady stat
   Scherbov's prospective old-age threshold (2005, *Nature*; 2010, *Science*).
 - **Its values** (sketch, women / men): 63 / 60 in 1836, 66 / 63 in 1950, 77 / 73 today, 92 / 86 with era 11
   medicine, 117 / 110 with ageing at 0.75. Under immortality there is none: no age has only 15 years left.
-- **How**: from the census's own life table, a reverse pass over its 31 groups at each step; the treated and untreated
-  tables weighted by A; women and men averaged. A period figure, like life expectancy.
+- **How**: from the census's own life table, a reverse pass over its 31 groups at each step, with the death rates at
+  each age blended by the ring's own treated share at that age (§1.2's s); women and men averaged. A period figure,
+  like life expectancy. Averaging the two tables' remaining lives by the treated share instead would lose the
+  threshold once a few percent are immortal.
+- **With some of a state treated** (era 11 rates, immortality, a constant share at every age; review's check): the
+  untreated alone give 92 / 86; a fifth treated gives 99 / 91; half gives none. Selection makes the old the most
+  treated, so the ring's own blend reaches none sooner. Whose table Linked to Longevity follows is §9's call 7.
 - **What reads it**: the panel's Old age from row; Linked to Longevity (§2.2); the after-pension share under UBI and
   Post-Scarcity (§2.2); events that mean "the old". Deaths, capacity and health need don't: they read biological age
   directly.
@@ -257,9 +314,26 @@ working-age start to the pension age (to capacity's end without a pension), and 
 people. Workers past the pension age count in the numerator; the hover lists them.
 
 **Into the engine**: the state's workforce ratio heads toward this fraction through `state_working_adult_ratio_add`
-(`modifiers.log:2007`), scaled so a typical 1836 state lands on vanilla's 0.25 (#894). Immortality with no retirement
-gives about 1.7 times today's fraction (0.77 against 0.45 in the sketch), about 0.7 on the engine's scale. Vanilla
-never goes past 0.5 (slaves), so a cap is an owner call (§9, call 7; proposal 0.6).
+(`modifiers.log:2007`), scaled so a typical 1836 state lands on vanilla's 0.25 (#894).
+
+**The target is a total, as M is for births and deaths.** About twenty other lines already move the ratio. The
+census's term is the target less the pops' own base ratios (people-weighted, from the walk: aristocrats 0.2, slaves
+0.5, the rest 0.25) less the lines left on top. Two families, by the moved lines' pattern (script-only types the mod
+applies outside Full and the census models under Full):
+- **Carried by the participation model**, so cancelled under Full: women's work (the five women's-rights laws, +0.05
+  to +0.3; State-Sponsored Family Planning +0.05; Communal Child-Rearing +0.1; the Pill +0.05; second-wave feminism
+  and personal appliances +0.025 each), which set the women's rate, the "maybe technology" of #894; and retirement
+  (Old Age Pension −0.01 a level, UBI −0.02, Post-Scarcity −0.04, Pro-Natalist's −0.05, which parent §8.1 already
+  drops), which the pension age replaces. Without this, women's work would count twice.
+- **Left on top**: the criminal-justice laws, the Ministries of Labour, State Eugenics, Community Service and
+  Mandatory Minimums, the failed-state modifier, and one company's and one production method's lines.
+
+This amends the parent's rule 3 ("ones that stand for women's or children's work stay"): under Full, women's work is
+the participation model's, and those lines set it.
+
+**The engine's scale.** Under immortality the sketch's workforce reaches 0.66 of all people with Linked to Longevity
+(§2.3) and 0.77 with no pension, against today's 0.45: about 0.62 and 0.73 on the engine's scale, against vanilla's
+0.25 in 1836 and about 0.42 today. A cap is an owner call (§9, call 10).
 
 ### 2.2 The pension age
 
@@ -272,7 +346,7 @@ Old Age Pension chooses how it is set:
 | **Early Retirement** | 60 | Trade Unions, the old; frees jobs for the young (parent §8.2) |
 | **Standard** | 65 | the default |
 | **Raised Pension Age** | 70 | the treasury, Industrialists |
-| **Linked to Longevity** (new) | five years below the old-age threshold (§1.5), never below 65, moving at most a year a year | the treasury; Trade Unions object less than to Raised, since it rises only as lives lengthen |
+| **Linked to Longevity** (new) | five years below the old-age threshold (§1.5), at least 65 (a choice: §9, call 6), moving at most a year a year | the treasury; Trade Unions object less than to Raised, since it rises only as lives lengthen |
 
 - **Why a fourth position and not indexed defaults.** Indexing every position would remove the 20th century's fiscal
   squeeze: a fixed 65 that grows more generous as lives lengthen *is* the history (Germany's 70 in 1889, 65 from 1916;
@@ -280,7 +354,17 @@ Old Age Pension chooses how it is set:
   Denmark linked its pension age to life expectancy in 2006 and has legislated 70 by 2040 (as summarised;
   *unverified*).
 - **What Linked gives in the model** (sketch, both sexes): 65 (the floor) in 1836 and 1950, 70 today, about 84 with
-  era 11 medicine, about 108 with ageing at 0.75, and no pension age under immortality.
+  era 11 medicine, about 108 with ageing at 0.75. Under immortality the threshold is gone, so the age rises a year a
+  year for good.
+- **Existing pensioners keep their pensions.** The age moves at most a year a year and every cohort ages a year a
+  year, so no one already over it falls below it. Under immortality those already retired stay retired for good.
+- **Whose life table** (§9, call 7). The state's: death rates at each age blended by the ring's own treated share
+  (§1.5), as Denmark's rule reads the national average. So the more of a state is treated, the later everyone's
+  pension, and the untreated, who still age, may never reach it. That regressive effect is the real one: raising
+  the eligibility age cuts low earners' lifetime benefits most, since their lives are shorter (US National Academies,
+  *The Growing Gap in Life Expectancy by Income*, 2015, as summarised). The gap's politics read it (§4.4).
+  Following the untreated's table instead protects their pension, but the treated then draw it from about 84 for
+  ever, and Linked no longer answers the immortal society's bill.
 - **The minimum term** stays five years (parent §8.2).
 - **UBI and Post-Scarcity**, the welfare group's later laws (`extra_laws.txt:285`, `:344`), replace Old Age Pension.
   Under them there is no pension age: the old are paid as everyone is, there is no separate pension bill, and the
@@ -292,13 +376,14 @@ Old Age Pension chooses how it is set:
 
 ### 2.3 What an immortal society's workforce looks like
 
-From the sketch (60 years after immortality, 1.6 children per woman):
-- **Linked to Longevity**: nobody reaches the pension age; the workforce is 0.77 of all people, everyone not a child.
-  The dependency ratio collapses to the children.
+From the sketch (60 years after immortality, everyone treated, 3% pull, 1.6 children per woman):
+- **Linked to Longevity** (rising a year a year from 70 once the threshold is gone; the review's check): those
+  already retired when immortality came keep their pensions for good, 18% of the people after 30 years and 16% after
+  60. Nobody younger reaches the age. The workforce is 0.61 and 0.66, against 0.74 and 0.77 with no pension.
 - **Standard (65)**: 67% of the people are pensioners and the workforce falls to 0.29 against today's 0.45. A
   leisure society paid for by a quarter of its people; it can be a choice, and Post-Scarcity is where the game puts
   it.
-- **Without Old Age Pension**: as Linked; the old never tire.
+- **Without Old Age Pension**: 0.77; the old never tire.
 
 ### 2.4 Youth and dependency
 
@@ -316,8 +401,8 @@ sum of two parts:
 - **Unplanned**: wealth × natural × (1 − means), the births the means don't reach.
 
 **Proposal: planned births follow the calendar, unplanned births the body.**
-- Planned births follow a schedule over calendar age, the stage of life at which people form families. Lifetime
-  planned births equal the wanted number, however long people live.
+- Planned births are timed by calendar age, the stage of life at which people form families; whether each happens
+  depends on the body (§3.2). Lifetime planned births are at most the wanted number, however long people live.
 - Unplanned births follow fecundity, over biological age. Under immortality they continue for as long as the body is
   fertile, as a trickle the means hold down.
 
@@ -331,25 +416,28 @@ Before life extension both read the same age and nothing changes. The split need
   (`ASFR_SHAPE_BY_GROUP`, `demographics_params.py:71`) has a mean of 30.1, a late-marrying natural schedule. Late
   Marriage's phase-3 "blended schedules" (#906's spec §2.5) are the same object: early in the game the Late Marriage
   share sets the mean, later postponement does. One parameter, two drivers, built once.
-- **Fecundity by biological age** multiplies planned births: births postponed past what the body allows are lost.
-  Proposal: 1 to 30, 0.9 at 35, 0.7 at 40, 0.35 at 45, 0 from 50 (after Leridon 2004, *Human Reproduction*, as
-  summarised; assisted reproduction recovers part of the loss, which a biotech tech could carry). So late
-  postponement costs births, and life extension gives them back: a woman of 45 with the body of 35 has the child she
-  postponed. That is the late game's answer to "when".
+- **Fecundity by biological age** decides whether a planned birth happens: births postponed past what the body
+  allows are lost. Proposal: 1 to 30, 0.9 at 35, 0.7 at 40, 0.35 at 45, 0 from 50 (after Leridon 2004, *Human
+  Reproduction*, as summarised; assisted reproduction recovers part of the loss, which a biotech tech could carry).
+- **Without counting the body twice.** Today's shape already falls with age, since it is a natural schedule (#906's
+  spec §2.5). So the planned timing is the shape ÷ fecundity at calendar age, shifted by the mean age at
+  childbearing, then × fecundity at biological age. With no shift and the two clocks equal, that is today's shape.
+- So late postponement costs births, and life extension gives them back: a woman of 45 with the body of 35 has the
+  child she postponed. That is the late game's answer to "when".
 - **Phase 2 builds none of this** but keeps births computed as the two parts (§8.1).
 
 ### 3.3 How many: the completed-family bound (parent §13)
 
-Under immortality, people after 50 years from today's structure, the body pulled 10% a year toward 35 (3% in
-brackets); "lifetime" is the children so far of women aged 100 at year 50:
+Under immortality, everyone treated, people after 50 years from today's structure, the body pulled 3% a year toward
+35 (10% in brackets); "lifetime" is the children so far of women aged 100 at year 50:
 
 | Fertility reads | People after 50 years | Lifetime children | Variables a state |
 |---|---|---|---|
-| Calendar age for all births | ×1.19 (×1.17) | 1.60 | none |
-| **Planned by calendar, unplanned by biology**, means 0.9 | ×1.40 (×1.30) | 1.99 | none |
-| … means 0.95 (the cap) | ×1.30 (×1.23) | 1.80 | none |
-| Biological age, with §13's children-so-far bound | ×1.45 (×1.34) | 2.06 | 30 (per band) to 150 |
-| Biological age, no bound | ×2.29 (×1.86) | 3.69 and rising | none |
+| Calendar age for all births | ×1.17 (×1.19) | 1.60 | none |
+| **Planned by calendar, unplanned by biology**, means 0.9 | ×1.30 (×1.40) | 1.85 (1.99) | none |
+| … means 0.95 (the cap) | ×1.23 (×1.30) | 1.73 (1.80) | none |
+| Biological age, with §13's children-so-far bound | ×1.34 (×1.45) | 1.90 (2.06) | 30 (per band) to 150 |
+| Biological age, no bound | ×1.86 (×2.29) | 2.95 (3.69) and rising | none |
 
 Every run starts at 1.6 children per woman over calendar 15–49. The split's unplanned part is 3.0 children (Rich
 today's wealth and natural terms) × (1 − the means): 0.3 at means 0.9, so 1.3 are planned. The §13 row stops planned
@@ -367,15 +455,16 @@ births at 1.6 and keeps an unplanned 3.5 × 0.1.
 ### 3.4 The brake when deaths approach zero
 
 - **In a rich, low-fertility state immortality turns decline into slow growth**: at 1.6 children per woman, ×0.75 in
-  50 years with era 11 medicine alone becomes ×1.30–1.40 with the recommended split. A swing of about a point a year,
-  not an explosion: births per 1,000 fall as the adults pile up while deaths fall from about 8 to 2.
+  50 years with era 11 medicine alone becomes ×1.23–1.30 with the recommended split (everyone treated). A swing of
+  about a point a year, not an explosion: births per 1,000 fall as the adults pile up while deaths fall from about 8
+  to 2.
 - **A flat population needs low wanted fertility and near-perfect means, for good** (sketch, the pull at 3%, 60
   years): under the recommended split, 1.0 children per woman still grows ×1.20 at means 0.9 and ×1.10 at the cap
   (0.95), because rejuvenated women of every calendar age add the unplanned trickle; 0.8 children at the cap gives
   ×1.06. With every birth timed by the calendar, 1.0 children holds it at ×1.02. Before immortality the line was about
   2.1. So Population Control's late role is to hold both the wanted size and the means, permanently, not for a
   generation.
-- **In a high-fertility state growth was already fast**: at 3 children per woman the sketch grows ×2.19 in 50 years
+- **In a high-fertility state growth was already fast**: at 3 children per woman the sketch grows ×2.18 in 50 years
   against ×1.91 without immortality.
 - **The brakes are the means and the wanted size**, as §13 said: Free Contraception and Sex Education raise the means
   and so cut the trickle; Later, Longer, Fewer and Birth Limit cut the wanted size. Crowding and food security bring
@@ -410,8 +499,8 @@ births at 1.6 and keeps an unplanned 3.5 × 0.1.
 
 ### 4.1 What the engine can and can't do
 
-- **The census is per state.** It has one ring a state, so the treated and untreated share each cohort (§1.3). It can't
-  give the treated their own age structure; the approximation is that they are spread like everyone else.
+- **The census is per state.** It has one ring a state; each band keeps its treated share and their deficit (§1.2),
+  so the treated have their own age structure. It doesn't know which of a band's people are treated, only how many.
 - **The engine's deaths are per pop**: bare curve × max(0, 1 + the state's terms + the pop's own). The only per-pop
   line that scales by wealth is `state_mortality_wealth_mult` ("Mortality per Wealth", `modifiers.log:1851`), which the
   census already drives through `te_dg_w` (`te_demog_rate_effects.txt:348`) on its own pair, Census: Deaths by Wealth
@@ -425,7 +514,8 @@ births at 1.6 and keeps an unplanned 3.5 × 0.1.
 
 ### 4.2 Access: law × wealth × time
 
-For wealth band k, access a_k is the larger of two routes; A is the people-weighted mean.
+For wealth band k, access a_k is the larger of two routes; eligibility E (§1.2) drifts toward their people-weighted
+mean.
 
 - **Public route**: the health system pays. Its reach is the census's health-care access (base 0.4 plus the health
   law per level, drifting, from the Causes of Death plan) times the law's cover for longevity care.
@@ -458,11 +548,22 @@ health and augmentation laws already say who gets medicine and enhancements.
   sketch's era 11 gap is 67% against 35% (32 points); under immortality 81% against 35%.
 - **Today's gap, for scale:** the richest 1% of American men live 14.6 years longer than the poorest 1%, women 10.1
   (Chetty et al. 2016, *JAMA*); the census's Private Health Insurance line is the game's version.
-- **Who dies in the engine.** The census fits a wealth slope to its bands each step: each band's death multiplier
-  (1 − a_k × (1 − the treated's rate ÷ the untreated's)) against its wealth, people-weighted, and adds it to `te_dg_w`.
-  M keeps the state's total right. Rich pops then really die less, grow relative to the poor and shift the strata.
-  The floor of −0.005 a wealth level (`demographics_params.py:246`), which holds a wealth-99 pop at half the census's
-  rate, must give way to a floor scaled by the treated's rate (§9, call 10).
+- **The ring and the gap agree.** The ring's treated and untreated parts die at the two life tables' rates (§1.3), so
+  the gap the panel shows is the ring's.
+- **Who dies in the engine.** The census fits a wealth slope to its wealth bands each step and puts it on the existing
+  Census: Deaths by Wealth pair. Each wealth band's death multiplier is 1 − (its treated share) × (1 − ρ), where ρ is
+  the ring's treated deaths per head ÷ its untreated deaths per head; the wealth bands' treated shares are their
+  access, scaled so their mean is the ring's treated share (which selection has raised). The slope is that multiplier
+  against wealth, people-weighted. Rich pops then really die less, grow relative to the poor and shift the strata.
+- **The slope is the census's own, so M nets it**, as it nets the absorbed per-pop terms: the walk sums each pop's bare
+  curve × its slope term, floored where the engine floors a pop (max(0, 1 + …): no pop's deaths go below zero), and M
+  takes that sum out. Under immortality ρ is about a fifth at 70 and a twentieth by 85, and a straight slope would take
+  the richest pops below zero; the top wealth band is held at ρ, and what the floor removes goes back into M, so the
+  state's total stays the model's.
+- **This overturns option (b) in effect** (owner, 2026-10-11: Private Health Insurance's wealth line at least −0.005 a
+  wealth level, `demographics_params.py:246`, so a wealth-99 pop dies at no less than half the census's rate). The
+  floor stays on that line; the longevity slope adds to it on the same pair, so once longevity care exists a rich pop
+  dies at a fraction of the census's rate (§9, call 14).
 - **Alternative**: per pop type lines (Aristocrats and Capitalists treated first). Coarser, and wrong under Public
   Health Insurance, where access doesn't follow class.
 
@@ -480,6 +581,9 @@ health and augmentation laws already say who gets medicine and enhancements.
 
 ## 5. Who pays for the old
 
+Like every census effect, the workforce term (§2.1) and both bills below apply under Full only. Display only shows
+them as figures, and the pension setting is hidden outside Full, as the Causes of Death plan hides its decree.
+
 ### 5.1 The pension: money
 
 - **Who is paid**: people at or above the pension age, under Old Age Pension (§2.2).
@@ -488,8 +592,15 @@ health and augmentation laws already say who gets medicine and enhancements.
   and a GDP-scaled multiplier (`scripting_best_practices.md`, "Expense Scaling with GDP"; `modifiers.log:595`).
 - **Anchor**: OECD public pensions cost about 8% of GDP with about 18% of people over 65 (OECD, *Pensions at a Glance
   2023*, as summarised): about 0.4 of GDP per head per pensioner.
-- **Sizes (sketch)**: rich today at 65, 31% pensioners → 12% of GDP; immortality at 65 → 27% and still rising;
-  Linked to Longevity → near 0.
+- **B waits for a fit.** The OECD anchor is a share of GDP, and the game's government revenue as a share of GDP is
+  unmeasured (the same open check as `monetary_policy_design.md` §12.2). The harness fits B against revenue in a
+  late-game save before the numbers are tuned.
+- **Sizes (sketch, B = 0.4)**: rich today at 65, 31% pensioners → 12% of GDP; immortality at 65 → 27% and still
+  rising; Linked to Longevity → about 6–7%, the pensions of those already retired when immortality came.
+- **Stacks on vanilla's welfare, by recipient** (§9, call 17). Old Age Pension's `state_welfare_payments_add` (+0.1 a
+  level) goes to workers paid below a share of the normal wage, not to the old (parent §14 Q6). Its +20% dependents'
+  income a level has no payer: this bill is that payer. Under UBI and Post-Scarcity (welfare payments 0.8 and 4.8 a
+  level, `extra_laws.txt:313`, `:370`) everyone is paid already, so there is no pension bill (§2.2).
 - **Replaces** the parent §7's bureaucracy-only pension bill, as #894 ruled.
 
 ### 5.2 Health care: bureaucracy
@@ -512,8 +623,9 @@ everyone young.
 - **Health**: the weights stop at 85+, the need term is capped at +1.0, and slowing the clock lowers need. The worst
   case is era 11 medicine without slowing, not immortality.
 - **Pensions**: bounded by people (at most every adult over the pension age, about 35% of GDP at B = 0.4). A fixed age
-  under immortality is the expensive choice by design, and Linked to Longevity is the way out; The Pension Without End
-  (§2.2) offers it.
+  under immortality is the expensive choice by design. Linked to Longevity is the way out, at the price of the
+  untreated's pensions and of a legacy of 6–7% of GDP for those already retired; The Pension Without End (§2.2)
+  offers it.
 - **AI**: picks the setting by the bill's share of its GDP and its treasury (the parent §11.2's rule), the same
   weights for every country.
 
@@ -566,9 +678,10 @@ the census states.
 
 | Item | Variables a state | When | Save (887 states, 60–85 bytes each) |
 |---|---|---|---|
-| Phase 2 figures: working-age share, share at work, pensioners, health need, old-age threshold | 5 | always | about 0.3 MB |
-| Phase 3: A, r, pull, deficits (per band, up to 25, plus the pool), Living to 100 treated and untreated, mean biological age, access by strata (3), mean age at childbirth | up to 35 | era 11, states with A > 0 | about 2 MB |
-| … with deficits per slot instead | up to 135 | | about 8 MB |
+| Phase 2 figures: working-age share, share at work, pensioners, health need, old-age threshold, the workforce term | 6 | always | about 0.4 MB |
+| Phase 3: E, r, c and the pull; a treated share and a deficit per band (up to 50) and the pool's two; Living to 100 treated and untreated; mean biological age; access by strata (3); mean age at childbirth | up to 62 | era 11, states with someone treated | about 3.9 MB |
+| … with one deficit per band instead | up to 37 | | about 2.3 MB |
+| … with a share and a deficit per slot instead | up to 262 | | about 16 MB |
 | §13's children-so-far (not recommended) | 30–150 more | | 2–9 MB |
 
 Against about 345 a state today (360 with the Causes of Death plan). The country adds a handful (the pension age and
@@ -576,8 +689,8 @@ setting, the bill's multipliers, the gap).
 
 **Time.** Phase 2's figures are sums the sweep already visits. Phase 3 doubles the rate work for the treated slots (a
 lookup and a second rate a slot) and the life tables (treated and untreated): about 1 ms → 2 ms a state, on its own
-day. The pop walk gains nothing: access reads the stored bands. Owner check 5 (the benchmark in a late-game save) is
-the gate; per-band deficits keep the risk small.
+day; the per-band selection update adds 25 divisions. The pop walk gains nothing: access reads the stored wealth
+bands. Owner check 5 (the benchmark in a late-game save) is the gate; per-band storage keeps the risk small.
 
 ## 8. Phasing
 
@@ -593,21 +706,26 @@ the gate; per-band deficits keep the risk small.
 4. **Health need is a weight table by biological group**, not a 65+ share.
 5. **Births are computed as planned plus unplanned**, each with its own schedule (the same one in phase 2).
 6. **The old-age threshold** is computed and stored at each step (a reverse pass over the life table's 31 groups).
-7. **Names reserved**: `te_dg_d<j>` (deficits), `te_dg_treated`, `te_dg_age_rate`, `state_ageing_rate_add`,
-   `state_rejuvenation_add`.
+7. **Names reserved**: `te_dg_d<j>` (deficits), `te_dg_s<j>` (treated shares), `te_dg_elig`, `te_dg_cover`,
+   `te_dg_age_rate`, `state_ageing_rate_add`, `state_rejuvenation_add`.
+8. **The workforce target is a total** (§2.1): phase 2's term nets the pops' base ratios and the lines left on top,
+   and the women's-work and retirement lines move to script-only types the participation model reads.
 
-None of these changes a number in phase 2.
+Items 1–7 change no number phase 2 would otherwise produce. Item 8 decides how phase 2's own workforce term counts
+the lines already there.
 
 ### 8.2 Phase 3
 
-The ageing rate and its carriers; deficits; Biological Immortality's pull; access and the wealth slope; the longevity
+The ageing rate and its carriers; who is treated (a share and a deficit per band, eligibility and cover);
+Biological Immortality's pull; access and the wealth slope; the longevity
 gap and its politics; the two fertility schedules, postponement and fecundity; ectogenesis's share; the late display
 rows; the late-era lines' move into the census (§8.4); the late check of adult external and work rates (§1.4).
 
 ### 8.3 Dependencies on work in flight
 
 - **Causes of Death (#905)**: health-care access drifts; the public route of §4.2 reads the drifted access, and its
-  medical-diffusion type speeds the market threshold. Its section gets the biological-age line (§6.2). No conflict.
+  medical-diffusion rate sets how fast eligibility drifts (§1.2) and speeds the market threshold. Its section gets the
+  biological-age line (§6.2). No conflict.
 - **Late Marriage and Birth Spacing (#906)**: their phase-3 blended schedules and §3.2's mean age at childbearing are
   one parameter; build it once, in phase 3.
 - **#894's workforce from participation**: §2.1 is that model with capacity added as its upper bound when there is no
@@ -628,42 +746,76 @@ only.
 
 ## 9. Owner calls
 
-1. **Two clocks**: planned births, pension eligibility, schooling and conscription read calendar age; deaths, capacity,
-   health need and unplanned births read biological age (§0). This amends the parent §1's "every age-specific rate
-   reads biological age". *Recommended.* Alternative: the parent's single clock with §13's bound.
+Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call 16's B waits for a fit.
+
+1. **Two clocks**: deaths, capacity, health need and unplanned births read biological age; pension eligibility,
+   schooling and conscription read calendar age; planned births read both, calendar for their timing and biology for
+   whether the body allows them (§0). This amends the parent §1's "every age-specific rate reads biological age".
+   *Recommended.* Alternative: the parent's single clock with §13's bound.
 2. **Phase 2 builds the interfaces in §8.1** (two indexes, a pension-age variable, participation and need tables,
-   planned and unplanned births), changing no number. *Recommended.*
+   planned and unplanned births, the workforce target as a total), changing no number it would otherwise produce.
+   *Recommended.*
 3. **Era 11's ageing rate: 0.75** (personalized medicine −0.15, genetic engineering −0.10; treated life expectancy about
    103). *Recommended.* Alternative: the parent's 0.5 (about 130, and an old-age threshold past the ring).
 4. **Immortality's pull toward 35: 3% a year** (deaths per 1,000 from 8 to about 3.6 in ten years). *Recommended.*
    Alternative: 10% (2.4 in ten years).
-5. **Fertility under immortality: planned by calendar, unplanned by biology**, no new variables; growth ×1.2–1.4 in 50
-   years at 1.6 children (§3.3). *Recommended.* Alternatives: §13's children-so-far count (×1.3–1.45, 30–150 more
-   variables), or biological age with no bound (×2.3 and rising).
+5. **Fertility under immortality: planned by calendar, unplanned by biology**, no new variables; growth ×1.23–1.30 in
+   50 years at 1.6 children with everyone treated (§3.3). *Recommended.* Alternatives: §13's children-so-far count
+   (×1.34, 30–150 more variables), or biological age with no bound (×1.86 and rising).
 6. **The pension setting: four positions**, Early 60, Standard 65, Raised 70 and Linked to Longevity (five years below
-   the old-age threshold, never below 65, at most a year a year; 70 today). *Recommended.* Alternatives: three
-   positions all linked (loses the 20th century's squeeze), or three calendar positions (an immortal society can't
-   escape its bill).
-7. **The workforce ratio's cap: 0.6** on the engine's scale. *Recommended*, since vanilla never passes 0.5. Alternative:
-   no cap (immortality with no retirement reaches about 0.7).
-8. **Deficit storage: per five-year birth band** (up to 25 variables a treated state). *Recommended.* Alternatives:
-   per slot (up to 125; exact) or parametric (2; wrong at era 12).
-9. **Access by law × wealth band × a falling market threshold**, through the existing health and augmentation laws
-   (§4.2's table). *Recommended.* Alternatives: a new law group; access by health-care access alone (no rich-first).
-10. **Rich pops really die less**: the census fits a wealth slope from its bands onto the existing Census: Deaths by
-    Wealth pair, with a floor scaled to the treated's rate instead of −0.005 a level. *Recommended.* Alternative: the
-    gap as display and politics only, every pop dying at the state's rate.
-11. **The gap's politics**: Trade Unions and Rural Folk approval down to −3, Labor movement support up, both scaled by
-    the gap and the lower strata's untreated share. *Recommended*, small. Alternative: none until a play-test asks.
-12. **Pension money cost: GDP ÷ 52 × pensioners' share × 0.08 per Social Security level**. *Recommended.*
+   the old-age threshold, at most a year a year; 70 today). Linked's floor of 65 brings back a fixed age on purpose: it
+   makes Linked a reform that only raises the age. *Recommended*, floor included. Alternatives: no floor (Linked would
+   give about 56–60 before 1950); three positions all linked (loses the 20th century's squeeze); three calendar
+   positions (an immortal society can't escape its bill).
+7. **Linked follows the state's life table**, death rates blended at each age by the ring's treated share there
+   (§1.5, §2.2). The untreated may then never reach the pension age once enough of the state is treated: the real
+   regressive effect of indexing, which the gap's politics read. *Recommended*, since it is the only version that
+   answers the immortal society's bill. Alternative: the untreated's table (protects their pension; the treated draw it
+   from about 84 for ever).
+8. **Who is treated: a treated share and a deficit per five-year birth band** (up to 50 variables a treated state, about
+   3.4 MB in a full late save). It tracks the truth within 0.1 deaths per 1,000 in every case of §1.3's table, and the
+   ring then has the gap §4.3 shows. *Recommended.* Alternatives: one deficit per band over the whole cohort (25
+   variables; right under era 11, but under immortality with half the state treated it gives 3.3 deaths per 1,000
+   against 7.6, and the gap becomes display only); a share and a deficit per slot (up to 250, exact).
+9. **Losing care: bodies keep their age.** The formerly treated age at 1 from where they are; eligibility drifts at the
+   Causes of Death plan's medical-diffusion rate both ways; emigrants leave with their band's mix, the residual's
+   immigrants join at the destination's, and Internal Resettlement's known moves carry their origin's share and
+   deficit (§1.2). *Recommended.* Alternative: the first draft's snap to calendar age (a ban after 50 years of
+   immortality takes deaths from 2.2 to 42.6 per 1,000 in a year).
+10. **The workforce ratio's cap: 0.6** on the engine's scale. The trade-off: 0.6 is 2.4 times 1836's 0.25 and 1.4 times
+    today's 0.42, so about that much more labour per pop. Jobs that don't grow with it mean unemployment and lower
+    wages; jobs that do mean output. Immortality reaches about 0.62 under Linked and 0.73 with no pension, so the cap
+    binds only there. *Recommended*, since vanilla never passes 0.5 and the engine is untested beyond. Alternative: no
+    cap.
+11. **The workforce target is a total**: the census's term nets the pops' base ratios and the lines left on top; the
+    women's-work lines (the women's-rights laws, the Pill, second-wave feminism, personal appliances, two family-policy
+    laws) and the retirement lines (Old Age Pension, UBI, Post-Scarcity, Pro-Natalist) move to script-only types the
+    participation model reads, cancelled under Full only (§2.1). This amends the parent's rule 3. *Recommended.*
+    Alternative: add the census's term on top of every line, and women's work counts twice.
+12. **Access by law × wealth band × a falling market threshold**, through the existing health and augmentation laws
+    (§4.2's table). *Recommended.* Alternatives: a new law group; access by health-care access alone (no rich-first).
 13. **Health bureaucracy: need by biological age (× 0.5, capped +1.0), +0.05 per chronic-treatment tech, +0.5 × the
     publicly covered longevity care.** *Recommended.*
-14. **The panel**: Life expectancy shows `100+` past 100; add Old age from (phase 2), Living to 100 and Biological age
+14. **Rich pops really die less**: the census fits a wealth slope from its wealth bands onto the existing Census: Deaths
+    by Wealth pair, M nets it with each pop floored at zero deaths, and the top band is held at the treated's rate
+    (§4.3). This overturns option (b)'s effect in the late game: option (b)'s −0.005-a-level floor stays on Private
+    Health Insurance's line, but a rich pop with longevity care dies at a fraction of the census's rate, not at half.
+    *Recommended.* Alternative: the gap as display and politics only, every pop dying at the state's rate.
+15. **The gap's politics**: Trade Unions and Rural Folk approval down to −3, Labor movement support up, both scaled by
+    the gap and the lower strata's untreated share. *Play-test later*: build the gap and its display first, and size
+    the politics when a game shows one.
+16. **Pension money cost: GDP ÷ 52 × pensioners' share × B**, B = 0.08 per Social Security level as a starting value.
+    *Fit later*: the harness fits B against the game's revenue in a late-game save before tuning.
+17. **The pension bill stacks on vanilla's welfare by recipient**: Old Age Pension's welfare payments go to low-paid
+    workers and stay; this bill pays for the old, whose +20% dependents' income vanilla gives without a payer; UBI and
+    Post-Scarcity pay everyone already and have no pension bill (§5.1). *Recommended.* Alternatives: replace Old Age
+    Pension's welfare payments with the bill; or charge the bill under UBI and Post-Scarcity too.
+18. **The panel**: Life expectancy shows `100+` past 100; add Old age from (phase 2), Living to 100 and Biological age
     (era 11); a Work and Retirement section that takes the pension setting from Family Policy; a Longevity subsection
     from era 11. *Recommended.*
-15. **The late-era lines** move into the census under Full (§8.4): immortality as the ageing rate, Mental Health
+19. **The late-era lines** move into the census under Full (§8.4): immortality as the ageing rate, Mental Health
     Awareness as external −10%, Mind Backups as external and work −50%; ectogenesis's births stay on top.
     *Recommended.*
-16. **The adult external and work schedules get a 2000–2020 band in the harness** before phase 3, since under
+20. **The adult external and work schedules get a 2000–2020 band in the harness** before phase 3, since under
     immortality they are the whole death rate (men's median age at death 203 against women's 594 in the sketch).
     *Recommended.*
