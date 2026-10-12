@@ -1395,7 +1395,7 @@
  je_un_chamber_propose_blocked_reserved:0 "#Y Another delegation holds the floor while it decides whether to propose a motion.#!"
  je_un_chamber_propose_button_label:0 "Propose"
  je_un_chamber_propose_header:0 "Propose a Resolution"
- je_un_chamber_propose_intro:0 "#bold Business we may bring before the Assembly on our own motion.#! The floor takes one resolution at a time, and every topic below has its own conditions and its own cost. After tabling on our own motion we must wait before tabling again: ten years, halved for a [Concept('concept_great_power', 'Great Power')], and lengthened or shortened by our International Standing.\n"
+ je_un_chamber_propose_intro:0 "#bold Business we may bring before the Assembly on our own motion.#! The floor takes one resolution at a time, and every topic below has its own conditions and its own cost. Sponsoring a resolution uses #bold 150#! [concept_influence] for two years, #bold 300#! if it acts against a member; a request for help uses none. After tabling on our own motion we must wait before tabling again: ten years, halved for a [Concept('concept_great_power', 'Great Power')], and lengthened or shortened by our International Standing.\n"
  je_un_chamber_propose_need_aid:0 "A state of ours is in want, and no aid programme is already running"
  je_un_chamber_propose_need_arms_embargo:0 "A rival, or a country at war with a member, that is not our ally, overlord or subject has a record that supports an arms embargo (case strength 40 or more) and is not already under one"
  je_un_chamber_propose_need_ceasefire:0 "A country that started a war against a member, and is not already under a ceasefire order, has a record that supports one (case strength 40 or more)"

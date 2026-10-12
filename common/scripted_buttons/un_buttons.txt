@@ -60,6 +60,11 @@ un_found_button = {
 			text = un_refounding_cooldown_tt
 			NOT = { has_global_variable = un_refounding_cooldown }
 		}
+		# un_founding_cost_modifier, either way (un_script_values.txt).
+		custom_tooltip = {
+			text = un_found_influence_tt
+			influence >= un_found_influence_cost
+		}
 	}
 
 	ai_chance = {
@@ -80,7 +85,7 @@ un_found_button = {
 		else = {
 			custom_tooltip = {
 				text = "UN_FOUND_DESC"
-				# Cost: prestige and bureaucracy
+				# Cost: influence, fading over five years
 				add_modifier = {
 					name = un_founding_cost_modifier
 					days = normal_modifier_time
@@ -586,6 +591,10 @@ un_peacekeeping_mission_button = {
 		country_rank >= rank_value:major_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
 		NOT = { has_modifier = un_peacekeeping_cooldown }
+		custom_tooltip = {
+			text = un_programme_influence_tt
+			influence >= un_programme_influence_cost
+		}
 	}
 
 	ai_chance = {
@@ -835,6 +844,10 @@ un_human_rights_resolution_button = {
 			has_law = law_type:law_universal_suffrage
 			has_law = law_type:law_protected_speech
 		}
+		custom_tooltip = {
+			text = un_programme_influence_tt
+			influence >= un_programme_influence_cost
+		}
 	}
 
 	ai_chance = {
@@ -843,6 +856,11 @@ un_human_rights_resolution_button = {
 		if = { limit = { has_law = law_type:law_universal_suffrage } add = 15 }
 		if = { limit = { has_law = law_type:law_protected_speech } add = 15 }
 		if = { limit = { global_var:un_authority >= 50 } add = 10 }
+		# Only with influence to spare after the programme's cost (un_ai_values.txt).
+		if = {
+			limit = { influence < un_ai_programme_influence_start }
+			multiply = 0
+		}
 	}
 
 	effect = {
@@ -871,6 +889,8 @@ un_withdraw_human_rights_button = {
 		if = { limit = { has_law = law_type:law_ethnostate } add = 30 }
 		if = { limit = { has_law = law_type:law_outlawed_dissent } add = 20 }
 		if = { limit = { has_law = law_type:law_penal_labor_camps } add = 20 }
+		# In influence deficit the programme's cost is among the first to go.
+		if = { limit = { influence < 0 } add = un_ai_influence_deficit_pull }
 	}
 
 	effect = {
@@ -907,6 +927,10 @@ un_arms_control_button = {
 			has_law = law_type:law_humanitarian_regulations
 			has_law = law_type:law_limited_war
 		}
+		custom_tooltip = {
+			text = un_programme_influence_tt
+			influence >= un_programme_influence_cost
+		}
 	}
 
 	ai_chance = {
@@ -922,6 +946,11 @@ un_arms_control_button = {
 				}
 			}
 			add = 15
+		}
+		# Only with influence to spare after the programme's cost (un_ai_values.txt).
+		if = {
+			limit = { influence < un_ai_programme_influence_start }
+			multiply = 0
 		}
 	}
 
@@ -950,6 +979,8 @@ un_withdraw_arms_control_button = {
 		value = 0
 		if = { limit = { has_law = law_type:law_total_war } add = 30 }
 		if = { limit = { is_at_war = yes } add = 20 }
+		# In influence deficit the programme's cost is among the first to go.
+		if = { limit = { influence < 0 } add = un_ai_influence_deficit_pull }
 	}
 
 	effect = {
@@ -963,8 +994,9 @@ un_withdraw_arms_control_button = {
 
 # ---- 7. GREAT POWER INFLUENCE ON UN (TOGGLES) ----
 # These are strategic-orientation toggles: champion or undermine.
-# While active the ongoing cost modifier persists, and the stance counts +1 or
-# -1 in the commitment pillar (un_authority_values.txt). The AI reads one
+# While active the ongoing cost modifier persists (500 influence either way,
+# un_stance_influence_cost), and the stance counts +1 or -1 in the commitment
+# pillar (un_authority_values.txt). The AI reads one
 # signed stance for all four (un_ai_order_will, un_ai_values.txt).
 
 un_champion_order_button = {
@@ -988,6 +1020,10 @@ un_champion_order_button = {
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
 		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		custom_tooltip = {
+			text = un_stance_influence_tt
+			influence >= un_stance_influence_cost
+		}
 	}
 
 	ai_chance = {
@@ -1051,6 +1087,10 @@ un_undermine_order_button = {
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
 		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		custom_tooltip = {
+			text = un_stance_influence_tt
+			influence >= un_stance_influence_cost
+		}
 	}
 
 	ai_chance = {

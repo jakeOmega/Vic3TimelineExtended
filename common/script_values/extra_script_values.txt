@@ -3101,10 +3101,14 @@ banking_display_points_free = {
 # Extra repeal weight the AI gives a button that ends a programme costing
 # authority, while the country's available authority is negative. Low authority
 # cuts bureaucracy, which can tip a country into a bankruptcy cycle, so an AI in
-# deficit should shed what it can. Used by the cultural hegemony and colonial
-# empire disable buttons; the global warming repeals carry their own table
+# deficit should shed what it can. Used by the colonial empire disable
+# buttons; the global warming repeals carry their own table
 # (gw_ai_authority_deficit_repeal_weight in global_warming_ai_values.txt).
 te_ai_authority_deficit_repeal_weight = 30
+
+# The same for a programme costing influence, while available influence is
+# negative. Used by the cultural hegemony disable buttons.
+te_ai_influence_deficit_repeal_weight = 30
 
 # Country scope. Location assigns buildings, including foreign-owned sites,
 # to the country governing the state. Households and removal follow it too.

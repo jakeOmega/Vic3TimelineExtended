@@ -16,7 +16,10 @@ a technology gate (listed in the tables), a power bloc principle (see
 actions](#principles-that-unlock-articles-and-actions)), or another system's
 game rule. A directed article binds one side, the conceding country, and gives
 something to the other. An enforceable article can also be demanded as a war
-goal. The draft shows each article's influence cost.
+goal. The draft shows each article's influence cost and who pays it. A demand
+is paid for by the country making it, so Seize Company, Disband Company, Return
+Cultural Property and Surrender a Monument cost the conceding country no
+influence.
 
 ### Choosing a company or state for an article
 
@@ -96,14 +99,14 @@ gains leverage over it, and relations improve.
 |---|---|---|
 | Request Influence | A country outside any bloc, to a bloc leader | The leader gains leverage over you very fast, so it can soon invite you into its bloc. It is the way for a player to join a bloc: an AI leader accepts readily, but an AI country essentially never agrees to be the one asking. |
 | Extend Influence | Bloc leader | The leader gains leverage over the other country. |
-| Crisis Resolution | Bloc leader with over 100 authority | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws; the leader pays authority. |
+| Crisis Resolution | Bloc leader | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws. |
 | Education Aid | A more literate member | +10% education access for a recipient with a weak Ministry of Education or none. |
 | Healthcare Aid | A member with a Ministry of Health at level 3+ | −5% mortality and +1 standard of living for a recipient with a weak health system. |
 | Security Aid | A member with a Ministry of Public Safety at level 3+ | −20% turmoil effects and lower liberty desire for a recipient with weak policing. |
 | Development Assistance | A member | +2 standard of living for the lower strata of a recipient whose primary cultures average below 15. |
 | Modernization Aid | A member with more technologies and a Ministry of Science at level 2+ | The recipient gains technology spread; the donor loses weekly innovation. |
 | Extensive Modernization Aid | A member with a Ministry of Science at level 4+ | Four times Modernization Aid, which it requires. |
-| Reduce Subject Liberty | A subject, to its overlord | Lowers the subject's liberty desire. |
+| Reduce Subject Liberty | A subject, to its overlord | Lowers the subject's liberty desire. The overlord pays its influence. |
 
 The remaining articles belong to systems with chapters of their own.
 
