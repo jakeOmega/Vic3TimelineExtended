@@ -281,9 +281,11 @@ te_demog_deaths_on_top = {
 }
 # Its split over the same window (te_demog_on_top_split, Full only): the whole state's part (the state-level lines, the
 # moved lines' on-top family, the census's own lag since its last count), severe starvation's, and the other lines on
-# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top unless dz hit either
-# end of its range; a division's min = 1 (a person) bites only on a tiny state, and te_dg_ed_state's floor at 0 only
-# where M's change moved a pop across the engine's floor inside the window.
+# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top except: where dz hit
+# either end of its range; where a division's min = 1 (a person) bites, on a tiny state; where an end's read was below
+# -1 (state-level lines falling inside the window after M was fitted, or the read without M already below the floor),
+# which moves deaths into the other effects and can floor te_dg_ed_state at 0; and after a second walk in a year
+# without a step, which rewrites te_dg_ed and the split but not dz or the target until the next step.
 te_demog_deaths_whole_state = {
 	value = var:te_dg_ed_state
 	divide = { value = var:te_dg_ed_target min = 1 }

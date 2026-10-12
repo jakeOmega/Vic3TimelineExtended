@@ -178,8 +178,14 @@ independent review (`review-905.md`) confirmed 1–4 against the code. The PR li
          touch.
        - Fast mode moves `te_dg_sp_d` by `−ΔF × (w_ed0 − w_ed0m) / people` as it moves `te_dg_sr_d` by
          `ΔF × w_ed0m / people`.
-       - These are the two new stored variables. They can't be recovered from `te_dg_sr_d` with `te_dg_os_d` and
-         `te_dg_q_d` (the identity breaks, as above), and only the refresh knows ΔM.
+       - Why store them (the review of Task 6):
+         - `te_dg_ss_d` can't be rebuilt: the walk at the window's start isn't kept.
+         - `te_dg_sp_d` could in principle be rebuilt at walk time from `te_dg_sr_d`, `te_dg_cdr_model`, `te_dg_tb_d`,
+           `te_dg_os_d`, `te_dg_md`, `te_dg_rep_d` and fast mode's term. But that is inexact where `te_dg_os_d` hit
+           `te_demog_k_rate_total_min`, and it assumes none of them is rewritten before the walk.
+         - Storing them is exact. Its cost: the split adds seven state variables under Full (`te_dg_sp_d`,
+           `te_dg_ss_d`, `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_rate_clamp_d`,
+           `te_dg_ed_clamp_d`) and one severe-starvation test per pop.
      - **Over the window:** `ED_pop = (w × te_dg_sp_d × people + (1 − w) × P_end) × months / 100,000`, `ED_sev` the
        same with `te_dg_ss_d` and `w_sevd`, and `ED_state = ED − ED_pop`. Where `te_demog_window_events` took the
        snapshot (no start rate), the snapshot's `P_end` and `w_sevd`.
@@ -188,13 +194,22 @@ independent review (`review-905.md`) confirmed 1–4 against the code. The PR li
      drifting).
    - Some of its people: `ED ÷ ED_state`. Severe starvation is `(ED_state + ED_sev) ÷ ED_state`; the rest is
      `ED ÷ (ED_state + ED_sev)`.
-   - **The product is `ED ÷ target = 1 + dz` by construction.** It departs only in three cases:
-     - where dz hit either end of its range (`ON_TOP_SCALE_MIN` −0.9, `ON_TOP_SCALE_MAX` +4);
-     - where a display value's `min = 1` (one person) bites, which only happens on a tiny state;
-     - where `ED_state` would fall below 0. It is floored at 0 there, the one place the identity is cut. The read's
-       floor (−0.8) and non-negative absorbed deaths keep each end's whole-state part at or above 0.2 × the bare
-       deaths, so only a pop that M's change moves across the engine's floor inside the window (#907's second-order
-       case) can get there.
+   - **The product is `ED ÷ target`, which is `1 + dz` except in four cases** (corrected by the review of Task 6):
+     - **dz hit either end of its range** (`ON_TOP_SCALE_MIN` −0.9, `ON_TOP_SCALE_MAX` +4).
+     - **A display value's `min = 1` (one person) bites,** which only happens on a tiny state.
+     - **An end's read is below −1 (`1 + read < 0`).** That end's whole-state part is then negative: it counts every
+       pop unfloored, while the engine floors them. The split moves deaths into "other effects on some of its people",
+       and further down `ED_state` floors at 0 and the product reads 0.
+       - M keeps the read at or above −0.8 when it is fitted, unless the read without it is already below that.
+         So only the start's whole-state part is at least 0.2 × the bare deaths.
+       - The end reaches `1 + read < 0` only through state-level lines falling inside the window after M was fitted,
+         or through "other" alone below `te_demog_k_rate_total_min`. Both are rare: vanilla's largest negative state
+         line is −0.5.
+       - Floor crossings from M's change cancel out of `ED_state`, since both of its parts count every pop. They reach
+         the product only through `te_dg_ed`'s own floor at 0 (`te_demog_window_events`).
+     - **A second walk in a year without a step** (a state's second yearly pulse, `te_demog_state_yearly`). It
+       rewrites `te_dg_ed` and the split but not dz or `te_dg_ed_target`, so until the next step the factors multiply
+       to the new `te_dg_ed` over the old target. #907 documents the same case for M and the start rate.
    - A save from #907 but before this build has `te_dg_sr_d` and no start parts. Its window can't be split
      consistently, so the split's variables go and the row waits for the next count.
 3. **Vanilla does have turmoil mortality.** The three `state_turmoil*` static modifiers carry none, as the brief says.
@@ -249,7 +264,9 @@ death term (+1.0 × bare) was never fitted and may be about 0.6. Fixing it will 
 4. The carriers and the decree's name, cost and unlock (tables above). The AI weight follows the shared-mechanics
    rule and needs no question.
 5. The section's place: after the overview, before the pyramid (life expectancy and its causes sit together, rule 5).
-6. Save size: under Full, 15 more variables per census state (9 under Display only), against about 345 now (+4%).
+6. Save size: under Full, 16 more variables per census state (9 under Display only), against about 345 now (+5%).
+   That is the nine stored inputs plus Task 6's seven (corrected by the review of Task 6).
+   The walk adds one severe-starvation test per pop, under Full only.
 7. Execution: native, with a fresh review of Tasks 4–6 (the risky script) and a whole-branch review at the end, as
    the engine-lines plan.
 
@@ -2208,9 +2225,11 @@ te_demog_deaths_on_top_code = {
 }
 # Its split over the same window (te_demog_on_top_split, Full only): the whole state's part (the state-level lines, the
 # moved lines' on-top family, the census's own lag since its last count), severe starvation's, and the other lines on
-# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top unless dz hit either
-# end of its range; a division's min = 1 (a person) bites only on a tiny state, and te_dg_ed_state's floor at 0 only
-# where M's change moved a pop across the engine's floor inside the window.
+# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top except: where dz hit
+# either end of its range; where a division's min = 1 (a person) bites, on a tiny state; where an end's read was below
+# -1 (state-level lines falling inside the window after M was fitted, or the read without M already below the floor),
+# which moves deaths into the other effects and can floor te_dg_ed_state at 0; and after a second walk in a year
+# without a step, which rewrites te_dg_ed and the split but not dz or the target until the next step.
 te_demog_deaths_whole_state = {
 	value = var:te_dg_ed_state
 	divide = { value = var:te_dg_ed_target min = 1 }
@@ -2793,9 +2812,14 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
      from the next. The same on the first Full count after Display only. Red from ×1.25: try a famine state, or
      late-game India. The hover's three parts multiply to the row, and severe starvation's share reads beside its
      part. Option n's `ed_state=`, `ed_sev=`, `sev=` and `clamp_d=` match the hover.
-  7. **Turmoil.** A state in high turmoil shows Turmoil above ×1.00 under Accidents and Violence.
-  8. **An old save** from before this build: the section reads "after its next count" until each state's step.
-  9. **`debug.log`:** no "Failed to fetch variable" or errors from `te_demog_f_*`, `te_dg_acc`, `te_dg_in_*` or the
+  7. **Severe starvation's sum parses** (the review of Task 6). In a famine state under Full, option n logs
+     `ed_sev=` above 0. `debug.log` shows no load-time parse error in `te_demog_generated_effects.txt`. A failed parse
+     would most likely show only as `ed_sev=0`.
+     - If it fails, move the walk's severe ladder (`te_demog_absorbed_walk_pop`) into a named pop-scope script value
+       and multiply by that.
+  8. **Turmoil.** A state in high turmoil shows Turmoil above ×1.00 under Accidents and Violence.
+  9. **An old save** from before this build: the section reads "after its next count" until each state's step.
+  10. **`debug.log`:** no "Failed to fetch variable" or errors from `te_demog_f_*`, `te_dg_acc`, `te_dg_in_*` or the
      decree.
 
 - [ ] **Step 5: Run the whole suite and the checks:**

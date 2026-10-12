@@ -126,9 +126,15 @@ te_demog_window_events = {
 # any pop's own lines, w_ed - w_edr - (1 + read) x w_ed0 (a floored pop's own lines took its deaths to 0), and
 # te_dg_w_sevd. The start's from the refresh that stored te_dg_sr_d: te_dg_sp_d and te_dg_ss_d, per head. A start
 # rate without them (a save from before this build) leaves no split, so the row waits for the next count. Outside
-# Full the three go. te_dg_ed_state's floor at 0 is the one place the split stops multiplying back to te_dg_ed over
-# the target: the read's floor and the absorbed deaths keep it above 0 unless M's change moved a pop across the
-# engine's floor inside the window (te_demog_window_events' second-order note).
+# Full the three go. The split multiplies back to te_dg_ed over the target (te_demog_deaths_whole_state, _severe,
+# _other) except where an end's read was below -1. Its whole-state part, which counts every pop unfloored, is then
+# negative, the deaths move into the other effects, and further down te_dg_ed_state floors at 0. M keeps the read at
+# or above -0.8 when it is fitted (unless the read without it is already below), so the end alone gets there: state-level
+# lines falling inside the window after M was fitted, or the read without M below te_demog_k_rate_total_min. Rare:
+# vanilla's largest negative state line is -0.5. Floor crossings from M's change cancel out of te_dg_ed_state, since
+# both of its parts count every pop, and reach the product only through te_dg_ed's own floor at 0. A second walk in a
+# year without a step (a state's second yearly pulse) rewrites te_dg_ed and the split but not dz or the target, so
+# until the next step the factors multiply to the new te_dg_ed over the old target (#907 notes the same for M).
 te_demog_on_top_split = {
 	if = {
 		limit = { te_demog_effects_run = yes }

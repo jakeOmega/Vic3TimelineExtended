@@ -2249,6 +2249,31 @@ class TestOnTopSplitScript(unittest.TestCase):
         self.assertNotIn("te_dg_sr_d", eng.vars)
         self.assert_split(eng, true)
 
+    def test_the_walks_own_severe_sum_feeds_the_split(self):
+        """The review of Task 6: the cases above sum severe starvation in Python; here the end's two severe sums come
+        from the generated per-pop effect (te_demog_absorbed_walk_pop), pop by pop, so a floored severe pop's deaths
+        counted there would show in the split. Food security at each step's middle, where the ladder is exact."""
+        floored = _s_severe(175e6, 170e6, 300e3, food=0.075, other_d=-3.0)
+        starving = _s_severe(100e6, 90e6, 100e3, food=0.125)
+        end = [self.SAFE, floored, starving]
+        eng, true = self.window([self.SAFE, self.LABORERS], end)
+        read_d = eng.fixtures["modifier:state_mortality_mult"]
+        eng.locals.update(te_dg_w_rep=1.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0,
+                          te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+        for pop, food in ((self.SAFE, 1.0), (floored, 0.075), (starving, 0.125)):
+            eng.fixtures.update(food_security=food, total_size=pop[7], literacy_rate=0.0)
+            eng.trigger_fixtures.update(is_in_severe_starvation=food < 0.2, is_in_mild_starvation=0.2 <= food < 0.4)
+            eng.locals.update(te_dg_p_eb=pop[0], te_dg_p_ed=pop[1], te_dg_p_mb=1.0,
+                              te_dg_p_md=max(0.0, 1 + read_d + pop[3] + pop[5]))
+            eng.call("te_demog_absorbed_walk_pop")
+        self.assertEqual(eng.locals["te_dg_w_sev"], 400e3, "the floored pop's people count")
+        self.assertAlmostEqual(eng.locals["te_dg_w_sevd"], 90e6 * 0.6875, delta=1e-3, msg="its deaths don't")
+        python = self.walk(end, 0.0, read_d)
+        self.assertAlmostEqual(eng.locals["te_dg_w_sevd"], python["te_dg_w_sevd"], delta=1e-3)
+        eng.call("te_demog_on_top_split")
+        self.assertAlmostEqual(eng.vars["te_dg_ed_sev"], true["sev"], delta=1e-6 * true["sev"])
+        self.assertAlmostEqual(eng.vars["te_dg_sev_share"], true["share"])
+
     def test_a_start_from_before_this_build_waits(self):
         """A save from #907 but before this build has the start's rate and none of its parts: the window can't be
         split as it was booked, so the split's variables go and the row waits for the next count."""
