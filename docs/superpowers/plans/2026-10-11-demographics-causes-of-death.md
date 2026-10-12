@@ -16,19 +16,55 @@ Full setting the section also shows the deaths the game added on top of the cens
   Between steps the hover still multiplies to the row's figure.
 - **Medicine drifts.** Health-care access and the three treatments move a share of the gap to their targets at each
   census step. The share is `0.1 + modifier:state_medical_diffusion_add`, from six technologies and the Medical
-  Outreach decree.
-- **The deaths added on top are measured, not inferred.** The yearly walk sums, under Full, each pop's deaths from the
-  state's read and the absorbed terms alone. Over the target that is the whole state's part; the walk's own expected
-  deaths over it are the part of the pops' own lines. The walk also counts the people in severe starvation.
+  Outreach decree. Before the numbers are approved, the owner sees how far life expectancy lags its target over 20
+  years (Task 3).
+- **The deaths added on top are split from sums the walk already has.** No new per-pop sum is needed for this split.
+  It builds on the trapezoid fix (branch `fix/demog-ring-on-top-trapezoid`):
+  - the pop-level lines' events at the window's end (`te_dg_ot_rd`) and its start (`te_dg_ot_d − te_dg_os_d`) come
+    off the window's events, leaving the whole state's part;
+  - severe starvation's part is summed inside the walk's per-pop severe-starvation branch, beside the people it
+    holds.
 
 **Tech Stack:** Paradox script (Victoria 3 1.14.5), the Python twin and harness (`scripts/analysis/demographics_*.py`),
 the generator `scripts/generators/gen_demographics.py`, unittest with the repo's script interpreter
 (`test_demographics_registry.py`'s `_Engine`).
 
 **Spec:** the owner's approved design (2026-10-11), restated in "Design" below, and #894's section "The panel: what a
-player can't see". It builds on `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md` (the census's
-term M and the on-top scales) and `docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md` (the
-moved lines). Read `docs/systems/mod_systems.md` § Demographics first.
+player can't see". It builds on:
+- `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md` (the census's term M and the on-top scales);
+- `docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md` (the moved lines);
+- the trapezoid fix (`fix/demog-ring-on-top-trapezoid`, #894's "the ring applies the step-day snapshot to the whole
+  year").
+
+Read `docs/systems/mod_systems.md` § Demographics first. An independent review (2026-10-11, approve with fixes) shaped
+this revision; its points are folded in.
+
+## Dependencies and shared edits
+
+- **Task 6 lands after the trapezoid PR** (branch `fix/demog-ring-on-top-trapezoid`, worktree
+  `/home/jakef/src/vic3te-demog-trapezoid`, still in progress at this writing). Task 6 reads these names from its
+  state at a4321948 (2026-10-11):
+  - effects: `te_demog_on_top_pop_lines` (sets the locals `te_dg_ot_rb`, `te_dg_ot_rd`), `te_demog_on_top_window`
+    (rewrites `te_dg_eb`/`te_dg_ed` in the walk's tail);
+  - variables: `te_dg_ot_b`, `te_dg_ot_d` (the start share, stored by `te_demog_rates_refresh`);
+  - script values: `te_demog_on_top_state_deaths`, `te_demog_on_top_window_k`, the constant
+    `te_demog_k_on_top_start_weight` (`P.ON_TOP_START_WEIGHT`);
+  - model: `demographics_model.on_top_share`, `window_events`.
+
+  **Before starting Task 6, re-read the merged trapezoid and re-check every one of these names and its formula.**
+  If one changed, follow the merged code. Tasks 1–5 and 7–11 don't depend on it, but they rebase onto it.
+- **Shared edits with the trapezoid:** `te_demog_seed`, `te_demog_rates_refresh`, `te_demog_rates_clear`,
+  `te_demog_rate_effects.txt`'s header, `te_demog_effects.txt`'s header, `gen_demographics.constants`.
+- **Shared edits with #906** (Late Marriage and Birth Spacing, branch `docs/demographics-late-marriage-plan`):
+  - `te_demog_step_begin`: #906 puts `te_demog_practices_step` before `te_demog_prepare`. This plan puts
+    `te_demog_medicine_drift` before it too; tests assert relative order only.
+  - `te_demog_seed`.
+  - `_engine_for`'s signature: #906 adds `place=`, `targets=`; this plan adds `real_multipliers=`.
+  - `demographics_model.Inputs`: both add fields at the end, with defaults.
+  - `demographics_params` near `DEMOG_TYPES`.
+  - The harness's `fidelity`: #906 notes it won't run on the build's saves; Task 10 rewrites its inputs.
+- **Generated files** (`te_demog_generated_values.txt`, `te_demog_generated_effects.txt`) are regenerated after each
+  merge, never merged by hand.
 
 ## Design (owner, 2026-10-11)
 
@@ -42,8 +78,8 @@ moved lines). Read `docs/systems/mod_systems.md` § Demographics first.
    | Accidents and Violence | `×0.90` | Laws and Institutions (policing, consumer protection, the combustion engine), Turmoil |
    | Chronic Illness, Old Age | `×0.95` | Medicine, Standard of Living, Laws and Institutions (pensions) |
    | Work | `×1.10` | Laws (child labour, Regulatory Bodies, Worker Protections) |
-   | Childbirth | `380 per 100,000 births` | Medicine |
-   | Deaths Added on Top (Full only) | `×1.62`, red from ×1.25 | the census's own deaths per 1,000 against the year's; the whole state's effects; some of its people's, above all severe starvation; the clamp, when it bit |
+   | Childbirth | `380 per 100k births` | Medicine |
+   | Deaths Added on Top (Full only) | `×1.62`, red from ×1.25 | the census's own deaths per 1,000 against the year's; effects on the whole state (and the census's own lag since its last count); severe starvation `×a (X% of its people)`; other effects on some of its people `×b`; the clamp, when it bit |
 
    Medicine is `1 − access × treatment`. The arrow appears while the drifted value is more than the snap from its
    target.
@@ -59,10 +95,13 @@ moved lines). Read `docs/systems/mod_systems.md` § Demographics first.
      This is accepted.
 3. **Turmoil raises Accidents and Violence:** a factor `1 + 0.5 × turmoil`, turmoil read as the 0–1 share the census
    already reads in `te_demog_crisis`. It reaches the game through M, under Full only.
-4. **The country tab:** not in this change. A TODO comment marks the spot (#894 tracks it).
-5. **Germany's excess deaths** (investigation done, 2026-10-11): the per-pop effect behind `dz` +0.6 to +1.0 is severe
-   starvation during an in-game famine. The "some of its people" hover names it, with the share of the state's
-   people in severe starvation, and calls the rest "other effects on some of its people".
+4. **Under Display only, the drift and turmoil run too** (the census runs under `te_demog_cohorts_run`). The section's
+   figures and the shown life expectancy move with them; the game's births and deaths don't, since there is no M
+   outside Full. That meets the owner's rule (nothing changes outside Full): Display only shows what Full would do.
+5. **The country tab:** not in this change. A TODO comment marks the spot (#894 tracks it).
+6. **Germany's excess deaths** (investigation done, 2026-10-11): the per-pop effect behind `dz` +0.6 to +1.0 is severe
+   starvation during an in-game famine. The hover splits the pops' own lines into severe starvation,
+   `×a (X% of its people)`, and other effects on some of its people, `×b`.
 
 ### The carriers of `state_medical_diffusion_add` (proposal)
 
@@ -78,14 +117,16 @@ Each carrier is +0.05; none is researched in 1836, so every 1836 state starts at
 | World Wide Web (`world_wide_web`) | 9 | Medical literature and training online | `era_9.txt` |
 | Telemedicine (`telemedicine`) | 10 | Specialists reach any clinic | `era_10.txt` |
 
-Half-lives of a gap: 6.6 years at 0.1 (1836), 3.1 at 0.2 (era 3), 2.4 at 0.25 (era 4), 1.4 at 0.4 (era 10).
-Alternatives if the owner prefers: Malaria Prevention (era 4, public-health campaigns), Television Broadcasting
-(era 7), Digital Education (era 9).
+Half-lives of a gap: 6.6 years at 0.1 (1836), 3.1 at 0.2 (era 3), 2.4 at 0.25 (era 4), 1.4 at 0.4 (era 10). In life
+expectancy that is large: a full treatment gap is about 10 years of e0 at SoL 15, and at 0.1 about 59% of it remains
+after 5 years. So the owner approves these numbers from Task 3's lag curve, not from the half-lives. Alternatives if
+the owner prefers: Malaria Prevention (era 4, public-health campaigns), Television Broadcasting (era 7), Digital
+Education (era 9).
 
 ### The Medical Outreach decree (proposal)
 
 `decree_medical_outreach`, "Medical Outreach": doctors and nurses sent to bring a state's practice up to the
-country's. Its effects:
+country's. Its terms:
 - `state_medical_diffusion_add = 0.2`;
 - cost 100 authority, as most of the mod's decrees;
 - unlocked by Medical Degrees;
@@ -93,15 +134,19 @@ country's. Its effects:
   the country trigger decides whether the decree is "permitted/shown in interface");
 - `state_trigger`: the state's medicine is behind its targets, or the decree is already issued there (Pollution
   Control's pattern);
-- `ai_weight` 0, as the mod's other decrees;
+- `ai_weight`: by the state's medicine gap, as the owner's shared-mechanics rule wants (the AI uses what the player
+  uses).
+  - It follows vanilla Road Maintenance's pattern (`00_decree.txt`): +100 above a gap of 0.1, +100 more above 0.3,
+    with lower thresholds (0.05, 0.2) where the decree is already issued.
+  - The weight is 0 once the state has caught up.
 - texture: vanilla's `decree_emergency_relief.dds`, a placeholder. Final-art subject: a doctor's bag over a map pin.
 
-A release comments it out whole (Task 6).
+A release comments it out whole (Task 7).
 
 ## What the code says (corrections to the brief)
 
-These came out of reading `te_demog_rate_effects.txt`, the walk and the vanilla files. The PR lists them as owner
-questions.
+These came out of reading `te_demog_rate_effects.txt`, the walk, the trapezoid branch and the vanilla files. The
+independent review (`review-905.md`) confirmed 1–4 against the code. The PR lists them as owner questions.
 
 1. **The whole state's factor includes the moved lines' on-top family.** The engine gives each pop
    `bare × max(0, 1 + S + own)`, S being the state read. Under Full, S = os + M (os: the state-level lines on top) and
@@ -115,15 +160,21 @@ questions.
    run, which ran on the previous refresh's M. Then `te_demog_rates_refresh` overwrites `te_dg_os_d`/`te_dg_q_d` for
    the next window. A state line that changed in between (devastation arriving) would be split by the wrong os, and
    a clamped M or a year's drift in the target breaks the identity too.
-   - **Chosen instead:** the walk measures the split. Under Full it sums each pop's bare deaths × `max(0, 1 + S +
-     the absorbed terms)` (`te_dg_ed_state`, over the same window as `te_dg_ed`).
-   - Whole state: `te_dg_ed_state ÷ te_dg_ed_target`. This holds os, q and the census term's own miss (the clamp,
-     the target's drift since the last refresh).
-   - Some of its people: `te_dg_ed ÷ te_dg_ed_state`, exactly the pops' own lines.
-   - The product is 1 + dz unless dz hit its cap (×5).
+   - **Chosen instead:** take the pops' own lines off the window's events, and what is left is the whole state's
+     part. The trapezoid (see "Dependencies") already computes those lines from the walk's own sums:
+     - at the window's end, `te_dg_ot_rd = w_ed − w_edr − (1 + read) × w_ed0`;
+     - at its start, `p_start = te_dg_ot_d − te_dg_os_d`, the last refresh's values, still in place at walk time.
+
+     It averages them the way it averages the window.
+   - Whole state: `te_dg_ed_state ÷ te_dg_ed_target`. This holds os and q averaged over the window, plus the census's
+     own lag since its last count: M a window old, and the model's rate drifting.
+   - Some of its people: `te_dg_ed ÷ te_dg_ed_state`, the pops' own lines over the window, split into severe
+     starvation and the rest.
+   - The product is 1 + dz unless dz hit either end of its range (`ON_TOP_SCALE_MIN` −0.9, `ON_TOP_SCALE_MAX` +4) or
+     the trapezoid's floor at 0.
 3. **Vanilla does have turmoil mortality.** The three `state_turmoil*` static modifiers carry none, as the brief says.
    But `state_mortality_turmoil_mult` ("Mortality per Turmoil") sits on several carriers:
-   - Militarized Police +0.004;
+   - Militarized Police +0.004 (`00_policing.txt`);
    - the Violent Suppression decree +0.02;
    - the Second Amendment +0.005;
    - `ig_trait_wounded_honor` +0.15;
@@ -134,8 +185,14 @@ questions.
    engine-applied on top. Not double counted in practice, but not "no turmoil mortality" either.
 4. **The first Full step after a seed has no target.** `te_demog_on_top_scales` writes `te_dg_ed_target = 0` and
    `dz = 0`, so the row would read ×1.00 when nothing was measured. The row's gate asks for `te_dg_ed_target > 0`.
-5. **`te_dg_rate_clamped` is one flag for births and deaths.** To say why deaths weren't set, the refresh also stores
-   `te_dg_rate_clamp_d`: 0 none, 1 the floor (the game's rate can't fall below a fifth of its base), 2 the cap (+300%).
+5. **`te_dg_rate_clamped` is one flag for births and deaths, and the refresh writes it after dz is measured.**
+   - To say why deaths weren't set, the refresh also stores `te_dg_rate_clamp_d`: 0 none, 1 the floor (the game's rate
+     can't fall below a fifth of its base), 2 the cap (+300%).
+   - That flag describes the next window's M, not the one dz measured. So `te_demog_on_top_scales` copies the last
+     refresh's flag to `te_dg_ed_clamp_d` before the refresh runs, and removes the copy when there's no flag. The hover
+     and the gate read the copy.
+   - With the copy absent, the row also stays hidden on the first Full step after Display only. That step has a target
+     (`step_finish` writes `te_dg_cdr_model` under any rule), but its window ran with no M.
 6. **The walk's expected deaths leave out turmoil's and wealth's lines** (`te_demog_pop_death_mult`'s comment). So
    dz, and the "some of its people" part, don't include Private Health Insurance's cut for the wealthy or the
    per-turmoil lines. The hover names only what the walk counts.
@@ -143,39 +200,46 @@ questions.
    augmentation laws act through chronic treatment, so they show under Medicine.
 8. **"Laws and Institutions" on Accidents and Violence includes the Combustion Engine**, a technology
    (`state_external_mortality_mult` +0.3: motor traffic). The label stays the owner's; the hover's note names it.
+9. **Fast mode** (console only): `te_demog_fast_deaths` is (K − 1) × the state's average multiplier, the pops' own
+   lines included, and it sits in the state's read. So under fast mode the whole state's part also carries K − 1
+   times a famine's share. The section isn't a fast-mode tool; `mod_systems.md` says so.
 
 **Note (#894, not planned here):** the "some of its people" figure reads the walk's dz. The walk's severe-starvation
-death term (+1.0 × bare) was never fitted and may be about 0.6, and the ring applies the step-day snapshot to the
-whole year. Fixing either will move the figure.
+death term (+1.0 × bare) was never fitted and may be about 0.6. Fixing it will move the figure.
 
 ## Owner decisions (to confirm in the PR)
 
-1. The corrections above, especially 1–2 (the measured split) and 3 (turmoil).
-2. The numbers (all proposals):
+1. The corrections above, especially 1–2 (the split, built on the trapezoid) and 3 (turmoil).
+2. **The drift numbers, from Task 3's lag curve** (an owner stop before Task 4):
    - `DIFFUSION_BASE` 0.1, `DIFFUSION_MAX` 1.0, `MEDICINE_SNAP` 0.005;
-   - six carriers at +0.05 each, the decree +0.2;
-   - `TURMOIL_EXTERNAL_WEIGHT` 0.5: about −0.4 to −0.7 years of life expectancy at full turmoil, by the model at SoL
-     8–25 (accidents and violence are a small cause);
+   - six carriers at +0.05 each;
+   - the decree +0.2.
+3. The other numbers (proposals):
+   - `TURMOIL_EXTERNAL_WEIGHT` 0.5: about −0.46 to −0.64 years of life expectancy at full turmoil, by the model at
+     SoL 8–25 (the review confirmed it; accidents and violence are a small cause);
    - `DEATHS_ON_TOP_HIGH` ×1.25. People-weighted dz ran +0.05 in 1900 and +0.19 to +0.24 by 2000–2020 in the fast run;
      Germany's famine states ran +0.6 to +1.0. So ×1.25 flags famine-class states and leaves ordinary late-game ones
      neutral.
-3. The carriers and the decree (tables above): its name, cost, unlock and AI weight.
-4. The section's place: after the overview, before the pyramid (life expectancy and its causes sit together, rule 5).
-5. Save size: under Full, 12 more variables per census state (9 under Display only), against about 345 now (+3.5%).
-6. Execution: native, with a fresh review of Tasks 3–5 (the risky script) and a whole-branch review at the end, as
+4. The carriers and the decree's name, cost and unlock (tables above). The AI weight follows the shared-mechanics
+   rule and needs no question.
+5. The section's place: after the overview, before the pyramid (life expectancy and its causes sit together, rule 5).
+6. Save size: under Full, 15 more variables per census state (9 under Display only), against about 345 now (+4%).
+7. Execution: native, with a fresh review of Tasks 4–6 (the risky script) and a whole-branch review at the end, as
    the engine-lines plan.
 
 ## Global Constraints
 
-- **Nothing changes outside Full** (owner rule). The census's drift and turmoil reach the game only through M; the
-  decree is hidden outside Full (`te_demog_effects_run`, the only reader of the rule besides `te_demog_cohorts_run`:
-  `test_only_the_wrappers_read_the_rule`).
+- **Nothing changes outside Full** (owner rule). The census's drift and turmoil reach the game only through M (Design
+  4). The decree is hidden outside Full through `te_demog_effects_run`, the only reader of the rule besides
+  `te_demog_cohorts_run` (`test_only_the_wrappers_read_the_rule`).
 - **A release has no census:** `scripts/release/comment_out_census_inputs.py` comments out the new type's carriers and
-  the decree whole (Task 6).
+  the decree whole (Task 7).
 - **Generated files are never hand-edited:** `te_demog_generated_values.txt` and `te_demog_generated_effects.txt` come
-  from `gen_demographics.py`; `gen_demographics.py --check` stays clean.
+  from `gen_demographics.py`; `gen_demographics.py --check` stays clean; after a merge, regenerate.
 - **The GUI reads variables and cheap script values only** (a `.gui` re-evaluates every frame); nothing walks. A read
   of a missing variable logs every frame, so every figure sits under a scripted-GUI gate (gotchas #14, #23).
+- **No new per-pop multiplier in the walk.** The split reads sums the walk already has; the only per-pop addition is
+  one severe-starvation test under Full, with two adds inside it (Task 6).
 - **No `TimedModifier.GetIcon` comparisons** (gui_modding_guide gotcha #40). The section shows no modifiers.
 - **Script literals:** at most five decimals. Set a variable from a script value with `set_variable`'s inline
   `value = { ... }` block, never `change_variable`'s operands (`scripting_best_practices.md`, the paris-commune note).
@@ -193,25 +257,28 @@ whole year. Fixing either will move the figure.
 
 ## Review Focus
 
-1. **An old save, or a census state from before this build.** It has no `te_dg_acc` or `te_dg_in_*`.
-   - Expected: its next step starts medicine at the targets (no sudden lag), and until then the section shows "after
-     the next count" with no per-frame "Failed to fetch variable".
-   - Pinned by Task 4's `test_an_old_census_starts_at_its_targets` and Task 8's `test_every_read_sits_under_its_gate`.
-2. **The first Full step after a seed, and any state outside Full.**
-   - Expected: no ×1.00 that wasn't measured. Outside Full the row is absent; on the first Full step it reads "after
+1. **An old save, or a census state from before this build.** It has none of the nine stored inputs.
+   - Expected: its next step starts medicine at the targets (no sudden lag) and stores all nine, and until then the
+     section shows "after the next count" with no per-frame "Failed to fetch variable".
+   - Pinned by Task 5's `test_an_old_census_starts_at_its_targets` and Task 9's `test_every_read_sits_under_its_gate`.
+2. **The first Full step after a seed or after Display only, and any state outside Full.**
+   - Expected: no ×1.00 that wasn't measured. Outside Full the row is absent; on those first steps it reads "after
      the next count".
-   - Pinned by Task 7's `test_the_on_top_gate_needs_a_measured_target`.
-3. **A state whose state-level lines changed between steps, or whose census term was clamped.**
-   - Expected: the split still multiplies to the scale, and the hover says which clamp bit.
-   - Pinned by Task 5's `test_the_split_multiplies_to_the_scale` and `test_the_deaths_clamp_records_its_side`.
+   - Pinned by Task 8's `test_the_on_top_gate_needs_a_measured_window`.
+3. **A famine that starts inside the window, a state-level line that changed, or a clamped census term.**
+   - Expected: the famine's share lands under severe starvation, not the whole state; a changed state-level line
+     lands under the whole state; the hover names the clamp that bit the measured window.
+   - Pinned by Task 6's `test_the_whole_state_part_is_the_window_without_the_pops_own_lines`,
+     `test_a_famine_inside_the_window_is_severe_starvations` and `test_the_measured_window_keeps_its_clamp`.
 4. **A conquered state, or a new health law.** The target jumps.
-   - Expected: the drifted values move `r` of the gap per step and never overshoot. A seed doesn't lag.
-   - Pinned by Task 3's `test_each_step_closes_its_share_of_the_gap` and Task 4's
-     `test_the_step_drifts_medicine_before_its_rates`.
+   - Expected: the drifted values move `r` of the gap per step and never overshoot. A seed doesn't lag. The lag in
+     life expectancy is what Task 3 showed the owner.
+   - Pinned by Task 4's `test_each_step_closes_its_share_of_the_gap`, Task 5's
+     `test_the_step_drifts_medicine_before_its_rates` and Task 3's `test_the_lag_closes_at_the_rate`.
 5. **A release build.**
    - Expected: the six carrier lines and the decree are commented out, and the decree isn't left as an empty shell
      with a texture and a cost.
-   - Pinned by Task 6's `test_the_census_decree_is_commented_whole`.
+   - Pinned by Task 7's `test_the_census_decree_is_commented_whole`.
 
 ---
 
@@ -220,25 +287,25 @@ whole year. Fixing either will move the figure.
 | File | Change | Responsibility |
 |---|---|---|
 | `scripts/analysis/demographics_params.py` | modify | `CAUSE_FACTORS`, `CAUSE_SHORT`, `TURMOIL_EXTERNAL_WEIGHT`, `DIFFUSION_*`, `MEDICINE_SNAP`, `MEDICAL_OUTREACH_DIFFUSION`, `DEATHS_ON_TOP_HIGH`; `DEMOG_TYPES` gains the diffusion type |
-| `scripts/analysis/demographics_model.py` | modify | `Inputs.turmoil`, `Inputs.medicine`, `Ring.medicine`; `medicine_targets`, `diffusion`, `medicine_drift`, `cause_factors`; `medicine`, `cause_multipliers`, `seed`, `step` |
+| `scripts/analysis/demographics_model.py` | modify | `Inputs.turmoil`, `Inputs.medicine`, `Ring.medicine`; `medicine_targets`, `diffusion`, `medicine_drift`, `cause_factors`; `medicine`, `cause_multipliers`, `seed`, `step`; `on_top_split` (Task 6) |
 | `common/modifier_type_definitions/demographics_modifier_types.txt` | modify | `state_medical_diffusion_add` |
 | `common/technology/technologies/te_demog_tech_injections.txt`, `modified.txt`, `era_6.txt`, `era_9.txt`, `era_10.txt` | modify | the six carriers |
-| `scripts/generators/gen_demographics.py` | modify | factors, targets, the inputs store, the drift effects, the multipliers as products, constants; the walk's on-top sums and `te_demog_pop_state_death_mult` |
+| `scripts/generators/gen_demographics.py` | modify | factors, targets, the inputs store, the drift effects, the multipliers as products, constants; the severe-starvation sums in the walk |
 | `common/script_values/te_demog_generated_values.txt`, `common/scripted_effects/te_demog_generated_effects.txt` | regenerated | — |
-| `common/scripted_effects/te_demog_effects.txt` | modify | prepare/seed/step call the new effects; the walk stores `te_dg_ed_state`, `te_dg_sev_share`; the header inventory |
-| `common/scripted_effects/te_demog_rate_effects.txt` | modify | `te_dg_rate_clamp_d` |
+| `common/scripted_effects/te_demog_effects.txt` | modify | prepare/seed/step call the new effects; the walk calls the split; the header inventory |
+| `common/scripted_effects/te_demog_rate_effects.txt` | modify | `te_demog_on_top_split`; `te_dg_rate_clamp_d`, its copy `te_dg_ed_clamp_d`; the severe start share `te_dg_ot_sev` |
 | `common/script_values/te_debug_demog_values.txt`, `common/scripted_effects/te_debug_demog_effects.txt` | modify | guards on the mult reads; option l logs the diffusion rate; option n logs the split |
 | `common/decrees/extra_decrees.txt` | modify | `decree_medical_outreach` |
 | `common/script_values/te_demog_values.txt`, `common/scripted_triggers/te_demog_triggers.txt` | modify | `te_demog_medicine_gap`, `te_demog_medicine_behind` |
 | `scripts/release/comment_out_census_inputs.py`, `test_release_census_inputs.py` | modify | a decree left with no effect goes whole |
-| `common/script_values/te_demog_display_values.txt` | modify | the moving flags, the on-top figures and code |
+| `common/script_values/te_demog_display_values.txt` | modify | the moving flags, the on-top figures, its split and code |
 | `common/scripted_guis/te_demog_sguis.txt` | modify | `te_demog_state_causes_sgui`, `_full_sgui`, `_on_top_sgui` |
 | `common/game_concepts/extra_concepts.txt` | modify | `concept_health_care_access` |
 | `gui/te_demographics_widgets.gui` | modify | `te_state_demog_causes`; its place in `te_state_demog_content`; the country tab's TODO |
 | `localization/english/te_miscellaneous_l_english.yml`, `te_modifiers_l_english.yml`, `te_decrees_l_english.yml`, `te_concepts_l_english.yml` | modify | the section, the type, the decree, the concept |
-| `scripts/analysis/demographics_harness.py` | modify | `fidelity` runs the model on the step's stored inputs |
+| `scripts/analysis/demographics_harness.py` | modify | `lag` (Task 3); `fidelity` and `history` run the model on the step's stored inputs (Task 10) |
 | tests: `test_demographics_model.py`, `test_demographics_modifiers.py`, `test_gen_demographics.py`, `test_demographics_registry.py`, `test_demographics_harness.py`, `test_release_census_inputs.py` | modify | below |
-| docs: `docs/systems/mod_systems.md`, `docs/guides/python_tools.md`, `docs/player_guide/08-states.md`, `06-politics.md` (+ PDF) | modify | Task 10 |
+| docs: `docs/systems/mod_systems.md`, `docs/guides/python_tools.md`, `docs/player_guide/08-states.md`, `06-politics.md` (+ PDF) | modify | Task 11 |
 
 ---
 
@@ -496,7 +563,7 @@ targets, so none moves.
 
 In `test_demographics_modifiers.py`, `TestCarriersInTheGameFiles`: add `P.DIFFUSION_TYPE: {"technology"}` to
 `test_each_type_sits_where_its_design_puts_it`'s `allowed`. (The decree carries the type too, but `load_carriers`
-reads only technologies, laws and institutions; Task 6 pins the decree.) Then:
+reads only technologies, laws and institutions; Task 7 pins the decree.) Then:
 
 ```python
     def test_medicine_spreads_from_a_tenth_to_two_fifths(self):
@@ -601,7 +668,142 @@ Expected: OK. Commit what organize_loc moved with the rest.
 
 ---
 
-### Task 3: The generator: factors, targets, the step's inputs, the drift
+### Task 3: The lag curve, for the owner (owner stop)
+
+How far life expectancy lags its target while medicine spreads, at the proposed rates. The owner approves
+`DIFFUSION_BASE`, the carriers' +0.05 and the decree's +0.2 from this table, not from the half-lives (the review: a
+full treatment gap is about 10 years of e0 at SoL 15, and at 0.1 about 59% of it remains after 5 years).
+
+**Files:**
+- Modify: `scripts/analysis/demographics_harness.py` (a `lag` subcommand beside `medicine`)
+- Test: `test_demographics_harness.py` (new `TestLag`)
+
+**Interfaces:**
+- Consumes: `M.medicine_targets`, `M.medicine_drift`, `M.diffusion` (Task 1); the carriers (Task 2); the harness's
+  `life`, `scenario_inputs`, `MED_*` sets.
+- Produces: `H.LAG_SCENARIOS`, `H.LAG_YEARS`, `H.lag_rows(carriers=None) -> [(label, rate, e0_before, e0_target,
+  {year: years behind})]`, `demographics_harness.py lag`.
+
+- [ ] **Step 1: Write the failing tests**
+
+```python
+class TestLag(unittest.TestCase):
+    """`lag`: years of life expectancy behind the target while medicine spreads (the Causes of Death plan, Task 3)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rows = H.lag_rows()
+
+    def test_every_scenario_starts_a_whole_gap_behind_and_closes(self):
+        for label, rate, before, target, behind in self.rows:
+            with self.subTest(label):
+                self.assertAlmostEqual(behind[0], target - before, places=6)
+                years = sorted(behind)
+                self.assertTrue(all(behind[a] >= behind[b] - 1e-9 for a, b in zip(years, years[1:])), "never widens")
+                self.assertGreaterEqual(behind[0], 0.0)
+
+    def test_the_lag_closes_at_the_rate(self):
+        # one step closes the rate's share of each input's gap; at a rate of 1 nothing is left after one step
+        label, kw_before, kw_after = H.LAG_SCENARIOS[0]
+        carriers = DM.load_carriers()
+        after = H.scenario_inputs(carriers, **kw_after)
+        fast = dataclasses.replace(after, mods={**after.mods, H.P.DIFFUSION_TYPE: 5.0})
+        med = M.medicine_drift(M.medicine_targets(H.scenario_inputs(carriers, **kw_before)), fast)
+        self.assertEqual(med, M.medicine_targets(fast))
+
+    def test_the_cli_prints_every_scenario(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["lag"]), 0)
+        for label, _b, _a in H.LAG_SCENARIOS:
+            self.assertIn(label, out.getvalue())
+```
+
+Add `import dataclasses` to `test_demographics_harness.py`'s imports.
+
+- [ ] **Step 2: Run them to see them fail**
+
+Run: `.venv/bin/python -m unittest test_demographics_harness.TestLag`
+Expected: ERROR (`lag_rows` not defined).
+
+- [ ] **Step 3: The harness** (after `cmd_medicine`)
+
+```python
+# ---- lag: how far life expectancy trails its target while medicine spreads (the Causes of Death plan) -------------
+# (label, before, after): a state's inputs before a change and after it, the communication techs of the era included
+# (they set the spread's rate). At year 0 the change has just happened; each year is one census step.
+COMMS_1870 = frozenset({"electric_telegraph"})
+COMMS_1950 = COMMS_1870 | {"radio"}
+COMMS_TODAY = COMMS_1950 | {"intergovernmental_organizations", "world_wide_web"}
+LAG_SCENARIOS = [
+    ("1840s: Charitable Health System, Ministry of Health 1 to 3",
+     dict(sol=10, literacy=0.25, techs=MED_1836, laws={CHS}, institutions={HEALTH: 1}),
+     dict(sol=10, literacy=0.25, techs=MED_1836, laws={CHS}, institutions={HEALTH: 3})),
+    ("1870s: Modern Nursing arrives",
+     dict(sol=13, literacy=0.5, techs=MED_1836 | {"pharmaceuticals"} | COMMS_1870, laws={CHS}, institutions={HEALTH: 3}),
+     dict(sol=13, literacy=0.5, techs=MED_1900 | COMMS_1870, laws={CHS}, institutions={HEALTH: 3})),
+    ("1900s: Public Health Insurance at 3, before antibiotics",
+     dict(sol=16, literacy=0.75, techs=MED_1900 | COMMS_1870, laws={CHS}, institutions={HEALTH: 3}),
+     dict(sol=16, literacy=0.75, techs=MED_1900 | COMMS_1870, laws={PHI}, institutions={HEALTH: 3})),
+    ("1940s: antibiotics and vaccines arrive",
+     dict(sol=22, literacy=0.9, techs=MED_1900 | COMMS_1950, laws={PHI}, institutions={HEALTH: 5}),
+     dict(sol=22, literacy=0.9, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={HEALTH: 5})),
+    ("1950s: a colony incorporated into that health system",
+     dict(sol=12, literacy=0.4, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={}),
+     dict(sol=12, literacy=0.4, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={HEALTH: 5})),
+    ("Today: Telemedicine arrives",
+     dict(sol=40, literacy=0.99, techs=MED_1990 | COMMS_TODAY, laws={PHI}, institutions={HEALTH: 8}),
+     dict(sol=40, literacy=0.99, techs=MED_TODAY | COMMS_TODAY, laws={PHI}, institutions={HEALTH: 8})),
+]
+LAG_YEARS = (0, 1, 2, 3, 5, 10, 15, 20)
+
+
+def lag_rows(carriers=None):
+    """[(label, rate, e0 before, e0 at the target, {year: years of e0 behind the target})] for LAG_SCENARIOS: medicine
+    starts at the before-inputs' targets and drifts at the after-inputs' rate (demographics_model.medicine_drift);
+    SoL, literacy and everything else are the after-inputs' from year 0."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for label, before, after in LAG_SCENARIOS:
+        inp0, inp1 = scenario_inputs(carriers, **before), scenario_inputs(carriers, **after)
+        target = life(inp1)["e0"]
+        med, behind = M.medicine_targets(inp0), {}
+        for year in range(max(LAG_YEARS) + 1):
+            if year in LAG_YEARS:
+                behind[year] = target - life(dataclasses.replace(inp1, medicine=med))["e0"]
+            med = M.medicine_drift(med, inp1)
+        rows.append((label, M.diffusion(inp1), life(inp0)["e0"], target, behind))
+    return rows
+
+
+def cmd_lag(_args):
+    print("Years of life expectancy behind the target after a change, at the spread's rate (the share of the gap a "
+          "census step closes):")
+    print(f"{'':56s} rate  e0 before  target  " + "  ".join(f"{y:>4d}y" for y in LAG_YEARS))
+    for label, rate, before, target, behind in lag_rows():
+        print(f"{label:56s} {rate:4.2f}  {before:9.1f}  {target:6.1f}  "
+              + "  ".join(f"{behind[y]:5.2f}" for y in LAG_YEARS))
+    return 0
+```
+
+Register it: `sub.add_parser("lag").set_defaults(fn=cmd_lag)` beside `medicine`, and add the line to the module
+docstring's command list.
+
+- [ ] **Step 4: Run the tests, then run `lag` and post its table on the PR**
+
+Run: `.venv/bin/python -m unittest test_demographics_harness.TestLag`, then
+`.venv/bin/python scripts/analysis/demographics_harness.py lag`.
+Expected: OK; the table prints. Post it on the PR as a comment headed "Lag curve for the drift numbers".
+
+- [ ] **Step 5: Commit**: "Demographics harness: the lag curve of spreading medicine".
+
+- [ ] **Owner stop:** the owner approves or changes `DIFFUSION_BASE`, the carriers' +0.05 and the decree's +0.2 from
+  the table. Apply any change in `demographics_params.py` (and on the carriers), rerun `lag`, and record the
+  approved table in `mod_systems.md` (Task 11) before Task 4.
+
+---
+
+### Task 4: The generator: factors, targets, the step's inputs, the drift
 
 **Files:**
 - Modify: `scripts/generators/gen_demographics.py` (`multipliers`, `constants`, `render_effects`)
@@ -820,7 +1022,7 @@ class TestMedicineDriftScript(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_acc"], target, places=12)
 ```
 
-Put `_stored` and `_mod_fixtures` above `_engine_for` (Task 4 changes `_engine_for` to use `_mod_fixtures`).
+Put `_stored` and `_mod_fixtures` above `_engine_for` (Task 5 changes `_engine_for` to use `_mod_fixtures`).
 
 - [ ] **Step 3: Run them to see them fail**
 
@@ -984,11 +1186,12 @@ def medicine_effects(o):
     o("add = var:$VAR$")
     o("}")
     o("}")
-    o("set_local_variable = { name = te_dg_gap value = { value = $TARGET$ subtract = var:$VAR$ } }")
+    o("# te_dg_med_gap, not te_dg_gap: te_demog_state_census, which calls the step, keeps its own te_dg_gap local")
+    o("set_local_variable = { name = te_dg_med_gap value = { value = $TARGET$ subtract = var:$VAR$ } }")
     o("if = {")
     o("limit = {")
-    o("local_var:te_dg_gap < te_demog_k_medicine_snap")
-    o("local_var:te_dg_gap > te_demog_k_medicine_snap_neg")
+    o("local_var:te_dg_med_gap < te_demog_k_medicine_snap")
+    o("local_var:te_dg_med_gap > te_demog_k_medicine_snap_neg")
     o("}")
     o("set_variable = { name = $VAR$ value = $TARGET$ }")
     o("}")
@@ -1007,7 +1210,7 @@ Expected: OK. `test_committed_outputs_are_current` passes on the regenerated fil
 
 ---
 
-### Task 4: The census stores its inputs and drifts its medicine (review stop)
+### Task 5: The census stores its inputs and drifts its medicine (review stop)
 
 **Files:**
 - Modify: `common/scripted_effects/te_demog_effects.txt` (`te_demog_prepare`, `te_demog_seed`, `te_demog_step_begin`,
@@ -1017,7 +1220,7 @@ Expected: OK. `test_committed_outputs_are_current` passes on the regenerated fil
 - Test: `test_demographics_registry.py` (`_engine_for`; new `TestCausesInTheStep`)
 
 **Interfaces:**
-- Consumes: `te_demog_cause_inputs_store`, `te_demog_medicine_at_target`, `te_demog_medicine_drift` (Task 3).
+- Consumes: `te_demog_cause_inputs_store`, `te_demog_medicine_at_target`, `te_demog_medicine_drift` (Task 4).
 - Produces: every seed and step leaves `te_dg_acc`, `te_dg_trt_*`, `te_dg_in_*` on the state; `_engine_for(...,
   real_multipliers=False)`.
 
@@ -1055,7 +1258,7 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
     return eng
 ```
 
-`_mod_fixtures` (Task 3) must be defined above `_engine_for`; move it there.
+`_mod_fixtures` is Task 4's, defined above `_engine_for`.
 
 - [ ] **Step 2: Write the failing tests**
 
@@ -1094,16 +1297,28 @@ class TestCausesInTheStep(unittest.TestCase):
         e0 = (demographics_model.life_table(qf)["e0"] + demographics_model.life_table(qm)["e0"]) / 2
         self.assertAlmostEqual(eng.vars["te_dg_e0"], e0, places=6)
 
+    GATE_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_chr", "te_dg_in_ext", "te_dg_in_work",
+                 "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd")
+
     def test_an_old_census_starts_at_its_targets(self):
-        # a census state from before this build: no drifted medicine, no stored inputs
+        """Review Focus 1: a census state from before this build has none of the nine variables
+        te_demog_state_causes_sgui asks for. Its first step starts medicine at the targets and leaves all nine."""
         eng = _engine_for(self.INP1, 1837, 250000.0, real_multipliers=True)
+        for name in self.GATE_VARS:
+            self.assertNotIn(name, eng.vars)
         eng.call("te_demog_medicine_drift")
-        self.assertAlmostEqual(eng.vars["te_dg_acc"], demographics_model.medicine_targets(self.INP1)["access"])
+        eng.call("te_demog_prepare")
+        for name in self.GATE_VARS:
+            self.assertIn(name, eng.vars, name)
+        targets = demographics_model.medicine_targets(self.INP1)
+        self.assertAlmostEqual(eng.vars["te_dg_acc"], targets["access"], places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_trt_inf"], targets["infection"], places=9)
 
     def test_the_entry_points_run_in_order(self):
         effects = _raw_blocks([EFFECTS])
         begin = [k for k, _, _ in _parse_script(effects["te_demog_step_begin"])]
-        self.assertEqual(begin[:2], ["te_demog_medicine_drift", "te_demog_prepare"])
+        # relative order only: #906 puts te_demog_practices_step before te_demog_prepare as well
+        self.assertLess(begin.index("te_demog_medicine_drift"), begin.index("te_demog_prepare"))
         seed = [k for k, _, _ in _parse_script(effects["te_demog_seed"])]
         self.assertLess(seed.index("te_demog_medicine_at_target"), seed.index("te_demog_prepare"))
         prepare = [k for k, _, _ in _parse_script(effects["te_demog_prepare"])]
@@ -1123,8 +1338,10 @@ Expected: ERROR (`read of missing variable var:te_dg_acc` in the seed).
     `# the inputs the factors read, stored so the Causes of Death section matches this step until the next (generated)`.
   - `te_demog_seed`: `te_demog_medicine_at_target = yes` just before `te_demog_prepare = yes`
     (`# a seed starts medicine at its targets (the Causes of Death plan)`).
-  - `te_demog_step_begin`: `te_demog_medicine_drift = yes` first
-    (`# medicine moves its share of the gap, then the year's rates use it`). Update its comment.
+  - `te_demog_step_begin`: `te_demog_medicine_drift = yes` before `te_demog_prepare = yes`
+    (`# medicine moves its share of the gap, then the year's rates use it`). If #906 has merged, its
+    `te_demog_practices_step` is there too; either order with it works, as long as both precede prepare. Update the
+    comment.
   - The header inventory: after the cause multipliers' lines, add:
     ```
     #   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments
@@ -1159,67 +1376,115 @@ Expected: OK. The cohort tests keep their multiplier fixtures; the drift runs at
 
 - [ ] **Step 7: Commit**: "Demographics: the census stores its causes' inputs and drifts its medicine".
 
-- [ ] **Review stop:** a fresh reviewer reads Tasks 3–4 (the generated factors and drift, the wiring, the old-save
-  path) against this plan before Task 5.
+- [ ] **Review stop:** a fresh reviewer reads Tasks 4–5 (the generated factors and drift, the wiring, the old-save
+  path) against this plan before Task 6.
 
 ---
 
-### Task 5: Measure the deaths added on top (walk sums, the clamp's side)
+### Task 6: Split the deaths added on top, on the trapezoid's quantities (review stop)
+
+**Lands after the trapezoid PR** (`fix/demog-ring-on-top-trapezoid`; see "Dependencies and shared edits"). Before
+starting, merge `origin/main` with the trapezoid in it and re-check every name this task reads against the merged code:
+`te_demog_on_top_pop_lines` and its locals `te_dg_ot_rb`/`te_dg_ot_rd`, `te_demog_on_top_window` and its limit,
+`te_dg_ot_b`/`te_dg_ot_d`, `te_demog_on_top_state_deaths`, `te_demog_on_top_window_k`,
+`te_demog_k_on_top_start_weight`, `demographics_model.on_top_share`/`window_events`. Where one changed, follow the
+merged code and keep this task's identity: whole state = the window's events less the pops' own lines over the same
+window.
 
 **Files:**
-- Modify: `scripts/generators/gen_demographics.py` (`absorbed_terms`, `absorbed_walk`); regenerate
-- Modify: `common/scripted_effects/te_demog_effects.txt` (`te_demog_walks`, after `te_dg_ed` is set; the header)
-- Modify: `common/scripted_effects/te_demog_rate_effects.txt` (`te_demog_rate_clamp`, `te_demog_rates_refresh`,
+- Modify: `scripts/generators/gen_demographics.py` (`absorbed_walk`); regenerate
+- Modify: `common/scripted_effects/te_demog_effects.txt` (`te_demog_walks`, after `te_demog_on_top_window = yes`;
+  `te_demog_seed`; the header)
+- Modify: `common/scripted_effects/te_demog_rate_effects.txt` (new `te_demog_on_top_split` and
+  `te_demog_on_top_clamp_copy`; `te_demog_on_top_scales`, `te_demog_rate_clamp`, `te_demog_rates_refresh`,
   `te_demog_rates_clear`, the header)
+- Modify: `common/script_values/te_demog_display_values.txt` (`te_demog_deaths_on_top`, `_whole_state`, `_severe`,
+  `_other`; text in Task 8 Step 3)
 - Modify: `common/scripted_effects/te_debug_demog_effects.txt` (option n's `TE_DEMOG_RATES` line)
-- Modify: `common/script_values/te_demog_display_values.txt` (`te_demog_deaths_on_top`, `_whole_state`,
-  `_some_people`; text in Task 7 Step 3)
-- Test: `test_gen_demographics.py`, `test_demographics_registry.py` (`TestRatesScript`, new `TestDeathsOnTopSplit`)
+- Modify: `scripts/analysis/demographics_model.py` (`on_top_split`)
+- Test: `test_gen_demographics.py`, `test_demographics_model.py`, `test_demographics_registry.py` (`TestRatesScript`,
+  new `TestOnTopSplitScript`)
 
 **Interfaces:**
-- Consumes: the walk's locals `te_dg_p_ed`, `te_dg_w_pop`, `te_dg_w_rep` (Full only), `te_demog_step_months`.
-- Produces:
-  - state variables (Full only): `te_dg_ed_state` (the engine's deaths over the window from the state's read and the
-    absorbed terms alone, people) and `te_dg_sev_share` (the share of people in severe starvation at the walk);
-  - `te_dg_rate_clamp_d` (0 none, 1 floor, 2 cap; set by every Full refresh, removed by `te_demog_rates_clear`);
-  - pop scope: `te_demog_pop_state_death_mult`.
+- Consumes:
+  - the walk's locals `te_dg_p_ed`, `te_dg_w_pop`, `te_dg_w_rep` (Full only), `te_demog_step_months`;
+  - from the trapezoid: `te_dg_ot_rd` (the pop-level lines at the window's end, a month × 100,000), `te_dg_ot_d` and
+    the last refresh's `te_dg_os_d` (so the pop-level share at the window's start is `te_dg_ot_d − te_dg_os_d`),
+    `te_demog_k_on_top_start_weight`, `te_demog_on_top_window_k`.
+- Produces (Full only; removed outside it):
+  - walk locals `te_dg_w_sev` (people in severe starvation) and `te_dg_w_sevd` (their bare deaths × the severe
+    term);
+  - state variables `te_dg_ed_state` (the window's deaths without the pops' own lines, people), `te_dg_ed_sev`
+    (severe starvation's part over the window, people) and `te_dg_sev_share` (the share of people in severe
+    starvation at the walk);
+  - `te_dg_ot_sev`, severe starvation's share of the target at the window's start, stored by the refresh beside
+    `te_dg_ot_d`;
+  - `te_dg_rate_clamp_d` (0 none, 1 floor, 2 cap), set by every Full refresh for the next window, and its copy for
+    the window just measured, `te_dg_ed_clamp_d` (`te_demog_on_top_clamp_copy`, run by `te_demog_on_top_scales`);
+  - `M.on_top_split(snapshot, target, end_state, end_pop, end_sev, start=None, k=1.0, months=12) -> (events,
+    state_part, severe_part)`.
 
-**Why measured:** see "What the code says" 1–2.
-- Whole state = `te_dg_ed_state ÷ te_dg_ed_target`. This is os + q + the census term's own miss.
-- Some of its people = `te_dg_ed ÷ te_dg_ed_state`, exactly the pops' own lines the walk counts: severe starvation,
-  their class's, workplace's and working conditions' lines, and non-homeland mortality.
-- The product is 1 + dz unless dz hit `ON_TOP_SCALE_MAX`.
+**Why this split** ("What the code says" 1–2, and the review's C1):
+- The pops' own lines over the window are what the trapezoid already measures: at the end
+  `te_dg_ot_rd = w_ed − w_edr − (1 + read) × w_ed0`, at the start `te_dg_ot_d − te_dg_os_d`.
+- They are averaged with the weight and K the trapezoid gives the window.
+- Taking them off `te_dg_ed` leaves the whole state's part: the state-level lines, averaged the same way, the moved
+  lines' on-top family, and the census's own lag (M a window old, the model's rate drifting).
+- No new per-pop sum is needed for this, because `te_demog_pop_absorbed_deaths` is never negative and the read stays at
+  or above −0.8. Severe starvation's part is summed inside the one per-pop severe-starvation test, beside its people.
 
 - [ ] **Step 1: Write the failing tests**
+
+`test_demographics_model.py`:
+
+```python
+class TestOnTopSplit(unittest.TestCase):
+    """demographics_model.on_top_split (the Causes of Death plan, Task 6): the window's events less the pops' own lines
+    over the same window, on the trapezoid's window_events."""
+
+    def test_without_pop_lines_everything_is_the_whole_states(self):
+        events, state, sev = M.on_top_split(1300.0, 1000.0, end_state=0.3, end_pop=0.0, end_sev=0.0,
+                                            start=(0.0, 0.0, 0.0))
+        self.assertAlmostEqual(state, events)
+        self.assertEqual(sev, 0.0)
+
+    def test_a_famine_inside_the_window_is_half_counted_and_all_severe(self):
+        # no famine at the start, severe starvation adding 0.6 of the target at the end: the trapezoid books half
+        events, state, sev = M.on_top_split(1600.0, 1000.0, end_state=0.0, end_pop=0.6, end_sev=0.6,
+                                            start=(0.0, 0.0, 0.0))
+        self.assertAlmostEqual(events, 1600.0 - 1000.0 * 0.6 * P.ON_TOP_START_WEIGHT)
+        self.assertAlmostEqual(sev, 1000.0 * 0.6 * (1 - P.ON_TOP_START_WEIGHT))
+        self.assertAlmostEqual(events - state, sev)
+
+    def test_no_start_share_is_the_snapshot(self):
+        events, state, sev = M.on_top_split(1500.0, 1000.0, end_state=0.1, end_pop=0.4, end_sev=0.3)
+        self.assertEqual(events, 1500.0)
+        self.assertAlmostEqual(state, 1100.0)
+        self.assertAlmostEqual(sev, 300.0)
+```
 
 `test_gen_demographics.py`:
 
 ```python
-    def test_the_state_part_of_a_pops_deaths(self):
-        body = self.values.split("te_demog_pop_state_death_mult = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertEqual([line.strip() for line in body.strip().splitlines()],
-                         ["value = 1", "add = state.modifier:state_mortality_mult",
-                          "add = te_demog_pop_absorbed_deaths", "min = 0"])
-        full = self.values.split("te_demog_pop_death_mult = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertIn("add = state.modifier:state_mortality_mult", full)
-        self.assertIn("is_in_severe_starvation = yes", full)
-
-    def test_the_walk_sums_the_split_under_full(self):
+    def test_the_walk_sums_severe_starvation_under_full(self):
         init = self.effects.split("te_demog_absorbed_walk_init = {", 1)[1].split("\n}\n", 1)[0]
         pop = self.effects.split("te_demog_absorbed_walk_pop = {", 1)[1].split("\n}\n", 1)[0]
-        for name in ("te_dg_w_eds", "te_dg_w_sev"):
+        for name in ("te_dg_w_sev", "te_dg_w_sevd"):
             self.assertIn(f"name = {name} value = 0", init)
         guarded = pop.split("local_var:te_dg_w_rep > 0", 1)[1]
-        self.assertIn("multiply = te_demog_pop_state_death_mult", guarded)
-        self.assertIn("is_in_severe_starvation = yes", guarded)
+        severe = guarded.split("is_in_severe_starvation = yes", 1)[1]
+        self.assertIn("name = te_dg_w_sev add = total_size", severe)
+        self.assertIn(f"multiply = {gen.lit(P.STARVATION_SEVERE['deaths'])}", severe)
+        self.assertNotIn("te_demog_pop_state_death_mult", self.values + self.effects)   # no second per-pop multiplier
 ```
 
-`test_demographics_registry.py`, `TestRatesScript`:
+`test_demographics_registry.py`, `TestRatesScript` (add `te_dg_w_sevd=0.0` to `_eng`'s locals, and a `sevd`
+argument):
 
 ```python
     def test_the_deaths_clamp_records_its_side(self):
-        """The Causes of Death section says why the census couldn't set deaths: 1 at the floor, 2 at the cap, 0 when it
-        could; births clamped alone leave 0."""
+        """The refresh says why the census couldn't set deaths for the next window: 1 at the floor, 2 at the cap, 0 when
+        it could; births clamped alone leave 0."""
         for kw, side in ((dict(cdr=400.0), 2), (dict(cdr=0.5, read_d=-0.5), 1),
                          (dict(cbr=2.0, read_b=-0.5), 0), ({}, 0)):
             eng = self._eng(**kw)
@@ -1227,144 +1492,302 @@ Expected: OK. The cohort tests keep their multiplier fixtures; the drift runs at
             with self.subTest(kw=kw):
                 self.assertEqual(eng.vars["te_dg_rate_clamp_d"], side)
 
-    def test_outside_full_the_clamp_side_goes(self):
-        eng = self._eng(full=False)
-        eng.vars["te_dg_rate_clamp_d"] = 2.0
+    def test_the_refresh_stores_severe_starvations_start_share(self):
+        eng = self._eng(sevd=0.25 * 31.0 * self.POP * 100 / 12)
         eng.call("te_demog_rates_refresh")
-        self.assertNotIn("te_dg_rate_clamp_d", eng.vars)
+        self.assertAlmostEqual(eng.vars["te_dg_ot_sev"], 0.25, places=5)
+
+    def test_outside_full_the_split_and_the_clamp_side_go(self):
+        eng = self._eng(full=False)
+        eng.vars.update(te_dg_rate_clamp_d=2.0, te_dg_ot_sev=0.1, te_dg_ed_clamp_d=1.0)
+        eng.call("te_demog_rates_refresh")
+        for name in ("te_dg_rate_clamp_d", "te_dg_ot_sev", "te_dg_ed_clamp_d"):
+            self.assertNotIn(name, eng.vars, name)
 ```
 
 New class:
 
 ```python
-class TestDeathsOnTopSplit(unittest.TestCase):
-    """te_demog_deaths_whole_state x te_demog_deaths_some_people (display values, Task 7) is 1 + te_dg_dz: the walk
-    measures the split over the same window as dz (the Causes of Death plan)."""
+class TestOnTopSplitScript(unittest.TestCase):
+    """te_demog_on_top_split, after the trapezoid's te_demog_on_top_window, against demographics_model.on_top_split, on
+    the walk's locals (the Causes of Death plan, Task 6; Review Focus 3)."""
 
-    def test_the_split_multiplies_to_the_scale(self):
-        for ed_target, ed_state, ed in ((1000.0, 1080.0, 1700.0), (1000.0, 950.0, 940.0), (500.0, 900.0, 1200.0)):
-            eng = _Engine({})
-            dz = min(max(ed / ed_target - 1, P.ON_TOP_SCALE_MIN), P.ON_TOP_SCALE_MAX)
-            eng.vars.update(te_dg_ed_target=ed_target, te_dg_ed_state=ed_state, te_dg_ed=ed, te_dg_dz=dz)
-            whole = eng.value(eng._tree(eng.values, "te_demog_deaths_whole_state"))
-            some = eng.value(eng._tree(eng.values, "te_demog_deaths_some_people"))
-            total = eng.value(eng._tree(eng.values, "te_demog_deaths_on_top"))
-            with self.subTest(ed=ed):
-                self.assertAlmostEqual(whole * some, total, places=9)
+    POP, CDR, CBR = 1_000_000.0, 30.0, 38.0
+    ED0, EB0, READ = 400e6, 475e6, -0.3          # the walk's bare deaths and births, a month x 100,000; the state read
 
-    def test_a_pops_state_part_floors_at_zero(self):
-        eng = _Engine({"state.modifier:state_mortality_mult": -1.4, "te_demog_pop_absorbed_deaths": 0.1})
-        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_pop_state_death_mult")), 0.0)
-        eng.fixtures["state.modifier:state_mortality_mult"] = 0.2
-        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_pop_state_death_mult")), 1.3)
+    def _t(self):
+        return self.CDR * self.POP * 100 / 12       # the target in the walk's units
 
-    def test_the_walk_stores_the_split_only_under_full(self):
-        walks = _block(_text(EFFECTS), "te_demog_walks")
-        tail = walks.split("name = te_dg_ed\n", 1)[1]
-        self.assertIn("local_var:te_dg_w_rep > 0", tail)
-        for name in ("te_dg_ed_state", "te_dg_sev_share"):
-            self.assertIn(f"name = {name}", tail)
-            self.assertIn(f"remove_variable = {name}", tail)
+    def _eng(self, os_end=0.0, pop_end=0.0, sev_end=0.0, start=None, full=True):
+        """A state at its walk's tail: the read is os_end + the census's own term (READ - os_end, applied as the pair);
+        the pops' own lines add pop_end of the target, sev_end of it from severe starvation; start = (os, pop, sev)
+        shares the last refresh stored, or None."""
+        t = self._t()
+        m = self.READ - os_end
+        eng = _Engine({"state_population": self.POP, "modifier:state_mortality_mult": self.READ,
+                       "modifier:state_birth_rate_mult": 0.0, "te_demog_step_months": 12.0,
+                       **{f"modifier:{n}": 0.0 for n in P.ENGINE_LINE_TYPES.values()}},
+                      triggers={"te_demog_effects_run": full})
+        eng.modifiers["te_demog_census_deaths_down" if m < 0 else "te_demog_census_deaths_up"] = abs(m)
+        eng.vars.update(te_dg_md=m, te_dg_cdr_model=self.CDR, te_dg_cbr_model=self.CBR)
+        w_ed = (1 + self.READ) * self.ED0 + pop_end * t
+        eng.locals.update(te_dg_w_ed0=self.ED0, te_dg_w_edr=0.0, te_dg_w_ed=w_ed, te_dg_w_eb0=self.EB0,
+                          te_dg_w_ebr=0.0, te_dg_w_eb=self.EB0, te_dg_w_sevd=sev_end * t, te_dg_w_sev=12000.0,
+                          te_dg_w_pop=self.POP)
+        eng.vars.update(te_dg_ed=w_ed * 12 / 1e5, te_dg_eb=self.EB0 * 12 / 1e5)
+        if start is not None:
+            eng.vars.update(te_dg_os_d=start[0], te_dg_ot_d=start[0] + start[1], te_dg_ot_sev=start[2], te_dg_ot_b=0.0)
+        return eng
+
+    def _run(self, eng):
+        eng.call("te_demog_on_top_window")
+        eng.call("te_demog_on_top_split")
+        return eng.vars["te_dg_ed"], eng.vars["te_dg_ed_state"], eng.vars["te_dg_ed_sev"]
+
+    def test_it_matches_the_model(self):
+        target = self.CDR * self.POP / 1000
+        for kw in (dict(), dict(os_end=0.2, pop_end=0.5, sev_end=0.4, start=(0.0, 0.1, 0.0)),
+                   dict(os_end=0.1, pop_end=0.3, sev_end=0.3), dict(pop_end=-0.05, start=(0.1, 0.2, 0.15))):
+            eng = self._eng(**kw)
+            snapshot = eng.vars["te_dg_ed"]
+            want = M.on_top_split(snapshot, target, kw.get("os_end", 0.0), kw.get("pop_end", 0.0),
+                                  kw.get("sev_end", 0.0), start=kw.get("start"))
+            with self.subTest(kw=kw):
+                for got, w in zip(self._run(eng), want):
+                    self.assertAlmostEqual(got, w, delta=1e-3 * max(abs(w), 1.0))
+
+    def test_the_whole_state_part_is_the_window_without_the_pops_own_lines(self):
+        # the same state with the pops' own lines zeroed at both ends: the trapezoid alone gives the whole state's part
+        lines = self._eng(os_end=0.2, pop_end=0.5, sev_end=0.4, start=(0.05, 0.1, 0.05))
+        _ed, state, _sev = self._run(lines)
+        bare = self._eng(os_end=0.2, start=(0.05, 0.0, 0.0))
+        bare.call("te_demog_on_top_window")
+        self.assertAlmostEqual(state, bare.vars["te_dg_ed"], delta=1e-3)
+
+    def test_a_famine_inside_the_window_is_severe_starvations(self):
+        ed, state, sev = self._run(self._eng(pop_end=0.6, sev_end=0.6, start=(0.0, 0.0, 0.0)))
+        self.assertAlmostEqual(ed - state, sev, delta=1e-3)
+        self.assertAlmostEqual(sev, 0.6 * self.CDR * self.POP / 1000 * (1 - P.ON_TOP_START_WEIGHT), delta=1e-3)
+
+    def test_a_state_level_change_stays_with_the_whole_state(self):
+        ed, state, sev = self._run(self._eng(os_end=0.3, start=(0.0, 0.0, 0.0)))
+        self.assertAlmostEqual(state, ed, delta=1e-3)
+        self.assertEqual(sev, 0.0)
+
+    def test_outside_full_the_split_goes(self):
+        eng = self._eng(full=False)
+        eng.vars.update(te_dg_ed_state=1.0, te_dg_ed_sev=1.0, te_dg_sev_share=0.1)
+        eng.call("te_demog_on_top_split")
+        for name in ("te_dg_ed_state", "te_dg_ed_sev", "te_dg_sev_share"):
+            self.assertNotIn(name, eng.vars, name)
+
+    def test_the_measured_window_keeps_its_clamp(self):
+        # Review Focus 3: dz measures the window that ran on the last refresh's M, so the hover reads that refresh's
+        # flag, copied before this step's refresh overwrites it; with no flag (the first Full step after Display only,
+        # or after a seed) the copy goes and the row waits
+        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng.vars["te_dg_rate_clamp_d"] = 2.0
+        eng.call("te_demog_on_top_clamp_copy")
+        self.assertEqual(eng.vars["te_dg_ed_clamp_d"], 2.0)
+        del eng.vars["te_dg_rate_clamp_d"]
+        eng.call("te_demog_on_top_clamp_copy")
+        self.assertNotIn("te_dg_ed_clamp_d", eng.vars)
+        scales = [k for k, _, _ in _parse_script(_raw_blocks([RATE_EFFECTS])["te_demog_on_top_scales"])]
+        self.assertIn("te_demog_on_top_clamp_copy", scales)
 ```
 
-(`test_the_split_multiplies_to_the_scale` reads Task 7's display values. Write those three values now, in Step 5
-below, or move the test to Task 7.)
+The `_eng` above leans on the trapezoid's test helpers' conventions (the census pair standing in for M, so
+`te_demog_on_top_state_deaths` reads `os_end`). If the merged trapezoid tests build a state differently, reuse their
+helper instead.
 
 - [ ] **Step 2: Run them to see them fail**
 
-Run: `.venv/bin/python -m unittest test_gen_demographics test_demographics_registry.TestRatesScript test_demographics_registry.TestDeathsOnTopSplit`
+Run: `.venv/bin/python -m unittest test_demographics_model.TestOnTopSplit test_gen_demographics test_demographics_registry.TestRatesScript test_demographics_registry.TestOnTopSplitScript`
 Expected: FAIL/ERROR.
 
-- [ ] **Step 3: The generator**
-  - In `absorbed_terms`, after `te_demog_pop_absorbed_deaths`:
+- [ ] **Step 3: The model** (after the trapezoid's `window_events`)
+
+```python
+def on_top_split(snapshot, target, end_state, end_pop, end_sev, start=None, k=1.0, months=12):
+    """(events, events without the pops' own lines, severe starvation's part) over a step's window (the Causes of Death
+    plan; the script's te_demog_on_top_split). Shares are of the target (a year). start = (state, pop, sev) shares at
+    the window's start, or None. The pops' own lines over the window are the snapshot's (end_pop x months / 12 of the
+    target) plus, where the trapezoid averaged the window, (start_pop - end_pop) x ON_TOP_START_WEIGHT / k of it;
+    severe starvation's alike."""
+    end_share = max(end_state, P.RATE_TOTAL_MIN) + end_pop
+    start_share = None if start is None else max(start[0], P.RATE_TOTAL_MIN) + start[1]
+    events = window_events(snapshot, target, end_share, start_share, k)
+    f = 0.0 if start is None else P.ON_TOP_START_WEIGHT / k
+    pop = target * (end_pop * months / 12 + ((start[1] - end_pop) * f if start else 0.0))
+    sev = target * (end_sev * months / 12 + ((start[2] - end_sev) * f if start else 0.0))
+    return events, max(events - pop, 0.0), max(sev, 0.0)
+```
+
+- [ ] **Step 4: The generator** (`absorbed_walk`)
+  - init, after `te_dg_w_rep`'s line: `set_local_variable = { name = te_dg_w_sev value = 0 }` and
+    `set_local_variable = { name = te_dg_w_sevd value = 0 }`.
+  - pop, inside the `local_var:te_dg_w_rep > 0` block (one test per pop, under Full only):
     ```python
-    o("# Pop scope: the engine's mortality multiplier for this pop from its state's read and the terms the census absorbs")
-    o("# alone, without its own lines on top (severe starvation, its class's, its workplace's, non-homeland mortality):")
-    o("# the walk's te_dg_ed over its sum is the per-pop part of the deaths added on top (the Causes of Death plan).")
-    o("te_demog_pop_state_death_mult = {")
-    o("value = 1")
-    o("add = state.modifier:state_mortality_mult")
-    o("add = te_demog_pop_absorbed_deaths")
-    o("min = 0")
-    o("}")
-    o("")
-    ```
-  - In `absorbed_walk`'s init, after `te_dg_w_rep`'s line:
-    `set_local_variable = { name = te_dg_w_eds value = 0 }` and `set_local_variable = { name = te_dg_w_sev value = 0 }`.
-  - In `absorbed_walk`'s pop, inside the `local_var:te_dg_w_rep > 0` block:
-    ```python
-    o("change_local_variable = { name = te_dg_w_eds add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_state_death_mult } }")
+    sev = static_modifier(root, "severe_starvation_penalty")["state_mortality_mult"]
+    assert sev == P.STARVATION_SEVERE["deaths"], "severe_starvation_penalty changed: update STARVATION_SEVERE"
+    o("# severe starvation's people and its share of the pop's deaths (the Causes of Death plan): the main per-pop line")
     o("if = {")
     o("limit = { is_in_severe_starvation = yes }")
     o("change_local_variable = { name = te_dg_w_sev add = total_size }")
+    o(f"change_local_variable = {{ name = te_dg_w_sevd add = {{ value = local_var:te_dg_p_ed multiply = {lit(sev)} }} }}")
     o("}")
     ```
-    and amend the two comments: "the replaced sums, and under Full the deaths-on-top split's".
-  - **Fallback, if the benchmark (Task 10 Step 4, item 10) shows the walk slower:** `te_demog_absorbed_walk_pop`
-    evaluates `te_demog_pop_absorbed_deaths` twice per pop (for `te_dg_w_edr` and, through
-    `te_demog_pop_state_death_mult`, for `te_dg_w_eds`). Evaluate it once into a local (`te_dg_p_ad`), and sum
-    `local_var:te_dg_p_ed × max(0, 1 + state.modifier:state_mortality_mult + local_var:te_dg_p_ad)` inline. Keep
-    `te_demog_pop_state_death_mult` for the test, or test the inline form.
+    `absorbed_walk(o, root)` already takes `root`. Amend the two comments: "the replaced sums, and under Full severe
+    starvation's".
   - Regenerate.
 
-- [ ] **Step 4: The walk and the refresh**
-  - `te_demog_walks`, straight after `set_variable = { name = te_dg_ed ... }`:
-    ```
-    	# the Causes of Death section's split of the deaths added on top (Full only, te_dg_w_rep): the engine's deaths
-    	# over the step from the state's read and the absorbed terms alone, and the share of people in severe starvation
-    	if = {
-    		limit = { local_var:te_dg_w_rep > 0 }
-    		set_variable = {
-    			name = te_dg_ed_state
-    			value = {
-    				value = local_var:te_dg_w_eds
-    				multiply = te_demog_step_months
-    				divide = 100000
-    			}
-    		}
-    		set_variable = { name = te_dg_sev_share value = { value = local_var:te_dg_w_sev divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }
-    	}
-    	else = {
-    		if = {
-    			limit = { has_variable = te_dg_ed_state }
-    			remove_variable = te_dg_ed_state
-    		}
-    		if = {
-    			limit = { has_variable = te_dg_sev_share }
-    			remove_variable = te_dg_sev_share
-    		}
-    	}
-    ```
-    Add both to the header's walk inventory ("Full only").
-  - `te_demog_rate_clamp`: first line `set_local_variable = { name = te_dg_rate_side value = 0 }`; in the floor branch
-    `set_local_variable = { name = te_dg_rate_side value = 1 }`, in the cap branch `... value = 2`. Update its comment.
-  - `te_demog_rates_refresh`, deaths half, after its `te_demog_rate_clamp = yes`:
-    `set_variable = { name = te_dg_rate_clamp_d value = local_var:te_dg_rate_side }`
-    (`# which clamp bit deaths, for the Causes of Death section: 0 none, 1 the floor, 2 the cap`).
-  - `te_demog_rates_clear`: remove `te_dg_rate_clamp_d` as it removes `te_dg_rate_clamped`.
-  - The file header: add `te_dg_rate_clamp_d` beside `te_dg_rate_clamped`.
+- [ ] **Step 5: The split, the clamp side and the start share** (`te_demog_rate_effects.txt`, after
+  `te_demog_on_top_window`)
 
-- [ ] **Step 5: Option n, and the display values the split test reads**
-  - Option n (`TE_DEMOG_RATES`): copy `te_dg_ed_state`, `te_dg_sev_share` and `te_dg_rate_clamp_d` into
-    `te_dg_dbg_eds`, `te_dg_dbg_sev`, `te_dg_dbg_cld` (0 when absent, as the line's other copies), append
-    ` ed_state=[THIS.Var('te_dg_dbg_eds').GetValue|0]; sev=[THIS.Var('te_dg_dbg_sev').GetValue|3]; clamp_d=[THIS.Var('te_dg_dbg_cld').GetValue|0]`
-    before `date=`, and remove the three after the line.
-  - `te_demog_display_values.txt`: add `te_demog_deaths_on_top`, `te_demog_deaths_whole_state` and
-    `te_demog_deaths_some_people` (Task 7, Step 3 gives their text).
+```
+# THIS = a state, the walk's tail, straight after te_demog_on_top_window: the Causes of Death section's split of the
+# window's deaths (docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md, Task 6). Under Full:
+#   te_dg_ed_state  te_dg_ed less the pops' own lines over the window: the snapshot's (te_dg_ot_rd, which
+#                   te_demog_on_top_pop_lines set) and, where te_demog_on_top_window averaged the window, its correction
+#                   toward the start's (te_dg_ot_d - te_dg_os_d: the last refresh's, still in place), weighed as it
+#                   weighs it. What is left: the state-level lines and the moved lines' on-top family over the window,
+#                   and the census's own lag (M a window old, the model's rate drifting)
+#   te_dg_ed_sev    severe starvation's part of those lines over the window, the same way (te_dg_w_sevd at the end,
+#                   te_dg_ot_sev at the start)
+#   te_dg_sev_share the share of the state's people in severe starvation at the walk
+# Outside Full the three go.
+te_demog_on_top_split = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		set_local_variable = { name = te_dg_sp_pop value = { value = local_var:te_dg_ot_rd multiply = te_demog_step_months divide = 100000 } }
+		set_local_variable = { name = te_dg_sp_sev value = { value = local_var:te_dg_w_sevd multiply = te_demog_step_months divide = 100000 } }
+		# te_demog_on_top_window's own limit: there it averaged the window
+		if = {
+			limit = {
+				has_variable = te_dg_cbr_model
+				has_variable = te_dg_cdr_model
+				has_variable = te_dg_ot_b
+				has_variable = te_dg_ot_d
+				has_variable = te_dg_os_d
+			}
+			set_local_variable = { name = te_dg_sp_t value = { value = var:te_dg_cdr_model multiply = state_population multiply = 100 divide = 12 } }
+			set_local_variable = {
+				name = te_dg_sp_pop
+				value = {
+					value = var:te_dg_ot_d
+					subtract = var:te_dg_os_d
+					multiply = local_var:te_dg_sp_t
+					subtract = local_var:te_dg_ot_rd
+					multiply = te_demog_k_on_top_start_weight
+					divide = { value = te_demog_on_top_window_k min = 1 }
+					multiply = 12
+					divide = 100000
+					add = local_var:te_dg_sp_pop
+				}
+			}
+			# severe starvation's start share arrives with this build's first refresh; until then its snapshot stands
+			if = {
+				limit = { has_variable = te_dg_ot_sev }
+				set_local_variable = {
+					name = te_dg_sp_sev
+					value = {
+						value = var:te_dg_ot_sev
+						multiply = local_var:te_dg_sp_t
+						subtract = local_var:te_dg_w_sevd
+						multiply = te_demog_k_on_top_start_weight
+						divide = { value = te_demog_on_top_window_k min = 1 }
+						multiply = 12
+						divide = 100000
+						add = local_var:te_dg_sp_sev
+					}
+				}
+			}
+		}
+		set_variable = { name = te_dg_ed_state value = { value = var:te_dg_ed subtract = local_var:te_dg_sp_pop min = 0 } }
+		set_variable = { name = te_dg_ed_sev value = { value = local_var:te_dg_sp_sev min = 0 } }
+		set_variable = { name = te_dg_sev_share value = { value = local_var:te_dg_w_sev divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }
+	}
+	else = {
+		if = {
+			limit = { has_variable = te_dg_ed_state }
+			remove_variable = te_dg_ed_state
+		}
+		if = {
+			limit = { has_variable = te_dg_ed_sev }
+			remove_variable = te_dg_ed_sev
+		}
+		if = {
+			limit = { has_variable = te_dg_sev_share }
+			remove_variable = te_dg_sev_share
+		}
+	}
+}
 
-- [ ] **Step 6: Run the tests**
+# THIS = a state, in te_demog_on_top_scales: the deaths clamp of the refresh whose M the window just measured ran on,
+# before this step's refresh writes the next window's (te_dg_rate_clamp_d). With none (not Full, the first Full step
+# after a seed or after Display only, an old save), the copy goes and the section's row waits for the next count.
+te_demog_on_top_clamp_copy = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_rate_clamp_d
+		}
+		set_variable = { name = te_dg_ed_clamp_d value = var:te_dg_rate_clamp_d }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_ed_clamp_d }
+		remove_variable = te_dg_ed_clamp_d
+	}
+}
+```
 
-Run: `.venv/bin/python scripts/generators/gen_demographics.py --check && .venv/bin/python -m unittest test_gen_demographics test_demographics_registry`
-Expected: OK.
+Then:
+- `te_demog_walks`: `te_demog_on_top_split = yes` straight after `te_demog_on_top_window = yes`
+  (`# the Causes of Death section's split of the window's deaths (Full only)`). Add the three variables to the header's
+  walk inventory ("Full only").
+- `te_demog_on_top_scales`: `te_demog_on_top_clamp_copy = yes` as its first line.
+- `te_demog_rate_clamp`: first line `set_local_variable = { name = te_dg_rate_side value = 0 }`; in the floor branch
+  `set_local_variable = { name = te_dg_rate_side value = 1 }`, in the cap branch `... value = 2`. Update its comment.
+- `te_demog_rates_refresh`, deaths half, after its `te_demog_rate_clamp = yes`:
+  `set_variable = { name = te_dg_rate_clamp_d value = local_var:te_dg_rate_side }`
+  (`# which clamp bit deaths, for the next window: 0 none, 1 the floor, 2 the cap (te_demog_on_top_clamp_copy)`).
+  Beside the trapezoid's `te_dg_ot_d`:
+  ```
+  			# severe starvation's share at the start of the window that begins here (te_demog_on_top_split)
+  			set_variable = {
+  				name = te_dg_ot_sev
+  				value = {
+  					value = local_var:te_dg_w_sevd
+  					divide = { value = var:te_dg_cdr_model multiply = state_population multiply = 100 divide = 12 min = 1 }
+  				}
+  			}
+  ```
+- `te_demog_rates_clear`: remove `te_dg_rate_clamp_d`, `te_dg_ot_sev` and `te_dg_ed_clamp_d`, as it removes
+  `te_dg_ot_d`.
+- `te_demog_seed`: remove `te_dg_ot_sev` where it removes `te_dg_ot_d`.
+- The headers of `te_demog_rate_effects.txt` and `te_demog_effects.txt`: the new variables.
 
-- [ ] **Step 7: Commit**: "Demographics: measure the deaths added on top by the walk, and say which clamp bit".
+- [ ] **Step 6: Option n, and the display values**
+  - Option n (`TE_DEMOG_RATES`): copy `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share` and `te_dg_ed_clamp_d` into
+    `te_dg_dbg_eds`, `te_dg_dbg_edsev`, `te_dg_dbg_sev`, `te_dg_dbg_cld` (0 when absent, as the line's other copies).
+    Append
+    ` ed_state=[THIS.Var('te_dg_dbg_eds').GetValue|0]; ed_sev=[THIS.Var('te_dg_dbg_edsev').GetValue|0]; sev=[THIS.Var('te_dg_dbg_sev').GetValue|3]; clamp_d=[THIS.Var('te_dg_dbg_cld').GetValue|0]`
+    before `date=`, and remove the four after the line.
+  - `te_demog_display_values.txt`: add `te_demog_deaths_on_top`, `te_demog_deaths_whole_state`,
+    `te_demog_deaths_severe` and `te_demog_deaths_other` (Task 8, Step 3 gives their text).
 
-- [ ] **Review stop:** the same fresh reviewer as Task 4 reads Task 5 (the walk's new sums, the clamp side) before
-  Task 6.
+- [ ] **Step 7: Run the tests**
+
+Run: `.venv/bin/python scripts/generators/gen_demographics.py --check && .venv/bin/python -m unittest test_demographics_model test_gen_demographics test_demographics_registry`
+Expected: OK, including the trapezoid's own tests.
+
+- [ ] **Step 8: Commit**: "Demographics: split the deaths added on top on the trapezoid's window".
+
+- [ ] **Review stop:** the same fresh reviewer as Task 5 reads Task 6 against the merged trapezoid before Task 7.
 
 ---
 
-### Task 6: Medical Outreach, and releases without it
+### Task 7: Medical Outreach, and releases without it
 
 **Files:**
 - Modify: `common/decrees/extra_decrees.txt`
@@ -1375,8 +1798,8 @@ Expected: OK.
 - Test: `test_demographics_registry.py` (new `TestMedicalOutreach`), `test_release_census_inputs.py`
 
 **Interfaces:**
-- Consumes: `te_demog_access_target`, `te_demog_treatment_target_<cause>`, `te_demog_k_medicine_snap` (Task 3);
-  `te_dg_acc`, `te_dg_trt_*` (Task 4); `P.MEDICAL_OUTREACH_DIFFUSION` (Task 1).
+- Consumes: `te_demog_access_target`, `te_demog_treatment_target_<cause>`, `te_demog_k_medicine_snap` (Task 4);
+  `te_dg_acc`, `te_dg_trt_*` (Task 5); `P.MEDICAL_OUTREACH_DIFFUSION` (Task 1).
 - Produces: `decree_medical_outreach`; `te_demog_medicine_behind` (state trigger); the release script's rule 3b.
 
 - [ ] **Step 1: Write the failing tests**
@@ -1408,6 +1831,19 @@ class TestMedicalOutreach(unittest.TestCase):
         self.assertTrue(eng.holds(_parse_script("te_demog_medicine_behind = yes")))
         eng.vars["te_dg_acc"] = 0.7
         self.assertFalse(eng.holds(_parse_script("te_demog_medicine_behind = yes")))
+
+    def test_the_ai_weighs_it_by_the_gap(self):
+        # the shared-mechanics rule: the AI issues it where medicine is behind, and never once the state caught up.
+        # has_decree is read as "not issued" (the interpreter doesn't know decrees)
+        body = _block(_text(self.DECREES), "decree_medical_outreach")
+        weight = _find(_parse_script(body.replace("has_decree = decree_medical_outreach", "always = no")), "ai_weight")
+        fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
+        fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.6          # access heading for 1.0
+        for acc, want in ((1.0, 0.0), (0.95, 0.0), (0.85, 100.0), (0.6, 200.0)):
+            eng = _Engine(fixtures)
+            eng.vars.update(te_dg_acc=acc, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0, te_dg_trt_chr=0.0)
+            with self.subTest(acc=acc):
+                self.assertEqual(eng._ops(weight, 0.0), want)
 ```
 
 `test_release_census_inputs.py`:
@@ -1423,8 +1859,51 @@ class TestMedicalOutreach(unittest.TestCase):
 ```
 
 In `test_it_found_the_carriers`, raise the floor from 30 to 46 (39 census lines on 2026-10-11, plus the six
-technologies and the decree). In `test_what_else_it_comments_is_dead_with_the_census`, add
-`"common/decrees/extra_decrees.txt"` to `whole_entries`.
+technologies and the decree). Replace `test_what_else_it_comments_is_dead_with_the_census` so the decree file is
+allowed only inside `decree_medical_outreach`'s entry, not as a whole:
+
+```python
+    def _entry_lines(self, text, name):
+        """The line indexes of the top-level `name = { ... }` entry, by brace depth."""
+        lines, out, depth = text.split("\n"), set(), 0
+        for i, line in enumerate(lines):
+            if not out and re.match(rf"{re.escape(name)} = \{{", line):
+                out.add(i)
+                depth = _code(line).count("{") - _code(line).count("}")
+                continue
+            if out and depth > 0:
+                out.add(i)
+                depth += _code(line).count("{") - _code(line).count("}")
+        return out
+
+    def test_what_else_it_comments_is_dead_with_the_census(self):
+        # outside the census's lines: the entries they leave empty, Family Limitation's application, Medical Outreach
+        # (its only effect was a census type), the gates' old bodies and the rule
+        census = re.compile(rf"^\s*({'|'.join(self.types)})\s*=")
+        whole_entries = {"common/laws/te_demog_law_injections.txt",
+                         "common/technology/technologies/te_demog_tech_injections.txt"}
+        decrees = "common/decrees/extra_decrees.txt"
+        outreach = self._entry_lines(self.before[self.root / decrees].decode("utf-8-sig"), "decree_medical_outreach")
+        self.assertTrue(outreach, "decree_medical_outreach found")
+        for path in self.changed:
+            rel = path.relative_to(self.root).as_posix()
+            for n, line in enumerate(path.read_text(encoding="utf-8-sig").split("\n")):
+                if not line.startswith(TAG):
+                    continue
+                body = line[len(TAG):]
+                with self.subTest(rel=rel, line=body.strip()):
+                    if census.match(body) or rel in whole_entries:
+                        continue
+                    if rel == decrees:
+                        self.assertIn(n, outreach, "only Medical Outreach goes whole")
+                    elif rel == "common/history/extra_history.txt":
+                        self.assertIn("add_modifier = { name = te_demog_family_limitation }", body)
+                    else:
+                        self.assertIn(rel, {"common/scripted_triggers/te_demog_triggers.txt",
+                                            "common/game_rules/extra_game_rules.txt"})
+```
+
+A commented line keeps its index (`test_it_only_comments_lines_out`), so `n` matches the original file's.
 
 - [ ] **Step 2: Run them to see them fail**
 
@@ -1499,8 +1978,38 @@ decree_medical_outreach = {
 		}
 	}
 
+	# The AI uses it where the player would (the shared-mechanics rule): by how far the state's medicine is behind,
+	# with lower thresholds once issued, and not at all once it has caught up (vanilla Road Maintenance's pattern)
 	ai_weight = {
 		value = 0
+		if = {
+			limit = {
+				OR = {
+					te_demog_medicine_gap > 0.1
+					AND = {
+						has_decree = decree_medical_outreach
+						te_demog_medicine_gap > 0.05
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				OR = {
+					te_demog_medicine_gap > 0.3
+					AND = {
+						has_decree = decree_medical_outreach
+						te_demog_medicine_gap > 0.2
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = { te_demog_medicine_behind = no }
+			multiply = 0
+		}
 	}
 }
 ```
@@ -1553,7 +2062,7 @@ Commit: "Demographics: the Medical Outreach decree (Full only), and releases wit
 
 ---
 
-### Task 7: What the section reads: display values, gates, names
+### Task 8: What the section reads: display values, gates, names
 
 **Files:**
 - Modify: `common/script_values/te_demog_display_values.txt`
@@ -1563,8 +2072,9 @@ Commit: "Demographics: the Medical Outreach decree (Full only), and releases wit
 - Test: `test_demographics_registry.py` (new `TestCausesDisplay`)
 
 **Interfaces:**
-- Consumes: the variables of Tasks 3–5 and `te_dg_dz`, `te_dg_ed`, `te_dg_ed_target`, `te_dg_cdr`, `te_dg_cdr_model`;
-  `concept_health_care_access` (Task 2); `te_demog_deaths_on_top`, `_whole_state`, `_some_people` (Task 5).
+- Consumes: the variables of Tasks 4–6 (`te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_ed_clamp_d`
+  among them) and `te_dg_dz`, `te_dg_ed`, `te_dg_ed_target`, `te_dg_cdr`, `te_dg_cdr_model`;
+  `concept_health_care_access` (Task 2); `te_demog_deaths_on_top`, `_whole_state`, `_severe`, `_other` (Task 6).
 - Produces:
   - display values: `te_demog_access_from_law`, `te_demog_access_gap`, `te_demog_access_moving`,
     `te_demog_medicine_gap_<cause>`, `te_demog_medicine_moving_<cause>`, `te_demog_deaths_on_top_code`;
@@ -1579,19 +2089,27 @@ SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
 
 
 class TestCausesDisplay(unittest.TestCase):
-    """The Causes of Death section's reads (the plan's Task 7)."""
+    """The Causes of Death section's reads (the plan's Task 8)."""
 
     def _shown(self, sgui, eng):
         body = _parse_script(_block(_text(SGUIS), sgui))
         return eng.holds(_find(body, "is_shown"))
 
-    def test_the_on_top_gate_needs_a_measured_target(self):
-        # Review Focus 2: the first Full step after a seed writes dz 0 against no target
-        base = dict(te_dg_ed_target=0.0, te_dg_ed_state=900.0, te_dg_sev_share=0.0, te_dg_dz=0.0, te_dg_rate_clamp_d=0.0)
-        for full, target, shown in ((True, 0.0, False), (True, 1000.0, True), (False, 1000.0, False)):
+    def test_the_on_top_gate_needs_a_measured_window(self):
+        # Review Focus 2: the first Full step after a seed writes dz 0 against no target; the first after Display only
+        # has a target but its window ran with no M, so no refresh's clamp flag was there to copy (te_dg_ed_clamp_d)
+        base = dict(te_dg_ed_target=1000.0, te_dg_ed_state=900.0, te_dg_ed_sev=0.0, te_dg_sev_share=0.0, te_dg_dz=0.0,
+                    te_dg_ed_clamp_d=0.0)
+        for full, change, shown in ((True, {}, True), (True, {"te_dg_ed_target": 0.0}, False),
+                                    (True, {"te_dg_ed_clamp_d": None}, False), (False, {}, False)):
             eng = _Engine({}, triggers={"te_demog_effects_run": full})
-            eng.vars.update(base, te_dg_ed_target=target)
-            with self.subTest(full=full, target=target):
+            eng.vars.update(base)
+            for k, v in change.items():
+                if v is None:
+                    del eng.vars[k]
+                else:
+                    eng.vars[k] = v
+            with self.subTest(full=full, change=change):
                 self.assertEqual(self._shown("te_demog_state_on_top_sgui", eng), shown)
 
     def test_the_causes_gate_needs_the_steps_inputs(self):
@@ -1684,7 +2202,7 @@ te_demog_medicine_moving_<c> = {
 }
 ```
 
-Task 5 wrote the deaths added on top and its split (below, for reference). Add the code beside them:
+Task 6 wrote the deaths added on top and its split (below, for reference). Add the code beside them:
 
 ```
 # 1 + te_dg_dz: how far the engine's deaths over the last step ran from the census's own (te_demog_on_top_scales).
@@ -1700,16 +2218,22 @@ te_demog_deaths_on_top_code = {
 		value = 1
 	}
 }
-# Its split, measured by the walk over the same window (te_dg_ed_state, Full only): the whole state's part (the state's
-# read: os, the moved lines' on-top family, the census term's own miss) and the pops' own lines'. Their product is
-# te_demog_deaths_on_top unless the scale hit its cap.
+# Its split over the same window (te_demog_on_top_split, Full only): the whole state's part (the state-level lines, the
+# moved lines' on-top family, the census's own lag since its last count), severe starvation's, and the other lines on
+# some of its people. Their product is te_demog_deaths_on_top unless dz hit either end of its range or the trapezoid's
+# floor at 0.
 te_demog_deaths_whole_state = {
 	value = var:te_dg_ed_state
 	divide = { value = var:te_dg_ed_target min = 1 }
 }
-te_demog_deaths_some_people = {
-	value = var:te_dg_ed
+te_demog_deaths_severe = {
+	value = var:te_dg_ed_state
+	add = var:te_dg_ed_sev
 	divide = { value = var:te_dg_ed_state min = 1 }
+}
+te_demog_deaths_other = {
+	value = var:te_dg_ed
+	divide = { value = var:te_dg_ed_state add = var:te_dg_ed_sev min = 1 }
 }
 ```
 
@@ -1756,8 +2280,9 @@ te_demog_state_on_top_sgui = {
 		var:te_dg_ed_target > 0
 		has_variable = te_dg_dz
 		has_variable = te_dg_ed_state
+		has_variable = te_dg_ed_sev
 		has_variable = te_dg_sev_share
-		has_variable = te_dg_rate_clamp_d
+		has_variable = te_dg_ed_clamp_d
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -1796,7 +2321,7 @@ The rows read only the state (`State.MakeScope`), never the player (`test_the_st
  te_demog_st_work_value:0 "×#v [State.MakeScope.Var('te_dg_m_work').GetValue|2]#!"
  te_demog_st_work_tt:0 "#b Work#!\nDeaths at work among people aged 15 to 64, shared between women and men by their share of the work, at a poor country's rates times:\n Laws: ×#v [State.MakeScope.ScriptValue('te_demog_f_work_laws')|2]#!\n#lore Child labor raises it; Regulatory Bodies and Worker Protections lower it.#!"
  te_demog_st_mat:0 "Childbirth"
- te_demog_st_mat_value:0 "#v [State.MakeScope.Var('te_dg_m_mat').GetValue|0]#! per 100,000 births"
+ te_demog_st_mat_value:0 "#v [State.MakeScope.Var('te_dg_m_mat').GetValue|0]#! per 100k births"
  te_demog_st_mat_tt:0 "#b Childbirth#!\nMothers who die in childbirth: #v [State.MakeScope.Var('te_dg_m_mat').GetValue|0]#! in 100,000 births, against #v [State.MakeScope.ScriptValue('te_demog_k_maternal_base')|0]#! without modern medicine.\n$te_demog_st_med_mat$"
  te_demog_st_med_mat:0 "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_medicine_moving_maternal'), '(CFixedPoint)1' ), 'te_demog_st_med_mat_moving', 'te_demog_st_med_mat_still' )]"
  te_demog_st_med_mat_still:0 " Medicine: ×#v [State.MakeScope.ScriptValue('te_demog_f_maternal_medicine')|2]#!"
@@ -1808,7 +2333,7 @@ The rows read only the state (`State.MakeScope`), never the player (`test_the_st
  te_demog_st_ontop_normal:0 "×#v [State.MakeScope.ScriptValue('te_demog_deaths_on_top')|2]#!"
  te_demog_st_ontop_tt:0 "[SelectLocalization( GetScriptedGui('te_demog_state_on_top_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_ontop_tt_measured', 'te_demog_st_ontop_tt_pending' )]"
  te_demog_st_ontop_tt_pending:0 "#b Deaths Added on Top#!\nHow far the game's deaths in this state ran from the census's own rate. Measured from the census's second count under the Full setting."
- te_demog_st_ontop_tt_measured:0 "#b Deaths Added on Top#!\nThe census sets this state's deaths at its own rate, and the game adds what the census doesn't model on top. Last count: #v [State.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! deaths per 1,000 people at the census's own rate, #v [State.MakeScope.Var('te_dg_cdr').GetValue|1]#! with the effects on top.\n Effects on the whole state: ×#v [State.MakeScope.ScriptValue('te_demog_deaths_whole_state')|2]#!\n#lore Pollution, devastation, decrees, events, and the late laws and technologies the census doesn't model.#!\n Effects on some of its people: ×#v [State.MakeScope.ScriptValue('te_demog_deaths_some_people')|2]#!\n#lore Above all severe starvation, where #v [State.MakeScope.Var('te_dg_sev_share').GetValue|%0]#! of the people were at the count; also dangerous workplaces and lines on one class or on people outside their homeland.#![SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_rate_clamp_d').GetValue, '(CFixedPoint)1' ), 'te_demog_st_ontop_floor', '' )][SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_rate_clamp_d').GetValue, '(CFixedPoint)2' ), 'te_demog_st_ontop_cap', '' )]"
+ te_demog_st_ontop_tt_measured:0 "#b Deaths Added on Top#!\nThe census sets this state's deaths at its own rate, and the game adds what the census doesn't model on top. Last count: #v [State.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! deaths per 1,000 people at the census's own rate, #v [State.MakeScope.Var('te_dg_cdr').GetValue|1]#! with the effects on top.\n Effects on the whole state: ×#v [State.MakeScope.ScriptValue('te_demog_deaths_whole_state')|2]#!\n#lore Pollution, devastation, decrees, events, the late laws and technologies the census doesn't model, and the census's own lag since its last count.#!\n Severe starvation: ×#v [State.MakeScope.ScriptValue('te_demog_deaths_severe')|2]#! (#v [State.MakeScope.Var('te_dg_sev_share').GetValue|%0]#! of its people at the count)\n Other effects on some of its people: ×#v [State.MakeScope.ScriptValue('te_demog_deaths_other')|2]#!\n#lore Dangerous workplaces, lines on one class, and people outside their homeland.#![SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_ed_clamp_d').GetValue, '(CFixedPoint)1' ), 'te_demog_st_ontop_floor', '' )][SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_ed_clamp_d').GetValue, '(CFixedPoint)2' ), 'te_demog_st_ontop_cap', '' )]"
  te_demog_st_ontop_floor:0 "\n\n#R The census couldn't bring deaths down to its own rate this year:#! the game's death rate can't fall below a fifth of its base, so deaths ran higher."
  te_demog_st_ontop_cap:0 "\n\n#R The census couldn't raise deaths to its own rate this year:#! the game's death rate can't rise past four times its base, so deaths ran lower."
 ```
@@ -1835,7 +2360,7 @@ Expected: OK, and nothing flagged for the new keys.
 
 ---
 
-### Task 8: The section on the state subtab, and the country tab's TODO (owner in-game check)
+### Task 9: The section on the state subtab, and the country tab's TODO (owner in-game check)
 
 **Files:**
 - Modify: `gui/te_demographics_widgets.gui` (new type `te_state_demog_causes` before `te_state_demog_pyramid`; its
@@ -1843,7 +2368,7 @@ Expected: OK, and nothing flagged for the new keys.
 - Test: `test_demographics_registry.py` (new `TestCausesSection`)
 
 **Interfaces:**
-- Consumes: Task 7's loc keys and gates.
+- Consumes: Task 8's loc keys and gates.
 - Produces: `te_state_demog_causes`; the collapse flag `te_demog_st_causes_closed`.
 
 - [ ] **Step 1: Write the failing tests**
@@ -1864,7 +2389,7 @@ def _gui_type(text, name):
 
 
 class TestCausesSection(unittest.TestCase):
-    """The Causes of Death section on the state subtab (the plan's Task 8)."""
+    """The Causes of Death section on the state subtab (the plan's Task 9)."""
 
     @classmethod
     def setUpClass(cls):
@@ -1890,7 +2415,7 @@ class TestCausesSection(unittest.TestCase):
         outer = self.section[: len(self.section) - len(inner)]
         for key in re.findall(r'(?:text|tooltip) = "(te_demog_st_\w+)"', outer):
             self.assertIn(key, ("te_demog_sec_causes", "te_demog_st_causes_pending"), key)
-        split = re.compile(r"te_dg_ed_state|te_dg_sev_share|te_dg_rate_clamp_d|te_demog_deaths_")
+        split = re.compile(r"te_dg_ed_state|te_dg_ed_sev|te_dg_sev_share|te_dg_ed_clamp_d|te_demog_deaths_")
         for key in ("te_demog_st_ontop_value", "te_demog_st_ontop_tt"):
             self.assertIsNone(split.search(self.loc[key]), key)
             self.assertIn("te_demog_state_on_top_sgui", self.loc[key])
@@ -1920,9 +2445,9 @@ Expected: ERROR (`te_state_demog_causes` not found).
 	### top of the census. Open by default (rule 1), with a flag of its own (te_demog_st_causes_closed). The rows sit
 	### under te_demog_state_causes_sgui (the step's inputs exist: a census from before this build waits a step);
 	### the on-top row under te_demog_state_full_sgui, its figure picked by te_demog_state_on_top_sgui (a measured
-	### scale). Labels fit te_demog_figure_row's 240-unit cell: "Chronic Illness, Old Age" is the longest, 24
-	### characters, about 227 in the medium font with the 10%; "380 per 100,000 births" is the longest value, 22,
-	### about 208: check it doesn't elide in game.
+	### scale). Labels fit te_demog_figure_row's 240-unit label cell: "Chronic Illness, Old Age" is the longest, 24
+	### characters, about 227 in the medium font with the 10%. Values fit its 200-unit value cell: "670 per 100k
+	### births" is the longest, 19 characters, about 180 ("per 100,000 births" would elide at about 208).
 	type te_state_demog_causes = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2053,22 +2578,28 @@ already in the file.
 
 - [ ] **Step 6: Commit**: "Demographics: the Causes of Death section on the state subtab".
 
-- [ ] **Owner in-game check** (before Task 10's docs; see Task 10 Step 4 for the list). Merge `origin/main`, read
+- [ ] **Owner in-game check** (before Task 11's docs; see Task 11 Step 4 for the list). Merge `origin/main`, read
   the deploy dry run alone, then deploy from the full checkout, per CLAUDE.md "Play-testing unmerged work".
 
 ---
 
-### Task 9: The harness reads the step's inputs
+### Task 10: The harness reads the step's inputs (`fidelity` and `history`)
 
 **Files:**
-- Modify: `scripts/analysis/demographics_harness.py` (`FIDELITY_VARS`, `fidelity_rows`, `_fidelity`'s header lines; a
-  helper `census_inputs`)
-- Test: `test_demographics_harness.py` (`TestFidelity`)
+- Modify: `scripts/analysis/demographics_harness.py` (`FIDELITY_VARS`, `fidelity_rows`, `_fidelity`'s header lines;
+  `country_figures`, `history_rows`, `cmd_history`; a helper `census_inputs`)
+- Test: `test_demographics_harness.py` (`TestFidelity`, `TestHistory` or the file's history tests)
+
+`history` is the calibration's view (the model's life expectancy and growth beside history's). With medicine drifting,
+a country's census runs behind its targets after every law and technology, so `history` must see the lag as the census
+does (the review's I4). `#906` notes `fidelity` won't run on that branch's saves; this task rewrites only its inputs.
 
 **Interfaces:**
-- Consumes: `M.Inputs.turmoil`, `M.Inputs.medicine` (Task 1); the variables of Tasks 3–4.
+- Consumes: `M.Inputs.turmoil`, `M.Inputs.medicine` (Task 1); the variables of Tasks 4–5.
 - Produces: `H.census_inputs(inp, got) -> M.Inputs`. With every input variable in `got`, it returns `inp` with the
-  step's medicine, turmoil, crowding and plain type sums; otherwise `inp` unchanged.
+  step's medicine, turmoil, crowding and plain type sums; otherwise `inp` unchanged. `H.country_figures(states,
+  carriers, stored=None)` and `H.history_rows(sections, year, anchors, carriers=None, stored=None)`, `stored` being
+  `{state id: {variable: value}}` from `S.read_variables`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -2138,16 +2669,56 @@ their own inputs and print one line, for example "N states read on the census's 
 spread, turmoil); M from the save's techs and laws". Count also the states whose stored medicine is more than
 `P.MEDICINE_SNAP` from the targets the save's techs and laws give, and print "medicine still spreading in K".
 
-- [ ] **Step 4: Run the harness tests, then commit**
+- [ ] **Step 4: `history` through the same inputs**
+
+Test first, in `TestHarness` beside its `country_figures` test (the same synthetic states):
+
+```python
+    def test_history_sees_the_censuss_lag(self):
+        """A state whose stored medicine is behind its targets reads a lower life expectancy than at its targets; with
+        nothing stored, the figures are as before (the Causes of Death plan, Task 10)."""
+        carriers = DM.load_carriers()
+        c = S.CountryInputs("TST")
+        c.population, c.sol_x_size, c.wealth_tfr_x_size = 1000.0, 13.0 * 1000.0, M.wealth_tfr(13.0) * 1000.0
+        c.workforce, c.literate = 500.0, 100.0
+        c.techs = {"medical_degrees", "pharmaceuticals", "modern_nursing"}
+        states = [("1", c, True)]
+        at_target = H.country_figures(states, carriers)
+        behind = {"1": dict(TestFidelity.STORED, te_dg_acc=0.4, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0,
+                            te_dg_trt_chr=0.0)}
+        self.assertLess(H.country_figures(states, carriers, stored=behind)["e0"], at_target["e0"])
+        self.assertEqual(H.country_figures(states, carriers, stored={}), at_target)
+```
+
+Then:
+
+```python
+def country_figures(states, carriers, stored=None):
+    """A country's model figures as the census builds them: each state's own rates (its SoL, literacy, urban share and
+    incorporation; with `stored`, the census's own inputs from the save, so medicine as it had spread), weighted by its
+    people."""
+    stored = stored or {}
+    figs = [(st.population, model_figures(census_inputs(inputs_for(st, carriers, incorporated=inc), stored.get(sid, {}))))
+            for sid, st, inc in states if st.population > 0]
+    tot = sum(p for p, _ in figs) or 1
+    return {k: sum(p * f[k] for p, f in figs) / tot for k in ("e0", "imr", "tfr", "r")}
+```
+
+`history_rows` passes `stored` to both of its `country_figures` calls. `cmd_history` reads it per save:
+`_countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS)` and
+`stored = {sid: rec["vars"] for sid, rec in walked.items()}`. It prints one line under the world line: "N states on the
+census's own inputs (medicine as it had spread)".
+
+- [ ] **Step 5: Run the harness tests, then commit**
 
 Run: `.venv/bin/python -m unittest test_demographics_harness`
 Expected: OK.
 
-Commit: "Demographics harness: fidelity reads the step's own inputs".
+Commit: "Demographics harness: fidelity and history read the step's own inputs".
 
 ---
 
-### Task 10: Docs, the player guide and the in-game checklist
+### Task 11: Docs, the player guide and the in-game checklist
 
 **Files:**
 - Modify: `docs/systems/mod_systems.md` (§ Demographics)
@@ -2160,15 +2731,23 @@ Commit: "Demographics harness: fidelity reads the step's own inputs".
 - [ ] **Step 1: mod_systems.md.** In § Demographics:
   - **Files table:** the new script values, effects, sguis, the decree, the type's carriers, the GUI type.
   - **Variable families:** add a row "Causes of Death (2026-10-11)": `te_dg_acc`, `te_dg_trt_*`, `te_dg_in_*`; under
-    Full `te_dg_ed_state`, `te_dg_sev_share`, `te_dg_rate_clamp_d`.
+    Full `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_ot_sev`, `te_dg_rate_clamp_d`,
+    `te_dg_ed_clamp_d`.
   - **A new subsection "Causes of Death (2026-10-11)"** after "The census's births and deaths". It covers:
     - the factor table and why the factors read stored inputs;
     - the drift (rate, carriers, decree, snap, seed and old-save behaviour, the re-seed accepted);
     - turmoil, with the vanilla `state_mortality_turmoil_mult` note;
-    - the measured split with its formula (whole state = `te_dg_ed_state ÷ te_dg_ed_target`, some of its people =
-      `te_dg_ed ÷ te_dg_ed_state`), and why os_d can't split dz;
-    - the red threshold, the clamp side and the severe-starvation share;
-    - the #894 note that the walk's severe term (+1.0) and the step-day snapshot move the figure;
+    - the split, built on the trapezoid's quantities, with its formula:
+      - whole state = `te_dg_ed_state ÷ te_dg_ed_target`;
+      - severe starvation = `(te_dg_ed_state + te_dg_ed_sev) ÷ te_dg_ed_state`;
+      - other effects = `te_dg_ed ÷ (te_dg_ed_state + te_dg_ed_sev)`;
+      - why os_d can't split dz;
+    - the red threshold, the clamp side (copied for the measured window) and the severe-starvation share;
+    - that under Display only the drift and turmoil move the shown figures but not the game;
+    - that under fast mode the whole state's part also carries K − 1 times a famine's share (the fast term sits in the
+      read);
+    - the #894 note that the walk's severe term (+1.0), never fitted, moves the figure;
+    - the approved lag table from Task 3;
     - the release's handling of the decree;
     - the decree's placeholder icon (`gui_style_guide.md` rule 10). The texture is vanilla's
       `decree_emergency_relief.dds`, set in `common/decrees/extra_decrees.txt`. The final art's subject: a doctor's bag
@@ -2190,22 +2769,24 @@ Commit: "Demographics harness: fidelity reads the step's own inputs".
     state's health care access and each cause's multiplier; hover a row for what makes it up and where medicine is
     heading. Under Full it also shows the deaths added on top of the census's own, in red from a quarter above it,
     split into effects on the whole state and effects on some of its people, such as severe starvation."
-  - `06-politics.md`, § New decrees: "The mod adds 15 decrees." becomes "The mod adds 15 decrees, and a 16th under the
-    Demographics rule's Full setting." Add the row `| Medical Outreach (Demographics, Full only) | Medical Degrees |
-    New medicine reaches the state faster; see [States and population](08-states.md#demographics) |`.
+  - `06-politics.md`, § New decrees: "The mod adds 15 decrees." becomes "The mod adds 15 decrees, and development builds
+    a 16th under the Demographics rule's Full setting." Add the row `| Medical Outreach (development builds only;
+    Demographics, Full only) | Medical Degrees | New medicine reaches the state faster; see [States and
+    population](08-states.md#demographics) |`.
   - Run `python3 scripts/analysis/check_player_guide_style.py --strict`, rebuild with
     `.venv/bin/python scripts/build_player_guide.py`, and check `scripts/build_player_guide.py --check`.
 
 - [ ] **Step 3: python_tools.md and the phase 2 plan.**
-  - `python_tools.md`: the harness list's `fidelity` line gains "runs the model on the census's stored inputs (the
-    drifted medicine, turmoil) when the save holds them".
+  - `python_tools.md`: the harness list's `fidelity` and `history` lines gain "run the model on the census's stored
+    inputs (the drifted medicine, turmoil) when the save holds them", and a new line for `lag` ("years of life
+    expectancy behind the target while medicine spreads, the drift numbers' evidence").
   - The 2026-10-10 plan's §2: one bullet, "Amended 2026-10-11 (3): the Causes of Death plan
     (`docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md`) adds turmoil to the external cause and
     drifts medicine; both reach M, under Full only."
 
 - [ ] **Step 4: The in-game checklist** (for the owner; the PR body carries it, and `mod_systems.md` keeps 11–13):
   1. **Layout.** A new 1836 game under Full: the state subtab shows Causes of Death after the overview, open. No row
-     label or value ends in "...". Childbirth's "670 per 100,000 births" is the longest value.
+     label or value ends in "...". Childbirth's "670 per 100k births" is the longest value.
   2. **Health Care Access.** 40% in an unincorporated colony. More in a Ministry of Health country's incorporated
      states, with the hover's two lines adding up to the row.
   3. **The hovers multiply to their rows.** Check one: Infection and Hunger's factors multiplied give its ×figure.
@@ -2215,16 +2796,13 @@ Commit: "Demographics harness: fidelity reads the step's own inputs".
      medicine is behind. Issuing it raises the hover's "closes N% of the gap" by 20 points in that state. Option l's
      `diff=` shows the same.
   6. **Deaths Added on Top.** Absent outside Full. "After the next count" on a state's first Full count. A ×figure
-     from the next. Red from ×1.25: try a famine state, or late-game India. The severe-starvation share reads in the
-     hover. Option n's `ed_state=`, `sev=` and `clamp_d=` match the hover.
+     from the next. The same on the first Full count after Display only. Red from ×1.25: try a famine state, or
+     late-game India. The hover's three parts multiply to the row, and severe starvation's share reads beside its
+     part. Option n's `ed_state=`, `ed_sev=`, `sev=` and `clamp_d=` match the hover.
   7. **Turmoil.** A state in high turmoil shows Turmoil above ×1.00 under Accidents and Violence.
   8. **An old save** from before this build: the section reads "after its next count" until each state's step.
   9. **`debug.log`:** no "Failed to fetch variable" or errors from `te_demog_f_*`, `te_dg_acc`, `te_dg_in_*` or the
      decree.
-  10. **Cost.** Run the benchmark (option d) in a late-game save under Full, before and after this branch. Task 5 adds
-      per-pop work to the walk: a second read of the mild-starvation buckets and the severe-starvation test. The yearly
-      cost should stay near the 1836 figure per occupied slot (mod_systems' owner check 5). If it moves, apply Task 5's
-      fallback.
 
 - [ ] **Step 5: Run the whole suite and the checks:**
   - `.venv/bin/python -m unittest discover -s . -p 'test_*.py'` (read the summary with `grep -E '^(Ran |OK|FAILED)'`);
@@ -2242,9 +2820,11 @@ Commit: "Demographics harness: fidelity reads the step's own inputs".
 
 ## Self-review notes (for the executor)
 
-- **Order of the two Task 5 tests that read display values:** write `te_demog_deaths_on_top`, `_whole_state` and
-  `_some_people` in Task 5 (Step 5) so `TestDeathsOnTopSplit` runs there; Task 7 adds the rest of the display values
-  beside them.
+- **Task 6 writes the four on-top display values** (`te_demog_deaths_on_top`, `_whole_state`, `_severe`, `_other`;
+  their text is in Task 8 Step 3); Task 8 adds the rest beside them.
+- **Task 6 waits for the trapezoid PR,** and is checked against its merged names first ("Dependencies and shared
+  edits"). The other tasks can go ahead of it.
 - **`_mod_fixtures` and `_stored`** are defined once in `test_demographics_registry.py`, above `_engine_for`, and used
-  by Tasks 3, 4 and 7.
-- **The generated files change twice** (Tasks 3 and 5). Regenerate after each; never merge them by hand.
+  by Tasks 4, 5 and 8.
+- **The generated files change twice** (Tasks 4 and 6), and the trapezoid and #906 change them too. Regenerate after
+  each task and after each merge; never merge them by hand.
