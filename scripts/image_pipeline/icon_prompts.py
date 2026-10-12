@@ -337,6 +337,22 @@ CATEGORIES = {
         folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92, grade_strength=0.4,
         entity_dir="common/prestige_goods", field="texture",
         style="{subject}, one chunky readable object, " + PAINTED),
+    # Vanilla's own prestige goods the mod renamed (localization/english/replace/),
+    # whose picture no longer fits the name. The mod defines no entity to wire,
+    # so the key is vanilla's file name and writing it over vanilla's path is
+    # the whole change, as for the goods.
+    "prestige_good_vanilla": dict(
+        folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92, grade_strength=0.4,
+        gui=(), style="{subject}, one chunky readable object, " + PAINTED),
+    # War goals and diplomatic plays (160 px, `texture =` in common/diplomatic_plays).
+    # Vanilla's 33 are painted objects on transparency in muted slate blue with
+    # dark red accents: chess pieces, flags on map tiles, documents. Measured:
+    # objects span 0.78-0.99 of the side (median 0.86), median saturation 0.33
+    # and value 0.43.
+    "war_goal": dict(
+        folder="war_goals", size=160, mode="cutout", fill=0.86, grade_strength=0.5,
+        entity_dir="common/diplomatic_plays", field="texture",
+        style="{subject}, one chunky readable object, " + PAINTED),
     "journal_entry": dict(
         folder="event_icons", size=150, mode="cutout", fill=0.89, panel_preview=True,
         entity_dir="common/journal_entries", field="icon",
@@ -1496,10 +1512,15 @@ ICONS: dict[str, dict[str, dict]] = {
         "company_basic_autarky": {"subject": "a black rubber tyre leaning against an oil barrel in front of a tall distillation tower", "seed": 1},
         "company_basic_synthetics": {"subject": "spools of brightly dyed red, blue and yellow thread beside a glass flask of purple dye", "seed": 1},
         # On vanilla's basic_construction until 2026-10-08, which vanilla's power bloc construction company keeps.
-        # Megastructure stays on it too: three subjects (a space elevator, a lattice tower, an orbital ring)
-        # drew a radio mast, an oil derrick and a station on a pale disc that broke the badge style.
         "company_infrastructure": {"subject": "a steel truss railway bridge with a train crossing it, a concrete highway running underneath", "seed": 1},
         "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
+        # Batch 5. Megastructure was left on basic_construction in batch 4: a space elevator, a lattice
+        # tower and an orbital ring drew a radio mast, an oil derrick and a station on a pale disc that
+        # broke the badge style. Batch 5: the tower above clouds mostly lost its disc (the sky was matted
+        # out with the ground); the owner took s3, whose disc partly survives (2026-10-11).
+        "company_megastructure_consortium": {"subject": "a colossal stepped skyscraper tower rising high above a layer of white clouds, two tiny construction cranes on its unfinished top", "seed": 3},
+        # "Unnamed Monument", the Grand Monuments name carrier: shown in the rename popup while a monument is named.
+        "company_gm_name_carrier": {"subject": "a blank smooth grey granite dedication plaque standing upright, a stonemason's wooden mallet and steel chisel resting against its foot", "seed": 2},
     },
     # The PLACEHOLDER cards of gen_placeholder_company_icons.py: the company's trade, no logo or lettering.
     # Interim for the seventeen real companies: the owner may draw their real logos (2026-10-07); drop an
@@ -1563,6 +1584,33 @@ ICONS: dict[str, dict[str, dict]] = {
                         "now": f"{_GI}/goods_icons/tech_metals.dds"},
         "tourism": {"subject": "a brown leather suitcase with a camera on a strap and a straw sun hat resting on top", "seed": 2,
                     "now": f"{_GI}/goods_icons/tourism.dds"},
+        # Batch 5: vanilla goods the mod renamed, written over vanilla's file so the
+        # text icon (@fertilizer!, @opium!) follows. Chemicals showed the basic
+        # chemicals company badge (REPLACE:fertilizer's texture, pointed back at
+        # goods_icons/fertilizer.dds) and its text icon vanilla's potted plant.
+        # Not bottles, which Dye is. Next subject if it misses: a dented blue steel
+        # drum beside a round-bottomed glass flask of green liquid.
+        "fertilizer": {"subject": "a large round green glass carboy of clear liquid with a cork stopper, held in a wooden crate packed with straw", "seed": 1,
+                       "now": f"{_GI}/company_icons/basic_chemicals.dds"},
+        # Drugs, which includes medicines, on vanilla's opium pipe and poppy pods.
+        # Reroll: "a dried poppy seed pod" drew a brown burr.
+        "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": 3,
+                  "now": f"{_GI}/goods_icons/opium.dds"},
+    },
+    # Batch 5: the two renamed prestige goods of the goods above, each a finer
+    # version of its good's idea (bulk carboy -> small reagent vials).
+    "prestige_good_vanilla": {
+        # Specialty Reagents (vanilla's Enriched Fertilizer, a fertilizer sack).
+        "generic_fertilizer_prestige": {"subject": "a polished wooden laboratory rack holding a row of slender stoppered glass vials of bright red, blue, green and amber liquids", "seed": 1,
+                                        "now": f"{_GI}/goods_icons/prestige_goods/generic_fertilizer_prestige.dds"},
+        # Potent Formulations (vanilla's Pure Opium, an opium box and pipe).
+        "generic_opium_prestige": {"subject": "a small open silver pillbox lined with blue velvet, full of glossy red-and-white capsules", "seed": 1,
+                                   "now": f"{_GI}/goods_icons/prestige_goods/generic_opium_prestige.dds"},
+    },
+    # Batch 5: the mod's diplomatic plays on a vanilla war goal's picture.
+    "war_goal": {
+        # War After a Nuclear Exchange, on Humiliation's boots on a flag. s3, the owner's pick (2026-10-11).
+        "dp_nuclear_exchange": {"subject": "a cracked and scorched slate-blue map tile of land with a small grey mushroom cloud rising from its centre, muted slate-blue and grey colours", "seed": 3},
     },
     # The Timeline Extended window's launcher, on vanilla's Journal button until now.
     "sidebar_button": {

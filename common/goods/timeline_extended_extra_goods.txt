@@ -105,7 +105,7 @@ construction = {
 }
 
 REPLACE:fertilizer = {
-	texture = "gfx/interface/icons/company_icons/basic_chemicals.dds"
+	texture = "gfx/interface/icons/goods_icons/fertilizer.dds"
 	cost = 30
 	category = industrial
 
