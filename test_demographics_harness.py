@@ -965,7 +965,7 @@ class TestFidelity(unittest.TestCase):
         """#916: the step stores the SoL and literacy it used (te_dg_in_sol, te_dg_in_lit), and a walk without a step
         (a second pulse in a year, the console) rewrites te_dg_sol and te_dg_lit but never te_dg_m_*. fidelity runs
         the model on the stored pair, without needing all of CENSUS_INPUT_VARS (a census from before #916's last fix
-        holds these two and not the rest)."""
+        holds the other stored inputs but not these two, which came last)."""
         stored = (("te_dg_in_sol", self.STEP_SOL), ("te_dg_in_lit", self.STEP_LIT))
         m_inf = self.step_infection(self.STEP_SOL, self.STEP_LIT)
         self.assertNotAlmostEqual(m_inf / self.step_infection(self.GAME_SOL, self.GAME_LIT), 1.0, places=2,
