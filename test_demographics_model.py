@@ -1283,10 +1283,15 @@ class TestConsequences(unittest.TestCase):
         self.assertGreater(M.structure(ring)["men_per_100_women"], P.SEX_FEWER_FROM)
         self.assertEqual(M.step(ring, AGRARIAN_1836, 1837)["fertility"]["sex"], 1.0)
 
-    def test_the_sex_balance_effects_are_held_back(self):
-        """demographics_params.SEX_BALANCE_EFFECTS (controller's decision, 2026-10-12): off, every sex-balance term is
+    def test_the_three_effects_are_on(self):
+        """The migrant booking (2026-10-12) turned on what step 4 held back: conscription, the youth bulge and sex
+        balance."""
+        self.assertTrue(P.CONSCRIPTION_EFFECTS and P.YOUTH_BULGE_EFFECTS and P.SEX_BALANCE_EFFECTS)
+
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", False)
+    def test_held_back_the_sex_balance_effects_are_neutral(self):
+        """demographics_params.SEX_BALANCE_EFFECTS off (held back, as step 4 shipped): every sex-balance term is
         neutral, so a ring short of men steps as a balanced one would."""
-        self.assertFalse(P.SEX_BALANCE_EFFECTS)
         for balance in (50.0, 82.0, 150.0):
             self.assertEqual((M.sex_births(balance), M.sex_women_add(balance), M.sex_fewer_men(balance),
                               M.sex_more_men(balance)), (1.0, 0.0, 0.0, 0.0))
@@ -1295,11 +1300,12 @@ class TestConsequences(unittest.TestCase):
             ring.m[(1836 - a) % P.RING_YEARS] *= 0.85
         self.assertEqual(M.step(ring, AGRARIAN_1836, 1837)["fertility"]["sex"], 1.0)
 
-    def test_conscription_and_the_youth_bulge_are_held_back(self):
-        """Controller's decision (2026-10-12, after the review): T and y are figures the census keeps; none applies
-        while their switches are off, and when on, none below the cut-offs (the review's Minor 2)."""
-        self.assertFalse(P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
-        self.assertEqual((M.conscription_applied(-0.5), M.youth_applied(0.8)), (0.0, 0.0))
+    def test_conscription_and_the_youth_bulge_apply_past_their_cut_offs(self):
+        """T and y are figures the census keeps; none applies while their switches are off (held back, as step 4
+        shipped), and when on, none below the cut-offs (the review's Minor 2)."""
+        with unittest.mock.patch.object(P, "CONSCRIPTION_EFFECTS", False), \
+                unittest.mock.patch.object(P, "YOUTH_BULGE_EFFECTS", False):
+            self.assertEqual((M.conscription_applied(-0.5), M.youth_applied(0.8)), (0.0, 0.0))
         with unittest.mock.patch.object(P, "CONSCRIPTION_EFFECTS", True), \
                 unittest.mock.patch.object(P, "YOUTH_BULGE_EFFECTS", True):
             self.assertEqual((M.conscription_applied(-0.5), M.youth_applied(0.8)), (-0.5, 0.8))

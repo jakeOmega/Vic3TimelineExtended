@@ -1289,21 +1289,33 @@ class TestConsequences(unittest.TestCase):
             self.assertIn("1 census states", out.getvalue())
             self.assertIn("the first save's world term", out.getvalue())
 
-    def test_the_held_back_band_is_judged_only_on_request(self):
-        """The three effects are held back; --effects (and its older name --sex-effects) judges the sex band as if on and
-        restores the switches."""
-        self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+    def test_the_sex_band_is_judged_while_on_and_on_request_while_held_back(self):
+        """On (the migrant booking, 2026-10-12) the sex band and anchors are judged; held back, only with --effects (or its
+        older name --sex-effects), which restores the switches."""
+        self.assertTrue(P.SEX_BALANCE_EFFECTS and P.CONSCRIPTION_EFFECTS and P.YOUTH_BULGE_EFFECTS)
         with tempfile.TemporaryDirectory() as tmp:
             path, _bands, _people = self._census_save(tmp)
-            for flag, shown in (([], False), (["--effects"], True), (["--sex-effects"], True)):
-                out = io.StringIO()
-                with redirect_stdout(out):
-                    H.main(["consequences", path, *flag])
-                self.assertEqual("sex balance: " in out.getvalue(), shown, flag)
-                self.assertEqual("Soviet Union 1959" in out.getvalue(), shown, flag)
-                self.assertIn("Held back in game: CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS",
-                              out.getvalue())
-                self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+            out = io.StringIO()
+            with redirect_stdout(out):
+                H.main(["consequences", path])
+            self.assertIn("sex balance: ", out.getvalue())
+            self.assertNotIn("Held back in game", out.getvalue())
+            off = [unittest.mock.patch.object(P, attr, False) for attr in H.HELD_BACK]
+            for patch in off:
+                patch.start()
+            try:
+                for flag, shown in (([], False), (["--effects"], True), (["--sex-effects"], True)):
+                    out = io.StringIO()
+                    with redirect_stdout(out):
+                        H.main(["consequences", path, *flag])
+                    self.assertEqual("sex balance: " in out.getvalue(), shown, flag)
+                    self.assertEqual("Soviet Union 1959" in out.getvalue(), shown, flag)
+                    self.assertIn("Held back in game: CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS",
+                                  out.getvalue())
+                    self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+            finally:
+                for patch in off:
+                    patch.stop()
 
 
 class TestRebook(unittest.TestCase):

@@ -277,13 +277,14 @@ POOL_TO = 39                   # biological: fitness
 CONSCRIPTION_REF = 0.139
 CONSCRIPTION_MIN = -1.0
 CONSCRIPTION_MAX = 0.25
-# Held back (controller's decision, 2026-10-12, after the review of step 4), with the youth bulge and the sex balance:
-# T reads the same men the census's migrant booking distorts (SEX_BALANCE_EFFECTS, below). In the overnight Full run's
-# 1848 save 32 states sat at T -0.5 or below (2-37 men per 100 women) and 134 (15%) at the +0.25 ceiling (115-145);
-# 29.5-34.6% of people lived in states past +-0.05 in 1848-1904. The census computes and stores T (te_dg_mc, Full) and
-# the panel shows it, but no pair is applied until the follow-up on the migrant booking turns all three on together.
-# The generator writes it as te_demog_k_conscription_effects; `demographics_harness.py consequences --effects`.
-CONSCRIPTION_EFFECTS = False
+# On since the migrant booking (2026-10-12; docs/testing/demographics-migrant-booking-2026-10-12.md), with the youth bulge
+# and the sex balance. Step 4 held all three back (controller's decision, 2026-10-12, after its review): T reads the men
+# the census's booking of the residual distorted (in the overnight Full run's 1848 save 32 states sat at T -0.5 or below
+# and 15% at the +0.25 ceiling; 29.5-34.6% of people lived in states past +-0.05 in 1848-1904). Booked by the cap and
+# the self-correcting labour split, the run's re-walk keeps T within -0.13 to +0.25 with 0.4-1.6% of people past 0.15
+# and the great powers within +-0.07 by decade (`demographics_harness.py rebook`). The generator writes the switch as
+# te_demog_k_conscription_effects (1 on, 0 held back).
+CONSCRIPTION_EFFECTS = True
 # When it applies, no pair below this |T| (the review's Minor 2: a term that small isn't worth a modifier line).
 CONSCRIPTION_CUT = 0.01
 # The youth bulge (§4.3): y = clamp((the share aged 20-29 - YOUTH_FROM) / YOUTH_SPAN, 0, 1) x clamp(unemployment /
@@ -296,10 +297,10 @@ YOUTH_SPAN = 0.06
 YOUTH_UNEMPLOYMENT_FULL = 0.2
 YOUTH_RADICALS = 0.15          # state_radicals_from_political_movements_mult at y = 1
 YOUTH_TURMOIL = 0.10           # state_turmoil_effects_mult at y = 1
-# Held back with conscription (above): 73% of the 1898 save's bulge states sit outside 90-110 men per 100 women, so the
-# bulges are mostly the migrant booking's young men. The census computes and stores y (te_dg_yb, Full) and the panel
-# shows it; no modifier applies until the follow-up. Written as te_demog_k_youth_effects.
-YOUTH_BULGE_EFFECTS = False
+# On with conscription (above): step 4 held it back because 73% of the 1898 save's bulge states sat outside 90-110 men
+# per 100 women, the booking's young men; re-walked with the booking, no state's 20-29 share passes 0.183 to 1901.
+# Written as te_demog_k_youth_effects.
+YOUTH_BULGE_EFFECTS = True
 YOUTH_CUT = 0.02               # when it applies, no modifier below this y
 # Sex balance (§4.4, call 10), on te_dg_sex_balance (men per 100 women aged 20-59). The census's adults run 91.5-98 men
 # per 100 women in every 1836 state (male deaths from work, accidents and violence), so an effect measured from 100
@@ -309,16 +310,12 @@ YOUTH_CUT = 0.02               # when it applies, no modifier below this y
 # anchor (-8.9%) where the square root would give -4.6%. The floor is parent §3's "capped". The women's rate gains up to
 # SEX_WOMEN_RATE and feminist movement support up to SEX_FEMINIST, both full at SEX_FEWER_FULL. More men than women:
 # radicals from movements up to SEX_RADICALS, from SEX_MORE_FROM to full at SEX_MORE_FULL (Bare Branches).
-# Held back (controller's decision, 2026-10-12), as conscription and the youth bulge are (above), and for the same cause:
-# the census computes, stores and shows the sex balance, but none of its
-# effects apply: not the births term, the women's-rate addition, feminist support or the radicals line. The census
-# books every unexplained residual as migrants by its profile, labour migrants 90% aged 18-35 and mostly men, which
-# hollows out the men of famine-hit states: in the overnight Full run's 1848-1904 saves 37-41% of states sat at one effect
-# or the other against the design's "under 2% in peace" (Hyderabad 50 men per 100 women in 1898, the Central Provinces
-# 28). A follow-up PR on the residual's migrant booking comes first; then all three switches go to True together. The
-# generator writes it as te_demog_k_sex_effects; `demographics_harness.py consequences --effects` judges the band as if it
-# were on. Children per woman's breakdown then gains a "Few men to marry" line (te_demog_tfr_sex), left out meanwhile.
-SEX_BALANCE_EFFECTS = False
+# On with the other two (above). Step 4 held it back because the census's booking of the residual hollowed out or piled
+# up states' men: in the overnight Full run's 1848-1904 saves 37-41% of states sat at one effect or the other against the
+# design's "under 2% in peace" (Hyderabad 50 men per 100 women in 1898, the Central Provinces 28). Re-walked with the
+# booking, 0.0-0.6% do (1848, 1898, 1901). The generator writes it as te_demog_k_sex_effects (1 on, 0 held back), and
+# children per woman's breakdown shows its "Few men to marry" line (te_demog_tfr_sex).
+SEX_BALANCE_EFFECTS = True
 SEX_FEWER_FROM = 90.0
 SEX_FEWER_FULL = 80.0
 SEX_BIRTHS_FLOOR = 0.8

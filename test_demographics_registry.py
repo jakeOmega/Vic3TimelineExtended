@@ -367,7 +367,8 @@ WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pe
 # sex ratio at birth, Birth Limit's part of desired fertility), 0 unless a test gives them (_family_fixtures).
 FAMILY_DEFAULTS = {**{f"modifier:{t}": 0.0 for t in P.MEASURE_TYPES}, "te_demog_srb_add": 0.0,
                    "te_demog_ms_birth_limit_part": 0.0}
-# Phase 2 step 4's three held-back effects (demographics_params' switches, generated as 0 or 1): an engine takes the
+# Phase 2 step 4's three effects (demographics_params' switches, generated as 0 or 1; on since the migrant booking,
+# 2026-10-12): an engine takes the
 # switches as the model reads them, so a test that patches them on (ALL_ON) runs the script with them on too.
 SWITCHES = {"te_demog_k_conscription_effects": "CONSCRIPTION_EFFECTS", "te_demog_k_youth_effects": "YOUTH_BULGE_EFFECTS",
             "te_demog_k_sex_effects": "SEX_BALANCE_EFFECTS"}
@@ -378,9 +379,16 @@ def _switch_fixtures():
 
 
 def ALL_ON(f):
-    """Patch the three switches on (as the follow-up will) for one test."""
+    """Patch the three switches on (as the migrant booking turned them, 2026-10-12) for one test."""
     for attr in SWITCHES.values():
         f = unittest.mock.patch.object(P, attr, True)(f)
+    return f
+
+
+def ALL_OFF(f):
+    """Patch the three switches off (held back, as step 4 shipped them) for one test."""
+    for attr in SWITCHES.values():
+        f = unittest.mock.patch.object(P, attr, False)(f)
     return f
 
 
@@ -1329,11 +1337,10 @@ class TestCohortScript(unittest.TestCase):
         self.close(eng.vars["te_dg_tfr"], figures["tfr"], rel=1e-6, what="children per woman")
         self._work_figures(eng, ring, dataclasses.replace(inp, sex_balance=balance))
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", False)
     def test_held_back_a_step_short_of_men_takes_no_term(self):
-        """demographics_params.SEX_BALANCE_EFFECTS off (controller's decision, 2026-10-12): the census still counts the
+        """demographics_params.SEX_BALANCE_EFFECTS off (held back, as step 4 shipped): the census still counts the
         balance but stores no te_dg_sxb, and its children per woman and work figures take no sex-balance term."""
-        self.assertFalse(P.SEX_BALANCE_EFFECTS)
-        self.assertEqual(_raw_blocks([GENERATED_VALUES])["te_demog_k_sex_effects"].strip(), "value = 0")
         inp = self._work_inp()
         eng, ring, figures, pop = self.step_both(inp=inp, migration=0.0, men_factor=0.85)
         self.check_step(eng, ring, figures, pop)
@@ -6852,11 +6859,16 @@ class TestConsequencesScript(unittest.TestCase):
         eng.call("te_demog_consequences_refresh")
         self.assertIn("te_demog_census_conscription_down", eng.modifiers)
 
-    def test_held_back_the_census_stores_the_figures_and_applies_nothing(self):
-        """Controller's decision (2026-10-12): the three switches are off; under Full T and y are stored for the panel."""
-        self.assertEqual(_switch_fixtures(), {k: 0.0 for k in SWITCHES})
+    def test_the_switches_are_on(self):
+        """The migrant booking (2026-10-12) turned the three effects on: the generated switches are 1."""
+        self.assertEqual(_switch_fixtures(), {k: 1.0 for k in SWITCHES})
         for key in SWITCHES:
-            self.assertEqual(_raw_blocks([GENERATED_VALUES])[key].strip(), "value = 0", key)
+            self.assertEqual(_raw_blocks([GENERATED_VALUES])[key].strip(), "value = 1", key)
+
+    @ALL_OFF
+    def test_held_back_the_census_stores_the_figures_and_applies_nothing(self):
+        """The three switches off (held back, as step 4 shipped): under Full T and y are stored for the panel."""
+        self.assertEqual(_switch_fixtures(), {k: 0.0 for k in SWITCHES})
         eng = self._state(fam=7000.0, balance=60.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.3)
         eng.call("te_demog_consequences_refresh")
         self.assertEqual(eng.modifiers, {})
