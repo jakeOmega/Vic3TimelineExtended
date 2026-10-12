@@ -101,7 +101,7 @@ Three things fall out, and the rest of the draft is built on them:
 | Workforce from participation; working-age share × share at work = workforce on the panel | #894 |
 | Pensions cost money, health care costs bureaucracy; medical technology moderately raises the health cost; no hard-coded 65 | #894 |
 | Growth matters more than exact children per woman; drift over jumps | #894 |
-| Pension age as a setting under Old Age Pension, not amendments (three positions) | parent Decisions |
+| Pension age as a setting under Old Age Pension, not amendments. The parent's three positions stand; a fourth, Linked to Longevity, is proposed (§2.2, call 6) | parent Decisions |
 | Calendar/biological toggle on the pyramid from era 11; ring to about 150 from 1836 | parent Decisions |
 | Measures are GUI buttons, national for now | parent Decisions |
 | One-year cohorts at about 26 MB of an 1836 plain-text save | #894 |
@@ -369,9 +369,12 @@ births at 1.6 and keeps an unplanned 3.5 × 0.1.
 - **In a rich, low-fertility state immortality turns decline into slow growth**: at 1.6 children per woman, ×0.75 in
   50 years with era 11 medicine alone becomes ×1.30–1.40 with the recommended split. A swing of about a point a year,
   not an explosion: births per 1,000 fall as the adults pile up while deaths fall from about 8 to 2.
-- **A flat population needs about one child per woman for good** (sketch, calendar timing: ×1.04 after 60 years at
-  1.0), against about 2.1 before. That is the late game's role for Population Control: holding fertility below
-  replacement permanently, not for a generation.
+- **A flat population needs low wanted fertility and near-perfect means, for good** (sketch, the pull at 3%, 60
+  years): under the recommended split, 1.0 children per woman still grows ×1.20 at means 0.9 and ×1.10 at the cap
+  (0.95), because rejuvenated women of every calendar age add the unplanned trickle; 0.8 children at the cap gives
+  ×1.06. With every birth timed by the calendar, 1.0 children holds it at ×1.02. Before immortality the line was about
+  2.1. So Population Control's late role is to hold both the wanted size and the means, permanently, not for a
+  generation.
 - **In a high-fertility state growth was already fast**: at 3 children per woman the sketch grows ×2.19 in 50 years
   against ×1.91 without immortality.
 - **The brakes are the means and the wanted size**, as §13 said: Free Contraception and Sex Education raise the means
