@@ -43,13 +43,15 @@ je_grand_monuments = {
 	}
 
 	# A monument, or a commission on offer or open (v2 §2.7): a country with
-	# no monument yet has a commission's row to follow.
+	# no monument yet has a commission's row to follow. A trophy held, or one
+	# taken from our lands and held abroad (trophies spec §6), has its rows too.
 	is_shown_when_inactive = {
 		gm_system_enabled = yes
 		OR = {
 			any_scope_state = { has_building = building_grand_monument }
 			has_variable = gm_com_open
 			has_variable = gm_com_offered
+			gm_tr_country_has_any = yes
 		}
 	}
 
@@ -59,6 +61,7 @@ je_grand_monuments = {
 			any_scope_state = { has_building = building_grand_monument }
 			has_variable = gm_com_open
 			has_variable = gm_com_offered
+			gm_tr_country_has_any = yes
 		}
 	}
 

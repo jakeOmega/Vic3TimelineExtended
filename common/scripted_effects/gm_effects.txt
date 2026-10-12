@@ -37,6 +37,9 @@ gm_state_first_sight = {
 			NOT = { has_variable = gm_ceremony_pending }
 		}
 		set_variable = gm_seen
+		# Who raised it, whatever it honours: trophies (gm_trophy_triggers.txt)
+		# let a country carry off only what it did not build.
+		gm_state_record_builder = yes
 		if = {
 			limit = { gm_state_is_bound = yes }
 			set_variable = { name = gm_raised_by value = owner }
@@ -132,6 +135,18 @@ gm_ig_to_flag_on_owner = {
 	if = {
 		limit = { is_interest_group_type = ig_trade_unions }
 		owner = { set_variable = { name = $VAR$ value = flag:trade_unions } }
+	}
+}
+
+# State scope. The country that first saw it dedicated: its own, for trophies
+# (gm_state_built_by_owner). Kept through a gift or a piece taken; cleared
+# with the monument (gm_clear_state).
+gm_state_record_builder = {
+	if = {
+		limit = {
+			NOT = { has_variable = gm_built_by }
+		}
+		set_variable = { name = gm_built_by value = owner }
 	}
 }
 
@@ -329,6 +344,11 @@ gm_clear_state = {
 	# An opportunity's gift (gm_commission_effects.txt).
 	gm_remove_state_var = { VAR = gm_gift }
 	gm_remove_state_var = { VAR = gm_restore_pm }
+	# Trophies (gm_trophy_effects.txt): its builder, a taking's marks.
+	gm_remove_state_var = { VAR = gm_built_by }
+	gm_remove_state_var = { VAR = gm_carried_off }
+	gm_remove_state_var = { VAR = gm_tr_cooldown }
+	gm_remove_state_var = { VAR = gm_tr_offered_to }
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
 }
@@ -391,6 +411,9 @@ gm_state_monthly = {
 			gm_add_local = { KEY = industrial }
 			gm_add_local = { KEY = athletic }
 		}
+		# Trophies (gm_trophy_effects.txt): the owner stamped, an occupier's
+		# offer or roll. Last: a taking removes the building.
+		gm_state_tr_monthly = yes
 	}
 	else = {
 		if = {
@@ -404,8 +427,12 @@ gm_state_monthly = {
 			}
 			# Gone without the Tear Down button (demolished from the building
 			# panel): a contested monument counts as torn down (plan decision 6).
+			# Not one carried off as a trophy (gm_carried_off).
 			if = {
-				limit = { gm_state_is_contested = yes }
+				limit = {
+					gm_state_is_contested = yes
+					NOT = { has_variable = gm_carried_off }
+				}
 				gm_state_record_teardown = yes
 			}
 			gm_clear_state = { KEEP_LANDMARK = no }
@@ -508,6 +535,7 @@ gm_country_refresh = {
 			OR = {
 				any_scope_state = { has_building = building_grand_monument }
 				has_variable = gm_com_open
+				gm_tr_country_has_any = yes
 			}
 		}
 		set_variable = gm_active
@@ -525,6 +553,7 @@ gm_country_refresh = {
 				any_scope_state = { has_building = building_grand_monument }
 				has_variable = gm_com_open
 				has_variable = gm_com_offered
+				gm_tr_country_has_any = yes
 			}
 		}
 		add_journal_entry = { type = je_grand_monuments }
@@ -578,8 +607,10 @@ gm_country_refresh = {
 gm_country_monthly = {
 	gm_init_ledgers = yes
 	gm_decay_ledgers = yes
-	# A month off every opportunity boon (gm_commission_effects.txt).
+	# A month off every opportunity boon (gm_commission_effects.txt), and the
+	# Homecoming (gm_trophy_effects.txt).
 	gm_tick_boons = yes
+	gm_tr_country_monthly = yes
 	# The open opportunity's month: completed, lapsed or run out before the
 	# refresh, which then counts its rewards.
 	gm_com_check_progress = yes
@@ -682,6 +713,8 @@ gm_compute_totals = {
 # IG, across all monuments.
 gm_compute_ig = {
 	set_variable = { name = gm_ig_net_$IG$ value = var:gm_ig_ledger_$IG$ }
+	# Trophies held (gm_trophy_values.txt): the Armed Forces' only.
+	change_variable = { name = gm_ig_net_$IG$ add = gm_tr_ig_share_$IG$ }
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
 		if = {
@@ -752,6 +785,7 @@ gm_apply_national_modifiers = {
 		gm_add_national = { NAME = gm_national_teardown VAR = gm_s_teardown }
 		gm_add_national = { NAME = gm_national_vanity VAR = gm_vanity_ledger }
 		gm_add_boons = yes
+		gm_tr_add_national = yes
 		gm_add_national_signed = { NAME = gm_ig_approval_armed_forces VAR = gm_s_ig_armed_forces }
 		gm_add_national_signed = { NAME = gm_ig_approval_devout VAR = gm_s_ig_devout }
 		gm_add_national_signed = { NAME = gm_ig_approval_industrialists VAR = gm_s_ig_industrialists }
@@ -778,6 +812,7 @@ gm_remove_national_modifiers = {
 	# v2's commission reward: nothing adds it now, but a save may carry it.
 	remove_modifier = gm_national_promise
 	gm_remove_boons = yes
+	gm_tr_remove_national = yes
 	remove_modifier = gm_ig_approval_armed_forces
 	remove_modifier = gm_ig_approval_devout
 	remove_modifier = gm_ig_approval_industrialists
@@ -942,6 +977,8 @@ gm_state_changed_hands = {
 	# (v2 §3.3, §3.5); its naming is closed by its own sweep.
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
 	gm_remove_state_var = { VAR = gm_being_named }
+	# The country it came from, for a trophy taken from it (gm_trophy_effects.txt).
+	gm_state_tr_changed_hands = yes
 	if = {
 		limit = {
 			owner = { has_variable = gm_cw_adopting }
@@ -1350,6 +1387,7 @@ gm_state_dedicate = {
 	}
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	set_variable = gm_seen
+	gm_state_record_builder = yes
 	# The monument a commission met by this dedication names (v2 §2.3).
 	owner = { set_variable = { name = gm_com_last_state value = prev } }
 }
@@ -1535,5 +1573,6 @@ gm_debug_log = {
 	debug_log = "TE_MONUMENTS: standing grandeur [SCOPE.ScriptValue('gm_display_g_standing')|0], prestige +[SCOPE.ScriptValue('gm_display_prestige')|1]; regime grandeur [SCOPE.ScriptValue('gm_display_g_regime')|0], legitimacy +[SCOPE.ScriptValue('gm_display_legitimacy')|1]; cultural pull +[SCOPE.ScriptValue('gm_display_culture')|1]"
 	debug_log = "TE_MONUMENTS: teardown legitimacy +[SCOPE.ScriptValue('gm_display_teardown')|1], vanity legitimacy [SCOPE.ScriptValue('gm_display_vanity')|1]"
 	debug_log = "TE_MONUMENTS: IG approval AF [SCOPE.ScriptValue('gm_display_ig_armed_forces')|1] DV [SCOPE.ScriptValue('gm_display_ig_devout')|1] IN [SCOPE.ScriptValue('gm_display_ig_industrialists')|1] IT [SCOPE.ScriptValue('gm_display_ig_intelligentsia')|1] LO [SCOPE.ScriptValue('gm_display_ig_landowners')|1] PB [SCOPE.ScriptValue('gm_display_ig_petty_bourgeoisie')|1] RF [SCOPE.ScriptValue('gm_display_ig_rural_folk')|1] TU [SCOPE.ScriptValue('gm_display_ig_trade_unions')|1]"
+	gm_tr_debug_log = yes
 	debug_log = "TE_MONUMENTS: opportunity open [SCOPE.ScriptValue('gm_disp_com_open')|0], grandeur added [SCOPE.ScriptValue('gm_disp_com_progress')|0] of [SCOPE.ScriptValue('gm_disp_com_target')|0], months left [SCOPE.ScriptValue('gm_disp_com_months')|0], fixed state [SCOPE.ScriptValue('gm_disp_com_fixed')|0]; boons running [SCOPE.ScriptValue('gm_disp_boon_any')|0]"
 }

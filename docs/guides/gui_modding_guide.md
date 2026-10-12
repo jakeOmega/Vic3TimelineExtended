@@ -1737,7 +1737,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 36 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 9 additive files (marked below):
+Currently 37 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 10 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1748,6 +1748,7 @@ Currently 36 GUI files at the top of `gui/`: 27 full-file replacements of vanill
 | `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
 | `culture_panel.gui` | Society | A fifth tab, Hegemony: the cultural hegemony journal entry's panel types under `GetPlayerJournalEntry('je_cultural_hegemony')`. CMF redefines this file's `society_panel` type (`system_panels_feasibility.md` § 7.4) |
 | `diplomatic_overview.gui` | Diplomacy | A sixth tab, UN: the strip becomes `te_tab_buttons_six` (vanilla's five slots are full), and the tab shows the United Nations journal entry's panel types plus its bar, status description and scripted buttons under `GetPlayerJournalEntry('je_united_nations')` |
+| `gm_trophy_widgets.gui` | (additive, type library) | Grand Monument trophies: the journal entry's Trophies and Held Abroad sections (composed by `grand_monuments_widget.gui`), Carry It Off for a monument's row and state card, and the state view's Trophies on Display card (instanced from `states_panel.gui`) |
 | `goods_panel.gui` | Goods panel | The legislated tax code: one `### MOD: Tax Code` block ANDs `te_tax_native_controls_sgui` into the `enabled` of the type `consumption_tax_button_toggle`, which vanilla's `goods_state_panel.gui` and `custom_tooltip.gui` also instantiate, so the one edit greys the consumption-tax toggle in every goods view. Otherwise vanilla 1.14.5; its copy is `test_fixtures/vanilla_gui/goods_panel.gui`, and `test_tax_code_bypass.py` fails on any other change |
 | `goods_state_panel.gui` | Goods by state | Modified goods display; a building card's PM groups scroll sideways past five (gotcha #38) |
 | `journal_entry.gui` | Journal entry panel | Hides the bottom bar block and the goal bar for an entry that draws its own (`custom_widget_container_7` marker) |

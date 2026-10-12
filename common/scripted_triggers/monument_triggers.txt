@@ -56,6 +56,7 @@ gm_entry_unlocked = {
 			any_scope_state = { has_building = building_grand_monument }
 			has_variable = gm_com_open
 			has_variable = gm_com_offered
+			gm_tr_country_has_any = yes
 		}
 	}
 }
@@ -446,6 +447,8 @@ gm_ledgers_idle = {
 	gm_ledger_idle = { VAR = gm_ig_ledger_rural_folk }
 	gm_ledger_idle = { VAR = gm_ig_ledger_trade_unions }
 	gm_boons_idle = yes
+	# No trophy held or abroad, no Homecoming (gm_trophy_triggers.txt).
+	gm_tr_country_idle = yes
 }
 
 # ======================================================================

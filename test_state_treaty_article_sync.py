@@ -28,6 +28,15 @@ TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "misc_triggers.txt"
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "extra_on_actions.txt")
 ARTICLES_DIR = os.path.join(REPO, "common", "treaty_articles")
 
+# A state-input article that acts once and leaves nothing on the state needs
+# no apply/clear pair: there is nothing for a treaty's end to undo.
+# article -> what it does once.
+ONE_SHOT = {
+    # Grand Monument trophies: the receiver carries the monument off as a
+    # trophy (gm_trophy_effects.txt); the state keeps only its rebuilt monument.
+    "surrender_monument": "gm_state_tr_order_take",
+}
+
 # article -> (apply effect, clear effect, the variable the sync gates on)
 ARTICLES = {
     "free_port_concession": ("te_free_port_state_apply", "te_free_port_state_clear", "has_free_port"),
@@ -92,10 +101,20 @@ class StateInputArticleRoster(unittest.TestCase):
             and re.search(r"\bstate\b", _body(body, "required_inputs"))
         }
         self.assertEqual(
-            state_input, set(ARTICLES),
+            state_input, set(ARTICLES) | set(ONE_SHOT),
             "a treaty article with a state input must get an apply/clear pair and "
             "a branch in te_sync_state_treaty_articles and te_restore_state_treaty_articles",
         )
+
+    def test_a_one_shot_article_leaves_nothing_on_the_state(self):
+        articles = _article_texts()
+        for name, effect in ONE_SHOT.items():
+            with self.subTest(article=name):
+                force = _body(articles[name], "on_entry_into_force")
+                self.assertIn(effect, force)
+                self.assertFalse(_modifiers_added(force), "a one-shot article adds no modifier")
+                for hook in ("on_break", "on_withdrawal"):
+                    self.assertEqual(_body(articles[name], hook).strip(), "", hook)
 
 
 class ArticleHooksUseTheHelpers(unittest.TestCase):

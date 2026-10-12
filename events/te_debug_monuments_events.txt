@@ -405,3 +405,115 @@ te_debug_monuments.5 = { # REVIEWED 2026-10-11: console-only test event (`event 
 		gm_debug_log_landmarks = yes
 	}
 }
+
+# ============================================================================
+# TROPHIES — console test event: `event te_debug_monuments.6`
+# ============================================================================
+# Docs: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §9.
+# Option a carries off the tallest monument in the world that is not ours, as
+# if our armies held its state (no war or province test); option b our own
+# tallest, as if from an unincorporated state (no incorporation or builder
+# test); c returns every trophy we hold; d runs the monthly pass now and logs
+# our trophies on TE_MONUMENTS: lines.
+te_debug_monuments.6 = { # REVIEWED 2026-10-12: console-only test event (`event te_debug_monuments.6`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.6.t
+	desc = te_debug_monuments.6.desc
+	flavor = te_debug_monuments.6.flavor
+
+	# Each option does its work behind a click-only marker
+	# (scripting_best_practices.md § "An Option's Tooltip Walks Its Effects"):
+	# a taking or a return reads back what it writes, which the tooltip's walk
+	# would log every frame.
+	option = {
+		name = te_debug_monuments.6.a
+		custom_tooltip = {
+			text = te_debug_monuments.6.a.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				ordered_state = {
+					limit = {
+						gm_state_tr_takeable = yes
+						NOT = { owner = root }
+					}
+					order_by = gm_state_grandeur
+					position = 0
+					check_range_bounds = no
+					gm_state_tr_take = { WHO = root ROUTE = occupation }
+				}
+				gm_tr_finish = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.6.b
+		custom_tooltip = {
+			text = te_debug_monuments.6.b.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				ordered_scope_state = {
+					limit = { gm_state_tr_takeable = yes }
+					order_by = gm_state_grandeur
+					position = 0
+					check_range_bounds = no
+					gm_state_tr_take = { WHO = root ROUTE = own }
+				}
+				gm_tr_finish = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.6.c
+		custom_tooltip = {
+			text = te_debug_monuments.6.c.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = {
+					has_variable = gm_tr_debug_click
+					has_global_variable_list = gm_trophies
+				}
+				every_in_global_list = {
+					variable = gm_trophies
+					limit = { gm_tr_held_by = { WHO = root } }
+					add_to_temporary_list = gm_tr_debug_returning
+				}
+				every_in_list = {
+					list = gm_tr_debug_returning
+					gm_tr_return_home = { RELATIONS = yes }
+				}
+				gm_tr_finish = yes
+			}
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.6.d
+		default_option = yes
+		custom_tooltip = {
+			text = te_debug_monuments.6.d.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				gm_trophy_monthly = yes
+				gm_tr_debug_log = yes
+			}
+		}
+	}
+}

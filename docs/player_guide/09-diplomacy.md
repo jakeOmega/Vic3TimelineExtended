@@ -1,6 +1,6 @@
 # Diplomacy
 
-The mod adds 35 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 37 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
 of power bloc principles, and ten late-game formable countries. None of this has
 a game rule or journal entry of its own: it works through the base game's treaty
@@ -20,9 +20,9 @@ goal. The draft shows each article's influence cost.
 
 ### Choosing a company or state for an article
 
-Six articles ask you to name something. Seize Company and Disband Company take a
-company. Minority Protection, Free Port Concession, Religious Mission Rights and
-Demilitarized Zone take a state. When you add one to a draft, the article shows
+Seven articles ask you to name something. Seize Company and Disband Company take a
+company. Minority Protection, Free Port Concession, Religious Mission Rights,
+Demilitarized Zone and Surrender a Monument take a state. When you add one to a draft, the article shows
 a button with its current choice; click it to pick from a list.
 
 The state or company always belongs to the conceding country, so only a
@@ -63,6 +63,8 @@ The humanitarian and cultural articles move people, faiths and cultures.
 | Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. The side sending the missionaries must be in a Religious Convocation bloc. Neither country can have State Atheism, and the treaty freezes if the conceding country adopts it later. |
 | Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −5 ideological covert defense. |
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
+| Return Cultural Property | The Grand Monuments rule | Yes | The conceding country returns every [Grand Monument trophy](02-timeline.md#monument-trophies) taken from the other's lands, once. Each is rebuilt where it stood. |
+| Surrender a Monument | The Grand Monuments rule | Yes | The conceding country gives up the Grand Monument in the chosen state as a trophy, once: the whole of it, a quarter or a tenth, by its form. Never a Grand Shrine. |
 
 The military and security articles cover disarmament and cooperation between
 armed forces.

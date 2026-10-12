@@ -478,10 +478,11 @@ carries its historical name. Only pulling it down, or demolishing it, ends it.
 
 ### The Monuments journal entry
 
-The Monuments journal entry appears when you own a Grand Monument or an
-[opportunity](#monument-opportunities) is open or on offer. After your last
-monument is gone, it stays until the fading approval and legitimacy it shows,
-and any boon it carries, have run out.
+The Monuments journal entry appears when you own a Grand Monument, an
+[opportunity](#monument-opportunities) is open or on offer, or you hold a
+[trophy](#monument-trophies) or one taken from your lands stands abroad. After
+your last monument is gone, it stays until the fading approval and legitimacy it
+shows, and any boon it carries, have run out.
 
 The same panels appear on the Grand Monuments tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
@@ -493,7 +494,9 @@ shows a Grand Monument card under the tourism card: the monument's status, name
 and dedication, its grandeur with a bar toward its next step, and the Tourism
 Industry throughput and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
-the Timeline Extended window, where the buttons are.
+the Timeline Extended window, where the buttons are. While you can carry the
+monument off as a trophy, the card has a Carry It Off button, and a state where
+trophies stand shows a Trophies on Display card under it.
 
 The overview at the top is always shown. It has an icon for each status a
 monument can hold, with the number of your monuments in that status beneath:
@@ -512,8 +515,10 @@ These sections follow:
 |---|---|---|
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
-| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. |
-| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, names and the monument policy. |
+| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. |
+| Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
+| Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
+| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, names, the monument policy and trophies. |
 
 Every monument, whatever it honors, gives:
 
@@ -718,6 +723,64 @@ country takes becomes heritage at once and cannot be pulled down. After a civil
 war the winner inherits the monuments the loser raised, and they are contested
 only if its laws no longer fit them. Demolishing a contested monument from its
 building panel counts as pulling it down.
+
+### Monument trophies
+
+A country can carry off a Grand Monument, or part of one, as a **trophy**, in
+three ways:
+
+- In a war, from a state where your armies hold half the provinces or more. The
+  state view's Grand Monument card has a Carry It Off button while you hold it,
+  and an event asks the first time your armies hold such a state.
+- From your own unincorporated state, if you did not raise the monument: a
+  recent conquest or a colony. The button is on the card and on the monument's
+  row under Our Monuments. Once you incorporate the state, the monument stays.
+- By treaty, with the Surrender a Monument article, which a war can enforce (see
+  [treaty articles by purpose](09-diplomacy.md#treaty-articles-by-purpose)).
+
+What goes depends on the monument's form. A Grand Shrine is never taken, and a
+monument that loses a piece is spared for ten years.
+
+| Form | What is carried off |
+|---|---|
+| Column, obelisk, statue, stele, pillar, high cross, rune stone, menorah, sun stone or stela | The whole monument |
+| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one. The monument is rebuilt smaller, keeping its name and dedication. |
+| Any other form: halls, a pantheon, forum, mausoleum, pyramid, pagoda or church, and the five civic-progress buildings | A tenth of its levels, at least one |
+
+A trophy stands in its taker's capital. It counts for half the levels carried
+off, rounded up, in the standing grandeur that gives prestige and cultural pull,
+and the Armed Forces approve of it. Whoever holds that capital's state holds the
+trophy, so conquering the state takes its trophies too. A trophy keeps its
+monument's name, and a piece is named for what was taken, such as the Brandenburg
+Gate's Quadriga.
+
+| Taken | You pay | The other side |
+|---|---|---|
+| In a war | 2 infamy, plus 1 for every 5 levels, at most 8; doubled once the UN's Cultural Heritage Program (UNESCO) is in force. Relations −30. | +10 war support in the war |
+| From your own unincorporated state | A tenth of the state's people turn radical. Relations −30 with the country you took the state from, if it still exists. | |
+| By treaty | Relations −30 | |
+
+Your trophies have their own Trophies section on the Grand Monuments tab. A
+trophy taken from your lands shows under Held Abroad, with its holder. To get
+one back:
+
+| Way home | How |
+|---|---|
+| Return It | Its holder's button on the trophy's row. Relations between the two rise by 40. |
+| Bring It Home | The same button, when the holder owns the state it came from, as after conquering the state where it stands. |
+| Occupation | Occupy the state where it stands in a war. Its Trophies on Display card in the state view has a button for each trophy, and one taken from your lands goes straight home. |
+| Return Cultural Property | A treaty article: the holder returns every trophy taken from your lands. A war can enforce it. |
+
+A trophy that comes home is rebuilt where it was taken from, with all the levels
+carried off. A monument standing there takes the levels; otherwise the monument
+is rebuilt with its name, style and dedication. Its owner gains The Homecoming,
++5 legitimacy for ten years, shown in the Trophies section.
+
+The AI carries off monuments in the states it occupies, more often when its
+governing interest groups favor Total War, Ethnostate or National Supremacy,
+when it is unrecognized, or for a monument of 10 levels or more, and much less
+once UNESCO is in force. It brings home every trophy it can, and now and then
+returns one to an ally or a power bloc partner.
 
 ### Vanity backlash
 

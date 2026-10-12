@@ -1105,6 +1105,10 @@ types grand_monuments_widget_types
 				blockoverride "choice_text" { text = "gm_button_preserve" }
 			}
 		}
+
+		# Carry It Off (trophies spec §2.2): a monument we did not raise, in a
+		# state we have not incorporated (gui/gm_trophy_widgets.gui).
+		gm_tr_take_button = {}
 	}
 
 	### ======================================================================
@@ -1946,6 +1950,17 @@ types grand_monuments_widget_types
 			gm_note = {
 				text = "gm_je_how_policy"
 			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_trophies"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_trophies"
+			}
+			gm_note = {
+				text = "gm_je_how_trophies_home"
+			}
 		}
 	}
 
@@ -1964,6 +1979,9 @@ types grand_monuments_widget_types
 		te_gm_sec_commission = {}
 		te_gm_sec_national = {}
 		te_gm_sec_monuments = {}
+		# Trophies (gui/gm_trophy_widgets.gui): ours, and ours held abroad.
+		te_gm_sec_trophies = {}
+		te_gm_sec_abroad = {}
 	}
 
 	### How it all works, collapsed.

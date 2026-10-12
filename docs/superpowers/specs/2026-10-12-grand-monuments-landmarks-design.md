@@ -392,6 +392,8 @@ No reference table, which would be more than the guide's peers carry. Rebuild th
 
 ## Appendix A: notes for phase 5 (trophies)
 
+Built on 2026-10-12 as `2026-10-12-grand-monument-trophies-design.md`, which fixes the table below form by form.
+
 From the conversation of 2026-10-11:
 
 - **A conqueror can always carry something off, but the share depends on the form**: the whole of a movable object,

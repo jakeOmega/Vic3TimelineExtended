@@ -1,0 +1,172 @@
+﻿namespace = monument_trophy_events
+
+# ============================================================================
+# GRAND MONUMENTS — trophies
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+# .1 is the one event a player reads: our armies hold a state with a monument.
+# .10-.13 are hidden: they do the work a scripted GUI, an event option or a
+# treaty has ordered (gm_trophy_effects.txt), outside any tooltip's walk.
+
+# ============================================================================
+# Event 1: a monument within our armies' reach (spec §2.1)
+# ============================================================================
+# A country event for the occupier, from gm_state_tr_monthly: once in each
+# occupation (gm_tr_offered_to), players only (the AI rolls instead). The
+# state travels as scope:monument_state, whose records name the monument.
+monument_trophy_events.1 = {
+	type = country_event
+	placement = scope:monument_state
+
+	event_image = { video = "southamerica_war_civilians" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = monument_trophy_events.1.t
+	desc = monument_trophy_events.1.d
+	flavor = monument_trophy_events.1.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:monument_state
+		scope:monument_state = {
+			gm_state_tr_can_take = { WHO = root }
+		}
+	}
+
+	# Carry it off: the taking runs in monument_trophy_events.10.
+	option = {
+		name = monument_trophy_events.1.a
+		scope:monument_state = {
+			gm_state_tr_choose_take = { WHO = root ROUTE = occupation }
+		}
+	}
+
+	# Leave it standing. The card's Carry It Off stays while we hold the state.
+	option = {
+		name = monument_trophy_events.1.b
+		# REVIEWED 2026-10-12 (no_effect_option): declining is the point; the tooltip says the state card's button stays
+		default_option = yes
+		custom_tooltip = gm_tr_leave_standing_tt
+	}
+}
+
+# ============================================================================
+# Event 10: a taking ordered (hidden)
+# ============================================================================
+# A state event on the monument's state, from gm_state_tr_order_take. Checks
+# again (a month can pass between an offer and its answer) and carries it off
+# for var:gm_tr_take_by by var:gm_tr_take_route.
+monument_trophy_events.10 = {
+	type = state_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		has_variable = gm_tr_take_by
+	}
+
+	immediate = {
+		clear_saved_scope = gm_tr_order_by
+		var:gm_tr_take_by ?= { save_scope_as = gm_tr_order_by }
+		if = {
+			limit = {
+				exists = scope:gm_tr_order_by
+				gm_state_tr_takeable = yes
+			}
+			if = {
+				limit = {
+					var:gm_tr_take_route = flag:occupation
+					gm_state_tr_occupied_by = { WHO = scope:gm_tr_order_by }
+				}
+				gm_state_tr_take = { WHO = scope:gm_tr_order_by ROUTE = occupation }
+			}
+			else_if = {
+				limit = {
+					var:gm_tr_take_route = flag:own
+					gm_state_tr_own_takeable_by = { WHO = scope:gm_tr_order_by }
+				}
+				gm_state_tr_take = { WHO = scope:gm_tr_order_by ROUTE = own }
+			}
+			else_if = {
+				limit = {
+					var:gm_tr_take_route = flag:treaty
+					NOT = { owner = scope:gm_tr_order_by }
+				}
+				gm_state_tr_take = { WHO = scope:gm_tr_order_by ROUTE = treaty }
+			}
+		}
+		remove_variable = gm_tr_take_by
+		gm_remove_state_var = { VAR = gm_tr_take_route }
+		gm_tr_finish = yes
+	}
+}
+
+# ============================================================================
+# Event 11: a trophy carried off its site (hidden)
+# ============================================================================
+# ROOT = the taker, scope:gm_tr_pick = the trophy (gm_tr_order_take_site).
+monument_trophy_events.11 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		exists = scope:gm_tr_pick
+		scope:gm_tr_pick = {
+			gm_tr_site_occupied_by = { WHO = root }
+		}
+	}
+
+	immediate = {
+		scope:gm_tr_pick = {
+			gm_tr_take_from_site = { WHO = root }
+		}
+		gm_tr_finish = yes
+	}
+}
+
+# ============================================================================
+# Event 12: a trophy sent home (hidden)
+# ============================================================================
+# ROOT = its holder, scope:gm_tr_pick = the trophy (gm_tr_order_return).
+monument_trophy_events.12 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		exists = scope:gm_tr_pick
+		scope:gm_tr_pick = {
+			gm_tr_held_by = { WHO = root }
+		}
+	}
+
+	immediate = {
+		scope:gm_tr_pick = {
+			gm_tr_return_home = { RELATIONS = yes }
+		}
+		gm_tr_finish = yes
+	}
+}
+
+# ============================================================================
+# Event 13: Return Cultural Property in force (hidden)
+# ============================================================================
+# ROOT = the receiver, scope:gm_tr_giver_treaty = the giver (the article's
+# on_entry_into_force).
+monument_trophy_events.13 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		exists = scope:gm_tr_giver_treaty
+	}
+
+	immediate = {
+		gm_tr_return_all_from = yes
+		gm_tr_finish = yes
+	}
+}
