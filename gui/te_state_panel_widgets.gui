@@ -529,8 +529,8 @@ types te_state_panel_widget_types
 	### window (te_systems_window.gui), which shows the entry's own panels. The
 	### title column stops short of it.
 	###
-	### Columns: 96 status + 10 + 404 = 510, the tourism card's inner width.
-	### Rows: 20 icon + 4 + 290 label + 4 + 86 value = 404.
+	### Columns: 120 picture + 10 + 380 = 510, the tourism card's inner width.
+	### Rows: 20 icon + 4 + 266 label + 4 + 86 value = 380.
 	type te_state_gm_row = te_state_stat_row {
 		blockoverride "label_size" {
 			size = { 266 22 }

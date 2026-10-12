@@ -1278,7 +1278,7 @@ gm_state_dedicate = {
 	owner = { set_variable = { name = gm_com_last_state value = prev } }
 }
 
-# AXIS: heritage (To the Nation, War Memorial) or none (the civic-progress five).
+# AXIS: heritage (To the Nation, War Memorial) or building_<key> (the civic-progress five).
 gm_state_dedicate_timeless = {
 	gm_state_dedicate = { KEY = $KEY$ }
 	gm_state_offer_skins = { AXIS = $AXIS$ }

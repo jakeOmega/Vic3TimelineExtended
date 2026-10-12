@@ -1769,8 +1769,6 @@ monument_events.11 = {
 		gm_state_choose_skin = { SKIN = heritage_hebrew }
 	}
 
-	# Always offered, last: with no default_option, an expired event takes the
-	# first valid option, which is the most specific skin.
 	option = {
 		name = monument_events.11.building_artistic_chinese
 		highlighted_option = yes
@@ -1901,6 +1899,8 @@ monument_events.11 = {
 		gm_state_choose_building_skin = { SKIN = heritage_mayan }
 	}
 
+	# Always offered, last: with no default_option, an expired event takes the
+	# first valid option, which is the most specific skin.
 	option = {
 		name = monument_events.11.generic
 		gm_state_choose_skin = { SKIN = generic }
