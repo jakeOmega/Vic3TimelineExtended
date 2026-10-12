@@ -1143,7 +1143,8 @@ def wrapper_call(d):
 class CeremonyTests(unittest.TestCase):
     def test_every_dedication_has_its_option(self):
         options = ceremony_options()
-        self.assertEqual(set(options), set(CEREMONY_OPTION.values()) | {"a"})
+        # "opp": the open opportunity's dedication, first (usability §3).
+        self.assertEqual(set(options), set(CEREMONY_OPTION.values()) | {"a", "opp"})
         for d in DEDICATIONS:
             body = squash(strip_comments(options[CEREMONY_OPTION[d.key]]))
             self.assertIn(f"text = monument_events.2.{CEREMONY_OPTION[d.key]}.tt {wrapper_call(d)}", body, d.key)
@@ -1895,9 +1896,27 @@ class CommissionLifeTests(unittest.TestCase):
             self.assertIn(f"modifier = {{ trigger = {{ gm_state_ceremony_for_commission = {{ KEY = {d.key} }} }} "
                           f"add = 100 }} modifier = {{ trigger = {{ gm_state_ceremony_not_for_commission = "
                           f"{{ KEY = {d.key} }} }} factor = 0 }}", squash(ev), d.key)
-        self.assertIn("name = monument_events.2.a default_option = yes ai_chance = { base = 1 modifier = { trigger = "
-                      "{ gm_state_ceremony_answers_commission = yes } factor = 0 } }", squash(ev),
-                      "the AI never leaves an opportunity's monument undedicated")
+        # The opportunity's option is first and the default while it is
+        # offered; "leave it undedicated" is the default otherwise. Two copies
+        # with complementary triggers keep exactly one default valid
+        # (scripting_best_practices.md: a failed default does not fall back).
+        self.assertIn("name = monument_events.2.opp trigger = { gm_state_ceremony_offers_opportunity = yes } "
+                      "default_option = yes ai_chance = { base = 0 } gm_state_dedicate_as_opportunity_asks = yes",
+                      squash(ev))
+        self.assertIn("name = monument_events.2.a trigger = { gm_state_ceremony_offers_opportunity = no } "
+                      "default_option = yes ai_chance = { base = 1 }", squash(ev))
+        self.assertIn("name = monument_events.2.a trigger = { gm_state_ceremony_offers_opportunity = yes } "
+                      "ai_chance = { base = 1 modifier = { trigger = { gm_state_ceremony_answers_commission = yes } "
+                      "factor = 0 } }", squash(ev), "the AI never leaves an opportunity's monument undedicated")
+        self.assertEqual(squash(ev).count("default_option = yes"), 2)
+        self.assertLess(squash(ev).find("name = monument_events.2.opp"), squash(ev).find("name = monument_events.2.a"))
+        offers = squash(block(self.t, "gm_state_ceremony_offers_opportunity"))
+        self.assertEqual(offers, "gm_state_ceremony_answers_commission = yes owner = { gm_country_com_gate_holds = yes }")
+        # The option repeats each dedication's own: its tooltip and wrapper.
+        asks = squash(block(self.e, "gm_state_dedicate_as_opportunity_asks"))
+        for d in DEDICATIONS:
+            self.assertIn(f"owner = {{ var:gm_com_dedication = flag:{d.key} }} }} custom_tooltip = {{ text = "
+                          f"monument_events.2.{CEREMONY_OPTION[d.key]}.tt {wrapper_call(d)} }}", asks, d.key)
         answers = squash(block(self.t, "gm_state_ceremony_answers_commission"))
         self.assertIn("this = scope:gm_tmp_com_state", answers, "only the opportunity's state, if it names one")
 
@@ -1954,7 +1973,7 @@ class CommissionLifeTests(unittest.TestCase):
     def test_the_offer(self):
         ev = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.21\s*=\s*\{"))
         self.assertIn("trigger = { has_variable = gm_com_offered has_variable = gm_com_source }", ev)
-        self.assertEqual(ev.count("option = {"), 2)
+        self.assertEqual(ev.count("option = {"), 3)
         self.assertEqual(ev.count("default_option = yes"), 1)
         # Seizing is the default: letting it pass, or running out, costs nothing.
         self.assertIn("name = monument_events.21.a default_option = yes custom_tooltip = { text = gm_com_accept_tt "
@@ -1962,6 +1981,14 @@ class CommissionLifeTests(unittest.TestCase):
         self.assertIn("name = monument_events.21.b custom_tooltip = { text = gm_com_decline_tt gm_com_decline = yes }", ev)
         self.assertIn("modifier = { trigger = { gm_com_ai_declines = yes } factor = 0 }", ev)
         self.assertIn("event_image", ev)
+        # Seize it and start building (usability §2): players only, where the
+        # immediate's pick puts it.
+        self.assertIn("immediate = { gm_com_save_scopes = yes gm_com_pick_build_state = yes }",
+                      squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.21\s*=\s*\{"))))
+        self.assertIn("name = monument_events.21.c trigger = { is_ai = no exists = scope:gm_com_build_state } "
+                      "custom_tooltip = { text = gm_com_accept_build_tt gm_com_accept = yes set_variable = "
+                      "{ name = gm_com_raise_pending value = yes days = 7 } trigger_event = { id = monument_events.27 } } "
+                      "ai_chance = { base = 0 }", ev)
         declines = squash(block(self.t, "gm_com_ai_declines"))
         for s_ in ("is_at_war = yes", "gm_country_hard_times = yes",
                    "construction_queue_government_duration >= 52", "scaled_debt > 0"):
@@ -1985,10 +2012,13 @@ class CommissionLifeTests(unittest.TestCase):
                    "set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }",
                    "if = { limit = { is_ai = yes } gm_com_ai_queue = yes }"):
             self.assertIn(s_, accept)
-        queue = squash(block(self.e, "gm_com_ai_queue"))
-        self.assertIn("while = { limit = { var:gm_com_queued < var:gm_com_target } scope:gm_com_build_state = "
+        queue = squash(block(self.e, "gm_com_queue_levels"))
+        self.assertIn("while = { limit = { var:gm_com_queued < var:gm_com_raise_levels } scope:gm_com_build_state = "
                       "{ start_building_construction = building_grand_monument }", queue)
-        self.assertNotIn("create_building", queue, "the AI pays for its levels")
+        self.assertNotIn("create_building", queue, "the country pays for its levels")
+        ai = squash(block(self.e, "gm_com_ai_queue"))
+        self.assertIn("gm_com_pick_build_state = yes if = { limit = { exists = scope:gm_com_build_state } "
+                      "set_variable = { name = gm_com_raise_levels value = var:gm_com_target } gm_com_queue_levels = yes", ai)
 
     def test_progress_floors_at_zero(self):
         body = squash(block(read(COM_VALUES), "gm_com_progress"))
@@ -2072,7 +2102,8 @@ class BoonTests(unittest.TestCase):
             self.assertIn(f"NOT = {{ has_variable = gm_boon_{key} }}", idle, key)
             self.assertIsNotNone(block(read(COM_VALUES), f"gm_disp_boon_{key}"), key)
             for target, loc_key in (("gm_com_boon_name", f"gm_boon_{key}"), ("gm_com_boon_effect", f"gm_boon_{key}_effect")):
-                self.assertIn(f"flag:{key} }} localization_key = {loc_key} }}", squash(block(custom, target)), key)
+                self.assertIn(f"trigger = {{ gm_com_source_is = {{ SRC = {key} }} }} localization_key = {loc_key} }}",
+                              squash(block(custom, target)), key)
 
     def test_wired_into_the_national_refresh(self):
         e = read(EFFECTS)
@@ -2149,6 +2180,88 @@ class GiftTests(unittest.TestCase):
         clear = squash(block(e, "gm_clear_state"))
         for var in ("gm_gift", "gm_restore_pm"):
             self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", clear, var)
+
+
+class UsabilityTests(unittest.TestCase):
+    """Opportunities made easy to act on (opportunities spec, usability §1-§5)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(COM_EFFECTS)
+        cls.t = read(COM_TRIGGERS)
+        cls.events = read(EVENTS)
+
+    def test_raise_it(self):
+        sgui = squash(block(read(SGUIS), "gm_com_raise_sgui"))
+        self.assertIn("is_valid = { gm_com_can_raise = yes }", sgui)
+        self.assertIn("custom_tooltip = { text = gm_com_raise_effect_tt set_variable = { name = gm_com_raise_pending "
+                      "value = yes days = 7 } trigger_event = { id = monument_events.27 } }", sgui)
+        self.assertIn("ai_is_valid = { always = no }", sgui)
+        can = squash(block(self.t, "gm_com_can_raise"))
+        for s_ in ("gm_com_monument_under_construction = no", "NOT = { has_variable = gm_com_raise_pending }",
+                   "has_variable = gm_com_build_where"):
+            self.assertIn(s_, can)
+        self.assertEqual(squash(block(self.t, "gm_com_monument_under_construction")),
+                         "any_scope_building = { is_building_type = building_grand_monument is_under_construction = yes }")
+        ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.27\s*=\s*\{"))
+        self.assertIn("type = country_event hidden = yes", ev)
+        self.assertIn("immediate = { gm_com_raise = yes }", ev)
+        raise_ = squash(block(self.e, "gm_com_raise"))
+        self.assertIn("gm_com_levels_to_go > 0", raise_)
+        self.assertIn("set_variable = { name = gm_com_raise_levels value = gm_com_levels_to_go } gm_com_queue_levels = yes",
+                      raise_)
+        self.assertEqual(squash(block(read(COM_VALUES), "gm_com_levels_to_go")),
+                         "value = 0 if = { limit = { has_variable = gm_com_open has_variable = gm_com_target } "
+                         "value = var:gm_com_target subtract = gm_com_progress min = 0 }")
+        gui = read(WIDGET)
+        self.assertIn("GetScriptedGui('gm_com_raise_sgui')", gui)
+
+    def test_where_it_builds_is_refreshed_not_read_back(self):
+        refresh = squash(block(read(EFFECTS), "gm_country_refresh"))
+        self.assertLess(refresh.find("gm_com_check_progress = yes"), refresh.find("gm_com_update_build_where = yes"))
+        where = squash(block(self.e, "gm_com_update_build_where"))
+        self.assertNotIn("var:gm_com_build_where", where, "written, never read back in the refresh")
+        clear = squash(block(self.e, "gm_com_clear"))
+        for var in ("gm_com_build_where", "gm_com_raise_pending"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", clear, var)
+
+    def test_the_panel_says_where_and_what_counts(self):
+        sec = squash(raw_block_at(read(WIDGET), r"type te_gm_sec_commission\s*=\s*flowcontainer\s*\{"))
+        self.assertIn('text = "gm_je_com_where_line"', sec)
+        self.assertIn("ScriptValue('gm_disp_com_building'), '(CFixedPoint)1' )]\" text = \"gm_je_com_building\"", sec)
+        L = loc()
+        self.assertIn("'gm_je_com_where_line_fixed', 'gm_je_com_where_line_any'", L["gm_je_com_where_line"])
+        for rel in (WIDGET, "gui/te_state_panel_widgets.gui"):
+            gui = squash(read(rel))
+            self.assertIn("ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )]", gui, rel)
+            self.assertIn('text = "gm_row_com_counts"', gui, rel)
+        counts = squash(block(read(COM_VALUES), "gm_state_disp_com_counts"))
+        self.assertIn("gm_state_com_counts = yes", counts)
+        self.assertNotIn("JournalEntry", L["gm_row_com_counts_tt"], "a row tooltip reads nothing but State")
+
+    def test_a_reminder_and_a_completion_event(self):
+        monthly = squash(block(self.e, "gm_com_monthly"))
+        self.assertIn("else_if = { limit = { is_ai = no var:gm_com_months_left = 12 } "
+                      "post_notification = gm_com_reminder_notice }", monthly)
+        self.assertIsNotNone(block(read(MESSAGES), "gm_com_reminder_notice"))
+        self.assertIsNone(block(read(MESSAGES), "gm_com_fulfilled_notice"), "completion is an event now")
+        fulfil = squash(block(self.e, "gm_com_fulfil"))
+        self.assertIn("set_variable = { name = gm_com_seized_state value = scope:gm_com_named_state }", fulfil)
+        self.assertIn("set_variable = { name = gm_com_seized_source value = var:gm_com_source }", fulfil)
+        self.assertIn("if = { limit = { is_ai = no } trigger_event = { id = monument_events.28 } }", fulfil)
+        self.assertNotIn("post_notification", fulfil)
+        ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.28\s*=\s*\{"))
+        self.assertIn("event_image", ev)
+        self.assertIn("var:gm_com_seized_state ?= { save_scope_as = monument_state }", ev)
+        self.assertEqual(ev.count("default_option = yes"), 1)
+        source_is = squash(block(self.t, "gm_com_source_is"))
+        self.assertIn("NOT = { has_variable = gm_com_source } has_variable = gm_com_seized_source "
+                      "var:gm_com_seized_source = flag:$SRC$", source_is)
+        L = loc()
+        for key in ("monument_events.28.t", "monument_events.28.d", "monument_events.28.d_unnamed",
+                    "monument_events.28.a", "notification_gm_com_reminder_notice_name"):
+            self.assertIn(key, L, key)
+        self.assertIn("GetCustom('gm_com_boon_name')", L["monument_events.28.d"])
 
 
 class ReviewFixTests(unittest.TestCase):

@@ -110,6 +110,73 @@ gm_disp_com_fixed = {
 	}
 }
 
+# ---- Building it (usability §1, §4) ---------------------------------------------------
+# The levels still missing: the target less the progress, at least 0.
+gm_com_levels_to_go = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			has_variable = gm_com_target
+		}
+		value = var:gm_com_target
+		subtract = gm_com_progress
+		min = 0
+	}
+}
+
+# What Raise It costs in construction: the missing levels at a level's price.
+gm_disp_com_raise_cost = {
+	value = gm_com_levels_to_go
+	multiply = construction_cost_grand_monument
+}
+
+# What Seize It and Start Building costs, on the offer: the whole target.
+gm_disp_com_accept_cost = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_target }
+		value = var:gm_com_target
+		multiply = construction_cost_grand_monument
+	}
+}
+
+# 1 while Raise It has a place to build (gm_com_build_where, refreshed by
+# gm_country_refresh).
+gm_disp_com_has_where = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_build_where }
+		value = 1
+	}
+}
+
+# 1 while one of our Grand Monuments has levels under construction: the
+# Opportunity section says they count once finished.
+gm_disp_com_building = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			gm_com_monument_under_construction = yes
+		}
+		value = 1
+	}
+}
+
+# State scope: 1 while this monument counts toward its owner's open
+# opportunity (gm_state_com_counts): the mark on its row and state card.
+gm_state_disp_com_counts = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= { has_variable = gm_com_open }
+			gm_state_com_counts = yes
+		}
+		value = 1
+	}
+}
+
 # ---- What completing one gives (spec §3), for the effects and the tooltips ----------
 # The monument that completed it is rebuilt this many levels taller (the
 # monument's gift, gm_state_gift_grandeur), at most to level 200.

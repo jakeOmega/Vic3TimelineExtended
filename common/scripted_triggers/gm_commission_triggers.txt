@@ -186,6 +186,14 @@ gm_state_ceremony_answers_commission = {
 	}
 }
 
+# State scope, a monument at its ceremony: the opportunity's dedication is
+# offered as the first option and the default (usability §3): it can answer
+# the open opportunity, and the dedication can still be raised.
+gm_state_ceremony_offers_opportunity = {
+	gm_state_ceremony_answers_commission = yes
+	owner = { gm_country_com_gate_holds = yes }
+}
+
 gm_state_ceremony_for_commission = {
 	gm_state_ceremony_answers_commission = yes
 	owner = { var:gm_com_dedication = flag:$KEY$ }
@@ -252,4 +260,48 @@ gm_boons_idle = {
 	NOT = { has_variable = gm_boon_tech_industrial }
 	NOT = { has_variable = gm_boon_tech_athletic }
 	NOT = { has_variable = gm_boon_tech_naturalist }
+}
+
+# ---- Usability (opportunities spec, usability §1-§5) ---------------------------
+# Country scope. The open opportunity's moment is $SRC$, or, once it has
+# closed, the last one seized was (gm_com_seized_source): the boon's name and
+# effect read through it, so monument_events.28 can name the boon after the
+# record is gone.
+gm_com_source_is = {
+	OR = {
+		AND = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:$SRC$
+		}
+		AND = {
+			NOT = { has_variable = gm_com_source }
+			has_variable = gm_com_seized_source
+			var:gm_com_seized_source = flag:$SRC$
+		}
+	}
+}
+
+# Country scope. One of our Grand Monuments has levels under construction:
+# Raise It waits, since script cannot count queued levels and a second press
+# would queue the same levels twice.
+gm_com_monument_under_construction = {
+	any_scope_building = {
+		is_building_type = building_grand_monument
+		is_under_construction = yes
+	}
+}
+
+# Country scope. Raise It can queue the missing levels (gm_com_raise_sgui).
+# gm_com_raise_pending covers the moment between a press and its event.
+gm_com_can_raise = {
+	has_variable = gm_com_open
+	custom_tooltip = {
+		text = gm_com_raise_building_tt
+		gm_com_monument_under_construction = no
+		NOT = { has_variable = gm_com_raise_pending }
+	}
+	custom_tooltip = {
+		text = gm_com_raise_nowhere_tt
+		has_variable = gm_com_build_where
+	}
 }
