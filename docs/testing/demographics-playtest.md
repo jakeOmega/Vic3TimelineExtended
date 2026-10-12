@@ -18,7 +18,7 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
   player's country, with lettered options (the list is at the top of `events/te_debug_demog_events.txt`).
 - **Logs.** Read `debug.log`, not `error.log`. Grep it for `TE_SELF_CHECK` first, then `TE_DEMOG`.
 
-## Self-checks (every game, any rule)
+## Self-checks (every game; each row's When names the rule settings it runs under)
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
