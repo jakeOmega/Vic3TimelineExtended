@@ -11,8 +11,9 @@
 # label the country census writes exists with it. These cover the rest. Each
 # reads only its root (is_shown only: none changes anything, so none is valid
 # or does anything). The first eight are country scope, rooted at the player's
-# country; the three at the end are state scope, rooted at the state the panel
-# shows (the state panel's Demographics subtab, plan Task 14):
+# country; the six at the end are state scope, rooted at the state the panel
+# shows (the state panel's Demographics subtab, plan Task 14; the last three its
+# Causes of Death section, docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md):
 # GuiScope.SetRoot( State.MakeScope ).End.
 # ============================================================================
 
@@ -170,6 +171,56 @@ te_demog_state_stepped_sgui = {
 	is_shown = {
 		has_variable = te_dg_stepped
 		var:te_dg_stepped > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's last seed or step stored the Causes of Death inputs (te_demog_cause_inputs_store, the drifted
+# medicine). A census from before the Causes of Death plan has none until its next step: the section says so.
+te_demog_state_causes_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_acc
+		has_variable = te_dg_trt_inf
+		has_variable = te_dg_trt_mat
+		has_variable = te_dg_trt_chr
+		has_variable = te_dg_in_ext
+		has_variable = te_dg_in_work
+		has_variable = te_dg_in_chr
+		has_variable = te_dg_in_turm
+		has_variable = te_dg_in_crowd
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The rule's Full setting: only then does the census set births and deaths, so only then is there a Deaths Added on
+# Top row.
+te_demog_state_full_sgui = {
+	scope = state
+	is_shown = { te_demog_effects_run = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# A measured scale under Full: the step had a target (the first Full step after a seed writes te_dg_ed_target 0 and
+# dz 0), the walk measured the split (a save from before the split has none until its next count), and the refresh
+# noted its clamp (none on the first Full step after Display only or a seed).
+te_demog_state_on_top_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_ed_target
+		var:te_dg_ed_target > 0
+		has_variable = te_dg_dz
+		has_variable = te_dg_ed_state
+		has_variable = te_dg_ed_sev
+		has_variable = te_dg_sev_share
+		has_variable = te_dg_ed_clamp_d
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }

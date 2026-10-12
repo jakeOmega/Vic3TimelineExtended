@@ -4910,6 +4910,71 @@ class TestMedicalOutreach(unittest.TestCase):
                 self.assertEqual(eng._ops(weight, 0.0), want)
 
 
+class TestCausesDisplay(unittest.TestCase):
+    """The Causes of Death section's reads (the plan's Task 8)."""
+
+    def _shown(self, sgui, eng):
+        body = _parse_script(_block(_text(SGUIS), sgui))
+        return eng.holds(_find(body, "is_shown"))
+
+    def test_the_on_top_gate_needs_a_measured_window(self):
+        # Review Focus 2: the first Full step after a seed writes dz 0 against no target; the first after Display only
+        # has a target but its window ran with no M, so no refresh's clamp flag was there to copy (te_dg_ed_clamp_d);
+        # a save from #907 before this build has no split (te_dg_ed_state) until its next count
+        base = dict(te_dg_ed_target=1000.0, te_dg_ed_state=900.0, te_dg_ed_sev=0.0, te_dg_sev_share=0.0, te_dg_dz=0.0,
+                    te_dg_ed_clamp_d=0.0)
+        for full, change, shown in ((True, {}, True), (True, {"te_dg_ed_target": 0.0}, False),
+                                    (True, {"te_dg_ed_clamp_d": None}, False), (True, {"te_dg_ed_state": None}, False),
+                                    (False, {}, False)):
+            eng = _Engine({}, triggers={"te_demog_effects_run": full})
+            eng.vars.update(base)
+            for k, v in change.items():
+                if v is None:
+                    del eng.vars[k]
+                else:
+                    eng.vars[k] = v
+            with self.subTest(full=full, change=change):
+                self.assertEqual(self._shown("te_demog_state_on_top_sgui", eng), shown)
+
+    def test_the_causes_gate_needs_the_steps_inputs(self):
+        eng = _Engine({})
+        self.assertFalse(self._shown("te_demog_state_causes_sgui", eng))
+        eng.vars.update(_stored(demographics_model.Inputs()))
+        self.assertTrue(self._shown("te_demog_state_causes_sgui", eng))
+
+    def test_red_from_the_threshold(self):
+        for dz, code in ((0.0, 0), (P.DEATHS_ON_TOP_HIGH - 1 - 0.01, 0), (P.DEATHS_ON_TOP_HIGH - 1, 1), (0.8, 1)):
+            eng = _Engine({})
+            eng.vars["te_dg_dz"] = dz
+            with self.subTest(dz=dz):
+                self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_deaths_on_top_code")), code)
+
+    def test_the_arrow_shows_while_medicine_moves(self):
+        inp = demographics_model.Inputs(mods={P.ACCESS_TYPE: 0.3})
+        eng = _Engine(_mod_fixtures(inp))
+        eng.vars.update(_stored(dataclasses.replace(inp, medicine={"access": 0.5, "infection": 0.0,
+                                                                   "maternal": 0.0, "chronic": 0.0})))
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_access_moving")), 1)
+        eng.vars["te_dg_acc"] = demographics_model.medicine_targets(inp)["access"]
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_access_moving")), 0)
+        # each cause's medicine: moving while its treatment is off its target, still once it arrived
+        eng.vars["te_dg_trt_inf"] = 0.3
+        inp_t = demographics_model.Inputs(mods={P.ACCESS_TYPE: 0.3, P.TREATMENT_TYPE["infection"]: 0.4})
+        eng.fixtures.update(_mod_fixtures(inp_t))
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_medicine_moving_infection")), 1)
+        eng.vars["te_dg_trt_inf"] = 0.4
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_medicine_moving_infection")), 0)
+
+    def test_every_key_the_section_names_exists(self):
+        # in any English file: organize_loc files a key no .gui names yet (until Task 9) in te_unused_l_english.yml
+        loc = "\n".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*_l_english.yml")))
+        rows = ("acc", "inf", "ext", "chr", "work", "mat", "ontop")
+        keys = ["te_demog_sec_causes", "te_demog_st_causes_pending"]
+        keys += [f"te_demog_st_{r}{s}" for r in rows for s in ("", "_value", "_tt")]
+        for key in keys:
+            self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
+
+
 class TestCauseFactorsScript(unittest.TestCase):
     """te_demog_f_<cause>_<factor> and te_demog_mult_<cause> (generated) against demographics_model.cause_factors,
     on the step's stored inputs (the Causes of Death plan)."""
