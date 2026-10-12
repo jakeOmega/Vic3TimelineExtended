@@ -2468,9 +2468,10 @@ def _reachable_pictures():
 
 # code -> (skin, form, civic-progress dedication or None). Written out and
 # append-only (spec §3.2): a code never moves or is reused, so a new form or
-# style takes the next free code in its block (generic 10-99; heritage 100 +
-# 10 x its HERITAGE_SKINS index; faith 300-399; buildings 400 + 10 x its
-# BUILDING_FORMS index), and a retired pair keeps its number.
+# style takes the code after the highest in its block (generic 10-99; heritage
+# 100 + 10 x its HERITAGE_SKINS index; faith 300-399; buildings 400 + 10 x its
+# BUILDING_FORMS index). A retired pair keeps its entry, widget and helper
+# line, and its code goes in RETIRED_PICTURES.
 PICTURES = {
     1: ("undedicated", None, None),
     10: ("generic", "column", None),
@@ -2553,6 +2554,22 @@ PICTURES = {
     443: ("heritage_nahuatl", "stadium", "athletic"),
     444: ("heritage_mayan", "stadium", "athletic"),
 }
+# Codes of pairs no monument can reach any more (a retired form or style).
+RETIRED_PICTURES = set()
+
+
+def _frozen_problems(pictures, retired, reachable):
+    """What breaks append-only: a retired code that isn't in the table, a live
+    pair missing or extra, or a pair under two codes."""
+    problems = [f"retired code {c} is not in PICTURES" for c in sorted(retired - set(pictures))]
+    live = {c: v for c, v in pictures.items() if c not in retired}
+    if set(live.values()) != reachable:
+        problems.append(f"live pictures differ from the reachable pairs: missing "
+                        f"{sorted(map(str, reachable - set(live.values())))}, extra "
+                        f"{sorted(map(str, set(live.values()) - reachable))}")
+    if len(set(pictures.values())) != len(pictures):
+        problems.append("a pair has two codes")
+    return problems
 
 
 def picture_key(code):
@@ -2579,13 +2596,21 @@ class PictureTests(unittest.TestCase):
         self.assertEqual(picture_key(300), "faith_catholic__faith")
         self.assertEqual(picture_key(444), "heritage_mayan__stadium")
 
+    def test_a_retired_pair_keeps_its_code(self):
+        # Spec §3.2: retiring a pair (Obelisk may merge into Column) keeps its
+        # code, listed in RETIRED_PICTURES, so a save that stored it never
+        # shows a blank (final review).
+        reachable = _reachable_pictures() - {("generic", "obelisk", None)}
+        self.assertEqual(_frozen_problems(PICTURES, {12}, reachable), [])
+        self.assertTrue(_frozen_problems(PICTURES, set(), reachable), "an unlisted extra code is a problem")
+        self.assertTrue(_frozen_problems(PICTURES, {999}, _reachable_pictures()), "a retired code must exist")
+
     def test_codes_are_frozen(self):
         # Append-only (spec §3.2): the table is written out, not computed from
         # the forms and styles, so inserting a style mid-list can't renumber
         # pictures a save has stored (Task 6 review).
         self.assertRegex(read("test_grand_monument_registry.py"), r"(?m)^PICTURES = \{\n    1: ")
-        self.assertEqual(set(PICTURES.values()), _reachable_pictures())
-        self.assertEqual(len(set(PICTURES.values())), len(PICTURES), "one code per picture")
+        self.assertEqual(_frozen_problems(PICTURES, RETIRED_PICTURES, _reachable_pictures()), [])
         heritage_block = {f"heritage_{h}": b for b, h in enumerate(HERITAGE_SKINS)}
         building_block = {k: b for b, k in enumerate(BUILDING_FORMS)}
         for code, (skin, form, key) in PICTURES.items():
