@@ -104,4 +104,6 @@ others; check the switching, the costs and the politics.
    or a notice if its law doesn't allow it.
 10. **Every game (Disabled)**: the family laws' AI weights: an AI country in famine moves toward Population Control
     Measures; one whose population shrinks, toward Pro-Natalist Policy. `debug.log`: no error from
-    `te_demog_measure_*`, `te_demog_messages.txt` or `te_demog_ms_law_on_action`.
+    `te_demog_measure_*`, `te_demog_messages.txt`, `te_demog_ms_law_on_action` or `te_debug_demog.10` (the
+    self-check's verdict event: an error there would leave a `START` with no verdict, which reads like a capital
+    that changed hands).

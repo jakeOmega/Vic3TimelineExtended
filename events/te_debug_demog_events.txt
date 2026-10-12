@@ -43,6 +43,9 @@
 #        day after by the hidden te_debug_demog.4 (TE_DEMOG_PROBE_OWNER). It really changes
 #        hands: throwaway games only. (p and te_debug_demog.3 are phase 2 step 1's.)
 #
+# Hidden events fired by script, not the console: .2 and .4 (options o and q), .5 (the Primogeniture self-check)
+# and .10 (the Family Policy measures' self-check, measure_country_types; .6 and .7 are phase 2 step 1's).
+#
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
 # or every state and war, and their tooltips wrote about 1,200 error lines a second
