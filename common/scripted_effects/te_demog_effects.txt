@@ -6,6 +6,7 @@
 # State variables the walk writes, every year, whatever the rule (Tasks 8-11
 # add theirs below as they land):
 #   te_dg_walk_pop      people in the state, as the pops sum
+#   te_dg_walk_pop_prev the last walk's te_dg_walk_pop (the AI's population trend, te_demog_ms_pop_trend)
 #   te_dg_lit           pop-weighted literacy, 0-1
 #   te_dg_sol           pop-weighted standard of living
 #   te_dg_wtfr          mean wealth TFR (children per woman from wealth alone)
@@ -229,6 +230,12 @@ te_demog_walks = {
 			limit = { is_pop_type = peasants }
 			change_local_variable = { name = te_dg_w_rural add = total_size }
 		}
+	}
+	# last walk's people beside this one's, for the AI's population trend (te_demog_ms_pop_trend; every game,
+	# the family laws' AI weights read it: phase 2 step 3a, owner call 7)
+	if = {
+		limit = { has_variable = te_dg_walk_pop }
+		set_variable = { name = te_dg_walk_pop_prev value = var:te_dg_walk_pop }
 	}
 	set_variable = { name = te_dg_walk_pop value = local_var:te_dg_w_pop }
 	set_variable = { name = te_dg_lit value = { value = local_var:te_dg_w_lit divide = { value = local_var:te_dg_w_pop min = 1 } } }

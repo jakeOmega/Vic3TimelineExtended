@@ -2702,6 +2702,25 @@ law_pro_natalist_subsidies = {
 		state_dependent_wage_mult = 0.1	# family allowances raise dependents' income (owner, 2026-10-12)
 		state_working_adult_ratio_add = -0.05
 	}
+
+	# AI (Demographics phase 2 step 3a, §3.6; every game, owner call 7): when the population shrinks, by the yearly
+	# walk's figures, or, where the census runs, the old are many; not in a famine. The triggers:
+	# te_demog_measure_triggers.txt.
+	ai_enact_weight_modifier = {
+		value = 0
+		if = {
+			limit = { te_demog_ms_ai_shrinking = yes }
+			add = 100
+		}
+		if = {
+			limit = { te_demog_ms_ai_old = yes }
+			add = 75
+		}
+		if = {
+			limit = { has_famine = yes }
+			add = -100
+		}
+	}
 }
 
 law_state_sponsored_family_planning = {
@@ -2730,6 +2749,28 @@ law_population_control_measures = {
 		state_demog_ontop_birth_rate_mult = -0.1
 		country_authority_add = 150
 		state_radicals_and_loyalists_from_sol_change_mult = 1.0
+	}
+
+	# AI (Demographics phase 2 step 3a, §3.6; every game, owner call 7): in a famine, with crowded states or, where
+	# the census runs, a youth bulge; not while the population shrinks.
+	ai_enact_weight_modifier = {
+		value = 0
+		if = {
+			limit = { has_famine = yes }
+			add = 100
+		}
+		if = {
+			limit = { te_demog_ms_ai_crowded = yes }
+			add = 50
+		}
+		if = {
+			limit = { te_demog_ms_ai_youth = yes }
+			add = 75
+		}
+		if = {
+			limit = { te_demog_ms_ai_shrinking = yes }
+			add = -100
+		}
 	}
 }
 
