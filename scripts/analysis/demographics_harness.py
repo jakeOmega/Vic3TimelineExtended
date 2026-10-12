@@ -820,6 +820,13 @@ MEASURE_RICH_SCENARIOS = [
     ("Rich today, Protected Class, 60% urban", dict(sol=40, literacy=0.99, urban_share=0.6,
                                                     techs=MED_TODAY | _RICH_MEANS, laws={PHI, "law_protected_class"},
                                                     institutions={HEALTH: 8}, practices={"lm": 0.3})),
+    # the band's upper half: the package grows with desired family size, which is higher where fewer live in cities
+    ("West 1990, Women's Suffrage, 50% urban", dict(sol=38, literacy=0.9, urban_share=0.5, techs=MED_1990 | _RICH_MEANS,
+                                                   laws={PHI, "law_womens_suffrage"}, institutions={HEALTH: 6},
+                                                   practices={"lm": 0.45})),
+    ("West 1970, Women's Suffrage", dict(sol=30, literacy=0.97, urban_share=0.7, techs=MED_1950 | _RICH_MEANS,
+                                         laws={PHI, "law_womens_suffrage"}, institutions={HEALTH: 5},
+                                         practices={"lm": 0.45})),
 ]
 MEASURE_HIGH_SCENARIOS = [
     ("China 1975 (TFR ~5, the Pill)", dict(sol=9, literacy=0.6, urban_share=0.2, agrarian_share=0.75,

@@ -381,7 +381,7 @@ five years and can't return for ten.
 | Measure | Laws that allow it | What it aims at | Upkeep |
 |---|---|---|---|
 | Child Allowance | Pro-Natalist Policy, Communal Child-Rearing | Families want more children | 0.5% of GDP a year, more where children are many |
-| Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.4% of GDP a year, by the share of people in cities |
+| Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
 | Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy | Families want a few more children | 25 authority |
 | Restricted Contraception | Pro-Natalist Policy | Families have less means to plan their children; more mothers die; the feminist movement gains support | 50 authority |
 | Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year, by the share of women at work |
@@ -400,7 +400,7 @@ after. Under Full, Pro-Natalist Policy itself makes families want a few more
 children, and the law's own boost to births and Population Control Measures' cut
 no longer apply: the measures carry those laws' force. Pro-Natalist Policy with
 Child Allowance, Family Housing and Honours adds about 0.3 children per woman in
-a rich country that has few, for about half a percent of GDP a year. Restricted
+a rich country that has few, for about 0.4% of GDP a year. Restricted
 Contraception, Birth Limit and the Crash Campaign move births further, at their
 political price. The Children per Woman tooltips list family policy beside the
 other terms. Parental Leave's women's work counts toward the workforce as the

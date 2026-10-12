@@ -40,7 +40,7 @@ te_demog_ms_family_housing = {
 	interest_group_ig_trade_unions_approval_add = 1
 }
 
-# 0.4% of GDP a year x the urban share: te_demog_ms_cost_family_housing.
+# 0.25% of GDP a year x the urban share (step 3b's fit; §3.4: 0.4%): te_demog_ms_cost_family_housing.
 te_demog_ms_family_housing_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1

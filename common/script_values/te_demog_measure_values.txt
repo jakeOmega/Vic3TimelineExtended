@@ -373,10 +373,11 @@ te_demog_ms_cost_child_allowance = {
 	divide = 52
 	min = 0
 }
-# Family Housing: 0.4% of GDP a year x the urban share (0.5 without the census).
+# Family Housing: 0.25% of GDP a year x the urban share (0.5 without the census). Step 3b's fit (§3.4: 0.4%): the full
+# pro-natalist package's upkeep within 1-3% of a rich country's revenue at the top of the gate's band.
 te_demog_ms_cost_family_housing = {
 	value = gdp
-	multiply = 0.004
+	multiply = 0.0025
 	if = {
 		limit = { has_variable = te_dg_urban_share }
 		multiply = var:te_dg_urban_share

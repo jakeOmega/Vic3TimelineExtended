@@ -82,7 +82,7 @@ BIRTH_LIMIT_ONE = {
     "state_desired_fertility_mult": -0.45, "state_sex_ratio_at_birth_add": 10,
     "interest_group_ig_rural_folk_approval_add": -3, "interest_group_ig_devout_approval_add": -2,
     "country_authority_add": -100}
-MONEY = {"child_allowance": 0.005, "family_housing": 0.004, "parental_leave": 0.003, "free_contraception": 0.001}
+MONEY = {"child_allowance": 0.005, "family_housing": 0.0025, "parental_leave": 0.003, "free_contraception": 0.001}
 NEW_TYPES = ("state_desired_fertility_mult", "state_urban_fertility_relief_add", "state_means_literacy_add",
              "state_maternal_mortality_mult", "state_birth_limit_relief_add", "state_sex_ratio_at_birth_add")
 
@@ -520,7 +520,7 @@ class TestUpkeep(unittest.TestCase):
         eng = _MeasureEngine(fixtures={"gdp": gdp})
         eng.vars.update(te_dg_young_share=0.15, te_dg_urban_share=0.8)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_child_allowance"), gdp * 0.005 * 0.5 / 52, places=2)
-        self.assertAlmostEqual(eng.sv("te_demog_ms_cost_family_housing"), gdp * 0.004 * 0.8 / 52, places=2)
+        self.assertAlmostEqual(eng.sv("te_demog_ms_cost_family_housing"), gdp * 0.0025 * 0.8 / 52, places=2)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_free_contraception"), gdp * 0.001 / 52, places=2)
         eng.fixtures["capital.te_demog_women_rate"] = 0.6
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_parental_leave"), gdp * 0.003 * 0.6 / 52, places=2)

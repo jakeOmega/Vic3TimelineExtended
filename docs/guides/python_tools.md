@@ -157,6 +157,14 @@ Defensive pattern: make the regex match BOTH the legacy untagged form and the ta
 | `mod_state_client.py` | CLI client for the mod state server. | `python mod_state_client.py <command> [args]` |
 | `mod_state_script.py` | Generates text reference docs (`docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt`) from parsed mod state. This is also called automatically when the mod state server starts or reloads. | `python mod_state_script.py` |
 
+### Reusing another test file's helpers
+
+Import a `TestCase` class through its module (`import test_demographics_registry as R`, then
+`R.TestCohortScript("test_seed_rates_match_the_model")` for its helpers), never by name. `unittest` collects every
+`TestCase` in a module's namespace, so `from test_x import TestY` runs all of `TestY`'s tests again in the importing
+file (phase 2 step 3b's family-census tests ran 92 tests where 30 were its own). Plain helpers (`_Engine`, `_block`)
+import by name safely.
+
 ## Formatting & Maintenance
 
 | Script | Purpose | Run |

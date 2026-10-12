@@ -362,7 +362,7 @@ class TestHarnessMeasures(unittest.TestCase):
             self.assertTrue(H.UPKEEP_BAND[0] <= share <= H.UPKEEP_BAND[1], f"{r['label']}: {share:.3%}")
 
     def test_the_money_shares_are_the_scripts(self):
-        self.assertEqual(self.shares, {"child_allowance": 0.005, "family_housing": 0.004, "parental_leave": 0.003,
+        self.assertEqual(self.shares, {"child_allowance": 0.005, "family_housing": 0.0025, "parental_leave": 0.003,
                                        "free_contraception": 0.001})
 
     def test_the_budget_reader(self):
