@@ -22,12 +22,12 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … primogeniture_scaled` | once a game, a week after the first state takes Primogeniture's farm line (a Primogeniture country's first yearly state pulse) | the engine sums a script-only type on a state modifier scaled by its multiplier (`added` ≈ `expected`) | `added` reads 0.1 (the multiplier is ignored) or 0 (the type isn't summed): Primogeniture's farm births are wrong in every game | Plan B of `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`, Task 9 |
+| `TE_SELF_CHECK … primogeniture_scaled` | once a game: `START` when the first state with a farm share between 0.1 and 0.9 takes Primogeniture's farm line fresh (a Primogeniture country's first yearly state pulse), the verdict a week later | the engine sums a script-only type on a state modifier scaled by its multiplier (`added` ≈ `expected`) | `added` reads 0.1 (the multiplier is ignored) or 0 (the type isn't summed): Primogeniture's farm births are wrong in every game | Plan B of `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`, Task 9 |
 | `TE_SELF_CHECK … workforce_amendment_type` | Display only or Full: once a game, a week after a country first holds Community Service or Mandatory Minimums on its criminal-justice law (silent under Disabled and in a release, which comments the inputs out) | the engine sums a script-only type from an amendment into a state's read (`read` = `expected`) | `read` = `laws_only`: the two amendments' moved working-adult lines are lost in every game | revert both amendments' blocks (`common/amendments/extra_amendments.txt`) to `state_working_adult_ratio_add` at their old values, list them in `P.LIVE_WORKFORCE_LINES` and take them out of `TestWorkforceLinesMoved.BLOCKS` (phase 2 step 1 plan, D12) |
 | `TE_SELF_CHECK … workforce_ig_trait_type` | Display only or Full: once a game, a week after a country's Trade Unions are first loyal at the trait's plain size (clout neither marginal nor powerful) with no Ministry of Labour law | the engine sums a script-only type from an IG trait into a state's read (`read` = 0.02) | `read` 0: the Trade Unions' two loyal traits' moved lines are lost in every game | delete `common/interest_group_traits/te_demog_workforce_injections.txt` (vanilla's +0.05 comes back on the engine field), list the two traits in `P.LIVE_WORKFORCE_LINES`, take them out of `TestWorkforceLinesMoved` and accept their two `vanilla_parsed` carriers as live |
 | `TE_SELF_CHECK … pop_workforce_read` | Display only or Full: once a game, at the first country monthly pulse after a capital's walk | a pop's `workforce` reads as a value in the walk (`wf_engine` about 0.2-0.3) | `wf_engine` 0: the walk can't read the engine's workforce | nothing in step 1 uses it; step 2's stop rule (spec §1.8) needs another read of the engine's workforce before its fit |
 
-No `TE_SELF_CHECK` line at all after a game's first year means no country had Primogeniture; enact it in a test game.
+No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
 carriers in the player's country. **Woman Soldiers and Pollution Impact** carry their moved working-adult lines as a
 script-only type on a modifier at a multiplier (×0.5, × the region's impact), the fact `primogeniture_scaled` tests:
@@ -39,9 +39,11 @@ and Pollution Impact's line in `common/static_modifiers/extra_modifiers.txt` to 
 1. **Full, a new 1836 game as Britain.**
    - The Population panel's children-per-woman tooltip shows "Late marriage ×0.90" and "women marry at about 26",
      with "Birth spacing ×1.00". The country line reads about 26 and 0%.
-   - A Japanese state's Demographics subtab: Birth spacing below ×1.00, Late marriage ×1.00, women marry at about 19.
-   - A state in Posen: Late marriage between the two, women marry at about 25.
-2. **Option l** on the capital after its first census step: `lm` near 1, `bs` 0, `lm_target` near 1, and
+   - A Japanese state's Demographics subtab: Birth spacing ×0.80, Late marriage ×1.00, women marry at about 19.
+   - A Chinese state: Birth spacing ×0.99.
+   - A state in Posen: Late marriage ×0.92 (a share of 0.8), women marry at about 25.
+2. **Option l** on the capital after its first census step: `lm=1.000`, `bs=0.000`, `lm_target` near 1 (an
+   unincorporated state reads `lm_target=-1.000`), and
    `absorbed_b` holding 0.1 × the capital's agrarian share on top of the laws' own absorbed birth lines.
 3. **Disabled, a new game, a farming state in Britain** (Primogeniture). After its first yearly pulse, its birth-rate
    breakdown shows Primogeniture's farm births at +10% × its Peasants' and Farmers' share, as a Laws and Institutions

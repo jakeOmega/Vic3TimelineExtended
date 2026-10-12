@@ -485,6 +485,9 @@ class _Engine:
             return any(self._test(*item) for item in arg)
         if key == "AND":
             return self.holds(arg)
+        if key == "custom_tooltip":
+            # the text only labels the tooltip; the triggers inside decide, as an AND
+            return self.holds([item for item in arg if item[0] != "text"])
         if key == "has_variable":
             return arg in self.vars
         if key == "has_modifier":
@@ -1832,7 +1835,10 @@ class TestPrimogenitureUnderFull(unittest.TestCase):
         for needle in ("NOT = { has_global_variable = te_inh_pr_selfcheck_done }",
                        "NOT = { has_local_variable = te_inh_pr_was }",
                        "value = modifier:state_demog_absorbed_birth_rate_mult",
-                       "trigger_event = { id = te_debug_demog.5 days = 7 }"):
+                       "trigger_event = { id = te_debug_demog.5 days = 7 }",
+                       # the review's I1: near 0 or 1 an unsummed or unscaled line reads like the scaled one
+                       "var:te_inh_agrarian_share > 0.1", "var:te_inh_agrarian_share < 0.9",
+                       "TE_SELF_CHECK START primogeniture_scaled"):
             self.assertIn(needle, start)
 
     def test_the_self_check_expects_the_modifiers_value(self):
@@ -5265,7 +5271,7 @@ class TestConsole(unittest.TestCase):
                          r"state_demog_absorbed_birth_rate_mult = 0\.1\b")
         start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_start")
         self.assertIn("add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }", start)
-        self.assertIn("trigger_event = { id = te_debug_demog.2 days = 1 }", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.2 days = 7 }", start)
         after = _block(console, "te_debug_demog.2")
         self.assertIn("remove_modifier = te_debug_demog_scaled_probe", after)
         values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")
@@ -5818,13 +5824,17 @@ class TestMedicalOutreach(unittest.TestCase):
             with self.subTest(acc=acc, issued=issued, people=people):
                 self.assertAlmostEqual(eng._ops(weight, 0.0), want, places=6)
 
-    def test_an_issued_decree_stays_valid(self):
-        """state_trigger: offered where medicine is behind; once issued it stays valid after the state caught up
-        (Pollution Control's pattern)."""
+    def test_an_issued_decree_lapses_once_the_state_catches_up(self):
+        """state_trigger: valid only while medicine is behind, issued or not, so the engine's weekly check ends the
+        decree once the state has caught up (vanilla Emergency Relief's and Violent Suppression's pattern). It is the
+        AI's only way to give it up: the AI never revokes a decree itself, and an ai_weight of 0 only stops it issuing
+        one (#894's observer run, 2026-10-12: with a has_decree escape, every AI decree stood until the state changed
+        hands)."""
         trig = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")), "state_trigger")
         fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
         fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.6
-        for acc, issued, want in ((0.8, False, True), (1.0, False, False), (1.0, True, True)):
+        for acc, issued, want in ((0.8, False, True), (1.0, False, False), (0.8, True, True), (0.997, True, False),
+                                  (1.0, True, False)):
             eng = _Engine(fixtures)
             if issued:
                 eng.decrees.add("decree_medical_outreach")

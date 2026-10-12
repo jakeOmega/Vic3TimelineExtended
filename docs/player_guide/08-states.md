@@ -255,7 +255,8 @@ of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
 rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
-and mild starvation. The rest, such as the family-policy laws and the late
+mild starvation, and Primogeniture's larger farm families, which late marriage
+replaces. The rest, such as the family-policy laws and the late
 medical technologies, it applies at its own rate, as it does an effect on the
 whole state, such as pollution, devastation or a decree. Either way, a new law
 or technology takes effect at the state's next census step, up to a year later.
@@ -335,8 +336,9 @@ Ministry of Health level moves a state's medicine part of the way at each yearly
 count: a tenth of the gap at first, and up to two fifths once the Electric
 Telegraph, Modern Nursing, Radio, Intergovernmental Organizations, the World
 Wide Web and Telemedicine are researched. Under Full, the Medical Outreach
-decree closes a further fifth of the gap at each count in one state. Turmoil
-raises deaths from accidents and violence, by half at full turmoil. The subtab's
+decree closes a further fifth of the gap at each count in one state, and it
+ends once the state has caught up. Turmoil raises deaths from accidents and
+violence, by half at full turmoil. The subtab's
 Causes of Death section shows a state's health care access and each cause's
 multiplier; hover a row for what makes it up and where medicine is heading.
 Under Full it also shows the deaths added on top of the census's own, in red
