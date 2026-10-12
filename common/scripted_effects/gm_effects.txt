@@ -389,7 +389,14 @@ gm_state_monthly = {
 	}
 	else = {
 		if = {
-			limit = { has_variable = gm_seen }
+			# A landmark too, recorded or not: a rededicated one left undedicated
+			# has no gm_seen, and its lock must not pass to the next monument here.
+			limit = {
+				OR = {
+					has_variable = gm_seen
+					gm_state_is_landmark = yes
+				}
+			}
 			# Gone without the Tear Down button (demolished from the building
 			# panel): a contested monument counts as torn down (plan decision 6).
 			if = {

@@ -45,19 +45,21 @@ gm_seed_landmark = {
 			}
 		}
 		s:$STATE$.region_state:$TAG$ = {
-			create_building = {
-				building = building_grand_monument
-				level = $LEVEL$
-				activate_production_methods = { pm_monument_$DEDICATION$ } # REVIEWED 2026-10-11: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
-			}
-			# Rededicate's guard: if create_building fires on_building_built,
-			# monument_events.1 charges no vanity for a level nobody built.
+			# The records first, as Rededicate sets its guard first: if
+			# create_building fires on_building_built at once, monument_events.1
+			# then charges no vanity (gm_rebuilding) and sees no copy to send to
+			# the ceremony (gm_ceremony_level).
 			set_variable = { name = gm_rebuilding days = 1 }
 			set_variable = { name = gm_landmark value = flag:$KEY$ }
 			set_variable = { name = gm_skin value = flag:landmark_$KEY$ }
 			set_variable = { name = gm_form value = flag:$FORM$ }
 			set_variable = { name = gm_namesake value = flag:landmark }
 			set_variable = { name = gm_ceremony_level value = $LEVEL$ }
+			create_building = {
+				building = building_grand_monument
+				level = $LEVEL$
+				activate_production_methods = { pm_monument_$DEDICATION$ } # REVIEWED 2026-10-11: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
+			}
 			debug_log = "TE_MONUMENTS: landmark $KEY$ placed in $STATE$ for $TAG$: level $LEVEL$, pm_monument_$DEDICATION$, form $FORM$"
 			# The refresh records it (gm_state_first_sight), opens the
 			# journal entry and sets its picture.

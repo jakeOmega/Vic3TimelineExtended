@@ -3061,5 +3061,27 @@ class LandmarkDebugTests(unittest.TestCase):
         self.assertIn("gm_debug_log_landmark_pm = { KEY = $KEY$ PM = undedicated }", one)
         self.assertNotIn(".MakeScope", one, "debug_log's working form only")
 
+
+class LandmarkReviewFixTests(unittest.TestCase):
+    """The final review's findings (phase 4)."""
+
+    def test_demolition_ends_a_landmark_without_records(self):
+        # I2: a rededicated landmark left undedicated has no gm_seen; demolished
+        # from the panel it must still lose its lock, or the next monument in
+        # the state reads as the landmark (§8.6).
+        monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
+        self.assertIn("else = { if = { limit = { OR = { has_variable = gm_seen gm_state_is_landmark = yes } } "
+                      "if = { limit = { gm_state_is_contested = yes } gm_state_record_teardown = yes } "
+                      "gm_clear_state = { KEEP_LANDMARK = no } }", monthly)
+
+    def test_the_seed_writes_its_records_before_the_building(self):
+        # I3: if create_building fires on_building_built at once, monument_events.1
+        # must already see gm_rebuilding and gm_ceremony_level (no vanity, no copy).
+        body = squash(block(read(LANDMARK_EFFECTS), "gm_seed_landmark"))
+        build = body.index("create_building")
+        for record in ("name = gm_rebuilding days = 1", "name = gm_landmark value", "name = gm_skin value",
+                       "name = gm_form value", "name = gm_namesake value", "name = gm_ceremony_level value"):
+            self.assertLess(body.index(record), build, record)
+
 if __name__ == "__main__":
     unittest.main()
