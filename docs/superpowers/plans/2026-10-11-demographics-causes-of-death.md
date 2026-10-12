@@ -18,12 +18,15 @@ Full setting the section also shows the deaths the game added on top of the cens
   census step. The share is `0.1 + modifier:state_medical_diffusion_add`, from six technologies and the Medical
   Outreach decree. Before the numbers are approved, the owner sees how far life expectancy lags its target over 20
   years (Task 3).
-- **The deaths added on top are split from sums the walk already has.** No new per-pop sum is needed for this split.
-  It builds on the trapezoid fix (branch `fix/demog-ring-on-top-trapezoid`):
-  - the pop-level lines' events at the window's end (`te_dg_ot_rd`) and its start (`te_dg_ot_d − te_dg_os_d`) come
-    off the window's events, leaving the whole state's part;
-  - severe starvation's part is summed inside the walk's per-pop severe-starvation branch, beside the people it
-    holds.
+- **The deaths added on top are split at both ends of the window dz measured.** Since #907 the census books a window
+  at the mean of the engine's rate at its two ends, so the split works at both ends (re-planned 2026-10-11 against
+  #907 and #913; Task 6):
+  - the pops' own lines at the window's end come from the walk's own sums (`w_ed − w_edr − (1 + read) × w_ed0`);
+  - at its start, the refresh that stores the start rate `te_dg_sr_d` stores the start's own lines beside it
+    (`te_dg_sp_d`, `te_dg_ss_d`). It is the one place that knows the change in M, and that change doesn't reach a pop
+    the engine floors at 0.
+  - The window's events less those lines are the whole state's part.
+  - Severe starvation's part is summed by one Full-only test per pop in the walk, beside the people it holds.
 
 **Tech Stack:** Paradox script (Victoria 3 1.14.5), the Python twin and harness (`scripts/analysis/demographics_*.py`),
 the generator `scripts/generators/gen_demographics.py`, unittest with the repo's script interpreter
@@ -33,28 +36,27 @@ the generator `scripts/generators/gen_demographics.py`, unittest with the repo's
 player can't see". It builds on:
 - `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md` (the census's term M and the on-top scales);
 - `docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md` (the moved lines);
-- the trapezoid fix (`fix/demog-ring-on-top-trapezoid`, #894's "the ring applies the step-day snapshot to the whole
-  year").
+- the trapezoid fix (#907, b8c993b4: the window at the mean of the engine's rate at its two ends) and severe
+  starvation by the starvation value (#913, 209401a6).
 
 Read `docs/systems/mod_systems.md` § Demographics first. An independent review (2026-10-11, approve with fixes) shaped
 this revision; its points are folded in.
 
 ## Dependencies and shared edits
 
-- **Task 6 lands after the trapezoid PR** (branch `fix/demog-ring-on-top-trapezoid`, worktree
-  `/home/jakef/src/vic3te-demog-trapezoid`, still in progress at this writing). Task 6 reads these names from its
-  state at a4321948 (2026-10-11):
-  - effects: `te_demog_on_top_pop_lines` (sets the locals `te_dg_ot_rb`, `te_dg_ot_rd`), `te_demog_on_top_window`
-    (rewrites `te_dg_eb`/`te_dg_ed` in the walk's tail);
-  - variables: `te_dg_ot_b`, `te_dg_ot_d` (the start share, stored by `te_demog_rates_refresh`);
-  - script values: `te_demog_on_top_state_deaths`, `te_demog_on_top_window_k`, the constant
-    `te_demog_k_on_top_start_weight` (`P.ON_TOP_START_WEIGHT`);
-  - model: `demographics_model.on_top_share`, `window_events`.
-
-  **Before starting Task 6, re-read the merged trapezoid and re-check every one of these names and its formula.**
-  If one changed, follow the merged code. Tasks 1–5 and 7–11 don't depend on it, but they rebase onto it.
-- **Shared edits with the trapezoid:** `te_demog_seed`, `te_demog_rates_refresh`, `te_demog_rates_clear`,
-  `te_demog_rate_effects.txt`'s header, `te_demog_effects.txt`'s header, `gen_demographics.constants`.
+- **Task 6 builds on #907 and #913, both on main and merged into this branch** (b8c993b4, 209401a6; re-planned
+  2026-10-11). It reads:
+  - from #907 (the window is the mean of the engine's rate at its two ends):
+    - `te_demog_window_events`, the walk's tail. Its limit is `te_demog_effects_run`, `te_dg_sr_b` and `te_dg_sr_d`.
+    - `te_dg_sr_b` / `te_dg_sr_d`, the rate per head at the window's start. `te_demog_rates_refresh` stores them,
+      `te_demog_fast_refresh_rates` moves them, and four sites remove them: `te_demog_rates_clear`, the refresh's
+      no-start branch, `te_demog_seed` and `te_demog_fast_clear_rates`.
+    - The walk's locals `te_dg_w_ed0m` / `te_dg_w_eb0m`: the bare curves of the pops the engine doesn't floor at 0.
+    - The refresh's locals `te_dg_rate_prev_d` and `te_dg_rate_lines_d`; `te_demog_k_window_start_weight`
+      (`P.WINDOW_START_WEIGHT`, 0.5); `demographics_model.window_events(end_rate, start_rate)`.
+  - from #913: severe starvation read in 0.05 food-security steps × the starvation value. The generator's
+    `_starvation_ladder(o, coefficient, _starvation_buckets(severe=True))` writes the step ladder;
+    `demographics_model.starvation_terms` gives the exact term.
 - **Shared edits with #906** (Late Marriage and Birth Spacing, branch `docs/demographics-late-marriage-plan`):
   - `te_demog_step_begin`: #906 puts `te_demog_practices_step` before `te_demog_prepare`. This plan puts
     `te_demog_medicine_drift` before it too; tests assert relative order only.
@@ -156,22 +158,45 @@ independent review (`review-905.md`) confirmed 1–4 against the code. The PR li
 
    q_d is `state_demog_ontop_mortality_mult` (Mental Health Awareness −0.05, Biological Immortality −0.2, Mind
    Backups −0.05). So the brief's whole-state factor, ×(1 + os_d), leaves those out.
-2. **`te_dg_os_d` is one refresh newer than `te_dg_dz`.** `te_demog_on_top_scales` measures dz over the window just
-   run, which ran on the previous refresh's M. Then `te_demog_rates_refresh` overwrites `te_dg_os_d`/`te_dg_q_d` for
-   the next window. A state line that changed in between (devastation arriving) would be split by the wrong os, and
-   a clamped M or a year's drift in the target breaks the identity too.
-   - **Chosen instead:** take the pops' own lines off the window's events, and what is left is the whole state's
-     part. The trapezoid (see "Dependencies") already computes those lines from the walk's own sums:
-     - at the window's end, `te_dg_ot_rd = w_ed − w_edr − (1 + read) × w_ed0`;
-     - at its start, `p_start = te_dg_ot_d − te_dg_os_d`, the last refresh's values, still in place at walk time.
-
-     It averages them the way it averages the window.
-   - Whole state: `te_dg_ed_state ÷ te_dg_ed_target`. This holds os and q averaged over the window, plus the census's
-     own lag since its last count: M a window old, and the model's rate drifting.
-   - Some of its people: `te_dg_ed ÷ te_dg_ed_state`, the pops' own lines over the window, split into severe
-     starvation and the rest.
-   - The product is 1 + dz unless dz hit either end of its range (`ON_TOP_SCALE_MIN` −0.9, `ON_TOP_SCALE_MAX` +4) or
-     the trapezoid's floor at 0.
+2. **The split must describe the window dz measured, at both of its ends.** `te_demog_on_top_scales` measures dz
+   from `te_dg_ed`. Since #907, `te_dg_ed` is the window's events: `w × te_dg_sr_d × people + (1 − w) × te_dg_w_ed`,
+   times the window's months (`te_demog_window_events`; w = 0.5).
+   - The last refresh's `te_dg_os_d` is one refresh newer than that window, and it holds only the state-level lines.
+     A state line that changed in between, a clamped M or a year's drift in the target breaks any identity built on
+     it.
+   - **Chosen instead:** take the pops' own lines off the window's events at each end. What is left is the whole
+     state's part. Each pop gives `bare × max(0, 1 + read + absorbed + own)`.
+     - **At the end** (the walk, the same effect): `P_end = w_ed − w_edr − (1 + read) × w_ed0`, read being
+       `modifier:state_mortality_mult` (M, the state-level lines, fast mode's term). For an unfloored pop that is
+       `bare × own`. For a floored one it is `−bare × (1 + read + absorbed)`: its own lines took its deaths to 0.
+     - **At the start:** the refresh that stores `te_dg_sr_d` stores beside it the start's own lines per head:
+       `te_dg_sp_d = (P_end' − ΔM × (w_ed0' − w_ed0m')) / people`. Here ΔM = `te_dg_md − te_dg_rate_prev_d −
+       te_dg_rate_lines_d`, `te_dg_sr_d`'s own multiplier.
+       - The change in M reaches only the pops the engine doesn't floor (`te_dg_sr_d` moves by `ΔM × w_ed0m'`), so
+         a floored pop's own lines absorb it.
+       - It also stores `te_dg_ss_d = w_sevd' / people`, severe starvation's part, which the change in M doesn't
+         touch.
+       - Fast mode moves `te_dg_sp_d` by `−ΔF × (w_ed0 − w_ed0m) / people` as it moves `te_dg_sr_d` by
+         `ΔF × w_ed0m / people`.
+       - These are the two new stored variables. They can't be recovered from `te_dg_sr_d` with `te_dg_os_d` and
+         `te_dg_q_d` (the identity breaks, as above), and only the refresh knows ΔM.
+     - **Over the window:** `ED_pop = (w × te_dg_sp_d × people + (1 − w) × P_end) × months / 100,000`, `ED_sev` the
+       same with `te_dg_ss_d` and `w_sevd`, and `ED_state = ED − ED_pop`. Where `te_demog_window_events` took the
+       snapshot (no start rate), the snapshot's `P_end` and `w_sevd`.
+   - Whole state: `ED_state ÷ target`. It holds the state-level lines and the moved lines' on-top family over the
+     window, the absorbed lines M nets (mild starvation), and the census's own lag (M a window old, the model's rate
+     drifting).
+   - Some of its people: `ED ÷ ED_state`. Severe starvation is `(ED_state + ED_sev) ÷ ED_state`; the rest is
+     `ED ÷ (ED_state + ED_sev)`.
+   - **The product is `ED ÷ target = 1 + dz` by construction.** It departs only in three cases:
+     - where dz hit either end of its range (`ON_TOP_SCALE_MIN` −0.9, `ON_TOP_SCALE_MAX` +4);
+     - where a display value's `min = 1` (one person) bites, which only happens on a tiny state;
+     - where `ED_state` would fall below 0. It is floored at 0 there, the one place the identity is cut. The read's
+       floor (−0.8) and non-negative absorbed deaths keep each end's whole-state part at or above 0.2 × the bare
+       deaths, so only a pop that M's change moves across the engine's floor inside the window (#907's second-order
+       case) can get there.
+   - A save from #907 but before this build has `te_dg_sr_d` and no start parts. Its window can't be split
+     consistently, so the split's variables go and the row waits for the next count.
 3. **Vanilla does have turmoil mortality.** The three `state_turmoil*` static modifiers carry none, as the brief says.
    But `state_mortality_turmoil_mult` ("Mortality per Turmoil") sits on several carriers:
    - Militarized Police +0.004 (`00_policing.txt`);
@@ -294,7 +319,8 @@ death term (+1.0 × bare) was never fitted and may be about 0.6. Fixing it will 
 | `scripts/generators/gen_demographics.py` | modify | factors, targets, the inputs store, the drift effects, the multipliers as products, constants; the severe-starvation sums in the walk |
 | `common/script_values/te_demog_generated_values.txt`, `common/scripted_effects/te_demog_generated_effects.txt` | regenerated | — |
 | `common/scripted_effects/te_demog_effects.txt` | modify | prepare/seed/step call the new effects; the walk calls the split; the header inventory |
-| `common/scripted_effects/te_demog_rate_effects.txt` | modify | `te_demog_on_top_split`; `te_dg_rate_clamp_d`, its copy `te_dg_ed_clamp_d`; the severe start share `te_dg_ot_sev` |
+| `common/scripted_effects/te_demog_fast_effects.txt` | modify | fast mode moves and removes the start's parts beside `te_dg_sr_d` |
+| `common/scripted_effects/te_demog_rate_effects.txt` | modify | `te_demog_on_top_split`; `te_dg_rate_clamp_d`, its copy `te_dg_ed_clamp_d`; the start's own lines and severe part `te_dg_sp_d`, `te_dg_ss_d` |
 | `common/script_values/te_debug_demog_values.txt`, `common/scripted_effects/te_debug_demog_effects.txt` | modify | guards on the mult reads; option l logs the diffusion rate; option n logs the split |
 | `common/decrees/extra_decrees.txt` | modify | `decree_medical_outreach` |
 | `common/script_values/te_demog_values.txt`, `common/scripted_triggers/te_demog_triggers.txt` | modify | `te_demog_medicine_gap`, `te_demog_medicine_behind` |
@@ -1405,409 +1431,347 @@ Expected: OK. The cohort tests keep their multiplier fixtures; the drift runs at
 
 ---
 
-### Task 6: Split the deaths added on top, on the trapezoid's quantities (review stop)
+### Task 6: Split the deaths added on top at both ends of the window (review stop)
 
-**Lands after the trapezoid PR** (`fix/demog-ring-on-top-trapezoid`; see "Dependencies and shared edits"). Before
-starting, merge `origin/main` with the trapezoid in it and re-check every name this task reads against the merged code:
-`te_demog_on_top_pop_lines` and its locals `te_dg_ot_rb`/`te_dg_ot_rd`, `te_demog_on_top_window` and its limit,
-`te_dg_ot_b`/`te_dg_ot_d`, `te_demog_on_top_state_deaths`, `te_demog_on_top_window_k`,
-`te_demog_k_on_top_start_weight`, `demographics_model.on_top_share`/`window_events`. Where one changed, follow the
-merged code and keep this task's identity: whole state = the window's events less the pops' own lines over the same
-window.
+**Re-planned 2026-10-11** against #907 (b8c993b4, the window is the mean of the engine's rate at its two ends) and #913
+(209401a6, severe starvation × the starvation value in 0.05 food-security steps). The design is the owner's, unchanged:
+- "Deaths Added on Top ×(1 + dz)" under Full, red from ×1.25;
+- split into effects on the whole state and effects on some of its people, the latter as "Severe starvation ×a
+  (X% of its people)" and "Other effects on some of its people ×b";
+- the hover describes the window dz measured, through the clamp copy `te_dg_ed_clamp_d`;
+- the row waits until a measured window exists.
+
+The identity and its departures are in "What the code says" §2.
 
 **Files:**
-- Modify: `scripts/generators/gen_demographics.py` (`absorbed_walk`); regenerate
-- Modify: `common/scripted_effects/te_demog_effects.txt` (`te_demog_walks`, after `te_demog_on_top_window = yes`;
-  `te_demog_seed`; the header)
-- Modify: `common/scripted_effects/te_demog_rate_effects.txt` (new `te_demog_on_top_split` and
-  `te_demog_on_top_clamp_copy`; `te_demog_on_top_scales`, `te_demog_rate_clamp`, `te_demog_rates_refresh`,
-  `te_demog_rates_clear`, the header)
-- Modify: `common/script_values/te_demog_display_values.txt` (`te_demog_deaths_on_top`, `_whole_state`, `_severe`,
-  `_other`; text in Task 8 Step 3)
-- Modify: `common/scripted_effects/te_debug_demog_effects.txt` (option n's `TE_DEMOG_RATES` line)
-- Modify: `scripts/analysis/demographics_model.py` (`on_top_split`)
-- Test: `test_gen_demographics.py`, `test_demographics_model.py`, `test_demographics_registry.py` (`TestRatesScript`,
-  new `TestOnTopSplitScript`)
+- Modify: `scripts/generators/gen_demographics.py` (`absorbed_walk`); regenerate.
+- Modify: `common/scripted_effects/te_demog_rate_effects.txt`:
+  - new `te_demog_on_top_split`, `te_demog_on_top_split_clear` and `te_demog_on_top_clamp_copy`;
+  - `te_demog_rates_refresh` (the start's parts beside `te_dg_sr_d`; `te_dg_rate_clamp_d`; the no-start branch);
+  - `te_demog_rate_clamp` (the side), `te_demog_on_top_scales` (the copy), `te_demog_rates_clear`, the header.
+- Modify: `common/scripted_effects/te_demog_effects.txt`: `te_demog_walks` (the split after
+  `te_demog_window_events`), `te_demog_seed` (the start's parts go with `te_dg_sr_*`), the header.
+- Modify: `common/scripted_effects/te_demog_fast_effects.txt`: `te_demog_fast_refresh_rates` moves `te_dg_sp_d`;
+  `te_demog_fast_clear_rates` removes the start's parts.
+- Modify: `common/script_values/te_demog_display_values.txt`: `te_demog_deaths_on_top`, `_whole_state`, `_severe`,
+  `_other` (Task 8 adds `_code` and the text).
+- Modify: `common/scripted_effects/te_debug_demog_effects.txt`: option n's `TE_DEMOG_RATES` line.
+- Modify: `scripts/analysis/demographics_model.py` (`on_top_split`).
+- Test:
+  - `test_demographics_model.py` (`TestOnTopSplit`) and `test_gen_demographics.py`;
+  - `test_demographics_registry.py`: `TestAbsorbedScript` (the severe sum), new `TestOnTopSplitScript`, new
+    `TestOnTopClampSide`. The helpers that run the refresh on hand-set walk locals gain `te_dg_w_sevd` and
+    `te_dg_w_sev`.
 
 **Interfaces:**
 - Consumes:
-  - the walk's locals `te_dg_p_ed`, `te_dg_w_pop`, `te_dg_w_rep` (Full only), `te_demog_step_months`;
-  - from the trapezoid: `te_dg_ot_rd` (the pop-level lines at the window's end, a month × 100,000), `te_dg_ot_d` and
-    the last refresh's `te_dg_os_d` (so the pop-level share at the window's start is `te_dg_ot_d − te_dg_os_d`),
-    `te_demog_k_on_top_start_weight`, `te_demog_on_top_window_k`.
-- Produces (Full only; removed outside it):
-  - walk locals `te_dg_w_sev` (people in severe starvation) and `te_dg_w_sevd` (their bare deaths × the severe
-    term);
-  - state variables `te_dg_ed_state` (the window's deaths without the pops' own lines, people), `te_dg_ed_sev`
-    (severe starvation's part over the window, people) and `te_dg_sev_share` (the share of people in severe
-    starvation at the walk);
-  - `te_dg_ot_sev`, severe starvation's share of the target at the window's start, stored by the refresh beside
-    `te_dg_ot_d`;
-  - `te_dg_rate_clamp_d` (0 none, 1 floor, 2 cap), set by every Full refresh for the next window, and its copy for
-    the window just measured, `te_dg_ed_clamp_d` (`te_demog_on_top_clamp_copy`, run by `te_demog_on_top_scales`);
-  - `M.on_top_split(snapshot, target, end_state, end_pop, end_sev, start=None, k=1.0, months=12) -> (events,
-    state_part, severe_part)`.
+  - the walk's locals `te_dg_w_ed`, `_ed0`, `_edr`, `_ed0m`, `te_dg_w_pop`, `te_dg_p_ed`, `te_dg_p_md` and
+    `te_dg_w_rep`;
+  - the refresh's locals `te_dg_rate_prev_d` and `te_dg_rate_lines_d`, and its `te_dg_md`;
+  - fast mode's `te_dg_fast_fd` and local `te_dg_fast_prev_d`;
+  - `te_dg_sr_b` / `_d`, `te_dg_ed`, `te_demog_k_window_start_weight`, `te_demog_step_months`.
+- Produces:
+  - walk locals `te_dg_w_sev` (people in severe starvation) and `te_dg_w_sevd` (their deaths' severe term: the bare
+    curve × 1.0 × the starvation value's step, pops the engine doesn't floor). They start at 0 for every walk and
+    are summed under Full only.
+  - state variables:
+    - `te_dg_sp_d` and `te_dg_ss_d`, the start's own lines and severe part per head, beside `te_dg_sr_d`, removed
+      with it;
+    - `te_dg_ed_state`, `te_dg_ed_sev` and `te_dg_sev_share` (Full only);
+    - `te_dg_rate_clamp_d` (0 none, 1 the floor, 2 the cap) and its copy for the measured window,
+      `te_dg_ed_clamp_d`.
+  - `M.on_top_split(end, start=None) -> (events, whole-state part, severe part)`. `end` and `start` are each
+    `(rate, pops' own lines, severe)` at that end, in any one unit.
+  - display values `te_demog_deaths_on_top`, `te_demog_deaths_whole_state`, `te_demog_deaths_severe` and
+    `te_demog_deaths_other`.
 
-**Why this split** ("What the code says" 1–2, and the review's C1):
-- The pops' own lines over the window are what the trapezoid already measures: at the end
-  `te_dg_ot_rd = w_ed − w_edr − (1 + read) × w_ed0`, at the start `te_dg_ot_d − te_dg_os_d`.
-- They are averaged with the weight and K the trapezoid gives the window.
-- Taking them off `te_dg_ed` leaves the whole state's part: the state-level lines, averaged the same way, the moved
-  lines' on-top family, and the census's own lag (M a window old, the model's rate drifting).
-- No new per-pop sum is needed for this, because `te_demog_pop_absorbed_deaths` is never negative and the read stays at
-  or above −0.8. Severe starvation's part is summed inside the one per-pop severe-starvation test, beside its people.
+**The truth the tests check against:** an engine built from pops, as `TestWindowEvents` builds one.
+- Each pop has bare curves, absorbed terms, its own terms on top and, of those, a severe starvation term and its
+  people.
+- At each end, under that end's read:
+  - the engine's deaths are `Σ bare × max(0, 1 + read + absorbed + own)`;
+  - the whole state's part is `Σ bare × (1 + read + absorbed)`: the engine without any pop's own lines, unfloored;
+  - severe starvation's part is `Σ bare × severe` over the pops the engine doesn't floor.
+- The window is the mean of the two ends × months / 100,000. The start runs under the read the refresh left in
+  force: the new M, fast mode's new term, no moved lines' pairs.
+- The discriminating case is a pop floored at the start while M changes at the refresh. Using `w_ed0` where the start
+  needs `w_ed0m` passes every steady case and fails this one.
 
 - [ ] **Step 1: Write the failing tests**
-
-`test_demographics_model.py`:
-
-```python
-class TestOnTopSplit(unittest.TestCase):
-    """demographics_model.on_top_split (the Causes of Death plan, Task 6): the window's events less the pops' own lines
-    over the same window, on the trapezoid's window_events."""
-
-    def test_without_pop_lines_everything_is_the_whole_states(self):
-        events, state, sev = M.on_top_split(1300.0, 1000.0, end_state=0.3, end_pop=0.0, end_sev=0.0,
-                                            start=(0.0, 0.0, 0.0))
-        self.assertAlmostEqual(state, events)
-        self.assertEqual(sev, 0.0)
-
-    def test_a_famine_inside_the_window_is_half_counted_and_all_severe(self):
-        # no famine at the start, severe starvation adding 0.6 of the target at the end: the trapezoid books half
-        events, state, sev = M.on_top_split(1600.0, 1000.0, end_state=0.0, end_pop=0.6, end_sev=0.6,
-                                            start=(0.0, 0.0, 0.0))
-        self.assertAlmostEqual(events, 1600.0 - 1000.0 * 0.6 * P.ON_TOP_START_WEIGHT)
-        self.assertAlmostEqual(sev, 1000.0 * 0.6 * (1 - P.ON_TOP_START_WEIGHT))
-        self.assertAlmostEqual(events - state, sev)
-
-    def test_no_start_share_is_the_snapshot(self):
-        events, state, sev = M.on_top_split(1500.0, 1000.0, end_state=0.1, end_pop=0.4, end_sev=0.3)
-        self.assertEqual(events, 1500.0)
-        self.assertAlmostEqual(state, 1100.0)
-        self.assertAlmostEqual(sev, 300.0)
-```
-
-`test_gen_demographics.py`:
-
-```python
-    def test_the_walk_sums_severe_starvation_under_full(self):
-        init = self.effects.split("te_demog_absorbed_walk_init = {", 1)[1].split("\n}\n", 1)[0]
-        pop = self.effects.split("te_demog_absorbed_walk_pop = {", 1)[1].split("\n}\n", 1)[0]
-        for name in ("te_dg_w_sev", "te_dg_w_sevd"):
-            self.assertIn(f"name = {name} value = 0", init)
-        guarded = pop.split("local_var:te_dg_w_rep > 0", 1)[1]
-        severe = guarded.split("is_in_severe_starvation = yes", 1)[1]
-        self.assertIn("name = te_dg_w_sev add = total_size", severe)
-        self.assertIn(f"multiply = {gen.lit(P.STARVATION_SEVERE['deaths'])}", severe)
-        self.assertNotIn("te_demog_pop_state_death_mult", self.values + self.effects)   # no second per-pop multiplier
-```
-
-`test_demographics_registry.py`, `TestRatesScript` (add `te_dg_w_sevd=0.0` to `_eng`'s locals, and a `sevd`
-argument):
-
-```python
-    def test_the_deaths_clamp_records_its_side(self):
-        """The refresh says why the census couldn't set deaths for the next window: 1 at the floor, 2 at the cap, 0 when
-        it could; births clamped alone leave 0."""
-        for kw, side in ((dict(cdr=400.0), 2), (dict(cdr=0.5, read_d=-0.5), 1),
-                         (dict(cbr=2.0, read_b=-0.5), 0), ({}, 0)):
-            eng = self._eng(**kw)
-            eng.call("te_demog_rates_refresh")
-            with self.subTest(kw=kw):
-                self.assertEqual(eng.vars["te_dg_rate_clamp_d"], side)
-
-    def test_the_refresh_stores_severe_starvations_start_share(self):
-        eng = self._eng(sevd=0.25 * 31.0 * self.POP * 100 / 12)
-        eng.call("te_demog_rates_refresh")
-        self.assertAlmostEqual(eng.vars["te_dg_ot_sev"], 0.25, places=5)
-
-    def test_outside_full_the_split_and_the_clamp_side_go(self):
-        eng = self._eng(full=False)
-        eng.vars.update(te_dg_rate_clamp_d=2.0, te_dg_ot_sev=0.1, te_dg_ed_clamp_d=1.0)
-        eng.call("te_demog_rates_refresh")
-        for name in ("te_dg_rate_clamp_d", "te_dg_ot_sev", "te_dg_ed_clamp_d"):
-            self.assertNotIn(name, eng.vars, name)
-```
-
-New class:
-
-```python
-class TestOnTopSplitScript(unittest.TestCase):
-    """te_demog_on_top_split, after the trapezoid's te_demog_on_top_window, against demographics_model.on_top_split, on
-    the walk's locals (the Causes of Death plan, Task 6; Review Focus 3)."""
-
-    POP, CDR, CBR = 1_000_000.0, 30.0, 38.0
-    ED0, EB0, READ = 400e6, 475e6, -0.3          # the walk's bare deaths and births, a month x 100,000; the state read
-
-    def _t(self):
-        return self.CDR * self.POP * 100 / 12       # the target in the walk's units
-
-    def _eng(self, os_end=0.0, pop_end=0.0, sev_end=0.0, start=None, full=True):
-        """A state at its walk's tail: the read is os_end + the census's own term (READ - os_end, applied as the pair);
-        the pops' own lines add pop_end of the target, sev_end of it from severe starvation; start = (os, pop, sev)
-        shares the last refresh stored, or None."""
-        t = self._t()
-        m = self.READ - os_end
-        eng = _Engine({"state_population": self.POP, "modifier:state_mortality_mult": self.READ,
-                       "modifier:state_birth_rate_mult": 0.0, "te_demog_step_months": 12.0,
-                       **{f"modifier:{n}": 0.0 for n in P.ENGINE_LINE_TYPES.values()}},
-                      triggers={"te_demog_effects_run": full})
-        eng.modifiers["te_demog_census_deaths_down" if m < 0 else "te_demog_census_deaths_up"] = abs(m)
-        eng.vars.update(te_dg_md=m, te_dg_cdr_model=self.CDR, te_dg_cbr_model=self.CBR)
-        w_ed = (1 + self.READ) * self.ED0 + pop_end * t
-        eng.locals.update(te_dg_w_ed0=self.ED0, te_dg_w_edr=0.0, te_dg_w_ed=w_ed, te_dg_w_eb0=self.EB0,
-                          te_dg_w_ebr=0.0, te_dg_w_eb=self.EB0, te_dg_w_sevd=sev_end * t, te_dg_w_sev=12000.0,
-                          te_dg_w_pop=self.POP)
-        eng.vars.update(te_dg_ed=w_ed * 12 / 1e5, te_dg_eb=self.EB0 * 12 / 1e5)
-        if start is not None:
-            eng.vars.update(te_dg_os_d=start[0], te_dg_ot_d=start[0] + start[1], te_dg_ot_sev=start[2], te_dg_ot_b=0.0)
-        return eng
-
-    def _run(self, eng):
-        eng.call("te_demog_on_top_window")
-        eng.call("te_demog_on_top_split")
-        return eng.vars["te_dg_ed"], eng.vars["te_dg_ed_state"], eng.vars["te_dg_ed_sev"]
-
-    def test_it_matches_the_model(self):
-        target = self.CDR * self.POP / 1000
-        for kw in (dict(), dict(os_end=0.2, pop_end=0.5, sev_end=0.4, start=(0.0, 0.1, 0.0)),
-                   dict(os_end=0.1, pop_end=0.3, sev_end=0.3), dict(pop_end=-0.05, start=(0.1, 0.2, 0.15))):
-            eng = self._eng(**kw)
-            snapshot = eng.vars["te_dg_ed"]
-            want = M.on_top_split(snapshot, target, kw.get("os_end", 0.0), kw.get("pop_end", 0.0),
-                                  kw.get("sev_end", 0.0), start=kw.get("start"))
-            with self.subTest(kw=kw):
-                for got, w in zip(self._run(eng), want):
-                    self.assertAlmostEqual(got, w, delta=1e-3 * max(abs(w), 1.0))
-
-    def test_the_whole_state_part_is_the_window_without_the_pops_own_lines(self):
-        # the same state with the pops' own lines zeroed at both ends: the trapezoid alone gives the whole state's part
-        lines = self._eng(os_end=0.2, pop_end=0.5, sev_end=0.4, start=(0.05, 0.1, 0.05))
-        _ed, state, _sev = self._run(lines)
-        bare = self._eng(os_end=0.2, start=(0.05, 0.0, 0.0))
-        bare.call("te_demog_on_top_window")
-        self.assertAlmostEqual(state, bare.vars["te_dg_ed"], delta=1e-3)
-
-    def test_a_famine_inside_the_window_is_severe_starvations(self):
-        ed, state, sev = self._run(self._eng(pop_end=0.6, sev_end=0.6, start=(0.0, 0.0, 0.0)))
-        self.assertAlmostEqual(ed - state, sev, delta=1e-3)
-        self.assertAlmostEqual(sev, 0.6 * self.CDR * self.POP / 1000 * (1 - P.ON_TOP_START_WEIGHT), delta=1e-3)
-
-    def test_a_state_level_change_stays_with_the_whole_state(self):
-        ed, state, sev = self._run(self._eng(os_end=0.3, start=(0.0, 0.0, 0.0)))
-        self.assertAlmostEqual(state, ed, delta=1e-3)
-        self.assertEqual(sev, 0.0)
-
-    def test_outside_full_the_split_goes(self):
-        eng = self._eng(full=False)
-        eng.vars.update(te_dg_ed_state=1.0, te_dg_ed_sev=1.0, te_dg_sev_share=0.1)
-        eng.call("te_demog_on_top_split")
-        for name in ("te_dg_ed_state", "te_dg_ed_sev", "te_dg_sev_share"):
-            self.assertNotIn(name, eng.vars, name)
-
-    def test_the_measured_window_keeps_its_clamp(self):
-        # Review Focus 3: dz measures the window that ran on the last refresh's M, so the hover reads that refresh's
-        # flag, copied before this step's refresh overwrites it; with no flag (the first Full step after Display only,
-        # or after a seed) the copy goes and the row waits
-        eng = _Engine({}, triggers={"te_demog_effects_run": True})
-        eng.vars["te_dg_rate_clamp_d"] = 2.0
-        eng.call("te_demog_on_top_clamp_copy")
-        self.assertEqual(eng.vars["te_dg_ed_clamp_d"], 2.0)
-        del eng.vars["te_dg_rate_clamp_d"]
-        eng.call("te_demog_on_top_clamp_copy")
-        self.assertNotIn("te_dg_ed_clamp_d", eng.vars)
-        scales = [k for k, _, _ in _parse_script(_raw_blocks([RATE_EFFECTS])["te_demog_on_top_scales"])]
-        self.assertIn("te_demog_on_top_clamp_copy", scales)
-```
-
-The `_eng` above leans on the trapezoid's test helpers' conventions (the census pair standing in for M, so
-`te_demog_on_top_state_deaths` reads `os_end`). If the merged trapezoid tests build a state differently, reuse their
-helper instead.
+  - `test_demographics_model.py`, `TestOnTopSplit`, on `M.on_top_split`:
+    - with no start, the snapshot: `events = end[0]` and `state = end[0] − end[1]`;
+    - with a start, each part weighted as `window_events` weighs the rate (`P.WINDOW_START_WEIGHT`);
+    - a famine only at the end books `(1 − w)` of its severe part;
+    - the whole state's part is never below 0.
+  - `test_gen_demographics.py`:
+    - `te_demog_absorbed_walk_init` starts `te_dg_w_sev` and `te_dg_w_sevd` at 0, outside the Full guard;
+    - `te_demog_absorbed_walk_pop` sums them inside it: one `is_in_severe_starvation = yes` test, the people
+      unconditionally, the deaths inside `local_var:te_dg_p_md > 0`;
+    - the deaths' term is the severe ladder that `te_demog_pop_death_mult` holds, the same text;
+    - no new per-pop script value.
+  - `test_demographics_registry.py`, `TestAbsorbedScript.test_the_walk_sums_severe_starvation`, per pop through the
+    generated effect:
+    - severe pops at food security 0.199, 0.15, 0.12, 0.07 and 0.0: people added, deaths `p_ed × 1.0 ×` the step's
+      starvation value (equal to `te_demog_pop_death_mult`'s severe part at each);
+    - a floored severe pop (`p_md = 0`): people only;
+    - a mild pop: nothing;
+    - outside Full: nothing.
+  - `test_demographics_registry.py`, new `TestOnTopSplitScript`:
+    - **The helper.** `window(start_pops, end_pops, ...)` mirrors `TestWindowEvents.window`: the refresh at the start
+      under the old read, the terms it left in force, the end's walk, then `te_demog_window_events` and
+      `te_demog_on_top_split`. It also runs `te_demog_on_top_scales` (its rate locals at 1) for dz, the target and
+      the clamp copy. Pops are `_SPop(bare_b, bare_d, abs_b, abs_d, top_b, top_d, sev_d, people)`, with `sev_d` part
+      of `top_d`.
+    - **Each case checks** `te_dg_ed_state` and `te_dg_ed_sev` against the truth above, `te_dg_sev_share` against the
+      end's people, and `whole × severe × other == 1 + dz` through the display values.
+      - `test_a_famine_inside_the_window_is_severe_starvations`: mild at the start (netted by M), severe at the end.
+        Half the end's severe part is severe starvation's; mild's netted line stays with the whole state.
+      - `test_a_famine_ending_in_the_window`.
+      - `test_a_state_level_change_stays_with_the_whole_state`: devastation 0 → +0.3 gives severe ×1.00 and other
+        ×1.00.
+      - `test_other_lines_on_some_people`: a workplace line on one pop gives other above 1 and severe ×1.00.
+      - `test_the_whole_state_part_is_the_window_without_the_pops_own_lines`: the same state with every pop's own
+        lines zeroed at both ends books `te_dg_ed` equal to the first's `te_dg_ed_state`.
+      - `test_a_floored_pop_under_a_changing_m`: a pop floored at the start while M moves from −0.25 to about +0.4
+        at the refresh.
+      - `test_fast_mode_moves_the_start_part`: K = 4, the window of 3 months.
+      - `test_no_start_rate_splits_the_snapshot`: the first step after a seed.
+    - **Exceptions.**
+      - `test_a_start_from_before_this_build_waits`: `te_dg_sr_*` without `te_dg_sp_d` / `te_dg_ss_d`. The three
+        variables go.
+      - `test_outside_full_the_split_goes`.
+      - `test_where_dz_is_clamped_the_product_is_not`: ED over five times the target. The product exceeds 1 + dz
+        (+4), which the hover says through the clamp text (Task 8).
+    - **Removal sites.** `test_the_start_parts_go_with_the_start_rate`: the start's parts go wherever `te_dg_sr_d`
+      goes. That is `te_demog_rates_clear`, the refresh's no-start branch (a seed's refresh), `te_demog_seed` and
+      `te_demog_fast_clear_rates`, each driven.
+  - `test_demographics_registry.py`, new `TestOnTopClampSide`:
+    - `test_the_deaths_clamp_records_its_side`: the floor gives 1, the cap 2, neither 0, and births clamped alone
+      0. The side resets at each `te_demog_rate_clamp`.
+    - `test_the_measured_window_keeps_its_clamp`: `te_demog_on_top_scales` copies the flag before the refresh;
+      with no flag the copy goes.
+    - `test_rates_clear_takes_the_clamp_and_the_start_parts`.
 
 - [ ] **Step 2: Run them to see them fail**
 
-Run: `.venv/bin/python -m unittest test_demographics_model.TestOnTopSplit test_gen_demographics test_demographics_registry.TestRatesScript test_demographics_registry.TestOnTopSplitScript`
-Expected: FAIL/ERROR.
+Run: `.venv/bin/python -m unittest test_demographics_model.TestOnTopSplit test_gen_demographics test_demographics_registry.TestAbsorbedScript test_demographics_registry.TestOnTopSplitScript test_demographics_registry.TestOnTopClampSide`
+Expected: FAIL/ERROR (`on_top_split`, `te_demog_on_top_split`, `te_dg_w_sevd` missing).
 
-- [ ] **Step 3: The model** (after the trapezoid's `window_events`)
+- [ ] **Step 3: The model** (after `window_events`)
 
 ```python
-def on_top_split(snapshot, target, end_state, end_pop, end_sev, start=None, k=1.0, months=12):
-    """(events, events without the pops' own lines, severe starvation's part) over a step's window (the Causes of Death
-    plan; the script's te_demog_on_top_split). Shares are of the target (a year). start = (state, pop, sev) shares at
-    the window's start, or None. The pops' own lines over the window are the snapshot's (end_pop x months / 12 of the
-    target) plus, where the trapezoid averaged the window, (start_pop - end_pop) x ON_TOP_START_WEIGHT / k of it;
-    severe starvation's alike."""
-    end_share = max(end_state, P.RATE_TOTAL_MIN) + end_pop
-    start_share = None if start is None else max(start[0], P.RATE_TOTAL_MIN) + start[1]
-    events = window_events(snapshot, target, end_share, start_share, k)
-    f = 0.0 if start is None else P.ON_TOP_START_WEIGHT / k
-    pop = target * (end_pop * months / 12 + ((start[1] - end_pop) * f if start else 0.0))
-    sev = target * (end_sev * months / 12 + ((start[2] - end_sev) * f if start else 0.0))
-    return events, max(events - pop, 0.0), max(sev, 0.0)
+def on_top_split(end, start=None):
+    """(events, whole-state part, severe starvation's part) over a step's window (the Causes of Death plan; the script's
+    te_demog_on_top_split). end, start: (the engine's rate, the pops' own lines in it, severe starvation's part of
+    those) at that end of the window, in one unit; start None where the window took the snapshot. Each part is
+    weighted as window_events weighs the rate; the whole state's part is the events less the pops' own lines, at
+    least 0."""
+    events = window_events(end[0], None if start is None else start[0])
+    if start is None:
+        own, severe = end[1], end[2]
+    else:
+        w = P.WINDOW_START_WEIGHT
+        own, severe = w * start[1] + (1 - w) * end[1], w * start[2] + (1 - w) * end[2]
+    return events, max(0.0, events - own), severe
 ```
 
 - [ ] **Step 4: The generator** (`absorbed_walk`)
-  - init, after `te_dg_w_rep`'s line: `set_local_variable = { name = te_dg_w_sev value = 0 }` and
+  - init, before the Full guard: `set_local_variable = { name = te_dg_w_sev value = 0 }` and
     `set_local_variable = { name = te_dg_w_sevd value = 0 }`.
-  - pop, inside the `local_var:te_dg_w_rep > 0` block (one test per pop, under Full only):
+  - pop, inside `local_var:te_dg_w_rep > 0`, after the `te_dg_w_ed0m` test:
     ```python
-    sev = static_modifier(root, "severe_starvation_penalty")["state_mortality_mult"]
-    assert sev == P.STARVATION_SEVERE["deaths"], "severe_starvation_penalty changed: update STARVATION_SEVERE"
-    o("# severe starvation's people and its share of the pop's deaths (the Causes of Death plan): the main per-pop line")
+    o("# severe starvation's people, and its part of the pop's deaths where the engine doesn't floor them (the Causes")
+    o("# of Death section's split, te_demog_on_top_split): the severe ladder te_demog_pop_death_mult holds")
     o("if = {")
     o("limit = { is_in_severe_starvation = yes }")
     o("change_local_variable = { name = te_dg_w_sev add = total_size }")
-    o(f"change_local_variable = {{ name = te_dg_w_sevd add = {{ value = local_var:te_dg_p_ed multiply = {lit(sev)} }} }}")
+    o("if = {")
+    o("limit = { local_var:te_dg_p_md > 0 }")
+    o("change_local_variable = {")
+    o("name = te_dg_w_sevd")
+    o("add = {")
+    o("value = local_var:te_dg_p_ed")
+    o("multiply = {")
+    o("value = 0")
+    _starvation_ladder(o, severe["state_mortality_mult"], _starvation_buckets(severe=True))
+    o("}")
+    o("}")
+    o("}")
+    o("}")
     o("}")
     ```
-    `absorbed_walk(o, root)` already takes `root`. Amend the two comments: "the replaced sums, and under Full severe
-    starvation's".
+    `absorbed_walk` reads `severe = static_modifier(root, "severe_starvation_penalty")`, as `engine_rate_terms`
+    does. Amend its comments.
   - Regenerate.
 
-- [ ] **Step 5: The split, the clamp side and the start share** (`te_demog_rate_effects.txt`, after
-  `te_demog_on_top_window`)
+- [ ] **Step 5: The split, the start's parts and the clamp side** (`te_demog_rate_effects.txt`)
 
 ```
-# THIS = a state, the walk's tail, straight after te_demog_on_top_window: the Causes of Death section's split of the
+# THIS = a state, the walk's tail, straight after te_demog_window_events: the Causes of Death section's split of the
 # window's deaths (docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md, Task 6). Under Full:
-#   te_dg_ed_state  te_dg_ed less the pops' own lines over the window: the snapshot's (te_dg_ot_rd, which
-#                   te_demog_on_top_pop_lines set) and, where te_demog_on_top_window averaged the window, its correction
-#                   toward the start's (te_dg_ot_d - te_dg_os_d: the last refresh's, still in place), weighed as it
-#                   weighs it. What is left: the state-level lines and the moved lines' on-top family over the window,
-#                   and the census's own lag (M a window old, the model's rate drifting)
-#   te_dg_ed_sev    severe starvation's part of those lines over the window, the same way (te_dg_w_sevd at the end,
-#                   te_dg_ot_sev at the start)
+#   te_dg_ed_state  te_dg_ed less the pops' own lines over the window, at least 0: the state-level lines and the moved
+#                   lines' on-top family, the absorbed lines M nets, and the census's own lag (M a window old, the
+#                   model's rate drifting)
+#   te_dg_ed_sev    severe starvation's part of the pops' own lines over the window
 #   te_dg_sev_share the share of the state's people in severe starvation at the walk
-# Outside Full the three go.
+# Each end as te_demog_window_events weighs it. Today's from the walk: the engine's rate less what it would be without
+# any pop's own lines, w_ed - w_edr - (1 + read) x w_ed0 (a floored pop's own lines took its deaths to 0), and
+# te_dg_w_sevd. The start's from the refresh that stored te_dg_sr_d: te_dg_sp_d and te_dg_ss_d, per head. A start
+# rate without them (a save from before this build) leaves no split, so the row waits for the next count. Outside
+# Full the three go.
 te_demog_on_top_split = {
 	if = {
 		limit = { te_demog_effects_run = yes }
-		set_local_variable = { name = te_dg_sp_pop value = { value = local_var:te_dg_ot_rd multiply = te_demog_step_months divide = 100000 } }
-		set_local_variable = { name = te_dg_sp_sev value = { value = local_var:te_dg_w_sevd multiply = te_demog_step_months divide = 100000 } }
-		# te_demog_on_top_window's own limit: there it averaged the window
+		set_local_variable = {
+			name = te_dg_split_own
+			value = {
+				value = modifier:state_mortality_mult
+				add = 1
+				multiply = local_var:te_dg_w_ed0
+				add = local_var:te_dg_w_edr
+				multiply = -1
+				add = local_var:te_dg_w_ed
+			}
+		}
+		set_local_variable = { name = te_dg_split_sev value = local_var:te_dg_w_sevd }
+		set_local_variable = { name = te_dg_split_ok value = 1 }
+		# te_demog_window_events' limit: there the window took the start's rate
 		if = {
 			limit = {
-				has_variable = te_dg_cbr_model
-				has_variable = te_dg_cdr_model
-				has_variable = te_dg_ot_b
-				has_variable = te_dg_ot_d
-				has_variable = te_dg_os_d
+				has_variable = te_dg_sr_b
+				has_variable = te_dg_sr_d
 			}
-			set_local_variable = { name = te_dg_sp_t value = { value = var:te_dg_cdr_model multiply = state_population multiply = 100 divide = 12 } }
-			set_local_variable = {
-				name = te_dg_sp_pop
-				value = {
-					value = var:te_dg_ot_d
-					subtract = var:te_dg_os_d
-					multiply = local_var:te_dg_sp_t
-					subtract = local_var:te_dg_ot_rd
-					multiply = te_demog_k_on_top_start_weight
-					divide = { value = te_demog_on_top_window_k min = 1 }
-					multiply = 12
-					divide = 100000
-					add = local_var:te_dg_sp_pop
-				}
-			}
-			# severe starvation's start share arrives with this build's first refresh; until then its snapshot stands
 			if = {
-				limit = { has_variable = te_dg_ot_sev }
+				limit = {
+					has_variable = te_dg_sp_d
+					has_variable = te_dg_ss_d
+				}
 				set_local_variable = {
-					name = te_dg_sp_sev
+					name = te_dg_split_own
 					value = {
-						value = var:te_dg_ot_sev
-						multiply = local_var:te_dg_sp_t
-						subtract = local_var:te_dg_w_sevd
-						multiply = te_demog_k_on_top_start_weight
-						divide = { value = te_demog_on_top_window_k min = 1 }
-						multiply = 12
-						divide = 100000
-						add = local_var:te_dg_sp_sev
+						value = var:te_dg_sp_d
+						multiply = state_population
+						subtract = local_var:te_dg_split_own
+						multiply = te_demog_k_window_start_weight
+						add = local_var:te_dg_split_own
+					}
+				}
+				set_local_variable = {
+					name = te_dg_split_sev
+					value = {
+						value = var:te_dg_ss_d
+						multiply = state_population
+						subtract = local_var:te_dg_split_sev
+						multiply = te_demog_k_window_start_weight
+						add = local_var:te_dg_split_sev
 					}
 				}
 			}
+			else = {
+				set_local_variable = { name = te_dg_split_ok value = 0 }
+			}
 		}
-		set_variable = { name = te_dg_ed_state value = { value = var:te_dg_ed subtract = local_var:te_dg_sp_pop min = 0 } }
-		set_variable = { name = te_dg_ed_sev value = { value = local_var:te_dg_sp_sev min = 0 } }
-		set_variable = { name = te_dg_sev_share value = { value = local_var:te_dg_w_sev divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }
+		if = {
+			limit = { local_var:te_dg_split_ok > 0 }
+			set_variable = {
+				name = te_dg_ed_state
+				value = {
+					value = local_var:te_dg_split_own
+					multiply = te_demog_step_months
+					divide = 100000
+					multiply = -1
+					add = var:te_dg_ed
+					min = 0
+				}
+			}
+			set_variable = {
+				name = te_dg_ed_sev
+				value = {
+					value = local_var:te_dg_split_sev
+					multiply = te_demog_step_months
+					divide = 100000
+					min = 0
+				}
+			}
+			set_variable = {
+				name = te_dg_sev_share
+				value = {
+					value = local_var:te_dg_w_sev
+					divide = { value = local_var:te_dg_w_pop min = 1 }
+					max = 1
+				}
+			}
+		}
+		else = {
+			te_demog_on_top_split_clear = yes
+		}
 	}
 	else = {
-		if = {
-			limit = { has_variable = te_dg_ed_state }
-			remove_variable = te_dg_ed_state
-		}
-		if = {
-			limit = { has_variable = te_dg_ed_sev }
-			remove_variable = te_dg_ed_sev
-		}
-		if = {
-			limit = { has_variable = te_dg_sev_share }
-			remove_variable = te_dg_sev_share
-		}
-	}
-}
-
-# THIS = a state, in te_demog_on_top_scales: the deaths clamp of the refresh whose M the window just measured ran on,
-# before this step's refresh writes the next window's (te_dg_rate_clamp_d). With none (not Full, the first Full step
-# after a seed or after Display only, an old save), the copy goes and the section's row waits for the next count.
-te_demog_on_top_clamp_copy = {
-	if = {
-		limit = {
-			te_demog_effects_run = yes
-			has_variable = te_dg_rate_clamp_d
-		}
-		set_variable = { name = te_dg_ed_clamp_d value = var:te_dg_rate_clamp_d }
-	}
-	else_if = {
-		limit = { has_variable = te_dg_ed_clamp_d }
-		remove_variable = te_dg_ed_clamp_d
+		te_demog_on_top_split_clear = yes
 	}
 }
 ```
 
+`te_demog_on_top_split_clear` removes the three variables, guarding each with `has_variable`.
+`te_demog_on_top_clamp_copy` is the original plan's text: under Full with `te_dg_rate_clamp_d` it sets
+`te_dg_ed_clamp_d` to it, and otherwise removes the copy.
+
 Then:
-- `te_demog_walks`: `te_demog_on_top_split = yes` straight after `te_demog_on_top_window = yes`
-  (`# the Causes of Death section's split of the window's deaths (Full only)`). Add the three variables to the header's
-  walk inventory ("Full only").
+- `te_demog_walks`: `te_demog_on_top_split = yes` straight after `te_demog_window_events = yes`, with the comment
+  `# the Causes of Death section's split of the window's deaths (Full only)`. Add the three variables to the
+  header's inventory ("Full only").
 - `te_demog_on_top_scales`: `te_demog_on_top_clamp_copy = yes` as its first line.
-- `te_demog_rate_clamp`: first line `set_local_variable = { name = te_dg_rate_side value = 0 }`; in the floor branch
-  `set_local_variable = { name = te_dg_rate_side value = 1 }`, in the cap branch `... value = 2`. Update its comment.
+- `te_demog_rate_clamp`: first line `set_local_variable = { name = te_dg_rate_side value = 0 }`; then 1 in the floor
+  branch and 2 in the cap branch. Update its comment.
 - `te_demog_rates_refresh`, deaths half, after its `te_demog_rate_clamp = yes`:
-  `set_variable = { name = te_dg_rate_clamp_d value = local_var:te_dg_rate_side }`
-  (`# which clamp bit deaths, for the next window: 0 none, 1 the floor, 2 the cap (te_demog_on_top_clamp_copy)`).
-  Beside the trapezoid's `te_dg_ot_d`:
+  `set_variable = { name = te_dg_rate_clamp_d value = local_var:te_dg_rate_side }`, with the comment `# which clamp bit
+  deaths, for the next window: 0 none, 1 the floor, 2 the cap (te_demog_on_top_clamp_copy)`. After `te_dg_sr_d`:
   ```
-  			# severe starvation's share at the start of the window that begins here (te_demog_on_top_split)
+  			# the start's own lines and severe starvation's part, per head (te_demog_on_top_split): today's, less the
+  			# change in the census's term on the pops the engine floors at 0, which it doesn't reach (te_dg_sr_d moves
+  			# by it on the others)
   			set_variable = {
-  				name = te_dg_ot_sev
+  				name = te_dg_sp_d
   				value = {
-  					value = local_var:te_dg_w_sevd
-  					divide = { value = var:te_dg_cdr_model multiply = state_population multiply = 100 divide = 12 min = 1 }
+  					value = var:te_dg_md
+  					subtract = local_var:te_dg_rate_prev_d
+  					subtract = local_var:te_dg_rate_lines_d
+  					multiply = { value = local_var:te_dg_w_ed0 subtract = local_var:te_dg_w_ed0m }
+  					multiply = -1
+  					add = local_var:te_dg_w_ed
+  					subtract = local_var:te_dg_w_edr
+  					subtract = { value = modifier:state_mortality_mult add = 1 multiply = local_var:te_dg_w_ed0 }
+  					divide = { value = state_population min = 1 }
   				}
   			}
+  			set_variable = { name = te_dg_ss_d value = { value = local_var:te_dg_w_sevd divide = { value = state_population min = 1 } } }
   ```
-- `te_demog_rates_clear`: remove `te_dg_rate_clamp_d`, `te_dg_ot_sev` and `te_dg_ed_clamp_d`, as it removes
-  `te_dg_ot_d`.
-- `te_demog_seed`: remove `te_dg_ot_sev` where it removes `te_dg_ot_d`.
+  The no-start branch removes `te_dg_sp_d` and `te_dg_ss_d` beside `te_dg_sr_*`.
+- `te_demog_rates_clear`: remove `te_dg_sp_d`, `te_dg_ss_d`, `te_dg_rate_clamp_d` and `te_dg_ed_clamp_d`.
+- `te_demog_seed` and `te_demog_fast_clear_rates`: remove `te_dg_sp_d` and `te_dg_ss_d` where they remove
+  `te_dg_sr_d`.
+- `te_demog_fast_refresh_rates`, after it moves `te_dg_sr_d`: under `has_variable = te_dg_sp_d`, a `set_variable`
+  with an inline value (the Global Constraints' rule) of `var:te_dg_sp_d − (te_dg_fast_fd − te_dg_fast_prev_d) ×
+  (te_dg_w_ed0 − te_dg_w_ed0m) / people`.
 - The headers of `te_demog_rate_effects.txt` and `te_demog_effects.txt`: the new variables.
 
 - [ ] **Step 6: Option n, and the display values**
-  - Option n (`TE_DEMOG_RATES`): copy `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share` and `te_dg_ed_clamp_d` into
-    `te_dg_dbg_eds`, `te_dg_dbg_edsev`, `te_dg_dbg_sev`, `te_dg_dbg_cld` (0 when absent, as the line's other copies).
-    Append
-    ` ed_state=[THIS.Var('te_dg_dbg_eds').GetValue|0]; ed_sev=[THIS.Var('te_dg_dbg_edsev').GetValue|0]; sev=[THIS.Var('te_dg_dbg_sev').GetValue|3]; clamp_d=[THIS.Var('te_dg_dbg_cld').GetValue|0]`
-    before `date=`, and remove the four after the line.
-  - `te_demog_display_values.txt`: add `te_demog_deaths_on_top`, `te_demog_deaths_whole_state`,
-    `te_demog_deaths_severe` and `te_demog_deaths_other` (Task 8, Step 3 gives their text).
+  - **Option n** (`TE_DEMOG_RATES`): copy `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_ed_clamp_d`,
+    `te_dg_sp_d` and `te_dg_ss_d` into `te_dg_dbg_eds`, `_edsev`, `_sev`, `_cld`, `_spd` and `_ssd` through
+    `te_debug_demog_rate_copy`. Log them before `date=` as ` ed_state= ed_sev= sev= clamp_d= sp_d= ss_d=` and remove
+    them after the line.
+  - **`te_demog_display_values.txt`:** `te_demog_deaths_on_top` (1 + `te_dg_dz`), `te_demog_deaths_whole_state`,
+    `te_demog_deaths_severe` and `te_demog_deaths_other`, as Task 8 Step 3 writes them. Their product is
+    `te_dg_ed ÷ te_dg_ed_target`.
 
 - [ ] **Step 7: Run the tests**
 
 Run: `.venv/bin/python scripts/generators/gen_demographics.py --check && .venv/bin/python -m unittest test_demographics_model test_gen_demographics test_demographics_registry`
-Expected: OK, including the trapezoid's own tests.
+Expected: OK, #907's and #913's own tests included.
 
-- [ ] **Step 8: Commit**: "Demographics: split the deaths added on top on the trapezoid's window".
+- [ ] **Step 8: Commit**: "Demographics: split the deaths added on top at both ends of the window".
 
-- [ ] **Review stop:** the same fresh reviewer as Task 5 reads Task 6 against the merged trapezoid before Task 7.
+- [ ] **Review stop:** a fresh reviewer reads the re-plan and Task 6 against #907 and #913 before Tasks 8–9.
 
 ---
 
@@ -2244,8 +2208,9 @@ te_demog_deaths_on_top_code = {
 }
 # Its split over the same window (te_demog_on_top_split, Full only): the whole state's part (the state-level lines, the
 # moved lines' on-top family, the census's own lag since its last count), severe starvation's, and the other lines on
-# some of its people. Their product is te_demog_deaths_on_top unless dz hit either end of its range or the trapezoid's
-# floor at 0.
+# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top unless dz hit either
+# end of its range; a division's min = 1 (a person) bites only on a tiny state, and te_dg_ed_state's floor at 0 only
+# where M's change moved a pop across the engine's floor inside the window.
 te_demog_deaths_whole_state = {
 	value = var:te_dg_ed_state
 	divide = { value = var:te_dg_ed_target min = 1 }
@@ -2755,13 +2720,14 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
 - [ ] **Step 1: mod_systems.md.** In § Demographics:
   - **Files table:** the new script values, effects, sguis, the decree, the type's carriers, the GUI type.
   - **Variable families:** add a row "Causes of Death (2026-10-11)": `te_dg_acc`, `te_dg_trt_*`, `te_dg_in_*`; under
-    Full `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_ot_sev`, `te_dg_rate_clamp_d`,
+    Full `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_sp_d`, `te_dg_ss_d`, `te_dg_rate_clamp_d`,
     `te_dg_ed_clamp_d`.
   - **A new subsection "Causes of Death (2026-10-11)"** after "The census's births and deaths". It covers:
     - the factor table and why the factors read stored inputs;
     - the drift (rate, carriers, decree, snap, seed and old-save behaviour, the re-seed accepted);
     - turmoil, with the vanilla `state_mortality_turmoil_mult` note;
-    - the split, built on the trapezoid's quantities, with its formula:
+    - the split at both ends of #907's window (the pops' own lines at the end from the walk, at the start from the
+      refresh's `te_dg_sp_d` / `te_dg_ss_d`), with its formula:
       - whole state = `te_dg_ed_state ÷ te_dg_ed_target`;
       - severe starvation = `(te_dg_ed_state + te_dg_ed_sev) ÷ te_dg_ed_state`;
       - other effects = `te_dg_ed ÷ (te_dg_ed_state + te_dg_ed_sev)`;
