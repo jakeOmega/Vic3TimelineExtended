@@ -1087,8 +1087,12 @@ INSCRIPTION_FAITHS = {"catholic": "latin", "jewish": "hebrew", "hindu": "sanskri
 # is the country holding the state's part in the 1836 history (game files,
 # 2026-10-11: Jaipur is Dhundhar's, JAI). The stand-in is the (skin, form) pair
 # whose picture it shows until its own is drawn. Adding a row is the checklist:
-# the failures name every site.
-Landmark = namedtuple("Landmark", "key state tag dedication form standin level")
+# the failures name every site. A row with placed=False is never seeded: it
+# names a trophy of 1836 with no standing monument of its own (spec
+# 2026-10-12-grand-monument-loot-and-1836-trophies-design.md §2.2), and stands
+# as a landmark only once that trophy goes home. Its state and owner are its
+# origin's (TROPHIES_1836 in test_grand_monument_trophies.py), and it has no level.
+Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed", defaults=(True,))
 LANDMARKS = (
     Landmark("arc_de_triomphe", "STATE_ILE_DE_FRANCE", "FRA", "war_memorial", "arch", ("generic", "arch"), 15),
     Landmark("alexander_column", "STATE_INGRIA", "RUS", "crown", "column", ("generic", "column"), 10),
@@ -1118,7 +1122,31 @@ LANDMARKS = (
     Landmark("lion_of_saint_mark", "STATE_VENETIA", "AUS", "republic", "column", ("generic", "column"), 5),
     Landmark("sans_souci_palace", "STATE_HAITI", "HAI", "crown", "hall", ("generic", "hall"), 5),
     Landmark("nikko_toshogu", "STATE_KANTO", "JAP", "crown", "gate", ("heritage_chinese", "gate"), 5),
+    # Added 2026-10-12 (owner: "grand monuments for the great powers to loot"):
+    # where Europe's looting took place. Owners from the game's 00_states.txt:
+    # Kumasi is in Asante's part of the Gold Coast, the Red Fort in the Mughal
+    # emperor's one province of Delhi (its city hub).
+    Landmark("parthenon", "STATE_ATTICA", "GRE", "civic", "pantheon", ("heritage_greek", "pantheon"), 10),
+    Landmark("obelisks_of_karnak", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), 5),
+    Landmark("royal_palace_of_benin", "STATE_BENIN", "BEN", "crown", "hall", ("generic", "hall"), 5),
+    Landmark("royal_palace_of_kumasi", "STATE_GOLD_COAST", "ASH", "crown", "hall", ("generic", "hall"), 5),
+    Landmark("bukgwan_victory_stele", "STATE_SARIWON", "KOR", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
+    Landmark("imperial_city_of_hue", "STATE_ANNAM", "DAI", "crown", "gate", ("heritage_chinese", "gate"), 10),
+    Landmark("persepolis", "STATE_FARS", "PER", "civic", "hall", ("heritage_avestan", "hall"), 5),
+    Landmark("red_fort", "STATE_DELHI", "MUG", "crown", "gate", ("heritage_avestan", "gate"), 10),
+    # Never placed: the trophies of 1836 with no standing monument of their own.
+    Landmark("rosetta_stone", "STATE_LOWER_EGYPT", "EGY", "civic", "stele", ("heritage_geez", "stele"), None, False),
+    Landmark("temple_of_dendera", "STATE_UPPER_EGYPT", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"),
+             None, False),
+    Landmark("luxor_obelisk", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), None, False),
+    Landmark("venus_de_milo", "STATE_WEST_AEGEAN_ISLANDS", "GRE", "civic", "statue", ("generic", "statue"), None, False),
+    Landmark("piraeus_lion", "STATE_ATTICA", "GRE", "civic", "statue", ("generic", "statue"), None, False),
+    Landmark("horses_of_saint_mark", "STATE_EASTERN_THRACE", "TUR", "civic", "statue", ("generic", "statue"), None,
+             False),
+    Landmark("tipus_tiger", "STATE_MYSORE", "MYS", "civic", "statue", ("generic", "statue"), None, False),
+    Landmark("baba_merzoug", "STATE_ALGIERS", "MAS", "war_memorial", "column", ("generic", "column"), None, False),
 )
+PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
 
 
@@ -3191,14 +3219,19 @@ class LandmarkTests(unittest.TestCase):
     def test_the_table(self):
         keys = [lm.key for lm in LANDMARKS]
         self.assertEqual(len(keys), len(set(keys)))
-        states = [lm.state for lm in LANDMARKS]
+        # One standing monument per state; an unplaced row shares its origin
+        # state with whatever stands there (loot spec §2.2).
+        states = [lm.state for lm in PLACED_LANDMARKS]
         self.assertEqual(len(states), len(set(states)), "one landmark per state (§2)")
         for lm in LANDMARKS:
             self.assertIn(lm.dedication, BY_KEY, lm.key)
             self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values(), lm.key)
             if lm.form in BUILDING_FORMS.values():
                 self.assertEqual(BUILDING_FORMS[lm.dedication], lm.form, f"{lm.key}: a building's own form")
-            self.assertGreaterEqual(lm.level, 5, lm.key)
+            if lm.placed:
+                self.assertGreaterEqual(lm.level, 5, lm.key)
+            else:
+                self.assertIsNone(lm.level, f"{lm.key}: an unplaced landmark's levels are its trophy's")
 
     def test_no_duplicate_of_a_base_game_monument_or_a_wonder(self):
         taken = vanilla_monuments()
@@ -3217,14 +3250,15 @@ class LandmarkTests(unittest.TestCase):
         body = squash(block(on, "gm_landmarks_on_game_started_after_lobby"))
         self.assertEqual(body, "effect = { if = { limit = { gm_system_enabled = yes NOT = { has_global_variable = "
                                "gm_landmarks_seeded } } set_global_variable = gm_landmarks_seeded "
-                               "gm_seed_landmarks = yes } }")
+                               "gm_seed_landmarks = yes gm_seed_trophies = yes } }")
 
     def test_a_call_per_row(self):
         raw = (ROOT / LANDMARK_EFFECTS).read_bytes()
         self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), "one BOM")
         self.assertFalse(raw.startswith(b"\xef\xbb\xbf" * 2), "one BOM, not two")
         body = squash(block(self.e, "gm_seed_landmarks"))
-        self.assertEqual(re.findall(r"gm_seed_landmark = \{[^{}]*\}", body), [landmark_seed_call(lm) for lm in LANDMARKS])
+        self.assertEqual(re.findall(r"gm_seed_landmark = \{[^{}]*\}", body),
+                         [landmark_seed_call(lm) for lm in PLACED_LANDMARKS])
 
     def test_the_seed_writes_the_five_records(self):
         body = squash(block(self.e, "gm_seed_landmark"))
