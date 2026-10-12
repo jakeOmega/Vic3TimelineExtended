@@ -3,14 +3,32 @@
 
 Usage: python3 scripts/analysis/demographics_observer_report.py DEBUG_LOG [MORE_LOGS ...]
            [--step 25] [--tag GBR ...] [--top N] [--json] [--closed-borders SAVE [SAVE ...]]
-           [--phase2 [--to-year 1900]]
+           [--phase2 [--to-year 1900] [--saves SAVE [SAVE ...]] [--band 1.4 1.65]]
 
---phase2 checks phase 2's gate (demographics phase 2 step 4, plan Task 12): the world's people from the
-first census year to --to-year within x1.3-x1.7, no country of 20M or more losing people ten census years
-running with no war year among them by --to-year, and the share of people in states whose census term was clamped
-(flagged above 1%). It exits 1 when the gate fails. From phase 2 step 4 a line's tfr, cbr and cdr are
-the realized figures (the census follows the engine's events), not the model's own: the anchors' TFR
-bands judge what the engine did.
+--phase2 checks phase 2's gate (demographics phase 2 step 4, plan Task 12): the world's multiple to
+--to-year within the band, no country of 20M or more losing people ten census years running with no war
+year among them by --to-year, and the share of people in states whose census term was clamped (flagged
+above 1%). It exits 1 when the gate fails. From phase 2 step 4 a line's tfr, cbr and cdr are the realized
+figures (the census follows the engine's events), not the model's own: the anchors' TFR bands judge what
+the engine did.
+
+The world's multiple comes from the saves when --saves names plain-text saves (#894): every pop's people
+(workforce and dependents) in the earliest save given, against the save nearest 1 January after --to-year
+(UNDECIDED when none lies within a year of it). Only those two saves are read past their header, so a run's
+whole save folder can be passed. Pass the run's first autosave (1 January after the first census year): the
+census log's figure runs from the first census year's line to --to-year's, both taken on 31 December, so the
+two cover the same years. The log's figure is still printed, as a second line: it sums the logged countries
+of a million people or more, so land that comes under the census as it is colonized joins the total and
+inflates it (normal-speed Full run to 1901, 2026-10-11: x1.92 from the log against x1.77 from the saves,
+docs/testing/demographics-phase2-engine-rates-2026-10-10.md). Without --saves the gate judges the log's
+figure, as before.
+
+The band (--band LO HI, default x1.40-x1.65, WORLD_BAND) is the owner's fair comparison (#894,
+2026-10-11). History's world grew about x1.4-x1.5 over 1836-1900 (Maddison), with the Taiping, Dungan and
+Nian revolts, China's 1876-79 famine and India's famines in it; without those it would have grown about
+x1.6-x1.65. The upper end is that no-catastrophe estimate: a run that grows faster outgrows history even
+with none of its catastrophes. The lower end is history as it happened, since a game can have catastrophes
+of its own. The old band, x1.3-x1.7, let a run with no catastrophes pass at x1.7.
 
 --closed-borders reads the migration law of each country from plain-text saves (debug mode writes
 them) and prints net migration per 1,000 for Closed Borders countries against the rest. Under Closed
@@ -91,6 +109,9 @@ ANCHORS = (
     ("GBR", 2020, "e65", "about 20 (§2.4, today)", None, None),
     ("GBR", 2020, "imr", "under 5 per 1,000 (§2.4, today)", None, 5),
 )
+# phase 2's gate band for the world's multiple to 1900 (module docstring; owner, #894, 2026-10-11): history
+# as it happened (about x1.4-x1.5) to history without its catastrophes (about x1.6-x1.65)
+WORLD_BAND = (1.4, 1.65)
 
 
 def _parse(text):
@@ -116,12 +137,16 @@ def _parse(text):
     return out
 
 
-def phase2_check(records, to_year=1900, big=20e6, run=10):
+def phase2_check(records, to_year=1900, big=20e6, run=10, band=WORLD_BAND, saves_world=None):
     """The calibration plan's in-game gate for phase 2 (plan 2026-10-10 engine rates, Task 12):
-    the world's people from the first census year to `to_year` (within x1.3-x1.7), countries of `big`
-    people or more that lost people `run` census years running with no war year among them, up to `to_year`, and the
-    share of the world's people in clamped states (above 1%, the clamp is holding M back: the results doc
-    names where)."""
+    the world's multiple to `to_year` within `band` (lo, hi), countries of `big` people or more that lost
+    people `run` census years running with no war year among them, up to `to_year`, and the share of the
+    world's people in clamped states (above 1%, the clamp is holding M back: the results doc names where).
+
+    The multiple judged is the saves' when `saves_world` is given (world_from_saves: every state's people in the
+    earliest save and the one nearest 1 January after `to_year`; None for "end" leaves it undecided), and the
+    census log's otherwise (the logged countries from the first census year to `to_year`). Both are returned:
+    "world_multiple" is the one judged, "world_source" says which ("saves" or "log"), "log_multiple" is the log's."""
     tags = {}
     for r in records:
         tags.setdefault(r["tag"], {})[r["year"]] = r
@@ -131,7 +156,13 @@ def phase2_check(records, to_year=1900, big=20e6, run=10):
             world[y] = world.get(y, 0.0) + r["people"]
     years = sorted(world)
     first = years[0] if years else None
-    multiple = world[to_year] / world[first] if first is not None and to_year in world and world[first] else None
+    log_multiple = (world[to_year] / world[first]
+                    if first is not None and to_year in world and world[first] else None)
+    if saves_world is not None:
+        start, end = saves_world["first"], saves_world.get("end")
+        multiple = end["people"] / start["people"] if end and start["people"] else None
+    else:
+        multiple = log_multiple
     shrinking = []
     for tag, series in sorted(tags.items()):
         ys = [y for y in sorted(series) if y <= to_year]   # fast mode logs far past the gate's window
@@ -145,17 +176,36 @@ def phase2_check(records, to_year=1900, big=20e6, run=10):
                 shrinking.append((tag, streak[0], streak[-1]))
     people = sum(r["people"] for r in records) or 1.0
     clamped = sum(r["people"] * r.get("clamped", 0.0) for r in records) / people
-    return {"world_multiple": multiple, "world_in_band": multiple is not None and 1.3 <= multiple <= 1.7,
-            "shrinking": shrinking, "clamped_share": clamped}
+    lo, hi = band
+    return {"world_multiple": multiple, "world_in_band": multiple is not None and lo <= multiple <= hi,
+            "world_source": "saves" if saves_world is not None else "log", "log_multiple": log_multiple,
+            "saves_world": saves_world, "band": (lo, hi), "shrinking": shrinking, "clamped_share": clamped}
 
 
 def _print_phase2(check, to_year):
-    m = check["world_multiple"]
-    if m is None:
-        print(f"phase 2 gate: no census in {to_year} (or none at the start): UNDECIDED")
+    m, (lo, hi) = check["world_multiple"], check["band"]
+    band = f"[x{lo:.2f}-x{hi:.2f}]"
+    verdict = "PASS" if check["world_in_band"] else "FAIL"
+    log_m = check["log_multiple"]
+    if check["world_source"] == "saves":
+        sw = check["saves_world"]
+        start, end = sw["first"], sw.get("end")
+        if m is None:
+            print(f"phase 2 gate: no save within a year of {sw['target']} (the earliest is {start['date']}): "
+                  "UNDECIDED")
+        else:
+            print(f"phase 2 gate: world x{m:.2f} from the saves, every state ({start['date']} "
+                  f"{start['people'] / 1e6:,.0f}M to {end['date']} {end['people'] / 1e6:,.0f}M) {band} {verdict}")
+        log = "no census in that year" if log_m is None else f"x{log_m:.2f}"
+        print(f"  census log, world {to_year} / first census year: {log} (not judged: it sums the countries of a "
+              "million people or more, so land colonized into the census inflates it)")
     else:
-        print(f"phase 2 gate: world {to_year} / first census year x{m:.2f} [x1.3-x1.7] "
-              f"{'PASS' if check['world_in_band'] else 'FAIL'}")
+        if m is None:
+            print(f"phase 2 gate: no census in {to_year} (or none at the start): UNDECIDED")
+        else:
+            print(f"phase 2 gate: world {to_year} / first census year x{m:.2f} from the census log {band} {verdict}")
+        print("  (the log sums the countries of a million people or more, so land colonized into the census "
+              "inflates it: --saves judges every state's people instead)")
     for tag, first, last in check["shrinking"]:
         print(f"  {tag} lost people every year {first}-{last} with no war year: FAIL")
     flag = "  (above 1%: the clamp is holding the census's term back)" if check["clamped_share"] > 0.01 else ""
@@ -301,14 +351,47 @@ CLOSED = "law_closed_borders"
 MIGRATION_LAWS = (CLOSED, "law_migration_controls", "law_no_migration_controls")
 
 
-def save_year(path):
-    """The in-game year of a plain-text save (its meta date)."""
+def save_date(path):
+    """The in-game date of a plain-text save (its meta date) as (year, month, day)."""
     with open(path, encoding="utf-8", errors="replace") as fh:
         head = fh.read(4000)
-    m = re.search(r"date=(\d+)\.", head)
+    m = re.search(r"date=(\d+)\.(\d+)\.(\d+)", head)
     if not m:
         raise ValueError(f"{path}: no date in the first 4,000 bytes (not a plain-text save?)")
-    return int(m.group(1))
+    return tuple(int(g) for g in m.groups())
+
+
+def save_year(path):
+    """The in-game year of a plain-text save (its meta date)."""
+    return save_date(path)[0]
+
+
+def save_people(path):
+    """Every pop's people (workforce and dependents) in a plain-text save: every state, in a census or not."""
+    import demographics_save_inputs as S
+    pops = S.read_sections(str(path), ("pops",))["pops"]
+    return sum(S._num(r.get("workforce")) + S._num(r.get("dependents")) for r in pops.values())
+
+
+def world_from_saves(saves, to_year=1900, slack=1.0):
+    """The world's people for the phase 2 gate from plain-text saves (#894): the earliest save, and the save
+    nearest 1 January after `to_year` (the later of two equally near), each read for every pop. Dates come from
+    the headers, so only those two saves are read in full. Returns {"first": {"date", "people"}, "end": the same
+    or None when no save other than the first lies within `slack` years of that date, "target": "Y.1.1"}."""
+    def years(d):
+        return d[0] + (d[1] - 1) / 12 + (d[2] - 1) / 365
+
+    dated = sorted(((save_date(p), str(p)) for p in saves), key=lambda dp: years(dp[0]))
+    target = to_year + 1
+    first = dated[0]
+    end = min(dated, key=lambda dp: (abs(years(dp[0]) - target), -years(dp[0])))
+    if end is first or abs(years(end[0]) - target) > slack:
+        end = None
+
+    def entry(dp):
+        return {"date": ".".join(str(x) for x in dp[0]), "people": save_people(dp[1])}
+
+    return {"first": entry(first), "end": entry(end) if end else None, "target": f"{target}.1.1"}
 
 
 def migration_laws(saves):
@@ -415,7 +498,15 @@ def main(argv=None):
                         help="phase 2's gate: the world's multiple to --to-year, 20M+ countries shrinking ten "
                              "peacetime years running, the clamped share; exit 1 when it fails")
     parser.add_argument("--to-year", type=int, default=1900, help="the gate's end year (default 1900)")
+    parser.add_argument("--saves", type=Path, nargs="+", metavar="SAVE",
+                        help="plain-text saves: --phase2 judges the world's multiple from every state's people in "
+                             "the earliest and the one nearest 1 January after --to-year, not the census log's")
+    parser.add_argument("--band", type=float, nargs=2, metavar=("LO", "HI"), default=WORLD_BAND,
+                        help="--phase2's band for the world's multiple (default %(default)s: history as it "
+                             "happened to history without its catastrophes, #894)")
     args = parser.parse_args(argv)
+    if args.band[0] > args.band[1]:
+        parser.error("--band: LO above HI")
     records, unresolved = [], []
     for path in args.logs:
         with path.open(encoding="utf-8-sig", errors="replace") as lines:
@@ -434,7 +525,8 @@ def main(argv=None):
         groups, verdict = closed_borders_check(records, migration_laws(args.closed_borders), args.tolerance)
         _print_closed(groups, verdict, args.tolerance)
     if args.phase2:
-        check = phase2_check(records, to_year=args.to_year)
+        saves_world = world_from_saves(args.saves, args.to_year) if args.saves else None
+        check = phase2_check(records, to_year=args.to_year, band=tuple(args.band), saves_world=saves_world)
         _print_phase2(check, args.to_year)
         if not check["world_in_band"] or check["shrinking"]:
             return 1
