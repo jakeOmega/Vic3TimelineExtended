@@ -249,6 +249,21 @@ class TestHarness(unittest.TestCase):
         whole = H.model_figures(H.inputs_for(state(9.0, 2000.0), carriers))
         self.assertGreater(abs(got["e0"] - whole["e0"]), 0.5, "the mean SoL would hide the bend")
 
+    def test_history_sees_the_censuss_lag(self):
+        """A state whose stored medicine is behind its targets reads a lower life expectancy than at its targets; with
+        nothing stored, the figures are as before (the Causes of Death plan, Task 10)."""
+        carriers = DM.load_carriers()
+        c = S.CountryInputs("TST")
+        c.population, c.sol_x_size, c.wealth_tfr_x_size = 1000.0, 13.0 * 1000.0, M.wealth_tfr(13.0) * 1000.0
+        c.workforce, c.literate = 500.0, 100.0
+        c.techs = {"medical_degrees", "pharmaceuticals", "modern_nursing"}
+        states = [("1", c, True)]
+        at_target = H.country_figures(states, carriers)
+        behind = {"1": dict(TestFidelity.STORED, te_dg_acc=0.4, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0,
+                            te_dg_trt_chr=0.0)}
+        self.assertLess(H.country_figures(states, carriers, stored=behind)["e0"], at_target["e0"])
+        self.assertEqual(H.country_figures(states, carriers, stored={}), at_target)
+
     def test_inputs_carry_a_static_means_shift(self):
         c = S.CountryInputs("TST", population=100.0, sol_x_size=1000.0, workforce=50.0, literate=10.0)
         c.means_add = 0.6
@@ -892,13 +907,13 @@ class TestFidelity(unittest.TestCase):
     def game_infection(self, poverty_floor=None):
         return self.game_multipliers(poverty_floor)[0]
 
-    def save(self, crowded, m_inf, m_mat=None):
+    def save(self, crowded, m_inf, m_mat=None, extra=()):
         def var(name, value):
             return (f"\t\t\t\tflag={name}\n\t\t\t\tdata={{\n\t\t\t\t\ttype=value\n"
                     f"\t\t\t\t\tidentity={round(value * 1e5)}\n\t\t\t\t}}\n")
         block = "\tvariables={\n\t\tdata={ {\n" + "\t\t\t} {\n".join(
             var(n, v) for n, v in (("te_dg_sol", self.GAME_SOL), ("te_dg_lit", self.GAME_LIT), ("te_dg_m_inf", m_inf),
-                                   ("te_dg_m_mat", m_mat)) if v is not None
+                                   ("te_dg_m_mat", m_mat), *extra) if v is not None
         ) + "\t\t\t} }\n\t}\n"
         if crowded:
             block += ("\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=5\n\t\t\t\tmodifier=migration_crowding\n"
@@ -909,6 +924,40 @@ class TestFidelity(unittest.TestCase):
         path = self.tmp / f"s{int(crowded)}_{m_inf:.5f}.v3"
         path.write_text(text, encoding="utf-8")
         return str(path)
+
+    STORED = (("te_dg_acc", 0.45), ("te_dg_trt_inf", 0.2), ("te_dg_trt_mat", 0.3), ("te_dg_trt_chr", 0.0),
+              ("te_dg_in_ext", 0.0), ("te_dg_in_work", 0.0), ("te_dg_in_chr", 0.0), ("te_dg_in_turm", 0.5),
+              ("te_dg_in_crowd", 0.0))
+
+    def test_a_census_from_this_build_is_read_on_its_own_inputs(self):
+        """The Causes of Death plan: medicine drifts, so the save's techs and laws give the targets, not what the step
+        used. fidelity runs the model on the step's stored inputs."""
+        stored = dict(self.STORED)
+        inp = M.Inputs(sol=self.GAME_SOL, literacy=self.GAME_LIT, turmoil=0.5,
+                       medicine={"access": 0.45, "infection": 0.2, "maternal": 0.3, "chronic": 0.0})
+        mult = M.cause_multipliers(inp)
+        path = self.save(False, mult["infection"], mult["maternal"] * H.P.MATERNAL_PER_100K_BIRTHS, extra=self.STORED)
+        (_tag, _sid, _people, pairs, _sol, _lit), = H.fidelity_rows(path, DM.load_carriers())
+        for cause in ("infection", "maternal"):
+            game, model = pairs[cause]
+            self.assertAlmostEqual(game / model, 1.0, places=4, msg=cause)
+        self.assertEqual(stored["te_dg_in_turm"], H.census_inputs(inp, stored).turmoil)
+
+    def test_a_census_from_before_reads_the_save(self):
+        got = {"te_dg_sol": 8.0, "te_dg_lit": 0.2}
+        inp = M.Inputs(sol=8.0, literacy=0.2)
+        self.assertIs(H.census_inputs(inp, got), inp)
+
+    def test_fidelity_counts_the_states_on_their_own_inputs(self):
+        # the summary's lines: states read on the step's inputs, and those whose medicine is still spreading (the
+        # tiny save's state has no health law, so access 0.45 is past its 0.4 target)
+        mult = M.cause_multipliers(M.Inputs(sol=self.GAME_SOL, literacy=self.GAME_LIT))
+        counts = {}
+        H.fidelity_rows(self.save(False, mult["infection"], extra=self.STORED), DM.load_carriers(), counts=counts)
+        self.assertEqual(counts, {"stored": 1, "save": 0, "spreading": 1})
+        counts = {}
+        H.fidelity_rows(self.save(False, mult["infection"] * 1.001), DM.load_carriers(), counts=counts)
+        self.assertEqual(counts, {"stored": 0, "save": 1, "spreading": 0})
 
     def test_a_crowded_state_matches(self):
         rows = H.fidelity_rows(self.save(True, *self.game_multipliers()), DM.load_carriers())
