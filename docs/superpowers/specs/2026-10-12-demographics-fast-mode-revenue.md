@@ -1,6 +1,8 @@
 # Demographics fast mode and AI revenue: should fast mode pay the AI's bills? (design note)
 
-> **Status: design note for the owner's decision, 2026-10-12. No code.** It answers the owner's idea of 2026-10-10:
+> **Status: decided (owner, 2026-10-12): the recommendation (§5) as written.** No revenue boost; the power-plant
+> subsidy burden is pursued as a normal-game balance issue; institutions at K× only after a measurement. No code.
+> Originally a design note for the owner's decision. It answers the owner's idea of 2026-10-10:
 > fast mode grows population K times as fast, which seemed to outrun the AI's economy (in #894's 4× run, 64% of
 > people were in bankrupt countries by 1904), so give fast mode a country-revenue boost, and possibly faster
 > bureaucracy or institutions, so that a fast run approximates a normal game. Fast mode is the console test tool in
@@ -282,3 +284,7 @@ living alone and does nothing for solvent countries. Its share, its cap and E2 a
 2. Whether to pursue the power-plant subsidy burden as a normal-game balance issue.
 3. Option 4: measure the institution lag, then decide.
 4. If fast runs should be shielded regardless: Option 2, with its share and cap.
+
+**Decided (owner, 2026-10-12): the recommendation.** (1) The reading stands and the boost approved in principle on
+2026-10-10 is dropped. (2) The power-plant subsidy burden is pursued as a normal-game balance issue. (3) Institutions at
+K× wait for a measurement of the lag. (4) Fast runs are not shielded.
