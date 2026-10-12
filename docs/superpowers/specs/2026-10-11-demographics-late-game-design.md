@@ -128,7 +128,8 @@ biological age, and changes nothing else about how a table is read.
 | Planned births (the wanted family) | calendar for their timing, biological for whether the body allows them | families form at a stage of life; a postponed birth needs a fertile body (§3.2) |
 | Pension eligibility | calendar | the law reads a birth date |
 | Schooling and child labour (the working ages' lower bound) | calendar | law |
-| Conscription's ages, war dead (18–40), youth bulge (20–29), migrant classes | calendar | law and life stage |
+| Conscription and the war dead | both: a calendar floor (legal adulthood, 20) and a biological ceiling (fitness, 39) | the law says who may be called, the body who is fit to serve (§2.5) |
+| Youth bulge (20–29), migrant classes | calendar | life stage |
 | Marriage (Late Marriage's share) | calendar | custom |
 
 **Before life extension the two clocks are the same**, so phase 2 can build every rule against its named clock at no
@@ -407,6 +408,31 @@ Sketch: one rich state 30 and 60 years after immortality, everyone treated, the 
 The youth share falls under immortality as the adults pile up (the calendar 0–14 share is about half today's after
 60 years). The youth bulge (calendar 20–29) disappears. Dependency becomes a choice made through the pension age, not a
 fact of biology: exactly the parent's "ageing is mainly a fiscal problem", taken to its end.
+
+### 2.5 Conscription and the war dead
+
+Conscription could read either clock (owner, 2026-10-11). Parent §7 sets `state_conscription_rate_mult` from men aged
+20–39 against the 1836 reference, capped at ±0.25. The war dead (parent §2.5) come from men aged 18–40 by rate age, 95%
+of them men.
+
+- **Proposal: both clocks.** The pool is men of calendar age 20 or more (legal adulthood) and biological age 39 or less
+  (fitness). The war dead come from the same pool, whichever rule is chosen, so the dead are those who could be sent.
+  Before life extension this is today's 20–39.
+- **What it does** (sketch: everyone treated, 60 years from today's structure; the 1836 reference is 14.0% of people,
+  28.6% of men):
+
+| Case | Share of men in the pool: calendar 20–39 | Both clocks | Parent §7's term, uncapped: calendar | Both clocks |
+|---|---|---|---|---|
+| Today's structure | 21.7% | 21.7% | −0.25 | −0.25 |
+| Era 11 (ageing 0.75), 30 / 60 years | 17.7% / 15.9% | 22.4% / 20.1% | −0.39 / −0.46 | −0.23 / −0.31 |
+| Immortality (3% pull), 30 / 60 years | 15.0% / 10.8% | 48.8% / 74.4% | −0.49 / −0.64 | +0.66 / +1.48 |
+
+- **Under immortality nearly every adult man qualifies** under both clocks, and the term would sit at the +0.25 cap:
+  the cap, not the pool, sets the late-game figure. By calendar alone an ageing society sits at the −0.25 cap from
+  today on, and the treated old are exempt however fit.
+- **A player choice, later**: "service by age" against "service by fitness", with the Armed Forces favouring fitness
+  (the owner thinks the group is usually too weak). Worth adding only if a play-test shows the cap binding often
+  (§9, call 21).
 
 ## 3. Children: how many and when
 
@@ -716,8 +742,9 @@ bands. Owner check 5 (the benchmark in a late-game save) is the gate; per-band s
 
 ### 8.1 Decide now: what phase 2 builds so it doesn't bake in 1836
 
-1. **Two indexes in the sweep.** Phase 2's new per-age sums (workers, pensioners, health need) read a biological index
-   that is the calendar index until phase 3: one local per slot, no variable.
+1. **Two indexes in the sweep.** Phase 2's new per-age sums (workers, pensioners, health need, the conscription pool
+   and the war dead's window) read a biological index that is the calendar index until phase 3: one local per slot,
+   no variable.
 2. **The pension age is a country variable**, set by the setting; nothing compares with a literal 65. The five
    positions (§2.2) can ship with phase 2: the linked ones need only the old-age thresholds, which the life table
    already allows (before life extension the two are the same).
@@ -768,10 +795,10 @@ only.
 
 Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call 16's B waits for a fit.
 
-1. **Two clocks**: deaths, capacity, health need and unplanned births read biological age; pension eligibility,
-   schooling and conscription read calendar age; planned births read both, calendar for their timing and biology for
-   whether the body allows them (§0). This amends the parent §1's "every age-specific rate reads biological age".
-   *Recommended.* Alternative: the parent's single clock with §13's bound.
+1. **Two clocks**: deaths, capacity, health need and unplanned births read biological age; pension eligibility and
+   schooling read calendar age; planned births read both, calendar for their timing and biology for whether the body
+   allows them; conscription is call 21 (§0). This amends the parent §1's "every age-specific rate reads biological
+   age". *Recommended.* Alternative: the parent's single clock with §13's bound.
 2. **Phase 2 builds the interfaces in §8.1** (two indexes, a pension-age variable, participation and need tables,
    planned and unplanned births, the workforce target as a total), changing no number it would otherwise produce.
    *Recommended.*
@@ -843,3 +870,10 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
 20. **The adult external and work schedules get a 2000–2020 band in the harness** before phase 3, since under
     immortality they are the whole death rate (men's median age at death 203 against women's 594 in the sketch).
     *Recommended.*
+21. **Conscription reads both clocks** (owner's question, 2026-10-11): the pool is men of calendar age 20 or more and
+    biological age 39 or less, and the war dead come from the same pool, whichever rule is chosen (§2.5). Under
+    immortality 74% of men qualify after 60 years, and parent §7's term (+1.48 uncapped) sits at its +0.25 cap.
+    *Recommended.* Alternatives: calendar only (the treated old are exempt and the pool shrinks with the young cohorts,
+    to 11% of men after 60 years of immortality: the term sits at the −0.25 cap); biological only (no legal floor:
+    rejected); a player choice, "service by age" or "service by fitness", with the Armed Forces favouring fitness,
+    added only if a play-test shows the cap binding often.
