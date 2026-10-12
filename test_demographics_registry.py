@@ -460,6 +460,9 @@ class _Engine:
             return any(self._test(*item) for item in arg)
         if key == "AND":
             return self.holds(arg)
+        if key == "custom_tooltip":
+            # the text only labels the tooltip; the triggers inside decide, as an AND
+            return self.holds([item for item in arg if item[0] != "text"])
         if key == "has_variable":
             return arg in self.vars
         if key == "has_modifier":

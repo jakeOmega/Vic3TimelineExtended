@@ -290,7 +290,10 @@ decree_medical_outreach = {
 	# an ai_weight of 0 only stops it issuing one (#894's observer run, 2026-10-12: with the escape, no AI ended a
 	# Medical Outreach in 1881-1901 except by losing the state, and 10-14 of the 22-24 held sat on states caught up).
 	state_trigger = {
-		te_demog_medicine_behind = yes
+		custom_tooltip = {
+			text = decree_medical_outreach_behind_tt
+			te_demog_medicine_behind = yes
+		}
 	}
 
 	# The AI uses it where the player would (the shared-mechanics rule): by how far the state's medicine is behind,
