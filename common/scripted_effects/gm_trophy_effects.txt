@@ -1,0 +1,931 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — trophies: scripted effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+#
+# A country can carry off a Grand Monument (or a piece of one) from a state it
+# occupies in a war, from its own unincorporated state if it did not raise the
+# monument, or by a treaty (Surrender a Monument). What it carries off is a
+# TROPHY: a script container tagged gm_trophy, with no parent (it outlives
+# every country), listed in the global list gm_trophies:
+#   gm_tr_origin_region, gm_tr_origin   the state region and state it came from
+#   gm_tr_site_region, gm_tr_site       where it stands: the taker's capital
+#   gm_tr_levels                        the levels taken, rebuilt on return
+#   gm_tr_grandeur                      half of them, rounded up: what it
+#                                       counts for abroad
+#   gm_tr_share                         flag: whole, piece or token
+#   gm_tr_dedication, gm_tr_skin, gm_tr_form, gm_tr_landmark
+#   gm_tr_namesake, gm_tr_name_year, gm_tr_name_char, gm_tr_name_occasion,
+#   gm_tr_name_enemy_cap, gm_tr_name    its name (gm_trophy_custom_loc.txt)
+#   gm_tr_honoree, gm_tr_honoree_ig     To the Leader's records
+#   gm_tr_year                          the year it was taken
+#   gm_tr_home_notified, gm_tr_reach_by, gm_tr_looter   the pass's notes
+# No timed variable on a trophy: it would never expire
+# (container_timed_variable_audit).
+#
+# The holder is the site's owner and the claimant the origin's owner, both
+# read live: annexation, a civil war or the capture of the site moves a trophy
+# with no special case. The monthly pass (gm_trophy_monthly) writes each
+# country's lists and totals from the trophies; the national refresh reads the
+# totals (gm_sum_standing, gm_compute_ig).
+#
+# No taking or return runs where a tooltip walks the effect: each reads back
+# what it writes, and a walk logs every such read. A scripted GUI, an event
+# option or a treaty only marks the work (gm_state_tr_order_take,
+# gm_tr_order_take_site, gm_tr_order_return) and a hidden event does it
+# (monument_trophy_events.10-.13), as the opportunities' gift does.
+
+# ---- Ordering the work ---------------------------------------------------------------
+# State scope. $WHO$ is to carry this monument off by $ROUTE$ (occupation, own
+# or treaty): monument_trophy_events.10 checks again and does it.
+gm_state_tr_order_take = {
+	set_variable = { name = gm_tr_take_by value = $WHO$ }
+	set_variable = { name = gm_tr_take_route value = flag:$ROUTE$ }
+	trigger_event = { id = monument_trophy_events.10 }
+}
+
+# State scope. The choice, with the tooltip that says what it costs, for the
+# event's option and the Carry It Off buttons. The loc reads the state as THIS.
+gm_state_tr_choose_take = {
+	custom_tooltip = {
+		text = gm_tr_take_$ROUTE$_tt
+		gm_state_tr_order_take = { WHO = $WHO$ ROUTE = $ROUTE$ }
+	}
+}
+
+# Container scope. $WHO$ is to carry this trophy off its occupied site
+# (monument_trophy_events.11).
+gm_tr_order_take_site = {
+	save_scope_as = gm_tr_pick
+	$WHO$ = { trigger_event = { id = monument_trophy_events.11 } }
+}
+
+# Container scope. Its holder sends it home (monument_trophy_events.12).
+gm_tr_order_return = {
+	save_scope_as = gm_tr_pick
+	$WHO$ = { trigger_event = { id = monument_trophy_events.12 } }
+}
+
+# ---- Taking a monument (spec §1-§3) ---------------------------------------------------
+# State scope, from monument_trophy_events.10, the AI's monthly roll and the
+# debug event. $WHO$ carries it off by $ROUTE$. The caller has checked it may.
+# The taker needs a capital, where the trophy will stand.
+gm_state_tr_take = {
+	clear_saved_scope = gm_tr_new
+	clear_saved_scope = gm_tr_taker
+	clear_saved_scope = gm_tr_victim
+	save_scope_as = gm_tr_state
+	$WHO$ = { save_scope_as = gm_tr_taker }
+	owner = { save_scope_as = gm_tr_victim }
+	if = {
+		limit = {
+			scope:gm_tr_taker = { exists = capital }
+		}
+		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = { name = gm_tr_take_levels value = gm_state_tr_levels }
+		set_variable = { name = gm_tr_take_value value = gm_state_tr_value }
+		set_variable = { name = gm_tr_take_whole value = gm_state_tr_whole }
+		set_variable = { name = gm_tr_take_left value = gm_state_tr_levels_left }
+		gm_state_tr_make_trophy = yes
+		if = {
+			limit = { exists = scope:gm_tr_new }
+			if = {
+				limit = { var:gm_tr_take_whole = 1 }
+				gm_state_tr_remove_whole = yes
+			}
+			else = {
+				gm_state_tr_remove_piece = yes
+			}
+			gm_state_tr_consequences_$ROUTE$ = yes
+		}
+		remove_variable = gm_tr_take_levels
+		remove_variable = gm_tr_take_value
+		remove_variable = gm_tr_take_whole
+		remove_variable = gm_tr_take_left
+	}
+}
+
+# State scope (scope:gm_tr_state), from gm_state_tr_take: the trophy, with
+# this monument's records. Its site is the taker's capital.
+gm_state_tr_make_trophy = {
+	create_container = {
+		tags = { gm_trophy }
+		save_scope_as = gm_tr_new
+		on_created = {
+			save_scope_as = gm_tr_new
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_tr_new }
+		add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }
+		scope:gm_tr_taker = {
+			capital = { save_scope_as = gm_tr_site_state }
+		}
+		scope:gm_tr_new = {
+			set_variable = { name = gm_tr_origin value = scope:gm_tr_state }
+			set_variable = { name = gm_tr_origin_region value = scope:gm_tr_state.state_region }
+			set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
+			set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
+			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
+			set_variable = { name = gm_tr_grandeur value = scope:gm_tr_state.var:gm_tr_take_value }
+			set_variable = { name = gm_tr_year value = gm_this_year }
+			if = {
+				limit = {
+					scope:gm_tr_state = { var:gm_tr_take_whole = 1 }
+				}
+				set_variable = { name = gm_tr_share value = flag:whole }
+			}
+			else_if = {
+				limit = {
+					scope:gm_tr_state = { gm_state_tr_form_is_piece = yes }
+				}
+				set_variable = { name = gm_tr_share value = flag:piece }
+			}
+			else = {
+				set_variable = { name = gm_tr_share value = flag:token }
+			}
+			gm_tr_record_dedication = yes
+			gm_tr_copy_from_state = { FROM = gm_skin TO = gm_tr_skin }
+			gm_tr_copy_from_state = { FROM = gm_form TO = gm_tr_form }
+			gm_tr_copy_from_state = { FROM = gm_landmark TO = gm_tr_landmark }
+			gm_tr_copy_from_state = { FROM = gm_namesake TO = gm_tr_namesake }
+			gm_tr_copy_from_state = { FROM = gm_name_year TO = gm_tr_name_year }
+			gm_tr_copy_from_state = { FROM = gm_name_char TO = gm_tr_name_char }
+			gm_tr_copy_from_state = { FROM = gm_name_occasion TO = gm_tr_name_occasion }
+			gm_tr_copy_from_state = { FROM = gm_name_enemy_cap TO = gm_tr_name_enemy_cap }
+			gm_tr_copy_from_state = { FROM = gm_name TO = gm_tr_name }
+			gm_tr_copy_from_state = { FROM = gm_honoree TO = gm_tr_honoree }
+			gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
+		}
+	}
+}
+
+# Container scope: the state's variable $FROM$, when it has one, as $TO$.
+gm_tr_copy_from_state = {
+	if = {
+		limit = {
+			scope:gm_tr_state = { has_variable = $FROM$ }
+		}
+		set_variable = { name = $TO$ value = scope:gm_tr_state.var:$FROM$ }
+	}
+}
+
+# Container scope: the dedication of scope:gm_tr_state's monument, as a flag
+# (the keys gm_state_mark_restore_pm uses, so a return can put it back).
+gm_tr_record_dedication = {
+	gm_tr_record_dedication_one = { KEY = crown }
+	gm_tr_record_dedication_one = { KEY = republic }
+	gm_tr_record_dedication_one = { KEY = revolution }
+	gm_tr_record_dedication_one = { KEY = leader }
+	gm_tr_record_dedication_one = { KEY = religious }
+	gm_tr_record_dedication_one = { KEY = civic }
+	gm_tr_record_dedication_one = { KEY = war_memorial }
+	gm_tr_record_dedication_one = { KEY = artistic }
+	gm_tr_record_dedication_one = { KEY = naturalist }
+	gm_tr_record_dedication_one = { KEY = scientific }
+	gm_tr_record_dedication_one = { KEY = industrial }
+	gm_tr_record_dedication_one = { KEY = athletic }
+}
+
+gm_tr_record_dedication_one = {
+	if = {
+		limit = {
+			scope:gm_tr_state = { gm_state_has_pm = { PM = pm_monument_$KEY$ } }
+		}
+		set_variable = { name = gm_tr_dedication value = flag:$KEY$ }
+	}
+}
+
+# State scope. Carried off whole: the building goes. Its records stay until
+# the state's next monthly pulse clears them (gm_state_monthly), so the
+# notices raised now can still name it; gm_carried_off keeps that pulse from
+# counting a contested monument as torn down.
+gm_state_tr_remove_whole = {
+	owner = {
+		remove_list_variable = { name = gm_states target = scope:gm_tr_state }
+	}
+	remove_building = building_grand_monument
+	set_variable = gm_carried_off
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# State scope. A piece carried off: rebuilt smaller, keeping every record, as
+# the opportunities' gift rebuilds it taller (gm_state_gift_grandeur), and
+# spared for ten years.
+gm_state_tr_remove_piece = {
+	gm_state_mark_restore_pm = yes
+	set_variable = { name = gm_rebuilding days = 1 }
+	set_variable = { name = gm_rebuild_level value = var:gm_tr_take_left }
+	remove_building = building_grand_monument
+	te_construction_market_build_specified_level = {
+		SPEC_TYPE = building_grand_monument
+		SPEC_LEVEL = var:gm_rebuild_level
+	}
+	set_variable = { name = gm_grandeur value = var:gm_rebuild_level }
+	remove_variable = gm_rebuild_level
+	set_variable = { name = gm_tr_cooldown days = 3650 }
+	# The refresh puts the dedication back once the rebuilt building reads.
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# ---- Consequences (spec §3), state scope (scope:gm_tr_state) ---------------------------
+# In a war: infamy, the owner's anger, and its people's resolve.
+gm_state_tr_consequences_occupation = {
+	scope:gm_tr_taker = {
+		set_variable = { name = gm_tr_tmp_levels value = scope:gm_tr_new.var:gm_tr_levels }
+		change_infamy = gm_tr_infamy
+		remove_variable = gm_tr_tmp_levels
+		change_relations = { country = scope:gm_tr_victim value = gm_tr_relations_taken }
+		every_scope_war = {
+			limit = { is_war_participant = scope:gm_tr_victim }
+			add_war_war_support = { target = scope:gm_tr_victim value = gm_tr_war_support }
+		}
+	}
+	gm_tr_notify_taking = yes
+}
+
+# From our own unincorporated state: its people resent it, and the country we
+# took the state from, if it still stands, is angered.
+gm_state_tr_consequences_own = {
+	add_radicals_in_state = { value = 0.1 }
+	if = {
+		limit = {
+			has_variable = gm_taken_from
+			var:gm_taken_from ?= {
+				is_country_alive = yes
+				NOT = { this = scope:gm_tr_taker }
+			}
+		}
+		var:gm_taken_from = { save_scope_as = gm_tr_former_owner }
+		scope:gm_tr_taker = {
+			change_relations = { country = scope:gm_tr_former_owner value = gm_tr_relations_taken }
+		}
+	}
+	gm_tr_notify_taking = yes
+}
+
+# Surrendered by a treaty.
+gm_state_tr_consequences_treaty = {
+	scope:gm_tr_taker = {
+		change_relations = { country = scope:gm_tr_victim value = gm_tr_relations_taken }
+	}
+	gm_tr_notify_taking = yes
+}
+
+# Any scope. Toasts for a player on either side of a taking.
+gm_tr_notify_taking = {
+	scope:gm_tr_victim = {
+		if = {
+			limit = {
+				is_ai = no
+				NOT = { this = scope:gm_tr_taker }
+			}
+			post_notification = gm_tr_lost_notice
+		}
+	}
+	scope:gm_tr_taker = {
+		if = {
+			limit = { is_ai = no }
+			post_notification = gm_tr_taken_notice
+		}
+	}
+}
+
+# ---- Taking a trophy from its site (spec §2.1, §5) -------------------------------------
+# Container scope, from monument_trophy_events.11 and the AI's monthly roll.
+# $WHO$ carries off a trophy on display in a state it occupies. One whose
+# origin it owns goes straight home; any other becomes its own trophy,
+# standing in its capital, at the price of a taking in war.
+gm_tr_take_from_site = {
+	clear_saved_scope = gm_tr_taker
+	clear_saved_scope = gm_tr_victim
+	save_scope_as = gm_tr_moving
+	$WHO$ = { save_scope_as = gm_tr_taker }
+	var:gm_tr_site ?= {
+		owner = { save_scope_as = gm_tr_victim }
+	}
+	if = {
+		limit = { gm_tr_claimed_by = { WHO = scope:gm_tr_taker } }
+		gm_tr_return_home = { RELATIONS = no }
+	}
+	else_if = {
+		limit = {
+			exists = scope:gm_tr_victim
+			scope:gm_tr_taker = { exists = capital }
+		}
+		scope:gm_tr_taker = {
+			capital = { save_scope_as = gm_tr_site_state }
+			set_variable = { name = gm_tr_tmp_levels value = scope:gm_tr_moving.var:gm_tr_levels }
+			change_infamy = gm_tr_infamy
+			remove_variable = gm_tr_tmp_levels
+			change_relations = { country = scope:gm_tr_victim value = gm_tr_relations_taken }
+			every_scope_war = {
+				limit = { is_war_participant = scope:gm_tr_victim }
+				add_war_war_support = { target = scope:gm_tr_victim value = gm_tr_war_support }
+			}
+		}
+		set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
+		set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
+		gm_tr_forget_notes = yes
+		gm_tr_notify_taking = yes
+	}
+}
+
+# Container scope. The pass's notes belong to the old holder and the old site.
+gm_tr_forget_notes = {
+	gm_remove_state_var = { VAR = gm_tr_home_notified }
+	gm_remove_state_var = { VAR = gm_tr_reach_by }
+	gm_remove_state_var = { VAR = gm_tr_looter }
+}
+
+# ---- Home again (spec §5) ---------------------------------------------------------------
+# Container scope. Rebuilt in its origin state for that state's owner, who
+# gets the Homecoming; the trophy is destroyed. RELATIONS = yes when its holder
+# hands it back of its own accord or by treaty: relations +40 with the
+# receiver if that is another country. The caller runs gm_tr_finish (or the
+# monthly pass) afterwards: the lists still name this trophy until then.
+gm_tr_return_home = {
+	clear_saved_scope = gm_tr_receiver
+	clear_saved_scope = gm_tr_giver
+	save_scope_as = gm_tr_moving
+	var:gm_tr_origin ?= {
+		owner = { save_scope_as = gm_tr_receiver }
+	}
+	var:gm_tr_site ?= {
+		owner = { save_scope_as = gm_tr_giver }
+	}
+	if = {
+		limit = { exists = scope:gm_tr_receiver }
+		var:gm_tr_origin = { gm_state_tr_receive = yes }
+		scope:gm_tr_receiver = {
+			set_variable = { name = gm_boon_homecoming value = gm_boon_months }
+			set_variable = gm_active
+			if = {
+				limit = { is_ai = no }
+				post_notification = gm_tr_homecoming_notice
+			}
+		}
+		if = {
+			limit = {
+				always = $RELATIONS$
+				exists = scope:gm_tr_giver
+				NOT = { scope:gm_tr_giver = scope:gm_tr_receiver }
+			}
+			scope:gm_tr_giver = {
+				change_relations = { country = scope:gm_tr_receiver value = gm_tr_relations_returned }
+			}
+		}
+		remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving }
+		destroy_container = yes
+	}
+}
+
+# State scope (the origin state, scope:gm_tr_moving the trophy). A monument
+# standing here takes the levels, keeping its own records and dedication (the
+# Quadriga goes back on the Gate). With none, a new one is built with the
+# trophy's: its look, name, landmark and dedication, recorded as seen so it is
+# never read as the engine's copy, and raised by its new owner.
+gm_state_tr_receive = {
+	if = {
+		limit = { has_building = building_grand_monument }
+		if = {
+			limit = {
+				gm_state_is_dedicated = yes
+				NOT = { has_variable = gm_restore_pm }
+			}
+			gm_state_mark_restore_pm = yes
+		}
+		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = {
+			name = gm_rebuild_level
+			value = {
+				value = var:gm_grandeur
+				add = scope:gm_tr_moving.var:gm_tr_levels
+				max = 200
+			}
+		}
+		set_variable = { name = gm_rebuilding days = 1 }
+		remove_building = building_grand_monument
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = building_grand_monument
+			SPEC_LEVEL = var:gm_rebuild_level
+		}
+		set_variable = { name = gm_grandeur value = var:gm_rebuild_level }
+		remove_variable = gm_rebuild_level
+	}
+	else = {
+		# Whatever a monument carried off earlier left here.
+		gm_clear_state = { KEEP_LANDMARK = no }
+		set_variable = {
+			name = gm_rebuild_level
+			value = {
+				value = scope:gm_tr_moving.var:gm_tr_levels
+				max = 200
+			}
+		}
+		set_variable = { name = gm_rebuilding days = 1 }
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = building_grand_monument
+			SPEC_LEVEL = var:gm_rebuild_level
+		}
+		gm_tr_copy_to_state = { FROM = gm_tr_skin TO = gm_skin }
+		gm_tr_copy_to_state = { FROM = gm_tr_form TO = gm_form }
+		gm_tr_copy_to_state = { FROM = gm_tr_landmark TO = gm_landmark }
+		gm_tr_copy_to_state = { FROM = gm_tr_namesake TO = gm_namesake }
+		gm_tr_copy_to_state = { FROM = gm_tr_name_year TO = gm_name_year }
+		gm_tr_copy_to_state = { FROM = gm_tr_name_char TO = gm_name_char }
+		gm_tr_copy_to_state = { FROM = gm_tr_name_occasion TO = gm_name_occasion }
+		gm_tr_copy_to_state = { FROM = gm_tr_name_enemy_cap TO = gm_name_enemy_cap }
+		gm_tr_copy_to_state = { FROM = gm_tr_name TO = gm_name }
+		gm_tr_copy_to_state = { FROM = gm_tr_honoree TO = gm_honoree }
+		gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
+		gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
+		set_variable = gm_seen
+		set_variable = { name = gm_ceremony_level value = var:gm_rebuild_level }
+		set_variable = { name = gm_grandeur value = var:gm_rebuild_level }
+		set_variable = { name = gm_built_by value = owner }
+		if = {
+			limit = {
+				scope:gm_tr_moving = {
+					has_variable = gm_tr_dedication
+					OR = {
+						var:gm_tr_dedication = flag:crown
+						var:gm_tr_dedication = flag:republic
+						var:gm_tr_dedication = flag:revolution
+						var:gm_tr_dedication = flag:leader
+					}
+				}
+			}
+			set_variable = { name = gm_raised_by value = owner }
+		}
+		remove_variable = gm_rebuild_level
+	}
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# State scope: the trophy's variable $FROM$, when it has one, as $TO$.
+gm_tr_copy_to_state = {
+	if = {
+		limit = {
+			scope:gm_tr_moving = { has_variable = $FROM$ }
+		}
+		set_variable = { name = $TO$ value = scope:gm_tr_moving.var:$FROM$ }
+	}
+}
+
+# Any scope. After a taking or a return from a click, a treaty or the debug
+# event: the lists again, then each side's refresh.
+gm_tr_finish = {
+	gm_trophy_pass = yes
+	if = {
+		limit = { exists = scope:gm_tr_taker }
+		scope:gm_tr_taker = { trigger_event = { id = monument_events.20 } }
+	}
+	if = {
+		limit = { exists = scope:gm_tr_victim }
+		scope:gm_tr_victim = { trigger_event = { id = monument_events.20 } }
+	}
+	if = {
+		limit = { exists = scope:gm_tr_receiver }
+		scope:gm_tr_receiver = { trigger_event = { id = monument_events.20 } }
+	}
+	if = {
+		limit = { exists = scope:gm_tr_giver }
+		scope:gm_tr_giver = { trigger_event = { id = monument_events.20 } }
+	}
+}
+
+# Country scope (the receiver), from monument_trophy_events.13: Return
+# Cultural Property, every trophy scope:gm_tr_giver holds whose origin this
+# country owns.
+gm_tr_return_all_from = {
+	save_scope_as = gm_tr_claiming
+	if = {
+		limit = { has_global_variable_list = gm_trophies }
+		every_in_global_list = {
+			variable = gm_trophies
+			limit = {
+				gm_tr_held_by = { WHO = scope:gm_tr_giver_treaty }
+				gm_tr_claimed_by = { WHO = scope:gm_tr_claiming }
+			}
+			add_to_temporary_list = gm_tr_returning
+		}
+		every_in_list = {
+			list = gm_tr_returning
+			gm_tr_return_home = { RELATIONS = yes }
+		}
+	}
+}
+
+# ---- The state's monthly part (from gm_state_monthly, ROOT = the state) ------------------
+# The owner stamped (on_state_owner_change names no previous owner); the
+# builder recorded for a monument from an older save; then an occupier's
+# chance: a player's notice once in each occupation, the AI's monthly roll; and
+# the AI owner's own carrying home from an unincorporated state.
+gm_state_tr_monthly = {
+	set_variable = { name = gm_holder value = owner }
+	if = {
+		limit = { has_variable = gm_seen }
+		gm_state_record_builder = yes
+	}
+	if = {
+		limit = { gm_state_tr_takeable = yes }
+		clear_saved_scope = gm_tr_occupier
+		gm_state_tr_find_occupier = yes
+		if = {
+			limit = {
+				exists = scope:gm_tr_occupier
+				gm_state_tr_occupied_by = { WHO = scope:gm_tr_occupier }
+			}
+			if = {
+				limit = {
+					scope:gm_tr_occupier = { is_ai = yes }
+				}
+				scope:gm_tr_occupier = { save_scope_as = gm_tr_taker }
+				random = {
+					chance = gm_tr_ai_loot_chance
+					gm_state_tr_take = { WHO = scope:gm_tr_occupier ROUTE = occupation }
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						has_variable = gm_tr_offered_to
+						var:gm_tr_offered_to ?= { this = scope:gm_tr_occupier }
+					}
+				}
+				set_variable = { name = gm_tr_offered_to value = scope:gm_tr_occupier }
+				save_scope_as = monument_state
+				owner = { save_scope_as = monument_owner }
+				scope:gm_tr_occupier = { trigger_event = { id = monument_trophy_events.1 } }
+			}
+		}
+		else = {
+			gm_remove_state_var = { VAR = gm_tr_offered_to }
+		}
+	}
+	if = {
+		limit = {
+			gm_state_tr_takeable = yes
+			owner = {
+				is_ai = yes
+				save_temporary_scope_as = gm_tmp_tr_owner
+			}
+			gm_state_tr_own_takeable_by = { WHO = scope:gm_tmp_tr_owner }
+			OR = {
+				owner = { ig:ig_armed_forces ?= { is_in_government = yes } }
+				gm_state_grandeur >= 10
+			}
+		}
+		owner = { save_scope_as = gm_tr_own_taker }
+		random = {
+			chance = gm_tr_ai_own_chance
+			gm_state_tr_take = { WHO = scope:gm_tr_own_taker ROUTE = own }
+		}
+	}
+}
+
+# State scope. The controller of a province the owner does not control, as
+# scope:gm_tr_occupier (the caller clears it first and checks
+# gm_state_tr_occupied_by: one province is not an occupation).
+gm_state_tr_find_occupier = {
+	owner = { save_scope_as = gm_tr_site_owner }
+	random_province = {
+		limit = {
+			NOT = { controller = scope:gm_tr_site_owner }
+		}
+		controller = { save_scope_as = gm_tr_occupier }
+	}
+}
+
+# State scope, from gm_state_changed_hands: the country it came from, while
+# the new owner differs from it (gm_state_tr_consequences_own angers it).
+gm_state_tr_changed_hands = {
+	gm_remove_state_var = { VAR = gm_tr_offered_to }
+	owner = { save_scope_as = gm_tr_new_owner }
+	if = {
+		limit = {
+			has_variable = gm_holder
+			var:gm_holder ?= {
+				NOT = { this = scope:gm_tr_new_owner }
+			}
+		}
+		set_variable = { name = gm_taken_from value = var:gm_holder }
+	}
+	if = {
+		limit = {
+			has_variable = gm_taken_from
+			var:gm_taken_from ?= { this = scope:gm_tr_new_owner }
+		}
+		remove_variable = gm_taken_from
+	}
+	set_variable = { name = gm_holder value = owner }
+}
+
+# ---- The monthly pass (spec §4), from on_monthly_pulse --------------------------------------
+# No scope. Repair each trophy's places, then the AI's decisions (collected
+# first: a return destroys a trophy, a taking moves one), a player's notes,
+# and the lists.
+gm_trophy_monthly = {
+	if = {
+		limit = {
+			gm_system_enabled = yes
+			has_global_variable_list = gm_trophies
+		}
+		every_in_global_list = {
+			variable = gm_trophies
+			gm_tr_repair_places = yes
+		}
+		every_in_global_list = {
+			variable = gm_trophies
+			gm_tr_monthly_one = yes
+		}
+		every_in_list = {
+			list = gm_tr_ai_home
+			gm_tr_return_home = { RELATIONS = yes }
+		}
+		every_in_list = {
+			list = gm_tr_ai_loot
+			clear_saved_scope = gm_tr_loot_by
+			var:gm_tr_looter ?= { save_scope_as = gm_tr_loot_by }
+			remove_variable = gm_tr_looter
+			if = {
+				limit = { exists = scope:gm_tr_loot_by }
+				gm_tr_take_from_site = { WHO = scope:gm_tr_loot_by }
+			}
+		}
+	}
+	gm_trophy_pass = yes
+}
+
+# Container scope. A state that has stopped existing (a region's parts merged)
+# is found again in its region: the most populous state there.
+gm_tr_repair_places = {
+	if = {
+		limit = {
+			NOT = { exists = var:gm_tr_origin }
+			has_variable = gm_tr_origin_region
+		}
+		clear_saved_scope = gm_tr_repair_state
+		var:gm_tr_origin_region = {
+			ordered_scope_state = {
+				order_by = state_population
+				position = 0
+				check_range_bounds = no
+				save_scope_as = gm_tr_repair_state
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_tr_repair_state }
+			set_variable = { name = gm_tr_origin value = scope:gm_tr_repair_state }
+		}
+	}
+	if = {
+		limit = {
+			NOT = { exists = var:gm_tr_site }
+			has_variable = gm_tr_site_region
+		}
+		clear_saved_scope = gm_tr_repair_state
+		var:gm_tr_site_region = {
+			ordered_scope_state = {
+				order_by = state_population
+				position = 0
+				check_range_bounds = no
+				save_scope_as = gm_tr_repair_state
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_tr_repair_state }
+			set_variable = { name = gm_tr_site value = scope:gm_tr_repair_state }
+		}
+	}
+}
+
+# Container scope, once a month. An AI holder brings home what it owns the
+# origin of, and returns to an ally or bloc partner at gm_tr_ai_return_chance.
+# An occupier of the site: the AI takes its own home, and carries off any
+# other at gm_tr_ai_loot_chance_trophy; a player is told once per
+# occupation. A player holder is told once that it can bring one home.
+gm_tr_monthly_one = {
+	clear_saved_scope = gm_tr_ai_holder
+	clear_saved_scope = gm_tr_ai_claimant
+	var:gm_tr_site ?= {
+		owner = { save_scope_as = gm_tr_ai_holder }
+	}
+	var:gm_tr_origin ?= {
+		owner = { save_scope_as = gm_tr_ai_claimant }
+	}
+	if = {
+		limit = {
+			exists = scope:gm_tr_ai_holder
+			scope:gm_tr_ai_holder = { is_ai = yes }
+		}
+		if = {
+			limit = { gm_tr_holder_owns_origin = yes }
+			add_to_temporary_list = gm_tr_ai_home
+		}
+		else_if = {
+			limit = {
+				exists = scope:gm_tr_ai_claimant
+				scope:gm_tr_ai_holder = { gm_tr_ai_returns_to = { WHO = scope:gm_tr_ai_claimant } }
+			}
+			random = {
+				chance = gm_tr_ai_return_chance
+				add_to_temporary_list = gm_tr_ai_home
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:gm_tr_ai_holder
+			gm_tr_holder_owns_origin = yes
+			NOT = { has_variable = gm_tr_home_notified }
+		}
+		set_variable = gm_tr_home_notified
+		scope:gm_tr_ai_holder = { post_notification = gm_tr_home_reach_notice }
+	}
+	if = {
+		limit = {
+			has_variable = gm_tr_home_notified
+			gm_tr_holder_owns_origin = no
+		}
+		remove_variable = gm_tr_home_notified
+	}
+	# An occupier of the site.
+	if = {
+		limit = {
+			has_variable = gm_tr_site
+			exists = var:gm_tr_site
+			NOT = { is_in_list = gm_tr_ai_home }
+		}
+		clear_saved_scope = gm_tr_occupier
+		var:gm_tr_site = { gm_state_tr_find_occupier = yes }
+		if = {
+			limit = {
+				exists = scope:gm_tr_occupier
+				gm_tr_site_occupied_by = { WHO = scope:gm_tr_occupier }
+			}
+			if = {
+				limit = {
+					scope:gm_tr_occupier = { is_ai = yes }
+				}
+				scope:gm_tr_occupier = { save_scope_as = gm_tr_taker }
+				if = {
+					limit = { gm_tr_claimed_by = { WHO = scope:gm_tr_occupier } }
+					set_variable = { name = gm_tr_looter value = scope:gm_tr_occupier }
+					add_to_temporary_list = gm_tr_ai_loot
+				}
+				else = {
+					random = {
+						chance = gm_tr_ai_loot_chance_trophy
+						set_variable = { name = gm_tr_looter value = scope:gm_tr_occupier }
+						add_to_temporary_list = gm_tr_ai_loot
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						has_variable = gm_tr_reach_by
+						var:gm_tr_reach_by ?= { this = scope:gm_tr_occupier }
+					}
+				}
+				set_variable = { name = gm_tr_reach_by value = scope:gm_tr_occupier }
+				scope:gm_tr_occupier = { post_notification = gm_tr_site_reach_notice }
+			}
+		}
+		else = {
+			gm_remove_state_var = { VAR = gm_tr_reach_by }
+		}
+	}
+}
+
+# Any scope. Every country's and state's trophy lists and totals, from the
+# trophies (spec §4). Last month's are cleared first; lists are rebuilt each
+# time, so a civil war's winner (who inherits no lists) has its rows back.
+gm_trophy_pass = {
+	# Nothing to do in a game no trophy has touched: gm_tr_lists_written
+	# stands while any list does.
+	if = {
+		limit = {
+			OR = {
+				has_global_variable = gm_tr_lists_written
+				has_global_variable_list = gm_trophies
+			}
+		}
+		every_country = {
+			limit = { has_variable = gm_tr_listed }
+			clear_variable_list = gm_trophies_held
+			clear_variable_list = gm_trophies_abroad
+			set_variable = { name = gm_tr_held_count value = 0 }
+			set_variable = { name = gm_tr_held_grandeur value = 0 }
+			set_variable = { name = gm_tr_abroad_count value = 0 }
+			remove_variable = gm_tr_listed
+		}
+		every_state = {
+			limit = { has_variable = gm_tr_here_count }
+			clear_variable_list = gm_trophies_here
+			remove_variable = gm_tr_here_count
+		}
+		if = {
+			limit = { has_global_variable = gm_tr_lists_written }
+			remove_global_variable = gm_tr_lists_written
+		}
+		if = {
+			limit = { has_global_variable_list = gm_trophies }
+			every_in_global_list = {
+				variable = gm_trophies
+				gm_tr_list_one = yes
+			}
+		}
+	}
+}
+
+# Container scope: this trophy into its site's, holder's and claimant's lists.
+gm_tr_list_one = {
+	save_scope_as = gm_tr_listing
+	if = {
+		limit = {
+			has_variable = gm_tr_site
+			exists = var:gm_tr_site
+		}
+		var:gm_tr_site = {
+			add_to_variable_list = { name = gm_trophies_here target = scope:gm_tr_listing }
+			gm_tr_count_add = { VAR = gm_tr_here_count ADD = 1 }
+			owner = {
+				gm_tr_country_listed = yes
+				add_to_variable_list = { name = gm_trophies_held target = scope:gm_tr_listing }
+				change_variable = { name = gm_tr_held_count add = 1 }
+				change_variable = { name = gm_tr_held_grandeur add = scope:gm_tr_listing.var:gm_tr_grandeur }
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_variable = gm_tr_origin
+			exists = var:gm_tr_origin
+			gm_tr_holder_owns_origin = no
+		}
+		var:gm_tr_origin = {
+			owner = {
+				gm_tr_country_listed = yes
+				add_to_variable_list = { name = gm_trophies_abroad target = scope:gm_tr_listing }
+				change_variable = { name = gm_tr_abroad_count add = 1 }
+			}
+		}
+	}
+}
+
+# Country scope: listed this month, with its counts started at 0, and its
+# national pulse running (the entry stays while it holds or misses a trophy).
+gm_tr_country_listed = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_tr_lists_written }
+		}
+		set_global_variable = gm_tr_lists_written
+	}
+	if = {
+		limit = {
+			NOT = { has_variable = gm_tr_listed }
+		}
+		set_variable = gm_tr_listed
+		set_variable = { name = gm_tr_held_count value = 0 }
+		set_variable = { name = gm_tr_held_grandeur value = 0 }
+		set_variable = { name = gm_tr_abroad_count value = 0 }
+	}
+	set_variable = gm_active
+}
+
+# Any scope: add $ADD$ to the variable $VAR$, starting it at 0.
+gm_tr_count_add = {
+	if = {
+		limit = { has_variable = $VAR$ }
+		change_variable = { name = $VAR$ add = $ADD$ }
+	}
+	else = {
+		set_variable = { name = $VAR$ value = $ADD$ }
+	}
+}
+
+# ---- The national pulse and the Homecoming (spec §3) -----------------------------------------
+# Country scope, from gm_country_monthly: a month off the Homecoming.
+gm_tr_country_monthly = {
+	gm_tick_boon = { SRC = homecoming }
+}
+
+# Journal-entry scope (ROOT = the country), from gm_apply_national_modifiers.
+gm_tr_add_national = {
+	gm_add_boon = { SRC = homecoming }
+}
+
+# Journal-entry scope, from gm_remove_national_modifiers.
+gm_tr_remove_national = {
+	remove_modifier = gm_boon_homecoming
+}
+
+# ---- Debug -------------------------------------------------------------------------------
+# Country scope. TE_MONUMENTS: lines for trophies (gm_debug_log's form).
+gm_tr_debug_log = {
+	debug_log = "TE_MONUMENTS: trophies held [SCOPE.ScriptValue('gm_tr_disp_held_count')|0], counting [SCOPE.ScriptValue('gm_tr_disp_held_grandeur')|0] grandeur; held abroad [SCOPE.ScriptValue('gm_tr_disp_abroad_count')|0]; Homecoming months [SCOPE.ScriptValue('gm_tr_disp_boon_homecoming')|0]"
+}

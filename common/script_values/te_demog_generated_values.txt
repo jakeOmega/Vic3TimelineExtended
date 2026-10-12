@@ -1443,6 +1443,283 @@ te_demog_means = {
 	min = 0
 }
 
+# State scope: each practice's start share (the late-marriage spec 3.2, 3.3; demographics_model.practice_start):
+# its strategic region's value, then its state region's, which wins. Geography, not culture. An entry that
+# changes nothing (a 0, a state at its region's value) is left out.
+te_demog_pr_start_lm = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				region = sr:region_central_europe
+				region = sr:region_northern_europe
+				region = sr:region_western_europe
+			}
+		}
+		value = 1
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_EAST_KARELIA
+				state_region = s:STATE_KOLA
+			}
+		}
+		value = 0.2
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_CROATIA
+				state_region = s:STATE_KAUNAS
+				state_region = s:STATE_LESSER_POLAND
+				state_region = s:STATE_MAZOVIA
+				state_region = s:STATE_SLOVAKIA
+				state_region = s:STATE_TRANSDANUBIA
+				state_region = s:STATE_VILNIUS
+				state_region = s:STATE_WEST_GALICIA
+			}
+		}
+		value = 0.4
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_ABRUZZO
+				state_region = s:STATE_APULIA
+				state_region = s:STATE_CALABRIA
+				state_region = s:STATE_CAMPANIA
+				state_region = s:STATE_CORSICA
+				state_region = s:STATE_EMILIA
+				state_region = s:STATE_ISTRIA
+				state_region = s:STATE_LAZIO
+				state_region = s:STATE_LOMBARDY
+				state_region = s:STATE_MALTA
+				state_region = s:STATE_PIEDMONT
+				state_region = s:STATE_ROMAGNA
+				state_region = s:STATE_SARDINIA
+				state_region = s:STATE_SICILY
+				state_region = s:STATE_SOUTH_TYROL
+				state_region = s:STATE_TUSCANY
+				state_region = s:STATE_UMBRIA
+				state_region = s:STATE_VENETIA
+			}
+		}
+		value = 0.5
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_ALENTEJO
+				state_region = s:STATE_ARAGON
+				state_region = s:STATE_BALEARIC_ISLANDS
+				state_region = s:STATE_CANARY_ISLANDS
+				state_region = s:STATE_CATALONIA
+				state_region = s:STATE_EXTREMADURA
+				state_region = s:STATE_LOWER_ANDALUSIA
+				state_region = s:STATE_MURCIA
+				state_region = s:STATE_NEW_CASTILE
+				state_region = s:STATE_UPPER_ANDALUSIA
+				state_region = s:STATE_VALENCIA
+			}
+		}
+		value = 0.6
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_COURLAND
+				state_region = s:STATE_EAST_PRUSSIA
+				state_region = s:STATE_GREATER_POLAND
+				state_region = s:STATE_POSEN
+				state_region = s:STATE_RIGA
+				state_region = s:STATE_SLOVENIA
+				state_region = s:STATE_TALINN
+				state_region = s:STATE_TARTU
+				state_region = s:STATE_WEST_PRUSSIA
+			}
+		}
+		value = 0.8
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_ASTURIAS
+				state_region = s:STATE_AZORES
+				state_region = s:STATE_BASQUE_COUNTRY
+				state_region = s:STATE_BEIRA
+				state_region = s:STATE_ENTRE_DOURO_E_MINHO
+				state_region = s:STATE_ESTREMADURA
+				state_region = s:STATE_GALICIA
+				state_region = s:STATE_LEON
+				state_region = s:STATE_MADEIRA
+				state_region = s:STATE_OLD_CASTILE
+			}
+		}
+		value = 0.9
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_AQUITAINE
+				state_region = s:STATE_AUVERGNE_LIMOUSIN
+				state_region = s:STATE_GUYENNE
+				state_region = s:STATE_LANGUEDOC
+				state_region = s:STATE_PROVENCE
+				state_region = s:STATE_RHONE
+				state_region = s:STATE_SAVOY
+			}
+		}
+		value = 1
+	}
+}
+
+te_demog_pr_start_bs = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				region = sr:region_north_china
+				region = sr:region_south_china
+			}
+		}
+		value = 0.06
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_BUSAN
+				state_region = s:STATE_NORTHERN_MANCHURIA
+				state_region = s:STATE_PYONGYANG
+				state_region = s:STATE_SARIWON
+				state_region = s:STATE_SEOUL
+				state_region = s:STATE_SHENGJING
+				state_region = s:STATE_SOUTHERN_MANCHURIA
+				state_region = s:STATE_YANGHO
+			}
+		}
+		value = 0.06
+	}
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_CHUGOKU
+				state_region = s:STATE_HOKKAIDO
+				state_region = s:STATE_HOKUSHINETSU
+				state_region = s:STATE_KANSAI
+				state_region = s:STATE_KANTO
+				state_region = s:STATE_KYOTO
+				state_region = s:STATE_KYUSHU
+				state_region = s:STATE_SHIKOKU
+				state_region = s:STATE_TOHOKU
+				state_region = s:STATE_TOKAI
+			}
+		}
+		value = 1
+	}
+}
+
+# State scope: the means beyond traditional methods as erosion (demographics_model.practice_erosion): the techs'
+# contraception x access by literacy, from 0 at PRACTICE_EROSION_FROM to its weight at FROM + SPAN.
+te_demog_pr_erosion_contraception = {
+	value = modifier:state_contraception_add
+	multiply = { value = var:te_dg_lit multiply = 0.7 add = 0.3 }
+	subtract = 0.1
+	divide = 0.2
+	min = 0
+	max = 1
+	multiply = 0.7
+}
+
+# State scope: how much of each practice's start its conditions have eroded, 0-1 (demographics_model.
+# practice_erosion): contraception, and for Birth Spacing the health-care access medicine has reached above the
+# base (te_dg_acc, which drifts toward its target since the Causes of Death plan; set before any practice reads
+# it, by te_demog_medicine_at_target at a seed and te_demog_medicine_drift at a step). The seed with no sibling
+# holding a share is the start less it (practice_seed; review I2), and the target adds Late Marriage's drivers
+# to that (practice_target): impartible inheritance on the farms and women's paid work. Read after the walk.
+te_demog_pr_erosion_lm = {
+	value = te_demog_pr_erosion_contraception
+	max = 1
+}
+te_demog_pr_seed_lm = {
+	value = te_demog_pr_erosion_lm
+	multiply = -1
+	add = 1
+	multiply = te_demog_pr_start_lm
+}
+te_demog_pr_target_lm = {
+	value = te_demog_pr_seed_lm
+	if = {
+		limit = {
+			owner = {
+				OR = {
+					has_law = law_type:law_primogeniture
+					te_inh_has_undivided_farms = yes
+				}
+			}
+		}
+		add = { value = var:te_dg_agr_share multiply = 0.15 }
+	}
+	add = { value = var:te_dg_fjob_share multiply = te_demog_female_work_share multiply = 0.625 }
+	min = 0
+	max = 1
+}
+
+te_demog_pr_erosion_bs = {
+	value = te_demog_pr_erosion_contraception
+	add = { value = var:te_dg_acc subtract = te_demog_k_base_access divide = 0.5 min = 0 max = 1 multiply = 0.3 }
+	max = 1
+}
+te_demog_pr_seed_bs = {
+	value = te_demog_pr_erosion_bs
+	multiply = -1
+	add = 1
+	multiply = te_demog_pr_start_bs
+}
+te_demog_pr_target_bs = {
+	value = te_demog_pr_seed_bs
+	min = 0
+	max = 1
+}
+
+# State or country scope: each practice's term in children per woman, 1 - cut x share; 1 with no share yet
+# (an old save's state before its next census step, whose te_dg_tfr has no practice in it either: plan D7).
+te_demog_pr_term_lm = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_pr_lm }
+		subtract = { value = var:te_dg_pr_lm multiply = 0.1 }
+	}
+}
+te_demog_pr_term_bs = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_pr_bs }
+		subtract = { value = var:te_dg_pr_bs multiply = 0.2 }
+	}
+}
+te_demog_pr_terms = {
+	value = 1
+	multiply = te_demog_pr_term_lm
+	multiply = te_demog_pr_term_bs
+}
+# State or country scope, the panel (spec 5.3): women's mean age at first marriage from the Late Marriage share,
+# and the Birth Spacing share (0 with none).
+te_demog_marriage_age = {
+	value = 19
+	if = {
+		limit = { has_variable = te_dg_pr_lm }
+		add = { value = var:te_dg_pr_lm multiply = 7 }
+	}
+}
+te_demog_pr_share_bs = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pr_bs }
+		value = var:te_dg_pr_bs
+	}
+}
+
 # State scope: the land-tenure term of Wealth Concentration's target (spec 4.2), weighted by
 # the state's agrarian share. Variant laws take their parent's value.
 te_demog_wc_land_term = {
@@ -1486,6 +1763,7 @@ te_demog_k_medicine_snap_neg = { value = -0.005 }
 te_demog_k_deaths_on_top_high = { value = 1.25 }
 te_demog_k_base_access = { value = 0.4 }
 te_demog_k_maternal_base = { value = 670 }
+te_demog_k_practice_rate = { value = 0.025 }
 # State scope: the family share's transport term (owner technology).
 te_demog_family_transport = {
 	value = 0

@@ -151,3 +151,30 @@ The asking group's ledger +15 grandeur (about +2 approval, fading ×0.97 a month
   3. A monument with levels still queued when the gift lands: what happens to the queue (as Rededicate).
   4. The boon shows on the journal entry with its months, and ends after 10 years.
   5. Let It Pass, a run-out and a lapse cost nothing.
+
+## 6. Usability (follow-up, owner 2026-10-12)
+
+The first build showed the offer and the rewards clearly but left the doing to the player: queue five levels by hand,
+then pick the right dedication at the ceremony, with the target state in a tooltip and a progress bar that stood at 0
+while construction ran. The owner approved all five fixes below.
+
+1. **Raise It** on the Opportunity section queues the levels still missing (target less progress) as government
+   construction, where the AI's picker would put them (the opportunity's state; the tallest fitting monument of its
+   dedication; an undedicated one; the capital without a monument; the most populous incorporated state without one).
+   Its tooltip names the state, the levels and the construction. Script can't count queued levels, so the button is
+   greyed while any Grand Monument of ours `is_under_construction`, and for a week after a press. The queue runs in a
+   hidden event (`monument_events.27`): the button's tooltip walks its effect without writing, and the queue sets a
+   variable and reads it back.
+2. **Seize It and Start Building**, a third offer option for players, seizes and queues at once.
+3. **The ceremony** lists "As the opportunity asks: [dedication]" first when the monument can answer the open
+   opportunity, and makes it the default then. A default whose trigger fails doesn't fall back, so the default moves
+   between it and a copy of "Leave it undedicated" by complementary triggers.
+4. **Visibility:** a Where line in the section, a line while levels are under construction ("levels count once they
+   are finished"), and "Counts toward the opportunity" on each counting monument's row and state card.
+5. **Reminders:** a notice at 12 months left; completion is an event (`monument_events.28`) naming the monument, its
+   gift and the boon, in place of the toast.
+
+In-game checks: `start_building_construction` from a player's button (only the AI has run it); `is_under_construction`
+true for a monument with an expansion queued as well as a new one; the ceremony's default moving between the two
+options.
+

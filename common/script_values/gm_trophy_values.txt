@@ -1,0 +1,270 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — trophies: script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md
+# (§8 holds the numbers).
+
+# ---- What a taking carries off (spec §1), state scope ----------------------------
+# The share of the monument's levels, by form: 1 for an object, 0.25 for a
+# piece of a structure, 0.1 for a token (gm_trophy_triggers.txt).
+gm_state_tr_share = {
+	value = 0.1
+	if = {
+		limit = { gm_state_tr_form_is_piece = yes }
+		value = 0.25
+	}
+	if = {
+		limit = { gm_state_tr_form_is_object = yes }
+		value = 1
+	}
+}
+
+# The levels a taking carries off: the share, rounded up, at least one and at
+# most every level.
+gm_state_tr_levels = {
+	value = gm_state_grandeur
+	multiply = gm_state_tr_share
+	ceiling = yes
+	min = 1
+	max = gm_state_grandeur
+}
+
+# What those levels count for abroad: half, rounded up (spec §1).
+gm_state_tr_value = {
+	value = gm_state_tr_levels
+	divide = 2
+	ceiling = yes
+}
+
+# 1 when a taking carries off the whole monument.
+gm_state_tr_whole = {
+	value = 0
+	if = {
+		limit = { gm_state_tr_levels >= gm_state_grandeur }
+		value = 1
+	}
+}
+
+# What is left standing after a piece is taken.
+gm_state_tr_levels_left = {
+	value = gm_state_grandeur
+	subtract = gm_state_tr_levels
+	min = 0
+}
+
+# ---- Consequences (spec §3) --------------------------------------------------------
+# Country scope, the taker, with the levels taken in var:gm_tr_tmp_levels: 2,
+# plus 1 per 5 levels, at most 8; doubled once UNESCO is in force.
+gm_tr_infamy = {
+	value = var:gm_tr_tmp_levels
+	divide = 5
+	add = 2
+	max = 8
+	if = {
+		limit = { has_global_variable = un_agency_unesco }
+		multiply = 2
+	}
+}
+
+# State scope: the infamy carrying this monument off would cost, for the
+# tooltips.
+gm_state_tr_infamy = {
+	value = gm_state_tr_levels
+	divide = 5
+	add = 2
+	max = 8
+	if = {
+		limit = { has_global_variable = un_agency_unesco }
+		multiply = 2
+	}
+}
+
+# Container scope: the same for a trophy on display.
+gm_tr_infamy_of_trophy = {
+	value = var:gm_tr_levels
+	divide = 5
+	add = 2
+	max = 8
+	if = {
+		limit = { has_global_variable = un_agency_unesco }
+		multiply = 2
+	}
+}
+
+gm_tr_relations_taken = -30
+gm_tr_relations_returned = 40
+gm_tr_war_support = 10
+
+# ---- The AI (spec §7) ----------------------------------------------------------------
+# Country scope, the would-be looter, in percent a month: 2, plus 10 times the
+# clout share of its governing groups that approve of Total War, Ethnostate or
+# National Supremacy (law stances, so it follows the groups and not one
+# hard-coded one), plus 5 for an unrecognized country.
+gm_tr_ai_loot_base = {
+	value = 2
+	every_interest_group = {
+		limit = { gm_tr_ig_looting_minded = yes }
+		add = {
+			value = ig_clout
+			multiply = 10
+		}
+	}
+	if = {
+		limit = { is_country_type = unrecognized }
+		add = 5
+	}
+}
+
+# State scope, with the looter saved as scope:gm_tr_taker: plus 3 for a
+# monument of 10 levels or more; a quarter once UNESCO is in force.
+gm_tr_ai_loot_chance = {
+	value = 0
+	scope:gm_tr_taker = {
+		add = gm_tr_ai_loot_base
+	}
+	if = {
+		limit = { gm_state_grandeur >= 10 }
+		add = 3
+	}
+	if = {
+		limit = { has_global_variable = un_agency_unesco }
+		multiply = 0.25
+	}
+}
+
+# Container scope, a trophy on display, with the looter as scope:gm_tr_taker.
+gm_tr_ai_loot_chance_trophy = {
+	value = 0
+	scope:gm_tr_taker = {
+		add = gm_tr_ai_loot_base
+	}
+	if = {
+		limit = { var:gm_tr_levels >= 10 }
+		add = 3
+	}
+	if = {
+		limit = { has_global_variable = un_agency_unesco }
+		multiply = 0.25
+	}
+}
+
+# In percent a month: carrying home from its own unincorporated state, and
+# returning a trophy to an ally or bloc partner.
+gm_tr_ai_own_chance = 1
+gm_tr_ai_return_chance = 2
+
+# ---- Totals (spec §3) -------------------------------------------------------------------
+# Country scope. The grandeur this country's trophies count for here (written
+# by the monthly pass, gm_trophy_monthly), or 0.
+gm_tr_disp_held_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_held_grandeur }
+		value = var:gm_tr_held_grandeur
+	}
+}
+
+gm_tr_disp_held_count = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_held_count }
+		value = var:gm_tr_held_count
+	}
+}
+
+gm_tr_disp_abroad_count = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_abroad_count }
+		value = var:gm_tr_abroad_count
+	}
+}
+
+# The Homecoming's months left, 0 when none runs.
+gm_tr_disp_boon_homecoming = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_homecoming }
+		value = var:gm_boon_homecoming
+	}
+}
+
+# 1 while the Trophies section shows: a trophy held, or the Homecoming running.
+gm_tr_disp_trophies_shown = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				gm_tr_disp_held_count > 0
+				has_variable = gm_boon_homecoming
+			}
+		}
+		value = 1
+	}
+}
+
+# The Armed Forces approve of trophies (spec §3); no other group counts them.
+# One value per group, added in gm_compute_ig.
+gm_tr_ig_share_armed_forces = {
+	value = gm_tr_disp_held_grandeur
+}
+gm_tr_ig_share_devout = 0
+gm_tr_ig_share_industrialists = 0
+gm_tr_ig_share_intelligentsia = 0
+gm_tr_ig_share_landowners = 0
+gm_tr_ig_share_petty_bourgeoisie = 0
+gm_tr_ig_share_rural_folk = 0
+gm_tr_ig_share_trade_unions = 0
+
+# State scope. Trophies on display in this state (the monthly pass), or 0:
+# the Trophies on Display card shows while it is above 0.
+gm_state_tr_disp_here = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_here_count }
+		value = var:gm_tr_here_count
+	}
+}
+
+# Container scope, the row's numbers.
+gm_tr_disp_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_levels }
+		value = var:gm_tr_levels
+	}
+}
+
+gm_tr_disp_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_grandeur }
+		value = var:gm_tr_grandeur
+	}
+}
+
+# The year its name carries (the defeat and year patterns).
+gm_tr_disp_name_year = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_name_year }
+		value = var:gm_tr_name_year
+	}
+}
+
+gm_tr_disp_year = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_year }
+		value = var:gm_tr_year
+	}
+}
+
+# 1 while the holder owns its origin (Bring It Home, not Return It).
+gm_tr_disp_home_owned = {
+	value = 0
+	if = {
+		limit = { gm_tr_holder_owns_origin = yes }
+		value = 1
+	}
+}

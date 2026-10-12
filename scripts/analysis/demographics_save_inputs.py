@@ -173,6 +173,7 @@ class CountryInputs:
     workforce: float = 0.0
     wealth_x_size: float = 0.0
     rural: float = 0.0
+    agrarian: float = 0.0    # Peasants and Farmers (the walk's te_dg_agr_share; Late Marriage's inheritance driver)
     strata_people: dict = field(default_factory=lambda: defaultdict(float))
     strata_wealth: dict = field(default_factory=lambda: defaultdict(float))
     sol_bins: dict = field(default_factory=lambda: defaultdict(float))
@@ -205,8 +206,13 @@ class CountryInputs:
     def urban_share(self):
         return 1 - self.rural / self.population if self.population else 0.0
 
+    @property
+    def agrarian_share(self):
+        return self.agrarian / self.population if self.population else 0.0
+
 
 RURAL_TYPES = {"peasants", "farmers", "slaves"}
+AGRARIAN_TYPES = {"peasants", "farmers"}   # the walk's te_dg_agr_share
 
 
 def is_incorporated(state_record):
@@ -228,6 +234,8 @@ def _add_pop(c, rec, size, incorporated):
     c.wealth_x_size += wealth * size
     if rec.get("type") in RURAL_TYPES:
         c.rural += size
+    if rec.get("type") in AGRARIAN_TYPES:
+        c.agrarian += size
     s = STRATA_OF_CLASS.get(rec.get("social_class"), "lower")
     c.strata_people[s] += size
     c.strata_wealth[s] += wealth * size
@@ -272,6 +280,16 @@ def state_pollution(sections):
         region = rec.get("region", "").strip('"')
         if region in by_region:
             out[sid] = by_region[region]
+    return out
+
+
+def state_regions(sections):
+    """{state id: its state region's key} for the states whose record names one (`region="STATE_X"`)."""
+    out = {}
+    for sid, rec in sections.get("states", {}).items():
+        region = rec.get("region", "").strip('"')
+        if region:
+            out[sid] = region
     return out
 
 

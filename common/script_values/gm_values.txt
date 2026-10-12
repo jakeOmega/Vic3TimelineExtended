@@ -416,13 +416,15 @@ gm_disp_policy_months_left = {
 }
 
 # ---- National sums (§2.3, §2.4), country scope ---------------------------------
-# Standing grandeur: every monument that is not contested (prestige, cultural pull).
+# Standing grandeur: every monument that is not contested (prestige, cultural pull),
+# and the trophies this country holds (gm_trophy_values.txt).
 gm_sum_standing = {
 	value = 0
 	every_scope_state = {
 		limit = { gm_state_counts_standing = yes }
 		add = gm_state_grandeur
 	}
+	add = gm_tr_disp_held_grandeur
 }
 
 # Regime grandeur: regime and ruler monuments that fit (legitimacy).

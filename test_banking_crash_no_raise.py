@@ -118,9 +118,10 @@ MINOR_EVENTS = definitions("events/minor_events.txt")
 
 
 class Interp:
-    def __init__(self, variables, laws=()):
+    def __init__(self, variables, laws=(), scopes=()):
         self.vars = dict(variables)
         self.laws = set(laws)
+        self.scopes = set(scopes)   # saved scopes, e.g. event .7's own roll (contagion_crashed)
         self.tooltips = []
 
     def num(self, token):
@@ -139,6 +140,8 @@ class Interp:
                 answer = val in self.vars
             elif key == "has_law":
                 answer = val.removeprefix("law_type:") in self.laws
+            elif key == "exists" and val.startswith("scope:"):
+                answer = val.removeprefix("scope:") in self.scopes
             elif key.startswith("var:"):
                 answer = {"=": operator.eq, ">": operator.gt, "<": operator.lt,
                           ">=": operator.ge, "<=": operator.le}[op](self.num(key), self.num(val))
@@ -191,8 +194,8 @@ class Interp:
                 raise AssertionError(f"unmodelled effect {key}")
 
 
-def run(effect, variables, laws=(), **params):
-    it = Interp(variables, laws)
+def run(effect, variables, laws=(), scopes=(), **params):
+    it = Interp(variables, laws, scopes)
     it.execute(substitute(copy.deepcopy(EFFECTS[effect]), params))
     return it
 
@@ -205,8 +208,8 @@ def option_bodies(event_id):
     return options
 
 
-def run_option(body, variables, laws=()):
-    it = Interp(variables, laws)
+def run_option(body, variables, laws=(), scopes=()):
+    it = Interp(variables, laws, scopes)
     it.execute(copy.deepcopy(body))
     return it
 
@@ -348,11 +351,35 @@ class EveryCrashOptionTest(unittest.TestCase):
                             start = {"finance_cycle_value": value, "finance_cycle_momentum": momentum,
                                      "bubble_pressure": 30, "contagion_crash": crashed,
                                      "crash_severity": severity}
-                            it = run_option(body, start, laws)
+                            # event .7 keeps its roll as a saved scope (its immediate): crashed if it exists
+                            it = run_option(body, start, laws, {"contagion_crashed"} if crashed else ())
                             self.assertLessEqual(it.vars["finance_cycle_value"], value + EPS)
                             self.assertLessEqual(it.vars["finance_cycle_momentum"], momentum + EPS)
                             for prior in PRIOR_VARS:
                                 self.assertNotIn(prior, it.vars)
+
+
+class ContagionRollScopeTest(unittest.TestCase):
+    """Event .7 keeps its roll in a saved scope, cleared before its own roll (scopes ride into events `after` triggers)."""
+
+    def blocks(self):
+        return {key: val for key, _, val in MINOR_EVENTS["minor_events_timelineextended.7"]
+                if key in ("immediate", "after")}
+
+    def test_immediate_clears_an_inherited_roll_before_saving_its_own(self):
+        text = repr(self.blocks()["immediate"])
+        self.assertIn("clear_saved_scope", text)
+        self.assertLess(text.index("clear_saved_scope"), text.index("banking_contagion_crash_check"))
+        self.assertLess(text.index("banking_contagion_crash_check"), text.index("save_scope_as"))
+
+    def test_after_clears_the_roll_before_spreading(self):
+        text = repr(self.blocks()["after"])
+        self.assertLess(text.index("clear_saved_scope"), text.index("banking_cycle_spread_contagion"))
+
+    def test_no_option_or_after_reads_the_variable(self):
+        for key, _, val in MINOR_EVENTS["minor_events_timelineextended.7"]:
+            if key in ("option", "after"):
+                self.assertNotIn("var:contagion_crash", repr(val), key)
 
 
 class LocTest(unittest.TestCase):

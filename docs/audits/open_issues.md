@@ -262,14 +262,15 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 ### L26. Grand Monuments v2 load-time notices
 **Files:** `events/monument_events.txt` (`monument_events.11`), `common/buildings/gm_name_carrier.txt`, `common/scripted_effects/gm_commission_effects.txt:115`
 
-**Problem (2026-10-07):** Grand Monuments v2 (#759) logs three lines once per launch.
+**Problem (2026-10-07):** Grand Monuments v2 (#759) logs three lines once per launch, and the picture work (#909) added a fourth.
 - `No default option in event monument_events.11.` (`event.cpp:358`). By design: the skin choice leaves out `default_option` so that an expired event takes its first valid option, the most specific skin (the note above its Hebrew option).
 - `Database type building_gm_name_carrier_anchor has missing texture` (`guitexturehandler.h:155`). The placeholder building is never built and its `icon` exists, so this is the same unidentified UI slot as L17.
 - `Flag 'leader' is used but is never set` (`jomini_effect.cpp:1139`). `gm_com_dedication` is set as `flag:$DEDICATION$`, which the parse-time validator cannot see.
+- `Flag 'memorial' is used but is never set` (`jomini_effect.cpp:1139`, 2026-10-12). #909 retired the Memorial form, so nothing sets `flag:memorial` any more, but a monument or commission from an older save can still hold it. The form's `gm_form_name` and `gm_com_form_phrase` branches stay on purpose to name it (`RETIRED_FORMS` in `test_grand_monument_registry.py`).
 
-Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these three.
+Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these four.
 
-**Fix:** None needed for the first and third. Close the second with L17 once that slot is found.
+**Fix:** None needed for the first, third and fourth. Close the second with L17 once that slot is found.
 
 ---
 

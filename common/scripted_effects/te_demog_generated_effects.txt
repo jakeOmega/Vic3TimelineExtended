@@ -7041,6 +7041,29 @@ te_demog_medicine_drift_one = {
 	}
 }
 
+# The practices' machinery (te_demog_practice_effects.txt) for each practice in P.PRACTICES: phase 3 adds
+# Family Limitation there and here.
+te_demog_practices_seed = {
+	te_demog_practice_seed = { P = lm }
+	te_demog_practice_seed = { P = bs }
+}
+te_demog_practices_step = {
+	te_demog_practice_step = { P = lm }
+	te_demog_practice_step = { P = bs }
+}
+te_demog_practices_country_init = {
+	te_demog_practice_country_init = { P = lm }
+	te_demog_practice_country_init = { P = bs }
+}
+te_demog_practices_country_add = {
+	te_demog_practice_country_add = { P = lm }
+	te_demog_practice_country_add = { P = bs }
+}
+te_demog_practices_country_store = {
+	te_demog_practice_country_store = { P = lm }
+	te_demog_practice_country_store = { P = bs }
+}
+
 # THIS = a state: the ring as TE_DEMOG_REPLAY before lines (demographics_harness.format_replay).
 te_demog_debug_log_ring_before = {
 	debug_log = "TE_DEMOG_REPLAY before from=0 f=[THIS.ScriptValue('te_demog_dbg_f0')|5],[THIS.ScriptValue('te_demog_dbg_f1')|5],[THIS.ScriptValue('te_demog_dbg_f2')|5],[THIS.ScriptValue('te_demog_dbg_f3')|5],[THIS.ScriptValue('te_demog_dbg_f4')|5],[THIS.ScriptValue('te_demog_dbg_f5')|5],[THIS.ScriptValue('te_demog_dbg_f6')|5],[THIS.ScriptValue('te_demog_dbg_f7')|5],[THIS.ScriptValue('te_demog_dbg_f8')|5],[THIS.ScriptValue('te_demog_dbg_f9')|5] m=[THIS.ScriptValue('te_demog_dbg_m0')|5],[THIS.ScriptValue('te_demog_dbg_m1')|5],[THIS.ScriptValue('te_demog_dbg_m2')|5],[THIS.ScriptValue('te_demog_dbg_m3')|5],[THIS.ScriptValue('te_demog_dbg_m4')|5],[THIS.ScriptValue('te_demog_dbg_m5')|5],[THIS.ScriptValue('te_demog_dbg_m6')|5],[THIS.ScriptValue('te_demog_dbg_m7')|5],[THIS.ScriptValue('te_demog_dbg_m8')|5],[THIS.ScriptValue('te_demog_dbg_m9')|5] pool_f=[THIS.ScriptValue('te_demog_dbg_pool_f')|5] pool_m=[THIS.ScriptValue('te_demog_dbg_pool_m')|5] pool_age=[THIS.Var('te_dg_pa').GetValue|5]"

@@ -2072,8 +2072,13 @@ cultural_hegemony.17 = {
 		ai_chance = {
 			base = 4
 			modifier = {
-				trigger = { influence > 100 }
+				trigger = { influence > 500 }
 				add = 2
+			}
+			# The attachés hold 300 influence for five years (ch_model_champion).
+			modifier = {
+				trigger = { influence < 300 }
+				factor = 0
 			}
 		}
 	}

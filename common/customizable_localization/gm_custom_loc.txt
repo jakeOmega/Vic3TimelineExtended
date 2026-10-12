@@ -1877,65 +1877,67 @@ gm_com_occasion_name = {
 }
 
 # The boon completing the open opportunity brings (opportunities spec §3.2):
-# its name, the modifier's own, and what it does. None for a save's petition.
+# its name, the modifier's own, and what it does; once it has closed, the boon
+# the last one seized brought (gm_com_source_is, for monument_events.28). None
+# for a save's petition.
 gm_com_boon_name = {
 	type = country
 	random_valid = no
 
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:reign }
+		trigger = { gm_com_source_is = { SRC = reign } }
 		localization_key = gm_boon_reign
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:regime }
+		trigger = { gm_com_source_is = { SRC = regime } }
 		localization_key = gm_boon_regime
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:great_power }
+		trigger = { gm_com_source_is = { SRC = great_power } }
 		localization_key = gm_boon_great_power
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:victory }
+		trigger = { gm_com_source_is = { SRC = victory } }
 		localization_key = gm_boon_victory
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:defeat }
+		trigger = { gm_com_source_is = { SRC = defeat } }
 		localization_key = gm_boon_defeat
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:centenary }
+		trigger = { gm_com_source_is = { SRC = centenary } }
 		localization_key = gm_boon_centenary
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:ruler_death }
+		trigger = { gm_com_source_is = { SRC = ruler_death } }
 		localization_key = gm_boon_ruler_death
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:space }
+		trigger = { gm_com_source_is = { SRC = space } }
 		localization_key = gm_boon_space
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:faith }
+		trigger = { gm_com_source_is = { SRC = faith } }
 		localization_key = gm_boon_faith
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_artistic }
+		trigger = { gm_com_source_is = { SRC = tech_artistic } }
 		localization_key = gm_boon_tech_artistic
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_scientific }
+		trigger = { gm_com_source_is = { SRC = tech_scientific } }
 		localization_key = gm_boon_tech_scientific
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_industrial }
+		trigger = { gm_com_source_is = { SRC = tech_industrial } }
 		localization_key = gm_boon_tech_industrial
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_athletic }
+		trigger = { gm_com_source_is = { SRC = tech_athletic } }
 		localization_key = gm_boon_tech_athletic
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_naturalist }
+		trigger = { gm_com_source_is = { SRC = tech_naturalist } }
 		localization_key = gm_boon_tech_naturalist
 	}
 	text = {
@@ -1948,59 +1950,59 @@ gm_com_boon_effect = {
 	random_valid = no
 
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:reign }
+		trigger = { gm_com_source_is = { SRC = reign } }
 		localization_key = gm_boon_reign_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:regime }
+		trigger = { gm_com_source_is = { SRC = regime } }
 		localization_key = gm_boon_regime_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:great_power }
+		trigger = { gm_com_source_is = { SRC = great_power } }
 		localization_key = gm_boon_great_power_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:victory }
+		trigger = { gm_com_source_is = { SRC = victory } }
 		localization_key = gm_boon_victory_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:defeat }
+		trigger = { gm_com_source_is = { SRC = defeat } }
 		localization_key = gm_boon_defeat_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:centenary }
+		trigger = { gm_com_source_is = { SRC = centenary } }
 		localization_key = gm_boon_centenary_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:ruler_death }
+		trigger = { gm_com_source_is = { SRC = ruler_death } }
 		localization_key = gm_boon_ruler_death_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:space }
+		trigger = { gm_com_source_is = { SRC = space } }
 		localization_key = gm_boon_space_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:faith }
+		trigger = { gm_com_source_is = { SRC = faith } }
 		localization_key = gm_boon_faith_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_artistic }
+		trigger = { gm_com_source_is = { SRC = tech_artistic } }
 		localization_key = gm_boon_tech_artistic_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_scientific }
+		trigger = { gm_com_source_is = { SRC = tech_scientific } }
 		localization_key = gm_boon_tech_scientific_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_industrial }
+		trigger = { gm_com_source_is = { SRC = tech_industrial } }
 		localization_key = gm_boon_tech_industrial_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_athletic }
+		trigger = { gm_com_source_is = { SRC = tech_athletic } }
 		localization_key = gm_boon_tech_athletic_effect
 	}
 	text = {
-		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_naturalist }
+		trigger = { gm_com_source_is = { SRC = tech_naturalist } }
 		localization_key = gm_boon_tech_naturalist_effect
 	}
 	text = {

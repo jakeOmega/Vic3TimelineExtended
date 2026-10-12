@@ -121,7 +121,9 @@ class Extensions(unittest.TestCase):
                              bubble_pressure=bubble, contagion_crash=int(severity is not None),
                              crash_severity=severity or 0)
             laws = (S.ECONOMY_LAWS[economy],) if economy != 'market' else ()
-            actual = run_crash('apply_banking_contagion_effects', variables, laws).vars
+            # event .7 keeps its roll as a saved scope (its immediate): crashed if it exists
+            scopes = {'contagion_crashed'} if severity is not None else ()
+            actual = run_crash('apply_banking_contagion_effects', variables, laws, scopes).vars
             S.apply_imported_effects(cfg, state, severity)
             self.assertEqual(state.finance_cycle_value, actual['finance_cycle_value'])
             self.assertEqual(state.finance_cycle_momentum, actual['finance_cycle_momentum'])

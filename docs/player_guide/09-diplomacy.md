@@ -1,6 +1,6 @@
 # Diplomacy
 
-The mod adds 35 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 37 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
 of power bloc principles, and ten late-game formable countries. None of this has
 a game rule or journal entry of its own: it works through the base game's treaty
@@ -16,13 +16,16 @@ a technology gate (listed in the tables), a power bloc principle (see
 actions](#principles-that-unlock-articles-and-actions)), or another system's
 game rule. A directed article binds one side, the conceding country, and gives
 something to the other. An enforceable article can also be demanded as a war
-goal. The draft shows each article's influence cost.
+goal. The draft shows each article's influence cost and who pays it. A demand
+is paid for by the country making it, so Seize Company, Disband Company, Return
+Cultural Property and Surrender a Monument cost the conceding country no
+influence.
 
 ### Choosing a company or state for an article
 
-Six articles ask you to name something. Seize Company and Disband Company take a
-company. Minority Protection, Free Port Concession, Religious Mission Rights and
-Demilitarized Zone take a state. When you add one to a draft, the article shows
+Seven articles ask you to name something. Seize Company and Disband Company take a
+company. Minority Protection, Free Port Concession, Religious Mission Rights,
+Demilitarized Zone and Surrender a Monument take a state. When you add one to a draft, the article shows
 a button with its current choice; click it to pick from a list.
 
 The state or company always belongs to the conceding country, so only a
@@ -63,6 +66,8 @@ The humanitarian and cultural articles move people, faiths and cultures.
 | Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. The side sending the missionaries must be in a Religious Convocation bloc. Neither country can have State Atheism, and the treaty freezes if the conceding country adopts it later. |
 | Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −5 ideological covert defense. |
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
+| Return Cultural Property | The Grand Monuments rule | Yes | The conceding country returns every [Grand Monument trophy](02-timeline.md#monument-trophies) taken from the other's lands, once. Each is rebuilt where it stood. |
+| Surrender a Monument | The Grand Monuments rule | Yes | The conceding country gives up the Grand Monument in the chosen state as a trophy, once: the whole of it, a quarter or a tenth, by its form. Never a Grand Shrine. |
 
 The military and security articles cover disarmament and cooperation between
 armed forces.
@@ -94,14 +99,14 @@ gains leverage over it, and relations improve.
 |---|---|---|
 | Request Influence | A country outside any bloc, to a bloc leader | The leader gains leverage over you very fast, so it can soon invite you into its bloc. It is the way for a player to join a bloc: an AI leader accepts readily, but an AI country essentially never agrees to be the one asking. |
 | Extend Influence | Bloc leader | The leader gains leverage over the other country. |
-| Crisis Resolution | Bloc leader with over 100 authority | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws; the leader pays authority. |
+| Crisis Resolution | Bloc leader | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws. |
 | Education Aid | A more literate member | +10% education access for a recipient with a weak Ministry of Education or none. |
 | Healthcare Aid | A member with a Ministry of Health at level 3+ | −5% mortality and +1 standard of living for a recipient with a weak health system. |
 | Security Aid | A member with a Ministry of Public Safety at level 3+ | −20% turmoil effects and lower liberty desire for a recipient with weak policing. |
 | Development Assistance | A member | +2 standard of living for the lower strata of a recipient whose primary cultures average below 15. |
 | Modernization Aid | A member with more technologies and a Ministry of Science at level 2+ | The recipient gains technology spread; the donor loses weekly innovation. |
 | Extensive Modernization Aid | A member with a Ministry of Science at level 4+ | Four times Modernization Aid, which it requires. |
-| Reduce Subject Liberty | A subject, to its overlord | Lowers the subject's liberty desire. |
+| Reduce Subject Liberty | A subject, to its overlord | Lowers the subject's liberty desire. The overlord pays its influence. |
 
 The remaining articles belong to systems with chapters of their own.
 

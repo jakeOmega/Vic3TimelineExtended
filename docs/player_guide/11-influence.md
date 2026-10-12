@@ -171,13 +171,14 @@ at the next monthly update.
 |---|---|---|---|
 | Programme Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
 | International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | The weekly cost of one funding step. |
-| Cultural Institutes | Fund / Defund | +10% pull. | +100 authority cost. |
-| Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | +100 authority cost. |
+| Cultural Institutes | Fund / Defund | +10% pull. | 150 influence. |
+| Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | 200 influence. |
 | Cultural Protectionism | Enact / End | +10% pull, +100 authority. | −5% society research speed, −10% mass migration attraction. |
 
 The funding cap is one step per level of the Ministry of Culture institution,
 plus one each from Mass Media and Television; the panel shows it. The four
-programs run until you end them. Global Media Campaign and Cultural
+programs run until you end them. Cultural Institutes and Global Media Campaign
+need their influence available to start. Global Media Campaign and Cultural
 Protectionism exclude each other: while one runs, the other's button is grayed
 out.
 
@@ -197,7 +198,9 @@ share or less. Four more events follow the political models. All of them are in
 ### How the AI competes for culture
 
 AI countries use the same programs. Those with a share of 10% or more begin
-outreach and launch media campaigns. An AI raises funding at a share of 10% or
+outreach and launch media campaigns, a campaign or institutes only with 200
+influence to spare beyond the cost, and they end either when their influence
+runs into deficit. An AI raises funding at a share of 10% or
 more, or below 5%, but only while it is out of default and its weekly surplus
 covers one more step; below 2% it is more likely to cut funding. Small
 countries under the benchmark enact Cultural Protectionism and end media
@@ -321,22 +324,28 @@ Social Media (era 9). The operations that can bring down a great power come
 late in the tree, so a small country can't rush them before the great powers
 have agencies of their own.
 
-| Operation | What it does at base strength | Also needs |
-|---|---|---|
-| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target has an elected legislature |
-| Financial Subversion | Target +2 bubble pressure a month | Computer Networks |
-| Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target |
-| Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target |
-| Industrial Espionage | You: [stolen production technology](#stealing-technology). Target: −3 authority | Target has researched a production technology that you could research now |
-| Military Espionage | You: [stolen military technology](#stealing-technology). Target: −3 authority | Target has researched a military technology that you could research now |
-| Influence Campaign | Target −15% leverage resistance | Mass Media; you lead a power bloc the target is not in |
-| Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Pop Culture; target has a political movement |
-| Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Social Media; target has a political movement |
-| Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | Satellite Communications; a rivalry; target not your subject; Seasoned [Tradecraft](#tradecraft) |
-| Nuclear Programme Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft |
-| Space Programme Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not |
-| Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject |
-| Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on |
+| Operation | What it does at base strength | Also needs | Influence |
+|---|---|---|---|
+| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target has an elected legislature | 50 |
+| Financial Subversion | Target +2 bubble pressure a month | Computer Networks | 50 |
+| Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target | None |
+| Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target | None |
+| Industrial Espionage | You: [stolen production technology](#stealing-technology). Target: −3 authority | Target has researched a production technology that you could research now | 25 |
+| Military Espionage | You: [stolen military technology](#stealing-technology). Target: −3 authority | Target has researched a military technology that you could research now | 25 |
+| Influence Campaign | Target −15% leverage resistance | Mass Media; you lead a power bloc the target is not in | 50 |
+| Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Pop Culture; target has a political movement | 100 |
+| Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Social Media; target has a political movement | 100 |
+| Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | Satellite Communications; a rivalry; target not your subject; Seasoned [Tradecraft](#tradecraft) | 100 |
+| Nuclear Programme Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft | 100 |
+| Space Programme Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
+| Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
+| Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
+
+An operation uses its influence for as long as it runs, more the worse the
+world would take its exposure (see [Detection and
+exposure](#detection-and-exposure)). As with any pact, a great power pays double
+and a major power half again as much, and you need the influence available to
+launch it.
 
 If you run several Space Programme Espionage operations, their bonuses come
 from the strongest and don't add up. Stolen technology does add up: each
@@ -540,5 +549,7 @@ raises priority to 2 against rivals and to 3 when a great power is at war with
 the target. Once launched, an operation stays until it is fully operational,
 unless it is caught or something it needs goes. After that the AI calls it off
 only when its reason has gone: no rivalry either way, no hostile attitude and
-relations above poor, or no space milestone of its own under way. It stops Cultivate Assets once its network reaches 75. It needs Seasoned Tradecraft for the two most severe operations, as
+relations above poor, or no space milestone of its own under way, or when its
+influence runs into deficit. It launches an operation that uses influence only
+while it holds 300 or more. It stops Cultivate Assets once its network reaches 75. It needs Seasoned Tradecraft for the two most severe operations, as
 you do, so it rarely launches them.

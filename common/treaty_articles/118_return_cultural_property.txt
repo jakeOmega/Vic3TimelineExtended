@@ -1,0 +1,158 @@
+﻿# =================================================================
+# TREATY ARTICLE: return_cultural_property
+# The source returns every Grand Monument trophy it holds whose origin the
+# target owns; each is rebuilt where it was taken from (gm_trophy_effects.txt,
+# docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §5).
+# Historical: Article 131 of the Treaty of Versailles sent the observatory
+# instruments taken in 1900 back to Beijing; the 1947 peace treaty with Italy
+# ordered the Aksum stele returned.
+# A one-time return: on entry into force the work runs in the hidden
+# monument_trophy_events.13, outside the treaty designer's preview pass,
+# which runs this hook every frame with scope:article_options unbound.
+# =================================================================
+return_cultural_property = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/cultural_exchange_program.dds"
+	kind = directed
+	cost = 50
+
+	flags = {
+		can_be_enforced
+		giftable
+	}
+
+	usage_limit = once_per_side
+
+	# The country receiving its property back (target) pays, as vanilla's
+	# demands and gifts do (owner, 2026-10-12; the source paid).
+	maintenance_paid_by = target_country
+
+	visible = {
+		gm_system_enabled = yes
+	}
+
+	# Before the direction is fixed: a trophy from either side's lands stands
+	# in the other's.
+	possible = {
+		gm_system_enabled = yes
+		OR = {
+			gm_tr_country_holds_from = { CLAIMANT = scope:other_country }
+			scope:other_country = {
+				gm_tr_country_holds_from = { CLAIMANT = root }
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = gm_tr_article_return_needs_tt
+			scope:source_country ?= {
+				gm_tr_country_holds_from = { CLAIMANT = scope:target_country }
+			}
+		}
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			no_duplicate_treaty_article = { ARTICLE_TYPE = return_cultural_property }
+		}
+	}
+
+	on_entry_into_force = {
+		scope:article_options = {
+			if = {
+				limit = {
+					exists = source_country
+					exists = target_country
+				}
+				source_country = { save_scope_as = gm_tr_giver_treaty }
+				target_country = {
+					trigger_event = { id = monument_trophy_events.13 }
+				}
+			}
+		}
+	}
+
+	on_withdrawal = {}
+	on_break = {}
+
+	ai = {
+		treaty_categories = { other }
+		# The AI asks for its own back.
+		article_ai_usage = { request }
+
+		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0
+			if = {
+				limit = { gm_tr_disp_abroad_count > 0 }
+				add = 0.02
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# The holder gives up its trophies.
+			if = {
+				limit = { scope:source_country = this }
+				add = {
+					desc = "GM_TR_RETURN_RELUCTANCE"
+					value = -40
+				}
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = genial }
+							has_attitude = { who = scope:target_country attitude = cooperative }
+							has_attitude = { who = scope:target_country attitude = conciliatory }
+						}
+					}
+					add = {
+						desc = "AI_FRIENDLY_ATTITUDE"
+						value = 20
+					}
+				}
+			}
+			# The claimant gets them home.
+			else = {
+				add = {
+					desc = "GM_TR_RETURN_WANTED"
+					value = 40
+				}
+			}
+		}
+	}
+
+	# Pushed in a play: the trophies stand in the holder's capital.
+	wargoal = {
+		execution_priority = 30
+		contestion_type = control_target_country_capital
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 1.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+			}
+		}
+
+		# A claim to what was taken: little infamy.
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 2
+			}
+		}
+	}
+}

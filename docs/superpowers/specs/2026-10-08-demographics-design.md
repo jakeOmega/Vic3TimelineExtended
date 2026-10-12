@@ -15,6 +15,9 @@
 > The late game (biological age, the pension age, fertility under life extension, who gets life extension, its costs
 > and display) is scoped in `2026-10-11-demographics-late-game-design.md` (approved 2026-10-11), which amends §1, design
 > rule 3, §7, §8.2, §8.3, §10 and §13.
+> Phase 2's consequences (workforce, pensions and health costs, the Family Policy measures, conscription, the youth
+> bulge and sex balance) are designed in `2026-10-12-demographics-phase2-consequences-design.md` (draft, 2026-10-12),
+> which amends §7, §8.1 and §8.2; its step 1 is planned in `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`.
 > Numbers are starting proposals for the calibration harness (§12), not decisions.
 
 ## Context

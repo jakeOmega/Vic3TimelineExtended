@@ -19,6 +19,9 @@
 # Events 24-25  - the monument's form and namesake (v2 §3.3), players only.
 # Event 26      - an opportunity's gift: its monument rebuilt taller (hidden,
 #                 opportunities spec §3.1).
+# Event 27      - Raise It: an opportunity's missing levels queued (hidden).
+# Event 28      - an opportunity seized: the monument, its gift and the boon,
+#                 players only.
 # ============================================================================
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
@@ -137,10 +140,40 @@ monument_events.2 = {
 		}
 	}
 
-	# Leave it undedicated; the ceremony asks again at the next level.
+	# As the open opportunity asks (opportunities usability §3): first, and the
+	# default, while this monument can answer it. The default moves between
+	# this option and the first copy of "leave it undedicated" below by
+	# complementary triggers, so exactly one default is valid
+	# (agricultural_diffusion_events.1's pattern; a default whose trigger fails
+	# does not fall back, scripting_best_practices.md). The AI takes the
+	# opportunity's dedication through the per-dedication weights instead.
+	option = {
+		name = monument_events.2.opp
+		trigger = { gm_state_ceremony_offers_opportunity = yes }
+		default_option = yes
+		ai_chance = { base = 0 }
+		gm_state_dedicate_as_opportunity_asks = yes
+	}
+
+	# Leave it undedicated; the ceremony asks again at the next level. The
+	# default unless an opportunity's dedication is offered above.
 	option = {
 		name = monument_events.2.a
+		trigger = { gm_state_ceremony_offers_opportunity = no }
 		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = monument_events.2.a.tt
+		hidden_effect = {
+			gm_remove_state_var = { VAR = gm_ceremony_pending }
+			# A copy of a sibling's dedication goes back to Undedicated.
+			gm_state_undedicate = yes
+		}
+	}
+
+	# The same, when the opportunity's option above is the default.
+	option = {
+		name = monument_events.2.a
+		trigger = { gm_state_ceremony_offers_opportunity = yes }
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -1191,6 +1224,8 @@ monument_events.21 = {
 
 	immediate = {
 		gm_com_save_scopes = yes
+		# Where Seize It and Start Building would build (usability §2).
+		gm_com_pick_build_state = yes
 	}
 
 	option = {
@@ -1207,6 +1242,23 @@ monument_events.21 = {
 				factor = 0
 			}
 		}
+	}
+
+	# Seize it and queue its levels at once (usability §2): players only, the
+	# AI's seizing already queues them.
+	option = {
+		name = monument_events.21.c
+		trigger = {
+			is_ai = no
+			exists = scope:gm_com_build_state
+		}
+		custom_tooltip = {
+			text = gm_com_accept_build_tt
+			gm_com_accept = yes
+			set_variable = { name = gm_com_raise_pending value = yes days = 7 }
+			trigger_event = { id = monument_events.27 }
+		}
+		ai_chance = { base = 0 }
 	}
 
 	option = {
@@ -1236,6 +1288,76 @@ monument_events.26 = {
 
 	immediate = {
 		gm_state_gift_grandeur = yes
+	}
+}
+
+# ============================================================================
+# Event 27: Raise It (opportunities usability §1)
+# ============================================================================
+# Hidden plumbing. From gm_com_raise_sgui and monument_events.21's Seize It and
+# Start Building: queues the missing levels (gm_com_raise), outside the
+# tooltip walk a button's or an option's effect gets.
+monument_events.27 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		has_variable = gm_com_open
+	}
+
+	immediate = {
+		gm_com_raise = yes
+	}
+}
+
+# ============================================================================
+# Event 28: an opportunity seized (opportunities usability §5)
+# ============================================================================
+# Players only, from gm_com_fulfil, after the record has closed: the monument
+# that completed it (gm_com_seized_state) and the boon (gm_com_seized_source,
+# read through gm_com_source_is by gm_com_boon_name / _effect). Its gift is
+# monument_events.26's, which may land after this opens, so the text says it
+# will be rebuilt rather than naming a level.
+monument_events.28 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = monument_events.28.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:monument_state }
+				desc = monument_events.28.d
+			}
+			triggered_desc = {
+				desc = monument_events.28.d_unnamed
+			}
+		}
+	}
+	flavor = monument_events.28.f
+
+	duration = 3
+
+	trigger = {
+		gm_system_enabled = yes
+		has_variable = gm_com_seized_source
+	}
+
+	immediate = {
+		if = {
+			limit = { has_variable = gm_com_seized_state }
+			var:gm_com_seized_state ?= { save_scope_as = monument_state }
+		}
+	}
+
+	option = {
+		name = monument_events.28.a
+		default_option = yes
 	}
 }
 

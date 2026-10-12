@@ -1,0 +1,168 @@
+﻿# =================================================================
+# TREATY ARTICLE: surrender_monument
+# The source surrenders the Grand Monument in a state it owns: the target
+# carries it off as a trophy, the share its form allows (a column whole, a
+# piece of a gate, a token of a hall). gm_trophy_effects.txt; docs/superpowers/
+# specs/2026-10-12-grand-monument-trophies-design.md §2.3.
+# Historical: the Treaty of Lahore (1849) made the Punjab surrender the
+# Koh-i-Noor.
+# A one-time taking: on entry into force the work runs in the hidden
+# monument_trophy_events.10, outside the treaty designer's preview pass,
+# which runs this hook every frame with scope:article_options unbound.
+# =================================================================
+surrender_monument = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/seize_company.dds"
+	kind = directed
+	cost = 100
+
+	flags = {
+		can_be_enforced
+		hostile
+	}
+
+	usage_limit = once_per_side_with_same_inputs
+
+	# The country carrying the monument off (target) pays, as vanilla's demands
+	# do (owner, 2026-10-12; the source paid).
+	maintenance_paid_by = target_country
+
+	required_inputs = {
+		state
+	}
+
+	visible = {
+		gm_system_enabled = yes
+	}
+
+	possible = {
+		gm_system_enabled = yes
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			no_duplicate_treaty_article = { ARTICLE_TYPE = surrender_monument }
+		}
+	}
+
+	# ROOT is the source, whose monument it is.
+	state_valid_trigger = {
+		scope:input = {
+			owner = root
+			gm_state_tr_takeable = yes
+		}
+	}
+
+	on_entry_into_force = {
+		scope:article_options = {
+			if = {
+				limit = {
+					exists = input_state
+					exists = target_country
+				}
+				target_country = { save_scope_as = gm_tr_treaty_taker }
+				input_state = {
+					gm_state_tr_order_take = { WHO = scope:gm_tr_treaty_taker ROUTE = treaty }
+				}
+			}
+		}
+	}
+
+	on_withdrawal = {}
+	on_break = {}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request }
+
+		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			# A major power or greater whose government loots (gm_tr_ai_loot_base
+			# above its base 2) asks now and then.
+			value = 0
+			if = {
+				limit = {
+					country_rank >= rank_value:major_power
+					gm_tr_ai_loot_base > 4
+				}
+				add = 0.005
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# The source gives up a monument, reluctant by its size.
+			if = {
+				limit = {
+					exists = scope:article.input_state
+					scope:source_country = this
+				}
+				add = {
+					desc = "GM_TR_SURRENDER_RELUCTANCE"
+					value = -100
+				}
+				subtract = {
+					desc = "GM_TR_SURRENDER_SIZE"
+					scope:article.input_state ?= {
+						add = gm_state_tr_levels
+					}
+					multiply = 5
+					max = 200
+				}
+				if = {
+					limit = { country_rank >= rank_value:great_power }
+					add = {
+						desc = "great_power"
+						value = -100
+					}
+				}
+			}
+			# The target gains a trophy.
+			else_if = {
+				limit = {
+					exists = scope:article.input_state
+					scope:target_country = this
+				}
+				add = {
+					desc = "GM_TR_SURRENDER_WANTED"
+					value = 20
+				}
+			}
+		}
+	}
+
+	# Pushed in a play: the monument's state is contested.
+	wargoal = {
+		execution_priority = 45
+		contestion_type = control_target_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+		}
+	}
+}
