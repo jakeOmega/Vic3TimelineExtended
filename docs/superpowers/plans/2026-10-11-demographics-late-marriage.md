@@ -958,7 +958,7 @@ git commit -m "Demographics model: Late Marriage and Birth Spacing, the terms an
   Every state the shares don't hold takes its seed (its start less what its conditions eroded); `practices=False` is
   today's model.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `test_demographics_save_inputs.py` (beside `test_state_inputs_split_the_country_by_state`):
 
@@ -1045,12 +1045,12 @@ In `test_demographics_harness.py` (beside `test_history_takes_each_states_own_ra
 
 Add `import demographics_params as P` to the harness test's imports if it isn't there.
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `$V -m unittest test_demographics_save_inputs test_demographics_practices test_demographics_harness`
 Expected: FAIL (`agrarian_share`, `state_regions`, `demographics_practices`, `country_figures(shares=…)` missing).
 
-- [ ] **Step 3: The save reader**
+- [x] **Step 3: The save reader**
 
 In `CountryInputs`, after `rural`:
 
@@ -1086,7 +1086,7 @@ def state_regions(sections):
     return out
 ```
 
-- [ ] **Step 4: `demographics_practices.py`, its first part**
+- [x] **Step 4: `demographics_practices.py`, its first part**
 
 ```python
 #!/usr/bin/env python3
@@ -1168,7 +1168,7 @@ def read_shares(path):
             for year, by_sid in data.items()}
 ```
 
-- [ ] **Step 5: The harness takes shares** (`demographics_harness.py`)
+- [x] **Step 5: The harness takes shares** (`demographics_harness.py`)
 
 `inputs_for` gains `practices=None` and passes `practices=dict(practices or {})` into `M.Inputs`.
 `country_figures` keeps #916's `stored` (the census's stored inputs, `census_inputs`) and becomes:
@@ -1219,7 +1219,7 @@ keeps every state). In `cmd_history` (which keeps reading `CENSUS_INPUT_VARS` in
 - `--incorporated-only`: print `(incorporated states only)` on the `==` line when it is set;
 - `--no-practices`: pass `practices=False`, for today's model (Task 6's "before").
 
-- [ ] **Step 6: Run the tests**
+- [x] **Step 6: Run the tests**
 
 Run:
 ```bash
@@ -1227,7 +1227,7 @@ $V -m unittest test_demographics_save_inputs test_demographics_practices test_de
 ```
 Expected: `OK`. `test_history_on_the_slice` still passes: the slice names no region, so every state takes 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add scripts/analysis/demographics_save_inputs.py scripts/analysis/demographics_practices.py scripts/analysis/demographics_harness.py test_demographics_save_inputs.py test_demographics_practices.py test_demographics_harness.py

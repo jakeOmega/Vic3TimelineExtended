@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 import demographics_harness as H  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
+import demographics_params as P  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 
 SLICE = ROOT / "test_fixtures" / "demographics" / "gb_1836_slice.v3"
@@ -250,6 +251,25 @@ class TestHarness(unittest.TestCase):
             self.assertAlmostEqual(got[k], (each[0][k] + each[1][k]) / 2, msg=k)
         whole = H.model_figures(H.inputs_for(state(9.0, 2000.0), carriers))
         self.assertGreater(abs(got["e0"] - whole["e0"]), 0.5, "the mean SoL would hide the bend")
+
+    def test_history_takes_each_states_practices(self):
+        """The late-marriage plan, Task 3: a state's shares multiply its children per woman, and a country's figure
+        can leave its colonies out (spec 5.1 item 3: Denmark's West African states)."""
+        carriers = DM.load_carriers()
+
+        def state(people):
+            c = S.CountryInputs("TST")
+            c.population, c.sol_x_size, c.wealth_tfr_x_size = people, 8.0 * people, M.wealth_tfr(8.0) * people
+            c.workforce, c.literate = people / 2, people / 10
+            return c
+
+        states = [("1", state(1000.0), True), ("2", state(1000.0), False)]
+        plain = H.country_figures(states, carriers)
+        late = H.country_figures(states, carriers, shares={"1": {"lm": 1.0}, "2": {"lm": 1.0}})
+        self.assertAlmostEqual(late["tfr"], plain["tfr"] * (1 - P.PRACTICE_CUT["lm"]), places=6)
+        home = H.country_figures(states, carriers, shares={"1": {"lm": 1.0}}, incorporated_only=True)
+        self.assertAlmostEqual(home["tfr"], H.model_figures(H.inputs_for(states[0][1], carriers,
+                                                                         practices={"lm": 1.0}))["tfr"], places=6)
 
     def test_history_sees_the_censuss_lag(self):
         """A state whose stored medicine is behind its targets reads a lower life expectancy than at its targets; with

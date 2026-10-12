@@ -42,6 +42,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
+import demographics_regions as R  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 import pop_growth as G  # noqa: E402
 
@@ -73,7 +74,7 @@ def income_proxy(wealth, costs):
     return costs[w]
 
 
-def inputs_for(c, carriers=None, incorporated=True):
+def inputs_for(c, carriers=None, incorporated=True, practices=None):
     """Model inputs for a save's country (as its incorporated states see them) or for one state
     (demographics_save_inputs.state_inputs; incorporated as the state is).
 
@@ -81,12 +82,13 @@ def inputs_for(c, carriers=None, incorporated=True):
     owner's techs, laws and institution levels. The wealth term is the pop-weighted curve,
     as the game computes it, not the curve at the mean SoL. Crowding (the state's migration penalty
     from migration_crowding) is a state's; a whole country's is 0, so `seed` and `adopters` leave it out.
+    practices: {practice: share} (Late Marriage lm, Birth Spacing bs; the late-marriage plan), none by default.
     """
     carriers = DM.load_carriers() if carriers is None else carriers
     mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=incorporated)
     return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share, techs=frozenset(c.techs),
                     laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
-                    mods=mods, means_add=c.means_add, crowding=c.crowding)
+                    mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}))
 
 
 def cmd_sketch(_args):
@@ -760,25 +762,45 @@ def model_figures(inp):
     return {"e0": e0, "imr": (qf[0] + qm[0]) / 200, "tfr": tfr, "r": r}
 
 
-def country_figures(states, carriers, stored=None):
+def country_figures(states, carriers, stored=None, shares=None, incorporated_only=False):
     """A country's model figures as the census builds them: each state's own rates (its SoL, literacy,
     urban share and incorporation; with `stored`, {state id: {variable: value}}, the census's own inputs from the
     save, so medicine as it had spread), weighted by its people. The poverty term bends at SoL 9, so the
-    rates at the country's mean SoL would hide what its poor and rich states do (#855's review)."""
-    stored = stored or {}
-    figs = [(st.population, model_figures(census_inputs(inputs_for(st, carriers, incorporated=inc),
+    rates at the country's mean SoL would hide what its poor and rich states do (#855's review). shares:
+    {state id: {practice: share}} (the late-marriage plan); incorporated_only leaves a country's colonies out
+    (spec 5.1 item 3)."""
+    stored, shares = stored or {}, shares or {}
+    figs = [(st.population, model_figures(census_inputs(inputs_for(st, carriers, incorporated=inc,
+                                                                   practices=shares.get(sid)),
                                                         stored.get(sid, {}))))
-            for sid, st, inc in states if st.population > 0]
+            for sid, st, inc in states if st.population > 0 and (inc or not incorporated_only)]
     tot = sum(p for p, _ in figs) or 1
     return {k: sum(p * f[k] for p, f in figs) / tot for k in ("e0", "imr", "tfr", "r")}
 
 
-def history_rows(sections, year, anchors, carriers=None, stored=None):
+def history_rows(sections, year, anchors, carriers=None, stored=None, shares=None, incorporated_only=False,
+                 practices=True):
     """[(country, tag, people, model figures, anchors)] for each HISTORY_TAGS country in the save, the
     world line (every country of 1M people or more, weighted by people) and the mapped countries that
-    have no anchor of any kind."""
+    have no anchor of any kind. The practices (the late-marriage plan, Task 3): every state takes its seed, as the
+    census gives it with no sibling holding a share (its start less what its conditions have eroded), and `shares`
+    ({state id: {practice: share}}, a replay's year) overrides the states it holds; practices=False is the model
+    without them. incorporated_only: each country's figure from its incorporated states (the world line keeps every
+    state)."""
     carriers = DM.load_carriers() if carriers is None else carriers
     states = S.state_inputs(sections)
+    if not practices:
+        shares = {}
+    else:
+        regions, sr = R.strategic_region_of(), S.state_regions(sections)
+
+        def seed(sid, st, inc):
+            reg = sr.get(sid, "")
+            inp = inputs_for(st, carriers, incorporated=inc)
+            return {p: M.practice_seed(p, inp, M.practice_start(p, reg, regions.get(reg, "")), [])
+                    for p in P.PRACTICES}
+
+        shares = {**{sid: seed(sid, st, inc) for sts in states.values() for sid, st, inc in sts}, **(shares or {})}
     people = {tag: sum(st.population for _sid, st, _inc in sts) for tag, sts in states.items()}
     rows, bare = [], []
     for country, tags in HISTORY_TAGS.items():
@@ -791,8 +813,10 @@ def history_rows(sections, year, anchors, carriers=None, stored=None):
                 "imr": nearest(anchors.get("imr", {}).get(country, {}), year, 15),
                 "tfr": nearest(anchors.get("tfr", {}).get(country, {}), year, 5),
                 "growth": growth_around(anchors.get("population", {}).get(country, {}), year)}
-        rows.append((country, tag, people[tag], country_figures(states[tag], carriers, stored), hist))
-    big = [(people[t], country_figures(sts, carriers, stored)) for t, sts in states.items() if people[t] >= 1e6]
+        rows.append((country, tag, people[tag], country_figures(states[tag], carriers, stored, shares, incorporated_only),
+                     hist))
+    big = [(people[t], country_figures(sts, carriers, stored, shares)) for t, sts in states.items()
+           if people[t] >= 1e6]
     tot = sum(p for p, _ in big) or 1
     world = {k: sum(p * f[k] for p, f in big) / tot for k in ("e0", "imr", "tfr", "r")}
     return rows, world, bare
@@ -806,6 +830,11 @@ def cmd_history(args):
               file=sys.stderr)
         return 1
     carriers = DM.load_carriers()
+    shares_by_year = {}
+    if args.shares:
+        import demographics_practices as DP   # it imports this module
+        shares_by_year = DP.read_shares(args.shares)
+    only = "; countries: incorporated states only" if args.incorporated_only else ""
     for path in args.save:
         sections = S.read_sections(path)        # a binary or zipped save stops here (NotPlainText, exit 1)
         year = save_year(path) or args.year     # the save's own date first; --year fills in a slice
@@ -814,11 +843,12 @@ def cmd_history(args):
             return 1
         _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS)
         stored = {sid: rec["vars"] for sid, rec in walked.items()}
-        rows, world, bare = history_rows(sections, year, anchors, carriers, stored)
+        rows, world, bare = history_rows(sections, year, anchors, carriers, stored, shares=shares_by_year.get(year),
+                                         incorporated_only=args.incorporated_only, practices=not args.no_practices)
         for country in bare:
             print(f"{country}: no anchors in {args.anchors}", file=sys.stderr)
         print(f"== {Path(path).name} ({year}): world (countries of 1M or more) e0 {world['e0']:.1f}  "
-              f"children per woman {world['tfr']:.2f}  growth {world['r']:+.2f}% a year")
+              f"children per woman {world['tfr']:.2f}  growth {world['r']:+.2f}% a year{only}")
         own = sum(1 for v in stored.values() if all(k in v for k in CENSUS_INPUT_VARS))
         print(f"   {own} states on the census's own inputs (medicine as it had spread)")
         for country, tag, people, got, hist in sorted(rows, key=lambda r: -r[2]):
@@ -1271,6 +1301,11 @@ def main(argv=None):
     p.add_argument("save", nargs="+")
     p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")
     p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.add_argument("--shares", help="practices-replay's --out file: each save's year selects its shares; a state or a "
+                                    "year it doesn't hold takes its seed")
+    p.add_argument("--incorporated-only", action="store_true",
+                   help="each country's figure from its incorporated states (the world line keeps every state)")
+    p.add_argument("--no-practices", action="store_true", help="the model without Late Marriage and Birth Spacing")
     p.set_defaults(fn=cmd_history)
     p = sub.add_parser("adopters")
     p.add_argument("saves", nargs="+")
