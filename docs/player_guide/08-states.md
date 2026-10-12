@@ -296,7 +296,8 @@ The pension age changes at once, but a linked setting moves at most a year a
 year; the bill and the workforce follow at the next census. Under Full, Old Age
 Pension costs money for its pensioners: each year's census sets a weekly expense
 worth 6% of your output per person for each pensioner, per level of Social
-Security, shown as Census: Pension Bill in the budget. A rich country at Standard with a
+Security: Census: Pension Bill, which the Budget panel's Breakdown tab lists
+under Old-Age Pensions. A rich country at Standard with a
 fifth of its people pensioned pays about a fifth of its revenue. Universal Basic
 Income and the Post-Scarcity Economy pay everyone already and have no pension bill. An older
 people also needs more care: the Ministry of Health costs more bureaucracy as the

@@ -105,3 +105,11 @@ country_te_budget_expense_drugs_add = {
 	prefix = "MONEY_PREFIX"
 	script_only = yes
 }
+
+country_te_budget_expense_pensions_add = {
+	color = neutral
+	percent = no
+	decimals = 1
+	prefix = "MONEY_PREFIX"
+	script_only = yes
+}

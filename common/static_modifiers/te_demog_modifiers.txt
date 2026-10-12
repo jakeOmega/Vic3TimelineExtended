@@ -54,9 +54,11 @@ te_demog_census_workforce_down = {
 	state_working_adult_ratio_add = -1
 }
 # The pension bill (§2.3): a weekly expense, multiplier GDP / 52 x the pensioners' share x B (te_dg_pension_bill).
+# Its mirror puts it under Old-Age Pensions in the Budget panel's Breakdown tab (gen_budget_breakdown.SOURCES).
 te_demog_pension_bill = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_pensions_add = 1
 }
 # The health bill (§2.4): the health system's institution cost, by the census's health need and the chronic-treatment
 # technologies; a country younger than 1836's world pays a little less (the down side).

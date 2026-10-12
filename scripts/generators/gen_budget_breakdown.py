@@ -44,6 +44,7 @@ SOURCES = {
         "nuclear_taboo": ("Nuclear Civil Defence", ("nd_taboo_civil_defence",)),
         "space": ("Space Race", ("we_se_debris_clearance",)),
         "drugs": ("Drug Shortage Response", ("drugs_shortage_spending",)),
+        "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),
