@@ -1673,6 +1673,37 @@ def _severe(bare_b, bare_d):
     return _Pop(bare_b, bare_d, top_b=P.STARVATION_SEVERE["births"], top_d=P.STARVATION_SEVERE["deaths"])
 
 
+class _ClockEngine(_Engine):
+    """_Engine plus what fast mode's switch (te_demog_fast_set) needs, for one state that is also the country:
+    every_state and every_country run their body here (their limit too), set_global_variable sets the global as a
+    fixture, debug_log does nothing."""
+
+    SPECIAL = ("every_state", "every_country", "set_global_variable", "debug_log")
+
+    @classmethod
+    def adopt(cls, eng):
+        new = cls.__new__(cls)
+        new.__dict__.update(eng.__dict__)
+        return new
+
+    def run(self, items):
+        segment = []
+        for item in items:
+            key, _, arg = item
+            if key not in self.SPECIAL:
+                segment.append(item)
+                continue
+            super().run(segment)
+            segment = []
+            if key == "set_global_variable":
+                self.fixtures[f"global_var:{_find(arg, 'name')}"] = self.value(_find(arg, "value"))
+            elif key in ("every_state", "every_country"):
+                limit = [i for i in arg if i[0] == "limit"]
+                if not limit or self.holds(limit[0][2]):
+                    self.run([i for i in arg if i[0] != "limit"])
+        super().run(segment)
+
+
 class TestWindowEvents(unittest.TestCase):
     """The trapezoid (owner, 2026-10-11; #894; the review of #907). The walk is a snapshot on the step's day and the
     step books the window that ends that day, so a famine starting in early December was booked for the whole year
@@ -1821,32 +1852,51 @@ class TestWindowEvents(unittest.TestCase):
         self.assertIn("te_demog_fast_deaths", eng.modifiers)
         self.assert_books(booked, true)
 
-    def test_a_switch_to_fast_mode_inside_the_window(self):
-        """Options h, k, h: normal speed's clock clears the term at the step, and h puts the clock back at three months
-        a step without one. The window is three months with no term at either end."""
+    def test_back_to_fast_mode_inside_a_window_at_normal_speed(self):
+        """Options k, then h: the clock's step at normal speed (K = 1) sets no term, and h puts the clock back at three
+        months a step without one until the next step. The window is three months with no term at either end."""
         start = [self.STEADY[0], _mild(175e6, 170e6)]
         end = [self.STEADY[0], _severe(175e6, 170e6)]
         eng, booked, true, _snap = self.window(start, end, fast_k=1, fast_at_end=True, months=3)
         self.assertNotIn("te_demog_fast_deaths", eng.modifiers)
         self.assert_books(booked, true)
 
-    def test_normal_speed_on_the_clock_takes_the_term_off_the_start(self):
-        """Option k: the clock's step at normal speed clears the term the window before ran with."""
+    def test_option_k_between_two_clock_steps_falls_back_to_the_snapshot(self):
+        """Option k (te_demog_fast_set at 12 months a step) takes fast mode's term off every state at once, between two
+        clock steps, so the rate the last step stored (with the term, about K times the engine's) no longer runs: it
+        goes, and the next window takes the snapshot, as before the trapezoid. Here k comes straight after a step at
+        K = 4 and the next step is 12 months later: the engine ran without the term all window."""
+        eng, *_ = self.window(self.STEADY, self.STEADY, fast_k=4, months=3)
+        self.assertIn("te_demog_fast_deaths", eng.modifiers)
+        self.assertIn("te_dg_sr_d", eng.vars)
+        clock = _ClockEngine.adopt(eng)
+        switch = re.sub(r'debug_log = "[^"]*"', "", _block(_text(FAST_EFFECTS), "te_demog_fast_set"))
+        clock.run(_parse_script(switch.replace("$MONTHS$", "12")))
+        self.assertEqual(clock.fixtures["global_var:te_demog_months_per_step"], 12.0)
+        self.assertFalse({"te_demog_fast_births", "te_demog_fast_deaths"} & set(clock.modifiers))
+        self.assertFalse({"te_dg_sr_b", "te_dg_sr_d"} & set(clock.vars))
+        # twelve months on, the clock's step: the walk under the census's terms alone
+        clock.locals.clear()
+        clock.fixtures["global_var:te_demog_window_months"] = 12.0
+        read = self._set_reads(clock, 0.02, 0.05)
+        end = self.walk(self.STEADY, *read)
+        clock.locals.update(end)
+        clock.vars.update(te_dg_eb=end["te_dg_w_eb"] * 12 / 1e5, te_dg_ed=end["te_dg_w_ed"] * 12 / 1e5)
+        clock.call("te_demog_window_events")
+        true = tuple(end[f"te_dg_w_{k}"] * 12 / 1e5 for k in ("eb", "ed"))   # a steady engine without the term
+        self.assert_books((clock.vars["te_dg_eb"], clock.vars["te_dg_ed"]), true)
+
+    def test_a_refresh_that_sets_no_term_drops_the_start_rate(self):
+        """A step with no births (te_dg_stepped 0) sets no term: the rate stored a window earlier is not this window's
+        start, so it goes and the next window takes the snapshot."""
         eng = self._engine()
-        eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.25, te_dg_stepped=1.0, te_dg_cbr_model=self.CBR,
-                        te_dg_cdr_model=self.CDR, te_dg_fast_fb=2.0, te_dg_fast_fd=2.1)
-        eng.modifiers.update(te_demog_census_births_down=0.3, te_demog_census_deaths_down=0.25,
-                             te_demog_fast_births=2.0, te_demog_fast_deaths=2.1)
-        eng.trigger_fixtures["te_demog_clock_on"] = True
-        eng.fixtures["global_var:te_demog_months_per_step"] = 12.0
-        read = self._set_reads(eng, 0.02, 0.05)
-        eng.locals.update(self.walk(self.STEADY, *read))
+        eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.25, te_dg_stepped=0.0, te_dg_cbr_model=self.CBR,
+                        te_dg_cdr_model=self.CDR, te_dg_sr_b=400.0, te_dg_sr_d=300.0)
+        eng.modifiers.update(te_demog_census_births_down=0.3, te_demog_census_deaths_down=0.25)
+        eng.locals.update(self.walk(self.STEADY, *self._set_reads(eng, 0.02, 0.05)))
         eng.call("te_demog_rates_refresh")
-        eng.call("te_demog_fast_refresh_rates")
-        self.assertNotIn("te_demog_fast_deaths", eng.modifiers)
-        true = self.walk(self.STEADY, *self._set_reads(eng, 0.02, 0.05))
-        self.assertAlmostEqual(eng.vars["te_dg_sr_d"] * self.POP, true["te_dg_w_ed"], delta=1.0)
-        self.assertAlmostEqual(eng.vars["te_dg_sr_b"] * self.POP, true["te_dg_w_eb"], delta=1.0)
+        self.assertFalse({"te_dg_sr_b", "te_dg_sr_d"} & set(eng.vars))
+        self.assertEqual(eng.vars["te_dg_md"], -0.25, "the terms stay as they were")
 
     def test_no_start_rate_or_not_full_is_the_snapshot(self):
         """The first step after a seed, a new state, an old save (no te_dg_sr_*); outside Full."""

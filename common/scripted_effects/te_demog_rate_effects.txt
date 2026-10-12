@@ -43,8 +43,9 @@
 #   ED = (w x rate_start x people + (1 - w) x te_dg_w_ed) x te_demog_step_months / 100,000
 # with w = te_demog_k_window_start_weight (0.5, the trapezoid; demographics_model.window_events). The
 # rate at the start is the one the last step left in force (te_dg_sr_d, per head): the walk's rate then,
-# with the terms the step changed swapped in. M is refitted only at a step, and fast mode's term is set
-# only at a clock step, so they hold all window and both ends carry them. So the refresh stores
+# with the terms the step changed swapped in. M is refitted only at a step, and fast mode's term is set at
+# a clock step, so they hold all window and both ends carry them (option k takes the term off between two
+# steps; te_demog_fast_clear_rates then drops the start's rate). So the refresh stores
 #   rate_start = te_dg_w_ed + te_dg_w_ed0m x (M_new - M_prev - the moved lines' pairs it cleared)
 # and fast mode adds te_dg_w_ed0m x (F_new - F_prev). te_dg_w_ed0m is the bare curves of the pops the
 # engine doesn't floor at 0, which alone a change in the read reaches: severe starvation's -0.9 floors a
@@ -61,6 +62,8 @@
 # (te_demog_on_top_scales) and console option n read te_dg_eb / te_dg_ed, so they all take the window's
 # events. The refresh and fast mode read the walk's locals, today's snapshot, as they should: M and the
 # term are fitted to today's lines.
+# A refresh that sets no term (a seed, a step with no births) drops the start's rate, so the next window
+# takes the snapshot rather than a rate two windows old.
 # Second order: a pop the change in M moves across the floor (from just above 0 to below it, or back)
 # counts as the walk found it. A second pulse in one year (no step) refits M and stores the start again
 # mid-window, as the refit itself already did.
@@ -195,6 +198,8 @@ te_demog_rates_refresh = {
 	# the moved lines' pairs this refresh clears (fast mode takes them off the walk's average): 0 unless it does
 	set_local_variable = { name = te_dg_rate_lines_b value = 0 }
 	set_local_variable = { name = te_dg_rate_lines_d value = 0 }
+	# 1 once this refresh stores the next window's start rate (the trapezoid)
+	set_local_variable = { name = te_dg_rate_sr value = 0 }
 	if = {
 		limit = { NOT = { te_demog_effects_run = yes } }
 		te_demog_rates_clear = yes
@@ -378,9 +383,23 @@ te_demog_rates_refresh = {
 					divide = { value = state_population min = 1 }
 				}
 			}
+			set_local_variable = { name = te_dg_rate_sr value = 1 }
 			te_demog_rates_apply = yes
 			set_local_variable = { name = te_dg_rate_new_b value = var:te_dg_mb }
 			set_local_variable = { name = te_dg_rate_new_d value = var:te_dg_md }
+		}
+	}
+	# no start rate stored (a seed, a step with no births, nobody): the one two windows old goes, and the next
+	# window takes the snapshot
+	if = {
+		limit = { local_var:te_dg_rate_sr = 0 }
+		if = {
+			limit = { has_variable = te_dg_sr_b }
+			remove_variable = te_dg_sr_b
+		}
+		if = {
+			limit = { has_variable = te_dg_sr_d }
+			remove_variable = te_dg_sr_d
 		}
 	}
 }

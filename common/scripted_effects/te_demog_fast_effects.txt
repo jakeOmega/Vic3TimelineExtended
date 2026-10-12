@@ -37,9 +37,11 @@
 #
 # The window's events under Full (te_demog_window_events, the trapezoid): a clock step books its
 # N-month window at the mean of the engine's rate at its start and on the step's day, as a yearly step
-# does its year. The term is set only at a clock step, so both ends carry the same one: the start's
-# rate (stored by te_demog_rates_refresh) moves by the term's change below, and the walk's months
-# (te_demog_step_months) are the window's at both ends, whatever the speed was.
+# does its year. The term is set at a clock step, where the start's rate (stored by
+# te_demog_rates_refresh) moves by its change below, so both ends carry the same one, and the walk's
+# months (te_demog_step_months) are the window's at both ends, whatever the speed was. Option k
+# (normal speed) takes the term off at once, between two steps: te_demog_fast_clear_rates then drops
+# the start's rate, and that window takes the snapshot.
 # ============================================================================
 
 # No scope: the global on_monthly_pulse (te_demog_clock_on_action), while the clock runs.
@@ -180,36 +182,32 @@ te_demog_fast_refresh_rates = {
 		add_modifier = { name = te_demog_fast_deaths multiplier = te_demog_fast_death_term }
 	}
 	else = {
-		# normal speed takes the term off: the window that begins here runs without it (the trapezoid's start rate)
-		if = {
-			limit = { has_variable = te_dg_sr_b }
-			change_variable = {
-				name = te_dg_sr_b
-				subtract = {
-					value = te_demog_fast_births_applied
-					multiply = local_var:te_dg_w_eb0m
-					divide = { value = state_population min = 1 }
-				}
-			}
-		}
-		if = {
-			limit = { has_variable = te_dg_sr_d }
-			change_variable = {
-				name = te_dg_sr_d
-				subtract = {
-					value = te_demog_fast_deaths_applied
-					multiply = local_var:te_dg_w_ed0m
-					divide = { value = state_population min = 1 }
-				}
-			}
-		}
 		te_demog_fast_clear_rates = yes
 	}
 }
 
 # THIS = a state: the fast rate modifiers and their stored terms off (normal speed). The terms
-# go too, or the next refresh would take a stale term off the walk's average.
+# go too, or the next refresh would take a stale term off the walk's average. While the term is on,
+# the census's start rate goes as well (te_dg_sr_b/_d, the trapezoid): the last step stored it with
+# the term, about K times what the engine runs once it is off. Option k takes the term off between
+# two steps, so that window falls back to the snapshot, as it did before the trapezoid.
 te_demog_fast_clear_rates = {
+	if = {
+		limit = {
+			OR = {
+				has_modifier = te_demog_fast_births
+				has_modifier = te_demog_fast_deaths
+			}
+		}
+		if = {
+			limit = { has_variable = te_dg_sr_b }
+			remove_variable = te_dg_sr_b
+		}
+		if = {
+			limit = { has_variable = te_dg_sr_d }
+			remove_variable = te_dg_sr_d
+		}
+	}
 	if = {
 		limit = { has_modifier = te_demog_fast_births }
 		remove_modifier = te_demog_fast_births
