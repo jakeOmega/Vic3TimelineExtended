@@ -499,7 +499,7 @@ te_demog_ms_pop_trend = {
 # (migration_crowding_mult_applied 4.5 or more: ten times the reference density, migration pull -45%). Any crowding at
 # all is too common to mean anything (73% of countries in an 1837 save, 88% in 1902), and 4.5 none before 1902; projected
 # from 1902's densities at twice and three times its people, half a country's people at the ceiling is about 4% and 20%
-# of countries: China, British India, Japan, Egypt, Java (the review of 3a; numbers in the PR).
+# of countries: China, East India, Japan, Egypt, Java (the review of 3a; numbers in the PR).
 te_demog_ms_crowded_share = {
 	value = 0
 	every_scope_state = {
