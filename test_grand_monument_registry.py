@@ -1153,6 +1153,13 @@ LANDMARKS = (
     Landmark("royal_palaces_of_abomey", "STATE_DAHOMEY", "DAH", "crown", "hall", ("generic", "hall"), 5),
     Landmark("klungkung_palace", "STATE_SUNDA_ISLANDS", "BAL", "crown", "gate", ("heritage_sanskrit", "gate"), 5),
     Landmark("royal_palace_of_kandy", "STATE_CEYLON", "BCE", "civic", "hall", ("generic", "hall"), None, False),
+    # Added 2026-10-12 (owner: Italy, Turkey and the Levant). Each state has
+    # one owner in 1836: Tuscany, the Papal States, the Ottomans (Aydin holds
+    # Mugla, so Bodrum) and Egypt (Lebanon's Zahle hub is Baalbek's valley).
+    Landmark("uffizi_gallery", "STATE_TUSCANY", "TUS", "civic", "hall", ("generic", "hall"), 10),
+    Landmark("capitoline_museums", "STATE_LAZIO", "PAP", "civic", "forum", ("heritage_latin", "forum"), 5),
+    Landmark("bodrum_castle", "STATE_AYDIN", "TUR", "war_memorial", "tower", ("heritage_gothic", "tower"), 5),
+    Landmark("temples_of_baalbek", "STATE_LEBANON", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000

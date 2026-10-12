@@ -17,8 +17,9 @@ thirty-four.
 
 This change does two things:
 
-1. **Eleven new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
-   Persia, Korea, Vietnam, and in decentralized territory Great Zimbabwe and Bali (§1, §1.1).
+1. **Fifteen new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
+   Persia, Korea, Vietnam, in decentralized territory Great Zimbabwe and Bali, and Italy, Anatolia and the Levant (§1,
+   §1.1, §1.2).
 2. **Ten trophies already abroad on 1 January 1836**, seeded as trophies at game start: the Parthenon Marbles, the
    Rosetta Stone, and eight more (§2). Most are still claimed today, so they start as the diplomatic friction the
    trophy system already models: the claimant sees them under Held Abroad, and its AI asks for them back.
@@ -137,6 +138,47 @@ there, with the Throne of Kandy (§2).
 - **The Lombok treasure** (2023's Dutch return): the obvious Lombok site, Cakranegara, may not be in Bali's two
   provinces, and one Balinese palace is enough.
 - **Tibet's monasteries** (1903–1904): holy sites.
+
+### 1.2 Italy, Turkey and the Levant (owner's third ask, 2026-10-12)
+
+| # | Key | Name | State | 1836 owner | Dedication | Form (share) | Stand-in | Level |
+|---|---|---|---|---|---|---|---|---|
+| 44 | `uffizi_gallery` | Uffizi | `STATE_TUSCANY` | TUS | To the Nation | Hall (token) | Generic · Hall | 10 |
+| 45 | `capitoline_museums` | Capitoline Museums | `STATE_LAZIO` | PAP | To the Nation | Forum (token) | Latin · Forum | 5 |
+| 46 | `bodrum_castle` | Bodrum Castle | `STATE_AYDIN` | TUR | War Memorial | Tower (piece) | Gothic · Tower | 5 |
+| 47 | `temples_of_baalbek` | Temples of Baalbek | `STATE_LEBANON` | EGY | To the Nation | Colonnade (token) | Aramaic · Colonnade | 5 |
+
+Each state has one owner in 1836, so none is exposed to #936.
+
+- **Uffizi.** Napoleon's looting of Italy, which the phase 5 spec cites (the horses of San Marco). He carried off the
+  Medici Venus in 1802, and it went back to Florence after his fall. Its piece is "the Medici Venus".
+- **Capitoline Museums.** The Treaty of Tolentino (1797) made the Pope surrender the Dying Gaul, the Capitoline Venus
+  and a hundred more works: a war goal like Surrender a Monument. Its piece is "the Dying Gaul". To the Nation, since
+  the Papal States are not crowned (`monument_government_is_crowned`) and a crown monument would start contested.
+- **Bodrum Castle.** The Knights of Saint John built it from the Mausoleum of Halicarnassus, and slabs of the
+  Mausoleum's frieze were set in its walls. The Sultan gave them to Britain in 1846, and Newton dug up the statues in
+  1856–1857; Turkey asks the British Museum for them. The castle, not the Mausoleum, is the landmark: an Ottoman
+  fortress since 1523 carried weight in 1836, while the Mausoleum was a lost ruin until Newton found it. Its piece is
+  "the Mausoleum friezes"; War Memorial for the conquest of the Knights' last stronghold in Anatolia *(design)*.
+- **Temples of Baalbek.** The Levant's grandest ruin, walled as a citadel in the Middle Ages and credited to Solomon
+  by local legend, which is its claim to weight in 1836 *(design)*. No famous piece left it: it is here as the
+  Levant's monument for an occupier to loot. Its piece is "the temple carvings". Egypt holds the Levant in 1836.
+  Since nobody else holds part of the state, its passing back to the Ottomans, or to anyone, is a whole transfer and
+  keeps its records.
+
+**Considered and left out.**
+
+- **Still buried or undiscovered in 1836:** the Pergamon Altar (1878), the Nereid Monument (1838), Priam's Treasure
+  (1873), the Mesha Stele (1868), the Siloam inscription (1880), the Sidon sarcophagi (1855, 1887), Nineveh's and
+  Nimrud's reliefs (1840s).
+- **Palmyra:** like Great Zimbabwe, its weight in 1836 was legend and travellers' romance (Lady Hester Stanhope, 1813),
+  and its funerary busts left from the 1870s. It could take `STATE_SYRIA` if the rule may bend again.
+- **Ctesiphon's arch** (Taq Kasra, `STATE_BAGHDAD`): weight in 1836, but nothing was ever carried off.
+- **The Serpent Column and the Obelisk of Theodosius** in Constantinople: they could be 1836 trophies held by the
+  Ottomans (from Delphi and Karnak), but nobody claims them, and Greece's and Egypt's AI would start asking.
+- **Italy:** the Vatican (a base-game monument), Michelangelo's David (never taken, and Tuscany has the Uffizi), the
+  Last Supper (Milan has La Scala), Raphael's Saint Cecilia (an altarpiece in a church).
+- **Jerusalem, Hebron, Damascus's Umayyad Mosque:** holy sites.
 
 ## 2. The trophies of 1836
 
@@ -304,7 +346,7 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 
 ## 6. In-game checks
 
-1. A new game: the eleven new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
+1. A new game: the fifteen new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
    logged. Benin and Asante are both centralized in 1836 (owner, 2026-10-12), and a building can be placed in a
    decentralized country's state too.
 2. Britain's Trophies section lists the Marbles, the Rosetta Stone, Tipu's Tiger and the Kandyan throne. France's lists

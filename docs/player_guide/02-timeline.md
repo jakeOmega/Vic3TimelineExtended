@@ -460,14 +460,15 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-Thirty-four monuments already stand when a game begins, among them the Arc de
+Thirty-eight monuments already stand when a game begins, among them the Arc de
 Triomphe in Paris, the Alexander Column in Saint Petersburg, the Temple of
 Heaven in Beijing, Topkapı Palace, La Scala in Milan and the Jantar Mantar in
-Jaipur. Eleven stand where the great powers' armies and collectors took the
-most: the Parthenon, the Obelisks of Karnak, the royal palaces of Benin,
-Kumasi and Abomey, Great Zimbabwe, the Bukgwan Victory Stele in Korea, the
-Imperial City of Huế, Klungkung Palace on Bali, Persepolis and the Red Fort
-in Delhi. Most monuments to a crown or a republic stand in countries that still
+Jaipur. Fifteen stand where the great powers' armies and collectors took the
+most: the Uffizi and the Capitoline Museums, the Parthenon, Bodrum Castle, the
+Temples of Baalbek, the Obelisks of Karnak, the royal palaces of Benin,
+Kumasi and Abomey, Great Zimbabwe, Persepolis, the Red Fort in Delhi, the
+Bukgwan Victory Stele in Korea, the Imperial City of Huế and Klungkung Palace
+on Bali. Most monuments to a crown or a republic stand in countries that still
 honor them; two start contested: the Lion of Saint Mark, the old Venetian
 Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
 Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,

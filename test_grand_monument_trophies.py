@@ -68,6 +68,10 @@ LANDMARK_PARTS = {
     "royal_palaces_of_abomey": "gm_tr_part_thrones_and_statues",
     "klungkung_palace": "gm_tr_part_royal_regalia",
     "royal_palace_of_kandy": "gm_tr_part_throne",
+    "uffizi_gallery": "gm_tr_part_medici_venus",
+    "capitoline_museums": "gm_tr_part_dying_gaul",
+    "bodrum_castle": "gm_tr_part_mausoleum_friezes",
+    "temples_of_baalbek": "gm_tr_part_temple_carvings",
 }
 # The occasion patterns of NAMESAKES, plus the namesakes with one pattern.
 NAME_PATTERNS = [p for patterns in NAMESAKES.values() for p in patterns]

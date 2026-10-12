@@ -313,6 +313,22 @@ gm_tr_part_name = {
 		localization_key = gm_tr_part_throne
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:uffizi_gallery }
+		localization_key = gm_tr_part_medici_venus
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:capitoline_museums }
+		localization_key = gm_tr_part_dying_gaul
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:bodrum_castle }
+		localization_key = gm_tr_part_mausoleum_friezes
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:temples_of_baalbek }
+		localization_key = gm_tr_part_temple_carvings
+	}
+	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:arch }
 		localization_key = gm_tr_part_reliefs
 	}
@@ -599,6 +615,22 @@ gm_tr_landmark_name = {
 		localization_key = gm_skin_landmark_royal_palace_of_kandy
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:uffizi_gallery }
+		localization_key = gm_skin_landmark_uffizi_gallery
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:capitoline_museums }
+		localization_key = gm_skin_landmark_capitoline_museums
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:bodrum_castle }
+		localization_key = gm_skin_landmark_bodrum_castle
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:temples_of_baalbek }
+		localization_key = gm_skin_landmark_temples_of_baalbek
+	}
+	text = {
 		localization_key = gm_form_monument
 	}
 }
@@ -781,6 +813,22 @@ gm_tr_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:royal_palace_of_kandy }
 		localization_key = gm_landmark_royal_palace_of_kandy_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:uffizi_gallery }
+		localization_key = gm_landmark_uffizi_gallery_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:capitoline_museums }
+		localization_key = gm_landmark_capitoline_museums_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:bodrum_castle }
+		localization_key = gm_landmark_bodrum_castle_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:temples_of_baalbek }
+		localization_key = gm_landmark_temples_of_baalbek_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none
