@@ -27,6 +27,8 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … workforce_ig_trait_type` | any rule, development builds only: once a game, a week after a country's Trade Unions are first loyal at the trait's plain size (clout neither marginal nor powerful) with no Ministry of Labour law | the engine sums a script-only type from an IG trait into a state's read (`read` = 0.02), and the INJECT added to vanilla's trait block (`remainder` about 0) | `read` 0: the type isn't summed; `remainder` about −0.05: the INJECT replaced vanilla's block. Either way the Trade Unions' two loyal traits' lines are lost in every game | delete `common/interest_group_traits/te_demog_workforce_injections.txt` (vanilla's +0.05 comes back on the engine field), list the two traits in `P.LIVE_WORKFORCE_LINES`, take them out of `TestWorkforceLinesMoved` and accept their two `vanilla_parsed` carriers as live |
 | `TE_SELF_CHECK … workforce_lines_net` | any rule, development builds only: once a game, a week after the first country's first monthly pulse, in its capital | the capital's working-adult field less the moved lines' pair is about 0: every vanilla carrier's INJECTed cancel nets out against its own line | `remainder` not 0: an INJECT replaced a vanilla block (a law, Woman Soldiers or a Trade Unions trait), so its cancel stands alone in every game (or the capital has Rosen's androids, which can't happen in 1836) | revert that carrier's INJECT and list it in `P.LIVE_WORKFORCE_LINES`; option l's `TE_DEMOG_MODS` lines show which carrier |
 | `TE_SELF_CHECK … pop_workforce_read` | Display only or Full: once a game, at the first country monthly pulse after a capital's walk | a pop's `workforce` reads as a value in the walk (`wf_engine` about 0.2-0.3) | `wf_engine` 0: the walk can't read the engine's workforce | nothing in step 1 uses it; step 2's stop rule (spec §1.8) needs another read of the engine's workforce before its fit |
+| `TE_SELF_CHECK … workforce_ratio_scale` | Display only or Full: once a game, at the first capital census step before any workforce term (a 1836 game: its first year) | the walk's `wf_engine` is nearer `per_people` (the set ratio as workforce over people: about 0.25 in 1836) than `per_dependents` (the same as workforce over dependents: about 0.20). The spec §1.8's stop rule, as built | `wf_engine` near `per_dependents`: the engine's ratio is workforce over dependents | re-derive `WORKFORCE_SCALE` and W on that scale (spec §1.8) and refit with `demographics_harness.py workforce SAVE`. Offline the 1836 save already reads over people: 82% of the world's people hold exactly 0.250 (§ Phase 2 step 2) |
+| `TE_SELF_CHECK … workforce_follows_target` | Full: once a game, at a capital's census once its workforce term has run five census years and moved more than 0.02 since it landed | the walk's `engine` figure is within 0.02 of `set`, the ratio the census set over the past year (its pops' bases plus the state's working-adult read); `census_target` and `w_target` say how far the ramp still has to go | `engine` lags `set` by more than 0.02: the engine's pull toward a pop's ratio is slower than the ramp, so the ramp adds nothing | set `WF_RAMP_STEP` large (the term lands at once, and the engine's own pull is the lag) and keep the panel's engine figure beside the target; no line at all after many years means no capital's term moved 0.02 (option r shows the capital's) |
 
 No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -130,3 +132,61 @@ are in the table above.
 10. **Pollution Impact, in passing:** in a polluted state of the same game, option l's `cap=` reads −0.1 × the impact
     and `replaced=` −0.05 × the same.
 
+## Phase 2 step 2: the workforce, pensions and health costs
+
+Under Full the census sets each state's workforce (a term W from who is of working age and who works, moving at most
+0.01 a census step), the country chooses a pension position, pays a pension bill and a health bill, and work deaths
+split by the census's own workers. Under Display only the figures and the section show and the buttons are greyed;
+outside Full nothing changes. Spec: `docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md` §2.
+The two self-checks are in the table above. None of these gates the merge.
+
+What the offline evidence already says (2026-10-12):
+- **The stop rule (spec §1.8).** In the 1 January 1836 save, 82% of the world's people sit at exactly 0.250 workforce
+  over workforce plus dependents, 17% at 0.300 (a +0.05 line) and slaves near 0.5. The engine's ratio is workforce over
+  people, as `WORKFORCE_SCALE` assumes; `workforce_ratio_scale` confirms it in game.
+- **The pull is slow in the saves.** Pops start at their state's ratio whatever their type (aristocrats at 0.25, not
+  0.2) and drift: the aristocrats' gap to the peasants grew 0.0026 to 0.0047 over 1836 (about 0.0002 a month), and by
+  1901 is 0.033 of the 0.05 their bases differ by. Countries with Women Own Property (+0.05) sat at 0.276-0.306 against
+  0.30 for decades, and countries with no line at 0.22-0.26. So the game's own figure can trail the census's set ratio
+  by 0.01-0.03 in fast-growing states; the panel shows it beside the target, and `workforce_follows_target` says
+  whether that gap stays within 0.02.
+
+1. **Display only, a new 1836 game.** The Population panel's Demographics tab shows Work and Retirement after the
+   overview (open), and the state subtab after Causes of Death. Nothing ends in "…": "84 (Linked to Average)" is the
+   longest value. The overview shows Working Age (about 70% in Britain) and Old Age From (about 58-62) where the
+   dependency ratio was; the Working Age hover gives the dependency ratio.
+2. **The buttons under Display only (a country with Old Age Pension; enact it by the console).** All five greyed, one
+   line above them ("Pension settings act only under the Full Demographics rule"); each tooltip lists the failing
+   condition and the effect. No Pension Bill row.
+3. **Full, the same country.** Press Raised (70): the age reads 70 at once; the line above the buttons gives the year
+   the term ends; the other four grey with "The setting has held for five years". At the next 31 December the Pension
+   Bill row appears (option r's `bill=`, `bill_share=`) and falls against Standard's; the capital's `w=` (option r)
+   rises by at most 0.01 at its next census. Option s ends the term to try the next. Trade Unions show the −2 approval
+   modifier.
+4. **A linked position.** From Early (60), Linked to Average sets 65 at once and then moves at most a year a year
+   toward old age from − 5 (option r's `link_target=`), at the yearly census only: enacting another law that year
+   doesn't move it.
+5. **Leaving Old Age Pension** (enact UBI): the Pension Age, Pensioners and Bill rows and the buttons go, the IG
+   modifier with them; a return to Old Age Pension starts at Standard with no term running.
+6. **Full, the workforce term.** A state's workforce breakdown shows "Census: Workforce" in place of "Laws and
+   Institutions" from its first census step (the pair comes off); option r's `w=` starts at the old pair (`pair=` before
+   the step) and moves at most 0.01 a census step. A Women in the Fields state starts near +0.30 and drifts down. The
+   state subtab's Workforce hover shows the game's figure, the set ratio and the census's target.
+7. **The health bill.** Under Full, from the first census, the Health Need row's hover gives the health system's extra
+   bureaucracy cost (about 0 in 1836); the country's modifiers show "Census: Health Care Needs". Its institution cost
+   in the budget panel moves by that share.
+8. **An AI country picks a position.** In an observer run under Full to the late game, a few AI countries with Old Age
+   Pension leave Standard: option r on one (switch to it) or the census log's `TE_DEMOG_WORKC` lines (`pos=`).
+9. **The observer gate (spec §2.6).** An observer run under Full to 2100 with the census log on (option b), then
+   `demographics_observer_report.py LOGS --work`: the game's workforce follows the set ratio within 0.02 where a term is
+   in force, no state's set ratio past 0.8 or under 0.1, and the pension bill's share of revenue across the great
+   powers (15-30% expected for a rich country at Standard around 2000-2020).
+10. **A late save, please.** No 2000-2020 save existed for the fit, so the rich-today bands were fitted on the harness's
+    Rich-today inputs (a 2020-like structure) and B on the 1953 save's revenue over GDP (median 0.27 among the 15
+    largest economies). Keep a plain-text save of a rich country around 2000-2020 (debug mode) and run
+    `demographics_harness.py workforce SAVE`-style checks on it; `pensions SAVE` reads its revenue over GDP.
+11. **Work deaths' split.** Under Full, option r's `fws_wk=` (the census's women among workers 15-64) replaces
+    `fws_law=` in the split at the next step: about 0.17 in a 1836 farming state (the law table's 0.1), about 0.46
+    under Protected Class (0.48). The Causes of Death section's work row still adds up.
+12. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_work_effects.txt`,
+    `te_demog_work_values.txt`, the pension scripted GUIs, `te_debug_demog_wf_term_checks` or the `TE_DEMOG_WORKC` line.

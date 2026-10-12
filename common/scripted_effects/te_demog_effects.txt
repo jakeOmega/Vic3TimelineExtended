@@ -92,6 +92,10 @@
 #   te_dg_low_share, te_dg_wbase, te_dg_wf_engine  the walk's, under the cohorts only (te_demog_work_walk_store,
 #                       phase 2 step 1): the lower strata's share of people, the pops' own working-adult ratios
 #                       people-weighted, and the engine's workforce over people
+#   te_dg_wk_past, te_dg_fws_wk  phase 2 step 2 (te_demog_work_finish_step2): workers past the end of the working
+#                       ages over people (the panel's hover), and women's share of the workers aged 15-64, which splits
+#                       work deaths under Full at the next step (none without workers there)
+#   te_dg_mw, te_dg_wf_rem  phase 2 step 2's workforce term and the lines on top of it (te_demog_work_effects.txt)
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
