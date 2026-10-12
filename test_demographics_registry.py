@@ -3532,6 +3532,8 @@ class _CountryEngine(_Engine):
     def number(self, tok):
         if tok.startswith("scope:"):
             return self.scopes[tok[6:]]
+        if tok in ("root", "ROOT"):
+            return self.root_vars   # the country, as a value (te_dg_primate_of = root)
         if tok.startswith("owner."):
             saved, self.vars = self.vars, self.root_vars
             try:

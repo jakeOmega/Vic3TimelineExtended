@@ -3,12 +3,14 @@
 # Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §5.1. Effects: te_demog_place_effects.txt.
 # ============================================================================
 
-# State scope: its owner's largest city at the last census (te_dg_primate_state, te_demog_up_country), so the state the
-# Primate City modifier goes to. A state that has changed hands since reads no.
+# State scope: its owner's largest city at the last census (te_demog_up_country sets te_dg_primate_of to the country on
+# it), so the state the Primate City modifier goes to. A state that has changed hands since holds its old owner's flag,
+# which reads no. The comparison is vanilla's form (00_ai_triggers.txt: scope:law = var:desired_law_var); the
+# primate_state_flag self-check confirms it once a game.
 te_demog_up_is_primate = {
+	has_variable = te_dg_primate_of
 	exists = owner
-	owner = { has_variable = te_dg_primate_state }
-	this = owner.var:te_dg_primate_state
+	owner = var:te_dg_primate_of
 }
 
 # State scope: a site the Planned Capital decision may offer (te_demog_capital.1). The base game's own rules for a
@@ -24,17 +26,33 @@ te_demog_pc_candidate = {
 	state_population >= te_demog_pc_min_people
 }
 
+# Country scope, in te_demog_capital.1's site options (scope:$SITE$ saved in its immediate): the site is still one when
+# the option is chosen, as the decision's own gates are (the event can stay open for days): still ours and a site, at
+# peace and in no diplomatic play, and the cooldown run.
+te_demog_pc_site_still_open = {
+	scope:$SITE$ = {
+		owner = ROOT
+		te_demog_pc_candidate = yes
+	}
+	is_at_war = no
+	is_diplomatic_play_committed_participant = no
+	te_demog_pc_years_since >= te_demog_k_pc_cooldown_years
+}
+
 # Country scope: the decision's AI rule, the same conditions for every country (spec §11.2; no is_ai). A Primate pattern
-# at half strength or more in a country of eight census states or more whose largest city is crowded (Migration
-# Crowding: the congested metropolis Brasília and Abuja were built to relieve), out of default, with the money in the
-# treasury and the authority to spare.
+# at half strength or more in a country of eight census states or more whose largest city Migration Crowding presses at
+# its ceiling (the congested metropolis Brasília and Abuja were built to relieve; te_demog_k_pc_ai_crowding), out of
+# default, with the money in the treasury and the authority to spare.
 te_demog_pc_ai_wants = {
 	has_variable = te_dg_up_s
 	var:te_dg_up_s >= te_demog_k_pc_ai_strength
 	has_variable = te_dg_up_states
 	var:te_dg_up_states >= te_demog_k_pc_ai_states
 	has_variable = te_dg_primate_state
-	var:te_dg_primate_state ?= { has_modifier = migration_crowding }
+	var:te_dg_primate_state ?= {
+		has_variable = migration_crowding_mult_applied
+		var:migration_crowding_mult_applied >= te_demog_k_pc_ai_crowding
+	}
 	in_default = no
 	gold_reserves > te_demog_pc_money_shown
 	authority > te_demog_pc_ai_authority

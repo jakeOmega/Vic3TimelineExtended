@@ -13,7 +13,9 @@
 # own rules for moving a capital (its Move Capital map interaction): at peace, in no diplomatic play, not moved
 # recently, and the site incorporated and a homeland of a primary culture (te_demog_pc_candidate). Steel-Frame
 # Buildings (era 3: Canberra was laid out in 1912), shown from its prerequisite Modern Sewerage. The authority for the
-# building. The money is not gated: a treasury short of it borrows, as for any other expense.
+# building. The money is not gated: a treasury short of it borrows, as for any other expense. One site event at a time
+# (te_dg_pc_pending, set here and cleared by every option); each site's option checks the site, peace and the cooldown
+# again when it is chosen, and the event lapses to Not Now.
 #
 # set_capital takes a state region's key, never a scope (gen_planned_capital.py's header), so the move dispatches on the
 # site's region (te_demog_pc_set_capital, generated). Whether set_capital also brings the base game's Moved Capital
@@ -60,10 +62,19 @@ te_decision_plan_new_capital = {
 			text = te_demog_pc_tt_site
 			any_scope_state = { te_demog_pc_candidate = yes }
 		}
+		custom_tooltip = {
+			text = te_demog_pc_tt_pending
+			NOT = { has_variable = te_dg_pc_pending }
+		}
 	}
 
+	# te_dg_pc_pending: the site event is open. Every option of te_demog_capital.1 clears it, and the event lapses to Not
+	# Now long before the year runs out, so the decision can't open a second event, and pay twice, while one is open.
 	when_taken = {
 		custom_tooltip = te_demog_pc_tt_choose_site
+		hidden_effect = {
+			set_variable = { name = te_dg_pc_pending value = yes days = 365 }
+		}
 		trigger_event = { id = te_demog_capital.1 popup = yes }
 	}
 

@@ -5468,6 +5468,7 @@
  te_demog_pc_tt_moved_recently:0 "We have not moved our [concept_capital_state] recently"
  te_demog_pc_tt_pattern:0 "Our urban pattern is $te_demog_pattern_0$ or $te_demog_pattern_1$: our largest city holds 25% or more of our urban people"
  te_demog_pc_tt_peace:0 "We are at peace and in no [concept_diplomatic_play]"
+ te_demog_pc_tt_pending:0 "Our planners are not already choosing a site"
  te_demog_pc_tt_site:0 "A site: an [concept_incorporated_state] that is a [concept_homeland] of one of our [concept_primary_cultures], not our [concept_capital_state] or our largest city, with at least 1% of our people"
  te_demog_pc_works:0 "Building the New Capital"
  te_demog_pc_works_desc:0 "Ministries, avenues and housing for the civil service are going up at the new capital. The building takes five years."

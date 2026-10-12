@@ -11,8 +11,10 @@
 # ======================================================================
 #  1 – Siting the New Capital
 #  ROOT = the country that took the decision. The immediate saves up to three sites, the largest by people first; each
-#  option builds the capital there (te_demog_pc_build: the costs, then the move). Not Now costs nothing, and the
-#  decision stays open.
+#  option builds the capital there (te_demog_pc_build: the costs, then the move), offered only while its site is still
+#  one, the country at peace and the cooldown run (te_demog_pc_site_still_open: the event can stay open for days). Not
+#  Now, the default (decline is the default: a lapsed event moves nothing), costs nothing, and the decision stays open.
+#  Every option clears te_dg_pc_pending, the decision's one-event-at-a-time marker.
 #  AI: the largest site most often (3:2:1), never Not Now: the decision's own rule (te_demog_pc_ai_wants) already said
 #  it wants one.
 # ======================================================================
@@ -56,8 +58,10 @@ te_demog_capital.1 = {
 
 	option = {
 		name = te_demog_capital.1.a
-		trigger = { exists = scope:te_pc_site_1 }
-		default_option = yes
+		trigger = {
+			exists = scope:te_pc_site_1
+			te_demog_pc_site_still_open = { SITE = te_pc_site_1 }
+		}
 		custom_tooltip = te_demog_capital.1.a.tt
 		te_demog_pc_build = { SITE = te_pc_site_1 }
 		ai_chance = {
@@ -67,7 +71,10 @@ te_demog_capital.1 = {
 
 	option = {
 		name = te_demog_capital.1.b
-		trigger = { exists = scope:te_pc_site_2 }
+		trigger = {
+			exists = scope:te_pc_site_2
+			te_demog_pc_site_still_open = { SITE = te_pc_site_2 }
+		}
 		custom_tooltip = te_demog_capital.1.b.tt
 		te_demog_pc_build = { SITE = te_pc_site_2 }
 		ai_chance = {
@@ -77,7 +84,10 @@ te_demog_capital.1 = {
 
 	option = {
 		name = te_demog_capital.1.c
-		trigger = { exists = scope:te_pc_site_3 }
+		trigger = {
+			exists = scope:te_pc_site_3
+			te_demog_pc_site_still_open = { SITE = te_pc_site_3 }
+		}
 		custom_tooltip = te_demog_capital.1.c.tt
 		te_demog_pc_build = { SITE = te_pc_site_3 }
 		ai_chance = {
@@ -87,8 +97,11 @@ te_demog_capital.1 = {
 
 	option = {
 		name = te_demog_capital.1.e
-		# REVIEWED 2026-10-12 (no_effect_option): waiting is the choice; the tooltip says nothing is spent and the decision stays open
+		default_option = yes
 		custom_tooltip = te_demog_capital.1.e.tt
+		hidden_effect = {
+			remove_variable = te_dg_pc_pending
+		}
 		ai_chance = {
 			base = 0
 		}

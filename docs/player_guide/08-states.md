@@ -394,11 +394,14 @@ largest city. The capital moves at once.
 | 100 authority for five years (Building the New Capital) | Planned Capital on the new capital for 20 years: migration attraction +25%, state construction efficiency +20%, infrastructure +10 and Government Structures throughput +10% |
 
 Planned Capital ends if the capital moves away again. Not now spends nothing,
-and the decision stays open. A planned capital draws migrants and building to a
+and the decision stays open; it is also what happens if you let the choice
+lapse. A site you lose, or a war that starts, while the choice is open takes
+that site off the list. A planned capital draws migrants and building to a
 region your largest city leaves behind, so over the years it can lower that
 city's share and with it Provincial Neglect. The AI plans one only with a
-Primate pattern of 45% or more, eight states or more, a largest city under
-Migration Crowding, and the money in its treasury.
+Primate pattern of 45% or more, eight states or more, a largest city crowded to
+Migration Crowding's ceiling (ten times the reference density), and the money
+in its treasury.
 
 ### Family policy measures
 

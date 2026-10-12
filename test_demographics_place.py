@@ -44,6 +44,21 @@ def _modifier(name):
 K = _values()
 
 
+class _PlaceEngine(R._CountryEngine):
+    """The country interpreter plus a state's owner = var:X (the stored country is the one running) and exists = owner,
+    for te_demog_up_is_primate on each state after the census."""
+
+    def _test(self, key, op, arg):
+        if key == "owner" and isinstance(arg, str):
+            return self.number(arg) is self.root_vars
+        if key == "exists" and arg == "owner":
+            return True
+        return super()._test(key, op, arg)
+
+    def reads_primate(self, state_vars):
+        return self.holds_in(state_vars, [("te_demog_up_is_primate", "=", "yes")])
+
+
 class TestStrength(unittest.TestCase):
     """te_demog_up_country, run inside the country census: the largest city, the states counted and the strength."""
 
@@ -53,7 +68,8 @@ class TestStrength(unittest.TestCase):
             s = dict(R.TestCountry._three[0])
             s["te_dg_urban"] = float(u) * 100_000
             states.append(s)
-        eng = R.TestCountry.country(R.TestCountry, states)
+        eng = _PlaceEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+                           triggers={"is_ai": False, "te_demog_cohorts_run": True})
         eng.call("te_demog_country_census")
         return eng, states
 
@@ -75,6 +91,33 @@ class TestStrength(unittest.TestCase):
         eng, states = self.census((2, 5, 1))
         self.assertIs(eng.vars["te_dg_primate_state"], states[1])
         self.assertEqual(eng.vars["te_dg_up_states"], 3.0)
+        # the flag: the largest city carries its country, and only it reads as primate
+        self.assertIs(states[1]["te_dg_primate_of"], eng.root_vars)
+        self.assertEqual([eng.reads_primate(s) for s in states], [False, True, False])
+
+    def test_a_new_census_clears_the_old_flag(self):
+        eng, states = self.census((2, 5, 1))
+        states[0]["te_dg_urban"], states[1]["te_dg_urban"] = 900_000.0, 100_000.0
+        eng.call("te_demog_country_census")
+        self.assertNotIn("te_dg_primate_of", states[1])
+        self.assertEqual([eng.reads_primate(s) for s in states], [True, False, False])
+
+    def test_a_flag_naming_another_country_reads_no(self):
+        """A state that changed hands keeps its old owner's flag until its new owner's census: it never matches."""
+        eng, states = self.census((2, 5, 1))
+        states[0]["te_dg_primate_of"] = {"another": "country"}
+        self.assertFalse(eng.reads_primate(states[0]))
+
+    def test_the_flag_self_check(self):
+        body = _block(_text(PLACE_EFFECTS), "te_debug_demog_up_selfcheck")
+        for need in ("te_demog_effects_run = yes", "te_debug_demog_selfchecks_run = yes",
+                     "NOT = { has_global_variable = te_demog_up_selfcheck_done }",
+                     "var:te_dg_up_states >= te_demog_k_up_min_states", "TE_SELF_CHECK OK primate_state_flag",
+                     "TE_SELF_CHECK BROKEN primate_state_flag"):
+            self.assertIn(need, body, need)
+        ok = body[body.index("var:te_dg_up_chk_self = 1"):body.index("TE_SELF_CHECK OK")]
+        self.assertIn("var:te_dg_up_chk_n = 1", ok, "OK needs the city read and no other state")
+        self.assertIn("te_debug_demog_up_selfcheck = yes", _block(_text(PLACE_EFFECTS), "te_demog_up_country"))
 
     def test_fewer_than_three_states_have_no_effects(self):
         for urbans in ((5,), (5, 1)):
@@ -223,14 +266,26 @@ class TestDecision(unittest.TestCase):
         """A crowded Primate metropolis in a country of eight states or more, out of default, money and authority."""
         body = _block(_text(PLACE_TRIGGERS), "te_demog_pc_ai_wants")
         for rule in ("var:te_dg_up_s >= te_demog_k_pc_ai_strength", "var:te_dg_up_states >= te_demog_k_pc_ai_states",
-                     "var:te_dg_primate_state ?= { has_modifier = migration_crowding }", "in_default = no",
+                     "var:migration_crowding_mult_applied >= te_demog_k_pc_ai_crowding", "in_default = no",
                      "gold_reserves > te_demog_pc_money_shown", "authority > te_demog_pc_ai_authority"):
             self.assertIn(rule, body, rule)
         self.assertGreaterEqual(K["te_demog_k_pc_ai_strength"], (0.4 - K["te_demog_k_up_floor"]) / K["te_demog_k_up_span"],
                                 "the AI needs a Primate pattern")
+        self.assertEqual(K["te_demog_k_pc_ai_crowding"], 4.5, "Migration Crowding's ceiling, the measures' mark")
+        self.assertNotIn("has_modifier = migration_crowding", body, "some crowding is on almost everywhere")
 
     def test_it_opens_the_site_event(self):
         self.assertIn("trigger_event = { id = te_demog_capital.1 popup = yes }", self.body)
+
+    def test_one_site_event_at_a_time(self):
+        """The marker is set as the event opens, checked in possible and cleared by every option, so closing the
+        event and taking the decision again can't open a second (two moves, two charges, the bar bypassed)."""
+        possible = self.body[self.body.index("possible = {"):self.body.index("when_taken")]
+        self.assertIn("NOT = { has_variable = te_dg_pc_pending }", possible)
+        taken = self.body[self.body.index("when_taken"):]
+        self.assertRegex(taken, r"set_variable = \{ name = te_dg_pc_pending value = yes days = \d+ \}")
+        days = int(re.search(r"te_dg_pc_pending value = yes days = (\d+)", taken).group(1))
+        self.assertGreater(days, 90, "longer than the event's life")
 
 
 class TestSiteEvent(unittest.TestCase):
@@ -241,16 +296,30 @@ class TestSiteEvent(unittest.TestCase):
     def test_three_sites_and_not_now(self):
         self.assertEqual(len(self.options), 4)
         for n, option in enumerate(self.options[:3], 1):
-            self.assertEqual(_find(option, "trigger"), [("exists", "=", f"scope:te_pc_site_{n}")])
+            self.assertEqual(_find(option, "trigger"), [
+                ("exists", "=", f"scope:te_pc_site_{n}"),
+                ("te_demog_pc_site_still_open", "=", [("SITE", "=", f"te_pc_site_{n}")])])
             self.assertEqual(_find(option, "te_demog_pc_build"), [("SITE", "=", f"te_pc_site_{n}")])
+            self.assertNotIn("default_option", {k for k, _, _ in option})
         immediate = _find(self.event, "immediate")
         saved = [_find(v, "save_scope_as") for k, _, v in immediate if k == "ordered_scope_state"]
         self.assertEqual(saved, ["te_pc_site_1", "te_pc_site_2", "te_pc_site_3"])
 
-    def test_not_now_costs_nothing_and_the_ai_never_takes_it(self):
+    def test_not_now_is_the_default_costs_nothing_and_the_ai_never_takes_it(self):
+        """Decline is the default (event_creation_guide.md): a lapsed event moves nothing."""
         keys = {k for k, _, _ in self.options[3]}
-        self.assertEqual(keys, {"name", "custom_tooltip", "ai_chance"})
+        self.assertEqual(keys, {"name", "default_option", "custom_tooltip", "hidden_effect", "ai_chance"})
+        self.assertEqual(_find(self.options[3], "hidden_effect"), [("remove_variable", "=", "te_dg_pc_pending")])
         self.assertEqual(_find(_find(self.options[3], "ai_chance"), "base"), "0")
+
+    def test_a_site_is_checked_again_when_chosen(self):
+        body = _block(_text(PLACE_TRIGGERS), "te_demog_pc_site_still_open")
+        for need in ("owner = ROOT", "te_demog_pc_candidate = yes", "is_at_war = no",
+                     "is_diplomatic_play_committed_participant = no",
+                     "te_demog_pc_years_since >= te_demog_k_pc_cooldown_years"):
+            self.assertIn(need, body, need)
+        build = _block(_text(PLACE_EFFECTS), "te_demog_pc_build")
+        self.assertIn("remove_variable = te_dg_pc_pending", build)
 
     def test_it_has_a_picture(self):
         self.assertIn("event_image", {k for k, _, _ in self.event})
@@ -284,7 +353,13 @@ class TestWiring(unittest.TestCase):
                                                                          "te_civil_war_on_won"))
         repair = _block(_text(PLACE_EFFECTS), "te_demog_pc_repair_after_civil_war")
         self.assertIn("te_demog_effects_run = yes", repair)
-        self.assertIn("days = te_demog_pc_works_days_left", repair)
+        # a ladder of literal durations, no computed one (scripting_best_practices.md)
+        days = [int(d) for d in re.findall(r"name = te_demog_pc_works days = (\d+)", repair)]
+        self.assertEqual(len(days), 10)
+        for k, d in enumerate(days):   # five years down to half a year, a half year apart
+            self.assertAlmostEqual(d, 365 * (5 - k / 2), delta=1)
+        for m in re.finditer(r"\bdays = (\S+)", _text(PLACE_EFFECTS)):
+            self.assertRegex(m.group(1), r"^(\d+|te_demog_k_\w+)$", "a literal or a named constant")
 
     def test_the_self_check_event_exists(self):
         self.assertIn("trigger_event = { id = te_debug_demog.60 days = 7 }", _text(PLACE_EFFECTS))
@@ -292,6 +367,9 @@ class TestWiring(unittest.TestCase):
         for verdict in ("TE_SELF_CHECK OK planned_capital_moved", "TE_SELF_CHECK BROKEN planned_capital_moved",
                         "TE_SELF_CHECK NO_VERDICT planned_capital_moved"):
             self.assertIn(verdict, body)
+        # a capital that moved at once and was moved back within the week is no verdict, not BROKEN
+        broken = body[:body.index("TE_SELF_CHECK BROKEN")]
+        self.assertIn("var:te_dg_pc_chk_now = 0", broken[broken.rindex("else_if"):])
 
     def test_the_loc_is_there(self):
         loc = "".join(_text(p) for p in LOC_DIR.glob("*.yml"))

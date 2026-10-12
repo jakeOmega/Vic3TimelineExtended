@@ -121,9 +121,15 @@ te_demog_k_pc_cooldown_years = { value = 50 }
 # A candidate site holds at least 1% of the country's people.
 te_demog_k_pc_min_share = { value = 0.01 }
 # The AI takes it only with a Primate pattern at half strength or more (45% primacy) in a country of eight census states
-# or more whose largest city is crowded, with the cost in its treasury and the authority to spare: a planned capital is
-# rare, about fifteen in the real twentieth century.
+# or more whose largest city is crowded to the ceiling, with the cost in its treasury and the authority to spare: a
+# planned capital is rare, about fifteen in the real twentieth century.
 te_demog_k_pc_ai_strength = { value = 0.5 }
+# The metropolis's crowding: Migration Crowding's multiplier at its ceiling, ten times the reference density (migration
+# pull -45%), the Family Policy AI's crowding mark (te_demog_ms_crowded_share). Some crowding somewhere is on in 73% of
+# countries in an 1837 save and 88% in 1902, so its mere presence filters nothing; at the ceiling the step 3a review
+# found no state before 1902, so the AI's planned capitals wait for the twentieth century's congested metropolises, as
+# the real ones did (Canberra 1913, Brasília 1960, Abuja 1991).
+te_demog_k_pc_ai_crowding = { value = 4.5 }
 te_demog_k_pc_ai_states = { value = 8 }
 te_demog_k_pc_ai_authority_spare = { value = 50 }
 
@@ -159,14 +165,6 @@ te_demog_pc_next_year = {
 		add = te_demog_k_pc_cooldown_years
 		floor = yes
 	}
-}
-# The building's days still to run, for the civil-war repair (0 once the five years are over).
-te_demog_pc_works_days_left = {
-	value = te_demog_k_pc_build_years
-	subtract = te_demog_pc_years_since
-	multiply = 365
-	min = 0
-	round = yes
 }
 
 # State scope: a candidate site's least people, 1% of its owner's.
