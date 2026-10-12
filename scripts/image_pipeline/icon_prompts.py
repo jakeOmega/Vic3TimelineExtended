@@ -1594,7 +1594,7 @@ ICONS: dict[str, dict[str, dict]] = {
                        "now": f"{_GI}/company_icons/basic_chemicals.dds"},
         # Drugs, which includes medicines, on vanilla's opium pipe and poppy pods.
         # Reroll: "a dried poppy seed pod" drew a brown burr.
-        "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": None,
+        "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": 3,
                   "now": f"{_GI}/goods_icons/opium.dds"},
     },
     # Batch 5: the two renamed prestige goods of the goods above, each a finer
