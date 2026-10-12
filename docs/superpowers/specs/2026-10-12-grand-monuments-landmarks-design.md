@@ -90,7 +90,7 @@ state) and the test `test_landmarks_phase_2_hook` are replaced by §7's checks.
 
 ## 2. The twelve landmarks
 
-| # | Key | Name | State | Owner (verify) | Dedication | Form | Stand-in picture | Level | Raised |
+| # | Key | Name | State | Owner | Dedication | Form | Stand-in picture | Level | Raised |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | `arc_de_triomphe` | Arc de Triomphe | `STATE_ILE_DE_FRANCE` | FRA | War Memorial | Arch | Generic · Arch | 15 | 1806–36 |
 | 2 | `alexander_column` | Alexander Column | `STATE_INGRIA` | RUS | To the Crown | Column | Generic · Column | 10 | 1834 |
@@ -98,7 +98,7 @@ state) and the test `test_landmarks_phase_2_hook` are replaced by §7's checks.
 | 4 | `washington_monument_baltimore` | Washington Monument | `STATE_MARYLAND` | USA | To the Republic | Column | Generic · Column | 5 | 1829 |
 | 5 | `la_scala` | La Scala | `STATE_LOMBARDY` | AUS (confirmed by the owner) | Grand Opera House | Opera house | Generic · Opera house | 10 | 1778 |
 | 6 | `teatro_di_san_carlo` | Teatro di San Carlo | `STATE_CAMPANIA` | SIC | Grand Opera House | Opera house | Generic · Opera house | 5 | 1737 |
-| 7 | `jantar_mantar` | Jantar Mantar | `STATE_RAJPUTANA` (Jaipur) | RAJ | Grand Observatory | Observatory | Sanskrit · Observatory | 5 | 1734 |
+| 7 | `jantar_mantar` | Jantar Mantar | `STATE_RAJPUTANA` (Jaipur) | JAI (Dhundhar) | Grand Observatory | Observatory | Sanskrit · Observatory | 5 | 1734 |
 | 8 | `shalimar_gardens` | Shalimar Gardens | `STATE_PUNJAB` (Lahore) | PAN | Botanical Gardens | Gardens | Avestan · Gardens | 5 | 1642 |
 | 9 | `jardim_botanico` | Jardim Botânico | `STATE_RIO_DE_JANEIRO` | BRZ | Botanical Gardens | Gardens | Generic · Gardens | 5 | 1808 |
 | 10 | `stelae_of_aksum` | Stelae of Aksum | `STATE_GONDER` (Aksum's part) | TGR | To the Nation | Stele | Ge'ez · Stele | 5 | 4th century |
@@ -106,6 +106,10 @@ state) and the test `test_landmarks_phase_2_hook` are replaced by §7's checks.
 | 12 | `lion_monument` | Lion Monument | `STATE_EAST_SWITZERLAND` | SWI | War Memorial | Statue | Generic · Statue | 5 | 1821 |
 
 Picture codes are 1,000,001 to 1,000,012, in this order.
+
+**Owners checked** against the game's `common/history/states/00_states.txt` (2026-10-11, in implementation): eleven as
+guessed. Jaipur's part of Rajputana is Dhundhar's (JAI), not Rajputana's. Aksum is in Tigray's part of `STATE_GONDER`,
+and Lahore in Punjab's (PAN) part of `STATE_PUNJAB`.
 
 **How they were picked.**
 - **One per state.** None stands in a state that phase 6's candidates (Appendix B) would need.
