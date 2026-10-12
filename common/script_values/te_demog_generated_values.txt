@@ -1546,10 +1546,15 @@ te_demog_f_maternal_medicine = {
 	value = 1
 	subtract = { value = var:te_dg_acc multiply = var:te_dg_trt_mat }
 }
+# State scope: maternal's laws factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_maternal_laws = {
+	value = 1 add = var:te_dg_in_mat min = 0.2
+}
 # State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
 # times the cause's factors (demographics_model.cause_multipliers, group_rates).
 te_demog_mult_maternal = {
 	value = te_demog_f_maternal_medicine
+	multiply = te_demog_f_maternal_laws
 	multiply = 670
 }
 
@@ -1595,7 +1600,8 @@ te_demog_means = {
 		min = 0
 		max = 1
 	}
-	multiply = { value = var:te_dg_lit multiply = 0.7 add = 0.3 }
+	# access: literacy, plus Sex Education's state_means_literacy_add (phase 2 step 3b), at most 1
+	multiply = { value = var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply = 0.7 add = 0.3 }
 	# laws, history, events and measures: Family Limitation and its kin (state_fertility_means_add)
 	add = modifier:state_fertility_means_add
 	max = 0.95
@@ -1956,6 +1962,53 @@ te_demog_pop_base_ratio = {
 	if = { limit = { is_pop_type = aristocrats } value = 0.2 }
 	if = { limit = { is_pop_type = slaves } value = 0.5 }
 }
+
+# Phase 2 step 3b (the design §3.5): family policy in the census. State scope.
+# Family policy's factor on desired fertility (demographics_model.policy_term): 1 + the desired type (the measures'
+# and Pro-Natalist Policy's lines), Birth Limit's part relieved by the Rural Exemption's type x the state's
+# agrarian share (Birth Limit's part is negative: the relief raises the factor), at least 0. te_demog_desired
+# multiplies by it; the TFR tooltips show it.
+te_demog_tfr_policy = {
+	value = modifier:state_desired_fertility_mult
+	if = {
+		limit = { modifier:state_birth_limit_relief_add > 0 }
+		subtract = {
+			value = te_demog_ms_birth_limit_part
+			multiply = { value = modifier:state_birth_limit_relief_add max = 1 }
+			multiply = te_demog_agr_share
+		}
+	}
+	add = 1
+	min = 0
+}
+# The walk's agrarian share (Peasants and Farmers over people), 0 before a walk.
+te_demog_agr_share = {
+	value = 0
+	if = { limit = { has_variable = te_dg_agr_share } value = var:te_dg_agr_share }
+}
+# City life's relief (Family Housing): the urban share it leaves, 1 - the type within 0-1 (te_demog_tfr_urban).
+te_demog_urban_relief_left = {
+	value = 1 subtract = { value = modifier:state_urban_fertility_relief_add min = 0 max = 1 }
+}
+# What the step used (te_demog_family_policy_store, in te_demog_prepare), for the children-per-woman tooltips: the
+# stored policy term and the urban share Family Housing leaves, as te_demog_natural_shown, so a measure switched on
+# between steps shows when the census's figure takes it. The live value for a census state from before the store.
+te_demog_tfr_policy_shown = {
+	value = te_demog_tfr_policy
+	if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy }
+}
+te_demog_urban_left_stored = {
+	value = te_demog_urban_relief_left
+	if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left }
+}
+# The sex ratio at birth's add (demographics_model.newborn_split): the type once prenatal sexing exists, else 0.
+te_demog_srb_add = {
+	value = 0
+	if = { limit = { owner = { has_technology_researched = microprocessor } } value = modifier:state_sex_ratio_at_birth_add min = 0 }
+}
+te_demog_k_desired_floor = { value = 0.1 }
+te_demog_k_desired_cap = { value = 1 }
+te_demog_k_srb_base = { value = 105 }
 
 # Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the
 # workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).

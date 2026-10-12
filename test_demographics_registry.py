@@ -357,6 +357,10 @@ WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pe
                  **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES},
                  # phase 2 step 2: the workforce term's read of the state's working-adult field
                  f"modifier:{P.WORKING_ADULT_FIELD}": 0.0}
+# Phase 2 step 3b: the Family Policy types' reads and the two owner reads (the prenatal-sexing technology's gate on the
+# sex ratio at birth, Birth Limit's part of desired fertility), 0 unless a test gives them (_family_fixtures).
+FAMILY_DEFAULTS = {**{f"modifier:{t}": 0.0 for t in P.MEASURE_TYPES}, "te_demog_srb_add": 0.0,
+                   "te_demog_ms_birth_limit_part": 0.0}
 
 
 class _Engine:
@@ -394,7 +398,7 @@ class _Engine:
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **fixtures}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -623,6 +627,17 @@ def _mod_fixtures(inp):
         out[f"modifier:{t}"] = inp.mods.get(t, 0.0)
     out["turmoil"] = inp.turmoil
     out["te_demog_malaria_level"] = float(inp.malaria)   # has_state_trait, which _Engine can't read (calibration step 3)
+    out.update(_family_fixtures(inp))
+    return out
+
+
+def _family_fixtures(inp):
+    """Phase 2 step 3b's reads from the model's inputs: the Family Policy types, and the owner's reads the interpreter
+    can't make (te_demog_srb_add: the type with prenatal sexing; te_demog_ms_birth_limit_part: Birth Limit's part)."""
+    out = {f"modifier:{t}": inp.mods.get(t, 0.0) for t in P.MEASURE_TYPES}
+    srb = inp.mods.get(P.SRB_TYPE, 0.0)
+    out["te_demog_srb_add"] = max(0.0, srb) if P.PRENATAL_SEXING_TECH in inp.techs else 0.0
+    out["te_demog_ms_birth_limit_part"] = inp.birth_limit
     return out
 
 
@@ -1332,9 +1347,10 @@ class TestEngineLinesMoved(unittest.TestCase):
         ("law", "law_mandatory_augmentation", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
         ("law", "law_medical_augmentation_only", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
         ("law", "law_no_womens_rights", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
-        ("law", "law_population_control_measures", "modifier", "state_birth_rate_mult"): ("ontop", -0.1),
+        # phase 2 step 3b (§3.2): the two family laws' lines are absorbed, so under Full M cancels them
+        ("law", "law_population_control_measures", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
         ("law", "law_private_health_insurance", "institution_modifier", "state_mortality_wealth_mult"): ("ontop", -0.002),
-        ("law", "law_pro_natalist_subsidies", "modifier", "state_birth_rate_mult"): ("ontop", 0.1),
+        ("law", "law_pro_natalist_subsidies", "modifier", "state_birth_rate_mult"): ("absorbed", 0.1),
         ("law", "law_protected_class", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
         ("law", "law_public_health_insurance", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.05),
         ("law", "law_regulated_augmentation_market", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),

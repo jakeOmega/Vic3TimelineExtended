@@ -10,6 +10,13 @@ The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on th
 - the yearly walk's text, which runs in every game and which the interpreter can't iterate over pops: kept but for the
   three calls of Task 5's gated effects.
 
+Phase 2 step 3b (the census reads the Family Policy measures) changes no number either while no measure is on and the
+family laws are left out (the cases hold none): its new reads are exact identities at 0 (x 1, + 0, the constants), and
+its edits to three existing blocks are named below (STEP3B_ADDED, STEP3B_REWRITE), so each block's old text must still
+come back once they are taken out; te_demog_cause_inputs_store, which calibration step 3 changed too, is held to
+STEP3_DIGESTS' digest with step 3b's line taken out. Its new variables are te_dg_in_mat (the maternal cause's input),
+te_dg_policy and te_dg_urban_left (what the step used, for the tooltips).
+
 Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2) changes the census under
 Full by design: work deaths split by the census's own count of women and men at work (§2.5). Its invariant is that
 nothing changes outside Full, which the Display-only, the lines' and the model's cases still pin. The two Full cases
@@ -40,6 +47,12 @@ GOLDEN = ROOT / "test_fixtures" / "demographics" / "phase2_step1_golden.json"
 NEW_VARS = {"te_dg_wa_share", "te_dg_at_work", "te_dg_pensioners", "te_dg_need", "te_dg_old_age",
             "te_dg_low_share", "te_dg_wbase", "te_dg_wf_engine", "te_dg_ln_working_adults"}
 NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adults_down"}
+# phase 2 step 3b: the maternal cause's stored family-policy input, and the stored policy term and urban share left
+NEW_VARS |= {"te_dg_in_mat", "te_dg_policy", "te_dg_urban_left"}
+# phase 2 step 3b's lines in existing blocks: the maternal cause's laws factor (te_demog_mult_maternal) and its stored
+# input (te_demog_cause_inputs_store), added; Sex Education's literacy in te_demog_means' access, rewritten back out
+STEP3B_ADDED = re.compile(r"^multiply = te_demog_f_maternal_laws$|^set_variable = \{ name = te_dg_in_mat ")
+STEP3B_REWRITE = (("var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply", "var:te_dg_lit multiply"),)
 # phase 2 step 2's figures (te_demog_work_finish_step2): workers past the end of the working ages, women's share of the
 # workers at the work deaths' ages
 STEP2_VARS = {"te_dg_wk_past", "te_dg_fws_wk"}
@@ -132,7 +145,9 @@ def _lines(full):
 
 def _norm(body, drop=None):
     lines = [line.strip() for line in body.splitlines() if line.strip()]
-    return "\n".join(line for line in lines if not (drop and drop(line)))
+    for was, now in STEP3B_REWRITE:
+        lines = [line.replace(was, now) for line in lines]
+    return "\n".join(line for line in lines if not (drop and drop(line)) and not STEP3B_ADDED.search(line))
 
 
 def blocks():

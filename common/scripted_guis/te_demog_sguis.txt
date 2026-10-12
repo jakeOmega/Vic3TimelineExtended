@@ -179,7 +179,8 @@ te_demog_state_stepped_sgui = {
 }
 
 # The state's last seed or step stored the Causes of Death inputs (te_demog_cause_inputs_store, the drifted
-# medicine). A census from before the Causes of Death plan has none until its next step: the section says so.
+# medicine). A census from before the Causes of Death plan has none until its next step: the section says so. So has
+# one from before phase 2 step 3b, which added the maternal cause's family-policy input (te_dg_in_mat).
 te_demog_state_causes_sgui = {
 	scope = state
 	is_shown = {
@@ -190,6 +191,7 @@ te_demog_state_causes_sgui = {
 		has_variable = te_dg_in_ext
 		has_variable = te_dg_in_work
 		has_variable = te_dg_in_chr
+		has_variable = te_dg_in_mat
 		has_variable = te_dg_in_turm
 		has_variable = te_dg_in_crowd
 		has_variable = te_dg_in_sol

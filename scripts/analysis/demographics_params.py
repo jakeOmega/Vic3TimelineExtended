@@ -112,6 +112,7 @@ MORTALITY_TYPES = {
     "external": ("state_external_mortality_mult",),
     "work": ("state_work_mortality_mult",),
     "chronic": ("state_chronic_mortality_mult",),
+    "maternal": ("state_maternal_mortality_mult",),   # phase 2 step 3b: Restricted Contraception (MEASURE_TYPES)
 }
 DEMOG_MORTALITY_TYPES = (
     ACCESS_TYPE, *TREATMENT_TYPE.values(),
@@ -380,7 +381,7 @@ CAUSE_FACTORS = {
     "infection": ("medicine", "sol", "poverty", "literacy", "crowding", "malaria"),
     "work": ("laws",),
     "external": ("laws", "turmoil"),
-    "maternal": ("medicine",),
+    "maternal": ("medicine", "laws"),   # laws: phase 2 step 3b's state_maternal_mortality_mult
     "chronic": ("medicine", "laws", "sol"),
 }
 # Short names of the state variables (te_dg_m_<short>, te_dg_trt_<short>, te_dg_in_<short>).
@@ -517,8 +518,10 @@ POLLUTION_MAX = 255
 # types. The women's-rights laws left this list in Task 8: Task 7's natural-fertility term
 # (NATURAL_FERTILITY_BY_LAW) carries their effect.
 ENGINE_LINES_ON_TOP = frozenset({
-    # the family-policy laws §8.1 has yet to re-express as census terms
-    "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
+    # Communal Child-Rearing's -20%, which a State Youth Center's method cancels (phase 2 §3.2, call 9). Pro-Natalist
+    # Policy's and Population Control Measures' births lines are absorbed since phase 2 step 3b: their force under Full
+    # comes from desired fertility and the measures
+    "law_communal_child_rearing",
     # late-era lines with no census term; revisit with step 6. Of the LGBTQ+ Rights laws only Full Equality and
     # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10)
     "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
@@ -603,3 +606,27 @@ GINI_SHOWN_EQUALITY = 0.7
 # ---- Display ----------------------------------------------------------------------
 BAND_WIDTH = 5
 BANDS = 18          # 0-4 ... 80-84, then 85+
+
+# ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5. Six script-only state types
+# (demographics_modifier_types.txt), carried by the measures' country modifiers (te_demog_measure_modifiers.txt) and,
+# for desired fertility, Pro-Natalist Policy. Not in DEMOG_TYPES: apart from that law's line they sit on static
+# modifiers, which load_carriers doesn't walk (demographics_modifiers.measure_lines reads them).
+DESIRED_TYPE = "state_desired_fertility_mult"               # desired x (1 + it), at least DESIRED_FLOOR
+URBAN_RELIEF_TYPE = "state_urban_fertility_relief_add"      # the urban term 1 - 0.2 x urban x (1 - it), it within 0-1
+MEANS_LITERACY_TYPE = "state_means_literacy_add"            # the means' access as if literacy were this much higher
+MATERNAL_TYPE = MORTALITY_TYPES["maternal"][0]              # the maternal cause x (1 + it): a "laws" factor (above)
+BIRTH_LIMIT_RELIEF_TYPE = "state_birth_limit_relief_add"    # Birth Limit's part x (1 - it x the agrarian share)
+SRB_TYPE = "state_sex_ratio_at_birth_add"                   # boys per 100 girls SRB_BASE + it, with prenatal sexing
+MEASURE_TYPES = (DESIRED_TYPE, URBAN_RELIEF_TYPE, MEANS_LITERACY_TYPE, MATERNAL_TYPE, BIRTH_LIMIT_RELIEF_TYPE,
+                 SRB_TYPE)
+# Desired fertility with the policy term is floored here (spec §3.5) and held at 1 at most: families can't plan more
+# children than nature gives them (a decision, step 3b; without a measure desired is at most 1 anyway).
+DESIRED_FLOOR = 0.1
+DESIRED_CAP = 1.0
+# The sex ratio at birth (§3.4): the constants above are 105 boys per 100 girls; with prenatal sexing (no technology of
+# its own; the spec's proposal, Microprocessor, era 8) a positive SRB_TYPE moves the newborns' split in the step only.
+SRB_BASE = 105
+PRENATAL_SEXING_TECH = "microprocessor"
+# Pro-Natalist Policy's own census line (§3.2): desired +5%, beside its births line moved to the absorbed family.
+PRO_NATALIST_LAW = "law_pro_natalist_subsidies"

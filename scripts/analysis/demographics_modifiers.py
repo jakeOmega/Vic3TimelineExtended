@@ -178,7 +178,7 @@ def is_engine_rate_field(field):
     mortality or wealth mortality. The census's own script-only types (state_work_mortality_mult and the like)
     are inputs, not engine lines."""
     return (bool(_ENGINE_RATE_FIELD.match(field)) and field not in P.DEMOG_TYPES
-            and field not in P.ENGINE_LINE_TYPES.values())
+            and field not in P.ENGINE_LINE_TYPES.values() and field not in P.MEASURE_TYPES)
 
 
 def engine_lines(root=ROOT):
@@ -278,3 +278,30 @@ def engine_line_totals(lines, laws=(), techs=()):
         if block == "modifier" and ((kind == "law" and key in laws) or (kind == "technology" and key in techs)):
             out[field] = out.get(field, 0.0) + value
     return {k: v for k, v in out.items() if v}
+
+
+# ---- Phase 2 step 3b: the Family Policy measures' lines (demographics_harness.py measures) --------------------------
+MEASURE_MODIFIERS = Path("common") / "static_modifiers" / "te_demog_measure_modifiers.txt"
+MEASURE_PREFIX = "te_demog_ms_"
+
+
+def measure_lines(root=ROOT):
+    """{measure: {field: value}} of each measure's country modifier (te_demog_measure_modifiers.txt; Birth Limit's one
+    child as birth_limit_one), the _cost modifiers left out: the game file is the source of the census types' sizes, as
+    load_carriers reads the laws' and techs'. A measure's census types reach every state of its country."""
+    from paradox_file_parser import ParadoxFileParser
+
+    parser = ParadoxFileParser()
+    parser.parse_file(str(Path(root) / MEASURE_MODIFIERS), apply_directives=False)
+    out = {}
+    for name, body in parser.data.items():
+        if not name.startswith(MEASURE_PREFIX) or name.endswith("_cost"):
+            continue
+        lines = {}
+        for field, value in (_u(body) or {}).items():
+            try:
+                lines[field] = float(_u(value))
+            except (TypeError, ValueError):
+                continue   # the icon
+        out[name[len(MEASURE_PREFIX):]] = lines
+    return out

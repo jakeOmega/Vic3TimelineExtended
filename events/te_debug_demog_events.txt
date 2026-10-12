@@ -49,6 +49,8 @@
 #   r    the workforce term and the pension setting (phase 2 step 2): the capital's TE_DEMOG_WF line (W, its target,
 #        the lines on top, the game's own figure, the work deaths' split) and the country's TE_DEMOG_PENSION line
 #   s    the pension setting's five-year term ends now (phase 2 step 2), so another position can be chosen at once
+#   x    family policy in the census (phase 2 step 3b): the capital's Family Policy types, the policy term, the sex
+#        ratio's add and the census's stored fertility terms (TE_DEMOG_FAMILY)
 # Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7, .8 (phase 2 step
 # 1's workforce self-checks; te_debug_demog_wf_selfchecks); under Full, .10 (the Family Policy measures' self-check,
 # measure_country_types; te_debug_demog_ms_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
@@ -387,6 +389,18 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 				remove_variable = te_dg_dbg_click
 				te_debug_demog_pension_term_end = yes
 			}
+		}
+	}
+
+	# ---- x: family policy in the census (phase 2 step 3b) -------------------------
+	option = {
+		name = te_debug_demog.1.x
+		trigger = {
+			exists = capital
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.x.tt
+			te_debug_demog_family_reads = yes
 		}
 	}
 

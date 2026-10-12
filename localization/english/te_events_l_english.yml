@@ -5127,6 +5127,8 @@
  te_debug_demog.1.s:0 "End the pension setting's five-year term now"
  te_debug_demog.1.s.tt:0 "Removes the year our pension setting was chosen, so another can be chosen at once. A play-test tool: the setting itself stays. Writes a TE_DEMOG_PENSION line."
  te_debug_demog.1.t:0 "Demographics Test Console"
+ te_debug_demog.1.x:0 "Family policy: log what our capital's census reads"
+ te_debug_demog.1.x.tt:0 "Writes a TE_DEMOG_FAMILY line to debug.log for our capital: the Family Policy readings it takes (desired family size, family housing, family planning knowledge, maternal deaths, the rural exemption, the boys per 100 girls), our measures' desired family size, the family policy term and Birth Limit's part of it, the farm share and the urban pull left, the boys added per 100 girls in force, and the census's stored desired family size, means, children per woman with its planned and unplanned parts, maternal deaths and men per 100 women."
  te_debug_demog.1.z:0 "Close"
 
 #
