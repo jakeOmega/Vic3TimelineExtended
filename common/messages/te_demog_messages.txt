@@ -1,0 +1,92 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the Family Policy measures' notices (phase 2 step 3a)
+# ============================================================================
+# te_demog_ms_ended_<measure>: the law in force doesn't allow the measure, so it switched off at once and its term
+# reset (te_demog_ms_end_notice: a law change, or the law a revolution's winner holds). te_demog_ms_crash_campaign_over:
+# the Crash Campaign ran its five years and can't return for ten (te_demog_ms_monthly). Posted to the country; only the
+# player sees one. Loc: notification_<message>_name/_desc, in te_notifications_l_english.yml.
+# ============================================================================
+
+te_demog_ms_ended_child_allowance = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_family_housing = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_honours = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_restricted_contraception = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_parental_leave = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_free_contraception = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_sex_education = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_later_longer_fewer = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_birth_limit = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_rural_exemption = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_ended_crash_campaign = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_demog_ms_crash_campaign_over = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}

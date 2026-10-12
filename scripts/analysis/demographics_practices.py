@@ -41,7 +41,7 @@ def read_save(path):
     which the fit caches by path and re-uses at every grid point."""
     sections = S.read_sections(path)
     _countries, svars = S.read_variables(path, (), ("te_dg_fjob_share", *BAND_VARS, *H.CENSUS_INPUT_VARS,
-                                                    *H.PRACTICE_VARS))
+                                                    *H.PRACTICE_VARS, *H.MALARIA_VARS))
     return sections, svars
 
 
@@ -398,17 +398,21 @@ def east_for_china(rows, today, point, s, cut_lm, cut_bs, held=None, top=0.9):
         e = round(e + 0.01, 2)
 
 
-def region_gate(proj, world_margin=1.0, big=2e7):
+def region_gate(proj, world_margin=1.0, big=2e7, widen=None):
     """Review C1's gate on a projection: every #904 group with a band (R.REPORT_REGIONS) inside it; the world at or
     below today's measured rate less world_margin per 1,000 (x1.65 over 1836-1900 needs about 1 less than the run's
-    +8.8); no country of `big` people or more with projected peacetime births below deaths. Returns the failures."""
+    +8.8); no country of `big` people or more with projected peacetime births below deaths. Returns the failures.
+    widen: {group: w}, each band widened by w on both sides (calibration step 3's call 3: R.widening(), half the
+    two-run spread, at least 0.5); None judges on history's bands."""
     fails = []
     for label, _regions, band in R.REPORT_REGIONS:
         if band and label in proj["groups"]:
             lo, hi = band
+            w = (widen or {}).get(label, 0.0)
             got = proj["groups"][label][1]
-            if not lo <= got <= hi:
-                fails.append(f"{label}: {got:+.2f} per 1,000 (history {lo:+g} to {hi:+g})")
+            if not lo - w <= got <= hi + w:
+                wide = f", widened {lo - w:+.2f} to {hi + w:+.2f}" if w else ""
+                fails.append(f"{label}: {got:+.2f} per 1,000 (history {lo:+g} to {hi:+g}{wide})")
     measured, projected = proj["world"]
     if projected > measured - world_margin:
         fails.append(f"World: {projected:+.2f} per 1,000 (at most {measured - world_margin:+.2f})")

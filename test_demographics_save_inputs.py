@@ -245,6 +245,21 @@ class TestTinySave(unittest.TestCase):
         self.assertAlmostEqual(by_id["2"].crowding, 0.004356)
         self.assertEqual(by_id["1"].crowding, 0.0)
 
+    def test_a_states_malaria_level_is_its_state_regions(self):
+        """Calibration step 3: the map files' malaria traits by the state's region; the owner's techs carry the control
+        (Malaria Prevention), so the level itself ignores them."""
+        text = TINY.replace("\tcountry=3\n\tincorporation=1\n}",
+                            "\tcountry=3\n\tincorporation=1\n\tregion=\"STATE_GOLD_COAST\"\n}", 1)
+        self.assertIn('region="STATE_GOLD_COAST"', text)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            states = S.state_inputs(S.read_sections(fh.name))["TST"]
+        finally:
+            Path(fh.name).unlink()
+        self.assertEqual({sid: st.malaria for sid, st, _inc in states}, {"1": 1})
+        self.assertEqual([st.malaria for _sid, st, _inc in S.state_inputs(self.sections)["TST"]], [0])
+
     def test_food_security_and_devastation_are_read(self):
         """Phase 2 step 4 (predict): a pop's food security (its nested block's value; the block's other keys are
         not fields) and a state's devastation (0-100 in the save)."""

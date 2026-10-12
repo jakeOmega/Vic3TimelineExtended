@@ -13,6 +13,10 @@
 ###                             exists)
 ###   te_demog_sec_pyramid      open: 18 five-year bands, men left, women right,
 ###                             with the outline twenty years ahead
+###   te_demog_sec_family       open: the Family & Reproductive Policy law and
+###                             its measures, a row and a button each; the
+###                             measures other laws allow, dimmed (phase 2
+###                             step 3a)
 ###   te_demog_sec_wealth       open: the Gini beside the strata's incomes, Wealth
 ###                             Concentration as a bar heading for its target, the
 ###                             target's five terms, the most and least
@@ -2136,6 +2140,522 @@ types te_demographics_widgets
 		}
 	}
 
+	### ======================================================================
+	### FAMILY POLICY (phase 2 step 3a; docs/superpowers/specs/
+	### 2026-10-12-demographics-phase2-consequences-design.md §3.7)
+	### ======================================================================
+	###
+	### The Family & Reproductive Policy law in force; a row a measure it
+	### allows, with its running cost, its term and its button; then, dimmed
+	### under "Other Laws", the measures only another law allows, each naming
+	### that law on hover (rule 2). A row shows while its scripted GUI's
+	### is_shown holds (te_demog_measure_sguis.txt: the law allows it). Every
+	### figure is a script value (te_demog_measure_values.txt), never a
+	### measure's variable, which exists only while it is on. Under Display
+	### only one line above the rows says why every button is greyed (rule 6).
+
+	### The column heads. Fixed cells, 200 + 104 + 100 + 64 and three 4 px gaps
+	### = 480; each head explains its column on hover.
+	type te_demog_measure_head = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			align = left|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			text = "te_demog_ms_head_measure"
+			tooltip = "te_demog_ms_head_measure_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 104 -1 }
+			maximumsize = { 104 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			text = "te_demog_ms_head_cost"
+			tooltip = "te_demog_ms_head_cost_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 100 -1 }
+			maximumsize = { 100 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			text = "te_demog_ms_head_term"
+			tooltip = "te_demog_ms_head_term_tt"
+		}
+		widget = {
+			size = { 64 4 }
+		}
+	}
+
+	### One measure the law in force allows (datacontext its scripted GUI):
+	### its name (its aim and its modifiers on hover), running cost, term and
+	### button. The instance sets the texts. "Honours for Large Families", 26
+	### characters, is about 224 units in the medium font, so the name shrinks
+	### to 12 before it would elide; "Barred to 1915", 14 in the small font,
+	### about 100.
+	type te_demog_measure_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			fontsize_min = 12
+			default_format = "#tooltippable"
+			elide = right
+			block "measure_name" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 104 -1 }
+			maximumsize = { 104 -1 }
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = fontsize_small
+			elide = right
+			block "measure_cost" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 100 -1 }
+			maximumsize = { 100 -1 }
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = fontsize_small
+			elide = right
+			block "measure_term" {}
+		}
+		button = {
+			using = default_button_action
+			size = { 64 24 }
+			parentanchor = vcenter
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 60
+				elide = right
+				using = fontsize_small
+				block "measure_button" {}
+			}
+		}
+	}
+
+	### One measure only another law allows (datacontext its scripted GUI):
+	### dimmed, its name and what it would cost; the hover names the laws that
+	### allow it and what it does. The term and button cells stay empty, so
+	### the columns line up with the rows above.
+	type te_demog_measure_row_other = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		alpha = 0.5
+		visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			fontsize_min = 12
+			default_format = "#tooltippable"
+			elide = right
+			block "measure_name" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 104 -1 }
+			maximumsize = { 104 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			elide = right
+			block "measure_cost" {}
+		}
+		widget = {
+			size = { 168 4 }
+		}
+	}
+
+	type te_demog_sec_family = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_family"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_family_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_family_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_family_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_family_closed'))]"
+
+			### The law in force, "Law in Force" then its name ("State-Sponsored
+			### Family Planning", 31 characters, about 270 units, in a 352 cell),
+			### with the law's own tooltip on hover.
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 8
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 120 -1 }
+					maximumsize = { 120 -1 }
+					align = left|nobaseline
+					using = fontsize_medium
+					default_format = "#tooltippable"
+					text = "te_demog_ms_law"
+					tooltip = "te_demog_ms_law_tt"
+				}
+				textbox = {
+					autoresize = yes
+					minimumsize = { 352 -1 }
+					maximumsize = { 352 -1 }
+					align = right|nobaseline
+					using = fontsize_medium
+					default_format = "#v"
+					datacontext = "[AccessPlayer.AccessActiveLawFromGroup('lawgroup_family_reproductive_policy')]"
+					text = "[Law.GetNameNoFormatting]"
+					tooltipwidget = {
+						FancyTooltip_Law = {}
+					}
+				}
+			}
+			te_demog_text = {
+				visible = "[Not( GetScriptedGui('te_demog_ms_full_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "te_demog_ms_display_only"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_ms_sub_measures"
+				}
+			}
+			te_demog_measure_head = {}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_child_allowance_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_child_allowance_name"
+					tooltip = "te_demog_ms_child_allowance_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_child_allowance_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_child_allowance_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_child_allowance_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_family_housing_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_family_housing_name"
+					tooltip = "te_demog_ms_family_housing_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_family_housing_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_family_housing_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_family_housing_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_honours_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_honours_name"
+					tooltip = "te_demog_ms_honours_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_honours_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_honours_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_honours_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_restricted_contraception_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_restricted_contraception_name"
+					tooltip = "te_demog_ms_restricted_contraception_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_restricted_contraception_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_restricted_contraception_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_restricted_contraception_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_parental_leave_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_parental_leave_name"
+					tooltip = "te_demog_ms_parental_leave_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_parental_leave_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_parental_leave_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_parental_leave_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_free_contraception_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_free_contraception_name"
+					tooltip = "te_demog_ms_free_contraception_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_free_contraception_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_free_contraception_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_free_contraception_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_sex_education_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_sex_education_name"
+					tooltip = "te_demog_ms_sex_education_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_sex_education_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_sex_education_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_sex_education_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_later_longer_fewer_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_later_longer_fewer_name"
+					tooltip = "te_demog_ms_later_longer_fewer_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_later_longer_fewer_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_later_longer_fewer_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_later_longer_fewer_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_birth_limit_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_birth_limit_name"
+					tooltip = "te_demog_ms_birth_limit_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_birth_limit_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_birth_limit_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_birth_limit_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_rural_exemption_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_rural_exemption_name"
+					tooltip = "te_demog_ms_rural_exemption_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_rural_exemption_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_rural_exemption_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_rural_exemption_btn"
+				}
+			}
+			te_demog_measure_row = {
+				datacontext = "[GetScriptedGui('te_demog_ms_crash_campaign_sgui')]"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_crash_campaign_name"
+					tooltip = "te_demog_ms_crash_campaign_tt"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_crash_campaign_upkeep"
+				}
+				blockoverride "measure_term" {
+					text = "te_demog_ms_crash_campaign_term"
+				}
+				blockoverride "measure_button" {
+					text = "te_demog_ms_crash_campaign_btn"
+				}
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_ms_sub_other"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_child_allowance_sgui')]"
+				tooltip = "te_demog_ms_child_allowance_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_child_allowance_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_child_allowance_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_family_housing_sgui')]"
+				tooltip = "te_demog_ms_family_housing_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_family_housing_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_family_housing_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_honours_sgui')]"
+				tooltip = "te_demog_ms_honours_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_honours_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_honours_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_restricted_contraception_sgui')]"
+				tooltip = "te_demog_ms_restricted_contraception_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_restricted_contraception_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_restricted_contraception_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_parental_leave_sgui')]"
+				tooltip = "te_demog_ms_parental_leave_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_parental_leave_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_parental_leave_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_free_contraception_sgui')]"
+				tooltip = "te_demog_ms_free_contraception_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_free_contraception_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_free_contraception_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_sex_education_sgui')]"
+				tooltip = "te_demog_ms_sex_education_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_sex_education_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_sex_education_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_later_longer_fewer_sgui')]"
+				tooltip = "te_demog_ms_later_longer_fewer_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_later_longer_fewer_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_later_longer_fewer_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_birth_limit_sgui')]"
+				tooltip = "te_demog_ms_birth_limit_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_birth_limit_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_birth_limit_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_rural_exemption_sgui')]"
+				tooltip = "te_demog_ms_rural_exemption_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_rural_exemption_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_rural_exemption_upkeep"
+				}
+			}
+			te_demog_measure_row_other = {
+				datacontext = "[GetScriptedGui('te_demog_ms_crash_campaign_sgui')]"
+				tooltip = "te_demog_ms_crash_campaign_other_tt"
+				blockoverride "measure_name" {
+					text = "te_demog_ms_crash_campaign_name"
+				}
+				blockoverride "measure_cost" {
+					text = "te_demog_ms_crash_campaign_upkeep"
+				}
+			}
+		}
+	}
+
 	### How Demographics Works: every explanation, collapsed by default, one
 	### heading per topic (rule 1).
 	type te_demog_sec_how = flowcontainer {
@@ -2189,6 +2709,14 @@ types te_demographics_widgets
 			}
 			te_demog_note = {
 				text = "te_demog_how_mortality"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_family"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_family"
 			}
 			te_demog_subheader = {
 				blockoverride "subheader_text" {
@@ -2274,6 +2802,7 @@ types te_demographics_widgets
 			### in te_demog_country_census already weights the cause multipliers), once the state subtab's
 			### te_state_demog_causes has been seen in game (owner, 2026-10-11). It goes here, after the overview.
 			te_demog_sec_pyramid = {}
+			te_demog_sec_family = {}
 			te_demog_sec_wealth = {}
 			te_demog_sec_places = {}
 			te_demog_sec_states = {}

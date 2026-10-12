@@ -1,0 +1,560 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the Family Policy measures' buttons (phase 2 step 3a)
+# (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3, §3.7; the panel:
+# te_demog_sec_family in gui/te_demographics_widgets.gui)
+# ============================================================================
+# One scripted GUI a measure, rooted at the player's country (GuiScope.SetRoot( GetPlayer.MakeScope ).End):
+#   is_shown  the law in force allows the measure: the panel draws its row with this button; while it doesn't, the
+#             measure is a dimmed row under "Other Laws", naming the laws that allow it
+#   is_valid  greyed with the failing reason only (gui_style_guide.md rule 6): the rule isn't Full ("Family policy
+#             measures act only under the Full Demographics rule"), the law, the five-year term with the year it ends,
+#             the Crash Campaign's run and bar, the Rural Exemption's need for Birth Limit. Each reason is a
+#             trigger_if that shows only when it fails, so a pressable button lists none
+#   effect    one press (te_demog_ms_press; Birth Limit's cycles off, two, one): what it does in words, the switching
+#             hidden (its modifiers show on the row's name)
+# The AI never presses them (ai_is_valid); its own yearly pulse is te_demog_ms_ai_choose.
+# ============================================================================
+
+# The rule is Full: the panel says once, above the rows, that the measures act only under it (rule 6).
+te_demog_ms_full_sgui = {
+	scope = country
+	is_shown = { te_demog_effects_run = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Child Allowance
+te_demog_ms_child_allowance_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_child_allowance = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_child_allowance = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_child_allowance_law_tt
+				te_demog_ms_allowed_child_allowance = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_child_allowance
+				NOT = { te_demog_ms_term_run = { M = child_allowance } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_child_allowance_term_tt
+				te_demog_ms_term_run = { M = child_allowance }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_child_allowance } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = child_allowance }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Family Housing
+te_demog_ms_family_housing_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_family_housing = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_family_housing = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_family_housing_law_tt
+				te_demog_ms_allowed_family_housing = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_family_housing
+				NOT = { te_demog_ms_term_run = { M = family_housing } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_family_housing_term_tt
+				te_demog_ms_term_run = { M = family_housing }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_family_housing } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = family_housing }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Honours for Large Families
+te_demog_ms_honours_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_honours = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_honours = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_honours_law_tt
+				te_demog_ms_allowed_honours = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_honours
+				NOT = { te_demog_ms_term_run = { M = honours } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_honours_term_tt
+				te_demog_ms_term_run = { M = honours }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_honours } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = honours }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Restricted Contraception
+te_demog_ms_restricted_contraception_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_restricted_contraception = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_restricted_contraception = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_restricted_contraception_law_tt
+				te_demog_ms_allowed_restricted_contraception = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_restricted_contraception
+				NOT = { te_demog_ms_term_run = { M = restricted_contraception } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_restricted_contraception_term_tt
+				te_demog_ms_term_run = { M = restricted_contraception }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_restricted_contraception } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = restricted_contraception }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Parental Leave
+te_demog_ms_parental_leave_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_parental_leave = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_parental_leave = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_parental_leave_law_tt
+				te_demog_ms_allowed_parental_leave = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_parental_leave
+				NOT = { te_demog_ms_term_run = { M = parental_leave } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_parental_leave_term_tt
+				te_demog_ms_term_run = { M = parental_leave }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_parental_leave } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = parental_leave }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Free Contraception
+te_demog_ms_free_contraception_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_free_contraception = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_free_contraception = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_free_contraception_law_tt
+				te_demog_ms_allowed_free_contraception = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_free_contraception
+				NOT = { te_demog_ms_term_run = { M = free_contraception } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_free_contraception_term_tt
+				te_demog_ms_term_run = { M = free_contraception }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_free_contraception } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = free_contraception }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Sex Education
+te_demog_ms_sex_education_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_sex_education = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_sex_education = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_sex_education_law_tt
+				te_demog_ms_allowed_sex_education = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_sex_education
+				NOT = { te_demog_ms_term_run = { M = sex_education } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_sex_education_term_tt
+				te_demog_ms_term_run = { M = sex_education }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_sex_education } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = sex_education }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Later, Longer, Fewer
+te_demog_ms_later_longer_fewer_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_later_longer_fewer = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_later_longer_fewer = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_later_longer_fewer_law_tt
+				te_demog_ms_allowed_later_longer_fewer = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_later_longer_fewer
+				NOT = { te_demog_ms_term_run = { M = later_longer_fewer } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_later_longer_fewer_term_tt
+				te_demog_ms_term_run = { M = later_longer_fewer }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_later_longer_fewer } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = later_longer_fewer }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Birth Limit
+te_demog_ms_birth_limit_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_birth_limit = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_birth_limit = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_birth_limit_law_tt
+				te_demog_ms_allowed_birth_limit = yes
+			}
+		}
+		# the term binds only the step back to off, from one child
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_birth_limit_one
+				NOT = { te_demog_ms_term_run = { M = birth_limit } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_birth_limit_term_tt
+				te_demog_ms_term_run = { M = birth_limit }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_birth_limit } }
+			custom_tooltip = te_demog_ms_birth_limit_start_tt
+		}
+		else_if = {
+			limit = { NOT = { has_variable = te_dg_ms_birth_limit_one } }
+			custom_tooltip = te_demog_ms_birth_limit_tighten_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_birth_limit_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press_birth_limit = yes
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Rural Exemption
+te_demog_ms_rural_exemption_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_rural_exemption = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_rural_exemption = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rural_exemption_law_tt
+				te_demog_ms_allowed_rural_exemption = yes
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_rural_exemption
+				NOT = { te_demog_ms_term_run = { M = rural_exemption } }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_rural_exemption_term_tt
+				te_demog_ms_term_run = { M = rural_exemption }
+			}
+		}
+		# it halves Birth Limit, so it starts only beside one
+		trigger_if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_rural_exemption }
+				NOT = { has_variable = te_dg_ms_birth_limit }
+			}
+			custom_tooltip = {
+				text = te_demog_ms_rural_exemption_needs_tt
+				has_variable = te_dg_ms_birth_limit
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_ms_rural_exemption } }
+			custom_tooltip = te_demog_ms_start_tt
+		}
+		else = {
+			custom_tooltip = te_demog_ms_end_tt
+		}
+		hidden_effect = {
+			te_demog_ms_press = { M = rural_exemption }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# Crash Campaign
+te_demog_ms_crash_campaign_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_ms_allowed_crash_campaign = yes
+	}
+	is_valid = {
+		trigger_if = {
+			limit = { NOT = { te_demog_effects_run = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_rule_tt
+				te_demog_effects_run = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { te_demog_ms_allowed_crash_campaign = yes } }
+			custom_tooltip = {
+				text = te_demog_ms_crash_campaign_law_tt
+				te_demog_ms_allowed_crash_campaign = yes
+			}
+		}
+		# no press ends it: it runs its five years (te_demog_ms_monthly), then can't return for ten
+		trigger_if = {
+			limit = { has_variable = te_dg_ms_crash_campaign }
+			custom_tooltip = {
+				text = te_demog_ms_crash_campaign_running_tt
+				NOT = { has_variable = te_dg_ms_crash_campaign }
+			}
+		}
+		trigger_if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_crash_campaign }
+				te_demog_ms_crash_campaign_barred = yes
+			}
+			custom_tooltip = {
+				text = te_demog_ms_crash_campaign_barred_tt
+				NOT = { te_demog_ms_crash_campaign_barred = yes }
+			}
+		}
+	}
+	effect = {
+		custom_tooltip = te_demog_ms_crash_campaign_start_tt
+		hidden_effect = {
+			te_demog_ms_press = { M = crash_campaign }
+		}
+	}
+	ai_is_valid = { always = no }
+}

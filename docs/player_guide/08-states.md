@@ -286,6 +286,7 @@ them, and some break the figure down for your capital.
 |---|---|
 | Overview | Median age, children per woman, life expectancy, dependency ratio, men per 100 women, the urban pattern, the Gini coefficient, Wealth Concentration with its target, the men of fighting age, and young adults where they are many while work is short. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead. |
+| Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. |
 | States | Your 40 largest states, with people, median age, children per woman, men per 100 women, Gini and Wealth Concentration. |
@@ -343,12 +344,19 @@ Telegraph, Modern Nursing, Radio, Intergovernmental Organizations, the World
 Wide Web and Telemedicine are researched. Under Full, the Medical Outreach
 decree closes a further fifth of the gap at each count in one state, and it
 ends once the state has caught up. Turmoil raises deaths from accidents and
-violence, by half at full turmoil. The subtab's
+violence, by half at full turmoil. Where the map marks a state with malaria
+(most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
+from infection run higher, more so with severe malaria, until Malaria
+Prevention; Quinine protected colonists, not the people who lived there, so it
+changes nothing here. The subtab's
 Causes of Death section shows a state's health care access and each cause's
 multiplier; hover a row for what makes it up and where medicine is heading.
 Under Full it also shows the deaths added on top of the census's own, in red
 from a quarter above it, split into effects on the whole state and effects on
-some of its people, such as severe starvation.
+some of its people, such as severe starvation. The Landowners' Famine Reserves
+is the exception: under Full the census sets the farm workers' saved lives
+against the rest of the state, so it moves deaths within a state without
+lowering them.
 
 An arrow beside a figure shows whether it rose or fell since the last census.
 Life expectancy rising is green and a rising dependency ratio is orange; the other
@@ -361,6 +369,53 @@ The urban pattern counts each state as one city and its urban people as everyone
 who does not work a farm, plantation, ranch, mine or other rural workplace. The
 pattern is Primate when the largest city holds 40% or more of all urban people,
 Dominant from 25%, Balanced from 10% and Dispersed below that.
+
+### Family policy measures
+
+Under the Full setting, the tab's Family Policy section lets you act within your
+Family & Reproductive Policy law. It shows the law in force, a row for each
+measure that law allows, with its running cost, its term and a button, and,
+dimmed, the measures only another law allows; hover one for the laws that allow
+it. Under Display only the rows show what each measure would do and the buttons
+are greyed.
+
+A measure takes effect as soon as you start it and costs its upkeep while it
+runs: a weekly share of GDP for the ones paid in money, recalculated each year,
+authority, or a costlier Ministry of Education. Each also moves the approval of
+the interest groups its tooltip lists. Once started, a measure runs for at least
+five years, and its button can't end it before then. A change to a law that
+doesn't allow a measure ends it at once, with a notice, and taking it up again
+under another law starts a new term. Birth Limit's button moves from two
+children to one child, then ends the limit. The Crash Campaign ends itself after
+five years and can't return for ten.
+
+| Measure | Laws that allow it | What it aims at | Upkeep |
+|---|---|---|---|
+| Child Allowance | Pro-Natalist Policy, Communal Child-Rearing | Families want more children | 0.5% of GDP a year, more where children are many |
+| Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.4% of GDP a year, by the share of people in cities |
+| Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy | Families want a few more children | 25 authority |
+| Restricted Contraception | Pro-Natalist Policy | Families have less means to plan their children; more mothers die; the feminist movement gains support | 50 authority |
+| Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year, by the share of women at work |
+| Free Contraception | State-Sponsored Family Planning, Population Control Measures | Families have more means to plan their children | 0.1% of GDP a year |
+| Sex Education | State-Sponsored Family Planning, Population Control Measures | Knowing how to plan a family reaches people as if literacy were 20 points higher | The Ministry of Education costs 10% more bureaucracy |
+| Later, Longer, Fewer | State-Sponsored Family Planning, Population Control Measures | Families want fewer children | 50 authority |
+| Birth Limit | Population Control Measures | Families want far fewer children, fewer still at one child; once Microprocessor is researched, more boys are born than girls | 100 authority |
+| Rural Exemption | Population Control Measures, with Birth Limit | Halves Birth Limit for farming families, by the state's share of Peasants and Farmers | None |
+| Crash Campaign | Population Control Measures | Families want fewer children still; legitimacy −10 and more radicals from movements | 100 authority |
+
+In this build the census reads only Free Contraception's and Restricted
+Contraception's effect on the means to plan a family, and Parental Leave's
+women's work counts toward the workforce as the women's rights laws' does. The
+other measures cost their upkeep and move the interest groups, and their effect
+on births comes in a later build.
+
+The AI starts the measures that raise births when its population shrinks or
+many of its people are old, and the ones that lower births in a famine, when
+half its people live in states crowded to Migration Crowding's ceiling, or with
+a youth bulge, as its treasury and authority allow, at most one measure paid in
+money a year. It takes
+Restricted Contraception, Birth Limit's one child and the Crash Campaign only
+when the need is pressing and its legitimacy is high.
 
 <!-- screenshot: the Demographics tab with the population pyramid and its twenty-year outline -->
 

@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import gen_demographics as gen  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
+import demographics_regions as R  # noqa: E402
 from format_paradox_tabs import format_text  # noqa: E402
 
 
@@ -465,3 +466,71 @@ class TestPhase2Generated(unittest.TestCase):
                         ("pension_age_standard", P.PENSION_AGE["standard"]),
                         ("health_need_1836", P.HEALTH_NEED_1836)):
             self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(v)} }}", self.values)
+
+
+class TestCalibrationStep3Generated(unittest.TestCase):
+    """Calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md; owner calls 1-2,
+    2026-10-12): the country-scope absorbed lines and the malaria factor's inputs."""
+
+    @classmethod
+    def setUpClass(cls):
+        out = gen.plan_outputs()
+        cls.values, cls.effects = out[gen.VALUES], out[gen.EFFECTS]
+
+    def _value(self, name):
+        return self.values.split(f"\n{name} = {{", 1)[1].split("\n}\n", 1)[0]
+
+    def test_the_absorbed_deaths_add_the_owners_read_where_the_walk_reads_the_workplaces(self):
+        absorbed = self._value("te_demog_pop_country_absorbed_deaths")
+        walk = self._value("te_demog_pop_country_line_walk_read")
+        death = self._value("te_demog_pop_death_mult")
+        for group in P.COUNTRY_ABSORBED_GROUPS:
+            key = f"building_group_{group}_mortality_mult"
+            self.assertIn(f"add = owner.modifier:{key}", absorbed)
+            self.assertIn(f"add = workplace.modifier:{key}", walk)
+            gate = absorbed.split(f"add = owner.modifier:{key}", 1)[0].rsplit("limit = ", 1)[1]
+            self.assertIn(gate.strip(), death, "the same workplace gate the walk adds the key under")
+        self.assertEqual(absorbed.replace("owner.", "workplace."), walk, "one gate, two readers")
+        self.assertIn("add = te_demog_pop_country_absorbed_deaths", self._value("te_demog_pop_absorbed_deaths"))
+        self.assertNotIn("te_demog_pop_country_absorbed_deaths", self._value("te_demog_pop_absorbed_births"))
+
+    def test_the_listed_malaria_regions_are_the_maps(self):
+        listed, pending = {}, []
+        for line in self._value("te_demog_malaria_level_listed").splitlines():
+            m = re.search(r"state_region = s:(STATE_\w+)", line)
+            if m:
+                pending.append(m.group(1))
+            m = re.search(r"^\t\tadd = (\d)$", line)
+            if m:
+                listed.update(dict.fromkeys(pending, int(m.group(1))))
+                pending = []
+        self.assertEqual(listed, R.malaria_levels())
+        self.assertEqual(sum(1 for v in listed.values() if v == 2), 26)
+
+    def test_the_level_reads_the_trait_and_the_store_its_control(self):
+        level = self._value("te_demog_malaria_level")
+        for trait in P.MALARIA_TRAITS:
+            self.assertIn(f"has_state_trait = {trait}", level)
+        self.assertNotIn("owner", level)
+        self.assertNotIn("te_demog_malaria_level_listed", level, "the fallback is off (P.MALARIA_READS_REGION_LIST)")
+        store = self.effects.split("te_demog_cause_inputs_store = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("set_variable = { name = te_dg_in_mal value = te_demog_malaria_level }", store)
+        self.assertIn(f"value = modifier:{P.MALARIA_CONTROL_TYPE} min = 0 max = 1", store)
+
+    def test_the_famine_reserves_fallback_reads_the_subsistence_farm(self):
+        """famine_reserves_absorbed's fallback for an owner's read of 0: the farm's own read, on subsistence farms only
+        (no company owns one, so no building-scope line is absorbed with it)."""
+        with unittest.mock.patch.object(P, "COUNTRY_ABSORBED_FROM_FARM", True):
+            values = gen.plan_outputs()[gen.VALUES]
+        body = values.split("\nte_demog_pop_country_absorbed_deaths = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertNotIn("owner.", body)
+        self.assertIn("limit = { workplace = { is_building_group = bg_subsistence_agriculture } }", body)
+        self.assertIn("add = workplace.modifier:building_group_bg_agriculture_mortality_mult", body)
+        self.assertNotIn("bg_staple_crops", body)
+
+    def test_the_fallback_reads_the_list(self):
+        with unittest.mock.patch.object(P, "MALARIA_READS_REGION_LIST", True):
+            values = gen.plan_outputs()[gen.VALUES]
+        level = values.split("\nte_demog_malaria_level = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("value = te_demog_malaria_level_listed", level)
+        self.assertNotIn("has_state_trait", level)

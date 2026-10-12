@@ -1020,6 +1020,29 @@ class TestPhase2Interfaces(unittest.TestCase):
         self.assertAlmostEqual(got, want)
 
 
+class TestMalariaFactor(unittest.TestCase):
+    """Calibration step 3 (the spec's §2.2): infection x (1 + the trait's excess x (1 - the control))."""
+
+    def test_the_factor(self):
+        def f(level, control=0.0):
+            inp = M.Inputs(sol=7, malaria=level, mods={P.MALARIA_CONTROL_TYPE: control})
+            return M.cause_factors(inp)["infection"]["malaria"]
+        self.assertEqual(f(0), 1.0)
+        self.assertAlmostEqual(f(1), 1 + P.MALARIA_INFECTION[1])
+        self.assertAlmostEqual(f(2), 1 + P.MALARIA_INFECTION[2])
+        self.assertAlmostEqual(f(2, 0.5), 1 + P.MALARIA_INFECTION[2] / 2)
+        self.assertEqual((f(1, 1.0), f(2, 3.0)), (1.0, 1.0), "Malaria Prevention ends it")
+        self.assertAlmostEqual(f(1, -1.0), 1 + P.MALARIA_INFECTION[1], msg="the control is 0 to 1")
+
+    def test_the_severe_traits_excess_follows_vanillas_ratio(self):
+        self.assertAlmostEqual(P.MALARIA_INFECTION[2], P.MALARIA_INFECTION[1] * P.MALARIA_SEVERE_RATIO, delta=0.005)
+        self.assertEqual(P.CAUSE_FACTORS["infection"][-1], "malaria")
+
+    def test_malaria_raises_deaths_and_shortens_life(self):
+        e0 = [M.life_table(M.group_rates(M.Inputs(sol=7, literacy=0.05, malaria=level))[0])["e0"] for level in (0, 2)]
+        self.assertLess(e0[1], e0[0])
+
+
 class TestConsequences(unittest.TestCase):
     """Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4): the pool,
     conscription, the war dead's window, the youth bulge and sex balance."""

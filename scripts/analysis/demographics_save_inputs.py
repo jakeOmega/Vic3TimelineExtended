@@ -185,6 +185,7 @@ class CountryInputs:
     states: int = 0
     means_add: float = 0.0                              # static modifiers' state_fertility_means_add
     crowding: float = 0.0    # a state's migration penalty from crowding (state_inputs); a country's stays 0
+    malaria: int = 0         # a state's malaria trait level from its state region (state_inputs; calibration step 3)
 
     @property
     def sol(self):
@@ -243,14 +244,27 @@ def _add_pop(c, rec, size, incorporated):
     c.sol_bins[min(int(sol // 5) * 5, 40)] += size
 
 
+_MALARIA = []
+
+
+def _malaria_levels():
+    """{state region: malaria level} from the map files (demographics_regions.malaria_levels), read once."""
+    if not _MALARIA:
+        import demographics_regions as R
+        _MALARIA.append(R.malaria_levels())
+    return _MALARIA[0]
+
+
 def state_inputs(sections):
     """{tag: [(state id, CountryInputs of that state's own pops, incorporated)]}. The census works state
     by state, so a curve that bends (the poverty term at SoL 9) needs each state's own SoL and literacy;
-    laws, techs and institutions are the owner's (country_inputs)."""
+    laws, techs and institutions are the owner's (country_inputs). A state's malaria level is its state region's
+    trait (calibration step 3); the owner's techs carry the control that switches it off."""
     countries = country_inputs(sections)
     tags = {cid: rec.get("definition", "").strip('"') for cid, rec in sections["country_manager"].items()}
     owner_of_state = {sid: rec.get("country") for sid, rec in sections["states"].items()}
     incorporated = {sid for sid, rec in sections["states"].items() if is_incorporated(rec)}
+    malaria = _malaria_levels()
     per = {}
     for rec in sections["pops"].values():
         size = _num(rec.get("workforce")) + _num(rec.get("dependents"))
@@ -268,6 +282,7 @@ def state_inputs(sections):
         st.crowding = sum(M.P.MIGRATION_CROWDING_PULL_PER_MULT * mult
                           for name, mult in sections["states"].get(sid, {}).get("timed_modifiers", ())
                           if name == "migration_crowding")
+        st.malaria = malaria.get(sections["states"].get(sid, {}).get("region", "").strip('"'), 0)
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
     return out
 
