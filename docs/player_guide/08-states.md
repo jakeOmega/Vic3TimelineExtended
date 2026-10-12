@@ -316,7 +316,7 @@ mid-twenties and many never marry. Under birth spacing, strongest in Japan and
 slight in China and Korea, couples space and stop births by custom. Modern
 contraception wears both away, and health care wears away birth spacing; women's
 paid work and farms that pass whole to one heir make late marriage more common.
-The figure then falls with literacy, child survival and city life. Under Full, the figure shown is what births came to that
+The figure then falls with literacy, child survival and city life, and family policy moves it (see [Family policy measures](#family-policy-measures)). Under Full, the figure shown is what births came to that
 year, so decrees, famine and other effects on births count in it; its tooltip
 lists them as births added on top of the census. The means to plan a family
 grow with literacy and with contraception: Vulcanization, Feminism, the
@@ -388,7 +388,7 @@ five years and can't return for ten.
 | Measure | Laws that allow it | What it aims at | Upkeep |
 |---|---|---|---|
 | Child Allowance | Pro-Natalist Policy, Communal Child-Rearing | Families want more children | 0.5% of GDP a year, more where children are many |
-| Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.4% of GDP a year, by the share of people in cities |
+| Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
 | Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy | Families want a few more children | 25 authority |
 | Restricted Contraception | Pro-Natalist Policy | Families have less means to plan their children; more mothers die; the feminist movement gains support | 50 authority |
 | Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year, by the share of women at work |
@@ -399,11 +399,19 @@ five years and can't return for ten.
 | Rural Exemption | Population Control Measures, with Birth Limit | Halves Birth Limit for farming families, by the state's share of Peasants and Farmers | None |
 | Crash Campaign | Population Control Measures | Families want fewer children still; legitimacy −10 and more radicals from movements | 100 authority |
 
-In this build the census reads only Free Contraception's and Restricted
-Contraception's effect on the means to plan a family, and Parental Leave's
-women's work counts toward the workforce as the women's rights laws' does. The
-other measures cost their upkeep and move the interest groups, and their effect
-on births comes in a later build.
+The census reads a measure at each state's next yearly count: how many
+children families want, city life's pull toward smaller families, the means to
+plan a family, mothers' deaths in childbirth and, once Microprocessor is
+researched, how many boys are born per 100 girls. Births follow over the year
+after. Under Full, Pro-Natalist Policy itself makes families want a few more
+children, and the law's own boost to births and Population Control Measures' cut
+no longer apply: the measures carry those laws' force. Pro-Natalist Policy with
+Child Allowance, Family Housing and Honours adds about 0.3 children per woman in
+a rich country that has few, for 0.4–0.5% of GDP a year. Restricted
+Contraception, Birth Limit and the Crash Campaign move births further, at their
+political price. The Children per Woman tooltips list family policy beside the
+other terms. Parental Leave's women's work counts toward the workforce as the
+women's rights laws' does.
 
 The AI starts the measures that raise births when its population shrinks or
 many of its people are old, and the ones that lower births in a famine, when

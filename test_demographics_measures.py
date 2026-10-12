@@ -10,11 +10,17 @@ leaving the law, the revolution's re-apply, the money upkeep and the AI pulse.
 import importlib.util
 import re
 import shutil
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-from test_demographics_registry import ROOT, _Engine, _block, _find, _parse_script, _raw_blocks, _text
+from test_demographics_registry import (GENERATED_EFFECTS, GENERATED_VALUES, ROOT, _Engine, _block, _find, _parse_script,
+                                       _raw_blocks, _text)
+
+sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+import demographics_modifiers as DM  # noqa: E402
+import demographics_params as P  # noqa: E402
 
 MS_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_measure_modifiers.txt"
 MS_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_measure_effects.txt"
@@ -37,12 +43,12 @@ FAMILY_LAWS = (TRADITIONAL, PN, FP, PC, COMMUNAL)
 # and other effects). Parental Leave's women's-work line is on phase 2 step 1's family.
 CATALOGUE = {
     "child_allowance": ({PN, COMMUNAL}, {
-        "state_desired_fertility_mult": 0.08,
+        "state_desired_fertility_mult": 0.14,   # step 3b's fit (§3.4's +8%)
         "interest_group_ig_devout_approval_add": 1, "interest_group_ig_trade_unions_approval_add": 1}),
     "family_housing": ({PN, FP}, {
         "state_urban_fertility_relief_add": 0.5, "interest_group_ig_trade_unions_approval_add": 1}),
     "honours": ({TRADITIONAL, PN}, {
-        "state_desired_fertility_mult": 0.03, "interest_group_ig_devout_approval_add": 1,
+        "state_desired_fertility_mult": 0.05, "interest_group_ig_devout_approval_add": 1,   # the fit (+3%)
         "country_authority_add": -25}),
     "restricted_contraception": ({PN}, {
         "state_fertility_means_add": -0.2, "state_maternal_mortality_mult": 0.25,
@@ -76,7 +82,7 @@ BIRTH_LIMIT_ONE = {
     "state_desired_fertility_mult": -0.45, "state_sex_ratio_at_birth_add": 10,
     "interest_group_ig_rural_folk_approval_add": -3, "interest_group_ig_devout_approval_add": -2,
     "country_authority_add": -100}
-MONEY = {"child_allowance": 0.005, "family_housing": 0.004, "parental_leave": 0.003, "free_contraception": 0.001}
+MONEY = {"child_allowance": 0.005, "family_housing": 0.0025, "parental_leave": 0.003, "free_contraception": 0.001}
 NEW_TYPES = ("state_desired_fertility_mult", "state_urban_fertility_relief_add", "state_means_literacy_add",
              "state_maternal_mortality_mult", "state_birth_limit_relief_add", "state_sex_ratio_at_birth_add")
 
@@ -240,12 +246,24 @@ class TestCatalogue(unittest.TestCase):
                 self.assertFalse(name.startswith("state_demog_"))
                 self.assertRegex(loc, rf"(?m)^ {name}:0 \"")
                 self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \"")
-        # until step 3b the census reads none of them (the console's self-check reads one, te_debug_demog_*)
+        # since step 3b the census reads each of them in state scope, in the generated files (gen_demographics.py), and
+        # no script reads one through the owner
+        generated = _text(GENERATED_VALUES) + _text(GENERATED_EFFECTS)
+        for name in NEW_TYPES:
+            self.assertIn(f"modifier:{name}", generated, name)
         for path in (ROOT / "common").rglob("*.txt"):
-            if path.name.startswith("te_debug_demog"):
-                continue
             for name in NEW_TYPES:
-                self.assertNotIn(f"modifier:{name}", _text(path), f"{path.name} reads {name}: that is step 3b")
+                self.assertNotIn(f"owner.modifier:{name}", _text(path), f"{path.name} reads {name} on the owner")
+
+    def test_the_reader_gives_the_catalogues_census_lines(self):
+        """demographics_modifiers.measure_lines (the harness's measures) reads the game file as the catalogue has it."""
+        got = DM.measure_lines()
+        for key, (_, lines) in CATALOGUE.items():
+            want = {k: float(v) for k, v in lines.items() if k in P.MEASURE_TYPES + P.DEMOG_FERTILITY_TYPES}
+            self.assertEqual({k: v for k, v in got[key].items() if k in P.MEASURE_TYPES + P.DEMOG_FERTILITY_TYPES},
+                             want, key)
+        self.assertEqual(got["birth_limit_one"]["state_desired_fertility_mult"],
+                         BIRTH_LIMIT_ONE["state_desired_fertility_mult"])
 
     def test_the_laws_allow_the_catalogues_measures(self):
         for law in FAMILY_LAWS:
@@ -262,7 +280,7 @@ class TestCatalogue(unittest.TestCase):
         self.assertAlmostEqual(eng.sv("te_demog_ms_desired_birth_limit_one"),
                                BIRTH_LIMIT_ONE["state_desired_fertility_mult"])
         eng.modifiers.update(te_demog_ms_child_allowance=1, te_demog_ms_birth_limit_one=1)
-        self.assertAlmostEqual(eng.sv("te_demog_ms_desired_on"), 0.08 - 0.45)
+        self.assertAlmostEqual(eng.sv("te_demog_ms_desired_on"), 0.14 - 0.45)
 
     def test_every_measure_has_its_loc_and_notice(self):
         loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
@@ -502,7 +520,7 @@ class TestUpkeep(unittest.TestCase):
         eng = _MeasureEngine(fixtures={"gdp": gdp})
         eng.vars.update(te_dg_young_share=0.15, te_dg_urban_share=0.8)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_child_allowance"), gdp * 0.005 * 0.5 / 52, places=2)
-        self.assertAlmostEqual(eng.sv("te_demog_ms_cost_family_housing"), gdp * 0.004 * 0.8 / 52, places=2)
+        self.assertAlmostEqual(eng.sv("te_demog_ms_cost_family_housing"), gdp * 0.0025 * 0.8 / 52, places=2)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_free_contraception"), gdp * 0.001 / 52, places=2)
         eng.fixtures["capital.te_demog_women_rate"] = 0.6
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_parental_leave"), gdp * 0.003 * 0.6 / 52, places=2)

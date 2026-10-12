@@ -46,6 +46,8 @@
 #   p    call 3's carriers (phase 2 step 1): Punishment-Focused Criminal Justice if needed with Community Service,
 #        Woman Soldiers at half strength and the Trade Unions pushed past loyal, all for 60 days; the capital's
 #        TE_DEMOG_MODS and TE_DEMOG_WORK lines now, a day and a month later (the hidden te_debug_demog.3)
+#   x    family policy in the census (phase 2 step 3b): the capital's Family Policy types, the policy term, the sex
+#        ratio's add and the census's stored fertility terms (TE_DEMOG_FAMILY)
 # Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7, .8 (phase 2 step
 # 1's workforce self-checks; te_debug_demog_wf_selfchecks); under Full, .10 (the Family Policy measures' self-check,
 # measure_country_types; te_debug_demog_ms_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
@@ -348,6 +350,18 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 				remove_variable = te_dg_dbg_click
 				te_debug_demog_call3_setup = yes
 			}
+		}
+	}
+
+	# ---- x: family policy in the census (phase 2 step 3b) -------------------------
+	option = {
+		name = te_debug_demog.1.x
+		trigger = {
+			exists = capital
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.x.tt
+			te_debug_demog_family_reads = yes
 		}
 	}
 
