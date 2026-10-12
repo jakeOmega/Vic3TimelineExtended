@@ -1688,7 +1688,7 @@ banking_contagion_crash_check = {
 }
 
 # Apply contagion effects to a country hit by financial contagion (event .7).
-# Checks contagion_crash (set by banking_contagion_crash_check in immediate).
+# Checks scope:contagion_crashed, event .7's own roll (banking_contagion_crash_check, saved in its immediate).
 # If crash: applies full crash effects (same as origin crash).
 # If scare: applies minor cycle/momentum reduction (markets wobble but hold).
 apply_banking_contagion_effects = {
@@ -1697,7 +1697,7 @@ apply_banking_contagion_effects = {
 	# bracketed: neither figure may end above where it stood.
 	banking_crash_note_prior_state = yes
 	if = {
-		limit = { var:contagion_crash > 0 }
+		limit = { exists = scope:contagion_crashed }	# event .7's own roll, saved in its immediate
 		# Full crash — reuse origin crash effects (cycle ceiling, bubble clear)
 		apply_banking_crash_origin_effects = yes
 	}
@@ -1806,7 +1806,7 @@ banking_crisis_wave_init = {
 }
 
 # Increment wave tracking when a contagion crash triggers in a target country.
-# Called from event .7 after block when contagion_crash > 0.
+# Called from event .7 after block when its own roll crashed (scope:contagion_crashed).
 banking_crisis_wave_increment = {
 	if = {
 		limit = { NOT = { has_variable = banking_crisis_wave_counted } }

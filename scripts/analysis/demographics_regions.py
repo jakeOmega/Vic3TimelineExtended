@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""Strategic regions for the demographics harness: which strategic region each state region is in.
+
+The practices' start tables (demographics_params.PRACTICE_START_REGION) are keyed by strategic region, and the script
+reads them with `region = sr:<name>`. The harness needs the same map for a save's states, which name only their state
+region (`region="STATE_X"`). The base game keeps it in game/common/strategic_regions/, which CI doesn't have, and
+vanilla_parsed/ has no strategic regions, so a snapshot sits beside this file (land regions only):
+
+    demographics_regions.py --refresh [--game-dir DIR]   # rewrite demographics_strategic_regions.json
+    demographics_regions.py --check   [--game-dir DIR]   # exit 1 if a fresh build would differ
+
+Re-run --refresh after a vanilla patch that moves a state region (docs/guides/vanilla_patch_runbook.md).
+"""
+
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+SNAPSHOT = Path(__file__).resolve().parent / "demographics_strategic_regions.json"
+MOD_OVERRIDE = ROOT / "common" / "strategic_regions" / "zzz_modified_strategic_regions.txt"
+STATE_REGIONS = ROOT / "map_data" / "state_regions"
+
+_HEADER = re.compile(r"^(?:REPLACE:)?(region_\w+)\s*=\s*\{", re.M)
+_STATES = re.compile(r"\bstates\s*=\s*\{([^{}]*)\}")
+_STATE = re.compile(r"\bSTATE_[A-Z0-9_]+\b")
+
+# #904's regional groups (its analyze.py's GROUPS and labels, which its state-years carry) with history's peacetime births
+# less deaths in normal years, per 1,000 a year (PR #904's results doc, "Peacetime births less deaths, by region"): the
+# late-marriage plan's gate (review C1). China's is the pace without its collapse; Africa's and the Middle East's are
+# conjectures. Oceania has no band.
+REPORT_REGIONS = (
+    ("China", ("region_north_china", "region_south_china"), (3, 6)),
+    ("India", ("region_north_india", "region_south_india", "region_himalayas"), (6, 9)),
+    ("W/N/C/S Europe",
+     ("region_western_europe", "region_northern_europe", "region_central_europe", "region_southern_europe"), (8, 10)),
+    ("Africa", ("region_nile_basin", "region_north_africa", "region_west_africa", "region_equatorial_africa",
+                "region_southern_africa", "region_east_africa"), (3, 8)),
+    ("USA, Canada", ("region_canada", "region_pacific_coast", "region_great_plains", "region_atlantic_coast"),
+     (17, 21)),
+    ("E Europe, Balkans", ("region_eastern_europe", "region_balkans"), (8, 12)),
+    ("Japan, Korea, Manchuria", ("region_northeast_asia",), (2, 6)),
+    ("Russia, Siberia", ("region_russia", "region_siberia"), (10, 13)),
+    ("Middle East, C Asia", ("region_near_east", "region_arabia", "region_greater_persia", "region_central_asia"),
+     (4, 8)),
+    ("South America", ("region_brazil", "region_andes", "region_la_plata", "region_gran_colombia"), (12, 16)),
+    ("SE Asia", ("region_indochina", "region_indonesia"), (9, 13)),
+    ("Mexico, C America", ("region_central_america",), (10, 13)),
+    ("Oceania", ("region_oceania",), None),
+)
+
+
+def parse(text):
+    """{region: [state regions]} from a strategic_regions file; a mod's REPLACE:region_x counts as region_x."""
+    code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
+    out, pos = {}, 0
+    while True:
+        m = _HEADER.search(code, pos)
+        if not m:
+            return out
+        depth, i = 1, m.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(code[i], 0)
+            i += 1
+        states = _STATES.search(code[m.end():i - 1])
+        if states:
+            out[m.group(1)] = _STATE.findall(states.group(1))
+        pos = i
+
+
+def land_state_regions():
+    """Every state region in map_data/state_regions/ outside the seas file."""
+    out = set()
+    for path in STATE_REGIONS.glob("*.txt"):
+        if path.name != "99_seas.txt":
+            out |= set(re.findall(r"^(STATE_[A-Z0-9_]+)\s*=\s*\{", path.read_text(encoding="utf-8-sig"), re.M))
+    return out
+
+
+def build(game_dir):
+    """The table from the base game's files, the mod's REPLACEs on top, land regions only."""
+    table = {}
+    for path in sorted(Path(game_dir).glob("*.txt")):
+        table.update(parse(path.read_text(encoding="utf-8-sig")))
+    table.update(parse(MOD_OVERRIDE.read_text(encoding="utf-8-sig")))
+    land = land_state_regions()
+    return {r: sorted(s) for r, s in sorted(table.items()) if set(s) & land}
+
+
+def load_table(path=SNAPSHOT):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def strategic_region_of(path=SNAPSHOT):
+    return {state: region for region, states in load_table(path).items() for state in states}
+
+
+def report_row_of():
+    """{strategic region: its REPORT_REGIONS label}."""
+    return {r: label for label, regions, _hist in REPORT_REGIONS for r in regions}
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--refresh", action="store_true")
+    ap.add_argument("--check", action="store_true")
+    ap.add_argument("--game-dir")
+    args = ap.parse_args(argv)
+    game_dir = args.game_dir
+    if game_dir is None:
+        sys.path.insert(0, str(ROOT))
+        import path_constants
+        game_dir = Path(path_constants.base_game_path) / "game" / "common" / "strategic_regions"
+    table = build(game_dir)
+    text = json.dumps(table, indent=1, sort_keys=True) + "\n"
+    if args.check:
+        same = SNAPSHOT.exists() and SNAPSHOT.read_text(encoding="utf-8") == text
+        print("current" if same else f"stale: {SNAPSHOT}")
+        return 0 if same else 1
+    if args.refresh:
+        SNAPSHOT.write_text(text, encoding="utf-8")
+        print(f"wrote {SNAPSHOT}: {len(table)} regions, {sum(len(s) for s in table.values())} state regions")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

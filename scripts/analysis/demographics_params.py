@@ -74,6 +74,8 @@ ASFR_SHAPE_BY_GROUP = {15: 6000, 20: 22000, 25: 25000, 30: 21000, 35: 15000, 40:
 # against 4.5, Britain 5.50 against 4.8, France 4.45 against 3.6), and the world multiple 1837-1900 at x1.78.
 # At 6.0: x1.66, China +0.12% a year in 1887, every medicine and fertility anchor in band
 # (docs/testing/demographics-phase2-engine-rates-2026-10-10.md, "The multiple").
+# x s, the raise (the late-marriage plan's fit, 2026-10-12; spec 2.2): s = 1.00, no raise. No raise up to 1.20 passes
+# the regional growth gate, and none fails fewer of its items (docs/testing/demographics-late-marriage-2026-10-12.md).
 WEALTH_TFR_LOW, WEALTH_TFR_LOW_SOL = 6.0, 8
 WEALTH_TFR_HIGH, WEALTH_TFR_HIGH_SOL = 3.5, 35   # what wealth alone does at SoL 35+
 EDUCATION_WEIGHT = 0.4        # desired x (1 - 0.4 x literacy)
@@ -136,13 +138,136 @@ DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY
 # The spread of medicine (the Causes of Death plan): the share of the gap health-care access and treatments close at a
 # census step, beyond DIFFUSION_BASE (below, with the rest of the drift's numbers).
 DIFFUSION_TYPE = "state_medical_diffusion_add"
-DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
+# DEMOG_TYPES, every census input type, is defined after phase 2 step 1's participation inputs (below).
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within
 # 0..MEANS_CAP. Traditional methods everyone has; the techs' lines add to them (the Pill without
 # vulcanization is 0.4 + the Pill's line). Values on the carriers: demographics_modifiers.py.
 TRADITIONAL_MEANS = 0.4
 MEANS_ACCESS_BASE = 0.3
+
+# ---- Phase 2 step 1: the interfaces -----------------------------------------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1. The census computes these figures
+# at every seed and step and applies none of them until step 2, whose harness fits the numbers (owner, 2026-10-12).
+# Participation (late-game §2.1; #894): people x start(calendar age) x [below the end of the working ages ? 1 : the
+# after-pension share] x capacity(biological age) x the sex's rate.
+CHILD_WORK_AGE = 10            # calendar: the 10-14s work at the childrens'-rights law's share (parent §7)
+WORKING_AGE = 15               # calendar: everyone from here
+CHILD_WORK_SHARE = {"law_child_labor_allowed": 0.3, "law_restricted_child_labor": 0.1,
+                    "law_compulsory_primary_school": 0.0}
+CHILD_WORK_SHARE_DEFAULT = 0.3  # a country with none of the three (vanilla gives every country one)
+CAPACITY = {0: 1.0, 60: 0.95, 65: 0.85, 70: 0.7, 75: 0.5, 80: 0.3, 85: 0.1}   # by biological band start
+AFTER_PENSION_SHARE = 0.15     # the share of the eligible who keep working, x capacity
+MEN_RATE = 0.92
+WOMEN_BASE = 0.05              # the middle and upper strata's women under No Women's Rights
+WOMEN_LOWER = 0.2              # the lower strata's women under any law (Goldin's U-shape)
+WOMENS_WORK_FULL = 0.30        # the women's-work family's sum at which women work at the men's rate
+WORKFORCE_SCALE = 0.74         # participation to the engine's ratio (the spec's §1.8 sketch: 1836 0.25, rich 0.40)
+# Health need by biological band start (late-game §5.2), and 1836's people-weighted need (the figure's 1.0).
+HEALTH_NEED = {0: 1.0, 5: 0.5, 15: 0.8, 45: 1.4, 65: 2.4, 75: 3.4, 85: 4.5}
+HEALTH_NEED_1836 = 0.95
+BIO_BANDS = tuple(sorted(set(CAPACITY) | set(HEALTH_NEED)))
+# The pension positions' ages (late-game §2.2). Step 1 sets a country's pension age to the Standard one under Old Age
+# Pension; step 2 adds the setting.
+PENSION_AGE = {"early": 60, "standard": 65, "raised": 70}
+PENSION_LAW = "law_old_age_pension"
+NO_PENSION_AGE_LAWS = ("law_universal_basic_income", "law_post-scarcity")  # the threshold ends the working ages
+NO_WORKING_AGE_END = 999       # no pension law: the working ages run to capacity's end, which never comes (D10)
+OLD_AGE_REMAINING = 15         # the old-age threshold: years of life left (Sanderson and Scherbov)
+OLD_AGE_FROM = 40              # its search's first group start
+# Planned and unplanned births (late-game §3.1): one schedule each, the same object until phase 3. While they are,
+# the generator writes the sweep's birth line as today's single term.
+ASFR_PLANNED_SHAPE = ASFR_SHAPE_BY_GROUP
+ASFR_UNPLANNED_SHAPE = ASFR_SHAPE_BY_GROUP
+# The pops' own working-adult ratios (vanilla pop_types; the rest take the define WORKING_ADULT_RATIO_BASE).
+POP_BASE_RATIO = {"aristocrats": 0.2, "slaves": 0.5}
+POP_BASE_RATIO_DEFAULT = 0.25
+# The working-adult lines' two script-only families (Task 6; demographics_workforce_line_types.txt).
+WOMENS_WORK_TYPE = "state_demog_womens_work_ratio_add"
+REPLACED_TYPE = "state_demog_replaced_ratio_add"   # lines a census term replaces under Full (the design §1.7)
+# Call 3's participation inputs (owner, 2026-10-12; the design §1.7): census-only types
+# (demographics_modifier_types.txt), carried by laws beside the replaced family's lines (Task 6).
+MALE_PARTICIPATION_TYPE = "state_male_labor_participation_add"   # the men's rate in the working ages
+PARTICIPATION_TYPE = "state_labor_participation_add"             # both sexes' rates in the working ages
+CAPACITY_TYPE = "state_work_capacity_mult"                       # capacity x (1 + it), at every age
+PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYPE)
+# Every census input type: the mortality and fertility inputs, the spread of medicine and call 3's participation inputs
+# (demographics_modifier_types.txt, which a release comments out with their carriers' lines).
+DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES
+
+# ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
+# docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of
+# its section 7 calls; Birth Spacing's cut at 0.35); plan docs/superpowers/plans/2026-10-11-demographics-late-marriage.md.
+# Two customs, each a share of a state's people (0-1): children per woman x (1 - cut x share) for each, outside the
+# means. Every value is a starting proposal the harness fits (plan Task 6), rounded to neat figures. The short names
+# key the script (te_dg_pr_<P>, te_demog_pr_*_<P>); phase 3 adds Family Limitation to the same machinery.
+PRACTICES = ("lm", "bs")
+# The fit (plan Task 6, 2026-10-12; docs/testing/demographics-late-marriage-2026-10-12.md): with no raise, the cuts that
+# fit children per woman best are 0.10 and 0.20 (the spec's 0.30 and 0.34 were fitted at a raise of 1.15 on the old
+# 6.2 curve).
+PRACTICE_CUT = {"lm": 0.10, "bs": 0.20}
+# Birth Spacing's start for India: the share that cancels the wealth curve's raise, (1 - 1/s) / cut (spec 2.2, "held,
+# not history"). With no raise there is nothing to cancel, so 0 (the fit, 2026-10-12). India's excess is early
+# mortality, calibration step 3's (owner, 2026-10-11).
+BS_HELD_START = 0.0
+# Birth Spacing's start for China, Manchuria and Korea (owner, 2026-10-11; plan D13): at least the share that cancels the
+# raise, and above it as far as China's peacetime births less deaths needs to land in history's +3 to +6, which lowers
+# their births toward history's ~5.5 children per woman (spec 2.2's second variant). The fit with today's mortality
+# (2026-10-12, the owner's option 2 at Stop A): 0.06, the smallest share on the 0.01 grid that brings China's projected
+# peacetime births less deaths inside +3 to +6 (+5.9; +6.5 with none). Membership, not the value, says which states
+# take it (demographics_model.bs_held_group).
+BS_EAST_ASIA_START = 0.06
+BS_EAST_ASIA_REGIONS = ("region_north_china", "region_south_china")
+BS_INDIA_REGIONS = ("region_north_india", "region_south_india")
+_OCCITANIA = ("STATE_PROVENCE", "STATE_GUYENNE", "STATE_LANGUEDOC", "STATE_AQUITAINE", "STATE_RHONE", "STATE_SAVOY",
+              "STATE_AUVERGNE_LIMOUSIN")
+_NW_IBERIA = ("STATE_GALICIA", "STATE_ASTURIAS", "STATE_BASQUE_COUNTRY", "STATE_LEON", "STATE_OLD_CASTILE",
+              "STATE_ENTRE_DOURO_E_MINHO", "STATE_BEIRA", "STATE_ESTREMADURA", "STATE_AZORES", "STATE_MADEIRA")
+_IBERIA = ("STATE_CATALONIA", "STATE_BALEARIC_ISLANDS", "STATE_ARAGON", "STATE_LOWER_ANDALUSIA", "STATE_ALENTEJO",
+           "STATE_EXTREMADURA", "STATE_NEW_CASTILE", "STATE_UPPER_ANDALUSIA", "STATE_VALENCIA", "STATE_MURCIA",
+           "STATE_CANARY_ISLANDS")
+_ITALY = ("STATE_PIEDMONT", "STATE_EMILIA", "STATE_TUSCANY", "STATE_LAZIO", "STATE_CAMPANIA", "STATE_CALABRIA",
+          "STATE_SICILY", "STATE_SARDINIA", "STATE_MALTA", "STATE_CORSICA", "STATE_UMBRIA", "STATE_APULIA",
+          "STATE_ABRUZZO", "STATE_ROMAGNA", "STATE_VENETIA", "STATE_ISTRIA", "STATE_LOMBARDY", "STATE_SOUTH_TYROL")
+_WEST_OF_THE_LINE = ("STATE_COURLAND", "STATE_TARTU", "STATE_RIGA", "STATE_TALINN", "STATE_EAST_PRUSSIA",
+                     "STATE_WEST_PRUSSIA", "STATE_POSEN", "STATE_GREATER_POLAND", "STATE_SLOVENIA")
+_THE_GRADIENT = ("STATE_MAZOVIA", "STATE_LESSER_POLAND", "STATE_WEST_GALICIA", "STATE_KAUNAS", "STATE_VILNIUS",
+                 "STATE_CROATIA", "STATE_TRANSDANUBIA", "STATE_SLOVAKIA")
+_JAPAN = ("STATE_HOKKAIDO", "STATE_TOHOKU", "STATE_KANTO", "STATE_HOKUSHINETSU", "STATE_TOKAI", "STATE_KYOTO",
+          "STATE_KANSAI", "STATE_CHUGOKU", "STATE_SHIKOKU", "STATE_KYUSHU")
+BS_EAST_ASIA_STATES = ("STATE_SOUTHERN_MANCHURIA", "STATE_NORTHERN_MANCHURIA", "STATE_SHENGJING", "STATE_SEOUL",
+                       "STATE_BUSAN", "STATE_SARIWON", "STATE_PYONGYANG", "STATE_YANGHO")   # Manchuria and Korea
+# Start shares (spec 3.2, 3.3): by strategic region, then by state region, which wins. Geography, not culture. Malta and
+# Corsica take Italy's (the vanilla file's Italy group); Cape Verde, an African archipelago, stays at 0 (plan D10).
+PRACTICE_START_REGION = {
+    "lm": {"region_western_europe": 1.0, "region_northern_europe": 1.0, "region_central_europe": 1.0},
+    "bs": {**dict.fromkeys(BS_EAST_ASIA_REGIONS, BS_EAST_ASIA_START), **dict.fromkeys(BS_INDIA_REGIONS, BS_HELD_START)},
+}
+PRACTICE_START_STATE = {
+    "lm": {**dict.fromkeys(("STATE_KOLA", "STATE_EAST_KARELIA"), 0.2), **dict.fromkeys(_OCCITANIA, 1.0),
+           **dict.fromkeys(_NW_IBERIA, 0.9), **dict.fromkeys(_IBERIA, 0.6), **dict.fromkeys(_ITALY, 0.5),
+           **dict.fromkeys(_WEST_OF_THE_LINE, 0.8), **dict.fromkeys(_THE_GRADIENT, 0.4)},
+    "bs": {**dict.fromkeys(_JAPAN, 1.0), **dict.fromkeys(BS_EAST_ASIA_STATES, BS_EAST_ASIA_START)},
+}
+# The yearly drift (spec 4.2, 4.3): share += PRACTICE_RATE x (target - share), a generation's half-life. The neighbour
+# spread is phase 3's (plan D6). target = start x (1 - erosion), plus Late Marriage's drivers, within 0-1.
+PRACTICE_RATE = 0.025
+# Erosion by contraception (calls 5, 6): the means beyond traditional methods, state_contraception_add x (0.3 + 0.7 x
+# literacy), from 0 at 0.1 to full at 0.3.
+PRACTICE_EROSION_CONTRACEPTION = 0.7
+PRACTICE_EROSION_FROM = 0.1
+PRACTICE_EROSION_SPAN = 0.2
+# Erosion by health care (call 5, Birth Spacing only): state_health_care_access_add, full at 0.5, standing in for the
+# state that registers births and licenses midwives (the Meiji rise).
+PRACTICE_EROSION_ACCESS = {"lm": 0.0, "bs": 0.3}
+PRACTICE_ACCESS_SPAN = 0.5
+# Late Marriage's drivers (call 6): impartible inheritance x the agrarian share; women's paid work before marriage,
+# x the women's job share x the law's women's work share / FULL_FEMALE_WORK_SHARE.
+LM_INHERITANCE = 0.15
+LM_WOMENS_WORK = 0.3
+IMPARTIBLE_LAWS = ("law_primogeniture",)   # and Undivided Farm Succession (te_inh_has_undivided_farms), script only
+# The panel (spec 5.3): women's mean age at first marriage, about 19 + 7 x the Late Marriage share.
+MARRIAGE_AGE_AT_ZERO, MARRIAGE_AGE_SPAN = 19, 7
 
 # ---- Cause multipliers from state inputs (§2.4) -----------------------------------
 # Medicine for infection, maternal and chronic deaths is 1 - access x treatment (the
@@ -305,6 +430,21 @@ ENGINE_LINES_ON_TOP = frozenset({
 # level, France would lose about a fifth of its deaths (results doc, phase 2 step 4). Absorbing it per pop under Full,
 # as mild starvation, is proposed.
 ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
+# Phase 2 step 1 (the design §1.7; late-game call 11; the owner's call 3, 2026-10-12): every working-adult line on two
+# script-only families (demographics_workforce_line_types.txt), each at its old flat value, re-applied by their own pair
+# while no workforce term is in force (te_demog_workforce_lines_apply: not Full, or no te_dg_mw, step 2's term). Their
+# own files and parameters, so the births and deaths term never takes them off (D3).
+WORKING_ADULT_FIELD = "state_working_adult_ratio_add"
+WORKFORCE_LINE_FIELDS = (WORKING_ADULT_FIELD,)
+WORKFORCE_LINE_SHORT = {WORKING_ADULT_FIELD: "working_adults"}
+WORKFORCE_LINE_TYPES = {("womens_work", WORKING_ADULT_FIELD): WOMENS_WORK_TYPE,
+                        ("replaced", WORKING_ADULT_FIELD): REPLACED_TYPE}
+# The only engine working-adult lines left in common/ (file, top-level block): Rosen's androids (call 12), the pairs and
+# the console's probe; the cancels in the injection files are checked against their families' lines by the MOVED tests.
+LIVE_WORKFORCE_LINES = frozenset({
+    ("extra_companies_flavored.txt", "company_rosen_association"),
+    ("unique_pms.txt", "pm_rosen_association_hq"),
+})
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee

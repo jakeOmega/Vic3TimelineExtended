@@ -5,6 +5,7 @@ pulse wiring, the gates around every cohort entry point. Later tasks add tests h
 """
 
 import dataclasses
+import json
 import math
 import random
 import re
@@ -16,10 +17,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 
 import demographics_model  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
+import gen_demographics  # noqa: E402
 import organize_loc  # noqa: E402
 
 RULES = ROOT / "common" / "game_rules" / "extra_game_rules.txt"
@@ -40,6 +43,11 @@ RATE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_rate_effects.txt
 LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_line_effects_generated.txt"
 LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_line_values_generated.txt"
 LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_line_modifiers_generated.txt"
+PRACTICE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_practice_effects.txt"
+# phase 2 step 1's working-adult pair (generated, Task 6)
+WORKFORCE_LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_workforce_line_effects_generated.txt"
+WORKFORCE_LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_workforce_line_values_generated.txt"
+WORKFORCE_LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_workforce_line_modifiers_generated.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -339,6 +347,11 @@ def _raw_blocks(paths):
 
 FIXED_MAX = (2 ** 63 - 1) / 1e5   # the largest value script holds: an i64 in units of 1e-5
 
+# The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them.
+WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pension_kind": 0.0,
+                 "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0,
+                 **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}}
+
 
 class _Engine:
     """Enough of the engine to run the census: value blocks applied in order (min and max clamp
@@ -351,22 +364,34 @@ class _Engine:
 
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
-        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS])
+        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
+                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS])
         self.effects.update(effects or {})
-        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES])
+        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
         # so is fast mode's census clock (te_demog_clock_on), whose globals a test gives as fixtures
         # ("global_var:te_demog_clock" and the like), and the rule's Full (te_demog_effects_run): off unless a
         # test says (the real trigger reads has_game_rule, which _Engine doesn't know)
+        # te_demog_has_pension_law (phase 2 step 1) reads has_law: off unless a test says, so an engine that runs the
+        # country's game start or yearly census never evaluates it
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
-                                 "te_demog_clock_on": False, "te_demog_effects_run": False, **(triggers or {})}
-        self.fixtures = dict(fixtures)
+                                 "te_demog_clock_on": False, "te_demog_effects_run": False,
+                                 "te_demog_has_pension_law": False, **(triggers or {})}
+        self.fixtures = {**WORK_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
         self.removed = []     # remove_modifier's names, in order
+        # the state's place, (state region, strategic region), for region = sr:… and state_region = s:… (the practices'
+        # start ladders), and the other states of its state region, each a dict of its variables with its own
+        # state_population (state_region = { every_scope_state = { … } }, the practices' seed)
+        self.place = (None, None)
+        self.siblings = []
+        # the state region's own variables (state_region = { set_variable / has_variable / var: }): the practices'
+        # copy of the shares, te_dg_pr_<P>_r (Stop B, I1)
+        self.region_vars = {}
 
     def _tree(self, table, name, args=()):
         key = (id(table), name, args)
@@ -460,6 +485,9 @@ class _Engine:
             return any(self._test(*item) for item in arg)
         if key == "AND":
             return self.holds(arg)
+        if key == "custom_tooltip":
+            # the text only labels the tooltip; the triggers inside decide, as an AND
+            return self.holds([item for item in arg if item[0] != "text"])
         if key == "has_variable":
             return arg in self.vars
         if key == "has_modifier":
@@ -468,6 +496,16 @@ class _Engine:
             return arg in self.decrees
         if key == "always":
             return arg == "yes"
+        if key == "region":
+            return arg == f"sr:{self.place[1]}"
+        if key == "state_region" and isinstance(arg, str):
+            return arg == f"s:{self.place[0]}"
+        if key == "state_region":
+            saved, self.vars = self.vars, self.region_vars
+            try:
+                return self.holds(arg)
+            finally:
+                self.vars = saved
         if key in self.trigger_fixtures:
             return self.trigger_fixtures[key] == (arg == "yes")
         if key in self.triggers:
@@ -508,6 +546,33 @@ class _Engine:
             elif key == "while":
                 for _ in range(int(self.value(_find(arg, "count")))):
                     self.run([i for i in arg if i[0] != "count"])
+            elif key == "state_region" and isinstance(arg, list) and arg[0][0] != "every_scope_state":
+                # state_region = { … }: the region's own variables (the practices' copy of the shares); locals are
+                # the effect's, so they cross the scope change
+                saved, self.vars = self.vars, self.region_vars
+                try:
+                    self.run(arg)
+                finally:
+                    self.vars = saved
+            elif key == "state_region" and isinstance(arg, list):
+                # state_region = { every_scope_state = { limit = { … } … } }: the other states in its state region,
+                # each a dict of its variables with its own state_population (te_demog_practice_seed)
+                (inner, _, body), = arg
+                assert inner == "every_scope_state", inner
+                limit = next((v for k, _, v in body if k == "limit"), [])
+                rest = [i for i in body if i[0] != "limit"]
+                for sib in self.siblings:
+                    saved_vars, saved_pop = self.vars, self.fixtures.get("state_population")
+                    self.vars, self.fixtures["state_population"] = sib, sib["state_population"]
+                    try:
+                        if self.holds(limit):
+                            self.run(rest)
+                    finally:
+                        self.vars = saved_vars
+                        if saved_pop is None:
+                            self.fixtures.pop("state_population", None)
+                        else:
+                            self.fixtures["state_population"] = saved_pop
             elif key in self.effects:
                 args = () if arg == "yes" else tuple((k, v) for k, _, v in arg)
                 self.run(self._tree(self.effects, key, args))
@@ -535,15 +600,20 @@ def _stored(inp):
 def _mod_fixtures(inp):
     """The engine reads the step makes: every census type, turmoil."""
     out = {f"modifier:{t}": inp.mods.get(t, 0.0) for t in P.DEMOG_TYPES}
+    for t in (P.WOMENS_WORK_TYPE, *P.PARTICIPATION_TYPES):
+        out[f"modifier:{t}"] = inp.mods.get(t, 0.0)
     out["turmoil"] = inp.turmoil
     return out
 
 
-def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=False):
+def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=False, place=(None, None), targets=None,
+                erosion=None):
     """A state with the census on, the walk's sums set from `inp`, and the owner's multipliers
     (script values that read the owner's techs and laws) taken from the model. The step's own reads (the census's
     types and turmoil) are fixtures too, for te_demog_cause_inputs_store and the drift; real_multipliers runs the
-    generated te_demog_mult_* on them instead of taking the model's."""
+    generated te_demog_mult_* on them instead of taking the model's. place: (state region, strategic region), for the
+    practices' start ladders; targets, erosion: {practice: value}, the practices' targets and erosions, which read
+    the owner and the census's types (fixtures, 0 by default). At no place and 0 a state's shares are 0 and stay 0."""
     mult = demographics_model.cause_multipliers(inp)
     fixtures = {
         "year": float(year),
@@ -551,6 +621,10 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
         "te_demog_female_work_share": demographics_model.female_work_share(inp),
         "te_demog_means": demographics_model.means(inp),
         f"modifier:{P.NATURAL_FERTILITY_TYPE}": inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0),
+        # phase 2 step 1: the owner's reads te_demog_work_setup makes (WORK_DEFAULTS), from the model
+        "te_demog_child_work": demographics_model.child_work_share(inp),
+        "te_demog_pension_kind": float(demographics_model.pension_kind(inp)),
+        "te_demog_pension_age": float(inp.pension_age if inp.pension_age is not None else P.PENSION_AGE["standard"]),
         **_mod_fixtures(inp),
     }
     if not real_multipliers:
@@ -561,9 +635,14 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
             "te_demog_mult_work": mult["work"],
             "te_demog_mult_maternal": mult["maternal"] * P.MATERNAL_PER_100K_BIRTHS,
         })
+    for p in P.PRACTICES:
+        fixtures[f"te_demog_pr_target_{p}"] = (targets or {}).get(p, 0.0)
+        fixtures[f"te_demog_pr_erosion_{p}"] = (erosion or {}).get(p, 0.0)
     eng = (engine or _Engine)(fixtures, triggers={"te_demog_cohorts_run": True}, effects=effects)
+    eng.place = place
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
                     te_dg_wtfr=demographics_model.wealth_tfr(inp.sol), te_dg_sol=float(inp.sol))
+    eng.vars.update(te_dg_low_share=inp.low_share)   # the walk's lower strata (phase 2 step 1)
     if inp.crowding:
         eng.modifiers["migration_crowding"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
         eng.vars["migration_crowding_mult_applied"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
@@ -585,12 +664,13 @@ class TestCohortScript(unittest.TestCase):
 
     # -- the seed -------------------------------------------------------------------------------
 
-    def seed_both(self):
-        eng = _engine_for(self.INP, self.YEAR, self.POP)
+    def seed_both(self, inp=None):
+        base = inp or self.INP
+        eng = _engine_for(base, self.YEAR, self.POP)
         eng.call("te_demog_seed")
         # the script reads the growth factor from a table of growth_factor; the model takes the same d
         with unittest.mock.patch.object(demographics_model, "growth_factor", lambda nrr: eng.locals["te_dg_d"]):
-            ring = demographics_model.seed(self.INP, self.YEAR, self.POP)
+            ring = demographics_model.seed(base, self.YEAR, self.POP)
         return eng, ring
 
     def test_seed_rates_match_the_model(self):
@@ -684,7 +764,8 @@ class TestCohortScript(unittest.TestCase):
     # -- the step -------------------------------------------------------------------------------
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
-                  flows=None, entry="te_demog_step", engine=None, on_top=None, full=False):
+                  flows=None, entry="te_demog_step", engine=None, on_top=None, full=False, inp=None,
+                  pool=(12.0, 7.0)):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -697,8 +778,10 @@ class TestCohortScript(unittest.TestCase):
         the ring of the game's first decades, when the open slot is empty at the fold.
         on_top = (births, deaths): the share by which the engine's expected events over the window ran
         above the model's rates M aimed at (phase 2 step 4); full = the rule's Full setting, under which
-        alone the step takes those as its on-top scales."""
-        ring = demographics_model.seed(self.INP, self.YEAR, self.POP)
+        alone the step takes those as its on-top scales. inp: the inputs (default INP); pool: (women, men) in the pool
+        (phase 2 step 1's figures count it)."""
+        base = inp or self.INP
+        ring = demographics_model.seed(base, self.YEAR, self.POP)
         ring.f = [x * ring.scale / scale for x in ring.f]
         ring.m = [x * ring.scale / scale for x in ring.m]
         ring.scale = scale
@@ -709,17 +792,17 @@ class TestCohortScript(unittest.TestCase):
         if empty_from is not None:
             for a in range(empty_from, P.RING_YEARS):
                 ring.f[(self.YEAR - a) % P.RING_YEARS] = ring.m[(self.YEAR - a) % P.RING_YEARS] = 0.0
-        ring.pool_f, ring.pool_m, ring.pool_age = 12.0, 7.0, 152.5
+        ring.pool_f, ring.pool_m, ring.pool_age = pool[0], pool[1], 152.5
         demographics_model._refresh_denominators(ring)
         ring.total = ring.people()
         before = (list(ring.f), list(ring.m))
         pop = ring.total * 1.004
-        inp = self.INP
+        inp = base
         fixtures = {}
         if flows is not None:
             stub_flows = False
             inp = dataclasses.replace(
-                self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
+                base, techs=base.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
                 inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
             war_dead, kills = flows.get("war") or 0.0, flows.get("kills") or 0.0
             # the residual the script reads, and what the model is told: a residual inside the noise band is none
@@ -1042,6 +1125,135 @@ class TestCohortScript(unittest.TestCase):
         self.assertLess(body.index("te_demog_prepare = yes"), body.index("te_demog_on_top_scales = yes"))
         self.assertIn("te_demog_step_begin = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_replay"))
 
+    # -- phase 2 step 1: the figures (demographics_model.work_figures) ---------------------------
+
+    WORK = dict(laws=frozenset({"law_women_in_the_fields", "law_restricted_child_labor", "law_old_age_pension"}),
+                low_share=0.7, pension_age=67.0)
+
+    def _work_inp(self, **kw):
+        inp = dataclasses.replace(self.INP, **{**self.WORK, **kw})
+        inp.mods = {**inp.mods, P.WOMENS_WORK_TYPE: 0.15, P.MALE_PARTICIPATION_TYPE: 0.02,
+                    P.PARTICIPATION_TYPE: 0.01, P.CAPACITY_TYPE: -0.05}   # call 3's inputs ride through the figures
+        return inp
+
+    def _work_figures(self, eng, ring, inp, rel=1e-4):
+        qf, qm, _ = demographics_model.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        want = demographics_model.work_figures(ring, inp, demographics_model.old_age(qf, qm))
+        for name in ("wa_share", "at_work", "pensioners", "need"):
+            self.close(eng.vars[f"te_dg_{name}"], want[name], rel=rel, what=name)
+
+    def test_seed_work_figures_match_the_model(self):
+        inp = self._work_inp()
+        eng, ring = self.seed_both(inp=inp)
+        self._work_figures(eng, ring, inp)
+
+    def test_step_work_figures_match_the_model(self):
+        inp = self._work_inp()
+        eng, ring, _figures, _pop = self.step_both(inp=inp, migration=0.0)
+        self._work_figures(eng, ring, inp)
+
+    def test_ubi_ends_the_working_ages_at_the_threshold(self):
+        inp = self._work_inp(laws=frozenset({"law_universal_basic_income", "law_child_labor_allowed"}),
+                             pension_age=None)
+        eng, ring = self.seed_both(inp=inp)
+        self._work_figures(eng, ring, inp)
+        self.assertEqual(eng.vars["te_dg_pensioners"], 0)
+
+    def test_with_no_pension_law_the_pool_is_of_working_age(self):
+        """D10 (the ledger's Deviation 2): with no pension law the working ages have no end, so the pool (150+) counts
+        in the working ages and works at its capacity, in the step as in the model. A pool of 5,000 makes the
+        difference about 2%, well past the tolerance."""
+        inp = self._work_inp(laws=frozenset({"law_child_labor_allowed"}), pension_age=None)
+        eng, ring, _figures, _pop = self.step_both(inp=inp, migration=0.0, pool=(3000.0, 2000.0))
+        self._work_figures(eng, ring, inp)
+        self.assertEqual(eng.vars["te_dg_pensioners"], 0)
+
+    def test_the_planned_and_unplanned_values_sum_to_the_tfr(self):
+        eng, _ring = self.seed_both(inp=self._work_inp())
+        planned = eng.value(eng._tree(eng.values, "te_demog_tfr_planned"))
+        unplanned = eng.value(eng._tree(eng.values, "te_demog_tfr_unplanned"))
+        self.close(planned + unplanned, eng.value(eng._tree(eng.values, "te_demog_tfr")), rel=1e-9, what="TFR")
+
+    def test_a_census_from_before_step_1_steps_cleanly(self):
+        """Review Focus 1: an old save's state has no te_dg_low_share and its owner no pension variable."""
+        inp = self._work_inp()
+        eng, ring = self.seed_both(inp=inp)
+        del eng.vars["te_dg_low_share"]
+        eng.fixtures["te_demog_pension_age"] = float(P.PENSION_AGE["standard"])
+        eng.fixtures.update(year=float(self.YEAR + 1))
+        eng.call("te_demog_prepare")           # every read guarded: no "read of missing variable"
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_low_share")), 0)
+
+
+class TestWorkWalk(unittest.TestCase):
+    """The walk's three sums (phase 2 step 1): under the cohorts only (D5), in three gated effects (D11)."""
+
+    def test_the_walk_calls_the_three_effects_in_place(self):
+        walk = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        pops = walk.index("every_scope_pop = {")
+        self.assertLess(walk.index("te_demog_work_walk_init = yes"), pops)
+        self.assertGreater(walk.index("te_demog_work_walk_pop = yes"), pops)
+        self.assertGreater(walk.index("te_demog_work_walk_store = yes"), walk.index("te_demog_gini_band_store = yes"))
+        self.assertIn("limit = { te_demog_cohorts_run = yes }", _block(_text(EFFECTS), "te_demog_work_walk_init"))
+        pop = _block(_text(EFFECTS), "te_demog_work_walk_pop")
+        for read in ("local_var:te_dg_w_on > 0", "add = workforce", "strata = lower",
+                     "multiply = te_demog_pop_base_ratio"):
+            self.assertIn(read, pop)
+
+    def test_outside_the_census_the_walk_effects_set_nothing(self):
+        """The walk runs under every rule (inheritance needs it): under Disabled the three effects set no variable and
+        read no pop."""
+        eng = _Engine({}, triggers={"te_demog_cohorts_run": False})
+        eng.locals["te_dg_w_pop"] = 1000.0
+        for effect in ("te_demog_work_walk_init", "te_demog_work_walk_pop", "te_demog_work_walk_store"):
+            eng.call(effect)
+        self.assertEqual(eng.vars, {})
+
+    def test_under_the_census_the_store_divides_by_the_walks_people(self):
+        eng = _Engine({}, triggers={"te_demog_cohorts_run": True})
+        eng.call("te_demog_work_walk_init")
+        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0)
+        eng.call("te_demog_work_walk_store")
+        self.assertEqual((eng.vars["te_dg_low_share"], eng.vars["te_dg_wbase"], eng.vars["te_dg_wf_engine"]),
+                         (0.8, 0.26, 0.25))
+
+    def test_three_pops_through_the_walk_effects(self):
+        """Each pop's sums as te_demog_walks makes them, one pop at a time (TestGini.walk's pattern; the review of #923):
+        an aristocrat, a slave and a lower-strata worker. _OwnerEngine knows is_pop_type (te_demog_pop_base_ratio); the
+        base _Engine doesn't know strata, so this test teaches it."""
+
+        class _PopEngine(_OwnerEngine):
+            strata = None
+
+            def _test(self, key, op, arg):
+                if key == "strata":
+                    return arg == self.strata
+                return super()._test(key, op, arg)
+
+        eng = _PopEngine({}, triggers={"te_demog_cohorts_run": True})
+        eng.call("te_demog_work_walk_init")
+        pops = (("aristocrats", "upper", 100.0, 18.0), ("slaves", "lower", 400.0, 210.0),
+                ("laborers", "lower", 500.0, 130.0))
+        for pop_type, strata, size, workforce in pops:
+            eng.pop_type, eng.strata = pop_type, strata
+            eng.fixtures.update(total_size=size, workforce=workforce)
+            eng.call("te_demog_work_walk_pop")
+        eng.locals["te_dg_w_pop"] = 1000.0          # the walk's own people sum (te_demog_walks keeps it)
+        eng.call("te_demog_work_walk_store")
+        self.assertAlmostEqual(eng.vars["te_dg_low_share"], (400 + 500) / 1000)
+        self.assertAlmostEqual(eng.vars["te_dg_wbase"], (100 * 0.2 + 400 * 0.5 + 500 * 0.25) / 1000)
+        self.assertAlmostEqual(eng.vars["te_dg_wf_engine"], (18 + 210 + 130) / 1000)
+
+    def test_the_figures_are_stored_where_the_denominator_is_whole(self):
+        """D4: in the seed straight after the accumulators close, in the step after the newborns join te_dg_raw."""
+        effects = _text(EFFECTS)
+        seed = _block(effects, "te_demog_seed")
+        self.assertLess(seed.index("te_demog_close_accumulators = yes"), seed.index("te_demog_work_finish = yes"))
+        self.assertLess(seed.index("te_demog_work_finish = yes"), seed.index("te_demog_normalize_slots = yes"))
+        finish = _block(effects, "te_demog_step_finish")
+        self.assertLess(finish.index("change_local_variable = { name = te_dg_raw add = local_var:te_dg_births }"),
+                        finish.index("te_demog_work_finish = yes"))
+
 
 class TestEngineLineTypes(unittest.TestCase):
     """Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): every engine birth
@@ -1183,6 +1395,28 @@ class TestLinesScript(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_ln_deaths"], -0.08)
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_line_deaths_applied")), -0.08)
 
+    def _primogeniture_line(self):
+        body = re.sub(r"#[^\n]*", "", _block(_text(ROOT / "common" / "static_modifiers" / "te_inheritance_modifiers.txt"),
+                                              "inh_primogeniture_rural"))
+        m = re.search(r"\bstate_demog_absorbed_birth_rate_mult = (-?[\d.]+)", body)
+        self.assertIsNotNone(m, "Primogeniture's birth line isn't on the absorbed family's type")
+        return float(m.group(1)) * 0.62   # the modifier's multiplier, an agrarian share of 0.62
+
+    def test_the_pair_carries_primogeniture_outside_full(self):
+        """The late-marriage plan, Task 9 (Plan A): outside Full the pair re-applies the line at 0.1 x the agrarian
+        share, as main's own line did (given that the engine sums the type scaled: TE_SELF_CHECK in debug.log)."""
+        line = self._primogeniture_line()
+        eng = self._eng({"state_demog_absorbed_birth_rate_mult": line})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {"te_demog_line_births_up": line})
+
+    def test_under_full_the_census_term_replaces_primogeniture(self):
+        line = self._primogeniture_line()
+        eng = self._eng({"state_demog_absorbed_birth_rate_mult": line}, full=True, census_term=True,
+                        held={"births": line})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {})
+
     def test_the_pairs_carry_the_engine_fields(self):
         mods = _raw_blocks([LINE_MODIFIERS])
         for field, short in P.ENGINE_LINE_SHORT.items():
@@ -1265,7 +1499,9 @@ class TestLinesScript(unittest.TestCase):
                  "on_game_started_after_lobby": "te_demog_lines_world_on_action"}
         for hook, name in hooks.items():
             self.assertRegex(on_actions, rf"\n{hook} = \{{\s*on_actions = \{{[^}}]*\b{name}\b", hook)
-        dispatch = r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*\}"
+        # the review of step 1 (Minor 3): again a day later, in case the engine hasn't re-summed the families that day
+        dispatch = (r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*(#[^\n]*\s*)*"
+                    r"trigger_event = \{ id = te_demog_events\.4 days = 1 \}\s*\}")
         # review I1: on_law_activated's ROOT is the law, so its states are the owner's; on_acquired_technology's
         # ROOT is the country. Both wait for the game to start: history's laws and techs are the world hook's.
         law = _block(on_actions, "te_demog_lines_law_on_action")
@@ -1280,6 +1516,357 @@ class TestLinesScript(unittest.TestCase):
         callers = sorted(p.name for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
                          if "te_demog_lines_refresh = yes" in _text(p) and "generated" not in p.name)
         self.assertEqual(callers, ["te_demog_events.txt", "te_demog_on_actions.txt"])
+
+
+class TestWorkforceLinesMoved(unittest.TestCase):
+    """Phase 2 step 1 (the design §1.7): every working-adult line sits on its family's type at its old value, with call
+    3's participation input beside it; the only live engine lines left are Rosen's."""
+
+    # laws and technologies, read back by DM.engine_workforce_lines
+    MOVED = {
+        ("law", "law_women_in_the_fields", "modifier"): ("womens_work", 0.3),
+        ("law", "law_women_own_property", "modifier"): ("womens_work", 0.05),
+        ("law", "law_women_in_the_workplace", "modifier"): ("womens_work", 0.1),
+        ("law", "law_womens_suffrage", "modifier"): ("womens_work", 0.15),
+        ("law", "law_protected_class", "modifier"): ("womens_work", 0.2),
+        ("law", "law_state_sponsored_family_planning", "modifier"): ("womens_work", 0.05),
+        ("law", "law_communal_child_rearing", "modifier"): ("womens_work", 0.1),
+        ("technology", "contraceptive_pill", "modifier"): ("womens_work", 0.05),
+        ("technology", "second_wave_feminism", "modifier"): ("womens_work", 0.025),
+        ("technology", "personal_appliances", "modifier"): ("womens_work", 0.025),
+        ("law", "law_old_age_pension", "institution_modifier"): ("replaced", -0.01),
+        ("law", "law_universal_basic_income", "institution_modifier"): ("replaced", -0.02),
+        ("law", "law_pro_natalist_subsidies", "modifier"): ("replaced", -0.05),
+        ("law", "law_restorative_justice", "modifier"): ("replaced", 0.025),
+        ("law", "law_rehabilitation_focused_criminal_justice", "modifier"): ("replaced", 0.05),
+        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier"): ("replaced", 0.01),
+        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier"): ("replaced", 0.02),
+        ("law", "law_state_eugenics_program", "modifier"): ("replaced", 0.05),
+    }
+    # call 3's participation inputs on laws (the design §1.7's inventory; starting sizes, call 11)
+    PARTICIPATION = {
+        ("law", "law_restorative_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.02,
+        ("law", "law_rehabilitation_focused_criminal_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.03,
+        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.005,
+        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.01,
+        ("law", "law_state_eugenics_program", "modifier", P.CAPACITY_TYPE): 0.1,
+    }
+    # the carriers no reader walks: (file, block) -> the lines its block must hold
+    BLOCKS = {
+        ("common/amendments/extra_amendments.txt", "amendment_community_service"):
+            (f"{P.REPLACED_TYPE} = 0.01", f"{P.MALE_PARTICIPATION_TYPE} = 0.01"),
+        ("common/amendments/extra_amendments.txt", "amendment_mandatory_minimums"):
+            (f"{P.REPLACED_TYPE} = -0.01", f"{P.MALE_PARTICIPATION_TYPE} = -0.01"),
+        ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_solidarity"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+        ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_bourse_du_travail"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+        ("common/static_modifiers/te_demog_workforce_injections.txt", "INJECT:modifier_woman_soldiers"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.WOMENS_WORK_TYPE} = 0.05"),
+        ("common/static_modifiers/extra_modifiers.txt", "INJECT:state_region_pollution_health"):
+            (f"{P.REPLACED_TYPE} = -0.05", f"{P.CAPACITY_TYPE} = -0.1"),
+    }
+
+    def test_each_line_sits_on_its_familys_type_at_its_old_value(self):
+        got = {k[:3]: v for k, v in DM.engine_workforce_lines().items()}
+        self.assertEqual(set(got), set(self.MOVED))
+        for k, (family, value) in self.MOVED.items():
+            self.assertEqual(got[k][0], family, k)
+            self.assertAlmostEqual(got[k][1], value, places=6, msg=k)
+
+    def test_each_law_carries_its_participation_input(self):
+        names = set(P.PARTICIPATION_TYPES)
+        got = {k: v for k, v in DM.engine_rate_lines(keep=lambda f: f in names).items() if abs(v) > 1e-9}
+        self.assertEqual(set(got), set(self.PARTICIPATION))
+        for k, value in self.PARTICIPATION.items():
+            self.assertAlmostEqual(got[k], value, places=6, msg=k)
+
+    def test_the_other_carriers_blocks(self):
+        for (rel, block), lines in self.BLOCKS.items():
+            body = re.sub(r"#[^\n]*", "", _block(_text(ROOT / rel), block))
+            for line in lines:
+                self.assertIn(line, body, (block, line))
+            if "INJECT:" not in block:
+                self.assertNotIn("state_working_adult_ratio_add", body, block)
+
+    def test_no_live_line_but_rosens(self):
+        """A working-adult line added anywhere in common/ fails here until it is given a family or listed (the design
+        §1.7: the census treats an unlisted line as the remainder on top, and this keeps the list honest)."""
+        live = set()
+        skip = {"te_demog_engine_line_injections.txt", "te_demog_workforce_injections.txt",
+                "te_demog_workforce_line_modifiers_generated.txt", "te_debug_demog_modifiers.txt",
+                "mod_entity_modifier_types.txt"}
+        for path in sorted((ROOT / "common").rglob("*.txt")):
+            if path.name in skip:
+                continue
+            text = re.sub(r"#[^\n]*", "", _text(path))
+            if not re.search(r"\bstate_working_adult_ratio_add\s*=\s*-?\d", text):
+                continue
+            for m in re.finditer(r"^([\w.:-]+) = \{", text, re.M):
+                if re.search(r"\bstate_working_adult_ratio_add\s*=\s*-?\d", _block(text, m.group(1))):
+                    live.add((path.name, m.group(1)))
+        self.assertEqual(live, set(P.LIVE_WORKFORCE_LINES))
+
+    def test_each_cancel_matches_its_familys_line(self):
+        """The injection files' cancels (vanilla's carriers): each block's working-adult cancel is minus its family's
+        line, so the engine field nets to 0 and the family carries vanilla's value."""
+        families = (P.WOMENS_WORK_TYPE, P.REPLACED_TYPE)
+        for rel in ("common/laws/te_demog_engine_line_injections.txt",
+                    "common/interest_group_traits/te_demog_workforce_injections.txt",
+                    "common/static_modifiers/te_demog_workforce_injections.txt"):
+            text = re.sub(r"#[^\n]*", "", _text(ROOT / rel))
+            for m in re.finditer(r"^(INJECT:[\w-]+) = \{", text, re.M):
+                body = _block(text, m.group(1))
+                cancel = re.search(r"\bstate_working_adult_ratio_add\s*=\s*(-?[\d.]+)", body)
+                if not cancel:
+                    continue
+                carried = sum(float(v) for f in families
+                              for v in re.findall(rf"\b{f}\s*=\s*(-?[\d.]+)", body))
+                self.assertAlmostEqual(float(cancel.group(1)), -carried, msg=m.group(1))
+
+    # vanilla's working-adult carriers (vanilla_parsed/common/<file>.json, top-level key), every one moved by an INJECT
+    VANILLA_CARRIERS = {
+        ("laws", "law_women_in_the_fields"), ("laws", "law_women_own_property"),
+        ("laws", "law_women_in_the_workplace"), ("laws", "law_womens_suffrage"), ("laws", "law_old_age_pension"),
+        ("interest_group_traits", "ig_trait_solidarity"), ("interest_group_traits", "ig_trait_bourse_du_travail"),
+        ("modifiers", "modifier_woman_soldiers"),
+    }
+
+    def test_every_vanilla_carrier_is_moved(self):
+        """A vanilla patch that adds a working-adult line fails here until it is classified, as #892's
+        test_every_vanilla_line_is_cancelled_and_carried does for births and deaths (the second review of #923)."""
+        found = set()
+
+        def walk(node, where):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    if key == P.WORKING_ADULT_FIELD:
+                        found.add(where[:2])
+                    walk(value, where + (key,))
+            elif isinstance(node, list):
+                for value in node:
+                    walk(value, where)
+
+        for path in sorted((ROOT / "vanilla_parsed" / "common").glob("*.json")):
+            if path.name == "modifier_types.json":   # the field's own definition
+                continue
+            data = json.loads(path.read_text(encoding="utf-8"))
+            walk(data.get("data", data), (path.stem,))
+        self.assertEqual(found, self.VANILLA_CARRIERS)
+
+    def test_a_release_keeps_the_families_and_drops_the_inputs(self):
+        """Review Focus 5: the release script comments out demographics_modifier_types.txt's types only."""
+        census_types = _text(ROOT / "common" / "modifier_type_definitions" / "demographics_modifier_types.txt")
+        for t in P.WORKFORCE_LINE_TYPES.values():
+            self.assertNotIn(t, census_types)
+            self.assertNotIn(t, P.DEMOG_TYPES)
+        for t in P.PARTICIPATION_TYPES:
+            self.assertIn(f"{t} = {{", census_types)
+
+    def test_the_types_copy_the_fields_format(self):
+        blocks = _raw_blocks([ROOT / "common" / "modifier_type_definitions" /
+                              "demographics_workforce_line_types.txt"])
+        self.assertEqual(set(blocks), set(P.WORKFORCE_LINE_TYPES.values()))
+        for name, body in blocks.items():
+            for line in ("decimals = 1", "percent = yes", "ai_value = 0", "script_only = yes"):
+                self.assertIn(line, body, name)
+
+
+class TestWorkforceLinesScript(unittest.TestCase):
+    """te_demog_workforce_lines_refresh: the pair at both families' sum while no workforce term is in force."""
+
+    def _eng(self, womens=0.25, replaced=-0.03, full=False, census_term=False, workforce_term=False):
+        fixtures = {f"modifier:{P.WOMENS_WORK_TYPE}": womens, f"modifier:{P.REPLACED_TYPE}": replaced}
+        eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full})
+        if census_term:
+            eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3, te_dg_q_b=0.0, te_dg_q_d=0.0)
+        if workforce_term:
+            eng.vars["te_dg_mw"] = 0.1
+        return eng
+
+    def test_outside_full_the_pair_carries_the_sum(self):
+        eng = self._eng()
+        eng.call("te_demog_workforce_lines_refresh")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_up"], 0.22)
+        self.assertAlmostEqual(eng.vars["te_dg_ln_working_adults"], 0.22)
+
+    def test_the_workforce_pair_survives_the_census_term(self):
+        """Review Focus 2 (D3): under Full with M in force the births and deaths pairs go, this one stays."""
+        eng = self._eng(full=True, census_term=True)
+        eng.call("te_demog_workforce_lines_refresh")
+        eng.call("te_demog_lines_clear")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_up"], 0.22)
+
+    def test_step_twos_term_takes_it_off(self):
+        eng = self._eng(full=True, workforce_term=True)
+        eng.modifiers["te_demog_line_working_adults_up"] = 0.22
+        eng.vars["te_dg_ln_working_adults"] = 0.22
+        eng.call("te_demog_workforce_lines_refresh")
+        self.assertNotIn("te_demog_line_working_adults_up", eng.modifiers)
+        self.assertNotIn("te_dg_ln_working_adults", eng.vars)
+
+    def test_a_negative_sum_takes_the_down_pair(self):
+        eng = self._eng(womens=0.0, replaced=-0.05)
+        eng.call("te_demog_workforce_lines_refresh")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_down"], 0.05)
+
+    def test_it_refreshes_where_the_lines_do(self):
+        for path in (DEMOG_ON_ACTIONS, ROOT / "events" / "te_demog_events.txt"):
+            text = _text(path)
+            self.assertEqual(text.count("te_demog_lines_refresh = yes"),
+                             text.count("te_demog_workforce_lines_refresh = yes"), path.name)
+
+    def test_an_amendments_repeal_or_timeout_refreshes_that_day(self):
+        """The design §1.9: an amendment attached waits for the monthly refresh (no on-action); its repeal and timeout
+        (ROOT the country) take the existing country refresh, as a technology does."""
+        on_actions = _text(DEMOG_ON_ACTIONS)
+        for hook in ("on_amendment_repealed", "on_amendment_timeout"):
+            self.assertIn("te_demog_lines_country_on_action", _block(on_actions, hook), hook)
+
+    def test_the_pair_is_hidden_and_named(self):
+        hidden = _block(_text(ROOT / "common" / "script_values" / "gui_chart_script_values.txt"),
+                        "gui_state_hidden_modifier_count")
+        loc = "".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*.yml")))
+        for name in ("te_demog_line_working_adults_up", "te_demog_line_working_adults_down"):
+            self.assertIn(f"has_modifier = {name}", hidden)
+            self.assertIn(f' {name}:0 "Laws and Institutions"', loc)
+
+
+class TestWorkforceSelfChecks(unittest.TestCase):
+    """Phase 2 step 1's once-a-game self-checks (owner, 2026-10-12: a self-check, not an in-game gate): whether the
+    engine sums a script-only type from an amendment and from an IG trait into a state's read, and whether a pop's
+    workforce reads as a value. Each compares the participation input its carrier holds with that carrier's size."""
+
+    VALUES = ROOT / "common" / "script_values" / "te_debug_demog_values.txt"
+    TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_debug_demog_triggers.txt"
+
+    def _adds(self, body):
+        """{law or amendment named in a limit: the literal its branch adds}."""
+        out = {}
+        for m in re.finditer(r"if = \{\s*limit = \{(.*?)\}\s*\}\s*add = (-?[\d.]+)", body, re.S):
+            name = re.search(r"(law_type|amendment_type):(\w+)", m.group(1)).group(2)
+            out[name] = float(m.group(2))
+        return out
+
+    def test_the_sizes_are_the_carriers(self):
+        values = _text(self.VALUES)
+        moved = TestWorkforceLinesMoved
+        laws = self._adds(_block(values, "te_debug_demog_wf_amend_laws_only"))
+        self.assertEqual(laws, {key: v for (_kind, key, _block_name, t), v in moved.PARTICIPATION.items()
+                                if t == P.MALE_PARTICIPATION_TYPE})
+        amends = self._adds(_block(values, "te_debug_demog_wf_amend_expected"))
+        for amendment in ("amendment_community_service", "amendment_mandatory_minimums"):
+            line = next(line for line in moved.BLOCKS[("common/amendments/extra_amendments.txt", amendment)]
+                        if line.startswith(P.MALE_PARTICIPATION_TYPE))
+            self.assertAlmostEqual(amends[amendment], float(line.split("=")[1]), msg=amendment)
+        trait = next(line for line in moved.BLOCKS[("common/interest_group_traits/te_demog_workforce_injections.txt",
+                                                     "INJECT:ig_trait_solidarity")]
+                     if line.startswith(P.PARTICIPATION_TYPE))
+        self.assertIn(f"value = {trait.split('= ')[1]}", _block(values, "te_debug_demog_wf_ig_expected"))
+        self.assertIn(f"value = modifier:{P.MALE_PARTICIPATION_TYPE}", _block(values, "te_debug_demog_wf_part_m_read"))
+        self.assertIn(f"value = modifier:{P.PARTICIPATION_TYPE}", _block(values, "te_debug_demog_wf_part_read"))
+
+    def test_the_ig_check_arms_only_at_the_traits_plain_size(self):
+        """A marginal IG's traits are halved and a powerful one's doubled (the defines), and the Ministries of Labour
+        carry the same input: the check's expected 0.02 holds only without all three."""
+        trig = _block(_text(self.TRIGGERS), "te_debug_demog_wf_ig_trait_plain")
+        for line in ("ig_approval >= define:NPolitics|APPROVAL_THRESHOLD_LOYAL",
+                     "ig_clout > define:NPolitics|MARGINAL_IG_THRESHOLD",
+                     "ig_clout < define:NPolitics|POWERFUL_IG_CUTOFF",
+                     "NOT = { has_law = law_type:law_pro_labor_ministry_of_labor }",
+                     "NOT = { has_law = law_type:law_pro_capital_ministry_of_labor }"):
+            self.assertIn(line, trig)
+        carriers = {k[1] for k in TestWorkforceLinesMoved.PARTICIPATION if k[3] == P.PARTICIPATION_TYPE}
+        self.assertEqual(carriers, {"law_pro_labor_ministry_of_labor", "law_pro_capital_ministry_of_labor"})
+
+    def test_the_checks_are_wired_once_a_game_where_the_census_runs(self):
+        monthly = _block(_text(DEMOG_ON_ACTIONS), "te_demog_country_monthly_on_action")
+        self.assertIn("te_debug_demog_wf_selfchecks = yes", monthly)
+        start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_selfchecks")
+        # the review of step 1 (Important 2): every development build under any rule, Disabled included; a release
+        # turns the gate off (it comments the inputs out, which would read 0)
+        self.assertIn("te_debug_demog_selfchecks_run = yes", start, "a release comments the inputs out: no false BROKEN")
+        self.assertNotIn("te_demog_cohorts_run", start.split("te_dg_wf_engine")[0])
+        release = _text(ROOT / "scripts" / "release" / "comment_out_census_inputs.py")
+        self.assertRegex(release, r'GATES = \([^)]*"te_debug_demog_selfchecks_run"')
+        triggers = _block(_text(TRIGGERS), "te_debug_demog_selfchecks_run")
+        self.assertIn("always = yes", triggers)
+        for flag, event in (("te_demog_selfcheck_amend_done", "te_debug_demog.6"),
+                            ("te_demog_selfcheck_ig_done", "te_debug_demog.7")):
+            self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", start)
+            self.assertIn(f"set_global_variable = {{ name = {flag} value = yes }}", start)
+            self.assertIn(f"trigger_event = {{ id = {event} days = 7 }}", start)
+        self.assertIn("TE_SELF_CHECK OK pop_workforce_read", start)
+        self.assertIn("TE_SELF_CHECK BROKEN pop_workforce_read", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.8 days = 7 }", start)
+        events = _text(DEBUG_EVENTS)
+        net = _block(events, "te_debug_demog.8")
+        for needle in ("TE_SELF_CHECK OK workforce_lines_net", "TE_SELF_CHECK BROKEN workforce_lines_net",
+                       "te_debug_demog_wf_remainder > -0.01", "te_debug_demog_wf_remainder < 0.01"):
+            self.assertIn(needle, net)
+        # the review of step 1 (Important 1): an INJECT that replaced vanilla's trait block reads 0.02 and leaves the
+        # cancel alone, so .7 also needs the remainder
+        self.assertIn("te_debug_demog_wf_remainder > -0.01", _block(events, "te_debug_demog.7"))
+        for event, name, flag in (("te_debug_demog.6", "workforce_amendment_type", "te_demog_selfcheck_amend_done"),
+                                  ("te_debug_demog.7", "workforce_ig_trait_type", "te_demog_selfcheck_ig_done")):
+            self.assertEqual(len(re.findall(rf"^{re.escape(event)} = \{{", events, re.M)), 1, event)
+            body = _block(events, event)
+            self.assertIn(f"TE_SELF_CHECK OK {name}", body)
+            self.assertIn(f"TE_SELF_CHECK BROKEN {name}", body)
+            self.assertIn(f"remove_global_variable = {flag}", body, "a carrier gone in the week re-arms")
+
+
+class TestPrimogenitureUnderFull(unittest.TestCase):
+    """Call 4 (the late-marriage spec 4.5; plan D3, Plan A): Primogeniture's +10% farm births ride the absorbed family,
+    so under Full the census's Late Marriage replaces them and nothing changes outside Full. The engine fact Plan A
+    rests on is unverified; a self-check logs it once a game (owner, 2026-10-12: log it instead of a probe gate)."""
+
+    MODS = ROOT / "common" / "static_modifiers" / "te_inheritance_modifiers.txt"
+    DEBUG = ROOT / "events" / "te_debug_demog_events.txt"
+    DEBUG_EFFECTS = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
+    DEBUG_VALUES = ROOT / "common" / "script_values" / "te_debug_demog_values.txt"
+
+    def test_the_line_sits_on_the_absorbed_family(self):
+        body = _block(_text(self.MODS), "inh_primogeniture_rural")
+        code = re.sub(r"#[^\n]*", "", body)
+        self.assertNotRegex(code, r"\bstate_birth_rate_mult\b")
+        self.assertRegex(code, rf"\b{P.ENGINE_LINE_TYPES[('absorbed', 'state_birth_rate_mult')]} = 0\.1\b")
+        self.assertRegex(code, r"\bstate_migration_quota_mult = 0\.2\b", "the migration line stays")
+        # Forced Heirship's -0.15 stays on its engine field: on top under Full (spec 4.5, parent 13: phase 3)
+        self.assertRegex(_block(_text(self.MODS), "inh_forced_heirship_rural"), r"state_birth_rate_mult = -0\.15")
+
+    def test_the_rural_refresh_fires_the_lines_refresh(self):
+        """No month's lag (#892's owner decision 2): the pair follows the yearly rural refresh the same day, from a
+        state event, where the modifier just added is visible."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(INH_EFFECTS), "te_inh_refresh_rural_effects"))
+        self.assertIn("trigger_event = { id = te_demog_events.4 }", body)
+        self.assertGreater(body.rindex("trigger_event = { id = te_demog_events.4 }"),
+                           body.rindex("name = inh_primogeniture_rural"))
+        self.assertIn("set_local_variable = { name = te_inh_pr_was value = 1 }", body)
+
+    def test_the_self_check_reads_before_the_add(self):
+        body = re.sub(r"#[^\n]*", "", _block(_text(INH_EFFECTS), "te_inh_refresh_rural_effects"))
+        call = body.index("te_debug_demog_pr_selfcheck_start = yes")
+        self.assertLess(call, body.index("name = inh_primogeniture_rural", call))
+        start = _block(_text(self.DEBUG_EFFECTS), "te_debug_demog_pr_selfcheck_start")
+        for needle in ("NOT = { has_global_variable = te_inh_pr_selfcheck_done }",
+                       "NOT = { has_local_variable = te_inh_pr_was }",
+                       "value = modifier:state_demog_absorbed_birth_rate_mult",
+                       "trigger_event = { id = te_debug_demog.5 days = 7 }",
+                       # the review's I1: near 0 or 1 an unsummed or unscaled line reads like the scaled one
+                       "var:te_inh_agrarian_share > 0.1", "var:te_inh_agrarian_share < 0.9",
+                       "TE_SELF_CHECK START primogeniture_scaled"):
+            self.assertIn(needle, start)
+
+    def test_the_self_check_expects_the_modifiers_value(self):
+        line = re.search(r"\bstate_demog_absorbed_birth_rate_mult = ([\d.]+)",
+                         _block(_text(self.MODS), "inh_primogeniture_rural")).group(1)
+        expected = _block(_text(self.DEBUG_VALUES), "te_debug_demog_pr_chk_expected")
+        self.assertRegex(expected, rf"value = {re.escape(line)}\b")
+        verdict = _block(_text(self.DEBUG), "te_debug_demog.5")
+        self.assertIn("TE_SELF_CHECK OK primogeniture_scaled", verdict)
+        self.assertIn("TE_SELF_CHECK BROKEN primogeniture_scaled", verdict)
+        self.assertIn("remove_variable = te_inh_pr_chk_before", verdict)
 
 
 class TestPollutionLine(unittest.TestCase):
@@ -2657,6 +3244,224 @@ class TestNaturalFertilityScript(unittest.TestCase):
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_natural_shown")), 0.85)
 
 
+    def test_the_tfr_tooltips_list_the_practices(self):
+        """Spec 5.3: the two practices beside wealth, women's legal standing, education, child survival, urban life
+        and the means, with women's age at first marriage; the country tab adds the country's own means."""
+        loc = _text(MISC_LOC)
+        for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            for sv in ("te_demog_pr_term_lm", "te_demog_pr_term_bs", "te_demog_marriage_age"):
+                self.assertIn(f"ScriptValue('{sv}')", line, f"{key}: {sv}")
+        capital = re.search(r"(?m)^ te_demog_ov_tfr_capital:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
+        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
+        for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt", "te_demog_how_fertility"):
+            text = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            self.assertNotIn("who marries", text, "women's legal standing no longer claims marriage (plan D2)")
+            self.assertIn("late marriage", text)
+            self.assertIn("birth spacing", text)
+        mods = _text(ROOT / "localization" / "english" / "te_modifiers_l_english.yml")
+        desc = re.search(r"(?m)^ state_natural_fertility_mult_desc:0 \"(.*)\"$", mods).group(1)
+        self.assertNotRegex(desc, r"\bmarr(?:y|ies)\b", "the type is women's standing inside marriage; who marries is "
+                                                          "Late Marriage's")
+
+    def test_the_terms_read_one_before_any_share(self):
+        """Review Focus 5: an old save's state before its next step shows x1.00 for each, beside a headline that has
+        no practice in it."""
+        eng = _Engine({})
+        for p in P.PRACTICES:
+            self.assertEqual(eng.value(eng._tree(eng.values, f"te_demog_pr_term_{p}")), 1.0)
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_marriage_age")), P.MARRIAGE_AGE_AT_ZERO)
+        eng.vars.update(te_dg_pr_lm=1.0, te_dg_pr_bs=0.5)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_pr_term_lm")), 1 - P.PRACTICE_CUT["lm"])
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_marriage_age")),
+                               P.MARRIAGE_AGE_AT_ZERO + P.MARRIAGE_AGE_SPAN)
+
+    def test_option_l_logs_the_practices(self):
+        line = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"), "te_debug_demog_mods_line")
+        for key, sv in (("lm", "te_debug_demog_pr_lm"), ("bs", "te_debug_demog_pr_bs"),
+                        ("lm_target", "te_debug_demog_pr_target_lm"), ("bs_target", "te_debug_demog_pr_target_bs"),
+                        ("absorbed_b", "te_debug_demog_line_absorbed_b")):
+            self.assertIn(f" {key}=[THIS.ScriptValue('{sv}')|3]", line)
+        # option l also logs a state with no census (an unincorporated one, or the rule off): the targets read the
+        # walk's variables, so they show -1 there, as the cause multipliers do, instead of reading a missing variable
+        eng = _Engine({})
+        eng.values.update(_raw_blocks([ROOT / "common" / "script_values" / "te_debug_demog_values.txt"]))
+        for p in P.PRACTICES:
+            self.assertEqual(eng.value(eng._tree(eng.values, f"te_debug_demog_pr_target_{p}")), -1)
+
+class TestPracticesScript(unittest.TestCase):
+    """Late Marriage and Birth Spacing (te_demog_practice_effects.txt and the generated values) against the model:
+    docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Task 8."""
+
+    INP = demographics_model.Inputs(sol=9.0, literacy=0.3, urban_share=0.2, laws=frozenset({"law_no_womens_rights"}))
+
+    def test_the_start_ladders_match_the_tables(self):
+        import demographics_regions as R
+        of = R.strategic_region_of()
+        cases = [(s, of[s]) for p in P.PRACTICES for s in P.PRACTICE_START_STATE[p]]
+        cases += [(None, r) for p in P.PRACTICES for r in P.PRACTICE_START_REGION[p]]
+        cases += [("STATE_CAPE_VERDE", "region_southern_europe"), ("STATE_MOSCOW", "region_russia")]
+        for state, region in cases:
+            eng = _Engine({})
+            eng.place = (state, region)
+            for p in P.PRACTICES:
+                with self.subTest(state=state, region=region, practice=p):
+                    self.assertEqual(eng.value(eng._tree(eng.values, f"te_demog_pr_start_{p}")),
+                                     demographics_model.practice_start(p, state, region))
+
+    def test_the_targets_match_the_model(self):
+        for laws, undivided, agr, fjob, lit, contra, access in (
+                ({"law_no_womens_rights"}, False, 0.6, 0.1, 0.2, 0.0, 0.0),
+                ({"law_primogeniture", "law_women_in_the_workplace"}, False, 0.5, 0.3, 0.6, 0.2, 0.18),
+                ({"law_equal_inheritance", "law_protected_class"}, True, 0.4, 0.4, 0.9, 0.35, 0.5),
+                ({"law_protected_class"}, False, 0.1, 0.5, 1.0, 0.45, 1.0)):
+            inp = demographics_model.Inputs(literacy=lit, laws=frozenset(laws), agrarian_share=agr,
+                                            female_job_share=fjob, impartible=undivided or "law_primogeniture" in laws,
+                                            mods={P.CONTRACEPTION_TYPE: contra, P.ACCESS_TYPE: access})
+            eng = _OwnerEngine({f"modifier:{P.CONTRACEPTION_TYPE}": contra, f"modifier:{P.ACCESS_TYPE}": access},
+                               laws=laws, triggers={"te_inh_has_undivided_farms": undivided})
+            # the access medicine has reached, at its target here (a seed's): the model reads the same
+            eng.vars.update(te_dg_lit=lit, te_dg_agr_share=agr, te_dg_fjob_share=fjob,
+                            te_dg_acc=demographics_model.medicine_targets(inp)["access"])
+            for state, region in (("STATE_POSEN", "region_eastern_europe"), ("STATE_KANTO", "region_northeast_asia")):
+                eng.place = (state, region)
+                for p in P.PRACTICES:
+                    start = demographics_model.practice_start(p, state, region)
+                    with self.subTest(laws=sorted(laws), state=state, practice=p):
+                        self.assertAlmostEqual(eng.value(eng._tree(eng.values, f"te_demog_pr_target_{p}")),
+                                               demographics_model.practice_target(p, inp, start), places=9)
+                        self.assertAlmostEqual(eng.value(eng._tree(eng.values, f"te_demog_pr_seed_{p}")),
+                                               demographics_model.practice_seed(p, inp, start, []), places=9)
+
+    def test_birth_spacing_erodes_with_the_access_medicine_has_reached(self):
+        """Since #916 the census's access drifts toward its target (te_dg_acc); Birth Spacing's erosion reads it above
+        the base (a default flagged for the owner, 2026-10-12), as demographics_model.practice_erosion does."""
+        for drifted in (P.BASE_ACCESS, P.BASE_ACCESS + 0.1, 0.75, 1.0):
+            inp = demographics_model.Inputs(literacy=0.5, mods={P.ACCESS_TYPE: 0.6},
+                                            medicine={"access": drifted, "infection": 0.0, "maternal": 0.0,
+                                                      "chronic": 0.0})
+            eng = _Engine({f"modifier:{P.CONTRACEPTION_TYPE}": 0.0, f"modifier:{P.ACCESS_TYPE}": 0.6})
+            eng.vars.update(te_dg_lit=0.5, te_dg_acc=drifted)
+            with self.subTest(drifted=drifted):
+                self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_pr_erosion_bs")),
+                                       demographics_model.practice_erosion("bs", inp), places=9)
+
+    def _seeded(self, place, siblings=(), targets=None, erosion=None, region=None):
+        eng = _engine_for(self.INP, 1836, 250000.0, place=place, targets=targets, erosion=erosion)
+        eng.siblings = [dict(s) for s in siblings]
+        eng.region_vars = dict(region or {})
+        eng.call("te_demog_seed")
+        return eng
+
+    def test_a_whole_region_changing_hands_takes_the_regions_copy(self):
+        """Stop B, I1 (owner, 2026-10-12): a change of owner makes a new state object, which carries none of the old
+        one's variables. With no sibling left in the region (a revolution's winner holding the whole state), the seed
+        takes the region's copy of the shares (te_dg_pr_<P>_r, written at each step), not the eroded start."""
+        eng = self._seeded(("STATE_RIGA", "region_eastern_europe"), erosion={"lm": 0.5},
+                           region={"te_dg_pr_lm_r": 0.85, "te_dg_pr_bs_r": 0.3})
+        self.assertEqual((eng.vars["te_dg_pr_lm"], eng.vars["te_dg_pr_bs"]), (0.85, 0.3))
+        for p in P.PRACTICES:
+            self.assertAlmostEqual(eng.vars[f"te_dg_pr_{p}"],
+                                   demographics_model.practice_seed(p, self.INP, 0.0, [],
+                                                                    region=eng.region_vars[f"te_dg_pr_{p}_r"]))
+
+    def test_a_sibling_wins_over_the_regions_copy(self):
+        eng = self._seeded(("STATE_POSEN", "region_eastern_europe"),
+                           siblings=[{"te_dg_pr_lm": 0.5, "te_dg_pr_bs": 0.1, "state_population": 300000.0}],
+                           region={"te_dg_pr_lm_r": 0.85, "te_dg_pr_bs_r": 0.3})
+        self.assertEqual((eng.vars["te_dg_pr_lm"], eng.vars["te_dg_pr_bs"]), (0.5, 0.1))
+
+    def test_the_step_writes_the_regions_copy(self):
+        """Each step copies the state's shares to its state region; in a split region the last state to step wins,
+        which is fine for a fallback."""
+        eng = self._seeded(("STATE_KANTO", "region_northeast_asia"), targets={"lm": 0.12, "bs": 0.7})
+        self.assertEqual(eng.region_vars, {}, "a seed writes no copy: a new game's regions hold none")
+        eng.call("te_demog_practices_step")
+        self.assertEqual(eng.region_vars, {f"te_dg_pr_{p}_r": eng.vars[f"te_dg_pr_{p}"] for p in P.PRACTICES})
+        body = re.sub(r"#[^\n]*", "", _block(_text(PRACTICE_EFFECTS), "te_demog_practice_seed"))
+        self.assertLess(body.index("every_scope_state"), body.index("te_dg_pr_$P$_r"), "siblings first, then the copy")
+
+    def test_a_state_with_no_sibling_seeds_at_its_eroded_start(self):
+        """Review I2 and Review Focus 1: with no sibling holding a share, the start less what the state's conditions
+        have eroded (0 in an 1836 game, where it is the table)."""
+        fresh = self._seeded(("STATE_RIGA", "region_eastern_europe"))
+        self.assertEqual((fresh.vars["te_dg_pr_lm"], fresh.vars["te_dg_pr_bs"]), (0.8, 0.0))
+        eroded = self._seeded(("STATE_KANTO", "region_northeast_asia"), erosion={"lm": 0.5, "bs": 0.6})
+        self.assertAlmostEqual(eroded.vars["te_dg_pr_bs"], 0.4)
+        self.assertEqual(eroded.vars["te_dg_pr_lm"], 0.0)
+
+    def test_the_seed_reads_only_its_state_region(self):
+        """Review Focus 1: an old save's states seed on their own days, so a neighbour across the Hajnal line (Pskov
+        beside Riga) must play no part: the seed walks the other states of its own state region and nothing else."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(PRACTICE_EFFECTS), "te_demog_practice_seed"))
+        self.assertIn("state_region = {", body)
+        self.assertIn("every_scope_state = {", body)
+        self.assertNotIn("neighbouring", body)
+        # and the walk counts only siblings holding a share, weighted by their people
+        eng = self._seeded(("STATE_RIGA", "region_eastern_europe"),
+                           siblings=[{"state_population": 500000.0},
+                                     {"te_dg_pr_lm": 0.3, "te_dg_pr_bs": 0.0, "state_population": 100000.0}])
+        self.assertAlmostEqual(eng.vars["te_dg_pr_lm"], 0.3)
+
+    def test_a_step_on_a_state_with_no_share_seeds_then_drifts(self):
+        """Review I4: an old save's state has a census but no share; its next step seeds it, then drifts once."""
+        eng = self._seeded(("STATE_KANTO", "region_northeast_asia"), targets={"lm": 0.3, "bs": 0.0},
+                           erosion={"bs": 0.5})
+        for p in P.PRACTICES:
+            del eng.vars[f"te_dg_pr_{p}"]
+        eng.call("te_demog_practices_step")
+        self.assertAlmostEqual(eng.vars["te_dg_pr_lm"], demographics_model.practice_drift(0.0, 0.3), places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_pr_bs"], demographics_model.practice_drift(0.5, 0.0), places=9)
+
+    def test_a_new_state_takes_its_siblings_shares(self):
+        """Review Focus 3: a split mid-game is the same people, so it takes its siblings' drifted, people-weighted
+        shares, not the 1836 table."""
+        sibs = [{"te_dg_pr_lm": 0.5, "te_dg_pr_bs": 0.1, "state_population": 300000.0},
+                {"te_dg_pr_lm": 0.9, "te_dg_pr_bs": 0.3, "state_population": 100000.0},
+                {"state_population": 900000.0}]                          # a sibling with no share yet
+        eng = self._seeded(("STATE_POSEN", "region_eastern_europe"), siblings=sibs)
+        self.assertAlmostEqual(eng.vars["te_dg_pr_lm"],
+                               demographics_model.practice_seed("lm", self.INP, 0.8, [(3e5, 0.5), (1e5, 0.9)]))
+        self.assertAlmostEqual(eng.vars["te_dg_pr_bs"], 0.15)
+
+    def test_a_census_reseed_keeps_the_shares(self):
+        """Review Focus 2: a merge, a split, a gap or fast mode's first switch re-seeds the census; the shares stay."""
+        eng = _engine_for(self.INP, 1850, 250000.0, place=("STATE_RIGA", "region_eastern_europe"))
+        eng.vars.update(te_dg_pr_lm=0.55, te_dg_pr_bs=0.05)
+        eng.call("te_demog_seed")
+        self.assertEqual((eng.vars["te_dg_pr_lm"], eng.vars["te_dg_pr_bs"]), (0.55, 0.05))
+
+    def test_the_step_drifts_like_the_model_and_prepare_reads_it(self):
+        eng = self._seeded(("STATE_KANTO", "region_northeast_asia"), targets={"lm": 0.12, "bs": 0.7})
+        plain = self._seeded((None, None))                 # the same state with no practice anywhere
+        eng.call("te_demog_practices_step")
+        lm = demographics_model.practice_drift(0.0, 0.12)   # Kanto starts at Late Marriage 0, Birth Spacing 1
+        bs = demographics_model.practice_drift(1.0, 0.7)
+        self.assertAlmostEqual(eng.vars["te_dg_pr_lm"], lm, places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_pr_bs"], bs, places=9)
+        for e in (eng, plain):
+            e.call("te_demog_prepare")
+        terms = (1 - P.PRACTICE_CUT["lm"] * lm) * (1 - P.PRACTICE_CUT["bs"] * bs)
+        self.assertAlmostEqual(eng.vars["te_dg_tfr"] / plain.vars["te_dg_tfr"], terms, places=9)
+        body = _block(_text(EFFECTS), "te_demog_step_begin")
+        self.assertLess(body.index("te_demog_practices_step = yes"), body.index("te_demog_prepare = yes"))
+
+    def test_the_tfr_takes_both_terms(self):
+        for lm, bs in ((0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (0.7, 0.38)):
+            inp = dataclasses.replace(self.INP, practices={"lm": lm, "bs": bs})
+            fert = demographics_model.fertility(inp, 35.0)
+            eng = _Engine({f"modifier:{P.NATURAL_FERTILITY_TYPE}": 0.0})
+            eng.vars.update(te_dg_wtfr=fert["wealth"], te_dg_means=fert["means"], te_dg_natural=fert["natural"],
+                            te_dg_desired=fert["education"] * fert["survival"] * fert["urban"],
+                            te_dg_pr_lm=lm, te_dg_pr_bs=bs)
+            with self.subTest(lm=lm, bs=bs):
+                self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr")), fert["tfr"], places=9)
+
+    def test_the_seed_runs_before_prepare(self):
+        body = _block(_text(EFFECTS), "te_demog_seed")
+        self.assertLess(body.index("te_demog_practices_seed = yes"), body.index("te_demog_prepare = yes"))
+
 class _CountryEngine(_Engine):
     """_Engine plus the iterators and scope changes the country effects use. every_scope_war runs
     its body once per war in `wars` (the owner's dead in it, read through te_demog_war_dead_root);
@@ -3136,6 +3941,18 @@ class TestCountry(unittest.TestCase):
         start = _block(_text(EFFECTS), "te_demog_country_game_start")
         self.assertLess(start.rindex("te_demog_cohorts_run = yes"), start.index("te_demog_country_census = yes"))
         self.assertGreater(start.index("te_demog_country_census = yes"), start.rindex("te_demog_seed_off_pulse = yes"))
+
+    def test_the_practices_are_people_weighted(self):
+        """Spec 3.1: the country shows each practice's people-weighted mean (te_demog_practice_country_*)."""
+        states = self.three()
+        for s, (lm, bs) in zip(states, ((1.0, 0.0), (0.5, 0.2), (0.0, 1.0))):
+            s.update(te_dg_pr_lm=lm, te_dg_pr_bs=bs)
+        eng = self.country(states)
+        eng.call("te_demog_country_census")
+        people = sum(s["te_dg_people"] for s in states)
+        for p in P.PRACTICES:
+            want = sum(s[f"te_dg_pr_{p}"] * s["te_dg_people"] for s in states) / people
+            self.assertAlmostEqual(eng.vars[f"te_dg_pr_{p}"], want, places=6, msg=p)
 
     def test_the_city_ranking_script_value_is_negated(self):
         body = _block(_text(VALUES), "te_demog_neg_city_rank")
@@ -4424,6 +5241,64 @@ class TestConsole(unittest.TestCase):
                                                               console.index(call)])
 
 
+    def test_option_q_probes_what_an_owner_change_carries(self):
+        """Stop B's I1 (owner, 2026-10-12): does on_state_owner_change's ROOT still hold the old state's variables, and
+        do they survive the hook? Option q stamps a state alone in its region, gives it to a neighbour, and logs it
+        before, in the hook and a day after (te_debug_demog.4)."""
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_probe_owner_start = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        start = re.sub(r"#[^\n]*", "", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_owner_start"))
+        for piece in ("set_variable = te_probe_owner_var", "set_global_variable = te_probe_owner_on",
+                      "set_state_owner = scope:te_probe_owner_to", "trigger_event = { id = te_debug_demog.4 days = 1 }",
+                      "TE_DEMOG_PROBE_OWNER before"):
+            self.assertIn(piece, start)
+        self.assertLess(start.index("TE_DEMOG_PROBE_OWNER before"), start.index("set_state_owner"))
+        after = _block(console, "te_debug_demog.4")
+        for piece in ("TE_DEMOG_PROBE_OWNER after", "remove_global_variable = te_probe_owner_on",
+                      "remove_global_variable = te_probe_owner_to"):
+            self.assertIn(piece, after)
+        self.assertIn("TE_DEMOG_PROBE_OWNER hook", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_owner_hook"))
+        loc = _text(ROOT / "localization" / "english" / "te_events_l_english.yml")
+        for key in ("te_debug_demog.1.q", "te_debug_demog.1.q.tt"):
+            self.assertRegex(loc, rf"(?m)^ {re.escape(key)}:0 \"", key)
+
+    def test_the_owner_change_hook_logs_only_while_the_probe_runs(self):
+        """The hook's probe branch costs nothing in play: it runs only under the global flag option q sets and
+        te_debug_demog.4 clears."""
+        hook = _block(_text(ROOT / "common" / "on_actions" / "extra_on_actions.txt"), "te_on_state_owner_change")
+        call = hook.index("te_debug_demog_probe_owner_hook = yes")
+        opener = hook.rindex("if = {", 0, call)
+        self.assertIn("limit = { has_global_variable = te_probe_owner_on }", hook[opener:call])
+        self.assertEqual(hook.count("te_debug_demog_probe_owner_hook"), 1)
+
+    def test_option_o_probes_a_scaled_script_only_type_on_a_state(self):
+        """The late-marriage plan, Task 9 (review C2): Primogeniture's farm births would ride a script-only type on a
+        state modifier with a multiplier; the probe adds one at 0.62 and logs the state's sum before and a day after."""
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_probe_start = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        self.assertRegex(_block(_text(DEBUG_MODIFIERS), "te_debug_demog_scaled_probe"),
+                         r"state_demog_absorbed_birth_rate_mult = 0\.1\b")
+        start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_start")
+        self.assertIn("add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.2 days = 7 }", start)
+        after = _block(console, "te_debug_demog.2")
+        self.assertIn("remove_modifier = te_debug_demog_scaled_probe", after)
+        values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")
+        self.assertIn("value = modifier:state_demog_absorbed_birth_rate_mult",
+                      _block(values, "te_debug_demog_line_absorbed_b"))
+        # its name and description (loc_coverage_audit; organize_loc files the _desc in te_concepts)
+        loc = _text(MISC_LOC) + _text(ROOT / "localization" / "english" / "te_concepts_l_english.yml")
+        for key in ("te_debug_demog_scaled_probe", "te_debug_demog_scaled_probe_desc"):
+            self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
+
 FAST_EVENTS = ROOT / "events" / "te_demog_events.txt"
 DEBUG_EVENTS = ROOT / "events" / "te_debug_demog_events.txt"
 DEBUG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_debug_demog_modifiers.txt"
@@ -4773,6 +5648,53 @@ class TestModifierTypes(unittest.TestCase):
                         ("means", "te_debug_demog_means")):
             self.assertIn(f" {key}=[THIS.ScriptValue('{sv}')|3]", line)
 
+    def test_option_l_logs_the_work_figures(self):
+        """Phase 2 step 1: option l's second line, TE_DEMOG_WORK, logs the census's new figures and the reads no test
+        runs (the owner's pension variable, the pension kind, the 10-14s' share, the families and inputs)."""
+        line = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"),
+                      "te_debug_demog_mods_line")
+        self.assertIn("TE_DEMOG_WORK", line)
+        for name in ("wa_share", "at_work", "pensioners", "need", "old_age", "low_share", "wbase", "wf_engine"):
+            self.assertIn(f"te_debug_demog_work_{name}", line, name)
+        self.assertIn("te_debug_demog_work_wf_target", line)
+        for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work",
+                     "te_debug_demog_womens_mod", "te_debug_demog_replaced_mod", "te_debug_demog_part_m_mod",
+                     "te_debug_demog_part_mod", "te_debug_demog_cap_mod", "te_demog_line_working_adults_applied"):
+            self.assertIn(read, line)
+        values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")
+        for name, var in (("wa_share", "te_dg_wa_share"), ("at_work", "te_dg_at_work"),
+                          ("pensioners", "te_dg_pensioners"), ("need", "te_dg_need"), ("old_age", "te_dg_old_age"),
+                          ("low_share", "te_dg_low_share"), ("wbase", "te_dg_wbase"),
+                          ("wf_engine", "te_dg_wf_engine")):
+            body = _block(values, f"te_debug_demog_work_{name}")
+            self.assertIn(f"has_variable = {var}", body, name)
+            self.assertIn("value = -1", body, name)
+        self.assertIn("owner ?= { has_variable = te_dg_pension_age }", _block(values, "te_debug_demog_pension_var"))
+
+    def test_option_p_sets_up_call_3s_carriers(self):
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_call3_setup = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        setup = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"),
+                       "te_debug_demog_call3_setup")
+        for line in ("activate_law = law_type:law_punishment_focused_criminal_justice",
+                     "type = amendment_community_service",
+                     "add_modifier = { name = modifier_woman_soldiers multiplier = 0.5 days = 60 }",
+                     "add_modifier = { name = te_demog_debug_ig_loyal days = 60 }",
+                     "trigger_event = { id = te_debug_demog.3 days = 1 }",
+                     "trigger_event = { id = te_debug_demog.3 days = 31 }"):
+            self.assertIn(line, setup)
+        self.assertLess(setup.index("te_debug_demog_mods_line = yes"), setup.index("activate_law"),
+                        "the before line comes first")
+        self.assertIn("te_debug_demog_mods_line = yes", _block(console, "te_debug_demog.3"))
+        self.assertIn("interest_group_approval_add = 30", _block(_text(DEBUG_MODIFIERS), "te_demog_debug_ig_loyal"))
+        loc = _text(ROOT / "localization" / "english" / "te_events_l_english.yml")
+        for key in ("te_debug_demog.1.p", "te_debug_demog.1.p.tt"):
+            self.assertRegex(loc, rf"(?m)^ {re.escape(key)}:0 \"", key)
+
     def test_option_l_logs_the_institution_impact(self):
         # the in-game check of #889: the Midlands read "A multiplier of 0.94" on its Ministry of Health, so its line
         # should log impact=0.940 (Local Vernacular's -0.05, obstinance's share)
@@ -4919,13 +5841,17 @@ class TestMedicalOutreach(unittest.TestCase):
             with self.subTest(acc=acc, issued=issued, people=people):
                 self.assertAlmostEqual(eng._ops(weight, 0.0), want, places=6)
 
-    def test_an_issued_decree_stays_valid(self):
-        """state_trigger: offered where medicine is behind; once issued it stays valid after the state caught up
-        (Pollution Control's pattern)."""
+    def test_an_issued_decree_lapses_once_the_state_catches_up(self):
+        """state_trigger: valid only while medicine is behind, issued or not, so the engine's weekly check ends the
+        decree once the state has caught up (vanilla Emergency Relief's and Violent Suppression's pattern). It is the
+        AI's only way to give it up: the AI never revokes a decree itself, and an ai_weight of 0 only stops it issuing
+        one (#894's observer run, 2026-10-12: with a has_decree escape, every AI decree stood until the state changed
+        hands)."""
         trig = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")), "state_trigger")
         fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
         fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.6
-        for acc, issued, want in ((0.8, False, True), (1.0, False, False), (1.0, True, True)):
+        for acc, issued, want in ((0.8, False, True), (1.0, False, False), (0.8, True, True), (0.997, True, False),
+                                  (1.0, True, False)):
             eng = _Engine(fixtures)
             if issued:
                 eng.decrees.add("decree_medical_outreach")
@@ -5490,3 +6416,65 @@ class TestGiniBands(unittest.TestCase):
 
     def test_the_constants_of_the_old_map_are_gone(self):
         self.assertNotIn("te_demog_k_gini", _text(GENERATED_VALUES))
+
+
+class TestOldAgeScript(unittest.TestCase):
+    """te_demog_old_age_pass against demographics_model.old_age (phase 2 step 1)."""
+
+    def test_seed_stores_the_models_threshold(self):
+        inp = demographics_model.Inputs(sol=14, literacy=0.35, urban_share=0.2,
+                                        techs=frozenset({"medical_degrees"}))
+        eng = _engine_for(inp, 1836, 250000.0)
+        eng.call("te_demog_seed")
+        qf, qm, _ = demographics_model.group_rates(inp)
+        self.assertAlmostEqual(eng.vars["te_dg_old_age"], demographics_model.old_age(qf, qm), delta=0.01)
+
+
+class TestSlotBirthsScript(unittest.TestCase):
+    """te_demog_slot_births against demographics_model.slot_births, with two schedules (not shipped)."""
+
+    def test_two_schedules_in_script_match_the_model(self):
+        other = {15: 10000, 20: 30000, 25: 30000, 30: 20000, 35: 7000, 40: 2500, 45: 500}
+        with unittest.mock.patch.object(P, "ASFR_UNPLANNED_SHAPE", other):
+            text = re.sub(r"#[^\n]*", "", gen_demographics.render_effects())
+            g = P.group_of(27)
+            eng = _Engine({}, effects={n: _block(text, n) for n in ("te_demog_slot_births", "te_demog_enter_group")})
+            eng.locals.update(te_dg_g=float(g), te_dg_f=1000.0, te_dg_tfr=4.0, te_dg_sh_pl=0.25, te_dg_sh_un=0.75,
+                              te_dg_m_inf=1.0, te_dg_m_work_f=1.0, te_dg_m_work_m=1.0, te_dg_m_ext=1.0,
+                              te_dg_m_chr=1.0)
+            eng.call("te_demog_enter_group")
+            eng.call("te_demog_slot_births")
+            want = demographics_model.slot_births(1000.0, 27, 27, 4.0, 0.25)
+        self.assertAlmostEqual(eng.locals["te_dg_b"], want)
+
+
+class TestPensionAge(unittest.TestCase):
+    """The pension age (phase 2 step 1; the design §1.2): one country variable, the Standard position's age under Old
+    Age Pension, none otherwise; every reader goes through te_demog_pension_age."""
+
+    def _country(self, oap, held=None):
+        eng = _Engine({}, triggers={"te_demog_has_pension_law": oap})
+        if held is not None:
+            eng.vars["te_dg_pension_age"] = held
+        eng.call("te_demog_pension_age_refresh")
+        return eng
+
+    def test_the_variable_follows_the_law(self):
+        self.assertEqual(self._country(True).vars["te_dg_pension_age"], P.PENSION_AGE["standard"])
+        self.assertNotIn("te_dg_pension_age", self._country(False, held=65.0).vars)
+        self.assertNotIn("te_dg_pension_age", self._country(False).vars)
+
+    def test_the_hooks(self):
+        effects = _text(EFFECTS)
+        for caller in ("te_demog_country_game_start", "te_demog_country_yearly"):
+            self.assertIn("te_demog_pension_age_refresh = yes", _block(effects, caller), caller)
+        on_actions = _text(DEMOG_ON_ACTIONS)
+        self.assertIn("te_demog_pension_law_on_action", _block(on_actions, "on_law_activated"))
+        self.assertIn("te_demog_pension_age_refresh = yes", _block(on_actions, "te_demog_pension_law_on_action"))
+
+    def test_no_age_is_compared_with_a_pension_age_literal(self):
+        """The design §1.2: nothing compares an age with 60, 65 or 70; the sweep reads te_dg_wa_end. (The Gini's
+        `wealth > 65` and the war window's 18-40 are other numbers.)"""
+        for path in DEMOG_FILES:
+            code = re.sub(r"#[^\n]*", "", _text(path))
+            self.assertIsNone(re.search(r"local_var:te_dg_(age|ab|r)\s*(>=|<=|<|>|=)\s*(60|65|70)\b", code), path.name)

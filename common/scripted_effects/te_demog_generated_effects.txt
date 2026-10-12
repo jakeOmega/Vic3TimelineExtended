@@ -3847,21 +3847,45 @@ te_demog_life_table = {
 	te_demog_lt_group = { N = 5 FERTILE = yes }
 	set_local_variable = { name = te_dg_g value = 9 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal40f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy40f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal40m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy40m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = yes }
 	set_local_variable = { name = te_dg_g value = 10 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal45f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy45f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal45m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy45m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = yes }
 	set_local_variable = { name = te_dg_g value = 11 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal50f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy50f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal50m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy50m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 12 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal55f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy55f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal55m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy55m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 13 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal60f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy60f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal60m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy60m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 14 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal65f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy65f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal65m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy65m value = local_var:te_dg_pym }
 	set_local_variable = { name = te_dg_l65f value = local_var:te_dg_lf }
 	set_local_variable = { name = te_dg_l65m value = local_var:te_dg_lm }
 	set_local_variable = { name = te_dg_py65f value = local_var:te_dg_pyf }
@@ -3869,53 +3893,462 @@ te_demog_life_table = {
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 15 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal70f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy70f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal70m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy70m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 16 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal75f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy75f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal75m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy75m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 17 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal80f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy80f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal80m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy80m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 18 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal85f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy85f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal85m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy85m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 19 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal90f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy90f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal90m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy90m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 20 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal95f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy95f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal95m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy95m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 21 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal100f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy100f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal100m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy100m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 22 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal105f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy105f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal105m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy105m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 23 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal110f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy110f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal110m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy110m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 24 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal115f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy115f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal115m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy115m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 25 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal120f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy120f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal120m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy120m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 26 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal125f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy125f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal125m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy125m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 27 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal130f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy130f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal130m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy130m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 28 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal135f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy135f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal135m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy135m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 29 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal140f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy140f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal140m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy140m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	set_local_variable = { name = te_dg_g value = 30 }
 	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_oal145f value = local_var:te_dg_lf }
+	set_local_variable = { name = te_dg_oapy145f value = local_var:te_dg_pyf }
+	set_local_variable = { name = te_dg_oal145m value = local_var:te_dg_lm }
+	set_local_variable = { name = te_dg_oapy145m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
 	te_demog_lt_finish = yes
+	te_demog_old_age_pass = yes
+}
+
+# THIS = a state, after te_demog_life_table's forward pass (phase 2 step 1; late-game §1.5): the age with
+# 15 years of life left (demographics_model.old_age_threshold), women's and men's averaged, into
+# te_dg_old_age. Remaining life at each group start from OLD_AGE_FROM; linear between starts.
+te_demog_old_age_pass = {
+	set_local_variable = { name = te_dg_oae40f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy40f divide = { value = local_var:te_dg_oal40f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae45f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy45f divide = { value = local_var:te_dg_oal45f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae50f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy50f divide = { value = local_var:te_dg_oal50f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae55f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy55f divide = { value = local_var:te_dg_oal55f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae60f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy60f divide = { value = local_var:te_dg_oal60f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae65f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy65f divide = { value = local_var:te_dg_oal65f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae70f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy70f divide = { value = local_var:te_dg_oal70f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae75f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy75f divide = { value = local_var:te_dg_oal75f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae80f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy80f divide = { value = local_var:te_dg_oal80f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae85f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy85f divide = { value = local_var:te_dg_oal85f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae90f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy90f divide = { value = local_var:te_dg_oal90f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae95f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy95f divide = { value = local_var:te_dg_oal95f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae100f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy100f divide = { value = local_var:te_dg_oal100f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae105f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy105f divide = { value = local_var:te_dg_oal105f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae110f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy110f divide = { value = local_var:te_dg_oal110f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae115f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy115f divide = { value = local_var:te_dg_oal115f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae120f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy120f divide = { value = local_var:te_dg_oal120f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae125f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy125f divide = { value = local_var:te_dg_oal125f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae130f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy130f divide = { value = local_var:te_dg_oal130f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae135f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy135f divide = { value = local_var:te_dg_oal135f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae140f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy140f divide = { value = local_var:te_dg_oal140f min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae145f value = { value = local_var:te_dg_pyf subtract = local_var:te_dg_oapy145f divide = { value = local_var:te_dg_oal145f min = 0.00001 } } }
+	if = {
+		limit = { local_var:te_dg_oae40f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = 40 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae45f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae40f subtract = 15 divide = { value = local_var:te_dg_oae40f subtract = local_var:te_dg_oae45f min = 0.00001 } multiply = 5 add = 40 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae50f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae45f subtract = 15 divide = { value = local_var:te_dg_oae45f subtract = local_var:te_dg_oae50f min = 0.00001 } multiply = 5 add = 45 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae55f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae50f subtract = 15 divide = { value = local_var:te_dg_oae50f subtract = local_var:te_dg_oae55f min = 0.00001 } multiply = 5 add = 50 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae60f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae55f subtract = 15 divide = { value = local_var:te_dg_oae55f subtract = local_var:te_dg_oae60f min = 0.00001 } multiply = 5 add = 55 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae65f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae60f subtract = 15 divide = { value = local_var:te_dg_oae60f subtract = local_var:te_dg_oae65f min = 0.00001 } multiply = 5 add = 60 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae70f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae65f subtract = 15 divide = { value = local_var:te_dg_oae65f subtract = local_var:te_dg_oae70f min = 0.00001 } multiply = 5 add = 65 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae75f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae70f subtract = 15 divide = { value = local_var:te_dg_oae70f subtract = local_var:te_dg_oae75f min = 0.00001 } multiply = 5 add = 70 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae80f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae75f subtract = 15 divide = { value = local_var:te_dg_oae75f subtract = local_var:te_dg_oae80f min = 0.00001 } multiply = 5 add = 75 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae85f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae80f subtract = 15 divide = { value = local_var:te_dg_oae80f subtract = local_var:te_dg_oae85f min = 0.00001 } multiply = 5 add = 80 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae90f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae85f subtract = 15 divide = { value = local_var:te_dg_oae85f subtract = local_var:te_dg_oae90f min = 0.00001 } multiply = 5 add = 85 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae95f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae90f subtract = 15 divide = { value = local_var:te_dg_oae90f subtract = local_var:te_dg_oae95f min = 0.00001 } multiply = 5 add = 90 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae100f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae95f subtract = 15 divide = { value = local_var:te_dg_oae95f subtract = local_var:te_dg_oae100f min = 0.00001 } multiply = 5 add = 95 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae105f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae100f subtract = 15 divide = { value = local_var:te_dg_oae100f subtract = local_var:te_dg_oae105f min = 0.00001 } multiply = 5 add = 100 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae110f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae105f subtract = 15 divide = { value = local_var:te_dg_oae105f subtract = local_var:te_dg_oae110f min = 0.00001 } multiply = 5 add = 105 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae115f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae110f subtract = 15 divide = { value = local_var:te_dg_oae110f subtract = local_var:te_dg_oae115f min = 0.00001 } multiply = 5 add = 110 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae120f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae115f subtract = 15 divide = { value = local_var:te_dg_oae115f subtract = local_var:te_dg_oae120f min = 0.00001 } multiply = 5 add = 115 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae125f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae120f subtract = 15 divide = { value = local_var:te_dg_oae120f subtract = local_var:te_dg_oae125f min = 0.00001 } multiply = 5 add = 120 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae130f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae125f subtract = 15 divide = { value = local_var:te_dg_oae125f subtract = local_var:te_dg_oae130f min = 0.00001 } multiply = 5 add = 125 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae135f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae130f subtract = 15 divide = { value = local_var:te_dg_oae130f subtract = local_var:te_dg_oae135f min = 0.00001 } multiply = 5 add = 130 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae140f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae135f subtract = 15 divide = { value = local_var:te_dg_oae135f subtract = local_var:te_dg_oae140f min = 0.00001 } multiply = 5 add = 135 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae145f <= 15 }
+		set_local_variable = { name = te_dg_oaf value = { value = local_var:te_dg_oae140f subtract = 15 divide = { value = local_var:te_dg_oae140f subtract = local_var:te_dg_oae145f min = 0.00001 } multiply = 5 add = 140 } }
+	}
+	else = {
+		set_local_variable = { name = te_dg_oaf value = 145 }
+	}
+	set_local_variable = { name = te_dg_oae40m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy40m divide = { value = local_var:te_dg_oal40m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae45m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy45m divide = { value = local_var:te_dg_oal45m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae50m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy50m divide = { value = local_var:te_dg_oal50m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae55m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy55m divide = { value = local_var:te_dg_oal55m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae60m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy60m divide = { value = local_var:te_dg_oal60m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae65m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy65m divide = { value = local_var:te_dg_oal65m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae70m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy70m divide = { value = local_var:te_dg_oal70m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae75m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy75m divide = { value = local_var:te_dg_oal75m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae80m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy80m divide = { value = local_var:te_dg_oal80m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae85m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy85m divide = { value = local_var:te_dg_oal85m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae90m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy90m divide = { value = local_var:te_dg_oal90m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae95m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy95m divide = { value = local_var:te_dg_oal95m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae100m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy100m divide = { value = local_var:te_dg_oal100m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae105m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy105m divide = { value = local_var:te_dg_oal105m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae110m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy110m divide = { value = local_var:te_dg_oal110m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae115m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy115m divide = { value = local_var:te_dg_oal115m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae120m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy120m divide = { value = local_var:te_dg_oal120m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae125m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy125m divide = { value = local_var:te_dg_oal125m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae130m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy130m divide = { value = local_var:te_dg_oal130m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae135m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy135m divide = { value = local_var:te_dg_oal135m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae140m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy140m divide = { value = local_var:te_dg_oal140m min = 0.00001 } } }
+	set_local_variable = { name = te_dg_oae145m value = { value = local_var:te_dg_pym subtract = local_var:te_dg_oapy145m divide = { value = local_var:te_dg_oal145m min = 0.00001 } } }
+	if = {
+		limit = { local_var:te_dg_oae40m <= 15 }
+		set_local_variable = { name = te_dg_oam value = 40 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae45m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae40m subtract = 15 divide = { value = local_var:te_dg_oae40m subtract = local_var:te_dg_oae45m min = 0.00001 } multiply = 5 add = 40 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae50m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae45m subtract = 15 divide = { value = local_var:te_dg_oae45m subtract = local_var:te_dg_oae50m min = 0.00001 } multiply = 5 add = 45 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae55m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae50m subtract = 15 divide = { value = local_var:te_dg_oae50m subtract = local_var:te_dg_oae55m min = 0.00001 } multiply = 5 add = 50 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae60m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae55m subtract = 15 divide = { value = local_var:te_dg_oae55m subtract = local_var:te_dg_oae60m min = 0.00001 } multiply = 5 add = 55 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae65m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae60m subtract = 15 divide = { value = local_var:te_dg_oae60m subtract = local_var:te_dg_oae65m min = 0.00001 } multiply = 5 add = 60 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae70m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae65m subtract = 15 divide = { value = local_var:te_dg_oae65m subtract = local_var:te_dg_oae70m min = 0.00001 } multiply = 5 add = 65 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae75m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae70m subtract = 15 divide = { value = local_var:te_dg_oae70m subtract = local_var:te_dg_oae75m min = 0.00001 } multiply = 5 add = 70 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae80m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae75m subtract = 15 divide = { value = local_var:te_dg_oae75m subtract = local_var:te_dg_oae80m min = 0.00001 } multiply = 5 add = 75 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae85m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae80m subtract = 15 divide = { value = local_var:te_dg_oae80m subtract = local_var:te_dg_oae85m min = 0.00001 } multiply = 5 add = 80 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae90m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae85m subtract = 15 divide = { value = local_var:te_dg_oae85m subtract = local_var:te_dg_oae90m min = 0.00001 } multiply = 5 add = 85 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae95m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae90m subtract = 15 divide = { value = local_var:te_dg_oae90m subtract = local_var:te_dg_oae95m min = 0.00001 } multiply = 5 add = 90 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae100m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae95m subtract = 15 divide = { value = local_var:te_dg_oae95m subtract = local_var:te_dg_oae100m min = 0.00001 } multiply = 5 add = 95 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae105m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae100m subtract = 15 divide = { value = local_var:te_dg_oae100m subtract = local_var:te_dg_oae105m min = 0.00001 } multiply = 5 add = 100 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae110m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae105m subtract = 15 divide = { value = local_var:te_dg_oae105m subtract = local_var:te_dg_oae110m min = 0.00001 } multiply = 5 add = 105 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae115m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae110m subtract = 15 divide = { value = local_var:te_dg_oae110m subtract = local_var:te_dg_oae115m min = 0.00001 } multiply = 5 add = 110 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae120m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae115m subtract = 15 divide = { value = local_var:te_dg_oae115m subtract = local_var:te_dg_oae120m min = 0.00001 } multiply = 5 add = 115 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae125m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae120m subtract = 15 divide = { value = local_var:te_dg_oae120m subtract = local_var:te_dg_oae125m min = 0.00001 } multiply = 5 add = 120 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae130m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae125m subtract = 15 divide = { value = local_var:te_dg_oae125m subtract = local_var:te_dg_oae130m min = 0.00001 } multiply = 5 add = 125 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae135m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae130m subtract = 15 divide = { value = local_var:te_dg_oae130m subtract = local_var:te_dg_oae135m min = 0.00001 } multiply = 5 add = 130 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae140m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae135m subtract = 15 divide = { value = local_var:te_dg_oae135m subtract = local_var:te_dg_oae140m min = 0.00001 } multiply = 5 add = 135 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_oae145m <= 15 }
+		set_local_variable = { name = te_dg_oam value = { value = local_var:te_dg_oae140m subtract = 15 divide = { value = local_var:te_dg_oae140m subtract = local_var:te_dg_oae145m min = 0.00001 } multiply = 5 add = 140 } }
+	}
+	else = {
+		set_local_variable = { name = te_dg_oam value = 145 }
+	}
+	set_variable = { name = te_dg_old_age value = { value = local_var:te_dg_oaf add = local_var:te_dg_oam multiply = 0.5 } }
+}
+
+# THIS = a state, in the sweep's age order (phase 2 step 1): the calendar band local_var:te_dg_cal sets
+# te_dg_start, the working-age start's factor (demographics_model.start_factor), and te_dg_next_cal.
+te_demog_enter_cal_band = {
+	if = {
+		limit = { local_var:te_dg_cal <= 1 }
+		if = {
+			limit = { local_var:te_dg_cal <= 0 }
+			set_local_variable = { name = te_dg_start value = 0 }
+			set_local_variable = { name = te_dg_next_cal value = 10 }
+		}
+		else = {
+			set_local_variable = { name = te_dg_start value = local_var:te_dg_child_work }
+			set_local_variable = { name = te_dg_next_cal value = 15 }
+		}
+	}
+	else = {
+		set_local_variable = { name = te_dg_start value = 1 }
+		set_local_variable = { name = te_dg_next_cal value = 999 }
+	}
+}
+
+# THIS = a state: the biological band local_var:te_dg_bio (P.BIO_BANDS) sets te_dg_cap (capacity), te_dg_needw
+# (health need) and te_dg_next_bio. Its age is te_dg_ab, the calendar one until phase 3.
+te_demog_enter_bio_band = {
+	if = {
+		limit = { local_var:te_dg_bio <= 4 }
+		if = {
+			limit = { local_var:te_dg_bio <= 2 }
+			if = {
+				limit = { local_var:te_dg_bio <= 1 }
+				if = {
+					limit = { local_var:te_dg_bio <= 0 }
+					set_local_variable = { name = te_dg_cap value = { value = 1 multiply = local_var:te_dg_wk_capm max = 1 } }
+					set_local_variable = { name = te_dg_needw value = 1 }
+					set_local_variable = { name = te_dg_next_bio value = 5 }
+				}
+				else = {
+					set_local_variable = { name = te_dg_cap value = { value = 1 multiply = local_var:te_dg_wk_capm max = 1 } }
+					set_local_variable = { name = te_dg_needw value = 0.5 }
+					set_local_variable = { name = te_dg_next_bio value = 15 }
+				}
+			}
+			else = {
+				set_local_variable = { name = te_dg_cap value = { value = 1 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_needw value = 0.8 }
+				set_local_variable = { name = te_dg_next_bio value = 45 }
+			}
+		}
+		else = {
+			if = {
+				limit = { local_var:te_dg_bio <= 3 }
+				set_local_variable = { name = te_dg_cap value = { value = 1 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_needw value = 1.4 }
+				set_local_variable = { name = te_dg_next_bio value = 60 }
+			}
+			else = {
+				set_local_variable = { name = te_dg_cap value = { value = 0.95 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_needw value = 1.4 }
+				set_local_variable = { name = te_dg_next_bio value = 65 }
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { local_var:te_dg_bio <= 7 }
+			if = {
+				limit = { local_var:te_dg_bio <= 6 }
+				if = {
+					limit = { local_var:te_dg_bio <= 5 }
+					set_local_variable = { name = te_dg_cap value = { value = 0.85 multiply = local_var:te_dg_wk_capm max = 1 } }
+					set_local_variable = { name = te_dg_needw value = 2.4 }
+					set_local_variable = { name = te_dg_next_bio value = 70 }
+				}
+				else = {
+					set_local_variable = { name = te_dg_cap value = { value = 0.7 multiply = local_var:te_dg_wk_capm max = 1 } }
+					set_local_variable = { name = te_dg_needw value = 2.4 }
+					set_local_variable = { name = te_dg_next_bio value = 75 }
+				}
+			}
+			else = {
+				set_local_variable = { name = te_dg_cap value = { value = 0.5 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_needw value = 3.4 }
+				set_local_variable = { name = te_dg_next_bio value = 80 }
+			}
+		}
+		else = {
+			if = {
+				limit = { local_var:te_dg_bio <= 8 }
+				set_local_variable = { name = te_dg_cap value = { value = 0.3 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_needw value = 3.4 }
+				set_local_variable = { name = te_dg_next_bio value = 85 }
+			}
+			else = {
+				set_local_variable = { name = te_dg_cap value = { value = 0.1 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_needw value = 4.5 }
+				set_local_variable = { name = te_dg_next_bio value = 999 }
+			}
+		}
+	}
+}
+
+# THIS = a state, in te_demog_age_slot: births from the cohort's women local_var:te_dg_f
+# (demographics_model.slot_births). Planned births follow P.ASFR_PLANNED_SHAPE by calendar age and unplanned
+# P.ASFR_UNPLANNED_SHAPE by biological age (late-game §3.1). While they are one schedule this is one term.
+te_demog_slot_births = {
+	set_local_variable = {
+		name = te_dg_b
+		value = { value = local_var:te_dg_f multiply = local_var:te_dg_asfr divide = 100000 multiply = local_var:te_dg_tfr }
+	}
 }
 
 # THIS = a state. local_var:te_dg_nrr -> local_var:te_dg_d = NRR^(-1/29), the stable
@@ -7039,6 +7472,29 @@ te_demog_medicine_drift_one = {
 		}
 		set_variable = { name = $VAR$ value = $TARGET$ }
 	}
+}
+
+# The practices' machinery (te_demog_practice_effects.txt) for each practice in P.PRACTICES: phase 3 adds
+# Family Limitation there and here.
+te_demog_practices_seed = {
+	te_demog_practice_seed = { P = lm }
+	te_demog_practice_seed = { P = bs }
+}
+te_demog_practices_step = {
+	te_demog_practice_step = { P = lm }
+	te_demog_practice_step = { P = bs }
+}
+te_demog_practices_country_init = {
+	te_demog_practice_country_init = { P = lm }
+	te_demog_practice_country_init = { P = bs }
+}
+te_demog_practices_country_add = {
+	te_demog_practice_country_add = { P = lm }
+	te_demog_practice_country_add = { P = bs }
+}
+te_demog_practices_country_store = {
+	te_demog_practice_country_store = { P = lm }
+	te_demog_practice_country_store = { P = bs }
 }
 
 # THIS = a state: the ring as TE_DEMOG_REPLAY before lines (demographics_harness.format_replay).

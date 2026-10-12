@@ -6,7 +6,9 @@
 > parent spec (`2026-10-08-demographics-design.md`, cited as "parent §n": §7, §8, §11.2, §12, §13), the approved
 > late-game design (`2026-10-11-demographics-late-game-design.md`, "late-game §n": §0, §2, §5, §8.1) and #894's rulings.
 > It amends the parent's §7 (workforce, pension and health bill, conscription), §8.1 and §8.2 where it says so. Step 1's
-> implementation plan is `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`. No code here.
+> implementation plan is `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`; **step 1 is built**
+> (branch `feat/demog-p2-interfaces`, 2026-10-12; its in-game items and self-checks are in
+> `docs/testing/demographics-playtest.md`, § Phase 2 step 1, and none gates the merge). No code here.
 > Numbers are targets or bands the harness must meet, each with a starting value; the harness picks the values and the
 > owner reviews the result (owner, 2026-10-12). §13 records the owner's answers. The
 > base-law fixes ship first, as their own small every-game PR (§3.1).

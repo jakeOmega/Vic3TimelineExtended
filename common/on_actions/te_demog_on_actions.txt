@@ -31,6 +31,8 @@ on_monthly_pulse_country = {
 te_demog_country_monthly_on_action = {
 	effect = {
 		te_demog_country_monthly = yes
+		# phase 2 step 1's once-a-game self-checks (te_debug_demog_effects.txt; they gate on the census themselves)
+		te_debug_demog_wf_selfchecks = yes
 	}
 }
 
@@ -134,9 +136,23 @@ on_state_created = {
 on_law_activated = {
 	on_actions = {
 		te_demog_lines_law_on_action
+		te_demog_pension_law_on_action
 	}
 }
 on_acquired_technology = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+# ROOT = the country (vanilla's comments on both hooks): an amendment repealed or timed out (the timeout's is already off
+# its law) changes its law's working-adult lines, so the country's states refresh that day, as for a technology. An
+# amendment attached has no hook; the monthly refresh takes it within a month (the design §1.9).
+on_amendment_repealed = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+on_amendment_timeout = {
 	on_actions = {
 		te_demog_lines_country_on_action
 	}
@@ -151,6 +167,7 @@ on_game_started_after_lobby = {
 te_demog_lines_on_action = {
 	effect = {
 		te_demog_lines_refresh = yes
+		te_demog_workforce_lines_refresh = yes
 	}
 }
 
@@ -163,8 +180,21 @@ te_demog_lines_law_on_action = {
 			owner = {
 				every_scope_state = {
 					trigger_event = { id = te_demog_events.4 }
+					# again a day later, in case the engine hasn't re-summed the families on the day (the refresh acts
+					# only where the sum changed)
+					trigger_event = { id = te_demog_events.4 days = 1 }
 				}
 			}
+		}
+	}
+}
+
+# ROOT = the law just activated: its owner's pension age, that day (phase 2 step 1). Under every rule, as the yearly
+# refresh; a history law's activation sets it before the game starts, and the game start sets it again.
+te_demog_pension_law_on_action = {
+	effect = {
+		owner = {
+			te_demog_pension_age_refresh = yes
 		}
 	}
 }
@@ -176,6 +206,7 @@ te_demog_lines_country_on_action = {
 			limit = { has_game_started = yes }
 			every_scope_state = {
 				trigger_event = { id = te_demog_events.4 }
+				trigger_event = { id = te_demog_events.4 days = 1 }
 			}
 		}
 	}

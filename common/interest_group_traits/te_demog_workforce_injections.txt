@@ -1,0 +1,20 @@
+﻿# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7, the owner's call 3):
+# the Trade Unions' two loyal traits' working-adult line, cancelled and carried on the replaced family at its old value
+# (te_demog_workforce_lines_refresh re-applies it while no workforce term is in force), with its participation input
+# for the census beside it. That the engine sums a script-only type from an IG trait into a state's read is unverified:
+# the once-a-game self-check workforce_ig_trait (te_debug_demog_wf_ig_check_start, te_debug_demog.7) tests it; its
+# fallback is docs/testing/demographics-playtest.md's.
+INJECT:ig_trait_solidarity = {
+	modifier = {
+		state_working_adult_ratio_add = -0.05
+		state_demog_replaced_ratio_add = 0.05
+		state_labor_participation_add = 0.02	# unions' mutual aid keeps the sick and jobless attached to work
+	}
+}
+INJECT:ig_trait_bourse_du_travail = {
+	modifier = {
+		state_working_adult_ratio_add = -0.05
+		state_demog_replaced_ratio_add = 0.05
+		state_labor_participation_add = 0.02	# labour exchanges place workers
+	}
+}

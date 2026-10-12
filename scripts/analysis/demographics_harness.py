@@ -13,6 +13,7 @@ Usage:
     demographics_harness.py lag                         # years of e0 behind the target while medicine spreads
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
+    demographics_harness.py workforce                   # phase 2 step 1: participation, need, the old-age threshold
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
@@ -42,6 +43,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
+import demographics_regions as R  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 import pop_growth as G  # noqa: E402
 
@@ -73,7 +75,7 @@ def income_proxy(wealth, costs):
     return costs[w]
 
 
-def inputs_for(c, carriers=None, incorporated=True):
+def inputs_for(c, carriers=None, incorporated=True, practices=None):
     """Model inputs for a save's country (as its incorporated states see them) or for one state
     (demographics_save_inputs.state_inputs; incorporated as the state is).
 
@@ -81,12 +83,13 @@ def inputs_for(c, carriers=None, incorporated=True):
     owner's techs, laws and institution levels. The wealth term is the pop-weighted curve,
     as the game computes it, not the curve at the mean SoL. Crowding (the state's migration penalty
     from migration_crowding) is a state's; a whole country's is 0, so `seed` and `adopters` leave it out.
+    practices: {practice: share} (Late Marriage lm, Birth Spacing bs; the late-marriage plan), none by default.
     """
     carriers = DM.load_carriers() if carriers is None else carriers
     mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=incorporated)
     return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share, techs=frozenset(c.techs),
                     laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
-                    mods=mods, means_add=c.means_add, crowding=c.crowding)
+                    mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}))
 
 
 def cmd_sketch(_args):
@@ -638,6 +641,62 @@ def cmd_lag(_args):
     return 0
 
 
+# ---- workforce: phase 2 step 1's participation figures -------------------------------------------------------
+# The participation figures at the starting values, on the census's own stable structures (the design §1.8's sketch,
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md). (name, Inputs keywords, the lower
+# strata's share.) No amendment or IG trait is in these rows: DM.load_carriers walks laws, technologies and
+# institutions only (step 2's late-save fit reads those from the save).
+_RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines",
+                         "antibiotic_mass_production", "contraceptive_pill", "modern_pharmaceuticals",
+                         "vulcanization", "feminism", "second_wave_feminism", "personal_appliances"})
+WORKFORCE_SCENARIOS = [
+    ("1836 farming", dict(sol=8, literacy=0.1, urban_share=0.05,
+                          laws=frozenset({"law_no_womens_rights", "law_child_labor_allowed"})), 0.85),
+    ("1836 Women in the Fields", dict(sol=8, literacy=0.1, urban_share=0.05,
+                                      laws=frozenset({"law_women_in_the_fields", "law_child_labor_allowed"})), 0.85),
+    ("Rich, Protected Class, pension at 65", dict(
+        sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS,
+        laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
+                        "law_public_health_insurance"}),
+        institutions={"institution_health_system": 5, "institution_social_security": 5}), 0.4),
+    ("Rich, plus call 3's laws", dict(
+        sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS,
+        laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
+                        "law_public_health_insurance", "law_pro_capital_ministry_of_labor",
+                        "law_rehabilitation_focused_criminal_justice"}),
+        institutions={"institution_health_system": 5, "institution_social_security": 5,
+                      "institution_ministry_of_labor": 5}), 0.4),
+]
+
+
+def workforce_rows():
+    """[{name, tfr, women, wa_share, at_work, pensioners, need, target, old_age}] for WORKFORCE_SCENARIOS: each
+    scenario's stable structure (300 years at constant inputs), its old-age threshold and its figures."""
+    carriers, lines = DM.load_carriers(), DM.workforce_line_carriers()
+    rows = []
+    for name, kw, low in WORKFORCE_SCENARIOS:
+        inp = M.Inputs(low_share=low, **kw)
+        inp.mods = {**DM.totals(carriers, inp.techs, inp.laws, inp.institutions),
+                    **DM.totals(lines, inp.techs, inp.laws, inp.institutions,
+                                types=tuple(P.WORKFORCE_LINE_TYPES.values()))}
+        ring, last = M.run_constant(inp, years=300)
+        qf, qm, _ = M.group_rates(inp)
+        old = M.old_age(qf, qm)
+        fig = M.work_figures(ring, inp, old)
+        rows.append({"name": name, "tfr": last["tfr"], "women": M.women_rate(inp), **fig,
+                     "target": M.wf_target(fig), "old_age": old})
+    return rows
+
+
+def cmd_workforce(_args):
+    print(f"{'scenario':40s} {'tfr':>5s} {'women':>6s} {'wa':>6s} {'at work':>8s} {'target':>7s} "
+          f"{'pens':>6s} {'need':>6s} {'old age':>8s}")
+    for r in workforce_rows():
+        print(f"{r['name']:40s} {r['tfr']:5.2f} {r['women']:6.2f} {r['wa_share']:6.3f} {r['at_work']:8.3f} "
+              f"{r['target']:7.3f} {r['pensioners']:6.3f} {r['need']:6.3f} {r['old_age']:8.1f}")
+    return 0
+
+
 # ---- fertility: children per woman (modifier-types design, stage 2) -----------------------------
 # (label, inputs, (low, high)): §2.3's sketch table and history. The 1836 rows hold no means tech, so
 # only the traditional means and literacy reach them; France's engine cut from Forced Heirship is
@@ -674,11 +733,38 @@ FERTILITY_SCENARIOS = [
 ]
 
 
-def fertility_rows(carriers=None):
-    """[(label, children per woman, low, high)] for FERTILITY_SCENARIOS, with the game files' values."""
+# The children-per-woman scenarios with the practices' shares (the late-marriage spec 5.1 item 4: the shares the drift
+# gives each), and review I3's two for the 20th century where Birth Spacing has eroded and only the raise is left
+# (bands from Gapminder in the anchors: East Asia 1990 Japan 1.56, Korea 1.58, Taiwan 1.81, China 2.35; Latin America
+# 1970 Chile 4.02 to Mexico 6.83, Argentina's 3.07 left out). practices-fit judges candidates against them; Task 6
+# makes them the fertility command's once the raise is applied.
+_SCENARIO_PRACTICES = {
+    "1836 agrarian (reference)": {"lm": 0.5}, "1836 agrarian, No Women's Rights": {"lm": 0.5},
+    "Britain 1836": {"lm": 1.0}, "France 1836 (Family Limitation)": {"lm": 1.0},
+    "Britain 1900": {"lm": 0.75}, "Britain 1900, Women Own Property": {"lm": 0.75},
+    "West 1950": {"lm": 0.5}, "West 1950, Women's Suffrage": {"lm": 0.5},
+    "West 1990": {"lm": 0.45}, "West 1990, Women's Suffrage": {"lm": 0.45},
+    "India 1975": {"bs": 0.0},   # the drift's equilibrium from India's held start: 0 since the fit (2026-10-12)
+}
+_SCENARIO_BANDS = {"Britain 1836": (4.3, 5.5)}   # re-centred on history's 4.8-5.0 (spec 5.1)
+PRACTICE_SCENARIOS = [(label, dict(kw, practices=_SCENARIO_PRACTICES[label]), _SCENARIO_BANDS.get(label, band))
+                      for label, kw, band in FERTILITY_SCENARIOS] + [
+    ("East Asia 1990", dict(sol=28, literacy=0.97, urban_share=0.7,
+                            techs=MED_1990 | MEANS_TECHS | {"contraceptive_pill"}, laws={PHI},
+                            institutions={HEALTH: 5}, practices={"lm": 0.1, "bs": 0.05}), (1.4, 2.4)),
+    ("Latin America 1970", dict(sol=12, literacy=0.72, urban_share=0.55, techs=MED_1950 | MEANS_TECHS, laws={CHS},
+                                institutions={HEALTH: 2}), (4.0, 6.8)),
+]
+# The fertility command judges the scenarios with their shares (the late-marriage plan, Task 6).
+FERTILITY_SCENARIOS = PRACTICE_SCENARIOS
+
+
+def fertility_rows(carriers=None, scenarios=None):
+    """[(label, children per woman, low, high)] for `scenarios` (default FERTILITY_SCENARIOS), with the game files'
+    values."""
     carriers = DM.load_carriers() if carriers is None else carriers
     rows = []
-    for label, kw, (lo, hi) in FERTILITY_SCENARIOS:
+    for label, kw, (lo, hi) in scenarios or FERTILITY_SCENARIOS:
         inp = scenario_inputs(carriers, **kw)
         rows.append((label, M.fertility(inp, life(inp)["e0"])["tfr"], lo, hi))
     return rows
@@ -760,25 +846,46 @@ def model_figures(inp):
     return {"e0": e0, "imr": (qf[0] + qm[0]) / 200, "tfr": tfr, "r": r}
 
 
-def country_figures(states, carriers, stored=None):
+def country_figures(states, carriers, stored=None, shares=None, incorporated_only=False):
     """A country's model figures as the census builds them: each state's own rates (its SoL, literacy,
     urban share and incorporation; with `stored`, {state id: {variable: value}}, the census's own inputs from the
     save, so medicine as it had spread), weighted by its people. The poverty term bends at SoL 9, so the
-    rates at the country's mean SoL would hide what its poor and rich states do (#855's review)."""
-    stored = stored or {}
-    figs = [(st.population, model_figures(census_inputs(inputs_for(st, carriers, incorporated=inc),
+    rates at the country's mean SoL would hide what its poor and rich states do (#855's review). shares:
+    {state id: {practice: share}} (the late-marriage plan); incorporated_only leaves a country's colonies out
+    (spec 5.1 item 3)."""
+    stored, shares = stored or {}, shares or {}
+    figs = [(st.population, model_figures(census_inputs(inputs_for(st, carriers, incorporated=inc,
+                                                                   practices=shares.get(sid)),
                                                         stored.get(sid, {}))))
-            for sid, st, inc in states if st.population > 0]
+            for sid, st, inc in states if st.population > 0 and (inc or not incorporated_only)]
     tot = sum(p for p, _ in figs) or 1
     return {k: sum(p * f[k] for p, f in figs) / tot for k in ("e0", "imr", "tfr", "r")}
 
 
-def history_rows(sections, year, anchors, carriers=None, stored=None):
+def history_rows(sections, year, anchors, carriers=None, stored=None, shares=None, incorporated_only=False,
+                 practices=True, saved=None):
     """[(country, tag, people, model figures, anchors)] for each HISTORY_TAGS country in the save, the
     world line (every country of 1M people or more, weighted by people) and the mapped countries that
-    have no anchor of any kind."""
+    have no anchor of any kind. The practices (the late-marriage plan, Task 3): every state takes its seed, as the
+    census gives it with no sibling holding a share (its start less what its conditions have eroded), and `shares`
+    ({state id: {practice: share}}, a replay's year) overrides the states it holds, over `saved` (the save's own
+    te_dg_pr_*, saved_shares; Stop B, M2), which overrides the seed; practices=False is the model without them. incorporated_only: each country's figure from its incorporated states (the world line keeps every
+    state)."""
     carriers = DM.load_carriers() if carriers is None else carriers
     states = S.state_inputs(sections)
+    if not practices:
+        shares = {}
+    else:
+        regions, sr = R.strategic_region_of(), S.state_regions(sections)
+
+        def seed(sid, st, inc):
+            reg = sr.get(sid, "")
+            inp = inputs_for(st, carriers, incorporated=inc)
+            return {p: M.practice_seed(p, inp, M.practice_start(p, reg, regions.get(reg, "")), [])
+                    for p in P.PRACTICES}
+
+        shares = {**{sid: seed(sid, st, inc) for sts in states.values() for sid, st, inc in sts}, **(saved or {}),
+                  **(shares or {})}
     people = {tag: sum(st.population for _sid, st, _inc in sts) for tag, sts in states.items()}
     rows, bare = [], []
     for country, tags in HISTORY_TAGS.items():
@@ -791,8 +898,10 @@ def history_rows(sections, year, anchors, carriers=None, stored=None):
                 "imr": nearest(anchors.get("imr", {}).get(country, {}), year, 15),
                 "tfr": nearest(anchors.get("tfr", {}).get(country, {}), year, 5),
                 "growth": growth_around(anchors.get("population", {}).get(country, {}), year)}
-        rows.append((country, tag, people[tag], country_figures(states[tag], carriers, stored), hist))
-    big = [(people[t], country_figures(sts, carriers, stored)) for t, sts in states.items() if people[t] >= 1e6]
+        rows.append((country, tag, people[tag], country_figures(states[tag], carriers, stored, shares, incorporated_only),
+                     hist))
+    big = [(people[t], country_figures(sts, carriers, stored, shares)) for t, sts in states.items()
+           if people[t] >= 1e6]
     tot = sum(p for p, _ in big) or 1
     world = {k: sum(p * f[k] for p, f in big) / tot for k in ("e0", "imr", "tfr", "r")}
     return rows, world, bare
@@ -806,21 +915,30 @@ def cmd_history(args):
               file=sys.stderr)
         return 1
     carriers = DM.load_carriers()
+    shares_by_year = {}
+    if args.shares:
+        import demographics_practices as DP   # it imports this module
+        shares_by_year = DP.read_shares(args.shares)
+    only = "; countries: incorporated states only" if args.incorporated_only else ""
     for path in args.save:
         sections = S.read_sections(path)        # a binary or zipped save stops here (NotPlainText, exit 1)
         year = save_year(path) or args.year     # the save's own date first; --year fills in a slice
         if year is None:
             print(f"{path}: no game_date in its meta_data; give the year with --year", file=sys.stderr)
             return 1
-        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS)
+        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS)
         stored = {sid: rec["vars"] for sid, rec in walked.items()}
-        rows, world, bare = history_rows(sections, year, anchors, carriers, stored)
+        saved = saved_shares(stored)
+        rows, world, bare = history_rows(sections, year, anchors, carriers, stored, shares=shares_by_year.get(year),
+                                         incorporated_only=args.incorporated_only, practices=not args.no_practices,
+                                         saved=saved)
         for country in bare:
             print(f"{country}: no anchors in {args.anchors}", file=sys.stderr)
         print(f"== {Path(path).name} ({year}): world (countries of 1M or more) e0 {world['e0']:.1f}  "
-              f"children per woman {world['tfr']:.2f}  growth {world['r']:+.2f}% a year")
+              f"children per woman {world['tfr']:.2f}  growth {world['r']:+.2f}% a year{only}")
         own = sum(1 for v in stored.values() if all(k in v for k in CENSUS_INPUT_VARS))
-        print(f"   {own} states on the census's own inputs (medicine as it had spread)")
+        print(f"   {own} states on the census's own inputs (medicine as it had spread); {len(saved)} with its own "
+              "practice shares")
         for country, tag, people, got, hist in sorted(rows, key=lambda r: -r[2]):
             e = f"{hist['e0'][1]:.0f} ({hist['e0'][0]})" if hist["e0"] else "-"
             m = f"{hist['imr'][1]:.0f}" if hist["imr"] else "-"
@@ -828,6 +946,143 @@ def cmd_history(args):
             t = f"{hist['tfr'][1]:.1f}" if hist["tfr"] else "-"
             print(f"{tag:4s} {country:15s} {people / 1e6:6.1f}M  model e0 {got['e0']:4.1f} imr {got['imr']:4.0f} "
                   f"tfr {got['tfr']:.2f} growth {got['r']:+.2f}%   history e0 {e:10s} imr {m:4s} tfr {t:4s} people {g}")
+    return 0
+
+
+# ---- Late Marriage and Birth Spacing (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md) ----------
+# demographics_practices imports this module, so the commands import it inside.
+def cmd_practices_replay(args):
+    import demographics_practices as DP
+    carriers = DM.load_carriers()
+    loaded = sorted(((save_year(p) or args.year, DP.practice_states(p, carriers)) for p in args.save),
+                    key=lambda pair: pair[0])
+    result = DP.replay(loaded)
+    for year, recs in sorted(result.items()):
+        west = DP._mean(recs.values(), "lm", lambda r: r["strategic_region"] in DP.WEST)
+        parts = [f"West's Late Marriage {west:.2f}" if west is not None else "no Western state"]
+        for label, keep in DP.EAST_ASIA_BS:
+            got = DP._mean(recs.values(), "bs", keep)
+            parts.append(f"{label}'s Birth Spacing {got:.2f}" if got is not None else f"no {label}")
+        print(f"{year}: " + "; ".join(parts))
+    print("largest moves from the start (practice, state region, start -> share, target):")
+    for move, p, _sid, sr, start, share, target in DP.replay_moves(result):
+        print(f"  {move:.2f}  {p} {sr:28s} {start:.2f} -> {share:.2f}  target {target:.2f}")
+    if args.out:
+        with open(args.out, "w", encoding="utf-8") as fh:
+            json.dump({str(y): r for y, r in result.items()}, fh, indent=1, sort_keys=True)
+    fails = DP.replay_gate(result)
+    for line in fails:
+        print("GATE " + line)
+    return 1 if fails else 0
+
+
+def cmd_practices_fit(args):
+    import demographics_practices as DP
+    try:
+        anchors = read_anchors(args.anchors)
+    except OSError as e:
+        print(f"cannot read the anchors {args.anchors}: {e}", file=sys.stderr)
+        return 1
+    rows = DP.peacetime_span(json.loads(Path(args.peacetime).read_text(encoding="utf-8"))["rows"])
+    carriers = DM.load_carriers()
+    shares_by_year = DP.read_shares(args.shares) if args.shares else {}
+    saves = {path: DP.read_save(path) for path in args.save}   # parse each save once
+    fit_years = {int(y) for y in args.fit_years.split(",")}
+
+    def load(carriers):
+        out = {}
+        for path in args.save:
+            year = save_year(path) or args.year
+            states = DP.practice_states(path, carriers, save=saves[path])
+            # the seed, under the save's own shares (Stop B, M2), under the replay's: a state the replay lacks takes its own
+            shares = {**DP.table_shares(states), **DP.saved_shares(states), **shares_by_year.get(year, {})}
+            out[year] = DP.fit_states(path, carriers, shares, save=saves[path])
+        return out
+
+    def scenarios_out(carriers, s, cl, cb):
+        """PRACTICE_SCENARIOS and the medicine scenarios out of band at this point (review I1): the curve x s and the
+        cuts patched, since the scenarios read them from P."""
+        with DP.patch_params(WEALTH_TFR_LOW=P.WEALTH_TFR_LOW * s, WEALTH_TFR_HIGH=P.WEALTH_TFR_HIGH * s,
+                             PRACTICE_CUT={"lm": cl, "bs": cb}):
+            fert = [r[0] for r in fertility_rows(carriers=carriers, scenarios=PRACTICE_SCENARIOS)
+                    if not r[2] <= r[1] <= r[3]]
+        med = [f"{label} {k}" for label, figures in medicine_rows(carriers=carriers)
+               for k, (v, lo, hi) in figures.items() if not lo <= v <= hi]
+        return fert, med
+
+    def show(proj, fails):
+        for label, (measured, projected) in sorted(proj["groups"].items()):
+            band = dict((l, b) for l, _r, b in R.REPORT_REGIONS).get(label)
+            b = f"{band[0]:+g} to {band[1]:+g}" if band else "-"
+            print(f"  {label:28s} measured {measured:+5.1f}  projected {projected:+5.1f}  history {b}")
+        print(f"  {'World':28s} measured {proj['world'][0]:+5.1f}  projected {proj['world'][1]:+5.1f}")
+        for line in fails:
+            print("  GATE " + line)
+
+    today = load(carriers)
+    grid = ([float(x) for x in args.s.split(",")], [float(x) for x in args.lm.split(",")],
+            [float(x) for x in args.bs.split(",")])
+    def china(res):
+        """China's children per woman in the fit years, flagged below about 5 (owner, 2026-10-11; D13)."""
+        got = {y: m for (c, y), (m, _h) in res["countries"].items() if c == "China" and y in fit_years}
+        return " / ".join(f"{v:.2f}{' LOW' if v < 5.0 else ''}" for _y, v in sorted(got.items()))
+
+    print("s     cut_lm cut_bs error  world tfr        india east  China tfr     high group  gate (today's mortality)")
+    for s, cl, cb, res in DP.fit_table(today, anchors, *grid, years=fit_years):
+        east, _rate = DP.east_for_china(rows, today, today, s, cl, cb)
+        res = DP.evaluate(today, anchors, s, cl, cb, east=east, years=fit_years)
+        tfr = " / ".join(f"{v:.2f}" for _y, v in sorted(res["world_tfr"].items()) if v)
+        hi = f"{res['high'][0]:.2f}-{res['high'][1]:.2f}" if res["high"] else "-"
+        fails = DP.region_gate(DP.project_regions(rows, today, today, s, cl, cb, east=east))
+        print(f"{s:.2f}  {cl:.2f}   {cb:.2f}   {res['error']:.3f}  {tfr:16s} {res['held']:.2f}  {east:.2f}  "
+              f"{china(res):12s}  {hi:10s}  {len(fails)} failing")
+    if not args.at:
+        return 0
+    s, cl, cb, *rest = (float(x) for x in args.at.split(","))
+    held = rest[0] if rest else None
+    east = rest[1] if len(rest) > 1 else DP.east_for_china(rows, today, today, s, cl, cb, held)[0]
+    res = DP.evaluate(today, anchors, s, cl, cb, held=held, east=east, years=fit_years)
+    print(f"held shares: India {res['held']:.2f}, China, Manchuria and Korea {east:.2f}; China's children per woman "
+          f"{china(res)}")
+    for (country, year), (model, hist) in sorted(res["countries"].items()):
+        if year not in fit_years:
+            continue
+        tag = " (half)" if country in DP.FLAT_GUESSES else ""
+        tag += " (dropped)" if (country, year) in DP.DROPPED else ""
+        off = " OFF" if hist is not None and abs(model - hist) > 0.5 else ""
+        h = f"{hist:.2f}" if hist is not None else "-"
+        print(f"{country:15s} {year}  model {model:.2f}  history {h}{tag}{off}")
+    proj = DP.project_regions(rows, today, today, s, cl, cb, held, east)
+    show(proj, DP.region_gate(proj))
+    print(f"Western life expectancy: {DP.mortality_report(today)}; scenarios out of band: "
+          f"{scenarios_out(carriers, s, cl, cb)}")
+    if args.mortality:
+        for floor in (1.5, 1.75, 2.0, 2.25):
+            for sol in (8, 9, 10):
+                for scale in (0.9, 1.0, 1.1, 1.2, 1.3):
+                    with DP.patch_params(infection_scale=scale, POVERTY_INFECTION_AT_FLOOR=floor,
+                                         POVERTY_INFECTION_SOL=sol):
+                        point = load(carriers)
+                        out = scenarios_out(carriers, s, cl, cb)
+                    e_pt = rest[1] if len(rest) > 1 else DP.east_for_china(rows, today, point, s, cl, cb, held)[0]
+                    proj = DP.project_regions(rows, today, point, s, cl, cb, held, e_pt)
+                    fails = DP.region_gate(proj)
+                    e0 = DP.mortality_report(point)
+                    cn = china(DP.evaluate(point, anchors, s, cl, cb, held=held, east=e_pt, years=fit_years))
+                    print(f"floor {floor:.2f} sol {sol} infection x{scale:.2f}: {len(fails)} failing; East Asia's "
+                          f"share {e_pt:.2f}, China {cn}; Western e0 {e0}; scenarios out of band {out}")
+                    show(proj, fails)
+    if args.means:
+        for vulc in (0.10, 0.15, 0.20, 0.25, 0.30):
+            for fem in (0.10, 0.15, 0.20, 0.25, 0.30):
+                patched = [dataclasses.replace(c, value=vulc) if c.key == "vulcanization"
+                           and c.type == P.CONTRACEPTION_TYPE else
+                           dataclasses.replace(c, value=fem) if c.key == "feminism"
+                           and c.type == P.CONTRACEPTION_TYPE else c for c in carriers]
+                res = DP.evaluate(load(patched), anchors, s, cl, cb, held=held, east=east, years=fit_years)
+                gb = {y: m for (c, y), (m, _h) in res["countries"].items() if c == "United Kingdom"}
+                print(f"vulcanization {vulc:.2f} feminism {fem:.2f}: Britain {gb}; scenarios out of band "
+                      f"{scenarios_out(patched, s, cl, cb)}")
     return 0
 
 
@@ -1129,6 +1384,18 @@ CENSUS_INPUT_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_c
 # Read on their own, not in CENSUS_INPUT_VARS: that check is all or nothing, and a census from before #916's last
 # fix, which holds the nine without these two, would lose its drifted medicine.
 STEP_SOL_VARS = ("te_dg_in_sol", "te_dg_in_lit")
+# The practices' shares a census state holds (te_demog_practice_effects.txt; Stop B, M2): history and practices-fit start
+# from them where a save has them, under a replay's (--shares) and over the seed.
+PRACTICE_VARS = tuple(f"te_dg_pr_{p}" for p in P.PRACTICES)
+
+
+def saved_shares(walked):
+    """{state id: {practice: share}} for the states whose variables ({state id: {variable: value}}) hold every
+    practice's share."""
+    return {sid: {p: got[f"te_dg_pr_{p}"] for p in P.PRACTICES} for sid, got in walked.items()
+            if all(f"te_dg_pr_{p}" in got for p in P.PRACTICES)}
+
+
 FIDELITY_VARS = (("te_dg_sol", "te_dg_lit") + STEP_SOL_VARS + tuple(var for _c, var, _s in FIDELITY_CAUSES)
                  + CENSUS_INPUT_VARS)
 
@@ -1275,11 +1542,37 @@ def main(argv=None):
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
     sub.add_parser("lag").set_defaults(fn=cmd_lag)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
+    sub.add_parser("workforce", help="phase 2 step 1: the participation figures at the starting values (the design "
+                                     "§1.8)").set_defaults(fn=cmd_workforce)
     p = sub.add_parser("history")
     p.add_argument("save", nargs="+")
     p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")
     p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.add_argument("--shares", help="practices-replay's --out file: each save's year selects its shares; a state or a "
+                                    "year it doesn't hold takes its seed")
+    p.add_argument("--incorporated-only", action="store_true",
+                   help="each country's figure from its incorporated states (the world line keeps every state)")
+    p.add_argument("--no-practices", action="store_true", help="the model without Late Marriage and Birth Spacing")
     p.set_defaults(fn=cmd_history)
+    p = sub.add_parser("practices-replay", help="Late Marriage's and Birth Spacing's drift through a run's saves")
+    p.add_argument("save", nargs="+")
+    p.add_argument("--out", help="write {year: {state id: record}} here (history --shares, practices-fit --shares)")
+    p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.set_defaults(fn=cmd_practices_replay)
+    p = sub.add_parser("practices-fit", help="the practices' joint fit, #904's peacetime rates projected, the gate")
+    p.add_argument("save", nargs="+")
+    p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")
+    p.add_argument("--peacetime", required=True, help="#904's state-years: regional-rates/analyze.py --json's file")
+    p.add_argument("--shares", help="practices-replay's --out file (a state or year it lacks takes its seed)")
+    p.add_argument("--s", default="1.00,1.05,1.10,1.15,1.20", help="the wealth curve's raises to try")
+    p.add_argument("--lm", default="0.20,0.25,0.30,0.35,0.40", help="Late Marriage's cuts to try")
+    p.add_argument("--bs", default="0.25,0.30,0.35,0.40,0.45", help="Birth Spacing's cuts to try")
+    p.add_argument("--fit-years", default="1837,1887", help="the saves' years the children-per-woman error reads")
+    p.add_argument("--at", help="S,LM,BS[,HELD[,EAST]]: one point in detail (HELD India's share, EAST East Asia's)")
+    p.add_argument("--mortality", action="store_true", help="with --at: the poverty term and base infection grid")
+    p.add_argument("--means", action="store_true", help="with --at: the era-3 means pair's grid")
+    p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.set_defaults(fn=cmd_practices_fit)
     p = sub.add_parser("adopters")
     p.add_argument("saves", nargs="+")
     p.set_defaults(fn=cmd_adopters)

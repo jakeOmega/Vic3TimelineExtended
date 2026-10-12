@@ -1,8 +1,10 @@
 ﻿# The engine's birth and mortality lines on vanilla's laws, moved to script-only types (owner, 2026-10-11;
 # docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md). Each field is cancelled by its
 # negative, which the engine sums to 0 and the tooltip drops, and its family's type carries the value at the same
-# scaling; te_demog_lines_refresh re-applies it while the census doesn't set the state's births and deaths. A
-# release keeps this file (scripts/release/comment_out_census_inputs.py doesn't read it).
+# scaling; te_demog_lines_refresh re-applies it while the census doesn't set the state's births and deaths. And,
+# since phase 2 step 1, the working-adult lines' women's-work and replaced families, re-applied by
+# te_demog_workforce_lines_refresh while no workforce term is in force. A release keeps this file
+# (scripts/release/comment_out_census_inputs.py doesn't read it).
 INJECT:law_charitable_health_system = {
 	institution_modifier = {
 		state_mortality_mult = 0.03
@@ -53,17 +55,35 @@ INJECT:law_women_in_the_fields = {
 	modifier = {
 		state_birth_rate_mult = 0.1
 		state_demog_absorbed_birth_rate_mult = -0.1
+		state_working_adult_ratio_add = -0.3
+		state_demog_womens_work_ratio_add = 0.3
 	}
 }
 INJECT:law_women_in_the_workplace = {
 	modifier = {
 		state_birth_rate_mult = 0.05
 		state_demog_absorbed_birth_rate_mult = -0.05
+		state_working_adult_ratio_add = -0.1
+		state_demog_womens_work_ratio_add = 0.1
 	}
 }
 INJECT:law_womens_suffrage = {
 	modifier = {
 		state_birth_rate_mult = 0.05
 		state_demog_absorbed_birth_rate_mult = -0.05
+		state_working_adult_ratio_add = -0.15
+		state_demog_womens_work_ratio_add = 0.15
+	}
+}
+INJECT:law_women_own_property = {
+	modifier = {
+		state_working_adult_ratio_add = -0.05
+		state_demog_womens_work_ratio_add = 0.05
+	}
+}
+INJECT:law_old_age_pension = {
+	institution_modifier = {
+		state_working_adult_ratio_add = 0.01
+		state_demog_replaced_ratio_add = -0.01
 	}
 }

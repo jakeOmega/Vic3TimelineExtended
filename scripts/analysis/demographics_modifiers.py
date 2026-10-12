@@ -114,9 +114,10 @@ def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, ty
     return out
 
 
-def engine_rate_lines(root=ROOT, mod=True):
+def engine_rate_lines(root=ROOT, mod=True, keep=None):
     """{(kind, key, block, field): net value} for every `*_mult` line in a law's `modifier` or
-    `institution_modifier`, a technology's or an institution's `modifier`. Vanilla's and (with mod) the
+    `institution_modifier`, a technology's or an institution's `modifier` (`keep`, a predicate on the field, picks
+    other fields instead: phase 2 step 1's working-adult families and participation inputs). Vanilla's and (with mod) the
     mod's are summed as the engine sums an INJECT (scripting_best_practices.md § INJECT); a mod REPLACE
     drops vanilla's. kind: law, technology, institution. Since the engine-lines plan (2026-10-11) a moved
     line's engine field nets to zero here (its INJECT's cancel) and its value is under its script-only type
@@ -126,6 +127,7 @@ def engine_rate_lines(root=ROOT, mod=True):
     files = {"law": ("laws", "laws"), "technology": ("technologies", "technology/technologies"),
              "institution": ("institutions", "institutions")}
     out = {}
+    keep = keep or (lambda f: f.endswith("_mult"))
 
     def w(v):
         """A value without its ("=", ...) wrapper: a tuple from the parser, a list from vanilla_parsed's JSON."""
@@ -146,7 +148,7 @@ def engine_rate_lines(root=ROOT, mod=True):
         for block in ("modifier", "institution_modifier"):
             for lines in each(body.get(block)):
                 for field, value in (lines if isinstance(lines, dict) else {}).items():
-                    if field.endswith("_mult"):
+                    if keep(field):
                         k = (kind, key, block, field)
                         out[k] = out.get(k, 0.0) + sum(float(x) for x in each(value))
 
@@ -202,6 +204,36 @@ def line_carriers(root=ROOT):
     out = []
     for (kind, key, block, field), (family, value) in sorted(engine_lines(root).items()):
         name = P.ENGINE_LINE_TYPES[(family, field)]
+        if kind == "law" and block == "institution_modifier":
+            out.append(Carrier("law_institution", key, name, value, institution.get(key)))
+        elif kind == "institution":
+            out.append(Carrier("institution", key, name, value, key))
+        else:
+            out.append(Carrier(kind, key, name, value))
+    return out
+
+
+def engine_workforce_lines(root=ROOT):
+    """{(kind, key, block, field): (family, value)}: the working-adult lines moved to the women's-work and replaced
+    types (phase 2 step 1), read back from the laws and technologies as engine_lines() reads the births and deaths
+    ones. The amendments, IG traits and static modifiers are no reader's: TestWorkforceLinesMoved reads their blocks."""
+    names = set(P.WORKFORCE_LINE_TYPES.values())
+    back = {name: fam_field for fam_field, name in P.WORKFORCE_LINE_TYPES.items()}
+    out = {}
+    for (kind, key, block, field), value in engine_rate_lines(root, keep=lambda f: f in names).items():
+        if abs(value) > 1e-9:
+            family, engine_field = back[field]
+            out[(kind, key, block, engine_field)] = (family, value)
+    return out
+
+
+def workforce_line_carriers(root=ROOT):
+    """engine_workforce_lines() as Carriers typed by their family's type, with the engine's scaling kinds (as
+    line_carriers)."""
+    institution = {key: _u(_u(entry).get("institution")) for key, entry in _state(root).get_data("Laws").items()}
+    out = []
+    for (kind, key, block, field), (family, value) in sorted(engine_workforce_lines(root).items()):
+        name = P.WORKFORCE_LINE_TYPES[(family, field)]
         if kind == "law" and block == "institution_modifier":
             out.append(Carrier("law_institution", key, name, value, institution.get(key)))
         elif kind == "institution":

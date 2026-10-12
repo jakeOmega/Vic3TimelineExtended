@@ -76,10 +76,19 @@ inh_forced_heirship_rural = {
 }
 
 # Primogeniture & Entail: large families, and the younger sons leave the
-# land.
+# land. The birth line sits on the moved lines' absorbed family
+# (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Task 9;
+# the late-marriage spec 4.5, call 4): outside the Demographics rule's Full
+# setting the moved lines' pair re-applies it (Laws and Institutions in a
+# state's birth rates), and under Full the census's Late Marriage takes its
+# place, since impartible inheritance raises it. Forced Heirship's line
+# stays an engine field, on top of the census under Full (phase 3).
+# Unverified: that the engine sums a script-only type on a state modifier
+# scaled by its multiplier. te_debug_demog_pr_selfcheck_start logs TE_SELF_CHECK
+# once a game; BROKEN means take the plan's Plan B.
 inh_primogeniture_rural = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_birth_rate_mult = 0.1
+	state_demog_absorbed_birth_rate_mult = 0.1
 	state_migration_quota_mult = 0.2
 }
 

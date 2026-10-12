@@ -291,7 +291,7 @@ yours loses approval the whole time.
 
 | Law | Available | Law's Wealth Concentration target | Also |
 |---|---|---|---|
-| Primogeniture & Entail | From the start | 80 | In farming states, birth rate and migration up; tax capacity −10%; local administration costs 10% less bureaucracy |
+| Primogeniture & Entail | From the start | 80 | In farming states, birth rate (outside the Demographics rule's Full setting) and migration up; tax capacity −10%; local administration costs 10% less bureaucracy |
 | Customary Inheritance | From the start | 50 | Tax capacity −5%; local administration costs 5% less bureaucracy |
 | Forced Heirship | Egalitarianism | 25 | In farming states, birth rate and migration down; tax capacity +10%, Rural Folk +10% political strength |
 | Freedom of Testation | From the start | 60 | Capitalists invest 10% more |

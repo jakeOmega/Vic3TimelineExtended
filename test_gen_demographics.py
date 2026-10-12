@@ -3,6 +3,7 @@
 import re
 import sys
 import unittest
+import unittest.mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -11,6 +12,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import gen_demographics as gen  # noqa: E402
+import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
 from format_paradox_tabs import format_text  # noqa: E402
 
@@ -249,6 +251,90 @@ class TestGenerated(unittest.TestCase):
             self.assertNotIn(gone, self.values)
 
 
+    def test_the_practices_values(self):
+        """Late Marriage and Birth Spacing (the late-marriage plan, Task 7): the start ladders, erosions, seeds,
+        targets and terms."""
+        for p in P.PRACTICES:
+            start = self.values.split(f"te_demog_pr_start_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            # the state regions come after the strategic regions, so they win
+            if "region = sr:" in start and "state_region = s:" in start:
+                self.assertLess(start.rindex("region = sr:"), start.index("state_region = s:"))
+            term = self.values.split(f"te_demog_pr_term_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            self.assertIn(f"limit = {{ has_variable = te_dg_pr_{p} }}", term)
+            self.assertIn(f"multiply = {gen.lit(P.PRACTICE_CUT[p])}", term)
+            self.assertIn(f"te_demog_pr_target_{p} = {{", self.values)
+            seed = self.values.split(f"te_demog_pr_seed_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            self.assertIn(f"value = te_demog_pr_erosion_{p}", seed)
+            self.assertIn(f"multiply = te_demog_pr_start_{p}", seed)
+            self.assertIn(f"value = te_demog_pr_seed_{p}", self.values.split(f"te_demog_pr_target_{p} = {{", 1)[1])
+            self.assertIn(f"multiply = te_demog_pr_term_{p}", self.values.split("te_demog_pr_terms = {", 1)[1])
+        lm = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("te_inh_has_undivided_farms = yes", lm)
+        self.assertIn("has_law = law_type:law_primogeniture", lm)
+        erosion_lm = self.values.split("te_demog_pr_erosion_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertNotIn("te_dg_acc", erosion_lm, "health care erodes Birth Spacing only")
+        erosion_bs = self.values.split("te_demog_pr_erosion_bs = {", 1)[1].split("\n}\n", 1)[0]
+        # the access medicine has reached above the base (#916's drifted te_dg_acc), not the law's modifier
+        self.assertIn("value = var:te_dg_acc subtract = te_demog_k_base_access", erosion_bs)
+        self.assertNotIn(f"modifier:{P.ACCESS_TYPE}", erosion_bs)
+        self.assertIn(f"te_demog_k_practice_rate = {{ value = {gen.lit(P.PRACTICE_RATE)} }}", self.values)
+
+    @staticmethod
+    def _owner_block_holds(target, conditions):
+        """(inside, outside): whether every condition sits in the limit's owner = { } block, and whether any appears
+        outside it. Brace matching, so a nested OR stays inside."""
+        limit = target[target.index("limit = {"):]
+        start = limit.index("owner = {")
+        depth, i = 0, start
+        while True:
+            depth += {"{": 1, "}": -1}.get(limit[i], 0)
+            i += 1
+            if depth == 0 and limit[i - 1] == "}":
+                break
+        inner, outer = limit[start:i], target.replace(limit[start:i], "")
+        return all(c in inner for c in conditions), any(c in outer for c in conditions)
+
+    def test_late_marriages_inheritance_reads_the_owner(self):
+        """Stop B, M1: te_inh_has_undivided_farms reads a country link (active_law:lawgroup_inheritance), so both of
+        the inheritance conditions must sit inside te_demog_pr_target_lm's owner = { } block. _OwnerEngine reads owner
+        and state alike, so only this static check catches a slip."""
+        conditions = ("has_law = law_type:law_primogeniture", "te_inh_has_undivided_farms = yes")
+        target = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertEqual(self._owner_block_holds(target, conditions), (True, False))
+        slipped = ("limit = {\n\tOR = {\n\t\towner = { has_law = law_type:law_primogeniture }\n"
+                   "\t\tte_inh_has_undivided_farms = yes\n\t}\n}")
+        self.assertNotEqual(self._owner_block_holds(slipped, conditions), (True, False), "the check catches a slip")
+
+    def test_the_start_ladders_give_every_state_its_start(self):
+        """Each ladder, read in order as the engine reads it (a later if wins), gives every land state region the
+        start demographics_model.practice_start gives it, with the entries that change nothing left out."""
+        import demographics_model as M
+        import demographics_regions as R
+        for p in P.PRACTICES:
+            ladder = self.values.split(f"te_demog_pr_start_{p} = {{", 1)[1].split("\n}\n", 1)[0]
+            blocks = []
+            for line in ladder.splitlines():
+                line = line.strip()
+                named = re.fullmatch(r"(?:region = sr:|state_region = s:)(\w+)", line)
+                value = re.fullmatch(r"value = ([\d.]+)", line)
+                if line == "if = {":
+                    blocks.append([set(), None])
+                elif named:
+                    blocks[-1][0].add(named.group(1))
+                elif blocks and value:
+                    blocks[-1][1] = float(value.group(1))
+            for state, region in R.strategic_region_of().items():
+                got = 0.0
+                for names, v in blocks:
+                    if state in names or region in names:
+                        got = v
+                self.assertAlmostEqual(got, M.practice_start(p, state, region), msg=f"{p} {state}")
+
+    def test_the_practice_loops_call_every_practice(self):
+        for name in ("seed", "step", "country_init", "country_add", "country_store"):
+            body = self.effects.split(f"te_demog_practices_{name} = {{", 1)[1].split("\n}\n", 1)[0]
+            self.assertEqual(re.findall(rf"te_demog_practice_{name} = \{{ P = (\w+) \}}", body), list(P.PRACTICES))
+
 class TestEngineRateTerms(unittest.TestCase):
     """The expected births and deaths the migration residual is measured against: each pop's curves x the
     engine's own multiplier for it (docs/testing/demographics-growth-probe-results-2026-10-09.md)."""
@@ -337,3 +423,45 @@ class TestEngineRateTerms(unittest.TestCase):
         self.assertIn("exists = workplace", laborers)
         self.assertNotIn("state_mortality_turmoil_mult", self.death)   # scaling unknown, measured about 0
         self.assertNotIn("state_mortality_wealth_mult", self.death)
+
+
+class TestPhase2Generated(unittest.TestCase):
+    """Phase 2 step 1 (the interfaces plan, Task 3)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = gen.render_effects()
+        cls.values = gen.render_values(ROOT)
+
+    def test_the_birth_line_is_todays_while_the_schedules_are_one(self):
+        body = re.search(r"^te_demog_slot_births = \{\n(.*?)^\}", self.effects, re.M | re.S).group(1)
+        self.assertIn("value = { value = local_var:te_dg_f multiply = local_var:te_dg_asfr divide = 100000 "
+                      "multiply = local_var:te_dg_tfr }", body)
+        self.assertNotIn("te_dg_asfr_un", self.effects)
+
+    def test_two_schedules_write_two_terms(self):
+        other = {15: 10000, 20: 30000, 25: 30000, 30: 20000, 35: 7000, 40: 2500, 45: 500}
+        with unittest.mock.patch.object(P, "ASFR_UNPLANNED_SHAPE", other):
+            text = gen.render_effects()
+        self.assertIn("te_dg_asfr_un", text)
+        self.assertIn("multiply = local_var:te_dg_sh_pl", text)
+
+    def test_the_bands_are_the_tables(self):
+        for a in P.BIO_BANDS:
+            self.assertIn(f"value = {{ value = {gen.lit(M.band_value(P.CAPACITY, a))} multiply = local_var:te_dg_wk_capm "
+                          "max = 1 }", self.effects)
+        self.assertRegex(self.effects, r"te_demog_enter_cal_band = \{")
+        self.assertRegex(self.effects, r"te_demog_enter_bio_band = \{")
+
+    def test_the_life_table_ends_with_the_threshold(self):
+        lt = re.search(r"^te_demog_life_table = \{\n(.*?)^\}", self.effects, re.M | re.S).group(1)
+        self.assertTrue(lt.rstrip().endswith("te_demog_old_age_pass = yes"))
+        for start, _w in P.GROUPS:
+            stored = f"name = te_dg_oal{start}f" in lt
+            self.assertEqual(stored, start >= P.OLD_AGE_FROM, start)
+
+    def test_the_constants(self):
+        for name, v in (("men_rate", P.MEN_RATE), ("workforce_scale", P.WORKFORCE_SCALE),
+                        ("pension_age_standard", P.PENSION_AGE["standard"]),
+                        ("health_need_1836", P.HEALTH_NEED_1836)):
+            self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(v)} }}", self.values)

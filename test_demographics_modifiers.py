@@ -72,7 +72,11 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    "state_work_mortality_mult": {"law", "law_institution"},
                    "state_chronic_mortality_mult": {"law"},
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
-                   P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"}}
+                   P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"},
+                   # call 3's participation inputs (phase 2 step 1): the criminal-justice laws and State Eugenics'
+                   # flat lines, the Ministries of Labour per level
+                   P.MALE_PARTICIPATION_TYPE: {"law"}, P.PARTICIPATION_TYPE: {"law_institution"},
+                   P.CAPACITY_TYPE: {"law"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
@@ -294,3 +298,21 @@ class TestEngineRateLines(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestWorkforceReaders(unittest.TestCase):
+    """Phase 2 step 1 (the design §1.7): the working-adult lines' readers, beside #892's."""
+
+    def test_the_readers_keep_only_the_working_adult_field(self):
+        lines = DM.engine_workforce_lines()
+        self.assertTrue(lines)
+        for (kind, key, block, field), (family, value) in lines.items():
+            self.assertEqual(field, P.WORKING_ADULT_FIELD)
+            self.assertIn(family, ("womens_work", "replaced"))
+
+    def test_carriers_keep_the_engines_scaling(self):
+        by_key = {c.key: c for c in DM.workforce_line_carriers()}
+        self.assertEqual(by_key["law_old_age_pension"].kind, "law_institution")
+        self.assertEqual(by_key["law_pro_capital_ministry_of_labor"].kind, "law_institution")
+        self.assertEqual(by_key["law_womens_suffrage"].kind, "law")
+        self.assertEqual(by_key["contraceptive_pill"].kind, "technology")
