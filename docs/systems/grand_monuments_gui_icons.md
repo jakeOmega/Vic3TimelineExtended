@@ -31,3 +31,5 @@ Change the entry, re-render, review, then `write`. The GUI needs no edit unless 
 - **Hard Times.** The brief asked for the bowl beside idle tools. The tools lie crossed in front of the bowl; the first subject drew a mortar and pestle.
 
 **Open question.** At 36 px the stele can read as a gravestone. #586 queued an obelisk alternative (`gm_part/obelisk`). If it is adopted, the four status files keep their names, so only the "Shows" column above changes.
+
+**Monument pictures (2026-10-11).** Each monument's row and its state card also show a picture of its style and form, from `gfx/interface/icons/gm_pictures/` (80 files, `<skin>__<form>.dds`, framed like the building icons). They are not status icons: the `gm_picture` type and the `PICTURES` table in `test_grand_monument_registry.py` list them, and the status badge sits over the picture's corner.
