@@ -136,8 +136,9 @@ is built, its stadium adds its levels to the standing monument, or is dropped.
 
 **Left out.**
 
-- **Origins the holder owns:** the Throne of Kandy (Ceylon is British Ceylon's in 1836) and Diponegoro's kris (Central
-  Java is the Dutch East Indies'). A holder that owns the origin brings the trophy home at the first monthly pass.
+- **The Throne of Kandy** (Windsor since 1815, returned 1934): its claimant would be British Ceylon, Britain's own
+  subject, until Ceylon goes free. It could be added; nothing in the mechanics stops it.
+- **Diponegoro's kris:** a weapon, not a monument. Its claimant would be Yogyakarta, not the Netherlands.
 - **Not monuments:** the Koh-i-Noor (in Lahore in 1836), Moctezuma's headdress (Vienna) and the Gweagal shield.
 - **Since returned:** the Quadriga (1814), the Laocoön and Napoleon's other Italian spoils (1815–1816).
 - **Too slight a claim:** the Aegina and Bassae marbles, Philae's obelisk at Kingston Lacy, the Serpent Column and
@@ -188,6 +189,32 @@ It places nothing, and logs a `TE_MONUMENTS:` line, when:
 Then `gm_trophy_pass` writes the lists, and every country it listed gets a refresh (`monument_events.20`), which opens
 its journal entry.
 
+### 2.4 Trophies outside a capital
+
+A taking puts the trophy in the taker's capital, but that is the only place the capital is read. After that its site is
+a fixed state, its holder whoever owns that state. So Brest and Venice behave as a trophy left behind when its holder
+moved its capital: the Trophies on Display card shows them there, occupying Brittany or Venetia reaches them, and
+conquering the state takes them. The one place the capital still counts: Return Cultural Property's war goal contests the
+holder's capital (`control_target_country_capital`), not the trophy's state. The article still returns every trophy,
+wherever it stands.
+
+### 2.5 Who carried it off (owner's question, 2026-10-12)
+
+Phase 5's AI brought home every trophy whose origin it owned, which made its own-colony route a loop. It carried a
+monument off from its unincorporated colony, then brought it straight back at the next monthly pass and took The
+Homecoming's ten years of legitimacy. A whole monument came back marked as built by its owner, which ended the loop. A
+piece left the monument standing with its old builder, so it could be taken again once the ten-year cooldown ran out.
+A player could do the same deliberately with Bring It Home.
+
+A trophy now records its taker (`gm_tr_taken_by`): the country that made it, a looter that carries it off its site, or
+for a seeded trophy its 1836 holder. While its taker still holds it (`gm_tr_held_by_its_taker`):
+
+- the AI doesn't bring it home, and a player isn't told it is within reach;
+- Bring It Home still works but only moves it, with no Homecoming (`gm_tr_bring_home_own_tt` says so);
+- a trophy taken *from* its holder (retaken, or its site conquered) comes home as before, with The Homecoming.
+
+A trophy from before this change has no record and behaves as before.
+
 ## 3. A trophy's line of history
 
 A trophy row today shows its name, dedication, origin and year. A trophy from a landmark now adds the state card's
@@ -230,6 +257,8 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
   guards both owners and duplicates. The on-action runs it after the landmarks. The part names (`gm_tr_part_name`) list
   the landmark branches first (the Quadriga, then the new ones), then the forms. `gm_tr_landmark_desc` has a branch per
   landmark, and the trophy rows have their history line.
+  `TakerTests`: every place a trophy gets a taker records it, the AI's pass and its notice skip a trophy its taker
+  holds, and The Homecoming and its tooltip leave the taker out (§2.5).
 - **Debug:** `te_debug_monuments.5` gains option c, which seeds the 1836 trophies (for a save made before this change).
 - **Docs:** `mod_systems.md` § Grand Monuments; the player guide's `02-timeline.md` (the landmark paragraph and
   *Monument trophies*); the trophies spec gets a pointer here.
@@ -237,9 +266,8 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 ## 6. In-game checks
 
 1. A new game: the eight new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
-   logged. **Unverified:** whether Benin's and Asante's buildings stand. The country definitions aren't in this
-   repository, and if either is a decentralized nation, `create_building` may place nothing there. The seed's log line
-   can't tell, so look at the state.
+   logged. Benin and Asante are both centralized in 1836 (owner, 2026-10-12), and a building can be placed in a
+   decentralized country's state too.
 2. Britain's Trophies section lists the Marbles, the Rosetta Stone and Tipu's Tiger. France's lists four and Austria's
    two. Greece, Egypt, the Ottomans, Mysore and Mascara each list theirs under Held Abroad.
 3. The history line's tooltip on a trophy row reads its landmark's line.
@@ -256,6 +284,9 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
   the Mughals' province of Delhi, the Jantar Mantar, the Shalimar Gardens, Aksum) is recorded on that part. If the
   country holding the rest annexes it (the Company annexing the Mughals), the engine merges the two. The records go with
   the merged part, and the building reads as an unrecorded monument. This is a phase 4 limit and is not fixed here: it
-  needs the landmark's identity kept by state region and restored after a merge.
-- **A trophy whose origin its holder comes to own goes home at the next monthly pass,** as phase 5 decided. A France that
-  conquers all of Algiers brings Baba Merzoug home from Brest.
+  needs the landmark's identity kept by state region and restored after a merge (issue #936, with the engine reads it
+  needs first).
+- **A holder keeps a trophy it carried off itself, even once it owns the origin** (`gm_tr_held_by_its_taker`, added
+  2026-10-12 with this change; the seeded trophies' taker is their 1836 holder). A France that conquers all of Algiers
+  keeps Baba Merzoug at Brest, and Britain keeps the Rosetta Stone if it takes Egypt. A trophy taken *from* its holder
+  still goes home: the AI brings it back, with The Homecoming.

@@ -129,6 +129,7 @@ gm_state_tr_make_trophy = {
 			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
 			set_variable = { name = gm_tr_grandeur value = scope:gm_tr_state.var:gm_tr_take_value }
 			set_variable = { name = gm_tr_year value = gm_this_year }
+			set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
 			if = {
 				limit = {
 					scope:gm_tr_state = { var:gm_tr_take_whole = 1 }
@@ -326,6 +327,7 @@ gm_tr_take_from_site = {
 		}
 		set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
 		set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
+		set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
 		gm_tr_forget_notes = yes
 		gm_tr_notify_taking = yes
 	}
@@ -357,12 +359,20 @@ gm_tr_return_home = {
 	if = {
 		limit = { exists = scope:gm_tr_receiver }
 		var:gm_tr_origin = { gm_state_tr_receive = yes }
-		scope:gm_tr_receiver = {
-			set_variable = { name = gm_boon_homecoming value = gm_boon_months }
-			set_variable = gm_active
-			if = {
-				limit = { is_ai = no }
-				post_notification = gm_tr_homecoming_notice
+		# The Homecoming is for getting back what another took: a country
+		# that carried it off itself (from its own colony, or before it
+		# conquered the origin) only moves it.
+		if = {
+			limit = {
+				NOT = { var:gm_tr_taken_by ?= { this = scope:gm_tr_receiver } }
+			}
+			scope:gm_tr_receiver = {
+				set_variable = { name = gm_boon_homecoming value = gm_boon_months }
+				set_variable = gm_active
+				if = {
+					limit = { is_ai = no }
+					post_notification = gm_tr_homecoming_notice
+				}
 			}
 		}
 		if = {
@@ -702,7 +712,8 @@ gm_tr_repair_places = {
 }
 
 # Container scope, once a month. An AI holder brings home what it owns the
-# origin of, and returns to an ally or bloc partner at gm_tr_ai_return_chance.
+# origin of, unless it carried it off itself (gm_tr_held_by_its_taker), and
+# returns to an ally or bloc partner at gm_tr_ai_return_chance.
 # An occupier of the site: the AI takes its own home, and carries off any
 # other at gm_tr_ai_loot_chance_trophy; a player is told once per
 # occupation. A player holder is told once that it can bring one home.
@@ -720,9 +731,14 @@ gm_tr_monthly_one = {
 			exists = scope:gm_tr_ai_holder
 			scope:gm_tr_ai_holder = { is_ai = yes }
 		}
+		# Its own back, unless it carried it off itself: an AI that took a
+		# monument from its own colony would otherwise bring it straight back.
 		if = {
 			limit = { gm_tr_holder_owns_origin = yes }
-			add_to_temporary_list = gm_tr_ai_home
+			if = {
+				limit = { gm_tr_held_by_its_taker = no }
+				add_to_temporary_list = gm_tr_ai_home
+			}
 		}
 		else_if = {
 			limit = {
@@ -739,6 +755,7 @@ gm_tr_monthly_one = {
 		limit = {
 			exists = scope:gm_tr_ai_holder
 			gm_tr_holder_owns_origin = yes
+			gm_tr_held_by_its_taker = no
 			NOT = { has_variable = gm_tr_home_notified }
 		}
 		set_variable = gm_tr_home_notified
@@ -1010,6 +1027,7 @@ gm_seed_trophy = {
 					}
 				}
 				set_variable = { name = gm_tr_year value = $YEAR$ }
+				set_variable = { name = gm_tr_taken_by value = scope:gm_tr_seed_holder }
 				set_variable = { name = gm_tr_share value = flag:$SHARE$ }
 				set_variable = { name = gm_tr_dedication value = flag:$DEDICATION$ }
 				set_variable = { name = gm_tr_skin value = flag:landmark_$LANDMARK$ }

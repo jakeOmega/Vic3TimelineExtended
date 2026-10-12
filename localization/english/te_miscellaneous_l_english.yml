@@ -3126,6 +3126,7 @@
  gm_status_unsettled:0 "Unsettled"
  gm_tear_down_tt:0 "Pull it down. The new order gains legitimacy that fades over about five years, and #v [THIS.GetState.GetCustom('gm_base_ig_name')]#! approve; #v [THIS.GetState.GetCustom('gm_supporter_ig_name')]#! resent it. All of its [concept_grandeur] is lost."
  gm_tr_article_return_needs_tt:0 "The giver holds a trophy taken from the receiver's lands"
+ gm_tr_bring_home_own_tt:0 "Bring it home: all its levels are rebuilt where it was taken from. We carried it off ourselves, so it brings no Homecoming. We lose what it counts for as a trophy."
  gm_tr_bring_home_tt:0 "Bring it home: all its levels are rebuilt where it was taken from, and the Homecoming gives #G +5#! [concept_legitimacy] for ten years. We lose what it counts for as a trophy."
  gm_tr_leave_standing_tt:0 "It stays where it is. While our armies hold the state, its card in the state view keeps a Carry It Off button."
  gm_tr_name_centenary:0 "The Centenary [ScriptContainer.GetCustom('gm_tr_form_name')]"

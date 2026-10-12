@@ -777,7 +777,9 @@ one back:
 A trophy that comes home is rebuilt where it was taken from, with all the levels
 carried off. A monument standing there takes the levels; otherwise the monument
 is rebuilt with its name, style and dedication. Its owner gains The Homecoming,
-+5 legitimacy for ten years, shown in the Trophies section.
++5 legitimacy for ten years, shown in the Trophies section, unless it carried
+the trophy off itself: bringing home what you took from your own colony only
+moves it.
 
 Nine trophies are already abroad when a game begins: the Parthenon's marbles,
 the Rosetta Stone and Tipu's Tiger in London; the Dendera Zodiac, the Luxor
@@ -790,8 +792,9 @@ monument line in its row; hover it for how it came to stand abroad.
 The AI carries off monuments in the states it occupies, more often when its
 governing interest groups favor Total War, Ethnostate or National Supremacy,
 when it is unrecognized, or for a monument of 10 levels or more, and much less
-once UNESCO is in force. It brings home every trophy it can, and now and then
-returns one to an ally or a power bloc partner.
+once UNESCO is in force. It brings home every trophy taken from it that it
+can, but keeps what it carried off itself, and now and then returns one to an
+ally or a power bloc partner.
 
 ### Vanity backlash
 

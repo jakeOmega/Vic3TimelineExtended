@@ -216,6 +216,43 @@ class TakingTests(unittest.TestCase):
             self.assertIn(line, receive)
 
 
+class TakerTests(unittest.TestCase):
+    """A trophy remembers who carried it off (gm_tr_taken_by, 2026-10-12). Without it an AI that took a
+    monument from its own colony brought it straight back at the next pass, for the Homecoming's ten years
+    of legitimacy, and a piece could be taken again once its cooldown ran out."""
+
+    def test_the_record(self):
+        e = read(TR_EFFECTS)
+        self.assertIn("set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }",
+                      squash(block(e, "gm_state_tr_make_trophy")))
+        self.assertIn("set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }",
+                      squash(block(e, "gm_tr_take_from_site")), "a new looter is its new taker")
+        self.assertEqual(squash(block(read(TR_TRIGGERS), "gm_tr_held_by_its_taker")),
+                         "has_variable = gm_tr_taken_by var:gm_tr_taken_by ?= { save_temporary_scope_as = "
+                         "gm_tmp_tr_taker } gm_tr_held_by = { WHO = scope:gm_tmp_tr_taker }")
+
+    def test_the_ai_keeps_what_it_took(self):
+        one = squash(block(read(TR_EFFECTS), "gm_tr_monthly_one"))
+        self.assertIn("if = { limit = { gm_tr_holder_owns_origin = yes } if = { limit = { gm_tr_held_by_its_taker = "
+                      "no } add_to_temporary_list = gm_tr_ai_home } } else_if = {", one,
+                      "owning the origin never falls through to the ally return")
+        self.assertIn("gm_tr_holder_owns_origin = yes gm_tr_held_by_its_taker = no NOT = { has_variable = "
+                      "gm_tr_home_notified }", one, "no 'within reach' notice for one we took ourselves")
+
+    def test_no_homecoming_for_its_taker(self):
+        home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
+        guard = "if = { limit = { NOT = { var:gm_tr_taken_by ?= { this = scope:gm_tr_receiver } } } scope:gm_tr_receiver = {"
+        self.assertIn(guard, home)
+        self.assertLess(home.index(guard), home.index("name = gm_boon_homecoming"))
+        effect = squash(block(block(strip_comments(read(TR_SGUIS)), "gm_tr_return_sgui"), "effect"))
+        self.assertTrue(effect.startswith("scope:gm_tr = { if = { limit = { gm_tr_claimed_by = { WHO = root } "
+                                          "gm_tr_held_by_its_taker = yes } custom_tooltip = { text = "
+                                          "gm_tr_bring_home_own_tt"), effect)
+        L = loc()
+        self.assertIn("no Homecoming", L["gm_tr_bring_home_own_tt"])
+        self.assertIn("Homecoming", L["gm_tr_bring_home_tt"])
+
+
 class ConsequenceTests(unittest.TestCase):
     def test_the_numbers(self):
         v = read(TR_VALUES)
@@ -481,7 +518,8 @@ class Trophies1836Tests(unittest.TestCase):
                        "name = gm_tr_site_region value = scope:gm_tr_site_state.state_region",
                        "name = gm_tr_levels value = $LEVELS$",
                        "name = gm_tr_grandeur value = { value = $LEVELS$ divide = 2 ceiling = yes }",
-                       "name = gm_tr_year value = $YEAR$", "name = gm_tr_share value = flag:$SHARE$",
+                       "name = gm_tr_year value = $YEAR$", "name = gm_tr_taken_by value = scope:gm_tr_seed_holder",
+                       "name = gm_tr_share value = flag:$SHARE$",
                        "name = gm_tr_dedication value = flag:$DEDICATION$",
                        "name = gm_tr_skin value = flag:landmark_$LANDMARK$", "name = gm_tr_form value = flag:$FORM$",
                        "name = gm_tr_landmark value = flag:$LANDMARK$", "name = gm_tr_namesake value = flag:landmark"):
