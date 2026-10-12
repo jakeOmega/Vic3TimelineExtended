@@ -687,7 +687,7 @@ _SCENARIO_PRACTICES = {
     "Britain 1900": {"lm": 0.75}, "Britain 1900, Women Own Property": {"lm": 0.75},
     "West 1950": {"lm": 0.5}, "West 1950, Women's Suffrage": {"lm": 0.5},
     "West 1990": {"lm": 0.45}, "West 1990, Women's Suffrage": {"lm": 0.45},
-    "India 1975": {"bs": 0.2},   # the drift's equilibrium from the held start at its contraception and health care
+    "India 1975": {"bs": 0.0},   # the drift's equilibrium from India's held start: 0 since the fit (2026-10-12)
 }
 _SCENARIO_BANDS = {"Britain 1836": (4.3, 5.5)}   # re-centred on history's 4.8-5.0 (spec 5.1)
 PRACTICE_SCENARIOS = [(label, dict(kw, practices=_SCENARIO_PRACTICES[label]), _SCENARIO_BANDS.get(label, band))
@@ -698,6 +698,8 @@ PRACTICE_SCENARIOS = [(label, dict(kw, practices=_SCENARIO_PRACTICES[label]), _S
     ("Latin America 1970", dict(sol=12, literacy=0.72, urban_share=0.55, techs=MED_1950 | MEANS_TECHS, laws={CHS},
                                 institutions={HEALTH: 2}), (4.0, 6.8)),
 ]
+# The fertility command judges the scenarios with their shares (the late-marriage plan, Task 6).
+FERTILITY_SCENARIOS = PRACTICE_SCENARIOS
 
 
 def fertility_rows(carriers=None, scenarios=None):

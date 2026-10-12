@@ -216,7 +216,8 @@ class TestHarness(unittest.TestCase):
         """Spec 5.1 item 4's shares on every fertility scenario, and review I3's two: the 20th century where Birth
         Spacing has eroded and the raise is all that's left."""
         labels = [label for label, _kw, _band in H.PRACTICE_SCENARIOS]
-        self.assertEqual(len(labels), len(H.FERTILITY_SCENARIOS) + 2)
+        self.assertIs(H.FERTILITY_SCENARIOS, H.PRACTICE_SCENARIOS, "Task 6: the fertility command judges the shares")
+        self.assertEqual(len(labels), len(H._SCENARIO_PRACTICES) + 2)
         self.assertIn("East Asia 1990", labels)
         self.assertIn("Latin America 1970", labels)
         rows = dict((r[0], r[1]) for r in H.fertility_rows(scenarios=H.PRACTICE_SCENARIOS))
@@ -908,7 +909,8 @@ class TestFidelity(unittest.TestCase):
     crowding term did, on 91% of the world's people (2026-10-10)."""
 
     CROWD_MULT = 1.5   # the crowded state's migration_crowding multiplier: a -15% pull, so infection x1.15
-    GAME_SOL, GAME_LIT = 8.0, 0.2   # the walk's figures; the tiny save's pops read SoL 28, literacy 0.5
+    # the walk's figures, SoL inside the poverty term; the tiny save's pops read SoL 28, literacy 0.5
+    GAME_SOL, GAME_LIT = P.POVERTY_INFECTION_SOL - 1.0, 0.2
 
     def setUp(self):
         from test_demographics_save_inputs import TINY
@@ -1000,7 +1002,8 @@ class TestFidelity(unittest.TestCase):
             self.assertAlmostEqual(game / model, 1.0, places=4, msg=cause)
 
     def test_a_save_from_another_build_takes_its_poverty_floor(self):
-        # a save from main (no poverty term) reads as off everywhere below SoL 9 unless fidelity is told (review I2)
+        # a save from main (no poverty term) reads as off everywhere below POVERTY_INFECTION_SOL unless fidelity is
+        # told (review I2)
         path = self.save(True, self.game_infection(poverty_floor=1.0))
         kept = H.P.POVERTY_INFECTION_AT_FLOOR
         for argv, code in ((["fidelity", path], 1), (["fidelity", path, "--poverty-floor", "1"], 0)):

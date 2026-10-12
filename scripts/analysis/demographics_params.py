@@ -74,6 +74,8 @@ ASFR_SHAPE_BY_GROUP = {15: 6000, 20: 22000, 25: 25000, 30: 21000, 35: 15000, 40:
 # against 4.5, Britain 5.50 against 4.8, France 4.45 against 3.6), and the world multiple 1837-1900 at x1.78.
 # At 6.0: x1.66, China +0.12% a year in 1887, every medicine and fertility anchor in band
 # (docs/testing/demographics-phase2-engine-rates-2026-10-10.md, "The multiple").
+# x s, the raise (the late-marriage plan's fit, 2026-10-12; spec 2.2): s = 1.00, no raise. No raise up to 1.20 passes
+# the regional growth gate, and none fails fewer of its items (docs/testing/demographics-late-marriage-2026-10-12.md).
 WEALTH_TFR_LOW, WEALTH_TFR_LOW_SOL = 6.0, 8
 WEALTH_TFR_HIGH, WEALTH_TFR_HIGH_SOL = 3.5, 35   # what wealth alone does at SoL 35+
 EDUCATION_WEIGHT = 0.4        # desired x (1 - 0.4 x literacy)
@@ -151,16 +153,20 @@ MEANS_ACCESS_BASE = 0.3
 # means. Every value is a starting proposal the harness fits (plan Task 6), rounded to neat figures. The short names
 # key the script (te_dg_pr_<P>, te_demog_pr_*_<P>); phase 3 adds Family Limitation to the same machinery.
 PRACTICES = ("lm", "bs")
-PRACTICE_CUT = {"lm": 0.30, "bs": 0.35}
+# The fit (plan Task 6, 2026-10-12; docs/testing/demographics-late-marriage-2026-10-12.md): with no raise, the cuts that
+# fit children per woman best are 0.10 and 0.20 (the spec's 0.30 and 0.34 were fitted at a raise of 1.15 on the old
+# 6.2 curve).
+PRACTICE_CUT = {"lm": 0.10, "bs": 0.20}
 # Birth Spacing's start for India: the share that cancels the wealth curve's raise, (1 - 1/s) / cut (spec 2.2, "held,
-# not history"): 0.37 at s 1.15 and the approved cut of 0.35 (the spec's 0.38 is the same rule at its 0.34). India's
-# excess is early mortality, calibration step 3's (owner, 2026-10-11). Task 6 sets it from the fitted s and cut.
-BS_HELD_START = 0.37
+# not history"). With no raise there is nothing to cancel, so 0 (the fit, 2026-10-12). India's excess is early
+# mortality, calibration step 3's (owner, 2026-10-11).
+BS_HELD_START = 0.0
 # Birth Spacing's start for China, Manchuria and Korea (owner, 2026-10-11; plan D13): at least the share that cancels the
 # raise, and above it as far as China's peacetime births less deaths needs to land in history's +3 to +6, which lowers
-# their births toward history's ~5.5 children per woman (spec 2.2's second variant). Starts at the cancel share; Task 6
-# sets it. Membership, not the value, says which states take it (demographics_model.bs_held_group).
-BS_EAST_ASIA_START = 0.37
+# their births toward history's ~5.5 children per woman (spec 2.2's second variant). The fit (2026-10-12): 0. With no
+# raise and the refitted poverty term (below), China's projected rate is +5.8 without it. Membership, not the value,
+# says which states take it (demographics_model.bs_held_group).
+BS_EAST_ASIA_START = 0.0
 BS_EAST_ASIA_REGIONS = ("region_north_china", "region_south_china")
 BS_INDIA_REGIONS = ("region_north_india", "region_south_india")
 _OCCITANIA = ("STATE_PROVENCE", "STATE_GUYENNE", "STATE_LANGUEDOC", "STATE_AQUITAINE", "STATE_RHONE", "STATE_SAVOY",
@@ -229,16 +235,20 @@ TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.85}
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
 SOL_INFECTION_AT_HIGH = 0.6
-# Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x1.75 at SoL 5 and below.
+# Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x1.75 at SoL 5 and below. Refitted on
+# 2026-10-12 (below): below SoL 8, to x2.25 at SoL 5.
 # Most of the 1836 world sits at SoL 6-9, and the high-SoL term above is flat below SoL 8, so without this the
 # census gave China, India and Mexico Britain's life expectancy and the world +1.4% a year against
 # history's 0.4-0.8%. Fitted against Clio Infra's life expectancy and Maddison's population on the gate
 # run's 1837, 1857 and 1887 saves, with each state's crowding term as the save holds it (continuous, below): the
 # strength at which China (SoL 6 by 1887 in that game) grows as Maddison's China did in peacetime, about +0.3-0.4%
 # a year (1820-1840, 1870-1910). x2 would shrink it (docs/testing/demographics-history-check-2026-10-10.md).
-POVERTY_INFECTION_SOL = 9          # x1 at and above
+# Refitted with the practices (the late-marriage plan, Task 6, 2026-10-12) against #904's regional peacetime births
+# less deaths: x2.25 at SoL 5, x1 from SoL 8 (was x1.75, x1 from SoL 9), the point of the grid that fails the fewest
+# regional items (docs/testing/demographics-late-marriage-2026-10-12.md).
+POVERTY_INFECTION_SOL = 8          # x1 at and above
 POVERTY_INFECTION_FLOOR_SOL = 5    # POVERTY_INFECTION_AT_FLOOR at and below
-POVERTY_INFECTION_AT_FLOOR = 1.75
+POVERTY_INFECTION_AT_FLOOR = 2.25
 SOL_CHRONIC_AT_HIGH = 0.85
 LITERACY_INFECTION_WEIGHT = 0.3   # mothers' literacy: infection x (1 - 0.3 x literacy)
 # Crowding (owner, 2026-10-10: a function of how crowded the state is, not a switch): infection rises by the

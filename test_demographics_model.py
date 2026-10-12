@@ -69,18 +69,21 @@ class TestFertility(unittest.TestCase):
         return last["tfr"]
 
     def test_sketch_cases(self):
-        for inp, expected, label in [
-            (BRITAIN_1836, 5.5, "Britain 1836"),
-            (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
-            (BRITAIN_1900, 3.85, "Britain 1900"),
+        # each with the Late Marriage share the drift gives it (demographics_harness._SCENARIO_PRACTICES) at the fitted
+        # cuts (the late-marriage plan, Task 6, 2026-10-12: 0.10 and 0.20, no raise)
+        for inp, practices, expected, label in [
+            (BRITAIN_1836, {"lm": 1.0}, 4.85, "Britain 1836"),
+            (FRANCE_1836, {"lm": 1.0}, 4.3, "France 1836 (Family Limitation)"),
+            (BRITAIN_1900, {"lm": 0.75}, 3.45, "Britain 1900"),
             # 2.8 before the women's-rights term; with Women in the Workplace's -0.10 (Task 7) 2.5, nearer the West's
-            # 1950 median of 2.31 (Gapminder: Austria 1.87 ... the Netherlands 3.10)
-            (WEST_1950, 2.5, "the West 1950"),
-            (WEST_1990, 1.4, "the West 1990"),   # 1.6 before Women's Suffrage's natural-fertility term (Task 7)
-            (INDIA_1975, 5.3, "India 1975"),
+            # 1950 median of 2.31 (Gapminder: Austria 1.87 ... the Netherlands 3.10); 2.35 with Late Marriage at 0.5
+            (WEST_1950, {"lm": 0.5}, 2.35, "the West 1950"),
+            # 1.6 before Women's Suffrage's natural-fertility term (Task 7), 1.4 with it, 1.35 with Late Marriage
+            (WEST_1990, {"lm": 0.45}, 1.35, "the West 1990"),
+            (INDIA_1975, {"bs": 0.0}, 5.15, "India 1975"),   # India's held start is 0 since the fit
         ]:
             with self.subTest(label):
-                self.assertAlmostEqual(self.tfr(inp), expected, delta=0.3)
+                self.assertAlmostEqual(self.tfr(dataclasses.replace(inp, practices=practices)), expected, delta=0.3)
 
     def test_wealth_term_endpoints(self):
         # 6.0 at SoL 8 and below (owner, 2026-10-10, phase 2 step 4's gate: the model's children per woman sat above
@@ -148,14 +151,15 @@ class TestMortality(unittest.TestCase):
         f, m = M.life_table(qf), M.life_table(qm)
         return {k: (f[k] + m[k]) / 2 for k in f}
 
-    def test_poverty_raises_infection_below_sol_9(self):
+    def test_poverty_raises_infection_below_sol_8(self):
         # phase 2 calibration (2026-10-10): x1 at SoL 9 and above, rising to x1.75 at SoL 5 and below (the
-        # strength refitted with the census's continuous crowding term counted)
-        self.assertEqual(M.poverty_infection(9), 1.0)
+        # strength refitted with the census's continuous crowding term counted); refitted with the practices (the
+        # late-marriage plan, Task 6, 2026-10-12): x1 at SoL 8 and above, x2.25 at SoL 5 and below
+        self.assertEqual(M.poverty_infection(8), 1.0)
         self.assertEqual(M.poverty_infection(15), 1.0)
-        self.assertAlmostEqual(M.poverty_infection(7), 1.375)
-        self.assertEqual(M.poverty_infection(5), 1.75)
-        self.assertEqual(M.poverty_infection(1), 1.75)
+        self.assertAlmostEqual(M.poverty_infection(7), 1 + 1.25 / 3)
+        self.assertEqual(M.poverty_infection(5), 2.25)
+        self.assertEqual(M.poverty_infection(1), 2.25)
         # SoL 8 and 4 share the high-SoL term (x1), so the cause multipliers differ by the poverty term alone
         ratio = (M.cause_multipliers(M.Inputs(sol=4))["infection"] / M.cause_multipliers(M.Inputs(sol=8))["infection"])
         self.assertAlmostEqual(ratio, M.poverty_infection(4) / M.poverty_infection(8))
