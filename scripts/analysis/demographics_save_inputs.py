@@ -44,6 +44,9 @@ SECTIONS = {
     "technology": ("country", "acquired_technologies"),
     "institutions": ("institution", "investment", "country"),
 }
+# Saves are read line by line from a 16 MB buffer: the archive drive (/mnt/d under WSL) reads at about 17 MB/s,
+# and Python's default 8 KB reads took about 90 s a save there against 10-25 s (#894's analysis, 2026-10-11)
+READ_BUFFER = 16 * 1024 * 1024
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
 # a pop's food security: the value inside its food_security={ } block (phase 2 step 4, predict)
@@ -98,7 +101,7 @@ def read_sections(path, wanted=tuple(SECTIONS)):
     record = None
     in_timed = False   # inside the current record's timed_modifiers block
     in_food = False    # inside the current pop's food_security block
-    with open(path, encoding="utf-8", errors="replace") as fh:
+    with open(path, encoding="utf-8", errors="replace", buffering=READ_BUFFER) as fh:
         for line in fh:
             if section is None:
                 if depth == 0 and line.endswith("={\n") and not line.startswith("\t"):
@@ -345,7 +348,7 @@ def read_variables(path, country_vars, state_vars):
     law_owner = {}
     section, rec, flag, law = None, None, None, {}
     depth = 0
-    with open(path, encoding="utf-8", errors="replace") as fh:
+    with open(path, encoding="utf-8", errors="replace", buffering=READ_BUFFER) as fh:
         for line in fh:
             before = depth
             depth += line.count("{") - line.count("}")
