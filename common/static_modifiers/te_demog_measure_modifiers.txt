@@ -1,7 +1,8 @@
 ﻿# ============================================================================
-# DEMOGRAPHICS — the Family Policy measures (phase 2 step 3a)
+# DEMOGRAPHICS — the Family Policy measures (phase 2 steps 3a and 3b)
 # Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.5 (the catalogue's
-# starting values; step 3b's harness fits the sizes within §5's band). Logic: te_demog_measure_effects.txt.
+# starting values, which step 3b's harness fitted to §5's band: demographics_harness.py measures, which reads this
+# file). Logic: te_demog_measure_effects.txt.
 # ============================================================================
 # One country modifier a measure while it is on: its census types (script-only state types,
 # demographics_modifier_types.txt, which a state's read takes from its country), its interest groups' approval, its
@@ -16,10 +17,11 @@
 # of its own, and nothing applies them there (the buttons and the AI pulse sit under te_demog_effects_run).
 # test_demographics_measures.py pins each modifier's lines to the catalogue.
 
-# Child Allowance: Pro-Natalist Policy, Communal Child-Rearing. France's allocations familiales (1932).
+# Child Allowance: Pro-Natalist Policy, Communal Child-Rearing. France's allocations familiales (1932). Desired +14%
+# (step 3b's fit, demographics_harness.py measures: §3.4's +8% left the full package at +0.20 to +0.23 children).
 te_demog_ms_child_allowance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_desired_fertility_mult = 0.08
+	state_desired_fertility_mult = 0.14
 	interest_group_ig_devout_approval_add = 1
 	interest_group_ig_trade_unions_approval_add = 1
 }
@@ -38,7 +40,7 @@ te_demog_ms_family_housing = {
 	interest_group_ig_trade_unions_approval_add = 1
 }
 
-# 0.4% of GDP a year x the urban share: te_demog_ms_cost_family_housing.
+# 0.25% of GDP a year x the urban share (step 3b's fit; §3.4: 0.4%): te_demog_ms_cost_family_housing.
 te_demog_ms_family_housing_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
@@ -48,13 +50,13 @@ te_demog_ms_family_housing_cost = {
 # Honours for Large Families: Traditional Family Structure, Pro-Natalist Policy. The Soviet "Mother Heroine" (1944).
 te_demog_ms_honours = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_desired_fertility_mult = 0.03
+	state_desired_fertility_mult = 0.05	# step 3b's fit (§3.4: +3%)
 	interest_group_ig_devout_approval_add = 1
 	country_authority_add = -25
 }
 
 # Restricted Contraception: Pro-Natalist Policy. Romania's Decree 770 (1966). The means line is the census's own type
-# (state_fertility_means_add), which it already reads: this measure acts on births now, under Full.
+# (state_fertility_means_add); its maternal deaths are the maternal cause's family-policy factor.
 te_demog_ms_restricted_contraception = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_fertility_means_add = -0.2
@@ -84,7 +86,7 @@ te_demog_ms_parental_leave_cost = {
 }
 
 # Free Contraception: State-Sponsored Family Planning, Population Control Measures. The means line is the census's own
-# type, which it already reads: this measure acts on births now, under Full.
+# type (state_fertility_means_add).
 te_demog_ms_free_contraception = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_fertility_means_add = 0.1
@@ -117,7 +119,7 @@ te_demog_ms_later_longer_fewer = {
 }
 
 # Birth Limit, two children: Population Control Measures. China's one-child policy (1980). The sex ratio line counts
-# once prenatal sexing exists (Microprocessor; the census reads it from step 3b).
+# once prenatal sexing exists (Microprocessor): the step's newborns (te_demog_newborn_split).
 te_demog_ms_birth_limit = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_desired_fertility_mult = -0.3

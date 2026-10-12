@@ -384,6 +384,47 @@ def fixed_point(raw):
     return v / 1e5
 
 
+def country_budgets(path):
+    """{tag: {"gdp", "income", "expenses"}} for every country with a GDP record (phase 2 step 2's pension fit):
+    the latest sample of the country's GDP channel (yearly, as the `gdp` script value), and its weekly income and
+    expenses, each the sum of the budget's weekly_income / weekly_expenses vectors (every category). Read from
+    country_manager's records: `\tdefinition=`, `\t\tweekly_income={ … }`, and inside `\tgdp={` the channel's
+    `\t\t\t\tindex=` and `\t\t\t\tvalues={ … }` (a ring, oldest first, `index` samples written)."""
+    check_plain_text(path)
+    out, cur, in_gdp, section, depth = {}, None, False, False, 0
+    with open(path, encoding="utf-8", errors="replace", buffering=READ_BUFFER) as fh:
+        for line in fh:
+            if not section:
+                if line == "country_manager={\n":
+                    section, depth = True, 1
+                continue
+            if depth == 2:
+                m = _RECORD.match(line)
+                if m:
+                    cur, in_gdp = out.setdefault(m.group(1), {}), False
+            if cur is not None:
+                if line.startswith("\tdefinition="):
+                    cur["tag"] = line.split("=", 1)[1].strip().strip('"')
+                elif line.startswith("\t\tweekly_income={"):
+                    cur["income"] = sum(_num(x) for x in line.split("{", 1)[1].split("}")[0].split())
+                elif line.startswith("\t\tweekly_expenses={"):
+                    cur["expenses"] = sum(_num(x) for x in line.split("{", 1)[1].split("}")[0].split())
+                elif line.startswith("\tgdp={"):
+                    in_gdp = True
+                elif in_gdp and line.startswith("\t\t\t\tindex="):
+                    cur["gdp_index"] = int(_num(line.split("=", 1)[1]))
+                elif in_gdp and line.startswith("\t\t\t\tvalues={"):
+                    vals = [_num(x) for x in line.split("{", 1)[1].split("}")[0].split()]
+                    i = min(cur.get("gdp_index", len(vals)), len(vals))
+                    cur["gdp"] = vals[i - 1] if i > 0 else 0.0
+                    in_gdp = False
+            depth += line.count("{") - line.count("}")
+            if depth == 0:
+                break
+    return {v["tag"]: {"gdp": v["gdp"], "income": v.get("income", 0.0), "expenses": v.get("expenses", 0.0)}
+            for v in out.values() if v.get("tag") and v.get("gdp", 0.0) > 0}
+
+
 def read_variables(path, country_vars, state_vars):
     """(countries, states) from a plain-text save's script variables and active laws.
 

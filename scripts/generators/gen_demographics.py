@@ -872,6 +872,7 @@ def render_effects(root=ROOT):
     absorbed_walk(o, root)
     medicine_effects(o)
     practice_loops(o)
+    family_policy_effects(o)
     debug_ring(o)
     return o.text()
 
@@ -1460,7 +1461,9 @@ def multipliers(o):
     o("min = 0")
     o("max = 1")
     o("}")
-    o(f"multiply = {{ value = var:te_dg_lit multiply = {lit(1 - P.MEANS_ACCESS_BASE)} add = {lit(P.MEANS_ACCESS_BASE)} }}")
+    o(f"# access: literacy, plus Sex Education's {P.MEANS_LITERACY_TYPE} (phase 2 step 3b), at most 1")
+    o(f"multiply = {{ value = var:te_dg_lit add = modifier:{P.MEANS_LITERACY_TYPE} max = 1 "
+      f"multiply = {lit(1 - P.MEANS_ACCESS_BASE)} add = {lit(P.MEANS_ACCESS_BASE)} }}")
     o(f"# laws, history, events and measures: Family Limitation and its kin ({P.MEANS_SHIFT_TYPE})")
     o(f"add = modifier:{P.MEANS_SHIFT_TYPE}")
     o(f"max = {lit(P.MEANS_CAP)}")
@@ -1639,6 +1642,41 @@ def work_values(o):
     o("")
 
 
+def work_step2_values(o):
+    """Phase 2 step 2's constants and generated values (te_demog_work_effects.txt, te_demog_work_values.txt): the
+    workforce term, the pension setting and the two bills. Kept apart from the other steps' blocks."""
+    o("# Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the")
+    o("# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).")
+    k = {
+        "working_adult_base": P.WORKING_ADULT_BASE,
+        "wf_ramp_step": P.WF_RAMP_STEP, "wf_ramp_step_neg": -P.WF_RAMP_STEP,
+        # the guard: the lowest pop base + W + the lines on top at least WF_POP_RATIO_MIN, so W + the lines on top at
+        # least this
+        "wf_pop_floor": P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN,
+        "pension_age_early": P.PENSION_AGE["early"], "pension_age_raised": P.PENSION_AGE["raised"],
+        "pension_link_offset": P.PENSION_LINK_OFFSET, "pension_link_floor": P.PENSION_LINK_FLOOR,
+        "pension_link_step": P.PENSION_LINK_STEP, "pension_link_step_neg": -P.PENSION_LINK_STEP,
+        "pension_term_years": P.PENSION_TERM_YEARS,
+        "pension_b_per_level": P.PENSION_B_PER_LEVEL,
+        "health_need_weight": P.HEALTH_NEED_WEIGHT, "health_need_cap": P.HEALTH_NEED_CAP,
+        "work_split_first": P.WORK_SPLIT_AGES[0], "work_split_last": P.WORK_SPLIT_AGES[1],
+        "pension_ai_bill_high": P.PENSION_AI_BILL_HIGH, "pension_ai_bill_low": P.PENSION_AI_BILL_LOW,
+        "pension_ai_debt": P.PENSION_AI_DEBT,
+        "pension_ai_unemployment": P.PENSION_AI_UNEMPLOYMENT,
+        "pension_ai_unemployment_low": P.PENSION_AI_UNEMPLOYMENT_LOW,
+        **{f"pension_pos_{pos}": i for pos, i in P.PENSION_POSITION_ID.items()},
+    }
+    for name, value in k.items():
+        o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
+    o("# Country scope: the health bill's chronic-treatment technologies (demographics_model.health_term).")
+    o("te_demog_health_tech_term = {")
+    o("value = 0")
+    for tech in P.HEALTH_TECHS:
+        o(f"if = {{ limit = {{ has_technology_researched = {tech} }} add = {lit(P.HEALTH_TECH_STEP)} }}")
+    o("}")
+    o("")
+
+
 def _by_value(table):
     """[(value, [keys])] for a {key: value} table, by value then key: one if per value."""
     out = {}
@@ -1778,6 +1816,89 @@ def practice_loops(o):
     o("")
 
 
+# ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.5. Sex Education's access sits in
+# te_demog_means (multipliers) and Restricted Contraception's maternal deaths in the maternal cause's "laws" factor
+# (P.CAUSE_FACTORS); the rest is here.
+
+def family_policy_values(o):
+    o("# Phase 2 step 3b (the design §3.5): family policy in the census. State scope.")
+    o("# Family policy's factor on desired fertility (demographics_model.policy_term): 1 + the desired type (the measures'")
+    o("# and Pro-Natalist Policy's lines), Birth Limit's part relieved by the Rural Exemption's type x the state's")
+    o("# agrarian share (Birth Limit's part is negative: the relief raises the factor), at least 0. te_demog_desired")
+    o("# multiplies by it; the TFR tooltips show it.")
+    o("te_demog_tfr_policy = {")
+    o(f"value = modifier:{P.DESIRED_TYPE}")
+    o("if = {")
+    o(f"limit = {{ modifier:{P.BIRTH_LIMIT_RELIEF_TYPE} > 0 }}")
+    o("subtract = {")
+    o("value = te_demog_ms_birth_limit_part")
+    o(f"multiply = {{ value = modifier:{P.BIRTH_LIMIT_RELIEF_TYPE} max = 1 }}")
+    o("multiply = te_demog_agr_share")
+    o("}")
+    o("}")
+    o("add = 1")
+    o("min = 0")
+    o("}")
+    o("# The walk's agrarian share (Peasants and Farmers over people), 0 before a walk.")
+    o("te_demog_agr_share = {")
+    o("value = 0")
+    o("if = { limit = { has_variable = te_dg_agr_share } value = var:te_dg_agr_share }")
+    o("}")
+    o("# City life's relief (Family Housing): the urban share it leaves, 1 - the type within 0-1 (te_demog_tfr_urban).")
+    o("te_demog_urban_relief_left = {")
+    o(f"value = 1 subtract = {{ value = modifier:{P.URBAN_RELIEF_TYPE} min = 0 max = 1 }}")
+    o("}")
+    o("# What the step used (te_demog_family_policy_store, in te_demog_prepare), for the children-per-woman tooltips: the")
+    o("# stored policy term and the urban share Family Housing leaves, as te_demog_natural_shown, so a measure switched on")
+    o("# between steps shows when the census's figure takes it. The live value for a census state from before the store.")
+    o("te_demog_tfr_policy_shown = {")
+    o("value = te_demog_tfr_policy")
+    o("if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy }")
+    o("}")
+    o("te_demog_urban_left_stored = {")
+    o("value = te_demog_urban_relief_left")
+    o("if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left }")
+    o("}")
+    o("# The sex ratio at birth's add (demographics_model.newborn_split): the type once prenatal sexing exists, else 0.")
+    o("te_demog_srb_add = {")
+    o("value = 0")
+    o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {P.PRENATAL_SEXING_TECH} }} }} "
+      f"value = modifier:{P.SRB_TYPE} min = 0 }}")
+    o("}")
+    o(f"te_demog_k_desired_floor = {{ value = {lit(P.DESIRED_FLOOR)} }}")
+    o(f"te_demog_k_desired_cap = {{ value = {lit(P.DESIRED_CAP)} }}")
+    o(f"te_demog_k_srb_base = {{ value = {lit(P.SRB_BASE)} }}")
+    o("")
+
+
+def family_policy_effects(o):
+    o("# Phase 2 step 3b: THIS = a state, in te_demog_prepare before te_demog_desired: the family policy term and the urban")
+    o("# share Family Housing leaves, stored with the step's other terms (te_dg_natural's pattern), so te_demog_tfr_urban")
+    o("# and the tooltips read what the step used until the next one.")
+    o("te_demog_family_policy_store = {")
+    o("set_variable = { name = te_dg_policy value = te_demog_tfr_policy }")
+    o("set_variable = { name = te_dg_urban_left value = te_demog_urban_relief_left }")
+    o("}")
+    o("# Phase 2 step 3b (the design §3.4): the newborns' split in the step (demographics_model.newborn_split). THIS = a")
+    o("# state, in te_demog_step_run before the sweep: girls and boys per 100,000 births into locals, the constants")
+    o("# unless prenatal sexing and a positive sex-ratio type move it (100 girls to te_demog_k_srb_base + it boys).")
+    o("te_demog_newborn_split = {")
+    o("set_local_variable = { name = te_dg_nb_f value = te_demog_k_female_births_per_100k }")
+    o("set_local_variable = { name = te_dg_nb_m value = te_demog_k_male_births_per_100k }")
+    o("set_local_variable = { name = te_dg_nb_srb value = te_demog_srb_add }")
+    o("if = {")
+    o("limit = { local_var:te_dg_nb_srb > 0 }")
+    o("set_local_variable = {")
+    o("name = te_dg_nb_f")
+    o("value = { value = 10000000 divide = { value = local_var:te_dg_nb_srb add = te_demog_k_srb_base add = 100 min = 100 } }")
+    o("}")
+    o("set_local_variable = { name = te_dg_nb_m value = { value = 100000 subtract = local_var:te_dg_nb_f } }")
+    o("}")
+    o("}")
+    o("")
+
+
 def debug_values(o):
     o("# State scope: each slot as per mille of the state's people, for the replay lines (Task 15).")
     o("# One sequential block each, so the scale and the people are not rounded on their own.")
@@ -1804,6 +1925,8 @@ def render_values(root):
     land_term(o, root)
     constants(o)
     work_values(o)
+    family_policy_values(o)
+    work_step2_values(o)
     consequence_values(o)
     debug_values(o)
     return o.text()

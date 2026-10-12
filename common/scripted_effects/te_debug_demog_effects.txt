@@ -752,6 +752,20 @@ te_debug_demog_ms_selfcheck_start = {
 	}
 }
 
+# ---- x: family policy in the census (phase 2 step 3b) -------------------------------------------------------------
+# THIS = ROOT = the player. One TE_DEMOG_FAMILY line for the capital: the six Family Policy types it reads (desired=
+# should be the owner's measures' desired lines, measures=, plus Pro-Natalist Policy's 0.05), the policy term and its
+# Birth Limit part, the agrarian share and the urban relief it reads, the sex ratio's add in force (0 before
+# Microprocessor), and the census's stored policy term (st_policy=, the tooltips' figure) and urban share left, desired, means, children per woman with its planned and unplanned parts,
+# the maternal input and rate, and men per 100 women (each -1 before a census step under this build).
+te_debug_demog_family_reads = {
+	capital = { te_debug_demog_family_line = yes }
+}
+
+te_debug_demog_family_line = {
+	debug_log = "TE_DEMOG_FAMILY desired=[THIS.ScriptValue('te_debug_demog_mod_desired')|3] measures=[THIS.ScriptValue('te_debug_demog_ms_desired_owner')|3] urban_relief=[THIS.ScriptValue('te_debug_demog_mod_urban_relief')|3] means_lit=[THIS.ScriptValue('te_debug_demog_mod_means_lit')|3] maternal=[THIS.ScriptValue('te_debug_demog_mod_maternal')|3] bl_relief=[THIS.ScriptValue('te_debug_demog_mod_bl_relief')|3] srb=[THIS.ScriptValue('te_debug_demog_mod_srb')|1] policy=[THIS.ScriptValue('te_demog_tfr_policy')|3] st_policy=[THIS.ScriptValue('te_debug_demog_fam_policy')|3] st_urban_left=[THIS.ScriptValue('te_debug_demog_fam_urban_left')|3] bl_part=[THIS.ScriptValue('te_demog_ms_birth_limit_part')|2] agr=[THIS.ScriptValue('te_demog_agr_share')|3] urban_left=[THIS.ScriptValue('te_demog_urban_relief_left')|3] srb_add=[THIS.ScriptValue('te_demog_srb_add')|1] means_live=[THIS.ScriptValue('te_debug_demog_means')|3] st_desired=[THIS.ScriptValue('te_debug_demog_fam_desired')|3] st_means=[THIS.ScriptValue('te_debug_demog_fam_means')|3] st_tfr=[THIS.ScriptValue('te_debug_demog_fam_tfr')|3] planned=[THIS.ScriptValue('te_debug_demog_fam_planned')|3] unplanned=[THIS.ScriptValue('te_debug_demog_fam_unplanned')|3] in_mat=[THIS.ScriptValue('te_debug_demog_fam_in_mat')|3] mmr=[THIS.ScriptValue('te_debug_demog_fam_mmr')|0] sex_balance=[THIS.ScriptValue('te_debug_demog_fam_sex_balance')|1] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
 # ---- Calibration step 3's self-checks (owner, 2026-10-12; docs/superpowers/specs/2026-10-12-demographics-calibration-
 # step3-design.md §6) -----------------------------------------------------------------------------------------------------
 # Instead of in-game checks before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Three engine facts
@@ -806,6 +820,166 @@ te_debug_demog_step3_selfchecks = {
 				debug_log_scopes = yes
 			}
 		}
+	}
+}
+
+# ---- Phase 2 step 2's workforce self-checks (docs/testing/demographics-playtest.md, "Self-checks") ------------------
+# THIS = ROOT = a state, at the top of te_demog_workforce_refresh (its census step), before the refresh moves anything:
+# the walk has just read the engine's workforce (te_dg_wf_engine), and the state's working-adult read is the one its pops
+# held over the past year. Each check writes one TE_SELF_CHECK line a game, from a capital. They read only the engine's
+# own fields and the walk, so they run whatever te_debug_demog_selfchecks_run says, wherever the census's cohorts run.
+#   workforce_ratio_scale (the design §1.8's stop rule): before any W (Display only, or the capital's first step under
+#     Full), is the engine's figure the set ratio read as workforce over people (WORKFORCE_SCALE's assumption; about 0.25
+#     in 1836) or as workforce over dependents (about 0.20)? OK names the first, BROKEN the second.
+#   workforce_follows_target (§2.1's open fact, the pull's speed): once W has run five census years in a capital and
+#     moved at least 0.03 since it landed, has the engine's figure moved W's way by at least half of W's move? (A gap to
+#     the set ratio wouldn't do: the saves show the engine's figure sitting 0.01-0.03 off its ratio in steady state.)
+te_debug_demog_wf_term_checks = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_selfcheck_wf_scale_done }
+			te_demog_cohorts_run = yes
+			is_capital = yes
+			has_variable = te_dg_wf_engine
+			has_variable = te_dg_wbase
+			NOT = { has_variable = te_dg_mw }
+			state_population > 10000
+			var:te_dg_wf_engine > 0.01
+		}
+		set_global_variable = { name = te_demog_selfcheck_wf_scale_done value = yes }
+		if = {
+			limit = { te_debug_demog_wf_people_gap < te_debug_demog_wf_dependents_gap }
+			debug_log = "TE_SELF_CHECK OK workforce_ratio_scale wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] per_people=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] per_dependents=[THIS.ScriptValue('te_debug_demog_wf_per_dependents')|3] (near per_people: the engine's ratio is workforce over people, as WORKFORCE_SCALE assumes) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN workforce_ratio_scale wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] per_people=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] per_dependents=[THIS.ScriptValue('te_debug_demog_wf_per_dependents')|3] (near per_dependents: the ratio is workforce over dependents; re-derive WORKFORCE_SCALE and W on that scale, the design §1.8) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_selfcheck_wft_done }
+			has_variable = te_dg_wft_y0
+			has_variable = te_dg_wft_w0
+			has_variable = te_dg_wft_e0
+			has_variable = te_dg_mw
+			has_variable = te_dg_wf_engine
+			te_debug_demog_wft_years >= 5
+			te_debug_demog_wft_moved >= te_debug_demog_wft_min_move
+		}
+		set_global_variable = { name = te_demog_selfcheck_wft_done value = yes }
+		if = {
+			limit = { te_debug_demog_wft_engine_moved >= te_debug_demog_wft_half_move }
+			debug_log = "TE_SELF_CHECK OK workforce_follows_target engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_at_landing=[THIS.ScriptValue('te_debug_demog_wft_e0_read')|3] engine_moved=[THIS.ScriptValue('te_debug_demog_wft_engine_moved')|3] w=[THIS.ScriptValue('te_debug_demog_wft_w')|3] w_at_landing=[THIS.ScriptValue('te_debug_demog_wft_w0_read')|3] needed=[THIS.ScriptValue('te_debug_demog_wft_half_move')|3] set=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wft_y0_read')|0] (the engine moved W's way by at least half of W's move) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN workforce_follows_target engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_at_landing=[THIS.ScriptValue('te_debug_demog_wft_e0_read')|3] engine_moved=[THIS.ScriptValue('te_debug_demog_wft_engine_moved')|3] w=[THIS.ScriptValue('te_debug_demog_wft_w')|3] w_at_landing=[THIS.ScriptValue('te_debug_demog_wft_w0_read')|3] needed=[THIS.ScriptValue('te_debug_demog_wft_half_move')|3] set=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wft_y0_read')|0] (the engine moved less than half of W's move in five years: its pull is slower than the ramp, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+	}
+	# the landing marks go once the check has run, in any capital
+	if = {
+		limit = {
+			has_global_variable = te_demog_selfcheck_wft_done
+			has_variable = te_dg_wft_y0
+		}
+		remove_variable = te_dg_wft_y0
+		remove_variable = te_dg_wft_w0
+		if = {
+			limit = { has_variable = te_dg_wft_e0 }
+			remove_variable = te_dg_wft_e0
+		}
+	}
+}
+
+# THIS = a state whose W lands now (te_demog_workforce_refresh): a capital keeps the census year, the W it starts from
+# (the refresh's local te_dg_wf_from: the region's copy or the moved lines' pair) and the walk's engine figure then, for
+# workforce_follows_target, until it has run.
+te_debug_demog_wf_term_landing = {
+	if = {
+		limit = {
+			is_capital = yes
+			NOT = { has_global_variable = te_demog_selfcheck_wft_done }
+			has_variable = te_dg_wf_engine
+		}
+		set_variable = { name = te_dg_wft_y0 value = te_demog_year }
+		set_variable = { name = te_dg_wft_w0 value = local_var:te_dg_wf_from }
+		set_variable = { name = te_dg_wft_e0 value = var:te_dg_wf_engine }
+	}
+}
+
+# ---- r: the workforce term and the pension setting (phase 2 step 2) -------------------------------------------
+# THIS = ROOT = the player: the capital's term (TE_DEMOG_WF) and the country's setting and bills (TE_DEMOG_PENSION).
+te_debug_demog_wf_lines = {
+	capital ?= {
+		debug_log = "TE_DEMOG_WF w=[THIS.ScriptValue('te_debug_demog_wf_w_read')|3] w_target=[THIS.ScriptValue('te_demog_wf_term_target')|3] applied=[THIS.ScriptValue('te_demog_census_workforce_applied')|3] rem=[THIS.ScriptValue('te_debug_demog_wf_rem_read')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] set=[THIS.ScriptValue('te_demog_wf_set')|3] engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] fws_wk=[THIS.ScriptValue('te_debug_demog_fws_wk_read')|3] fws_law=[THIS.ScriptValue('te_demog_female_work_share')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	debug_log = "TE_DEMOG_PENSION pos=[THIS.ScriptValue('te_demog_pension_pos')|0] age=[THIS.ScriptValue('te_debug_demog_country_pension_age')|0] term_left=[THIS.ScriptValue('te_demog_pension_term_left')|0] link_target=[THIS.ScriptValue('te_demog_pension_link_target')|1] pensioners=[THIS.ScriptValue('te_debug_demog_country_pensioners')|3] b=[THIS.ScriptValue('te_demog_pension_b')|3] bill=[THIS.ScriptValue('te_debug_demog_pension_bill_read')|0] bill_share=[THIS.ScriptValue('te_demog_pension_bill_share')|3] need=[THIS.ScriptValue('te_debug_demog_country_need')|3] health_term=[THIS.ScriptValue('te_debug_demog_health_term_read')|3] health_now=[THIS.ScriptValue('te_debug_demog_health_term_now')|3] unemployment=[THIS.ScriptValue('te_demog_country_unemployment')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# ---- s: the pension term ends now (phase 2 step 2) -------------------------------------------------------------
+# THIS = ROOT = the player: the five-year term's year goes, so another position can be chosen at once (a play-test of
+# the buttons and of a change reaching the bill and the workforce at the next census). The position stays.
+te_debug_demog_pension_term_end = {
+	if = {
+		limit = { has_variable = te_dg_pension_since }
+		remove_variable = te_dg_pension_since
+	}
+	debug_log = "TE_DEMOG_PENSION term ended by the console pos=[THIS.ScriptValue('te_demog_pension_pos')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# ---- The census log's work line (phase 2 step 2; option b) ------------------------------------------------------
+# THIS = ROOT = a country, from te_demog_work_country_store inside its census while the census log is on (its local
+# te_dg_c_people, as te_debug_demog_census_line): one TE_DEMOG_WORKC line beside its TE_DEMOG_CENSUS line, for
+# demographics_observer_report.py --work (the design §2.6's observer gate). wf is the census's workforce share
+# (workers over people), wf_engine the game's own, set the ratio the states' pops are set to and target the census's
+# engine-scale aim (both people-weighted over the census states the walk has read; set_min and set_max the extremes),
+# w the term in force (0 outside Full), pens the pensioners' share, bill the pension bill's share of revenue, health
+# the health bill's term, pos and age the pension setting. A country under a million people writes nothing.
+te_debug_demog_work_census_line = {
+	if = {
+		limit = {
+			local_var:te_dg_c_people >= 1000000
+			has_variable = te_dg_wa_share
+			has_variable = te_dg_at_work
+		}
+		set_local_variable = { name = te_dg_dbg_wk_p value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_set value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_target value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_w value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_max value = 0 }
+		set_local_variable = { name = te_dg_dbg_wk_min value = 9 }
+		every_scope_state = {
+			limit = {
+				te_demog_has_census = yes
+				has_variable = te_dg_wbase
+				has_variable = te_dg_wa_share
+				has_variable = te_dg_at_work
+			}
+			change_local_variable = { name = te_dg_dbg_wk_p add = var:te_dg_people }
+			change_local_variable = { name = te_dg_dbg_wk_set add = { value = te_demog_wf_set multiply = var:te_dg_people } }
+			change_local_variable = { name = te_dg_dbg_wk_target add = { value = te_demog_wf_engine_target multiply = var:te_dg_people } }
+			change_local_variable = { name = te_dg_dbg_wk_w add = { value = te_demog_census_workforce_applied multiply = var:te_dg_people } }
+			if = {
+				limit = { te_demog_wf_set > local_var:te_dg_dbg_wk_max }
+				set_local_variable = { name = te_dg_dbg_wk_max value = te_demog_wf_set }
+			}
+			if = {
+				limit = { te_demog_wf_set < local_var:te_dg_dbg_wk_min }
+				set_local_variable = { name = te_dg_dbg_wk_min value = te_demog_wf_set }
+			}
+		}
+		set_variable = { name = te_dg_dbg_wk_set value = { value = local_var:te_dg_dbg_wk_set divide = { value = local_var:te_dg_dbg_wk_p min = 1 } } }
+		set_variable = { name = te_dg_dbg_wk_target value = { value = local_var:te_dg_dbg_wk_target divide = { value = local_var:te_dg_dbg_wk_p min = 1 } } }
+		set_variable = { name = te_dg_dbg_wk_w value = { value = local_var:te_dg_dbg_wk_w divide = { value = local_var:te_dg_dbg_wk_p min = 1 } } }
+		set_variable = { name = te_dg_dbg_wk_max value = local_var:te_dg_dbg_wk_max }
+		set_variable = { name = te_dg_dbg_wk_min value = local_var:te_dg_dbg_wk_min }
+		debug_log = "TE_DEMOG_WORKC: tag=[THIS.GetCountry.GetTagName]; year=[THIS.ScriptValue('te_demog_year')|0]; wf=[THIS.ScriptValue('te_demog_wk_share')|4]; wf_engine=[THIS.ScriptValue('te_debug_demog_country_wf_engine')|4]; set=[THIS.Var('te_dg_dbg_wk_set').GetValue|4]; target=[THIS.Var('te_dg_dbg_wk_target').GetValue|4]; set_min=[THIS.Var('te_dg_dbg_wk_min').GetValue|4]; set_max=[THIS.Var('te_dg_dbg_wk_max').GetValue|4]; w=[THIS.Var('te_dg_dbg_wk_w').GetValue|4]; pens=[THIS.ScriptValue('te_debug_demog_country_pensioners')|4]; bill=[THIS.ScriptValue('te_demog_pension_bill_share')|4]; health=[THIS.ScriptValue('te_debug_demog_health_term_read')|4]; pos=[THIS.ScriptValue('te_demog_pension_pos')|0]; age=[THIS.ScriptValue('te_debug_demog_country_pension_age')|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
+		remove_variable = te_dg_dbg_wk_set
+		remove_variable = te_dg_dbg_wk_target
+		remove_variable = te_dg_dbg_wk_w
+		remove_variable = te_dg_dbg_wk_max
+		remove_variable = te_dg_dbg_wk_min
 	}
 }
 

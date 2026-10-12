@@ -118,9 +118,10 @@ state_malaria_control_add = {
 
 # Family Policy measures (phase 2 step 3a: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
 # §3.5). Carried by the measures' country modifiers (te_demog_measure_modifiers.txt); a state's read includes its
-# country's modifiers. Step 3b makes the census read them: until then they only show on the measures' tooltips. A
+# country's modifiers; Pro-Natalist Policy carries a desired line of its own. The census reads them since step 3b
+# (demographics_model.policy_term, urban_term, means, newborn_split; the generated te_demog_tfr_policy and kin). A
 # release comments their lines out (scripts/release/comment_out_census_inputs.py, rule 1). Read as:
-#   state_desired_fertility_mult      desired x (1 + it), floored at 0.1
+#   state_desired_fertility_mult      desired x (1 + it), within 0.1 and 1
 #   state_urban_fertility_relief_add  the urban term 1 - 0.2 x urban share x (1 - it)
 #   state_means_literacy_add          the means' access 0.3 + 0.7 x min(1, literacy + it)
 #   state_maternal_mortality_mult     the maternal cause x (1 + it)

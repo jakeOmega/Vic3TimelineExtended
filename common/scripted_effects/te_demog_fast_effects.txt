@@ -76,6 +76,8 @@ te_demog_state_clock_step = {
 	te_demog_state_census = yes
 	te_demog_rates_refresh = yes
 	te_demog_fast_refresh_rates = yes
+	# phase 2 step 2: the workforce term, as on the yearly pulse (te_demog_work_effects.txt)
+	te_demog_workforce_refresh = yes
 	# phase 2 step 4: conscription, the youth bulge and sex balance, as on the yearly pulse
 	te_demog_consequences_refresh = yes
 }

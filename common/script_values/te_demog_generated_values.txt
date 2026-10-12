@@ -1546,10 +1546,15 @@ te_demog_f_maternal_medicine = {
 	value = 1
 	subtract = { value = var:te_dg_acc multiply = var:te_dg_trt_mat }
 }
+# State scope: maternal's laws factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_maternal_laws = {
+	value = 1 add = var:te_dg_in_mat min = 0.2
+}
 # State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
 # times the cause's factors (demographics_model.cause_multipliers, group_rates).
 te_demog_mult_maternal = {
 	value = te_demog_f_maternal_medicine
+	multiply = te_demog_f_maternal_laws
 	multiply = 670
 }
 
@@ -1595,7 +1600,8 @@ te_demog_means = {
 		min = 0
 		max = 1
 	}
-	multiply = { value = var:te_dg_lit multiply = 0.7 add = 0.3 }
+	# access: literacy, plus Sex Education's state_means_literacy_add (phase 2 step 3b), at most 1
+	multiply = { value = var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply = 0.7 add = 0.3 }
 	# laws, history, events and measures: Family Limitation and its kin (state_fertility_means_add)
 	add = modifier:state_fertility_means_add
 	max = 0.95
@@ -1925,13 +1931,13 @@ te_demog_k_maternal_base = { value = 670 }
 te_demog_k_practice_rate = { value = 0.025 }
 te_demog_k_child_work_age = { value = 10 }
 te_demog_k_working_age = { value = 15 }
-te_demog_k_after_pension_share = { value = 0.15 }
+te_demog_k_after_pension_share = { value = 0.3 }
 te_demog_k_men_rate = { value = 0.92 }
 te_demog_k_women_base = { value = 0.05 }
 te_demog_k_women_lower = { value = 0.2 }
-te_demog_k_womens_work_full = { value = 0.3 }
-te_demog_k_workforce_scale = { value = 0.74 }
-te_demog_k_health_need_1836 = { value = 0.95 }
+te_demog_k_womens_work_full = { value = 0.35 }
+te_demog_k_workforce_scale = { value = 0.7 }
+te_demog_k_health_need_1836 = { value = 0.952 }
 te_demog_k_need_newborn = { value = 1 }
 te_demog_k_pension_age_standard = { value = 65 }
 # State scope: the family share's transport term (owner technology).
@@ -1955,6 +1961,89 @@ te_demog_pop_base_ratio = {
 	value = 0.25
 	if = { limit = { is_pop_type = aristocrats } value = 0.2 }
 	if = { limit = { is_pop_type = slaves } value = 0.5 }
+}
+
+# Phase 2 step 3b (the design §3.5): family policy in the census. State scope.
+# Family policy's factor on desired fertility (demographics_model.policy_term): 1 + the desired type (the measures'
+# and Pro-Natalist Policy's lines), Birth Limit's part relieved by the Rural Exemption's type x the state's
+# agrarian share (Birth Limit's part is negative: the relief raises the factor), at least 0. te_demog_desired
+# multiplies by it; the TFR tooltips show it.
+te_demog_tfr_policy = {
+	value = modifier:state_desired_fertility_mult
+	if = {
+		limit = { modifier:state_birth_limit_relief_add > 0 }
+		subtract = {
+			value = te_demog_ms_birth_limit_part
+			multiply = { value = modifier:state_birth_limit_relief_add max = 1 }
+			multiply = te_demog_agr_share
+		}
+	}
+	add = 1
+	min = 0
+}
+# The walk's agrarian share (Peasants and Farmers over people), 0 before a walk.
+te_demog_agr_share = {
+	value = 0
+	if = { limit = { has_variable = te_dg_agr_share } value = var:te_dg_agr_share }
+}
+# City life's relief (Family Housing): the urban share it leaves, 1 - the type within 0-1 (te_demog_tfr_urban).
+te_demog_urban_relief_left = {
+	value = 1 subtract = { value = modifier:state_urban_fertility_relief_add min = 0 max = 1 }
+}
+# What the step used (te_demog_family_policy_store, in te_demog_prepare), for the children-per-woman tooltips: the
+# stored policy term and the urban share Family Housing leaves, as te_demog_natural_shown, so a measure switched on
+# between steps shows when the census's figure takes it. The live value for a census state from before the store.
+te_demog_tfr_policy_shown = {
+	value = te_demog_tfr_policy
+	if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy }
+}
+te_demog_urban_left_stored = {
+	value = te_demog_urban_relief_left
+	if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left }
+}
+# The sex ratio at birth's add (demographics_model.newborn_split): the type once prenatal sexing exists, else 0.
+te_demog_srb_add = {
+	value = 0
+	if = { limit = { owner = { has_technology_researched = microprocessor } } value = modifier:state_sex_ratio_at_birth_add min = 0 }
+}
+te_demog_k_desired_floor = { value = 0.1 }
+te_demog_k_desired_cap = { value = 1 }
+te_demog_k_srb_base = { value = 105 }
+
+# Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the
+# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).
+te_demog_k_working_adult_base = { value = 0.25 }
+te_demog_k_wf_ramp_step = { value = 0.01 }
+te_demog_k_wf_ramp_step_neg = { value = -0.01 }
+te_demog_k_wf_pop_floor = { value = -0.15 }
+te_demog_k_pension_age_early = { value = 60 }
+te_demog_k_pension_age_raised = { value = 70 }
+te_demog_k_pension_link_offset = { value = 5 }
+te_demog_k_pension_link_floor = { value = 65 }
+te_demog_k_pension_link_step = { value = 1 }
+te_demog_k_pension_link_step_neg = { value = -1 }
+te_demog_k_pension_term_years = { value = 5 }
+te_demog_k_pension_b_per_level = { value = 0.06 }
+te_demog_k_health_need_weight = { value = 0.8 }
+te_demog_k_health_need_cap = { value = 1 }
+te_demog_k_work_split_first = { value = 15 }
+te_demog_k_work_split_last = { value = 64 }
+te_demog_k_pension_ai_bill_high = { value = 0.3 }
+te_demog_k_pension_ai_bill_low = { value = 0.2 }
+te_demog_k_pension_ai_debt = { value = 0.25 }
+te_demog_k_pension_ai_unemployment = { value = 0.1 }
+te_demog_k_pension_ai_unemployment_low = { value = 0.05 }
+te_demog_k_pension_pos_early = { value = 1 }
+te_demog_k_pension_pos_standard = { value = 2 }
+te_demog_k_pension_pos_raised = { value = 3 }
+te_demog_k_pension_pos_linked_average = { value = 4 }
+te_demog_k_pension_pos_linked_common = { value = 5 }
+# Country scope: the health bill's chronic-treatment technologies (demographics_model.health_term).
+te_demog_health_tech_term = {
+	value = 0
+	if = { limit = { has_technology_researched = modern_pharmaceuticals } add = 0.05 }
+	if = { limit = { has_technology_researched = telemedicine } add = 0.05 }
+	if = { limit = { has_technology_researched = personalized_medicine } add = 0.05 }
 }
 
 # Phase 2 step 4: conscription, the youth bulge and sex balance (demographics_params.py).
