@@ -775,7 +775,7 @@ class TestCohortScript(unittest.TestCase):
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
                   flows=None, entry="te_demog_step", engine=None, on_top=None, full=False, inp=None,
-                  pool=(12.0, 7.0)):
+                  pool=(12.0, 7.0), men_factor=None, old_census=False):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -789,7 +789,9 @@ class TestCohortScript(unittest.TestCase):
         on_top = (births, deaths): the share by which the engine's expected events over the window ran
         above the model's rates M aimed at (phase 2 step 4); full = the rule's Full setting, under which
         alone the step takes those as its on-top scales. inp: the inputs (default INP); pool: (women, men) in the pool
-        (phase 2 step 1's figures count it)."""
+        (phase 2 step 1's figures count it). men_factor scales the men aged 20-59 (phase 2 step 4's sex balance: the
+        census's te_dg_sex_balance is the ring's, as its last census stored it); old_census gives the script a census
+        from before step 4, with the 18-40 sums' names (te_dg_m1840, te_dg_f1840) holding the pool's sums."""
         base = inp or self.INP
         ring = demographics_model.seed(base, self.YEAR, self.POP)
         ring.f = [x * ring.scale / scale for x in ring.f]
@@ -803,8 +805,12 @@ class TestCohortScript(unittest.TestCase):
             for a in range(empty_from, P.RING_YEARS):
                 ring.f[(self.YEAR - a) % P.RING_YEARS] = ring.m[(self.YEAR - a) % P.RING_YEARS] = 0.0
         ring.pool_f, ring.pool_m, ring.pool_age = pool[0], pool[1], 152.5
+        if men_factor is not None:
+            for a in range(20, 60):
+                ring.m[(self.YEAR - a) % P.RING_YEARS] *= men_factor
         demographics_model._refresh_denominators(ring)
         ring.total = ring.people()
+        balance = demographics_model.structure(ring)["men_per_100_women"]
         before = (list(ring.f), list(ring.m))
         pop = ring.total * 1.004
         inp = base
@@ -854,7 +860,11 @@ class TestCohortScript(unittest.TestCase):
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = before[0][k], before[1][k]
         eng.vars.update(te_dg_pf=ring.pool_f, te_dg_pm=ring.pool_m, te_dg_pa=ring.pool_age, te_dg_scale=scale,
                         te_dg_year=self.YEAR, te_dg_people=ring.total, te_dg_raw=ring.total / scale,
-                        te_dg_faw=ring.faw, te_dg_fam=ring.fam)
+                        te_dg_sex_balance=balance)
+        if old_census:
+            eng.vars.update(te_dg_f1840=ring.faw, te_dg_m1840=ring.fam)
+        else:
+            eng.vars.update(te_dg_faw=ring.faw, te_dg_fam=ring.fam)
         for c in range(len(P.MIGRANT_CLASSES)):
             eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
         if flows is not None:
@@ -1193,6 +1203,44 @@ class TestCohortScript(unittest.TestCase):
         eng.fixtures.update(year=float(self.YEAR + 1))
         eng.call("te_demog_prepare")           # every read guarded: no "read of missing variable"
         self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_low_share")), 0)
+
+
+    # -- phase 2 step 4: the pool, the war dead's window and the sex balance in the step ---------------------------
+
+    def test_a_step_short_of_men_matches_the_model(self):
+        """The design §4.4: a census of 85 men per 100 women aged 20-59 (war dead, emigration) stores the balance its
+        step began with (te_dg_sxb), and its children per woman and women's rate take the terms the model gives; war
+        dead come from the pool's ages."""
+        inp = self._work_inp()
+        eng, ring, figures, pop = self.step_both(inp=inp, war_dead=2000.0, migration=0.0, men_factor=0.85)
+        self.check_step(eng, ring, figures, pop)
+        balance = eng.vars["te_dg_sxb"]
+        self.assertLess(balance, P.SEX_FEWER_FROM)
+        self.close(figures["fertility"]["sex"], balance / P.SEX_FEWER_FROM, rel=1e-6, what="the births term")
+        self.close(eng.vars["te_dg_tfr"], figures["tfr"], rel=1e-6, what="children per woman")
+        self._work_figures(eng, ring, dataclasses.replace(inp, sex_balance=balance))
+
+    def test_a_balanced_step_stores_no_balance(self):
+        eng, *rest = self.step_both(migration=0.0)
+        self.check_step(eng, *rest)
+        self.assertNotIn("te_dg_sxb", eng.vars)
+
+    def test_a_seed_takes_no_sex_balance_term(self):
+        eng = _engine_for(self.INP, self.YEAR, self.POP)
+        eng.vars.update(te_dg_sxb=70.0, te_dg_sex_balance=70.0)   # a re-seed of a census short of men
+        eng.call("te_demog_seed")
+        self.assertNotIn("te_dg_sxb", eng.vars)
+        _eng, ring = self.seed_both()
+        self.close(eng.vars["te_dg_tfr"], _eng.vars["te_dg_tfr"], what="the seed's children per woman")
+
+    def test_a_census_from_before_step_4_takes_its_war_dead_once(self):
+        """An old save's state holds the 18-40 sums' names: the step's flows divide by them once, and the census that
+        follows writes the pool's and removes them."""
+        flows = dict(eb=1200.0, ed=900.0, crisis=0.0, fjob_share=0.3, migration=0.0, war=900.0)
+        eng, ring, figures, pop = self.step_both(flows=flows, old_census=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertNotIn("te_dg_m1840", eng.vars)
+        self.assertNotIn("te_dg_f1840", eng.vars)
 
 
 class TestWorkWalk(unittest.TestCase):
@@ -6492,3 +6540,160 @@ class TestPensionAge(unittest.TestCase):
         for path in DEMOG_FILES:
             code = re.sub(r"#[^\n]*", "", _text(path))
             self.assertIsNone(re.search(r"local_var:te_dg_(age|ab|r)\s*(>=|<=|<|>|=)\s*(60|65|70)\b", code), path.name)
+
+
+class TestConsequencesScript(unittest.TestCase):
+    """Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4): the four state
+    modifiers' refresh (te_demog_consequence_effects.txt) against demographics_model, under Full and outside it."""
+
+    def _state(self, fam=11000.0, people=100000.0, balance=94.0, youth=(8000.0, 8100.0, 7900.0, 7950.0),
+               unemployment=0.0, full=True):
+        eng = _Engine({"state_unemployment_rate": unemployment}, triggers={"te_demog_effects_run": full})
+        eng.vars.update(te_dg_fam=fam, te_dg_faw=fam * 1.02, te_dg_people=people, te_dg_sex_balance=balance,
+                        te_dg_bf4=youth[0], te_dg_bm4=youth[1], te_dg_bf5=youth[2], te_dg_bm5=youth[3])
+        return eng
+
+    def test_full_applies_the_models_terms(self):
+        cases = [dict(), dict(fam=7000.0, balance=82.0, unemployment=0.12),
+                 dict(fam=16000.0, balance=135.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.25),
+                 dict(fam=0.0, balance=150.0), dict(fam=50000.0, balance=60.0)]
+        for kw in cases:
+            with self.subTest(**{k: v for k, v in kw.items() if k != "youth"}):
+                eng = self._state(**kw)
+                eng.call("te_demog_consequences_refresh")
+                v = eng.vars
+                term = demographics_model.conscription_term(v["te_dg_fam"], v["te_dg_people"])
+                share = sum(kw.get("youth", (8000.0, 8100.0, 7900.0, 7950.0))) / v["te_dg_people"]
+                y = demographics_model.youth_bulge(share, kw.get("unemployment", 0.0))
+                self.assertAlmostEqual(v["te_dg_mc"], term, places=9)
+                self.assertAlmostEqual(v["te_dg_yb"], y, places=9)
+                want = {}
+                if term > 0:
+                    want["te_demog_census_conscription_up"] = term
+                elif term < 0:
+                    want["te_demog_census_conscription_down"] = -term
+                if y > 0:
+                    want["te_demog_census_youth_bulge"] = y
+                fewer = demographics_model.sex_fewer_men(v["te_dg_sex_balance"])
+                more = demographics_model.sex_more_men(v["te_dg_sex_balance"])
+                if fewer > 0:
+                    want["te_demog_census_fewer_men"] = fewer
+                if more > 0:
+                    want["te_demog_census_more_men"] = more
+                self.assertEqual(set(eng.modifiers), set(want))
+                for name, mult in want.items():
+                    self.assertAlmostEqual(eng.modifiers[name], mult, places=9, msg=name)
+
+    def test_a_change_of_sign_swaps_the_pair(self):
+        eng = self._state(fam=7000.0)
+        eng.call("te_demog_consequences_refresh")
+        self.assertIn("te_demog_census_conscription_down", eng.modifiers)
+        eng.vars["te_dg_fam"] = 15500.0
+        eng.call("te_demog_consequences_refresh")
+        self.assertIn("te_demog_census_conscription_up", eng.modifiers)
+        self.assertNotIn("te_demog_census_conscription_down", eng.modifiers)
+
+    def test_outside_full_everything_goes(self):
+        eng = self._state(fam=7000.0, balance=70.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.3)
+        eng.call("te_demog_consequences_refresh")
+        self.assertEqual(len(eng.modifiers), 3)
+        eng.trigger_fixtures["te_demog_effects_run"] = False
+        eng.call("te_demog_consequences_refresh")
+        self.assertEqual(eng.modifiers, {})
+        self.assertNotIn("te_dg_mc", eng.vars)
+        self.assertNotIn("te_dg_yb", eng.vars)
+        # the panel still shows what Full would do: the term and the bulge from the census and today's unemployment
+        self.assertLess(eng.value(eng._tree(eng.values, "te_demog_conscription_term")), 0)
+        self.assertGreater(eng.value(eng._tree(eng.values, "te_demog_youth_bulge_shown")), 0)
+
+    def test_a_census_from_before_step_4_takes_nothing(self):
+        eng = self._state()
+        del eng.vars["te_dg_fam"]
+        eng.vars["te_dg_mc"] = -0.2
+        eng.modifiers["te_demog_census_conscription_down"] = 0.2
+        eng.call("te_demog_consequences_refresh")
+        self.assertEqual(eng.modifiers, {})
+        self.assertNotIn("te_dg_mc", eng.vars)
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_fam_share")), 0)
+
+    def test_the_1836_reference_state_takes_no_modifier(self):
+        """A state at the 1836 world's pool, its young adults and balance: no modifier at all."""
+        eng = self._state(fam=P.CONSCRIPTION_REF * 100000.0, balance=94.0)
+        eng.call("te_demog_consequences_refresh")
+        self.assertEqual(eng.modifiers, {})
+        self.assertEqual((eng.vars["te_dg_mc"], eng.vars["te_dg_yb"]), (0, 0))
+
+    def test_the_sizes_are_the_params(self):
+        mods = _raw_blocks([CONSEQ_MODIFIERS])
+        want = {"te_demog_census_conscription_up": {"state_conscription_rate_mult": 1.0},
+                "te_demog_census_conscription_down": {"state_conscription_rate_mult": -1.0},
+                "te_demog_census_youth_bulge": {"state_radicals_from_political_movements_mult": P.YOUTH_RADICALS,
+                                                "state_turmoil_effects_mult": P.YOUTH_TURMOIL},
+                "te_demog_census_fewer_men": {"state_pop_support_movement_feminist_mult": P.SEX_FEMINIST},
+                "te_demog_census_more_men": {"state_radicals_from_political_movements_mult": P.SEX_RADICALS}}
+        self.assertEqual(set(mods), set(want))
+        for name, fields in want.items():
+            got = {k: float(v) for k, v in re.findall(r"(state_\w+) = (-?[\d.]+)", mods[name])}
+            self.assertEqual(got, fields, name)
+        values = _raw_blocks([CONSEQ_VALUES])
+        for name, size in (("te_demog_sex_feminist_shown", P.SEX_FEMINIST), ("te_demog_sex_radicals_shown",
+                           P.SEX_RADICALS), ("te_demog_youth_radicals_shown", P.YOUTH_RADICALS),
+                           ("te_demog_youth_turmoil_shown", P.YOUTH_TURMOIL)):
+            self.assertEqual(float(re.search(r"multiply = ([\d.]+)", values[name]).group(1)), size, name)
+
+    def test_one_refresh_site_after_the_births_and_deaths_terms(self):
+        effects = _raw_blocks([EFFECTS, FAST_EFFECTS, CONSEQ_EFFECTS])
+        for caller, before in (("te_demog_state_yearly", "te_demog_rates_refresh = yes"),
+                               ("te_demog_state_clock_step", "te_demog_fast_refresh_rates = yes")):
+            body = effects[caller]
+            self.assertLess(body.index(before), body.index("te_demog_consequences_refresh = yes"), caller)
+        users = [name for name, body in effects.items() if "te_demog_consequences_apply = yes" in body]
+        self.assertEqual(users, ["te_demog_consequences_refresh"])
+        for path in DEMOG_FILES:
+            if path != CONSEQ_EFFECTS:
+                self.assertIsNone(re.search(r"add_modifier = \{ name = te_demog_census_(conscription|youth|fewer|more)",
+                                            _text(path)), path.name)
+        # the step stores the balance before its rates; a seed drops it before its own
+        begin = effects["te_demog_step_begin"]
+        self.assertLess(begin.index("te_demog_sex_births_store = yes"), begin.index("te_demog_prepare = yes"))
+        seed = effects["te_demog_seed"]
+        self.assertLess(seed.index("remove_variable = te_dg_sxb"), seed.index("te_demog_prepare = yes"))
+
+    def test_the_country_figures(self):
+        states = [TestCountry.state(*args) for args in TestCountry.INPUTS]
+        states[0]["te_dg_yb"] = 0.3
+        del states[2]["te_dg_fam"]                    # a census from before step 4
+        eng = TestCountry().country(states)
+        eng.call("te_demog_country_census")
+        fam = states[0]["te_dg_fam"] + states[1]["te_dg_fam"]
+        people = states[0]["te_dg_people"] + states[1]["te_dg_people"]
+        men = sum(eng.vars[f"te_dg_cbm{b}"] for b in range(18))
+        self.assertAlmostEqual(eng.vars["te_dg_fam_share"], fam / people, places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_fam_men"], fam / men, places=9)
+        self.assertEqual(eng.vars["te_dg_yb_n"], 1)
+
+    def test_the_self_checks_are_wired(self):
+        """Owner, 2026-10-12: once a game each (a global flag), the conscription check reading before the add and
+        judged a week later (te_debug_demog.30), the unemployment check where the census runs."""
+        refresh = _raw_blocks([CONSEQ_EFFECTS])["te_demog_consequences_refresh"]
+        self.assertLess(refresh.index("te_debug_demog_conscription_selfcheck_start = yes"),
+                        refresh.index("te_demog_consequences_apply = yes"))
+        self.assertIn("te_debug_demog_unemployment_selfcheck = yes", refresh)
+        debug = _raw_blocks([ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"])
+        start = debug["te_debug_demog_conscription_selfcheck_start"]
+        for line in ("NOT = { has_global_variable = te_demog_selfcheck_consc_done }",
+                     "set_global_variable = { name = te_demog_selfcheck_consc_done value = yes }",
+                     "NOT = { has_modifier = te_demog_census_conscription_up }",
+                     "NOT = { has_modifier = te_demog_census_conscription_down }",
+                     "trigger_event = { id = te_debug_demog.30 days = 7 }"):
+            self.assertIn(line, start)
+        unemp = debug["te_debug_demog_unemployment_selfcheck"]
+        for line in ("te_demog_cohorts_run = yes", "NOT = { has_global_variable = te_demog_selfcheck_unemp_done }",
+                     "TE_SELF_CHECK OK unemployment_rate_read", "TE_SELF_CHECK BROKEN unemployment_rate_read"):
+            self.assertIn(line, unemp)
+        events = _text(ROOT / "events" / "te_debug_demog_events.txt")
+        check = _block(events, "te_debug_demog.30")
+        self.assertIn("TE_SELF_CHECK OK conscription_term_read", check)
+        self.assertIn("TE_SELF_CHECK BROKEN conscription_term_read", check)
+        self.assertIn("name = te_debug_demog.1.t_opt", _block(events, "te_debug_demog.1"))
+

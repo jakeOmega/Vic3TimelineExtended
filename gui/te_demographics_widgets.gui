@@ -6,7 +6,11 @@
 ### every section is a type here (gui_style_guide.md rule 9), so the state
 ### panel's Demographics subtab (Task 14) composes the same pieces. In order:
 ###   te_demog_overview         always shown: the census year and eight figures,
-###                             each "Label: value" with a trend arrow
+###                             each "Label: value" with a trend arrow; phase 2
+###                             step 4 adds Youth (while a state has a youth
+###                             bulge) and Fighting-Age Men (te_demog_fam_row,
+###                             step 2's Work and Retirement section's once it
+###                             exists)
 ###   te_demog_sec_pyramid      open: 18 five-year bands, men left, women right,
 ###                             with the outline twenty years ahead
 ###   te_demog_sec_wealth       open: the Gini beside the strata's incomes, Wealth
@@ -821,6 +825,17 @@ types te_demographics_widgets
 					}
 				}
 			}
+			### Phase 2 step 4 (the consequences design §4.5): shown while any of our census states has a youth bulge
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_youth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "te_demog_ov_youth_tt"
+				blockoverride "row_label" {
+					text = "te_demog_youth"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_youth_value"
+				}
+			}
 			te_demog_figure_row = {
 				tooltip = "te_demog_ov_gini_tt"
 				blockoverride "row_label" {
@@ -861,6 +876,34 @@ types te_demographics_widgets
 					}
 				}
 			}
+			### Phase 2 step 4: step 2's Work and Retirement section takes this row (the design §4.5); move this line there
+			te_demog_fam_row = {}
+		}
+	}
+
+	### Fighting-Age Men (phase 2 step 4; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+	### §4.5): the pool, men aged 20 to 39, as a share of the men, and the conscription multiplier it gives, with the
+	### pool and the term on hover. It belongs in step 2's Work and Retirement section; until that section exists it is
+	### the overview's last row, one instance line in te_demog_overview and one in te_state_demog_overview for the merge
+	### to move. A census from before step 4 shows the pending text until its next count. Fits the figure row's cells:
+	### "Fighting-Age Men" is 16 characters, about 150 units; "100% (×1.25)" 12, about 115.
+	type te_demog_fam_row = te_demog_figure_row {
+		tooltip = "te_demog_ov_fam_tt"
+		blockoverride "row_label" {
+			text = "te_demog_fam"
+		}
+		blockoverride "row_value" {
+			text = "[SelectLocalization( GetScriptedGui('te_demog_pool_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_fam_value', 'te_demog_ov_pending' )]"
+		}
+	}
+
+	type te_state_demog_fam_row = te_demog_figure_row {
+		tooltip = "te_demog_st_fam_tt"
+		blockoverride "row_label" {
+			text = "te_demog_fam"
+		}
+		blockoverride "row_value" {
+			text = "[SelectLocalization( GetScriptedGui('te_demog_state_pool_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_fam_value', 'te_demog_st_next' )]"
 		}
 	}
 
@@ -2389,6 +2432,17 @@ types te_demographics_widgets
 					}
 				}
 			}
+			### Phase 2 step 4 (the consequences design §4.5): shown while the state has a youth bulge
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_state_youth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_st_youth_tt"
+				blockoverride "row_label" {
+					text = "te_demog_youth"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_youth_value"
+				}
+			}
 			te_demog_figure_row = {
 				tooltip = "te_demog_st_mig_tt"
 				blockoverride "row_label" {
@@ -2407,6 +2461,8 @@ types te_demographics_widgets
 					text = "te_demog_st_urban_value"
 				}
 			}
+			### Phase 2 step 4: step 2's Work and Retirement section takes this row (the design §4.5); move this line there
+			te_state_demog_fam_row = {}
 		}
 	}
 

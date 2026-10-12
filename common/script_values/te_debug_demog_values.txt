@@ -744,3 +744,38 @@ te_debug_demog_replaced_mod = { value = modifier:state_demog_replaced_ratio_add 
 te_debug_demog_part_m_mod = { value = modifier:state_male_labor_participation_add }
 te_debug_demog_part_mod = { value = modifier:state_labor_participation_add }
 te_debug_demog_cap_mod = { value = modifier:state_work_capacity_mult }
+
+# ---- Phase 2 step 4's self-checks and option t (te_debug_demog_effects.txt) -------------------------------------------
+# THIS = the state: the conscription term the self-check expects, and the field before the add (0 where none is held).
+te_debug_demog_consc_chk_t = { value = 0 if = { limit = { has_variable = te_dg_chk_consc_t } value = var:te_dg_chk_consc_t } }
+te_debug_demog_consc_chk_before = { value = 0 if = { limit = { has_variable = te_dg_chk_consc_before } value = var:te_dg_chk_consc_before } }
+# What the state's conscription rate multiplier gained in the week since the census's pair went on.
+te_debug_demog_consc_chk_added = {
+	value = modifier:state_conscription_rate_mult
+	subtract = te_debug_demog_consc_chk_before
+}
+# How far that is from the term, non-negative (a sign flip, as te_debug_demog_pr_chk_gap).
+te_debug_demog_consc_chk_gap = {
+	value = te_debug_demog_consc_chk_added
+	subtract = te_debug_demog_consc_chk_t
+	if = {
+		limit = { te_debug_demog_consc_chk_added < te_debug_demog_consc_chk_t }
+		multiply = -1
+	}
+}
+# Option t's reads, -1 where the state holds none.
+te_debug_demog_cq_fam = { value = -1 if = { limit = { has_variable = te_dg_fam } value = var:te_dg_fam } }
+te_debug_demog_cq_faw = { value = -1 if = { limit = { has_variable = te_dg_faw } value = var:te_dg_faw } }
+te_debug_demog_cq_people = { value = -1 if = { limit = { has_variable = te_dg_people } value = var:te_dg_people } }
+te_debug_demog_cq_mc = { value = -1 if = { limit = { has_variable = te_dg_mc } value = var:te_dg_mc } }
+te_debug_demog_cq_yb = { value = -1 if = { limit = { has_variable = te_dg_yb } value = var:te_dg_yb } }
+te_debug_demog_cq_sex = { value = -1 if = { limit = { has_variable = te_dg_sex_balance } value = var:te_dg_sex_balance } }
+te_debug_demog_cq_sxb = { value = -1 if = { limit = { has_variable = te_dg_sxb } value = var:te_dg_sxb } }
+te_debug_demog_cq_consc_mod = { value = modifier:state_conscription_rate_mult }
+te_debug_demog_cq_radicals_mod = { value = modifier:state_radicals_from_political_movements_mult }
+te_debug_demog_cq_turmoil_mod = { value = modifier:state_turmoil_effects_mult }
+te_debug_demog_cq_feminist_mod = { value = modifier:state_pop_support_movement_feminist_mult }
+# THIS = the country.
+te_debug_demog_cq_c_share = { value = -1 if = { limit = { has_variable = te_dg_fam_share } value = var:te_dg_fam_share } }
+te_debug_demog_cq_c_men = { value = -1 if = { limit = { has_variable = te_dg_fam_men } value = var:te_dg_fam_men } }
+te_debug_demog_cq_c_yb_n = { value = -1 if = { limit = { has_variable = te_dg_yb_n } value = var:te_dg_yb_n } }
