@@ -508,6 +508,26 @@ class _Engine:
         self.run(_parse_script(f"{effect} = yes"))
 
 
+def _stored(inp):
+    """The variables a step stores for `inp`: te_demog_cause_inputs_store's, and the drifted medicine (inp.medicine,
+    or the targets)."""
+    med = inp.medicine if inp.medicine is not None else demographics_model.medicine_targets(inp)
+    out = {"te_dg_sol": float(inp.sol), "te_dg_lit": float(inp.literacy), "te_dg_acc": med["access"],
+           "te_dg_in_turm": min(max(inp.turmoil, 0.0), 1.0), "te_dg_in_crowd": inp.crowding}
+    for cause in P.MEDICINE_CAUSES:
+        out[f"te_dg_trt_{P.CAUSE_SHORT[cause]}"] = med[cause]
+    for cause, types in P.MORTALITY_TYPES.items():
+        out[f"te_dg_in_{P.CAUSE_SHORT[cause]}"] = sum(inp.mods.get(t, 0.0) for t in types)
+    return out
+
+
+def _mod_fixtures(inp):
+    """The engine reads the step makes: every census type, turmoil."""
+    out = {f"modifier:{t}": inp.mods.get(t, 0.0) for t in P.DEMOG_TYPES}
+    out["turmoil"] = inp.turmoil
+    return out
+
+
 def _engine_for(inp, year, pop, effects=None, engine=None):
     """A state with the census on, the walk's sums set from `inp`, and the owner's multipliers
     (script values that read the owner's techs and laws) taken from the model."""
@@ -3937,9 +3957,9 @@ class TestModifierTypes(unittest.TestCase):
             self.assertTrue(name.startswith("state_"), name)
 
 
-class TestCauseMultipliersScript(unittest.TestCase):
-    """te_demog_mult_<cause> (generated) against demographics_model.cause_multipliers, with the
-    modifier types' reads as fixtures: the caps, the floor and the order of the clamps."""
+class TestCauseFactorsScript(unittest.TestCase):
+    """te_demog_f_<cause>_<factor> and te_demog_mult_<cause> (generated) against demographics_model.cause_factors,
+    on the step's stored inputs (the Causes of Death plan)."""
 
     CASES = [
         {},
@@ -3950,55 +3970,89 @@ class TestCauseMultipliersScript(unittest.TestCase):
         {"state_work_mortality_mult": -0.9, "state_external_mortality_mult": -0.1},
         {"state_work_mortality_mult": 0.1, "state_external_mortality_mult": 0.3, "state_chronic_mortality_mult": -0.9},
     ]
+    STATES = ((3, 0.1, 0.0, 0.0), (6.5, 0.2, 0.4, 0.05), (8, 0.0, 1.0, 0.0), (20, 0.5, 0.2, 0.6), (40, 1.0, 0.0, 0.0))
 
-    def test_script_matches_the_model(self):
+    def _eng(self, inp):
+        eng = _Engine({})
+        eng.vars.update(_stored(inp))
+        return eng
+
+    def test_each_factor_matches_the_model(self):
         for mods in self.CASES:
-            for sol, lit in ((3, 0.1), (6.5, 0.2), (8, 0.0), (20, 0.5), (40, 1.0)):
-                inp = demographics_model.Inputs(sol=sol, literacy=lit, mods=dict(mods))
-                want = demographics_model.cause_multipliers(inp)
-                fixtures = {f"modifier:{t}": mods.get(t, 0.0) for t in P.DEMOG_MORTALITY_TYPES}
-                eng = _Engine(fixtures)
-                eng.vars.update(te_dg_sol=float(sol), te_dg_lit=float(lit))
-                for cause in ("infection", "work", "external", "chronic"):
+            for sol, lit, turm, crowd in self.STATES:
+                inp = demographics_model.Inputs(sol=sol, literacy=lit, turmoil=turm, crowding=crowd, mods=dict(mods))
+                eng = self._eng(inp)
+                for cause, factors in demographics_model.cause_factors(inp).items():
+                    for f, want in factors.items():
+                        with self.subTest(mods=mods, sol=sol, cause=cause, factor=f):
+                            got = eng.value(eng._tree(eng.values, f"te_demog_f_{cause}_{f}"))
+                            self.assertAlmostEqual(got, want, places=9)
+
+    def test_each_multiplier_matches_the_model(self):
+        for mods in self.CASES:
+            for sol, lit, turm, crowd in self.STATES:
+                inp = demographics_model.Inputs(sol=sol, literacy=lit, turmoil=turm, crowding=crowd, mods=dict(mods))
+                eng, want = self._eng(inp), demographics_model.cause_multipliers(inp)
+                for cause in P.CAUSE_FACTORS:
+                    scale = P.MATERNAL_PER_100K_BIRTHS if cause == "maternal" else 1.0
                     with self.subTest(mods=mods, sol=sol, cause=cause):
                         got = eng.value(eng._tree(eng.values, f"te_demog_mult_{cause}"))
-                        self.assertAlmostEqual(got, want[cause], places=9)
-                with self.subTest(mods=mods, sol=sol, cause="maternal"):
-                    got = eng.value(eng._tree(eng.values, "te_demog_mult_maternal"))
-                    self.assertAlmostEqual(got, want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)
+                        self.assertAlmostEqual(got, want[cause] * scale, places=6)
 
-    def test_crowding_matches_the_model(self):
-        # the census reads the multiplier the crowding refresh applied (migration_crowding_mult_applied), the
-        # harness the modifier's multiplier in the save: the same yearly figure. Slight (-3.8% attraction), 10x
-        # density (-45%), past the cap, and a state the refresh has not reached (no modifier, no variable)
-        for mult in (0.378, 4.5, 14.5, None):
-            eng = _Engine({f"modifier:{t}": 0.0 for t in P.DEMOG_MORTALITY_TYPES})
-            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
-            if mult is not None:
-                eng.modifiers["migration_crowding"] = mult
-                eng.vars["migration_crowding_mult_applied"] = mult
-            crowding = 0.0 if mult is None else P.MIGRATION_CROWDING_PULL_PER_MULT * mult
-            want = demographics_model.cause_multipliers(demographics_model.Inputs(sol=12, literacy=0.3,
-                                                                                  crowding=crowding))
-            with self.subTest(mult=mult):
-                got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
-                self.assertAlmostEqual(got, want["infection"], places=9)
+    def test_the_factors_read_the_drifted_medicine(self):
+        inp = demographics_model.Inputs(sol=12, literacy=0.3, mods=dict(self.CASES[2]),
+                                        medicine={"access": 0.45, "infection": 0.2, "maternal": 0.3, "chronic": 0.05})
+        eng = self._eng(inp)
+        for cause in P.MEDICINE_CAUSES:
+            got = eng.value(eng._tree(eng.values, f"te_demog_f_{cause}_medicine"))
+            self.assertAlmostEqual(got, demographics_model.medicine(inp, cause), places=9)
+        # the target is today's, read live
+        eng.fixtures.update(_mod_fixtures(inp))
+        target = demographics_model.medicine(dataclasses.replace(inp, medicine=None), "infection")
+        got = eng.value(eng._tree(eng.values, "te_demog_f_infection_medicine_target"))
+        self.assertAlmostEqual(got, target, places=9)
+
+    def test_the_inputs_store_takes_the_steps_reads(self):
+        inp = demographics_model.Inputs(sol=12, literacy=0.3, turmoil=1.4, mods=dict(self.CASES[5]))
+        eng = _Engine(_mod_fixtures(inp))
+        eng.call("te_demog_cause_inputs_store")
+        want = _stored(inp)
+        for name in ("te_dg_in_ext", "te_dg_in_work", "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd"):
+            self.assertAlmostEqual(eng.vars[name], want[name], places=9, msg=name)
+        self.assertEqual(eng.vars["te_dg_in_turm"], 1.0, "turmoil is a 0-1 share")
 
     def test_crowding_needs_both_the_modifier_and_the_stored_multiplier(self):
-        # a save from before the stored multiplier: the modifier without the variable, until the state's next yearly
-        # refresh (677 of 874 states in the 1949 save), must read no term rather than an unset var:; and a variable
-        # outliving its modifier must not count (review I1)
-        want = demographics_model.cause_multipliers(demographics_model.Inputs(sol=12, literacy=0.3))["infection"]
-        for label, modifier, variable in (("modifier only", True, False), ("variable only", False, True)):
-            eng = _Engine({f"modifier:{t}": 0.0 for t in P.DEMOG_MORTALITY_TYPES})
-            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
+        # a save from before the stored multiplier (the modifier alone), and a variable outliving its modifier,
+        # store no crowding (review I1 of the crowding term)
+        for label, modifier, variable in (("both", True, True), ("modifier only", True, False),
+                                          ("variable only", False, True)):
+            eng = _Engine(_mod_fixtures(demographics_model.Inputs()))
             if modifier:
                 eng.modifiers["migration_crowding"] = 1.5
             if variable:
                 eng.vars["migration_crowding_mult_applied"] = 1.5
+            eng.call("te_demog_cause_inputs_store")
+            want = 1.5 * P.MIGRATION_CROWDING_PULL_PER_MULT if label == "both" else 0.0
             with self.subTest(label):
+                self.assertAlmostEqual(eng.vars["te_dg_in_crowd"], want, places=9)
+
+    def test_crowding_matches_the_model(self):
+        # the census stores the multiplier the crowding refresh applied (migration_crowding_mult_applied), the
+        # harness reads the modifier's multiplier in the save: the same yearly figure. Slight (-3.8% attraction), 10x
+        # density (-45%), past the cap, and a state the refresh has not reached (no modifier, no variable)
+        for mult in (0.378, 4.5, 14.5, None):
+            crowding = 0.0 if mult is None else P.MIGRATION_CROWDING_PULL_PER_MULT * mult
+            inp = demographics_model.Inputs(sol=12, literacy=0.3, crowding=crowding)
+            eng = _Engine(_mod_fixtures(inp))
+            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
+            if mult is not None:
+                eng.modifiers["migration_crowding"] = mult
+                eng.vars["migration_crowding_mult_applied"] = mult
+            eng.call("te_demog_cause_inputs_store")
+            eng.call("te_demog_medicine_at_target")
+            with self.subTest(mult=mult):
                 got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
-                self.assertAlmostEqual(got, want, places=9)
+                self.assertAlmostEqual(got, demographics_model.cause_multipliers(inp)["infection"], places=9)
 
     def test_crowdings_pull_per_multiplier_is_the_modifiers(self):
         # "infection rises by the share attraction falls" holds only while the two agree: a retuned
@@ -4020,6 +4074,50 @@ class TestCauseMultipliersScript(unittest.TestCase):
         eng.call("te_update_migration_crowding_modifier")
         self.assertEqual(eng.modifiers, {})
         self.assertNotIn("migration_crowding_mult_applied", eng.vars)
+
+
+class TestMedicineDriftScript(unittest.TestCase):
+    """te_demog_medicine_drift and te_demog_medicine_at_target (generated) against demographics_model.medicine_drift."""
+
+    INP = demographics_model.Inputs(mods={P.ACCESS_TYPE: 0.3, P.TREATMENT_TYPE["infection"]: 0.4,
+                                          P.TREATMENT_TYPE["maternal"]: 0.35, P.TREATMENT_TYPE["chronic"]: 0.1})
+    VARS = {"access": "te_dg_acc", **{c: f"te_dg_trt_{P.CAUSE_SHORT[c]}" for c in P.MEDICINE_CAUSES}}
+
+    def _read(self, eng):
+        return {k: eng.vars[v] for k, v in self.VARS.items()}
+
+    def test_a_state_without_medicine_starts_at_its_targets(self):
+        eng = _Engine(_mod_fixtures(self.INP))
+        eng.call("te_demog_medicine_drift")
+        for k, v in self._read(eng).items():
+            self.assertAlmostEqual(v, demographics_model.medicine_targets(self.INP)[k], places=9, msg=k)
+
+    def test_a_seed_sets_the_targets(self):
+        eng = _Engine(_mod_fixtures(self.INP))
+        eng.vars.update(te_dg_acc=0.9, te_dg_trt_inf=0.9, te_dg_trt_mat=0.9, te_dg_trt_chr=0.9)
+        eng.call("te_demog_medicine_at_target")
+        self.assertEqual(self._read(eng), demographics_model.medicine_targets(self.INP))
+
+    def test_each_step_closes_its_share_of_the_gap(self):
+        prev = {"access": 0.4, "infection": 0.0, "maternal": 0.6, "chronic": 0.1}
+        for spread in (0.0, 0.15, 0.3, 5.0):
+            inp = dataclasses.replace(self.INP, mods={**self.INP.mods, P.DIFFUSION_TYPE: spread})
+            eng = _Engine(_mod_fixtures(inp))
+            eng.vars.update({self.VARS[k]: v for k, v in prev.items()})
+            eng.call("te_demog_medicine_drift")
+            want = demographics_model.medicine_drift(prev, inp)
+            for k, v in self._read(eng).items():
+                with self.subTest(spread=spread, value=k):
+                    self.assertAlmostEqual(v, want[k], places=9)
+                    lo, hi = sorted((prev[k], demographics_model.medicine_targets(inp)[k]))
+                    self.assertTrue(lo - 1e-9 <= v <= hi + 1e-9, "never overshoots")
+
+    def test_near_its_target_a_value_takes_it(self):
+        target = demographics_model.medicine_targets(self.INP)["access"]
+        eng = _Engine(_mod_fixtures(self.INP))
+        eng.vars.update(te_dg_acc=target - 0.005, te_dg_trt_inf=0.4, te_dg_trt_mat=0.35, te_dg_trt_chr=0.1)
+        eng.call("te_demog_medicine_drift")
+        self.assertAlmostEqual(eng.vars["te_dg_acc"], target, places=12)
 
 
 class TestMeansScript(unittest.TestCase):

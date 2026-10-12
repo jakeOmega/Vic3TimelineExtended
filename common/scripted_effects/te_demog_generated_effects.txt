@@ -6926,6 +6926,78 @@ te_demog_absorbed_walk_pop = {
 	}
 }
 
+# THIS = a state, at the top of te_demog_prepare (a seed or a step): the census's inputs that aren't stored
+# already, so te_demog_f_* (and the state subtab's Causes of Death) read what the step used until the next one.
+te_demog_cause_inputs_store = {
+	set_variable = { name = te_dg_in_ext value = { value = 0 add = modifier:state_external_mortality_mult } }
+	set_variable = { name = te_dg_in_work value = { value = 0 add = modifier:state_work_mortality_mult } }
+	set_variable = { name = te_dg_in_chr value = { value = 0 add = modifier:state_chronic_mortality_mult } }
+	# turmoil as the 0-1 share te_demog_crisis reads
+	set_variable = { name = te_dg_in_turm value = { value = turmoil min = 0 max = 1 } }
+	# crowding: the migration penalty the crowding refresh applied (te_update_migration_crowding_modifier)
+	set_variable = { name = te_dg_in_crowd value = 0 }
+	if = {
+		limit = {
+			has_modifier = migration_crowding
+			has_variable = migration_crowding_mult_applied
+		}
+		set_variable = { name = te_dg_in_crowd value = { value = var:migration_crowding_mult_applied multiply = 0.1 } }
+	}
+}
+
+# THIS = a state: the drifted medicine at its targets (te_demog_seed; te_demog_medicine_drift for a state
+# without it: a census from before the Causes of Death plan).
+te_demog_medicine_at_target = {
+	set_variable = { name = te_dg_acc value = te_demog_access_target }
+	set_variable = { name = te_dg_trt_inf value = te_demog_treatment_target_infection }
+	set_variable = { name = te_dg_trt_mat value = te_demog_treatment_target_maternal }
+	set_variable = { name = te_dg_trt_chr value = te_demog_treatment_target_chronic }
+}
+
+# THIS = a state at the start of its step (te_demog_step_begin): health-care access and each cause's treatment
+# move te_demog_medical_diffusion of the way to today's targets (demographics_model.medicine_drift).
+te_demog_medicine_drift = {
+	if = {
+		limit = {
+			has_variable = te_dg_acc
+			has_variable = te_dg_trt_inf
+			has_variable = te_dg_trt_mat
+			has_variable = te_dg_trt_chr
+		}
+		set_local_variable = { name = te_dg_diff value = te_demog_medical_diffusion }
+		te_demog_medicine_drift_one = { VAR = te_dg_acc TARGET = te_demog_access_target }
+		te_demog_medicine_drift_one = { VAR = te_dg_trt_inf TARGET = te_demog_treatment_target_infection }
+		te_demog_medicine_drift_one = { VAR = te_dg_trt_mat TARGET = te_demog_treatment_target_maternal }
+		te_demog_medicine_drift_one = { VAR = te_dg_trt_chr TARGET = te_demog_treatment_target_chronic }
+	}
+	else = {
+		te_demog_medicine_at_target = yes
+	}
+}
+
+# One drifted value: (target - value) x the step's share + value; within te_demog_k_medicine_snap of the target,
+# the target. set_variable's inline block, not change_variable (scripting_best_practices.md).
+te_demog_medicine_drift_one = {
+	set_variable = {
+		name = $VAR$
+		value = {
+			value = $TARGET$
+			subtract = var:$VAR$
+			multiply = local_var:te_dg_diff
+			add = var:$VAR$
+		}
+	}
+	# te_dg_med_gap, not te_dg_gap: te_demog_state_census, which calls the step, keeps its own te_dg_gap local
+	set_local_variable = { name = te_dg_med_gap value = { value = $TARGET$ subtract = var:$VAR$ } }
+	if = {
+		limit = {
+			local_var:te_dg_med_gap < te_demog_k_medicine_snap
+			local_var:te_dg_med_gap > te_demog_k_medicine_snap_neg
+		}
+		set_variable = { name = $VAR$ value = $TARGET$ }
+	}
+}
+
 # THIS = a state: the ring as TE_DEMOG_REPLAY before lines (demographics_harness.format_replay).
 te_demog_debug_log_ring_before = {
 	debug_log = "TE_DEMOG_REPLAY before from=0 f=[THIS.ScriptValue('te_demog_dbg_f0')|5],[THIS.ScriptValue('te_demog_dbg_f1')|5],[THIS.ScriptValue('te_demog_dbg_f2')|5],[THIS.ScriptValue('te_demog_dbg_f3')|5],[THIS.ScriptValue('te_demog_dbg_f4')|5],[THIS.ScriptValue('te_demog_dbg_f5')|5],[THIS.ScriptValue('te_demog_dbg_f6')|5],[THIS.ScriptValue('te_demog_dbg_f7')|5],[THIS.ScriptValue('te_demog_dbg_f8')|5],[THIS.ScriptValue('te_demog_dbg_f9')|5] m=[THIS.ScriptValue('te_demog_dbg_m0')|5],[THIS.ScriptValue('te_demog_dbg_m1')|5],[THIS.ScriptValue('te_demog_dbg_m2')|5],[THIS.ScriptValue('te_demog_dbg_m3')|5],[THIS.ScriptValue('te_demog_dbg_m4')|5],[THIS.ScriptValue('te_demog_dbg_m5')|5],[THIS.ScriptValue('te_demog_dbg_m6')|5],[THIS.ScriptValue('te_demog_dbg_m7')|5],[THIS.ScriptValue('te_demog_dbg_m8')|5],[THIS.ScriptValue('te_demog_dbg_m9')|5] pool_f=[THIS.ScriptValue('te_demog_dbg_pool_f')|5] pool_m=[THIS.ScriptValue('te_demog_dbg_pool_m')|5] pool_age=[THIS.Var('te_dg_pa').GetValue|5]"
