@@ -1775,10 +1775,7 @@ monument_events.11 = {
 		name = monument_events.11.building_artistic_chinese
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_artistic }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_artistic }
 			owner = { te_heritage_chinese = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_chinese }
@@ -1788,10 +1785,7 @@ monument_events.11 = {
 		name = monument_events.11.building_artistic_greek
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_artistic }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_artistic }
 			owner = { te_heritage_greek = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_greek }
@@ -1801,10 +1795,7 @@ monument_events.11 = {
 		name = monument_events.11.building_naturalist_avestan
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_naturalist }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_naturalist }
 			owner = { te_heritage_avestan = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_avestan }
@@ -1814,10 +1805,7 @@ monument_events.11 = {
 		name = monument_events.11.building_naturalist_arabic
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_naturalist }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_naturalist }
 			owner = { te_heritage_arabic = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_arabic }
@@ -1827,10 +1815,7 @@ monument_events.11 = {
 		name = monument_events.11.building_naturalist_chinese
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_naturalist }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_naturalist }
 			owner = { te_heritage_chinese = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_chinese }
@@ -1840,10 +1825,7 @@ monument_events.11 = {
 		name = monument_events.11.building_scientific_sanskrit
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_scientific }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_scientific }
 			owner = { te_heritage_sanskrit = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_sanskrit }
@@ -1853,10 +1835,7 @@ monument_events.11 = {
 		name = monument_events.11.building_scientific_avestan
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_scientific }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_scientific }
 			owner = { te_heritage_avestan = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_avestan }
@@ -1866,10 +1845,7 @@ monument_events.11 = {
 		name = monument_events.11.building_scientific_chinese
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_scientific }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_scientific }
 			owner = { te_heritage_chinese = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_chinese }
@@ -1879,10 +1855,7 @@ monument_events.11 = {
 		name = monument_events.11.building_scientific_mayan
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_scientific }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_scientific }
 			owner = { te_heritage_mayan = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_mayan }
@@ -1892,10 +1865,7 @@ monument_events.11 = {
 		name = monument_events.11.building_athletic_latin
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_athletic }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_athletic }
 			owner = { te_heritage_latin = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_latin }
@@ -1905,10 +1875,7 @@ monument_events.11 = {
 		name = monument_events.11.building_athletic_greek
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_athletic }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_athletic }
 			owner = { te_heritage_greek = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_greek }
@@ -1918,10 +1885,7 @@ monument_events.11 = {
 		name = monument_events.11.building_athletic_nahuatl
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_athletic }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_athletic }
 			owner = { te_heritage_nahuatl = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_nahuatl }
@@ -1931,10 +1895,7 @@ monument_events.11 = {
 		name = monument_events.11.building_athletic_mayan
 		highlighted_option = yes
 		trigger = {
-			hidden_trigger = {
-				var:gm_skin_axis = flag:building
-				gm_state_has_pm = { PM = pm_monument_athletic }
-			}
+			hidden_trigger = { var:gm_skin_axis = flag:building_athletic }
 			owner = { te_heritage_mayan = yes }
 		}
 		gm_state_choose_building_skin = { SKIN = heritage_mayan }

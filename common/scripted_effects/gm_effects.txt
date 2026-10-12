@@ -1375,7 +1375,7 @@ gm_state_offer_building_skins = {
 			NOT = { var:gm_skin = flag:generic }
 			owner = { is_ai = no }
 		}
-		set_variable = { name = gm_skin_axis value = flag:building }
+		set_variable = { name = gm_skin_axis value = flag:building_$KEY$ }
 		trigger_event = { id = monument_events.11 }
 	}
 }

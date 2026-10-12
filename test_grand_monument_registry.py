@@ -1227,14 +1227,17 @@ class SkinTests(unittest.TestCase):
             for h in heritages:
                 body = bodies[f"building_{key}_{h}"]
                 self.assertIn("highlighted_option = yes", body)
-                self.assertIn(f"hidden_trigger = {{ var:gm_skin_axis = flag:building "
-                              f"gm_state_has_pm = {{ PM = pm_monument_{key} }} }} "
+                # The axis names the building: no production-method read-back
+                # (Task 3 review), so the option can't vanish if the engine
+                # hasn't applied the dedication's PM yet.
+                self.assertIn(f"hidden_trigger = {{ var:gm_skin_axis = flag:building_{key} }} "
                               f"owner = {{ te_heritage_{h} = yes }}", body)
+                self.assertNotIn("gm_state_has_pm", body)
                 self.assertIn(f"gm_state_choose_building_skin = {{ SKIN = heritage_{h} }}", body)
                 self.assertIn(f"monument_events.11.building_{key}_{h}", L)
         shared = squash(block(e, "gm_state_offer_building_skins"))
         self.assertIn("gm_state_default_building_skin_$KEY$ = yes", shared)
-        self.assertIn("set_variable = { name = gm_skin_axis value = flag:building } "
+        self.assertIn("set_variable = { name = gm_skin_axis value = flag:building_$KEY$ } "
                       "trigger_event = { id = monument_events.11 }", shared)
         choose = squash(block(e, "gm_state_choose_building_skin"))
         self.assertIn("text = gm_skin_choice_building_tt", choose)
