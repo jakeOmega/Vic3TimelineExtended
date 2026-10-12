@@ -159,8 +159,8 @@ value, §1.8) puts it on the engine's scale. `te_dg_working_share` (15–64, the
 
 - **A weight table by biological age** (late-game §5.2, after American health spending per person by age): 0–4 1.0,
   5–14 0.5, 15–44 0.8, 45–64 1.4, 65–74 2.4, 75–84 3.4, 85+ 4.5.
-- **The figure** `te_dg_need`: the people-weighted weight ÷ the 1836 reference (`P.HEALTH_NEED_1836`, starting 0.97,
-  the sketch's 1836 structure; step 2's harness sets it from the 1836 save's world mean). 1.0 is 1836's need.
+- **The figure** `te_dg_need`: the people-weighted weight ÷ the 1836 reference (`P.HEALTH_NEED_1836`, starting 0.95,
+  §1.8's sketch of the 1836 structure; step 2's harness sets it from the 1836 save's world mean). 1.0 is 1836's need.
 - Step 1 stores it; step 2's health bill reads it.
 
 ### 1.5 The old-age threshold
@@ -196,7 +196,8 @@ Late-game §2.1 and call 11: the women's-work and retirement lines move to scrip
 reads, re-applied by the mod outside Full and cancelled under Full only. Step 1 moves them; under every rule the pair
 re-applies them, since no workforce term exists until step 2.
 
-**The two families** (new types in `demographics_engine_line_types.txt`, which a release keeps):
+**The two families** (new types in their own file, `demographics_workforce_line_types.txt`, which a release keeps
+as it keeps #892's):
 - `state_demog_womens_work_ratio_add`: the women's rate reads it (§1.3).
 - `state_demog_retirement_ratio_add`: lines the census's ages replace. Step 2's participation model doesn't read it;
   the pension age does its work. Pro-Natalist Subsidies' −0.05 sits here (late-game call 11): it stands for women
@@ -233,15 +234,17 @@ still reads "Workforce Ratio".
 headquarters method, the mod's −0.05 on Pollution Impact (`extra_modifiers.txt:345`), and vanilla's two IG traits
 (`ig_trait_solidarity`, `ig_trait_bourse_du_travail`) and `modifier_woman_soldiers`.
 
-**The pair.** `gen_demographics` adds the field to the moved lines' pairs (`te_demog_line_working_adults_up`/`_down`,
-`state_working_adult_ratio_add` ±1, multiplier = the two families' sum) with **its own gate**, `te_demog_workforce_
-lines_apply`: not Full, or no workforce term yet (`te_dg_mw`, a name reserved for step 2's term). The births and
-deaths pairs keep `te_demog_lines_apply` (Full and `te_dg_mb`). A shared gate would take the workforce pair off at a
-state's first Full step with nothing in its place, so the generator writes one gate per group, and
-`te_demog_lines_clear` (which the census's refresh calls when it first sets M) clears the births and deaths group only.
+**The pair.** `gen_demographics` writes a pair for the field like the moved lines'
+(`te_demog_line_working_adults_up`/`_down`, `state_working_adult_ratio_add` ±1, multiplier = the two families' sum),
+in its own files, with its own refresh (`te_demog_workforce_lines_refresh`, called beside `te_demog_lines_refresh`)
+and **its own gate**, `te_demog_workforce_lines_apply`: not Full, or no workforce term yet (`te_dg_mw`, a name
+reserved for step 2's term). The births and deaths pairs keep `te_demog_lines_apply` (Full and `te_dg_mb`). A shared
+gate would take the workforce pair off at a state's first Full step with nothing in its place, and
+`te_demog_lines_clear` (which the census's refresh calls when it first sets M) clears the births and deaths pairs only.
 
-**The readers.** `demographics_modifiers.engine_rate_lines` reads only `*_mult` fields today; it gains the working-adult
-field so `engine_lines()` and `line_carriers()` read the moved lines back, and a `MOVED`-style test pins each at its old
+**The readers.** `demographics_modifiers.engine_rate_lines` reads only `*_mult` fields today; it gains a field filter,
+and two new readers (`engine_workforce_lines`, `workforce_line_carriers`) read the moved lines back, so #892's readers
+and tests don't change; a `MOVED`-style test pins each at its old
 value (§1.10).
 
 ### 1.8 The workforce target as a total
@@ -261,8 +264,19 @@ value (§1.10).
   needed: a line added later is on top by default.
 - **Step 1 builds `te_demog_wf_target` and its inputs and applies nothing.** `te_dg_mw` and the term's pair are step
   2's.
-- `WORKFORCE_SCALE` starts at 0.69 (the sketch: 1836's participation gives about 0.36 of people at work, which the
-  scale puts on vanilla's 0.25; today's rich state gives about 0.61, which it puts at 0.42). Step 2's harness fits it.
+- `WORKFORCE_SCALE` starts at 0.74. A sketch of §1.3's starting tables on the census model's own stable structures
+  (`demographics_model.run_constant`, the game files' carriers; 2026-10-12):
+
+  | Case | Children per woman | 0–14 / 65+ | Women's rate | Working-age share | At work | Workers ÷ people | × 0.74 |
+  |---|---|---|---|---|---|---|---|
+  | 1836 farming, No Women's Rights, Child Labor Allowed, lower strata 0.85 | 5.9 | 38% / 5% | 0.18 | 0.67 | 0.50 | 0.34 | 0.25 |
+  | 1836, Women in the Fields | 5.1 | 34% / 7% | 0.92 | 0.69 | 0.88 | 0.61 | 0.45 |
+  | Rich, Protected Class and the technologies, Old Age Pension at 65 | 1.4 | 11% / 31% | 0.92 | 0.57 | 0.95 | 0.54 | 0.40 |
+  | The same under Women's Suffrage | 1.4 | 11% / 31% | 0.78 | 0.57 | 0.88 | 0.50 | 0.37 |
+
+  So the starting tables meet both targets at one scale (0.25 and 0.40 against 0.42 ± 0.03). Old age from: 59 in 1836,
+  70 in the rich case; health need 0.95 in 1836 and 1.70 rich (×1.79). Step 2's harness fits the scale and the tables
+  on the 1836 save's states and a late save's.
 
 ### 1.9 What step 1 changes in a game
 
@@ -282,10 +296,10 @@ value (§1.10).
 ### 1.10 Gate
 
 - **Harness and tests:**
-  - a golden test: every census output (every `te_dg_*` variable and every modifier) after a seed and a step, on four
-    fixture states (an 1836 farming state, the same under Full with on-top scales, an aged rich state under Full, the
-    moved lines' refresh), recorded before step 1's first change and asserted equal under the interpreter's fixed-point
-    mode afterwards; only the step's new names may be added;
+  - a golden test: every census output (every `te_dg_*` variable and every modifier) in five cases (an 1836 farming
+    state's seed and step under Display only, the same under Full with on-top scales, a rich aged state under Full, the
+    moved lines' refresh outside Full and under Full), recorded before step 1's first change and asserted equal under
+    the interpreter's fixed-point mode afterwards; only the step's new names may be added;
   - the model's outputs on the harness's scenarios (children per woman, life expectancy, the structure) unchanged;
   - the moved lines' table (§1.7) pinned at the old values, and no `state_working_adult_ratio_add` line left on a law,
     technology or institution except those listed on top;
@@ -317,8 +331,8 @@ Everything here acts under Full only. Display only shows the figures; its button
   Q11). Step 1's in-game list runs the probe; if the pull is slow, the panel shows the engine's own figure
   (`te_dg_wf_engine`) beside the target so the player sees the lag.
 - **Uses `te_dg_low_share`** from the walk; women's work by class enters only through the state's mix (#894).
-- **What it does** (sketch, starting values): 1836 farming states about 0.25 (vanilla's); Women in the Fields states
-  about 0.41 against the base game's 0.55; a rich state today about 0.42 against this mod's about 0.55 outside Full
+- **What it does** (§1.8's sketch, starting values): 1836 farming states about 0.25 (vanilla's); Women in the Fields
+  states about 0.45 against the base game's 0.55; a rich state today about 0.40 against this mod's about 0.55 outside Full
   (Protected Class +0.2, the technologies +0.1, Family Planning +0.05, Old Age Pension −0.05 at level 5). So under Full
   a rich modern country has about a quarter fewer workers than in the same game outside Full, by the owner's target;
   the harness reports both figures for every scenario.
@@ -584,12 +598,12 @@ is the harness's Rich-today inputs (late-game sketch); "1836" is the 1836 save's
 
 | Number | Step | Starting value | Target the fit must meet |
 |---|---|---|---|
-| `WORKFORCE_SCALE` | 2 | 0.69 | 1836 world 0.25 ± 0.02, at least four-fifths of states within 0.21–0.29 |
+| `WORKFORCE_SCALE` | 2 | 0.74 | 1836 world 0.25 ± 0.02, at least four-fifths of states within 0.21–0.29 |
 | `MEN_RATE`, `W_BASE`, `W_LOWER`, `W_FULL` | 2 | 0.92, 0.05, 0.2, 0.30 | rich today 0.42 ± 0.03 on the engine's scale, with 1836 above; women's rate today ≥ 0.8 of men's |
 | Capacity table, `AFTER_PENSION_SHARE` | 2 | late-game §2.1, 0.15 | over-65s at work: about three-quarters of men with no pension (1880), about a fifth today |
 | Working-age start | 2 | 0.3 / 0.1 / 0 | parent §7 |
 | `PENSION_B_PER_LEVEL` | 2 | 0.08 | the bill 15–30% of revenue, rich country 2000–2020, Standard, 18–22% pensioners |
-| `HEALTH_NEED_1836` | 1 (stored), 2 (fitted) | 0.97 | the 1836 world's need ÷ it = 1.00 ± 0.01 |
+| `HEALTH_NEED_1836` | 1 (stored), 2 (fitted) | 0.95 | the 1836 world's need ÷ it = 1.00 ± 0.01 |
 | Health need weight, medical-technology term | 2 | 0.5, 0.05 | rich today +0.35 to +0.5 in all; 1836 0 ± 0.05 |
 | Measure sizes | 3 | §3.4 | full pro-natalist package +0.2 to +0.4 children in a rich state at 1.2–1.8; each single measure under +0.15 |
 | Measure money upkeep | 3 | §3.4 | the full pro-natalist package costs 1–3% of a rich country's revenue (below) |
