@@ -1516,11 +1516,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
         # Batch 5. Megastructure was left on basic_construction in batch 4: a space elevator, a lattice
         # tower and an orbital ring drew a radio mast, an oil derrick and a station on a pale disc that
-        # broke the badge style. Next subject if this one misses: a huge half-built steel geodesic dome
-        # under two tall construction cranes.
-        "company_megastructure_consortium": {"subject": "a colossal stepped skyscraper tower rising high above a layer of white clouds, two tiny construction cranes on its unfinished top", "seed": None},
+        # broke the badge style. Batch 5: a tower above clouds lost its disc (the sky was matted out
+        # with the ground), so the dome, with no sky in the subject.
+        "company_megastructure_consortium": {"subject": "a huge half-built steel geodesic dome under two tall construction cranes", "seed": None},
         # "Unnamed Monument", the Grand Monuments name carrier: shown in the rename popup while a monument is named.
-        "company_gm_name_carrier": {"subject": "a blank smooth grey granite dedication plaque standing upright, a stonemason's wooden mallet and steel chisel resting against its foot", "seed": None},
+        "company_gm_name_carrier": {"subject": "a blank smooth grey granite dedication plaque standing upright, a stonemason's wooden mallet and steel chisel resting against its foot", "seed": 2},
     },
     # The PLACEHOLDER cards of gen_placeholder_company_icons.py: the company's trade, no logo or lettering.
     # Interim for the seventeen real companies: the owner may draw their real logos (2026-10-07); drop an
@@ -1590,26 +1590,28 @@ ICONS: dict[str, dict[str, dict]] = {
         # goods_icons/fertilizer.dds) and its text icon vanilla's potted plant.
         # Not bottles, which Dye is. Next subject if it misses: a dented blue steel
         # drum beside a round-bottomed glass flask of green liquid.
-        "fertilizer": {"subject": "a large round green glass carboy of clear liquid with a cork stopper, held in a wooden crate packed with straw", "seed": None,
+        "fertilizer": {"subject": "a large round green glass carboy of clear liquid with a cork stopper, held in a wooden crate packed with straw", "seed": 1,
                        "now": f"{_GI}/company_icons/basic_chemicals.dds"},
         # Drugs, which includes medicines, on vanilla's opium pipe and poppy pods.
-        "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a dried poppy seed pod beside it", "seed": None,
+        # Reroll: "a dried poppy seed pod" drew a brown burr.
+        "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": None,
                   "now": f"{_GI}/goods_icons/opium.dds"},
     },
     # Batch 5: the two renamed prestige goods of the goods above, each a finer
     # version of its good's idea (bulk carboy -> small reagent vials).
     "prestige_good_vanilla": {
         # Specialty Reagents (vanilla's Enriched Fertilizer, a fertilizer sack).
-        "generic_fertilizer_prestige": {"subject": "a polished wooden laboratory rack holding a row of slender stoppered glass vials of bright red, blue, green and amber liquids", "seed": None,
+        "generic_fertilizer_prestige": {"subject": "a polished wooden laboratory rack holding a row of slender stoppered glass vials of bright red, blue, green and amber liquids", "seed": 1,
                                         "now": f"{_GI}/goods_icons/prestige_goods/generic_fertilizer_prestige.dds"},
         # Potent Formulations (vanilla's Pure Opium, an opium box and pipe).
-        "generic_opium_prestige": {"subject": "a small open silver pillbox lined with blue velvet, full of glossy red-and-white capsules", "seed": None,
+        "generic_opium_prestige": {"subject": "a small open silver pillbox lined with blue velvet, full of glossy red-and-white capsules", "seed": 1,
                                    "now": f"{_GI}/goods_icons/prestige_goods/generic_opium_prestige.dds"},
     },
     # Batch 5: the mod's diplomatic plays on a vanilla war goal's picture.
     "war_goal": {
-        # War After a Nuclear Exchange, on Humiliation's boots on a flag.
-        "dp_nuclear_exchange": {"subject": "a cracked and scorched slate-blue map tile of land with a small grey mushroom cloud rising from its centre, muted slate-blue and grey colours", "seed": None},
+        # War After a Nuclear Exchange, on Humiliation's boots on a flag. Reroll: "a small grey
+        # mushroom cloud" drew a pale puff like a cauliflower.
+        "dp_nuclear_exchange": {"subject": "a tall grey mushroom cloud with a wide rounded cap on a narrow column of smoke, rising from a cracked and scorched slate-blue map tile of land, muted slate-blue and grey colours", "seed": None},
     },
     # The Timeline Extended window's launcher, on vanilla's Journal button until now.
     "sidebar_button": {
