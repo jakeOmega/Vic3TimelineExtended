@@ -93,15 +93,28 @@ row in the INJECT table and `WORKFORCE_LINES_ON_TOP` loses `law_post-scarcity`.
 **D8. The war dead's window stays 18–40.** The spec moves it to the conscription pool in step 4; doing it here would
 move the ring.
 
+**D10. With no pension law the working ages have no end.** Late-game §2.1 runs them "to capacity's end", and capacity
+never reaches 0, so `te_dg_wa_end` is 999 without a pension law (not the Standard 65, which let "at work" pass 100% in
+an old country with no pension). "At work" can still pass 1 under a pension law when those past the end far outnumber
+the working ages; the stored figure stays uncapped, and step 2's panel caps what it shows (spec §1.3).
+
+**D11. The interpreter can't iterate pops**, so `te_demog_walks` never runs in a test (`TestWalks` reads its text).
+Task 5 puts its additions in three effects called by one line each, and Task 1's golden pins the walk's text less
+those three lines; Task 5 runs the three effects outside the census and checks they set nothing.
+
 **D9. The seed's NRR keeps the one schedule.** `te_demog_life_table`'s NRR sum and the model's `nrr` read `te_dg_asfr`;
 phase 3, which parts the schedules, revisits them.
 
 ## Owner decisions (to confirm in the PR)
 
+**Spec §13 calls 1 and 2 must be answered before Task 1 starts.**
 1. Spec §13 call 1 (Post-Scarcity's line on top) decides one row of Task 6 (D7).
-2. Step 1 changes the workforce tooltip's breakdown in every game (one "Laws and Institutions" line for the moved
-   lines, #892's precedent) and lets an institution level's line follow within a month. The values don't change.
-3. Execution: subagent-driven, with review stops after Tasks 3, 5 and 6 and a whole-branch review at the end.
+2. Spec §13 call 2: step 1 changes the workforce tooltip's breakdown in every game (one "Laws and Institutions" line
+   for the moved lines instead of one per law, #892's precedent) and lets an institution level's line arrive up to a
+   month late. The values don't change. If the owner declines, Task 6 doesn't ship as written: stop and re-plan.
+3. Calls 3 and 4 (the lines on top, which base the term nets) are step 2's; step 1 stores `te_dg_wbase` and reads the
+   state's total either way.
+4. Execution: subagent-driven, with review stops after Tasks 3, 5 and 6 and a whole-branch review at the end.
 
 ## Global Constraints
 
@@ -139,7 +152,8 @@ phase 3, which parts the schedules, revisits them.
    - Expect: the country's pension variable follows that day; under UBI the working ages end at the state's old-age
      threshold and no one counts as a pensioner.
    - Pinned by Task 4's `test_the_variable_follows_the_law` and Task 5's `test_ubi_ends_the_working_ages_at_the_threshold`.
-4. **Every census output stays the same** in the four golden cases and the model's scenarios.
+4. **Every census output stays the same**: the five golden cases (with the census's own term under Full), the model's
+   scenarios, every existing generated block and the walk's text.
    - Pinned by Task 1's `TestStepOneChangesNoNumber`, run after every task.
 5. **A release build** (`scripts/release/comment_out_census_inputs.py`): the moved workforce lines must survive it,
    since the pair re-applies them in every game.
@@ -181,8 +195,9 @@ phase 3, which parts the schedules, revisits them.
 - Create: `test_fixtures/demographics/phase2_step1_golden.json` (written by Step 2)
 
 **Interfaces:**
-- Consumes: `_Engine`, `_engine_for` from `test_demographics_registry.py` (functions only; no `TestCase` is imported,
-  so discovery doesn't run the registry's tests twice); `demographics_model`, `demographics_modifiers`.
+- Consumes: `_Engine`, `_engine_for`, `_raw_blocks`, `_block`, `_text` and the file paths from
+  `test_demographics_registry.py` (no `TestCase` is imported, so discovery doesn't run the registry's tests twice);
+  `demographics_model`, `demographics_modifiers`, `demographics_params`.
 - Produces: `TestStepOneChangesNoNumber`, which every later task runs. `NEW_VARS`, `NEW_MODIFIERS`: the names step 1
   may add.
 
@@ -191,14 +206,21 @@ phase 3, which parts the schedules, revisits them.
 ```python
 """Phase 2 step 1 changes no census number (docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md).
 
-The golden (test_fixtures/demographics/phase2_step1_golden.json) holds every census output of five cases and the
-model's outputs on two scenarios, recorded on the tree before step 1's first change (TE_RECORD_GOLDEN=1). Every later
-task keeps each recorded value exactly, under the interpreter's fixed point (truncate=True); a name the golden lacks
-must be one of step 1's (NEW_VARS, NEW_MODIFIERS)."""
+The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on the tree before step 1's first change
+(TE_RECORD_GOLDEN=1), holds:
+- every te_dg_* variable and modifier of five census cases (seed, step and, under Full, the census's own term) and the
+  model's outputs on two scenarios, kept exactly under the interpreter's fixed point (truncate=True); a name the golden
+  lacks must be one of step 1's (NEW_VARS, NEW_MODIFIERS);
+- a digest of every block of the generated census files and #892's three line files, kept byte for byte (comments
+  aside) except the life table's added threshold lines;
+- the yearly walk's text, which runs in every game and which the interpreter can't iterate over pops: kept but for the
+  three calls of Task 5's gated effects."""
 
 import functools
+import hashlib
 import json
 import os
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -208,12 +230,21 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
-from test_demographics_registry import _Engine, _engine_for  # noqa: E402
+import demographics_params as P  # noqa: E402
+from test_demographics_registry import (  # noqa: E402  (helpers and paths only: no TestCase)
+    EFFECTS, GENERATED_EFFECTS, GENERATED_VALUES, LINE_EFFECTS, LINE_MODIFIERS, LINE_VALUES, _block, _Engine,
+    _engine_for, _raw_blocks, _text)
 
 GOLDEN = ROOT / "test_fixtures" / "demographics" / "phase2_step1_golden.json"
 NEW_VARS = {"te_dg_wa_share", "te_dg_at_work", "te_dg_pensioners", "te_dg_need", "te_dg_old_age",
             "te_dg_low_share", "te_dg_wbase", "te_dg_wf_engine", "te_dg_ln_working_adults"}
 NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adults_down"}
+# Task 5's three calls in te_demog_walks; nothing else in the walk may change
+WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
+# Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
+LIFE_TABLE_ADDED = re.compile(r"te_dg_oal\d|te_dg_oapy\d|^te_demog_old_age_pass = yes$")
+BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
+               "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
 
 
@@ -240,8 +271,10 @@ LINE_SUMS = {"state_demog_absorbed_mortality_mult": -0.03, "state_demog_ontop_mo
 
 
 def _census(inp, full, on_top):
-    """te_demog_seed, then te_demog_step a year later (no flows), as the yearly pulse runs them."""
-    eng = _engine_for(inp, 1836, 250000.0, engine=functools.partial(_Engine, truncate=True),
+    """te_demog_seed, te_demog_step a year later (no flows) and, under Full, the census's own term
+    (te_demog_rates_refresh), as te_demog_state_yearly runs them. The generated cause multipliers run
+    (real_multipliers); the owner's means and work share stay _engine_for's fixtures (the interpreter can't read laws)."""
+    eng = _engine_for(inp, 1836, 250000.0, engine=functools.partial(_Engine, truncate=True), real_multipliers=True,
                       effects={"te_demog_flows": "te_demog_no_flows = yes"})
     eng.call("te_demog_seed")
     pop = 251000.0
@@ -252,13 +285,21 @@ def _census(inp, full, on_top):
         eng.vars.update(te_dg_cbr_model=40.0, te_dg_cdr_model=30.0,
                         te_dg_eb=40.0 * pop / 1000 * (1 + on_top[0]), te_dg_ed=30.0 * pop / 1000 * (1 + on_top[1]))
     eng.call("te_demog_step")
+    if full:
+        # the walk's sums and the state's reads as TestRatesScript._eng gives them
+        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.05, "modifier:state_mortality_mult": 0.04,
+                             **{f"modifier:{n}": 0.0 for n in P.ENGINE_LINE_TYPES.values()}})
+        eb0, ed0 = 475.0 * pop, 430.0 * pop
+        eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebr=P.LITERACY_BIRTH_PENALTY * 0.2 * eb0,
+                          te_dg_w_edr=0.0, te_dg_w_eb=eb0, te_dg_w_ed=ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0,
+                          te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+        eng.call("te_demog_rates_refresh")
     return eng
 
 
 def _lines(full):
     """te_demog_lines_refresh (and, from Task 6, te_demog_workforce_lines_refresh) on a state; under Full with the
     census's term in force."""
-    import demographics_params as P
     names = set(P.ENGINE_LINE_TYPES.values()) | set(LINE_SUMS)
     eng = _Engine({f"modifier:{n}": LINE_SUMS.get(n, 0.0) for n in names},
                   triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full}, truncate=True)
@@ -270,17 +311,37 @@ def _lines(full):
     return eng
 
 
+def _norm(body, drop=None):
+    lines = [line.strip() for line in body.splitlines() if line.strip()]
+    return "\n".join(line for line in lines if not (drop and drop(line)))
+
+
+def blocks():
+    out = {}
+    for key, path in BLOCK_FILES.items():
+        out[key] = {}
+        for name, body in _raw_blocks([path]).items():
+            drop = (lambda line: bool(LIFE_TABLE_ADDED.search(line))) if name == "te_demog_life_table" else None
+            out[key][name] = hashlib.sha256(_norm(body, drop).encode("utf-8")).hexdigest()
+    return out
+
+
+def walk_text():
+    body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+    return _norm(body, lambda line: line in WALK_CALLS)
+
+
 def outputs():
-    cases = {"farm_display_only": _census(FARM, False, None), "farm_full_on_top": _census(FARM, True, (0.1, 0.2)),
-             "rich_full": _census(RICH, True, (0.0, 0.05)), "lines_outside_full": _lines(False),
-             "lines_full": _lines(True)}
-    out = {name: {"vars": dict(sorted(eng.vars.items())), "modifiers": dict(sorted(eng.modifiers.items()))}
-           for name, eng in cases.items()}
+    engines = {"farm_display_only": _census(FARM, False, None), "farm_full_on_top": _census(FARM, True, (0.1, 0.2)),
+               "rich_full": _census(RICH, True, (0.0, 0.05)), "lines_outside_full": _lines(False),
+               "lines_full": _lines(True)}
+    cases = {name: {"vars": dict(sorted(eng.vars.items())), "modifiers": dict(sorted(eng.modifiers.items()))}
+             for name, eng in engines.items()}
     for name, inp in (("model_farm", FARM), ("model_rich", RICH)):
         ring, last = M.run_constant(inp, years=60)
-        out[name] = {"vars": {k: last[k] for k in ("births", "deaths", "tfr", "e0", "e65", "q0_per_1000")}
-                     | {f"structure_{k}": v for k, v in M.structure(ring).items()}, "modifiers": {}}
-    return out
+        cases[name] = {"vars": {k: last[k] for k in ("births", "deaths", "tfr", "e0", "e65", "q0_per_1000")}
+                       | {f"structure_{k}": v for k, v in M.structure(ring).items()}, "modifiers": {}}
+    return {"cases": cases, "blocks": blocks(), "walk": walk_text()}
 
 
 class TestStepOneChangesNoNumber(unittest.TestCase):
@@ -292,16 +353,34 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         cls.golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
 
     def test_every_recorded_output_is_unchanged(self):
-        for case, rec in self.golden.items():
+        for case, rec in self.golden["cases"].items():
             for kind in ("vars", "modifiers"):
                 for name, value in rec[kind].items():
-                    self.assertIn(name, self.now[case][kind], f"{case}: {name} is gone")
-                    self.assertEqual(self.now[case][kind][name], value, f"{case}: {name}")
+                    self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
+                    self.assertEqual(self.now["cases"][case][kind][name], value, f"{case}: {name}")
 
     def test_only_step_ones_names_are_new(self):
-        for case, rec in self.golden.items():
-            self.assertEqual(set(self.now[case]["vars"]) - set(rec["vars"]) - NEW_VARS, set(), case)
-            self.assertEqual(set(self.now[case]["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
+        for case, rec in self.golden["cases"].items():
+            now = self.now["cases"][case]
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS, set(), case)
+            self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
+
+    def test_the_census_term_is_recorded(self):
+        """The Full cases hold the census's own modifiers, so a change to M would show."""
+        for case in ("farm_full_on_top", "rich_full"):
+            mods = self.golden["cases"][case]["modifiers"]
+            self.assertTrue(any(name.startswith("te_demog_census_") for name in mods), case)
+
+    def test_every_generated_block_is_unchanged(self):
+        """Existing blocks byte for byte (comments aside), the life table less Task 3's threshold lines; new blocks are
+        free. Task 6's refactor of #892's renderers must leave its three files' blocks as they were."""
+        for key, rec in self.golden["blocks"].items():
+            for name, digest in rec.items():
+                self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
+                self.assertEqual(self.now["blocks"][key][name], digest, f"{key}: {name} changed")
+
+    def test_the_walk_changes_only_by_its_three_calls(self):
+        self.assertEqual(self.now["walk"], self.golden["walk"])
 
 
 if __name__ == "__main__":
@@ -316,7 +395,11 @@ Expected: OK, and `test_fixtures/demographics/phase2_step1_golden.json` written.
   `truncate=False` (drop the `functools.partial`) and say so in the commit message: float equality still pins an
   unchanged arithmetic path.
 - If the step reads a variable the walk would set that the case lacks, add it to the `eng.vars.update` in `_census`
-  from `TestCohortScript.step_both`'s list, and record again.
+  from `TestCohortScript.step_both`'s list; if `te_demog_rates_refresh` reads a name the case lacks, take it from
+  `TestRatesScript._eng`. Record again.
+- Check the recording holds what it should: the two Full cases carry `te_demog_census_*` modifiers
+  (`test_the_census_term_is_recorded`), and `blocks` lists `te_demog_life_table`, `te_demog_enter_group` and
+  `te_demog_lines_refresh`.
 
 - [ ] **Step 3: Check it holds without recording**
 
@@ -341,7 +424,7 @@ Expected: OK. Then `git diff --stat` shows only the two new files.
     `P.CHILD_WORK_SHARE_DEFAULT`, `P.CAPACITY: dict[int, float]`, `P.AFTER_PENSION_SHARE`, `P.MEN_RATE`,
     `P.WOMEN_BASE`, `P.WOMEN_LOWER`, `P.WOMENS_WORK_FULL`, `P.WORKFORCE_SCALE`, `P.HEALTH_NEED: dict[int, float]`,
     `P.HEALTH_NEED_1836`, `P.BIO_BANDS: tuple[int, ...]`, `P.PENSION_AGE: dict[str, int]`, `P.PENSION_LAW`,
-    `P.NO_PENSION_AGE_LAWS`, `P.OLD_AGE_REMAINING`, `P.OLD_AGE_FROM`, `P.ASFR_PLANNED_SHAPE`,
+    `P.NO_PENSION_AGE_LAWS`, `P.NO_WORKING_AGE_END`, `P.OLD_AGE_REMAINING`, `P.OLD_AGE_FROM`, `P.ASFR_PLANNED_SHAPE`,
     `P.ASFR_UNPLANNED_SHAPE`, `P.POP_BASE_RATIO`, `P.POP_BASE_RATIO_DEFAULT`, `P.WOMENS_WORK_TYPE`,
     `P.RETIREMENT_TYPE`.
   - `M.Inputs.low_share: float = 0.0`, `M.Inputs.pension_age: float | None = None`.
@@ -389,7 +472,7 @@ class TestPhase2Interfaces(unittest.TestCase):
                                msg="the floor never lowers a law's rate")
 
     def test_the_working_ages_end_by_the_welfare_law(self):
-        self.assertEqual(M.working_ages_end(M.Inputs(), 61.0), (65.0, False, False))
+        self.assertEqual(M.working_ages_end(M.Inputs(), 61.0), (999.0, False, False), "no pension: no end (D10)")
         oap = M.Inputs(laws=frozenset({"law_old_age_pension"}))
         self.assertEqual(M.working_ages_end(oap, 61.0), (65, True, True))
         self.assertEqual(M.working_ages_end(dataclasses.replace(oap, pension_age=70.0), 61.0), (70.0, True, True))
@@ -489,6 +572,7 @@ BIO_BANDS = tuple(sorted(set(CAPACITY) | set(HEALTH_NEED)))
 PENSION_AGE = {"early": 60, "standard": 65, "raised": 70}
 PENSION_LAW = "law_old_age_pension"
 NO_PENSION_AGE_LAWS = ("law_universal_basic_income", "law_post-scarcity")  # the threshold ends the working ages
+NO_WORKING_AGE_END = 999       # no pension law: the working ages run to capacity's end, which never comes (D10)
 OLD_AGE_REMAINING = 15         # the old-age threshold: years of life left (Sanderson and Scherbov)
 OLD_AGE_FROM = 40              # its search's first group start
 # Planned and unplanned births (late-game §3.1): one schedule each, the same object until phase 3. While they are,
@@ -595,13 +679,14 @@ def pension_kind(inp):
 
 def working_ages_end(inp, old_age):
     """(the end of the working ages, whether the after-pension share applies past it, whether those past it are
-    pensioners): te_demog_work_setup. With no pension law the end is the Standard age, for the panel's split only."""
+    pensioners): te_demog_work_setup. With no pension law the working ages run to capacity's end (late-game §2.1), which
+    never comes: NO_WORKING_AGE_END."""
     kind = pension_kind(inp)
     if kind == 1:
         return (P.PENSION_AGE["standard"] if inp.pension_age is None else inp.pension_age), True, True
     if kind == 2:
         return old_age, True, False
-    return float(P.PENSION_AGE["standard"]), False, False
+    return float(P.NO_WORKING_AGE_END), False, False
 
 
 def work_figures(ring, inp, old_age):
@@ -1121,7 +1206,8 @@ Expected: OK.
   - `te_demog_reset_accumulators`, `te_demog_age_boundaries`, `te_demog_accumulate_slot`;
   - `te_demog_seed` (after `te_demog_close_accumulators = yes`) and `te_demog_step_finish` (after the newborns join
     `te_dg_raw`): `te_demog_work_finish`;
-  - new `te_demog_work_setup`, `te_demog_work_walk_pop`, `te_demog_work_slot`, `te_demog_work_finish`;
+  - new `te_demog_work_setup`, `te_demog_work_walk_init`, `_walk_pop`, `_walk_store`, `te_demog_work_slot`,
+    `te_demog_work_finish`;
   - the header inventory lists `te_dg_wa_share`, `_at_work`, `_pensioners`, `_need`, `_old_age`, `_low_share`,
     `_wbase`, `_wf_engine`.
 - Modify: `common/script_values/te_demog_values.txt` (`te_demog_women_rate_law`, `te_demog_women_rate`,
@@ -1222,15 +1308,36 @@ wherever it now reads `self.INP` (default unchanged, so every existing test runs
 
 ```python
 class TestWorkWalk(unittest.TestCase):
-    """The walk's three sums (phase 2 step 1): under the cohorts only (D5)."""
+    """The walk's three sums (phase 2 step 1): under the cohorts only (D5), in three gated effects (D11)."""
 
-    def test_the_walk_sums_run_under_the_cohorts_only(self):
-        walk = _block(_text(EFFECTS), "te_demog_walks")
-        self.assertIn("limit = { te_demog_cohorts_run = yes }", walk)
-        self.assertIn("te_demog_work_walk_pop = yes", walk)
+    def test_the_walk_calls_the_three_effects_in_place(self):
+        walk = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        pops = walk.index("every_scope_pop = {")
+        self.assertLess(walk.index("te_demog_work_walk_init = yes"), pops)
+        self.assertGreater(walk.index("te_demog_work_walk_pop = yes"), pops)
+        self.assertGreater(walk.index("te_demog_work_walk_store = yes"), walk.index("te_demog_gini_band_store = yes"))
+        self.assertIn("limit = { te_demog_cohorts_run = yes }", _block(_text(EFFECTS), "te_demog_work_walk_init"))
         pop = _block(_text(EFFECTS), "te_demog_work_walk_pop")
-        for read in ("add = workforce", "strata = lower", "multiply = te_demog_pop_base_ratio"):
+        for read in ("local_var:te_dg_w_on > 0", "add = workforce", "strata = lower",
+                     "multiply = te_demog_pop_base_ratio"):
             self.assertIn(read, pop)
+
+    def test_outside_the_census_the_walk_effects_set_nothing(self):
+        """The walk runs under every rule (inheritance needs it): under Disabled the three effects set no variable and
+        read no pop."""
+        eng = _Engine({}, triggers={"te_demog_cohorts_run": False})
+        eng.locals["te_dg_w_pop"] = 1000.0
+        for effect in ("te_demog_work_walk_init", "te_demog_work_walk_pop", "te_demog_work_walk_store"):
+            eng.call(effect)
+        self.assertEqual(eng.vars, {})
+
+    def test_under_the_census_the_store_divides_by_the_walks_people(self):
+        eng = _Engine({}, triggers={"te_demog_cohorts_run": True})
+        eng.call("te_demog_work_walk_init")
+        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0)
+        eng.call("te_demog_work_walk_store")
+        self.assertEqual((eng.vars["te_dg_low_share"], eng.vars["te_dg_wbase"], eng.vars["te_dg_wf_engine"]),
+                         (0.8, 0.26, 0.25))
 
     def test_the_figures_are_stored_where_the_denominator_is_whole(self):
         """D4: in the seed straight after the accumulators close, in the step after the newborns join te_dg_raw."""
@@ -1333,9 +1440,10 @@ New effects (after `te_demog_close_accumulators`):
 # pensioners, the 10-14s' share, the sexes' rates and planned births' share.
 te_demog_work_setup = {
 	set_local_variable = { name = te_dg_child_work value = te_demog_child_work }
-	set_local_variable = { name = te_dg_rate_m value = te_demog_k_men_rate }
-	set_local_variable = { name = te_dg_rate_f value = te_demog_women_rate }
-	set_local_variable = { name = te_dg_wa_end value = te_demog_k_pension_age_standard }
+	set_local_variable = { name = te_dg_wk_rm value = te_demog_k_men_rate }
+	set_local_variable = { name = te_dg_wk_rf value = te_demog_women_rate }
+	# no pension law: the working ages run to capacity's end, which never comes (D10)
+	set_local_variable = { name = te_dg_wa_end value = 999 }
 	set_local_variable = { name = te_dg_pens_on value = 0 }
 	set_local_variable = { name = te_dg_bill_on value = 0 }
 	set_local_variable = { name = te_dg_pkind value = te_demog_pension_kind }
@@ -1355,14 +1463,40 @@ te_demog_work_setup = {
 	set_local_variable = { name = te_dg_sh_un value = { value = 1 subtract = local_var:te_dg_sh_pl } }
 }
 
-# Pop scope, in the walk under the cohorts (phase 2 step 1): the lower strata, the pop's own working-adult ratio and
-# the engine's workforce (triggers.log: workforce, strata).
-te_demog_work_walk_pop = {
-	change_local_variable = { name = te_dg_w_wf add = workforce }
-	change_local_variable = { name = te_dg_w_wbase add = { value = total_size multiply = te_demog_pop_base_ratio } }
+# THIS = a state, in te_demog_walks before its pop loop (phase 2 step 1): the walk runs under every rule, for
+# inheritance; these sums only while the census's cohorts run (D5, D11).
+te_demog_work_walk_init = {
+	set_local_variable = { name = te_dg_w_on value = 0 }
 	if = {
-		limit = { strata = lower }
-		change_local_variable = { name = te_dg_w_low add = total_size }
+		limit = { te_demog_cohorts_run = yes }
+		set_local_variable = { name = te_dg_w_on value = 1 }
+	}
+	set_local_variable = { name = te_dg_w_low value = 0 }
+	set_local_variable = { name = te_dg_w_wbase value = 0 }
+	set_local_variable = { name = te_dg_w_wf value = 0 }
+}
+
+# Pop scope, the walk's last line per pop: the lower strata, the pop's own working-adult ratio and the engine's
+# workforce (triggers.log: workforce, strata), under the cohorts only.
+te_demog_work_walk_pop = {
+	if = {
+		limit = { local_var:te_dg_w_on > 0 }
+		change_local_variable = { name = te_dg_w_wf add = workforce }
+		change_local_variable = { name = te_dg_w_wbase add = { value = total_size multiply = te_demog_pop_base_ratio } }
+		if = {
+			limit = { strata = lower }
+			change_local_variable = { name = te_dg_w_low add = total_size }
+		}
+	}
+}
+
+# THIS = a state, after the walk's Gini store: the three shares, under the cohorts only.
+te_demog_work_walk_store = {
+	if = {
+		limit = { local_var:te_dg_w_on > 0 }
+		set_variable = { name = te_dg_low_share value = { value = local_var:te_dg_w_low divide = { value = local_var:te_dg_w_pop min = 1 } } }
+		set_variable = { name = te_dg_wbase value = { value = local_var:te_dg_w_wbase divide = { value = local_var:te_dg_w_pop min = 1 } } }
+		set_variable = { name = te_dg_wf_engine value = { value = local_var:te_dg_w_wf divide = { value = local_var:te_dg_w_pop min = 1 } } }
 	}
 }
 
@@ -1391,8 +1525,8 @@ te_demog_work_slot = {
 		name = te_dg_acc_wk
 		add = {
 			value = var:te_dg_f$S$
-			multiply = local_var:te_dg_rate_f
-			add = { value = var:te_dg_m$S$ multiply = local_var:te_dg_rate_m }
+			multiply = local_var:te_dg_wk_rf
+			add = { value = var:te_dg_m$S$ multiply = local_var:te_dg_wk_rm }
 			multiply = local_var:te_dg_start
 			multiply = local_var:te_dg_cap
 			multiply = local_var:te_dg_wk_sh
@@ -1419,8 +1553,8 @@ te_demog_work_finish = {
 		name = te_dg_acc_wk
 		add = {
 			value = var:te_dg_pf
-			multiply = local_var:te_dg_rate_f
-			add = { value = var:te_dg_pm multiply = local_var:te_dg_rate_m }
+			multiply = local_var:te_dg_wk_rf
+			add = { value = var:te_dg_pm multiply = local_var:te_dg_wk_rm }
 			multiply = local_var:te_dg_cap
 			multiply = local_var:te_dg_wk_sh
 		}
@@ -1488,40 +1622,9 @@ te_demog_work_finish = {
 	te_demog_work_finish = yes
 ```
 
-`te_demog_walks`: before `every_scope_pop`,
-
-```
-	# phase 2 step 1: the lower strata, the pops' own working-adult ratios and the engine's workforce, under the
-	# cohorts only (the walk runs whatever the rule, for inheritance)
-	set_local_variable = { name = te_dg_w_on value = 0 }
-	if = {
-		limit = { te_demog_cohorts_run = yes }
-		set_local_variable = { name = te_dg_w_on value = 1 }
-	}
-	set_local_variable = { name = te_dg_w_low value = 0 }
-	set_local_variable = { name = te_dg_w_wbase value = 0 }
-	set_local_variable = { name = te_dg_w_wf value = 0 }
-```
-
-inside `every_scope_pop`, last:
-
-```
-		if = {
-			limit = { local_var:te_dg_w_on > 0 }
-			te_demog_work_walk_pop = yes
-		}
-```
-
-and after `te_demog_gini_band_store = yes`:
-
-```
-	if = {
-		limit = { local_var:te_dg_w_on > 0 }
-		set_variable = { name = te_dg_low_share value = { value = local_var:te_dg_w_low divide = { value = local_var:te_dg_w_pop min = 1 } } }
-		set_variable = { name = te_dg_wbase value = { value = local_var:te_dg_w_wbase divide = { value = local_var:te_dg_w_pop min = 1 } } }
-		set_variable = { name = te_dg_wf_engine value = { value = local_var:te_dg_w_wf divide = { value = local_var:te_dg_w_pop min = 1 } } }
-	}
-```
+`te_demog_walks` gains exactly three lines, one call each (Task 1's golden pins the rest of its text, D11):
+`te_demog_work_walk_init = yes` before `every_scope_pop`, `te_demog_work_walk_pop = yes` as the pop loop's last line,
+and `te_demog_work_walk_store = yes` after `te_demog_gini_band_store = yes`.
 
 Add the eight names to the header's inventory comment.
 
@@ -1539,7 +1642,10 @@ Expected: OK.
 - [ ] **Step 8: Commit**: "Demographics phase 2 step 1: the census counts who works, the pensioners and health need".
 
 - [ ] **Review stop:** a fresh reviewer reads Tasks 4–5 (the denominators, D4; the bands' pointers in the seed and the
-  step; the guarded reads of an old save; that nothing new is applied).
+  step; the guarded reads of an old save; that nothing new is applied). It names what no test runs, because
+  `WORK_DEFAULTS` and `_engine_for` replace them with fixtures and `_Engine` can't read laws or another scope's
+  variable: `te_demog_child_work`, `te_demog_pension_kind`, `te_demog_pension_age`'s `owner.var:` read and
+  `te_demog_pop_base_ratio`. Task 7's `TE_DEMOG_WORK` line logs each, and Task 8's list checks them in game.
 
 ---
 
@@ -2080,7 +2186,7 @@ Loc: `te_miscellaneous_l_english.yml` (beside `te_demog_line_births_up`):
  state_demog_womens_work_ratio_add:0 "$state_working_adult_ratio_add$"
  state_demog_womens_work_ratio_add_desc:0 "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it reads this effect as women's work instead."
  state_demog_retirement_ratio_add:0 "$state_working_adult_ratio_add$"
- state_demog_retirement_ratio_add_desc:0 "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, its age structure and pension age carry this effect instead."
+ state_demog_retirement_ratio_add_desc:0 "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, its age structure carries this effect instead: how many are old, when they retire and how many children there are."
 ```
 
 Run `python3 organize_loc.py` and keep what it moves.
@@ -2142,7 +2248,8 @@ class TestWorkforceCommand(unittest.TestCase):
         for name in ("wa_share", "at_work", "pensioners", "need", "old_age", "low_share", "wbase", "wf_engine"):
             self.assertIn(f"te_debug_demog_work_{name}", line, name)
         self.assertIn("te_debug_demog_work_wf_target", line)
-        self.assertIn("te_debug_demog_pension_var", line)
+        for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work"):
+            self.assertIn(read, line)
 ```
 
 - [ ] **Step 2: Run them to see them fail**
@@ -2221,7 +2328,7 @@ te_debug_demog_pension_var = { value = -1 if = { limit = { owner ?= { has_variab
 `te_debug_demog_mods_line` gains a second `debug_log`:
 
 ```
-	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 ```
 
 
@@ -2277,14 +2384,19 @@ Expected: OK; the table's 1836 farming row reads a target of about 0.25 and old 
      Raise Old Age Pension's institution level: the line follows within a month.
   3. **Under Full the pair stays.** After a state's first census step (M in force), `ww_mod=` still holds the families'
      sum and the workforce tooltip still shows the line.
-  4. **The figures in 1836.** Option l in Britain's capital: `wa_share` about 0.6–0.7, `at_work` about 0.5,
-     `wf_target` about 0.25, `wf_engine` about 0.25, `wbase` about 0.25, `old_age` about 58–62, `need` about 1.0,
-     `pensioners` 0, `pension_age` 65.
+  4. **The figures in 1836.** Option l in Britain's capital: `wa_share` about 0.7, `at_work` about 0.45–0.5,
+     `wf_target` about 0.25, `wbase` about 0.25, `old_age` about 58–62, `need` about 1.0, `pensioners` 0,
+     `pension_kind` 0, `child_work` 0.3 (Child Labor Allowed).
+     - **Stop rule for step 2: `wf_engine`** (the engine's workforce ÷ people). About 0.25 confirms the census's
+       reading; about 0.20 means the engine's ratio is workforce ÷ dependents (as the define's and the modifier's
+       descriptions read), and step 2 re-derives the scale and its term on that scale before any fit (spec §1.8).
+       Check it in a few states, and in one with aristocrats or slaves (`wbase` away from 0.25).
   5. **A pension country.** A country with Old Age Pension: `pension_var=65` (the owner's variable, read through the
      `owner.var:` chain) and `pensioners` above 0; a country without one: `pension_var=-1`. Switching the welfare law to
      UBI makes `pension_var=-1` that day and `pensioners` reads 0 at the state's next count.
   6. **The skew probe** (options f and g; unrun since #828): how fast a working-adult modifier moves a pop's workforce
-     share. Step 2 needs it.
+     share. Step 2's plan is written after this result (spec §2.1): an instant pull needs a ramp, a slow one a lag on
+     the panel.
   7. **The benchmark** (option d): the step's cost within 25% of `main`'s.
   8. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_work_*`, `te_demog_women_rate`,
      `te_demog_old_age_pass`, `te_demog_slot_births` or `te_demog_workforce_lines_refresh`.
