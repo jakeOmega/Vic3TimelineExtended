@@ -267,6 +267,15 @@ works at the census's rate, and no pop's deaths fall below half of it. A state's
 birth rate and mortality tooltips show the census's part as Census: Births and
 Census: Deaths. The workforce still follows the base game's rules.
 
+Under Full the census also sets each state's conscription from its men of
+fighting age, 20 to 39, against the world's share in 1836: an older people, or
+one that has lost its young men to war or emigration, raises fewer conscript
+battalions, down to none, and a young one up to a quarter more. War dead come
+from the same men. Smaller effects follow from the same count: a youth bulge,
+young adults over 18% of a state's people while work is short, adds radicals and
+turmoil, and fewer than 90 men per 100 women cuts births and draws more women
+into work and the women's rights movement, while 110 or more adds radicals.
+
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
 the default, also removes the census and both tabs. Wealth Concentration and its
@@ -280,7 +289,7 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Median age, children per woman, life expectancy, dependency ratio, men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target. |
+| Overview | Median age, children per woman, life expectancy, dependency ratio, men per 100 women, the urban pattern, the Gini coefficient, Wealth Concentration with its target, and the men of fighting age with the conscription they give; young adults while a state has a youth bulge. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead. |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. |

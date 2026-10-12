@@ -198,7 +198,7 @@ DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) 
 # ---- Phase 2 step 4: conscription, the youth bulge and sex balance ----------------------------------------------
 # docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4 and §5. The figures are the census's
 # (Full and Display only); the four state modifiers act under Full only. `demographics_harness.py consequences` checks
-# every band (docs/testing/demographics-consequences-2026-10-12.md).
+# every band against the model's structures and the saves given.
 # The pool (late-game call 21): men of calendar age POOL_FROM or more and biological age POOL_TO or less, summed in the
 # sweep through step 1's two indexes; before phase 3, men aged 20-39. The war dead come from the same ages (§4.2), their
 # women's share from the women of those ages.

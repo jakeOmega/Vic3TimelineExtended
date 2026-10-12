@@ -1167,3 +1167,67 @@ class TestWorkforceCommand(unittest.TestCase):
             self.assertEqual(H.main(["workforce"]), 0)
         for name, _kw, _low in H.WORKFORCE_SCENARIOS:
             self.assertIn(name, out.getvalue())
+
+
+class TestConsequences(unittest.TestCase):
+    """`consequences`: phase 2 step 4's bands (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-
+    design.md §5) on the model's structures and on a census save."""
+
+    def test_the_stable_structures(self):
+        rows = {r["name"]: r for r in H.consequence_scenarios()}
+        self.assertLess(abs(rows["1836 agrarian (reference)"]["term"]), 0.02)
+        rich = next(r for name, r in rows.items() if name.startswith("Rich"))
+        self.assertTrue(H.BAND_RICH_TERM[0] <= rich["term"] <= H.BAND_RICH_TERM[1], rich["term"])
+        for r in rows.values():
+            self.assertLess(r["youth"], P.YOUTH_FROM, r["name"])
+
+    def test_the_sex_anchors(self):
+        for name, _b, got, bands in H.sex_anchor_rows():
+            for key, (lo, hi) in bands.items():
+                self.assertTrue(lo - 1e-9 <= got[key] <= hi + 1e-9, (name, key, got[key]))
+
+    def test_a_sharp_transition_reaches_the_youth_bulge(self):
+        slow, fast = H.consequence_transitions(years=50)
+        self.assertGreater(fast["peak_youth"], 0.21)
+        self.assertGreater(fast["y"], 0.5)
+        self.assertLessEqual(fast["y"], 1.0)
+        self.assertLess(slow["y"], fast["y"])
+        self.assertLessEqual(fast["peak_term"], P.CONSCRIPTION_MAX)
+
+    def _census_save(self, tmp):
+        from test_demographics_save_inputs import TINY
+        bands = {f"te_dg_b{s}{b}": 1000.0 for s in "fm" for b in range(P.BANDS)}
+        bands.update(te_dg_bm4=2000.0, te_dg_bm5=1800.0, te_dg_bf4=1500.0, te_dg_bf5=1500.0, te_dg_bm7=500.0)
+        people = sum(bands.values())
+        variables = {**bands, "te_dg_people": people, "te_dg_sex_balance": 132.0}
+
+        def var(name, value):
+            return (f"\t\t\t\tflag={name}\n\t\t\t\tdata={{\n\t\t\t\t\ttype=value\n"
+                    f"\t\t\t\t\tidentity={round(value * 1e5)}\n\t\t\t\t}}\n")
+        block = "\tvariables={\n\t\tdata={ {\n" + "\t\t\t} {\n".join(var(n, v) for n, v in variables.items()) + \
+            "\t\t\t} }\n\t}\n"
+        state = "1={\n\tcountry=3\n\tincorporation=1\n"
+        path = Path(tmp) / "census.v3"
+        path.write_text(TINY.replace(state + "}", state + block + "}", 1), encoding="utf-8")
+        return str(path), bands, people
+
+    def test_a_census_save(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path, bands, people = self._census_save(tmp)
+            figs = H.census_figures(path)
+            self.assertEqual(set(figs), {"1"})
+            f = figs["1"]
+            self.assertAlmostEqual(f["people"], people, places=3)
+            self.assertAlmostEqual(f["fam"], sum(bands[f"te_dg_bm{b}"] for b in (4, 5, 6, 7)), places=3)
+            youth = sum(bands[f"te_dg_b{s}{b}"] for s in "fm" for b in (4, 5)) / people
+            self.assertAlmostEqual(f["youth"], youth, places=6)
+            r = H.save_consequences(path)
+            self.assertAlmostEqual(r["term_world"], M.conscription_term(f["fam"], people), places=9)
+            # TINY's only pop with a workforce has no workplace: unemployment 1
+            self.assertAlmostEqual(r["y_any"], 1.0 if M.youth_bulge(youth, 1.0) > 0 else 0.0)
+            self.assertEqual((r["fewer"], r["more"], r["either"]), (0.0, 1.0, 1.0))
+            out = io.StringIO()
+            with redirect_stdout(out):
+                H.main(["consequences", path])
+            self.assertIn("1 census states", out.getvalue())
+            self.assertIn("the first save's world term", out.getvalue())

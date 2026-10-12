@@ -193,6 +193,11 @@ class TestTinySave(unittest.TestCase):
         self.assertAlmostEqual(c.agrarian_share, 0.4)
         self.assertEqual(S.CountryInputs("EMPTY").agrarian_share, 0.0)
 
+    def test_state_unemployment_counts_the_workforce_with_no_workplace(self):
+        """Phase 2 step 4's stand-in for state_unemployment_rate: TINY's aristocrats have no workplace; its peasants
+        no workforce."""
+        self.assertEqual(S.state_unemployment(self.sections), {"1": (100.0, 100.0)})
+
     def test_state_regions(self):
         sections = {"states": {"1": {"region": '"STATE_TEST"'}, "2": {}}}
         self.assertEqual(S.state_regions(sections), {"1": "STATE_TEST"})

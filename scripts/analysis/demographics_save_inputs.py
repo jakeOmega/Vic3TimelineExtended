@@ -15,7 +15,8 @@ Layout, as written by 1.14.5 (checked on an 1836 save, 2026-10-08): top-level se
 `pops={ database={ <id>={ … } … } }`, `states=`, `country_manager=`, `laws=`, `technology=`, `institutions=`,
 each record's own fields one tab in. The fields read:
     pops             type, location (state id), workforce, dependents, num_literate, wealth,
-                     previous_quality_of_life (the pop's standard of living last week)
+                     previous_quality_of_life (the pop's standard of living last week), workplace (absent for a pop
+                     with no job: phase 2 step 4's unemployment, state_unemployment)
     states           country (owner id), incorporation (1 once incorporated; a fraction while
                      incorporating; absent in an unincorporated state)
     country_manager  definition (the tag, quoted)
@@ -36,7 +37,7 @@ import demographics_model as M
 
 SECTIONS = {
     "pops": ("type", "location", "workforce", "dependents", "num_literate", "wealth", "previous_quality_of_life",
-             "social_class"),
+             "social_class", "workplace"),
     "states": ("country", "incorporation", "devastation", "region"),
     "state_region_manager": ("template", "pollution"),
     "country_manager": ("definition",),
@@ -268,6 +269,21 @@ def state_inputs(sections):
                           for name, mult in sections["states"].get(sid, {}).get("timed_modifiers", ())
                           if name == "migration_crowding")
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
+    return out
+
+
+def state_unemployment(sections):
+    """{state id: (workforce, workforce with no workplace)} from the pops (phase 2 step 4's youth bulge reads the
+    engine's state_unemployment_rate; a save holds no such figure, so this is its stand-in, the same as the
+    unemployment_rate_read self-check counts in game)."""
+    out = {}
+    for rec in sections["pops"].values():
+        wf = _num(rec.get("workforce"))
+        if wf <= 0:
+            continue
+        sid = rec.get("location")
+        total, idle = out.get(sid, (0.0, 0.0))
+        out[sid] = (total + wf, idle + (wf if not rec.get("workplace") else 0.0))
     return out
 
 

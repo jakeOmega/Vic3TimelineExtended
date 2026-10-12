@@ -14,6 +14,7 @@ Usage:
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
     demographics_harness.py workforce                   # phase 2 step 1: participation, need, the old-age threshold
+    demographics_harness.py consequences [SAVE...]      # phase 2 step 4: conscription, youth bulge, sex balance bands
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
@@ -695,6 +696,176 @@ def cmd_workforce(_args):
         print(f"{r['name']:40s} {r['tfr']:5.2f} {r['women']:6.2f} {r['wa_share']:6.3f} {r['at_work']:8.3f} "
               f"{r['target']:7.3f} {r['pensioners']:6.3f} {r['need']:6.3f} {r['old_age']:8.1f}")
     return 0
+
+
+# ---- consequences: phase 2 step 4's bands (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+# §4 and §5) ----------------------------------------------------------------------------------------------------------
+# The census's own bands from a save made under Full or Display only (te_dg_b<s><b>), with its people and sex balance.
+CENSUS_BAND_VARS = (tuple(f"te_dg_b{s}{b}" for s in "fm" for b in range(P.BANDS))
+                    + ("te_dg_people", "te_dg_sex_balance"))
+# The model's stable structures (300 years at constant inputs): the 1836 references and today's rich row.
+CONSEQ_SCENARIOS = [
+    ("1836 agrarian (reference)", dict(sol=8, literacy=0.2, urban_share=0.1), 0.85),
+    ("Britain 1836", dict(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"})), 0.8),
+    ("India 1975", dict(sol=9, literacy=0.35, urban_share=0.2, techs=MED_1950, laws=frozenset({CHS}),
+                        institutions={HEALTH: 1}), 0.85),
+] + [(name, kw, low) for name, kw, low in WORKFORCE_SCENARIOS if name.startswith("Rich, Protected")]
+# Transitions from the 1836 agrarian stable structure: medicine arrives at year 0 with fertility still high, which
+# falls from the year given (the youth bulge's "1950s high-fertility state"; the pool's young state).
+CONSEQ_TRANSITIONS = [
+    ("1950s medicine, fertility falls slowly from year 15",
+     dict(sol=9, literacy=0.3, urban_share=0.15, techs=MED_1950, laws=frozenset({CHS}), institutions={HEALTH: 3}),
+     dict(sol=14, literacy=0.6, urban_share=0.35, techs=MED_1950 | {"contraceptive_pill", "vulcanization", "feminism"},
+          laws=frozenset({CHS}), institutions={HEALTH: 4}), 15),
+    ("1950s medicine, fertility falls fast from year 20",
+     dict(sol=12, literacy=0.4, urban_share=0.2, techs=MED_1990, laws=frozenset({PHI}), institutions={HEALTH: 5}),
+     dict(sol=30, literacy=0.95, urban_share=0.7, techs=MED_1990 | {"contraceptive_pill", "vulcanization", "feminism"},
+          laws=frozenset({PHI}), institutions={HEALTH: 6}), 20),
+]
+# The sex-balance anchors (the design §4.4): the Soviet Union of 1959 and a frontier state.
+SEX_ANCHORS = [("Soviet Union 1959", 82.0, {"births": (0.89, 0.93), "women": (0.07, 0.1)}),
+               ("frontier state", 150.0, {"more": (1.0, 1.0)})]
+# §5's bands for step 4
+BANDS_1836_TERM = 0.05            # the 1836 world's term within +-0.05
+BAND_RICH_TERM = (-0.32, -0.18)   # today's rich structure about -0.25
+BAND_PEACE_SEX = 0.02             # under 2% of states at either sex-balance effect in a peacetime save
+BAND_YOUTH_HALF = 0.05            # under 5% of states above y = 0.5
+
+
+def census_figures(path):
+    """{state id: {owner, people, men, fam, youth, sex_balance}} from a save's census bands (a save made under Full or
+    Display only; a state without bands is left out). The pool by bands: before phase 3 its ages are bands 4 to 7."""
+    lo, hi = P.POOL_FROM // P.BAND_WIDTH, (P.POOL_TO + 1) // P.BAND_WIDTH
+    assert P.POOL_FROM % P.BAND_WIDTH == 0 and (P.POOL_TO + 1) % P.BAND_WIDTH == 0
+    ylo, yhi = P.YOUTH_AGES[0] // P.BAND_WIDTH, (P.YOUTH_AGES[1] + 1) // P.BAND_WIDTH
+    _countries, states = S.read_variables(path, (), CENSUS_BAND_VARS)
+    out = {}
+    for sid, st in states.items():
+        v = st["vars"]
+        if "te_dg_bm0" not in v:
+            continue
+        people = sum(v.get(f"te_dg_b{s}{b}", 0.0) for s in "fm" for b in range(P.BANDS))
+        if people <= 0:
+            continue
+        out[sid] = {"owner": st["owner"], "people": people,
+                    "men": sum(v.get(f"te_dg_bm{b}", 0.0) for b in range(P.BANDS)),
+                    "fam": sum(v.get(f"te_dg_bm{b}", 0.0) for b in range(lo, hi)),
+                    "youth": sum(v.get(f"te_dg_b{s}{b}", 0.0) for s in "fm" for b in range(ylo, yhi)) / people,
+                    "sex_balance": v.get("te_dg_sex_balance")}
+    return out
+
+
+def save_consequences(path, unemployment=True):
+    """{year, states, people, pool_share, term_world, term_weighted, big_terms, fewer, more, either, y_any, y_half}: a
+    save's census against step 4's bands; with unemployment, each state's from its pops (S.state_unemployment)."""
+    figs = census_figures(path)
+    idle = S.state_unemployment(S.read_sections(path, wanted=("pops",))) if unemployment else {}
+    people = sum(f["people"] for f in figs.values()) or 1.0
+    pool = sum(f["fam"] for f in figs.values())
+    terms = [(M.conscription_term(f["fam"], f["people"]), f["people"]) for f in figs.values()]
+    n = len(figs) or 1
+    fewer = sum(1 for f in figs.values() if M.sex_fewer_men(f["sex_balance"]) > 0)
+    more = sum(1 for f in figs.values() if M.sex_more_men(f["sex_balance"]) > 0)
+    ys = []
+    for sid, f in figs.items():
+        total, none = idle.get(sid, (0.0, 0.0))
+        ys.append(M.youth_bulge(f["youth"], none / total if total else 0.0))
+    return {"year": save_year(path), "states": len(figs), "people": people, "pool_share": pool / people,
+            "term_world": M.conscription_term(pool, people),
+            "term_weighted": sum(t * w for t, w in terms) / people,
+            "big_terms": sum(w for t, w in terms if abs(t) > BANDS_1836_TERM) / people,
+            "fewer": fewer / n, "more": more / n, "either": (fewer + more) / n,
+            "y_any": sum(1 for y in ys if y > 0) / n, "y_half": sum(1 for y in ys if y > 0.5) / n,
+            "youth_max": max((f["youth"] for f in figs.values()), default=0.0)}
+
+
+def consequence_scenarios(carriers=None):
+    """[{name, tfr, pool_share, pool_men, term, youth, sex_balance}] on the model's stable structures."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for name, kw, low in CONSEQ_SCENARIOS:
+        inp = scenario_inputs(carriers, low_share=low, **kw)
+        ring, last = M.run_constant(inp, years=300)
+        f = M.consequence_figures(ring)
+        rows.append({"name": name, "tfr": last["tfr"], "pool_share": f["pool_share"], "pool_men": f["pool_men_share"],
+                     "term": f["term"], "youth": f["youth"], "sex_balance": f["sex_balance"]})
+    return rows
+
+
+def consequence_transitions(carriers=None, years=80, unemployment=0.2):
+    """[{name, peak_youth, peak_year, y, peak_term, term_year}]: each transition's highest share aged 20-29, the youth
+    bulge there at `unemployment`, and its highest conscription term."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    base = scenario_inputs(carriers, sol=8, literacy=0.2, urban_share=0.1)
+    rows = []
+    for name, early, late, fall in CONSEQ_TRANSITIONS:
+        ring, _ = M.run_constant(base, years=300)
+        y0 = ring.year
+        inp_early, inp_late = scenario_inputs(carriers, **early), scenario_inputs(carriers, **late)
+        peak, term = (0.0, 0), (-9.0, 0)
+        for t in range(1, years + 1):
+            M.step(ring, inp_early if t < fall else inp_late, y0 + t)
+            f = M.consequence_figures(ring)
+            if f["youth"] > peak[0]:
+                peak = (f["youth"], t)
+            if f["term"] > term[0]:
+                term = (f["term"], t)
+        rows.append({"name": name, "peak_youth": peak[0], "peak_year": peak[1],
+                     "y": M.youth_bulge(peak[0], unemployment), "peak_term": term[0], "term_year": term[1]})
+    return rows
+
+
+def sex_anchor_rows():
+    """[(name, balance, {births, women, fewer, more}, bands)] for SEX_ANCHORS."""
+    return [(name, b, {"births": M.sex_births(b), "women": M.sex_women_add(b), "fewer": M.sex_fewer_men(b),
+                       "more": M.sex_more_men(b)}, bands) for name, b, bands in SEX_ANCHORS]
+
+
+def _band(value, lo, hi):
+    return "ok" if lo - 1e-9 <= value <= hi + 1e-9 else "OUT"
+
+
+def cmd_consequences(args):
+    out = 0
+    print("Phase 2 step 4 (the consequences design §5): CONSCRIPTION_REF "
+          f"{P.CONSCRIPTION_REF}, youth {P.YOUTH_FROM}/{P.YOUTH_SPAN}/{P.YOUTH_UNEMPLOYMENT_FULL}, sex balance from "
+          f"{P.SEX_FEWER_FROM:.0f} (full {P.SEX_FEWER_FULL:.0f}) and {P.SEX_MORE_FROM:.0f} (full {P.SEX_MORE_FULL:.0f})")
+    print("\nThe model's stable structures:")
+    for r in consequence_scenarios():
+        print(f"  {r['name']:42s} tfr {r['tfr']:4.2f}  pool {r['pool_share']:.4f} of people, {r['pool_men']:.3f} of men  "
+              f"T {r['term']:+.3f}  20-29 {r['youth']:.3f}  men/100 women {r['sex_balance']:5.1f}")
+        if r["name"].startswith("Rich"):
+            verdict = _band(r["term"], *BAND_RICH_TERM)
+            print(f"    today's rich structure: T {r['term']:+.3f} against {BAND_RICH_TERM} (about -0.25): {verdict}")
+            out |= verdict != "ok"
+    print("\nTransitions from the 1836 stable structure (youth bulge at 20% unemployment):")
+    for r in consequence_transitions():
+        print(f"  {r['name']:52s} peak 20-29 {r['peak_youth']:.3f} (year {r['peak_year']}), y {r['y']:.2f}; "
+              f"peak T {r['peak_term']:+.3f} (year {r['term_year']})")
+    print("\nSex balance anchors:")
+    for name, b, got, bands in sex_anchor_rows():
+        checks = "  ".join(f"{k} {got[k]:.3f} [{lo}-{hi}] {_band(got[k], lo, hi)}" for k, (lo, hi) in bands.items())
+        out |= any(_band(got[k], lo, hi) != "ok" for k, (lo, hi) in bands.items())
+        print(f"  {name:20s} {b:5.1f} men per 100 women: {checks}")
+    for i, path in enumerate(args.saves):
+        r = save_consequences(path, unemployment=not args.no_unemployment)
+        print(f"\n{path} ({r['year']}): {r['states']} census states, {r['people'] / 1e6:.0f}M people")
+        if r["states"] == 0:
+            print("  no census bands (not a Full or Display only save)")
+            continue
+        print(f"  pool {r['pool_share']:.4f} of people: world T {r['term_world']:+.3f}, people-weighted states' T "
+              f"{r['term_weighted']:+.3f}, people in states past +-{BANDS_1836_TERM}: {r['big_terms']:.1%}")
+        if i == 0:
+            verdict = _band(r["term_world"], -BANDS_1836_TERM, BANDS_1836_TERM)
+            print(f"  the first save's world term within +-{BANDS_1836_TERM} (1836 world 0 +- 0.05): {verdict}")
+            out |= verdict != "ok"
+        print(f"  sex balance: {r['fewer']:.1%} of states below {P.SEX_FEWER_FROM:.0f}, {r['more']:.1%} at "
+              f"{P.SEX_MORE_FROM:.0f} or more ({r['either']:.1%} at either; band under {BAND_PEACE_SEX:.0%} in peace: "
+              f"{'ok' if r['either'] < BAND_PEACE_SEX else 'OUT'})")
+        print(f"  youth: highest share aged 20-29 {r['youth_max']:.3f}; states with a bulge {r['y_any']:.1%}, above "
+              f"y = 0.5 {r['y_half']:.1%} (band under {BAND_YOUTH_HALF:.0%}: "
+              f"{'ok' if r['y_half'] < BAND_YOUTH_HALF else 'OUT'})")
+    return out
 
 
 # ---- fertility: children per woman (modifier-types design, stage 2) -----------------------------
@@ -1541,6 +1712,11 @@ def main(argv=None):
     p.set_defaults(fn=cmd_wc)
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
     sub.add_parser("lag").set_defaults(fn=cmd_lag)
+    p = sub.add_parser("consequences", help="phase 2 step 4: conscription, the youth bulge and sex balance against "
+                                            "the design's §5 bands (saves: the 1836 one first)")
+    p.add_argument("saves", nargs="*", help="plain-text saves made under Full or Display only")
+    p.add_argument("--no-unemployment", action="store_true", help="skip the pops pass (the youth bulge reads 0)")
+    p.set_defaults(fn=cmd_consequences)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     sub.add_parser("workforce", help="phase 2 step 1: the participation figures at the starting values (the design "
                                      "§1.8)").set_defaults(fn=cmd_workforce)
