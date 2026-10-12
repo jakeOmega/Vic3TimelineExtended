@@ -312,6 +312,17 @@ def fit_table(fit_by_year, anchors, s_grid, lm_grid, bs_grid, years=None):
     return rows
 
 
+# #904's table spans the census steps of 1837-1900 (its analyze.py's five-year intervals, 1837 to 1901). Its rows also
+# hold 1901's steps (the 1902 save), which the table leaves out.
+PEACETIME_YEARS = (1837, 1901)
+
+
+def peacetime_span(rows, first=PEACETIME_YEARS[0], end=PEACETIME_YEARS[1]):
+    """#904's state-years inside its table's span, first <= step year < end, so a projection's measured column is its
+    peacetime column."""
+    return [r for r in rows if first <= r[0] < end]
+
+
 def project_regions(rows, today, point, s, cut_lm, cut_bs, held=None, east=None):
     """#904's peacetime births less deaths, projected to one point of the fit (review C1).
 

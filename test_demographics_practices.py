@@ -198,6 +198,13 @@ class TestProjection(unittest.TestCase):
         e, rate = DP.east_for_china(low, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)
         self.assertAlmostEqual(e, 0.38, places=9)
 
+    def test_the_span_is_904s_table(self):
+        """#904's table covers the steps of 1837-1900 (its analyze.py's intervals, 1837 to 1901); its rows also hold
+        1901's, from the 1902 save, which the table leaves out. The projection reads the table's span, so its measured
+        column reproduces #904's."""
+        rows = [[year, "China", True, [], 40.0, 30.0, 1000.0, 0.0, "CHI", "1"] for year in (1836, 1837, 1900, 1901)]
+        self.assertEqual([r[0] for r in DP.peacetime_span(rows)], [1837, 1900])
+
     def test_the_gate(self):
         today = self.states()
         proj = DP.project_regions(self.ROWS, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)

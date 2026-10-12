@@ -920,7 +920,7 @@ def cmd_practices_fit(args):
     except OSError as e:
         print(f"cannot read the anchors {args.anchors}: {e}", file=sys.stderr)
         return 1
-    rows = json.loads(Path(args.peacetime).read_text(encoding="utf-8"))["rows"]
+    rows = DP.peacetime_span(json.loads(Path(args.peacetime).read_text(encoding="utf-8"))["rows"])
     carriers = DM.load_carriers()
     shares_by_year = DP.read_shares(args.shares) if args.shares else {}
     saves = {path: DP.read_save(path) for path in args.save}   # parse each save once
