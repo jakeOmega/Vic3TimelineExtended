@@ -968,6 +968,13 @@ types grand_monuments_widget_types
 					using = fontsize_large
 					text = "gm_row_title_named"
 				}
+				# A landmark standing since 1836 (phase 4): its history on hover.
+				gm_row_line = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_landmark'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_row_landmark_tt"
+					text = "gm_row_landmark"
+				}
 				gm_row_line = {
 					text = "gm_row_detail"
 				}

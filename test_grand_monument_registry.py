@@ -3011,5 +3011,27 @@ class LandmarkTechTests(unittest.TestCase):
             "NOT = { has_variable = gm_ceremony_pending } } gm_state_start_ceremony = yes } else_if = { "
             "limit = { gm_state_is_dedicated = yes"), first)
 
+
+class LandmarkLineTests(unittest.TestCase):
+    """Phase 4 §4: a landmark's line of history, on hover in its row and on its card."""
+
+    VISIBLE = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_landmark'), '(CFixedPoint)1' )]"
+
+    def test_the_toggle(self):
+        self.assertEqual(squash(block(read(VALUES), "gm_disp_is_landmark")),
+                         "value = 0 if = { limit = { gm_state_is_landmark = yes } value = 1 }")
+
+    def test_row_and_card(self):
+        row = squash(read(WIDGET))  # raw: strip_comments would eat "#tooltippable"
+        self.assertIn(f'gm_row_line = {{ visible = "{self.VISIBLE}" default_format = "#tooltippable" '
+                      f'tooltip = "gm_row_landmark_tt" text = "gm_row_landmark" }}', row)
+        card = squash(read("gui/te_state_panel_widgets.gui"))
+        self.assertIn(f'visible = "{self.VISIBLE}" autoresize = yes multiline = yes minimumsize = {{ 350 -1 }} '
+                      f'maximumsize = {{ 350 -1 }} align = left|nobaseline using = fontsize_medium '
+                      f'default_format = "#tooltippable" tooltip = "gm_row_landmark_tt" text = "gm_row_landmark"', card)
+        L = loc()
+        self.assertEqual(L["gm_row_landmark"], "Historical monument")
+        self.assertIn("[State.GetCustom('gm_landmark_desc')]", L["gm_row_landmark_tt"])
+
 if __name__ == "__main__":
     unittest.main()

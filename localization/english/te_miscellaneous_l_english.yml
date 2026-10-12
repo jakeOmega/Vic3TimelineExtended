@@ -2795,6 +2795,8 @@
  gm_row_contest_tt:0 "#b Contested#!\nIt honours something this government is not. Its old supporters want it kept. The group that objected to its message resents it every month it stands undecided, which costs that group's approval. Pull it down, rededicate it or keep it as heritage with the buttons below."
  gm_row_detail:0 "[State.GetName] · [concept_grandeur]: #v [State.MakeScope.ScriptValue('gm_state_grandeur')|0]#!"
  gm_row_inscription:0 "[State.GetCustom('gm_inscription')]"
+ gm_row_landmark:0 "Historical monument"
+ gm_row_landmark_tt:0 "#b Historical monument#!\n[State.GetCustom('gm_landmark_desc')]\n\nIt stood when the game began. It keeps its look while it stands, through contest, conquest and rededication, and its name unless it is rededicated. Only pulling it down or demolishing it ends it."
  gm_row_status:0 "[State.GetCustom('gm_status_name')]"
  gm_row_title:0 "#b [State.GetCustom('gm_monument_name_row')]#! — [State.GetCustom('gm_dedication_name')]"
  gm_row_title_named:0 "#b [State.MakeScope.Var('gm_name').GetFlagName]#! — [State.GetCustom('gm_dedication_name')]"
