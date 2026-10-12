@@ -79,8 +79,14 @@ def _walk(items):
             yield from _walk(value)
 
 
-def _option_letter(name):
-    return name.split(".")[2].replace("_opt", "")
+def _option_names(opt):
+    """An option's loc keys: its name, or each text of a name chosen by trigger (`name = { trigger text }`)."""
+    names = [v for k, _, v in opt if k == "name"]
+    return [n if isinstance(n, str) else dict((a, b) for a, _, b in n)["text"] for n in names]
+
+
+def _option_letter(opt):
+    return _option_names(opt)[0].split(".")[2].replace("_opt", "")
 
 
 def _modifiers():
@@ -178,7 +184,8 @@ class TestEvents(unittest.TestCase):
                     self.assertIn(d, self.loc)
                 for k, _, opt in body:
                     if k == "option":
-                        self.assertIn(dict((a, b) for a, _, b in opt)["name"], self.loc)
+                        for name in _option_names(opt):
+                            self.assertIn(name, self.loc)
 
     def test_each_option_has_an_ai_weight_and_one_default(self):
         for n, body in self.events.items():
@@ -188,8 +195,9 @@ class TestEvents(unittest.TestCase):
                 for opt in options:
                     self.assertIn("ai_chance", [k for k, _, _ in opt])
                 defaults = [opt for opt in options if ("default_option", "=", "yes") in opt]
-                # the Greying has one default with Old Age Pension and one without, behind exclusive triggers
-                self.assertEqual(len(defaults), 2 if n == "4" else 1)
+                self.assertEqual(len(defaults), 1)
+                # the default never hides: auto-resolving at the event's duration needs it offered
+                self.assertNotIn("trigger", [k for k, _, _ in defaults[0]])
 
     def test_every_modifier_is_granted_in_an_option_and_exists(self):
         granted = set()
@@ -269,8 +277,7 @@ class TestEvents(unittest.TestCase):
 
     def test_the_census_line_options_arm_the_self_check_with_their_line(self):
         for (n, letter), (mod, code, field) in CENSUS_LINE_OPTIONS.items():
-            opt = next(o for k, _, o in self.events[n] if k == "option"
-                       and _option_letter(dict((a, b) for a, _, b in o)["name"]) == letter)
+            opt = next(o for k, _, o in self.events[n] if k == "option" and _option_letter(o) == letter)
             calls = [v for k, v in _walk(opt) if k == "te_debug_demog_wave_selfcheck_start"]
             self.assertEqual(len(calls), 1, (n, letter))
             args = dict((a, b) for a, _, b in calls[0])

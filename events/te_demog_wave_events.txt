@@ -326,17 +326,6 @@ te_demog_wave.4 = {
 		}
 	}
 
-	# Keep the promise (Old Age Pension)
-	option = {
-		name = te_demog_wave.4.e
-		trigger = { te_demog_has_pension_law = yes }
-		default_option = yes
-		add_modifier = { name = te_demog_wave_pension_kept days = normal_modifier_time is_decaying = yes }
-		ai_chance = {
-			base = 2
-		}
-	}
-
 	# Almshouses (no pension law)
 	option = {
 		name = te_demog_wave.4.f_opt
@@ -353,14 +342,24 @@ te_demog_wave.4 = {
 		}
 	}
 
-	# The family will provide (no pension law)
+	# The default, one option whatever the law: keep the promise (Old Age Pension), or the family will provide (none)
 	option = {
-		name = te_demog_wave.4.g
-		trigger = {
-			NOT = { te_demog_has_pension_law = yes }
+		name = {
+			trigger = { te_demog_has_pension_law = yes }
+			text = te_demog_wave.4.e
+		}
+		name = {
+			trigger = { always = yes }
+			text = te_demog_wave.4.g
 		}
 		default_option = yes
-		add_modifier = { name = te_demog_wave_family_care days = long_modifier_time }
+		if = {
+			limit = { te_demog_has_pension_law = yes }
+			add_modifier = { name = te_demog_wave_pension_kept days = normal_modifier_time is_decaying = yes }
+		}
+		else = {
+			add_modifier = { name = te_demog_wave_family_care days = long_modifier_time }
+		}
 		ai_chance = {
 			base = 2
 		}
