@@ -18,6 +18,8 @@ It comments out, keeping each line's text after a `# RELEASE: ` prefix:
    census lines);
 3. every `add_modifier = { name = X }` of a static modifier left with no effect line
    (te_demog_family_limitation, in France's history);
+3b. every decree whose `modifier` block is left with no effect line is commented out
+   whole (Medical Outreach: the census is its only reader);
 4. the rule: both gates (te_demog_triggers.txt) read `always = no` and the rule's block
    goes, since the census can't run correctly without its inputs (owner, 2026-10-10:
    the release offers no way to turn it on).
@@ -71,6 +73,23 @@ def _empty(lines):
     return not re.sub(r"[{}\s]", "", body)
 
 
+def _modifier_emptied(lines):
+    """True when an entry's `modifier = { ... }` block holds no live line: a decree whose only effects were census
+    types (its texture and cost would ship as an empty decree otherwise)."""
+    depth, inside = 0, False
+    for line in lines:
+        code = _code(line)
+        if not inside and re.match(r"\s*modifier\s*=\s*\{", code):
+            inside = True
+        if inside:
+            depth += code.count("{") - code.count("}")
+            if re.sub(r"[\w:.@-]+\s*=\s*\{|[{}\s]", "", code):
+                return False
+            if depth == 0:
+                return True
+    return False
+
+
 def _tag(lines, i):
     if lines[i].strip() and not lines[i].startswith(TAG):
         lines[i] = TAG + lines[i]
@@ -106,6 +125,9 @@ def run(root, check=False):
             if not hits & set(range(start, end + 1)):
                 continue
             if _empty(new[start:end + 1]):
+                for i in range(start, end + 1):
+                    _tag(new, i)
+            elif path.parent.name == "decrees" and _modifier_emptied(new[start:end + 1]):
                 for i in range(start, end + 1):
                     _tag(new, i)
             elif path.parent.name == "static_modifiers":

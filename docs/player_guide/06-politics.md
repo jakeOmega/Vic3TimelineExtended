@@ -780,8 +780,9 @@ again. Decentralized countries are exempt.
 
 ## New decrees
 
-The mod adds 15 decrees. They cost authority like the base game's, 100 unless
-noted, scaled by your rank.
+The mod adds 15 decrees, and development builds a 16th under the Demographics
+rule's Full setting. They cost authority like the base game's, 100 unless noted,
+scaled by your rank.
 
 | Decree | Unlocked by | Effect in the state |
 |---|---|---|
@@ -793,6 +794,7 @@ noted, scaled by your rank.
 | Pollution Control | Pollution Control | −50% pollution |
 | Cultural Integration | | +5 cultural acceptance a year |
 | Natalism Initiative (250) | Mass Media | +50% birth rate |
+| Medical Outreach (development builds only; Demographics, Full only) | Medical Degrees | New medicine reaches the state faster; see [States and population](08-states.md#demographics) |
 | Tax Breaks (50) | Keynesian Economics | −50% taxes, fewer radicals, more migration |
 | Trade Reform | Containerization | +25% trade advantage and capacity, lower tariffs |
 | Anti-Terrorism Campaign | Terrorism and Antiterrorism | Fewer radicals from movements, less turmoil |

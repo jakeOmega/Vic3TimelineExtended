@@ -17,6 +17,9 @@
 #                       Under Full, the mean of the engine's rate at the window's start
 #                       and today's (the trapezoid, te_demog_window_events in
 #                       te_demog_rate_effects.txt)
+#   te_dg_ed_state, te_dg_ed_sev, te_dg_sev_share  under Full, the split of te_dg_ed for the
+#                       Causes of Death section (te_demog_on_top_split): the deaths less the pops'
+#                       own lines, severe starvation's part, the share of people severely starving
 #   te_dg_agr_share     Peasants + Farmers over the state's population, 0-1;
 #                       inheritance's rural modifiers' multiplier (probe-checked,
 #                       London 0.174)
@@ -59,6 +62,11 @@
 #                       women's legal standing, phase 2 step 4)
 #   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
 #                       te_dg_m_mat maternal deaths per 100,000 births
+#   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments
+#                       (te_demog_medicine_drift; the Causes of Death plan)
+#   te_dg_in_ext, te_dg_in_work, te_dg_in_chr, te_dg_in_turm, te_dg_in_crowd, te_dg_in_sol, te_dg_in_lit  the
+#                       step's other inputs the factors read (te_demog_cause_inputs_store; the last two the
+#                       walk's te_dg_sol and te_dg_lit as the step used them)
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share,
 #   te_dg_dependency, te_dg_sex_balance, te_dg_cbr, te_dg_cdr, te_dg_w1549
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
@@ -247,6 +255,8 @@ te_demog_walks = {
 	}
 	# under Full, the window's events: the mean of the engine's rate at its start and today's (the trapezoid; owner, 2026-10-11)
 	te_demog_window_events = yes
+	# the Causes of Death section's split of the window's deaths (Full only)
+	te_demog_on_top_split = yes
 	set_variable = { name = te_dg_agr_share value = { value = local_var:te_dg_w_agr divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }
 	set_variable = { name = te_dg_soldiers value = local_var:te_dg_w_sold }
 	set_variable = { name = te_dg_bureaucrats value = local_var:te_dg_w_bur }
@@ -419,6 +429,8 @@ te_demog_prepare = {
 			set_variable = { name = te_dg_prev_e0 value = var:te_dg_e0 }
 		}
 	}
+	# the inputs the factors read, stored so the Causes of Death section matches this step until the next (generated)
+	te_demog_cause_inputs_store = yes
 	set_local_variable = { name = te_dg_m_inf value = te_demog_mult_infection }
 	set_local_variable = { name = te_dg_m_ext value = te_demog_mult_external }
 	set_local_variable = { name = te_dg_m_chr value = te_demog_mult_chronic }
@@ -528,6 +540,8 @@ te_demog_seed = {
 		limit = { has_variable = te_dg_reseed }
 		remove_variable = te_dg_reseed
 	}
+	# a seed starts medicine at its targets (the Causes of Death plan)
+	te_demog_medicine_at_target = yes
 	te_demog_prepare = yes
 	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
 	set_local_variable = {
@@ -594,7 +608,8 @@ te_demog_seed = {
 	set_variable = { name = te_dg_dz value = 0 }
 	set_variable = { name = te_dg_eb_target value = 0 }
 	set_variable = { name = te_dg_ed_target value = 0 }
-	# and the window's start rate (te_demog_window_events): the next window has none
+	# and the window's start rate (te_demog_window_events) with its parts (te_demog_on_top_split): the next window has
+	# none
 	if = {
 		limit = { has_variable = te_dg_sr_b }
 		remove_variable = te_dg_sr_b
@@ -602,6 +617,14 @@ te_demog_seed = {
 	if = {
 		limit = { has_variable = te_dg_sr_d }
 		remove_variable = te_dg_sr_d
+	}
+	if = {
+		limit = { has_variable = te_dg_sp_d }
+		remove_variable = te_dg_sp_d
+	}
+	if = {
+		limit = { has_variable = te_dg_ss_d }
+		remove_variable = te_dg_ss_d
 	}
 	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	te_demog_set_scale = yes
@@ -1064,10 +1087,13 @@ te_demog_step = {
 	te_demog_step_run = yes
 }
 
-# The step's first half: the year's rates into locals (te_demog_prepare), then the flows,
-# which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates
-# scaled to what the engine did over the window (te_demog_on_top_scales, phase 2 step 4).
+# The step's first half: medicine's share of the gap (te_demog_medicine_drift, the Causes of Death
+# plan), the year's rates into locals (te_demog_prepare), then the flows, which take and remove
+# te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates scaled to what the engine did
+# over the window (te_demog_on_top_scales, phase 2 step 4).
 te_demog_step_begin = {
+	# medicine moves its share of the gap, then the year's rates use it
+	te_demog_medicine_drift = yes
 	te_demog_prepare = yes
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes

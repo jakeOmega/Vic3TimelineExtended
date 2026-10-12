@@ -761,7 +761,7 @@ the census states.
 | … with a share and a deficit per slot instead | up to 262 | | about 16 MB |
 | §13's children-so-far (not chosen) | 30–150 more | | 2–9 MB |
 
-Against about 345 a state today (360 with the Causes of Death plan). The country adds a handful (the pension age and
+Against about 345 a state today (363 with the Causes of Death plan: +18 under Full). The country adds a handful (the pension age and
 setting, the bill's multipliers, the gap).
 
 **Time.** Phase 2's figures are sums the sweep already visits. Phase 3 doubles the rate work for the treated slots (a

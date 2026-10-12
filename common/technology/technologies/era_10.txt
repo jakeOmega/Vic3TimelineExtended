@@ -326,6 +326,8 @@ telemedicine = {
 	modifier = {
 		# the census's medicine (demographics modifier types, stage 1)
 		state_chronic_treatment_add = 0.2
+		# the census's spread of medicine (the Causes of Death plan)
+		state_medical_diffusion_add = 0.05
 		country_institution_health_system_max_investment_add = 1
 		country_voting_power_mult = 0.2
 	}

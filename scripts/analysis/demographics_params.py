@@ -133,7 +133,10 @@ NATURAL_FERTILITY_BY_LAW = {
     "law_women_in_the_workplace": -0.10, "law_womens_suffrage": -0.10, "law_protected_class": -0.15,
 }
 DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY_TYPE)
-DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES
+# The spread of medicine (the Causes of Death plan): the share of the gap health-care access and treatments close at a
+# census step, beyond DIFFUSION_BASE (below, with the rest of the drift's numbers).
+DIFFUSION_TYPE = "state_medical_diffusion_add"
+DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within
 # 0..MEANS_CAP. Traditional methods everyone has; the techs' lines add to them (the Pill without
@@ -178,6 +181,34 @@ LITERACY_INFECTION_WEIGHT = 0.3   # mothers' literacy: infection x (1 - 0.3 x li
 MIGRATION_CROWDING_PULL_PER_MULT = 0.1   # the modifier's pull penalty a unit of multiplier (a test pins it)
 CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls
 CROWDING_INFECTION_MAX = 0.5             # at most +50%, just past ten times the floor density (a guess)
+
+# ---- Causes of Death (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md) ----
+# Each cause's multiplier is the product of these factors, in this order. The generator writes one script value per
+# factor (te_demog_f_<cause>_<factor>) and each te_demog_mult_<cause> as their product; the state subtab's Causes of
+# Death section reads the same values, so the display and the census can't disagree.
+CAUSE_FACTORS = {
+    "infection": ("medicine", "sol", "poverty", "literacy", "crowding"),
+    "work": ("laws",),
+    "external": ("laws", "turmoil"),
+    "maternal": ("medicine",),
+    "chronic": ("medicine", "laws", "sol"),
+}
+# Short names of the state variables (te_dg_m_<short>, te_dg_trt_<short>, te_dg_in_<short>).
+CAUSE_SHORT = {"infection": "inf", "work": "work", "external": "ext", "maternal": "mat", "chronic": "chr"}
+# Turmoil (owner, 2026-10-11): accidents and violence x (1 + this x the state's turmoil, a 0-1 share). Vanilla's
+# state_turmoil modifiers carry no mortality; state_mortality_turmoil_mult's carriers (Violent Suppression, Militarized
+# Police, events) stay engine lines on top, which the walk leaves out (scaling unknown, measured about 0).
+TURMOIL_EXTERNAL_WEIGHT = 0.5
+# Medicine spreads (owner, 2026-10-11): at each census step health-care access and each cause's treatment move this
+# share of the gap to their targets: DIFFUSION_BASE everywhere, plus DIFFUSION_TYPE (communication and medical-training
+# technologies, the Medical Outreach decree), at most DIFFUSION_MAX. Within MEDICINE_SNAP of its target a value takes
+# the target. A seed, a new state and an old save's state start at their targets. DIFFUSION_TYPE is with the other
+# types, above.
+DIFFUSION_BASE = 0.1
+DIFFUSION_MAX = 1.0
+MEDICINE_SNAP = 0.005
+MEDICAL_OUTREACH_DIFFUSION = 0.2   # decree_medical_outreach's line (a test pins the decree to it)
+DEATHS_ON_TOP_HIGH = 1.25          # 1 + te_dg_dz at or above this reads red on the state subtab
 
 # Women's share of the workforce by women's-rights law, for splitting work deaths (§2.4).
 FEMALE_WORK_SHARE = {

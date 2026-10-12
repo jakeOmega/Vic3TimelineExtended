@@ -72,9 +72,19 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    "state_work_mortality_mult": {"law", "law_institution"},
                    "state_chronic_mortality_mult": {"law"},
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
-                   P.NATURAL_FERTILITY_TYPE: {"law"}}
+                   P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
+
+    def test_medicine_spreads_from_a_tenth_to_two_fifths(self):
+        """The Causes of Death plan: communication and medical-training techs carry the spread of medicine, +0.05 each,
+        so a state closes 10% of the gap a year in 1836 and 40% with all six."""
+        carried = {c.key: c.value for c in self.carriers if c.type == P.DIFFUSION_TYPE}
+        self.assertEqual(set(carried), {"electric_telegraph", "modern_nursing", "radio",
+                                        "intergovernmental_organizations", "world_wide_web", "telemedicine"})
+        t = DM.totals(self.carriers, techs=set(carried))
+        self.assertAlmostEqual(P.DIFFUSION_BASE + t[P.DIFFUSION_TYPE], 0.4)
+        self.assertAlmostEqual(P.DIFFUSION_BASE + DM.totals(self.carriers)[P.DIFFUSION_TYPE], P.DIFFUSION_BASE)
 
     def test_health_laws_carry_access_on_the_health_institution(self):
         access = {c.key: c for c in self.carriers if c.type == P.ACCESS_TYPE}
