@@ -1339,6 +1339,33 @@ class TestWorkWalk(unittest.TestCase):
         self.assertEqual((eng.vars["te_dg_low_share"], eng.vars["te_dg_wbase"], eng.vars["te_dg_wf_engine"]),
                          (0.8, 0.26, 0.25))
 
+    def test_three_pops_through_the_walk_effects(self):
+        """Each pop's sums as te_demog_walks makes them, one pop at a time (TestGini.walk's pattern; the review of #923):
+        an aristocrat, a slave and a lower-strata worker. _OwnerEngine knows is_pop_type (te_demog_pop_base_ratio); the
+        base _Engine doesn't know strata, so this test teaches it."""
+
+        class _PopEngine(_OwnerEngine):
+            strata = None
+
+            def _test(self, key, op, arg):
+                if key == "strata":
+                    return arg == self.strata
+                return super()._test(key, op, arg)
+
+        eng = _PopEngine({}, triggers={"te_demog_cohorts_run": True})
+        eng.call("te_demog_work_walk_init")
+        pops = (("aristocrats", "upper", 100.0, 18.0), ("slaves", "lower", 400.0, 210.0),
+                ("laborers", "lower", 500.0, 130.0))
+        for pop_type, strata, size, workforce in pops:
+            eng.pop_type, eng.strata = pop_type, strata
+            eng.fixtures.update(total_size=size, workforce=workforce)
+            eng.call("te_demog_work_walk_pop")
+        eng.locals["te_dg_w_pop"] = 1000.0          # the walk's own people sum (te_demog_walks keeps it)
+        eng.call("te_demog_work_walk_store")
+        self.assertAlmostEqual(eng.vars["te_dg_low_share"], (400 + 500) / 1000)
+        self.assertAlmostEqual(eng.vars["te_dg_wbase"], (100 * 0.2 + 400 * 0.5 + 500 * 0.25) / 1000)
+        self.assertAlmostEqual(eng.vars["te_dg_wf_engine"], (18 + 210 + 130) / 1000)
+
     def test_the_figures_are_stored_where_the_denominator_is_whole(self):
         """D4: in the seed straight after the accumulators close, in the step after the newborns join te_dg_raw."""
         effects = _text(EFFECTS)
