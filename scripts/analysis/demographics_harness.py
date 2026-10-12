@@ -10,6 +10,7 @@ Usage:
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
     demographics_harness.py wc SAVE [--tag GBR] [--top 30]  # Wealth Concentration as the game holds it
     demographics_harness.py medicine                    # mortality anchors with the game files' values
+    demographics_harness.py lag                         # years of e0 behind the target while medicine spreads
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
@@ -577,6 +578,64 @@ def cmd_medicine(_args):
             parts.append(f"{k} {v:6.1f} [{lo:g}-{hi:g}]{'' if ok else ' OUT'}")
         print(f"{label:44s} " + "  ".join(parts))
     return out
+
+
+# ---- lag: how far life expectancy trails its target while medicine spreads (the Causes of Death plan) -------------
+# (label, before, after): a state's inputs before a change and after it, the communication techs of the era included
+# (they set the spread's rate). At year 0 the change has just happened; each year is one census step.
+COMMS_1870 = frozenset({"electric_telegraph"})
+COMMS_1950 = COMMS_1870 | {"radio"}
+COMMS_TODAY = COMMS_1950 | {"intergovernmental_organizations", "world_wide_web"}
+LAG_SCENARIOS = [
+    ("1840s: Charitable Health System, Ministry of Health 1 to 3",
+     dict(sol=10, literacy=0.25, techs=MED_1836, laws={CHS}, institutions={HEALTH: 1}),
+     dict(sol=10, literacy=0.25, techs=MED_1836, laws={CHS}, institutions={HEALTH: 3})),
+    ("1870s: Modern Nursing arrives",
+     dict(sol=13, literacy=0.5, techs=MED_1836 | {"pharmaceuticals"} | COMMS_1870, laws={CHS}, institutions={HEALTH: 3}),
+     dict(sol=13, literacy=0.5, techs=MED_1900 | COMMS_1870, laws={CHS}, institutions={HEALTH: 3})),
+    ("1900s: Public Health Insurance at 3, before antibiotics",
+     dict(sol=16, literacy=0.75, techs=MED_1900 | COMMS_1870, laws={CHS}, institutions={HEALTH: 3}),
+     dict(sol=16, literacy=0.75, techs=MED_1900 | COMMS_1870, laws={PHI}, institutions={HEALTH: 3})),
+    # the motor age on both sides: MED_1950 holds combustion_engine, whose accident line is no medicine and doesn't drift
+    ("1940s: antibiotics and vaccines arrive",
+     dict(sol=22, literacy=0.9, techs=MED_1900 | {"combustion_engine"} | COMMS_1950, laws={PHI}, institutions={HEALTH: 5}),
+     dict(sol=22, literacy=0.9, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={HEALTH: 5})),
+    ("1950s: a colony incorporated into that health system",
+     dict(sol=12, literacy=0.4, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={}),
+     dict(sol=12, literacy=0.4, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={HEALTH: 5})),
+    ("Today: Telemedicine arrives",
+     dict(sol=40, literacy=0.99, techs=MED_1990 | COMMS_TODAY, laws={PHI}, institutions={HEALTH: 8}),
+     dict(sol=40, literacy=0.99, techs=MED_TODAY | COMMS_TODAY, laws={PHI}, institutions={HEALTH: 8})),
+]
+LAG_YEARS = (0, 1, 2, 3, 5, 10, 15, 20)
+
+
+def lag_rows(carriers=None):
+    """[(label, rate, e0 before, e0 at the target, {year: years of e0 behind the target})] for LAG_SCENARIOS: medicine
+    starts at the before-inputs' targets and drifts at the after-inputs' rate (demographics_model.medicine_drift);
+    SoL, literacy and everything else are the after-inputs' from year 0."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for label, before, after in LAG_SCENARIOS:
+        inp0, inp1 = scenario_inputs(carriers, **before), scenario_inputs(carriers, **after)
+        target = life(inp1)["e0"]
+        med, behind = M.medicine_targets(inp0), {}
+        for year in range(max(LAG_YEARS) + 1):
+            if year in LAG_YEARS:
+                behind[year] = target - life(dataclasses.replace(inp1, medicine=med))["e0"]
+            med = M.medicine_drift(med, inp1)
+        rows.append((label, M.diffusion(inp1), life(inp0)["e0"], target, behind))
+    return rows
+
+
+def cmd_lag(_args):
+    print("Years of life expectancy behind the target after a change, at the spread's rate (the share of the gap a "
+          "census step closes):")
+    print(f"{'':56s} rate  e0 before  target  " + "  ".join(f"{y:>4d}y" for y in LAG_YEARS))
+    for label, rate, before, target, behind in lag_rows():
+        print(f"{label:56s} {rate:4.2f}  {before:9.1f}  {target:6.1f}  "
+              + "  ".join(f"{behind[y]:5.2f}" for y in LAG_YEARS))
+    return 0
 
 
 # ---- fertility: children per woman (modifier-types design, stage 2) -----------------------------
@@ -1162,6 +1221,7 @@ def main(argv=None):
     p.add_argument("--top", type=int, default=30)
     p.set_defaults(fn=cmd_wc)
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
+    sub.add_parser("lag").set_defaults(fn=cmd_lag)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     p = sub.add_parser("history")
     p.add_argument("save", nargs="+")

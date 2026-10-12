@@ -1,6 +1,7 @@
 """scripts/analysis/demographics_harness.py: the sketch, the Gini anchor and the replay round trip."""
 
 import copy
+import dataclasses
 import io
 import json
 import math
@@ -960,3 +961,35 @@ class TestFidelity(unittest.TestCase):
         with redirect_stdout(out), redirect_stderr(err):
             self.assertEqual(H.main(["fidelity", str(path)]), 1)
         self.assertIn("te_dg_m_inf", err.getvalue())
+
+
+class TestLag(unittest.TestCase):
+    """`lag`: years of life expectancy behind the target while medicine spreads (the Causes of Death plan, Task 3)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rows = H.lag_rows()
+
+    def test_every_scenario_starts_a_whole_gap_behind_and_closes(self):
+        for label, rate, before, target, behind in self.rows:
+            with self.subTest(label):
+                self.assertAlmostEqual(behind[0], target - before, places=6)
+                years = sorted(behind)
+                self.assertTrue(all(behind[a] >= behind[b] - 1e-9 for a, b in zip(years, years[1:])), "never widens")
+                self.assertGreaterEqual(behind[0], 0.0)
+
+    def test_the_lag_closes_at_the_rate(self):
+        # one step closes the rate's share of each input's gap; at a rate of 1 nothing is left after one step
+        label, kw_before, kw_after = H.LAG_SCENARIOS[0]
+        carriers = DM.load_carriers()
+        after = H.scenario_inputs(carriers, **kw_after)
+        fast = dataclasses.replace(after, mods={**after.mods, H.P.DIFFUSION_TYPE: 5.0})
+        med = M.medicine_drift(M.medicine_targets(H.scenario_inputs(carriers, **kw_before)), fast)
+        self.assertEqual(med, M.medicine_targets(fast))
+
+    def test_the_cli_prints_every_scenario(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["lag"]), 0)
+        for label, _b, _a in H.LAG_SCENARIOS:
+            self.assertIn(label, out.getvalue())
