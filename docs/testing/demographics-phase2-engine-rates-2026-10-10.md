@@ -316,6 +316,85 @@ Every birth and mortality line on a law, technology or institution now sits on a
 `predict` on the six normal-speed gate saves still gives ×1.64, with no 20M+ country shrinking. Its growth doesn't
 change, because an absorbed line cancelled on both sides before, and no on-top family line is held between 1837 and 1887.
 
+## The normal-speed Full run (2026-10-11)
+
+- **The run:** a new 1836 game on main at ec304526 (#885's lines on top at the census's rate, #889's Impact of
+  Institutions; before #892's moved lines), Demographics on Full, observed, census log on, fast mode off, from 13:11.
+  - It crashed at 13:59, when a script-value hot deploy hit it, and the owner resumed from the 1853 save.
+  - It ran to 1 January 1901.
+  - The archive has 65 yearly autosaves and every log generation, in `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`.
+- **The tools ran from a checkout of that build** (`git worktree add --detach … ec304526`). #892's `predict` would read
+  these saves wrongly.
+
+| Check | Threshold | Result |
+|---|---|---|
+| World 1836–1900, logged countries | ×1.3–×1.7 | **×1.92, fail** (913M to 1,752M). Inflated: the logged countries of a million or more went from 81 to 101 as colonized land came under the census. The saves, which count every state, give **×1.77** (1,031M in 1837 to 1,822M in 1901). That is still above the band |
+| No 20M+ country losing people ten years running outside wars | none | **Pass** |
+| Share of people in clamped states | under 1% | 0.00% |
+| Closed Borders `mig_raw` median | within ±1 per 1,000 | **+0.18 (+0.29 weighted), pass,** over 1,500 country-years (1901 save) |
+| P4: census modifiers kept | none missing | **Pass** (1901 save) |
+| P3's pollution half: `te_dg_os_d` follows Pollution Impact | close | **Pass.** By the region's pollution (1901 save, states over 200,000 people): 25–50, `os_d` +0.080 against `predict`'s line +0.089 (19 states); 50–100, +0.177 against +0.151 (5 states) |
+| India in the 1860s–1880s (item 5) | no collapse | **Pass.** India's states grow from 178M (1837) to 294M (1901), births less deaths +0.90% a year. British India's 1900 census: CBR 41.4, CDR 32.7. No Indian state is in severe starvation in 1901 |
+| Errors | none from the census | **None in a census file.** Six lines come from the Demographics tab's scripted GUI evaluated with no country (`te_system_tab_sguis.txt:278`, `:286`, observer mode), which is harmless (#894). The rest is vanilla, plus the known `contagion_crash` lines |
+
+**Where the growth comes from.** Each region's people (every pop, by its state's strategic region) are taken at five-year
+saves. Births less deaths is the census's own count (`te_dg_births − te_dg_deaths` over `te_dg_people`, averaged
+between saves). "Other" is the rest: net migration, war losses and rounding.
+
+| Region | 1837 | 1901 | × | % a year | births less deaths | other | CBR/CDR 1872 | CBR/CDR 1901 |
+|---|---|---|---|---|---|---|---|---|
+| China | 353M | 529M | 1.50 | +0.63 | +0.67 | −0.04 | 42.2/34.0 | 43.2/39.8 |
+| India | 178M | 294M | 1.65 | +0.79 | +0.90 | −0.11 | 41.3/34.4 | 41.5/33.0 |
+| Western, northern, central, southern Europe | 149M | 245M | 1.64 | +0.78 | +1.07 | −0.29 | 37.5/25.9 | 33.1/27.2 |
+| Africa | 73M | 127M | 1.73 | +0.85 | +0.79 | +0.06 | 40.2/31.1 | 39.2/31.1 |
+| USA, Canada | 19M | 116M | 6.04 | +2.81 | +1.34 | +1.47 | 37.5/24.5 | 36.1/22.4 |
+| Eastern Europe, Balkans | 59M | 100M | 1.70 | +0.83 | +1.06 | −0.23 | 40.6/29.8 | 37.6/29.2 |
+| Japan, Korea, Manchuria | 64M | 97M | 1.52 | +0.65 | +0.52 | +0.13 | 40.8/38.8 | 38.1/39.1 |
+| Russia, Siberia | 35M | 74M | 2.14 | +1.19 | +1.04 | +0.14 | 40.8/31.4 | 39.0/30.3 |
+| Middle East, Central Asia | 38M | 72M | 1.90 | +1.01 | +0.84 | +0.17 | 41.4/33.9 | 40.8/31.9 |
+| South America | 14M | 58M | 4.19 | +2.24 | +1.07 | +1.17 | 36.4/24.6 | 34.6/23.4 |
+| Southeast Asia | 36M | 57M | 1.58 | +0.72 | +0.78 | −0.07 | 42.1/34.3 | 38.7/30.2 |
+| Mexico, Central America | 12M | 48M | 3.98 | +2.16 | +1.18 | +0.98 | 40.4/28.0 | 38.7/29.7 |
+| **World** | **1,031M** | **1,822M** | **1.77** | **+0.89** | **+0.86** | **+0.03** | 40.6/32.0 | 39.4/32.9 |
+
+**Against history (owner, 2026-10-11: compare fairly, allowing for what the game didn't have).** These are rough
+multiples for 1836–1900, interpolated from Maddison's 1820, 1870 and 1913 estimates. Ranges are wide:
+
+| Region | History | Notes |
+|---|---|---|
+| World | about ×1.45 | Rises to about ×1.6 without the two collapses below |
+| China | about ×1.0 | The Taiping (1850–64), Dungan and Nian revolts and the 1876–79 famine. A China that kept its pre-1850 pace makes about ×1.3–1.4. **This run had no Taiping state** |
+| India | about ×1.3 | Famines in 1837–38, 1866–70, 1876–78 and 1896–1900 |
+| Western Europe | about ×1.6 | |
+| Eastern Europe | about ×1.7 | |
+| Russian Empire's lands | about ×2.1 | |
+| USA and Canada | about ×4.8 | |
+| Latin America | about ×2.5 | |
+| Africa | about ×1.45 | |
+| Japan | about ×1.4 | |
+
+- **Worldwide, the excess is births less deaths, not migration.** It runs +0.86% a year of the world's +0.89%, against
+  history's roughly +0.6%.
+- **Europe and Russia match history overall.**
+- **Most of the excess against a fair target (about ×1.6) is outside Europe:**
+  - **China:** +50M against a China without its collapse, and +175M against real China.
+  - **India:** about +60M.
+  - **Africa and the Middle East:** about +20M each.
+  - **The Americas:** about +70M. Their migration ("other") is about twice history's, and Mexico's births less deaths
+    (+1.18% a year) is above its history too.
+- **Europe's deaths move the wrong way.** Its CDR rises from 25.9 (1872) to 27.2 (1901), where history's fell from
+  about 24 to 19.
+  - Germany's 1900 census has CDR 33.4 above CBR 31.2 (history: about 22 and 36).
+  - In ten German states the engine adds 60–100% more deaths than the census's target (`dz` +0.6 to +1.0), with M at
+    −0.55 and nothing on top at state level.
+  - None is in severe starvation at the 1901 save. One German state was fully starving in 1891, so a famine during
+    1900 is possible, but the cause isn't established (#894).
+- **China was in a famine at the end:** 26 states and 273M people at 10% or more severe starvation in the 1901 save.
+
+**Not tuned here.** Changing the gate's measure to the saves, and setting its band for what didn't happen, are #894's
+items, and so are the regional rates and Germany's deaths. The fast run's ×1.63 didn't show any of this, because its
+census years ran on the 1837–1851 economy.
+
 ## The probes
 
 | Probe | Question | Answer |
@@ -338,7 +417,7 @@ This list is the canonical checklist; the PR body repeats it.
    - Europe's flat share: accepted.
    - `--phase2`'s run check now stops at `--to-year`.
    - Bengal's deaths on top past 1900: answered and changed (above, "Bengal and the lines on top").
-5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
+5. **Done: India at normal speed** (above, "The normal-speed Full run"): no collapse, 178M to 294M.
 6. **Done: P6** (above). Then absorbing Private Health Insurance's wealth mortality per pop under Full (owner, 2026-10-10: on top for now; P6 says it can be built).
 7. **The moved lines, in game** (a new game after the build is deployed; not the normal-speed run's save, whose old
    census terms come off at its first monthly pulse). Do each "that day" check on the day of the change, before the
@@ -360,4 +439,4 @@ This list is the canonical checklist; the PR body repeats it.
      rich pop's tooltip reads about wealth × −0.005 × the census's share (`tb_d` in option n).
    - **`debug.log`:** no error from `te_demog_line_*`, `te_demog_events.4`, `te_demog_lines_law_on_action` or
      `te_demog_engine_line_injections.txt`; in particular no scope error on a law's enactment.
-8. **The normal-speed Full run** from 1836 (started 2026-10-11, 13:11; `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`): the calendar gate to 1900, and P3's pollution half from the saves' `te_dg_os_d`.
+8. **Done: the normal-speed Full run** (above): the gate fails on the world's multiple (×1.92 logged, ×1.77 from the saves); the rest passes. Follow-ups in #894.

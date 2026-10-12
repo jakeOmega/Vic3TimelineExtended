@@ -73,6 +73,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/te_demog_line_values_generated.txt",
     "common/scripted_effects/te_demog_line_effects_generated.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",
+    "common/power_bloc_names/te_capital_power_bloc_names_generated.txt",
     "common/amendments/te_tax_amendments_generated.txt",
     "common/script_values/te_tax_generated_values.txt",
     "common/scripted_effects/te_tax_generated_effects.txt",
