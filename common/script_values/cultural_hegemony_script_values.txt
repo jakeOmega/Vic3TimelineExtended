@@ -64,6 +64,18 @@ cultural_pull_art_dr_threshold = 33
 # Asymptote of the diminished share as x → ∞ is 33 + 1/c ≈ 55.78.
 cultural_pull_art_dr_steepness = 0.04390
 
+# Influence the two outward programmes use while they run (owner, 2026-10-12):
+# each restates its modifier's country_influence_cost_add for the gate
+# (ch_possible_cultural_institutes / ch_possible_global_media_campaign).
+# test_international_influence_costs.py pins them together.
+ch_cultural_institutes_influence_cost = 150
+ch_global_media_influence_cost = 200
+# The AI takes one up only with 200 to spare after its cost, so dropping it in
+# deficit (te_ai_influence_deficit_repeal_weight) never leaves enough to take
+# it straight back up.
+ch_cultural_institutes_ai_influence_start = 350
+ch_global_media_ai_influence_start = 400
+
 # Cultural program funding cap and live level
 ch_program_funding_max_level = {
 	value = 0

@@ -13,8 +13,9 @@ panels](#the-un-panels)). The United Nations game rule turns the system off.
 ## Founding the United Nations
 
 A great power that has researched Intergovernmental Organizations and is not a
-subject can press Found the United Nations while no UN exists. Founding costs
-prestige and bureaucracy for five years. The founder becomes the first member, a
+subject can press Found the United Nations while no UN exists. Founding uses 500
+influence, fading over five years, and needs that much available. The founder
+becomes the first member, a
 founding member, the headquarters host and the first permanent member of the
 Security Council, and UN Authority starts at 50.
 
@@ -203,7 +204,7 @@ regime, mandate and mission, demolishes the headquarters and writes off unpaid
 dues. Every power bloc gains The UN Has Fallen (+20 cohesion, +20% leverage
 generation, fading over ten years). Twenty years later any great power with
 Intergovernmental Organizations can convene a founding conference with Found the
-United Nations. The great power with the most prestige, if it is not the
+United Nations, at the founder's influence cost. The great power with the most prestige, if it is not the
 convener, receives A Founding Conference and may join, stay out or oppose;
 opposing wrecks it and blocks another for ten years. Otherwise the UN is
 refounded after twelve months at authority 25, under the founding charter and
@@ -409,8 +410,18 @@ whether it is a Binding Resolution (which can be vetoed) or a Recommendatory
 one, its passage rule and its target. "Target: None" means no country gives
 grounds right now; hover it for why. Hover a convention's name for the agency it
 would found and when the docket raises it. A greyed Propose button lists in its
-tooltip what stops you. Tabling on
-your own motion puts UN Request Cooldown on you, during which you can table
+tooltip what stops you.
+
+Tabling on your own motion uses influence for two years, and you need that much
+available to table:
+
+| Topics | Influence |
+|---|---|
+| International Sanctions, Authorized Military Mandate, Motion to Expel a Permanent Member, Refer a Dispute to the World Court, Arms Embargo, Suspension of Credentials | 300 |
+| Every other topic and convention | 150 |
+| Request a Peacekeeping Deployment, Request Humanitarian Aid, Request Electoral Observers | None |
+
+Tabling on your own motion also puts UN Request Cooldown on you, during which you can table
 nothing else yourself. It lasts ten years for an ordinary member. A great power
 waits half as long, and [standing](#international-standing) stretches or
 shortens the wait: 15% shorter at Respected, 30% shorter at Exemplary, 25%
@@ -862,15 +873,16 @@ after 24 months.
 
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
-| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
+| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, 100 influence, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
 | Fund Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.0625% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
-| Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
-| Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
+| Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | 100 influence | Prestige, refugee ministry impact |
+| Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | 100 influence, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
 Great powers can also Champion International Order or Undermine International
-Order, each costing Authority and influence, which count +1 or −1 in the
-commitment pillar. Undermining also drains standing, and after 24 months it
-suspends your standing benefits until you stop.
+Order, each using 500 influence while it holds (as much as leading a power
+bloc), which count +1 or −1 in the commitment pillar. Undermining also drains standing, and after 24 months it
+suspends your standing benefits until you stop. A program or stance that uses
+influence needs that much available to start.
 
 ### Development Programs sizes
 
@@ -1025,6 +1037,9 @@ Token. Major powers contribute to peacekeeping for the
 same kinds of reasons, more when missions are in the field. They stop either
 one when their treasury fails or their laws turn against it, and stop
 peacekeeping at war; peacekeeping only once its ten years have run.
+- They start a program or stance that uses influence only with 200 influence
+to spare beyond its cost, and give it up when their influence runs into
+deficit.
 - Great powers champion or undermine the order for their own reasons:
 Humanitarian Regulations or Limited War, a permanent seat and their bloc's
 Multilateral Institutions principle pull toward championing; isolationism,

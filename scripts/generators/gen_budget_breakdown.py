@@ -35,7 +35,7 @@ SOURCES = {
         "culture": ("Cultural Hegemony", ("ch_cultural_program_funding_cost", "ch_world_exposition_cost")),
         "colonial": ("Colonial Development", ("colonial_development_investment_expense_modifier",)),
         "un": ("United Nations", (
-            "un_founding_cost_modifier", "un_peacekeeping_contributor_cost",
+            "un_peacekeeping_contributor_cost",
             "un_development_contributor_cost", "un_humanitarian_aid_cost", "un_humanitarian_token_cost",
             "un_observer_mission_cost", "un_peacekeeping_deployment_cost", "un_mission_service_cost",
             "un_dues_modifier", "un_loan_repayment_modifier",

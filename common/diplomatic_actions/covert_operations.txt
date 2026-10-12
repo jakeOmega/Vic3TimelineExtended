@@ -3,6 +3,13 @@
 # ============================================================================
 # These diplomatic actions function like increase_relations: togglable pacts
 # that persist until the player breaks them or conditions change.
+#
+# INFLUENCE: each pact's `cost` is influence by exposure tier (owner,
+# 2026-10-12): mild 25, moderate 50, severe 100, war 0, which the engine
+# doubles for a great power and raises by half for a major one, as for any
+# pact. Vanilla's coup and separatism actions cost 100. The money ladder
+# (covert_operations_cost_scale) is the agency's budget and stays.
+# test_international_influence_costs.py holds the table.
 # Core effects are applied via pact modifiers (auto-active while pact exists).
 # Complex state/movement-scoped effects supplement pact modifiers via JE pulse.
 # All ops auto-cancel when funding drops to 0 (requirement_to_maintain).
@@ -40,12 +47,16 @@
 #   (covert_warfare_triggers.txt): no much weaker target without money to burn.
 #   Espionage, nuclear programme sabotage and secure loose material don't take
 #   it; test_covert_ai_targets.py holds the two lists.
+# - Influence: a costed operation launches only with covert_ai_influence_floor
+#   available (covert_ai_can_spare_influence), and a breakable one, once
+#   settled, is also called off while influence is in deficit. What breaking
+#   frees never lifts it back to the floor, so it is not relaunched at once.
 # - Breaking: an operation pays nothing for six months, so every action spells
 #   out will_break (none is left to the engine's default). The AI keeps an
 #   operation until it is fully operational (covert_ai_op_settled), then ends
 #   it only once its reason has gone, judged more loosely than at launch:
 #   hostility (covert_ai_hostility_gone), nothing left to steal, no milestone
-#   of our own. Wartime operations, influence campaign and secure loose
+#   of our own, or influence in deficit. Wartime operations, influence campaign and secure loose
 #   material are never called off by choice; their requirement_to_maintain
 #   ends them. Cultivate assets also stops once its network reaches
 #   covert_cultivate_ai_net_done. Launch-only tests (free slot, intelligence
@@ -145,7 +156,7 @@ covert_election_interference_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -213,12 +224,18 @@ covert_election_interference_action = {
 			intelligence_capacity_total >= scope:target_country.intelligence_capacity_total
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_election_interference_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone
+		# Kept until fully operational, then until the hostility is gone or
+		# influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = election_interference TARGET = scope:target_country }
-			covert_ai_hostility_gone = { TARGET = scope:target_country }
+			OR = {
+				covert_ai_hostility_gone = { TARGET = scope:target_country }
+				influence < 0
+			}
 		}
 
 		propose_score = {
@@ -321,7 +338,7 @@ covert_financial_subversion_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -377,12 +394,18 @@ covert_financial_subversion_action = {
 			intelligence_capacity_total >= scope:target_country.intelligence_capacity_total
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_financial_subversion_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone
+		# Kept until fully operational, then until the hostility is gone or
+		# influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = financial_subversion TARGET = scope:target_country }
-			covert_ai_hostility_gone = { TARGET = scope:target_country }
+			OR = {
+				covert_ai_hostility_gone = { TARGET = scope:target_country }
+				influence < 0
+			}
 		}
 
 		propose_score = {
@@ -490,7 +513,7 @@ covert_infrastructure_sabotage_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 0 # war tier: no influence (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -656,7 +679,7 @@ covert_comms_disruption_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 0 # war tier: no influence (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -823,7 +846,7 @@ covert_industrial_espionage_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -881,6 +904,8 @@ covert_industrial_espionage_action = {
 			in_default = no
 			# Only spy on countries with a production technology to steal
 			covert_tech_stealable_production = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_industrial_espionage_action }
 		}
 
 		# Never called off by choice: it ends when nothing is left to steal
@@ -986,7 +1011,7 @@ covert_military_espionage_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -1043,6 +1068,8 @@ covert_military_espionage_action = {
 			var:iw_funding_level >= 1
 			in_default = no
 			covert_tech_stealable_military = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_military_espionage_action }
 		}
 
 		# Never called off by choice: it ends when nothing is left to steal
@@ -1143,7 +1170,7 @@ covert_influence_campaign_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -1210,6 +1237,8 @@ covert_influence_campaign_action = {
 			country_rank >= rank_value:major_power
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_influence_campaign_action }
 		}
 
 		# Never called off by choice: it ends when we lose the bloc's lead or the
@@ -1324,7 +1353,7 @@ covert_ideological_subversion_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -1393,12 +1422,18 @@ covert_ideological_subversion_action = {
 			}
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_ideological_subversion_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone
+		# Kept until fully operational, then until the hostility is gone or
+		# influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = ideological_subversion TARGET = scope:target_country }
-			covert_ai_hostility_gone = { TARGET = scope:target_country }
+			OR = {
+				covert_ai_hostility_gone = { TARGET = scope:target_country }
+				influence < 0
+			}
 		}
 
 		propose_score = {
@@ -1504,7 +1539,7 @@ covert_destabilization_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -1575,12 +1610,18 @@ covert_destabilization_action = {
 			}
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_destabilization_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone
+		# Kept until fully operational, then until the hostility is gone or
+		# influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = destabilization TARGET = scope:target_country }
-			covert_ai_hostility_gone = { TARGET = scope:target_country }
+			OR = {
+				covert_ai_hostility_gone = { TARGET = scope:target_country }
+				influence < 0
+			}
 		}
 
 		propose_score = {
@@ -1693,7 +1734,7 @@ covert_regime_change_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -1758,12 +1799,18 @@ covert_regime_change_action = {
 			country_rank >= rank_value:major_power
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_regime_change_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone
+		# Kept until fully operational, then until the hostility is gone or
+		# influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = regime_change TARGET = scope:target_country }
-			covert_ai_hostility_gone = { TARGET = scope:target_country }
+			OR = {
+				covert_ai_hostility_gone = { TARGET = scope:target_country }
+				influence < 0
+			}
 		}
 
 		propose_score = {
@@ -1864,7 +1911,7 @@ covert_nuclear_sabotage_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -1932,12 +1979,18 @@ covert_nuclear_sabotage_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_nuclear_sabotage_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone
+		# Kept until fully operational, then until the hostility is gone or
+		# influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = nuclear_sabotage TARGET = scope:target_country }
-			covert_ai_hostility_gone = { TARGET = scope:target_country }
+			OR = {
+				covert_ai_hostility_gone = { TARGET = scope:target_country }
+				influence < 0
+			}
 		}
 
 		propose_score = {
@@ -2044,7 +2097,7 @@ covert_space_espionage_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -2103,13 +2156,19 @@ covert_space_espionage_action = {
 			# Only spy on a programme that is ahead, while we run one ourselves
 			covert_target_ahead_in_space = { TARGET = scope:target_country }
 			sr_has_running_milestone = yes
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_space_espionage_action }
 		}
 
 		# Kept until fully operational, then while we run a milestone of our
-		# own (the target's lead is a requirement_to_maintain)
+		# own and influence is not in deficit (the target's lead is a
+		# requirement_to_maintain)
 		will_break = {
 			covert_ai_op_settled = { TYPE = space_espionage TARGET = scope:target_country }
-			sr_has_running_milestone = no
+			OR = {
+				sr_has_running_milestone = no
+				influence < 0
+			}
 		}
 
 		propose_score = {
@@ -2195,7 +2254,7 @@ covert_cultivate_assets_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -2249,17 +2308,22 @@ covert_cultivate_assets_action = {
 			in_default = no
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_cultivate_assets_action }
 		}
 
 		# Called off once the network is strong, whatever its age (the operation
 		# pays from its first month), or once fully operational if the hostility
-		# is gone
+		# is gone or influence runs into deficit
 		will_break = {
 			OR = {
 				NOT = { covert_net_weaker_than = { TARGET = scope:target_country STRENGTH = covert_cultivate_ai_net_done } }
 				AND = {
 					covert_ai_op_settled = { TYPE = cultivate_assets TARGET = scope:target_country }
-					covert_ai_hostility_gone = { TARGET = scope:target_country }
+					OR = {
+						covert_ai_hostility_gone = { TARGET = scope:target_country }
+						influence < 0
+					}
 				}
 			}
 		}
@@ -2360,7 +2424,7 @@ covert_secure_material_action = {
 	}
 
 	pact = {
-		cost = 0
+		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
 		show_in_outliner = yes
 
@@ -2419,6 +2483,8 @@ covert_secure_material_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_secure_material_action }
 		}
 
 		# Never called off by choice: it ends when nothing is left to find
