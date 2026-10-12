@@ -23,6 +23,8 @@ Usage:
                                                         # the engine's growth once the census sets its rates
     demographics_harness.py ontop-fit SAVE... --peacetime ROWS --splits SPLIT... [--g LIST] [--at G]
                                                         # calibration step 3: absorption, the malaria factor, the gate
+    demographics_harness.py lategame [--years N]        # phase 3: a rich state to 2300 under each era ladder and
+                                                        # immortality, judged against the late-game design's sketch
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -96,6 +98,12 @@ def inputs_for(c, carriers=None, incorporated=True, practices=None):
                     laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
                     mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}),
                     malaria=getattr(c, "malaria", 0))
+
+
+def cmd_lategame(args):
+    """Phase 3: the late game's scenarios (demographics_late.py)."""
+    import demographics_late
+    return demographics_late.main(args)
 
 
 def cmd_sketch(_args):
@@ -2291,6 +2299,11 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("sketch").set_defaults(fn=cmd_sketch)
+    # phase 3, the late game (demographics_late.py)
+    p = sub.add_parser("lategame", help="phase 3: a rich state to 2300 under each era ladder and immortality, against the "
+                                        "late-game design's figures, the per-cohort truth and the adult-mortality check")
+    p.add_argument("--years", type=int, default=280, help="years from 2020 (default 280: to 2300)")
+    p.set_defaults(fn=cmd_lategame)
     p = sub.add_parser("inputs")
     p.add_argument("save")
     p.add_argument("--tag", action="append", default=[])

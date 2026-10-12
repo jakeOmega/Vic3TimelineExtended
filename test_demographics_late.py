@@ -340,6 +340,35 @@ class TestLateGameModel(unittest.TestCase):
         self.assertEqual(M.lx_market_next(P.LX_MARKET_FLOOR), P.LX_MARKET_FLOOR)
 
 
+class TestLateGameHarness(unittest.TestCase):
+    """demographics_harness.py lategame (demographics_late.py): the band model against the per-cohort truth (§1.3) and the
+    design's bands."""
+
+    @classmethod
+    def setUpClass(cls):
+        import demographics_late as L
+        cls.L = L
+        cls.carriers, cls.lines = L._carriers()
+        cls.start = L.start_ring(L.scenarios_base(cls.carriers, cls.lines))
+
+    def test_the_bands_track_the_truth(self):
+        """§1.3, call 8: a share and a deficit per band tracks the per-cohort truth (here within 0.1 per 1,000)."""
+        for techs, share in ((self.L.ERA12, 0.2), (self.L.ERA11, 0.5)):
+            inp = self.L._share_inputs(self.carriers, self.lines, techs, share)
+            d_band, x_band = self.L.band_model(inp, share, self.start, years=30)
+            d_truth, x_truth = self.L.truth(inp, share, self.start, years=30)
+            self.assertLess(abs(d_band - d_truth), 0.1, (share, d_band, d_truth))
+            self.assertLess(abs(x_band / x_truth - 1), 0.01, (share, x_band, x_truth))
+
+    def test_the_command_meets_its_bands(self):
+        import argparse
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = self.L.main(argparse.Namespace(years=60))
+        self.assertEqual(code, 0, out.getvalue())
+
+
 class TestLateGameCountry(unittest.TestCase):
     """The country's late figures (people-weighted), the health bill's longevity-care term (§5.2), Linked to Common
     Longevity on the untreated's threshold (§2.2), the AI's push from the gap, and the market threshold (§4.2)."""
