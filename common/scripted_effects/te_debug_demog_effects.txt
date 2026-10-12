@@ -718,3 +718,58 @@ te_debug_demog_call3_setup = {
 	trigger_event = { id = te_debug_demog.3 days = 1 }
 	trigger_event = { id = te_debug_demog.3 days = 31 }
 }
+
+# ---- Calibration step 3's self-checks (owner, 2026-10-12; docs/superpowers/specs/2026-10-12-demographics-calibration-
+# step3-design.md §6) -----------------------------------------------------------------------------------------------------
+# Instead of in-game checks before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Three engine facts
+# the step rests on, each read once a game:
+# - famine_reserves_absorbed (P1, te_debug_demog.40): the census absorbs the Landowners' famine reserves at the owner's
+#   read of the key, and the walk reads it at the farm's. A week after the first country with powerful Landowners and
+#   the trait on (a day may come before the engine re-sums its modifiers), one of its subsistence-farm pops logs both.
+# - working_conditions_read (P2, te_debug_demog.41): a mine outside the capital reads working conditions' laborers line
+#   as 0, so the walk's constant is the only copy.
+# - malaria_trait_read (P3, here): once a country with quinine owns a state the map files give the mild malaria trait,
+#   has_state_trait still reads it there, though quinine has switched the trait's modifier off.
+# Each arms once; .40 and .41 re-arm for a later month when their state or input has gone in the week. Under every rule
+# in a development build (te_debug_demog_selfchecks_run), as the workforce checks: the facts are the engine's.
+# THIS = a country, on its monthly pulse (te_demog_country_monthly_on_action).
+te_debug_demog_step3_selfchecks = {
+	if = {
+		limit = { te_debug_demog_selfchecks_run = yes }
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_fr_done }
+				te_debug_demog_fr_armed = yes
+			}
+			set_global_variable = { name = te_demog_selfcheck_fr_done value = yes }
+			trigger_event = { id = te_debug_demog.40 days = 7 }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_wc_done }
+				any_scope_building = { te_debug_demog_wc_mine = yes }
+			}
+			set_global_variable = { name = te_demog_selfcheck_wc_done value = yes }
+			trigger_event = { id = te_debug_demog.41 days = 7 }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_mal_done }
+				has_technology_researched = quinine
+				any_scope_state = { te_debug_demog_mal_listed_mild = yes }
+			}
+			set_global_variable = { name = te_demog_selfcheck_mal_done value = yes }
+			random_scope_state = {
+				limit = { te_debug_demog_mal_listed_mild = yes }
+				if = {
+					limit = { has_state_trait = state_trait_malaria }
+					debug_log = "TE_SELF_CHECK OK malaria_trait_read state=[THIS.GetState.GetNameNoFormatting] listed=[THIS.ScriptValue('te_demog_malaria_level_listed')|0] trait_read=[THIS.ScriptValue('te_debug_demog_mal_trait_read')|0] level=[THIS.ScriptValue('te_demog_malaria_level')|0] (the owner has quinine) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN malaria_trait_read state=[THIS.GetState.GetNameNoFormatting] listed=[THIS.ScriptValue('te_demog_malaria_level_listed')|0] trait_read=[THIS.ScriptValue('te_debug_demog_mal_trait_read')|0] level=[THIS.ScriptValue('te_demog_malaria_level')|0] (the owner has quinine: has_state_trait stops reading a trait its technology disables, so the malaria factor ends at quinine; set MALARIA_READS_REGION_LIST in demographics_params.py and regenerate, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				debug_log_scopes = yes
+			}
+		}
+	}
+}

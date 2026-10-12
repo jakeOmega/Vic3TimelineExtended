@@ -52,6 +52,39 @@ REPORT_REGIONS = (
 )
 
 
+_STATE_BLOCK = re.compile(r"^(STATE_[A-Z0-9_]+)\s*=\s*\{", re.M)
+_TRAITS = re.compile(r"\btraits\s*=\s*\{([^{}]*)\}")
+
+
+def state_region_traits(state_regions=STATE_REGIONS):
+    """{state region: [its traits]} from the map files (map_data/state_regions, the mod's copy of every file, which the
+    game reads in place of the base game's), seas left out."""
+    out = {}
+    for path in sorted(Path(state_regions).glob("*.txt")):
+        if path.name == "99_seas.txt":
+            continue
+        text = path.read_text(encoding="utf-8-sig")
+        heads = list(_STATE_BLOCK.finditer(text))
+        for i, m in enumerate(heads):
+            body = text[m.end():heads[i + 1].start() if i + 1 < len(heads) else len(text)]
+            traits = _TRAITS.search(body)
+            out[m.group(1)] = re.findall(r'"([^"]+)"', traits.group(1)) if traits else []
+    return out
+
+
+def malaria_levels(levels=None, state_regions=STATE_REGIONS):
+    """{state region: its malaria level} for the state regions with one of vanilla's malaria traits (calibration step 3,
+    demographics_params.MALARIA_TRAITS: 1 malaria, 2 severe; the higher if a region had both)."""
+    import demographics_params as P
+    levels = P.MALARIA_TRAITS if levels is None else levels
+    out = {}
+    for region, traits in state_region_traits(state_regions).items():
+        level = max((levels[t] for t in traits if t in levels), default=0)
+        if level:
+            out[region] = level
+    return out
+
+
 def parse(text):
     """{region: [state regions]} from a strategic_regions file; a mod's REPLACE:region_x counts as region_x."""
     code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())

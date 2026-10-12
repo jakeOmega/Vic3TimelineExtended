@@ -25,3 +25,39 @@ te_debug_demog_wf_ig_trait_plain = {
 	NOT = { has_law = law_type:law_pro_labor_ministry_of_labor }
 	NOT = { has_law = law_type:law_pro_capital_ministry_of_labor }
 }
+
+# Calibration step 3's self-checks (te_debug_demog_step3_selfchecks, te_debug_demog.40 and .41; owner, 2026-10-12).
+# THIS = a country whose Landowners are powerful (their traits count double: POWERFUL_IG_TRAIT_BONUS) and whose read of
+# the famine reserves key isn't 0: there the walk's read and the census's absorbed amount differ if either misses the
+# doubling, so an OK says both carry it.
+te_debug_demog_fr_armed = {
+	te_debug_demog_fr_country < -0.001
+	ig:ig_landowners ?= {
+		ig_clout > define:NPolitics|POWERFUL_IG_THRESHOLD
+	}
+}
+
+# THIS = a pop working a subsistence farm: no company owns one, so its workplace's read of the agriculture key holds no
+# executive's trait, only what reaches the building from its state and country.
+te_debug_demog_fr_farm_pop = {
+	is_employed = yes
+	exists = workplace
+	workplace = { is_building_group = bg_subsistence_agriculture }
+}
+
+# THIS = a building: a mine (the walk's gate for bg_mining) in a state that isn't its country's capital (the growth probe
+# of 2026-10-09 read the capital only).
+te_debug_demog_wc_mine = {
+	OR = {
+		is_building_group = bg_mining
+		is_building_group = bg_discoverable_mining
+	}
+	state = { is_capital = no }
+}
+
+# THIS = a state in a state region the map files give the mild malaria trait (te_demog_malaria_level_listed 1), the trait
+# quinine's research switches off (disabling_technologies).
+te_debug_demog_mal_listed_mild = {
+	te_demog_malaria_level_listed > 0
+	te_demog_malaria_level_listed < 2
+}

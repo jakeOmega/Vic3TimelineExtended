@@ -89,7 +89,8 @@ def inputs_for(c, carriers=None, incorporated=True, practices=None):
     mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=incorporated)
     return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share, techs=frozenset(c.techs),
                     laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
-                    mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}))
+                    mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}),
+                    malaria=getattr(c, "malaria", 0))
 
 
 def cmd_sketch(_args):
@@ -926,7 +927,7 @@ def cmd_history(args):
         if year is None:
             print(f"{path}: no game_date in its meta_data; give the year with --year", file=sys.stderr)
             return 1
-        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS)
+        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS + MALARIA_VARS)
         stored = {sid: rec["vars"] for sid, rec in walked.items()}
         saved = saved_shares(stored)
         rows, world, bare = history_rows(sections, year, anchors, carriers, stored, shares=shares_by_year.get(year),
@@ -1384,6 +1385,9 @@ CENSUS_INPUT_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_c
 # Read on their own, not in CENSUS_INPUT_VARS: that check is all or nothing, and a census from before #916's last
 # fix, which holds the nine without these two, would lose its drifted medicine.
 STEP_SOL_VARS = ("te_dg_in_sol", "te_dg_in_lit")
+# Calibration step 3's stored inputs: the malaria level and control the step used (te_demog_cause_inputs_store). Read on
+# their own too: a census from before step 3 holds the nine without them, and had no malaria factor.
+MALARIA_VARS = ("te_dg_in_mal", "te_dg_in_malc")
 # The practices' shares a census state holds (te_demog_practice_effects.txt; Stop B, M2): history and practices-fit start
 # from them where a save has them, under a replay's (--shares) and over the seed.
 PRACTICE_VARS = tuple(f"te_dg_pr_{p}" for p in P.PRACTICES)
@@ -1397,7 +1401,7 @@ def saved_shares(walked):
 
 
 FIDELITY_VARS = (("te_dg_sol", "te_dg_lit") + STEP_SOL_VARS + tuple(var for _c, var, _s in FIDELITY_CAUSES)
-                 + CENSUS_INPUT_VARS)
+                 + CENSUS_INPUT_VARS + MALARIA_VARS)
 
 
 def census_inputs(inp, got):
@@ -1411,8 +1415,15 @@ def census_inputs(inp, got):
         for t in types:
             mods[t] = 0.0
         mods[types[0]] = got[f"te_dg_in_{P.CAUSE_SHORT[cause]}"]
+    # the malaria level and control the step stored; a census from before step 3 stored neither, so the state keeps its
+    # map's level and its owner's control (what the census does from its next step; fidelity_rows takes the level as 0,
+    # what that census did)
+    malaria = inp.malaria
+    if all(v in got for v in MALARIA_VARS):
+        malaria = int(got["te_dg_in_mal"])
+        mods[P.MALARIA_CONTROL_TYPE] = got["te_dg_in_malc"]
     return dataclasses.replace(inp, medicine=medicine, turmoil=got["te_dg_in_turm"], crowding=got["te_dg_in_crowd"],
-                               mods=mods)
+                               mods=mods, malaria=malaria)
 
 
 def fidelity_rows(path, carriers=None, tags=(), counts=None):
@@ -1440,6 +1451,8 @@ def fidelity_rows(path, carriers=None, tags=(), counts=None):
             inp = dataclasses.replace(inputs_for(st, carriers, incorporated=inc),
                                       sol=got.get("te_dg_in_sol", got.get("te_dg_sol", st.sol)),
                                       literacy=got.get("te_dg_in_lit", got.get("te_dg_lit", st.literacy)))
+            if not all(v in got for v in MALARIA_VARS):
+                inp = dataclasses.replace(inp, malaria=0)   # a census from before calibration step 3: no malaria factor
             own = census_inputs(inp, got)
             if counts is not None:
                 counts["stored" if own is not inp else "save"] += 1

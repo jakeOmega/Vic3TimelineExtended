@@ -38,6 +38,12 @@ NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adult
 WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
 LIFE_TABLE_ADDED = re.compile(r"te_dg_oal\d|te_dg_oapy\d|^te_demog_old_age_pass = yes$")
+# Calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md) changes these blocks on
+# purpose: the country-scope absorbed lines join the absorbed deaths, the malaria factor joins infection's product and
+# the store keeps its two inputs. No golden case has a farm pop, malaria or Malaria Prevention, so every recorded number
+# stays as it was.
+STEP3_BLOCKS = {"te_demog_pop_absorbed_deaths", "te_demog_mult_infection", "te_demog_cause_inputs_store"}
+STEP3_VARS = {"te_dg_in_mal", "te_dg_in_malc"}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -164,7 +170,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS, set(), case)
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS, set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
     def test_the_census_term_is_recorded(self):
@@ -179,7 +185,8 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for key, rec in self.golden["blocks"].items():
             for name, digest in rec.items():
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
-                self.assertEqual(self.now["blocks"][key][name], digest, f"{key}: {name} changed")
+                if name not in STEP3_BLOCKS:
+                    self.assertEqual(self.now["blocks"][key][name], digest, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):
         self.assertEqual(self.now["walk"], self.golden["walk"])

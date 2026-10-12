@@ -744,3 +744,39 @@ te_debug_demog_replaced_mod = { value = modifier:state_demog_replaced_ratio_add 
 te_debug_demog_part_m_mod = { value = modifier:state_male_labor_participation_add }
 te_debug_demog_part_mod = { value = modifier:state_labor_participation_add }
 te_debug_demog_cap_mod = { value = modifier:state_work_capacity_mult }
+
+# ---- Calibration step 3's self-checks (te_debug_demog_step3_selfchecks, te_debug_demog.40 and .41; owner, 2026-10-12) ----
+# THIS = a country: its read of the Landowners' famine reserves key (famine_reserves_absorbed arms only where it isn't 0).
+te_debug_demog_fr_country = { value = modifier:building_group_bg_agriculture_mortality_mult }
+# THIS = a state: its owner's read of the same key (te_debug_demog.40's line).
+te_debug_demog_fr_owner = { value = owner.modifier:building_group_bg_agriculture_mortality_mult }
+# THIS = the state te_debug_demog.40 picked: a subsistence-farm pop's two reads the check stored there, what the census
+# absorbs for it (te_demog_pop_country_absorbed_deaths) and what the walk reads at its workplace
+# (te_demog_pop_country_line_walk_read); 0 where the check stored none.
+te_debug_demog_fr_absorbed = { value = 0 if = { limit = { has_variable = te_dbg_fr_abs } value = var:te_dbg_fr_abs } }
+te_debug_demog_fr_walk = { value = 0 if = { limit = { has_variable = te_dbg_fr_walk } value = var:te_dbg_fr_walk } }
+# How far apart the two are, non-negative (a sign flip, as te_debug_demog_pr_chk_gap).
+te_debug_demog_fr_gap = {
+	value = te_debug_demog_fr_walk
+	subtract = te_debug_demog_fr_absorbed
+	if = {
+		limit = { te_debug_demog_fr_walk < te_debug_demog_fr_absorbed }
+		multiply = -1
+	}
+}
+# The walk's read over the absorbed amount: the k to set COUNTRY_ABSORBED_SCALE to on a BROKEN line; -1 when nothing
+# was absorbed.
+te_debug_demog_fr_ratio = {
+	value = -1
+	if = {
+		limit = { te_debug_demog_fr_absorbed < -0.0001 }
+		value = te_debug_demog_fr_walk
+		divide = te_debug_demog_fr_absorbed
+	}
+}
+# THIS = a building: working conditions' laborers key on a mine as the building reads it (te_debug_demog.41).
+te_debug_demog_wc_mine_read = { value = modifier:building_group_bg_mining_laborers_mortality_mult }
+# THIS = the state te_debug_demog.41 picked: the mine's read the check stored there.
+te_debug_demog_wc_read = { value = -1 if = { limit = { has_variable = te_dbg_wc_read } value = var:te_dbg_wc_read } }
+# THIS = a state: 1 where has_state_trait reads the mild malaria trait, else 0 (malaria_trait_read).
+te_debug_demog_mal_trait_read = { value = 0 if = { limit = { has_state_trait = state_trait_malaria } add = 1 } }
