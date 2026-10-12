@@ -2450,32 +2450,109 @@ class CopiedDedicationTests(unittest.TestCase):
 PICTURE_EFFECTS = "common/scripted_effects/gm_picture_effects.txt"
 
 
-def _skin_forms(skin):
-    """A skin's forms in picture order: its default first, then the rest as
-    FORMS lists them."""
-    rest = [f for f, skins in FORMS.items() if skin in skins and f != DEFAULT_FORM[skin]]
-    return [DEFAULT_FORM[skin]] + rest
-
-
-def _pictures():
-    out = {1: ("undedicated", None, None)}
-    for i, form in enumerate(("column", "arch", "obelisk", "statue", "gate", "hall", "mausoleum")):
-        out[10 + i] = ("generic", form, None)
-    for b, h in enumerate(HERITAGE_SKINS):
-        for i, form in enumerate(_skin_forms(f"heritage_{h}")):
-            out[100 + 10 * b + i] = (f"heritage_{h}", form, None)
-    for i, f in enumerate(FAITHS):
-        out[300 + i] = (f"faith_{f}", "faith", None)
-    for b, (key, form) in enumerate(BUILDING_FORMS.items()):
-        out[400 + 10 * b] = ("generic", form, key)
-        for i, h in enumerate(BUILDING_SKINS[key]):
-            out[400 + 10 * b + 1 + i] = (f"heritage_{h}", form, key)
+def _reachable_pictures():
+    """Every (skin, form, civic-progress dedication or None) a monument can
+    reach, from the form and style tables: PICTURES must hold exactly these."""
+    out = {("undedicated", None, None)}
+    for form, skins in FORMS.items():
+        for skin in skins:
+            out.add((skin, form, None))
+    for f in FAITHS:
+        out.add((f"faith_{f}", "faith", None))
+    for key, form in BUILDING_FORMS.items():
+        out.add(("generic", form, key))
+        for h in BUILDING_SKINS[key]:
+            out.add((f"heritage_{h}", form, key))
     return out
 
 
-# code -> (skin, form, civic-progress dedication or None). Append-only: a code
-# never moves or is reused (a retired pair keeps its number).
-PICTURES = _pictures()
+# code -> (skin, form, civic-progress dedication or None). Written out and
+# append-only (spec §3.2): a code never moves or is reused, so a new form or
+# style takes the next free code in its block (generic 10-99; heritage 100 +
+# 10 x its HERITAGE_SKINS index; faith 300-399; buildings 400 + 10 x its
+# BUILDING_FORMS index), and a retired pair keeps its number.
+PICTURES = {
+    1: ("undedicated", None, None),
+    10: ("generic", "column", None),
+    11: ("generic", "arch", None),
+    12: ("generic", "obelisk", None),
+    13: ("generic", "statue", None),
+    14: ("generic", "gate", None),
+    15: ("generic", "hall", None),
+    16: ("generic", "mausoleum", None),
+    100: ("heritage_latin", "column", None),
+    101: ("heritage_latin", "arch", None),
+    102: ("heritage_latin", "forum", None),
+    110: ("heritage_hebrew", "gate", None),
+    111: ("heritage_hebrew", "court", None),
+    112: ("heritage_hebrew", "pillar", None),
+    113: ("heritage_hebrew", "menorah", None),
+    120: ("heritage_sanskrit", "pillar", None),
+    121: ("heritage_sanskrit", "gate", None),
+    130: ("heritage_geez", "stele", None),
+    131: ("heritage_geez", "rock_hewn_church", None),
+    140: ("heritage_slavonic", "memorial_church", None),
+    141: ("heritage_slavonic", "column", None),
+    142: ("heritage_slavonic", "bell_tower", None),
+    150: ("heritage_avestan", "gate", None),
+    151: ("heritage_avestan", "hall", None),
+    160: ("heritage_arabic", "hall", None),
+    161: ("heritage_arabic", "gate", None),
+    170: ("heritage_chinese", "hall", None),
+    171: ("heritage_chinese", "gate", None),
+    172: ("heritage_chinese", "pagoda", None),
+    180: ("heritage_greek", "pantheon", None),
+    181: ("heritage_greek", "column", None),
+    182: ("heritage_greek", "stoa", None),
+    190: ("heritage_irish", "round_tower", None),
+    191: ("heritage_irish", "high_cross", None),
+    200: ("heritage_nahuatl", "pyramid", None),
+    201: ("heritage_nahuatl", "sun_stone", None),
+    210: ("heritage_norse", "rune_stone", None),
+    211: ("heritage_norse", "hall", None),
+    220: ("heritage_gothic", "hall_of_fame", None),
+    221: ("heritage_gothic", "tower", None),
+    230: ("heritage_mayan", "pyramid", None),
+    231: ("heritage_mayan", "stela", None),
+    240: ("heritage_prussian", "hill_shrine", None),
+    241: ("heritage_prussian", "sacred_oak", None),
+    250: ("heritage_aramaic", "rock_cut", None),
+    251: ("heritage_aramaic", "colonnade", None),
+    300: ("faith_catholic", "faith", None),
+    301: ("faith_protestant", "faith", None),
+    302: ("faith_orthodox", "faith", None),
+    303: ("faith_oriental_orthodox", "faith", None),
+    304: ("faith_sunni", "faith", None),
+    305: ("faith_shiite", "faith", None),
+    306: ("faith_ibadi", "faith", None),
+    307: ("faith_jewish", "faith", None),
+    308: ("faith_mahayana", "faith", None),
+    309: ("faith_gelugpa", "faith", None),
+    310: ("faith_theravada", "faith", None),
+    311: ("faith_confucian", "faith", None),
+    312: ("faith_hindu", "faith", None),
+    313: ("faith_shinto", "faith", None),
+    314: ("faith_sikh", "faith", None),
+    315: ("faith_animist", "faith", None),
+    400: ("generic", "opera_house", "artistic"),
+    401: ("heritage_chinese", "opera_house", "artistic"),
+    402: ("heritage_greek", "opera_house", "artistic"),
+    410: ("generic", "gardens", "naturalist"),
+    411: ("heritage_avestan", "gardens", "naturalist"),
+    412: ("heritage_arabic", "gardens", "naturalist"),
+    413: ("heritage_chinese", "gardens", "naturalist"),
+    420: ("generic", "observatory", "scientific"),
+    421: ("heritage_sanskrit", "observatory", "scientific"),
+    422: ("heritage_avestan", "observatory", "scientific"),
+    423: ("heritage_chinese", "observatory", "scientific"),
+    424: ("heritage_mayan", "observatory", "scientific"),
+    430: ("generic", "exhibition_hall", "industrial"),
+    440: ("generic", "stadium", "athletic"),
+    441: ("heritage_latin", "stadium", "athletic"),
+    442: ("heritage_greek", "stadium", "athletic"),
+    443: ("heritage_nahuatl", "stadium", "athletic"),
+    444: ("heritage_mayan", "stadium", "athletic"),
+}
 
 
 def picture_key(code):
@@ -2502,6 +2579,25 @@ class PictureTests(unittest.TestCase):
         self.assertEqual(picture_key(300), "faith_catholic__faith")
         self.assertEqual(picture_key(444), "heritage_mayan__stadium")
 
+    def test_codes_are_frozen(self):
+        # Append-only (spec §3.2): the table is written out, not computed from
+        # the forms and styles, so inserting a style mid-list can't renumber
+        # pictures a save has stored (Task 6 review).
+        self.assertRegex(read("test_grand_monument_registry.py"), r"(?m)^PICTURES = \{\n    1: ")
+        self.assertEqual(set(PICTURES.values()), _reachable_pictures())
+        self.assertEqual(len(set(PICTURES.values())), len(PICTURES), "one code per picture")
+        heritage_block = {f"heritage_{h}": b for b, h in enumerate(HERITAGE_SKINS)}
+        building_block = {k: b for b, k in enumerate(BUILDING_FORMS)}
+        for code, (skin, form, key) in PICTURES.items():
+            if key is not None:
+                self.assertEqual((code - 400) // 10, building_block[key], code)
+            elif form == "faith":
+                self.assertTrue(300 <= code < 400, code)
+            elif skin == "generic":
+                self.assertTrue(10 <= code < 100, code)
+            elif skin != "undedicated":
+                self.assertEqual((code - 100) // 10, heritage_block[skin], code)
+
     def test_helper_sets_every_code_in_order(self):
         b = self.body
         self.assertTrue(b.startswith("set_variable = { name = gm_picture_code value = 1 }"))
@@ -2510,24 +2606,26 @@ class PictureTests(unittest.TestCase):
         buildings_start = b.index("gm_state_picture_building =")
         self.assertLess(skins_start, pairs_start, "skin defaults first: an unknown pair falls back to them")
         self.assertLess(pairs_start, buildings_start, "a building's lines last: its form outranks its skin")
-        for code, (skin, form, key) in PICTURES.items():
-            if code == 1:
-                continue
-            generic = "yes" if skin == "generic" else "no"
-            if key is not None and skin == "generic":
-                self.assertIn(f"gm_state_picture_building = {{ FORM = {form} CODE = {code} }}", b, code)
-            elif key is not None:
-                self.assertIn(f"gm_state_picture_building_skin = {{ FORM = {form} SKIN = {skin} CODE = {code} }}",
-                              b, code)
-            elif form == "faith":
-                self.assertIn(f"gm_state_picture_skin = {{ SKIN = {skin} GENERIC = no CODE = {code} }}", b, code)
-            else:
-                self.assertIn(f"gm_state_picture_pair = {{ SKIN = {skin} GENERIC = {generic} FORM = {form} "
-                              f"CODE = {code} }}", b, code)
+        # The whole call list, in order: a duplicate with a wrong code, or a
+        # building's generic line after its styles, would win in game.
+        expected = []
         for skin, default in DEFAULT_FORM.items():
             code = next(c for c, (s, f, k) in PICTURES.items() if s == skin and f == default and k is None)
-            self.assertIn(f"gm_state_picture_skin = {{ SKIN = {skin} GENERIC = {'yes' if skin == 'generic' else 'no'} "
-                          f"CODE = {code} }}", b, skin)
+            expected.append(f"gm_state_picture_skin = {{ SKIN = {skin} GENERIC = "
+                            f"{'yes' if skin == 'generic' else 'no'} CODE = {code} }}")
+        codes = sorted(PICTURES)
+        expected += [f"gm_state_picture_skin = {{ SKIN = {PICTURES[c][0]} GENERIC = no CODE = {c} }}"
+                     for c in codes if PICTURES[c][1] == "faith"]
+        expected += [f"gm_state_picture_pair = {{ SKIN = {PICTURES[c][0]} GENERIC = "
+                     f"{'yes' if PICTURES[c][0] == 'generic' else 'no'} FORM = {PICTURES[c][1]} CODE = {c} }}"
+                     for c in codes if c != 1 and PICTURES[c][2] is None and PICTURES[c][1] != "faith"]
+        for c in codes:
+            skin, form, key = PICTURES[c]
+            if key is not None and skin == "generic":
+                expected.append(f"gm_state_picture_building = {{ FORM = {form} CODE = {c} }}")
+            elif key is not None:
+                expected.append(f"gm_state_picture_building_skin = {{ FORM = {form} SKIN = {skin} CODE = {c} }}")
+        self.assertEqual(re.findall(r"gm_state_picture_\w+ = \{[^{}]*\}", b), expected)
 
     def test_called_wherever_skin_or_form_changes(self):
         names = read(NAME_EFFECTS)
