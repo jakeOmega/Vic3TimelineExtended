@@ -1355,6 +1355,54 @@ gm_state_offer_skins_heritage = {
 	}
 }
 
+# The civic-progress buildings (spec 2026-10-11 §2.4): a style changes only the
+# look. Each building offers the heritages its own tradition has, most specific
+# last (a later try wins, as in gm_state_default_heritage_skin). The Exhibition
+# Hall offers none. gm_state_offer_skins has already set the generic skin and
+# handles the unveiling.
+gm_state_offer_skins_building_artistic = { gm_state_offer_building_skins = { KEY = artistic } }
+gm_state_offer_skins_building_naturalist = { gm_state_offer_building_skins = { KEY = naturalist } }
+gm_state_offer_skins_building_scientific = { gm_state_offer_building_skins = { KEY = scientific } }
+gm_state_offer_skins_building_industrial = { gm_state_offer_skins_none = yes }
+gm_state_offer_skins_building_athletic = { gm_state_offer_building_skins = { KEY = athletic } }
+
+gm_state_offer_building_skins = {
+	gm_state_default_building_skin_$KEY$ = yes
+	if = {
+		limit = {
+			NOT = { var:gm_skin = flag:generic }
+			owner = { is_ai = no }
+		}
+		set_variable = { name = gm_skin_axis value = flag:building }
+		trigger_event = { id = monument_events.11 }
+	}
+}
+
+gm_state_default_building_skin_artistic = {
+	gm_state_try_heritage_skin = { H = greek }
+	gm_state_try_heritage_skin = { H = chinese }
+}
+
+gm_state_default_building_skin_naturalist = {
+	gm_state_try_heritage_skin = { H = chinese }
+	gm_state_try_heritage_skin = { H = arabic }
+	gm_state_try_heritage_skin = { H = avestan }
+}
+
+gm_state_default_building_skin_scientific = {
+	gm_state_try_heritage_skin = { H = mayan }
+	gm_state_try_heritage_skin = { H = chinese }
+	gm_state_try_heritage_skin = { H = avestan }
+	gm_state_try_heritage_skin = { H = sanskrit }
+}
+
+gm_state_default_building_skin_athletic = {
+	gm_state_try_heritage_skin = { H = mayan }
+	gm_state_try_heritage_skin = { H = nahuatl }
+	gm_state_try_heritage_skin = { H = greek }
+	gm_state_try_heritage_skin = { H = latin }
+}
+
 # State scope, an option of monument_events.11.
 gm_state_choose_skin = {
 	custom_tooltip = {
@@ -1363,6 +1411,16 @@ gm_state_choose_skin = {
 		gm_remove_state_var = { VAR = gm_skin_axis }
 	}
 	# Then the form and the namesake (v2 §3.3).
+	hidden_effect = { gm_state_unveil = yes }
+}
+
+# State scope, a civic-progress option of monument_events.11: the look only.
+gm_state_choose_building_skin = {
+	custom_tooltip = {
+		text = gm_skin_choice_building_tt
+		set_variable = { name = gm_skin value = flag:$SKIN$ }
+		gm_remove_state_var = { VAR = gm_skin_axis }
+	}
 	hidden_effect = { gm_state_unveil = yes }
 }
 

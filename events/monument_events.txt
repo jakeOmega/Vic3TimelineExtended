@@ -398,7 +398,7 @@ monument_events.2 = {
 		}
 		custom_tooltip = {
 			text = monument_events.2.g.tt
-			gm_state_dedicate_timeless = { KEY = artistic AXIS = none }
+			gm_state_dedicate_timeless = { KEY = artistic AXIS = building_artistic }
 		}
 	}
 
@@ -431,7 +431,7 @@ monument_events.2 = {
 		}
 		custom_tooltip = {
 			text = monument_events.2.h.tt
-			gm_state_dedicate_timeless = { KEY = naturalist AXIS = none }
+			gm_state_dedicate_timeless = { KEY = naturalist AXIS = building_naturalist }
 		}
 	}
 
@@ -457,7 +457,7 @@ monument_events.2 = {
 		}
 		custom_tooltip = {
 			text = monument_events.2.i.tt
-			gm_state_dedicate_timeless = { KEY = scientific AXIS = none }
+			gm_state_dedicate_timeless = { KEY = scientific AXIS = building_scientific }
 		}
 	}
 
@@ -486,7 +486,7 @@ monument_events.2 = {
 		}
 		custom_tooltip = {
 			text = monument_events.2.j.tt
-			gm_state_dedicate_timeless = { KEY = industrial AXIS = none }
+			gm_state_dedicate_timeless = { KEY = industrial AXIS = building_industrial }
 		}
 	}
 
@@ -512,7 +512,7 @@ monument_events.2 = {
 		}
 		custom_tooltip = {
 			text = monument_events.2.k.tt
-			gm_state_dedicate_timeless = { KEY = athletic AXIS = none }
+			gm_state_dedicate_timeless = { KEY = athletic AXIS = building_athletic }
 		}
 	}
 }
@@ -1727,6 +1727,175 @@ monument_events.11 = {
 
 	# Always offered, last: with no default_option, an expired event takes the
 	# first valid option, which is the most specific skin.
+	option = {
+		name = monument_events.11.building_artistic_chinese
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_artistic }
+			}
+			owner = { te_heritage_chinese = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_chinese }
+	}
+
+	option = {
+		name = monument_events.11.building_artistic_greek
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_artistic }
+			}
+			owner = { te_heritage_greek = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_greek }
+	}
+
+	option = {
+		name = monument_events.11.building_naturalist_avestan
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_naturalist }
+			}
+			owner = { te_heritage_avestan = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_avestan }
+	}
+
+	option = {
+		name = monument_events.11.building_naturalist_arabic
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_naturalist }
+			}
+			owner = { te_heritage_arabic = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_arabic }
+	}
+
+	option = {
+		name = monument_events.11.building_naturalist_chinese
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_naturalist }
+			}
+			owner = { te_heritage_chinese = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_chinese }
+	}
+
+	option = {
+		name = monument_events.11.building_scientific_sanskrit
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_scientific }
+			}
+			owner = { te_heritage_sanskrit = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_sanskrit }
+	}
+
+	option = {
+		name = monument_events.11.building_scientific_avestan
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_scientific }
+			}
+			owner = { te_heritage_avestan = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_avestan }
+	}
+
+	option = {
+		name = monument_events.11.building_scientific_chinese
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_scientific }
+			}
+			owner = { te_heritage_chinese = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_chinese }
+	}
+
+	option = {
+		name = monument_events.11.building_scientific_mayan
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_scientific }
+			}
+			owner = { te_heritage_mayan = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_mayan }
+	}
+
+	option = {
+		name = monument_events.11.building_athletic_latin
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_athletic }
+			}
+			owner = { te_heritage_latin = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_latin }
+	}
+
+	option = {
+		name = monument_events.11.building_athletic_greek
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_athletic }
+			}
+			owner = { te_heritage_greek = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_greek }
+	}
+
+	option = {
+		name = monument_events.11.building_athletic_nahuatl
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_athletic }
+			}
+			owner = { te_heritage_nahuatl = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_nahuatl }
+	}
+
+	option = {
+		name = monument_events.11.building_athletic_mayan
+		highlighted_option = yes
+		trigger = {
+			hidden_trigger = {
+				var:gm_skin_axis = flag:building
+				gm_state_has_pm = { PM = pm_monument_athletic }
+			}
+			owner = { te_heritage_mayan = yes }
+		}
+		gm_state_choose_building_skin = { SKIN = heritage_mayan }
+	}
+
 	option = {
 		name = monument_events.11.generic
 		gm_state_choose_skin = { SKIN = generic }

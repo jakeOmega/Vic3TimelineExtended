@@ -289,6 +289,27 @@ gm_skin_name = {
 	type = state
 	random_valid = no
 
+	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:gardens }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:observatory }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:exhibition_hall }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:stadium }
+		localization_key = pm_monument_athletic
+	}
 	text = {
 		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_catholic }
 		localization_key = gm_skin_faith_catholic

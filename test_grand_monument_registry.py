@@ -1094,7 +1094,7 @@ def wrapper_call(d):
         return "gm_state_dedicate_leader = yes"
     if d.kind == "faith":
         return "gm_state_dedicate_faith = yes"
-    axis = "heritage" if d.key in HERITAGE_SKINNED else "none"
+    axis = "heritage" if d.key in HERITAGE_SKINNED else f"building_{d.key}"
     return f"gm_state_dedicate_timeless = {{ KEY = {d.key} AXIS = {axis} }}"
 
 
@@ -1174,8 +1174,9 @@ class SkinTests(unittest.TestCase):
         # expired event (no default_option) takes one of those over the
         # group-level Hebrew match for a Semitic-language country.
         heritages_in_option_order = tuple(h for h in HERITAGES if h != "hebrew") + ("hebrew",)
+        building = [f"building_{k}_{h}" for k, hs in BUILDING_SKINS.items() for h in hs]
         expected = ([f"landmark_{k}" for k, _ in LANDMARKS] + [f"faith_{f}" for f in FAITHS]
-                    + [f"heritage_{h}" for h in heritages_in_option_order] + ["generic"])
+                    + [f"heritage_{h}" for h in heritages_in_option_order] + building + ["generic"])
         self.assertEqual(names, expected)
         self.assertLess(names.index("heritage_hebrew"), names.index("generic"))
         for h in ("arabic", "geez", "aramaic"):
@@ -1190,6 +1191,45 @@ class SkinTests(unittest.TestCase):
                           bodies[f"heritage_{h}"])
             self.assertIn(f"gm_state_choose_skin = {{ SKIN = {skin} }}", bodies[f"heritage_{h}"])
         self.assertNotIn("default_option", squash(strip_comments(self.event)))
+
+    def test_building_styles(self):
+        e = read(EFFECTS)
+        bodies = dict(self._options())
+        L = loc()
+        for key, heritages in BUILDING_SKINS.items():
+            self.assertEqual(list(heritages), [h for h in HERITAGES if h in heritages], key)
+            offer = squash(block(e, f"gm_state_offer_skins_building_{key}"))
+            if not heritages:
+                # The Exhibition Hall offers no style: its axis is none in effect.
+                self.assertEqual(offer, "gm_state_offer_skins_none = yes", key)
+                continue
+            self.assertEqual(offer, f"gm_state_offer_building_skins = {{ KEY = {key} }}")
+            default = squash(block(e, f"gm_state_default_building_skin_{key}"))
+            # Reverse partition order: a later try wins, so the most specific is last.
+            self.assertEqual(default, " ".join(f"gm_state_try_heritage_skin = {{ H = {h} }}"
+                                               for h in reversed(heritages)), key)
+            for h in heritages:
+                body = bodies[f"building_{key}_{h}"]
+                self.assertIn("highlighted_option = yes", body)
+                self.assertIn(f"hidden_trigger = {{ var:gm_skin_axis = flag:building "
+                              f"gm_state_has_pm = {{ PM = pm_monument_{key} }} }} "
+                              f"owner = {{ te_heritage_{h} = yes }}", body)
+                self.assertIn(f"gm_state_choose_building_skin = {{ SKIN = heritage_{h} }}", body)
+                self.assertIn(f"monument_events.11.building_{key}_{h}", L)
+        shared = squash(block(e, "gm_state_offer_building_skins"))
+        self.assertIn("gm_state_default_building_skin_$KEY$ = yes", shared)
+        self.assertIn("set_variable = { name = gm_skin_axis value = flag:building } "
+                      "trigger_event = { id = monument_events.11 }", shared)
+        choose = squash(block(e, "gm_state_choose_building_skin"))
+        self.assertIn("text = gm_skin_choice_building_tt", choose)
+        self.assertIn("gm_state_unveil = yes", choose)
+        self.assertIn("gm_skin_choice_building_tt", L)
+
+    def test_a_building_keeps_its_name_in_any_style(self):
+        names = squash(block(read(CUSTOM_LOC), "gm_skin_name"))
+        first = names.split("text = {")[1:6]
+        for (key, form), branch in zip(BUILDING_FORMS.items(), first):
+            self.assertIn(f"var:gm_form = flag:{form} }} localization_key = pm_monument_{key}", branch)
 
     def test_skins_read_only_own_identity(self):
         body = strip_comments(self.event)
@@ -1903,6 +1943,16 @@ DEFAULT_FORM = {"generic": "column", "heritage_latin": "column", "heritage_greek
                 "heritage_prussian": "hill_shrine", "heritage_aramaic": "rock_cut"}
 BUILDING_FORMS = {"artistic": "opera_house", "naturalist": "gardens", "scientific": "observatory",
                   "industrial": "exhibition_hall", "athletic": "stadium"}
+# The heritage styles each civic-progress building offers beyond generic (spec
+# 2026-10-11 §2.4), in the revival partition's order (HERITAGES): the first is
+# the most specific, so it is the AI's pick and comes first in .11.
+BUILDING_SKINS = {
+    "artistic": ("chinese", "greek"),
+    "naturalist": ("avestan", "arabic", "chinese"),
+    "scientific": ("sanskrit", "avestan", "chinese", "mayan"),
+    "industrial": (),
+    "athletic": ("latin", "greek", "nahuatl", "mayan"),
+}
 # namesake -> its pattern keys (gm_name_<pattern>_row / _evt).
 NAMESAKES = {"city": ("city",), "state": ("state",), "ruler": ("ruler",), "honours": ("honours",),
              "year": ("year",),
