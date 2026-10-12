@@ -51,6 +51,7 @@ class Inputs:
     # phase 2 step 2 (§2.5): under Full, women's share of the census's own workers aged P.WORK_SPLIT_AGES at the last
     # count (te_dg_fws_wk), which splits work deaths; None = the law table (outside Full, or before a count)
     work_female_share: float | None = None
+    sex_balance: float | None = None     # men per 100 women aged 20-59 the step reads (te_dg_sxb); None = no term
 
 
 def clamp(x, lo, hi):
@@ -255,10 +256,11 @@ def newborn_split(inp):
 
 
 def fertility(inp, e0):
-    """Children per woman and its terms (§2.3): wealth x natural x the practices x (1 - means x (1 - desired)).
+    """Children per woman and its terms (§2.3): wealth x natural x the practices x sex x (1 - means x (1 - desired)).
     Natural fertility is women's legal standing (phase 2 step 4, Task 7), 1 + its type, at least
     NATURAL_FERTILITY_FLOOR. Each practice (the late-marriage spec §2.1) multiplies by 1 - its cut x its share, outside
-    the means; a practice with no share is 1."""
+    the means; a practice with no share is 1. sex is the sex balance's term (phase 2 step 4, the consequences design
+    §4.4: fewer marriages where men are few; sex_births), 1 with no balance given."""
     wealth = inp.wealth_tfr if inp.wealth_tfr is not None else wealth_tfr(inp.sol)
     natural = max(P.NATURAL_FERTILITY_FLOOR, 1 + inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0))
     education = 1 - P.EDUCATION_WEIGHT * inp.literacy
@@ -270,12 +272,13 @@ def fertility(inp, e0):
     mn = means(inp)
     factor = 1 - mn * (1 - desired)
     practices = {p: 1 - cut * inp.practices.get(p, 0.0) for p, cut in P.PRACTICE_CUT.items()}
-    tfr = wealth * natural * factor
+    sex = sex_births(inp.sex_balance)
+    tfr = wealth * natural * factor * sex
     for term in practices.values():
         tfr *= term
     out = {"tfr": tfr, "wealth": wealth, "natural": natural, "education": education,
            "survival": survival, "urban": urban, "policy": policy, "desired": desired, "means": mn, "factor": factor,
-           **practices}
+           "sex": sex, **practices}
     # planned and unplanned births (late-game §3.1): the families who choose their number, and the births the means
     # don't reach. Computed from the result's own tfr and factor, so every term multiplying the factor (wealth,
     # natural, #906's practices) scales both parts alike.
@@ -422,9 +425,10 @@ def women_rate_law(inp):
 
 
 def women_rate(inp):
-    """The state's women's rate: its lower strata's women work at least WOMEN_LOWER (te_demog_women_rate)."""
+    """The state's women's rate: its lower strata's women work at least WOMEN_LOWER, and where men are few more women
+    work (phase 2 step 4, sex_women_add) (te_demog_women_rate)."""
     w = women_rate_law(inp)
-    return (max(w, P.WOMEN_LOWER) - w) * inp.low_share + w
+    return (max(w, P.WOMEN_LOWER) - w) * inp.low_share + w + sex_women_add(inp.sex_balance)
 
 
 def sex_rates(inp):
@@ -439,6 +443,80 @@ def sex_rates(inp):
 def capacity_at(inp, age):
     """Capacity at a biological age with call 3's input: the table x (1 + it), 0 to 1 (te_demog_enter_bio_band)."""
     return min(band_value(P.CAPACITY, age) * max(1 + inp.mods.get(P.CAPACITY_TYPE, 0.0), 0.0), 1.0)
+
+
+# ---- Phase 2 step 4: conscription, the youth bulge and sex balance (the consequences design §4) ----------------------
+
+def sex_fewer_men(balance):
+    """0 to 1: how far men are short, from SEX_FEWER_FROM men per 100 women to SEX_FEWER_FULL (te_demog_sex_fewer_men).
+    None (no balance) is 0, and so is every balance while P.SEX_BALANCE_EFFECTS is off (held back), as for the other
+    three sex-balance functions."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
+        return 0.0
+    return clamp((P.SEX_FEWER_FROM - balance) / (P.SEX_FEWER_FROM - P.SEX_FEWER_FULL), 0.0, 1.0)
+
+
+def sex_more_men(balance):
+    """0 to 1: how far men are in excess, from SEX_MORE_FROM to SEX_MORE_FULL (te_demog_sex_more_men)."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
+        return 0.0
+    return clamp((balance - P.SEX_MORE_FROM) / (P.SEX_MORE_FULL - P.SEX_MORE_FROM), 0.0, 1.0)
+
+
+def sex_births(balance):
+    """Children per woman's sex-balance term (te_demog_tfr_sex): the balance / SEX_FEWER_FROM, at most 1 and at least
+    SEX_BIRTHS_FLOOR; 1 with no balance, or while P.SEX_BALANCE_EFFECTS is off."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
+        return 1.0
+    return clamp(balance / P.SEX_FEWER_FROM, P.SEX_BIRTHS_FLOOR, 1.0)
+
+
+def sex_women_add(balance):
+    """What the women's rate gains where men are few (te_demog_sex_women_add)."""
+    return P.SEX_WOMEN_RATE * sex_fewer_men(balance)
+
+
+def conscription_term(fam, people):
+    """T on state_conscription_rate_mult (te_demog_conscription_term): the pool over people against the 1836 world's."""
+    return clamp(fam / max(people, 1.0) / P.CONSCRIPTION_REF - 1, P.CONSCRIPTION_MIN, P.CONSCRIPTION_MAX)
+
+
+def conscription_applied(term):
+    """The conscription multiplier the census's pair applies (te_demog_consequences_apply): the term while
+    P.CONSCRIPTION_EFFECTS is on and |term| reaches CONSCRIPTION_CUT, else 0 (held back, or too small for a line)."""
+    return term if P.CONSCRIPTION_EFFECTS and abs(term) >= P.CONSCRIPTION_CUT else 0.0
+
+
+def youth_applied(y):
+    """The youth-bulge modifier's multiplier: y while P.YOUTH_BULGE_EFFECTS is on and y reaches YOUTH_CUT, else 0."""
+    return y if P.YOUTH_BULGE_EFFECTS and y >= P.YOUTH_CUT else 0.0
+
+
+def youth_share(ring):
+    """The share of people of calendar age YOUTH_AGES (te_demog_youth_share: bands 4 and 5)."""
+    rows = ring.by_age()
+    total = sum(f + m for _a, f, m in rows)
+    lo, hi = P.YOUTH_AGES
+    return sum(f + m for a, f, m in rows if lo <= a <= hi) / max(total, 1.0)
+
+
+def youth_bulge(share, unemployment):
+    """y, the youth-bulge modifier's multiplier (te_demog_youth_bulge_now)."""
+    return (clamp((share - P.YOUTH_FROM) / P.YOUTH_SPAN, 0.0, 1.0)
+            * clamp(unemployment / P.YOUTH_UNEMPLOYMENT_FULL, 0.0, 1.0))
+
+
+def consequence_figures(ring, unemployment=0.0):
+    """{fam, faw, people, pool_share, pool_men_share, term, youth, y, sex_balance, fewer, more, births}: phase 2 step
+    4's figures for a ring after its step (ages after the step; the pool sums by _refresh_denominators)."""
+    people = ring.people()
+    men = sum(m for _a, _f, m in ring.by_age())
+    sb = structure(ring)["men_per_100_women"]
+    share = youth_share(ring)
+    return {"fam": ring.fam, "faw": ring.faw, "people": people, "pool_share": ring.fam / max(people, 1.0),
+            "pool_men_share": ring.fam / max(men, 1.0), "term": conscription_term(ring.fam, people),
+            "youth": share, "y": youth_bulge(share, unemployment), "sex_balance": sb,
+            "fewer": sex_fewer_men(sb), "more": sex_more_men(sb), "births": sex_births(sb)}
 
 
 def pension_kind(inp):
@@ -622,8 +700,8 @@ class Ring:
     year: int | None = None
     class_f: list = field(default_factory=lambda: [0.0] * len(P.MIGRANT_CLASSES))
     class_m: list = field(default_factory=lambda: [0.0] * len(P.MIGRANT_CLASSES))
-    men_18_40: float = 0.0
-    women_18_40: float = 0.0
+    fam: float = 0.0                    # the pool's men (phase 2 step 4): calendar POOL_FROM+, biological POOL_TO or less
+    faw: float = 0.0                    # the women of the same ages: the war dead's women's share
     total: float = 0.0
     medicine: dict | None = None        # the drifted access and treatments (medicine_drift); None = at the targets
 
@@ -741,25 +819,31 @@ def seed(inp, year, engine_pop):
     return ring
 
 
+def in_pool(age, bio_age):
+    """The conscription pool's ages (phase 2 step 4; late-game call 21): calendar POOL_FROM or more and biological
+    POOL_TO or less. The war dead come from the same ages."""
+    return age >= P.POOL_FROM and bio_age <= P.POOL_TO
+
+
 def _refresh_denominators(ring):
-    """Class and 18-40 sums for next year's flows, by the age each cohort has now.
+    """Class and pool sums for next year's flows, by the age each cohort has now.
 
     Next year's step applies the flows by rate age (a - 1), so it divides by exactly the
     cohorts it applies them to. The age-149 cohort and the pool are left out: they are
-    folded, not flowed.
+    folded, not flowed. The pool's sums (fam, faw) are also the conscription term's input (te_dg_fam, te_dg_faw).
     """
     ring.class_f = [0.0] * len(P.MIGRANT_CLASSES)
     ring.class_m = [0.0] * len(P.MIGRANT_CLASSES)
-    ring.men_18_40 = ring.women_18_40 = 0.0
+    ring.fam = ring.faw = 0.0
     for a, f, m in ring.by_age():
         if a > N - 2:
             continue
         c = class_of(a)
         ring.class_f[c] += f
         ring.class_m[c] += m
-        if P.WAR_DEAD_AGES[0] <= a <= P.WAR_DEAD_AGES[1]:
-            ring.men_18_40 += m
-            ring.women_18_40 += f
+        if in_pool(a, a):                       # the biological index is the calendar one until phase 3
+            ring.fam += m
+            ring.faw += f
 
 
 def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
@@ -873,6 +957,9 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     """
     assert ring.year is not None and year == ring.year + 1, "one step per year"
     if rates is None:
+        # the sex balance the step's fertility and women's rate read (te_demog_sex_births_store): the ring's before its
+        # sweep, which is the census's last figure (phase 2 step 4)
+        inp = replace(inp, sex_balance=structure(ring)["men_per_100_women"])
         # medicine spreads (the Causes of Death plan): the drifted values move, then the year's rates use them
         ring.medicine = medicine_drift(ring.medicine, inp)
         inp = replace(inp, medicine=ring.medicine)
@@ -907,8 +994,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             qm = [min(100000.0, q * (1 + deaths_scale)) for q in qm]
     maternal = 0.0
     s = ring.scale
-    war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.men_18_40, 0, 0.5) if ring.men_18_40 else 0.0
-    war_f = clamp(war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.women_18_40, 0, 0.5) if ring.women_18_40 else 0.0
+    war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
+    war_f = clamp(war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw, 0, 0.5) if ring.faw else 0.0
     kill = clamp(kills / ring.total, 0, 0.9) if ring.total else 0.0
     births = deaths = 0.0
     open_k = year % N
@@ -932,7 +1019,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         f2 = f * (1 - qf[g] / 100000.0) - b * mmr / 100000.0
         m2 = m * (1 - qm[g] / 100000.0)
         deaths += (f - f2) + (m - m2)
-        if P.WAR_DEAD_AGES[0] <= r <= P.WAR_DEAD_AGES[1]:
+        if in_pool(r, r):                       # the pool's ages by rate age (phase 2 step 4, §4.2)
             f2 -= f * war_f
             m2 -= m * war_m
         f2 -= f * kill

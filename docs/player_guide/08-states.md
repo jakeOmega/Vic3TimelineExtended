@@ -306,6 +306,10 @@ technology (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
 two fifths more for a rich country today. Outside Full none of this changes
 anything, and the buttons are greyed.
 
+The census also counts each state's men of fighting age, 20 to 39, and its
+young adults, and takes war dead from the men of fighting age. The tab shows
+both counts; neither changes conscription or unrest.
+
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
 the default, also removes the census and both tabs. Wealth Concentration and its
@@ -319,8 +323,8 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Median age, children per woman, life expectancy, the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target. |
-| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's. |
+| Overview | Median age, children per woman, life expectancy, the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short. |
+| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |

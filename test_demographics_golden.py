@@ -21,7 +21,13 @@ Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequenc
 Full by design: work deaths split by the census's own count of women and men at work (§2.5). Its invariant is that
 nothing changes outside Full, which the Display-only, the lines' and the model's cases still pin. The two Full cases
 (FULL_CASES) were re-recorded on step 2's tree (TE_RECORD_GOLDEN_FULL=1, which rewrites them alone), so a later change
-under Full still shows; step 2's new names are STEP2_VARS."""
+under Full still shows; step 2's new names are STEP2_VARS.
+
+Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4) changes two things here
+on purpose, and nothing else: the war dead's sums, the 18-40 te_dg_f1840 and te_dg_m1840, become the conscription
+pool's (te_dg_faw, te_dg_fam: calendar 20 and over, biological 39 and under), in the cases and in
+te_demog_normalize_bands (STEP4_RENAMED); and its new names (STEP4_NEW_VARS). Its sex-balance terms leave these cases
+alone: their balances (94-100 men per 100 women) are above the threshold."""
 
 import functools
 import hashlib
@@ -59,6 +65,9 @@ STEP2_VARS = {"te_dg_wk_past", "te_dg_fws_wk"}
 NEW_VARS |= STEP2_VARS
 # the cases under Full, re-recorded on step 2's tree (the module's docstring)
 FULL_CASES = ("farm_full_on_top", "rich_full")
+# Phase 2 step 4: the war dead's 18-40 sums became the pool's (old name: new name); its new state variables
+STEP4_RENAMED = {"te_dg_f1840": "te_dg_faw", "te_dg_m1840": "te_dg_fam"}
+STEP4_NEW_VARS = {"te_dg_faw", "te_dg_fam", "te_dg_sxb", "te_dg_mc", "te_dg_yb"}
 # Task 5's three calls in te_demog_walks; nothing else in the walk may change
 WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
@@ -156,6 +165,10 @@ def blocks():
         out[key] = {}
         for name, body in _raw_blocks([path]).items():
             drop = (lambda line: bool(LIFE_TABLE_ADDED.search(line))) if name == "te_demog_life_table" else None
+            if name == "te_demog_normalize_bands":
+                # phase 2 step 4's rename, back to the names the golden was recorded with
+                for old, new in STEP4_RENAMED.items():
+                    body = re.sub(rf"\b{new}\b", old, body)
             out[key][name] = hashlib.sha256(_norm(body, drop).encode("utf-8")).hexdigest()
     return out
 
@@ -195,6 +208,11 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for case, rec in self.golden["cases"].items():
             for kind in ("vars", "modifiers"):
                 for name, value in rec[kind].items():
+                    if name in STEP4_RENAMED:
+                        # phase 2 step 4: the pool's sums replaced the 18-40 sums (other ages: other values)
+                        self.assertNotIn(name, self.now["cases"][case][kind], f"{case}: {name} is still there")
+                        self.assertIn(STEP4_RENAMED[name], self.now["cases"][case][kind], case)
+                        continue
                     self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
                     now = self.now["cases"][case][kind][name]
                     if isinstance(value, float) and isinstance(now, float):
@@ -208,7 +226,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS, set(), case)
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS, set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
     def test_the_full_cases_hold_step_twos_split(self):

@@ -1114,3 +1114,120 @@ class TestMalariaFactor(unittest.TestCase):
     def test_malaria_raises_deaths_and_shortens_life(self):
         e0 = [M.life_table(M.group_rates(M.Inputs(sol=7, literacy=0.05, malaria=level))[0])["e0"] for level in (0, 2)]
         self.assertLess(e0[1], e0[0])
+
+
+class TestConsequences(unittest.TestCase):
+    """Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4): the pool,
+    conscription, the war dead's window, the youth bulge and sex balance."""
+
+    def test_the_pool_is_men_of_twenty_to_thirty_nine(self):
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        rows = ring.by_age()
+        self.assertAlmostEqual(ring.fam, sum(m for a, _f, m in rows if 20 <= a <= 39))
+        self.assertAlmostEqual(ring.faw, sum(f for a, f, _m in rows if 20 <= a <= 39))
+        # the two clocks: the calendar floor and the biological ceiling (equal until phase 3)
+        self.assertTrue(M.in_pool(20, 39) and M.in_pool(80, 30))
+        self.assertFalse(M.in_pool(19, 19) or M.in_pool(30, 40))
+
+    def test_the_1836_reference_gives_no_term(self):
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        self.assertLess(abs(M.conscription_term(ring.fam, ring.people())), 0.02)
+
+    def test_the_term_falls_as_far_as_the_pool_and_rises_a_quarter(self):
+        self.assertEqual(M.conscription_term(0.0, 1000.0), P.CONSCRIPTION_MIN)
+        self.assertEqual(M.conscription_term(500.0, 1000.0), P.CONSCRIPTION_MAX)
+        self.assertAlmostEqual(M.conscription_term(P.CONSCRIPTION_REF * 0.75 * 1000.0, 1000.0), -0.25)
+        self.assertEqual((P.CONSCRIPTION_MIN, P.CONSCRIPTION_MAX), (-1.0, 0.25))
+
+    def test_war_dead_come_from_the_pools_ages(self):
+        """§4.2: a year's war dead leave the cohorts of rate ages 20-39, 95% of them men."""
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        twin = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        M.step(ring, AGRARIAN_1836, 1837, war_dead=5000.0)
+        M.step(twin, AGRARIAN_1836, 1837)
+        lost = {a: (tf - f, tm - m) for (a, f, m), (_b, tf, tm) in zip(ring.by_age(), twin.by_age())}
+        self.assertAlmostEqual(sum(w for w, _m in lost.values()), 5000.0 * (1 - P.WAR_DEAD_MALE_SHARE), places=3)
+        self.assertAlmostEqual(sum(m for _w, m in lost.values()), 5000.0 * P.WAR_DEAD_MALE_SHARE, places=3)
+        for a, (w, m) in lost.items():
+            if not 21 <= a <= 40:                  # ages after the step: rate ages 20-39
+                self.assertAlmostEqual(w + m, 0.0, places=6, msg=f"age {a}")
+        self.assertGreater(lost[21][1], 0.0)
+        self.assertGreater(lost[40][1], 0.0)
+
+    def test_the_youth_bulge(self):
+        self.assertEqual(M.youth_bulge(0.16, 0.3), 0.0)
+        self.assertEqual(M.youth_bulge(0.25, 0.0), 0.0)
+        self.assertEqual(M.youth_bulge(0.24, 0.2), 1.0)
+        self.assertAlmostEqual(M.youth_bulge(0.21, 0.1), 0.25)
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        self.assertLess(M.youth_share(ring), P.YOUTH_FROM)
+
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
+    def test_the_sex_balance_terms(self):
+        self.assertEqual((M.sex_births(None), M.sex_women_add(None), M.sex_fewer_men(None), M.sex_more_men(None)),
+                         (1.0, 0.0, 0.0, 0.0))
+        for balance in (90.0, 95.0, 100.0, 110.0):
+            self.assertEqual((M.sex_births(balance), M.sex_fewer_men(balance), M.sex_more_men(balance)), (1.0, 0.0, 0.0))
+        # the Soviet Union of 1959, 82 men per 100 women: births about -9%, women's rate about +0.09 (the design §4.4)
+        self.assertAlmostEqual(M.sex_births(82.0), 82.0 / 90.0)
+        self.assertLess(abs(M.sex_births(82.0) - 0.91), 0.01)
+        self.assertAlmostEqual(M.sex_women_add(82.0), 0.08)
+        self.assertEqual(M.sex_births(60.0), P.SEX_BIRTHS_FLOOR)
+        self.assertEqual((M.sex_fewer_men(80.0), M.sex_women_add(75.0)), (1.0, P.SEX_WOMEN_RATE))
+        self.assertEqual((M.sex_more_men(150.0), M.sex_more_men(170.0)), (1.0, 1.0))
+        self.assertAlmostEqual(M.sex_more_men(130.0), 0.5)
+
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
+    def test_the_fertility_term_scales_planned_and_unplanned_alike(self):
+        inp = dataclasses.replace(BRITAIN_1836, sex_balance=82.0)
+        fert, plain = M.fertility(inp, 40.0), M.fertility(BRITAIN_1836, 40.0)
+        self.assertAlmostEqual(fert["tfr"], plain["tfr"] * 82.0 / 90.0)
+        self.assertAlmostEqual(fert["planned"] + fert["unplanned"], fert["tfr"])
+        self.assertAlmostEqual(M.women_rate(inp), M.women_rate(BRITAIN_1836) + 0.08)
+
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
+    def test_the_step_reads_the_rings_balance_before_its_sweep(self):
+        """A ring short of men has fewer births than the same ring at its own balance."""
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        twin = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        for a in range(20, 60):
+            ring.m[(1836 - a) % P.RING_YEARS] *= 0.85
+            twin.m[(1836 - a) % P.RING_YEARS] *= 0.85
+        balance = M.structure(ring)["men_per_100_women"]
+        self.assertLess(balance, P.SEX_FEWER_FROM)
+        self.assertGreater(balance / P.SEX_FEWER_FROM, P.SEX_BIRTHS_FLOOR)
+        out = M.step(ring, AGRARIAN_1836, 1837)
+        self.assertAlmostEqual(out["fertility"]["sex"], balance / P.SEX_FEWER_FROM)
+        with unittest.mock.patch.object(M, "sex_births", lambda _b: 1.0):
+            plain = M.step(twin, AGRARIAN_1836, 1837)
+        self.assertAlmostEqual(out["births"] / plain["births"], balance / P.SEX_FEWER_FROM, places=6)
+
+    def test_a_balanced_ring_keeps_todays_births(self):
+        """The 1836 world's balances (91.5-98 in the census's 1836 save) take no term."""
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        self.assertGreater(M.structure(ring)["men_per_100_women"], P.SEX_FEWER_FROM)
+        self.assertEqual(M.step(ring, AGRARIAN_1836, 1837)["fertility"]["sex"], 1.0)
+
+    def test_the_sex_balance_effects_are_held_back(self):
+        """demographics_params.SEX_BALANCE_EFFECTS (controller's decision, 2026-10-12): off, every sex-balance term is
+        neutral, so a ring short of men steps as a balanced one would."""
+        self.assertFalse(P.SEX_BALANCE_EFFECTS)
+        for balance in (50.0, 82.0, 150.0):
+            self.assertEqual((M.sex_births(balance), M.sex_women_add(balance), M.sex_fewer_men(balance),
+                              M.sex_more_men(balance)), (1.0, 0.0, 0.0, 0.0))
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        for a in range(20, 60):
+            ring.m[(1836 - a) % P.RING_YEARS] *= 0.85
+        self.assertEqual(M.step(ring, AGRARIAN_1836, 1837)["fertility"]["sex"], 1.0)
+
+    def test_conscription_and_the_youth_bulge_are_held_back(self):
+        """Controller's decision (2026-10-12, after the review): T and y are figures the census keeps; none applies
+        while their switches are off, and when on, none below the cut-offs (the review's Minor 2)."""
+        self.assertFalse(P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+        self.assertEqual((M.conscription_applied(-0.5), M.youth_applied(0.8)), (0.0, 0.0))
+        with unittest.mock.patch.object(P, "CONSCRIPTION_EFFECTS", True), \
+                unittest.mock.patch.object(P, "YOUTH_BULGE_EFFECTS", True):
+            self.assertEqual((M.conscription_applied(-0.5), M.youth_applied(0.8)), (-0.5, 0.8))
+            self.assertEqual((M.conscription_applied(0.009), M.conscription_applied(-0.009)), (0.0, 0.0))
+            self.assertEqual((M.conscription_applied(0.01), M.youth_applied(0.019), M.youth_applied(0.02)),
+                             (0.01, 0.0, 0.02))

@@ -10,6 +10,9 @@
 ###   te_demog_sec_work         open: Work and Retirement (phase 2 step 2): the
 ###                             workforce, the pension age and its five buttons,
 ###                             the pensioners, the pension bill, health need
+###                             (phase 2 step 4 adds its Fighting-Age Men row,
+###                             te_demog_fam_row); the overview gains Youth while
+###                             a state has a youth bulge
 ###   te_demog_sec_pyramid      open: 18 five-year bands, men left, women right,
 ###                             with the outline twenty years ahead
 ###   te_demog_sec_family       open: the Family & Reproductive Policy law and
@@ -826,6 +829,17 @@ types te_demographics_widgets
 					}
 				}
 			}
+			### Phase 2 step 4 (the consequences design §4.5): shown while any of our census states has a youth bulge
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_youth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "te_demog_ov_youth_tt"
+				blockoverride "row_label" {
+					text = "te_demog_youth"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_youth_value"
+				}
+			}
 			te_demog_figure_row = {
 				tooltip = "te_demog_ov_gini_tt"
 				blockoverride "row_label" {
@@ -866,6 +880,32 @@ types te_demographics_widgets
 					}
 				}
 			}
+		}
+	}
+
+	### Fighting-Age Men (phase 2 step 4; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+	### §4.5): the pool, men aged 20 to 39, as a share of the men, and the conscription multiplier it gives, with the
+	### pool and the term on hover (held back for now: the hover says "not applied yet"). The last row of step 2's Work
+	### and Retirement section, te_demog_sec_work and te_state_demog_work. A census from before step 4 shows the pending
+	### text until its next count. Fits the figure row's cells:
+	### "Fighting-Age Men" is 16 characters, about 150 units; "100% (×1.25)" 12, about 115.
+	type te_demog_fam_row = te_demog_figure_row {
+		tooltip = "te_demog_ov_fam_tt"
+		blockoverride "row_label" {
+			text = "te_demog_fam"
+		}
+		blockoverride "row_value" {
+			text = "[SelectLocalization( GetScriptedGui('te_demog_pool_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_fam_value', 'te_demog_ov_pending' )]"
+		}
+	}
+
+	type te_state_demog_fam_row = te_demog_figure_row {
+		tooltip = "te_demog_st_fam_tt"
+		blockoverride "row_label" {
+			text = "te_demog_fam"
+		}
+		blockoverride "row_value" {
+			text = "[SelectLocalization( GetScriptedGui('te_demog_state_pool_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_fam_value', 'te_demog_st_next' )]"
 		}
 	}
 
@@ -2867,6 +2907,8 @@ types te_demographics_widgets
 						text = "te_demog_wk_need_value"
 					}
 				}
+				### phase 2 step 4 (the consequences design §4.5)
+				te_demog_fam_row = {}
 			}
 		}
 	}
@@ -3094,6 +3136,17 @@ types te_demographics_widgets
 					}
 				}
 			}
+			### Phase 2 step 4 (the consequences design §4.5): shown while the state has a youth bulge
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_state_youth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_st_youth_tt"
+				blockoverride "row_label" {
+					text = "te_demog_youth"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_youth_value"
+				}
+			}
 			te_demog_figure_row = {
 				tooltip = "te_demog_st_mig_tt"
 				blockoverride "row_label" {
@@ -3304,6 +3357,8 @@ types te_demographics_widgets
 						text = "te_demog_st_wk_need_value"
 					}
 				}
+				### phase 2 step 4 (the consequences design §4.5)
+				te_state_demog_fam_row = {}
 			}
 		}
 	}

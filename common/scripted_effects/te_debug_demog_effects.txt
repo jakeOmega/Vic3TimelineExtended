@@ -982,3 +982,86 @@ te_debug_demog_work_census_line = {
 		remove_variable = te_dg_dbg_wk_min
 	}
 }
+
+# ---- Phase 2 step 4: conscription, the youth bulge and sex balance (the consequences design §4) --------------------
+# Two once-a-game self-checks (owner, 2026-10-12; docs/testing/demographics-playtest.md, "Self-checks"), each called
+# from te_demog_consequences_refresh (te_demog_consequence_effects.txt), ROOT the state:
+#   conscription_term_read  the first state to take a fresh conscription pair (its term at least te_demog_k_conscription_cut
+#                           either way, and only while the effect is on: held back, it arms never): its
+#                           state_conscription_rate_mult before the add, then a week later (te_debug_demog.30; a modifier
+#                           sum can lag a day) whether it moved by the term. It tests the term's path into the state's
+#                           read; whether the read moves the state's potential conscripts is the play-test's item (no
+#                           script reads a state's potential conscripts: army_size_including_conscripts counts raised
+#                           ones). Another change to the field inside the week (a military technology, a law) reads as
+#                           BROKEN with its own size: the line prints both.
+#   unemployment_rate_read  the first census state whose state_unemployment_rate reads above 0.02: the read against the
+#                           pops' own count, the workforce of pops with no workplace over all the workforce. OK within a
+#                           factor of 2; BROKEN at about 100x (a percentage) or with no unemployed pops. The youth bulge
+#                           reads it as a share, 0-1 (te_demog_unemployment).
+te_debug_demog_conscription_selfcheck_start = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_selfcheck_consc_done }
+			NOT = { has_modifier = te_demog_census_conscription_up }
+			NOT = { has_modifier = te_demog_census_conscription_down }
+			# a pair the refresh will add: the effect on (held back, it adds none, and the check would read a false
+			# BROKEN) and a term past the cut-off
+			te_demog_k_conscription_effects > 0
+			te_demog_conscription_size >= te_demog_k_conscription_cut
+		}
+		set_global_variable = { name = te_demog_selfcheck_consc_done value = yes }
+		set_variable = { name = te_dg_chk_consc_before value = modifier:state_conscription_rate_mult }
+		set_variable = { name = te_dg_chk_consc_t value = var:te_dg_mc }
+		debug_log = "TE_SELF_CHECK START conscription_term_read term=[THIS.ScriptValue('te_debug_demog_consc_chk_t')|3] before=[THIS.ScriptValue('te_debug_demog_consc_chk_before')|3] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+		trigger_event = { id = te_debug_demog.30 days = 7 }
+	}
+}
+
+te_debug_demog_unemployment_selfcheck = {
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			NOT = { has_global_variable = te_demog_selfcheck_unemp_done }
+			state_unemployment_rate > 0.02
+		}
+		set_global_variable = { name = te_demog_selfcheck_unemp_done value = yes }
+		set_local_variable = { name = te_dg_chk_wf value = 0 }
+		set_local_variable = { name = te_dg_chk_un value = 0 }
+		every_scope_pop = {
+			change_local_variable = { name = te_dg_chk_wf add = workforce }
+			if = {
+				limit = { NOT = { exists = workplace } }
+				change_local_variable = { name = te_dg_chk_un add = workforce }
+			}
+		}
+		set_variable = { name = te_dg_chk_unemp_est value = { value = local_var:te_dg_chk_un divide = { value = local_var:te_dg_chk_wf min = 1 } } }
+		set_variable = { name = te_dg_chk_unemp_read value = te_demog_unemployment }
+		set_variable = { name = te_dg_chk_unemp_ratio value = { value = var:te_dg_chk_unemp_read divide = { value = var:te_dg_chk_unemp_est min = 0.00001 } } }
+		if = {
+			limit = {
+				var:te_dg_chk_unemp_est >= 0.005
+				var:te_dg_chk_unemp_ratio >= 0.5
+				var:te_dg_chk_unemp_ratio <= 2
+			}
+			debug_log = "TE_SELF_CHECK OK unemployment_rate_read read=[THIS.Var('te_dg_chk_unemp_read').GetValue|3] pops=[THIS.Var('te_dg_chk_unemp_est').GetValue|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN unemployment_rate_read read=[THIS.Var('te_dg_chk_unemp_read').GetValue|3] pops=[THIS.Var('te_dg_chk_unemp_est').GetValue|3] (about 100 x pops: the read is a percentage, divide te_demog_unemployment by 100; pops near 0 or far apart: the youth bulge reads the wrong figure, take the walk's own count instead, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+		remove_variable = te_dg_chk_unemp_est
+		remove_variable = te_dg_chk_unemp_read
+		remove_variable = te_dg_chk_unemp_ratio
+	}
+}
+
+# ---- t: phase 2 step 4's figures (the consequences design §4) -------------------------------------------------------
+# THIS = ROOT = the player. The capital's pool, conscription term, youth bulge and sex-balance terms (TE_DEMOG_CONSEQ),
+# and the country's (TE_DEMOG_CONSEQ_COUNTRY): what the panel shows and what the four modifiers carry.
+te_debug_demog_consequence_lines = {
+	capital = {
+		debug_log = "TE_DEMOG_CONSEQ fam=[THIS.ScriptValue('te_debug_demog_cq_fam')|0] faw=[THIS.ScriptValue('te_debug_demog_cq_faw')|0] people=[THIS.ScriptValue('te_debug_demog_cq_people')|0] share=[THIS.ScriptValue('te_demog_fam_share')|4] men_share=[THIS.ScriptValue('te_demog_fam_men_share')|3] term=[THIS.ScriptValue('te_demog_conscription_term')|3] mc=[THIS.ScriptValue('te_debug_demog_cq_mc')|3] consc_mod=[THIS.ScriptValue('te_debug_demog_cq_consc_mod')|3] youth=[THIS.ScriptValue('te_demog_youth_share')|3] unemp=[THIS.ScriptValue('te_demog_unemployment')|3] y_now=[THIS.ScriptValue('te_demog_youth_bulge_now')|3] yb=[THIS.ScriptValue('te_debug_demog_cq_yb')|3] sex=[THIS.ScriptValue('te_debug_demog_cq_sex')|1] sxb=[THIS.ScriptValue('te_debug_demog_cq_sxb')|1] tfr_sex=[THIS.ScriptValue('te_demog_tfr_sex')|3] women_add=[THIS.ScriptValue('te_demog_sex_women_add')|3] fewer=[THIS.ScriptValue('te_demog_sex_fewer_men')|3] more=[THIS.ScriptValue('te_demog_sex_more_men')|3] radicals_mod=[THIS.ScriptValue('te_debug_demog_cq_radicals_mod')|3] turmoil_mod=[THIS.ScriptValue('te_debug_demog_cq_turmoil_mod')|3] feminist_mod=[THIS.ScriptValue('te_debug_demog_cq_feminist_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	debug_log = "TE_DEMOG_CONSEQ_COUNTRY fam_share=[THIS.ScriptValue('te_debug_demog_cq_c_share')|4] fam_men=[THIS.ScriptValue('te_debug_demog_cq_c_men')|3] term=[THIS.ScriptValue('te_demog_country_conscription')|3] youth=[THIS.ScriptValue('te_demog_country_youth_share')|3] yb_states=[THIS.ScriptValue('te_debug_demog_cq_c_yb_n')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+}

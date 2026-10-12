@@ -261,6 +261,74 @@ PENSION_AI_DEBT = 0.25
 PENSION_AI_UNEMPLOYMENT = 0.1
 PENSION_AI_UNEMPLOYMENT_LOW = 0.05
 
+# ---- Phase 2 step 4: conscription, the youth bulge and sex balance ----------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4 and §5. The figures are the census's
+# (Full and Display only); the four state modifiers act under Full only. `demographics_harness.py consequences` checks
+# every band against the model's structures and the saves given.
+# The pool (late-game call 21): men of calendar age POOL_FROM or more and biological age POOL_TO or less, summed in the
+# sweep through step 1's two indexes; before phase 3, men aged 20-39. The war dead come from the same ages (§4.2), their
+# women's share from the women of those ages.
+POOL_FROM = 20                 # calendar: legal adulthood
+POOL_TO = 39                   # biological: fitness
+# Conscription T = clamp(the pool / people / CONSCRIPTION_REF - 1, CONSCRIPTION_MIN, CONSCRIPTION_MAX) on
+# state_conscription_rate_mult (§4.1). The reference is the 1836 save's world, people-weighted: 0.1389 in the census's
+# own seeded bands (the overnight Full run's 1836.2.1 save) and 0.1390 in the model's 1836 agrarian stable structure
+# (starting value 0.14). No floor but -1 (call 21); parent §7's -0.25 floor is gone.
+CONSCRIPTION_REF = 0.139
+CONSCRIPTION_MIN = -1.0
+CONSCRIPTION_MAX = 0.25
+# Held back (controller's decision, 2026-10-12, after the review of step 4), with the youth bulge and the sex balance:
+# T reads the same men the census's migrant booking distorts (SEX_BALANCE_EFFECTS, below). In the overnight Full run's
+# 1848 save 32 states sat at T -0.5 or below (2-37 men per 100 women) and 134 (15%) at the +0.25 ceiling (115-145);
+# 29.5-34.6% of people lived in states past +-0.05 in 1848-1904. The census computes and stores T (te_dg_mc, Full) and
+# the panel shows it, but no pair is applied until the follow-up on the migrant booking turns all three on together.
+# The generator writes it as te_demog_k_conscription_effects; `demographics_harness.py consequences --effects`.
+CONSCRIPTION_EFFECTS = False
+# When it applies, no pair below this |T| (the review's Minor 2: a term that small isn't worth a modifier line).
+CONSCRIPTION_CUT = 0.01
+# The youth bulge (§4.3): y = clamp((the share aged 20-29 - YOUTH_FROM) / YOUTH_SPAN, 0, 1) x clamp(unemployment /
+# YOUTH_UNEMPLOYMENT_FULL, 0, 1), on one state modifier at multiplier y. The census's 1836 share is 0.159 in every
+# state (the spec's sketch said about 0.17); a sharp transition's peak in the model is 0.20-0.23. Kept at the spec's
+# starting values: they meet the bands.
+YOUTH_AGES = (20, 29)          # calendar (life stage)
+YOUTH_FROM = 0.18
+YOUTH_SPAN = 0.06
+YOUTH_UNEMPLOYMENT_FULL = 0.2
+YOUTH_RADICALS = 0.15          # state_radicals_from_political_movements_mult at y = 1
+YOUTH_TURMOIL = 0.10           # state_turmoil_effects_mult at y = 1
+# Held back with conscription (above): 73% of the 1898 save's bulge states sit outside 90-110 men per 100 women, so the
+# bulges are mostly the migrant booking's young men. The census computes and stores y (te_dg_yb, Full) and the panel
+# shows it; no modifier applies until the follow-up. Written as te_demog_k_youth_effects.
+YOUTH_BULGE_EFFECTS = False
+YOUTH_CUT = 0.02               # when it applies, no modifier below this y
+# Sex balance (§4.4, call 10), on te_dg_sex_balance (men per 100 women aged 20-59). The census's adults run 91.5-98 men
+# per 100 women in every 1836 state (male deaths from work, accidents and violence), so an effect measured from 100
+# would fall on every state in peace: the fewer-men effects start below SEX_FEWER_FROM instead, just under 1836's lowest
+# state. Children per woman x the balance / SEX_FEWER_FROM, at most 1 and at least SEX_BIRTHS_FLOOR (fewer marriages):
+# the spec's square-root rule from 100 gave -9% at the Soviet Union's 82 of 1959; from 90 a straight ratio keeps that
+# anchor (-8.9%) where the square root would give -4.6%. The floor is parent §3's "capped". The women's rate gains up to
+# SEX_WOMEN_RATE and feminist movement support up to SEX_FEMINIST, both full at SEX_FEWER_FULL. More men than women:
+# radicals from movements up to SEX_RADICALS, from SEX_MORE_FROM to full at SEX_MORE_FULL (Bare Branches).
+# Held back (controller's decision, 2026-10-12), as conscription and the youth bulge are (above), and for the same cause:
+# the census computes, stores and shows the sex balance, but none of its
+# effects apply: not the births term, the women's-rate addition, feminist support or the radicals line. The census
+# books every unexplained residual as migrants by its profile, labour migrants 90% aged 18-35 and mostly men, which
+# hollows out the men of famine-hit states: in the overnight Full run's 1848-1904 saves 37-41% of states sat at one effect
+# or the other against the design's "under 2% in peace" (Hyderabad 50 men per 100 women in 1898, the Central Provinces
+# 28). A follow-up PR on the residual's migrant booking comes first; then all three switches go to True together. The
+# generator writes it as te_demog_k_sex_effects; `demographics_harness.py consequences --effects` judges the band as if it
+# were on. Children per woman's breakdown then gains a "Few men to marry" line (te_demog_tfr_sex), left out meanwhile.
+SEX_BALANCE_EFFECTS = False
+SEX_FEWER_FROM = 90.0
+SEX_FEWER_FULL = 80.0
+SEX_BIRTHS_FLOOR = 0.8
+SEX_WOMEN_RATE = 0.1
+SEX_FEMINIST = 0.10            # state_pop_support_movement_feminist_mult (a percentage; the _add form is not one)
+SEX_MORE_FROM = 110.0
+SEX_MORE_FULL = 150.0
+SEX_RADICALS = 0.10            # state_radicals_from_political_movements_mult at full
+
+
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of
 # its section 7 calls; Birth Spacing's cut at 0.35); plan docs/superpowers/plans/2026-10-11-demographics-late-marriage.md.
@@ -444,8 +512,8 @@ FEMALE_WORK_SHARE = {
 FEMALE_WORK_SHARE_DEFAULT = 0.1
 
 # ---- War dead and migrants (§2.5) -------------------------------------------------
+# The war dead come from the conscription pool's ages (phase 2 step 4, below: POOL_FROM, POOL_TO), 95% of them men.
 WAR_DEAD_MALE_SHARE = 0.95
-WAR_DEAD_AGES = (18, 40)
 RESIDUAL_NOISE_SHARE = 0.003   # a residual under 0.3% of the population is model error
 # The engine's starvation scaling (vanilla 00_defines.txt, 1.14.5; the mod leaves these alone): a pop's
 # starvation value is clamp((the first threshold - food security) x the factor, 0, 1), which the save stores per
