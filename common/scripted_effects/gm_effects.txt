@@ -1078,42 +1078,56 @@ gm_state_tear_down = {
 # Rebuilt at half its level (rounded up, at most 200: the ladder's reach) and
 # dedicated again under current laws. No effect removes levels, so the old
 # building goes and a new one is built (nuclear_strike_halve_building's path).
+#
+# The work runs only under a marker set here: a button's or an option's
+# tooltip walks this body every frame it shows, testing each limit and writing
+# nothing, so the reads of gm_rebuild_cost and gm_rebuild_level found them
+# unset (~600 error lines a frame through the level switch's 200 cases while
+# the Rededicate button was hovered, 2026-10-12). Every caller already shows
+# gm_rededicate_tt in place of these effects (gm_state_choose_rededicate) or
+# needs no tooltip (the AI), so the guard hides nothing
+# (scripting_best_practices.md § "An Option's Tooltip Walks Its Effects").
 gm_state_rededicate = {
-	set_variable = { name = gm_grandeur value = gm_state_grandeur }
-	# Minor 3: guard the rebuild's own on_building_built (monument_events.1)
-	# against vanity backlash for a level it did not earn — the Rededicate
-	# tooltip never mentions that risk. A short flag, not a container, so
-	# container_timed_variable_audit does not apply.
-	set_variable = { name = gm_rebuilding days = 1 }
-	set_variable = { name = gm_rebuild_cost value = gm_state_rededicate_cost }
-	owner = {
-		add_treasury = {
-			value = prev.var:gm_rebuild_cost
-			multiply = -1
+	set_variable = gm_rededicate_click
+	if = {
+		limit = { has_variable = gm_rededicate_click }
+		remove_variable = gm_rededicate_click
+		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		# Minor 3: guard the rebuild's own on_building_built (monument_events.1)
+		# against vanity backlash for a level it did not earn — the Rededicate
+		# tooltip never mentions that risk. A short flag, not a container, so
+		# container_timed_variable_audit does not apply.
+		set_variable = { name = gm_rebuilding days = 1 }
+		set_variable = { name = gm_rebuild_cost value = gm_state_rededicate_cost }
+		owner = {
+			add_treasury = {
+				value = prev.var:gm_rebuild_cost
+				multiply = -1
+			}
+			gm_init_ledgers = yes
 		}
-		gm_init_ledgers = yes
-	}
-	gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -0.5 }
-	set_variable = {
-		name = gm_rebuild_level
-		value = {
-			value = var:gm_grandeur
-			divide = 2
-			ceiling = yes
-			max = 200
+		gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -0.5 }
+		set_variable = {
+			name = gm_rebuild_level
+			value = {
+				value = var:gm_grandeur
+				divide = 2
+				ceiling = yes
+				max = 200
+			}
 		}
+		remove_building = building_grand_monument
+		# A landmark keeps its look and picture; the ceremony and the unveiling
+		# give it a new dedication and a new name (phase 4 §3.3).
+		gm_clear_state = { KEEP_LANDMARK = yes }
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = building_grand_monument
+			SPEC_LEVEL = var:gm_rebuild_level
+		}
+		remove_variable = gm_rebuild_level
+		remove_variable = gm_rebuild_cost
+		gm_state_start_ceremony = yes
 	}
-	remove_building = building_grand_monument
-	# A landmark keeps its look and picture; the ceremony and the unveiling
-	# give it a new dedication and a new name (phase 4 §3.3).
-	gm_clear_state = { KEEP_LANDMARK = yes }
-	te_construction_market_build_specified_level = {
-		SPEC_TYPE = building_grand_monument
-		SPEC_LEVEL = var:gm_rebuild_level
-	}
-	remove_variable = gm_rebuild_level
-	remove_variable = gm_rebuild_cost
-	gm_state_start_ceremony = yes
 }
 
 gm_state_preserve = {
