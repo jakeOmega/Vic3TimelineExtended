@@ -447,6 +447,9 @@ group and method, the slot modifier, the row's labels and tooltips, and `gm_name
 
 ## 4. Monuments standing in 1836 (phase 4)
 
+**Superseded (2026-10-12)** by `2026-10-12-grand-monuments-landmarks-design.md`: twelve landmarks instead of the four
+below, each its own locked skin with a stand-in picture, never offered in `monument_events.11`.
+
 Placed in `common/history/extra_history.txt` (or a new `common/history/grand_monuments_history.txt` if the order
 allows), each with its dedication PM, `gm_raised_by` = its owner, `gm_seen`, a landmark skin and the landmark namesake:
 
