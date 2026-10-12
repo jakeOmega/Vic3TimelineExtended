@@ -2606,6 +2606,17 @@ PICTURES = {
     1000010: ("landmark_stelae_of_aksum", "stele", None),
     1000011: ("landmark_liberty_column", "obelisk", None),
     1000012: ("landmark_lion_monument", "statue", None),
+    1000013: ("landmark_temple_of_heaven", "hall", None),
+    1000014: ("landmark_topkapi_palace", "gate", None),
+    1000015: ("landmark_golestan_palace", "hall", None),
+    1000016: ("landmark_basilica_of_superga", "mausoleum", None),
+    1000017: ("landmark_tomb_of_william_the_silent", "mausoleum", None),
+    1000018: ("landmark_cenotaph_of_maximilian", "mausoleum", None),
+    1000019: ("landmark_arco_de_santa_maria", "gate", None),
+    1000020: ("landmark_statue_of_louis_xiv", "statue", None),
+    1000021: ("landmark_lion_of_saint_mark", "column", None),
+    1000022: ("landmark_sans_souci_palace", "hall", None),
+    1000023: ("landmark_nikko_toshogu", "gate", None),
 }
 # Codes of pairs no monument can reach any more (a retired form or style).
 RETIRED_PICTURES = set()
@@ -2647,7 +2658,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_state_update_picture"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 92)
+        self.assertEqual(len(PICTURES), 103)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():
