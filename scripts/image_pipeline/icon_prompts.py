@@ -1516,9 +1516,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
         # Batch 5. Megastructure was left on basic_construction in batch 4: a space elevator, a lattice
         # tower and an orbital ring drew a radio mast, an oil derrick and a station on a pale disc that
-        # broke the badge style. Batch 5: a tower above clouds lost its disc (the sky was matted out
-        # with the ground), so the dome, with no sky in the subject.
-        "company_megastructure_consortium": {"subject": "a huge half-built steel geodesic dome under two tall construction cranes", "seed": None},
+        # broke the badge style. Batch 5: the tower above clouds mostly lost its disc (the sky was matted
+        # out with the ground); the owner took s3, whose disc partly survives (2026-10-11).
+        "company_megastructure_consortium": {"subject": "a colossal stepped skyscraper tower rising high above a layer of white clouds, two tiny construction cranes on its unfinished top", "seed": 3},
         # "Unnamed Monument", the Grand Monuments name carrier: shown in the rename popup while a monument is named.
         "company_gm_name_carrier": {"subject": "a blank smooth grey granite dedication plaque standing upright, a stonemason's wooden mallet and steel chisel resting against its foot", "seed": 2},
     },
@@ -1609,9 +1609,8 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     # Batch 5: the mod's diplomatic plays on a vanilla war goal's picture.
     "war_goal": {
-        # War After a Nuclear Exchange, on Humiliation's boots on a flag. Reroll: "a small grey
-        # mushroom cloud" drew a pale puff like a cauliflower.
-        "dp_nuclear_exchange": {"subject": "a tall grey mushroom cloud with a wide rounded cap on a narrow column of smoke, rising from a cracked and scorched slate-blue map tile of land, muted slate-blue and grey colours", "seed": None},
+        # War After a Nuclear Exchange, on Humiliation's boots on a flag. s3, the owner's pick (2026-10-11).
+        "dp_nuclear_exchange": {"subject": "a cracked and scorched slate-blue map tile of land with a small grey mushroom cloud rising from its centre, muted slate-blue and grey colours", "seed": 3},
     },
     # The Timeline Extended window's launcher, on vanilla's Journal button until now.
     "sidebar_button": {
