@@ -22,7 +22,9 @@ Phase 4 builds the landmark mechanism. If phase 6 (historical commissions) is bu
 |---|---|
 | Order | Phase 4 is built **after the pictures PR**: both change `FORMS`, the `gm_state_form_fits_*` triggers, `test_grand_monument_registry.py` and `gm_name_effects.txt`. Then phase 5 (trophies). Phase 6 (historical commissions) stays in the plan, unscheduled |
 | What a landmark is | **Its own skin**, `landmark_<key>`, with one form from the existing roster. The pair gets its own picture, and the monument carries its historical name |
-| Locked | **A landmark keeps its skin, form and name while it stands**: through contest, heritage, Rededicate, conquest and civil war. Pull Down, or demolition from the building panel, ends it |
+| Locked | **A landmark keeps its skin and form, and so its picture, while it stands**: through contest, heritage, Rededicate, conquest and civil war. Pull Down, or demolition from the building panel, ends it |
+| Its name | Kept through contest, heritage, conquest and civil war. **Rededicate gives it a new name by default** (§3.3): "Alexander Column — To the Republic" reads wrong. The namesake choice offers the historical name back |
+| The civic-progress technologies | Removed from the three dedication methods that carry them, and checked in the ceremony and at first sight instead (§6). A method whose technology the owner lacks is switched away by the engine (owner, 2026-10-12) |
 | Picture codes | Landmarks start at **1,000,000**, in `LANDMARKS` order: append-only, like the pictures spec's codes |
 | Before its icon exists | It shows a **stand-in picture**: an existing skin and form pair named in its row |
 | Who gets one | Minor countries too, not only the great powers |
@@ -33,8 +35,9 @@ Phase 4 builds the landmark mechanism. If phase 6 (historical commissions) is bu
 
 Two calls made in writing this spec, for review:
 
-1. **Rename and Name It are greyed out on a landmark** ("A landmark keeps its historical name"). The lock covers the
-   name as well as the picture, so a landmark can't become "the Paris Arch".
+1. **Rename and Name It are greyed out while a landmark carries its historical name** ("A landmark keeps its
+   historical name"), so the Arc de Triomphe can't become "the Paris Arch". Once a rededication has renamed it, both
+   work as for any monument.
 2. **The AI preserves a contested landmark more readily** (§5.3), as history mostly did: the Soviets kept the Alexander
    Column.
 
@@ -45,9 +48,10 @@ Two calls made in writing this spec, for review:
   with a `# REVIEWED` comment for the audit that flags the key. Since 1.13.9 it checks the building's unlocking
   technology. `building_grand_monument` has none.
 - **Three dedication methods have a technology:** `pm_monument_artistic` and `pm_monument_naturalist` need Romanticism,
-  and `pm_monument_scientific` needs Empiricism. It is **unverified** whether a method that script activates, and whose
-  technology the owner lacks, stays active. Five landmarks are civic-progress buildings. Check 3 in §8 tests this, and
-  §6 gives the fallback.
+  and `pm_monument_scientific` needs Empiricism. **The engine switches a building off a method whose unlocking
+  technology the owner lacks**, onto another allowed one (owner, 2026-10-12). Five landmarks are civic-progress
+  buildings, and several owners won't have the technology in 1836. Under the ratchet the dedication may have no allowed
+  alternative, so the outcome is uncertain either way; §6 removes the question.
 - **A game rule read during history can still change in the lobby.** `on_game_started_after_lobby` (ROOT none) runs once
   the rules are final, which is how the construction market converts what history placed
   (`scripting_best_practices.md` § "Gating a Mechanic on a Game Rule…"). Landmarks are placed there, behind
@@ -59,8 +63,7 @@ Two calls made in writing this spec, for review:
   the first refresh after placement. It sets a default skin only when there is none. A landmark therefore needs no
   dedication records of its own; it sets only the landmark records (§3.1).
 - **Monuments are recorded on the state**, because buildings hold no variables. `gm_skin` and `gm_form` are each read
-  about 150 times. The building's dedication is its production method. Both facts rule out two monuments in one state
-  (Out of scope).
+  about 150 times. That rules out two monuments in one state (Out of scope).
 - **History has no record of 1836 owners in this repository.** The committed `vanilla_parsed/` snapshot leaves out
   `common/history/states`, and no server endpoint answers the question (issue #901). The owners in §2 are checked
   against the game files before implementation.
@@ -73,7 +76,7 @@ A landmark is an ordinary Grand Monument with five things set:
 |---|---|---|
 | `gm_landmark` | `flag:<key>` | Marks a landmark and locks it (§3) |
 | `gm_skin` | `flag:landmark_<key>` | Its own skin. Gives the name (`gm_skin_landmark_<key>`) and the picture |
-| `gm_form` | One form from the roster (§2) | Unchanged by the lock. Phase 5 reads it for the trophy share |
+| `gm_form` | One form from the roster (§2) | Locked with the skin. Phase 5 reads it for the trophy share |
 | `gm_namesake` | `flag:landmark` | A new namesake whose name pattern prints the skin's name (§4) |
 | `gm_ceremony_level` | Its level | So it never reads as the engine's copy |
 
@@ -166,30 +169,48 @@ gm_seed_landmark = { KEY = arc_de_triomphe STATE = STATE_ILE_DE_FRANCE TAG = FRA
 
 A save from before phase 4 gets no landmarks. A debug option places them (§7).
 
-### 3.2 Every writer of skin, form and name skips a landmark
+### 3.2 What the lock changes
 
-A state trigger, `gm_state_is_landmark` (`has_variable = gm_landmark`), gates each one:
+Two state triggers gate the writers: `gm_state_is_landmark` (`has_variable = gm_landmark`) locks the skin and form, and
+`gm_state_has_historical_name` (a landmark whose `gm_namesake` is `landmark`) locks the name.
 
 | Writer | What it does today | For a landmark |
 |---|---|---|
-| `gm_state_offer_skins` (and `_faith`, `_heritage`) | Sets `gm_skin = generic`, then the default, then `.11` for players | Skips everything but the refresh it sends |
+| `gm_state_offer_skins` (and `_faith`, `_heritage`) | Sets `gm_skin = generic`, then the default, then `.11` for players | Leaves the skin and asks nothing. It sets `gm_unveil_pending` and sends the refresh, the path a monument with one fitting skin already takes |
 | `gm_state_set_default_skin` (first sight) | Sets a skin when there is none | Already a no-op (a landmark has its skin) |
-| `gm_state_unveil` | Sets the default form and namesake; for players, `.24` and `.25` | Skipped |
-| `gm_state_set_default_form`, `gm_state_name_if_unnamed` | Name a monument with none | Already a no-op (a landmark has form and namesake) |
-| `gm_rename_sgui` | Reruns `.24` / `.25` | Greyed out: "A landmark keeps its historical name" |
-| `gm_name_start_sgui` (Name It, typed names) | Opens the rename popup | Greyed out, same tooltip |
-| `gm_com_fulfil` | Renames the monument that met a commission (`gm_state_take_commission_name`) | No rename. The commission is still met |
-| `gm_clear_state`, from `gm_state_rededicate` | Clears every record before the rebuild | Keeps `gm_landmark`, `gm_skin`, `gm_form` and `gm_namesake` |
+| `gm_state_unveil` | Sets the default form and namesake; for players, `.24` and `.25` | Skips the form and `.24`. Names it as any monument (§3.3) |
+| `gm_state_set_default_form` | Sets the skin's default form | Skipped |
+| `gm_state_name_if_unnamed` | Names a monument with no namesake | Unchanged (it never sees a named landmark) |
+| `gm_rename_sgui` | Reruns `.24` / `.25` | Greyed out while it carries its historical name: "A landmark keeps its historical name". After a rededication renames it, Rename runs `.25` only |
+| `gm_name_start_sgui` (Name It, typed names) | Opens the rename popup | Greyed out while it carries its historical name |
+| `gm_com_fulfil` | Renames the monument that met a commission (`gm_state_take_commission_name`) | No rename while it carries its historical name. The commission is still met |
+| `gm_clear_state`, from `gm_state_rededicate` | Clears every record before the rebuild | Keeps `gm_landmark`, `gm_skin` and `gm_form`. The name goes with the rest |
 | `gm_clear_state`, from `gm_state_tear_down` and from demolition (`gm_state_monthly`'s else branch) | Clears every record | Clears them all, `gm_landmark` included: the landmark is gone |
 
 `gm_clear_state` gains a parameter, `KEEP_LANDMARK = yes/no`. Only Rededicate passes `yes`. Every caller passes it
 explicitly, which `script_argument_audit` enforces.
 
-**Rededicate on a landmark:** the building is rebuilt at half its level, as for any monument, and the ceremony picks a
-new dedication. The skin, form and name stay. A rededicated Alexander Column is still the Alexander Column, now To the
-Republic.
+### 3.3 Rededication renames it
 
-**Undedicated:** a landmark left undedicated by a rededication's ceremony still shows its own picture (§5.1).
+A rededicated landmark keeps its look but stands for something new, so by default it takes a new name. The building is
+rebuilt at half its level, as for any monument, and the ceremony picks a new dedication. Then:
+
+- **The unveiling names it** as it names any newly dedicated monument. The AI takes the city: "The St Petersburg
+  Column — To the Republic", still with the Alexander Column's picture. A player gets the namesake choice
+  (`monument_events.25`).
+- **`.25` gains an option, "Its historical name"**, shown only for a monument on a landmark skin. It sets
+  `gm_namesake = landmark` again. A restored crown can put the Alexander Column back.
+- The name prints through the form, which the lock keeps: a rededicated Washington Monument is "the Baltimore
+  Column".
+
+Only a contested monument can be rededicated, and only bound dedications (Crown, Republic, Revolution, Leader, Shrine)
+are contested. Among the twelve, that means the Alexander Column and the Washington Monument.
+
+History has both kinds of case. The Ochterlony Monument in Calcutta became the Shaheed Minar in 1969. The Alexander
+Column kept its name under the Soviets, which a player can choose too.
+
+**Undedicated:** a landmark left undedicated by a rededication's ceremony still shows its own picture (§5.1). It has no
+namesake, so its name falls back to the skin's: the historical name.
 
 ## 4. Its name
 
@@ -233,17 +254,19 @@ None of their own (§1).
 `gm_ai_decide_contests` multiplies **Preserve's weight ×3** for a landmark. Tear Down ends a landmark for good, and
 history mostly kept these monuments.
 
-## 6. Fallback: a civic-progress landmark whose technology the owner lacks
+## 6. The civic-progress technologies
 
-**If check 3 in §8 fails**, the method doesn't hold without its technology (for example, Rajputana in 1836 without
-Empiricism). Then:
+The engine switches a building off a method whose unlocking technology its owner lacks (Engine facts). Rajputana in 1836
+without Empiricism would lose the Jantar Mantar's dedication, so phase 4 moves the gate out of the methods:
 
 - Remove `unlocking_technologies` from `pm_monument_artistic`, `_naturalist` and `_scientific`. The ceremony's options
-  already test the technology (`TECH_GATES` in the registry test).
-- Add the same test to `gm_state_first_sight`: a panel pick made without the technology goes back to the ceremony, as
-  a copied dedication does.
+  already test the technology (`TECH_GATES` in the registry test), so the ceremony is unchanged.
+- The building panel would now offer the three to an undedicated monument without the technology. `gm_state_first_sight`
+  catches such a pick: a monument that is not a landmark and stands on one of the three without its technology goes to
+  the ceremony, as a copied dedication does. Its options are gated, so the answer replaces the pick.
+- A landmark is exempt: it stands on its historical dedication whatever its owner has researched.
 
-This keeps the gate for players and lets a landmark stand on its historical dedication.
+Monuments in existing saves are unaffected: each was dedicated with the technology in hand.
 
 ## 7. Tests and tools
 
@@ -264,9 +287,13 @@ stand-in (skin, form), level. It is the checklist for adding a landmark. The tes
 
 **The lock.** One test per row of §3.2:
 
-- each writer has its `gm_state_is_landmark` gate;
-- `gm_clear_state` keeps the four records only under `KEEP_LANDMARK = yes`, and only `gm_state_rededicate` passes `yes`;
-- `NAMESAKES` gains `landmark`, and `gm_monument_name_row` and `_evt` have its branch ahead of the year fallback.
+- each writer has its gate (`gm_state_is_landmark` or `gm_state_has_historical_name`);
+- `gm_clear_state` keeps the three records only under `KEEP_LANDMARK = yes`, and only `gm_state_rededicate` passes `yes`;
+- `NAMESAKES` gains `landmark`, and `gm_monument_name_row` and `_evt` have its branch ahead of the year fallback;
+- `monument_events.25` has the "Its historical name" option, gated on a landmark skin.
+
+**The technologies (§6):** the three methods carry no `unlocking_technologies`, the ceremony's `TECH_GATES` stand, and
+`gm_state_first_sight` has the tech check with its landmark exemption.
 
 **Debug** (`te_debug_monuments`):
 
@@ -286,13 +313,15 @@ stand-in (skin, form), level. It is the checklist for adding a landmark. The tes
 1. A new game: the twelve stand at their levels, named, with their dedications. Their owners' journal entries are open
    by the first refresh, and no ceremony fires for any of them.
 2. With the game rule off in the lobby, none is placed.
-3. **The technology question (§6):** La Scala, San Carlo, Jantar Mantar, the Shalimar Gardens and the Jardim Botânico
-   keep their dedications in countries without Romanticism or Empiricism. If not, apply §6.
+3. **The technologies (§6):** La Scala, San Carlo, Jantar Mantar, the Shalimar Gardens and the Jardim Botânico keep
+   their dedications in countries without Romanticism or Empiricism. Then, in a country without Romanticism, pick the
+   Grand Opera House for an undedicated monument in the building panel: the ceremony opens, with that option greyed.
 4. Each shows its stand-in picture (or its own, once drawn) in the row and on the state card.
-5. Rename and Name It are greyed out on a landmark, with the tooltip.
+5. Rename and Name It are greyed out on a landmark with its historical name, with the tooltip.
 6. Contest the Alexander Column (playing Russia, `event te_debug_monuments.1`, option c, which contests the tallest
    regime monument). Then:
-   - Rededicate: the rebuilt monument keeps its name and picture under the new dedication.
+   - Rededicate: the rebuilt monument keeps its picture under the new dedication, and the namesake choice offers a new
+     name or "Its historical name". As the AI, it takes the city's name. Rename works afterwards.
    - Keep as Heritage: it keeps everything.
    - Pull Down: it's gone, and a new monument in Ingria is an ordinary one.
 7. A commission met by raising a landmark doesn't rename it.
@@ -303,9 +332,12 @@ stand-in (skin, form), level. It is the checklist for adding a landmark. The tes
 `02-timeline.md` § Grand monuments gets one short paragraph:
 
 - some monuments stand at the start, with a few named as examples;
-- a historical monument keeps its look and name through contest and rededication;
+- a historical monument keeps its look through contest and rededication, and its name unless it is rededicated;
 - only Pull Down or demolition ends it;
-- Rename is greyed out on one.
+- Rename is greyed out while it carries its historical name.
+
+The three civic-progress buildings' technologies don't change for players (the ceremony still asks for them), so that
+needs no guide edit.
 
 No reference table, which would be more than the guide's peers carry. Rebuild the PDF.
 
@@ -313,12 +345,15 @@ No reference table, which would be more than the guide's peers carry. Rebuild th
 
 - **Phase 5 (trophies).** Notes for its spec are in Appendix A.
 - **Phase 6 (historical commissions).** Rules and candidates are in Appendix B.
-- **Two monuments in one state.** The engine merges one building type's levels in a state into one building. A level-10
-  building could be counted as two level-5 monuments for effects, which are modifiers anyway. But each monument's
-  records live on the state under fixed names, and its dedication is the building's single production method, so a
-  second monument needs a second copy of both and of every reader. If this is ever wanted, the cheaper version is giving
-  the five civic-progress buildings their own building type: they carry fewer records, and most capital clashes are a
-  civic-progress building against a political monument.
+- **Two monuments in one state.** The engine merges one building type's levels in a state into one building, but a
+  level-10 building could be counted as two level-5 monuments. The production method isn't the obstacle: it carries only
+  the caretaker staff, and every effect is a modifier that script computes, so the dedication could move into a state
+  variable and the effects could follow the split. The obstacle is the records. Each monument's skin, form, name,
+  status, contest records and picture live on the state under fixed names (`gm_skin` and `gm_form` alone are read about
+  150 times), so a second monument needs a second copy of all of them and of every reader. If this is ever wanted, the
+  cheaper version is giving the five civic-progress buildings their own building type: they carry fewer records (never
+  contested, no honoree, a fixed form), and most capital clashes are a civic-progress building against a political
+  monument.
 - **Landmarks for old saves**, except through the debug option.
 - **The landmark icons themselves**, which belong to the icon session.
 
@@ -349,8 +384,12 @@ From the conversation of 2026-10-11:
 - no great/major-power gate;
 - declining or missing one costs nothing.
 
-**Proposed, not yet decided:** each is offered once per game, to whoever holds the state, from the year its
-construction began historically (v2 §7 used completion years for most), for 40 years.
+**Proposed, not yet decided:** each is offered once per game, to whoever holds the state, for 40 years. **From when:**
+
+- **The year construction began** (proposed). A commission then takes the player about as long as history took: 5 to
+  10 years for 5 or 10 levels. The monument stands about when the real one did.
+- **The year it was completed** (v2 §7's choice for most). The monument then stands 5 to 10 years after the real one:
+  Walhalla around 1850 instead of 1842.
 
 **Candidates that pass the rules** (state, dedication, skin · form, target). O'Connell Tower is borderline: O'Connell
 is a figure from before 1836, but the tower marks his death in 1847.
