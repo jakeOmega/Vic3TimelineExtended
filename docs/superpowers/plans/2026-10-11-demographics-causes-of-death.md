@@ -1497,7 +1497,7 @@ The identity and its departures are in "What the code says" §2.
 - The discriminating case is a pop floored at the start while M changes at the refresh. Using `w_ed0` where the start
   needs `w_ed0m` passes every steady case and fails this one.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
   - `test_demographics_model.py`, `TestOnTopSplit`, on `M.on_top_split`:
     - with no start, the snapshot: `events = end[0]` and `state = end[0] − end[1]`;
     - with a start, each part weighted as `window_events` weighs the rate (`P.WINDOW_START_WEIGHT`);
@@ -1552,12 +1552,12 @@ The identity and its departures are in "What the code says" §2.
       with no flag the copy goes.
     - `test_rates_clear_takes_the_clamp_and_the_start_parts`.
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_model.TestOnTopSplit test_gen_demographics test_demographics_registry.TestAbsorbedScript test_demographics_registry.TestOnTopSplitScript test_demographics_registry.TestOnTopClampSide`
 Expected: FAIL/ERROR (`on_top_split`, `te_demog_on_top_split`, `te_dg_w_sevd` missing).
 
-- [ ] **Step 3: The model** (after `window_events`)
+- [x] **Step 3: The model** (after `window_events`)
 
 ```python
 def on_top_split(end, start=None):
@@ -1575,7 +1575,7 @@ def on_top_split(end, start=None):
     return events, max(0.0, events - own), severe
 ```
 
-- [ ] **Step 4: The generator** (`absorbed_walk`)
+- [x] **Step 4: The generator** (`absorbed_walk`)
   - init, before the Full guard: `set_local_variable = { name = te_dg_w_sev value = 0 }` and
     `set_local_variable = { name = te_dg_w_sevd value = 0 }`.
   - pop, inside `local_var:te_dg_w_rep > 0`, after the `te_dg_w_ed0m` test:
@@ -1604,7 +1604,7 @@ def on_top_split(end, start=None):
     does. Amend its comments.
   - Regenerate.
 
-- [ ] **Step 5: The split, the start's parts and the clamp side** (`te_demog_rate_effects.txt`)
+- [x] **Step 5: The split, the start's parts and the clamp side** (`te_demog_rate_effects.txt`)
 
 ```
 # THIS = a state, the walk's tail, straight after te_demog_window_events: the Causes of Death section's split of the
@@ -1755,7 +1755,7 @@ Then:
   (te_dg_w_ed0 − te_dg_w_ed0m) / people`.
 - The headers of `te_demog_rate_effects.txt` and `te_demog_effects.txt`: the new variables.
 
-- [ ] **Step 6: Option n, and the display values**
+- [x] **Step 6: Option n, and the display values**
   - **Option n** (`TE_DEMOG_RATES`): copy `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_ed_clamp_d`,
     `te_dg_sp_d` and `te_dg_ss_d` into `te_dg_dbg_eds`, `_edsev`, `_sev`, `_cld`, `_spd` and `_ssd` through
     `te_debug_demog_rate_copy`. Log them before `date=` as ` ed_state= ed_sev= sev= clamp_d= sp_d= ss_d=` and remove
@@ -1764,12 +1764,12 @@ Then:
     `te_demog_deaths_severe` and `te_demog_deaths_other`, as Task 8 Step 3 writes them. Their product is
     `te_dg_ed ÷ te_dg_ed_target`.
 
-- [ ] **Step 7: Run the tests**
+- [x] **Step 7: Run the tests**
 
 Run: `.venv/bin/python scripts/generators/gen_demographics.py --check && .venv/bin/python -m unittest test_demographics_model test_gen_demographics test_demographics_registry`
 Expected: OK, #907's and #913's own tests included.
 
-- [ ] **Step 8: Commit**: "Demographics: split the deaths added on top at both ends of the window".
+- [x] **Step 8: Commit**: "Demographics: split the deaths added on top at both ends of the window".
 
 - [ ] **Review stop:** a fresh reviewer reads the re-plan and Task 6 against #907 and #913 before Tasks 8–9.
 
