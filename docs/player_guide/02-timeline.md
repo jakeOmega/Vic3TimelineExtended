@@ -546,8 +546,8 @@ No number of monuments can buy a group outright: each group has one total.
 
 ### Monument opportunities
 
-In a great or major power, moments in your country's history bring
-**opportunities** to raise a monument. Each comes as an event, An Opportunity,
+Moments in your country's history bring **opportunities** to raise a
+monument, whatever your rank. Each comes as an event, An Opportunity,
 titled for the moment that brought it, and names the interest group that wants
 it, the dedication, where it stands and what completing it gives. Seize the
 Opportunity opens it; Let It Pass closes it. Neither choice costs anything, and
@@ -558,14 +558,14 @@ open passes without one.
 
 | Moment | Who asks | For | Where | Boon for ten years |
 |---|---|---|---|---|
-| A New Reign: a new ruler takes power | Landowners, or the new leader's own group | To the Crown when the ruler is crowned, otherwise To the Leader when your government can raise one, named for the new ruler | Anywhere | +10% authority |
+| A New Reign: a new ruler takes power | Landowners, or the new leader's own group | To the Crown when the ruler is crowned, otherwise To the Leader under Autocracy or a Single-Party State, named for the new ruler; under any other government, such as a democratic republic electing its president, none | Anywhere | +10% authority |
 | A New Order: a new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere | +25% loyalists from high legitimacy |
 | Among the Great Powers: you become a great power for the first time | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital | +10% influence |
 | Victory: you end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere | +10% prestige |
 | Defeat: you end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere | −25% radicals from low legitimacy |
 | A Centenary: the 100th or 200th year since your founding | Petty Bourgeoisie, or the strongest group in government | A column To the Nation | The capital | +25% assimilation |
 | A Reign Remembered: a ruler who reigned 15 years or more dies | The late ruler's group | A mausoleum To the Nation, named for them | The capital | +5 legitimacy |
-| First into Orbit, First on the Moon | Intelligentsia | An obelisk To the Nation | The capital | +10% innovation |
+| A space race first: First into Orbit, First on the Moon, First Lunar Colony, First on Mars or First Interstellar Probe | Intelligentsia | An obelisk To the Nation | The capital | +10% innovation |
 | A New Faith: your state religion changes | Devout | A Grand Shrine | Anywhere | +25% conversion |
 | Romanticism researched | Intelligentsia | A Grand Opera House | Anywhere | +10% Arts Academy throughput |
 | Empiricism researched | Intelligentsia | A Grand Observatory | Anywhere | +10% technology spread |
@@ -573,8 +573,8 @@ open passes without one.
 | Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality |
 | The Environmental Movement researched | Rural Folk | Botanical Gardens | Anywhere | +25% pollution health effects reduction |
 
-An opportunity asks for 5 grandeur of its dedication within 60 months, or 120
-in a major power. Grandeur you add to fitting monuments of the dedication
+An opportunity asks for 5 grandeur of its dedication within 60 months in a
+great power, 120 in a major power and 180 in any other. Grandeur you add to fitting monuments of the dedication
 counts, whether you raise an old monument or build a new one, and an
 opportunity for the capital counts only the capital's monument. One for the
 capital can be met anywhere when the capital already holds a monument of
@@ -600,9 +600,9 @@ formed or released in play is founded the year it appears. Other countries of
 A second boon of the same kind restarts its ten years. The rebuilt monument
 reaches level 200 at most, so a monument already that tall gets no extra levels.
 
-The AI gets the same offers. It seizes one unless it is at war, in hard times,
-has more than a year of government construction queued or is in debt, and then
-queues the five levels itself.
+The AI gets the same offers. It seizes one unless it is below a major power, at
+war, in hard times, has more than a year of government construction queued or
+is in debt, and then queues the five levels itself.
 
 ### Monument names and forms
 

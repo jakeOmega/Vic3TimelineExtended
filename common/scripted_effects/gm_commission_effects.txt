@@ -699,7 +699,8 @@ gm_com_world_monthly = {
 
 # Country scope. The first time the world pass sees a country (a new game, a
 # save from before opportunities, a released country): what it already has is
-# seen, so it brings no opportunity. A save's v2 promise ledger and petition
+# seen (great power status, the technologies, the space firsts won), so it
+# brings no opportunity. A save's v2 promise ledger and petition
 # cooldown go.
 gm_com_first_sight = {
 	set_variable = gm_com_opp_tracked
@@ -712,6 +713,11 @@ gm_com_first_sight = {
 	gm_com_see_tech_if_known = { KEY = industrial TECH = marketing_research }
 	gm_com_see_tech_if_known = { KEY = athletic TECH = television_broadcasting }
 	gm_com_see_tech_if_known = { KEY = naturalist TECH = environmental_movement }
+	gm_com_see_space_if_won = { M = orbital }
+	gm_com_see_space_if_won = { M = moon_landing }
+	gm_com_see_space_if_won = { M = moon_base }
+	gm_com_see_space_if_won = { M = mars_landing }
+	gm_com_see_space_if_won = { M = interstellar_probe }
 	gm_remove_state_var = { VAR = gm_promise_ledger }
 	gm_remove_state_var = { VAR = gm_com_cooldown }
 }
@@ -720,6 +726,13 @@ gm_com_see_tech_if_known = {
 	if = {
 		limit = { has_technology_researched = $TECH$ }
 		set_variable = gm_com_seen_tech_$KEY$
+	}
+}
+
+gm_com_see_space_if_won = {
+	if = {
+		limit = { has_variable = sr_was_first_$M$ }
+		set_variable = gm_com_seen_space_$M$
 	}
 }
 
@@ -921,10 +934,16 @@ gm_com_track_faith = {
 	}
 }
 
-# A space first (spec §1): the two crewed world firsts. Seen once, offered if free.
+# A space first (spec §1): the world firsts of the crewed and far-reaching
+# milestones (the suborbital hop and the first probe lead up to orbit, and
+# solar colonization has no race for the first). Seen once, offered if free;
+# first sight sees one already won.
 gm_com_track_space = {
 	gm_com_track_space_one = { M = orbital }
 	gm_com_track_space_one = { M = moon_landing }
+	gm_com_track_space_one = { M = moon_base }
+	gm_com_track_space_one = { M = mars_landing }
+	gm_com_track_space_one = { M = interstellar_probe }
 }
 
 gm_com_track_space_one = {

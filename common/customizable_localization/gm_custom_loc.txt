@@ -1063,6 +1063,30 @@ gm_monument_name_row = {
 		}
 		localization_key = gm_name_space_moon_landing_row
 	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_moon_base
+		}
+		localization_key = gm_name_space_moon_base_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_name_space_mars_landing_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_name_space_interstellar_probe_row
+	}
 	# The year: its own namesake, and the fallback of the ruler and victory names.
 	text = {
 		trigger = { has_variable = gm_namesake has_variable = gm_name_year }
@@ -1149,6 +1173,30 @@ gm_monument_name_evt = {
 			var:gm_name_occasion = flag:space_moon_landing
 		}
 		localization_key = gm_name_space_moon_landing_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_moon_base
+		}
+		localization_key = gm_name_space_moon_base_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_name_space_mars_landing_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_name_space_interstellar_probe_evt
 	}
 	# The year: its own namesake, and the fallback of the ruler and victory names.
 	text = {
@@ -1354,6 +1402,33 @@ gm_com_namesake_phrase = {
 	text = {
 		trigger = {
 			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_moon_base
+		}
+		localization_key = gm_com_named_space_moon_base
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_com_named_space_mars_landing
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_com_named_space_interstellar_probe
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
 			var:gm_com_namesake = flag:ruler
 			has_variable = gm_com_source
 			var:gm_com_source = flag:reign
@@ -1433,6 +1508,33 @@ gm_com_occasion_name = {
 			var:gm_com_occasion = flag:space_moon_landing
 		}
 		localization_key = gm_com_occasion_space_moon_landing
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_moon_base
+		}
+		localization_key = gm_com_occasion_space_moon_base
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_com_occasion_space_mars_landing
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_com_occasion_space_interstellar_probe
 	}
 	text = {
 		trigger = { has_variable = gm_com_source var:gm_com_source = flag:faith }
@@ -1655,7 +1757,7 @@ gm_policy_effects = {
 }
 
 # The opportunity's time in words for the offer (gm_com_time_months): five
-# years for a great power, ten for a major power.
+# years for a great power, ten for a major power, fifteen for any other.
 gm_com_time_words = {
 	type = country
 	random_valid = no
@@ -1665,6 +1767,10 @@ gm_com_time_words = {
 		localization_key = gm_com_time_5_years
 	}
 	text = {
+		trigger = { country_rank >= rank_value:major_power }
 		localization_key = gm_com_time_10_years
+	}
+	text = {
+		localization_key = gm_com_time_15_years
 	}
 }

@@ -1605,6 +1605,10 @@ REGIME_IG = {"crown": "landowners", "republic": "intelligentsia", "revolution": 
 # What completing one gives (§3): the gift in levels, the asking group's
 # ledger, the boon's months.
 REWARDS = {"gift": 5, "ig": 15, "boon_months": 120}
+# The space race's firsts that bring an opportunity (§1): every milestone that
+# records a world first (space_race_effects.txt) but the suborbital hop and the
+# first probe, which lead up to orbit.
+SPACE_FIRSTS = ("orbital", "moon_landing", "moon_base", "mars_landing", "interstellar_probe")
 # The world pass's trackers, in priority order (§1).
 WORLD_PASS = ("gm_com_first_sight", "gm_com_init_founded", "gm_com_track_regime", "gm_com_track_ruler",
               "gm_com_track_great_power", "gm_com_track_faith", "gm_com_track_space", "gm_com_track_centenary",
@@ -1712,20 +1716,42 @@ class CommissionSourceTests(unittest.TestCase):
                    "NOT = { any_scope_state = { has_variable = gm_restore_pm } }"):
             self.assertIn(s_, can)
 
-    def test_only_great_and_major_powers(self):
-        """Five levels are 5,000 construction, beyond a minor power (owner, 2026-10-05)."""
-        self.assertIn("gm_system_enabled = yes country_rank >= rank_value:major_power",
-                      squash(block(read(COM_TRIGGERS), "gm_com_can_offer")))
-        # A major power gets ten years, a great power five, fixed on seizing.
+    def test_every_rank_and_the_ai_gate(self):
+        """Any rank may take one (owner, 2026-10-12), with longer below great
+        and major power; the AI below major power lets them pass, since five
+        levels are 5,000 construction (owner, 2026-10-05)."""
+        can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
+        self.assertNotIn("country_rank", can)
         self.assertEqual(squash(block(read(COM_VALUES), "gm_com_time_months")),
-                         "value = 120 if = { limit = { country_rank >= rank_value:great_power } value = 60 }")
+                         "value = 180 if = { limit = { country_rank >= rank_value:great_power } value = 60 } "
+                         "else_if = { limit = { country_rank >= rank_value:major_power } value = 120 }")
         self.assertIn("set_variable = { name = gm_com_months_left value = gm_com_time_months }",
                       squash(block(read(COM_EFFECTS), "gm_com_accept")))
+        self.assertIn("OR = { NOT = { country_rank >= rank_value:major_power }",
+                      squash(block(read(COM_TRIGGERS), "gm_com_ai_declines")))
+        words = squash(block(read(CUSTOM_LOC), "gm_com_time_words"))
+        for rank, key in (("great_power", "gm_com_time_5_years"), ("major_power", "gm_com_time_10_years")):
+            self.assertIn(f"country_rank >= rank_value:{rank} }} localization_key = {key}", words)
+        self.assertTrue(words.endswith("text = { localization_key = gm_com_time_15_years }"))
         L = loc()
         self.assertIn("ScriptValue('gm_com_time_months')", L["gm_com_accept_tt"])
         for key, text in L.items():
             if key.startswith("monument_events.21.d_"):
                 self.assertNotIn("five years", text, key)
+
+    def test_the_space_firsts(self):
+        track = squash(block(self.e, "gm_com_track_space"))
+        self.assertEqual(tuple(re.findall(r"gm_com_track_space_one = \{ M = (\w+) \}", track)), SPACE_FIRSTS)
+        sight = squash(block(self.e, "gm_com_first_sight"))
+        for m in SPACE_FIRSTS:
+            self.assertIn(f"gm_com_see_space_if_won = {{ M = {m} }}", sight, m)
+            self.assertIn(f"space_{m}", NAMESAKES["occasion"], m)
+            self.assertIn(f"var:gm_com_occasion = flag:space_{m} }} localization_key = gm_com_occasion_space_{m}",
+                          squash(block(read(CUSTOM_LOC), "gm_com_occasion_name")), m)
+            self.assertIn(f"var:gm_com_occasion = flag:space_{m} }} localization_key = gm_com_named_space_{m}",
+                          squash(block(read(CUSTOM_LOC), "gm_com_namesake_phrase")), m)
+        self.assertIn("limit = { has_variable = sr_was_first_$M$ } set_variable = gm_com_seen_space_$M$",
+                      squash(block(self.e, "gm_com_see_space_if_won")))
 
     def test_civil_war_guards(self):
         """A side in a civil war gets no offer, and a revolutionary country never
@@ -2210,7 +2236,8 @@ BUILDING_SKINS = {
 # namesake -> its pattern keys (gm_name_<pattern>_row / _evt).
 NAMESAKES = {"city": ("city",), "state": ("state",), "ruler": ("ruler",), "honours": ("honours",),
              "year": ("year",),
-             "occasion": ("victory", "defeat", "centenary", "space_orbital", "space_moon_landing")}
+             "occasion": ("victory", "defeat", "centenary", "space_orbital", "space_moon_landing",
+                          "space_moon_base", "space_mars_landing", "space_interstellar_probe")}
 NAME_RECORDS = ("gm_namesake", "gm_name_year", "gm_name_char", "gm_name_occasion", "gm_name_enemy_cap",
                 "gm_name_from_com")
 

@@ -143,17 +143,16 @@ gm_state_can_host_commission = {
 }
 
 # ---- Pacing (spec §1) -----------------------------------------------------------
-# Country scope. A great or major power (owner, 2026-10-05: five levels are
-# 5,000 construction, beyond a minor power's means within five years), with
-# nothing open or on offer, not a side in a civil war (the winner is judged
-# after it; scripting_best_practices.md § "What a Civil War's Winner
-# Inherits"), and a country that can build. A rank lost after seizing does
-# not lapse the opportunity. Not while a gifted monument's dedication is being
+# Country scope. Any rank (owner, 2026-10-12: with nothing lost by letting one
+# pass, a minor power may take one too; it gets longer, gm_com_time_months, and
+# the AI below major power lets them pass, gm_com_ai_declines), with nothing
+# open or on offer, not a side in a civil war (the winner is judged after it;
+# scripting_best_practices.md § "What a Civil War's Winner Inherits"), and a
+# country that can build. Not while a gifted monument's dedication is being
 # put back (gm_restore_pm, spec §3.1): its method may read as another
 # dedication for a month, and a baseline taken then would miscount.
 gm_com_can_offer = {
 	gm_system_enabled = yes
-	country_rank >= rank_value:major_power
 	NOT = { has_variable = gm_com_offered }
 	NOT = { has_variable = gm_com_open }
 	NOT = { has_variable = te_cw_role }
@@ -200,10 +199,13 @@ gm_state_ceremony_not_for_commission = {
 }
 
 # ---- The AI (v2 §2.6) -----------------------------------------------------------
-# Country scope. The AI lets an opportunity pass at war, in hard times, with
-# more than a year of government construction queued, or in debt.
+# Country scope. The AI lets an opportunity pass below major power (five
+# levels are 5,000 construction, beyond a minor power's means within a few
+# years: owner, 2026-10-05), at war, in hard times, with more than a year of
+# government construction queued, or in debt.
 gm_com_ai_declines = {
 	OR = {
+		NOT = { country_rank >= rank_value:major_power }
 		is_at_war = yes
 		gm_country_hard_times = yes
 		construction_queue_government_duration >= 52

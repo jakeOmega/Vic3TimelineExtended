@@ -39,12 +39,17 @@ gm_com_progress = {
 # ---- Time (spec §2) ----------------------------------------------------------------
 # The months an opportunity runs, fixed on seizing: 60 for a great power, 120
 # for a major power (owner, 2026-10-05: about half the construction for the same
-# five levels). A rank won or lost later does not change a running one.
+# five levels), 180 for any other (owner, 2026-10-12). A rank won or lost later
+# does not change a running one.
 gm_com_time_months = {
-	value = 120
+	value = 180
 	if = {
 		limit = { country_rank >= rank_value:great_power }
 		value = 60
+	}
+	else_if = {
+		limit = { country_rank >= rank_value:major_power }
+		value = 120
 	}
 }
 

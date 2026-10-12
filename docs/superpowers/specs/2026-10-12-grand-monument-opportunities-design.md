@@ -31,22 +31,22 @@ destroyed and rebuilt bigger), the **IG approval** a commission gives today, and
 | What prompts them | **Only moments a player can see** (§1). The petition roll is gone |
 | Rewards | (1) **The monument's gift:** the monument that completed it is rebuilt **5 levels taller**, once, keeping its dedication, name, style and records (§3.1). (2) **Approval:** the asking group's ledger +15, as now (about +2 approval, fading). (3) **A boon:** a national modifier for **10 years**, one per moment (§3.2). v2's *A Promise Kept* legitimacy goes; the boon replaces it |
 | One at a time | **Kept.** One opportunity open or on offer at a time; a moment that comes while one is open passes. A player frees the slot with **Let It Pass**, in the offer or on the open opportunity's panel |
-| Who gets them | **Great and major powers**, as v2 (owner, 2026-10-05: five levels are 5,000 construction). A great power has 60 months, a major power 120. Opening them to minor powers is a separate call, left for the owner |
+| Who gets them | **Every rank** (owner, 2026-10-12, reversing v2's great-and-major-power gate now that nothing is lost by passing). A great power has 60 months, a major power 120, any other 180. **The AI below major power lets them pass**: v2's reason (five levels are 5,000 construction) still holds for its construction queue |
 | Target | 5 grandeur, as v2 |
-| AI | Seizes one when not at war, not in hard times, with under a year of government construction queued and not in debt (v2's test), and then queues the five levels itself; otherwise lets it pass |
+| AI | Seizes one as a great or major power when not at war, not in hard times, with under a year of government construction queued and not in debt (v2's test), and then queues the five levels itself; otherwise lets it pass |
 
 ## 1. The moments
 
 | Source (`gm_com_source`) | Moment | Seen by | Asks for | Who asks | Where | Named for / form | Boon (10 years) |
 |---|---|---|---|---|---|---|---|
-| `reign` | **A New Reign**: a new ruler takes power | the world pass: the ruler differs from last month's | To the Crown when crowned, else To the Leader when the government can raise one; neither, no opportunity | Landowners (Crown); the ruler's own group (Leader), else the strongest in government | anywhere | the ruler; column (Crown), statue (Leader) | **The New Reign**: +10% authority |
+| `reign` | **A New Reign**: a new ruler takes power | the world pass: the ruler differs from last month's | To the Crown when crowned, else To the Leader under Autocracy or a Single-Party State; neither (an elected president of a democracy, say), no opportunity: one each election would be noise | Landowners (Crown); the ruler's own group (Leader), else the strongest in government | anywhere | the ruler; column (Crown), statue (Leader) | **The New Reign**: +10% authority |
 | `regime` | **A New Order**: a crown, republic or revolution with no fitting monument | the world pass, as v2 | that regime | its approving group (v2) | anywhere | the year; column | **The New Order Proclaimed**: +25% loyalists from legitimacy |
 | `great_power` | **Among the Great Powers**: the country becomes a great power for the first time | the world pass, once per game | To the Nation | Petty Bourgeoisie, else the strongest in government | the capital | what it honours ("the Column of the Nation"); column | **A Seat Among the Powers**: +10% influence |
 | `victory` | **Victory** in a war of a year or more, as war leader | `on_won_war`, as v2 | War Memorial | Armed Forces | anywhere | the victory; arch | **Victory Parade**: +10% prestige |
 | `defeat` | **Defeat** in such a war | `on_lost_war`, as v2 | War Memorial | Armed Forces, or the strongest outside government | anywhere | the fallen; hall | **Lest We Forget**: −25% radicals from legitimacy |
 | `centenary` | **Centenary**: the 100th or 200th year since the founding | the world pass, as v2 | To the Nation | Petty Bourgeoisie, else the strongest in government | the capital | the centenary; column | **A Century of Nationhood**: +25% assimilation |
 | `ruler_death` | **A Reign Remembered**: a ruler of 15 years or more dies | `on_character_death`, as v2 | To the Nation | the late ruler's group | the capital | the late ruler; mausoleum | **A Nation in Mourning**: +5 legitimacy |
-| `space` | **First into orbit / onto the Moon** | the world pass, as v2 | To the Nation | Intelligentsia | the capital | the achievement; obelisk | **The Space Age**: +10% innovation |
+| `space` | **A space race first**: into orbit, onto the Moon, a lunar colony, onto Mars, an interstellar probe (owner, 2026-10-12: "what about Mars") | the world pass, as v2, once each | To the Nation | Intelligentsia | the capital | the achievement; obelisk | **The Space Age**: +10% innovation |
 | `faith` | **A New Faith**: the state religion changes | the world pass | Grand Shrine | Devout | anywhere | what it honours ("… of the Faith"); the faith's building | **A Faith Proclaimed**: +25% conversion |
 | `tech_artistic` | **Romanticism** researched | the world pass, once per game | Grand Opera House | Intelligentsia | anywhere | the city | **A Golden Age of the Arts**: +10% Creative Industry throughput |
 | `tech_scientific` | **Empiricism** researched | the world pass, once per game | Grand Observatory | Intelligentsia | anywhere | the city | **An Age of Inquiry**: +10% technology spread |
@@ -63,8 +63,8 @@ destroyed and rebuilt bigger), the **IG approval** a commission gives today, and
   `on_new_ruler`, so a long-reigning ruler's death (`on_character_death`, at once) takes the slot first and the
   mausoleum wins over the coronation, every time.
 - **First sight** *(design)*: the first time the world pass sees a country (a new game, a save from before this
-  change, a released country), it records what it already has — great power status, the five technologies, the state
-  religion — and offers nothing. So 1836's great powers and everyone's Empiricism bring no opportunity, and an old
+  change, a released country), it records what it already has — great power status, the five technologies, the space
+  firsts won, the state religion — and offers nothing. So 1836's great powers and everyone's Empiricism bring no opportunity, and an old
   save does not flood.
 - **Civil war:** no offer to a side in one (v2), and neither side records a new faith, as v2 already keeps it from
   recording a regime.

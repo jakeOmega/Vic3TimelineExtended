@@ -16,7 +16,8 @@
 #                      and the victory names fall back to it)
 #   gm_name_char       ruler: the character it is named for
 #   gm_name_occasion   occasion: victory, defeat, centenary, space_orbital,
-#                      space_moon_landing
+#                      space_moon_landing, space_moon_base,
+#                      space_mars_landing, space_interstellar_probe
 #   gm_name_enemy_cap  occasion victory: the enemy's capital (a state: a
 #                      country stored in a variable does not print its name)
 #   gm_name_from_com   the name came from a commission

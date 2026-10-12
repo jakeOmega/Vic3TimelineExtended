@@ -2508,6 +2508,30 @@ monument_events.25 = {
 			text = monument_events.25.keep_space_moon_landing
 		}
 		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_moon_base
+			}
+			text = monument_events.25.keep_space_moon_base
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_mars_landing
+			}
+			text = monument_events.25.keep_space_mars_landing
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_interstellar_probe
+			}
+			text = monument_events.25.keep_space_interstellar_probe
+		}
+		name = {
 			trigger = { has_variable = gm_namesake has_variable = gm_name_year }
 			text = monument_events.25.keep_year
 		}
