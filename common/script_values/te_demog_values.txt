@@ -241,6 +241,29 @@ te_demog_tfr = {
 	multiply = te_demog_pr_terms
 }
 
+# State scope (phase 2 step 1): 1 under Old Age Pension, 2 under UBI or Post-Scarcity (no pension age: the old-age
+# threshold ends the working ages), else 0 (demographics_model.pension_kind). The welfare group holds one of them.
+te_demog_pension_kind = {
+	value = 0
+	if = {
+		limit = { owner = { OR = { has_law = law_type:law_universal_basic_income has_law = law_type:law_post-scarcity } } }
+		value = 2
+	}
+	if = {
+		limit = { owner = { te_demog_has_pension_law = yes } }
+		value = 1
+	}
+}
+# State scope: the owner's pension age, or the Standard position's where it has none yet (a save from before step 1).
+# The owner.var read follows te_tax_est_regrel_keep_now (te_tax_display_values.txt:639), guarded the same way.
+te_demog_pension_age = {
+	value = te_demog_k_pension_age_standard
+	if = {
+		limit = { owner ?= { has_variable = te_dg_pension_age } }
+		value = owner.var:te_dg_pension_age
+	}
+}
+
 # War scope, on the owner's pulse: the owner's dead in this war so far (probe Q4).
 te_demog_war_dead_root = {
 	value = "num_country_dead(root)"

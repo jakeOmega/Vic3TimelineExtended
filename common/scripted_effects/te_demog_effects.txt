@@ -397,6 +397,8 @@ te_demog_state_census = {
 # seed every state, then take the country's census, so 1836 opens with figures. The seeds
 # are off the states' pulses, so each state seeds again at its first pulse.
 te_demog_country_game_start = {
+	# the pension age before any state is seeded (phase 2 step 1)
+	te_demog_pension_age_refresh = yes
 	every_scope_state = {
 		te_demog_walks = yes
 		if = {
@@ -1069,6 +1071,7 @@ te_demog_country_lists = {
 # The national Wealth Concentration, #822's modifiers and the country's Gini follow from this
 # year's state scores, whatever the rule, before the census reads them.
 te_demog_country_yearly = {
+	te_demog_pension_age_refresh = yes
 	te_demog_wc_war_shock = yes
 	if = {
 		limit = { has_variable = te_dg_war_year }
@@ -1082,6 +1085,21 @@ te_demog_country_yearly = {
 			NOT = { te_demog_clock_on = yes }
 		}
 		te_demog_country_census = yes
+	}
+}
+
+# THIS = a country (phase 2 step 1; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.2):
+# its pension age, the one number every reader takes through te_demog_pension_age. Under Old Age Pension the Standard
+# position's age (step 2 adds the setting); otherwise none. A revolution's winner inherits it. Called first in the
+# country's game start and yearly census and from te_demog_pension_law_on_action, whatever the rule.
+te_demog_pension_age_refresh = {
+	if = {
+		limit = { te_demog_has_pension_law = yes }
+		set_variable = { name = te_dg_pension_age value = te_demog_k_pension_age_standard }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_pension_age }
+		remove_variable = te_dg_pension_age
 	}
 }
 

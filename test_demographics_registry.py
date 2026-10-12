@@ -364,8 +364,11 @@ class _Engine:
         # so is fast mode's census clock (te_demog_clock_on), whose globals a test gives as fixtures
         # ("global_var:te_demog_clock" and the like), and the rule's Full (te_demog_effects_run): off unless a
         # test says (the real trigger reads has_game_rule, which _Engine doesn't know)
+        # te_demog_has_pension_law (phase 2 step 1) reads has_law: off unless a test says, so an engine that runs the
+        # country's game start or yearly census never evaluates it
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
-                                 "te_demog_clock_on": False, "te_demog_effects_run": False, **(triggers or {})}
+                                 "te_demog_clock_on": False, "te_demog_effects_run": False,
+                                 "te_demog_has_pension_law": False, **(triggers or {})}
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
@@ -5936,3 +5939,35 @@ class TestSlotBirthsScript(unittest.TestCase):
             eng.call("te_demog_slot_births")
             want = demographics_model.slot_births(1000.0, 27, 27, 4.0, 0.25)
         self.assertAlmostEqual(eng.locals["te_dg_b"], want)
+
+
+class TestPensionAge(unittest.TestCase):
+    """The pension age (phase 2 step 1; the design §1.2): one country variable, the Standard position's age under Old
+    Age Pension, none otherwise; every reader goes through te_demog_pension_age."""
+
+    def _country(self, oap, held=None):
+        eng = _Engine({}, triggers={"te_demog_has_pension_law": oap})
+        if held is not None:
+            eng.vars["te_dg_pension_age"] = held
+        eng.call("te_demog_pension_age_refresh")
+        return eng
+
+    def test_the_variable_follows_the_law(self):
+        self.assertEqual(self._country(True).vars["te_dg_pension_age"], P.PENSION_AGE["standard"])
+        self.assertNotIn("te_dg_pension_age", self._country(False, held=65.0).vars)
+        self.assertNotIn("te_dg_pension_age", self._country(False).vars)
+
+    def test_the_hooks(self):
+        effects = _text(EFFECTS)
+        for caller in ("te_demog_country_game_start", "te_demog_country_yearly"):
+            self.assertIn("te_demog_pension_age_refresh = yes", _block(effects, caller), caller)
+        on_actions = _text(DEMOG_ON_ACTIONS)
+        self.assertIn("te_demog_pension_law_on_action", _block(on_actions, "on_law_activated"))
+        self.assertIn("te_demog_pension_age_refresh = yes", _block(on_actions, "te_demog_pension_law_on_action"))
+
+    def test_no_age_is_compared_with_a_pension_age_literal(self):
+        """The design §1.2: nothing compares an age with 60, 65 or 70; the sweep reads te_dg_wa_end. (The Gini's
+        `wealth > 65` and the war window's 18-40 are other numbers.)"""
+        for path in DEMOG_FILES:
+            code = re.sub(r"#[^\n]*", "", _text(path))
+            self.assertIsNone(re.search(r"local_var:te_dg_(age|ab|r)\s*(>=|<=|<|>|=)\s*(60|65|70)\b", code), path.name)
