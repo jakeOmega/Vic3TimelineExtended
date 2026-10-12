@@ -214,6 +214,7 @@ death term (+1.0 × bare) was never fitted and may be about 0.6. Fixing it will 
    - `DIFFUSION_BASE` 0.1, `DIFFUSION_MAX` 1.0, `MEDICINE_SNAP` 0.005;
    - six carriers at +0.05 each;
    - the decree +0.2.
+   **Approved by the owner, 2026-10-11, as proposed** (from Task 3's lag table; see Task 3's owner stop).
 3. The other numbers (proposals):
    - `TURMOIL_EXTERNAL_WEIGHT` 0.5: about −0.46 to −0.64 years of life expectancy at full turmoil, by the model at
      SoL 8–25 (the review confirmed it; accidents and violence are a small cause);
@@ -799,9 +800,29 @@ scenario's "before" holds the Combustion Engine too; see the commit.)
 
 - [x] **Step 5: Commit**: "Demographics harness: the lag curve of spreading medicine".
 
-- [ ] **Owner stop:** the owner approves or changes `DIFFUSION_BASE`, the carriers' +0.05 and the decree's +0.2 from
+- [x] **Owner stop:** the owner approves or changes `DIFFUSION_BASE`, the carriers' +0.05 and the decree's +0.2 from
   the table. Apply any change in `demographics_params.py` (and on the carriers), rerun `lag`, and record the
   approved table in `mod_systems.md` (Task 11) before Task 4.
+
+  **Approved, 2026-10-11:** the owner kept the proposed numbers: `DIFFUSION_BASE` 0.10, +0.05 on each of the six
+  carriers, Medical Outreach +0.2. Nothing to apply. The approved table, `demographics_harness.py lag` at 98584051
+  (Task 11 copies it into `mod_systems.md`):
+
+  ```
+  Years of life expectancy behind the target after a change, at the spread's rate (the share of the gap a census step closes):
+                                                           rate  e0 before  target     0y     1y     2y     3y     5y    10y    15y    20y
+  1840s: Charitable Health System, Ministry of Health 1 to 3 0.10       38.8    38.8   0.04   0.04   0.03   0.03   0.02   0.01   0.01   0.00
+  1870s: Modern Nursing arrives                            0.20       42.4    43.2   0.83   0.67   0.53   0.43   0.27   0.09   0.00   0.00
+  1900s: Public Health Insurance at 3, before antibiotics  0.20       46.0    46.7   0.75   0.60   0.48   0.39   0.25   0.08   0.03   0.00
+  1940s: antibiotics and vaccines arrive                   0.25       49.9    61.7  11.84   9.11   6.97   5.30   3.04   0.74   0.18   0.00
+  1950s: a colony incorporated into that health system     0.25       47.5    58.9  11.39   8.76   6.70   5.10   2.93   0.71   0.17   0.00
+  Today: Telemedicine arrives                              0.40       71.0    74.4   3.37   2.16   1.35   0.83   0.31   0.00   0.00   0.00
+  ```
+
+  In words: a new medical technology is half felt (in e0) after about 6.6 years in 1850, 3 years in 1900, 2.6 years
+  in 1950 and 1.6 years today. Medical Outreach halves a 1950s colony's wait (1.3 years to half). The 1840s row is
+  nearly empty: before Modern Nursing there is almost no treatment to spread. The 1940s row's +11.8 years is
+  Antibiotics and Modern Vaccines together; in a game they come an era apart.
 
 ---
 
