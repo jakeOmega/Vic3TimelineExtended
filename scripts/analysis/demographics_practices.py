@@ -250,12 +250,13 @@ def fit_states(path, carriers, shares, save=None):
 
 def tfr_at(st, s, cut_lm, cut_bs, held, east):
     """A state's children per woman at one point: the curve x s, its shares' terms, India's held share (held) or East
-    Asia's (east) in place of its start, each scaling its replayed share."""
+    Asia's (east) in place of its start, each scaling its replayed share (what the drift has left of the start). A
+    start of 0 leaves nothing to erode, so the state takes the held share itself."""
     bs = st.bs
     if st.held == "india":
-        bs = st.bs * held / P.BS_HELD_START
+        bs = held * (st.bs / P.BS_HELD_START if P.BS_HELD_START else 1.0)
     elif st.held == "east_asia":
-        bs = st.bs * east / P.BS_EAST_ASIA_START
+        bs = east * (st.bs / P.BS_EAST_ASIA_START if P.BS_EAST_ASIA_START else 1.0)
     return s * st.base_tfr * (1 - cut_lm * st.lm) * (1 - cut_bs * bs)
 
 

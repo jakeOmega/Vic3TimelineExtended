@@ -131,6 +131,16 @@ class TestFit(unittest.TestCase):
         self.assertAlmostEqual(above["countries"][("China", 1837)][0], 6.0 * 1.2 * (1 - 0.4 * 0.6), places=9)
         self.assertAlmostEqual(above["countries"][("India", 1837)][0], 6.0, places=9)
 
+    def test_a_held_group_with_a_zero_start_takes_the_held_share(self):
+        """A fit that lands a held start at 0 (no raise to cancel; Task 6) leaves nothing for a replay to erode: the
+        state takes the held share itself, not a division by zero."""
+        china = _fit("China", 6.0, bs=0.0, held="east_asia")
+        india = _fit("India", 6.0, bs=0.0, held="india", sid="2", tag="BIC")
+        with DP.patch_params(BS_EAST_ASIA_START=0.0, BS_HELD_START=0.0):
+            self.assertAlmostEqual(DP.tfr_at(china, 1.2, 0.3, 0.4, 0.1, 0.5), 6.0 * 1.2 * (1 - 0.4 * 0.5), places=9)
+            self.assertAlmostEqual(DP.tfr_at(india, 1.2, 0.3, 0.4, 0.1, 0.5), 6.0 * 1.2 * (1 - 0.4 * 0.1), places=9)
+            self.assertAlmostEqual(DP.tfr_at(china, 1.0, 0.3, 0.4, 0.0, 0.0), 6.0, places=9)
+
     def test_the_table_finds_each_raises_best_cuts(self):
         states = {1837: [_fit("Sweden", 5.5, lm=1.0), _fit("Iran", 6.0)]}
         rows = DP.fit_table(states, self.ANCHORS, [1.15], [0.2, 0.3, 0.4], [0.35])
