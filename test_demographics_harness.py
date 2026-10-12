@@ -1236,14 +1236,17 @@ class TestConsequences(unittest.TestCase):
             self.assertIn("the first save's world term", out.getvalue())
 
     def test_the_held_back_band_is_judged_only_on_request(self):
-        """The sex balance's effects are held back; --sex-effects judges the band as if on and restores the switch."""
-        self.assertFalse(P.SEX_BALANCE_EFFECTS)
+        """The three effects are held back; --effects (and its older name --sex-effects) judges the sex band as if on and
+        restores the switches."""
+        self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
         with tempfile.TemporaryDirectory() as tmp:
             path, _bands, _people = self._census_save(tmp)
-            for flag, shown in (([], False), (["--sex-effects"], True)):
+            for flag, shown in (([], False), (["--effects"], True), (["--sex-effects"], True)):
                 out = io.StringIO()
                 with redirect_stdout(out):
                     H.main(["consequences", path, *flag])
                 self.assertEqual("sex balance: " in out.getvalue(), shown, flag)
                 self.assertEqual("Soviet Union 1959" in out.getvalue(), shown, flag)
-                self.assertFalse(P.SEX_BALANCE_EFFECTS)
+                self.assertIn("Held back in game: CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS",
+                              out.getvalue())
+                self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)

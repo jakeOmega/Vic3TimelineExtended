@@ -267,12 +267,9 @@ works at the census's rate, and no pop's deaths fall below half of it. A state's
 birth rate and mortality tooltips show the census's part as Census: Births and
 Census: Deaths. The workforce still follows the base game's rules.
 
-Under Full the census also sets each state's conscription from its men of
-fighting age, 20 to 39, against the world's share in 1836: an older people, or
-one that has lost its young men to war or emigration, raises fewer conscript
-battalions, down to none, and a young one up to a quarter more. War dead come
-from the same men. A youth bulge, young adults over 18% of a state's people
-while work is short, adds a little to radicals and turmoil there.
+The census also counts each state's men of fighting age, 20 to 39, and its
+young adults, and takes war dead from the men of fighting age. The tab shows
+both counts; neither changes conscription or unrest.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
@@ -287,7 +284,7 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Median age, children per woman, life expectancy, dependency ratio, men per 100 women, the urban pattern, the Gini coefficient, Wealth Concentration with its target, and the men of fighting age with the conscription they give; young adults while a state has a youth bulge. |
+| Overview | Median age, children per woman, life expectancy, dependency ratio, men per 100 women, the urban pattern, the Gini coefficient, Wealth Concentration with its target, the men of fighting age, and young adults where they are many while work is short. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead. |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. |

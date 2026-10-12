@@ -2,7 +2,8 @@
 # conscription, the youth bulge and sex balance. State modifiers, under Full only, applied by the census at multipliers
 # from 0 to 1 (te_demog_consequence_effects.txt); each field's size is demographics_params' (a test pins them). They
 # show in a state's modifier list, unlike the census's births and deaths terms: they are effects the player plans
-# around, not bookkeeping.
+# around, not bookkeeping. None is applied yet: demographics_params' three switches hold all of them back until a
+# follow-up fixes the census's migrant booking (te_demog_consequence_effects.txt).
 
 # The pool (men of fighting age) against 1836's: one of the pair at a time, multiplier |T| (no negative multiplier).
 te_demog_census_conscription_up = {

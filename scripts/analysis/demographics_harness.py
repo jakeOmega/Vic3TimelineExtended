@@ -14,7 +14,7 @@ Usage:
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
     demographics_harness.py workforce                   # phase 2 step 1: participation, need, the old-age threshold
-    demographics_harness.py consequences [SAVE...] [--sex-effects]  # phase 2 step 4: conscription, youth, sex balance
+    demographics_harness.py consequences [SAVE...] [--effects]  # phase 2 step 4: conscription, youth bulge, sex balance
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
@@ -825,15 +825,25 @@ def _band(value, lo, hi):
     return "ok" if lo - 1e-9 <= value <= hi + 1e-9 else "OUT"
 
 
+HELD_BACK = ("CONSCRIPTION_EFFECTS", "YOUTH_BULGE_EFFECTS", "SEX_BALANCE_EFFECTS")
+
+
 def cmd_consequences(args):
-    """The bands. The sex balance's effects are held back (P.SEX_BALANCE_EFFECTS off): --sex-effects judges its band and
-    anchors as if they were on, for the follow-up on the census's migrant profile."""
-    kept = P.SEX_BALANCE_EFFECTS
-    P.SEX_BALANCE_EFFECTS = kept or args.sex_effects
+    """The bands. All three effects are held back (P's three switches off, controller's decision 2026-10-12): the
+    conscription and youth-bulge bands judge the census's figures, which it keeps either way; --effects (or its older name
+    --sex-effects) turns the switches on for the run, so the sex balance's band and anchors are judged as if applied, for
+    the follow-up on the census's migrant booking."""
+    kept = {attr: getattr(P, attr) for attr in HELD_BACK}
+    for attr in HELD_BACK:
+        setattr(P, attr, kept[attr] or args.effects)
     try:
+        held = [attr for attr in HELD_BACK if not kept[attr]]
+        if held:
+            print(f"Held back in game: {', '.join(held)}" + (" (judged here as if on)" if args.effects else ""))
         return _consequences(args)
     finally:
-        P.SEX_BALANCE_EFFECTS = kept
+        for attr, value in kept.items():
+            setattr(P, attr, value)
 
 
 def _consequences(args):
@@ -855,7 +865,7 @@ def _consequences(args):
         print(f"  {r['name']:52s} peak 20-29 {r['peak_youth']:.3f} (year {r['peak_year']}), y {r['y']:.2f}; "
               f"peak T {r['peak_term']:+.3f} (year {r['term_year']})")
     print("\nSex balance anchors:" if sex_on else
-          "\nSex balance: its effects are held back (demographics_params.SEX_BALANCE_EFFECTS); --sex-effects judges them")
+          "\nSex balance: its effects are held back (demographics_params.SEX_BALANCE_EFFECTS); --effects judges them")
     for name, b, got, bands in (sex_anchor_rows() if sex_on else ()):
         checks = "  ".join(f"{k} {got[k]:.3f} [{lo}-{hi}] {_band(got[k], lo, hi)}" for k, (lo, hi) in bands.items())
         out |= any(_band(got[k], lo, hi) != "ok" for k, (lo, hi) in bands.items())
@@ -1730,8 +1740,8 @@ def main(argv=None):
                                             "the design's §5 bands (saves: the 1836 one first)")
     p.add_argument("saves", nargs="*", help="plain-text saves made under Full or Display only")
     p.add_argument("--no-unemployment", action="store_true", help="skip the pops pass (the youth bulge reads 0)")
-    p.add_argument("--sex-effects", action="store_true",
-                   help="judge the sex balance's band and anchors as if its held-back effects were on")
+    p.add_argument("--effects", "--sex-effects", action="store_true", dest="effects",
+                   help="judge the bands as if the held-back effects (conscription, youth bulge, sex balance) were on")
     p.set_defaults(fn=cmd_consequences)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     sub.add_parser("workforce", help="phase 2 step 1: the participation figures at the starting values (the design "

@@ -1813,6 +1813,10 @@ te_demog_k_sex_births_floor = { value = 0.8 }
 te_demog_k_sex_women_rate = { value = 0.1 }
 te_demog_k_sex_more_from = { value = 110 }
 te_demog_k_sex_more_span = { value = 40 }
+te_demog_k_conscription_effects = { value = 0 }
+te_demog_k_conscription_cut = { value = 0.01 }
+te_demog_k_youth_effects = { value = 0 }
+te_demog_k_youth_cut = { value = 0.02 }
 te_demog_k_sex_effects = { value = 0 }
 # State scope: the share of people aged 20-29 (bands 4, 5), 0 before a census.
 te_demog_youth_share = {

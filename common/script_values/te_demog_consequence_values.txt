@@ -144,13 +144,30 @@ te_demog_country_conscription = {
 	}
 }
 
+# State scope: |te_dg_mc|, the conscription term's size (0 with none stored).
+te_demog_conscription_size = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mc }
+		value = var:te_dg_mc
+		if = {
+			limit = { var:te_dg_mc < 0 }
+			multiply = -1
+		}
+	}
+}
+
 # State scope: the fixed-sign pair's multipliers (te_demog_census_conscription_up/_down): |te_dg_mc| on its side, else 0.
+# Both are 0 while te_demog_k_conscription_effects is 0 (held back: demographics_params.CONSCRIPTION_EFFECTS) and for a
+# term smaller than te_demog_k_conscription_cut (demographics_model.conscription_applied).
 te_demog_conscription_up = {
 	value = 0
 	if = {
 		limit = {
+			te_demog_k_conscription_effects > 0
 			has_variable = te_dg_mc
 			var:te_dg_mc > 0
+			te_demog_conscription_size >= te_demog_k_conscription_cut
 		}
 		value = var:te_dg_mc
 	}
@@ -159,8 +176,10 @@ te_demog_conscription_down = {
 	value = 0
 	if = {
 		limit = {
+			te_demog_k_conscription_effects > 0
 			has_variable = te_dg_mc
 			var:te_dg_mc < 0
+			te_demog_conscription_size >= te_demog_k_conscription_cut
 		}
 		value = var:te_dg_mc
 		multiply = -1
@@ -189,6 +208,21 @@ te_demog_youth_bulge_now = {
 		divide = { value = te_demog_k_youth_unemployment_full min = 0.001 }
 		min = 0
 		max = 1
+	}
+}
+
+# State scope: the youth-bulge modifier's multiplier (te_demog_consequences_apply): te_dg_yb, 0 while
+# te_demog_k_youth_effects is 0 (held back: demographics_params.YOUTH_BULGE_EFFECTS) or below te_demog_k_youth_cut
+# (demographics_model.youth_applied).
+te_demog_youth_applied = {
+	value = 0
+	if = {
+		limit = {
+			te_demog_k_youth_effects > 0
+			has_variable = te_dg_yb
+			var:te_dg_yb >= te_demog_k_youth_cut
+		}
+		value = var:te_dg_yb
 	}
 }
 

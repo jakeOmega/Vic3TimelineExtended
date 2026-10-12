@@ -358,6 +358,23 @@ WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pe
                  **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}, "state_unemployment_rate": 0.0}
 # Phase 2 step 4's once-a-game self-checks, which the census's refresh calls (te_demog_consequences_refresh): they set a
 # global variable, log and fire an event, none of which the interpreter runs. TestConsequenceSelfChecks reads them.
+# Phase 2 step 4's three held-back effects (demographics_params' switches, generated as 0 or 1): an engine takes the
+# switches as the model reads them, so a test that patches them on (ALL_ON) runs the script with them on too.
+SWITCHES = {"te_demog_k_conscription_effects": "CONSCRIPTION_EFFECTS", "te_demog_k_youth_effects": "YOUTH_BULGE_EFFECTS",
+            "te_demog_k_sex_effects": "SEX_BALANCE_EFFECTS"}
+
+
+def _switch_fixtures():
+    return {k: 1.0 if getattr(P, attr) else 0.0 for k, attr in SWITCHES.items()}
+
+
+def ALL_ON(f):
+    """Patch the three switches on (as the follow-up will) for one test."""
+    for attr in SWITCHES.values():
+        f = unittest.mock.patch.object(P, attr, True)(f)
+    return f
+
+
 SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": ""}
 
 
@@ -650,7 +667,7 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
         fixtures[f"te_demog_pr_erosion_{p}"] = (erosion or {}).get(p, 0.0)
     # the sex balance's switch as the model reads it (demographics_params.SEX_BALANCE_EFFECTS; generated as 0 or 1), so a
     # test that patches the switch on runs the script with it on too
-    fixtures["te_demog_k_sex_effects"] = 1.0 if P.SEX_BALANCE_EFFECTS else 0.0
+    fixtures.update(_switch_fixtures())
     eng = (engine or _Engine)(fixtures, triggers={"te_demog_cohorts_run": True}, effects=effects)
     eng.place = place
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
@@ -1210,7 +1227,7 @@ class TestCohortScript(unittest.TestCase):
 
     # -- phase 2 step 4: the pool, the war dead's window and the sex balance in the step ---------------------------
 
-    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
+    @ALL_ON
     def test_a_step_short_of_men_matches_the_model(self):
         """The design §4.4: a census of 85 men per 100 women aged 20-59 (war dead, emigration) stores the balance its
         step began with (te_dg_sxb), and its children per woman and women's rate take the terms the model gives; war
@@ -6566,17 +6583,18 @@ class TestConsequencesScript(unittest.TestCase):
 
     def _state(self, fam=11000.0, people=100000.0, balance=94.0, youth=(8000.0, 8100.0, 7900.0, 7950.0),
                unemployment=0.0, full=True):
-        eng = _Engine({"state_unemployment_rate": unemployment,
-                       "te_demog_k_sex_effects": 1.0 if P.SEX_BALANCE_EFFECTS else 0.0},
+        eng = _Engine({"state_unemployment_rate": unemployment, **_switch_fixtures()},
                       triggers={"te_demog_effects_run": full})
         eng.vars.update(te_dg_fam=fam, te_dg_faw=fam * 1.02, te_dg_people=people, te_dg_sex_balance=balance,
                         te_dg_bf4=youth[0], te_dg_bm4=youth[1], te_dg_bf5=youth[2], te_dg_bm5=youth[3])
         return eng
 
     def test_full_applies_the_models_terms(self):
-        """With the sex balance's effects held back (the switch off) and as if on."""
+        """With the three effects held back (the switches off) and as if on."""
         for on in (False, True):
-            with unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", on):
+            with unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", on), \
+                    unittest.mock.patch.object(P, "CONSCRIPTION_EFFECTS", on), \
+                    unittest.mock.patch.object(P, "YOUTH_BULGE_EFFECTS", on):
                 self._full_cases(on)
 
     def _full_cases(self, on):
@@ -6594,12 +6612,13 @@ class TestConsequencesScript(unittest.TestCase):
                 self.assertAlmostEqual(v["te_dg_mc"], term, places=9)
                 self.assertAlmostEqual(v["te_dg_yb"], y, places=9)
                 want = {}
-                if term > 0:
-                    want["te_demog_census_conscription_up"] = term
-                elif term < 0:
-                    want["te_demog_census_conscription_down"] = -term
-                if y > 0:
-                    want["te_demog_census_youth_bulge"] = y
+                applied, bulge = demographics_model.conscription_applied(term), demographics_model.youth_applied(y)
+                if applied > 0:
+                    want["te_demog_census_conscription_up"] = applied
+                elif applied < 0:
+                    want["te_demog_census_conscription_down"] = -applied
+                if bulge > 0:
+                    want["te_demog_census_youth_bulge"] = bulge
                 fewer = demographics_model.sex_fewer_men(v["te_dg_sex_balance"])
                 more = demographics_model.sex_more_men(v["te_dg_sex_balance"])
                 if fewer > 0:
@@ -6610,9 +6629,10 @@ class TestConsequencesScript(unittest.TestCase):
                 for name, mult in want.items():
                     self.assertAlmostEqual(eng.modifiers[name], mult, places=9, msg=name)
                 if not on:
-                    self.assertFalse(any(n in eng.modifiers for n in ("te_demog_census_fewer_men",
-                                                                       "te_demog_census_more_men")))
+                    # held back: T and y stored, nothing applied
+                    self.assertEqual(eng.modifiers, {})
 
+    @ALL_ON
     def test_a_change_of_sign_swaps_the_pair(self):
         eng = self._state(fam=7000.0)
         eng.call("te_demog_consequences_refresh")
@@ -6622,7 +6642,7 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertIn("te_demog_census_conscription_up", eng.modifiers)
         self.assertNotIn("te_demog_census_conscription_down", eng.modifiers)
 
-    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # the fewer-men modifier too
+    @ALL_ON
     def test_outside_full_everything_goes(self):
         eng = self._state(fam=7000.0, balance=70.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.3)
         eng.call("te_demog_consequences_refresh")
@@ -6652,6 +6672,32 @@ class TestConsequencesScript(unittest.TestCase):
         eng.call("te_demog_consequences_refresh")
         self.assertEqual(eng.modifiers, {})
         self.assertEqual((eng.vars["te_dg_mc"], eng.vars["te_dg_yb"]), (0, 0))
+
+    @ALL_ON
+    def test_no_modifier_below_the_cut_offs(self):
+        """The review's Minor 2: when the effects apply, no conscription pair below |T| 0.01 and no youth modifier below
+        y 0.02; the figures are still stored."""
+        fam = P.CONSCRIPTION_REF * 100000.0 * (1 - P.CONSCRIPTION_CUT / 2)   # T = -0.005
+        youth = 100000.0 * (P.YOUTH_FROM + P.YOUTH_SPAN * P.YOUTH_CUT / 2) / 4   # y = 0.01 at full unemployment
+        eng = self._state(fam=fam, youth=(youth,) * 4, unemployment=0.3)
+        eng.call("te_demog_consequences_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mc"], -P.CONSCRIPTION_CUT / 2, places=4)
+        self.assertAlmostEqual(eng.vars["te_dg_yb"], P.YOUTH_CUT / 2, places=4)
+        self.assertEqual(eng.modifiers, {})
+        eng.vars["te_dg_fam"] = P.CONSCRIPTION_REF * 100000.0 * (1 - 2 * P.CONSCRIPTION_CUT)
+        eng.call("te_demog_consequences_refresh")
+        self.assertIn("te_demog_census_conscription_down", eng.modifiers)
+
+    def test_held_back_the_census_stores_the_figures_and_applies_nothing(self):
+        """Controller's decision (2026-10-12): the three switches are off; under Full T and y are stored for the panel."""
+        self.assertEqual(_switch_fixtures(), {k: 0.0 for k in SWITCHES})
+        for key in SWITCHES:
+            self.assertEqual(_raw_blocks([GENERATED_VALUES])[key].strip(), "value = 0", key)
+        eng = self._state(fam=7000.0, balance=60.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.3)
+        eng.call("te_demog_consequences_refresh")
+        self.assertEqual(eng.modifiers, {})
+        self.assertLess(eng.vars["te_dg_mc"], -0.4)
+        self.assertGreater(eng.vars["te_dg_yb"], 0.5)
 
     def test_the_sizes_are_the_params(self):
         mods = _raw_blocks([CONSEQ_MODIFIERS])
@@ -6689,6 +6735,34 @@ class TestConsequencesScript(unittest.TestCase):
         seed = effects["te_demog_seed"]
         self.assertLess(seed.index("remove_variable = te_dg_sxb"), seed.index("te_demog_prepare = yes"))
 
+    def test_a_country_with_no_pool_yet_shows_none(self):
+        """The review's Minor 3: a country whose census states all come from before this build gets no pool figures
+        (the row's pending text), not 0% (x0.00)."""
+        states = [TestCountry.state(*args) for args in TestCountry.INPUTS]
+        for st in states:
+            del st["te_dg_fam"]
+        eng = TestCountry().country(states)
+        eng.vars.update(te_dg_fam_share=0.2, te_dg_fam_men=0.3)   # last year's, from a census since replaced
+        eng.call("te_demog_country_census")
+        self.assertNotIn("te_dg_fam_share", eng.vars)
+        self.assertNotIn("te_dg_fam_men", eng.vars)
+
+    def test_the_hovers_read_the_reference_and_mark_the_held_back(self):
+        """The review's Minor 4 and 5: the 1836 reference is read from its constant, not written out; each effect's
+        hover has its held-back line; no demographics loc line starts with a newline."""
+        loc = {}
+        for path in sorted((ROOT / "localization" / "english").glob("*_l_english.yml")):
+            for m in re.finditer(r'^ (te_demog_[\w.]+):\d* "(.*)"$', _text(path), re.M):
+                loc[m.group(1)] = m.group(2)
+        self.assertIn("ScriptValue('te_demog_k_conscription_ref')", loc["te_demog_fam_rule"])
+        self.assertNotIn("13.9", loc["te_demog_fam_rule"])
+        for key, switch in (("te_demog_ov_fam_figures", "conscription"), ("te_demog_st_fam_figures", "conscription"),
+                            ("te_demog_ov_youth_tt", "youth"), ("te_demog_st_youth_tt", "youth"),
+                            ("te_demog_ov_sex_tt", "sex"), ("te_demog_st_sex_tt", "sex")):
+            self.assertIn(f"ScriptValue('te_demog_k_{switch}_effects')", loc[key], key)
+        for key, text in loc.items():
+            self.assertFalse(text.startswith("\\n"), key)
+
     def test_the_country_figures(self):
         states = [TestCountry.state(*args) for args in TestCountry.INPUTS]
         states[0]["te_dg_yb"] = 0.3
@@ -6711,7 +6785,9 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertIn("te_debug_demog_unemployment_selfcheck = yes", refresh)
         debug = _raw_blocks([ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"])
         start = debug["te_debug_demog_conscription_selfcheck_start"]
-        for line in ("NOT = { has_global_variable = te_demog_selfcheck_consc_done }",
+        for line in ("te_demog_k_conscription_effects > 0",   # held back, it never arms (no false BROKEN)
+                     "te_demog_conscription_size >= te_demog_k_conscription_cut",
+                     "NOT = { has_global_variable = te_demog_selfcheck_consc_done }",
                      "set_global_variable = { name = te_demog_selfcheck_consc_done value = yes }",
                      "NOT = { has_modifier = te_demog_census_conscription_up }",
                      "NOT = { has_modifier = te_demog_census_conscription_down }",

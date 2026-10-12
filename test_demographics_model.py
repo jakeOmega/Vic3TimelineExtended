@@ -1123,3 +1123,15 @@ class TestConsequences(unittest.TestCase):
         for a in range(20, 60):
             ring.m[(1836 - a) % P.RING_YEARS] *= 0.85
         self.assertEqual(M.step(ring, AGRARIAN_1836, 1837)["fertility"]["sex"], 1.0)
+
+    def test_conscription_and_the_youth_bulge_are_held_back(self):
+        """Controller's decision (2026-10-12, after the review): T and y are figures the census keeps; none applies
+        while their switches are off, and when on, none below the cut-offs (the review's Minor 2)."""
+        self.assertFalse(P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+        self.assertEqual((M.conscription_applied(-0.5), M.youth_applied(0.8)), (0.0, 0.0))
+        with unittest.mock.patch.object(P, "CONSCRIPTION_EFFECTS", True), \
+                unittest.mock.patch.object(P, "YOUTH_BULGE_EFFECTS", True):
+            self.assertEqual((M.conscription_applied(-0.5), M.youth_applied(0.8)), (-0.5, 0.8))
+            self.assertEqual((M.conscription_applied(0.009), M.conscription_applied(-0.009)), (0.0, 0.0))
+            self.assertEqual((M.conscription_applied(0.01), M.youth_applied(0.019), M.youth_applied(0.02)),
+                             (0.01, 0.0, 0.02))

@@ -433,6 +433,17 @@ def conscription_term(fam, people):
     return clamp(fam / max(people, 1.0) / P.CONSCRIPTION_REF - 1, P.CONSCRIPTION_MIN, P.CONSCRIPTION_MAX)
 
 
+def conscription_applied(term):
+    """The conscription multiplier the census's pair applies (te_demog_consequences_apply): the term while
+    P.CONSCRIPTION_EFFECTS is on and |term| reaches CONSCRIPTION_CUT, else 0 (held back, or too small for a line)."""
+    return term if P.CONSCRIPTION_EFFECTS and abs(term) >= P.CONSCRIPTION_CUT else 0.0
+
+
+def youth_applied(y):
+    """The youth-bulge modifier's multiplier: y while P.YOUTH_BULGE_EFFECTS is on and y reaches YOUTH_CUT, else 0."""
+    return y if P.YOUTH_BULGE_EFFECTS and y >= P.YOUTH_CUT else 0.0
+
+
 def youth_share(ring):
     """The share of people of calendar age YOUTH_AGES (te_demog_youth_share: bands 4 and 5)."""
     rows = ring.by_age()

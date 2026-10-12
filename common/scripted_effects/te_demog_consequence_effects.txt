@@ -13,8 +13,12 @@
 #                                            adults above 18% of the people, with unemployment (§4.3)
 #   te_demog_census_fewer_men                feminist movement support +10% at the fewer-men share (§4.4)
 #   te_demog_census_more_men                 radicals from movements +10% at the more-men share (§4.4)
-# The two sex-balance modifiers and the census's two sex-balance terms are held back while te_demog_k_sex_effects is 0
-# (demographics_params.SEX_BALANCE_EFFECTS: the census's migrant profile builds false imbalances; a follow-up first).
+# All three are held back (controller's decision, 2026-10-12): the census's migrant booking distorts the men they read.
+# The census computes and stores T and y (te_dg_mc, te_dg_yb, under Full) and the panel shows them, but no conscription
+# pair applies while te_demog_k_conscription_effects is 0, no youth-bulge modifier while te_demog_k_youth_effects is 0,
+# and neither sex-balance modifier nor term while te_demog_k_sex_effects is 0 (demographics_params' three switches). A
+# follow-up on the migrant booking turns them on together. When on, no pair below |T| te_demog_k_conscription_cut and
+# no youth modifier below te_demog_k_youth_cut.
 # Display only and Disabled clear all four, and te_dg_mc and te_dg_yb, at the state's next pulse, as the births and
 # deaths terms clear (te_demog_rates_clear). The census's own terms, the sex balance's on children per woman and on the
 # women's rate (te_demog_consequence_values.txt), run under Display only too: they move the census's figures, which
@@ -71,16 +75,16 @@ te_demog_consequences_refresh = {
 te_demog_consequences_apply = {
 	te_demog_consequences_remove = yes
 	if = {
-		limit = { var:te_dg_mc > 0 }
+		limit = { te_demog_conscription_up > 0 }
 		add_modifier = { name = te_demog_census_conscription_up multiplier = te_demog_conscription_up }
 	}
 	else_if = {
-		limit = { var:te_dg_mc < 0 }
+		limit = { te_demog_conscription_down > 0 }
 		add_modifier = { name = te_demog_census_conscription_down multiplier = te_demog_conscription_down }
 	}
 	if = {
-		limit = { var:te_dg_yb > 0 }
-		add_modifier = { name = te_demog_census_youth_bulge multiplier = var:te_dg_yb }
+		limit = { te_demog_youth_applied > 0 }
+		add_modifier = { name = te_demog_census_youth_bulge multiplier = te_demog_youth_applied }
 	}
 	if = {
 		limit = { te_demog_sex_fewer_men > 0 }
@@ -148,7 +152,17 @@ te_demog_consequences_country = {
 			change_local_variable = { name = te_dg_c_yb_n add = 1 }
 		}
 	}
-	set_variable = { name = te_dg_fam_share value = { value = local_var:te_dg_c_fam divide = { value = local_var:te_dg_c_fam_ppl min = 1 } } }
-	set_variable = { name = te_dg_fam_men value = { value = local_var:te_dg_c_fam divide = { value = te_demog_country_men min = 1 } } }
+	# only where a census state holds a pool: a country whose states' censuses all come from before this build shows the
+	# row's pending text, not 0% (x0.00), until their next count
+	if = {
+		limit = { local_var:te_dg_c_fam_ppl > 0 }
+		set_variable = { name = te_dg_fam_share value = { value = local_var:te_dg_c_fam divide = { value = local_var:te_dg_c_fam_ppl min = 1 } } }
+		set_variable = { name = te_dg_fam_men value = { value = local_var:te_dg_c_fam divide = { value = te_demog_country_men min = 1 } } }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_fam_share }
+		remove_variable = te_dg_fam_share
+		remove_variable = te_dg_fam_men
+	}
 	set_variable = { name = te_dg_yb_n value = local_var:te_dg_c_yb_n }
 }

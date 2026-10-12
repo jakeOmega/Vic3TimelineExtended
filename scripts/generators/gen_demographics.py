@@ -1461,7 +1461,9 @@ def consequence_values(o):
         "sex_fewer_from": P.SEX_FEWER_FROM, "sex_fewer_span": P.SEX_FEWER_FROM - P.SEX_FEWER_FULL,
         "sex_births_floor": P.SEX_BIRTHS_FLOOR, "sex_women_rate": P.SEX_WOMEN_RATE,
         "sex_more_from": P.SEX_MORE_FROM, "sex_more_span": P.SEX_MORE_FULL - P.SEX_MORE_FROM,
-        # 1 applies the sex balance's effects, 0 holds them back (P.SEX_BALANCE_EFFECTS)
+        # 1 applies each effect, 0 holds it back (P.CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS)
+        "conscription_effects": 1 if P.CONSCRIPTION_EFFECTS else 0, "conscription_cut": P.CONSCRIPTION_CUT,
+        "youth_effects": 1 if P.YOUTH_BULGE_EFFECTS else 0, "youth_cut": P.YOUTH_CUT,
         "sex_effects": 1 if P.SEX_BALANCE_EFFECTS else 0,
     }
     for name, value in k.items():
