@@ -18566,7 +18566,7 @@ pm_communal_child_rearing = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_birth_rate_mult = 0.2
+			state_birth_rate_mult = 0.2	# cancels law_communal_child_rearing's -20% births (owner, 2026-10-12)
 			state_assimilation_mult = 0.25
 			state_conversion_mult = 0.25
 			state_education_access_add = 0.25

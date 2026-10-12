@@ -341,7 +341,8 @@ applies outside Full and the census models under Full):
 - **Carried by the participation model**, so cancelled under Full: women's work (the five women's-rights laws, +0.05
   to +0.3; State-Sponsored Family Planning +0.05; Communal Child-Rearing +0.1; the Pill +0.05; second-wave feminism
   and personal appliances +0.025 each), which set the women's rate, the "maybe technology" of #894; and retirement
-  (Old Age Pension −0.01 a level, UBI −0.02, Post-Scarcity −0.04, Pro-Natalist's −0.05, which parent §8.1 already
+  (Old Age Pension −0.01 a level, UBI −0.02, Post-Scarcity −0.04 (since dropped in every game: phase 2 call 1,
+  2026-10-12), Pro-Natalist's −0.05, which parent §8.1 already
   drops), which the pension age replaces. Without this, women's work would count twice.
 - **Left on top**: the criminal-justice laws, the Ministries of Labour, State Eugenics, Community Service and
   Mandatory Minimums, the failed-state modifier, and one company's and one production method's lines.
@@ -400,7 +401,8 @@ bears the cost):
 - **UBI and Post-Scarcity**, the welfare group's later laws (`extra_laws.txt:285`, `:344`), replace Old Age Pension.
   Under them there is no pension age: the old are paid as everyone is, there is no separate pension bill, and the
   working ages end at capacity, with the after-pension share applied from the old-age threshold (§1.5's figure) as a
-  stand-in for choosing leisure. Post-Scarcity's own −0.04 workforce line stays.
+  stand-in for choosing leisure. Post-Scarcity's own −0.04 workforce line is dropped in every game (owner,
+  2026-10-12: phase 2 spec §13 call 1, #925).
 - **Events** that read "65+" (the parent's Greying of the Nation) read the pension age or the old-age threshold
   instead. Two late ones: **The Pension Without End** (pensioners pass half the people: link it, raise it or pay) and
   **The Last Generation?** (Biological Immortality; parent §9).

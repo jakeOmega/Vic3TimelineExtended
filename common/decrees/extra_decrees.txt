@@ -241,17 +241,19 @@ decree_cultural_integration = {
 	}
 }
 
+# Natalism Initiative (owner, 2026-10-12; was +50% at 250): a small push now shows as a cohort later, and at 100
+# authority it pays off over a long time. Its births line stays an engine field (on top of the census under Full).
 decree_natalism_initiative = {
 	texture = "gfx/interface/icons/decree/decree_natalism_initiative.dds"
 	modifier = {
-		state_birth_rate_mult = 0.5
+		state_birth_rate_mult = 0.15
 	}
 
 	unlocking_technologies = {
 		mass_media
 	}
 
-	cost = 250
+	cost = 100
 
 	ai_weight = {
 		value = 0
