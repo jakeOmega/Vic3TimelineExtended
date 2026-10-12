@@ -208,7 +208,7 @@ class TestGenerated(unittest.TestCase):
     def test_phase2_constants_match_the_params(self):
         for name, value in (("on_top_scale_min", P.ON_TOP_SCALE_MIN), ("on_top_scale_max", P.ON_TOP_SCALE_MAX),
                             ("rate_total_min", P.RATE_TOTAL_MIN),
-                            ("rate_term_max", P.RATE_TERM_MAX)):
+                            ("rate_term_max", P.RATE_TERM_MAX), ("window_start_weight", P.WINDOW_START_WEIGHT)):
             self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(value)} }}", self.values, name)
 
     def test_the_absorbed_terms_follow_the_engine(self):

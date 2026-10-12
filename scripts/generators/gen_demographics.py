@@ -931,11 +931,14 @@ def absorbed_terms(o, root, literacy, mild):
 
 def absorbed_walk(o, root):
     """The walk's replaced sums (phase 2 step 4, owner amendment): each pop's bare curves x the terms absorbed per pop."""
-    o("# THIS = a state, before its pop walk (te_demog_walks): the replaced sums start at 0; under Full only (the")
-    o("# refresh reads them nowhere else) te_dg_w_rep turns the per-pop sums on.")
+    o("# THIS = a state, before its pop walk (te_demog_walks): the replaced sums and the bare curves the census's")
+    o("# term reaches start at 0; under Full only (the refresh reads them nowhere else) te_dg_w_rep turns the")
+    o("# per-pop sums on.")
     o("te_demog_absorbed_walk_init = {")
     o("set_local_variable = { name = te_dg_w_ebr value = 0 }")
     o("set_local_variable = { name = te_dg_w_edr value = 0 }")
+    o("set_local_variable = { name = te_dg_w_eb0m value = 0 }")
+    o("set_local_variable = { name = te_dg_w_ed0m value = 0 }")
     o("set_local_variable = { name = te_dg_w_rep value = 0 }")
     o("if = {")
     o("limit = { te_demog_effects_run = yes }")
@@ -943,13 +946,24 @@ def absorbed_walk(o, root):
     o("}")
     o("}")
     o("")
-    o("# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed): its bare births and deaths x")
-    o("# what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr (te_demog_rates_refresh). Full only.")
+    o("# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed) and multipliers (te_dg_p_mb,")
+    o("# te_dg_p_md): its bare births and deaths x what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr")
+    o("# (te_demog_rates_refresh); and its bare curves into te_dg_w_eb0m / _ed0m unless the engine floors its")
+    o("# multiplier at 0 (severe starvation's births), which a change in the census's term then doesn't reach (the")
+    o("# trapezoid's start rate). Full only.")
     o("te_demog_absorbed_walk_pop = {")
     o("if = {")
     o("limit = { local_var:te_dg_w_rep > 0 }")
     o("change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_absorbed_births } }")
     o("change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_absorbed_deaths } }")
+    o("if = {")
+    o("limit = { local_var:te_dg_p_mb > 0 }")
+    o("change_local_variable = { name = te_dg_w_eb0m add = local_var:te_dg_p_eb }")
+    o("}")
+    o("if = {")
+    o("limit = { local_var:te_dg_p_md > 0 }")
+    o("change_local_variable = { name = te_dg_w_ed0m add = local_var:te_dg_p_ed }")
+    o("}")
     o("}")
     o("}")
     o("")
@@ -1231,6 +1245,7 @@ def constants(o):
         "full_female_work_share": P.FULL_FEMALE_WORK_SHARE, "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
         "crisis_at_war": P.CRISIS_AT_WAR,
         "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_scale_max": P.ON_TOP_SCALE_MAX,
+        "window_start_weight": P.WINDOW_START_WEIGHT,
         "rate_total_min": P.RATE_TOTAL_MIN,
         "rate_term_max": P.RATE_TERM_MAX,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,

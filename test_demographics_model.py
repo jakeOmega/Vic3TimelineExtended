@@ -531,6 +531,24 @@ class TestOnTopScales(unittest.TestCase):
         # infant mortality is the life table's too, as the script's te_dg_imr (set before the scales)
         self.assertEqual(a["q0_per_1000"], b["q0_per_1000"])
 
+    # -- the trapezoid (owner, 2026-10-11; #894): a window's events average the engine's rate at its two ends --------
+
+    def test_the_weight_is_the_trapezoids(self):
+        self.assertEqual(P.WINDOW_START_WEIGHT, 0.5)
+
+    def test_a_window_takes_the_mean_of_its_two_ends(self):
+        """Germany 1897-98: the engine's deaths ran at 100 a month when the window began and at 160 on the step's day
+        (a famine's onset). The window books 130, where the snapshot booked 160."""
+        self.assertAlmostEqual(M.window_events(end_rate=160.0, start_rate=100.0), 130.0)
+        self.assertAlmostEqual(M.window_events(end_rate=100.0, start_rate=160.0), 130.0)
+
+    def test_no_start_rate_is_the_snapshot(self):
+        """The first step after a seed, a new state, an old save: no rate stored at the window's start."""
+        self.assertEqual(M.window_events(end_rate=160.0, start_rate=None), 160.0)
+
+    def test_the_window_never_expects_fewer_than_no_events(self):
+        self.assertEqual(M.window_events(end_rate=0.0, start_rate=-5.0), 0.0)
+
     def test_crude_rates_of_the_stable_population(self):
         cbr, cdr = M.model_crude_rates(M.Inputs(sol=9.0, literacy=0.2))
         self.assertTrue(20 < cbr < 60 and 15 < cdr < 50, (cbr, cdr))

@@ -11,7 +11,7 @@
 # Shown only while a naming is open (gm_naming_active), never by the AI. Its one
 # building type is a placeholder that is never built.
 company_gm_name_carrier = {
-	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	icon = "gfx/interface/icons/company_icons/company_gm_name_carrier.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	category = bureaucrat_owned

@@ -24,10 +24,87 @@
 #   te_dg_os_b, te_dg_os_d  the state-level lines on top M scaled to the census's rate (option n)
 #   te_dg_rep_b, te_dg_rep_d  the replaced sums over the bare curves: the absorbed lines' share
 #                       that M took out (console option n)
+#   te_dg_sr_b, te_dg_sr_d  the engine's births and deaths rate per head at the start of the window
+#                       that ends at the next step (the trapezoid, te_demog_window_events), a month x
+#                       100,000: the walk's rate with the terms the step left in force. Stored by the
+#                       refresh, moved by fast mode's term, removed by a seed and outside Full
 # The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
 # bare births and deaths a month x 100,000; te_dg_w_ebr and te_dg_w_edr, the replaced sums: each
-# pop's bare curves x what the census absorbs for it (te_demog_absorbed_walk_pop, generated).
+# pop's bare curves x what the census absorbs for it (te_demog_absorbed_walk_pop, generated);
+# te_dg_w_eb and te_dg_w_ed, each pop's bare curves x its own multiplier: the engine's rate.
 # ============================================================================
+
+# ---- The window's events: the trapezoid (owner, 2026-10-11; #894; the review of #907) -------------
+# The walk is a snapshot: its expected births and deaths (te_dg_eb, te_dg_ed) are the engine's rate on the
+# step's day x the window, and the step books the whole window that ends that day. A famine that began in
+# early December was booked for all of Hannover's year to February 1898, and the residual read the deaths
+# that never happened as immigrants (Germany 1898: +933k). Under Full the walk's tail books the window at
+# the mean of the engine's rate at its two ends:
+#   ED = (w x rate_start x people + (1 - w) x te_dg_w_ed) x te_demog_step_months / 100,000
+# with w = te_demog_k_window_start_weight (0.5, the trapezoid; demographics_model.window_events). The
+# rate at the start is the one the last step left in force (te_dg_sr_d, per head): the walk's rate then,
+# with the terms the step changed swapped in. M is refitted only at a step, and fast mode's term is set at
+# a clock step, so they hold all window and both ends carry them (option k takes the term off between two
+# steps; te_demog_fast_clear_rates then drops the start's rate). So the refresh stores
+#   rate_start = te_dg_w_ed + te_dg_w_ed0m x (M_new - M_prev - the moved lines' pairs it cleared)
+# and fast mode adds te_dg_w_ed0m x (F_new - F_prev). te_dg_w_ed0m is the bare curves of the pops the
+# engine doesn't floor at 0, which alone a change in the read reaches: severe starvation's -0.9 floors a
+# pop's births whenever M is negative, and counting those pops' bare curves too put a famine state's
+# start births about a tenth high. Each end is the engine's whole rate, so every line
+# that moved inside the window counts at the engine's own weight: severe starvation, the mild starvation M
+# nets, a state line (devastation, pollution, an event) on every pop's bare curve, and the bare curves
+# themselves as standard of living moves. The model's rate drifting is not in either end; it stays in dz's
+# comparison with the target, as before. Births alike: a famine cuts births too. Both ends cover the same
+# months (te_demog_step_months), so fast mode's window needs nothing more, and a switch of speed between
+# steps is booked at the months it covered.
+# No start rate (the first step after a seed, a new state, an old save, fast mode's first switch, which
+# re-seeds) or not Full: the snapshot, as before. The residual (te_demog_flows), the step's scales
+# (te_demog_on_top_scales) and console option n read te_dg_eb / te_dg_ed, so they all take the window's
+# events. The refresh and fast mode read the walk's locals, today's snapshot, as they should: M and the
+# term are fitted to today's lines.
+# A refresh that sets no term (a seed, a step with no births) drops the start's rate, so the next window
+# takes the snapshot rather than a rate two windows old.
+# Second order: a pop the change in M moves across the floor (from just above 0 to below it, or back)
+# counts as the walk found it. A second pulse in one year (no step) refits M and stores the start again
+# mid-window, as the refit itself already did.
+
+# THIS = a state, the walk's tail (te_demog_walks), straight after te_dg_eb and te_dg_ed: the window's
+# events, as the header above says. Never below 0.
+te_demog_window_events = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_sr_b
+			has_variable = te_dg_sr_d
+		}
+		set_variable = {
+			name = te_dg_eb
+			value = {
+				value = var:te_dg_sr_b
+				multiply = state_population
+				subtract = local_var:te_dg_w_eb
+				multiply = te_demog_k_window_start_weight
+				add = local_var:te_dg_w_eb
+				multiply = te_demog_step_months
+				divide = 100000
+				min = 0
+			}
+		}
+		set_variable = {
+			name = te_dg_ed
+			value = {
+				value = var:te_dg_sr_d
+				multiply = state_population
+				subtract = local_var:te_dg_w_ed
+				multiply = te_demog_k_window_start_weight
+				add = local_var:te_dg_w_ed
+				multiply = te_demog_step_months
+				divide = 100000
+				min = 0
+			}
+		}
+	}
+}
 
 # THIS = a state at the start of its step, straight after te_demog_prepare and te_demog_flows:
 # the year's rates scaled by how far the engine's expected births and deaths over the window
@@ -121,6 +198,8 @@ te_demog_rates_refresh = {
 	# the moved lines' pairs this refresh clears (fast mode takes them off the walk's average): 0 unless it does
 	set_local_variable = { name = te_dg_rate_lines_b value = 0 }
 	set_local_variable = { name = te_dg_rate_lines_d value = 0 }
+	# 1 once this refresh stores the next window's start rate (the trapezoid)
+	set_local_variable = { name = te_dg_rate_sr value = 0 }
 	if = {
 		limit = { NOT = { te_demog_effects_run = yes } }
 		te_demog_rates_clear = yes
@@ -278,9 +357,49 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_rate_clamped value = local_var:te_dg_rate_clamped }
 			set_variable = { name = te_dg_rep_b value = { value = local_var:te_dg_w_ebr divide = { value = local_var:te_dg_w_eb0 min = 1 } } }
 			set_variable = { name = te_dg_rep_d value = { value = local_var:te_dg_w_edr divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
+			# the engine's rate per head at the start of the window that begins here (the trapezoid,
+			# te_demog_window_events): the walk's, with this refresh's M for the last one and without the moved
+			# lines' pairs it clears, on the bare curves those reach. Fast mode, next in this effect, moves it by
+			# its own term's change
+			set_variable = {
+				name = te_dg_sr_b
+				value = {
+					value = var:te_dg_mb
+					subtract = local_var:te_dg_rate_prev_b
+					subtract = local_var:te_dg_rate_lines_b
+					multiply = local_var:te_dg_w_eb0m
+					add = local_var:te_dg_w_eb
+					divide = { value = state_population min = 1 }
+				}
+			}
+			set_variable = {
+				name = te_dg_sr_d
+				value = {
+					value = var:te_dg_md
+					subtract = local_var:te_dg_rate_prev_d
+					subtract = local_var:te_dg_rate_lines_d
+					multiply = local_var:te_dg_w_ed0m
+					add = local_var:te_dg_w_ed
+					divide = { value = state_population min = 1 }
+				}
+			}
+			set_local_variable = { name = te_dg_rate_sr value = 1 }
 			te_demog_rates_apply = yes
 			set_local_variable = { name = te_dg_rate_new_b value = var:te_dg_mb }
 			set_local_variable = { name = te_dg_rate_new_d value = var:te_dg_md }
+		}
+	}
+	# no start rate stored (a seed, a step with no births, nobody): the one two windows old goes, and the next
+	# window takes the snapshot
+	if = {
+		limit = { local_var:te_dg_rate_sr = 0 }
+		if = {
+			limit = { has_variable = te_dg_sr_b }
+			remove_variable = te_dg_sr_b
+		}
+		if = {
+			limit = { has_variable = te_dg_sr_d }
+			remove_variable = te_dg_sr_d
 		}
 	}
 }
@@ -407,5 +526,13 @@ te_demog_rates_clear = {
 	if = {
 		limit = { has_variable = te_dg_w }
 		remove_variable = te_dg_w
+	}
+	if = {
+		limit = { has_variable = te_dg_sr_b }
+		remove_variable = te_dg_sr_b
+	}
+	if = {
+		limit = { has_variable = te_dg_sr_d }
+		remove_variable = te_dg_sr_d
 	}
 }

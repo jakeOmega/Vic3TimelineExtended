@@ -413,7 +413,9 @@ te_debug_demog_shock_lines = {
 # ---- n: the census's rates (phase 2 step 4, probe P3) -----------------------------
 # THIS = the capital: its census terms, the terms in force, the on-top scales of its last step and
 # the target they were measured against (bz = eb / eb_target - 1, clamped; dz the same), the
-# model's rates, the engine's expected events over the last window, today's people, the reads and
+# model's rates, the engine's expected events over the last window (under Full the trapezoid's, the
+# mean of the engine's rate at the window's two ends; sr_b, sr_d are the rate per head stored for the
+# next window's start, a month x 100,000, te_demog_window_events), today's people, the reads and
 # the absorbed lines' share M took out (rep_b, rep_d), the target over the bare curve (tb_b, tb_d) and the
 # state-level lines on top (os_b, os_d), the moved lines' on-top family the census adds (q_b, q_d) and Private Health
 # Insurance's wealth line it applies (w): M = tb - 1 - rep - os x (1 - tb) + q x tb, before the clamp. Every variable is copied through a guard: a capital that hasn't stepped under Full has
@@ -439,6 +441,8 @@ te_debug_demog_rate_lines = {
 	te_debug_demog_rate_copy = { FROM = te_dg_q_b TO = te_dg_dbg_qb }
 	te_debug_demog_rate_copy = { FROM = te_dg_q_d TO = te_dg_dbg_qd }
 	te_debug_demog_rate_copy = { FROM = te_dg_w TO = te_dg_dbg_w }
+	te_debug_demog_rate_copy = { FROM = te_dg_sr_b TO = te_dg_dbg_srb }
+	te_debug_demog_rate_copy = { FROM = te_dg_sr_d TO = te_dg_dbg_srd }
 	set_variable = { name = te_dg_dbg_people value = state_population }
 	set_variable = { name = te_dg_dbg_ab value = te_demog_rate_births_applied }
 	set_variable = { name = te_dg_dbg_ad value = te_demog_rate_deaths_applied }
@@ -446,7 +450,7 @@ te_debug_demog_rate_lines = {
 	set_variable = { name = te_dg_dbg_fd value = te_demog_fast_deaths_applied }
 	set_variable = { name = te_dg_dbg_read_b value = modifier:state_birth_rate_mult }
 	set_variable = { name = te_dg_dbg_read_d value = modifier:state_mortality_mult }
-	debug_log = "TE_DEMOG_RATES: mb=[THIS.Var('te_dg_dbg_mb').GetValue|4]; md=[THIS.Var('te_dg_dbg_md').GetValue|4]; applied_b=[THIS.Var('te_dg_dbg_ab').GetValue|4]; applied_d=[THIS.Var('te_dg_dbg_ad').GetValue|4]; fast_b=[THIS.Var('te_dg_dbg_fb').GetValue|4]; fast_d=[THIS.Var('te_dg_dbg_fd').GetValue|4]; read_b=[THIS.Var('te_dg_dbg_read_b').GetValue|4]; read_d=[THIS.Var('te_dg_dbg_read_d').GetValue|4]; bz=[THIS.Var('te_dg_dbg_bz').GetValue|4]; dz=[THIS.Var('te_dg_dbg_dz').GetValue|4]; cbr_model=[THIS.Var('te_dg_dbg_cbrm').GetValue|3]; cdr_model=[THIS.Var('te_dg_dbg_cdrm').GetValue|3]; eb=[THIS.Var('te_dg_dbg_eb').GetValue|0]; ed=[THIS.Var('te_dg_dbg_ed').GetValue|0]; eb_target=[THIS.Var('te_dg_dbg_ebt').GetValue|0]; ed_target=[THIS.Var('te_dg_dbg_edt').GetValue|0]; people=[THIS.Var('te_dg_dbg_people').GetValue|0]; rep_b=[THIS.Var('te_dg_dbg_repb').GetValue|4]; rep_d=[THIS.Var('te_dg_dbg_repd').GetValue|4]; tb_b=[THIS.Var('te_dg_dbg_tbb').GetValue|4]; tb_d=[THIS.Var('te_dg_dbg_tbd').GetValue|4]; os_b=[THIS.Var('te_dg_dbg_osb').GetValue|4]; os_d=[THIS.Var('te_dg_dbg_osd').GetValue|4]; q_b=[THIS.Var('te_dg_dbg_qb').GetValue|4]; q_d=[THIS.Var('te_dg_dbg_qd').GetValue|4]; w=[THIS.Var('te_dg_dbg_w').GetValue|5]; clamped=[THIS.Var('te_dg_dbg_cl').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_RATES: mb=[THIS.Var('te_dg_dbg_mb').GetValue|4]; md=[THIS.Var('te_dg_dbg_md').GetValue|4]; applied_b=[THIS.Var('te_dg_dbg_ab').GetValue|4]; applied_d=[THIS.Var('te_dg_dbg_ad').GetValue|4]; fast_b=[THIS.Var('te_dg_dbg_fb').GetValue|4]; fast_d=[THIS.Var('te_dg_dbg_fd').GetValue|4]; read_b=[THIS.Var('te_dg_dbg_read_b').GetValue|4]; read_d=[THIS.Var('te_dg_dbg_read_d').GetValue|4]; bz=[THIS.Var('te_dg_dbg_bz').GetValue|4]; dz=[THIS.Var('te_dg_dbg_dz').GetValue|4]; cbr_model=[THIS.Var('te_dg_dbg_cbrm').GetValue|3]; cdr_model=[THIS.Var('te_dg_dbg_cdrm').GetValue|3]; eb=[THIS.Var('te_dg_dbg_eb').GetValue|0]; ed=[THIS.Var('te_dg_dbg_ed').GetValue|0]; eb_target=[THIS.Var('te_dg_dbg_ebt').GetValue|0]; ed_target=[THIS.Var('te_dg_dbg_edt').GetValue|0]; people=[THIS.Var('te_dg_dbg_people').GetValue|0]; rep_b=[THIS.Var('te_dg_dbg_repb').GetValue|4]; rep_d=[THIS.Var('te_dg_dbg_repd').GetValue|4]; tb_b=[THIS.Var('te_dg_dbg_tbb').GetValue|4]; tb_d=[THIS.Var('te_dg_dbg_tbd').GetValue|4]; os_b=[THIS.Var('te_dg_dbg_osb').GetValue|4]; os_d=[THIS.Var('te_dg_dbg_osd').GetValue|4]; q_b=[THIS.Var('te_dg_dbg_qb').GetValue|4]; q_d=[THIS.Var('te_dg_dbg_qd').GetValue|4]; w=[THIS.Var('te_dg_dbg_w').GetValue|5]; sr_b=[THIS.Var('te_dg_dbg_srb').GetValue|2]; sr_d=[THIS.Var('te_dg_dbg_srd').GetValue|2]; clamped=[THIS.Var('te_dg_dbg_cl').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_dg_dbg_mb
 	remove_variable = te_dg_dbg_md
 	remove_variable = te_dg_dbg_bz
@@ -467,6 +471,8 @@ te_debug_demog_rate_lines = {
 	remove_variable = te_dg_dbg_qb
 	remove_variable = te_dg_dbg_qd
 	remove_variable = te_dg_dbg_w
+	remove_variable = te_dg_dbg_srb
+	remove_variable = te_dg_dbg_srd
 	remove_variable = te_dg_dbg_people
 	remove_variable = te_dg_dbg_ab
 	remove_variable = te_dg_dbg_ad

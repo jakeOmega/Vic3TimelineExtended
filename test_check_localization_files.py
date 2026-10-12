@@ -167,6 +167,25 @@ class QuoteTests(unittest.TestCase):
         self.assertEqual(_check(text), [])
 
 
+class VersionSpaceTests(unittest.TestCase):
+    """`KEY:0 "value"`: the version digit is followed by a space. `KEY:0"value"`
+    is a typo (an editor dropping the trailing space); neither vanilla nor the
+    mod writes it. `KEY:"value"` with no digit is the mod's own older form and
+    renders in game (the banking buttons), so it stays allowed."""
+
+    def test_version_digit_glued_to_the_quote_is_flagged(self):
+        text = BOM + 'l_english:\n TE_ALPHA:0"Alpha"\n'
+        problems = _check(text)
+        self.assertEqual(len(problems), 1)
+        self.assertIn(":2:", problems[0])
+        self.assertIn("TE_ALPHA", problems[0])
+        self.assertIn("space", problems[0])
+
+    def test_no_version_and_no_space_is_allowed(self):
+        text = BOM + 'l_english:\n TE_ALPHA:"Alpha"\n TE_BETA: "Beta"\n'
+        self.assertEqual(_check(text), [])
+
+
 class MainTests(unittest.TestCase):
     def test_main_returns_zero_on_clean_tree(self):
         with _TempLoc({"te_ok_l_english.yml": GOOD}) as d:

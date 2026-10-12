@@ -240,6 +240,11 @@ RATE_TOTAL_MIN = -0.8         # the state read with M in it stays at or above th
 RATE_TERM_MAX = 3.0           # a guard against a nonsense target, not a measured limit
 ON_TOP_SCALE_MIN = -0.9       # the step's births and deaths scales (the engine's events over the model's target)
 ON_TOP_SCALE_MAX = 4.0
+# The window's events (owner, 2026-10-11; #894; the review of #907): the walk is a snapshot on the step's day, and the
+# step books the whole window that ends that day. The window is booked at the engine's rate at its start (stored by the
+# last step's refresh) at this weight and today's at the rest: 0.5 is the trapezoid, which halves the misplacement when
+# a famine starts or ends inside the window and lags a one-off by half a window (demographics_model.window_events).
+WINDOW_START_WEIGHT = 0.5
 LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
 # Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth and
 # mortality lines on laws, technologies and institutions move to script-only types, one per field and family
