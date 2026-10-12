@@ -16,8 +16,9 @@ It comments out, keeping each line's text after a `# RELEASE: ` prefix:
    `modifier:<type>` reads are left alone);
 2. every top-level entry those leave with nothing in it (the INJECTs that carried only
    census lines);
-3. every `add_modifier = { name = X }` of a static modifier left with no effect line
-   (te_demog_family_limitation, in France's history);
+3. every `add_modifier = { name = X }` of a static modifier left with no effect line, with or without a
+   `multiplier = Y` (te_demog_family_limitation: France's history, and phase 3's census line under Full,
+   te_demog_fl_effects.txt);
 3b. every decree whose `modifier` block is left with no effect line is commented out
    whole (Medical Outreach: the census is its only reader);
 4. the rule: both gates (te_demog_triggers.txt) read `always = no` and the rule's block
@@ -136,7 +137,8 @@ def run(root, check=False):
                     emptied.add(re.match(r"\s*([\w.-]+)\s*=", new[start]).group(1))
 
     if emptied:
-        applied = re.compile(rf"add_modifier\s*=\s*\{{\s*name\s*=\s*({'|'.join(map(re.escape, sorted(emptied)))})\s*\}}")
+        applied = re.compile(rf"add_modifier\s*=\s*\{{\s*name\s*=\s*({'|'.join(map(re.escape, sorted(emptied)))})"
+                             rf"(?:\s+multiplier\s*=\s*\S+)?\s*\}}")
         for path in sorted([*(root / "common").rglob("*.txt"), *(root / "events").rglob("*.txt")]):
             _, lines = _read(path)
             hits = [i for i, line in enumerate(lines) if applied.search(_code(line))]

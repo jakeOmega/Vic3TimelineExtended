@@ -7478,8 +7478,9 @@ te_demog_medicine_drift_one = {
 	}
 }
 
-# The practices' machinery (te_demog_practice_effects.txt) for each practice in P.PRACTICES: phase 3 adds
-# Family Limitation there and here.
+# The practices' machinery (te_demog_practice_effects.txt) for each practice in P.PRACTICES. Phase 3's neighbour
+# spread reads te_demog_practices_neighbours' sums (te_demog_spread_effects_generated.txt); Family Limitation is
+# national, not a state practice (te_demog_fl_effects.txt).
 te_demog_practices_seed = {
 	te_demog_practice_seed = { P = lm }
 	te_demog_practice_seed = { P = bs }

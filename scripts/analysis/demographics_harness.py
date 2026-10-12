@@ -1618,11 +1618,27 @@ def cmd_history(args):
 # ---- Late Marriage and Birth Spacing (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md) ----------
 # demographics_practices imports this module, so the commands import it inside.
 def cmd_practices_replay(args):
+    import demographics_adjacency as A
     import demographics_practices as DP
     carriers = DM.load_carriers()
     loaded = sorted(((save_year(p) or args.year, DP.practice_states(p, carriers)) for p in args.save),
                     key=lambda pair: pair[0])
-    result = DP.replay(loaded)
+    # phase 3's neighbour spread (the late-marriage spec 4.4), unless --no-spread asks for phase 2's replay
+    adjacency = None if args.no_spread else A.neighbours(straits=args.straits)
+    result = DP.replay(loaded, adjacency)
+    if adjacency is not None:
+        # the spec's 5.2 item: no state's shares moving more than 0.2 by 1887 except through its own conditions, read
+        # as the spread's own part, the replay with it less the replay without it
+        bare = DP.replay(loaded)
+        upto = max([y for y in result if y <= 1887] or [min(result)])
+        spread = sorted(((abs(result[upto][sid][p] - bare[upto][sid][p]), p, rec["state_region"])
+                         for sid, rec in result[upto].items() if sid in bare[upto] for p in P.PRACTICES),
+                        reverse=True)[:args.top]
+        print(f"largest moves the spread made by {upto} (practice, state region):")
+        for move, p, sr in spread:
+            print(f"  {move:.3f}  {p} {sr}")
+        if spread and spread[0][0] > 0.2:
+            print(f"GATE the spread moved {spread[0][2]}'s {spread[0][1]} {spread[0][0]:.2f} by {upto} (at most 0.2)")
     for year, recs in sorted(result.items()):
         west = DP._mean(recs.values(), "lm", lambda r: r["strategic_region"] in DP.WEST)
         parts = [f"West's Late Marriage {west:.2f}" if west is not None else "no Western state"]
@@ -1640,6 +1656,69 @@ def cmd_practices_replay(args):
     for line in fails:
         print("GATE " + line)
     return 1 if fails else 0
+
+
+def cmd_fl_replay(args):
+    """Phase 3 (parent spec section 13): Family Limitation's share, line and target per country through the saves, and
+    children per woman today (history's modifier, Forced Heirship's cut on top) and with the practice (the cut folded
+    in), against Gapminder's (demographics_fl.report)."""
+    import demographics_adjacency as A
+    import demographics_fl as F
+    import demographics_practices as DP
+    try:
+        anchors = read_anchors(args.anchors)
+    except OSError as e:
+        print(f"cannot read the anchors {args.anchors}: {e}", file=sys.stderr)
+        return 1
+    carriers = DM.load_carriers()
+    loaded = sorted(((save_year(p) or args.year, DP.practice_states(p, carriers)) for p in args.save),
+                    key=lambda pair: pair[0])
+    rows, rmse, _fl = F.report(loaded, A.neighbours(straits=args.straits), anchors)
+    print("children per woman: today (history's modifier, Forced Heirship's cut on top) and with Family Limitation")
+    for country in (*F.CHECK, *F.CONTROLS):
+        mine = [r for r in rows if r[1] == country]
+        if not mine:
+            continue
+        print(country + (" (check)" if country in F.CHECK else ""))
+        for year, _c, share, line, target, nb, today, new, hist in mine:
+            nb_text = f"{nb:.3f}" if nb is not None else "  -  "
+            hist_text = f"{hist:.2f}" if hist is not None else "  -"
+            print(f"  {year}  share {share:.3f}  line {line:.3f}  target {target:.3f}  neighbours {nb_text}  "
+                  f"today {today:.2f}  with {new:.2f}  Gapminder {hist_text}")
+    fmt = {k: (f"{v:.3f}" if v is not None else "-") for k, v in rmse.items()}
+    print(f"error over {', '.join(F.CHECK)}: today {fmt['today']}, with {fmt['with']}")
+    return 0
+
+
+def ch_rows(carriers=None):
+    """[(label, exposure, hegemon's desired, own desired, factor at its target, children per woman without and with)]:
+    Cultural Hegemony's drift at its target on two scenarios (phase 3; demographics_model.ch_target)."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for label, kw, exposure, hegemon in (
+            ("Latin America 1970, a 25-point lead", dict(sol=12, literacy=0.72, urban_share=0.55,
+                                                        techs=MED_1950 | MEANS_TECHS, laws={CHS},
+                                                        institutions={HEALTH: 2}), 0.25, 0.45),
+            ("India 1975, a 30-point lead", dict(sol=9, literacy=0.35, urban_share=0.2,
+                                                 techs=MED_1950 | MEANS_TECHS | {"contraceptive_pill"}, laws={CHS},
+                                                 institutions={HEALTH: 1}), 0.30, 0.45),
+            ("West 1990, a rival 10 points behind", dict(sol=38, literacy=0.98, urban_share=0.75,
+                                                         techs=MED_1990 | MEANS_TECHS | {"contraceptive_pill"},
+                                                         laws={PHI}, institutions={HEALTH: 6}), 0.10, 0.45)):
+        inp = scenario_inputs(carriers, **kw)
+        e0 = life(inp)["e0"]
+        base = M.fertility(inp, e0)
+        factor = M.ch_target(exposure, hegemon, base["desired"])
+        with_ch = M.fertility(dataclasses.replace(inp, hegemon=factor), e0)
+        rows.append((label, exposure, hegemon, base["desired"], factor, base["tfr"], with_ch["tfr"]))
+    return rows
+
+
+def cmd_ch_drift(_args):
+    for label, exposure, hegemon, own, factor, tfr0, tfr1 in ch_rows():
+        print(f"{label:38s} exposure {exposure:.2f}  hegemon's desired {hegemon:.2f}  own {own:.2f}  "
+              f"factor {factor:.3f}  children per woman {tfr0:.2f} -> {tfr1:.2f}")
+    return 0
 
 
 def cmd_practices_fit(args):
@@ -2357,7 +2436,19 @@ def main(argv=None):
     p.add_argument("save", nargs="+")
     p.add_argument("--out", help="write {year: {state id: record}} here (history --shares, practices-fit --shares)")
     p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.add_argument("--no-spread", action="store_true", help="phase 2's replay: no neighbour spread")
+    p.add_argument("--straits", action="store_true", help="the spread crosses demographics_adjacency's straits too")
+    p.add_argument("--top", type=int, default=10, help="how many of the spread's largest moves to list")
     p.set_defaults(fn=cmd_practices_replay)
+    p = sub.add_parser("fl-replay", help="phase 3: Family Limitation's national practice through a run's saves, "
+                                         "children per woman against Gapminder (France, Belgium, Switzerland)")
+    p.add_argument("save", nargs="+")
+    p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")
+    p.add_argument("--straits", action="store_true", help="neighbours across demographics_adjacency's straits too")
+    p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.set_defaults(fn=cmd_fl_replay)
+    sub.add_parser("ch-drift", help="phase 3: Cultural Hegemony's drift on scenarios (its size)").set_defaults(
+        fn=cmd_ch_drift)
     p = sub.add_parser("practices-fit", help="the practices' joint fit, #904's peacetime rates projected, the gate")
     p.add_argument("save", nargs="+")
     p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")

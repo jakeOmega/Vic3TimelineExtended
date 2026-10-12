@@ -219,6 +219,8 @@ te_inh_refresh_rural_effects = {
 	if = {
 		limit = { has_modifier = inh_forced_heirship_rural }
 		remove_modifier = inh_forced_heirship_rural
+		# phase 3: Forced Heirship's farm births ride the moved lines' pair too (te_inheritance_modifiers.txt)
+		set_local_variable = { name = te_inh_fh_was value = 1 }
 	}
 	if = {
 		limit = { has_modifier = inh_primogeniture_rural }
@@ -263,13 +265,19 @@ te_inh_refresh_rural_effects = {
 			}
 		}
 	}
-	# the moved lines' pair carries Primogeniture's farm births: refresh it now, from a state event, where the
-	# modifier just added or removed is visible (add_modifier isn't, inside this effect)
+	# the moved lines' pair carries Primogeniture's and (phase 3) Forced Heirship's farm births: refresh it now, from
+	# a state event, where the modifier just added or removed is visible (add_modifier isn't, inside this effect)
 	if = {
 		limit = {
 			OR = {
 				has_local_variable = te_inh_pr_was
-				owner ?= { has_law = law_type:law_primogeniture }
+				has_local_variable = te_inh_fh_was
+				owner ?= {
+					OR = {
+						has_law = law_type:law_primogeniture
+						has_law = law_type:law_equal_inheritance
+					}
+				}
 			}
 		}
 		trigger_event = { id = te_demog_events.4 }

@@ -35,6 +35,9 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … workforce_follows_target` | Full: once a game, at a capital's census once its workforce term has run five census years and moved at least 0.03 since it landed | the walk's `engine` figure has moved W's way since the landing (`engine_at_landing`) by at least half of W's move (`needed`); `set` and `census_target` say how far the ramp still has to go. Not a gap to the set ratio: the saves show the game's figure sitting 0.01-0.03 off its ratio in steady state | `engine_moved` under `needed`: the engine's pull is slower than the ramp, so the ramp adds nothing | set `WF_RAMP_STEP` large (the term lands at once, and the engine's own pull is the lag) and keep the panel's engine figure beside the target; no line at all after many years means no capital's term moved 0.03 (option r shows the capital's) |
 | `TE_SELF_CHECK … conscription_term_read` | Full, and only once conscription's effect is on (`CONSCRIPTION_EFFECTS`; held back now, so no line): once a game, a week after the first state takes a fresh conscription pair (its term at least 0.01 either way) | the census's conscription pair reaches the state's conscription multiplier (`added` = `expected`, the term) | `added` 0: the pair doesn't reach the state's read. Another figure: a technology or law moved the field inside the week, which says nothing either way: read the state's conscription tooltip for "Census: Fighting-Age Men" | for `added` 0, put the term on `state_conscription_rate_add` as T × the state's own rate (`modifier:state_conscription_rate_add`, read in the refresh, ROOT the state). Whether the read moves the state's conscript battalions is item 2 of § Phase 2 step 4: no script reads them |
 | `TE_SELF_CHECK … unemployment_rate_read` | Display only or Full: once a game, the first census state whose `state_unemployment_rate` reads above 0.02 | the read is a share, 0–1: within a factor of 2 of the pops' own count (`pops=`, the workforce of pops with no workplace over all the workforce) | `read` about 100 × `pops`: a percentage. `pops` near 0, or the two far apart otherwise: the read is another figure. Its count sums each pop's `workforce`, so it needs `pop_workforce_read` OK first: with that BROKEN, `pops` reads 0 and this line BROKEN whatever the read | a percentage: divide `te_demog_unemployment` (`te_demog_consequence_values.txt`) by 100. Otherwise sum the unemployed workforce in the walk under the cohorts (`te_demog_work_walk_pop`) and read that |
+| `TE_SELF_CHECK … family_limitation_scaled` | Full: once a game, `START` when the first country's Family Limitation line goes on fresh at 0.02–0.3 (a neighbour of France gaining the practice, usually in the first few years), the verdict a week later from its capital (`te_debug_demog.90`) | the capital's `state_fertility_means_add` rose by the line (`added` ≈ `expected`): the engine scales a script-only state type on a country modifier by its multiplier, and the states read it. The type-on-a-country half is already seen in saves: France's states read history's 0.6 in their means | `added` about 0.6: the multiplier is ignored, so every country's line reads 0.6 once it has any; about 0: the type doesn't reach the states, so no country's practice counts. `NO_VERDICT` (the capital changed hands, or the line came off within the week) re-arms | put the line on a state modifier in each of the country's states, applied by `te_demog_fl_apply` beside the country one (the measures' fallback pattern); or, for an ignored multiplier only, a ladder of static modifiers at tenths of the line |
+| `TE_SELF_CHECK … fl_neighbours_read` | Full: once a game, at the first Family Limitation step (31 December 1836) of a country the state-scope test says has a foreign neighbour | `every_neighbouring_state` from country scope returns the states across its borders (`foreign` above 0). `own` above 0 says it returns the country's own states too, which the step leaves out either way | `foreign=0`: the practice never spreads | walk the country's own states and each one's `every_neighbouring_state` in `te_demog_fl_step` (a border state then counts once per own state it touches) |
+| `TE_SELF_CHECK … neighbouring_state_reads` | Full or Display only: once a game, at the first country census on 31 December | `every_neighbouring_state` from a state returns a land neighbour (Ulster sees Leinster): Late Marriage and Birth Spacing spread. `strait=1` says it crosses the Ulster–Lowlands strait too, so islands spread with their neighbours across the water; `strait=0`, only through their own conditions (the late-marriage spec 4.4 allows either) | `land=0`: the practices never spread | set `PRACTICE_SPREAD` to 0 in `demographics_params.py` and regenerate (`gen_demographics.py`), so the code says what the game does; with `strait=1`, run the harness's replays with `--straits` |
 
 No `unemployment_rate_read` line after a few years under the census means no state's read ever passed 0.02: compare option t's `unemp=` with the state panel's unemployment in a state with visibly idle workers.
 No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game. No `measure_country_types` line means no measure that moves family size went on (start Child Allowance under Pro-Natalist Policy); a `START` with no verdict, that the capital changed hands within the week.
@@ -349,3 +352,36 @@ effects are built but held back (`demographics_params`' `CONSCRIPTION_EFFECTS`, 
    the state's next count. The sex balance's hover ends in "not applied yet".
 8. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_consequence_*`,
    `te_demog_sex_births_store`, `te_debug_demog.30`, `te_debug_demog_unemployment_selfcheck` or option t.
+
+## Phase 3: Family Limitation and Cultural Hegemony's drift
+
+Family Limitation becomes a national practice under Full: a share of couples, 0–1, that France starts at 0.6 (history's
+modifier), that rises toward a target from Forced Heirship on the farms, literacy and the church law, and that closes
+part of the gap to the countries across its borders. Its one line in the means is the share less what modern
+contraception has replaced. Forced Heirship's rural birth cut moved to the moved lines' absorbed family (outside Full the
+Laws and Institutions pair re-applies it; under Full Family Limitation stands in). Cultural Hegemony's drift moves each
+country's desired fertility a little toward the hegemon's, by how far the hegemon's culture leads its own. Late Marriage
+and Birth Spacing now spread from neighbouring states too. Outside Full nothing changes but the Display only panel's
+practices, which spread. Spec: `docs/superpowers/specs/2026-10-08-demographics-design.md` §13 and §6; results:
+`docs/testing/demographics-family-limitation-2026-10-12.md`. The three self-checks are in the table above.
+
+1. **France at the start (Full, a new 1836 game).** France's modifiers list Family Limitation at +60% means to plan a
+   family, as before. The Population panel's children-per-woman hover: "60% of couples practise family limitation" in
+   the country line, and in the capital's terms "family limitation's part +60%". A French farming state's birth-rate
+   breakdown has no "Divided Holdings" birth line and no Laws and Institutions line for it after its first census step.
+2. **The spread (Full, a few years in).** Belgium, Switzerland or Spain shows Family Limitation in its modifiers once
+   its share passes 2% (in the first five years or so), at the share the hover's country line gives. Britain shows none
+   unless the strait check says the iterator crosses water.
+3. **Forced Heirship outside Full (Disabled, a new game).** A French farming state's birth-rate breakdown shows the
+   −15% × farm share as a Laws and Institutions line after its first yearly pulse, and Divided Holdings keeps its
+   migration line. The same in Display only.
+4. **The hegemon's example (Full, a late game with Cultural Hegemony on).** In a country under the foreign benchmark,
+   a state's children-per-woman hover shows "The cultural hegemon's example" away from ×1.00 (within ×0.90–×1.10), and
+   option l's `hegemon=` matches it. The hegemon itself reads ×1.00.
+5. **Display only and Disabled.** France keeps history's modifier at +60% for good; no country gains it; every hover
+   reads "The cultural hegemon's example: ×1.00".
+6. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_fl_effects.txt`,
+   `te_demog_spread_*`, `owner.var:te_dg_pr_fl`, `global_var:ch_rank_1`, `te_debug_demog.90` or the two inline
+   self-checks.
+7. **A revolution's winner (Full).** It inherits `te_dg_pr_fl` and its line comes back at the next 31 December
+   (the line is re-added every census year).

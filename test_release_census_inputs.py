@@ -79,6 +79,8 @@ class ReleaseCensusInputsTest(unittest.TestCase):
         mods = self._text("common/static_modifiers/te_inheritance_modifiers.txt")
         self.assertRegex(mods, r"(?m)^\tstate_demog_absorbed_birth_rate_mult = 0\.1$",
                          "a release keeps Primogeniture's farm births: the pair re-applies them")
+        self.assertRegex(mods, r"(?m)^\tstate_demog_absorbed_birth_rate_mult = -0\.15$",
+                         "a release keeps Forced Heirship's farm births (phase 3): the pair re-applies them")
         # the switch: no rule, so te_demog_effects_run reads always = no and te_demog_lines_apply holds everywhere
         triggers = self._text("common/scripted_triggers/te_demog_triggers.txt")
         self.assertIn("te_demog_lines_apply = {", triggers)
@@ -136,6 +138,9 @@ class ReleaseCensusInputsTest(unittest.TestCase):
                         self.assertIn(n, outreach, "only Medical Outreach goes whole")
                     elif rel == "common/history/extra_history.txt":
                         self.assertIn("add_modifier = { name = te_demog_family_limitation }", body)
+                    elif rel == "common/scripted_effects/te_demog_fl_effects.txt":
+                        # phase 3: the census's own line, at the share's multiplier, under Full
+                        self.assertRegex(body, r"add_modifier = \{ name = te_demog_family_limitation multiplier = \S+ \}")
                     else:
                         self.assertIn(rel, {"common/scripted_triggers/te_demog_triggers.txt",
                                             "common/game_rules/extra_game_rules.txt"})

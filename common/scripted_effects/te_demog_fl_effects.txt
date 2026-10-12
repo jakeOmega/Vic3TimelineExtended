@@ -1,0 +1,274 @@
+﻿# ============================================================================
+# DEMOGRAPHICS, phase 3: Family Limitation as a general practice, and Cultural Hegemony's drift
+# docs/superpowers/specs/2026-10-08-demographics-design.md section 13 ("Family Limitation as a general practice, not
+# France's") and section 6 (Cultural Hegemony: desired fertility drifts a little toward the hegemon's); owner,
+# 2026-10-12: build as section 13 proposes, a national practice. Twins: demographics_model.fl_target, fl_seed,
+# fl_step, fl_line, ch_target, ch_drift. Constants and values: te_demog_spread_values_generated.txt.
+# ============================================================================
+# Both run under the Demographics rule's Full setting only (te_demog_effects_run), at the country's census: the yearly
+# one on 31 December, or fast mode's clock census once a clock year. Outside Full nothing here runs, so France keeps
+# history's te_demog_family_limitation at its own 0.6, as before, and no desired fertility moves.
+#
+# Country variables (Full):
+#   te_dg_pr_fl       Family Limitation's share, 0-1: the couples who stop at the family size they want by methods
+#                     older than any modern one. Seeds at history's modifier's value (France, 0.6), else 0, and rises
+#                     only: toward the target its conditions give, and toward its neighbours' share
+#   te_dg_fl_line     the share less what modern methods have replaced (te_demog_fl_erosion), 0 below
+#                     te_demog_k_fl_line_min: the line te_demog_family_limitation carries in the means
+#   te_dg_fl_nb       the neighbours' border-weighted share at the last step (-1: no neighbour holds one), the panel's
+#   te_dg_fl_agr, te_dg_fl_lit, te_dg_fl_ero
+#                     the census states' people-weighted farm share, literacy and contraception erosion
+#   te_dg_desired     the census states' desired fertility, weighted by women aged 15-49 (Cultural Hegemony's reads)
+#   te_dg_ch_desired  Cultural Hegemony's factor on its states' desired fertility, 1 at the start
+# State variable (Full): te_dg_hegemon, the factor the state's last step used (absent at 1).
+# ============================================================================
+
+# THIS = a country at its census (te_demog_country_census): the sums, initialised before the walk over the states,
+# added inside it (after the local te_dg_c_s_pm, the state's people in millions) and stored after it.
+te_demog_fl_country_init = {
+	set_local_variable = { name = te_dg_c_fl_agr value = 0 }
+	set_local_variable = { name = te_dg_c_fl_lit value = 0 }
+	set_local_variable = { name = te_dg_c_fl_ero value = 0 }
+	set_local_variable = { name = te_dg_c_des_w value = 0 }
+	set_local_variable = { name = te_dg_c_des_n value = 0 }
+}
+
+# THIS = a census state, inside the country's walk; under Full only, the sums' only reader (a census state has the
+# walk's te_dg_agr_share and te_dg_lit: the walk runs before the census each year, whatever the rule).
+te_demog_fl_country_add = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		change_local_variable = { name = te_dg_c_fl_agr add = { value = var:te_dg_agr_share multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_fl_lit add = { value = var:te_dg_lit multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_fl_ero add = { value = te_demog_pr_erosion_contraception multiply = local_var:te_dg_c_s_pm } }
+		if = {
+			limit = { has_variable = te_dg_desired }
+			change_local_variable = { name = te_dg_c_des_w add = { value = var:te_dg_desired multiply = var:te_dg_w1549 } }
+			change_local_variable = { name = te_dg_c_des_n add = var:te_dg_w1549 }
+		}
+	}
+}
+
+# THIS = the country, after the walk, with at least one census state (local te_dg_c_pm, its people in millions).
+te_demog_fl_country_store = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		set_variable = { name = te_dg_fl_agr value = { value = local_var:te_dg_c_fl_agr divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_fl_lit value = { value = local_var:te_dg_c_fl_lit divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_fl_ero value = { value = local_var:te_dg_c_fl_ero divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		if = {
+			limit = { local_var:te_dg_c_des_n > 0 }
+			set_variable = { name = te_dg_desired value = { value = local_var:te_dg_c_des_w divide = { value = local_var:te_dg_c_des_n min = 1 } } }
+		}
+	}
+}
+
+# THIS = ROOT = a country, straight after its census at game start (te_demog_country_game_start), under Full: the
+# seed and the line, no step. France's history modifier comes off and the same modifier goes back on at its share's
+# multiplier, 1 at 0.6: the same +0.6 in its means.
+te_demog_phase3_game_start = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_fl_agr
+		}
+		te_demog_fl_seed_if_none = yes
+		te_demog_fl_apply = yes
+	}
+}
+
+# THIS = ROOT = a country, straight after its census (te_demog_country_yearly, or fast mode's clock census), under
+# Full: a census year of Family Limitation and of Cultural Hegemony's drift. A country with no census state yet
+# (no te_dg_fl_agr) waits for its first.
+te_demog_phase3_yearly = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_fl_agr
+		}
+		if = {
+			limit = { has_variable = te_dg_pr_fl }
+			te_demog_fl_step = yes
+		}
+		else = {
+			te_demog_fl_seed_if_none = yes
+		}
+		te_demog_fl_apply = yes
+		te_demog_ch_refresh = yes
+	}
+}
+
+# THIS = a country with no share: history's modifier's value, else 0 (te_demog_fl_seed). A save from before this
+# build, or a country new since the last census (a release, a formed nation's new tag keeps its variables), seeds the
+# same way.
+te_demog_fl_seed_if_none = {
+	if = {
+		limit = { NOT = { has_variable = te_dg_pr_fl } }
+		set_variable = { name = te_dg_pr_fl value = te_demog_fl_seed }
+	}
+}
+
+# THIS = ROOT = a country holding a share (demographics_model.fl_step): te_demog_k_fl_rate of the gap up to its target
+# and te_demog_k_fl_spread of the gap up to its neighbours' share, both from last year's share and upward only (a
+# practice once learned is not unlearned). The neighbours' share is the states across its borders, each its owner's
+# share weighted by the state's people (millions): every_neighbouring_state from country scope, its own states left
+# out. Unverified: what that iterator returns from country scope; te_debug_demog_fl_neighbours_check logs it once a
+# game (TE_SELF_CHECK fl_neighbours_read).
+te_demog_fl_step = {
+	set_local_variable = { name = te_dg_fl_np value = 0 }
+	set_local_variable = { name = te_dg_fl_ns value = 0 }
+	set_local_variable = { name = te_dg_fl_nf value = 0 }
+	set_local_variable = { name = te_dg_fl_own value = 0 }
+	every_neighbouring_state = {
+		limit = { exists = owner }
+		if = {
+			limit = { owner = ROOT }
+			change_local_variable = { name = te_dg_fl_own add = 1 }
+		}
+		else = {
+			change_local_variable = { name = te_dg_fl_nf add = 1 }
+			if = {
+				limit = {
+					owner = { has_variable = te_dg_pr_fl }
+				}
+				change_local_variable = { name = te_dg_fl_np add = { value = state_population divide = 1000000 } }
+				change_local_variable = { name = te_dg_fl_ns add = { value = owner.var:te_dg_pr_fl multiply = state_population divide = 1000000 } }
+			}
+		}
+	}
+	te_debug_demog_fl_neighbours_check = yes
+	set_local_variable = {
+		name = te_dg_fl_up
+		value = {
+			value = te_demog_fl_target
+			subtract = var:te_dg_pr_fl
+			min = 0
+			multiply = te_demog_k_fl_rate
+		}
+	}
+	if = {
+		limit = { local_var:te_dg_fl_np > 0 }
+		set_variable = { name = te_dg_fl_nb value = { value = local_var:te_dg_fl_ns divide = { value = local_var:te_dg_fl_np min = 0.00001 } } }
+		change_local_variable = {
+			name = te_dg_fl_up
+			add = {
+				value = var:te_dg_fl_nb
+				subtract = var:te_dg_pr_fl
+				min = 0
+				multiply = te_demog_k_fl_spread
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_dg_fl_nb value = -1 }
+	}
+	set_variable = {
+		name = te_dg_pr_fl
+		value = {
+			value = var:te_dg_pr_fl
+			add = local_var:te_dg_fl_up
+			min = 0
+			max = 1
+		}
+	}
+}
+
+# THIS = ROOT = a country holding a share: the one refresh site of te_demog_family_limitation under Full, ROOT being
+# the country, as the multiplier needs. The line is the share less what modern methods have replaced; below
+# te_demog_k_fl_line_min the country carries none. Always re-added (a revolution's winner inherits the share but not
+# the modifier). The self-check reads the capital's means before the first fresh line goes on.
+te_demog_fl_apply = {
+	set_variable = {
+		name = te_dg_fl_line
+		value = {
+			value = 1
+			subtract = te_demog_fl_erosion
+			multiply = var:te_dg_pr_fl
+		}
+	}
+	if = {
+		limit = { var:te_dg_fl_line < te_demog_k_fl_line_min }
+		set_variable = { name = te_dg_fl_line value = 0 }
+	}
+	te_debug_demog_fl_selfcheck_start = yes
+	if = {
+		limit = { has_modifier = te_demog_family_limitation }
+		remove_modifier = te_demog_family_limitation
+	}
+	if = {
+		limit = { var:te_dg_fl_line > 0 }
+		add_modifier = { name = te_demog_family_limitation multiplier = te_demog_fl_mult }
+	}
+}
+
+# THIS = ROOT = a country under Full, after its census (demographics_model.ch_target, ch_drift): Cultural Hegemony's
+# factor on its states' desired fertility moves te_demog_k_ch_rate of the way to 1 + te_demog_k_ch_weight x its
+# exposure x (the hegemon's desired fertility / its own before the factor - 1), within te_demog_k_ch_low to _high. With no
+# exposure (no Cultural Hegemony journal entry, no benchmark, the hegemon itself) or no figure for either, the target
+# is 1, so the factor drifts back. Its states read it at their next step (te_demog_hegemon_store).
+te_demog_ch_refresh = {
+	if = {
+		limit = { NOT = { has_variable = te_dg_ch_desired } }
+		set_variable = { name = te_dg_ch_desired value = 1 }
+	}
+	set_local_variable = { name = te_dg_ch_target value = 1 }
+	set_local_variable = { name = te_dg_ch_hd value = 0 }
+	if = {
+		limit = { exists = global_var:ch_rank_1 }
+		global_var:ch_rank_1 = {
+			if = {
+				limit = { has_variable = te_dg_desired }
+				set_local_variable = { name = te_dg_ch_hd value = var:te_dg_desired }
+			}
+		}
+	}
+	if = {
+		limit = {
+			te_demog_ch_exposure > 0
+			local_var:te_dg_ch_hd > 0
+			has_variable = te_dg_desired
+		}
+		set_local_variable = {
+			name = te_dg_ch_target
+			value = {
+				value = local_var:te_dg_ch_hd
+				# its own desired fertility before the factor its states used this year
+				divide = {
+					value = var:te_dg_desired
+					divide = { value = var:te_dg_ch_desired min = 0.01 }
+					min = 0.01
+				}
+				subtract = 1
+				multiply = te_demog_ch_exposure
+				multiply = te_demog_k_ch_weight
+				add = 1
+				min = te_demog_k_ch_low
+				max = te_demog_k_ch_high
+			}
+		}
+	}
+	set_variable = {
+		name = te_dg_ch_desired
+		value = {
+			value = local_var:te_dg_ch_target
+			subtract = var:te_dg_ch_desired
+			multiply = te_demog_k_ch_rate
+			add = var:te_dg_ch_desired
+		}
+	}
+}
+
+# THIS = a state at its census step (te_demog_prepare, before te_demog_desired): the factor this step's desired
+# fertility takes from Cultural Hegemony, stored so the tooltip matches the step until the next (absent at 1).
+te_demog_hegemon_store = {
+	if = {
+		limit = { te_demog_tfr_hegemon = 1 }
+		if = {
+			limit = { has_variable = te_dg_hegemon }
+			remove_variable = te_dg_hegemon
+		}
+	}
+	else = {
+		set_variable = { name = te_dg_hegemon value = te_demog_tfr_hegemon }
+	}
+}
