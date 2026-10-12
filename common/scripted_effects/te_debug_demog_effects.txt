@@ -595,7 +595,8 @@ te_debug_demog_probe_owner_hook = {
 # Instead of a probe before the merge: Primogeniture's farm births ride a script-only type on a state modifier at the
 # agrarian share (Plan A), which assumes the engine sums the type scaled by its multiplier. Once a game, the first
 # state to take the line fresh (none last year, so the sum read here holds none of it) stores its absorbed births sum;
-# te_debug_demog.5 logs the sum a day later and the verdict (TE_SELF_CHECK). BROKEN means the engine doesn't scale
+# te_debug_demog.5 logs the sum a week later (a day may come before the engine re-sums a state's modifiers) and the
+# verdict (TE_SELF_CHECK). BROKEN means the engine doesn't scale
 # it: swap Primogeniture to the plan's Plan B. Called from te_inh_refresh_rural_effects's Primogeniture branch, just
 # before its add_modifier; reads the local te_inh_pr_was that effect sets.
 te_debug_demog_pr_selfcheck_start = {
@@ -606,6 +607,6 @@ te_debug_demog_pr_selfcheck_start = {
 		}
 		set_global_variable = { name = te_inh_pr_selfcheck_done value = yes }
 		set_variable = { name = te_inh_pr_chk_before value = modifier:state_demog_absorbed_birth_rate_mult }
-		trigger_event = { id = te_debug_demog.5 days = 1 }
+		trigger_event = { id = te_debug_demog.5 days = 7 }
 	}
 }

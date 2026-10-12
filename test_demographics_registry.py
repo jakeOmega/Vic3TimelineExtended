@@ -1394,7 +1394,7 @@ class TestPrimogenitureUnderFull(unittest.TestCase):
         for needle in ("NOT = { has_global_variable = te_inh_pr_selfcheck_done }",
                        "NOT = { has_local_variable = te_inh_pr_was }",
                        "value = modifier:state_demog_absorbed_birth_rate_mult",
-                       "trigger_event = { id = te_debug_demog.5 days = 1 }"):
+                       "trigger_event = { id = te_debug_demog.5 days = 7 }"):
             self.assertIn(needle, start)
 
     def test_the_self_check_expects_the_modifiers_value(self):

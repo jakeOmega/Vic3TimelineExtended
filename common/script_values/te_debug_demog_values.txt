@@ -615,7 +615,7 @@ te_debug_demog_probe_owner_lm = {
 }
 
 # ---- The Primogeniture self-check (te_debug_demog_pr_selfcheck_start, te_debug_demog.5) ----------------------------
-# THIS = the state. What Primogeniture's line added to the absorbed births sum since the day before.
+# THIS = the state. What Primogeniture's line added to the absorbed births sum in the week since it went on.
 te_debug_demog_pr_chk_added = {
 	value = modifier:state_demog_absorbed_birth_rate_mult
 	if = {
