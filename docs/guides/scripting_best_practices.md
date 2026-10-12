@@ -1631,6 +1631,10 @@ building_modifiers = {
   ```
 - The `ADD_LEVEL` parameter is used as a `switch` trigger, so `variable:foo` and script value names both work — they resolve to an integer which the switch matches against cases 1–100.
 
+## `set_capital` Takes a State Region Key, Not a Scope
+
+`effects.log` documents `set_capital = X  Where X is a state region` with no **Supported Targets** line, the mark of an effect that reads a database key rather than resolving a scope (`add_claim` and `set_company_state_region` list one). Vanilla and every Workshop mod on disk (2026-10-12) write a literal: `set_capital = STATE_LAZIO`. So moving a capital to a state chosen at run time needs a dispatch on the state's region: `te_demog_pc_set_capital` (`common/scripted_effects/te_demog_capital_generated.txt`, from `scripts/generators/gen_planned_capital.py`) has one `else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_X } } set_capital = STATE_X }` for each of the 675 land regions. A dispatch that size in an event option belongs behind the click-only marker (§ "An Option's Tooltip Walks Its Effects"): the tooltip walk tests every `limit` each frame. `set_market_capital` has the same signature. Whether the script effect also applies the Move Capital map interaction's `moved_capital_recently` is unverified; the `planned_capital_moved` self-check logs it.
+
 ## Code Generators and Generated Files
 
 - **`gen_ministry_events.py`** generates `events/ministry_law_events.txt`. **`gen_loc_files.py`** generates localization for `extra_law_events` and `ministry_law_events`.

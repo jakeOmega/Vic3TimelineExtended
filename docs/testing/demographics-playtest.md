@@ -28,8 +28,9 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … workforce_lines_net` | any rule, development builds only: once a game, a week after the first country's first monthly pulse, in its capital | the capital's working-adult field less the moved lines' pair is about 0: every vanilla carrier's INJECTed cancel nets out against its own line | `remainder` not 0: an INJECT replaced a vanilla block (a law, Woman Soldiers or a Trade Unions trait), so its cancel stands alone in every game (or the capital has Rosen's androids, which can't happen in 1836) | revert that carrier's INJECT and list it in `P.LIVE_WORKFORCE_LINES`; option l's `TE_DEMOG_MODS` lines show which carrier |
 | `TE_SELF_CHECK … pop_workforce_read` | Display only or Full: once a game, at the first country monthly pulse after a capital's walk | a pop's `workforce` reads as a value in the walk (`wf_engine` about 0.2-0.3) | `wf_engine` 0: the walk can't read the engine's workforce | nothing in step 1 uses it; step 2's stop rule (spec §1.8) needs another read of the engine's workforce before its fit |
 | `TE_SELF_CHECK … measure_country_types` | once a game, under Full: `START` when the first measure that moves desired family size goes on in any country (Child Allowance, Honours, Parental Leave, Later Longer Fewer, Birth Limit, the Crash Campaign; the AI's included), the verdict a week later from the capital (`te_debug_demog.10`) | the capital's read of the script-only `state_desired_fertility_mult` rose by the measures' lines its owner gained (`added` ≈ `expected`): a script-only state type on a country static modifier reaches the states | `added` reads 0: the census will never see any measure's types (step 3b reads them); `NO_VERDICT` (the measure ended within the week) re-arms the check | put each measure's census types on a state modifier in each of the country's states, applied and removed with the country modifier and re-applied by the yearly state pulse (inheritance's rural modifiers' pattern), and keep the interest groups and upkeep on the country |
+| `TE_SELF_CHECK … planned_capital_moved` | once a game, under Full: `START` when the first country (the AI's included) founds a planned capital, the verdict a week later (`te_debug_demog.60`) | the capital stands in the chosen site: the generated dispatcher's `set_capital = STATE_X` moved it. `penalty=` says whether the base game's Moved Capital Recently came with the move (1) or not (0); `at_once=` whether the capital had moved by the end of the option | the capital is still the old one: the move never happened. `NO_VERDICT` (the capital in neither state, or a state changed hands in the week) re-arms the check | re-run `scripts/generators/gen_planned_capital.py` if the site's region is new; if the engine refuses the move, the decision instead marks the site and asks the player to move the capital there with the base game's Move Capital map interaction within a year, and the development modifier and the costs follow the move (an AI keeps its capital) |
 
-No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game. No `measure_country_types` line means no measure that moves family size went on (start Child Allowance under Pro-Natalist Policy); a `START` with no verdict, that the capital changed hands within the week.
+No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game. No `planned_capital_moved` line means nobody founded a planned capital (take the decision, or watch an observer run past Steel-Frame Buildings); with `penalty=1`, the base game's own move penalty stacks on the decision's costs, so consider lowering the authority cost. No `measure_country_types` line means no measure that moves family size went on (start Child Allowance under Pro-Natalist Policy); a `START` with no verdict, that the capital changed hands within the week.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
 carriers in the player's country. **Woman Soldiers and Pollution Impact** carry their moved working-adult lines as a
 script-only type on a modifier at a multiplier (×0.5, × the region's impact), the fact `primogeniture_scaled` tests:
@@ -173,3 +174,39 @@ others; check the switching, the costs and the politics.
     `te_demog_measure_*`, `te_demog_messages.txt`, `te_demog_ms_law_on_action` or `te_debug_demog.10` (the
     self-check's verdict event: an error there would leave a `START` with no verdict, which reads like a capital
     that changed hands).
+
+## Phase 3: the urban pattern and Planned Capital
+
+The national urban pattern's effects and the Plan a New Capital decision (spec §5.1; mod_systems.md § Demographics,
+"The urban pattern's effects and Planned Capital"). Everything here acts under Full only.
+
+1. **Full, a new game, a country of three states or more whose Urban Pattern row reads Primate or Dominant** (in the
+   1903 observer census Argentina and Egypt read Dominant, Siam and Colombia Primate). Through 1836 each state takes
+   its modifier at its yearly count: the largest city **Primate City** (Urban Center throughput and migration
+   attraction up), every other
+   state **Provincial Neglect** (migration attraction down, turmoil penalties up), each at the strength the Urban
+   Pattern tooltip shows (none at 25% primacy, full at 60%). Hover a state's modifier: its figures are the full sizes
+   times that strength. A Balanced or Dispersed country gets neither (in the 1903 observer census Britain, France and
+   the United States read Balanced).
+2. **The tooltip** (Overview's and Where People Live's Urban Pattern rows): the strength, the largest city by name and
+   each field as it applies; "none" with the reason for a Balanced or Dispersed pattern or a country under three
+   states. The Primacy row's tooltip names the largest city. No label or value cut short.
+3. **Display only**, a new game: no state carries either modifier, and the tooltip's last paragraph says what Full would
+   do.
+4. **A country of one or two states**: no modifier, though its primacy reads near 100%; the tooltip says why.
+5. **The decision** (Full; Modern Sewerage shows it, Steel-Frame Buildings opens it): the greyed reasons read right
+   (pattern, peace and plays, moved recently, the 50 years with the next year, 100 authority, a site). Take it: the
+   event offers up to three sites, largest first, never the capital or the largest city. Choosing one: the capital
+   moves at once; the treasury drops by about 3% of a year's GDP; Building the New Capital takes 100 authority for five
+   years; the new capital shows Planned Capital for 20 years; the decision is greyed "the next from <year + 50>". Not
+   Now spends nothing and the decision stays open. `debug.log`: the `planned_capital_moved` lines.
+6. **After the move**: does the base game let you move the capital again at once with its map interaction (the
+   `penalty=` line says whether its Moved Capital Recently came with the decision)? Move it back: Planned Capital ends at
+   the old site's next yearly count.
+7. **An observer run to 2000, Full**: how many AI countries plan a capital, when and where (a plain-text save's
+   `te_dg_pc_year`). The rule allows it only to Primate countries of eight census states or more, at 45% primacy or
+   more, whose largest city is under Migration Crowding, with the money and authority; expect a handful, not dozens. None should move a capital twice within 50 years.
+8. **A revolution that wins** within five years of a planned capital: the winner still pays the building's authority
+   until the five years end, and the decision stays greyed for the rest of the 50 years.
+9. `debug.log`: no error from `te_demog_place_*`, `te_demog_capital.1` or `te_debug_demog.60`, and none while the site
+   event is open (the move's 675 branches sit behind a click-only marker).
