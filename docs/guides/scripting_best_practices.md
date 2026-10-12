@@ -160,6 +160,8 @@ For a **persistent cost** ("spend exactly N authority to run this policy"), use 
 
 Contrast the legacy `country_authority_add = -N`, which **is** scaled by `country_authority_mult` (a flat `-250` → `-375` effective at +50% mult) — wrong for a fixed cost. Keep `_add` only for short-lived event penalties / "capacity destroyed" shocks (e.g. `te_authority_drain`), never for a persistent spend.
 
+**Influence is a capacity too, so it has no one-shot spend.** A one-time action (founding the UN, tabling a resolution) costs influence through a timed modifier carrying `country_influence_cost_add` (decaying or not). Two influence costs scale differently. A modifier's `country_influence_cost_add` is flat, the same for every rank. A pact's or treaty article's `cost` is multiplied by rank (×2 great power, ×1.5 recognized major; `vanilla_economy_reference.md` § 11.3). Gate a button on available influence (`influence >= <script value>`, the `influence` trigger reads what is unspent), as vanilla gates creating a power bloc. Give the AI hysteresis: start only with the cost plus a spare in hand, and drop the action when influence goes negative. What dropping frees then never reaches the start line, so the AI doesn't flip it every month. The UN stances, the cultural hegemony programmes and the covert operations follow this (`test_international_influence_costs.py`).
+
 ### Legacy compensation pattern (pre-1.13.9 — obsolete, do not write new)
 
 Before `_cost_add` existed, a fixed `_add` cost was paired with a script-value multiplier inverting the authority mult:

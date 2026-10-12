@@ -22,7 +22,9 @@ surrender_monument = {
 
 	usage_limit = once_per_side_with_same_inputs
 
-	maintenance_paid_by = source_country
+	# The country carrying the monument off (target) pays, as vanilla's demands
+	# do (owner, 2026-10-12; the source paid).
+	maintenance_paid_by = target_country
 
 	required_inputs = {
 		state

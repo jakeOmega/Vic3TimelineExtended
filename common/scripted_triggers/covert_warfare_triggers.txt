@@ -464,6 +464,18 @@ covert_ai_target_worth_the_upkeep = {
 	}
 }
 
+# Every operation but the two wartime ones costs influence (its pact cost,
+# covert_operations.txt § INFLUENCE). The AI launches one only when it can pay
+# it and still holds covert_ai_influence_floor, more than any operation costs
+# even a great power; an operation it calls off in deficit (will_break) frees
+# less than that, so it is not relaunched at once.
+# Parameters: $TYPE$ = the operation's diplomatic action
+# Scope: country (the operator); scope:target_country = the target
+covert_ai_can_spare_influence = {
+	can_afford_diplomatic_action = { target = scope:target_country type = $TYPE$ }
+	influence >= covert_ai_influence_floor
+}
+
 # ============================================================================
 # AI: CALLING AN OPERATION OFF
 # ============================================================================

@@ -3377,13 +3377,13 @@ un_member_privileges_modifier = {
 	country_defender_diplomatic_play_escalation_weekly_mult = -0.05
 }
 
-# Cost of founding the UN (decaying, applied to the founding GP)
+# Cost of founding the UN (decaying over five years, applied to the founder).
+# Influence, as creating a power bloc costs 500 (owner, 2026-10-12). It used
+# to be prestige, bureaucracy and a money line that, added with no multiplier,
+# came to £1 a week.
 un_founding_cost_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_prestige_mult = -0.10
-	country_bureaucracy_add = -100
-	country_expenses_add = 1
-	country_te_budget_expense_un_add = 1
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_cost_add = 500
 }
 
 # Cooldown after requesting UN action
@@ -3460,16 +3460,17 @@ un_expelled_cooldown = {
 	country_improve_relations_speed_mult = -0.30
 }
 
+# The great-power stances cost influence alone, the price of leading a power
+# bloc (owner, 2026-10-12). The buttons ask for that much available influence
+# (un_stance_influence_affordable).
 un_champion_order_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_cost_add = 50
-	country_influence_mult = -0.10
+	country_influence_cost_add = 500
 }
 
 un_undermine_order_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_cost_add = 25
-	country_influence_mult = -0.05
+	country_influence_cost_add = 500
 }
 
 un_vote_success_reward = {
@@ -3556,6 +3557,20 @@ un_ga_resolution_modifier = {
 	country_infamy_generation_mult = 0.05
 }
 
+# The influence tabling a resolution on our own motion uses, for
+# un_sponsor_cost_days (un_propose_sponsor_cost, un_propose_effects.txt): the
+# punitive one for a resolution that punishes a member (owner, 2026-10-12).
+# un_script_values.txt restates both figures for the gates.
+un_sponsor_cost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_cost_add = 150
+}
+
+un_sponsor_punitive_cost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_cost_add = 300
+}
+
 un_condemnation_leader_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_infamy_decay_mult = 0.15
@@ -3617,7 +3632,7 @@ un_human_rights_champion_modifier = {
 	country_institution_impact_institution_ministry_of_refugee_affairs_mult = 0.05
 	country_prestige_mult = 0.05
 	country_institution_size_change_speed_mult = 0.05
-	country_bureaucracy_cost_add = 25
+	country_influence_cost_add = 100
 }
 
 # ---- Peacekeeping Modifiers ----
@@ -3625,7 +3640,9 @@ un_human_rights_champion_modifier = {
 # The peacekeeping programme (un_peacekeeping_mission_button). Troops sent
 # abroad cost more to keep (+5% military goods), and come home with more
 # experience than a garrison that never left (+10% army experience gain;
-# owner, 2026-10-03). A unit modifier on the journal entry, as arms control's
+# owner, 2026-10-03). Its 100 influence, like human rights' and arms
+# control's, was 25 bureaucracy before the UN's diplomatic stances moved to
+# influence (owner, 2026-10-12). A unit modifier on the journal entry, as arms control's
 # are: whether it reaches the army is an in-game check (un_redesign_design.md
 # §0.13).
 un_peacekeeping_contributor_modifier = {
@@ -3634,7 +3651,7 @@ un_peacekeeping_contributor_modifier = {
 	country_prestige_mult = 0.05
 	country_military_goods_cost_mult = 0.05
 	unit_experience_gain_mult = 0.1
-	country_bureaucracy_cost_add = 25
+	country_influence_cost_add = 100
 }
 
 # A full force sent to a collapsing state (un_events.4 A). What it costs is
@@ -3745,7 +3762,7 @@ un_arms_control_participant_modifier = {
 	unit_kill_rate_add = -0.05
 	unit_devastation_mult = -0.15
 	country_military_goods_cost_mult = -0.05
-	country_bureaucracy_cost_add = 25
+	country_influence_cost_add = 100
 }
 
 # ---- Reform Modifiers ----
@@ -6924,19 +6941,23 @@ ch_cultural_program_funding_cost = {
 	country_te_budget_expense_culture_add = 1
 }
 
-# Cultural Hegemony JE button: fund cultural institutes
+# Cultural Hegemony JE button: fund cultural institutes. Soft power abroad, so
+# it costs influence (owner, 2026-10-12; it was 100 authority).
+# ch_cultural_institutes_influence_cost restates the figure for the gate.
 ch_cultural_institutes_program = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.1
-	country_authority_cost_add = 100
+	country_influence_cost_add = 150
 }
 
-# Cultural Hegemony JE button: use mass media for deliberate global projection
+# Cultural Hegemony JE button: use mass media for deliberate global projection.
+# Influence, as the institutes (owner, 2026-10-12; it was 100 authority).
+# ch_global_media_influence_cost restates the figure for the gate.
 ch_global_media_campaign = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.15
 	country_prestige_mult = 0.05
-	country_authority_cost_add = 100
+	country_influence_cost_add = 200
 }
 
 # Cultural Hegemony JE button: protect domestic culture at the expense of openness
@@ -7026,11 +7047,12 @@ ch_hegemon_model_pressure = {
 # Event 17 (Our Model Abroad) option A: the hegemon champions its model abroad.
 # Besides these fields, while it lasts ch_model_pressure_mult adds
 # ch_model_champion_mult_bonus to the baseline pressure every trailing country
-# feels from this model.
+# feels from this model. Its cost is influence held for the five years
+# (owner, 2026-10-12; it was a flat -25 influence, nothing to a hegemon).
 ch_model_champion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.10
-	country_influence_add = -25
+	country_influence_cost_add = 300
 }
 
 # Event 17 option B: the hegemon leads by example at home instead.

@@ -267,6 +267,10 @@ covert_ai_much_weaker_gdp_factor = 10
 # Money to burn: gold reserves at least this full (the limit is 20 % of annual
 # GDP, so 0.5 holds a tenth of a year's GDP), and a weekly surplus.
 covert_ai_spare_reserves_ratio = 0.5
+# The influence an AI keeps in hand to launch a costed operation
+# (covert_ai_can_spare_influence): above a great power's severe-tier cost of
+# 200 (a pact cost of 100, doubled for its rank), with 100 to spare.
+covert_ai_influence_floor = 300
 
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
