@@ -45,6 +45,9 @@ class Inputs:
     impartible: bool = False             # the owner holds Primogeniture or Undivided Farm Succession
     low_share: float = 0.0               # the lower strata's share of people (te_dg_low_share, from the walk)
     pension_age: float | None = None     # the owner's pension age under Old Age Pension; None = the Standard position
+    # phase 2 step 2 (§2.5): under Full, women's share of the census's own workers aged P.WORK_SPLIT_AGES at the last
+    # count (te_dg_fws_wk), which splits work deaths; None = the law table (outside Full, or before a count)
+    work_female_share: float | None = None
 
 
 def clamp(x, lo, hi):
@@ -166,9 +169,15 @@ def rates_from_multipliers(mult, work_f, work_m):
     return qf, qm
 
 
+def work_death_share(inp):
+    """Women's share of work deaths (te_demog_work_death_share): under Full the census's own count of women among the
+    workers aged P.WORK_SPLIT_AGES at the last count (phase 2 step 2, §2.5), else the law table."""
+    return female_work_share(inp) if inp.work_female_share is None else inp.work_female_share
+
+
 def work_split(inp, work_mult):
     """(women's, men's) work-death multipliers: the cause multiplier x 2 x each sex's share."""
-    fw = female_work_share(inp)
+    fw = work_death_share(inp)
     return work_mult * 2 * fw, work_mult * 2 * (1 - fw)
 
 
@@ -420,6 +429,8 @@ def work_figures(ring, inp, old_age):
     end, after_on, bill_on = working_ages_end(inp, old_age)
     rate_f, rate_m = sex_rates(inp)
     total = wa = workers = pens = need = 0.0
+    past = split_f = split_all = 0.0           # phase 2 step 2: workers past the end; the work-death split's sums
+    lo, hi = P.WORK_SPLIT_AGES
     for a, f, m in ring.by_age():
         ab = a                                  # the biological index (phase 3: less the band's deficit)
         p = f + m
@@ -434,14 +445,72 @@ def work_figures(ring, inp, old_age):
                 pens += p
         elif start > 0:
             wa += p
-        workers += (f * rate_f + m * rate_m) * start * capacity_at(inp, ab) * share
+        k = start * capacity_at(inp, ab) * share
+        workers += (f * rate_f + m * rate_m) * k
+        if a >= end:
+            past += (f * rate_f + m * rate_m) * k
+        if lo <= a <= hi:
+            split_f += f * rate_f * k
+            split_all += (f * rate_f + m * rate_m) * k
     return {"wa_share": wa / max(total, 1.0), "at_work": workers / max(wa, 1.0),
-            "pensioners": pens / max(total, 1.0), "need": need / max(total, 1.0) / P.HEALTH_NEED_1836}
+            "pensioners": pens / max(total, 1.0), "need": need / max(total, 1.0) / P.HEALTH_NEED_1836,
+            "past": past / max(total, 1.0),
+            "fws_work": split_f / split_all if split_all > 0 else None}
 
 
 def wf_target(figures):
     """The workforce share on the engine's scale (te_demog_wf_target; step 2's target less the pops' bases)."""
     return P.WORKFORCE_SCALE * figures["wa_share"] * figures["at_work"]
+
+
+# ---- Phase 2 step 2: the workforce term, the pension setting and the bills (te_demog_work_effects.txt) ---------------
+
+def workforce_term_target(figures):
+    """W's target: the census's target less the define's base (te_demog_wf_term_target; calls 3 and 4)."""
+    return wf_target(figures) - P.WORKING_ADULT_BASE
+
+
+def workforce_term(target_w, prev_w, remainder):
+    """W after one census step (te_demog_workforce_refresh): prev_w moved toward target_w by at most P.WF_RAMP_STEP,
+    then raised so the lowest pop base plus W plus the remainder (the lines on top) stays at P.WF_POP_RATIO_MIN.
+    prev_w is the term in force, or the moved lines' pair it replaces when it first lands."""
+    w = prev_w + clamp(target_w - prev_w, -P.WF_RAMP_STEP, P.WF_RAMP_STEP)
+    return max(w, P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN - remainder)
+
+
+def engine_total(figures, wbase, remainder=0.0):
+    """The workforce ratio the census aims a state at on the engine's scale: its target, the pops' own bases' offset
+    from the define (call 4) and the lines left on top (te_demog_wf_engine_target)."""
+    return wf_target(figures) + (wbase - P.WORKING_ADULT_BASE) + remainder
+
+
+def outside_full_total(wbase, lines, remainder=0.0):
+    """The same state's ratio outside Full: the pops' bases and every moved line at its flat value (the pair)."""
+    return wbase + lines + remainder
+
+
+def pension_position_age(position, current_age=None, old_age=None):
+    """A position's pension age for this year (te_demog_pension_age_refresh): the fixed ages, or for a linked one the
+    country's old-age threshold less P.PENSION_LINK_OFFSET, at least P.PENSION_LINK_FLOOR, moving at most
+    P.PENSION_LINK_STEP from current_age (None: it lands at once). None old_age (no census yet): the floor."""
+    if position not in P.PENSION_LINKED:
+        return float(P.PENSION_AGE[position])
+    target = P.PENSION_LINK_FLOOR if old_age is None else max(old_age - P.PENSION_LINK_OFFSET, P.PENSION_LINK_FLOOR)
+    if current_age is None:
+        return float(target)
+    return float(current_age + clamp(target - current_age, -P.PENSION_LINK_STEP, P.PENSION_LINK_STEP))
+
+
+def pension_bill_gdp_share(pensioners, social_security_level):
+    """The pension bill as a share of GDP a year: the pensioners' share x B (late-game §5.1)."""
+    return pensioners * P.PENSION_B_PER_LEVEL * social_security_level
+
+
+def health_term(need, techs=frozenset()):
+    """The health bill's multiplier on the health system's institution cost (§2.4): the need term, capped above, and
+    the chronic-treatment technologies; longevity care is phase 3's."""
+    need_term = min(P.HEALTH_NEED_WEIGHT * (need - 1.0), P.HEALTH_NEED_CAP)
+    return need_term + P.HEALTH_TECH_STEP * sum(1 for t in P.HEALTH_TECHS if t in techs)
 
 
 def old_age_threshold(q):

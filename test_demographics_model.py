@@ -906,8 +906,8 @@ class TestPhase2Interfaces(unittest.TestCase):
     def test_the_bands_cover_both_tables(self):
         self.assertEqual(P.BIO_BANDS, tuple(sorted(set(P.CAPACITY) | set(P.HEALTH_NEED))))
         self.assertEqual(M.band_value(P.CAPACITY, 59), 1.0)
-        self.assertEqual(M.band_value(P.CAPACITY, 64), 0.95)
-        self.assertEqual(M.band_value(P.CAPACITY, 150), 0.1)
+        self.assertEqual(M.band_value(P.CAPACITY, 64), P.CAPACITY[60])
+        self.assertEqual(M.band_value(P.CAPACITY, 150), P.CAPACITY[85])
         self.assertEqual(M.band_value(P.HEALTH_NEED, 4), 1.0)
         self.assertEqual(M.band_value(P.HEALTH_NEED, 14), 0.5)
 
@@ -935,11 +935,11 @@ class TestPhase2Interfaces(unittest.TestCase):
         self.assertAlmostEqual(rm, P.MEN_RATE + 0.04)
         self.assertAlmostEqual(rf, P.WOMEN_BASE + 0.01)
         self.assertAlmostEqual(M.capacity_at(inp, 30), 0.9)
-        self.assertAlmostEqual(M.capacity_at(inp, 62), 0.95 * 0.9)
+        self.assertAlmostEqual(M.capacity_at(inp, 62), P.CAPACITY[60] * 0.9)
         big = M.Inputs(mods={P.MALE_PARTICIPATION_TYPE: 0.5, P.CAPACITY_TYPE: 0.5})
         self.assertEqual(M.sex_rates(big)[1], 1.0)
         self.assertEqual(M.capacity_at(big, 30), 1.0)
-        self.assertAlmostEqual(M.capacity_at(big, 82), 0.45)
+        self.assertAlmostEqual(M.capacity_at(big, 82), min(P.CAPACITY[80] * 1.5, 1.0))
 
     def test_the_working_ages_end_by_the_welfare_law(self):
         self.assertEqual(M.working_ages_end(M.Inputs(), 61.0), (999.0, False, False), "no pension: no end (D10)")
@@ -961,7 +961,8 @@ class TestPhase2Interfaces(unittest.TestCase):
         total = 200 + 100 + 400 + 70 + 2
         wa = 100 + 400                                   # 12-year-olds at 0.3, 30-year-olds; 66 is past 65
         workers = (50 * rf + 50 * 0.92) * 0.3 + (200 * rf + 200 * 0.92) \
-            + (40 * rf + 30 * 0.92) * 0.85 * P.AFTER_PENSION_SHARE + (rf + 0.92) * 0.1 * P.AFTER_PENSION_SHARE
+            + (40 * rf + 30 * 0.92) * P.CAPACITY[65] * P.AFTER_PENSION_SHARE \
+            + (rf + 0.92) * P.CAPACITY[85] * P.AFTER_PENSION_SHARE
         need = 200 * 0.5 + 100 * 0.5 + 400 * 0.8 + 70 * 2.4 + 2 * 4.5
         self.assertAlmostEqual(got["wa_share"], wa / total)
         self.assertAlmostEqual(got["at_work"], workers / wa)
@@ -980,7 +981,7 @@ class TestPhase2Interfaces(unittest.TestCase):
         rf = M.women_rate(inp)
         got = M.work_figures(ring, inp, 60.0)
         self.assertAlmostEqual(got["wa_share"], 1.0)
-        self.assertAlmostEqual(got["at_work"], (200 * rf + 200 * 0.92 + (rf + 0.92) * 0.1) / 402)
+        self.assertAlmostEqual(got["at_work"], (200 * rf + 200 * 0.92 + (rf + 0.92) * P.CAPACITY[85]) / 402)
         self.assertEqual(got["pensioners"], 0.0)
 
     def test_the_targets_at_the_starting_values(self):
@@ -1018,3 +1019,73 @@ class TestPhase2Interfaces(unittest.TestCase):
             got = M.slot_births(1000.0, 27, 32, 4.0, 0.25)
         want = (P.ASFR_SHAPE_BY_GROUP[25] / 5 * 0.25 + other[30] / 5 * 0.75) * 1000.0 / 100000.0 * 4.0
         self.assertAlmostEqual(got, want)
+
+
+class TestPhase2Step2(unittest.TestCase):
+    """Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the workforce
+    term, the pension setting, the two bills and the work deaths' split."""
+
+    def test_the_term_ramps_toward_its_target(self):
+        step = P.WF_RAMP_STEP
+        self.assertAlmostEqual(M.workforce_term(0.2, 0.0, 0.0), step)
+        self.assertAlmostEqual(M.workforce_term(-0.2, 0.0, 0.0), -step)
+        self.assertAlmostEqual(M.workforce_term(0.003, 0.0, 0.0), 0.003, msg="within a step it lands")
+        self.assertAlmostEqual(M.workforce_term(0.15, 0.30, 0.0), 0.30 - step, msg="from the pair it replaces")
+
+    def test_the_guard_keeps_every_pop_at_its_floor(self):
+        """The lowest base (aristocrats' 0.2) + W + the lines on top stays at WF_POP_RATIO_MIN; no cap above."""
+        floor = P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN
+        self.assertAlmostEqual(M.workforce_term(-0.5, floor, 0.0), floor)
+        self.assertAlmostEqual(M.workforce_term(-0.5, floor, -0.1), floor + 0.1, msg="a negative line on top")
+        self.assertAlmostEqual(M.workforce_term(5.0, 4.0, 0.0), 4.0 + P.WF_RAMP_STEP, msg="no cap")
+        self.assertEqual(P.POP_BASE_RATIO_MIN, 0.2)
+
+    def test_the_term_nets_only_the_define(self):
+        fig = {"wa_share": 0.7, "at_work": 0.5}
+        self.assertAlmostEqual(M.workforce_term_target(fig), P.WORKFORCE_SCALE * 0.35 - 0.25)
+        self.assertAlmostEqual(M.engine_total(fig, 0.3, 0.05), P.WORKFORCE_SCALE * 0.35 + 0.05 + 0.05)
+
+    def test_fixed_positions_take_their_ages(self):
+        for pos in ("early", "standard", "raised"):
+            self.assertEqual(M.pension_position_age(pos, 80.0, 90.0), float(P.PENSION_AGE[pos]))
+
+    def test_linked_positions_follow_the_threshold_a_year_a_year_from_65(self):
+        self.assertEqual(M.pension_position_age("linked_average", 65.0, 77.0), 66.0)
+        self.assertEqual(M.pension_position_age("linked_common", 71.5, 75.0), 70.5, msg="down a year too")
+        self.assertEqual(M.pension_position_age("linked_average", 65.0, 62.0), 65.0, msg="the floor")
+        self.assertEqual(M.pension_position_age("linked_average", 65.0, None), 65.0, msg="no census: the floor")
+        self.assertEqual(M.pension_position_age("linked_average", None, 77.0), 72.0, msg="none yet: at once")
+
+    def test_the_pension_bill_is_pensioners_times_b(self):
+        self.assertAlmostEqual(M.pension_bill_gdp_share(0.2, 5), 0.2 * P.PENSION_B_PER_LEVEL * 5)
+        self.assertEqual(M.pension_bill_gdp_share(0.2, 0), 0.0)
+
+    def test_the_health_term(self):
+        self.assertAlmostEqual(M.health_term(1.0), 0.0)
+        self.assertAlmostEqual(M.health_term(1.5), P.HEALTH_NEED_WEIGHT * 0.5)
+        self.assertAlmostEqual(M.health_term(0.9), -P.HEALTH_NEED_WEIGHT * 0.1, msg="a young country: below 0")
+        self.assertAlmostEqual(M.health_term(9.0), P.HEALTH_NEED_CAP, msg="the need term's cap")
+        self.assertAlmostEqual(M.health_term(1.0, frozenset(P.HEALTH_TECHS) | {"railways"}),
+                               P.HEALTH_TECH_STEP * len(P.HEALTH_TECHS))
+
+    def test_work_deaths_split_by_the_census_under_full(self):
+        inp = M.Inputs(laws=frozenset({"law_protected_class"}))
+        self.assertEqual(M.work_death_share(inp), P.FEMALE_WORK_SHARE["law_protected_class"])
+        full = dataclasses.replace(inp, work_female_share=0.3)
+        self.assertEqual(M.work_death_share(full), 0.3)
+        f, m = M.work_split(full, 2.0)
+        self.assertAlmostEqual(f, 2.0 * 2 * 0.3)
+        self.assertAlmostEqual(m, 2.0 * 2 * 0.7)
+
+    def test_the_figures_count_workers_past_the_end_and_the_split(self):
+        ring = M.Ring(year=1900)
+        for a, f, m in ((30, 100, 100), (70, 40, 30)):
+            k = (1900 - a) % M.N
+            ring.f[k], ring.m[k] = float(f), float(m)
+        inp = M.Inputs(laws=frozenset({"law_old_age_pension"}), low_share=0.5)
+        rf, rm = M.sex_rates(inp)
+        got = M.work_figures(ring, inp, 60.0)
+        past = (40 * rf + 30 * rm) * P.CAPACITY[70] * P.AFTER_PENSION_SHARE
+        self.assertAlmostEqual(got["past"], past / 270)
+        self.assertAlmostEqual(got["fws_work"], 100 * rf / (100 * rf + 100 * rm), msg="15-64 only")
+        self.assertIsNone(M.work_figures(M.Ring(year=1900), inp, 60.0)["fws_work"])

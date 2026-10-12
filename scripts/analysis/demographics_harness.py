@@ -13,7 +13,8 @@ Usage:
     demographics_harness.py lag                         # years of e0 behind the target while medicine spreads
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
-    demographics_harness.py workforce                   # phase 2 step 1: participation, need, the old-age threshold
+    demographics_harness.py workforce [SAVE]            # phase 2: participation, the workforce bands (step 2's fit)
+    demographics_harness.py pensions [SAVE]             # phase 2 step 2: the pension bill against revenue, the health bill
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
@@ -641,60 +642,310 @@ def cmd_lag(_args):
     return 0
 
 
-# ---- workforce: phase 2 step 1's participation figures -------------------------------------------------------
-# The participation figures at the starting values, on the census's own stable structures (the design §1.8's sketch,
+# ---- workforce: phase 2's participation figures and step 2's fit (§5) ------------------------------------------
+# The participation figures on the census's own structures (the design §1.8's sketch,
 # docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md). (name, Inputs keywords, the lower
 # strata's share.) No amendment or IG trait is in these rows: DM.load_carriers walks laws, technologies and
-# institutions only (step 2's late-save fit reads those from the save).
+# institutions only, and no save reads them yet (each scenario that would hold one says so).
 _RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines",
                          "antibiotic_mass_production", "contraceptive_pill", "modern_pharmaceuticals",
                          "vulcanization", "feminism", "second_wave_feminism", "personal_appliances"})
+_RICH_LAWS = frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
+                        "law_public_health_insurance"})
+_RICH_INSTITUTIONS = {"institution_health_system": 5, "institution_social_security": 5}
 WORKFORCE_SCENARIOS = [
     ("1836 farming", dict(sol=8, literacy=0.1, urban_share=0.05,
                           laws=frozenset({"law_no_womens_rights", "law_child_labor_allowed"})), 0.85),
     ("1836 Women in the Fields", dict(sol=8, literacy=0.1, urban_share=0.05,
                                       laws=frozenset({"law_women_in_the_fields", "law_child_labor_allowed"})), 0.85),
     ("Rich, Protected Class, pension at 65", dict(
-        sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS,
-        laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
-                        "law_public_health_insurance"}),
-        institutions={"institution_health_system": 5, "institution_social_security": 5}), 0.4),
+        sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS, laws=_RICH_LAWS,
+        institutions=_RICH_INSTITUTIONS), 0.4),
     ("Rich, plus call 3's laws", dict(
         sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS,
-        laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
-                        "law_public_health_insurance", "law_pro_capital_ministry_of_labor",
-                        "law_rehabilitation_focused_criminal_justice"}),
-        institutions={"institution_health_system": 5, "institution_social_security": 5,
-                      "institution_ministry_of_labor": 5}), 0.4),
+        laws=_RICH_LAWS | {"law_pro_capital_ministry_of_labor", "law_rehabilitation_focused_criminal_justice"},
+        institutions={**_RICH_INSTITUTIONS, "institution_ministry_of_labor": 5}), 0.4),
 ]
+# Rich today (step 2's fit; no 2000-2020 save exists yet, 2026-10-12): today's inputs on a 2020-like structure, not
+# the stable one. A West-1950 population (stable, about 2.7 children) steps 70 years under today's inputs: about 17%
+# under 15 and 19% over 65, against the OECD's 17% and 18% in 2020. The Standard pension age; Social Security at 5.
+WORKFORCE_1950 = dict(sol=25, literacy=0.95, urban_share=0.65, techs=MED_1950 | {"vulcanization", "feminism"},
+                      laws=frozenset({PHI, "law_womens_suffrage", "law_restricted_child_labor", "law_old_age_pension"}),
+                      institutions={HEALTH: 5, "institution_social_security": 3})
+WORKFORCE_TODAY = dict(sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS | {"telemedicine"},
+                       laws=_RICH_LAWS, institutions=_RICH_INSTITUTIONS)
+WORKFORCE_TODAY_YEARS = 10
+WORKFORCE_TODAY_LOW = 0.4
+# §5's bands (the design, owner 2026-10-12): the engine's total (the census's target, the pops' bases' offset, the
+# lines on top) on the 1836 save's states, people-weighted, and four-fifths of states within the state band; a rich
+# state today; women's rate today at least 0.8 of men's; over-65s at work.
+BAND_1836_WORLD = (0.23, 0.27)
+BAND_1836_STATE = (0.21, 0.29)
+BAND_1836_STATE_SHARE = 0.8
+BAND_TODAY = (0.39, 0.45)
+BAND_WOMEN_TODAY = 0.8
+BAND_OLD_MEN_1836 = (0.6, 0.85)      # about three-quarters of men over 65 with no pension (1880)
+BAND_OLD_TODAY = (0.12, 0.28)        # about a fifth of over-65s today
+BAND_NEED_1836 = (0.99, 1.01)
+
+
+def _workforce_inputs(kw, low, carriers, lines, incorporated=True):
+    inp = M.Inputs(low_share=low, **kw)
+    inp.mods = {**DM.totals(carriers, inp.techs, inp.laws, inp.institutions, incorporated=incorporated),
+                **DM.totals(lines, inp.techs, inp.laws, inp.institutions, incorporated=incorporated,
+                            types=tuple(P.WORKFORCE_LINE_TYPES.values()))}
+    return inp
+
+
+def old_at_work(ring, inp, old_age):
+    """(men over 65 at work over men over 65, everyone over 65 at work over everyone over 65): the over-65 anchors
+    (late-game §2.1), from work_figures' own participation."""
+    end, after_on, _bill = M.working_ages_end(inp, old_age)
+    rate_f, rate_m = M.sex_rates(inp)
+    men = men_w = all_p = all_w = 0.0
+    for a, f, m in ring.by_age():
+        if a < 65:
+            continue
+        k = M.start_factor(inp, a) * M.capacity_at(inp, a) * (P.AFTER_PENSION_SHARE if (a >= end and after_on) else 1.0)
+        men += m
+        men_w += m * rate_m * k
+        all_p += f + m
+        all_w += (f * rate_f + m * rate_m) * k
+    return men_w / max(men, 1e-9), all_w / max(all_p, 1e-9)
+
+
+def _workforce_row(name, inp, ring, tfr):
+    qf, qm, _ = M.group_rates(inp)
+    old = M.old_age(qf, qm)
+    fig = M.work_figures(ring, inp, old)
+    men65, all65 = old_at_work(ring, inp, old)
+    lines = sum(inp.mods.get(t, 0.0) for t in P.WORKFORCE_LINE_TYPES.values())
+    s = M.structure(ring)
+    return {"name": name, "tfr": tfr, "women": M.women_rate(inp), "men": M.sex_rates(inp)[1], **fig,
+            "target": M.wf_target(fig), "old_age": old, "w_target": M.workforce_term_target(fig),
+            "engine": M.engine_total(fig, P.POP_BASE_RATIO_DEFAULT),
+            "outside": M.outside_full_total(P.POP_BASE_RATIO_DEFAULT, lines), "lines": lines,
+            "men65": men65, "all65": all65, "young": s["young"], "old": s["old"]}
+
+
+def rich_today(carriers=None, lines=None, today=None):
+    """(Inputs, ring, last step) for Rich today: WORKFORCE_1950's stable population stepped WORKFORCE_TODAY_YEARS
+    under `today` (WORKFORCE_TODAY's keywords)."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    lines = DM.workforce_line_carriers() if lines is None else lines
+    ring, _ = M.run_constant(_workforce_inputs(WORKFORCE_1950, WORKFORCE_TODAY_LOW, carriers, lines), years=300)
+    inp = _workforce_inputs(today or WORKFORCE_TODAY, WORKFORCE_TODAY_LOW, carriers, lines)
+    last = None
+    for y in range(ring.year + 1, ring.year + 1 + WORKFORCE_TODAY_YEARS):
+        last = M.step(ring, inp, y)
+    return inp, ring, last
 
 
 def workforce_rows():
-    """[{name, tfr, women, wa_share, at_work, pensioners, need, target, old_age}] for WORKFORCE_SCENARIOS: each
-    scenario's stable structure (300 years at constant inputs), its old-age threshold and its figures."""
+    """[{name, tfr, women, men, wa_share, at_work, pensioners, need, past, fws_work, target, old_age, w_target, engine,
+    outside, lines, men65, all65, young, old}] for WORKFORCE_SCENARIOS (each on its stable structure: 300 years at
+    constant inputs) and Rich today (a 2020-like structure, rich_today)."""
     carriers, lines = DM.load_carriers(), DM.workforce_line_carriers()
     rows = []
     for name, kw, low in WORKFORCE_SCENARIOS:
-        inp = M.Inputs(low_share=low, **kw)
-        inp.mods = {**DM.totals(carriers, inp.techs, inp.laws, inp.institutions),
-                    **DM.totals(lines, inp.techs, inp.laws, inp.institutions,
-                                types=tuple(P.WORKFORCE_LINE_TYPES.values()))}
+        inp = _workforce_inputs(kw, low, carriers, lines)
         ring, last = M.run_constant(inp, years=300)
-        qf, qm, _ = M.group_rates(inp)
-        old = M.old_age(qf, qm)
-        fig = M.work_figures(ring, inp, old)
-        rows.append({"name": name, "tfr": last["tfr"], "women": M.women_rate(inp), **fig,
-                     "target": M.wf_target(fig), "old_age": old})
+        rows.append(_workforce_row(name, inp, ring, last["tfr"]))
+    inp, ring, last = rich_today(carriers, lines)
+    rows.append(_workforce_row("Rich today (2020-like structure)", inp, ring, last["tfr"]))
     return rows
 
 
-def cmd_workforce(_args):
-    print(f"{'scenario':40s} {'tfr':>5s} {'women':>6s} {'wa':>6s} {'at work':>8s} {'target':>7s} "
-          f"{'pens':>6s} {'need':>6s} {'old age':>8s}")
-    for r in workforce_rows():
-        print(f"{r['name']:40s} {r['tfr']:5.2f} {r['women']:6.2f} {r['wa_share']:6.3f} {r['at_work']:8.3f} "
-              f"{r['target']:7.3f} {r['pensioners']:6.3f} {r['need']:6.3f} {r['old_age']:8.1f}")
-    return 0
+def participation_rows(carriers=None, lines=None):
+    """Call 3's carriers on Rich today (§5: each carrier's effect on the engine's scale beside its old flat line):
+    [(carrier, the engine-scale change under Full, the flat line outside Full)]. A law joins the rich laws (in its
+    group's place), an institution law at level 5; the IG traits, amendments, Woman Soldiers and Pollution Impact need a
+    save's state and are listed by the design (§1.7)."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    lines = DM.workforce_line_carriers() if lines is None else lines
+    base_inp, ring, _ = rich_today(carriers, lines)
+    qf, qm, _ = M.group_rates(base_inp)
+    old = M.old_age(qf, qm)
+    base = M.wf_target(M.work_figures(ring, base_inp, old))
+    rows = []
+    for law, inst in (("law_restorative_justice", None), ("law_rehabilitation_focused_criminal_justice", None),
+                      ("law_pro_labor_ministry_of_labor", "institution_ministry_of_labor"),
+                      ("law_pro_capital_ministry_of_labor", "institution_ministry_of_labor"),
+                      ("law_state_eugenics_program", None)):
+        kw = dict(WORKFORCE_TODAY, laws=WORKFORCE_TODAY["laws"] | {law})
+        if inst:
+            kw["institutions"] = {**WORKFORCE_TODAY["institutions"], inst: 5}
+        inp = _workforce_inputs(kw, WORKFORCE_TODAY_LOW, carriers, lines)
+        full = M.wf_target(M.work_figures(ring, inp, old)) - base
+        flat = sum(inp.mods.get(t, 0.0) - base_inp.mods.get(t, 0.0) for t in P.WORKFORCE_LINE_TYPES.values())
+        rows.append((law + (" at 5" if inst else ""), full, flat))
+    return rows
+
+
+def _pop_bases(sections):
+    """{state id: the pops' own base ratios, people-weighted} (te_dg_wbase), from a save's pops."""
+    num, den = collections.defaultdict(float), collections.defaultdict(float)
+    for rec in sections["pops"].values():
+        size = S._num(rec.get("workforce")) + S._num(rec.get("dependents"))
+        if size > 0:
+            num[rec.get("location")] += size * P.POP_BASE_RATIO.get(rec.get("type"), P.POP_BASE_RATIO_DEFAULT)
+            den[rec.get("location")] += size
+    return {sid: num[sid] / den[sid] for sid in den}
+
+
+def workforce_states(sections, carriers=None, lines=None):
+    """[{tag, sid, people, engine, outside, measured, need_raw, low, wbase, at_work, wa_share}] for every state of a
+    save with people: the model's figures on the state's seed (its own SoL, literacy and class mix, its owner's laws
+    and techs) on the engine's scale under Full, outside Full (the pops' bases and the moved lines at their flat
+    values), the engine's own workforce over people in the save, and the raw health need (HEALTH_NEED_1836's 1.0)."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    lines = DM.workforce_line_carriers() if lines is None else lines
+    bases = _pop_bases(sections)
+    out = []
+    for tag, states in S.state_inputs(sections).items():
+        for sid, st, inc in states:
+            if st.population <= 0:
+                continue
+            low = st.strata_people.get("lower", 0.0) / st.population
+            inp = inputs_for(st, carriers, incorporated=inc)
+            inp.low_share = low
+            inp.mods = {**inp.mods, **DM.totals(lines, inp.techs, inp.laws, inp.institutions, incorporated=inc,
+                                                types=tuple(P.WORKFORCE_LINE_TYPES.values()))}
+            ring = M.seed(inp, 1836, st.population)
+            qf, qm, _ = M.group_rates(inp)
+            fig = M.work_figures(ring, inp, M.old_age(qf, qm))
+            wbase = bases.get(sid, P.POP_BASE_RATIO_DEFAULT)
+            flat = sum(inp.mods.get(t, 0.0) for t in P.WORKFORCE_LINE_TYPES.values())
+            out.append({"tag": tag, "sid": sid, "people": st.population, "low": low, "wbase": wbase,
+                        "engine": M.engine_total(fig, wbase), "outside": M.outside_full_total(wbase, flat),
+                        "measured": st.workforce / st.population, "need_raw": fig["need"] * P.HEALTH_NEED_1836,
+                        "at_work": fig["at_work"], "wa_share": fig["wa_share"]})
+    return out
+
+
+def world_summary(rows):
+    """People-weighted world figures over workforce_states' rows, and the share of states in BAND_1836_STATE."""
+    people = sum(r["people"] for r in rows) or 1.0
+
+    def mean(k):
+        return sum(r[k] * r["people"] for r in rows) / people
+
+    lo, hi = BAND_1836_STATE
+    return {"engine": mean("engine"), "outside": mean("outside"), "measured": mean("measured"),
+            "need_raw": mean("need_raw"), "need": mean("need_raw") / P.HEALTH_NEED_1836,
+            "in_band": sum(1 for r in rows if lo <= r["engine"] <= hi) / max(len(rows), 1), "states": len(rows)}
+
+
+def _band(v, lo, hi):
+    return "" if lo <= v <= hi else " OUT"
+
+
+def cmd_workforce(args):
+    rows = workforce_rows()
+    print("Engine-scale figures (W's target is the census's target less the define's 0.25; the engine's total adds the "
+          "pops' bases' offset, here 0; outside Full is the base and every moved line at its flat value):")
+    print(f"{'scenario':38s} {'tfr':>5s} {'0-14':>5s} {'65+':>5s} {'women':>6s} {'wa':>6s} {'at work':>8s} "
+          f"{'target':>7s} {'outside':>8s} {'pens':>6s} {'need':>6s} {'men65':>6s} {'all65':>6s} {'old age':>8s}")
+    for r in rows:
+        print(f"{r['name']:38s} {r['tfr']:5.2f} {r['young']:5.0%} {r['old']:5.0%} {r['women']:6.2f} "
+              f"{r['wa_share']:6.3f} {r['at_work']:8.3f} {r['engine']:7.3f} {r['outside']:8.3f} "
+              f"{r['pensioners']:6.3f} {r['need']:6.3f} {r['men65']:6.2f} {r['all65']:6.2f} {r['old_age']:8.1f}")
+    out = 0
+    by = {r["name"]: r for r in rows}
+    today, farm = by["Rich today (2020-like structure)"], by["1836 farming"]
+    checks = [("Rich today, the engine's total", today["engine"], *BAND_TODAY),
+              ("women's rate today over men's", today["women"] / today["men"], BAND_WOMEN_TODAY, 9.0),
+              ("1836 men over 65 at work, no pension", farm["men65"], *BAND_OLD_MEN_1836),
+              ("over-65s at work today", today["all65"], *BAND_OLD_TODAY)]
+    print("\n§5's bands:")
+    for label, v, lo, hi in checks:
+        out |= not lo <= v <= hi
+        print(f"  {label:44s} {v:6.3f}  [{lo:g}-{hi:g}]{_band(v, lo, hi)}")
+    print("\nCall 3's participation inputs on Rich today (engine scale under Full against the flat line outside):")
+    for name, full, flat in participation_rows():
+        print(f"  {name:56s} {full:+7.3f}  (flat {flat:+.3f})")
+    if args.save:
+        st = workforce_states(S.read_sections(args.save))
+        w = world_summary(st)
+        print(f"\n{args.save}: {w['states']} states")
+        lo, hi = BAND_1836_WORLD
+        out |= not lo <= w["engine"] <= hi or w["in_band"] < BAND_1836_STATE_SHARE
+        out |= not BAND_NEED_1836[0] <= w["need"] <= BAND_NEED_1836[1]
+        print(f"  the engine's total under Full, world  {w['engine']:6.3f}  [{lo:g}-{hi:g}]{_band(w['engine'], lo, hi)}")
+        print(f"  states within {BAND_1836_STATE[0]:g}-{BAND_1836_STATE[1]:g}          {w['in_band']:6.1%}  "
+              f"[at least {BAND_1836_STATE_SHARE:.0%}]{'' if w['in_band'] >= BAND_1836_STATE_SHARE else ' OUT'}")
+        print(f"  outside Full (bases + flat lines)     {w['outside']:6.3f}")
+        print(f"  the engine's own, measured in the save {w['measured']:6.3f}  (workforce over people: the stop rule, "
+              "about 0.25 = the ratio is over people, about 0.20 = over dependents)")
+        print(f"  health need over 1836's               {w['need']:6.3f}  [{BAND_NEED_1836[0]:g}-{BAND_NEED_1836[1]:g}]"
+              f"{_band(w['need'], *BAND_NEED_1836)}  (raw {w['need_raw']:.4f}: HEALTH_NEED_1836)")
+    return out
+
+
+# ---- pensions: phase 2 step 2's pension bill (money) and health bill (bureaucracy), against §5's bands ------------
+# The pension bill is GDP / 52 x the pensioners' share x B a week, B = PENSION_B_PER_LEVEL x the Social Security level:
+# a share of GDP a year of pensioners x B. The band is a share of revenue (late-game call 16), so the fit needs the
+# game's own revenue over GDP, read from a save's largest economies (S.country_budgets: weekly income x 52 over the
+# GDP channel's latest sample). No 2000-2020 save exists yet (2026-10-12): the latest is 1953's, whose median the fit
+# takes; a late save replaces it (docs/testing/demographics-playtest.md).
+PENSION_LEVEL = 5            # Social Security at vanilla's top level, the design's reference (late-game §5.1)
+PENSION_SHARES = (0.18, 0.20, 0.22)
+PENSION_TOP_ECONOMIES = 15
+BAND_HEALTH_TODAY = (0.35, 0.5)
+BAND_HEALTH_1836 = (-0.05, 0.05)
+
+
+def revenue_share(budgets, top=PENSION_TOP_ECONOMIES):
+    """(median revenue over GDP of the `top` largest economies, [(tag, ratio)])."""
+    rows = sorted(budgets.items(), key=lambda kv: -kv[1]["gdp"])[:top]
+    ratios = [(tag, b["income"] * 52 / b["gdp"]) for tag, b in rows if b["gdp"] > 0]
+    return (statistics.median(r for _t, r in ratios) if ratios else None), ratios
+
+
+def fitted_b(revenue, pensioners=0.2, level=PENSION_LEVEL, band=P.PENSION_BILL_BAND):
+    """B a level that puts the bill at the middle of the revenue band for `pensioners` at `level`."""
+    return (band[0] + band[1]) / 2 * revenue / (pensioners * level)
+
+
+def health_rows(carriers=None, lines=None):
+    """[(label, need over 1836's, the term, band)] for Rich today and the 1836 farming scenario."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    lines = DM.workforce_line_carriers() if lines is None else lines
+    inp, ring, _ = rich_today(carriers, lines)
+    qf, qm, _ = M.group_rates(inp)
+    today = M.work_figures(ring, inp, M.old_age(qf, qm))["need"]
+    name, kw, low = WORKFORCE_SCENARIOS[0]
+    farm_inp = _workforce_inputs(kw, low, carriers, lines)
+    ring, _ = M.run_constant(farm_inp, years=300)
+    qf, qm, _ = M.group_rates(farm_inp)
+    farm = M.work_figures(ring, farm_inp, M.old_age(qf, qm))["need"]
+    return [("Rich today (2020-like structure)", today, M.health_term(today, inp.techs), BAND_HEALTH_TODAY),
+            (name, farm, M.health_term(farm, farm_inp.techs), BAND_HEALTH_1836)]
+
+
+def cmd_pensions(args):
+    out = 0
+    inp, ring, _ = rich_today()
+    qf, qm, _ = M.group_rates(inp)
+    pens = M.work_figures(ring, inp, M.old_age(qf, qm))["pensioners"]
+    print(f"Rich today (Standard, Social Security {PENSION_LEVEL}): pensioners {pens:.1%}; B {P.PENSION_B_PER_LEVEL:g} a "
+          f"level, so the bill is {M.pension_bill_gdp_share(pens, PENSION_LEVEL):.1%} of GDP a year")
+    if args.save:
+        revenue, ratios = revenue_share(S.country_budgets(args.save))
+        print(f"\n{args.save}: revenue over GDP, the {len(ratios)} largest economies: "
+              + ", ".join(f"{t} {r:.2f}" for t, r in ratios))
+        print(f"  median {revenue:.3f}; B that centres the band at 20% pensioners: {fitted_b(revenue):.4f}")
+        lo, hi = P.PENSION_BILL_BAND
+        for share in (*PENSION_SHARES, pens):
+            bill = M.pension_bill_gdp_share(share, PENSION_LEVEL) / revenue
+            ok = lo <= bill <= hi
+            out |= not ok and share in PENSION_SHARES
+            print(f"  {share:5.1%} pensioners: the bill is {bill:6.1%} of revenue [{lo:.0%}-{hi:.0%}]{'' if ok else ' OUT'}")
+    print("\nThe health bill (the health system's institution cost):")
+    for label, need, term, (lo, hi) in health_rows():
+        out |= not lo <= term <= hi
+        print(f"  {label:40s} need x{need:.2f} of 1836  term {term:+.3f}  [{lo:+g} to {hi:+g}]{_band(term, lo, hi)}")
+    return out
 
 
 # ---- fertility: children per woman (modifier-types design, stage 2) -----------------------------
@@ -1542,8 +1793,14 @@ def main(argv=None):
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
     sub.add_parser("lag").set_defaults(fn=cmd_lag)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
-    sub.add_parser("workforce", help="phase 2 step 1: the participation figures at the starting values (the design "
-                                     "§1.8)").set_defaults(fn=cmd_workforce)
+    p = sub.add_parser("workforce", help="phase 2: the participation figures and step 2's bands (the design §5); "
+                                         "with SAVE, the 1836 world's engine-scale totals and health need")
+    p.add_argument("save", nargs="?", help="a plain-text 1836 save")
+    p.set_defaults(fn=cmd_workforce)
+    p = sub.add_parser("pensions", help="phase 2 step 2: the pension bill against revenue (SAVE: the latest save's "
+                                        "revenue over GDP) and the health bill, against the design's §5 bands")
+    p.add_argument("save", nargs="?", help="a plain-text save, as late as there is")
+    p.set_defaults(fn=cmd_pensions)
     p = sub.add_parser("history")
     p.add_argument("save", nargs="+")
     p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")
