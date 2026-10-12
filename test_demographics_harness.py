@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 import demographics_harness as H  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
+import demographics_params as P  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 
 SLICE = ROOT / "test_fixtures" / "demographics" / "gb_1836_slice.v3"
@@ -211,6 +212,17 @@ class TestHarness(unittest.TestCase):
             self.assertIn(label, out.getvalue())
         self.assertNotIn(" OUT", out.getvalue())
 
+    def test_the_practice_scenarios(self):
+        """Spec 5.1 item 4's shares on every fertility scenario, and review I3's two: the 20th century where Birth
+        Spacing has eroded and the raise is all that's left."""
+        labels = [label for label, _kw, _band in H.PRACTICE_SCENARIOS]
+        self.assertIs(H.FERTILITY_SCENARIOS, H.PRACTICE_SCENARIOS, "Task 6: the fertility command judges the shares")
+        self.assertEqual(len(labels), len(H._SCENARIO_PRACTICES) + 2)
+        self.assertIn("East Asia 1990", labels)
+        self.assertIn("Latin America 1970", labels)
+        rows = dict((r[0], r[1]) for r in H.fertility_rows(scenarios=H.PRACTICE_SCENARIOS))
+        self.assertAlmostEqual(rows["1836 agrarian, No Women's Rights"], rows["1836 agrarian (reference)"], places=9)
+
     def test_fertility_rows_match_the_models_steady_state(self):
         # the command's shortcut (fertility at the scenario's own e0) is what a constant run settles on
         label, kw, _band = H.FERTILITY_SCENARIOS[1]
@@ -250,6 +262,40 @@ class TestHarness(unittest.TestCase):
             self.assertAlmostEqual(got[k], (each[0][k] + each[1][k]) / 2, msg=k)
         whole = H.model_figures(H.inputs_for(state(9.0, 2000.0), carriers))
         self.assertGreater(abs(got["e0"] - whole["e0"]), 0.5, "the mean SoL would hide the bend")
+
+    @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
+    def test_history_reads_a_saves_own_shares_under_a_replays(self):
+        """Stop B, M2: each state's shares are its seed, then the save's own (te_dg_pr_*, `saved`), then a replay's
+        (`shares`, the --shares file), each overriding the one before."""
+        sections = S.read_sections(SLICE)
+        gbr = [sid for sid, _st, _inc in S.state_inputs(sections)["GBR"]]
+        def tfr(**kw):
+            rows, _world, _bare = H.history_rows(sections, 1836, {}, **kw)
+            return next(r[3]["tfr"] for r in rows if r[1] == "GBR")
+        seeded = tfr()
+        saved = tfr(saved={sid: {"lm": 1.0, "bs": 0.0} for sid in gbr})
+        self.assertAlmostEqual(saved, seeded * (1 - P.PRACTICE_CUT["lm"]), places=6)
+        self.assertAlmostEqual(tfr(saved={sid: {"lm": 1.0, "bs": 0.0} for sid in gbr},
+                                   shares={sid: {"lm": 0.0, "bs": 0.0} for sid in gbr}), seeded, places=6)
+
+    def test_history_takes_each_states_practices(self):
+        """The late-marriage plan, Task 3: a state's shares multiply its children per woman, and a country's figure
+        can leave its colonies out (spec 5.1 item 3: Denmark's West African states)."""
+        carriers = DM.load_carriers()
+
+        def state(people):
+            c = S.CountryInputs("TST")
+            c.population, c.sol_x_size, c.wealth_tfr_x_size = people, 8.0 * people, M.wealth_tfr(8.0) * people
+            c.workforce, c.literate = people / 2, people / 10
+            return c
+
+        states = [("1", state(1000.0), True), ("2", state(1000.0), False)]
+        plain = H.country_figures(states, carriers)
+        late = H.country_figures(states, carriers, shares={"1": {"lm": 1.0}, "2": {"lm": 1.0}})
+        self.assertAlmostEqual(late["tfr"], plain["tfr"] * (1 - P.PRACTICE_CUT["lm"]), places=6)
+        home = H.country_figures(states, carriers, shares={"1": {"lm": 1.0}}, incorporated_only=True)
+        self.assertAlmostEqual(home["tfr"], H.model_figures(H.inputs_for(states[0][1], carriers,
+                                                                         practices={"lm": 1.0}))["tfr"], places=6)
 
     def test_history_sees_the_censuss_lag(self):
         """A state whose stored medicine is behind its targets reads a lower life expectancy than at its targets; with

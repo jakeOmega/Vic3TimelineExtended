@@ -540,3 +540,105 @@ te_debug_demog_mult_work = {
 		value = te_demog_mult_work
 	}
 }
+
+# ---- o: the engine-scaling probe (the late-marriage plan, Task 9) ----------------------------
+# THIS = a state: the absorbed family's births sum the engine holds for it (#892's script-only type), which option o
+# reads before and after its scaled probe; option l logs it too.
+te_debug_demog_line_absorbed_b = {
+	value = modifier:state_demog_absorbed_birth_rate_mult
+}
+
+# ---- l: the practices (the late-marriage plan, Task 10) -----------------------------------
+# THIS = a state: its Late Marriage and Birth Spacing shares (0 with none) and their targets. The targets read the walk's
+# variables, so a state with no census (an unincorporated one, or the rule off) shows -1, as the cause multipliers do.
+te_debug_demog_pr_lm = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pr_lm }
+		value = var:te_dg_pr_lm
+	}
+}
+te_debug_demog_pr_bs = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pr_bs }
+		value = var:te_dg_pr_bs
+	}
+}
+te_debug_demog_pr_target_lm = {
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_lit
+			has_variable = te_dg_acc
+			has_variable = te_dg_agr_share
+			has_variable = te_dg_fjob_share
+		}
+		value = te_demog_pr_target_lm
+	}
+}
+te_debug_demog_pr_target_bs = {
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_lit
+			has_variable = te_dg_acc
+			has_variable = te_dg_agr_share
+			has_variable = te_dg_fjob_share
+		}
+		value = te_demog_pr_target_bs
+	}
+}
+
+# ---- q: the owner-change probe (the late-marriage plan, Stop B's I1) ------------------------------
+# THIS = a state: 1 if it holds the probe's stamp, else 0; its census year and Late Marriage share, -1 with none.
+te_debug_demog_probe_owner_var = {
+	value = 0
+	if = {
+		limit = { has_variable = te_probe_owner_var }
+		value = 1
+	}
+}
+te_debug_demog_probe_owner_year = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_year }
+		value = var:te_dg_year
+	}
+}
+te_debug_demog_probe_owner_lm = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_pr_lm }
+		value = var:te_dg_pr_lm
+	}
+}
+
+# ---- The Primogeniture self-check (te_debug_demog_pr_selfcheck_start, te_debug_demog.5) ----------------------------
+# THIS = the state. What Primogeniture's line added to the absorbed births sum in the week since it went on.
+te_debug_demog_pr_chk_added = {
+	value = modifier:state_demog_absorbed_birth_rate_mult
+	if = {
+		limit = { has_variable = te_inh_pr_chk_before }
+		subtract = var:te_inh_pr_chk_before
+	}
+}
+
+# What it should add: inh_primogeniture_rural's 0.1 at the agrarian share (test_demographics_registry pins the 0.1).
+te_debug_demog_pr_chk_expected = {
+	value = 0.1
+	if = {
+		limit = { has_variable = te_inh_agrarian_share }
+		multiply = var:te_inh_agrarian_share
+	}
+}
+
+# How far apart the two are, as a non-negative number (a sign flip, not `abs = yes`, which the trigger catalog lacks).
+te_debug_demog_pr_chk_gap = {
+	value = te_debug_demog_pr_chk_added
+	subtract = te_debug_demog_pr_chk_expected
+	if = {
+		limit = { te_debug_demog_pr_chk_added < te_debug_demog_pr_chk_expected }
+		multiply = -1
+	}
+}

@@ -1,6 +1,10 @@
 # Demographics: late marriage and birth spacing — design
 
-> **Status: design draft, 2026-10-10, second round.** It answers the owner call in step 2 of the phase 2 calibration
+> **Status: approved (owner, 2026-10-11).** All nine calls in §7 are approved as recommended, with one change: Birth
+> Spacing's cut starts at 0.35, not 0.34. The harness refits every value jointly (§5.1) and rounds the results to neat
+> figures. Plan: `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`.
+>
+> **Design draft, 2026-10-10, second round.** It answers the owner call in step 2 of the phase 2 calibration
 > plan (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`, on PR #857): the census's children
 > per woman run 4.3–6.1 where history's run 3.2–7.1. The cause is how marriage and childbearing were organised, and
 > the game has no input for it. The first round chose between a strict late-marriage share and a broad one. The owner
@@ -241,6 +245,13 @@ Three numbers move together:
   world's from +1.03% to +0.91%. That waits for the joint mortality refit (§2.4); if the refit raises China's life
   expectancy, the share can rise with it.
 
+> **As built (2026-10-12; the plan's D1, D12, D13).** The wealth curve's base has been 6.0 since #869; this section's
+> 6.2 and its fit are older. The plan's fit on the normal-speed run (`docs/testing/demographics-late-marriage-2026-10-12.md`)
+> found no raise that passes the owner's regional growth gate, and at Stop A the owner kept today's mortality. So
+> s = 1.00, Late Marriage's cut is 0.10 and Birth Spacing's 0.20, India's held share is 0 (with no raise there is
+> nothing to cancel), and China's, Korea's and Manchuria's is 0.06, the smallest that brings China's projected
+> peacetime growth inside +3 to +6 per 1,000.
+
 ### 2.3 The fit
 
 **Method.**
@@ -439,8 +450,15 @@ The same generator, read the same way. The share's 1.0 is Tokugawa Japan's restr
   births modifier isn't applied until phase 2.
 - **A state with no share** (new, split, or from an older save) takes the people-weighted mean of its neighbours
   that have one, else its table value. A split state is the same people as its sibling.
-- **Revolutions:** the shares are state variables, so they stay (`scripting_best_practices.md` § "What a Civil
-  War's Winner Inherits").
+  - **As built (the plan's D5):** the people-weighted mean of the *other states in its state region* that hold one,
+    else its start less what its conditions have already eroded. States seed on their own days, so a neighbour across
+    a border would cascade the Hajnal line; it plays no part. In 1836 nothing has eroded where a practice starts, so a
+    new game seeds the table. A census re-seed keeps the shares.
+- **Revolutions and changes of owner** (as built; the plan's Stop B, I1): a change of owner moves the people to a
+  new state object, which carries none of the old one's variables. The shares survive through the siblings (another
+  piece of the region still holding them) or the region's copy, which every step writes on the state region. Only a
+  region with neither seeds at its eroded start. The census's ring and medicine still re-seed on a whole-region
+  transfer (`scripting_best_practices.md` § "What a Civil War's Winner Inherits").
 
 ## 4. Drift and spread
 
@@ -601,6 +619,15 @@ harness needs:
 
 ### 5.2 The gate
 
+> **The owner's gate (2026-10-11; the plan's D12).** Regional growth is the gate:
+> - each of #904's regions' projected peacetime births less deaths inside history's band;
+> - the world at or below today's less about 1 per 1,000;
+> - China inside +3 to +6;
+> - no country of 20M or more shrinking.
+>
+> The raise is the smallest neat value that passes it, possibly none. The high group's ~7 is reported, not required,
+> and calibration step 3 (a geographic mortality term) follows separately. The list below is this spec's original gate.
+
 On the gate saves (1837, 1887) and the scenarios:
 - **every anchor country within ±0.5 children per woman**, except those named in the results doc with a reason:
   marital fertility (the Low Countries), colonies (until the filter), and the flat Gapminder guesses (China, Persia,
@@ -672,6 +699,10 @@ The candidates, in existing groups:
 
 Decided (owner, 2026-10-10): two practices, combined as a product (§2.1).
 
+**Approved (owner, 2026-10-11): all nine calls below, as recommended,** with one change to call 4: Birth Spacing's cut
+starts at **0.35** (not 0.34), for neatness. The harness refits all the values jointly anyway (§5.1), and its results
+are rounded to neat figures. Call 6 stands as written: contraception erodes Late Marriage.
+
 1. **The names:** "Late Marriage" and "Birth Spacing". "Marital Restraint" and "Customary Restraint" are the
    alternatives for the second; "Birth Spacing" is plain, describes what it does, and doesn't echo Family
    Limitation. Recommended as proposed.
@@ -682,8 +713,8 @@ Decided (owner, 2026-10-10): two practices, combined as a product (§2.1).
    - Recommended as proposed, with both flagged.
 3. **Japan in Birth Spacing at 1.0 and Late Marriage at 0** (§1.3). Starting it in both changes nothing measurable,
    and the evidence is restraint within marriage. Recommended.
-4. **The size:** wealth curve ×1.15, Late Marriage cut 0.30, Birth Spacing cut 0.34 (§2.3). The high-fertility
-   group reaches about 7 at an error of 0.49 (today 0.89).
+4. **The size:** wealth curve ×1.15, Late Marriage cut 0.30, Birth Spacing cut 0.34 (§2.3; approved at **0.35**,
+   owner, 2026-10-11). The high-fertility group reaches about 7 at an error of 0.49 (today 0.89).
    - The harness refits the values jointly (§5.1).
    - Drop `inh_primogeniture_rural`'s +10% birth line, which contradicts Late Marriage (§4.5).
    - Recommended.

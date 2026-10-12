@@ -38,10 +38,14 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_band_figures                   total, young, working, old, women 15-49, 20-59 sums, median
         te_demog_project                        the bands twenty years ahead (a display outline)
         te_demog_debug_log_ring_before / _after  (Task 15's replay lines)
+        te_demog_practices_seed, _step, _country_init, _country_add, _country_store
+                                                each practice's turn of te_demog_practice_effects.txt (Late
+                                                Marriage and Birth Spacing; the late-marriage plan)
     common/script_values/te_demog_generated_values.txt
         per-pop engine curves and wealth TFR; per-state cause multipliers (reads of the
         demographics modifier types: medicine as 1 - access x treatment), women's work share, the means and
-        the land-tenure term; te_demog_k_* constants; per-slot debug shares
+        the land-tenure term; the practices' start ladders, erosions, seeds, targets and terms
+        (te_demog_pr_*, te_demog_marriage_age); te_demog_k_* constants; per-slot debug shares
 """
 
 import argparse
@@ -56,6 +60,7 @@ sys.path.insert(0, str(ROOT))
 
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
+import demographics_regions as R  # noqa: E402
 import pop_growth as G  # noqa: E402
 
 EFFECTS = Path("common/scripted_effects/te_demog_generated_effects.txt")
@@ -742,6 +747,7 @@ def render_effects(root=ROOT):
     projection(o)
     absorbed_walk(o, root)
     medicine_effects(o)
+    practice_loops(o)
     debug_ring(o)
     return o.text()
 
@@ -1290,6 +1296,7 @@ def constants(o):
         "medicine_snap": P.MEDICINE_SNAP, "medicine_snap_neg": -P.MEDICINE_SNAP,
         "deaths_on_top_high": P.DEATHS_ON_TOP_HIGH, "base_access": P.BASE_ACCESS,
         "maternal_base": P.MATERNAL_PER_100K_BIRTHS,
+        "practice_rate": P.PRACTICE_RATE,
     }
     for name, value in k.items():
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
@@ -1299,6 +1306,145 @@ def constants(o):
     for tech, v in P.FAMILY_TRANSPORT_TECHS.items():
         o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {tech} }} }} add = {lit(v)} }}")
     o("}")
+    o("")
+
+
+def _by_value(table):
+    """[(value, [keys])] for a {key: value} table, by value then key: one if per value."""
+    out = {}
+    for key, value in table.items():
+        out.setdefault(value, []).append(key)
+    return [(v, sorted(keys)) for v, keys in sorted(out.items())]
+
+
+def _start_entries(p):
+    """The start ladder's two tables with the entries that change nothing left out: a strategic region at 0 (the
+    ladder's default), and a state region at its strategic region's value. The fit can set a held share to 0
+    (2026-10-12: India's and East Asia's), which would otherwise write a test a state a year for nothing."""
+    regions = {r: v for r, v in P.PRACTICE_START_REGION[p].items() if v}
+    of = R.strategic_region_of()
+    states = {s: v for s, v in P.PRACTICE_START_STATE[p].items() if v != regions.get(of.get(s), 0.0)}
+    return regions, states
+
+
+def practices(o):
+    """Late Marriage and Birth Spacing (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md): each
+    practice's start ladder, target and term, from demographics_params.py. The machinery that reads them is
+    te_demog_practice_effects.txt."""
+    o("# State scope: each practice's start share (the late-marriage spec 3.2, 3.3; demographics_model.practice_start):")
+    o("# its strategic region's value, then its state region's, which wins. Geography, not culture. An entry that")
+    o("# changes nothing (a 0, a state at its region's value) is left out.")
+    for p in P.PRACTICES:
+        o(f"te_demog_pr_start_{p} = {{")
+        o("value = 0")
+        for key, table in zip(("region = sr:", "state_region = s:"), _start_entries(p)):
+            for value, names in _by_value(table):
+                o("if = {")
+                o("limit = {")
+                o("OR = {")
+                for name in names:
+                    o(f"{key}{name}")
+                o("}")
+                o("}")
+                o(f"value = {lit(value)}")
+                o("}")
+        o("}")
+        o("")
+    o("# State scope: the means beyond traditional methods as erosion (demographics_model.practice_erosion): the techs'")
+    o("# contraception x access by literacy, from 0 at PRACTICE_EROSION_FROM to its weight at FROM + SPAN.")
+    o("te_demog_pr_erosion_contraception = {")
+    o(f"value = modifier:{P.CONTRACEPTION_TYPE}")
+    o(f"multiply = {{ value = var:te_dg_lit multiply = {lit(1 - P.MEANS_ACCESS_BASE)} add = {lit(P.MEANS_ACCESS_BASE)} }}")
+    o(f"subtract = {lit(P.PRACTICE_EROSION_FROM)}")
+    o(f"divide = {lit(P.PRACTICE_EROSION_SPAN)}")
+    o("min = 0")
+    o("max = 1")
+    o(f"multiply = {lit(P.PRACTICE_EROSION_CONTRACEPTION)}")
+    o("}")
+    o("")
+    o("# State scope: how much of each practice's start its conditions have eroded, 0-1 (demographics_model.")
+    o("# practice_erosion): contraception, and for Birth Spacing the health-care access medicine has reached above the")
+    o("# base (te_dg_acc, which drifts toward its target since the Causes of Death plan; set before any practice reads")
+    o("# it, by te_demog_medicine_at_target at a seed and te_demog_medicine_drift at a step). The seed with no sibling")
+    o("# holding a share is the start less it (practice_seed; review I2), and the target adds Late Marriage's drivers")
+    o("# to that (practice_target): impartible inheritance on the farms and women's paid work. Read after the walk.")
+    for p in P.PRACTICES:
+        o(f"te_demog_pr_erosion_{p} = {{")
+        o("value = te_demog_pr_erosion_contraception")
+        if P.PRACTICE_EROSION_ACCESS[p]:
+            o(f"add = {{ value = var:te_dg_acc subtract = te_demog_k_base_access divide = {lit(P.PRACTICE_ACCESS_SPAN)} "
+              f"min = 0 max = 1 multiply = {lit(P.PRACTICE_EROSION_ACCESS[p])} }}")
+        o("max = 1")
+        o("}")
+        o(f"te_demog_pr_seed_{p} = {{")
+        o(f"value = te_demog_pr_erosion_{p}")
+        o("multiply = -1")
+        o("add = 1")
+        o(f"multiply = te_demog_pr_start_{p}")
+        o("}")
+        o(f"te_demog_pr_target_{p} = {{")
+        o(f"value = te_demog_pr_seed_{p}")
+        if p == "lm":
+            o("if = {")
+            o("limit = {")
+            o("owner = {")
+            o("OR = {")
+            for law in P.IMPARTIBLE_LAWS:
+                o(f"has_law = law_type:{law}")
+            o("te_inh_has_undivided_farms = yes")
+            o("}")
+            o("}")
+            o("}")
+            o(f"add = {{ value = var:te_dg_agr_share multiply = {lit(P.LM_INHERITANCE)} }}")
+            o("}")
+            o(f"add = {{ value = var:te_dg_fjob_share multiply = te_demog_female_work_share "
+              f"multiply = {lit(P.LM_WOMENS_WORK / P.FULL_FEMALE_WORK_SHARE)} }}")
+        o("min = 0")
+        o("max = 1")
+        o("}")
+        o("")
+    o("# State or country scope: each practice's term in children per woman, 1 - cut x share; 1 with no share yet")
+    o("# (an old save's state before its next census step, whose te_dg_tfr has no practice in it either: plan D7).")
+    for p in P.PRACTICES:
+        o(f"te_demog_pr_term_{p} = {{")
+        o("value = 1")
+        o("if = {")
+        o(f"limit = {{ has_variable = te_dg_pr_{p} }}")
+        o(f"subtract = {{ value = var:te_dg_pr_{p} multiply = {lit(P.PRACTICE_CUT[p])} }}")
+        o("}")
+        o("}")
+    o("te_demog_pr_terms = {")
+    o("value = 1")
+    for p in P.PRACTICES:
+        o(f"multiply = te_demog_pr_term_{p}")
+    o("}")
+    o("# State or country scope, the panel (spec 5.3): women's mean age at first marriage from the Late Marriage share,")
+    o("# and the Birth Spacing share (0 with none).")
+    o("te_demog_marriage_age = {")
+    o(f"value = {lit(P.MARRIAGE_AGE_AT_ZERO)}")
+    o("if = {")
+    o("limit = { has_variable = te_dg_pr_lm }")
+    o(f"add = {{ value = var:te_dg_pr_lm multiply = {lit(P.MARRIAGE_AGE_SPAN)} }}")
+    o("}")
+    o("}")
+    o("te_demog_pr_share_bs = {")
+    o("value = 0")
+    o("if = {")
+    o("limit = { has_variable = te_dg_pr_bs }")
+    o("value = var:te_dg_pr_bs")
+    o("}")
+    o("}")
+    o("")
+
+
+def practice_loops(o):
+    o("# The practices' machinery (te_demog_practice_effects.txt) for each practice in P.PRACTICES: phase 3 adds")
+    o("# Family Limitation there and here.")
+    for name in ("seed", "step", "country_init", "country_add", "country_store"):
+        o(f"te_demog_practices_{name} = {{")
+        for p in P.PRACTICES:
+            o(f"te_demog_practice_{name} = {{ P = {p} }}")
+        o("}")
     o("")
 
 
@@ -1323,6 +1469,7 @@ def render_values(root):
     engine_curves(o, G.read_defines(root / "common" / "defines" / "extra_defines.txt"))
     engine_rate_terms(o, root)
     multipliers(o)
+    practices(o)
     land_term(o, root)
     constants(o)
     debug_values(o)

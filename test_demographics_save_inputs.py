@@ -185,6 +185,18 @@ class TestTinySave(unittest.TestCase):
             self.assertEqual(st.laws, {"law_serfdom"})
             self.assertEqual(st.institutions, {"institution_health_system": 3})
 
+    def test_agrarian_share_counts_peasants_and_farmers(self):
+        # the walk's te_dg_agr_share (Late Marriage's inheritance driver): Peasants and Farmers, not Slaves
+        c = S.CountryInputs("TST")
+        for kind, size in (("peasants", 300.0), ("farmers", 100.0), ("slaves", 200.0), ("laborers", 400.0)):
+            S._add_pop(c, {"type": kind}, size, True)
+        self.assertAlmostEqual(c.agrarian_share, 0.4)
+        self.assertEqual(S.CountryInputs("EMPTY").agrarian_share, 0.0)
+
+    def test_state_regions(self):
+        sections = {"states": {"1": {"region": '"STATE_TEST"'}, "2": {}}}
+        self.assertEqual(S.state_regions(sections), {"1": "STATE_TEST"})
+
     def test_family_limitation_is_read_from_the_countrys_timed_modifiers(self):
         # the census reads it through state_fertility_means_add; the harness needs it from the save (#852's
         # deferred minor: France read from a save had 0.6 less means than in game)

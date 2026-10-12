@@ -69,18 +69,21 @@ class TestFertility(unittest.TestCase):
         return last["tfr"]
 
     def test_sketch_cases(self):
-        for inp, expected, label in [
-            (BRITAIN_1836, 5.5, "Britain 1836"),
-            (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
-            (BRITAIN_1900, 3.85, "Britain 1900"),
+        # each with the Late Marriage share the drift gives it (demographics_harness._SCENARIO_PRACTICES) at the fitted
+        # cuts (the late-marriage plan, Task 6, 2026-10-12: 0.10 and 0.20, no raise)
+        for inp, practices, expected, label in [
+            (BRITAIN_1836, {"lm": 1.0}, 4.85, "Britain 1836"),
+            (FRANCE_1836, {"lm": 1.0}, 4.3, "France 1836 (Family Limitation)"),
+            (BRITAIN_1900, {"lm": 0.75}, 3.45, "Britain 1900"),
             # 2.8 before the women's-rights term; with Women in the Workplace's -0.10 (Task 7) 2.5, nearer the West's
-            # 1950 median of 2.31 (Gapminder: Austria 1.87 ... the Netherlands 3.10)
-            (WEST_1950, 2.5, "the West 1950"),
-            (WEST_1990, 1.4, "the West 1990"),   # 1.6 before Women's Suffrage's natural-fertility term (Task 7)
-            (INDIA_1975, 5.3, "India 1975"),
+            # 1950 median of 2.31 (Gapminder: Austria 1.87 ... the Netherlands 3.10); 2.35 with Late Marriage at 0.5
+            (WEST_1950, {"lm": 0.5}, 2.35, "the West 1950"),
+            # 1.6 before Women's Suffrage's natural-fertility term (Task 7), 1.4 with it, 1.35 with Late Marriage
+            (WEST_1990, {"lm": 0.45}, 1.35, "the West 1990"),
+            (INDIA_1975, {"bs": 0.0}, 5.15, "India 1975"),   # India's held start is 0 since the fit
         ]:
             with self.subTest(label):
-                self.assertAlmostEqual(self.tfr(inp), expected, delta=0.3)
+                self.assertAlmostEqual(self.tfr(dataclasses.replace(inp, practices=practices)), expected, delta=0.3)
 
     def test_wealth_term_endpoints(self):
         # 6.0 at SoL 8 and below (owner, 2026-10-10, phase 2 step 4's gate: the model's children per woman sat above
@@ -762,3 +765,131 @@ class TestOnTopSplit(unittest.TestCase):
     def test_the_whole_states_part_is_never_below_zero(self):
         self.assertEqual(M.on_top_split((100.0, 300.0, 0.0))[1], 0.0)
 
+
+
+class TestPractices(unittest.TestCase):
+    """Late Marriage (lm) and Birth Spacing (bs): docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md
+    §2-§4; the plan's D5 for the seed."""
+
+    def test_the_terms_multiply_outside_the_means(self):
+        inp = M.Inputs(sol=8, literacy=0.2, urban_share=0.1)
+        base = M.fertility(inp, 35.0)
+        both = M.fertility(dataclasses.replace(inp, practices={"lm": 1.0, "bs": 0.5}), 35.0)
+        want = base["tfr"] * (1 - P.PRACTICE_CUT["lm"]) * (1 - P.PRACTICE_CUT["bs"] * 0.5)
+        self.assertAlmostEqual(both["tfr"], want, places=9)
+        self.assertAlmostEqual(both["lm"], 1 - P.PRACTICE_CUT["lm"])
+        self.assertAlmostEqual(both["bs"], 1 - P.PRACTICE_CUT["bs"] * 0.5)
+        self.assertEqual(both["means"], base["means"], "the practices act outside the means")
+
+    def test_no_share_is_no_term(self):
+        terms = M.fertility(M.Inputs(sol=8), 35.0)
+        self.assertEqual((terms["lm"], terms["bs"]), (1.0, 1.0))
+
+    def test_the_start_tables(self):
+        for practice, state, region, want in (
+                ("lm", "STATE_HOME_COUNTIES", "region_western_europe", 1.0),
+                ("lm", "STATE_KOLA", "region_northern_europe", 0.2),
+                ("lm", "STATE_GALICIA", "region_southern_europe", 0.9),
+                ("lm", "STATE_NEW_CASTILE", "region_southern_europe", 0.6),
+                ("lm", "STATE_CAPE_VERDE", "region_southern_europe", 0.0),
+                ("lm", "STATE_LAZIO", "region_southern_europe", 0.5),
+                ("lm", "STATE_PROVENCE", "region_southern_europe", 1.0),
+                ("lm", "STATE_POSEN", "region_eastern_europe", 0.8),
+                ("lm", "STATE_MAZOVIA", "region_eastern_europe", 0.4),
+                ("lm", "STATE_MOSCOW", "region_russia", 0.0),
+                ("lm", "STATE_KANTO", "region_northeast_asia", 0.0),
+                ("bs", "STATE_KANTO", "region_northeast_asia", 1.0),
+                ("bs", "STATE_RYUKYU_ISLANDS", "region_northeast_asia", 0.0),
+                ("bs", "STATE_SEOUL", "region_northeast_asia", P.BS_EAST_ASIA_START),
+                ("bs", "STATE_JIANGSU", "region_north_china", P.BS_EAST_ASIA_START),
+                ("bs", "STATE_BOMBAY", "region_south_india", P.BS_HELD_START),
+                ("bs", "STATE_HOME_COUNTIES", "region_western_europe", 0.0)):
+            with self.subTest(practice=practice, state=state):
+                self.assertEqual(M.practice_start(practice, state, region), want)
+
+    def test_the_held_groups(self):
+        """Owner, 2026-10-11 (plan D13): China, Manchuria and Korea take one Birth Spacing share, India another."""
+        for state, region, want in (("STATE_JIANGSU", "region_north_china", "east_asia"),
+                                    ("STATE_SEOUL", "region_northeast_asia", "east_asia"),
+                                    ("STATE_BOMBAY", "region_south_india", "india"),
+                                    ("STATE_KANTO", "region_northeast_asia", None),
+                                    ("STATE_MOSCOW", "region_russia", None)):
+            self.assertEqual(M.bs_held_group(state, region), want, state)
+
+    def test_the_start_tables_name_only_real_places(self):
+        import demographics_regions as R
+        table = R.load_table()
+        for practice in P.PRACTICES:
+            self.assertLessEqual(set(P.PRACTICE_START_REGION[practice]), set(table), practice)
+            self.assertLessEqual(set(P.PRACTICE_START_STATE[practice]), set(R.strategic_region_of()), practice)
+
+    def test_late_marriage_target(self):
+        # 1836: nothing beyond traditional methods, No Women's Rights, Primogeniture on half-farming land
+        inp = M.Inputs(literacy=0.4, laws=frozenset({"law_no_womens_rights"}), agrarian_share=0.5,
+                       female_job_share=0.2, impartible=True)
+        work = P.LM_WOMENS_WORK * 0.2 * 0.1 / P.FULL_FEMALE_WORK_SHARE
+        self.assertAlmostEqual(M.practice_target("lm", inp, 0.0), P.LM_INHERITANCE * 0.5 + work)
+        self.assertEqual(M.practice_target("lm", inp, 1.0), 1.0, "clamped at 1")
+        # era 3's pair at literacy 0.75: the means beyond traditional methods are 0.35 x 0.825 = 0.289
+        late = dataclasses.replace(inp, literacy=0.75, impartible=False, female_job_share=0.0,
+                                   mods={P.CONTRACEPTION_TYPE: 0.35})
+        erosion = P.PRACTICE_EROSION_CONTRACEPTION * min(1.0, (0.35 * 0.825 - P.PRACTICE_EROSION_FROM)
+                                                         / P.PRACTICE_EROSION_SPAN)
+        self.assertAlmostEqual(M.practice_target("lm", late, 1.0), 1 - erosion)
+        self.assertAlmostEqual(M.practice_target("lm", dataclasses.replace(late, mods={P.ACCESS_TYPE: 1.0}), 1.0),
+                               1.0, msg="health care doesn't erode Late Marriage")
+
+    def test_birth_spacing_target_erodes_with_contraception_and_health_access(self):
+        inp = M.Inputs(literacy=0.3, mods={P.ACCESS_TYPE: 0.25})
+        self.assertAlmostEqual(M.practice_target("bs", inp, 1.0),
+                               1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.25 / P.PRACTICE_ACCESS_SPAN)
+        full = dataclasses.replace(inp, literacy=1.0, mods={P.ACCESS_TYPE: 1.0, P.CONTRACEPTION_TYPE: 0.5})
+        self.assertEqual(M.practice_target("bs", full, 1.0), 0.0, "the erosion is at most 1")
+        self.assertEqual(M.practice_target("bs", M.Inputs(agrarian_share=1.0, impartible=True), 0.0), 0.0,
+                         "nothing builds Birth Spacing up")
+
+    def test_birth_spacing_erodes_with_the_access_medicine_has_reached(self):
+        """Since #916 the census's health-care access drifts toward its target (te_dg_acc). Birth Spacing's erosion
+        reads that drifted access above the base, not the law's modifier, so it fades as medicine spreads; with no
+        drift held (a seed, or a save from before #916) it reads the target, which is the modifier."""
+        line = 0.5
+        lagging = M.Inputs(mods={P.ACCESS_TYPE: line}, medicine={"access": P.BASE_ACCESS + 0.1,
+                                                                 "infection": 0.0, "maternal": 0.0, "chronic": 0.0})
+        self.assertAlmostEqual(M.practice_target("bs", lagging, 1.0),
+                               1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.1 / P.PRACTICE_ACCESS_SPAN)
+        at_target = dataclasses.replace(lagging, medicine=None)
+        self.assertAlmostEqual(M.practice_target("bs", at_target, 1.0),
+                               1 - P.PRACTICE_EROSION_ACCESS["bs"] * line / P.PRACTICE_ACCESS_SPAN)
+
+    def test_drift_closes_its_rate_of_the_gap(self):
+        self.assertAlmostEqual(M.practice_drift(1.0, 0.45), 1.0 - P.PRACTICE_RATE * 0.55)
+        self.assertEqual(M.practice_drift(0.0, 0.0), 0.0)
+
+    def test_a_seed_takes_its_siblings_people_weighted_mean_else_its_eroded_start(self):
+        inp = M.Inputs()
+        self.assertAlmostEqual(M.practice_seed("lm", inp, 0.0, [(300.0, 0.8), (100.0, 0.4)]), 0.7)
+        self.assertEqual(M.practice_seed("lm", inp, 0.4, []), 0.4, "nothing eroded: the start")
+        self.assertEqual(M.practice_seed("lm", inp, 0.4, [(0.0, 0.9)]), 0.4, "siblings with no people don't count")
+        # review I2: an old save's or a mid-game switch's state seeds at its start less what its conditions eroded
+        late = M.Inputs(literacy=1.0, mods={P.CONTRACEPTION_TYPE: 1.0, P.ACCESS_TYPE: 1.0})
+        self.assertEqual(M.practice_seed("bs", late, 1.0, []), 0.0, "a 1950 Japan seeds with its spacing gone")
+        self.assertAlmostEqual(M.practice_seed("bs", M.Inputs(mods={P.ACCESS_TYPE: 0.25}), 1.0, []),
+                               1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.5)
+        drivers = M.Inputs(female_job_share=1.0, laws=frozenset({"law_protected_class"}), agrarian_share=1.0,
+                           impartible=True)
+        self.assertEqual(M.practice_seed("lm", drivers, 0.0, []), 0.0,
+                         "the drivers stay out of the seed: Japan's Late Marriage starts at 0 (call 3)")
+
+    def test_a_seed_with_no_sibling_takes_its_regions_copy(self):
+        """Stop B, I1 (owner, 2026-10-12): a whole state region changing hands makes a new state object with no sibling;
+        its seed takes the region's copy of the shares (te_dg_pr_<P>_r, written at each step), before the eroded
+        start. A sibling holding a share still comes first."""
+        late = M.Inputs(literacy=1.0, mods={P.CONTRACEPTION_TYPE: 1.0})
+        self.assertEqual(M.practice_seed("lm", late, 1.0, [], region=0.85), 0.85, "the region's copy, not 0.3")
+        self.assertAlmostEqual(M.practice_seed("lm", late, 1.0, [(100.0, 0.6)], region=0.85), 0.6, msg="sibling first")
+        self.assertAlmostEqual(M.practice_seed("lm", late, 1.0, [], region=None), 0.3, msg="nothing: the eroded start")
+        self.assertEqual(M.practice_seed("lm", late, 1.0, [], region=0.0), 0.0, "a copy of 0 is a copy")
+
+    def test_marriage_age(self):
+        self.assertEqual(M.marriage_age(1.0), 26)
+        self.assertEqual(M.marriage_age(0.0), 19)

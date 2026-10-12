@@ -228,8 +228,8 @@ te_demog_tfr_on_top = {
 	}
 }
 
-# State scope: children per woman = wealth x natural x (1 - means x (1 - desired)) (spec §2.3;
-# demographics_model.fertility).
+# State scope: children per woman = wealth x natural x the practices x (1 - means x (1 - desired)) (spec §2.3;
+# demographics_model.fertility; the practices, te_demog_practice_effects.txt).
 te_demog_tfr = {
 	value = 1
 	subtract = var:te_dg_desired
@@ -238,6 +238,7 @@ te_demog_tfr = {
 	add = 1
 	multiply = var:te_dg_wtfr
 	multiply = var:te_dg_natural
+	multiply = te_demog_pr_terms
 }
 
 # War scope, on the owner's pulse: the owner's dead in this war so far (probe Q4).

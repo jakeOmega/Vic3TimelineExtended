@@ -254,7 +254,8 @@ of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
 rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
-and mild starvation. The rest, such as the family-policy laws and the late
+mild starvation, and Primogeniture's larger farm families, which late marriage
+replaces. The rest, such as the family-policy laws and the late
 medical technologies, it applies at its own rate, as it does an effect on the
 whole state, such as pollution, devastation or a decree. Either way, a new law
 or technology takes effect at the state's next census step, up to a year later.
@@ -306,9 +307,13 @@ Each year, the people of every age lose their dead at that age's rate, the
 newborn enter at age 0, and the war dead, people killed by events and migrants
 are taken from or added to the ages they belong to. The war dead are people aged
 18 to 40, nineteen in twenty of them men. Children per woman follows wealth and
-women's legal standing (where women work the fields, own property, hold jobs or
-vote, they marry later and have fewer children), then falls with literacy, child
-survival and city life. Under Full, the figure shown is what births came to that
+women's legal standing, and two customs lower it. Under late marriage, strongest
+at the start in north-western and central Europe, women marry in their
+mid-twenties and many never marry. Under birth spacing, strongest in Japan and
+slight in China and Korea, couples space and stop births by custom. Modern
+contraception wears both away, and health care wears away birth spacing; women's
+paid work and farms that pass whole to one heir make late marriage more common.
+The figure then falls with literacy, child survival and city life. Under Full, the figure shown is what births came to that
 year, so decrees, famine and other effects on births count in it; its tooltip
 lists them as births added on top of the census. The means to plan a family
 grow with literacy and with contraception: Vulcanization, Feminism, the

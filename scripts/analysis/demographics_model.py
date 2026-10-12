@@ -40,6 +40,9 @@ class Inputs:
     mods: dict = field(default_factory=dict)   # {modifier type: total} the state reads (demographics_modifiers.totals)
     turmoil: float = 0.0                 # 0..1: the state's turmoil at the step (te_dg_in_turm)
     medicine: dict | None = None         # the drifted access and treatments the step holds; None = at the targets
+    practices: dict = field(default_factory=dict)   # {practice: share 0-1}: lm Late Marriage, bs Birth Spacing
+    agrarian_share: float = 0.0          # Peasants and Farmers over the state's people (the walk's te_dg_agr_share)
+    impartible: bool = False             # the owner holds Primogeniture or Undivided Farm Succession
 
 
 def clamp(x, lo, hi):
@@ -205,8 +208,10 @@ def means(inp):
 
 
 def fertility(inp, e0):
-    """Children per woman and its terms (§2.3): wealth x natural x (1 - means x (1 - desired)). Natural fertility
-    is women's legal standing (phase 2 step 4, Task 7), 1 + its type, at least NATURAL_FERTILITY_FLOOR."""
+    """Children per woman and its terms (§2.3): wealth x natural x the practices x (1 - means x (1 - desired)).
+    Natural fertility is women's legal standing (phase 2 step 4, Task 7), 1 + its type, at least
+    NATURAL_FERTILITY_FLOOR. Each practice (the late-marriage spec §2.1) multiplies by 1 - its cut x its share, outside
+    the means; a practice with no share is 1."""
     wealth = inp.wealth_tfr if inp.wealth_tfr is not None else wealth_tfr(inp.sol)
     natural = max(P.NATURAL_FERTILITY_FLOOR, 1 + inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0))
     education = 1 - P.EDUCATION_WEIGHT * inp.literacy
@@ -215,8 +220,88 @@ def fertility(inp, e0):
     desired = education * survival * urban
     mn = means(inp)
     factor = 1 - mn * (1 - desired)
-    return {"tfr": wealth * natural * factor, "wealth": wealth, "natural": natural, "education": education,
-            "survival": survival, "urban": urban, "means": mn, "factor": factor}
+    practices = {p: 1 - cut * inp.practices.get(p, 0.0) for p, cut in P.PRACTICE_CUT.items()}
+    tfr = wealth * natural * factor
+    for term in practices.values():
+        tfr *= term
+    return {"tfr": tfr, "wealth": wealth, "natural": natural, "education": education,
+            "survival": survival, "urban": urban, "means": mn, "factor": factor, **practices}
+
+
+# ---- Late Marriage and Birth Spacing (the late-marriage spec §3-§4; te_demog_practice_effects.txt) --------------
+
+def practice_start(practice, state_region, strategic_region):
+    """A state's start share (§3.2, §3.3): its state region's entry, else its strategic region's, else 0
+    (te_demog_pr_start_<P>, generated)."""
+    by_state = P.PRACTICE_START_STATE[practice]
+    if state_region in by_state:
+        return by_state[state_region]
+    return P.PRACTICE_START_REGION[practice].get(strategic_region, 0.0)
+
+
+def bs_held_group(state_region, strategic_region):
+    """Which held Birth Spacing share a state takes (the plan's D13): "east_asia" (China, Manchuria, Korea), "india", or
+    None (Japan's full share, or none)."""
+    if strategic_region in P.BS_EAST_ASIA_REGIONS or state_region in P.BS_EAST_ASIA_STATES:
+        return "east_asia"
+    if strategic_region in P.BS_INDIA_REGIONS:
+        return "india"
+    return None
+
+
+def contraception_beyond(inp):
+    """The means beyond traditional methods: the techs' contraception x access by literacy (§4.2)."""
+    return inp.mods.get(P.CONTRACEPTION_TYPE, 0.0) * (P.MEANS_ACCESS_BASE + (1 - P.MEANS_ACCESS_BASE) * inp.literacy)
+
+
+def practice_erosion(practice, inp):
+    """How much of the start the state's conditions take away, 0-1 (§4.2, §4.3). Health care's part reads the access
+    medicine has reached above the base (te_dg_acc - BASE_ACCESS: since #916 access drifts toward its target), so
+    Birth Spacing fades as medicine spreads; with no drift held it is the target, the access modifier."""
+    contra = P.PRACTICE_EROSION_CONTRACEPTION * clamp(
+        (contraception_beyond(inp) - P.PRACTICE_EROSION_FROM) / P.PRACTICE_EROSION_SPAN, 0.0, 1.0)
+    reached = (inp.medicine if inp.medicine is not None else medicine_targets(inp))["access"] - P.BASE_ACCESS
+    access = P.PRACTICE_EROSION_ACCESS[practice] * clamp(reached / P.PRACTICE_ACCESS_SPAN, 0.0, 1.0)
+    return clamp(contra + access, 0.0, 1.0)
+
+
+def practice_target(practice, inp, start):
+    """Where a practice's share drifts (§4.2, §4.3; te_demog_pr_target_<P>): the start less its erosion, plus Late
+    Marriage's drivers, impartible inheritance on the farms and women's paid work, within 0-1."""
+    target = start * (1 - practice_erosion(practice, inp))
+    if practice == "lm":
+        if inp.impartible:
+            target += P.LM_INHERITANCE * inp.agrarian_share
+        target += P.LM_WOMENS_WORK * inp.female_job_share * female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
+    return clamp(target, 0.0, 1.0)
+
+
+def practice_drift(share, target):
+    """One year's drift (§4.2): PRACTICE_RATE of the gap. The neighbour spread is phase 3's (the plan's D6)."""
+    return clamp(share + P.PRACTICE_RATE * (target - share), 0.0, 1.0)
+
+
+def practice_seed(practice, inp, start, siblings=(), region=None):
+    """A state with no share (§3.4; the plan's D5): the people-weighted mean of the other states in its state region
+    that hold one; else the region's copy of the share (te_dg_pr_<P>_r, written at each step: a whole state region that
+    changed hands, Stop B's I1); else its start less what its conditions have already eroded, start x (1 - erosion)
+    (te_demog_pr_seed_<P>). In 1836 nothing has eroded anywhere a practice starts (no contraception before era 3; no
+    health law in Japan, China, Korea or India) and no region holds a copy, so a new game seeds the table. An old save
+    or a rule switched on mid-game seeds near where the drift would have taken it, not at the 1836 custom (review I2).
+    The drivers stay out, so Japan's Late Marriage starts at 0 (call 3). siblings: [(people, share)]; region: the
+    region's copy, or None."""
+    held = [(p, s) for p, s in siblings if p > 0]
+    people = sum(p for p, _s in held)
+    if people > 0:
+        return sum(p * s for p, s in held) / people
+    if region is not None:
+        return region
+    return start * (1 - practice_erosion(practice, inp))
+
+
+def marriage_age(share):
+    """Women's mean age at first marriage the panel shows (§5.3): 19 with no Late Marriage, 26 at a full share."""
+    return P.MARRIAGE_AGE_AT_ZERO + P.MARRIAGE_AGE_SPAN * share
 
 
 def asfr_shape(rate_age):
