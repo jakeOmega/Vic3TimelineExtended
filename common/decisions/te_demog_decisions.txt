@@ -20,8 +20,8 @@
 # Recently penalty is unverified: the planned_capital_moved self-check logs it (docs/testing/demographics-playtest.md).
 #
 # ai_chance: te_demog_pc_ai_wants, the same conditions for every country (no is_ai): a Primate pattern at half strength
-# or more in a country of eight census states or more, out of default, with the money in the treasury and authority to
-# spare.
+# or more in a country of eight census states or more whose largest city is under Migration Crowding, out of default,
+# with the money in the treasury and authority to spare.
 # ============================================================================
 te_decision_plan_new_capital = {
 	is_shown = {

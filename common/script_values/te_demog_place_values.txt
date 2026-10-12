@@ -121,8 +121,8 @@ te_demog_k_pc_cooldown_years = { value = 50 }
 # A candidate site holds at least 1% of the country's people.
 te_demog_k_pc_min_share = { value = 0.01 }
 # The AI takes it only with a Primate pattern at half strength or more (45% primacy) in a country of eight census states
-# or more, with the cost in its treasury and the authority to spare: a planned capital is rare, about fifteen in the
-# real twentieth century.
+# or more whose largest city is crowded, with the cost in its treasury and the authority to spare: a planned capital is
+# rare, about fifteen in the real twentieth century.
 te_demog_k_pc_ai_strength = { value = 0.5 }
 te_demog_k_pc_ai_states = { value = 8 }
 te_demog_k_pc_ai_authority_spare = { value = 50 }

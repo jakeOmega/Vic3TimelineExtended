@@ -219,6 +219,16 @@ class TestDecision(unittest.TestCase):
             self.assertNotIn("is_ai", re.sub(r"#[^\n]*", "", _text(path)), path.name)
         self.assertIn("te_demog_pc_ai_wants = yes", self.body[self.body.index("ai_chance"):])
 
+    def test_the_ai_rule(self):
+        """A crowded Primate metropolis in a country of eight states or more, out of default, money and authority."""
+        body = _block(_text(PLACE_TRIGGERS), "te_demog_pc_ai_wants")
+        for rule in ("var:te_dg_up_s >= te_demog_k_pc_ai_strength", "var:te_dg_up_states >= te_demog_k_pc_ai_states",
+                     "var:te_dg_primate_state ?= { has_modifier = migration_crowding }", "in_default = no",
+                     "gold_reserves > te_demog_pc_money_shown", "authority > te_demog_pc_ai_authority"):
+            self.assertIn(rule, body, rule)
+        self.assertGreaterEqual(K["te_demog_k_pc_ai_strength"], (0.4 - K["te_demog_k_up_floor"]) / K["te_demog_k_up_span"],
+                                "the AI needs a Primate pattern")
+
     def test_it_opens_the_site_event(self):
         self.assertIn("trigger_event = { id = te_demog_capital.1 popup = yes }", self.body)
 
