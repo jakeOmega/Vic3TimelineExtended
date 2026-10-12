@@ -125,6 +125,7 @@ te_civil_war_on_won = {
 		te_tax_repair_after_civil_war = yes		# Legislated tax code: the winner's code applies
 		inh_repair_after_civil_war = yes		# Inheritance: the concentration score
 		te_demog_ms_repair_after_civil_war = yes	# Demographics: the Family Policy measures' modifiers
+		te_demog_pc_repair_after_civil_war = yes	# Demographics: a planned capital's cooldown and building cost
 		te_civil_war_repoint_uprisings = yes
 		te_civil_war_clear = yes
 	}

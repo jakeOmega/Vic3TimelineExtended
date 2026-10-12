@@ -48,7 +48,8 @@
 #        TE_DEMOG_MODS and TE_DEMOG_WORK lines now, a day and a month later (the hidden te_debug_demog.3)
 # Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7, .8 (phase 2 step
 # 1's workforce self-checks; te_debug_demog_wf_selfchecks); under Full, .10 (the Family Policy measures' self-check,
-# measure_country_types; te_debug_demog_ms_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
+# measure_country_types; te_debug_demog_ms_selfcheck_start) and .60 (the Planned Capital's, planned_capital_moved;
+# te_debug_demog_pc_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
 #
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
@@ -589,6 +590,61 @@ te_debug_demog.10 = {
 			remove_variable = te_dg_ms_chk_before
 			remove_variable = te_dg_ms_chk_e0
 			remove_variable = te_dg_ms_chk_owner
+		}
+	}
+}
+
+# The Planned Capital self-check's second half (te_debug_demog_pc_selfcheck_start, te_demog_place_effects.txt): once a
+# game, under Full, a week after the first planned capital anywhere (the AI's included), on that country. OK: the
+# capital stands in the chosen site, so set_capital moved it from the generated dispatcher on the site's state region.
+# BROKEN: it is still in the old capital, so the move never happened: re-run scripts/generators/gen_planned_capital.py
+# (a region added since) or, if the engine refuses the move, take the fallback in docs/testing/demographics-playtest.md
+# (Self-checks). penalty: whether the base game's Moved Capital Recently came with the move (1) or not (0), for the
+# costs' tuning. NO_VERDICT, and the check re-arms, when the capital is in neither state or a state changed hands within
+# the week.
+te_debug_demog.60 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_dg_pc_chk_site
+				has_variable = te_dg_pc_chk_from
+			}
+			set_variable = { name = te_dg_pc_chk_penalty value = 0 }
+			if = {
+				limit = { has_modifier = moved_capital_recently }
+				set_variable = { name = te_dg_pc_chk_penalty value = 1 }
+			}
+			if = {
+				limit = {
+					var:te_dg_pc_chk_site ?= {
+						owner = ROOT
+						is_capital = yes
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = {
+					var:te_dg_pc_chk_from ?= {
+						owner = ROOT
+						is_capital = yes
+					}
+					var:te_dg_pc_chk_site ?= { owner = ROOT }
+				}
+				debug_log = "TE_SELF_CHECK BROKEN planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetName] (the capital never left the old one: re-run gen_planned_capital.py, or take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK NO_VERDICT planned_capital_moved tag=[THIS.GetCountry.GetTagName] (the capital is in neither state, or one changed hands within the week; the check re-arms) date=[TimeKeeper.GetCurrentDate.GetString]"
+				remove_global_variable = te_demog_pc_selfcheck_done
+			}
+			debug_log_scopes = yes
+			remove_variable = te_dg_pc_chk_site
+			remove_variable = te_dg_pc_chk_from
+			remove_variable = te_dg_pc_chk_now
+			remove_variable = te_dg_pc_chk_penalty
 		}
 	}
 }

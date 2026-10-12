@@ -1,0 +1,201 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — where people live (phase 3): the national urban pattern's effects and the Planned Capital decision
+# Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §5.1 (the table: a choice, not a penalty) and §11.
+# Values: te_demog_place_values.txt; triggers: te_demog_place_triggers.txt; modifiers: te_demog_place_modifiers.txt;
+# the decision: common/decisions/te_demog_decisions.txt; its site choice: events/te_demog_capital_events.txt; the move:
+# te_demog_capital_generated.txt (scripts/generators/gen_planned_capital.py).
+#
+# Under Full only (te_demog_effects_run): the census computes the pattern wherever it runs (Full or Display only), but
+# its effects and the decision act only under Full, as the census's births and deaths do (the release precondition:
+# nothing changes outside Full; mod_systems.md § Demographics).
+#
+# Variables:
+#   country  te_dg_primate_state  its largest city at the last census (a state: the census state with the most urban
+#                                 people, the one primacy is measured by)
+#            te_dg_up_states      the census states counted
+#            te_dg_up_s           the pattern's strength, 0-1 (te_demog_up_strength; 0 under three census states)
+#            te_dg_pc_year        the date its last planned capital was founded (te_demog_ms_now: a year with months)
+#   state    te_dg_up_mult        the multiplier of the state's urban-pattern modifier (its owner's te_dg_up_s at its
+#                                 last pulse; kept, since a modifier's multiplier is read again after it is applied)
+# ============================================================================
+
+# THIS = ROOT = a country, at the end of its census's urban pattern (te_demog_country_census, so at game start, each
+# 31 December and fast mode's country census alike). Names its largest city, counts its census states and sets the
+# strength the states' pulses apply. Whatever the rule: under Display only the panel shows what the pattern would do.
+te_demog_up_country = {
+	if = {
+		limit = { has_variable = te_dg_primate_state }
+		remove_variable = te_dg_primate_state
+	}
+	set_local_variable = { name = te_dg_up_n value = 0 }
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		change_local_variable = { name = te_dg_up_n add = 1 }
+	}
+	set_variable = { name = te_dg_up_states value = local_var:te_dg_up_n }
+	ordered_scope_state = {
+		limit = {
+			te_demog_has_census = yes
+			te_demog_up_urban > 0
+		}
+		order_by = te_demog_up_urban
+		max = 1
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_up_it
+		root = { set_variable = { name = te_dg_primate_state value = scope:te_dg_up_it } }
+	}
+	set_variable = { name = te_dg_up_s value = 0 }
+	if = {
+		limit = {
+			has_variable = te_dg_primate_state
+			var:te_dg_up_states >= te_demog_k_up_min_states
+		}
+		set_variable = { name = te_dg_up_s value = te_demog_up_strength }
+	}
+}
+
+# THIS = ROOT = a state, on its yearly pulse (te_demog_state_yearly_on_action, after te_demog_state_yearly), the one
+# refresh site of both modifiers: ROOT is the state, so the multiplier reads its own variable. Under Full, its owner's
+# largest city takes Primate City and every other census state Provincial Neglect, each scaled by the owner's strength
+# from its last census; below 0.01 neither. Outside Full both come off at the next pulse.
+te_demog_up_state_refresh = {
+	if = {
+		limit = { has_modifier = te_demog_primate_city }
+		remove_modifier = te_demog_primate_city
+	}
+	if = {
+		limit = { has_modifier = te_demog_provincial_neglect }
+		remove_modifier = te_demog_provincial_neglect
+	}
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			te_demog_has_census = yes
+			te_demog_up_owner_strength > 0.01
+		}
+		set_variable = { name = te_dg_up_mult value = te_demog_up_owner_strength }
+		if = {
+			limit = { te_demog_up_is_primate = yes }
+			add_modifier = {
+				name = te_demog_primate_city
+				multiplier = var:te_dg_up_mult
+			}
+		}
+		else = {
+			add_modifier = {
+				name = te_demog_provincial_neglect
+				multiplier = var:te_dg_up_mult
+			}
+		}
+	}
+}
+
+# THIS = ROOT = a state, on its yearly pulse (te_demog_state_yearly_on_action). A planned capital's development modifier
+# is the capital's: once the state is no longer its owner's capital (the capital moved on by the base game's map
+# interaction, or the state changed hands) it ends at the next pulse, so a planned capital can't buy a state's growth
+# and hand the seat back.
+te_demog_pc_state_check = {
+	if = {
+		limit = {
+			has_modifier = te_demog_pc_new_capital
+			is_capital = no
+		}
+		remove_modifier = te_demog_pc_new_capital
+	}
+}
+
+# THIS = ROOT = the country, in te_demog_capital.1's chosen option; scope:$SITE$ = the site (saved in the event's
+# immediate, so it exists in the option's tooltip too). The money and the authority, the new capital's development
+# modifier, then on the click only (te_dg_pc_click: the tooltip walk tests every limit and writes nothing, and the
+# move's dispatcher has a branch for each of 675 state regions) the move, the date and the self-check.
+te_demog_pc_build = {
+	add_treasury = te_demog_pc_money_cost
+	add_modifier = {
+		name = te_demog_pc_works
+		days = te_demog_k_pc_works_days
+	}
+	scope:$SITE$ = {
+		add_modifier = {
+			name = te_demog_pc_new_capital
+			days = te_demog_k_pc_new_capital_days
+		}
+	}
+	custom_tooltip = {
+		text = te_demog_pc_tt_cooldown_set
+		set_variable = te_dg_pc_click
+		if = {
+			limit = { has_variable = te_dg_pc_click }
+			remove_variable = te_dg_pc_click
+			scope:$SITE$ = { save_scope_as = te_pc_site }
+			if = {
+				limit = { exists = capital }
+				capital = { save_scope_as = te_pc_from }
+			}
+			te_demog_pc_set_capital = yes
+			set_variable = { name = te_dg_pc_year value = te_demog_ms_now }
+			te_debug_demog_pc_selfcheck_start = yes
+		}
+	}
+}
+
+# THIS = ROOT = a civil war's winner (te_civil_war_on_won), Full only. The winner continues the nation (owner,
+# 2026-09-26): a revolution that won takes the old government's planned-capital date (the cooldown) where it has none,
+# and the building's authority cost comes back for the days left of its five years, since no country modifier passes to
+# the winner. A loyalist winner keeps its own modifier.
+te_demog_pc_repair_after_civil_war = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		if = {
+			limit = {
+				has_variable = te_cw_rebels_won
+				var:te_cw_rebels_won = 1
+				NOT = { has_variable = te_dg_pc_year }
+				scope:te_cw_loser ?= { has_variable = te_dg_pc_year }
+			}
+			set_variable = { name = te_dg_pc_year value = scope:te_cw_loser.var:te_dg_pc_year }
+		}
+		if = {
+			limit = {
+				has_variable = te_dg_pc_year
+				NOT = { has_modifier = te_demog_pc_works }
+				te_demog_pc_works_days_left > 0
+			}
+			add_modifier = {
+				name = te_demog_pc_works
+				days = te_demog_pc_works_days_left
+			}
+		}
+	}
+}
+
+# THIS = ROOT = the country, in te_demog_pc_build straight after the move, with scope:te_pc_site (the new capital) and
+# scope:te_pc_from (the old). The planned_capital_moved self-check's first half, once a game, the AI's included
+# (docs/testing/demographics-playtest.md, Self-checks): it notes the two states, whether the capital had moved at once
+# and whether the base game's Moved Capital Recently penalty came with the move, and its verdict follows in a week
+# (te_debug_demog.60).
+te_debug_demog_pc_selfcheck_start = {
+	if = {
+		limit = {
+			te_debug_demog_selfchecks_run = yes
+			NOT = { has_global_variable = te_demog_pc_selfcheck_done }
+			exists = scope:te_pc_site
+			exists = scope:te_pc_from
+		}
+		set_global_variable = { name = te_demog_pc_selfcheck_done value = yes }
+		set_variable = { name = te_dg_pc_chk_site value = scope:te_pc_site }
+		set_variable = { name = te_dg_pc_chk_from value = scope:te_pc_from }
+		set_variable = { name = te_dg_pc_chk_now value = 0 }
+		if = {
+			limit = { scope:te_pc_site = { is_capital = yes } }
+			set_variable = { name = te_dg_pc_chk_now value = 1 }
+		}
+		set_variable = { name = te_dg_pc_chk_penalty value = 0 }
+		if = {
+			limit = { has_modifier = moved_capital_recently }
+			set_variable = { name = te_dg_pc_chk_penalty value = 1 }
+		}
+		debug_log = "TE_SELF_CHECK START planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetName] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+		trigger_event = { id = te_debug_demog.60 days = 7 }
+	}
+}

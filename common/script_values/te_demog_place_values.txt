@@ -1,0 +1,189 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — where people live (phase 3): the national urban pattern's effects and the Planned Capital decision
+# Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §5.1. Effects: te_demog_place_effects.txt.
+# test_demographics_place.py pins the static modifiers' fields to the te_demog_k_up_* and te_demog_k_pc_* values here.
+# The panel reads the values below, never a variable that may not exist (a GUI read of a missing variable logs every
+# frame: gui_modding_guide.md gotchas #14 and #23).
+# ============================================================================
+
+# ---- The urban pattern's effects (§5.1's table: a choice, not a penalty) ------------------------------------------
+# The strength, 0-1: 0 at 25% primacy (the Dominant label's floor: Balanced and Dispersed are the baseline), rising in a
+# straight line to 1 at 60% (Seoul's share of Korea's urban people), so nothing steps at the label edges. 40% (the
+# Primate label's floor) is 0.43.
+te_demog_k_up_floor = { value = 0.25 }
+te_demog_k_up_span = { value = 0.35 }
+# A country of one or two states has no urban hierarchy to speak of: its largest state is most of its urban people by
+# construction (dozens of one-state countries read 100% in the 1903 observer census), so the effects need three census
+# states.
+te_demog_k_up_min_states = { value = 3 }
+# The two state modifiers' fields at full strength (te_demog_place_modifiers.txt). The primate state: agglomeration, the
+# Urban Center (the city's services) working at a larger scale and drawing migrants. The rest: migrants drawn away and
+# some regional resentment.
+te_demog_k_up_uc = { value = 0.1 }
+te_demog_k_up_pull = { value = 0.15 }
+te_demog_k_up_rest_pull = { value = -0.1 }
+te_demog_k_up_rest_turmoil = { value = 0.1 }
+
+# Country scope, at the census (te_demog_up_country): the strength from this census's primacy.
+te_demog_up_strength = {
+	value = var:te_dg_primacy
+	subtract = te_demog_k_up_floor
+	divide = { value = te_demog_k_up_span min = 0.01 }
+	min = 0
+	max = 1
+}
+
+# State scope: its urban people, the order the census finds its largest city by (te_demog_up_country), as the primacy
+# sum does (te_demog_country_census).
+te_demog_up_urban = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_urban }
+		value = var:te_dg_urban
+	}
+}
+
+# State scope, at its yearly pulse (te_demog_up_state_refresh): its owner's strength from the last census, 0 before one.
+te_demog_up_owner_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = owner
+			owner = { has_variable = te_dg_up_s }
+		}
+		value = owner.var:te_dg_up_s
+	}
+}
+
+# Country scope, for the panel. te_demog_up_shown_s: the strength, 0 before the census has one.
+# te_demog_up_rule_full: 1 under the Full rule (the effects act only there). te_demog_up_has_primate: 1 once the census
+# has named the largest city. te_demog_up_states_short: 1 when the census counted fewer than three states.
+te_demog_up_shown_s = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_up_s }
+		value = var:te_dg_up_s
+	}
+}
+te_demog_up_rule_full = {
+	value = 0
+	if = {
+		limit = { te_demog_effects_run = yes }
+		value = 1
+	}
+}
+te_demog_up_has_primate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_primate_state }
+		value = 1
+	}
+}
+te_demog_up_states_short = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_up_states
+			var:te_dg_up_states < te_demog_k_up_min_states
+		}
+		value = 1
+	}
+}
+# Each field as it applies now (the strength times its full size), for the tooltip.
+te_demog_up_shown_uc = {
+	value = te_demog_up_shown_s
+	multiply = te_demog_k_up_uc
+}
+te_demog_up_shown_pull = {
+	value = te_demog_up_shown_s
+	multiply = te_demog_k_up_pull
+}
+te_demog_up_shown_rest_pull = {
+	value = te_demog_up_shown_s
+	multiply = te_demog_k_up_rest_pull
+	multiply = -1
+}
+te_demog_up_shown_rest_turmoil = {
+	value = te_demog_up_shown_s
+	multiply = te_demog_k_up_rest_turmoil
+}
+
+# ---- The Planned Capital decision ----------------------------------------------------------------------------------
+# Costs: a one-off 3% of a year's GDP (the banking events' "huge" tier, banking_event_expense_huge), paid from the
+# treasury, and 100 authority for the five years of building (a timed country modifier: authority has no one-off
+# spend). The new capital state's development modifier lasts 20 years. Another planned capital waits 50 years.
+te_demog_k_pc_gdp_share = { value = 0.03 }
+te_demog_k_pc_authority = { value = 100 }
+te_demog_k_pc_build_years = { value = 5 }
+te_demog_k_pc_works_days = { value = 1825 }
+te_demog_k_pc_new_capital_days = { value = 7300 }
+te_demog_k_pc_cooldown_years = { value = 50 }
+# A candidate site holds at least 1% of the country's people.
+te_demog_k_pc_min_share = { value = 0.01 }
+# The AI takes it only with a Primate pattern at half strength or more (45% primacy) in a country of eight census states
+# or more, with the cost in its treasury and the authority to spare: a planned capital is rare, about fifteen in the
+# real twentieth century.
+te_demog_k_pc_ai_strength = { value = 0.5 }
+te_demog_k_pc_ai_states = { value = 8 }
+te_demog_k_pc_ai_authority_spare = { value = 50 }
+
+# Country scope: the money, negative for add_treasury, and positive for the tooltips and the AI's treasury check.
+te_demog_pc_money_cost = {
+	value = root.gdp
+	multiply = te_demog_k_pc_gdp_share
+	multiply = -1
+	round = yes
+}
+te_demog_pc_money_shown = {
+	value = gdp
+	multiply = te_demog_k_pc_gdp_share
+	round = yes
+}
+
+# Country scope: the years since the last planned capital, 999 before one (the cooldown, the panel and the civil-war
+# repair's remaining build time). te_demog_ms_now is the date as a year with its months.
+te_demog_pc_years_since = {
+	value = 999
+	if = {
+		limit = { has_variable = te_dg_pc_year }
+		value = te_demog_ms_now
+		subtract = var:te_dg_pc_year
+	}
+}
+# The year another may be founded, for the greyed decision's reason.
+te_demog_pc_next_year = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pc_year }
+		value = var:te_dg_pc_year
+		add = te_demog_k_pc_cooldown_years
+		floor = yes
+	}
+}
+# The building's days still to run, for the civil-war repair (0 once the five years are over).
+te_demog_pc_works_days_left = {
+	value = te_demog_k_pc_build_years
+	subtract = te_demog_pc_years_since
+	multiply = 365
+	min = 0
+	round = yes
+}
+
+# State scope: a candidate site's least people, 1% of its owner's.
+te_demog_pc_min_people = {
+	value = 0
+	if = {
+		limit = { exists = owner }
+		value = owner.total_population
+		multiply = te_demog_k_pc_min_share
+	}
+}
+# State scope: the order the sites are offered in, the largest first.
+te_demog_pc_site_order = {
+	value = state_population
+}
+# Country scope: the authority the AI keeps free before it starts one, the cost and a spare.
+te_demog_pc_ai_authority = {
+	value = te_demog_k_pc_authority
+	add = te_demog_k_pc_ai_authority_spare
+}

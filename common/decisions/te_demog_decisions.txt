@@ -1,0 +1,76 @@
+﻿# ============================================================================
+# Plan a New Capital (docs/superpowers/specs/2026-10-08-demographics-design.md §5.1's lever; mod_systems.md
+# § Demographics, "The urban pattern's effects and the Planned Capital decision")
+# Washington, Canberra, Brasília, Abuja and Astana: a seat of government built away from the country's great city. The
+# decision opens a choice of up to three sites (te_demog_capital.1); the chosen site becomes the capital at once, the
+# treasury pays 3% of a year's GDP, the five years of building cost 100 authority, and the new capital grows under a
+# development modifier for 20 years. Another waits 50 years.
+#
+# Full only, like the census's other effects (the release precondition: nothing changes outside Full). It reads the
+# urban pattern, which only the census computes, and it moves a capital, which changes a game.
+#
+# Gates. The pattern is Primate or Dominant (25% primacy or more, where the pattern's effects begin). The base game's
+# own rules for moving a capital (its Move Capital map interaction): at peace, in no diplomatic play, not moved
+# recently, and the site incorporated and a homeland of a primary culture (te_demog_pc_candidate). Steel-Frame
+# Buildings (era 3: Canberra was laid out in 1912), shown from its prerequisite Modern Sewerage. The authority for the
+# building. The money is not gated: a treasury short of it borrows, as for any other expense.
+#
+# set_capital takes a state region's key, never a scope (gen_planned_capital.py's header), so the move dispatches on the
+# site's region (te_demog_pc_set_capital, generated). Whether set_capital also brings the base game's Moved Capital
+# Recently penalty is unverified: the planned_capital_moved self-check logs it (docs/testing/demographics-playtest.md).
+#
+# ai_chance: te_demog_pc_ai_wants, the same conditions for every country (no is_ai): a Primate pattern at half strength
+# or more in a country of eight census states or more, out of default, with the money in the treasury and authority to
+# spare.
+# ============================================================================
+te_decision_plan_new_capital = {
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_urban_label
+		has_technology_researched = modern_sewerage
+		is_revolutionary = no
+		NOT = { is_country_type = decentralized }
+	}
+
+	possible = {
+		has_technology_researched = steel_frame_buildings
+		custom_tooltip = {
+			text = te_demog_pc_tt_pattern
+			var:te_dg_urban_label <= 1
+		}
+		custom_tooltip = {
+			text = te_demog_pc_tt_peace
+			is_at_war = no
+			is_diplomatic_play_committed_participant = no
+		}
+		custom_tooltip = {
+			text = te_demog_pc_tt_moved_recently
+			NOT = { has_modifier = moved_capital_recently }
+		}
+		custom_tooltip = {
+			text = te_demog_pc_tt_cooldown
+			te_demog_pc_years_since >= te_demog_k_pc_cooldown_years
+		}
+		custom_tooltip = {
+			text = te_demog_pc_tt_authority
+			authority >= te_demog_k_pc_authority
+		}
+		custom_tooltip = {
+			text = te_demog_pc_tt_site
+			any_scope_state = { te_demog_pc_candidate = yes }
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = te_demog_pc_tt_choose_site
+		trigger_event = { id = te_demog_capital.1 popup = yes }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { te_demog_pc_ai_wants = yes }
+			add = 1
+		}
+	}
+}
