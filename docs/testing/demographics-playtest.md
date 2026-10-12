@@ -27,7 +27,7 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … workforce_ig_trait_type` | any rule, development builds only: once a game, a week after a country's Trade Unions are first loyal at the trait's plain size (clout neither marginal nor powerful) with no Ministry of Labour law | the engine sums a script-only type from an IG trait into a state's read (`read` = 0.02), and the INJECT added to vanilla's trait block (`remainder` about 0) | `read` 0: the type isn't summed; `remainder` about −0.05: the INJECT replaced vanilla's block. Either way the Trade Unions' two loyal traits' lines are lost in every game | delete `common/interest_group_traits/te_demog_workforce_injections.txt` (vanilla's +0.05 comes back on the engine field), list the two traits in `P.LIVE_WORKFORCE_LINES`, take them out of `TestWorkforceLinesMoved` and accept their two `vanilla_parsed` carriers as live |
 | `TE_SELF_CHECK … workforce_lines_net` | any rule, development builds only: once a game, a week after the first country's first monthly pulse, in its capital | the capital's working-adult field less the moved lines' pair is about 0: every vanilla carrier's INJECTed cancel nets out against its own line | `remainder` not 0: an INJECT replaced a vanilla block (a law, Woman Soldiers or a Trade Unions trait), so its cancel stands alone in every game (or the capital has Rosen's androids, which can't happen in 1836) | revert that carrier's INJECT and list it in `P.LIVE_WORKFORCE_LINES`; option l's `TE_DEMOG_MODS` lines show which carrier |
 | `TE_SELF_CHECK … pop_workforce_read` | Display only or Full: once a game, at the first country monthly pulse after a capital's walk | a pop's `workforce` reads as a value in the walk (`wf_engine` about 0.2-0.3) | `wf_engine` 0: the walk can't read the engine's workforce | nothing in step 1 uses it; step 2's stop rule (spec §1.8) needs another read of the engine's workforce before its fit |
-| `TE_SELF_CHECK … measure_country_types` | once a game, under Full: `START` when the first measure that moves desired family size goes on in any country (Child Allowance, Honours, Parental Leave, Later Longer Fewer, Birth Limit, the Crash Campaign; the AI's included), the verdict a week later from the capital (`te_debug_demog.10`) | the capital's read of the script-only `state_desired_fertility_mult` rose by the measures' lines its owner gained (`added` ≈ `expected`): a script-only state type on a country static modifier reaches the states | `added` reads 0: the census will never see any measure's types (step 3b reads them); `NO_VERDICT` (the measure ended within the week) re-arms the check | put each measure's census types on a state modifier in each of the country's states, applied and removed with the country modifier and re-applied by the yearly state pulse (inheritance's rural modifiers' pattern), and keep the interest groups and upkeep on the country |
+| `TE_SELF_CHECK … measure_country_types` | once a game, under Full: `START` when the first measure that moves desired family size goes on in any country (Child Allowance, Honours, Parental Leave, Later Longer Fewer, Birth Limit, the Crash Campaign; the AI's included), the verdict a week later from the capital (`te_debug_demog.10`) | the capital's read of the script-only `state_desired_fertility_mult` rose by the measures' lines its owner gained (`added` ≈ `expected`): a script-only state type on a country static modifier reaches the states | `added` reads 0: the census sees none of the measures' types, so no measure moves births (step 3b's census reads them from the state); `NO_VERDICT` (the measure ended within the week) re-arms the check | put each measure's census types on a state modifier in each of the country's states, applied and removed with the country modifier and re-applied by the yearly state pulse (inheritance's rural modifiers' pattern), and keep the interest groups and upkeep on the country |
 
 No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game. No `measure_country_types` line means no measure that moves family size went on (start Child Allowance under Pro-Natalist Policy); a `START` with no verdict, that the capital changed hands within the week.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -173,3 +173,35 @@ others; check the switching, the costs and the politics.
     `te_demog_measure_*`, `te_demog_messages.txt`, `te_demog_ms_law_on_action` or `te_debug_demog.10` (the
     self-check's verdict event: an error there would leave a `START` with no verdict, which reads like a capital
     that changed hands).
+
+## Family Policy in the census (step 3b)
+
+The census reads the measures and the family laws (spec §3.2, §3.5; `docs/systems/mod_systems.md`, § Family Policy in
+the census). Console option x writes the capital's `TE_DEMOG_FAMILY` line: the six types it reads, the policy term,
+Birth Limit's part, the sex ratio's add in force and the census's stored terms. No new self-check: the one unverified
+engine fact (a country modifier's script-only type reaching the state) is step 3a's `measure_country_types` row above,
+and a BROKEN there means no measure moves births here either.
+
+1. **Full, Pro-Natalist Policy, no measure**: option x reads `desired=0.050`, `measures=0.000`, `policy=1.050`. After
+   the capital's next census its Children per Woman tooltip lists "Family policy: ×1.05"; the law's old +10% births
+   no longer reaches the census's term (option n's `q_b` excludes it). **Disabled or Display only**, same law: the
+   state panel's birth rate keeps its Laws and Institutions line with the +10%, as before; under Display only the
+   tooltip shows ×1.05 and births don't move.
+2. **Child Allowance on** (Full, Pro-Natalist Policy): option x `desired=0.190`, `measures=0.140`; at the capital's
+   next census "Family policy: ×1.19", children per woman up by roughly a tenth of a child in a rich state, `planned`
+   up and `unplanned` unchanged.
+3. **Family Housing**: `urban_relief=0.500`, `urban_left=0.500`; the tooltip's "Urban life" factor moves halfway to 1
+   at the next census.
+4. **Sex Education** (Population Control or Family Planning): `means_lit=0.200`; `means_live` rises where literacy is
+   under 0.8 and stays where it is above.
+5. **Restricted Contraception**: `maternal=0.250`; after the capital's next step its Causes of Death Childbirth row
+   lists "Family policy: ×1.25" and mothers' deaths per 100,000 births rise by a quarter (`mmr=`).
+6. **Birth Limit** (Population Control): `bl_part=-0.30` (−0.45 at one child), `policy` 0.70 (0.55) less the other
+   measures. Before Microprocessor `srb=5.0` but `srb_add=0.0`; once it is researched `srb_add=5.0` (10 at one child),
+   and over the next censuses the 0-4 band's boys outnumber its girls by about 110 to 100 (115 at one child).
+7. **Rural Exemption** with Birth Limit: `bl_relief=0.500`; in a farming capital (`agr=` high) `policy` rises by
+   0.5 × `agr` × Birth Limit's 0.30 or 0.45.
+8. **A save from step 3a, under Full**: the state subtab's Causes of Death section says it waits for the census until
+   each state's next step (the gate now needs `te_dg_in_mat`), then shows the Family policy factor.
+9. **`debug.log`**: no error from `te_demog_tfr_policy`, `te_demog_ms_birth_limit_part`, `te_demog_srb_add`,
+   `te_demog_newborn_split`, `te_demog_f_maternal_laws` or `te_debug_demog_family_line`.
