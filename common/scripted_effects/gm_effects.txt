@@ -1181,7 +1181,9 @@ gm_state_undedicate = {
 		}
 	}
 	# Draped at once: gm_state_update_picture would read back the PM just activated.
+	# A landmark keeps its own picture (phase 4 §5.1).
 	set_variable = { name = gm_picture_code value = 1 }
+	gm_state_picture_landmarks = yes
 }
 
 # State scope, from gm_country_refresh and monument_events.1. A monument on a

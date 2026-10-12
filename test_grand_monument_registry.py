@@ -2431,7 +2431,7 @@ class CopiedDedicationTests(unittest.TestCase):
                          "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } } } "
                          "activate_production_method = { building_type = building_grand_monument "
                          "production_method = pm_monument_undedicated } } "
-                         "set_variable = { name = gm_picture_code value = 1 }")
+                         "set_variable = { name = gm_picture_code value = 1 } gm_state_picture_landmarks = yes")
         self.assertTrue(squash(block(self.e, "gm_state_dedicate")).startswith(
             "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_$KEY$ } } } "
             "activate_production_method = { building_type = building_grand_monument "
@@ -2571,6 +2571,20 @@ PICTURES = {
     442: ("heritage_greek", "stadium", "athletic"),
     443: ("heritage_nahuatl", "stadium", "athletic"),
     444: ("heritage_mayan", "stadium", "athletic"),
+    # The landmarks (phase 4 §5.1): LANDMARK_CODE_BASE + the LANDMARKS row number,
+    # listed once its picture is drawn.
+    1000001: ("landmark_arc_de_triomphe", "arch", None),
+    1000002: ("landmark_alexander_column", "column", None),
+    1000003: ("landmark_brandenburg_gate", "gate", None),
+    1000004: ("landmark_washington_monument_baltimore", "column", None),
+    1000005: ("landmark_la_scala", "opera_house", None),
+    1000006: ("landmark_teatro_di_san_carlo", "opera_house", None),
+    1000007: ("landmark_jantar_mantar", "observatory", None),
+    1000008: ("landmark_shalimar_gardens", "gardens", None),
+    1000009: ("landmark_jardim_botanico", "gardens", None),
+    1000010: ("landmark_stelae_of_aksum", "stele", None),
+    1000011: ("landmark_liberty_column", "obelisk", None),
+    1000012: ("landmark_lion_monument", "statue", None),
 }
 # Codes of pairs no monument can reach any more (a retired form or style).
 RETIRED_PICTURES = set()
@@ -2580,7 +2594,8 @@ def _frozen_problems(pictures, retired, reachable):
     """What breaks append-only: a retired code that isn't in the table, a live
     pair missing or extra, or a pair under two codes."""
     problems = [f"retired code {c} is not in PICTURES" for c in sorted(retired - set(pictures))]
-    live = {c: v for c, v in pictures.items() if c not in retired}
+    # A landmark's code follows its LANDMARKS row (LandmarkPictureTests).
+    live = {c: v for c, v in pictures.items() if c not in retired and c < LANDMARK_CODE_BASE}
     if set(live.values()) != reachable:
         problems.append(f"live pictures differ from the reachable pairs: missing "
                         f"{sorted(map(str, reachable - set(live.values())))}, extra "
@@ -2602,7 +2617,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_state_update_picture"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 80)
+        self.assertEqual(len(PICTURES), 92)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():
@@ -2632,7 +2647,9 @@ class PictureTests(unittest.TestCase):
         heritage_block = {f"heritage_{h}": b for b, h in enumerate(HERITAGE_SKINS)}
         building_block = {k: b for b, k in enumerate(BUILDING_FORMS)}
         for code, (skin, form, key) in PICTURES.items():
-            if key is not None:
+            if skin.startswith("landmark_"):
+                self.assertEqual(LANDMARKS[code - LANDMARK_CODE_BASE - 1].key, skin.removeprefix("landmark_"), code)
+            elif key is not None:
                 self.assertEqual((code - 400) // 10, building_block[key], code)
             elif form == "faith":
                 self.assertTrue(300 <= code < 400, code)
@@ -2661,7 +2678,8 @@ class PictureTests(unittest.TestCase):
                      for c in codes if PICTURES[c][1] == "faith"]
         expected += [f"gm_state_picture_pair = {{ SKIN = {PICTURES[c][0]} GENERIC = "
                      f"{'yes' if PICTURES[c][0] == 'generic' else 'no'} FORM = {PICTURES[c][1]} CODE = {c} }}"
-                     for c in codes if c != 1 and PICTURES[c][2] is None and PICTURES[c][1] != "faith"]
+                     for c in codes if c != 1 and PICTURES[c][2] is None and PICTURES[c][1] != "faith"
+                     and c < LANDMARK_CODE_BASE]
         for c in codes:
             skin, form, key = PICTURES[c]
             if key is not None and skin == "generic":
@@ -2710,7 +2728,9 @@ class PictureTests(unittest.TestCase):
         # has just activated (Task 6 review). Without this, a monument that
         # had a form keeps its old picture until the refresh.
         body = squash(block(read(EFFECTS), "gm_state_undedicate"))
-        self.assertTrue(body.endswith("set_variable = { name = gm_picture_code value = 1 }"), body)
+        # A landmark keeps its own picture (phase 4 §5.1).
+        self.assertTrue(body.endswith("set_variable = { name = gm_picture_code value = 1 } "
+                                      "gm_state_picture_landmarks = yes"), body)
 
     def test_frame_tier_follows_the_grandeur_steps(self):
         # Spec §3.5: the frame shows the step the monument's effects have
@@ -2933,6 +2953,40 @@ class LandmarkNameTests(unittest.TestCase):
         self.assertLess(ev.index("monument_events.25.landmark "), ev.index("monument_events.25.city "))
         self.assertIn("$gm_name_landmark_evt$", L["monument_events.25.landmark"])
         self.assertEqual(L["monument_events.25.keep_landmark"], "Keep the name: $gm_name_landmark_evt$")
+
+
+def landmark_picture_code(lm):
+    """Its own code once PICTURES lists its picture, else its stand-in pair's (§5.1)."""
+    i = LANDMARKS.index(lm) + 1
+    if PICTURES.get(LANDMARK_CODE_BASE + i) == (f"landmark_{lm.key}", lm.form, None):
+        return LANDMARK_CODE_BASE + i
+    skin, form = lm.standin
+    return next(c for c, (s, f, _) in PICTURES.items() if (s, f) == (skin, form))
+
+
+class LandmarkPictureTests(unittest.TestCase):
+    def test_codes_follow_the_rows(self):
+        for code, (skin, form, key) in PICTURES.items():
+            if code >= LANDMARK_CODE_BASE:
+                lm = LANDMARKS[code - LANDMARK_CODE_BASE - 1]
+                self.assertEqual((skin, form, key), (f"landmark_{lm.key}", lm.form, None), code)
+
+    def test_every_stand_in_has_a_picture(self):
+        pairs = {(s, f) for s, f, _ in PICTURES.values()}
+        for lm in LANDMARKS:
+            self.assertIn(lm.standin, pairs, lm.key)
+
+    def test_a_landmark_shows_its_picture_after_everything_else(self):
+        e = read(PICTURE_EFFECTS)
+        self.assertTrue(squash(block(e, "gm_state_update_picture")).endswith("gm_state_picture_landmarks = yes"),
+                        "last: the building lines match on the form alone, and would overwrite it")
+        body = squash(block(e, "gm_state_picture_landmarks"))
+        self.assertEqual(re.findall(r"gm_state_picture_landmark = \{[^{}]*\}", body),
+                         [f"gm_state_picture_landmark = {{ KEY = {lm.key} CODE = {landmark_picture_code(lm)} }}"
+                          for lm in LANDMARKS])
+        self.assertEqual(squash(block(e, "gm_state_picture_landmark")),
+                         "if = { limit = { has_variable = gm_landmark var:gm_landmark = flag:$KEY$ } "
+                         "set_variable = { name = gm_picture_code value = $CODE$ } }")
 
 if __name__ == "__main__":
     unittest.main()
