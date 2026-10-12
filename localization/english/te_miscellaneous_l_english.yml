@@ -5320,7 +5320,7 @@
  te_demog_ms_free_contraception_tt:0 "#b $te_demog_ms_free_contraception$#!\n$te_demog_ms_free_contraception_desc$\n[GetStaticModifier('te_demog_ms_free_contraception').GetDesc]\nRunning cost: 0.1% of GDP a year.\n#lore Allowed under $law_state_sponsored_family_planning$ or $law_population_control_measures$.#!"
  te_demog_ms_free_contraception_upkeep:0 "@money![GetPlayer.MakeScope.ScriptValue('te_demog_ms_cost_free_contraception')|D]/wk"
  te_demog_ms_head_cost:0 "Running Cost"
- te_demog_ms_head_cost_tt:0 "What a measure costs while it is on, or would cost now: money each week, a share of GDP refreshed each year; authority; or more bureaucracy for the schools."
+ te_demog_ms_head_cost_tt:0 "What a measure costs while it is on, or would cost now: money each week, a share of GDP refreshed each year; authority; or more bureaucracy for the $institution_schools$."
  te_demog_ms_head_measure:0 "Measure"
  te_demog_ms_head_measure_tt:0 "A policy the government takes within its law. Hover a name for what it aims at and what it does."
  te_demog_ms_head_term:0 "Term"
