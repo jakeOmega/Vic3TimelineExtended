@@ -1,7 +1,6 @@
 # Demographics phase 2: what the census feeds — design
 
-> **Status: revised after the owner's answers to its ten calls (2026-10-12; §13), with three calls open: 9 (reopened),
-> 11 and 12.** It designs phase 2's consequences as one piece in four steps,
+> **Status: all twelve owner calls answered (2026-10-12; §13), after two independent reviews.** It designs phase 2's consequences as one piece in four steps,
 > in the owner's order of 2026-10-12: (1) the late game's interfaces, changing no number; (2) the workforce, pensions
 > and health costs; (3) the Family Policy measures; (4) conscription, the youth bulge and sex balance. It builds on the
 > parent spec (`2026-10-08-demographics-design.md`, cited as "parent §n": §7, §8, §11.2, §12, §13), the approved
@@ -9,7 +8,7 @@
 > It amends the parent's §7 (workforce, pension and health bill, conscription), §8.1 and §8.2 where it says so. Step 1's
 > implementation plan is `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`. No code here.
 > Numbers are targets or bands the harness must meet, each with a starting value; the harness picks the values and the
-> owner reviews the result (owner, 2026-10-12). §13 records the owner's answers and the three calls still open. The
+> owner reviews the result (owner, 2026-10-12). §13 records the owner's answers. The
 > base-law fixes ship first, as their own small every-game PR (§3.1).
 
 ## Context
@@ -31,7 +30,7 @@
 
 | Question | Answer |
 |---|---|
-| What changes outside Full | Only the base-law fixes, which are balance fixes to the laws, not census mechanics: the Natalism Initiative goes from +50% births at 250 authority to **+15% at 100**; Pro-Natalist Subsidies' dependents' wage flips to **+**; Communal Child-Rearing's births change (§3.1; its magnitudes are call 9, reopened); Population Control Measures' enactment events stop granting a birth boost. Every census mechanic changes nothing outside Full |
+| What changes outside Full | Only the base-law fixes, which are balance fixes to the laws, not census mechanics: the Natalism Initiative goes from +50% births at 250 authority to **+15% at 100**; Pro-Natalist Subsidies' dependents' wage flips to **+**; Communal Child-Rearing keeps its numbers, and its description names the offset (call 9); Population Control Measures' enactment events stop granting a birth boost. Every census mechanic changes nothing outside Full |
 | Who picks phase 2's numbers | **The harness, within stated targets**; the owner reviews the result, not each number. 1836's workforce near vanilla's 0.25 and today's near 0.42; a full pro-natalist package moves fertility about 0.2–0.4 children (the most extreme package may move it a little more); conscription follows the pool (no floor; the +0.25 ceiling stays); youth bulge and sex-balance effects small |
 | The order | (1) the interfaces, changing no number; (2) workforce, pensions and health costs; (3) the Family Policy measures; (4) conscription and the youth bulge |
 
@@ -270,28 +269,41 @@ realistic changes in who works, starting values for step 2's fit; "at 2020" is t
 | Pollution Impact (vanilla `state_region_pollution_health`, the mod's INJECT at `extra_modifiers.txt:345`) | a code-applied state modifier, × the region's pollution impact | −0.05 × impact | capacity ×(1 − 0.1 × impact) | −0.045 at full impact | ill health keeps people from work |
 | `ig_trait_solidarity` (vanilla, Trade Unions while loyal) | an IG trait's modifier on the country, every state | +0.05 | both sexes +0.02 | +0.010 | unions' mutual aid keeps the sick and jobless attached to work |
 | `ig_trait_bourse_du_travail` (vanilla, the same group's alternative) | same | +0.05 | both sexes +0.02 | +0.010 | labour exchanges place workers |
-| `modifier_woman_soldiers` (vanilla, the Paris Commune's events, a timed country modifier at ×0.5) | a country modifier, every state | +0.05 | women's-work family +0.05 | up to +0.035 (0 once women work at men's rate) | the owner's example: women at arms go on to work |
-| `company_rosen_association` (`extra_companies_flavored.txt:5970`, prosperity modifier) | a company's prosperity modifier | +0.03 | **stays a flat add on top** (call 12) | +0.03 | its androids work but are not people the census counts |
+| `modifier_woman_soldiers` (vanilla, the Paris Commune's events, a timed country modifier at ×0.5) | a country modifier, every state | +0.05 (+0.025 as applied) | women's-work family +0.05 (+0.025 as applied) | about +0.017 at ×0.5; near that in 1871, where women's rate is low, and 0 once women work at men's rate | the owner's example: women at arms go on to work |
+| `company_rosen_association` (`extra_companies_flavored.txt:5970`, prosperity modifier) | a company's prosperity modifier | +0.03 | **stays a flat add on top** (owner, call 12) | +0.03 | its androids work but are not people the census counts |
 | `pm_rosen_association_hq` (`unique_pms.txt:11903`, workforce-scaled) | the headquarters' state modifier | +0.05 × staffing | **stays on top** (call 12) | same | the same androids |
 
-- **Their sizes are realistic, and smaller than the flat lines** (call 11): most keep about a fifth of their effect
+- **Their sizes are realistic, and smaller than the flat lines** (owner, call 11): most keep about a fifth of their effect
   on the engine's scale, State Eugenics far less, Pollution Impact about all of it. A rich state with a Pro-Capital
   Ministry at level 5, Rehabilitation and a loyal Trade Unions' Solidarity gets +0.20 from them outside Full and about
   +0.04 under Full. Sizing each to its flat line instead would need impossible rates: Rehabilitation's +0.05 is about +19 points
   on the men's rate, which is already 0.92.
-- **How a state reads each.** Laws (modifier and institution modifier) are #892's proven kinds. The amendments, the IG
-  traits, Woman Soldiers and Pollution Impact carry script-only types in blocks #892 never used; that the engine sums
-  each into a state's `modifier:` read as it sums the field (Pollution Impact × the region's impact, Woman Soldiers ×
-  its 0.5) is an **in-game check** in step 1's list. If one fails, its old field stays on top and the line is listed
-  in the PR.
+- **How a state reads each, and what is proven.**
+  - Laws (modifier and institution modifier) are #892's proven kinds.
+  - A country modifier's `state_*` lines reach every state's read (`scripting_best_practices.md:4918`, the probe's test
+    country modifier), and a modifier's multiplier scales every field: Woman Soldiers at ×0.5.
+  - A line INJECTed into `state_region_pollution_health` sums with vanilla's and reaches the state's read × the
+    region's impact (probe P1, `scripting_best_practices.md:4932`: 0.5 + the mod's 0.05 = 0.55 × impact).
+  - An amendment's modifier "will be added to the modifiers of the law it is attached to" (vanilla
+    `common/amendments/amendments.md:8`), so it takes the law's proven path: strongly plausible.
+  - The IG traits are the one open kind. The mod already INJECTs one (`sol_expectations_vanilla_injections.txt:8`), but
+    no check has recorded that a trait's script-only type reaches a state's read, or that a trait's cancel nets its
+    tooltip to one line.
+  - Step 1's **in-game check** therefore centres on the amendments and the IG traits, through a console option that
+    sets up both, with Woman Soldiers (§1.10). If one fails, its old field stays on top (listed in
+    `P.LIVE_WORKFORCE_LINES`) and the PR says so. A failure would otherwise lose the line in every game, since the pair
+    can't put back what the state doesn't read, so the check blocks step 1's merge.
 - **Vanilla's carriers move by INJECT:** the two IG traits (`interest_group_traits`) and `modifier_woman_soldiers`
   (static modifier, as the mod already INJECTs `state_region_pollution_health`). Each cancels the field, carries the
-  family's type at the old value and adds its participation input. That INJECT works on an IG trait is part of the same
-  in-game check.
-- **A line added later with no family stays on top**, as does Rosen's: the engine applies it, and step 2's term reads
-  it as the remainder (the state's read less the census's own pair and the moved lines' pair), for its guard (§2.1). A
-  CI test lists the live working-adult lines in `common/` (Rosen's two, the pairs and the console's probe), so a new
-  one is classified when it lands, as #892's test does for births and deaths.
+  family's type at the old value and adds its participation input.
+- **Their tooltip names say they are the census's** ("Census: Men at Work", "Census: People at Work", "Census: Fitness
+  for Work"), so a carrier's tooltip doesn't read "Workforce Ratio +5%" and a second "+3%" as two additions: under Full
+  the census input replaces the flat line.
+- **A line added later with no family stays on top**, as do Rosen's: the engine applies it, and step 2's term reads
+  it as the remainder (the state's read less the census's own pair and the moved lines' pair), for its guard (§2.1). CI
+  tests list the live working-adult lines in the mod's `common/` (Rosen's two, the pairs and the console's probe) and the
+  vanilla carriers in `vanilla_parsed/` (the eight moved), so a new line, the mod's or a vanilla patch's, is classified
+  when it lands, as #892's tests do for births and deaths.
 
 **The pair.** `gen_demographics` writes a pair for the field like the moved lines'
 (`te_demog_line_working_adults_up`/`_down`, `state_working_adult_ratio_add` ±1, multiplier = the sum of both families),
@@ -309,8 +321,8 @@ its old value; the amendments, IG traits and static modifiers are pinned by read
 ### 1.8 The workforce target as a total
 
 - **What the state's ratio heads to under Full** (step 2): the model's workforce share on the engine's scale, with
-  every moved line's effect inside it (call 3), plus only what is still left on top (Rosen's lines, and any line added
-  later with no family):
+  every moved line's effect inside it (call 3), plus what stays on top: the class offset (call 4, below), Rosen's lines
+  and any line added later with no family:
 
       te_demog_wf_target = WORKFORCE_SCALE × te_dg_wa_share × te_dg_at_work
 
@@ -319,12 +331,15 @@ its old value; the amendments, IG traits and static modifiers are pinned by read
   (`te_dg_wbase`, stored for the hover), so slave economies keep their extra workforce. The moved families are in no
   pair under Full once W lands, so nothing counts twice.
 - **The lines that were left on top are inside the target** (owner, call 3): each is a participation input (§1.7),
-  so the engine's total is the census's target, plus only Rosen's lines and any line added later with no family. Step 2
-  reads that remainder (the state's `modifier:state_working_adult_ratio_add` less the census's and the moved lines'
+  so the engine's total is the census's target plus the class offset (`te_dg_wbase` − 0.25, call 4), Rosen's lines
+  and any line added later with no family. Step 2 reads that remainder (the state's `modifier:state_working_adult_ratio_add` less the census's and the moved lines'
   pairs) for the hover and the guard (§2.1), as M reads the birth total.
 - **What 0.42 measures.** The owner's targets (0.25 in 1836, about 0.42 today) are the engine's own figure, a state's
-  workforce ÷ people, which is what the player sees. The fit aims the engine's total at them in a late save's states,
-  with their laws' participation inputs included.
+  workforce ÷ people, which is what the player sees. The fit aims the engine's total (target, class offset, Rosen and
+  any remainder) at them: the 1836 save's states, and a late save's with their laws' participation inputs included.
+  The harness's carrier reader walks laws, technologies and institutions only, so for that fit step 2 must also read
+  the amendments' and IG traits' inputs from the save (which amendments are attached, which traits are active), or
+  report the gap beside each scenario.
 - **Step 1 builds `te_demog_wf_target` and its inputs and applies nothing.** `te_dg_mw` and the term's pair are step
   2's.
 - `WORKFORCE_SCALE` starts at 0.74. A sketch of §1.3's starting tables on the census model's own stable structures
@@ -365,10 +380,17 @@ its old value; the amendments, IG traits and static modifiers are pinned by read
   - a state's workforce tooltip shows one "Laws and Institutions" line for the moved lines instead of one per law; a
     law's or technology's own tooltip still lists its line;
   - a change of Old Age Pension's or UBI's institution level reaches the pair at the state's next monthly refresh (up
-    to a month), as the health laws' lines do since #892. A law's activation or a technology refreshes that day.
+    to a month), as the health laws' lines do since #892. A law's activation or a technology refreshes that day;
+  - four more carriers have no on-action, so they too reach the pair at the next monthly refresh, up to a month late:
+    an amendment attached (its repeal or timeout refreshes that day: `on_amendment_repealed` and
+    `on_amendment_timeout`, ROOT the country, take the existing country refresh, `te_demog_lines_country_on_action`);
+    the Trade Unions' two traits switching on or off as the group's approval crosses loyal; Woman Soldiers starting and
+    expiring; and Pollution Impact as a region's impact moves (slowly). The values are the old ones throughout.
 - **New variables:** eight on each census state (§1.3–§1.5) plus the pair's stored sum on every state; one on a
   country with Old Age Pension.
-- **The owner accepted these two visible changes** (call 2, 2026-10-12: "yes, that's fine").
+- **The owner accepted the tooltip grouping and the institution level's lag** (call 2, 2026-10-12: "yes, that's
+  fine"). The four carriers' lags are the same kind, from call 3's moves; they are listed here and in §7 so the owner
+  sees them.
 - **The panel:** unchanged. Console option l logs the new figures (§1.10).
 - **The player guide:** one sentence: the Laws and Institutions lines also cover the workforce ratio
   (`08-states.md`, State panel additions).
@@ -400,9 +422,13 @@ its old value; the amendments, IG traits and static modifiers are pinned by read
   old age from about 60, the target about 0.25); `te_dg_wf_engine` in 1836, the stop rule of §1.8 (about 0.25:
   workforce ÷ people, as assumed; about 0.20: re-derive the scale before step 2); the skew probe (options f and g,
   unrun since #828), whose result step 2's plan waits for; the benchmark (option d) within 25% of today's step cost;
-  and the call-3 carriers' scopes: a state's read of the families and participation inputs under a Criminal Justice
-  amendment, a loyal Trade Unions with either trait, the Paris Commune's Woman Soldiers (×0.5) and a polluted state
-  (× its impact), each against the field it replaced.
+  and the call-3 carriers' scopes, through a new console option (`te_debug_demog.1` option p) that in the player's
+  country enacts Punishment-Focused Criminal Justice if needed and attaches Community Service, adds Woman Soldiers at
+  ×0.5 for 60 days and pushes Trade Unions to loyal, then logs the capital's families, participation inputs, pair and
+  engine field that day and a month later. It checks the two kinds nothing has verified, the amendments and the IG
+  traits, against the two that are (a country modifier at a multiplier, `scripting_best_practices.md:4918`; Pollution
+  Impact × impact, `:4932`). The trait's and the amendment's own tooltips must show one "Workforce Ratio" line, not a
+  +5% and a −5%. A failed kind blocks the merge (§1.7).
 
 ## 2. Step 2: the workforce, pensions and health costs
 
@@ -417,7 +443,9 @@ Everything here acts under Full only. Display only shows the figures; its button
   state pulse, so ROOT is the state (`scripting_best_practices.md`, "add_modifier { multiplier = var:X } Resolves
   Against ROOT"). Stored as `te_dg_mw`. One refresh site.
 - **The moved pairs come off** in the effect that first sets W (as M clears the births and deaths pairs); Display only
-  and Disabled clear W at the state's next step, and the pairs return at the next refresh.
+  and Disabled clear W at the state's next step, and the pairs return at the next refresh. The term reads the pair's
+  applied value (`te_demog_line_working_adults_applied`) before it clears the pair, as the births and deaths refresh
+  does (`te_demog_rate_effects.txt:513–515`), so the remainder never counts the pair it is replacing.
 - **No cap** (late-game call 10). A guard keeps each pop's own ratio at or above 0.05: W is raised if the lowest base
   among the state's pops plus W plus the remainder (§1.8: Rosen's lines, a line with no family) would go below it
   (aristocrats' 0.2 is the lowest base).
@@ -525,14 +553,14 @@ The overview gains **Old age from** (late-game §6.2) and shows the working-age 
 ### 3.1 The base-law fixes (every game)
 
 The owner's answers (2026-10-12): balance fixes to the base laws, applied whatever the rule. **They ship now as their
-own small every-game PR**, built from this table, ahead of step 1; none depends on the census. Calls 1, 6 and 8
-settled the rows the first answer left open; Communal Child-Rearing's magnitudes wait for call 9.
+own small every-game PR**, built from this table, ahead of step 1; none depends on the census. Calls 1, 6, 8 and 9
+settled the rows the first answer left open.
 
 | Fix | Today | After |
 |---|---|---|
 | Natalism Initiative (`extra_decrees.txt:244`) | +50% births, 250 authority | **+15%, 100 authority**. A small push now shows as a cohort later (parent §8.1). Its births line stays an engine field, on top of the census under Full |
 | Pro-Natalist Subsidies' dependents' wage (`extra_laws.txt:2693`) | −10% | **+10%**: family allowances raise dependents' income |
-| Communal Child-Rearing (`:2737`) | births −20% in every state (on-top family), women's work +0.1; its Youth Center method (`pm_communal_child_rearing`, `extra_pms.txt:18539`) births +20%, workforce-scaled. The method's +20% exists to cancel the law's −20% (owner) | **a births penalty in states without a State Youth Center, which the method cancels; magnitudes pending the owner** (call 9: recommended law −10% on the on-top family and method +10%, so a fully covered country is births-neutral; main today −20% / +20%). A State Youth Center has at most one level a state, so coverage is a yes or no per state. Women's work +0.1 stays (the women's-work family from step 1) |
+| Communal Child-Rearing (`:2737`) | births −20% in every state (on-top family), women's work +0.1; its Youth Center method (`pm_communal_child_rearing`, `extra_pms.txt:18539`) births +20%, which cancels the law in a state that builds one (at most one level a state) | **numbers unchanged** (owner, call 9: "given how radical of a law it is, I feel like this is kinda fair"); **only the description changes, to name the offset**: births fall in states without a State Youth Center to raise the children |
 | The enactment events `extra_law_events.19`, `.55`, `.79` (`extra_law_events.txt:1389`, `:5631`, `:7196`) | an option grants `famrep_birth_rate_boost` (+10% births for `normal_modifier_time`, `law_enactment_modifiers.txt:728`) whichever of the four family laws is being enacted | **the boost only while enacting Pro-Natalist Policy** (call 6); none for Population Control, State-Sponsored Family Planning or Communal Child-Rearing |
 | Post-Scarcity (`extra_laws.txt:344`) | `state_working_adult_ratio_add = -0.04` per Social Security level (`:368`) | **the line goes** (call 1: "We can drop it") |
 
@@ -551,9 +579,9 @@ keep it outside Full:
 - **Population Control Measures:** its −10% births line is absorbed; its force comes from its measures (parent §8.1).
   Under Full the law alone no longer cuts births.
 - **State-Sponsored Family Planning:** the means +0.1, as now.
-- **Communal Child-Rearing:** its births penalty stays on the on-top family, which the census applies at its rate; the
-  Youth Center method's births are an engine line in the state's read, so it cancels the penalty under Full as outside
-  it (§3.1, call 9).
+- **Communal Child-Rearing:** its −20% stays on the on-top family, which the census applies at its rate; the Youth
+  Center method's +20% is an engine line in the state's read, so it cancels the penalty under Full as outside it
+  (§3.1, call 9).
 - **Traditional Family Structure:** nothing; allows Honours for Large Families.
 
 ### 3.3 Measures: how one works
@@ -643,8 +671,8 @@ the running cost and the remaining term; a measure another law would allow, dimm
 - Harness (`demographics_harness.py measures`, new): the full pro-natalist package's effect on rich low-fertility
   states (1.2–1.8 children) within 0.2–0.4; each single measure's effect; the coercive packages' effect reported; the
   money upkeep's share of revenue.
-- In game: the base-law fixes in a Disabled game (decree +15% at 100, dependents' wage +10%, Communal's penalty in a
-  state without a Youth Center and none with one, no boost when enacting Population Control); under Full a measure's button, term, notice
+- In game: the base-law fixes in a Disabled game (decree +15% at 100, dependents' wage +10%, Communal's new
+  description, no boost when enacting Population Control); under Full a measure's button, term, notice
   on leaving the law, IG reactions; an AI country with a measure on.
 
 ## 4. Step 4: conscription, the youth bulge and sex balance
@@ -751,11 +779,12 @@ the conversion, as for B).
 ## 7. What changes outside Full
 
 1. **The base-law fixes** (§3.1), every game, in their own PR before step 1: the Natalism Initiative, Pro-Natalist's
-   dependents' wage, name and description, Communal Child-Rearing's births penalty and its Youth Center method (call
-   9's magnitudes), the enactment events' boost and Post-Scarcity's dropped line.
+   dependents' wage, name and description, Communal Child-Rearing's description (its numbers stay), the enactment
+   events' boost and Post-Scarcity's dropped line.
 2. **The moved workforce lines** (step 1): the same values on the same pops; one "Laws and Institutions" line in the
    workforce tooltip instead of one per carrier; an institution level's change reaches the pair up to a month later
-   (call 2, accepted). The participation inputs (call 3) show on their carriers' tooltips in a development build and
+   (call 2, accepted), and so do four carriers with no on-action (§1.9): an amendment attached, the Trade Unions' traits
+   switching with approval, Woman Soldiers starting and expiring, and Pollution Impact moving. The participation inputs (call 3) show on their carriers' tooltips in a development build and
    act only under Full.
 3. **The law AI weights** for the family group, and the walk's stored population figure they read (call 7), from
    step 3.
@@ -814,8 +843,8 @@ Match the depth already there (CLAUDE.md, "Current means accurate, not exhaustiv
 ## 12. Dependencies and order
 
 - **The base-law PR lands first** (§3.1): every game, no census code. It removes Post-Scarcity's working-adult line,
-  so step 1's moved-lines table no longer has it, and it sets Communal Child-Rearing's births penalty and its Youth
-  Center method to call 9's magnitudes (the penalty stays on #892's on-top family).
+  so step 1's moved-lines table no longer has it. Communal Child-Rearing's numbers stay; only its description
+  changes (call 9).
 - **Late Marriage and Birth Spacing (#906) lands before step 1.** Step 1 edits the same places: `te_demog_seed`,
   `te_demog_step_begin`, `te_demog_prepare`, the generator, `demographics_params`/`_model`/`_harness`, and
   `_engine_for` in `test_demographics_registry.py`. Step 1's golden test is recorded on the merged tree, so it holds
@@ -830,41 +859,31 @@ Match the depth already there (CLAUDE.md, "Current means accurate, not exhaustiv
 
 ## 13. Owner calls
 
-### Answered (owner, 2026-10-12)
+All twelve answered by the owner on 2026-10-12. Calls 1–10 were the draft's; 11 and 12 came from call 3's design.
 
 1. **Post-Scarcity's −0.04 a Social Security level: dropped** ("We can drop it"), in every game, by the base-law PR
-   (§3.1). It leaves step 1's moved lines.
-2. **Step 1's two visible changes in every game: accepted** ("yes, that's fine"): one "Laws and Institutions" workforce
-   line instead of one per carrier, and an institution level's line up to a month late.
-3. **The lines left on top: neither reading.** "I'd prefer to move them to other effects — criminal justice and
-   ministry of labor increasing labor participation (e.g. 80% of men aged 18-65 -> 85% of men aged 18-65) or similar,
-   and so forth." (The first message read "58%"; the owner corrected it the same day: the example is an increase.)
-   The carrier list is confirmed. Each becomes a participation input (§1.7's inventory), re-applied at its old flat value outside Full
-   like the two families; under Full the engine's total is the census's target (§1.8).
-4. **The term nets only the define's 0.25** ("That's fine/makes sense"), so the pop types' own bases stay on top.
+   (§3.1); confirmed later the same day. It leaves step 1's moved lines.
+2. **Step 1's every-game changes: accepted** ("yes, that's fine"): one "Laws and Institutions" workforce line instead of
+   one per carrier, and an institution level's line up to a month late. The four carriers with no on-action that call 3
+   moves lag the same way (§1.9).
+3. **The lines left on top become participation inputs.** "I'd prefer to move them to other effects — criminal justice
+   and ministry of labor increasing labor participation (e.g. 80% of men aged 18-65 -> 85% of men aged 18-65) or
+   similar, and so forth." (The first message read "58%"; the owner corrected it the same day: the example is an
+   increase.) The carrier list is confirmed. Each line keeps its flat value on the replaced family outside Full and
+   carries a participation input for the census (§1.7's inventory); under Full the engine's total is the census's
+   target plus the class offset, Rosen's lines and any line with no family (§1.8).
+4. **The term nets only the define's 0.25** ("That's fine/makes sense"), so the pop types' own bases stay on top as the
+   class offset.
 5. **Work deaths split by the participation model, in step 2:** yes.
 6. **The enactment events' birth boost only while enacting Pro-Natalist Policy, in every game:** yes.
 7. **The family group's AI weights in every game:** fine.
 8. **The rename to "Pro-Natalist Policy" (key kept), in every game:** yes.
+9. **Communal Child-Rearing keeps main's numbers**: the law −20% births, the Youth Center method +20%, which cancels the
+   law in a state that builds one (at most one level a state). "Given how radical of a law it is, I feel like this is
+   kinda fair." The base-law PR changes only the law's description, to name the offset.
 10. **Sex balance in step 4:** fine.
-
-Call 1 was confirmed the same day: Post-Scarcity's −0.04 goes in every game.
-
-### Open
-
-9. **Reopened (owner, 2026-10-12): Communal Child-Rearing carries a births penalty in states without a State Youth
-   Center, which the Youth Center's method cancels; magnitudes pending the owner.** Recommendation: the law −10% births
-   (the on-top family, as today's −20% is) and the method +10%, so a fully covered country is births-neutral. Main
-   today has −20% / +20%; the method's +20% exists to cancel the law's −20% (owner). A State Youth Center has at most
-   one level a state, so coverage is a yes or no per state. Needed before the base-law PR's Communal rows.
-11. **Recommendation: size call 3's participation inputs as realistic changes in who works** (§1.7's inventory), not
-    to match the flat lines. Under Full that leaves most of them about a fifth of their old workforce effect (State
-    Eugenics far less, Pollution Impact about the same): a Pro-Capital Ministry at level 5 gives +0.024 on the engine's
-    scale, not +0.10. Matching the flat lines would need
-    impossible rates: Rehabilitation's +0.05 is about +19 points on the men's rate, which starts at 0.92. Step 2's fit
-    can still scale them, and the harness reports each beside its flat line. Needed before step 2's fit; step 1 stores
-    figures with the starting sizes.
-12. **Recommendation: the Rosen Association's two lines stay flat adds on top** (the company's +0.03, its
-    headquarters method's +0.05 × staffing). Its androids are workers who aren't people the census counts, so no
-    change in who works describes them. The alternative maps them to a participation input (both sexes' rate), which
-    would make androids a share of the human population. Needed before step 1, since step 1 moves every other line.
+11. **Call 3's participation inputs are sized as realistic changes in who works** (§1.7's inventory): approved. Under
+    Full those laws keep about a fifth of their old workforce effect (State Eugenics far less, Pollution Impact about
+    all of it); step 2's fit may still scale them.
+12. **The Rosen Association's two lines stay flat adds on top:** approved. Its androids are workers who aren't people
+    the census counts.

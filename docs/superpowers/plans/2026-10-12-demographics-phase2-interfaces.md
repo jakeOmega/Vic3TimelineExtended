@@ -33,10 +33,9 @@ It argues from the approved late-game design (`2026-10-11-demographics-late-game
 
 ## Dependencies and shared edits
 
-- **This plan lands after the base-law PR** (spec §3.1: every game, being built separately from calls 1, 6 and 8,
-  with Communal Child-Rearing's magnitudes from call 9, reopened). It drops Post-Scarcity's working-adult line, which
-  Task 6 would otherwise have to move, and changes Communal Child-Rearing's birth lines and the family laws' loc,
-  which nothing here touches (Communal's women's-work line stays and moves in Task 6).
+- **This plan lands after the base-law PR** (spec §3.1: every game, built separately from calls 1, 6, 8 and 9). It
+  drops Post-Scarcity's working-adult line, which Task 6 would otherwise have to move, and changes the family laws' loc
+  (Communal Child-Rearing's numbers stay; its women's-work line moves in Task 6).
 - **This plan lands after Late Marriage and Birth Spacing** (#906, branch `feat/demog-late-marriage`, being built in
   `/home/jakef/src/vic3te-demog-lm-build`). Start only once #906 has merged; branch from `main` then. #906 edits:
   - `te_demog_seed` and `te_demog_step_begin` (its `te_demog_practices_seed` / `_step` before `te_demog_prepare`);
@@ -95,11 +94,21 @@ rest the define's 0.25.
 **D7. Post-Scarcity's line is gone before step 1.** The owner dropped it in every game (spec §13 call 1), and the
 base-law PR removes it; Task 6 checks that it has.
 
-**D12. Some of call 3's carriers are no reader's.** `demographics_modifiers` walks laws, technologies and institutions.
-The two amendments, the two IG traits, Woman Soldiers and Pollution Impact are pinned by reading their blocks (Task 6),
-and whether the engine sums a script-only type from each into a state's read is an in-game check (Task 8, item 9). The
-mod already INJECTs an IG trait (`common/interest_group_traits/sol_expectations_vanilla_injections.txt:8`) and Pollution
-Impact (`extra_modifiers.txt:341`).
+**D12. Some of call 3's carriers are no reader's, and two of their kinds are unproven.** `demographics_modifiers`
+walks laws, technologies and institutions, so the two amendments, the two IG traits, Woman Soldiers and Pollution
+Impact are pinned by reading their blocks (Task 6). Whether the engine sums a script-only type from each into a state's
+read:
+- Woman Soldiers, a country modifier at ×0.5: proven kind (a country modifier's `state_*` lines reach every state's
+  read, `scripting_best_practices.md:4918`; a multiplier scales every field).
+- Pollution Impact: proven (probe P1, `scripting_best_practices.md:4932`: the mod's INJECTed line sums with vanilla's ×
+  the region's impact).
+- Amendments: strongly plausible (vanilla `common/amendments/amendments.md:8`: an amendment's modifier is "added to the
+  modifiers of the law it is attached to", the law path #892 proved).
+- IG traits: open. The mod already INJECTs one (`common/interest_group_traits/sol_expectations_vanilla_injections.txt:8`),
+  with no recorded check of a script-only type or of the cancel netting the trait's tooltip.
+- Task 7's console option p sets up the amendment, the traits and Woman Soldiers in one go, and Task 8's item 9 reads
+  the result. A failed kind would lose its line in every game (the pair can't put back what the state doesn't read), so
+  it blocks the merge: revert that block to its engine field and list it in `P.LIVE_WORKFORCE_LINES`.
 
 **D8. The war dead's window stays 18–40.** The spec moves it to the conscription pool in step 4; doing it here would
 move the ring.
@@ -126,13 +135,9 @@ phase 3, which parts the schedules, revisits them.
    beside it (spec §1.7's inventory; Task 6).
 4. Call 4: step 2's term nets the define's 0.25; step 1 stores `te_dg_wbase` for the hover.
 
-**Still open** (spec §13):
-- **Call 12, before Task 6:** Rosen's two lines stay flat on top (recommended). If the owner maps them to a
-  participation input instead, Task 6 gains two rows and `P.LIVE_WORKFORCE_LINES` empties.
-- **Call 11, before step 2's fit:** realistic sizes for the participation inputs (recommended). Step 1 ships the
-  starting sizes; step 2's fit may scale them.
-- Call 9 (Communal Child-Rearing's births penalty and Youth Center method, reopened) is the base-law PR's, not this
-  plan's.
+**Also answered:** call 11 (realistic sizes for the participation inputs; step 1 ships the starting sizes, and step 2's
+fit may scale them) and call 12 (Rosen's two lines stay flat on top, listed in `P.LIVE_WORKFORCE_LINES`). Call 9
+(Communal Child-Rearing keeps main's numbers) is the base-law PR's. No call is open.
 
 Execution: subagent-driven, with review stops after Tasks 3, 5 and 6 and a whole-branch review at the end.
 
@@ -1448,7 +1453,9 @@ Run: `$V -m unittest test_demographics_registry.TestCohortScript test_demographi
 Expected: FAIL (`te_dg_wa_share` missing; `te_demog_work_walk_pop` not found).
 
 - [ ] **Step 4: The participation inputs' types** (call 3; `demographics_modifier_types.txt`, at its end, and
-  `te_modifiers_l_english.yml` beside `state_work_mortality_mult`). Their carriers come in Task 6.
+  `te_modifiers_l_english.yml` beside `state_work_mortality_mult`). Their carriers come in Task 6. The names start
+  "Census:" so a carrier's tooltip doesn't read them as adding to its "Workforce Ratio" line, which they replace under
+  Full (spec §1.7).
 
 ```
 # Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7; the owner's call 3):
@@ -1475,11 +1482,11 @@ state_work_capacity_mult = {
 ```
 
 ```
- state_male_labor_participation_add:0 "Men at Work"
+ state_male_labor_participation_add:0 "Census: Men at Work"
  state_male_labor_participation_add_desc:0 "The share of working-age men who work. Used by the census on the Demographics tab."
- state_labor_participation_add:0 "People at Work"
+ state_labor_participation_add:0 "Census: People at Work"
  state_labor_participation_add_desc:0 "The share of working-age women and men who work. Used by the census on the Demographics tab."
- state_work_capacity_mult:0 "Fitness for Work"
+ state_work_capacity_mult:0 "Census: Fitness for Work"
  state_work_capacity_mult_desc:0 "How fit people are to work at each age, most of all past 60. Used by the census on the Demographics tab."
 ```
 
@@ -1858,7 +1865,7 @@ and `DEMOG_TYPES` gains the participation types (their carriers arrive in this t
 
 - [ ] **Step 2: Write the failing tests**
 
-`test_demographics_registry.py`: add `WORKFORCE_LINE_EFFECTS`, `WORKFORCE_LINE_VALUES`, `WORKFORCE_LINE_MODIFIERS`
+`test_demographics_registry.py`: add `import json` to its imports, and `WORKFORCE_LINE_EFFECTS`, `WORKFORCE_LINE_VALUES`, `WORKFORCE_LINE_MODIFIERS`
 paths beside `LINE_EFFECTS`, and add the first two to `_Engine.__init__`'s lists. Then:
 
 ```python
@@ -1951,6 +1958,36 @@ class TestWorkforceLinesMoved(unittest.TestCase):
                     live.add((path.name, m.group(1)))
         self.assertEqual(live, set(P.LIVE_WORKFORCE_LINES))
 
+    # vanilla's working-adult carriers (vanilla_parsed/common/<file>.json, top-level key), every one moved by an INJECT
+    VANILLA_CARRIERS = {
+        ("laws", "law_women_in_the_fields"), ("laws", "law_women_own_property"),
+        ("laws", "law_women_in_the_workplace"), ("laws", "law_womens_suffrage"), ("laws", "law_old_age_pension"),
+        ("interest_group_traits", "ig_trait_solidarity"), ("interest_group_traits", "ig_trait_bourse_du_travail"),
+        ("modifiers", "modifier_woman_soldiers"),
+    }
+
+    def test_every_vanilla_carrier_is_moved(self):
+        """A vanilla patch that adds a working-adult line fails here until it is classified, as #892's
+        test_every_vanilla_line_is_cancelled_and_carried does for births and deaths (the second review of #923)."""
+        found = set()
+
+        def walk(node, where):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    if key == P.WORKING_ADULT_FIELD:
+                        found.add(where[:2])
+                    walk(value, where + (key,))
+            elif isinstance(node, list):
+                for value in node:
+                    walk(value, where)
+
+        for path in sorted((ROOT / "vanilla_parsed" / "common").glob("*.json")):
+            if path.name == "modifier_types.json":   # the field's own definition
+                continue
+            data = json.loads(path.read_text(encoding="utf-8"))
+            walk(data.get("data", data), (path.stem,))
+        self.assertEqual(found, self.VANILLA_CARRIERS)
+
     def test_a_release_keeps_the_families_and_drops_the_inputs(self):
         """Review Focus 5: the release script comments out demographics_modifier_types.txt's types only."""
         census_types = _text(ROOT / "common" / "modifier_type_definitions" / "demographics_modifier_types.txt")
@@ -2012,6 +2049,13 @@ class TestWorkforceLinesScript(unittest.TestCase):
             text = _text(path)
             self.assertEqual(text.count("te_demog_lines_refresh = yes"),
                              text.count("te_demog_workforce_lines_refresh = yes"), path.name)
+
+    def test_an_amendments_repeal_or_timeout_refreshes_that_day(self):
+        """The design §1.9: an amendment attached waits for the monthly refresh (no on-action); its repeal and timeout
+        (ROOT the country) take the existing country refresh, as a technology does."""
+        on_actions = _text(DEMOG_ON_ACTIONS)
+        for hook in ("on_amendment_repealed", "on_amendment_timeout"):
+            self.assertIn("te_demog_lines_country_on_action", _block(on_actions, hook), hook)
 
     def test_the_pair_is_hidden_and_named(self):
         hidden = _block(_text(ROOT / "common" / "script_values" / "gui_chart_script_values.txt"),
@@ -2435,6 +2479,25 @@ te_demog_workforce_lines_apply = {
 }
 ```
 
+`te_demog_on_actions.txt`, after `on_acquired_technology`'s block (additive `on_actions` lists, as
+`amendment_on_actions.txt` and three files' `on_law_activated` already are):
+
+```
+# ROOT = the country (vanilla's comments on both hooks): an amendment repealed or timed out (the timeout's is already off
+# its law) changes its law's working-adult lines, so the country's states refresh that day, as for a technology. An
+# amendment attached has no hook; the monthly refresh takes it within a month (the design §1.9).
+on_amendment_repealed = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+on_amendment_timeout = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+```
+
 `te_demog_on_actions.txt:153` and `events/te_demog_events.txt:74`: `te_demog_workforce_lines_refresh = yes` on the line
 after `te_demog_lines_refresh = yes`.
 
@@ -2494,18 +2557,21 @@ Expected: exit 0 each.
 
 ---
 
-### Task 7: The harness and the console show the figures
+### Task 7: The harness and the console show the figures, and option p sets up call 3's carriers
 
 **Files:**
 - Modify: `scripts/analysis/demographics_harness.py` (subcommand `workforce`; `WORKFORCE_SCENARIOS`)
-- Modify: `common/scripted_effects/te_debug_demog_effects.txt` (`te_debug_demog_mods_line` gains a second line),
-  `common/script_values/te_debug_demog_values.txt` (guarded reads)
-- Test: `test_demographics_harness.py` (new test), `test_demographics_registry.py` (option l)
+- Modify: `common/scripted_effects/te_debug_demog_effects.txt` (`te_debug_demog_mods_line` gains a second line;
+  new `te_debug_demog_call3_setup`), `common/script_values/te_debug_demog_values.txt` (guarded reads),
+  `common/static_modifiers/te_debug_demog_modifiers.txt` (`te_demog_debug_ig_loyal`),
+  `events/te_debug_demog_events.txt` (option p; the hidden `te_debug_demog.3`: #906 takes `.2` and option o)
+- Modify: `localization/english/te_events_l_english.yml` (option p), `te_miscellaneous_l_english.yml` (the modifier)
+- Test: `test_demographics_harness.py` (new test), `test_demographics_registry.py` (options l and p)
 
 **Interfaces:**
-- Consumes: Task 2's model, Task 6's `DM.workforce_line_carriers`.
+- Consumes: Task 2's model, Task 6's `DM.workforce_line_carriers` and moved carriers.
 - Produces: `H.WORKFORCE_SCENARIOS: list[tuple[str, dict, float]]`, `H.workforce_rows() -> list[dict]`;
-  `TE_DEMOG_WORK` console line.
+  `TE_DEMOG_WORK` console line; option p and `te_debug_demog.3`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -2542,7 +2608,7 @@ class TestWorkforceCommand(unittest.TestCase):
         self.assertIn("te_debug_demog_work_wf_target", line)
         for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work",
                      "te_debug_demog_womens_mod", "te_debug_demog_replaced_mod", "te_debug_demog_part_m_mod",
-                     "te_debug_demog_part_mod", "te_debug_demog_cap_mod"):
+                     "te_debug_demog_part_mod", "te_debug_demog_cap_mod", "te_demog_line_working_adults_applied"):
             self.assertIn(read, line)
 ```
 
@@ -2635,9 +2701,117 @@ te_debug_demog_cap_mod = { value = modifier:state_work_capacity_mult }
 `te_debug_demog_mods_line` gains a second `debug_log`:
 
 ```
-	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 ```
 
+
+- [ ] **Step 4b: Option p, call 3's carriers in one go** (D12; the second review of #923)
+
+The kinds nothing has verified are the amendments and the IG traits, and the console has no effect command, so option
+p sets each up in the player's country and logs the capital before, a day after and a month after. Test first
+(`test_demographics_registry.py`, beside the option l tests):
+
+```python
+    def test_option_p_sets_up_call_3s_carriers(self):
+        console = _text(ROOT / "events" / "te_debug_demog_events.txt")
+        self.assertIn("te_debug_demog_call3_setup = yes", console)
+        setup = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"),
+                       "te_debug_demog_call3_setup")
+        for line in ("activate_law = law_type:law_punishment_focused_criminal_justice",
+                     "type = amendment_community_service",
+                     "add_modifier = { name = modifier_woman_soldiers multiplier = 0.5 days = 60 }",
+                     "add_modifier = { name = te_demog_debug_ig_loyal days = 60 }",
+                     "trigger_event = { id = te_debug_demog.3 days = 1 }",
+                     "trigger_event = { id = te_debug_demog.3 days = 31 }"):
+            self.assertIn(line, setup)
+        self.assertLess(setup.index("te_debug_demog_mods_line = yes"), setup.index("activate_law"),
+                        "the before line comes first")
+        self.assertIn("te_debug_demog_mods_line = yes", _block(console, "te_debug_demog.3"))
+```
+
+`events/te_debug_demog_events.txt`, before option z:
+
+```
+	# ---- p: call 3's carriers (phase 2 step 1; spec §1.7, plan D12) --------------------------------
+	option = {
+		name = te_debug_demog.1.p
+		trigger = { exists = capital }
+		custom_tooltip = {
+			text = te_debug_demog.1.p.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_call3_setup = yes
+			}
+		}
+	}
+```
+
+and after `te_debug_demog.1`'s block:
+
+```
+# Option p's later reads (phase 2 step 1): the capital's TE_DEMOG_MODS and TE_DEMOG_WORK lines a day after the setup
+# (the engine has summed the new modifiers; the pair waits for its refresh) and a month after (the monthly refresh has
+# run). Fired only by te_debug_demog_call3_setup.
+te_debug_demog.3 = {
+	type = country_event
+	hidden = yes
+	immediate = {
+		capital ?= { te_debug_demog_mods_line = yes }
+	}
+}
+```
+
+`te_debug_demog_effects.txt`:
+
+```
+# ---- p: call 3's carriers (phase 2 step 1; spec §1.7, plan D12) ------------------------------------
+# THIS = ROOT = the player. The carrier kinds no test can read, set up in one go: Community Service (an amendment, on
+# Punishment-Focused Criminal Justice, its only allowed law), Woman Soldiers at x0.5 for 60 days (a country modifier)
+# and Trade Unions pushed past loyal (its Solidarity or Bourse du Travail trait). Logs the capital now, then a day and
+# a month later (te_debug_demog.3). If the law was enacted here and the amendment didn't attach, run p again.
+te_debug_demog_call3_setup = {
+	capital = { te_debug_demog_mods_line = yes }
+	if = {
+		limit = { NOT = { has_law = law_type:law_punishment_focused_criminal_justice } }
+		activate_law = law_type:law_punishment_focused_criminal_justice
+	}
+	active_law:lawgroup_criminal_justice ?= {
+		add_amendment = {
+			type = amendment_community_service
+			sponsor = PREV.ig:ig_intelligentsia
+		}
+	}
+	add_modifier = { name = modifier_woman_soldiers multiplier = 0.5 days = 60 }
+	ig:ig_trade_unions ?= {
+		add_modifier = { name = te_demog_debug_ig_loyal days = 60 }
+	}
+	trigger_event = { id = te_debug_demog.3 days = 1 }
+	trigger_event = { id = te_debug_demog.3 days = 31 }
+}
+```
+
+`te_debug_demog_modifiers.txt`:
+
+```
+# Option p (phase 2 step 1): Trade Unions' approval pushed past loyal for sixty days, so its loyal trait (Solidarity
+# or the Bourse du Travail) comes on.
+te_demog_debug_ig_loyal = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_approval_add = 30
+}
+```
+
+Loc (`te_events_l_english.yml` beside `te_debug_demog.1.n`; `te_miscellaneous_l_english.yml` beside
+`te_demog_debug_working_adults`):
+
+```
+ te_debug_demog.1.p:0 "Call 3's carriers: set them up and log our capital"
+ te_debug_demog.1.p.tt:0 "Enacts Punishment-Focused Criminal Justice if needed and attaches Community Service, adds Woman Soldiers at half strength for 60 days and makes the Trade Unions loyal for 60 days. Writes TE_DEMOG_MODS and TE_DEMOG_WORK lines for our capital now, a day later and a month later: womens and replaced are the two families, ww_mod their sum, pair the pair in force, part_m, part and cap the census's inputs, and wa_mod the engine's own field."
+ te_demog_debug_ig_loyal:0 "Test: Loyal"
+ te_demog_debug_ig_loyal_desc:0 "The demographics test console's 60-day push of an interest group past loyal."
+```
 
 - [ ] **Step 5: Run the tests and the harness**
 
@@ -2709,14 +2883,26 @@ Expected: OK; the table's 1836 farming row reads a target of about 0.25 and old 
   8. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_work_*`, `te_demog_women_rate`,
      `te_demog_old_age_pass`, `te_demog_slot_births` or `te_demog_workforce_lines_refresh`; no load error from the
      two new INJECT files.
-  9. **Call 3's carriers reach a state** (D12; spec §1.7). Option l's `womens=`, `replaced=`, `part_m=`, `part=` and
-     `cap=` in a capital, against `wa_mod=` on `main` for the same save:
-     - a Criminal Justice amendment (Community Service: `replaced=` up 0.01, `part_m=` up 0.01);
-     - a loyal Trade Unions with Solidarity or the Bourse du Travail (`replaced=` up 0.05, `part=` up 0.02);
-     - the Paris Commune with Woman Soldiers (`womens=` up 0.025, at its ×0.5);
-     - a polluted state (`replaced=` −0.05 × its impact, `cap=` −0.1 × the same);
-     - and that `wa_mod=` (the engine's own field) is unchanged in each. If one fails, that carrier's field goes back
-       on top and the PR lists it.
+  9. **Call 3's unproven carrier kinds reach a state** (D12; spec §1.7). The amendments and the IG traits are the
+     two kinds nothing has verified; Woman Soldiers (a country modifier at ×0.5, `scripting_best_practices.md:4918`)
+     and Pollution Impact (× impact, probe P1, `:4932`) are proven kinds and ride along. In a new game under Disabled,
+     run option p once. Its log gives three pairs of `TE_DEMOG_MODS` / `TE_DEMOG_WORK` lines (before, a day later, a
+     month later):
+     - **a day later:** `replaced=` up 0.01 (Community Service) and, once Trade Unions are loyal, 0.05 more (the trait);
+       `part_m=` up 0.01; `part=` up 0.02 with the trait; `womens=` up 0.025 (Woman Soldiers at ×0.5); `ww_mod=` (the
+       families' sum) up by their total. `pair=` (the pair in force) and `wa_mod=` (the engine's own field) haven't
+       moved yet, unless option p enacted the law, which refreshes the pair that day: this is the month's lag of
+       spec §1.9;
+     - **a month later:** `pair=` equal to `ww_mod=`, and `wa_mod=` up by the old flat lines, as on `main`: +0.01,
+       +0.05 and +0.025;
+     - **the tooltips:** the Trade Unions' trait shows one "Workforce Ratio +5%" line and one "Census: People at
+       Work +2%" line, not a +5% and a −5%; Woman Soldiers in the country's modifiers shows one "Workforce Ratio" line;
+       Community Service shows "Workforce Ratio +1%" and "Census: Men at Work +1%";
+     - **if a kind fails** (its type stays at 0 a month later, or its tooltip shows the cancel): revert that carrier's
+       block to its engine field, list it in `P.LIVE_WORKFORCE_LINES` and say so in the PR. The merge waits for this
+       item, since a failed kind would lose its line in every game.
+  10. **Pollution Impact, in passing:** in a polluted state of the same game, option l's `cap=` reads −0.1 × the
+      impact and `replaced=` −0.05 × the same.
 
 - [ ] **Step 5: Run the whole suite and the checks**
   - `$V -m unittest discover -s . -p 'test_*.py' > /tmp/suite.txt 2>&1; grep -E '^(Ran |OK|FAILED)' /tmp/suite.txt`;
@@ -2759,5 +2945,8 @@ Expected: OK; the table's 1836 farming row reads a target of about 0.25 and old 
   by hand.
 - **`test_no_live_line_but_rosens` will need step 2's census pair** (`te_demog_census_workforce_up`/`_down` in
   `te_demog_modifiers.txt`) in its skip list when step 2 adds it.
-- **Call 3's sizes are starting values** (spec §13 call 11, open): write them as the inventory gives them, and don't
-  tune them here.
+- **Call 3's sizes are the owner-approved starting values** (spec §13 call 11): write them as the inventory gives
+  them, and don't tune them here; step 2's fit may scale them.
+- **Step 2's late-save fit needs the amendments' and IG traits' inputs** (spec §1.8): `DM.load_carriers` walks laws,
+  technologies and institutions only, so step 2 reads which amendments are attached and which traits are active from
+  the save, or reports the gap beside each scenario. Task 7's `workforce` rows have none of those carriers.
