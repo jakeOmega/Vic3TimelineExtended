@@ -2309,7 +2309,8 @@ Add `te_demog_tech_injections.txt` to the `git add` if Step 6 changed it.
 
 **Files:**
 - Modify: `scripts/generators/gen_demographics.py` (`practices(o)` in `render_values` after `multipliers(o)`;
-  `practice_loops(o)` in `render_effects` after `absorbed_walk(o, root)`; `"practice_rate"` in `constants`; the
+  `practice_loops(o)` in `render_effects` after `medicine_effects(o)` (since #916 it runs `absorbed_walk`,
+  `medicine_effects`, `debug_ring`); `"practice_rate"` in `constants`; the
   module docstring's list)
 - Regenerate: `te_demog_generated_values.txt`, `te_demog_generated_effects.txt`
 - Test: `test_gen_demographics.py`
@@ -2526,8 +2527,13 @@ git commit -m "Demographics generator: the practices' start ladders, targets, te
 **Files:**
 - Create: `common/scripted_effects/te_demog_practice_effects.txt`
 - Modify: `common/scripted_effects/te_demog_effects.txt`:
-  - `te_demog_seed`: `te_demog_practices_seed = yes` before `te_demog_prepare = yes`;
-  - `te_demog_step_begin`: `te_demog_practices_step = yes` before `te_demog_prepare = yes`;
+  - `te_demog_seed`: `te_demog_practices_seed = yes` after `te_demog_medicine_at_target = yes` (#916), before
+    `te_demog_prepare = yes`;
+  - `te_demog_step_begin`: `te_demog_practices_step = yes` after `te_demog_medicine_drift = yes` (#916), before
+    `te_demog_prepare = yes`; its header comment names the practices. #916's
+    `test_the_entry_points_run_in_order` checks relative order only and already expects this;
+  - console option a's comment (`te_debug_demog_effects.txt`, "drifts the census's medicine one more step"): each
+    replay drifts the practices one more step too;
   - `te_demog_country_census`: `te_demog_practices_country_init = yes` after its other locals,
     `te_demog_practices_country_add = yes` inside `every_scope_state` after `te_dg_c_s_pm` is set, and
     `te_demog_practices_country_store = yes` after `te_demog_store_figures = yes`;
@@ -2794,7 +2800,8 @@ te_demog_practice_seed = {
 	}
 }
 
-# THIS = a state at its census step (te_demog_step_begin, after the walk and before te_demog_prepare reads the term):
+# THIS = a state at its census step (te_demog_step_begin, after the walk and te_demog_medicine_drift, before
+# te_demog_prepare reads the term):
 # seed if it has no share (an old save's state), then drift te_demog_k_practice_rate of the gap to its target
 # (te_demog_pr_target_$P$: the start less what contraception and, for Birth Spacing, health care have eroded, plus
 # Late Marriage's inheritance and women's work). Once a census year: fast mode's clock steps it once a clock year.
@@ -2939,6 +2946,10 @@ te_debug_demog_scaled_probe = {
 }
 ```
 
+Its name and description go beside `te_demog_debug_working_adults` in `te_miscellaneous_l_english.yml`
+(`loc_coverage_audit --strict` requires both for a static modifier): `te_debug_demog_scaled_probe:0 "Test: Engine
+Scaling Probe"` and a `_desc` that says it is the console's one-day probe.
+
 The effect (`te_debug_demog_effects.txt`, appended; add a `TE_DEMOG_PROBE` line to the header's list):
 
 ```
@@ -2963,7 +2974,7 @@ te_debug_demog_line_absorbed_b = {
 ```
 
 In `events/te_debug_demog_events.txt`:
-- option o, after option n, built as option m is: `name = te_debug_demog.1.o`, trigger `exists = capital`, and the
+- option o, after option n, built as option n is (without its `te_demog_cohorts_run` trigger): `name = te_debug_demog.1.o`, trigger `exists = capital`, and the
   `te_dg_dbg_click` guard around `capital = { te_debug_demog_probe_start = yes }`;
 - the hidden state event, after `te_debug_demog.1`:
 
@@ -3152,7 +3163,9 @@ D3's rejected swap, now the fallback:
 ```
 
 - Accept a one-year transition: the census's refresh runs in the same effect as the swap, so its read of the state's
-  birth rate still holds the +10% for one step, and M takes it off a year late.
+  birth rate still holds the +10% for one step, and M takes it off a year late. Since #907 the refresh also stores
+  the next window's start rate (`te_dg_sr_b`, from the walk's `te_dg_w_eb`), which the walk read before the swap, so
+  the old +10% rides one window, start rate included.
 - Tests:
   - the twin carries no `state_birth_rate_mult`, and the original keeps its 0.1;
   - the rural refresh applies the twin only inside a limit holding both `te_demog_effects_run = yes` and
@@ -3200,8 +3213,10 @@ only the files it touched.
 
 **Files:**
 - Modify: `localization/english/te_miscellaneous_l_english.yml`: `te_demog_st_tfr_terms`, `te_demog_ov_tfr_capital`,
-  `te_demog_st_tfr_tt`, `te_demog_ov_tfr_tt`, and the "How Demographics Works" text if it describes fertility (grep for
-  `marry` and `legal standing`)
+  `te_demog_st_tfr_tt`, `te_demog_ov_tfr_tt`, and the "How Demographics Works" text, `te_demog_how_fertility`, which
+  carries the same "who marries and how young" phrase (D2)
+- Modify: `localization/english/te_modifiers_l_english.yml`: `state_natural_fertility_mult_desc` ("through who marries
+  and how young… they marry later"; D2 drops the phrase)
 - Modify: `common/scripted_effects/te_debug_demog_effects.txt` (`te_debug_demog_mods_line`),
   `common/script_values/te_debug_demog_values.txt`
 - Test: `test_demographics_registry.py`
@@ -3220,7 +3235,7 @@ only the files it touched.
         capital = re.search(r"(?m)^ te_demog_ov_tfr_capital:0 \"(.*)\"$", loc).group(1)
         self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
         self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
-        for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt"):
+        for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt", "te_demog_how_fertility"):
             text = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
             self.assertNotIn("who marries", text, "women's legal standing no longer claims marriage (plan D2)")
             self.assertIn("late marriage", text)
@@ -3325,7 +3340,8 @@ Stage only the loc files `git status` shows changed.
     sentence each, the drift and its drivers, the seed rule (D5), the panel, Call 4's line;
   - "Absorbed by the census" (Primogeniture's farm births);
   - "Generator and harness" (`practices-replay`, `practices-fit`; the regional gate on #904's peacetime rates);
-  - the console's option o (Task 9's probe) in the console paragraph;
+  - the console's option o (Task 9's probe) in the Files table's "Test console" row (beside "options m and n are
+    phase 2's probes");
   - "Owner checks in game" (point to this plan's list).
 - Modify: `docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md`:
   - a note under §2.2 that the curve's base is 6.0 since #869 and the fit's values are the plan's (D1);
@@ -3334,8 +3350,8 @@ Stage only the loc files `git status` shows changed.
     value that passes it; the high group's ~7 is reported only; calibration step 3 follows separately.
 - Modify: `docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md` step 2 (built: the fitted values and
   the results doc).
-- Modify: `docs/guides/python_tools.md` (the harness's row: `practices-replay`, `practices-fit` and `history`'s three
-  options; a row for `demographics_regions.py`; option o in the console's row).
+- Modify: `docs/guides/python_tools.md` (the harness's row: "Fourteen commands" becomes "Sixteen", with
+  `practices-replay`, `practices-fit` and `history`'s three options; a row for `demographics_regions.py`; option o in the console's row).
 - Modify: `docs/auto_generated_files.md` (a row for `demographics_strategic_regions.json`: written by
   `demographics_regions.py --refresh` from the base game's strategic regions and the mod's REPLACEs; one-shot).
 - Modify: `docs/guides/vanilla_patch_runbook.md` (beside `gen_formable_regions.py`: "`demographics_regions.py --check`;
