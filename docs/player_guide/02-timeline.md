@@ -277,7 +277,7 @@ Resort Colony production method, which produces art and tourism instead.
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
 | Transport | Airport and Highway, both producing Personal and Bulk Transportation. |
 | Leisure | Tourism Industry and National Park ([States and population](08-states.md)). |
-| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Subsidies, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
+| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
 
 ### Pharmaceutical Industries and Drugs
 
