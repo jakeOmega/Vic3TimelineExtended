@@ -70,6 +70,10 @@ ch_possible_cultural_institutes = {
 		text = CH_REQUIRES_MINISTRY_TT
 		has_law = law_type:law_ministry_of_culture
 	}
+	custom_tooltip = {
+		text = CH_INSTITUTES_INFLUENCE_TT
+		influence >= ch_cultural_institutes_influence_cost
+	}
 }
 
 ch_possible_disable_cultural_institutes = {
@@ -89,6 +93,10 @@ ch_possible_global_media_campaign = {
 	custom_tooltip = {
 		text = CH_MEDIA_BLOCKED_BY_PROTECTIONISM
 		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+	}
+	custom_tooltip = {
+		text = CH_MEDIA_INFLUENCE_TT
+		influence >= ch_global_media_influence_cost
 	}
 }
 

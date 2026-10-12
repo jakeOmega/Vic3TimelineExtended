@@ -33,6 +33,9 @@
 #                       its window's deaths (the Causes of Death section)
 #   TE_DEMOG_PROBE      option o (the late-marriage plan, Task 9): the capital's absorbed
 #                       births sum before a scaled script-only probe and a day after
+#   TE_DEMOG_PROBE_OWNER option q (the late-marriage plan, Stop B's I1): a state given to a
+#                       neighbour, before, in on_state_owner_change and a day after: does
+#                       the hook's ROOT still hold the old state's variables?
 #
 # A debug_log line reads only variables and script values of THIS (locals don't reach
 # it, nor do saved scopes), so the numbers a line needs are copied into te_dg_dbg_*
@@ -521,4 +524,69 @@ te_debug_demog_probe_start = {
 	debug_log_scopes = yes
 	add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }
 	trigger_event = { id = te_debug_demog.2 days = 1 }
+}
+
+# ---- q: the owner-change probe (the late-marriage plan, Stop B's I1; owner, 2026-10-12) --------
+# THIS = the player's country. Does on_state_owner_change's ROOT still hold the old state's variables, is it the same
+# state object, and do the variables outlive the hook? Picks one of our states that is the only state in its region (not
+# the capital) and has a foreign neighbour, stamps it (te_probe_owner_var) and its region (te_probe_owner_region), logs
+# it, and gives it to that neighbour's owner. The hook (te_on_state_owner_change, only while global_var:
+# te_probe_owner_on is set) logs what ROOT holds; te_debug_demog.4 logs the region's state a day later and clears the
+# flags. Throwaway games only: the state really changes hands.
+te_debug_demog_probe_owner_start = {
+	if = {
+		limit = {
+			any_scope_state = {
+				NOT = { is_capital = yes }
+				state_region = {
+					NOT = {
+						any_scope_state = { NOT = { owner = ROOT } }
+					}
+				}
+				any_neighbouring_state = {
+					exists = owner
+					NOT = { owner = ROOT }
+				}
+			}
+		}
+		random_scope_state = {
+			limit = {
+				NOT = { is_capital = yes }
+				state_region = {
+					NOT = {
+						any_scope_state = { NOT = { owner = ROOT } }
+					}
+				}
+				any_neighbouring_state = {
+					exists = owner
+					NOT = { owner = ROOT }
+				}
+			}
+			random_neighbouring_state = {
+				limit = {
+					exists = owner
+					NOT = { owner = ROOT }
+				}
+				owner = { save_scope_as = te_probe_owner_to }
+			}
+			set_variable = te_probe_owner_var
+			state_region = { set_variable = te_probe_owner_region }
+			set_global_variable = { name = te_probe_owner_to value = scope:te_probe_owner_to }
+			set_global_variable = te_probe_owner_on
+			debug_log = "TE_DEMOG_PROBE_OWNER before name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log_scopes = yes
+			set_state_owner = scope:te_probe_owner_to
+		}
+		trigger_event = { id = te_debug_demog.4 days = 1 }
+	}
+	else = {
+		debug_log = "TE_DEMOG_PROBE_OWNER none: no state of ours is alone in its region with a foreign neighbour"
+	}
+}
+
+# THIS = ROOT = the state in on_state_owner_change, under its new owner (te_on_state_owner_change, only while
+# global_var:te_probe_owner_on is set): what it holds of the state the probe stamped.
+te_debug_demog_probe_owner_hook = {
+	debug_log = "TE_DEMOG_PROBE_OWNER hook name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log_scopes = yes
 }

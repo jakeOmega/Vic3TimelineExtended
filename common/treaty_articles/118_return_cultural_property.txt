@@ -22,7 +22,9 @@ return_cultural_property = {
 
 	usage_limit = once_per_side
 
-	maintenance_paid_by = source_country
+	# The country receiving its property back (target) pays, as vanilla's
+	# demands and gifts do (owner, 2026-10-12; the source paid).
+	maintenance_paid_by = target_country
 
 	visible = {
 		gm_system_enabled = yes

@@ -4710,6 +4710,40 @@ class TestConsole(unittest.TestCase):
                                                               console.index(call)])
 
 
+    def test_option_q_probes_what_an_owner_change_carries(self):
+        """Stop B's I1 (owner, 2026-10-12): does on_state_owner_change's ROOT still hold the old state's variables, and
+        do they survive the hook? Option q stamps a state alone in its region, gives it to a neighbour, and logs it
+        before, in the hook and a day after (te_debug_demog.4)."""
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_probe_owner_start = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        start = re.sub(r"#[^\n]*", "", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_owner_start"))
+        for piece in ("set_variable = te_probe_owner_var", "set_global_variable = te_probe_owner_on",
+                      "set_state_owner = scope:te_probe_owner_to", "trigger_event = { id = te_debug_demog.4 days = 1 }",
+                      "TE_DEMOG_PROBE_OWNER before"):
+            self.assertIn(piece, start)
+        self.assertLess(start.index("TE_DEMOG_PROBE_OWNER before"), start.index("set_state_owner"))
+        after = _block(console, "te_debug_demog.4")
+        for piece in ("TE_DEMOG_PROBE_OWNER after", "remove_global_variable = te_probe_owner_on",
+                      "remove_global_variable = te_probe_owner_to"):
+            self.assertIn(piece, after)
+        self.assertIn("TE_DEMOG_PROBE_OWNER hook", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_owner_hook"))
+        loc = _text(ROOT / "localization" / "english" / "te_events_l_english.yml")
+        for key in ("te_debug_demog.1.q", "te_debug_demog.1.q.tt"):
+            self.assertRegex(loc, rf"(?m)^ {re.escape(key)}:0 \"", key)
+
+    def test_the_owner_change_hook_logs_only_while_the_probe_runs(self):
+        """The hook's probe branch costs nothing in play: it runs only under the global flag option q sets and
+        te_debug_demog.4 clears."""
+        hook = _block(_text(ROOT / "common" / "on_actions" / "extra_on_actions.txt"), "te_on_state_owner_change")
+        call = hook.index("te_debug_demog_probe_owner_hook = yes")
+        opener = hook.rindex("if = {", 0, call)
+        self.assertIn("limit = { has_global_variable = te_probe_owner_on }", hook[opener:call])
+        self.assertEqual(hook.count("te_debug_demog_probe_owner_hook"), 1)
+
     def test_option_o_probes_a_scaled_script_only_type_on_a_state(self):
         """The late-marriage plan, Task 9 (review C2): Primogeniture's farm births would ride a script-only type on a
         state modifier with a multiplier; the probe adds one at 0.62 and logs the state's sum before and a day after."""

@@ -7,7 +7,9 @@
 seize_company = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/seize_company.dds"
 	kind = directed
-	maintenance_paid_by = source_country
+	# The receiving country (target) pays, as vanilla's demands do: the country
+	# losing its company owes nothing for it (owner, 2026-10-12; the source paid).
+	maintenance_paid_by = target_country
 	cost = 200 # More expensive than disband (150) since the winner gains the company.
 
 	flags = {

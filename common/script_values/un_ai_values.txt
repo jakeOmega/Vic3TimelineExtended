@@ -97,6 +97,30 @@ un_ai_money_cap = { value = 40 }
 # peacekeeping score is the one exception (see the header).
 un_ai_self_flipping_terms = { value = 20 }
 
+# ---- Influence ---------------------------------------------------------------
+# The stances and the peacekeeping, human rights and arms control programmes
+# cost influence while they run (un_script_values.txt § Influence Costs). An AI
+# takes one up only with un_ai_influence_spare left over after its cost, and
+# reaches to lay it down once its influence runs into deficit. Laying it down
+# frees the cost but leaves less than the spare on top of it, so it is never
+# taken straight back up. These are gates, not terms of a will score: what the
+# AI can afford is not a reason to want the UN more or less.
+
+un_ai_influence_spare = { value = 200 }
+
+un_ai_stance_influence_start = {
+	value = un_stance_influence_cost
+	add = un_ai_influence_spare
+}
+
+un_ai_programme_influence_start = {
+	value = un_programme_influence_cost
+	add = un_ai_influence_spare
+}
+
+# Added to a stop weight while influence is in deficit.
+un_ai_influence_deficit_pull = { value = 50 }
+
 # The UN's authority, 50 when there is none to read. Globals only.
 un_ai_authority = {
 	value = 0
@@ -825,7 +849,10 @@ un_ai_peacekeeping_stop_line = {
 un_peacekeeping_ai_chance = {
 	value = 0
 	if = {
-		limit = { un_ai_peacekeeping_will >= un_ai_peacekeeping_line }
+		limit = {
+			un_ai_peacekeeping_will >= un_ai_peacekeeping_line
+			influence >= un_ai_programme_influence_start
+		}
 		add = un_ai_peacekeeping_will
 		subtract = un_ai_peacekeeping_line
 		add = 10
@@ -841,11 +868,15 @@ un_end_peacekeeping_ai_chance = {
 		subtract = un_ai_peacekeeping_will
 		max = 50
 	}
+	if = {
+		limit = { influence < 0 }
+		add = un_ai_influence_deficit_pull
+	}
 }
 
 # ---- Champion / undermine the order ------------------------------------------------------
 # A great power's stance on the order (un_champion_order_button and the
-# undermine button: the commitment pillar's +1 / -1, at a cost in Authority and
+# undermine button: the commitment pillar's +1 / -1, at a cost of 500
 # influence). Its reasons are its laws, its seat, its bloc's commitment to the
 # institution, what the conventions ask of it and whether the Assembly has
 # turned on it. Authority adds a mild pull, at most 7.5 either way: a weak UN
@@ -923,7 +954,10 @@ un_ai_order_stop_line = {
 un_champion_order_ai_chance = {
 	value = 0
 	if = {
-		limit = { un_ai_order_will >= un_ai_order_line }
+		limit = {
+			un_ai_order_will >= un_ai_order_line
+			influence >= un_ai_stance_influence_start
+		}
 		add = un_ai_order_will
 		subtract = un_ai_order_line
 		add = 10
@@ -939,12 +973,19 @@ un_stop_championing_ai_chance = {
 		subtract = un_ai_order_will
 		max = 50
 	}
+	if = {
+		limit = { influence < 0 }
+		add = un_ai_influence_deficit_pull
+	}
 }
 
 un_undermine_order_ai_chance = {
 	value = 0
 	if = {
-		limit = { un_ai_dissent_will >= un_ai_order_line }
+		limit = {
+			un_ai_dissent_will >= un_ai_order_line
+			influence >= un_ai_stance_influence_start
+		}
 		add = un_ai_dissent_will
 		subtract = un_ai_order_line
 		add = 10
@@ -959,5 +1000,9 @@ un_stop_undermining_ai_chance = {
 		add = un_ai_order_stop_line
 		subtract = un_ai_dissent_will
 		max = 50
+	}
+	if = {
+		limit = { influence < 0 }
+		add = un_ai_influence_deficit_pull
 	}
 }

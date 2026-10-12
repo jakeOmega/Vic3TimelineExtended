@@ -121,6 +121,7 @@ un_propose_condemn_effect = {
 		}
 		un_resolution_open = { TOPIC = condemn }
 	}
+	un_propose_sponsor_cost = yes
 }
 
 # International sanctions — binding, simple majority, names a rival not already
@@ -145,6 +146,7 @@ un_propose_sanctions_effect = {
 		}
 		un_resolution_open = { TOPIC = sanctions }
 	}
+	un_propose_sponsor_punitive_cost = yes
 }
 
 # Motion to strip a permanent seat — recommendatory in form but decided by a
@@ -165,6 +167,7 @@ un_propose_expulsion_effect = {
 		# Every other member votes, including the target — it gets to defend itself
 		un_resolution_open = { TOPIC = expulsion }
 	}
+	un_propose_sponsor_punitive_cost = yes
 }
 
 # Authorized military mandate — binding, simple majority, and the only topic
@@ -216,6 +219,9 @@ un_propose_mandate_effect = {
 			}
 		}
 	}
+	# Outside the case check so the tooltip shows it: un_propose_mandate_possible
+	# already asks for a case.
+	un_propose_sponsor_punitive_cost = yes
 }
 
 # Request a peacekeeping deployment on our own soil — binding, simple majority.
@@ -276,6 +282,7 @@ un_propose_reform_effect = {
 		}
 		un_charter_reform_open = yes
 	}
+	un_propose_sponsor_cost = yes
 }
 
 # Open a charter-reform resolution for the charter's next stage. The one place
@@ -297,9 +304,10 @@ un_charter_reform_open = {
 # ============================================================================
 # Nine decisions, requests and institutions; the two phase 7 conventions are
 # with the others below. Tabling one costs what tabling a convention on our own
-# motion costs (un_propose_own_motion_costs, shown), except the request for
-# electoral observers, which takes the request cooldown as the other requests
-# do. The target, if the topic names one, is the owner's pick
+# motion costs (un_propose_own_motion_costs, shown), or the punitive sponsor's
+# cost for the three that punish a member (court referral, arms embargo,
+# credentials), except the request for electoral observers, which takes the
+# request cooldown as the other requests do. The target, if the topic names one, is the owner's pick
 # (un_<key>_select_target, the same selector the chamber's row previews), and
 # un_<key>_on_tabled writes the topic's own fields on the resolution.
 
@@ -307,7 +315,7 @@ un_charter_reform_open = {
 # Scope: the proposing country
 un_propose_court_referral_effect = {
 	custom_tooltip = UN_PROPOSE_COURT_REFERRAL_TT
-	un_propose_own_motion_costs = yes
+	un_propose_own_motion_costs_punitive = yes
 	hidden_effect = {
 		un_court_referral_select_target = yes
 		scope:un_court_referral_pick ?= { save_scope_as = un_vote_target }
@@ -320,7 +328,7 @@ un_propose_court_referral_effect = {
 # Scope: the proposing country
 un_propose_arms_embargo_effect = {
 	custom_tooltip = UN_PROPOSE_ARMS_EMBARGO_TT
-	un_propose_own_motion_costs = yes
+	un_propose_own_motion_costs_punitive = yes
 	hidden_effect = {
 		un_arms_embargo_select_target = yes
 		scope:un_arms_embargo_pick ?= { save_scope_as = un_vote_target }
@@ -332,7 +340,7 @@ un_propose_arms_embargo_effect = {
 # Scope: the proposing country
 un_propose_credentials_effect = {
 	custom_tooltip = UN_PROPOSE_CREDENTIALS_TT
-	un_propose_own_motion_costs = yes
+	un_propose_own_motion_costs_punitive = yes
 	hidden_effect = {
 		un_credentials_select_target = yes
 		scope:un_credentials_pick ?= { save_scope_as = un_vote_target }
@@ -441,13 +449,27 @@ un_propose_referendum_effect = {
 # through the docket.
 # ============================================================================
 
-# The price of tabling business on our own motion, the same two modifiers the
+# The price of tabling business on our own motion, the same modifiers the
 # seven topics above take: un_ga_resolution_modifier marks us as a sponsor for
-# five years, and un_request_cooldown bars our next own-motion proposal, of any
-# topic, for ten. Shown rather than folded into a custom tooltip, because the
-# ten-year bar is the real price of the choice.
+# five years, un_request_cooldown bars our next own-motion proposal, of any
+# topic, for ten, and the sponsor's influence cost runs two years. Shown rather
+# than folded into a custom tooltip, because the ten-year bar is the real price
+# of the choice. The three phase 7 topics that punish a member take the
+# punitive sponsor's cost (un_propose_own_motion_costs_punitive).
 # Scope: the proposing country
 un_propose_own_motion_costs = {
+	un_propose_own_motion_marks = yes
+	un_propose_sponsor_cost = yes
+}
+
+# Scope: the proposing country
+un_propose_own_motion_costs_punitive = {
+	un_propose_own_motion_marks = yes
+	un_propose_sponsor_punitive_cost = yes
+}
+
+# Scope: the proposing country
+un_propose_own_motion_marks = {
 	add_modifier = {
 		name = un_ga_resolution_modifier
 		days = un_propose_sponsor_days
@@ -457,6 +479,27 @@ un_propose_own_motion_costs = {
 		name = un_request_cooldown
 		days = un_propose_cooldown_days
 		is_decaying = yes
+	}
+}
+
+# What sponsoring a resolution on our own motion uses: influence for
+# un_sponsor_cost_days, the punitive figure for a resolution that punishes a
+# member (un_script_values.txt § Influence Costs). Requests for help and the
+# docket's offers take neither. The _possible gates ask for the influence
+# (un_propose_can_afford_sponsor, un_propose_triggers.txt).
+# Scope: the proposing country
+un_propose_sponsor_cost = {
+	add_modifier = {
+		name = un_sponsor_cost_modifier
+		days = un_sponsor_cost_days
+	}
+}
+
+# Scope: the proposing country
+un_propose_sponsor_punitive_cost = {
+	add_modifier = {
+		name = un_sponsor_punitive_cost_modifier
+		days = un_sponsor_cost_days
 	}
 }
 

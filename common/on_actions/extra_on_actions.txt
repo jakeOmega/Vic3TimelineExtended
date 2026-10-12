@@ -720,6 +720,11 @@ te_on_state_owner_change = {
 			}
 			remove_building = building_space_program
 		}
+		# the late-marriage plan's owner-change probe (te_debug_demog.1 option q): console only, off in play
+		if = {
+			limit = { has_global_variable = te_probe_owner_on }
+			te_debug_demog_probe_owner_hook = yes
+		}
 	}
 }
 

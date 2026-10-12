@@ -373,6 +373,38 @@ un_heritage_participants = {
 	}
 }
 
+# ---- Influence Costs ----
+# The UN's diplomatic actions cost influence (owner, 2026-10-12), each held as
+# a country_influence_cost_add, which is flat: rank and influence multipliers
+# leave it alone. Each value restates the modifier it names, and the buttons
+# and the chamber ask for that much available influence, as vanilla does to
+# create a power bloc. test_international_influence_costs.py pins each value
+# to its modifier and its tooltip.
+
+# Founding the UN or convening a refounding conference: un_founding_cost_modifier,
+# fading over five years. Creating a power bloc costs the same.
+un_found_influence_cost = { value = 500 }
+
+# Championing or undermining the order: un_champion_order_cost,
+# un_undermine_order_cost, while the stance holds.
+un_stance_influence_cost = { value = 500 }
+
+# The peacekeeping, human rights and arms control programmes:
+# un_peacekeeping_contributor_modifier, un_human_rights_champion_modifier,
+# un_arms_control_participant_modifier, while each runs.
+un_programme_influence_cost = { value = 100 }
+
+# Tabling a resolution on our own motion: un_sponsor_cost_modifier, or
+# un_sponsor_punitive_cost_modifier for one that punishes a member (sanctions,
+# mandate, expulsion, arms embargo, court referral, credentials), for
+# un_sponsor_cost_days. Requests for help and the docket's offers are free.
+un_sponsor_influence_cost = { value = 150 }
+un_sponsor_punitive_influence_cost = { value = 300 }
+
+# Two years: about as long as a resolution takes to come to a vote and be
+# carried out. Not decaying, so the cost holds at its figure throughout.
+un_sponsor_cost_days = { value = 730 }
+
 # ---- Financial Cost / Benefit Scaling ----
 
 # Expense for contributing to a UN program (~0.5% of GDP, matches banking_event_expense_small)
