@@ -356,6 +356,38 @@ class TestPhase2(unittest.TestCase):
         out = R.phase2_check(recs)
         self.assertAlmostEqual(out["world_multiple"], 1.5)
         self.assertTrue(out["world_in_band"])
+        self.assertEqual(out["world_source"], "log")
+
+    def test_the_band_is_history_as_it_happened_to_history_without_its_catastrophes(self):
+        """#894 (owner, 2026-10-11): about x1.4-x1.5 as it happened, about x1.6-x1.65 without the Chinese collapse
+        and the Indian famines. The old band's x1.7 now fails; --band can set another."""
+        self.assertEqual(R.WORLD_BAND, (1.4, 1.65))
+        recs = [self.rec("AAA", 1836, 100e6), self.rec("AAA", 1900, 168e6)]
+        self.assertFalse(R.phase2_check(recs)["world_in_band"])
+        self.assertTrue(R.phase2_check(recs, band=(1.3, 1.7))["world_in_band"])
+        recs = [self.rec("AAA", 1836, 100e6), self.rec("AAA", 1900, 135e6)]
+        self.assertFalse(R.phase2_check(recs)["world_in_band"])
+
+    SAVES = {"first": {"date": "1837.1.1", "people": 100e6}, "end": {"date": "1901.1.1", "people": 160e6},
+             "target": "1901.1.1"}
+
+    def test_the_saves_figure_is_judged_and_the_logs_kept(self):
+        """The log sums the countries of 1M+, so colonized land joining the census inflates it (x1.92 against the
+        saves' x1.77 in the 2026-10-11 normal-speed run): with saves the gate judges every state's people."""
+        recs = [self.rec("AAA", 1836, 100e6), self.rec("AAA", 1900, 190e6)]
+        out = R.phase2_check(recs, saves_world=self.SAVES)
+        self.assertEqual(out["world_source"], "saves")
+        self.assertAlmostEqual(out["world_multiple"], 1.6)
+        self.assertTrue(out["world_in_band"])
+        self.assertAlmostEqual(out["log_multiple"], 1.9)
+        self.assertFalse(R.phase2_check(recs)["world_in_band"])   # the log's figure alone fails
+
+    def test_no_save_near_the_gate_year_is_undecided(self):
+        recs = [self.rec("AAA", 1836, 100e6), self.rec("AAA", 1900, 150e6)]
+        out = R.phase2_check(recs, saves_world=dict(self.SAVES, end=None))
+        self.assertIsNone(out["world_multiple"])
+        self.assertFalse(out["world_in_band"])
+        self.assertAlmostEqual(out["log_multiple"], 1.5)
 
     def test_ten_years_of_peacetime_loss_fails(self):
         recs = [self.rec("BIG", 1836 + i, 30e6 - i * 0.1e6) for i in range(12)]
@@ -395,6 +427,121 @@ class TestPhase2(unittest.TestCase):
         recs, bad = R.read_records([line])
         self.assertEqual(bad, [])
         self.assertEqual((recs[0]["m_b"], recs[0]["dz"], recs[0]["war"]), (-0.12, 0.01, 1.0))
+
+
+def pops_save(date, sizes):
+    """A plain-text save holding only pops, each (workforce, dependents); a nested block's fields don't count."""
+    lines = ["SAV0100tiny", "meta_data={", f"\tdate={date}", "}", "pops={", "\tdatabase={"]
+    for i, (workforce, dependents) in enumerate(sizes):
+        lines += [f"{i}={{", f"\tworkforce={workforce}", f"\tdependents={dependents}", "\tlocation=7",
+                  "\tfood_security={", "\t\tvalue=0.5", "\t\tworkforce=999", "\t}", "}"]
+    lines += [f"{len(sizes)}=none", "\t}", "}", "states={", "\tdatabase={", "\t}", "}"]
+    return "\n".join(lines) + "\n"
+
+
+class TestPhase2Saves(unittest.TestCase):
+    """--phase2 --saves: the world's multiple from every state's people in the saves (#894)."""
+
+    def _saves(self, tmp, dated):
+        paths = []
+        for i, (date, sizes) in enumerate(dated):
+            path = Path(tmp) / f"autosave.{i}.v3"
+            path.write_text(pops_save(date, sizes), encoding="utf-8")
+            paths.append(path)
+        return paths
+
+    def test_reads_the_date_and_every_pops_people(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            [path] = self._saves(tmp, [("1837.1.1", [(100, 200), (50, 0)])])
+            self.assertEqual(R.save_date(path), (1837, 1, 1))
+            self.assertEqual(R.save_year(path), 1837)
+            self.assertEqual(R.save_people(path), 350)
+
+    def test_the_earliest_save_against_the_one_nearest_the_gate_years_end(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = self._saves(tmp, [("1880.1.1", [(500, 0)]), ("1901.1.1", [(700, 0)]), ("1837.1.1", [(400, 0)]),
+                                      ("1902.1.1", [(900, 0)])])
+            got = R.world_from_saves(paths, to_year=1900)
+        self.assertEqual(got, {"first": {"date": "1837.1.1", "people": 400},
+                               "end": {"date": "1901.1.1", "people": 700}, "target": "1901.1.1"})
+
+    def test_of_two_equally_near_the_later_wins(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1900.7.1", [(600, 0)]), ("1901.7.1", [(700, 0)])])
+            self.assertEqual(R.world_from_saves(paths, to_year=1900)["end"]["date"], "1901.7.1")
+
+    def test_no_save_within_a_year_of_the_gate_years_end(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1880.1.1", [(500, 0)])])
+            got = R.world_from_saves(paths, to_year=1900)
+            self.assertIsNone(got["end"])
+            self.assertEqual(got["target"], "1901.1.1")
+            # one save alone is no span, even at the gate year's end
+            self.assertIsNone(R.world_from_saves(paths[:1], to_year=1836)["end"])
+
+    def test_the_slack_is_one_year(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # a year and a half out is too far; exactly a year out is still near enough
+            far = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1902.7.1", [(900, 0)])])
+            self.assertIsNone(R.world_from_saves(far, to_year=1900)["end"])
+        with tempfile.TemporaryDirectory() as tmp:
+            edge = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1902.1.1", [(900, 0)])])
+            self.assertEqual(R.world_from_saves(edge, to_year=1900)["end"]["date"], "1902.1.1")
+
+    def test_month_and_day_count_in_the_nearest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # 1900.12.1 is a month short of 1901.1.1, 1901.3.1 two months past it
+            paths = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1900.12.1", [(600, 0)]), ("1901.3.1", [(700, 0)])])
+            self.assertEqual(R.world_from_saves(paths, to_year=1900)["end"]["date"], "1900.12.1")
+
+    def _main(self, tmp, *flags, lines=None):
+        log = Path(tmp) / "debug.log"
+        lines = lines or [census("AAA", 1836, "100_0_0", "5.0", "40.0"), census("AAA", 1900, "190_0_0", "5.0", "40.0")]
+        log.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        out = io.StringIO()
+        with redirect_stdout(out):
+            code = R.main([str(log), "--phase2", *flags])
+        return code, out.getvalue()
+
+    def test_cli_judges_the_saves_and_prints_the_log_beside(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = self._saves(tmp, [("1837.1.1", [(1_000_000, 0)]), ("1901.1.1", [(1_500_000, 0)])])
+            code, out = self._main(tmp, "--saves", *map(str, paths))
+            self.assertEqual(code, 0)
+            self.assertIn("phase 2 gate: world x1.50 from the saves, every state (1837.1.1 1M to 1901.1.1 2M) "
+                          "[x1.40-x1.65] PASS", out)
+            self.assertIn("census log, world 1900 / first census year: x1.90 (not judged", out)
+            code, out = self._main(tmp, "--saves", *map(str, paths), "--band", "1.0", "1.4")
+            self.assertEqual(code, 1)
+            self.assertIn("[x1.00-x1.40] FAIL", out)
+
+    def test_cli_without_saves_judges_the_log(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, out = self._main(tmp)
+            self.assertEqual(code, 1)
+            self.assertIn("world 1900 / first census year x1.90 from the census log [x1.40-x1.65] FAIL", out)
+            self.assertIn("--saves judges every state's people instead", out)
+            self.assertEqual(self._main(tmp, "--band", "1.3", "2.0")[0], 0)
+
+    def test_cli_with_no_save_near_the_end_is_undecided(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = self._saves(tmp, [("1837.1.1", [(1_000_000, 0)]), ("1880.1.1", [(1_200_000, 0)])])
+            code, out = self._main(tmp, "--saves", *map(str, paths))
+            self.assertEqual(code, 1)
+            self.assertIn("no save but the first within a year of 1901.1.1 (the earliest is 1837.1.1): UNDECIDED", out)
+
+    def test_cli_refuses_saves_without_phase2(self):
+        with tempfile.TemporaryDirectory() as tmp, redirect_stderr(io.StringIO()):
+            [path] = self._saves(tmp, [("1837.1.1", [(100, 0)])])
+            log = Path(tmp) / "debug.log"
+            log.write_text(census("AAA", 1836, "100_0_0", "5.0", "40.0") + "\n", encoding="utf-8")
+            with self.assertRaises(SystemExit), redirect_stdout(io.StringIO()):
+                R.main([str(log), "--saves", str(path)])
+
+    def test_cli_refuses_a_band_upside_down(self):
+        with tempfile.TemporaryDirectory() as tmp, redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                self._main(tmp, "--band", "1.7", "1.3")
 
 
 if __name__ == "__main__":

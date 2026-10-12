@@ -12,6 +12,7 @@ fails here, naming the site.
 Run: python3 -m unittest test_grand_monument_registry -v
 """
 import re
+import subprocess
 import unittest
 from collections import namedtuple
 from pathlib import Path
@@ -2615,6 +2616,15 @@ def picture_key(code):
     return "undedicated" if skin == "undedicated" else f"{skin}__{form}"
 
 
+def committed(rel):
+    """Whether a texture is on disk or tracked by git. CI checks out without
+    gfx/ (sparse), so a committed texture can be absent from the working tree
+    (test_nuclear_deterrence.py's tracked())."""
+    if (ROOT / rel).exists():
+        return True
+    return subprocess.run(["git", "ls-files", "--error-unmatch", rel], cwd=ROOT, capture_output=True).returncode == 0
+
+
 class PictureTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -2726,7 +2736,7 @@ class PictureTests(unittest.TestCase):
         for key, entry in entries.items():
             self.assertEqual(entry["now"], "gfx/interface/icons/building_icons/building_grand_monument.dds", key)
             if isinstance(entry.get("seed"), int):
-                self.assertTrue((ROOT / f"gfx/interface/icons/gm_pictures/{key}.dds").exists(), key)
+                self.assertTrue(committed(f"gfx/interface/icons/gm_pictures/{key}.dds"), key)
 
     def test_undedicating_drapes_it_at_once(self):
         # Not gm_state_update_picture: it would read back the PM this effect
@@ -2758,7 +2768,7 @@ class PictureTests(unittest.TestCase):
                      f"texture = \"gfx/interface/icons/gm_pictures/frames/frame_tier_{tier}.dds\"")
             self.assertIn(frame, body, tier)
             self.assertGreater(body.index(frame), last_picture, "a frame draws over every picture")
-            self.assertTrue((ROOT / f"gfx/interface/icons/gm_pictures/frames/frame_tier_{tier}.dds").exists(), tier)
+            self.assertTrue(committed(f"gfx/interface/icons/gm_pictures/frames/frame_tier_{tier}.dds"), tier)
         self.assertEqual(body.count("icon = {"), len(PICTURES) + 5)
 
     def test_display_value_defaults_to_the_draped_picture(self):

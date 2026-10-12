@@ -1414,6 +1414,7 @@ te_demog_k_chain_cap = { value = 0.2 }
 te_demog_k_crisis_at_war = { value = 0.3 }
 te_demog_k_on_top_scale_min = { value = -0.9 }
 te_demog_k_on_top_scale_max = { value = 4 }
+te_demog_k_window_start_weight = { value = 0.5 }
 te_demog_k_rate_total_min = { value = -0.8 }
 te_demog_k_rate_term_max = { value = 3 }
 te_demog_k_natural_fertility_floor = { value = 0.2 }
