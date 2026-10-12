@@ -1412,6 +1412,16 @@ te_demog_pension_age_refresh = {
 			remove_variable = te_dg_pension_age
 		}
 		te_demog_pension_setting_clear = yes
+		# the bill stops with the law, the day it goes (the census would take it off only on 31 December); never
+		# re-applied here
+		if = {
+			limit = { has_modifier = te_demog_pension_bill }
+			remove_modifier = te_demog_pension_bill
+		}
+		if = {
+			limit = { has_variable = te_dg_pension_bill }
+			remove_variable = te_dg_pension_bill
+		}
 	}
 	te_demog_pension_ig_refresh = yes
 }

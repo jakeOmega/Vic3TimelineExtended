@@ -34,7 +34,7 @@ of its own. The old band, x1.3-x1.7, let a run with no catastrophes pass at x1.7
 --work (phase 2 step 2; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6) reads
 the TE_DEMOG_WORKC lines the census log writes beside each TE_DEMOG_CENSUS line under this build, and checks the
 observer gate's three items for countries of WORK_BIG people or more: the game's own workforce share within
-WORK_FOLLOW_TOLERANCE of the ratio the census sets (the pull's lag), no state's set ratio past WORK_SET_BAND, and the
+WORK_FOLLOW_TOLERANCE of the ratio the census sets (the pull's lag; the saves show 0.01-0.03 in steady state), no state's set ratio past WORK_SET_BAND, and the
 pension bill's share of revenue (printed by decade, the design's 15-30% band for a rich country at Standard). It
 exits 1 when a state's ratio leaves the band.
 
@@ -84,7 +84,7 @@ PREFIX = "TE_DEMOG_CENSUS: "
 WORK_PREFIX = "TE_DEMOG_WORKC: "
 WORK_FIELDS = ("wf", "wf_engine", "set", "target", "set_min", "set_max", "w", "pens", "bill", "health", "pos", "age")
 WORK_BIG = 20e6                      # the gate's great powers: countries of this many people or more
-WORK_FOLLOW_TOLERANCE = 0.02         # workforce_follows_target's tolerance (te_debug_demog_wft_tolerance)
+WORK_FOLLOW_TOLERANCE = 0.03         # the saves' steady lag of the game's figure behind its ratio: 0.01-0.03
 WORK_SET_BAND = (0.1, 0.8)           # no state's ratio past 0.8 or under 0.1 (the design §2.6)
 FIELDS = ("tag", "year", "people", "median", "tfr", "e0", "e65", "imr", "cbr", "cdr", "mig", "young",
           "working", "old", "sex_balance", "gini", "wc", "primacy", "crisis", "devastation", "turmoil")

@@ -250,10 +250,15 @@ WORK_SPLIT_AGES = (15, 64)
 # The AI's yearly pulse (§2.2, §9): the same weights for every country; is_ai only decides whom the pulse acts for. A
 # bill over PENSION_AI_BILL_HIGH of revenue, or debt over PENSION_AI_DEBT of its ceiling, pushes toward the cheaper
 # positions (Linked to Average where its age passes Raised's, else Raised); unemployment over PENSION_AI_UNEMPLOYMENT
-# (people-weighted over its states) toward Early. A wide longevity gap toward Linked to Common waits for phase 3.
+# (people-weighted over its states) toward Early. A wide longevity gap toward Linked to Common waits for phase 3. It goes
+# back to Standard only once the reason has clearly gone (hysteresis, the review of 2026-10-12): from a cheaper position
+# when the bill is under PENSION_AI_BILL_LOW of revenue and the debt and default have gone, from Early when unemployment
+# is under PENSION_AI_UNEMPLOYMENT_LOW.
 PENSION_AI_BILL_HIGH = 0.3
+PENSION_AI_BILL_LOW = 0.2
 PENSION_AI_DEBT = 0.25
 PENSION_AI_UNEMPLOYMENT = 0.1
+PENSION_AI_UNEMPLOYMENT_LOW = 0.05
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of

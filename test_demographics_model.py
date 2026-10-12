@@ -1055,6 +1055,8 @@ class TestPhase2Step2(unittest.TestCase):
         self.assertEqual(M.pension_position_age("linked_average", 65.0, 62.0), 65.0, msg="the floor")
         self.assertEqual(M.pension_position_age("linked_average", 65.0, None), 65.0, msg="no census: the floor")
         self.assertEqual(M.pension_position_age("linked_average", None, 77.0), 72.0, msg="none yet: at once")
+        self.assertEqual(M.pension_position_age("linked_average", 60.0, 77.0), 66.0,
+                         msg="from Early: the floor first, then a year (the script's choice, then its drift)")
 
     def test_the_pension_bill_is_pensioners_times_b(self):
         self.assertAlmostEqual(M.pension_bill_gdp_share(0.2, 5), 0.2 * P.PENSION_B_PER_LEVEL * 5)

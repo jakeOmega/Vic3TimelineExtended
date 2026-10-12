@@ -818,7 +818,8 @@ te_debug_demog_step3_selfchecks = {
 #     Full), is the engine's figure the set ratio read as workforce over people (WORKFORCE_SCALE's assumption; about 0.25
 #     in 1836) or as workforce over dependents (about 0.20)? OK names the first, BROKEN the second.
 #   workforce_follows_target (§2.1's open fact, the pull's speed): once W has run five census years in a capital and
-#     moved more than the tolerance since it landed, is the engine's figure within 0.02 of the ratio the census set?
+#     moved at least 0.03 since it landed, has the engine's figure moved W's way by at least half of W's move? (A gap to
+#     the set ratio wouldn't do: the saves show the engine's figure sitting 0.01-0.03 off its ratio in steady state.)
 te_debug_demog_wf_term_checks = {
 	if = {
 		limit = {
@@ -846,18 +847,19 @@ te_debug_demog_wf_term_checks = {
 			NOT = { has_global_variable = te_demog_selfcheck_wft_done }
 			has_variable = te_dg_wft_y0
 			has_variable = te_dg_wft_w0
+			has_variable = te_dg_wft_e0
 			has_variable = te_dg_mw
 			has_variable = te_dg_wf_engine
 			te_debug_demog_wft_years >= 5
-			te_debug_demog_wft_moved > te_debug_demog_wft_tolerance
+			te_debug_demog_wft_moved >= te_debug_demog_wft_min_move
 		}
 		set_global_variable = { name = te_demog_selfcheck_wft_done value = yes }
 		if = {
-			limit = { te_debug_demog_wf_people_gap <= te_debug_demog_wft_tolerance }
-			debug_log = "TE_SELF_CHECK OK workforce_follows_target engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] set=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] w=[THIS.ScriptValue('te_debug_demog_wft_w')|3] w_target=[THIS.ScriptValue('te_debug_demog_wft_w_target')|3] since=[THIS.ScriptValue('te_debug_demog_wft_y0_read')|0] (the engine keeps within 0.02 of the ratio the census sets) date=[TimeKeeper.GetCurrentDate.GetString]"
+			limit = { te_debug_demog_wft_engine_moved >= te_debug_demog_wft_half_move }
+			debug_log = "TE_SELF_CHECK OK workforce_follows_target engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_at_landing=[THIS.ScriptValue('te_debug_demog_wft_e0_read')|3] engine_moved=[THIS.ScriptValue('te_debug_demog_wft_engine_moved')|3] w=[THIS.ScriptValue('te_debug_demog_wft_w')|3] w_at_landing=[THIS.ScriptValue('te_debug_demog_wft_w0_read')|3] needed=[THIS.ScriptValue('te_debug_demog_wft_half_move')|3] set=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wft_y0_read')|0] (the engine moved W's way by at least half of W's move) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN workforce_follows_target engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] set=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] w=[THIS.ScriptValue('te_debug_demog_wft_w')|3] w_target=[THIS.ScriptValue('te_debug_demog_wft_w_target')|3] since=[THIS.ScriptValue('te_debug_demog_wft_y0_read')|0] (the engine lags the ratio the census sets by more than 0.02: the pull is slower than the ramp, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN workforce_follows_target engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_at_landing=[THIS.ScriptValue('te_debug_demog_wft_e0_read')|3] engine_moved=[THIS.ScriptValue('te_debug_demog_wft_engine_moved')|3] w=[THIS.ScriptValue('te_debug_demog_wft_w')|3] w_at_landing=[THIS.ScriptValue('te_debug_demog_wft_w0_read')|3] needed=[THIS.ScriptValue('te_debug_demog_wft_half_move')|3] set=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wft_y0_read')|0] (the engine moved less than half of W's move in five years: its pull is slower than the ramp, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 	}
@@ -869,19 +871,26 @@ te_debug_demog_wf_term_checks = {
 		}
 		remove_variable = te_dg_wft_y0
 		remove_variable = te_dg_wft_w0
+		if = {
+			limit = { has_variable = te_dg_wft_e0 }
+			remove_variable = te_dg_wft_e0
+		}
 	}
 }
 
-# THIS = a state whose W lands now (te_demog_workforce_refresh): a capital keeps the census year and the W it starts
-# from (the moved lines' pair, the refresh's local te_dg_wf_pair) for workforce_follows_target, until it has run.
+# THIS = a state whose W lands now (te_demog_workforce_refresh): a capital keeps the census year, the W it starts from
+# (the refresh's local te_dg_wf_from: the region's copy or the moved lines' pair) and the walk's engine figure then, for
+# workforce_follows_target, until it has run.
 te_debug_demog_wf_term_landing = {
 	if = {
 		limit = {
 			is_capital = yes
 			NOT = { has_global_variable = te_demog_selfcheck_wft_done }
+			has_variable = te_dg_wf_engine
 		}
 		set_variable = { name = te_dg_wft_y0 value = te_demog_year }
-		set_variable = { name = te_dg_wft_w0 value = local_var:te_dg_wf_pair }
+		set_variable = { name = te_dg_wft_w0 value = local_var:te_dg_wf_from }
+		set_variable = { name = te_dg_wft_e0 value = var:te_dg_wf_engine }
 	}
 }
 

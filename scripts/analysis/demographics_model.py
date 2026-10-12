@@ -502,6 +502,8 @@ def pension_position_age(position, current_age=None, old_age=None):
     target = P.PENSION_LINK_FLOOR if old_age is None else max(old_age - P.PENSION_LINK_OFFSET, P.PENSION_LINK_FLOOR)
     if current_age is None:
         return float(target)
+    # a linked position starts from at least the floor (te_demog_pension_age_from_position: leaving Early raises it)
+    current_age = max(current_age, P.PENSION_LINK_FLOOR)
     return float(current_age + clamp(target - current_age, -P.PENSION_LINK_STEP, P.PENSION_LINK_STEP))
 
 

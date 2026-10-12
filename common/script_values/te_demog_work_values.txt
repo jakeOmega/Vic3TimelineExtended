@@ -88,11 +88,11 @@ te_demog_pension_pos = {
 	}
 }
 
-# The calendar year the five-year term ends: the year the position was chosen + te_demog_k_pension_term_years; this
-# year when none was chosen (no term running).
+# When the five-year term ends, as the year with its months (te_demog_ms_now's units: te_dg_pension_since holds the
+# date the position was chosen, to the month): since + te_demog_k_pension_term_years; now when none was chosen (no term
+# running).
 te_demog_pension_term_end = {
-	value = 0
-	add = year
+	value = te_demog_ms_now
 	if = {
 		limit = { has_variable = te_dg_pension_since }
 		value = var:te_dg_pension_since
@@ -100,11 +100,21 @@ te_demog_pension_term_end = {
 	}
 }
 
-# The years of the term still to run (0 when it is over or none runs).
+# The years of the term still to run, to the month (0 when it is over or none runs).
 te_demog_pension_term_left = {
 	value = te_demog_pension_term_end
-	subtract = year
+	subtract = te_demog_ms_now
 	min = 0
+}
+
+# The panel's years: the one the position was chosen in and the one its term ends in.
+te_demog_pension_since_year = {
+	value = var:te_dg_pension_since
+	floor = yes
+}
+te_demog_pension_term_end_year = {
+	value = te_demog_pension_term_end
+	floor = yes
 }
 
 # The age the linked positions head for (demographics_model.pension_position_age): the country's people-weighted
@@ -177,6 +187,15 @@ te_demog_health_term_now = {
 	add = te_demog_health_tech_term
 }
 te_demog_health_bill_up_mult = { value = var:te_dg_health_term min = 0 }
+# the health term below 0, as a saving (the hover's second wording); 0 with no term (the hover reads it unguarded)
+te_demog_health_term_saving = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_health_term }
+		value = var:te_dg_health_term
+		multiply = -1
+	}
+}
 te_demog_health_bill_down_mult = { value = var:te_dg_health_term multiply = -1 min = 0 }
 
 # ---- The AI's yearly pulse (country scope; §2.2) ---------------------------------------------------------------

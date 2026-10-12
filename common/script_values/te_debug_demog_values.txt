@@ -812,7 +812,8 @@ te_debug_demog_wf_dependents_gap = {
 }
 
 # workforce_follows_target: the census years since W landed in this capital, how far W has moved since (the check waits
-# until it has moved more than the tolerance, so an OK can't come from a ratio that never changed) and the tolerance.
+# until it has moved at least te_debug_demog_wft_min_move, so an OK can't come from a ratio that never changed), how far
+# the engine's figure has moved W's way since (te_dg_wft_e0, the walk's at landing) and half of W's move, the OK line.
 te_debug_demog_wft_years = {
 	value = te_demog_year
 	subtract = var:te_dg_wft_y0
@@ -825,8 +826,26 @@ te_debug_demog_wft_moved = {
 		multiply = -1
 	}
 }
-te_debug_demog_wft_tolerance = {
-	value = 0.02
+te_debug_demog_wft_min_move = {
+	value = 0.03
+}
+te_debug_demog_wft_engine_moved = {
+	value = var:te_dg_wf_engine
+	subtract = var:te_dg_wft_e0
+	if = {
+		limit = { var:te_dg_mw < var:te_dg_wft_w0 }
+		multiply = -1
+	}
+}
+te_debug_demog_wft_half_move = {
+	value = te_debug_demog_wft_moved
+	multiply = 0.5
+}
+te_debug_demog_wft_e0_read = {
+	value = var:te_dg_wft_e0
+}
+te_debug_demog_wft_w0_read = {
+	value = var:te_dg_wft_w0
 }
 # W, its target, the census's engine-scale target and the census year W landed, for the line.
 te_debug_demog_wft_w = {

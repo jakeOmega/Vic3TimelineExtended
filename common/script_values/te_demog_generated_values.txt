@@ -1976,8 +1976,10 @@ te_demog_k_health_need_cap = { value = 1 }
 te_demog_k_work_split_first = { value = 15 }
 te_demog_k_work_split_last = { value = 64 }
 te_demog_k_pension_ai_bill_high = { value = 0.3 }
+te_demog_k_pension_ai_bill_low = { value = 0.2 }
 te_demog_k_pension_ai_debt = { value = 0.25 }
 te_demog_k_pension_ai_unemployment = { value = 0.1 }
+te_demog_k_pension_ai_unemployment_low = { value = 0.05 }
 te_demog_k_pension_pos_early = { value = 1 }
 te_demog_k_pension_pos_standard = { value = 2 }
 te_demog_k_pension_pos_raised = { value = 3 }

@@ -1586,8 +1586,10 @@ def work_step2_values(o):
         "pension_b_per_level": P.PENSION_B_PER_LEVEL,
         "health_need_weight": P.HEALTH_NEED_WEIGHT, "health_need_cap": P.HEALTH_NEED_CAP,
         "work_split_first": P.WORK_SPLIT_AGES[0], "work_split_last": P.WORK_SPLIT_AGES[1],
-        "pension_ai_bill_high": P.PENSION_AI_BILL_HIGH, "pension_ai_debt": P.PENSION_AI_DEBT,
+        "pension_ai_bill_high": P.PENSION_AI_BILL_HIGH, "pension_ai_bill_low": P.PENSION_AI_BILL_LOW,
+        "pension_ai_debt": P.PENSION_AI_DEBT,
         "pension_ai_unemployment": P.PENSION_AI_UNEMPLOYMENT,
+        "pension_ai_unemployment_low": P.PENSION_AI_UNEMPLOYMENT_LOW,
         **{f"pension_pos_{pos}": i for pos, i in P.PENSION_POSITION_ID.items()},
     }
     for name, value in k.items():

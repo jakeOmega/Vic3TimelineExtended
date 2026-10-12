@@ -113,6 +113,36 @@ class TestWorkforceTerm(unittest.TestCase):
         self.assertNotIn("te_dg_mw", eng.vars)
         self.assertEqual(eng.modifiers, {"te_demog_line_working_adults_up": 0.3})
 
+    def test_a_new_state_lands_from_its_regions_copy(self):
+        """A conquered state or a revolution's winner's is a new state object with none of the old one's variables: it
+        continues the region's W (te_dg_mw_r), at its first seed already, not from the flat lines (the review of
+        2026-10-12). Each refresh writes the copy."""
+        eng = _state(stepped=0.0, read=0.30, pair=0.30, families=(0.30, 0.0))
+        eng.region_vars["te_dg_mw_r"] = 0.18
+        eng.call("te_demog_workforce_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], 0.18, places=5, msg="a seed lands it unmoved")
+        self.assertEqual(set(eng.modifiers), {"te_demog_census_workforce_up"})
+        eng = _state(wa=0.75, at=0.75, read=0.30, pair=0.30, families=(0.30, 0.0))
+        eng.region_vars["te_dg_mw_r"] = 0.18
+        eng.call("te_demog_workforce_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], M.workforce_term(_target(0.75, 0.75), 0.18, 0.0), places=5)
+        self.assertAlmostEqual(eng.region_vars["te_dg_mw_r"], eng.vars["te_dg_mw"], places=5)
+
+    def test_a_lost_modifier_comes_back_within_a_month(self):
+        """te_demog_workforce_heal, beside the pair's own refresh in the monthly and owner-change hooks."""
+        eng = _state(read=0.0, w=0.12)
+        eng.modifiers.clear()
+        eng.call("te_demog_workforce_heal")
+        self.assertEqual(eng.modifiers, {"te_demog_census_workforce_up": 0.12})
+        eng = _state(full=False, read=0.0, w=0.12)
+        eng.modifiers.clear()
+        eng.call("te_demog_workforce_heal")
+        self.assertEqual(eng.modifiers, {}, "outside Full the census's next step clears W instead")
+        on_actions = _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt")
+        self.assertIn("te_demog_workforce_heal = yes", _block(on_actions, "te_demog_lines_on_action"))
+        self.assertIn("te_demog_workforce_heal = yes", _block(_text(ROOT / "events" / "te_demog_events.txt"),
+                                                            "te_demog_events.4"))
+
     def test_outside_full_w_goes_and_the_pair_returns_that_day(self):
         eng = _state(full=False, read=0.12, w=0.12, families=(0.25, -0.03))
         eng.call("te_demog_workforce_refresh")
@@ -213,7 +243,9 @@ class TestPensionSetting(unittest.TestCase):
     the interest groups while in force; leaving Old Age Pension clears it; Full only."""
 
     def _country(self, full=True, oap=True, **vars_):
-        eng = _Engine({"year": 1950.0}, triggers={"te_demog_effects_run": full, "te_demog_has_pension_law": oap})
+        # te_demog_ms_now (the year with its months) stands in for the engine's date
+        eng = _Engine({"te_demog_ms_now": 1950.0}, triggers={"te_demog_effects_run": full,
+                                                            "te_demog_has_pension_law": oap})
         eng.vars.update(vars_)
         return eng
 
@@ -226,14 +258,14 @@ class TestPensionSetting(unittest.TestCase):
             self._choose(eng, pos)
             self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE[pos], pos)
             self.assertEqual(eng.vars["te_dg_pension_pos"], P.PENSION_POSITION_ID[pos])
-            self.assertEqual(eng.vars["te_dg_pension_since"], 1950.0)
+            self.assertEqual(eng.vars["te_dg_pension_since"], 1950.0)  # te_demog_ms_now
 
     def test_linked_positions_start_at_least_at_65_and_move_a_year_a_year(self):
         eng = self._country(te_dg_pension_age=60.0, te_dg_old_age=77.0)
         self._choose(eng, "linked_average")
         self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_LINK_FLOOR, "leaving Early raises it at once")
         for year, age in ((1951, 66.0), (1952, 67.0)):
-            eng.fixtures["year"] = float(year)
+            eng.fixtures["te_demog_ms_now"] = float(year)
             eng.call("te_demog_pension_age_refresh")
             eng.call("te_demog_pension_link_drift")
             self.assertEqual(eng.vars["te_dg_pension_age"], age)
@@ -253,16 +285,22 @@ class TestPensionSetting(unittest.TestCase):
         self.assertLess(yearly.index("te_demog_pension_age_refresh = yes"), yearly.index("te_demog_pension_link_drift = yes"))
         self.assertNotIn("te_demog_pension_link_drift", _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt"))
 
-    def test_the_term(self):
+    def test_the_term_is_five_years_to_the_month(self):
+        """te_dg_pension_since holds the date to the month (te_demog_ms_now), so a position chosen in June 1950 holds
+        until June 1955, not to the turn of 1955 (the review of 2026-10-12)."""
         eng = self._country()
         self.assertTrue(eng.holds([("te_demog_pension_can_change", "=", "yes")]), "none chosen yet")
+        eng.fixtures["te_demog_ms_now"] = 1950.5
         self._choose(eng, "raised")
-        for year, ok in ((1950, False), (1954, False), (1955, True)):
-            eng.fixtures["year"] = float(year)
-            self.assertEqual(eng.holds([("te_demog_pension_can_change", "=", "yes")]), ok, year)
-        eng.fixtures["year"] = 1952.0
-        self.assertEqual(eng.value("te_demog_pension_term_end"), 1955.0)
+        self.assertEqual(eng.vars["te_dg_pension_since"], 1950.5)
+        for now, ok in ((1950.5, False), (1955.0, False), (1955.41666, False), (1955.5, True)):
+            eng.fixtures["te_demog_ms_now"] = now
+            self.assertEqual(eng.holds([("te_demog_pension_can_change", "=", "yes")]), ok, now)
+        eng.fixtures["te_demog_ms_now"] = 1952.5
+        self.assertEqual(eng.value("te_demog_pension_term_end"), 1955.5)
         self.assertEqual(eng.value("te_demog_pension_term_left"), 3.0)
+        self.assertEqual(eng.value("te_demog_pension_since_year"), 1950.0)
+        self.assertEqual(eng.value("te_demog_pension_term_end_year"), 1955.0)
 
     def test_the_interest_groups_while_in_force(self):
         mods = _text(DEMOG_MODIFIERS)
@@ -284,14 +322,17 @@ class TestPensionSetting(unittest.TestCase):
         self.assertEqual(eng.modifiers, {"te_demog_pension_pos_early": 1.0})
         self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE["early"])
 
-    def test_leaving_old_age_pension_clears_the_setting(self):
+    def test_leaving_old_age_pension_clears_the_setting_and_the_bill(self):
+        """A repeal takes the bill off that day, not at the next 31 December (the review of 2026-10-12)."""
         eng = self._country(oap=False, te_dg_pension_age=70.0, te_dg_pension_since=1948.0,
-                            te_dg_pension_pos=float(P.PENSION_POSITION_ID["raised"]))
-        eng.modifiers["te_demog_pension_pos_raised"] = 1.0
+                            te_dg_pension_pos=float(P.PENSION_POSITION_ID["raised"]), te_dg_pension_bill=1234.0)
+        eng.modifiers.update(te_demog_pension_pos_raised=1.0, te_demog_pension_bill=1234.0)
         eng.call("te_demog_pension_age_refresh")
-        for var in ("te_dg_pension_age", "te_dg_pension_pos", "te_dg_pension_since"):
+        for var in ("te_dg_pension_age", "te_dg_pension_pos", "te_dg_pension_since", "te_dg_pension_bill"):
             self.assertNotIn(var, eng.vars)
         self.assertEqual(eng.modifiers, {})
+        body = _block(_text(EFFECTS), "te_demog_pension_age_refresh")
+        self.assertNotIn("add_modifier", body, "never re-applied there")
         eng.trigger_fixtures["te_demog_has_pension_law"] = True
         eng.call("te_demog_pension_age_refresh")
         self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE["standard"], "a return starts at Standard")
@@ -310,7 +351,7 @@ class TestPensionAi(unittest.TestCase):
     """§2.2, §9: the AI's yearly pulse by shared weights; is_ai only decides whom it acts for; the term binds it."""
 
     def _ai(self, share=0.1, debt=0.0, default=False, unemployment=0.02, old_age=74.0, ai=True, **vars_):
-        fixtures = {"year": 1990.0, "te_demog_pension_bill_share": share, "scaled_debt": debt,
+        fixtures = {"te_demog_ms_now": 1990.0, "te_demog_pension_bill_share": share, "scaled_debt": debt,
                     "te_demog_country_unemployment": unemployment}
         eng = _Engine(fixtures, triggers={"te_demog_effects_run": True, "te_demog_has_pension_law": True, "is_ai": ai,
                                           "in_default": default})
@@ -336,6 +377,19 @@ class TestPensionAi(unittest.TestCase):
         self.assertNotIn("te_dg_pension_pos", eng.vars)
         self.assertNotIn("te_dg_pension_since", eng.vars)
 
+    def test_it_goes_back_only_once_the_reason_has_clearly_gone(self):
+        """Hysteresis (the review of 2026-10-12): a cheaper position stays until the bill is under
+        PENSION_AI_BILL_LOW of revenue; Early stays until unemployment is under PENSION_AI_UNEMPLOYMENT_LOW."""
+        raised = dict(te_dg_pension_pos=float(P.PENSION_POSITION_ID["raised"]), te_dg_pension_since=1980.0)
+        self.assertEqual(self._ai(share=0.25, **raised).vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["raised"])
+        self.assertEqual(self._ai(share=0.15, **raised).vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["standard"])
+        self.assertEqual(self._ai(share=0.15, debt=0.4, **raised).vars["te_dg_pension_pos"],
+                         P.PENSION_POSITION_ID["raised"])
+        early = dict(te_dg_pension_pos=float(P.PENSION_POSITION_ID["early"]), te_dg_pension_since=1980.0)
+        self.assertEqual(self._ai(unemployment=0.07, **early).vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["early"])
+        self.assertEqual(self._ai(unemployment=0.03, **early).vars["te_dg_pension_pos"],
+                         P.PENSION_POSITION_ID["standard"])
+
     def test_the_term_binds_it_and_a_player_is_never_moved(self):
         eng = self._ai(share=0.35, te_dg_pension_pos=float(P.PENSION_POSITION_ID["early"]), te_dg_pension_since=1988.0)
         self.assertEqual(eng.vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["early"])
@@ -346,6 +400,21 @@ class TestPensionAi(unittest.TestCase):
         self.assertLess(yearly.index("te_demog_country_census = yes"), yearly.index("te_demog_pension_ai = yes"))
         body = _block(_text(WORK_EFFECTS), "te_demog_pension_ai")
         self.assertEqual(body.count("is_ai"), 1, "is_ai only decides whom it acts for")
+
+
+class TestCivilWarRepair(unittest.TestCase):
+    """A revolution's winner has the position's interest groups and both bills back at once (the review of
+    2026-10-12), from the shared civil-war layer, taking the loser's variables where it holds none."""
+
+    def test_wired_and_complete(self):
+        on_won = _block(_text(ROOT / "common" / "on_actions" / "te_civil_war_on_actions.txt"), "te_civil_war_on_won")
+        self.assertIn("te_demog_pension_repair_after_civil_war = yes", on_won)
+        body = _block(_text(WORK_EFFECTS), "te_demog_pension_repair_after_civil_war")
+        for name in ("te_dg_pension_pos", "te_dg_pension_since", "te_dg_pension_age", "te_dg_pension_bill",
+                     "te_dg_health_term"):
+            self.assertIn(f"te_demog_ms_inherit = {{ NAME = {name} }}", body)
+        self.assertLess(body.index("te_demog_pension_age_refresh = yes"), body.index("te_demog_bills_apply = yes"))
+        self.assertIn("var:te_cw_rebels_won = 1", body)
 
 
 class TestBills(unittest.TestCase):
@@ -387,6 +456,12 @@ class TestBills(unittest.TestCase):
                 self.assertAlmostEqual(sum(mods.values()), abs(want), places=5)
         self.assertAlmostEqual(M.health_term(1.4, frozenset({"modern_pharmaceuticals", "telemedicine"})),
                                P.HEALTH_NEED_WEIGHT * 0.4 + 2 * P.HEALTH_TECH_STEP)
+
+    def test_the_hover_words_a_saving_as_one(self):
+        """A young country's term is negative: its hover reads "costs N% less", not "costs -N% more"."""
+        loc = _text(ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml")
+        self.assertIn("'te_demog_wk_need_saving', 'te_demog_wk_need_bill'", loc)
+        self.assertRegex(loc, r"te_demog_wk_need_saving:0 \"[^\"]*te_demog_health_term_saving[^\"]*less bureaucracy")
 
     def test_outside_full_both_go(self):
         eng = self._country()
@@ -458,10 +533,14 @@ class TestWorkTermSelfChecks(unittest.TestCase):
         scale, follows = body.split("workforce_follows_target", 1)[0], body
         for needle in ("NOT = { has_variable = te_dg_mw }", "var:te_dg_wf_engine > 0.01", "is_capital = yes"):
             self.assertIn(needle, scale)
-        for needle in ("te_debug_demog_wft_years >= 5", "te_debug_demog_wft_moved > te_debug_demog_wft_tolerance"):
+        for needle in ("te_debug_demog_wft_years >= 5", "te_debug_demog_wft_moved >= te_debug_demog_wft_min_move",
+                       "te_debug_demog_wft_engine_moved >= te_debug_demog_wft_half_move"):
             self.assertIn(needle, follows)
         values = _text(DEBUG_VALUES)
-        self.assertIn("value = 0.02", _block(values, "te_debug_demog_wft_tolerance"))
+        self.assertIn("value = 0.03", _block(values, "te_debug_demog_wft_min_move"))
+        self.assertIn("multiply = 0.5", _block(values, "te_debug_demog_wft_half_move"))
+        landing = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_term_landing")
+        self.assertIn("set_variable = { name = te_dg_wft_e0 value = var:te_dg_wf_engine }", landing)
         self.assertIn("divide = { value = te_demog_wf_set add = 1", _block(values, "te_debug_demog_wf_per_dependents"))
 
     def test_they_read_before_the_refresh_moves_anything(self):

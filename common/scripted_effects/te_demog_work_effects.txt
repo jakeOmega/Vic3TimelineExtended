@@ -30,16 +30,18 @@
 
 # THIS = ROOT = a state, straight after te_demog_rates_refresh in the effect that ran its census (its yearly pulse, or a
 # step of fast mode's clock), so the pair's multipliers resolve against the state. The one refresh site of
-# te_demog_census_workforce_* (te_demog_workforce_apply). Under Full, after a census step (as M, a seed leaves W as it
-# is: te_dg_stepped 0):
+# te_demog_census_workforce_* (te_demog_workforce_apply; te_demog_workforce_heal only re-applies a lost one). Under Full:
 #   target = te_demog_wf_term_target (the census's target less the define's 0.25)
 #   W      = from + clamp(target - from, -step, step), at least te_demog_k_wf_pop_floor - the lines on top
-# from: W in force, or when W first lands the moved lines' pair it replaces (so the state's workforce never jumps);
-# step: te_demog_k_wf_ramp_step a census step (demographics_params.WF_RAMP_STEP says why); the floor keeps the lowest
-# pop base (aristocrats' 0.2) + W + the lines on top at 0.05 (no cap above: late-game call 10). The lines on top are
-# the state's read less W and the pair, read before anything here touches them. When W lands the moved lines' pair
-# comes off (te_demog_workforce_lines_apply no longer holds). Outside Full, or under Full in a state with no census, W
-# goes and the pair returns that day.
+# from: W in force; when W first lands, its state region's copy (te_dg_mw_r: a state new to its owner, a conquest or a
+# revolution's winner, is a new state object with none of the old one's variables, and continues the term: "the winner
+# continues the nation"), else the moved lines' pair it replaces (so the state's workforce never jumps). step:
+# te_demog_k_wf_ramp_step after a census step (demographics_params.WF_RAMP_STEP says why); 0 at a seed, which only lands
+# W from the region's copy and otherwise leaves W as it is (as M). The floor keeps the lowest pop base (aristocrats'
+# 0.2) + W + the lines on top at 0.05 (no cap above: late-game call 10). The lines on top are the state's read less W and
+# the pair, read before anything here touches them. When W lands the moved lines' pair comes off
+# (te_demog_workforce_lines_apply no longer holds). Outside Full, or under Full in a state with no census, W goes and the
+# pair returns that day. Each refresh copies W to the state region.
 te_demog_workforce_refresh = {
 	set_local_variable = { name = te_dg_wf_applied value = te_demog_census_workforce_applied }
 	set_local_variable = { name = te_dg_wf_pair value = te_demog_line_working_adults_applied }
@@ -53,8 +55,35 @@ te_demog_workforce_refresh = {
 			has_variable = te_dg_wa_share
 			has_variable = te_dg_at_work
 		}
+		# where W starts, and whether this refresh moves it: 2 = from the region's copy, 1 = from the pair, 0 = in force
+		set_local_variable = { name = te_dg_wf_from value = local_var:te_dg_wf_pair }
+		set_local_variable = { name = te_dg_wf_landing value = 1 }
+		if = {
+			limit = { has_variable = te_dg_mw }
+			set_local_variable = { name = te_dg_wf_from value = var:te_dg_mw }
+			set_local_variable = { name = te_dg_wf_landing value = 0 }
+		}
+		else_if = {
+			limit = { state_region = { has_variable = te_dg_mw_r } }
+			state_region = {
+				set_local_variable = { name = te_dg_wf_from value = var:te_dg_mw_r }
+			}
+			set_local_variable = { name = te_dg_wf_landing value = 2 }
+		}
+		set_local_variable = { name = te_dg_wf_up value = 0 }
+		set_local_variable = { name = te_dg_wf_dn value = 0 }
 		if = {
 			limit = { var:te_dg_stepped > 0 }
+			set_local_variable = { name = te_dg_wf_up value = te_demog_k_wf_ramp_step }
+			set_local_variable = { name = te_dg_wf_dn value = te_demog_k_wf_ramp_step_neg }
+		}
+		if = {
+			limit = {
+				OR = {
+					var:te_dg_stepped > 0
+					local_var:te_dg_wf_landing = 2
+				}
+			}
 			set_local_variable = {
 				name = te_dg_wf_rem
 				value = {
@@ -63,12 +92,8 @@ te_demog_workforce_refresh = {
 					subtract = local_var:te_dg_wf_pair
 				}
 			}
-			set_local_variable = { name = te_dg_wf_from value = local_var:te_dg_wf_pair }
 			if = {
-				limit = { has_variable = te_dg_mw }
-				set_local_variable = { name = te_dg_wf_from value = var:te_dg_mw }
-			}
-			else = {
+				limit = { local_var:te_dg_wf_landing > 0 }
 				te_debug_demog_wf_term_landing = yes
 			}
 			set_variable = {
@@ -76,8 +101,8 @@ te_demog_workforce_refresh = {
 				value = {
 					value = te_demog_wf_term_target
 					subtract = local_var:te_dg_wf_from
-					min = te_demog_k_wf_ramp_step_neg
-					max = te_demog_k_wf_ramp_step
+					min = local_var:te_dg_wf_dn
+					max = local_var:te_dg_wf_up
 					add = local_var:te_dg_wf_from
 					min = { value = te_demog_k_wf_pop_floor subtract = local_var:te_dg_wf_rem }
 				}
@@ -85,6 +110,11 @@ te_demog_workforce_refresh = {
 			set_variable = { name = te_dg_wf_rem value = local_var:te_dg_wf_rem }
 			te_demog_workforce_lines_clear = yes
 			te_demog_workforce_apply = yes
+			# the state region's copy, which a state new to its owner lands from
+			set_local_variable = { name = te_dg_wf_rv value = var:te_dg_mw }
+			state_region = {
+				set_variable = { name = te_dg_mw_r value = local_var:te_dg_wf_rv }
+			}
 		}
 	}
 	else_if = {
@@ -95,6 +125,23 @@ te_demog_workforce_refresh = {
 	}
 	else = {
 		te_demog_workforce_clear = yes
+	}
+}
+
+# THIS = ROOT = a state, beside te_demog_workforce_lines_refresh in the monthly and owner-change hooks and
+# te_demog_events.4: under Full, a state that keeps W's variable but lost its modifier (a save quirk, a state that copied
+# its variables) has it back within a month, as the moved lines' pair re-applies itself; otherwise the pair's gate
+# (te_demog_workforce_lines_apply) would leave it with neither until its next census step.
+te_demog_workforce_heal = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_mw
+			NOT = { has_modifier = te_demog_census_workforce_up }
+			NOT = { has_modifier = te_demog_census_workforce_down }
+			NOT = { var:te_dg_mw = 0 }
+		}
+		te_demog_workforce_apply = yes
 	}
 }
 
@@ -390,10 +437,11 @@ te_demog_pension_setting_clear = {
 
 # THIS = a country, from a button (te_demog_sguis.txt) or the AI's pulse: position $POS$ (te_demog_k_pension_pos_*)
 # from today, for at least te_demog_k_pension_term_years. The age follows at once (a linked one from at least 65); the
-# bill and the workforce at the next census.
+# bill and the workforce at the next census. te_dg_pension_since holds the date to the month (te_demog_ms_now, the
+# year with its months, as the Family Policy measures' terms), so the term is five years, not four to five.
 te_demog_pension_choose = {
 	set_variable = { name = te_dg_pension_pos value = te_demog_k_pension_pos_$POS$ }
-	set_variable = { name = te_dg_pension_since value = { value = 0 add = year } }
+	set_variable = { name = te_dg_pension_since value = te_demog_ms_now }
 	te_demog_pension_age_from_position = yes
 	te_demog_pension_ig_refresh = yes
 }
@@ -402,8 +450,11 @@ te_demog_pension_choose = {
 # is_ai = yes only decides whom the pulse acts for, as Grand Monuments' policy pulse does (gm_policy_ai_choose). A bill
 # over te_demog_k_pension_ai_bill_high of revenue, or debt over te_demog_k_pension_ai_debt of its ceiling (or a default),
 # picks the cheaper positions: Linked to Average where its age passes Raised's, else Raised. Unemployment over
-# te_demog_k_pension_ai_unemployment picks Early. Otherwise Standard. It changes only when the pick differs and the
-# term allows. A wide longevity gap pushing toward Linked to Common waits for phase 3.
+# te_demog_k_pension_ai_unemployment picks Early. Otherwise it keeps its position, and goes back to Standard only once
+# the reason has clearly gone: from a cheaper one when the bill is under te_demog_k_pension_ai_bill_low of revenue and
+# the debt and default have gone, from Early when unemployment is under te_demog_k_pension_ai_unemployment_low (so it
+# doesn't swing every five years). It changes only when the pick differs and the term allows. A wide longevity gap
+# pushing toward Linked to Common waits for phase 3.
 te_demog_pension_ai = {
 	if = {
 		limit = {
@@ -412,7 +463,26 @@ te_demog_pension_ai = {
 			te_demog_has_pension_law = yes
 			te_demog_pension_can_change = yes
 		}
-		set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_standard }
+		set_local_variable = { name = te_dg_pa_pick value = te_demog_pension_pos }
+		if = {
+			limit = {
+				OR = {
+					te_demog_pension_pos = te_demog_k_pension_pos_raised
+					te_demog_pension_pos = te_demog_k_pension_pos_linked_average
+				}
+				te_demog_pension_bill_share < te_demog_k_pension_ai_bill_low
+				NOT = { scaled_debt > te_demog_k_pension_ai_debt }
+				in_default = no
+			}
+			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_standard }
+		}
+		if = {
+			limit = {
+				te_demog_pension_pos = te_demog_k_pension_pos_early
+				te_demog_country_unemployment < te_demog_k_pension_ai_unemployment_low
+			}
+			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_standard }
+		}
 		if = {
 			limit = {
 				OR = {
@@ -449,5 +519,29 @@ te_demog_pension_ai = {
 				te_demog_pension_choose = { POS = standard }
 			}
 		}
+	}
+}
+
+# THIS = ROOT = a civil war's winner (te_civil_war_on_won, after te_civil_war_resolve_sides: var:te_cw_rebels_won,
+# scope:te_cw_loser), Full only. A revolution that won continues the nation (owner, 2026-09-26): the winner takes the old
+# government's pension setting and bills from scope:te_cw_loser where it holds none (as te_demog_ms_repair_after_civil_war
+# does for the measures), then has the position's interest groups and both bills back at once rather than within a
+# year: the age refresh keeps them only under Old Age Pension (and takes the bill off without it), the bills' apply puts
+# the modifiers back from the variables. A loyalist winner keeps its own modifiers and needs nothing.
+te_demog_pension_repair_after_civil_war = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+			exists = scope:te_cw_loser
+		}
+		te_demog_ms_inherit = { NAME = te_dg_pension_pos }
+		te_demog_ms_inherit = { NAME = te_dg_pension_since }
+		te_demog_ms_inherit = { NAME = te_dg_pension_age }
+		te_demog_ms_inherit = { NAME = te_dg_pension_bill }
+		te_demog_ms_inherit = { NAME = te_dg_health_term }
+		te_demog_pension_age_refresh = yes
+		te_demog_bills_apply = yes
 	}
 }
