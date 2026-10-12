@@ -1160,6 +1160,13 @@ LANDMARKS = (
     Landmark("capitoline_museums", "STATE_LAZIO", "PAP", "civic", "forum", ("heritage_latin", "forum"), 5),
     Landmark("bodrum_castle", "STATE_AYDIN", "TUR", "war_memorial", "tower", ("heritage_gothic", "tower"), 5),
     Landmark("temples_of_baalbek", "STATE_LEBANON", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
+    # Added 2026-10-12: heritage sites with no weight in 1836, which the
+    # owner's revised rule admits at lower priority. Single-owner states only
+    # (owner): Palmyra in Syria (Homs is its nearest hub), Xanthos in Konya
+    # (Antalya), Dhiban's stele in Transjordan (Kerak).
+    Landmark("palmyra", "STATE_SYRIA", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
+    Landmark("xanthos", "STATE_KONYA", "TUR", "civic", "rock_cut", ("heritage_aramaic", "rock_cut"), 5),
+    Landmark("mesha_stele", "STATE_TRANSJORDAN", "EGY", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000

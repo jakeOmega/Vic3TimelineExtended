@@ -329,6 +329,14 @@ gm_tr_part_name = {
 		localization_key = gm_tr_part_temple_carvings
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:palmyra }
+		localization_key = gm_tr_part_funerary_busts
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:xanthos }
+		localization_key = gm_tr_part_nereid_monument
+	}
+	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:arch }
 		localization_key = gm_tr_part_reliefs
 	}
@@ -631,6 +639,18 @@ gm_tr_landmark_name = {
 		localization_key = gm_skin_landmark_temples_of_baalbek
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:palmyra }
+		localization_key = gm_skin_landmark_palmyra
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:xanthos }
+		localization_key = gm_skin_landmark_xanthos
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:mesha_stele }
+		localization_key = gm_skin_landmark_mesha_stele
+	}
+	text = {
 		localization_key = gm_form_monument
 	}
 }
@@ -829,6 +849,18 @@ gm_tr_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:temples_of_baalbek }
 		localization_key = gm_landmark_temples_of_baalbek_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:palmyra }
+		localization_key = gm_landmark_palmyra_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:xanthos }
+		localization_key = gm_landmark_xanthos_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:mesha_stele }
+		localization_key = gm_landmark_mesha_stele_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

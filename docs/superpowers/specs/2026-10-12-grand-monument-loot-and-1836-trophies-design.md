@@ -17,9 +17,9 @@ thirty-four.
 
 This change does two things:
 
-1. **Fifteen new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
+1. **Eighteen new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
    Persia, Korea, Vietnam, in decentralized territory Great Zimbabwe and Bali, and Italy, Anatolia and the Levant (§1,
-   §1.1, §1.2).
+   §1.1–§1.3).
 2. **Ten trophies already abroad on 1 January 1836**, seeded as trophies at game start: the Parthenon Marbles, the
    Rosetta Stone, and eight more (§2). Most are still claimed today, so they start as the diplomatic friction the
    trophy system already models: the claimant sees them under Held Abroad, and its AI asks for them back.
@@ -94,7 +94,8 @@ means Athens, the Red Fort Indian sovereignty. The grievance is the taking, whic
 - **The Old Summer Palace** (the bronze zodiac heads), the Beijing observatory and the Forbidden City's treasures: Beijing
   holds the Temple of Heaven, and one monument a state is the rule. Its piece would be the city's case.
 - **Borobudur, Amaravati, Sanchi, Xanthos:** no weight in 1836, which under the revised rule makes them lower priority,
-  not excluded. They are candidates (§1.3). Great Zimbabwe (§1.1) and Halicarnassus (as Bodrum Castle, §1.2) were added.
+  not excluded. Xanthos was added (§1.3); Borobudur and Amaravati stand in split states, left out for now. Great
+  Zimbabwe (§1.1) and Halicarnassus (as Bodrum Castle, §1.2) were added.
 - **The Pergamon Altar, the Ishtar Gate, the Nimrud lamassu, Nefertiti:** still buried in 1836.
 - **Magdala:** Tewodros's fortress dates from the 1850s.
 - **Mexico's Sun Stone:** `STATE_MEXICO` is phase 6's Angel of Independence, and Mexico's dispute is a featherwork
@@ -171,10 +172,11 @@ Each state has one owner in 1836, so none is exposed to #936.
 
 - **Still buried in 1836:** the Pergamon Altar (1878), Priam's Treasure (1873), the Sidon sarcophagi (1855, 1887),
   Nineveh's and Nimrud's reliefs (1840s). The Siloam inscription (1880) lay in Hezekiah's tunnel under Jerusalem.
+  Monuments uncovered during the game are issue #939.
 - **Standing but unknown to Europe in 1836:** the Nereid Monument at Xanthos (1838) and the Mesha Stele at Dhiban
-  (1868). Candidates under the revised rule (§1.3).
+  (1868). Both added under the revised rule (§1.3).
 - **Palmyra:** like Great Zimbabwe, its weight in 1836 was legend and travellers' romance (Lady Hester Stanhope, 1813),
-  and its funerary busts left from the 1870s. A candidate under the revised rule (§1.3).
+  and its funerary busts left from the 1870s. Added under the revised rule (§1.3).
 - **Ctesiphon's arch** (Taq Kasra, `STATE_BAGHDAD`): weight in 1836, but nothing was ever carried off.
 - **The Serpent Column and the Obelisk of Theodosius** in Constantinople: they could be 1836 trophies held by the
   Ottomans (from Delphi and Karnak), but nobody claims them, and Greece's and Egypt's AI would start asking.
@@ -182,19 +184,27 @@ Each state has one owner in 1836, so none is exposed to #936.
   Last Supper (Milan has La Scala), Raphael's Saint Cecilia (an altarpiece in a church).
 - **Jerusalem, Hebron, Damascus's Umayyad Mosque:** holy sites.
 
-### 1.3 Candidates the revised rule opens (not added)
+### 1.3 Heritage sites the revised rule opens (owner's fourth ask, 2026-10-12)
 
-The owner's revision (2026-10-12): an ancient monument without weight in 1836 can stand as a heritage site, lower
-priority all else equal. These were left out under the old rule. Each needs its owner read from `00_states.txt`
-before it is added.
+The owner's revision: an ancient monument without weight in 1836 can stand as a heritage site, lower priority all else
+equal. Of the candidates it opened, the owner asked for those in single-owner states (none exposed to #936).
 
-| Candidate | Where | Loot story | Note |
-|---|---|---|---|
-| Palmyra | `STATE_SYRIA` (EGY) | funerary busts sold to European museums from the 1870s | Aramaic colonnade fits |
-| Xanthos (the Nereid Monument) | Lycia, likely `STATE_KONYA` (TUR) | Fellows shipped the Nereid Monument and the Harpy Tomb to the British Museum, 1842–1844; Turkey asks for them | Aydin already holds Bodrum |
-| Mesha Stele | `STATE_TRANSJORDAN` (EGY) | broken up in 1868 and pieced together in the Louvre; Jordan asks for it | a stele goes whole |
-| Borobudur | `STATE_CENTRAL_JAVA` (the Dutch East Indies' part) | the Dutch gave eight cartloads of its sculpture to Siam's king in 1896 | a Buddhist monument; split state (#936) |
-| Amaravati | the Company's Madras lands | its marbles went to Madras and then the British Museum (1859) | the remains of a Buddhist stupa |
+| # | Key | Name | State | 1836 owner | Dedication | Form (share) | Stand-in | Level |
+|---|---|---|---|---|---|---|---|---|
+| 48 | `palmyra` | Palmyra | `STATE_SYRIA` | EGY | To the Nation | Colonnade (token) | Aramaic · Colonnade | 5 |
+| 49 | `xanthos` | Xanthos | `STATE_KONYA` | TUR | To the Nation | Rock-cut (piece) | Aramaic · Rock-cut | 5 |
+| 50 | `mesha_stele` | Mesha Stele | `STATE_TRANSJORDAN` | EGY | War Memorial | Stele (whole) | Ge'ez · Stele | 5 |
+
+- **Palmyra.** Its funerary busts went to European museums from the 1870s; that is its piece. It lies between Syria
+  (Homs, the nearest hub) and Deir ez-Zor, both with one owner, so either state is safe.
+- **Xanthos.** Fellows shipped the Nereid Monument and the Harpy Tomb's reliefs to the British Museum in 1842–1844,
+  and Turkey asks for them. Its piece is "the Nereid Monument"; the rock-cut form for the Lycian tombs cut into its
+  cliffs, a quarter to a looter. In Konya, whose port hub is Antalya (Aydin already holds Bodrum).
+- **Mesha Stele.** Broken up in 1868 and pieced together in the Louvre; Jordan asks for it. A stele goes whole, and
+  War Memorial suits a king's record of his victory. In Transjordan (Kerak is the hub beside Dhiban).
+
+**Left out, split states (owner, 2026-10-12):** Borobudur (Central Java: the Dutch East Indies, Yogyakarta and
+Surakarta) and Amaravati (Circars or Madras, both shared with the Company).
 
 ## 2. The trophies of 1836
 
@@ -362,7 +372,7 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 
 ## 6. In-game checks
 
-1. A new game: the fifteen new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
+1. A new game: the eighteen new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
    logged. Benin and Asante are both centralized in 1836 (owner, 2026-10-12), and a building can be placed in a
    decentralized country's state too.
 2. Britain's Trophies section lists the Marbles, the Rosetta Stone, Tipu's Tiger and the Kandyan throne. France's lists

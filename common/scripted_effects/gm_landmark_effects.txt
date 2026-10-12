@@ -58,6 +58,9 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = capitoline_museums STATE = STATE_LAZIO TAG = PAP DEDICATION = civic FORM = forum LEVEL = 5 }
 	gm_seed_landmark = { KEY = bodrum_castle STATE = STATE_AYDIN TAG = TUR DEDICATION = war_memorial FORM = tower LEVEL = 5 }
 	gm_seed_landmark = { KEY = temples_of_baalbek STATE = STATE_LEBANON TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 }
+	gm_seed_landmark = { KEY = palmyra STATE = STATE_SYRIA TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 }
+	gm_seed_landmark = { KEY = xanthos STATE = STATE_KONYA TAG = TUR DEDICATION = civic FORM = rock_cut LEVEL = 5 }
+	gm_seed_landmark = { KEY = mesha_stele STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = war_memorial FORM = stele LEVEL = 5 }
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
@@ -150,6 +153,9 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = capitoline_museums }
 	gm_debug_log_landmark = { KEY = bodrum_castle }
 	gm_debug_log_landmark = { KEY = temples_of_baalbek }
+	gm_debug_log_landmark = { KEY = palmyra }
+	gm_debug_log_landmark = { KEY = xanthos }
+	gm_debug_log_landmark = { KEY = mesha_stele }
 }
 
 gm_debug_log_landmark = {
