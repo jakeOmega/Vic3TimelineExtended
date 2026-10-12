@@ -1692,7 +1692,7 @@ te_ai_seed_trade_center_effect = {
 		if = {
 			limit = {
 				market_capital ?= {
-					owner = ROOT
+					owner ?= ROOT	# a dead country's market capital has no valid owner (observer run, 2026-10-12)
 					trade_center_construction_allowed = yes
 				}
 			}

@@ -599,7 +599,22 @@ minor_events_timelineextended.7 = {
 	}
 
 	immediate = {
+		# A saved scope rides into events triggered from `after`, so a crashed origin's contagion_crashed would reach
+		# every country it spreads to: clear any inherited one before this event's own roll.
+		if = {
+			limit = { exists = scope:contagion_crashed }
+			clear_saved_scope = contagion_crashed
+		}
 		banking_contagion_crash_check = yes
+		# The roll, kept for this event alone. Two contagion events can be open for one country at once (a second
+		# origin's crash in the same pulse re-runs banking_crisis_wave_init, which clears the reached marks), and the
+		# first one's `after` removes contagion_crash before the second resolves, so the options and `after` read
+		# this saved scope, not the variable (observer run, 2026-10-12: three unset reads in a second). An object
+		# scope (the country), since `exists` on object scopes has vanilla precedent.
+		if = {
+			limit = { var:contagion_crash > 0 }
+			save_scope_as = contagion_crashed
+		}
 	}
 
 	duration = 3
@@ -612,7 +627,7 @@ minor_events_timelineextended.7 = {
 		apply_banking_contagion_effects = yes
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		if = {
-			limit = { var:contagion_crash > 0 }
+			limit = { exists = scope:contagion_crashed }
 			add_modifier = {
 				name = banking_crisis_protectionism_modifier
 				days = short_modifier_time
@@ -644,7 +659,7 @@ minor_events_timelineextended.7 = {
 		name = minor_events_timelineextended.7.b
 		apply_banking_contagion_effects = yes
 		if = {
-			limit = { var:contagion_crash > 0 }
+			limit = { exists = scope:contagion_crashed }
 			add_radicals = {
 				value = medium_radicals
 				strata = upper
@@ -682,7 +697,7 @@ minor_events_timelineextended.7 = {
 	option = {
 		name = minor_events_timelineextended.7.capital_controls
 		trigger = {
-			var:contagion_crash > 0
+			exists = scope:contagion_crashed
 			OR = {
 				has_law = law_type:law_interventionism
 				has_law = law_type:law_command_economy
@@ -723,7 +738,7 @@ minor_events_timelineextended.7 = {
 	option = {
 		name = minor_events_timelineextended.7.monetary_intervention
 		trigger = {
-			var:contagion_crash > 0
+			exists = scope:contagion_crashed
 			institution_investment_level = { institution = institution_national_bank value >= 1 }
 		}
 		apply_banking_contagion_effects = yes
@@ -760,7 +775,7 @@ minor_events_timelineextended.7 = {
 	option = {
 		name = minor_events_timelineextended.7.confidence_messaging
 		trigger = {
-			var:contagion_crash > 0
+			exists = scope:contagion_crashed
 			institution_investment_level = { institution = institution_ministry_of_propaganda value >= 1 }
 		}
 		apply_banking_contagion_effects = yes
@@ -789,10 +804,11 @@ minor_events_timelineextended.7 = {
 	after = {
 		# Cascade: if contagion triggered a crash, spread contagion from this country
 		if = {
-			limit = { var:contagion_crash > 0 }
+			limit = { exists = scope:contagion_crashed }
 			# Track this crash in the crisis wave (Great Depression mechanic)
 			banking_crisis_wave_increment = yes
 			save_scope_as = banking_crash_origin_country
+			clear_saved_scope = contagion_crashed	# this event's roll, not the targets' (their immediate also clears it)
 			banking_cycle_spread_contagion = yes
 			# Check if enough countries have crashed for Great Depression
 			banking_crisis_wave_check_great_depression = yes
