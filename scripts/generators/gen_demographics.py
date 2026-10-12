@@ -1571,6 +1571,41 @@ def work_values(o):
     o("")
 
 
+def work_step2_values(o):
+    """Phase 2 step 2's constants and generated values (te_demog_work_effects.txt, te_demog_work_values.txt): the
+    workforce term, the pension setting and the two bills. Kept apart from the other steps' blocks."""
+    o("# Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the")
+    o("# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).")
+    k = {
+        "working_adult_base": P.WORKING_ADULT_BASE,
+        "wf_ramp_step": P.WF_RAMP_STEP, "wf_ramp_step_neg": -P.WF_RAMP_STEP,
+        # the guard: the lowest pop base + W + the lines on top at least WF_POP_RATIO_MIN, so W + the lines on top at
+        # least this
+        "wf_pop_floor": P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN,
+        "pension_age_early": P.PENSION_AGE["early"], "pension_age_raised": P.PENSION_AGE["raised"],
+        "pension_link_offset": P.PENSION_LINK_OFFSET, "pension_link_floor": P.PENSION_LINK_FLOOR,
+        "pension_link_step": P.PENSION_LINK_STEP, "pension_link_step_neg": -P.PENSION_LINK_STEP,
+        "pension_term_years": P.PENSION_TERM_YEARS,
+        "pension_b_per_level": P.PENSION_B_PER_LEVEL,
+        "health_need_weight": P.HEALTH_NEED_WEIGHT, "health_need_cap": P.HEALTH_NEED_CAP,
+        "work_split_first": P.WORK_SPLIT_AGES[0], "work_split_last": P.WORK_SPLIT_AGES[1],
+        "pension_ai_bill_high": P.PENSION_AI_BILL_HIGH, "pension_ai_bill_low": P.PENSION_AI_BILL_LOW,
+        "pension_ai_debt": P.PENSION_AI_DEBT,
+        "pension_ai_unemployment": P.PENSION_AI_UNEMPLOYMENT,
+        "pension_ai_unemployment_low": P.PENSION_AI_UNEMPLOYMENT_LOW,
+        **{f"pension_pos_{pos}": i for pos, i in P.PENSION_POSITION_ID.items()},
+    }
+    for name, value in k.items():
+        o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
+    o("# Country scope: the health bill's chronic-treatment technologies (demographics_model.health_term).")
+    o("te_demog_health_tech_term = {")
+    o("value = 0")
+    for tech in P.HEALTH_TECHS:
+        o(f"if = {{ limit = {{ has_technology_researched = {tech} }} add = {lit(P.HEALTH_TECH_STEP)} }}")
+    o("}")
+    o("")
+
+
 def _by_value(table):
     """[(value, [keys])] for a {key: value} table, by value then key: one if per value."""
     out = {}
@@ -1820,6 +1855,7 @@ def render_values(root):
     constants(o)
     work_values(o)
     family_policy_values(o)
+    work_step2_values(o)
     debug_values(o)
     return o.text()
 

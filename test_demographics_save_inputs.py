@@ -411,3 +411,45 @@ class TestSlice(unittest.TestCase):
         self.assertIn("enclosure", gbr.techs)
         self.assertLessEqual(set(gbr.strata_people), {"lower", "middle", "upper"})
         self.assertTrue(0 < gbr.literacy < 1 and 0 < gbr.urban_share < 1)
+
+
+BUDGETS = """SAV0100tiny
+meta_data={
+\tversion="1.14.5"
+}
+country_manager={
+\tdatabase={
+3={
+\tdefinition="TST"
+\tbudget={
+\t\tweekly_expenses={ 1 2 3 }
+\t\tweekly_income={ 10 0 20.5 }
+\t}
+\tgdp={
+\t\tsample_rate=28
+\t\tchannels={
+0={
+\t\t\t\tdate=1953.1.1
+\t\t\t\tindex=3
+\t\t\t\tvalues={ 100 200 300 0 0 }
+\t\t\t}\t\t}
+\t}
+}
+4={
+\tdefinition="NOG"
+}
+\t}
+}
+"""
+
+
+class TestCountryBudgets(unittest.TestCase):
+    """Phase 2 step 2's pension fit reads each country's revenue and GDP (S.country_budgets)."""
+
+    def test_income_expenses_and_the_latest_gdp(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "budgets.v3"
+            path.write_text(BUDGETS, encoding="utf-8")
+            got = S.country_budgets(path)
+        self.assertEqual(set(got), {"TST"}, "a country with no GDP record is left out")
+        self.assertEqual(got["TST"], {"gdp": 300.0, "income": 30.5, "expenses": 6.0})

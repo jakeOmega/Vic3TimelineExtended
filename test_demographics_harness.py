@@ -1140,18 +1140,41 @@ class TestLag(unittest.TestCase):
 
 
 class TestWorkforceCommand(unittest.TestCase):
-    """Phase 2 step 1: the participation figures at the starting values (the design §1.8's sketch)."""
+    """Phase 2: the participation figures (the design §1.8's sketch) and step 2's bands (§5), on the fitted values."""
 
     @classmethod
     def setUpClass(cls):
         cls.rows = H.workforce_rows()
+        cls.by = {r["name"]: r for r in cls.rows}
 
     def test_rows_cover_the_scenarios_and_the_1836_target(self):
-        self.assertEqual([r["name"] for r in self.rows], [s[0] for s in H.WORKFORCE_SCENARIOS])
+        self.assertEqual([r["name"] for r in self.rows],
+                         [s[0] for s in H.WORKFORCE_SCENARIOS] + ["Rich today (2020-like structure)"])
         farm = self.rows[0]
         self.assertAlmostEqual(farm["target"], 0.25, delta=0.02)
         for r in self.rows:
             self.assertAlmostEqual(r["target"], P.WORKFORCE_SCALE * r["wa_share"] * r["at_work"], places=9)
+            self.assertAlmostEqual(r["w_target"], r["target"] - P.WORKING_ADULT_BASE, places=12)
+
+    def test_rich_today_meets_the_bands(self):
+        """§5: 0.42 +- 0.03 on the engine's scale, women at least 0.8 of men's rate, about a fifth of over-65s at work,
+        on a 2020-like structure (about 17% under 15 and 18% over 65)."""
+        today = self.by["Rich today (2020-like structure)"]
+        self.assertTrue(H.BAND_TODAY[0] <= today["engine"] <= H.BAND_TODAY[1], today["engine"])
+        self.assertGreaterEqual(today["women"] / today["men"], H.BAND_WOMEN_TODAY)
+        self.assertTrue(H.BAND_OLD_TODAY[0] <= today["all65"] <= H.BAND_OLD_TODAY[1], today["all65"])
+        self.assertAlmostEqual(today["young"], 0.17, delta=0.03)
+        self.assertAlmostEqual(today["old"], 0.18, delta=0.03)
+
+    def test_most_old_men_work_with_no_pension(self):
+        farm = self.by["1836 farming"]
+        self.assertTrue(H.BAND_OLD_MEN_1836[0] <= farm["men65"] <= H.BAND_OLD_MEN_1836[1], farm["men65"])
+
+    def test_outside_full_keeps_the_flat_lines(self):
+        """The same state outside Full: the base and every moved line at its flat value (Women in the Fields +0.3)."""
+        fields = self.by["1836 Women in the Fields"]
+        self.assertAlmostEqual(fields["outside"], P.POP_BASE_RATIO_DEFAULT + 0.3, places=9)
+        self.assertLess(fields["engine"], fields["outside"])
 
     def test_call_3s_laws_add_their_participation_inputs(self):
         """A Pro-Capital Ministry at level 5 and Rehabilitation add about +0.027 on the engine's scale to the rich row
@@ -1167,3 +1190,35 @@ class TestWorkforceCommand(unittest.TestCase):
             self.assertEqual(H.main(["workforce"]), 0)
         for name, _kw, _low in H.WORKFORCE_SCENARIOS:
             self.assertIn(name, out.getvalue())
+
+
+class TestPensionsCommand(unittest.TestCase):
+    """Phase 2 step 2: the pension bill fitted against the game's revenue, the health bill (the design §5)."""
+
+    def test_revenue_share_is_the_largest_economies_median(self):
+        budgets = {"A": {"gdp": 1000.0, "income": 1000 * 0.2 / 52}, "B": {"gdp": 500.0, "income": 500 * 0.3 / 52},
+                   "C": {"gdp": 10.0, "income": 10 * 0.9 / 52}}
+        median, ratios = H.revenue_share(budgets, top=2)
+        self.assertAlmostEqual(median, 0.25)
+        self.assertEqual([t for t, _ in ratios], ["A", "B"])
+
+    def test_b_centres_the_band(self):
+        b = H.fitted_b(0.27)
+        self.assertAlmostEqual(0.2 * b * H.PENSION_LEVEL / 0.27, sum(P.PENSION_BILL_BAND) / 2)
+
+    def test_the_fitted_b_meets_the_band_at_the_1953_ratio(self):
+        """The fit (2026-10-12): the 1953 save's 15 largest economies' median revenue over GDP was 0.273; at it the
+        bill for 18-22% pensioners at Social Security 5 sits inside 15-30% of revenue."""
+        for share in H.PENSION_SHARES:
+            bill = M.pension_bill_gdp_share(share, H.PENSION_LEVEL) / 0.273
+            self.assertTrue(P.PENSION_BILL_BAND[0] <= bill <= P.PENSION_BILL_BAND[1], (share, bill))
+
+    def test_the_health_bill_meets_its_bands(self):
+        for label, _need, term, (lo, hi) in H.health_rows():
+            self.assertTrue(lo <= term <= hi, (label, term))
+
+    def test_the_command_runs_without_a_save(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["pensions"]), 0)
+        self.assertIn("The health bill", out.getvalue())

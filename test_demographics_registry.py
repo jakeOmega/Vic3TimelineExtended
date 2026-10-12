@@ -48,6 +48,10 @@ PRACTICE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_practice_eff
 WORKFORCE_LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_workforce_line_effects_generated.txt"
 WORKFORCE_LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_workforce_line_values_generated.txt"
 WORKFORCE_LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_workforce_line_modifiers_generated.txt"
+# phase 2 step 2: the workforce term, the pension setting and the bills
+WORK_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_work_effects.txt"
+WORK_VALUES = ROOT / "common" / "script_values" / "te_demog_work_values.txt"
+DEMOG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -350,7 +354,9 @@ FIXED_MAX = (2 ** 63 - 1) / 1e5   # the largest value script holds: an i64 in un
 # The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them.
 WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pension_kind": 0.0,
                  "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0,
-                 **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}}
+                 **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES},
+                 # phase 2 step 2: the workforce term's read of the state's working-adult field
+                 f"modifier:{P.WORKING_ADULT_FIELD}": 0.0}
 # Phase 2 step 3b: the Family Policy types' reads and the two owner reads (the prenatal-sexing technology's gate on the
 # sex ratio at birth, Birth Limit's part of desired fertility), 0 unless a test gives them (_family_fixtures).
 FAMILY_DEFAULTS = {**{f"modifier:{t}": 0.0 for t in P.MEASURE_TYPES}, "te_demog_srb_add": 0.0,
@@ -369,9 +375,13 @@ class _Engine:
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
-                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS])
+                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS])
+        # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
+        # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
+        self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
         self.effects.update(effects or {})
-        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES])
+        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
+                                   WORK_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -384,7 +394,10 @@ class _Engine:
         # a test says (_OwnerEngine's workplace)
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
                                  "te_demog_clock_on": False, "te_demog_effects_run": False,
-                                 "te_demog_has_pension_law": False, "is_employed": False, **(triggers or {})}
+                                 "te_demog_has_pension_law": False, "is_employed": False,
+                                 # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
+                                 # yearly census: a player's unless a test says
+                                 "is_ai": False, **(triggers or {})}
         self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
@@ -544,7 +557,9 @@ class _Engine:
             elif key == "remove_variable":
                 self.vars.pop(arg, None)
             elif key == "add_modifier":
-                self.modifiers[_find(arg, "name")] = self._q(self.value(_find(arg, "multiplier")))
+                # a modifier with no multiplier (phase 2 step 2's pension positions) applies at 1
+                mult = next((v for k, _, v in arg if k == "multiplier"), None)
+                self.modifiers[_find(arg, "name")] = 1.0 if mult is None else self._q(self.value(mult))
             elif key == "remove_modifier":
                 assert arg in self.modifiers, f"remove of absent modifier {arg}"
                 del self.modifiers[arg]
@@ -1617,6 +1632,9 @@ class TestWorkforceLinesMoved(unittest.TestCase):
         skip = {"te_demog_engine_line_injections.txt", "te_demog_workforce_injections.txt",
                 "te_demog_workforce_line_modifiers_generated.txt", "te_debug_demog_modifiers.txt",
                 "mod_entity_modifier_types.txt"}
+        # phase 2 step 2's workforce term: the census's own pair, as the moved lines' pair is
+        census_pair = {("te_demog_modifiers.txt", "te_demog_census_workforce_up"),
+                       ("te_demog_modifiers.txt", "te_demog_census_workforce_down")}
         for path in sorted((ROOT / "common").rglob("*.txt")):
             if path.name in skip:
                 continue
@@ -1626,7 +1644,8 @@ class TestWorkforceLinesMoved(unittest.TestCase):
             for m in re.finditer(r"^([\w.:-]+) = \{", text, re.M):
                 if re.search(r"\bstate_working_adult_ratio_add\s*=\s*-?\d", _block(text, m.group(1))):
                     live.add((path.name, m.group(1)))
-        self.assertEqual(live, set(P.LIVE_WORKFORCE_LINES))
+        self.assertEqual(live - census_pair, set(P.LIVE_WORKFORCE_LINES))
+        self.assertEqual(live & census_pair, census_pair)
 
     def test_each_cancel_matches_its_familys_line(self):
         """The injection files' cancels (vanilla's carriers): each block's working-adult cancel is minus its family's
@@ -6017,8 +6036,9 @@ class TestCausesSection(unittest.TestCase):
     def test_it_sits_after_the_overview(self):
         content = _gui_type(self.gui, "te_state_demog_content")
         order = re.findall(r"(te_state_demog_\w+) = \{\}", content)
-        self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid",
-                                 "te_state_demog_wealth", "te_state_demog_how"])
+        # phase 2 step 2's Work and Retirement follows it
+        self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_work",
+                                 "te_state_demog_pyramid", "te_state_demog_wealth", "te_state_demog_how"])
 
     def test_open_by_default(self):
         # rule 7: a section that starts open names its flag _closed

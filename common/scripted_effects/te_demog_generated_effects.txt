@@ -4296,7 +4296,7 @@ te_demog_enter_bio_band = {
 				set_local_variable = { name = te_dg_next_bio value = 60 }
 			}
 			else = {
-				set_local_variable = { name = te_dg_cap value = { value = 0.95 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_cap value = { value = 1 multiply = local_var:te_dg_wk_capm max = 1 } }
 				set_local_variable = { name = te_dg_needw value = 1.4 }
 				set_local_variable = { name = te_dg_next_bio value = 65 }
 			}
@@ -4309,18 +4309,18 @@ te_demog_enter_bio_band = {
 				limit = { local_var:te_dg_bio <= 6 }
 				if = {
 					limit = { local_var:te_dg_bio <= 5 }
-					set_local_variable = { name = te_dg_cap value = { value = 0.85 multiply = local_var:te_dg_wk_capm max = 1 } }
+					set_local_variable = { name = te_dg_cap value = { value = 0.95 multiply = local_var:te_dg_wk_capm max = 1 } }
 					set_local_variable = { name = te_dg_needw value = 2.4 }
 					set_local_variable = { name = te_dg_next_bio value = 70 }
 				}
 				else = {
-					set_local_variable = { name = te_dg_cap value = { value = 0.7 multiply = local_var:te_dg_wk_capm max = 1 } }
+					set_local_variable = { name = te_dg_cap value = { value = 0.85 multiply = local_var:te_dg_wk_capm max = 1 } }
 					set_local_variable = { name = te_dg_needw value = 2.4 }
 					set_local_variable = { name = te_dg_next_bio value = 75 }
 				}
 			}
 			else = {
-				set_local_variable = { name = te_dg_cap value = { value = 0.5 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_cap value = { value = 0.7 multiply = local_var:te_dg_wk_capm max = 1 } }
 				set_local_variable = { name = te_dg_needw value = 3.4 }
 				set_local_variable = { name = te_dg_next_bio value = 80 }
 			}
@@ -4328,12 +4328,12 @@ te_demog_enter_bio_band = {
 		else = {
 			if = {
 				limit = { local_var:te_dg_bio <= 8 }
-				set_local_variable = { name = te_dg_cap value = { value = 0.3 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_cap value = { value = 0.5 multiply = local_var:te_dg_wk_capm max = 1 } }
 				set_local_variable = { name = te_dg_needw value = 3.4 }
 				set_local_variable = { name = te_dg_next_bio value = 85 }
 			}
 			else = {
-				set_local_variable = { name = te_dg_cap value = { value = 0.1 multiply = local_var:te_dg_wk_capm max = 1 } }
+				set_local_variable = { name = te_dg_cap value = { value = 0.2 multiply = local_var:te_dg_wk_capm max = 1 } }
 				set_local_variable = { name = te_dg_needw value = 4.5 }
 				set_local_variable = { name = te_dg_next_bio value = 999 }
 			}

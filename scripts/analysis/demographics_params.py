@@ -157,16 +157,16 @@ WORKING_AGE = 15               # calendar: everyone from here
 CHILD_WORK_SHARE = {"law_child_labor_allowed": 0.3, "law_restricted_child_labor": 0.1,
                     "law_compulsory_primary_school": 0.0}
 CHILD_WORK_SHARE_DEFAULT = 0.3  # a country with none of the three (vanilla gives every country one)
-CAPACITY = {0: 1.0, 60: 0.95, 65: 0.85, 70: 0.7, 75: 0.5, 80: 0.3, 85: 0.1}   # by biological band start
-AFTER_PENSION_SHARE = 0.15     # the share of the eligible who keep working, x capacity
+CAPACITY = {0: 1.0, 60: 1.0, 65: 0.95, 70: 0.85, 75: 0.7, 80: 0.5, 85: 0.2}   # by biological band start
+AFTER_PENSION_SHARE = 0.3      # the share of the eligible who keep working, x capacity
 MEN_RATE = 0.92
 WOMEN_BASE = 0.05              # the middle and upper strata's women under No Women's Rights
 WOMEN_LOWER = 0.2              # the lower strata's women under any law (Goldin's U-shape)
-WOMENS_WORK_FULL = 0.30        # the women's-work family's sum at which women work at the men's rate
-WORKFORCE_SCALE = 0.74         # participation to the engine's ratio (the spec's §1.8 sketch: 1836 0.25, rich 0.40)
+WOMENS_WORK_FULL = 0.35        # the women's-work family's sum at which women work at the men's rate
+WORKFORCE_SCALE = 0.7          # participation to the engine's ratio (step 2's fit: 1836 0.25, rich today 0.42)
 # Health need by biological band start (late-game §5.2), and 1836's people-weighted need (the figure's 1.0).
 HEALTH_NEED = {0: 1.0, 5: 0.5, 15: 0.8, 45: 1.4, 65: 2.4, 75: 3.4, 85: 4.5}
-HEALTH_NEED_1836 = 0.95
+HEALTH_NEED_1836 = 0.952      # step 2's fit: the 1836 save's world need, people-weighted (harness `workforce`)
 BIO_BANDS = tuple(sorted(set(CAPACITY) | set(HEALTH_NEED)))
 # The pension positions' ages (late-game §2.2). Step 1 sets a country's pension age to the Standard one under Old Age
 # Pension; step 2 adds the setting.
@@ -199,6 +199,67 @@ PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYP
 MALARIA_CONTROL_TYPE = "state_malaria_control_add"
 DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES
                + (MALARIA_CONTROL_TYPE,))
+
+# ---- Phase 2 step 2: the workforce, pensions and health costs ------------------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2 and §5. Everything here acts under
+# Full only (te_demog_work_effects.txt). The harness fits the numbers (demographics_harness.py workforce, pensions).
+# The workforce term W = te_demog_wf_target - the define's base (call 4), on a fixed-sign state pair. It moves toward
+# that target by at most WF_RAMP_STEP a census step: the engine's own pull toward a pop's ratio has not been measured
+# in game (the mod's WORKING_ADULT_RATIO_SKEW_MAXIMUM, extra_defines.txt, suggests it is instant; the saves suggest it
+# is slow: docs/testing/demographics-playtest.md, § Phase 2 step 2), and a pension change should reach the workforce as the
+# cohorts it frees or holds pass the age, over a few years, not in a week. At 0.01 a change of one position in a rich
+# state (Standard to Raised +0.020 on the engine's scale, Early to Standard +0.023: harness `workforce`) shows fully in
+# two to three census years, Early to Raised in about five; Women in the Fields' first landing (+0.30 of lines against a
+# target near +0.15) takes about fifteen. W starts at the moved lines' pair it replaces, so a state's workforce never
+# jumps when the census takes over. The self-check workforce_follows_target reads whether the engine keeps up.
+WORKING_ADULT_BASE = 0.25      # the define WORKING_ADULT_RATIO_BASE (vanilla 00_defines.txt); the term nets only it
+WF_RAMP_STEP = 0.01
+WF_POP_RATIO_MIN = 0.05        # the guard: no pop's own ratio below this (W is raised instead; no cap above)
+POP_BASE_RATIO_MIN = min(min(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # aristocrats' 0.2
+# The pension setting (late-game §2.2): five positions, the country variable te_dg_pension_pos (absent = Standard).
+# The linked positions follow the country's people-weighted old-age threshold less PENSION_LINK_OFFSET, at least
+# PENSION_LINK_FLOOR, moving at most PENSION_LINK_STEP a year. Every position holds for PENSION_TERM_YEARS.
+PENSION_POSITIONS = ("early", "standard", "raised", "linked_average", "linked_common")
+PENSION_POSITION_ID = {p: i + 1 for i, p in enumerate(PENSION_POSITIONS)}   # te_dg_pension_pos
+PENSION_LINKED = ("linked_average", "linked_common")
+PENSION_LINK_OFFSET = 5
+PENSION_LINK_FLOOR = 65
+PENSION_LINK_STEP = 1
+PENSION_TERM_YEARS = 5
+# Approval while in force (a country static modifier per position; late-game §2.2's table). Standard has none.
+PENSION_IG_APPROVAL = {
+    "early": {"ig_trade_unions": 2, "ig_industrialists": -1},
+    "raised": {"ig_trade_unions": -2, "ig_rural_folk": -1, "ig_industrialists": 1},
+    "linked_average": {"ig_trade_unions": -1, "ig_rural_folk": -1, "ig_industrialists": 1},
+    "linked_common": {"ig_trade_unions": 1, "ig_rural_folk": 1, "ig_industrialists": -1},
+}
+# The pension bill (§2.3, money): a weekly expense of GDP / 52 x the pensioners' share x B, B = PENSION_B_PER_LEVEL x
+# the Social Security level. Fitted against revenue (late-game call 16): the bill 15-30% of a rich country's revenue at
+# Standard with 18-22% pensioners.
+PENSION_B_PER_LEVEL = 0.06      # step 2's fit (0.08 proposed): the 1953 save's revenue over GDP (harness `pensions`)
+PENSION_BILL_BAND = (0.15, 0.30)
+# The health bill (§2.4, bureaucracy): country_institution_cost_institution_health_system_mult = the need term
+# HEALTH_NEED_WEIGHT x (need - 1), at most HEALTH_NEED_CAP, plus HEALTH_TECH_STEP for each chronic-treatment technology.
+# Below 1836's need the term is negative (a young country's system costs a little less), on a fixed-sign pair.
+HEALTH_NEED_WEIGHT = 0.8      # step 2's fit (0.5 proposed): rich today +0.35 to +0.5 with its technologies
+HEALTH_NEED_CAP = 1.0
+HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine")
+HEALTH_TECH_STEP = 0.05
+# Work deaths follow the participation model under Full (§2.5): women's share of the census's own workers aged
+# WORK_SPLIT_AGES (first, last), from the last count; the law table (FEMALE_WORK_SHARE) before one.
+WORK_SPLIT_AGES = (15, 64)
+# The AI's yearly pulse (§2.2, §9): the same weights for every country; is_ai only decides whom the pulse acts for. A
+# bill over PENSION_AI_BILL_HIGH of revenue, or debt over PENSION_AI_DEBT of its ceiling, pushes toward the cheaper
+# positions (Linked to Average where its age passes Raised's, else Raised); unemployment over PENSION_AI_UNEMPLOYMENT
+# (people-weighted over its states) toward Early. A wide longevity gap toward Linked to Common waits for phase 3. It goes
+# back to Standard only once the reason has clearly gone (hysteresis, the review of 2026-10-12): from a cheaper position
+# when the bill is under PENSION_AI_BILL_LOW of revenue and the debt and default have gone, from Early when unemployment
+# is under PENSION_AI_UNEMPLOYMENT_LOW.
+PENSION_AI_BILL_HIGH = 0.3
+PENSION_AI_BILL_LOW = 0.2
+PENSION_AI_DEBT = 0.25
+PENSION_AI_UNEMPLOYMENT = 0.1
+PENSION_AI_UNEMPLOYMENT_LOW = 0.05
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of

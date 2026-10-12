@@ -48,6 +48,7 @@ SOURCES = {
             "te_demog_ms_child_allowance_cost", "te_demog_ms_family_housing_cost", "te_demog_ms_parental_leave_cost",
             "te_demog_ms_free_contraception_cost",
         )),
+        "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),

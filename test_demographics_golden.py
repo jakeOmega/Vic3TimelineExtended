@@ -15,7 +15,13 @@ family laws are left out (the cases hold none): its new reads are exact identiti
 its edits to three existing blocks are named below (STEP3B_ADDED, STEP3B_REWRITE), so each block's old text must still
 come back once they are taken out; te_demog_cause_inputs_store, which calibration step 3 changed too, is held to
 STEP3_DIGESTS' digest with step 3b's line taken out. Its new variables are te_dg_in_mat (the maternal cause's input),
-te_dg_policy and te_dg_urban_left (what the step used, for the tooltips)."""
+te_dg_policy and te_dg_urban_left (what the step used, for the tooltips).
+
+Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2) changes the census under
+Full by design: work deaths split by the census's own count of women and men at work (§2.5). Its invariant is that
+nothing changes outside Full, which the Display-only, the lines' and the model's cases still pin. The two Full cases
+(FULL_CASES) were re-recorded on step 2's tree (TE_RECORD_GOLDEN_FULL=1, which rewrites them alone), so a later change
+under Full still shows; step 2's new names are STEP2_VARS."""
 
 import functools
 import hashlib
@@ -47,6 +53,12 @@ NEW_VARS |= {"te_dg_in_mat", "te_dg_policy", "te_dg_urban_left"}
 # input (te_demog_cause_inputs_store), added; Sex Education's literacy in te_demog_means' access, rewritten back out
 STEP3B_ADDED = re.compile(r"^multiply = te_demog_f_maternal_laws$|^set_variable = \{ name = te_dg_in_mat ")
 STEP3B_REWRITE = (("var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply", "var:te_dg_lit multiply"),)
+# phase 2 step 2's figures (te_demog_work_finish_step2): workers past the end of the working ages, women's share of the
+# workers at the work deaths' ages
+STEP2_VARS = {"te_dg_wk_past", "te_dg_fws_wk"}
+NEW_VARS |= STEP2_VARS
+# the cases under Full, re-recorded on step 2's tree (the module's docstring)
+FULL_CASES = ("farm_full_on_top", "rich_full")
 # Task 5's three calls in te_demog_walks; nothing else in the walk may change
 WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
@@ -172,6 +184,11 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         cls.now = outputs()
         if os.environ.get("TE_RECORD_GOLDEN") == "1":
             GOLDEN.write_text(json.dumps(cls.now, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        if os.environ.get("TE_RECORD_GOLDEN_FULL") == "1":
+            golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
+            for case in FULL_CASES:
+                golden["cases"][case] = cls.now["cases"][case]
+            GOLDEN.write_text(json.dumps(golden, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         cls.golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
 
     def test_every_recorded_output_is_unchanged(self):
@@ -193,6 +210,13 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
             now = self.now["cases"][case]
             self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS, set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
+
+    def test_the_full_cases_hold_step_twos_split(self):
+        """The re-recorded Full cases hold step 2's figures (te_dg_fws_wk splits their work deaths); the Display-only
+        case holds none of them, so a golden recorded before step 2 would fail here."""
+        for case in FULL_CASES:
+            self.assertTrue(STEP2_VARS <= set(self.golden["cases"][case]["vars"]), case)
+        self.assertFalse(STEP2_VARS & set(self.golden["cases"]["farm_display_only"]["vars"]))
 
     def test_the_census_term_is_recorded(self):
         """The Full cases hold the census's own modifiers, so a change to M would show."""
