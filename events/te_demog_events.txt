@@ -72,5 +72,6 @@ te_demog_events.4 = {
 
 	immediate = {
 		te_demog_lines_refresh = yes
+		te_demog_workforce_lines_refresh = yes
 	}
 }

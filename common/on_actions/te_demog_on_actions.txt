@@ -31,6 +31,8 @@ on_monthly_pulse_country = {
 te_demog_country_monthly_on_action = {
 	effect = {
 		te_demog_country_monthly = yes
+		# phase 2 step 1's once-a-game self-checks (te_debug_demog_effects.txt; they gate on the census themselves)
+		te_debug_demog_wf_selfchecks = yes
 	}
 }
 
@@ -142,6 +144,19 @@ on_acquired_technology = {
 		te_demog_lines_country_on_action
 	}
 }
+# ROOT = the country (vanilla's comments on both hooks): an amendment repealed or timed out (the timeout's is already off
+# its law) changes its law's working-adult lines, so the country's states refresh that day, as for a technology. An
+# amendment attached has no hook; the monthly refresh takes it within a month (the design §1.9).
+on_amendment_repealed = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+on_amendment_timeout = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
 on_game_started_after_lobby = {
 	on_actions = {
 		te_demog_lines_world_on_action
@@ -152,6 +167,7 @@ on_game_started_after_lobby = {
 te_demog_lines_on_action = {
 	effect = {
 		te_demog_lines_refresh = yes
+		te_demog_workforce_lines_refresh = yes
 	}
 }
 

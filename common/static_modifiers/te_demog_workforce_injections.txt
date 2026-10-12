@@ -1,0 +1,8 @@
+﻿# Phase 2 step 1 (the design §1.7, the owner's call 3): the Paris Commune's Woman Soldiers (vanilla; applied to the
+# country at x0.5): its working-adult line moves to the women's-work family at its old value. Women at arms go on to
+# work (the owner's example). That the engine scales a script-only type with the modifier's multiplier is the fact
+# the primogeniture_scaled self-check tests (docs/testing/demographics-playtest.md).
+INJECT:modifier_woman_soldiers = {
+	state_working_adult_ratio_add = -0.05
+	state_demog_womens_work_ratio_add = 0.05
+}

@@ -99,6 +99,15 @@ te_demog_lines_apply = {
 	}
 }
 
+# THIS = a state: the working-adult lines' pair applies (phase 2 step 1) unless the census sets this state's
+# workforce: Full, and step 2's term in force (te_dg_mw). In step 1 nothing sets te_dg_mw, so it always applies.
+te_demog_workforce_lines_apply = {
+	OR = {
+		NOT = { te_demog_effects_run = yes }
+		NOT = { has_variable = te_dg_mw }
+	}
+}
+
 # THIS = a state: its medicine is still spreading, more than the snap behind its targets in all (te_demog_medicine_gap),
 # so Medical Outreach would do something. False for a state without the census's medicine.
 te_demog_medicine_behind = {

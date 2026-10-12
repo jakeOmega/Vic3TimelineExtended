@@ -5,6 +5,7 @@ pulse wiring, the gates around every cohort entry point. Later tasks add tests h
 """
 
 import dataclasses
+import json
 import math
 import random
 import re
@@ -43,6 +44,10 @@ LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_line_effects_gen
 LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_line_values_generated.txt"
 LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_line_modifiers_generated.txt"
 PRACTICE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_practice_effects.txt"
+# phase 2 step 1's working-adult pair (generated, Task 6)
+WORKFORCE_LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_workforce_line_effects_generated.txt"
+WORKFORCE_LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_workforce_line_values_generated.txt"
+WORKFORCE_LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_workforce_line_modifiers_generated.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -360,9 +365,9 @@ class _Engine:
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
-                                    PRACTICE_EFFECTS])
+                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS])
         self.effects.update(effects or {})
-        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES])
+        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -1506,6 +1511,289 @@ class TestLinesScript(unittest.TestCase):
         callers = sorted(p.name for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
                          if "te_demog_lines_refresh = yes" in _text(p) and "generated" not in p.name)
         self.assertEqual(callers, ["te_demog_events.txt", "te_demog_on_actions.txt"])
+
+
+class TestWorkforceLinesMoved(unittest.TestCase):
+    """Phase 2 step 1 (the design §1.7): every working-adult line sits on its family's type at its old value, with call
+    3's participation input beside it; the only live engine lines left are Rosen's."""
+
+    # laws and technologies, read back by DM.engine_workforce_lines
+    MOVED = {
+        ("law", "law_women_in_the_fields", "modifier"): ("womens_work", 0.3),
+        ("law", "law_women_own_property", "modifier"): ("womens_work", 0.05),
+        ("law", "law_women_in_the_workplace", "modifier"): ("womens_work", 0.1),
+        ("law", "law_womens_suffrage", "modifier"): ("womens_work", 0.15),
+        ("law", "law_protected_class", "modifier"): ("womens_work", 0.2),
+        ("law", "law_state_sponsored_family_planning", "modifier"): ("womens_work", 0.05),
+        ("law", "law_communal_child_rearing", "modifier"): ("womens_work", 0.1),
+        ("technology", "contraceptive_pill", "modifier"): ("womens_work", 0.05),
+        ("technology", "second_wave_feminism", "modifier"): ("womens_work", 0.025),
+        ("technology", "personal_appliances", "modifier"): ("womens_work", 0.025),
+        ("law", "law_old_age_pension", "institution_modifier"): ("replaced", -0.01),
+        ("law", "law_universal_basic_income", "institution_modifier"): ("replaced", -0.02),
+        ("law", "law_pro_natalist_subsidies", "modifier"): ("replaced", -0.05),
+        ("law", "law_restorative_justice", "modifier"): ("replaced", 0.025),
+        ("law", "law_rehabilitation_focused_criminal_justice", "modifier"): ("replaced", 0.05),
+        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier"): ("replaced", 0.01),
+        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier"): ("replaced", 0.02),
+        ("law", "law_state_eugenics_program", "modifier"): ("replaced", 0.05),
+    }
+    # call 3's participation inputs on laws (the design §1.7's inventory; starting sizes, call 11)
+    PARTICIPATION = {
+        ("law", "law_restorative_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.02,
+        ("law", "law_rehabilitation_focused_criminal_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.03,
+        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.005,
+        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.01,
+        ("law", "law_state_eugenics_program", "modifier", P.CAPACITY_TYPE): 0.1,
+    }
+    # the carriers no reader walks: (file, block) -> the lines its block must hold
+    BLOCKS = {
+        ("common/amendments/extra_amendments.txt", "amendment_community_service"):
+            (f"{P.REPLACED_TYPE} = 0.01", f"{P.MALE_PARTICIPATION_TYPE} = 0.01"),
+        ("common/amendments/extra_amendments.txt", "amendment_mandatory_minimums"):
+            (f"{P.REPLACED_TYPE} = -0.01", f"{P.MALE_PARTICIPATION_TYPE} = -0.01"),
+        ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_solidarity"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+        ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_bourse_du_travail"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+        ("common/static_modifiers/te_demog_workforce_injections.txt", "INJECT:modifier_woman_soldiers"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.WOMENS_WORK_TYPE} = 0.05"),
+        ("common/static_modifiers/extra_modifiers.txt", "INJECT:state_region_pollution_health"):
+            (f"{P.REPLACED_TYPE} = -0.05", f"{P.CAPACITY_TYPE} = -0.1"),
+    }
+
+    def test_each_line_sits_on_its_familys_type_at_its_old_value(self):
+        got = {k[:3]: v for k, v in DM.engine_workforce_lines().items()}
+        self.assertEqual(set(got), set(self.MOVED))
+        for k, (family, value) in self.MOVED.items():
+            self.assertEqual(got[k][0], family, k)
+            self.assertAlmostEqual(got[k][1], value, places=6, msg=k)
+
+    def test_each_law_carries_its_participation_input(self):
+        names = set(P.PARTICIPATION_TYPES)
+        got = {k: v for k, v in DM.engine_rate_lines(keep=lambda f: f in names).items() if abs(v) > 1e-9}
+        self.assertEqual(set(got), set(self.PARTICIPATION))
+        for k, value in self.PARTICIPATION.items():
+            self.assertAlmostEqual(got[k], value, places=6, msg=k)
+
+    def test_the_other_carriers_blocks(self):
+        for (rel, block), lines in self.BLOCKS.items():
+            body = re.sub(r"#[^\n]*", "", _block(_text(ROOT / rel), block))
+            for line in lines:
+                self.assertIn(line, body, (block, line))
+            if "INJECT:" not in block:
+                self.assertNotIn("state_working_adult_ratio_add", body, block)
+
+    def test_no_live_line_but_rosens(self):
+        """A working-adult line added anywhere in common/ fails here until it is given a family or listed (the design
+        §1.7: the census treats an unlisted line as the remainder on top, and this keeps the list honest)."""
+        live = set()
+        skip = {"te_demog_engine_line_injections.txt", "te_demog_workforce_injections.txt",
+                "te_demog_workforce_line_modifiers_generated.txt", "te_debug_demog_modifiers.txt",
+                "mod_entity_modifier_types.txt"}
+        for path in sorted((ROOT / "common").rglob("*.txt")):
+            if path.name in skip:
+                continue
+            text = re.sub(r"#[^\n]*", "", _text(path))
+            if not re.search(r"\bstate_working_adult_ratio_add\s*=\s*-?\d", text):
+                continue
+            for m in re.finditer(r"^([\w.:-]+) = \{", text, re.M):
+                if re.search(r"\bstate_working_adult_ratio_add\s*=\s*-?\d", _block(text, m.group(1))):
+                    live.add((path.name, m.group(1)))
+        self.assertEqual(live, set(P.LIVE_WORKFORCE_LINES))
+
+    def test_each_cancel_matches_its_familys_line(self):
+        """The injection files' cancels (vanilla's carriers): each block's working-adult cancel is minus its family's
+        line, so the engine field nets to 0 and the family carries vanilla's value."""
+        families = (P.WOMENS_WORK_TYPE, P.REPLACED_TYPE)
+        for rel in ("common/laws/te_demog_engine_line_injections.txt",
+                    "common/interest_group_traits/te_demog_workforce_injections.txt",
+                    "common/static_modifiers/te_demog_workforce_injections.txt"):
+            text = re.sub(r"#[^\n]*", "", _text(ROOT / rel))
+            for m in re.finditer(r"^(INJECT:[\w-]+) = \{", text, re.M):
+                body = _block(text, m.group(1))
+                cancel = re.search(r"\bstate_working_adult_ratio_add\s*=\s*(-?[\d.]+)", body)
+                if not cancel:
+                    continue
+                carried = sum(float(v) for f in families
+                              for v in re.findall(rf"\b{f}\s*=\s*(-?[\d.]+)", body))
+                self.assertAlmostEqual(float(cancel.group(1)), -carried, msg=m.group(1))
+
+    # vanilla's working-adult carriers (vanilla_parsed/common/<file>.json, top-level key), every one moved by an INJECT
+    VANILLA_CARRIERS = {
+        ("laws", "law_women_in_the_fields"), ("laws", "law_women_own_property"),
+        ("laws", "law_women_in_the_workplace"), ("laws", "law_womens_suffrage"), ("laws", "law_old_age_pension"),
+        ("interest_group_traits", "ig_trait_solidarity"), ("interest_group_traits", "ig_trait_bourse_du_travail"),
+        ("modifiers", "modifier_woman_soldiers"),
+    }
+
+    def test_every_vanilla_carrier_is_moved(self):
+        """A vanilla patch that adds a working-adult line fails here until it is classified, as #892's
+        test_every_vanilla_line_is_cancelled_and_carried does for births and deaths (the second review of #923)."""
+        found = set()
+
+        def walk(node, where):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    if key == P.WORKING_ADULT_FIELD:
+                        found.add(where[:2])
+                    walk(value, where + (key,))
+            elif isinstance(node, list):
+                for value in node:
+                    walk(value, where)
+
+        for path in sorted((ROOT / "vanilla_parsed" / "common").glob("*.json")):
+            if path.name == "modifier_types.json":   # the field's own definition
+                continue
+            data = json.loads(path.read_text(encoding="utf-8"))
+            walk(data.get("data", data), (path.stem,))
+        self.assertEqual(found, self.VANILLA_CARRIERS)
+
+    def test_a_release_keeps_the_families_and_drops_the_inputs(self):
+        """Review Focus 5: the release script comments out demographics_modifier_types.txt's types only."""
+        census_types = _text(ROOT / "common" / "modifier_type_definitions" / "demographics_modifier_types.txt")
+        for t in P.WORKFORCE_LINE_TYPES.values():
+            self.assertNotIn(t, census_types)
+            self.assertNotIn(t, P.DEMOG_TYPES)
+        for t in P.PARTICIPATION_TYPES:
+            self.assertIn(f"{t} = {{", census_types)
+
+    def test_the_types_copy_the_fields_format(self):
+        blocks = _raw_blocks([ROOT / "common" / "modifier_type_definitions" /
+                              "demographics_workforce_line_types.txt"])
+        self.assertEqual(set(blocks), set(P.WORKFORCE_LINE_TYPES.values()))
+        for name, body in blocks.items():
+            for line in ("decimals = 1", "percent = yes", "ai_value = 0", "script_only = yes"):
+                self.assertIn(line, body, name)
+
+
+class TestWorkforceLinesScript(unittest.TestCase):
+    """te_demog_workforce_lines_refresh: the pair at both families' sum while no workforce term is in force."""
+
+    def _eng(self, womens=0.25, replaced=-0.03, full=False, census_term=False, workforce_term=False):
+        fixtures = {f"modifier:{P.WOMENS_WORK_TYPE}": womens, f"modifier:{P.REPLACED_TYPE}": replaced}
+        eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full})
+        if census_term:
+            eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3, te_dg_q_b=0.0, te_dg_q_d=0.0)
+        if workforce_term:
+            eng.vars["te_dg_mw"] = 0.1
+        return eng
+
+    def test_outside_full_the_pair_carries_the_sum(self):
+        eng = self._eng()
+        eng.call("te_demog_workforce_lines_refresh")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_up"], 0.22)
+        self.assertAlmostEqual(eng.vars["te_dg_ln_working_adults"], 0.22)
+
+    def test_the_workforce_pair_survives_the_census_term(self):
+        """Review Focus 2 (D3): under Full with M in force the births and deaths pairs go, this one stays."""
+        eng = self._eng(full=True, census_term=True)
+        eng.call("te_demog_workforce_lines_refresh")
+        eng.call("te_demog_lines_clear")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_up"], 0.22)
+
+    def test_step_twos_term_takes_it_off(self):
+        eng = self._eng(full=True, workforce_term=True)
+        eng.modifiers["te_demog_line_working_adults_up"] = 0.22
+        eng.vars["te_dg_ln_working_adults"] = 0.22
+        eng.call("te_demog_workforce_lines_refresh")
+        self.assertNotIn("te_demog_line_working_adults_up", eng.modifiers)
+        self.assertNotIn("te_dg_ln_working_adults", eng.vars)
+
+    def test_a_negative_sum_takes_the_down_pair(self):
+        eng = self._eng(womens=0.0, replaced=-0.05)
+        eng.call("te_demog_workforce_lines_refresh")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_down"], 0.05)
+
+    def test_it_refreshes_where_the_lines_do(self):
+        for path in (DEMOG_ON_ACTIONS, ROOT / "events" / "te_demog_events.txt"):
+            text = _text(path)
+            self.assertEqual(text.count("te_demog_lines_refresh = yes"),
+                             text.count("te_demog_workforce_lines_refresh = yes"), path.name)
+
+    def test_an_amendments_repeal_or_timeout_refreshes_that_day(self):
+        """The design §1.9: an amendment attached waits for the monthly refresh (no on-action); its repeal and timeout
+        (ROOT the country) take the existing country refresh, as a technology does."""
+        on_actions = _text(DEMOG_ON_ACTIONS)
+        for hook in ("on_amendment_repealed", "on_amendment_timeout"):
+            self.assertIn("te_demog_lines_country_on_action", _block(on_actions, hook), hook)
+
+    def test_the_pair_is_hidden_and_named(self):
+        hidden = _block(_text(ROOT / "common" / "script_values" / "gui_chart_script_values.txt"),
+                        "gui_state_hidden_modifier_count")
+        loc = "".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*.yml")))
+        for name in ("te_demog_line_working_adults_up", "te_demog_line_working_adults_down"):
+            self.assertIn(f"has_modifier = {name}", hidden)
+            self.assertIn(f' {name}:0 "Laws and Institutions"', loc)
+
+
+class TestWorkforceSelfChecks(unittest.TestCase):
+    """Phase 2 step 1's once-a-game self-checks (owner, 2026-10-12: a self-check, not an in-game gate): whether the
+    engine sums a script-only type from an amendment and from an IG trait into a state's read, and whether a pop's
+    workforce reads as a value. Each compares the participation input its carrier holds with that carrier's size."""
+
+    VALUES = ROOT / "common" / "script_values" / "te_debug_demog_values.txt"
+    TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_debug_demog_triggers.txt"
+
+    def _adds(self, body):
+        """{law or amendment named in a limit: the literal its branch adds}."""
+        out = {}
+        for m in re.finditer(r"if = \{\s*limit = \{(.*?)\}\s*\}\s*add = (-?[\d.]+)", body, re.S):
+            name = re.search(r"(law_type|amendment_type):(\w+)", m.group(1)).group(2)
+            out[name] = float(m.group(2))
+        return out
+
+    def test_the_sizes_are_the_carriers(self):
+        values = _text(self.VALUES)
+        moved = TestWorkforceLinesMoved
+        laws = self._adds(_block(values, "te_debug_demog_wf_amend_laws_only"))
+        self.assertEqual(laws, {key: v for (_kind, key, _block_name, t), v in moved.PARTICIPATION.items()
+                                if t == P.MALE_PARTICIPATION_TYPE})
+        amends = self._adds(_block(values, "te_debug_demog_wf_amend_expected"))
+        for amendment in ("amendment_community_service", "amendment_mandatory_minimums"):
+            line = next(line for line in moved.BLOCKS[("common/amendments/extra_amendments.txt", amendment)]
+                        if line.startswith(P.MALE_PARTICIPATION_TYPE))
+            self.assertAlmostEqual(amends[amendment], float(line.split("=")[1]), msg=amendment)
+        trait = next(line for line in moved.BLOCKS[("common/interest_group_traits/te_demog_workforce_injections.txt",
+                                                     "INJECT:ig_trait_solidarity")]
+                     if line.startswith(P.PARTICIPATION_TYPE))
+        self.assertIn(f"value = {trait.split('= ')[1]}", _block(values, "te_debug_demog_wf_ig_expected"))
+        self.assertIn(f"value = modifier:{P.MALE_PARTICIPATION_TYPE}", _block(values, "te_debug_demog_wf_part_m_read"))
+        self.assertIn(f"value = modifier:{P.PARTICIPATION_TYPE}", _block(values, "te_debug_demog_wf_part_read"))
+
+    def test_the_ig_check_arms_only_at_the_traits_plain_size(self):
+        """A marginal IG's traits are halved and a powerful one's doubled (the defines), and the Ministries of Labour
+        carry the same input: the check's expected 0.02 holds only without all three."""
+        trig = _block(_text(self.TRIGGERS), "te_debug_demog_wf_ig_trait_plain")
+        for line in ("ig_approval >= define:NPolitics|APPROVAL_THRESHOLD_LOYAL",
+                     "ig_clout > define:NPolitics|MARGINAL_IG_THRESHOLD",
+                     "ig_clout < define:NPolitics|POWERFUL_IG_CUTOFF",
+                     "NOT = { has_law = law_type:law_pro_labor_ministry_of_labor }",
+                     "NOT = { has_law = law_type:law_pro_capital_ministry_of_labor }"):
+            self.assertIn(line, trig)
+        carriers = {k[1] for k in TestWorkforceLinesMoved.PARTICIPATION if k[3] == P.PARTICIPATION_TYPE}
+        self.assertEqual(carriers, {"law_pro_labor_ministry_of_labor", "law_pro_capital_ministry_of_labor"})
+
+    def test_the_checks_are_wired_once_a_game_where_the_census_runs(self):
+        monthly = _block(_text(DEMOG_ON_ACTIONS), "te_demog_country_monthly_on_action")
+        self.assertIn("te_debug_demog_wf_selfchecks = yes", monthly)
+        start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_selfchecks")
+        self.assertIn("te_demog_cohorts_run = yes", start, "a release comments the inputs out: no false BROKEN")
+        for flag, event in (("te_demog_selfcheck_amend_done", "te_debug_demog.6"),
+                            ("te_demog_selfcheck_ig_done", "te_debug_demog.7")):
+            self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", start)
+            self.assertIn(f"set_global_variable = {{ name = {flag} value = yes }}", start)
+            self.assertIn(f"trigger_event = {{ id = {event} days = 7 }}", start)
+        self.assertIn("TE_SELF_CHECK OK pop_workforce_read", start)
+        self.assertIn("TE_SELF_CHECK BROKEN pop_workforce_read", start)
+        events = _text(DEBUG_EVENTS)
+        for event, name, flag in (("te_debug_demog.6", "workforce_amendment_type", "te_demog_selfcheck_amend_done"),
+                                  ("te_debug_demog.7", "workforce_ig_trait_type", "te_demog_selfcheck_ig_done")):
+            self.assertEqual(len(re.findall(rf"^{re.escape(event)} = \{{", events, re.M)), 1, event)
+            body = _block(events, event)
+            self.assertIn(f"TE_SELF_CHECK OK {name}", body)
+            self.assertIn(f"TE_SELF_CHECK BROKEN {name}", body)
+            self.assertIn(f"remove_global_variable = {flag}", body, "a carrier gone in the week re-arms")
 
 
 class TestPrimogenitureUnderFull(unittest.TestCase):

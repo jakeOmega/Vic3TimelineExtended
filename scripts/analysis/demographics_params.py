@@ -138,7 +138,7 @@ DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY
 # The spread of medicine (the Causes of Death plan): the share of the gap health-care access and treatments close at a
 # census step, beyond DIFFUSION_BASE (below, with the rest of the drift's numbers).
 DIFFUSION_TYPE = "state_medical_diffusion_add"
-DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
+# DEMOG_TYPES, every census input type, is defined after phase 2 step 1's participation inputs (below).
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within
 # 0..MEANS_CAP. Traditional methods everyone has; the techs' lines add to them (the Pill without
@@ -185,12 +185,15 @@ POP_BASE_RATIO_DEFAULT = 0.25
 # The working-adult lines' two script-only families (Task 6; demographics_workforce_line_types.txt).
 WOMENS_WORK_TYPE = "state_demog_womens_work_ratio_add"
 REPLACED_TYPE = "state_demog_replaced_ratio_add"   # lines a census term replaces under Full (the design §1.7)
-# Call 3's participation inputs (owner, 2026-10-12; the design §1.7): census-only types, defined in Task 5 and joining
-# DEMOG_TYPES with their carriers in Task 6.
+# Call 3's participation inputs (owner, 2026-10-12; the design §1.7): census-only types
+# (demographics_modifier_types.txt), carried by laws beside the replaced family's lines (Task 6).
 MALE_PARTICIPATION_TYPE = "state_male_labor_participation_add"   # the men's rate in the working ages
 PARTICIPATION_TYPE = "state_labor_participation_add"             # both sexes' rates in the working ages
 CAPACITY_TYPE = "state_work_capacity_mult"                       # capacity x (1 + it), at every age
 PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYPE)
+# Every census input type: the mortality and fertility inputs, the spread of medicine and call 3's participation inputs
+# (demographics_modifier_types.txt, which a release comments out with their carriers' lines).
+DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of
@@ -427,6 +430,21 @@ ENGINE_LINES_ON_TOP = frozenset({
 # level, France would lose about a fifth of its deaths (results doc, phase 2 step 4). Absorbing it per pop under Full,
 # as mild starvation, is proposed.
 ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
+# Phase 2 step 1 (the design §1.7; late-game call 11; the owner's call 3, 2026-10-12): every working-adult line on two
+# script-only families (demographics_workforce_line_types.txt), each at its old flat value, re-applied by their own pair
+# while no workforce term is in force (te_demog_workforce_lines_apply: not Full, or no te_dg_mw, step 2's term). Their
+# own files and parameters, so the births and deaths term never takes them off (D3).
+WORKING_ADULT_FIELD = "state_working_adult_ratio_add"
+WORKFORCE_LINE_FIELDS = (WORKING_ADULT_FIELD,)
+WORKFORCE_LINE_SHORT = {WORKING_ADULT_FIELD: "working_adults"}
+WORKFORCE_LINE_TYPES = {("womens_work", WORKING_ADULT_FIELD): WOMENS_WORK_TYPE,
+                        ("replaced", WORKING_ADULT_FIELD): REPLACED_TYPE}
+# The only engine working-adult lines left in common/ (file, top-level block): Rosen's androids (call 12), the pairs and
+# the console's probe; the cancels in the injection files are checked against their families' lines by the MOVED tests.
+LIVE_WORKFORCE_LINES = frozenset({
+    ("extra_companies_flavored.txt", "company_rosen_association"),
+    ("unique_pms.txt", "pm_rosen_association_hq"),
+})
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee

@@ -642,3 +642,76 @@ te_debug_demog_pr_chk_gap = {
 		multiply = -1
 	}
 }
+
+# ---- Call 3's carrier-kind self-checks (te_debug_demog_wf_selfchecks, te_debug_demog.6 and .7; phase 2 step 1) -------
+# THIS = the state (its owner's capital). The men's participation input as the state reads it: the criminal-justice
+# laws' lines and the two amendments' (it has no other carrier: TestWorkforceLinesMoved).
+te_debug_demog_wf_part_m_read = {
+	value = modifier:state_male_labor_participation_add
+}
+
+# What the laws alone put there: Restorative Justice 0.02, Rehabilitation 0.03 (test_demographics_registry pins the
+# sizes against the carriers). A state that doesn't sum an amendment's script-only type reads this.
+te_debug_demog_wf_amend_laws_only = {
+	value = 0
+	if = {
+		limit = { owner = { has_law = law_type:law_restorative_justice } }
+		add = 0.02
+	}
+	if = {
+		limit = { owner = { has_law = law_type:law_rehabilitation_focused_criminal_justice } }
+		add = 0.03
+	}
+}
+
+# What it should read: the laws' and the amendment's, Community Service +0.01, Mandatory Minimums -0.01.
+te_debug_demog_wf_amend_expected = {
+	value = te_debug_demog_wf_amend_laws_only
+	if = {
+		limit = { owner = { active_law:lawgroup_criminal_justice ?= { has_amendment = amendment_type:amendment_community_service } } }
+		add = 0.01
+	}
+	if = {
+		limit = { owner = { active_law:lawgroup_criminal_justice ?= { has_amendment = amendment_type:amendment_mandatory_minimums } } }
+		add = -0.01
+	}
+}
+
+# How far apart the read and the expected are, non-negative (a sign flip, as te_debug_demog_pr_chk_gap).
+te_debug_demog_wf_amend_gap = {
+	value = te_debug_demog_wf_part_m_read
+	subtract = te_debug_demog_wf_amend_expected
+	if = {
+		limit = { te_debug_demog_wf_part_m_read < te_debug_demog_wf_amend_expected }
+		multiply = -1
+	}
+}
+
+# Both sexes' input as the state reads it: the Trade Unions' loyal trait's (the Ministries of Labour carry it too; the
+# check arms only without them, te_debug_demog_wf_ig_trait_plain).
+te_debug_demog_wf_part_read = {
+	value = modifier:state_labor_participation_add
+}
+
+# What the trait should put there at its plain size (common/interest_group_traits/te_demog_workforce_injections.txt).
+te_debug_demog_wf_ig_expected = {
+	value = 0.02
+}
+
+te_debug_demog_wf_ig_gap = {
+	value = te_debug_demog_wf_part_read
+	subtract = te_debug_demog_wf_ig_expected
+	if = {
+		limit = { te_debug_demog_wf_part_read < te_debug_demog_wf_ig_expected }
+		multiply = -1
+	}
+}
+
+# The walk's engine workforce share (te_dg_wf_engine), -1 where the state has none.
+te_debug_demog_wf_engine_read = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_wf_engine }
+		value = var:te_dg_wf_engine
+	}
+}

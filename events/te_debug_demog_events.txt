@@ -398,3 +398,56 @@ te_debug_demog.5 = {
 		}
 	}
 }
+
+# Call 3's carrier-kind self-checks' second halves (te_debug_demog_wf_selfchecks): once a game, in every game where the
+# census runs, a week after a country first held the carrier, on its capital. A carrier gone in the week re-arms the
+# check for a later month.
+# .6: Community Service or Mandatory Minimums. OK: the engine sums a script-only type from an amendment into a state's
+# read. BROKEN: read equals laws_only, so it doesn't; revert both amendments' blocks to their engine field
+# (docs/testing/demographics-playtest.md, "Self-checks").
+te_debug_demog.6 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { owner = { te_debug_demog_wf_amendment_held = yes } }
+			if = {
+				limit = { te_debug_demog_wf_amend_gap < 0.002 }
+				debug_log = "TE_SELF_CHECK OK workforce_amendment_type read=[THIS.ScriptValue('te_debug_demog_wf_part_m_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_amend_expected')|3] laws_only=[THIS.ScriptValue('te_debug_demog_wf_amend_laws_only')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN workforce_amendment_type read=[THIS.ScriptValue('te_debug_demog_wf_part_m_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_amend_expected')|3] laws_only=[THIS.ScriptValue('te_debug_demog_wf_amend_laws_only')|3] (read = laws_only: the engine doesn't sum a script-only type from an amendment; revert Community Service's and Mandatory Minimums' blocks, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+		}
+		else = {
+			remove_global_variable = te_demog_selfcheck_amend_done
+		}
+	}
+}
+
+# .7: the Trade Unions' loyal trait at its plain size, no Ministry of Labour law. OK: the engine sums a script-only type
+# from an IG trait into a state's read. BROKEN: read 0, so it doesn't; revert the two traits' INJECTs
+# (docs/testing/demographics-playtest.md, "Self-checks").
+te_debug_demog.7 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { owner = { te_debug_demog_wf_ig_trait_plain = yes } }
+			if = {
+				limit = { te_debug_demog_wf_ig_gap < 0.002 }
+				debug_log = "TE_SELF_CHECK OK workforce_ig_trait_type read=[THIS.ScriptValue('te_debug_demog_wf_part_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_ig_expected')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN workforce_ig_trait_type read=[THIS.ScriptValue('te_debug_demog_wf_part_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_ig_expected')|3] (0: the engine doesn't sum a script-only type from an IG trait; revert the Trade Unions' two trait INJECTs, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+		}
+		else = {
+			remove_global_variable = te_demog_selfcheck_ig_done
+		}
+	}
+}
