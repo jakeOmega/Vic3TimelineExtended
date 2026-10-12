@@ -3033,5 +3033,33 @@ class LandmarkLineTests(unittest.TestCase):
         self.assertEqual(L["gm_row_landmark"], "Historical monument")
         self.assertIn("[State.GetCustom('gm_landmark_desc')]", L["gm_row_landmark_tt"])
 
+
+class LandmarkDebugTests(unittest.TestCase):
+    """Phase 4 §7: place the landmarks on an older save, and log them."""
+
+    def test_the_debug_event(self):
+        text = read(DEBUG_EVENTS)
+        self.assertRegex(text, r"(?m)^te_debug_monuments\.5 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
+        ev = squash(strip_comments(raw_block_at(text, r"(?m)^te_debug_monuments\.5\s*=\s*\{")))
+        self.assertIn("name = te_debug_monuments.5.a gm_seed_landmarks = yes", ev,
+                      "the seeding's own checks: the owner matches and no monument stands there")
+        self.assertIn("name = te_debug_monuments.5.b default_option = yes gm_debug_log_landmarks = yes", ev)
+        L = loc()
+        for k in ("t", "desc", "flavor", "a", "b"):
+            self.assertIn(f"te_debug_monuments.5.{k}", L)
+
+    def test_a_log_line_per_landmark(self):
+        e = read(LANDMARK_EFFECTS)
+        body = squash(block(e, "gm_debug_log_landmarks"))
+        self.assertEqual(re.findall(r"gm_debug_log_landmark = \{[^{}]*\}", body),
+                         [f"gm_debug_log_landmark = {{ KEY = {lm.key} }}" for lm in LANDMARKS])
+        one = squash(block(e, "gm_debug_log_landmark"))
+        for v in ("gm_state_grandeur", "gm_status_code", "gm_disp_picture_code"):
+            self.assertIn(f"[SCOPE.ScriptValue('{v}')|0]", one, v)
+        for d in DEDICATIONS:
+            self.assertIn(f"gm_debug_log_landmark_pm = {{ KEY = $KEY$ PM = {d.key} }}", one, d.key)
+        self.assertIn("gm_debug_log_landmark_pm = { KEY = $KEY$ PM = undedicated }", one)
+        self.assertNotIn(".MakeScope", one, "debug_log's working form only")
+
 if __name__ == "__main__":
     unittest.main()

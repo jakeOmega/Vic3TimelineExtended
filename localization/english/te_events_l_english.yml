@@ -5281,6 +5281,11 @@
  te_debug_monuments.4.desc:0 "Step the picture of the monument in [SCOPE.sState('gm_dbg_m1').GetName] through every picture code. It shows code [SCOPE.sState('gm_dbg_m1').MakeScope.Var('gm_picture_code').GetValue|0] now."
  te_debug_monuments.4.flavor:0 "The refresh, or the last option, puts the real picture back."
  te_debug_monuments.4.t:0 "Debug: Monument Pictures"
+ te_debug_monuments.5.a:0 "Place the landmarks"
+ te_debug_monuments.5.b:0 "Log every landmark"
+ te_debug_monuments.5.desc:0 "Place every landmark standing in 1836 whose state has no Grand Monument and whose 1836 owner still holds it, for a save started before they existed. Each is logged as TE_MONUMENTS: placed or not placed."
+ te_debug_monuments.5.flavor:0 "Logging writes each landmark's level, status, picture code and dedication to debug.log."
+ te_debug_monuments.5.t:0 "Debug: Landmarks"
 
 #
 # TE_DEBUG_NUCLEAR

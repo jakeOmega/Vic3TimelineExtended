@@ -68,3 +68,64 @@ gm_seed_landmark = {
 		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or a Grand Monument already stands there"
 	}
 }
+
+# ---- Debug (te_debug_monuments.5) ---------------------------------------------
+# Any scope. One TE_MONUMENTS: line per landmark: its level, status
+# (gm_status_code: 1 undedicated, 2 upheld, 3 heritage, 4 contested) and
+# picture code, then its dedication; or that none stands. Only the working
+# debug_log form ([SCOPE.ScriptValue('...')|N], no names: scripting_best_practices.md).
+gm_debug_log_landmarks = {
+	gm_debug_log_landmark = { KEY = arc_de_triomphe }
+	gm_debug_log_landmark = { KEY = alexander_column }
+	gm_debug_log_landmark = { KEY = brandenburg_gate }
+	gm_debug_log_landmark = { KEY = washington_monument_baltimore }
+	gm_debug_log_landmark = { KEY = la_scala }
+	gm_debug_log_landmark = { KEY = teatro_di_san_carlo }
+	gm_debug_log_landmark = { KEY = jantar_mantar }
+	gm_debug_log_landmark = { KEY = shalimar_gardens }
+	gm_debug_log_landmark = { KEY = jardim_botanico }
+	gm_debug_log_landmark = { KEY = stelae_of_aksum }
+	gm_debug_log_landmark = { KEY = liberty_column }
+	gm_debug_log_landmark = { KEY = lion_monument }
+}
+
+gm_debug_log_landmark = {
+	if = {
+		limit = {
+			any_state = {
+				has_variable = gm_landmark
+				var:gm_landmark = flag:$KEY$
+			}
+		}
+		every_state = {
+			limit = {
+				has_variable = gm_landmark
+				var:gm_landmark = flag:$KEY$
+			}
+			debug_log = "TE_MONUMENTS: landmark $KEY$: level [SCOPE.ScriptValue('gm_state_grandeur')|0], status [SCOPE.ScriptValue('gm_status_code')|0], picture [SCOPE.ScriptValue('gm_disp_picture_code')|0]"
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = undedicated }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = crown }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = republic }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = revolution }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = leader }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = religious }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = civic }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = war_memorial }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = artistic }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = naturalist }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = scientific }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = industrial }
+		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = athletic }
+		}
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: landmark $KEY$: none standing"
+	}
+}
+
+gm_debug_log_landmark_pm = {
+	if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_$PM$ } }
+		debug_log = "TE_MONUMENTS: landmark $KEY$: dedication $PM$"
+	}
+}
