@@ -1,0 +1,155 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — the landmarks standing in 1836 (phase 4)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monuments-landmarks-design.md.
+# A landmark is an ordinary Grand Monument with five records on its state:
+#   gm_landmark        flag: its key. Locks the skin and form (gm_state_is_landmark,
+#                      monument_triggers.txt) while the monument stands
+#   gm_skin            flag:landmark_<key>, its own skin: its name and its picture
+#   gm_form            its one form, from the roster
+#   gm_namesake        flag:landmark: the name prints the skin's (gm_name_landmark_row)
+#   gm_ceremony_level  its level, so it never reads as the engine's copy
+# The first refresh (monument_events.20) writes the rest: gm_seen, and for a
+# bound dedication gm_raised_by (gm_state_first_sight). It has its dedication's
+# usual effects and nothing more, and takes no inscription.
+#
+# test_grand_monument_registry.py's LANDMARKS is the table: one call per row,
+# in its order, which is also the picture codes' (1,000,000 + the row number,
+# gm_state_picture_landmarks).
+
+# No root scope: once per game, from on_game_started_after_lobby
+# (gm_landmarks_on_game_started_after_lobby), when the game rules are final.
+gm_seed_landmarks = {
+	gm_seed_landmark = { KEY = arc_de_triomphe STATE = STATE_ILE_DE_FRANCE TAG = FRA DEDICATION = war_memorial FORM = arch LEVEL = 15 }
+	gm_seed_landmark = { KEY = alexander_column STATE = STATE_INGRIA TAG = RUS DEDICATION = crown FORM = column LEVEL = 10 }
+	gm_seed_landmark = { KEY = brandenburg_gate STATE = STATE_BRANDENBURG TAG = PRU DEDICATION = civic FORM = gate LEVEL = 10 }
+	gm_seed_landmark = { KEY = washington_monument_baltimore STATE = STATE_MARYLAND TAG = USA DEDICATION = republic FORM = column LEVEL = 5 }
+	gm_seed_landmark = { KEY = la_scala STATE = STATE_LOMBARDY TAG = AUS DEDICATION = artistic FORM = opera_house LEVEL = 10 }
+	gm_seed_landmark = { KEY = teatro_di_san_carlo STATE = STATE_CAMPANIA TAG = SIC DEDICATION = artistic FORM = opera_house LEVEL = 5 }
+	gm_seed_landmark = { KEY = jantar_mantar STATE = STATE_RAJPUTANA TAG = JAI DEDICATION = scientific FORM = observatory LEVEL = 5 }
+	gm_seed_landmark = { KEY = shalimar_gardens STATE = STATE_PUNJAB TAG = PAN DEDICATION = naturalist FORM = gardens LEVEL = 5 }
+	gm_seed_landmark = { KEY = jardim_botanico STATE = STATE_RIO_DE_JANEIRO TAG = BRZ DEDICATION = naturalist FORM = gardens LEVEL = 5 }
+	gm_seed_landmark = { KEY = stelae_of_aksum STATE = STATE_GONDER TAG = TGR DEDICATION = civic FORM = stele LEVEL = 5 }
+	gm_seed_landmark = { KEY = liberty_column STATE = STATE_ZEALAND TAG = DEN DEDICATION = civic FORM = obelisk LEVEL = 5 }
+	gm_seed_landmark = { KEY = lion_monument STATE = STATE_EAST_SWITZERLAND TAG = SWI DEDICATION = war_memorial FORM = statue LEVEL = 5 }
+	gm_seed_landmark = { KEY = temple_of_heaven STATE = STATE_BEIJING TAG = CHI DEDICATION = crown FORM = hall LEVEL = 10 }
+	gm_seed_landmark = { KEY = topkapi_palace STATE = STATE_EASTERN_THRACE TAG = TUR DEDICATION = crown FORM = gate LEVEL = 10 }
+	gm_seed_landmark = { KEY = golestan_palace STATE = STATE_IRAKAJEMI TAG = PER DEDICATION = crown FORM = hall LEVEL = 5 }
+	gm_seed_landmark = { KEY = basilica_of_superga STATE = STATE_PIEDMONT TAG = SAR DEDICATION = crown FORM = mausoleum LEVEL = 5 }
+	gm_seed_landmark = { KEY = tomb_of_william_the_silent STATE = STATE_HOLLAND TAG = NET DEDICATION = crown FORM = mausoleum LEVEL = 5 }
+	gm_seed_landmark = { KEY = cenotaph_of_maximilian STATE = STATE_TYROL TAG = AUS DEDICATION = crown FORM = mausoleum LEVEL = 5 }
+	gm_seed_landmark = { KEY = arco_de_santa_maria STATE = STATE_OLD_CASTILE TAG = SPA DEDICATION = crown FORM = gate LEVEL = 5 }
+	gm_seed_landmark = { KEY = statue_of_louis_xiv STATE = STATE_RHONE TAG = FRA DEDICATION = crown FORM = statue LEVEL = 5 }
+	gm_seed_landmark = { KEY = lion_of_saint_mark STATE = STATE_VENETIA TAG = AUS DEDICATION = republic FORM = column LEVEL = 5 }
+	gm_seed_landmark = { KEY = sans_souci_palace STATE = STATE_HAITI TAG = HAI DEDICATION = crown FORM = hall LEVEL = 5 }
+	gm_seed_landmark = { KEY = nikko_toshogu STATE = STATE_KANTO TAG = JAP DEDICATION = crown FORM = gate LEVEL = 5 }
+}
+
+# The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
+# proves wrong, or a Grand Monument already standing there (create_building
+# would keep the larger level), places nothing and says so in debug.log.
+gm_seed_landmark = {
+	if = {
+		limit = {
+			s:$STATE$.region_state:$TAG$ ?= {
+				NOT = { has_building = building_grand_monument }
+			}
+		}
+		s:$STATE$.region_state:$TAG$ = {
+			# The records first, as Rededicate sets its guard first: if
+			# create_building fires on_building_built at once, monument_events.1
+			# then charges no vanity (gm_rebuilding) and sees no copy to send to
+			# the ceremony (gm_ceremony_level).
+			set_variable = { name = gm_rebuilding days = 1 }
+			set_variable = { name = gm_landmark value = flag:$KEY$ }
+			set_variable = { name = gm_skin value = flag:landmark_$KEY$ }
+			set_variable = { name = gm_form value = flag:$FORM$ }
+			set_variable = { name = gm_namesake value = flag:landmark }
+			set_variable = { name = gm_ceremony_level value = $LEVEL$ }
+			create_building = {
+				building = building_grand_monument
+				level = $LEVEL$
+				activate_production_methods = { pm_monument_$DEDICATION$ } # REVIEWED 2026-10-11: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
+			}
+			debug_log = "TE_MONUMENTS: landmark $KEY$ placed in $STATE$ for $TAG$: level $LEVEL$, pm_monument_$DEDICATION$, form $FORM$"
+			# The refresh records it (gm_state_first_sight), opens the
+			# journal entry and sets its picture.
+			owner = { trigger_event = { id = monument_events.20 } }
+		}
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or a Grand Monument already stands there"
+	}
+}
+
+# ---- Debug (te_debug_monuments.5) ---------------------------------------------
+# Any scope. One TE_MONUMENTS: line per landmark: its level, status
+# (gm_status_code: 1 undedicated, 2 upheld, 3 heritage, 4 contested) and
+# picture code, then its dedication; or that none stands. Only the working
+# debug_log form ([SCOPE.ScriptValue('...')|N], no names: scripting_best_practices.md).
+gm_debug_log_landmarks = {
+	gm_debug_log_landmark = { KEY = arc_de_triomphe }
+	gm_debug_log_landmark = { KEY = alexander_column }
+	gm_debug_log_landmark = { KEY = brandenburg_gate }
+	gm_debug_log_landmark = { KEY = washington_monument_baltimore }
+	gm_debug_log_landmark = { KEY = la_scala }
+	gm_debug_log_landmark = { KEY = teatro_di_san_carlo }
+	gm_debug_log_landmark = { KEY = jantar_mantar }
+	gm_debug_log_landmark = { KEY = shalimar_gardens }
+	gm_debug_log_landmark = { KEY = jardim_botanico }
+	gm_debug_log_landmark = { KEY = stelae_of_aksum }
+	gm_debug_log_landmark = { KEY = liberty_column }
+	gm_debug_log_landmark = { KEY = lion_monument }
+	gm_debug_log_landmark = { KEY = temple_of_heaven }
+	gm_debug_log_landmark = { KEY = topkapi_palace }
+	gm_debug_log_landmark = { KEY = golestan_palace }
+	gm_debug_log_landmark = { KEY = basilica_of_superga }
+	gm_debug_log_landmark = { KEY = tomb_of_william_the_silent }
+	gm_debug_log_landmark = { KEY = cenotaph_of_maximilian }
+	gm_debug_log_landmark = { KEY = arco_de_santa_maria }
+	gm_debug_log_landmark = { KEY = statue_of_louis_xiv }
+	gm_debug_log_landmark = { KEY = lion_of_saint_mark }
+	gm_debug_log_landmark = { KEY = sans_souci_palace }
+	gm_debug_log_landmark = { KEY = nikko_toshogu }
+}
+
+gm_debug_log_landmark = {
+	if = {
+		limit = {
+			any_state = {
+				has_variable = gm_landmark
+				var:gm_landmark = flag:$KEY$
+			}
+		}
+		every_state = {
+			limit = {
+				has_variable = gm_landmark
+				var:gm_landmark = flag:$KEY$
+			}
+			debug_log = "TE_MONUMENTS: landmark $KEY$: level [SCOPE.ScriptValue('gm_state_grandeur')|0], status [SCOPE.ScriptValue('gm_status_code')|0], picture [SCOPE.ScriptValue('gm_disp_picture_code')|0]"
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = undedicated }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = crown }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = republic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = revolution }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = leader }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = religious }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = civic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = war_memorial }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = artistic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = naturalist }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = scientific }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = industrial }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = athletic }
+		}
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: landmark $KEY$: none standing"
+	}
+}
+
+gm_debug_log_landmark_pm = {
+	if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_$PM$ } }
+		debug_log = "TE_MONUMENTS: landmark $KEY$: dedication $PM$"
+	}
+}

@@ -264,7 +264,7 @@ te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event 
 		default_option = yes
 		trigger = { exists = scope:gm_dbg_m1 }
 		scope:gm_dbg_m1 = {
-			hidden_effect = { gm_clear_state = yes }
+			hidden_effect = { gm_clear_state = { KEEP_LANDMARK = no } }
 			gm_state_start_ceremony = yes
 		}
 		trigger_event = { id = monument_events.20 }
@@ -274,7 +274,7 @@ te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event 
 		name = te_debug_monuments.3.b
 		trigger = { exists = scope:gm_dbg_m2 }
 		scope:gm_dbg_m2 = {
-			hidden_effect = { gm_clear_state = yes }
+			hidden_effect = { gm_clear_state = { KEEP_LANDMARK = no } }
 			gm_state_start_ceremony = yes
 		}
 		trigger_event = { id = monument_events.20 }
@@ -284,7 +284,7 @@ te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event 
 		name = te_debug_monuments.3.c
 		trigger = { exists = scope:gm_dbg_m3 }
 		scope:gm_dbg_m3 = {
-			hidden_effect = { gm_clear_state = yes }
+			hidden_effect = { gm_clear_state = { KEEP_LANDMARK = no } }
 			gm_state_start_ceremony = yes
 		}
 		trigger_event = { id = monument_events.20 }
@@ -338,5 +338,36 @@ te_debug_monuments.4 = { # REVIEWED 2026-10-11: console-only test event (`event 
 		name = te_debug_monuments.4.c
 		default_option = yes
 		scope:gm_dbg_m1 ?= { gm_state_update_picture = yes }
+	}
+}
+
+# ============================================================================
+# LANDMARKS (phase 4) — console test event: `event te_debug_monuments.5`
+# ============================================================================
+# A save started before phase 4 has no landmarks: option a places every one
+# whose state has no Grand Monument and whose 1836 owner still holds it
+# (gm_seed_landmarks' own checks), logging each placed or not placed. Option b
+# logs every landmark standing (gm_debug_log_landmarks).
+te_debug_monuments.5 = { # REVIEWED 2026-10-11: console-only test event (`event te_debug_monuments.5`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.5.t
+	desc = te_debug_monuments.5.desc
+	flavor = te_debug_monuments.5.flavor
+
+	option = {
+		name = te_debug_monuments.5.a
+		gm_seed_landmarks = yes
+	}
+
+	option = {
+		name = te_debug_monuments.5.b
+		default_option = yes
+		gm_debug_log_landmarks = yes
 	}
 }

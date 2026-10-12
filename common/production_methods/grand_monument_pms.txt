@@ -23,6 +23,14 @@
 # it (te_debug_monuments probe, 2026-10-08). So the ceremony replaces a copy
 # directly (gm_state_reset_copied_dedication, gm_effects.txt).
 #
+# TECHNOLOGIES. The Grand Opera House, Botanical Gardens and Grand Observatory
+# carry no unlocking_technologies: the engine switches a building off a method
+# whose technology its owner lacks, which would strip the landmarks standing in
+# 1836 (phase 4 §6) of their dedications. The ceremony asks for the technology
+# (monument_events.2), and gm_state_first_sight sends a panel pick made without
+# it to the ceremony (gm_state_lacks_dedication_tech). The Exhibition Hall and
+# Stadium keep theirs.
+#
 # Every PM carries is_hidden_when_unavailable so the group shows one row.
 # Do NOT add replacement_if_valid to any of these -- it would defeat the ratchet.
 #
@@ -190,10 +198,6 @@ pm_monument_artistic = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
 
-	unlocking_technologies = {
-		romanticism
-	}
-
 	unlocking_production_methods = {
 		pm_monument_undedicated
 		pm_monument_artistic
@@ -212,10 +216,6 @@ pm_monument_naturalist = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
 
-	unlocking_technologies = {
-		romanticism
-	}
-
 	unlocking_production_methods = {
 		pm_monument_undedicated
 		pm_monument_naturalist
@@ -233,10 +233,6 @@ pm_monument_naturalist = {
 pm_monument_scientific = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
-
-	unlocking_technologies = {
-		empiricism
-	}
 
 	unlocking_production_methods = {
 		pm_monument_undedicated

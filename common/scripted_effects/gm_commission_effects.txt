@@ -407,6 +407,9 @@ gm_com_fulfil = {
 			if = {
 				limit = {
 					NOT = { has_variable = gm_unveiled_for_com }
+					# A landmark keeps its historical name; the commission is
+					# still met (phase 4 §3.2).
+					gm_state_has_historical_name = no
 					OR = {
 						NOT = { has_variable = gm_namesake }
 						owner = {
