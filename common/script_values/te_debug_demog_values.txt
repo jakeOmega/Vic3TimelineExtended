@@ -744,3 +744,24 @@ te_debug_demog_replaced_mod = { value = modifier:state_demog_replaced_ratio_add 
 te_debug_demog_part_m_mod = { value = modifier:state_male_labor_participation_add }
 te_debug_demog_part_mod = { value = modifier:state_labor_participation_add }
 te_debug_demog_cap_mod = { value = modifier:state_work_capacity_mult }
+
+# ---- Option x's TE_DEMOG_FAMILY line (phase 2 step 3b) -----------------------------------------------------------
+# THIS = the state: the Family Policy types as it reads them (live), and the census's stored fertility terms, -1 where
+# the state holds none.
+te_debug_demog_mod_desired = { value = modifier:state_desired_fertility_mult }
+te_debug_demog_mod_urban_relief = { value = modifier:state_urban_fertility_relief_add }
+te_debug_demog_mod_means_lit = { value = modifier:state_means_literacy_add }
+te_debug_demog_mod_maternal = { value = modifier:state_maternal_mortality_mult }
+te_debug_demog_mod_bl_relief = { value = modifier:state_birth_limit_relief_add }
+te_debug_demog_mod_srb = { value = modifier:state_sex_ratio_at_birth_add }
+# the owner's measures' desired lines (te_demog_ms_desired_on): with the law's +5% under Pro-Natalist Policy, the
+# capital's desired= read should equal it
+te_debug_demog_ms_desired_owner = { value = 0 if = { limit = { exists = owner } value = owner.te_demog_ms_desired_on } }
+te_debug_demog_fam_desired = { value = -1 if = { limit = { has_variable = te_dg_desired } value = var:te_dg_desired } }
+te_debug_demog_fam_means = { value = -1 if = { limit = { has_variable = te_dg_means } value = var:te_dg_means } }
+te_debug_demog_fam_tfr = { value = -1 if = { limit = { has_variable = te_dg_tfr } value = var:te_dg_tfr } }
+te_debug_demog_fam_planned = { value = -1 if = { limit = { has_variable = te_dg_desired } value = te_demog_tfr_planned } }
+te_debug_demog_fam_unplanned = { value = -1 if = { limit = { has_variable = te_dg_desired } value = te_demog_tfr_unplanned } }
+te_debug_demog_fam_in_mat = { value = -1 if = { limit = { has_variable = te_dg_in_mat } value = var:te_dg_in_mat } }
+te_debug_demog_fam_mmr = { value = -1 if = { limit = { has_variable = te_dg_m_mat } value = var:te_dg_m_mat } }
+te_debug_demog_fam_sex_balance = { value = -1 if = { limit = { has_variable = te_dg_sex_balance } value = var:te_dg_sex_balance } }
