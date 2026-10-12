@@ -1253,7 +1253,7 @@ git commit -m "Demographics harness: each state's practices from a save; history
 
 The regional growth table is Task 5's: it projects #904's peacetime rates, so it needs the fit's per-state figures.
 
-- [ ] **Step 1: Write the failing tests** (append to `test_demographics_practices.py`)
+- [x] **Step 1: Write the failing tests** (append to `test_demographics_practices.py`)
 
 ```python
 class TestReplay(unittest.TestCase):
@@ -1310,12 +1310,12 @@ class TestReplay(unittest.TestCase):
 
 Add `from dataclasses import replace` to the test file's imports.
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `$V -m unittest test_demographics_practices.TestReplay`
 Expected: FAIL (`DP.replay` missing).
 
-- [ ] **Step 3: Write the replay** (append to `demographics_practices.py`)
+- [x] **Step 3: Write the replay** (append to `demographics_practices.py`)
 
 ```python
 # ---- the drift replay (spec 5.1 item 5) ---------------------------------------------------------------------
@@ -1412,7 +1412,7 @@ def replay_moves(result, top=10):
     return sorted(rows, reverse=True)[:top]
 ```
 
-- [ ] **Step 4: The subcommand** (`demographics_harness.py`; it imports `demographics_practices as DP` inside the
+- [x] **Step 4: The subcommand** (`demographics_harness.py`; it imports `demographics_practices as DP` inside the
   function, since that module imports this one)
 
 ```python
@@ -1443,12 +1443,12 @@ def cmd_practices_replay(args):
 
 Parser: `practices-replay SAVE... [--out FILE] [--year Y]`.
 
-- [ ] **Step 5: Run the tests**
+- [x] **Step 5: Run the tests**
 
 Run: `$V -m unittest test_demographics_practices test_demographics_harness`
 Expected: `OK`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add scripts/analysis/demographics_practices.py scripts/analysis/demographics_harness.py test_demographics_practices.py

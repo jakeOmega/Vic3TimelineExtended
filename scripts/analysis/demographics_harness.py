@@ -861,6 +861,33 @@ def cmd_history(args):
     return 0
 
 
+# ---- Late Marriage and Birth Spacing (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md) ----------
+# demographics_practices imports this module, so the commands import it inside.
+def cmd_practices_replay(args):
+    import demographics_practices as DP
+    carriers = DM.load_carriers()
+    loaded = sorted(((save_year(p) or args.year, DP.practice_states(p, carriers)) for p in args.save),
+                    key=lambda pair: pair[0])
+    result = DP.replay(loaded)
+    for year, recs in sorted(result.items()):
+        west = DP._mean(recs.values(), "lm", lambda r: r["strategic_region"] in DP.WEST)
+        parts = [f"West's Late Marriage {west:.2f}" if west is not None else "no Western state"]
+        for label, keep in DP.EAST_ASIA_BS:
+            got = DP._mean(recs.values(), "bs", keep)
+            parts.append(f"{label}'s Birth Spacing {got:.2f}" if got is not None else f"no {label}")
+        print(f"{year}: " + "; ".join(parts))
+    print("largest moves from the start (practice, state region, start -> share, target):")
+    for move, p, _sid, sr, start, share, target in DP.replay_moves(result):
+        print(f"  {move:.2f}  {p} {sr:28s} {start:.2f} -> {share:.2f}  target {target:.2f}")
+    if args.out:
+        with open(args.out, "w", encoding="utf-8") as fh:
+            json.dump({str(y): r for y, r in result.items()}, fh, indent=1, sort_keys=True)
+    fails = DP.replay_gate(result)
+    for line in fails:
+        print("GATE " + line)
+    return 1 if fails else 0
+
+
 HEALTH_LAWS = ("law_charitable_health_system", "law_private_health_insurance", "law_public_health_insurance")
 
 
@@ -1307,6 +1334,11 @@ def main(argv=None):
                    help="each country's figure from its incorporated states (the world line keeps every state)")
     p.add_argument("--no-practices", action="store_true", help="the model without Late Marriage and Birth Spacing")
     p.set_defaults(fn=cmd_history)
+    p = sub.add_parser("practices-replay", help="Late Marriage's and Birth Spacing's drift through a run's saves")
+    p.add_argument("save", nargs="+")
+    p.add_argument("--out", help="write {year: {state id: record}} here (history --shares, practices-fit --shares)")
+    p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.set_defaults(fn=cmd_practices_replay)
     p = sub.add_parser("adopters")
     p.add_argument("saves", nargs="+")
     p.set_defaults(fn=cmd_adopters)

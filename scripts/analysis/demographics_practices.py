@@ -75,3 +75,97 @@ def read_shares(path):
     data = json.loads(open(path, encoding="utf-8").read())
     return {int(year): {sid: {p: rec[p] for p in P.PRACTICES} for sid, rec in by_sid.items()}
             for year, by_sid in data.items()}
+
+
+# ---- the drift replay (spec 5.1 item 5) ---------------------------------------------------------------------
+
+def _seed(shares, states):
+    """te_demog_practice_seed: a state with no share takes its siblings' people-weighted mean (the states in its state
+    region that hold one), else its start less what its conditions have eroded. Siblings share a start, so in a new
+    game the order doesn't matter (the plan's D5)."""
+    by_region = {}
+    for s in states:
+        by_region.setdefault(s.state_region, []).append(s)
+    for s in states:
+        if s.sid in shares:
+            continue
+        sibs = [x for x in by_region[s.state_region] if x.sid in shares]
+        shares[s.sid] = {p: M.practice_seed(p, s.inp, M.practice_start(p, s.state_region, s.strategic_region),
+                                            [(x.people, shares[x.sid][p]) for x in sibs]) for p in P.PRACTICES}
+
+
+def _step(shares, states):
+    """te_demog_practice_step for every state: a year's drift toward its target at these conditions."""
+    for s in states:
+        for p in P.PRACTICES:
+            start = M.practice_start(p, s.state_region, s.strategic_region)
+            shares[s.sid][p] = M.practice_drift(shares[s.sid][p], M.practice_target(p, s.inp, start))
+
+
+def replay(loaded):
+    """{year: {sid: record}} for each save in `loaded` ([(year, [PracticeState])], sorted): every state seeds at the
+    first save that holds it, then the census steps once a year, each year with the conditions of the latest save at
+    or before it (so the years between two saves take the earlier one's, and a save's own year takes its own). A
+    record holds the shares, their targets at that save's conditions, the state's people and its regions."""
+    shares, out, prev = {}, {}, None
+    for year, states in loaded:
+        if prev is not None:
+            prev_year, prev_states = prev
+            for _ in range(year - prev_year - 1):
+                _step(shares, prev_states)
+        _seed(shares, states)
+        if prev is not None:
+            _step(shares, states)
+        out[year] = {}
+        for s in states:
+            rec = {p: shares[s.sid][p] for p in P.PRACTICES}
+            for p in P.PRACTICES:
+                rec[f"target_{p}"] = M.practice_target(p, s.inp, M.practice_start(p, s.state_region,
+                                                                                    s.strategic_region))
+            rec.update(people=s.people, state_region=s.state_region, strategic_region=s.strategic_region)
+            out[year][s.sid] = rec
+        prev = (year, states)
+    return out
+
+
+WEST = frozenset({"region_western_europe", "region_northern_europe", "region_central_europe"})
+EAST_ASIA_BS = (("Japan", lambda r: P.PRACTICE_START_STATE["bs"].get(r["state_region"]) == 1.0),
+                ("China, Manchuria, Korea", lambda r: M.bs_held_group(r["state_region"], r["strategic_region"])
+                 == "east_asia"))
+
+
+def _mean(records, key, keep):
+    held = [(r["people"], r[key]) for r in records if keep(r) and r["people"] > 0]
+    people = sum(p for p, _v in held)
+    return sum(p * v for p, v in held) / people if people else None
+
+
+def replay_gate(result, upto=1887):
+    """Spec 5.2's replay items: the West's Late Marriage at 0.8 or more, and East Asia's Birth Spacing within 0.1 of
+    its start, at every save up to `upto`. Returns the failures as lines."""
+    fails = []
+    for year, recs in sorted(result.items()):
+        if year > upto:
+            continue
+        west = _mean(recs.values(), "lm", lambda r: r["strategic_region"] in WEST)
+        if west is not None and west < 0.8:
+            fails.append(f"{year}: the West's Late Marriage {west:.2f} (at least 0.8)")
+        for label, keep in EAST_ASIA_BS:
+            got = _mean(recs.values(), "bs", keep)
+            start = _mean([dict(r, start=M.practice_start("bs", r["state_region"], r["strategic_region"]))
+                           for r in recs.values()], "start", keep)
+            if got is not None and abs(got - start) > 0.1:
+                fails.append(f"{year}: East Asia's Birth Spacing, {label}, {got:.2f} against its start {start:.2f}")
+    return fails
+
+
+def replay_moves(result, top=10):
+    """The states whose shares moved most from their start by the last save: [(move, practice, sid, state region,
+    start, share, target)], largest first. Phase 2 has no spread, so every move is the state's own conditions."""
+    year = max(result)
+    rows = []
+    for sid, r in result[year].items():
+        for p in P.PRACTICES:
+            start = M.practice_start(p, r["state_region"], r["strategic_region"])
+            rows.append((abs(r[p] - start), p, sid, r["state_region"], start, r[p], r[f"target_{p}"]))
+    return sorted(rows, reverse=True)[:top]
