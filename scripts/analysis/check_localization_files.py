@@ -26,6 +26,10 @@ Checks, per `localization/**/*.yml`:
      `key:0 "first part` on one line and the rest on the next: the game reads
      neither as the value, and organize_loc keeps the first line as the whole
      value and drops the rest, after which no other check sees it.
+  8. a version digit is followed by a space before the quote (`key:0 "`).
+     `key:0"value"` is a typo neither vanilla nor the mod writes (an editor
+     that drops a trailing space produces it). `key:"value"`, with no digit,
+     is the mod's own older form and renders in game, so it passes.
 
 Pass a directory to check other trees too, e.g. the deploy-time language copies
 `scripts/generators/gen_non_english_loc.py` stages under `build/localization/`.
@@ -52,6 +56,9 @@ BOM = b"\xef\xbb\xbf"
 
 # `KEY:0 "value"` / `KEY: "value"` — the key is the leading token before the colon.
 _KEY_RE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\s*\d*\s*"')
+
+# `KEY:0"value"`: a version digit glued to the quote (check 8).
+_VERSION_NO_SPACE_RE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d+"')
 
 # The loader takes a file's language from its `_l_<language>.yml` suffix.
 _LANGUAGE_SUFFIX_RE = re.compile(r"_l_([a-z_]+)\.yml$")
@@ -129,6 +136,11 @@ def check_file(path: str) -> list[str]:
         key = match.group(1)
         if f"{key}:" == expected_header:
             continue
+        if _VERSION_NO_SPACE_RE.match(line):
+            problems.append(
+                f"{rel}:{index}: '{key}' has no space between its version digit and the quote: "
+                f"write `{key}:0 \"…\"`"
+            )
         if key in seen:
             problems.append(
                 f"{rel}:{index}: duplicate key '{key}' "
