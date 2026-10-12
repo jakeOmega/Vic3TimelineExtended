@@ -56,6 +56,8 @@ gm_com_clear = {
 	gm_remove_state_var = { VAR = gm_com_name_enemy_cap }
 	gm_remove_state_var = { VAR = gm_com_gap_half }
 	gm_remove_state_var = { VAR = gm_com_offer_watch }
+	gm_remove_state_var = { VAR = gm_com_build_where }
+	gm_remove_state_var = { VAR = gm_com_raise_pending }
 	every_scope_state = {
 		limit = { has_variable = gm_unveiled_for_com }
 		remove_variable = gm_unveiled_for_com
@@ -235,15 +237,13 @@ gm_com_decline = {
 	trigger_event = { id = monument_events.20 }
 }
 
-# ---- The AI's construction (v2 §2.6) ----------------------------------------------------
-# Country scope, AI only, on seizing. Queues the target's levels as
-# government construction (start_building_construction: the AI pays for them,
-# unlike create_building) in the first of: the opportunity's state; the tallest
-# fitting monument of its dedication; an undedicated monument (the ceremony's
-# AI weight then picks the opportunity's dedication); the capital, if it has no
-# monument; the most populous incorporated state without one. One level a call,
-# in a `while` with a limit: an <int> argument does not take a variable.
-gm_com_ai_queue = {
+# ---- Building it: the AI's queue and Raise It (v2 §2.6; usability §1) -------------------
+# Country scope. Where an opportunity's levels go, as scope:gm_com_build_state:
+# the first of the opportunity's state; the tallest fitting monument of its
+# dedication; an undedicated monument (the ceremony then offers the
+# opportunity's dedication first); the capital, if it has no monument; the most
+# populous incorporated state without one. None of these, no scope.
+gm_com_pick_build_state = {
 	clear_saved_scope = gm_com_build_state
 	if = {
 		limit = { has_variable = gm_com_state }
@@ -308,17 +308,190 @@ gm_com_ai_queue = {
 			save_scope_as = gm_com_build_state
 		}
 	}
+}
+
+# Country scope, with scope:gm_com_build_state and gm_com_raise_levels set:
+# queue that many levels there as government construction
+# (start_building_construction: the country pays for them, unlike
+# create_building). One level a call, in a `while` with a limit: an <int>
+# argument does not take a variable.
+gm_com_queue_levels = {
+	set_variable = { name = gm_com_queued value = 0 }
+	while = {
+		limit = { var:gm_com_queued < var:gm_com_raise_levels }
+		scope:gm_com_build_state = {
+			start_building_construction = building_grand_monument
+		}
+		change_variable = { name = gm_com_queued add = 1 }
+	}
+	remove_variable = gm_com_queued
+}
+
+# Country scope, AI only, on seizing: the whole target.
+gm_com_ai_queue = {
+	gm_com_pick_build_state = yes
 	if = {
 		limit = { exists = scope:gm_com_build_state }
-		set_variable = { name = gm_com_queued value = 0 }
-		while = {
-			limit = { var:gm_com_queued < var:gm_com_target }
-			scope:gm_com_build_state = {
-				start_building_construction = building_grand_monument
-			}
-			change_variable = { name = gm_com_queued add = 1 }
+		set_variable = { name = gm_com_raise_levels value = var:gm_com_target }
+		gm_com_queue_levels = yes
+		remove_variable = gm_com_raise_levels
+	}
+}
+
+# Country scope, from monument_events.27 (Raise It on the panel, or Seize It
+# and Start Building on the offer): the levels still missing
+# (gm_com_levels_to_go), where gm_com_pick_build_state puts them. An event,
+# not the button's effect: the button's tooltip walks its effect without
+# writing, and this sets a variable and reads it back.
+gm_com_raise = {
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			gm_com_levels_to_go > 0
 		}
-		remove_variable = gm_com_queued
+		gm_com_pick_build_state = yes
+		if = {
+			limit = { exists = scope:gm_com_build_state }
+			set_variable = { name = gm_com_raise_levels value = gm_com_levels_to_go }
+			gm_com_queue_levels = yes
+			remove_variable = gm_com_raise_levels
+		}
+	}
+}
+
+# Country scope, from gm_country_refresh: where Raise It would build
+# (gm_com_build_where), for the panel's Where line and the button's tooltip.
+# Written, never read back here (the refresh runs inside tooltips).
+gm_com_update_build_where = {
+	if = {
+		limit = { has_variable = gm_com_open }
+		gm_com_pick_build_state = yes
+		if = {
+			limit = { exists = scope:gm_com_build_state }
+			set_variable = { name = gm_com_build_where value = scope:gm_com_build_state }
+		}
+		else = {
+			gm_remove_state_var = { VAR = gm_com_build_where }
+		}
+	}
+	else = {
+		gm_remove_state_var = { VAR = gm_com_build_where }
+	}
+}
+
+# ---- The ceremony's opportunity option (usability §3) -----------------------------------
+# State scope, monument_events.2's "As the opportunity asks": the open
+# opportunity's dedication, through the same wrapper and with the same tooltip
+# as that dedication's own option. test_grand_monument_registry.py pins each
+# branch to the option it repeats.
+gm_state_dedicate_as_opportunity_asks = {
+	if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:crown }
+		}
+		custom_tooltip = {
+			text = monument_events.2.l.tt
+			gm_state_dedicate_regime = { KEY = crown }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:republic }
+		}
+		custom_tooltip = {
+			text = monument_events.2.b.tt
+			gm_state_dedicate_regime = { KEY = republic }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:revolution }
+		}
+		custom_tooltip = {
+			text = monument_events.2.n.tt
+			gm_state_dedicate_regime = { KEY = revolution }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:leader }
+		}
+		custom_tooltip = {
+			text = monument_events.2.o.tt
+			gm_state_dedicate_leader = yes
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:religious }
+		}
+		custom_tooltip = {
+			text = monument_events.2.c.tt
+			gm_state_dedicate_faith = yes
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:civic }
+		}
+		custom_tooltip = {
+			text = monument_events.2.m.tt
+			gm_state_dedicate_timeless = { KEY = civic AXIS = heritage }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:war_memorial }
+		}
+		custom_tooltip = {
+			text = monument_events.2.e.tt
+			gm_state_dedicate_timeless = { KEY = war_memorial AXIS = heritage }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:artistic }
+		}
+		custom_tooltip = {
+			text = monument_events.2.g.tt
+			gm_state_dedicate_timeless = { KEY = artistic AXIS = building_artistic }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:naturalist }
+		}
+		custom_tooltip = {
+			text = monument_events.2.h.tt
+			gm_state_dedicate_timeless = { KEY = naturalist AXIS = building_naturalist }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:scientific }
+		}
+		custom_tooltip = {
+			text = monument_events.2.i.tt
+			gm_state_dedicate_timeless = { KEY = scientific AXIS = building_scientific }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:industrial }
+		}
+		custom_tooltip = {
+			text = monument_events.2.j.tt
+			gm_state_dedicate_timeless = { KEY = industrial AXIS = building_industrial }
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { var:gm_com_dedication = flag:athletic }
+		}
+		custom_tooltip = {
+			text = monument_events.2.k.tt
+			gm_state_dedicate_timeless = { KEY = athletic AXIS = building_athletic }
+		}
 	}
 }
 
@@ -362,6 +535,14 @@ gm_com_monthly = {
 			limit = { var:gm_com_months_left <= 0 }
 			gm_com_miss = yes
 		}
+		# A year left and not yet met: a reminder (usability §5).
+		else_if = {
+			limit = {
+				is_ai = no
+				var:gm_com_months_left = 12
+			}
+			post_notification = gm_com_reminder_notice
+		}
 	}
 }
 
@@ -373,7 +554,10 @@ gm_com_monthly = {
 # opportunity asks only for the city's name and the monument already has a
 # name: that would erase a chosen name for everyone's default -- and is rebuilt
 # taller by monument_events.26 (gm_gift; never here: this runs inside the
-# refresh, which tooltips walk). Then the asking group's approval and the boon.
+# refresh, which tooltips walk). Then the asking group's approval and the boon,
+# and for a player monument_events.28, which names the monument and the boon
+# from gm_com_seized_state and gm_com_seized_source (the record is gone by
+# then; nothing here reads them back).
 gm_com_fulfil = {
 	clear_saved_scope = gm_com_named_state
 	if = {
@@ -413,13 +597,22 @@ gm_com_fulfil = {
 			set_variable = gm_gift
 			trigger_event = { id = monument_events.26 }
 		}
+		# What monument_events.28 names after the record closes (usability §5).
+		set_variable = { name = gm_com_seized_state value = scope:gm_com_named_state }
+	}
+	else = {
+		gm_remove_state_var = { VAR = gm_com_seized_state }
+	}
+	if = {
+		limit = { has_variable = gm_com_source }
+		set_variable = { name = gm_com_seized_source value = var:gm_com_source }
 	}
 	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = 15 }
 	gm_com_grant_boon = yes
 	set_variable = gm_active
 	if = {
 		limit = { is_ai = no }
-		post_notification = gm_com_fulfilled_notice
+		trigger_event = { id = monument_events.28 }
 	}
 	gm_com_close = yes
 }

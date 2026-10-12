@@ -2201,12 +2201,14 @@ gm_vanity_backlash_notice = {
 	color = bad
 }
 
-# Grand Monuments: a commission closes (docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2.3)
-gm_com_fulfilled_notice = {
+# Grand Monuments: an opportunity's notices (docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md)
+# A year left on an open opportunity not yet met (opportunities usability §5).
+# Its completion is an event (monument_events.28), not a notice.
+gm_com_reminder_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/buildings.dds"
 	notification_type = toast
-	color = good
+	color = neutral
 }
 
 gm_com_missed_notice = {

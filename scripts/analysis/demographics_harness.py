@@ -1125,7 +1125,12 @@ FIDELITY_CAUSES = (("infection", "te_dg_m_inf", 1.0), ("chronic", "te_dg_m_chr",
 # the script against the model; a census from before them is read from the save's techs, laws and modifiers.
 CENSUS_INPUT_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_chr", "te_dg_in_ext",
                      "te_dg_in_work", "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd")
-FIDELITY_VARS = ("te_dg_sol", "te_dg_lit") + tuple(var for _c, var, _s in FIDELITY_CAUSES) + CENSUS_INPUT_VARS
+# The step's own SoL and literacy (#916): a walk without a step rewrites te_dg_sol and te_dg_lit, never te_dg_m_*.
+# Read on their own, not in CENSUS_INPUT_VARS: that check is all or nothing, and a census from before #916's last
+# fix, which holds the nine without these two, would lose its drifted medicine.
+STEP_SOL_VARS = ("te_dg_in_sol", "te_dg_in_lit")
+FIDELITY_VARS = (("te_dg_sol", "te_dg_lit") + STEP_SOL_VARS + tuple(var for _c, var, _s in FIDELITY_CAUSES)
+                 + CENSUS_INPUT_VARS)
 
 
 def census_inputs(inp, got):
@@ -1145,11 +1150,12 @@ def census_inputs(inp, got):
 
 def fidelity_rows(path, carriers=None, tags=(), counts=None):
     """[(tag, state id, people, {cause: (census, model)}, (SoL: save, walk), (literacy: save, walk))] for each state
-    the census has walked. The model runs on the walk's own SoL and literacy (te_dg_sol, te_dg_lit) and, where the save
-    holds them, the step's own stored inputs (census_inputs: the drifted medicine, turmoil, crowding and the plain
-    types' sums); otherwise on the save's techs, laws, institutions and crowding. So a cause that differs is the
-    script against the model, a term the harness doesn't read (the crowding term was one, 2026-10-10) or, for a census
-    from before the stored inputs, an input that changed after the state's last step (a new tech or law).
+    the census has walked. The model runs on the SoL and literacy the step used (te_dg_in_sol, te_dg_in_lit; for a
+    census from before them, the walk's te_dg_sol and te_dg_lit, which a walk without a step rewrites) and, where
+    the save holds them, the step's own stored inputs (census_inputs: the drifted medicine, turmoil, crowding and
+    the plain types' sums); otherwise on the save's techs, laws, institutions and crowding. So a cause that differs
+    is the script against the model, a term the harness doesn't read (the crowding term was one, 2026-10-10) or, for
+    a census from before the stored inputs, an input that changed after the state's last step (a new tech or law).
     counts, if given, gets {"stored": states read on their own inputs, "save": states read from the save, "spreading":
     states whose stored medicine is more than P.MEDICINE_SNAP from the targets the save's lines give}."""
     carriers = DM.load_carriers() if carriers is None else carriers
@@ -1165,7 +1171,8 @@ def fidelity_rows(path, carriers=None, tags=(), counts=None):
             if "te_dg_m_inf" not in got or st.population <= 0:
                 continue
             inp = dataclasses.replace(inputs_for(st, carriers, incorporated=inc),
-                                      sol=got.get("te_dg_sol", st.sol), literacy=got.get("te_dg_lit", st.literacy))
+                                      sol=got.get("te_dg_in_sol", got.get("te_dg_sol", st.sol)),
+                                      literacy=got.get("te_dg_in_lit", got.get("te_dg_lit", st.literacy)))
             own = census_inputs(inp, got)
             if counts is not None:
                 counts["stored" if own is not inp else "save"] += 1
@@ -1203,7 +1210,8 @@ def _fidelity(args):
         return 1
     people = sum(r[2] for r in rows)
     print(f"{len(rows)} states the census has walked, {people / 1e6:,.1f}M people. A cause is off where the census's "
-          f"multiplier is more than {args.tolerance:.0%} from the model's on the walk's own SoL and literacy.")
+          f"multiplier is more than {args.tolerance:.0%} from the model's on the step's own SoL and literacy "
+          "(the walk's, for a census from before the step stored them).")
     print(f"The model has the poverty term at x{P.POVERTY_INFECTION_AT_FLOOR:g} (SoL {P.POVERTY_INFECTION_FLOOR_SOL}); "
           f"a save from a build with another shows it as off below SoL {P.POVERTY_INFECTION_SOL} "
           f"(--poverty-floor 1 for one from before the poverty term).")

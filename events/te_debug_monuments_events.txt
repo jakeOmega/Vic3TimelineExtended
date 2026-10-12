@@ -427,54 +427,93 @@ te_debug_monuments.6 = { # REVIEWED 2026-10-12: console-only test event (`event 
 	desc = te_debug_monuments.6.desc
 	flavor = te_debug_monuments.6.flavor
 
+	# Each option does its work behind a click-only marker
+	# (scripting_best_practices.md § "An Option's Tooltip Walks Its Effects"):
+	# a taking or a return reads back what it writes, which the tooltip's walk
+	# would log every frame.
 	option = {
 		name = te_debug_monuments.6.a
-		ordered_state = {
-			limit = {
-				gm_state_tr_takeable = yes
-				NOT = { owner = root }
+		custom_tooltip = {
+			text = te_debug_monuments.6.a.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				ordered_state = {
+					limit = {
+						gm_state_tr_takeable = yes
+						NOT = { owner = root }
+					}
+					order_by = gm_state_grandeur
+					position = 0
+					check_range_bounds = no
+					gm_state_tr_take = { WHO = root ROUTE = occupation }
+				}
+				gm_tr_finish = yes
 			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			gm_state_tr_take = { WHO = root ROUTE = occupation }
 		}
-		gm_tr_finish = yes
 	}
 
 	option = {
 		name = te_debug_monuments.6.b
-		ordered_scope_state = {
-			limit = { gm_state_tr_takeable = yes }
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			gm_state_tr_take = { WHO = root ROUTE = own }
+		custom_tooltip = {
+			text = te_debug_monuments.6.b.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				ordered_scope_state = {
+					limit = { gm_state_tr_takeable = yes }
+					order_by = gm_state_grandeur
+					position = 0
+					check_range_bounds = no
+					gm_state_tr_take = { WHO = root ROUTE = own }
+				}
+				gm_tr_finish = yes
+			}
 		}
-		gm_tr_finish = yes
 	}
 
 	option = {
 		name = te_debug_monuments.6.c
-		if = {
-			limit = { has_global_variable_list = gm_trophies }
-			every_in_global_list = {
-				variable = gm_trophies
-				limit = { gm_tr_held_by = { WHO = root } }
-				add_to_temporary_list = gm_tr_debug_returning
+		custom_tooltip = {
+			text = te_debug_monuments.6.c.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = {
+					has_variable = gm_tr_debug_click
+					has_global_variable_list = gm_trophies
+				}
+				every_in_global_list = {
+					variable = gm_trophies
+					limit = { gm_tr_held_by = { WHO = root } }
+					add_to_temporary_list = gm_tr_debug_returning
+				}
+				every_in_list = {
+					list = gm_tr_debug_returning
+					gm_tr_return_home = { RELATIONS = yes }
+				}
+				gm_tr_finish = yes
 			}
-			every_in_list = {
-				list = gm_tr_debug_returning
-				gm_tr_return_home = { RELATIONS = yes }
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
 			}
 		}
-		gm_tr_finish = yes
 	}
 
 	option = {
 		name = te_debug_monuments.6.d
 		default_option = yes
-		gm_trophy_monthly = yes
-		gm_tr_debug_log = yes
+		custom_tooltip = {
+			text = te_debug_monuments.6.d.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				gm_trophy_monthly = yes
+				gm_tr_debug_log = yes
+			}
+		}
 	}
 }

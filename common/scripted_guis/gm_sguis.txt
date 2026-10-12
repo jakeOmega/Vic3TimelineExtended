@@ -141,6 +141,35 @@ gm_com_let_pass_sgui = {
 	}
 }
 
+# Raise It (usability §1): the missing levels queued as government construction
+# where gm_com_pick_build_state puts them, through monument_events.27 (the
+# button's tooltip walks this effect without writing, and the queue sets a
+# variable and reads it back). Greyed while one of our monuments is under
+# construction, so a second press can't queue the same levels twice.
+gm_com_raise_sgui = {
+	scope = country
+
+	is_shown = {
+		has_variable = gm_com_open
+	}
+
+	is_valid = {
+		gm_com_can_raise = yes
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_com_raise_effect_tt
+			set_variable = { name = gm_com_raise_pending value = yes days = 7 }
+			trigger_event = { id = monument_events.27 }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
 # ---- Names (v2 §3.3) ------------------------------------------------------------
 # Rename the row's monument: the form (if its skin offers more than one) and
 # the namesake again, at no cost, the current name each event's default. Not

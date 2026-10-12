@@ -218,6 +218,7 @@ Event un_vote.5 is orphaned
 No default option in event monument_events.11.
 building_gm_name_carrier_anchor has missing texture
 Flag 'leader' is used but is never set
+Flag 'memorial' is used but is never set
 ```
 
-Three lines once per launch. The skin choice has no `default_option` by design, the never-built name-carrier building lacks the same unidentified UI texture as the silo (L17), and `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see. Each signature names its own event, building or flag, so another event without a default, another building's missing texture or another never-set flag still shows up.
+Four lines once per launch. The skin choice has no `default_option` by design, the never-built name-carrier building lacks the same unidentified UI texture as the silo (L17), `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see, and `flag:memorial` is read only to name a Memorial-form monument or commission from a save older than #909, which retired that form. Each signature names its own event, building or flag, so another event without a default, another building's missing texture or another never-set flag still shows up.

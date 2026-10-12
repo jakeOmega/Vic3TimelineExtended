@@ -513,7 +513,7 @@ These sections follow:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, and Let It Pass. |
+| Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
 | Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
@@ -567,11 +567,21 @@ Moments in your country's history bring **opportunities** to raise a
 monument, whatever your rank. Each comes as an event, An Opportunity,
 titled for the moment that brought it, and names the interest group that wants
 it, the dedication, where it stands and what completing it gives. Seize the
-Opportunity opens it; Let It Pass closes it. Neither choice costs anything, and
-an offer left unanswered is seized. While it is open it has its own section on
-the Grand Monuments tab, with a Let It Pass button of its own. Only one
-opportunity is open or on offer at a time; a moment that comes while one is
-open passes without one.
+Opportunity opens it; Seize It and Start Building opens it and queues its five
+levels at once, as government construction, in the state its tooltip names; Let
+It Pass closes it. Passing costs nothing, and an offer left unanswered is seized.
+Only one opportunity is open or on offer at a time; a moment that comes while
+one is open passes without one.
+
+While it is open it has its own section on the Grand Monuments tab: where it
+counts, the grandeur added, the months left and what completing it gives. Raise
+It queues the levels still missing in the state its tooltip names, at 1,000
+construction each; it is grayed while any of your Grand Monuments is under
+construction, so a second press can't queue them twice. Levels count only once
+they are finished, and the section says so while any are being built. Let It
+Pass closes the opportunity. A monument that counts toward it is marked Counts
+toward the opportunity in its row under Our Monuments and on its state card. A
+year before time runs out, a notice reminds you.
 
 | Moment | Who asks | For | Where | Boon for ten years |
 |---|---|---|---|---|
@@ -595,8 +605,10 @@ great power, 120 in a major power and 180 in any other. Grandeur you add to fitt
 counts, whether you raise an old monument or build a new one, and an
 opportunity for the capital counts only the capital's monument. One for the
 capital can be met anywhere when the capital already holds a monument of
-another dedication. A monument that becomes contested stops counting. While an
-opportunity is open, the dedication ceremony says so.
+another dedication. A monument that becomes contested stops counting. When a new
+monument's dedication ceremony could answer the open opportunity, its first
+choice is "As the opportunity asks", with its dedication, and that
+is what the ceremony picks if you let it pass.
 
 Each moment that comes once comes once a game: the first time you are a great
 power, the space firsts, each technology. What you already have when a game
@@ -610,7 +622,7 @@ formed or released in play is founded the year it appears. Other countries of
 
 | Outcome | What follows |
 |---|---|
-| Completed | The monument that completed it is rebuilt 5 levels taller at no cost, keeping its dedication, name and style. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
+| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it is rebuilt 5 levels taller at no cost, keeping its dedication, name and style. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
 | Let it pass, or time runs out | Nothing. The next moment can bring another. |
 | Lapsed | Nothing. An opportunity lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
 
