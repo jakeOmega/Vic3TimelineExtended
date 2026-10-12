@@ -32,6 +32,8 @@ offline checks; `gen_demographics.py` for generated script.
 
 **Base:** `main` at a8d2b9fc (#900). The other agent's branch `demog-gate-from-saves` edits
 `scripts/analysis/demographics_observer_report.py`; this plan never touches that file.
+- **Re-based 2026-10-12** onto `main` at 4002821a (#904, #907, #913, #914, #916 merged since). The places below that
+  name code were re-checked against it; where it moved, the text says so ("since #916").
 
 ---
 
@@ -151,6 +153,11 @@ variables a state".
   (`session-notes-2026-10-11/regional-rates/`), with #904's peacetime filter (no war at either save, devastation under
   5, radicals under a quarter of the people, no famine and under 10% in severe starvation). Task 6 Step 2 writes them
   again with its defaults and checks they reproduce #904's table.
+- Since #916 `history` and `fidelity` run the model on the census's stored inputs (`census_inputs`: medicine as it
+  had spread, turmoil, crowding) where a save holds all of `CENSUS_INPUT_VARS`. The ec304526 saves hold none, so they
+  read the save's techs, laws and modifiers, with turmoil 0 and medicine at its targets: ec304526's census, which had
+  neither term. The model is otherwise unchanged since ec304526 (re-checked 2026-10-12), so these commands still run
+  from this branch.
 - `predict` and `fidelity` do not run from this branch on those saves. #892's `predict` treats the moved lines as
   script-only, but at ec304526 they were live engine fields. `fidelity`'s cause multipliers differ by build.
   - #900's baseline (×1.77 from the saves) came from a detached worktree at ec304526.
@@ -805,7 +812,7 @@ fine.
 
 - [ ] **Step 4: The model** (`demographics_model.py`)
 
-Add to `Inputs`, after `mods`:
+Add to `Inputs`, after `medicine` (its last field since #916; every caller builds `Inputs` by keyword):
 
 ```python
     practices: dict = field(default_factory=dict)   # {practice: share 0-1}: lm Late Marriage, bs Birth Spacing
@@ -944,8 +951,10 @@ git commit -m "Demographics model: Late Marriage and Birth Spacing, the terms an
   people, incorporated, inp)`; `DP.read_save(path) -> (sections, state variables)` (the parse, which the fit
   caches); `DP.practice_states(path, carriers, regions=None, save=None) -> [PracticeState]`;
   `DP.table_shares(states) -> {sid: {practice: share}}`; `DP.read_shares(path) -> {year: {sid: {practice: share}}}`;
-  `H.inputs_for(c, carriers=None, incorporated=True, practices=None)`; `H.history_rows(sections, year, anchors,
-  carriers=None, shares=None, incorporated_only=False, practices=True)` where `shares` is `{sid: {practice: share}}`.
+  `H.inputs_for(c, carriers=None, incorporated=True, practices=None)`; `H.country_figures(states, carriers,
+  stored=None, shares=None, incorporated_only=False)`; `H.history_rows(sections, year, anchors, carriers=None,
+  stored=None, shares=None, incorporated_only=False, practices=True)` where `shares` is `{sid: {practice: share}}`
+  (`stored` is #916's, kept).
   Every state the shares don't hold takes its seed (its start less what its conditions eroded); `practices=False` is
   today's model.
 
@@ -1119,15 +1128,16 @@ def read_save(path):
     """(sections, {state id: {"vars": ...}}) of a plain-text save: the parse (265 MB a save in the normal-speed run),
     which the fit caches by path and re-uses at every grid point."""
     sections = S.read_sections(path)
-    _countries, svars = S.read_variables(path, (), ("te_dg_fjob_share", *BAND_VARS))
+    _countries, svars = S.read_variables(path, (), ("te_dg_fjob_share", *BAND_VARS, *H.CENSUS_INPUT_VARS))
     return sections, svars
 
 
 def practice_states(path, carriers, regions=None, save=None):
     """[PracticeState] for every state of a plain-text save that has people (save: read_save's result, if cached).
-    The women's job share is the walk's te_dg_fjob_share where the save holds it (a game with the census running),
-    else 0; Undivided Farm Succession isn't read from saves, so only Primogeniture counts as impartible here (the
-    script reads both)."""
+    The model's inputs are the census's stored ones where the save holds them all (H.census_inputs, as `history`
+    reads them since #916), else the save's techs, laws and modifiers. The women's job share is the walk's
+    te_dg_fjob_share where the save holds it (a game with the census running), else 0; Undivided Farm Succession
+    isn't read from saves, so only Primogeniture counts as impartible here (the script reads both)."""
     regions = R.strategic_region_of() if regions is None else regions
     sections, svars = read_save(path) if save is None else save
     state_region = S.state_regions(sections)
@@ -1135,8 +1145,8 @@ def practice_states(path, carriers, regions=None, save=None):
     for tag, sts in S.state_inputs(sections).items():
         for sid, st, inc in sts:
             v = svars.get(sid, {}).get("vars", {})
-            inp = replace(H.inputs_for(st, carriers, incorporated=inc), agrarian_share=st.agrarian_share,
-                          female_job_share=v.get("te_dg_fjob_share", 0.0),
+            inp = replace(H.census_inputs(H.inputs_for(st, carriers, incorporated=inc), v),
+                          agrarian_share=st.agrarian_share, female_job_share=v.get("te_dg_fjob_share", 0.0),
                           impartible=bool(set(P.IMPARTIBLE_LAWS) & st.laws))
             bands = tuple((v.get(f"te_dg_bf{b}", 0.0), v.get(f"te_dg_bm{b}", 0.0)) for b in range(P.BANDS))
             sr = state_region.get(sid, "")
@@ -1161,24 +1171,28 @@ def read_shares(path):
 - [ ] **Step 5: The harness takes shares** (`demographics_harness.py`)
 
 `inputs_for` gains `practices=None` and passes `practices=dict(practices or {})` into `M.Inputs`.
-`country_figures` becomes:
+`country_figures` keeps #916's `stored` (the census's stored inputs, `census_inputs`) and becomes:
 
 ```python
-def country_figures(states, carriers, shares=None, incorporated_only=False):
+def country_figures(states, carriers, stored=None, shares=None, incorporated_only=False):
     """A country's model figures as the census builds them: each state's own rates (its SoL, literacy,
-    urban share and incorporation), weighted by its people. The poverty term bends at SoL 9, so the
+    urban share and incorporation; with `stored`, {state id: {variable: value}}, the census's own inputs from the
+    save, so medicine as it had spread), weighted by its people. The poverty term bends at SoL 9, so the
     rates at the country's mean SoL would hide what its poor and rich states do (#855's review). shares:
     {state id: {practice: share}} (the late-marriage plan); incorporated_only leaves a country's colonies out
     (spec 5.1 item 3)."""
-    shares = shares or {}
-    figs = [(st.population, model_figures(inputs_for(st, carriers, incorporated=inc, practices=shares.get(sid))))
+    stored, shares = stored or {}, shares or {}
+    figs = [(st.population, model_figures(census_inputs(inputs_for(st, carriers, incorporated=inc,
+                                                                   practices=shares.get(sid)),
+                                                        stored.get(sid, {}))))
             for sid, st, inc in states if st.population > 0 and (inc or not incorporated_only)]
     tot = sum(p for p, _ in figs) or 1
     return {k: sum(p * f[k] for p, f in figs) / tot for k in ("e0", "imr", "tfr", "r")}
 ```
 
 Add `import demographics_regions as R  # noqa: E402` to the harness's imports (it imports nothing of the harness's).
-`history_rows(sections, year, anchors, carriers=None, shares=None, incorporated_only=False, practices=True)`: every
+`history_rows(sections, year, anchors, carriers=None, stored=None, shares=None, incorporated_only=False,
+practices=True)` (`stored` as since #916): every
 state takes its seed, as the census gives it with no sibling holding a share, and `shares` overrides the states it
 holds (a replay's year). So a state the file lacks still gets its practices (review minor):
 
@@ -1197,8 +1211,9 @@ holds (a replay's year). So a state the file lacks still gets its practices (rev
         shares = {**{sid: seed(sid, st, inc) for sts in states.values() for sid, st, inc in sts}, **(shares or {})}
 ```
 
-Pass `shares` to every `country_figures` call, and `incorporated_only` to the countries' (the world line keeps every
-state). In `cmd_history`, add three options to the `history` subparser:
+Pass `stored` and `shares` to every `country_figures` call, and `incorporated_only` to the countries' (the world line
+keeps every state). In `cmd_history` (which keeps reading `CENSUS_INPUT_VARS` into `stored`), add three options to the
+`history` subparser:
 - `--shares FILE`: practices-replay's output; the save's year selects its shares, and a state or a year the file
   doesn't hold falls back to the seed;
 - `--incorporated-only`: print `(incorporated states only)` on the `==` line when it is set;
@@ -2086,7 +2101,8 @@ values, and the script gets the practices only in Task 8, so a game in between w
 - [ ] **Step 1: Check the build question and pick the saves**
 
 ```bash
-git diff --quiet ec304526 origin/main -- scripts/analysis/demographics_save_inputs.py && echo "main's reader is ec304526's"
+F=scripts/analysis/demographics_save_inputs.py
+git show origin/main:$F | sed 's/, buffering=READ_BUFFER//' | grep -v 'READ_BUFFER\|16 MB buffer\|8 KB reads' | diff -q - <(git show ec304526:$F) >/dev/null && echo "main's reader is ec304526's but for #904's buffer"
 git diff origin/main -- scripts/analysis/demographics_save_inputs.py | grep '^-[^-]' || echo "this branch only adds to it"
 D=/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/saves
 for f in $D/*.v3; do printf '%s %s\n' "$($V -c "import sys; sys.path.insert(0,'scripts/analysis'); import demographics_harness as H; print(H.save_year(sys.argv[1]))" "$f")" "$f"; done | sort -n > /tmp/claude-1000/lm-saves.txt
@@ -2094,8 +2110,8 @@ awk '$1==1837||$1==1847||$1==1857||$1==1867||$1==1877||$1==1887||$1==1897||$1==1
 ```
 
 Expected:
-- Both lines print. #904, if it has merged, only widened the reader's buffer; Task 3's changes to the reader only add
-  lines.
+- Both lines print. #904 (merged) only widened the reader's buffer, which the first command filters out; Task 3's
+  changes to the reader only add lines.
 - One save for each of the eight years. Keep the eight paths as `S1837 … S1901` and `SAVES="$S1837 … $S1901"`.
 
 `predict` does not run from this branch on these saves (D8).
