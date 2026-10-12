@@ -374,6 +374,11 @@ traits and no table.**
   | Oceania | +6.42 | +6.42 | +6.42 | +6.24 | – | – | unjudged |
   | **World** | +8.53 | +7.70 | +7.24 | +7.16 | at most +7.53 | | **out** / in |
 
+  - "Before" differs a little from the overnight report's Late Marriage projection (REPORT G: India +12.8, Europe
+    +7.8, the Japan group +4.2, the world +7.9). That projection ran with no East Asian Birth Spacing; this one uses
+    main's decided share, 0.06 (China +5.31 → +4.80 is its trace).
+  - The 6 failing before are on the widened bands. On history's bands Europe (+7.91 against at least +8) would be a
+    seventh: call 3's widening alone brings it in, the late-marriage fit's "fail by rounding".
   - No country of 20M or more has births below deaths, before or after.
   - **The gate after: 3 failing** (6 before). The USA is call 4's (§2.3). The Middle East is 0.35 above its widened
     band, the +1 per 1,000 no game input separates (§1(b)). Southeast Asia is 1.42 below: in the previous run it
