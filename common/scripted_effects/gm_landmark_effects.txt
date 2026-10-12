@@ -103,19 +103,19 @@ gm_debug_log_landmark = {
 				var:gm_landmark = flag:$KEY$
 			}
 			debug_log = "TE_MONUMENTS: landmark $KEY$: level [SCOPE.ScriptValue('gm_state_grandeur')|0], status [SCOPE.ScriptValue('gm_status_code')|0], picture [SCOPE.ScriptValue('gm_disp_picture_code')|0]"
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = undedicated }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = crown }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = republic }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = revolution }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = leader }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = religious }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = civic }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = war_memorial }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = artistic }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = naturalist }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = scientific }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = industrial }
-		gm_debug_log_landmark_pm = { KEY = $KEY$ PM = athletic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = undedicated }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = crown }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = republic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = revolution }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = leader }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = religious }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = civic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = war_memorial }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = artistic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = naturalist }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = scientific }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = industrial }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = athletic }
 		}
 	}
 	else = {
