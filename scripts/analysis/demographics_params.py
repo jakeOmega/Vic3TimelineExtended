@@ -229,6 +229,14 @@ YOUTH_TURMOIL = 0.10           # state_turmoil_effects_mult at y = 1
 # anchor (-8.9%) where the square root would give -4.6%. The floor is parent §3's "capped". The women's rate gains up to
 # SEX_WOMEN_RATE and feminist movement support up to SEX_FEMINIST, both full at SEX_FEWER_FULL. More men than women:
 # radicals from movements up to SEX_RADICALS, from SEX_MORE_FROM to full at SEX_MORE_FULL (Bare Branches).
+# Held back (controller's decision, 2026-10-12): the census computes, stores and shows the sex balance, but none of its
+# effects apply: not the births term, the women's-rate addition, feminist support or the radicals line. The census
+# books every unexplained residual as migrants by its profile, labour migrants 90% aged 18-35 and mostly men, which
+# hollows out the men of famine-hit states: in the overnight Full run's 1848-1904 saves 37-41% of states sat at one effect
+# or the other against the design's "under 2% in peace" (Hyderabad 50 men per 100 women in 1898, the Central Provinces
+# 28). A follow-up PR on the residual's migrant profile comes first; then this goes to True. The generator writes it as
+# te_demog_k_sex_effects; `demographics_harness.py consequences --sex-effects` judges the band as if it were on.
+SEX_BALANCE_EFFECTS = False
 SEX_FEWER_FROM = 90.0
 SEX_FEWER_FULL = 80.0
 SEX_BIRTHS_FLOOR = 0.8

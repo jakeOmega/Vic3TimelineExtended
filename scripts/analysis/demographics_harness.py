@@ -14,7 +14,7 @@ Usage:
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
     demographics_harness.py workforce                   # phase 2 step 1: participation, need, the old-age threshold
-    demographics_harness.py consequences [SAVE...]      # phase 2 step 4: conscription, youth bulge, sex balance bands
+    demographics_harness.py consequences [SAVE...] [--sex-effects]  # phase 2 step 4: conscription, youth, sex balance
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
@@ -826,7 +826,19 @@ def _band(value, lo, hi):
 
 
 def cmd_consequences(args):
+    """The bands. The sex balance's effects are held back (P.SEX_BALANCE_EFFECTS off): --sex-effects judges its band and
+    anchors as if they were on, for the follow-up on the census's migrant profile."""
+    kept = P.SEX_BALANCE_EFFECTS
+    P.SEX_BALANCE_EFFECTS = kept or args.sex_effects
+    try:
+        return _consequences(args)
+    finally:
+        P.SEX_BALANCE_EFFECTS = kept
+
+
+def _consequences(args):
     out = 0
+    sex_on = P.SEX_BALANCE_EFFECTS
     print("Phase 2 step 4 (the consequences design §5): CONSCRIPTION_REF "
           f"{P.CONSCRIPTION_REF}, youth {P.YOUTH_FROM}/{P.YOUTH_SPAN}/{P.YOUTH_UNEMPLOYMENT_FULL}, sex balance from "
           f"{P.SEX_FEWER_FROM:.0f} (full {P.SEX_FEWER_FULL:.0f}) and {P.SEX_MORE_FROM:.0f} (full {P.SEX_MORE_FULL:.0f})")
@@ -842,8 +854,9 @@ def cmd_consequences(args):
     for r in consequence_transitions():
         print(f"  {r['name']:52s} peak 20-29 {r['peak_youth']:.3f} (year {r['peak_year']}), y {r['y']:.2f}; "
               f"peak T {r['peak_term']:+.3f} (year {r['term_year']})")
-    print("\nSex balance anchors:")
-    for name, b, got, bands in sex_anchor_rows():
+    print("\nSex balance anchors:" if sex_on else
+          "\nSex balance: its effects are held back (demographics_params.SEX_BALANCE_EFFECTS); --sex-effects judges them")
+    for name, b, got, bands in (sex_anchor_rows() if sex_on else ()):
         checks = "  ".join(f"{k} {got[k]:.3f} [{lo}-{hi}] {_band(got[k], lo, hi)}" for k, (lo, hi) in bands.items())
         out |= any(_band(got[k], lo, hi) != "ok" for k, (lo, hi) in bands.items())
         print(f"  {name:20s} {b:5.1f} men per 100 women: {checks}")
@@ -859,9 +872,10 @@ def cmd_consequences(args):
             verdict = _band(r["term_world"], -BANDS_1836_TERM, BANDS_1836_TERM)
             print(f"  the first save's world term within +-{BANDS_1836_TERM} (1836 world 0 +- 0.05): {verdict}")
             out |= verdict != "ok"
-        print(f"  sex balance: {r['fewer']:.1%} of states below {P.SEX_FEWER_FROM:.0f}, {r['more']:.1%} at "
-              f"{P.SEX_MORE_FROM:.0f} or more ({r['either']:.1%} at either; band under {BAND_PEACE_SEX:.0%} in peace: "
-              f"{'ok' if r['either'] < BAND_PEACE_SEX else 'OUT'})")
+        if sex_on:
+            print(f"  sex balance: {r['fewer']:.1%} of states below {P.SEX_FEWER_FROM:.0f}, {r['more']:.1%} at "
+                  f"{P.SEX_MORE_FROM:.0f} or more ({r['either']:.1%} at either; band under {BAND_PEACE_SEX:.0%} in "
+                  f"peace: {'ok' if r['either'] < BAND_PEACE_SEX else 'OUT'})")
         print(f"  youth: highest share aged 20-29 {r['youth_max']:.3f}; states with a bulge {r['y_any']:.1%}, above "
               f"y = 0.5 {r['y_half']:.1%} (band under {BAND_YOUTH_HALF:.0%}: "
               f"{'ok' if r['y_half'] < BAND_YOUTH_HALF else 'OUT'})")
@@ -1716,6 +1730,8 @@ def main(argv=None):
                                             "the design's §5 bands (saves: the 1836 one first)")
     p.add_argument("saves", nargs="*", help="plain-text saves made under Full or Display only")
     p.add_argument("--no-unemployment", action="store_true", help="skip the pops pass (the youth bulge reads 0)")
+    p.add_argument("--sex-effects", action="store_true",
+                   help="judge the sex balance's band and anchors as if its held-back effects were on")
     p.set_defaults(fn=cmd_consequences)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     sub.add_parser("workforce", help="phase 2 step 1: the participation figures at the starting values (the design "

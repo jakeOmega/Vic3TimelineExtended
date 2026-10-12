@@ -1461,6 +1461,8 @@ def consequence_values(o):
         "sex_fewer_from": P.SEX_FEWER_FROM, "sex_fewer_span": P.SEX_FEWER_FROM - P.SEX_FEWER_FULL,
         "sex_births_floor": P.SEX_BIRTHS_FLOOR, "sex_women_rate": P.SEX_WOMEN_RATE,
         "sex_more_from": P.SEX_MORE_FROM, "sex_more_span": P.SEX_MORE_FULL - P.SEX_MORE_FROM,
+        # 1 applies the sex balance's effects, 0 holds them back (P.SEX_BALANCE_EFFECTS)
+        "sex_effects": 1 if P.SEX_BALANCE_EFFECTS else 0,
     }
     for name, value in k.items():
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")

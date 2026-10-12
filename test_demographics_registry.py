@@ -648,6 +648,9 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
     for p in P.PRACTICES:
         fixtures[f"te_demog_pr_target_{p}"] = (targets or {}).get(p, 0.0)
         fixtures[f"te_demog_pr_erosion_{p}"] = (erosion or {}).get(p, 0.0)
+    # the sex balance's switch as the model reads it (demographics_params.SEX_BALANCE_EFFECTS; generated as 0 or 1), so a
+    # test that patches the switch on runs the script with it on too
+    fixtures["te_demog_k_sex_effects"] = 1.0 if P.SEX_BALANCE_EFFECTS else 0.0
     eng = (engine or _Engine)(fixtures, triggers={"te_demog_cohorts_run": True}, effects=effects)
     eng.place = place
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
@@ -1207,6 +1210,7 @@ class TestCohortScript(unittest.TestCase):
 
     # -- phase 2 step 4: the pool, the war dead's window and the sex balance in the step ---------------------------
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_a_step_short_of_men_matches_the_model(self):
         """The design §4.4: a census of 85 men per 100 women aged 20-59 (war dead, emigration) stores the balance its
         step began with (te_dg_sxb), and its children per woman and women's rate take the terms the model gives; war
@@ -1219,6 +1223,20 @@ class TestCohortScript(unittest.TestCase):
         self.close(figures["fertility"]["sex"], balance / P.SEX_FEWER_FROM, rel=1e-6, what="the births term")
         self.close(eng.vars["te_dg_tfr"], figures["tfr"], rel=1e-6, what="children per woman")
         self._work_figures(eng, ring, dataclasses.replace(inp, sex_balance=balance))
+
+    def test_held_back_a_step_short_of_men_takes_no_term(self):
+        """demographics_params.SEX_BALANCE_EFFECTS off (controller's decision, 2026-10-12): the census still counts the
+        balance but stores no te_dg_sxb, and its children per woman and work figures take no sex-balance term."""
+        self.assertFalse(P.SEX_BALANCE_EFFECTS)
+        self.assertEqual(_raw_blocks([GENERATED_VALUES])["te_demog_k_sex_effects"].strip(), "value = 0")
+        inp = self._work_inp()
+        eng, ring, figures, pop = self.step_both(inp=inp, migration=0.0, men_factor=0.85)
+        self.check_step(eng, ring, figures, pop)
+        self.assertNotIn("te_dg_sxb", eng.vars)
+        self.assertLess(eng.vars["te_dg_sex_balance"], P.SEX_FEWER_FROM)
+        self.assertEqual(figures["fertility"]["sex"], 1.0)
+        self.close(eng.vars["te_dg_tfr"], figures["tfr"], rel=1e-6, what="children per woman")
+        self._work_figures(eng, ring, inp)
 
     def test_a_balanced_step_stores_no_balance(self):
         eng, *rest = self.step_both(migration=0.0)
@@ -6548,17 +6566,25 @@ class TestConsequencesScript(unittest.TestCase):
 
     def _state(self, fam=11000.0, people=100000.0, balance=94.0, youth=(8000.0, 8100.0, 7900.0, 7950.0),
                unemployment=0.0, full=True):
-        eng = _Engine({"state_unemployment_rate": unemployment}, triggers={"te_demog_effects_run": full})
+        eng = _Engine({"state_unemployment_rate": unemployment,
+                       "te_demog_k_sex_effects": 1.0 if P.SEX_BALANCE_EFFECTS else 0.0},
+                      triggers={"te_demog_effects_run": full})
         eng.vars.update(te_dg_fam=fam, te_dg_faw=fam * 1.02, te_dg_people=people, te_dg_sex_balance=balance,
                         te_dg_bf4=youth[0], te_dg_bm4=youth[1], te_dg_bf5=youth[2], te_dg_bm5=youth[3])
         return eng
 
     def test_full_applies_the_models_terms(self):
+        """With the sex balance's effects held back (the switch off) and as if on."""
+        for on in (False, True):
+            with unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", on):
+                self._full_cases(on)
+
+    def _full_cases(self, on):
         cases = [dict(), dict(fam=7000.0, balance=82.0, unemployment=0.12),
                  dict(fam=16000.0, balance=135.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.25),
                  dict(fam=0.0, balance=150.0), dict(fam=50000.0, balance=60.0)]
         for kw in cases:
-            with self.subTest(**{k: v for k, v in kw.items() if k != "youth"}):
+            with self.subTest(on=on, **{k: v for k, v in kw.items() if k != "youth"}):
                 eng = self._state(**kw)
                 eng.call("te_demog_consequences_refresh")
                 v = eng.vars
@@ -6583,6 +6609,9 @@ class TestConsequencesScript(unittest.TestCase):
                 self.assertEqual(set(eng.modifiers), set(want))
                 for name, mult in want.items():
                     self.assertAlmostEqual(eng.modifiers[name], mult, places=9, msg=name)
+                if not on:
+                    self.assertFalse(any(n in eng.modifiers for n in ("te_demog_census_fewer_men",
+                                                                       "te_demog_census_more_men")))
 
     def test_a_change_of_sign_swaps_the_pair(self):
         eng = self._state(fam=7000.0)
@@ -6593,6 +6622,7 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertIn("te_demog_census_conscription_up", eng.modifiers)
         self.assertNotIn("te_demog_census_conscription_down", eng.modifiers)
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # the fewer-men modifier too
     def test_outside_full_everything_goes(self):
         eng = self._state(fam=7000.0, balance=70.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.3)
         eng.call("te_demog_consequences_refresh")

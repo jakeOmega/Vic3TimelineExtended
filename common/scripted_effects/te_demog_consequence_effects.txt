@@ -13,6 +13,8 @@
 #                                            adults above 18% of the people, with unemployment (§4.3)
 #   te_demog_census_fewer_men                feminist movement support +10% at the fewer-men share (§4.4)
 #   te_demog_census_more_men                 radicals from movements +10% at the more-men share (§4.4)
+# The two sex-balance modifiers and the census's two sex-balance terms are held back while te_demog_k_sex_effects is 0
+# (demographics_params.SEX_BALANCE_EFFECTS: the census's migrant profile builds false imbalances; a follow-up first).
 # Display only and Disabled clear all four, and te_dg_mc and te_dg_yb, at the state's next pulse, as the births and
 # deaths terms clear (te_demog_rates_clear). The census's own terms, the sex balance's on children per woman and on the
 # women's rate (te_demog_consequence_values.txt), run under Display only too: they move the census's figures, which
@@ -26,7 +28,8 @@
 # THIS = a state, at the start of its step before te_demog_prepare (te_demog_step_begin): the ring's sex balance, the
 # census's last figure (men per 100 women aged 20-59), which the year's children per woman (te_demog_tfr_sex) and
 # women's rate (te_demog_sex_women_add) read. Stored only where men are short, below te_demog_k_sex_fewer_from, so a
-# state at peace keeps no variable for it; a seed removes it (demographics_model.step's sex_balance).
+# state at peace keeps no variable for it; a seed removes it (demographics_model.step's sex_balance). Held back while
+# te_demog_k_sex_effects is 0 (demographics_params.SEX_BALANCE_EFFECTS): nothing is stored, so both terms stay neutral.
 te_demog_sex_births_store = {
 	if = {
 		limit = { has_variable = te_dg_sxb }
@@ -34,6 +37,7 @@ te_demog_sex_births_store = {
 	}
 	if = {
 		limit = {
+			te_demog_k_sex_effects > 0
 			has_variable = te_dg_sex_balance
 			var:te_dg_sex_balance < te_demog_k_sex_fewer_from
 		}

@@ -38,13 +38,18 @@ te_demog_sex_women_add = {
 }
 
 # ---- Sex balance: the state modifiers' multipliers (Full only), and the panel's ------------------------------------
+# Both multipliers are 0 while te_demog_k_sex_effects is 0 (held back: demographics_params.SEX_BALANCE_EFFECTS), so
+# te_demog_consequences_apply adds neither modifier; the panel's hover then says the effects aren't applied yet.
 
 # State or country scope: how far men are short, 0 to 1, from the census's latest balance (te_dg_sex_balance, men per
 # 100 women aged 20-59): 0 at te_demog_k_sex_fewer_from or more, 1 a span below. te_demog_census_fewer_men's multiplier.
 te_demog_sex_fewer_men = {
 	value = 0
 	if = {
-		limit = { has_variable = te_dg_sex_balance }
+		limit = {
+			te_demog_k_sex_effects > 0
+			has_variable = te_dg_sex_balance
+		}
 		value = te_demog_k_sex_fewer_from
 		subtract = var:te_dg_sex_balance
 		divide = { value = te_demog_k_sex_fewer_span min = 1 }
@@ -58,7 +63,10 @@ te_demog_sex_fewer_men = {
 te_demog_sex_more_men = {
 	value = 0
 	if = {
-		limit = { has_variable = te_dg_sex_balance }
+		limit = {
+			te_demog_k_sex_effects > 0
+			has_variable = te_dg_sex_balance
+		}
 		value = var:te_dg_sex_balance
 		subtract = te_demog_k_sex_more_from
 		divide = { value = te_demog_k_sex_more_span min = 1 }

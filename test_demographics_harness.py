@@ -9,6 +9,7 @@ import re
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
@@ -1181,6 +1182,7 @@ class TestConsequences(unittest.TestCase):
         for r in rows.values():
             self.assertLess(r["youth"], P.YOUTH_FROM, r["name"])
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_the_sex_anchors(self):
         for name, _b, got, bands in H.sex_anchor_rows():
             for key, (lo, hi) in bands.items():
@@ -1211,6 +1213,7 @@ class TestConsequences(unittest.TestCase):
         path.write_text(TINY.replace(state + "}", state + block + "}", 1), encoding="utf-8")
         return str(path), bands, people
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_a_census_save(self):
         with tempfile.TemporaryDirectory() as tmp:
             path, bands, people = self._census_save(tmp)
@@ -1231,3 +1234,16 @@ class TestConsequences(unittest.TestCase):
                 H.main(["consequences", path])
             self.assertIn("1 census states", out.getvalue())
             self.assertIn("the first save's world term", out.getvalue())
+
+    def test_the_held_back_band_is_judged_only_on_request(self):
+        """The sex balance's effects are held back; --sex-effects judges the band as if on and restores the switch."""
+        self.assertFalse(P.SEX_BALANCE_EFFECTS)
+        with tempfile.TemporaryDirectory() as tmp:
+            path, _bands, _people = self._census_save(tmp)
+            for flag, shown in (([], False), (["--sex-effects"], True)):
+                out = io.StringIO()
+                with redirect_stdout(out):
+                    H.main(["consequences", path, *flag])
+                self.assertEqual("sex balance: " in out.getvalue(), shown, flag)
+                self.assertEqual("Soviet Union 1959" in out.getvalue(), shown, flag)
+                self.assertFalse(P.SEX_BALANCE_EFFECTS)

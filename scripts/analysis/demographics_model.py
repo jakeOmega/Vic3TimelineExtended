@@ -401,23 +401,24 @@ def capacity_at(inp, age):
 
 def sex_fewer_men(balance):
     """0 to 1: how far men are short, from SEX_FEWER_FROM men per 100 women to SEX_FEWER_FULL (te_demog_sex_fewer_men).
-    None (no balance) is 0."""
-    if balance is None:
+    None (no balance) is 0, and so is every balance while P.SEX_BALANCE_EFFECTS is off (held back), as for the other
+    three sex-balance functions."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
         return 0.0
     return clamp((P.SEX_FEWER_FROM - balance) / (P.SEX_FEWER_FROM - P.SEX_FEWER_FULL), 0.0, 1.0)
 
 
 def sex_more_men(balance):
     """0 to 1: how far men are in excess, from SEX_MORE_FROM to SEX_MORE_FULL (te_demog_sex_more_men)."""
-    if balance is None:
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
         return 0.0
     return clamp((balance - P.SEX_MORE_FROM) / (P.SEX_MORE_FULL - P.SEX_MORE_FROM), 0.0, 1.0)
 
 
 def sex_births(balance):
     """Children per woman's sex-balance term (te_demog_tfr_sex): the balance / SEX_FEWER_FROM, at most 1 and at least
-    SEX_BIRTHS_FLOOR; 1 with no balance."""
-    if balance is None:
+    SEX_BIRTHS_FLOOR; 1 with no balance, or while P.SEX_BALANCE_EFFECTS is off."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
         return 1.0
     return clamp(balance / P.SEX_FEWER_FROM, P.SEX_BIRTHS_FLOOR, 1.0)
 

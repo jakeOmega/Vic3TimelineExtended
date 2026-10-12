@@ -1066,6 +1066,7 @@ class TestConsequences(unittest.TestCase):
         ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
         self.assertLess(M.youth_share(ring), P.YOUTH_FROM)
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_the_sex_balance_terms(self):
         self.assertEqual((M.sex_births(None), M.sex_women_add(None), M.sex_fewer_men(None), M.sex_more_men(None)),
                          (1.0, 0.0, 0.0, 0.0))
@@ -1080,6 +1081,7 @@ class TestConsequences(unittest.TestCase):
         self.assertEqual((M.sex_more_men(150.0), M.sex_more_men(170.0)), (1.0, 1.0))
         self.assertAlmostEqual(M.sex_more_men(130.0), 0.5)
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_the_fertility_term_scales_planned_and_unplanned_alike(self):
         inp = dataclasses.replace(BRITAIN_1836, sex_balance=82.0)
         fert, plain = M.fertility(inp, 40.0), M.fertility(BRITAIN_1836, 40.0)
@@ -1087,6 +1089,7 @@ class TestConsequences(unittest.TestCase):
         self.assertAlmostEqual(fert["planned"] + fert["unplanned"], fert["tfr"])
         self.assertAlmostEqual(M.women_rate(inp), M.women_rate(BRITAIN_1836) + 0.08)
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_the_step_reads_the_rings_balance_before_its_sweep(self):
         """A ring short of men has fewer births than the same ring at its own balance."""
         ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
@@ -1107,4 +1110,16 @@ class TestConsequences(unittest.TestCase):
         """The 1836 world's balances (91.5-98 in the census's 1836 save) take no term."""
         ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
         self.assertGreater(M.structure(ring)["men_per_100_women"], P.SEX_FEWER_FROM)
+        self.assertEqual(M.step(ring, AGRARIAN_1836, 1837)["fertility"]["sex"], 1.0)
+
+    def test_the_sex_balance_effects_are_held_back(self):
+        """demographics_params.SEX_BALANCE_EFFECTS (controller's decision, 2026-10-12): off, every sex-balance term is
+        neutral, so a ring short of men steps as a balanced one would."""
+        self.assertFalse(P.SEX_BALANCE_EFFECTS)
+        for balance in (50.0, 82.0, 150.0):
+            self.assertEqual((M.sex_births(balance), M.sex_women_add(balance), M.sex_fewer_men(balance),
+                              M.sex_more_men(balance)), (1.0, 0.0, 0.0, 0.0))
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        for a in range(20, 60):
+            ring.m[(1836 - a) % P.RING_YEARS] *= 0.85
         self.assertEqual(M.step(ring, AGRARIAN_1836, 1837)["fertility"]["sex"], 1.0)

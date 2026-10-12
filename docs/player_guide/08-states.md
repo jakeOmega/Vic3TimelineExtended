@@ -271,10 +271,8 @@ Under Full the census also sets each state's conscription from its men of
 fighting age, 20 to 39, against the world's share in 1836: an older people, or
 one that has lost its young men to war or emigration, raises fewer conscript
 battalions, down to none, and a young one up to a quarter more. War dead come
-from the same men. Smaller effects follow from the same count: a youth bulge,
-young adults over 18% of a state's people while work is short, adds radicals and
-turmoil, and fewer than 90 men per 100 women cuts births and draws more women
-into work and the women's rights movement, while 110 or more adds radicals.
+from the same men. A youth bulge, young adults over 18% of a state's people
+while work is short, adds a little to radicals and turmoil there.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
