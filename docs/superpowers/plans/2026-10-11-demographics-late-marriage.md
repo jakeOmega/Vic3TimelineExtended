@@ -2568,7 +2568,7 @@ git commit -m "Demographics generator: the practices' start ladders, targets, te
 - Consumes: Task 7's generated values and loops; Task 2's model functions.
 - Produces: state variables `te_dg_pr_lm`, `te_dg_pr_bs`; the same names on the country (people-weighted means).
 
-- [ ] **Step 1: Teach the interpreter what the machinery uses**
+- [x] **Step 1: Teach the interpreter what the machinery uses**
 
 In `test_demographics_registry.py`:
 - add `PRACTICE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_practice_effects.txt"`;
@@ -2618,7 +2618,7 @@ per practice: `f"te_demog_pr_target_{p}": (targets or {}).get(p, 0.0)` and
 - At no place and 0 a state's shares are 0 and stay there, so every existing twin comparison (`TestCohortScript`) is
   unchanged.
 
-- [ ] **Step 2: Write the failing tests** (a new class after `TestNaturalFertilityScript`)
+- [x] **Step 2: Write the failing tests** (a new class after `TestNaturalFertilityScript`)
 
 ```python
 class TestPracticesScript(unittest.TestCase):
@@ -2767,12 +2767,17 @@ And in `TestCountry` (its `setUpClass` builds the three seeded states the test r
             self.assertAlmostEqual(eng.vars[f"te_dg_pr_{p}"], want, places=6, msg=p)
 ```
 
-- [ ] **Step 3: Run them to see them fail**
+**Amended at the build (2026-10-12):** `test_the_targets_match_the_model` sets `te_dg_acc` at the model's target, since
+Birth Spacing's erosion reads the access medicine has reached (Task 7's amendment). A new test,
+`test_birth_spacing_erodes_with_the_access_medicine_has_reached`, checks the script's erosion against the model's at
+four drifted values.
+
+- [x] **Step 3: Run them to see them fail**
 
 Run: `$V -m unittest test_demographics_registry.TestPracticesScript`
 Expected: FAIL (`effect te_demog_practices_seed` unknown, or `te_dg_pr_lm` missing).
 
-- [ ] **Step 4: Write the machinery** (`common/scripted_effects/te_demog_practice_effects.txt`, with a UTF-8 BOM)
+- [x] **Step 4: Write the machinery** (`common/scripted_effects/te_demog_practice_effects.txt`, with a UTF-8 BOM)
 
 ```
 # ============================================================================
@@ -2872,7 +2877,7 @@ demographics_model.fertility; the practices, te_demog_practice_effects.txt)". In
 #                       a country's: its states' people-weighted mean)
 ```
 
-- [ ] **Step 5: Run the tests, the formatter and the audits**
+- [x] **Step 5: Run the tests, the formatter and the audits**
 
 ```bash
 python3 scripts/format_paradox_tabs.py common/scripted_effects/te_demog_practice_effects.txt common/scripted_effects/te_demog_effects.txt common/script_values/te_demog_values.txt
@@ -2884,7 +2889,7 @@ Expected:
 - `OK` and no `FAIL`;
 - the BOM bytes `ef bb bf`, exactly once (`head -c 6` must not show them twice).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add common/scripted_effects/te_demog_practice_effects.txt common/scripted_effects/te_demog_effects.txt common/script_values/te_demog_values.txt test_demographics_registry.py

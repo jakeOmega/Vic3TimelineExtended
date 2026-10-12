@@ -48,8 +48,9 @@
 # year first, so the census reads as a state about to step does. Run twice in one
 # year, the second step ages this year's newborns as if they were 150 (both here and
 # in the model, so the replay still matches): use a save you can throw away, or
-# re-seed afterwards (option c). Each run also drifts the census's medicine one more step
-# (te_demog_medicine_drift in te_demog_step_begin), a year's spread on top of the yearly one.
+# re-seed afterwards (option c). Each run also drifts the census's medicine and the practices one
+# more step (te_demog_medicine_drift and te_demog_practices_step in te_demog_step_begin), a year's
+# spread and drift on top of the yearly ones.
 te_debug_demog_replay = {
 	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 	te_demog_step_begin = yes

@@ -1,0 +1,85 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the practices: Late Marriage (lm) and Birth Spacing (bs)
+# docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11);
+# docs/superpowers/plans/2026-10-11-demographics-late-marriage.md
+# ============================================================================
+# One machinery for every practice, parameterised by its short name $P$ (demographics_params.PRACTICES; the generated
+# te_demog_practices_* call each). Phase 3 adds Family Limitation and the neighbour spread here. Each practice is a
+# share of the state's people, 0-1, and multiplies the census's children per woman by 1 - cut x share
+# (te_demog_pr_term_$P$, generated), outside the means. They run wherever the census runs (Full and Display only):
+# they are the census's inputs, and they reach the engine only through the census's term M, under Full.
+#
+# State variable:   te_dg_pr_$P$   the share, 0-1
+# Country variable: te_dg_pr_$P$   its census states' people-weighted mean (te_demog_country_census)
+# ============================================================================
+
+# THIS = a state whose census is being seeded or stepped. A state with no share takes the people-weighted mean of the
+# other states in its state region that hold one (a split state is the same people as its sibling), else its start less
+# what its conditions have eroded (te_demog_pr_seed_$P$). In 1836 nothing has eroded where a practice starts, so a new
+# game seeds the table whatever order the states' pulses come in; an old save or a rule switched on mid-game seeds near
+# where the drift would have taken it. A neighbour across a border plays no part. A share already held stays: a census
+# re-seed re-counts the people, it doesn't change their customs.
+te_demog_practice_seed = {
+	if = {
+		limit = { NOT = { has_variable = te_dg_pr_$P$ } }
+		set_local_variable = { name = te_dg_pr_np value = 0 }
+		set_local_variable = { name = te_dg_pr_ns value = 0 }
+		state_region = {
+			every_scope_state = {
+				limit = { has_variable = te_dg_pr_$P$ }
+				change_local_variable = { name = te_dg_pr_np add = state_population }
+				change_local_variable = { name = te_dg_pr_ns add = { value = var:te_dg_pr_$P$ multiply = state_population } }
+			}
+		}
+		if = {
+			limit = { local_var:te_dg_pr_np > 0 }
+			set_variable = { name = te_dg_pr_$P$ value = { value = local_var:te_dg_pr_ns divide = { value = local_var:te_dg_pr_np min = 1 } } }
+		}
+		else = {
+			set_variable = { name = te_dg_pr_$P$ value = te_demog_pr_seed_$P$ }
+		}
+	}
+}
+
+# THIS = a state at its census step (te_demog_step_begin, after the walk and te_demog_medicine_drift, before
+# te_demog_prepare reads the term):
+# seed if it has no share (an old save's state), then drift te_demog_k_practice_rate of the gap to its target
+# (te_demog_pr_target_$P$: the start less what contraception and, for Birth Spacing, health care have eroded, plus
+# Late Marriage's inheritance and women's work). Once a census year: fast mode's clock steps it once a clock year.
+te_demog_practice_step = {
+	te_demog_practice_seed = { P = $P$ }
+	set_variable = {
+		name = te_dg_pr_$P$
+		value = {
+			value = te_demog_pr_target_$P$
+			subtract = var:te_dg_pr_$P$
+			multiply = te_demog_k_practice_rate
+			add = var:te_dg_pr_$P$
+			min = 0
+			max = 1
+		}
+	}
+}
+
+# THIS = a country at its census (te_demog_country_census): the people-weighted mean of its census states' shares,
+# for the panel (spec 3.1). Init before the walk over the states, add inside it (after local te_dg_c_s_pm, the
+# state's people in millions), store after it.
+te_demog_practice_country_init = {
+	set_local_variable = { name = te_dg_c_pr_$P$_w value = 0 }
+	set_local_variable = { name = te_dg_c_pr_$P$_p value = 0 }
+}
+
+te_demog_practice_country_add = {
+	if = {
+		limit = { has_variable = te_dg_pr_$P$ }
+		change_local_variable = { name = te_dg_c_pr_$P$_w add = { value = var:te_dg_pr_$P$ multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_pr_$P$_p add = local_var:te_dg_c_s_pm }
+	}
+}
+
+te_demog_practice_country_store = {
+	if = {
+		limit = { local_var:te_dg_c_pr_$P$_p > 0 }
+		set_variable = { name = te_dg_pr_$P$ value = { value = local_var:te_dg_c_pr_$P$_w divide = { value = local_var:te_dg_c_pr_$P$_p min = 0.00001 } } }
+	}
+}

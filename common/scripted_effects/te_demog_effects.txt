@@ -60,6 +60,8 @@
 #   te_dg_e0, te_dg_e0f, te_dg_e0m, te_dg_e65, te_dg_imr  the life table (IMR per 1,000)
 #   te_dg_tfr, te_dg_means, te_dg_desired, te_dg_natural  fertility (spec §2.3; te_dg_natural is
 #                       women's legal standing, phase 2 step 4)
+#   te_dg_pr_lm, te_dg_pr_bs  the practices' shares, Late Marriage and Birth Spacing, 0-1 (te_demog_practice_effects.txt;
+#                       a country's: its states' people-weighted mean)
 #   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
 #                       te_dg_m_mat maternal deaths per 100,000 births
 #   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments
@@ -542,6 +544,9 @@ te_demog_seed = {
 	}
 	# a seed starts medicine at its targets (the Causes of Death plan)
 	te_demog_medicine_at_target = yes
+	# Late Marriage and Birth Spacing: a state with no share takes its siblings' or its eroded start; one held stays
+	# (te_demog_practice_effects.txt). After the medicine, whose access Birth Spacing's erosion reads.
+	te_demog_practices_seed = yes
 	te_demog_prepare = yes
 	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
 	set_local_variable = {
@@ -1088,12 +1093,14 @@ te_demog_step = {
 }
 
 # The step's first half: medicine's share of the gap (te_demog_medicine_drift, the Causes of Death
-# plan), the year's rates into locals (te_demog_prepare), then the flows, which take and remove
-# te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates scaled to what the engine did
-# over the window (te_demog_on_top_scales, phase 2 step 4).
+# plan), the practices' drift toward their targets (te_demog_practices_step, Late Marriage and Birth
+# Spacing; it reads the drifted access), the year's rates into locals (te_demog_prepare), then the
+# flows, which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates
+# scaled to what the engine did over the window (te_demog_on_top_scales, phase 2 step 4).
 te_demog_step_begin = {
-	# medicine moves its share of the gap, then the year's rates use it
+	# medicine moves its share of the gap, then the practices theirs, then the year's rates use them
 	te_demog_medicine_drift = yes
+	te_demog_practices_step = yes
 	te_demog_prepare = yes
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes
@@ -1444,10 +1451,12 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_ext_w value = 0 }
 	set_local_variable = { name = te_dg_c_chr_w value = 0 }
 	set_local_variable = { name = te_dg_c_work_w value = 0 }
+	te_demog_practices_country_init = yes
 	every_scope_state = {
 		limit = { te_demog_has_census = yes }
 		te_demog_add_bands_to_root = yes
 		set_local_variable = { name = te_dg_c_s_pm value = { value = var:te_dg_people divide = 1000000 } }
+		te_demog_practices_country_add = yes
 		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 100000 } }
 		change_local_variable = { name = te_dg_seeded add = 1 }
 		# the women's share of the workforce depends on the owner's law only: any state gives it
@@ -1510,6 +1519,7 @@ te_demog_country_census = {
 		}
 		te_demog_band_figures = { B = te_dg_cb }
 		te_demog_store_figures = yes
+		te_demog_practices_country_store = yes
 		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_cdr value = { value = local_var:te_dg_c_deaths divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_net_migration value = local_var:te_dg_c_mig }
