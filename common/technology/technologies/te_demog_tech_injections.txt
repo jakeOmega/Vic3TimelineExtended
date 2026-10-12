@@ -59,3 +59,12 @@ INJECT:feminism = {
 		state_contraception_add = 0.15
 	}
 }
+
+# Malaria Prevention ends the census's malaria factor (calibration step 3, the spec's §2.2): the people who lived with
+# malaria died of it less only with 20th-century medicine. Quinine, which vanilla's malaria trait takes for its
+# colonists, carries nothing: it protected colonists, not the people who lived there.
+INJECT:malaria_prevention = {
+	modifier = {
+		state_malaria_control_add = 1
+	}
+}

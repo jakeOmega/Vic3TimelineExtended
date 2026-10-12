@@ -50,6 +50,7 @@
 # 1's workforce self-checks; te_debug_demog_wf_selfchecks); under Full, .10 (the Family Policy measures' self-check,
 # measure_country_types; te_debug_demog_ms_selfcheck_start) and .60 (the Planned Capital's, planned_capital_moved;
 # te_debug_demog_pc_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
+# Hidden too: .40 and .41, calibration step 3's self-checks (te_debug_demog_step3_selfchecks), one line a game each.
 #
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
@@ -590,6 +591,85 @@ te_debug_demog.10 = {
 			remove_variable = te_dg_ms_chk_before
 			remove_variable = te_dg_ms_chk_e0
 			remove_variable = te_dg_ms_chk_owner
+		}
+	}
+}
+
+# Calibration step 3's self-checks' second halves (te_debug_demog_step3_selfchecks): once a game, a week after they arm,
+# on the country. A state or input gone in the week re-arms the check for a later month.
+# .40: famine_reserves_absorbed. On the capital of a country whose Landowners are powerful, a subsistence-farm pop that
+# reads the line at its farm. OK: what the census absorbs for it (its owner's read of the agriculture key) equals what
+# the walk reads at its farm, so M nets the Landowners' famine reserves exactly. BROKEN with absorbed 0: the owner's read
+# of a building-group key is 0 at country scope, so under Full the census absorbs nothing; set COUNTRY_ABSORBED_FROM_FARM
+# in demographics_params.py. BROKEN otherwise: the two differ by the ratio logged (2 or 0.5: the group's power reaches
+# one read and not the other); set COUNTRY_ABSORBED_SCALE to the ratio (docs/testing/demographics-playtest.md).
+te_debug_demog.40 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { te_debug_demog_fr_armed = yes }
+			capital = {
+				random_scope_pop = {
+					limit = { te_debug_demog_fr_farm_pop = yes }
+					set_local_variable = { name = te_s3_fr_abs value = te_demog_pop_country_absorbed_deaths }
+					set_local_variable = { name = te_s3_fr_walk value = te_demog_pop_country_line_walk_read }
+				}
+				set_variable = { name = te_dbg_fr_abs value = local_var:te_s3_fr_abs }
+				set_variable = { name = te_dbg_fr_walk value = local_var:te_s3_fr_walk }
+				if = {
+					limit = { te_debug_demog_fr_gap < 0.002 }
+					debug_log = "TE_SELF_CHECK OK famine_reserves_absorbed absorbed=[THIS.ScriptValue('te_debug_demog_fr_absorbed')|3] walk=[THIS.ScriptValue('te_debug_demog_fr_walk')|3] country=[THIS.ScriptValue('te_debug_demog_fr_owner')|3] (powerful Landowners: the trait's -0.1 doubled reads -0.2) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else_if = {
+					limit = { te_debug_demog_fr_absorbed > -0.001 }
+					debug_log = "TE_SELF_CHECK BROKEN famine_reserves_absorbed absorbed=[THIS.ScriptValue('te_debug_demog_fr_absorbed')|3] walk=[THIS.ScriptValue('te_debug_demog_fr_walk')|3] country=[THIS.ScriptValue('te_debug_demog_fr_owner')|3] (absorbed 0: a building-group key reads 0 at country scope, so under Full the census absorbs nothing of the famine reserves; set COUNTRY_ABSORBED_FROM_FARM in demographics_params.py and regenerate, docs/testing/demographics-playtest.md) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN famine_reserves_absorbed absorbed=[THIS.ScriptValue('te_debug_demog_fr_absorbed')|3] walk=[THIS.ScriptValue('te_debug_demog_fr_walk')|3] ratio=[THIS.ScriptValue('te_debug_demog_fr_ratio')|2] country=[THIS.ScriptValue('te_debug_demog_fr_owner')|3] (the walk reads a farm pop's famine reserves at ratio x what the census absorbs: set COUNTRY_ABSORBED_SCALE in demographics_params.py to the ratio and regenerate, docs/testing/demographics-playtest.md) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				debug_log_scopes = yes
+				remove_variable = te_dbg_fr_abs
+				remove_variable = te_dbg_fr_walk
+			}
+		}
+		else = {
+			remove_global_variable = te_demog_selfcheck_fr_done
+		}
+	}
+}
+
+# .41: working_conditions_read. OK: a mine outside the capital reads working conditions' laborers line as about 0 (the
+# 2026-10-09 growth probe's capital reading), so the walk's constant (the table's 0.1) is its only copy. BROKEN: it reads
+# about 0.1, so the walk counts the table twice; drop the constants from te_demog_pop_death_mult (gen_demographics.py,
+# engine_rate_terms) and refit (docs/testing/demographics-playtest.md, "Self-checks").
+te_debug_demog.41 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { any_scope_building = { te_debug_demog_wc_mine = yes } }
+			random_scope_building = {
+				limit = { te_debug_demog_wc_mine = yes }
+				set_local_variable = { name = te_s3_wc value = te_debug_demog_wc_mine_read }
+				state = {
+					set_variable = { name = te_dbg_wc_read value = local_var:te_s3_wc }
+					if = {
+						limit = { var:te_dbg_wc_read < 0.05 }
+						debug_log = "TE_SELF_CHECK OK working_conditions_read read=[THIS.ScriptValue('te_debug_demog_wc_read')|3] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN working_conditions_read read=[THIS.ScriptValue('te_debug_demog_wc_read')|3] state=[THIS.GetState.GetNameNoFormatting] (about 0.1: the mine's read carries working conditions' table, which the walk adds again as a constant; drop the constants, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					debug_log_scopes = yes
+					remove_variable = te_dbg_wc_read
+				}
+			}
+		}
+		else = {
+			remove_global_variable = te_demog_selfcheck_wc_done
 		}
 	}
 }
