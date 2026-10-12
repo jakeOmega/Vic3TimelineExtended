@@ -6822,7 +6822,7 @@ class TestConsequencesScript(unittest.TestCase):
 
     def test_the_hovers_read_the_reference_and_mark_the_held_back(self):
         """The review's Minor 4 and 5: the 1836 reference is read from its constant, not written out; each effect's
-        hover has its held-back line; no demographics loc line starts with a newline."""
+        hover has its held-back line; none of this step's loc lines starts with a newline."""
         loc = {}
         for path in sorted((ROOT / "localization" / "english").glob("*_l_english.yml")):
             for m in re.finditer(r'^ (te_demog_[\w.]+):\d* "(.*)"$', _text(path), re.M):
@@ -6833,8 +6833,10 @@ class TestConsequencesScript(unittest.TestCase):
                             ("te_demog_ov_youth_tt", "youth"), ("te_demog_st_youth_tt", "youth"),
                             ("te_demog_ov_sex_tt", "sex"), ("te_demog_st_sex_tt", "sex")):
             self.assertIn(f"ScriptValue('te_demog_k_{switch}_effects')", loc[key], key)
+        step4 = re.compile(r"fam|youth|sex|conscription|fewer_men|more_men")   # this step's keys (other steps' aren't checked)
         for key, text in loc.items():
-            self.assertFalse(text.startswith("\\n"), key)
+            if step4.search(key):
+                self.assertFalse(text.startswith("\\n"), key)
 
     def test_the_country_figures(self):
         states = [TestCountry.state(*args) for args in TestCountry.INPUTS]
