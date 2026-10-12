@@ -13,6 +13,7 @@ The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on th
 import functools
 import hashlib
 import json
+import math
 import os
 import re
 import sys
@@ -151,7 +152,14 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
             for kind in ("vars", "modifiers"):
                 for name, value in rec[kind].items():
                     self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
-                    self.assertEqual(self.now["cases"][case][kind][name], value, f"{case}: {name}")
+                    now = self.now["cases"][case][kind][name]
+                    if isinstance(value, float) and isinstance(now, float):
+                        # Python 3.12's sum() rounds floats differently from 3.11's (compensated summation): CI runs
+                        # both, so a float may differ in its last place; any real change is far larger
+                        self.assertTrue(math.isclose(now, value, rel_tol=1e-12, abs_tol=1e-12),
+                                        f"{case}: {name}: {now!r} != {value!r}")
+                    else:
+                        self.assertEqual(now, value, f"{case}: {name}")
 
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
