@@ -7219,11 +7219,12 @@ extra_law_events.79 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		# Only the two laws the debate is between (owner, 2026-10-12): its options' enactment modifiers are named for
+		# them, so on a Population Control or Communal Child-Rearing bill they read as the wrong law. Those two still
+		# get .19 and .55.
 		OR = {
 			is_enacting_law = law_type:law_pro_natalist_subsidies
 			is_enacting_law = law_type:law_state_sponsored_family_planning
-			is_enacting_law = law_type:law_population_control_measures
-			is_enacting_law = law_type:law_communal_child_rearing
 		}
 		NOR = {
 			has_modifier = famrep_pronatalist_incentives
@@ -7243,8 +7244,8 @@ extra_law_events.79 = {
 		name = extra_law_events.79.a
 		default_option = yes
 		add_enactment_modifier = { name = famrep_pronatalist_incentives }
-		# Domain side-effect, only for the law that wants more births (owner, 2026-10-12): the other three family
-		# laws lower births
+		# Domain side-effect, only for the law that wants more births (owner, 2026-10-12): Family Planning, the
+		# debate's other law, lowers them
 		if = {
 			limit = { is_enacting_law = law_type:law_pro_natalist_subsidies }
 			add_modifier = { name = famrep_birth_rate_boost days = normal_modifier_time }
