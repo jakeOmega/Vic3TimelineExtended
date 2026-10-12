@@ -1110,6 +1110,17 @@ class CeremonyTests(unittest.TestCase):
             if d.key in TECH_GATES:
                 self.assertIn(f"has_technology_researched = {TECH_GATES[d.key]}", body, d.key)
 
+    def test_unavailable_dedications_show_greyed(self):
+        options = ceremony_options()
+        gated = 0
+        for d in DEDICATIONS:
+            body = squash(strip_comments(options[CEREMONY_OPTION[d.key]]))
+            if "trigger = {" in body.split("ai_chance")[0]:
+                gated += 1
+                self.assertIn("show_as_unavailable = { always = yes }", body, d.key)
+        self.assertEqual(gated, 10, "the ten gated dedications (spec 2026-10-11 §4.1)")
+        self.assertNotIn("show_as_unavailable", squash(options["a"]), "leaving it undedicated is always open")
+
     def test_leave_undedicated_clears_the_pending_flag(self):
         body = ceremony_options()["a"]
         self.assertNotIn("REVIEWED", body)

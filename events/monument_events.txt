@@ -156,6 +156,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { monument_government_is_crowned = yes }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -188,6 +189,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { monument_government_is_republican = yes }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -220,6 +222,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { gm_government_is_revolutionary = yes }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -252,6 +255,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { gm_can_raise_leader_monument = yes }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 5
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -286,6 +290,7 @@ monument_events.2 = {
 				NOT = { has_law_or_variant = law_type:law_state_atheism }
 			}
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -382,6 +387,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { has_technology_researched = romanticism }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -408,6 +414,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { has_technology_researched = romanticism }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -441,6 +448,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { has_technology_researched = empiricism }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -470,6 +478,7 @@ monument_events.2 = {
 				NOT = { has_law_or_variant = law_type:law_industry_banned }
 			}
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
@@ -496,6 +505,7 @@ monument_events.2 = {
 		trigger = {
 			owner = { has_technology_researched = television_broadcasting }
 		}
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
 			# The open commission's dedication (v2 §2.6): certain for a monument
