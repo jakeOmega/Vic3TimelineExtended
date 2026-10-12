@@ -34,7 +34,7 @@ with it Anarchy, Collectivized Agriculture and Possession by Use.
 | Minority Rights | Violent Hostility, Ghettoization, Discrimination, Cultural Assimilation, Indifference, Protection, Affirmative Action | How the state treats cultural and religious minorities. |
 | LGBTQ+ Rights | Active Persecution, Legal Limbo, Basic Protections, Anti-Discrimination Laws, Full Equality and Protection | Legal status of LGBTQ+ people. |
 | Criminal Justice | Penal Labor Camps, Punishment-Focused Criminal Justice, Restorative Justice, Rehabilitation-Focused Criminal Justice | Prisons, sentencing and reintegration; who polices is the base-game Policing group (see [Who polices](#who-polices)). |
-| Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Subsidies, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
+| Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Policy, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
 
@@ -793,7 +793,7 @@ scaled by your rank.
 | Cultural Emigration Initiative | Cultural Unity power bloc principle | Violence against minorities |
 | Pollution Control | Pollution Control | −50% pollution |
 | Cultural Integration | | +5 cultural acceptance a year |
-| Natalism Initiative (250) | Mass Media | +50% birth rate |
+| Natalism Initiative | Mass Media | +15% birth rate |
 | Medical Outreach (development builds only; Demographics, Full only) | Medical Degrees | New medicine reaches the state faster; see [States and population](08-states.md#demographics) |
 | Tax Breaks (50) | Keynesian Economics | −50% taxes, fewer radicals, more migration |
 | Trade Reform | Containerization | +25% trade advantage and capacity, lower tariffs |
