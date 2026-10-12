@@ -21,7 +21,9 @@
 ###   te_demog_sec_how          collapsed: How Demographics Works
 ###
 ### The state panel's Demographics subtab (plan Task 14) composes the same
-### blocks into te_state_demog_content, at the end of this file.
+### blocks into te_state_demog_content, at the end of this file, with a section
+### of its own after its figures: te_state_demog_causes, the state's Causes of
+### Death (docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md).
 ###
 ### EDITING RULES
 ### * No Scope in GUI can ask whether a variable exists, and reading a missing
@@ -2225,6 +2227,9 @@ types te_demographics_widgets
 			spacing = 10
 
 			te_demog_overview = {}
+			### TODO (#894): the country's Causes of Death, people-weighted over its census states (te_dg_c_*_w
+			### in te_demog_country_census already weights the cause multipliers), once the state subtab's
+			### te_state_demog_causes has been seen in game (owner, 2026-10-11). It goes here, after the overview.
 			te_demog_sec_pyramid = {}
 			te_demog_sec_wealth = {}
 			te_demog_sec_places = {}
@@ -2252,10 +2257,11 @@ types te_demographics_widgets
 	### "Census pending". Do not reuse te_demog_sec_wealth here: its strata
 	### cells need the Population panel's PopsOverviewPanel context.
 	###
-	### Sections: te_state_demog_overview (the figures), te_state_demog_pyramid,
-	### te_state_demog_wealth (the Gini, Wealth Concentration and its target) and
-	### te_state_demog_how (collapsed). Three flags of this subtab's own, so
-	### collapsing the Population panel's sections leaves these alone:
+	### Sections: te_state_demog_overview (the figures), te_state_demog_causes
+	### (Causes of Death), te_state_demog_pyramid, te_state_demog_wealth (the Gini,
+	### Wealth Concentration and its target) and te_state_demog_how (collapsed).
+	### Four flags of this subtab's own, so collapsing the Population panel's
+	### sections leaves these alone: te_demog_st_causes_closed,
 	### te_demog_st_pyr_closed and te_demog_st_wealth_closed (open by default)
 	### and te_demog_st_how_open (collapsed by default).
 
@@ -2399,6 +2405,118 @@ types te_demographics_widgets
 				}
 				blockoverride "row_value" {
 					text = "te_demog_st_urban_value"
+				}
+			}
+		}
+	}
+
+	### Causes of Death (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md):
+	### Health Care Access and the five causes the census's life table runs on, each with its factors on hover
+	### (the generated te_demog_f_*, which the census multiplies), then, under Full, the deaths the game added on
+	### top of the census. Open by default (rule 1), with a flag of its own (te_demog_st_causes_closed). The rows sit
+	### under te_demog_state_causes_sgui (the step's inputs exist: a census from before this build waits a step);
+	### the on-top row under te_demog_state_full_sgui, its figure picked by te_demog_state_on_top_sgui (a measured
+	### scale). Labels fit te_demog_figure_row's 240-unit label cell: "Chronic Illness, Old Age" is the longest, 24
+	### characters, about 227 in the medium font with the 10%. Values fit its 200-unit value cell: "670 per 100k
+	### births" is the longest, 19 characters, about 180 ("per 100,000 births" would elide at about 208).
+	type te_state_demog_causes = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_causes"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_causes_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_st_causes_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_st_causes_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_st_causes_closed'))]"
+
+			te_demog_text = {
+				visible = "[Not( GetScriptedGui('te_demog_state_causes_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+				text = "te_demog_st_causes_pending"
+			}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_demog_state_causes_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_acc_tt"
+					blockoverride "row_label" {
+						text = "te_demog_st_acc"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_acc_value"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_inf_tt"
+					blockoverride "row_label" {
+						text = "te_demog_st_inf"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_inf_value"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_ext_tt"
+					blockoverride "row_label" {
+						text = "te_demog_st_ext"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_ext_value"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_chr_tt"
+					blockoverride "row_label" {
+						text = "te_demog_st_chr"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_chr_value"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_work_tt"
+					blockoverride "row_label" {
+						text = "te_demog_st_work"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_work_value"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_mat_tt"
+					blockoverride "row_label" {
+						text = "te_demog_st_mat"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_mat_value"
+					}
+				}
+				te_demog_figure_row = {
+					visible = "[GetScriptedGui('te_demog_state_full_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+					tooltip = "te_demog_st_ontop_tt"
+					blockoverride "row_label" {
+						text = "te_demog_st_ontop"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_ontop_value"
+					}
 				}
 			}
 		}
@@ -3145,6 +3263,7 @@ types te_demographics_widgets
 			spacing = 10
 
 			te_state_demog_overview = {}
+			te_state_demog_causes = {}
 			te_state_demog_pyramid = {}
 			te_state_demog_wealth = {}
 		}

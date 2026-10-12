@@ -174,6 +174,9 @@ With no pop at the floor, a state's events a month are `Σ bare_p × (1 + M + F 
 M = T / B − 1 − Σ bare_p × (A_s + A_p) / B,        B = Σ bare_p
 ```
 
+- **Amended 2026-10-11 (3): the Causes of Death plan**
+  (`docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md`) adds turmoil to the external cause and drifts
+  medicine. Both reach M, under Full only.
 - **Amended 2026-10-11 (2), owner: the laws', technologies' and institutions' lines are script-only**
   (`docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md`). A_s is now 0: the engine no longer
   applies those lines under Full, so M nets only the per-pop terms (literacy, mild starvation). The lines the census

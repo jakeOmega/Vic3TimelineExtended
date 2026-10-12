@@ -168,6 +168,22 @@ te_demog_fast_refresh_rates = {
 				}
 			}
 		}
+		# and the pops' own lines in it (te_dg_sp_d, the Causes of Death section's split) by the change on the pops the
+		# engine floors at 0, which the term doesn't reach
+		if = {
+			limit = { has_variable = te_dg_sp_d }
+			set_variable = {
+				name = te_dg_sp_d
+				value = {
+					value = var:te_dg_fast_fd
+					subtract = local_var:te_dg_fast_prev_d
+					multiply = { value = local_var:te_dg_w_ed0 subtract = local_var:te_dg_w_ed0m }
+					divide = { value = state_population min = 1 }
+					multiply = -1
+					add = var:te_dg_sp_d
+				}
+			}
+		}
 		# removed and re-applied, the mod's refresh pattern (docs/systems/mod_systems.md, the
 		# dynamic-modifier scaling pattern)
 		if = {
@@ -206,6 +222,14 @@ te_demog_fast_clear_rates = {
 		if = {
 			limit = { has_variable = te_dg_sr_d }
 			remove_variable = te_dg_sr_d
+		}
+		if = {
+			limit = { has_variable = te_dg_sp_d }
+			remove_variable = te_dg_sp_d
+		}
+		if = {
+			limit = { has_variable = te_dg_ss_d }
+			remove_variable = te_dg_ss_d
 		}
 	}
 	if = {

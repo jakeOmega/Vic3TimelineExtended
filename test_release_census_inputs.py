@@ -82,11 +82,12 @@ class ReleaseCensusInputsTest(unittest.TestCase):
         self.assertNotIn(TAG + "te_demog_lines_apply", triggers)
 
     def test_it_found_the_carriers(self):
-        # the nine types sit on 30 lines today; #869 adds more, never fewer
+        # the types sat on 39 lines on 2026-10-11; the Causes of Death plan adds the six technologies' and
+        # Medical Outreach's spread of medicine; more later, never fewer
         tagged = sum(
             1 for p in self.changed for line in p.read_text(encoding="utf-8-sig").split("\n")
             if line.startswith(TAG) and re.match(rf"\s*({'|'.join(self.types)})\s*=", line[len(TAG):]))
-        self.assertGreaterEqual(tagged, 30)
+        self.assertGreaterEqual(tagged, 46)
 
     def test_it_only_comments_lines_out(self):
         # every changed line is the old line behind the tag, except the gates' always = no
@@ -97,26 +98,52 @@ class ReleaseCensusInputsTest(unittest.TestCase):
             rest = [line for line in rest if line.strip() != "always = no"]
             self.assertEqual(rest, old, path.relative_to(self.root))
 
+    def _entry_lines(self, text, name):
+        """The line indexes of the top-level `name = { ... }` entry, by brace depth."""
+        lines, out, depth = text.split("\n"), set(), 0
+        for i, line in enumerate(lines):
+            if not out and re.match(rf"{re.escape(name)} = \{{", line):
+                out.add(i)
+                depth = _code(line).count("{") - _code(line).count("}")
+                continue
+            if out and depth > 0:
+                out.add(i)
+                depth += _code(line).count("{") - _code(line).count("}")
+        return out
+
     def test_what_else_it_comments_is_dead_with_the_census(self):
-        # outside the census's lines: the entries they leave empty, Family Limitation's
-        # application, the gates' old bodies and the rule
+        # outside the census's lines: the entries they leave empty, Family Limitation's application, Medical Outreach
+        # (its only effect was a census type), the gates' old bodies and the rule
         census = re.compile(rf"^\s*({'|'.join(self.types)})\s*=")
         whole_entries = {"common/laws/te_demog_law_injections.txt",
                          "common/technology/technologies/te_demog_tech_injections.txt"}
+        decrees = "common/decrees/extra_decrees.txt"
+        outreach = self._entry_lines(self.before[self.root / decrees].decode("utf-8-sig"), "decree_medical_outreach")
+        self.assertTrue(outreach, "decree_medical_outreach found")
         for path in self.changed:
             rel = path.relative_to(self.root).as_posix()
-            for line in path.read_text(encoding="utf-8-sig").split("\n"):
+            for n, line in enumerate(path.read_text(encoding="utf-8-sig").split("\n")):
                 if not line.startswith(TAG):
                     continue
                 body = line[len(TAG):]
                 with self.subTest(rel=rel, line=body.strip()):
                     if census.match(body) or rel in whole_entries:
                         continue
-                    if rel == "common/history/extra_history.txt":
+                    if rel == decrees:
+                        self.assertIn(n, outreach, "only Medical Outreach goes whole")
+                    elif rel == "common/history/extra_history.txt":
                         self.assertIn("add_modifier = { name = te_demog_family_limitation }", body)
                     else:
                         self.assertIn(rel, {"common/scripted_triggers/te_demog_triggers.txt",
                                             "common/game_rules/extra_game_rules.txt"})
+
+    def test_the_census_decree_is_commented_whole(self):
+        """Medical Outreach's only effect is the census's spread of medicine: a release has no census, so the decree
+        goes whole, not as a shell with a texture and a cost (the Causes of Death plan)."""
+        entries = self._entries(self._text("common/decrees/extra_decrees.txt"))
+        self.assertNotIn("decree_medical_outreach", entries)
+        for kept in ("decree_natalism_initiative", "decree_pollution_control", "decree_war_propaganda"):
+            self.assertIn(kept, entries)
 
     def test_the_injection_files_are_inert(self):
         for rel in ("common/laws/te_demog_law_injections.txt",

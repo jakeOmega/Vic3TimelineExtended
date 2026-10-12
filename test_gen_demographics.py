@@ -106,25 +106,95 @@ class TestGenerated(unittest.TestCase):
         self.assertLess(body.index("multiply = { value = var:te_dg_lit"), body.index(f"modifier:{P.MEANS_SHIFT_TYPE}"))
 
     def test_causes_read_the_types_not_the_owners_techs_or_laws(self):
-        for cause in gen.CAUSES:
-            body = self._cause(cause)
-            self.assertNotIn("has_technology_researched", body, cause)
-            self.assertNotIn("has_law", body, cause)
-            self.assertNotIn("institution = institution_health_system", body, cause)
-            self.assertNotIn("institution = institution_workplace_safety", body, cause)
+        # every body the causes' figures come from: each factor, the medicine targets and the spread's rate (values),
+        # and te_demog_cause_inputs_store (effects), which reads the plain types for the factors (review of Tasks 4-5)
+        names = [f"te_demog_f_{cause}_{f}" for cause, factors in P.CAUSE_FACTORS.items() for f in factors]
+        names += [f"te_demog_f_{cause}_medicine_target" for cause in P.MEDICINE_CAUSES]
+        names += ["te_demog_access_target", "te_demog_medical_diffusion"]
+        names += [f"te_demog_treatment_target_{cause}" for cause in P.MEDICINE_CAUSES]
+        bodies = {name: self._value(name) for name in names}
+        bodies["te_demog_cause_inputs_store"] = self.effects.split("te_demog_cause_inputs_store = {", 1)[1].split(
+            "\n}\n", 1)[0]
+        bodies.update({f"te_demog_mult_{cause}": self._cause(cause) for cause in gen.CAUSES})
+        for name, body in bodies.items():
+            with self.subTest(name):
+                self.assertNotIn("has_technology_researched", body)
+                self.assertNotIn("has_law", body)
+                self.assertNotIn("institution = institution_health_system", body)
+                self.assertNotIn("institution = institution_workplace_safety", body)
+                self.assertNotIn("owner", body)
 
-    def test_medicine_reads_access_and_the_causes_treatment(self):
+    def _value(self, name):
+        return self.values.split(f"\n{name} = {{", 1)[1].split("\n}\n", 1)[0]
+
+    def test_each_multiplier_is_the_product_of_its_factors(self):
+        for cause, factors in P.CAUSE_FACTORS.items():
+            lines = [line.strip() for line in self._cause(cause).strip().splitlines()]
+            want = [f"value = te_demog_f_{cause}_{factors[0]}"]
+            want += [f"multiply = te_demog_f_{cause}_{f}" for f in factors[1:]]
+            if cause == "maternal":
+                want.append(f"multiply = {P.MATERNAL_PER_100K_BIRTHS}")
+            self.assertEqual(lines, want, cause)
+
+    def test_factors_read_only_what_the_step_stored(self):
+        # the hover multiplies to the row between steps only if no factor reads a live modifier, turmoil or crowding
+        for cause, factors in P.CAUSE_FACTORS.items():
+            for f in factors:
+                body = self._value(f"te_demog_f_{cause}_{f}")
+                with self.subTest(cause=cause, factor=f):
+                    self.assertNotIn("modifier:", body)
+                    self.assertNotIn("has_modifier", body)
+                    self.assertIsNone(re.search(r"(?<![\w:])turmoil\b", body))
+                    self.assertRegex(body, r"var:te_dg_(acc|trt_\w+|in_\w+)\b")
+                    # the walk's te_dg_sol and te_dg_lit change at a walk without a step; the step's copies don't
+                    self.assertIsNone(re.search(r"var:te_dg_(sol|lit)\b", body))
+
+    def test_the_targets_read_the_types(self):
+        self.assertIn(f"value = modifier:{P.ACCESS_TYPE}", self._value("te_demog_access_target"))
+        self.assertIn(f"value = modifier:{P.DIFFUSION_TYPE}", self._value("te_demog_medical_diffusion"))
         for cause in P.MEDICINE_CAUSES:
-            body = self._cause(cause)
-            self.assertIn(f"value = modifier:{P.ACCESS_TYPE}", body, cause)
-            self.assertIn(f"value = modifier:{P.TREATMENT_TYPE[cause]}", body, cause)
-        for cause in set(gen.CAUSES) - set(P.MEDICINE_CAUSES):
-            self.assertNotIn(P.ACCESS_TYPE, self._cause(cause), cause)
+            self.assertIn(f"value = modifier:{P.TREATMENT_TYPE[cause]}",
+                          self._value(f"te_demog_treatment_target_{cause}"))
+
+    def test_the_inputs_store_reads_each_plain_type(self):
+        body = self.effects.split("te_demog_cause_inputs_store = {", 1)[1].split("\n}\n", 1)[0]
+        for cause, types in P.MORTALITY_TYPES.items():
+            for t in types:
+                self.assertIn(f"add = modifier:{t}", body)
+            self.assertIn(f"name = te_dg_in_{P.CAUSE_SHORT[cause]}", body)
+        self.assertIn("value = turmoil", body)
+        self.assertIn("var:migration_crowding_mult_applied", body)
 
     def test_every_type_is_read_in_state_scope(self):
-        for name in P.DEMOG_MORTALITY_TYPES:
-            self.assertIn(f"modifier:{name}", self.values, name)
-            self.assertNotIn(f"owner.modifier:{name}", self.values, name)
+        # medicine's types in the targets (values); the plain ones in te_demog_cause_inputs_store (effects), which
+        # stores them for the factors (the Causes of Death plan)
+        both = self.values + self.effects
+        for name in P.DEMOG_MORTALITY_TYPES + (P.DIFFUSION_TYPE,):
+            self.assertIn(f"modifier:{name}", both, name)
+            self.assertNotIn(f"owner.modifier:{name}", both, name)
+
+    def test_the_walk_sums_severe_starvation_under_full(self):
+        """The Causes of Death section's split (Task 6): one Full-only severe-starvation test per pop, beside the walk's
+        other Full-only sums. Its people count unconditionally; its deaths' severe term only where the engine doesn't
+        floor the pop, and the term is the very ladder te_demog_pop_death_mult holds."""
+        init = self.effects.split("te_demog_absorbed_walk_init = {", 1)[1].split("\n}\n", 1)[0]
+        pop = self.effects.split("te_demog_absorbed_walk_pop = {", 1)[1].split("\n}\n", 1)[0]
+        before_guard = init.split("te_demog_effects_run = yes", 1)[0]
+        for name in ("te_dg_w_sev", "te_dg_w_sevd"):
+            self.assertIn(f"set_local_variable = {{ name = {name} value = 0 }}", before_guard)
+        guarded = pop.split("local_var:te_dg_w_rep > 0", 1)[1]
+        self.assertEqual(pop.count("is_in_severe_starvation = yes"), 1)
+        severe = guarded.split("is_in_severe_starvation = yes", 1)[1]
+        self.assertIn("change_local_variable = { name = te_dg_w_sev add = total_size }", severe)
+        floored = severe.split("local_var:te_dg_p_md > 0", 1)
+        self.assertEqual(len(floored), 2, "the deaths sit inside the engine's floor test")
+        self.assertNotIn("te_dg_w_sevd", floored[0])
+        ladder = self.values.split("te_demog_pop_death_mult = {", 1)[1].split("\n}\n", 1)[0]
+        ladder = ladder.split("limit = { is_in_severe_starvation = yes }", 1)[1].split("else_if = {\n\t\tlimit = { is_in_mild", 1)[0]
+        want = [line.strip() for line in ladder.strip().splitlines() if line.strip() != "}"]
+        got = [line.strip() for line in floored[1].split("value = 0", 1)[1].strip().splitlines()][:len(want)]
+        self.assertEqual(got, want)
+        self.assertNotIn("te_demog_pop_severe", self.values + self.effects, "no new per-pop script value")
 
     def test_replay_values_are_one_sequential_block(self):
         self.assertNotIn("te_demog_dbg_unit", self.values)

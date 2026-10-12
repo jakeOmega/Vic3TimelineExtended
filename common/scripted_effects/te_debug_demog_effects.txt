@@ -21,12 +21,14 @@
 #                       tally, and each state's dead still to be taken
 #   TE_DEMOG_SKEW       options f and g: the capital's pops' workforce and dependents
 #   TE_DEMOG_MODS       option l: the census's modifier types as the capital and an
-#                       unincorporated state read them
+#                       unincorporated state read them (live), and the cause multipliers
+#                       as the last step left them (-1 before a census's first step)
 #   TE_DEMOG_SHOCK:     option m (probe P1): every devastated or polluted state's
 #                       mortality and birth reads, devastation, turmoil and pollution,
 #                       each line followed by the state's scope
 #   TE_DEMOG_RATES:     option n (probe P3): the capital's census terms, the terms in
-#                       force, its last step's on-top scales and the reads
+#                       force, its last step's on-top scales and the reads, and the split of
+#                       its window's deaths (the Causes of Death section)
 #
 # A debug_log line reads only variables and script values of THIS (locals don't reach
 # it, nor do saved scopes), so the numbers a line needs are copied into te_dg_dbg_*
@@ -46,7 +48,8 @@
 # year first, so the census reads as a state about to step does. Run twice in one
 # year, the second step ages this year's newborns as if they were 150 (both here and
 # in the model, so the replay still matches): use a save you can throw away, or
-# re-seed afterwards (option c).
+# re-seed afterwards (option c). Each run also drifts the census's medicine one more step
+# (te_demog_medicine_drift in te_demog_step_begin), a year's spread on top of the yearly one.
 te_debug_demog_replay = {
 	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 	te_demog_step_begin = yes
@@ -357,7 +360,8 @@ te_debug_demog_skew_lines = {
 # modifier-types-design.md, engine checks a-c). Treatment and the techs' and laws' lines read the
 # same in both states; access and the per-level lines are each line times its level in the
 # capital and 0 in the other state, both times the state's Impact of Institutions (impact=, #889).
-# Contraception and fertility control read the same in both.
+# Contraception and fertility control read the same in both, as does the spread of medicine's
+# rate (diff=, the Causes of Death plan).
 te_debug_demog_modifier_reads = {
 	capital = { te_debug_demog_mods_line = yes }
 	if = {
@@ -374,7 +378,7 @@ te_debug_demog_modifier_reads = {
 
 # THIS = a state: its TE_DEMOG_MODS line.
 te_debug_demog_mods_line = {
-	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString] impact=[THIS.ScriptValue('te_demog_institution_impact')|3]"
+	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString] impact=[THIS.ScriptValue('te_demog_institution_impact')|3] diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3]"
 }
 
 # ---- m: the shock terms (phase 2 step 4, probe P1) ------------------------------
@@ -440,6 +444,13 @@ te_debug_demog_rate_lines = {
 	te_debug_demog_rate_copy = { FROM = te_dg_w TO = te_dg_dbg_w }
 	te_debug_demog_rate_copy = { FROM = te_dg_sr_b TO = te_dg_dbg_srb }
 	te_debug_demog_rate_copy = { FROM = te_dg_sr_d TO = te_dg_dbg_srd }
+	# the Causes of Death section's split of the window's deaths and the start's parts (te_demog_on_top_split)
+	te_debug_demog_rate_copy = { FROM = te_dg_ed_state TO = te_dg_dbg_eds }
+	te_debug_demog_rate_copy = { FROM = te_dg_ed_sev TO = te_dg_dbg_edsev }
+	te_debug_demog_rate_copy = { FROM = te_dg_sev_share TO = te_dg_dbg_sev }
+	te_debug_demog_rate_copy = { FROM = te_dg_ed_clamp_d TO = te_dg_dbg_cld }
+	te_debug_demog_rate_copy = { FROM = te_dg_sp_d TO = te_dg_dbg_spd }
+	te_debug_demog_rate_copy = { FROM = te_dg_ss_d TO = te_dg_dbg_ssd }
 	set_variable = { name = te_dg_dbg_people value = state_population }
 	set_variable = { name = te_dg_dbg_ab value = te_demog_rate_births_applied }
 	set_variable = { name = te_dg_dbg_ad value = te_demog_rate_deaths_applied }
@@ -447,7 +458,7 @@ te_debug_demog_rate_lines = {
 	set_variable = { name = te_dg_dbg_fd value = te_demog_fast_deaths_applied }
 	set_variable = { name = te_dg_dbg_read_b value = modifier:state_birth_rate_mult }
 	set_variable = { name = te_dg_dbg_read_d value = modifier:state_mortality_mult }
-	debug_log = "TE_DEMOG_RATES: mb=[THIS.Var('te_dg_dbg_mb').GetValue|4]; md=[THIS.Var('te_dg_dbg_md').GetValue|4]; applied_b=[THIS.Var('te_dg_dbg_ab').GetValue|4]; applied_d=[THIS.Var('te_dg_dbg_ad').GetValue|4]; fast_b=[THIS.Var('te_dg_dbg_fb').GetValue|4]; fast_d=[THIS.Var('te_dg_dbg_fd').GetValue|4]; read_b=[THIS.Var('te_dg_dbg_read_b').GetValue|4]; read_d=[THIS.Var('te_dg_dbg_read_d').GetValue|4]; bz=[THIS.Var('te_dg_dbg_bz').GetValue|4]; dz=[THIS.Var('te_dg_dbg_dz').GetValue|4]; cbr_model=[THIS.Var('te_dg_dbg_cbrm').GetValue|3]; cdr_model=[THIS.Var('te_dg_dbg_cdrm').GetValue|3]; eb=[THIS.Var('te_dg_dbg_eb').GetValue|0]; ed=[THIS.Var('te_dg_dbg_ed').GetValue|0]; eb_target=[THIS.Var('te_dg_dbg_ebt').GetValue|0]; ed_target=[THIS.Var('te_dg_dbg_edt').GetValue|0]; people=[THIS.Var('te_dg_dbg_people').GetValue|0]; rep_b=[THIS.Var('te_dg_dbg_repb').GetValue|4]; rep_d=[THIS.Var('te_dg_dbg_repd').GetValue|4]; tb_b=[THIS.Var('te_dg_dbg_tbb').GetValue|4]; tb_d=[THIS.Var('te_dg_dbg_tbd').GetValue|4]; os_b=[THIS.Var('te_dg_dbg_osb').GetValue|4]; os_d=[THIS.Var('te_dg_dbg_osd').GetValue|4]; q_b=[THIS.Var('te_dg_dbg_qb').GetValue|4]; q_d=[THIS.Var('te_dg_dbg_qd').GetValue|4]; w=[THIS.Var('te_dg_dbg_w').GetValue|5]; sr_b=[THIS.Var('te_dg_dbg_srb').GetValue|2]; sr_d=[THIS.Var('te_dg_dbg_srd').GetValue|2]; clamped=[THIS.Var('te_dg_dbg_cl').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_RATES: mb=[THIS.Var('te_dg_dbg_mb').GetValue|4]; md=[THIS.Var('te_dg_dbg_md').GetValue|4]; applied_b=[THIS.Var('te_dg_dbg_ab').GetValue|4]; applied_d=[THIS.Var('te_dg_dbg_ad').GetValue|4]; fast_b=[THIS.Var('te_dg_dbg_fb').GetValue|4]; fast_d=[THIS.Var('te_dg_dbg_fd').GetValue|4]; read_b=[THIS.Var('te_dg_dbg_read_b').GetValue|4]; read_d=[THIS.Var('te_dg_dbg_read_d').GetValue|4]; bz=[THIS.Var('te_dg_dbg_bz').GetValue|4]; dz=[THIS.Var('te_dg_dbg_dz').GetValue|4]; cbr_model=[THIS.Var('te_dg_dbg_cbrm').GetValue|3]; cdr_model=[THIS.Var('te_dg_dbg_cdrm').GetValue|3]; eb=[THIS.Var('te_dg_dbg_eb').GetValue|0]; ed=[THIS.Var('te_dg_dbg_ed').GetValue|0]; eb_target=[THIS.Var('te_dg_dbg_ebt').GetValue|0]; ed_target=[THIS.Var('te_dg_dbg_edt').GetValue|0]; people=[THIS.Var('te_dg_dbg_people').GetValue|0]; rep_b=[THIS.Var('te_dg_dbg_repb').GetValue|4]; rep_d=[THIS.Var('te_dg_dbg_repd').GetValue|4]; tb_b=[THIS.Var('te_dg_dbg_tbb').GetValue|4]; tb_d=[THIS.Var('te_dg_dbg_tbd').GetValue|4]; os_b=[THIS.Var('te_dg_dbg_osb').GetValue|4]; os_d=[THIS.Var('te_dg_dbg_osd').GetValue|4]; q_b=[THIS.Var('te_dg_dbg_qb').GetValue|4]; q_d=[THIS.Var('te_dg_dbg_qd').GetValue|4]; w=[THIS.Var('te_dg_dbg_w').GetValue|5]; sr_b=[THIS.Var('te_dg_dbg_srb').GetValue|2]; sr_d=[THIS.Var('te_dg_dbg_srd').GetValue|2]; clamped=[THIS.Var('te_dg_dbg_cl').GetValue|0]; ed_state=[THIS.Var('te_dg_dbg_eds').GetValue|0]; ed_sev=[THIS.Var('te_dg_dbg_edsev').GetValue|0]; sev=[THIS.Var('te_dg_dbg_sev').GetValue|3]; clamp_d=[THIS.Var('te_dg_dbg_cld').GetValue|0]; sp_d=[THIS.Var('te_dg_dbg_spd').GetValue|2]; ss_d=[THIS.Var('te_dg_dbg_ssd').GetValue|2]; date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_dg_dbg_mb
 	remove_variable = te_dg_dbg_md
 	remove_variable = te_dg_dbg_bz
@@ -470,6 +481,12 @@ te_debug_demog_rate_lines = {
 	remove_variable = te_dg_dbg_w
 	remove_variable = te_dg_dbg_srb
 	remove_variable = te_dg_dbg_srd
+	remove_variable = te_dg_dbg_eds
+	remove_variable = te_dg_dbg_edsev
+	remove_variable = te_dg_dbg_sev
+	remove_variable = te_dg_dbg_cld
+	remove_variable = te_dg_dbg_spd
+	remove_variable = te_dg_dbg_ssd
 	remove_variable = te_dg_dbg_people
 	remove_variable = te_dg_dbg_ab
 	remove_variable = te_dg_dbg_ad

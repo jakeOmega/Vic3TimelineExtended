@@ -11,7 +11,7 @@ the step of year Y, slot Y mod RING_YEARS holds that year's births (age 0) and t
 for age a holds the people born in Y - a. Ages 150 and over live in a pool.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 try:  # repo layout: scripts/analysis/ on sys.path, or imported as a namespace package
     import demographics_params as P
@@ -38,6 +38,8 @@ class Inputs:
     crisis: float = 0.0                  # 0..1: war, devastation, turmoil at the origin
     inflow_years: int = 0                # consecutive years of net inflow (chain migration)
     mods: dict = field(default_factory=dict)   # {modifier type: total} the state reads (demographics_modifiers.totals)
+    turmoil: float = 0.0                 # 0..1: the state's turmoil at the step (te_dg_in_turm)
+    medicine: dict | None = None         # the drifted access and treatments the step holds; None = at the targets
 
 
 def clamp(x, lo, hi):
@@ -61,33 +63,78 @@ def female_work_share(inp):
     return P.FEMALE_WORK_SHARE_DEFAULT
 
 
-def medicine(inp, cause):
-    """1 - access x treatment for one of P.MEDICINE_CAUSES (modifier-types design, Decision 1)."""
-    access = clamp(P.BASE_ACCESS + inp.mods.get(P.ACCESS_TYPE, 0.0), 0.0, 1.0)
-    treatment = clamp(inp.mods.get(P.TREATMENT_TYPE[cause], 0.0), 0.0, P.TREATMENT_CAP[cause])
-    return 1 - access * treatment
-
-
 def plain_multiplier(inp, cause):
     """1 + the cause's types' sum (P.MORTALITY_TYPES), at least P.MORTALITY_MULT_FLOOR."""
     return max(P.MORTALITY_MULT_FLOOR, 1 + sum(inp.mods.get(t, 0.0) for t in P.MORTALITY_TYPES.get(cause, ())))
 
 
-def cause_multipliers(inp):
-    """One multiplier per cause from the state's inputs; 1.0 at the base (§2.4). Laws,
-    technology and institutions arrive as modifier totals (inp.mods); the script's
-    te_demog_mult_<cause> computes the same, in the same order."""
-    mult = {c: 1.0 for c in ("infection", "work", "external", "maternal", "chronic")}
+def medicine_targets(inp):
+    """Where medicine is heading: {"access", and each of P.MEDICINE_CAUSES' treatment}, clamped as the census
+    clamps them (te_demog_access_target, te_demog_treatment_target_<cause>)."""
+    out = {"access": clamp(P.BASE_ACCESS + inp.mods.get(P.ACCESS_TYPE, 0.0), 0.0, 1.0)}
     for cause in P.MEDICINE_CAUSES:
-        mult[cause] *= medicine(inp, cause)
-    for cause in P.MORTALITY_TYPES:
-        mult[cause] *= plain_multiplier(inp, cause)
-    mult["infection"] *= lerp_sol(inp.sol, 1.0, P.SOL_INFECTION_AT_HIGH)
-    mult["infection"] *= poverty_infection(inp.sol)
-    mult["infection"] *= 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
-    mult["infection"] *= 1 + min(P.CROWDING_INFECTION_PER_PULL * inp.crowding, P.CROWDING_INFECTION_MAX)
-    mult["chronic"] *= lerp_sol(inp.sol, 1.0, P.SOL_CHRONIC_AT_HIGH)
-    return mult
+        out[cause] = clamp(inp.mods.get(P.TREATMENT_TYPE[cause], 0.0), 0.0, P.TREATMENT_CAP[cause])
+    return out
+
+
+def diffusion(inp):
+    """The share of the gap medicine closes at a census step (te_demog_medical_diffusion)."""
+    return clamp(P.DIFFUSION_BASE + inp.mods.get(P.DIFFUSION_TYPE, 0.0), 0.0, P.DIFFUSION_MAX)
+
+
+def medicine_drift(prev, inp):
+    """One census step of the drifted medicine (te_demog_medicine_drift): each value moves diffusion(inp) of the way
+    to its target and takes the target once within MEDICINE_SNAP of it. prev None (a seed, a new state, an old save's
+    state) starts at the targets. The order of operations is the script's: (target - prev) x rate + prev."""
+    target = medicine_targets(inp)
+    if prev is None:
+        return dict(target)
+    rate = diffusion(inp)
+    out = {}
+    for key, t in target.items():
+        x = (t - prev[key]) * rate + prev[key]
+        out[key] = t if -P.MEDICINE_SNAP < t - x < P.MEDICINE_SNAP else x
+    return out
+
+
+def medicine(inp, cause):
+    """1 - access x treatment for one of P.MEDICINE_CAUSES, at the drifted values the step holds (inp.medicine) or,
+    with none, at the targets (modifier-types design, Decision 1)."""
+    m = inp.medicine if inp.medicine is not None else medicine_targets(inp)
+    return 1 - m["access"] * m[cause]
+
+
+def cause_factors(inp):
+    """{cause: {factor: value}} in P.CAUSE_FACTORS' order: the script's te_demog_f_<cause>_<factor>."""
+    def one(factor, cause):
+        if factor == "medicine":
+            return medicine(inp, cause)
+        if factor == "sol":
+            return lerp_sol(inp.sol, 1.0, P.SOL_INFECTION_AT_HIGH if cause == "infection" else P.SOL_CHRONIC_AT_HIGH)
+        if factor == "poverty":
+            return poverty_infection(inp.sol)
+        if factor == "literacy":
+            return 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
+        if factor == "crowding":
+            return 1 + min(P.CROWDING_INFECTION_PER_PULL * inp.crowding, P.CROWDING_INFECTION_MAX)
+        if factor == "laws":
+            return plain_multiplier(inp, cause)
+        if factor == "turmoil":
+            return 1 + P.TURMOIL_EXTERNAL_WEIGHT * clamp(inp.turmoil, 0.0, 1.0)
+        raise KeyError(factor)
+    return {cause: {f: one(f, cause) for f in factors} for cause, factors in P.CAUSE_FACTORS.items()}
+
+
+def cause_multipliers(inp):
+    """One multiplier per cause from the state's inputs; 1.0 at the base (§2.4): the product of its factors, in
+    P.CAUSE_FACTORS' order, as the script's te_demog_mult_<cause> computes it."""
+    out = {}
+    for cause, factors in cause_factors(inp).items():
+        m = 1.0
+        for v in factors.values():
+            m *= v
+        out[cause] = m
+    return out
 
 
 def poverty_infection(sol):
@@ -222,6 +269,7 @@ class Ring:
     men_18_40: float = 0.0
     women_18_40: float = 0.0
     total: float = 0.0
+    medicine: dict | None = None        # the drifted access and treatments (medicine_drift); None = at the targets
 
     def age_of_slot(self, k):
         """Age of slot k's people after the step of self.year."""
@@ -310,13 +358,16 @@ def seed(inp, year, engine_pop):
     """A ring at the stable structure of the state's own rates (§2.6, rule 5).
 
     The women's survivorship includes maternal deaths, so the seed is the step's own
-    equilibrium; nrr and life_table leave them out (a documented approximation).
+    equilibrium; nrr and life_table leave them out (a documented approximation). Medicine starts at its targets,
+    as the script's seed sets it (te_demog_medicine_at_target before te_demog_prepare), whatever inp.medicine holds.
     """
+    inp = replace(inp, medicine=None)
     qf, qm, mmr = group_rates(inp)
     e0 = life_table(qf)["e0"] * 0.5 + life_table(qm)["e0"] * 0.5
     tfr = fertility(inp, e0)["tfr"]
     d = growth_factor(nrr(tfr, qf))
     ring = Ring(year=year)
+    ring.medicine = medicine_targets(inp)
     lf = lm = 100000.0
     dpow = 1.0
     for a in range(N):
@@ -403,6 +454,21 @@ def window_events(end_rate, start_rate=None):
     return max(0.0, P.WINDOW_START_WEIGHT * start_rate + (1 - P.WINDOW_START_WEIGHT) * end_rate)
 
 
+def on_top_split(end, start=None):
+    """(events, the whole state's part, severe starvation's part) over a step's window (the Causes of Death plan, Task 6;
+    the script's te_demog_on_top_split). end, start: (the engine's rate, the pops' own lines in it, severe
+    starvation's part of those) at that end of the window, in one unit; start None where the window took the
+    snapshot. Each part is weighted as window_events weighs the rate; the whole state's part is the events less the
+    pops' own lines, at least 0."""
+    events = window_events(end[0], None if start is None else start[0])
+    if start is None:
+        own, severe = end[1], end[2]
+    else:
+        w = P.WINDOW_START_WEIGHT
+        own, severe = w * start[1] + (1 - w) * end[1], w * start[2] + (1 - w) * end[2]
+    return events, max(0.0, events - own), severe
+
+
 def starvation_value(food_security):
     """The engine's starvation value for a pop at this food security: clamp((FOOD_SECURITY_STARVATION_THRESHOLD - food
     security) x STARVATION_EFFECTS_SCALING_FACTOR, 0, STARVATION_VALUE_MAX) (vanilla 00_defines.txt's comment). The
@@ -436,7 +502,8 @@ def model_crude_rates(inp, year=1836):
 
 def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.0, rates=None,
          births_scale=0.0, deaths_scale=0.0):
-    """One yearly step (§2.1), in the script's order. Returns the year's figures.
+    """One yearly step (§2.1), in the script's order: medicine drifts before the rates (te_demog_medicine_drift
+    before te_demog_prepare). Returns the year's figures.
 
     engine_pop None = no scaling (a pure model run). war_dead, kills and migration are
     people this year (migration net, signed); the residual noise rule is the caller's.
@@ -450,6 +517,9 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     """
     assert ring.year is not None and year == ring.year + 1, "one step per year"
     if rates is None:
+        # medicine spreads (the Causes of Death plan): the drifted values move, then the year's rates use them
+        ring.medicine = medicine_drift(ring.medicine, inp)
+        inp = replace(inp, medicine=ring.medicine)
         qf, qm, mmr = group_rates(inp)
         lt_f, lt_m = life_table(qf), life_table(qm)
         e0 = (lt_f["e0"] + lt_m["e0"]) / 2
