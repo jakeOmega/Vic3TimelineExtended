@@ -2548,6 +2548,18 @@ class PictureTests(unittest.TestCase):
                           f"texture = \"gfx/interface/icons/gm_pictures/{picture_key(code)}.dds\"", body, code)
         self.assertEqual(body.count("icon = {"), len(PICTURES))
 
+    def test_every_picture_has_its_art(self):
+        import importlib
+        import sys
+        sys.path.insert(0, str(ROOT / "scripts" / "image_pipeline"))
+        ip = importlib.import_module("icon_prompts")
+        entries = ip.ICONS["gm_picture"]
+        self.assertEqual(set(entries), {picture_key(c) for c in PICTURES})
+        for key, entry in entries.items():
+            self.assertEqual(entry["now"], "gfx/interface/icons/building_icons/building_grand_monument.dds", key)
+            if isinstance(entry.get("seed"), int):
+                self.assertTrue((ROOT / f"gfx/interface/icons/gm_pictures/{key}.dds").exists(), key)
+
     def test_display_value_defaults_to_the_draped_picture(self):
         v = squash(block(read(VALUES), "gm_disp_picture_code"))
         self.assertEqual(v, "value = 1 if = { limit = { has_variable = gm_picture_code } value = var:gm_picture_code }")
