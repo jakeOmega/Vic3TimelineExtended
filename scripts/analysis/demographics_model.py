@@ -255,11 +255,13 @@ def contraception_beyond(inp):
 
 
 def practice_erosion(practice, inp):
-    """How much of the start the state's conditions take away, 0-1 (§4.2, §4.3)."""
+    """How much of the start the state's conditions take away, 0-1 (§4.2, §4.3). Health care's part reads the access
+    medicine has reached above the base (te_dg_acc - BASE_ACCESS: since #916 access drifts toward its target), so
+    Birth Spacing fades as medicine spreads; with no drift held it is the target, the access modifier."""
     contra = P.PRACTICE_EROSION_CONTRACEPTION * clamp(
         (contraception_beyond(inp) - P.PRACTICE_EROSION_FROM) / P.PRACTICE_EROSION_SPAN, 0.0, 1.0)
-    access = P.PRACTICE_EROSION_ACCESS[practice] * clamp(inp.mods.get(P.ACCESS_TYPE, 0.0) / P.PRACTICE_ACCESS_SPAN,
-                                                          0.0, 1.0)
+    reached = (inp.medicine if inp.medicine is not None else medicine_targets(inp))["access"] - P.BASE_ACCESS
+    access = P.PRACTICE_EROSION_ACCESS[practice] * clamp(reached / P.PRACTICE_ACCESS_SPAN, 0.0, 1.0)
     return clamp(contra + access, 0.0, 1.0)
 
 

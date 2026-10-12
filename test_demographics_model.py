@@ -848,6 +848,19 @@ class TestPractices(unittest.TestCase):
         self.assertEqual(M.practice_target("bs", M.Inputs(agrarian_share=1.0, impartible=True), 0.0), 0.0,
                          "nothing builds Birth Spacing up")
 
+    def test_birth_spacing_erodes_with_the_access_medicine_has_reached(self):
+        """Since #916 the census's health-care access drifts toward its target (te_dg_acc). Birth Spacing's erosion
+        reads that drifted access above the base, not the law's modifier, so it fades as medicine spreads; with no
+        drift held (a seed, or a save from before #916) it reads the target, which is the modifier."""
+        line = 0.5
+        lagging = M.Inputs(mods={P.ACCESS_TYPE: line}, medicine={"access": P.BASE_ACCESS + 0.1,
+                                                                 "infection": 0.0, "maternal": 0.0, "chronic": 0.0})
+        self.assertAlmostEqual(M.practice_target("bs", lagging, 1.0),
+                               1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.1 / P.PRACTICE_ACCESS_SPAN)
+        at_target = dataclasses.replace(lagging, medicine=None)
+        self.assertAlmostEqual(M.practice_target("bs", at_target, 1.0),
+                               1 - P.PRACTICE_EROSION_ACCESS["bs"] * line / P.PRACTICE_ACCESS_SPAN)
+
     def test_drift_closes_its_rate_of_the_gap(self):
         self.assertAlmostEqual(M.practice_drift(1.0, 0.45), 1.0 - P.PRACTICE_RATE * 0.55)
         self.assertEqual(M.practice_drift(0.0, 0.0), 0.0)
