@@ -2873,6 +2873,10 @@ class LandmarkTests(unittest.TestCase):
         self.assertEqual(L["gm_skin_landmark_la_scala"], "La Scala")
         self.assertEqual(L["gm_landmark_la_scala_evt"], "$gm_skin_landmark_la_scala$")
         self.assertEqual(L["gm_landmark_arc_de_triomphe_evt"], "the $gm_skin_landmark_arc_de_triomphe$")
+        # Not "the Washington Monument", which players read as the D.C. obelisk (owner, 2026-10-11).
+        self.assertEqual(L["gm_skin_landmark_washington_monument_baltimore"], "Baltimore's Washington Monument")
+        self.assertEqual(L["gm_landmark_washington_monument_baltimore_evt"],
+                         "$gm_skin_landmark_washington_monument_baltimore$")
 
 
 class LandmarkLockTests(unittest.TestCase):

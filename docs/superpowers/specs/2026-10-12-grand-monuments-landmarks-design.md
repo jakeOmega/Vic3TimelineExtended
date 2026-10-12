@@ -95,7 +95,7 @@ state) and the test `test_landmarks_phase_2_hook` are replaced by §7's checks.
 | 1 | `arc_de_triomphe` | Arc de Triomphe | `STATE_ILE_DE_FRANCE` | FRA | War Memorial | Arch | Generic · Arch | 15 | 1806–36 |
 | 2 | `alexander_column` | Alexander Column | `STATE_INGRIA` | RUS | To the Crown | Column | Generic · Column | 10 | 1834 |
 | 3 | `brandenburg_gate` | Brandenburg Gate | `STATE_BRANDENBURG` | PRU | To the Nation | Gate | Generic · Gate | 10 | 1791 |
-| 4 | `washington_monument_baltimore` | Washington Monument | `STATE_MARYLAND` | USA | To the Republic | Column | Generic · Column | 5 | 1829 |
+| 4 | `washington_monument_baltimore` | Baltimore's Washington Monument | `STATE_MARYLAND` | USA | To the Republic | Column | Generic · Column | 5 | 1829 |
 | 5 | `la_scala` | La Scala | `STATE_LOMBARDY` | AUS (confirmed by the owner) | Grand Opera House | Opera house | Generic · Opera house | 10 | 1778 |
 | 6 | `teatro_di_san_carlo` | Teatro di San Carlo | `STATE_CAMPANIA` | SIC | Grand Opera House | Opera house | Generic · Opera house | 5 | 1737 |
 | 7 | `jantar_mantar` | Jantar Mantar | `STATE_RAJPUTANA` (Jaipur) | JAI (Dhundhar) | Grand Observatory | Observatory | Sanskrit · Observatory | 5 | 1734 |
@@ -106,6 +106,9 @@ state) and the test `test_landmarks_phase_2_hook` are replaced by §7's checks.
 | 12 | `lion_monument` | Lion Monument | `STATE_EAST_SWITZERLAND` | SWI | War Memorial | Statue | Generic · Statue | 5 | 1821 |
 
 Picture codes are 1,000,001 to 1,000,012, in this order.
+
+**Baltimore's Washington Monument** is named so (owner, 2026-10-11): players read "the Washington Monument" as the
+D.C. obelisk, which Appendix B's commission would also be called.
 
 **Owners checked** against the game's `common/history/states/00_states.txt` (2026-10-11, in implementation): eleven as
 guessed. Jaipur's part of Rajputana is Dhundhar's (JAI), not Rajputana's. Aksum is in Tigray's part of `STATE_GONDER`,
