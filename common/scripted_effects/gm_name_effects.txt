@@ -216,8 +216,10 @@ gm_state_mark_unveiled_for_com = {
 # itself, while the skin event was still open) is kept, and so is its form if
 # the skin chosen still offers it.
 gm_state_unveil = {
+	# A landmark's form is locked (phase 4 §3.2); a rededication still names it.
 	if = {
 		limit = {
+			gm_state_is_landmark = no
 			NOT = {
 				AND = {
 					has_variable = gm_name_from_com
@@ -254,7 +256,10 @@ gm_state_offer_name_choice = {
 	# (or 90 days, if it never is).
 	set_variable = { name = gm_name_choice_open value = yes days = 90 }
 	if = {
-		limit = { gm_state_has_form_choice = yes }
+		limit = {
+			gm_state_has_form_choice = yes
+			gm_state_is_landmark = no
+		}
 		trigger_event = { id = monument_events.24 }
 	}
 	else = {
@@ -276,6 +281,7 @@ gm_state_name_if_unnamed = {
 		if = {
 			limit = {
 				NOT = { has_variable = gm_form }
+				gm_state_is_landmark = no
 			}
 			gm_state_set_default_form = yes
 		}

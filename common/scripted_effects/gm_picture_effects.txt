@@ -117,6 +117,48 @@ gm_state_update_picture = {
 		gm_state_picture_building_skin = { FORM = stadium SKIN = heritage_nahuatl CODE = 443 }
 		gm_state_picture_building_skin = { FORM = stadium SKIN = heritage_mayan CODE = 444 }
 	}
+	# A landmark's own picture, dedicated or not (phase 4 §5.1). Last: the
+	# building lines above match on the form alone and would overwrite it.
+	gm_state_picture_landmarks = yes
+}
+
+# Each landmark's code: LANDMARK_CODE_BASE (1,000,000) + its LANDMARKS row once
+# its picture is drawn, its stand-in pair's code until then (the registry test
+# keeps this in step with PICTURES).
+gm_state_picture_landmarks = {
+	gm_state_picture_landmark = { KEY = arc_de_triomphe CODE = 1000001 }
+	gm_state_picture_landmark = { KEY = alexander_column CODE = 1000002 }
+	gm_state_picture_landmark = { KEY = brandenburg_gate CODE = 1000003 }
+	gm_state_picture_landmark = { KEY = washington_monument_baltimore CODE = 1000004 }
+	gm_state_picture_landmark = { KEY = la_scala CODE = 1000005 }
+	gm_state_picture_landmark = { KEY = teatro_di_san_carlo CODE = 1000006 }
+	gm_state_picture_landmark = { KEY = jantar_mantar CODE = 1000007 }
+	gm_state_picture_landmark = { KEY = shalimar_gardens CODE = 1000008 }
+	gm_state_picture_landmark = { KEY = jardim_botanico CODE = 1000009 }
+	gm_state_picture_landmark = { KEY = stelae_of_aksum CODE = 1000010 }
+	gm_state_picture_landmark = { KEY = liberty_column CODE = 1000011 }
+	gm_state_picture_landmark = { KEY = lion_monument CODE = 1000012 }
+	gm_state_picture_landmark = { KEY = temple_of_heaven CODE = 1000013 }
+	gm_state_picture_landmark = { KEY = topkapi_palace CODE = 1000014 }
+	gm_state_picture_landmark = { KEY = golestan_palace CODE = 1000015 }
+	gm_state_picture_landmark = { KEY = basilica_of_superga CODE = 1000016 }
+	gm_state_picture_landmark = { KEY = tomb_of_william_the_silent CODE = 1000017 }
+	gm_state_picture_landmark = { KEY = cenotaph_of_maximilian CODE = 1000018 }
+	gm_state_picture_landmark = { KEY = arco_de_santa_maria CODE = 1000019 }
+	gm_state_picture_landmark = { KEY = statue_of_louis_xiv CODE = 1000020 }
+	gm_state_picture_landmark = { KEY = lion_of_saint_mark CODE = 1000021 }
+	gm_state_picture_landmark = { KEY = sans_souci_palace CODE = 1000022 }
+	gm_state_picture_landmark = { KEY = nikko_toshogu CODE = 1000023 }
+}
+
+gm_state_picture_landmark = {
+	if = {
+		limit = {
+			has_variable = gm_landmark
+			var:gm_landmark = flag:$KEY$
+		}
+		set_variable = { name = gm_picture_code value = $CODE$ }
+	}
 }
 
 # A skin alone: its default form's picture, or a faith's building.
@@ -477,6 +519,98 @@ gm_debug_next_picture = {
 	}
 	else_if = {
 		limit = { var:gm_picture_code = 444 }
+		set_variable = { name = gm_picture_code value = 1000001 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000001 }
+		set_variable = { name = gm_picture_code value = 1000002 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000002 }
+		set_variable = { name = gm_picture_code value = 1000003 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000003 }
+		set_variable = { name = gm_picture_code value = 1000004 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000004 }
+		set_variable = { name = gm_picture_code value = 1000005 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000005 }
+		set_variable = { name = gm_picture_code value = 1000006 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000006 }
+		set_variable = { name = gm_picture_code value = 1000007 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000007 }
+		set_variable = { name = gm_picture_code value = 1000008 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000008 }
+		set_variable = { name = gm_picture_code value = 1000009 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000009 }
+		set_variable = { name = gm_picture_code value = 1000010 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000010 }
+		set_variable = { name = gm_picture_code value = 1000011 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000011 }
+		set_variable = { name = gm_picture_code value = 1000012 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000012 }
+		set_variable = { name = gm_picture_code value = 1000013 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000013 }
+		set_variable = { name = gm_picture_code value = 1000014 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000014 }
+		set_variable = { name = gm_picture_code value = 1000015 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000015 }
+		set_variable = { name = gm_picture_code value = 1000016 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000016 }
+		set_variable = { name = gm_picture_code value = 1000017 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000017 }
+		set_variable = { name = gm_picture_code value = 1000018 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000018 }
+		set_variable = { name = gm_picture_code value = 1000019 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000019 }
+		set_variable = { name = gm_picture_code value = 1000020 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000020 }
+		set_variable = { name = gm_picture_code value = 1000021 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000021 }
+		set_variable = { name = gm_picture_code value = 1000022 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000022 }
+		set_variable = { name = gm_picture_code value = 1000023 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000023 }
 		set_variable = { name = gm_picture_code value = 1 }
 	}
 	else = {

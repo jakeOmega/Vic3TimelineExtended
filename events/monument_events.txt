@@ -2532,6 +2532,10 @@ monument_events.25 = {
 			text = monument_events.25.keep_space_interstellar_probe
 		}
 		name = {
+			trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
+			text = monument_events.25.keep_landmark
+		}
+		name = {
 			trigger = { has_variable = gm_namesake has_variable = gm_name_year }
 			text = monument_events.25.keep_year
 		}
@@ -2555,6 +2559,18 @@ monument_events.25 = {
 			NOT = { has_variable = gm_name_from_com }
 		}
 		gm_state_choose_commission_name = yes
+	}
+
+	# A landmark's historical name back, after a rededication renamed it
+	# (phase 4 §3.3): a restored crown can put the Alexander Column back.
+	option = {
+		name = monument_events.25.landmark
+		trigger = {
+			owner = scope:monument_owner
+			gm_state_is_landmark = yes
+			NOT = { gm_state_namesake_is = { NAMESAKE = landmark } }
+		}
+		gm_state_choose_namesake = { NAMESAKE = landmark }
 	}
 
 	option = {

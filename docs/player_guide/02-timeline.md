@@ -460,6 +460,18 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
+Twenty-three monuments already stand when a game begins, among them the Arc de
+Triomphe in Paris, the Alexander Column in Saint Petersburg, the Temple of
+Heaven in Beijing, Topkapı Palace, La Scala in Milan and the Jantar Mantar in
+Jaipur. Most monuments to a crown or a republic stand in countries that still
+honor them; two start contested: the Lion of Saint Mark, the old Venetian
+Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
+Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,
+a change of owner or a rededication. It keeps its name too unless it is
+rededicated; then it is named again like any new monument, and the naming event
+can give the historical name back. Rename and Name It are greyed out while it
+carries its historical name. Only pulling it down, or demolishing it, ends it.
+
 ![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
 
 <!-- screenshot: the Monuments panel with Contested lit in the overview and a contested monument's row with its three buttons -->

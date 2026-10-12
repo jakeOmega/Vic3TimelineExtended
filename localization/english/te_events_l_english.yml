@@ -2852,6 +2852,7 @@
  monument_events.25.keep_custom:0 "Keep the name: $gm_name_custom_evt$"
  monument_events.25.keep_defeat:0 "Keep the name: $gm_name_defeat_evt$"
  monument_events.25.keep_honours:0 "Keep the name: $gm_name_honours_evt$"
+ monument_events.25.keep_landmark:0 "Keep the name: $gm_name_landmark_evt$"
  monument_events.25.keep_ruler:0 "Keep the name: $gm_name_ruler_evt$"
  monument_events.25.keep_skin:0 "Keep the name: $gm_name_skin_evt$"
  monument_events.25.keep_space_interstellar_probe:0 "Keep the name: $gm_name_space_interstellar_probe_evt$"
@@ -2862,6 +2863,7 @@
  monument_events.25.keep_state:0 "Keep the name: $gm_name_state_evt$"
  monument_events.25.keep_victory:0 "Keep the name: $gm_name_victory_evt$"
  monument_events.25.keep_year:0 "Keep the name: $gm_name_year_evt$"
+ monument_events.25.landmark:0 "Its historical name, $gm_name_landmark_evt$"
  monument_events.25.ruler:0 "[SCOPE.sCharacter('gm_name_ruler_now').GetFirstNameNoFormatting]'s [SCOPE.sState('monument_state').GetCustom('gm_form_name')]"
  monument_events.25.state:0 "The [SCOPE.sState('monument_state').GetNameNoFormatting] [SCOPE.sState('monument_state').GetCustom('gm_form_name')]"
  monument_events.25.t:0 "A Name for the Monument"
@@ -5296,6 +5298,11 @@
  te_debug_monuments.4.desc:0 "Step the picture of the monument in [SCOPE.sState('gm_dbg_m1').GetName] through every picture code. It shows code [SCOPE.sState('gm_dbg_m1').MakeScope.Var('gm_picture_code').GetValue|0] now."
  te_debug_monuments.4.flavor:0 "The refresh, or the last option, puts the real picture back."
  te_debug_monuments.4.t:0 "Debug: Monument Pictures"
+ te_debug_monuments.5.a:0 "Place the landmarks"
+ te_debug_monuments.5.b:0 "Log every landmark"
+ te_debug_monuments.5.desc:0 "Place every landmark standing in 1836 whose state has no Grand Monument and whose 1836 owner still holds it, for a save started before they existed. Each is logged as TE_MONUMENTS: placed or not placed."
+ te_debug_monuments.5.flavor:0 "Logging writes each landmark's level, status, picture code and dedication to debug.log."
+ te_debug_monuments.5.t:0 "Debug: Landmarks"
 
 #
 # TE_DEBUG_NUCLEAR

@@ -165,6 +165,16 @@ gm_state_has_typed_name = {
 	}
 }
 
+# A landmark (phase 4): 1 shows its "Historical monument" line, in its row and
+# on its card, with its history on hover.
+gm_disp_is_landmark = {
+	value = 0
+	if = {
+		limit = { gm_state_is_landmark = yes }
+		value = 1
+	}
+}
+
 # The picture's grandeur frame (spec 2026-10-11 §3.5): the step the monument's
 # own effects have reached, 0 (plain) to 5 (five steps and more), read from the
 # live level on gm_state_disp_next_step's thresholds.
