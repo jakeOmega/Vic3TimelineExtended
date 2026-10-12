@@ -241,6 +241,70 @@ te_demog_tfr = {
 	multiply = te_demog_pr_terms
 }
 
+# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1). State scope.
+# Planned and unplanned births (late-game §3.1): te_demog_tfr's parts, from the stored terms, so whatever multiplies
+# the factor (wealth, natural, the practices) scales both. No variable: the tooltips read them.
+te_demog_tfr_factor = {
+	value = 1
+	subtract = var:te_dg_desired
+	multiply = var:te_dg_means
+	multiply = -1
+	add = 1
+}
+te_demog_tfr_unplanned = {
+	value = 1
+	subtract = var:te_dg_means
+	multiply = te_demog_tfr
+	divide = { value = te_demog_tfr_factor min = 0.01 }
+}
+te_demog_tfr_planned = {
+	value = te_demog_tfr
+	subtract = te_demog_tfr_unplanned
+}
+te_demog_tfr_planned_share = {
+	value = te_demog_tfr_planned
+	divide = { value = te_demog_tfr min = 0.00001 }
+}
+# The lower strata's share of the state's people (the walk), 0 before a walk under this build.
+te_demog_low_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_low_share }
+		value = var:te_dg_low_share
+	}
+}
+# Women's participation (#894; demographics_model.women_rate_law and women_rate): the women's-work family's sum
+# takes it from the base to the men's rate; the lower strata's women work at least te_demog_k_women_lower.
+te_demog_women_rate_law = {
+	value = modifier:state_demog_womens_work_ratio_add
+	min = 0
+	divide = { value = te_demog_k_womens_work_full min = 0.01 }
+	max = 1
+	multiply = { value = te_demog_k_men_rate subtract = te_demog_k_women_base }
+	add = te_demog_k_women_base
+}
+te_demog_women_rate = {
+	value = te_demog_women_rate_law
+	min = { value = te_demog_k_women_lower }
+	subtract = te_demog_women_rate_law
+	multiply = te_demog_low_share
+	add = te_demog_women_rate_law
+}
+# The workforce share on the engine's scale: step 2's target, less the pops' own bases (the design §1.8).
+te_demog_wf_target = {
+	value = var:te_dg_wa_share
+	multiply = var:te_dg_at_work
+	multiply = te_demog_k_workforce_scale
+}
+# The old-age threshold the two linked pension positions follow (late-game §2.2): one figure until phase 3 gives
+# the untreated their own.
+te_demog_old_age_average = {
+	value = var:te_dg_old_age
+}
+te_demog_old_age_common = {
+	value = var:te_dg_old_age
+}
+
 # State scope (phase 2 step 1): 1 under Old Age Pension, 2 under UBI or Post-Scarcity (no pension age: the old-age
 # threshold ends the working ages), else 0 (demographics_model.pension_kind). The welfare group holds one of them.
 te_demog_pension_kind = {

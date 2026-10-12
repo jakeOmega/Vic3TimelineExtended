@@ -342,6 +342,11 @@ def _raw_blocks(paths):
 
 FIXED_MAX = (2 ** 63 - 1) / 1e5   # the largest value script holds: an i64 in units of 1e-5
 
+# The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them.
+WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pension_kind": 0.0,
+                 "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0,
+                 **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}}
+
 
 class _Engine:
     """Enough of the engine to run the census: value blocks applied in order (min and max clamp
@@ -369,7 +374,7 @@ class _Engine:
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
                                  "te_demog_clock_on": False, "te_demog_effects_run": False,
                                  "te_demog_has_pension_law": False, **(triggers or {})}
-        self.fixtures = dict(fixtures)
+        self.fixtures = {**WORK_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -587,6 +592,8 @@ def _stored(inp):
 def _mod_fixtures(inp):
     """The engine reads the step makes: every census type, turmoil."""
     out = {f"modifier:{t}": inp.mods.get(t, 0.0) for t in P.DEMOG_TYPES}
+    for t in (P.WOMENS_WORK_TYPE, *P.PARTICIPATION_TYPES):
+        out[f"modifier:{t}"] = inp.mods.get(t, 0.0)
     out["turmoil"] = inp.turmoil
     return out
 
@@ -606,6 +613,10 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
         "te_demog_female_work_share": demographics_model.female_work_share(inp),
         "te_demog_means": demographics_model.means(inp),
         f"modifier:{P.NATURAL_FERTILITY_TYPE}": inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0),
+        # phase 2 step 1: the owner's reads te_demog_work_setup makes (WORK_DEFAULTS), from the model
+        "te_demog_child_work": demographics_model.child_work_share(inp),
+        "te_demog_pension_kind": float(demographics_model.pension_kind(inp)),
+        "te_demog_pension_age": float(inp.pension_age if inp.pension_age is not None else P.PENSION_AGE["standard"]),
         **_mod_fixtures(inp),
     }
     if not real_multipliers:
@@ -623,6 +634,7 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
     eng.place = place
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
                     te_dg_wtfr=demographics_model.wealth_tfr(inp.sol), te_dg_sol=float(inp.sol))
+    eng.vars.update(te_dg_low_share=inp.low_share)   # the walk's lower strata (phase 2 step 1)
     if inp.crowding:
         eng.modifiers["migration_crowding"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
         eng.vars["migration_crowding_mult_applied"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
@@ -644,12 +656,13 @@ class TestCohortScript(unittest.TestCase):
 
     # -- the seed -------------------------------------------------------------------------------
 
-    def seed_both(self):
-        eng = _engine_for(self.INP, self.YEAR, self.POP)
+    def seed_both(self, inp=None):
+        base = inp or self.INP
+        eng = _engine_for(base, self.YEAR, self.POP)
         eng.call("te_demog_seed")
         # the script reads the growth factor from a table of growth_factor; the model takes the same d
         with unittest.mock.patch.object(demographics_model, "growth_factor", lambda nrr: eng.locals["te_dg_d"]):
-            ring = demographics_model.seed(self.INP, self.YEAR, self.POP)
+            ring = demographics_model.seed(base, self.YEAR, self.POP)
         return eng, ring
 
     def test_seed_rates_match_the_model(self):
@@ -743,7 +756,8 @@ class TestCohortScript(unittest.TestCase):
     # -- the step -------------------------------------------------------------------------------
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
-                  flows=None, entry="te_demog_step", engine=None, on_top=None, full=False):
+                  flows=None, entry="te_demog_step", engine=None, on_top=None, full=False, inp=None,
+                  pool=(12.0, 7.0)):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -756,8 +770,10 @@ class TestCohortScript(unittest.TestCase):
         the ring of the game's first decades, when the open slot is empty at the fold.
         on_top = (births, deaths): the share by which the engine's expected events over the window ran
         above the model's rates M aimed at (phase 2 step 4); full = the rule's Full setting, under which
-        alone the step takes those as its on-top scales."""
-        ring = demographics_model.seed(self.INP, self.YEAR, self.POP)
+        alone the step takes those as its on-top scales. inp: the inputs (default INP); pool: (women, men) in the pool
+        (phase 2 step 1's figures count it)."""
+        base = inp or self.INP
+        ring = demographics_model.seed(base, self.YEAR, self.POP)
         ring.f = [x * ring.scale / scale for x in ring.f]
         ring.m = [x * ring.scale / scale for x in ring.m]
         ring.scale = scale
@@ -768,17 +784,17 @@ class TestCohortScript(unittest.TestCase):
         if empty_from is not None:
             for a in range(empty_from, P.RING_YEARS):
                 ring.f[(self.YEAR - a) % P.RING_YEARS] = ring.m[(self.YEAR - a) % P.RING_YEARS] = 0.0
-        ring.pool_f, ring.pool_m, ring.pool_age = 12.0, 7.0, 152.5
+        ring.pool_f, ring.pool_m, ring.pool_age = pool[0], pool[1], 152.5
         demographics_model._refresh_denominators(ring)
         ring.total = ring.people()
         before = (list(ring.f), list(ring.m))
         pop = ring.total * 1.004
-        inp = self.INP
+        inp = base
         fixtures = {}
         if flows is not None:
             stub_flows = False
             inp = dataclasses.replace(
-                self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
+                base, techs=base.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
                 inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
             war_dead, kills = flows.get("war") or 0.0, flows.get("kills") or 0.0
             # the residual the script reads, and what the model is told: a residual inside the noise band is none
@@ -1100,6 +1116,135 @@ class TestCohortScript(unittest.TestCase):
         body = _block(_text(EFFECTS), "te_demog_step_begin")
         self.assertLess(body.index("te_demog_prepare = yes"), body.index("te_demog_on_top_scales = yes"))
         self.assertIn("te_demog_step_begin = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_replay"))
+
+    # -- phase 2 step 1: the figures (demographics_model.work_figures) ---------------------------
+
+    WORK = dict(laws=frozenset({"law_women_in_the_fields", "law_restricted_child_labor", "law_old_age_pension"}),
+                low_share=0.7, pension_age=67.0)
+
+    def _work_inp(self, **kw):
+        inp = dataclasses.replace(self.INP, **{**self.WORK, **kw})
+        inp.mods = {**inp.mods, P.WOMENS_WORK_TYPE: 0.15, P.MALE_PARTICIPATION_TYPE: 0.02,
+                    P.PARTICIPATION_TYPE: 0.01, P.CAPACITY_TYPE: -0.05}   # call 3's inputs ride through the figures
+        return inp
+
+    def _work_figures(self, eng, ring, inp, rel=1e-4):
+        qf, qm, _ = demographics_model.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        want = demographics_model.work_figures(ring, inp, demographics_model.old_age(qf, qm))
+        for name in ("wa_share", "at_work", "pensioners", "need"):
+            self.close(eng.vars[f"te_dg_{name}"], want[name], rel=rel, what=name)
+
+    def test_seed_work_figures_match_the_model(self):
+        inp = self._work_inp()
+        eng, ring = self.seed_both(inp=inp)
+        self._work_figures(eng, ring, inp)
+
+    def test_step_work_figures_match_the_model(self):
+        inp = self._work_inp()
+        eng, ring, _figures, _pop = self.step_both(inp=inp, migration=0.0)
+        self._work_figures(eng, ring, inp)
+
+    def test_ubi_ends_the_working_ages_at_the_threshold(self):
+        inp = self._work_inp(laws=frozenset({"law_universal_basic_income", "law_child_labor_allowed"}),
+                             pension_age=None)
+        eng, ring = self.seed_both(inp=inp)
+        self._work_figures(eng, ring, inp)
+        self.assertEqual(eng.vars["te_dg_pensioners"], 0)
+
+    def test_with_no_pension_law_the_pool_is_of_working_age(self):
+        """D10 (the ledger's Deviation 2): with no pension law the working ages have no end, so the pool (150+) counts
+        in the working ages and works at its capacity, in the step as in the model. A pool of 5,000 makes the
+        difference about 2%, well past the tolerance."""
+        inp = self._work_inp(laws=frozenset({"law_child_labor_allowed"}), pension_age=None)
+        eng, ring, _figures, _pop = self.step_both(inp=inp, migration=0.0, pool=(3000.0, 2000.0))
+        self._work_figures(eng, ring, inp)
+        self.assertEqual(eng.vars["te_dg_pensioners"], 0)
+
+    def test_the_planned_and_unplanned_values_sum_to_the_tfr(self):
+        eng, _ring = self.seed_both(inp=self._work_inp())
+        planned = eng.value(eng._tree(eng.values, "te_demog_tfr_planned"))
+        unplanned = eng.value(eng._tree(eng.values, "te_demog_tfr_unplanned"))
+        self.close(planned + unplanned, eng.value(eng._tree(eng.values, "te_demog_tfr")), rel=1e-9, what="TFR")
+
+    def test_a_census_from_before_step_1_steps_cleanly(self):
+        """Review Focus 1: an old save's state has no te_dg_low_share and its owner no pension variable."""
+        inp = self._work_inp()
+        eng, ring = self.seed_both(inp=inp)
+        del eng.vars["te_dg_low_share"]
+        eng.fixtures["te_demog_pension_age"] = float(P.PENSION_AGE["standard"])
+        eng.fixtures.update(year=float(self.YEAR + 1))
+        eng.call("te_demog_prepare")           # every read guarded: no "read of missing variable"
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_low_share")), 0)
+
+
+class TestWorkWalk(unittest.TestCase):
+    """The walk's three sums (phase 2 step 1): under the cohorts only (D5), in three gated effects (D11)."""
+
+    def test_the_walk_calls_the_three_effects_in_place(self):
+        walk = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        pops = walk.index("every_scope_pop = {")
+        self.assertLess(walk.index("te_demog_work_walk_init = yes"), pops)
+        self.assertGreater(walk.index("te_demog_work_walk_pop = yes"), pops)
+        self.assertGreater(walk.index("te_demog_work_walk_store = yes"), walk.index("te_demog_gini_band_store = yes"))
+        self.assertIn("limit = { te_demog_cohorts_run = yes }", _block(_text(EFFECTS), "te_demog_work_walk_init"))
+        pop = _block(_text(EFFECTS), "te_demog_work_walk_pop")
+        for read in ("local_var:te_dg_w_on > 0", "add = workforce", "strata = lower",
+                     "multiply = te_demog_pop_base_ratio"):
+            self.assertIn(read, pop)
+
+    def test_outside_the_census_the_walk_effects_set_nothing(self):
+        """The walk runs under every rule (inheritance needs it): under Disabled the three effects set no variable and
+        read no pop."""
+        eng = _Engine({}, triggers={"te_demog_cohorts_run": False})
+        eng.locals["te_dg_w_pop"] = 1000.0
+        for effect in ("te_demog_work_walk_init", "te_demog_work_walk_pop", "te_demog_work_walk_store"):
+            eng.call(effect)
+        self.assertEqual(eng.vars, {})
+
+    def test_under_the_census_the_store_divides_by_the_walks_people(self):
+        eng = _Engine({}, triggers={"te_demog_cohorts_run": True})
+        eng.call("te_demog_work_walk_init")
+        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0)
+        eng.call("te_demog_work_walk_store")
+        self.assertEqual((eng.vars["te_dg_low_share"], eng.vars["te_dg_wbase"], eng.vars["te_dg_wf_engine"]),
+                         (0.8, 0.26, 0.25))
+
+    def test_three_pops_through_the_walk_effects(self):
+        """Each pop's sums as te_demog_walks makes them, one pop at a time (TestGini.walk's pattern; the review of #923):
+        an aristocrat, a slave and a lower-strata worker. _OwnerEngine knows is_pop_type (te_demog_pop_base_ratio); the
+        base _Engine doesn't know strata, so this test teaches it."""
+
+        class _PopEngine(_OwnerEngine):
+            strata = None
+
+            def _test(self, key, op, arg):
+                if key == "strata":
+                    return arg == self.strata
+                return super()._test(key, op, arg)
+
+        eng = _PopEngine({}, triggers={"te_demog_cohorts_run": True})
+        eng.call("te_demog_work_walk_init")
+        pops = (("aristocrats", "upper", 100.0, 18.0), ("slaves", "lower", 400.0, 210.0),
+                ("laborers", "lower", 500.0, 130.0))
+        for pop_type, strata, size, workforce in pops:
+            eng.pop_type, eng.strata = pop_type, strata
+            eng.fixtures.update(total_size=size, workforce=workforce)
+            eng.call("te_demog_work_walk_pop")
+        eng.locals["te_dg_w_pop"] = 1000.0          # the walk's own people sum (te_demog_walks keeps it)
+        eng.call("te_demog_work_walk_store")
+        self.assertAlmostEqual(eng.vars["te_dg_low_share"], (400 + 500) / 1000)
+        self.assertAlmostEqual(eng.vars["te_dg_wbase"], (100 * 0.2 + 400 * 0.5 + 500 * 0.25) / 1000)
+        self.assertAlmostEqual(eng.vars["te_dg_wf_engine"], (18 + 210 + 130) / 1000)
+
+    def test_the_figures_are_stored_where_the_denominator_is_whole(self):
+        """D4: in the seed straight after the accumulators close, in the step after the newborns join te_dg_raw."""
+        effects = _text(EFFECTS)
+        seed = _block(effects, "te_demog_seed")
+        self.assertLess(seed.index("te_demog_close_accumulators = yes"), seed.index("te_demog_work_finish = yes"))
+        self.assertLess(seed.index("te_demog_work_finish = yes"), seed.index("te_demog_normalize_slots = yes"))
+        finish = _block(effects, "te_demog_step_finish")
+        self.assertLess(finish.index("change_local_variable = { name = te_dg_raw add = local_var:te_dg_births }"),
+                        finish.index("te_demog_work_finish = yes"))
 
 
 class TestEngineLineTypes(unittest.TestCase):
