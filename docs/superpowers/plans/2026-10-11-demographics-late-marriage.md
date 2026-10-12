@@ -372,7 +372,7 @@ start at 0.37.
   tuple[strategic region], (low, high) per 1,000 a year or None)]`, #904's groups and its history bands (the gate's,
   Task 5); `R.report_row_of() -> {strategic region: label}`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """scripts/analysis/demographics_regions.py: the strategic-region snapshot the practices' start tables and the
@@ -430,12 +430,12 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Run it to see it fail**
+- [x] **Step 2: Run it to see it fail**
 
 Run: `$V -m unittest test_demographics_regions`
 Expected: FAIL, `ModuleNotFoundError: No module named 'demographics_regions'`.
 
-- [ ] **Step 3: Write the module**
+- [x] **Step 3: Write the module**
 
 ```python
 #!/usr/bin/env python3
@@ -569,17 +569,17 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
-- [ ] **Step 4: Write the snapshot from the game** (the one command in this plan that needs the real game path)
+- [x] **Step 4: Write the snapshot from the game** (the one command in this plan that needs the real game path)
 
 Run: `/home/jakef/src/Vic3TimelineExtended/.venv/bin/python scripts/analysis/demographics_regions.py --refresh`
 Expected: `wrote …/demographics_strategic_regions.json: 36 regions, 675 state regions`.
 
-- [ ] **Step 5: Run the tests**
+- [x] **Step 5: Run the tests**
 
 Run: `$V -m unittest test_demographics_regions`
 Expected: 4 tests, `OK`.
 
-- [ ] **Step 6: File the capability issue** (CLAUDE.md, "File issues for mod-state-server capability gaps")
+- [x] **Step 6: File the capability issue** (CLAUDE.md, "File issues for mod-state-server capability gaps")
 
 ```bash
 gh issue create --label enhancement --label tooling \
@@ -587,7 +587,7 @@ gh issue create --label enhancement --label tooling \
   --body "The demographics practices (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md) key their start tables by strategic region, and the harness needs each save state's strategic region. vanilla_parsed/ has no strategic_regions entity and the server no endpoint, so the plan commits scripts/analysis/demographics_strategic_regions.json, built from game/common/strategic_regions/ plus the mod's REPLACEs. Proposed: add strategic_regions to mod_state.VANILLA_COMMON_DIRS and GET /strategic-regions/<name> -> {\"states\": [...]}, GET /state-region/<STATE_X> -> {\"strategic_region\": ...}. gen_formable_regions.py reads the same files from the game install today."
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add scripts/analysis/demographics_regions.py scripts/analysis/demographics_strategic_regions.json test_demographics_regions.py
