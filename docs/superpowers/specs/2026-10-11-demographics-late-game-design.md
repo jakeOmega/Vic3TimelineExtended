@@ -105,7 +105,7 @@ Three things fall out, and the rest of the draft is built on them:
 | Workforce from participation; working-age share × share at work = workforce on the panel | #894 |
 | Pensions cost money, health care costs bureaucracy; medical technology moderately raises the health cost; no hard-coded 65 | #894 |
 | Growth matters more than exact children per woman; drift over jumps | #894 |
-| Pension age as a setting under Old Age Pension, not amendments. The parent's three positions stand; a fourth, Linked to Longevity, is proposed (§2.2, call 6) | parent Decisions |
+| Pension age as a setting under Old Age Pension, not amendments. The parent's three positions stand; two linked positions are added (§2.2; owner, 2026-10-11: offer both) | parent Decisions |
 | Calendar/biological toggle on the pyramid from era 11; ring to about 150 from 1836 | parent Decisions |
 | Measures are GUI buttons, national for now | parent Decisions |
 | One-year cohorts at about 26 MB of an 1836 plain-text save | #894 |
@@ -284,10 +284,11 @@ five cohorts sit within ±2 years of each other, which the table's runs include.
   threshold once a few percent are immortal.
 - **With some of a state treated** (era 11 rates, immortality, a constant share at every age; review's check): the
   untreated alone give 92 / 86; a fifth treated gives 99 / 91; half gives none. Selection makes the old the most
-  treated, so the ring's own blend reaches none sooner. Whose table Linked to Longevity follows is §9's call 7.
-- **What reads it**: the panel's Old age from row; Linked to Longevity (§2.2); the after-pension share under UBI and
-  Post-Scarcity (§2.2); events that mean "the old". Deaths, capacity and health need don't: they read biological age
-  directly.
+  treated, so the ring's own blend reaches none sooner. The census keeps both figures: the state's blend (Linked to
+  Average Longevity follows it) and the untreated's alone (Linked to Common Longevity follows it).
+- **What reads it**: the panel's Old age from row; the two linked pension positions (§2.2); the after-pension share
+  under UBI and Post-Scarcity (§2.2); events that mean "the old". Deaths, capacity and health need don't: they read
+  biological age directly.
 
 ## 2. Work and retirement
 
@@ -334,41 +335,43 @@ applies outside Full and the census models under Full):
 This amends the parent's rule 3 ("ones that stand for women's or children's work stay"): under Full, women's work is
 the participation model's, and those lines set it.
 
-**The engine's scale.** Under immortality the sketch's workforce reaches 0.66 of all people with Linked to Longevity
-(§2.3) and 0.77 with no pension, against today's 0.45: about 0.62 and 0.73 on the engine's scale, against vanilla's
-0.25 in 1836 and about 0.42 today. A cap is an owner call (§9, call 10).
+**The engine's scale.** Under immortality the sketch's workforce reaches 0.66 of all people with Linked to Average
+Longevity, 0.39 with Linked to Common and 0.77 with no pension (§2.3), against today's 0.45: about 0.62, 0.36 and 0.73
+on the engine's scale, against vanilla's 0.25 in 1836 and about 0.42 today. A cap is an owner call (§9, call 10).
 
 ### 2.2 The pension age
 
 **The pension age is one number per country**, stored as a variable (a revolution's winner keeps it; CLAUDE.md, "the
 winner continues the nation"), read by the workforce (§2.1), the pension bill (§5.1) and the panel. The setting under
-Old Age Pension chooses how it is set:
+Old Age Pension has five positions (owner, 2026-10-11: both linked variants are offered, so the player chooses who
+bears the cost):
 
-| Position | Pension age | Who wants it |
-|---|---|---|
-| **Early Retirement** | 60 | Trade Unions, the old; frees jobs for the young (parent §8.2) |
-| **Standard** | 65 | the default |
-| **Raised Pension Age** | 70 | the treasury, Industrialists |
-| **Linked to Longevity** (new) | five years below the old-age threshold (§1.5), at least 65 (a choice: §9, call 6), moving at most a year a year | the treasury; Trade Unions object less than to Raised, since it rises only as lives lengthen |
+| Position | Pension age | Trade-off | Interest groups (approval while in force; proposal) |
+|---|---|---|---|
+| **Early Retirement** | 60 | frees jobs for the young (parent §8.2); the largest bill | Trade Unions +2; Industrialists −1 |
+| **Standard** | 65 | the default; grows more generous as lives lengthen | none |
+| **Raised Pension Age** | 70 | a smaller bill; the old work longer | Trade Unions −2, Rural Folk −1; Industrialists +1 |
+| **Linked to Average Longevity** (new) | five years below the state's old-age threshold (§1.5: death rates blended at each age by the treated share) | the cheapest under life extension, but the untreated, who still age, may never reach it once enough of the state is treated | Trade Unions −1, Rural Folk −1; Industrialists +1 |
+| **Linked to Common Longevity** (new) | five years below the untreated's old-age threshold (§1.5) | fairer: the age follows those who still age; but the treated draw a pension from about 84 for ever, and that bill is the price | Trade Unions +1, Rural Folk +1; Industrialists −1 |
 
-- **Why a fourth position and not indexed defaults.** Indexing every position would remove the 20th century's fiscal
-  squeeze: a fixed 65 that grows more generous as lives lengthen *is* the history (Germany's 70 in 1889, 65 from 1916;
-  65 held for most of a century while life at 65 grew by about eight years). Linking is the early-21st-century reform:
-  Denmark linked its pension age to life expectancy in 2006 and has legislated 70 by 2040 (as summarised;
-  *unverified*).
-- **What Linked gives in the model** (sketch, both sexes): 65 (the floor) in 1836 and 1950, 70 today, about 84 with
-  era 11 medicine, about 108 with ageing at 0.75. Under immortality the threshold is gone, so the age rises a year a
-  year for good.
+- **Both linked positions** are at least 65 and move at most a year a year. The floor brings back a fixed age on
+  purpose: it makes linking a reform that only raises the age (§9, call 6). Before anyone is treated they give the
+  same age: 65 (the floor) in 1836 and 1950, 70 today, about 84 with era 11 medicine. They part once some of a state
+  is treated.
 - **Existing pensioners keep their pensions.** The age moves at most a year a year and every cohort ages a year a
-  year, so no one already over it falls below it. Under immortality those already retired stay retired for good.
-- **Whose life table** (§9, call 7). The state's: death rates at each age blended by the ring's own treated share
-  (§1.5), as Denmark's rule reads the national average. So the more of a state is treated, the later everyone's
-  pension, and the untreated, who still age, may never reach it. That regressive effect is the real one: raising
-  the eligibility age cuts low earners' lifetime benefits most, since their lives are shorter (US National Academies,
-  *The Growing Gap in Life Expectancy by Income*, 2015, as summarised). The gap's politics read it (§4.4).
-  Following the untreated's table instead protects their pension, but the treated then draw it from about 84 for
-  ever, and Linked no longer answers the immortal society's bill.
-- **The minimum term** stays five years (parent §8.2).
+  year, so no one already over it falls below it.
+- **Why linked positions, and why two.** Indexing every position would remove the 20th century's fiscal squeeze: a
+  fixed 65 that grows more generous as lives lengthen *is* the history (Germany's 70 in 1889, 65 from 1916; 65 held
+  for most of a century while life at 65 grew by about eight years). Linking is the early-21st-century reform: Denmark
+  linked its pension age to life expectancy in 2006 and has legislated 70 by 2040 (as summarised; *unverified*).
+  Denmark's rule reads the national average, and the average is regressive: raising the eligibility age cuts low
+  earners' lifetime benefits most, since their lives are shorter (US National Academies, *The Growing Gap in Life
+  Expectancy by Income*, 2015, as summarised). Once life extension reaches the rich first, that choice is the late
+  game's pension question, so the player gets both answers.
+- **The minimum term** stays five years for every position (parent §8.2).
+- **AI weights** (shared mechanics, the same for every country, never `is_ai`): the bill's share of GDP and a weak
+  treasury push toward Raised and Linked to Average; a wide longevity gap (§4.3) pushes toward Linked to Common, as
+  the country's unions would; a youth-bulge or unemployment problem pushes toward Early.
 - **UBI and Post-Scarcity**, the welfare group's later laws (`extra_laws.txt:285`, `:344`), replace Old Age Pension.
   Under them there is no pension age: the old are paid as everyone is, there is no separate pension bill, and the
   working ages end at capacity, with the after-pension share applied from the old-age threshold (§1.5's figure) as a
@@ -379,14 +382,25 @@ Old Age Pension chooses how it is set:
 
 ### 2.3 What an immortal society's workforce looks like
 
-From the sketch (60 years after immortality, everyone treated, 3% pull, 1.6 children per woman):
-- **Linked to Longevity** (rising a year a year from 70 once the threshold is gone; the review's check): those
-  already retired when immortality came keep their pensions for good, 18% of the people after 30 years and 16% after
-  60. Nobody younger reaches the age. The workforce is 0.61 and 0.66, against 0.74 and 0.77 with no pension.
-- **Standard (65)**: 67% of the people are pensioners and the workforce falls to 0.29 against today's 0.45. A
-  leisure society paid for by a quarter of its people; it can be a choice, and Post-Scarcity is where the game puts
-  it.
-- **Without Old Age Pension**: 0.77; the old never tire.
+Sketch: one rich state 30 and 60 years after immortality, everyone treated, the 3% pull, 1.6 children per woman, B
+= 0.4 (§5.1). Each position starts from today's 70 where it rises.
+
+| Position | Pension age | Pensioners at 30 / 60 years | Bill, % of GDP | Workforce |
+|---|---|---|---|---|
+| Early (60) | 60 | 57% / 70% | 23 / 28 | 0.33 / 0.27 |
+| Standard (65) | 65 | 53% / 67% | 21 / 27 | 0.37 / 0.29 |
+| Raised (70) | 70 | 48% / 63% | 19 / 25 | 0.40 / 0.32 |
+| Linked to Common Longevity | 84 from year 14 | 34% / 54% | 14 / 21 | 0.50 / 0.39 |
+| Linked to Average Longevity | rising a year a year (the threshold is gone) | 18% / 16% | 7 / 6 | 0.61 / 0.66 |
+| No Old Age Pension | none | 0 | 0 | 0.74 / 0.77 |
+
+- **Linked to Average**: those already retired when immortality came keep their pensions for good; nobody younger
+  reaches the age. Cheap, and with some of the state untreated, it is they who never retire.
+- **Linked to Common**: everyone who reaches 84 retires for good, treated or not, so the pensioners grow as the
+  immortal pile up past it. Fairer to the untreated, at a bill near Standard's within two generations.
+- **Standard (65)**: a leisure society paid for by a quarter of its people; it can be a choice, and Post-Scarcity is
+  where the game puts it.
+- **Without Old Age Pension**: the old never tire.
 
 ### 2.4 Youth and dependency
 
@@ -598,13 +612,14 @@ them as figures, and the pension setting is hidden outside Full, as the Causes o
 - **B waits for a fit.** The OECD anchor is a share of GDP, and the game's government revenue as a share of GDP is
   unmeasured (the same open check as `monetary_policy_design.md` §12.2). The harness fits B against revenue in a
   late-game save before the numbers are tuned.
-- **Sizes (sketch, B = 0.4)**: rich today at 65, 31% pensioners → 12% of GDP; immortality at 65 → 27% and still
-  rising; Linked to Longevity → about 6–7%, the pensions of those already retired when immortality came.
+- **Sizes (sketch, B = 0.4)**: rich today at 65, 31% pensioners → 12% of GDP. Under immortality (§2.3's table), 60
+  years on: 65 → 27% and still rising; Linked to Common → 21% (14% after 30 years); Linked to Average → about 6–7%,
+  the pensions of those already retired when immortality came.
 - **Stacks on vanilla's welfare, by recipient** (§9, call 17). Old Age Pension's `state_welfare_payments_add` (+0.1 a
   level) goes to workers paid below a share of the normal wage, not to the old (parent §14 Q6). Its +20% dependents'
-  income a level has no payer: this bill is that payer. That premise rests on the parent's §14 Q6, read from the game
-  files; it is unprobed in game. Under UBI and Post-Scarcity (welfare payments 0.8 and 4.8 a
-  level, `extra_laws.txt:313`, `:370`) everyone is paid already, so there is no pension bill (§2.2).
+  income a level has no payer: this bill is that payer. The owner confirmed it (2026-10-11): vanilla's +20% dependents'
+  income has no treasury cost (also parent §14 Q6, from the game files). Under UBI and Post-Scarcity (welfare payments
+  0.8 and 4.8 a level, `extra_laws.txt:313`, `:370`) everyone is paid already, so there is no pension bill (§2.2).
 - **Replaces** the parent §7's bureaucracy-only pension bill, as #894 ruled.
 
 ### 5.2 Health care: bureaucracy
@@ -627,9 +642,10 @@ everyone young.
 - **Health**: the weights stop at 85+, the need term is capped at +1.0, and slowing the clock lowers need. The worst
   case is era 11 medicine without slowing, not immortality.
 - **Pensions**: bounded by people (at most every adult over the pension age, about 35% of GDP at B = 0.4). A fixed age
-  under immortality is the expensive choice by design. Linked to Longevity is the way out, at the price of the
-  untreated's pensions and of a legacy of 6–7% of GDP for those already retired; The Pension Without End (§2.2)
-  offers it.
+  under immortality is the expensive choice by design. Linked to Average Longevity is the cheap way out, at the price
+  of the untreated's pensions and a legacy of 6–7% of GDP for those already retired; Linked to Common Longevity keeps
+  the untreated's pensions at a bill that reaches Standard's within two generations. The Pension Without End (§2.2)
+  offers the choice.
 - **AI**: picks the setting by the bill's share of its GDP and its treasury (the parent §11.2's rule), the same
   weights for every country.
 
@@ -642,7 +658,7 @@ everyone young.
 | Life expectancy at birth | 559 years, or 129 cut at 150 | keep while under 100; then "100+" |
 | Median age at death | 594 for women, 203 for men | no: it splits by sex on the external rates, and reads as nonsense |
 | **Living to 100** | 81% | **yes**: bounded, readable in every era from 1836's 0% to now and on |
-| **Old age from** (the age with 15 years left; Sanderson and Scherbov 2005, *Nature*, and 2010, *Science*) | none | **yes**: says what "old" means now, and drives Linked to Longevity |
+| **Old age from** (the age with 15 years left; Sanderson and Scherbov 2005, *Nature*, and 2010, *Science*) | none | **yes**: says what "old" means now, and drives the linked pension positions |
 | Deaths per 1,000 | 2.2 | already shown (realized); in the late game it is the honest figure |
 | Healthy lifespan (years to biological 65) | unbounded | no: undefined under immortality |
 | **Mean biological age** | 29 against a calendar mean in the hundreds | **yes**, from era 11 |
@@ -655,11 +671,11 @@ the census states.
 | Row | Section | Shown | Value | Hover |
 |---|---|---|---|---|
 | Life expectancy | Overview; state figures | always | `77`, then `100+` once the census's figure passes 100 | at birth and 65, women and men, the five causes (as built) |
-| Old age from | Overview; state figures | phase 2 | `75`, or `none` | 15 years left; women and men; Linked to Longevity sets the pension age five years below it |
+| Old age from | Overview; state figures | phase 2 | `75`, or `none` | 15 years left; women and men; the untreated's figure beside the state's; the linked pension positions sit five years below the one they follow |
 | Living to 100 | Overview; state figures | from era 11, or once 1% | `35%` | treated and untreated; women and men |
 | Biological age | Overview; state figures | from era 11 | `38 (calendar 61)` | mean ages; the ageing rate; the pull; the treated share |
 | Workforce | Work and Retirement (new, open) | phase 2 | `62% × 71% = 44%` | working-age share by its bounds; at work by sex and class mix; workers past the pension age |
-| Pension age | Work and Retirement | Old Age Pension | `67 (Linked)` | the setting buttons sit beside it (rule 6); the old-age threshold |
+| Pension age | Work and Retirement | Old Age Pension | `84 (Linked to Common)` | the setting's five buttons sit beside it (rule 6), each with its trade-off, interest-group reactions and minimum term on hover; the threshold the position follows |
 | Pensioners | Work and Retirement | Old Age Pension | `18%` | |
 | Pension bill | Work and Retirement | Old Age Pension | `£1.2M a week (6% of GDP)` | pensioners × B |
 | Health need | Work and Retirement | phase 2 | `×1.8 of 1836` | by age band; medical technology; longevity care |
@@ -702,9 +718,9 @@ bands. Owner check 5 (the benchmark in a late-game save) is the gate; per-band s
 
 1. **Two indexes in the sweep.** Phase 2's new per-age sums (workers, pensioners, health need) read a biological index
    that is the calendar index until phase 3: one local per slot, no variable.
-2. **The pension age is a country variable**, set by the setting; nothing compares with a literal 65. The four
-   positions (§2.2) can ship with phase 2: Linked to Longevity needs only the old-age threshold, which the life table
-   already allows.
+2. **The pension age is a country variable**, set by the setting; nothing compares with a literal 65. The five
+   positions (§2.2) can ship with phase 2: the linked ones need only the old-age thresholds, which the life table
+   already allows (before life extension the two are the same).
 3. **Participation is a table over ages** in `demographics_params` (working-age start by law, capacity by biological
    group, the after-pension share), not a 15–64 band.
 4. **Health need is a weight table by biological group**, not a 65+ share.
@@ -766,16 +782,20 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
 5. **Fertility under immortality: planned by calendar, unplanned by biology**, no new variables; growth ×1.23–1.30 in
    50 years at 1.6 children with everyone treated (§3.3). *Recommended.* Alternatives: §13's children-so-far count
    (×1.34, 30–150 more variables), or biological age with no bound (×1.86 and rising).
-6. **The pension setting: four positions**, Early 60, Standard 65, Raised 70 and Linked to Longevity (five years below
-   the old-age threshold, at most a year a year; 70 today). Linked's floor of 65 brings back a fixed age on purpose: it
-   makes Linked a reform that only raises the age. *Recommended*, floor included. Alternatives: no floor (Linked would
-   give about 56–60 before 1950); three positions all linked (loses the 20th century's squeeze); three calendar
-   positions (an immortal society can't escape its bill).
-7. **Linked follows the state's life table**, death rates blended at each age by the ring's treated share there
-   (§1.5, §2.2). The untreated may then never reach the pension age once enough of the state is treated: the real
-   regressive effect of indexing, which the gap's politics read. *Recommended*, since it is the only version that
-   answers the immortal society's bill. Alternative: the untreated's table (protects their pension; the treated draw it
-   from about 84 for ever).
+6. **The pension setting: five positions**, Early 60, Standard 65, Raised 70, Linked to Average Longevity and Linked
+   to Common Longevity (both five years below the old-age threshold they follow, at least 65, at most a year a year,
+   70 today; five-year minimum term for all). Interest groups, proposals: Early, Trade Unions +2 and Industrialists −1;
+   Raised, Trade Unions −2, Rural Folk −1 and Industrialists +1; Average, Trade Unions and Rural Folk −1 and
+   Industrialists +1; Common, Trade Unions and Rural Folk +1 and Industrialists −1. AI weights by the bill's share of
+   GDP, the treasury and the longevity gap, the same for every country. The linked floor of 65 brings back a fixed
+   age on purpose: it makes linking a reform that only raises the age. *Recommended*, floor included. Alternatives: no
+   floor (about 56–60 before 1950); every position linked (loses the 20th century's squeeze); calendar positions only
+   (an immortal society can't escape its bill).
+7. **Both linked variants are offered** (owner, 2026-10-11). Linked to Average Longevity follows the state's blended
+   table: the cheapest under immortality (16% pensioners and about 6% of GDP after 60 years, everyone treated), but
+   the untreated, who still age, may never reach it, the real regressive effect of indexing. Linked to Common
+   Longevity follows the untreated's table: fairer, but the treated draw a pension from about 84 for ever (54%
+   pensioners and about 21% of GDP after 60 years). Decided; listed for the record.
 8. **Who is treated: a treated share and a deficit per five-year birth band** (up to 50 variables a treated state, about
    3.4 MB in a full late save). It tracks the truth within 0.1 deaths per 1,000 in every case of §1.3's table, and the
    ring then has the gap §4.3 shows. *Recommended.* Alternatives: one deficit per band over the whole cohort (25
@@ -787,9 +807,9 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
    snap to calendar age (a ban after 50 years of immortality takes deaths from 2.2 to 42.6 per 1,000 in a year).
 10. **The workforce ratio's cap: 0.6** on the engine's scale. The trade-off: 0.6 is 2.4 times 1836's 0.25 and 1.4 times
     today's 0.42, so about that much more labour per pop. Jobs that don't grow with it mean unemployment and lower
-    wages; jobs that do mean output. Immortality reaches about 0.62 under Linked and 0.73 with no pension, so the cap
-    binds only there. *Recommended*, since vanilla never passes 0.5 and the engine is untested beyond. Alternative: no
-    cap.
+    wages; jobs that do mean output. Immortality reaches about 0.62 under Linked to Average and 0.73 with no pension, so
+    the cap binds only there. *Recommended*, since vanilla never passes 0.5 and the engine is untested beyond.
+    Alternative: no cap.
 11. **The workforce target is a total**: the census's term nets the pops' base ratios and the lines left on top; the
     women's-work lines (the women's-rights laws, the Pill, second-wave feminism, personal appliances, two family-policy
     laws) and the retirement lines (Old Age Pension, UBI, Post-Scarcity, Pro-Natalist) move to script-only types the
@@ -811,8 +831,8 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
     *Fit later*: the harness fits B against the game's revenue in a late-game save before tuning.
 17. **The pension bill stacks on vanilla's welfare by recipient**: Old Age Pension's welfare payments go to low-paid
     workers and stay; this bill pays for the old, whose +20% dependents' income vanilla gives without a payer; UBI and
-    Post-Scarcity pay everyone already and have no pension bill (§5.1). The "no payer" premise rests on the parent's
-    §14 Q6 and is unprobed in game. *Recommended.* Alternatives: replace Old Age Pension's welfare payments with the
+    Post-Scarcity pay everyone already and have no pension bill (§5.1). The "no payer" premise is the owner's
+    confirmation (2026-10-11). *Recommended.* Alternatives: replace Old Age Pension's welfare payments with the
     bill; or charge the bill under UBI and Post-Scarcity too.
 18. **The panel**: Life expectancy shows `100+` past 100; add Old age from (phase 2), Living to 100 and Biological age
     (era 11); a Work and Retirement section that takes the pension setting from Family Policy; a Longevity subsection
