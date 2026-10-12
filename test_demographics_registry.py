@@ -1239,6 +1239,28 @@ class TestLinesScript(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_ln_deaths"], -0.08)
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_line_deaths_applied")), -0.08)
 
+    def _primogeniture_line(self):
+        body = re.sub(r"#[^\n]*", "", _block(_text(ROOT / "common" / "static_modifiers" / "te_inheritance_modifiers.txt"),
+                                              "inh_primogeniture_rural"))
+        m = re.search(r"\bstate_demog_absorbed_birth_rate_mult = (-?[\d.]+)", body)
+        self.assertIsNotNone(m, "Primogeniture's birth line isn't on the absorbed family's type")
+        return float(m.group(1)) * 0.62   # the modifier's multiplier, an agrarian share of 0.62
+
+    def test_the_pair_carries_primogeniture_outside_full(self):
+        """The late-marriage plan, Task 9 (Plan A): outside Full the pair re-applies the line at 0.1 x the agrarian
+        share, as main's own line did (given that the engine sums the type scaled: TE_SELF_CHECK in debug.log)."""
+        line = self._primogeniture_line()
+        eng = self._eng({"state_demog_absorbed_birth_rate_mult": line})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {"te_demog_line_births_up": line})
+
+    def test_under_full_the_census_term_replaces_primogeniture(self):
+        line = self._primogeniture_line()
+        eng = self._eng({"state_demog_absorbed_birth_rate_mult": line}, full=True, census_term=True,
+                        held={"births": line})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {})
+
     def test_the_pairs_carry_the_engine_fields(self):
         mods = _raw_blocks([LINE_MODIFIERS])
         for field, short in P.ENGINE_LINE_SHORT.items():
@@ -1336,6 +1358,56 @@ class TestLinesScript(unittest.TestCase):
         callers = sorted(p.name for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
                          if "te_demog_lines_refresh = yes" in _text(p) and "generated" not in p.name)
         self.assertEqual(callers, ["te_demog_events.txt", "te_demog_on_actions.txt"])
+
+
+class TestPrimogenitureUnderFull(unittest.TestCase):
+    """Call 4 (the late-marriage spec 4.5; plan D3, Plan A): Primogeniture's +10% farm births ride the absorbed family,
+    so under Full the census's Late Marriage replaces them and nothing changes outside Full. The engine fact Plan A
+    rests on is unverified; a self-check logs it once a game (owner, 2026-10-12: log it instead of a probe gate)."""
+
+    MODS = ROOT / "common" / "static_modifiers" / "te_inheritance_modifiers.txt"
+    DEBUG = ROOT / "events" / "te_debug_demog_events.txt"
+    DEBUG_EFFECTS = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
+    DEBUG_VALUES = ROOT / "common" / "script_values" / "te_debug_demog_values.txt"
+
+    def test_the_line_sits_on_the_absorbed_family(self):
+        body = _block(_text(self.MODS), "inh_primogeniture_rural")
+        code = re.sub(r"#[^\n]*", "", body)
+        self.assertNotRegex(code, r"\bstate_birth_rate_mult\b")
+        self.assertRegex(code, rf"\b{P.ENGINE_LINE_TYPES[('absorbed', 'state_birth_rate_mult')]} = 0\.1\b")
+        self.assertRegex(code, r"\bstate_migration_quota_mult = 0\.2\b", "the migration line stays")
+        # Forced Heirship's -0.15 stays on its engine field: on top under Full (spec 4.5, parent 13: phase 3)
+        self.assertRegex(_block(_text(self.MODS), "inh_forced_heirship_rural"), r"state_birth_rate_mult = -0\.15")
+
+    def test_the_rural_refresh_fires_the_lines_refresh(self):
+        """No month's lag (#892's owner decision 2): the pair follows the yearly rural refresh the same day, from a
+        state event, where the modifier just added is visible."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(INH_EFFECTS), "te_inh_refresh_rural_effects"))
+        self.assertIn("trigger_event = { id = te_demog_events.4 }", body)
+        self.assertGreater(body.rindex("trigger_event = { id = te_demog_events.4 }"),
+                           body.rindex("name = inh_primogeniture_rural"))
+        self.assertIn("set_local_variable = { name = te_inh_pr_was value = 1 }", body)
+
+    def test_the_self_check_reads_before_the_add(self):
+        body = re.sub(r"#[^\n]*", "", _block(_text(INH_EFFECTS), "te_inh_refresh_rural_effects"))
+        call = body.index("te_debug_demog_pr_selfcheck_start = yes")
+        self.assertLess(call, body.index("name = inh_primogeniture_rural", call))
+        start = _block(_text(self.DEBUG_EFFECTS), "te_debug_demog_pr_selfcheck_start")
+        for needle in ("NOT = { has_global_variable = te_inh_pr_selfcheck_done }",
+                       "NOT = { has_local_variable = te_inh_pr_was }",
+                       "value = modifier:state_demog_absorbed_birth_rate_mult",
+                       "trigger_event = { id = te_debug_demog.5 days = 7 }"):
+            self.assertIn(needle, start)
+
+    def test_the_self_check_expects_the_modifiers_value(self):
+        line = re.search(r"\bstate_demog_absorbed_birth_rate_mult = ([\d.]+)",
+                         _block(_text(self.MODS), "inh_primogeniture_rural")).group(1)
+        expected = _block(_text(self.DEBUG_VALUES), "te_debug_demog_pr_chk_expected")
+        self.assertRegex(expected, rf"value = {re.escape(line)}\b")
+        verdict = _block(_text(self.DEBUG), "te_debug_demog.5")
+        self.assertIn("TE_SELF_CHECK OK primogeniture_scaled", verdict)
+        self.assertIn("TE_SELF_CHECK BROKEN primogeniture_scaled", verdict)
+        self.assertIn("remove_variable = te_inh_pr_chk_before", verdict)
 
 
 class TestPollutionLine(unittest.TestCase):

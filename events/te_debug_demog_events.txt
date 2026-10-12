@@ -375,3 +375,26 @@ te_debug_demog.4 = {
 		remove_global_variable = te_probe_owner_to
 	}
 }
+
+# The Primogeniture self-check's second half (te_debug_demog_pr_selfcheck_start): runs once a game, in every game, a
+# week after the first fresh Primogeniture line. OK: the engine summed the script-only type scaled by the agrarian
+# share. BROKEN: swap Primogeniture to Plan B (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Task 9).
+te_debug_demog.5 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = te_inh_pr_chk_before }
+			if = {
+				limit = { te_debug_demog_pr_chk_gap < 0.002 }
+				debug_log = "TE_SELF_CHECK OK primogeniture_scaled added=[THIS.ScriptValue('te_debug_demog_pr_chk_added')|4] expected=[THIS.ScriptValue('te_debug_demog_pr_chk_expected')|4] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN primogeniture_scaled added=[THIS.ScriptValue('te_debug_demog_pr_chk_added')|4] expected=[THIS.ScriptValue('te_debug_demog_pr_chk_expected')|4] (0.1 or 0: the engine doesn't scale a script-only type on a state modifier; take Plan B, late-marriage plan Task 9) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_variable = te_inh_pr_chk_before
+		}
+	}
+}

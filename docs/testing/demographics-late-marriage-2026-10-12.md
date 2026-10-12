@@ -25,6 +25,10 @@ owner took option 2: the fallback's fertility, with step 1's mortality left wher
 
 The failing regions are calibration step 3's: a geographic mortality term, which comes next.
 
+**In game:** Task 9 took Plan A without the probe (owner, 2026-10-12): a once-a-game `TE_SELF_CHECK` line in
+`debug.log` says whether the engine scales the type, and the in-game list is now `docs/testing/demographics-playtest.md`,
+checked at the next play-test rather than before the merge.
+
 Birth Spacing's health-care erosion reads the access medicine has reached (`te_dg_acc` above its base, which drifts
 since #916), not the access modifier. That is a default chosen at the build and flagged for the owner. On these saves,
 which predate #916's drift, the two are the same.
