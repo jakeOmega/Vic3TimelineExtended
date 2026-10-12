@@ -176,6 +176,7 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = palmyra CODE = 251 }
 	gm_state_picture_landmark = { KEY = xanthos CODE = 250 }
 	gm_state_picture_landmark = { KEY = mesha_stele CODE = 130 }
+	gm_state_picture_landmark = { KEY = arch_of_ctesiphon CODE = 150 }
 }
 
 gm_state_picture_landmark = {

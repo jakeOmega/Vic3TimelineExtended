@@ -17,9 +17,9 @@ thirty-four.
 
 This change does two things:
 
-1. **Eighteen new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
-   Persia, Korea, Vietnam, in decentralized territory Great Zimbabwe and Bali, and Italy, Anatolia and the Levant (§1,
-   §1.1–§1.3).
+1. **Nineteen new landmarks** in the places where Europe's great looting took place: Greece, Egypt, West Africa, India,
+   Persia, Korea, Vietnam, in decentralized territory Great Zimbabwe and Bali, and Italy, Anatolia, the Levant and
+   Mesopotamia (§1, §1.1–§1.4).
 2. **Ten trophies already abroad on 1 January 1836**, seeded as trophies at game start: the Parthenon Marbles, the
    Rosetta Stone, and eight more (§2). Most are still claimed today, so they start as the diplomatic friction the
    trophy system already models: the claimant sees them under Held Abroad, and its AI asks for them back.
@@ -177,7 +177,7 @@ Each state has one owner in 1836, so none is exposed to #936.
   (1868). Both added under the revised rule (§1.3).
 - **Palmyra:** like Great Zimbabwe, its weight in 1836 was legend and travellers' romance (Lady Hester Stanhope, 1813),
   and its funerary busts left from the 1870s. Added under the revised rule (§1.3).
-- **Ctesiphon's arch** (Taq Kasra, `STATE_BAGHDAD`): weight in 1836, but nothing was ever carried off.
+- **Ctesiphon's arch** (Taq Kasra, `STATE_BAGHDAD`): added at the owner's ask (§1.4).
 - **The Serpent Column and the Obelisk of Theodosius** in Constantinople: they could be 1836 trophies held by the
   Ottomans (from Delphi and Karnak), but nobody claims them, and Greece's and Egypt's AI would start asking.
 - **Italy:** the Vatican (a base-game monument), Michelangelo's David (never taken, and Tuscany has the Uffizi), the
@@ -205,6 +205,17 @@ equal. Of the candidates it opened, the owner asked for those in single-owner st
 
 **Left out, split states (owner, 2026-10-12):** Borobudur (Central Java: the Dutch East Indies, Yogyakarta and
 Surakarta) and Amaravati (Circars or Madras, both shared with the Company).
+
+### 1.4 The Arch of Ctesiphon (owner, 2026-10-12)
+
+| # | Key | Name | State | 1836 owner | Dedication | Form (share) | Stand-in | Level |
+|---|---|---|---|---|---|---|---|---|
+| 51 | `arch_of_ctesiphon` | Arch of Ctesiphon | `STATE_BAGHDAD` | TUR | To the Nation | Arch (piece) | Avestan · Gate | 5 |
+
+Taq Kasra, the Sasanian kings' audience hall, carried weight in 1836: al-Buhturi's ode on it is a classic of Arabic
+poetry, and it stood for Persian kingship. Nothing left it in modern times. Its piece is "the treasures of Khosrow",
+which its Arab conquerors carried off in 637, the Spring of Khosrow carpet among them. The stand-in is the Persian
+gate, an iwan like the arch's, rather than a Roman triumphal arch. Baghdad is the Ottomans' alone in 1836.
 
 ## 2. The trophies of 1836
 
@@ -372,7 +383,7 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 
 ## 6. In-game checks
 
-1. A new game: the eighteen new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
+1. A new game: the nineteen new landmarks stand at their levels, and no `TE_MONUMENTS: landmark … not placed` line is
    logged. Benin and Asante are both centralized in 1836 (owner, 2026-10-12), and a building can be placed in a
    decentralized country's state too.
 2. Britain's Trophies section lists the Marbles, the Rosetta Stone, Tipu's Tiger and the Kandyan throne. France's lists

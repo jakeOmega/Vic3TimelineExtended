@@ -6,7 +6,7 @@
 (§1.1 named landmarks; "v1"), and the pictures spec, *Grand Monument pictures, forms and styles* (2026-10-11, written
 in another session and not yet merged).
 **Replaces:** v2 §4's table, and its plan to offer landmarks in the style choice (`monument_events.11`).
-**Extended by:** `2026-10-12-grand-monument-loot-and-1836-trophies-design.md` (rows 24–50: eighteen landmarks to loot,
+**Extended by:** `2026-10-12-grand-monument-loot-and-1836-trophies-design.md` (rows 24–51: nineteen landmarks to loot,
 and nine never placed, for the trophies of 1836).
 
 ## Context

@@ -337,6 +337,10 @@ gm_tr_part_name = {
 		localization_key = gm_tr_part_nereid_monument
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:arch_of_ctesiphon }
+		localization_key = gm_tr_part_treasures_of_khosrow
+	}
+	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:arch }
 		localization_key = gm_tr_part_reliefs
 	}
@@ -651,6 +655,10 @@ gm_tr_landmark_name = {
 		localization_key = gm_skin_landmark_mesha_stele
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:arch_of_ctesiphon }
+		localization_key = gm_skin_landmark_arch_of_ctesiphon
+	}
+	text = {
 		localization_key = gm_form_monument
 	}
 }
@@ -861,6 +869,10 @@ gm_tr_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:mesha_stele }
 		localization_key = gm_landmark_mesha_stele_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:arch_of_ctesiphon }
+		localization_key = gm_landmark_arch_of_ctesiphon_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

@@ -74,6 +74,7 @@ LANDMARK_PARTS = {
     "temples_of_baalbek": "gm_tr_part_temple_carvings",
     "palmyra": "gm_tr_part_funerary_busts",
     "xanthos": "gm_tr_part_nereid_monument",
+    "arch_of_ctesiphon": "gm_tr_part_treasures_of_khosrow",
 }
 # The occasion patterns of NAMESAKES, plus the namesakes with one pattern.
 NAME_PATTERNS = [p for patterns in NAMESAKES.values() for p in patterns]

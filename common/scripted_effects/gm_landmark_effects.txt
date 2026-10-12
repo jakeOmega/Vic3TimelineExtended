@@ -61,6 +61,7 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = palmyra STATE = STATE_SYRIA TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 }
 	gm_seed_landmark = { KEY = xanthos STATE = STATE_KONYA TAG = TUR DEDICATION = civic FORM = rock_cut LEVEL = 5 }
 	gm_seed_landmark = { KEY = mesha_stele STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = war_memorial FORM = stele LEVEL = 5 }
+	gm_seed_landmark = { KEY = arch_of_ctesiphon STATE = STATE_BAGHDAD TAG = TUR DEDICATION = civic FORM = arch LEVEL = 5 }
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
@@ -156,6 +157,7 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = palmyra }
 	gm_debug_log_landmark = { KEY = xanthos }
 	gm_debug_log_landmark = { KEY = mesha_stele }
+	gm_debug_log_landmark = { KEY = arch_of_ctesiphon }
 }
 
 gm_debug_log_landmark = {

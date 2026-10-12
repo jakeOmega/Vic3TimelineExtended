@@ -491,6 +491,10 @@ gm_skin_name = {
 		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_mesha_stele }
 		localization_key = gm_skin_landmark_mesha_stele
 	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arch_of_ctesiphon }
+		localization_key = gm_skin_landmark_arch_of_ctesiphon
+	}
 	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
 	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
@@ -853,6 +857,10 @@ gm_landmark_name_evt = {
 		localization_key = gm_landmark_mesha_stele_evt
 	}
 	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arch_of_ctesiphon }
+		localization_key = gm_landmark_arch_of_ctesiphon_evt
+	}
+	text = {
 		localization_key = gm_landmark_name_evt_none
 	}
 }
@@ -1062,6 +1070,10 @@ gm_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_landmark var:gm_landmark = flag:mesha_stele }
 		localization_key = gm_landmark_mesha_stele_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:arch_of_ctesiphon }
+		localization_key = gm_landmark_arch_of_ctesiphon_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

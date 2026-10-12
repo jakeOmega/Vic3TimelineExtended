@@ -1167,6 +1167,9 @@ LANDMARKS = (
     Landmark("palmyra", "STATE_SYRIA", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
     Landmark("xanthos", "STATE_KONYA", "TUR", "civic", "rock_cut", ("heritage_aramaic", "rock_cut"), 5),
     Landmark("mesha_stele", "STATE_TRANSJORDAN", "EGY", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
+    # Added 2026-10-12 (owner). Baghdad is the Ottomans' alone; the stand-in is
+    # the Persian gate, an iwan like Taq Kasra's.
+    Landmark("arch_of_ctesiphon", "STATE_BAGHDAD", "TUR", "civic", "arch", ("heritage_avestan", "gate"), 5),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
