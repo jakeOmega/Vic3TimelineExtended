@@ -166,6 +166,10 @@ gm_rename_sgui = {
 				gm_state_status_fits = yes
 			}
 			custom_tooltip = {
+				text = gm_sgui_landmark_name_tt
+				gm_state_has_historical_name = no
+			}
+			custom_tooltip = {
 				text = gm_sgui_rename_open_tt
 				NOT = { has_variable = gm_name_choice_open }
 			}
@@ -342,6 +346,10 @@ gm_name_start_sgui = {
 			custom_tooltip = {
 				text = gm_sgui_rename_upheld_tt
 				gm_state_status_fits = yes
+			}
+			custom_tooltip = {
+				text = gm_sgui_landmark_name_tt
+				gm_state_has_historical_name = no
 			}
 		}
 		custom_tooltip = {

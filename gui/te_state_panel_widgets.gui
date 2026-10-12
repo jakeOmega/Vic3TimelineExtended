@@ -643,6 +643,20 @@ types te_state_panel_widget_types
 						text = "gm_row_title_named"
 					}
 
+					### A LANDMARK standing since 1836 (phase 4): its history on hover.
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_landmark'), '(CFixedPoint)1' )]"
+						autoresize = yes
+						multiline = yes
+						minimumsize = { 350 -1 }
+						maximumsize = { 350 -1 }
+						align = left|nobaseline
+						using = fontsize_medium
+						default_format = "#tooltippable"
+						tooltip = "gm_row_landmark_tt"
+						text = "gm_row_landmark"
+					}
+
 					### GRANDEUR and the step now being filled.
 					te_state_meter = {
 						blockoverride "meter_tooltip" {
