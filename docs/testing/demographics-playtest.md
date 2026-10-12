@@ -31,9 +31,11 @@ No `TE_SELF_CHECK` line at all after a game's first year means no state took the
 1. **Full, a new 1836 game as Britain.**
    - The Population panel's children-per-woman tooltip shows "Late marriage ×0.90" and "women marry at about 26",
      with "Birth spacing ×1.00". The country line reads about 26 and 0%.
-   - A Japanese state's Demographics subtab: Birth spacing below ×1.00, Late marriage ×1.00, women marry at about 19.
-   - A state in Posen: Late marriage between the two, women marry at about 25.
-2. **Option l** on the capital after its first census step: `lm` near 1, `bs` 0, `lm_target` near 1, and
+   - A Japanese state's Demographics subtab: Birth spacing ×0.80, Late marriage ×1.00, women marry at about 19.
+   - A Chinese state: Birth spacing ×0.99.
+   - A state in Posen: Late marriage ×0.92 (a share of 0.8), women marry at about 25.
+2. **Option l** on the capital after its first census step: `lm=1.000`, `bs=0.000`, `lm_target` near 1 (an
+   unincorporated state reads `lm_target=-1.000`), and
    `absorbed_b` holding 0.1 × the capital's agrarian share on top of the laws' own absorbed birth lines.
 3. **Disabled, a new game, a farming state in Britain** (Primogeniture). After its first yearly pulse, its birth-rate
    breakdown shows Primogeniture's farm births at +10% × its Peasants' and Farmers' share, as a Laws and Institutions
