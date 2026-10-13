@@ -6,8 +6,8 @@ saves). This records the diagnosis from the saves, the fix (`demographics_params
 the bands judged on a re-walk of the run with the fix. Branch `feat/demog-migrant-booking`.
 
 **Status: the residual is the engine's own migration, not unmodelled deaths. Booked with a per-step cap and a
-self-correcting labour split, the run's re-walk meets every §5 band of the consequences design's step 4, and the three
-effects are on.** The cost is the frontier: no state's men reach 130 per 100 women from migration (below, "The
+self-correcting labour split, the run's re-walk meets every §5 band of the consequences design's step 4 that can be
+judged (the aged society needs phase 3; the 2000 youth band runs on scenarios), and the three effects are on.** The cost is the frontier: no state's men reach 130 per 100 women from migration (below, "The
 frontier").
 
 ## The data
@@ -94,6 +94,12 @@ Command (the overnight run; the eight plain-text saves add the transport technol
 With every residual booked flat (no profile at all) 0.9–1.4% of people sit past ±0.05, so the rest of the 14–18% is
 the profile's young adults moving, within the cap.
 
+**The margin.** The re-walk's sex balance runs a median +0.5 to +1.4 above the saves' (no war dead, approximate natural
+rates), and its emigration states settle at 90–91, where the low ramp completes. In a game they may settle at 89–90,
+inside the fewer-men effect at a sliver of its strength: "0.0% below 90" may be a few percent at near-zero strength.
+The next run's `consequences` on its own saves is the real test (the play-test list, § The migrant booking, item 2); if
+it shows that, moving `LABOUR_BALANCE_LOW` to 96 → 92 is the one-line fix.
+
 **The great powers' conscription terms by decade** (the consequences design's §4.5 gate; booked): Britain −0.02 to
 +0.04, France −0.05 to +0.02, Prussia/Germany −0.01 to +0.04, Austria −0.03 to +0.02, Russia 0.00 to +0.03, the USA
 +0.01 to +0.05, Sardinia/Italy −0.01 to +0.07, Spain, the Ottomans, Japan, China and British India within ±0.05.
@@ -116,4 +122,21 @@ should come back is the owner's call (raise `MIGRANT_CAP_IN` and `LABOUR_BALANCE
 
 ## The second run
 
-The 2026-10-11 normal-speed run's re-walk is running; its figures follow in the next commit.
+The 2026-10-11 normal-speed Full run (`vic3te-demog-p2-normal-2026-10-11`, 66 plain-text yearly saves, 1837–1902; an
+earlier build, before #907 and #913), re-walked the same way. **The re-walk reproduces this run less well:** the
+profile alone puts 47.3% (1848) and 57.4% (1898) of states outside 90–110 against the saves' 39.0% and 38.9%, and the
+5th–95th percentile of its sex balance's difference runs −17 to +38 (the median +0.4 to +0.9). It overstates the old
+booking's damage here, so its booked figures are an upper bound, not a band result.
+
+| Year | Booking | Below 90 | 110 or more | Range | People with \|T\| past 0.05 / 0.15 | T range |
+|---|---|---|---|---|---|---|
+| 1848 | profile alone | 22.4% | 24.9% | 22–250 | 31.7% / 16.5% | −0.96 to +0.25 |
+| 1848 | booked | 0.0% | 0.9% | 90–111 | 23.9% / 3.4% | −0.13 to +0.25 |
+| 1898 | profile alone | 29.9% | 27.6% | 5–217 | 37.4% / 17.5% | −0.90 to +0.25 |
+| 1898 | booked | 0.6% | 1.7% | 88–111 | 17.0% / 4.5% | −0.18 to +0.25 |
+| 1902 | profile alone | 28.5% | 26.3% | 14–212 | 44.5% / 15.3% | −0.93 to +0.25 |
+| 1902 | booked | 0.5% | 1.7% | 89–111 | 27.4% / 2.6% | −0.15 to +0.25 |
+
+Booked, 2.3% (1898) and 2.2% (1902) of states sit at a sex-balance effect, just over the 2% band, on a re-walk that
+runs high for this run. The great powers' terms stay within −0.07 to +0.06 by decade but for Britain, +0.14 in 1890
+and +0.10 in 1900 (+0.25 and +0.15 under the profile alone): this run sent Britain large inflows in the 1880s.

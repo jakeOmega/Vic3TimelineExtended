@@ -361,9 +361,11 @@ effect on. Display only shows the same pyramids as Full; neither changes the gam
    people year after year (its Net Migration row negative most years; in the 2026-10-12 run, Hill Punjab, Hyderabad,
    West Karelia, the Central Provinces) keeps 90 or more men per 100 women aged 20 to 59, and its pyramid's men aged 20
    to 39 are not much shorter than its women. Before the booking such states fell to 2–50.
-2. **Few sex-balance modifiers in peace (Full).** In a save with no great war in the last twenty years, fewer than one
-   state in fifty lists "Census: Fewer Men" or "Census: More Men" (`demographics_harness.py consequences SAVE` prints
-   the share). The re-walk predicts 0–1% to 1901.
+2. **Few sex-balance modifiers in peace (Full): the band's real test.** In a save with no great war in the last twenty
+   years, fewer than one state in fifty lists "Census: Fewer Men" or "Census: More Men" (`demographics_harness.py
+   consequences SAVE` prints the share). The re-walk predicts 0–1% to 1901, but runs about a point high, and its
+   emigration states sit at 90–91: if the game's settle just under 90 (a few percent of states at a sliver of the
+   effect), move `LABOUR_BALANCE_LOW` to 96 → 92 and regenerate.
 3. **Frontiers are no longer male (Full).** A frontier filling fast (the American West, the Canadian prairies,
    northern Mexico) stays near 100–110 men per 100 women. This is the band's price, not a bug: the results doc's
    § The frontier gives the owner's choice.
