@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # GRAND MONUMENTS — scripted effects
 # ============================================================================
 # Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
@@ -425,8 +425,10 @@ gm_state_monthly = {
 					gm_state_is_landmark = yes
 				}
 			}
-			# Gone without the Tear Down button (demolished from the building
-			# panel): a contested monument counts as torn down (plan decision 6).
+			# Gone without the Tear Down button: a contested monument counts
+			# as torn down (plan decision 6). The building is not downsizeable,
+			# so the building panel can no longer demolish one; this stays as
+			# the net for a save that did, or any other removal.
 			# Not one carried off as a trophy (gm_carried_off).
 			if = {
 				limit = {

@@ -727,8 +727,10 @@ comes back, for example when the monarchy is restored, it counts in full again.
 Pulling it down is the only permanent choice. A shrine in a state that another
 country takes becomes heritage at once and cannot be pulled down. After a civil
 war the winner inherits the monuments the loser raised, and they are contested
-only if its laws no longer fit them. Demolishing a contested monument from its
-building panel counts as pulling it down.
+only if its laws no longer fit them.
+
+A Grand Monument cannot be downsized or demolished from its building panel, by
+you or by the AI. Pull Down is the only way to remove one yourself.
 
 ### Monument trophies
 
