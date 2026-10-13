@@ -4,6 +4,7 @@ Static checks on the script: the rule's settings and wrappers, guarded divisions
 pulse wiring, the gates around every cohort entry point. Later tasks add tests here.
 """
 
+import copy
 import dataclasses
 import json
 import math
@@ -370,7 +371,8 @@ WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pe
 # sex ratio at birth, Birth Limit's part of desired fertility), 0 unless a test gives them (_family_fixtures).
 FAMILY_DEFAULTS = {**{f"modifier:{t}": 0.0 for t in P.MEASURE_TYPES}, "te_demog_srb_add": 0.0,
                    "te_demog_ms_birth_limit_part": 0.0}
-# Phase 2 step 4's three held-back effects (demographics_params' switches, generated as 0 or 1): an engine takes the
+# Phase 2 step 4's three effects (demographics_params' switches, generated as 0 or 1; on since the migrant booking,
+# 2026-10-12): an engine takes the
 # switches as the model reads them, so a test that patches them on (ALL_ON) runs the script with them on too.
 SWITCHES = {"te_demog_k_conscription_effects": "CONSCRIPTION_EFFECTS", "te_demog_k_youth_effects": "YOUTH_BULGE_EFFECTS",
             "te_demog_k_sex_effects": "SEX_BALANCE_EFFECTS"}
@@ -381,9 +383,16 @@ def _switch_fixtures():
 
 
 def ALL_ON(f):
-    """Patch the three switches on (as the follow-up will) for one test."""
+    """Patch the three switches on (as the migrant booking turned them, 2026-10-12) for one test."""
     for attr in SWITCHES.values():
         f = unittest.mock.patch.object(P, attr, True)(f)
+    return f
+
+
+def ALL_OFF(f):
+    """Patch the three switches off (held back, as step 4 shipped them) for one test."""
+    for attr in SWITCHES.values():
+        f = unittest.mock.patch.object(P, attr, False)(f)
     return f
 
 
@@ -900,10 +909,14 @@ class TestCohortScript(unittest.TestCase):
             }
             for c in range(len(P.MIGRANT_CLASSES)):
                 locals_[f"te_dg_pf{c}"], locals_[f"te_dg_pm{c}"] = prof[(c, "f")], prof[(c, "m")]
-            stub = {"te_demog_flows": "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}"
-                                                for k, v in locals_.items())}
+            # the booking's cap reads the profile and the class sums (te_demog_migrant_rates, 2026-10-12)
+            stub = {"te_demog_flows": "\n".join([f"set_local_variable = {{ name = {k} value = {v!r} }}"
+                                                 for k, v in locals_.items()] + ["te_demog_migrant_rates = yes"])}
         eng = _engine_for(inp, self.YEAR + 1, pop, effects=stub, engine=engine)
         eng.fixtures.update(fixtures)
+        # the census's last sex balance and class sums, before the step rewrites them (the migrant booking reads both)
+        eng.balance_before = balance
+        eng.ring_before = copy.deepcopy(ring)
         bz = dz = 0.0
         if full:
             eng.trigger_fixtures["te_demog_effects_run"] = True
@@ -1040,7 +1053,16 @@ class TestCohortScript(unittest.TestCase):
         inp = dataclasses.replace(
             self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
             inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
-        prof = demographics_model.migrant_profile(inp)
+        sign = 1 if eng.locals["te_dg_mig_in"] > 0 else -1 if eng.locals["te_dg_mig_out"] > 0 else 0
+        prof = demographics_model.migrant_profile(inp, eng.balance_before, sign)
+        # the booking's rates (te_demog_migrant_rates, 2026-10-12): each class and sex's, plus the flat one
+        migration = eng.locals["te_dg_mig_in"] - eng.locals["te_dg_mig_out"]
+        rates = demographics_model.migrant_rates(eng.ring_before, prof, migration)
+        flat = eng.locals["te_dg_mig_flat"]
+        for (c, sex), rate in rates.items():
+            if abs(rate):
+                self.close(eng.locals[f"te_dg_mr_{sex}{c}"] + flat, abs(rate), rel=1e-4,
+                           what=f"booking rate, class {c} {sex}")
         for c in range(len(P.MIGRANT_CLASSES)):
             self.close(eng.locals[f"te_dg_pf{c}"], prof[(c, "f")], rel=1e-9, what=f"profile, class {c} women")
             self.close(eng.locals[f"te_dg_pm{c}"], prof[(c, "m")], rel=1e-9, what=f"profile, class {c} men")
@@ -1084,6 +1106,46 @@ class TestCohortScript(unittest.TestCase):
         self.check_step(eng, ring, figures, pop)
         self.check_flows(eng, flows, want_inflow_years=5)
         self.assertGreater(eng.vars["te_dg_net_migration"], 0)
+
+    def test_flows_balance_the_labour_split_where_men_are_few(self):
+        """The migrant booking (2026-10-12): departures from a state short of men take the labour kind's women and men
+        alike (demographics_model.labour_balance_weight), and the step still matches the model."""
+        flows = dict(eb=2500.0, ed=2100.0, migration=-6000.0, crisis=0.0, fjob_share=0.0)
+        eng, ring, figures, pop = self.step_both(flows=flows, men_factor=0.85)
+        self.assertLess(eng.balance_before, P.LABOUR_BALANCE_LOW[1])
+        self.close(eng.locals["te_dg_lbw"], 1.0, what="the balance weight")
+        self.close(eng.locals["te_dg_labour_f"], P.LABOUR_BALANCE_SHARE, what="labour's women's share")
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=0)
+        # the same state gaining people keeps the jobs' split: the correction only stops a fall
+        flows["migration"] = 6000.0
+        eng, ring, figures, pop = self.step_both(flows=flows, men_factor=0.85)
+        self.close(eng.locals["te_dg_lbw"], 0.0, what="no correction on arrivals")
+        self.close(eng.locals["te_dg_labour_f"], P.LABOUR_FEMALE_SHARE_MIN, what="labour's women's share")
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=1)
+
+    def test_flows_balance_the_labour_split_where_men_are_many(self):
+        """Arrivals in a state with men to spare move toward the balanced split, part of the way inside the ramp."""
+        flows = dict(eb=2500.0, ed=2100.0, migration=6000.0, crisis=0.0, fjob_share=0.0)
+        eng, ring, figures, pop = self.step_both(flows=flows, men_factor=1.15)
+        start, full = P.LABOUR_BALANCE_HIGH
+        want = (eng.balance_before - start) / (full - start)
+        self.assertTrue(0 < want < 1, eng.balance_before)
+        self.close(eng.locals["te_dg_lbw"], want, rel=1e-4, what="the balance weight")
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=1)
+
+    def test_flows_past_the_booking_cap(self):
+        """A residual far past the cap: the classes stop at the cap and the rest is flat (te_demog_migrant_rates)."""
+        for migration in (-0.2 * self.POP, 0.3 * self.POP):
+            flows = dict(eb=2500.0, ed=2100.0, migration=migration, crisis=0.1, fjob_share=0.2)
+            eng, ring, figures, pop = self.step_both(flows=flows)
+            self.assertGreater(eng.locals["te_dg_mig_flat"], 0.05)
+            cap = P.MIGRANT_CAP_IN if migration > 0 else P.MIGRANT_CAP_OUT
+            self.close(eng.locals["te_dg_mr_m2"], cap, rel=1e-4, what="young men at the cap")
+            self.check_step(eng, ring, figures, pop)
+            self.check_flows(eng, flows, want_inflow_years=1 if migration > 0 else 0)
 
     def test_flows_with_a_first_year_state_and_a_full_crisis(self):
         """No pending dead or kills, no streak variable yet; refugees take the whole profile."""
@@ -1282,11 +1344,10 @@ class TestCohortScript(unittest.TestCase):
         self.close(eng.vars["te_dg_tfr"], figures["tfr"], rel=1e-6, what="children per woman")
         self._work_figures(eng, ring, dataclasses.replace(inp, sex_balance=balance))
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", False)
     def test_held_back_a_step_short_of_men_takes_no_term(self):
-        """demographics_params.SEX_BALANCE_EFFECTS off (controller's decision, 2026-10-12): the census still counts the
+        """demographics_params.SEX_BALANCE_EFFECTS off (held back, as step 4 shipped): the census still counts the
         balance but stores no te_dg_sxb, and its children per woman and work figures take no sex-balance term."""
-        self.assertFalse(P.SEX_BALANCE_EFFECTS)
-        self.assertEqual(_raw_blocks([GENERATED_VALUES])["te_demog_k_sex_effects"].strip(), "value = 0")
         inp = self._work_inp()
         eng, ring, figures, pop = self.step_both(inp=inp, migration=0.0, men_factor=0.85)
         self.check_step(eng, ring, figures, pop)
@@ -3830,10 +3891,12 @@ class TestFlows(unittest.TestCase):
         """Whatever the branch, te_demog_flows leaves the locals te_demog_no_flows names: each is set
         at its top level (one tab), not inside an if."""
         flows = _block(_text(EFFECTS), "te_demog_flows")
-        body = flows + _block(_text(GENERATED_EFFECTS), "te_demog_set_profile")
+        body = (flows + _block(_text(GENERATED_EFFECTS), "te_demog_set_profile")
+                + _block(_text(GENERATED_EFFECTS), "te_demog_migrant_rates"))
         self.assertRegex(flows, r"(?m)^\tte_demog_set_profile = yes$", "the profile is set unconditionally")
+        self.assertRegex(flows, r"(?m)^\tte_demog_migrant_rates = yes$", "the booking's rates are set unconditionally")
         names = re.findall(r"name = (te_dg_\w+) value", _block(_text(EFFECTS), "te_demog_no_flows"))
-        self.assertEqual(len(names), 15)
+        self.assertEqual(len(names), 16)
         for name in names:
             self.assertIsNotNone(re.search(rf"^\tset_local_variable = \{{\s+name = {name}\s+value", body, re.M), name)
 
@@ -6805,11 +6868,16 @@ class TestConsequencesScript(unittest.TestCase):
         eng.call("te_demog_consequences_refresh")
         self.assertIn("te_demog_census_conscription_down", eng.modifiers)
 
-    def test_held_back_the_census_stores_the_figures_and_applies_nothing(self):
-        """Controller's decision (2026-10-12): the three switches are off; under Full T and y are stored for the panel."""
-        self.assertEqual(_switch_fixtures(), {k: 0.0 for k in SWITCHES})
+    def test_the_switches_are_on(self):
+        """The migrant booking (2026-10-12) turned the three effects on: the generated switches are 1."""
+        self.assertEqual(_switch_fixtures(), {k: 1.0 for k in SWITCHES})
         for key in SWITCHES:
-            self.assertEqual(_raw_blocks([GENERATED_VALUES])[key].strip(), "value = 0", key)
+            self.assertEqual(_raw_blocks([GENERATED_VALUES])[key].strip(), "value = 1", key)
+
+    @ALL_OFF
+    def test_held_back_the_census_stores_the_figures_and_applies_nothing(self):
+        """The three switches off (held back, as step 4 shipped): under Full T and y are stored for the panel."""
+        self.assertEqual(_switch_fixtures(), {k: 0.0 for k in SWITCHES})
         eng = self._state(fam=7000.0, balance=60.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.3)
         eng.call("te_demog_consequences_refresh")
         self.assertEqual(eng.modifiers, {})

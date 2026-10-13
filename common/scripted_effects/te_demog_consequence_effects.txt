@@ -13,12 +13,12 @@
 #                                            adults above 18% of the people, with unemployment (§4.3)
 #   te_demog_census_fewer_men                feminist movement support +10% at the fewer-men share (§4.4)
 #   te_demog_census_more_men                 radicals from movements +10% at the more-men share (§4.4)
-# All three are held back (controller's decision, 2026-10-12): the census's migrant booking distorts the men they read.
-# The census computes and stores T and y (te_dg_mc, te_dg_yb, under Full) and the panel shows them, but no conscription
-# pair applies while te_demog_k_conscription_effects is 0, no youth-bulge modifier while te_demog_k_youth_effects is 0,
-# and neither sex-balance modifier nor term while te_demog_k_sex_effects is 0 (demographics_params' three switches). A
-# follow-up on the migrant booking turns them on together. When on, no pair below |T| te_demog_k_conscription_cut and
-# no youth modifier below te_demog_k_youth_cut.
+# Each has a switch (demographics_params' three, generated as te_demog_k_conscription_effects, _youth_effects and
+# _sex_effects): step 4 shipped all three at 0, held back because the census's booking of the residual distorted the
+# men they read, and the migrant booking (2026-10-12; te_demog_migrant_rates, te_demog_labour_balance) turned them on.
+# At 0 the census still computes and stores T and y (te_dg_mc, te_dg_yb, under Full) and the panel shows them, but no
+# conscription pair, youth-bulge modifier or sex-balance modifier or term applies. No pair below |T|
+# te_demog_k_conscription_cut and no youth modifier below te_demog_k_youth_cut.
 # Display only and Disabled clear all four, and te_dg_mc and te_dg_yb, at the state's next pulse, as the births and
 # deaths terms clear (te_demog_rates_clear). The census's own terms, the sex balance's on children per woman and on the
 # women's rate (te_demog_consequence_values.txt), run under Display only too: they move the census's figures, which
@@ -32,8 +32,9 @@
 # THIS = a state, at the start of its step before te_demog_prepare (te_demog_step_begin): the ring's sex balance, the
 # census's last figure (men per 100 women aged 20-59), which the year's children per woman (te_demog_tfr_sex) and
 # women's rate (te_demog_sex_women_add) read. Stored only where men are short, below te_demog_k_sex_fewer_from, so a
-# state at peace keeps no variable for it; a seed removes it (demographics_model.step's sex_balance). Held back while
-# te_demog_k_sex_effects is 0 (demographics_params.SEX_BALANCE_EFFECTS): nothing is stored, so both terms stay neutral.
+# state at peace keeps no variable for it; a seed removes it (demographics_model.step's sex_balance). While
+# te_demog_k_sex_effects is 0 (held back: demographics_params.SEX_BALANCE_EFFECTS) nothing is stored, so both terms stay
+# neutral.
 te_demog_sex_births_store = {
 	if = {
 		limit = { has_variable = te_dg_sxb }

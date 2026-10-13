@@ -38,7 +38,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … measure_country_types` | once a game, under Full: `START` when the first measure that moves desired family size goes on in any country (Child Allowance, Honours, Parental Leave, Later Longer Fewer, Birth Limit, the Crash Campaign; the AI's included), the verdict a week later from the capital (`te_debug_demog.10`) | the capital's read of the script-only `state_desired_fertility_mult` rose by the measures' lines its owner gained (`added` ≈ `expected`): a script-only state type on a country static modifier reaches the states | `added` reads 0: the census sees none of the measures' types, so no measure moves births (step 3b's census reads them from the state); `NO_VERDICT` (the measure ended within the week) re-arms the check | put each measure's census types on a state modifier in each of the country's states, applied and removed with the country modifier and re-applied by the yearly state pulse (inheritance's rural modifiers' pattern), and keep the interest groups and upkeep on the country |
 | `TE_SELF_CHECK … workforce_ratio_scale` | Display only or Full: once a game, at the first capital census step before any workforce term (a 1836 game: its first year) | the walk's `wf_engine` is nearer `per_people` (the set ratio as workforce over people: about 0.25 in 1836) than `per_dependents` (the same as workforce over dependents: about 0.20). The spec §1.8's stop rule, as built | `wf_engine` near `per_dependents`: the engine's ratio is workforce over dependents | re-derive `WORKFORCE_SCALE` and W on that scale (spec §1.8) and refit with `demographics_harness.py workforce SAVE`. Offline the 1836 save already reads over people: 82% of the world's people hold exactly 0.250 (§ Phase 2 step 2) |
 | `TE_SELF_CHECK … workforce_follows_target` | Full: once a game, at a capital's census once its workforce term has run five census years and moved at least 0.03 since it landed | the walk's `engine` figure has moved W's way since the landing (`engine_at_landing`) by at least half of W's move (`needed`); `set` and `census_target` say how far the ramp still has to go. Not a gap to the set ratio: the saves show the game's figure sitting 0.01-0.03 off its ratio in steady state | `engine_moved` under `needed`: the engine's pull is slower than the ramp, so the ramp adds nothing | set `WF_RAMP_STEP` large (the term lands at once, and the engine's own pull is the lag) and keep the panel's engine figure beside the target; no line at all after many years means no capital's term moved 0.03 (option r shows the capital's) |
-| `TE_SELF_CHECK … conscription_term_read` | Full, and only once conscription's effect is on (`CONSCRIPTION_EFFECTS`; held back now, so no line): once a game, a week after the first state takes a fresh conscription pair (its term at least 0.01 either way) | the census's conscription pair reaches the state's conscription multiplier (`added` = `expected`, the term) | `added` 0: the pair doesn't reach the state's read. Another figure: a technology or law moved the field inside the week, which says nothing either way: read the state's conscription tooltip for "Census: Fighting-Age Men" | for `added` 0, put the term on `state_conscription_rate_add` as T × the state's own rate (`modifier:state_conscription_rate_add`, read in the refresh, ROOT the state). Whether the read moves the state's conscript battalions is item 2 of § Phase 2 step 4: no script reads them |
+| `TE_SELF_CHECK … conscription_term_read` | Full, while conscription's effect is on (`CONSCRIPTION_EFFECTS`: on since the migrant booking, 2026-10-12; step 4 shipped it held back, with no line): once a game, a week after the first state takes a fresh conscription pair (its term at least 0.01 either way) | the census's conscription pair reaches the state's conscription multiplier (`added` = `expected`, the term) | `added` 0: the pair doesn't reach the state's read. Another figure: a technology or law moved the field inside the week, which says nothing either way: read the state's conscription tooltip for "Census: Fighting-Age Men" | for `added` 0, put the term on `state_conscription_rate_add` as T × the state's own rate (`modifier:state_conscription_rate_add`, read in the refresh, ROOT the state). Whether the read moves the state's conscript battalions is item 2 of § Phase 2 step 4: no script reads them |
 | `TE_SELF_CHECK … unemployment_rate_read` | Display only or Full: once a game, the first census state whose `state_unemployment_rate` reads above 0.02 | the read is a share, 0–1: within a factor of 2 of the pops' own count (`pops=`, the workforce of pops with no workplace over all the workforce) | `read` about 100 × `pops`: a percentage. `pops` near 0, or the two far apart otherwise: the read is another figure. Its count sums each pop's `workforce`, so it needs `pop_workforce_read` OK first: with that BROKEN, `pops` reads 0 and this line BROKEN whatever the read | a percentage: divide `te_demog_unemployment` (`te_demog_consequence_values.txt`) by 100. Otherwise sum the unemployed workforce in the walk under the cohorts (`te_demog_work_walk_pop`) and read that |
 
 No `unemployment_rate_read` line after a few years under the census means no state's read ever passed 0.02: compare option t's `unemp=` with the state panel's unemployment in a state with visibly idle workers.
@@ -354,20 +354,18 @@ What the offline evidence already says (2026-10-12):
 ## Phase 2 step 4: conscription, the youth bulge and sex balance
 
 The census counts each state's men aged 20 to 39 (its conscription term against the 1836 world's share), its young adults
-(the youth bulge) and its sex balance, and takes the war dead from the men's ages, under Display only too. All three
-effects are built but held back (`demographics_params`' `CONSCRIPTION_EFFECTS`, `YOUTH_BULGE_EFFECTS`,
-`SEX_BALANCE_EFFECTS`, off until the follow-up on the census's migrant booking): the panel shows the figures, marked
-"not applied yet", and no state takes a census modifier from them. Items 2, 4 and 5 wait for that follow-up. Spec: `docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md`
+(the youth bulge) and its sex balance, and takes the war dead from the men's ages, under Display only too. Step 4
+shipped the three effects held back (`demographics_params`' `CONSCRIPTION_EFFECTS`, `YOUTH_BULGE_EFFECTS`,
+`SEX_BALANCE_EFFECTS`); the migrant booking (2026-10-12, § The migrant booking below) turned them on, so the items
+below are written for them on. Spec: `docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md`
 §4; no plan document (owner, 2026-10-12). The two self-checks are in the table above.
 
 1. **The 1836 figures (Full, a new game).** Option t in the capital after its first count (`TE_DEMOG_CONSEQ`): `share`
-   about 0.139, `term` and `mc` within ±0.05 and equal, `consc_mod` without them (held back: only laws' and
-   technologies' lines),
-   `youth` about 0.16, `y_now` and `yb` 0, `sex` 91–98; `sxb` -1, `tfr_sex` 1 and `women_add`, `fewer`, `more` 0 in every
-   state while the sex balance's effects are held back. The country line: `fam_share`
+   about 0.139, `term` and `mc` within ±0.05 and equal, `consc_mod` with `mc` in it where `mc` is 0.01 or more either
+   way (else only laws' and technologies' lines), `youth` about 0.16, `y_now` and `yb` 0, `sex` 91–98; `sxb` -1 (no
+   state starts short of men), `tfr_sex` 1 and `women_add`, `fewer`, `more` 0. The country line: `fam_share`
    about 0.139, `term` about 0, `yb_states` 0.
-2. *(held back with `CONSCRIPTION_EFFECTS`: run it once the follow-up turns it on)* **Conscript battalions follow the
-   term (Full).** The engine fact the self-check can't read. Find a state with a term
+2. **Conscript battalions follow the term (Full).** The engine fact the self-check can't read. Find a state with a term
    of a tenth or more either way (option t's `mc` in a colony or a frontier state, or the Fighting-Age Men row's ×):
    its conscription tooltip lists "Census: Fighting-Age Men" at that size, and its conscription limit (the battalions
    it can raise; the country panel's "+N" conscript battalions summed) is about the same share above or below the same
@@ -376,19 +374,45 @@ effects are built but held back (`demographics_params`' `CONSCRIPTION_EFFECTS`, 
 3. **The war dead land in the pool's ages (Full or Display only).** During a war with dead, option a's replay of a
    state with dead (`demographics_harness.py replay debug.log` prints OK) and its pyramid: the men's bars of 20–24 to
    35–39 fall, 15–19 and 40–44 don't.
-4. *(held back with `YOUTH_BULGE_EFFECTS`: until then, check only that the Youth row shows and its hover ends in "not
-   applied yet")* **A youth-bulge state shows its modifier (Full).** In a later game (1880s or after), a state whose Demographics
+4. **A youth-bulge state shows its modifier (Full).** In a later game (1880s or after), a state whose Demographics
    subtab shows a Youth row: its modifiers list "Census: Youth Bulge", radicals and turmoil effects at the strength the
    row's hover gives; option t's `unemp=` matches the state panel's unemployment (the self-check's scale).
-5. ~~**The sex-balance modifiers (Full).**~~ Held back with the switch: no state lists "Census: Fewer Men" or
-   "Census: More Men", even one far from 100 men per 100 women; its Sex Balance hover says the effects aren't applied
-   yet, and children per woman's breakdown has no "Few men to marry" line. The follow-up that turns them on brings its
-   own items.
+5. **The sex-balance modifiers (Full).** A state below 90 men per 100 women (after a war with many dead; console
+   option t's `sex`) lists "Census: Fewer Men" at the strength its Sex Balance hover gives, its children per woman's
+   breakdown shows "Few men to marry" below 1.00, and option t's `sxb` is its balance; a state at 110 or more lists
+   "Census: More Men". In peace both should be rare (§ The migrant booking, item 2).
 6. **Display only and Disabled.** No state lists any of the census's modifiers (option t: `mc` and `yb` -1); the
    Fighting-Age Men row's hover says "would set"; the Youth row still shows where a bulge would be. Switching a Full game
    to Display only isn't possible mid-game: start one of each.
 7. **The panel's rows.** Fighting-Age Men reads like "28% (×1.00)" as Work and Retirement's last row on the tab and the subtab, nothing ends in "…", and
-   the hover gives the share of people, the 1836 reference (13.9%) and "Not applied yet"; an old save's census reads "After the next count" until
-   the state's next count. The sex balance's hover ends in "not applied yet".
+   the hover gives the share of people, the 1836 reference (13.9%) and what the census sets ("The census sets its
+   conscription ×…" under Full, "would set" under Display only); an old save's census reads "After the next count" until
+   the state's next count. No hover says "not applied yet".
 8. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_consequence_*`,
    `te_demog_sex_births_store`, `te_debug_demog.30`, `te_debug_demog_unemployment_selfcheck` or option t.
+
+## The migrant booking (2026-10-12)
+
+The census books each state's migration residual (the engine's own migration: the Vic3 save's weekly statistics agree
+with it) by its migrant profile, now with a cap on how much of one class and sex a step can take or add (3% and 5%;
+the rest over every age and both sexes) and a labour split that moves to half women as a state's men run short or
+pile up. Results and the re-walk of the 2026-10-12 run: `docs/testing/demographics-migrant-booking-2026-10-12.md`. It
+rests on no new engine fact, so it adds no self-check; `conscription_term_read` (table above) arms again with the
+effect on. Display only shows the same pyramids as Full; neither changes the game outside Full.
+
+1. **Emigration leaves women and men (Full or Display only, a game run to the 1870s or later).** A state that loses
+   people year after year (its Net Migration row negative most years; in the 2026-10-12 run, Hill Punjab, Hyderabad,
+   West Karelia, the Central Provinces) keeps 90 or more men per 100 women aged 20 to 59, and its pyramid's men aged 20
+   to 39 are not much shorter than its women. Before the booking such states fell to 2–50.
+2. **Few sex-balance modifiers in peace (Full): the band's real test.** In a save with no great war in the last twenty
+   years, fewer than one state in fifty lists "Census: Fewer Men" or "Census: More Men" (`demographics_harness.py
+   consequences SAVE` prints the share). The re-walk predicts 0–1% to 1901, but runs about a point high, and its
+   emigration states sit at 90–91: if the game's settle just under 90 (a few percent of states at a sliver of the
+   effect), move `LABOUR_BALANCE_LOW` to 96 → 92 and regenerate.
+3. **Frontiers are no longer male (Full).** A frontier filling fast (the American West, the Canadian prairies,
+   northern Mexico) stays near 100–110 men per 100 women. This is the band's price, not a bug: the results doc's
+   § The frontier gives the owner's choice.
+4. **Conscription terms stay moderate (Full).** The great powers' Fighting-Age Men rows read ×0.95 to ×1.10 through the
+   19th century; no state below ×0.85 or at the ×1.25 ceiling from migration alone. The next run's `consequences` on
+   its saves should agree with the re-walk (people past ±0.15: under 2%).
+5. **`debug.log`:** no errors from `te_demog_migrant_rates` or `te_demog_labour_balance`.
