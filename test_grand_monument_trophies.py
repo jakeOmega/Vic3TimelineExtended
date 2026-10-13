@@ -547,12 +547,14 @@ class StateCardViewTests(unittest.TestCase):
         for row in ("gm_tr_row_held", "gm_tr_row_site"):
             self.assertNotIn("tr_button_layout", self.type_body(row), row)
 
-    def test_full_spells_out_what_a_trophy_counts_for(self):
+    def test_full_shows_grandeur_with_aggregation_tooltip(self):
         site = self.type_body("gm_tr_row_site")
-        self.assertIn('tooltip = "gm_tr_row_value_tt" text = "gm_tr_row_site_value"', site)
+        self.assertIn('tooltip = "gm_tr_row_site_value_tt" text = "gm_tr_row_site_value"', site)
         L = loc()
+        self.assertEqual(L["gm_tr_row_site_value"], "[concept_grandeur]: #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#!")
+        for word in ("concept_grandeur", "aggregated", "Timeline Extended", "Journal Entry"):
+            self.assertIn(word, L["gm_tr_row_site_value_tt"], word)
         for word in ("concept_grandeur", "concept_prestige", "concept_cultural_pull", "Armed Forces"):
-            self.assertIn(word, L["gm_tr_row_site_value"], word)
             self.assertIn(word, L["gm_state_tr_summary_tt"], word)
 
     def test_the_summary_counts_and_totals(self):
@@ -586,7 +588,7 @@ class StateCardViewTests(unittest.TestCase):
             self.assertNotIn("JournalEntry", body, name)
             for key in re.findall(r'(?:text|tooltip) = "(\w+)"', body):
                 self.assertNotIn("JournalEntry", L.get(key, ""), (name, key))
-        for key in ("gm_tr_short_line", "gm_tr_short_tt", "gm_tr_row_site_value", "gm_state_tr_summary_tt"):
+        for key in ("gm_tr_short_line", "gm_tr_short_tt", "gm_tr_row_site_value", "gm_tr_row_site_value_tt", "gm_state_tr_summary_tt"):
             self.assertNotIn("JournalEntry", L[key], key)
 
 
