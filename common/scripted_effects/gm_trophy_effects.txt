@@ -881,6 +881,7 @@ gm_trophy_pass = {
 			limit = { has_variable = gm_tr_here_count }
 			clear_variable_list = gm_trophies_here
 			remove_variable = gm_tr_here_count
+			gm_remove_state_var = { VAR = gm_tr_here_grandeur }
 		}
 		if = {
 			limit = { has_global_variable = gm_tr_lists_written }
@@ -907,6 +908,7 @@ gm_tr_list_one = {
 		var:gm_tr_site = {
 			add_to_variable_list = { name = gm_trophies_here target = scope:gm_tr_listing }
 			gm_tr_count_add = { VAR = gm_tr_here_count ADD = 1 }
+			gm_tr_count_add = { VAR = gm_tr_here_grandeur ADD = scope:gm_tr_listing.var:gm_tr_grandeur }
 			owner = {
 				gm_tr_country_listed = yes
 				add_to_variable_list = { name = gm_trophies_held target = scope:gm_tr_listing }

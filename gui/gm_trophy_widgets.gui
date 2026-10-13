@@ -36,12 +36,16 @@ types gm_trophy_widget_types
 	}
 
 	### A trophy row's or card's button: its scripted GUI and label from the
-	### instance, its trophy as gm_tr.
+	### instance, its trophy as gm_tr. The size, anchor and label width are
+	### blocks with a default body: the short line overrides them to sit at the
+	### end of a line.
 	type gm_tr_button = button {
 		using = default_button_action
-		size = { 200 26 }
-		parentanchor = hcenter
-		margin_top = 2
+		block "tr_button_layout" {
+			size = { 200 26 }
+			parentanchor = hcenter
+			margin_top = 2
+		}
 
 		block "tr_button" {}
 
@@ -49,10 +53,32 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 190
+			block "tr_button_text_width" {
+				max_width = 190
+			}
 			elide = right
 			using = fontsize_small
 			block "tr_button_text" {}
+		}
+	}
+
+	### One of the Trophies on Display card's three views (Full, Short,
+	### Collapsed). The instance sets the label, the tooltip, `enabled` (off for
+	### the view showing now) and the click, which sets the client-side
+	### gm_state_tr_view (unset is Full).
+	type gm_tr_view_button = button {
+		using = default_button_action
+		size = { 76 22 }
+		parentanchor = vcenter
+
+		block "tr_view_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			using = fontsize_small
+			block "tr_view_button_text" {}
 		}
 	}
 
@@ -839,9 +865,9 @@ types gm_trophy_widget_types
 		}
 	}
 
-	### A trophy on display in a state, on its card: its name and where it
-	### came from, and Carry It Off (Bring It Home when its origin is ours)
-	### while our armies hold the state.
+	### A trophy on display in a state, on its card, in the Full view: its name
+	### and where it came from, what it counts for, and Carry It Off (Bring It
+	### Home when its origin is ours) while our armies hold the state.
 	type gm_tr_row_site = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -872,10 +898,60 @@ types gm_trophy_widget_types
 					tooltip = "gm_tr_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
+				### What it counts for, spelled out: the held row's worth line and
+				### tooltip, with the effects named.
+				gm_tr_line = {
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_row_value_tt"
+					text = "gm_tr_row_site_value"
+				}
 			}
 		}
 
 		gm_tr_button = {
+			blockoverride "tr_button" {
+				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				tooltip = "gm_button_tr_take_site_tooltip"
+			}
+			blockoverride "tr_button_text" {
+				text = "gm_button_tr_take_site"
+			}
+		}
+	}
+
+	### A trophy on display in a state, in the Short view: one line, no picture.
+	### Its name and what it counts for; the rest (the dedication, where it came
+	### from and when, the levels, a landmark's history) on hover. Carry It Off
+	### (Bring It Home) ends the line, small, while our armies hold the state.
+	### 392 + 6 + 112 = 510, the card's width inside its margins.
+	type gm_tr_row_short = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 6
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 392 -1 }
+			maximumsize = { 392 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			tooltip = "gm_tr_short_tt"
+			text = "gm_tr_short_line"
+		}
+
+		gm_tr_button = {
+			blockoverride "tr_button_layout" {
+				size = { 112 22 }
+				parentanchor = vcenter
+			}
+			blockoverride "tr_button_text_width" {
+				max_width = 104
+			}
 			blockoverride "tr_button" {
 				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
 				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
@@ -997,7 +1073,14 @@ types gm_trophy_widget_types
 	}
 
 	### The state view's Trophies on Display card, under the monument card,
-	### while trophies stand in this state (gm_state_tr_disp_here).
+	### while trophies stand in this state (gm_state_tr_disp_here). Three views,
+	### chosen by the buttons in its header and kept in the client-side
+	### gm_state_tr_view (unset is Full, so a fresh session opens as before):
+	###   Full       the pictured rows, with what each counts for spelled out
+	###   Short      one line per trophy, no pictures, the rest on hover
+	###   Collapsed  the summary line alone: how many, and what they count for
+	### The summary line shows in every view but a Full one with a single trophy,
+	### whose row says the same.
 	type te_state_gm_trophy_card = flowcontainer {
 		visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_tr_disp_here'), '(CFixedPoint)0')]"
 		direction = vertical
@@ -1016,17 +1099,77 @@ types gm_trophy_widget_types
 					using = entry_bg_simple
 				}
 
-				textbox = {
-					autoresize = yes
-					maximumsize = { 510 -1 }
-					align = left|nobaseline
-					using = fontsize_large
-					default_format = "#tooltippable"
-					tooltip = "gm_state_tr_header_tt"
-					text = "gm_state_tr_header"
+				### The header: the title, and the three views at its right.
+				### 76 * 3 + 4 * 2 = 236 beside a title of about 190.
+				widget = {
+					size = { 510 26 }
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						align = left|nobaseline
+						using = fontsize_large
+						default_format = "#tooltippable"
+						tooltip = "gm_state_tr_header_tt"
+						text = "gm_state_tr_header"
+					}
+
+					flowcontainer = {
+						parentanchor = right|vcenter
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+
+						gm_tr_view_button = {
+							tooltip = "gm_state_tr_view_full_tt"
+							blockoverride "tr_view_button" {
+								enabled = "[GetVariableSystem.Exists('gm_state_tr_view')]"
+								onclick = "[GetVariableSystem.Clear('gm_state_tr_view')]"
+							}
+							blockoverride "tr_view_button_text" {
+								text = "gm_state_tr_view_full"
+							}
+						}
+						gm_tr_view_button = {
+							tooltip = "gm_state_tr_view_short_tt"
+							blockoverride "tr_view_button" {
+								enabled = "[Not(GetVariableSystem.HasValue('gm_state_tr_view', 'short'))]"
+								onclick = "[GetVariableSystem.Set('gm_state_tr_view', 'short')]"
+							}
+							blockoverride "tr_view_button_text" {
+								text = "gm_state_tr_view_short"
+							}
+						}
+						gm_tr_view_button = {
+							tooltip = "gm_state_tr_view_collapsed_tt"
+							blockoverride "tr_view_button" {
+								enabled = "[Not(GetVariableSystem.HasValue('gm_state_tr_view', 'collapsed'))]"
+								onclick = "[GetVariableSystem.Set('gm_state_tr_view', 'collapsed')]"
+							}
+							blockoverride "tr_view_button_text" {
+								text = "gm_state_tr_view_collapsed"
+							}
+						}
+					}
 				}
 
+				### How many, and what they count for together, in every view but
+				### a Full one with a single trophy.
+				textbox = {
+					visible = "[Or( GetVariableSystem.Exists('gm_state_tr_view'), GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('gm_state_tr_disp_here'), '(CFixedPoint)1' ) )]"
+					autoresize = yes
+					multiline = yes
+					maximumsize = { 510 -1 }
+					align = left|nobaseline
+					using = fontsize_medium
+					default_format = "#tooltippable"
+					tooltip = "gm_state_tr_summary_tt"
+					text = "gm_state_tr_summary"
+				}
+
+				### Full: unset is Full.
 				flowcontainer = {
+					visible = "[Not(GetVariableSystem.Exists('gm_state_tr_view'))]"
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 8
@@ -1034,6 +1177,19 @@ types gm_trophy_widget_types
 
 					item = {
 						gm_tr_row_site = { datacontext = "[Scope.GetScriptContainer]" }
+					}
+				}
+
+				### Short: a line each.
+				flowcontainer = {
+					visible = "[GetVariableSystem.HasValue('gm_state_tr_view', 'short')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+					datamodel = "[State.MakeScope.GetList('gm_trophies_here')]"
+
+					item = {
+						gm_tr_row_short = { datacontext = "[Scope.GetScriptContainer]" }
 					}
 				}
 			}

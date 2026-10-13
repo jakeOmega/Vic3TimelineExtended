@@ -204,6 +204,20 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
 - **The state card:** Carry It Off under the monument, while the viewer could take it (share, levels, value and
   consequences in its tooltip). A second card, **Trophies on Display**, on a state where trophies stand, with Carry It
   Off or Bring It Home per trophy for an occupier.
+- **Trophies on Display has three views** (added 2026-10-13, owner's request), chosen by three buttons in the card's
+  header and kept in the client-side `gm_state_tr_view` (`GetVariableSystem`: unset is Full, `short`, `collapsed`; not
+  saved, and one choice for every state):
+  - **Full:** the pictured rows as before, plus a line per trophy that spells out what it counts for (levels carried
+    off, worth N grandeur toward prestige, cultural pull and the Armed Forces' approval).
+  - **Short:** one line per trophy, no picture: its title and its grandeur in brackets, with the dedication, origin,
+    year, worth and (for a landmark) its history on hover (`gm_tr_short_tt`). Carry It Off or Bring It Home ends the
+    line as a smaller button (`gm_tr_button`'s `tr_button_layout` block), so an occupier acts without leaving the view.
+  - **Collapsed:** the summary line alone, "N trophies, worth G grandeur to <holder>", with what the grandeur feeds
+    on hover. The summary also heads Short, and Full when two or more trophies stand there.
+  The total is the sum of the trophies' `gm_tr_grandeur`, written by the monthly pass beside the count
+  (`gm_tr_here_grandeur`, read by `gm_state_tr_disp_here_grandeur`; an older save reads 0 until the next pass). It is
+  grandeur and not a prestige figure because the national effect is a step curve over everything the holder owns
+  (`gm_curve_steps_f5`), so a trophy has no flat bonus to add up.
 - **Our Monuments:** Carry It Off on an eligible monument's row.
 - **Notices:** the occupier's offer (`monument_trophy_events.1`, players), toasts for a taking (both sides), a
   homecoming and a trophy brought within reach.
@@ -275,6 +289,17 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
 10. **The picture (2026-10-13):** each trophy row shows its monument's picture: the Parthenon's for the marbles, the
     Brandenburg Gate's for the Quadriga, and a carried-off column's own style and form. An older save's trophies show
     the draped picture until the next month's pass.
+11. **The three views (2026-10-13):** on the Home Counties (four of the trophies of 1836 stand there) the card opens in Full with a worth line under each row and the summary line above them. Short is a
+    line per trophy: check that no title wraps in the 392-wide cell (a long one wrapping is tolerable, but note which),
+    that the grandeur in brackets matches the Full rows, that hovering a line shows the dedication, origin, year and
+    worth, and a landmark's history, and that Carry It Off, in a war with Britain while we hold the Home Counties,
+    ends the line at 112 px without clipping or widening the card. Collapsed shows the summary alone. The buttons
+    grey the view that is showing, the choice holds as you move to another state with trophies, and a fresh session
+    opens in Full. The totals read 0 on a save from before the change until the next month's pass.
+    **Unverified engine reads:** that a `block` with a default body (`tr_button_layout`, `tr_button_text_width`) takes
+    a `blockoverride` from the Short row and keeps its default for the Full row; that `parentanchor = right|vcenter`
+    seats the buttons at the header's right; that `Or(Exists, GreaterThan_CFixedPoint(...))` hides the summary for one
+    trophy in Full only.
 
 ## Out of scope
 
