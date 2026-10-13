@@ -85,20 +85,17 @@ debt_receivership = {
 
 	# THE PRETEXT (§15C.3, ruling C4: IN DEFAULT ONLY). The draft's
 	# scaled_debt >= 0.75 alternative was rejected — a heavily indebted
-	# government is not yet somebody else's to run. Split between `possible`
-	# (either direction) and `can_ratify` (this one) for the reason 113's
-	# header gives: the direction is not fixed in `possible`.
+	# government is not yet somebody else's to run. Tested in `possible`, where
+	# ROOT is the prospective source (the debtor) and scope:other_country the
+	# receiver, so one way round only, since a war goal enforcing the article
+	# checks `possible` but not `can_ratify` (113's comment); and again in
+	# `can_ratify`, which carries the tooltip.
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
-		}
-		OR = {
-			te_mon_can_receive_for = { OTHER = scope:other_country }
-			scope:other_country = {
-				te_mon_can_receive_for = { OTHER = root }
-			}
+			te_mon_can_receive_for = { OTHER = root }
 		}
 	}
 

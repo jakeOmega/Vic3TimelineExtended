@@ -187,6 +187,13 @@ class TakingTests(unittest.TestCase):
             self.assertTrue(force.startswith("scope:article_options = { if = { limit = { exists = "), path)
             self.assertIn(call, force, path)
 
+    def test_only_a_claimant_can_demand_the_return(self):
+        # ROOT is the prospective source (the holder) in possible, and a war goal enforcing the
+        # article checks possible but not can_ratify: an either-way OR let the UK, holding Egypt's
+        # trophies, demand their return from Egypt (2026-10-13).
+        self.assertEqual(squash(block(read(ARTICLE_RETURN), "possible")),
+                         "gm_system_enabled = yes gm_tr_country_holds_from = { CLAIMANT = scope:other_country }")
+
     def test_the_hidden_events_do_the_work(self):
         events = strip_comments(read(TR_EVENTS))
         for n, doer in ((10, "gm_state_tr_take = { WHO = scope:gm_tr_order_by ROUTE = occupation }"),

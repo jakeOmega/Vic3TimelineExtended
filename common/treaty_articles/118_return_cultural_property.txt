@@ -30,16 +30,14 @@ return_cultural_property = {
 		gm_system_enabled = yes
 	}
 
-	# Before the direction is fixed: a trophy from either side's lands stands
-	# in the other's.
+	# ROOT is the prospective source, the holder that gives the trophies back,
+	# and scope:other_country the claimant. One direction only: a war goal
+	# enforcing the article checks possible but not can_ratify, and the old
+	# either-way OR let a holder demand the return of trophies from the very
+	# country it took them from (the UK against Egypt, 2026-10-13).
 	possible = {
 		gm_system_enabled = yes
-		OR = {
-			gm_tr_country_holds_from = { CLAIMANT = scope:other_country }
-			scope:other_country = {
-				gm_tr_country_holds_from = { CLAIMANT = root }
-			}
-		}
+		gm_tr_country_holds_from = { CLAIMANT = scope:other_country }
 	}
 
 	can_ratify = {

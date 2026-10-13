@@ -87,23 +87,18 @@ imposed_currency_peg = {
 	# space, is not by itself grounds. An insolvent government is. It is also
 	# what keeps the AI world from filling with imposed pegs.
 	#
-	# IT IS TESTED TWICE, in the two places the mod's convention puts each half
-	# (treaty_articles_reference.md: "Symmetric conditions in `possible`;
-	# everything directional in `requirement_to_maintain` or `can_ratify`").
-	# `possible` runs before the direction is fixed, so here it only asks
-	# whether a pretext exists in EITHER direction; can_ratify below holds the
-	# imposer to the side that actually has one.
+	# IT IS TESTED TWICE. In `possible` ROOT is the prospective source (the
+	# pegger) and scope:other_country the anchor, so the pretext is read one
+	# way round: a war goal enforcing the article checks `possible` but not
+	# `can_ratify`, and until 2026-10-13 an either-direction OR here let the
+	# defaulted country demand that its creditor peg to it. can_ratify below
+	# repeats the test with the named scopes and carries the tooltip.
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
-		}
-		OR = {
-			te_mon_can_impose_peg_on = { OTHER = scope:other_country }
-			scope:other_country = {
-				te_mon_can_impose_peg_on = { OTHER = root }
-			}
+			te_mon_can_impose_peg_on = { OTHER = root }
 		}
 	}
 
