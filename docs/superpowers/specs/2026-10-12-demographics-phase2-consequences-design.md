@@ -14,8 +14,11 @@
 > in `docs/systems/mod_systems.md` § Demographics and the playtest doc's § Phase 2 step 2). **Step 4 is built** (branch `feat/demog-p2-conscription-youth`, 2026-10-12, from this
 > spec with no plan document; its decisions where the spec left room are in `docs/systems/mod_systems.md` § Phase 2 step
 > 4 and its in-game items in the play-test file). Its three effects (conscription §4.1, the youth bulge §4.3, sex balance
-> §4.4) are built but held back behind switches until a follow-up fixes the census's migrant booking, which distorts the
-> men they read; the figures and the war dead's window (§4.2) ship. No code here.
+> §4.4) shipped held back behind switches, because the census's migrant booking distorted the men they read; the
+> figures and the war dead's window (§4.2) shipped on. **The migrant booking** (branch `feat/demog-migrant-booking`,
+> 2026-10-12; `docs/testing/demographics-migrant-booking-2026-10-12.md`) caps how much of one class and sex a step's
+> residual can take or add and lets the labour kind's sex split correct itself, re-walks the overnight run against
+> §5's step-4 bands, and turns all three effects on. No code here.
 > Numbers are targets or bands the harness must meet, each with a starting value; the harness picks the values and the
 > owner reviews the result (owner, 2026-10-12). §13 records the owner's answers. The
 > base-law fixes ship first, as their own small every-game PR (§3.1).

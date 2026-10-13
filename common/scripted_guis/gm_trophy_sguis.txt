@@ -117,7 +117,18 @@ gm_tr_return_sgui = {
 
 	effect = {
 		scope:gm_tr = {
+			# Carried off by us: it only moves, with no Homecoming.
 			if = {
+				limit = {
+					gm_tr_claimed_by = { WHO = root }
+					gm_tr_held_by_its_taker = yes
+				}
+				custom_tooltip = {
+					text = gm_tr_bring_home_own_tt
+					gm_tr_order_return = { WHO = root }
+				}
+			}
+			else_if = {
 				limit = { gm_tr_claimed_by = { WHO = root } }
 				custom_tooltip = {
 					text = gm_tr_bring_home_tt

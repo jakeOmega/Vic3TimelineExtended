@@ -1289,18 +1289,104 @@ class TestConsequences(unittest.TestCase):
             self.assertIn("1 census states", out.getvalue())
             self.assertIn("the first save's world term", out.getvalue())
 
-    def test_the_held_back_band_is_judged_only_on_request(self):
-        """The three effects are held back; --effects (and its older name --sex-effects) judges the sex band as if on and
-        restores the switches."""
-        self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+    def test_the_sex_band_is_judged_while_on_and_on_request_while_held_back(self):
+        """On (the migrant booking, 2026-10-12) the sex band and anchors are judged; held back, only with --effects (or its
+        older name --sex-effects), which restores the switches."""
+        self.assertTrue(P.SEX_BALANCE_EFFECTS and P.CONSCRIPTION_EFFECTS and P.YOUTH_BULGE_EFFECTS)
         with tempfile.TemporaryDirectory() as tmp:
             path, _bands, _people = self._census_save(tmp)
-            for flag, shown in (([], False), (["--effects"], True), (["--sex-effects"], True)):
-                out = io.StringIO()
-                with redirect_stdout(out):
-                    H.main(["consequences", path, *flag])
-                self.assertEqual("sex balance: " in out.getvalue(), shown, flag)
-                self.assertEqual("Soviet Union 1959" in out.getvalue(), shown, flag)
-                self.assertIn("Held back in game: CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS",
-                              out.getvalue())
-                self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+            out = io.StringIO()
+            with redirect_stdout(out):
+                H.main(["consequences", path])
+            self.assertIn("sex balance: ", out.getvalue())
+            self.assertNotIn("Held back in game", out.getvalue())
+            off = [unittest.mock.patch.object(P, attr, False) for attr in H.HELD_BACK]
+            for patch in off:
+                patch.start()
+            try:
+                for flag, shown in (([], False), (["--effects"], True), (["--sex-effects"], True)):
+                    out = io.StringIO()
+                    with redirect_stdout(out):
+                        H.main(["consequences", path, *flag])
+                    self.assertEqual("sex balance: " in out.getvalue(), shown, flag)
+                    self.assertEqual("Soviet Union 1959" in out.getvalue(), shown, flag)
+                    self.assertIn("Held back in game: CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS",
+                                  out.getvalue())
+                    self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+            finally:
+                for patch in off:
+                    patch.stop()
+
+
+class TestRebook(unittest.TestCase):
+    """`rebook`: the census re-walked through a run's saves with its own residual (the migrant booking, 2026-10-12;
+    demographics_rebook.py), on a synthetic run in extract_all.py's per-save JSON."""
+
+    INP = M.Inputs(sol=8, literacy=0.1, urban_share=0.05, female_job_share=0.02)
+
+    def _run(self, tmp, years=40, rate=-0.04):
+        import demographics_rebook as RB
+        ring = M.seed(self.INP, 1837, 1_000_000.0)
+        people = ring.people()
+        paths = []
+        for i in range(years + 1):
+            year = 1837 + i
+            v = {"te_dg_year": float(year), "te_dg_stepped": 0.0 if i == 0 else 1.0, "te_dg_people": people,
+                 "te_dg_net_migration": 0.0 if i == 0 else rate * people, "te_dg_sol": 8.0, "te_dg_lit": 0.1,
+                 "te_dg_urban_share": 0.05, "te_dg_fjob_share": 0.02, "te_dg_inflow_years": 0.0,
+                 "te_dg_scale": ring.scale, "te_dg_pf": 0.0, "te_dg_pm": 0.0, "te_dg_pa": 150.0}
+            v.update({f"te_dg_b{s}{b}": 1000.0 for s in "fm" for b in range(P.BANDS)})
+            state = {"country": "3", "region": "STATE_TEST", "devastation": 0.0, "vars": v}
+            if i == 0:
+                state["ring"] = {"f": {str(k): x for k, x in enumerate(ring.f) if x},
+                                 "m": {str(k): x for k, x in enumerate(ring.m) if x}}
+            data = {"date": f"{year + 1}.1.1", "states": {"7": state}, "countries": {"3": {"tag": "AAA"}},
+                    "laws": {"3": ["law_no_womens_rights"]}, "techs": {}, "wars": []}
+            path = Path(tmp) / f"s{i:03d}.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            paths.append(str(path))
+            people *= 0.985
+        return RB, [RB.read_save(p) for p in paths]
+
+    def test_sustained_emigration_hollows_the_profile_alone_not_the_booking(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            RB, saves = self._run(tmp)
+            saves = RB.merge_years(saves)
+            booked, before = RB.walk(saves), RB.walk(saves, booked=False)
+            last = saves[-1]["year"]
+            self.assertLess(before["7"][last]["sb"], P.SEX_FEWER_FROM, "the bug: the young men leave year after year")
+            self.assertGreater(booked["7"][last]["sb"], P.SEX_FEWER_FROM)
+            self.assertGreater(booked["7"][last]["T"], before["7"][last]["T"])
+            self.assertEqual(P.MIGRANT_CAP_OUT, 0.03, "the walk restores the booking after the profile-alone pass")
+            r = RB.band_summary([booked["7"][last]])
+            self.assertEqual((r["n"], r["fewer"], r["either"]), (1, 0.0, 0.0))
+            terms = RB.country_terms(booked, saves, ["AAA"], [last])
+            self.assertAlmostEqual(terms["AAA"][last], booked["7"][last]["T"], places=9)
+            # the save's own bands are flat (1000 a band): 100 men per 100 women
+            med, *_rest, out_save, _out_walk = RB.fidelity(booked, saves, last)
+            self.assertAlmostEqual(med, booked["7"][last]["sb"] - 100.0, places=6)
+            self.assertEqual(out_save, 0.0)
+
+    def test_a_seed_in_the_save_seeds_the_walk(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            RB, saves = self._run(tmp, years=12)
+            saves[6]["states"]["7"]["vars"]["te_dg_stepped"] = 0.0   # the game seeded this state again that year
+            walked = RB.walk(saves, booked=False)
+            year = saves[6]["year"]
+            self.assertAlmostEqual(walked["7"][year]["sb"], M.consequence_figures(
+                M.seed(RB.inputs(saves[6]["states"]["7"], None, saves[6]["countries"]["3"], year, {}), 1843,
+                       saves[6]["states"]["7"]["vars"]["te_dg_people"]))["sex_balance"], places=6)
+            self.assertLess(walked["7"][saves[5]["year"]]["sb"], walked["7"][year]["sb"])
+
+    def test_the_command_judges_the_bands(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self._run(tmp, years=12)
+            out = io.StringIO()
+            with redirect_stdout(out):
+                code = H.main(["rebook", *sorted(str(p) for p in Path(tmp).glob("*.json")), "--years", "1850"])
+            self.assertEqual(code, 0)
+            text = out.getvalue()
+            self.assertIn("note: no plain-text save", text)
+            self.assertIn("booked        1 states", text)
+            self.assertIn("band under 2%: ok", text)
+            self.assertIn("Great powers' conscription terms by decade (booked)", text)

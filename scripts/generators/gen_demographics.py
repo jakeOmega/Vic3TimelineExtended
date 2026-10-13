@@ -42,6 +42,8 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
                                                 country's sum (spec 4.1)
         te_demog_gini_from_locals               the Gini over the bands in order, the panel's figure
         te_demog_set_profile                    the migrant profile per class and sex
+        te_demog_migrant_rates                  the migrant booking's cap: each class and sex's rate and the flat
+                                                rate over everyone (te_dg_mr_f<c>/mr_m<c>, te_dg_mig_flat; 2026-10-12)
         te_demog_band_figures                   total, young, working, old, women 15-49, 20-59 sums, median
         te_demog_project                        the bands twenty years ahead (a display outline)
         te_demog_debug_log_ring_before / _after  (Task 15's replay lines)
@@ -244,27 +246,25 @@ def bands_and_classes(o):
     o("}")
     o("")
     o("# THIS = a state. On entering the migrant class of local_var:te_dg_acls (the class of the")
-    o("# RATE age, a - 1): the share of the class's arrivals (te_dg_mig_gain_f / _m) and departures")
-    o("# (te_dg_mig_frac_f / _m) that falls on one cohort of it, from the profile (te_dg_pf<c> /")
-    o("# te_dg_pm<c>), te_dg_mig_in / te_dg_mig_out and last year's class sums. Both are zero for a")
-    o("# class whose last-year sum is under one person.")
+    o("# RATE age, a - 1): the share of one cohort of the class that arrives (te_dg_mig_gain_f / _m) or")
+    o("# departs (te_dg_mig_frac_f / _m): the class and sex's rate from te_demog_migrant_rates")
+    o("# (te_dg_mr_f<c> / te_dg_mr_m<c>) plus the flat rate (te_dg_mig_flat), on whichever of")
+    o("# te_dg_mig_in and te_dg_mig_out is above 0. Both are zero for a class whose last-year sum is under")
+    o("# one person (demographics_model.migrant_rates).")
     o("te_demog_enter_class = {")
 
     def leaf(o, c):
-        for sex, prof, last in (("f", f"te_dg_pf{c}", f"te_dg_cf{c}"), ("m", f"te_dg_pm{c}", f"te_dg_cm{c}")):
-            share = f"divide = {{ value = var:{last} min = 1 }}"
+        for sex, last in (("f", f"te_dg_cf{c}"), ("m", f"te_dg_cm{c}")):
+            rate = f"value = {{ value = local_var:te_dg_mr_{sex}{c} add = local_var:te_dg_mig_flat }}"
             o(f"set_local_variable = {{ name = te_dg_mig_gain_{sex} value = 0 }}")
             o(f"set_local_variable = {{ name = te_dg_mig_frac_{sex} value = 0 }}")
             o("if = {")
-            o(f"limit = {{ var:{last} >= 1 }}")
-            o("set_local_variable = {")
-            o(f"name = te_dg_mig_gain_{sex}")
-            o(f"value = {{ value = local_var:te_dg_mig_in multiply = local_var:{prof} {share} }}")
+            o(f"limit = {{ var:{last} >= 1 local_var:te_dg_mig_in > 0 }}")
+            o(f"set_local_variable = {{ name = te_dg_mig_gain_{sex} {rate} }}")
             o("}")
-            o("set_local_variable = {")
-            o(f"name = te_dg_mig_frac_{sex}")
-            o(f"value = {{ value = local_var:te_dg_mig_out multiply = local_var:{prof} {share} }}")
-            o("}")
+            o("else_if = {")
+            o(f"limit = {{ var:{last} >= 1 local_var:te_dg_mig_out > 0 }}")
+            o(f"set_local_variable = {{ name = te_dg_mig_frac_{sex} {rate} }}")
             o("}")
     tree(o, "te_dg_acls", 0, len(P.MIGRANT_CLASSES) - 1, leaf)
     o("}")
@@ -514,6 +514,52 @@ def profile(o):
           f"multiply = {lit(lw)} multiply = local_var:te_dg_labour_f {both} }} }}")
         o(f"set_local_variable = {{ name = te_dg_pm{c} value = {{ value = 1 subtract = local_var:te_dg_labour_f "
           f"multiply = local_var:te_dg_labour multiply = {lit(lw)} {both} }} }}")
+    o("}")
+    o("")
+
+
+def migrant_booking(o):
+    """The migrant booking's cap (2026-10-12; docs/testing/demographics-migrant-booking-2026-10-12.md): the twin of
+    demographics_model.migrant_rates."""
+    o("# THIS = a state, in te_demog_flows after te_demog_set_profile (demographics_model.migrant_rates). Each")
+    o("# class and sex takes the profile's share of the year's migrants (te_dg_mig_in or te_dg_mig_out) over")
+    o("# its last-year sum, at most te_demog_k_migrant_cap_in or _out of it (te_dg_mr_f<c>, te_dg_mr_m<c>);")
+    o("# what the cap and any class under one person leave over is spread over every class and sex with")
+    o("# people at one flat rate (te_dg_mig_flat): whole families moving. The rates are unsigned;")
+    o("# te_demog_enter_class gives them their direction.")
+    o("te_demog_migrant_rates = {")
+    o("set_local_variable = { name = te_dg_mig_amt value = { value = local_var:te_dg_mig_in add = local_var:te_dg_mig_out } }")
+    o("set_local_variable = { name = te_dg_mig_cap value = te_demog_k_migrant_cap_out }")
+    o("if = {")
+    o("limit = { local_var:te_dg_mig_in > 0 }")
+    o("set_local_variable = { name = te_dg_mig_cap value = te_demog_k_migrant_cap_in }")
+    o("}")
+    o("set_local_variable = { name = te_dg_mig_left value = 0 }")
+    o("set_local_variable = { name = te_dg_mig_all value = 0 }")
+    for c in range(len(P.MIGRANT_CLASSES)):
+        for sex in "fm":
+            last, prof = f"var:te_dg_c{sex}{c}", f"local_var:te_dg_p{sex}{c}"
+            want = f"value = local_var:te_dg_mig_amt multiply = {prof}"
+            o(f"set_local_variable = {{ name = te_dg_mr_{sex}{c} value = 0 }}")
+            o("if = {")
+            o(f"limit = {{ {last} >= 1 }}")
+            o(f"change_local_variable = {{ name = te_dg_mig_all add = {last} }}")
+            o(f"set_local_variable = {{ name = te_dg_mig_take value = {{ {want} "
+              f"max = {{ value = {last} multiply = local_var:te_dg_mig_cap }} }} }}")
+            o(f"change_local_variable = {{ name = te_dg_mig_left add = {{ {want} "
+              "subtract = local_var:te_dg_mig_take } }")
+            o(f"set_local_variable = {{ name = te_dg_mr_{sex}{c} value = {{ value = local_var:te_dg_mig_take "
+              f"divide = {{ value = {last} min = 1 }} }} }}")
+            o("}")
+            o("else = {")
+            o(f"change_local_variable = {{ name = te_dg_mig_left add = {{ {want} }} }}")
+            o("}")
+    o("set_local_variable = { name = te_dg_mig_flat value = 0 }")
+    o("if = {")
+    o("limit = { local_var:te_dg_mig_all >= 1 }")
+    o("set_local_variable = { name = te_dg_mig_flat value = { value = local_var:te_dg_mig_left "
+      "divide = { value = local_var:te_dg_mig_all min = 1 } } }")
+    o("}")
     o("}")
     o("")
 
@@ -875,6 +921,7 @@ def render_effects(root=ROOT):
     country_bands(o)
     gini_bands(o, gini_income_pieces(root))
     profile(o)
+    migrant_booking(o)
     band_figures(o)
     projection(o)
     absorbed_walk(o, root)
@@ -1569,6 +1616,22 @@ def constants(o):
 POOL_SUMS = ["te_dg_faw", "te_dg_fam"]
 
 
+def migrant_booking_values(o):
+    """The migrant booking's constants (2026-10-12): the cap and the labour kind's balance (demographics_params.py)."""
+    o("# The migrant booking (2026-10-12): the cap on each class and sex (te_demog_migrant_rates) and the labour")
+    o("# kind's sex split correcting itself (te_demog_labour_balance; demographics_model.labour_balance_weight).")
+    # the balance ramps divide by their widths, floored at 1 in the script
+    assert P.LABOUR_BALANCE_LOW[0] - P.LABOUR_BALANCE_LOW[1] >= 1
+    assert P.LABOUR_BALANCE_HIGH[1] - P.LABOUR_BALANCE_HIGH[0] >= 1
+    k = {"migrant_cap_in": P.MIGRANT_CAP_IN, "migrant_cap_out": P.MIGRANT_CAP_OUT,
+         "labour_balance_share": P.LABOUR_BALANCE_SHARE,
+         "labour_low_start": P.LABOUR_BALANCE_LOW[0], "labour_low_full": P.LABOUR_BALANCE_LOW[1],
+         "labour_high_start": P.LABOUR_BALANCE_HIGH[0], "labour_high_full": P.LABOUR_BALANCE_HIGH[1]}
+    for name, value in k.items():
+        o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
+    o("")
+
+
 def youth_bands():
     """The five-year bands that make up P.YOUTH_AGES (20-29: bands 4 and 5)."""
     lo, hi = P.YOUTH_AGES
@@ -1933,6 +1996,7 @@ def render_values(root):
     practices(o)
     land_term(o, root)
     constants(o)
+    migrant_booking_values(o)
     work_values(o)
     family_policy_values(o)
     work_step2_values(o)

@@ -129,6 +129,7 @@ gm_state_tr_make_trophy = {
 			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
 			set_variable = { name = gm_tr_grandeur value = scope:gm_tr_state.var:gm_tr_take_value }
 			set_variable = { name = gm_tr_year value = gm_this_year }
+			set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
 			if = {
 				limit = {
 					scope:gm_tr_state = { var:gm_tr_take_whole = 1 }
@@ -326,6 +327,7 @@ gm_tr_take_from_site = {
 		}
 		set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
 		set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
+		set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
 		gm_tr_forget_notes = yes
 		gm_tr_notify_taking = yes
 	}
@@ -357,12 +359,20 @@ gm_tr_return_home = {
 	if = {
 		limit = { exists = scope:gm_tr_receiver }
 		var:gm_tr_origin = { gm_state_tr_receive = yes }
-		scope:gm_tr_receiver = {
-			set_variable = { name = gm_boon_homecoming value = gm_boon_months }
-			set_variable = gm_active
-			if = {
-				limit = { is_ai = no }
-				post_notification = gm_tr_homecoming_notice
+		# The Homecoming is for getting back what another took: a country
+		# that carried it off itself (from its own colony, or before it
+		# conquered the origin) only moves it.
+		if = {
+			limit = {
+				NOT = { var:gm_tr_taken_by ?= { this = scope:gm_tr_receiver } }
+			}
+			scope:gm_tr_receiver = {
+				set_variable = { name = gm_boon_homecoming value = gm_boon_months }
+				set_variable = gm_active
+				if = {
+					limit = { is_ai = no }
+					post_notification = gm_tr_homecoming_notice
+				}
 			}
 		}
 		if = {
@@ -702,7 +712,8 @@ gm_tr_repair_places = {
 }
 
 # Container scope, once a month. An AI holder brings home what it owns the
-# origin of, and returns to an ally or bloc partner at gm_tr_ai_return_chance.
+# origin of, unless it carried it off itself (gm_tr_held_by_its_taker), and
+# returns to an ally or bloc partner at gm_tr_ai_return_chance.
 # An occupier of the site: the AI takes its own home, and carries off any
 # other at gm_tr_ai_loot_chance_trophy; a player is told once per
 # occupation. A player holder is told once that it can bring one home.
@@ -720,9 +731,14 @@ gm_tr_monthly_one = {
 			exists = scope:gm_tr_ai_holder
 			scope:gm_tr_ai_holder = { is_ai = yes }
 		}
+		# Its own back, unless it carried it off itself: an AI that took a
+		# monument from its own colony would otherwise bring it straight back.
 		if = {
 			limit = { gm_tr_holder_owns_origin = yes }
-			add_to_temporary_list = gm_tr_ai_home
+			if = {
+				limit = { gm_tr_held_by_its_taker = no }
+				add_to_temporary_list = gm_tr_ai_home
+			}
 		}
 		else_if = {
 			limit = {
@@ -739,6 +755,7 @@ gm_tr_monthly_one = {
 		limit = {
 			exists = scope:gm_tr_ai_holder
 			gm_tr_holder_owns_origin = yes
+			gm_tr_held_by_its_taker = no
 			NOT = { has_variable = gm_tr_home_notified }
 		}
 		set_variable = gm_tr_home_notified
@@ -922,6 +939,109 @@ gm_tr_add_national = {
 # Journal-entry scope, from gm_remove_national_modifiers.
 gm_tr_remove_national = {
 	remove_modifier = gm_boon_homecoming
+}
+
+# ---- The trophies of 1836 (loot spec 2026-10-12 §2) ---------------------------------------
+# No root scope: once per game, from on_game_started_after_lobby after the
+# landmarks (gm_landmarks_on_game_started_after_lobby), and from the debug
+# event te_debug_monuments.5. One call per row of TROPHIES_1836 in
+# test_grand_monument_trophies.py, in its order. Taken before the game began,
+# so no infamy, relations or notices: only the records.
+gm_seed_trophies = {
+	gm_seed_trophy = { LANDMARK = parthenon ORIGIN = STATE_ATTICA ORIGIN_TAG = GRE SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = pantheon SHARE = piece LEVELS = 5 YEAR = 1801 }
+	gm_seed_trophy = { LANDMARK = rosetta_stone ORIGIN = STATE_LOWER_EGYPT ORIGIN_TAG = EGY SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = stele SHARE = whole LEVELS = 3 YEAR = 1801 }
+	gm_seed_trophy = { LANDMARK = tipus_tiger ORIGIN = STATE_MYSORE ORIGIN_TAG = MYS SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = statue SHARE = whole LEVELS = 2 YEAR = 1799 }
+	gm_seed_trophy = { LANDMARK = royal_palace_of_kandy ORIGIN = STATE_CEYLON ORIGIN_TAG = BCE SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = hall SHARE = piece LEVELS = 2 YEAR = 1815 }
+	gm_seed_trophy = { LANDMARK = temple_of_dendera ORIGIN = STATE_UPPER_EGYPT ORIGIN_TAG = EGY SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = colonnade SHARE = piece LEVELS = 2 YEAR = 1821 }
+	gm_seed_trophy = { LANDMARK = luxor_obelisk ORIGIN = STATE_UPPER_EGYPT ORIGIN_TAG = EGY SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = obelisk SHARE = whole LEVELS = 5 YEAR = 1831 }
+	gm_seed_trophy = { LANDMARK = venus_de_milo ORIGIN = STATE_WEST_AEGEAN_ISLANDS ORIGIN_TAG = GRE SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = statue SHARE = whole LEVELS = 3 YEAR = 1820 }
+	gm_seed_trophy = { LANDMARK = baba_merzoug ORIGIN = STATE_ALGIERS ORIGIN_TAG = MAS SITE = STATE_BRITTANY SITE_TAG = FRA DEDICATION = war_memorial FORM = column SHARE = whole LEVELS = 2 YEAR = 1830 }
+	gm_seed_trophy = { LANDMARK = piraeus_lion ORIGIN = STATE_ATTICA ORIGIN_TAG = GRE SITE = STATE_VENETIA SITE_TAG = AUS DEDICATION = civic FORM = statue SHARE = whole LEVELS = 2 YEAR = 1687 }
+	gm_seed_trophy = { LANDMARK = horses_of_saint_mark ORIGIN = STATE_EASTERN_THRACE ORIGIN_TAG = TUR SITE = STATE_VENETIA SITE_TAG = AUS DEDICATION = civic FORM = statue SHARE = whole LEVELS = 5 YEAR = 1204 }
+	# The lists, then each holder's and claimant's refresh, which opens its
+	# journal entry.
+	gm_trophy_pass = yes
+	every_country = {
+		limit = { has_variable = gm_tr_listed }
+		trigger_event = { id = monument_events.20 }
+	}
+}
+
+# The trophy of the landmark $LANDMARK$, taken in $YEAR$ from $ORIGIN_TAG$'s
+# part of $ORIGIN$ and standing in $SITE_TAG$'s part of $SITE$, made as a taking
+# makes one (gm_state_tr_make_trophy). Places nothing, and says so in
+# debug.log, when either part is not the named owner's, when one country owns
+# both (the monthly pass would bring it home at once), or when a trophy of this
+# landmark already exists (the debug event run twice).
+gm_seed_trophy = {
+	clear_saved_scope = gm_tr_state
+	clear_saved_scope = gm_tr_site_state
+	clear_saved_scope = gm_tr_seed_holder
+	clear_saved_scope = gm_tr_new
+	s:$ORIGIN$.region_state:$ORIGIN_TAG$ ?= { save_scope_as = gm_tr_state }
+	s:$SITE$.region_state:$SITE_TAG$ ?= {
+		save_scope_as = gm_tr_site_state
+		owner = { save_scope_as = gm_tr_seed_holder }
+	}
+	if = {
+		limit = {
+			exists = scope:gm_tr_state
+			exists = scope:gm_tr_site_state
+			scope:gm_tr_state = {
+				NOT = { owner = scope:gm_tr_seed_holder }
+			}
+			NOT = {
+				AND = {
+					has_global_variable_list = gm_trophies
+					any_in_global_list = {
+						variable = gm_trophies
+						has_variable = gm_tr_landmark
+						var:gm_tr_landmark = flag:$LANDMARK$
+					}
+				}
+			}
+		}
+		scope:gm_tr_site_state = {
+			create_container = {
+				tags = { gm_trophy }
+				save_scope_as = gm_tr_new
+				on_created = {
+					save_scope_as = gm_tr_new
+				}
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_tr_new }
+			add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }
+			scope:gm_tr_new = {
+				set_variable = { name = gm_tr_origin value = scope:gm_tr_state }
+				set_variable = { name = gm_tr_origin_region value = scope:gm_tr_state.state_region }
+				set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
+				set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
+				set_variable = { name = gm_tr_levels value = $LEVELS$ }
+				set_variable = {
+					name = gm_tr_grandeur
+					value = {
+						value = $LEVELS$
+						divide = 2
+						ceiling = yes
+					}
+				}
+				set_variable = { name = gm_tr_year value = $YEAR$ }
+				set_variable = { name = gm_tr_taken_by value = scope:gm_tr_seed_holder }
+				set_variable = { name = gm_tr_share value = flag:$SHARE$ }
+				set_variable = { name = gm_tr_dedication value = flag:$DEDICATION$ }
+				set_variable = { name = gm_tr_skin value = flag:landmark_$LANDMARK$ }
+				set_variable = { name = gm_tr_form value = flag:$FORM$ }
+				set_variable = { name = gm_tr_landmark value = flag:$LANDMARK$ }
+				set_variable = { name = gm_tr_namesake value = flag:landmark }
+			}
+			debug_log = "TE_MONUMENTS: trophy $LANDMARK$ placed: from $ORIGIN_TAG$'s part of $ORIGIN$, standing in $SITE_TAG$'s part of $SITE$, $LEVELS$ levels"
+		}
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: trophy $LANDMARK$ not placed: $ORIGIN$ not held by $ORIGIN_TAG$, $SITE$ not held by $SITE_TAG$, one country holds both, or it is already abroad"
+	}
 }
 
 # ---- Debug -------------------------------------------------------------------------------

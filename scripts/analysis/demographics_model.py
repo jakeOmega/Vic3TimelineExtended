@@ -750,8 +750,22 @@ def old_age(qf, qm):
     return (old_age_threshold(qf) + old_age_threshold(qm)) * 0.5
 
 
-def migrant_profile(inp):
-    """Per (class, sex) share of a net migration, summing to 1 (§2.5)."""
+def labour_balance_weight(balance, sign):
+    """How far the labour kind's women's share has moved to LABOUR_BALANCE_SHARE (0-1): departures (sign < 0) as the
+    state's men per 100 women fall through LABOUR_BALANCE_LOW, arrivals (sign > 0) as they rise through
+    LABOUR_BALANCE_HIGH (te_demog_labour_balance_weight). No balance (None) or no migration: 0."""
+    if balance is None or not sign:
+        return 0.0
+    if sign < 0:
+        start, full = P.LABOUR_BALANCE_LOW
+        return clamp((start - balance) / (start - full), 0.0, 1.0)
+    start, full = P.LABOUR_BALANCE_HIGH
+    return clamp((balance - start) / (full - start), 0.0, 1.0)
+
+
+def migrant_profile(inp, balance=None, sign=0):
+    """Per (class, sex) share of a net migration, summing to 1 (§2.5). balance and sign (the migration's) move the
+    labour kind's women's share toward LABOUR_BALANCE_SHARE (labour_balance_weight)."""
     refugee = clamp(inp.crisis, 0.0, 1.0)
     rights = female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
     family = P.FAMILY_BASE + sum(v for t, v in P.FAMILY_TRANSPORT_TECHS.items() if t in inp.techs)
@@ -761,6 +775,7 @@ def migrant_profile(inp):
     labour_f = clamp(P.LABOUR_FEMALE_SHARE_MIN + inp.female_job_share * rights
                      * (P.LABOUR_FEMALE_SHARE_MAX - P.LABOUR_FEMALE_SHARE_MIN),
                      P.LABOUR_FEMALE_SHARE_MIN, P.LABOUR_FEMALE_SHARE_MAX)
+    labour_f += (P.LABOUR_BALANCE_SHARE - labour_f) * labour_balance_weight(balance, sign)
     out = {}
     for c in range(len(P.MIGRANT_CLASSES)):
         lw = labour * P.MIGRANT_PROFILE["labour"]["weights"][c]
@@ -770,6 +785,34 @@ def migrant_profile(inp):
         out[(c, "m")] = lw * (1 - labour_f) + (fw + rw) * 0.5
     total = sum(out.values()) or 1.0
     return {k: v / total for k, v in out.items()}
+
+
+def migrant_rates(ring, prof, migration):
+    """{(class, sex): the share of each cohort of that class and sex the year's migration adds (+) or takes (-)}: the
+    profile's share of the migrants over the class's people (its last-year sum), at most MIGRANT_CAP_IN or _OUT of them;
+    what the cap and any class under one person leave over is booked at one flat rate over every class and sex
+    (te_demog_migrant_rates). Both 0 without migration."""
+    n = len(P.MIGRANT_CLASSES)
+    out = {(c, s): 0.0 for c in range(n) for s in "fm"}
+    if not migration:
+        return out
+    amount, sign = abs(migration), (1.0 if migration > 0 else -1.0)
+    cap = P.MIGRANT_CAP_IN if migration > 0 else P.MIGRANT_CAP_OUT
+    left, everyone = 0.0, 0.0
+    for c in range(n):
+        for s, sums in (("f", ring.class_f), ("m", ring.class_m)):
+            people = sums[c]
+            want = amount * prof[(c, s)]
+            if people < 1:
+                left += want
+                continue
+            everyone += people
+            take = min(want, cap * people)
+            left += want - take
+            out[(c, s)] = take / people
+    flat = left / everyone if everyone >= 1 else 0.0
+    return {k: sign * (v + flat) if (ring.class_f if k[1] == "f" else ring.class_m)[k[0]] >= 1 else 0.0
+            for k, v in out.items()}
 
 
 def class_of(age):
@@ -1058,7 +1101,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         e0 = (lt_f["e0"] + lt_m["e0"]) / 2
         fert = fertility(inp, e0)
         tfr = fert["tfr"]
-        prof = migrant_profile(inp)
+        prof = migrant_profile(inp, inp.sex_balance, migration)
     else:
         qf, qm, mmr, tfr, prof = rates
         lt_f, lt_m = life_table(qf), life_table(qm)
@@ -1087,6 +1130,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
     war_f = clamp(war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw, 0, 0.5) if ring.faw else 0.0
     kill = clamp(kills / ring.total, 0, 0.9) if ring.total else 0.0
+    mig = migrant_rates(ring, prof, migration)
     births = deaths = 0.0
     open_k = year % N
     # ages 1..150 at this step; the slot at 150 is the open slot, folded then refilled
@@ -1116,15 +1160,13 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         m2 -= m * kill
         c = class_of(r)
         if migration > 0:
-            if ring.class_f[c] >= 1:
-                f2 += migration * prof[(c, "f")] * f / ring.class_f[c]
-            if ring.class_m[c] >= 1:
-                m2 += migration * prof[(c, "m")] * m / ring.class_m[c]
+            f2 += f * mig[(c, "f")]
+            m2 += m * mig[(c, "m")]
         elif migration < 0:
-            if ring.class_f[c] >= 1:
-                f2 -= min(max(f2, 0.0) * 0.5, -migration * prof[(c, "f")] * f / ring.class_f[c])
-            if ring.class_m[c] >= 1:
-                m2 -= min(max(m2, 0.0) * 0.5, -migration * prof[(c, "m")] * m / ring.class_m[c])
+            if mig[(c, "f")] < 0:
+                f2 -= min(max(f2, 0.0) * 0.5, -f * mig[(c, "f")])
+            if mig[(c, "m")] < 0:
+                m2 -= min(max(m2, 0.0) * 0.5, -m * mig[(c, "m")])
         ring.f[k], ring.m[k] = max(f2, 0.0), max(m2, 0.0)
     # the pool: last group's rates, ages a year
     pq_f, pq_m = qf[-1] / 100000.0, qm[-1] / 100000.0

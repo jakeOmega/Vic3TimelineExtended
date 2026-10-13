@@ -6,12 +6,15 @@ Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
 Adding a form to FORMS (test_grand_monument_registry.py) fails here until it
 has a share in TROPHY_SHARES, its branch in the share triggers and, for a
 piece or token, its part name. Adding a landmark fails until the trophy's
-landmark name has its branch.
+landmark name has its branch. Adding a trophy of 1836 is a row in
+TROPHIES_1836 (loot spec 2026-10-12 §2), and an unplaced LANDMARKS row when
+no monument of its own stands.
 
 Run: python3 -m unittest test_grand_monument_trophies -v
 """
 import re
 import unittest
+from collections import namedtuple
 
 from test_grand_monument_registry import (
     BUILDING_FORMS, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, RETIRED_FORMS, block, loc, raw_block_at, read,
@@ -50,6 +53,29 @@ TROPHY_SHARES = {
               "opera_house", "gardens", "observatory", "exhibition_hall", "stadium"),
 }
 SHARE_VALUES = {"object": 1, "piece": 0.25, "token": 0.1}
+# A landmark whose piece has its own name, ahead of the forms' (spec §1; loot
+# spec 2026-10-12 §1).
+LANDMARK_PARTS = {
+    "brandenburg_gate": "gm_tr_part_quadriga",
+    "parthenon": "gm_tr_part_marbles",
+    "temple_of_dendera": "gm_tr_part_zodiac",
+    "royal_palace_of_benin": "gm_tr_part_bronzes",
+    "royal_palace_of_kumasi": "gm_tr_part_gold_regalia",
+    "imperial_city_of_hue": "gm_tr_part_imperial_treasury",
+    "persepolis": "gm_tr_part_reliefs",
+    "red_fort": "gm_tr_part_mughal_regalia",
+    "great_zimbabwe": "gm_tr_part_soapstone_birds",
+    "royal_palaces_of_abomey": "gm_tr_part_thrones_and_statues",
+    "klungkung_palace": "gm_tr_part_royal_regalia",
+    "royal_palace_of_kandy": "gm_tr_part_throne",
+    "uffizi_gallery": "gm_tr_part_medici_venus",
+    "capitoline_museums": "gm_tr_part_dying_gaul",
+    "bodrum_castle": "gm_tr_part_mausoleum_friezes",
+    "temples_of_baalbek": "gm_tr_part_temple_carvings",
+    "palmyra": "gm_tr_part_funerary_busts",
+    "xanthos": "gm_tr_part_nereid_monument",
+    "arch_of_ctesiphon": "gm_tr_part_treasures_of_khosrow",
+}
 # The occasion patterns of NAMESAKES, plus the namesakes with one pattern.
 NAME_PATTERNS = [p for patterns in NAMESAKES.values() for p in patterns]
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners", "petty_bourgeoisie",
@@ -201,6 +227,43 @@ class TakingTests(unittest.TestCase):
             self.assertIn(line, receive)
 
 
+class TakerTests(unittest.TestCase):
+    """A trophy remembers who carried it off (gm_tr_taken_by, 2026-10-12). Without it an AI that took a
+    monument from its own colony brought it straight back at the next pass, for the Homecoming's ten years
+    of legitimacy, and a piece could be taken again once its cooldown ran out."""
+
+    def test_the_record(self):
+        e = read(TR_EFFECTS)
+        self.assertIn("set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }",
+                      squash(block(e, "gm_state_tr_make_trophy")))
+        self.assertIn("set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }",
+                      squash(block(e, "gm_tr_take_from_site")), "a new looter is its new taker")
+        self.assertEqual(squash(block(read(TR_TRIGGERS), "gm_tr_held_by_its_taker")),
+                         "has_variable = gm_tr_taken_by var:gm_tr_taken_by ?= { save_temporary_scope_as = "
+                         "gm_tmp_tr_taker } gm_tr_held_by = { WHO = scope:gm_tmp_tr_taker }")
+
+    def test_the_ai_keeps_what_it_took(self):
+        one = squash(block(read(TR_EFFECTS), "gm_tr_monthly_one"))
+        self.assertIn("if = { limit = { gm_tr_holder_owns_origin = yes } if = { limit = { gm_tr_held_by_its_taker = "
+                      "no } add_to_temporary_list = gm_tr_ai_home } } else_if = {", one,
+                      "owning the origin never falls through to the ally return")
+        self.assertIn("gm_tr_holder_owns_origin = yes gm_tr_held_by_its_taker = no NOT = { has_variable = "
+                      "gm_tr_home_notified }", one, "no 'within reach' notice for one we took ourselves")
+
+    def test_no_homecoming_for_its_taker(self):
+        home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
+        guard = "if = { limit = { NOT = { var:gm_tr_taken_by ?= { this = scope:gm_tr_receiver } } } scope:gm_tr_receiver = {"
+        self.assertIn(guard, home)
+        self.assertLess(home.index(guard), home.index("name = gm_boon_homecoming"))
+        effect = squash(block(block(strip_comments(read(TR_SGUIS)), "gm_tr_return_sgui"), "effect"))
+        self.assertTrue(effect.startswith("scope:gm_tr = { if = { limit = { gm_tr_claimed_by = { WHO = root } "
+                                          "gm_tr_held_by_its_taker = yes } custom_tooltip = { text = "
+                                          "gm_tr_bring_home_own_tt"), effect)
+        L = loc()
+        self.assertIn("no Homecoming", L["gm_tr_bring_home_own_tt"])
+        self.assertIn("Homecoming", L["gm_tr_bring_home_tt"])
+
+
 class ConsequenceTests(unittest.TestCase):
     def test_the_numbers(self):
         v = read(TR_VALUES)
@@ -306,8 +369,11 @@ class NameTests(unittest.TestCase):
 
     def test_every_piece_and_token_has_its_part(self):
         branches = custom_loc_branches("gm_tr_part_name")
-        self.assertEqual(branches[0], ("brandenburg_gate", "gm_tr_part_quadriga"), "the Quadriga first")
-        forms = {flag for flag, _ in branches[1:]}
+        n = len(LANDMARK_PARTS)
+        self.assertEqual(branches[:n], list(LANDMARK_PARTS.items()), "the landmarks' own parts first, the Quadriga's first")
+        for key in LANDMARK_PARTS:
+            self.assertIn(key, {lm.key for lm in LANDMARKS}, key)
+        forms = {flag for flag, _ in branches[n:]}
         self.assertEqual(forms, set(TROPHY_SHARES["piece"]) | set(TROPHY_SHARES["token"]))
         L = loc()
         for _, key in branches:
@@ -384,6 +450,122 @@ class PanelTests(unittest.TestCase):
         for article in ("return_cultural_property", "surrender_monument"):
             for suffix in ("", "_desc", "_effects_desc", "_article_short_desc"):
                 self.assertIn(f"{article}{suffix}", L, article + suffix)
+
+
+# The trophies already abroad on 1 January 1836 (loot spec 2026-10-12 §2), in
+# seeding order. Owners from the game's 00_states.txt: the origin's part is
+# its claimant's, the site's part its holder's. Adding a row is the checklist.
+Trophy1836 = namedtuple("Trophy1836", "landmark origin origin_tag site site_tag levels share year")
+TROPHIES_1836 = (
+    Trophy1836("parthenon", "STATE_ATTICA", "GRE", "STATE_HOME_COUNTIES", "GBR", 5, "piece", 1801),
+    Trophy1836("rosetta_stone", "STATE_LOWER_EGYPT", "EGY", "STATE_HOME_COUNTIES", "GBR", 3, "whole", 1801),
+    Trophy1836("tipus_tiger", "STATE_MYSORE", "MYS", "STATE_HOME_COUNTIES", "GBR", 2, "whole", 1799),
+    # Windsor. Its claimant is British Ceylon, Britain's own colony, until it goes free.
+    Trophy1836("royal_palace_of_kandy", "STATE_CEYLON", "BCE", "STATE_HOME_COUNTIES", "GBR", 2, "piece", 1815),
+    Trophy1836("temple_of_dendera", "STATE_UPPER_EGYPT", "EGY", "STATE_ILE_DE_FRANCE", "FRA", 2, "piece", 1821),
+    Trophy1836("luxor_obelisk", "STATE_UPPER_EGYPT", "EGY", "STATE_ILE_DE_FRANCE", "FRA", 5, "whole", 1831),
+    Trophy1836("venus_de_milo", "STATE_WEST_AEGEAN_ISLANDS", "GRE", "STATE_ILE_DE_FRANCE", "FRA", 3, "whole", 1820),
+    # Brest's arsenal. Algiers is French in one province, Mascara's in the rest.
+    Trophy1836("baba_merzoug", "STATE_ALGIERS", "MAS", "STATE_BRITTANY", "FRA", 2, "whole", 1830),
+    # Venice: whoever holds Venetia holds them.
+    Trophy1836("piraeus_lion", "STATE_ATTICA", "GRE", "STATE_VENETIA", "AUS", 2, "whole", 1687),
+    Trophy1836("horses_of_saint_mark", "STATE_EASTERN_THRACE", "TUR", "STATE_VENETIA", "AUS", 5, "whole", 1204),
+)
+
+
+def trophy_seed_call(tr):
+    lm = {lm.key: lm for lm in LANDMARKS}[tr.landmark]
+    return (f"gm_seed_trophy = {{ LANDMARK = {tr.landmark} ORIGIN = {tr.origin} ORIGIN_TAG = {tr.origin_tag} "
+            f"SITE = {tr.site} SITE_TAG = {tr.site_tag} DEDICATION = {lm.dedication} FORM = {lm.form} "
+            f"SHARE = {tr.share} LEVELS = {tr.levels} YEAR = {tr.year} }}")
+
+
+class Trophies1836Tests(unittest.TestCase):
+    """Loot spec 2026-10-12 §2: the trophies already abroad when the game begins."""
+
+    def test_the_table(self):
+        by_key = {lm.key: lm for lm in LANDMARKS}
+        seen = [tr.landmark for tr in TROPHIES_1836]
+        self.assertEqual(len(seen), len(set(seen)), "one trophy per landmark")
+        for tr in TROPHIES_1836:
+            lm = by_key[tr.landmark]
+            self.assertNotEqual(tr.origin_tag, tr.site_tag, f"{tr.landmark}: a holder that owns the origin brings it "
+                                                            "home at the first pass")
+            self.assertLess(tr.year, 1836, tr.landmark)
+            self.assertGreaterEqual(tr.levels, 1, tr.landmark)
+            # The share picks the title: whole for an object, a part's name otherwise.
+            self.assertEqual(tr.share == "whole", lm.form in TROPHY_SHARES["object"], tr.landmark)
+            self.assertIn(tr.share, ("whole", "piece", "token"), tr.landmark)
+            if not lm.placed:
+                self.assertEqual((lm.state, lm.tag), (tr.origin, tr.origin_tag),
+                                 f"{tr.landmark}: an unplaced landmark stands where its trophy came from")
+            else:
+                self.assertEqual(lm.state, tr.origin, f"{tr.landmark}: a piece comes from its landmark's state")
+            if tr.share != "whole":
+                self.assertIn(tr.landmark, LANDMARK_PARTS, f"{tr.landmark}: a part names what was taken")
+        unplaced = {lm.key for lm in LANDMARKS if not lm.placed}
+        self.assertEqual(unplaced - set(seen), set(), "an unplaced landmark exists only for its trophy")
+
+    def test_a_call_per_row(self):
+        body = squash(block(read(TR_EFFECTS), "gm_seed_trophies"))
+        self.assertEqual(re.findall(r"gm_seed_trophy = \{[^{}]*\}", body), [trophy_seed_call(tr) for tr in TROPHIES_1836])
+        # The lists, then every listed country's refresh, which opens its entry.
+        self.assertTrue(body.endswith("gm_trophy_pass = yes every_country = { limit = { has_variable = gm_tr_listed } "
+                                      "trigger_event = { id = monument_events.20 } }"), body[-200:])
+
+    def test_the_seed_writes_the_records(self):
+        body = squash(block(read(TR_EFFECTS), "gm_seed_trophy"))
+        self.assertIn("s:$ORIGIN$.region_state:$ORIGIN_TAG$ ?= { save_scope_as = gm_tr_state }", body)
+        self.assertIn("s:$SITE$.region_state:$SITE_TAG$ ?= { save_scope_as = gm_tr_site_state "
+                      "owner = { save_scope_as = gm_tr_seed_holder } }", body)
+        self.assertIn("scope:gm_tr_state = { NOT = { owner = scope:gm_tr_seed_holder } }", body,
+                      "never one whose holder owns its origin")
+        self.assertIn("NOT = { AND = { has_global_variable_list = gm_trophies any_in_global_list = { variable = "
+                      "gm_trophies has_variable = gm_tr_landmark var:gm_tr_landmark = flag:$LANDMARK$ } } }", body,
+                      "never twice")
+        self.assertIn("scope:gm_tr_site_state = { create_container = { tags = { gm_trophy }", body)
+        self.assertIn("add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }", body)
+        for record in ("name = gm_tr_origin value = scope:gm_tr_state",
+                       "name = gm_tr_origin_region value = scope:gm_tr_state.state_region",
+                       "name = gm_tr_site value = scope:gm_tr_site_state",
+                       "name = gm_tr_site_region value = scope:gm_tr_site_state.state_region",
+                       "name = gm_tr_levels value = $LEVELS$",
+                       "name = gm_tr_grandeur value = { value = $LEVELS$ divide = 2 ceiling = yes }",
+                       "name = gm_tr_year value = $YEAR$", "name = gm_tr_taken_by value = scope:gm_tr_seed_holder",
+                       "name = gm_tr_share value = flag:$SHARE$",
+                       "name = gm_tr_dedication value = flag:$DEDICATION$",
+                       "name = gm_tr_skin value = flag:landmark_$LANDMARK$", "name = gm_tr_form value = flag:$FORM$",
+                       "name = gm_tr_landmark value = flag:$LANDMARK$", "name = gm_tr_namesake value = flag:landmark"):
+            self.assertIn(f"set_variable = {{ {record} }}", body, record)
+        # Taken before the game began: none of a taking's consequences.
+        for line in ("change_infamy", "change_relations", "post_notification", "add_war_war_support"):
+            self.assertNotIn(line, body, line)
+        self.assertIn('else = { debug_log = "TE_MONUMENTS: trophy $LANDMARK$ not placed', body)
+
+    def test_seeded_after_the_landmarks_and_from_the_debug_event(self):
+        on = squash(block(read("common/on_actions/monument_events_on_actions.txt"),
+                          "gm_landmarks_on_game_started_after_lobby"))
+        self.assertIn("gm_seed_landmarks = yes gm_seed_trophies = yes", on)
+        ev = squash(raw_block_at(strip_comments(read(DEBUG_EVENTS)), r"(?m)^te_debug_monuments\.5\s*=\s*\{"))
+        self.assertIn("name = te_debug_monuments.5.c gm_seed_trophies = yes", ev)
+        self.assertIn("te_debug_monuments.5.c", loc())
+
+    def test_a_trophy_row_tells_its_history(self):
+        branches = custom_loc_branches("gm_tr_landmark_desc")
+        self.assertEqual(branches, [(lm.key, f"gm_landmark_{lm.key}_desc") for lm in LANDMARKS])
+        body = squash(block(read(TR_CUSTOM_LOC), "gm_tr_landmark_desc"))
+        self.assertTrue(body.endswith("text = { localization_key = gm_landmark_desc_none }"))
+        self.assertEqual(squash(block(read(TR_VALUES), "gm_tr_disp_is_landmark")),
+                         "value = 0 if = { limit = { has_variable = gm_tr_landmark } value = 1 }")
+        gui = read(TR_GUI)
+        line = ("gm_tr_line = { visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue("
+                "'gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]\" default_format = \"#tooltippable\" "
+                "tooltip = \"gm_tr_row_landmark_tt\" text = \"gm_row_landmark\" }")
+        for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site"):
+            self.assertIn(line, squash(raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")), row)
+        L = loc()
+        self.assertEqual(L["gm_tr_row_landmark_tt"],
+                         "#b Historical monument#!\\n[ScriptContainer.GetCustom('gm_tr_landmark_desc')]")
 
 
 class DebugTests(unittest.TestCase):

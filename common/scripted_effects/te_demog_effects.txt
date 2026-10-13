@@ -1168,12 +1168,15 @@ te_demog_no_flows = {
 	set_local_variable = { name = te_dg_pm2 value = 0 }
 	set_local_variable = { name = te_dg_pm3 value = 0 }
 	set_local_variable = { name = te_dg_pm4 value = 0 }
+	set_local_variable = { name = te_dg_mig_flat value = 0 }
 }
 
 # THIS = a state, at the start of its step (after te_demog_prepare, which sets
 # te_dg_fws). Sets the step's flow locals (demographics_model.step's war_dead, kills,
-# migration and migrant_profile): te_dg_war_ff/_fm, te_dg_kill, te_dg_mig_in/_out and
-# te_dg_pf<c>/te_dg_pm<c>. Every branch sets all of them; the step reads them unguarded.
+# migration, migrant_profile and migrant_rates): te_dg_war_ff/_fm, te_dg_kill, te_dg_mig_in/_out,
+# te_dg_pf<c>/te_dg_pm<c> and the booking's rates (te_dg_mr_f<c>/_m<c>, te_dg_mig_flat; te_demog_enter_class
+# reads the rates only while te_dg_mig_in or te_dg_mig_out is above 0). Every branch sets the rest; the step
+# reads them unguarded.
 te_demog_flows = {
 	# war dead the owner shared out monthly since this state's last step (te_demog_share_war_dead)
 	set_local_variable = { name = te_dg_war value = 0 }
@@ -1278,7 +1281,10 @@ te_demog_flows = {
 			max = te_demog_k_labour_female_max
 		}
 	}
+	# the migrant booking (2026-10-12): the labour kind's sex split corrects itself, then the profile, then the cap
+	te_demog_labour_balance = yes
 	te_demog_set_profile = yes
+	te_demog_migrant_rates = yes
 	# chain migration: consecutive years of net inflow, counted after the profile
 	# read last year's count (the model's inp.inflow_years)
 	if = {
@@ -1287,6 +1293,57 @@ te_demog_flows = {
 	}
 	else = {
 		set_variable = { name = te_dg_inflow_years value = 0 }
+	}
+}
+
+# THIS = a state, in te_demog_flows after the labour kind's women's share (te_dg_labour_f) and the residual
+# (te_dg_mig_in, te_dg_mig_out): the migrant booking's self-correcting sex split
+# (demographics_model.labour_balance_weight, 2026-10-12). Departures' women's share moves to
+# te_demog_k_labour_balance_share as the state's men per 100 women aged 20-59 (te_dg_sex_balance, the last census's)
+# fall from te_demog_k_labour_low_start to _low_full; arrivals' as they rise from _high_start to _high_full. Without a
+# sex balance or a residual it leaves the share alone. docs/testing/demographics-migrant-booking-2026-10-12.md.
+te_demog_labour_balance = {
+	set_local_variable = { name = te_dg_lbw value = 0 }
+	if = {
+		limit = {
+			has_variable = te_dg_sex_balance
+			local_var:te_dg_mig_out > 0
+		}
+		set_local_variable = {
+			name = te_dg_lbw
+			value = {
+				value = te_demog_k_labour_low_start
+				subtract = var:te_dg_sex_balance
+				divide = { value = te_demog_k_labour_low_start subtract = te_demog_k_labour_low_full min = 1 }
+				min = 0
+				max = 1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_sex_balance
+			local_var:te_dg_mig_in > 0
+		}
+		set_local_variable = {
+			name = te_dg_lbw
+			value = {
+				value = var:te_dg_sex_balance
+				subtract = te_demog_k_labour_high_start
+				divide = { value = te_demog_k_labour_high_full subtract = te_demog_k_labour_high_start min = 1 }
+				min = 0
+				max = 1
+			}
+		}
+	}
+	set_local_variable = {
+		name = te_dg_labour_f
+		value = {
+			value = te_demog_k_labour_balance_share
+			subtract = local_var:te_dg_labour_f
+			multiply = local_var:te_dg_lbw
+			add = local_var:te_dg_labour_f
+		}
 	}
 }
 
@@ -1969,6 +2026,9 @@ te_demog_country_census = {
 		else = {
 			set_variable = { name = te_dg_urban_label value = 3 }
 		}
+		# phase 3: the largest city and the pattern's strength, which the states' pulses apply under Full
+		# (te_demog_place_effects.txt)
+		te_demog_up_country = yes
 		te_demog_country_lists = yes
 		set_variable = { name = te_dg_census_year value = te_demog_year }
 		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }

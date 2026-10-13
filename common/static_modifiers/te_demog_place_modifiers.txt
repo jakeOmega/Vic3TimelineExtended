@@ -1,0 +1,36 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — where people live (phase 3): the national urban pattern's effects and the Planned Capital decision
+# Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §5.1. Logic: te_demog_place_effects.txt; sizes:
+# te_demog_place_values.txt (test_demographics_place.py pins each field to its value there).
+# ============================================================================
+
+# The two urban-pattern modifiers, at full strength. Each state's yearly pulse applies one, under Full only, with its
+# owner's strength from the last census as the multiplier (te_demog_up_state_refresh: 0 at 25% primacy, 1 at 60%).
+# The country's largest city: agglomeration.
+te_demog_primate_city = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_urban_center_throughput_add = 0.1
+	state_migration_pull_mult = 0.15
+}
+
+# Every other state of a country with a large primate city: migrants drawn away, and regional resentment.
+te_demog_provincial_neglect = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_pull_mult = -0.1
+	state_turmoil_effects_mult = 0.1
+}
+
+# The Planned Capital decision (te_demog_capital.1): the five years of building, on the country, for their authority.
+te_demog_pc_works = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_cost_add = 100
+}
+
+# The new capital state, for 20 years: the ministries, the builders and the roads the planners laid out.
+te_demog_pc_new_capital = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_migration_pull_mult = 0.25
+	state_construction_mult = 0.2
+	state_infrastructure_add = 10
+	building_group_bg_government_throughput_add = 0.1
+}

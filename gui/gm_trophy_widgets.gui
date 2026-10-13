@@ -119,6 +119,12 @@ types gm_trophy_widget_types
 					text = "gm_tr_row_detail"
 				}
 				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_row_landmark_tt"
+					text = "gm_row_landmark"
+				}
+				gm_tr_line = {
 					default_format = "#tooltippable"
 					tooltip = "gm_tr_row_value_tt"
 					text = "gm_tr_row_value"
@@ -170,6 +176,12 @@ types gm_trophy_widget_types
 				text = "gm_tr_row_detail"
 			}
 			gm_tr_line = {
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
+				default_format = "#tooltippable"
+				tooltip = "gm_tr_row_landmark_tt"
+				text = "gm_row_landmark"
+			}
+			gm_tr_line = {
 				default_format = "#tooltippable"
 				tooltip = "gm_tr_row_held_by_tt"
 				text = "gm_tr_row_held_by"
@@ -203,6 +215,12 @@ types gm_trophy_widget_types
 				}
 				gm_tr_line = {
 					text = "gm_tr_row_detail"
+				}
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_row_landmark_tt"
+					text = "gm_row_landmark"
 				}
 			}
 		}

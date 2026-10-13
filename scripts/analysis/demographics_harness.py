@@ -17,6 +17,7 @@ Usage:
     demographics_harness.py workforce [SAVE]            # phase 2: participation, the workforce bands (step 2's fit)
     demographics_harness.py pensions [SAVE]             # phase 2 step 2: the pension bill against revenue, the health bill
     demographics_harness.py consequences [SAVE...] [--effects]  # phase 2 step 4: conscription, youth bulge, sex balance
+    demographics_harness.py rebook SAVE... [--years Y ...]   # the migrant booking: a run re-walked, its bands judged
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
@@ -1144,6 +1145,64 @@ def _consequences(args):
         print(f"  youth: highest share aged 20-29 {r['youth_max']:.3f}; states with a bulge {r['y_any']:.1%}, above "
               f"y = 0.5 {r['y_half']:.1%} (band under {BAND_YOUTH_HALF:.0%}: "
               f"{'ok' if r['y_half'] < BAND_YOUTH_HALF else 'OUT'})")
+    return out
+
+
+# ---- rebook: the census re-walked with the run's own residual (the migrant booking, 2026-10-12) ------------------------
+# docs/testing/demographics-migrant-booking-2026-10-12.md; the re-walk is demographics_rebook.py's. The great powers whose
+# conscription terms by decade the consequences design's §4.5 gate reads (each tag the save holds).
+REBOOK_POWERS = ("GBR", "FRA", "PRU", "GER", "AUS", "RUS", "USA", "SAR", "ITA", "SPA", "TUR", "JAP", "CHI", "BIC")
+REBOOK_YEARS = (1848, 1898, 1901)
+
+
+def cmd_rebook(args):
+    import demographics_rebook as RB
+    plain = {path: save_year(path) for path in args.save if not str(path).endswith(".json")}
+    first = min((y for y in plain.values() if y is not None), default=None)
+    saves = []
+    for path in args.save:
+        save = RB.read_save(path, year_of=save_year, ring=plain.get(path) == first)
+        if save["year"] is None:
+            print(f"{path}: no game_date (skipped)", file=sys.stderr)
+            continue
+        saves.append(save)
+    saves = RB.merge_years(saves)
+    if not saves:
+        print("no saves", file=sys.stderr)
+        return 1
+    if not any(s["techs_known"] for s in saves):
+        print("note: no plain-text save, so no transport technologies (the family weight's): families read light")
+    booked, before = RB.walk(saves), RB.walk(saves, booked=False)
+    years = args.years or [y for y in REBOOK_YEARS if any(s["year"] == y for s in saves)] or [saves[-1]["year"]]
+    out = 0
+    print(f"Re-walked {len(booked)} census states through {len(saves)} saves ({saves[0]['year']}-{saves[-1]['year']}); "
+          f"cap in {P.MIGRANT_CAP_IN} out {P.MIGRANT_CAP_OUT}, labour split balanced from {P.LABOUR_BALANCE_LOW} and "
+          f"{P.LABOUR_BALANCE_HIGH}")
+    for year in years:
+        got = RB.fidelity(before, saves, year)
+        if got:
+            med, p05, p95, out_save, out_walk = got
+            print(f"\n{year}: the run's own booking re-walked against the save: sex balance {med:+.1f} (5th-95th "
+                  f"{p05:+.1f} to {p95:+.1f}); outside {P.SEX_FEWER_FROM:.0f}-{P.SEX_MORE_FROM:.0f}: save "
+                  f"{out_save:.1%}, re-walk {out_walk:.1%}")
+        for label, walked in (("profile alone", before), ("booked", booked)):
+            r = RB.band_summary([res[year] for res in walked.values() if year in res])
+            verdict = "ok" if r["either"] < BAND_PEACE_SEX else "OUT"
+            print(f"  {label:13s} {r['n']} states: sex balance below {P.SEX_FEWER_FROM:.0f} {r['fewer']:.1%}, "
+                  f"{P.SEX_MORE_FROM:.0f}+ {r['more']:.1%} (either {r['either']:.1%}, band under "
+                  f"{BAND_PEACE_SEX:.0%}: {verdict}), range {r['sb_min']:.0f}-{r['sb_max']:.0f}; people with |T| past "
+                  f"0.05 {r['term_past']:.1%}, past 0.15 {r['term_far']:.1%} (T {r['term_min']:+.2f} to "
+                  f"{r['term_max']:+.2f}); 20-29 share at most {r['youth_max']:.3f}, states above {P.YOUTH_FROM} "
+                  f"{r['youth_over']:.1%}")
+            if label == "booked":
+                out |= verdict != "ok"
+    decades = [y for y in range(1840, saves[-1]["year"] + 1, 10) if any(s["year"] == y for s in saves)]
+    for label, walked in (("profile alone", before), ("booked", booked)):
+        terms = RB.country_terms(walked, saves, args.powers or REBOOK_POWERS, decades)
+        print(f"\nGreat powers' conscription terms by decade ({label}):")
+        print("       " + " ".join(f"{y:>7d}" for y in decades))
+        for tag, by_year in terms.items():
+            print(f"  {tag:4s} " + " ".join(f"{by_year[y]:+7.3f}" if y in by_year else "      -" for y in decades))
     return out
 
 
@@ -2406,6 +2465,13 @@ def main(argv=None):
     p.add_argument("--effects", "--sex-effects", action="store_true", dest="effects",
                    help="judge the bands as if the held-back effects (conscription, youth bulge, sex balance) were on")
     p.set_defaults(fn=cmd_consequences)
+    p = sub.add_parser("rebook", help="the migrant booking (2026-10-12): the census re-walked through a run's saves "
+                                      "with its own residual, booked by today's rules and by the profile alone")
+    p.add_argument("save", nargs="+", help="the run's saves, plain text or extract_all.py's per-save JSON (the first "
+                                           "in date order must hold the rings; plain text adds the transport techs)")
+    p.add_argument("--years", type=int, nargs="+", help=f"the years to judge (default {REBOOK_YEARS})")
+    p.add_argument("--powers", nargs="+", help="the countries' tags for the terms by decade")
+    p.set_defaults(fn=cmd_rebook)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     p = sub.add_parser("measures", help="phase 2 step 3b: the Family Policy measures' effect on children per woman and "
                                         "the package's upkeep against the design's §5 bands")

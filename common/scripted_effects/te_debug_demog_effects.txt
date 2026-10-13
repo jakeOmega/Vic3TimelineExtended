@@ -992,7 +992,8 @@ te_debug_demog_work_census_line = {
 # Two once-a-game self-checks (owner, 2026-10-12; docs/testing/demographics-playtest.md, "Self-checks"), each called
 # from te_demog_consequences_refresh (te_demog_consequence_effects.txt), ROOT the state:
 #   conscription_term_read  the first state to take a fresh conscription pair (its term at least te_demog_k_conscription_cut
-#                           either way, and only while the effect is on: held back, it arms never): its
+#                           either way, and only while the effect is on, as it is since the migrant booking; held back, it
+#                           arms never): its
 #                           state_conscription_rate_mult before the add, then a week later (te_debug_demog.30; a modifier
 #                           sum can lag a day) whether it moved by the term. It tests the term's path into the state's
 #                           read; whether the read moves the state's potential conscripts is the play-test's item (no
