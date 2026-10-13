@@ -1,4 +1,4 @@
-﻿#==================================================
+#==================================================
 # Grand Monuments
 #==================================================
 # A monument a regime raises to what it stands for: its crown, republic,
@@ -19,7 +19,15 @@ building_grand_monument = {
 	levels_per_mesh = -1
 
 	expandable = yes
-	downsizeable = yes
+	# Neither the player nor the AI can downsize or demolish a monument from
+	# the building panel. To the AI's economic code it is pure upkeep with no
+	# output, and AI countries were demolishing theirs. Every way a monument
+	# goes or shrinks is script's, through remove_building, which this flag
+	# does not block: Pull Down and Rededicate on a contested monument
+	# (gm_state_tear_down / gm_state_rededicate), a trophy taking, and a
+	# commission's rebuild. Every vanilla monument and the Strategic Reserve
+	# hub set the same flag.
+	downsizeable = no
 	unique = no
 	ai_nationalization_desire = 0
 
