@@ -256,8 +256,9 @@ of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
 rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
-mild starvation, and Primogeniture's larger farm families, which late marriage
-replaces. The rest, such as the family-policy laws and the late
+mild starvation, Primogeniture's larger farm families, which late marriage
+replaces, and Forced Heirship's smaller ones, which family limitation replaces.
+The rest, such as the family-policy laws and the late
 medical technologies, it applies at its own rate, as it does an effect on the
 whole state, such as pollution, devastation or a decree. Either way, a new law
 or technology takes effect at the state's next census step, up to a year later.
@@ -379,13 +380,23 @@ mid-twenties and many never marry. Under birth spacing, strongest in Japan and
 slight in China and Korea, couples space and stop births by custom. Modern
 contraception wears both away, and health care wears away birth spacing; women's
 paid work and farms that pass whole to one heir make late marriage more common.
+Both customs also spread slowly from neighbouring states.
 The figure then falls with literacy, child survival and city life, and family policy moves it (see [Family policy measures](#family-policy-measures)). Under Full, the figure shown is what births came to that
 year, so decrees, famine and other effects on births count in it; its tooltip
 lists them as births added on top of the census. The means to plan a family
 grow with literacy and with contraception: Vulcanization, Feminism, the
 Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
 State-Sponsored Family Planning adds more, whoever can read. Their tooltips show
-each line. Life expectancy follows five
+each line. Under Full, family limitation adds to them too: the share of couples
+who stop at the family size they want by older methods, which France starts with
+at 60%. It spreads from neighbouring countries that practise it, grows under
+Forced Heirship in farming countries and in nearly universally literate ones,
+less under a state religion, and never falls back, though modern contraception takes over its part
+of the means as it arrives. It shows as Family Limitation among a country's
+modifiers. Under Full, too, where a cultural hegemon's culture outweighs yours
+(the Foreign Cultural Benchmark), the size of family its people want pulls yours
+a little toward it: a few percent at most, shown as the cultural hegemon's
+example in the children-per-woman tooltip. Life expectancy follows five
 causes of death, which standard of living, medicine, health laws and institutions
 bring down. Medicine saves lives only as far as health care reaches. Markets and
 charity give some care everywhere; a health law adds more with each level of the

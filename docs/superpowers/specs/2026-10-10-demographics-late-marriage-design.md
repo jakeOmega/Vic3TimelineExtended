@@ -554,6 +554,10 @@ The neighbour term arrives in phase 3 (§4.4, §5.3); phase 2 builds the rest.
 - **The interior of a bloc doesn't move:** its neighbours share its value.
 - **Unverified:** whether `every_neighbouring_state` crosses water (Britain and France, Denmark and Sweden, Japan and
   Korea). A one-line probe settles it. If it doesn't, islands spread only through conditions.
+- **Built in phase 3 (2026-10-12)** for both practices at 0.5% a year, both ways, one neighbour walk a step; the
+  once-a-game `neighbouring_state_reads` self-check logs whether the iterator crosses a strait. Family Limitation was
+  built national (owner, 2026-10-12: as the parent spec's §13 proposes), not per state as call 7 had it, so it spreads
+  country to country over the border states.
 
 ### 4.5 Existing lines they collide with
 

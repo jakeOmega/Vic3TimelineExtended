@@ -400,6 +400,62 @@ IMPARTIBLE_LAWS = ("law_primogeniture",)   # and Undivided Farm Succession (te_i
 # The panel (spec 5.3): women's mean age at first marriage, about 19 + 7 x the Late Marriage share.
 MARRIAGE_AGE_AT_ZERO, MARRIAGE_AGE_SPAN = 19, 7
 
+# ---- Phase 3: the neighbour spread, Family Limitation as a general practice, Cultural Hegemony's drift ----------
+# Parent spec docs/superpowers/specs/2026-10-08-demographics-design.md section 13 ("Family Limitation as a general
+# practice, not France's") and section 6's Cultural Hegemony row; the late-marriage spec's 4.4 (the spread). Owner,
+# 2026-10-12: build as section 13 proposes (a national practice), no country-specific mechanics. Results:
+# docs/testing/demographics-family-limitation-2026-10-12.md.
+#
+# The neighbour spread of Late Marriage and Birth Spacing (late-marriage spec 4.2-4.4): each step also closes this share
+# of the gap to its neighbouring states' people-weighted mean, both ways (te_demog_practices_neighbours). Kept slow
+# because the Hajnal line was stable for centuries: an edge state moves about a fifth of the way in 50 years.
+PRACTICE_SPREAD = 0.005
+# Family Limitation: a national practice, the share of couples who stop at the family size they want by methods older
+# than any modern one (withdrawal, abstinence). A country's share, 0-1 (te_dg_pr_fl), under the Demographics rule's Full
+# setting only; outside Full France keeps history's te_demog_family_limitation at FAMILY_LIMITATION_MEANS, as before.
+# Applied as that same modifier at multiplier line / FAMILY_LIMITATION_MEANS, so its one line in the means
+# (state_fertility_means_add) reads line = share x (1 - what modern methods have replaced), which the census reads
+# through te_demog_means as before. Below FL_LINE_MIN the country carries no line (no "+0.4%" rows on half the map).
+FL_LINE_MIN = 0.02
+# The start: a country holding history's modifier (France, as history sets its Forced Heirship) seeds at its value,
+# FAMILY_LIMITATION_MEANS; every other country at 0.
+# The yearly rise, each census year (fl_step): FL_RATE of the gap to the target its conditions give, and FL_SPREAD of the
+# gap to its neighbours' share (neighbouring states' owners, weighted by those states' people: a border-weighted mean,
+# so Catalonia's frontier with France counts and Portugal's size doesn't). Both act upward only: a practice once
+# learned is not unlearned (in the European Fertility Project no province's marital fertility rose again once it had
+# fallen 10%), and France's share would otherwise leak to its neighbours' zero. What replaces it is modern methods, below.
+FL_RATE = 0.025
+FL_SPREAD = 0.02
+# The target from the country's conditions, people-weighted over its census states, within 0-1:
+#   smallholders under partible inheritance: FL_HEIRSHIP x the agrarian share under Forced Heirship (law_equal_
+#   inheritance), not with Undivided Farm Succession, which switches the rural cut off today too. It is Forced Heirship's
+#   old rural birth cut (inh_forced_heirship_rural, -15% x the farm share), folded in under Full (section 13);
+#   + literacy, read through the church law: FL_LITERACY x clamp((literacy - FL_LITERACY_FROM) / FL_LITERACY_SPAN, 0, 1)
+#   x FL_CHURCH[the law] (a secular, literate society limits births; the game's literacy rises fast in the West, so the
+#   term starts late and stays small).
+FL_HEIRSHIP = 1.0
+FL_LITERACY = 0.3
+FL_LITERACY_FROM = 0.8
+FL_LITERACY_SPAN = 0.2
+FL_CHURCH = {"law_state_religion": 0.5, "law_freedom_of_conscience": 1.0, "law_total_separation": 1.5,
+             "law_state_atheism": 1.5}   # a State Religion variant takes its parent's (has_law_or_variant)
+FL_CHURCH_DEFAULT = 1.0
+# Modern methods replace it: the line is share x (1 - the erosion Late Marriage and Birth Spacing take from contraception,
+# te_demog_pr_erosion_contraception), at the country's people-weighted literacy. The couples who practised it now use
+# the methods the means already count (the techs' state_contraception_add), so the West of 1950 isn't counted twice.
+FL_ERODES = True
+# Cultural Hegemony's drift (section 6, "the soap-opera effect": Brazil's fertility fell where TV novelas reached, La
+# Ferrara, Chong and Duryea 2012): under Full, a factor on each state's desired fertility, the country's te_dg_ch_desired.
+# Each census year it moves CH_RATE of the way to 1 + CH_WEIGHT x exposure x (the hegemon's desired / the country's own
+# - 1), within 1 +- CH_CAP. Exposure is the hegemon's cultural lead over the country, as the foreign benchmark reads
+# it (ch_benchmark_applied / cultural_hegemony_foreign_benchmark_max: (the hegemon's share - the country's) / 100 x 1 -
+# its ideology resistance; 0 for the hegemon, and only while the Cultural Hegemony journal entry runs, the mass-media
+# era). Small: at a 30-point lead and the hegemon wanting two-thirds as many children, desired falls by 5%.
+CH_WEIGHT = 0.5
+CH_RATE = 0.2
+CH_CAP = 0.1
+CH_BENCHMARK_MAX = 3.0   # cultural_hegemony_foreign_benchmark_max (cultural_hegemony_script_values.txt)
+
 # ---- Cause multipliers from state inputs (§2.4) -----------------------------------
 # Medicine for infection, maternal and chronic deaths is 1 - access x treatment (the
 # modifier-types design, Decision 1). Access is how much of the population a state's medicine

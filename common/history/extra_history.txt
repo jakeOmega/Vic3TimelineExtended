@@ -255,8 +255,11 @@ GLOBAL = {
 	# (gm_commission_effects.txt).
 	gm_com_seed = yes
 	# Demographics §2.6: France's fertility transition began around 1800, before
-	# any modern method, so it starts with Family Limitation (any country can be
-	# given it). The only line in the demographics system that names a country.
+	# any modern method, so it starts with Family Limitation. Under the
+	# Demographics rule's Full setting this is only its start: a general practice
+	# every country can gain from its own conditions and its neighbours'
+	# (te_demog_fl_effects.txt; phase 3). The only line in the demographics
+	# system that names a country.
 	c:FRA ?= {
 		add_modifier = { name = te_demog_family_limitation }
 	}

@@ -61,6 +61,10 @@ DEMOG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt
 CONSEQ_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_consequence_effects.txt"
 CONSEQ_VALUES = ROOT / "common" / "script_values" / "te_demog_consequence_values.txt"
 CONSEQ_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_consequence_modifiers.txt"
+# phase 3: the spreading machinery (the practices' neighbour spread, Family Limitation, Cultural Hegemony's drift)
+FL_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fl_effects.txt"
+SPREAD_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_spread_effects_generated.txt"
+SPREAD_VALUES = ROOT / "common" / "script_values" / "te_demog_spread_values_generated.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -398,7 +402,12 @@ def ALL_OFF(f):
 
 # Phase 2 step 4's once-a-game self-checks, which the census's refresh calls (te_demog_consequences_refresh): they set a
 # global variable, log and fire an event, none of which the interpreter runs; TestConsequencesScript reads their text.
-SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": ""}
+SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": "",
+                    # phase 3's (te_debug_demog_effects.txt): they read the capital, s:STATE_ULSTER and debug_log
+                    "te_debug_demog_fl_selfcheck_start": "", "te_debug_demog_fl_neighbours_check": "",
+                    "te_debug_demog_neighbours_selfcheck": ""}
+# Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
+PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
 
 
 class _Engine:
@@ -414,14 +423,14 @@ class _Engine:
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
-                                    PLACE_EFFECTS])
+                                    FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS])
         # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
         # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
         self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
         self.effects.update(SELF_CHECK_STUBS)
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
-                                   WORK_VALUES, CONSEQ_VALUES, PLACE_VALUES])
+                                   WORK_VALUES, CONSEQ_VALUES, SPREAD_VALUES, PLACE_VALUES])
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -438,7 +447,7 @@ class _Engine:
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **fixtures}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **PHASE3_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -451,6 +460,9 @@ class _Engine:
         # the state region's own variables (state_region = { set_variable / has_variable / var: }): the practices'
         # copy of the shares, te_dg_pr_<P>_r (Stop B, I1)
         self.region_vars = {}
+        # phase 3: its neighbouring states (every_neighbouring_state), each a dict of its variables with its own
+        # state_population, as the siblings are (te_demog_practices_neighbours)
+        self.neighbours = []
 
     def _tree(self, table, name, args=()):
         key = (id(table), name, args)
@@ -549,6 +561,8 @@ class _Engine:
             return self.holds([item for item in arg if item[0] != "text"])
         if key == "has_variable":
             return arg in self.vars
+        if key == "has_local_variable":
+            return arg in self.locals
         if key == "has_modifier":
             return arg in self.modifiers
         if key == "has_decree":
@@ -617,30 +631,38 @@ class _Engine:
                     self.run(arg)
                 finally:
                     self.vars = saved
+            elif key == "every_neighbouring_state":
+                # phase 3: the state's neighbouring states (te_demog_practices_neighbours), as the siblings below
+                self._each_state(self.neighbours, arg)
             elif key == "state_region" and isinstance(arg, list):
                 # state_region = { every_scope_state = { limit = { … } … } }: the other states in its state region,
                 # each a dict of its variables with its own state_population (te_demog_practice_seed)
                 (inner, _, body), = arg
                 assert inner == "every_scope_state", inner
-                limit = next((v for k, _, v in body if k == "limit"), [])
-                rest = [i for i in body if i[0] != "limit"]
-                for sib in self.siblings:
-                    saved_vars, saved_pop = self.vars, self.fixtures.get("state_population")
-                    self.vars, self.fixtures["state_population"] = sib, sib["state_population"]
-                    try:
-                        if self.holds(limit):
-                            self.run(rest)
-                    finally:
-                        self.vars = saved_vars
-                        if saved_pop is None:
-                            self.fixtures.pop("state_population", None)
-                        else:
-                            self.fixtures["state_population"] = saved_pop
+                self._each_state(self.siblings, body)
             elif key in self.effects:
                 args = () if arg == "yes" else tuple((k, v) for k, _, v in arg)
                 self.run(self._tree(self.effects, key, args))
             else:
                 raise AssertionError(f"effect {key}")
+
+    def _each_state(self, states, body):
+        """An iterator's body over `states` (each a dict of its variables with its own state_population): its limit,
+        then the rest, with the state's variables and population in place of the scope's; locals are the effect's."""
+        limit = next((v for k, _, v in body if k == "limit"), [])
+        rest = [i for i in body if i[0] != "limit"]
+        for sib in states:
+            saved_vars, saved_pop = self.vars, self.fixtures.get("state_population")
+            self.vars, self.fixtures["state_population"] = sib, sib["state_population"]
+            try:
+                if self.holds(limit):
+                    self.run(rest)
+            finally:
+                self.vars = saved_vars
+                if saved_pop is None:
+                    self.fixtures.pop("state_population", None)
+                else:
+                    self.fixtures["state_population"] = saved_pop
 
     def call(self, effect):
         self.run(_parse_script(f"{effect} = yes"))
@@ -2032,8 +2054,23 @@ class TestPrimogenitureUnderFull(unittest.TestCase):
         self.assertNotRegex(code, r"\bstate_birth_rate_mult\b")
         self.assertRegex(code, rf"\b{P.ENGINE_LINE_TYPES[('absorbed', 'state_birth_rate_mult')]} = 0\.1\b")
         self.assertRegex(code, r"\bstate_migration_quota_mult = 0\.2\b", "the migration line stays")
-        # Forced Heirship's -0.15 stays on its engine field: on top under Full (spec 4.5, parent 13: phase 3)
-        self.assertRegex(_block(_text(self.MODS), "inh_forced_heirship_rural"), r"state_birth_rate_mult = -0\.15")
+        # phase 3 (parent spec 13): Forced Heirship's -0.15 moved the same way; under Full Family Limitation takes it
+        fh = re.sub(r"#[^\n]*", "", _block(_text(self.MODS), "inh_forced_heirship_rural"))
+        self.assertNotRegex(fh, r"\bstate_birth_rate_mult\b")
+        self.assertRegex(fh, rf"\b{P.ENGINE_LINE_TYPES[('absorbed', 'state_birth_rate_mult')]} = -0\.15\b")
+        self.assertRegex(fh, r"\bstate_migration_quota_mult = -0\.2\b", "its migration line stays")
+
+    def test_the_rural_refresh_fires_the_lines_refresh_for_forced_heirship_too(self):
+        """Phase 3: Forced Heirship's farm births ride the pair too, so its refresh fires the same day as
+        Primogeniture's; and the Primogeniture self-check skips a state whose owner just left Forced Heirship (the
+        removed line still reads that week)."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(INH_EFFECTS), "te_inh_refresh_rural_effects"))
+        self.assertIn("set_local_variable = { name = te_inh_fh_was value = 1 }", body)
+        fire = body[body.rindex("trigger_event = { id = te_demog_events.4 }") - 400:]
+        for needle in ("has_local_variable = te_inh_fh_was", "has_law = law_type:law_equal_inheritance"):
+            self.assertIn(needle, fire)
+        self.assertIn("NOT = { has_local_variable = te_inh_fh_was }",
+                      _block(_text(self.DEBUG_EFFECTS), "te_debug_demog_pr_selfcheck_start"))
 
     def test_the_rural_refresh_fires_the_lines_refresh(self):
         """No month's lag (#892's owner decision 2): the pair follows the yearly rural refresh the same day, from a

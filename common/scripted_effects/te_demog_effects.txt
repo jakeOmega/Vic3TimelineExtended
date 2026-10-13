@@ -69,6 +69,10 @@
 #   te_dg_pr_lm, te_dg_pr_bs  the practices' shares, Late Marriage and Birth Spacing, 0-1 (te_demog_practice_effects.txt;
 #                       a country's: its states' people-weighted mean; the state region's te_dg_pr_lm_r and
 #                       te_dg_pr_bs_r: the last stepped state's, the seed's fallback after a change of owner)
+#   te_dg_hegemon       phase 3, under Full: the Cultural Hegemony factor the step's desired fertility took (absent at
+#                       1; te_demog_fl_effects.txt). The country's phase 3 variables (Family Limitation's te_dg_pr_fl,
+#                       te_dg_fl_line, te_dg_fl_nb, te_dg_fl_agr, _lit, _ero; te_dg_desired; te_dg_ch_desired) are
+#                       listed in that file's header
 #   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
 #                       te_dg_m_mat maternal deaths per 100,000 births
 #   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments
@@ -451,6 +455,8 @@ te_demog_country_game_start = {
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		te_demog_country_census = yes
+		# phase 3, under Full: Family Limitation's seed and line (te_demog_fl_effects.txt)
+		te_demog_phase3_game_start = yes
 	}
 }
 
@@ -497,6 +503,8 @@ te_demog_prepare = {
 	set_variable = { name = te_dg_means value = te_demog_means }
 	# phase 2 step 3b: the family policy term and Family Housing's urban share, stored for the tooltips (generated)
 	te_demog_family_policy_store = yes
+	# phase 3: Cultural Hegemony's factor on desired fertility, stored for the tooltips (te_demog_fl_effects.txt)
+	te_demog_hegemon_store = yes
 	set_variable = { name = te_dg_desired value = te_demog_desired }
 	# women's legal standing, stored with the step's other terms so the tooltips match te_dg_tfr until the next step
 	set_variable = { name = te_dg_natural value = te_demog_tfr_natural }
@@ -1481,6 +1489,10 @@ te_demog_country_yearly = {
 			NOT = { te_demog_clock_on = yes }
 		}
 		te_demog_country_census = yes
+		# phase 3, under Full: Family Limitation's census year and Cultural Hegemony's drift (te_demog_fl_effects.txt)
+		te_demog_phase3_yearly = yes
+		# phase 3: once a game, whether a state's neighbours read across land and straits (te_debug_demog_effects.txt)
+		te_debug_demog_neighbours_selfcheck = yes
 	}
 	# phase 2 step 2: the AI's pension position, after the census set this year's bill
 	te_demog_pension_ai = yes
@@ -1538,6 +1550,8 @@ te_demog_step = {
 te_demog_step_begin = {
 	# medicine moves its share of the gap, then the practices theirs, then the year's rates use them
 	te_demog_medicine_drift = yes
+	# phase 3: the neighbouring states' shares, which each practice's step closes part of the gap to (generated)
+	te_demog_practices_neighbours = yes
 	te_demog_practices_step = yes
 	# phase 2 step 4: the ring's sex balance, which the year's fertility and women's rate read (te_dg_sxb)
 	te_demog_sex_births_store = yes
@@ -1898,6 +1912,8 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_chr_w value = 0 }
 	set_local_variable = { name = te_dg_c_work_w value = 0 }
 	te_demog_practices_country_init = yes
+	# phase 3: Family Limitation's and Cultural Hegemony's inputs (te_demog_fl_effects.txt)
+	te_demog_fl_country_init = yes
 	# phase 2 step 2: the work figures' people-weighted sums (te_demog_work_effects.txt)
 	te_demog_work_country_init = yes
 	every_scope_state = {
@@ -1905,6 +1921,7 @@ te_demog_country_census = {
 		te_demog_add_bands_to_root = yes
 		set_local_variable = { name = te_dg_c_s_pm value = { value = var:te_dg_people divide = 1000000 } }
 		te_demog_practices_country_add = yes
+		te_demog_fl_country_add = yes
 		te_demog_work_country_add = yes
 		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 100000 } }
 		change_local_variable = { name = te_dg_seeded add = 1 }
@@ -1969,6 +1986,7 @@ te_demog_country_census = {
 		te_demog_band_figures = { B = te_dg_cb }
 		te_demog_store_figures = yes
 		te_demog_practices_country_store = yes
+		te_demog_fl_country_store = yes
 		# phase 2 step 2: the work figures, then the pension and health bills
 		te_demog_work_country_store = yes
 		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
