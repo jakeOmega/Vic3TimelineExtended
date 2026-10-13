@@ -207,8 +207,7 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
 - **Trophies on Display has three views** (added 2026-10-13, owner's request), chosen by three buttons in the card's
   header and kept in the client-side `gm_state_tr_view` (`GetVariableSystem`: unset is Full, `short`, `collapsed`; not
   saved, and one choice for every state):
-  - **Full:** the pictured rows as before, plus a line per trophy that spells out what it counts for (levels carried
-    off, worth N grandeur toward prestige, cultural pull and the Armed Forces' approval).
+  - **Full:** the pictured rows as before, showing each trophy's Grandeur, with a tooltip explaining that effects are aggregated and can be viewed in the Grand Monuments tab of the Timeline Extended window or in the Journal Entry.
   - **Short:** one line per trophy, no picture: its title and its grandeur in brackets, with the dedication, origin,
     year, worth and (for a landmark) its history on hover (`gm_tr_short_tt`). Carry It Off or Bring It Home ends the
     line as a smaller button (`gm_tr_button`'s `tr_button_layout` block), so an occupier acts without leaving the view.
@@ -289,7 +288,7 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
 10. **The picture (2026-10-13):** each trophy row shows its monument's picture: the Parthenon's for the marbles, the
     Brandenburg Gate's for the Quadriga, and a carried-off column's own style and form. An older save's trophies show
     the draped picture until the next month's pass.
-11. **The three views (2026-10-13):** on the Home Counties (four of the trophies of 1836 stand there) the card opens in Full with a worth line under each row and the summary line above them. Short is a
+11. **The three views (2026-10-13):** on the Home Counties (four of the trophies of 1836 stand there) the card opens in Full with a Grandeur line under each row and the summary line above them. Short is a
     line per trophy: check that no title wraps in the 392-wide cell (a long one wrapping is tolerable, but note which),
     that the grandeur in brackets matches the Full rows, that hovering a line shows the dedication, origin, year and
     worth, and a landmark's history, and that Carry It Off, in a war with Britain while we hold the Home Counties,

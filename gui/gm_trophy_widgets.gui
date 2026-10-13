@@ -898,11 +898,11 @@ types gm_trophy_widget_types
 					tooltip = "gm_tr_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
-				### What it counts for, spelled out: the held row's worth line and
-				### tooltip, with the effects named.
+				### What it counts for: its grandeur, with the effects and where
+				### to view them on hover.
 				gm_tr_line = {
 					default_format = "#tooltippable"
-					tooltip = "gm_tr_row_value_tt"
+					tooltip = "gm_tr_row_site_value_tt"
 					text = "gm_tr_row_site_value"
 				}
 			}
