@@ -380,6 +380,10 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 - **Debug:** `te_debug_monuments.5` gains option c, which seeds the 1836 trophies (for a save made before this change).
 - **Docs:** `mod_systems.md` § Grand Monuments; the player guide's `02-timeline.md` (the landmark paragraph and
   *Monument trophies*); the trophies spec gets a pointer here.
+- **Pictures (drawn 2026-10-12):** each placed landmark has its own picture, as it stood in 1836 (the Parthenon a
+  roofless ruin with its small mosque, Karnak half in sand, Xanthos's temple-tomb fallen). Each takes its
+  code from 1,000,000 and its `gm_picture` entry in the icon pipeline, and stops showing its stand-in. The stand-in
+  columns above record what each showed before.
 
 ## 6. In-game checks
 
