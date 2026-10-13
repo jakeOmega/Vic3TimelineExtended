@@ -344,7 +344,10 @@ The farming effects follow the share of Peasants and Farmers in each state.
 Under Forced Heirship, smallholders have fewer children so the farm is not
 split again, and stay on their plots; under Primogeniture & Entail families
 are large and the younger sons leave the land. Industrial states are hardly
-touched, so the effect fades as you urbanize. States update once a year, so a
+touched, so the effect fades as you urbanize. Under the Demographics rule's Full
+setting the census carries the birth effects instead: Forced Heirship's through
+family limitation and Primogeniture's through late marriage (see
+[Reading the figures](08-states.md#reading-the-figures)). States update once a year, so a
 new law takes up to a year to reach them.
 
 Four amendments adjust the inheritance laws (see [Amendments to the mod's

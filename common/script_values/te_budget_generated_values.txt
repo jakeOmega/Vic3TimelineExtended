@@ -444,12 +444,17 @@ te_budget_income_tax_code = {
 	value = scope:tax_code
 }
 
+te_budget_income_pension_reform = {
+	value = scope:pension_reform
+}
+
 te_budget_income_additional = {
 	value = scope:additional
 	subtract = te_budget_income_un
 	subtract = te_budget_income_reserve
 	subtract = te_budget_income_war_tax
 	subtract = te_budget_income_tax_code
+	subtract = te_budget_income_pension_reform
 }
 
 te_budget_income_other = {
@@ -467,6 +472,7 @@ te_budget_income_other = {
 	subtract = te_budget_income_reserve
 	subtract = te_budget_income_war_tax
 	subtract = te_budget_income_tax_code
+	subtract = te_budget_income_pension_reform
 	subtract = te_budget_income_additional
 }
 
@@ -1115,6 +1121,43 @@ te_budget_income_tax_code_share = {
 	max = 1
 }
 
+te_budget_income_pension_reform_positive = {
+	value = te_budget_income_pension_reform
+	min = 0
+}
+
+te_budget_income_pension_reform_active = {
+	value = 0
+	if = { limit = { NOT = { te_budget_income_pension_reform = 0 } } value = 1 }
+}
+
+te_budget_income_pension_reform_subtree_rows = {
+	value = te_budget_income_pension_reform_active
+}
+
+te_budget_income_pension_reform_visible = {
+	value = te_budget_income_pension_reform_active
+}
+
+te_budget_income_pension_reform_cached_rank = {
+	value = scope:rank_pension_reform
+}
+
+te_budget_income_pension_reform_cached_active = {
+	value = scope:active_pension_reform
+}
+
+te_budget_income_pension_reform_slice = {
+	value = scope:positive_income_pension_reform
+}
+
+te_budget_income_pension_reform_share = {
+	value = te_budget_income_pension_reform_positive
+	divide = { value = scope:positive_total min = 0.001 }
+	min = 0
+	max = 1
+}
+
 te_budget_income_additional_positive = {
 	value = te_budget_income_additional
 	min = 0
@@ -1198,6 +1241,7 @@ te_budget_income_positive_total = {
 	add = te_budget_income_un_positive
 	add = te_budget_income_reserve_positive
 	add = te_budget_income_tax_code_positive
+	add = te_budget_income_pension_reform_positive
 	add = te_budget_income_additional_positive
 	add = te_budget_income_other_positive
 }
@@ -1214,6 +1258,7 @@ te_budget_income_taxes_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_taxes } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_taxes } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_taxes } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_taxes } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_taxes } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_taxes } add = scope:subtree_other }
 }
@@ -1226,6 +1271,7 @@ te_budget_income_income_tax_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_taxes } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_taxes } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_taxes } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_taxes } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_taxes } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_taxes } add = scope:subtree_other }
 	if = { limit = { scope:subtree_poll_tax > 0 scope:row_poll_tax > scope:row_income_tax } add = scope:subtree_poll_tax }
@@ -1243,6 +1289,7 @@ te_budget_income_poll_tax_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_taxes } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_taxes } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_taxes } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_taxes } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_taxes } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_taxes } add = scope:subtree_other }
 	if = { limit = { scope:subtree_income_tax > 0 scope:row_income_tax >= scope:row_poll_tax } add = scope:subtree_income_tax }
@@ -1260,6 +1307,7 @@ te_budget_income_consumption_tax_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_taxes } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_taxes } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_taxes } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_taxes } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_taxes } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_taxes } add = scope:subtree_other }
 	if = { limit = { scope:subtree_income_tax > 0 scope:row_income_tax >= scope:row_consumption_tax } add = scope:subtree_income_tax }
@@ -1277,6 +1325,7 @@ te_budget_income_dividends_tax_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_taxes } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_taxes } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_taxes } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_taxes } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_taxes } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_taxes } add = scope:subtree_other }
 	if = { limit = { scope:subtree_income_tax > 0 scope:row_income_tax >= scope:row_dividends_tax } add = scope:subtree_income_tax }
@@ -1294,6 +1343,7 @@ te_budget_income_tariffs_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_taxes } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_taxes } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_taxes } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_taxes } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_taxes } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_taxes } add = scope:subtree_other }
 	if = { limit = { scope:subtree_income_tax > 0 scope:row_income_tax >= scope:row_tariffs } add = scope:subtree_income_tax }
@@ -1311,6 +1361,7 @@ te_budget_income_war_tax_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_taxes } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_taxes } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_taxes } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_taxes } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_taxes } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_taxes } add = scope:subtree_other }
 	if = { limit = { scope:subtree_income_tax > 0 scope:row_income_tax >= scope:row_war_tax } add = scope:subtree_income_tax }
@@ -1328,6 +1379,7 @@ te_budget_income_diplomacy_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_diplomacy } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_diplomacy } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_diplomacy } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_diplomacy } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_diplomacy } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_diplomacy } add = scope:subtree_other }
 }
@@ -1340,6 +1392,7 @@ te_budget_income_pacts_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_diplomacy } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_diplomacy } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_diplomacy } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_diplomacy } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_diplomacy } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_diplomacy } add = scope:subtree_other }
 	if = { limit = { scope:subtree_treaties > 0 scope:row_treaties > scope:row_pacts } add = scope:subtree_treaties }
@@ -1353,6 +1406,7 @@ te_budget_income_treaties_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_diplomacy } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_diplomacy } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_diplomacy } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_diplomacy } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_diplomacy } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_diplomacy } add = scope:subtree_other }
 	if = { limit = { scope:subtree_pacts > 0 scope:row_pacts >= scope:row_treaties } add = scope:subtree_pacts }
@@ -1366,6 +1420,7 @@ te_budget_income_minting_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_minting } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_minting } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_minting } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_minting } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_minting } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_minting } add = scope:subtree_other }
 }
@@ -1378,6 +1433,7 @@ te_budget_income_government_dividends_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un > scope:row_government_dividends } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_government_dividends } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_government_dividends } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_government_dividends } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_government_dividends } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_government_dividends } add = scope:subtree_other }
 }
@@ -1390,6 +1446,7 @@ te_budget_income_un_display_rank = {
 	if = { limit = { scope:subtree_government_dividends > 0 scope:row_government_dividends >= scope:row_un } add = scope:subtree_government_dividends }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve > scope:row_un } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_un } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_un } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_un } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_un } add = scope:subtree_other }
 }
@@ -1402,6 +1459,7 @@ te_budget_income_reserve_display_rank = {
 	if = { limit = { scope:subtree_government_dividends > 0 scope:row_government_dividends >= scope:row_reserve } add = scope:subtree_government_dividends }
 	if = { limit = { scope:subtree_un > 0 scope:row_un >= scope:row_reserve } add = scope:subtree_un }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code > scope:row_reserve } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_reserve } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_reserve } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_reserve } add = scope:subtree_other }
 }
@@ -1414,8 +1472,22 @@ te_budget_income_tax_code_display_rank = {
 	if = { limit = { scope:subtree_government_dividends > 0 scope:row_government_dividends >= scope:row_tax_code } add = scope:subtree_government_dividends }
 	if = { limit = { scope:subtree_un > 0 scope:row_un >= scope:row_tax_code } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve >= scope:row_tax_code } add = scope:subtree_reserve }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform > scope:row_tax_code } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_tax_code } add = scope:subtree_additional }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_tax_code } add = scope:subtree_other }
+}
+
+te_budget_income_pension_reform_display_rank = {
+	value = 0
+	if = { limit = { scope:subtree_taxes > 0 scope:row_taxes >= scope:row_pension_reform } add = scope:subtree_taxes }
+	if = { limit = { scope:subtree_diplomacy > 0 scope:row_diplomacy >= scope:row_pension_reform } add = scope:subtree_diplomacy }
+	if = { limit = { scope:subtree_minting > 0 scope:row_minting >= scope:row_pension_reform } add = scope:subtree_minting }
+	if = { limit = { scope:subtree_government_dividends > 0 scope:row_government_dividends >= scope:row_pension_reform } add = scope:subtree_government_dividends }
+	if = { limit = { scope:subtree_un > 0 scope:row_un >= scope:row_pension_reform } add = scope:subtree_un }
+	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve >= scope:row_pension_reform } add = scope:subtree_reserve }
+	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code >= scope:row_pension_reform } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_pension_reform } add = scope:subtree_additional }
+	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_pension_reform } add = scope:subtree_other }
 }
 
 te_budget_income_additional_display_rank = {
@@ -1427,6 +1499,7 @@ te_budget_income_additional_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un >= scope:row_additional } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve >= scope:row_additional } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code >= scope:row_additional } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform >= scope:row_additional } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_additional } add = scope:subtree_other }
 }
 
@@ -1439,6 +1512,7 @@ te_budget_income_other_display_rank = {
 	if = { limit = { scope:subtree_un > 0 scope:row_un >= scope:row_other } add = scope:subtree_un }
 	if = { limit = { scope:subtree_reserve > 0 scope:row_reserve >= scope:row_other } add = scope:subtree_reserve }
 	if = { limit = { scope:subtree_tax_code > 0 scope:row_tax_code >= scope:row_other } add = scope:subtree_tax_code }
+	if = { limit = { scope:subtree_pension_reform > 0 scope:row_pension_reform >= scope:row_other } add = scope:subtree_pension_reform }
 	if = { limit = { scope:subtree_additional > 0 scope:row_additional >= scope:row_other } add = scope:subtree_additional }
 }
 
@@ -1451,6 +1525,7 @@ te_budget_income_display_count = {
 	add = scope:subtree_un
 	add = scope:subtree_reserve
 	add = scope:subtree_tax_code
+	add = scope:subtree_pension_reform
 	add = scope:subtree_additional
 	add = scope:subtree_other
 }
@@ -1697,7 +1772,7 @@ te_budget_income_cum_15 = {
 	add = te_budget_income_un_slice
 	add = te_budget_income_reserve_slice
 	add = te_budget_income_tax_code_slice
-	add = te_budget_income_additional_slice
+	add = te_budget_income_pension_reform_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -1720,6 +1795,31 @@ te_budget_income_cum_16 = {
 	add = te_budget_income_un_slice
 	add = te_budget_income_reserve_slice
 	add = te_budget_income_tax_code_slice
+	add = te_budget_income_pension_reform_slice
+	add = te_budget_income_additional_slice
+	divide = { value = scope:positive_total min = 0.001 }
+	min = 0
+	max = 1
+}
+
+te_budget_income_cum_17 = {
+	value = 0
+	add = te_budget_income_taxes_slice
+	add = te_budget_income_income_tax_slice
+	add = te_budget_income_poll_tax_slice
+	add = te_budget_income_consumption_tax_slice
+	add = te_budget_income_dividends_tax_slice
+	add = te_budget_income_tariffs_slice
+	add = te_budget_income_war_tax_slice
+	add = te_budget_income_diplomacy_slice
+	add = te_budget_income_pacts_slice
+	add = te_budget_income_treaties_slice
+	add = te_budget_income_minting_slice
+	add = te_budget_income_government_dividends_slice
+	add = te_budget_income_un_slice
+	add = te_budget_income_reserve_slice
+	add = te_budget_income_tax_code_slice
+	add = te_budget_income_pension_reform_slice
 	add = te_budget_income_additional_slice
 	add = te_budget_income_other_slice
 	divide = { value = scope:positive_total min = 0.001 }

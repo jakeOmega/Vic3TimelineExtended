@@ -69,7 +69,7 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    **{t: {"technology"} for t in P.TREATMENT_TYPE.values()},
                    P.TREATMENT_TYPE["chronic"]: {"technology", "law"},
                    "state_external_mortality_mult": {"technology", "law", "institution"},
-                   "state_work_mortality_mult": {"law", "law_institution"},
+                   "state_work_mortality_mult": {"law", "law_institution", "technology"},   # phase 3: Mind Backups
                    "state_chronic_mortality_mult": {"law"},
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
                    P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"},
@@ -78,7 +78,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    P.MALE_PARTICIPATION_TYPE: {"law"}, P.PARTICIPATION_TYPE: {"law_institution"},
                    P.CAPACITY_TYPE: {"law"},
                    # calibration step 3: Malaria Prevention's control
-                   P.MALARIA_CONTROL_TYPE: {"technology"}}
+                   P.MALARIA_CONTROL_TYPE: {"technology"},
+                   # phase 3, the late game: the ageing ladder and the pull sit on the era 10-12 technologies
+                   P.AGEING_RATE_TYPE: {"technology"}, P.REJUVENATION_TYPE: {"technology"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 

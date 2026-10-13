@@ -27,7 +27,9 @@ Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequenc
 on purpose, and nothing else: the war dead's sums, the 18-40 te_dg_f1840 and te_dg_m1840, become the conscription
 pool's (te_dg_faw, te_dg_fam: calendar 20 and over, biological 39 and under), in the cases and in
 te_demog_normalize_bands (STEP4_RENAMED); and its new names (STEP4_NEW_VARS). Its sex-balance terms leave these cases
-alone: their balances (94-100 men per 100 women) are above the threshold."""
+alone: their balances (94-100 men per 100 women) are above the threshold.
+
+The migrant booking (2026-10-12) rewrites te_demog_enter_class (BOOKING_DIGESTS) and changes no recorded number."""
 
 import functools
 import hashlib
@@ -84,6 +86,28 @@ STEP3_DIGESTS = {
         "10a1a9f5fad0b5b475884d196e0ad597605b78ce05e48b30849d05431c3fa168",
 }
 STEP3_VARS = {"te_dg_in_mal", "te_dg_in_malc"}
+# Phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md): a state with no ageing carrier
+# and no treated people takes the plain sweep and changes no number (these cases have none); every census step now
+# stores the mean age at childbirth (late-game §6.2), the one new name here. The walk's Full-only sums gain the bare
+# deaths x wealth and the richest pop the wealth slope reads (call 14: two locals, read only in a late state's refresh,
+# whose slope is 0 elsewhere), so the absorbed walk's two blocks are held to their new digests.
+PHASE3_VARS = {"te_dg_mab"}
+PHASE3_DIGESTS = {
+    ("generated_effects", "te_demog_absorbed_walk_init"):
+        "7c462c234d5672a8ea73e92287716b915166c61c8944b8284476ede476b0d936",
+    ("generated_effects", "te_demog_absorbed_walk_pop"):
+        "ff0c52f0f59476dcf0e3fda6eff86cc1aea107e7849840c9c091609d40ec6300",
+}
+# The migrant booking (2026-10-12; docs/testing/demographics-migrant-booking-2026-10-12.md) rewrites one block on
+# purpose: te_demog_enter_class takes each class and sex's rate from te_demog_migrant_rates (the cap, then a flat rate
+# for what it leaves) instead of the profile's share over the class's people. Below the cap the two are the same; the
+# golden cases step with no flows (te_demog_no_flows), so every recorded number stays as it was, and
+# test_demographics_registry's TestCohortScript holds the booking to the model. Held to its new digest, as
+# STEP3_DIGESTS are.
+BOOKING_DIGESTS = {
+    ("generated_effects", "te_demog_enter_class"):
+        "07f944c3f25667c54c199dea7cba21d956615a0f8fb065f1fd3e5d802f34ad7a",
+}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -226,7 +250,8 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS, set(), case)
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS,
+                             set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
     def test_the_full_cases_hold_step_twos_split(self):
@@ -248,7 +273,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for key, rec in self.golden["blocks"].items():
             for name, digest in rec.items():
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
-                want = STEP3_DIGESTS.get((key, name), digest)
+                want = PHASE3_DIGESTS.get((key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

@@ -119,14 +119,31 @@ te_demog_pension_term_end_year = {
 
 # The age the linked positions head for (demographics_model.pension_position_age): the country's people-weighted
 # old-age threshold less te_demog_k_pension_link_offset, at least te_demog_k_pension_link_floor; the floor before the
-# country's first census under this build. Both read te_dg_old_age until phase 3 gives the untreated their own.
-te_demog_pension_link_target = {
+# country's first census under this build. Linked to Average Longevity follows the state's blend (te_dg_old_age); Linked
+# to Common Longevity the untreated's own (te_dg_old_age_c, phase 3), which is the blend until anyone is treated.
+te_demog_pension_link_target_average = {
 	value = te_demog_k_pension_link_floor
 	if = {
 		limit = { has_variable = te_dg_old_age }
 		value = var:te_dg_old_age
 		subtract = te_demog_k_pension_link_offset
 		min = te_demog_k_pension_link_floor
+	}
+}
+te_demog_pension_link_target_common = {
+	value = te_demog_pension_link_target_average
+	if = {
+		limit = { has_variable = te_dg_old_age_c }
+		value = var:te_dg_old_age_c
+		subtract = te_demog_k_pension_link_offset
+		min = te_demog_k_pension_link_floor
+	}
+}
+te_demog_pension_link_target = {
+	value = te_demog_pension_link_target_average
+	if = {
+		limit = { te_demog_pension_pos = te_demog_k_pension_pos_linked_common }
+		value = te_demog_pension_link_target_common
 	}
 }
 
@@ -175,7 +192,7 @@ te_demog_pension_bill_share = {
 
 # The health bill's term (§2.4; demographics_model.health_term): the need term, the people-weighted health need over
 # 1836's less 1 times the weight, at most the cap (negative for a country younger than 1836's world), plus the
-# chronic-treatment technologies. Longevity care paid by the system is phase 3's.
+# chronic-treatment technologies and (phase 3, late-game §5.2) longevity care paid by the system.
 te_demog_health_need_term = {
 	value = var:te_dg_need
 	subtract = 1
@@ -185,6 +202,21 @@ te_demog_health_need_term = {
 te_demog_health_term_now = {
 	value = te_demog_health_need_term
 	add = te_demog_health_tech_term
+	add = te_demog_health_lx_term
+}
+# Longevity care paid by the system (late-game §5.2, call 13): te_demog_k_lx_public_health_weight x the share of people on
+# the public route, at most the share in care (the country's te_dg_lx_pub and te_dg_elig; 0 before the late game).
+te_demog_health_lx_term = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_lx_pub
+			has_variable = te_dg_elig
+		}
+		value = var:te_dg_lx_pub
+		max = var:te_dg_elig
+		multiply = te_demog_k_lx_public_health_weight
+	}
 }
 te_demog_health_bill_up_mult = { value = var:te_dg_health_term min = 0 }
 # the health term below 0, as a saving (the hover's second wording); 0 with no term (the hover reads it unguarded)

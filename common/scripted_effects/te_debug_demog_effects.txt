@@ -24,7 +24,9 @@
 #                       unincorporated state read them (live), and the cause multipliers
 #                       as the last step left them (-1 before a census's first step); the
 #                       practices' shares and targets (lm=, bs=, lm_target=, bs_target=; -1
-#                       with no census) and the absorbed births sum (absorbed_b=)
+#                       with no census) and the absorbed births sum (absorbed_b=); phase 3: the owner's Family
+#                       Limitation line in the means (fl_line=) and the Cultural Hegemony factor the step took
+#                       (hegemon=)
 #   TE_DEMOG_SHOCK:     option m (probe P1): every devastated or polluted state's
 #                       mortality and birth reads, devastation, turmoil and pollution,
 #                       each line followed by the state's scope
@@ -386,7 +388,7 @@ te_debug_demog_modifier_reads = {
 
 # THIS = a state: its TE_DEMOG_MODS line.
 te_debug_demog_mods_line = {
-	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString] impact=[THIS.ScriptValue('te_demog_institution_impact')|3] diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3] lm=[THIS.ScriptValue('te_debug_demog_pr_lm')|3] bs=[THIS.ScriptValue('te_debug_demog_pr_bs')|3] lm_target=[THIS.ScriptValue('te_debug_demog_pr_target_lm')|3] bs_target=[THIS.ScriptValue('te_debug_demog_pr_target_bs')|3] absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|3]"
+	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString] impact=[THIS.ScriptValue('te_demog_institution_impact')|3] diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3] lm=[THIS.ScriptValue('te_debug_demog_pr_lm')|3] bs=[THIS.ScriptValue('te_debug_demog_pr_bs')|3] lm_target=[THIS.ScriptValue('te_debug_demog_pr_target_lm')|3] bs_target=[THIS.ScriptValue('te_debug_demog_pr_target_bs')|3] absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|3] fl_line=[THIS.ScriptValue('te_demog_fl_line_shown')|3] hegemon=[THIS.ScriptValue('te_demog_hegemon_used')|3]"
 	# phase 2 step 1: the census's work figures, the reads no test runs and the working-adult families (TE_DEMOG_WORK)
 	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
@@ -608,6 +610,9 @@ te_debug_demog_pr_selfcheck_start = {
 		limit = {
 			NOT = { has_global_variable = te_inh_pr_selfcheck_done }
 			NOT = { has_local_variable = te_inh_pr_was }
+			# phase 3: a state whose owner just left Forced Heirship still reads its line this week (the remove isn't
+			# visible inside the refresh), which would read as a wrong Primogeniture line
+			NOT = { has_local_variable = te_inh_fh_was }
 			var:te_inh_agrarian_share > 0.1
 			var:te_inh_agrarian_share < 0.9
 		}
@@ -987,7 +992,8 @@ te_debug_demog_work_census_line = {
 # Two once-a-game self-checks (owner, 2026-10-12; docs/testing/demographics-playtest.md, "Self-checks"), each called
 # from te_demog_consequences_refresh (te_demog_consequence_effects.txt), ROOT the state:
 #   conscription_term_read  the first state to take a fresh conscription pair (its term at least te_demog_k_conscription_cut
-#                           either way, and only while the effect is on: held back, it arms never): its
+#                           either way, and only while the effect is on, as it is since the migrant booking; held back, it
+#                           arms never): its
 #                           state_conscription_rate_mult before the add, then a week later (te_debug_demog.30; a modifier
 #                           sum can lag a day) whether it moved by the term. It tests the term's path into the state's
 #                           read; whether the read moves the state's potential conscripts is the play-test's item (no
@@ -1064,4 +1070,125 @@ te_debug_demog_consequence_lines = {
 		debug_log = "TE_DEMOG_CONSEQ fam=[THIS.ScriptValue('te_debug_demog_cq_fam')|0] faw=[THIS.ScriptValue('te_debug_demog_cq_faw')|0] people=[THIS.ScriptValue('te_debug_demog_cq_people')|0] share=[THIS.ScriptValue('te_demog_fam_share')|4] men_share=[THIS.ScriptValue('te_demog_fam_men_share')|3] term=[THIS.ScriptValue('te_demog_conscription_term')|3] mc=[THIS.ScriptValue('te_debug_demog_cq_mc')|3] consc_mod=[THIS.ScriptValue('te_debug_demog_cq_consc_mod')|3] youth=[THIS.ScriptValue('te_demog_youth_share')|3] unemp=[THIS.ScriptValue('te_demog_unemployment')|3] y_now=[THIS.ScriptValue('te_demog_youth_bulge_now')|3] yb=[THIS.ScriptValue('te_debug_demog_cq_yb')|3] sex=[THIS.ScriptValue('te_debug_demog_cq_sex')|1] sxb=[THIS.ScriptValue('te_debug_demog_cq_sxb')|1] tfr_sex=[THIS.ScriptValue('te_demog_tfr_sex')|3] women_add=[THIS.ScriptValue('te_demog_sex_women_add')|3] fewer=[THIS.ScriptValue('te_demog_sex_fewer_men')|3] more=[THIS.ScriptValue('te_demog_sex_more_men')|3] radicals_mod=[THIS.ScriptValue('te_debug_demog_cq_radicals_mod')|3] turmoil_mod=[THIS.ScriptValue('te_debug_demog_cq_turmoil_mod')|3] feminist_mod=[THIS.ScriptValue('te_debug_demog_cq_feminist_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 	debug_log = "TE_DEMOG_CONSEQ_COUNTRY fam_share=[THIS.ScriptValue('te_debug_demog_cq_c_share')|4] fam_men=[THIS.ScriptValue('te_debug_demog_cq_c_men')|3] term=[THIS.ScriptValue('te_demog_country_conscription')|3] youth=[THIS.ScriptValue('te_demog_country_youth_share')|3] yb_states=[THIS.ScriptValue('te_debug_demog_cq_c_yb_n')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# ---- Phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md) -------------------------
+# Option u: the capital's late figures (TE_DEMOG_LATE) and the country's (TE_DEMOG_LATE_COUNTRY). THIS = the country.
+te_debug_demog_late_lines = {
+	capital = { te_debug_demog_late_line = yes }
+	debug_log = "TE_DEMOG_LATE_COUNTRY market_w=[THIS.ScriptValue('te_debug_demog_late_country_w')|1] elig=[THIS.ScriptValue('te_debug_demog_late_elig')|3] pub=[THIS.ScriptValue('te_debug_demog_late_pub')|3] l100=[THIS.ScriptValue('te_debug_demog_late_l100')|3] l100t=[THIS.ScriptValue('te_debug_demog_late_l100t')|3] l100u=[THIS.ScriptValue('te_debug_demog_late_l100u')|3] gap=[THIS.ScriptValue('te_demog_lx_gap')|3] old_age=[THIS.ScriptValue('te_debug_demog_late_old_age')|1] old_age_c=[THIS.ScriptValue('te_debug_demog_late_old_age_c')|1] age=[THIS.ScriptValue('te_debug_demog_late_age')|1] bio=[THIS.ScriptValue('te_debug_demog_late_bio')|1] mab=[THIS.ScriptValue('te_debug_demog_late_mab')|1] health_lx=[THIS.ScriptValue('te_demog_health_lx_term')|3] politics_x=[THIS.ScriptValue('te_demog_lx_gap_politics_x')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# THIS = a state (the capital): every late variable it holds, -1 where it has none (te_debug_demog_values.txt).
+te_debug_demog_late_line = {
+	debug_log = "TE_DEMOG_LATE rate=[THIS.ScriptValue('te_demog_lx_rate')|3] pull=[THIS.ScriptValue('te_demog_lx_pull')|3] carrier=[THIS.ScriptValue('te_demog_lx_carrier_on')|0] elig=[THIS.ScriptValue('te_debug_demog_late_elig')|3] cover=[THIS.ScriptValue('te_debug_demog_late_cover')|3] sbar=[THIS.ScriptValue('te_debug_demog_late_sbar')|3] pub=[THIS.ScriptValue('te_debug_demog_late_pub')|3] public_now=[THIS.ScriptValue('te_demog_lx_public')|3] threshold=[THIS.ScriptValue('te_demog_lx_threshold')|1] banned=[THIS.ScriptValue('te_demog_lx_banned')|0] mandatory=[THIS.ScriptValue('te_demog_lx_mandatory')|0] unrestricted=[THIS.ScriptValue('te_demog_lx_unrestricted')|0] ecto_levels=[THIS.ScriptValue('te_demog_lx_ecto_levels')|0] l100=[THIS.ScriptValue('te_debug_demog_late_l100')|3] l100t=[THIS.ScriptValue('te_debug_demog_late_l100t')|3] l100u=[THIS.ScriptValue('te_debug_demog_late_l100u')|3] old_age=[THIS.ScriptValue('te_debug_demog_late_old_age')|1] old_age_c=[THIS.ScriptValue('te_debug_demog_late_old_age_c')|1] rho=[THIS.ScriptValue('te_debug_demog_late_rho')|3] slope=[THIS.ScriptValue('te_debug_demog_late_slope')|5] mbar=[THIS.ScriptValue('te_debug_demog_late_mbar')|3] wealth_w=[THIS.ScriptValue('te_debug_demog_late_w')|5] age=[THIS.ScriptValue('te_debug_demog_late_age')|1] bio=[THIS.ScriptValue('te_debug_demog_late_bio')|1] mab=[THIS.ScriptValue('te_debug_demog_late_mab')|1] b50=[THIS.ScriptValue('te_debug_demog_late_b50')|3] s5=[THIS.ScriptValue('te_debug_demog_late_s5')|3] d5=[THIS.ScriptValue('te_debug_demog_late_d5')|2] ps=[THIS.ScriptValue('te_debug_demog_late_ps')|3] pd=[THIS.ScriptValue('te_debug_demog_late_pd')|2] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# Option v: the ageing ladder at once, for a play-test of the late game in an evening (THIS = the country).
+te_debug_demog_late_ladder = {
+	add_technology_researched = mrna_therapeutics
+	add_technology_researched = personalized_medicine
+	add_technology_researched = genetic_engineering
+	add_technology_researched = biological_immortality
+	debug_log = "TE_DEMOG_LATE ladder researched for [THIS.GetName] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# ---- Phase 3's self-checks (te_demog_fl_effects.txt; owner, 2026-10-12: a once-a-game line in place of an in-game gate)
+# docs/testing/demographics-playtest.md, "Self-checks". Three engine facts the spreading machinery rests on:
+# - family_limitation_scaled: a script-only state type (state_fertility_means_add) on a country static modifier, scaled
+#   by its multiplier, reaches the state's read. The type-on-a-country half is already seen in saves (France's states
+#   read history's 0.6 in te_dg_means, 2026-10-12), the multiplier half only on a state modifier (primogeniture_scaled).
+#   Once a game under Full, the first country whose line goes on fresh (it carried none, so the read before holds none)
+#   with a line from te_demog_k_fl_line_min to 0.3 (multiplier 0.5 or less: an unscaled 0.6 reads at least 0.3 apart);
+#   the verdict a week later from the capital (te_debug_demog.90).
+# - fl_neighbours_read: every_neighbouring_state from country scope returns the states across the borders. Once a game
+#   under Full, at the first Family Limitation step of a country with a foreign neighbour by the state-scope test.
+# - neighbouring_state_reads: every_neighbouring_state from state scope returns a land neighbour (the practices' spread
+#   rests on it), and whether it crosses a strait (Ulster to the Scottish Lowlands: the spec's open question). Once a game
+#   wherever the census runs, at the first country census on 31 December.
+
+# THIS = ROOT = a country under Full, in te_demog_fl_apply before the line is swapped (te_dg_fl_line is the new line).
+te_debug_demog_fl_selfcheck_start = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_fl_selfcheck_done }
+			NOT = { has_modifier = te_demog_family_limitation }
+			var:te_dg_fl_line >= te_demog_k_fl_line_min
+			var:te_dg_fl_line <= 0.3
+			exists = capital
+		}
+		set_global_variable = { name = te_demog_fl_selfcheck_done value = yes }
+		set_local_variable = { name = te_dg_fl_chk_line value = var:te_dg_fl_line }
+		capital = {
+			set_variable = { name = te_dg_fl_chk_before value = modifier:state_fertility_means_add }
+			set_variable = { name = te_dg_fl_chk_line value = local_var:te_dg_fl_chk_line }
+			set_variable = { name = te_dg_fl_chk_owner value = ROOT }
+			debug_log = "TE_SELF_CHECK START family_limitation_scaled before=[THIS.Var('te_dg_fl_chk_before').GetValue|4] line=[THIS.Var('te_dg_fl_chk_line').GetValue|4] (the verdict follows in a week; none means the capital changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log_scopes = yes
+			trigger_event = { id = te_debug_demog.90 days = 7 }
+		}
+	}
+}
+
+# THIS = ROOT = a country under Full, in te_demog_fl_step after its walk over its neighbouring states (locals
+# te_dg_fl_nf: the states other countries own, te_dg_fl_own: its own the iterator returned too).
+te_debug_demog_fl_neighbours_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_fl_nb_selfcheck_done }
+			any_scope_state = {
+				any_neighbouring_state = {
+					exists = owner
+					NOT = { owner = ROOT }
+				}
+			}
+		}
+		set_global_variable = { name = te_demog_fl_nb_selfcheck_done value = yes }
+		set_variable = { name = te_dg_fl_chk_nf value = local_var:te_dg_fl_nf }
+		set_variable = { name = te_dg_fl_chk_own value = local_var:te_dg_fl_own }
+		if = {
+			limit = { local_var:te_dg_fl_nf > 0 }
+			debug_log = "TE_SELF_CHECK OK fl_neighbours_read foreign=[THIS.Var('te_dg_fl_chk_nf').GetValue|0] own=[THIS.Var('te_dg_fl_chk_own').GetValue|0] (own above 0: the iterator returns the country's own states too, which the step leaves out) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN fl_neighbours_read foreign=0 own=[THIS.Var('te_dg_fl_chk_own').GetValue|0] (every_neighbouring_state from country scope returns no foreign state, so Family Limitation never spreads: walk the country's own states' every_neighbouring_state instead, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+		remove_variable = te_dg_fl_chk_nf
+		remove_variable = te_dg_fl_chk_own
+	}
+}
+
+# THIS = a country at its 31 December census, wherever the census runs (te_demog_country_yearly).
+te_debug_demog_neighbours_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_nb_selfcheck_done }
+			s:STATE_ULSTER = { any_scope_state = { exists = owner } }
+		}
+		set_global_variable = { name = te_demog_nb_selfcheck_done value = yes }
+		set_local_variable = { name = te_dg_nb_chk_land value = 0 }
+		set_local_variable = { name = te_dg_nb_chk_strait value = 0 }
+		s:STATE_ULSTER = {
+			if = {
+				limit = { any_scope_state = { any_neighbouring_state = { state_region = s:STATE_LEINSTER } } }
+				set_local_variable = { name = te_dg_nb_chk_land value = 1 }
+			}
+			if = {
+				limit = { any_scope_state = { any_neighbouring_state = { state_region = s:STATE_LOWLANDS } } }
+				set_local_variable = { name = te_dg_nb_chk_strait value = 1 }
+			}
+		}
+		# kept on the country for the line (a debug_log line reads THIS.Var, not a local)
+		set_variable = { name = te_dg_nb_chk_strait value = local_var:te_dg_nb_chk_strait }
+		if = {
+			limit = { local_var:te_dg_nb_chk_land = 1 }
+			debug_log = "TE_SELF_CHECK OK neighbouring_state_reads land=1 strait=[THIS.Var('te_dg_nb_chk_strait').GetValue|0] (strait=1: the practices spread across straits too, so the harness's replay takes demographics_adjacency's straits; strait=0: islands spread only through their own conditions) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN neighbouring_state_reads land=0 strait=[THIS.Var('te_dg_nb_chk_strait').GetValue|0] (every_neighbouring_state from a state doesn't return Ulster's land neighbour Leinster, so Late Marriage and Birth Spacing never spread: set PRACTICE_SPREAD to 0 and regenerate, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+		remove_variable = te_dg_nb_chk_strait
+	}
 }

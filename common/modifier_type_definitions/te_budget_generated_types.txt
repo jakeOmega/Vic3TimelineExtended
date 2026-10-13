@@ -34,6 +34,14 @@ country_te_budget_income_tax_code_add = {
 	script_only = yes
 }
 
+country_te_budget_income_pension_reform_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	prefix = "MONEY_PREFIX"
+	script_only = yes
+}
+
 country_te_budget_expense_banking_add = {
 	color = neutral
 	percent = no

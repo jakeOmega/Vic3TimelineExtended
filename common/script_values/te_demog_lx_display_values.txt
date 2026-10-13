@@ -1,0 +1,25 @@
+﻿# ============================================================================
+# DEMOGRAPHICS PHASE 3 — display values for the late game's rows (gui/te_demographics_widgets.gui and their loc in
+# te_miscellaneous_l_english.yml; docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §6). Read only by
+# the panel; the census never reads them.
+# ============================================================================
+
+# State or country scope: the longevity gap in points, Living to 100 in care less out of it, x 100 (te_demog_lx_gap).
+te_demog_lx_gap_points = {
+	value = te_demog_lx_gap
+	multiply = 100
+}
+
+# State scope: the wealth at which the market starts to bring longevity care within reach, and the wealth from which it
+# brings it to everyone (te_demog_lx_threshold, the owner's threshold less the Unrestricted offset, -/+ the ramp). The
+# country tab reads them at its capital.
+te_demog_lx_market_from = {
+	value = te_demog_lx_threshold
+	subtract = te_demog_k_lx_market_ramp
+	min = 0
+}
+te_demog_lx_market_all = {
+	value = te_demog_lx_threshold
+	add = te_demog_k_lx_market_ramp
+	min = 0
+}

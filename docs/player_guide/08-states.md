@@ -256,10 +256,7 @@ of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
 rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
-mild starvation, and Primogeniture's larger farm families, which late marriage
-replaces. The rest, such as the family-policy laws and the late
-medical technologies, it applies at its own rate, as it does an effect on the
-whole state, such as pollution, devastation or a decree. Either way, a new law
+mild starvation, Primogeniture's larger farm families, which late marriage replaces, and Forced Heirship's smaller ones, which Family Limitation replaces. The late medical technologies' cuts to deaths become part of its rates too (see [Life extension](#life-extension)). The rest, such as Communal Child-Rearing, the State Eugenics Program, the Sexual Revolution and the family-policy laws, it applies at its own rate, as it does an effect on the whole state, such as pollution, devastation or a decree. Either way, a new law
 or technology takes effect at the state's next census step, up to a year later.
 An effect on some of a state's people, such as severe starvation, applies to
 their rate in the base game. Private Health Insurance's cut for the wealthy
@@ -306,9 +303,28 @@ technology (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
 two fifths more for a rich country today. Outside Full none of this changes
 anything, and the buttons are greyed.
 
-The census also counts each state's men of fighting age, 20 to 39, and its
-young adults, and takes war dead from the men of fighting age. The tab shows
-both counts; neither changes conscription or unrest.
+The census also counts each state's men of fighting age, 20 to 39, its young
+adults and its men per 100 women aged 20 to 59, and takes war dead from the men
+of fighting age. Under Full each count sets a state modifier, refreshed at the
+state's yearly census:
+
+- **Census: Fighting-Age Men** scales the state's conscription by its share of
+  men of fighting age against 1836's: a state short of young men raises fewer
+  conscripts, and one rich in them up to a quarter more. An aging country loses
+  conscripts as its people grow older.
+- **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
+  18% of the people while work is short. At full strength (24% young adults and
+  a fifth of the workforce without work) radicals from movements rise by 15% and
+  the effects of turmoil by 10%.
+- **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
+  many dead. Fewer women marry, so children per woman fall with the balance (by
+  at most a fifth), more women work, and support for women's rights movements
+  rises, by up to 10% at 80. **Census: More Men** appears from 110 men per 100
+  women and raises radicals from movements, by up to 10% at 150.
+
+The census books migration as whole families once a state gains or loses many
+people in a year, so migration alone seldom carries a state's balance past 90
+or 110.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
@@ -323,9 +339,10 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Median age, children per woman, life expectancy, the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short. |
-| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age. |
-| Population pyramid | People by five-year age band, with an outline twenty years ahead. |
+| Overview | Median age, children per woman (its tooltip gives the mean age at childbirth), life expectancy (100+ past 100), the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left; None when no age has), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short; once longevity care exists, Living to 100 and the mean biological age beside the calendar one. |
+| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age with the conscription they give. |
+| Longevity | Once longevity care exists: the share of people within its reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
+| Population pyramid | People by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
@@ -334,7 +351,7 @@ them, and some break the figure down for your capital.
 | How Demographics Works | A collapsed section that explains the method. |
 
 The subtab shows one state's overview, causes of death, work and retirement
-(without the buttons), pyramid and wealth, for any state you open. The first count of a state comes from the age structure its own birth and
+(without the buttons), longevity, pyramid and wealth, for any state you open. The first count of a state comes from the age structure its own birth and
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
 
@@ -360,13 +377,23 @@ mid-twenties and many never marry. Under birth spacing, strongest in Japan and
 slight in China and Korea, couples space and stop births by custom. Modern
 contraception wears both away, and health care wears away birth spacing; women's
 paid work and farms that pass whole to one heir make late marriage more common.
+Both customs also spread slowly from neighbouring states.
 The figure then falls with literacy, child survival and city life, and family policy moves it (see [Family policy measures](#family-policy-measures)). Under Full, the figure shown is what births came to that
 year, so decrees, famine and other effects on births count in it; its tooltip
 lists them as births added on top of the census. The means to plan a family
 grow with literacy and with contraception: Vulcanization, Feminism, the
 Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
 State-Sponsored Family Planning adds more, whoever can read. Their tooltips show
-each line. Life expectancy follows five
+each line. Under Full, family limitation adds to them too: the share of couples
+who stop at the family size they want by older methods, which France starts with
+at 60%. It spreads from neighbouring countries that practise it, grows under
+Forced Heirship in farming countries and in nearly universally literate ones,
+less under a state religion, and never falls back, though modern contraception takes over its part
+of the means as it arrives. It shows as Family Limitation among a country's
+modifiers. Under Full, too, where a cultural hegemon's culture outweighs yours
+(the Foreign Cultural Benchmark), the size of family its people want pulls yours
+a little toward it: a few percent at most, shown as the cultural hegemon's
+example in the children-per-woman tooltip. Life expectancy follows five
 causes of death, which standard of living, medicine, health laws and institutions
 bring down. Medicine saves lives only as far as health care reaches. Markets and
 charity give some care everywhere; a health law adds more with each level of the
@@ -446,6 +473,51 @@ Primate pattern of 45% or more, eight states or more, a largest city crowded to
 Migration Crowding's ceiling (ten times the reference density), and the money
 in its treasury.
 
+### Life extension
+
+From mRNA Therapeutics on, medicine slows ageing itself as well as treating
+illness, and the census tracks each person's body apart from the calendar.
+People in longevity care age nine-tenths of a year each year with mRNA
+Therapeutics, three-quarters once Personalized Medicine and Genetic Engineering
+follow, and not at all with Biological Immortality, under which bodies older than
+35 also wind back toward 35. Children are never treated: people join at 25.
+
+Who is in care depends on your laws and your people's wealth.
+
+| Law | Longevity care |
+|---|---|
+| Public Health Insurance | Everyone the health system reaches. |
+| Charitable Health System | A quarter of those it reaches. |
+| Private Health Insurance, No Health System | The market alone; Private Health Insurance brings its price down twice as fast. |
+| Mandatory Augmentation | At least nine in ten people. |
+| Unrestricted Augmentation | The market reaches 20 levels of wealth further down. |
+| Regulated Augmentation Market | The market's price falls half again as fast. |
+| Human Purity | None. |
+
+The market reaches the rich first: from your first ageing technology, people
+from wealth 80 can buy care, and the line falls about a level a year, faster with
+the technologies that spread medicine. Care rolls out as fast as new medicine
+spreads, and a ban winds it down the same way; people who lose care keep the
+bodies they have and age normally from there. The Longevity section shows the
+share in reach and the gap between those in care and those not, as the chance of
+living to 100.
+
+Under Full, people in care die at their bodies' rates. Where the market reaches
+the rich first they die less, so your wealthy pops grow against the poor. The
+health system's share of the care costs your Ministry of Health more bureaucracy.
+Women in care can have children they put off, and births nobody planned go on as
+long as their bodies allow, even past 50 by the calendar; State Youth Centers on
+Ectogenesis carry a share of planned births with no risk in childbirth. A society
+that stops ageing turns a slow decline into slow growth, about 1% a year at 1.6
+children per woman: the brakes are the means to plan a family and the size of
+family people want. Old Age From rises with longer lives and reads None once no
+age has fifteen years left; Linked to Average Longevity follows it, Linked to
+Common Longevity follows those not in care, and the AI moves to Linked to Common
+when the gap is wide. Mental Health Awareness and Mind Backups cut deaths from
+accidents and violence (and at work, for Mind Backups) instead of a flat cut to
+deaths. Outside Full these technologies cut deaths by a flat share, and nothing
+else of this changes the game.
+
 ### Family policy measures
 
 Under the Full setting, the tab's Family Policy section lets you act within your
@@ -500,6 +572,24 @@ a youth bulge, as its treasury and authority allow, at most one measure paid in
 money a year. It takes
 Restricted Contraception, Birth Limit's one child and the Crash Campaign only
 when the need is pressing and its legitimacy is high.
+
+### Demographic events
+
+Under the Full setting, ten events mark the moments the census records: the
+Demographic Dividend (the working-age share a tenth above 1836's), the Baby Boom
+(after a long war with heavy losses), the Lost Generation (war dead past a
+twentieth of the men of fighting age), the Greying of the Nation (pensioners at a
+fifth of the people), the Youth Bulge (a fifth of the people in their twenties
+while work is short), Missing Girls (110 boys born per 100 girls under Birth
+Limit), Bare Branches (110 men per 100 women), the Empty Villages (an old,
+shrinking farm state), the Overspill (a dominant city crowded to Migration
+Crowding's ceiling) and the Last Generation? (Biological Immortality). Each comes
+at most once in 25 years, and the Last Generation? once a game; at most one of the
+yearly ones arrives on a given 31 December. The Lost Generation and the Empty
+Villages offer only harms: each choice spares one and pays its own cost. Some
+choices use the census's own levers: the pension age, Birth Limit and, for the
+Overspill, your Settlement Authorities' Planned Towns. Every event and choice is
+listed in [Demographic event list](19-appendix-events.md#demographic-event-list).
 
 <!-- screenshot: the Demographics tab with the population pyramid and its twenty-year outline -->
 

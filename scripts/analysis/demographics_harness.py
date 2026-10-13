@@ -17,12 +17,17 @@ Usage:
     demographics_harness.py workforce [SAVE]            # phase 2: participation, the workforce bands (step 2's fit)
     demographics_harness.py pensions [SAVE]             # phase 2 step 2: the pension bill against revenue, the health bill
     demographics_harness.py consequences [SAVE...] [--effects]  # phase 2 step 4: conscription, youth bulge, sex balance
+    demographics_harness.py events [SAVE...]             # phase 3: the event wave's thresholds (demographics_wave.py)
+
+    demographics_harness.py rebook SAVE... [--years Y ...]   # the migrant booking: a run re-walked, its bands judged
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
                                                         # the engine's growth once the census sets its rates
     demographics_harness.py ontop-fit SAVE... --peacetime ROWS --splits SPLIT... [--g LIST] [--at G]
                                                         # calibration step 3: absorption, the malaria factor, the gate
+    demographics_harness.py lategame [--years N]        # phase 3: a rich state to 2300 under each era ladder and
+                                                        # immortality, judged against the late-game design's sketch
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -96,6 +101,12 @@ def inputs_for(c, carriers=None, incorporated=True, practices=None):
                     laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
                     mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}),
                     malaria=getattr(c, "malaria", 0))
+
+
+def cmd_lategame(args):
+    """Phase 3: the late game's scenarios (demographics_late.py)."""
+    import demographics_late
+    return demographics_late.main(args)
 
 
 def cmd_sketch(_args):
@@ -891,11 +902,15 @@ def cmd_workforce(args):
 # The pension bill is GDP / 52 x the pensioners' share x B a week, B = PENSION_B_PER_LEVEL x the Social Security level:
 # a share of GDP a year of pensioners x B. The band is a share of revenue (late-game call 16), so the fit needs the
 # game's own revenue over GDP, read from a save's largest economies (S.country_budgets: weekly income x 52 over the
-# GDP channel's latest sample). No 2000-2020 save exists yet (2026-10-12): the latest is 1953's, whose median the fit
-# takes; a late save replaces it (docs/testing/demographics-playtest.md).
+# GDP channel's latest sample). Step 2 took 1953's median; call 16 (2026-10-12) read 1949, 1959 and the one plain-text
+# late-game save, 2062, whose solvent half agrees (demographics_params.PENSION_B_PER_LEVEL). A healthy late save is the
+# better second reading (docs/testing/demographics-playtest.md).
 PENSION_LEVEL = 5            # Social Security at vanilla's top level, the design's reference (late-game §5.1)
 PENSION_SHARES = (0.18, 0.20, 0.22)
 PENSION_TOP_ECONOMIES = 15
+# Call 16's late-game reading: economies raising less than this share of GDP are insolvent AIs (expenses many times
+# income), not a measure of what a state can tax; the fit reads the median of the rest beside the plain one.
+PENSION_SOLVENT_REVENUE = 0.1
 BAND_HEALTH_TODAY = (0.35, 0.5)
 BAND_HEALTH_1836 = (-0.05, 0.05)
 
@@ -940,6 +955,11 @@ def cmd_pensions(args):
         print(f"\n{args.save}: revenue over GDP, the {len(ratios)} largest economies: "
               + ", ".join(f"{t} {r:.2f}" for t, r in ratios))
         print(f"  median {revenue:.3f}; B that centres the band at 20% pensioners: {fitted_b(revenue):.4f}")
+        solvent = [r for _t, r in ratios if r >= PENSION_SOLVENT_REVENUE]
+        if solvent and len(solvent) < len(ratios):
+            med = statistics.median(solvent)
+            print(f"  the {len(solvent)} with revenue at least {PENSION_SOLVENT_REVENUE:.0%} of GDP (call 16: the rest are "
+                  f"the AI's insolvency): median {med:.3f}, B {fitted_b(med):.4f}")
         lo, hi = P.PENSION_BILL_BAND
         for share in (*PENSION_SHARES, pens):
             bill = M.pension_bill_gdp_share(share, PENSION_LEVEL) / revenue
@@ -1101,6 +1121,12 @@ def cmd_consequences(args):
             setattr(P, attr, value)
 
 
+def cmd_events(args):
+    """Phase 3's event wave (docs/superpowers/specs/2026-10-08-demographics-design.md §9): demographics_wave.report."""
+    import demographics_wave as W   # imports this module, so not at the top
+    return W.report(args.saves, unemployment=not args.no_unemployment)
+
+
 def _consequences(args):
     out = 0
     sex_on = P.SEX_BALANCE_EFFECTS
@@ -1144,6 +1170,64 @@ def _consequences(args):
         print(f"  youth: highest share aged 20-29 {r['youth_max']:.3f}; states with a bulge {r['y_any']:.1%}, above "
               f"y = 0.5 {r['y_half']:.1%} (band under {BAND_YOUTH_HALF:.0%}: "
               f"{'ok' if r['y_half'] < BAND_YOUTH_HALF else 'OUT'})")
+    return out
+
+
+# ---- rebook: the census re-walked with the run's own residual (the migrant booking, 2026-10-12) ------------------------
+# docs/testing/demographics-migrant-booking-2026-10-12.md; the re-walk is demographics_rebook.py's. The great powers whose
+# conscription terms by decade the consequences design's §4.5 gate reads (each tag the save holds).
+REBOOK_POWERS = ("GBR", "FRA", "PRU", "GER", "AUS", "RUS", "USA", "SAR", "ITA", "SPA", "TUR", "JAP", "CHI", "BIC")
+REBOOK_YEARS = (1848, 1898, 1901)
+
+
+def cmd_rebook(args):
+    import demographics_rebook as RB
+    plain = {path: save_year(path) for path in args.save if not str(path).endswith(".json")}
+    first = min((y for y in plain.values() if y is not None), default=None)
+    saves = []
+    for path in args.save:
+        save = RB.read_save(path, year_of=save_year, ring=plain.get(path) == first)
+        if save["year"] is None:
+            print(f"{path}: no game_date (skipped)", file=sys.stderr)
+            continue
+        saves.append(save)
+    saves = RB.merge_years(saves)
+    if not saves:
+        print("no saves", file=sys.stderr)
+        return 1
+    if not any(s["techs_known"] for s in saves):
+        print("note: no plain-text save, so no transport technologies (the family weight's): families read light")
+    booked, before = RB.walk(saves), RB.walk(saves, booked=False)
+    years = args.years or [y for y in REBOOK_YEARS if any(s["year"] == y for s in saves)] or [saves[-1]["year"]]
+    out = 0
+    print(f"Re-walked {len(booked)} census states through {len(saves)} saves ({saves[0]['year']}-{saves[-1]['year']}); "
+          f"cap in {P.MIGRANT_CAP_IN} out {P.MIGRANT_CAP_OUT}, labour split balanced from {P.LABOUR_BALANCE_LOW} and "
+          f"{P.LABOUR_BALANCE_HIGH}")
+    for year in years:
+        got = RB.fidelity(before, saves, year)
+        if got:
+            med, p05, p95, out_save, out_walk = got
+            print(f"\n{year}: the run's own booking re-walked against the save: sex balance {med:+.1f} (5th-95th "
+                  f"{p05:+.1f} to {p95:+.1f}); outside {P.SEX_FEWER_FROM:.0f}-{P.SEX_MORE_FROM:.0f}: save "
+                  f"{out_save:.1%}, re-walk {out_walk:.1%}")
+        for label, walked in (("profile alone", before), ("booked", booked)):
+            r = RB.band_summary([res[year] for res in walked.values() if year in res])
+            verdict = "ok" if r["either"] < BAND_PEACE_SEX else "OUT"
+            print(f"  {label:13s} {r['n']} states: sex balance below {P.SEX_FEWER_FROM:.0f} {r['fewer']:.1%}, "
+                  f"{P.SEX_MORE_FROM:.0f}+ {r['more']:.1%} (either {r['either']:.1%}, band under "
+                  f"{BAND_PEACE_SEX:.0%}: {verdict}), range {r['sb_min']:.0f}-{r['sb_max']:.0f}; people with |T| past "
+                  f"0.05 {r['term_past']:.1%}, past 0.15 {r['term_far']:.1%} (T {r['term_min']:+.2f} to "
+                  f"{r['term_max']:+.2f}); 20-29 share at most {r['youth_max']:.3f}, states above {P.YOUTH_FROM} "
+                  f"{r['youth_over']:.1%}")
+            if label == "booked":
+                out |= verdict != "ok"
+    decades = [y for y in range(1840, saves[-1]["year"] + 1, 10) if any(s["year"] == y for s in saves)]
+    for label, walked in (("profile alone", before), ("booked", booked)):
+        terms = RB.country_terms(walked, saves, args.powers or REBOOK_POWERS, decades)
+        print(f"\nGreat powers' conscription terms by decade ({label}):")
+        print("       " + " ".join(f"{y:>7d}" for y in decades))
+        for tag, by_year in terms.items():
+            print(f"  {tag:4s} " + " ".join(f"{by_year[y]:+7.3f}" if y in by_year else "      -" for y in decades))
     return out
 
 
@@ -1618,11 +1702,27 @@ def cmd_history(args):
 # ---- Late Marriage and Birth Spacing (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md) ----------
 # demographics_practices imports this module, so the commands import it inside.
 def cmd_practices_replay(args):
+    import demographics_adjacency as A
     import demographics_practices as DP
     carriers = DM.load_carriers()
     loaded = sorted(((save_year(p) or args.year, DP.practice_states(p, carriers)) for p in args.save),
                     key=lambda pair: pair[0])
-    result = DP.replay(loaded)
+    # phase 3's neighbour spread (the late-marriage spec 4.4), unless --no-spread asks for phase 2's replay
+    adjacency = None if args.no_spread else A.neighbours(straits=args.straits)
+    result = DP.replay(loaded, adjacency)
+    if adjacency is not None:
+        # the spec's 5.2 item: no state's shares moving more than 0.2 by 1887 except through its own conditions, read
+        # as the spread's own part, the replay with it less the replay without it
+        bare = DP.replay(loaded)
+        upto = max([y for y in result if y <= 1887] or [min(result)])
+        spread = sorted(((abs(result[upto][sid][p] - bare[upto][sid][p]), p, rec["state_region"])
+                         for sid, rec in result[upto].items() if sid in bare[upto] for p in P.PRACTICES),
+                        reverse=True)[:args.top]
+        print(f"largest moves the spread made by {upto} (practice, state region):")
+        for move, p, sr in spread:
+            print(f"  {move:.3f}  {p} {sr}")
+        if spread and spread[0][0] > 0.2:
+            print(f"GATE the spread moved {spread[0][2]}'s {spread[0][1]} {spread[0][0]:.2f} by {upto} (at most 0.2)")
     for year, recs in sorted(result.items()):
         west = DP._mean(recs.values(), "lm", lambda r: r["strategic_region"] in DP.WEST)
         parts = [f"West's Late Marriage {west:.2f}" if west is not None else "no Western state"]
@@ -1640,6 +1740,69 @@ def cmd_practices_replay(args):
     for line in fails:
         print("GATE " + line)
     return 1 if fails else 0
+
+
+def cmd_fl_replay(args):
+    """Phase 3 (parent spec section 13): Family Limitation's share, line and target per country through the saves, and
+    children per woman today (history's modifier, Forced Heirship's cut on top) and with the practice (the cut folded
+    in), against Gapminder's (demographics_fl.report)."""
+    import demographics_adjacency as A
+    import demographics_fl as F
+    import demographics_practices as DP
+    try:
+        anchors = read_anchors(args.anchors)
+    except OSError as e:
+        print(f"cannot read the anchors {args.anchors}: {e}", file=sys.stderr)
+        return 1
+    carriers = DM.load_carriers()
+    loaded = sorted(((save_year(p) or args.year, DP.practice_states(p, carriers)) for p in args.save),
+                    key=lambda pair: pair[0])
+    rows, rmse, _fl = F.report(loaded, A.neighbours(straits=args.straits), anchors)
+    print("children per woman: today (history's modifier, Forced Heirship's cut on top) and with Family Limitation")
+    for country in (*F.CHECK, *F.CONTROLS):
+        mine = [r for r in rows if r[1] == country]
+        if not mine:
+            continue
+        print(country + (" (check)" if country in F.CHECK else ""))
+        for year, _c, share, line, target, nb, today, new, hist in mine:
+            nb_text = f"{nb:.3f}" if nb is not None else "  -  "
+            hist_text = f"{hist:.2f}" if hist is not None else "  -"
+            print(f"  {year}  share {share:.3f}  line {line:.3f}  target {target:.3f}  neighbours {nb_text}  "
+                  f"today {today:.2f}  with {new:.2f}  Gapminder {hist_text}")
+    fmt = {k: (f"{v:.3f}" if v is not None else "-") for k, v in rmse.items()}
+    print(f"error over {', '.join(F.CHECK)}: today {fmt['today']}, with {fmt['with']}")
+    return 0
+
+
+def ch_rows(carriers=None):
+    """[(label, exposure, hegemon's desired, own desired, factor at its target, children per woman without and with)]:
+    Cultural Hegemony's drift at its target on two scenarios (phase 3; demographics_model.ch_target)."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for label, kw, exposure, hegemon in (
+            ("Latin America 1970, a 25-point lead", dict(sol=12, literacy=0.72, urban_share=0.55,
+                                                        techs=MED_1950 | MEANS_TECHS, laws={CHS},
+                                                        institutions={HEALTH: 2}), 0.25, 0.45),
+            ("India 1975, a 30-point lead", dict(sol=9, literacy=0.35, urban_share=0.2,
+                                                 techs=MED_1950 | MEANS_TECHS | {"contraceptive_pill"}, laws={CHS},
+                                                 institutions={HEALTH: 1}), 0.30, 0.45),
+            ("West 1990, a rival 10 points behind", dict(sol=38, literacy=0.98, urban_share=0.75,
+                                                         techs=MED_1990 | MEANS_TECHS | {"contraceptive_pill"},
+                                                         laws={PHI}, institutions={HEALTH: 6}), 0.10, 0.45)):
+        inp = scenario_inputs(carriers, **kw)
+        e0 = life(inp)["e0"]
+        base = M.fertility(inp, e0)
+        factor = M.ch_target(exposure, hegemon, base["desired"])
+        with_ch = M.fertility(dataclasses.replace(inp, hegemon=factor), e0)
+        rows.append((label, exposure, hegemon, base["desired"], factor, base["tfr"], with_ch["tfr"]))
+    return rows
+
+
+def cmd_ch_drift(_args):
+    for label, exposure, hegemon, own, factor, tfr0, tfr1 in ch_rows():
+        print(f"{label:38s} exposure {exposure:.2f}  hegemon's desired {hegemon:.2f}  own {own:.2f}  "
+              f"factor {factor:.3f}  children per woman {tfr0:.2f} -> {tfr1:.2f}")
+    return 0
 
 
 def cmd_practices_fit(args):
@@ -2291,6 +2454,11 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("sketch").set_defaults(fn=cmd_sketch)
+    # phase 3, the late game (demographics_late.py)
+    p = sub.add_parser("lategame", help="phase 3: a rich state to 2300 under each era ladder and immortality, against the "
+                                        "late-game design's figures, the per-cohort truth and the adult-mortality check")
+    p.add_argument("--years", type=int, default=280, help="years from 2020 (default 280: to 2300)")
+    p.set_defaults(fn=cmd_lategame)
     p = sub.add_parser("inputs")
     p.add_argument("save")
     p.add_argument("--tag", action="append", default=[])
@@ -2327,6 +2495,19 @@ def main(argv=None):
     p.add_argument("--effects", "--sex-effects", action="store_true", dest="effects",
                    help="judge the bands as if the held-back effects (conscription, youth bulge, sex balance) were on")
     p.set_defaults(fn=cmd_consequences)
+    p = sub.add_parser("events", help="phase 3: the event wave's thresholds against the model's structures and "
+                                      "transitions and a save's census countries (demographics_wave.py)")
+    p.add_argument("saves", nargs="*", help="plain-text saves made under Full or Display only")
+    p.add_argument("--no-unemployment", action="store_true", help="skip the pops pass (the Youth Bulge reads 0)")
+    p.set_defaults(fn=cmd_events)
+
+    p = sub.add_parser("rebook", help="the migrant booking (2026-10-12): the census re-walked through a run's saves "
+                                      "with its own residual, booked by today's rules and by the profile alone")
+    p.add_argument("save", nargs="+", help="the run's saves, plain text or extract_all.py's per-save JSON (the first "
+                                           "in date order must hold the rings; plain text adds the transport techs)")
+    p.add_argument("--years", type=int, nargs="+", help=f"the years to judge (default {REBOOK_YEARS})")
+    p.add_argument("--powers", nargs="+", help="the countries' tags for the terms by decade")
+    p.set_defaults(fn=cmd_rebook)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     p = sub.add_parser("measures", help="phase 2 step 3b: the Family Policy measures' effect on children per woman and "
                                         "the package's upkeep against the design's §5 bands")
@@ -2357,7 +2538,19 @@ def main(argv=None):
     p.add_argument("save", nargs="+")
     p.add_argument("--out", help="write {year: {state id: record}} here (history --shares, practices-fit --shares)")
     p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.add_argument("--no-spread", action="store_true", help="phase 2's replay: no neighbour spread")
+    p.add_argument("--straits", action="store_true", help="the spread crosses demographics_adjacency's straits too")
+    p.add_argument("--top", type=int, default=10, help="how many of the spread's largest moves to list")
     p.set_defaults(fn=cmd_practices_replay)
+    p = sub.add_parser("fl-replay", help="phase 3: Family Limitation's national practice through a run's saves, "
+                                         "children per woman against Gapminder (France, Belgium, Switzerland)")
+    p.add_argument("save", nargs="+")
+    p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")
+    p.add_argument("--straits", action="store_true", help="neighbours across demographics_adjacency's straits too")
+    p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.set_defaults(fn=cmd_fl_replay)
+    sub.add_parser("ch-drift", help="phase 3: Cultural Hegemony's drift on scenarios (its size)").set_defaults(
+        fn=cmd_ch_drift)
     p = sub.add_parser("practices-fit", help="the practices' joint fit, #904's peacetime rates projected, the gate")
     p.add_argument("save", nargs="+")
     p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")

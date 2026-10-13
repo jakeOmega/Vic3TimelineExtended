@@ -125,7 +125,10 @@ Established, three quarters at Strong and all of it at Supranational. A
 hegemon that ratifies the convention projects 10% less cultural pull, scaled
 the same way (see [UN conventions and
 agencies](10-united-nations.md#un-conventions-and-agencies)). While you carry it, the overview shows
-a red Benchmark icon; hover it for the current strength.
+a red Benchmark icon; hover it for the current strength. Under the Demographics
+rule's Full setting the same gap also pulls the family size your people want a
+little toward the hegemon's (see [Reading the
+figures](08-states.md#reading-the-figures)).
 
 ### Political models of the world
 

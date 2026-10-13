@@ -1,0 +1,823 @@
+﻿namespace = te_demog_wave
+
+# ============================================================================
+# DEMOGRAPHICS — THE EVENT WAVE (phase 3)
+# Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §9: the census's milestones, each firing when the
+# census crosses its threshold, at most once a generation per country, under the Demographics rule's Full setting only.
+# The dispatcher and its conditions: common/scripted_effects/te_demog_wave_effects.txt,
+# common/scripted_triggers/te_demog_wave_triggers.txt; figures and thresholds: te_demog_wave_values.txt; modifiers:
+# te_demog_wave_modifiers.txt. The console fires each on the player (`event te_debug_demog.1`, option w).
+#
+#    1   The Demographic Dividend   the working-age share 10% above 1836's reference (yearly)
+#    2   The Baby Boom              a war of two years or more with mass mobilisation ends (monthly)
+#    3   The Lost Generation        war dead pass a twentieth of the men of fighting age (monthly; a harm menu)
+#    4   The Greying of the Nation  pensioners (or the people past the old-age threshold) pass the bar (yearly)
+#    5   The Youth Bulge            a fifth of the people aged 20-29 while a tenth of the workforce is idle (yearly)
+#    6   Missing Girls              110 boys born per 100 girls (Birth Limit after Microprocessor) (yearly)
+#    7   Bare Branches              110 men per 100 women aged 20-59 (yearly)
+#    8   The Empty Villages         a farm state old and shrinking (yearly; a harm menu)
+#    9   The Overspill              a Primate or Dominant country's largest city at Migration Crowding's ceiling (yearly)
+#    10  The Last Generation?       Biological Immortality (at once; once a game)
+#
+# No event has a trigger of its own: the dispatcher holds every condition, and a trigger would block the console. Each
+# immediate picks what it names (the village state, the city) itself, with fallbacks for the console.
+# ============================================================================
+
+# ======================================================================
+#  1 – The Demographic Dividend
+#  Good news with three ways to spend it, each on its own axis (human capital, industry, the public purse), none
+#  dominant. Ten years each, the window a dividend lasts before the workers age.
+# ======================================================================
+te_demog_wave.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.1.t
+	desc = te_demog_wave.1.d
+	flavor = te_demog_wave.1.f
+
+	event_image = { texture = "gfx/event_pictures/home_front_factory.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	option = {
+		name = te_demog_wave.1.a
+		default_option = yes
+		add_modifier = { name = te_demog_wave_dividend_schools days = long_modifier_time }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { literacy_rate < 0.6 }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.1.b
+		add_modifier = { name = te_demog_wave_dividend_industry days = long_modifier_time }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_powerful = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.1.c
+		add_modifier = { name = te_demog_wave_dividend_savings days = long_modifier_time }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scaled_debt >= 0.25 }
+				add = 3
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  2 – The Baby Boom
+#  §9: births +15% for ten years, decaying, and the cohort echoes (the census ages the boom's newborns). The choice is
+#  what the women who worked through the war do now: the size of the boom against the workforce.
+# ======================================================================
+te_demog_wave.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.2.t
+	desc = te_demog_wave.2.d
+	flavor = te_demog_wave.2.f
+
+	event_image = {
+		trigger = { has_technology_researched = television }
+		texture = "gfx/event_pictures/space_rivalry_celebration.dds"
+	}
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	option = {
+		name = te_demog_wave.2.a
+		default_option = yes
+		add_modifier = { name = te_demog_wave_baby_boom days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = te_demog_wave_boom_homes days = normal_modifier_time }
+		add_treasury = te_demog_wave_cost_medium
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					in_default = no
+					scaled_debt < 0.25
+				}
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.2.b
+		add_modifier = { name = te_demog_wave_baby_boom days = long_modifier_time is_decaying = yes multiplier = 1.33333 }
+		add_modifier = { name = te_demog_wave_boom_women_home days = long_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_powerful = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.2.c
+		add_modifier = { name = te_demog_wave_baby_boom days = long_modifier_time is_decaying = yes multiplier = 0.66667 }
+		add_modifier = { name = te_demog_wave_boom_women_work days = long_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_powerful = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  3 – The Lost Generation (a harm menu)
+#  Three harms, each option sparing one at its own cost and delivering the rest: grief (legitimacy, radicals), the
+#  missing workers (throughput), the widows (the lower strata's standard of living, births). No option helps.
+# ======================================================================
+te_demog_wave.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.3.t
+	desc = te_demog_wave.3.d
+	flavor = te_demog_wave.3.f
+
+	event_image = { texture = "gfx/event_pictures/war_weariness_homefront.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	duration = 3
+
+	# Memorials: spares the mourning
+	option = {
+		name = te_demog_wave.3.a
+		default_option = yes
+		add_modifier = { name = te_demog_wave_lost_workbenches days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = te_demog_wave_lost_widows days = normal_modifier_time }
+		add_treasury = te_demog_wave_cost_small
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { legitimacy < 50 }
+				add = 2
+			}
+		}
+	}
+
+	# Women into industry: spares the missing workers
+	option = {
+		name = te_demog_wave.3.b
+		add_modifier = { name = te_demog_wave_lost_mourning days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = te_demog_wave_lost_widows days = normal_modifier_time }
+		add_modifier = { name = te_demog_wave_lost_women_work days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					NOT = { ig:ig_devout ?= { is_powerful = yes } }
+				}
+				add = 1
+			}
+		}
+	}
+
+	# Widows' pensions: spares the widows
+	option = {
+		name = te_demog_wave.3.c
+		add_modifier = { name = te_demog_wave_lost_mourning days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = te_demog_wave_lost_workbenches days = long_modifier_time is_decaying = yes }
+		add_treasury = te_demog_wave_cost_medium
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					in_default = no
+					scaled_debt < 0.25
+				}
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  4 – The Greying of the Nation
+#  §9's four answers (raise the pension age, cut benefits, raise contributions, open the borders) under Old Age
+#  Pension, and keeping the pension as it is; with no pension law, the borders, almshouses or the family. Raising the
+#  age uses the pension setting itself (te_demog_pension_choose), so its five-year term binds as the buttons' does.
+# ======================================================================
+te_demog_wave.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = te_demog_wave.4.d_pension
+				trigger = { te_demog_has_pension_law = yes }
+			}
+			triggered_desc = {
+				desc = te_demog_wave.4.d
+				trigger = { always = yes }
+			}
+		}
+	}
+	flavor = te_demog_wave.4.f
+
+	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	# Raise the pension age (Old Age Pension; a position may be chosen; not already raised or linked)
+	option = {
+		name = te_demog_wave.4.a
+		trigger = {
+			te_demog_wave_pension_free = yes
+			NOT = { te_demog_wave_pension_raised = yes }
+		}
+		show_as_unavailable = { te_demog_has_pension_law = yes }
+		custom_tooltip = {
+			text = te_demog_pension_raised_effect_tt
+			te_demog_pension_choose = { POS = raised }
+		}
+		show_as_tooltip = {
+			add_modifier = { name = te_demog_pension_pos_raised }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { te_demog_pension_bill_share > 0.2 }
+				add = 2
+			}
+			modifier = {
+				trigger = { te_demog_country_unemployment > 0.1 }
+				add = -1
+			}
+		}
+	}
+
+	# Cut benefits (a pension bill is being paid)
+	option = {
+		name = te_demog_wave.4.b
+		trigger = { te_demog_wave_has_pension_bill = yes }
+		add_modifier = { name = te_demog_wave_pension_cut days = long_modifier_time }
+		add_modifier = { name = te_demog_wave_pension_cut_income days = long_modifier_time multiplier = te_demog_wave_pension_cut_flow }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					OR = {
+						in_default = yes
+						scaled_debt >= 0.5
+					}
+				}
+				add = 3
+			}
+		}
+	}
+
+	# Raise contributions (a pension bill is being paid)
+	option = {
+		name = te_demog_wave.4.c
+		trigger = { te_demog_wave_has_pension_bill = yes }
+		add_modifier = { name = te_demog_wave_contributions days = long_modifier_time }
+		add_modifier = { name = te_demog_wave_contributions_income days = long_modifier_time multiplier = te_demog_wave_contributions_flow }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scaled_debt >= 0.25 }
+				add = 2
+			}
+		}
+	}
+
+	# Open the borders (any country)
+	option = {
+		name = te_demog_wave.4.d_opt
+		add_modifier = { name = te_demog_wave_open_borders days = long_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_powerful = yes } }
+				add = 1
+			}
+		}
+	}
+
+	# Almshouses (no pension law)
+	option = {
+		name = te_demog_wave.4.f_opt
+		trigger = {
+			NOT = { te_demog_has_pension_law = yes }
+		}
+		add_modifier = { name = te_demog_wave_almshouses days = long_modifier_time }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_public_health_insurance }
+				add = 1
+			}
+		}
+	}
+
+	# The default, one option whatever the law: keep the promise (Old Age Pension), or the family will provide (none)
+	option = {
+		name = {
+			trigger = { te_demog_has_pension_law = yes }
+			text = te_demog_wave.4.e
+		}
+		name = {
+			trigger = { always = yes }
+			text = te_demog_wave.4.g
+		}
+		default_option = yes
+		if = {
+			limit = { te_demog_has_pension_law = yes }
+			add_modifier = { name = te_demog_wave_pension_kept days = normal_modifier_time is_decaying = yes }
+		}
+		else = {
+			add_modifier = { name = te_demog_wave_family_care days = long_modifier_time }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  5 – The Youth Bulge
+#  §9: jobs, conscription or emigration, and leaving the young to themselves (the youth bulge's own effects, which the
+#  census holds back, as an event modifier).
+# ======================================================================
+te_demog_wave.5 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.5.t
+	desc = te_demog_wave.5.d
+	flavor = te_demog_wave.5.f
+
+	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	option = {
+		name = te_demog_wave.5.a
+		add_modifier = { name = te_demog_wave_youth_works days = normal_modifier_time }
+		add_treasury = te_demog_wave_cost_medium
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					in_default = no
+					scaled_debt < 0.25
+				}
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.5.b
+		add_modifier = { name = te_demog_wave_youth_service days = normal_modifier_time }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_armed_forces ?= { is_powerful = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.5.c
+		add_modifier = { name = te_demog_wave_youth_emigration days = normal_modifier_time }
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = {
+		name = te_demog_wave.5.d_opt
+		default_option = yes
+		add_modifier = { name = te_demog_wave_youth_idle days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  6 – Missing Girls
+#  §9: ban prenatal sexing, pay families for daughters, or ignore it; and, where Birth Limit made it, relax the limit
+#  (one child back to two at once; two children ended once its five-year term has run, as its button would).
+# ======================================================================
+te_demog_wave.6 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.6.t
+	desc = te_demog_wave.6.d
+	flavor = te_demog_wave.6.f
+
+	event_image = { texture = "gfx/event_pictures/genetic_designer_baby_clinic.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	option = {
+		name = te_demog_wave.6.a
+		hidden_effect = {
+			te_debug_demog_wave_selfcheck_start = { CODE = 1 EXPECTED = -5 }
+		}
+		add_modifier = { name = te_demog_wave_srb_ban days = very_long_modifier_time }
+		add_modifier = { name = te_demog_wave_srb_ban_enforcement days = normal_modifier_time }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { authority > 200 }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.6.b
+		hidden_effect = {
+			te_debug_demog_wave_selfcheck_start = { CODE = 1 EXPECTED = -3 }
+		}
+		add_modifier = { name = te_demog_wave_srb_daughters days = very_long_modifier_time }
+		add_treasury = te_demog_wave_cost_medium
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					in_default = no
+					scaled_debt < 0.25
+				}
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.6.c
+		trigger = {
+			has_variable = te_dg_ms_birth_limit
+			custom_tooltip = {
+				text = te_demog_wave_tt_relax_limit_req
+				OR = {
+					has_variable = te_dg_ms_birth_limit_one
+					te_demog_ms_term_run = { M = birth_limit }
+				}
+			}
+		}
+		show_as_unavailable = { has_variable = te_dg_ms_birth_limit }
+		if = {
+			limit = { has_variable = te_dg_ms_birth_limit_one }
+			custom_tooltip = {
+				text = te_demog_wave_tt_relax_to_two
+				remove_variable = te_dg_ms_birth_limit_one
+				te_demog_ms_apply = { M = birth_limit }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = te_demog_wave_tt_relax_end
+				te_demog_ms_end = { M = birth_limit }
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { te_demog_ms_ai_shrinking = yes }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.6.d_opt
+		default_option = yes
+		add_modifier = { name = te_demog_wave_srb_ignored days = long_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  7 – Bare Branches
+#  More men than women of marrying age (Hudson and den Boer's Bare Branches): women from abroad, the army, the police,
+#  or the more-men effect the census holds back, as an event modifier.
+# ======================================================================
+te_demog_wave.7 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.7.t
+	desc = te_demog_wave.7.d
+	flavor = te_demog_wave.7.f
+
+	event_image = { texture = "gfx/event_pictures/black_market_underground.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	option = {
+		name = te_demog_wave.7.a
+		add_modifier = { name = te_demog_wave_branches_brides days = long_modifier_time is_decaying = yes }
+		add_treasury = te_demog_wave_cost_small
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -1
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.7.b
+		add_modifier = { name = te_demog_wave_branches_service days = long_modifier_time }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_armed_forces ?= { is_powerful = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.7.c
+		add_modifier = { name = te_demog_wave_branches_police days = normal_modifier_time }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { authority > 200 }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.7.d_opt
+		default_option = yes
+		add_modifier = { name = te_demog_wave_branches_idle days = long_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  8 – The Empty Villages (a harm menu, on the village state)
+#  Three harms on the state, each option sparing one at its own cost: the fields fall idle, the school and clinic
+#  close, the old are left alone. The state is the emptiest farm state that is old and shrinking.
+# ======================================================================
+te_demog_wave.8 = {
+	type = country_event
+	placement = scope:te_wave_state
+
+	title = te_demog_wave.8.t
+	desc = te_demog_wave.8.d
+	flavor = te_demog_wave.8.f
+
+	event_image = { video = "europenorthamerica_russian_serfs" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	duration = 3
+
+	immediate = {
+		te_demog_wave_pick_village = yes
+	}
+
+	# Subsidise the farms: spares the fields
+	option = {
+		name = te_demog_wave.8.a
+		scope:te_wave_state = {
+			add_modifier = { name = te_demog_wave_villages_services days = long_modifier_time is_decaying = yes }
+			add_modifier = { name = te_demog_wave_villages_alone days = long_modifier_time is_decaying = yes }
+		}
+		add_treasury = te_demog_wave_cost_small
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					in_default = no
+					scaled_debt < 0.25
+				}
+				add = 2
+			}
+		}
+	}
+
+	# Keep the school and the clinic open: spares the services
+	option = {
+		name = te_demog_wave.8.b
+		scope:te_wave_state = {
+			add_modifier = { name = te_demog_wave_villages_fields days = long_modifier_time is_decaying = yes }
+			add_modifier = { name = te_demog_wave_villages_alone days = long_modifier_time is_decaying = yes }
+		}
+		add_modifier = { name = te_demog_wave_villages_upkeep days = normal_modifier_time }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { authority > 200 }
+				add = 2
+			}
+		}
+	}
+
+	# Move the old into the market town: spares those left alone
+	option = {
+		name = te_demog_wave.8.c
+		default_option = yes
+		scope:te_wave_state = {
+			add_modifier = { name = te_demog_wave_villages_fields days = long_modifier_time is_decaying = yes }
+			add_modifier = { name = te_demog_wave_villages_services days = long_modifier_time is_decaying = yes }
+		}
+		add_modifier = { name = te_demog_wave_villages_moved days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_rural_folk ?= { is_powerful = yes } }
+				add = -1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  9 – The Overspill (on the largest city)
+#  §9: new towns, a green belt, or let it sprawl. The spec's trigger is a Metropolis-pattern state (the per-state
+#  metropolitan share, §5.2), which isn't built yet: the national pattern (Primate or Dominant) and the largest city at
+#  Migration Crowding's ceiling stand in for it (te_demog_wave_cond_overspill). New towns also switch the country's
+#  Settlement Authorities to Planned Towns, where it runs any and knows Modern Urban Planning (Internal Resettlement).
+# ======================================================================
+te_demog_wave.9 = {
+	type = country_event
+	placement = scope:te_wave_state
+
+	title = te_demog_wave.9.t
+	desc = te_demog_wave.9.d
+	flavor = te_demog_wave.9.f
+
+	event_image = { texture = "gfx/event_pictures/humanitarian_crisis.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	duration = 3
+
+	immediate = {
+		te_demog_wave_pick_city = yes
+	}
+
+	option = {
+		name = te_demog_wave.9.a
+		scope:te_wave_state = {
+			add_modifier = { name = te_demog_wave_overspill_new_towns days = long_modifier_time is_decaying = yes }
+		}
+		add_treasury = te_demog_wave_cost_medium
+		if = {
+			limit = { te_demog_wave_can_plan_towns = yes }
+			custom_tooltip = {
+				text = te_demog_wave_tt_planned_towns
+				te_demog_wave_plan_towns = yes
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					in_default = no
+					scaled_debt < 0.25
+				}
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.9.b
+		scope:te_wave_state = {
+			add_modifier = { name = te_demog_wave_overspill_green_belt days = very_long_modifier_time }
+		}
+		add_modifier = { name = te_demog_wave_overspill_green_belt_politics days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_powerful = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.9.c
+		default_option = yes
+		scope:te_wave_state = {
+			add_modifier = { name = te_demog_wave_overspill_sprawl days = very_long_modifier_time }
+		}
+		add_modifier = { name = te_demog_wave_overspill_sprawl_politics days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_powerful = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  10 – The Last Generation?
+#  Biological Immortality, once a game: licence births (a child for each death), leave children a right, or pay for the
+#  next generation. The two census lines (desired family size) act at each state's next count.
+# ======================================================================
+te_demog_wave.10 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_demog_wave.10.t
+	desc = te_demog_wave.10.d
+	flavor = te_demog_wave.10.f
+
+	event_image = { texture = "gfx/event_pictures/meaning_crisis_abundance.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	option = {
+		name = te_demog_wave.10.a
+		hidden_effect = {
+			te_debug_demog_wave_selfcheck_start = { CODE = 2 EXPECTED = -0.3 }
+		}
+		add_modifier = { name = te_demog_wave_immortal_licences days = very_long_modifier_time }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { authority > 300 }
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = te_demog_wave.10.b
+		default_option = yes
+		add_modifier = { name = te_demog_wave_immortal_right days = very_long_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = {
+		name = te_demog_wave.10.c
+		hidden_effect = {
+			te_debug_demog_wave_selfcheck_start = { CODE = 2 EXPECTED = 0.1 }
+		}
+		add_modifier = { name = te_demog_wave_immortal_heirs days = very_long_modifier_time }
+		add_treasury = te_demog_wave_cost_medium
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { te_demog_ms_ai_shrinking = yes }
+				add = 2
+			}
+		}
+	}
+}

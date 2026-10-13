@@ -197,7 +197,7 @@ IMAGES = {
     "black_market_underground": {
         "prompt": "A clandestine night market in a back alley.",
         "style": "oil painting, socialist realism, harsh light",
-        "events": ["banking_cycle_events.53", "banking_cycle_events.120"],
+        "events": ["banking_cycle_events.53", "banking_cycle_events.120", "te_demog_wave.7"],
     },
     "state_bank_reserves": {
         "prompt": "Interior of a state bank vault with gold stacks.",
@@ -911,7 +911,7 @@ IMAGES = {
         "style": "oil painting, social realism, dramatic light",
         "events": [
             "decolonization_events.54", "movement_events_te.9", "movement_events_te.10",
-            "movement_events_te.11", "movement_events_te.12",
+            "movement_events_te.11", "movement_events_te.12", "te_demog_wave.5",
         ],
     },
     "digital_activism_screens": {
@@ -1028,7 +1028,7 @@ IMAGES = {
     "meaning_crisis_abundance": {
         "prompt": "A person in a luxurious apartment staring emptily at a perfect city.",
         "style": "digital painting, clean light, speculative future",
-        "events": ["post_scarcity_events.2"],
+        "events": ["post_scarcity_events.2", "te_demog_wave.10"],
     },
     "ai_governance_system": {
         "prompt": "A government control room where AI systems display policy decisions.",
@@ -1318,7 +1318,7 @@ IMAGES = {
     "genetic_designer_baby_clinic": {
         "prompt": "Prospective parents reviewing an embryo's genetic profile in clinic.",
         "style": "oil painting, cool clinical light, near-future",
-        "events": ["society_technology_events.28"],
+        "events": ["society_technology_events.28", "te_demog_wave.6"],
     },
     "synthetic_food_laboratory": {
         "prompt": "Bioreactors and 3D printers producing synthetic meals.",
@@ -1775,7 +1775,7 @@ IMAGES = {
     "budget_hearing_congress": {
         "prompt": "A congressional budget hearing for the space program. An administrator defends the program with models and photographs while skeptical legislators wave cost reports. The perennial battle between the dream of space and the reality of budgets.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.24", "space_race_events.26", "amendment_petition_events.7"],
+        "events": ["space_race_events.24", "space_race_events.26", "amendment_petition_events.7", "te_demog_wave.4"],
     },
 
     # =========================================================================
@@ -2189,7 +2189,7 @@ IMAGES = {
     "home_front_factory": {
         "prompt": "Packed wartime factory with workers assembling shells and engines under bright industrial lamps.",
         "style": "oil painting, dramatic shadows, military painting",
-        "events": ["world_war_events.10"],
+        "events": ["world_war_events.10", "te_demog_wave.1"],
     },
     "strategic_bombing_ruins": {
         "prompt": "A city devastated by strategic bombing: entire blocks reduced to rubble, fires still burning, civilians picking through the ruins. A cathedral standing skeletal against a smoke-filled sky. The deliberate destruction of civilization from the air.",
@@ -2209,7 +2209,7 @@ IMAGES = {
     "war_weariness_homefront": {
         "prompt": "Long ration lines and grieving families in a worn city square during a prolonged war.",
         "style": "oil painting, dramatic shadows, military painting",
-        "events": ["decolonization_events.51", "world_war_events.30"],
+        "events": ["decolonization_events.51", "world_war_events.30", "te_demog_wave.3"],
     },
     "peace_conference_grand": {
         "prompt": "A grand peace conference ending a world war: delegations from exhausted nations gathered in an ornate palace. Maps of redrawn borders, terms of surrender, the exhausted relief of peace mixed with the anxiety of what comes next.",

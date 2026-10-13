@@ -90,8 +90,11 @@ class TestGenerated(unittest.TestCase):
         self.assertNotIn("te_dg_cls", body)
         self.assertNotIn("te_dg_mig_add_", body)
         for sex in "fm":
-            self.assertEqual(body.count(f"name = te_dg_mig_gain_{sex}\n"), len(P.MIGRANT_CLASSES))
-            self.assertEqual(body.count(f"name = te_dg_mig_frac_{sex}\n"), len(P.MIGRANT_CLASSES))
+            # each class sets its gain and loss from the booking's rate (te_demog_migrant_rates, 2026-10-12)
+            for kind in ("gain", "frac"):
+                self.assertEqual(body.count(f"name = te_dg_mig_{kind}_{sex} value = {{ value = local_var:te_dg_mr_{sex}"),
+                                 len(P.MIGRANT_CLASSES))
+            self.assertEqual(body.count("add = local_var:te_dg_mig_flat"), 4 * len(P.MIGRANT_CLASSES))
 
     def _cause(self, cause):
         return self.values.split(f"te_demog_mult_{cause} = {{", 1)[1].split("\n}\n", 1)[0]

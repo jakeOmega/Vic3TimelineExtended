@@ -471,6 +471,15 @@ profile mixes three kinds of migrant:
 
 None of it is scripted by date.
 
+**Amended (the migrant booking, 2026-10-12; `docs/testing/demographics-migrant-booking-2026-10-12.md`).** The residual
+is the engine's own migration, and the engine's flows run far past history's: states lost or gained 2–7% of their
+people a year for decades, and booked by the profile every year their men fell to 2 per 100 women or rose to 200. Two
+rules now bound it: a step's profile adds to a class and sex at most 5% of its people and takes at most 3%, the rest
+booked over every age and both sexes (whole families moving), and the labour kind's women's share moves to half as a
+state's men per 100 women aged 20–59 fall from 95 to 91 or rise from 105 to 115. The places left behind still grow
+older within the cap, but no state passes about 90–110 by migration alone, so the frontier fills with families, not
+young men: the price of phase 2's "under 2% of states at a sex-balance effect in peace".
+
 ### 2.6 Starting values and new states
 
 - **1836.** Each state starts at the equilibrium of its own inputs, taken from a lookup by fertility and life
@@ -739,7 +748,7 @@ Market Towns (< 20).
 | Child-labour, pension and retirement settings | who among the young and old works | participation weights (§7) |
 | Ectogenesis (the Youth Center PM) | births depend less on how many women of childbearing age there are | weakens the women's-cohort term in states with the PM |
 | Biological Immortality (era 12) | ageing stops | §8.3 |
-| Cultural Hegemony (later phase) | desired fertility drifts a little toward the hegemon's | the "soap-opera effect": Brazil's fertility fell where TV novelas reached (La Ferrara et al., 2012) |
+| Cultural Hegemony (built in phase 3, under Full) | desired fertility drifts a little toward the hegemon's | the "soap-opera effect": Brazil's fertility fell where TV novelas reached (La Ferrara et al., 2012); scaled by the foreign benchmark's gap |
 | Inheritance, land tenure, ownership, taxes, war, devastation, revolution, banking crises | Wealth Concentration | §4.2 |
 | Capital, ports, area, industry, infrastructure, crowding, urban planning | settlement pattern | §5.2 |
 
@@ -1119,6 +1128,12 @@ to be sane.
   birth cut (`inh_forced_heirship_rural`, −15% × the agrarian share) tells the same story, so the two should be
   folded together when this is built. Late Marriage and Birth Spacing, two practices on the same machinery, per
   state: `2026-10-10-demographics-late-marriage-design.md`.
+  **Built in phase 3 (2026-10-12; owner: build it as proposed, national).** Under Full only, so France keeps history's
+  +0.6 outside it. Two choices the proposal left open: the share rises only (toward its target and toward its
+  neighbours'), since a practice once learned isn't unlearned and France's would otherwise leak to its neighbours'
+  zero; and its line erodes with modern contraception, which takes its place in the means. Forced Heirship's rural cut
+  rides the moved lines' absorbed family, as Primogeniture's does. `docs/systems/mod_systems.md` § Demographics, "Phase
+  3"; fit: `docs/testing/demographics-family-limitation-2026-10-12.md`.
 - **What the panel's children per woman shows once phase 2 applies the births (owner's question, 2026-10-10).** The
   census's figure starts from the standard-of-living curve and reads no engine birth modifier: Forced Heirship,
   literacy's −0.1, the Pill's and the family-policy laws' flat lines. The engine's births take them all, so France

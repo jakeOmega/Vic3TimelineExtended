@@ -120,32 +120,58 @@ def _seed(shares, states, region):
                          for p in P.PRACTICES}
 
 
-def _step(shares, states, region):
-    """te_demog_practice_step for every state: a year's drift toward its target at these conditions, then the shares
-    copied to its state region (the last state of a region to step wins, as in game)."""
+def neighbour_map(states, adjacency):
+    """{state id: [neighbouring state]} for the phase 3 spread (te_demog_practices_neighbours): the states in the state
+    regions next to its own (demographics_adjacency's land snapshot), and the other states of its own region. None
+    (no adjacency given) spreads nothing."""
+    if adjacency is None:
+        return None
+    by_region = {}
+    for s in states:
+        by_region.setdefault(s.state_region, []).append(s)
+    out = {}
+    for s in states:
+        near = [x for r in adjacency.get(s.state_region, ()) for x in by_region.get(r, ())]
+        near += [x for x in by_region.get(s.state_region, ()) if x.sid != s.sid]
+        out[s.sid] = near
+    return out
+
+
+def _step(shares, states, region, neighbours=None):
+    """te_demog_practice_step for every state: a year's drift toward its target at these conditions and (phase 3) the
+    spread toward its neighbours' people-weighted mean, from last year's shares (in game each state steps on its own
+    day, so a neighbour's share may already be this year's: a year's drift at most), then the shares copied to its state
+    region (the last state of a region to step wins, as in game)."""
+    before = {sid: dict(v) for sid, v in shares.items()}
     for s in states:
         for p in P.PRACTICES:
             start = M.practice_start(p, s.state_region, s.strategic_region)
-            shares[s.sid][p] = M.practice_drift(shares[s.sid][p], M.practice_target(p, s.inp, start))
+            near = None
+            if neighbours is not None:
+                near = M.people_mean([(x.people, before[x.sid][p]) for x in neighbours.get(s.sid, ())
+                                      if x.sid in before])
+            shares[s.sid][p] = M.practice_drift(before[s.sid][p], M.practice_target(p, s.inp, start), near)
         region[s.state_region] = dict(shares[s.sid])
 
 
-def replay(loaded):
+def replay(loaded, adjacency=None):
     """{year: {sid: record}} for each save in `loaded` ([(year, [PracticeState])], sorted): every state seeds at the
     first save that holds it, then the census steps once a year, each year with the conditions of the latest save at
     or before it (so the years between two saves take the earlier one's, and a save's own year takes its own). Each
     step writes its region's copy, which a new ID with no sibling holding a share seeds from, as in game (a region that
     changed hands between two sampled saves). A record holds the shares, their targets at that save's conditions, the
-    state's people and its regions."""
+    state's people and its regions. adjacency ({state region: set of neighbours}, demographics_adjacency.neighbours):
+    phase 3's spread; None leaves it out (phase 2's replay)."""
     shares, region, out, prev = {}, {}, {}, None
     for year, states in loaded:
+        near = neighbour_map(states, adjacency)
         if prev is not None:
-            prev_year, prev_states = prev
+            prev_year, prev_states, prev_near = prev
             for _ in range(year - prev_year - 1):
-                _step(shares, prev_states, region)
+                _step(shares, prev_states, region, prev_near)
         _seed(shares, states, region)
         if prev is not None:
-            _step(shares, states, region)
+            _step(shares, states, region, near)
         out[year] = {}
         for s in states:
             rec = {p: shares[s.sid][p] for p in P.PRACTICES}
@@ -154,7 +180,7 @@ def replay(loaded):
                                                                                     s.strategic_region))
             rec.update(people=s.people, state_region=s.state_region, strategic_region=s.strategic_region)
             out[year][s.sid] = rec
-        prev = (year, states)
+        prev = (year, states, near)
     return out
 
 

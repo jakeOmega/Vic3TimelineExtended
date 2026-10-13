@@ -68,10 +68,17 @@ inh_land_hunger = {
 # ----------------------------------------------------------------------
 
 # Forced Heirship: smallholders have fewer children so the plot is not
-# split again, and stay on it.
+# split again, and stay on it. The birth line sits on the moved lines'
+# absorbed family, as Primogeniture's does (phase 3; the parent spec's
+# section 13: the two "should be folded together"): outside the
+# Demographics rule's Full setting the moved lines' pair re-applies it (Laws
+# and Institutions in a state's birth rates), and under Full the census's
+# Family Limitation takes its place, since Forced Heirship x the farm share
+# raises that practice's target (te_demog_fl_target). The engine fact it
+# rests on is primogeniture_scaled's (te_debug_demog_pr_selfcheck_start).
 inh_forced_heirship_rural = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	state_birth_rate_mult = -0.15
+	state_demog_absorbed_birth_rate_mult = -0.15
 	state_migration_quota_mult = -0.2
 }
 
@@ -82,7 +89,7 @@ inh_forced_heirship_rural = {
 # setting the moved lines' pair re-applies it (Laws and Institutions in a
 # state's birth rates), and under Full the census's Late Marriage takes its
 # place, since impartible inheritance raises it. Forced Heirship's line
-# stays an engine field, on top of the census under Full (phase 3).
+# moved the same way in phase 3, to Family Limitation.
 # Unverified: that the engine sums a script-only type on a state modifier
 # scaled by its multiplier. te_debug_demog_pr_selfcheck_start logs TE_SELF_CHECK
 # once a game; BROKEN means take the plan's Plan B.
