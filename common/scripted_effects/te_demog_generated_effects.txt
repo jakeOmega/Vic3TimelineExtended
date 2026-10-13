@@ -7347,6 +7347,8 @@ te_demog_absorbed_walk_init = {
 	set_local_variable = { name = te_dg_w_ed0m value = 0 }
 	set_local_variable = { name = te_dg_w_sev value = 0 }
 	set_local_variable = { name = te_dg_w_sevd value = 0 }
+	set_local_variable = { name = te_dg_w_edw value = 0 }
+	set_local_variable = { name = te_dg_w_wtop value = 0 }
 	set_local_variable = { name = te_dg_w_rep value = 0 }
 	if = {
 		limit = { te_demog_effects_run = yes }
@@ -7359,7 +7361,8 @@ te_demog_absorbed_walk_init = {
 # (te_demog_rates_refresh); and its bare curves into te_dg_w_eb0m / _ed0m unless the engine floors its
 # multiplier at 0 (severe starvation's births, in its lower food-security steps or under a low term), which a
 # change in the census's term then doesn't reach (the trapezoid's start rate); and severe starvation's people
-# and deaths (te_dg_w_sev, te_dg_w_sevd: the Causes of Death section's split). Full only.
+# and deaths (te_dg_w_sev, te_dg_w_sevd: the Causes of Death section's split); the bare deaths x wealth the
+# census's wealth slope reaches and the richest pop's wealth (te_dg_w_edw, te_dg_w_wtop; phase 3). Full only.
 te_demog_absorbed_walk_pop = {
 	if = {
 		limit = { local_var:te_dg_w_rep > 0 }
@@ -7372,6 +7375,11 @@ te_demog_absorbed_walk_pop = {
 		if = {
 			limit = { local_var:te_dg_p_md > 0 }
 			change_local_variable = { name = te_dg_w_ed0m add = local_var:te_dg_p_ed }
+			change_local_variable = { name = te_dg_w_edw add = { value = local_var:te_dg_p_ed multiply = wealth } }
+		}
+		if = {
+			limit = { wealth > local_var:te_dg_w_wtop }
+			set_local_variable = { name = te_dg_w_wtop value = wealth }
 		}
 		# severe starvation's people, and its part of the pop's deaths where the engine doesn't floor them (the Causes
 		# of Death section's split, te_demog_on_top_split): the severe ladder te_demog_pop_death_mult holds

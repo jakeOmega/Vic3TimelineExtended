@@ -929,3 +929,159 @@ te_debug_demog_cq_feminist_mod = { value = modifier:state_pop_support_movement_f
 te_debug_demog_cq_c_share = { value = -1 if = { limit = { has_variable = te_dg_fam_share } value = var:te_dg_fam_share } }
 te_debug_demog_cq_c_men = { value = -1 if = { limit = { has_variable = te_dg_fam_men } value = var:te_dg_fam_men } }
 te_debug_demog_cq_c_yb_n = { value = -1 if = { limit = { has_variable = te_dg_yb_n } value = var:te_dg_yb_n } }
+
+# ---- Phase 3, the late game: option u's reads (state or country), -1 where the variable is missing ----------------
+te_debug_demog_late_elig = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_elig }
+		value = var:te_dg_elig
+	}
+}
+te_debug_demog_late_cover = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_cover }
+		value = var:te_dg_cover
+	}
+}
+te_debug_demog_late_sbar = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_sbar }
+		value = var:te_dg_lx_sbar
+	}
+}
+te_debug_demog_late_pub = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_pub }
+		value = var:te_dg_lx_pub
+	}
+}
+te_debug_demog_late_l100 = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_l100 }
+		value = var:te_dg_lx_l100
+	}
+}
+te_debug_demog_late_l100t = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_l100t }
+		value = var:te_dg_lx_l100t
+	}
+}
+te_debug_demog_late_l100u = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_l100u }
+		value = var:te_dg_lx_l100u
+	}
+}
+te_debug_demog_late_old_age = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_old_age }
+		value = var:te_dg_old_age
+	}
+}
+te_debug_demog_late_old_age_c = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_old_age_c }
+		value = var:te_dg_old_age_c
+	}
+}
+te_debug_demog_late_rho = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_rho }
+		value = var:te_dg_lx_rho
+	}
+}
+te_debug_demog_late_slope = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_slope }
+		value = var:te_dg_lx_slope
+	}
+}
+te_debug_demog_late_mbar = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_mbar }
+		value = var:te_dg_lx_mbar
+	}
+}
+te_debug_demog_late_w = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_w }
+		value = var:te_dg_w
+	}
+}
+te_debug_demog_late_age = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_age }
+		value = var:te_dg_lx_age
+	}
+}
+te_debug_demog_late_bio = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_bio }
+		value = var:te_dg_lx_bio
+	}
+}
+te_debug_demog_late_mab = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_mab }
+		value = var:te_dg_mab
+	}
+}
+te_debug_demog_late_b50 = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_b50 }
+		value = var:te_dg_lx_b50
+	}
+}
+te_debug_demog_late_s5 = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_s5 }
+		value = var:te_dg_s5
+	}
+}
+te_debug_demog_late_d5 = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_d5 }
+		value = var:te_dg_d5
+	}
+}
+te_debug_demog_late_ps = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_ps }
+		value = var:te_dg_lx_ps
+	}
+}
+te_debug_demog_late_pd = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_pd }
+		value = var:te_dg_lx_pd
+	}
+}
+te_debug_demog_late_country_w = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_lx_w }
+		value = var:te_dg_lx_w
+	}
+}

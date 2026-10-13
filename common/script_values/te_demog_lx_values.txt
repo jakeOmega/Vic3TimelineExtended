@@ -120,3 +120,16 @@ te_demog_lx_gap = {
 		subtract = var:te_dg_lx_l100u
 	}
 }
+
+# Country scope: the longevity gap's politics' multiplier (§4.4, call 15): the gap x the share of people not in care,
+# 0 to 1 (te_demog_lx_gap_politics, off until a play-test sizes it).
+te_demog_lx_gap_politics_x = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_elig }
+		value = te_demog_lx_gap
+		multiply = { value = 1 subtract = var:te_dg_elig }
+		min = 0
+		max = 1
+	}
+}

@@ -236,7 +236,11 @@ PENSION_IG_APPROVAL = {
 # The pension bill (§2.3, money): a weekly expense of GDP / 52 x the pensioners' share x B, B = PENSION_B_PER_LEVEL x
 # the Social Security level. Fitted against revenue (late-game call 16): the bill 15-30% of a rich country's revenue at
 # Standard with 18-22% pensioners.
-PENSION_B_PER_LEVEL = 0.06      # step 2's fit (0.08 proposed): the 1953 save's revenue over GDP (harness `pensions`)
+# Call 16's fit (2026-10-12, harness `pensions SAVE`, the 15 largest economies' median revenue over GDP): 1949 0.32,
+# 1953 0.27, 1959 0.38 (the bill 16-23% of revenue at 20% pensioners), and the only plain-text late-game save, 2062
+# 0.10 over all 15 but 0.26 over the eight whose revenue is at least 10% of GDP (the other seven run expenses 5-34x their
+# income: the AI's chronic insolvency), which puts B at 0.059. 0.06 stands.
+PENSION_B_PER_LEVEL = 0.06      # step 2's fit (0.08 proposed), held by call 16's fit above
 PENSION_BILL_BAND = (0.15, 0.30)
 # The health bill (§2.4, bureaucracy): country_institution_cost_institution_health_system_mult = the need term
 # HEALTH_NEED_WEIGHT x (need - 1), at most HEALTH_NEED_CAP, plus HEALTH_TECH_STEP for each chronic-treatment technology.

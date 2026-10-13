@@ -899,11 +899,15 @@ def cmd_workforce(args):
 # The pension bill is GDP / 52 x the pensioners' share x B a week, B = PENSION_B_PER_LEVEL x the Social Security level:
 # a share of GDP a year of pensioners x B. The band is a share of revenue (late-game call 16), so the fit needs the
 # game's own revenue over GDP, read from a save's largest economies (S.country_budgets: weekly income x 52 over the
-# GDP channel's latest sample). No 2000-2020 save exists yet (2026-10-12): the latest is 1953's, whose median the fit
-# takes; a late save replaces it (docs/testing/demographics-playtest.md).
+# GDP channel's latest sample). Step 2 took 1953's median; call 16 (2026-10-12) read 1949, 1959 and the one plain-text
+# late-game save, 2062, whose solvent half agrees (demographics_params.PENSION_B_PER_LEVEL). A healthy late save is the
+# better second reading (docs/testing/demographics-playtest.md).
 PENSION_LEVEL = 5            # Social Security at vanilla's top level, the design's reference (late-game §5.1)
 PENSION_SHARES = (0.18, 0.20, 0.22)
 PENSION_TOP_ECONOMIES = 15
+# Call 16's late-game reading: economies raising less than this share of GDP are insolvent AIs (expenses many times
+# income), not a measure of what a state can tax; the fit reads the median of the rest beside the plain one.
+PENSION_SOLVENT_REVENUE = 0.1
 BAND_HEALTH_TODAY = (0.35, 0.5)
 BAND_HEALTH_1836 = (-0.05, 0.05)
 
@@ -948,6 +952,11 @@ def cmd_pensions(args):
         print(f"\n{args.save}: revenue over GDP, the {len(ratios)} largest economies: "
               + ", ".join(f"{t} {r:.2f}" for t, r in ratios))
         print(f"  median {revenue:.3f}; B that centres the band at 20% pensioners: {fitted_b(revenue):.4f}")
+        solvent = [r for _t, r in ratios if r >= PENSION_SOLVENT_REVENUE]
+        if solvent and len(solvent) < len(ratios):
+            med = statistics.median(solvent)
+            print(f"  the {len(solvent)} with revenue at least {PENSION_SOLVENT_REVENUE:.0%} of GDP (call 16: the rest are "
+                  f"the AI's insolvency): median {med:.3f}, B {fitted_b(med):.4f}")
         lo, hi = P.PENSION_BILL_BAND
         for share in (*PENSION_SHARES, pens):
             bill = M.pension_bill_gdp_share(share, PENSION_LEVEL) / revenue

@@ -147,7 +147,7 @@ class TestLateGameScript(unittest.TestCase):
                            ("te_dg_e65", lx["blend"]["e65"]), ("te_dg_old_age", lx["blend"]["old_age"]),
                            ("te_dg_old_age_c", lx["untreated"]["old_age"]), ("te_dg_lx_l100", lx["blend"]["l100"]),
                            ("te_dg_lx_l100t", lx["treated"]["l100"]), ("te_dg_lx_l100u", lx["untreated"]["l100"]),
-                           ("te_dg_lx_rho", lx["rho"])):
+                           ("te_dg_lx_rho", lx["rho"]), ("te_dg_lx_slope", lx["slope"]), ("te_dg_lx_mbar", lx["mbar"])):
             self.close(eng.vars[name], want, 1e-6, name)
         # the biological pyramid's moves from the calendar one (the script's bands leave out the cohorts it dropped, each
         # under half a person: TestCohortScript checks the calendar bands)
@@ -247,10 +247,25 @@ class TestLateGameScript(unittest.TestCase):
             self.check(eng, ring, out)
 
     def test_the_seed(self):
-        inp = _inp()
+        """A seed once ageing is slowed (§1.2): its adults survive with the treated at the rate's steady biological age,
+        and each band starts at E and its steady deficit."""
+        inp = _inp(**{P.AGEING_RATE_TYPE: -0.5})
         eng = _engine_for(inp, YEAR, POP)
         eng.call("te_demog_seed")
-        ring = M.seed(inp, YEAR, POP)
+        # the script reads the growth factor from a table of growth_factor; the model takes the same d
+        with unittest.mock.patch.object(M, "growth_factor", lambda nrr: eng.locals["te_dg_d"]):
+            ring = M.seed(inp, YEAR, POP)
+        plain = M.seed(_inp(**{P.AGEING_RATE_TYPE: 0.0}), YEAR, POP)
+        for a, f, m in ring.by_age()[:-1]:
+            k = (YEAR - a) % N
+            if f"te_dg_f{k}" not in eng.vars:
+                self.assertLess(f + m, 1e-5 * POP, f"age {a} left empty")
+                continue
+            self.close(eng.vars[f"te_dg_f{k}"], f, 1e-4, f"women aged {a}")
+            self.close(eng.vars[f"te_dg_m{k}"], m, 1e-4, f"men aged {a}")
+        old_share = sum(f + m for a, f, m in ring.by_age()[:-1] if a >= 80) / POP
+        self.assertGreater(old_share, sum(f + m for a, f, m in plain.by_age()[:-1] if a >= 80) / POP,
+                           "the treated live longer, so the seed holds more old people")
         target, pub = M.lx_targets(inp)
         self.close(eng.vars["te_dg_elig"], target, 1e-9, "eligibility")
         self.assertEqual(eng.vars["te_dg_cover"], 1)
@@ -338,6 +353,95 @@ class TestLateGameModel(unittest.TestCase):
         self.assertEqual(M.lx_market_next(80.0), 80.0 - P.LX_MARKET_FALL)
         self.assertEqual(M.lx_market_next(80.0, laws={"law_private_health_insurance"}), 78.0)
         self.assertEqual(M.lx_market_next(P.LX_MARKET_FLOOR), P.LX_MARKET_FLOOR)
+
+
+class TestWealthSlope(unittest.TestCase):
+    """Rich pops really die less (§4.3, call 14): the slope of each wealth band's multiplier against wealth, on the census's
+    own Deaths by Wealth pair, M netting what it moves so the state's total stays the census's."""
+
+    POP = 1_000_000.0
+
+    ED0 = 8.0 * 1_000_000 * 100 / 12          # the bare deaths: 8 per 1,000 a year (the census's target: 4)
+
+    def refresh(self, slope, mbar, rho, edw, wtop, line=0.0):
+        ed0 = self.ED0
+        eng = _Engine({"state_population": self.POP, "modifier:state_birth_rate_mult": 0.05,
+                       "modifier:state_mortality_mult": 0.04,
+                       **{f"modifier:{n}": 0.0 for n in P.ENGINE_LINE_TYPES.values()},
+                       "modifier:state_demog_ontop_mortality_wealth_mult": line},
+                      triggers={"te_demog_effects_run": True, "te_demog_cohorts_run": True})
+        eng.locals.update(te_dg_w_eb0=475e6, te_dg_w_ed0=ed0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=475e6,
+                          te_dg_w_ed=ed0, te_dg_w_eb0m=475e6, te_dg_w_ed0m=ed0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0,
+                          te_dg_w_edw=edw, te_dg_w_wtop=wtop)
+        eng.vars.update(te_dg_stepped=1.0, te_dg_cbr_model=10.0, te_dg_cdr_model=4.0, te_dg_lx_slope=slope,
+                        te_dg_lx_mbar=mbar, te_dg_lx_rho=rho)
+        eng.call("te_demog_rates_refresh")
+        return eng, ed0
+
+    def test_the_slope_nets_out_and_the_richest_are_held(self):
+        ed0, wbar = self.ED0, 40.0
+        for slope, wtop in ((-0.004, 120.0), (-0.02, 150.0)):
+            eng, ed0 = self.refresh(slope, 0.6, 0.1, wbar * ed0, wtop)
+            target = 4.0 * self.POP * 100 / 12
+            tb = target / ed0
+            held = M.lx_wealth_term(slope, 0.6, 0.1, wbar, wtop)
+            md, _ = M.rate_term(target, ed0, absorbed=held * tb * wbar * ed0, other=0.04, on_top=0.04)
+            self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+            self.assertAlmostEqual(eng.vars["te_dg_w"], (P.WEALTH_LINE_FLOOR * 0 + held) * tb, places=6)
+            # the richest pop's rate on the census's: 1 + slope x (its wealth - the mean), at least the treated's
+            self.assertGreaterEqual(1 + held * (wtop - wbar), 0.1 / 0.6 - 1e-9)
+            # the state's total stays the census's: the bare curves x (1 + M + wealth x W), summed, is the target
+            total = ed0 * (1 + eng.vars["te_dg_md"] + 0.04) + eng.vars["te_dg_w"] * wbar * ed0
+            self.assertAlmostEqual(total, target * 1.04, delta=target * 1e-4)
+        self.assertLess(M.lx_wealth_term(-0.02, 0.6, 0.1, wbar, 150.0), 0)
+        self.assertGreater(M.lx_wealth_term(-0.02, 0.6, 0.1, wbar, 150.0), -0.02, "the hold binds")
+
+    def test_no_late_game_no_slope(self):
+        eng = _Engine({"state_population": self.POP, "modifier:state_birth_rate_mult": 0.05,
+                       "modifier:state_mortality_mult": 0.04, **{f"modifier:{n}": 0.0 for n in P.ENGINE_LINE_TYPES.values()}},
+                      triggers={"te_demog_effects_run": True, "te_demog_cohorts_run": True})
+        eng.locals.update(te_dg_w_eb0=475e6, te_dg_w_ed0=430e6, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=475e6,
+                          te_dg_w_ed=430e6, te_dg_w_eb0m=475e6, te_dg_w_ed0m=430e6, te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+        eng.vars.update(te_dg_stepped=1.0, te_dg_cbr_model=10.0, te_dg_cdr_model=4.0)
+        eng.call("te_demog_rates_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_w"], P.WEALTH_LINE_FLOOR * 0, places=9)
+
+    def test_the_model_slope(self):
+        """A rich minority within reach: its multiplier is rho's share lower, so the slope is negative."""
+        inp = dataclasses.replace(_inp(), laws=frozenset({"law_private_health_insurance"}),
+                                  wealth_bands={2: 800.0, 30: 200.0}, lx_w=100.0)
+        slope, mbar = M.lx_wealth_slope(inp, 0.2, 0.25)
+        self.assertLess(slope, 0)
+        self.assertAlmostEqual(mbar, 0.8 * 1 + 0.2 * 0.25)
+        self.assertEqual(M.lx_wealth_slope(dataclasses.replace(inp, laws=inp.laws | {P.LX_BAN_LAW}), 0.2, 0.25),
+                         (0.0, 1.0))
+
+
+class TestGapPolitics(unittest.TestCase):
+    """§4.4, call 15: built behind demographics_params.LONGEVITY_POLITICS, off until a play-test sizes it."""
+
+    def test_off_applies_nothing(self):
+        self.assertFalse(P.LONGEVITY_POLITICS)
+        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng.vars.update(te_dg_lx_l100t=0.8, te_dg_lx_l100u=0.3)
+        eng.modifiers["te_demog_lx_gap_labor"] = 0.4      # a game that had it on: it goes
+        eng.call("te_demog_lx_politics_refresh")
+        self.assertEqual(eng.modifiers, {})
+
+    def test_on_applies_the_gap(self):
+        eng = _Engine({"te_demog_k_lx_politics": 1.0}, triggers={"te_demog_effects_run": True})
+        eng.vars.update(te_dg_lx_l100t=0.8, te_dg_lx_l100u=0.3)
+        eng.call("te_demog_lx_politics_refresh")
+        self.assertAlmostEqual(eng.modifiers["te_demog_lx_gap_labor"], 0.5)
+        eng.trigger_fixtures["te_demog_effects_run"] = False
+        eng.call("te_demog_lx_politics_refresh")
+        self.assertEqual(eng.modifiers, {}, "outside Full nothing")
+
+    def test_the_sizes(self):
+        mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_lx_modifiers.txt"])
+        self.assertIn(f"interest_group_ig_trade_unions_approval_add = {P.LX_POLITICS_APPROVAL}", mods["te_demog_lx_gap_politics"])
+        self.assertIn(f"interest_group_ig_rural_folk_approval_add = {P.LX_POLITICS_APPROVAL}", mods["te_demog_lx_gap_politics"])
+        self.assertIn(f"state_pop_support_movement_labor_mult = {P.LX_POLITICS_LABOR}", mods["te_demog_lx_gap_labor"])
 
 
 class TestLateGameHarness(unittest.TestCase):

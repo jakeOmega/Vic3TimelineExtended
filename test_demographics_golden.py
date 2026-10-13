@@ -86,8 +86,16 @@ STEP3_DIGESTS = {
 STEP3_VARS = {"te_dg_in_mal", "te_dg_in_malc"}
 # Phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md): a state with no ageing carrier
 # and no treated people takes the plain sweep and changes no number (these cases have none); every census step now
-# stores the mean age at childbirth (late-game §6.2), the one new name here.
+# stores the mean age at childbirth (late-game §6.2), the one new name here. The walk's Full-only sums gain the bare
+# deaths x wealth and the richest pop the wealth slope reads (call 14: two locals, read only in a late state's refresh,
+# whose slope is 0 elsewhere), so the absorbed walk's two blocks are held to their new digests.
 PHASE3_VARS = {"te_dg_mab"}
+PHASE3_DIGESTS = {
+    ("generated_effects", "te_demog_absorbed_walk_init"):
+        "7c462c234d5672a8ea73e92287716b915166c61c8944b8284476ede476b0d936",
+    ("generated_effects", "te_demog_absorbed_walk_pop"):
+        "ff0c52f0f59476dcf0e3fda6eff86cc1aea107e7849840c9c091609d40ec6300",
+}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -253,7 +261,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for key, rec in self.golden["blocks"].items():
             for name, digest in rec.items():
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
-                want = STEP3_DIGESTS.get((key, name), digest)
+                want = PHASE3_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest))
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

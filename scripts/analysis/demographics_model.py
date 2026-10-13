@@ -836,13 +836,24 @@ def seed(inp, year, engine_pop):
     ring.medicine = medicine_targets(inp)
     lf = lm = 100000.0
     dpow = 1.0
+    # phase 3: once ageing is slowed, the adults' survivorship blends in the treated share E at the steady biological age
+    # of the current rate, 25 + r x (age - 25) (te_demog_lx_seed_begin, te_demog_lx_seed_decrement)
+    lxs = (lx_targets(inp)[0], ageing_rate(inp)) if lx_carrier(inp) else None
     for a in range(N):
         k = (year - a) % N
         ring.f[k] = P.FEMALE_BIRTH_PER_100K / 100000.0 * lf * dpow
         ring.m[k] = P.MALE_BIRTH_PER_100K / 100000.0 * lm * dpow
         g = P.group_of(a)
-        lf *= 1 - (qf[g] + asfr_shape(a) * tfr * mmr / 100000.0) / 100000.0
-        lm *= 1 - qm[g] / 100000.0
+        if lxs is not None and a >= P.LX_JOIN_AGE:
+            e, rr = lxs
+            gb = P.group_of(P.LX_JOIN_AGE + rr * (a - P.LX_JOIN_AGE))
+            q_f = (1 - e) * qf[g] + e * qf[gb]
+            q_m = (1 - e) * qm[g] + e * qm[gb]
+            lf *= 1 - (q_f + asfr_shape(a) * tfr * mmr / 100000.0) / 100000.0
+            lm *= 1 - q_m / 100000.0
+        else:
+            lf *= 1 - (qf[g] + asfr_shape(a) * tfr * mmr / 100000.0) / 100000.0
+            lm *= 1 - qm[g] / 100000.0
         dpow *= d
     raw = sum(ring.f) + sum(ring.m)
     ring.scale = engine_pop / raw if raw > 0 else 1.0
@@ -1117,7 +1128,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     ring.total = ring.people()
     ring.births = births
     if lx is not None:
-        lx_finish(ring, lx, qf0, qm0)
+        lx_finish(ring, lx, qf0, qm0, inp)
         if lx["b50"] > 0 and births > 0:
             ring.lx_out["b50"] = lx["b50"] / births
     else:
@@ -1490,7 +1501,40 @@ def lx_rho(lx, qf0, qm0):
     return tq / max(tp, 0.00001) / max(uq / max(up, 0.00001), 0.00001)
 
 
-def lx_finish(ring, lx, qf0, qm0):
+def lx_wealth_slope(inp, sbar, rho):
+    """(slope, mbar): rich pops die less (§4.3, call 14; te_demog_lx_wealth_slope). Each wealth band's death multiplier
+    is 1 - its treated share x (1 - rho), its treated share its access scaled so the bands' mean is the ring's (sbar
+    over eligibility's target), at most 1; the slope is that multiplier over its people-weighted mean, against wealth,
+    people-weighted (per wealth level, on the census's rate). None without a target or a spread of wealth."""
+    target, pub = lx_targets(inp)
+    bands = {k: n for k, n in (inp.wealth_bands or {}).items() if n > 0}
+    if target <= 0 or not bands:
+        return 0.0, 1.0
+    tau = sbar / max(target, 0.00001)
+    w0 = lx_threshold(inp)
+    sn = sw = sww = sm = swm = 0.0
+    for k, n in bands.items():
+        w = P.LX_BAND_WEALTH[k]
+        m = 1 - min(1.0, max(pub, lx_market(w, w0)) * tau) * (1 - rho)
+        sn, sw, sww, sm, swm = sn + n, sw + n * w, sww + n * w * w, sm + n * m, swm + n * w * m
+    if sm <= 0:
+        return 0.0, 1.0
+    mw, mm = sw / sn, sm / sn
+    vw = sww / sn - mw * mw
+    if vw <= 0.01:
+        return 0.0, mm
+    return (swm / sn - mw * mm) / vw / mm, mm
+
+
+def lx_wealth_term(slope, mbar, rho, w_bar, w_top):
+    """The slope the census applies (te_demog_lx_rate_slope): the richest pop held at the treated's rate over the state's
+    (rho / mbar), so no pop's deaths go below zero; w_bar is the bare deaths' mean wealth, w_top the richest pop's."""
+    if w_top > w_bar:
+        return max(slope, (rho / max(mbar, 0.00001) - 1) / max(w_top - w_bar, 0.00001))
+    return slope
+
+
+def lx_finish(ring, lx, qf0, qm0, inp=None):
     """After the sweep (te_demog_lx_finish): the bands close, the tables and the late figures (ring.lx_out)."""
     ring.lx_sbar = lx_close_bands(ring, lx)
     tables = lx_tables(lx, qf0, qm0)
@@ -1503,6 +1547,7 @@ def lx_finish(ring, lx, qf0, qm0):
                      "l100": (survivors_at(qf, P.LX_LIVING_TO) + survivors_at(qm, P.LX_LIVING_TO)) / 2}
     out["gap"] = out["treated"]["l100"] - out["untreated"]["l100"]
     out["rho"] = lx_rho(lx, qf0, qm0)
+    out["slope"], out["mbar"] = lx_wealth_slope(inp, ring.lx_sbar, out["rho"]) if inp is not None else (0.0, 1.0)
     # mean calendar and biological ages after the step (the pool at its mean age)
     people = deficit = cal = 0.0
     for a, f, m in ring.by_age()[:-1]:

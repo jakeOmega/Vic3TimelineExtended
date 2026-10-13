@@ -1065,3 +1065,25 @@ te_debug_demog_consequence_lines = {
 	}
 	debug_log = "TE_DEMOG_CONSEQ_COUNTRY fam_share=[THIS.ScriptValue('te_debug_demog_cq_c_share')|4] fam_men=[THIS.ScriptValue('te_debug_demog_cq_c_men')|3] term=[THIS.ScriptValue('te_demog_country_conscription')|3] youth=[THIS.ScriptValue('te_demog_country_youth_share')|3] yb_states=[THIS.ScriptValue('te_debug_demog_cq_c_yb_n')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
+
+# ---- Phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md) -------------------------
+# Option u: the capital's late figures (TE_DEMOG_LATE) and the country's (TE_DEMOG_LATE_COUNTRY). THIS = the country.
+te_debug_demog_late_lines = {
+	capital = { te_debug_demog_late_line = yes }
+	debug_log = "TE_DEMOG_LATE_COUNTRY market_w=[THIS.ScriptValue('te_debug_demog_late_country_w')|1] elig=[THIS.ScriptValue('te_debug_demog_late_elig')|3] pub=[THIS.ScriptValue('te_debug_demog_late_pub')|3] l100=[THIS.ScriptValue('te_debug_demog_late_l100')|3] l100t=[THIS.ScriptValue('te_debug_demog_late_l100t')|3] l100u=[THIS.ScriptValue('te_debug_demog_late_l100u')|3] gap=[THIS.ScriptValue('te_demog_lx_gap')|3] old_age=[THIS.ScriptValue('te_debug_demog_late_old_age')|1] old_age_c=[THIS.ScriptValue('te_debug_demog_late_old_age_c')|1] age=[THIS.ScriptValue('te_debug_demog_late_age')|1] bio=[THIS.ScriptValue('te_debug_demog_late_bio')|1] mab=[THIS.ScriptValue('te_debug_demog_late_mab')|1] health_lx=[THIS.ScriptValue('te_demog_health_lx_term')|3] politics_x=[THIS.ScriptValue('te_demog_lx_gap_politics_x')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# THIS = a state (the capital): every late variable it holds, -1 where it has none (te_debug_demog_values.txt).
+te_debug_demog_late_line = {
+	debug_log = "TE_DEMOG_LATE rate=[THIS.ScriptValue('te_demog_lx_rate')|3] pull=[THIS.ScriptValue('te_demog_lx_pull')|3] carrier=[THIS.ScriptValue('te_demog_lx_carrier_on')|0] elig=[THIS.ScriptValue('te_debug_demog_late_elig')|3] cover=[THIS.ScriptValue('te_debug_demog_late_cover')|3] sbar=[THIS.ScriptValue('te_debug_demog_late_sbar')|3] pub=[THIS.ScriptValue('te_debug_demog_late_pub')|3] public_now=[THIS.ScriptValue('te_demog_lx_public')|3] threshold=[THIS.ScriptValue('te_demog_lx_threshold')|1] banned=[THIS.ScriptValue('te_demog_lx_banned')|0] mandatory=[THIS.ScriptValue('te_demog_lx_mandatory')|0] unrestricted=[THIS.ScriptValue('te_demog_lx_unrestricted')|0] ecto_levels=[THIS.ScriptValue('te_demog_lx_ecto_levels')|0] l100=[THIS.ScriptValue('te_debug_demog_late_l100')|3] l100t=[THIS.ScriptValue('te_debug_demog_late_l100t')|3] l100u=[THIS.ScriptValue('te_debug_demog_late_l100u')|3] old_age=[THIS.ScriptValue('te_debug_demog_late_old_age')|1] old_age_c=[THIS.ScriptValue('te_debug_demog_late_old_age_c')|1] rho=[THIS.ScriptValue('te_debug_demog_late_rho')|3] slope=[THIS.ScriptValue('te_debug_demog_late_slope')|5] mbar=[THIS.ScriptValue('te_debug_demog_late_mbar')|3] wealth_w=[THIS.ScriptValue('te_debug_demog_late_w')|5] age=[THIS.ScriptValue('te_debug_demog_late_age')|1] bio=[THIS.ScriptValue('te_debug_demog_late_bio')|1] mab=[THIS.ScriptValue('te_debug_demog_late_mab')|1] b50=[THIS.ScriptValue('te_debug_demog_late_b50')|3] s5=[THIS.ScriptValue('te_debug_demog_late_s5')|3] d5=[THIS.ScriptValue('te_debug_demog_late_d5')|2] ps=[THIS.ScriptValue('te_debug_demog_late_ps')|3] pd=[THIS.ScriptValue('te_debug_demog_late_pd')|2] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# Option v: the ageing ladder at once, for a play-test of the late game in an evening (THIS = the country).
+te_debug_demog_late_ladder = {
+	add_technology_researched = mrna_therapeutics
+	add_technology_researched = personalized_medicine
+	add_technology_researched = genetic_engineering
+	add_technology_researched = biological_immortality
+	debug_log = "TE_DEMOG_LATE ladder researched for [THIS.GetName] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+

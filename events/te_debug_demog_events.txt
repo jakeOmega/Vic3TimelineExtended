@@ -53,6 +53,11 @@
 #        ratio's add and the census's stored fertility terms (TE_DEMOG_FAMILY)
 #   t    phase 2 step 4's figures: the capital's pool, conscription term, youth bulge and sex-balance terms beside the
 #        state's reads of the four fields they move (TE_DEMOG_CONSEQ), and the country's (TE_DEMOG_CONSEQ_COUNTRY)
+#   u    phase 3, the late game: the capital's eligibility, cover, ageing rate and pull, the market threshold, Living to
+#        100, old age from, rho, the wealth slope and the mean ages (TE_DEMOG_LATE), and the country's (TE_DEMOG_LATE_COUNTRY)
+#   v    phase 3's play-test cheat: our country researches the ageing ladder at once (mRNA Therapeutics, Personalized
+#        Medicine, Genetic Engineering and Biological Immortality), so the late game starts at the next census. It
+#        really researches them: throwaway games only
 # Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7, .8 (phase 2 step
 # 1's workforce self-checks; te_debug_demog_wf_selfchecks); under Full, .10 (the Family Policy measures' self-check,
 # measure_country_types; te_debug_demog_ms_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
@@ -423,6 +428,41 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 				limit = { has_variable = te_dg_dbg_click }
 				remove_variable = te_dg_dbg_click
 				te_debug_demog_consequence_lines = yes
+			}
+		}
+	}
+
+	# ---- u: phase 3, the late game (te_debug_demog_late_lines) ---------------------------------------------------
+	option = {
+		name = te_debug_demog.1.u
+		trigger = {
+			exists = capital
+			te_demog_cohorts_run = yes
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.u.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_late_lines = yes
+			}
+		}
+	}
+
+	# ---- v: phase 3's play-test cheat, the ageing ladder at once ---------------------------------------------------
+	option = {
+		name = te_debug_demog.1.v
+		trigger = {
+			NOT = { has_technology_researched = biological_immortality }
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.v.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_late_ladder = yes
 			}
 		}
 	}

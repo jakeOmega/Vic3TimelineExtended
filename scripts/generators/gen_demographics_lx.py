@@ -71,10 +71,10 @@ def lx_sweep(o):
     for pass_ in (1, 2):
         for j in range(P.LX_BANDS - 1, -1, -1):
             top = W * j + W - 1
-            o(f"te_demog_lx_band_p{pass_} = {{ J = {j} TOP = {top} WHEN = open }}")
+            o(f"te_demog_lx_pass{pass_}_band = {{ J = {j} TOP = {top} WHEN = open }}")
             for k in range(top, W * j - 1, -1):
                 o(f"te_demog_lx_slot_p{pass_} = {{ S = {k} }}")
-            o(f"te_demog_lx_band_p{pass_} = {{ J = {j} TOP = {top} WHEN = close }}")
+            o(f"te_demog_lx_pass{pass_}_band = {{ J = {j} TOP = {top} WHEN = close }}")
     o("}")
     o("")
     assert N == W * P.LX_BANDS
@@ -312,6 +312,60 @@ def access(o):
     o("")
 
 
+def wealth_slope(o):
+    o("# THIS = a state after the late sweep (demographics_model.lx_wealth_slope; late-game §4.3, call 14): each wealth band's")
+    o("# death multiplier 1 - its treated share x (1 - rho), its treated share its access scaled so their mean is the ring's")
+    o("# (te_dg_lx_sbar over eligibility's target), and the people-weighted slope of that multiplier over the state's mean")
+    o("# against wealth: te_dg_lx_slope (per wealth level, on the census's rate) and te_dg_lx_mbar (the mean). Needs")
+    o("# te_demog_lx_access's locals (te_dg_lx_lo, te_dg_lx_pub, te_dg_lx_target) and the step's te_dg_lx_rho, te_dg_lx_sbar.")
+    o("te_demog_lx_wealth_slope = {")
+    for name in ("n", "w", "ww", "m", "wm"):
+        o(f"set_local_variable = {{ name = te_dg_lx_s{name} value = 0 }}")
+    o("set_local_variable = { name = te_dg_lx_tau_k value = { value = var:te_dg_lx_sbar divide = { value = local_var:te_dg_lx_target "
+      "min = 0.00001 } } }")
+    o("set_local_variable = { name = te_dg_lx_rho1 value = { value = 1 subtract = var:te_dg_lx_rho } }")
+    o("if = {")
+    o("limit = { local_var:te_dg_lx_target > 0 }")
+    for k in range(1, P.GINI_BANDS + 1):
+        w = _lit(P.LX_BAND_WEALTH[k])
+        o("if = {")
+        o(f"limit = {{ has_variable = te_dg_gn{k} }}")
+        o(f"set_local_variable = {{ name = te_dg_lx_mk value = {{ value = {w} subtract = local_var:te_dg_lx_lo divide = "
+          f"{_lit(2 * P.LX_MARKET_RAMP)} min = 0 max = 1 min = local_var:te_dg_lx_pub multiply = local_var:te_dg_lx_tau_k "
+          f"max = 1 multiply = local_var:te_dg_lx_rho1 multiply = -1 add = 1 }} }}")
+        o(f"change_local_variable = {{ name = te_dg_lx_sn add = var:te_dg_gn{k} }}")
+        o(f"change_local_variable = {{ name = te_dg_lx_sw add = {{ value = var:te_dg_gn{k} multiply = {w} }} }}")
+        o(f"change_local_variable = {{ name = te_dg_lx_sww add = {{ value = var:te_dg_gn{k} multiply = {w} multiply = {w} }} }}")
+        o(f"change_local_variable = {{ name = te_dg_lx_sm add = {{ value = var:te_dg_gn{k} multiply = local_var:te_dg_lx_mk }} }}")
+        o(f"change_local_variable = {{ name = te_dg_lx_swm add = {{ value = var:te_dg_gn{k} multiply = {w} "
+          f"multiply = local_var:te_dg_lx_mk }} }}")
+        o("}")
+    o("}")
+    o("set_variable = { name = te_dg_lx_slope value = 0 }")
+    o("set_variable = { name = te_dg_lx_mbar value = 1 }")
+    o("if = {")
+    o("limit = {")
+    o("local_var:te_dg_lx_sn > 0")
+    o("local_var:te_dg_lx_sm > 0")
+    o("}")
+    o("set_local_variable = { name = te_dg_lx_mw value = { value = local_var:te_dg_lx_sw divide = { value = local_var:te_dg_lx_sn "
+      "min = 0.00001 } } }")
+    o("set_local_variable = { name = te_dg_lx_mm value = { value = local_var:te_dg_lx_sm divide = { value = local_var:te_dg_lx_sn "
+      "min = 0.00001 } } }")
+    o("set_local_variable = { name = te_dg_lx_vw value = { value = local_var:te_dg_lx_sww divide = { value = local_var:te_dg_lx_sn "
+      "min = 0.00001 } subtract = { value = local_var:te_dg_lx_mw multiply = local_var:te_dg_lx_mw } } }")
+    o("set_variable = { name = te_dg_lx_mbar value = local_var:te_dg_lx_mm }")
+    o("if = {")
+    o("limit = { local_var:te_dg_lx_vw > 0.01 }")
+    o("set_variable = { name = te_dg_lx_slope value = { value = local_var:te_dg_lx_swm divide = { value = local_var:te_dg_lx_sn "
+      "min = 0.00001 } subtract = { value = local_var:te_dg_lx_mw multiply = local_var:te_dg_lx_mm } divide = { value = "
+      "local_var:te_dg_lx_vw min = 0.00001 } divide = { value = local_var:te_dg_lx_mm min = 0.00001 } } }")
+    o("}")
+    o("}")
+    o("}")
+    o("")
+
+
 def seed_bands(o):
     W = P.LX_BAND_WIDTH
     o("# THIS = a state, in its seed once ageing is slowed (te_demog_lx_seed; demographics_model.lx_seed): every band with an")
@@ -388,17 +442,25 @@ def bio_bands(o):
     o("}")
     o("}")
     o("")
-    o("# THIS = ROOT = a country, in te_demog_country_census: its biological pyramid's sums at 0 (te_dg_c_lx_bbn counts the")
-    o("# states that have one).")
+    o("# THIS = ROOT = a country, in te_demog_country_census: whether any of its states has a biological pyramid")
+    o("# (te_dg_c_lx_bion; with none the country keeps none and the loop adds nothing), and its sums at 0 (te_dg_c_lx_bbn")
+    o("# counts the states that have one).")
     o("te_demog_lx_country_bio_init = {")
     o("set_local_variable = { name = te_dg_c_lx_bbn value = 0 }")
+    o("set_local_variable = { name = te_dg_c_lx_bion value = 0 }")
+    o("if = {")
+    o("limit = { any_scope_state = { has_variable = te_dg_bbf0 } }")
+    o("set_local_variable = { name = te_dg_c_lx_bion value = 1 }")
     for b in range(P.BANDS):
         for s in "fm":
             o(f"set_local_variable = {{ name = te_dg_c_bb{s}{b} value = 0 }}")
     o("}")
+    o("}")
     o("")
     o("# THIS = a census state in the country's loop: its biological bands, or its calendar ones where it has none.")
     o("te_demog_lx_country_bio_add = {")
+    o("if = {")
+    o("limit = { local_var:te_dg_c_lx_bion > 0 }")
     o("if = {")
     o("limit = { has_variable = te_dg_bbf0 }")
     o("change_local_variable = { name = te_dg_c_lx_bbn add = 1 }")
@@ -410,6 +472,7 @@ def bio_bands(o):
     for b in range(P.BANDS):
         for s in "fm":
             o(f"change_local_variable = {{ name = te_dg_c_bb{s}{b} add = var:te_dg_b{s}{b} }}")
+    o("}")
     o("}")
     o("}")
     o("")
@@ -448,6 +511,7 @@ def render_lx_effects():
     old_age_pass(o)
     tables(o)
     access(o)
+    wealth_slope(o)
     seed_bands(o)
     bio_bands(o)
     return o.text()

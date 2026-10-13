@@ -369,6 +369,8 @@ te_demog_state_yearly = {
 		te_demog_workforce_refresh = yes
 		# phase 2 step 4: conscription, the youth bulge and sex balance (te_demog_consequence_effects.txt)
 		te_demog_consequences_refresh = yes
+		# phase 3: the longevity gap's politics, off until a play-test (te_demog_lx_effects.txt)
+		te_demog_lx_politics_refresh = yes
 	}
 }
 
@@ -604,6 +606,8 @@ te_demog_seed = {
 		remove_variable = te_dg_sxb
 	}
 	te_demog_prepare = yes
+	# phase 3: a seed once ageing is slowed builds its adults' survivorship with the treated (te_demog_lx_effects.txt)
+	te_demog_lx_seed_begin = yes
 	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
 	set_local_variable = {
 		name = te_dg_nrr
@@ -746,21 +750,32 @@ te_demog_seed_slot = {
 		change_local_variable = { name = te_dg_g add = 1 }
 		te_demog_enter_group = yes
 	}
-	# women die of the group's causes and in childbirth (demographics_model.seed's decrement)
-	change_local_variable = {
-		name = te_dg_lsf
-		multiply = {
-			value = local_var:te_dg_asfr
-			multiply = local_var:te_dg_tfr
-			multiply = local_var:te_dg_mmr
-			divide = 100000
-			add = local_var:te_dg_qf
-			divide = 100000
-			multiply = -1
-			add = 1
+	# phase 3: once ageing is slowed, an adult's survivorship blends in the treated at the current rate's steady biological
+	# age (te_demog_lx_seed_decrement; demographics_model.seed)
+	if = {
+		limit = {
+			local_var:te_dg_lx_seed_on > 0
+			local_var:te_dg_age >= te_demog_k_lx_join_age
 		}
+		te_demog_lx_seed_decrement = yes
 	}
-	change_local_variable = { name = te_dg_lsm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	else = {
+		# women die of the group's causes and in childbirth (demographics_model.seed's decrement)
+		change_local_variable = {
+			name = te_dg_lsf
+			multiply = {
+				value = local_var:te_dg_asfr
+				multiply = local_var:te_dg_tfr
+				multiply = local_var:te_dg_mmr
+				divide = 100000
+				add = local_var:te_dg_qf
+				divide = 100000
+				multiply = -1
+				add = 1
+			}
+		}
+		change_local_variable = { name = te_dg_lsm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	}
 	change_local_variable = { name = te_dg_dpow multiply = local_var:te_dg_d }
 	change_local_variable = { name = te_dg_age add = 1 }
 }
