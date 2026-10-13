@@ -265,7 +265,50 @@ An effect on some of a state's people, such as severe starvation, applies to
 their rate in the base game. Private Health Insurance's cut for the wealthy
 works at the census's rate, and no pop's deaths fall below half of it. A state's
 birth rate and mortality tooltips show the census's part as Census: Births and
-Census: Deaths. The workforce still follows the base game's rules.
+Census: Deaths.
+
+Under Full the census also sets each state's workforce, from who is of working
+age and how many of them work. The working ages run from 15 (children of 10 to
+14 work at a share under the child labor laws) to the pension age, or with no
+pension law for as long as people's health allows. Men of working age mostly
+work; how many women work depends on the women's rights laws, the technologies
+that free women's time and the state's lower strata, whose women work under any
+law. This replaces the laws' and technologies' own flat workforce lines: in 1836
+a state works about as in the base game, but a rich modern country has a sixth
+to a quarter fewer workers than the flat lines would give it. The change moves a
+state's workforce by at most a point a year, shown as Census: Workforce in its
+workforce tooltip, and the game's own count follows it over time.
+
+With Old Age Pension, you choose the pension age with five buttons on the
+Demographics tab. A setting holds for five years once chosen, and the AI picks
+its own with the same considerations: a heavy bill or debt toward Raised or
+Linked to Average, high unemployment toward Early.
+
+| Setting | Pension age | What you gain and what you pay | Interest groups |
+|---|---|---|---|
+| Early Retirement | 60 | More of the old retire and jobs open for the young; the largest bill and the smallest workforce. | Trade Unions +2, Industrialists −1 |
+| Standard | 65 | The default. It grows more generous as lives lengthen, since more people live to draw it, and for longer. | None |
+| Raised Pension Age | 70 | A smaller bill and more old people at work. | Trade Unions −2, Rural Folk −1, Industrialists +1 |
+| Linked to Average Longevity | Five years below where old age begins for your people, at least 65 | Follows lengthening lives, so the bill stays in check, a year at a time. | Trade Unions −1, Rural Folk −1, Industrialists +1 |
+| Linked to Common Longevity | Five years below where old age begins for those who still age, at least 65 | The same until longevity treatment exists; after that it keeps the pension within reach of the untreated, at a larger bill. | Trade Unions +1, Rural Folk +1, Industrialists −1 |
+
+The pension age changes at once, but a linked setting moves at most a year a
+year; the bill and the workforce follow at the next census. Under Full, Old Age
+Pension costs money for its pensioners: each year's census sets a weekly expense
+worth 6% of your output per person for each pensioner, per level of Social
+Security: Census: Pension Bill, which the Budget panel's Breakdown tab lists
+under Old-Age Pensions. A rich country at Standard with a
+fifth of its people pensioned pays about a fifth of its revenue. Universal Basic
+Income and the Post-Scarcity Economy pay everyone already and have no pension bill. An older
+people also needs more care: the Ministry of Health costs more bureaucracy as the
+census's health need rises above 1836's, and more for each chronic-care
+technology (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
+two fifths more for a rich country today. Outside Full none of this changes
+anything, and the buttons are greyed.
+
+The census also counts each state's men of fighting age, 20 to 39, and its
+young adults, and takes war dead from the men of fighting age. The tab shows
+both counts; neither changes conscription or unrest.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
@@ -280,17 +323,18 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Median age, children per woman, life expectancy, dependency ratio, men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target. |
+| Overview | Median age, children per woman, life expectancy, the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short. |
+| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
-| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
 | States | Your 40 largest states, with people, median age, children per woman, men per 100 women, Gini and Wealth Concentration. |
 | History | Median age, children per woman and life expectancy by year, over 5, 20 or 100 years. |
 | How Demographics Works | A collapsed section that explains the method. |
 
-The subtab shows one state's overview, causes of death, pyramid and wealth, for
-any state you open. The first count of a state comes from the age structure its own birth and
+The subtab shows one state's overview, causes of death, work and retirement
+(without the buttons), pyramid and wealth, for any state you open. The first count of a state comes from the age structure its own birth and
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
 
@@ -355,16 +399,52 @@ against the rest of the state, so it moves deaths within a state without
 lowering them.
 
 An arrow beside a figure shows whether it rose or fell since the last census.
-Life expectancy rising is green and a rising dependency ratio is orange; the other
-figures are neutral. Arrows appear only after the census has been brought forward
+Life expectancy rising is green; the other figures are neutral. Arrows appear only after the census has been brought forward
 a full year twice, so in a new 1836 game the first ones come with the census at
 the end of 1838. Births and deaths per 1,000 people appear from the first full
 year.
+
+### The urban pattern and a planned capital
 
 The urban pattern counts each state as one city and its urban people as everyone
 who does not work a farm, plantation, ranch, mine or other rural workplace. The
 pattern is Primate when the largest city holds 40% or more of all urban people,
 Dominant from 25%, Balanced from 10% and Dispersed below that.
+
+Under the Full setting a Dominant or Primate pattern has effects; Balanced and
+Dispersed are the baseline. Your largest city gets Primate City, with more Urban
+Center throughput and migration attraction. Every other state gets Provincial
+Neglect, with less migration attraction and higher penalties from turmoil. Both
+grow with the largest city's share of urban people, from nothing at 25% to their
+full size at 60%: Urban Center throughput +10% and migration attraction +15% for
+the city, migration attraction −10% and turmoil penalties +10% for the rest. A
+country of fewer than three states gets neither. Each state takes the new figure
+at its yearly count, and the Urban Pattern tooltip names your largest city and
+shows the current figures. Under Display only it says what Full would do.
+
+The decision Plan a New Capital, also under Full, moves your seat of government
+away from your largest city. It appears once you research Modern Sewerage and
+can be taken with Steel-Frame Buildings, a Dominant or Primate pattern, 100
+authority to spare, at peace and outside any diplomatic play, when you have not
+moved your capital recently, and once in 50 years. It offers up to three sites:
+your largest incorporated states that are a homeland of one of your primary
+cultures, hold at least 1% of your people, and are neither the capital nor the
+largest city. The capital moves at once.
+
+| You pay | You get |
+|---|---|
+| 3% of a year's GDP, at once | The capital in the chosen state |
+| 100 authority for five years (Building the New Capital) | Planned Capital on the new capital for 20 years: migration attraction +25%, state construction efficiency +20%, infrastructure +10 and Government Structures throughput +10% |
+
+Planned Capital ends if the capital moves away again. Not now spends nothing,
+and the decision stays open; it is also what happens if you let the choice
+lapse. A site you lose, or a war that starts, while the choice is open takes
+that site off the list. A planned capital draws migrants and building to a
+region your largest city leaves behind, so over the years it can lower that
+city's share and with it Provincial Neglect. The AI plans one only with a
+Primate pattern of 45% or more, eight states or more, a largest city crowded to
+Migration Crowding's ceiling (ten times the reference density), and the money
+in its treasury.
 
 ### Family policy measures
 

@@ -1931,13 +1931,13 @@ te_demog_k_maternal_base = { value = 670 }
 te_demog_k_practice_rate = { value = 0.025 }
 te_demog_k_child_work_age = { value = 10 }
 te_demog_k_working_age = { value = 15 }
-te_demog_k_after_pension_share = { value = 0.15 }
+te_demog_k_after_pension_share = { value = 0.3 }
 te_demog_k_men_rate = { value = 0.92 }
 te_demog_k_women_base = { value = 0.05 }
 te_demog_k_women_lower = { value = 0.2 }
-te_demog_k_womens_work_full = { value = 0.3 }
-te_demog_k_workforce_scale = { value = 0.74 }
-te_demog_k_health_need_1836 = { value = 0.95 }
+te_demog_k_womens_work_full = { value = 0.35 }
+te_demog_k_workforce_scale = { value = 0.7 }
+te_demog_k_health_need_1836 = { value = 0.952 }
 te_demog_k_need_newborn = { value = 1 }
 te_demog_k_pension_age_standard = { value = 65 }
 # State scope: the family share's transport term (owner technology).
@@ -2009,6 +2009,174 @@ te_demog_srb_add = {
 te_demog_k_desired_floor = { value = 0.1 }
 te_demog_k_desired_cap = { value = 1 }
 te_demog_k_srb_base = { value = 105 }
+
+# Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the
+# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).
+te_demog_k_working_adult_base = { value = 0.25 }
+te_demog_k_wf_ramp_step = { value = 0.01 }
+te_demog_k_wf_ramp_step_neg = { value = -0.01 }
+te_demog_k_wf_pop_floor = { value = -0.15 }
+te_demog_k_pension_age_early = { value = 60 }
+te_demog_k_pension_age_raised = { value = 70 }
+te_demog_k_pension_link_offset = { value = 5 }
+te_demog_k_pension_link_floor = { value = 65 }
+te_demog_k_pension_link_step = { value = 1 }
+te_demog_k_pension_link_step_neg = { value = -1 }
+te_demog_k_pension_term_years = { value = 5 }
+te_demog_k_pension_b_per_level = { value = 0.06 }
+te_demog_k_health_need_weight = { value = 0.8 }
+te_demog_k_health_need_cap = { value = 1 }
+te_demog_k_work_split_first = { value = 15 }
+te_demog_k_work_split_last = { value = 64 }
+te_demog_k_pension_ai_bill_high = { value = 0.3 }
+te_demog_k_pension_ai_bill_low = { value = 0.2 }
+te_demog_k_pension_ai_debt = { value = 0.25 }
+te_demog_k_pension_ai_unemployment = { value = 0.1 }
+te_demog_k_pension_ai_unemployment_low = { value = 0.05 }
+te_demog_k_pension_pos_early = { value = 1 }
+te_demog_k_pension_pos_standard = { value = 2 }
+te_demog_k_pension_pos_raised = { value = 3 }
+te_demog_k_pension_pos_linked_average = { value = 4 }
+te_demog_k_pension_pos_linked_common = { value = 5 }
+# Country scope: the health bill's chronic-treatment technologies (demographics_model.health_term).
+te_demog_health_tech_term = {
+	value = 0
+	if = { limit = { has_technology_researched = modern_pharmaceuticals } add = 0.05 }
+	if = { limit = { has_technology_researched = telemedicine } add = 0.05 }
+	if = { limit = { has_technology_researched = personalized_medicine } add = 0.05 }
+}
+
+# Phase 2 step 4: conscription, the youth bulge and sex balance (demographics_params.py).
+te_demog_k_pool_from = { value = 20 }
+te_demog_k_pool_to = { value = 39 }
+te_demog_k_conscription_ref = { value = 0.139 }
+te_demog_k_conscription_min = { value = -1 }
+te_demog_k_conscription_max = { value = 0.25 }
+te_demog_k_youth_from = { value = 0.18 }
+te_demog_k_youth_span = { value = 0.06 }
+te_demog_k_youth_unemployment_full = { value = 0.2 }
+te_demog_k_sex_fewer_from = { value = 90 }
+te_demog_k_sex_fewer_span = { value = 10 }
+te_demog_k_sex_births_floor = { value = 0.8 }
+te_demog_k_sex_women_rate = { value = 0.1 }
+te_demog_k_sex_more_from = { value = 110 }
+te_demog_k_sex_more_span = { value = 40 }
+te_demog_k_conscription_effects = { value = 0 }
+te_demog_k_conscription_cut = { value = 0.01 }
+te_demog_k_youth_effects = { value = 0 }
+te_demog_k_youth_cut = { value = 0.02 }
+te_demog_k_sex_effects = { value = 0 }
+# State scope: the share of people aged 20-29 (bands 4, 5), 0 before a census.
+te_demog_youth_share = {
+	value = 0
+	if = { limit = { has_variable = te_dg_bf4 }
+		value = var:te_dg_bf4
+		add = var:te_dg_bm4
+		add = var:te_dg_bf5
+		add = var:te_dg_bm5
+		divide = { value = var:te_dg_people min = 1 }
+	}
+}
+# Country scope: the share of people aged 20-29 (bands 4, 5), 0 before a census.
+te_demog_country_youth_share = {
+	value = 0
+	if = { limit = { has_variable = te_dg_cbf4 }
+		value = var:te_dg_cbf4
+		add = var:te_dg_cbm4
+		add = var:te_dg_cbf5
+		add = var:te_dg_cbm5
+		divide = { value = te_demog_country_people min = 1 }
+	}
+}
+# State scope: the census's men (its bands' sum), 0 before a census.
+te_demog_state_men = {
+	value = 0
+	if = { limit = { has_variable = te_dg_bm0 }
+		value = var:te_dg_bm0
+		add = var:te_dg_bm1
+		add = var:te_dg_bm2
+		add = var:te_dg_bm3
+		add = var:te_dg_bm4
+		add = var:te_dg_bm5
+		add = var:te_dg_bm6
+		add = var:te_dg_bm7
+		add = var:te_dg_bm8
+		add = var:te_dg_bm9
+		add = var:te_dg_bm10
+		add = var:te_dg_bm11
+		add = var:te_dg_bm12
+		add = var:te_dg_bm13
+		add = var:te_dg_bm14
+		add = var:te_dg_bm15
+		add = var:te_dg_bm16
+		add = var:te_dg_bm17
+	}
+}
+# Country scope: the census's men and people (its bands' sum), 0 before a census.
+te_demog_country_men = {
+	value = 0
+	if = { limit = { has_variable = te_dg_cbm0 }
+		value = var:te_dg_cbm0
+		add = var:te_dg_cbm1
+		add = var:te_dg_cbm2
+		add = var:te_dg_cbm3
+		add = var:te_dg_cbm4
+		add = var:te_dg_cbm5
+		add = var:te_dg_cbm6
+		add = var:te_dg_cbm7
+		add = var:te_dg_cbm8
+		add = var:te_dg_cbm9
+		add = var:te_dg_cbm10
+		add = var:te_dg_cbm11
+		add = var:te_dg_cbm12
+		add = var:te_dg_cbm13
+		add = var:te_dg_cbm14
+		add = var:te_dg_cbm15
+		add = var:te_dg_cbm16
+		add = var:te_dg_cbm17
+	}
+}
+te_demog_country_people = {
+	value = 0
+	if = { limit = { has_variable = te_dg_cbm0 }
+		value = var:te_dg_cbf0
+		add = var:te_dg_cbm0
+		add = var:te_dg_cbf1
+		add = var:te_dg_cbm1
+		add = var:te_dg_cbf2
+		add = var:te_dg_cbm2
+		add = var:te_dg_cbf3
+		add = var:te_dg_cbm3
+		add = var:te_dg_cbf4
+		add = var:te_dg_cbm4
+		add = var:te_dg_cbf5
+		add = var:te_dg_cbm5
+		add = var:te_dg_cbf6
+		add = var:te_dg_cbm6
+		add = var:te_dg_cbf7
+		add = var:te_dg_cbm7
+		add = var:te_dg_cbf8
+		add = var:te_dg_cbm8
+		add = var:te_dg_cbf9
+		add = var:te_dg_cbm9
+		add = var:te_dg_cbf10
+		add = var:te_dg_cbm10
+		add = var:te_dg_cbf11
+		add = var:te_dg_cbm11
+		add = var:te_dg_cbf12
+		add = var:te_dg_cbm12
+		add = var:te_dg_cbf13
+		add = var:te_dg_cbm13
+		add = var:te_dg_cbf14
+		add = var:te_dg_cbm14
+		add = var:te_dg_cbf15
+		add = var:te_dg_cbm15
+		add = var:te_dg_cbf16
+		add = var:te_dg_cbm16
+		add = var:te_dg_cbf17
+		add = var:te_dg_cbm17
+	}
+}
 
 # State scope: each slot as per mille of the state's people, for the replay lines (Task 15).
 # One sequential block each, so the scale and the people are not rounded on their own.

@@ -9,6 +9,7 @@ import re
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
@@ -1140,18 +1141,41 @@ class TestLag(unittest.TestCase):
 
 
 class TestWorkforceCommand(unittest.TestCase):
-    """Phase 2 step 1: the participation figures at the starting values (the design §1.8's sketch)."""
+    """Phase 2: the participation figures (the design §1.8's sketch) and step 2's bands (§5), on the fitted values."""
 
     @classmethod
     def setUpClass(cls):
         cls.rows = H.workforce_rows()
+        cls.by = {r["name"]: r for r in cls.rows}
 
     def test_rows_cover_the_scenarios_and_the_1836_target(self):
-        self.assertEqual([r["name"] for r in self.rows], [s[0] for s in H.WORKFORCE_SCENARIOS])
+        self.assertEqual([r["name"] for r in self.rows],
+                         [s[0] for s in H.WORKFORCE_SCENARIOS] + ["Rich today (2020-like structure)"])
         farm = self.rows[0]
         self.assertAlmostEqual(farm["target"], 0.25, delta=0.02)
         for r in self.rows:
             self.assertAlmostEqual(r["target"], P.WORKFORCE_SCALE * r["wa_share"] * r["at_work"], places=9)
+            self.assertAlmostEqual(r["w_target"], r["target"] - P.WORKING_ADULT_BASE, places=12)
+
+    def test_rich_today_meets_the_bands(self):
+        """§5: 0.42 +- 0.03 on the engine's scale, women at least 0.8 of men's rate, about a fifth of over-65s at work,
+        on a 2020-like structure (about 17% under 15 and 18% over 65)."""
+        today = self.by["Rich today (2020-like structure)"]
+        self.assertTrue(H.BAND_TODAY[0] <= today["engine"] <= H.BAND_TODAY[1], today["engine"])
+        self.assertGreaterEqual(today["women"] / today["men"], H.BAND_WOMEN_TODAY)
+        self.assertTrue(H.BAND_OLD_TODAY[0] <= today["all65"] <= H.BAND_OLD_TODAY[1], today["all65"])
+        self.assertAlmostEqual(today["young"], 0.17, delta=0.03)
+        self.assertAlmostEqual(today["old"], 0.18, delta=0.03)
+
+    def test_most_old_men_work_with_no_pension(self):
+        farm = self.by["1836 farming"]
+        self.assertTrue(H.BAND_OLD_MEN_1836[0] <= farm["men65"] <= H.BAND_OLD_MEN_1836[1], farm["men65"])
+
+    def test_outside_full_keeps_the_flat_lines(self):
+        """The same state outside Full: the base and every moved line at its flat value (Women in the Fields +0.3)."""
+        fields = self.by["1836 Women in the Fields"]
+        self.assertAlmostEqual(fields["outside"], P.POP_BASE_RATIO_DEFAULT + 0.3, places=9)
+        self.assertLess(fields["engine"], fields["outside"])
 
     def test_call_3s_laws_add_their_participation_inputs(self):
         """A Pro-Capital Ministry at level 5 and Rehabilitation add about +0.027 on the engine's scale to the rich row
@@ -1167,3 +1191,116 @@ class TestWorkforceCommand(unittest.TestCase):
             self.assertEqual(H.main(["workforce"]), 0)
         for name, _kw, _low in H.WORKFORCE_SCENARIOS:
             self.assertIn(name, out.getvalue())
+
+
+class TestPensionsCommand(unittest.TestCase):
+    """Phase 2 step 2: the pension bill fitted against the game's revenue, the health bill (the design §5)."""
+
+    def test_revenue_share_is_the_largest_economies_median(self):
+        budgets = {"A": {"gdp": 1000.0, "income": 1000 * 0.2 / 52}, "B": {"gdp": 500.0, "income": 500 * 0.3 / 52},
+                   "C": {"gdp": 10.0, "income": 10 * 0.9 / 52}}
+        median, ratios = H.revenue_share(budgets, top=2)
+        self.assertAlmostEqual(median, 0.25)
+        self.assertEqual([t for t, _ in ratios], ["A", "B"])
+
+    def test_b_centres_the_band(self):
+        b = H.fitted_b(0.27)
+        self.assertAlmostEqual(0.2 * b * H.PENSION_LEVEL / 0.27, sum(P.PENSION_BILL_BAND) / 2)
+
+    def test_the_fitted_b_meets_the_band_at_the_1953_ratio(self):
+        """The fit (2026-10-12): the 1953 save's 15 largest economies' median revenue over GDP was 0.273; at it the
+        bill for 18-22% pensioners at Social Security 5 sits inside 15-30% of revenue."""
+        for share in H.PENSION_SHARES:
+            bill = M.pension_bill_gdp_share(share, H.PENSION_LEVEL) / 0.273
+            self.assertTrue(P.PENSION_BILL_BAND[0] <= bill <= P.PENSION_BILL_BAND[1], (share, bill))
+
+    def test_the_health_bill_meets_its_bands(self):
+        for label, _need, term, (lo, hi) in H.health_rows():
+            self.assertTrue(lo <= term <= hi, (label, term))
+
+    def test_the_command_runs_without_a_save(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["pensions"]), 0)
+        self.assertIn("The health bill", out.getvalue())
+
+class TestConsequences(unittest.TestCase):
+    """`consequences`: phase 2 step 4's bands (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-
+    design.md §5) on the model's structures and on a census save."""
+
+    def test_the_stable_structures(self):
+        rows = {r["name"]: r for r in H.consequence_scenarios()}
+        self.assertLess(abs(rows["1836 agrarian (reference)"]["term"]), 0.02)
+        rich = next(r for name, r in rows.items() if name.startswith("Rich"))
+        self.assertTrue(H.BAND_RICH_TERM[0] <= rich["term"] <= H.BAND_RICH_TERM[1], rich["term"])
+        for r in rows.values():
+            self.assertLess(r["youth"], P.YOUTH_FROM, r["name"])
+
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
+    def test_the_sex_anchors(self):
+        for name, _b, got, bands in H.sex_anchor_rows():
+            for key, (lo, hi) in bands.items():
+                self.assertTrue(lo - 1e-9 <= got[key] <= hi + 1e-9, (name, key, got[key]))
+
+    def test_a_sharp_transition_reaches_the_youth_bulge(self):
+        slow, fast = H.consequence_transitions(years=50)
+        self.assertGreater(fast["peak_youth"], 0.21)
+        self.assertGreater(fast["y"], 0.5)
+        self.assertLessEqual(fast["y"], 1.0)
+        self.assertLess(slow["y"], fast["y"])
+        self.assertLessEqual(fast["peak_term"], P.CONSCRIPTION_MAX)
+
+    def _census_save(self, tmp):
+        from test_demographics_save_inputs import TINY
+        bands = {f"te_dg_b{s}{b}": 1000.0 for s in "fm" for b in range(P.BANDS)}
+        bands.update(te_dg_bm4=2000.0, te_dg_bm5=1800.0, te_dg_bf4=1500.0, te_dg_bf5=1500.0, te_dg_bm7=500.0)
+        people = sum(bands.values())
+        variables = {**bands, "te_dg_people": people, "te_dg_sex_balance": 132.0}
+
+        def var(name, value):
+            return (f"\t\t\t\tflag={name}\n\t\t\t\tdata={{\n\t\t\t\t\ttype=value\n"
+                    f"\t\t\t\t\tidentity={round(value * 1e5)}\n\t\t\t\t}}\n")
+        block = "\tvariables={\n\t\tdata={ {\n" + "\t\t\t} {\n".join(var(n, v) for n, v in variables.items()) + \
+            "\t\t\t} }\n\t}\n"
+        state = "1={\n\tcountry=3\n\tincorporation=1\n"
+        path = Path(tmp) / "census.v3"
+        path.write_text(TINY.replace(state + "}", state + block + "}", 1), encoding="utf-8")
+        return str(path), bands, people
+
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
+    def test_a_census_save(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path, bands, people = self._census_save(tmp)
+            figs = H.census_figures(path)
+            self.assertEqual(set(figs), {"1"})
+            f = figs["1"]
+            self.assertAlmostEqual(f["people"], people, places=3)
+            self.assertAlmostEqual(f["fam"], sum(bands[f"te_dg_bm{b}"] for b in (4, 5, 6, 7)), places=3)
+            youth = sum(bands[f"te_dg_b{s}{b}"] for s in "fm" for b in (4, 5)) / people
+            self.assertAlmostEqual(f["youth"], youth, places=6)
+            r = H.save_consequences(path)
+            self.assertAlmostEqual(r["term_world"], M.conscription_term(f["fam"], people), places=9)
+            # TINY's only pop with a workforce has no workplace: unemployment 1
+            self.assertAlmostEqual(r["y_any"], 1.0 if M.youth_bulge(youth, 1.0) > 0 else 0.0)
+            self.assertEqual((r["fewer"], r["more"], r["either"]), (0.0, 1.0, 1.0))
+            out = io.StringIO()
+            with redirect_stdout(out):
+                H.main(["consequences", path])
+            self.assertIn("1 census states", out.getvalue())
+            self.assertIn("the first save's world term", out.getvalue())
+
+    def test_the_held_back_band_is_judged_only_on_request(self):
+        """The three effects are held back; --effects (and its older name --sex-effects) judges the sex band as if on and
+        restores the switches."""
+        self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)
+        with tempfile.TemporaryDirectory() as tmp:
+            path, _bands, _people = self._census_save(tmp)
+            for flag, shown in (([], False), (["--effects"], True), (["--sex-effects"], True)):
+                out = io.StringIO()
+                with redirect_stdout(out):
+                    H.main(["consequences", path, *flag])
+                self.assertEqual("sex balance: " in out.getvalue(), shown, flag)
+                self.assertEqual("Soviet Union 1959" in out.getvalue(), shown, flag)
+                self.assertIn("Held back in game: CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS",
+                              out.getvalue())
+                self.assertFalse(P.SEX_BALANCE_EFFECTS or P.CONSCRIPTION_EFFECTS or P.YOUTH_BULGE_EFFECTS)

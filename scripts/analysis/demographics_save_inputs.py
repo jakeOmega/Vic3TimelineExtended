@@ -15,7 +15,8 @@ Layout, as written by 1.14.5 (checked on an 1836 save, 2026-10-08): top-level se
 `pops={ database={ <id>={ … } … } }`, `states=`, `country_manager=`, `laws=`, `technology=`, `institutions=`,
 each record's own fields one tab in. The fields read:
     pops             type, location (state id), workforce, dependents, num_literate, wealth,
-                     previous_quality_of_life (the pop's standard of living last week)
+                     previous_quality_of_life (the pop's standard of living last week), workplace (absent for a pop
+                     with no job: phase 2 step 4's unemployment, state_unemployment)
     states           country (owner id), incorporation (1 once incorporated; a fraction while
                      incorporating; absent in an unincorporated state)
     country_manager  definition (the tag, quoted)
@@ -36,7 +37,7 @@ import demographics_model as M
 
 SECTIONS = {
     "pops": ("type", "location", "workforce", "dependents", "num_literate", "wealth", "previous_quality_of_life",
-             "social_class"),
+             "social_class", "workplace"),
     "states": ("country", "incorporation", "devastation", "region"),
     "state_region_manager": ("template", "pollution"),
     "country_manager": ("definition",),
@@ -286,6 +287,21 @@ def state_inputs(sections):
     return out
 
 
+def state_unemployment(sections):
+    """{state id: (workforce, workforce with no workplace)} from the pops (phase 2 step 4's youth bulge reads the
+    engine's state_unemployment_rate; a save holds no such figure, so this is its stand-in, the same as the
+    unemployment_rate_read self-check counts in game)."""
+    out = {}
+    for rec in sections["pops"].values():
+        wf = _num(rec.get("workforce"))
+        if wf <= 0:
+            continue
+        sid = rec.get("location")
+        total, idle = out.get(sid, (0.0, 0.0))
+        out[sid] = (total + wf, idle + (wf if not rec.get("workplace") else 0.0))
+    return out
+
+
 def state_pollution(sections):
     """{state id: its state region's pollution, 0 to POLLUTION_MAX} for the states whose region the save names
     (predict's Pollution Impact line, owner 2026-10-11). Pollution is region-wide: split states share it."""
@@ -366,6 +382,47 @@ def fixed_point(raw):
     if v >= 2 ** 63:
         v -= 2 ** 64
     return v / 1e5
+
+
+def country_budgets(path):
+    """{tag: {"gdp", "income", "expenses"}} for every country with a GDP record (phase 2 step 2's pension fit):
+    the latest sample of the country's GDP channel (yearly, as the `gdp` script value), and its weekly income and
+    expenses, each the sum of the budget's weekly_income / weekly_expenses vectors (every category). Read from
+    country_manager's records: `\tdefinition=`, `\t\tweekly_income={ … }`, and inside `\tgdp={` the channel's
+    `\t\t\t\tindex=` and `\t\t\t\tvalues={ … }` (a ring, oldest first, `index` samples written)."""
+    check_plain_text(path)
+    out, cur, in_gdp, section, depth = {}, None, False, False, 0
+    with open(path, encoding="utf-8", errors="replace", buffering=READ_BUFFER) as fh:
+        for line in fh:
+            if not section:
+                if line == "country_manager={\n":
+                    section, depth = True, 1
+                continue
+            if depth == 2:
+                m = _RECORD.match(line)
+                if m:
+                    cur, in_gdp = out.setdefault(m.group(1), {}), False
+            if cur is not None:
+                if line.startswith("\tdefinition="):
+                    cur["tag"] = line.split("=", 1)[1].strip().strip('"')
+                elif line.startswith("\t\tweekly_income={"):
+                    cur["income"] = sum(_num(x) for x in line.split("{", 1)[1].split("}")[0].split())
+                elif line.startswith("\t\tweekly_expenses={"):
+                    cur["expenses"] = sum(_num(x) for x in line.split("{", 1)[1].split("}")[0].split())
+                elif line.startswith("\tgdp={"):
+                    in_gdp = True
+                elif in_gdp and line.startswith("\t\t\t\tindex="):
+                    cur["gdp_index"] = int(_num(line.split("=", 1)[1]))
+                elif in_gdp and line.startswith("\t\t\t\tvalues={"):
+                    vals = [_num(x) for x in line.split("{", 1)[1].split("}")[0].split()]
+                    i = min(cur.get("gdp_index", len(vals)), len(vals))
+                    cur["gdp"] = vals[i - 1] if i > 0 else 0.0
+                    in_gdp = False
+            depth += line.count("{") - line.count("}")
+            if depth == 0:
+                break
+    return {v["tag"]: {"gdp": v["gdp"], "income": v.get("income", 0.0), "expenses": v.get("expenses", 0.0)}
+            for v in out.values() if v.get("tag") and v.get("gdp", 0.0) > 0}
 
 
 def read_variables(path, country_vars, state_vars):

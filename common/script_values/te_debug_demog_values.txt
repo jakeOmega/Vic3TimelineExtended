@@ -714,6 +714,8 @@ te_debug_demog_wf_ig_gap = {
 te_debug_demog_wf_remainder = {
 	value = modifier:state_working_adult_ratio_add
 	subtract = te_demog_line_working_adults_applied
+	# phase 2 step 2: under Full W replaces the pair on the same field
+	subtract = te_demog_census_workforce_applied
 }
 
 # The walk's engine workforce share (te_dg_wf_engine), -1 where the state has none.
@@ -802,3 +804,128 @@ te_debug_demog_wc_mine_read = { value = modifier:building_group_bg_mining_labore
 te_debug_demog_wc_read = { value = -1 if = { limit = { has_variable = te_dbg_wc_read } value = var:te_dbg_wc_read } }
 # THIS = a state: 1 where has_state_trait reads the mild malaria trait, else 0 (malaria_trait_read).
 te_debug_demog_mal_trait_read = { value = 0 if = { limit = { has_state_trait = state_trait_malaria } add = 1 } }
+
+# ---- Phase 2 step 2's workforce self-checks (te_debug_demog_wf_term_checks) ------------------------------------------
+# THIS = a capital, at its census's workforce refresh, before the refresh moves anything: the walk's engine figure
+# (te_dg_wf_engine, the pops' workforce over people) against the ratio the pops were set to over the past year
+# (te_demog_wf_set: their own bases plus the state's working-adult read).
+# workforce_ratio_scale (the design §1.8's stop rule): the set ratio read as workforce over people, and the same read as
+# workforce over dependents (r / (1 + r): 0.25 of dependents is 0.20 of people), and how far the engine is from each.
+te_debug_demog_wf_per_people = {
+	value = te_demog_wf_set
+}
+te_debug_demog_wf_per_dependents = {
+	value = te_demog_wf_set
+	divide = { value = te_demog_wf_set add = 1 min = 0.01 }
+}
+te_debug_demog_wf_people_gap = {
+	value = te_debug_demog_wf_engine_read
+	subtract = te_debug_demog_wf_per_people
+	if = {
+		limit = { te_debug_demog_wf_engine_read < te_debug_demog_wf_per_people }
+		multiply = -1
+	}
+}
+te_debug_demog_wf_dependents_gap = {
+	value = te_debug_demog_wf_engine_read
+	subtract = te_debug_demog_wf_per_dependents
+	if = {
+		limit = { te_debug_demog_wf_engine_read < te_debug_demog_wf_per_dependents }
+		multiply = -1
+	}
+}
+
+# workforce_follows_target: the census years since W landed in this capital, how far W has moved since (the check waits
+# until it has moved at least te_debug_demog_wft_min_move, so an OK can't come from a ratio that never changed), how far
+# the engine's figure has moved W's way since (te_dg_wft_e0, the walk's at landing) and half of W's move, the OK line.
+te_debug_demog_wft_years = {
+	value = te_demog_year
+	subtract = var:te_dg_wft_y0
+}
+te_debug_demog_wft_moved = {
+	value = var:te_dg_mw
+	subtract = var:te_dg_wft_w0
+	if = {
+		limit = { var:te_dg_mw < var:te_dg_wft_w0 }
+		multiply = -1
+	}
+}
+te_debug_demog_wft_min_move = {
+	value = 0.03
+}
+te_debug_demog_wft_engine_moved = {
+	value = var:te_dg_wf_engine
+	subtract = var:te_dg_wft_e0
+	if = {
+		limit = { var:te_dg_mw < var:te_dg_wft_w0 }
+		multiply = -1
+	}
+}
+te_debug_demog_wft_half_move = {
+	value = te_debug_demog_wft_moved
+	multiply = 0.5
+}
+te_debug_demog_wft_e0_read = {
+	value = var:te_dg_wft_e0
+}
+te_debug_demog_wft_w0_read = {
+	value = var:te_dg_wft_w0
+}
+# W, its target, the census's engine-scale target and the census year W landed, for the line.
+te_debug_demog_wft_w = {
+	value = var:te_dg_mw
+}
+te_debug_demog_wft_w_target = {
+	value = te_demog_wf_term_target
+}
+te_debug_demog_wft_y0_read = {
+	value = var:te_dg_wft_y0
+}
+
+# ---- Option r (phase 2 step 2): -1 where a figure doesn't exist -----------------------------------------------
+te_debug_demog_wf_w_read = { value = -1 if = { limit = { has_variable = te_dg_mw } value = var:te_dg_mw } }
+te_debug_demog_wf_rem_read = { value = -1 if = { limit = { has_variable = te_dg_wf_rem } value = var:te_dg_wf_rem } }
+te_debug_demog_fws_wk_read = { value = -1 if = { limit = { has_variable = te_dg_fws_wk } value = var:te_dg_fws_wk } }
+# THIS = a country
+te_debug_demog_country_pensioners = { value = -1 if = { limit = { has_variable = te_dg_pensioners } value = var:te_dg_pensioners } }
+te_debug_demog_country_need = { value = -1 if = { limit = { has_variable = te_dg_need } value = var:te_dg_need } }
+te_debug_demog_pension_bill_read = { value = -1 if = { limit = { has_variable = te_dg_pension_bill } value = var:te_dg_pension_bill } }
+te_debug_demog_health_term_read = { value = -1 if = { limit = { has_variable = te_dg_health_term } value = var:te_dg_health_term } }
+te_debug_demog_health_term_now = { value = -1 if = { limit = { has_variable = te_dg_need } value = te_demog_health_term_now } }
+te_debug_demog_country_pension_age = { value = -1 if = { limit = { has_variable = te_dg_pension_age } value = var:te_dg_pension_age } }
+te_debug_demog_country_wf_engine = { value = -1 if = { limit = { has_variable = te_dg_wf_engine } value = var:te_dg_wf_engine } }
+
+# ---- Phase 2 step 4's self-checks and option t (te_debug_demog_effects.txt) -------------------------------------------
+# THIS = the state: the conscription term the self-check expects, and the field before the add (0 where none is held).
+te_debug_demog_consc_chk_t = { value = 0 if = { limit = { has_variable = te_dg_chk_consc_t } value = var:te_dg_chk_consc_t } }
+te_debug_demog_consc_chk_before = { value = 0 if = { limit = { has_variable = te_dg_chk_consc_before } value = var:te_dg_chk_consc_before } }
+# What the state's conscription rate multiplier gained in the week since the census's pair went on.
+te_debug_demog_consc_chk_added = {
+	value = modifier:state_conscription_rate_mult
+	subtract = te_debug_demog_consc_chk_before
+}
+# How far that is from the term, non-negative (a sign flip, as te_debug_demog_pr_chk_gap).
+te_debug_demog_consc_chk_gap = {
+	value = te_debug_demog_consc_chk_added
+	subtract = te_debug_demog_consc_chk_t
+	if = {
+		limit = { te_debug_demog_consc_chk_added < te_debug_demog_consc_chk_t }
+		multiply = -1
+	}
+}
+# Option t's reads, -1 where the state holds none.
+te_debug_demog_cq_fam = { value = -1 if = { limit = { has_variable = te_dg_fam } value = var:te_dg_fam } }
+te_debug_demog_cq_faw = { value = -1 if = { limit = { has_variable = te_dg_faw } value = var:te_dg_faw } }
+te_debug_demog_cq_people = { value = -1 if = { limit = { has_variable = te_dg_people } value = var:te_dg_people } }
+te_debug_demog_cq_mc = { value = -1 if = { limit = { has_variable = te_dg_mc } value = var:te_dg_mc } }
+te_debug_demog_cq_yb = { value = -1 if = { limit = { has_variable = te_dg_yb } value = var:te_dg_yb } }
+te_debug_demog_cq_sex = { value = -1 if = { limit = { has_variable = te_dg_sex_balance } value = var:te_dg_sex_balance } }
+te_debug_demog_cq_sxb = { value = -1 if = { limit = { has_variable = te_dg_sxb } value = var:te_dg_sxb } }
+te_debug_demog_cq_consc_mod = { value = modifier:state_conscription_rate_mult }
+te_debug_demog_cq_radicals_mod = { value = modifier:state_radicals_from_political_movements_mult }
+te_debug_demog_cq_turmoil_mod = { value = modifier:state_turmoil_effects_mult }
+te_debug_demog_cq_feminist_mod = { value = modifier:state_pop_support_movement_feminist_mult }
+# THIS = the country.
+te_debug_demog_cq_c_share = { value = -1 if = { limit = { has_variable = te_dg_fam_share } value = var:te_dg_fam_share } }
+te_debug_demog_cq_c_men = { value = -1 if = { limit = { has_variable = te_dg_fam_men } value = var:te_dg_fam_men } }
+te_debug_demog_cq_c_yb_n = { value = -1 if = { limit = { has_variable = te_dg_yb_n } value = var:te_dg_yb_n } }

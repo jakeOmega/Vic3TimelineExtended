@@ -546,3 +546,47 @@ class TestPhase2Saves(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestWork(unittest.TestCase):
+    """Phase 2 step 2's work line (te_debug_demog_work_census_line) and --work's checks (the design §2.6)."""
+
+    def _line(self, tag, year, **fields):
+        base = {"wf": "0.4400", "wf_engine": "0.4300", "set": "0.4350", "target": "0.4400", "set_min": "0.3000",
+                "set_max": "0.5000", "w": "0.1500", "pens": "0.1800", "bill": "0.2100", "health": "0.4000",
+                "pos": "2", "age": "65"}
+        base.update(fields)
+        return PREFIX + f"TE_DEMOG_WORKC: tag={tag}; year={year}; " + "; ".join(f"{k}={v}" for k, v in base.items())
+
+    def test_the_scripts_line_reads_back(self):
+        text = CONSOLE.read_text(encoding="utf-8-sig")
+        templates = re.findall(r'debug_log = "(TE_DEMOG_WORKC: [^"]*)"', text)
+        self.assertEqual(len(templates), 1)
+        sample = iter(range(1, 1000))
+        line = re.sub(r"\[[^\]]*\]", lambda m: ("GBR" if "GetTagName" in m.group(0) else
+                                                 "January 2, 1840" if "GetCurrentDate" in m.group(0) else
+                                                 str(next(sample))), templates[0])
+        (record,) = R.read_work_records([PREFIX + line])
+        self.assertEqual(set(record), {"tag", "year", "date", *R.WORK_FIELDS})
+
+    def test_the_checks(self):
+        records = [R._parse(census(t, y, "30_0_0", "2.000", "70.00").split("TE_DEMOG_CENSUS: ", 1)[1])
+                   for t in ("GBR", "SMA") for y in (1900, 1901)]
+        records = [r for r in records if r["tag"] == "GBR"] + [dict(r, people=1e6) for r in records if r["tag"] == "SMA"]
+        work = R.read_work_records([self._line("GBR", 1900), self._line("GBR", 1901, wf_engine="0.3800", set_max="0.8500"),
+                                    self._line("SMA", 1900, set_min="0.0500")])
+        check = R.work_check(work, records)
+        self.assertEqual([(t, y) for t, y, _ in check["rows"]], [("GBR", 1900)])
+        self.assertEqual([(t, y) for t, y, _ in check["lag"]], [("GBR", 1901)])
+        self.assertEqual([(t, y) for t, y, *_ in check["out_of_band"]], [("GBR", 1901)], "a small country isn't judged")
+        self.assertEqual(check["bill"], (0.21, 0.21))
+
+    def test_the_cli_fails_on_a_ratio_out_of_band(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            log = Path(tmp) / "debug.log"
+            log.write_text("\n".join([census("GBR", 1900, "30_0_0", "2.000", "70.00"),
+                                      self._line("GBR", 1900, set_min="0.0500")]) + "\n", encoding="utf-8")
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(R.main([str(log), "--work"]), 1)
+            self.assertIn("Work and retirement", out.getvalue())
