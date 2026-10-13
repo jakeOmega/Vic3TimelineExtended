@@ -110,6 +110,22 @@ class TreatyEligibilityTests(unittest.TestCase):
                         self.assertFalse(self.evaluate("te_mon_support_article_valid", state))
                         provider[field] = original
 
+    def test_coercive_pretext_is_read_one_way_round_in_possible(self):
+        # In possible ROOT is the prospective source (the country that concedes) and
+        # scope:other_country the imposer. A war goal enforcing the article checks possible but
+        # not can_ratify, so an either-direction pretext there let a defaulted country demand
+        # the article of its creditor (2026-10-13).
+        for path, pretext in (("113_imposed_currency_peg.txt", "te_mon_can_impose_peg_on"),
+                              ("114_debt_receivership.txt", "te_mon_can_receive_for")):
+            parser = ParadoxFileParser()
+            parser.parse_file(str(ROOT / "common/treaty_articles" / path), False)
+            article = next(iter(parser.data.values()))[1]
+            possible = article["possible"][1]
+            with self.subTest(article=path):
+                self.assertNotIn("OR", possible)
+                self.assertNotIn(pretext, possible)
+                self.assertEqual(possible["scope:other_country"][1][pretext], ("=", {"OTHER": ("=", "root")}))
+
 
 if __name__ == "__main__":
     unittest.main()

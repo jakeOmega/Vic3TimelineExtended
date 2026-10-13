@@ -5129,13 +5129,12 @@
  te_debug_demog.1.t:0 "Demographics Test Console"
  te_debug_demog.1.t_opt:0 "Conscription, youth and sex balance: log our capital"
  te_debug_demog.1.t_opt.tt:0 "Writes a TE_DEMOG_CONSEQ line for our capital: fam and faw are its men aged 20 to 39 and the women of those ages, share their share of its people and men_share of its men, term the conscription term from them, mc the one the census applies under Full and consc_mod the state's conscription multiplier; youth is the share aged 20 to 29, unemp the engine's unemployment, y_now the youth bulge's strength now and yb the one in force; sex is men per 100 women aged 20 to 59, sxb the balance this year's births read, tfr_sex and women_add its terms, fewer and more the two sex-balance modifiers' strengths; radicals_mod, turmoil_mod and feminist_mod are the state's reads of the fields they move. A TE_DEMOG_CONSEQ_COUNTRY line gives our census states together."
- te_debug_demog.1.w:0 "Demographic events: fire one on us now"
- te_debug_demog.1.w.tt:0 "Opens a chooser that fires any of the ten events of the demographic event wave on our country now, whatever its condition and whether it fired within a generation. Its options act as they would under Full; the ones that use the census's levers need Full."
-
  te_debug_demog.1.u:0 "The late game: log our capital's longevity figures"
  te_debug_demog.1.u.tt:0 "Writes a TE_DEMOG_LATE line for our capital: the ageing rate and the pull of those in longevity care, eligibility (the share within reach), cover, the adults' ever-treated share, the public route's share and its reach now, the market threshold, the augmentation and health laws' reads, the ectogenesis levels, Living to 100 (the state's, in care, not in care), old age from (the state's and the untreated's), rho, the wealth slope, its mean and the wealth pair in force, the mean calendar and biological ages, the mean age at childbirth, the share of births to women of 50 and over, band 5's share and deficit and the pool's; -1 where the census holds none. A TE_DEMOG_LATE_COUNTRY line gives our country's."
  te_debug_demog.1.v:0 "The late game: research the ageing ladder now"
  te_debug_demog.1.v.tt:0 "Our country researches mRNA Therapeutics, Personalized Medicine, Genetic Engineering and Biological Immortality at once, so the late game starts at each state's next census. For a play-test: it really researches them."
+ te_debug_demog.1.w:0 "Demographic events: fire one on us now"
+ te_debug_demog.1.w.tt:0 "Opens a chooser that fires any of the ten events of the demographic event wave on our country now, whatever its condition and whether it fired within a generation. Its options act as they would under Full; the ones that use the census's levers need Full."
  te_debug_demog.1.x:0 "Family policy: log what our capital's census reads"
  te_debug_demog.1.x.tt:0 "Writes a TE_DEMOG_FAMILY line to debug.log for our capital: the Family Policy readings it takes (desired family size, family housing, family planning knowledge, maternal deaths, the rural exemption, the boys per 100 girls), our measures' desired family size, the family policy term and Birth Limit's part of it, the farm share and the urban pull left, the boys added per 100 girls in force, and the census's stored desired family size, means, children per woman with its planned and unplanned parts, maternal deaths and men per 100 women."
  te_debug_demog.1.z:0 "Close"
@@ -5472,6 +5471,21 @@
  te_debug_un.1.z:0 "Close"
 
 #
+# TE_DEMOG_CAPITAL
+#
+ te_demog_capital.1.a:0 "Build it in [SCOPE.sState('te_pc_site_1').GetName]"
+ te_demog_capital.1.a.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_1').GetName]#! at once"
+ te_demog_capital.1.b:0 "Build it in [SCOPE.sState('te_pc_site_2').GetName]"
+ te_demog_capital.1.b.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_2').GetName]#! at once"
+ te_demog_capital.1.c:0 "Build it in [SCOPE.sState('te_pc_site_3').GetName]"
+ te_demog_capital.1.c.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_3').GetName]#! at once"
+ te_demog_capital.1.d:0 "The planners have laid out the sites where a new capital could rise. Wherever we build it, the ministries, the courts and the parliament will follow, and with them the clerks, the builders and the merchants who serve them. Our great city keeps its trade and its crowds, but not the seat of power."
+ te_demog_capital.1.e:0 "Not now"
+ te_demog_capital.1.e.tt:0 "Nothing is spent, and the decision stays open"
+ te_demog_capital.1.f:0 "#lore A capital built from nothing says that the country is larger than its first city.#!"
+ te_demog_capital.1.t:0 "Siting the New Capital"
+
+#
 # TE_DEMOG_WAVE
 #
  te_demog_wave.1.a:0 "Build schools for the children we still have."
@@ -5542,20 +5556,6 @@
  te_demog_wave.9.d:0 "[SCOPE.sState('te_wave_state').GetName] has outgrown itself. #v [SCOPE.GetRootScope.ScriptValue('te_demog_wave_primacy')|%0]#! of our city dwellers live there, crowded at ten times what its land can comfortably hold, and shanty districts creep along the railway lines and the river flats faster than the drains can follow them."
  te_demog_wave.9.f:0 "\"The map in your office is three years out of date, Minister.\"\n\n\"It was printed last spring.\"\n\n\"Then it is a year out of date. The district I grew up in had cabbage fields in it. Now it has eleven thousand people, two standpipes and a police post that closes at dusk.\"\n\n\"And what do you propose?\"\n\n\"Buy a new map. Then decide whether to draw a line on it, or to let the city keep drawing them for you.\""
  te_demog_wave.9.t:0 "The Overspill"
-
-# TE_DEMOG_CAPITAL
-#
- te_demog_capital.1.a:0 "Build it in [SCOPE.sState('te_pc_site_1').GetName]"
- te_demog_capital.1.a.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_1').GetName]#! at once"
- te_demog_capital.1.b:0 "Build it in [SCOPE.sState('te_pc_site_2').GetName]"
- te_demog_capital.1.b.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_2').GetName]#! at once"
- te_demog_capital.1.c:0 "Build it in [SCOPE.sState('te_pc_site_3').GetName]"
- te_demog_capital.1.c.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_3').GetName]#! at once"
- te_demog_capital.1.d:0 "The planners have laid out the sites where a new capital could rise. Wherever we build it, the ministries, the courts and the parliament will follow, and with them the clerks, the builders and the merchants who serve them. Our great city keeps its trade and its crowds, but not the seat of power."
- te_demog_capital.1.e:0 "Not now"
- te_demog_capital.1.e.tt:0 "Nothing is spent, and the decision stays open"
- te_demog_capital.1.f:0 "#lore A capital built from nothing says that the country is larger than its first city.#!"
- te_demog_capital.1.t:0 "Siting the New Capital"
 
 #
 # TE_INFLATION
