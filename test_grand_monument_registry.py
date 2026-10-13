@@ -3043,9 +3043,17 @@ PICTURES = {
     1000029: ("landmark_imperial_city_of_hue", "gate", None),
     1000030: ("landmark_persepolis", "hall", None),
     1000031: ("landmark_red_fort", "gate", None),
+    1000032: ("landmark_rosetta_stone", "stele", None),
+    1000033: ("landmark_temple_of_dendera", "colonnade", None),
+    1000034: ("landmark_luxor_obelisk", "obelisk", None),
+    1000036: ("landmark_piraeus_lion", "statue", None),
+    1000037: ("landmark_horses_of_saint_mark", "statue", None),
+    1000038: ("landmark_tipus_tiger", "statue", None),
+    1000039: ("landmark_baba_merzoug", "column", None),
     1000040: ("landmark_great_zimbabwe", "round_tower", None),
     1000041: ("landmark_royal_palaces_of_abomey", "hall", None),
     1000042: ("landmark_klungkung_palace", "gate", None),
+    1000043: ("landmark_royal_palace_of_kandy", "hall", None),
     1000044: ("landmark_uffizi_gallery", "hall", None),
     1000045: ("landmark_capitoline_museums", "forum", None),
     1000046: ("landmark_bodrum_castle", "tower", None),
@@ -3095,7 +3103,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_state_update_picture"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 122)
+        self.assertEqual(len(PICTURES), 130)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():

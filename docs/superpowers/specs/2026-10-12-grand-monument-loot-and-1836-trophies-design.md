@@ -264,7 +264,7 @@ gate, an iwan like the arch's, rather than a Roman triumphal arch. Baghdad is th
 
 A trophy with no standing monument of its own (all but the Marbles) gets a landmark row, marked `placed = False` in
 `LANDMARKS`. It has every landmark site except the seeding call: its name, history line, name in running text,
-trophy name, picture branch (its stand-in's code) and debug log line. Its state and owner are its origin's, checked
+trophy name, picture branch and debug log line. Its state and owner are its origin's, checked
 against the trophy row. Picture codes follow `LANDMARKS` order, so these take 1,000,032 to 1,000,039, and Kandy's,
 added after §1.1's three, 1,000,043.
 
@@ -383,7 +383,9 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
 - **Pictures (drawn 2026-10-12):** each placed landmark has its own picture, as it stood in 1836 (the Parthenon a
   roofless ruin with its small mosque, Karnak half in sand, Xanthos's temple-tomb fallen). Each takes its
   code from 1,000,000 and its `gm_picture` entry in the icon pipeline, and stops showing its stand-in. The stand-in
-  columns above record what each showed before.
+  columns above record what each showed before. So do the unplaced rows of §2.2, as each would stand once its trophy
+  goes home (Luxor's obelisk before its pylon, the Horses on the Hippodrome), all but the Venus de Milo: three rounds
+  drew her with arms, from behind or over a lettered plaque, so she keeps the generic statue.
 
 ## 6. In-game checks
 
@@ -395,7 +397,7 @@ Each ends with a full stop and speaks from 1836, as phase 4's do.
    Abroad.
 3. The history line's tooltip on a trophy row reads its landmark's line.
 4. Return the Marbles (debug `te_debug_monuments.6` option c, as Britain): the Parthenon grows by 5. Return the Rosetta
-   Stone: a "Rosetta Stone" landmark stands in Lower Egypt with its stand-in picture.
+   Stone: a "Rosetta Stone" landmark stands in Lower Egypt with its own picture.
 5. Occupy Venetia at war with Austria: the Trophies on Display card offers the Horses and the Lion.
 6. Play Britain or France for a few years: Greece, Egypt and the rest ask for Return Cultural Property now and then
    (its existing 2% evaluation chance), not every month. If they ask too often, lower `evaluation_chance` for

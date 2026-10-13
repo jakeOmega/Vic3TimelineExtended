@@ -157,18 +157,18 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = imperial_city_of_hue CODE = 1000029 }
 	gm_state_picture_landmark = { KEY = persepolis CODE = 1000030 }
 	gm_state_picture_landmark = { KEY = red_fort CODE = 1000031 }
-	gm_state_picture_landmark = { KEY = rosetta_stone CODE = 130 }
-	gm_state_picture_landmark = { KEY = temple_of_dendera CODE = 251 }
-	gm_state_picture_landmark = { KEY = luxor_obelisk CODE = 12 }
+	gm_state_picture_landmark = { KEY = rosetta_stone CODE = 1000032 }
+	gm_state_picture_landmark = { KEY = temple_of_dendera CODE = 1000033 }
+	gm_state_picture_landmark = { KEY = luxor_obelisk CODE = 1000034 }
 	gm_state_picture_landmark = { KEY = venus_de_milo CODE = 13 }
-	gm_state_picture_landmark = { KEY = piraeus_lion CODE = 13 }
-	gm_state_picture_landmark = { KEY = horses_of_saint_mark CODE = 13 }
-	gm_state_picture_landmark = { KEY = tipus_tiger CODE = 13 }
-	gm_state_picture_landmark = { KEY = baba_merzoug CODE = 10 }
+	gm_state_picture_landmark = { KEY = piraeus_lion CODE = 1000036 }
+	gm_state_picture_landmark = { KEY = horses_of_saint_mark CODE = 1000037 }
+	gm_state_picture_landmark = { KEY = tipus_tiger CODE = 1000038 }
+	gm_state_picture_landmark = { KEY = baba_merzoug CODE = 1000039 }
 	gm_state_picture_landmark = { KEY = great_zimbabwe CODE = 1000040 }
 	gm_state_picture_landmark = { KEY = royal_palaces_of_abomey CODE = 1000041 }
 	gm_state_picture_landmark = { KEY = klungkung_palace CODE = 1000042 }
-	gm_state_picture_landmark = { KEY = royal_palace_of_kandy CODE = 15 }
+	gm_state_picture_landmark = { KEY = royal_palace_of_kandy CODE = 1000043 }
 	gm_state_picture_landmark = { KEY = uffizi_gallery CODE = 1000044 }
 	gm_state_picture_landmark = { KEY = capitoline_museums CODE = 1000045 }
 	gm_state_picture_landmark = { KEY = bodrum_castle CODE = 1000046 }
@@ -671,6 +671,34 @@ gm_debug_next_picture = {
 	}
 	else_if = {
 		limit = { var:gm_picture_code = 1000031 }
+		set_variable = { name = gm_picture_code value = 1000032 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000032 }
+		set_variable = { name = gm_picture_code value = 1000033 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000033 }
+		set_variable = { name = gm_picture_code value = 1000034 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000034 }
+		set_variable = { name = gm_picture_code value = 1000036 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000036 }
+		set_variable = { name = gm_picture_code value = 1000037 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000037 }
+		set_variable = { name = gm_picture_code value = 1000038 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000038 }
+		set_variable = { name = gm_picture_code value = 1000039 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000039 }
 		set_variable = { name = gm_picture_code value = 1000040 }
 	}
 	else_if = {
@@ -683,6 +711,10 @@ gm_debug_next_picture = {
 	}
 	else_if = {
 		limit = { var:gm_picture_code = 1000042 }
+		set_variable = { name = gm_picture_code value = 1000043 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000043 }
 		set_variable = { name = gm_picture_code value = 1000044 }
 	}
 	else_if = {
