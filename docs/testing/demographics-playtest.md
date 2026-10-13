@@ -43,6 +43,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … family_limitation_scaled` | Full: once a game, `START` when the first country's Family Limitation line goes on fresh at 0.02–0.3 (a neighbour of France gaining the practice, usually in the first few years), the verdict a week later from its capital (`te_debug_demog.90`) | the capital's `state_fertility_means_add` rose by the line (`added` ≈ `expected`): the engine scales a script-only state type on a country modifier by its multiplier, and the states read it. The type-on-a-country half is already seen in saves: France's states read history's 0.6 in their means | `added` about 0.6: the multiplier is ignored, so every country's line reads 0.6 once it has any; about 0: the type doesn't reach the states, so no country's practice counts. `NO_VERDICT` (the capital changed hands, or the line came off within the week) re-arms | put the line on a state modifier in each of the country's states, applied by `te_demog_fl_apply` beside the country one (the measures' fallback pattern); or, for an ignored multiplier only, a ladder of static modifiers at tenths of the line |
 | `TE_SELF_CHECK … fl_neighbours_read` | Full: once a game, at the first Family Limitation step (31 December 1836) of a country the state-scope test says has a foreign neighbour | `every_neighbouring_state` from country scope returns the states across its borders (`foreign` above 0). `own` above 0 says it returns the country's own states too, which the step leaves out either way | `foreign=0`: the practice never spreads | walk the country's own states and each one's `every_neighbouring_state` in `te_demog_fl_step` (a border state then counts once per own state it touches) |
 | `TE_SELF_CHECK … neighbouring_state_reads` | Full or Display only: once a game, at the first country census on 31 December | `every_neighbouring_state` from a state returns a land neighbour (Ulster sees Leinster): Late Marriage and Birth Spacing spread. `strait=1` says it crosses the Ulster–Lowlands strait too, so islands spread with their neighbours across the water; `strait=0`, only through their own conditions (the late-marriage spec 4.4 allows either) | `land=0`: the practices never spread | set `PRACTICE_SPREAD` to 0 in `demographics_params.py` and regenerate (`gen_demographics.py`), so the code says what the game does; with `strait=1`, run the harness's replays with `--straits` |
+| `TE_SELF_CHECK … wave_timed_country_type` | Full: once a game, `START` when the first of the event wave's four census-line options is chosen (Missing Girls' ban or payments, `code=1`; The Last Generation?'s licences or payments, `code=2`), the verdict a week later from the capital (`te_debug_demog.81`) | the capital's sum of the type (`state_sex_ratio_at_birth_add` or `state_desired_fertility_mult`) rose by the option's line plus any change in the Family Policy measures' lines of that type (`added` ≈ `expected`): a script-only state type on a timed country modifier reaches the state | `added` 0: the census never sees those four options' lines, so they change no birth, nor the women's-work lines the Baby Boom's and the Greying's options carry on the same kind of modifier; `NO_VERDICT` (a measure offset the line within the week) re-arms the check | add each of the four modifiers (and the three women's-work ones) without `days` and store its end date on the country (`te_dg_wv_<modifier>_until`); `te_demog_wave_yearly` removes it when the date passes and puts it back for a revolution's winner that holds the date (the measures' pattern, `te_demog_ms_keep_all`) |
 
 No `unemployment_rate_read` line after a few years under the census means no state's read ever passed 0.02: compare option t's `unemp=` with the state panel's unemployment in a state with visibly idle workers.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -393,6 +394,45 @@ below are written for them on. Spec: `docs/superpowers/specs/2026-10-12-demograp
    the state's next count. No hover says "not applied yet".
 8. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_consequence_*`,
    `te_demog_sex_births_store`, `te_debug_demog.30`, `te_debug_demog_unemployment_selfcheck` or option t.
+
+## Phase 3: the event wave
+
+Ten events (the parent spec's §9) fire when the census crosses their thresholds, at most once a generation per country,
+under Full only: `events/te_demog_wave_events.txt`, `docs/systems/mod_systems.md` § Phase 3: the event wave. The owner
+judges their text and balance here (owner, 2026-10-12). No plan document; the self-check is in the table above.
+
+1. **Each event from the console (Full, any date).** `event te_debug_demog.1`, option w, then each of the ten in the
+   chooser: the picture fits the text (the Baby Boom's switches from a classroom to a family watching television once
+   Television is researched), no raw loc keys or `[...]` left in the description, the flavor and the options read in
+   the house voice, each option's tooltip lists what it does, and nothing is said that the effects don't do. The
+   Lost Generation's figure reads 0% outside a war, as the console fires it with no war behind it.
+2. **The options' balance.** For each event, is there a player for whom each option is the best? The two harm menus
+   (the Lost Generation, the Empty Villages) give no option an upside: each spares one harm. Note any option that is
+   never worth taking, or always.
+3. **The Greying's two cases.** Under Old Age Pension: five options, raising the age greyed with its reason while the
+   pension setting's five-year term runs (choose a position on the tab first) and, once taken, the tab shows Raised
+   Pension Age with its new term; cut benefits and raise contributions show a Pension Reform income row in the Budget
+   panel's Breakdown tab. Without the law: three options (the borders, almshouses, the family).
+4. **Missing Girls' relax option.** Under Population Control Measures with Birth Limit at one child (Microprocessor
+   researched): relaxing returns it to two children on the tab at once, its term running on; at two children with its
+   term run, relaxing ends it and the Rural Exemption with it; at two children within its term, the option is greyed.
+5. **The Overspill's new towns** in a country with a Settlement Authority and Modern Urban Planning: the Authority's
+   settlement plan switches to Planned Towns; without either, the option still works and says nothing about them.
+6. **The firing itself (Full, a long game or fast mode).** `debug.log` and the save: an event fires on 31 December after
+   the census, at most one of the yearly eight a year, and not again within 25 years (`te_dg_wv_<event>`, a timed
+   variable); none in an 1836 game before the end of 1837. The AI answers them too.
+7. **The war tracker in a real war (Full).** At war, the country holds `te_dg_wv_war_from`, `_war_dead` (rising with
+   the war's dead), `_war_seen` and `_war_men` (its men of fighting age when the war began); the Lost Generation fires
+   the month the dead pass a twentieth of them; the variables go the first month at peace, and the Baby Boom fires then
+   if the war ran two years and its dead passed a hundredth.
+8. **The Last Generation?** fires the day Biological Immortality is researched under Full (a late save, or the tech
+   granted by the console), and never again in that game.
+9. **Bare Branches in the settler societies.** In the overnight run's 1900 and 1904 saves it was due in 9-12 countries of
+   a million people or more: the USA, Canada, Argentina, Chile and Cuba, which had more men than women then, and Mexico,
+   Bolivia and Colombia, which are the census's migrant booking (the reason step 4's effects are held back). Note where
+   it fires in a play-test; the follow-up on the migrant booking should take the second group out.
+10. **`debug.log`:** no script errors from `te_demog_wave_*` or `te_debug_demog.80`/`.81`, and no
+    `Failed to fetch variable` or `Data error in loc string` lines naming them.
 
 ## Phase 3: the late game
 

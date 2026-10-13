@@ -1,0 +1,292 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the event wave (phase 3): the dispatcher
+# Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §9: ten events, each firing when the census crosses its
+# threshold, at most once a generation per country, under the Demographics rule's Full setting only (te_demog_wave_runs:
+# census mechanics change nothing outside Full, and the figures these read exist only where the census runs).
+# Events: events/te_demog_wave_events.txt; conditions: te_demog_wave_triggers.txt; figures: te_demog_wave_values.txt.
+#
+# Country variables (Full only; a revolution's winner inherits them, so a new government doesn't hear the same news):
+#   te_dg_wv_<event>      the generation's hold: set when the event fires, a 25-year timed variable (permanent for
+#                         The Last Generation?, which can only happen once)
+#   te_dg_wv_war_from     the war period the monthly tracker follows: the date it began (te_demog_ms_now), removed the
+#                         first month at peace, or outside Full
+#   te_dg_wv_war_dead     its dead so far: the rise in the dead of all the country's wars, month by month
+#   te_dg_wv_war_seen     the dead of its wars at the last month, to take the rise from (a war that ends drops out of the
+#                         sum, so a rise is floored at 0, as te_demog_country_monthly does)
+#   te_dg_wv_war_men      the men of fighting age when it began (the census's pool, te_dg_fam), the dead's yardstick
+#
+# One yearly event at most a year a country, in the order below, so two thresholds crossed in one year don't arrive as
+# two popups on 31 December; the next one is still due the year after. The war's two events are monthly and apart.
+# The events carry no trigger of their own (a trigger is evaluated on trigger_event and would block the console's
+# test firing): every condition is here, and each event's immediate picks its state itself.
+# ============================================================================
+
+# THIS = ROOT = a country on 31 December, after its census (te_demog_country_yearly_on_action), so the figures are this
+# year's.
+te_demog_wave_yearly = {
+	if = {
+		limit = { te_demog_wave_runs = yes }
+		set_local_variable = { name = te_dg_wv_fired value = 0 }
+		# the largest city, by the census's urban people, for the Overspill: 1 when it is at Migration Crowding's ceiling
+		# (read in the iterator: te_demog_wave_cond_overspill reads the local)
+		set_local_variable = { name = te_dg_wv_city_crowded value = 0 }
+		ordered_scope_state = {
+			limit = {
+				te_demog_has_census = yes
+				has_variable = te_dg_urban
+			}
+			order_by = te_demog_wave_urban_people
+			max = 1
+			check_range_bounds = no
+			if = {
+				limit = { te_demog_wave_crowded_city = yes }
+				set_local_variable = { name = te_dg_wv_city_crowded value = 1 }
+			}
+		}
+		te_demog_wave_try_once = { EV = immortal EVENT = te_demog_wave.10 }
+		te_demog_wave_try = { EV = greying EVENT = te_demog_wave.4 }
+		te_demog_wave_try = { EV = youth EVENT = te_demog_wave.5 }
+		te_demog_wave_try = { EV = girls EVENT = te_demog_wave.6 }
+		te_demog_wave_try = { EV = branches EVENT = te_demog_wave.7 }
+		te_demog_wave_try = { EV = villages EVENT = te_demog_wave.8 }
+		te_demog_wave_try = { EV = overspill EVENT = te_demog_wave.9 }
+		te_demog_wave_try = { EV = dividend EVENT = te_demog_wave.1 }
+	}
+}
+
+# Country, in te_demog_wave_yearly: event $EVENT$ fires when its condition holds, no event has fired this
+# year and none of its kind within a generation.
+te_demog_wave_try = {
+	if = {
+		limit = {
+			local_var:te_dg_wv_fired = 0
+			te_demog_wave_free = { EV = $EV$ }
+			te_demog_wave_cond_$EV$ = yes
+		}
+		set_local_variable = { name = te_dg_wv_fired value = 1 }
+		te_demog_wave_hold = { EV = $EV$ }
+		trigger_event = { id = $EVENT$ }
+	}
+}
+
+# The event is named whole (EVENT = te_demog_wave.N), so orphaned_event_audit sees the reference.
+# The same for an event that can only happen once a game (The Last Generation?): its hold never runs out.
+te_demog_wave_try_once = {
+	if = {
+		limit = {
+			local_var:te_dg_wv_fired = 0
+			te_demog_wave_free = { EV = $EV$ }
+			te_demog_wave_cond_$EV$ = yes
+		}
+		set_local_variable = { name = te_dg_wv_fired value = 1 }
+		set_variable = { name = te_dg_wv_$EV$ value = te_demog_ms_now }
+		trigger_event = { id = $EVENT$ }
+	}
+}
+
+# Country: event $EV$ is held for a generation.
+te_demog_wave_hold = {
+	set_variable = {
+		name = te_dg_wv_$EV$
+		value = te_demog_ms_now
+		years = 25
+	}
+}
+
+# THIS = ROOT = a country that acquired a technology (on_acquired_technology): The Last Generation? fires at once rather
+# than on 31 December. The yearly check stays as the fallback (a technology granted by history or an event).
+te_demog_wave_technology = {
+	if = {
+		limit = {
+			te_demog_wave_runs = yes
+			te_demog_wave_free = { EV = immortal }
+			te_demog_wave_cond_immortal = yes
+		}
+		set_variable = { name = te_dg_wv_immortal value = te_demog_ms_now }
+		trigger_event = { id = te_demog_wave.10 }
+	}
+}
+
+# ---- The war tracker (The Lost Generation, The Baby Boom) ---------------------------------------------------------
+# THIS = ROOT = a country, monthly (te_demog_country_monthly_on_action). A war period runs from the first month the
+# country is at war to the first month it isn't. Its dead are the rise in the dead of all its wars, month by month,
+# counted here from its own snapshot (the census's monthly snapshot is reset on 31 December, and the on-actions' order
+# is not guaranteed), against the men of fighting age when the period began. The Lost Generation fires the month the
+# dead pass a twentieth of them; the Baby Boom the month the period ends, when it ran two years or more and its dead
+# passed a hundredth (mass mobilisation). Outside Full nothing is kept.
+te_demog_wave_war_monthly = {
+	if = {
+		limit = { te_demog_wave_runs = yes }
+		if = {
+			limit = { is_at_war = yes }
+			set_local_variable = { name = te_dg_wv_dead value = 0 }
+			every_scope_war = {
+				change_local_variable = { name = te_dg_wv_dead add = te_demog_war_dead_root }
+			}
+			if = {
+				limit = { NOT = { has_variable = te_dg_wv_war_from } }
+				set_variable = { name = te_dg_wv_war_from value = te_demog_ms_now }
+				set_variable = { name = te_dg_wv_war_dead value = 0 }
+				set_variable = { name = te_dg_wv_war_seen value = local_var:te_dg_wv_dead }
+				set_variable = { name = te_dg_wv_war_men value = te_demog_wave_fam_men }
+			}
+			# a period begun before the census counted a pool takes the first pool it counts
+			if = {
+				limit = { var:te_dg_wv_war_men <= 0 }
+				set_variable = { name = te_dg_wv_war_men value = te_demog_wave_fam_men }
+			}
+			change_variable = {
+				name = te_dg_wv_war_dead
+				add = {
+					value = local_var:te_dg_wv_dead
+					subtract = var:te_dg_wv_war_seen
+					min = 0
+				}
+			}
+			set_variable = { name = te_dg_wv_war_seen value = local_var:te_dg_wv_dead }
+			if = {
+				limit = {
+					te_demog_wave_free = { EV = lost }
+					te_demog_wave_cond_lost = yes
+				}
+				te_demog_wave_hold = { EV = lost }
+				trigger_event = { id = te_demog_wave.3 }
+			}
+		}
+		else_if = {
+			limit = { has_variable = te_dg_wv_war_from }
+			if = {
+				limit = {
+					te_demog_wave_free = { EV = boom }
+					te_demog_wave_cond_boom = yes
+				}
+				te_demog_wave_hold = { EV = boom }
+				trigger_event = { id = te_demog_wave.2 }
+			}
+			te_demog_wave_war_clear = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_wv_war_from }
+		te_demog_wave_war_clear = yes
+	}
+}
+
+te_demog_wave_war_clear = {
+	remove_variable = te_dg_wv_war_from
+	remove_variable = te_dg_wv_war_dead
+	remove_variable = te_dg_wv_war_seen
+	remove_variable = te_dg_wv_war_men
+}
+
+# ---- The events' state picks (THIS = ROOT = the country, in an event's immediate) -----------------------------------
+# The Empty Villages: the emptiest farm state that is old and shrinking (te_demog_wave_village_score: its median age,
+# plus a year for each point of people it lost); on the console, where none may be, the census state with the largest
+# farm share, else the capital.
+te_demog_wave_pick_village = {
+	if = {
+		limit = {
+			any_scope_state = { te_demog_wave_village_state = yes }
+		}
+		ordered_scope_state = {
+			limit = { te_demog_wave_village_state = yes }
+			order_by = te_demog_wave_village_score
+			max = 1
+			check_range_bounds = no
+			save_scope_as = te_wave_state
+		}
+	}
+	else_if = {
+		limit = {
+			any_scope_state = { te_demog_has_census = yes }
+		}
+		ordered_scope_state = {
+			limit = { te_demog_has_census = yes }
+			order_by = te_demog_wave_farm_share
+			max = 1
+			check_range_bounds = no
+			save_scope_as = te_wave_state
+		}
+	}
+	else = {
+		capital = { save_scope_as = te_wave_state }
+	}
+}
+
+# The Overspill: the largest city, the census state with the most urban people, else the capital.
+te_demog_wave_pick_city = {
+	if = {
+		limit = {
+			any_scope_state = {
+				te_demog_has_census = yes
+				has_variable = te_dg_urban
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				te_demog_has_census = yes
+				has_variable = te_dg_urban
+			}
+			order_by = te_demog_wave_urban_people
+			max = 1
+			check_range_bounds = no
+			save_scope_as = te_wave_state
+		}
+	}
+	else = {
+		capital = { save_scope_as = te_wave_state }
+	}
+}
+
+# ---- Option effects (THIS = ROOT = the country) --------------------------------------------------------------------
+# The Overspill's new towns: every Settlement Authority's settlement plan switches to Planned Towns (Internal
+# Resettlement, docs/systems/mod_systems.md: the PM needs Modern Urban Planning, which the option's branch checks).
+te_demog_wave_plan_towns = {
+	every_scope_state = {
+		limit = { has_building = building_resettlement_colony }
+		activate_production_method = {
+			building_type = building_resettlement_colony
+			production_method = pm_resettlement_planned_towns
+		}
+	}
+}
+
+# ---- The self-check wave_timed_country_type (docs/testing/demographics-playtest.md, Self-checks) ---------------------
+# Once a game, under Full (the events fire nowhere else): the first option that puts a census type on a timed country
+# modifier (Missing Girls' ban or payments: CODE 1, state_sex_ratio_at_birth_add; The Last Generation?'s licences or
+# allowance: CODE 2, state_desired_fertility_mult) reads the capital's sum of that type now, before its modifier is
+# added (an add isn't visible inside its own effect), with the Family Policy measures' lines of the same type on the
+# owner; te_debug_demog.81 reads both again a week later. OK: the capital's sum rose by the line ($EXPECTED$) plus any
+# change in the measures' lines. Measure_country_types checks a script-only type on an untimed country modifier; a
+# timed one is a carrier nobody has read yet (the phase 2 design §6). THIS = ROOT = the country, in an option's
+# hidden_effect; the tooltip pass writes nothing.
+te_debug_demog_wave_selfcheck_start = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_wave_selfcheck_done }
+			te_debug_demog_selfchecks_run = yes
+			exists = capital
+		}
+		set_global_variable = { name = te_demog_wave_selfcheck_done value = yes }
+		set_local_variable = { name = te_dg_wv_chk_c value = $CODE$ }
+		set_local_variable = { name = te_dg_wv_chk_m0 value = te_demog_wave_chk_measure_lines_srb }
+		if = {
+			limit = { local_var:te_dg_wv_chk_c = 2 }
+			set_local_variable = { name = te_dg_wv_chk_m0 value = te_demog_ms_desired_on }
+		}
+		capital = {
+			set_variable = { name = te_dg_wv_chk_code value = local_var:te_dg_wv_chk_c }
+			set_variable = { name = te_dg_wv_chk_line value = $EXPECTED$ }
+			set_variable = { name = te_dg_wv_chk_m0 value = local_var:te_dg_wv_chk_m0 }
+			set_variable = { name = te_dg_wv_chk_owner value = ROOT }
+			set_variable = { name = te_dg_wv_chk_before value = modifier:state_sex_ratio_at_birth_add }
+			if = {
+				limit = { var:te_dg_wv_chk_code = 2 }
+				set_variable = { name = te_dg_wv_chk_before value = modifier:state_desired_fertility_mult }
+			}
+			debug_log = "TE_SELF_CHECK START wave_timed_country_type code=[THIS.Var('te_dg_wv_chk_code').GetValue|0] before=[THIS.Var('te_dg_wv_chk_before').GetValue|4] line=[THIS.Var('te_dg_wv_chk_line').GetValue|4] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log_scopes = yes
+			trigger_event = { id = te_debug_demog.81 days = 7 }
+		}
+	}
+}

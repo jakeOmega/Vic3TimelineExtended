@@ -17,6 +17,8 @@ Usage:
     demographics_harness.py workforce [SAVE]            # phase 2: participation, the workforce bands (step 2's fit)
     demographics_harness.py pensions [SAVE]             # phase 2 step 2: the pension bill against revenue, the health bill
     demographics_harness.py consequences [SAVE...] [--effects]  # phase 2 step 4: conscription, youth bulge, sex balance
+    demographics_harness.py events [SAVE...]             # phase 3: the event wave's thresholds (demographics_wave.py)
+
     demographics_harness.py rebook SAVE... [--years Y ...]   # the migrant booking: a run re-walked, its bands judged
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
@@ -1117,6 +1119,12 @@ def cmd_consequences(args):
     finally:
         for attr, value in kept.items():
             setattr(P, attr, value)
+
+
+def cmd_events(args):
+    """Phase 3's event wave (docs/superpowers/specs/2026-10-08-demographics-design.md §9): demographics_wave.report."""
+    import demographics_wave as W   # imports this module, so not at the top
+    return W.report(args.saves, unemployment=not args.no_unemployment)
 
 
 def _consequences(args):
@@ -2487,6 +2495,12 @@ def main(argv=None):
     p.add_argument("--effects", "--sex-effects", action="store_true", dest="effects",
                    help="judge the bands as if the held-back effects (conscription, youth bulge, sex balance) were on")
     p.set_defaults(fn=cmd_consequences)
+    p = sub.add_parser("events", help="phase 3: the event wave's thresholds against the model's structures and "
+                                      "transitions and a save's census countries (demographics_wave.py)")
+    p.add_argument("saves", nargs="*", help="plain-text saves made under Full or Display only")
+    p.add_argument("--no-unemployment", action="store_true", help="skip the pops pass (the Youth Bulge reads 0)")
+    p.set_defaults(fn=cmd_events)
+
     p = sub.add_parser("rebook", help="the migrant booking (2026-10-12): the census re-walked through a run's saves "
                                       "with its own residual, booked by today's rules and by the profile alone")
     p.add_argument("save", nargs="+", help="the run's saves, plain text or extract_all.py's per-save JSON (the first "
