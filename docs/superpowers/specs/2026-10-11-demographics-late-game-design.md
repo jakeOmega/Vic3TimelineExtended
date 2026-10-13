@@ -1,5 +1,10 @@
 # Demographics in the late game: old age, work, children and who lives longest — design (approved)
 
+> **Built 2026-10-12** (branch `feat/demog-p3-late-game`, from this spec with no plan document, owner's process of that
+> day): `docs/systems/mod_systems.md` § Phase 3: the late game says what shipped and where it settles what this design
+> left open (the postponement shift held at 0; `autonomous_vehicles` not built; the gap's politics behind a switch, off;
+> the harness's `lategame` results against the sketched figures). The design below is unchanged.
+>
 > **Status: approved design, 2026-10-11.** The owner approved every call in §9 as recommended the same day; call 15 (the
 > gap's politics) waits for a play-test and call 16's B for a fit. It was revised after an independent review the same
 > day (who is treated is now tracked per band, §1.2–§1.3). It answers the owner's request of 2026-10-11: scope the late
