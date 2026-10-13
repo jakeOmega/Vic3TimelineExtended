@@ -779,6 +779,13 @@ one back:
 | Occupation | Occupy the state where it stands in a war. Its Trophies on Display card in the state view has a button for each trophy, and one taken from your lands goes straight home. |
 | Return Cultural Property | A treaty article: the holder returns every trophy taken from your lands. A war can enforce it. |
 
+The Trophies on Display card has three views, chosen by the buttons in its
+header. Full shows each trophy with its picture, where it came from and what it
+counts for. Short is one line for each trophy, with the rest on hover. Collapsed
+shows only how many trophies stand in the state and what they count for
+together. The card opens in Full, and your choice lasts until you leave the
+game.
+
 A trophy that comes home is rebuilt where it was taken from, with all the levels
 carried off. A monument standing there takes the levels; otherwise the monument
 is rebuilt with its name, style and dedication. Its owner gains The Homecoming,

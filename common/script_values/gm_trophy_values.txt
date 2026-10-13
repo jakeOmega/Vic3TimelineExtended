@@ -226,6 +226,18 @@ gm_state_tr_disp_here = {
 	}
 }
 
+# State scope. What those trophies count for together, in grandeur, for the
+# state's holder (the same pass, the sum of their gm_tr_grandeur), or 0: the
+# card's summary line, which is all the collapsed card shows. An older save
+# reads 0 until its next monthly pass writes it.
+gm_state_tr_disp_here_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_here_grandeur }
+		value = var:gm_tr_here_grandeur
+	}
+}
+
 # Container scope. 1 for a trophy from a landmark: its rows show the
 # "Historical monument" line, with the landmark's line of history on hover
 # (loot spec 2026-10-12 §3).

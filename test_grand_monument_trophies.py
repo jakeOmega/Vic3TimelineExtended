@@ -460,6 +460,136 @@ class PanelTests(unittest.TestCase):
                 self.assertIn(f"{article}{suffix}", L, article + suffix)
 
 
+class StateCardViewTests(unittest.TestCase):
+    """The state view's Trophies on Display card has three views: Full (the pictured rows, with what each
+    counts for spelled out), Short (one line a trophy, no pictures, the rest on hover) and Collapsed (the
+    summary line alone: how many, and what they count for together). The client-side gm_state_tr_view
+    chooses; unset is Full, so a fresh session opens as before."""
+
+    VIEW = "gm_state_tr_view"
+
+    @staticmethod
+    def code(text):
+        """A .gui block without its `###` comment lines (`#tooltippable` is code, so not strip_comments)."""
+        return re.sub(r"(?m)^\s*###.*$", "", text)
+
+    def type_body(self, name, kind="flowcontainer"):
+        raw = raw_block_at(read(TR_GUI), rf"(?m)^\ttype {name} = {kind} \{{")
+        self.assertIsNotNone(raw, name)
+        return squash(self.code(raw))
+
+    def test_the_pass_totals_what_stands_in_each_state(self):
+        e = read(TR_EFFECTS)
+        listed = squash(block(e, "gm_tr_list_one"))
+        self.assertIn("gm_tr_count_add = { VAR = gm_tr_here_count ADD = 1 } gm_tr_count_add = { VAR = "
+                      "gm_tr_here_grandeur ADD = scope:gm_tr_listing.var:gm_tr_grandeur }", listed)
+        # The same grandeur the holder's total adds.
+        self.assertIn("change_variable = { name = gm_tr_held_grandeur add = scope:gm_tr_listing.var:gm_tr_grandeur }",
+                      listed)
+        cleared = squash(block(e, "gm_trophy_pass"))
+        self.assertIn("remove_variable = gm_tr_here_count gm_remove_state_var = { VAR = gm_tr_here_grandeur }", cleared)
+        self.assertLess(cleared.find("gm_remove_state_var = { VAR = gm_tr_here_grandeur }"),
+                        cleared.find("gm_tr_list_one = yes"), "cleared before it is written")
+        self.assertEqual(squash(block(read(TR_VALUES), "gm_state_tr_disp_here_grandeur")),
+                         "value = 0 if = { limit = { has_variable = gm_tr_here_grandeur } "
+                         "value = var:gm_tr_here_grandeur }")
+
+    def test_three_buttons_choose_the_view(self):
+        card = self.type_body("te_state_gm_trophy_card")
+        self.assertNotIn("GetVariableSystem.Toggle", card, "a Toggle flag cannot hold three views")
+        buttons = re.findall(
+            r'gm_tr_view_button = \{ tooltip = "(\w+)" blockoverride "tr_view_button" \{ enabled = "([^"]+)" '
+            r'onclick = "([^"]+)" \} blockoverride "tr_view_button_text" \{ text = "(\w+)" \} \}', card)
+        self.assertEqual([(b[0], b[3]) for b in buttons],
+                         [("gm_state_tr_view_full_tt", "gm_state_tr_view_full"),
+                          ("gm_state_tr_view_short_tt", "gm_state_tr_view_short"),
+                          ("gm_state_tr_view_collapsed_tt", "gm_state_tr_view_collapsed")])
+        # Full is the unset value; each button is off while its own view shows.
+        self.assertEqual(buttons[0][1:3], (f"[GetVariableSystem.Exists('{self.VIEW}')]",
+                                           f"[GetVariableSystem.Clear('{self.VIEW}')]"))
+        for (_, enabled, onclick, _), view in zip(buttons[1:], ("short", "collapsed")):
+            self.assertEqual(enabled, f"[Not(GetVariableSystem.HasValue('{self.VIEW}', '{view}'))]")
+            self.assertEqual(onclick, f"[GetVariableSystem.Set('{self.VIEW}', '{view}')]")
+
+    def test_each_view_shows_its_rows_and_collapsed_none(self):
+        card = self.type_body("te_state_gm_trophy_card")
+        lists = re.findall(r'flowcontainer = \{ visible = "([^"]+)" direction = vertical ignoreinvisible = yes '
+                           r'spacing = \d+ datamodel = "\[State\.MakeScope\.GetList\(\'gm_trophies_here\'\)\]" '
+                           r'item = \{ (\w+) = \{ datacontext = "\[Scope\.GetScriptContainer\]" \}', card)
+        self.assertEqual(lists, [(f"[Not(GetVariableSystem.Exists('{self.VIEW}'))]", "gm_tr_row_site"),
+                                 (f"[GetVariableSystem.HasValue('{self.VIEW}', 'short')]", "gm_tr_row_short")])
+        self.assertEqual(card.count("GetList('gm_trophies_here')"), 2, "Collapsed lists no trophy")
+
+    def test_the_summary_shows_but_for_a_full_view_of_one_trophy(self):
+        card = self.type_body("te_state_gm_trophy_card")
+        self.assertIn(f"textbox = {{ visible = \"[Or( GetVariableSystem.Exists('{self.VIEW}'), GreaterThan_CFixedPoint("
+                      "State.MakeScope.ScriptValue('gm_state_tr_disp_here'), '(CFixedPoint)1' ) )]\" autoresize = yes",
+                      card.replace("GreaterThan_CFixedPoint( ", "GreaterThan_CFixedPoint("))
+        self.assertIn('tooltip = "gm_state_tr_summary_tt" text = "gm_state_tr_summary"', card)
+
+    def test_short_is_a_line_with_the_rest_on_hover(self):
+        row = self.type_body("gm_tr_row_short")
+        self.assertNotIn("gm_tr_picture", row, "no pictures")
+        self.assertIn('tooltip = "gm_tr_short_tt" text = "gm_tr_short_line"', row)
+        # 392 + 6 + 112 = the card's 510 inside its margins.
+        self.assertIn("spacing = 6", row)
+        self.assertIn("minimumsize = { 392 -1 } maximumsize = { 392 -1 }", row)
+        self.assertIn('blockoverride "tr_button_layout" { size = { 112 22 } parentanchor = vcenter }', row)
+        self.assertEqual(392 + 6 + 112, 530 - 2 * 10)
+        # The same scripted GUI, shown and run the same way, as the Full row's button.
+        pick = r'blockoverride "tr_button" \{ (.*?) \} blockoverride "tr_button_text"'
+        self.assertEqual(re.search(pick, row).group(1), re.search(pick, self.type_body("gm_tr_row_site")).group(1))
+
+    def test_the_button_keeps_its_size_everywhere_else(self):
+        btn = self.type_body("gm_tr_button", "button")
+        self.assertIn('block "tr_button_layout" { size = { 200 26 } parentanchor = hcenter margin_top = 2 }', btn)
+        self.assertIn('block "tr_button_text_width" { max_width = 190 }', btn)
+        for row in ("gm_tr_row_held", "gm_tr_row_site"):
+            self.assertNotIn("tr_button_layout", self.type_body(row), row)
+
+    def test_full_spells_out_what_a_trophy_counts_for(self):
+        site = self.type_body("gm_tr_row_site")
+        self.assertIn('tooltip = "gm_tr_row_value_tt" text = "gm_tr_row_site_value"', site)
+        L = loc()
+        for word in ("concept_grandeur", "concept_prestige", "concept_cultural_pull", "Armed Forces"):
+            self.assertIn(word, L["gm_tr_row_site_value"], word)
+            self.assertIn(word, L["gm_state_tr_summary_tt"], word)
+
+    def test_the_summary_counts_and_totals(self):
+        L = loc()
+        self.assertIn("'gm_state_tr_summary_one', 'gm_state_tr_summary_many'", L["gm_state_tr_summary"])
+        self.assertIn("ScriptValue('gm_state_tr_disp_here'), '(CFixedPoint)1' )", L["gm_state_tr_summary"])
+        self.assertIn("1#! trophy,", L["gm_state_tr_summary_one"])
+        self.assertIn("ScriptValue('gm_state_tr_disp_here')|0]#! trophies,", L["gm_state_tr_summary_many"])
+        for key in ("gm_state_tr_summary_one", "gm_state_tr_summary_many"):
+            self.assertIn("ScriptValue('gm_state_tr_disp_here_grandeur')|0]", L[key], key)
+            self.assertIn("[State.GetOwner.GetName]", L[key], key)
+
+    def test_short_hover_carries_what_the_line_drops(self):
+        L = loc()
+        self.assertIn("ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' ), 'gm_tr_short_tt_landmark', "
+                      "'gm_tr_short_tt_plain'",
+                      L["gm_tr_short_tt"])
+        for part in ("$gm_tr_row_title$", "$gm_tr_row_detail$", "$gm_tr_row_site_value$"):
+            self.assertIn(part, L["gm_tr_short_tt_plain"], part)
+        self.assertIn("$gm_tr_short_tt_plain$", L["gm_tr_short_tt_landmark"])
+        self.assertIn("$gm_tr_row_landmark_tt$", L["gm_tr_short_tt_landmark"])
+        for key in ("gm_tr_short_tt_plain", "gm_tr_short_tt_landmark"):
+            self.assertFalse(L[key].startswith("\\n") or L[key].endswith("\\n"), key)
+
+    def test_the_card_and_short_row_read_no_journal_entry(self):
+        L = loc()
+        gui = read(TR_GUI)
+        for name in ("te_state_gm_trophy_card", "gm_tr_row_short", "gm_tr_view_button"):
+            kind = "button" if name.endswith("button") else "flowcontainer"
+            body = raw_block_at(gui, rf"(?m)^\ttype {name} = {kind} \{{")
+            self.assertNotIn("JournalEntry", body, name)
+            for key in re.findall(r'(?:text|tooltip) = "(\w+)"', body):
+                self.assertNotIn("JournalEntry", L.get(key, ""), (name, key))
+        for key in ("gm_tr_short_line", "gm_tr_short_tt", "gm_tr_row_site_value", "gm_state_tr_summary_tt"):
+            self.assertNotIn("JournalEntry", L[key], key)
+
+
 class PictureTests(unittest.TestCase):
     """A trophy shows the picture of the monument it was taken from (2026-10-13): the monuments' own
     table run on its records, and gm_picture's icons read from the container."""
