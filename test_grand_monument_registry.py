@@ -1087,8 +1087,12 @@ INSCRIPTION_FAITHS = {"catholic": "latin", "jewish": "hebrew", "hindu": "sanskri
 # is the country holding the state's part in the 1836 history (game files,
 # 2026-10-11: Jaipur is Dhundhar's, JAI). The stand-in is the (skin, form) pair
 # whose picture it shows until its own is drawn. Adding a row is the checklist:
-# the failures name every site.
-Landmark = namedtuple("Landmark", "key state tag dedication form standin level")
+# the failures name every site. A row with placed=False is never seeded: it
+# names a trophy of 1836 with no standing monument of its own (spec
+# 2026-10-12-grand-monument-loot-and-1836-trophies-design.md §2.2), and stands
+# as a landmark only once that trophy goes home. Its state and owner are its
+# origin's (TROPHIES_1836 in test_grand_monument_trophies.py), and it has no level.
+Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed", defaults=(True,))
 LANDMARKS = (
     Landmark("arc_de_triomphe", "STATE_ILE_DE_FRANCE", "FRA", "war_memorial", "arch", ("generic", "arch"), 15),
     Landmark("alexander_column", "STATE_INGRIA", "RUS", "crown", "column", ("generic", "column"), 10),
@@ -1118,7 +1122,56 @@ LANDMARKS = (
     Landmark("lion_of_saint_mark", "STATE_VENETIA", "AUS", "republic", "column", ("generic", "column"), 5),
     Landmark("sans_souci_palace", "STATE_HAITI", "HAI", "crown", "hall", ("generic", "hall"), 5),
     Landmark("nikko_toshogu", "STATE_KANTO", "JAP", "crown", "gate", ("heritage_chinese", "gate"), 5),
+    # Added 2026-10-12 (owner: "grand monuments for the great powers to loot"):
+    # where Europe's looting took place. Owners from the game's 00_states.txt:
+    # Kumasi is in Asante's part of the Gold Coast, the Red Fort in the Mughal
+    # emperor's one province of Delhi (its city hub).
+    Landmark("parthenon", "STATE_ATTICA", "GRE", "civic", "pantheon", ("heritage_greek", "pantheon"), 10),
+    Landmark("obelisks_of_karnak", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), 5),
+    Landmark("royal_palace_of_benin", "STATE_BENIN", "BEN", "crown", "hall", ("generic", "hall"), 5),
+    Landmark("royal_palace_of_kumasi", "STATE_GOLD_COAST", "ASH", "crown", "hall", ("generic", "hall"), 5),
+    Landmark("bukgwan_victory_stele", "STATE_SARIWON", "KOR", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
+    Landmark("imperial_city_of_hue", "STATE_ANNAM", "DAI", "crown", "gate", ("heritage_chinese", "gate"), 10),
+    Landmark("persepolis", "STATE_FARS", "PER", "civic", "hall", ("heritage_avestan", "hall"), 5),
+    Landmark("red_fort", "STATE_DELHI", "MUG", "crown", "gate", ("heritage_avestan", "gate"), 10),
+    # Never placed: the trophies of 1836 with no standing monument of their own.
+    Landmark("rosetta_stone", "STATE_LOWER_EGYPT", "EGY", "civic", "stele", ("heritage_geez", "stele"), None, False),
+    Landmark("temple_of_dendera", "STATE_UPPER_EGYPT", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"),
+             None, False),
+    Landmark("luxor_obelisk", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), None, False),
+    Landmark("venus_de_milo", "STATE_WEST_AEGEAN_ISLANDS", "GRE", "civic", "statue", ("generic", "statue"), None, False),
+    Landmark("piraeus_lion", "STATE_ATTICA", "GRE", "civic", "statue", ("generic", "statue"), None, False),
+    Landmark("horses_of_saint_mark", "STATE_EASTERN_THRACE", "TUR", "civic", "statue", ("generic", "statue"), None,
+             False),
+    Landmark("tipus_tiger", "STATE_MYSORE", "MYS", "civic", "statue", ("generic", "statue"), None, False),
+    Landmark("baba_merzoug", "STATE_ALGIERS", "MAS", "war_memorial", "column", ("generic", "column"), None, False),
+    # Added 2026-10-12 (owner: the Throne of Kandy, and looted places in
+    # decentralized territory). Great Zimbabwe is in the Mashona's part of
+    # Zambezi (Harare and Bulawayo are its hubs), Klungkung in Bali's part of
+    # the Sunda Islands (Denpasar is its port). Abomey is Dahomey's.
+    Landmark("great_zimbabwe", "STATE_ZAMBEZI", "MSH", "civic", "round_tower", ("heritage_irish", "round_tower"), 5),
+    Landmark("royal_palaces_of_abomey", "STATE_DAHOMEY", "DAH", "crown", "hall", ("generic", "hall"), 5),
+    Landmark("klungkung_palace", "STATE_SUNDA_ISLANDS", "BAL", "crown", "gate", ("heritage_sanskrit", "gate"), 5),
+    Landmark("royal_palace_of_kandy", "STATE_CEYLON", "BCE", "civic", "hall", ("generic", "hall"), None, False),
+    # Added 2026-10-12 (owner: Italy, Turkey and the Levant). Each state has
+    # one owner in 1836: Tuscany, the Papal States, the Ottomans (Aydin holds
+    # Mugla, so Bodrum) and Egypt (Lebanon's Zahle hub is Baalbek's valley).
+    Landmark("uffizi_gallery", "STATE_TUSCANY", "TUS", "civic", "hall", ("generic", "hall"), 10),
+    Landmark("capitoline_museums", "STATE_LAZIO", "PAP", "civic", "forum", ("heritage_latin", "forum"), 5),
+    Landmark("bodrum_castle", "STATE_AYDIN", "TUR", "war_memorial", "tower", ("heritage_gothic", "tower"), 5),
+    Landmark("temples_of_baalbek", "STATE_LEBANON", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
+    # Added 2026-10-12: heritage sites with no weight in 1836, which the
+    # owner's revised rule admits at lower priority. Single-owner states only
+    # (owner): Palmyra in Syria (Homs is its nearest hub), Xanthos in Konya
+    # (Antalya), Dhiban's stele in Transjordan (Kerak).
+    Landmark("palmyra", "STATE_SYRIA", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
+    Landmark("xanthos", "STATE_KONYA", "TUR", "civic", "rock_cut", ("heritage_aramaic", "rock_cut"), 5),
+    Landmark("mesha_stele", "STATE_TRANSJORDAN", "EGY", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
+    # Added 2026-10-12 (owner). Baghdad is the Ottomans' alone; the stand-in is
+    # the Persian gate, an iwan like Taq Kasra's.
+    Landmark("arch_of_ctesiphon", "STATE_BAGHDAD", "TUR", "civic", "arch", ("heritage_avestan", "gate"), 5),
 )
+PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
 
 
@@ -2982,6 +3035,33 @@ PICTURES = {
     1000021: ("landmark_lion_of_saint_mark", "column", None),
     1000022: ("landmark_sans_souci_palace", "hall", None),
     1000023: ("landmark_nikko_toshogu", "gate", None),
+    1000024: ("landmark_parthenon", "pantheon", None),
+    1000025: ("landmark_obelisks_of_karnak", "obelisk", None),
+    1000026: ("landmark_royal_palace_of_benin", "hall", None),
+    1000027: ("landmark_royal_palace_of_kumasi", "hall", None),
+    1000028: ("landmark_bukgwan_victory_stele", "stele", None),
+    1000029: ("landmark_imperial_city_of_hue", "gate", None),
+    1000030: ("landmark_persepolis", "hall", None),
+    1000031: ("landmark_red_fort", "gate", None),
+    1000032: ("landmark_rosetta_stone", "stele", None),
+    1000033: ("landmark_temple_of_dendera", "colonnade", None),
+    1000034: ("landmark_luxor_obelisk", "obelisk", None),
+    1000036: ("landmark_piraeus_lion", "statue", None),
+    1000037: ("landmark_horses_of_saint_mark", "statue", None),
+    1000038: ("landmark_tipus_tiger", "statue", None),
+    1000039: ("landmark_baba_merzoug", "column", None),
+    1000040: ("landmark_great_zimbabwe", "round_tower", None),
+    1000041: ("landmark_royal_palaces_of_abomey", "hall", None),
+    1000042: ("landmark_klungkung_palace", "gate", None),
+    1000043: ("landmark_royal_palace_of_kandy", "hall", None),
+    1000044: ("landmark_uffizi_gallery", "hall", None),
+    1000045: ("landmark_capitoline_museums", "forum", None),
+    1000046: ("landmark_bodrum_castle", "tower", None),
+    1000047: ("landmark_temples_of_baalbek", "colonnade", None),
+    1000048: ("landmark_palmyra", "colonnade", None),
+    1000049: ("landmark_xanthos", "rock_cut", None),
+    1000050: ("landmark_mesha_stele", "stele", None),
+    1000051: ("landmark_arch_of_ctesiphon", "arch", None),
 }
 # Codes of pairs no monument can reach any more (a retired form or style).
 RETIRED_PICTURES = set()
@@ -3023,7 +3103,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_state_update_picture"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 103)
+        self.assertEqual(len(PICTURES), 130)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():
@@ -3191,14 +3271,19 @@ class LandmarkTests(unittest.TestCase):
     def test_the_table(self):
         keys = [lm.key for lm in LANDMARKS]
         self.assertEqual(len(keys), len(set(keys)))
-        states = [lm.state for lm in LANDMARKS]
+        # One standing monument per state; an unplaced row shares its origin
+        # state with whatever stands there (loot spec §2.2).
+        states = [lm.state for lm in PLACED_LANDMARKS]
         self.assertEqual(len(states), len(set(states)), "one landmark per state (§2)")
         for lm in LANDMARKS:
             self.assertIn(lm.dedication, BY_KEY, lm.key)
             self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values(), lm.key)
             if lm.form in BUILDING_FORMS.values():
                 self.assertEqual(BUILDING_FORMS[lm.dedication], lm.form, f"{lm.key}: a building's own form")
-            self.assertGreaterEqual(lm.level, 5, lm.key)
+            if lm.placed:
+                self.assertGreaterEqual(lm.level, 5, lm.key)
+            else:
+                self.assertIsNone(lm.level, f"{lm.key}: an unplaced landmark's levels are its trophy's")
 
     def test_no_duplicate_of_a_base_game_monument_or_a_wonder(self):
         taken = vanilla_monuments()
@@ -3217,14 +3302,15 @@ class LandmarkTests(unittest.TestCase):
         body = squash(block(on, "gm_landmarks_on_game_started_after_lobby"))
         self.assertEqual(body, "effect = { if = { limit = { gm_system_enabled = yes NOT = { has_global_variable = "
                                "gm_landmarks_seeded } } set_global_variable = gm_landmarks_seeded "
-                               "gm_seed_landmarks = yes } }")
+                               "gm_seed_landmarks = yes gm_seed_trophies = yes } }")
 
     def test_a_call_per_row(self):
         raw = (ROOT / LANDMARK_EFFECTS).read_bytes()
         self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), "one BOM")
         self.assertFalse(raw.startswith(b"\xef\xbb\xbf" * 2), "one BOM, not two")
         body = squash(block(self.e, "gm_seed_landmarks"))
-        self.assertEqual(re.findall(r"gm_seed_landmark = \{[^{}]*\}", body), [landmark_seed_call(lm) for lm in LANDMARKS])
+        self.assertEqual(re.findall(r"gm_seed_landmark = \{[^{}]*\}", body),
+                         [landmark_seed_call(lm) for lm in PLACED_LANDMARKS])
 
     def test_the_seed_writes_the_five_records(self):
         body = squash(block(self.e, "gm_seed_landmark"))

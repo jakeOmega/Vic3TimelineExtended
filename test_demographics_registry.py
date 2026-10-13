@@ -4,6 +4,7 @@ Static checks on the script: the rule's settings and wrappers, guarded divisions
 pulse wiring, the gates around every cohort entry point. Later tasks add tests here.
 """
 
+import copy
 import dataclasses
 import json
 import math
@@ -65,6 +66,10 @@ LX_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_lx_effects.txt"
 LX_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_lx_generated_effects.txt"
 LX_VALUES = ROOT / "common" / "script_values" / "te_demog_lx_values.txt"
 LX_GEN_VALUES = ROOT / "common" / "script_values" / "te_demog_lx_generated_values.txt"
+# phase 3: the spreading machinery (the practices' neighbour spread, Family Limitation, Cultural Hegemony's drift)
+FL_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fl_effects.txt"
+SPREAD_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_spread_effects_generated.txt"
+SPREAD_VALUES = ROOT / "common" / "script_values" / "te_demog_spread_values_generated.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -385,7 +390,8 @@ LX_DEFAULTS = {"te_demog_lx_cover": P.LX_COVER_DEFAULT, "te_demog_lx_banned": 0.
                "te_demog_lx_country_carrier": 0.0, "te_demog_lx_ecto_levels": 0.0,
                # a pop's wealth, which the walk's Full-only sums read for the wealth slope (te_demog_absorbed_walk_pop)
                "wealth": 0.0}
-# Phase 2 step 4's three held-back effects (demographics_params' switches, generated as 0 or 1): an engine takes the
+# Phase 2 step 4's three effects (demographics_params' switches, generated as 0 or 1; on since the migrant booking,
+# 2026-10-12): an engine takes the
 # switches as the model reads them, so a test that patches them on (ALL_ON) runs the script with them on too.
 SWITCHES = {"te_demog_k_conscription_effects": "CONSCRIPTION_EFFECTS", "te_demog_k_youth_effects": "YOUTH_BULGE_EFFECTS",
             "te_demog_k_sex_effects": "SEX_BALANCE_EFFECTS"}
@@ -396,15 +402,27 @@ def _switch_fixtures():
 
 
 def ALL_ON(f):
-    """Patch the three switches on (as the follow-up will) for one test."""
+    """Patch the three switches on (as the migrant booking turned them, 2026-10-12) for one test."""
     for attr in SWITCHES.values():
         f = unittest.mock.patch.object(P, attr, True)(f)
     return f
 
 
+def ALL_OFF(f):
+    """Patch the three switches off (held back, as step 4 shipped them) for one test."""
+    for attr in SWITCHES.values():
+        f = unittest.mock.patch.object(P, attr, False)(f)
+    return f
+
+
 # Phase 2 step 4's once-a-game self-checks, which the census's refresh calls (te_demog_consequences_refresh): they set a
 # global variable, log and fire an event, none of which the interpreter runs; TestConsequencesScript reads their text.
-SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": ""}
+SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": "",
+                    # phase 3's (te_debug_demog_effects.txt): they read the capital, s:STATE_ULSTER and debug_log
+                    "te_debug_demog_fl_selfcheck_start": "", "te_debug_demog_fl_neighbours_check": "",
+                    "te_debug_demog_neighbours_selfcheck": ""}
+# Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
+PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
 
 
 class _Engine:
@@ -420,14 +438,14 @@ class _Engine:
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
-                                    LX_EFFECTS, LX_GEN_EFFECTS, PLACE_EFFECTS])
+                                    LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS])
         # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
         # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
         self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
         self.effects.update(SELF_CHECK_STUBS)
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
-                                   WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, PLACE_VALUES])
+                                   WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES])
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -444,7 +462,7 @@ class _Engine:
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **fixtures}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -457,6 +475,9 @@ class _Engine:
         # the state region's own variables (state_region = { set_variable / has_variable / var: }): the practices'
         # copy of the shares, te_dg_pr_<P>_r (Stop B, I1)
         self.region_vars = {}
+        # phase 3: its neighbouring states (every_neighbouring_state), each a dict of its variables with its own
+        # state_population, as the siblings are (te_demog_practices_neighbours)
+        self.neighbours = []
 
     def _tree(self, table, name, args=()):
         key = (id(table), name, args)
@@ -555,6 +576,8 @@ class _Engine:
             return self.holds([item for item in arg if item[0] != "text"])
         if key == "has_variable":
             return arg in self.vars
+        if key == "has_local_variable":
+            return arg in self.locals
         if key == "has_modifier":
             return arg in self.modifiers
         if key == "has_decree":
@@ -623,30 +646,38 @@ class _Engine:
                     self.run(arg)
                 finally:
                     self.vars = saved
+            elif key == "every_neighbouring_state":
+                # phase 3: the state's neighbouring states (te_demog_practices_neighbours), as the siblings below
+                self._each_state(self.neighbours, arg)
             elif key == "state_region" and isinstance(arg, list):
                 # state_region = { every_scope_state = { limit = { … } … } }: the other states in its state region,
                 # each a dict of its variables with its own state_population (te_demog_practice_seed)
                 (inner, _, body), = arg
                 assert inner == "every_scope_state", inner
-                limit = next((v for k, _, v in body if k == "limit"), [])
-                rest = [i for i in body if i[0] != "limit"]
-                for sib in self.siblings:
-                    saved_vars, saved_pop = self.vars, self.fixtures.get("state_population")
-                    self.vars, self.fixtures["state_population"] = sib, sib["state_population"]
-                    try:
-                        if self.holds(limit):
-                            self.run(rest)
-                    finally:
-                        self.vars = saved_vars
-                        if saved_pop is None:
-                            self.fixtures.pop("state_population", None)
-                        else:
-                            self.fixtures["state_population"] = saved_pop
+                self._each_state(self.siblings, body)
             elif key in self.effects:
                 args = () if arg == "yes" else tuple((k, v) for k, _, v in arg)
                 self.run(self._tree(self.effects, key, args))
             else:
                 raise AssertionError(f"effect {key}")
+
+    def _each_state(self, states, body):
+        """An iterator's body over `states` (each a dict of its variables with its own state_population): its limit,
+        then the rest, with the state's variables and population in place of the scope's; locals are the effect's."""
+        limit = next((v for k, _, v in body if k == "limit"), [])
+        rest = [i for i in body if i[0] != "limit"]
+        for sib in states:
+            saved_vars, saved_pop = self.vars, self.fixtures.get("state_population")
+            self.vars, self.fixtures["state_population"] = sib, sib["state_population"]
+            try:
+                if self.holds(limit):
+                    self.run(rest)
+            finally:
+                self.vars = saved_vars
+                if saved_pop is None:
+                    self.fixtures.pop("state_population", None)
+                else:
+                    self.fixtures["state_population"] = saved_pop
 
     def call(self, effect):
         self.run(_parse_script(f"{effect} = yes"))
@@ -932,10 +963,14 @@ class TestCohortScript(unittest.TestCase):
             }
             for c in range(len(P.MIGRANT_CLASSES)):
                 locals_[f"te_dg_pf{c}"], locals_[f"te_dg_pm{c}"] = prof[(c, "f")], prof[(c, "m")]
-            stub = {"te_demog_flows": "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}"
-                                                for k, v in locals_.items())}
+            # the booking's cap reads the profile and the class sums (te_demog_migrant_rates, 2026-10-12)
+            stub = {"te_demog_flows": "\n".join([f"set_local_variable = {{ name = {k} value = {v!r} }}"
+                                                 for k, v in locals_.items()] + ["te_demog_migrant_rates = yes"])}
         eng = _engine_for(inp, self.YEAR + 1, pop, effects=stub, engine=engine)
         eng.fixtures.update(fixtures)
+        # the census's last sex balance and class sums, before the step rewrites them (the migrant booking reads both)
+        eng.balance_before = balance
+        eng.ring_before = copy.deepcopy(ring)
         bz = dz = 0.0
         if full:
             eng.trigger_fixtures["te_demog_effects_run"] = True
@@ -1072,7 +1107,16 @@ class TestCohortScript(unittest.TestCase):
         inp = dataclasses.replace(
             self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
             inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
-        prof = demographics_model.migrant_profile(inp)
+        sign = 1 if eng.locals["te_dg_mig_in"] > 0 else -1 if eng.locals["te_dg_mig_out"] > 0 else 0
+        prof = demographics_model.migrant_profile(inp, eng.balance_before, sign)
+        # the booking's rates (te_demog_migrant_rates, 2026-10-12): each class and sex's, plus the flat one
+        migration = eng.locals["te_dg_mig_in"] - eng.locals["te_dg_mig_out"]
+        rates = demographics_model.migrant_rates(eng.ring_before, prof, migration)
+        flat = eng.locals["te_dg_mig_flat"]
+        for (c, sex), rate in rates.items():
+            if abs(rate):
+                self.close(eng.locals[f"te_dg_mr_{sex}{c}"] + flat, abs(rate), rel=1e-4,
+                           what=f"booking rate, class {c} {sex}")
         for c in range(len(P.MIGRANT_CLASSES)):
             self.close(eng.locals[f"te_dg_pf{c}"], prof[(c, "f")], rel=1e-9, what=f"profile, class {c} women")
             self.close(eng.locals[f"te_dg_pm{c}"], prof[(c, "m")], rel=1e-9, what=f"profile, class {c} men")
@@ -1116,6 +1160,46 @@ class TestCohortScript(unittest.TestCase):
         self.check_step(eng, ring, figures, pop)
         self.check_flows(eng, flows, want_inflow_years=5)
         self.assertGreater(eng.vars["te_dg_net_migration"], 0)
+
+    def test_flows_balance_the_labour_split_where_men_are_few(self):
+        """The migrant booking (2026-10-12): departures from a state short of men take the labour kind's women and men
+        alike (demographics_model.labour_balance_weight), and the step still matches the model."""
+        flows = dict(eb=2500.0, ed=2100.0, migration=-6000.0, crisis=0.0, fjob_share=0.0)
+        eng, ring, figures, pop = self.step_both(flows=flows, men_factor=0.85)
+        self.assertLess(eng.balance_before, P.LABOUR_BALANCE_LOW[1])
+        self.close(eng.locals["te_dg_lbw"], 1.0, what="the balance weight")
+        self.close(eng.locals["te_dg_labour_f"], P.LABOUR_BALANCE_SHARE, what="labour's women's share")
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=0)
+        # the same state gaining people keeps the jobs' split: the correction only stops a fall
+        flows["migration"] = 6000.0
+        eng, ring, figures, pop = self.step_both(flows=flows, men_factor=0.85)
+        self.close(eng.locals["te_dg_lbw"], 0.0, what="no correction on arrivals")
+        self.close(eng.locals["te_dg_labour_f"], P.LABOUR_FEMALE_SHARE_MIN, what="labour's women's share")
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=1)
+
+    def test_flows_balance_the_labour_split_where_men_are_many(self):
+        """Arrivals in a state with men to spare move toward the balanced split, part of the way inside the ramp."""
+        flows = dict(eb=2500.0, ed=2100.0, migration=6000.0, crisis=0.0, fjob_share=0.0)
+        eng, ring, figures, pop = self.step_both(flows=flows, men_factor=1.15)
+        start, full = P.LABOUR_BALANCE_HIGH
+        want = (eng.balance_before - start) / (full - start)
+        self.assertTrue(0 < want < 1, eng.balance_before)
+        self.close(eng.locals["te_dg_lbw"], want, rel=1e-4, what="the balance weight")
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=1)
+
+    def test_flows_past_the_booking_cap(self):
+        """A residual far past the cap: the classes stop at the cap and the rest is flat (te_demog_migrant_rates)."""
+        for migration in (-0.2 * self.POP, 0.3 * self.POP):
+            flows = dict(eb=2500.0, ed=2100.0, migration=migration, crisis=0.1, fjob_share=0.2)
+            eng, ring, figures, pop = self.step_both(flows=flows)
+            self.assertGreater(eng.locals["te_dg_mig_flat"], 0.05)
+            cap = P.MIGRANT_CAP_IN if migration > 0 else P.MIGRANT_CAP_OUT
+            self.close(eng.locals["te_dg_mr_m2"], cap, rel=1e-4, what="young men at the cap")
+            self.check_step(eng, ring, figures, pop)
+            self.check_flows(eng, flows, want_inflow_years=1 if migration > 0 else 0)
 
     def test_flows_with_a_first_year_state_and_a_full_crisis(self):
         """No pending dead or kills, no streak variable yet; refugees take the whole profile."""
@@ -1314,11 +1398,10 @@ class TestCohortScript(unittest.TestCase):
         self.close(eng.vars["te_dg_tfr"], figures["tfr"], rel=1e-6, what="children per woman")
         self._work_figures(eng, ring, dataclasses.replace(inp, sex_balance=balance))
 
+    @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", False)
     def test_held_back_a_step_short_of_men_takes_no_term(self):
-        """demographics_params.SEX_BALANCE_EFFECTS off (controller's decision, 2026-10-12): the census still counts the
+        """demographics_params.SEX_BALANCE_EFFECTS off (held back, as step 4 shipped): the census still counts the
         balance but stores no te_dg_sxb, and its children per woman and work figures take no sex-balance term."""
-        self.assertFalse(P.SEX_BALANCE_EFFECTS)
-        self.assertEqual(_raw_blocks([GENERATED_VALUES])["te_demog_k_sex_effects"].strip(), "value = 0")
         inp = self._work_inp()
         eng, ring, figures, pop = self.step_both(inp=inp, migration=0.0, men_factor=0.85)
         self.check_step(eng, ring, figures, pop)
@@ -2003,8 +2086,23 @@ class TestPrimogenitureUnderFull(unittest.TestCase):
         self.assertNotRegex(code, r"\bstate_birth_rate_mult\b")
         self.assertRegex(code, rf"\b{P.ENGINE_LINE_TYPES[('absorbed', 'state_birth_rate_mult')]} = 0\.1\b")
         self.assertRegex(code, r"\bstate_migration_quota_mult = 0\.2\b", "the migration line stays")
-        # Forced Heirship's -0.15 stays on its engine field: on top under Full (spec 4.5, parent 13: phase 3)
-        self.assertRegex(_block(_text(self.MODS), "inh_forced_heirship_rural"), r"state_birth_rate_mult = -0\.15")
+        # phase 3 (parent spec 13): Forced Heirship's -0.15 moved the same way; under Full Family Limitation takes it
+        fh = re.sub(r"#[^\n]*", "", _block(_text(self.MODS), "inh_forced_heirship_rural"))
+        self.assertNotRegex(fh, r"\bstate_birth_rate_mult\b")
+        self.assertRegex(fh, rf"\b{P.ENGINE_LINE_TYPES[('absorbed', 'state_birth_rate_mult')]} = -0\.15\b")
+        self.assertRegex(fh, r"\bstate_migration_quota_mult = -0\.2\b", "its migration line stays")
+
+    def test_the_rural_refresh_fires_the_lines_refresh_for_forced_heirship_too(self):
+        """Phase 3: Forced Heirship's farm births ride the pair too, so its refresh fires the same day as
+        Primogeniture's; and the Primogeniture self-check skips a state whose owner just left Forced Heirship (the
+        removed line still reads that week)."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(INH_EFFECTS), "te_inh_refresh_rural_effects"))
+        self.assertIn("set_local_variable = { name = te_inh_fh_was value = 1 }", body)
+        fire = body[body.rindex("trigger_event = { id = te_demog_events.4 }") - 400:]
+        for needle in ("has_local_variable = te_inh_fh_was", "has_law = law_type:law_equal_inheritance"):
+            self.assertIn(needle, fire)
+        self.assertIn("NOT = { has_local_variable = te_inh_fh_was }",
+                      _block(_text(self.DEBUG_EFFECTS), "te_debug_demog_pr_selfcheck_start"))
 
     def test_the_rural_refresh_fires_the_lines_refresh(self):
         """No month's lag (#892's owner decision 2): the pair follows the yearly rural refresh the same day, from a
@@ -3862,10 +3960,12 @@ class TestFlows(unittest.TestCase):
         """Whatever the branch, te_demog_flows leaves the locals te_demog_no_flows names: each is set
         at its top level (one tab), not inside an if."""
         flows = _block(_text(EFFECTS), "te_demog_flows")
-        body = flows + _block(_text(GENERATED_EFFECTS), "te_demog_set_profile")
+        body = (flows + _block(_text(GENERATED_EFFECTS), "te_demog_set_profile")
+                + _block(_text(GENERATED_EFFECTS), "te_demog_migrant_rates"))
         self.assertRegex(flows, r"(?m)^\tte_demog_set_profile = yes$", "the profile is set unconditionally")
+        self.assertRegex(flows, r"(?m)^\tte_demog_migrant_rates = yes$", "the booking's rates are set unconditionally")
         names = re.findall(r"name = (te_dg_\w+) value", _block(_text(EFFECTS), "te_demog_no_flows"))
-        self.assertEqual(len(names), 15)
+        self.assertEqual(len(names), 16)
         for name in names:
             self.assertIsNotNone(re.search(rf"^\tset_local_variable = \{{\s+name = {name}\s+value", body, re.M), name)
 
@@ -6842,11 +6942,16 @@ class TestConsequencesScript(unittest.TestCase):
         eng.call("te_demog_consequences_refresh")
         self.assertIn("te_demog_census_conscription_down", eng.modifiers)
 
-    def test_held_back_the_census_stores_the_figures_and_applies_nothing(self):
-        """Controller's decision (2026-10-12): the three switches are off; under Full T and y are stored for the panel."""
-        self.assertEqual(_switch_fixtures(), {k: 0.0 for k in SWITCHES})
+    def test_the_switches_are_on(self):
+        """The migrant booking (2026-10-12) turned the three effects on: the generated switches are 1."""
+        self.assertEqual(_switch_fixtures(), {k: 1.0 for k in SWITCHES})
         for key in SWITCHES:
-            self.assertEqual(_raw_blocks([GENERATED_VALUES])[key].strip(), "value = 0", key)
+            self.assertEqual(_raw_blocks([GENERATED_VALUES])[key].strip(), "value = 1", key)
+
+    @ALL_OFF
+    def test_held_back_the_census_stores_the_figures_and_applies_nothing(self):
+        """The three switches off (held back, as step 4 shipped): under Full T and y are stored for the panel."""
+        self.assertEqual(_switch_fixtures(), {k: 0.0 for k in SWITCHES})
         eng = self._state(fam=7000.0, balance=60.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.3)
         eng.call("te_demog_consequences_refresh")
         self.assertEqual(eng.modifiers, {})

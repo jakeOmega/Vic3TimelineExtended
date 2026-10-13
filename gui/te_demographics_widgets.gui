@@ -910,7 +910,7 @@ types te_demographics_widgets
 
 	### Fighting-Age Men (phase 2 step 4; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
 	### §4.5): the pool, men aged 20 to 39, as a share of the men, and the conscription multiplier it gives, with the
-	### pool and the term on hover (held back for now: the hover says "not applied yet"). The last row of step 2's Work
+	### pool and the term on hover (while te_demog_k_conscription_effects is 0, "not applied yet"). The last row of step 2's Work
 	### and Retirement section, te_demog_sec_work and te_state_demog_work. A census from before step 4 shows the pending
 	### text until its next count. Fits the figure row's cells:
 	### "Fighting-Age Men" is 16 characters, about 150 units; "100% (×1.25)" 12, about 115.

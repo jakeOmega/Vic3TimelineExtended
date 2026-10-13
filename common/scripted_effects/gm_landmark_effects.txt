@@ -43,6 +43,25 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = lion_of_saint_mark STATE = STATE_VENETIA TAG = AUS DEDICATION = republic FORM = column LEVEL = 5 }
 	gm_seed_landmark = { KEY = sans_souci_palace STATE = STATE_HAITI TAG = HAI DEDICATION = crown FORM = hall LEVEL = 5 }
 	gm_seed_landmark = { KEY = nikko_toshogu STATE = STATE_KANTO TAG = JAP DEDICATION = crown FORM = gate LEVEL = 5 }
+	gm_seed_landmark = { KEY = parthenon STATE = STATE_ATTICA TAG = GRE DEDICATION = civic FORM = pantheon LEVEL = 10 }
+	gm_seed_landmark = { KEY = obelisks_of_karnak STATE = STATE_UPPER_EGYPT TAG = EGY DEDICATION = civic FORM = obelisk LEVEL = 5 }
+	gm_seed_landmark = { KEY = royal_palace_of_benin STATE = STATE_BENIN TAG = BEN DEDICATION = crown FORM = hall LEVEL = 5 }
+	gm_seed_landmark = { KEY = royal_palace_of_kumasi STATE = STATE_GOLD_COAST TAG = ASH DEDICATION = crown FORM = hall LEVEL = 5 }
+	gm_seed_landmark = { KEY = bukgwan_victory_stele STATE = STATE_SARIWON TAG = KOR DEDICATION = war_memorial FORM = stele LEVEL = 5 }
+	gm_seed_landmark = { KEY = imperial_city_of_hue STATE = STATE_ANNAM TAG = DAI DEDICATION = crown FORM = gate LEVEL = 10 }
+	gm_seed_landmark = { KEY = persepolis STATE = STATE_FARS TAG = PER DEDICATION = civic FORM = hall LEVEL = 5 }
+	gm_seed_landmark = { KEY = red_fort STATE = STATE_DELHI TAG = MUG DEDICATION = crown FORM = gate LEVEL = 10 }
+	gm_seed_landmark = { KEY = great_zimbabwe STATE = STATE_ZAMBEZI TAG = MSH DEDICATION = civic FORM = round_tower LEVEL = 5 }
+	gm_seed_landmark = { KEY = royal_palaces_of_abomey STATE = STATE_DAHOMEY TAG = DAH DEDICATION = crown FORM = hall LEVEL = 5 }
+	gm_seed_landmark = { KEY = klungkung_palace STATE = STATE_SUNDA_ISLANDS TAG = BAL DEDICATION = crown FORM = gate LEVEL = 5 }
+	gm_seed_landmark = { KEY = uffizi_gallery STATE = STATE_TUSCANY TAG = TUS DEDICATION = civic FORM = hall LEVEL = 10 }
+	gm_seed_landmark = { KEY = capitoline_museums STATE = STATE_LAZIO TAG = PAP DEDICATION = civic FORM = forum LEVEL = 5 }
+	gm_seed_landmark = { KEY = bodrum_castle STATE = STATE_AYDIN TAG = TUR DEDICATION = war_memorial FORM = tower LEVEL = 5 }
+	gm_seed_landmark = { KEY = temples_of_baalbek STATE = STATE_LEBANON TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 }
+	gm_seed_landmark = { KEY = palmyra STATE = STATE_SYRIA TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 }
+	gm_seed_landmark = { KEY = xanthos STATE = STATE_KONYA TAG = TUR DEDICATION = civic FORM = rock_cut LEVEL = 5 }
+	gm_seed_landmark = { KEY = mesha_stele STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = war_memorial FORM = stele LEVEL = 5 }
+	gm_seed_landmark = { KEY = arch_of_ctesiphon STATE = STATE_BAGHDAD TAG = TUR DEDICATION = civic FORM = arch LEVEL = 5 }
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
@@ -111,6 +130,34 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = lion_of_saint_mark }
 	gm_debug_log_landmark = { KEY = sans_souci_palace }
 	gm_debug_log_landmark = { KEY = nikko_toshogu }
+	gm_debug_log_landmark = { KEY = parthenon }
+	gm_debug_log_landmark = { KEY = obelisks_of_karnak }
+	gm_debug_log_landmark = { KEY = royal_palace_of_benin }
+	gm_debug_log_landmark = { KEY = royal_palace_of_kumasi }
+	gm_debug_log_landmark = { KEY = bukgwan_victory_stele }
+	gm_debug_log_landmark = { KEY = imperial_city_of_hue }
+	gm_debug_log_landmark = { KEY = persepolis }
+	gm_debug_log_landmark = { KEY = red_fort }
+	gm_debug_log_landmark = { KEY = rosetta_stone }
+	gm_debug_log_landmark = { KEY = temple_of_dendera }
+	gm_debug_log_landmark = { KEY = luxor_obelisk }
+	gm_debug_log_landmark = { KEY = venus_de_milo }
+	gm_debug_log_landmark = { KEY = piraeus_lion }
+	gm_debug_log_landmark = { KEY = horses_of_saint_mark }
+	gm_debug_log_landmark = { KEY = tipus_tiger }
+	gm_debug_log_landmark = { KEY = baba_merzoug }
+	gm_debug_log_landmark = { KEY = great_zimbabwe }
+	gm_debug_log_landmark = { KEY = royal_palaces_of_abomey }
+	gm_debug_log_landmark = { KEY = klungkung_palace }
+	gm_debug_log_landmark = { KEY = royal_palace_of_kandy }
+	gm_debug_log_landmark = { KEY = uffizi_gallery }
+	gm_debug_log_landmark = { KEY = capitoline_museums }
+	gm_debug_log_landmark = { KEY = bodrum_castle }
+	gm_debug_log_landmark = { KEY = temples_of_baalbek }
+	gm_debug_log_landmark = { KEY = palmyra }
+	gm_debug_log_landmark = { KEY = xanthos }
+	gm_debug_log_landmark = { KEY = mesha_stele }
+	gm_debug_log_landmark = { KEY = arch_of_ctesiphon }
 }
 
 gm_debug_log_landmark = {

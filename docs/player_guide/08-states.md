@@ -256,12 +256,7 @@ of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
 rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
-mild starvation, and Primogeniture's larger farm families, which late marriage
-replaces. The late medical technologies' cuts to deaths become part of its rates
-too (see [Life extension](#life-extension)). The rest, such as Communal
-Child-Rearing, the State Eugenics Program and the Sexual Revolution, it applies
-at its own rate, as it does an effect on the whole state, such as pollution,
-devastation or a decree. Either way, a new law
+mild starvation, Primogeniture's larger farm families, which late marriage replaces, and Forced Heirship's smaller ones, which Family Limitation replaces. The late medical technologies' cuts to deaths become part of its rates too (see [Life extension](#life-extension)). The rest, such as Communal Child-Rearing, the State Eugenics Program, the Sexual Revolution and the family-policy laws, it applies at its own rate, as it does an effect on the whole state, such as pollution, devastation or a decree. Either way, a new law
 or technology takes effect at the state's next census step, up to a year later.
 An effect on some of a state's people, such as severe starvation, applies to
 their rate in the base game. Private Health Insurance's cut for the wealthy
@@ -308,9 +303,28 @@ technology (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
 two fifths more for a rich country today. Outside Full none of this changes
 anything, and the buttons are greyed.
 
-The census also counts each state's men of fighting age, 20 to 39, and its
-young adults, and takes war dead from the men of fighting age. The tab shows
-both counts; neither changes conscription or unrest.
+The census also counts each state's men of fighting age, 20 to 39, its young
+adults and its men per 100 women aged 20 to 59, and takes war dead from the men
+of fighting age. Under Full each count sets a state modifier, refreshed at the
+state's yearly census:
+
+- **Census: Fighting-Age Men** scales the state's conscription by its share of
+  men of fighting age against 1836's: a state short of young men raises fewer
+  conscripts, and one rich in them up to a quarter more. An aging country loses
+  conscripts as its people grow older.
+- **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
+  18% of the people while work is short. At full strength (24% young adults and
+  a fifth of the workforce without work) radicals from movements rise by 15% and
+  the effects of turmoil by 10%.
+- **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
+  many dead. Fewer women marry, so children per woman fall with the balance (by
+  at most a fifth), more women work, and support for women's rights movements
+  rises, by up to 10% at 80. **Census: More Men** appears from 110 men per 100
+  women and raises radicals from movements, by up to 10% at 150.
+
+The census books migration as whole families once a state gains or loses many
+people in a year, so migration alone seldom carries a state's balance past 90
+or 110.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
@@ -326,7 +340,7 @@ them, and some break the figure down for your capital.
 | Section | What it shows |
 |---|---|
 | Overview | Median age, children per woman (its tooltip gives the mean age at childbirth), life expectancy (100+ past 100), the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left; None when no age has), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short; once longevity care exists, Living to 100 and the mean biological age beside the calendar one. |
-| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age. |
+| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age with the conscription they give. |
 | Longevity | Once longevity care exists: the share of people within its reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
@@ -363,13 +377,23 @@ mid-twenties and many never marry. Under birth spacing, strongest in Japan and
 slight in China and Korea, couples space and stop births by custom. Modern
 contraception wears both away, and health care wears away birth spacing; women's
 paid work and farms that pass whole to one heir make late marriage more common.
+Both customs also spread slowly from neighbouring states.
 The figure then falls with literacy, child survival and city life, and family policy moves it (see [Family policy measures](#family-policy-measures)). Under Full, the figure shown is what births came to that
 year, so decrees, famine and other effects on births count in it; its tooltip
 lists them as births added on top of the census. The means to plan a family
 grow with literacy and with contraception: Vulcanization, Feminism, the
 Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
 State-Sponsored Family Planning adds more, whoever can read. Their tooltips show
-each line. Life expectancy follows five
+each line. Under Full, family limitation adds to them too: the share of couples
+who stop at the family size they want by older methods, which France starts with
+at 60%. It spreads from neighbouring countries that practise it, grows under
+Forced Heirship in farming countries and in nearly universally literate ones,
+less under a state religion, and never falls back, though modern contraception takes over its part
+of the means as it arrives. It shows as Family Limitation among a country's
+modifiers. Under Full, too, where a cultural hegemon's culture outweighs yours
+(the Foreign Cultural Benchmark), the size of family its people want pulls yours
+a little toward it: a few percent at most, shown as the cultural hegemon's
+example in the children-per-woman tooltip. Life expectancy follows five
 causes of death, which standard of living, medicine, health laws and institutions
 bring down. Medicine saves lives only as far as health care reaches. Markets and
 charity give some care everywhere; a health law adds more with each level of the

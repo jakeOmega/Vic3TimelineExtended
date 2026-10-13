@@ -1561,7 +1561,7 @@
  inh_dispersed_wealth_desc:0 "Estates are divided as they pass, and few great houses remain to buy influence. Grows as the national [concept_inheritance_concentration] falls below 50 (now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!)."
  inh_dynasty_founded:0 "A New Dynasty"
  inh_fewer_children:0 "Fewer Heirs"
- inh_forced_heirship_rural_desc:0 "Smallholders have fewer children so the farm is not split again, and stay on their plots. Scaled by the state's share of Peasants and Farmers."
+ inh_forced_heirship_rural_desc:0 "Smallholders have fewer children so the farm is not split again, and stay on their plots. Scaled by the state's share of Peasants and Farmers. Where the demographic census sets a state's births and deaths, its family limitation takes the place of the smaller families."
  inh_foundation_endowed:0 "A Great Foundation"
  inh_great_fortunes:0 "Great Family Fortunes"
  inh_great_fortunes_desc:0 "Great fortunes pass whole from one generation to the next, and the families who hold them buy influence. Grows with the national [concept_inheritance_concentration] above 50 (now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!)."

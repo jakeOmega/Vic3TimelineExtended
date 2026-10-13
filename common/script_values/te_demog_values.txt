@@ -158,7 +158,8 @@ te_demog_open_slot = {
 
 # State scope: desired fertility as a factor (spec §2.3; demographics_model.fertility):
 # education x child survival x urban life x family policy (phase 2 step 3b: the measures' and Pro-Natalist Policy's
-# te_demog_tfr_policy, read live: te_demog_prepare has just stored it), within the floor and 1. Reads this year's e0
+# te_demog_tfr_policy, read live: te_demog_prepare has just stored it) x Cultural Hegemony's drift (phase 3, under
+# Full: te_demog_hegemon_used, which te_demog_prepare has just stored), within the floor and 1. Reads this year's e0
 # (te_demog_life_table).
 te_demog_desired = {
 	value = 1
@@ -166,8 +167,60 @@ te_demog_desired = {
 	multiply = te_demog_tfr_survival
 	multiply = te_demog_tfr_urban
 	multiply = te_demog_tfr_policy
+	multiply = te_demog_hegemon_used
 	min = te_demog_k_desired_floor
 	max = te_demog_k_desired_cap
+}
+
+# Phase 3 (te_demog_fl_effects.txt): Cultural Hegemony's factor on desired fertility, the owner's te_dg_ch_desired
+# under Full (the hegemon's desired family size, reached through its culture), else 1. State scope.
+te_demog_tfr_hegemon = {
+	value = 1
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			owner ?= { has_variable = te_dg_ch_desired }
+		}
+		value = owner.var:te_dg_ch_desired
+	}
+}
+
+# State scope: the factor the state's last step used (te_dg_hegemon, stored by te_demog_hegemon_store), 1 with none:
+# te_demog_desired and the children-per-woman tooltips read it, so they match the step until the next.
+te_demog_hegemon_used = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_hegemon }
+		value = var:te_dg_hegemon
+	}
+}
+
+# Phase 3, the children-per-woman tooltips: Family Limitation. Country scope: the share of couples who practise it (its
+# te_dg_pr_fl under Full; outside Full history's modifier's 0.6 where a country holds it, else 0).
+te_demog_fl_share_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pr_fl }
+		value = var:te_dg_pr_fl
+	}
+	else_if = {
+		limit = { has_modifier = te_demog_family_limitation }
+		value = te_demog_k_fl_history
+	}
+}
+
+# State scope: Family Limitation's part of the state's means, the owner's line (te_dg_fl_line under Full; outside Full
+# history's modifier's 0.6 where its owner holds it, else 0).
+te_demog_fl_line_shown = {
+	value = 0
+	if = {
+		limit = { owner ?= { has_variable = te_dg_fl_line } }
+		value = owner.var:te_dg_fl_line
+	}
+	else_if = {
+		limit = { owner ?= { has_modifier = te_demog_family_limitation } }
+		value = te_demog_k_fl_history
+	}
 }
 
 # State scope: desired fertility's three factors, each 1 at its reference and lower as

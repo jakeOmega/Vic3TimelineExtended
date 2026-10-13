@@ -76,7 +76,10 @@ def _engine(ring, inp, pop, war_dead=0.0, kills=0.0, migration=0.0):
                "te_dg_mig_in": max(migration, 0.0), "te_dg_mig_out": max(-migration, 0.0)}
     for c in range(len(P.MIGRANT_CLASSES)):
         locals_[f"te_dg_pf{c}"], locals_[f"te_dg_pm{c}"] = prof[(c, "f")], prof[(c, "m")]
-    stub = {"te_demog_flows": "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in locals_.items())}
+    # te_demog_enter_class now reads the booking rates generated from the same profile and class sums.
+    stub = {"te_demog_flows": "\n".join(
+        [f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in locals_.items()]
+        + ["te_demog_migrant_rates = yes"])}
     eng = _engine_for(inp, YEAR + 1, pop, effects=stub)
     for k in range(N):
         if ring.f[k] or ring.m[k]:

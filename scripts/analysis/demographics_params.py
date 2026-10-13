@@ -281,13 +281,14 @@ POOL_TO = 39                   # biological: fitness
 CONSCRIPTION_REF = 0.139
 CONSCRIPTION_MIN = -1.0
 CONSCRIPTION_MAX = 0.25
-# Held back (controller's decision, 2026-10-12, after the review of step 4), with the youth bulge and the sex balance:
-# T reads the same men the census's migrant booking distorts (SEX_BALANCE_EFFECTS, below). In the overnight Full run's
-# 1848 save 32 states sat at T -0.5 or below (2-37 men per 100 women) and 134 (15%) at the +0.25 ceiling (115-145);
-# 29.5-34.6% of people lived in states past +-0.05 in 1848-1904. The census computes and stores T (te_dg_mc, Full) and
-# the panel shows it, but no pair is applied until the follow-up on the migrant booking turns all three on together.
-# The generator writes it as te_demog_k_conscription_effects; `demographics_harness.py consequences --effects`.
-CONSCRIPTION_EFFECTS = False
+# On since the migrant booking (2026-10-12; docs/testing/demographics-migrant-booking-2026-10-12.md), with the youth bulge
+# and the sex balance. Step 4 held all three back (controller's decision, 2026-10-12, after its review): T reads the men
+# the census's booking of the residual distorted (in the overnight Full run's 1848 save 32 states sat at T -0.5 or below
+# and 15% at the +0.25 ceiling; 29.5-34.6% of people lived in states past +-0.05 in 1848-1904). Booked by the cap and
+# the self-correcting labour split, the run's re-walk keeps T within -0.13 to +0.25 with 0.4-1.6% of people past 0.15
+# and the great powers within +-0.07 by decade (`demographics_harness.py rebook`). The generator writes the switch as
+# te_demog_k_conscription_effects (1 on, 0 held back).
+CONSCRIPTION_EFFECTS = True
 # When it applies, no pair below this |T| (the review's Minor 2: a term that small isn't worth a modifier line).
 CONSCRIPTION_CUT = 0.01
 # The youth bulge (§4.3): y = clamp((the share aged 20-29 - YOUTH_FROM) / YOUTH_SPAN, 0, 1) x clamp(unemployment /
@@ -300,10 +301,10 @@ YOUTH_SPAN = 0.06
 YOUTH_UNEMPLOYMENT_FULL = 0.2
 YOUTH_RADICALS = 0.15          # state_radicals_from_political_movements_mult at y = 1
 YOUTH_TURMOIL = 0.10           # state_turmoil_effects_mult at y = 1
-# Held back with conscription (above): 73% of the 1898 save's bulge states sit outside 90-110 men per 100 women, so the
-# bulges are mostly the migrant booking's young men. The census computes and stores y (te_dg_yb, Full) and the panel
-# shows it; no modifier applies until the follow-up. Written as te_demog_k_youth_effects.
-YOUTH_BULGE_EFFECTS = False
+# On with conscription (above): step 4 held it back because 73% of the 1898 save's bulge states sat outside 90-110 men
+# per 100 women, the booking's young men; re-walked with the booking, no state's 20-29 share passes 0.183 to 1901.
+# Written as te_demog_k_youth_effects.
+YOUTH_BULGE_EFFECTS = True
 YOUTH_CUT = 0.02               # when it applies, no modifier below this y
 # Sex balance (§4.4, call 10), on te_dg_sex_balance (men per 100 women aged 20-59). The census's adults run 91.5-98 men
 # per 100 women in every 1836 state (male deaths from work, accidents and violence), so an effect measured from 100
@@ -313,16 +314,12 @@ YOUTH_CUT = 0.02               # when it applies, no modifier below this y
 # anchor (-8.9%) where the square root would give -4.6%. The floor is parent §3's "capped". The women's rate gains up to
 # SEX_WOMEN_RATE and feminist movement support up to SEX_FEMINIST, both full at SEX_FEWER_FULL. More men than women:
 # radicals from movements up to SEX_RADICALS, from SEX_MORE_FROM to full at SEX_MORE_FULL (Bare Branches).
-# Held back (controller's decision, 2026-10-12), as conscription and the youth bulge are (above), and for the same cause:
-# the census computes, stores and shows the sex balance, but none of its
-# effects apply: not the births term, the women's-rate addition, feminist support or the radicals line. The census
-# books every unexplained residual as migrants by its profile, labour migrants 90% aged 18-35 and mostly men, which
-# hollows out the men of famine-hit states: in the overnight Full run's 1848-1904 saves 37-41% of states sat at one effect
-# or the other against the design's "under 2% in peace" (Hyderabad 50 men per 100 women in 1898, the Central Provinces
-# 28). A follow-up PR on the residual's migrant booking comes first; then all three switches go to True together. The
-# generator writes it as te_demog_k_sex_effects; `demographics_harness.py consequences --effects` judges the band as if it
-# were on. Children per woman's breakdown then gains a "Few men to marry" line (te_demog_tfr_sex), left out meanwhile.
-SEX_BALANCE_EFFECTS = False
+# On with the other two (above). Step 4 held it back because the census's booking of the residual hollowed out or piled
+# up states' men: in the overnight Full run's 1848-1904 saves 37-41% of states sat at one effect or the other against the
+# design's "under 2% in peace" (Hyderabad 50 men per 100 women in 1898, the Central Provinces 28). Re-walked with the
+# booking, 0.0-0.6% do (1848, 1898, 1901). The generator writes it as te_demog_k_sex_effects (1 on, 0 held back), and
+# children per woman's breakdown shows its "Few men to marry" line (te_demog_tfr_sex).
+SEX_BALANCE_EFFECTS = True
 SEX_FEWER_FROM = 90.0
 SEX_FEWER_FULL = 80.0
 SEX_BIRTHS_FLOOR = 0.8
@@ -406,6 +403,62 @@ LM_WOMENS_WORK = 0.3
 IMPARTIBLE_LAWS = ("law_primogeniture",)   # and Undivided Farm Succession (te_inh_has_undivided_farms), script only
 # The panel (spec 5.3): women's mean age at first marriage, about 19 + 7 x the Late Marriage share.
 MARRIAGE_AGE_AT_ZERO, MARRIAGE_AGE_SPAN = 19, 7
+
+# ---- Phase 3: the neighbour spread, Family Limitation as a general practice, Cultural Hegemony's drift ----------
+# Parent spec docs/superpowers/specs/2026-10-08-demographics-design.md section 13 ("Family Limitation as a general
+# practice, not France's") and section 6's Cultural Hegemony row; the late-marriage spec's 4.4 (the spread). Owner,
+# 2026-10-12: build as section 13 proposes (a national practice), no country-specific mechanics. Results:
+# docs/testing/demographics-family-limitation-2026-10-12.md.
+#
+# The neighbour spread of Late Marriage and Birth Spacing (late-marriage spec 4.2-4.4): each step also closes this share
+# of the gap to its neighbouring states' people-weighted mean, both ways (te_demog_practices_neighbours). Kept slow
+# because the Hajnal line was stable for centuries: an edge state moves about a fifth of the way in 50 years.
+PRACTICE_SPREAD = 0.005
+# Family Limitation: a national practice, the share of couples who stop at the family size they want by methods older
+# than any modern one (withdrawal, abstinence). A country's share, 0-1 (te_dg_pr_fl), under the Demographics rule's Full
+# setting only; outside Full France keeps history's te_demog_family_limitation at FAMILY_LIMITATION_MEANS, as before.
+# Applied as that same modifier at multiplier line / FAMILY_LIMITATION_MEANS, so its one line in the means
+# (state_fertility_means_add) reads line = share x (1 - what modern methods have replaced), which the census reads
+# through te_demog_means as before. Below FL_LINE_MIN the country carries no line (no "+0.4%" rows on half the map).
+FL_LINE_MIN = 0.02
+# The start: a country holding history's modifier (France, as history sets its Forced Heirship) seeds at its value,
+# FAMILY_LIMITATION_MEANS; every other country at 0.
+# The yearly rise, each census year (fl_step): FL_RATE of the gap to the target its conditions give, and FL_SPREAD of the
+# gap to its neighbours' share (neighbouring states' owners, weighted by those states' people: a border-weighted mean,
+# so Catalonia's frontier with France counts and Portugal's size doesn't). Both act upward only: a practice once
+# learned is not unlearned (in the European Fertility Project no province's marital fertility rose again once it had
+# fallen 10%), and France's share would otherwise leak to its neighbours' zero. What replaces it is modern methods, below.
+FL_RATE = 0.025
+FL_SPREAD = 0.02
+# The target from the country's conditions, people-weighted over its census states, within 0-1:
+#   smallholders under partible inheritance: FL_HEIRSHIP x the agrarian share under Forced Heirship (law_equal_
+#   inheritance), not with Undivided Farm Succession, which switches the rural cut off today too. It is Forced Heirship's
+#   old rural birth cut (inh_forced_heirship_rural, -15% x the farm share), folded in under Full (section 13);
+#   + literacy, read through the church law: FL_LITERACY x clamp((literacy - FL_LITERACY_FROM) / FL_LITERACY_SPAN, 0, 1)
+#   x FL_CHURCH[the law] (a secular, literate society limits births; the game's literacy rises fast in the West, so the
+#   term starts late and stays small).
+FL_HEIRSHIP = 1.0
+FL_LITERACY = 0.3
+FL_LITERACY_FROM = 0.8
+FL_LITERACY_SPAN = 0.2
+FL_CHURCH = {"law_state_religion": 0.5, "law_freedom_of_conscience": 1.0, "law_total_separation": 1.5,
+             "law_state_atheism": 1.5}   # a State Religion variant takes its parent's (has_law_or_variant)
+FL_CHURCH_DEFAULT = 1.0
+# Modern methods replace it: the line is share x (1 - the erosion Late Marriage and Birth Spacing take from contraception,
+# te_demog_pr_erosion_contraception), at the country's people-weighted literacy. The couples who practised it now use
+# the methods the means already count (the techs' state_contraception_add), so the West of 1950 isn't counted twice.
+FL_ERODES = True
+# Cultural Hegemony's drift (section 6, "the soap-opera effect": Brazil's fertility fell where TV novelas reached, La
+# Ferrara, Chong and Duryea 2012): under Full, a factor on each state's desired fertility, the country's te_dg_ch_desired.
+# Each census year it moves CH_RATE of the way to 1 + CH_WEIGHT x exposure x (the hegemon's desired / the country's own
+# - 1), within 1 +- CH_CAP. Exposure is the hegemon's cultural lead over the country, as the foreign benchmark reads
+# it (ch_benchmark_applied / cultural_hegemony_foreign_benchmark_max: (the hegemon's share - the country's) / 100 x 1 -
+# its ideology resistance; 0 for the hegemon, and only while the Cultural Hegemony journal entry runs, the mass-media
+# era). Small: at a 30-point lead and the hegemon wanting two-thirds as many children, desired falls by 5%.
+CH_WEIGHT = 0.5
+CH_RATE = 0.2
+CH_CAP = 0.1
+CH_BENCHMARK_MAX = 3.0   # cultural_hegemony_foreign_benchmark_max (cultural_hegemony_script_values.txt)
 
 # ---- Cause multipliers from state inputs (§2.4) -----------------------------------
 # Medicine for infection, maternal and chronic deaths is 1 - access x treatment (the
@@ -637,6 +690,24 @@ FAMILY_RIGHTS_WEIGHT = 0.2        # x women's work share / FULL_FEMALE_WORK_SHAR
 FULL_FEMALE_WORK_SHARE = 0.48     # Protected Class's share: women's rights at their fullest
 CHAIN_STEP, CHAIN_CAP = 0.02, 0.2  # per consecutive year of net inflow, at most
 CRISIS_AT_WAR = 0.3               # refugees' weight while the owner is at war, before devastation and turmoil
+# ---- The residual's booking keeps the structure plausible (migrant booking, 2026-10-12) ---------------------------
+# docs/testing/demographics-migrant-booking-2026-10-12.md. The residual is the engine's own migration (its per-state
+# weekly statistics agree with it, in starving states too), and the engine moves whole pops, which have no age or sex:
+# the profile above is the census's overlay. Booked the same way year after year, a state losing 2-7% of its people a
+# year for decades lost nearly all its young men (Hill Punjab 2 men per 100 women by 1870) and frontiers piled them up
+# (Durango 194). Two rules, fitted on a re-walk of the 2026-10-12 overnight run (demographics_harness.py rebook):
+# - The cap: in one step the profile adds to a class and sex at most MIGRANT_CAP_IN of its people, and takes at most
+#   MIGRANT_CAP_OUT; what is left over is booked at one flat rate over every class and sex (whole families moving).
+#   Below the cap the booking is the profile's, as before.
+MIGRANT_CAP_OUT = 0.03
+MIGRANT_CAP_IN = 0.05
+# - The labour kind's sex split corrects itself: departures' women's share moves to LABOUR_BALANCE_SHARE as the state's
+#   men per 100 women aged 20-59 (te_dg_sex_balance, the census's last figure) fall from LABOUR_BALANCE_LOW's first
+#   figure to its second, and arrivals' as they rise through LABOUR_BALANCE_HIGH. With the cap they keep migration
+#   alone from carrying a state past the sex-balance effects' thresholds (SEX_FEWER_FROM 90, SEX_MORE_FROM 110).
+LABOUR_BALANCE_SHARE = 0.5
+LABOUR_BALANCE_LOW = (95.0, 91.0)
+LABOUR_BALANCE_HIGH = (105.0, 115.0)
 
 # ---- Income inequality (§4.1) -----------------------------------------------------
 # Spending per head stands in for income: the buy package cost at the pop's wealth / 100, linear

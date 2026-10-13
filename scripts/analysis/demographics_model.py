@@ -58,6 +58,8 @@ class Inputs:
     wealth_bands: dict | None = None
     lx_w: float | None = None
     ecto_levels: float = 0.0
+    # phase 3: Cultural Hegemony's drift, the owner's factor on desired fertility (te_dg_ch_desired, under Full); 1 = none
+    hegemon: float = 1.0
 
 
 def clamp(x, lo, hi):
@@ -274,7 +276,8 @@ def fertility(inp, e0):
     urban = urban_term(inp)
     # family policy (phase 2 step 3b): the measures' and Pro-Natalist Policy's desired type, floored and capped
     policy = policy_term(inp)
-    desired = clamp(education * survival * urban * policy, P.DESIRED_FLOOR, P.DESIRED_CAP)
+    # phase 3: Cultural Hegemony's drift toward the hegemon's desired family size (te_demog_tfr_hegemon), 1 with none
+    desired = clamp(education * survival * urban * policy * inp.hegemon, P.DESIRED_FLOOR, P.DESIRED_CAP)
     mn = means(inp)
     factor = 1 - mn * (1 - desired)
     practices = {p: 1 - cut * inp.practices.get(p, 0.0) for p, cut in P.PRACTICE_CUT.items()}
@@ -283,8 +286,8 @@ def fertility(inp, e0):
     for term in practices.values():
         tfr *= term
     out = {"tfr": tfr, "wealth": wealth, "natural": natural, "education": education,
-           "survival": survival, "urban": urban, "policy": policy, "desired": desired, "means": mn, "factor": factor,
-           "sex": sex, **practices}
+           "survival": survival, "urban": urban, "policy": policy, "hegemon": inp.hegemon, "desired": desired,
+           "means": mn, "factor": factor, "sex": sex, **practices}
     # planned and unplanned births (late-game §3.1): the families who choose their number, and the births the means
     # don't reach. Computed from the result's own tfr and factor, so every term multiplying the factor (wealth,
     # natural, #906's practices) scales both parts alike.
@@ -319,12 +322,19 @@ def contraception_beyond(inp):
     return inp.mods.get(P.CONTRACEPTION_TYPE, 0.0) * (P.MEANS_ACCESS_BASE + (1 - P.MEANS_ACCESS_BASE) * inp.literacy)
 
 
+def contraception_erosion(inp):
+    """Contraception's part of a practice's erosion (§4.2; te_demog_pr_erosion_contraception): the means beyond
+    traditional methods, from 0 at PRACTICE_EROSION_FROM to PRACTICE_EROSION_CONTRACEPTION at FROM + SPAN. Family
+    Limitation's line erodes by it too (phase 3; fl_line)."""
+    return P.PRACTICE_EROSION_CONTRACEPTION * clamp(
+        (contraception_beyond(inp) - P.PRACTICE_EROSION_FROM) / P.PRACTICE_EROSION_SPAN, 0.0, 1.0)
+
+
 def practice_erosion(practice, inp):
     """How much of the start the state's conditions take away, 0-1 (§4.2, §4.3). Health care's part reads the access
     medicine has reached above the base (te_dg_acc - BASE_ACCESS: since #916 access drifts toward its target), so
     Birth Spacing fades as medicine spreads; with no drift held it is the target, the access modifier."""
-    contra = P.PRACTICE_EROSION_CONTRACEPTION * clamp(
-        (contraception_beyond(inp) - P.PRACTICE_EROSION_FROM) / P.PRACTICE_EROSION_SPAN, 0.0, 1.0)
+    contra = contraception_erosion(inp)
     reached = (inp.medicine if inp.medicine is not None else medicine_targets(inp))["access"] - P.BASE_ACCESS
     access = P.PRACTICE_EROSION_ACCESS[practice] * clamp(reached / P.PRACTICE_ACCESS_SPAN, 0.0, 1.0)
     return clamp(contra + access, 0.0, 1.0)
@@ -341,9 +351,14 @@ def practice_target(practice, inp, start):
     return clamp(target, 0.0, 1.0)
 
 
-def practice_drift(share, target):
-    """One year's drift (§4.2): PRACTICE_RATE of the gap. The neighbour spread is phase 3's (the plan's D6)."""
-    return clamp(share + P.PRACTICE_RATE * (target - share), 0.0, 1.0)
+def practice_drift(share, target, neighbours=None):
+    """One year's drift (§4.2): PRACTICE_RATE of the gap to the target, and (phase 3, §4.4) PRACTICE_SPREAD of the gap to
+    the neighbouring states' people-weighted mean, both ways, both from last year's share. neighbours None (no
+    neighbouring state holds a share) spreads nothing."""
+    move = P.PRACTICE_RATE * (target - share)
+    if neighbours is not None:
+        move += P.PRACTICE_SPREAD * (neighbours - share)
+    return clamp(share + move, 0.0, 1.0)
 
 
 def practice_seed(practice, inp, start, siblings=(), region=None):
@@ -367,6 +382,81 @@ def practice_seed(practice, inp, start, siblings=(), region=None):
 def marriage_age(share):
     """Women's mean age at first marriage the panel shows (§5.3): 19 with no Late Marriage, 26 at a full share."""
     return P.MARRIAGE_AGE_AT_ZERO + P.MARRIAGE_AGE_SPAN * share
+
+
+# ---- Phase 3: Family Limitation as a general practice, Cultural Hegemony's drift (te_demog_fl_effects.txt) -------
+# Parent spec section 13 and section 6's Cultural Hegemony row; demographics_params' phase 3 block.
+
+def people_mean(pairs):
+    """The people-weighted mean of [(people, value)], or None with no people (no neighbour holds one)."""
+    held = [(p, v) for p, v in pairs if p > 0]
+    people = sum(p for p, _v in held)
+    return sum(p * v for p, v in held) / people if people > 0 else None
+
+
+def fl_church(laws):
+    """The church law's weight on Family Limitation's literacy term (P.FL_CHURCH; a State Religion variant is a
+    State Religion)."""
+    for law, weight in P.FL_CHURCH.items():
+        if law in laws:
+            return weight
+    if {"law_millet_system", "law_people_of_the_book"} & set(laws):
+        return P.FL_CHURCH["law_state_religion"]
+    return P.FL_CHURCH_DEFAULT
+
+
+def fl_target(agrarian_share, literacy, laws, undivided=False):
+    """Where a country's Family Limitation rises (te_demog_fl_target): smallholders under Forced Heirship (FL_HEIRSHIP x
+    the agrarian share, not with Undivided Farm Succession: the rural cut it folds in), plus literacy above
+    FL_LITERACY_FROM read through the church law, within 0-1. Its people-weighted farm share and literacy."""
+    heirship = P.FL_HEIRSHIP * agrarian_share if "law_equal_inheritance" in laws and not undivided else 0.0
+    lit = P.FL_LITERACY * clamp((literacy - P.FL_LITERACY_FROM) / P.FL_LITERACY_SPAN, 0.0, 1.0) * fl_church(laws)
+    return clamp(heirship + lit, 0.0, 1.0)
+
+
+def fl_seed(history_modifier):
+    """A country's first share under Full (te_demog_fl_refresh): history's modifier's value where history gave it one
+    (France), else 0."""
+    return P.FAMILY_LIMITATION_MEANS if history_modifier else 0.0
+
+
+def fl_step(share, target, neighbours=None):
+    """One census year (te_demog_fl_refresh): FL_RATE of the gap up to the target and FL_SPREAD of the gap up to the
+    neighbours' border-weighted mean, both from last year's share and upward only (a practice once learned is not
+    unlearned). neighbours None: no neighbouring state's owner holds a share."""
+    up = P.FL_RATE * max(0.0, target - share)
+    if neighbours is not None:
+        up += P.FL_SPREAD * max(0.0, neighbours - share)
+    return clamp(share + up, 0.0, 1.0)
+
+
+def fl_line(share, erosion=0.0):
+    """The country's line in the means (state_fertility_means_add, its te_demog_family_limitation at multiplier line /
+    FAMILY_LIMITATION_MEANS): the share less what modern methods have replaced (the country's people-weighted
+    contraception_erosion, when FL_ERODES), 0 below FL_LINE_MIN."""
+    line = share * (1 - (erosion if P.FL_ERODES else 0.0))
+    return line if line >= P.FL_LINE_MIN else 0.0
+
+
+def ch_exposure(benchmark_applied):
+    """How far the hegemon's culture reaches a country, 0-1 (te_demog_ch_exposure): its foreign benchmark's multiplier
+    (ch_benchmark_applied: (the hegemon's share - its own) / 100 x the benchmark's max x 1 - its resistance) over that
+    max. 0 for the hegemon, and with no Cultural Hegemony journal entry running."""
+    return clamp(benchmark_applied / P.CH_BENCHMARK_MAX, 0.0, 1.0)
+
+
+def ch_target(exposure, hegemon_desired, own_desired):
+    """Where Cultural Hegemony's factor on desired fertility moves (te_demog_ch_target): 1 + CH_WEIGHT x exposure x (the
+    hegemon's desired / the country's own, before the factor, - 1), within 1 +- CH_CAP; 1 with no exposure or no
+    figure."""
+    if exposure <= 0 or not hegemon_desired or not own_desired:
+        return 1.0
+    return clamp(1 + P.CH_WEIGHT * exposure * (hegemon_desired / own_desired - 1), 1 - P.CH_CAP, 1 + P.CH_CAP)
+
+
+def ch_drift(factor, target):
+    """One census year of the factor (te_demog_ch_refresh): CH_RATE of the gap."""
+    return factor + P.CH_RATE * (target - factor)
 
 
 def asfr_shape(rate_age):
@@ -677,8 +767,22 @@ def old_age(qf, qm):
     return (old_age_threshold(qf) + old_age_threshold(qm)) * 0.5
 
 
-def migrant_profile(inp):
-    """Per (class, sex) share of a net migration, summing to 1 (§2.5)."""
+def labour_balance_weight(balance, sign):
+    """How far the labour kind's women's share has moved to LABOUR_BALANCE_SHARE (0-1): departures (sign < 0) as the
+    state's men per 100 women fall through LABOUR_BALANCE_LOW, arrivals (sign > 0) as they rise through
+    LABOUR_BALANCE_HIGH (te_demog_labour_balance_weight). No balance (None) or no migration: 0."""
+    if balance is None or not sign:
+        return 0.0
+    if sign < 0:
+        start, full = P.LABOUR_BALANCE_LOW
+        return clamp((start - balance) / (start - full), 0.0, 1.0)
+    start, full = P.LABOUR_BALANCE_HIGH
+    return clamp((balance - start) / (full - start), 0.0, 1.0)
+
+
+def migrant_profile(inp, balance=None, sign=0):
+    """Per (class, sex) share of a net migration, summing to 1 (§2.5). balance and sign (the migration's) move the
+    labour kind's women's share toward LABOUR_BALANCE_SHARE (labour_balance_weight)."""
     refugee = clamp(inp.crisis, 0.0, 1.0)
     rights = female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
     family = P.FAMILY_BASE + sum(v for t, v in P.FAMILY_TRANSPORT_TECHS.items() if t in inp.techs)
@@ -688,6 +792,7 @@ def migrant_profile(inp):
     labour_f = clamp(P.LABOUR_FEMALE_SHARE_MIN + inp.female_job_share * rights
                      * (P.LABOUR_FEMALE_SHARE_MAX - P.LABOUR_FEMALE_SHARE_MIN),
                      P.LABOUR_FEMALE_SHARE_MIN, P.LABOUR_FEMALE_SHARE_MAX)
+    labour_f += (P.LABOUR_BALANCE_SHARE - labour_f) * labour_balance_weight(balance, sign)
     out = {}
     for c in range(len(P.MIGRANT_CLASSES)):
         lw = labour * P.MIGRANT_PROFILE["labour"]["weights"][c]
@@ -697,6 +802,34 @@ def migrant_profile(inp):
         out[(c, "m")] = lw * (1 - labour_f) + (fw + rw) * 0.5
     total = sum(out.values()) or 1.0
     return {k: v / total for k, v in out.items()}
+
+
+def migrant_rates(ring, prof, migration):
+    """{(class, sex): the share of each cohort of that class and sex the year's migration adds (+) or takes (-)}: the
+    profile's share of the migrants over the class's people (its last-year sum), at most MIGRANT_CAP_IN or _OUT of them;
+    what the cap and any class under one person leave over is booked at one flat rate over every class and sex
+    (te_demog_migrant_rates). Both 0 without migration."""
+    n = len(P.MIGRANT_CLASSES)
+    out = {(c, s): 0.0 for c in range(n) for s in "fm"}
+    if not migration:
+        return out
+    amount, sign = abs(migration), (1.0 if migration > 0 else -1.0)
+    cap = P.MIGRANT_CAP_IN if migration > 0 else P.MIGRANT_CAP_OUT
+    left, everyone = 0.0, 0.0
+    for c in range(n):
+        for s, sums in (("f", ring.class_f), ("m", ring.class_m)):
+            people = sums[c]
+            want = amount * prof[(c, s)]
+            if people < 1:
+                left += want
+                continue
+            everyone += people
+            take = min(want, cap * people)
+            left += want - take
+            out[(c, s)] = take / people
+    flat = left / everyone if everyone >= 1 else 0.0
+    return {k: sign * (v + flat) if (ring.class_f if k[1] == "f" else ring.class_m)[k[0]] >= 1 else 0.0
+            for k, v in out.items()}
 
 
 def class_of(age):
@@ -1022,7 +1155,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         e0 = (lt_f["e0"] + lt_m["e0"]) / 2
         fert = fertility(inp, e0)
         tfr = fert["tfr"]
-        prof = migrant_profile(inp)
+        prof = migrant_profile(inp, inp.sex_balance, migration)
     else:
         qf, qm, mmr, tfr, prof = rates
         lt_f, lt_m = life_table(qf), life_table(qm)
@@ -1055,6 +1188,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
     war_f = clamp(war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw, 0, 0.5) if ring.faw else 0.0
     kill = clamp(kills / ring.total, 0, 0.9) if ring.total else 0.0
+    mig = migrant_rates(ring, prof, migration)
     births = deaths = 0.0
     birth_age = 0.0
     open_k = year % N
@@ -1099,15 +1233,13 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         m2 -= m * kill
         c = class_of(r)
         if migration > 0:
-            if ring.class_f[c] >= 1:
-                f2 += migration * prof[(c, "f")] * f / ring.class_f[c]
-            if ring.class_m[c] >= 1:
-                m2 += migration * prof[(c, "m")] * m / ring.class_m[c]
+            f2 += f * mig[(c, "f")]
+            m2 += m * mig[(c, "m")]
         elif migration < 0:
-            if ring.class_f[c] >= 1:
-                f2 -= min(max(f2, 0.0) * 0.5, -migration * prof[(c, "f")] * f / ring.class_f[c])
-            if ring.class_m[c] >= 1:
-                m2 -= min(max(m2, 0.0) * 0.5, -migration * prof[(c, "m")] * m / ring.class_m[c])
+            if mig[(c, "f")] < 0:
+                f2 -= min(max(f2, 0.0) * 0.5, -f * mig[(c, "f")])
+            if mig[(c, "m")] < 0:
+                m2 -= min(max(m2, 0.0) * 0.5, -m * mig[(c, "m")])
         ring.f[k], ring.m[k] = max(f2, 0.0), max(m2, 0.0)
     # the pool: last group's rates, ages a year
     if lx is not None:
