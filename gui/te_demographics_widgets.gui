@@ -766,12 +766,13 @@ types te_demographics_widgets
 				}
 			}
 			te_demog_figure_row = {
-				tooltip = "te_demog_ov_e0_tt"
+				### phase 3 (the late-game design §6.1): past 100 the value reads "100+" (the census's life table stops at 150)
+				tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_e0_over_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_e0_tt_100', 'te_demog_ov_e0_tt' )]"
 				blockoverride "row_label" {
 					text = "te_demog_ov_e0"
 				}
 				blockoverride "row_value" {
-					text = "te_demog_ov_e0_value"
+					text = "[SelectLocalization( GetScriptedGui('te_demog_lx_e0_over_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_e0_100', 'te_demog_ov_e0_value' )]"
 				}
 				blockoverride "row_trend" {
 					te_demog_trend_good_up = {
@@ -799,12 +800,36 @@ types te_demographics_widgets
 				}
 			}
 			te_demog_figure_row = {
-				tooltip = "te_demog_ov_old_age_tt"
+				### phase 3 (§1.5): "None" once no age has fifteen years left; the hover adds the untreated's own threshold
+				tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_old_c_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_old_age_tt_late', 'te_demog_ov_old_age_tt' )]"
 				blockoverride "row_label" {
 					text = "te_demog_ov_old_age"
 				}
 				blockoverride "row_value" {
 					text = "[SelectLocalization( GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_old_age_value', 'te_demog_ov_pending' )]"
+				}
+			}
+			### Phase 3 (the late-game design §6.2): Living to 100 and Biological Age, shown once the country's late figures
+			### exist (te_demog_lx_ready_sgui: one of its census states has had a late step). Values fit the 200-unit cell:
+			### "38 (calendar 61)" is 16 characters, about 160.
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_lx_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "te_demog_ov_lx_l100_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_l100"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_lx_l100_value"
+				}
+			}
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_lx_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "te_demog_ov_lx_bio_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_bio"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_lx_bio_value"
 				}
 			}
 			te_demog_figure_row = {
@@ -937,6 +962,36 @@ types te_demographics_widgets
 		te_demog_panel = {
 			visible = "[Not(GetVariableSystem.Exists('te_demog_pyr_closed'))]"
 
+			### Phase 3: the Calendar / Biological toggle, where the biological bands exist (a GUI flag, no script state)
+			button = {
+				visible = "[GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = default_button_action
+				size = { 220 24 }
+				parentanchor = hcenter
+				onclick = "[GetVariableSystem.Toggle('te_demog_pyr_bio_open')]"
+				tooltip = "te_demog_pyr_toggle_tt"
+
+				textbox = {
+					visible = "[Not(GetVariableSystem.Exists('te_demog_pyr_bio_open'))]"
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 210
+					elide = right
+					using = fontsize_small
+					text = "te_demog_pyr_show_bio"
+				}
+				textbox = {
+					visible = "[GetVariableSystem.Exists('te_demog_pyr_bio_open')]"
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 210
+					elide = right
+					using = fontsize_small
+					text = "te_demog_pyr_show_cal"
+				}
+			}
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
@@ -970,427 +1025,753 @@ types te_demographics_widgets
 					text = "te_demog_pyr_women"
 				}
 			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_17', 'te_demog_pyr_tt_now_17' )]"
+			### Phase 3 (the late-game design §6.2): calendar ages, or biological ages where the bands exist (each cohort's
+			### treated part at its biological band); the tab's own flag (te_demog_pyr_bio_open: the biological view, off until opened)
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+				visible = "[Not( And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_17', 'te_demog_pyr_tt_now_17' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "85+"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm17').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf17').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm17').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf17').GetValue )]"
+					}
 				}
-				blockoverride "band_label" {
-					raw_text = "85+"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_16', 'te_demog_pyr_tt_now_16' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "80–84"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm16').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf16').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm16').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf16').GetValue )]"
+					}
 				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_15', 'te_demog_pyr_tt_now_15' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "75–79"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm15').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf15').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm15').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf15').GetValue )]"
+					}
 				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm17').GetValue ) )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_14', 'te_demog_pyr_tt_now_14' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "70–74"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm14').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf14').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm14').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf14').GetValue )]"
+					}
 				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf17').GetValue )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_13', 'te_demog_pyr_tt_now_13' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "65–69"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm13').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf13').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm13').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf13').GetValue )]"
+					}
 				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm17').GetValue ) )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_12', 'te_demog_pyr_tt_now_12' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "60–64"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm12').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf12').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm12').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf12').GetValue )]"
+					}
 				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf17').GetValue )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_11', 'te_demog_pyr_tt_now_11' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "55–59"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm11').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf11').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm11').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf11').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_10', 'te_demog_pyr_tt_now_10' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "50–54"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm10').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf10').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm10').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf10').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_9', 'te_demog_pyr_tt_now_9' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "45–49"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm9').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf9').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm9').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf9').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_8', 'te_demog_pyr_tt_now_8' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "40–44"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm8').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf8').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm8').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf8').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_7', 'te_demog_pyr_tt_now_7' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "35–39"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm7').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf7').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm7').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf7').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_6', 'te_demog_pyr_tt_now_6' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "30–34"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm6').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf6').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm6').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf6').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_5', 'te_demog_pyr_tt_now_5' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "25–29"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm5').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf5').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm5').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf5').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_4', 'te_demog_pyr_tt_now_4' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "20–24"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm4').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf4').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm4').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf4').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_3', 'te_demog_pyr_tt_now_3' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "15–19"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm3').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf3').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm3').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf3').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_2', 'te_demog_pyr_tt_now_2' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "10–14"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm2').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf2').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm2').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf2').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_1', 'te_demog_pyr_tt_now_1' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "5–9"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm1').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf1').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm1').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf1').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_0', 'te_demog_pyr_tt_now_0' )]"
+					}
+					blockoverride "band_label" {
+						raw_text = "0–4"
+					}
+					blockoverride "next_visible" {
+						visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm0').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf0').GetValue )]"
+					}
+					blockoverride "men_next" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm0').GetValue ) )]"
+					}
+					blockoverride "women_next" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf0').GetValue )]"
+					}
 				}
 			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_16', 'te_demog_pyr_tt_now_16' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "80–84"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm16').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf16').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm16').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf16').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_15', 'te_demog_pyr_tt_now_15' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "75–79"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm15').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf15').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm15').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf15').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_14', 'te_demog_pyr_tt_now_14' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "70–74"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm14').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf14').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm14').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf14').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_13', 'te_demog_pyr_tt_now_13' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "65–69"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm13').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf13').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm13').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf13').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_12', 'te_demog_pyr_tt_now_12' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "60–64"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm12').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf12').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm12').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf12').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_11', 'te_demog_pyr_tt_now_11' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "55–59"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm11').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf11').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm11').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf11').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_10', 'te_demog_pyr_tt_now_10' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "50–54"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm10').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf10').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm10').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf10').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_9', 'te_demog_pyr_tt_now_9' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "45–49"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm9').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf9').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm9').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf9').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_8', 'te_demog_pyr_tt_now_8' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "40–44"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm8').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf8').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm8').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf8').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_7', 'te_demog_pyr_tt_now_7' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "35–39"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm7').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf7').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm7').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf7').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_6', 'te_demog_pyr_tt_now_6' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "30–34"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm6').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf6').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm6').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf6').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_5', 'te_demog_pyr_tt_now_5' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "25–29"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm5').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf5').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm5').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf5').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_4', 'te_demog_pyr_tt_now_4' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "20–24"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm4').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf4').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm4').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf4').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_3', 'te_demog_pyr_tt_now_3' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "15–19"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm3').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf3').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm3').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf3').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_2', 'te_demog_pyr_tt_now_2' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "10–14"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm2').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf2').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm2').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf2').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_1', 'te_demog_pyr_tt_now_1' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "5–9"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm1').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf1').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm1').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf1').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_0', 'te_demog_pyr_tt_now_0' )]"
-				}
-				blockoverride "band_label" {
-					raw_text = "0–4"
-				}
-				blockoverride "next_visible" {
-					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm0').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf0').GetValue )]"
-				}
-				blockoverride "men_next" {
-					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm0').GetValue ) )]"
-				}
-				blockoverride "women_next" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf0').GetValue )]"
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+				visible = "[And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_17"
+					}
+					blockoverride "band_label" {
+						raw_text = "85+"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm17').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf17').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_16"
+					}
+					blockoverride "band_label" {
+						raw_text = "80–84"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm16').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf16').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_15"
+					}
+					blockoverride "band_label" {
+						raw_text = "75–79"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm15').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf15').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_14"
+					}
+					blockoverride "band_label" {
+						raw_text = "70–74"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm14').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf14').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_13"
+					}
+					blockoverride "band_label" {
+						raw_text = "65–69"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm13').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf13').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_12"
+					}
+					blockoverride "band_label" {
+						raw_text = "60–64"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm12').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf12').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_11"
+					}
+					blockoverride "band_label" {
+						raw_text = "55–59"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm11').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf11').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_10"
+					}
+					blockoverride "band_label" {
+						raw_text = "50–54"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm10').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf10').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_9"
+					}
+					blockoverride "band_label" {
+						raw_text = "45–49"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm9').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf9').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_8"
+					}
+					blockoverride "band_label" {
+						raw_text = "40–44"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm8').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf8').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_7"
+					}
+					blockoverride "band_label" {
+						raw_text = "35–39"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm7').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf7').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_6"
+					}
+					blockoverride "band_label" {
+						raw_text = "30–34"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm6').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf6').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_5"
+					}
+					blockoverride "band_label" {
+						raw_text = "25–29"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm5').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf5').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_4"
+					}
+					blockoverride "band_label" {
+						raw_text = "20–24"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm4').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf4').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_3"
+					}
+					blockoverride "band_label" {
+						raw_text = "15–19"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm3').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf3').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_2"
+					}
+					blockoverride "band_label" {
+						raw_text = "10–14"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm2').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf2').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_1"
+					}
+					blockoverride "band_label" {
+						raw_text = "5–9"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm1').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf1').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_pyr_bio_tt_0"
+					}
+					blockoverride "band_label" {
+						raw_text = "0–4"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbm0').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbbf0').GetValue )]"
+					}
 				}
 			}
 			te_demog_note = {
-				visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[And( Not( And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				text = "te_demog_pyr_legend"
 			}
 			te_demog_note = {
-				visible = "[Not( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				visible = "[And( Not( And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), Not( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				text = "te_demog_pyr_legend_now"
+			}
+			te_demog_note = {
+				visible = "[And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "te_demog_pyr_legend_bio"
 			}
 		}
 	}
@@ -2913,6 +3294,57 @@ types te_demographics_widgets
 		}
 	}
 
+	### Longevity (phase 3; the late-game design §6.2, rule 7): who is within reach of the treatments that slow ageing,
+	### and how much likelier they are than the rest to reach 100. Shown once the country's late figures exist (one of
+	### its census states has had a late step), after Work and Retirement; open by default (rule 1), with its own flag
+	### (te_demog_lx_closed). Labels fit the 240-unit cell ("Longevity Care", 14 characters); values the 200-unit one
+	### ("100% of people", 14).
+	type te_demog_sec_longevity = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('te_demog_lx_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_longevity"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_lx_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_lx_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_lx_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_lx_closed'))]"
+
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_lx_care_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_care"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_lx_care_value"
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_lx_gap_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_gap"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_lx_gap_value"
+				}
+			}
+		}
+	}
+
 	### One of the five pension positions (late-game §2.2), beside the pension age: three to a row, then two, each 156
 	### wide (3 x 156 + 2 x 6 = 480). The position in force is greyed (its scripted GUI is invalid for it), as are all
 	### five outside Full and while the five-year term runs. Labels fit the 146-unit text in the small font: "Linked:
@@ -2974,6 +3406,8 @@ types te_demographics_widgets
 
 			te_demog_overview = {}
 			te_demog_sec_work = {}
+			### phase 3: shown once the country's late figures exist
+			te_demog_sec_longevity = {}
 			### TODO (#894): the country's Causes of Death, people-weighted over its census states (te_dg_c_*_w
 			### in te_demog_country_census already weights the cause multipliers), once the state subtab's
 			### te_state_demog_causes has been seen in game (owner, 2026-10-11). It goes here, after the overview.
@@ -3073,12 +3507,13 @@ types te_demographics_widgets
 				}
 			}
 			te_demog_figure_row = {
-				tooltip = "te_demog_st_e0_tt"
+				### phase 3 (the late-game design §6.1): past 100 the value reads "100+"
+				tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_state_e0_over_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_e0_tt_100', 'te_demog_st_e0_tt' )]"
 				blockoverride "row_label" {
 					text = "te_demog_ov_e0"
 				}
 				blockoverride "row_value" {
-					text = "te_demog_st_e0_value"
+					text = "[SelectLocalization( GetScriptedGui('te_demog_lx_state_e0_over_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_ov_e0_100', 'te_demog_st_e0_value' )]"
 				}
 				blockoverride "row_trend" {
 					te_demog_trend_good_up = {
@@ -3106,12 +3541,34 @@ types te_demographics_widgets
 				}
 			}
 			te_demog_figure_row = {
-				tooltip = "te_demog_st_old_age_tt"
+				### phase 3 (§1.5): "None" once no age has fifteen years left; the hover adds the untreated's own threshold
+				tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_state_old_c_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_old_age_tt_late', 'te_demog_st_old_age_tt' )]"
 				blockoverride "row_label" {
 					text = "te_demog_ov_old_age"
 				}
 				blockoverride "row_value" {
 					text = "[SelectLocalization( GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_old_age_value', 'te_demog_ov_pending' )]"
+				}
+			}
+			### Phase 3 (the late-game design §6.2): Living to 100 and Biological Age, once the state has had a late step
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_lx_state_ready_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_st_lx_l100_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_l100"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_lx_l100_value"
+				}
+			}
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_lx_state_ready_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_st_lx_bio_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_bio"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_lx_bio_value"
 				}
 			}
 			te_demog_figure_row = {
@@ -3363,6 +3820,54 @@ types te_demographics_widgets
 		}
 	}
 
+	### The state's Longevity (phase 3), as the country's (te_demog_sec_longevity), with the state's own figures and the
+	### cover its ever-treated still have; its own flag (te_demog_st_lx_closed). Shown once the state has had a late step.
+	type te_state_demog_longevity = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('te_demog_lx_state_ready_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_longevity"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_lx_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_st_lx_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_st_lx_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_st_lx_closed'))]"
+
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_lx_care_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_care"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_lx_care_value"
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_lx_gap_tt"
+				blockoverride "row_label" {
+					text = "te_demog_lx_gap"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_lx_gap_value"
+				}
+			}
+		}
+	}
+
 	### The state's pyramid: the same row as the country's, 85 and over at the
 	### top, on the state's own scale (te_dg_pyr_max, te_demog_state_pyramid_max
 	### stored at its census: the largest of its 36 bands) and without the outline (next_visible off, so the
@@ -3392,6 +3897,36 @@ types te_demographics_widgets
 		te_demog_panel = {
 			visible = "[Not(GetVariableSystem.Exists('te_demog_st_pyr_closed'))]"
 
+			### Phase 3: the Calendar / Biological toggle, where the biological bands exist (a GUI flag, no script state)
+			button = {
+				visible = "[GetScriptedGui('te_demog_lx_state_bio_pyr_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				using = default_button_action
+				size = { 220 24 }
+				parentanchor = hcenter
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_pyr_bio_open')]"
+				tooltip = "te_demog_pyr_toggle_tt"
+
+				textbox = {
+					visible = "[Not(GetVariableSystem.Exists('te_demog_st_pyr_bio_open'))]"
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 210
+					elide = right
+					using = fontsize_small
+					text = "te_demog_pyr_show_bio"
+				}
+				textbox = {
+					visible = "[GetVariableSystem.Exists('te_demog_st_pyr_bio_open')]"
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 210
+					elide = right
+					using = fontsize_small
+					text = "te_demog_pyr_show_cal"
+				}
+			}
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
@@ -3425,458 +3960,929 @@ types te_demographics_widgets
 					text = "te_demog_pyr_women"
 				}
 			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_17"
+			### Phase 3 (the late-game design §6.2): calendar ages, or biological ages where the bands exist (each cohort's
+			### treated part at its biological band); the subtab's own flag (te_demog_st_pyr_bio_open: the biological view, off until opened)
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+				visible = "[Not( And( GetVariableSystem.Exists('te_demog_st_pyr_bio_open'), GetScriptedGui('te_demog_lx_state_bio_pyr_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) ) )]"
+
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_17"
+					}
+					blockoverride "band_label" {
+						raw_text = "85+"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm17').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf17').GetValue )]"
+					}
 				}
-				blockoverride "band_label" {
-					raw_text = "85+"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_16"
+					}
+					blockoverride "band_label" {
+						raw_text = "80–84"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm16').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf16').GetValue )]"
+					}
 				}
-				blockoverride "next_visible" {
-					visible = no
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_15"
+					}
+					blockoverride "band_label" {
+						raw_text = "75–79"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm15').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf15').GetValue )]"
+					}
 				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_14"
+					}
+					blockoverride "band_label" {
+						raw_text = "70–74"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm14').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf14').GetValue )]"
+					}
 				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_13"
+					}
+					blockoverride "band_label" {
+						raw_text = "65–69"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm13').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf13').GetValue )]"
+					}
 				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm17').GetValue ) )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_12"
+					}
+					blockoverride "band_label" {
+						raw_text = "60–64"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm12').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf12').GetValue )]"
+					}
 				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf17').GetValue )]"
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_11"
+					}
+					blockoverride "band_label" {
+						raw_text = "55–59"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm11').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf11').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_10"
+					}
+					blockoverride "band_label" {
+						raw_text = "50–54"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm10').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf10').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_9"
+					}
+					blockoverride "band_label" {
+						raw_text = "45–49"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm9').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf9').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_8"
+					}
+					blockoverride "band_label" {
+						raw_text = "40–44"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm8').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf8').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_7"
+					}
+					blockoverride "band_label" {
+						raw_text = "35–39"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm7').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf7').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_6"
+					}
+					blockoverride "band_label" {
+						raw_text = "30–34"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm6').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf6').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_5"
+					}
+					blockoverride "band_label" {
+						raw_text = "25–29"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm5').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf5').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_4"
+					}
+					blockoverride "band_label" {
+						raw_text = "20–24"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm4').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf4').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_3"
+					}
+					blockoverride "band_label" {
+						raw_text = "15–19"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm3').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf3').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_2"
+					}
+					blockoverride "band_label" {
+						raw_text = "10–14"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm2').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf2').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_1"
+					}
+					blockoverride "band_label" {
+						raw_text = "5–9"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm1').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf1').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_tt_0"
+					}
+					blockoverride "band_label" {
+						raw_text = "0–4"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm0').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf0').GetValue )]"
+					}
 				}
 			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_16"
-				}
-				blockoverride "band_label" {
-					raw_text = "80–84"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm16').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf16').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_15"
-				}
-				blockoverride "band_label" {
-					raw_text = "75–79"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm15').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf15').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_14"
-				}
-				blockoverride "band_label" {
-					raw_text = "70–74"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm14').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf14').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_13"
-				}
-				blockoverride "band_label" {
-					raw_text = "65–69"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm13').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf13').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_12"
-				}
-				blockoverride "band_label" {
-					raw_text = "60–64"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm12').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf12').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_11"
-				}
-				blockoverride "band_label" {
-					raw_text = "55–59"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm11').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf11').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_10"
-				}
-				blockoverride "band_label" {
-					raw_text = "50–54"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm10').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf10').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_9"
-				}
-				blockoverride "band_label" {
-					raw_text = "45–49"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm9').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf9').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_8"
-				}
-				blockoverride "band_label" {
-					raw_text = "40–44"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm8').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf8').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_7"
-				}
-				blockoverride "band_label" {
-					raw_text = "35–39"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm7').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf7').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_6"
-				}
-				blockoverride "band_label" {
-					raw_text = "30–34"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm6').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf6').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_5"
-				}
-				blockoverride "band_label" {
-					raw_text = "25–29"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm5').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf5').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_4"
-				}
-				blockoverride "band_label" {
-					raw_text = "20–24"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm4').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf4').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_3"
-				}
-				blockoverride "band_label" {
-					raw_text = "15–19"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm3').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf3').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_2"
-				}
-				blockoverride "band_label" {
-					raw_text = "10–14"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm2').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf2').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_1"
-				}
-				blockoverride "band_label" {
-					raw_text = "5–9"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm1').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf1').GetValue )]"
-				}
-			}
-			te_demog_pyramid_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "te_demog_st_pyr_tt_0"
-				}
-				blockoverride "band_label" {
-					raw_text = "0–4"
-				}
-				blockoverride "next_visible" {
-					visible = no
-				}
-				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
-					max = 0
-				}
-				blockoverride "women_range" {
-					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
-				}
-				blockoverride "men_now" {
-					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm0').GetValue ) )]"
-				}
-				blockoverride "women_now" {
-					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf0').GetValue )]"
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+				visible = "[And( GetVariableSystem.Exists('te_demog_st_pyr_bio_open'), GetScriptedGui('te_demog_lx_state_bio_pyr_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_17"
+					}
+					blockoverride "band_label" {
+						raw_text = "85+"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm17').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf17').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_16"
+					}
+					blockoverride "band_label" {
+						raw_text = "80–84"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm16').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf16').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_15"
+					}
+					blockoverride "band_label" {
+						raw_text = "75–79"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm15').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf15').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_14"
+					}
+					blockoverride "band_label" {
+						raw_text = "70–74"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm14').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf14').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_13"
+					}
+					blockoverride "band_label" {
+						raw_text = "65–69"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm13').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf13').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_12"
+					}
+					blockoverride "band_label" {
+						raw_text = "60–64"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm12').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf12').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_11"
+					}
+					blockoverride "band_label" {
+						raw_text = "55–59"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm11').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf11').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_10"
+					}
+					blockoverride "band_label" {
+						raw_text = "50–54"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm10').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf10').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_9"
+					}
+					blockoverride "band_label" {
+						raw_text = "45–49"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm9').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf9').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_8"
+					}
+					blockoverride "band_label" {
+						raw_text = "40–44"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm8').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf8').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_7"
+					}
+					blockoverride "band_label" {
+						raw_text = "35–39"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm7').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf7').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_6"
+					}
+					blockoverride "band_label" {
+						raw_text = "30–34"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm6').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf6').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_5"
+					}
+					blockoverride "band_label" {
+						raw_text = "25–29"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm5').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf5').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_4"
+					}
+					blockoverride "band_label" {
+						raw_text = "20–24"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm4').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf4').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_3"
+					}
+					blockoverride "band_label" {
+						raw_text = "15–19"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm3').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf3').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_2"
+					}
+					blockoverride "band_label" {
+						raw_text = "10–14"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm2').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf2').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_1"
+					}
+					blockoverride "band_label" {
+						raw_text = "5–9"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm1').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf1').GetValue )]"
+					}
+				}
+				te_demog_pyramid_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "te_demog_st_pyr_bio_tt_0"
+					}
+					blockoverride "band_label" {
+						raw_text = "0–4"
+					}
+					blockoverride "next_visible" {
+						visible = no
+					}
+					blockoverride "men_range" {
+						min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+						max = 0
+					}
+					blockoverride "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+					}
+					blockoverride "men_now" {
+						value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bbm0').GetValue ) )]"
+					}
+					blockoverride "women_now" {
+						value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bbf0').GetValue )]"
+					}
 				}
 			}
 			te_demog_note = {
+				visible = "[Not( And( GetVariableSystem.Exists('te_demog_st_pyr_bio_open'), GetScriptedGui('te_demog_lx_state_bio_pyr_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) ) )]"
 				text = "te_demog_st_pyr_legend"
+			}
+			te_demog_note = {
+				visible = "[And( GetVariableSystem.Exists('te_demog_st_pyr_bio_open'), GetScriptedGui('te_demog_lx_state_bio_pyr_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+				text = "te_demog_pyr_legend_bio"
 			}
 		}
 	}
@@ -4106,6 +5112,8 @@ types te_demographics_widgets
 			te_state_demog_overview = {}
 			te_state_demog_causes = {}
 			te_state_demog_work = {}
+			### phase 3: shown once the state has had a late step
+			te_state_demog_longevity = {}
 			te_state_demog_pyramid = {}
 			te_state_demog_wealth = {}
 		}
