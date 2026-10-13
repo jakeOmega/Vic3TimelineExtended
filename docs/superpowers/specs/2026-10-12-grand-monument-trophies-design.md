@@ -6,6 +6,8 @@ this spec's, open to review on the PR.
 **Builds on:** `2026-10-05-grand-monuments-v2-design.md` (§6, "v2" below) and the landmarks spec's Appendix A
 (`2026-10-12-grand-monuments-landmarks-design.md`).
 **Replaces:** v2 §6 in full.
+**Extended by:** `2026-10-12-grand-monument-loot-and-1836-trophies-design.md` (nineteen landmarks to loot, and the
+ten trophies already abroad in 1836).
 
 ## Context
 
@@ -125,7 +127,8 @@ Koh-i-Noor. Not giftable *(design: a gift would carry the taking's relations hit
 While a trophy is held: the holder counts it in standing grandeur (prestige, cultural pull) and the Armed Forces
 approve of it (`gm_tr_ig_share_<ig>`: Armed Forces only). The victim has no ongoing penalty; the loss is the cost.
 
-When it goes back: the receiver gets **The Homecoming** (`gm_boon_homecoming`, +5 legitimacy, 120 months); a holder that
+When it goes back: the receiver gets **The Homecoming** (`gm_boon_homecoming`, +5 legitimacy, 120 months), unless
+the receiver carried it off itself (`gm_tr_taken_by`, added 2026-10-12); a holder that
 returns it to another country gets relations +40 with it. The Armed Forces' approval goes with the trophy.
 
 ## 4. Records
@@ -149,6 +152,7 @@ whole), `gm_tr_offered_to` (the occupier a player's notice went to).
 | `gm_tr_honoree`, `gm_tr_honoree_ig` | To the Leader's records, put back on return |
 | `gm_tr_year` | the year it was taken |
 | `gm_tr_home_notified` | the holder already told it can bring it home |
+| `gm_tr_taken_by` | the country that carried it off (added 2026-10-12; a trophy from before then has none) |
 
 **Holder and claimant** are read, not stored: the holder is the site's owner, the claimant the origin's owner. So
 annexation, a civil war or the capture of the site moves a trophy with no special case, and a formable inherits its
@@ -204,7 +208,10 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
   origin it owns it always takes home.
 - **Carries home** from its own unincorporated states at 1% a month, when the Armed Forces are in government or the
   monument is 10 levels or more.
-- **Brings home** every trophy whose origin it owns, at the monthly pass.
+- **Brings home** every trophy whose origin it owns, at the monthly pass, except one it carried off itself
+  (`gm_tr_held_by_its_taker`, added 2026-10-12). Without that exception an AI that took a monument from its own
+  colony brought it straight back at the next pass, for ten years of The Homecoming, and a piece could be taken
+  again once its cooldown ran out.
 - **Returns** a trophy at 2% a month when the claimant is an ally or in its power bloc.
 - **Treaties:** requests Return Cultural Property when it has trophies abroad; requests Surrender a Monument rarely, as
   a major power or greater with a looting-minded government. The giver's reluctance grows with the levels at stake.
