@@ -237,6 +237,18 @@ gm_tr_disp_is_landmark = {
 	}
 }
 
+# Container scope. The picture of the monument a trophy was taken from
+# (gm_tr_update_picture), for the gm_tr_picture type: the stored code, or the
+# draped picture until the monthly pass has set one (gm_disp_picture_code's
+# default).
+gm_tr_disp_picture_code = {
+	value = 1
+	if = {
+		limit = { has_variable = gm_tr_picture_code }
+		value = var:gm_tr_picture_code
+	}
+}
+
 # Container scope, the row's numbers.
 gm_tr_disp_levels = {
 	value = 0

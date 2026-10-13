@@ -148,6 +148,7 @@ whole), `gm_tr_offered_to` (the occupier a player's notice went to).
 | `gm_tr_levels`, `gm_tr_grandeur` | the levels taken; half of them, rounded up, which it counts for abroad |
 | `gm_tr_share` | flag: whole, piece or token |
 | `gm_tr_dedication`, `gm_tr_skin`, `gm_tr_form`, `gm_tr_landmark` | its look and what it honoured |
+| `gm_tr_picture_code` | its monument's picture, from its look (added 2026-10-13, §6) |
 | `gm_tr_namesake`, `gm_tr_name_year`, `gm_tr_name_char`, `gm_tr_name_occasion`, `gm_tr_name_enemy_cap`, `gm_tr_name` | its name |
 | `gm_tr_honoree`, `gm_tr_honoree_ig` | To the Leader's records, put back on return |
 | `gm_tr_year` | the year it was taken |
@@ -190,6 +191,14 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
 - **Trophies** (journal entry, open), while the country holds one or The Homecoming runs: what they count for, The
   Homecoming's months left, and a row per trophy: its name, where it came from and when, the levels it carries and
   what it counts for here, who claims it, and Return It or Bring It Home.
+- **The picture** (added 2026-10-13, owner's request; it replaced a statue icon): every trophy row, in Trophies, Held
+  Abroad and Trophies on Display, shows the picture of the monument the trophy was taken from, at 96 px as in Our
+  Monuments, a piece's too. `gm_tr_update_picture` runs the monuments' own table (`gm_picture_from_look`, split out
+  of `gm_state_update_picture`, then `gm_state_picture_landmarks`) on the trophy's look, lent under the state's
+  variable names and taken back at once, and stores `gm_tr_picture_code`. It runs when the trophy is made or seeded
+  and from the monthly pass, so a landmark whose own picture is drawn later, or a trophy from an older save, catches
+  up within a month. The `gm_tr_picture` type holds `gm_picture`'s icons, read from the container, without the
+  grandeur frame.
 - **Held Abroad** (open), while trophies taken from the country's lands stand abroad: a row per trophy, its holder and
   where it stands, the ways home on hover.
 - **The state card:** Carry It Off under the monument, while the viewer could take it (share, levels, value and
@@ -263,11 +272,14 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
 9. **Unverified engine reads:** that `any_province` with `controller` reads occupation as described; that removing
    and rebuilding a monument in a state the actor doesn't own builds it for the owner; what queued levels do when a
    piece is taken (the gift's open question).
+10. **The picture (2026-10-13):** each trophy row shows its monument's picture: the Parthenon's for the marbles, the
+    Brandenburg Gate's for the Quadriga, and a carried-off column's own style and form. An older save's trophies show
+    the draped picture until the next month's pass.
 
 ## Out of scope
 
 - The UN topic (a follow-up PR).
 - A monument as a gift between countries (the Luxor Obelisk).
-- A trophy's own picture: rows show a statue icon. The monument's picture is per state, and a piece isn't the
-  monument.
+- ~~A trophy's own picture: rows show a statue icon.~~ Brought in on 2026-10-13: a trophy's row shows the picture of
+  the monument it was taken from (§6).
 - Taking from a subject country outside a war.
