@@ -17,8 +17,8 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILDING_FORMS, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, RETIRED_FORMS, block, loc, raw_block_at, read,
-    squash, strip_comments,
+    BUILDING_FORMS, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, block, loc, picture_key,
+    raw_block_at, read, squash, strip_comments,
 )
 
 TR_EFFECTS = "common/scripted_effects/gm_trophy_effects.txt"
@@ -29,6 +29,7 @@ TR_ON_ACTIONS = "common/on_actions/gm_trophy_on_actions.txt"
 TR_CUSTOM_LOC = "common/customizable_localization/gm_trophy_custom_loc.txt"
 TR_EVENTS = "events/monument_trophy_events.txt"
 TR_GUI = "gui/gm_trophy_widgets.gui"
+PICTURE_EFFECTS = "common/scripted_effects/gm_picture_effects.txt"
 ARTICLE_RETURN = "common/treaty_articles/118_return_cultural_property.txt"
 ARTICLE_SURRENDER = "common/treaty_articles/119_surrender_monument.txt"
 EFFECTS = "common/scripted_effects/gm_effects.txt"
@@ -450,6 +451,63 @@ class PanelTests(unittest.TestCase):
         for article in ("return_cultural_property", "surrender_monument"):
             for suffix in ("", "_desc", "_effects_desc", "_article_short_desc"):
                 self.assertIn(f"{article}{suffix}", L, article + suffix)
+
+
+class PictureTests(unittest.TestCase):
+    """A trophy shows the picture of the monument it was taken from (2026-10-13): the monuments' own
+    table run on its records, and gm_picture's icons read from the container."""
+
+    def test_the_monuments_table_on_the_trophys_records(self):
+        body = squash(block(read(TR_EFFECTS), "gm_tr_update_picture"))
+        self.assertEqual(body,
+                         "gm_tr_lend_look = { FROM = gm_tr_skin TO = gm_skin } "
+                         "gm_tr_lend_look = { FROM = gm_tr_form TO = gm_form } "
+                         "gm_tr_lend_look = { FROM = gm_tr_landmark TO = gm_landmark } "
+                         "set_variable = { name = gm_picture_code value = 1 } "
+                         "if = { limit = { has_variable = gm_form } gm_picture_from_look = yes } "
+                         "gm_state_picture_landmarks = yes "
+                         "set_variable = { name = gm_tr_picture_code value = var:gm_picture_code } "
+                         "gm_remove_state_var = { VAR = gm_skin } gm_remove_state_var = { VAR = gm_form } "
+                         "gm_remove_state_var = { VAR = gm_landmark } gm_remove_state_var = { VAR = gm_picture_code }")
+        self.assertEqual(squash(block(read(TR_EFFECTS), "gm_tr_lend_look")),
+                         "if = { limit = { has_variable = $FROM$ } set_variable = { name = $TO$ value = var:$FROM$ } }")
+        # The state's own update runs the same table, behind its dedicated check.
+        self.assertIn("gm_picture_from_look = yes", squash(block(read(PICTURE_EFFECTS), "gm_state_update_picture")))
+
+    def test_set_when_made_seeded_and_every_month(self):
+        e = read(TR_EFFECTS)
+        self.assertIn("gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig } gm_tr_update_picture = yes",
+                      squash(block(e, "gm_state_tr_make_trophy")), "after the records it reads")
+        self.assertIn("set_variable = { name = gm_tr_namesake value = flag:landmark } gm_tr_update_picture = yes",
+                      squash(block(e, "gm_seed_trophy")))
+        self.assertIn("every_in_global_list = { variable = gm_trophies gm_tr_repair_places = yes "
+                      "gm_tr_update_picture = yes }", squash(block(e, "gm_trophy_monthly")),
+                      "a landmark drawn later, or an older save's trophy, catches up")
+
+    def test_display_value_defaults_to_the_draped_picture(self):
+        self.assertEqual(squash(block(read(TR_VALUES), "gm_tr_disp_picture_code")),
+                         "value = 1 if = { limit = { has_variable = gm_tr_picture_code } value = var:gm_tr_picture_code }")
+
+    def test_widget_has_every_picture(self):
+        raw = raw_block_at(read(TR_GUI), r"(?m)^\ttype gm_tr_picture = widget \{")
+        self.assertIsNotNone(raw)
+        body = squash(strip_comments(raw))
+        self.assertTrue(body.startswith("size = { 96 96 } icon = {"), body[:80])
+        for code in PICTURES:
+            self.assertIn(f"icon = {{ visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue("
+                          f"'gm_tr_disp_picture_code'), '(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
+                          f"texture = \"gfx/interface/icons/gm_pictures/{picture_key(code)}.dds\" }}", body, code)
+        self.assertEqual(body.count("icon = {"), len(PICTURES))
+        self.assertNotIn("frame_tier", body, "the grandeur frame is a standing monument's")
+
+    def test_every_row_shows_it(self):
+        gui = read(TR_GUI)
+        for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site"):
+            self.assertIn("gm_tr_picture = {}", squash(raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")), row)
+        self.assertNotIn("modifier_statue_positive", gui)
+        # Beside the picture, the row's lines: 96 + 8 + 376 = 480, a monument row's width.
+        line = squash(raw_block_at(gui, r"(?m)^\ttype gm_tr_line = textbox \{"))
+        self.assertIn("minimumsize = { 376 -1 } maximumsize = { 376 -1 }", line)
 
 
 # The trophies already abroad on 1 January 1836 (loot spec 2026-10-12 §2), in

@@ -522,7 +522,7 @@ These sections follow:
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
 | Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. |
-| Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
+| Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
 | How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, names, the monument policy and trophies. |
 
@@ -757,8 +757,8 @@ A trophy stands in its taker's capital. It counts for half the levels carried
 off, rounded up, in the standing grandeur that gives prestige and cultural pull,
 and the Armed Forces approve of it. Whoever holds that capital's state holds the
 trophy, so conquering the state takes its trophies too. A trophy keeps its
-monument's name, and a piece is named for what was taken, such as the Brandenburg
-Gate's Quadriga.
+monument's name and picture, and a piece is named for what was taken, such as
+the Brandenburg Gate's Quadriga, shown with the Gate.
 
 | Taken | You pay | The other side |
 |---|---|---|

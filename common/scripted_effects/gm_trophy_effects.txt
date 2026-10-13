@@ -15,6 +15,8 @@
 #                                       counts for abroad
 #   gm_tr_share                         flag: whole, piece or token
 #   gm_tr_dedication, gm_tr_skin, gm_tr_form, gm_tr_landmark
+#   gm_tr_picture_code                  its monument's picture
+#                                       (gm_tr_update_picture)
 #   gm_tr_namesake, gm_tr_name_year, gm_tr_name_char, gm_tr_name_occasion,
 #   gm_tr_name_enemy_cap, gm_tr_name    its name (gm_trophy_custom_loc.txt)
 #   gm_tr_honoree, gm_tr_honoree_ig     To the Leader's records
@@ -157,6 +159,7 @@ gm_state_tr_make_trophy = {
 			gm_tr_copy_from_state = { FROM = gm_name TO = gm_tr_name }
 			gm_tr_copy_from_state = { FROM = gm_honoree TO = gm_tr_honoree }
 			gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
+			gm_tr_update_picture = yes
 		}
 	}
 }
@@ -168,6 +171,40 @@ gm_tr_copy_from_state = {
 			scope:gm_tr_state = { has_variable = $FROM$ }
 		}
 		set_variable = { name = $TO$ value = scope:gm_tr_state.var:$FROM$ }
+	}
+}
+
+# Container scope. The trophy's picture: the monument it was taken from, as
+# its records describe it (gm_tr_skin, gm_tr_form, gm_tr_landmark), by the
+# monuments' own table (gm_picture_effects.txt). The table reads a state's
+# names, so the records are lent under them and taken back at once. A piece
+# shows its monument. Set when the trophy is made or seeded and again by the
+# monthly pass, so a landmark whose picture is drawn later, or a trophy from
+# an older save, catches up within a month; gm_tr_disp_picture_code reads the
+# draped picture until then.
+gm_tr_update_picture = {
+	gm_tr_lend_look = { FROM = gm_tr_skin TO = gm_skin }
+	gm_tr_lend_look = { FROM = gm_tr_form TO = gm_form }
+	gm_tr_lend_look = { FROM = gm_tr_landmark TO = gm_landmark }
+	set_variable = { name = gm_picture_code value = 1 }
+	if = {
+		limit = { has_variable = gm_form }
+		gm_picture_from_look = yes
+	}
+	gm_state_picture_landmarks = yes
+	set_variable = { name = gm_tr_picture_code value = var:gm_picture_code }
+	gm_remove_state_var = { VAR = gm_skin }
+	gm_remove_state_var = { VAR = gm_form }
+	gm_remove_state_var = { VAR = gm_landmark }
+	gm_remove_state_var = { VAR = gm_picture_code }
+}
+
+# Container scope: the trophy's variable $FROM$, when it has one, as $TO$, for
+# gm_tr_update_picture.
+gm_tr_lend_look = {
+	if = {
+		limit = { has_variable = $FROM$ }
+		set_variable = { name = $TO$ value = var:$FROM$ }
 	}
 }
 
@@ -645,6 +682,7 @@ gm_trophy_monthly = {
 		every_in_global_list = {
 			variable = gm_trophies
 			gm_tr_repair_places = yes
+			gm_tr_update_picture = yes
 		}
 		every_in_global_list = {
 			variable = gm_trophies
@@ -1035,6 +1073,7 @@ gm_seed_trophy = {
 				set_variable = { name = gm_tr_form value = flag:$FORM$ }
 				set_variable = { name = gm_tr_landmark value = flag:$LANDMARK$ }
 				set_variable = { name = gm_tr_namesake value = flag:landmark }
+				gm_tr_update_picture = yes
 			}
 			debug_log = "TE_MONUMENTS: trophy $LANDMARK$ placed: from $ORIGIN_TAG$'s part of $ORIGIN$, standing in $SITE_TAG$'s part of $SITE$, $LEVELS$ levels"
 		}

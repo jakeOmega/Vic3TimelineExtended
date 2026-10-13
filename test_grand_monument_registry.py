@@ -3100,7 +3100,9 @@ class PictureTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.e = read(PICTURE_EFFECTS)
-        cls.body = squash(block(cls.e, "gm_state_update_picture"))
+        # The table itself is gm_picture_from_look, which a trophy runs too
+        # (gm_tr_update_picture, test_grand_monument_trophies.PictureTests).
+        cls.body = squash(block(cls.e, "gm_picture_from_look"))
 
     def test_the_table(self):
         self.assertEqual(len(PICTURES), 130)
@@ -3145,8 +3147,11 @@ class PictureTests(unittest.TestCase):
                 self.assertEqual((code - 100) // 10, heritage_block[skin], code)
 
     def test_helper_sets_every_code_in_order(self):
+        self.assertEqual(squash(block(self.e, "gm_state_update_picture")),
+                         "set_variable = { name = gm_picture_code value = 1 } if = { limit = { "
+                         "gm_state_is_dedicated = yes has_variable = gm_form } gm_picture_from_look = yes } "
+                         "gm_state_picture_landmarks = yes")
         b = self.body
-        self.assertTrue(b.startswith("set_variable = { name = gm_picture_code value = 1 }"))
         skins_start = b.index("gm_state_picture_skin =")
         pairs_start = b.index("gm_state_picture_pair =")
         buildings_start = b.index("gm_state_picture_building =")
