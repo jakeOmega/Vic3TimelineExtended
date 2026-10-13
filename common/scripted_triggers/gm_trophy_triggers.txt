@@ -133,6 +133,17 @@ gm_tr_holder_owns_origin = {
 	gm_tr_claimed_by = { WHO = scope:gm_tmp_tr_holder }
 }
 
+# The country that carried it off still holds it (gm_tr_taken_by). Such a
+# trophy is not brought home by the AI, and brings its taker no Homecoming:
+# otherwise an AI that carried a monument off from its own colony would bring
+# it straight back the next month, for ten years of legitimacy. A trophy from
+# before the record existed has none, and reads as false.
+gm_tr_held_by_its_taker = {
+	has_variable = gm_tr_taken_by
+	var:gm_tr_taken_by ?= { save_temporary_scope_as = gm_tmp_tr_taker }
+	gm_tr_held_by = { WHO = scope:gm_tmp_tr_taker }
+}
+
 # $WHO$ occupies the state where it stands (spec §2.1).
 gm_tr_site_occupied_by = {
 	gm_system_enabled = yes

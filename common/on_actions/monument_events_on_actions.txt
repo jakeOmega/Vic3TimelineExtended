@@ -401,9 +401,10 @@ gm_formed_on_action = {
 	}
 }
 
-# The landmarks standing in 1836 (phase 4, gm_landmark_effects.txt). After the
-# lobby, because a game rule changed there is final only then; once per game.
-# ROOT is none here, and the seeding never reads it.
+# The landmarks standing in 1836 (phase 4, gm_landmark_effects.txt), then the
+# trophies already abroad (loot spec 2026-10-12 §2, gm_trophy_effects.txt).
+# After the lobby, because a game rule changed there is final only then; once
+# per game. ROOT is none here, and the seeding never reads it.
 on_game_started_after_lobby = {
 	on_actions = {
 		gm_landmarks_on_game_started_after_lobby
@@ -419,6 +420,7 @@ gm_landmarks_on_game_started_after_lobby = {
 			}
 			set_global_variable = gm_landmarks_seeded
 			gm_seed_landmarks = yes
+			gm_seed_trophies = yes
 		}
 	}
 }

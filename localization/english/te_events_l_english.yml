@@ -5330,7 +5330,8 @@
  te_debug_monuments.4.t:0 "Debug: Monument Pictures"
  te_debug_monuments.5.a:0 "Place the landmarks"
  te_debug_monuments.5.b:0 "Log every landmark"
- te_debug_monuments.5.desc:0 "Place every landmark standing in 1836 whose state has no Grand Monument and whose 1836 owner still holds it, for a save started before they existed. Each is logged as TE_MONUMENTS: placed or not placed."
+ te_debug_monuments.5.c:0 "Place the trophies of 1836"
+ te_debug_monuments.5.desc:0 "Place every landmark standing in 1836 whose state has no Grand Monument and whose 1836 owner still holds it, for a save started before they existed, or the trophies already abroad in 1836 whose origin and site still have their 1836 owners. Each is logged as TE_MONUMENTS: placed or not placed."
  te_debug_monuments.5.flavor:0 "Logging writes each landmark's level, status, picture code and dedication to debug.log."
  te_debug_monuments.5.t:0 "Debug: Landmarks"
  te_debug_monuments.6.a:0 "Carry off the tallest monument that is not ours"
@@ -5448,6 +5449,21 @@
  te_debug_un.1.x:0 "Log every country's UN AI scores to debug.log (UN_AI_SCORES lines)"
  te_debug_un.1.y:0 "Have the strongest other member take a trade dispute with us to the UN (its choice reaches us as a notification)"
  te_debug_un.1.z:0 "Close"
+
+#
+# TE_DEMOG_CAPITAL
+#
+ te_demog_capital.1.a:0 "Build it in [SCOPE.sState('te_pc_site_1').GetName]"
+ te_demog_capital.1.a.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_1').GetName]#! at once"
+ te_demog_capital.1.b:0 "Build it in [SCOPE.sState('te_pc_site_2').GetName]"
+ te_demog_capital.1.b.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_2').GetName]#! at once"
+ te_demog_capital.1.c:0 "Build it in [SCOPE.sState('te_pc_site_3').GetName]"
+ te_demog_capital.1.c.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_3').GetName]#! at once"
+ te_demog_capital.1.d:0 "The planners have laid out the sites where a new capital could rise. Wherever we build it, the ministries, the courts and the parliament will follow, and with them the clerks, the builders and the merchants who serve them. Our great city keeps its trade and its crowds, but not the seat of power."
+ te_demog_capital.1.e:0 "Not now"
+ te_demog_capital.1.e.tt:0 "Nothing is spent, and the decision stays open"
+ te_demog_capital.1.f:0 "#lore A capital built from nothing says that the country is larger than its first city.#!"
+ te_demog_capital.1.t:0 "Siting the New Capital"
 
 #
 # TE_INFLATION

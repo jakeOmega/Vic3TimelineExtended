@@ -460,10 +460,16 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-Twenty-three monuments already stand when a game begins, among them the Arc de
+Forty-two monuments already stand when a game begins, among them the Arc de
 Triomphe in Paris, the Alexander Column in Saint Petersburg, the Temple of
 Heaven in Beijing, Topkapı Palace, La Scala in Milan and the Jantar Mantar in
-Jaipur. Most monuments to a crown or a republic stand in countries that still
+Jaipur. Nineteen stand where the great powers' armies and collectors took the
+most: the Uffizi and the Capitoline Museums, the Parthenon, Bodrum Castle,
+Xanthos, the Temples of Baalbek, Palmyra, the Mesha Stele, the Arch of
+Ctesiphon, the Obelisks of Karnak, the royal palaces of Benin, Kumasi and
+Abomey, Great Zimbabwe, Persepolis, the Red Fort in Delhi, the
+Bukgwan Victory Stele in Korea, the Imperial City of Huế and Klungkung Palace
+on Bali. Most monuments to a crown or a republic stand in countries that still
 honor them; two start contested: the Lion of Saint Mark, the old Venetian
 Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
 Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,
@@ -774,13 +780,25 @@ one back:
 A trophy that comes home is rebuilt where it was taken from, with all the levels
 carried off. A monument standing there takes the levels; otherwise the monument
 is rebuilt with its name, style and dedication. Its owner gains The Homecoming,
-+5 legitimacy for ten years, shown in the Trophies section.
++5 legitimacy for ten years, shown in the Trophies section, unless it carried
+the trophy off itself: bringing home what you took from your own colony only
+moves it.
+
+Ten trophies are already abroad when a game begins: the Parthenon's marbles,
+the Rosetta Stone and Tipu's Tiger in London, and the throne of the kings of
+Kandy at Windsor; the Dendera Zodiac, the Luxor
+Obelisk and the Venus de Milo in Paris; Baba Merzoug, the great cannon of
+Algiers, at Brest; and the Piraeus Lion and the Horses of Saint Mark in Venice.
+Greece, Egypt, the Ottoman Empire, Mysore, Mascara and British Ceylon see
+theirs under Held Abroad from the start. A trophy from a historical monument has a Historical
+monument line in its row; hover it for how it came to stand abroad.
 
 The AI carries off monuments in the states it occupies, more often when its
 governing interest groups favor Total War, Ethnostate or National Supremacy,
 when it is unrecognized, or for a monument of 10 levels or more, and much less
-once UNESCO is in force. It brings home every trophy it can, and now and then
-returns one to an ally or a power bloc partner.
+once UNESCO is in force. It brings home every trophy taken from it that it
+can, but keeps what it carried off itself, and now and then returns one to an
+ally or a power bloc partner.
 
 ### Vanity backlash
 

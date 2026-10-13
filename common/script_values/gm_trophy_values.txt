@@ -226,6 +226,17 @@ gm_state_tr_disp_here = {
 	}
 }
 
+# Container scope. 1 for a trophy from a landmark: its rows show the
+# "Historical monument" line, with the landmark's line of history on hover
+# (loot spec 2026-10-12 §3).
+gm_tr_disp_is_landmark = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_landmark }
+		value = 1
+	}
+}
+
 # Container scope, the row's numbers.
 gm_tr_disp_levels = {
 	value = 0

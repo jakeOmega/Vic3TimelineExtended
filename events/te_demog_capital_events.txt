@@ -1,0 +1,109 @@
+﻿namespace = te_demog_capital
+
+# ======================================================================
+#  DEMOGRAPHICS — the Planned Capital decision's site (phase 3)
+#  Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §5.1.
+#  Fired only by te_decision_plan_new_capital (common/decisions/te_demog_decisions.txt), Full only.
+#
+#    1       the site: up to three candidates (te_demog_pc_candidate), the largest first, or not now
+# ======================================================================
+
+# ======================================================================
+#  1 – Siting the New Capital
+#  ROOT = the country that took the decision. The immediate saves up to three sites, the largest by people first; each
+#  option builds the capital there (te_demog_pc_build: the costs, then the move), offered only while its site is still
+#  one, the country at peace and the cooldown run (te_demog_pc_site_still_open: the event can stay open for days). Not
+#  Now, the default (decline is the default: a lapsed event moves nothing), costs nothing, and the decision stays open.
+#  Every option clears te_dg_pc_pending, the decision's one-event-at-a-time marker.
+#  AI: the largest site most often (3:2:1), never Not Now: the decision's own rule (te_demog_pc_ai_wants) already said
+#  it wants one.
+# ======================================================================
+te_demog_capital.1 = {
+	type = country_event
+	placement = root
+
+	title = te_demog_capital.1.t
+	desc = te_demog_capital.1.d
+	flavor = te_demog_capital.1.f
+
+	event_image = { video = "middleeast_engineer_blueprint" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	duration = 3
+
+	immediate = {
+		ordered_scope_state = {
+			limit = { te_demog_pc_candidate = yes }
+			order_by = te_demog_pc_site_order
+			position = 0
+			check_range_bounds = no
+			save_scope_as = te_pc_site_1
+		}
+		ordered_scope_state = {
+			limit = { te_demog_pc_candidate = yes }
+			order_by = te_demog_pc_site_order
+			position = 1
+			check_range_bounds = no
+			save_scope_as = te_pc_site_2
+		}
+		ordered_scope_state = {
+			limit = { te_demog_pc_candidate = yes }
+			order_by = te_demog_pc_site_order
+			position = 2
+			check_range_bounds = no
+			save_scope_as = te_pc_site_3
+		}
+	}
+
+	option = {
+		name = te_demog_capital.1.a
+		trigger = {
+			exists = scope:te_pc_site_1
+			te_demog_pc_site_still_open = { SITE = te_pc_site_1 }
+		}
+		custom_tooltip = te_demog_capital.1.a.tt
+		te_demog_pc_build = { SITE = te_pc_site_1 }
+		ai_chance = {
+			base = 3
+		}
+	}
+
+	option = {
+		name = te_demog_capital.1.b
+		trigger = {
+			exists = scope:te_pc_site_2
+			te_demog_pc_site_still_open = { SITE = te_pc_site_2 }
+		}
+		custom_tooltip = te_demog_capital.1.b.tt
+		te_demog_pc_build = { SITE = te_pc_site_2 }
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = {
+		name = te_demog_capital.1.c
+		trigger = {
+			exists = scope:te_pc_site_3
+			te_demog_pc_site_still_open = { SITE = te_pc_site_3 }
+		}
+		custom_tooltip = te_demog_capital.1.c.tt
+		te_demog_pc_build = { SITE = te_pc_site_3 }
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = {
+		name = te_demog_capital.1.e
+		default_option = yes
+		custom_tooltip = te_demog_capital.1.e.tt
+		hidden_effect = {
+			remove_variable = te_dg_pc_pending
+		}
+		ai_chance = {
+			base = 0
+		}
+	}
+}
