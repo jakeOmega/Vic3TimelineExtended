@@ -45,25 +45,29 @@ types banking_dashboard_widget_types
 	### are fixed-width wrappers so the readings line up; the text inside them
 	### elides rather than pushing the row past the block. Every instance puts
 	### its tooltip (the reading, and what moves it) on the row, as the UN's
-	### pillar rows do. The table is in the UN tables' medium type, and its label
-	### column is 164, the same as a banking_dash_pair's, so a full row's value
-	### lines up with the left value of a pair row (play-test round 2, which
-	### asked for a shorter panel; round 3 widened the column from 132 so the
-	### longest label, "Gap to World Rate", fits the width budget).
+	### pillar rows do. The table is in the large type (a Steam Workshop player
+	### found the medium one too small to read, so the whole panel moved up a
+	### step, 2026-10-13), and its label column is 176, the same as a
+	### banking_dash_pair's, so a full row's value lines up with the left value
+	### of a pair row (play-test round 2, which asked for a shorter panel; round
+	### 3 widened the column from 132 so the longest label fits the width
+	### budget; the large type widened it again, to the 176 of "Trade and Prices"
+	### and "Monetise Deficit", and renamed "Gap to World Rate" to "World Rate
+	### Gap").
 	type banking_dash_condition_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
 
 		widget = {
-			size = { 164 22 }
+			size = { 176 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 164
+				max_width = 176
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = fontsize_large
 				default_format = "#tooltippable"
 				block "condition_label" {}
 			}
@@ -79,8 +83,8 @@ types banking_dashboard_widget_types
 	}
 
 	### Free-standing value textbox used inside banking_dash_condition_row.
-	### 292 is what the Monetary Policy block has left of its 460 once the
-	### 164 label column and the 4 spacing are taken; wider runs the value
+	### 280 is what the Monetary Policy block has left of its 460 once the
+	### 176 label column and the 4 spacing are taken; wider runs the value
 	### past the block's right edge. Any row whose text can run longer — a
 	### country name, two signed figures, a state word after a number — sets
 	### `multiline = yes` and wraps instead of eliding: Peg Confidence,
@@ -89,43 +93,80 @@ types banking_dashboard_widget_types
 	type banking_dash_condition_value = textbox {
 		parentanchor = vcenter
 		autoresize = yes
-		max_width = 292
+		max_width = 280
 		elide = right
 		align = nobaseline
-		using = fontsize_medium
+		using = fontsize_large
 	}
 
-	### One reading of a two-column pair row: label 164 + 4 + value 62 = 230,
-	### so two fill the block's 460. Only for short readings (a percentage or a
-	### signed figure, six characters at most); anything longer keeps a full row. The instance puts
-	### its tooltip on the cell, so each half explains itself.
+	### The left reading of a two-column pair row: label 176 + 4 + value 66 =
+	### 246. With banking_dash_pair_right (144 + 4 + 66 = 214) it fills the
+	### block's 460. Only for short readings (a percentage or a signed figure,
+	### six characters at most); anything longer keeps a full row. The instance
+	### puts its tooltip on the cell, so each half explains itself.
 	type banking_dash_pair = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
 
 		widget = {
-			size = { 164 22 }
+			size = { 176 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 164
+				max_width = 176
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = fontsize_large
 				default_format = "#tooltippable"
 				block "pair_label" {}
 			}
 		}
 		widget = {
-			size = { 62 22 }
+			size = { 66 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 62
+				max_width = 66
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = fontsize_large
+				block "pair_value" {}
+			}
+		}
+	}
+
+	### The right reading of a pair row. The large type does not leave two
+	### 176 label columns in 460, so the right half gets the 144 that holds its
+	### longest label ("Wage Pressure") and the left keeps the one that holds
+	### "Credit Standing" and "Price Pressure".
+	type banking_dash_pair_right = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		widget = {
+			size = { 144 26 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 144
+				elide = right
+				align = nobaseline
+				using = fontsize_large
+				default_format = "#tooltippable"
+				block "pair_label" {}
+			}
+		}
+		widget = {
+			size = { 66 26 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 66
+				elide = right
+				align = nobaseline
+				using = fontsize_large
 				block "pair_value" {}
 			}
 		}
@@ -149,7 +190,8 @@ types banking_dashboard_widget_types
 	### frontend-only button_standard_* family is never instantiated in-game.
 	type banking_dash_action_button = button {
 		using = default_button_action
-		size = { 100 28 }
+		using = fontsize_large
+		size = { 90 30 }
 		parentanchor = vcenter
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -167,22 +209,23 @@ types banking_dashboard_widget_types
 	### its row supplies.
 	type banking_dash_mon_button = button {
 		using = default_button_action
-		size = { 128 26 }
+		using = fontsize_large
+		size = { 140 28 }
 		parentanchor = vcenter
 	}
 
 	### The label column of a monetary row with controls, sized to line up with
 	### banking_dash_condition_row's.
 	type banking_dash_mon_label = widget {
-		size = { 164 26 }
+		size = { 176 28 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 164
+			max_width = 176
 			elide = right
 			align = nobaseline
-			using = fontsize_medium
+			using = fontsize_large
 			default_format = "#tooltippable"
 			block "mon_label_text" {}
 		}
@@ -211,7 +254,7 @@ types banking_dashboard_widget_types
 			multiline = yes
 			maximumsize = { 460 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = fontsize_xl
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -231,7 +274,7 @@ types banking_dashboard_widget_types
 		minimumsize = { 460 -1 }
 		maximumsize = { 460 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = fontsize_large
 		default_format = "#lore"
 	}
 
@@ -248,19 +291,20 @@ types banking_dashboard_widget_types
 		}
 	}
 
-	### The value column of a monetary row with a control: 160, which leaves the
-	### Delegation row room for its 128 button (164 + 4 + 160 + 4 + 128 = 460),
-	### and still fits "Bound by mandate" without eliding.
+	### The value column of a monetary row with a control: 136, which leaves the
+	### Delegation row room for its 140 button (176 + 4 + 136 + 4 + 140 = 460),
+	### and still fits "By mandate" and "Takes Effect In"'s "-10.0 months" without
+	### eliding.
 	type banking_dash_mon_value = widget {
-		size = { 160 26 }
+		size = { 136 28 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 160
+			max_width = 136
 			elide = right
 			align = nobaseline
-			using = fontsize_medium
+			using = fontsize_large
 			block "mon_value_text" {}
 		}
 	}
@@ -270,22 +314,24 @@ types banking_dashboard_widget_types
 	### mirror the enable/disable scripted_button pair's `visible` triggers. The
 	### row's tooltip is the policy's description and effects, so its name is
 	### set as hoverable text; the button's own tooltip says why it is greyed.
-	### 6 + 288 + 6 + 36 + 6 + 100 + 6 = 448, inside the Monetary Policy block's
-	### 460 (the open-market operations row sits there).
+	### 4 + 320 + 4 + 34 + 4 + 90 + 4 = 460, the Monetary Policy block's width
+	### (the open-market operations row sits there).
 	###
 	### Play-test round 3 (the owner: "a lot of the interventions ... are too
 	### long"): the name is in the medium type, with a dashboard name where the
-	### button's own is longer than the 288 cell holds (banking_dash_name_*,
+	### button's own is longer than the name cell holds (banking_dash_name_*,
 	### the sector alone under the Directed Credit heading), and the
 	### requirement ("At least 2 free Banking Intervention Points") is a compact
 	### cell, the budget's icon and the points, with the full line in the row's
 	### tooltip under Requires. test_banking_layout.WidthBudgetTest holds every
-	### name to the cell.
+	### name to the cell. The 2026-10-13 pass put the row in the large type (the
+	### name cell grew from 288 to 320 for "Dividend Restraint Resolution", the
+	### buttons shrank from 100 to 90, "Disable" being the longest label).
 	type banking_dash_policy_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 6
-		margin = { 6 2 }
+		spacing = 4
+		margin = { 4 2 }
 		parentanchor = hcenter
 
 		background = {
@@ -294,21 +340,21 @@ types banking_dashboard_widget_types
 		}
 
 		widget = {
-			size = { 288 26 }
+			size = { 320 30 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 288
+				max_width = 320
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = fontsize_large
 				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
 
 		widget = {
-			size = { 36 26 }
+			size = { 34 30 }
 			block "cost_icon" {
 				icon = {
 					size = { 18 18 }
@@ -322,7 +368,7 @@ types banking_dashboard_widget_types
 				max_width = 16
 				elide = right
 				align = right|nobaseline
-				using = fontsize_medium
+				using = fontsize_large
 				block "row_cost" {}
 			}
 		}
@@ -360,18 +406,25 @@ types banking_dashboard_widget_types
 
 	### A cell of the overview: the icon on the left, and beside it the caption
 	### (a concept) over the reading's word. Play-test round 2 laid the cells
-	### on their side to shorten the panel: 40 high instead of 76, the word
-	### still right next to its icon. Fixed size, so no cell can widen its
-	### row: three to a row is 3 x 158 + 2 x 3 = 480, the bars' width. The
-	### caption says which reading it is, because two band words (Elevated,
-	### High) name a band of bubble pressure and of inflation alike. The
-	### instance puts one icon per state in "icons", each with its own
+	### on their side to shorten the panel: the word still right next to its
+	### icon. The caption says which reading it is, because two band words
+	### (Elevated, High) name a band of bubble pressure and of inflation alike.
+	### The instance puts one icon per state in "icons", each with its own
 	### visible, and its word (or words) in "word"; "badge" is for a small
-	### alert over the icon's corner. Round 3: 158 wide (3 x 158 + 2 x 3 = 480)
-	### and the text from x 34, so its column is 124, and the word in the small
-	### type, so the longest ("Hyperinflation") fits the width budget.
+	### alert over the icon's corner.
+	###
+	### The medium type (the 2026-10-13 pass: a Steam Workshop player found the
+	### small one too hard to read) does not fit the 158 x 3 the cells shared
+	### before: "Bubble Pressure" needs 142 and "Hyperinflation" 132 beside a
+	### 34 icon column. So each instance sets its own width, at least 34 wider
+	### than its longest caption and word, and a row of cells is as wide as
+	### they sum to, with a 3 spacing, inside the bars' 480: the cycle row is
+	### 146 + 146 + 176, the row the player sets 160 + 168 + 132. The text
+	### starts at x 34; the instance's "caption_width" says how much of the
+	### cell the caption may take (width - 34), and test_banking_layout holds
+	### every caption and word to it.
 	type te_banking_ov_cell = widget {
-		size = { 158 40 }
+		size = { 158 46 }
 
 		widget = {
 			size = { 32 32 }
@@ -381,10 +434,12 @@ types banking_dashboard_widget_types
 		textbox = {
 			position = { 34 2 }
 			autoresize = yes
-			max_width = 124
+			block "caption_width" {
+				max_width = 124
+			}
 			elide = right
 			align = left|nobaseline
-			using = fontsize_small
+			using = fontsize_medium
 			default_format = "#tooltippable"
 			block "caption" {}
 		}
@@ -392,35 +447,39 @@ types banking_dashboard_widget_types
 		block "badge" {}
 	}
 
-	### The word beside a cell's icon, under its caption.
+	### The word beside a cell's icon, under its caption. 142 is the widest
+	### cell column there is (the bubble pressure cell's); no cell's words are
+	### longer than their own column, which the test holds.
 	type te_banking_ov_word = textbox {
-		position = { 34 20 }
+		position = { 34 24 }
 		autoresize = yes
-		max_width = 124
+		max_width = 142
 		elide = right
 		align = left|nobaseline
-		using = fontsize_small
+		using = fontsize_medium
 	}
 
 	### A first-row cell's third line: how far its reading can move at the next
-	### monthly update. As wide as the cell, with its text at the cell's x (34),
-	### so it reads as the cell's own line under the word. The instance puts the
-	### breakdown on the line, which is hoverable apart from the cell above, and
-	### one te_banking_ov_change_text per shape of range in "range".
+	### monthly update. As wide as the cell above it (the instance sets the
+	### same width), with its text from x 4: the 14-character ranges ("-10.0
+	### to -10.0") need 132, which a 34 indent would not leave in a 146 cell.
+	### The instance puts the breakdown on the line, which is hoverable apart
+	### from the cell above, and one te_banking_ov_change_text per shape of
+	### range in "range".
 	type te_banking_ov_change = widget {
-		size = { 158 18 }
+		size = { 158 22 }
 		block "range" {}
 	}
 
 	### One shape of a change line's range. Underlined, as hoverable text is,
 	### since its tooltip is not the cell's.
 	type te_banking_ov_change_text = textbox {
-		position = { 34 0 }
+		position = { 4 0 }
 		autoresize = yes
-		max_width = 124
+		max_width = 138
 		elide = right
 		align = left|nobaseline
-		using = fontsize_small
+		using = fontsize_medium
 		default_format = "#tooltippable"
 	}
 
@@ -606,6 +665,10 @@ types banking_dashboard_widget_types
 				### scripted GUI, the one the word always used.
 				te_banking_ov_cell = {
 					tooltip = "banking_dash_phase_tt"
+					size = { 146 46 }
+					blockoverride "caption_width" {
+						max_width = 112
+					}
 					blockoverride "caption" {
 						text = "banking_dash_phase_label"
 					}
@@ -647,6 +710,10 @@ types banking_dashboard_widget_types
 				### Momentum's band (te_banking_momentum_icons).
 				te_banking_ov_cell = {
 					tooltip = "banking_dash_momentum_tt"
+					size = { 146 46 }
+					blockoverride "caption_width" {
+						max_width = 112
+					}
 					blockoverride "caption" {
 						text = "banking_dash_momentum_label"
 					}
@@ -664,6 +731,10 @@ types banking_dashboard_widget_types
 				### badge over the icon's corner.
 				te_banking_ov_cell = {
 					tooltip = "banking_dash_bubble_tt"
+					size = { 176 46 }
+					blockoverride "caption_width" {
+						max_width = 142
+					}
 					blockoverride "caption" {
 						text = "banking_dash_bubble_label"
 					}
@@ -696,6 +767,7 @@ types banking_dashboard_widget_types
 				### Under the phase: the cycle value.
 				te_banking_ov_change = {
 					tooltip = "banking_dash_value_change_tt"
+					size = { 146 22 }
 					blockoverride "range" {
 						te_banking_ov_change_text = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)1' )]"
@@ -719,6 +791,7 @@ types banking_dashboard_widget_types
 				### Under momentum.
 				te_banking_ov_change = {
 					tooltip = "banking_dash_momentum_change_tt"
+					size = { 146 22 }
 					blockoverride "range" {
 						te_banking_ov_change_text = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)1' )]"
@@ -742,6 +815,7 @@ types banking_dashboard_widget_types
 				### Under bubble pressure. Its range is always closed.
 				te_banking_ov_change = {
 					tooltip = "banking_dash_bubble_change_tt"
+					size = { 176 22 }
 					blockoverride "range" {
 						te_banking_ov_change_text = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_change_shape'), '(CFixedPoint)1' )]"
@@ -769,6 +843,10 @@ types banking_dashboard_widget_types
 			te_banking_ov_cell = {
 				visible = "[And( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 				tooltip = "banking_dash_mon_stance_tt"
+				size = { 160 46 }
+				blockoverride "caption_width" {
+					max_width = 126
+				}
 				blockoverride "caption" {
 					text = "banking_dash_mon_stance_label"
 				}
@@ -811,6 +889,10 @@ types banking_dashboard_widget_types
 			te_banking_ov_cell = {
 				visible = "[And( GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 				tooltip = "banking_dash_mon_band_tt"
+				size = { 168 46 }
+				blockoverride "caption_width" {
+					max_width = 134
+				}
 				blockoverride "caption" {
 					text = "banking_dash_mon_inflation_label"
 				}
@@ -866,6 +948,10 @@ types banking_dashboard_widget_types
 			### The intervention budget: points free. One icon, always shown.
 			te_banking_ov_cell = {
 				tooltip = "banking_dash_budget_tt"
+				size = { 132 46 }
+				blockoverride "caption_width" {
+					max_width = 98
+				}
 				blockoverride "caption" {
 					text = "banking_dash_budget_label"
 				}
@@ -999,6 +1085,7 @@ types banking_dashboard_widget_types
 				minimumsize = { 480 -1 }
 				maximumsize = { 480 -1 }
 				align = left|nobaseline
+				using = fontsize_large
 				margin = { 6 4 }
 			}
 
@@ -1810,6 +1897,7 @@ types banking_dashboard_widget_types
 					multiline = yes
 					max_width = 460
 					align = left|nobaseline
+					using = fontsize_large
 				}
 
 				flowcontainer = {
@@ -1828,6 +1916,7 @@ types banking_dashboard_widget_types
 						multiline = yes
 						max_width = 460
 						align = left|nobaseline
+						using = fontsize_large
 						margin_bottom = 2
 					}
 
@@ -1869,7 +1958,7 @@ types banking_dashboard_widget_types
 							}
 						}
 						blockoverride "pair_right" {
-							banking_dash_pair = {
+							banking_dash_pair_right = {
 								visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 								tooltip = "banking_dash_mon_worldrate_tt"
 								blockoverride "pair_label" {
@@ -1885,8 +1974,9 @@ types banking_dashboard_widget_types
 					### The policy rate (the actual rate, one decimal) and, beside it, the
 					### Rate Target: the dial itself. Ops 0 (down) and 1 (up) of
 					### banking_mon_control_sgui; the handler answers why a step is greyed out,
-					### so no threshold lives in this file. The target half is 106 + 2 + 26 +
-					### 2 + 60 + 2 + 26 = 224, inside the pair's 230.
+					### so no threshold lives in this file. The target half is 70 + 2 + 28 +
+					### 2 + 66 + 2 + 28 = 198, inside the right half's 214 (the large type
+					### shortened its label from Rate Target to Target).
 					banking_dash_pair_row = {
 						blockoverride "pair_left" {
 							banking_dash_pair = {
@@ -1909,21 +1999,21 @@ types banking_dashboard_widget_types
 								visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 								widget = {
-									size = { 106 26 }
+									size = { 70 28 }
 									textbox = {
 										parentanchor = left|vcenter
 										autoresize = yes
-										max_width = 106
+										max_width = 70
 										elide = right
 										align = nobaseline
-										using = fontsize_medium
+										using = fontsize_large
 										default_format = "#tooltippable"
 										text = "banking_dash_mon_target_label"
 									}
 								}
 
 								button_icon_minus_action = {
-									size = { 26 26 }
+									size = { 28 28 }
 									parentanchor = vcenter
 									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									### Click a point, ctrl-click a tenth, shift-click to the limit.
@@ -1936,20 +2026,20 @@ types banking_dashboard_widget_types
 								}
 
 								widget = {
-									size = { 60 26 }
+									size = { 66 28 }
 									textbox = {
 										parentanchor = center
 										align = center|nobaseline
 										autoresize = yes
-										max_width = 60
+										max_width = 66
 										elide = right
-										using = fontsize_medium
+										using = fontsize_large
 										text = "banking_dash_mon_target_value"
 									}
 								}
 
 								button_icon_plus_action = {
-									size = { 26 26 }
+									size = { 28 28 }
 									parentanchor = vcenter
 									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									### Click a point, ctrl-click a tenth, shift-click to the limit.
@@ -1965,7 +2055,7 @@ types banking_dashboard_widget_types
 					}
 
 					### Delegation — ops 2 (delegate) and 3 (take it back), the button
-					### beside the value it changes (164 + 4 + 160 + 4 + 128 = 460). Exactly one
+					### beside the value it changes (176 + 4 + 136 + 4 + 140 = 460). Exactly one
 					### button is ever drawn, and neither under central bank independence,
 					### which is permanently mandate-bound; the value says so there (§5.2).
 					flowcontainer = {
@@ -2007,8 +2097,8 @@ types banking_dashboard_widget_types
 					}
 
 					### Mandate — which rule a delegated or independent bank follows. The
-					### value takes the width the row has free (164 + 4 + 290 = 458), since
-					### "Inflation Targeting" runs past the value column's 160.
+					### value takes the width the row has free (176 + 4 + 280 = 460), since
+					### "Inflation Targeting" runs past the value column's 136.
 					flowcontainer = {
 						direction = horizontal
 						ignoreinvisible = yes
@@ -2024,15 +2114,15 @@ types banking_dashboard_widget_types
 						}
 
 						widget = {
-							size = { 290 26 }
+							size = { 280 28 }
 
 							textbox = {
 								parentanchor = left|vcenter
 								autoresize = yes
-								max_width = 290
+								max_width = 280
 								elide = right
 								align = nobaseline
-								using = fontsize_medium
+								using = fontsize_large
 								text = "banking_dash_mon_mandate_value"
 							}
 						}
@@ -2057,15 +2147,15 @@ types banking_dashboard_widget_types
 						}
 
 						widget = {
-							size = { 290 26 }
+							size = { 280 28 }
 
 							textbox = {
 								parentanchor = left|vcenter
 								autoresize = yes
-								max_width = 290
+								max_width = 280
 								elide = right
 								align = nobaseline
-								using = fontsize_medium
+								using = fontsize_large
 								text = "banking_dash_mon_act_value"
 							}
 						}
@@ -2114,7 +2204,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
-							size = { 226 26 }
+							size = { 226 28 }
 							text = "banking_dash_mon_mandate_inflation"
 						}
 
@@ -2122,7 +2212,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-							size = { 226 26 }
+							size = { 226 28 }
 							text = "banking_dash_mon_mandate_dual"
 						}
 					}
@@ -2140,7 +2230,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
-							size = { 226 26 }
+							size = { 226 28 }
 							text = "banking_dash_mon_mandate_growth"
 						}
 
@@ -2149,7 +2239,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
-							size = { 226 26 }
+							size = { 226 28 }
 							text = "banking_dash_mon_mandate_peg"
 						}
 					}
@@ -2200,6 +2290,7 @@ types banking_dashboard_widget_types
 						}
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
+								multiline = yes
 								text = "banking_dash_mon_bankgold_value"
 							}
 						}
@@ -2305,7 +2396,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ) ) )]"
-							size = { 200 28 }
+							size = { 240 30 }
 							text = "banking_dash_mon_btn_recapitalise"
 						}
 					}
@@ -2431,9 +2522,12 @@ types banking_dashboard_widget_types
 						}
 					}
 
+					### Stacked, not side by side: two can show at once (Leave and Press for
+					### Convergence), and at 231 each the large type does not fit both in 460.
 					flowcontainer = {
-						direction = horizontal
+						direction = vertical
 						ignoreinvisible = yes
+						spacing = 2
 						parentanchor = hcenter
 						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
@@ -2443,7 +2537,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-							size = { 200 28 }
+							size = { 240 30 }
 							text = "banking_dash_mon_btn_union_adopt"
 						}
 
@@ -2453,7 +2547,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-							size = { 200 28 }
+							size = { 240 30 }
 							text = "banking_dash_mon_btn_union_leave"
 						}
 
@@ -2463,7 +2557,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-							size = { 200 28 }
+							size = { 240 30 }
 							text = "banking_dash_mon_btn_union_press"
 						}
 
@@ -2473,7 +2567,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-							size = { 200 28 }
+							size = { 240 30 }
 							text = "banking_dash_mon_btn_union_press_off"
 						}
 					}
@@ -2518,7 +2612,7 @@ types banking_dashboard_widget_types
 							}
 						}
 						blockoverride "pair_right" {
-							banking_dash_pair = {
+							banking_dash_pair_right = {
 								tooltip = "banking_dash_mon_premium_tt"
 								blockoverride "pair_label" {
 									text = "banking_dash_mon_premium_label"
@@ -2560,7 +2654,7 @@ types banking_dashboard_widget_types
 							}
 						}
 						blockoverride "pair_right" {
-							banking_dash_pair = {
+							banking_dash_pair_right = {
 								tooltip = "banking_dash_mon_expected_tt"
 								blockoverride "pair_label" {
 									text = "banking_dash_mon_expected_label"
@@ -2575,23 +2669,13 @@ types banking_dashboard_widget_types
 					### The price band has no row here: the overview's Inflation cell shows it,
 					### with the same tooltip (banking_dash_mon_band_tt), since play-test round 2.
 					###
-					### Wage pressure (the labour and welfare half, §9.4, kept apart because it
-					### is the half that earns the real-wage dividend) and price pressure
-					### (everything else the player chose: devaluations, crisis outcomes,
-					### event modifiers).
+					### Price pressure (everything the player chose that is not wages:
+					### devaluations, crisis outcomes, event modifiers) and wage pressure (the
+					### labour and welfare half, §9.4, kept apart because it is the half that
+					### earns the real-wage dividend). Price is on the left because its label is
+					### the longer, and the left cell is the wider (2026-10-13).
 					banking_dash_pair_row = {
 						blockoverride "pair_left" {
-							banking_dash_pair = {
-								tooltip = "banking_dash_mon_wage_tt"
-								blockoverride "pair_label" {
-									text = "banking_dash_mon_wage_label"
-								}
-								blockoverride "pair_value" {
-									text = "banking_dash_mon_wage_value"
-								}
-							}
-						}
-						blockoverride "pair_right" {
 							banking_dash_pair = {
 								tooltip = "banking_dash_mon_pressure_tt"
 								blockoverride "pair_label" {
@@ -2599,6 +2683,17 @@ types banking_dashboard_widget_types
 								}
 								blockoverride "pair_value" {
 									text = "banking_dash_mon_pressure_value"
+								}
+							}
+						}
+						blockoverride "pair_right" {
+							banking_dash_pair_right = {
+								tooltip = "banking_dash_mon_wage_tt"
+								blockoverride "pair_label" {
+									text = "banking_dash_mon_wage_label"
+								}
+								blockoverride "pair_value" {
+									text = "banking_dash_mon_wage_value"
 								}
 							}
 						}
@@ -2667,7 +2762,7 @@ types banking_dashboard_widget_types
 						}
 
 						button_icon_minus_action = {
-							size = { 26 26 }
+							size = { 28 28 }
 							parentanchor = vcenter
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
@@ -2675,20 +2770,20 @@ types banking_dashboard_widget_types
 						}
 
 						widget = {
-							size = { 60 26 }
+							size = { 66 28 }
 							textbox = {
 								parentanchor = center
 								align = center|nobaseline
 								autoresize = yes
-								max_width = 60
+								max_width = 66
 								elide = right
-								using = fontsize_medium
+								using = fontsize_large
 								text = "banking_dash_mon_monetise_value"
 							}
 						}
 
 						button_icon_plus_action = {
-							size = { 26 26 }
+							size = { 28 28 }
 							parentanchor = vcenter
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
@@ -2772,6 +2867,7 @@ types banking_dashboard_widget_types
 			multiline = yes
 			max_width = 460
 			align = left|nobaseline
+			using = fontsize_large
 		}
 
 		flowcontainer = {
@@ -2795,7 +2891,7 @@ types banking_dashboard_widget_types
 					}
 				}
 				blockoverride "pair_right" {
-					banking_dash_pair = {
+					banking_dash_pair_right = {
 						visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_worldrate_tt"
 						blockoverride "pair_label" {
@@ -2913,6 +3009,7 @@ types banking_dashboard_widget_types
 		textbox = {
 			text = "banking_dash_available_header"
 			default_format = "#header"
+			using = fontsize_xl
 			autoresize = yes
 			max_width = 500
 			parentanchor = hcenter
