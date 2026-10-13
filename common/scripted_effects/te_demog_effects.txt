@@ -69,6 +69,10 @@
 #   te_dg_pr_lm, te_dg_pr_bs  the practices' shares, Late Marriage and Birth Spacing, 0-1 (te_demog_practice_effects.txt;
 #                       a country's: its states' people-weighted mean; the state region's te_dg_pr_lm_r and
 #                       te_dg_pr_bs_r: the last stepped state's, the seed's fallback after a change of owner)
+#   te_dg_hegemon       phase 3, under Full: the Cultural Hegemony factor the step's desired fertility took (absent at
+#                       1; te_demog_fl_effects.txt). The country's phase 3 variables (Family Limitation's te_dg_pr_fl,
+#                       te_dg_fl_line, te_dg_fl_nb, te_dg_fl_agr, _lit, _ero; te_dg_desired; te_dg_ch_desired) are
+#                       listed in that file's header
 #   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
 #                       te_dg_m_mat maternal deaths per 100,000 births
 #   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments
@@ -369,6 +373,8 @@ te_demog_state_yearly = {
 		te_demog_workforce_refresh = yes
 		# phase 2 step 4: conscription, the youth bulge and sex balance (te_demog_consequence_effects.txt)
 		te_demog_consequences_refresh = yes
+		# phase 3: the longevity gap's politics, off until a play-test (te_demog_lx_effects.txt)
+		te_demog_lx_politics_refresh = yes
 	}
 }
 
@@ -451,6 +457,8 @@ te_demog_country_game_start = {
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		te_demog_country_census = yes
+		# phase 3, under Full: Family Limitation's seed and line (te_demog_fl_effects.txt)
+		te_demog_phase3_game_start = yes
 	}
 }
 
@@ -497,6 +505,8 @@ te_demog_prepare = {
 	set_variable = { name = te_dg_means value = te_demog_means }
 	# phase 2 step 3b: the family policy term and Family Housing's urban share, stored for the tooltips (generated)
 	te_demog_family_policy_store = yes
+	# phase 3: Cultural Hegemony's factor on desired fertility, stored for the tooltips (te_demog_fl_effects.txt)
+	te_demog_hegemon_store = yes
 	set_variable = { name = te_dg_desired value = te_demog_desired }
 	# women's legal standing, stored with the step's other terms so the tooltips match te_dg_tfr until the next step
 	set_variable = { name = te_dg_natural value = te_demog_tfr_natural }
@@ -604,6 +614,8 @@ te_demog_seed = {
 		remove_variable = te_dg_sxb
 	}
 	te_demog_prepare = yes
+	# phase 3: a seed once ageing is slowed builds its adults' survivorship with the treated (te_demog_lx_effects.txt)
+	te_demog_lx_seed_begin = yes
 	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
 	set_local_variable = {
 		name = te_dg_nrr
@@ -692,6 +704,8 @@ te_demog_seed = {
 	}
 	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	te_demog_set_scale = yes
+	# phase 3: a state seeded once ageing is slowed starts its bands at the steady state (te_demog_lx_effects.txt)
+	te_demog_lx_seed = yes
 }
 
 # The seed's sweep (te_demog_seed_sweep), pass 1: slots open .. 0, ages 0 .. open.
@@ -744,21 +758,32 @@ te_demog_seed_slot = {
 		change_local_variable = { name = te_dg_g add = 1 }
 		te_demog_enter_group = yes
 	}
-	# women die of the group's causes and in childbirth (demographics_model.seed's decrement)
-	change_local_variable = {
-		name = te_dg_lsf
-		multiply = {
-			value = local_var:te_dg_asfr
-			multiply = local_var:te_dg_tfr
-			multiply = local_var:te_dg_mmr
-			divide = 100000
-			add = local_var:te_dg_qf
-			divide = 100000
-			multiply = -1
-			add = 1
+	# phase 3: once ageing is slowed, an adult's survivorship blends in the treated at the current rate's steady biological
+	# age (te_demog_lx_seed_decrement; demographics_model.seed)
+	if = {
+		limit = {
+			local_var:te_dg_lx_seed_on > 0
+			local_var:te_dg_age >= te_demog_k_lx_join_age
 		}
+		te_demog_lx_seed_decrement = yes
 	}
-	change_local_variable = { name = te_dg_lsm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	else = {
+		# women die of the group's causes and in childbirth (demographics_model.seed's decrement)
+		change_local_variable = {
+			name = te_dg_lsf
+			multiply = {
+				value = local_var:te_dg_asfr
+				multiply = local_var:te_dg_tfr
+				multiply = local_var:te_dg_mmr
+				divide = 100000
+				add = local_var:te_dg_qf
+				divide = 100000
+				multiply = -1
+				add = 1
+			}
+		}
+		change_local_variable = { name = te_dg_lsm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	}
 	change_local_variable = { name = te_dg_dpow multiply = local_var:te_dg_d }
 	change_local_variable = { name = te_dg_age add = 1 }
 }
@@ -795,6 +820,10 @@ te_demog_reset_accumulators = {
 	te_demog_enter_cal_band = yes
 	set_local_variable = { name = te_dg_bio value = 0 }
 	te_demog_enter_bio_band = yes
+	# phase 3: 1 in the late sweep only (te_demog_lx_sweep_run), so the seed's and the plain sweep's slots take the plain lines
+	set_local_variable = { name = te_dg_lx_t value = 0 }
+	# phase 3: the births' ages, for the mean age at childbirth
+	set_local_variable = { name = te_dg_bage value = 0 }
 }
 
 # Before the people of local_var:te_dg_age are added: close the band or the
@@ -864,7 +893,12 @@ te_demog_accumulate_slot = {
 		limit = { local_var:te_dg_age <= 148 }
 		change_local_variable = { name = te_dg_acc_cf add = var:te_dg_f$S$ }
 		change_local_variable = { name = te_dg_acc_cm add = var:te_dg_m$S$ }
+		# phase 3: in the late sweep by part, each at its own biological age (te_demog_lx_pool_sums)
 		if = {
+			limit = { local_var:te_dg_lx_t > 0 }
+			te_demog_lx_pool_sums = { S = $S$ }
+		}
+		else_if = {
 			limit = {
 				local_var:te_dg_age >= te_demog_k_pool_from
 				local_var:te_dg_ab <= te_demog_k_pool_to
@@ -873,8 +907,14 @@ te_demog_accumulate_slot = {
 			change_local_variable = { name = te_dg_acc_fam add = var:te_dg_m$S$ }
 		}
 	}
-	# phase 2 step 1: at every age, as the bands
-	te_demog_work_slot = { S = $S$ }
+	# phase 2 step 1: at every age, as the bands; phase 3: by part in the late sweep (te_demog_lx_work_slot)
+	if = {
+		limit = { local_var:te_dg_lx_t > 0 }
+		te_demog_lx_work_slot = { S = $S$ }
+	}
+	else = {
+		te_demog_work_slot = { S = $S$ }
+	}
 }
 
 # After a sweep: the pool goes to 85+ and the raw total (not to a class: it
@@ -984,7 +1024,15 @@ te_demog_work_walk_store = {
 # Slot $S$'s people after the step into the working ages, the workers, the pensioners and the health need
 # (demographics_model.work_figures). te_dg_start, te_dg_cap and te_dg_needw are the bands' (te_demog_age_boundaries).
 te_demog_work_slot = {
-	set_local_variable = { name = te_dg_wk_p value = { value = var:te_dg_f$S$ add = var:te_dg_m$S$ } }
+	set_local_variable = { name = te_dg_wk_f value = var:te_dg_f$S$ }
+	set_local_variable = { name = te_dg_wk_m value = var:te_dg_m$S$ }
+	te_demog_work_part = yes
+}
+
+# One part of a slot (phase 3 splits a treated slot in two; te_demog_work_slot passes the whole): its people te_dg_wk_f and
+# te_dg_wk_m at the capacity and need locals te_dg_cap and te_dg_needw.
+te_demog_work_part = {
+	set_local_variable = { name = te_dg_wk_p value = { value = local_var:te_dg_wk_f add = local_var:te_dg_wk_m } }
 	change_local_variable = { name = te_dg_acc_need add = { value = local_var:te_dg_wk_p multiply = local_var:te_dg_needw } }
 	set_local_variable = { name = te_dg_wk_sh value = 1 }
 	if = {
@@ -1005,18 +1053,18 @@ te_demog_work_slot = {
 	change_local_variable = {
 		name = te_dg_acc_wk
 		add = {
-			value = var:te_dg_f$S$
+			value = local_var:te_dg_wk_f
 			multiply = local_var:te_dg_wk_rf
-			add = { value = var:te_dg_m$S$ multiply = local_var:te_dg_wk_rm }
+			add = { value = local_var:te_dg_wk_m multiply = local_var:te_dg_wk_rm }
 			multiply = local_var:te_dg_start
 			multiply = local_var:te_dg_cap
 			multiply = local_var:te_dg_wk_sh
 		}
 	}
-	te_demog_work_slot_step2 = { S = $S$ }
+	te_demog_work_slot_step2 = yes
 }
 
-# Phase 2 step 2, slot $S$ (te_demog_work_slot's participation, as it stands): the workers past the end of the working
+# Phase 2 step 2, a slot's part (te_demog_work_part's people and participation, as they stand): the workers past the end of the working
 # ages (the panel's hover) and, at the work deaths' ages, women and all workers (§2.5's split; demographics_model.work_figures).
 te_demog_work_slot_step2 = {
 	set_local_variable = { name = te_dg_wk_k value = { value = local_var:te_dg_start multiply = local_var:te_dg_cap multiply = local_var:te_dg_wk_sh } }
@@ -1025,9 +1073,9 @@ te_demog_work_slot_step2 = {
 		change_local_variable = {
 			name = te_dg_acc_past
 			add = {
-				value = var:te_dg_f$S$
+				value = local_var:te_dg_wk_f
 				multiply = local_var:te_dg_wk_rf
-				add = { value = var:te_dg_m$S$ multiply = local_var:te_dg_wk_rm }
+				add = { value = local_var:te_dg_wk_m multiply = local_var:te_dg_wk_rm }
 				multiply = local_var:te_dg_wk_k
 			}
 		}
@@ -1037,13 +1085,13 @@ te_demog_work_slot_step2 = {
 			local_var:te_dg_age >= te_demog_k_work_split_first
 			local_var:te_dg_age <= te_demog_k_work_split_last
 		}
-		change_local_variable = { name = te_dg_acc_wsf add = { value = var:te_dg_f$S$ multiply = local_var:te_dg_wk_rf multiply = local_var:te_dg_wk_k } }
+		change_local_variable = { name = te_dg_acc_wsf add = { value = local_var:te_dg_wk_f multiply = local_var:te_dg_wk_rf multiply = local_var:te_dg_wk_k } }
 		change_local_variable = {
 			name = te_dg_acc_wsa
 			add = {
-				value = var:te_dg_f$S$
+				value = local_var:te_dg_wk_f
 				multiply = local_var:te_dg_wk_rf
-				add = { value = var:te_dg_m$S$ multiply = local_var:te_dg_wk_rm }
+				add = { value = local_var:te_dg_wk_m multiply = local_var:te_dg_wk_rm }
 				multiply = local_var:te_dg_wk_k
 			}
 		}
@@ -1055,7 +1103,36 @@ te_demog_work_slot_step2 = {
 # the figures. The pool is past the end of the working ages where a pension law ends them; with none they have no end
 # (D10), so it counts in the working ages, as demographics_model.work_figures has it.
 te_demog_work_finish = {
-	set_local_variable = { name = te_dg_wk_p value = { value = var:te_dg_pf add = var:te_dg_pm } }
+	# the pool's part; phase 3: by part in the late sweep, its treated part at its biological age (te_demog_lx_work_pool)
+	if = {
+		limit = { local_var:te_dg_lx_t > 0 }
+		te_demog_lx_work_pool = yes
+	}
+	else = {
+		set_local_variable = { name = te_dg_wk_f value = var:te_dg_pf }
+		set_local_variable = { name = te_dg_wk_m value = var:te_dg_pm }
+		te_demog_work_pool_part = yes
+	}
+	te_demog_work_finish_step2 = yes
+	change_local_variable = { name = te_dg_acc_need add = { value = local_var:te_dg_wk_born multiply = te_demog_k_need_newborn } }
+	set_variable = { name = te_dg_wa_share value = { value = local_var:te_dg_acc_wa divide = { value = local_var:te_dg_raw min = 1 } } }
+	set_variable = { name = te_dg_at_work value = { value = local_var:te_dg_acc_wk divide = { value = local_var:te_dg_acc_wa min = 1 } } }
+	set_variable = { name = te_dg_pensioners value = { value = local_var:te_dg_acc_pens divide = { value = local_var:te_dg_raw min = 1 } } }
+	set_variable = {
+		name = te_dg_need
+		value = {
+			value = local_var:te_dg_acc_need
+			divide = { value = local_var:te_dg_raw min = 1 }
+			divide = { value = te_demog_k_health_need_1836 min = 0.01 }
+		}
+	}
+}
+
+# The pool's part (locals te_dg_wk_f, te_dg_wk_m) at age 150 (te_demog_work_finish; phase 3 splits it in two in the late
+# sweep): past the end of the working ages where a pension law ends them, in them otherwise; its workers, and those past
+# the end (phase 2 step 2).
+te_demog_work_pool_part = {
+	set_local_variable = { name = te_dg_wk_p value = { value = local_var:te_dg_wk_f add = local_var:te_dg_wk_m } }
 	change_local_variable = { name = te_dg_acc_need add = { value = local_var:te_dg_wk_p multiply = local_var:te_dg_needw } }
 	set_local_variable = { name = te_dg_wk_sh value = 1 }
 	if = {
@@ -1075,46 +1152,32 @@ te_demog_work_finish = {
 	change_local_variable = {
 		name = te_dg_acc_wk
 		add = {
-			value = var:te_dg_pf
+			value = local_var:te_dg_wk_f
 			multiply = local_var:te_dg_wk_rf
-			add = { value = var:te_dg_pm multiply = local_var:te_dg_wk_rm }
+			add = { value = local_var:te_dg_wk_m multiply = local_var:te_dg_wk_rm }
 			multiply = local_var:te_dg_cap
 			multiply = local_var:te_dg_wk_sh
 		}
 	}
-	te_demog_work_finish_step2 = yes
-	change_local_variable = { name = te_dg_acc_need add = { value = local_var:te_dg_wk_born multiply = te_demog_k_need_newborn } }
-	set_variable = { name = te_dg_wa_share value = { value = local_var:te_dg_acc_wa divide = { value = local_var:te_dg_raw min = 1 } } }
-	set_variable = { name = te_dg_at_work value = { value = local_var:te_dg_acc_wk divide = { value = local_var:te_dg_acc_wa min = 1 } } }
-	set_variable = { name = te_dg_pensioners value = { value = local_var:te_dg_acc_pens divide = { value = local_var:te_dg_raw min = 1 } } }
-	set_variable = {
-		name = te_dg_need
-		value = {
-			value = local_var:te_dg_acc_need
-			divide = { value = local_var:te_dg_raw min = 1 }
-			divide = { value = te_demog_k_health_need_1836 min = 0.01 }
-		}
-	}
-}
-
-# Phase 2 step 2, in te_demog_work_finish after the pool's workers: the pool's past the end (where a pension law ends the
-# working ages), then the workers past the end over people (te_dg_wk_past, the panel's hover) and women's share of the
-# workers at the work deaths' ages (te_dg_fws_wk, which splits work deaths under Full at the next step; none without
-# workers there, and the law's share stands in).
-te_demog_work_finish_step2 = {
 	if = {
 		limit = { local_var:te_dg_wa_end <= 150 }
 		change_local_variable = {
 			name = te_dg_acc_past
 			add = {
-				value = var:te_dg_pf
+				value = local_var:te_dg_wk_f
 				multiply = local_var:te_dg_wk_rf
-				add = { value = var:te_dg_pm multiply = local_var:te_dg_wk_rm }
+				add = { value = local_var:te_dg_wk_m multiply = local_var:te_dg_wk_rm }
 				multiply = local_var:te_dg_cap
 				multiply = local_var:te_dg_wk_sh
 			}
 		}
 	}
+}
+
+# Phase 2 step 2, in te_demog_work_finish after the pool's part(s): the workers past the end over people (te_dg_wk_past, the
+# panel's hover) and women's share of the workers at the work deaths' ages (te_dg_fws_wk, which splits work deaths under
+# Full at the next step; none without workers there, and the law's share stands in).
+te_demog_work_finish_step2 = {
 	set_variable = { name = te_dg_wk_past value = { value = local_var:te_dg_acc_past divide = { value = local_var:te_dg_raw min = 1 } } }
 	if = {
 		limit = { local_var:te_dg_acc_wsa > 0 }
@@ -1160,12 +1223,15 @@ te_demog_no_flows = {
 	set_local_variable = { name = te_dg_pm2 value = 0 }
 	set_local_variable = { name = te_dg_pm3 value = 0 }
 	set_local_variable = { name = te_dg_pm4 value = 0 }
+	set_local_variable = { name = te_dg_mig_flat value = 0 }
 }
 
 # THIS = a state, at the start of its step (after te_demog_prepare, which sets
 # te_dg_fws). Sets the step's flow locals (demographics_model.step's war_dead, kills,
-# migration and migrant_profile): te_dg_war_ff/_fm, te_dg_kill, te_dg_mig_in/_out and
-# te_dg_pf<c>/te_dg_pm<c>. Every branch sets all of them; the step reads them unguarded.
+# migration, migrant_profile and migrant_rates): te_dg_war_ff/_fm, te_dg_kill, te_dg_mig_in/_out,
+# te_dg_pf<c>/te_dg_pm<c> and the booking's rates (te_dg_mr_f<c>/_m<c>, te_dg_mig_flat; te_demog_enter_class
+# reads the rates only while te_dg_mig_in or te_dg_mig_out is above 0). Every branch sets the rest; the step
+# reads them unguarded.
 te_demog_flows = {
 	# war dead the owner shared out monthly since this state's last step (te_demog_share_war_dead)
 	set_local_variable = { name = te_dg_war value = 0 }
@@ -1270,7 +1336,10 @@ te_demog_flows = {
 			max = te_demog_k_labour_female_max
 		}
 	}
+	# the migrant booking (2026-10-12): the labour kind's sex split corrects itself, then the profile, then the cap
+	te_demog_labour_balance = yes
 	te_demog_set_profile = yes
+	te_demog_migrant_rates = yes
 	# chain migration: consecutive years of net inflow, counted after the profile
 	# read last year's count (the model's inp.inflow_years)
 	if = {
@@ -1279,6 +1348,57 @@ te_demog_flows = {
 	}
 	else = {
 		set_variable = { name = te_dg_inflow_years value = 0 }
+	}
+}
+
+# THIS = a state, in te_demog_flows after the labour kind's women's share (te_dg_labour_f) and the residual
+# (te_dg_mig_in, te_dg_mig_out): the migrant booking's self-correcting sex split
+# (demographics_model.labour_balance_weight, 2026-10-12). Departures' women's share moves to
+# te_demog_k_labour_balance_share as the state's men per 100 women aged 20-59 (te_dg_sex_balance, the last census's)
+# fall from te_demog_k_labour_low_start to _low_full; arrivals' as they rise from _high_start to _high_full. Without a
+# sex balance or a residual it leaves the share alone. docs/testing/demographics-migrant-booking-2026-10-12.md.
+te_demog_labour_balance = {
+	set_local_variable = { name = te_dg_lbw value = 0 }
+	if = {
+		limit = {
+			has_variable = te_dg_sex_balance
+			local_var:te_dg_mig_out > 0
+		}
+		set_local_variable = {
+			name = te_dg_lbw
+			value = {
+				value = te_demog_k_labour_low_start
+				subtract = var:te_dg_sex_balance
+				divide = { value = te_demog_k_labour_low_start subtract = te_demog_k_labour_low_full min = 1 }
+				min = 0
+				max = 1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_sex_balance
+			local_var:te_dg_mig_in > 0
+		}
+		set_local_variable = {
+			name = te_dg_lbw
+			value = {
+				value = var:te_dg_sex_balance
+				subtract = te_demog_k_labour_high_start
+				divide = { value = te_demog_k_labour_high_full subtract = te_demog_k_labour_high_start min = 1 }
+				min = 0
+				max = 1
+			}
+		}
+	}
+	set_local_variable = {
+		name = te_dg_labour_f
+		value = {
+			value = te_demog_k_labour_balance_share
+			subtract = local_var:te_dg_labour_f
+			multiply = local_var:te_dg_lbw
+			add = local_var:te_dg_labour_f
+		}
 	}
 }
 
@@ -1408,6 +1528,8 @@ te_demog_country_lists = {
 # The national Wealth Concentration, #822's modifiers and the country's Gini follow from this
 # year's state scores, whatever the rule, before the census reads them.
 te_demog_country_yearly = {
+	# phase 3: the market threshold for longevity care falls a year (te_demog_lx_effects.txt)
+	te_demog_lx_market_step = yes
 	te_demog_pension_age_refresh = yes
 	# phase 2 step 2: a linked pension age moves a year toward its target (te_demog_work_effects.txt)
 	te_demog_pension_link_drift = yes
@@ -1424,6 +1546,10 @@ te_demog_country_yearly = {
 			NOT = { te_demog_clock_on = yes }
 		}
 		te_demog_country_census = yes
+		# phase 3, under Full: Family Limitation's census year and Cultural Hegemony's drift (te_demog_fl_effects.txt)
+		te_demog_phase3_yearly = yes
+		# phase 3: once a game, whether a state's neighbours read across land and straits (te_debug_demog_effects.txt)
+		te_debug_demog_neighbours_selfcheck = yes
 	}
 	# phase 2 step 2: the AI's pension position, after the census set this year's bill
 	te_demog_pension_ai = yes
@@ -1481,10 +1607,15 @@ te_demog_step = {
 te_demog_step_begin = {
 	# medicine moves its share of the gap, then the practices theirs, then the year's rates use them
 	te_demog_medicine_drift = yes
+	# phase 3: the neighbouring states' shares, which each practice's step closes part of the gap to (generated)
+	te_demog_practices_neighbours = yes
 	te_demog_practices_step = yes
 	# phase 2 step 4: the ring's sex balance, which the year's fertility and women's rate read (te_dg_sxb)
 	te_demog_sex_births_store = yes
 	te_demog_prepare = yes
+	# phase 3, the late game: eligibility, cover and the age groups' own rates once a carrier or treated people exist
+	# (te_demog_lx_effects.txt; local te_dg_lx_on)
+	te_demog_lx_begin = yes
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes
 }
@@ -1511,7 +1642,15 @@ te_demog_step_run = {
 	# te_demog_k_pool_from and the biological one to te_demog_k_pool_to. te_dg_ab is the biological age after the step,
 	# a year on from the rate age until phase 3 (which ages the treated more slowly and replaces this 1)
 	set_local_variable = { name = te_dg_war_ab value = { value = te_demog_k_pool_to add = 1 } }
-	te_demog_sweep = yes
+	# phase 3: a state in the late game takes the late sweep, its treated parts at their biological ages
+	# (te_demog_lx_effects.txt); every other state the plain one, as before
+	if = {
+		limit = { local_var:te_dg_lx_on > 0 }
+		te_demog_lx_sweep_run = yes
+	}
+	else = {
+		te_demog_sweep = yes
+	}
 	te_demog_step_finish = yes
 }
 
@@ -1578,38 +1717,54 @@ te_demog_slot = {
 te_demog_age_slot = {
 	set_local_variable = { name = te_dg_f value = { value = var:te_dg_f$S$ multiply = local_var:te_dg_s } }
 	set_local_variable = { name = te_dg_m value = { value = var:te_dg_m$S$ multiply = local_var:te_dg_s } }
-	# births from these women (rate ages 15-49 carry a non-zero te_dg_asfr); generated: planned and unplanned
-	te_demog_slot_births = yes
-	change_local_variable = { name = te_dg_births add = local_var:te_dg_b }
-	change_local_variable = { name = te_dg_mat add = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 } }
-	# deaths, and maternal deaths per birth
-	set_local_variable = {
-		name = te_dg_f2
-		value = {
-			value = local_var:te_dg_qf
-			divide = 100000
-			multiply = -1
-			add = 1
-			multiply = local_var:te_dg_f
-			subtract = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 }
-		}
-	}
-	set_local_variable = {
-		name = te_dg_m2
-		value = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_m }
-	}
-	change_local_variable = {
-		name = te_dg_deaths
-		add = { value = local_var:te_dg_f add = local_var:te_dg_m subtract = local_var:te_dg_f2 subtract = local_var:te_dg_m2 }
-	}
-	# war dead: the pool's ages by rate age (phase 2 step 4, §4.2), from the counts before deaths
+	# phase 3: in the late sweep births by part and by clock, and artificial wombs (te_demog_lx_births)
 	if = {
-		limit = {
-			local_var:te_dg_r >= te_demog_k_pool_from
-			local_var:te_dg_ab <= local_var:te_dg_war_ab
+		limit = { local_var:te_dg_lx_t > 0 }
+		te_demog_lx_births = yes
+	}
+	else = {
+		# births from these women (rate ages 15-49 carry a non-zero te_dg_asfr); generated: planned and unplanned
+		te_demog_slot_births = yes
+		change_local_variable = { name = te_dg_births add = local_var:te_dg_b }
+		change_local_variable = { name = te_dg_mat add = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 } }
+	}
+	# phase 3: the mean age at childbirth (te_dg_mab, te_demog_step_finish)
+	change_local_variable = { name = te_dg_bage add = { value = local_var:te_dg_b multiply = local_var:te_dg_r } }
+	# phase 3: in the late sweep the cohort's treated and untreated parts die apart (te_demog_lx_deaths)
+	if = {
+		limit = { local_var:te_dg_lx_t > 0 }
+		te_demog_lx_deaths = yes
+	}
+	else = {
+		# deaths, and maternal deaths per birth
+		set_local_variable = {
+			name = te_dg_f2
+			value = {
+				value = local_var:te_dg_qf
+				divide = 100000
+				multiply = -1
+				add = 1
+				multiply = local_var:te_dg_f
+				subtract = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 }
+			}
 		}
-		change_local_variable = { name = te_dg_f2 subtract = { value = local_var:te_dg_f multiply = local_var:te_dg_war_ff } }
-		change_local_variable = { name = te_dg_m2 subtract = { value = local_var:te_dg_m multiply = local_var:te_dg_war_fm } }
+		set_local_variable = {
+			name = te_dg_m2
+			value = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_m }
+		}
+		change_local_variable = {
+			name = te_dg_deaths
+			add = { value = local_var:te_dg_f add = local_var:te_dg_m subtract = local_var:te_dg_f2 subtract = local_var:te_dg_m2 }
+		}
+		# war dead: the pool's ages by rate age (phase 2 step 4, §4.2), from the counts before deaths
+		if = {
+			limit = {
+				local_var:te_dg_r >= te_demog_k_pool_from
+				local_var:te_dg_ab <= local_var:te_dg_war_ab
+			}
+			change_local_variable = { name = te_dg_f2 subtract = { value = local_var:te_dg_f multiply = local_var:te_dg_war_ff } }
+			change_local_variable = { name = te_dg_m2 subtract = { value = local_var:te_dg_m multiply = local_var:te_dg_war_fm } }
+		}
 	}
 	# known kills: every age, from the counts before deaths
 	change_local_variable = { name = te_dg_f2 subtract = { value = local_var:te_dg_f multiply = local_var:te_dg_kill } }
@@ -1651,6 +1806,11 @@ te_demog_age_slot = {
 # join the pool, which ages, loses the year's kills and dies at the last group's
 # rates; the slot takes this year's births (it is the sweep's last).
 te_demog_fold_slot = {
+	# phase 3: the cohort's band's treated share and deficit join the pool's first (te_demog_lx_fold_merge)
+	if = {
+		limit = { local_var:te_dg_lx_t > 0 }
+		te_demog_lx_fold_merge = { S = $S$ }
+	}
 	set_local_variable = { name = te_dg_pool value = { value = var:te_dg_pf add = var:te_dg_pm multiply = local_var:te_dg_s } }
 	set_local_variable = { name = te_dg_old value = 0 }
 	if = {
@@ -1678,17 +1838,24 @@ te_demog_fold_slot = {
 	# known kills take the same share of the pool
 	change_variable = { name = te_dg_pf multiply = { value = 1 subtract = local_var:te_dg_kill } }
 	change_variable = { name = te_dg_pm multiply = { value = 1 subtract = local_var:te_dg_kill } }
-	change_local_variable = {
-		name = te_dg_deaths
-		add = {
-			value = var:te_dg_pf
-			multiply = local_var:te_dg_qf
-			add = { value = var:te_dg_pm multiply = local_var:te_dg_qm }
-			divide = 100000
-		}
+	# phase 3: in the late sweep the pool's treated and untreated parts die apart (te_demog_lx_fold_deaths)
+	if = {
+		limit = { local_var:te_dg_lx_t > 0 }
+		te_demog_lx_fold_deaths = yes
 	}
-	change_variable = { name = te_dg_pf multiply = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 } }
-	change_variable = { name = te_dg_pm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	else = {
+		change_local_variable = {
+			name = te_dg_deaths
+			add = {
+				value = var:te_dg_pf
+				multiply = local_var:te_dg_qf
+				add = { value = var:te_dg_pm multiply = local_var:te_dg_qm }
+				divide = 100000
+			}
+		}
+		change_variable = { name = te_dg_pf multiply = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 } }
+		change_variable = { name = te_dg_pm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	}
 	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_f divide = 100000 } }
 	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_m divide = 100000 } }
 }
@@ -1710,6 +1877,14 @@ te_demog_step_finish = {
 	te_demog_work_finish = yes
 	set_variable = { name = te_dg_births value = local_var:te_dg_births }
 	set_variable = { name = te_dg_deaths value = local_var:te_dg_deaths }
+	# phase 3 (late-game §6.2): the mean age at childbirth, mothers' rate age plus half a year (none with no births)
+	if = {
+		limit = { local_var:te_dg_births > 0 }
+		set_variable = {
+			name = te_dg_mab
+			value = { value = local_var:te_dg_bage divide = { value = local_var:te_dg_births min = 0.00001 } add = 0.5 }
+		}
+	}
 	# the model's own rates without the on-top scales: what the census's births and deaths modifiers aim at
 	# next (te_demog_rates_refresh). Births: / (1 + bz). Deaths: the cause deaths / (1 + dz), the maternal
 	# deaths (which follow the births) / (1 + bz).
@@ -1734,6 +1909,11 @@ te_demog_step_finish = {
 		}
 	}
 	te_demog_set_scale = yes
+	# phase 3: the biological pyramid, at the new scale (te_demog_lx_effects.txt)
+	if = {
+		limit = { local_var:te_dg_lx_t > 0 }
+		te_demog_lx_bio_bands_store = yes
+	}
 }
 
 # THIS = a state, after its census (demographics_model.structure, by band): the
@@ -1841,14 +2021,20 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_chr_w value = 0 }
 	set_local_variable = { name = te_dg_c_work_w value = 0 }
 	te_demog_practices_country_init = yes
+	# phase 3: Family Limitation's and Cultural Hegemony's inputs (te_demog_fl_effects.txt)
+	te_demog_fl_country_init = yes
 	# phase 2 step 2: the work figures' people-weighted sums (te_demog_work_effects.txt)
 	te_demog_work_country_init = yes
+	# phase 3: the late figures' (te_demog_lx_effects.txt)
+	te_demog_lx_country_init = yes
 	every_scope_state = {
 		limit = { te_demog_has_census = yes }
 		te_demog_add_bands_to_root = yes
 		set_local_variable = { name = te_dg_c_s_pm value = { value = var:te_dg_people divide = 1000000 } }
 		te_demog_practices_country_add = yes
+		te_demog_fl_country_add = yes
 		te_demog_work_country_add = yes
+		te_demog_lx_country_add = yes
 		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 100000 } }
 		change_local_variable = { name = te_dg_seeded add = 1 }
 		# the women's share of the workforce depends on the owner's law only: any state gives it
@@ -1912,6 +2098,8 @@ te_demog_country_census = {
 		te_demog_band_figures = { B = te_dg_cb }
 		te_demog_store_figures = yes
 		te_demog_practices_country_store = yes
+		te_demog_fl_country_store = yes
+		te_demog_lx_country_store = yes
 		# phase 2 step 2: the work figures, then the pension and health bills
 		te_demog_work_country_store = yes
 		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
@@ -1951,6 +2139,9 @@ te_demog_country_census = {
 		else = {
 			set_variable = { name = te_dg_urban_label value = 3 }
 		}
+		# phase 3: the largest city and the pattern's strength, which the states' pulses apply under Full
+		# (te_demog_place_effects.txt)
+		te_demog_up_country = yes
 		te_demog_country_lists = yes
 		set_variable = { name = te_dg_census_year value = te_demog_year }
 		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }
@@ -1971,6 +2162,8 @@ te_demog_country_census = {
 		}
 		# the pyramid's scale, once here instead of in every bar's range each frame
 		set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }
+		# phase 3: the biological pyramid where any state has one, the scale over both (te_demog_lx_effects.txt)
+		te_demog_lx_country_bio_store = yes
 		# phase 2 step 4: the country's pool and youth-bulge figures for its tab (te_demog_consequence_effects.txt)
 		te_demog_consequences_country = yes
 		# one sample a year of the figures above for the history charts (te_demog_history_effects.txt)

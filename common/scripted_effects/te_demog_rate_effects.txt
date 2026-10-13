@@ -460,6 +460,9 @@ te_demog_rates_refresh = {
 			}
 			# the moved lines' on-top family (the engine-lines plan): script-only, so the census adds it at its rate
 			set_local_variable = { name = te_dg_rate_q value = modifier:state_demog_ontop_mortality_mult }
+			# phase 3 (late-game §4.3, call 14): the census's wealth slope in the late game (te_demog_lx_wealth_slope), on
+			# the census's rate, the richest pop held at the treated's rate; M nets what it moves (te_demog_lx_rate_slope)
+			te_demog_lx_rate_slope = yes
 			set_local_variable = {
 				name = te_dg_rate_m
 				value = {
@@ -469,6 +472,7 @@ te_demog_rates_refresh = {
 						value = local_var:te_dg_w_edr
 						divide = { value = local_var:te_dg_w_ed0 min = 1 }
 					}
+					subtract = local_var:te_dg_rate_slope_net
 					subtract = {
 						value = 1
 						subtract = local_var:te_dg_rate_tb
@@ -505,6 +509,7 @@ te_demog_rates_refresh = {
 				value = {
 					value = modifier:state_demog_ontop_mortality_wealth_mult
 					min = te_demog_k_wealth_line_floor
+					add = local_var:te_dg_rate_slope
 					multiply = var:te_dg_tb_d
 				}
 			}

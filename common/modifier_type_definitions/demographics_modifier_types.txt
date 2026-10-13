@@ -163,3 +163,22 @@ state_sex_ratio_at_birth_add = {
 	decimals = 0
 	script_only = yes
 }
+
+# The late game (demographics phase 3; docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §1.2, §1.4).
+# Read only by the census (te_demog_lx_begin):
+#   state_ageing_rate_add     the biological years a calendar year of those in longevity care, 1 + it, within 0-1
+#                             (mRNA Therapeutics -0.10, Personalized Medicine -0.10, Genetic Engineering -0.05,
+#                             Biological Immortality -0.75: the ladder 0.9, 0.75, 0)
+#   state_rejuvenation_add    the share of a treated body's gap to 35 closed each year (Biological Immortality 0.03)
+state_ageing_rate_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_rejuvenation_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}

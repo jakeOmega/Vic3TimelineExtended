@@ -53,21 +53,27 @@
 #        ratio's add and the census's stored fertility terms (TE_DEMOG_FAMILY)
 #   t    phase 2 step 4's figures: the capital's pool, conscription term, youth bulge and sex-balance terms beside the
 #        state's reads of the four fields they move (TE_DEMOG_CONSEQ), and the country's (TE_DEMOG_CONSEQ_COUNTRY)
+#   u    phase 3, the late game: the capital's eligibility, cover, ageing rate and pull, the market threshold, Living to
+#        100, old age from, rho, the wealth slope and the mean ages (TE_DEMOG_LATE), and the country's (TE_DEMOG_LATE_COUNTRY)
+#   v    phase 3's play-test cheat: our country researches the ageing ladder at once (mRNA Therapeutics, Personalized
+#        Medicine, Genetic Engineering and Biological Immortality), so the late game starts at the next census. It
+#        really researches them: throwaway games only
 #   w    phase 3's event wave: opens te_debug_demog.80, a chooser that fires any of the ten wave events
 #        (events/te_demog_wave_events.txt) on the player now, whatever its condition and its generation's hold, under
 #        any rule (its options act as they would under Full; the census's levers in them need Full)
 # Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7, .8 (phase 2 step
 # 1's workforce self-checks; te_debug_demog_wf_selfchecks); under Full, .10 (the Family Policy measures' self-check,
-# measure_country_types; te_debug_demog_ms_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
+# measure_country_types; te_debug_demog_ms_selfcheck_start) and .60 (the Planned Capital's, planned_capital_moved;
+# te_debug_demog_pc_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
 # Hidden too: .40 and .41, calibration step 3's self-checks (te_debug_demog_step3_selfchecks), one line a game each.
 # Phase 2 step 2's two (workforce_ratio_scale, workforce_follows_target) need no event: te_debug_demog_wf_term_checks
 # writes them at a capital's census, before its workforce refresh.
 # Hidden too: .30, phase 2 step 4's conscription_term_read (te_debug_demog_conscription_selfcheck_start), one line a
 # game, only while conscription's effect applies.
+#
 # Phase 3's event wave: .80, the console's chooser (option w; visible), and the hidden .81, the self-check
 # wave_timed_country_type's second half (te_debug_demog_wave_selfcheck_start, te_demog_wave_effects.txt), one line a
 # game under Full.
-#
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
 # or every state and war, and their tooltips wrote about 1,200 error lines a second
@@ -433,6 +439,41 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		}
 	}
 
+	# ---- u: phase 3, the late game (te_debug_demog_late_lines) ---------------------------------------------------
+	option = {
+		name = te_debug_demog.1.u
+		trigger = {
+			exists = capital
+			te_demog_cohorts_run = yes
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.u.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_late_lines = yes
+			}
+		}
+	}
+
+	# ---- v: phase 3's play-test cheat, the ageing ladder at once ---------------------------------------------------
+	option = {
+		name = te_debug_demog.1.v
+		trigger = {
+			NOT = { has_technology_researched = biological_immortality }
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.v.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_late_ladder = yes
+			}
+		}
+	}
+
 	# ---- w: phase 3's event wave (te_debug_demog.80, a chooser) ------------------------------------------------------
 	option = {
 		name = te_debug_demog.1.w
@@ -785,6 +826,122 @@ te_debug_demog.30 = {
 			debug_log_scopes = yes
 			remove_variable = te_dg_chk_consc_before
 			remove_variable = te_dg_chk_consc_t
+		}
+	}
+}
+
+# Phase 3's family_limitation_scaled, its second half (te_debug_demog_fl_selfcheck_start): once a game, a week after the
+# first country's fresh Family Limitation line. OK: the capital's state_fertility_means_add rose by the line, so the
+# engine scales a script-only type on a country modifier by its multiplier and the states read it. BROKEN with added
+# about 0.6: the multiplier is ignored; about 0: the type doesn't reach the state. docs/testing/demographics-playtest.md.
+te_debug_demog.90 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_dg_fl_chk_before
+				exists = owner
+				owner = var:te_dg_fl_chk_owner
+				owner = { has_modifier = te_demog_family_limitation }
+			}
+			set_variable = {
+				name = te_dg_fl_chk_added
+				value = {
+					value = modifier:state_fertility_means_add
+					subtract = var:te_dg_fl_chk_before
+				}
+			}
+			set_local_variable = {
+				name = te_dg_fl_chk_gap
+				value = {
+					value = var:te_dg_fl_chk_added
+					subtract = var:te_dg_fl_chk_line
+				}
+			}
+			if = {
+				limit = { local_var:te_dg_fl_chk_gap < 0 }
+				change_local_variable = { name = te_dg_fl_chk_gap multiply = -1 }
+			}
+			if = {
+				limit = { local_var:te_dg_fl_chk_gap < 0.005 }
+				debug_log = "TE_SELF_CHECK OK family_limitation_scaled added=[THIS.Var('te_dg_fl_chk_added').GetValue|4] expected=[THIS.Var('te_dg_fl_chk_line').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN family_limitation_scaled added=[THIS.Var('te_dg_fl_chk_added').GetValue|4] expected=[THIS.Var('te_dg_fl_chk_line').GetValue|4] (about 0.6: the multiplier is ignored; about 0: the type doesn't reach the state; another figure: a law or measure moved the means inside the week. Fallback: put the line on a state modifier in each state, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_variable = te_dg_fl_chk_added
+		}
+		else_if = {
+			limit = { has_variable = te_dg_fl_chk_before }
+			# the capital changed hands or the line came off within the week: no verdict, and the check re-arms
+			debug_log = "TE_SELF_CHECK NO_VERDICT family_limitation_scaled (the capital changed hands or the line came off within the week; the check re-arms) date=[TimeKeeper.GetCurrentDate.GetString]"
+			remove_global_variable = te_demog_fl_selfcheck_done
+		}
+		if = {
+			limit = { has_variable = te_dg_fl_chk_before }
+			remove_variable = te_dg_fl_chk_before
+			remove_variable = te_dg_fl_chk_line
+			remove_variable = te_dg_fl_chk_owner
+		}
+	}
+}
+
+# The Planned Capital self-check's second half (te_debug_demog_pc_selfcheck_start, te_demog_place_effects.txt): once a
+# game, under Full, a week after the first planned capital anywhere (the AI's included), on that country. OK: the
+# capital stands in the chosen site, so set_capital moved it from the generated dispatcher on the site's state region.
+# BROKEN: it is still in the old capital, so the move never happened: re-run scripts/generators/gen_planned_capital.py
+# (a region added since) or, if the engine refuses the move, take the fallback in docs/testing/demographics-playtest.md
+# (Self-checks). BROKEN needs at_once 0 too: a capital that moved at once and was moved back within the week (the
+# play-test's item 6) is no verdict. penalty: whether the base game's Moved Capital Recently came with the move (1) or
+# not (0), for the costs' tuning. NO_VERDICT, and the check re-arms, otherwise: the capital in neither state, moved back,
+# or a state changed hands within the week.
+te_debug_demog.60 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_dg_pc_chk_site
+				has_variable = te_dg_pc_chk_from
+			}
+			set_variable = { name = te_dg_pc_chk_penalty value = 0 }
+			if = {
+				limit = { has_modifier = moved_capital_recently }
+				set_variable = { name = te_dg_pc_chk_penalty value = 1 }
+			}
+			if = {
+				limit = {
+					var:te_dg_pc_chk_site ?= {
+						owner = ROOT
+						is_capital = yes
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = {
+					var:te_dg_pc_chk_now = 0
+					var:te_dg_pc_chk_from ?= {
+						owner = ROOT
+						is_capital = yes
+					}
+					var:te_dg_pc_chk_site ?= { owner = ROOT }
+				}
+				debug_log = "TE_SELF_CHECK BROKEN planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetName] (the capital never left the old one: re-run gen_planned_capital.py, or take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK NO_VERDICT planned_capital_moved tag=[THIS.GetCountry.GetTagName] (the capital is in neither state, moved at once and back again, or one changed hands within the week; the check re-arms) date=[TimeKeeper.GetCurrentDate.GetString]"
+				remove_global_variable = te_demog_pc_selfcheck_done
+			}
+			debug_log_scopes = yes
+			remove_variable = te_dg_pc_chk_site
+			remove_variable = te_dg_pc_chk_from
+			remove_variable = te_dg_pc_chk_now
+			remove_variable = te_dg_pc_chk_penalty
 		}
 	}
 }

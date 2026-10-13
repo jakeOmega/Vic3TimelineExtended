@@ -383,6 +383,118 @@ gm_skin_name = {
 		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_nikko_toshogu }
 		localization_key = gm_skin_landmark_nikko_toshogu
 	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_parthenon }
+		localization_key = gm_skin_landmark_parthenon
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_obelisks_of_karnak }
+		localization_key = gm_skin_landmark_obelisks_of_karnak
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_benin }
+		localization_key = gm_skin_landmark_royal_palace_of_benin
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_kumasi }
+		localization_key = gm_skin_landmark_royal_palace_of_kumasi
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_bukgwan_victory_stele }
+		localization_key = gm_skin_landmark_bukgwan_victory_stele
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_imperial_city_of_hue }
+		localization_key = gm_skin_landmark_imperial_city_of_hue
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_persepolis }
+		localization_key = gm_skin_landmark_persepolis
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_red_fort }
+		localization_key = gm_skin_landmark_red_fort
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_rosetta_stone }
+		localization_key = gm_skin_landmark_rosetta_stone
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_temple_of_dendera }
+		localization_key = gm_skin_landmark_temple_of_dendera
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_luxor_obelisk }
+		localization_key = gm_skin_landmark_luxor_obelisk
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_venus_de_milo }
+		localization_key = gm_skin_landmark_venus_de_milo
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_piraeus_lion }
+		localization_key = gm_skin_landmark_piraeus_lion
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_horses_of_saint_mark }
+		localization_key = gm_skin_landmark_horses_of_saint_mark
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_tipus_tiger }
+		localization_key = gm_skin_landmark_tipus_tiger
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_baba_merzoug }
+		localization_key = gm_skin_landmark_baba_merzoug
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_great_zimbabwe }
+		localization_key = gm_skin_landmark_great_zimbabwe
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palaces_of_abomey }
+		localization_key = gm_skin_landmark_royal_palaces_of_abomey
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_klungkung_palace }
+		localization_key = gm_skin_landmark_klungkung_palace
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_kandy }
+		localization_key = gm_skin_landmark_royal_palace_of_kandy
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_uffizi_gallery }
+		localization_key = gm_skin_landmark_uffizi_gallery
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_capitoline_museums }
+		localization_key = gm_skin_landmark_capitoline_museums
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_bodrum_castle }
+		localization_key = gm_skin_landmark_bodrum_castle
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_temples_of_baalbek }
+		localization_key = gm_skin_landmark_temples_of_baalbek
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_palmyra }
+		localization_key = gm_skin_landmark_palmyra
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_xanthos }
+		localization_key = gm_skin_landmark_xanthos
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_mesha_stele }
+		localization_key = gm_skin_landmark_mesha_stele
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arch_of_ctesiphon }
+		localization_key = gm_skin_landmark_arch_of_ctesiphon
+	}
 	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
 	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
@@ -637,6 +749,118 @@ gm_landmark_name_evt = {
 		localization_key = gm_landmark_nikko_toshogu_evt
 	}
 	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_parthenon }
+		localization_key = gm_landmark_parthenon_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_obelisks_of_karnak }
+		localization_key = gm_landmark_obelisks_of_karnak_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_benin }
+		localization_key = gm_landmark_royal_palace_of_benin_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_kumasi }
+		localization_key = gm_landmark_royal_palace_of_kumasi_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_bukgwan_victory_stele }
+		localization_key = gm_landmark_bukgwan_victory_stele_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_imperial_city_of_hue }
+		localization_key = gm_landmark_imperial_city_of_hue_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_persepolis }
+		localization_key = gm_landmark_persepolis_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_red_fort }
+		localization_key = gm_landmark_red_fort_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_rosetta_stone }
+		localization_key = gm_landmark_rosetta_stone_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_temple_of_dendera }
+		localization_key = gm_landmark_temple_of_dendera_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_luxor_obelisk }
+		localization_key = gm_landmark_luxor_obelisk_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_venus_de_milo }
+		localization_key = gm_landmark_venus_de_milo_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_piraeus_lion }
+		localization_key = gm_landmark_piraeus_lion_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_horses_of_saint_mark }
+		localization_key = gm_landmark_horses_of_saint_mark_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_tipus_tiger }
+		localization_key = gm_landmark_tipus_tiger_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_baba_merzoug }
+		localization_key = gm_landmark_baba_merzoug_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_great_zimbabwe }
+		localization_key = gm_landmark_great_zimbabwe_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palaces_of_abomey }
+		localization_key = gm_landmark_royal_palaces_of_abomey_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_klungkung_palace }
+		localization_key = gm_landmark_klungkung_palace_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_royal_palace_of_kandy }
+		localization_key = gm_landmark_royal_palace_of_kandy_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_uffizi_gallery }
+		localization_key = gm_landmark_uffizi_gallery_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_capitoline_museums }
+		localization_key = gm_landmark_capitoline_museums_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_bodrum_castle }
+		localization_key = gm_landmark_bodrum_castle_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_temples_of_baalbek }
+		localization_key = gm_landmark_temples_of_baalbek_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_palmyra }
+		localization_key = gm_landmark_palmyra_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_xanthos }
+		localization_key = gm_landmark_xanthos_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_mesha_stele }
+		localization_key = gm_landmark_mesha_stele_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arch_of_ctesiphon }
+		localization_key = gm_landmark_arch_of_ctesiphon_evt
+	}
+	text = {
 		localization_key = gm_landmark_name_evt_none
 	}
 }
@@ -738,6 +962,118 @@ gm_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_landmark var:gm_landmark = flag:nikko_toshogu }
 		localization_key = gm_landmark_nikko_toshogu_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:parthenon }
+		localization_key = gm_landmark_parthenon_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:obelisks_of_karnak }
+		localization_key = gm_landmark_obelisks_of_karnak_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:royal_palace_of_benin }
+		localization_key = gm_landmark_royal_palace_of_benin_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:royal_palace_of_kumasi }
+		localization_key = gm_landmark_royal_palace_of_kumasi_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:bukgwan_victory_stele }
+		localization_key = gm_landmark_bukgwan_victory_stele_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:imperial_city_of_hue }
+		localization_key = gm_landmark_imperial_city_of_hue_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:persepolis }
+		localization_key = gm_landmark_persepolis_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:red_fort }
+		localization_key = gm_landmark_red_fort_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:rosetta_stone }
+		localization_key = gm_landmark_rosetta_stone_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:temple_of_dendera }
+		localization_key = gm_landmark_temple_of_dendera_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:luxor_obelisk }
+		localization_key = gm_landmark_luxor_obelisk_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:venus_de_milo }
+		localization_key = gm_landmark_venus_de_milo_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:piraeus_lion }
+		localization_key = gm_landmark_piraeus_lion_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:horses_of_saint_mark }
+		localization_key = gm_landmark_horses_of_saint_mark_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:tipus_tiger }
+		localization_key = gm_landmark_tipus_tiger_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:baba_merzoug }
+		localization_key = gm_landmark_baba_merzoug_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:great_zimbabwe }
+		localization_key = gm_landmark_great_zimbabwe_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:royal_palaces_of_abomey }
+		localization_key = gm_landmark_royal_palaces_of_abomey_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:klungkung_palace }
+		localization_key = gm_landmark_klungkung_palace_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:royal_palace_of_kandy }
+		localization_key = gm_landmark_royal_palace_of_kandy_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:uffizi_gallery }
+		localization_key = gm_landmark_uffizi_gallery_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:capitoline_museums }
+		localization_key = gm_landmark_capitoline_museums_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:bodrum_castle }
+		localization_key = gm_landmark_bodrum_castle_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:temples_of_baalbek }
+		localization_key = gm_landmark_temples_of_baalbek_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:palmyra }
+		localization_key = gm_landmark_palmyra_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:xanthos }
+		localization_key = gm_landmark_xanthos_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:mesha_stele }
+		localization_key = gm_landmark_mesha_stele_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:arch_of_ctesiphon }
+		localization_key = gm_landmark_arch_of_ctesiphon_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

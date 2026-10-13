@@ -1,0 +1,247 @@
+﻿# ============================================================================
+# DEMOGRAPHICS PHASE 3 — display gates for the late game's rows on the Demographics tab and subtab
+# (gui/te_demographics_widgets.gui; docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §6)
+# ============================================================================
+# A .gui read of a variable that does not exist logs "Failed to fetch variable" every frame (gui_modding_guide.md
+# gotchas #14 and #23), so every late figure is read under a gate that asks script, as te_demog_sguis.txt's are.
+# Each is shown-only: none is valid or does anything. Country gates are rooted at the player's country
+# (GuiScope.SetRoot( GetPlayer.MakeScope ).End), state gates at the state the subtab shows
+# (GuiScope.SetRoot( State.MakeScope ).End). The late figures exist only once a state's late game has started (its
+# owner has an ageing carrier, or it holds treated people: te_demog_lx_effects.txt); the country's only while one of
+# its census states has them.
+# ============================================================================
+
+# The country's late figures (te_demog_lx_country_store): Living to 100, the biological and calendar mean ages,
+# eligibility and the public route, written together.
+te_demog_lx_ready_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_lx_l100
+		has_variable = te_dg_lx_l100t
+		has_variable = te_dg_lx_l100u
+		has_variable = te_dg_lx_bio
+		has_variable = te_dg_lx_age
+		has_variable = te_dg_elig
+		has_variable = te_dg_lx_pub
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# A state's late figures, written together by its late step (te_demog_lx_finish, te_demog_lx_begin).
+te_demog_lx_state_ready_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_lx_l100
+		has_variable = te_dg_lx_l100t
+		has_variable = te_dg_lx_l100u
+		has_variable = te_dg_lx_bio
+		has_variable = te_dg_lx_age
+		has_variable = te_dg_elig
+		has_variable = te_dg_lx_pub
+		has_variable = te_dg_cover
+		has_variable = te_dg_lx_sbar
+		has_variable = te_dg_age_rate
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Life expectancy past 100 (§6.1): the census's life table stops at 150, so the panel reads "100+".
+te_demog_lx_e0_over_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_e0
+		var:te_dg_e0 >= 100
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The same for a state.
+te_demog_lx_state_e0_over_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_e0
+		var:te_dg_e0 >= 100
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# No age with fifteen years left (§1.5): under immortality the threshold runs to the table's end, so the panel
+# reads "None" from te_demog_k_lx_old_age_none.
+te_demog_lx_old_none_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_old_age
+		var:te_dg_old_age >= te_demog_k_lx_old_age_none
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The same for a state.
+te_demog_lx_state_old_none_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_old_age
+		var:te_dg_old_age >= te_demog_k_lx_old_age_none
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The untreated's own old-age threshold (te_dg_old_age_c), beside the state's, once anyone is treated.
+te_demog_lx_old_c_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_old_age_c
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The same for a state.
+te_demog_lx_state_old_c_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_old_age_c
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The untreated's threshold past the table's end too (a treated share that ages slowly can't reach it).
+te_demog_lx_old_c_none_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_old_age_c
+		var:te_dg_old_age_c >= te_demog_k_lx_old_age_none
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The same for a state.
+te_demog_lx_state_old_c_none_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_old_age_c
+		var:te_dg_old_age_c >= te_demog_k_lx_old_age_none
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The mean age at childbirth (te_dg_mab): every census state from its first step, the country's births-weighted.
+te_demog_lx_mab_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_mab
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The same for a state.
+te_demog_lx_state_mab_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_mab
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Births to women of 50 and over (te_dg_lx_b50), stored only while there are any.
+te_demog_lx_b50_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_lx_b50
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The same for a state.
+te_demog_lx_state_b50_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_lx_b50
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The biological pyramid (te_dg_cbb<f|m><band>, te_demog_lx_country_bio_store): the toggle and its rows.
+te_demog_lx_bio_pyr_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_cbbf0
+		has_variable = te_dg_cbbm17
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# A state's biological pyramid (te_dg_bb<f|m><band>, te_demog_lx_bio_bands_store).
+te_demog_lx_state_bio_pyr_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_bbf0
+		has_variable = te_dg_bbm17
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Some of those ever treated are out of care (te_dg_cover below 1: eligibility fell; bodies keep their age).
+te_demog_lx_state_cover_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_cover
+		var:te_dg_cover < 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The market threshold has started (te_dg_lx_w, from the country's first ageing carrier).
+te_demog_lx_market_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_lx_w
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The owner's market threshold has started (a state reads it through owner).
+te_demog_lx_state_market_sgui = {
+	scope = state
+	is_shown = {
+		owner ?= { has_variable = te_dg_lx_w }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
