@@ -1,0 +1,1198 @@
+﻿# ============================================================================
+# DEMOGRAPHICS PHASE 3 — the late game: biological age, who gets life extension, Biological Immortality
+# docs/superpowers/specs/2026-10-11-demographics-late-game-design.md (approved by the owner 2026-10-11). The twin is
+# scripts/analysis/demographics_model.py's late-game section (lx_begin, lx_slot, lx_fold, lx_pool_deaths,
+# lx_close_bands, lx_tables, lx_finish, lx_seed); test_demographics_registry.TestLateGameScript runs this file against it.
+#
+# Inert before the first ageing carrier: a state with no carrier and no stored eligibility takes the plain sweep
+# (te_demog_step_run), so every earlier number is the census's as before (test_demographics_golden.py). Under Display
+# only it moves the census's figures; outside Full nothing reaches the engine.
+#
+# State variables (only once a state's late game has started: an owner with a carrier, or treated people):
+#   te_dg_s<j>, te_dg_d<j>  per five-year birth band j (ring slot / 5), adults only: the share of its people who have
+#                       been in longevity care, and their mean deficit (calendar less biological age). A band with no
+#                       adult has neither, so its next cohorts start afresh at 25
+#   te_dg_lx_ps, te_dg_lx_pd  the pool's (150 and over), likewise
+#   te_dg_elig          eligibility E, the share within reach of longevity care, drifting toward its target (§4.2) at
+#                       the medical diffusion rate both ways
+#   te_dg_cover         cover c, the share of the ever-treated still in care: falls with E in proportion, returns first
+#                       when E rises (bodies out of care keep their age, call 9)
+#   te_dg_lx_sbar       the adults' ever-treated share after the last step (the joining share's denominator)
+#   te_dg_age_rate      r, the ageing rate of those in care the step used
+#   te_dg_lx_pub        the share on the public route (the health bill's longevity-care term, §5.2)
+#   te_dg_lx_l100, te_dg_lx_l100t, te_dg_lx_l100u  Living to 100: the state's, the treated's and the untreated's
+#   te_dg_old_age_c     the untreated's old-age threshold (Linked to Common Longevity follows it; te_dg_old_age is the
+#                       state's blend after a late step)
+#   te_dg_lx_rho        the adults' treated deaths per head over the untreated's
+#   te_dg_lx_age, te_dg_lx_bio  the mean calendar and biological ages after the step
+# Country: te_dg_lx_w, the market threshold (§4.2; from the country's first carrier, falling yearly), and the people-
+# weighted te_dg_elig, te_dg_lx_pub, te_dg_lx_l100, _l100t, _l100u, te_dg_old_age_c, te_dg_lx_age, te_dg_lx_bio.
+# ============================================================================
+
+# THIS = a state, in te_demog_step_begin after te_demog_prepare (demographics_model.lx_begin): whether this step is a
+# late one (local te_dg_lx_on), and if so the year's ageing rate, pull, eligibility, cover and joining share, and the age
+# groups' rates at the model's own multipliers (before the step's on-top scales).
+te_demog_lx_begin = {
+	set_local_variable = { name = te_dg_lx_on value = 0 }
+	set_local_variable = { name = te_dg_lx_lv value = te_demog_lx_ecto_levels }
+	if = {
+		limit = {
+			OR = {
+				has_variable = te_dg_elig
+				te_demog_lx_carrier_on > 0
+				local_var:te_dg_lx_lv > 0
+			}
+		}
+		set_local_variable = { name = te_dg_lx_on value = 1 }
+		# artificial wombs (§3.5; demographics_model.ecto_share): their capacity over last year's births, at most the cap
+		set_local_variable = { name = te_dg_lx_ecto value = 0 }
+		if = {
+			limit = {
+				local_var:te_dg_lx_lv > 0
+				has_variable = te_dg_births
+				var:te_dg_births > 0
+			}
+			set_local_variable = {
+				name = te_dg_lx_ecto
+				value = {
+					value = local_var:te_dg_lx_lv
+					multiply = te_demog_k_lx_ecto_per_level
+					divide = { value = var:te_dg_births min = 0.00001 }
+					max = te_demog_k_lx_ecto_max
+				}
+			}
+		}
+		set_local_variable = { name = te_dg_lx_rr value = te_demog_lx_rate }
+		set_local_variable = { name = te_dg_lx_pull value = te_demog_lx_pull }
+		# eligibility's target and the public route (generated)
+		te_demog_lx_access = yes
+		set_local_variable = { name = te_dg_lx_e0 value = 0 }
+		if = {
+			limit = { has_variable = te_dg_elig }
+			set_local_variable = { name = te_dg_lx_e0 value = var:te_dg_elig }
+		}
+		set_local_variable = {
+			name = te_dg_lx_e
+			value = {
+				value = local_var:te_dg_lx_target
+				subtract = local_var:te_dg_lx_e0
+				multiply = te_demog_medical_diffusion
+				add = local_var:te_dg_lx_e0
+			}
+		}
+		set_local_variable = { name = te_dg_lx_gap value = { value = local_var:te_dg_lx_target subtract = local_var:te_dg_lx_e } }
+		if = {
+			limit = {
+				local_var:te_dg_lx_gap < te_demog_k_lx_snap
+				local_var:te_dg_lx_gap > te_demog_k_lx_snap_neg
+			}
+			set_local_variable = { name = te_dg_lx_e value = local_var:te_dg_lx_target }
+		}
+		# cover and the joining share: when E falls, cover falls in proportion; when it rises, cover returns first, then
+		# the same share of every band's untreated joins with no deficit (§1.2's step 4)
+		set_local_variable = { name = te_dg_lx_c0 value = 1 }
+		if = {
+			limit = { has_variable = te_dg_cover }
+			set_local_variable = { name = te_dg_lx_c0 value = var:te_dg_cover }
+		}
+		set_local_variable = { name = te_dg_lx_sbar value = 0 }
+		if = {
+			limit = { has_variable = te_dg_lx_sbar }
+			set_local_variable = { name = te_dg_lx_sbar value = var:te_dg_lx_sbar }
+		}
+		set_local_variable = { name = te_dg_lx_phi value = 0 }
+		if = {
+			limit = { local_var:te_dg_lx_e0 <= 0 }
+			if = {
+				limit = {
+					local_var:te_dg_lx_sbar > 0
+					local_var:te_dg_lx_sbar >= local_var:te_dg_lx_e
+				}
+				set_local_variable = { name = te_dg_lx_c value = { value = local_var:te_dg_lx_e divide = { value = local_var:te_dg_lx_sbar min = 0.00001 } } }
+			}
+			else = {
+				set_local_variable = { name = te_dg_lx_c value = 1 }
+				set_local_variable = {
+					name = te_dg_lx_phi
+					value = {
+						value = local_var:te_dg_lx_e
+						subtract = local_var:te_dg_lx_sbar
+						divide = { value = 1 subtract = local_var:te_dg_lx_sbar min = 0.00001 }
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { local_var:te_dg_lx_e <= local_var:te_dg_lx_e0 }
+			set_local_variable = {
+				name = te_dg_lx_c
+				value = { value = local_var:te_dg_lx_c0 multiply = local_var:te_dg_lx_e divide = { value = local_var:te_dg_lx_e0 min = 0.00001 } }
+			}
+		}
+		else = {
+			set_local_variable = {
+				name = te_dg_lx_c2
+				value = { value = local_var:te_dg_lx_c0 multiply = local_var:te_dg_lx_e divide = { value = local_var:te_dg_lx_e0 min = 0.00001 } }
+			}
+			if = {
+				limit = { local_var:te_dg_lx_c2 <= 1 }
+				set_local_variable = { name = te_dg_lx_c value = local_var:te_dg_lx_c2 }
+			}
+			else = {
+				set_local_variable = { name = te_dg_lx_c value = 1 }
+				set_local_variable = {
+					name = te_dg_lx_phi
+					value = {
+						value = local_var:te_dg_lx_sbar
+						multiply = local_var:te_dg_lx_c2
+						max = 1
+						subtract = local_var:te_dg_lx_sbar
+						divide = { value = 1 subtract = local_var:te_dg_lx_sbar min = 0.00001 }
+					}
+				}
+			}
+		}
+		set_local_variable = { name = te_dg_lx_c value = { value = local_var:te_dg_lx_c min = 0 max = 1 } }
+		set_local_variable = { name = te_dg_lx_phi value = { value = local_var:te_dg_lx_phi min = 0 max = 1 } }
+		set_variable = { name = te_dg_elig value = local_var:te_dg_lx_e }
+		set_variable = { name = te_dg_cover value = local_var:te_dg_lx_c }
+		set_variable = { name = te_dg_age_rate value = local_var:te_dg_lx_rr }
+		set_variable = { name = te_dg_lx_pub value = local_var:te_dg_lx_pub }
+		# the age groups' rates at the model's own multipliers (generated), before te_demog_on_top_scales scales them
+		te_demog_lx_group_rates_unscaled = yes
+	}
+}
+
+# THIS = a state, in te_demog_step_run in place of the plain sweep while te_dg_lx_on (te_demog_lx_begin): the age groups'
+# rates with the step's scales (which re-enters group 0 for the sweep), the sweep's late sums, the late sweep, then the
+# bands' and the tables' figures (te_demog_lx_finish). te_demog_reset_accumulators has set te_dg_lx_t to 0 for every
+# sweep; this one is the late sweep's.
+te_demog_lx_sweep_run = {
+	te_demog_lx_group_rates_scaled = yes
+	set_local_variable = { name = te_dg_g value = 0 }
+	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_lx_t value = 1 }
+	# the band's locals (te_demog_lx_band_open), a slot's part locals, the age group's sums, the totals
+	set_local_variable = { name = te_dg_lx_bs value = 0 }
+	set_local_variable = { name = te_dg_lx_bd value = 0 }
+	set_local_variable = { name = te_dg_lx_bda value = 0 }
+	set_local_variable = { name = te_dg_lx_bt value = 0 }
+	set_local_variable = { name = te_dg_lx_ba value = 0 }
+	set_local_variable = { name = te_dg_lx_bj value = 0 }
+	set_local_variable = { name = te_dg_lx_bta value = 0 }
+	set_local_variable = { name = te_dg_lx_sk value = 0 }
+	set_local_variable = { name = te_dg_lx_sk2 value = 0 }
+	set_local_variable = { name = te_dg_lx_ab_t value = 0 }
+	set_local_variable = { name = te_dg_lx_guf value = 0 }
+	set_local_variable = { name = te_dg_lx_gum value = 0 }
+	set_local_variable = { name = te_dg_lx_gtf value = 0 }
+	set_local_variable = { name = te_dg_lx_gtm value = 0 }
+	set_local_variable = { name = te_dg_lx_gtqf value = 0 }
+	set_local_variable = { name = te_dg_lx_gtqm value = 0 }
+	set_local_variable = { name = te_dg_lx_tsum value = 0 }
+	set_local_variable = { name = te_dg_lx_asum value = 0 }
+	set_local_variable = { name = te_dg_lx_mp value = 0 }
+	set_local_variable = { name = te_dg_lx_mcal value = 0 }
+	set_local_variable = { name = te_dg_lx_mdef value = 0 }
+	set_local_variable = { name = te_dg_lx_b50 value = 0 }
+	te_demog_lx_bio_init = yes
+	te_demog_lx_sweep = yes
+	te_demog_lx_finish = yes
+}
+
+# The late sweep's band calls (generated, te_demog_lx_sweep): $WHEN$ open or close, in pass 1 for a band all below the open
+# slot (its top slot $TOP$ below it), in pass 2 for the rest. Each band is opened and closed once a step.
+te_demog_lx_pass1_band = {
+	if = {
+		limit = { local_var:te_dg_open > $TOP$ }
+		te_demog_lx_band_$WHEN$ = { J = $J$ }
+	}
+}
+te_demog_lx_pass2_band = {
+	if = {
+		limit = { NOT = { local_var:te_dg_open > $TOP$ } }
+		te_demog_lx_band_$WHEN$ = { J = $J$ }
+	}
+}
+
+# Band $J$ before its slots: its share and deficit into locals, the deficit it will have after this year's ageing (the
+# slots' biological ages after the step read it), and its sums at 0.
+te_demog_lx_band_open = {
+	set_local_variable = { name = te_dg_lx_bs value = 0 }
+	set_local_variable = { name = te_dg_lx_bd value = 0 }
+	if = {
+		limit = { has_variable = te_dg_s$J$ }
+		set_local_variable = { name = te_dg_lx_bs value = var:te_dg_s$J$ }
+	}
+	if = {
+		limit = { has_variable = te_dg_d$J$ }
+		set_local_variable = { name = te_dg_lx_bd value = var:te_dg_d$J$ }
+	}
+	set_local_variable = {
+		name = te_dg_lx_bda
+		value = { value = 1 subtract = local_var:te_dg_lx_rr multiply = local_var:te_dg_lx_c add = local_var:te_dg_lx_bd }
+	}
+	set_local_variable = { name = te_dg_lx_bt value = 0 }
+	set_local_variable = { name = te_dg_lx_ba value = 0 }
+	set_local_variable = { name = te_dg_lx_bj value = 0 }
+	set_local_variable = { name = te_dg_lx_bta value = 0 }
+}
+
+# Band $J$ after its slots (demographics_model.lx_close_bands): selection (the treated survivors over all survivors),
+# ageing and the pull, the year's joining share of its untreated, then the cohort that turned 25 at E. A band with no
+# adult left drops both variables.
+te_demog_lx_band_close = {
+	set_local_variable = { name = te_dg_lx_bn value = { value = local_var:te_dg_lx_ba add = local_var:te_dg_lx_bj } }
+	if = {
+		limit = { local_var:te_dg_lx_bn > 0 }
+		set_local_variable = { name = te_dg_lx_aged value = local_var:te_dg_lx_bda }
+		if = {
+			limit = { local_var:te_dg_lx_bt > 0 }
+			change_local_variable = {
+				name = te_dg_lx_aged
+				add = {
+					value = local_var:te_dg_lx_bta
+					divide = { value = local_var:te_dg_lx_bt min = 0.00001 }
+					subtract = local_var:te_dg_lx_aged
+					subtract = te_demog_k_lx_pull_to
+					min = 0
+					multiply = local_var:te_dg_lx_pull
+					multiply = local_var:te_dg_lx_c
+				}
+			}
+		}
+		set_local_variable = { name = te_dg_lx_ssel value = 0 }
+		if = {
+			limit = { local_var:te_dg_lx_ba > 0 }
+			set_local_variable = { name = te_dg_lx_ssel value = { value = local_var:te_dg_lx_bt divide = { value = local_var:te_dg_lx_ba min = 0.00001 } } }
+		}
+		set_local_variable = {
+			name = te_dg_lx_s1
+			value = { value = 1 subtract = local_var:te_dg_lx_ssel multiply = local_var:te_dg_lx_phi add = local_var:te_dg_lx_ssel }
+		}
+		set_local_variable = { name = te_dg_lx_d1 value = 0 }
+		if = {
+			limit = { local_var:te_dg_lx_s1 > 0 }
+			set_local_variable = {
+				name = te_dg_lx_d1
+				value = { value = local_var:te_dg_lx_aged multiply = local_var:te_dg_lx_ssel divide = { value = local_var:te_dg_lx_s1 min = 0.00001 } }
+			}
+		}
+		set_local_variable = {
+			name = te_dg_lx_tn
+			value = {
+				value = local_var:te_dg_lx_s1
+				multiply = local_var:te_dg_lx_ba
+				add = { value = local_var:te_dg_lx_e multiply = local_var:te_dg_lx_bj }
+			}
+		}
+		if = {
+			limit = { local_var:te_dg_lx_tn > 0 }
+			set_variable = { name = te_dg_s$J$ value = { value = local_var:te_dg_lx_tn divide = { value = local_var:te_dg_lx_bn min = 0.00001 } } }
+			set_variable = {
+				name = te_dg_d$J$
+				value = {
+					value = local_var:te_dg_lx_d1
+					multiply = local_var:te_dg_lx_s1
+					multiply = local_var:te_dg_lx_ba
+					divide = { value = local_var:te_dg_lx_tn min = 0.00001 }
+				}
+			}
+		}
+		else = {
+			te_demog_lx_drop_band = { J = $J$ }
+		}
+		change_local_variable = { name = te_dg_lx_tsum add = local_var:te_dg_lx_tn }
+		change_local_variable = { name = te_dg_lx_asum add = local_var:te_dg_lx_bn }
+	}
+	else = {
+		te_demog_lx_drop_band = { J = $J$ }
+	}
+}
+
+te_demog_lx_drop_band = {
+	if = {
+		limit = { has_variable = te_dg_s$J$ }
+		remove_variable = te_dg_s$J$
+	}
+	if = {
+		limit = { has_variable = te_dg_d$J$ }
+		remove_variable = te_dg_d$J$
+	}
+}
+
+# The late sweep's slots (generated, te_demog_lx_sweep): the plain sweep's guards, then te_demog_slot after the slot's late
+# locals (te_demog_lx_slot_pre).
+te_demog_lx_slot_p1 = {
+	if = {
+		limit = { local_var:te_dg_open > $S$ }
+		te_demog_lx_slot_pre = yes
+		te_demog_slot = { S = $S$ }
+	}
+}
+te_demog_lx_slot_p2 = {
+	if = {
+		limit = { NOT = { local_var:te_dg_open > $S$ } }
+		te_demog_lx_slot_pre = yes
+		te_demog_slot = { S = $S$ }
+	}
+}
+
+# Before te_demog_slot: the age group closing as this slot's rate age leaves it keeps its sums for the life tables (te_demog_slot
+# enters the next), and the slot's treated share is its band's for an adult rate age (25 and over), else 0.
+te_demog_lx_slot_pre = {
+	if = {
+		limit = { local_var:te_dg_r = local_var:te_dg_next_group }
+		te_demog_lx_group_flush = yes
+	}
+	set_local_variable = { name = te_dg_lx_sk value = 0 }
+	if = {
+		limit = { local_var:te_dg_r >= te_demog_k_lx_join_age }
+		set_local_variable = { name = te_dg_lx_sk value = local_var:te_dg_lx_bs }
+	}
+}
+
+# THIS = a state, in te_demog_age_slot while te_dg_lx_t (demographics_model.lx_births): the cohort's births with its two parts
+# (locals te_dg_f, te_dg_m; the slot's share te_dg_lx_sk and its band's deficit te_dg_lx_bd). Planned births follow the
+# calendar, as families intend them, x the fecundity of the body that bears them; unplanned births the body (§3.1-§3.2;
+# both schedules are today's shape, te_dg_asfr, at the calendar age). Artificial wombs carry the share te_dg_lx_ecto of the
+# planned births with no fecundity loss and no maternal death, from the cohort's women and men alike (§3.5). Sets te_dg_b
+# and the women's own births by part, te_dg_lx_bmu and te_dg_lx_bmt, which carry the maternal deaths
+# (te_demog_lx_deaths); adds to the step's births and maternal deaths, and to the births to women of 50 and over.
+te_demog_lx_births = {
+	set_local_variable = { name = te_dg_lx_ft value = { value = local_var:te_dg_f multiply = local_var:te_dg_lx_sk } }
+	set_local_variable = { name = te_dg_lx_fu value = { value = local_var:te_dg_f subtract = local_var:te_dg_lx_ft } }
+	set_local_variable = { name = te_dg_lx_base value = { value = local_var:te_dg_tfr divide = 100000 } }
+	set_local_variable = { name = te_dg_lx_int value = 0 }
+	set_local_variable = { name = te_dg_lx_plu value = 0 }
+	set_local_variable = { name = te_dg_lx_unu value = 0 }
+	set_local_variable = { name = te_dg_lx_plt value = 0 }
+	set_local_variable = { name = te_dg_lx_unt value = 0 }
+	if = {
+		limit = { local_var:te_dg_asfr > 0 }
+		set_local_variable = { name = te_dg_lx_fa value = local_var:te_dg_r }
+		te_demog_lx_fert_at = yes
+		set_local_variable = { name = te_dg_lx_int0 value = local_var:te_dg_lx_int }
+		set_local_variable = {
+			name = te_dg_lx_plu
+			value = {
+				value = local_var:te_dg_sh_pl
+				multiply = local_var:te_dg_lx_base
+				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
+				multiply = local_var:te_dg_lx_fu
+				multiply = local_var:te_dg_asfr
+			}
+		}
+		set_local_variable = {
+			name = te_dg_lx_unu
+			value = { value = local_var:te_dg_sh_un multiply = local_var:te_dg_lx_base multiply = local_var:te_dg_lx_fu multiply = local_var:te_dg_asfr }
+		}
+		set_local_variable = { name = te_dg_lx_int value = local_var:te_dg_lx_int0 }
+	}
+	if = {
+		limit = { local_var:te_dg_lx_sk > 0 }
+		set_local_variable = { name = te_dg_lx_fa value = { value = local_var:te_dg_r subtract = local_var:te_dg_lx_bd } }
+		set_local_variable = { name = te_dg_lx_intr value = local_var:te_dg_lx_int }
+		te_demog_lx_fert_at = yes
+		set_local_variable = {
+			name = te_dg_lx_plt
+			value = {
+				value = local_var:te_dg_sh_pl
+				multiply = local_var:te_dg_lx_base
+				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
+				multiply = local_var:te_dg_lx_ft
+				multiply = local_var:te_dg_lx_intr
+				multiply = local_var:te_dg_lx_fec
+			}
+		}
+		set_local_variable = {
+			name = te_dg_lx_unt
+			value = { value = local_var:te_dg_sh_un multiply = local_var:te_dg_lx_base multiply = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_asfr }
+		}
+		set_local_variable = { name = te_dg_lx_int value = local_var:te_dg_lx_intr }
+	}
+	set_local_variable = { name = te_dg_lx_bmu value = { value = local_var:te_dg_lx_plu add = local_var:te_dg_lx_unu } }
+	set_local_variable = { name = te_dg_lx_bmt value = { value = local_var:te_dg_lx_plt add = local_var:te_dg_lx_unt } }
+	set_local_variable = {
+		name = te_dg_b
+		value = {
+			value = local_var:te_dg_lx_plu
+			add = local_var:te_dg_lx_unu
+			add = local_var:te_dg_lx_plt
+			add = local_var:te_dg_lx_unt
+			add = {
+				value = local_var:te_dg_sh_pl
+				multiply = local_var:te_dg_lx_base
+				multiply = local_var:te_dg_lx_ecto
+				multiply = { value = local_var:te_dg_f add = local_var:te_dg_m }
+				multiply = 0.5
+				multiply = local_var:te_dg_lx_int
+			}
+		}
+	}
+	change_local_variable = { name = te_dg_births add = local_var:te_dg_b }
+	change_local_variable = {
+		name = te_dg_mat
+		add = { value = local_var:te_dg_lx_bmu add = local_var:te_dg_lx_bmt multiply = local_var:te_dg_mmr divide = 100000 }
+	}
+	if = {
+		limit = { local_var:te_dg_r >= 50 }
+		change_local_variable = { name = te_dg_lx_b50 add = local_var:te_dg_b }
+	}
+}
+
+# THIS = a state, in te_demog_age_slot while te_dg_lx_t (demographics_model.lx_slot): the cohort's deaths and war dead with its
+# two parts, from the counts before deaths (locals te_dg_f, te_dg_m, its births te_dg_b): the treated part at its
+# biological rate age (its rates from te_demog_lx_rates_at), the rest at the calendar one (the group's te_dg_qf, te_dg_qm).
+# Sets te_dg_f2 and te_dg_m2 for te_demog_age_slot's kills and migrants, the band's selection sums, the age group's sums
+# for the life tables, and the slot's treated share and biological age after the step for its accumulation.
+te_demog_lx_deaths = {
+	set_local_variable = { name = te_dg_lx_ft value = { value = local_var:te_dg_f multiply = local_var:te_dg_lx_sk } }
+	set_local_variable = { name = te_dg_lx_mt value = { value = local_var:te_dg_m multiply = local_var:te_dg_lx_sk } }
+	set_local_variable = { name = te_dg_lx_fu value = { value = local_var:te_dg_f subtract = local_var:te_dg_lx_ft } }
+	set_local_variable = { name = te_dg_lx_mu value = { value = local_var:te_dg_m subtract = local_var:te_dg_lx_mt } }
+	set_local_variable = {
+		name = te_dg_lx_u2f
+		value = {
+			value = local_var:te_dg_qf
+			divide = 100000
+			multiply = -1
+			add = 1
+			multiply = local_var:te_dg_lx_fu
+			subtract = { value = local_var:te_dg_lx_bmu multiply = local_var:te_dg_mmr divide = 100000 }
+		}
+	}
+	set_local_variable = {
+		name = te_dg_lx_u2m
+		value = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mu }
+	}
+	set_local_variable = { name = te_dg_lx_t2f value = 0 }
+	set_local_variable = { name = te_dg_lx_t2m value = 0 }
+	if = {
+		limit = { local_var:te_dg_lx_sk > 0 }
+		set_local_variable = { name = te_dg_lx_rb value = { value = local_var:te_dg_r subtract = local_var:te_dg_lx_bd } }
+		te_demog_lx_rates_at = yes
+		set_local_variable = {
+			name = te_dg_lx_t2f
+			value = {
+				value = local_var:te_dg_lx_qf
+				divide = 100000
+				multiply = -1
+				add = 1
+				multiply = local_var:te_dg_lx_ft
+				subtract = { value = local_var:te_dg_lx_bmt multiply = local_var:te_dg_mmr divide = 100000 }
+			}
+		}
+		set_local_variable = {
+			name = te_dg_lx_t2m
+			value = { value = local_var:te_dg_lx_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mt }
+		}
+	}
+	change_local_variable = {
+		name = te_dg_deaths
+		add = {
+			value = local_var:te_dg_f
+			subtract = local_var:te_dg_lx_u2f
+			subtract = local_var:te_dg_lx_t2f
+			add = {
+				value = local_var:te_dg_m
+				subtract = local_var:te_dg_lx_u2m
+				subtract = local_var:te_dg_lx_t2m
+			}
+		}
+	}
+	# war dead: the pool's ages by rate age, each part by its own clock (calendar from te_demog_k_pool_from, biological to
+	# te_demog_k_pool_to; phase 2 step 4)
+	if = {
+		limit = { local_var:te_dg_r >= te_demog_k_pool_from }
+		if = {
+			limit = { local_var:te_dg_r <= te_demog_k_pool_to }
+			change_local_variable = { name = te_dg_lx_u2f subtract = { value = local_var:te_dg_lx_fu multiply = local_var:te_dg_war_ff } }
+			change_local_variable = { name = te_dg_lx_u2m subtract = { value = local_var:te_dg_lx_mu multiply = local_var:te_dg_war_fm } }
+		}
+		if = {
+			limit = {
+				local_var:te_dg_lx_sk > 0
+				local_var:te_dg_lx_rb <= te_demog_k_pool_to
+			}
+			change_local_variable = { name = te_dg_lx_t2f subtract = { value = local_var:te_dg_lx_ft multiply = local_var:te_dg_war_ff } }
+			change_local_variable = { name = te_dg_lx_t2m subtract = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_war_fm } }
+		}
+	}
+	# the band's selection: adults (rate age 25 and over), and the cohort turning 25, which joins at E
+	set_local_variable = {
+		name = te_dg_lx_alive
+		value = { value = local_var:te_dg_lx_t2f add = local_var:te_dg_lx_t2m add = local_var:te_dg_lx_u2f add = local_var:te_dg_lx_u2m }
+	}
+	if = {
+		limit = { local_var:te_dg_r >= te_demog_k_lx_join_age }
+		change_local_variable = { name = te_dg_lx_bt add = { value = local_var:te_dg_lx_t2f add = local_var:te_dg_lx_t2m } }
+		change_local_variable = { name = te_dg_lx_ba add = local_var:te_dg_lx_alive }
+		change_local_variable = {
+			name = te_dg_lx_bta
+			add = { value = local_var:te_dg_lx_t2f add = local_var:te_dg_lx_t2m multiply = { value = local_var:te_dg_r add = 1 } }
+		}
+	}
+	else_if = {
+		limit = { local_var:te_dg_r = te_demog_k_lx_join_prev }
+		change_local_variable = { name = te_dg_lx_bj add = { value = local_var:te_dg_lx_u2f add = local_var:te_dg_lx_u2m } }
+	}
+	# the age group's sums for the life tables, at the model's own rates
+	change_local_variable = { name = te_dg_lx_guf add = local_var:te_dg_lx_fu }
+	change_local_variable = { name = te_dg_lx_gum add = local_var:te_dg_lx_mu }
+	set_local_variable = { name = te_dg_lx_sk2 value = 0 }
+	if = {
+		limit = { local_var:te_dg_lx_sk > 0 }
+		change_local_variable = { name = te_dg_lx_gtf add = local_var:te_dg_lx_ft }
+		change_local_variable = { name = te_dg_lx_gtm add = local_var:te_dg_lx_mt }
+		change_local_variable = { name = te_dg_lx_gtqf add = { value = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_uqf } }
+		change_local_variable = { name = te_dg_lx_gtqm add = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_lx_uqm } }
+		if = {
+			limit = { local_var:te_dg_lx_alive > 0 }
+			set_local_variable = {
+				name = te_dg_lx_sk2
+				value = {
+					value = local_var:te_dg_lx_t2f
+					add = local_var:te_dg_lx_t2m
+					divide = { value = local_var:te_dg_lx_alive min = 0.00001 }
+					min = 0
+					max = 1
+				}
+			}
+			set_local_variable = { name = te_dg_lx_ab_t value = { value = local_var:te_dg_r add = 1 subtract = local_var:te_dg_lx_bda } }
+		}
+	}
+	set_local_variable = { name = te_dg_f2 value = { value = local_var:te_dg_lx_t2f add = local_var:te_dg_lx_u2f } }
+	set_local_variable = { name = te_dg_m2 value = { value = local_var:te_dg_lx_t2m add = local_var:te_dg_lx_u2m } }
+}
+
+# THIS = a state, in te_demog_fold_slot while te_dg_lx_t, before the pool changes (demographics_model.lx_fold): the age-150
+# cohort of slot $S$ joins the pool, whose treated share and deficit take its band's (the open band's locals).
+te_demog_lx_fold_merge = {
+	set_local_variable = { name = te_dg_lx_pb value = { value = var:te_dg_pf add = var:te_dg_pm multiply = local_var:te_dg_s } }
+	set_local_variable = { name = te_dg_lx_fp value = 0 }
+	if = {
+		limit = { has_variable = te_dg_f$S$ }
+		set_local_variable = { name = te_dg_lx_fp value = { value = var:te_dg_f$S$ add = var:te_dg_m$S$ multiply = local_var:te_dg_s } }
+	}
+	set_local_variable = { name = te_dg_lx_ps value = 0 }
+	set_local_variable = { name = te_dg_lx_pd value = 0 }
+	if = {
+		limit = { has_variable = te_dg_lx_ps }
+		set_local_variable = { name = te_dg_lx_ps value = var:te_dg_lx_ps }
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_pd }
+		set_local_variable = { name = te_dg_lx_pd value = var:te_dg_lx_pd }
+	}
+	set_local_variable = {
+		name = te_dg_lx_ptr
+		value = {
+			value = local_var:te_dg_lx_ps
+			multiply = local_var:te_dg_lx_pb
+			add = { value = local_var:te_dg_lx_bs multiply = local_var:te_dg_lx_fp }
+		}
+	}
+	if = {
+		limit = { local_var:te_dg_lx_ptr > 0 }
+		set_variable = {
+			name = te_dg_lx_pd
+			value = {
+				value = local_var:te_dg_lx_pd
+				multiply = local_var:te_dg_lx_ps
+				multiply = local_var:te_dg_lx_pb
+				add = { value = local_var:te_dg_lx_bd multiply = local_var:te_dg_lx_bs multiply = local_var:te_dg_lx_fp }
+				divide = { value = local_var:te_dg_lx_ptr min = 0.00001 }
+			}
+		}
+		set_variable = {
+			name = te_dg_lx_ps
+			value = {
+				value = local_var:te_dg_lx_ptr
+				divide = { value = local_var:te_dg_lx_pb add = local_var:te_dg_lx_fp min = 0.00001 }
+			}
+		}
+	}
+}
+
+# THIS = a state, in te_demog_fold_slot while te_dg_lx_t, in place of the pool's deaths (demographics_model.lx_pool_deaths):
+# the pool's treated part at its biological rate age, the rest at the last group's rates; its share by selection, its
+# deficit aged and pulled. The pool's people count in the last age group's sums.
+te_demog_lx_fold_deaths = {
+	set_local_variable = { name = te_dg_lx_ps value = 0 }
+	set_local_variable = { name = te_dg_lx_pd value = 0 }
+	if = {
+		limit = { has_variable = te_dg_lx_ps }
+		set_local_variable = { name = te_dg_lx_ps value = var:te_dg_lx_ps }
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_pd }
+		set_local_variable = { name = te_dg_lx_pd value = var:te_dg_lx_pd }
+	}
+	set_local_variable = { name = te_dg_lx_qf value = local_var:te_dg_qf }
+	set_local_variable = { name = te_dg_lx_qm value = local_var:te_dg_qm }
+	set_local_variable = { name = te_dg_lx_uqf value = 0 }
+	set_local_variable = { name = te_dg_lx_uqm value = 0 }
+	if = {
+		limit = { local_var:te_dg_lx_ps > 0 }
+		set_local_variable = { name = te_dg_lx_rb value = { value = var:te_dg_pa subtract = 1 subtract = local_var:te_dg_lx_pd } }
+		te_demog_lx_rates_at = yes
+	}
+	set_local_variable = { name = te_dg_lx_ft value = { value = var:te_dg_pf multiply = local_var:te_dg_lx_ps } }
+	set_local_variable = { name = te_dg_lx_mt value = { value = var:te_dg_pm multiply = local_var:te_dg_lx_ps } }
+	set_local_variable = { name = te_dg_lx_fu value = { value = var:te_dg_pf subtract = local_var:te_dg_lx_ft } }
+	set_local_variable = { name = te_dg_lx_mu value = { value = var:te_dg_pm subtract = local_var:te_dg_lx_mt } }
+	change_local_variable = {
+		name = te_dg_deaths
+		add = {
+			value = local_var:te_dg_lx_fu
+			multiply = local_var:te_dg_qf
+			add = { value = local_var:te_dg_lx_mu multiply = local_var:te_dg_qm }
+			add = { value = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_qf }
+			add = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_lx_qm }
+			divide = 100000
+		}
+	}
+	change_local_variable = { name = te_dg_lx_guf add = local_var:te_dg_lx_fu }
+	change_local_variable = { name = te_dg_lx_gum add = local_var:te_dg_lx_mu }
+	set_variable = {
+		name = te_dg_pf
+		value = {
+			value = local_var:te_dg_lx_qf
+			divide = 100000
+			multiply = -1
+			add = 1
+			multiply = local_var:te_dg_lx_ft
+			add = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_fu }
+		}
+	}
+	set_variable = {
+		name = te_dg_pm
+		value = {
+			value = local_var:te_dg_lx_qm
+			divide = 100000
+			multiply = -1
+			add = 1
+			multiply = local_var:te_dg_lx_mt
+			add = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mu }
+		}
+	}
+	if = {
+		limit = { local_var:te_dg_lx_ps > 0 }
+		change_local_variable = { name = te_dg_lx_gtf add = local_var:te_dg_lx_ft }
+		change_local_variable = { name = te_dg_lx_gtm add = local_var:te_dg_lx_mt }
+		change_local_variable = { name = te_dg_lx_gtqf add = { value = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_uqf } }
+		change_local_variable = { name = te_dg_lx_gtqm add = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_lx_uqm } }
+		set_local_variable = { name = te_dg_lx_alive value = { value = var:te_dg_pf add = var:te_dg_pm } }
+		set_variable = { name = te_dg_lx_ps value = 0 }
+		if = {
+			limit = { local_var:te_dg_lx_alive > 0 }
+			set_variable = {
+				name = te_dg_lx_ps
+				value = {
+					value = local_var:te_dg_lx_qf
+					divide = 100000
+					multiply = -1
+					add = 1
+					multiply = local_var:te_dg_lx_ft
+					add = { value = local_var:te_dg_lx_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_lx_mt }
+					divide = { value = local_var:te_dg_lx_alive min = 0.00001 }
+				}
+			}
+		}
+		set_local_variable = {
+			name = te_dg_lx_aged
+			value = { value = 1 subtract = local_var:te_dg_lx_rr multiply = local_var:te_dg_lx_c add = local_var:te_dg_lx_pd }
+		}
+		change_local_variable = {
+			name = te_dg_lx_aged
+			add = {
+				value = var:te_dg_pa
+				subtract = local_var:te_dg_lx_aged
+				subtract = te_demog_k_lx_pull_to
+				min = 0
+				multiply = local_var:te_dg_lx_pull
+				multiply = local_var:te_dg_lx_c
+			}
+		}
+		set_variable = { name = te_dg_lx_pd value = local_var:te_dg_lx_aged }
+	}
+}
+
+# THIS = a state, in te_demog_accumulate_slot while te_dg_lx_t: slot $S$'s people after the step into the conscription pool's
+# sums by part (the treated part at its biological age after the step, the rest at the calendar one; phase 2 step 4).
+te_demog_lx_pool_sums = {
+	if = {
+		limit = { local_var:te_dg_lx_sk2 > 0 }
+		set_local_variable = { name = te_dg_lx_aft value = { value = var:te_dg_f$S$ multiply = local_var:te_dg_lx_sk2 } }
+		set_local_variable = { name = te_dg_lx_amt value = { value = var:te_dg_m$S$ multiply = local_var:te_dg_lx_sk2 } }
+		if = {
+			limit = {
+				local_var:te_dg_age >= te_demog_k_pool_from
+				local_var:te_dg_lx_ab_t <= te_demog_k_pool_to
+			}
+			change_local_variable = { name = te_dg_acc_faw add = local_var:te_dg_lx_aft }
+			change_local_variable = { name = te_dg_acc_fam add = local_var:te_dg_lx_amt }
+		}
+		if = {
+			limit = {
+				local_var:te_dg_age >= te_demog_k_pool_from
+				local_var:te_dg_age <= te_demog_k_pool_to
+			}
+			change_local_variable = { name = te_dg_acc_faw add = { value = var:te_dg_f$S$ subtract = local_var:te_dg_lx_aft } }
+			change_local_variable = { name = te_dg_acc_fam add = { value = var:te_dg_m$S$ subtract = local_var:te_dg_lx_amt } }
+		}
+	}
+	else_if = {
+		limit = {
+			local_var:te_dg_age >= te_demog_k_pool_from
+			local_var:te_dg_age <= te_demog_k_pool_to
+		}
+		change_local_variable = { name = te_dg_acc_faw add = var:te_dg_f$S$ }
+		change_local_variable = { name = te_dg_acc_fam add = var:te_dg_m$S$ }
+	}
+}
+
+# THIS = a state, in te_demog_accumulate_slot while te_dg_lx_t (demographics_model.work_figures): slot $S$'s work figures by
+# part, the treated part's capacity and need at its biological age after the step; and the mean ages' sums.
+te_demog_lx_work_slot = {
+	set_local_variable = { name = te_dg_lx_p value = { value = var:te_dg_f$S$ add = var:te_dg_m$S$ } }
+	change_local_variable = { name = te_dg_lx_mp add = local_var:te_dg_lx_p }
+	change_local_variable = { name = te_dg_lx_mcal add = { value = local_var:te_dg_lx_p multiply = local_var:te_dg_age } }
+	if = {
+		limit = { local_var:te_dg_lx_sk2 > 0 }
+		set_local_variable = { name = te_dg_lx_aft value = { value = var:te_dg_f$S$ multiply = local_var:te_dg_lx_sk2 } }
+		set_local_variable = { name = te_dg_lx_amt value = { value = var:te_dg_m$S$ multiply = local_var:te_dg_lx_sk2 } }
+		change_local_variable = {
+			name = te_dg_lx_mdef
+			add = {
+				value = local_var:te_dg_lx_aft
+				add = local_var:te_dg_lx_amt
+				multiply = { value = local_var:te_dg_age subtract = local_var:te_dg_lx_ab_t }
+			}
+		}
+		set_local_variable = { name = te_dg_wk_f value = { value = var:te_dg_f$S$ subtract = local_var:te_dg_lx_aft } }
+		set_local_variable = { name = te_dg_wk_m value = { value = var:te_dg_m$S$ subtract = local_var:te_dg_lx_amt } }
+		te_demog_work_part = yes
+		te_demog_lx_bio_part = yes
+		# the biological pyramid: the treated part at its biological band (generated)
+		te_demog_lx_bio_move = yes
+	}
+	else = {
+		te_demog_work_slot = { S = $S$ }
+	}
+}
+
+# The treated part (locals te_dg_lx_aft, te_dg_lx_amt) at its biological age te_dg_lx_ab_t: capacity and need from the
+# lookup (te_demog_lx_bio_band_at), then the pointer's back for the next slot.
+te_demog_lx_bio_part = {
+	set_local_variable = { name = te_dg_lx_cap0 value = local_var:te_dg_cap }
+	set_local_variable = { name = te_dg_lx_needw0 value = local_var:te_dg_needw }
+	set_local_variable = { name = te_dg_lx_ab value = local_var:te_dg_lx_ab_t }
+	te_demog_lx_bio_band_at = yes
+	set_local_variable = { name = te_dg_wk_f value = local_var:te_dg_lx_aft }
+	set_local_variable = { name = te_dg_wk_m value = local_var:te_dg_lx_amt }
+	te_demog_work_part = yes
+	set_local_variable = { name = te_dg_cap value = local_var:te_dg_lx_cap0 }
+	set_local_variable = { name = te_dg_needw value = local_var:te_dg_lx_needw0 }
+}
+
+# THIS = a state, in te_demog_work_finish while te_dg_lx_t: the pool's work figures by part, its treated part at its mean age
+# less its deficit (demographics_model.work_figures' pool row).
+te_demog_lx_work_pool = {
+	set_local_variable = { name = te_dg_lx_ps value = 0 }
+	if = {
+		limit = { has_variable = te_dg_lx_ps }
+		set_local_variable = { name = te_dg_lx_ps value = var:te_dg_lx_ps }
+	}
+	if = {
+		limit = { local_var:te_dg_lx_ps > 0 }
+		set_local_variable = { name = te_dg_lx_aft value = { value = var:te_dg_pf multiply = local_var:te_dg_lx_ps } }
+		set_local_variable = { name = te_dg_lx_amt value = { value = var:te_dg_pm multiply = local_var:te_dg_lx_ps } }
+		set_local_variable = { name = te_dg_wk_f value = { value = var:te_dg_pf subtract = local_var:te_dg_lx_aft } }
+		set_local_variable = { name = te_dg_wk_m value = { value = var:te_dg_pm subtract = local_var:te_dg_lx_amt } }
+		te_demog_work_pool_part = yes
+		set_local_variable = { name = te_dg_lx_ab_t value = { value = var:te_dg_pa subtract = var:te_dg_lx_pd } }
+		set_local_variable = { name = te_dg_lx_cap0 value = local_var:te_dg_cap }
+		set_local_variable = { name = te_dg_lx_needw0 value = local_var:te_dg_needw }
+		set_local_variable = { name = te_dg_lx_ab value = local_var:te_dg_lx_ab_t }
+		te_demog_lx_bio_band_at = yes
+		set_local_variable = { name = te_dg_wk_f value = local_var:te_dg_lx_aft }
+		set_local_variable = { name = te_dg_wk_m value = local_var:te_dg_lx_amt }
+		te_demog_work_pool_part = yes
+		set_local_variable = { name = te_dg_cap value = local_var:te_dg_lx_cap0 }
+		set_local_variable = { name = te_dg_needw value = local_var:te_dg_lx_needw0 }
+		# the biological pyramid: the pool's treated part from 85+ to its biological band (the pointer is at 85+ here)
+		te_demog_lx_bio_move = yes
+	}
+	else = {
+		set_local_variable = { name = te_dg_wk_f value = var:te_dg_pf }
+		set_local_variable = { name = te_dg_wk_m value = var:te_dg_pm }
+		te_demog_work_pool_part = yes
+	}
+}
+
+# THIS = a state after the late sweep (demographics_model.lx_finish): the last age group's sums, the adults' ever-treated
+# share, the three life tables and rho (generated), the mean ages (the pool at its mean age, the newborns at 0).
+te_demog_lx_finish = {
+	te_demog_lx_group_flush = yes
+	# births to women of 50 and over, over all births (children per woman's hover; §6.2)
+	if = {
+		limit = {
+			local_var:te_dg_lx_b50 > 0
+			local_var:te_dg_births > 0
+		}
+		set_variable = { name = te_dg_lx_b50 value = { value = local_var:te_dg_lx_b50 divide = { value = local_var:te_dg_births min = 0.00001 } } }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_lx_b50 }
+		remove_variable = te_dg_lx_b50
+	}
+	set_variable = { name = te_dg_lx_sbar value = 0 }
+	if = {
+		limit = { local_var:te_dg_lx_asum > 0 }
+		set_variable = { name = te_dg_lx_sbar value = { value = local_var:te_dg_lx_tsum divide = { value = local_var:te_dg_lx_asum min = 0.00001 } } }
+	}
+	te_demog_lx_tables = yes
+	# rich pops die less (late-game §4.3, call 14): the census's wealth slope, which te_demog_rates_refresh applies under Full
+	te_demog_lx_wealth_slope = yes
+	set_local_variable = { name = te_dg_lx_pp value = { value = var:te_dg_pf add = var:te_dg_pm } }
+	change_local_variable = { name = te_dg_lx_mp add = { value = local_var:te_dg_lx_pp add = local_var:te_dg_births } }
+	change_local_variable = { name = te_dg_lx_mcal add = { value = local_var:te_dg_lx_pp multiply = var:te_dg_pa } }
+	if = {
+		limit = {
+			has_variable = te_dg_lx_ps
+			has_variable = te_dg_lx_pd
+		}
+		change_local_variable = {
+			name = te_dg_lx_mdef
+			add = { value = local_var:te_dg_lx_pp multiply = var:te_dg_lx_ps multiply = var:te_dg_lx_pd }
+		}
+	}
+	set_variable = { name = te_dg_lx_age value = { value = local_var:te_dg_lx_mcal divide = { value = local_var:te_dg_lx_mp min = 0.00001 } } }
+	set_variable = {
+		name = te_dg_lx_bio
+		value = {
+			value = local_var:te_dg_lx_mcal
+			subtract = local_var:te_dg_lx_mdef
+			divide = { value = local_var:te_dg_lx_mp min = 0.00001 }
+		}
+	}
+}
+
+# THIS = a state, in its seed after te_demog_prepare (demographics_model.seed): once ageing is slowed (an owner with a carrier)
+# the seed's adults survive at the blend of the untreated and the treated share E at the steady biological age of the
+# current rate; sets local te_dg_lx_seed_on, E and r, and the age groups' rates for the lookups (the seed's rates have no
+# on-top scales, so both sets are the model's own; the seed re-enters group 0 after this).
+te_demog_lx_seed_begin = {
+	set_local_variable = { name = te_dg_lx_seed_on value = 0 }
+	if = {
+		limit = { te_demog_lx_carrier_on > 0 }
+		te_demog_lx_access = yes
+		set_local_variable = { name = te_dg_lx_e value = local_var:te_dg_lx_target }
+		set_local_variable = { name = te_dg_lx_rr value = te_demog_lx_rate }
+		if = {
+			limit = { local_var:te_dg_lx_e > 0 }
+			set_local_variable = { name = te_dg_lx_seed_on value = 1 }
+			te_demog_lx_group_rates_unscaled = yes
+			te_demog_lx_group_rates_scaled = yes
+		}
+	}
+}
+
+# THIS = a state, in its seed's slot of an adult while te_dg_lx_seed_on (demographics_model.seed): the year's survival at
+# (1 - E) x the age's rates + E x the rates at 25 + r x (age - 25), women's with their deaths in childbirth.
+te_demog_lx_seed_decrement = {
+	set_local_variable = {
+		name = te_dg_lx_rb
+		value = { value = local_var:te_dg_age subtract = te_demog_k_lx_join_age multiply = local_var:te_dg_lx_rr add = te_demog_k_lx_join_age }
+	}
+	te_demog_lx_rates_at = yes
+	change_local_variable = {
+		name = te_dg_lsf
+		multiply = {
+			value = local_var:te_dg_asfr
+			multiply = local_var:te_dg_tfr
+			multiply = local_var:te_dg_mmr
+			divide = 100000
+			add = {
+				value = 1
+				subtract = local_var:te_dg_lx_e
+				multiply = local_var:te_dg_qf
+				add = { value = local_var:te_dg_lx_e multiply = local_var:te_dg_lx_qf }
+			}
+			divide = 100000
+			multiply = -1
+			add = 1
+		}
+	}
+	change_local_variable = {
+		name = te_dg_lsm
+		multiply = {
+			value = 1
+			subtract = local_var:te_dg_lx_e
+			multiply = local_var:te_dg_qm
+			add = { value = local_var:te_dg_lx_e multiply = local_var:te_dg_lx_qm }
+			divide = 100000
+			multiply = -1
+			add = 1
+		}
+	}
+}
+
+# THIS = a state, at the end of its seed (demographics_model.lx_seed): once ageing is slowed, every band with an adult at
+# s = E (eligibility at its target) and the steady state of the current rate, cover 1, the pool empty; otherwise the late
+# variables go (a seed without a carrier: the console's re-seed, an old save's state).
+te_demog_lx_seed = {
+	te_demog_lx_clear_bands = yes
+	te_demog_lx_bio_bands_clear = yes
+	if = {
+		limit = { has_variable = te_dg_lx_ps }
+		remove_variable = te_dg_lx_ps
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_pd }
+		remove_variable = te_dg_lx_pd
+	}
+	if = {
+		limit = { te_demog_lx_carrier_on > 0 }
+		te_demog_lx_access = yes
+		set_local_variable = { name = te_dg_lx_e value = local_var:te_dg_lx_target }
+		set_local_variable = { name = te_dg_lx_rr value = te_demog_lx_rate }
+		set_variable = { name = te_dg_elig value = local_var:te_dg_lx_e }
+		set_variable = { name = te_dg_cover value = 1 }
+		set_variable = { name = te_dg_lx_sbar value = local_var:te_dg_lx_e }
+		set_variable = { name = te_dg_age_rate value = local_var:te_dg_lx_rr }
+		set_variable = { name = te_dg_lx_pub value = local_var:te_dg_lx_pub }
+		te_demog_lx_seed_bands = yes
+	}
+	else = {
+		te_demog_lx_clear = yes
+	}
+}
+
+# THIS = a state: the late game's state variables, gone (its bands are cleared by the caller).
+te_demog_lx_clear = {
+	if = {
+		limit = { has_variable = te_dg_elig }
+		remove_variable = te_dg_elig
+	}
+	if = {
+		limit = { has_variable = te_dg_cover }
+		remove_variable = te_dg_cover
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_sbar }
+		remove_variable = te_dg_lx_sbar
+	}
+	if = {
+		limit = { has_variable = te_dg_age_rate }
+		remove_variable = te_dg_age_rate
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_pub }
+		remove_variable = te_dg_lx_pub
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_l100 }
+		remove_variable = te_dg_lx_l100
+		remove_variable = te_dg_lx_l100t
+		remove_variable = te_dg_lx_l100u
+		remove_variable = te_dg_lx_rho
+	}
+	if = {
+		limit = { has_variable = te_dg_old_age_c }
+		remove_variable = te_dg_old_age_c
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_age }
+		remove_variable = te_dg_lx_age
+		remove_variable = te_dg_lx_bio
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_b50 }
+		remove_variable = te_dg_lx_b50
+	}
+	if = {
+		limit = { has_variable = te_dg_lx_slope }
+		remove_variable = te_dg_lx_slope
+		remove_variable = te_dg_lx_mbar
+	}
+	te_demog_lx_bio_bands_clear = yes
+}
+
+# THIS = ROOT = a state, in te_demog_rates_refresh's deaths under Full (demographics_model.lx_wealth_term; late-game §4.3,
+# call 14): the wealth slope the census applies, local te_dg_rate_slope (per wealth level, on the census's rate; 0
+# outside the late game), with the richest pop (the walk's te_dg_w_wtop) held at the treated's rate over the state's
+# (te_dg_lx_rho over te_dg_lx_mbar), so no pop's deaths go below zero; and te_dg_rate_slope_net, what it moves on the
+# bare curves' scale, which M takes out (te_dg_rate_tb x the slope x the bare deaths' mean wealth, te_dg_w_edw over
+# te_dg_w_ed0), so the state's total stays the census's.
+te_demog_lx_rate_slope = {
+	set_local_variable = { name = te_dg_rate_slope value = 0 }
+	set_local_variable = { name = te_dg_rate_slope_net value = 0 }
+	if = {
+		limit = {
+			has_variable = te_dg_lx_slope
+			local_var:te_dg_w_ed0 > 0
+		}
+		set_local_variable = { name = te_dg_rate_slope value = var:te_dg_lx_slope }
+		set_local_variable = { name = te_dg_rate_wbar value = { value = local_var:te_dg_w_edw divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
+		if = {
+			limit = { local_var:te_dg_w_wtop > local_var:te_dg_rate_wbar }
+			set_local_variable = {
+				name = te_dg_rate_slope
+				value = {
+					value = var:te_dg_lx_rho
+					divide = { value = var:te_dg_lx_mbar min = 0.00001 }
+					subtract = 1
+					divide = { value = local_var:te_dg_w_wtop subtract = local_var:te_dg_rate_wbar min = 0.00001 }
+					min = var:te_dg_lx_slope
+				}
+			}
+		}
+		set_local_variable = {
+			name = te_dg_rate_slope_net
+			value = { value = local_var:te_dg_rate_slope multiply = local_var:te_dg_rate_tb multiply = local_var:te_dg_rate_wbar }
+		}
+	}
+}
+
+# THIS = ROOT = a state, after the census's other terms (te_demog_state_yearly, fast mode's clock step): the longevity gap's
+# state modifier (late-game §4.4, call 15), the one refresh site of te_demog_lx_gap_labor. Applied only under Full with
+# te_demog_k_lx_politics on (off until a play-test sizes it), at the state's gap (Living to 100, treated less untreated).
+te_demog_lx_politics_refresh = {
+	if = {
+		limit = { has_modifier = te_demog_lx_gap_labor }
+		remove_modifier = te_demog_lx_gap_labor
+	}
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			te_demog_k_lx_politics > 0
+			te_demog_lx_gap > 0.01
+		}
+		add_modifier = { name = te_demog_lx_gap_labor multiplier = te_demog_lx_gap }
+	}
+}
+
+# ---- The country -------------------------------------------------------------------------------------------------
+
+# THIS = a country, on its yearly pulse (te_demog_country_yearly): the market threshold (§4.2) starts with its first
+# ageing carrier and falls a year at a time (demographics_model.lx_market_next), whatever the rule: like the techs it
+# follows, it is a fact about the country, and the census reads it only where it runs.
+te_demog_lx_market_step = {
+	if = {
+		limit = { te_demog_lx_country_carrier > 0 }
+		if = {
+			limit = { has_variable = te_dg_lx_w }
+			set_variable = {
+				name = te_dg_lx_w
+				value = {
+					value = var:te_dg_lx_w
+					subtract = te_demog_lx_market_fall
+					min = te_demog_k_lx_market_floor
+				}
+			}
+		}
+		else = {
+			set_variable = { name = te_dg_lx_w value = te_demog_k_lx_market_start }
+		}
+	}
+}
+
+# THIS = ROOT = a country, in te_demog_country_census (around te_demog_work_country_add): the late figures' people-weighted
+# sums over its census states with a late step behind them.
+te_demog_lx_country_init = {
+	te_demog_lx_country_bio_init = yes
+	# the mean age at childbirth and the births to women of 50 and over, weighted by births, over every census state
+	set_local_variable = { name = te_dg_c_mab_b value = 0 }
+	set_local_variable = { name = te_dg_c_mab_w value = 0 }
+	set_local_variable = { name = te_dg_c_b50_w value = 0 }
+	set_local_variable = { name = te_dg_c_lx_pm value = 0 }
+	set_local_variable = { name = te_dg_c_lx_e value = 0 }
+	set_local_variable = { name = te_dg_c_lx_pub value = 0 }
+	set_local_variable = { name = te_dg_c_lx_l100 value = 0 }
+	set_local_variable = { name = te_dg_c_lx_l100t value = 0 }
+	set_local_variable = { name = te_dg_c_lx_l100u value = 0 }
+	set_local_variable = { name = te_dg_c_lx_oac value = 0 }
+	set_local_variable = { name = te_dg_c_lx_age value = 0 }
+	set_local_variable = { name = te_dg_c_lx_bio value = 0 }
+}
+
+te_demog_lx_country_add = {
+	te_demog_lx_country_bio_add = yes
+	if = {
+		limit = {
+			has_variable = te_dg_mab
+			var:te_dg_births > 0
+		}
+		change_local_variable = { name = te_dg_c_mab_b add = var:te_dg_births }
+		change_local_variable = { name = te_dg_c_mab_w add = { value = var:te_dg_mab multiply = var:te_dg_births } }
+		if = {
+			limit = { has_variable = te_dg_lx_b50 }
+			change_local_variable = { name = te_dg_c_b50_w add = { value = var:te_dg_lx_b50 multiply = var:te_dg_births } }
+		}
+	}
+	if = {
+		limit = {
+			has_variable = te_dg_elig
+			has_variable = te_dg_lx_l100
+		}
+		change_local_variable = { name = te_dg_c_lx_pm add = local_var:te_dg_c_s_pm }
+		change_local_variable = { name = te_dg_c_lx_e add = { value = var:te_dg_elig multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_lx_pub add = { value = var:te_dg_lx_pub multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_lx_l100 add = { value = var:te_dg_lx_l100 multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_lx_l100t add = { value = var:te_dg_lx_l100t multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_lx_l100u add = { value = var:te_dg_lx_l100u multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_lx_oac add = { value = var:te_dg_old_age_c multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_lx_age add = { value = var:te_dg_lx_age multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_lx_bio add = { value = var:te_dg_lx_bio multiply = local_var:te_dg_c_s_pm } }
+	}
+}
+
+# THIS = ROOT = a country, before te_demog_work_country_store (whose health bill reads te_dg_lx_pub): the figures, or none
+# while no census state has a late step behind it. The untreated's old-age threshold is the state's elsewhere, so
+# Linked to Common Longevity reads te_dg_old_age_c only where it exists (te_demog_pension_link_target).
+te_demog_lx_country_store = {
+	if = {
+		limit = { local_var:te_dg_c_mab_b > 0 }
+		set_variable = { name = te_dg_mab value = { value = local_var:te_dg_c_mab_w divide = { value = local_var:te_dg_c_mab_b min = 0.00001 } } }
+	}
+	if = {
+		limit = { local_var:te_dg_c_b50_w > 0 }
+		set_variable = { name = te_dg_lx_b50 value = { value = local_var:te_dg_c_b50_w divide = { value = local_var:te_dg_c_mab_b min = 0.00001 } } }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_lx_b50 }
+		remove_variable = te_dg_lx_b50
+	}
+	if = {
+		limit = { local_var:te_dg_c_lx_pm > 0 }
+		set_variable = { name = te_dg_elig value = { value = local_var:te_dg_c_lx_e divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_lx_pub value = { value = local_var:te_dg_c_lx_pub divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_lx_l100 value = { value = local_var:te_dg_c_lx_l100 divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_lx_l100t value = { value = local_var:te_dg_c_lx_l100t divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_lx_l100u value = { value = local_var:te_dg_c_lx_l100u divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_old_age_c value = { value = local_var:te_dg_c_lx_oac divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_lx_age value = { value = local_var:te_dg_c_lx_age divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_lx_bio value = { value = local_var:te_dg_c_lx_bio divide = { value = local_var:te_dg_c_lx_pm min = 0.00001 } } }
+	}
+	else = {
+		te_demog_lx_clear = yes
+	}
+	# the longevity gap's politics (late-game §4.4, call 15): the country's one refresh site of te_demog_lx_gap_politics,
+	# at the gap x the share of people not in care, under Full with te_demog_k_lx_politics on (off until a play-test)
+	if = {
+		limit = { has_modifier = te_demog_lx_gap_politics }
+		remove_modifier = te_demog_lx_gap_politics
+	}
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			te_demog_k_lx_politics > 0
+			has_variable = te_dg_elig
+			te_demog_lx_gap_politics_x > 0.01
+		}
+		add_modifier = { name = te_demog_lx_gap_politics multiplier = te_demog_lx_gap_politics_x }
+	}
+}

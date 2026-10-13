@@ -136,6 +136,8 @@ mrna_therapeutics = {
 
 	modifier = {
 		country_institution_health_system_max_investment_add = 1
+		# the census's ageing rate for those in longevity care (demographics phase 3, the late-game design's call 3)
+		state_ageing_rate_add = -0.10
 	}
 
 	ai_weight = {
@@ -379,7 +381,10 @@ mental_health_awareness = {
 
 	modifier = {
 		state_standard_of_living_add = 1
-		state_demog_ontop_mortality_mult = -0.05
+		# demographics phase 3 (the late-game design §8.4, call 19): under Full the census carries this line as fewer
+		# deaths from accidents and violence (suicide); outside Full the flat line stays
+		state_demog_absorbed_mortality_mult = -0.05
+		state_external_mortality_mult = -0.10
 		country_weekly_innovation_max_add = 100
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1

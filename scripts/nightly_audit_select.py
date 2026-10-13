@@ -76,6 +76,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/static_modifiers/te_demog_workforce_line_modifiers_generated.txt",
     "common/script_values/te_demog_workforce_line_values_generated.txt",
     "common/scripted_effects/te_demog_workforce_line_effects_generated.txt",
+    "common/scripted_effects/te_demog_lx_generated_effects.txt",
+    "common/script_values/te_demog_lx_generated_values.txt",
     "common/script_values/te_demog_spread_values_generated.txt",
     "common/scripted_effects/te_demog_spread_effects_generated.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",

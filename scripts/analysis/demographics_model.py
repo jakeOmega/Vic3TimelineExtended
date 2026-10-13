@@ -52,6 +52,12 @@ class Inputs:
     # count (te_dg_fws_wk), which splits work deaths; None = the law table (outside Full, or before a count)
     work_female_share: float | None = None
     sex_balance: float | None = None     # men per 100 women aged 20-59 the step reads (te_dg_sxb); None = no term
+    # phase 3, the late game (late-game §4.2, §3.5): people by the Gini's wealth band {k: people} (the walk's
+    # te_dg_gn<k>; None = everyone on the public route alone), the owner's market threshold (te_dg_lx_w; None = not
+    # started, LX_MARKET_START), State Youth Center levels on pm_ectogenesis
+    wealth_bands: dict | None = None
+    lx_w: float | None = None
+    ecto_levels: float = 0.0
     # phase 3: Cultural Hegemony's drift, the owner's factor on desired fertility (te_dg_ch_desired, under Full); 1 = none
     hegemon: float = 1.0
 
@@ -455,7 +461,7 @@ def ch_drift(factor, target):
 
 def asfr_shape(rate_age):
     """Share of a woman's lifetime births at this rate age, per 100k (15-49)."""
-    if rate_age < 15 or rate_age > 49:
+    if rate_age < 15 or rate_age >= 50:          # the fertile groups 15-45 (a biological age can be fractional)
         return 0.0
     return P.ASFR_SHAPE_BY_GROUP[rate_age - rate_age % 5] / 5.0
 
@@ -464,14 +470,14 @@ def asfr_shape(rate_age):
 
 def asfr_planned(rate_age):
     """Planned births' share at a calendar rate age, per 100k (P.ASFR_PLANNED_SHAPE)."""
-    if rate_age < 15 or rate_age > 49:
+    if rate_age < 15 or rate_age >= 50:          # the fertile groups 15-45 (a biological age can be fractional)
         return 0.0
     return P.ASFR_PLANNED_SHAPE[rate_age - rate_age % 5] / 5.0
 
 
 def asfr_unplanned(rate_age):
     """Unplanned births' share at a biological rate age, per 100k (P.ASFR_UNPLANNED_SHAPE)."""
-    if rate_age < 15 or rate_age > 49:
+    if rate_age < 15 or rate_age >= 50:          # the fertile groups 15-45 (a biological age can be fractional)
         return 0.0
     return P.ASFR_UNPLANNED_SHAPE[rate_age - rate_age % 5] / 5.0
 
@@ -639,10 +645,8 @@ def work_figures(ring, inp, old_age):
     past = split_f = split_all = 0.0           # phase 2 step 2: workers past the end; the work-death split's sums
     lo, hi = P.WORK_SPLIT_AGES
     for a, f, m in ring.by_age():
-        ab = a                                  # the biological index (phase 3: less the band's deficit)
         p = f + m
         total += p
-        need += p * band_value(P.HEALTH_NEED, ab)
         start = start_factor(inp, a)
         share = 1.0
         if a >= end:
@@ -652,13 +656,22 @@ def work_figures(ring, inp, old_age):
                 pens += p
         elif start > 0:
             wa += p
-        k = start * capacity_at(inp, ab) * share
-        workers += (f * rate_f + m * rate_m) * k
-        if a >= end:
-            past += (f * rate_f + m * rate_m) * k
-        if lo <= a <= hi:
-            split_f += f * rate_f * k
-            split_all += (f * rate_f + m * rate_m) * k
+        # phase 3: the slot's treated part at its biological age, the rest at the calendar one (te_demog_lx_accumulate);
+        # the pool's treated part at its mean age less its deficit
+        if a == N:
+            sh, bio = (ring.lx_ps or 0.0), ring.pool_age - (ring.lx_pd or 0.0)
+        else:
+            sh, bio = ring.lx_slot.get((ring.year - a) % N, (0.0, a))
+        parts = ((f, m, a),) if sh <= 0 else ((f - f * sh, m - m * sh, a), (f * sh, m * sh, bio))
+        for pf, pm, ab in parts:
+            need += (pf + pm) * band_value(P.HEALTH_NEED, ab)
+            k = start * capacity_at(inp, ab) * share
+            workers += (pf * rate_f + pm * rate_m) * k
+            if a >= end:
+                past += (pf * rate_f + pm * rate_m) * k
+            if lo <= a <= hi:
+                split_f += pf * rate_f * k
+                split_all += (pf * rate_f + pm * rate_m) * k
     return {"wa_share": wa / max(total, 1.0), "at_work": workers / max(wa, 1.0),
             "pensioners": pens / max(total, 1.0), "need": need / max(total, 1.0) / P.HEALTH_NEED_1836,
             "past": past / max(total, 1.0),
@@ -699,7 +712,9 @@ def outside_full_total(wbase, lines, remainder=0.0):
 def pension_position_age(position, current_age=None, old_age=None):
     """A position's pension age for this year (te_demog_pension_age_refresh): the fixed ages, or for a linked one the
     country's old-age threshold less P.PENSION_LINK_OFFSET, at least P.PENSION_LINK_FLOOR, moving at most
-    P.PENSION_LINK_STEP from current_age (None: it lands at once). None old_age (no census yet): the floor."""
+    P.PENSION_LINK_STEP from current_age (None: it lands at once). None old_age (no census yet): the floor. old_age is the
+    threshold the position follows: the state's blend for Linked to Average Longevity, the untreated's for Linked to
+    Common Longevity (phase 3: te_demog_pension_link_target_average, _common)."""
     if position not in P.PENSION_LINKED:
         return float(P.PENSION_AGE[position])
     target = P.PENSION_LINK_FLOOR if old_age is None else max(old_age - P.PENSION_LINK_OFFSET, P.PENSION_LINK_FLOOR)
@@ -715,11 +730,13 @@ def pension_bill_gdp_share(pensioners, social_security_level):
     return pensioners * P.PENSION_B_PER_LEVEL * social_security_level
 
 
-def health_term(need, techs=frozenset()):
-    """The health bill's multiplier on the health system's institution cost (§2.4): the need term, capped above, and
-    the chronic-treatment technologies; longevity care is phase 3's."""
+def health_term(need, techs=frozenset(), lx_public=0.0, lx_elig=0.0):
+    """The health bill's multiplier on the health system's institution cost (§2.4): the need term, capped above, the
+    chronic-treatment technologies and (phase 3, late-game §5.2) longevity care paid by the system, the share on the
+    public route at most the share in care (te_demog_health_lx_term)."""
     need_term = min(P.HEALTH_NEED_WEIGHT * (need - 1.0), P.HEALTH_NEED_CAP)
-    return need_term + P.HEALTH_TECH_STEP * sum(1 for t in P.HEALTH_TECHS if t in techs)
+    return (need_term + P.HEALTH_TECH_STEP * sum(1 for t in P.HEALTH_TECHS if t in techs)
+            + min(lx_public, lx_elig) * P.LX_PUBLIC_HEALTH_WEIGHT)
 
 
 def old_age_threshold(q):
@@ -837,6 +854,21 @@ class Ring:
     faw: float = 0.0                    # the women of the same ages: the war dead's women's share
     total: float = 0.0
     medicine: dict | None = None        # the drifted access and treatments (medicine_drift); None = at the targets
+    # phase 3, the late game (late-game §1.2-§1.4; te_dg_s<j>, te_dg_d<j>, te_dg_lx_ps/_pd, te_dg_elig, te_dg_cover,
+    # te_dg_lx_sbar): per five-year birth band the treated share and their mean deficit (None: no variable), the
+    # pool's, eligibility, cover and the adults' ever-treated share. lx_elig None: the late game hasn't started here.
+    lx_s: list = field(default_factory=lambda: [None] * P.LX_BANDS)
+    lx_d: list = field(default_factory=lambda: [None] * P.LX_BANDS)
+    lx_ps: float | None = None
+    lx_pd: float | None = None
+    lx_elig: float | None = None
+    lx_cover: float | None = None
+    lx_sbar: float | None = None
+    # the last step's per-slot treated share and biological age after the step {slot: (share, bio age)} (the sweep's
+    # accumulation splits each slot into its two parts; a seed's is empty), and its late figures
+    lx_slot: dict = field(default_factory=dict)
+    lx_out: dict = field(default_factory=dict)
+    births: float = 0.0                 # the last step's births (te_dg_births; 0 after a seed): ectogenesis's share
 
     def age_of_slot(self, k):
         """Age of slot k's people after the step of self.year."""
@@ -937,18 +969,31 @@ def seed(inp, year, engine_pop):
     ring.medicine = medicine_targets(inp)
     lf = lm = 100000.0
     dpow = 1.0
+    # phase 3: once ageing is slowed, the adults' survivorship blends in the treated share E at the steady biological age
+    # of the current rate, 25 + r x (age - 25) (te_demog_lx_seed_begin, te_demog_lx_seed_decrement)
+    lxs = (lx_targets(inp)[0], ageing_rate(inp)) if lx_carrier(inp) else None
     for a in range(N):
         k = (year - a) % N
         ring.f[k] = P.FEMALE_BIRTH_PER_100K / 100000.0 * lf * dpow
         ring.m[k] = P.MALE_BIRTH_PER_100K / 100000.0 * lm * dpow
         g = P.group_of(a)
-        lf *= 1 - (qf[g] + asfr_shape(a) * tfr * mmr / 100000.0) / 100000.0
-        lm *= 1 - qm[g] / 100000.0
+        if lxs is not None and a >= P.LX_JOIN_AGE:
+            e, rr = lxs
+            gb = P.group_of(P.LX_JOIN_AGE + rr * (a - P.LX_JOIN_AGE))
+            q_f = (1 - e) * qf[g] + e * qf[gb]
+            q_m = (1 - e) * qm[g] + e * qm[gb]
+            lf *= 1 - (q_f + asfr_shape(a) * tfr * mmr / 100000.0) / 100000.0
+            lm *= 1 - q_m / 100000.0
+        else:
+            lf *= 1 - (qf[g] + asfr_shape(a) * tfr * mmr / 100000.0) / 100000.0
+            lm *= 1 - qm[g] / 100000.0
         dpow *= d
     raw = sum(ring.f) + sum(ring.m)
     ring.scale = engine_pop / raw if raw > 0 else 1.0
     _refresh_denominators(ring)
     ring.total = engine_pop
+    # phase 3: a state seeded once ageing is slowed starts its bands at the steady state (te_demog_lx_seed)
+    lx_seed(ring, inp, year)
     return ring
 
 
@@ -974,7 +1019,16 @@ def _refresh_denominators(ring):
         c = class_of(a)
         ring.class_f[c] += f
         ring.class_m[c] += m
-        if in_pool(a, a):                       # the biological index is the calendar one until phase 3
+        # phase 3: a slot's treated part at its biological age, the rest at the calendar one (te_demog_lx_accumulate)
+        sh, bio = ring.lx_slot.get((ring.year - a) % N, (0.0, a))
+        if sh > 0:
+            if in_pool(a, bio):
+                ring.fam += m * sh
+                ring.faw += f * sh
+            if in_pool(a, a):
+                ring.fam += m - m * sh
+                ring.faw += f - f * sh
+        elif in_pool(a, a):                     # the biological index is the calendar one before treatment
             ring.fam += m
             ring.faw += f
 
@@ -1115,6 +1169,10 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         planned_share = 1.0
     tfr_model = tfr
     q0_model = (qf[0] + qm[0]) / 200.0   # the life table's infant mortality, before the scales
+    qf0, qm0 = list(qf), list(qm)        # the model's own rates (phase 3's life tables)
+    # phase 3, the late game: None until the state has a carrier or treated people (te_demog_lx_begin)
+    lx = lx_begin(ring, inp) if rates is None else None
+    ring.lx_slot = {}
     tfr = tfr * (1 + births_scale)
     if deaths_scale:
         if rates is None:
@@ -1132,12 +1190,15 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     kill = clamp(kills / ring.total, 0, 0.9) if ring.total else 0.0
     mig = migrant_rates(ring, prof, migration)
     births = deaths = 0.0
+    birth_age = 0.0
     open_k = year % N
     # ages 1..150 at this step; the slot at 150 is the open slot, folded then refilled
     for a in range(1, N + 1):
         k = (year - a) % N
         f, m = ring.f[k] * s, ring.m[k] * s
         if a == N:
+            if lx is not None:
+                lx_fold(ring, k, f, m, s)
             ring.pool_age = ((ring.pool_f + ring.pool_m) * s * (ring.pool_age + 1) + (f + m) * N) / max(
                 (ring.pool_f + ring.pool_m) * s + f + m, 1e-9)
             ring.pool_f, ring.pool_m = ring.pool_f * s + f, ring.pool_m * s + m
@@ -1147,15 +1208,27 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             continue
         r = a - 1
         g = P.group_of(r)
-        b = slot_births(f, r, r, tfr, planned_share)
-        births += b
-        maternal += b * mmr / 100000.0
-        f2 = f * (1 - qf[g] / 100000.0) - b * mmr / 100000.0
-        m2 = m * (1 - qm[g] / 100000.0)
-        deaths += (f - f2) + (m - m2)
-        if in_pool(r, r):                       # the pool's ages by rate age (phase 2 step 4, §4.2)
-            f2 -= f * war_f
-            m2 -= m * war_m
+        if lx is not None:
+            # phase 3: births by part and by clock, and artificial wombs (te_demog_lx_births)
+            b, bmu, bmt = lx_births(lx, ring, k, r, f, m, tfr, planned_share)
+            births += b
+            maternal += (bmu + bmt) * mmr / 100000.0
+        else:
+            b = slot_births(f, r, r, tfr, planned_share)
+            births += b
+            maternal += b * mmr / 100000.0
+        birth_age += b * r                      # phase 3: the mean age at childbirth (te_dg_mab)
+        if lx is not None:
+            # phase 3: the cohort's treated and untreated parts die apart (te_demog_lx_deaths)
+            f2, m2, dead = lx_slot(lx, ring, k, r, g, f, m, (bmu, bmt), mmr, qf, qm, qf0, qm0, war_f, war_m)
+            deaths += dead
+        else:
+            f2 = f * (1 - qf[g] / 100000.0) - b * mmr / 100000.0
+            m2 = m * (1 - qm[g] / 100000.0)
+            deaths += (f - f2) + (m - m2)
+            if in_pool(r, r):                   # the pool's ages by rate age (phase 2 step 4, §4.2)
+                f2 -= f * war_f
+                m2 -= m * war_m
         f2 -= f * kill
         m2 -= m * kill
         c = class_of(r)
@@ -1169,10 +1242,13 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
                 m2 -= min(max(m2, 0.0) * 0.5, -m * mig[(c, "m")])
         ring.f[k], ring.m[k] = max(f2, 0.0), max(m2, 0.0)
     # the pool: last group's rates, ages a year
-    pq_f, pq_m = qf[-1] / 100000.0, qm[-1] / 100000.0
-    deaths += ring.pool_f * pq_f + ring.pool_m * pq_m
-    ring.pool_f *= 1 - pq_f
-    ring.pool_m *= 1 - pq_m
+    if lx is not None:
+        deaths += lx_pool_deaths(ring, lx, qf, qm, qf0, qm0)
+    else:
+        pq_f, pq_m = qf[-1] / 100000.0, qm[-1] / 100000.0
+        deaths += ring.pool_f * pq_f + ring.pool_m * pq_m
+        ring.pool_f *= 1 - pq_f
+        ring.pool_m *= 1 - pq_m
     # the newborns' split: the constants, or the sex ratio at birth with prenatal sexing (phase 2 step 3b)
     girls, boys = newborn_split(inp)
     ring.f[open_k] = births * girls / 100000.0
@@ -1182,7 +1258,14 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     ring.scale = (engine_pop / raw) if (engine_pop is not None and raw > 0) else 1.0
     _refresh_denominators(ring)
     ring.total = ring.people()
-    return {"births": births, "deaths": deaths, "tfr": tfr_model, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
+    ring.births = births
+    if lx is not None:
+        lx_finish(ring, lx, qf0, qm0, inp)
+        if lx["b50"] > 0 and births > 0:
+            ring.lx_out["b50"] = lx["b50"] / births
+    else:
+        ring.lx_out = {}
+    return {"lx": ring.lx_out, "mab": birth_age / births + 0.5 if births > 0 else None, "births": births, "deaths": deaths, "tfr": tfr_model, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
             "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": q0_model,
             "fertility": fert, "raw": raw,
             "tfr_shown": tfr, "maternal": maternal,
@@ -1224,3 +1307,441 @@ def run_constant(inp, years=400, year0=1836):
         last["growth"] = cur / prev - 1
         prev = cur
     return ring, last
+
+
+# ---- Phase 3: the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md) --------------------
+# Biological age per five-year birth band (§1.2-§1.3), who gets life extension (§4.2), Biological Immortality's pull
+# (§1.4) and the late figures (§6). Inert before the first ageing carrier: step() takes none of this path until a state
+# has a carrier or a stored eligibility (ring.lx_elig), so every earlier number is the census's as before. The script
+# twin is common/scripted_effects/te_demog_lx_effects.txt with te_demog_lx_generated_effects.txt.
+
+def ageing_rate(inp):
+    """r, the biological years a calendar year of those in care (§1.2): 1 + state_ageing_rate_add, within 0-1."""
+    return clamp(1 + inp.mods.get(P.AGEING_RATE_TYPE, 0.0), 0.0, 1.0)
+
+
+def rejuvenation(inp):
+    """Biological Immortality's pull (§1.4): the share of a treated body's gap to LX_PULL_TO closed each year."""
+    return clamp(inp.mods.get(P.REJUVENATION_TYPE, 0.0), 0.0, 1.0)
+
+
+def lx_carrier(inp):
+    """Longevity care exists for this state's owner: an ageing carrier or the pull (te_demog_lx_carrier)."""
+    return ageing_rate(inp) < 1 or rejuvenation(inp) > 0
+
+
+def lx_band(k):
+    """A ring slot's five-year birth band (te_dg_s<j>, te_dg_d<j>)."""
+    return k // P.LX_BAND_WIDTH
+
+
+def lx_threshold(inp):
+    """The market threshold this state's people meet (§4.2): the owner's W (LX_MARKET_START before its first year), less
+    LX_UNRESTRICTED_OFFSET under Unrestricted Augmentation (te_demog_lx_threshold)."""
+    w = P.LX_MARKET_START if inp.lx_w is None else inp.lx_w
+    if P.LX_UNRESTRICTED_LAW in inp.laws:
+        w -= P.LX_UNRESTRICTED_OFFSET
+    return w
+
+
+def lx_public(inp):
+    """The public route's reach (§4.2): the drifted health-care access x the health law's cover; at least
+    LX_MANDATORY_FLOOR under Mandatory Augmentation (te_demog_lx_public)."""
+    acc = (inp.medicine if inp.medicine is not None else medicine_targets(inp))["access"]
+    if P.LX_MANDATORY_LAW in inp.laws:
+        return max(acc, P.LX_MANDATORY_FLOOR)
+    cover = next((v for law, v in P.LX_COVER.items() if law in inp.laws), P.LX_COVER_DEFAULT)
+    return acc * cover
+
+
+def lx_market(wealth, w):
+    """The market route at a wealth (§4.2): 0 at LX_MARKET_RAMP below the threshold, 1 as far above it."""
+    return clamp((wealth - (w - P.LX_MARKET_RAMP)) / (2 * P.LX_MARKET_RAMP), 0.0, 1.0)
+
+
+def lx_targets(inp):
+    """(eligibility's target, the share on the public route): access people-weighted over the walk's wealth bands, each
+    band the larger of the two routes (te_demog_lx_access). No carrier, or Human Purity: none. No bands: the public
+    route alone."""
+    if not lx_carrier(inp) or P.LX_BAN_LAW in inp.laws:
+        return 0.0, 0.0
+    pub = lx_public(inp)
+    bands = {k: n for k, n in (inp.wealth_bands or {}).items() if n > 0}
+    if not bands:
+        return pub, pub
+    w = lx_threshold(inp)
+    people = sum(bands.values())
+    reach = sum(n * max(pub, lx_market(P.LX_BAND_WEALTH[k], w)) for k, n in bands.items())
+    return reach / max(people, 0.00001), pub
+
+
+def lx_market_next(w, laws=frozenset(), diffusion_add=0.0):
+    """The owner's market threshold a year on (te_demog_lx_market_fall; the country's yearly census): None (no carrier
+    yet) starts at LX_MARKET_START; it falls LX_MARKET_FALL a year x the laws' factor x (1 + LX_MARKET_DIFFUSION x the
+    capital's diffusion type), to LX_MARKET_FLOOR."""
+    if w is None:
+        return float(P.LX_MARKET_START)
+    factor = 1.0
+    for law, x in P.LX_MARKET_FALL_LAWS.items():
+        if law in laws:
+            factor *= x
+    return max(P.LX_MARKET_FLOOR, w - P.LX_MARKET_FALL * factor * (1 + P.LX_MARKET_DIFFUSION * diffusion_add))
+
+
+def lx_begin(ring, inp):
+    """The step's late inputs (te_demog_lx_begin), or None while the late game hasn't started in this state. Eligibility
+    E drifts toward its target at the medical diffusion rate; cover c and the joining share phi follow E (§1.2): when E
+    falls, c falls in proportion (bodies keep their age); when it rises, cover returns first, then the same share phi of
+    every band's untreated joins with no deficit. Sets ring.lx_elig and ring.lx_cover."""
+    started = ring.lx_elig is not None
+    if not started and not lx_carrier(inp) and inp.ecto_levels <= 0:
+        return None
+    target, pub = lx_targets(inp)
+    e_old = ring.lx_elig if started else 0.0
+    e = (target - e_old) * diffusion(inp) + e_old
+    if -P.LX_SNAP < target - e < P.LX_SNAP:
+        e = target
+    c_old = 1.0 if ring.lx_cover is None else ring.lx_cover
+    sbar = ring.lx_sbar or 0.0
+    phi = 0.0
+    if e_old <= 0:
+        if sbar > 0 and sbar >= e:
+            c = e / max(sbar, 0.00001)
+        else:
+            c = 1.0
+            phi = (e - sbar) / max(1 - sbar, 0.00001)
+    elif e <= e_old:
+        c = c_old * e / max(e_old, 0.00001)
+    else:
+        c2 = c_old * e / max(e_old, 0.00001)
+        if c2 <= 1:
+            c = c2
+        else:
+            c = 1.0
+            phi = (min(1.0, sbar * c2) - sbar) / max(1 - sbar, 0.00001)
+    c, phi = clamp(c, 0.0, 1.0), clamp(phi, 0.0, 1.0)
+    ring.lx_elig, ring.lx_cover = e, c
+    groups = len(P.GROUPS)
+    return {"rr": ageing_rate(inp), "pull": rejuvenation(inp), "c": c, "phi": phi, "e": e, "target": target,
+            "pub": pub, "ecto": ecto_share(inp, ring.births),
+            "T": {}, "A": {}, "J": {}, "TA": {}, "b50": 0.0,
+            "U_f": [0.0] * groups, "T_f": [0.0] * groups, "TQ_f": [0.0] * groups,
+            "U_m": [0.0] * groups, "T_m": [0.0] * groups, "TQ_m": [0.0] * groups}
+
+
+def ecto_share(inp, births_last):
+    """e, the share of planned births artificial wombs carry (§3.5): the State Youth Centers' levels on pm_ectogenesis x
+    LX_ECTO_PER_LEVEL over last year's births, at most LX_ECTO_MAX; 0 with no births yet (te_demog_lx_ecto)."""
+    if inp.ecto_levels <= 0 or births_last <= 0:
+        return 0.0
+    return clamp(inp.ecto_levels * P.LX_ECTO_PER_LEVEL / births_last, 0.0, P.LX_ECTO_MAX)
+
+
+def fecundity(age):
+    """The body's share of a planned birth it allows at a biological age (§3.2; P.FECUNDITY by group start)."""
+    return band_value(P.FECUNDITY, age)
+
+
+def intended(age):
+    """The planned schedule as families intend it at a calendar rate age, per 100k (§3.2): today's shape over the
+    fecundity it already carries, 0 where the body allows none (te_demog_lx_fert_at's te_dg_lx_int)."""
+    fec = fecundity(age)
+    return asfr_planned(age) / fec if fec > 0 else 0.0
+
+
+def lx_births(lx, ring, k, r, f, m, tfr, planned_share):
+    """One cohort's births with its two parts and ectogenesis (§3.1, §3.2, §3.5; te_demog_lx_births): planned births by
+    the calendar, as intended x the fecundity of the body that bears them; unplanned births by the body. Artificial wombs
+    carry the share e of planned births with no fecundity loss, from the cohort's women and men alike. Returns (births,
+    the untreated women's own births, the treated women's own births): only the women's own carry maternal deaths."""
+    j = lx_band(k)
+    sk = (ring.lx_s[j] or 0.0) if r >= P.LX_JOIN_AGE else 0.0
+    rb = r - (ring.lx_d[j] or 0.0)
+    e = lx["ecto"]
+    ft = f * sk
+    fu = f - ft
+    a_r = asfr_planned(r)
+    i_r = intended(r)
+    base = tfr / 100000.0
+    pl_u = planned_share * base * (1 - e) * fu * a_r
+    un_u = (1 - planned_share) * base * fu * asfr_unplanned(r)
+    pl_t = un_t = 0.0
+    if sk > 0:
+        pl_t = planned_share * base * (1 - e) * ft * i_r * fecundity(rb)
+        un_t = (1 - planned_share) * base * ft * asfr_unplanned(rb)
+    ecto = planned_share * base * e * (f + m) * 0.5 * i_r
+    b = pl_u + un_u + pl_t + un_t + ecto
+    if r >= 50:
+        lx["b50"] += b
+    return b, pl_u + un_u, pl_t + un_t
+
+
+def lx_slot(lx, ring, k, r, g, f, m, bm, mmr, qf, qm, qf0, qm0, war_f, war_m):
+    """One cohort's deaths and war dead with its two parts (te_demog_lx_deaths): the treated part at its biological rate
+    age, the rest at the calendar one (§1.3), from the counts before deaths; bm the women's own births this year by part
+    (untreated, treated: lx_births), which carry the maternal deaths.
+    Accumulates the band's selection and the life tables' sums. Returns (f2, m2, deaths)."""
+    j = lx_band(k)
+    sk = (ring.lx_s[j] or 0.0) if r >= P.LX_JOIN_AGE else 0.0
+    d0 = ring.lx_d[j] or 0.0
+    ft, mt = f * sk, m * sk
+    fu, mu = f - ft, m - mt
+    bu, bt = bm                                  # the women's own births by part (lx_births)
+    u2f = fu * (1 - qf[g] / 100000.0) - bu * mmr / 100000.0
+    u2m = mu * (1 - qm[g] / 100000.0)
+    t2f = t2m = 0.0
+    gt = g
+    if sk > 0:
+        rb = r - d0
+        gt = P.group_of(rb)
+        t2f = ft * (1 - qf[gt] / 100000.0) - bt * mmr / 100000.0
+        t2m = mt * (1 - qm[gt] / 100000.0)
+    dead = (f - u2f - t2f) + (m - u2m - t2m)
+    if r >= P.POOL_FROM:
+        if r <= P.POOL_TO:
+            u2f -= fu * war_f
+            u2m -= mu * war_m
+        if sk > 0 and r - d0 <= P.POOL_TO:
+            t2f -= ft * war_f
+            t2m -= mt * war_m
+    if r >= P.LX_JOIN_AGE:
+        lx["T"][j] = lx["T"].get(j, 0.0) + t2f + t2m
+        lx["A"][j] = lx["A"].get(j, 0.0) + t2f + t2m + u2f + u2m
+        lx["TA"][j] = lx["TA"].get(j, 0.0) + (t2f + t2m) * (r + 1)
+    elif r == P.LX_JOIN_AGE - 1:
+        lx["J"][j] = lx["J"].get(j, 0.0) + u2f + u2m
+    lx["U_f"][g] += fu
+    lx["U_m"][g] += mu
+    if sk > 0:
+        lx["T_f"][g] += ft
+        lx["T_m"][g] += mt
+        lx["TQ_f"][g] += ft * qf0[gt]
+        lx["TQ_m"][g] += mt * qm0[gt]
+        alive = t2f + t2m + u2f + u2m
+        if alive > 0:
+            ring.lx_slot[k] = (clamp((t2f + t2m) / max(alive, 0.00001), 0.0, 1.0),
+                               r + 1 - (d0 + lx["c"] * (1 - lx["rr"])))
+    return t2f + u2f, t2m + u2m, dead
+
+
+def lx_fold(ring, k, f, m, s):
+    """The age-150 cohort joins the pool (te_demog_lx_fold): the pool's treated share and deficit take its band's, by
+    people and by treated people, before the pool ages and dies."""
+    j = lx_band(k)
+    sj, dj = ring.lx_s[j] or 0.0, ring.lx_d[j] or 0.0
+    before = (ring.pool_f + ring.pool_m) * s
+    ps, pd = ring.lx_ps or 0.0, ring.lx_pd or 0.0
+    treated = ps * before + sj * (f + m)
+    if treated > 0:
+        ring.lx_pd = (pd * ps * before + dj * sj * (f + m)) / max(treated, 0.00001)
+        ring.lx_ps = treated / max(before + f + m, 0.00001)
+
+
+def lx_pool_deaths(ring, lx, qf, qm, qf0, qm0):
+    """The pool's year with its two parts (te_demog_lx_fold's deaths): the treated at their biological rate age, the
+    rest at the last group's rates; then its share by selection and its deficit aged. Returns the deaths."""
+    last = len(P.GROUPS) - 1
+    ps = ring.lx_ps or 0.0
+    pd = ring.lx_pd or 0.0
+    gt = P.group_of(ring.pool_age - 1 - pd) if ps > 0 else last
+    tf, tm = ring.pool_f * ps, ring.pool_m * ps
+    uf, um = ring.pool_f - tf, ring.pool_m - tm
+    dead = (uf * qf[last] + um * qm[last] + tf * qf[gt] + tm * qm[gt]) / 100000.0
+    tf2, tm2 = tf * (1 - qf[gt] / 100000.0), tm * (1 - qm[gt] / 100000.0)
+    uf2, um2 = uf * (1 - qf[last] / 100000.0), um * (1 - qm[last] / 100000.0)
+    lx["U_f"][last] += uf
+    lx["U_m"][last] += um
+    if ps > 0:
+        lx["T_f"][last] += tf
+        lx["T_m"][last] += tm
+        lx["TQ_f"][last] += tf * qf0[gt]
+        lx["TQ_m"][last] += tm * qm0[gt]
+    ring.pool_f, ring.pool_m = tf2 + uf2, tm2 + um2
+    if ps > 0:
+        alive = ring.pool_f + ring.pool_m
+        ring.lx_ps = (tf2 + tm2) / max(alive, 0.00001) if alive > 0 else 0.0
+        aged = pd + lx["c"] * (1 - lx["rr"])
+        aged += lx["pull"] * lx["c"] * max(0.0, ring.pool_age - aged - P.LX_PULL_TO)
+        ring.lx_pd = aged
+    return dead
+
+
+def lx_close_bands(ring, lx):
+    """Each band after the sweep (te_demog_lx_band_close): selection (the treated survivors over all survivors), ageing
+    (+ c x (1 - r)) and the pull (+ pull x c x the treated's mean biological age above LX_PULL_TO), the year's joining
+    share phi of its untreated with no deficit, then the cohort that turned LX_JOIN_AGE at E. A band with no adult left
+    drops its share and deficit, so its next cohorts start afresh. Returns the adults' ever-treated share (te_dg_lx_sbar)."""
+    c, rr, pull, phi, e = lx["c"], lx["rr"], lx["pull"], lx["phi"], lx["e"]
+    treated_all = adults_all = 0.0
+    for j in range(P.LX_BANDS):
+        t, a, jn = lx["T"].get(j, 0.0), lx["A"].get(j, 0.0), lx["J"].get(j, 0.0)
+        if a + jn <= 0:
+            ring.lx_s[j] = ring.lx_d[j] = None
+            continue
+        aged = (ring.lx_d[j] or 0.0) + c * (1 - rr)
+        if t > 0:
+            aged += pull * c * max(0.0, lx["TA"][j] / max(t, 0.00001) - aged - P.LX_PULL_TO)
+        # the script's divisions take a floor of 0.00001 (its fixed point's smallest step)
+        s_sel = t / max(a, 0.00001) if a > 0 else 0.0
+        s1 = s_sel + phi * (1 - s_sel)
+        d1 = aged * s_sel / max(s1, 0.00001) if s1 > 0 else 0.0
+        tn = s1 * a + e * jn
+        if tn > 0:
+            ring.lx_s[j] = tn / max(a + jn, 0.00001)
+            ring.lx_d[j] = d1 * s1 * a / max(tn, 0.00001)
+        else:
+            ring.lx_s[j] = ring.lx_d[j] = None
+        treated_all += tn
+        adults_all += a + jn
+    return treated_all / max(adults_all, 0.00001) if adults_all > 0 else 0.0
+
+
+def survivors_at(q, age):
+    """Survivors of the life table to a group start (radix 1), the life_table arithmetic."""
+    l = 1.0
+    for g, (start, n) in enumerate(P.GROUPS):
+        if start >= age:
+            return l
+        l *= (1.0 - q[g] / 100000.0) ** n
+    return l
+
+
+def lx_tables(lx, qf0, qm0):
+    """The three period life tables of a treated state (te_demog_lx_tables): the untreated's (the model's own rates),
+    the state's blend (each age group's deaths over its people, both parts, at the model's rates without the on-top
+    scales) and the treated's (their deaths over their people; a group none of them reaches takes the untreated's)."""
+    qbf, qbm, qtf, qtm = [], [], [], []
+    for g in range(len(P.GROUPS)):
+        for sx, qu, out_b, out_t in (("f", qf0, qbf, qtf), ("m", qm0, qbm, qtm)):
+            u, t, tq = lx[f"U_{sx}"][g], lx[f"T_{sx}"][g], lx[f"TQ_{sx}"][g]
+            out_b.append((u * qu[g] + tq) / max(u + t, 0.00001) if u + t > 0 else qu[g])
+            out_t.append(tq / max(t, 0.00001) if t > 0 else qu[g])
+    return {"untreated": (qf0, qm0), "blend": (qbf, qbm), "treated": (qtf, qtm)}
+
+
+def lx_rho(lx, qf0, qm0):
+    """The adults' treated deaths per head over the untreated's (§4.3), at the model's rates; 1 with either empty."""
+    first = P.group_of(P.LX_JOIN_AGE)
+    tq = tp = uq = up = 0.0
+    for g in range(first, len(P.GROUPS)):
+        tq += lx["TQ_f"][g] + lx["TQ_m"][g]
+        tp += lx["T_f"][g] + lx["T_m"][g]
+        uq += lx["U_f"][g] * qf0[g] + lx["U_m"][g] * qm0[g]
+        up += lx["U_f"][g] + lx["U_m"][g]
+    if tp <= 0 or up <= 0 or uq <= 0:
+        return 1.0
+    return tq / max(tp, 0.00001) / max(uq / max(up, 0.00001), 0.00001)
+
+
+def lx_wealth_slope(inp, sbar, rho):
+    """(slope, mbar): rich pops die less (§4.3, call 14; te_demog_lx_wealth_slope). Each wealth band's death multiplier
+    is 1 - its treated share x (1 - rho), its treated share its access scaled so the bands' mean is the ring's (sbar
+    over eligibility's target), at most 1; the slope is that multiplier over its people-weighted mean, against wealth,
+    people-weighted (per wealth level, on the census's rate). None without a target or a spread of wealth."""
+    target, pub = lx_targets(inp)
+    bands = {k: n for k, n in (inp.wealth_bands or {}).items() if n > 0}
+    if target <= 0 or not bands:
+        return 0.0, 1.0
+    tau = sbar / max(target, 0.00001)
+    w0 = lx_threshold(inp)
+    sn = sw = sww = sm = swm = 0.0
+    for k, n in bands.items():
+        w = P.LX_BAND_WEALTH[k]
+        m = 1 - min(1.0, max(pub, lx_market(w, w0)) * tau) * (1 - rho)
+        sn, sw, sww, sm, swm = sn + n, sw + n * w, sww + n * w * w, sm + n * m, swm + n * w * m
+    if sm <= 0:
+        return 0.0, 1.0
+    mw, mm = sw / sn, sm / sn
+    vw = sww / sn - mw * mw
+    if vw <= 0.01:
+        return 0.0, mm
+    return (swm / sn - mw * mm) / vw / mm, mm
+
+
+def lx_wealth_term(slope, mbar, rho, w_bar, w_top):
+    """The slope the census applies (te_demog_lx_rate_slope): the richest pop held at the treated's rate over the state's
+    (rho / mbar), so no pop's deaths go below zero; w_bar is the bare deaths' mean wealth, w_top the richest pop's."""
+    if w_top > w_bar:
+        return max(slope, (rho / max(mbar, 0.00001) - 1) / max(w_top - w_bar, 0.00001))
+    return slope
+
+
+def lx_finish(ring, lx, qf0, qm0, inp=None):
+    """After the sweep (te_demog_lx_finish): the bands close, the tables and the late figures (ring.lx_out)."""
+    ring.lx_sbar = lx_close_bands(ring, lx)
+    tables = lx_tables(lx, qf0, qm0)
+    out = {"elig": lx["e"], "cover": lx["c"], "target": lx["target"], "pub": lx["pub"], "rr": lx["rr"],
+           "pull": lx["pull"], "phi": lx["phi"], "sbar": ring.lx_sbar, "ecto": lx["ecto"]}
+    for name, (qf, qm) in tables.items():
+        lt_f, lt_m = life_table(qf), life_table(qm)
+        out[name] = {"e0_f": lt_f["e0"], "e0_m": lt_m["e0"], "e0": (lt_f["e0"] + lt_m["e0"]) / 2,
+                     "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "old_age": old_age(qf, qm),
+                     "l100": (survivors_at(qf, P.LX_LIVING_TO) + survivors_at(qm, P.LX_LIVING_TO)) / 2}
+    out["gap"] = out["treated"]["l100"] - out["untreated"]["l100"]
+    out["rho"] = lx_rho(lx, qf0, qm0)
+    out["slope"], out["mbar"] = lx_wealth_slope(inp, ring.lx_sbar, out["rho"]) if inp is not None else (0.0, 1.0)
+    # mean calendar and biological ages after the step (the pool at its mean age)
+    people = deficit = cal = 0.0
+    for a, f, m in ring.by_age()[:-1]:
+        k = (ring.year - a) % N
+        p = f + m
+        people += p
+        cal += p * a
+        sh, bio = ring.lx_slot.get(k, (0.0, float(a)))
+        deficit += p * sh * (a - bio)
+    pool = (ring.pool_f + ring.pool_m) * ring.scale
+    people += pool
+    cal += pool * ring.pool_age
+    deficit += pool * (ring.lx_ps or 0.0) * (ring.lx_pd or 0.0)
+    out["mean_age"] = cal / max(people, 0.00001)
+    out["mean_bio"] = (cal - deficit) / max(people, 0.00001)
+    out["bio_bands"] = lx_bio_bands(ring)
+    ring.lx_out = out
+    return out
+
+
+def lx_band_of(age):
+    """The pyramid's five-year band of an age, 85 and over the last (te_demog_lx_bio_move)."""
+    return min(int(age // P.BAND_WIDTH), P.BANDS - 1)
+
+
+def lx_bio_bands(ring):
+    """(women, men) by the pyramid's bands with each cohort's treated part at its biological band and the rest at its
+    calendar one (§6.2's toggle; te_dg_bbf<b>, te_dg_bbm<b>): the calendar bands, the pool at 85+, less each treated part
+    at its calendar band and plus it at its biological band."""
+    bf, bm = [0.0] * P.BANDS, [0.0] * P.BANDS
+    for a, f, m in ring.by_age():
+        b = lx_band_of(a)
+        bf[b] += f
+        bm[b] += m
+        if a == N:
+            sh, bio = (ring.lx_ps or 0.0), ring.pool_age - (ring.lx_pd or 0.0)
+        else:
+            sh, bio = ring.lx_slot.get((ring.year - a) % N, (0.0, a))
+        if sh > 0:
+            bf[b] -= f * sh
+            bm[b] -= m * sh
+            bf[lx_band_of(bio)] += f * sh
+            bm[lx_band_of(bio)] += m * sh
+    return [max(0.0, x) for x in bf], [max(0.0, x) for x in bm]
+
+
+def lx_seed(ring, inp, year):
+    """A seed once ageing is slowed (§1.2; te_demog_lx_seed): eligibility at its target, cover 1, every band with an
+    adult at s = E and the steady state of the current rate, d = (1 - r) x (its middle cohort's age - LX_JOIN_AGE); the
+    pool empty. Without a carrier the late variables go."""
+    ring.lx_s, ring.lx_d = [None] * P.LX_BANDS, [None] * P.LX_BANDS
+    ring.lx_ps = ring.lx_pd = None
+    ring.lx_slot, ring.lx_out = {}, {}
+    if not lx_carrier(inp):
+        ring.lx_elig = ring.lx_cover = ring.lx_sbar = None
+        return
+    target, _pub = lx_targets(inp)
+    rr = ageing_rate(inp)
+    ring.lx_elig, ring.lx_cover, ring.lx_sbar = target, 1.0, target
+    open_k = year % N
+    for j in range(P.LX_BANDS):
+        oldest = (open_k - P.LX_BAND_WIDTH * j) % N
+        if oldest >= P.LX_JOIN_AGE and target > 0:
+            ring.lx_s[j] = target
+            ring.lx_d[j] = (1 - rr) * max(0.0, oldest - 2 - P.LX_JOIN_AGE)

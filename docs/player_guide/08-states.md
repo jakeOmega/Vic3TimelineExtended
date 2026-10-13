@@ -256,11 +256,7 @@ of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
 rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
-mild starvation, Primogeniture's larger farm families, which late marriage
-replaces, and Forced Heirship's smaller ones, which family limitation replaces.
-The rest, such as the family-policy laws and the late
-medical technologies, it applies at its own rate, as it does an effect on the
-whole state, such as pollution, devastation or a decree. Either way, a new law
+mild starvation, Primogeniture's larger farm families, which late marriage replaces, and Forced Heirship's smaller ones, which Family Limitation replaces. The late medical technologies' cuts to deaths become part of its rates too (see [Life extension](#life-extension)). The rest, such as Communal Child-Rearing, the State Eugenics Program, the Sexual Revolution and the family-policy laws, it applies at its own rate, as it does an effect on the whole state, such as pollution, devastation or a decree. Either way, a new law
 or technology takes effect at the state's next census step, up to a year later.
 An effect on some of a state's people, such as severe starvation, applies to
 their rate in the base game. Private Health Insurance's cut for the wealthy
@@ -343,9 +339,10 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Median age, children per woman, life expectancy, the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short. |
+| Overview | Median age, children per woman (its tooltip gives the mean age at childbirth), life expectancy (100+ past 100), the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left; None when no age has), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short; once longevity care exists, Living to 100 and the mean biological age beside the calendar one. |
 | Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age with the conscription they give. |
-| Population pyramid | People by five-year age band, with an outline twenty years ahead. |
+| Longevity | Once longevity care exists: the share of people within its reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
+| Population pyramid | People by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
@@ -354,7 +351,7 @@ them, and some break the figure down for your capital.
 | How Demographics Works | A collapsed section that explains the method. |
 
 The subtab shows one state's overview, causes of death, work and retirement
-(without the buttons), pyramid and wealth, for any state you open. The first count of a state comes from the age structure its own birth and
+(without the buttons), longevity, pyramid and wealth, for any state you open. The first count of a state comes from the age structure its own birth and
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
 
@@ -475,6 +472,51 @@ city's share and with it Provincial Neglect. The AI plans one only with a
 Primate pattern of 45% or more, eight states or more, a largest city crowded to
 Migration Crowding's ceiling (ten times the reference density), and the money
 in its treasury.
+
+### Life extension
+
+From mRNA Therapeutics on, medicine slows ageing itself as well as treating
+illness, and the census tracks each person's body apart from the calendar.
+People in longevity care age nine-tenths of a year each year with mRNA
+Therapeutics, three-quarters once Personalized Medicine and Genetic Engineering
+follow, and not at all with Biological Immortality, under which bodies older than
+35 also wind back toward 35. Children are never treated: people join at 25.
+
+Who is in care depends on your laws and your people's wealth.
+
+| Law | Longevity care |
+|---|---|
+| Public Health Insurance | Everyone the health system reaches. |
+| Charitable Health System | A quarter of those it reaches. |
+| Private Health Insurance, No Health System | The market alone; Private Health Insurance brings its price down twice as fast. |
+| Mandatory Augmentation | At least nine in ten people. |
+| Unrestricted Augmentation | The market reaches 20 levels of wealth further down. |
+| Regulated Augmentation Market | The market's price falls half again as fast. |
+| Human Purity | None. |
+
+The market reaches the rich first: from your first ageing technology, people
+from wealth 80 can buy care, and the line falls about a level a year, faster with
+the technologies that spread medicine. Care rolls out as fast as new medicine
+spreads, and a ban winds it down the same way; people who lose care keep the
+bodies they have and age normally from there. The Longevity section shows the
+share in reach and the gap between those in care and those not, as the chance of
+living to 100.
+
+Under Full, people in care die at their bodies' rates. Where the market reaches
+the rich first they die less, so your wealthy pops grow against the poor. The
+health system's share of the care costs your Ministry of Health more bureaucracy.
+Women in care can have children they put off, and births nobody planned go on as
+long as their bodies allow, even past 50 by the calendar; State Youth Centers on
+Ectogenesis carry a share of planned births with no risk in childbirth. A society
+that stops ageing turns a slow decline into slow growth, about 1% a year at 1.6
+children per woman: the brakes are the means to plan a family and the size of
+family people want. Old Age From rises with longer lives and reads None once no
+age has fifteen years left; Linked to Average Longevity follows it, Linked to
+Common Longevity follows those not in care, and the AI moves to Linked to Common
+when the gap is wide. Mental Health Awareness and Mind Backups cut deaths from
+accidents and violence (and at work, for Mind Backups) instead of a flat cut to
+deaths. Outside Full these technologies cut deaths by a flat share, and nothing
+else of this changes the game.
 
 ### Family policy measures
 

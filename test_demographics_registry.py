@@ -61,6 +61,11 @@ DEMOG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt
 CONSEQ_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_consequence_effects.txt"
 CONSEQ_VALUES = ROOT / "common" / "script_values" / "te_demog_consequence_values.txt"
 CONSEQ_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_consequence_modifiers.txt"
+# phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md)
+LX_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_lx_effects.txt"
+LX_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_lx_generated_effects.txt"
+LX_VALUES = ROOT / "common" / "script_values" / "te_demog_lx_values.txt"
+LX_GEN_VALUES = ROOT / "common" / "script_values" / "te_demog_lx_generated_values.txt"
 # phase 3: the spreading machinery (the practices' neighbour spread, Family Limitation, Cultural Hegemony's drift)
 FL_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fl_effects.txt"
 SPREAD_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_spread_effects_generated.txt"
@@ -375,6 +380,16 @@ WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pe
 # sex ratio at birth, Birth Limit's part of desired fertility), 0 unless a test gives them (_family_fixtures).
 FAMILY_DEFAULTS = {**{f"modifier:{t}": 0.0 for t in P.MEASURE_TYPES}, "te_demog_srb_add": 0.0,
                    "te_demog_ms_birth_limit_part": 0.0}
+# Phase 3's owner reads (the health law's cover, the augmentation laws, the owner's market threshold) and its two types,
+# for engines that don't give them (_lx_fixtures gives them from the model's inputs).
+LX_DEFAULTS = {"te_demog_lx_cover": P.LX_COVER_DEFAULT, "te_demog_lx_banned": 0.0, "te_demog_lx_mandatory": 0.0,
+               "te_demog_lx_unrestricted": 0.0, "te_demog_lx_owner_w": float(P.LX_MARKET_START),
+               **{f"modifier:{t}": 0.0 for t in P.LATE_TYPES},
+               # the country's carrier reads has_technology_researched (te_demog_lx_market_step, the yearly pulse); the
+               # state's ectogenesis levels walk its buildings
+               "te_demog_lx_country_carrier": 0.0, "te_demog_lx_ecto_levels": 0.0,
+               # a pop's wealth, which the walk's Full-only sums read for the wealth slope (te_demog_absorbed_walk_pop)
+               "wealth": 0.0}
 # Phase 2 step 4's three effects (demographics_params' switches, generated as 0 or 1; on since the migrant booking,
 # 2026-10-12): an engine takes the
 # switches as the model reads them, so a test that patches them on (ALL_ON) runs the script with them on too.
@@ -423,14 +438,14 @@ class _Engine:
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
-                                    FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS])
+                                    LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS])
         # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
         # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
         self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
         self.effects.update(SELF_CHECK_STUBS)
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
-                                   WORK_VALUES, CONSEQ_VALUES, SPREAD_VALUES, PLACE_VALUES])
+                                   WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES])
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -447,7 +462,7 @@ class _Engine:
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **PHASE3_DEFAULTS, **fixtures}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -692,7 +707,19 @@ def _mod_fixtures(inp):
     out["turmoil"] = inp.turmoil
     out["te_demog_malaria_level"] = float(inp.malaria)   # has_state_trait, which _Engine can't read (calibration step 3)
     out.update(_family_fixtures(inp))
+    out.update(_lx_fixtures(inp))
     return out
+
+
+def _lx_fixtures(inp):
+    """Phase 3's owner reads from the model's inputs (demographics_model.lx_public, lx_threshold): the health law's cover,
+    the augmentation laws and the owner's market threshold."""
+    return {"te_demog_lx_cover": next((v for law, v in P.LX_COVER.items() if law in inp.laws), P.LX_COVER_DEFAULT),
+            "te_demog_lx_banned": 1.0 if P.LX_BAN_LAW in inp.laws else 0.0,
+            "te_demog_lx_mandatory": 1.0 if P.LX_MANDATORY_LAW in inp.laws else 0.0,
+            "te_demog_lx_unrestricted": 1.0 if P.LX_UNRESTRICTED_LAW in inp.laws else 0.0,
+            "te_demog_lx_owner_w": float(P.LX_MARKET_START if inp.lx_w is None else inp.lx_w),
+            "te_demog_lx_ecto_levels": float(inp.ecto_levels)}
 
 
 def _family_fixtures(inp):
@@ -745,6 +772,10 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
                     te_dg_wtfr=demographics_model.wealth_tfr(inp.sol), te_dg_sol=float(inp.sol))
     eng.vars.update(te_dg_low_share=inp.low_share)   # the walk's lower strata (phase 2 step 1)
+    # phase 3: the walk's people by wealth band, eligibility's target reads them (te_demog_lx_access)
+    for k, n in (inp.wealth_bands or {}).items():
+        if n > 0:
+            eng.vars[f"te_dg_gn{k}"] = float(n)
     if inp.crowding:
         eng.modifiers["migration_crowding"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
         eng.vars["migration_crowding_mult_applied"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
@@ -829,7 +860,8 @@ class TestCohortScript(unittest.TestCase):
         gui = _text(ROOT / "gui" / "te_demographics_widgets.gui")
         self.assertNotIn("ScriptValue('te_demog_pyramid_max')", gui)
         self.assertNotIn("ScriptValue('te_demog_state_pyramid_max')", gui)
-        self.assertEqual(gui.count("Var('te_dg_pyr_max').GetValue"), 40)
+        # 4 in the row type and 2 in each of the state's 18 rows; phase 3 adds the state's 18 biological rows (late-game §6.2)
+        self.assertEqual(gui.count("Var('te_dg_pyr_max').GetValue"), 76)
         census = _block(_text(EFFECTS), "te_demog_country_census")
         self.assertGreater(census.index("set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }"),
                            census.index("te_demog_project = yes"), "after the outline, which shares the scale")
@@ -1547,10 +1579,10 @@ class TestEngineLinesMoved(unittest.TestCase):
         ("law", "law_womens_suffrage", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
         ("technology", "antibiotic_mass_production", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
         ("technology", "antibiotic_mass_production", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
-        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("ontop", -0.2),
+        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("absorbed", -0.2),   # phase 3 (§8.4)
         ("technology", "contraceptive_pill", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
-        ("technology", "mental_health_awareness", "modifier", "state_mortality_mult"): ("ontop", -0.05),
-        ("technology", "mind_backups", "modifier", "state_mortality_mult"): ("ontop", -0.05),
+        ("technology", "mental_health_awareness", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # phase 3 (§8.4)
+        ("technology", "mind_backups", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # phase 3 (§8.4)
         ("technology", "modern_vaccines", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
         ("technology", "modern_vaccines", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
         ("technology", "second_wave_feminism", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
@@ -3091,7 +3123,7 @@ class TestOnTopSplitScript(unittest.TestCase):
         eng, true = self.window([self.SAFE, self.LABORERS], end)
         read_d = eng.fixtures["modifier:state_mortality_mult"]
         eng.locals.update(te_dg_w_rep=1.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0,
-                          te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+                          te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_edw=0.0, te_dg_w_wtop=0.0)
         for pop, food in ((self.SAFE, 1.0), (floored, 0.075), (starving, 0.125)):
             eng.fixtures.update(food_security=food, total_size=pop[7], literacy_rate=0.0)
             eng.trigger_fixtures.update(is_in_severe_starvation=food < 0.2, is_in_mild_starvation=0.2 <= food < 0.4)
@@ -6241,9 +6273,10 @@ class TestCausesSection(unittest.TestCase):
     def test_it_sits_after_the_overview(self):
         content = _gui_type(self.gui, "te_state_demog_content")
         order = re.findall(r"(te_state_demog_\w+) = \{\}", content)
-        # phase 2 step 2's Work and Retirement follows it
+        # phase 2 step 2's Work and Retirement follows it, then phase 3's Longevity (late-game §6.2)
         self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_work",
-                                 "te_state_demog_pyramid", "te_state_demog_wealth", "te_state_demog_how"])
+                                 "te_state_demog_longevity", "te_state_demog_pyramid", "te_state_demog_wealth",
+                                 "te_state_demog_how"])
 
     def test_open_by_default(self):
         # rule 7: a section that starts open names its flag _closed
@@ -6719,8 +6752,12 @@ class TestGiniBands(unittest.TestCase):
         every = {f"var:te_dg_g{s}{k}" for k in range(1, P.GINI_BANDS + 1) for s in "ny"}
         self.assertEqual(found.get("te_demog_gini_band_load"), every)
         self.assertEqual(found.get("te_demog_gini_band_add_state"), every)
-        self.assertEqual(set(found), {"te_demog_gini_band_load", "te_demog_gini_band_add_state"},
-                         "no other reader of the stored bands")
+        # phase 3: longevity care's access and the wealth slope read the people by band (te_demog_lx_access,
+        # te_demog_lx_wealth_slope, generated)
+        for name in ("te_demog_lx_access", "te_demog_lx_wealth_slope"):
+            self.assertEqual(found.get(name), {f"var:te_dg_gn{k}" for k in range(1, P.GINI_BANDS + 1)}, name)
+        self.assertEqual(set(found), {"te_demog_gini_band_load", "te_demog_gini_band_add_state", "te_demog_lx_access",
+                                      "te_demog_lx_wealth_slope"}, "no other reader of the stored bands")
 
     def test_a_near_total_inequality_shows_near_1_without_a_cap(self):
         bands = {1: (99, 0.0001), P.GINI_BANDS: (1, 1000)}
