@@ -1623,7 +1623,7 @@ types budget
 						multiline = yes
 						max_width = 480
 						align = center|nobaseline
-						using = fontsize_medium
+						using = fontsize_large
 						text = "banking_dash_ro_note"
 						tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'banking_dash_ro_note_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 					}
@@ -1649,6 +1649,7 @@ types budget
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
+							using = fontsize_large
 							parentanchor = hcenter
 							size = { 480 32 }
 							text = "te_system_tab_open_journal"

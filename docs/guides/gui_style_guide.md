@@ -44,6 +44,7 @@ When an icon or a short label replaces a sentence, the sentence moves into that 
   5. widen the cell.
 
   Budget about 10 GUI units per character for the large row font and 8.6 for the medium table font, plus 10%. Check the longest dynamic name a cell can show, too.
+- *(Steam Workshop feedback, 2026-10-13)* **Rows, values and button labels are in the large type; the smallest type a player reads to decide something is medium.** The Banking panels had their rows in medium and their overview in small, and a player found them hard to read, so both went up a step: rows, values and buttons large, the overview's captions and words medium, subheadings extra large, notes large. Don't put a reading in the small type. A bigger type needs wider cells, so size a table from the longest label first (176 for Banking's label column, with its two-up rows split 176 and 144), and give an overview cell the width its own caption needs rather than one width for all. Shorten a label, or let a long value wrap (`multiline = yes`), before squeezing a neighbour. `test_banking_layout.py`'s `WidthBudgetTest` reads each cell's font from the markup, so it follows a change of type.
 
 ### 4. Icons first, with a small word beneath
 

@@ -553,10 +553,11 @@ anchor's.
 
 ### Rate target, delegation and mandates
 
-You choose a Rate Target and the policy rate moves toward it by a third of a
-point a month (two thirds under Digital Currency). Click the stepper for a
-point, Ctrl-click for a tenth, Shift-click for the limit of your currency law.
-Changes are free and have no cooldown.
+You choose a Rate Target, the stepper labelled Target beside your Policy Rate,
+and the policy rate moves toward it by a third of a point a month (two thirds
+under Digital Currency). Click the stepper for a point, Ctrl-click for a tenth,
+Shift-click for the limit of your currency law. Changes are free and have no
+cooldown.
 
 You start with the dial delegated: the central bank sets the target every month
 from its mandate. Take Control and Delegate switch between you and the bank,

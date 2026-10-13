@@ -391,28 +391,33 @@ class OverviewTest(unittest.TestCase):
         self.assertIn("banking_dash_ov_crash_risk_tt", _loc())
 
     def test_the_overview_is_as_wide_as_the_sections(self):
+        """The medium type needs cells of different widths (a caption such as
+        "Bubble Pressure" is 142 wide), so each instance sets its own: a row of
+        cells, or of the change lines under them, sums to at most the bars' 480,
+        and the change lines are as wide as the cells above them."""
         dash = _read(DASH)
-        cell = _type_body(dash, "te_banking_ov_cell")
-        w = int(re.search(r"size = \{ (\d+) \d+ \}", cell).group(1))
         body = _type_body(dash, "te_banking_overview_panel")
         self.assertRegex(body, r"(?m)^\t\tmargin = \{ 10 8 \}")   # 10 + 480 bars + 10 = 500
         header = _type_body(dash, "banking_dash_category_header")
         self.assertIn("size = { 500 32 }", header)
-        change = _type_body(dash, "te_banking_ov_change")
-        self.assertEqual(int(re.search(r"size = \{ (\d+) \d+ \}", change).group(1)), w)
-        rows = 0
+        rows = []
         for m in re.finditer(r"flowcontainer = \{\s*direction = horizontal", body):
             row = _block_from(body, m.start())
-            n = len(re.findall(r"te_banking_ov_(?:cell|change) = \{", row))
-            if not n:
+            kinds = re.findall(r"te_banking_ov_(cell|change) = \{\s*(?:visible = [^\n]*\s*)?(?:tooltip = [^\n]*\s*)?"
+                               r"size = \{ (\d+) (\d+) \}", row)
+            if not kinds:
                 continue
-            rows += 1
             spacing = int(re.search(r"spacing = (\d+)", row).group(1))
-            self.assertLessEqual(n * w + (n - 1) * spacing, 480, row[:80])
-        self.assertEqual(rows, 3)   # the readings, their changes, what the player sets
-        for textbox in re.findall(r"max_width = (\d+)", cell) + \
-                re.findall(r"max_width = (\d+)", _type_body(dash, "te_banking_ov_word")):
-            self.assertLessEqual(int(textbox), w)
+            widths = [int(w) for _, w, _ in kinds]
+            self.assertEqual({k for k, _, _ in kinds}, {kinds[0][0]}, "a row is cells or change lines")
+            self.assertEqual(len(kinds), len(re.findall(r"te_banking_ov_(?:cell|change) = \{", row)),
+                             "every instance sets its width")
+            self.assertLessEqual(sum(widths) + (len(widths) - 1) * spacing, 480, row[:80])
+            rows.append((kinds[0][0], widths))
+        # the readings, their changes, what the player sets
+        self.assertEqual([k for k, _ in rows], ["cell", "change", "cell"])
+        self.assertEqual(rows[0][1], rows[1][1])     # a change line is as wide as its cell
+        self.assertEqual(len(rows[2][1]), 3)
 
 
 class BandCodeTest(unittest.TestCase):
@@ -613,7 +618,7 @@ class ShortPanelTest(unittest.TestCase):
             ["banking_dash_mon_rate_tt", "banking_dash_mon_target_tt"],
             ["banking_dash_mon_standing_tt", "banking_dash_mon_premium_tt"],
             ["banking_dash_mon_inflation_tt", "banking_dash_mon_expected_tt"],
-            ["banking_dash_mon_wage_tt", "banking_dash_mon_pressure_tt"],
+            ["banking_dash_mon_pressure_tt", "banking_dash_mon_wage_tt"],
         ])
 
     def test_the_dial_sits_together(self):
@@ -635,16 +640,20 @@ class ShortPanelTest(unittest.TestCase):
         def widths(typ):
             return [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", _type_body(dash, typ))]
         label, value = widths("banking_dash_pair")
-        self.assertEqual(label + 4 + value, 230)                     # two to a row: 460
+        right_label, right_value = widths("banking_dash_pair_right")
+        self.assertEqual(value, right_value)
+        # two to a row: the left cell and the right cell fill the block's 460
+        self.assertEqual((label + 4 + value) + (right_label + 4 + right_value), 460)
         self.assertEqual(widths("banking_dash_condition_row"), [label])
         self.assertIn("max_width = %d" % (460 - label - 4), _type_body(dash, "banking_dash_condition_value"))
         (mon_label,), (mon_value,) = widths("banking_dash_mon_label"), widths("banking_dash_mon_value")
+        self.assertEqual(mon_label, label)
         (button,) = widths("banking_dash_mon_button")
         self.assertLessEqual(mon_label + 4 + mon_value + 4 + button, 460)  # the Delegation row
         body = _type_body(dash, "te_banking_sec_monetary")
         target = _block_from(body, body.index("flowcontainer = {", body.index('blockoverride "pair_right" {')))
         parts = [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", target)]
-        self.assertLessEqual(sum(parts) + 2 * (len(parts) - 1), 230, parts)
+        self.assertLessEqual(sum(parts) + 2 * (len(parts) - 1), right_label + 4 + right_value, parts)
 
     def test_status_text_is_empty_while_active(self):
         """The overview shows all it said: the readings as icons, and the
@@ -761,7 +770,7 @@ class WidthBudgetTest(unittest.TestCase):
         names = self.texts("row_label")
         self.assertGreaterEqual(len(names), 40)
         cell = self.type_box("banking_dash_policy_row", "row_label")
-        self.assertEqual(cell, (288, "medium"))
+        self.assertEqual(cell, (320, "large"))
         for key in names:
             with self.subTest(name=key):
                 self.fits(key, cell)
@@ -799,6 +808,20 @@ class WidthBudgetTest(unittest.TestCase):
             for key in self.texts(block):
                 with self.subTest(label=key):
                     self.fits(key, cell)
+        # The right half of a pair row is the narrower cell (144): hold its
+        # labels, and only its labels, to it.
+        right = self.type_box("banking_dash_pair_right", "pair_label")
+        self.assertEqual(right, (144, "large"))
+        rights = set()
+        for m in re.finditer(r'blockoverride "pair_right" \{\s*banking_dash_pair_right = \{', self.dash):
+            cell_block = _block_from(self.dash, m.end() - 1)
+            rights.add(re.search(r'blockoverride "pair_label" \{\s*text = "(\w+)"', cell_block).group(1))
+        # (the rate target is not a pair cell, and the Budget tab's readout shares the world rate's label)
+        self.assertEqual(rights, {"banking_dash_mon_worldrate_label", "banking_dash_mon_premium_label",
+                                  "banking_dash_mon_expected_label", "banking_dash_mon_wage_label"})
+        for key in sorted(rights):
+            with self.subTest(right_label=key):
+                self.fits(key, right)
         body = _type_body(self.dash, "te_banking_sec_monetary")
         self.fits("banking_dash_mon_target_label", self.box(body, '"banking_dash_mon_target_label"'))
         self.assertEqual(self.shown("banking_dash_mon_anchoring_label"), "Anchoring")
@@ -822,28 +845,40 @@ class WidthBudgetTest(unittest.TestCase):
         value = _block_from(value, value.index("{"))
         cell = (int(re.search(r"max_width = (\d+)", value).group(1)),
                 re.search(r"using = fontsize_(\w+)", value).group(1))
-        for m in re.finditer(r"banking_dash_condition_value = \{", body):
-            box = _block_from(body, m.end() - 1)
-            if "multiline = yes" in box:
-                continue      # wraps rather than eliding
-            key = re.search(r'text = "(\w+)"', box).group(1)
-            with self.subTest(value=key):
-                self.fits(key, cell)
+        # the Budget tab's read-only readout shares the type and the cell
+        for where in (body, _type_body(self.dash, "te_banking_mon_readout")):
+            for m in re.finditer(r"banking_dash_condition_value = \{", where):
+                box = _block_from(where, m.end() - 1)
+                if "multiline = yes" in box:
+                    continue      # wraps rather than eliding
+                key = re.search(r'text = "(\w+)"', box).group(1)
+                with self.subTest(value=key):
+                    self.fits(key, cell)
 
     def test_overview_cells(self):
-        body = _type_body(self.dash, "te_banking_overview_panel")
-        cell = self.type_box("te_banking_ov_cell", "caption")
-        for key in self.texts("caption", body):
-            with self.subTest(caption=key):
-                self.fits(key, cell)
+        """Each cell's caption and words fit the column its own width leaves
+        (width - 34, beside the icon), in the medium type. The type's word box
+        is as wide as the widest column, so no cell's word is cut by it."""
+        cap = _type_body(self.dash, "te_banking_ov_cell")
+        self.assertIn("using = fontsize_medium", cap)
         word = _type_body(self.dash, "te_banking_ov_word")
-        cell = (int(re.search(r"max_width = (\d+)", word).group(1)),
-                re.search(r"using = fontsize_(\w+)", word).group(1))
-        words = sorted(set(re.findall(r'te_banking_ov_word = \{[^{}]*?text = "(\w+)"', body)))
+        self.assertIn("using = fontsize_medium", word)
+        widest = int(re.search(r"max_width = (\d+)", word).group(1))
+        words, columns = set(), []
+        for tip, caption, _, block in _cells():
+            width = int(re.search(r"size = \{ (\d+) 46 \}", block).group(1))
+            column = width - 34
+            columns.append(column)
+            declared = re.search(r'blockoverride "caption_width" \{\s*max_width = (\d+)', block)
+            self.assertEqual(int(declared.group(1)), column, tip)
+            with self.subTest(caption=caption):
+                self.fits(caption, (column, "medium"))
+            for key in re.findall(r'te_banking_ov_word = \{[^{}]*?text = "(\w+)"', block):
+                words.add(key)
+                with self.subTest(word=key):
+                    self.fits(key, (column, "medium"))
         self.assertEqual(len(words), 12)   # seven phase words and five readings
-        for key in words:
-            with self.subTest(word=key):
-                self.fits(key, cell)
+        self.assertEqual(widest, max(columns))
         # the longest band word, named: the price band's
         self.assertEqual(self.shown("banking_dash_mon_band_value"), "Hyperinflation")
 
@@ -854,18 +889,27 @@ class WidthBudgetTest(unittest.TestCase):
         momentum decays, and the pushes come to a few points at most)."""
         body = _type_body(self.dash, "te_banking_overview_panel")
         box = _type_body(self.dash, "te_banking_ov_change_text")
-        cell = (int(re.search(r"max_width = (\d+)", box).group(1)),
-                re.search(r"using = fontsize_(\w+)", box).group(1))
-        keys = sorted(set(re.findall(r'te_banking_ov_change_text = \{[^{}]*?text = "(\w+)"', body)))
+        font = re.search(r"using = fontsize_(\w+)", box).group(1)
+        self.assertEqual(font, "medium")
+        reach = int(re.search(r"max_width = (\d+)", box).group(1))
+        start = int(re.search(r"position = \{ (\d+) 0 \}", box).group(1))
+        keys = set()
+        for m in re.finditer(r"te_banking_ov_change = \{", body):
+            block = _block_from(body, m.end() - 1)
+            width = int(re.search(r"size = \{ (\d+) 22 \}", block).group(1))
+            self.assertLessEqual(start + reach, width)      # the type's box stays inside the cell
+            for key in re.findall(r'te_banking_ov_change_text = \{[^{}]*?text = "(\w+)"', block):
+                keys.add(key)
+                with self.subTest(line=key):
+                    self.fits(key, (width - start, font), "-9.99" if "_momentum_" in key else NUMBER)
         self.assertEqual(len(keys), 10)   # four shapes each for value and momentum, two for bubble
-        for key in keys:
-            with self.subTest(line=key):
-                self.fits(key, cell, "-9.99" if "_momentum_" in key else NUMBER)
 
     def test_buttons(self):
-        """A button's label is in the medium type (assumed: its font is the
-        button template's)."""
-        types = {"banking_dash_mon_button": 128, "banking_dash_action_button": 100}
+        """A button's label is in the large type (set on the button, as vanilla's
+        states_panel.gui and power_bloc_panel.gui do beside default_button_action)."""
+        types = {"banking_dash_mon_button": 140, "banking_dash_action_button": 90}
+        for typ in types:
+            self.assertIn("using = fontsize_large", _type_body(self.dash, typ))
         for typ, default in types.items():
             for m in re.finditer(r"\b%s = \{" % typ, self.dash):
                 block = _block_from(self.dash, m.end() - 1)
@@ -874,9 +918,9 @@ class WidthBudgetTest(unittest.TestCase):
                 if key is None:          # the type's own block slots
                     continue
                 with self.subTest(button=key.group(1)):
-                    self.fits(key.group(1), (int(size.group(1)) if size else default, "medium"))
+                    self.fits(key.group(1), (int(size.group(1)) if size else default, "large"))
         for key in ("banking_dash_btn_enable", "banking_dash_btn_disable", "banking_dash_btn_execute"):
-            self.fits(key, (100, "medium"))
+            self.fits(key, (90, "large"))
 
 
 if __name__ == "__main__":

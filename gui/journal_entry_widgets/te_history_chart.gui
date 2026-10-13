@@ -207,7 +207,9 @@ types te_history_chart_types
 				autoresize = yes
 				max_width = 460
 				align = nobaseline
-				using = fontsize_small
+				block "marker_legend_font" {
+					using = fontsize_small
+				}
 				text = "te_hist_legend_marker"
 			}
 		}
@@ -230,7 +232,9 @@ types te_history_chart_types
 					autoresize = yes
 					max_width = 460
 					align = nobaseline
-					using = fontsize_small
+					block "crash_legend_font" {
+						using = fontsize_small
+					}
 					text = "te_hist_legend_crash"
 				}
 			}
@@ -348,12 +352,17 @@ types te_history_chart_types
 			spacing = 0
 			margin_left = 4
 
+			### The fonts are blocks so a system can scale its charts: the banking
+			### charts override both one step up (a Steam Workshop player found
+			### the panel's text too small, 2026-10-13); the others keep these.
 			textbox = {
 				autoresize = yes
 				max_width = 484
 				elide = right
 				align = nobaseline
-				using = fontsize_large
+				block "chart_title_font" {
+					using = fontsize_large
+				}
 				default_format = "#title"
 				block "chart_title" {}
 			}
@@ -363,7 +372,9 @@ types te_history_chart_types
 				multiline = yes
 				max_width = 484
 				align = nobaseline
-				using = fontsize_small
+				block "chart_legend_font" {
+					using = fontsize_small
+				}
 				block "chart_legend" {}
 			}
 		}
