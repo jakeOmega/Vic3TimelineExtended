@@ -134,3 +134,23 @@ gm_mon_tr_can_take_tt = {
 		var:gm_tr_origin ?= { gm_state_tr_occupied_by = { WHO = $WHO$ } }
 	}
 }
+
+# ---- Landmarks seeded beside another (spec §6) ---------------------------------------
+# State scope. The landmark $KEY$ stands here, as the primary or as a secondary
+# monument: the seeding places it once, and not again on a re-run.
+gm_state_has_landmark = {
+	OR = {
+		AND = {
+			has_variable = gm_landmark
+			var:gm_landmark = flag:$KEY$
+		}
+		AND = {
+			has_variable_list = gm_monuments_here
+			any_in_list = {
+				variable = gm_monuments_here
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = flag:$KEY$
+			}
+		}
+	}
+}

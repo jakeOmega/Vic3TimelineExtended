@@ -423,3 +423,49 @@ gm_state_tr_ai_choose_target = {
 		}
 	}
 }
+
+# ---- A landmark seeded beside another (spec §6) ----------------------------------------
+# State scope, the part of a state that already has a monument, from
+# gm_seed_landmark (gm_landmark_effects.txt, once per game, at the start). The
+# landmark is a secondary monument: a container with the records a returned
+# trophy carries (gm_tr_*), its levels added to the state's one building, which
+# keeps the primary's dedication (gm_state_tr_add_levels records it first).
+gm_seed_landmark_beside = {
+	clear_saved_scope = gm_tr_moving
+	save_scope_as = gm_mon_seed_state
+	create_container = {
+		tags = { gm_monument }
+		save_scope_as = gm_tr_moving
+		on_created = {
+			save_scope_as = gm_tr_moving
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_tr_moving }
+		scope:gm_tr_moving = {
+			set_variable = { name = gm_tr_levels value = $LEVEL$ }
+			set_variable = { name = gm_tr_dedication value = flag:$DEDICATION$ }
+			set_variable = { name = gm_tr_skin value = flag:landmark_$KEY$ }
+			set_variable = { name = gm_tr_form value = flag:$FORM$ }
+			set_variable = { name = gm_tr_landmark value = flag:$KEY$ }
+			set_variable = { name = gm_tr_namesake value = flag:landmark }
+			set_variable = { name = gm_tr_origin value = scope:gm_mon_seed_state }
+			set_variable = { name = gm_tr_origin_region value = scope:gm_mon_seed_state.state_region }
+			set_variable = { name = gm_tr_site value = scope:gm_mon_seed_state }
+			set_variable = { name = gm_tr_site_region value = scope:gm_mon_seed_state.state_region }
+			gm_tr_update_picture = yes
+		}
+		# The levels on the building, then the container in the lists.
+		gm_state_tr_add_levels = yes
+		add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }
+		set_global_variable = gm_mon_lists_written
+		add_to_variable_list = { name = gm_monuments_here target = scope:gm_tr_moving }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+		owner = {
+			add_to_variable_list = { name = gm_monuments_held target = scope:gm_tr_moving }
+			set_variable = gm_mon_listed
+			trigger_event = { id = monument_events.20 }
+		}
+		debug_log = "TE_MONUMENTS: landmark $KEY$ placed beside the monument already standing in its state: level $LEVEL$, form $FORM$"
+	}
+}

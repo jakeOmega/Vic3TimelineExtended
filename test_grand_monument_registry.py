@@ -1092,7 +1092,12 @@ INSCRIPTION_FAITHS = {"catholic": "latin", "jewish": "hebrew", "hindu": "sanskri
 # 2026-10-12-grand-monument-loot-and-1836-trophies-design.md §2.2), and stands
 # as a landmark only once that trophy goes home. Its state and owner are its
 # origin's (TROPHIES_1836 in test_grand_monument_trophies.py), and it has no level.
-Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed", defaults=(True,))
+# A row with beside=True is a second placed landmark in a state another stands
+# in (spec 2026-10-13-multiple-monuments-per-state-design.md §6): it follows that
+# state's first row, and the seeding stands it beside it as a secondary monument
+# rather than skipping it. Rome, Beijing and Athens are the next.
+Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed beside",
+                      defaults=(True, False))
 LANDMARKS = (
     Landmark("arc_de_triomphe", "STATE_ILE_DE_FRANCE", "FRA", "war_memorial", "arch", ("generic", "arch"), 15),
     Landmark("alexander_column", "STATE_INGRIA", "RUS", "crown", "column", ("generic", "column"), 10),
@@ -3278,8 +3283,13 @@ class LandmarkTests(unittest.TestCase):
         self.assertEqual(len(keys), len(set(keys)))
         # One standing monument per state; an unplaced row shares its origin
         # state with whatever stands there (loot spec §2.2).
-        states = [lm.state for lm in PLACED_LANDMARKS]
-        self.assertEqual(len(states), len(set(states)), "one landmark per state (§2)")
+        states = [lm.state for lm in PLACED_LANDMARKS if not lm.beside]
+        self.assertEqual(len(states), len(set(states)),
+                         "one landmark per state (§2); a second is beside=True, after the first")
+        for i, lm in enumerate(PLACED_LANDMARKS):
+            if lm.beside:
+                self.assertTrue(any(o.state == lm.state and not o.beside for o in PLACED_LANDMARKS[:i]),
+                                f"{lm.key}: seeded beside a landmark that is seeded first")
         for lm in LANDMARKS:
             self.assertIn(lm.dedication, BY_KEY, lm.key)
             self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values(), lm.key)
@@ -3754,6 +3764,54 @@ class MultiMonumentLevelTests(unittest.TestCase):
                       "add = scope:gm_tr_moving.var:gm_tr_levels max = 200 }", body)
         self.assertIn("set_variable = { name = gm_rebuilding days = 1 }", body)
         self.assertIn("SPEC_LEVEL = var:gm_rebuild_level", body)
+
+
+class ColocatedLandmarkTests(unittest.TestCase):
+    """Task 7: a second landmark in a state another stands in is stood beside
+    it as a secondary monument (the Obelisks of Karnak and, home again, the
+    Luxor Obelisk), not skipped, and never a second building."""
+
+    def setUp(self):
+        self.e = read(LANDMARK_EFFECTS)
+
+    def test_a_held_state_with_a_building_stands_it_beside(self):
+        body = squash(block(self.e, "gm_seed_landmark"))
+        self.assertIn("else_if = { limit = { s:$STATE$.region_state:$TAG$ ?= { has_building = building_grand_monument "
+                      "NOT = { gm_state_has_landmark = { KEY = $KEY$ } } } } "
+                      "s:$STATE$.region_state:$TAG$ = { gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ "
+                      "DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ } } }", body)
+        # The old else is still the one that says nothing was placed.
+        self.assertIn('else = { debug_log = "TE_MONUMENTS: landmark $KEY$ not placed', body)
+
+    def test_the_beside_seed_is_a_monument_container_with_the_landmarks_records(self):
+        body = squash(block(read(MON_EFFECTS), "gm_seed_landmark_beside"))
+        self.assertIn("create_container = { tags = { gm_monument } save_scope_as = gm_tr_moving", body)
+        for record in ("name = gm_tr_levels value = $LEVEL$", "name = gm_tr_dedication value = flag:$DEDICATION$",
+                       "name = gm_tr_skin value = flag:landmark_$KEY$", "name = gm_tr_form value = flag:$FORM$",
+                       "name = gm_tr_landmark value = flag:$KEY$", "name = gm_tr_namesake value = flag:landmark"):
+            self.assertIn(f"set_variable = {{ {record} }}", body, record)
+        # Its levels go on the building before it is listed, as a return's do.
+        self.assertLess(body.find("gm_state_tr_add_levels = yes"),
+                        body.find("add_to_variable_list = { name = gm_monuments_here"))
+        for line in ("add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }",
+                     "set_variable = { name = gm_tr_origin value = scope:gm_mon_seed_state }",
+                     "set_variable = { name = gm_tr_origin_region value = scope:gm_mon_seed_state.state_region }",
+                     "set_variable = { name = gm_tr_site value = scope:gm_mon_seed_state }",
+                     "gm_tr_update_picture = yes"):
+            self.assertIn(line, body)
+        self.assertIn("if = { limit = { exists = scope:gm_tr_moving }", body)
+        self.assertNotIn("create_building", body, "the state's one building takes the levels")
+
+    def test_a_landmark_stands_in_a_state_as_the_primary_or_a_secondary(self):
+        body = squash(block(read(MON_TRIGGERS), "gm_state_has_landmark"))
+        self.assertIn("AND = { has_variable = gm_landmark var:gm_landmark = flag:$KEY$ }", body)
+        self.assertIn("any_in_list = { variable = gm_monuments_here has_variable = gm_tr_landmark "
+                      "var:gm_tr_landmark = flag:$KEY$ }", body)
+
+    def test_upper_egypt_starts_with_karnak_alone(self):
+        rows = [lm for lm in PLACED_LANDMARKS if lm.state == "STATE_UPPER_EGYPT"]
+        self.assertEqual([lm.key for lm in rows], ["obelisks_of_karnak"])
+        self.assertFalse(rows[0].beside)
 
 if __name__ == "__main__":
     unittest.main()
