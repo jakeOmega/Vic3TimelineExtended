@@ -64,6 +64,15 @@ gm_monument_pass = {
 			gm_mon_list_one = yes
 		}
 	}
+	# A state whose building has gone (whatever removed it) while monuments
+	# stand beside it: the largest takes it over.
+	every_state = {
+		limit = {
+			gm_state_has_secondary = yes
+			NOT = { has_building = building_grand_monument }
+		}
+		gm_state_promote_secondary = yes
+	}
 }
 
 # Container scope: this secondary monument into its state's list.
@@ -78,6 +87,53 @@ gm_mon_list_one = {
 		var:gm_tr_origin = {
 			add_to_variable_list = { name = gm_monuments_here target = scope:gm_mon_listing }
 			gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+		}
+	}
+}
+
+# ---- The primary goes (spec §4.2, §4.3) ----------------------------------------------
+# State scope, from gm_state_tear_down, gm_state_tr_remove_whole and the pass:
+# the primary monument is gone (torn down, carried off whole, or its building
+# lost) and another stood beside it. The largest secondary becomes the
+# primary: the building is built at the levels of everything that remains, with
+# that monument's records and dedication (gm_state_tr_rebuild_from_moving,
+# gm_trophy_effects.txt), and its container is destroyed.
+# The work runs only under a marker set here: a button's or an option's tooltip
+# walks the effects it shows without writing, so the rebuild's read of
+# gm_rebuild_level would find it unset through the ladder's 200 cases (see
+# gm_state_rededicate).
+gm_state_promote_secondary = {
+	set_variable = gm_promote_click
+	if = {
+		limit = { has_variable = gm_promote_click }
+		remove_variable = gm_promote_click
+		clear_saved_scope = gm_mon_promoted
+		clear_saved_scope = gm_tr_moving
+		ordered_in_list = {
+			variable = gm_monuments_here
+			order_by = gm_mon_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_mon_promoted
+		}
+		if = {
+			limit = { exists = scope:gm_mon_promoted }
+			scope:gm_mon_promoted = { save_scope_as = gm_tr_moving }
+			# Everything that remains, the promoted one included: read before it
+			# leaves the list.
+			set_variable = {
+				name = gm_rebuild_level
+				value = {
+					value = gm_state_secondary_grandeur
+					max = 200
+				}
+			}
+			remove_list_variable = { name = gm_monuments_here target = scope:gm_mon_promoted }
+			gm_tr_count_add = { VAR = gm_mon_here_count ADD = -1 }
+			remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_promoted }
+			gm_state_tr_rebuild_from_moving = yes
+			scope:gm_mon_promoted = { destroy_container = yes }
+			owner = { trigger_event = { id = monument_events.20 } }
 		}
 	}
 }

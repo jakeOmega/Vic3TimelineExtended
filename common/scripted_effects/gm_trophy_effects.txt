@@ -83,7 +83,7 @@ gm_state_tr_take = {
 		limit = {
 			scope:gm_tr_taker = { exists = capital }
 		}
-		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		set_variable = { name = gm_tr_take_levels value = gm_state_tr_levels }
 		set_variable = { name = gm_tr_take_value value = gm_state_tr_value }
 		set_variable = { name = gm_tr_take_whole value = gm_state_tr_whole }
@@ -244,6 +244,13 @@ gm_state_tr_remove_whole = {
 	}
 	remove_building = building_grand_monument
 	set_variable = gm_carried_off
+	# Another monument stood beside it: the building passes to the largest, at
+	# the levels of all that remain (gm_monument_effects.txt), which clears the
+	# taken one's records as a rebuild does.
+	if = {
+		limit = { gm_state_has_secondary = yes }
+		gm_state_promote_secondary = yes
+	}
 	owner = { trigger_event = { id = monument_events.20 } }
 }
 
@@ -253,13 +260,20 @@ gm_state_tr_remove_whole = {
 gm_state_tr_remove_piece = {
 	gm_state_mark_restore_pm = yes
 	set_variable = { name = gm_rebuilding days = 1 }
-	set_variable = { name = gm_rebuild_level value = var:gm_tr_take_left }
+	set_variable = {
+		name = gm_rebuild_level
+		value = {
+			value = var:gm_tr_take_left
+			add = gm_state_secondary_grandeur
+			max = 200
+		}
+	}
 	remove_building = building_grand_monument
 	te_construction_market_build_specified_level = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
-	set_variable = { name = gm_grandeur value = var:gm_rebuild_level }
+	set_variable = { name = gm_grandeur value = var:gm_tr_take_left }
 	remove_variable = gm_rebuild_level
 	set_variable = { name = gm_tr_cooldown days = 3650 }
 	# The refresh puts the dedication back once the rebuilt building reads.
@@ -435,34 +449,54 @@ gm_tr_return_home = {
 gm_state_tr_receive = {
 	if = {
 		limit = { has_building = building_grand_monument }
-		if = {
-			limit = {
-				gm_state_is_dedicated = yes
-				NOT = { has_variable = gm_restore_pm }
-			}
-			gm_state_mark_restore_pm = yes
-		}
-		set_variable = { name = gm_grandeur value = gm_state_grandeur }
-		set_variable = {
-			name = gm_rebuild_level
-			value = {
-				value = var:gm_grandeur
-				add = scope:gm_tr_moving.var:gm_tr_levels
-				max = 200
-			}
-		}
-		set_variable = { name = gm_rebuilding days = 1 }
-		remove_building = building_grand_monument
-		te_construction_market_build_specified_level = {
-			SPEC_TYPE = building_grand_monument
-			SPEC_LEVEL = var:gm_rebuild_level
-		}
-		set_variable = { name = gm_grandeur value = var:gm_rebuild_level }
-		remove_variable = gm_rebuild_level
+		gm_state_tr_add_levels = yes
 	}
 	else = {
-		# Whatever a monument carried off earlier left here.
-		gm_clear_state = { KEEP_LANDMARK = no }
+		gm_state_tr_rebuild_from_moving = yes
+	}
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# State scope (scope:gm_tr_moving the trophy or monument). The standing building
+# takes the levels: removed and built again, the ladder's only way to add
+# levels (gm_state_gift_grandeur). The primary's dedication is recorded first,
+# so the rebuilt building gets it back (gm_restore_pm) and whatever else
+# stands here keeps its place in the level (the building's whole, plus these).
+gm_state_tr_add_levels = {
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			NOT = { has_variable = gm_restore_pm }
+		}
+		gm_state_mark_restore_pm = yes
+	}
+	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
+	set_variable = {
+		name = gm_rebuild_level
+		value = {
+			value = gm_state_grandeur
+			add = scope:gm_tr_moving.var:gm_tr_levels
+			max = 200
+		}
+	}
+	set_variable = { name = gm_rebuilding days = 1 }
+	remove_building = building_grand_monument
+	te_construction_market_build_specified_level = {
+		SPEC_TYPE = building_grand_monument
+		SPEC_LEVEL = var:gm_rebuild_level
+	}
+	remove_variable = gm_rebuild_level
+}
+
+# State scope (scope:gm_tr_moving the trophy or monument to stand as this
+# state's primary monument; the state has no building, or just lost it). Built
+# at var:gm_rebuild_level when the caller set one, else at the moving
+# container's own levels, with its records. Whatever the state recorded of an
+# earlier monument is cleared first.
+gm_state_tr_rebuild_from_moving = {
+	gm_clear_state = { KEEP_LANDMARK = no }
+	if = {
+		limit = { NOT = { has_variable = gm_rebuild_level } }
 		set_variable = {
 			name = gm_rebuild_level
 			value = {
@@ -470,44 +504,43 @@ gm_state_tr_receive = {
 				max = 200
 			}
 		}
-		set_variable = { name = gm_rebuilding days = 1 }
-		te_construction_market_build_specified_level = {
-			SPEC_TYPE = building_grand_monument
-			SPEC_LEVEL = var:gm_rebuild_level
-		}
-		gm_tr_copy_to_state = { FROM = gm_tr_skin TO = gm_skin }
-		gm_tr_copy_to_state = { FROM = gm_tr_form TO = gm_form }
-		gm_tr_copy_to_state = { FROM = gm_tr_landmark TO = gm_landmark }
-		gm_tr_copy_to_state = { FROM = gm_tr_namesake TO = gm_namesake }
-		gm_tr_copy_to_state = { FROM = gm_tr_name_year TO = gm_name_year }
-		gm_tr_copy_to_state = { FROM = gm_tr_name_char TO = gm_name_char }
-		gm_tr_copy_to_state = { FROM = gm_tr_name_occasion TO = gm_name_occasion }
-		gm_tr_copy_to_state = { FROM = gm_tr_name_enemy_cap TO = gm_name_enemy_cap }
-		gm_tr_copy_to_state = { FROM = gm_tr_name TO = gm_name }
-		gm_tr_copy_to_state = { FROM = gm_tr_honoree TO = gm_honoree }
-		gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
-		gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
-		set_variable = gm_seen
-		set_variable = { name = gm_ceremony_level value = var:gm_rebuild_level }
-		set_variable = { name = gm_grandeur value = var:gm_rebuild_level }
-		set_variable = { name = gm_built_by value = owner }
-		if = {
-			limit = {
-				scope:gm_tr_moving = {
-					has_variable = gm_tr_dedication
-					OR = {
-						var:gm_tr_dedication = flag:crown
-						var:gm_tr_dedication = flag:republic
-						var:gm_tr_dedication = flag:revolution
-						var:gm_tr_dedication = flag:leader
-					}
+	}
+	set_variable = { name = gm_rebuilding days = 1 }
+	te_construction_market_build_specified_level = {
+		SPEC_TYPE = building_grand_monument
+		SPEC_LEVEL = var:gm_rebuild_level
+	}
+	gm_tr_copy_to_state = { FROM = gm_tr_skin TO = gm_skin }
+	gm_tr_copy_to_state = { FROM = gm_tr_form TO = gm_form }
+	gm_tr_copy_to_state = { FROM = gm_tr_landmark TO = gm_landmark }
+	gm_tr_copy_to_state = { FROM = gm_tr_namesake TO = gm_namesake }
+	gm_tr_copy_to_state = { FROM = gm_tr_name_year TO = gm_name_year }
+	gm_tr_copy_to_state = { FROM = gm_tr_name_char TO = gm_name_char }
+	gm_tr_copy_to_state = { FROM = gm_tr_name_occasion TO = gm_name_occasion }
+	gm_tr_copy_to_state = { FROM = gm_tr_name_enemy_cap TO = gm_name_enemy_cap }
+	gm_tr_copy_to_state = { FROM = gm_tr_name TO = gm_name }
+	gm_tr_copy_to_state = { FROM = gm_tr_honoree TO = gm_honoree }
+	gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
+	gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
+	set_variable = gm_seen
+	set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
+	set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }
+	set_variable = { name = gm_built_by value = owner }
+	if = {
+		limit = {
+			scope:gm_tr_moving = {
+				has_variable = gm_tr_dedication
+				OR = {
+					var:gm_tr_dedication = flag:crown
+					var:gm_tr_dedication = flag:republic
+					var:gm_tr_dedication = flag:revolution
+					var:gm_tr_dedication = flag:leader
 				}
 			}
-			set_variable = { name = gm_raised_by value = owner }
 		}
-		remove_variable = gm_rebuild_level
+		set_variable = { name = gm_raised_by value = owner }
 	}
-	owner = { trigger_event = { id = monument_events.20 } }
+	remove_variable = gm_rebuild_level
 }
 
 # State scope: the trophy's variable $FROM$, when it has one, as $TO$.

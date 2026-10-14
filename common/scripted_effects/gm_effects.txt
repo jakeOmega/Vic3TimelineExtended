@@ -364,7 +364,7 @@ gm_state_monthly = {
 	if = {
 		limit = { has_building = building_grand_monument }
 		# Last known level, read if the building disappears before the next pulse.
-		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
 		# The monument policy (v2 §5) scales tourism and the local effect.
 		set_variable = {
@@ -565,7 +565,7 @@ gm_country_refresh = {
 		limit = { has_building = building_grand_monument }
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
-		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		# A new monument copies its siblings' dedication: the ceremony
 		# replaces it.
 		gm_state_reset_copied_dedication = yes
@@ -1107,13 +1107,19 @@ gm_state_record_teardown = {
 }
 
 gm_state_tear_down = {
-	set_variable = { name = gm_grandeur value = gm_state_grandeur }
+	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 	gm_state_record_teardown = yes
 	owner = {
 		remove_list_variable = { name = gm_states target = prev }
 	}
 	remove_building = building_grand_monument
 	gm_clear_state = { KEEP_LANDMARK = no }
+	# Another monument stood beside it: the building passes to the largest, at
+	# the levels of all that remain (gm_monument_effects.txt).
+	if = {
+		limit = { gm_state_has_secondary = yes }
+		gm_state_promote_secondary = yes
+	}
 }
 
 # Rebuilt at half its level (rounded up, at most 200: the ladder's reach) and
@@ -1133,7 +1139,7 @@ gm_state_rededicate = {
 	if = {
 		limit = { has_variable = gm_rededicate_click }
 		remove_variable = gm_rededicate_click
-		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		# Minor 3: guard the rebuild's own on_building_built (monument_events.1)
 		# against vanity backlash for a level it did not earn — the Rededicate
 		# tooltip never mentions that risk. A short flag, not a container, so
@@ -1148,12 +1154,14 @@ gm_state_rededicate = {
 			gm_init_ledgers = yes
 		}
 		gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -0.5 }
+		# Half the primary's own levels; what else stands here is not rededicated.
 		set_variable = {
 			name = gm_rebuild_level
 			value = {
 				value = var:gm_grandeur
 				divide = 2
 				ceiling = yes
+				add = gm_state_secondary_grandeur
 				max = 200
 			}
 		}
@@ -1172,7 +1180,7 @@ gm_state_rededicate = {
 }
 
 gm_state_preserve = {
-	set_variable = { name = gm_grandeur value = gm_state_grandeur }
+	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 	owner = { gm_init_ledgers = yes }
 	gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = -1 }
 	gm_state_lift_contest = yes
@@ -1220,7 +1228,7 @@ gm_state_start_ceremony = {
 			NOT = { has_variable = gm_restore_pm }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		set_variable = { name = gm_ceremony_level value = gm_state_grandeur }
+		set_variable = { name = gm_ceremony_level value = gm_state_primary_grandeur }
 		trigger_event = { id = monument_events.2 }
 	}
 }
@@ -1242,7 +1250,7 @@ gm_state_offer_missed_ceremony = {
 				NOT = { has_variable = gm_ceremony_level }
 				AND = {
 					has_variable = gm_ceremony_level
-					var:gm_ceremony_level < gm_state_grandeur
+					var:gm_ceremony_level < gm_state_primary_grandeur
 				}
 			}
 		}

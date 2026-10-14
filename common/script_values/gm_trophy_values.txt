@@ -22,11 +22,11 @@ gm_state_tr_share = {
 # The levels a taking carries off: the share, rounded up, at least one and at
 # most every level.
 gm_state_tr_levels = {
-	value = gm_state_grandeur
+	value = gm_state_primary_grandeur
 	multiply = gm_state_tr_share
 	ceiling = yes
 	min = 1
-	max = gm_state_grandeur
+	max = gm_state_primary_grandeur
 }
 
 # What those levels count for abroad: half, rounded up (spec §1).
@@ -40,14 +40,14 @@ gm_state_tr_value = {
 gm_state_tr_whole = {
 	value = 0
 	if = {
-		limit = { gm_state_tr_levels >= gm_state_grandeur }
+		limit = { gm_state_tr_levels >= gm_state_primary_grandeur }
 		value = 1
 	}
 }
 
 # What is left standing after a piece is taken.
 gm_state_tr_levels_left = {
-	value = gm_state_grandeur
+	value = gm_state_primary_grandeur
 	subtract = gm_state_tr_levels
 	min = 0
 }

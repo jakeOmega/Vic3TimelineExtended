@@ -3,8 +3,10 @@
 # ============================================================================
 # Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
 
-# State scope. A secondary monument stands here beside the primary.
+# State scope. A secondary monument stands here beside the primary. Not
+# variable_list_size: its documented `target` key fails to load in 1.14, and a
+# list keeps existing after its last entry is removed.
 gm_state_has_secondary = {
 	has_variable_list = gm_monuments_here
-	variable_list_size = { name = gm_monuments_here target > 0 }
+	any_in_list = { variable = gm_monuments_here exists = this }
 }

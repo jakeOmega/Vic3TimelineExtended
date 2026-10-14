@@ -765,11 +765,13 @@ gm_state_gift_grandeur = {
 			NOT = { has_variable = gm_restore_pm }
 			gm_state_grandeur < 200
 		}
-		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		set_variable = {
 			name = gm_rebuild_level
+			# The building's whole level: the gift lands on the primary and
+			# every secondary standing beside it stays.
 			value = {
-				value = var:gm_grandeur
+				value = gm_state_grandeur
 				add = gm_com_gift
 				max = 200
 			}
@@ -781,7 +783,14 @@ gm_state_gift_grandeur = {
 			SPEC_TYPE = building_grand_monument
 			SPEC_LEVEL = var:gm_rebuild_level
 		}
-		set_variable = { name = gm_grandeur value = var:gm_rebuild_level }
+		set_variable = {
+			name = gm_grandeur
+			value = {
+				value = var:gm_rebuild_level
+				subtract = gm_state_secondary_grandeur
+				min = 1
+			}
+		}
 		remove_variable = gm_rebuild_level
 		owner = { trigger_event = { id = monument_events.20 } }
 	}
