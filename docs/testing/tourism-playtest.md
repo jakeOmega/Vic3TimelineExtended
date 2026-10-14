@@ -28,3 +28,13 @@ infrastructure to read the same.
 | **Coastal states.** A coastal state with a large Port and little rail. | It no longer gets a bonus for the Port as such; a Port adds only the few points of infrastructure it supplies. This is intended. | Tourist coasts that read badly low are a calibration question for the owner, not a bug. |
 | **Refresh.** Build or demolish a Railway, then wait for the next month. | The row and the "All modifiers" throughput line move together after the monthly pulse. | A row that moves while "All modifiers" does not means `tourism_on_action` did not re-apply the modifier. |
 | **Display.** Hover the row's label and its bar. | The label reads "Excess Infrastructure"; the hover text gives the three sample points and "Maximum: +100% (approached, never reached)". The concept's link opens its description. | A raw key (`concept_tourism_infrastructure`, `te_state_tourism_infrastructure_tt`) means the loc did not load. |
+
+## Highway methods add to tourism output
+
+The five Highway production methods carry `goods_output_tourism_mult` in their `state_modifiers`, the same slot the
+Airport and Spaceport use: +5% on Civil, Electric Civil and Autonomous, +2.5% on Industrial and Electric Industrial
+(`common/production_methods/extra_pms.txt`).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Value.** Build a Highway on the Civil Highway method in a state, staff it, then read the tourism card's "All modifiers" output line (hover for the breakdown). | The Highway appears as a source of about +5% per level, scaled by staffing. Switching to Industrial Highway halves it to +2.5%. | A missing source means the method's `state_modifiers` block did not load: check `debug.log` for the PM. |

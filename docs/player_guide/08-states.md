@@ -204,7 +204,9 @@ Two sources on the card set a state's output bonus:
 | Cities | +100% for the largest city in the world, 5% less for each place below it, nothing below 20th. See [World city rankings](#world-city-rankings). |
 
 The card's "All modifiers" line adds everything else that changes output. An
-Airport or Spaceport adds +15% per level, scaled by staffing. Laws add between
+Airport or Spaceport adds +15% per level, scaled by staffing. A Highway adds +5%
+on the Civil, Electric Civil and Autonomous Highway methods and +2.5% on the
+Industrial and Electric Industrial ones. Laws add between
 −30% (Secret Police, Outlawed Dissent) and +15% (Universal Citizenship).
 Pollution, turmoil and obstinance cut output in proportion to how bad they are,
 at their worst by 200%, 100% and 50%, so heavy pollution can shut a state's
