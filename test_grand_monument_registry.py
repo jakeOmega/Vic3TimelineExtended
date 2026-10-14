@@ -3317,7 +3317,7 @@ class LandmarkTests(unittest.TestCase):
         body = squash(block(on, "gm_landmarks_on_game_started_after_lobby"))
         self.assertEqual(body, "effect = { if = { limit = { gm_system_enabled = yes NOT = { has_global_variable = "
                                "gm_landmarks_seeded } } set_global_variable = gm_landmarks_seeded "
-                               "gm_seed_landmarks = yes gm_seed_trophies = yes } }")
+                               "gm_seed_landmarks = yes gm_seed_trophies = yes gm_monument_self_check = yes } }")
 
     def test_a_call_per_row(self):
         raw = (ROOT / LANDMARK_EFFECTS).read_bytes()
@@ -3788,7 +3788,9 @@ class ColocatedLandmarkTests(unittest.TestCase):
         self.assertIn("create_container = { tags = { gm_monument } save_scope_as = gm_tr_moving", body)
         for record in ("name = gm_tr_levels value = $LEVEL$", "name = gm_tr_dedication value = flag:$DEDICATION$",
                        "name = gm_tr_skin value = flag:landmark_$KEY$", "name = gm_tr_form value = flag:$FORM$",
-                       "name = gm_tr_landmark value = flag:$KEY$", "name = gm_tr_namesake value = flag:landmark"):
+                       "name = gm_tr_landmark value = flag:$KEY$", "name = gm_tr_namesake value = flag:landmark",
+                       # A whole landmark: its row's title is its name, not "<name> - <part>".
+                       "name = gm_tr_share value = flag:whole"):
             self.assertIn(f"set_variable = {{ {record} }}", body, record)
         # Its levels go on the building before it is listed, as a return's do.
         self.assertLess(body.find("gm_state_tr_add_levels = yes"),
@@ -3812,6 +3814,40 @@ class ColocatedLandmarkTests(unittest.TestCase):
         rows = [lm for lm in PLACED_LANDMARKS if lm.state == "STATE_UPPER_EGYPT"]
         self.assertEqual([lm.key for lm in rows], ["obelisks_of_karnak"])
         self.assertFalse(rows[0].beside)
+
+
+class MultiMonumentSelfCheckTests(unittest.TestCase):
+    """The build rests on an engine fact nobody has verified: that
+    `var:gm_landmark = scope:gm_tr_moving.var:gm_tr_landmark` compares two
+    flags across scopes. A game logs once, after the seeding, what the 1836
+    data says it should (docs/testing/grand-monuments-multiple-playtest.md,
+    Self-checks); the fallback is named there."""
+
+    def setUp(self):
+        self.body = squash(block(read(MON_EFFECTS), "gm_monument_self_check"))
+
+    def test_both_verdicts_for_both_cases(self):
+        for name in ("monument_piece_rejoins", "monument_artifact_stands_apart"):
+            self.assertIn(f"TE_SELF_CHECK OK {name}", self.body)
+            self.assertIn(f"TE_SELF_CHECK BROKEN {name}", self.body)
+
+    def test_a_degenerate_premise_logs_nothing(self):
+        # The marbles read against Attica's Parthenon, the Luxor Obelisk against
+        # Upper Egypt's Obelisks of Karnak; with either absent, no verdict.
+        self.assertIn("var:gm_tr_landmark = flag:parthenon", self.body)
+        self.assertIn("var:gm_landmark = flag:parthenon", self.body)
+        self.assertIn("var:gm_tr_landmark = flag:luxor_obelisk", self.body)
+        self.assertIn("var:gm_landmark = flag:obelisks_of_karnak", self.body)
+        self.assertEqual(self.body.count("has_building = building_grand_monument"), 2)
+
+    def test_the_rule_is_read_through_the_triggers_the_return_uses(self):
+        self.assertIn("gm_tr_rejoins_primary = yes", self.body)
+        self.assertIn("gm_tr_stands_apart = yes", self.body)
+        self.assertIn("save_scope_as = gm_tr_moving", self.body)
+
+    def test_the_broken_line_names_its_fallback(self):
+        self.assertIn("docs/testing/grand-monuments-multiple-playtest.md", self.body)
+        self.assertTrue((ROOT / "docs/testing/grand-monuments-multiple-playtest.md").exists())
 
 if __name__ == "__main__":
     unittest.main()

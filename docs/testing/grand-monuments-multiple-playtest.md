@@ -1,0 +1,54 @@
+# Grand Monuments: several monuments in one state, play-test checklist
+
+What the next play-test should look at for monuments that share a state (spec
+`docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md`, plan
+`docs/superpowers/plans/2026-10-13-multiple-monuments-per-state.md`). In-game checks do not gate a merge (CLAUDE.md,
+"In-game checks: self-checks and the play-test list"): the PR landed on the offline gate and this is what only the game
+can show. A fixed item is struck through with the commit that fixed it.
+
+## How to run
+
+- **Deploy** per CLAUDE.md, "Play-testing unmerged work" (or from `main`).
+- **Start a game in 1836** with the Grand Monuments rule on. France holds the Luxor Obelisk and the Dendera Zodiac, which
+  are Upper Egypt's; the Obelisks of Karnak stand there already.
+- **Logs.** Read `debug.log`, not `error.log`; grep `TE_SELF_CHECK` and `TE_MONUMENTS`.
+- **Console.** `event te_debug_monuments.5` seeds the landmarks and trophies again (option c), `.6` is the trophy debug.
+  Vic3 has no `effect` command.
+
+## Self-checks
+
+Logged once at the start of a game, after the seeding. Nothing logged means the premise was absent (the monument did not
+stand, the owner proved wrong, or the system is off).
+
+| Line | Means | If BROKEN, take the fallback |
+|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN monument_piece_rejoins` | A trophy that is a piece of the standing monument (the Parthenon's marbles in Attica) reads as one, so it will rejoin it. | The cross-scope flag comparison in `gm_state_stands_for_moving` (`var:gm_landmark = scope:gm_tr_moving.var:gm_tr_landmark`) does not hold. Stage the trophy's landmark on the origin state first with `set_variable = { name = gm_tr_ret_landmark value = scope:gm_tr_moving.var:gm_tr_landmark }` (the cross-scope read `gm_tr_copy_to_state` proves) and compare same-scope, `var:gm_landmark = var:gm_tr_ret_landmark` (as `te_tax_display_values.txt` compares two variables). Do the same for the secondaries in `gm_tr_rejoins_secondary`. |
+| `TE_SELF_CHECK OK/BROKEN monument_artifact_stands_apart` | A returned artifact with a monument already standing (the Luxor Obelisk in Upper Egypt) reads as apart from it, so it will stand beside it. | The same comparison, read the other way: with both BROKEN the comparison is always false or always true. |
+
+## Returns
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Luxor Obelisk home.** As Egypt (or any owner of Upper Egypt), get the Luxor Obelisk returned (Return Cultural Property, or take it from France in a war). | Upper Egypt keeps the Obelisks of Karnak as the state's monument and gains the Luxor Obelisk beside it. The state's building is 5 levels taller, on the same dedication, and the Also Standing Here card lists the Obelisk with its own picture and name. The Homecoming runs. | The card missing with the building taller: the monthly pass did not list it (`gm_monuments_here`). The Obelisk merged into Karnak: read the self-check. |
+| **Both home.** Return the Dendera Zodiac too. | Two rows on the card; the building is 12 levels (Karnak 5, Luxor 5, the Zodiac 2). Karnak's own grandeur on the state card's Grandeur hover reads 5. | A building that fell back to 5 or 10: the rebuild level read `gm_state_grandeur` at the wrong time. |
+| **A piece rejoins.** Return the Parthenon's marbles to Attica. | The levels go on the Parthenon; no new row. The Piraeus Lion returned there stands beside it as a row. | The marbles as a row of their own: self-check. |
+| **Dedication kept.** Return a civic artifact to a state whose monument is Crown. | The building keeps Crown; legitimacy from regime grandeur does not rise by the artifact's levels; prestige does. | Crown legitimacy rising: a dedication sum still reads `gm_state_grandeur`. |
+
+## Carrying off
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **One of two.** Occupy a state with a primary and a secondary monument. Use Carry It Off on the secondary's row. | Only that one goes: the building loses its levels (or a quarter or a tenth, by form), the primary and the others stay, the taker's capital shows the trophy. The state is spared for ten years after a piece. | The whole building gone: the click named the primary. |
+| **The primary whole.** Carry off a primary whose form goes whole (a column) in a state with a secondary. | The largest secondary becomes the state's monument, with its name, picture and dedication, and the building is at the levels of all that remain. | An empty state: `gm_state_promote_secondary` did not run (it needs `gm_state_has_secondary`). |
+| **Tear Down.** Pull down the primary of a state with a secondary. | The same as above. | |
+| **Rededicate.** Rededicate the primary of a state with a secondary. | The primary is rebuilt at half its own grandeur plus the secondaries' levels in full; the cost is 500 a level of the primary's own. | A building at half of everything: `gm_state_rededicate` read the whole level. |
+| **The AI.** Let an AI occupy such a state for a few years. | It carries off a monument now and then, any one of them. | |
+
+## Panels
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **State card.** Open the state view of Upper Egypt with the Obelisk home. | The monument card as before, with Grandeur at the whole level (its hover names the first one's part and the others'); under it Also Standing Here, then Trophies on Display. | A raw key: the loc did not load. |
+| **Our Monuments.** Open the journal entry's Our Monuments, and the Timeline Extended window's Grand Monuments tab. | A row per state's primary as before, then a row per secondary with where it stands. A change in one shows in the other. | |
+| **A civil war.** Have a civil war's winner take such a state. | The rows are back within a month (the pass rebuilds the lists). | Rows missing for good: check `gm_mon_lists_written`. |
+| **Pictures.** A returned landmark whose picture was drawn later. | It shows the right picture within a month. | |

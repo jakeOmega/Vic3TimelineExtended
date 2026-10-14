@@ -449,6 +449,8 @@ gm_seed_landmark_beside = {
 			set_variable = { name = gm_tr_form value = flag:$FORM$ }
 			set_variable = { name = gm_tr_landmark value = flag:$KEY$ }
 			set_variable = { name = gm_tr_namesake value = flag:landmark }
+			# A whole landmark: its row's title is its name, with no part's.
+			set_variable = { name = gm_tr_share value = flag:whole }
 			set_variable = { name = gm_tr_origin value = scope:gm_mon_seed_state }
 			set_variable = { name = gm_tr_origin_region value = scope:gm_mon_seed_state.state_region }
 			set_variable = { name = gm_tr_site value = scope:gm_mon_seed_state }
@@ -467,5 +469,75 @@ gm_seed_landmark_beside = {
 			trigger_event = { id = monument_events.20 }
 		}
 		debug_log = "TE_MONUMENTS: landmark $KEY$ placed beside the monument already standing in its state: level $LEVEL$, form $FORM$"
+	}
+}
+
+# ---- Self-check (once a game, after the seeding) ---------------------------------------
+# No scope, from gm_landmarks_on_game_started_after_lobby. Whether a returning
+# trophy is told from a piece of what stands: the rule compares the standing
+# monument's landmark with the trophy's across scopes
+# (gm_state_stands_for_moving, gm_monument_triggers.txt), which nobody has seen
+# the engine do. 1836's data says what each must read as: the Parthenon's
+# marbles are a piece of the Parthenon standing in Attica, the Luxor Obelisk
+# stands apart from the Obelisks of Karnak. With either premise absent (the
+# owner proved wrong, the rule off) it logs nothing, so OK cannot be a false
+# pass. The fallback is in docs/testing/grand-monuments-multiple-playtest.md.
+gm_monument_self_check = {
+	clear_saved_scope = gm_mon_chk_piece
+	clear_saved_scope = gm_mon_chk_apart
+	if = {
+		limit = { has_global_variable_list = gm_trophies }
+		random_in_global_list = {
+			variable = gm_trophies
+			limit = {
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = flag:parthenon
+				var:gm_tr_origin ?= {
+					has_building = building_grand_monument
+					has_variable = gm_landmark
+					var:gm_landmark = flag:parthenon
+				}
+			}
+			save_scope_as = gm_mon_chk_piece
+		}
+		random_in_global_list = {
+			variable = gm_trophies
+			limit = {
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = flag:luxor_obelisk
+				var:gm_tr_origin ?= {
+					has_building = building_grand_monument
+					has_variable = gm_landmark
+					var:gm_landmark = flag:obelisks_of_karnak
+				}
+			}
+			save_scope_as = gm_mon_chk_apart
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_mon_chk_piece }
+		scope:gm_mon_chk_piece = {
+			save_scope_as = gm_tr_moving
+			if = {
+				limit = { gm_tr_rejoins_primary = yes }
+				debug_log = "TE_SELF_CHECK OK monument_piece_rejoins (the Parthenon's marbles read as a piece of the Parthenon in Attica)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN monument_piece_rejoins (the Parthenon's marbles do not read as a piece of the Parthenon standing in Attica, so a returned piece will stand as a monument of its own: take the fallback in docs/testing/grand-monuments-multiple-playtest.md)"
+			}
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_mon_chk_apart }
+		scope:gm_mon_chk_apart = {
+			save_scope_as = gm_tr_moving
+			if = {
+				limit = { gm_tr_stands_apart = yes }
+				debug_log = "TE_SELF_CHECK OK monument_artifact_stands_apart (the Luxor Obelisk reads as apart from the Obelisks of Karnak)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN monument_artifact_stands_apart (the Luxor Obelisk does not read as apart from the Obelisks of Karnak, so a returned artifact will be merged into the monument standing: take the fallback in docs/testing/grand-monuments-multiple-playtest.md)"
+			}
+		}
 	}
 }

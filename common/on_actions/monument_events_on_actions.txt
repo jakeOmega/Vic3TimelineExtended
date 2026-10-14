@@ -421,6 +421,7 @@ gm_landmarks_on_game_started_after_lobby = {
 			set_global_variable = gm_landmarks_seeded
 			gm_seed_landmarks = yes
 			gm_seed_trophies = yes
+			gm_monument_self_check = yes
 		}
 	}
 }
