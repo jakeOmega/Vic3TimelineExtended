@@ -175,6 +175,41 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = xanthos }
 	gm_debug_log_landmark = { KEY = mesha_stele }
 	gm_debug_log_landmark = { KEY = arch_of_ctesiphon }
+	gm_debug_log_landmark = { KEY = nineveh_library }
+	gm_debug_log_landmark = { KEY = winged_victory_of_samothrace }
+	gm_debug_log_landmark = { KEY = vindolanda_tablets }
+	gm_debug_log_landmark = { KEY = troy_hisarlik }
+	gm_debug_log_landmark = { KEY = mycenae_grave_circle }
+	gm_debug_log_landmark = { KEY = pergamon_altar }
+	gm_debug_log_landmark = { KEY = deir_el_bahari_cache }
+	gm_debug_log_landmark = { KEY = ishtar_gate_babylon }
+	gm_debug_log_landmark = { KEY = palace_of_knossos }
+	gm_debug_log_landmark = { KEY = antikythera_mechanism }
+	gm_debug_log_landmark = { KEY = oseberg_ship }
+	gm_debug_log_landmark = { KEY = machu_picchu }
+	gm_debug_log_landmark = { KEY = bust_of_nefertiti }
+	gm_debug_log_landmark = { KEY = mohenjo_daro }
+	gm_debug_log_landmark = { KEY = tomb_of_tutankhamun }
+	gm_debug_log_landmark = { KEY = royal_cemetery_at_ur }
+	gm_debug_log_landmark = { KEY = sanxingdui_pits }
+	gm_debug_log_landmark = { KEY = sutton_hoo }
+	gm_debug_log_landmark = { KEY = lascaux_caves }
+	gm_debug_log_landmark = { KEY = nag_hammadi_library }
+	gm_debug_log_landmark = { KEY = dead_sea_scrolls }
+	gm_debug_log_landmark = { KEY = tomb_of_pakal }
+	gm_debug_log_landmark = { KEY = mawangdui_tombs }
+	gm_debug_log_landmark = { KEY = terracotta_army }
+	gm_debug_log_landmark = { KEY = tomb_of_philip_ii }
+	gm_debug_log_landmark = { KEY = tomb_of_marquis_yi }
+	gm_debug_log_landmark = { KEY = royal_tombs_of_sipan }
+	gm_debug_log_landmark = { KEY = otzi_the_iceman }
+	gm_debug_log_landmark = { KEY = caral_supe }
+	gm_debug_log_landmark = { KEY = gobekli_tepe }
+	gm_debug_log_landmark = { KEY = olympia }
+	gm_debug_log_landmark = { KEY = delphi }
+	gm_debug_log_landmark = { KEY = sidon_necropolis }
+	gm_debug_log_landmark = { KEY = villa_of_the_papyri }
+	gm_debug_log_landmark = { KEY = tomb_of_alexander }
 }
 
 gm_debug_log_landmark = {

@@ -538,6 +538,7 @@ gm_country_refresh = {
 				any_scope_state = { has_building = building_grand_monument }
 				has_variable = gm_com_open
 				gm_tr_country_has_any = yes
+				gm_arch_country_has_any = yes
 			}
 		}
 		set_variable = gm_active
@@ -556,6 +557,7 @@ gm_country_refresh = {
 				has_variable = gm_com_open
 				has_variable = gm_com_offered
 				gm_tr_country_has_any = yes
+				gm_arch_country_has_any = yes
 			}
 		}
 		add_journal_entry = { type = je_grand_monuments }
@@ -788,6 +790,7 @@ gm_apply_national_modifiers = {
 		gm_add_national = { NAME = gm_national_vanity VAR = gm_vanity_ledger }
 		gm_add_boons = yes
 		gm_tr_add_national = yes
+		gm_arch_add_national = yes
 		gm_add_national_signed = { NAME = gm_ig_approval_armed_forces VAR = gm_s_ig_armed_forces }
 		gm_add_national_signed = { NAME = gm_ig_approval_devout VAR = gm_s_ig_devout }
 		gm_add_national_signed = { NAME = gm_ig_approval_industrialists VAR = gm_s_ig_industrialists }
@@ -815,6 +818,7 @@ gm_remove_national_modifiers = {
 	remove_modifier = gm_national_promise
 	gm_remove_boons = yes
 	gm_tr_remove_national = yes
+	gm_arch_remove_national = yes
 	remove_modifier = gm_ig_approval_armed_forces
 	remove_modifier = gm_ig_approval_devout
 	remove_modifier = gm_ig_approval_industrialists

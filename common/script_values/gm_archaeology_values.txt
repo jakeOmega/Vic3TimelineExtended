@@ -1,0 +1,181 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — archaeology: script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md
+# (issue #939). Container scope unless a comment says country.
+
+# ---- Discovery -----------------------------------------------------------------------
+# The monthly chance, in percent, that an incidental site is turned up while
+# its owner has the technology that gates it (the plough, the railway cutting
+# and the hiker find what scholars never looked for).
+gm_arch_find_chance = {
+	value = 1
+}
+
+# ---- Methods ----------------------------------------------------------------------------
+# Progress a month, in percent of the dig (25, 40 and 29 months).
+gm_arch_rate_antiquarian = { value = 4 }
+gm_arch_rate_systematic = { value = 2.5 }
+gm_arch_rate_forensic = { value = 3.5 }
+
+# What an Antiquarian dig risks: the chance, in percent, that its haste
+# destroys half of what it finds (Stratigraphic Destruction).
+gm_arch_destruction_chance = { value = 35 }
+
+# Levels a Forensic dig adds to what it unearths.
+gm_arch_forensic_bonus = { value = 2 }
+
+# ---- The brakes (country scope, the sponsor) -----------------------------------------------
+# The weekly innovation a dig diverts: the scholars, philologists and
+# chemists in the field are not in the universities. Only the weekly flow
+# falls; the innovation cap does not (owner, 2026-10-14).
+gm_arch_innovation_antiquarian = { value = 5 }
+gm_arch_innovation_systematic = { value = 15 }
+gm_arch_innovation_forensic = { value = 30 }
+
+# The weekly treasury cost of one standard dig: a share of the sponsor's GDP,
+# with a floor so a small state feels it in absolute pounds. The method scales
+# it (1x, 2.5x, 5x). The modifier that charges it (gm_arch_expense) carries
+# country_expenses_add = 1, so this is the multiplier.
+gm_arch_cost_base = {
+	value = gdp
+	multiply = 0.0002
+	min = 100
+}
+gm_arch_cost_antiquarian = {
+	value = gm_arch_cost_base
+}
+gm_arch_cost_systematic = {
+	value = gm_arch_cost_base
+	multiply = 2.5
+}
+gm_arch_cost_forensic = {
+	value = gm_arch_cost_base
+	multiply = 5
+}
+
+# ---- Display ---------------------------------------------------------------------------------
+# Each is guarded: a site that was never dug has no progress or method.
+# gm_arch_disp_status: 1 buried, 2 known, 3 being dug, 4 unearthed.
+gm_arch_disp_status = {
+	value = 1
+	if = {
+		limit = { has_variable = gm_site_status }
+		value = var:gm_site_status
+	}
+}
+
+# gm_arch_disp_method: 1 Antiquarian, 2 Systematic, 3 Forensic, 0 none.
+gm_arch_disp_method = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_site_method }
+		if = {
+			limit = { var:gm_site_method = flag:antiquarian }
+			value = 1
+		}
+		else_if = {
+			limit = { var:gm_site_method = flag:systematic }
+			value = 2
+		}
+		else_if = {
+			limit = { var:gm_site_method = flag:forensic }
+			value = 3
+		}
+	}
+}
+
+gm_arch_disp_progress = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_site_progress }
+		value = var:gm_site_progress
+	}
+}
+
+# The percent a month this dig makes, by its method.
+gm_arch_disp_rate = {
+	value = 0
+	if = {
+		limit = { gm_arch_disp_method = 1 }
+		value = gm_arch_rate_antiquarian
+	}
+	else_if = {
+		limit = { gm_arch_disp_method = 2 }
+		value = gm_arch_rate_systematic
+	}
+	else_if = {
+		limit = { gm_arch_disp_method = 3 }
+		value = gm_arch_rate_forensic
+	}
+}
+
+# Months to go at that rate, rounded up.
+gm_arch_disp_months_left = {
+	value = 100
+	subtract = gm_arch_disp_progress
+	min = 0
+	if = {
+		limit = { gm_arch_disp_rate > 0 }
+		divide = gm_arch_disp_rate
+		ceiling = yes
+	}
+}
+
+# The levels it will raise, before the method's luck: the site's own.
+gm_arch_disp_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_levels }
+		value = var:gm_tr_levels
+	}
+}
+
+# Country scope. How many digs it runs and how many sites wait for it.
+gm_arch_disp_dig_count = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_arch_dig_count }
+		value = var:gm_arch_dig_count
+	}
+}
+
+gm_arch_disp_open_count = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_arch_open_count }
+		value = var:gm_arch_open_count
+	}
+}
+
+# Country scope. 1 while the section has anything to show.
+gm_arch_disp_shown = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				gm_arch_disp_dig_count > 0
+				gm_arch_disp_open_count > 0
+			}
+		}
+		value = 1
+	}
+}
+
+# Country scope. The weekly innovation the digs divert, and what they cost a
+# week: the variables the modifiers' multipliers read (gm_arch_pass).
+gm_arch_disp_innovation = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_arch_innovation_units }
+		value = var:gm_arch_innovation_units
+	}
+}
+
+gm_arch_disp_cost = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_arch_cost_units }
+		value = var:gm_arch_cost_units
+	}
+}

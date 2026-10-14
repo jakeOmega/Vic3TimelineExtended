@@ -49,6 +49,7 @@ SOURCES = {
             "te_demog_ms_free_contraception_cost",
         )),
         "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
+        "archaeology": ("Archaeological Digs", ("gm_arch_expense",)),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),

@@ -76,6 +76,30 @@ LANDMARK_PARTS = {
     "palmyra": "gm_tr_part_funerary_busts",
     "xanthos": "gm_tr_part_nereid_monument",
     "arch_of_ctesiphon": "gm_tr_part_treasures_of_khosrow",
+    "nineveh_library": "gm_tr_part_nineveh_reliefs",
+    "vindolanda_tablets": "gm_tr_part_ink_tablets",
+    "troy_hisarlik": "gm_tr_part_priams_treasure",
+    "mycenae_grave_circle": "gm_tr_part_mask_of_agamemnon",
+    "pergamon_altar": "gm_tr_part_gigantomachy_frieze",
+    "deir_el_bahari_cache": "gm_tr_part_royal_mummies",
+    "ishtar_gate_babylon": "gm_tr_part_ishtar_gate",
+    "palace_of_knossos": "gm_tr_part_bull_leaping_frescoes",
+    "machu_picchu": "gm_tr_part_machu_picchu_finds",
+    "mohenjo_daro": "gm_tr_part_indus_seals",
+    "tomb_of_tutankhamun": "gm_tr_part_golden_mask",
+    "royal_cemetery_at_ur": "gm_tr_part_standard_of_ur",
+    "sanxingdui_pits": "gm_tr_part_bronze_masks",
+    "sutton_hoo": "gm_tr_part_helmet_and_regalia",
+    "tomb_of_pakal": "gm_tr_part_jade_mask",
+    "mawangdui_tombs": "gm_tr_part_silk_banner",
+    "terracotta_army": "gm_tr_part_terracotta_warriors",
+    "tomb_of_philip_ii": "gm_tr_part_golden_larnax",
+    "tomb_of_marquis_yi": "gm_tr_part_chime_bells",
+    "royal_tombs_of_sipan": "gm_tr_part_sipan_regalia",
+    "gobekli_tepe": "gm_tr_part_t_pillars",
+    "olympia": "gm_tr_part_hermes_of_praxiteles",
+    "delphi": "gm_tr_part_charioteer_of_delphi",
+    "sidon_necropolis": "gm_tr_part_sidon_sarcophagi",
 }
 # The occasion patterns of NAMESAKES, plus the namesakes with one pattern.
 NAME_PATTERNS = [p for patterns in NAMESAKES.values() for p in patterns]
@@ -704,7 +728,7 @@ class Trophies1836Tests(unittest.TestCase):
                 self.assertEqual(lm.state, tr.origin, f"{tr.landmark}: a piece comes from its landmark's state")
             if tr.share != "whole":
                 self.assertIn(tr.landmark, LANDMARK_PARTS, f"{tr.landmark}: a part names what was taken")
-        unplaced = {lm.key for lm in LANDMARKS if not lm.placed}
+        unplaced = {lm.key for lm in LANDMARKS if not lm.placed and not lm.buried}
         self.assertEqual(unplaced - set(seen), set(), "an unplaced landmark exists only for its trophy")
 
     def test_a_call_per_row(self):

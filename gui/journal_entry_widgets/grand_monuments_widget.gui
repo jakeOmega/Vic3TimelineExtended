@@ -2136,6 +2136,9 @@ types grand_monuments_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_gm_sec_commission = {}
+		# Archaeological Expeditions (gui/gm_archaeology_widgets.gui): the digs we
+		# run and the sites open to us.
+		te_gm_sec_archaeology = {}
 		te_gm_sec_national = {}
 		te_gm_sec_monuments = {}
 		# Trophies (gui/gm_trophy_widgets.gui): ours, and ours held abroad.

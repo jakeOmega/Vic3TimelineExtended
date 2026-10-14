@@ -525,3 +525,125 @@ te_debug_monuments.6 = { # REVIEWED 2026-10-12: console-only test event (`event 
 		}
 	}
 }
+
+# ============================================================================
+# ARCHAEOLOGY — console test event: `event te_debug_monuments.7`
+# ============================================================================
+# Docs: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
+# Option a seeds the buried sites (for a save started before them; a site
+# already seeded is not made twice) and turns up every incidental site; b digs
+# the grandest site we may dig, by the best method we have; c brings every dig
+# of ours to its last month and runs the pass, which finishes it; d runs the
+# pass now and logs the sites that have moved on TE_MONUMENTS: lines. Each
+# option only acts under a click marker: a tooltip walks the effects it shows
+# without writing, and these read back what they write.
+te_debug_monuments.7 = { # REVIEWED 2026-10-14: console-only test event (`event te_debug_monuments.7`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.7.t
+	desc = te_debug_monuments.7.desc
+	flavor = te_debug_monuments.7.flavor
+
+	option = {
+		name = te_debug_monuments.7.a
+		custom_tooltip = {
+			text = te_debug_monuments.7.a.tt
+			set_variable = gm_arch_debug_click
+			if = {
+				limit = { has_variable = gm_arch_debug_click }
+				remove_variable = gm_arch_debug_click
+				gm_arch_seed_sites = yes
+				set_global_variable = gm_arch_seeded
+				if = {
+					limit = { has_global_variable_list = gm_arch_sites }
+					every_in_global_list = {
+						variable = gm_arch_sites
+						limit = {
+							var:gm_site_status = 1
+							var:gm_site_vector = flag:incidental
+						}
+						set_variable = { name = gm_site_status value = 2 }
+					}
+				}
+				gm_arch_pass = yes
+				trigger_event = { id = monument_events.20 }
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.7.b
+		custom_tooltip = {
+			text = te_debug_monuments.7.b.tt
+			set_variable = gm_arch_debug_click
+			if = {
+				limit = { has_variable = gm_arch_debug_click }
+				remove_variable = gm_arch_debug_click
+				gm_arch_pass = yes
+				clear_saved_scope = gm_arch_debug_pick
+				if = {
+					limit = { has_variable_list = gm_arch_available }
+					ordered_in_list = {
+						variable = gm_arch_available
+						order_by = gm_arch_disp_levels
+						position = 0
+						check_range_bounds = no
+						save_scope_as = gm_arch_debug_pick
+					}
+				}
+				if = {
+					limit = { exists = scope:gm_arch_debug_pick }
+					scope:gm_arch_debug_pick = {
+						gm_arch_start_best = { WHO = root }
+					}
+				}
+				gm_arch_pass = yes
+				trigger_event = { id = monument_events.20 }
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.7.c
+		custom_tooltip = {
+			text = te_debug_monuments.7.c.tt
+			set_variable = gm_arch_debug_click
+			if = {
+				limit = {
+					has_variable = gm_arch_debug_click
+					has_global_variable_list = gm_arch_sites
+				}
+				every_in_global_list = {
+					variable = gm_arch_sites
+					limit = { gm_arch_digs_for = { WHO = root } }
+					set_variable = { name = gm_site_progress value = 99 }
+				}
+				gm_arch_monthly = yes
+			}
+			if = {
+				limit = { has_variable = gm_arch_debug_click }
+				remove_variable = gm_arch_debug_click
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.7.d
+		default_option = yes
+		custom_tooltip = {
+			text = te_debug_monuments.7.d.tt
+			set_variable = gm_arch_debug_click
+			if = {
+				limit = { has_variable = gm_arch_debug_click }
+				remove_variable = gm_arch_debug_click
+				gm_arch_monthly = yes
+				gm_arch_debug_log = yes
+			}
+		}
+	}
+}

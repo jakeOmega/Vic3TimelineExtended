@@ -1,0 +1,189 @@
+﻿namespace = arch_events
+
+# ============================================================================
+# GRAND MONUMENTS — archaeology (issue #939)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
+# .1-.3 are the events a player reads: a site turned up, a dig finished, a dig
+# that destroyed half of what it found. .10 and .11 are hidden: they do the
+# work a scripted GUI or an option ordered (gm_archaeology_effects.txt), outside
+# any tooltip's walk. A site travels as scope:gm_arch_pick; its name, which
+# an event cannot reach in a container, is the country's gm_arch_last
+# (gm_arch_site_name).
+
+# ============================================================================
+# Event 1: something under the spade (incidental find)
+# ============================================================================
+# A country event from gm_arch_found, players only (the AI finds the site in its
+# list at the next review). scope:gm_arch_pick is the site, now known (status 2).
+arch_events.1 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "africa_desert_expedition" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = arch_events.1.t
+	desc = arch_events.1.d
+	flavor = arch_events.1.f
+
+	duration = 3
+
+	trigger = {
+		gm_system_enabled = yes
+		exists = scope:gm_arch_pick
+		scope:gm_arch_pick = {
+			gm_arch_site_open = yes
+			gm_arch_owns_ground = { WHO = root }
+		}
+	}
+
+	# Dig it properly: Systematic Stratigraphy if we have it, else Antiquarian.
+	option = {
+		name = arch_events.1.a
+		trigger = { gm_arch_method_systematic_ok = yes }
+		default_option = yes
+		scope:gm_arch_pick = {
+			gm_arch_choose_launch = { WHO = root METHOD = systematic }
+		}
+	}
+
+	option = {
+		name = arch_events.1.b
+		trigger = {
+			gm_arch_method_systematic_ok = no
+			gm_arch_method_antiquarian_ok = yes
+		}
+		default_option = yes
+		scope:gm_arch_pick = {
+			gm_arch_choose_launch = { WHO = root METHOD = antiquarian }
+		}
+	}
+
+	# Leave it sealed. It waits in the Archaeological Expeditions section.
+	option = {
+		name = arch_events.1.c
+		# REVIEWED 2026-10-14 (no_effect_option): sealing the site is the point; it stays open in the journal entry's Known Antiquities
+		custom_tooltip = arch_events.1.c.tt
+	}
+}
+
+# ============================================================================
+# Event 2: a dig is finished
+# ============================================================================
+# A country event from gm_arch_place, players only. The monument stands; the
+# monument's own refresh has opened its row.
+arch_events.2 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "middleeast_jungle_expedition" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = arch_events.2.t
+	desc = arch_events.2.d
+	flavor = arch_events.2.f
+
+	duration = 3
+
+	trigger = {
+		gm_system_enabled = yes
+		has_variable = gm_arch_last
+	}
+
+	option = {
+		name = arch_events.2.a
+		default_option = yes
+		custom_tooltip = arch_events.2.a.tt
+	}
+}
+
+# ============================================================================
+# Event 3: Stratigraphic Destruction
+# ============================================================================
+# The same, after an Antiquarian dig whose haste destroyed half of what it found.
+arch_events.3 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "middleeast_jungle_expedition" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = arch_events.3.t
+	desc = arch_events.3.d
+	flavor = arch_events.3.f
+
+	duration = 3
+
+	trigger = {
+		gm_system_enabled = yes
+		has_variable = gm_arch_last
+	}
+
+	option = {
+		name = arch_events.3.a
+		default_option = yes
+		custom_tooltip = arch_events.3.a.tt
+	}
+}
+
+# ============================================================================
+# Event 10: a dig ordered (hidden)
+# ============================================================================
+# ROOT = the sponsor, scope:gm_arch_pick = the site (gm_arch_order_launch).
+# Checks again (a month can pass between an offer and its answer), starts the
+# dig by the method ordered, then the lists and the refresh that applies the
+# cost.
+arch_events.10 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		exists = scope:gm_arch_pick
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				scope:gm_arch_pick = {
+					gm_arch_can_dig = { WHO = root }
+					has_variable = gm_site_order_method
+				}
+			}
+			scope:gm_arch_pick = {
+				gm_arch_start_dig = { WHO = root }
+			}
+		}
+		gm_arch_pass = yes
+		trigger_event = { id = monument_events.20 }
+	}
+}
+
+# ============================================================================
+# Event 11: a dig suspended (hidden)
+# ============================================================================
+# ROOT = the sponsor, scope:gm_arch_pick = the site (gm_arch_order_suspend).
+arch_events.11 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		exists = scope:gm_arch_pick
+		scope:gm_arch_pick = {
+			gm_arch_digs_for = { WHO = root }
+		}
+	}
+
+	immediate = {
+		scope:gm_arch_pick = {
+			gm_arch_stop_dig = yes
+		}
+		gm_arch_pass = yes
+		trigger_event = { id = monument_events.20 }
+	}
+}

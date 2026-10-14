@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — archaeology: the monthly pass
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
+# One global pass a month (gm_arch_monthly, gm_archaeology_effects.txt): seed the
+# sites once, turn up what a chance turns up, dig a month, finish what is done,
+# then every country's lists, costs and the AI.
+
+# No root scope.
+on_monthly_pulse = {
+	on_actions = {
+		gm_arch_monthly_on_action
+	}
+}
+
+gm_arch_monthly_on_action = {
+	effect = {
+		gm_arch_monthly = yes
+	}
+}

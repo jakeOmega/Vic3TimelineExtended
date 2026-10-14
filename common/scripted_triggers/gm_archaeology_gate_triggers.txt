@@ -1,0 +1,37 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — archaeology: the technology gate
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939).
+
+# Container scope. $WHO$ (a country) has the technology that opens the site. A site
+# stores its technology as a flag (gm_site_tech) with the hyphen written as an
+# underscore (pan-nationalism is flag:pan_nationalism), so there is no technology to
+# look up by name: one branch for each technology the table uses. Read from the
+# site's side, with the country as the argument, so no scope is saved for it to
+# read. test_grand_monument_archaeology.py keeps this in step with its ARCH_SITES table.
+gm_arch_has_gate_for = {
+	OR = {
+		AND = { var:gm_site_tech = flag:romanticism $WHO$ = { has_technology_researched = romanticism } }
+		AND = { var:gm_site_tech = flag:empiricism $WHO$ = { has_technology_researched = empiricism } }
+		AND = { var:gm_site_tech = flag:civilizing_mission $WHO$ = { has_technology_researched = civilizing_mission } }
+		AND = { var:gm_site_tech = flag:pan_nationalism $WHO$ = { has_technology_researched = pan-nationalism } }
+		AND = { var:gm_site_tech = flag:steam_donkey $WHO$ = { has_technology_researched = steam_donkey } }
+		AND = { var:gm_site_tech = flag:mass_propaganda $WHO$ = { has_technology_researched = mass_propaganda } }
+		AND = { var:gm_site_tech = flag:modern_materials $WHO$ = { has_technology_researched = modern_materials } }
+		AND = { var:gm_site_tech = flag:mass_media $WHO$ = { has_technology_researched = mass_media } }
+		AND = { var:gm_site_tech = flag:public_works_programs $WHO$ = { has_technology_researched = public_works_programs } }
+		AND = { var:gm_site_tech = flag:combined_arms $WHO$ = { has_technology_researched = combined_arms } }
+		AND = { var:gm_site_tech = flag:nuclear_energy $WHO$ = { has_technology_researched = nuclear_energy } }
+		AND = { var:gm_site_tech = flag:jet_engine_technology $WHO$ = { has_technology_researched = jet_engine_technology } }
+		AND = { var:gm_site_tech = flag:television_broadcasting $WHO$ = { has_technology_researched = television_broadcasting } }
+		AND = { var:gm_site_tech = flag:modern_pharmaceuticals $WHO$ = { has_technology_researched = modern_pharmaceuticals } }
+		AND = { var:gm_site_tech = flag:containerization $WHO$ = { has_technology_researched = containerization } }
+		AND = { var:gm_site_tech = flag:microprocessor $WHO$ = { has_technology_researched = microprocessor } }
+		AND = { var:gm_site_tech = flag:barcodes_and_scanners $WHO$ = { has_technology_researched = barcodes_and_scanners } }
+		AND = { var:gm_site_tech = flag:personal_computers $WHO$ = { has_technology_researched = personal_computers } }
+		AND = { var:gm_site_tech = flag:world_wide_web $WHO$ = { has_technology_researched = world_wide_web } }
+		AND = { var:gm_site_tech = flag:digital_telecommunications $WHO$ = { has_technology_researched = digital_telecommunications } }
+		AND = { var:gm_site_tech = flag:e_commerce $WHO$ = { has_technology_researched = e-commerce } }
+		AND = { var:gm_site_tech = flag:mainframe_computers $WHO$ = { has_technology_researched = mainframe_computers } }
+	}
+}
