@@ -1798,10 +1798,10 @@ te_free_elections_country_pulse = {
 # Monthly (not yearly) because the multipliers genuinely change month to
 # month: total_tourism_output_bonus_percent reads city_size_rank, i.e.
 # var:state_city_size_rank, which city_rank_on_action recomputes on every
-# on_monthly_pulse, and total_tourism_throughput_bonus_percent reads live
-# port / railway / highway / art-academy / national-park levels that move
-# with construction. A yearly refresh would leave the modifier up to 11
-# months stale.
+# on_monthly_pulse, and total_tourism_throughput_bonus_percent reads the
+# state's live infrastructure balance and art-academy / national-park levels
+# that move with construction. A yearly refresh would leave the modifier up
+# to 11 months stale.
 # on_monthly_pulse_state is genuine state scope, so it satisfies the same
 # requirement the old yearly comment cited: the tourism script values use
 # state_region = s:STATE_X comparisons that only resolve in state scope

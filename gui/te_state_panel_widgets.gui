@@ -346,33 +346,7 @@ types te_state_panel_widget_types
 
 					te_state_meter = {
 						blockoverride "meter_tooltip" {
-							tooltip = "te_state_tourism_ports_tt"
-						}
-
-						te_state_stat_row = {
-							blockoverride "row_icon_texture" {
-								texture = "gfx/interface/icons/building_icons/building_port.dds"
-							}
-							blockoverride "row_label" {
-								text = "[concept_tourism_ports]"
-							}
-							blockoverride "row_value" {
-								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_ports')|+=0%]"
-							}
-						}
-						te_state_stat_bar = {
-							blockoverride "bar_value" {
-								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_ports_pct'))]"
-							}
-							blockoverride "bar_color" {
-								color = { 0.42 0.68 0.78 1.0 }
-							}
-						}
-					}
-
-					te_state_meter = {
-						blockoverride "meter_tooltip" {
-							tooltip = "te_state_tourism_transit_tt"
+							tooltip = "te_state_tourism_infrastructure_tt"
 						}
 
 						te_state_stat_row = {
@@ -380,15 +354,15 @@ types te_state_panel_widget_types
 								texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
 							}
 							blockoverride "row_label" {
-								text = "[concept_tourism_transit]"
+								text = "[concept_tourism_infrastructure]"
 							}
 							blockoverride "row_value" {
-								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_land_transport')|+=0%]"
+								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_infrastructure')|+=0%]"
 							}
 						}
 						te_state_stat_bar = {
 							blockoverride "bar_value" {
-								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_land_transport_pct'))]"
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('tourism_fill_infrastructure_pct'))]"
 							}
 							blockoverride "bar_color" {
 								color = { 0.42 0.68 0.78 1.0 }
