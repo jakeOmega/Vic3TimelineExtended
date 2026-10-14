@@ -17,7 +17,7 @@ Systems using this pattern:
 - **Construction Cost Scaling** — `construction_cost_scaling` modifier × `construction_cost_scaling_mult` (applied yearly, country scope)
 - **Migration Crowding** — `migration_crowding` modifier × `migration_crowding_mult` (applied yearly, state scope)
 - **Excess Private Construction** — `too_much_private_construction` modifier × `var:too_much_private_construction_cached`, set yearly from `too_much_private_construction_script_value` (country scope; § Excess Private Construction)
-- **Tourism** — `tourism_output` × `total_tourism_output_bonus_percent` and `tourism_throughput` × `total_tourism_throughput_bonus_percent` (state scope), re-applied by `te_update_tourism_modifier` from `tourism_on_action` on `on_monthly_pulse_state`, because its inputs (`city_size_rank`, building levels) move monthly. Uses ~2700 lines of state_region appeal values in `common/script_values/tourism.txt`. It must run from a state pulse: law, treaty and building hooks have unreliable scope chains for state-targeted script values.
+- **Tourism** — `tourism_output` × `total_tourism_output_bonus_percent` and `tourism_throughput` × `total_tourism_throughput_bonus_percent` (state scope), re-applied by `te_update_tourism_modifier` from `tourism_on_action` on `on_monthly_pulse_state`, because its inputs (`city_size_rank`, the state's infrastructure balance, building levels) move monthly. Uses ~2700 lines of state_region appeal values in `common/script_values/tourism.txt`. The infrastructure source, `tourism_throughput_from_infrastructure`, is `0.72 × E / (E + 3000)` with E = vanilla's `state_infrastructure_balance` (infrastructure less usage) floored at 0: diminishing returns toward the +72% ceiling the per-level Port (+36%), Railway and Highway (+18% each) tiers used to share. The 3000 half-point was set from the old tiers, not from a late-game save; check it at the next play-test (`docs/testing/tourism-playtest.md`). It must run from a state pulse: law, treaty and building hooks have unreliable scope chains for state-targeted script values.
 
 ## Production Methods (PMs)
 
@@ -380,7 +380,7 @@ Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for
   - `te_state_stat_bar`: a 4 px headroom bar, a bare `progressbar` fed by a 0–100 `*_fill_pct` script value that carries its own cap.
 - **Tourism card** (`te_state_tourism_card`): a 530 px card between the population block and the status grid.
   - It sits outside the grid because the grid is `wrap_count = 2` over 260 px tiles, and anything that isn't exactly one tile breaks its rows.
-  - Output column: base appeal, cities (with world rank). Throughput column: ports, transit, art, parks, monuments. Each capped source has a bar toward its cap; the caps are in the `tourism_fill_*_pct` values at the end of `common/script_values/tourism.txt`.
+  - Output column: base appeal, cities (with world rank). Throughput column: excess infrastructure, art, parks, monuments. Each capped source has a bar toward its cap (excess infrastructure toward its +72% ceiling, half full at 3,000); the caps are in the `tourism_fill_*_pct` values at the end of `common/script_values/tourism.txt`.
   - Footer "All modifiers": `State.GetModifier.GetValueWithBreakdownFor('goods_output_tourism_mult')` and `('building_tourism_industry_throughput_add')`. These also carry airports, decrees, pollution, grand monuments and so on, and lag the scripted sources by up to a month.
   - Per-source tooltips `te_state_tourism_*_tt` state each tier schedule.
 - **Loc keys:** `TE_STATE_*_STATUS` (tile title), `TE_STATE_*_ROW_*` / `TE_STATE_POINTS_ROW_*` (row labels), `TE_STATE_*_TT` (tooltip) and `te_state_tourism_*` in `localization/english/te_miscellaneous_l_english.yml`.
@@ -1808,7 +1808,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `pollution_on_action` — state pollution modifier update
 - `war_propaganda_on_action` — wartime propaganda effects
 - `state_yearly_cultural_acceptance_add_on_action` — cultural acceptance
-- `tourism_on_action` — tourism output/throughput modifier refresh (sole owner; the multipliers read monthly-varying `city_size_rank` and live building levels)
+- `tourism_on_action` — tourism output/throughput modifier refresh (sole owner; the multipliers read monthly-varying `city_size_rank` and the live infrastructure balance and building levels)
 - `ministry_of_thought_control_on_action` — monthly loyalists from `state_monthly_loyalists_add`, per incorporated state
 
 **`on_monthly_pulse`** (Root = global):

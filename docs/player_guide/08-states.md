@@ -212,16 +212,19 @@ tourism off entirely.
 
 ### Tourism throughput
 
-Five sources set a state's throughput bonus, and each capped one shows a bar
+Four sources set a state's throughput bonus, and each capped one shows a bar
 toward its cap:
 
 | Source | Bonus | Cap |
 |---|---|---|
-| Ports | +0.2% per Port level up to 100, then +0.04% per level up to 500 | +36% |
-| Transit | +0.1% per Railway level and per Highway level up to 100, then +0.02% per level up to 500 | +18% from each |
+| Excess Infrastructure | The infrastructure the state produces less what its buildings use: +18% at 1,000, +36% at 3,000, +54% at 9,000. Each point adds less than the one before. | +72%, never quite reached |
 | Art | +1% per Creative Industry level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
 | Monuments | +10% for a Skyscraper, +25% for each monument | none |
+
+Railways and Highways raise Excess Infrastructure by supplying infrastructure.
+Each building you add uses some, so a crowded industrial state has little to
+spare for visitors.
 
 The "All modifiers" line for throughput also carries the Promote Tourism decree
 (+50%), a Grand Monument (+25% for each step of its grandeur, see [Grand
