@@ -1,0 +1,83 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — several monuments in one state: scripted effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
+#
+# A SECONDARY monument is a script container tagged gm_monument, with no parent
+# (it outlives every country), in the global list gm_monuments. It is a
+# returned trophy that stands apart from the monument already in its state (or
+# a co-located landmark, gm_seed_landmark), and keeps its trophy's records
+# (gm_tr_*, gm_trophy_effects.txt: skin, form, landmark, name, dedication,
+# picture, honoree) so the trophy names, forms, parts and pictures serve it.
+#   gm_tr_origin, gm_tr_origin_region   the state it stands in
+#   gm_tr_levels                        its grandeur (gm_mon_grandeur)
+# The list and the state's holder are read live. The monthly pass
+# (gm_monument_monthly) writes each state's gm_monuments_here and
+# gm_mon_here_count from the global list, so a state that was merged, or a
+# civil war's winner (who inherits no lists), has its rows back.
+# No timed variable on a container: it would never expire
+# (container_timed_variable_audit).
+#
+# The building's level is the truth (gm_values.txt, gm_state_grandeur): nothing
+# here rebuilds a building on a pulse. A rebuild runs where a monument is added
+# or taken, from a hidden event (gm_state_tr_receive and its siblings).
+
+# ---- The monthly pass (from on_monthly_pulse) --------------------------------------
+# No scope. Repair each secondary's state, then the lists. Nothing to do in a
+# game none has touched: gm_mon_lists_written stands while any list does.
+gm_monument_monthly = {
+	if = {
+		limit = {
+			gm_system_enabled = yes
+			OR = {
+				has_global_variable = gm_mon_lists_written
+				has_global_variable_list = gm_monuments
+			}
+		}
+		if = {
+			limit = { has_global_variable_list = gm_monuments }
+			every_in_global_list = {
+				variable = gm_monuments
+				gm_tr_repair_places = yes
+			}
+		}
+		gm_monument_pass = yes
+	}
+}
+
+# Any scope. Every state's list of secondaries, from the global list. Last
+# month's are cleared first; the lists are rebuilt each time.
+gm_monument_pass = {
+	every_state = {
+		limit = { has_variable = gm_mon_here_count }
+		clear_variable_list = gm_monuments_here
+		remove_variable = gm_mon_here_count
+	}
+	if = {
+		limit = { has_global_variable = gm_mon_lists_written }
+		remove_global_variable = gm_mon_lists_written
+	}
+	if = {
+		limit = { has_global_variable_list = gm_monuments }
+		every_in_global_list = {
+			variable = gm_monuments
+			gm_mon_list_one = yes
+		}
+	}
+}
+
+# Container scope: this secondary monument into its state's list.
+gm_mon_list_one = {
+	save_scope_as = gm_mon_listing
+	if = {
+		limit = {
+			has_variable = gm_tr_origin
+			exists = var:gm_tr_origin
+		}
+		set_global_variable = gm_mon_lists_written
+		var:gm_tr_origin = {
+			add_to_variable_list = { name = gm_monuments_here target = scope:gm_mon_listing }
+			gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+		}
+	}
+}

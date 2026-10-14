@@ -1,0 +1,64 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — several monuments in one state: script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
+# One building_grand_monument stands in a state, at the level of everything
+# standing there (the engine allows one). The PRIMARY monument is the one the
+# state's own variables describe (gm_skin, gm_form, gm_name, ...); every other
+# monument is a SECONDARY, a gm_monument container (gm_monument_effects.txt)
+# in the state's gm_monuments_here, with its levels in gm_tr_levels.
+# gm_state_grandeur (gm_values.txt) is the building's level, so the state's
+# whole; gm_state_primary_grandeur is the primary's own part of it.
+
+# Container scope. The levels a secondary monument stands for.
+gm_mon_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_levels }
+		value = var:gm_tr_levels
+	}
+}
+
+# State scope. The levels standing here in secondary monuments (the monthly
+# pass writes the list), 0 with none.
+gm_state_secondary_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable_list = gm_monuments_here }
+		every_in_list = {
+			variable = gm_monuments_here
+			add = gm_mon_grandeur
+		}
+	}
+}
+
+# State scope. What the primary monument stands for: the building's level less
+# its secondaries', at least 1; 0 with no building. Every reader that means "this
+# monument's own grandeur" (take shares, Rededicate, the ceremony's level, the
+# dedication's national sums) reads this, so a returned artifact adds to the
+# state's standing grandeur without being counted as the primary's dedication.
+gm_state_primary_grandeur = {
+	value = gm_state_grandeur
+	subtract = gm_state_secondary_grandeur
+	min = 1
+	if = {
+		limit = { NOT = { has_building = building_grand_monument } }
+		value = 0
+	}
+}
+
+# State scope. How many monuments stand here: the primary and its secondaries.
+gm_state_monument_count = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		add = 1
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_here }
+		every_in_list = {
+			variable = gm_monuments_here
+			add = 1
+		}
+	}
+}

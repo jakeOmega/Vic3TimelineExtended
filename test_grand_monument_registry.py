@@ -3580,5 +3580,76 @@ class LandmarkReviewFixTests(unittest.TestCase):
                        "name = gm_form value", "name = gm_namesake value", "name = gm_ceremony_level value"):
             self.assertLess(body.index(record), build, record)
 
+
+# ---- Several monuments in one state (spec 2026-10-13-multiple-monuments-per-state) ----
+
+MON_EFFECTS = "common/scripted_effects/gm_monument_effects.txt"
+MON_TRIGGERS = "common/scripted_triggers/gm_monument_triggers.txt"
+MON_VALUES = "common/script_values/gm_monument_values.txt"
+MON_ON_ACTIONS = "common/on_actions/gm_monument_on_actions.txt"
+
+
+class MultiMonumentDataTests(unittest.TestCase):
+    """Task 1: the primary monument stays on the state's variables; every other
+    monument standing in the state is a gm_monument container (a returned
+    trophy keeps its gm_tr_* records), listed in the global gm_monuments and,
+    by the monthly pass, in its state's gm_monuments_here."""
+
+    def test_a_secondarys_grandeur_is_its_levels(self):
+        body = squash(block(read(MON_VALUES), "gm_mon_grandeur"))
+        self.assertEqual(body, "value = 0 if = { limit = { has_variable = gm_tr_levels } value = var:gm_tr_levels }")
+
+    def test_the_state_sums_its_secondaries_from_the_list(self):
+        body = squash(block(read(MON_VALUES), "gm_state_secondary_grandeur"))
+        self.assertEqual(body, "value = 0 if = { limit = { has_variable_list = gm_monuments_here } "
+                               "every_in_list = { variable = gm_monuments_here add = gm_mon_grandeur } }")
+
+    def test_the_primary_is_what_the_building_holds_beyond_them(self):
+        body = squash(block(read(MON_VALUES), "gm_state_primary_grandeur"))
+        self.assertIn("value = gm_state_grandeur subtract = gm_state_secondary_grandeur min = 1", body)
+        # No building, no monument: the floor of 1 must not invent one.
+        self.assertIn("if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }", body)
+
+    def test_the_count_is_the_primary_and_the_list(self):
+        body = squash(block(read(MON_VALUES), "gm_state_monument_count"))
+        self.assertIn("if = { limit = { has_building = building_grand_monument } add = 1 }", body)
+        self.assertIn("every_in_list = { variable = gm_monuments_here add = 1 }", body)
+        self.assertIn("has_variable_list = gm_monuments_here", body)
+
+    def test_a_state_with_a_secondary(self):
+        body = squash(block(read(MON_TRIGGERS), "gm_state_has_secondary"))
+        self.assertIn("has_variable_list = gm_monuments_here", body)
+        self.assertIn("variable_list_size = { name = gm_monuments_here target > 0 }", body)
+
+    def test_the_pass_clears_before_it_lists(self):
+        pass_ = squash(block(read(MON_EFFECTS), "gm_monument_pass"))
+        self.assertLess(pass_.find("clear_variable_list = gm_monuments_here"), pass_.find("gm_mon_list_one = yes"))
+        self.assertIn("remove_variable = gm_mon_here_count", pass_)
+        one = squash(block(read(MON_EFFECTS), "gm_mon_list_one"))
+        self.assertIn("add_to_variable_list = { name = gm_monuments_here target = scope:gm_mon_listing }", one)
+        self.assertIn("var:gm_tr_origin", one)
+
+    def test_the_pass_repairs_a_vanished_state_from_its_region(self):
+        monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
+        self.assertIn("gm_system_enabled = yes", monthly)
+        self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes }", monthly)
+        self.assertLess(monthly.find("gm_tr_repair_places = yes"), monthly.find("gm_monument_pass = yes"))
+
+    def test_the_pass_has_nothing_to_do_in_a_game_with_no_secondary(self):
+        monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
+        self.assertIn("has_global_variable_list = gm_monuments", monthly)
+        self.assertIn("has_global_variable = gm_mon_lists_written", monthly)
+
+    def test_wired_to_the_global_pulse(self):
+        oa = squash(strip_comments(read(MON_ON_ACTIONS)))
+        self.assertIn("on_monthly_pulse = { on_actions = { gm_monument_monthly_on_action } }", oa)
+        self.assertIn("effect = { gm_monument_monthly = yes }", oa)
+
+    def test_new_files_carry_one_bom(self):
+        for rel in (MON_EFFECTS, MON_TRIGGERS, MON_VALUES, MON_ON_ACTIONS):
+            raw = (ROOT / rel).read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), rel)
+            self.assertFalse(raw.startswith(b"\xef\xbb\xbf\xef\xbb\xbf"), rel)
+
 if __name__ == "__main__":
     unittest.main()
