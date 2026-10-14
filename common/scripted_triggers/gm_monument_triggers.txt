@@ -10,3 +10,58 @@ gm_state_has_secondary = {
 	has_variable_list = gm_monuments_here
 	any_in_list = { variable = gm_monuments_here exists = this }
 }
+
+# ---- A trophy comes home (spec §4.1) -----------------------------------------------
+# State scope, with scope:gm_tr_moving the returning trophy. What stands here
+# is what the trophy is a piece of: the landmark it came from, or, with
+# neither naming one, a monument of the same unnamed make.
+gm_state_stands_for_moving = {
+	OR = {
+		AND = {
+			has_variable = gm_landmark
+			scope:gm_tr_moving = { has_variable = gm_tr_landmark }
+			var:gm_landmark = scope:gm_tr_moving.var:gm_tr_landmark
+		}
+		AND = {
+			NOT = { has_variable = gm_landmark }
+			scope:gm_tr_moving = { NOT = { has_variable = gm_tr_landmark } }
+		}
+	}
+}
+
+# Container scope (the returning trophy, scope:gm_tr_moving). A piece of the
+# primary monument standing in its origin: it rejoins it (the Quadriga on the
+# Gate). A whole monument never does: it is a monument of its own.
+gm_tr_rejoins_primary = {
+	has_variable = gm_tr_share
+	NOT = { var:gm_tr_share = flag:whole }
+	var:gm_tr_origin ?= {
+		has_building = building_grand_monument
+		gm_state_stands_for_moving = yes
+	}
+}
+
+# Container scope (scope:gm_tr_moving). A piece of a secondary monument
+# standing in its origin, the same landmark: it rejoins that one.
+gm_tr_rejoins_secondary = {
+	has_variable = gm_tr_share
+	NOT = { var:gm_tr_share = flag:whole }
+	has_variable = gm_tr_landmark
+	var:gm_tr_origin ?= {
+		has_variable_list = gm_monuments_here
+		any_in_list = {
+			variable = gm_monuments_here
+			has_variable = gm_tr_landmark
+			var:gm_tr_landmark = scope:gm_tr_moving.var:gm_tr_landmark
+		}
+	}
+}
+
+# Container scope (scope:gm_tr_moving). A monument stands in its origin and
+# the trophy is not a piece of it: it comes home as a monument of its own (the
+# Luxor Obelisk beside the Obelisks of Karnak).
+gm_tr_stands_apart = {
+	var:gm_tr_origin ?= { has_building = building_grand_monument }
+	NOT = { gm_tr_rejoins_primary = yes }
+	NOT = { gm_tr_rejoins_secondary = yes }
+}

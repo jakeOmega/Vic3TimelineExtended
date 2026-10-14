@@ -769,6 +769,114 @@ class Trophies1836Tests(unittest.TestCase):
                          "#b Historical monument#!\\n[ScriptContainer.GetCustom('gm_tr_landmark_desc')]")
 
 
+MON_EFFECTS = "common/scripted_effects/gm_monument_effects.txt"
+MON_TRIGGERS = "common/scripted_triggers/gm_monument_triggers.txt"
+
+
+def homecoming_kind(tr):
+    """How a trophy of 1836 comes home, by the rule of spec 2026-10-13 §4.1:
+    "rebuild" where nothing stands, "rejoin" when it is a piece of the landmark
+    that stands there, "apart" for anything else (its own monument)."""
+    standing = {lm.state: lm for lm in LANDMARKS if lm.placed}.get(tr.origin)
+    if standing is None:
+        return "rebuild"
+    if standing.key == tr.landmark and tr.share != "whole":
+        return "rejoin"
+    return "apart"
+
+
+class ReturnToAStateWithAMonumentTests(unittest.TestCase):
+    """Task 3: a trophy that is a piece of what stands rejoins it (the Quadriga
+    on the Gate); any other, with a monument standing, stays a monument of its
+    own (the Luxor Obelisk beside the Obelisks of Karnak): it keeps its name,
+    form, landmark and picture, adds its levels to the state's building and
+    leaves the primary's dedication alone."""
+
+    def test_the_trophies_of_1836_that_stand_apart(self):
+        kinds = {tr.landmark: homecoming_kind(tr) for tr in TROPHIES_1836}
+        # Upper Egypt: the Obelisks of Karnak stand; neither returning piece is theirs.
+        self.assertEqual(kinds["luxor_obelisk"], "apart")
+        self.assertEqual(kinds["temple_of_dendera"], "apart")
+        # Attica: the Parthenon stands; its marbles rejoin it, the Piraeus Lion stays itself.
+        self.assertEqual(kinds["parthenon"], "rejoin")
+        self.assertEqual(kinds["piraeus_lion"], "apart")
+        # Eastern Thrace: Topkapi stands.
+        self.assertEqual(kinds["horses_of_saint_mark"], "apart")
+        # Nothing stands where these came from: rebuilt, as before.
+        for key in ("rosetta_stone", "tipus_tiger", "venus_de_milo", "baba_merzoug", "royal_palace_of_kandy"):
+            self.assertEqual(kinds[key], "rebuild", key)
+
+    def test_the_levels_a_state_of_1836_comes_to(self):
+        # Upper Egypt with both home: Karnak 5 + Luxor 5 + Dendera's piece 2.
+        by_key = {lm.key: lm for lm in LANDMARKS}
+        total = by_key["obelisks_of_karnak"].level + sum(
+            tr.levels for tr in TROPHIES_1836 if tr.origin == "STATE_UPPER_EGYPT")
+        self.assertEqual(total, 12)
+
+    def test_a_return_chooses_one_of_three_ways(self):
+        home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
+        self.assertIn("if = { limit = { gm_tr_rejoins_secondary = yes } gm_tr_rejoin_secondary = yes } "
+                      "else_if = { limit = { gm_tr_stands_apart = yes } gm_tr_become_monument = yes } "
+                      "else = { var:gm_tr_origin = { gm_state_tr_receive = yes } }", home)
+
+    def test_only_a_rejoining_return_destroys_the_container(self):
+        home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
+        # The trophy that becomes a monument is not destroyed: the destroy
+        # sits with the other two ways, after the boon and the relations.
+        self.assertIn("if = { limit = { NOT = { has_tag = gm_monument } } "
+                      "remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving } "
+                      "destroy_container = yes }", home)
+        self.assertLess(home.find("gm_boon_homecoming"), home.find("destroy_container = yes"))
+        self.assertLess(home.find("gm_tr_become_monument = yes"), home.find("destroy_container = yes"))
+
+    def test_standing_matches_by_landmark_or_by_neither_having_one(self):
+        body = squash(block(read(MON_TRIGGERS), "gm_state_stands_for_moving"))
+        self.assertIn("AND = { has_variable = gm_landmark scope:gm_tr_moving = { has_variable = gm_tr_landmark } "
+                      "var:gm_landmark = scope:gm_tr_moving.var:gm_tr_landmark }", body)
+        self.assertIn("AND = { NOT = { has_variable = gm_landmark } "
+                      "scope:gm_tr_moving = { NOT = { has_variable = gm_tr_landmark } } }", body)
+
+    def test_a_piece_rejoins_and_a_whole_one_stands_apart(self):
+        body = squash(block(read(MON_TRIGGERS), "gm_tr_rejoins_primary"))
+        self.assertIn("has_variable = gm_tr_share NOT = { var:gm_tr_share = flag:whole }", body)
+        self.assertIn("gm_state_stands_for_moving = yes", body)
+        apart = squash(block(read(MON_TRIGGERS), "gm_tr_stands_apart"))
+        self.assertIn("var:gm_tr_origin ?= { has_building = building_grand_monument }", apart)
+        self.assertIn("NOT = { gm_tr_rejoins_primary = yes }", apart)
+        self.assertIn("NOT = { gm_tr_rejoins_secondary = yes }", apart)
+
+    def test_a_piece_of_a_secondary_rejoins_that_secondary(self):
+        trig = squash(block(read(MON_TRIGGERS), "gm_tr_rejoins_secondary"))
+        self.assertIn("has_variable = gm_tr_share NOT = { var:gm_tr_share = flag:whole }", trig)
+        self.assertIn("any_in_list = { variable = gm_monuments_here has_variable = gm_tr_landmark "
+                      "var:gm_tr_landmark = scope:gm_tr_moving.var:gm_tr_landmark }", trig)
+        eff = squash(block(read(MON_EFFECTS), "gm_tr_rejoin_secondary"))
+        self.assertIn("random_in_list = { variable = gm_monuments_here limit = { has_variable = gm_tr_landmark "
+                      "var:gm_tr_landmark = scope:gm_tr_moving.var:gm_tr_landmark } save_scope_as = gm_mon_match }", eff)
+        self.assertIn("change_variable = { name = gm_tr_levels add = scope:gm_tr_moving.var:gm_tr_levels }", eff)
+        self.assertIn("gm_state_tr_add_levels = yes", eff)
+        self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", eff)
+
+    def test_a_distinct_monument_keeps_its_identity_and_the_primarys_dedication(self):
+        body = squash(block(read(MON_EFFECTS), "gm_tr_become_monument"))
+        # The levels go on the building first (which records the primary's
+        # dedication to put back), then the container joins the state's list.
+        self.assertLess(body.find("gm_state_tr_add_levels = yes"),
+                        body.find("add_to_variable_list = { name = gm_monuments_here"))
+        for line in ("remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving }",
+                     "add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }",
+                     "remove_tag = gm_trophy", "add_tag = gm_monument",
+                     "set_variable = { name = gm_tr_site value = var:gm_tr_origin }",
+                     "gm_tr_forget_notes = yes",
+                     "owner = { trigger_event = { id = monument_events.20 } }"):
+            self.assertIn(line, body)
+        # Its identity is kept: nothing is cleared or destroyed.
+        self.assertNotIn("destroy_container", body)
+        for record in ("gm_tr_skin", "gm_tr_form", "gm_tr_landmark", "gm_tr_name", "gm_tr_picture_code",
+                       "gm_tr_dedication"):
+            self.assertNotIn(f"remove_variable = {record}", body)
+
+
 class DebugTests(unittest.TestCase):
     def test_the_debug_event(self):
         ev = squash(raw_block_at(strip_comments(read(DEBUG_EVENTS)), r"(?m)^te_debug_monuments\.6\s*=\s*\{"))

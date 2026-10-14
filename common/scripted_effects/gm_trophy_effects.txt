@@ -409,7 +409,21 @@ gm_tr_return_home = {
 	}
 	if = {
 		limit = { exists = scope:gm_tr_receiver }
-		var:gm_tr_origin = { gm_state_tr_receive = yes }
+		# A piece of a secondary rejoins it; anything else with a monument
+		# standing in its origin becomes a monument of its own (spec
+		# 2026-10-13 §4.1); a piece of the primary, or with none standing, is
+		# the Quadriga's way back and the rebuild.
+		if = {
+			limit = { gm_tr_rejoins_secondary = yes }
+			gm_tr_rejoin_secondary = yes
+		}
+		else_if = {
+			limit = { gm_tr_stands_apart = yes }
+			gm_tr_become_monument = yes
+		}
+		else = {
+			var:gm_tr_origin = { gm_state_tr_receive = yes }
+		}
 		# The Homecoming is for getting back what another took: a country
 		# that carried it off itself (from its own colony, or before it
 		# conquered the origin) only moves it.
@@ -436,8 +450,12 @@ gm_tr_return_home = {
 				change_relations = { country = scope:gm_tr_receiver value = gm_tr_relations_returned }
 			}
 		}
-		remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving }
-		destroy_container = yes
+		# A trophy that became a monument is the same container: it stays.
+		if = {
+			limit = { NOT = { has_tag = gm_monument } }
+			remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving }
+			destroy_container = yes
+		}
 	}
 }
 

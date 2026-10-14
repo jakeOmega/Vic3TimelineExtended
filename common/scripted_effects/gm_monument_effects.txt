@@ -137,3 +137,57 @@ gm_state_promote_secondary = {
 		}
 	}
 }
+
+# ---- Home again, as a monument of its own (spec §4.1) --------------------------------
+# Container scope, the returning trophy (scope:gm_tr_moving; gm_tr_return_home).
+# A piece of a monument already standing beside the primary rejoins that one:
+# its levels go on the building and on that container.
+gm_tr_rejoin_secondary = {
+	var:gm_tr_origin = {
+		clear_saved_scope = gm_mon_match
+		random_in_list = {
+			variable = gm_monuments_here
+			limit = {
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = scope:gm_tr_moving.var:gm_tr_landmark
+			}
+			save_scope_as = gm_mon_match
+		}
+		if = {
+			limit = { exists = scope:gm_mon_match }
+			gm_state_tr_add_levels = yes
+			scope:gm_mon_match = {
+				change_variable = { name = gm_tr_levels add = scope:gm_tr_moving.var:gm_tr_levels }
+			}
+		}
+		owner = { trigger_event = { id = monument_events.20 } }
+	}
+}
+
+# Container scope, the returning trophy (scope:gm_tr_moving). It stands in its
+# origin as a monument beside the one there, and keeps everything it was: its
+# name, form, landmark, picture and dedication. Its levels go on the building,
+# which records the primary's dedication to put back first
+# (gm_state_tr_add_levels), then it joins the state's list at once, so no
+# reader sees the building taller than its primary and secondaries.
+# It is the same container, retagged (add_tag / remove_tag are the status
+# marks, scripting_best_practices.md) and moved from gm_trophies to
+# gm_monuments: the trophy names, parts and pictures read its gm_tr_* records.
+gm_tr_become_monument = {
+	var:gm_tr_origin = {
+		gm_state_tr_add_levels = yes
+		add_to_variable_list = { name = gm_monuments_here target = scope:gm_tr_moving }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+		owner = { trigger_event = { id = monument_events.20 } }
+	}
+	remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving }
+	add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }
+	set_global_variable = gm_mon_lists_written
+	remove_tag = gm_trophy
+	add_tag = gm_monument
+	# Where it stands is where it came from: the pass's repair finds the
+	# state again through the region.
+	set_variable = { name = gm_tr_site value = var:gm_tr_origin }
+	set_variable = { name = gm_tr_site_region value = var:gm_tr_origin_region }
+	gm_tr_forget_notes = yes
+}
