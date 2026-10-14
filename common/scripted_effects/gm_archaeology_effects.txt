@@ -44,6 +44,7 @@ gm_arch_monthly = {
 			limit = { NOT = { has_global_variable = gm_arch_seeded } }
 			set_global_variable = gm_arch_seeded
 			gm_arch_seed_sites = yes
+			gm_arch_self_check = yes
 		}
 		if = {
 			limit = { has_global_variable_list = gm_arch_sites }
@@ -64,13 +65,13 @@ gm_arch_monthly = {
 			}
 			gm_arch_ai_decide = yes
 		}
-		# A country with a dig to pay for, or a site waiting, keeps its entry:
-		# the refresh applies the cost and opens the journal entry.
+		# A player the pass has listed is refreshed now: the cost and the drain
+		# follow the digs this month's pass counted, a finished dig's included, and
+		# a site waiting opens the journal entry.
 		every_country = {
 			limit = {
 				has_variable = gm_arch_listed
 				is_ai = no
-				gm_arch_country_has_any = yes
 			}
 			trigger_event = { id = monument_events.20 }
 		}
@@ -117,9 +118,45 @@ gm_arch_seed_sites = {
 	gm_arch_seed_site = { KEY = tomb_of_alexander STATE = STATE_LOWER_EGYPT TECH = mainframe_computers VECTOR = survey FORM = mausoleum LEVEL = 15 }
 }
 
+# No scope, once a game after the seeding. The one engine fact nobody has seen
+# hold: that a stored state region is still one a state can be found in. With the
+# first site absent it logs nothing, so OK cannot be a false pass. The fallback is
+# in docs/testing/grand-monuments-archaeology-playtest.md.
+gm_arch_self_check = {
+	clear_saved_scope = gm_arch_chk
+	if = {
+		limit = { has_global_variable_list = gm_arch_sites }
+		random_in_global_list = {
+			variable = gm_arch_sites
+			limit = {
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = flag:nineveh_library
+			}
+			save_scope_as = gm_arch_chk
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_arch_chk }
+		scope:gm_arch_chk = {
+			if = {
+				limit = {
+					var:gm_tr_origin_region ?= {
+						any_scope_state = { always = yes }
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK archaeology_site_region (a site's stored state region finds its states)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN archaeology_site_region (a site's stored state region finds no state, so no site will be listed, found or dug: take the fallback in docs/testing/grand-monuments-archaeology-playtest.md)"
+			}
+		}
+	}
+}
+
 # Any scope. A site container with the records of the monument it will be.
-# Never twice: the debug event runs the seeding again. The container needs
-# a scope to be made in: any country will do, it has no parent.
+# Never twice: the debug event runs the seeding again, so a site already on the
+# list, standing as a monument or carried off as a trophy is not made again.
+# The container has no parent, and is made in whatever scope this runs in.
 gm_arch_seed_site = {
 	if = {
 		limit = {
@@ -133,19 +170,52 @@ gm_arch_seed_site = {
 					}
 				}
 			}
-		}
-		clear_saved_scope = gm_arch_new
-		random_country = {
-			create_container = {
-				tags = { gm_site }
-				save_scope_as = gm_arch_new
-				on_created = {
-					save_scope_as = gm_arch_new
+			# Not one already dug: it has left the list, and stands as a
+			# monument (a state's own, or a container beside it) or is a trophy.
+			NOT = {
+				any_state = {
+					has_variable = gm_landmark
+					var:gm_landmark = flag:$KEY$
+				}
+			}
+			NOT = {
+				AND = {
+					has_global_variable_list = gm_monuments
+					any_in_global_list = {
+						variable = gm_monuments
+						has_variable = gm_tr_landmark
+						var:gm_tr_landmark = flag:$KEY$
+					}
+				}
+			}
+			NOT = {
+				AND = {
+					has_global_variable_list = gm_trophies
+					any_in_global_list = {
+						variable = gm_trophies
+						has_variable = gm_tr_landmark
+						var:gm_tr_landmark = flag:$KEY$
+					}
 				}
 			}
 		}
+		clear_saved_scope = gm_arch_new
+		clear_saved_scope = gm_arch_seed_region
+		# The region is saved first and stored from the saved scope, as every
+		# stored region is elsewhere (gm_tr_origin_region).
+		s:$STATE$ = { save_scope_as = gm_arch_seed_region }
+		create_container = {
+			tags = { gm_site }
+			save_scope_as = gm_arch_new
+			on_created = {
+				save_scope_as = gm_arch_new
+			}
+		}
 		if = {
-			limit = { exists = scope:gm_arch_new }
+			limit = {
+				exists = scope:gm_arch_new
+				exists = scope:gm_arch_seed_region
+			}
 			add_to_global_variable_list = { name = gm_arch_sites target = scope:gm_arch_new }
 			scope:gm_arch_new = {
 				set_variable = { name = gm_tr_landmark value = flag:$KEY$ }
@@ -156,7 +226,7 @@ gm_arch_seed_site = {
 				set_variable = { name = gm_tr_namesake value = flag:landmark }
 				# A whole landmark: its title is its name, with no part's.
 				set_variable = { name = gm_tr_share value = flag:whole }
-				set_variable = { name = gm_tr_origin_region value = s:$STATE$ }
+				set_variable = { name = gm_tr_origin_region value = scope:gm_arch_seed_region }
 				set_variable = { name = gm_site_tech value = flag:$TECH$ }
 				set_variable = { name = gm_site_vector value = flag:$VECTOR$ }
 				set_variable = { name = gm_site_status value = 1 }
@@ -188,13 +258,14 @@ gm_arch_site_monthly = {
 # plough, the railway cutting or a hiker turns it up. The finder is one of the
 # ground's owners with the technology.
 gm_arch_try_find = {
-	save_scope_as = gm_arch_gate_site
+	save_scope_as = gm_arch_find_site
 	clear_saved_scope = gm_arch_finder
 	var:gm_tr_origin_region ?= {
 		random_scope_state = {
 			limit = {
 				exists = owner
-				owner = { gm_arch_country_has_gate = yes }
+				owner = { save_temporary_scope_as = gm_arch_cand }
+				scope:gm_arch_find_site = { gm_arch_has_gate_for = { WHO = scope:gm_arch_cand } }
 			}
 			owner = { save_scope_as = gm_arch_finder }
 		}
@@ -506,7 +577,6 @@ gm_arch_pass = {
 # countries that may.
 gm_arch_list_one = {
 	save_scope_as = gm_arch_listing
-	save_scope_as = gm_arch_gate_site
 	if = {
 		limit = { gm_arch_site_digging = yes }
 		clear_saved_scope = gm_arch_sponsor
@@ -549,17 +619,13 @@ gm_arch_list_one = {
 	else_if = {
 		limit = { gm_arch_site_open = yes }
 		var:gm_tr_origin_region ?= {
+			# A country holds one state in a region (a part another holds is a state
+			# of the other), so each owner is listed once.
 			every_scope_state = {
 				limit = {
 					exists = owner
-					owner = {
-						gm_arch_country_has_gate = yes
-						NOT = { is_target_in_variable_list = { name = gm_arch_available target = scope:gm_arch_listing } }
-					}
-				}
-				save_scope_as = gm_arch_view_state
-				scope:gm_arch_listing = {
-					set_variable = { name = gm_site_view_state value = scope:gm_arch_view_state }
+					owner = { save_temporary_scope_as = gm_arch_cand }
+					scope:gm_arch_listing = { gm_arch_has_gate_for = { WHO = scope:gm_arch_cand } }
 				}
 				owner = {
 					gm_arch_country_listed = yes
@@ -589,8 +655,16 @@ gm_arch_country_listed = {
 # The digs' weekly innovation drain and weekly cost, each the units
 # gm_arch_pass summed: the modifiers carry one unit.
 gm_arch_add_national = {
-	gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units }
-	gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units }
+	# Only a country gm_arch_pass has listed has the variables, and
+	# gm_add_national reads them unguarded (the boons' guard, gm_add_boon).
+	if = {
+		limit = { root = { has_variable = gm_arch_innovation_units } }
+		gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units }
+	}
+	if = {
+		limit = { root = { has_variable = gm_arch_cost_units } }
+		gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units }
+	}
 }
 
 # Journal-entry scope, from gm_remove_national_modifiers.
@@ -610,8 +684,12 @@ gm_arch_ai_decide = {
 		limit = {
 			has_variable = gm_arch_open_count
 			var:gm_arch_open_count > 0
-			# any_in_list's count, not variable_list_size, whose key fails to load in 1.14
-			NOT = { any_in_list = { variable = gm_arch_digging count >= 2 } }
+			# any_in_list's count, not variable_list_size, whose key fails to load in 1.14;
+			# a country that has never dug has no list
+			OR = {
+				NOT = { has_variable_list = gm_arch_digging }
+				NOT = { any_in_list = { variable = gm_arch_digging count >= 2 } }
+			}
 		}
 		random = {
 			chance = 8

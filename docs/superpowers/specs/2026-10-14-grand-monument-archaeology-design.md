@@ -43,7 +43,7 @@ part of the region each month.
 
 ## Discovery
 
-Both vectors need the country that holds the ground to have the site's technology (`gm_arch_country_has_gate`: one branch for
+Both vectors need the country that holds the ground to have the site's technology (`gm_arch_has_gate_for`: one branch for
 each of the 22 technologies the table uses).
 
 - **Survey.** Open as soon as its owner has the technology: the scholars know where to look (Troy, Mycenae, Knossos, Babylon,

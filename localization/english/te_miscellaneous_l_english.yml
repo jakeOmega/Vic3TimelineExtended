@@ -2400,7 +2400,7 @@
  gm_arch_method_none:0 "a dig"
  gm_arch_method_systematic:0 "a Systematic dig"
  gm_arch_row_dig_detail:0 "In [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetName]: [ScriptContainer.GetCustom('gm_arch_method_name')], #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress')|0]%#! done, about #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_months_left')|0]#! months to go"
- gm_arch_row_open_detail:0 "In [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetName]: raises #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_levels')|0]#! levels of [concept_grandeur]"
+ gm_arch_row_open_detail:0 "Open to dig: raises #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_levels')|0]#! levels of [concept_grandeur]"
  gm_arch_row_resume:0 "Work paused at #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress')|0]%#!"
  gm_arch_row_title:0 "#b [ScriptContainer.GetCustom('gm_tr_landmark_name')]#!"
  gm_arch_site_name_none:0 "an ancient site"

@@ -152,24 +152,42 @@ class SeedTests(unittest.TestCase):
 
     def test_the_seed_writes_the_records(self):
         body = squash(block(self.e, "gm_arch_seed_site"))
-        self.assertIn("random_country = { create_container = { tags = { gm_site } save_scope_as = gm_arch_new", body,
+        self.assertIn("create_container = { tags = { gm_site } save_scope_as = gm_arch_new", body,
                       "no parent: it outlives every country")
         self.assertNotIn("parent =", body)
+        self.assertNotIn("random_country", body, "no wrapper: no other global store has one")
+        self.assertIn("s:$STATE$ = { save_scope_as = gm_arch_seed_region }", body,
+                      "the region is saved first, as every stored region is")
         self.assertIn("add_to_global_variable_list = { name = gm_arch_sites target = scope:gm_arch_new }", body)
         for record in ("name = gm_tr_landmark value = flag:$KEY$", "name = gm_tr_skin value = flag:landmark_$KEY$",
                        "name = gm_tr_form value = flag:$FORM$", "name = gm_tr_levels value = $LEVEL$",
                        "name = gm_tr_dedication value = flag:civic", "name = gm_tr_namesake value = flag:landmark",
-                       "name = gm_tr_share value = flag:whole", "name = gm_tr_origin_region value = s:$STATE$",
+                       "name = gm_tr_share value = flag:whole", "name = gm_tr_origin_region value = scope:gm_arch_seed_region",
                        "name = gm_site_tech value = flag:$TECH$", "name = gm_site_vector value = flag:$VECTOR$",
                        "name = gm_site_status value = 1"):
             self.assertIn(f"set_variable = {{ {record} }}", body, record)
         self.assertIn("var:gm_tr_landmark = flag:$KEY$", body, "never twice")
+        # Nor a site already dug: it has left the list for a state, the secondaries or the trophies.
+        for lst in ("gm_monuments", "gm_trophies"):
+            self.assertIn(f"has_global_variable_list = {lst} any_in_global_list = {{ variable = {lst} "
+                          "has_variable = gm_tr_landmark var:gm_tr_landmark = flag:$KEY$", body, lst)
+        self.assertIn("any_state = { has_variable = gm_landmark var:gm_landmark = flag:$KEY$ }", body)
+
+    def test_the_self_check_logs_only_with_its_premise(self):
+        body = squash(block(self.e, "gm_arch_self_check"))
+        self.assertIn("var:gm_tr_landmark = flag:nineveh_library", body)
+        self.assertIn("limit = { exists = scope:gm_arch_chk }", body, "nothing logged with the site absent")
+        self.assertIn("any_scope_state = { always = yes }", body)
+        self.assertIn("TE_SELF_CHECK OK archaeology_site_region", body)
+        self.assertIn("TE_SELF_CHECK BROKEN archaeology_site_region", body)
+        self.assertIn("gm_arch_seed_sites = yes gm_arch_self_check = yes", squash(block(self.e, "gm_arch_monthly")))
+        self.assertIn("archaeology_site_region", read("docs/testing/grand-monuments-archaeology-playtest.md"))
 
     def test_seeded_once_from_the_monthly_pass(self):
         body = squash(block(self.e, "gm_arch_monthly"))
         self.assertTrue(body.startswith("if = { limit = { gm_system_enabled = yes } if = { limit = { NOT = { "
                                         "has_global_variable = gm_arch_seeded } } set_global_variable = "
-                                        "gm_arch_seeded gm_arch_seed_sites = yes }"), body[:260])
+                                        "gm_arch_seeded gm_arch_seed_sites = yes gm_arch_self_check = yes }"), body[:300])
         on = squash(strip_comments(read(ON_ACTIONS)))
         self.assertIn("on_monthly_pulse = { on_actions = { gm_arch_monthly_on_action } }", on)
         self.assertIn("gm_arch_monthly_on_action = { effect = { gm_arch_monthly = yes } }", on)
@@ -181,18 +199,32 @@ class SeedTests(unittest.TestCase):
 
 class GateTests(unittest.TestCase):
     def test_a_branch_per_technology(self):
-        body = squash(block(read(GATE), "gm_arch_country_has_gate"))
-        found = re.findall(r"scope:gm_arch_gate_site = \{ var:gm_site_tech = flag:(\w+) \} "
-                           r"has_technology_researched = ([\w-]+) \}", body)
+        body = squash(block(read(GATE), "gm_arch_has_gate_for"))
+        found = re.findall(r"AND = \{ var:gm_site_tech = flag:(\w+) \$WHO\$ = \{ has_technology_researched = "
+                           r"([\w-]+) \} \}", body)
         techs = []
         for s in ARCH_SITES:
             if s.tech not in techs:
                 techs.append(s.tech)
         self.assertEqual(found, [(flag(t), t) for t in techs])
 
-    def test_the_gate_reads_the_site_the_trigger_saved(self):
-        body = squash(block(read(TRIGGERS), "gm_arch_has_gate_for"))
-        self.assertEqual(body, "save_temporary_scope_as = gm_arch_gate_site $WHO$ = { gm_arch_country_has_gate = yes }")
+    def test_the_gate_is_read_from_the_sites_side_with_no_saved_scope(self):
+        # A saved scope a trigger writes can be shadowed by one an effect left
+        # set under the same name (the AI's start ran after the pass): the gate
+        # takes the country as its argument instead, and the callers save theirs
+        # under a name nothing else saves, as a temporary scope.
+        gate = read(GATE)
+        self.assertNotIn("save_temporary_scope_as", strip_comments(gate))
+        self.assertNotIn("gm_arch_has_gate_for", strip_comments(read(TRIGGERS)).split("gm_arch_can_dig = {")[0])
+        everything = strip_comments(read(EFFECTS) + read(TRIGGERS) + gate)
+        self.assertNotIn("gm_arch_gate_site", everything)
+        self.assertNotIn("gm_arch_country_has_gate", everything)
+        for name in ("gm_arch_try_find", "gm_arch_list_one"):
+            body = squash(block(read(EFFECTS), name))
+            self.assertIn("owner = { save_temporary_scope_as = gm_arch_cand }", body, name)
+            self.assertIn("gm_arch_has_gate_for = { WHO = scope:gm_arch_cand }", body, name)
+        self.assertNotIn("scope:gm_arch_cand", squash(block(read(EFFECTS), "gm_arch_ai_decide")))
+        self.assertNotRegex(read(EFFECTS), r"(?m)^\s*save_scope_as = gm_arch_cand")
 
     def test_who_may_dig(self):
         t = read(TRIGGERS)
@@ -259,7 +291,7 @@ class DigTests(unittest.TestCase):
 
     def test_an_incidental_site_is_turned_up_by_a_chance(self):
         body = squash(block(self.e, "gm_arch_try_find"))
-        self.assertIn("owner = { gm_arch_country_has_gate = yes }", body)
+        self.assertIn("gm_arch_has_gate_for = { WHO = scope:gm_arch_cand }", body)
         self.assertIn("random = { chance = gm_arch_find_chance gm_arch_found = yes }", body)
         monthly = squash(block(self.e, "gm_arch_site_monthly"))
         self.assertIn("var:gm_site_status = 1 var:gm_site_vector = flag:incidental } gm_arch_try_find = yes", monthly)
@@ -376,9 +408,13 @@ class BrakeTests(unittest.TestCase):
 
     def test_the_modifiers_ride_the_journal_entry(self):
         e = read(EFFECTS)
+        # gm_add_national reads ROOT's variable unguarded, and only a country the pass has
+        # listed has these two: the guard, as the boons' gm_add_boon has.
         self.assertEqual(squash(block(e, "gm_arch_add_national")),
-                         "gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units } "
-                         "gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units }")
+                         "if = { limit = { root = { has_variable = gm_arch_innovation_units } } "
+                         "gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units } } "
+                         "if = { limit = { root = { has_variable = gm_arch_cost_units } } "
+                         "gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units } }")
         self.assertEqual(squash(block(e, "gm_arch_remove_national")),
                          "remove_modifier = gm_arch_diversion remove_modifier = gm_arch_expense")
         g = read(GM_EFFECTS)
@@ -410,6 +446,19 @@ class EntryTests(unittest.TestCase):
     def test_a_country_that_digs_keeps_its_pulse(self):
         body = squash(block(read(EFFECTS), "gm_arch_country_listed"))
         self.assertIn("set_variable = gm_active", body)
+
+    def test_a_player_is_refreshed_after_the_pass_so_a_finished_digs_cost_ends(self):
+        monthly = squash(block(read(EFFECTS), "gm_arch_monthly"))
+        self.assertLess(monthly.index("gm_arch_pass = yes"), monthly.index("is_ai = no } trigger_event = { id = monument_events.20 }"))
+        self.assertNotIn("is_ai = no gm_arch_country_has_any = yes", monthly)
+
+    def test_an_open_row_names_no_state(self):
+        # One variable on a container shared by every country that may dig it: the
+        # last listed would name its state in everyone's row.
+        self.assertNotIn("gm_site_view_state", loc()["gm_arch_row_open_detail"])
+        pass_ = squash(block(read(EFFECTS), "gm_arch_list_one"))
+        self.assertEqual(pass_.count("gm_site_view_state"), 1, "written for a dig, which has one sponsor")
+        self.assertNotIn("is_target_in_variable_list", pass_)
 
     def test_the_lists_are_rebuilt_after_every_order(self):
         events = read(EVENTS)
@@ -472,7 +521,8 @@ class AiTests(unittest.TestCase):
         best = squash(block(e, "gm_arch_start_best"))
         self.assertLess(best.index("forensic_ok"), best.index("systematic_ok"))
         decide = squash(block(e, "gm_arch_ai_decide"))
-        self.assertIn("NOT = { any_in_list = { variable = gm_arch_digging count >= 2 } }", decide, "two digs at most")
+        self.assertIn("OR = { NOT = { has_variable_list = gm_arch_digging } NOT = { any_in_list = { variable = "
+                      "gm_arch_digging count >= 2 } } }", decide, "two digs at most; a country that never dug has no list")
         self.assertIn("gm_arch_start_best = { WHO = scope:gm_arch_ai_country }", decide)
         monthly = squash(block(e, "gm_arch_monthly"))
         self.assertIn("gm_arch_ai_may_dig = yes } gm_arch_ai_decide = yes", monthly)

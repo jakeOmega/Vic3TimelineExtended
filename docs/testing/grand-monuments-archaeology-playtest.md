@@ -15,22 +15,31 @@ game can show. A fixed item is struck through with the commit that fixed it.
   digs the grandest site we may dig by the best method we have; c takes our digs to 99% and runs the pass (they finish); d runs the
   pass and logs the sites that have moved on. Vic3 has no `effect` command.
 
+## Self-checks
+
+Logged once at the start of a game, after the seeding. Nothing logged means the premise was absent (the system is off, or the
+site did not seed).
+
+| Line | Means | If BROKEN, take the fallback |
+|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN archaeology_site_region` | A site's stored state region (`gm_tr_origin_region`, saved from `s:STATE_X` and stored from the saved scope) still finds its states, so a site can be listed, found and dug. | Store the region from a state in it, as the trophies do: `s:X = { random_scope_state = { save_scope_as = … } }` and `value = scope:….state_region` (`gm_state_tr_make_trophy`). |
+
 ## Engine facts nobody has seen hold
 
 | Premise | Where it matters | If it fails, take the fallback |
 |---|---|---|
-| `create_container` works from `random_country = { }` in a no-scope effect, with no `parent` | The seeding (`gm_arch_seed_site`). No `TE_MONUMENTS` line says it worked: check the Archaeological Expeditions section of a country that owns Mosul (Romanticism) or the Peloponnese (Empiricism). | Make the container in a state's scope instead, as `gm_state_tr_make_trophy` does: `ordered_state = { create_container … }`. |
-| `set_variable = { value = s:STATE_X }` stores a state region | Every site's ground (`gm_tr_origin_region`). A site with no ground lists nowhere. | Store the region from a state in it: `s:X = { random_scope_state = { save_scope_as = … } }` and `scope:….state_region`, as the trophies do. |
-| `region.any_scope_state` / `random_scope_state` in a stored region | Who may dig, the dig's month, the finishing. | `ordered_scope_state` (proven by `gm_tr_repair_places`). |
+| `create_container` with no `parent`, in whatever scope the seeding runs in (no scope from the monthly pass) | The seeding (`gm_arch_seed_site`). Besides the self-check: the Archaeological Expeditions section of a country that owns Mosul (Romanticism) or the Peloponnese (Empiricism). | Make the container in a state's or country's scope, as `gm_state_tr_make_trophy` and `un_resolution_open` do. |
 | A retagged container (`remove_tag gm_site`, `add_tag gm_monument`) joins the secondary monuments | A dig finished beside a standing monument (`gm_arch_stand_beside`). | Make a new `gm_monument` container, as `gm_seed_landmark_beside` does, and destroy the site. |
 | `chance = <named script value>` in a container scope | The incidental find, and the Antiquarian's destruction. | Roll `random_list` with a literal percentage. |
+| `save_temporary_scope_as = gm_arch_cand` in a `limit`, read at once | Who may dig, and who finds (`gm_arch_try_find`, `gm_arch_list_one`): the country as an argument to `gm_arch_has_gate_for`. `gm_tr_holder_owns_origin` does the same. | A saved scope in the effect before the loop. |
+| `any_in_list = { variable = … count >= 2 }` after a `has_variable_list` guard | The AI's two-dig cap. | |
 
 ## Seeding and listing
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **First month.** Play as the Ottomans (Mosul, Aydin, Hüdavendigâr, Baghdad) with Romanticism. | The Grand Monuments entry opens with Archaeological Expeditions: *Library of Ashurbanipal* is listed, with its state, the levels it raises and an Antiquarian button. | An empty or missing section: the seeding, or `gm_arch_pass` did not list the country (`gm_arch_listed`). |
-| **Empiricism.** Research it. | Troy and Pergamon join (Mycenae and Olympia, in Greece's Peloponnese, for a Greek player); the Systematic button appears. | A site that stays unlisted: the gate (`gm_arch_country_has_gate`) or the ground. |
+| **First month.** Play as the Ottomans (Mosul, Aydin, Hüdavendigâr, Baghdad) with Romanticism. | The Grand Monuments entry opens with Archaeological Expeditions: *Library of Ashurbanipal* is listed, with the levels it raises and an Antiquarian button. | An empty or missing section: the seeding, or `gm_arch_pass` did not list the country (`gm_arch_listed`). |
+| **Empiricism.** Research it. | Troy and Pergamon join (Mycenae and Olympia, in Greece's Peloponnese, for a Greek player); the Systematic button appears. | A site that stays unlisted: the gate (`gm_arch_has_gate_for`) or the ground. |
 | **Not our ground.** Play Britain. | No Nineveh: only a country with a part of the ground is offered a site. Foreign digs are deferred. | |
 | **Incidental.** Debug a. | The incidental sites in our states whose technology we have are listed with a Launch button; nothing is lost. | |
 
@@ -63,4 +72,5 @@ game can show. A fixed item is struck through with the commit that fixed it.
 ## Known limits
 
 - A site shows its form's stand-in picture; none of the 35 has its own.
-- Only the holder of the ground digs. A split state is dug by any of its owners; the first to launch holds it.
+- Only the holder of the ground digs. A split state is dug by any of its owners; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
+- A find's popup names the last site found or dug (`gm_arch_last`), so a popup left unanswered while another site turns up or finishes names that one.

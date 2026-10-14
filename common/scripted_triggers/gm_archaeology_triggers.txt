@@ -12,8 +12,8 @@
 #   gm_site_status                                     1 buried, 2 known,
 #                                                      3 being dug, 4 unearthed
 #   gm_site_sponsor, gm_site_method, gm_site_progress  the dig
-# The technology gate itself is in gm_archaeology_gate_triggers.txt: one branch for each
-# technology the table uses, kept in step with it by test_grand_monument_archaeology.py.
+# The technology gate (gm_arch_has_gate_for) is in gm_archaeology_gate_triggers.txt: one branch
+# for each technology the table uses, kept in step with it by test_grand_monument_archaeology.py.
 
 # ---- What a site is -----------------------------------------------------------------
 # Container scope. A survey site is open to anyone with its technology as soon
@@ -49,13 +49,6 @@ gm_arch_owns_ground = {
 	var:gm_tr_origin_region ?= {
 		any_scope_state = { owner = $WHO$ }
 	}
-}
-
-# Container scope. $WHO$ has the technology that opens the site. Saves the
-# site as scope:gm_arch_gate_site for the country's side of the question.
-gm_arch_has_gate_for = {
-	save_temporary_scope_as = gm_arch_gate_site
-	$WHO$ = { gm_arch_country_has_gate = yes }
 }
 
 # Container scope. The site's own conditions for $WHO$: open, on its ground,
