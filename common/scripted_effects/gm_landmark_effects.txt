@@ -65,8 +65,9 @@ gm_seed_landmarks = {
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
-# proves wrong, or a Grand Monument already standing there (create_building
-# would keep the larger level), places nothing and says so in debug.log.
+# proves wrong, or this landmark already standing there, places nothing and
+# says so in debug.log; a part with another monument in it takes this one
+# beside it (gm_seed_landmark_beside).
 gm_seed_landmark = {
 	if = {
 		limit = {
@@ -96,8 +97,24 @@ gm_seed_landmark = {
 			owner = { trigger_event = { id = monument_events.20 } }
 		}
 	}
+	# A monument already stands in that part (a landmark seeded before this
+	# one): the engine has one building a state, so this one stands beside it
+	# as a secondary monument, its levels on the same building
+	# (gm_monument_effects.txt). Not when this landmark already stands there:
+	# the debug event runs the seeding again.
+	else_if = {
+		limit = {
+			s:$STATE$.region_state:$TAG$ ?= {
+				has_building = building_grand_monument
+				NOT = { gm_state_has_landmark = { KEY = $KEY$ } }
+			}
+		}
+		s:$STATE$.region_state:$TAG$ = {
+			gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ }
+		}
+	}
 	else = {
-		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or a Grand Monument already stands there"
+		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or it already stands there"
 	}
 }
 

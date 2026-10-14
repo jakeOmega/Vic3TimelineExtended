@@ -1,0 +1,19 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — several monuments in one state: the monthly pass
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
+# One global pass a month (gm_monument_monthly, gm_monument_effects.txt): every
+# state's list of the secondary monuments standing in it.
+
+# No root scope.
+on_monthly_pulse = {
+	on_actions = {
+		gm_monument_monthly_on_action
+	}
+}
+
+gm_monument_monthly_on_action = {
+	effect = {
+		gm_monument_monthly = yes
+	}
+}

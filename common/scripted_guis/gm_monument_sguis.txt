@@ -1,0 +1,41 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — several monuments in one state: scripted GUIs
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md §5.
+# ROOT is the player's country; the monument travels as gm_mon (a secondary's
+# container, as gm_trophy_sguis.txt's gm_tr). The effect only orders the work,
+# and a hidden event does it (monument_trophy_events.10): a tooltip walks the
+# effect every frame.
+
+# Carry It Off: one secondary monument in a state we occupy.
+gm_mon_take_sgui = {
+	scope = country
+	saved_scopes = { gm_mon }
+
+	is_shown = {
+		exists = scope:gm_mon
+		scope:gm_mon = {
+			gm_mon_tr_can_take = { WHO = root }
+		}
+	}
+
+	is_valid = {
+		exists = scope:gm_mon
+		scope:gm_mon = {
+			gm_mon_tr_can_take_tt = { WHO = root }
+		}
+	}
+
+	effect = {
+		scope:gm_mon = {
+			custom_tooltip = {
+				text = gm_mon_take_tt
+				gm_mon_tr_order_take = { WHO = root }
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

@@ -7,6 +7,11 @@
 ###     row there and on its state card (te_state_panel_widgets.gui)
 ###   te_state_gm_trophy_card                the state view's Trophies on
 ###     Display card (states_panel.gui), under the monument card
+###   gm_mon_take_button, gm_mon_row_site,   a secondary monument's Carry It Off,
+###   te_state_gm_beside                     its row, and the section of the state
+###     view's monument card (te_state_panel_widgets.gui) that lists the
+###     monuments standing beside the state's primary
+###     (docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md §5)
 ### A trophy is a script container (gm_trophy_effects.txt): its rows come from
 ### the country's gm_trophies_held / gm_trophies_abroad and the state's
 ### gm_trophies_here lists, rebuilt by the monthly pass, each item under
@@ -1192,6 +1197,125 @@ types gm_trophy_widget_types
 						gm_tr_row_short = { datacontext = "[Scope.GetScriptContainer]" }
 					}
 				}
+			}
+		}
+	}
+
+	### Carry It Off, for one secondary monument's row: shown while the player
+	### occupies its state in a war (gm_mon_take_sgui, gm_monument_sguis.txt).
+	### Its monument is the row's container.
+	type gm_mon_take_button = button {
+		using = default_button_action
+		size = { 200 26 }
+		parentanchor = hcenter
+		margin_top = 2
+		datacontext = "[GetScriptedGui('gm_mon_take_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		tooltip = "gm_mon_take_button_tooltip"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 190
+			elide = right
+			using = fontsize_small
+			text = "gm_button_tr_take"
+		}
+	}
+
+	### A monument standing beside the state's primary, on the Also Standing
+	### Here card: the picture, name, form and dedication of what came home,
+	### what it adds to the building, and Carry It Off while our armies hold
+	### the state. It is a trophy's container still (gm_tr_*), so the trophy
+	### row's picture, title and landmark line serve it.
+	type gm_mon_row_site = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
+
+			gm_tr_picture = {}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				gm_tr_line = {
+					using = fontsize_large
+					text = "gm_tr_row_title"
+				}
+				gm_tr_line = {
+					text = "gm_mon_row_detail"
+				}
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_row_landmark_tt"
+					text = "gm_row_landmark"
+				}
+				### What it adds: its levels, with how the building sums
+				### them on hover.
+				gm_tr_line = {
+					default_format = "#tooltippable"
+					tooltip = "gm_mon_row_value_tt"
+					text = "gm_mon_row_value"
+				}
+				### Where it stands, for the journal entry's list (the state
+				### card is in that state already): the instance's override.
+				block "mon_where" {}
+			}
+		}
+
+		gm_mon_take_button = {}
+	}
+
+	### The monuments that stand beside a state's own, a section of the state
+	### view's monument card (te_state_gm_card, te_state_panel_widgets.gui), under
+	### its picture and details and across its width, while a secondary monument
+	### stands in this state (gm_state_mon_disp_here). The card above it is the
+	### state's whole (the building, at every monument's levels together) and its
+	### primary; each monument beside the primary has a row here.
+	type te_state_gm_beside = flowcontainer {
+		visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_mon_disp_here'), '(CFixedPoint)0')]"
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 6
+
+		textbox = {
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#tooltippable"
+			tooltip = "gm_state_mon_header_tt"
+			text = "gm_state_mon_header"
+		}
+
+		### How many, and what they add to the building together.
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 510 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			text = "gm_state_mon_summary"
+		}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 8
+			datamodel = "[State.MakeScope.GetList('gm_monuments_here')]"
+
+			item = {
+				gm_mon_row_site = { datacontext = "[Scope.GetScriptContainer]" }
 			}
 		}
 	}

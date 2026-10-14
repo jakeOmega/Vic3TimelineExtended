@@ -15,7 +15,7 @@ gm_com_fit_grandeur = {
 		limit = { has_variable = gm_com_dedication }
 		every_scope_state = {
 			limit = { gm_state_com_counts = yes }
-			add = gm_state_grandeur
+			add = gm_state_primary_grandeur
 		}
 	}
 }

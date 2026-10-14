@@ -1,0 +1,156 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — several monuments in one state: scripted triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
+
+# State scope. A secondary monument stands here beside the primary. Not
+# variable_list_size: its documented `target` key fails to load in 1.14, and a
+# list keeps existing after its last entry is removed.
+gm_state_has_secondary = {
+	has_variable_list = gm_monuments_here
+	any_in_list = { variable = gm_monuments_here exists = this }
+}
+
+# ---- A trophy comes home (spec §4.1) -----------------------------------------------
+# State scope, with scope:gm_tr_moving the returning trophy. What stands here
+# is what the trophy is a piece of: the landmark it came from, or, with
+# neither naming one, a monument of the same unnamed make.
+gm_state_stands_for_moving = {
+	OR = {
+		AND = {
+			has_variable = gm_landmark
+			scope:gm_tr_moving = { has_variable = gm_tr_landmark }
+			var:gm_landmark = scope:gm_tr_moving.var:gm_tr_landmark
+		}
+		AND = {
+			NOT = { has_variable = gm_landmark }
+			scope:gm_tr_moving = { NOT = { has_variable = gm_tr_landmark } }
+		}
+	}
+}
+
+# Container scope (the returning trophy, scope:gm_tr_moving). A piece of the
+# primary monument standing in its origin: it rejoins it (the Quadriga on the
+# Gate). A whole monument never does: it is a monument of its own.
+gm_tr_rejoins_primary = {
+	has_variable = gm_tr_share
+	NOT = { var:gm_tr_share = flag:whole }
+	var:gm_tr_origin ?= {
+		has_building = building_grand_monument
+		gm_state_stands_for_moving = yes
+	}
+}
+
+# Container scope (scope:gm_tr_moving). A piece of a secondary monument
+# standing in its origin, the same landmark: it rejoins that one.
+gm_tr_rejoins_secondary = {
+	has_variable = gm_tr_share
+	NOT = { var:gm_tr_share = flag:whole }
+	has_variable = gm_tr_landmark
+	var:gm_tr_origin ?= {
+		has_variable_list = gm_monuments_here
+		any_in_list = {
+			variable = gm_monuments_here
+			has_variable = gm_tr_landmark
+			var:gm_tr_landmark = scope:gm_tr_moving.var:gm_tr_landmark
+		}
+	}
+}
+
+# Container scope (scope:gm_tr_moving). A monument stands in its origin and
+# the trophy is not a piece of it: it comes home as a monument of its own (the
+# Luxor Obelisk beside the Obelisks of Karnak).
+gm_tr_stands_apart = {
+	var:gm_tr_origin ?= { has_building = building_grand_monument }
+	NOT = { gm_tr_rejoins_primary = yes }
+	NOT = { gm_tr_rejoins_secondary = yes }
+}
+
+# ---- Looting one monument of a state (spec §4.2) -----------------------------------
+# Container scope, a secondary monument. By its form, the share an occupier
+# carries off (gm_mon_tr_share): the primary's lists again, on gm_tr_form
+# (gm_state_tr_form_is_object / _piece, gm_trophy_triggers.txt).
+# test_grand_monument_trophies.py pins both to TROPHY_SHARES.
+gm_mon_form_is_object = {
+	has_variable = gm_tr_form
+	OR = {
+		var:gm_tr_form = flag:column
+		var:gm_tr_form = flag:obelisk
+		var:gm_tr_form = flag:statue
+		var:gm_tr_form = flag:stele
+		var:gm_tr_form = flag:pillar
+		var:gm_tr_form = flag:high_cross
+		var:gm_tr_form = flag:rune_stone
+		var:gm_tr_form = flag:menorah
+		var:gm_tr_form = flag:sun_stone
+		var:gm_tr_form = flag:stela
+	}
+}
+
+gm_mon_form_is_piece = {
+	has_variable = gm_tr_form
+	OR = {
+		var:gm_tr_form = flag:arch
+		var:gm_tr_form = flag:gate
+		var:gm_tr_form = flag:tower
+		var:gm_tr_form = flag:bell_tower
+		var:gm_tr_form = flag:round_tower
+		var:gm_tr_form = flag:rock_cut
+	}
+}
+
+# State scope. A secondary monument here can be carried off at all: the
+# building is not being rebuilt, no ceremony is asking, nothing has been taken
+# from the state in the last ten years. It asks nothing of the primary's
+# dedication (gm_state_tr_takeable does): a returned artifact stands in a state
+# whose own monument may be undedicated.
+gm_state_tr_takeable_secondary = {
+	gm_system_enabled = yes
+	has_building = building_grand_monument
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_gift }
+	NOT = { has_variable = gm_carried_off }
+	NOT = { has_variable = gm_tr_cooldown }
+}
+
+# Container scope, a secondary monument. $WHO$ (a country) occupies its state
+# in a war and may carry it off.
+gm_mon_tr_can_take = {
+	var:gm_tr_origin ?= {
+		gm_state_tr_takeable_secondary = yes
+		gm_state_tr_occupied_by = { WHO = $WHO$ }
+	}
+}
+
+# The scripted GUI's check: each part with its reason.
+gm_mon_tr_can_take_tt = {
+	custom_tooltip = {
+		text = gm_mon_sgui_takeable_tt
+		var:gm_tr_origin ?= { gm_state_tr_takeable_secondary = yes }
+	}
+	custom_tooltip = {
+		text = gm_mon_sgui_route_tt
+		var:gm_tr_origin ?= { gm_state_tr_occupied_by = { WHO = $WHO$ } }
+	}
+}
+
+# ---- Landmarks seeded beside another (spec §6) ---------------------------------------
+# State scope. The landmark $KEY$ stands here, as the primary or as a secondary
+# monument: the seeding places it once, and not again on a re-run.
+gm_state_has_landmark = {
+	OR = {
+		AND = {
+			has_variable = gm_landmark
+			var:gm_landmark = flag:$KEY$
+		}
+		AND = {
+			has_variable_list = gm_monuments_here
+			any_in_list = {
+				variable = gm_monuments_here
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = flag:$KEY$
+			}
+		}
+	}
+}
