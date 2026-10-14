@@ -877,6 +877,134 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
             self.assertNotIn(f"remove_variable = {record}", body)
 
 
+MON_VALUES = "common/script_values/gm_monument_values.txt"
+MON_SGUIS = "common/scripted_guis/gm_monument_sguis.txt"
+
+
+class LootingASecondaryTests(unittest.TestCase):
+    """Task 4: an occupier carries off one monument of a state, not the state's
+    building. A secondary goes whole, or as a piece by its form's share; the
+    building shrinks by the levels taken and every other monument stands."""
+
+    def test_the_share_triggers_read_the_secondarys_form_from_the_same_table(self):
+        for name, key in (("gm_mon_form_is_object", "object"), ("gm_mon_form_is_piece", "piece")):
+            body = squash(block(read(MON_TRIGGERS), name))
+            self.assertTrue(body.startswith("has_variable = gm_tr_form OR = {"), name)
+            flags = re.findall(r"var:gm_tr_form = flag:(\w+)", body)
+            self.assertEqual(flags, list(TROPHY_SHARES[key]), name)
+
+    def test_the_secondarys_share_levels_and_whole(self):
+        v = read(MON_VALUES)
+        share = squash(block(v, "gm_mon_tr_share"))
+        self.assertIn(f"value = {SHARE_VALUES['token']}", share)
+        self.assertIn(f"limit = {{ gm_mon_form_is_piece = yes }} value = {SHARE_VALUES['piece']}", share)
+        self.assertIn(f"limit = {{ gm_mon_form_is_object = yes }} value = {SHARE_VALUES['object']}", share)
+        self.assertLess(share.find("gm_mon_form_is_piece"), share.find("gm_mon_form_is_object"))
+        self.assertEqual(squash(block(v, "gm_mon_tr_levels")),
+                         "value = gm_mon_grandeur multiply = gm_mon_tr_share ceiling = yes min = 1 max = gm_mon_grandeur")
+        self.assertEqual(squash(block(v, "gm_mon_tr_whole")),
+                         "value = 0 if = { limit = { gm_mon_tr_levels >= gm_mon_grandeur } value = 1 }")
+
+    def test_a_click_names_the_monument_and_only_orders(self):
+        order = squash(block(read(MON_EFFECTS), "gm_mon_tr_order_take"))
+        self.assertIn("save_scope_as = gm_mon_pick", order)
+        self.assertIn("set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick }", order)
+        self.assertIn("gm_state_tr_order_take = { WHO = $WHO$ ROUTE = occupation }", order)
+        sgui = strip_comments(read(MON_SGUIS))
+        self.assertEqual(squash(block(block(sgui, "gm_mon_take_sgui"), "ai_is_valid")), "always = no")
+        effect = squash(block(block(sgui, "gm_mon_take_sgui"), "effect"))
+        for doer in ("gm_state_tr_take ", "gm_mon_tr_take", "create_container", "remove_building"):
+            self.assertNotIn(doer, effect)
+        self.assertIn("gm_mon_tr_order_take = { WHO = root }", effect)
+        self.assertIn("saved_scopes = { gm_mon }", squash(block(sgui, "gm_mon_take_sgui")))
+
+    def test_the_gate_for_a_secondary_asks_nothing_of_the_primarys_dedication(self):
+        body = squash(block(read(MON_TRIGGERS), "gm_state_tr_takeable_secondary"))
+        for line in ("gm_system_enabled = yes", "has_building = building_grand_monument",
+                     "NOT = { has_variable = gm_restore_pm }", "NOT = { has_variable = gm_ceremony_pending }",
+                     "NOT = { has_variable = gm_gift }", "NOT = { has_variable = gm_carried_off }",
+                     "NOT = { has_variable = gm_tr_cooldown }"):
+            self.assertIn(line, body)
+        self.assertNotIn("gm_state_is_dedicated", body)
+        can = squash(block(read(MON_TRIGGERS), "gm_mon_tr_can_take"))
+        self.assertIn("var:gm_tr_origin ?= { gm_state_tr_takeable_secondary = yes "
+                      "gm_state_tr_occupied_by = { WHO = $WHO$ } }", can)
+
+    def test_the_hidden_event_gates_the_target_by_its_own_rule_and_forgets_it(self):
+        ev = squash(raw_block_at(strip_comments(read(TR_EVENTS)), r"(?m)^monument_trophy_events\.10\s*=\s*\{"))
+        self.assertIn("OR = { AND = { NOT = { has_variable = gm_tr_take_target } gm_state_tr_takeable = yes } "
+                      "AND = { has_variable = gm_tr_take_target gm_state_tr_takeable_secondary = yes } }", ev)
+        self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_target }", ev)
+
+    def test_a_taking_branches_on_its_target(self):
+        body = squash(block(read(TR_EFFECTS), "gm_state_tr_take"))
+        self.assertIn("if = { limit = { has_variable = gm_tr_take_target } gm_mon_tr_take = yes } else = {", body)
+        # The consequences follow either way, once a trophy exists.
+        after = body.split("gm_mon_tr_take = yes", 1)[1]
+        self.assertIn("if = { limit = { exists = scope:gm_tr_new } gm_state_tr_consequences_$ROUTE$ = yes }", after)
+        self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_target }", body)
+
+    def test_a_whole_secondary_becomes_the_trophy_and_the_building_shrinks_by_it(self):
+        body = squash(block(read(MON_EFFECTS), "gm_mon_tr_take_whole"))
+        self.assertIn("save_scope_as = gm_tr_new", body)
+        for line in ("remove_list_variable = { name = gm_monuments_here target = scope:gm_tr_new }",
+                     "remove_list_global_variable = { name = gm_monuments target = scope:gm_tr_new }",
+                     "add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }",
+                     "remove_tag = gm_monument", "add_tag = gm_trophy",
+                     "set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }",
+                     "set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }",
+                     "gm_state_tr_shrink_by = yes"):
+            self.assertIn(line, body)
+        self.assertLess(body.find("remove_list_variable"), body.find("gm_state_tr_shrink_by = yes"))
+        # A piece it already was stays a piece; only a monument with no share
+        # recorded (a co-located landmark) is a whole one.
+        self.assertIn("if = { limit = { NOT = { has_variable = gm_tr_share } } "
+                      "set_variable = { name = gm_tr_share value = flag:whole } }", body)
+        # Its records and the state's other monuments are not touched.
+        self.assertNotIn("destroy_container", body)
+        self.assertNotIn("gm_clear_state", body)
+        self.assertNotIn("remove_building", body)
+
+    def test_a_piece_of_a_secondary_is_a_new_trophy_with_its_records(self):
+        body = squash(block(read(MON_EFFECTS), "gm_mon_tr_take_piece"))
+        self.assertIn("create_container = { tags = { gm_trophy } save_scope_as = gm_tr_new", body)
+        for key in ("gm_tr_skin", "gm_tr_form", "gm_tr_landmark", "gm_tr_namesake", "gm_tr_name_year",
+                    "gm_tr_name_char", "gm_tr_name_occasion", "gm_tr_name_enemy_cap", "gm_tr_name",
+                    "gm_tr_honoree", "gm_tr_honoree_ig", "gm_tr_dedication"):
+            self.assertIn(f"gm_mon_copy_record = {{ KEY = {key} }}", body, key)
+        self.assertIn("change_variable = { name = gm_tr_levels subtract = scope:gm_tr_state.var:gm_tr_take_levels }", body)
+        self.assertIn("set_variable = { name = gm_tr_cooldown days = 3650 }", body)
+        self.assertIn("gm_state_tr_shrink_by = yes", body)
+        self.assertIn("gm_tr_update_picture = yes", body)
+        self.assertIn("add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }", body)
+
+    def test_shrinking_leaves_the_primary_and_the_rest_standing(self):
+        body = squash(block(read(MON_EFFECTS), "gm_state_tr_shrink_by"))
+        self.assertIn("gm_state_mark_restore_pm = yes", body)
+        self.assertIn("name = gm_rebuild_level value = { value = gm_state_grandeur "
+                      "subtract = var:gm_tr_take_levels min = 1 max = 200 }", body)
+        self.assertLess(body.find("remove_building = building_grand_monument"),
+                        body.find("te_construction_market_build_specified_level"))
+        self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", body)
+        # Under a marker, as the other rebuilds are.
+        self.assertTrue(body.startswith("set_variable = gm_shrink_click if = { limit = { has_variable = gm_shrink_click }"))
+
+    def test_the_ai_picks_one_monument_of_the_state_to_loot(self):
+        pick = squash(block(read(MON_EFFECTS), "gm_state_tr_ai_choose_target"))
+        self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_target }", pick)
+        self.assertIn("limit = { gm_state_has_secondary = yes }", pick)
+        self.assertIn("random = { chance = gm_state_tr_ai_secondary_chance "
+                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } "
+                      "if = { limit = { exists = scope:gm_mon_pick } "
+                      "set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick } } }", pick)
+        monthly = squash(block(read(TR_EFFECTS), "gm_state_tr_monthly"))
+        self.assertIn("random = { chance = gm_tr_ai_loot_chance gm_state_tr_ai_choose_target = yes "
+                      "gm_state_tr_take = { WHO = scope:gm_tr_occupier ROUTE = occupation } }", monthly)
+        chance = squash(block(read(MON_VALUES), "gm_state_tr_ai_secondary_chance"))
+        self.assertEqual(chance, "value = gm_state_monument_count subtract = 1 multiply = 100 "
+                                 "divide = gm_state_monument_count")
+
+
 class DebugTests(unittest.TestCase):
     def test_the_debug_event(self):
         ev = squash(raw_block_at(strip_comments(read(DEBUG_EVENTS)), r"(?m)^te_debug_monuments\.6\s*=\s*\{"))

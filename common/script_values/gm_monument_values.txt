@@ -62,3 +62,47 @@ gm_state_monument_count = {
 		}
 	}
 }
+
+# ---- Looting one monument of a state (spec §4.2) -----------------------------------
+# Container scope, a secondary monument. The share of its levels an occupier
+# carries off, by form: 1 for an object, 0.25 for a piece of a structure, 0.1
+# for a token (gm_state_tr_share, gm_trophy_values.txt, on gm_tr_form).
+gm_mon_tr_share = {
+	value = 0.1
+	if = {
+		limit = { gm_mon_form_is_piece = yes }
+		value = 0.25
+	}
+	if = {
+		limit = { gm_mon_form_is_object = yes }
+		value = 1
+	}
+}
+
+# The levels a taking carries off: the share, rounded up, at least one and at
+# most every level.
+gm_mon_tr_levels = {
+	value = gm_mon_grandeur
+	multiply = gm_mon_tr_share
+	ceiling = yes
+	min = 1
+	max = gm_mon_grandeur
+}
+
+# 1 when a taking carries off the whole monument.
+gm_mon_tr_whole = {
+	value = 0
+	if = {
+		limit = { gm_mon_tr_levels >= gm_mon_grandeur }
+		value = 1
+	}
+}
+
+# State scope. In percent: the chance that the AI's one roll at a state falls on
+# a secondary monument, every monument standing here being as likely.
+gm_state_tr_ai_secondary_chance = {
+	value = gm_state_monument_count
+	subtract = 1
+	multiply = 100
+	divide = gm_state_monument_count
+}

@@ -83,27 +83,40 @@ gm_state_tr_take = {
 		limit = {
 			scope:gm_tr_taker = { exists = capital }
 		}
-		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-		set_variable = { name = gm_tr_take_levels value = gm_state_tr_levels }
-		set_variable = { name = gm_tr_take_value value = gm_state_tr_value }
-		set_variable = { name = gm_tr_take_whole value = gm_state_tr_whole }
-		set_variable = { name = gm_tr_take_left value = gm_state_tr_levels_left }
-		gm_state_tr_make_trophy = yes
+		# One monument of the state: a secondary monument named by
+		# gm_mon_tr_order_take or the AI's choice (gm_monument_effects.txt), else
+		# the primary, as before.
+		if = {
+			limit = { has_variable = gm_tr_take_target }
+			gm_mon_tr_take = yes
+		}
+		else = {
+			set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
+			set_variable = { name = gm_tr_take_levels value = gm_state_tr_levels }
+			set_variable = { name = gm_tr_take_value value = gm_state_tr_value }
+			set_variable = { name = gm_tr_take_whole value = gm_state_tr_whole }
+			set_variable = { name = gm_tr_take_left value = gm_state_tr_levels_left }
+			gm_state_tr_make_trophy = yes
+			if = {
+				limit = { exists = scope:gm_tr_new }
+				if = {
+					limit = { var:gm_tr_take_whole = 1 }
+					gm_state_tr_remove_whole = yes
+				}
+				else = {
+					gm_state_tr_remove_piece = yes
+				}
+			}
+		}
 		if = {
 			limit = { exists = scope:gm_tr_new }
-			if = {
-				limit = { var:gm_tr_take_whole = 1 }
-				gm_state_tr_remove_whole = yes
-			}
-			else = {
-				gm_state_tr_remove_piece = yes
-			}
 			gm_state_tr_consequences_$ROUTE$ = yes
 		}
-		remove_variable = gm_tr_take_levels
-		remove_variable = gm_tr_take_value
-		remove_variable = gm_tr_take_whole
-		remove_variable = gm_tr_take_left
+		gm_remove_state_var = { VAR = gm_tr_take_target }
+		gm_remove_state_var = { VAR = gm_tr_take_levels }
+		gm_remove_state_var = { VAR = gm_tr_take_value }
+		gm_remove_state_var = { VAR = gm_tr_take_whole }
+		gm_remove_state_var = { VAR = gm_tr_take_left }
 	}
 }
 
@@ -642,6 +655,7 @@ gm_state_tr_monthly = {
 				scope:gm_tr_occupier = { save_scope_as = gm_tr_taker }
 				random = {
 					chance = gm_tr_ai_loot_chance
+					gm_state_tr_ai_choose_target = yes
 					gm_state_tr_take = { WHO = scope:gm_tr_occupier ROUTE = occupation }
 				}
 			}

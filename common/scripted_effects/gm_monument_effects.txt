@@ -191,3 +191,216 @@ gm_tr_become_monument = {
 	set_variable = { name = gm_tr_site_region value = var:gm_tr_origin_region }
 	gm_tr_forget_notes = yes
 }
+
+# ---- Carried off (spec §4.2) -------------------------------------------------------
+# Container scope, a secondary monument; $WHO$ carries it off from the state it
+# stands in (a country that occupies it). Only orders the work, as
+# gm_state_tr_order_take does: the state's gm_tr_take_target names it for
+# monument_trophy_events.10, which checks again and does it.
+gm_mon_tr_order_take = {
+	save_scope_as = gm_mon_pick
+	var:gm_tr_origin ?= {
+		set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick }
+		gm_state_tr_order_take = { WHO = $WHO$ ROUTE = occupation }
+	}
+}
+
+# State scope (scope:gm_tr_state, gm_tr_taker, gm_tr_victim as gm_state_tr_take
+# saves them), from it when var:gm_tr_take_target names a secondary monument.
+# Whole (an object, or a monument too small to part with a piece): the
+# container itself becomes the trophy. Otherwise a piece, by its form's share,
+# is a new trophy with its records. Either way the building shrinks by the
+# levels taken and everything else standing here stays.
+gm_mon_tr_take = {
+	clear_saved_scope = gm_mon_target
+	clear_saved_scope = gm_tr_site_state
+	var:gm_tr_take_target ?= { save_scope_as = gm_mon_target }
+	if = {
+		limit = {
+			exists = scope:gm_mon_target
+			scope:gm_tr_taker = { exists = capital }
+		}
+		scope:gm_tr_taker = {
+			capital = { save_scope_as = gm_tr_site_state }
+		}
+		scope:gm_mon_target = {
+			set_variable = { name = gm_tr_take_levels value = gm_mon_tr_levels }
+		}
+		set_variable = { name = gm_tr_take_levels value = scope:gm_mon_target.var:gm_tr_take_levels }
+		scope:gm_mon_target = {
+			remove_variable = gm_tr_take_levels
+			if = {
+				limit = { gm_mon_tr_whole = 1 }
+				gm_mon_tr_take_whole = yes
+			}
+			else = {
+				gm_mon_tr_take_piece = yes
+			}
+		}
+	}
+}
+
+# Container scope (the secondary; scope:gm_tr_state, gm_tr_taker and
+# gm_tr_site_state saved). It stands abroad now: out of the state's list and
+# gm_monuments, into gm_trophies, retagged, its site the taker's capital. Its
+# records are kept; a piece it already was stays a piece.
+gm_mon_tr_take_whole = {
+	save_scope_as = gm_tr_new
+	scope:gm_tr_state = {
+		remove_list_variable = { name = gm_monuments_here target = scope:gm_tr_new }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = -1 }
+	}
+	remove_list_global_variable = { name = gm_monuments target = scope:gm_tr_new }
+	add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }
+	remove_tag = gm_monument
+	add_tag = gm_trophy
+	set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
+	set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
+	set_variable = { name = gm_tr_year value = gm_this_year }
+	set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
+	if = {
+		limit = { NOT = { has_variable = gm_tr_share } }
+		set_variable = { name = gm_tr_share value = flag:whole }
+	}
+	set_variable = {
+		name = gm_tr_grandeur
+		value = {
+			value = var:gm_tr_levels
+			divide = 2
+			ceiling = yes
+		}
+	}
+	gm_tr_forget_notes = yes
+	scope:gm_tr_state = { gm_state_tr_shrink_by = yes }
+}
+
+# Container scope (the secondary, scope:gm_mon_src once saved here). A piece of
+# it: a new trophy with its records, the levels taken (the state's
+# gm_tr_take_levels) off its own, the building shrunk by them, and the state
+# spared for ten years as a piece of the primary spares it.
+gm_mon_tr_take_piece = {
+	save_scope_as = gm_mon_src
+	scope:gm_tr_state = {
+		create_container = {
+			tags = { gm_trophy }
+			save_scope_as = gm_tr_new
+			on_created = {
+				save_scope_as = gm_tr_new
+			}
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_tr_new }
+		add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }
+		scope:gm_tr_new = {
+			set_variable = { name = gm_tr_origin value = scope:gm_tr_state }
+			set_variable = { name = gm_tr_origin_region value = scope:gm_tr_state.state_region }
+			set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
+			set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
+			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
+			set_variable = {
+				name = gm_tr_grandeur
+				value = {
+					value = scope:gm_tr_state.var:gm_tr_take_levels
+					divide = 2
+					ceiling = yes
+				}
+			}
+			set_variable = { name = gm_tr_year value = gm_this_year }
+			set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
+			if = {
+				limit = { scope:gm_mon_src = { gm_mon_form_is_piece = yes } }
+				set_variable = { name = gm_tr_share value = flag:piece }
+			}
+			else = {
+				set_variable = { name = gm_tr_share value = flag:token }
+			}
+			gm_mon_copy_record = { KEY = gm_tr_skin }
+			gm_mon_copy_record = { KEY = gm_tr_form }
+			gm_mon_copy_record = { KEY = gm_tr_landmark }
+			gm_mon_copy_record = { KEY = gm_tr_namesake }
+			gm_mon_copy_record = { KEY = gm_tr_name_year }
+			gm_mon_copy_record = { KEY = gm_tr_name_char }
+			gm_mon_copy_record = { KEY = gm_tr_name_occasion }
+			gm_mon_copy_record = { KEY = gm_tr_name_enemy_cap }
+			gm_mon_copy_record = { KEY = gm_tr_name }
+			gm_mon_copy_record = { KEY = gm_tr_honoree }
+			gm_mon_copy_record = { KEY = gm_tr_honoree_ig }
+			gm_mon_copy_record = { KEY = gm_tr_dedication }
+			gm_tr_update_picture = yes
+		}
+		change_variable = { name = gm_tr_levels subtract = scope:gm_tr_state.var:gm_tr_take_levels }
+		scope:gm_tr_state = {
+			set_variable = { name = gm_tr_cooldown days = 3650 }
+			gm_state_tr_shrink_by = yes
+		}
+	}
+}
+
+# Container scope (the new trophy): the secondary's variable $KEY$, when it has
+# one, under the same name.
+gm_mon_copy_record = {
+	if = {
+		limit = { scope:gm_mon_src = { has_variable = $KEY$ } }
+		set_variable = { name = $KEY$ value = scope:gm_mon_src.var:$KEY$ }
+	}
+}
+
+# State scope (var:gm_tr_take_levels the levels carried off). The building is
+# built again smaller, keeping the primary's dedication (recorded first, as a
+# return records it) and every monument standing here: the primary's own and
+# the secondaries' levels still add up to what is left. The ladder cannot take
+# levels off a standing building (gm_state_tr_remove_piece).
+# Under a marker, as Rededicate is: a tooltip walks this body without writing,
+# and the ladder's switch reads gm_rebuild_level.
+gm_state_tr_shrink_by = {
+	set_variable = gm_shrink_click
+	if = {
+		limit = { has_variable = gm_shrink_click }
+		remove_variable = gm_shrink_click
+		if = {
+			limit = {
+				gm_state_is_dedicated = yes
+				NOT = { has_variable = gm_restore_pm }
+			}
+			gm_state_mark_restore_pm = yes
+		}
+		set_variable = { name = gm_rebuilding days = 1 }
+		set_variable = {
+			name = gm_rebuild_level
+			value = {
+				value = gm_state_grandeur
+				subtract = var:gm_tr_take_levels
+				min = 1
+				max = 200
+			}
+		}
+		remove_building = building_grand_monument
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = building_grand_monument
+			SPEC_LEVEL = var:gm_rebuild_level
+		}
+		remove_variable = gm_rebuild_level
+		owner = { trigger_event = { id = monument_events.20 } }
+	}
+}
+
+# ---- The AI's choice of which monument ----------------------------------------------
+# State scope, before gm_state_tr_take on the AI's occupation roll. One roll
+# falls on one monument of the state: the primary, or (every monument as
+# likely) a secondary, named in gm_tr_take_target.
+gm_state_tr_ai_choose_target = {
+	gm_remove_state_var = { VAR = gm_tr_take_target }
+	if = {
+		limit = { gm_state_has_secondary = yes }
+		clear_saved_scope = gm_mon_pick
+		random = {
+			chance = gm_state_tr_ai_secondary_chance
+			random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick }
+			if = {
+				limit = { exists = scope:gm_mon_pick }
+				set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick }
+			}
+		}
+	}
+}

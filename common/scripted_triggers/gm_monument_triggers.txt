@@ -65,3 +65,72 @@ gm_tr_stands_apart = {
 	NOT = { gm_tr_rejoins_primary = yes }
 	NOT = { gm_tr_rejoins_secondary = yes }
 }
+
+# ---- Looting one monument of a state (spec §4.2) -----------------------------------
+# Container scope, a secondary monument. By its form, the share an occupier
+# carries off (gm_mon_tr_share): the primary's lists again, on gm_tr_form
+# (gm_state_tr_form_is_object / _piece, gm_trophy_triggers.txt).
+# test_grand_monument_trophies.py pins both to TROPHY_SHARES.
+gm_mon_form_is_object = {
+	has_variable = gm_tr_form
+	OR = {
+		var:gm_tr_form = flag:column
+		var:gm_tr_form = flag:obelisk
+		var:gm_tr_form = flag:statue
+		var:gm_tr_form = flag:stele
+		var:gm_tr_form = flag:pillar
+		var:gm_tr_form = flag:high_cross
+		var:gm_tr_form = flag:rune_stone
+		var:gm_tr_form = flag:menorah
+		var:gm_tr_form = flag:sun_stone
+		var:gm_tr_form = flag:stela
+	}
+}
+
+gm_mon_form_is_piece = {
+	has_variable = gm_tr_form
+	OR = {
+		var:gm_tr_form = flag:arch
+		var:gm_tr_form = flag:gate
+		var:gm_tr_form = flag:tower
+		var:gm_tr_form = flag:bell_tower
+		var:gm_tr_form = flag:round_tower
+		var:gm_tr_form = flag:rock_cut
+	}
+}
+
+# State scope. A secondary monument here can be carried off at all: the
+# building is not being rebuilt, no ceremony is asking, nothing has been taken
+# from the state in the last ten years. It asks nothing of the primary's
+# dedication (gm_state_tr_takeable does): a returned artifact stands in a state
+# whose own monument may be undedicated.
+gm_state_tr_takeable_secondary = {
+	gm_system_enabled = yes
+	has_building = building_grand_monument
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_gift }
+	NOT = { has_variable = gm_carried_off }
+	NOT = { has_variable = gm_tr_cooldown }
+}
+
+# Container scope, a secondary monument. $WHO$ (a country) occupies its state
+# in a war and may carry it off.
+gm_mon_tr_can_take = {
+	var:gm_tr_origin ?= {
+		gm_state_tr_takeable_secondary = yes
+		gm_state_tr_occupied_by = { WHO = $WHO$ }
+	}
+}
+
+# The scripted GUI's check: each part with its reason.
+gm_mon_tr_can_take_tt = {
+	custom_tooltip = {
+		text = gm_mon_sgui_takeable_tt
+		var:gm_tr_origin ?= { gm_state_tr_takeable_secondary = yes }
+	}
+	custom_tooltip = {
+		text = gm_mon_sgui_route_tt
+		var:gm_tr_origin ?= { gm_state_tr_occupied_by = { WHO = $WHO$ } }
+	}
+}
