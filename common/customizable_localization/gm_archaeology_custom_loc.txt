@@ -1,0 +1,173 @@
+﻿# A country's last site, as a name for event text (events cannot reach a container's
+# custom localization: scripting_best_practices.md § Per-Entity State, rule 10).
+# Branches in LANDMARKS order; test_grand_monument_archaeology.py pins them.
+gm_arch_site_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:nineveh_library }
+		localization_key = gm_landmark_nineveh_library_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:winged_victory_of_samothrace }
+		localization_key = gm_landmark_winged_victory_of_samothrace_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:vindolanda_tablets }
+		localization_key = gm_landmark_vindolanda_tablets_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:troy_hisarlik }
+		localization_key = gm_landmark_troy_hisarlik_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:mycenae_grave_circle }
+		localization_key = gm_landmark_mycenae_grave_circle_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:pergamon_altar }
+		localization_key = gm_landmark_pergamon_altar_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:deir_el_bahari_cache }
+		localization_key = gm_landmark_deir_el_bahari_cache_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:ishtar_gate_babylon }
+		localization_key = gm_landmark_ishtar_gate_babylon_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:palace_of_knossos }
+		localization_key = gm_landmark_palace_of_knossos_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:antikythera_mechanism }
+		localization_key = gm_landmark_antikythera_mechanism_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:oseberg_ship }
+		localization_key = gm_landmark_oseberg_ship_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:machu_picchu }
+		localization_key = gm_landmark_machu_picchu_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:bust_of_nefertiti }
+		localization_key = gm_landmark_bust_of_nefertiti_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:mohenjo_daro }
+		localization_key = gm_landmark_mohenjo_daro_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:tomb_of_tutankhamun }
+		localization_key = gm_landmark_tomb_of_tutankhamun_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:royal_cemetery_at_ur }
+		localization_key = gm_landmark_royal_cemetery_at_ur_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:sanxingdui_pits }
+		localization_key = gm_landmark_sanxingdui_pits_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:sutton_hoo }
+		localization_key = gm_landmark_sutton_hoo_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:lascaux_caves }
+		localization_key = gm_landmark_lascaux_caves_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:nag_hammadi_library }
+		localization_key = gm_landmark_nag_hammadi_library_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:dead_sea_scrolls }
+		localization_key = gm_landmark_dead_sea_scrolls_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:tomb_of_pakal }
+		localization_key = gm_landmark_tomb_of_pakal_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:mawangdui_tombs }
+		localization_key = gm_landmark_mawangdui_tombs_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:terracotta_army }
+		localization_key = gm_landmark_terracotta_army_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:tomb_of_philip_ii }
+		localization_key = gm_landmark_tomb_of_philip_ii_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:tomb_of_marquis_yi }
+		localization_key = gm_landmark_tomb_of_marquis_yi_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:royal_tombs_of_sipan }
+		localization_key = gm_landmark_royal_tombs_of_sipan_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:otzi_the_iceman }
+		localization_key = gm_landmark_otzi_the_iceman_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:caral_supe }
+		localization_key = gm_landmark_caral_supe_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:gobekli_tepe }
+		localization_key = gm_landmark_gobekli_tepe_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:olympia }
+		localization_key = gm_landmark_olympia_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:delphi }
+		localization_key = gm_landmark_delphi_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:sidon_necropolis }
+		localization_key = gm_landmark_sidon_necropolis_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:villa_of_the_papyri }
+		localization_key = gm_landmark_villa_of_the_papyri_evt
+	}
+	text = {
+		trigger = { has_variable = gm_arch_last var:gm_arch_last = flag:tomb_of_alexander }
+		localization_key = gm_landmark_tomb_of_alexander_evt
+	}
+	text = {
+		localization_key = gm_arch_site_name_none
+	}
+}
+
+# A dig's method, by its gm_site_method, for its row (gm_archaeology_widgets.gui).
+gm_arch_method_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_site_method var:gm_site_method = flag:antiquarian }
+		localization_key = gm_arch_method_antiquarian
+	}
+	text = {
+		trigger = { has_variable = gm_site_method var:gm_site_method = flag:systematic }
+		localization_key = gm_arch_method_systematic
+	}
+	text = {
+		trigger = { has_variable = gm_site_method var:gm_site_method = flag:forensic }
+		localization_key = gm_arch_method_forensic
+	}
+	text = {
+		localization_key = gm_arch_method_none
+	}
+}

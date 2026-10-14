@@ -52,6 +52,7 @@ je_grand_monuments = {
 			has_variable = gm_com_open
 			has_variable = gm_com_offered
 			gm_tr_country_has_any = yes
+			gm_arch_country_has_any = yes
 		}
 	}
 
@@ -62,6 +63,7 @@ je_grand_monuments = {
 			has_variable = gm_com_open
 			has_variable = gm_com_offered
 			gm_tr_country_has_any = yes
+			gm_arch_country_has_any = yes
 		}
 	}
 

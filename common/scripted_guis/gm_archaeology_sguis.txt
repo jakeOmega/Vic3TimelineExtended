@@ -1,0 +1,137 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — archaeology: scripted GUIs
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
+# gui/gm_archaeology_widgets.gui (the journal entry's Archaeological
+# Expeditions section). ROOT is the player's country; the site travels as
+# gm_arch (a trophy's gm_tr shape). Each effect only orders the work, and a
+# hidden event does it (arch_events.10, .11): a tooltip walks the effect every
+# frame.
+
+# Launch Excavation by $METHOD$: a site we may dig, with that method's
+# technology. Three buttons share one shape, one scripted GUI each.
+gm_arch_launch_antiquarian_sgui = {
+	scope = country
+	saved_scopes = { gm_arch }
+
+	is_shown = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_site_open = yes
+			gm_arch_owns_ground = { WHO = root }
+		}
+		gm_arch_method_antiquarian_ok = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_can_dig_tt = { WHO = root }
+		}
+	}
+
+	effect = {
+		scope:gm_arch = {
+			gm_arch_choose_launch = { WHO = root METHOD = antiquarian }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_arch_launch_systematic_sgui = {
+	scope = country
+	saved_scopes = { gm_arch }
+
+	is_shown = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_site_open = yes
+			gm_arch_owns_ground = { WHO = root }
+		}
+		gm_arch_method_systematic_ok = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_can_dig_tt = { WHO = root }
+		}
+	}
+
+	effect = {
+		scope:gm_arch = {
+			gm_arch_choose_launch = { WHO = root METHOD = systematic }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_arch_launch_forensic_sgui = {
+	scope = country
+	saved_scopes = { gm_arch }
+
+	is_shown = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_site_open = yes
+			gm_arch_owns_ground = { WHO = root }
+		}
+		gm_arch_method_forensic_ok = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_can_dig_tt = { WHO = root }
+		}
+	}
+
+	effect = {
+		scope:gm_arch = {
+			gm_arch_choose_launch = { WHO = root METHOD = forensic }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# Suspend Dig: a dig we run. The progress stays.
+gm_arch_suspend_sgui = {
+	scope = country
+	saved_scopes = { gm_arch }
+
+	is_shown = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_digs_for = { WHO = root }
+		}
+	}
+
+	is_valid = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_digs_for = { WHO = root }
+		}
+	}
+
+	effect = {
+		scope:gm_arch = {
+			custom_tooltip = {
+				text = gm_arch_suspend_tt
+				gm_arch_order_suspend = { WHO = root }
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

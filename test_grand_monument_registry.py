@@ -1064,7 +1064,8 @@ class ContestTests(unittest.TestCase):
         # (trophies spec §6) keeps the pulse running.
         self.assertTrue(body.startswith("gm_init_ledgers = yes if = { limit = { OR = { any_scope_state = "
                                         "{ has_building = building_grand_monument } has_variable = gm_com_open "
-                                        "gm_tr_country_has_any = yes } } set_variable = gm_active }"), body[:200])
+                                        "gm_tr_country_has_any = yes gm_arch_country_has_any = yes } } set_variable = gm_active }"),
+                        body[:240])
 
 
 # ---- Task 7: the ceremony, skins, the inscription ------------------------------------
@@ -1096,8 +1097,8 @@ INSCRIPTION_FAITHS = {"catholic": "latin", "jewish": "hebrew", "hindu": "sanskri
 # in (spec 2026-10-13-multiple-monuments-per-state-design.md §6): it follows that
 # state's first row, and the seeding stands it beside it as a secondary monument
 # rather than skipping it. Rome, Beijing and Athens are the next.
-Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed beside",
-                      defaults=(True, False))
+Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed beside buried",
+                      defaults=(True, False, False))
 LANDMARKS = (
     Landmark("arc_de_triomphe", "STATE_ILE_DE_FRANCE", "FRA", "war_memorial", "arch", ("generic", "arch"), 15),
     Landmark("alexander_column", "STATE_INGRIA", "RUS", "crown", "column", ("generic", "column"), 10),
@@ -1175,6 +1176,43 @@ LANDMARKS = (
     # Added 2026-10-12 (owner). Baghdad is the Ottomans' alone; the stand-in is
     # the Persian gate, an iwan like Taq Kasra's.
     Landmark("arch_of_ctesiphon", "STATE_BAGHDAD", "TUR", "civic", "arch", ("heritage_avestan", "gate"), 5),
+    # Buried until the game (buried=True, issue #939): placed by an excavation, never at the start. The
+    # owner is whoever digs, so there is no tag; the level is the monument's when it is unearthed.
+    Landmark("nineveh_library", "STATE_MOSUL", None, "civic", "hall", ("heritage_avestan", "hall"), 10, False, False, True),
+    Landmark("winged_victory_of_samothrace", "STATE_WESTERN_THRACE", None, "civic", "statue", ("generic", "statue"), 5, False, False, True),
+    Landmark("vindolanda_tablets", "STATE_YORKSHIRE", None, "civic", "hall", ("generic", "hall"), 5, False, False, True),
+    Landmark("troy_hisarlik", "STATE_HUDAVENDIGAR", None, "civic", "gate", ("generic", "gate"), 10, False, False, True),
+    Landmark("mycenae_grave_circle", "STATE_PELOPONNESE", None, "civic", "mausoleum", ("generic", "mausoleum"), 10, False, False, True),
+    Landmark("pergamon_altar", "STATE_AYDIN", None, "civic", "pantheon", ("heritage_greek", "pantheon"), 10, False, False, True),
+    Landmark("deir_el_bahari_cache", "STATE_UPPER_EGYPT", None, "civic", "rock_cut", ("heritage_aramaic", "rock_cut"), 5, False, False, True),
+    Landmark("ishtar_gate_babylon", "STATE_BAGHDAD", None, "civic", "gate", ("heritage_avestan", "gate"), 10, False, False, True),
+    Landmark("palace_of_knossos", "STATE_CRETE", None, "civic", "hall", ("generic", "hall"), 10, False, False, True),
+    Landmark("antikythera_mechanism", "STATE_PELOPONNESE", None, "civic", "statue", ("generic", "statue"), 5, False, False, True),
+    Landmark("oseberg_ship", "STATE_EASTERN_NORWAY", None, "civic", "statue", ("generic", "statue"), 5, False, False, True),
+    Landmark("machu_picchu", "STATE_ICA", None, "civic", "gate", ("generic", "gate"), 15, False, False, True),
+    Landmark("bust_of_nefertiti", "STATE_MIDDLE_EGYPT", None, "civic", "statue", ("generic", "statue"), 5, False, False, True),
+    Landmark("mohenjo_daro", "STATE_SINDH", None, "civic", "forum", ("heritage_latin", "forum"), 10, False, False, True),
+    Landmark("tomb_of_tutankhamun", "STATE_UPPER_EGYPT", None, "civic", "mausoleum", ("generic", "mausoleum"), 15, False, False, True),
+    Landmark("royal_cemetery_at_ur", "STATE_BASRA", None, "civic", "mausoleum", ("generic", "mausoleum"), 10, False, False, True),
+    Landmark("sanxingdui_pits", "STATE_SICHUAN", None, "civic", "hall", ("heritage_chinese", "hall"), 10, False, False, True),
+    Landmark("sutton_hoo", "STATE_EAST_ANGLIA", None, "civic", "mausoleum", ("generic", "mausoleum"), 5, False, False, True),
+    Landmark("lascaux_caves", "STATE_AQUITAINE", None, "civic", "rock_cut", ("heritage_aramaic", "rock_cut"), 10, False, False, True),
+    Landmark("nag_hammadi_library", "STATE_UPPER_EGYPT", None, "civic", "stele", ("heritage_geez", "stele"), 5, False, False, True),
+    Landmark("dead_sea_scrolls", "STATE_PALESTINE", None, "civic", "stele", ("heritage_geez", "stele"), 10, False, False, True),
+    Landmark("tomb_of_pakal", "STATE_CHIAPAS", None, "civic", "pyramid", ("heritage_mayan", "pyramid"), 10, False, False, True),
+    Landmark("mawangdui_tombs", "STATE_HUNAN", None, "civic", "mausoleum", ("generic", "mausoleum"), 10, False, False, True),
+    Landmark("terracotta_army", "STATE_XIAN", None, "civic", "mausoleum", ("generic", "mausoleum"), 15, False, False, True),
+    Landmark("tomb_of_philip_ii", "STATE_MACEDONIA", None, "civic", "mausoleum", ("generic", "mausoleum"), 10, False, False, True),
+    Landmark("tomb_of_marquis_yi", "STATE_EASTERN_HUBEI", None, "civic", "hall", ("heritage_chinese", "hall"), 10, False, False, True),
+    Landmark("royal_tombs_of_sipan", "STATE_CAJAMARCA", None, "civic", "pyramid", ("heritage_nahuatl", "pyramid"), 10, False, False, True),
+    Landmark("otzi_the_iceman", "STATE_SOUTH_TYROL", None, "civic", "statue", ("generic", "statue"), 5, False, False, True),
+    Landmark("caral_supe", "STATE_LIMA", None, "civic", "pyramid", ("heritage_nahuatl", "pyramid"), 10, False, False, True),
+    Landmark("gobekli_tepe", "STATE_DIYARBAKIR", None, "civic", "colonnade", ("heritage_aramaic", "colonnade"), 15, False, False, True),
+    Landmark("olympia", "STATE_PELOPONNESE", None, "civic", "pantheon", ("heritage_greek", "pantheon"), 10, False, False, True),
+    Landmark("delphi", "STATE_ATTICA", None, "civic", "stoa", ("heritage_greek", "stoa"), 10, False, False, True),
+    Landmark("sidon_necropolis", "STATE_LEBANON", None, "civic", "mausoleum", ("generic", "mausoleum"), 5, False, False, True),
+    Landmark("villa_of_the_papyri", "STATE_CAMPANIA", None, "civic", "hall", ("generic", "hall"), 10, False, False, True),
+    Landmark("tomb_of_alexander", "STATE_LOWER_EGYPT", None, "civic", "mausoleum", ("generic", "mausoleum"), 15, False, False, True),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
@@ -3297,6 +3335,11 @@ class LandmarkTests(unittest.TestCase):
                 self.assertEqual(BUILDING_FORMS[lm.dedication], lm.form, f"{lm.key}: a building's own form")
             if lm.placed:
                 self.assertGreaterEqual(lm.level, 5, lm.key)
+            elif lm.buried:
+                # A buried site (issue #939) is placed by an excavation, whoever owns the ground then:
+                # a level of its own, no owner of its own.
+                self.assertGreaterEqual(lm.level, 5, lm.key)
+                self.assertIsNone(lm.tag, f"{lm.key}: a buried site has the owner who digs it")
             else:
                 self.assertIsNone(lm.level, f"{lm.key}: an unplaced landmark's levels are its trophy's")
 

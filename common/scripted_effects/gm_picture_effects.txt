@@ -187,6 +187,41 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = xanthos CODE = 1000049 }
 	gm_state_picture_landmark = { KEY = mesha_stele CODE = 1000050 }
 	gm_state_picture_landmark = { KEY = arch_of_ctesiphon CODE = 1000051 }
+	gm_state_picture_landmark = { KEY = nineveh_library CODE = 151 }
+	gm_state_picture_landmark = { KEY = winged_victory_of_samothrace CODE = 13 }
+	gm_state_picture_landmark = { KEY = vindolanda_tablets CODE = 15 }
+	gm_state_picture_landmark = { KEY = troy_hisarlik CODE = 14 }
+	gm_state_picture_landmark = { KEY = mycenae_grave_circle CODE = 16 }
+	gm_state_picture_landmark = { KEY = pergamon_altar CODE = 180 }
+	gm_state_picture_landmark = { KEY = deir_el_bahari_cache CODE = 250 }
+	gm_state_picture_landmark = { KEY = ishtar_gate_babylon CODE = 150 }
+	gm_state_picture_landmark = { KEY = palace_of_knossos CODE = 15 }
+	gm_state_picture_landmark = { KEY = antikythera_mechanism CODE = 13 }
+	gm_state_picture_landmark = { KEY = oseberg_ship CODE = 13 }
+	gm_state_picture_landmark = { KEY = machu_picchu CODE = 14 }
+	gm_state_picture_landmark = { KEY = bust_of_nefertiti CODE = 13 }
+	gm_state_picture_landmark = { KEY = mohenjo_daro CODE = 102 }
+	gm_state_picture_landmark = { KEY = tomb_of_tutankhamun CODE = 16 }
+	gm_state_picture_landmark = { KEY = royal_cemetery_at_ur CODE = 16 }
+	gm_state_picture_landmark = { KEY = sanxingdui_pits CODE = 170 }
+	gm_state_picture_landmark = { KEY = sutton_hoo CODE = 16 }
+	gm_state_picture_landmark = { KEY = lascaux_caves CODE = 250 }
+	gm_state_picture_landmark = { KEY = nag_hammadi_library CODE = 130 }
+	gm_state_picture_landmark = { KEY = dead_sea_scrolls CODE = 130 }
+	gm_state_picture_landmark = { KEY = tomb_of_pakal CODE = 230 }
+	gm_state_picture_landmark = { KEY = mawangdui_tombs CODE = 16 }
+	gm_state_picture_landmark = { KEY = terracotta_army CODE = 16 }
+	gm_state_picture_landmark = { KEY = tomb_of_philip_ii CODE = 16 }
+	gm_state_picture_landmark = { KEY = tomb_of_marquis_yi CODE = 170 }
+	gm_state_picture_landmark = { KEY = royal_tombs_of_sipan CODE = 200 }
+	gm_state_picture_landmark = { KEY = otzi_the_iceman CODE = 13 }
+	gm_state_picture_landmark = { KEY = caral_supe CODE = 200 }
+	gm_state_picture_landmark = { KEY = gobekli_tepe CODE = 251 }
+	gm_state_picture_landmark = { KEY = olympia CODE = 180 }
+	gm_state_picture_landmark = { KEY = delphi CODE = 182 }
+	gm_state_picture_landmark = { KEY = sidon_necropolis CODE = 16 }
+	gm_state_picture_landmark = { KEY = villa_of_the_papyri CODE = 15 }
+	gm_state_picture_landmark = { KEY = tomb_of_alexander CODE = 16 }
 }
 
 gm_state_picture_landmark = {

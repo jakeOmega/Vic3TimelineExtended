@@ -23,8 +23,9 @@ CONCEPT_LOC = os.path.join(REPO, "localization", "english", "te_concepts_l_engli
 
 # Trophies and Held Abroad are types in gui/gm_trophy_widgets.gui
 # (test_grand_monument_trophies.py holds their flags and gates).
-STATUS = ["te_gm_sec_commission", "te_gm_sec_national", "te_gm_sec_monuments", "te_gm_sec_trophies",
-          "te_gm_sec_abroad"]
+# Archaeological Expeditions is a type in gui/gm_archaeology_widgets.gui.
+STATUS = ["te_gm_sec_commission", "te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_monuments",
+          "te_gm_sec_trophies", "te_gm_sec_abroad"]
 REFERENCE = ["te_gm_sec_how"]
 # root -> (container, what it wraps)
 ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_panel"),

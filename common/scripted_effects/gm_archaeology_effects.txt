@@ -1,0 +1,678 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — archaeology: scripted effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939).
+#
+# A buried site is a script container tagged gm_site, with no parent (it
+# outlives every country), in the global list gm_arch_sites. It holds the
+# monument it will become under the records a returned trophy carries
+# (gm_tr_landmark, gm_tr_skin, gm_tr_form, gm_tr_levels, gm_tr_dedication,
+# gm_tr_namesake, gm_tr_share, gm_tr_origin_region), so the trophy names and
+# the monument machinery serve it unchanged, and the dig's own:
+#   gm_site_tech, gm_site_vector     what opens it: a technology (a flag, the
+#                                    hyphen an underscore) and `survey` (open as
+#                                    soon as its owner has the technology) or
+#                                    `incidental` (turned up by a monthly chance)
+#   gm_site_status                   1 buried, 2 known, 3 being dug, 4 unearthed
+#   gm_site_sponsor, gm_site_method  who digs it, and how: `antiquarian`,
+#                                    `systematic` or `forensic`
+#   gm_site_progress                 0 to 100, kept when a dig is suspended
+# No timed variable on a container: it would never expire
+# (container_timed_variable_audit).
+#
+# A finished dig stands as a monument in the sponsor's part of the ground: the
+# state's one building takes its levels (gm_state_tr_receive when it has none,
+# else the container stays as a secondary monument beside the primary:
+# gm_arch_stand_beside), the way a trophy comes home.
+#
+# The sites are seeded once, lazily, from the monthly pass (gm_arch_monthly),
+# so a save from before this change has them too. One call per row of
+# ARCH_SITES in test_grand_monument_archaeology.py, in LANDMARKS order.
+#
+# No order runs where a tooltip walks the effect: a scripted GUI or an event
+# option only orders the work (gm_arch_order_launch, gm_arch_order_suspend) and
+# a hidden event does it (arch_events.10, .11), as the trophies' do.
+
+# ---- The monthly pass (from on_monthly_pulse) -------------------------------------------------
+# No scope. Seed, turn up what a chance turns up, dig a month, finish what is
+# done (after the walk: a container is taken off the list it is walked in
+# only outside the walk), then the lists, the costs and the AI.
+gm_arch_monthly = {
+	if = {
+		limit = { gm_system_enabled = yes }
+		if = {
+			limit = { NOT = { has_global_variable = gm_arch_seeded } }
+			set_global_variable = gm_arch_seeded
+			gm_arch_seed_sites = yes
+		}
+		if = {
+			limit = { has_global_variable_list = gm_arch_sites }
+			every_in_global_list = {
+				variable = gm_arch_sites
+				gm_arch_site_monthly = yes
+			}
+			every_in_list = {
+				list = gm_arch_done
+				gm_arch_finish = yes
+			}
+		}
+		gm_arch_pass = yes
+		every_country = {
+			limit = {
+				has_variable = gm_arch_listed
+				gm_arch_ai_may_dig = yes
+			}
+			gm_arch_ai_decide = yes
+		}
+		# A country with a dig to pay for, or a site waiting, keeps its entry:
+		# the refresh applies the cost and opens the journal entry.
+		every_country = {
+			limit = {
+				has_variable = gm_arch_listed
+				is_ai = no
+				gm_arch_country_has_any = yes
+			}
+			trigger_event = { id = monument_events.20 }
+		}
+	}
+}
+
+# ---- Seeding (once a game) ---------------------------------------------------------------------
+# No scope. One call per site.
+gm_arch_seed_sites = {
+	gm_arch_seed_site = { KEY = nineveh_library STATE = STATE_MOSUL TECH = romanticism VECTOR = survey FORM = hall LEVEL = 10 }
+	gm_arch_seed_site = { KEY = winged_victory_of_samothrace STATE = STATE_WESTERN_THRACE TECH = romanticism VECTOR = survey FORM = statue LEVEL = 5 }
+	gm_arch_seed_site = { KEY = vindolanda_tablets STATE = STATE_YORKSHIRE TECH = empiricism VECTOR = incidental FORM = hall LEVEL = 5 }
+	gm_arch_seed_site = { KEY = troy_hisarlik STATE = STATE_HUDAVENDIGAR TECH = empiricism VECTOR = survey FORM = gate LEVEL = 10 }
+	gm_arch_seed_site = { KEY = mycenae_grave_circle STATE = STATE_PELOPONNESE TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 10 }
+	gm_arch_seed_site = { KEY = pergamon_altar STATE = STATE_AYDIN TECH = empiricism VECTOR = survey FORM = pantheon LEVEL = 10 }
+	gm_arch_seed_site = { KEY = deir_el_bahari_cache STATE = STATE_UPPER_EGYPT TECH = empiricism VECTOR = incidental FORM = rock_cut LEVEL = 5 }
+	gm_arch_seed_site = { KEY = ishtar_gate_babylon STATE = STATE_BAGHDAD TECH = civilizing_mission VECTOR = survey FORM = gate LEVEL = 10 }
+	gm_arch_seed_site = { KEY = palace_of_knossos STATE = STATE_CRETE TECH = pan_nationalism VECTOR = survey FORM = hall LEVEL = 10 }
+	gm_arch_seed_site = { KEY = antikythera_mechanism STATE = STATE_PELOPONNESE TECH = steam_donkey VECTOR = incidental FORM = statue LEVEL = 5 }
+	gm_arch_seed_site = { KEY = oseberg_ship STATE = STATE_EASTERN_NORWAY TECH = pan_nationalism VECTOR = incidental FORM = statue LEVEL = 5 }
+	gm_arch_seed_site = { KEY = machu_picchu STATE = STATE_ICA TECH = mass_propaganda VECTOR = survey FORM = gate LEVEL = 15 }
+	gm_arch_seed_site = { KEY = bust_of_nefertiti STATE = STATE_MIDDLE_EGYPT TECH = mass_propaganda VECTOR = survey FORM = statue LEVEL = 5 }
+	gm_arch_seed_site = { KEY = mohenjo_daro STATE = STATE_SINDH TECH = modern_materials VECTOR = incidental FORM = forum LEVEL = 10 }
+	gm_arch_seed_site = { KEY = tomb_of_tutankhamun STATE = STATE_UPPER_EGYPT TECH = mass_media VECTOR = survey FORM = mausoleum LEVEL = 15 }
+	gm_arch_seed_site = { KEY = royal_cemetery_at_ur STATE = STATE_BASRA TECH = mass_media VECTOR = survey FORM = mausoleum LEVEL = 10 }
+	gm_arch_seed_site = { KEY = sanxingdui_pits STATE = STATE_SICHUAN TECH = public_works_programs VECTOR = incidental FORM = hall LEVEL = 10 }
+	gm_arch_seed_site = { KEY = sutton_hoo STATE = STATE_EAST_ANGLIA TECH = combined_arms VECTOR = incidental FORM = mausoleum LEVEL = 5 }
+	gm_arch_seed_site = { KEY = lascaux_caves STATE = STATE_AQUITAINE TECH = public_works_programs VECTOR = incidental FORM = rock_cut LEVEL = 10 }
+	gm_arch_seed_site = { KEY = nag_hammadi_library STATE = STATE_UPPER_EGYPT TECH = nuclear_energy VECTOR = incidental FORM = stele LEVEL = 5 }
+	gm_arch_seed_site = { KEY = dead_sea_scrolls STATE = STATE_PALESTINE TECH = jet_engine_technology VECTOR = incidental FORM = stele LEVEL = 10 }
+	gm_arch_seed_site = { KEY = tomb_of_pakal STATE = STATE_CHIAPAS TECH = television_broadcasting VECTOR = survey FORM = pyramid LEVEL = 10 }
+	gm_arch_seed_site = { KEY = mawangdui_tombs STATE = STATE_HUNAN TECH = modern_pharmaceuticals VECTOR = incidental FORM = mausoleum LEVEL = 10 }
+	gm_arch_seed_site = { KEY = terracotta_army STATE = STATE_XIAN TECH = containerization VECTOR = incidental FORM = mausoleum LEVEL = 15 }
+	gm_arch_seed_site = { KEY = tomb_of_philip_ii STATE = STATE_MACEDONIA TECH = microprocessor VECTOR = survey FORM = mausoleum LEVEL = 10 }
+	gm_arch_seed_site = { KEY = tomb_of_marquis_yi STATE = STATE_EASTERN_HUBEI TECH = barcodes_and_scanners VECTOR = incidental FORM = hall LEVEL = 10 }
+	gm_arch_seed_site = { KEY = royal_tombs_of_sipan STATE = STATE_CAJAMARCA TECH = personal_computers VECTOR = incidental FORM = pyramid LEVEL = 10 }
+	gm_arch_seed_site = { KEY = otzi_the_iceman STATE = STATE_SOUTH_TYROL TECH = world_wide_web VECTOR = incidental FORM = statue LEVEL = 5 }
+	gm_arch_seed_site = { KEY = caral_supe STATE = STATE_LIMA TECH = digital_telecommunications VECTOR = survey FORM = pyramid LEVEL = 10 }
+	gm_arch_seed_site = { KEY = gobekli_tepe STATE = STATE_DIYARBAKIR TECH = e_commerce VECTOR = survey FORM = colonnade LEVEL = 15 }
+	gm_arch_seed_site = { KEY = olympia STATE = STATE_PELOPONNESE TECH = empiricism VECTOR = survey FORM = pantheon LEVEL = 10 }
+	gm_arch_seed_site = { KEY = delphi STATE = STATE_ATTICA TECH = civilizing_mission VECTOR = survey FORM = stoa LEVEL = 10 }
+	gm_arch_seed_site = { KEY = sidon_necropolis STATE = STATE_LEBANON TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 5 }
+	gm_arch_seed_site = { KEY = villa_of_the_papyri STATE = STATE_CAMPANIA TECH = microprocessor VECTOR = survey FORM = hall LEVEL = 10 }
+	gm_arch_seed_site = { KEY = tomb_of_alexander STATE = STATE_LOWER_EGYPT TECH = mainframe_computers VECTOR = survey FORM = mausoleum LEVEL = 15 }
+}
+
+# Any scope. A site container with the records of the monument it will be.
+# Never twice: the debug event runs the seeding again. The container needs
+# a scope to be made in: any country will do, it has no parent.
+gm_arch_seed_site = {
+	if = {
+		limit = {
+			NOT = {
+				AND = {
+					has_global_variable_list = gm_arch_sites
+					any_in_global_list = {
+						variable = gm_arch_sites
+						has_variable = gm_tr_landmark
+						var:gm_tr_landmark = flag:$KEY$
+					}
+				}
+			}
+		}
+		clear_saved_scope = gm_arch_new
+		random_country = {
+			create_container = {
+				tags = { gm_site }
+				save_scope_as = gm_arch_new
+				on_created = {
+					save_scope_as = gm_arch_new
+				}
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_arch_new }
+			add_to_global_variable_list = { name = gm_arch_sites target = scope:gm_arch_new }
+			scope:gm_arch_new = {
+				set_variable = { name = gm_tr_landmark value = flag:$KEY$ }
+				set_variable = { name = gm_tr_skin value = flag:landmark_$KEY$ }
+				set_variable = { name = gm_tr_form value = flag:$FORM$ }
+				set_variable = { name = gm_tr_levels value = $LEVEL$ }
+				set_variable = { name = gm_tr_dedication value = flag:civic }
+				set_variable = { name = gm_tr_namesake value = flag:landmark }
+				# A whole landmark: its title is its name, with no part's.
+				set_variable = { name = gm_tr_share value = flag:whole }
+				set_variable = { name = gm_tr_origin_region value = s:$STATE$ }
+				set_variable = { name = gm_site_tech value = flag:$TECH$ }
+				set_variable = { name = gm_site_vector value = flag:$VECTOR$ }
+				set_variable = { name = gm_site_status value = 1 }
+			}
+		}
+	}
+}
+
+# ---- A site's month ---------------------------------------------------------------------------------
+# Container scope, from gm_arch_monthly. A dig goes on a month; an incidental
+# site that nobody has found may be.
+gm_arch_site_monthly = {
+	if = {
+		limit = { gm_arch_site_digging = yes }
+		gm_arch_dig_step = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = gm_site_status
+			var:gm_site_status = 1
+			var:gm_site_vector = flag:incidental
+		}
+		gm_arch_try_find = yes
+	}
+}
+
+# Container scope. An incidental site whose ground belongs to a country with the
+# technology that gates it: a monthly chance (gm_arch_find_chance) that the
+# plough, the railway cutting or a hiker turns it up. The finder is one of the
+# ground's owners with the technology.
+gm_arch_try_find = {
+	save_scope_as = gm_arch_gate_site
+	clear_saved_scope = gm_arch_finder
+	var:gm_tr_origin_region ?= {
+		random_scope_state = {
+			limit = {
+				exists = owner
+				owner = { gm_arch_country_has_gate = yes }
+			}
+			owner = { save_scope_as = gm_arch_finder }
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_arch_finder }
+		random = {
+			chance = gm_arch_find_chance
+			gm_arch_found = yes
+		}
+	}
+}
+
+# Container scope (scope:gm_arch_finder). It is known now, and open to whoever
+# owns the ground and has the technology. A player is told; the AI finds it in
+# its list at the next review.
+gm_arch_found = {
+	set_variable = { name = gm_site_status value = 2 }
+	save_scope_as = gm_arch_pick
+	debug_log = "TE_MONUMENTS: site turned up (incidental)"
+	scope:gm_arch_finder = {
+		set_variable = { name = gm_arch_last value = scope:gm_arch_pick.var:gm_tr_landmark }
+		if = {
+			limit = { is_ai = no }
+			trigger_event = { id = arch_events.1 }
+		}
+	}
+}
+
+# Container scope, a dig in progress. A month of progress by the method, from
+# the sponsor's part of the ground: a sponsor that no longer holds any (the
+# ground changed hands, or the country is gone) suspends it, with its
+# progress kept. A dig that reaches 100 is put on gm_arch_done, to be finished
+# once the walk over the list is over.
+gm_arch_dig_step = {
+	clear_saved_scope = gm_arch_sponsor
+	clear_saved_scope = gm_arch_dig_state
+	var:gm_site_sponsor ?= { save_scope_as = gm_arch_sponsor }
+	if = {
+		limit = { exists = scope:gm_arch_sponsor }
+		var:gm_tr_origin_region ?= {
+			random_scope_state = {
+				limit = { owner = scope:gm_arch_sponsor }
+				save_scope_as = gm_arch_dig_state
+			}
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_arch_dig_state }
+		if = {
+			limit = { var:gm_site_method = flag:antiquarian }
+			change_variable = { name = gm_site_progress add = gm_arch_rate_antiquarian }
+		}
+		else_if = {
+			limit = { var:gm_site_method = flag:systematic }
+			change_variable = { name = gm_site_progress add = gm_arch_rate_systematic }
+		}
+		else = {
+			change_variable = { name = gm_site_progress add = gm_arch_rate_forensic }
+		}
+		clamp_variable = { name = gm_site_progress max = 100 min = 0 }
+		if = {
+			limit = { var:gm_site_progress >= 100 }
+			add_to_temporary_list = gm_arch_done
+		}
+	}
+	else = {
+		gm_arch_suspend = yes
+	}
+}
+
+# Container scope. The dig stops; what was done is kept, and the site is open
+# to whoever owns the ground and has the technology.
+gm_arch_suspend = {
+	set_variable = { name = gm_site_status value = 2 }
+	remove_variable = gm_site_sponsor
+}
+
+# ---- Finishing a dig -------------------------------------------------------------------------------
+# Container scope, from gm_arch_monthly's walk of gm_arch_done. The method
+# decides what the dig makes of it (gm_arch_settle_levels), then it stands
+# in the sponsor's part of the ground, or the dig is suspended if the sponsor
+# has none left.
+gm_arch_finish = {
+	clear_saved_scope = gm_arch_sponsor
+	clear_saved_scope = gm_arch_dig_state
+	var:gm_site_sponsor ?= { save_scope_as = gm_arch_sponsor }
+	if = {
+		limit = { exists = scope:gm_arch_sponsor }
+		var:gm_tr_origin_region ?= {
+			random_scope_state = {
+				limit = { owner = scope:gm_arch_sponsor }
+				save_scope_as = gm_arch_dig_state
+			}
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_arch_dig_state }
+		gm_arch_settle_levels = yes
+		gm_arch_place = yes
+	}
+	else = {
+		gm_arch_suspend = yes
+	}
+}
+
+# Container scope. What the method made of the dig. A Forensic dig adds a few
+# levels; an Antiquarian one risks Stratigraphic Destruction, which halves what
+# it finds (at least 3). gm_arch_ruined tells the sponsor which it was.
+gm_arch_settle_levels = {
+	if = {
+		limit = { has_variable = gm_arch_ruined }
+		remove_variable = gm_arch_ruined
+	}
+	if = {
+		limit = { var:gm_site_method = flag:forensic }
+		change_variable = { name = gm_tr_levels add = gm_arch_forensic_bonus }
+	}
+	else_if = {
+		limit = { var:gm_site_method = flag:antiquarian }
+		random = {
+			chance = gm_arch_destruction_chance
+			set_variable = gm_arch_ruined
+			set_variable = {
+				name = gm_tr_levels
+				value = {
+					value = var:gm_tr_levels
+					divide = 2
+					ceiling = yes
+					min = 3
+				}
+			}
+		}
+	}
+}
+
+# Container scope (scope:gm_arch_sponsor, scope:gm_arch_dig_state). The
+# monument stands in the sponsor's part. With none there, the state's building
+# is built from the records (gm_state_tr_receive, as a trophy's return is) and
+# the container is done with. With one standing, the building takes the levels
+# and the container stays as a monument beside it.
+gm_arch_place = {
+	save_scope_as = gm_tr_moving
+	set_variable = { name = gm_site_status value = 4 }
+	set_variable = { name = gm_tr_origin value = scope:gm_arch_dig_state }
+	set_variable = { name = gm_tr_site value = scope:gm_arch_dig_state }
+	set_variable = { name = gm_tr_site_region value = var:gm_tr_origin_region }
+	set_variable = { name = gm_tr_year value = gm_this_year }
+	gm_tr_update_picture = yes
+	scope:gm_arch_sponsor = {
+		set_variable = { name = gm_arch_last value = scope:gm_tr_moving.var:gm_tr_landmark }
+		set_variable = gm_active
+	}
+	debug_log = "TE_MONUMENTS: site unearthed and placed"
+	# A player is told how it went, before the container may go: the text reads
+	# the sponsor's gm_arch_last, and the monument's own refresh follows.
+	if = {
+		limit = {
+			exists = scope:gm_arch_sponsor
+			scope:gm_arch_sponsor = { is_ai = no }
+		}
+		if = {
+			limit = { has_variable = gm_arch_ruined }
+			scope:gm_arch_sponsor = { trigger_event = { id = arch_events.3 } }
+		}
+		else = {
+			scope:gm_arch_sponsor = { trigger_event = { id = arch_events.2 } }
+		}
+	}
+	if = {
+		limit = { scope:gm_arch_dig_state = { has_building = building_grand_monument } }
+		gm_arch_stand_beside = yes
+	}
+	else = {
+		scope:gm_arch_dig_state = { gm_state_tr_receive = yes }
+		gm_arch_retire = yes
+	}
+}
+
+# Container scope (scope:gm_tr_moving is this container, var:gm_tr_origin its
+# state). A monument already stands there: the levels go on the building, which
+# records the primary's dedication to put back first (gm_state_tr_add_levels),
+# and this container becomes a monument of its own, retagged, in the
+# state's and the owner's lists, as a landmark seeded beside another is
+# (gm_seed_landmark_beside, gm_monument_effects.txt).
+gm_arch_stand_beside = {
+	remove_list_global_variable = { name = gm_arch_sites target = scope:gm_tr_moving }
+	add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }
+	set_global_variable = gm_mon_lists_written
+	remove_tag = gm_site
+	add_tag = gm_monument
+	var:gm_tr_origin = {
+		gm_state_tr_add_levels = yes
+		add_to_variable_list = { name = gm_monuments_here target = scope:gm_tr_moving }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+		owner = {
+			add_to_variable_list = { name = gm_monuments_held target = scope:gm_tr_moving }
+			set_variable = gm_mon_listed
+			trigger_event = { id = monument_events.20 }
+		}
+	}
+}
+
+# Container scope. The state has the monument now; this container has done its
+# work. Off the list, then destroyed.
+gm_arch_retire = {
+	remove_list_global_variable = { name = gm_arch_sites target = scope:gm_tr_moving }
+	destroy_container = yes
+}
+
+# ---- Orders (the scripted GUI's and the events' side) ------------------------------------------------------
+# Container scope. $WHO$ is to dig it by $METHOD$ (antiquarian, systematic or
+# forensic): arch_events.10 checks again and does it.
+gm_arch_order_launch = {
+	set_variable = { name = gm_site_order_method value = flag:$METHOD$ }
+	save_scope_as = gm_arch_pick
+	$WHO$ = { trigger_event = { id = arch_events.10 } }
+}
+
+# Container scope. $WHO$ is to stop digging it (arch_events.11).
+gm_arch_order_suspend = {
+	save_scope_as = gm_arch_pick
+	$WHO$ = { trigger_event = { id = arch_events.11 } }
+}
+
+# Container scope (scope:gm_arch_pick). The choice, with the tooltip that says
+# what it costs, for an event's option.
+gm_arch_choose_launch = {
+	custom_tooltip = {
+		text = gm_arch_launch_$METHOD$_tt
+		gm_arch_order_launch = { WHO = $WHO$ METHOD = $METHOD$ }
+	}
+}
+
+# Container scope, from arch_events.10 once it has checked the site again.
+# $WHO$ starts the dig by the method it ordered, if it has that method's
+# technology. Progress is kept from a dig suspended before.
+gm_arch_start_dig = {
+	if = {
+		limit = {
+			var:gm_site_order_method = flag:antiquarian
+			$WHO$ = { gm_arch_method_antiquarian_ok = yes }
+		}
+		set_variable = { name = gm_site_method value = flag:antiquarian }
+		gm_arch_begin_dig = { WHO = $WHO$ }
+	}
+	else_if = {
+		limit = {
+			var:gm_site_order_method = flag:systematic
+			$WHO$ = { gm_arch_method_systematic_ok = yes }
+		}
+		set_variable = { name = gm_site_method value = flag:systematic }
+		gm_arch_begin_dig = { WHO = $WHO$ }
+	}
+	else_if = {
+		limit = {
+			var:gm_site_order_method = flag:forensic
+			$WHO$ = { gm_arch_method_forensic_ok = yes }
+		}
+		set_variable = { name = gm_site_method value = flag:forensic }
+		gm_arch_begin_dig = { WHO = $WHO$ }
+	}
+	remove_variable = gm_site_order_method
+}
+
+gm_arch_begin_dig = {
+	set_variable = { name = gm_site_status value = 3 }
+	set_variable = { name = gm_site_sponsor value = $WHO$ }
+	if = {
+		limit = { NOT = { has_variable = gm_site_progress } }
+		set_variable = { name = gm_site_progress value = 0 }
+	}
+	debug_log = "TE_MONUMENTS: dig begun"
+}
+
+# Container scope, from arch_events.11: the dig stops and its progress stays.
+gm_arch_stop_dig = {
+	gm_arch_suspend = yes
+	if = {
+		limit = { has_variable = gm_site_order_method }
+		remove_variable = gm_site_order_method
+	}
+}
+
+# ---- Lists, costs, the national side -------------------------------------------------------------------------
+# No scope. Every country's lists of what it digs and what waits for it, and what
+# the digs cost, from the sites. Last month's are cleared first; the lists are
+# rebuilt each time, after a click too (arch_events.10, .11).
+gm_arch_pass = {
+	every_country = {
+		limit = { has_variable = gm_arch_listed }
+		clear_variable_list = gm_arch_available
+		clear_variable_list = gm_arch_digging
+		set_variable = { name = gm_arch_dig_count value = 0 }
+		set_variable = { name = gm_arch_open_count value = 0 }
+		set_variable = { name = gm_arch_innovation_units value = 0 }
+		set_variable = { name = gm_arch_cost_units value = 0 }
+	}
+	if = {
+		limit = { has_global_variable_list = gm_arch_sites }
+		every_in_global_list = {
+			variable = gm_arch_sites
+			gm_arch_list_one = yes
+		}
+	}
+}
+
+# Container scope. This site into the lists of the country that digs it or the
+# countries that may.
+gm_arch_list_one = {
+	save_scope_as = gm_arch_listing
+	save_scope_as = gm_arch_gate_site
+	if = {
+		limit = { gm_arch_site_digging = yes }
+		clear_saved_scope = gm_arch_sponsor
+		var:gm_site_sponsor ?= { save_scope_as = gm_arch_sponsor }
+		clear_saved_scope = gm_arch_view_state
+		if = {
+			limit = { exists = scope:gm_arch_sponsor }
+			# The state the row names: the sponsor's part of the ground.
+			var:gm_tr_origin_region ?= {
+				random_scope_state = {
+					limit = { owner = scope:gm_arch_sponsor }
+					save_scope_as = gm_arch_view_state
+				}
+			}
+			if = {
+				limit = { exists = scope:gm_arch_view_state }
+				set_variable = { name = gm_site_view_state value = scope:gm_arch_view_state }
+			}
+			scope:gm_arch_sponsor = {
+				gm_arch_country_listed = yes
+				add_to_variable_list = { name = gm_arch_digging target = scope:gm_arch_listing }
+				change_variable = { name = gm_arch_dig_count add = 1 }
+				if = {
+					limit = { scope:gm_arch_listing = { var:gm_site_method = flag:antiquarian } }
+					change_variable = { name = gm_arch_innovation_units add = gm_arch_innovation_antiquarian }
+					change_variable = { name = gm_arch_cost_units add = gm_arch_cost_antiquarian }
+				}
+				else_if = {
+					limit = { scope:gm_arch_listing = { var:gm_site_method = flag:systematic } }
+					change_variable = { name = gm_arch_innovation_units add = gm_arch_innovation_systematic }
+					change_variable = { name = gm_arch_cost_units add = gm_arch_cost_systematic }
+				}
+				else = {
+					change_variable = { name = gm_arch_innovation_units add = gm_arch_innovation_forensic }
+					change_variable = { name = gm_arch_cost_units add = gm_arch_cost_forensic }
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { gm_arch_site_open = yes }
+		var:gm_tr_origin_region ?= {
+			every_scope_state = {
+				limit = {
+					exists = owner
+					owner = {
+						gm_arch_country_has_gate = yes
+						NOT = { is_target_in_variable_list = { name = gm_arch_available target = scope:gm_arch_listing } }
+					}
+				}
+				save_scope_as = gm_arch_view_state
+				scope:gm_arch_listing = {
+					set_variable = { name = gm_site_view_state value = scope:gm_arch_view_state }
+				}
+				owner = {
+					gm_arch_country_listed = yes
+					add_to_variable_list = { name = gm_arch_available target = scope:gm_arch_listing }
+					change_variable = { name = gm_arch_open_count add = 1 }
+				}
+			}
+		}
+	}
+}
+
+# Country scope: listed this month, with its counts started at 0, and its
+# national pulse running (gm_active keeps it going while it digs or waits).
+gm_arch_country_listed = {
+	if = {
+		limit = { NOT = { has_variable = gm_arch_listed } }
+		set_variable = gm_arch_listed
+		set_variable = { name = gm_arch_dig_count value = 0 }
+		set_variable = { name = gm_arch_open_count value = 0 }
+		set_variable = { name = gm_arch_innovation_units value = 0 }
+		set_variable = { name = gm_arch_cost_units value = 0 }
+	}
+	set_variable = gm_active
+}
+
+# Journal-entry scope (ROOT = the country), from gm_apply_national_modifiers.
+# The digs' weekly innovation drain and weekly cost, each the units
+# gm_arch_pass summed: the modifiers carry one unit.
+gm_arch_add_national = {
+	gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units }
+	gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units }
+}
+
+# Journal-entry scope, from gm_remove_national_modifiers.
+gm_arch_remove_national = {
+	remove_modifier = gm_arch_diversion
+	remove_modifier = gm_arch_expense
+}
+
+# ---- The AI ---------------------------------------------------------------------------------------------------------
+# Country scope, monthly, an AI at peace and out of default (gm_arch_ai_may_dig)
+# that is listed. With a site waiting and fewer than two digs going, one
+# month in twelve it opens the grandest, by the best method its technology
+# allows: Forensic, then Systematic, then Antiquarian. The cost and the
+# drained innovation are the brakes, as for a player.
+gm_arch_ai_decide = {
+	if = {
+		limit = {
+			has_variable = gm_arch_open_count
+			var:gm_arch_open_count > 0
+			# any_in_list's count, not variable_list_size, whose key fails to load in 1.14
+			NOT = { any_in_list = { variable = gm_arch_digging count >= 2 } }
+		}
+		random = {
+			chance = 8
+			clear_saved_scope = gm_arch_ai_pick
+			ordered_in_list = {
+				variable = gm_arch_available
+				order_by = gm_arch_disp_levels
+				position = 0
+				check_range_bounds = no
+				save_scope_as = gm_arch_ai_pick
+			}
+			if = {
+				limit = { exists = scope:gm_arch_ai_pick }
+				save_scope_as = gm_arch_ai_country
+				scope:gm_arch_ai_pick = {
+					gm_arch_start_best = { WHO = scope:gm_arch_ai_country }
+				}
+			}
+		}
+	}
+}
+
+# Container scope. $WHO$ digs the site by the best method its technology
+# allows: Forensic, then Systematic, then Antiquarian, if it may dig it at all.
+gm_arch_start_best = {
+	if = {
+		limit = { $WHO$ = { gm_arch_method_forensic_ok = yes } }
+		set_variable = { name = gm_site_order_method value = flag:forensic }
+	}
+	else_if = {
+		limit = { $WHO$ = { gm_arch_method_systematic_ok = yes } }
+		set_variable = { name = gm_site_order_method value = flag:systematic }
+	}
+	else = {
+		set_variable = { name = gm_site_order_method value = flag:antiquarian }
+	}
+	if = {
+		limit = { gm_arch_can_dig = { WHO = $WHO$ } }
+		gm_arch_start_dig = { WHO = $WHO$ }
+	}
+	else = {
+		remove_variable = gm_site_order_method
+	}
+}
+
+# ---- Debug (te_debug_monuments.7) --------------------------------------------------------------------------------------
+# No scope. One TE_MONUMENTS: line a site that has moved from buried, and a summary.
+# Only the working debug_log form ([SCOPE.ScriptValue('...')|N]: no names).
+gm_arch_debug_log = {
+	if = {
+		limit = { has_global_variable_list = gm_arch_sites }
+		every_in_global_list = {
+			variable = gm_arch_sites
+			limit = {
+				has_variable = gm_site_status
+				var:gm_site_status > 1
+			}
+			debug_log = "TE_MONUMENTS: site status [SCOPE.ScriptValue('gm_arch_disp_status')|0], progress [SCOPE.ScriptValue('gm_arch_disp_progress')|0], method [SCOPE.ScriptValue('gm_arch_disp_method')|0], levels [SCOPE.ScriptValue('gm_arch_disp_levels')|0]"
+		}
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: no archaeological sites yet"
+	}
+}

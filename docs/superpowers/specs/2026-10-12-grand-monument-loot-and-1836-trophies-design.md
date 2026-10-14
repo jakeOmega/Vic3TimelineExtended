@@ -172,7 +172,7 @@ Each state has one owner in 1836, so none is exposed to #936.
 
 - **Still buried in 1836:** the Pergamon Altar (1878), Priam's Treasure (1873), the Sidon sarcophagi (1855, 1887),
   Nineveh's and Nimrud's reliefs (1840s). The Siloam inscription (1880) lay in Hezekiah's tunnel under Jerusalem.
-  Monuments uncovered during the game are issue #939.
+  Monuments uncovered during the game are issue #939, built as `2026-10-14-grand-monument-archaeology-design.md`.
 - **Standing but unknown to Europe in 1836:** the Nereid Monument at Xanthos (1838) and the Mesha Stele at Dhiban
   (1868). Both added under the revised rule (§1.3).
 - **Palmyra:** like Great Zimbabwe, its weight in 1836 was legend and travellers' romance (Lady Hester Stanhope, 1813),

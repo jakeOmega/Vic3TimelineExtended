@@ -66,8 +66,8 @@ slice, including descendants previously expanded.
 ## Journal systems and source amounts
 
 Banking, Covert Actions, Cultural Hegemony, Colonial Development, the United
-Nations, Nuclear Program, Nuclear Civil Defence, Space Race and Drug Shortage
-Response each have a separate expense category. UN grants, Strategic Reserve
+Nations, Nuclear Program, Nuclear Civil Defence, Space Race, Drug Shortage
+Response and Archaeological Digs each have a separate expense category. UN grants, Strategic Reserve
 sales, war-profit taxes and spectrum auctions have separate income categories.
 Hover a row for the engine's applied modifier sources and amounts.
 
