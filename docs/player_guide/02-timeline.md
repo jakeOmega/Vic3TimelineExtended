@@ -502,8 +502,8 @@ Industry throughput and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
 the Timeline Extended window, where the buttons are. While you can carry the
 monument off as a trophy, the card has a Carry It Off button. A state with more
-than one monument shows an Also Standing Here card under it, and a state where
-trophies stand shows a Trophies on Display card under that.
+than one monument lists the others in the same card, under these details, and a
+state where trophies stand shows a Trophies on Display card under it.
 
 The overview at the top is always shown. It has an icon for each status a
 monument can hold, with the number of your monuments in that status beneath:
@@ -550,10 +550,10 @@ monument adds to your prestige and cultural pull, but its dedication gives
 nothing of its own, so a civic artifact beside a crown monument does not add to
 the crown's legitimacy.
 
-Each of the others has its own row on the state's Also Standing Here card and
-under Our Monuments. An army that holds the state carries monuments off one at
-a time, with the Carry It Off on the first one's card or on another's row, and
-the rest stay. If the first
+Each of the others has its own row in the state's monument card, under the
+first one's details, and under Our Monuments. An army that holds the state
+carries monuments off one at a time, with the Carry It Off on the first one's
+details or on another's row, and the rest stay. If the first
 monument is pulled down or carried off whole, the largest of the others takes
 the building and its dedication. Rededicate applies to the first monument only,
 at half its own grandeur.

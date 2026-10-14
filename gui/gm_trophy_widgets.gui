@@ -8,9 +8,9 @@
 ###   te_state_gm_trophy_card                the state view's Trophies on
 ###     Display card (states_panel.gui), under the monument card
 ###   gm_mon_take_button, gm_mon_row_site,   a secondary monument's Carry It Off,
-###   te_state_gm_monument_card              its row, and the state view's Also
-###     Standing Here card (states_panel.gui), between the monument card and
-###     the trophies: the monuments standing beside the state's primary
+###   te_state_gm_beside                     its row, and the section of the state
+###     view's monument card (te_state_panel_widgets.gui) that lists the
+###     monuments standing beside the state's primary
 ###     (docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md §5)
 ### A trophy is a script container (gm_trophy_effects.txt): its rows come from
 ### the country's gm_trophies_held / gm_trophies_abroad and the state's
@@ -1277,58 +1277,45 @@ types gm_trophy_widget_types
 		gm_mon_take_button = {}
 	}
 
-	### The state view's Also Standing Here card, between the monument card and
-	### the Trophies on Display card, while a secondary monument stands in this
-	### state (gm_state_mon_disp_here). The monument card above is the state's
-	### whole (the building, at every monument's levels together) and its
+	### The monuments that stand beside a state's own, a section of the state
+	### view's monument card (te_state_gm_card, te_state_panel_widgets.gui), under
+	### its picture and details and across its width, while a secondary monument
+	### stands in this state (gm_state_mon_disp_here). The card above it is the
+	### state's whole (the building, at every monument's levels together) and its
 	### primary; each monument beside the primary has a row here.
-	type te_state_gm_monument_card = flowcontainer {
+	type te_state_gm_beside = flowcontainer {
 		visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_mon_disp_here'), '(CFixedPoint)0')]"
 		direction = vertical
-		parentanchor = hcenter
-		margin_top = 10
+		ignoreinvisible = yes
+		spacing = 6
 
-		container = {
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				margin = { 10 8 }
-				spacing = 6
-				minimumsize = { 530 -1 }
+		textbox = {
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#tooltippable"
+			tooltip = "gm_state_mon_header_tt"
+			text = "gm_state_mon_header"
+		}
 
-				background = {
-					using = entry_bg_simple
-				}
+		### How many, and what they add to the building together.
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 510 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			text = "gm_state_mon_summary"
+		}
 
-				textbox = {
-					autoresize = yes
-					align = left|nobaseline
-					using = fontsize_large
-					default_format = "#tooltippable"
-					tooltip = "gm_state_mon_header_tt"
-					text = "gm_state_mon_header"
-				}
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 8
+			datamodel = "[State.MakeScope.GetList('gm_monuments_here')]"
 
-				### How many, and what they add to the building together.
-				textbox = {
-					autoresize = yes
-					multiline = yes
-					maximumsize = { 510 -1 }
-					align = left|nobaseline
-					using = fontsize_medium
-					text = "gm_state_mon_summary"
-				}
-
-				flowcontainer = {
-					direction = vertical
-					ignoreinvisible = yes
-					spacing = 8
-					datamodel = "[State.MakeScope.GetList('gm_monuments_here')]"
-
-					item = {
-						gm_mon_row_site = { datacontext = "[Scope.GetScriptContainer]" }
-					}
-				}
+			item = {
+				gm_mon_row_site = { datacontext = "[Scope.GetScriptContainer]" }
 			}
 		}
 	}

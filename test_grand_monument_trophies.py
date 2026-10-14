@@ -423,8 +423,7 @@ class PanelTests(unittest.TestCase):
                                                                     r"(?m)^\ttype gm_monument_row = flowcontainer \{")))
         self.assertIn("gm_tr_take_button = {}", squash(raw_block_at(read(STATE_WIDGETS),
                                                                     r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))
-        self.assertIn("te_state_gm_card = {} te_state_gm_monument_card = {} te_state_gm_trophy_card = {}",
-                      squash(strip_comments(read(STATES_PANEL))))
+        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", squash(strip_comments(read(STATES_PANEL))))
 
     def test_flags_say_their_default(self):
         gui = strip_comments(read(TR_GUI))
@@ -1008,16 +1007,16 @@ class LootingASecondaryTests(unittest.TestCase):
 
 class AlsoStandingHereTests(unittest.TestCase):
     """Task 5: the state view. The monument card is the state's whole and its
-    primary, as before. Under it, while a secondary monument stands here, a
-    card lists each with its picture, name, form, dedication and levels, and a
-    Carry It Off of its own."""
+    primary, as before. Under its details, inside the same card and while a
+    secondary monument stands here, a section lists each with its picture,
+    name, form, dedication and levels, and a Carry It Off of its own."""
 
     def setUp(self):
         self.gui = read(TR_GUI)
         self.card = squash(strip_comments(
-            raw_block_at(self.gui, r"(?m)^\ttype te_state_gm_monument_card = flowcontainer \{") or ""))
+            raw_block_at(self.gui, r"(?m)^\ttype te_state_gm_beside = flowcontainer \{") or ""))
 
-    def test_the_card_shows_only_while_a_secondary_stands_here(self):
+    def test_the_section_shows_only_while_a_secondary_stands_here(self):
         self.assertIn("visible = \"[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_mon_disp_here'), "
                       "'(CFixedPoint)0')]\"", self.card)
         v = squash(block(read(MON_VALUES), "gm_state_mon_disp_here"))
@@ -1053,7 +1052,7 @@ class AlsoStandingHereTests(unittest.TestCase):
         """Gotcha #24: a datamodel row renders its tooltips without JournalEntry."""
         L = loc()
         for row, kind in (("gm_mon_row_site", "flowcontainer"), ("gm_mon_take_button", "button"),
-                          ("te_state_gm_monument_card", "flowcontainer")):
+                          ("te_state_gm_beside", "flowcontainer")):
             body = raw_block_at(self.gui, rf"(?m)^\ttype {row} = {kind} \{{")
             self.assertIsNotNone(body, row)
             self.assertNotIn("JournalEntry", body, row)
@@ -1067,9 +1066,17 @@ class AlsoStandingHereTests(unittest.TestCase):
         for key in re.findall(r"text = (gm_mon_\w+)", read(MON_SGUIS) + read(MON_TRIGGERS)):
             self.assertIn(key, L, key)
 
-    def test_mounted_between_the_monument_and_the_trophies(self):
+    def test_one_card_holds_the_primary_and_the_rest(self):
         panel = squash(strip_comments(read(STATES_PANEL)))
-        self.assertIn("te_state_gm_card = {} te_state_gm_monument_card = {} te_state_gm_trophy_card = {}", panel)
+        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", panel)
+        self.assertNotIn("te_state_gm_monument_card", panel)
+        self.assertNotIn("te_state_gm_monument_card", strip_comments(self.gui))
+        card = squash(strip_comments(raw_block_at(read(STATE_WIDGETS), r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))
+        # Inside the card's background, after the picture and details row,
+        # before the corner's goto.
+        self.assertEqual(card.count("te_state_gm_beside = {}"), 1)
+        self.assertLess(card.find("gm_tr_take_button = {}"), card.find("te_state_gm_beside = {}"))
+        self.assertLess(card.find("te_state_gm_beside = {}"), card.find("button_icon_goto"))
 
     def test_the_monument_card_names_the_building_as_the_whole(self):
         # The grandeur row's hover says, with a secondary here, that the level

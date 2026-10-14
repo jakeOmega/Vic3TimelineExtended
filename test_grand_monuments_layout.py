@@ -753,7 +753,12 @@ class StateCardTest(unittest.TestCase):
                            r"blockoverride \"status_texture\" \{ texture = \"([^\"]+)\" \}", self.flat)
         self.assertEqual({int(c): t for c, _, t in found}, {k: v for k, v in ICONS.items() if isinstance(k, int)})
         # The three hidden ones take no room.
-        self.assertIn("container = { flowcontainer = { direction = horizontal ignoreinvisible = yes ", self.flat)
+        # The picture and details are a horizontal row in a vertical flow that
+        # carries the margin, width and background, so the monuments standing
+        # beside this one (te_state_gm_beside) can span the card under them.
+        self.assertIn("container = { flowcontainer = { direction = vertical ignoreinvisible = yes margin = { 10 8 } "
+                      "spacing = 8 minimumsize = { 530 -1 } background = { using = entry_bg_simple } "
+                      "flowcontainer = { direction = horizontal ignoreinvisible = yes spacing = 10 ", self.flat)
         row = _squash(_type_body(_gui(), "gm_monument_row"))
         for code, tooltip, _ in found:
             self.assertIn(f"'(CFixedPoint){code}' )]\" tooltip = \"{tooltip}\"", row, "the row's tooltip")
