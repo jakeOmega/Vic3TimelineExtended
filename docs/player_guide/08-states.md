@@ -217,7 +217,7 @@ toward its cap:
 
 | Source | Bonus | Cap |
 |---|---|---|
-| Excess Infrastructure | The infrastructure the state produces less what its buildings use: +18% at 1,000, +36% at 3,000, +54% at 9,000. Each point adds less than the one before. | +72%, never quite reached |
+| Excess Infrastructure | The infrastructure the state produces less what its buildings use: +25% at 10,000, +50% at 30,000, +75% at 90,000. Each point adds less than the one before. | +100%, never quite reached |
 | Art | +1% per Creative Industry level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
 | Monuments | +10% for a Skyscraper, +25% for each monument | none |
