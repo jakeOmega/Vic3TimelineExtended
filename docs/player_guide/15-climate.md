@@ -464,8 +464,24 @@ logging throughput, 2% oil extraction throughput and 5% more construction goods.
 Heavy pollution hurts more than in the base game. As a state region's pollution
 rises toward its maximum, it adds up to +5% mortality, −3 standard of living and
 −5% working-age population on top of the base-game penalty, and wipes out
-tourism output. It also damps new pollution by up to 90%, so a region that is
-already choked fills up more slowly.
+tourism output.
+
+It also damps new pollution generation by up to 90% as pollution rises. Because
+pollution reduces its own generation, a state's pollution percentage settles at a
+steady value instead of climbing without limit. This creates a steepening curve:
+in an unpolluted state, all generated pollution counts, but at maximum pollution
+impact, damping reaches 90%, so only 10% counts: a tenfold increase in the gross
+pollution needed per point of impact. Pushing a state from roughly 89% pollution
+(where 20% counts) to 100% (where 10% counts) requires twice as much gross
+generation.
+
+The steeper curve ensures a region never accumulates so much excess pollution
+that reducing pollution does nothing. In the base game, an industrial heartland
+can produce far more pollution than the 100% impact cap requires, leaving a
+deep backlog where cutting emissions has no visible effect for years. Under this
+damping, pollution cannot run away beyond the cap, so adopting clean production
+methods, decrees or ministry funding always lowers the pollution percentage
+right away.
 
 ### The Environmental Movement
 
