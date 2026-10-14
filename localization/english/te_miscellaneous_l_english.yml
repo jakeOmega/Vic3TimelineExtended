@@ -2942,6 +2942,7 @@
  gm_mon_row_detail:0 "[ScriptContainer.GetCustom('gm_tr_form_name')], [ScriptContainer.GetCustom('gm_tr_dedication_name')]"
  gm_mon_row_value:0 "Adds #v [ScriptContainer.MakeScope.ScriptValue('gm_mon_grandeur')|0]#! levels to the building"
  gm_mon_row_value_tt:0 "#b Its levels#!\nA monument that stands beside the first one here adds its levels to the one building, which runs on the first's dedication. What the building gives this state and the nation counts every monument's levels once, and the Grand Monuments tab of the Timeline Extended window lists the effects.\nA country whose armies hold half the state in a war can carry this one off, and the others stay."
+ gm_mon_row_where:0 "Stands in #v [ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetName]#!"
  gm_mon_sgui_route_tt:0 "Our armies hold half the state where it stands, in a war with its owner"
  gm_mon_sgui_takeable_tt:0 "Not being rebuilt, no ceremony asking about it, and nothing carried off from this state in the last ten years"
  gm_mon_take_button_tooltip:0 "#b Carry it off#!\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"

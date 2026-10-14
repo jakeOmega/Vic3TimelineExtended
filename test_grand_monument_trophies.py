@@ -869,7 +869,7 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
                      "remove_tag = gm_trophy", "add_tag = gm_monument",
                      "set_variable = { name = gm_tr_site value = var:gm_tr_origin }",
                      "gm_tr_forget_notes = yes",
-                     "owner = { trigger_event = { id = monument_events.20 } }"):
+                     "set_variable = gm_mon_listed trigger_event = { id = monument_events.20 } }"):
             self.assertIn(line, body)
         # Its identity is kept: nothing is cleared or destroyed.
         self.assertNotIn("destroy_container", body)
@@ -1086,6 +1086,49 @@ class AlsoStandingHereTests(unittest.TestCase):
         monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
         self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes "
                       "gm_tr_update_picture = yes }", monthly)
+
+
+class OurMonumentsListTests(unittest.TestCase):
+    """Task 6: Our Monuments (the journal entry and the Timeline Extended
+    window's tab) lists every monument we own, a row per state's primary as
+    before and a row per secondary after them, each with its own picture,
+    name, form, dedication and levels."""
+
+    def test_the_pass_lists_each_secondary_under_its_states_owner(self):
+        pass_ = squash(block(read(MON_EFFECTS), "gm_monument_pass"))
+        self.assertIn("every_country = { limit = { has_variable = gm_mon_listed } "
+                      "clear_variable_list = gm_monuments_held remove_variable = gm_mon_listed }", pass_)
+        self.assertLess(pass_.find("clear_variable_list = gm_monuments_held"), pass_.find("gm_mon_list_one = yes"))
+        one = squash(block(read(MON_EFFECTS), "gm_mon_list_one"))
+        self.assertIn("owner = { add_to_variable_list = { name = gm_monuments_held target = scope:gm_mon_listing } "
+                      "set_variable = gm_mon_listed }", one)
+
+    def test_a_return_a_taking_and_a_promotion_keep_the_owners_list(self):
+        become = squash(block(read(MON_EFFECTS), "gm_tr_become_monument"))
+        self.assertIn("owner = { add_to_variable_list = { name = gm_monuments_held target = scope:gm_tr_moving } "
+                      "set_variable = gm_mon_listed", become)
+        whole = squash(block(read(MON_EFFECTS), "gm_mon_tr_take_whole"))
+        self.assertIn("owner = { remove_list_variable = { name = gm_monuments_held target = scope:gm_tr_new } }", whole)
+        promote = squash(block(read(MON_EFFECTS), "gm_state_promote_secondary"))
+        self.assertIn("owner = { remove_list_variable = { name = gm_monuments_held target = scope:gm_mon_promoted } }",
+                      promote)
+
+    def test_the_section_lists_primaries_then_secondaries(self):
+        sec = squash(strip_comments(raw_block_at(read(WIDGET), r"(?m)^\ttype te_gm_sec_monuments = flowcontainer \{")))
+        first = sec.find("GetList('gm_states')")
+        second = sec.find("GetList('gm_monuments_held')")
+        self.assertNotEqual(first, -1)
+        self.assertGreater(second, first)
+        self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
+                      "blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } }", sec)
+
+    def test_the_row_says_where_it_stands_only_where_asked(self):
+        gui = strip_comments(read(TR_GUI))
+        row = squash(raw_block_at(gui, r"(?m)^\ttype gm_mon_row_site = flowcontainer \{"))
+        self.assertIn("block \"mon_where\" {}", row)
+        self.assertNotIn("gm_mon_row_where", row)
+        self.assertIn("gm_mon_row_where", loc())
+        self.assertNotIn("JournalEntry", loc()["gm_mon_row_where"])
 
 
 class DebugTests(unittest.TestCase):

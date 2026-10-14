@@ -56,6 +56,12 @@ gm_monument_pass = {
 		clear_variable_list = gm_monuments_here
 		remove_variable = gm_mon_here_count
 	}
+	# The owners' lists, for Our Monuments (gm_monuments_held, a row each).
+	every_country = {
+		limit = { has_variable = gm_mon_listed }
+		clear_variable_list = gm_monuments_held
+		remove_variable = gm_mon_listed
+	}
 	if = {
 		limit = { has_global_variable = gm_mon_lists_written }
 		remove_global_variable = gm_mon_lists_written
@@ -90,6 +96,10 @@ gm_mon_list_one = {
 		var:gm_tr_origin = {
 			add_to_variable_list = { name = gm_monuments_here target = scope:gm_mon_listing }
 			gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+			owner = {
+				add_to_variable_list = { name = gm_monuments_held target = scope:gm_mon_listing }
+				set_variable = gm_mon_listed
+			}
 		}
 	}
 }
@@ -133,6 +143,7 @@ gm_state_promote_secondary = {
 			}
 			remove_list_variable = { name = gm_monuments_here target = scope:gm_mon_promoted }
 			gm_tr_count_add = { VAR = gm_mon_here_count ADD = -1 }
+			owner = { remove_list_variable = { name = gm_monuments_held target = scope:gm_mon_promoted } }
 			remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_promoted }
 			gm_state_tr_rebuild_from_moving = yes
 			scope:gm_mon_promoted = { destroy_container = yes }
@@ -181,7 +192,11 @@ gm_tr_become_monument = {
 		gm_state_tr_add_levels = yes
 		add_to_variable_list = { name = gm_monuments_here target = scope:gm_tr_moving }
 		gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
-		owner = { trigger_event = { id = monument_events.20 } }
+		owner = {
+			add_to_variable_list = { name = gm_monuments_held target = scope:gm_tr_moving }
+			set_variable = gm_mon_listed
+			trigger_event = { id = monument_events.20 }
+		}
 	}
 	remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving }
 	add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }
@@ -252,6 +267,7 @@ gm_mon_tr_take_whole = {
 	scope:gm_tr_state = {
 		remove_list_variable = { name = gm_monuments_here target = scope:gm_tr_new }
 		gm_tr_count_add = { VAR = gm_mon_here_count ADD = -1 }
+		owner = { remove_list_variable = { name = gm_monuments_held target = scope:gm_tr_new } }
 	}
 	remove_list_global_variable = { name = gm_monuments target = scope:gm_tr_new }
 	add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }

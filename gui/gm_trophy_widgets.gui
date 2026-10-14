@@ -1268,6 +1268,9 @@ types gm_trophy_widget_types
 					tooltip = "gm_mon_row_value_tt"
 					text = "gm_mon_row_value"
 				}
+				### Where it stands, for the journal entry's list (the state
+				### card is in that state already): the instance's override.
+				block "mon_where" {}
 			}
 		}
 
