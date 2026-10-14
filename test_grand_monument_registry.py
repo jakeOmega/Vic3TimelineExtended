@@ -3635,7 +3635,8 @@ class MultiMonumentDataTests(unittest.TestCase):
     def test_the_pass_repairs_a_vanished_state_from_its_region(self):
         monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
         self.assertIn("gm_system_enabled = yes", monthly)
-        self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes }", monthly)
+        self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes "
+                      "gm_tr_update_picture = yes }", monthly)
         self.assertLess(monthly.find("gm_tr_repair_places = yes"), monthly.find("gm_monument_pass = yes"))
 
     def test_the_pass_has_nothing_to_do_in_a_game_with_no_secondary(self):

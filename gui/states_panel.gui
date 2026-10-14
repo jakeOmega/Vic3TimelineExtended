@@ -1456,6 +1456,11 @@ types state_panel_types
 		### this state; its markup lives in gui/te_state_panel_widgets.gui.
 		te_state_gm_card = {}
 
+		### ALSO STANDING HERE (TE) — a full-width card, only while a monument
+		### stands in this state beside its primary one; its markup lives in
+		### gui/gm_trophy_widgets.gui.
+		te_state_gm_monument_card = {}
+
 		### TROPHIES ON DISPLAY (TE) — a full-width card, only while trophies
 		### stand in this state; its markup lives in gui/gm_trophy_widgets.gui.
 		te_state_gm_trophy_card = {}

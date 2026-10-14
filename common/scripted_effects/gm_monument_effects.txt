@@ -39,6 +39,9 @@ gm_monument_monthly = {
 			every_in_global_list = {
 				variable = gm_monuments
 				gm_tr_repair_places = yes
+				# A landmark whose picture is drawn later, or a monument from an
+				# older save, catches up within a month (as a trophy does).
+				gm_tr_update_picture = yes
 			}
 		}
 		gm_monument_pass = yes

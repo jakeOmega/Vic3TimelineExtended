@@ -106,3 +106,18 @@ gm_state_tr_ai_secondary_chance = {
 	multiply = 100
 	divide = gm_state_monument_count
 }
+
+# ---- The state view (spec §5.1) ---------------------------------------------------
+# State scope. Secondary monuments standing here (the list the monthly pass and
+# every return or taking keep), 0 with none: the Also Standing Here card shows
+# while it is above 0.
+gm_state_mon_disp_here = {
+	value = 0
+	if = {
+		limit = { gm_state_has_secondary = yes }
+		every_in_list = {
+			variable = gm_monuments_here
+			add = 1
+		}
+	}
+}

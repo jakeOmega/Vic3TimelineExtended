@@ -423,7 +423,8 @@ class PanelTests(unittest.TestCase):
                                                                     r"(?m)^\ttype gm_monument_row = flowcontainer \{")))
         self.assertIn("gm_tr_take_button = {}", squash(raw_block_at(read(STATE_WIDGETS),
                                                                     r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))
-        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", squash(strip_comments(read(STATES_PANEL))))
+        self.assertIn("te_state_gm_card = {} te_state_gm_monument_card = {} te_state_gm_trophy_card = {}",
+                      squash(strip_comments(read(STATES_PANEL))))
 
     def test_flags_say_their_default(self):
         gui = strip_comments(read(TR_GUI))
@@ -1003,6 +1004,88 @@ class LootingASecondaryTests(unittest.TestCase):
         chance = squash(block(read(MON_VALUES), "gm_state_tr_ai_secondary_chance"))
         self.assertEqual(chance, "value = gm_state_monument_count subtract = 1 multiply = 100 "
                                  "divide = gm_state_monument_count")
+
+
+class AlsoStandingHereTests(unittest.TestCase):
+    """Task 5: the state view. The monument card is the state's whole and its
+    primary, as before. Under it, while a secondary monument stands here, a
+    card lists each with its picture, name, form, dedication and levels, and a
+    Carry It Off of its own."""
+
+    def setUp(self):
+        self.gui = read(TR_GUI)
+        self.card = squash(strip_comments(
+            raw_block_at(self.gui, r"(?m)^\ttype te_state_gm_monument_card = flowcontainer \{") or ""))
+
+    def test_the_card_shows_only_while_a_secondary_stands_here(self):
+        self.assertIn("visible = \"[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_mon_disp_here'), "
+                      "'(CFixedPoint)0')]\"", self.card)
+        v = squash(block(read(MON_VALUES), "gm_state_mon_disp_here"))
+        self.assertEqual(v, "value = 0 if = { limit = { gm_state_has_secondary = yes } "
+                            "every_in_list = { variable = gm_monuments_here add = 1 } }")
+
+    def test_a_row_for_each_secondary_from_the_states_list(self):
+        self.assertIn("datamodel = \"[State.MakeScope.GetList('gm_monuments_here')]\"", self.card)
+        self.assertIn("item = { gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" } }", self.card)
+        self.assertIn("text = \"gm_state_mon_header\"", self.card)
+        self.assertIn("tooltip = \"gm_state_mon_header_tt\"", self.card)
+        self.assertIn("text = \"gm_state_mon_summary\"", self.card)
+
+    def test_a_row_is_the_trophys_with_a_button_of_its_own(self):
+        row = squash(strip_comments(raw_block_at(self.gui, r"(?m)^\ttype gm_mon_row_site = flowcontainer \{") or ""))
+        for line in ("gm_tr_picture = {}", "text = \"gm_tr_row_title\"", "text = \"gm_mon_row_detail\"",
+                     "text = \"gm_mon_row_value\"", "tooltip = \"gm_mon_row_value_tt\"", "gm_mon_take_button = {}"):
+            self.assertIn(line, row)
+        # A landmark's history on hover, as every trophy's row.
+        self.assertIn("ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark')", row)
+        self.assertIn("tooltip = \"gm_tr_row_landmark_tt\"", row)
+
+    def test_the_button_orders_through_its_scripted_gui(self):
+        btn = squash(strip_comments(raw_block_at(self.gui, r"(?m)^\ttype gm_mon_take_button = button \{") or ""))
+        self.assertIn("datacontext = \"[GetScriptedGui('gm_mon_take_sgui')]\"", btn)
+        for call in ("IsShown", "IsValid", "Execute"):
+            self.assertIn(f"ScriptedGui.{call}( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', "
+                          "ScriptContainer.MakeScope ).End )", btn)
+        self.assertIn("tooltip = \"gm_mon_take_button_tooltip\"", btn)
+        self.assertIn("text = \"gm_button_tr_take\"", btn)
+
+    def test_rows_read_no_journal_entry(self):
+        """Gotcha #24: a datamodel row renders its tooltips without JournalEntry."""
+        L = loc()
+        for row, kind in (("gm_mon_row_site", "flowcontainer"), ("gm_mon_take_button", "button"),
+                          ("te_state_gm_monument_card", "flowcontainer")):
+            body = raw_block_at(self.gui, rf"(?m)^\ttype {row} = {kind} \{{")
+            self.assertIsNotNone(body, row)
+            self.assertNotIn("JournalEntry", body, row)
+            for key in re.findall(r'(?:text|tooltip) = "(\w+)"', body):
+                self.assertNotIn("JournalEntry", L.get(key, ""), (row, key))
+
+    def test_every_key_the_card_and_the_button_use_exists(self):
+        L = loc()
+        for key in re.findall(r'(?:text|tooltip) = "(\w+)"', strip_comments(self.gui)):
+            self.assertIn(key, L, key)
+        for key in re.findall(r"text = (gm_mon_\w+)", read(MON_SGUIS) + read(MON_TRIGGERS)):
+            self.assertIn(key, L, key)
+
+    def test_mounted_between_the_monument_and_the_trophies(self):
+        panel = squash(strip_comments(read(STATES_PANEL)))
+        self.assertIn("te_state_gm_card = {} te_state_gm_monument_card = {} te_state_gm_trophy_card = {}", panel)
+
+    def test_the_monument_card_names_the_building_as_the_whole(self):
+        # The grandeur row's hover says, with a secondary here, that the level
+        # is every monument's together and which part is the first's.
+        self.assertEqual(
+            loc().get("gm_state_grandeur_tt"),
+            "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_mon_disp_here'), "
+            "'(CFixedPoint)0' ), 'gm_state_grandeur_tt_one', 'gm_state_grandeur_tt_many' )]")
+        many = loc().get("gm_state_grandeur_tt_many", "")
+        self.assertIn("ScriptValue('gm_state_primary_grandeur')", many)
+        self.assertIn("ScriptValue('gm_state_secondary_grandeur')", many)
+
+    def test_a_secondarys_picture_catches_up_each_month(self):
+        monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
+        self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes "
+                      "gm_tr_update_picture = yes }", monthly)
 
 
 class DebugTests(unittest.TestCase):
