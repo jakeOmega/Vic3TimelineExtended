@@ -656,6 +656,45 @@ class OrderTests(unittest.TestCase):
             self.assertIn(key, L)
 
 
+class PlayerInnovationTests(unittest.TestCase):
+    """A player may not launch a dig that diverts more weekly innovation than it makes (owner, 2026-10-16)."""
+
+    def test_each_method_has_a_floor_of_its_own_figure(self):
+        t = read(TRIGGERS)
+        for method in METHODS:
+            self.assertEqual(squash(block(t, f"gm_arch_spares_{method}")),
+                             f"country_innovation >= gm_arch_innovation_{method}", method)
+
+    def test_the_buttons_are_greyed_below_the_floor(self):
+        L = loc()
+        for method, units in INNOVATION.items():
+            valid = squash(block(block(read(SGUIS), f"gm_arch_launch_{method}_sgui"), "is_valid"))
+            self.assertIn(f"custom_tooltip = {{ text = gm_arch_dig_innovation_{method}_tt "
+                          f"gm_arch_spares_{method} = yes }}", valid, method)
+            self.assertIn(f"at least {units} weekly [concept_innovation]", L[f"gm_arch_dig_innovation_{method}_tt"],
+                          "the tooltip's figure is the value's")
+
+    def test_the_find_offers_only_a_dig_we_can_spare(self):
+        body = squash(raw_block_at(strip_comments(read(EVENTS)), r"(?m)^arch_events\.1\s*=\s*\{"))
+        self.assertIn("name = arch_events.1.a trigger = { gm_arch_method_systematic_ok = yes "
+                      "gm_arch_spares_systematic = yes }", body)
+        self.assertIn("name = arch_events.1.b trigger = { NOT = { AND = { gm_arch_method_systematic_ok = yes "
+                      "gm_arch_spares_systematic = yes } } gm_arch_method_antiquarian_ok = yes "
+                      "gm_arch_spares_antiquarian = yes }", body)
+
+    def test_the_worker_checks_the_innovation_again(self):
+        ev = squash(raw_block_at(strip_comments(read(EVENTS)), r"(?m)^arch_events\.10\s*=\s*\{"))
+        self.assertIn("has_variable = gm_site_order_method gm_arch_order_spared = { WHO = root }", ev)
+        spared = squash(block(read(TRIGGERS), "gm_arch_order_spared"))
+        for method in METHODS:
+            self.assertIn(f"AND = {{ var:gm_site_order_method = flag:{method} "
+                          f"$WHO$ = {{ gm_arch_spares_{method} = yes }} }}", spared, method)
+
+    def test_the_ais_floor_is_above_the_players(self):
+        v = read(VALUES)
+        self.assertGreaterEqual(int(squash(block(v, "gm_arch_ai_innovation_multiple")).split()[-1]), 1)
+
+
 class AiTests(unittest.TestCase):
     def test_the_ai_digs_at_peace_with_the_best_method_it_affords(self):
         t = read(TRIGGERS)

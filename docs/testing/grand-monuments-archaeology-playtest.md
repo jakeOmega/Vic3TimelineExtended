@@ -39,7 +39,7 @@ site did not seed).
 | `title`/`desc`/`flavor` `first_valid` read saved scopes set by the caller | Both events: the title of a survey find, a ruined dig, a dig abroad, the host's copy. | A separate event per case. |
 | `[SCOPE.sState('gm_arch_ev_<key>').GetName]` inside a key pulled in with `$…$` from the event's description | Every site's text names its state. | Name the state in the event's own key. |
 | `any_scope_treaty = { any_scope_article = { has_type … source_country = … input_state = … } }` reads an article in force, from a country, in a trigger | Digging abroad (`gm_arch_state_conceded_to`), the free port's sync uses the same shape. | |
-| `country_innovation >= <named script value>` is net of the `country_weekly_innovation_add` modifiers (the digs already running) | The AI's innovation floors (`gm_arch_ai_affords_<method>`). It is the brake either way; gross only lets an AI that already digs start a second dig a little sooner. | Subtract `gm_arch_disp_innovation` before comparing. |
+| `country_innovation >= <named script value>` is net of the `country_weekly_innovation_add` modifiers (the digs already running); the owner is all but sure it is | The player's launch gate (`gm_arch_spares_<method>`) and the AI's floors (`gm_arch_ai_affords_<method>`). | Subtract `gm_arch_disp_innovation` before comparing. |
 
 ## Seeding and listing
 
@@ -77,6 +77,7 @@ site did not seed).
 |---|---|---|
 | **Cost.** Hover the three buttons of a 10-level site (Nineveh). | 5, 20 and 100 weekly innovation and no money; 25, 40 and 29 months. A 5-level site (the Winged Victory) shows the same innovation and 17, 27 and 20 months. | A money figure: an old tooltip. A blank month count: `gm_arch_site_months_*` on the container. |
 | **The row.** Launch a dig. | Its row says "Diverts 20 weekly innovation" for Systematic; the summary line's total is the sum of the rows. | A 0: `gm_arch_site_innovation` reads no method. |
+| **The gate.** As a country making about 30 weekly innovation with Empiricism, launch a Systematic dig, then hover Systematic on another site. | The first launches; the second button is greyed with "We make at least 20 weekly innovation…" failing, and Antiquarian (5) is still open. | A second launch passes: `country_innovation` is gross, or not refreshed before the next click. |
 | **An old save.** Load a save made with the MVP while a dig ran. | Within a month the Excavation Costs modifier is gone from the entry and the Budget's Archaeological Digs row is empty. | `gm_arch_remove_national` did not run, or the engine dropped the modifier on load (harmless). |
 | **The AI.** Observe a small AI making under 20 weekly innovation for ten years. | It opens no dig. One making 80 to 400 digs by Systematic; above 400 with Computer Networks, by Forensic. | |
 

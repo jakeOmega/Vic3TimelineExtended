@@ -880,8 +880,10 @@ lowers your weekly innovation by its method's figure for as long as it runs;
 the innovation cap stays. A site's size sets its months, so a 10-level site dug
 by Systematic Stratigraphy diverts 20 innovation a week for 40 months, a 5-level
 one for 27. The button's tooltip gives this site's months, and a dig's row
-gives the innovation it diverts. Nothing caps how many digs you run. Suspend
-Dig stops a dig and keeps its progress. A dig also stops if you lose the state,
+gives the innovation it diverts. Nothing caps how many digs you run, but a
+method's button is greyed while you make less weekly innovation than it would
+divert, so a new dig never takes your innovation below zero. Suspend Dig stops
+a dig and keeps its progress. A dig also stops if you lose the state,
 or the treaty that let you dig there ends, and whoever may dig it next can take
 it up from where it stopped.
 

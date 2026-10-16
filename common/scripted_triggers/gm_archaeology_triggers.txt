@@ -169,6 +169,41 @@ gm_arch_method_forensic_ok = {
 	has_technology_researched = computer_networks
 }
 
+# Country scope. It makes at least the weekly innovation a dig by the method
+# diverts (country_innovation is net of the digs it already runs), so a launch
+# never takes its weekly innovation below zero (owner, 2026-10-16). The AI's
+# own floor is four times this (gm_arch_ai_affords_<method>).
+gm_arch_spares_antiquarian = {
+	country_innovation >= gm_arch_innovation_antiquarian
+}
+
+gm_arch_spares_systematic = {
+	country_innovation >= gm_arch_innovation_systematic
+}
+
+gm_arch_spares_forensic = {
+	country_innovation >= gm_arch_innovation_forensic
+}
+
+# Container scope, with gm_site_order_method set: $WHO$ makes the weekly
+# innovation the method ordered diverts (arch_events.10 checks again).
+gm_arch_order_spared = {
+	OR = {
+		AND = {
+			var:gm_site_order_method = flag:antiquarian
+			$WHO$ = { gm_arch_spares_antiquarian = yes }
+		}
+		AND = {
+			var:gm_site_order_method = flag:systematic
+			$WHO$ = { gm_arch_spares_systematic = yes }
+		}
+		AND = {
+			var:gm_site_order_method = flag:forensic
+			$WHO$ = { gm_arch_spares_forensic = yes }
+		}
+	}
+}
+
 # ---- A country's side -------------------------------------------------------------------------
 # Country scope. It digs, or a site waits for it (gm_arch_pass writes the
 # counts): the journal entry stays for either.

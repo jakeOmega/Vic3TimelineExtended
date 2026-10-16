@@ -218,10 +218,14 @@ arch_events.1 = {
 		}
 	}
 
-	# Dig it properly: Systematic Stratigraphy if we have it, else Antiquarian.
+	# Dig it properly: Systematic Stratigraphy if we have it and the weekly
+	# innovation it diverts, else Antiquarian if we make that much.
 	option = {
 		name = arch_events.1.a
-		trigger = { gm_arch_method_systematic_ok = yes }
+		trigger = {
+			gm_arch_method_systematic_ok = yes
+			gm_arch_spares_systematic = yes
+		}
 		default_option = yes
 		scope:gm_arch_pick = {
 			gm_arch_choose_launch = { WHO = root METHOD = systematic }
@@ -231,8 +235,14 @@ arch_events.1 = {
 	option = {
 		name = arch_events.1.b
 		trigger = {
-			gm_arch_method_systematic_ok = no
+			NOT = {
+				AND = {
+					gm_arch_method_systematic_ok = yes
+					gm_arch_spares_systematic = yes
+				}
+			}
 			gm_arch_method_antiquarian_ok = yes
+			gm_arch_spares_antiquarian = yes
 		}
 		default_option = yes
 		scope:gm_arch_pick = {
@@ -583,9 +593,9 @@ arch_events.2 = {
 # Event 10: a dig ordered (hidden)
 # ============================================================================
 # ROOT = the sponsor, scope:gm_arch_pick = the site (gm_arch_order_launch).
-# Checks again (a month can pass between an offer and its answer), starts the
-# dig by the method ordered, then the lists and the refresh that applies the
-# cost.
+# Checks again (a month can pass between an offer and its answer), the weekly
+# innovation the method diverts too (gm_arch_order_spared), starts the dig by
+# the method ordered, then the lists and the refresh that applies the cost.
 arch_events.10 = {
 	type = country_event
 	hidden = yes
@@ -601,6 +611,7 @@ arch_events.10 = {
 				scope:gm_arch_pick = {
 					gm_arch_can_dig = { WHO = root }
 					has_variable = gm_site_order_method
+					gm_arch_order_spared = { WHO = root }
 				}
 			}
 			scope:gm_arch_pick = {

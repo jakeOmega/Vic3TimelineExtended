@@ -9,7 +9,9 @@
 # frame.
 
 # Launch Excavation by $METHOD$: a site we may dig, with that method's
-# technology. Three buttons share one shape, one scripted GUI each.
+# technology, greyed while we make less weekly innovation than the dig would
+# divert (gm_arch_spares_<method>). Three buttons share one shape, one scripted
+# GUI each.
 gm_arch_launch_antiquarian_sgui = {
 	scope = country
 	saved_scopes = { gm_arch }
@@ -27,6 +29,10 @@ gm_arch_launch_antiquarian_sgui = {
 		exists = scope:gm_arch
 		scope:gm_arch = {
 			gm_arch_can_dig_tt = { WHO = root }
+		}
+		custom_tooltip = {
+			text = gm_arch_dig_innovation_antiquarian_tt
+			gm_arch_spares_antiquarian = yes
 		}
 	}
 
@@ -59,6 +65,10 @@ gm_arch_launch_systematic_sgui = {
 		scope:gm_arch = {
 			gm_arch_can_dig_tt = { WHO = root }
 		}
+		custom_tooltip = {
+			text = gm_arch_dig_innovation_systematic_tt
+			gm_arch_spares_systematic = yes
+		}
 	}
 
 	effect = {
@@ -89,6 +99,10 @@ gm_arch_launch_forensic_sgui = {
 		exists = scope:gm_arch
 		scope:gm_arch = {
 			gm_arch_can_dig_tt = { WHO = root }
+		}
+		custom_tooltip = {
+			text = gm_arch_dig_innovation_forensic_tt
+			gm_arch_spares_forensic = yes
 		}
 	}
 

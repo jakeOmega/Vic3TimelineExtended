@@ -42,6 +42,12 @@ monthly pass sums the sponsor's digs into `gm_arch_innovation_units`, the multip
 gives a dig's figure by its method, for its row. A dig diverts its innovation for as long as it runs, so a great site, dug
 for longer, costs more in all.
 
+A player may launch a dig only while the country makes at least the weekly innovation it would divert
+(`gm_arch_spares_<method>`: `country_innovation`, which is net of the digs already running, against
+`gm_arch_innovation_<method>`), so a launch never takes the weekly innovation below zero (owner, 2026-10-16). The launch
+buttons are greyed below it with a line of their own, the find event offers only a method the country can spare, and
+`arch_events.10` checks again (`gm_arch_order_spared`). A dig already running is not stopped if the innovation later falls.
+
 This replaces a first rework, which priced a dig at its levels times £20 / £50 / £200 a week instead of the MVP's share of
 GDP. `gm_arch_expense` is retired, not deleted: nothing adds it, `gm_arch_remove_national` strips it from a save made while
 it was applied, and its Budget Breakdown row (Archaeological Digs) stays empty.
