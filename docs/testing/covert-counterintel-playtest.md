@@ -10,7 +10,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 - **Deploy** per CLAUDE.md, "Play-testing unmerged work" (or from `main`).
 - **Console harness:** `event te_debug_covert.7` (a: every foreign operation against us is caught now; b: expose every
   watched operation; c: relations +60 with every country running operations against us, so their catches count as
-  spying on a friend; d: start Counterintelligence Support from us on our best friend). The older harness events still
+  spying on a friend; d: start Counterintelligence Support from us on a friend without a protector, six months in). The older harness events still
   work: `te_debug_covert.1` forces a detection.
 - **Logs.** Read `debug.log`, not `error.log`. Search `TE_SELF_CHECK` for the two self-checks below.
 
@@ -57,7 +57,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 | **New game starts** with `common/political_lobby_appeasement/te_covert_appeasement.txt` present. | Normal start. | Remove the file and use `appeasement_special_events_negative`. |
 | **Appeasement.** Catch an operation against a friend whose country has a pro-target lobby at home (and a subject spying on its overlord, `lobby_pro_overlord`). | The lobby's appeasement drops by −3/−5/−8 (Acknowledge) or −2/−3/−4 (Deny) by tier; its tooltip names the reason. No `Appeasement change failed` in error.log. | As above. |
 | **`.1` tooltips.** Against a friend. | Infamy, relations (×1.5), then the home lines (appeasement, the scandal modifier). With no pro lobby, the "no lobby" line and the modifier. Against a non-friend, or a war-tier operation caught at war: no home lines at all. | |
-| **Defender side.** A foreign operation exposed in a country with a pro-attacker lobby. | The lobby's interest groups carry "Discredited by Foreign Ties" (−5/−10/−15% political strength by tier, ×1.5 if the attacker was a friend), fading. `.2` adds the public-anger paragraph. | Paragraph missing: move the two `triggered_desc` blocks from `.2`'s `desc` into its `flavor` chain. |
+| **Defender side.** A foreign operation exposed in a country with a pro-attacker lobby. | The lobby's interest groups carry "Foreign Ties Discredited" (−5/−10/−15% political strength by tier, ×1.5 if the attacker was a friend), fading. `.2` adds the public-anger paragraph. | Paragraph missing: move the two `triggered_desc` blocks from `.2`'s `desc` into its `flavor` chain. |
 | **Launch preview.** Hover a hostile operation against a friend, and against a non-friend. | The friend warning appears only for the friend. | If it shows for everyone, use a `custom_tooltip` whose text is a custom-loc keyed on the trigger. |
 | **AI.** Observer run. | AIs don't launch the six formerly blocked operations against friends; they still spy on friends with espionage and pay when caught. | |
 
