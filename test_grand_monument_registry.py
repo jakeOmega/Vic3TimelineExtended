@@ -4668,6 +4668,36 @@ class FinalReviewFixTests(unittest.TestCase):
         ev16 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.16\s*=\s*\{")))
         self.assertNotIn("any_in_list = { variable = gm_notice_mons }", ev16)
 
+    def test_a_promotion_never_raises_a_monument_ordered_down(self):
+        # Deferred minor, fixed: pulling down a primary handed the building to
+        # the grandest secondary even when its Pull Down was ordered and not yet
+        # run (.30), so Tear Them All Down left it standing first, contested,
+        # with no new notice. The building is already down: the ordered ones go
+        # first, and their levels drop out of the one rebuild.
+        promote = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_promote_secondary")))
+        self.assertIn("gm_state_pull_down_ordered = yes", promote)
+        self.assertLess(promote.index("gm_state_pull_down_ordered = yes"), promote.index("ordered_in_list"))
+        self.assertLess(promote.index("gm_state_pull_down_ordered = yes"), promote.index("name = gm_rebuild_level"))
+        pull = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_pull_down_ordered")))
+        # The filter gm_state_run_mon_orders keeps an order by.
+        for cond in ("var:gm_mon_order = flag:tear_down", "gm_mon_is_contested = yes",
+                     "var:gm_mon_order_by ?= { this = scope:gm_mon_run_owner }"):
+            self.assertIn(cond, pull)
+        self.assertIn("gm_mon_tear_down_one = yes", pull)
+        self.assertIn("save_scope_as = gm_mon_run_state", pull)
+        self.assertNotIn("gm_state_tr_shrink_by", pull)
+        # One at a time, not a temporary list: option a pulls down several
+        # states in one effect, and a temporary list lasts until it ends.
+        self.assertNotIn("add_to_temporary_list", pull)
+        self.assertIn("var:gm_pull_n < 16", pull)
+        self.assertIn("change_variable = { name = gm_pull_n add = 1 }", pull)
+
+    def test_tear_them_all_down_orders_the_secondaries_first(self):
+        ev16 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.16\s*=\s*\{")))
+        opt_a = ev16[ev16.index("name = monument_events.16.a"):ev16.index("name = monument_events.16.b")]
+        self.assertLess(opt_a.index("gm_mon_order_choice = { CHOICE = tear_down }"),
+                        opt_a.index("gm_state_tear_down = yes"))
+
 def _mod_txt_files():
     for sub in ("common", "events"):
         yield from sorted((ROOT / sub).rglob("*.txt"))

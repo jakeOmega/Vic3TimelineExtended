@@ -1503,15 +1503,9 @@ monument_events.16 = {
 		name = monument_events.16.a
 		custom_tooltip = {
 			text = monument_events.16.a.tt
-			every_in_list = {
-				variable = gm_notice_states
-				limit = {
-					gm_state_is_contested = yes
-					owner = root
-				}
-				gm_state_tear_down = yes
-			}
-			# A monument beside another: ordered, as its row's button does.
+			# A monument beside another: ordered, as its row's button does, and
+			# first, so a state's pull-down below never raises one of them in
+			# its place (gm_state_pull_down_ordered).
 			if = {
 				limit = { has_variable_list = gm_notice_mons }
 				every_in_list = {
@@ -1522,6 +1516,14 @@ monument_events.16 = {
 					}
 					gm_mon_order_choice = { CHOICE = tear_down }
 				}
+			}
+			every_in_list = {
+				variable = gm_notice_states
+				limit = {
+					gm_state_is_contested = yes
+					owner = root
+				}
+				gm_state_tear_down = yes
 			}
 		}
 		hidden_effect = { gm_country_refresh = yes }

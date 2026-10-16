@@ -63,6 +63,8 @@ absorbed part, and before or after the merge; and what colonizing a decentralize
 |---|---|---|
 | **A contested secondary.** Have a crown monument stand beside another, then change to a republic. | Its row in Our Monuments shows Contested with Pull Down, Rededicate and Keep as Heritage; the contest notice lists it. | |
 | **Pull Down two at once.** Use Tear Them All Down on the notice with two contested secondaries in one state. | Both go, and the building ends at its level less their levels together: in one shrink if the queued `.30` events run after the option, or a day apart if each runs at once. | A building at the wrong level: a second shrink read the first one's stale level. |
+| **Tear them all down, the first one too.** A contested primary with a grander contested secondary beside it, both on one notice, and a third, uncontested monument beside them. Use Tear Them All Down. | Both contested ones go. The uncontested one stands first, with its own name and dedication, in a building at its own levels. With no third monument the building is gone. | The grander contested one stands first, still contested: `gm_state_pull_down_ordered` did not see its order (the order was not set before the primary's pull-down, or the filter failed). |
+| **A row's Pull Down, then the first one.** With a contested secondary beside a contested primary, click Pull Down on the secondary's row, then at once pull down the primary from its own row. | Both go; the building is gone, or stands at what else remains. | The secondary stands first: as above. |
 | **Rededicate a secondary.** | It becomes the state's own monument at half its levels and half its age, asked its dedication; the old first one stands beside it. | |
 
 ## Opportunities and events
