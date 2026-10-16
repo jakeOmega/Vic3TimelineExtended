@@ -234,6 +234,113 @@ gm_state_picture_landmark = {
 	}
 }
 
+# Container scope (a trophy, from gm_tr_update_picture). A landmark's trophy
+# picture: what was carried off, on display in a museum room, which its rows
+# show over its monument's (gm_tr_trophy_picture). TROPHY_CODE_BASE
+# (2,000,000) + its LANDMARKS row, for the landmarks that have one drawn
+# (TROPHY_PICTURES in the registry test); 0 for any other, whose rows show the
+# monument's picture alone.
+gm_tr_picture_trophies = {
+	set_variable = { name = gm_tr_trophy_picture_code value = 0 }
+	### The trophy pictures, from 2,000,001.
+	gm_tr_picture_trophy = { KEY = arc_de_triomphe CODE = 2000001 }
+	gm_tr_picture_trophy = { KEY = alexander_column CODE = 2000002 }
+	gm_tr_picture_trophy = { KEY = brandenburg_gate CODE = 2000003 }
+	gm_tr_picture_trophy = { KEY = washington_monument_baltimore CODE = 2000004 }
+	gm_tr_picture_trophy = { KEY = la_scala CODE = 2000005 }
+	gm_tr_picture_trophy = { KEY = teatro_di_san_carlo CODE = 2000006 }
+	gm_tr_picture_trophy = { KEY = jantar_mantar CODE = 2000007 }
+	gm_tr_picture_trophy = { KEY = shalimar_gardens CODE = 2000008 }
+	gm_tr_picture_trophy = { KEY = jardim_botanico CODE = 2000009 }
+	gm_tr_picture_trophy = { KEY = stelae_of_aksum CODE = 2000010 }
+	gm_tr_picture_trophy = { KEY = liberty_column CODE = 2000011 }
+	gm_tr_picture_trophy = { KEY = lion_monument CODE = 2000012 }
+	gm_tr_picture_trophy = { KEY = temple_of_heaven CODE = 2000013 }
+	gm_tr_picture_trophy = { KEY = topkapi_palace CODE = 2000014 }
+	gm_tr_picture_trophy = { KEY = golestan_palace CODE = 2000015 }
+	gm_tr_picture_trophy = { KEY = basilica_of_superga CODE = 2000016 }
+	gm_tr_picture_trophy = { KEY = tomb_of_william_the_silent CODE = 2000017 }
+	gm_tr_picture_trophy = { KEY = cenotaph_of_maximilian CODE = 2000018 }
+	gm_tr_picture_trophy = { KEY = arco_de_santa_maria CODE = 2000019 }
+	gm_tr_picture_trophy = { KEY = statue_of_louis_xiv CODE = 2000020 }
+	gm_tr_picture_trophy = { KEY = lion_of_saint_mark CODE = 2000021 }
+	gm_tr_picture_trophy = { KEY = sans_souci_palace CODE = 2000022 }
+	gm_tr_picture_trophy = { KEY = nikko_toshogu CODE = 2000023 }
+	gm_tr_picture_trophy = { KEY = parthenon CODE = 2000024 }
+	gm_tr_picture_trophy = { KEY = obelisks_of_karnak CODE = 2000025 }
+	gm_tr_picture_trophy = { KEY = royal_palace_of_benin CODE = 2000026 }
+	gm_tr_picture_trophy = { KEY = royal_palace_of_kumasi CODE = 2000027 }
+	gm_tr_picture_trophy = { KEY = bukgwan_victory_stele CODE = 2000028 }
+	gm_tr_picture_trophy = { KEY = imperial_city_of_hue CODE = 2000029 }
+	gm_tr_picture_trophy = { KEY = persepolis CODE = 2000030 }
+	gm_tr_picture_trophy = { KEY = red_fort CODE = 2000031 }
+	gm_tr_picture_trophy = { KEY = rosetta_stone CODE = 2000032 }
+	gm_tr_picture_trophy = { KEY = temple_of_dendera CODE = 2000033 }
+	gm_tr_picture_trophy = { KEY = luxor_obelisk CODE = 2000034 }
+	gm_tr_picture_trophy = { KEY = venus_de_milo CODE = 2000035 }
+	gm_tr_picture_trophy = { KEY = piraeus_lion CODE = 2000036 }
+	gm_tr_picture_trophy = { KEY = horses_of_saint_mark CODE = 2000037 }
+	gm_tr_picture_trophy = { KEY = tipus_tiger CODE = 2000038 }
+	gm_tr_picture_trophy = { KEY = baba_merzoug CODE = 2000039 }
+	gm_tr_picture_trophy = { KEY = great_zimbabwe CODE = 2000040 }
+	gm_tr_picture_trophy = { KEY = royal_palaces_of_abomey CODE = 2000041 }
+	gm_tr_picture_trophy = { KEY = klungkung_palace CODE = 2000042 }
+	gm_tr_picture_trophy = { KEY = royal_palace_of_kandy CODE = 2000043 }
+	gm_tr_picture_trophy = { KEY = uffizi_gallery CODE = 2000044 }
+	gm_tr_picture_trophy = { KEY = capitoline_museums CODE = 2000045 }
+	gm_tr_picture_trophy = { KEY = bodrum_castle CODE = 2000046 }
+	gm_tr_picture_trophy = { KEY = temples_of_baalbek CODE = 2000047 }
+	gm_tr_picture_trophy = { KEY = palmyra CODE = 2000048 }
+	gm_tr_picture_trophy = { KEY = xanthos CODE = 2000049 }
+	gm_tr_picture_trophy = { KEY = mesha_stele CODE = 2000050 }
+	gm_tr_picture_trophy = { KEY = arch_of_ctesiphon CODE = 2000051 }
+	gm_tr_picture_trophy = { KEY = nineveh_library CODE = 2000052 }
+	gm_tr_picture_trophy = { KEY = winged_victory_of_samothrace CODE = 2000053 }
+	gm_tr_picture_trophy = { KEY = vindolanda_tablets CODE = 2000054 }
+	gm_tr_picture_trophy = { KEY = troy_hisarlik CODE = 2000055 }
+	gm_tr_picture_trophy = { KEY = mycenae_grave_circle CODE = 2000056 }
+	gm_tr_picture_trophy = { KEY = pergamon_altar CODE = 2000057 }
+	gm_tr_picture_trophy = { KEY = deir_el_bahari_cache CODE = 2000058 }
+	gm_tr_picture_trophy = { KEY = ishtar_gate_babylon CODE = 2000059 }
+	gm_tr_picture_trophy = { KEY = palace_of_knossos CODE = 2000060 }
+	gm_tr_picture_trophy = { KEY = antikythera_mechanism CODE = 2000061 }
+	gm_tr_picture_trophy = { KEY = oseberg_ship CODE = 2000062 }
+	gm_tr_picture_trophy = { KEY = machu_picchu CODE = 2000063 }
+	gm_tr_picture_trophy = { KEY = bust_of_nefertiti CODE = 2000064 }
+	gm_tr_picture_trophy = { KEY = mohenjo_daro CODE = 2000065 }
+	gm_tr_picture_trophy = { KEY = tomb_of_tutankhamun CODE = 2000066 }
+	gm_tr_picture_trophy = { KEY = royal_cemetery_at_ur CODE = 2000067 }
+	gm_tr_picture_trophy = { KEY = sanxingdui_pits CODE = 2000068 }
+	gm_tr_picture_trophy = { KEY = sutton_hoo CODE = 2000069 }
+	gm_tr_picture_trophy = { KEY = lascaux_caves CODE = 2000070 }
+	gm_tr_picture_trophy = { KEY = nag_hammadi_library CODE = 2000071 }
+	gm_tr_picture_trophy = { KEY = dead_sea_scrolls CODE = 2000072 }
+	gm_tr_picture_trophy = { KEY = tomb_of_pakal CODE = 2000073 }
+	gm_tr_picture_trophy = { KEY = mawangdui_tombs CODE = 2000074 }
+	gm_tr_picture_trophy = { KEY = terracotta_army CODE = 2000075 }
+	gm_tr_picture_trophy = { KEY = tomb_of_philip_ii CODE = 2000076 }
+	gm_tr_picture_trophy = { KEY = tomb_of_marquis_yi CODE = 2000077 }
+	gm_tr_picture_trophy = { KEY = royal_tombs_of_sipan CODE = 2000078 }
+	gm_tr_picture_trophy = { KEY = otzi_the_iceman CODE = 2000079 }
+	gm_tr_picture_trophy = { KEY = caral_supe CODE = 2000080 }
+	gm_tr_picture_trophy = { KEY = gobekli_tepe CODE = 2000081 }
+	gm_tr_picture_trophy = { KEY = olympia CODE = 2000082 }
+	gm_tr_picture_trophy = { KEY = delphi CODE = 2000083 }
+	gm_tr_picture_trophy = { KEY = sidon_necropolis CODE = 2000084 }
+	gm_tr_picture_trophy = { KEY = villa_of_the_papyri CODE = 2000085 }
+	gm_tr_picture_trophy = { KEY = tomb_of_alexander CODE = 2000086 }
+}
+
+gm_tr_picture_trophy = {
+	if = {
+		limit = {
+			has_variable = gm_tr_landmark
+			var:gm_tr_landmark = flag:$KEY$
+		}
+		set_variable = { name = gm_tr_trophy_picture_code value = $CODE$ }
+	}
+}
+
 # A skin alone: its default form's picture, or a faith's building.
 gm_state_picture_skin = {
 	if = {

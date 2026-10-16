@@ -261,6 +261,17 @@ gm_tr_disp_picture_code = {
 	}
 }
 
+# Container scope. The trophy's own picture (gm_tr_picture_trophies), for the
+# gm_tr_trophy_picture type: 0, which shows nothing over the monument's picture,
+# until the monthly pass sets one, or for a landmark with none drawn.
+gm_tr_disp_trophy_picture_code = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_trophy_picture_code }
+		value = var:gm_tr_trophy_picture_code
+	}
+}
+
 # Container scope, the row's numbers.
 gm_tr_disp_levels = {
 	value = 0
