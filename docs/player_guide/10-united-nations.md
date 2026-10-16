@@ -748,8 +748,9 @@ never below ×0.01, so a Moribund UN leaves conventions dormant rather than
 lapsed. Most also name winners and losers among the parties. Our Obligations
 lists each convention you are party to, with your terms under it; hover a
 convention for all its terms, or a term for its modifier. Hover an agency in the
-overview for its convention's terms, founded or not. Terms are re-read when the
-tier changes and once a year.
+overview for its convention's terms, founded or not. Your terms start the day
+you ratify a convention or join, and are re-read when the tier changes and once
+a year.
 
 | Convention (agency) | Can come to the floor with | Parties gain | Winners and losers |
 |---|---|---|---|
