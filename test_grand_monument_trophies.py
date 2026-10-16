@@ -100,6 +100,7 @@ LANDMARK_PARTS = {
     "olympia": "gm_tr_part_hermes_of_praxiteles",
     "delphi": "gm_tr_part_charioteer_of_delphi",
     "sidon_necropolis": "gm_tr_part_sidon_sarcophagi",
+    "pompeii": "gm_tr_part_alexander_mosaic",
 }
 # The occasion patterns of NAMESAKES, plus the namesakes with one pattern.
 NAME_PATTERNS = [p for patterns in NAMESAKES.values() for p in patterns]

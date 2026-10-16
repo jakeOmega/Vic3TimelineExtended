@@ -1213,6 +1213,8 @@ LANDMARKS = (
     Landmark("sidon_necropolis", "STATE_LEBANON", None, "civic", "mausoleum", ("generic", "mausoleum"), 5, False, False, True),
     Landmark("villa_of_the_papyri", "STATE_CAMPANIA", None, "civic", "hall", ("generic", "hall"), 10, False, False, True),
     Landmark("tomb_of_alexander", "STATE_LOWER_EGYPT", None, "civic", "mausoleum", ("generic", "mausoleum"), 15, False, False, True),
+    # Added 2026-10-16 (owner): being dug in 1836, so seeded as a dig already under way (VECTOR = excavating).
+    Landmark("pompeii", "STATE_CAMPANIA", None, "civic", "forum", ("heritage_latin", "forum"), 15, False, False, True),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
