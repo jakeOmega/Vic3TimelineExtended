@@ -516,10 +516,12 @@ class DisplayValuesTest(unittest.TestCase):
         self.assertIn("gm_state_is_contested = yes", _squash(_block(self.values, "gm_disp_count_contested")))
 
     def test_each_bar_follows_its_curve(self):
-        """A bar's first step f and variables must be its gm_set_steps call's."""
+        """A bar's first step f and variables must be its gm_set_steps call's
+        (gm_set_steps_open's for cultural pull, whose partial step is the same
+        formula)."""
         totals = _squash(_block(_read(EFFECTS), "gm_compute_totals"))
         calls = {m.group(3): (m.group(1), int(m.group(4))) for m in re.finditer(
-            r"gm_set_steps = \{ IN = (gm_\w+) OUT = gm_s_(\w+) NEXT = gm_n_(\w+) F = (\d+) \}", totals)}
+            r"gm_set_steps(?:_open)? = \{ IN = (gm_\w+) OUT = gm_s_(\w+) NEXT = gm_n_(\w+) F = (\d+) \}", totals)}
         gui = _gui()
         for row, suffix in FRACS.items():
             self.assertIn(f"ScriptValue('gm_disp_frac_{row}')", gui, row)

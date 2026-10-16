@@ -537,7 +537,8 @@ Every monument, whatever it honors, gives:
   is not contested.
 - +25% Tourism Industry throughput in its state for each step of its own
   grandeur, so its first five levels match one of the base game's monuments.
-- +1 cultural pull for each step of standing grandeur (steps of 10), up to +5.
+- +1 cultural pull for each step of standing grandeur (steps of 10), with no
+  ceiling: past the eighth step, at 2,550 grandeur, the steps keep doubling.
 
 ### A finished monument and its age
 
@@ -657,7 +658,7 @@ row in National Effects. Mothballed halves them. Monuments of one kind share one
 
 | Unique dedication | Carried by | Per step |
 |---|---|---|
-| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, at most +3, beside the monuments' own +5, and +10% Tourism Industry throughput in its state; the Intelligentsia approve |
+| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, at most +3, on top of the monuments' own pull, and +10% Tourism Industry throughput in its state; the Intelligentsia approve |
 | Epigraphic Archive | Inscriptions and lost libraries: the Rosetta Stone, the Temple of Dendera, the Mesha Stele, the Library of Ashurbanipal, the Dead Sea Scrolls and 10 more | +2 innovation cap and +2% technology spread, and +10% University throughput in its state; the Intelligentsia approve |
 | Seat of the Throne | Royal palaces: Topkapı Palace, the Red Fort, Sans-Souci Palace, the Royal Palace of Benin and 6 more | +3% authority |
 | Royal Pantheon | Royal tombs and statues: the Alexander Column, the Basilica of Superga, Nikkō Tōshō-gū and 4 more | +5% loyalists from high legitimacy |

@@ -258,7 +258,8 @@ total with `multiplier = var:…` from the curve:
 | Per IG | signed: + each Fits dedication the IG approves, − each it opposes, plus the §4 ledgers | `gm_ig_approval_<ig>` (`interest_group_ig_<ig>_approval_add`), one per vanilla IG, on the absolute value with the sign applied |
 
 Cultural pull stays a script value (`cultural_pull_from_grand_monuments`), now read from standing grandeur through the
-curve instead of `levels / 20`. Its 5-step chain keeps the existing +5 ceiling.
+curve instead of `levels / 20`. Its 5-step chain keeps the existing +5 ceiling. *(Superseded 2026-10-16, owner: no
+ceiling, diminishing returns alone; `gm_set_steps_open` carries the doubling on past the curve's eighth step.)*
 
 **One cap per IG, across all monuments.** Republic, Opera and Observatory all please the Intelligentsia; their sum
 goes through one curve. Monuments can never buy an interest group outright.

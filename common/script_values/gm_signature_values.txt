@@ -31,8 +31,8 @@ gm_step_sig_local_antiquity = 0.1
 gm_step_sig_local_archive = 0.1
 gm_step_sig_local_first_emperor = 0.25
 
-# Ancestral Antiquity's cultural pull has a cap of its own (§2.1), apart from
-# the +5 of cultural_pull_from_grand_monuments.
+# Ancestral Antiquity's cultural pull has a cap of its own (§2.1);
+# cultural_pull_from_grand_monuments has none (owner, 2026-10-16).
 gm_sig_antiquity_cap = 3
 
 # ---- National Effects (country scope) ----------------------------------------------
