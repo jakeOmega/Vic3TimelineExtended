@@ -4,9 +4,9 @@
 # power plants and 5 railways. OK: under half its power plants subsidized while
 # its railways, still must_have, read half or more (the control: a low railway
 # share means is_subsidized doesn't read the subsidy, so a low power-plant share
-# would be a false pass). Baseline under nice_to_have (Fast A's 1912 save): 604
-# of 630 AI power plants subsidized, railways 555 of 557. What each result means
-# and the fallback: docs/testing/ai-economy-playtest.md.
+# would be a false pass). Baseline under vanilla's must_have (Fast A's 1912
+# save): 604 of 630 AI power plants subsidized, railways 555 of 557. What each
+# result means and the fallback: docs/testing/ai-economy-playtest.md.
 te_ai_subsidy_should_remove_selfcheck = {
 	if = {
 		limit = {
@@ -29,21 +29,40 @@ te_ai_subsidy_should_remove_selfcheck = {
 	}
 	if = {
 		limit = {
-			NOT = { has_global_variable = te_ai_pp_selfcheck_other_done }
-			te_ai_pp_count_other >= 5
-			te_ai_rail_count_other >= 5
+			NOT = { has_global_variable = te_ai_pp_selfcheck_merged_done }
+			te_ai_pp_count_merged >= 5
+			te_ai_rail_count_merged >= 5
 		}
-		set_global_variable = { name = te_ai_pp_selfcheck_other_done value = yes }
+		set_global_variable = { name = te_ai_pp_selfcheck_merged_done value = yes }
 		if = {
-			limit = { te_ai_rail_subsidized_share_other < 0.5 }
-			debug_log = "TE_SELF_CHECK BROKEN ai_power_plant_should_remove group=other power_plants=[THIS.ScriptValue('te_ai_pp_count_other')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_other')|2] railways=[THIS.ScriptValue('te_ai_rail_count_other')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_other')|2] (the control failed: must_have railways read under half subsidized, so is_subsidized doesn't read the subsidy and this check can't judge; count from a plain-text save instead) date=[TimeKeeper.GetCurrentDate.GetString]"
+			limit = { te_ai_rail_subsidized_share_merged < 0.5 }
+			debug_log = "TE_SELF_CHECK BROKEN ai_power_plant_should_remove group=merged power_plants=[THIS.ScriptValue('te_ai_pp_count_merged')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_merged')|2] railways=[THIS.ScriptValue('te_ai_rail_count_merged')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_merged')|2] (the control failed: must_have railways read under half subsidized, so is_subsidized doesn't read the subsidy and this check can't judge; count from a plain-text save instead) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else_if = {
-			limit = { te_ai_pp_subsidized_share_other < 0.5 }
-			debug_log = "TE_SELF_CHECK OK ai_power_plant_should_remove group=other power_plants=[THIS.ScriptValue('te_ai_pp_count_other')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_other')|2] railways=[THIS.ScriptValue('te_ai_rail_count_other')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_other')|2] (the default strategy's INJECT replaces vanilla's must_have for power plants) date=[TimeKeeper.GetCurrentDate.GetString]"
+			limit = { te_ai_pp_subsidized_share_merged < 0.5 }
+			debug_log = "TE_SELF_CHECK OK ai_power_plant_should_remove group=merged power_plants=[THIS.ScriptValue('te_ai_pp_count_merged')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_merged')|2] railways=[THIS.ScriptValue('te_ai_rail_count_merged')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_merged')|2] (an INJECTed second subsidies block adds its key to a strategy whose vanilla block exists, so should_remove reaches these countries) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN ai_power_plant_should_remove group=other power_plants=[THIS.ScriptValue('te_ai_pp_count_other')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_other')|2] railways=[THIS.ScriptValue('te_ai_rail_count_other')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_other')|2] (most AI power plants stay subsidized where only the default strategy's INJECT sets the value: if group=clean read OK, the engine keeps vanilla's must_have over the INJECT; see the fallback) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN ai_power_plant_should_remove group=merged power_plants=[THIS.ScriptValue('te_ai_pp_count_merged')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_merged')|2] railways=[THIS.ScriptValue('te_ai_rail_count_merged')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_merged')|2] (most AI power plants stay subsidized where the INJECT adds a second subsidies block to a strategy that has one: the engine drops the second block's keys; REPLACE these four strategies) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_ai_pp_selfcheck_rest_done }
+			te_ai_pp_count_rest >= 5
+			te_ai_rail_count_rest >= 5
+		}
+		set_global_variable = { name = te_ai_pp_selfcheck_rest_done value = yes }
+		if = {
+			limit = { te_ai_rail_subsidized_share_rest < 0.5 }
+			debug_log = "TE_SELF_CHECK BROKEN ai_power_plant_should_remove group=rest power_plants=[THIS.ScriptValue('te_ai_pp_count_rest')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_rest')|2] railways=[THIS.ScriptValue('te_ai_rail_count_rest')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_rest')|2] (the control failed: must_have railways read under half subsidized, so is_subsidized doesn't read the subsidy and this check can't judge; count from a plain-text save instead) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = { te_ai_pp_subsidized_share_rest < 0.5 }
+			debug_log = "TE_SELF_CHECK OK ai_power_plant_should_remove group=rest power_plants=[THIS.ScriptValue('te_ai_pp_count_rest')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_rest')|2] railways=[THIS.ScriptValue('te_ai_rail_count_rest')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_rest')|2] (AI countries outside the seven administrative strategies don't subsidize their power plants either) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN ai_power_plant_should_remove group=rest power_plants=[THIS.ScriptValue('te_ai_pp_count_rest')|0] subsidized=[THIS.ScriptValue('te_ai_pp_subsidized_share_rest')|2] railways=[THIS.ScriptValue('te_ai_rail_count_rest')|0] railways_subsidized=[THIS.ScriptValue('te_ai_rail_subsidized_share_rest')|2] (AI countries outside the seven administrative strategies keep the default's must_have, which no INJECT changes; expected, and only a concern if this group is large) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

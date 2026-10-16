@@ -1,4 +1,4 @@
-﻿# The should_remove experiment's self-check (#933), once a year until both
+﻿# The should_remove experiment's self-check (#933), once a year until all three
 # groups have reported (te_ai_subsidy_selfcheck_effects.txt).
 on_yearly_pulse = {
 	on_actions = {
@@ -12,7 +12,8 @@ te_ai_subsidy_selfcheck_on_action = {
 			limit = {
 				OR = {
 					NOT = { has_global_variable = te_ai_pp_selfcheck_clean_done }
-					NOT = { has_global_variable = te_ai_pp_selfcheck_other_done }
+					NOT = { has_global_variable = te_ai_pp_selfcheck_merged_done }
+					NOT = { has_global_variable = te_ai_pp_selfcheck_rest_done }
 				}
 			}
 			random_country = {

@@ -1,9 +1,11 @@
 ﻿# The should_remove self-check (#933, te_ai_subsidy_should_remove_selfcheck):
 # AI-owned power plants and railways, and the share of each that is subsidized,
-# in countries running one of the strategies te_ai_subsidy_clean_strategy names
-# ("clean") and in the other AI countries ("other"). Railways stay must_have
+# in three groups of AI countries: "clean" (te_ai_subsidy_clean_strategy),
+# "merged" (te_ai_subsidy_merged_strategy) and "rest" (neither: no
+# administrative strategy the experiment reaches). Railways stay must_have
 # everywhere, so their share is the control: it shows is_subsidized reads.
 # Any scope.
+
 te_ai_pp_count_clean = {
 	value = 0
 	every_country = {
@@ -76,12 +78,12 @@ te_ai_rail_subsidized_share_clean = {
 	divide = { value = te_ai_rail_count_clean min = 1 }
 }
 
-te_ai_pp_count_other = {
+te_ai_pp_count_merged = {
 	value = 0
 	every_country = {
 		limit = {
 			is_ai = yes
-			NOT = { te_ai_subsidy_clean_strategy = yes }
+			te_ai_subsidy_merged_strategy = yes
 		}
 		every_scope_state = {
 			every_scope_building = {
@@ -92,12 +94,12 @@ te_ai_pp_count_other = {
 	}
 }
 
-te_ai_pp_subsidized_share_other = {
+te_ai_pp_subsidized_share_merged = {
 	value = 0
 	every_country = {
 		limit = {
 			is_ai = yes
-			NOT = { te_ai_subsidy_clean_strategy = yes }
+			te_ai_subsidy_merged_strategy = yes
 		}
 		every_scope_state = {
 			every_scope_building = {
@@ -109,15 +111,15 @@ te_ai_pp_subsidized_share_other = {
 			}
 		}
 	}
-	divide = { value = te_ai_pp_count_other min = 1 }
+	divide = { value = te_ai_pp_count_merged min = 1 }
 }
 
-te_ai_rail_count_other = {
+te_ai_rail_count_merged = {
 	value = 0
 	every_country = {
 		limit = {
 			is_ai = yes
-			NOT = { te_ai_subsidy_clean_strategy = yes }
+			te_ai_subsidy_merged_strategy = yes
 		}
 		every_scope_state = {
 			every_scope_building = {
@@ -128,12 +130,12 @@ te_ai_rail_count_other = {
 	}
 }
 
-te_ai_rail_subsidized_share_other = {
+te_ai_rail_subsidized_share_merged = {
 	value = 0
 	every_country = {
 		limit = {
 			is_ai = yes
-			NOT = { te_ai_subsidy_clean_strategy = yes }
+			te_ai_subsidy_merged_strategy = yes
 		}
 		every_scope_state = {
 			every_scope_building = {
@@ -145,5 +147,81 @@ te_ai_rail_subsidized_share_other = {
 			}
 		}
 	}
-	divide = { value = te_ai_rail_count_other min = 1 }
+	divide = { value = te_ai_rail_count_merged min = 1 }
+}
+
+te_ai_pp_count_rest = {
+	value = 0
+	every_country = {
+		limit = {
+			is_ai = yes
+			NOT = { te_ai_subsidy_clean_strategy = yes }
+			NOT = { te_ai_subsidy_merged_strategy = yes }
+		}
+		every_scope_state = {
+			every_scope_building = {
+				limit = { is_building_type = building_power_plant }
+				add = 1
+			}
+		}
+	}
+}
+
+te_ai_pp_subsidized_share_rest = {
+	value = 0
+	every_country = {
+		limit = {
+			is_ai = yes
+			NOT = { te_ai_subsidy_clean_strategy = yes }
+			NOT = { te_ai_subsidy_merged_strategy = yes }
+		}
+		every_scope_state = {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_power_plant
+					is_subsidized = yes
+				}
+				add = 1
+			}
+		}
+	}
+	divide = { value = te_ai_pp_count_rest min = 1 }
+}
+
+te_ai_rail_count_rest = {
+	value = 0
+	every_country = {
+		limit = {
+			is_ai = yes
+			NOT = { te_ai_subsidy_clean_strategy = yes }
+			NOT = { te_ai_subsidy_merged_strategy = yes }
+		}
+		every_scope_state = {
+			every_scope_building = {
+				limit = { is_building_type = building_railway }
+				add = 1
+			}
+		}
+	}
+}
+
+te_ai_rail_subsidized_share_rest = {
+	value = 0
+	every_country = {
+		limit = {
+			is_ai = yes
+			NOT = { te_ai_subsidy_clean_strategy = yes }
+			NOT = { te_ai_subsidy_merged_strategy = yes }
+		}
+		every_scope_state = {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_railway
+					is_subsidized = yes
+				}
+				add = 1
+			}
+		}
+	}
+	divide = { value = te_ai_rail_count_rest min = 1 }
 }

@@ -1,9 +1,10 @@
 """The should_remove experiment's strategies and its self-check agree (#933).
 
 te_power_plant_subsidy_strategies.txt INJECTs building_power_plant =
-should_remove into administrative strategies with no subsidies block in vanilla;
-the self-check's trigger te_ai_subsidy_clean_strategy must name exactly those,
-or it reads the wrong countries as the "clean" group.
+should_remove into every administrative strategy. The self-check sorts AI
+countries by te_ai_subsidy_clean_strategy (no subsidies block in vanilla) and
+te_ai_subsidy_merged_strategy (one in vanilla); together they must name exactly
+the INJECTed strategies, once each, or a group reads the wrong countries.
 """
 
 import re
@@ -35,6 +36,7 @@ class TestShouldRemoveExperiment(unittest.TestCase):
         triggers = _strip_comments(
             (ROOT / "common/scripted_triggers/te_ai_subsidy_selfcheck_triggers.txt").read_text(encoding="utf-8-sig"))
         cls.clean = re.findall(r"has_strategy\s*=\s*(ai_strategy_\w+)", _block(triggers, "te_ai_subsidy_clean_strategy"))
+        cls.merged = re.findall(r"has_strategy\s*=\s*(ai_strategy_\w+)", _block(triggers, "te_ai_subsidy_merged_strategy"))
 
     def test_each_inject_sets_should_remove(self):
         self.assertTrue(self.injected)
@@ -42,8 +44,9 @@ class TestShouldRemoveExperiment(unittest.TestCase):
             with self.subTest(strategy=name):
                 self.assertRegex(_block(self.strategies, name), r"\bbuilding_power_plant\s*=\s*should_remove\b")
 
-    def test_the_trigger_names_the_injected_strategies(self):
-        self.assertEqual(sorted(self.clean), sorted(self.injected))
+    def test_the_triggers_name_the_injected_strategies(self):
+        self.assertFalse(set(self.clean) & set(self.merged))
+        self.assertEqual(sorted(self.clean + self.merged), sorted(self.injected))
 
     def test_the_default_strategy_sets_it_too(self):
         default = _strip_comments(

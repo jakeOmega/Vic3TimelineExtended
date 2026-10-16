@@ -1,14 +1,18 @@
 ﻿# Experiment (#933): `should_remove` takes a building out of the AI's
 # subsidies. No vanilla strategy uses it and no engine doc lists the subsidy
 # priorities; it sits beside must_have and nice_to_have among the game
-# executable's strings. The three administrative strategies below have no
-# subsidies block in vanilla, so each INJECT adds one with no key in common
-# with vanilla's, and a strategy's value overrides the default's. Read in game
-# 2026-10-16: 54 AI power plants in these strategies' countries 1% subsidized,
-# against 99% of 256 where only the default strategy's INJECT set the value
-# (inert: edited_default_strategy.txt). The yearly self-check
-# te_ai_subsidy_should_remove_selfcheck reads the two groups;
+# executable's strings. A strategy's value overrides the default's, and an
+# INJECT can't change a key the default's vanilla subsidies block already holds
+# (edited_default_strategy.txt), so it goes in every administrative strategy.
+# Read in game 2026-10-16: 54 AI power plants in the first three strategies'
+# countries 1% subsidized, against 99% of 256 elsewhere. building_power_plant
+# is the coal and oil plant; nuclear, fusion and renewable plants are their own
+# buildings, which no strategy subsidizes. The yearly self-check
+# te_ai_subsidy_should_remove_selfcheck reads the groups apart;
 # docs/testing/ai-economy-playtest.md.
+
+# No subsidies block in vanilla: each INJECT adds one with no key in common
+# (group=clean, te_ai_subsidy_clean_strategy).
 INJECT:ai_strategy_agricultural_expansion = {
 	subsidies = {
 		building_power_plant = should_remove
@@ -22,6 +26,33 @@ INJECT:ai_strategy_plantation_economy = {
 }
 
 INJECT:ai_strategy_placate_population = {
+	subsidies = {
+		building_power_plant = should_remove
+	}
+}
+
+# A subsidies block in vanilla, naming other buildings: whether an INJECT's
+# second block adds a new key to it is unread (group=merged,
+# te_ai_subsidy_merged_strategy). If it doesn't, REPLACE these four.
+INJECT:ai_strategy_resource_expansion = {
+	subsidies = {
+		building_power_plant = should_remove
+	}
+}
+
+INJECT:ai_strategy_industrial_expansion = {
+	subsidies = {
+		building_power_plant = should_remove
+	}
+}
+
+INJECT:ai_strategy_colonial_extraction = {
+	subsidies = {
+		building_power_plant = should_remove
+	}
+}
+
+INJECT:ai_strategy_montenegro_admin = {
 	subsidies = {
 		building_power_plant = should_remove
 	}
