@@ -79,6 +79,17 @@ te_seabed_party_cooling = {
 	var:te_seabed_party_cooldown_end > te_history_month_index
 }
 
+# Switching to Unilateral Licensing now would be a defection (§3.3), so the
+# seabed panel's Unilateral Licensing button can warn before the switch, as a
+# tooltip cannot see the costs te_seabed_un_on_policy_change charges after it
+# (its limit reads the new policy). Optional for the panel.
+# Scope: country
+te_seabed_defection_would_cost = {
+	NOT = { te_seabed_on_unilateral = yes }
+	te_seabed_itlos_ratified = yes
+	te_seabed_itlos_governs = yes
+}
+
 # A party pays royalties this month: a seabed party while the seabed is
 # regulated, with Deep-Sea Mine levels to pay on. Scope: country
 te_seabed_royalty_payer = {

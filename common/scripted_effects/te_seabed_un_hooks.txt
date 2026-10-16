@@ -121,7 +121,8 @@ te_seabed_un_clear_scramble_clock = {
 
 # A change of seabed policy, answered (§3.3):
 #   - a party that switches to Unilateral Licensing while the Law of the Sea
-#     governs the seabed defects: 10 infamy once, 5 standing and 10 case
+#     governs the seabed (in force, its seabed terms awake: Regulated or
+#     Scramble) defects: 10 infamy once, 5 standing and 10 case
 #     strength (the defiance record, "binding resolution refused"). It leaves
 #     the reserved half and pays no royalties while it holds the policy
 #     (te_seabed_itlos_party reads the policy itself);
@@ -140,7 +141,10 @@ te_seabed_un_on_policy_change = {
 			te_seabed_on_unilateral = yes
 			NOT = { te_seabed_was_unilateral = yes }
 			te_seabed_itlos_ratified = yes
-			te_seabed_regime_is_governed = yes
+			# The convention governs the seabed now, whether or not this
+			# year's allocation has written the regime yet: a party cannot
+			# slip out between the vote and the next pass.
+			te_seabed_itlos_governs = yes
 		}
 		custom_tooltip = te_seabed_defection_tt
 		change_infamy = te_seabed_defection_infamy
