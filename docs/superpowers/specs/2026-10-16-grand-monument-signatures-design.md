@@ -3,8 +3,8 @@
 **Date:** 2026-10-16
 **Status:** asked for by the owner on 2026-10-16 ("unique dedications tied to specific historical monuments and special
 dedications unlocked only by completing specific Monument Opportunities"). The owner chose the signature layer over new
-dedications and decided the five forks in §0. Every other call is this spec's, marked *(design)*, and open to review on
-the PR.
+dedications and decided the forks in §0, and approved the rest of the first draft the same day. Every other call is this
+spec's, marked *(design)*, and open to review on the PR.
 **Builds on:** `2026-09-27-grand-monument-rework-design.md` (the curve, kinds, fit, contests),
 `2026-10-12-grand-monuments-landmarks-design.md` (landmarks; Appendix B, phase 6's candidates),
 `2026-10-12-grand-monument-opportunities-design.md` (moments, boons, the gift), `2026-10-12-grand-monument-trophies-design.md`
@@ -22,13 +22,13 @@ Persepolis, the Terracotta Army and Machu Picchu play like a column in a provinc
 royal tombs play alike. A completed opportunity leaves nothing behind once its ten-year boon runs out.
 
 This change gives a monument a **signature**: a unique dedication layered on one of the twelve. A historical monument
-carries its own; a country that completes certain opportunities unlocks one it can give its monuments; and phase 6's
+carries its own; completing certain opportunities gives the monument that completed it one; and phase 6's
 historical opportunities raise a landmark that carries one.
 
 Success looks like: the Temple of Heaven's row reads "Temple of Heaven — The Mandate of Heaven", hovering the name says
-it is a unique dedication of To the Crown and what it adds, and its effect shows in National Effects; a country that
-completes a Victory opportunity can raise monuments To Victory from then on; and Bavaria's player is offered Walhalla in
-1836 and, on completing it, has the landmark.
+it is a unique dedication of To the Crown and what it adds, and its effect shows in National Effects; the War Memorial
+that completes a Victory opportunity is dedicated To Victory, and the next victory's memorial is too; and Bavaria's
+player is offered Walhalla in 1836 and, on completing it, has the landmark.
 
 **Non-goals.** No change to the twelve dedications, their effects, kinds, fit or contests; to the curve or the step
 values; to names, styles, forms or pictures other than phase 6's new landmarks; to the opportunities' moments, timers,
@@ -44,7 +44,7 @@ inside a tooltip-walked effect.
 |---|---|
 | New dedications, or a layer on the twelve | **The layer** |
 | How the name shows | **In place of the dedication's name, with the parent as a tooltip** |
-| Specials unlocked by opportunities | **Unlimited:** limited in effect by circumstance, not by a cap |
+| Specials from opportunities | **One monument per completion:** each completed opportunity gives one monument its special, and completing another of that kind later gives one more. No other cap; "limited by circumstance" (owner's correction, 2026-10-16) |
 | One-off effects | **Maybe for a handful; families are probably fine too** (§4.2 proposes four one-offs) |
 | A trophy's signature | **Counts for whoever holds it, at half** |
 | A signature's own interest group | **Only where it makes sense**, never for its own sake (§2.3) |
@@ -71,8 +71,8 @@ A signature is a **parent dedication plus a signature record**, as a law variant
   A monument rededicated to another dedication keeps its signature **dormant**: no effect, the parent's name. Rededicated
   back, it is live again.
 - **One per monument.** A monument that carries a signature keeps it; nothing gives it a second (§5.2).
-- **Never in the building panel.** A pick there gives the plain parent. Every new monument gets the ceremony, which
-  offers the specials (§5.3).
+- **Never in the building panel.** A pick there gives the plain parent. A special reaches a monument by completing its
+  opportunity, or through the ceremony while the country holds one (§5.2, §5.3).
 
 When a signature counts, by the monument's status:
 
@@ -210,32 +210,39 @@ its keys). One writer:
 landmark. A rededicated landmark on another dedication is dormant until rededicated back to its historical one (the
 Alexander Column made To the Republic is no Royal Pantheon).
 
-## 5. Special dedications unlocked by opportunities
+## 5. Special dedications from opportunities
 
-### 5.1 The record
+### 5.1 One completion, one monument
 
-`gm_com_done_<source>` (country variable, `yes`) is set by `gm_com_fulfil` for a source with a special. It is a variable,
-so a civil war's winner keeps the unlock (`scripting_best_practices.md` § "What a Civil War's Winner Inherits"). It is
-never removed.
+**Each completion of an opportunity with a special gives one monument that special** (owner, 2026-10-16: "an unlock
+should be for one of that monument"). Completing another of the same kind later gives one more. There is no other
+cap. The number a country raises is the number of times it completed the moments: Victory and Defeat come with every
+qualifying war, A space first with each of the five firsts, Among the Great Powers and each technology once a game.
 
-### 5.2 On completion
+### 5.2 On completion: the completing monument takes it
 
-- **The completing monument takes the special** where the gift lands: in `monument_events.26` for a primary (the
-  event `gm_com_fulfil` triggers after marking `gm_gift`), and beside the `gm_mon_add_age` call in `gm_com_fulfil` for a
-  secondary, which writes variables only, as the gift does there. Its
-  dedication is the opportunity's, which is the special's parent, so nothing is rebuilt. A monument that already carries a
-  signature (a landmark the fallback chose) keeps its own; the country still unlocks the special.
-- **`monument_events.28`** names the special along with the boon: "The Lisbon Arch is now dedicated To Victory."
+- **The completing monument takes the special** where the gift lands. A primary's is written in `monument_events.26`:
+  `gm_com_fulfil` marks it with `gm_sig_grant` (the special's flag, from the source by `gm_sig_special_for_source`)
+  beside `gm_gift`. A secondary's is written beside the `gm_mon_add_age` call in `gm_com_fulfil`, which writes
+  variables only, as the gift does there. The monument's dedication is the opportunity's, which is the special's
+  parent, so nothing is rebuilt.
+- **Held, when it can't.** When the completing monument already carries a signature (a landmark the fallback chose)
+  or no monument can take it, the country **holds** the special instead: `gm_sig_held_<special>`, a count in a country
+  variable, so a civil war's winner keeps it (`scripting_best_practices.md` § "What a Civil War's Winner Inherits")
+  *(design)*.
+- **`monument_events.28`** names the special along with the boon: "The Lisbon Arch is now dedicated To Victory," or,
+  when held, "Your next War Memorial can be dedicated To Victory."
+- **Spent for good.** A special stays with its monument. Pulled down, rededicated (`gm_clear_state` removes it from a
+  monument that is not a landmark) or lost with its building, it is gone; nothing gives it back. Carried off whole, it
+  goes with the trophy, counts for the holder at half (§2.4) and comes home with it.
 
-### 5.3 In the ceremony
+### 5.3 In the ceremony: only for a held special
 
-- One option per special, **hidden** until its source is done *(design: hidden, not greyed: the ceremony already lists
-  twelve dedications)*, and gated as its parent is (the Grand Stadium's technology for Olympic). Its effect is the
-  parent's dedicate helper, then the two records; its tooltip names the parent and lists both effects in a
-  `custom_tooltip` (`silent_variable_audit`).
-- **Unlimited.** Once unlocked, a special is its parent and more, so a ceremony that can pick the parent will pick it; the
-  plain parent stays for a country without the unlock. The AI prefers an unlocked special over its parent (the parent's
-  weight ×3 on the special, the parent's own option ×0.25) *(design)*.
+- One option per special, **hidden** unless the country holds one *(design: hidden, not greyed: the ceremony already
+  lists twelve dedications)*, and gated as its parent is (the Grand Stadium's technology for Olympic). Its effect is the
+  parent's dedicate helper, then the two records, then one off `gm_sig_held_<special>`. Its tooltip names the parent and
+  lists both effects in a `custom_tooltip` (`silent_variable_audit`).
+- The AI takes a held special whenever the ceremony offers it, since holding one gains nothing.
 - A special counts as its parent everywhere else: the sums, fit, contests and opportunity progress.
 
 ### 5.4 The first wave
@@ -256,16 +263,16 @@ Republic or Revolution) wait until a special can be keyed by source and dedicati
 
 ### 5.5 The offer says what is at stake
 
-The offer (`monument_events.21`) and the Opportunity section's "what completing it gives" add "and unlocks the
-<special> dedication". For a moment that comes once a game (Among the Great Powers, the space firsts, the technologies),
-the tooltip adds that letting it pass loses that special for the game.
+The offer (`monument_events.21`) and the Opportunity section's "what completing it gives" add "and dedicates the
+monument that completes it <special>". For a moment that comes once a game (Among the Great Powers, each space first,
+the technologies), the tooltip adds that letting it pass loses that monument's special for good.
 
 ### 5.6 Old saves
 
-A save from before this change has no `gm_com_done_*`. A one-off pass (`gm_sig_seed_round` against
-`gm_sig_seed_rounds`, the pattern of `gm_arch_seed_round`) sets it for every source whose boon still runs
-(`gm_boon_<source>` above 0), so an opportunity completed in the last ten years counts *(design)*. It gives no
-monument the special: the next ceremony offers it.
+A save from before this change holds no specials. A one-off pass (`gm_sig_seed_round` against `gm_sig_seed_rounds`,
+the pattern of `gm_arch_seed_round`) gives the country one held special for every source whose boon still runs
+(`gm_boon_<source>` above 0), so an opportunity completed in the last ten years counts *(design)*. No monument takes it
+then; the next ceremony that can raise its parent offers it.
 
 ## 6. Historical opportunities (phase 6)
 
@@ -339,7 +346,10 @@ to pin (`CONTAINER_RECORDS` and a `TROPHY_RECORDS` check of the trophy copies) *
 - **Our Monuments rows, the state card, rows beside another, trophy rows:** the label (§3).
 - **The state card's local effect line:** the signature's local effect is a second line under the dedication's, from
   `gm_state_disp_sig_local`, hidden at 0.
-- **The ceremony:** the special options (§5.3). **The opportunity's section and offer:** the unlock line (§5.5).
+- **The ceremony:** the options for held specials (§5.3). **The opportunity's section and offer:** the special's line
+  (§5.5).
+- **A held special** shows under Opportunities Seized in National Effects: "Held: To Victory, for your next War
+  Memorial" *(design)*.
 - **How Grand Monuments Work:** a paragraph on unique dedications.
 
 ## 9. Engine facts this rests on
@@ -360,11 +370,12 @@ to pin (`CONTAINER_RECORDS` and a `TROPHY_RECORDS` check of the trophy copies) *
   (a family or one-off key, or `None`) and `year`; `COMMISSION_SOURCES` gains `special`. The tests fail unless each
   signature has its modifier with one field and an icon, its step mirror, its sum, its national hooks (add and remove),
   its row, its loc; each local one its state-pulse call and card line; each IG one its `gm_compute_ig` term; each landmark
-  member its branch in `gm_sig_from_landmark`; each name its custom-loc branches; each special its ceremony option, its
-  `gm_com_done_` write and its offer line; both record pairs are in `CONTAINER_RECORDS`.
+  member its branch in `gm_sig_from_landmark`; each name its custom-loc branches; each special its branch in
+  `gm_sig_special_for_source`, its grant on both paths (`.26` and beside `gm_mon_add_age`), its held count, its ceremony
+  option and its offer line; both record pairs are in `CONTAINER_RECORDS`.
 - **`test_grand_monuments_layout.py`:** the new rows, in order. **`test_grand_monument_trophies.py`:** a trophy carries
   the pair, and its holder's sum counts `gm_tr_grandeur`.
-- **Debug, `te_debug_monuments.8`:** a) unlock every special; b) run the landmark backfill now; c) give the tallest
+- **Debug, `te_debug_monuments.8`:** a) hold one of every special; b) run the landmark backfill now; c) give the tallest
   monument each signature in turn (as `.4` steps through pictures); d) log every monument's signature, parent and whether
   it counts on `TE_MONUMENTS:` lines.
 - **Audits that cover the new script:** `silent_variable` (ceremony options), `loc_coverage`, `script_argument`,
@@ -375,7 +386,8 @@ to pin (`CONTAINER_RECORDS` and a `TROPHY_RECORDS` check of the trophy copies) *
 
 `02-timeline.md`: a **Unique dedications** subsection after "Monument dedications": what a signature is, the hover, when
 it counts (the status table, shortened), the families with their effects and a few members each, the one-offs, and the
-specials with the opportunity that unlocks each. The opportunities table gains an "Unlocks" column; "Monument trophies"
+specials with the opportunity that gives each, one monument per completion. The opportunities table gains a "Special"
+column; "Monument trophies"
 gains a sentence on a trophy's signature; Phase C adds "Historical opportunities" under "Monument opportunities".
 `17-reference.md` gains a "Unique dedication" entry. Rebuild the PDF in the same PR.
 
@@ -411,11 +423,13 @@ merge):
 3. A contested crown landmark loses its national signature and keeps its local one; kept as heritage, the same.
 4. Rededicating the Alexander Column To the Republic shows To the Republic and no Royal Pantheon.
 5. Carrying off a landmark piece moves part of its signature to the taker at half; bringing it home restores it.
-6. Completing a Victory opportunity gives the completing memorial To Victory, `.28` says so, and the next ceremony offers
-   To Victory; the AI picks it.
-7. A once-a-game offer's tooltip says letting it pass loses the special.
-8. An old save picks up landmark signatures within a month, and an unlock from a boon still running.
-9. Phase C: Bavaria is offered Walhalla in 1836; completing it turns the new monument into Walhalla, with its picture
+6. Completing a Victory opportunity gives the completing memorial To Victory and `.28` says so; the next ceremony does
+   not offer To Victory; a second Victory completed gives a second memorial To Victory.
+7. A completing landmark keeps its own signature; the country holds the special, National Effects shows it held, and
+   the next War Memorial's ceremony offers it once; the AI takes it.
+8. A once-a-game offer's tooltip says letting it pass loses that monument's special.
+9. An old save picks up landmark signatures within a month, and a held special for a boon still running.
+10. Phase C: Bavaria is offered Walhalla in 1836; completing it turns the new monument into Walhalla, with its picture
    (or stand-in), its locked name and Heroes of the Nation.
 
 ## 14. Phasing
@@ -425,7 +439,7 @@ Each phase is its own PR.
 | Phase | Content | Needs |
 |---|---|---|
 | A | §1–§4 and §7–§8: the layer, the six families, the four one-offs, the backfill, trophies at half | — |
-| B | §5: the record, the grant, the ceremony options, the offer lines, the first five specials, old saves | A |
+| B | §5: the grant on completion, held specials and their ceremony options, the offer lines, the first five specials, old saves | A |
 | C | §6: historical opportunities, the first six, Heroes of the Nation | A, B (the grant point) |
 
 ## Out of scope
