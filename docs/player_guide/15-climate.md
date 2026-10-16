@@ -526,7 +526,8 @@ tourism output by up to 200%, so a region at half its maximum pollution has no
 tourism left.
 
 Pollution impact also damps each state's own generation, adding up to −90% to
-its Generated Pollution modifier: −45% at 50% impact and −90% at 100%. The
+its Generated Pollution modifier: −45% at 50% impact and −90% at 100%. Pollution
+health protections don't weaken it. The
 dirtier a region gets, the less each extra unit of pollution adds, so its impact
 settles lower than it would in the base game. With no other cuts, generation
 that would hold a region at 50% impact in the base game holds it near 34%,
