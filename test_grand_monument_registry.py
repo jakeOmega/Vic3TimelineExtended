@@ -1605,7 +1605,7 @@ class FlavourTests(unittest.TestCase):
     def test_only_a_fitting_landmark_holds_anniversaries(self):
         self.assertEqual(squash(block(read(TRIGGERS), "gm_state_holds_anniversary")),
                          "gm_state_status_fits = yes gm_state_has_pm = { PM = $PM$ } "
-                         "b:building_grand_monument ?= { level >= 3 }")
+                         "gm_state_primary_grandeur >= 3")
 
     def test_events(self):
         text, L = read(EVENTS), loc()
@@ -2236,20 +2236,13 @@ class GiftTests(unittest.TestCase):
         self.assertIn("trigger = { gm_system_enabled = yes has_variable = gm_gift }", ev)
         self.assertIn("immediate = { gm_state_gift_grandeur = yes }", ev)
 
-    def test_the_rebuild(self):
+    def test_the_gift_is_age(self):
+        # Ageing rework (spec 2026-10-16 §5; owner): +5 grandeur, no rebuild.
         gift = squash(block(self.e, "gm_state_gift_grandeur"))
         self.assertTrue(gift.startswith("gm_remove_state_var = { VAR = gm_gift }"))
-        self.assertIn("limit = { has_building = building_grand_monument gm_state_is_dedicated = yes "
-                      "NOT = { has_variable = gm_restore_pm } gm_state_level < 200 }", gift)
-        self.assertIn("value = { value = gm_state_level add = gm_com_gift max = 200 }", gift)
-        order = ["gm_state_mark_restore_pm = yes", "set_variable = { name = gm_rebuilding days = 1 }",
-                 "remove_building = building_grand_monument",
-                 "te_construction_market_build_specified_level = { SPEC_TYPE = building_grand_monument "
-                 "SPEC_LEVEL = var:gm_rebuild_level }",
-                 "owner = { trigger_event = { id = monument_events.20 } }"]
-        found = [gift.find(s_) for s_ in order]
-        self.assertNotIn(-1, found)
-        self.assertEqual(found, sorted(found))
+        self.assertIn("limit = { has_building = building_grand_monument gm_state_is_dedicated = yes } "
+                      "gm_state_add_age = { AGE = gm_com_gift }", gift)
+        self.assertNotIn("remove_building", gift)
         self.assertNotIn("gm_clear_state", gift, "the gift keeps the monument's records")
         self.assertNotIn("gm_state_start_ceremony", gift)
 
@@ -3743,7 +3736,7 @@ class MultiMonumentLevelTests(unittest.TestCase):
 
     def test_the_opportunity_counts_the_primarys_levels(self):
         body = squash(block(read("common/script_values/gm_commission_values.txt"), "gm_com_fit_grandeur"))
-        self.assertIn("add = gm_state_primary_grandeur", body)
+        self.assertIn("add = gm_state_primary_levels", body)
 
     def test_no_record_of_a_level_reads_the_whole_building(self):
         for rel in (EFFECTS, "common/scripted_effects/gm_trophy_effects.txt",
@@ -3760,10 +3753,9 @@ class MultiMonumentLevelTests(unittest.TestCase):
         self.assertIn("name = gm_rebuild_level value = { value = gm_state_primary_levels divide = 2 ceiling = yes "
                       "add = gm_state_secondary_levels max = 200 }", red)
 
-    def test_the_gift_remembers_the_primarys_levels(self):
+    def test_the_gift_lands_on_the_primarys_age(self):
         gift = squash(block(read("common/scripted_effects/gm_commission_effects.txt"), "gm_state_gift_grandeur"))
-        self.assertIn("set_variable = { name = gm_grandeur value = { value = var:gm_rebuild_level "
-                      "subtract = gm_state_secondary_levels min = 1 } }", gift)
+        self.assertIn("gm_state_add_age = { AGE = gm_com_gift }", gift)
 
     def test_a_primary_that_goes_hands_the_building_on(self):
         for name, body in (("gm_state_tear_down", block(self.e, "gm_state_tear_down")),
@@ -4010,7 +4002,6 @@ class LevelsApartTests(unittest.TestCase):
             (MON_EFFECTS, "gm_state_tr_shrink_by"),
             (MON_EFFECTS, "gm_state_promote_secondary"),
             (EFFECTS, "gm_state_rededicate"),
-            (self.COM, "gm_state_gift_grandeur"),
         )
         for path, name in sites:
             body = squash(strip_comments(block(read(path), name)))
@@ -4496,6 +4487,72 @@ class SwapTests(unittest.TestCase):
         refresh = squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
         self.assertIn("gm_state_newcomer_settled = yes", refresh)
         self.assertNotIn("gm_state_swap_primary", refresh)
+
+
+ANNIVERSARIES = (3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15)
+
+
+class OpportunityLevelTests(unittest.TestCase):
+    """Ageing rework (spec 2026-10-16 §5; owner): an opportunity counts new
+    levels of fitting monuments of its dedication, ageing never; the gift is
+    +5 grandeur with no rebuild."""
+
+    COM_V = "common/script_values/gm_commission_values.txt"
+    COM_E = "common/scripted_effects/gm_commission_effects.txt"
+    COM_T = "common/scripted_triggers/gm_commission_triggers.txt"
+
+    def test_progress_counts_levels(self):
+        body = squash(block(read(self.COM_V), "gm_com_fit_grandeur"))
+        self.assertIn("limit = { gm_state_com_counts = yes } add = gm_state_primary_levels", body)
+        self.assertIn("every_in_list = { variable = gm_monuments_held limit = { gm_mon_com_counts = yes } "
+                      "add = gm_mon_levels }", body)
+        self.assertNotIn("grandeur", body.replace("gm_com_fit_grandeur", ""))
+        counts = squash(block(read(MON_TRIGGERS), "gm_mon_com_counts"))
+        self.assertIn("gm_mon_status_fits = yes", counts)
+        self.assertIn("gm_mon_has_dedication_flag = { VAR = gm_com_dedication }", counts)
+
+    def test_raise_it_builds_only_where_it_may(self):
+        pick = squash(strip_comments(block(read(self.COM_E), "gm_com_pick_build_state")))
+        self.assertGreaterEqual(pick.count("gm_state_can_expand = yes"), 5)
+
+    def test_the_gift_is_age(self):
+        gift = squash(strip_comments(block(read(self.COM_E), "gm_state_gift_grandeur")))
+        self.assertIn("gm_state_add_age = { AGE = gm_com_gift }", gift)
+        for s in ("remove_building", "te_construction_market_build_specified_level", "gm_state_mark_restore_pm"):
+            self.assertNotIn(s, gift)
+        fulfil = squash(strip_comments(block(read(self.COM_E), "gm_com_fulfil")))
+        self.assertIn("limit = { gm_mon_com_counts = yes }", fulfil)
+        self.assertIn("scope:gm_com_gift_mon = { gm_mon_add_age = { AGE = gm_com_gift } }", fulfil)
+
+
+class RededicateAgeTests(unittest.TestCase):
+    def test_rededicate_halves_the_age(self):
+        body = squash(strip_comments(block(read(EFFECTS), "gm_state_rededicate")))
+        self.assertIn("set_variable = { name = gm_rededicate_age value = { value = gm_state_primary_age divide = 2 } }",
+                      body)
+        self.assertLess(body.find("gm_rededicate_age value"), body.find("gm_clear_state = { KEEP_LANDMARK = yes }"))
+        self.assertIn("set_variable = { name = gm_age value = var:gm_rededicate_age }", body)
+        self.assertLess(body.find("gm_clear_state = { KEEP_LANDMARK = yes }"),
+                        body.find("name = gm_age value = var:gm_rededicate_age"))
+        self.assertIn("remove_variable = gm_rededicate_age", body)
+
+
+class AnniversaryAgeTests(unittest.TestCase):
+    def test_a_monument_holds_anniversaries_by_its_grandeur(self):
+        body = squash(block(read(TRIGGERS), "gm_state_holds_anniversary"))
+        self.assertIn("gm_state_primary_grandeur >= 3", body)
+        self.assertNotIn("level", body)
+
+    def test_the_public_option_adds_age(self):
+        self.assertEqual(squash(block(read(VALUES), "gm_evt_grandeur")),
+                         "value = gm_state_primary_levels multiply = 0.1 min = 1")
+        events = read(EVENTS)
+        for n in ANNIVERSARIES:
+            ev = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.%d\s*=\s*\{" % n)))
+            a = ev[ev.find("name = monument_events.%d.a" % n):ev.find("name = monument_events.%d.b" % n)]
+            self.assertIn("custom_tooltip = { text = gm_evt_grandeur_tt scope:monument_state = { "
+                          "gm_state_add_age = { AGE = gm_evt_grandeur } } }", a, n)
+        self.assertIn("gm_evt_grandeur_tt", loc())
 
 if __name__ == "__main__":
     unittest.main()

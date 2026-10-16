@@ -2892,7 +2892,7 @@
  monument_events.25.t:0 "A Name for the Monument"
  monument_events.25.year:0 "The [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_this_year')|0]"
  monument_events.28.a:0 "A fitting monument"
- monument_events.28.d:0 "[SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName] is finished as the moment asked, and the country is rebuilding it #v [SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! levels taller at no cost. The group that asked for it is pleased.\n\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! is ours for #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! years: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')]."
+ monument_events.28.d:0 "[SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName] is finished as the moment asked, and gains #v [SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur] at no cost. The group that asked for it is pleased.\n\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! is ours for #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! years: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')]."
  monument_events.28.d_unnamed:0 "The monument is finished as the moment asked, and the group that asked for it is pleased.\n\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! is ours for #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! years: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')]."
  monument_events.28.f:0 "The scaffolding is still coming down when the first wreath is laid."
  monument_events.28.t:0 "An Opportunity Seized"

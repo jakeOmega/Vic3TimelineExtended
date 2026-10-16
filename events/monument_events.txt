@@ -624,6 +624,13 @@ monument_events.3 = {
 
 	option = {
 		name = monument_events.3.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_state_occasion days = normal_modifier_time }
 		ai_chance = { base = 1 }
@@ -730,6 +737,13 @@ monument_events.4 = {
 
 	option = {
 		name = monument_events.4.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_treasury = gm_event_cost
 		scope:monument_state = {
 			add_modifier = { name = gm_evt_pilgrim_hostels days = normal_modifier_time }
@@ -782,6 +796,13 @@ monument_events.5 = {
 
 	option = {
 		name = monument_events.5.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_modifier = { name = gm_evt_remembrance_day days = normal_modifier_time }
 		ai_chance = { base = 1 }
 	}
@@ -832,6 +853,13 @@ monument_events.6 = {
 
 	option = {
 		name = monument_events.6.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_modifier = { name = gm_evt_artists_defended days = normal_modifier_time }
 		ai_chance = { base = 1 }
 	}
@@ -880,6 +908,13 @@ monument_events.7 = {
 
 	option = {
 		name = monument_events.7.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_treasury = gm_event_cost
 		scope:monument_state = {
 			add_modifier = { name = gm_evt_gardens_open days = normal_modifier_time }
@@ -931,6 +966,13 @@ monument_events.8 = {
 
 	option = {
 		name = monument_events.8.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		scope:monument_state = {
 			add_modifier = { name = gm_evt_public_lectures days = normal_modifier_time }
 		}
@@ -981,6 +1023,13 @@ monument_events.9 = {
 
 	option = {
 		name = monument_events.9.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_modifier = { name = gm_evt_domestic_exhibition days = normal_modifier_time }
 		ai_chance = { base = 1 }
 	}
@@ -1029,6 +1078,13 @@ monument_events.10 = {
 
 	option = {
 		name = monument_events.10.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_treasury = gm_event_cost
 		scope:monument_state = {
 			add_modifier = { name = gm_evt_subsidised_tickets days = normal_modifier_time }
@@ -2909,6 +2965,13 @@ monument_events.12 = {
 
 	option = {
 		name = monument_events.12.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_jubilee days = normal_modifier_time }
 		ai_chance = { base = 1 }
@@ -2960,6 +3023,13 @@ monument_events.13 = {
 
 	option = {
 		name = monument_events.13.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_modifier = { name = gm_evt_citizens_assembly days = normal_modifier_time }
 		ai_chance = { base = 1 }
 	}
@@ -3008,6 +3078,13 @@ monument_events.14 = {
 
 	option = {
 		name = monument_events.14.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_mass_rally days = normal_modifier_time }
 		scope:monument_state = {
@@ -3060,6 +3137,13 @@ monument_events.15 = {
 
 	option = {
 		name = monument_events.15.a
+		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
+		custom_tooltip = {
+			text = gm_evt_grandeur_tt
+			scope:monument_state = {
+				gm_state_add_age = { AGE = gm_evt_grandeur }
+			}
+		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_leader_celebrated days = normal_modifier_time }
 		ai_chance = { base = 1 }

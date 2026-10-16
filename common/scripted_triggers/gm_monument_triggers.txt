@@ -320,6 +320,47 @@ gm_state_can_rededicate_beside = {
 	NOT = { has_variable = gm_being_named }
 }
 
+# Container scope. Its dedication is the one its state's owner's variable $VAR$
+# names (gm_state_has_dedication_flag's twin, gm_commission_triggers.txt).
+gm_mon_has_dedication_flag = {
+	var:gm_tr_origin ?= { owner = { has_variable = $VAR$ } }
+	OR = {
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:crown } } gm_mon_is = { KEY = crown } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:republic } } gm_mon_is = { KEY = republic } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:revolution } } gm_mon_is = { KEY = revolution } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:leader } } gm_mon_is = { KEY = leader } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:religious } } gm_mon_is = { KEY = religious } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:civic } } gm_mon_is = { KEY = civic } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:war_memorial } } gm_mon_is = { KEY = war_memorial } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:artistic } } gm_mon_is = { KEY = artistic } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:naturalist } } gm_mon_is = { KEY = naturalist } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:scientific } } gm_mon_is = { KEY = scientific } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:industrial } } gm_mon_is = { KEY = industrial } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:athletic } } gm_mon_is = { KEY = athletic } }
+	}
+}
+
+# Container scope. This secondary counts toward its owner's open opportunity
+# (spec 2026-10-16 §5), as gm_state_com_counts does for a state's own: it fits,
+# it is of the opportunity's dedication, and it stands in the opportunity's
+# state if that names one.
+gm_mon_com_counts = {
+	var:gm_tr_origin ?= { owner = { has_variable = gm_com_dedication } }
+	gm_mon_status_fits = yes
+	gm_mon_has_dedication_flag = { VAR = gm_com_dedication }
+	var:gm_tr_origin ?= {
+		OR = {
+			owner = {
+				NOT = { has_variable = gm_com_state }
+			}
+			AND = {
+				owner.var:gm_com_state ?= { save_temporary_scope_as = gm_tmp_mon_com_state }
+				this = scope:gm_tmp_mon_com_state
+			}
+		}
+	}
+}
+
 # ---- A trophy comes home (spec §4.1) -----------------------------------------------
 # State scope, with scope:gm_tr_moving the returning trophy. What stands here
 # is what the trophy is a piece of: the landmark it came from, or, with

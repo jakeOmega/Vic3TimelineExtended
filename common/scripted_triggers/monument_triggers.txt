@@ -527,10 +527,10 @@ gm_country_has_revived = {
 #  Anniversaries (spec §6.1)
 # ======================================================================
 # State scope. A monument of this dedication that fits and is a real
-# landmark (level 3 or more) holds anniversaries; a contested or heritage one
-# does not.
+# landmark (grandeur 3 or more, its own) holds anniversaries; a contested or
+# heritage one does not.
 gm_state_holds_anniversary = {
 	gm_state_status_fits = yes
 	gm_state_has_pm = { PM = $PM$ }
-	b:building_grand_monument ?= { level >= 3 }
+	gm_state_primary_grandeur >= 3
 }

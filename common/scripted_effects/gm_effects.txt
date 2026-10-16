@@ -1388,6 +1388,15 @@ gm_state_rededicate = {
 				max = 200
 			}
 		}
+		# Half its years too (ageing spec 2026-10-16 §5): its grandeur halves,
+		# and it ages again once the ceremony dedicates it.
+		set_variable = {
+			name = gm_rededicate_age
+			value = {
+				value = gm_state_primary_age
+				divide = 2
+			}
+		}
 		remove_building = building_grand_monument
 		# A landmark keeps its look and picture; the ceremony and the unveiling
 		# give it a new dedication and a new name (phase 4 §3.3).
@@ -1396,6 +1405,11 @@ gm_state_rededicate = {
 			SPEC_TYPE = building_grand_monument
 			SPEC_LEVEL = var:gm_rebuild_level
 		}
+		if = {
+			limit = { var:gm_rededicate_age > 0 }
+			set_variable = { name = gm_age value = var:gm_rededicate_age }
+		}
+		remove_variable = gm_rededicate_age
 		remove_variable = gm_rebuild_level
 		remove_variable = gm_rebuild_cost
 		gm_state_start_ceremony = yes

@@ -434,6 +434,14 @@ gm_state_age_step = {
 	multiply = gm_policy_factor_age
 }
 
+# State scope. What an anniversary's public option adds to the monument's age
+# grandeur (ageing spec 2026-10-16 §5): a tenth of its levels, at least 1.
+gm_evt_grandeur = {
+	value = gm_state_primary_levels
+	multiply = 0.1
+	min = 1
+}
+
 # Country scope, for the overview's policy line: months until the policy may
 # change again (0 when it may).
 gm_disp_policy_months_left = {
