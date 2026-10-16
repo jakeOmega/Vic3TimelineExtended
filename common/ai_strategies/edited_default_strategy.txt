@@ -318,14 +318,15 @@
 			value = 10
 		}
 	}
-	# Meant to demote the power plant subsidy from vanilla's must_have to
-	# nice_to_have, but inert: an INJECT can't change a key vanilla's subsidies
-	# block already holds, so the engine keeps must_have (read in game
-	# 2026-10-16, #933; scripting_best_practices.md). A priority set in a
-	# country's own strategy does override the default's, and should_remove,
-	# below nice_to_have, makes the AI drop the subsidy: draft PR #981.
+	# Inert: an INJECT can't change a key vanilla's subsidies block already
+	# holds, so the engine keeps vanilla's must_have here (read in game
+	# 2026-10-16, #933; scripting_best_practices.md). The setting that works is
+	# in the countries' administrative strategies
+	# (te_power_plant_subsidy_strategies.txt): a strategy's value overrides the
+	# default's. This line would take effect only if vanilla's block stopped
+	# naming power plants.
 	subsidies = {
-		building_power_plant = nice_to_have
+		building_power_plant = should_remove
 	}
 	goods_stances = {
 		construction = {
