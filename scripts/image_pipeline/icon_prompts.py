@@ -191,6 +191,11 @@ BUILDING_STYLE = ("aerial three-quarter view of {subject}, detailed painted illu
 TROPHY_STYLE = ("close three-quarter view from above of {subject}, detailed painted illustration of a miniature "
                 "diorama, warm golden light from skylights, muted earthy palette, the exhibit large in the "
                 "foreground and filling the center of the image")
+# The Venus de Milo's own picture (2026-10-16): close and from the front. Under BUILDING_STYLE's
+# aerial view, four rounds drew her from behind, looking out over the bay, and every round gave her arms.
+STATUE_STYLE = ("close three-quarter view from above of {subject}, detailed painted illustration of a miniature "
+                "diorama, warm golden afternoon light, muted earthy palette, the statue large in the foreground "
+                "facing the viewer and filling the center of the image")
 
 CATEGORIES = {
     "technology": dict(
@@ -2284,8 +2289,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "landmark_arch_of_ctesiphon__arch": {"subject": "Taq Kasra at Ctesiphon: a gigantic open-fronted brick vault, a tall parabolic arched opening like the mouth of a huge tunnel rising from the ground, set in the middle of a high flat brick wall covered in rows of small blind arches and stretching out on both sides, alone on the flat dusty plain by the Tigris, a few palm trees", "seed": 0,
                                              "now": f"{_BI}/building_grand_monument.dds"},
         # The never-placed origins of the 1836 trophies (placed=False), as each would stand once its
-        # trophy goes home. The Venus de Milo keeps its stand-in: three rounds drew her with arms, from
-        # behind or over a lettered plaque.
+        # trophy goes home.
         "landmark_rosetta_stone__stele": {"subject": "a dark grey granite slab with a jagged broken top edge and a polished face finely incised with rows of tiny carved signs, set upright on a low stone plinth in the courtyard of a sand-coloured Ottoman fort on the Nile delta, date palms beyond", "seed": 0,
                                           "now": f"{_BI}/building_grand_monument.dds"},
         "landmark_temple_of_dendera__colonnade": {"subject": "the temple of Hathor at Dendera in Egypt: a massive flat-roofed sandstone temple, its front a row of six thick columns topped by huge square capitals carved with a woman's face, a deep curved Egyptian cornice above, its courts half buried in drifted sand with mud-brick huts on the roof, inside a high mud-brick enclosure wall, desert and palms beyond", "seed": 1,
@@ -2293,6 +2297,8 @@ ICONS: dict[str, dict[str, dict]] = {
         # s0 is retouched: lettering on its lintel and a sign (raw in ~/flux_runs/originals/gm_loot/).
         "landmark_luxor_obelisk__obelisk": {"subject": "the temple of Luxor on the bank of the Nile: a tall pink granite obelisk standing before a huge sloping stone temple gateway, two colossal seated pharaoh statues half buried in sand by its door, mud-brick village houses and a small mosque among the ruins, palm trees", "seed": 0,
                                             "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_venus_de_milo__statue": {"subject": "an armless white marble statue of a goddess, her arms ending in rough broken stumps just below the shoulders, bare to the hips with heavy drapery round her legs, standing outdoors on a stone pedestal among ruined ancient stone terraces on a Greek island hillside, olive trees, the blue sea far below", "seed": 11, "style": STATUE_STYLE,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
         "landmark_piraeus_lion__statue": {"subject": "a colossal white marble lion seated upright on its haunches on a tall stone plinth at the mouth of a small ancient harbour, a rocky Greek shore, fishing boats, bare hills", "seed": 0,
                                           "now": f"{_BI}/building_grand_monument.dds"},
         "landmark_horses_of_saint_mark__statue": {"subject": "four gilded bronze horses striding side by side on a tall stone pedestal on the long open square of the old Hippodrome of Constantinople, an ancient Egyptian obelisk nearby, the domes and slender minarets of a great mosque beyond", "seed": 0,

@@ -3089,6 +3089,7 @@ PICTURES = {
     1000032: ("landmark_rosetta_stone", "stele", None),
     1000033: ("landmark_temple_of_dendera", "colonnade", None),
     1000034: ("landmark_luxor_obelisk", "obelisk", None),
+    1000035: ("landmark_venus_de_milo", "statue", None),
     1000036: ("landmark_piraeus_lion", "statue", None),
     1000037: ("landmark_horses_of_saint_mark", "statue", None),
     1000038: ("landmark_tipus_tiger", "statue", None),
@@ -3279,7 +3280,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_picture_from_look"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 166)
+        self.assertEqual(len(PICTURES), 167)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():
