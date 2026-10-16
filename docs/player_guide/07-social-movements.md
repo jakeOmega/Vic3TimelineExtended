@@ -167,7 +167,7 @@ The entry opens in era 9, but Strong Privacy Rights needs Universal Digital
 Identity from era 11 and the Guaranteed Liberties law, and you have 15 years.
 The events bring a whistleblower, a data breach, hackers, predictive policing
 and foreign cyber-espionage; with Covert Warfare on, the last follows only when
-your counterintelligence catches a foreign espionage operation (see [What the
+your counterintelligence exposes a foreign espionage operation (see [What the
 target learns](11-influence.md#what-the-target-learns)).
 
 ### The mental health debate
