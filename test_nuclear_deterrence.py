@@ -793,6 +793,67 @@ class TestCrisisPanel(unittest.TestCase):
             self.assertIn(n, loc_value("nd_w_crisis_pressure_tt"))
 
 
+class TestWorldCrises(unittest.TestCase):
+    """The World Crises section: the slots the refresh writes, the rows that
+    read them, and every place a crisis starts, ends or changes its danger."""
+
+    SLOTS = set(range(1, 9))
+
+    def setUp(self):
+        self.sguis = strip_comments(read(SGUIS))
+        self.gui = read(GUI)
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def _drawn(self, sgui, call):
+        pat = rf"GetScriptedGui\('{sgui}'\)\.{call}\( [^\"]*?\(CFixedPoint\)(\d+)"
+        return {int(x) for x in re.findall(pat, self.gui)}
+
+    def test_rows_drawn_match_rows_handled(self):
+        rows = self._drawn("nd_world_crisis_row_sgui", "ExecuteTooltip")
+        self.assertEqual(rows, self.SLOTS | {9})
+        self.assertEqual(self._drawn("nd_world_crisis_row_sgui", "IsShown"), rows)
+        body = block(self.sguis, "nd_world_crisis_row_sgui")
+        self.assertEqual(sgui_ops(self.sguis, "nd_world_crisis_row_sgui", "is_shown"), rows)
+        self.assertEqual(sgui_ops(self.sguis, "nd_world_crisis_row_sgui", "effect"), rows)
+        for n in self.SLOTS:
+            self.assertIn(f"nd_world_crisis_row_at = {{ SLOT = {n} }}", body, n)
+
+    def test_hovers_drawn_match_hovers_handled(self):
+        hovers = self._drawn("nd_world_crisis_detail_sgui", "ExecuteTooltip")
+        self.assertEqual(hovers, self.SLOTS)
+        self.assertEqual(sgui_ops(self.sguis, "nd_world_crisis_detail_sgui", "effect"), hovers)
+
+    def test_the_refresh_writes_every_slot_the_rows_read(self):
+        body = block(self.effects, "nd_world_crises_refresh")
+        self.assertTrue(body.strip().startswith("hidden_effect"), "the refresh must stay out of tooltips")
+        for n in self.SLOTS:
+            self.assertIn(f"remove_global_variable = nd_wc_{n}", body)
+            self.assertIn(f"set_global_variable = {{ name = nd_wc_{n} value = THIS }}", body)
+        gate = block(self.sguis, "nd_world_crises_sgui")
+        for n in self.SLOTS:
+            self.assertIn(f"nd_world_crisis_slot_live = {{ SLOT = {n} }}", gate)
+
+    def test_every_change_refreshes_the_list(self):
+        for name in ("nd_crisis_open", "nd_crisis_close", "nd_crisis_weekly_tick"):
+            self.assertIn("nd_world_crises_refresh = yes", block(self.effects, name), name)
+        taboo = strip_comments(read(ROOT / "common/scripted_effects/nuclear_taboo_effects.txt"))
+        self.assertIn("nd_world_crises_refresh = yes", block(taboo, "nd_taboo_monthly_update"))
+
+    def test_handlers_are_display_only_and_drawn(self):
+        for name in ("nd_world_crises_sgui", "nd_world_crisis_row_sgui", "nd_world_crisis_detail_sgui"):
+            body = block(self.sguis, name)
+            self.assertIn("is_valid = { always = no }", body, name)
+            self.assertIn("ai_is_valid = { always = no }", body, name)
+            self.assertIn(name, self.gui, f"{name} is never drawn")
+
+    def test_printed_lines_have_loc(self):
+        text = self.effects + self.sguis
+        printed = set(re.findall(r"custom_tooltip_no_bullet = (nd_wc_\w+)", text))
+        self.assertTrue(printed)
+        missing = sorted(printed - loc_keys())
+        self.assertFalse(missing, missing)
+
+
 class TestInterestGroupClasses(unittest.TestCase):
     OLD = ("nd_ig_leader_is_hawk", "nd_ig_leader_is_dove", "nd_ig_class_warfighting", "nd_ig_class_dove")
     NEW = ("nd_stance_militarist_full", "nd_stance_militarist_mild", "nd_stance_restraint_full",

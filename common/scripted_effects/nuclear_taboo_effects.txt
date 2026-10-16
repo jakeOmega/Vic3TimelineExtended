@@ -94,6 +94,9 @@ nd_taboo_monthly_update = {
 	# active country's weekly pulse, which the entry being active for every
 	# country (nuke_triggers.txt) would have made ~200 sweeps a week.
 	update_nuclear_powers_ranking = yes
+	# The panel's list of the world's crises, for a record that ended without
+	# a close (nd_world_crises_refresh, nuclear_crisis_effects.txt).
+	nd_world_crises_refresh = yes
 	nd_taboo_seed_existing_world = yes
 	if = {
 		limit = { has_global_variable = nd_taboo }
