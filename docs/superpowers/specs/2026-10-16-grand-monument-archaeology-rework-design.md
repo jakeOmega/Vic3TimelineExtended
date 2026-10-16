@@ -25,29 +25,26 @@ A review of the MVP found four things worth changing.
 
 ## 1. What a dig costs
 
-### Treasury: by the site, not the country *(design)*
+### Innovation, and no money (owner, 2026-10-16)
 
-A dig costs a fixed sum a week for each level the site will raise, by method:
+A dig costs weekly innovation and nothing else: the country already pays for its innovation through its universities, so a
+treasury charge on top counted the scholars twice. By method:
 
-| Method | Per level, per week | 5 levels | 10 levels | 15 levels |
-|---|---|---|---|---|
-| Antiquarian | £20 | £100 | £200 | £300 |
-| Systematic | £50 | £250 | £500 | £750 |
-| Forensic | £200 | £1,000 | £2,000 | £3,000 |
+| Method | Weekly innovation a dig |
+|---|---|
+| Antiquarian | 5 |
+| Systematic | 20 |
+| Forensic | 100 |
 
-`gm_arch_price_<method>` holds the price; `gm_arch_site_cost_<method>` (container scope) multiplies it by the site's levels.
-The monthly pass writes each dig's cost on its container (`gm_site_weekly_cost`) and sums the sponsor's digs into
-`gm_arch_cost_units`, which `gm_arch_expense` (`country_expenses_add = 1`, the Archaeological Digs row of the Budget
-Breakdown) still takes as its multiplier. Nothing reads GDP.
+`gm_arch_innovation_<method>` holds the figure (the MVP's 5 / 15 / 30, with the later methods raised by the owner); the
+monthly pass sums the sponsor's digs into `gm_arch_innovation_units`, the multiplier of `gm_arch_diversion`
+(`country_weekly_innovation_add = -1`). The cap never falls (owner, 2026-10-14). `gm_arch_site_innovation` (container scope)
+gives a dig's figure by its method, for its row. A dig diverts its innovation for as long as it runs, so a great site, dug
+for longer, costs more in all.
 
-The prices are set for the era each method arrives in: Antiquarian (Romanticism) for the 1840s, Systematic (Empiricism) for
-the 1870s, and Forensic, which needs Computer Networks, for the late twentieth century. A great power runs several without
-noticing the money (the innovation is its brake); a small country feels one. Modern archaeology is cheap beside a modern
-budget, and the prices let it be. They are named script values (`gm_arch_price_<method>`), to be tuned by play-test.
-
-### Innovation
-
-Unchanged: 5, 15 or 30 weekly innovation a dig, never the cap (owner, 2026-10-14).
+This replaces a first rework, which priced a dig at its levels times £20 / £50 / £200 a week instead of the MVP's share of
+GDP. `gm_arch_expense` is retired, not deleted: nothing adds it, `gm_arch_remove_national` strips it from a save made while
+it was applied, and its Budget Breakdown row (Archaeological Digs) stays empty.
 
 ### Time: by the site's size *(design)*
 
@@ -60,14 +57,15 @@ The MVP's months are kept for a 10-level site, and a site's months scale with `(
 | Forensic | 20 | 29 | 39 |
 
 The progress a month is the method's rate times `gm_arch_size_factor` (`15 / (levels + 5)`, container scope), so a small find
-comes out quickly and cheaply and a great one is a commitment of years: the whole cost of a dig grows with the levels times
-the months. The Forensic bonus (+2 levels) is added at the end and does not lengthen the dig.
+comes out quickly and a great one is a commitment of years: the innovation a dig diverts in all grows with its months. The Forensic bonus (+2 levels) is added at the end and does not lengthen the dig.
 
 ### The AI
 
-An AI starts a dig only when its weekly fixed surplus (`net_fixed_income`) is at least four times what the dig would cost a
-week by the best method it has, and picks the grandest site it can afford (`gm_arch_ai_affordable`). Otherwise it is as
-before: at peace, out of default, fewer than two digs, an 8% chance a month.
+An AI starts a dig only when the weekly innovation it makes (`country_innovation`, net of the digs it already runs) is at
+least four times what an Antiquarian dig diverts. It picks the grandest site waiting and digs it by the best method whose
+innovation it makes four times over (`gm_arch_ai_affords_<method>`, `gm_arch_start_affordable`): Forensic needs 400 weekly
+innovation, Systematic 80, Antiquarian 20. Otherwise it is as before: at peace, out of default, fewer than two digs, an 8%
+chance a month.
 
 ## 2. The events
 
@@ -112,7 +110,7 @@ and `sState` in event loc. `gm_arch_last` and the `gm_arch_site_name` custom loc
 Both are directed, with a state input: the **source** is the host, who grants the right in a state it owns; the **target** is
 the sponsor, who digs there and pays the influence upkeep. While one is in force, the sponsor may dig any site in that state's
 region that is open to it (`gm_arch_may_dig_ground`): a survey site whose technology the sponsor has, or an incidental one
-already turned up. It pays the dig's money and innovation as at home. The host may still dig its own sites, and whoever
+already turned up. It diverts the dig's innovation as at home. The host may still dig its own sites, and whoever
 launches first holds the dig.
 
 The treaty is the record: nothing is written on the state. `gm_arch_state_conceded_to` asks the sponsor's treaties live for an
@@ -156,8 +154,9 @@ game's technology without a rule that switches one off.
 
 ## 4. The panel
 
-- The launch buttons' tooltips give this site's months and weekly cost for that method, read from the container.
-- A dig's row gains its weekly cost, and, abroad, a line naming the host and the terms.
+- The launch buttons' tooltips give this site's months for that method, read from the container, and the method's weekly
+  innovation.
+- A dig's row gains the weekly innovation it diverts, and, abroad, a line naming the host and the terms.
 - An open site we would dig abroad says so, and on what terms (two display-only scripted GUIs,
   `gm_arch_abroad_concession_sgui`, `gm_arch_abroad_permit_sgui`; the row is shared by every country that may dig it, so the
   line is decided for the viewer).
@@ -171,7 +170,7 @@ sites to add."
 **Pompeii** is row 87 (`pompeii`, Campania, a forum, 15 levels, Romanticism, the Alexander Mosaic as its piece). It was being
 dug in 1836, by the Bourbons since 1748, so it is seeded as a dig already under way: a third vector, `excavating`, makes the
 seeding start an Antiquarian dig by the owner of its ground at 30% (`gm_arch_seed_dig`, `gm_arch_excavating_progress`). The
-owner pays for it from the first month and may suspend it, or restart it by Systematic Stratigraphy, keeping the progress;
+owner diverts its 5 weekly innovation from the first month and may suspend it, or restart it by Systematic Stratigraphy, keeping the progress;
 with no owner it waits as a known site. A game seeded before this change gets Pompeii the next month: the seeding now runs
 again whenever `gm_arch_seed_round` is below `gm_arch_seed_rounds` (2), and makes no site twice. *(design: 30% and the
 Antiquarian method stand for the Bourbon treasure-hunting before Fiorelli's methods of 1863.)*
@@ -181,8 +180,8 @@ The audit of the list (gaps by region and era, real sites to fill them, and plau
 
 ## Tests, debug, docs
 
-- `test_grand_monument_archaeology.py`: the prices, the size factor and the month table, the cost written on the container
-  and summed, no `gdp` in the values, the AI's affordability, the event plumbing (`gm_arch_ev_mark` branches in LANDMARKS
+- `test_grand_monument_archaeology.py`: the innovation figures, no money cost (no `gdp`, no treasury charge, the money
+  modifier a retired stub), the size factor and the month table, the AI's innovation floors, the event plumbing (`gm_arch_ev_mark` branches in LANDMARKS
   order, each event's `first_valid` the same, every site's four lines, each naming its scope), the two articles and the live
   check, partage.
 - `test_state_treaty_article_sync.py`: the `LIVE` kind.

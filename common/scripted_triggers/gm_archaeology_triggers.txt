@@ -215,10 +215,20 @@ gm_arch_ai_may_dig = {
 	in_default = no
 }
 
-# Container scope, with scope:gm_arch_ai_country the AI and its weekly fixed
-# surplus copied to its gm_arch_ai_budget (gm_arch_ai_decide): the dig by its
-# best method costs at most a quarter of that surplus (gm_arch_ai_cost_needed).
-gm_arch_ai_affordable = {
-	scope:gm_arch_ai_country ?= { has_variable = gm_arch_ai_budget }
-	gm_arch_ai_cost_needed <= scope:gm_arch_ai_country.var:gm_arch_ai_budget
+# Country scope, an AI: it can spare the weekly innovation a method diverts,
+# making at least four times as much (gm_arch_ai_floor_<method>), and has the
+# method's technology.
+gm_arch_ai_affords_antiquarian = {
+	gm_arch_method_antiquarian_ok = yes
+	country_innovation >= gm_arch_ai_floor_antiquarian
+}
+
+gm_arch_ai_affords_systematic = {
+	gm_arch_method_systematic_ok = yes
+	country_innovation >= gm_arch_ai_floor_systematic
+}
+
+gm_arch_ai_affords_forensic = {
+	gm_arch_method_forensic_ok = yes
+	country_innovation >= gm_arch_ai_floor_forensic
 }

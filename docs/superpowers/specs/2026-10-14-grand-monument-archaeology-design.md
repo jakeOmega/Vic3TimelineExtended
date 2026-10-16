@@ -126,6 +126,9 @@ There is no slot cap. Two costs bound how many a country can run:
 Both ride on `je:je_grand_monuments` as the trophies' national modifiers do, with the units the pass sums
 (`gm_arch_innovation_units`, `gm_arch_cost_units`) as their multipliers.
 
+*(Superseded 2026-10-16: the treasury cost is gone and innovation is the only cost, 5 / 20 / 100 a week by method; see the
+rework spec § 1.)*
+
 A dig can be **suspended**; the progress is kept and the site is open again. A dig whose sponsor loses every part of the ground
 is suspended the same way, so conquering the state hands the site to the conqueror (with its progress).
 
@@ -160,7 +163,7 @@ From the issue's design, not built (owner, 2026-10-14: the mechanisms and the mo
 
 - **Foreign digs**: the `archaeological_concession` treaty article, its influence upkeep, the partage split (the host keeps the
   ruin, the sponsor takes the portable masterpiece as a trophy) and the Host's change of heart. Only the holder of the ground digs.
-  *(Built by `2026-10-16-grand-monument-archaeology-rework-design.md` § 3, which also replaced the GDP-share cost.)*
+  *(Built by `2026-10-16-grand-monument-archaeology-rework-design.md` § 3, which also replaced the GDP-share cost: digs now cost innovation alone, 5 / 20 / 100 a week, and `gm_arch_expense` is a retired stub.)*
 - **Political brakes**: the interest groups' stances, Hard Times backlash (*Gold for the Dead, Crumbs for the Living*), the
   Starved-of-Specialists slowdown.
 - **The two dedications** (Ancestral Antiquity, Epigraphic and Prehistoric Archive) and their production methods. Every site is

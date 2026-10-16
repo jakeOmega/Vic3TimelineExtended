@@ -87,8 +87,8 @@ ARCH_SITES = (
 )
 BURIED = tuple(lm for lm in LANDMARKS if lm.buried)
 METHODS = {"antiquarian": ("romanticism", 4), "systematic": ("empiricism", 2.5), "forensic": ("computer_networks", 3.5)}
-# The weekly price of a dig for each level the site will raise (rework spec § 1).
-PRICES = {"antiquarian": 20, "systematic": 50, "forensic": 200}
+# The weekly innovation a dig diverts, its whole cost (owner, 2026-10-16; rework spec § 1).
+INNOVATION = {"antiquarian": 5, "systematic": 20, "forensic": 100}
 # Months for a site of 5, 10 and 15 levels: the 10-level months scaled by (levels + 5) / 15.
 MONTHS = {"antiquarian": (17, 25, 34), "systematic": (27, 40, 54), "forensic": (20, 29, 39)}
 ARTICLES = ("archaeological_concession", "excavation_permit")
@@ -510,50 +510,55 @@ class BrakeTests(unittest.TestCase):
         self.assertIn("gm_arch_diversion = { icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds "
                       "country_weekly_innovation_add = -1 }", body)
         self.assertNotIn("innovation_max", body, "the cap is never touched (owner, 2026-10-14)")
+
+    def test_the_money_modifier_is_a_retired_stub(self):
+        # Digs cost no money (owner, 2026-10-16). The stub stays, with its Budget
+        # Breakdown category, so a save that carries it loads clean and sheds it.
+        body = squash(strip_comments(read(MODIFIERS)))
         self.assertIn("gm_arch_expense = { icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds "
                       "country_expenses_add = 1 country_te_budget_expense_archaeology_add = 1 }", body,
                       "a recurring monetary modifier joins a Budget Breakdown category (test_budget_breakdown.py)")
+        self.assertIn("RETIRED 2026-10-16", read(MODIFIERS))
         gen = read("scripts/generators/gen_budget_breakdown.py")
         self.assertIn('"archaeology": ("Archaeological Digs", ("gm_arch_expense",)),', gen)
+        for rel in (EFFECTS, EVENTS, SGUIS, "common/treaty_articles/120_archaeological_concession.txt",
+                    "common/treaty_articles/121_excavation_permit.txt"):
+            code = strip_comments(read(rel))
+            self.assertNotIn("NAME = gm_arch_expense", code, rel)
+            self.assertNotRegex(code, r"add_modifier = \{ name = gm_arch_expense", rel)
 
     def test_the_methods_cost_what_the_spec_says(self):
         v = read(VALUES)
-        for method, units in (("antiquarian", 5), ("systematic", 15), ("forensic", 30)):
+        for method, units in INNOVATION.items():
             self.assertEqual(squash(block(v, f"gm_arch_innovation_{method}")), f"value = {units}", method)
-        for method, price in PRICES.items():
-            self.assertEqual(squash(block(v, f"gm_arch_price_{method}")), f"value = {price}", method)
-            self.assertEqual(squash(block(v, f"gm_arch_site_cost_{method}")),
-                             f"value = gm_arch_disp_levels multiply = gm_arch_price_{method}", method)
-        site = squash(block(v, "gm_arch_site_cost"))
+        site = squash(block(v, "gm_arch_site_innovation"))
         for n, method in enumerate(METHODS, start=1):
-            self.assertIn(f"gm_arch_disp_method = {n} }} value = gm_arch_site_cost_{method}", site)
+            self.assertIn(f"gm_arch_disp_method = {n} }} value = gm_arch_innovation_{method}", site)
 
-    def test_no_cost_reads_the_economy(self):
-        # A price for the dig, not a share of the sponsor's GDP (owner, 2026-10-16).
+    def test_no_money_cost(self):
+        # Innovation is the whole cost; nothing reads the economy (owner, 2026-10-16).
         v = strip_comments(read(VALUES))
-        for word in ("gdp", "income", "gm_arch_cost_base"):
+        for word in ("gdp", "income", "net_fixed_income", "gm_arch_cost_base", "gm_arch_price_antiquarian",
+                     "gm_arch_site_cost"):
             self.assertNotRegex(v, rf"\b{word}\b", word)
+        e = strip_comments(read(EFFECTS))
+        for word in ("gm_arch_cost_units", "gm_site_weekly_cost", "net_fixed_income", "gm_arch_ai_budget"):
+            self.assertNotIn(word, e, word)
 
     def test_the_pass_sums_the_digs_by_method(self):
         body = squash(block(read(EFFECTS), "gm_arch_list_one"))
         for method in METHODS:
             self.assertIn(f"change_variable = {{ name = gm_arch_innovation_units add = gm_arch_innovation_{method} }}",
                           body)
-        # Each dig's cost is written on its container, for its row, and summed.
-        self.assertIn("set_variable = { name = gm_site_weekly_cost value = gm_arch_site_cost }", body)
-        self.assertIn("change_variable = { name = gm_arch_cost_units add = scope:gm_arch_listing.var:gm_site_weekly_cost }",
-                      body)
-        self.assertLess(body.index("name = gm_site_weekly_cost value"), body.index("name = gm_arch_cost_units add"))
 
     def test_the_modifiers_ride_the_journal_entry(self):
         e = read(EFFECTS)
         # gm_add_national reads ROOT's variable unguarded, and only a country the pass has
-        # listed has these two: the guard, as the boons' gm_add_boon has.
+        # listed has it: the guard, as the boons' gm_add_boon has.
         self.assertEqual(squash(block(e, "gm_arch_add_national")),
                          "if = { limit = { root = { has_variable = gm_arch_innovation_units } } "
-                         "gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units } } "
-                         "if = { limit = { root = { has_variable = gm_arch_cost_units } } "
-                         "gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units } }")
+                         "gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units } }")
+        # The retired money modifier is still removed, so an old save sheds it.
         self.assertEqual(squash(block(e, "gm_arch_remove_national")),
                          "remove_modifier = gm_arch_diversion remove_modifier = gm_arch_expense")
         g = read(GM_EFFECTS)
@@ -652,7 +657,7 @@ class OrderTests(unittest.TestCase):
 
 
 class AiTests(unittest.TestCase):
-    def test_the_ai_digs_at_peace_with_the_best_method(self):
+    def test_the_ai_digs_at_peace_with_the_best_method_it_affords(self):
         t = read(TRIGGERS)
         may = squash(block(t, "gm_arch_ai_may_dig"))
         self.assertEqual(may, "is_ai = yes is_at_war = no in_default = no")
@@ -662,18 +667,21 @@ class AiTests(unittest.TestCase):
         decide = squash(block(e, "gm_arch_ai_decide"))
         self.assertIn("OR = { NOT = { has_variable_list = gm_arch_digging } NOT = { any_in_list = { variable = "
                       "gm_arch_digging count >= 2 } } }", decide, "two digs at most; a country that never dug has no list")
-        self.assertIn("gm_arch_start_best = { WHO = scope:gm_arch_ai_country }", decide)
-        # It digs only what it can afford, from a weekly surplus.
-        self.assertIn("net_fixed_income > 0", decide)
-        self.assertIn("set_variable = { name = gm_arch_ai_budget value = net_fixed_income }", decide)
-        self.assertIn("limit = { gm_arch_ai_affordable = yes } order_by = gm_arch_disp_levels", decide)
-        self.assertLess(decide.index("limit = { gm_arch_ai_affordable"), decide.index("remove_variable = gm_arch_ai_budget"))
-        self.assertIn("gm_arch_ai_cost_needed <= scope:gm_arch_ai_country.var:gm_arch_ai_budget",
-                      squash(block(t, "gm_arch_ai_affordable")))
-        need = squash(block(read(VALUES), "gm_arch_ai_cost_needed"))
-        self.assertLess(need.index("forensic_ok"), need.index("systematic_ok"), "its best method, as gm_arch_start_best")
-        self.assertTrue(need.endswith("multiply = gm_arch_ai_surplus_multiple"))
-        self.assertEqual(squash(block(read(VALUES), "gm_arch_ai_surplus_multiple")), "value = 4")
+        # It digs only with the innovation to spare for an Antiquarian dig, the grandest
+        # site waiting, by the best method it affords.
+        self.assertIn("gm_arch_ai_affords_antiquarian = yes", decide)
+        self.assertIn("variable = gm_arch_available order_by = gm_arch_disp_levels position = 0", decide)
+        self.assertIn("gm_arch_start_affordable = { WHO = scope:gm_arch_ai_country }", decide)
+        start = squash(block(e, "gm_arch_start_affordable"))
+        self.assertLess(start.index("gm_arch_ai_affords_forensic"), start.index("gm_arch_ai_affords_systematic"))
+        self.assertIn("limit = { gm_arch_can_dig = { WHO = $WHO$ } } gm_arch_start_dig = { WHO = $WHO$ }", start)
+        v = read(VALUES)
+        self.assertEqual(squash(block(v, "gm_arch_ai_innovation_multiple")), "value = 4")
+        for method in METHODS:
+            self.assertEqual(squash(block(v, f"gm_arch_ai_floor_{method}")),
+                             f"value = gm_arch_innovation_{method} multiply = gm_arch_ai_innovation_multiple", method)
+            self.assertEqual(squash(block(t, f"gm_arch_ai_affords_{method}")),
+                             f"gm_arch_method_{method}_ok = yes country_innovation >= gm_arch_ai_floor_{method}", method)
         monthly = squash(block(e, "gm_arch_monthly"))
         self.assertIn("gm_arch_ai_may_dig = yes } gm_arch_ai_decide = yes", monthly)
 
@@ -781,13 +789,16 @@ class PanelTests(unittest.TestCase):
         for method in METHODS:
             tip = L[f"gm_arch_launch_{method}_tooltip"]
             self.assertIn(f"ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_{method}')", tip, method)
-            self.assertIn(f"ScriptContainer.MakeScope.ScriptValue('gm_arch_site_cost_{method}')", tip, method)
             self.assertIn(f"GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_{method}')", tip, method)
-            self.assertNotIn("GetPlayer.MakeScope.ScriptValue('gm_arch_cost", tip, "no country-scope cost")
+            self.assertNotIn("@money!", tip, "no money cost")
 
     def test_a_dig_row_shows_its_cost_and_its_terms(self):
         L = loc()
-        self.assertIn("ScriptValue('gm_arch_disp_site_cost')", L["gm_arch_row_dig_cost"])
+        self.assertIn("ScriptValue('gm_arch_site_innovation')", L["gm_arch_row_dig_innovation"])
+        self.assertIn('text = "gm_arch_row_dig_innovation"', self.gui)
+        for key in ("gm_je_arch_costs", "gm_je_arch_costs_tt", "gm_je_arch_summary_tt", "gm_arch_suspend_tooltip"):
+            self.assertNotIn("money", L[key].lower(), key)
+            self.assertNotIn("@money!", L[key], key)
         for n, key in ((1, "gm_arch_row_dig_concession"), (2, "gm_arch_row_dig_permit")):
             self.assertIn(f"ScriptValue('gm_arch_disp_terms'), '(CFixedPoint){n}' )]\"\n\t\t\ttext = \"{key}\"",
                           self.gui, key)
@@ -876,6 +887,10 @@ class ForeignTests(unittest.TestCase):
         self.assertIn("gm_arch_method_antiquarian_ok = yes", self.arts["archaeological_concession"])
         self.assertIn("gm_arch_method_systematic_ok = yes", squash(block(strip_comments(self.arts["excavation_permit"]),
                                                                          "can_ratify")))
+        for name in ARTICLES:
+            # An AI asks only with the innovation to spare for the dig (owner, 2026-10-16).
+            self.assertIn("gm_arch_ai_affords_systematic = yes",
+                          squash(block(strip_comments(self.arts[name]), "evaluation_chance")), name)
         self.assertIn("can_be_enforced", self.arts["archaeological_concession"])
         self.assertNotIn("can_be_enforced", self.arts["excavation_permit"])
         L = loc()

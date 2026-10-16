@@ -3,8 +3,9 @@
 # ============================================================================
 # Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md
 # (issue #939), reworked by 2026-10-16-grand-monument-archaeology-rework-design.md
-# (the costs by the site, its size, foreign digs). Container scope unless a
-# comment says country. Each value is defined before the values that read it.
+# (innovation the only cost, digs sized by the site, foreign digs). Container
+# scope unless a comment says country. Each value is defined before the values
+# that read it.
 
 # ---- Discovery -----------------------------------------------------------------------
 # The monthly chance, in percent, that an incidental site is turned up while
@@ -127,74 +128,52 @@ gm_arch_destruction_chance = { value = 35 }
 # Levels a Forensic dig adds to what it unearths.
 gm_arch_forensic_bonus = { value = 2 }
 
-# ---- The brakes ----------------------------------------------------------------------------
-# Country scope, the sponsor. The weekly innovation a dig diverts: the
-# scholars, philologists and chemists in the field are not in the
-# universities. Only the weekly flow falls; the innovation cap does not
-# (owner, 2026-10-14).
+# ---- The brake ------------------------------------------------------------------------------
+# The weekly innovation a dig diverts, by method: the scholars, philologists and
+# chemists in the field are not in the universities. It is the whole cost of a
+# dig: there is no treasury charge, since the country already pays for its
+# innovation through its universities (owner, 2026-10-16). Each dig diverts it
+# for as long as it runs, so a great site, dug for longer, costs more in all.
+# Only the weekly flow falls; the innovation cap does not (owner, 2026-10-14).
 gm_arch_innovation_antiquarian = { value = 5 }
-gm_arch_innovation_systematic = { value = 15 }
-gm_arch_innovation_forensic = { value = 30 }
+gm_arch_innovation_systematic = { value = 20 }
+gm_arch_innovation_forensic = { value = 100 }
 
-# The weekly treasury cost of a dig, for each level the site will raise, by
-# method: a price for the dig, not a share of the sponsor's GDP (owner,
-# 2026-10-16). Forensic needs Computer Networks and is priced for its era.
-gm_arch_price_antiquarian = { value = 20 }
-gm_arch_price_systematic = { value = 50 }
-gm_arch_price_forensic = { value = 200 }
-
-# This site's weekly cost by each method: its levels at the method's price.
-gm_arch_site_cost_antiquarian = {
-	value = gm_arch_disp_levels
-	multiply = gm_arch_price_antiquarian
-}
-gm_arch_site_cost_systematic = {
-	value = gm_arch_disp_levels
-	multiply = gm_arch_price_systematic
-}
-gm_arch_site_cost_forensic = {
-	value = gm_arch_disp_levels
-	multiply = gm_arch_price_forensic
-}
-
-# A dig: what it costs a week by the method it runs. The monthly pass writes it
-# on the container (gm_site_weekly_cost) and sums the sponsor's digs into
-# gm_arch_cost_units, the multiplier of gm_arch_expense (country_expenses_add = 1).
-gm_arch_site_cost = {
+# A dig: the innovation it diverts a week by the method it runs.
+gm_arch_site_innovation = {
 	value = 0
 	if = {
 		limit = { gm_arch_disp_method = 1 }
-		value = gm_arch_site_cost_antiquarian
+		value = gm_arch_innovation_antiquarian
 	}
 	else_if = {
 		limit = { gm_arch_disp_method = 2 }
-		value = gm_arch_site_cost_systematic
+		value = gm_arch_innovation_systematic
 	}
 	else_if = {
 		limit = { gm_arch_disp_method = 3 }
-		value = gm_arch_site_cost_forensic
+		value = gm_arch_innovation_forensic
 	}
 }
 
 # ---- The AI ---------------------------------------------------------------------------------
-# An AI digs only with a weekly fixed surplus of at least this many times the
-# dig's weekly cost.
-gm_arch_ai_surplus_multiple = { value = 4 }
+# Country scope. An AI digs by a method only while the weekly innovation it
+# makes (country_innovation, net of the digs it already runs) is at least this
+# many times what the method diverts: the floors gm_arch_ai_affords_<method>
+# compare it with.
+gm_arch_ai_innovation_multiple = { value = 4 }
 
-# With scope:gm_arch_ai_country the AI that may dig the site: what the dig
-# would cost a week by the best method it has (gm_arch_start_best's order),
-# times that multiple. gm_arch_ai_affordable compares it with the surplus.
-gm_arch_ai_cost_needed = {
-	value = gm_arch_site_cost_antiquarian
-	if = {
-		limit = { scope:gm_arch_ai_country = { gm_arch_method_forensic_ok = yes } }
-		value = gm_arch_site_cost_forensic
-	}
-	else_if = {
-		limit = { scope:gm_arch_ai_country = { gm_arch_method_systematic_ok = yes } }
-		value = gm_arch_site_cost_systematic
-	}
-	multiply = gm_arch_ai_surplus_multiple
+gm_arch_ai_floor_antiquarian = {
+	value = gm_arch_innovation_antiquarian
+	multiply = gm_arch_ai_innovation_multiple
+}
+gm_arch_ai_floor_systematic = {
+	value = gm_arch_innovation_systematic
+	multiply = gm_arch_ai_innovation_multiple
+}
+gm_arch_ai_floor_forensic = {
+	value = gm_arch_innovation_forensic
+	multiply = gm_arch_ai_innovation_multiple
 }
 
 # ---- Foreign digs (rework spec § 3) -----------------------------------------------------------
@@ -242,15 +221,6 @@ gm_arch_disp_months_left = {
 		limit = { gm_arch_disp_rate > 0 }
 		divide = gm_arch_disp_rate
 		ceiling = yes
-	}
-}
-
-# A dig's weekly cost, as the last pass wrote it.
-gm_arch_disp_site_cost = {
-	value = 0
-	if = {
-		limit = { has_variable = gm_site_weekly_cost }
-		value = var:gm_site_weekly_cost
 	}
 }
 
@@ -302,20 +272,12 @@ gm_arch_disp_shown = {
 	}
 }
 
-# Country scope. The weekly innovation the digs divert, and what they cost a
-# week: the variables the modifiers' multipliers read (gm_arch_pass).
+# Country scope. The weekly innovation the digs divert: the variable the
+# modifier's multiplier reads (gm_arch_pass).
 gm_arch_disp_innovation = {
 	value = 0
 	if = {
 		limit = { has_variable = gm_arch_innovation_units }
 		value = var:gm_arch_innovation_units
-	}
-}
-
-gm_arch_disp_cost = {
-	value = 0
-	if = {
-		limit = { has_variable = gm_arch_cost_units }
-		value = var:gm_arch_cost_units
 	}
 }

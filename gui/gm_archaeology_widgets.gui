@@ -145,7 +145,7 @@ types gm_archaeology_widget_types
 			text = "gm_arch_row_dig_detail"
 		}
 		gm_arch_line = {
-			text = "gm_arch_row_dig_cost"
+			text = "gm_arch_row_dig_innovation"
 		}
 		gm_arch_line = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)1' )]"

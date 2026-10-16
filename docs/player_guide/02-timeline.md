@@ -522,7 +522,7 @@ These sections follow:
 | Section | Starts | Shows |
 |---|---|---|
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
-| Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and what they cost each week, each with its state, its weekly cost and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
+| Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
 | Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
@@ -849,8 +849,9 @@ like those standing at the start. It keeps its name and look, and an army can
 carry it off as a [trophy](#monument-trophies).
 
 Pompeii is already being dug when the game begins: whoever holds Campania runs
-an Antiquarian dig there, a third done, and pays for it from the first month. At
-15 levels it is one of the largest sites. Suspend it to save the money, or
+an Antiquarian dig there, a third done, which diverts 5 innovation a week from
+the first month. At 15 levels it is one of the largest sites. Suspend it to
+keep the innovation, or
 restart it by Systematic Stratigraphy once you have Empiricism to bring it out
 whole; the progress is kept either way.
 
@@ -868,19 +869,18 @@ You choose a method for each dig, from the Archaeological Expeditions section
 of the Grand Monuments tab. A button appears for each method you have the
 technology for.
 
-| Method | Needs | Months (5, 10, 15 levels) | Weekly innovation | Weekly cost per level | Result |
-|---|---|---|---|---|---|
-| Antiquarian | Romanticism | 17, 25, 34 | −5 | £20 | A 35% chance the dig destroys half the levels, at least 3 |
-| Systematic | Empiricism | 27, 40, 54 | −15 | £50 | The whole monument |
-| Forensic | Computer Networks | 20, 29, 39 | −30 | £200 | 2 levels more than the site's own |
+| Method | Needs | Months (5, 10, 15 levels) | Weekly innovation | Result |
+|---|---|---|---|---|
+| Antiquarian | Romanticism | 17, 25, 34 | −5 | A 35% chance the dig destroys half the levels, at least 3 |
+| Systematic | Empiricism | 27, 40, 54 | −20 | The whole monument |
+| Forensic | Computer Networks | 20, 29, 39 | −100 | 2 levels more than the site's own |
 
-A site's size sets both its months and its weekly cost: a 10-level site dug by
-Systematic Stratigraphy costs £500 a week for 40 months, a 5-level one £250 a
-week for 27. The cost is the same for a small country as for a great power.
-The button's tooltip gives this site's months and weekly cost, and a dig's row
-gives what it costs now. Nothing caps how many digs you run, but each one lowers
-your weekly innovation (the cap stays) and costs money every week, which the
-Budget's Breakdown shows as Archaeological Digs under Programme Costs. Suspend
+Innovation is the only cost: a dig takes no money from the treasury. Each dig
+lowers your weekly innovation by its method's figure for as long as it runs;
+the innovation cap stays. A site's size sets its months, so a 10-level site dug
+by Systematic Stratigraphy diverts 20 innovation a week for 40 months, a 5-level
+one for 27. The button's tooltip gives this site's months, and a dig's row
+gives the innovation it diverts. Nothing caps how many digs you run. Suspend
 Dig stops a dig and keeps its progress. A dig also stops if you lose the state,
 or the treaty that let you dig there ends, and whoever may dig it next can take
 it up from where it stopped.
@@ -889,9 +889,10 @@ A finished dig stands in the state it was dug in, To the Nation, at the site's
 levels (5 to 15). With no monument there it is a new one; otherwise it stands
 beside the one there as [several monuments in one state](#several-monuments-in-one-state).
 An event tells you how it went, again with the place, the find and its history.
-The AI, at peace and out of default, starts a dig now and then with the best
-method it has, only when its weekly surplus is at least four times the dig's
-weekly cost, and never runs more than two.
+The AI, at peace and out of default, starts a dig now and then, never runs
+more than two, and digs only by a method whose innovation it makes four times
+over: 20 weekly innovation for Antiquarian, 80 for Systematic, 400 for
+Forensic.
 
 #### Digging abroad
 
@@ -900,7 +901,7 @@ Both name a state that has a site open to you: a known site whose technology
 you have, or a chance find already turned up. The country that owns it
 concedes, and you pay the influence. While the article stands, the site is
 listed in your Archaeological Expeditions with the terms, and you dig it as you
-would at home, paying the money and innovation.
+would at home, diverting the same innovation.
 
 | Article | You need | Influence | When the dig finishes |
 |---|---|---|---|

@@ -25,7 +25,6 @@
 #   gm_site_terms                    where the sponsor digs: `own` ground, or
 #                                    abroad by `concession` or `permit` (the
 #                                    two treaty articles; rework spec § 3)
-#   gm_site_weekly_cost              what the dig costs a week (the pass)
 #   gm_site_told                     the players told of it (arch_events.1)
 # No timed variable on a container: it would never expire
 # (container_timed_variable_audit).
@@ -990,10 +989,10 @@ gm_arch_stop_dig = {
 	}
 }
 
-# ---- Lists, costs, the national side -------------------------------------------------------------------------
-# No scope. Every country's lists of what it digs and what waits for it, and what
-# the digs cost, from the sites. Last month's are cleared first; the lists are
-# rebuilt each time, after a click too (arch_events.10, .11).
+# ---- Lists, innovation, the national side --------------------------------------------------------------------
+# No scope. Every country's lists of what it digs and what waits for it, and the
+# innovation the digs divert, from the sites. Last month's are cleared first; the
+# lists are rebuilt each time, after a click too (arch_events.10, .11).
 gm_arch_pass = {
 	every_country = {
 		limit = { has_variable = gm_arch_listed }
@@ -1002,7 +1001,6 @@ gm_arch_pass = {
 		set_variable = { name = gm_arch_dig_count value = 0 }
 		set_variable = { name = gm_arch_open_count value = 0 }
 		set_variable = { name = gm_arch_innovation_units value = 0 }
-		set_variable = { name = gm_arch_cost_units value = 0 }
 	}
 	if = {
 		limit = { has_global_variable_list = gm_arch_sites }
@@ -1030,12 +1028,10 @@ gm_arch_list_one = {
 				limit = { exists = scope:gm_arch_dig_state }
 				set_variable = { name = gm_site_view_state value = scope:gm_arch_dig_state }
 			}
-			set_variable = { name = gm_site_weekly_cost value = gm_arch_site_cost }
 			scope:gm_arch_sponsor = {
 				gm_arch_country_listed = yes
 				add_to_variable_list = { name = gm_arch_digging target = scope:gm_arch_listing }
 				change_variable = { name = gm_arch_dig_count add = 1 }
-				change_variable = { name = gm_arch_cost_units add = scope:gm_arch_listing.var:gm_site_weekly_cost }
 				if = {
 					limit = { scope:gm_arch_listing = { var:gm_site_method = flag:antiquarian } }
 					change_variable = { name = gm_arch_innovation_units add = gm_arch_innovation_antiquarian }
@@ -1128,28 +1124,25 @@ gm_arch_country_listed = {
 		set_variable = { name = gm_arch_dig_count value = 0 }
 		set_variable = { name = gm_arch_open_count value = 0 }
 		set_variable = { name = gm_arch_innovation_units value = 0 }
-		set_variable = { name = gm_arch_cost_units value = 0 }
 	}
 	set_variable = gm_active
 }
 
 # Journal-entry scope (ROOT = the country), from gm_apply_national_modifiers.
-# The digs' weekly innovation drain and weekly cost, each the units
-# gm_arch_pass summed: the modifiers carry one unit.
+# The digs' weekly innovation drain, the units gm_arch_pass summed: the
+# modifier carries one unit. Digs cost no money (owner, 2026-10-16).
 gm_arch_add_national = {
-	# Only a country gm_arch_pass has listed has the variables, and
-	# gm_add_national reads them unguarded (the boons' guard, gm_add_boon).
+	# Only a country gm_arch_pass has listed has the variable, and
+	# gm_add_national reads it unguarded (the boons' guard, gm_add_boon).
 	if = {
 		limit = { root = { has_variable = gm_arch_innovation_units } }
 		gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units }
 	}
-	if = {
-		limit = { root = { has_variable = gm_arch_cost_units } }
-		gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units }
-	}
 }
 
-# Journal-entry scope, from gm_remove_national_modifiers.
+# Journal-entry scope, from gm_remove_national_modifiers. gm_arch_expense is
+# retired: nothing adds it, and removing it here sheds it from a save made while
+# digs cost money.
 gm_arch_remove_national = {
 	remove_modifier = gm_arch_diversion
 	remove_modifier = gm_arch_expense
@@ -1157,11 +1150,12 @@ gm_arch_remove_national = {
 
 # ---- The AI ---------------------------------------------------------------------------------------------------------
 # Country scope, monthly, an AI at peace and out of default (gm_arch_ai_may_dig)
-# that is listed. With a site waiting, fewer than two digs going and a weekly
-# surplus, one month in twelve it opens the grandest site it can afford (the
-# dig by its best method at most a quarter of the surplus, gm_arch_ai_affordable)
-# by that method: Forensic, then Systematic, then Antiquarian. The cost and the
-# drained innovation are the brakes, as for a player.
+# that is listed. With a site waiting, fewer than two digs going and the weekly
+# innovation to spare for at least an Antiquarian dig (gm_arch_ai_affords_<method>:
+# four times what the method diverts), one month in twelve it opens the grandest
+# site waiting, by the best method it affords: Forensic, then Systematic, then
+# Antiquarian (gm_arch_start_affordable). The diverted innovation is the brake,
+# as for a player.
 gm_arch_ai_decide = {
 	if = {
 		limit = {
@@ -1173,34 +1167,56 @@ gm_arch_ai_decide = {
 				NOT = { has_variable_list = gm_arch_digging }
 				NOT = { any_in_list = { variable = gm_arch_digging count >= 2 } }
 			}
-			net_fixed_income > 0
+			gm_arch_ai_affords_antiquarian = yes
 		}
 		random = {
 			chance = 8
 			clear_saved_scope = gm_arch_ai_pick
 			save_scope_as = gm_arch_ai_country
-			set_variable = { name = gm_arch_ai_budget value = net_fixed_income }
 			ordered_in_list = {
 				variable = gm_arch_available
-				limit = { gm_arch_ai_affordable = yes }
 				order_by = gm_arch_disp_levels
 				position = 0
 				check_range_bounds = no
 				save_scope_as = gm_arch_ai_pick
 			}
-			remove_variable = gm_arch_ai_budget
 			if = {
 				limit = { exists = scope:gm_arch_ai_pick }
 				scope:gm_arch_ai_pick = {
-					gm_arch_start_best = { WHO = scope:gm_arch_ai_country }
+					gm_arch_start_affordable = { WHO = scope:gm_arch_ai_country }
 				}
 			}
 		}
 	}
 }
 
+# Container scope. $WHO$, an AI, digs the site by the best method whose
+# innovation it can spare (gm_arch_ai_affords_<method>), Antiquarian at worst
+# (gm_arch_ai_decide has checked that one).
+gm_arch_start_affordable = {
+	if = {
+		limit = { $WHO$ = { gm_arch_ai_affords_forensic = yes } }
+		set_variable = { name = gm_site_order_method value = flag:forensic }
+	}
+	else_if = {
+		limit = { $WHO$ = { gm_arch_ai_affords_systematic = yes } }
+		set_variable = { name = gm_site_order_method value = flag:systematic }
+	}
+	else = {
+		set_variable = { name = gm_site_order_method value = flag:antiquarian }
+	}
+	if = {
+		limit = { gm_arch_can_dig = { WHO = $WHO$ } }
+		gm_arch_start_dig = { WHO = $WHO$ }
+	}
+	else = {
+		remove_variable = gm_site_order_method
+	}
+}
+
 # Container scope. $WHO$ digs the site by the best method its technology
-# allows: Forensic, then Systematic, then Antiquarian, if it may dig it at all.
+# allows: Forensic, then Systematic, then Antiquarian, if it may dig it at all,
+# whatever the innovation (the debug events, te_debug_monuments_events.txt).
 gm_arch_start_best = {
 	if = {
 		limit = { $WHO$ = { gm_arch_method_forensic_ok = yes } }

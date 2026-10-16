@@ -108,15 +108,16 @@ archaeological_concession = {
 
 		evaluation_chance = {
 			# Root-only proposal frequency; partner preferences belong in acceptance.
-			# A major power or greater, at peace, with Empiricism and fewer than
-			# two digs, asks now and then.
+			# A major power or greater, at peace, with fewer than two digs and the
+			# innovation to spare for a Systematic dig (Empiricism, and four times
+			# the 20 it diverts: gm_arch_ai_affords_systematic), asks now and then.
 			value = 0
 			if = {
 				limit = {
 					gm_system_enabled = yes
 					country_rank >= rank_value:major_power
 					is_at_war = no
-					gm_arch_method_systematic_ok = yes
+					gm_arch_ai_affords_systematic = yes
 					gm_arch_disp_dig_count < 2
 				}
 				add = 0.01

@@ -2,7 +2,7 @@
 
 What the next play-test should look at for the buried sites and the dig (spec
 `docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md`, issue #939, and the rework
-`docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md`: fixed costs, sized digs, the sites' events,
+`docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md`: innovation the only cost, sized digs, the sites' events,
 foreign digs by treaty). In-game checks do not gate a merge
 (CLAUDE.md, "In-game checks: self-checks and the play-test list"): the PR landed on the offline gate and this is what only the
 game can show. A fixed item is struck through with the commit that fixed it.
@@ -39,7 +39,7 @@ site did not seed).
 | `title`/`desc`/`flavor` `first_valid` read saved scopes set by the caller | Both events: the title of a survey find, a ruined dig, a dig abroad, the host's copy. | A separate event per case. |
 | `[SCOPE.sState('gm_arch_ev_<key>').GetName]` inside a key pulled in with `$…$` from the event's description | Every site's text names its state. | Name the state in the event's own key. |
 | `any_scope_treaty = { any_scope_article = { has_type … source_country = … input_state = … } }` reads an article in force, from a country, in a trigger | Digging abroad (`gm_arch_state_conceded_to`), the free port's sync uses the same shape. | |
-| `set_variable = { … value = net_fixed_income }`, compared from a container through `scope:x.var:` | The AI's affordability (`gm_arch_ai_affordable`). | A country-scope value with the levels copied to a country variable. |
+| `country_innovation >= <named script value>` is net of the `country_weekly_innovation_add` modifiers (the digs already running) | The AI's innovation floors (`gm_arch_ai_affords_<method>`). It is the brake either way; gross only lets an AI that already digs start a second dig a little sooner. | Subtract `gm_arch_disp_innovation` before comparing. |
 
 ## Seeding and listing
 
@@ -54,9 +54,9 @@ site did not seed).
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Launch.** Press Systematic on a survey site. | At once: the row moves to the top as a dig ("a Systematic dig, 0% done, about 40 months to go"), a Suspend Dig button appears, and the Budget's expenses (Archaeological Digs, under Programme Costs in the Breakdown) and the weekly innovation change by the amounts on the tooltip (`gm_arch_expense`, `gm_arch_diversion` on the entry). The research bar's *cap* is unchanged. | The row staying under the open sites: the pass did not run (`arch_events.10`). A changed cap: a modifier with `max`. |
+| **Launch.** Press Systematic on a survey site. | At once: the row moves to the top as a dig ("a Systematic dig, 0% done, about 40 months to go"), a Suspend Dig button appears, and the weekly innovation falls by the amount on the tooltip, 20 (`gm_arch_diversion` on the entry). The Budget's expenses do not change: digs cost no money. The research bar's *cap* is unchanged. | The row staying under the open sites: the pass did not run (`arch_events.10`). A changed cap: a modifier with `max`. |
 | **A month.** Wait one. | Progress 2.5% (4% Antiquarian, 3.5% Forensic). | |
-| **Suspend.** Suspend it. | It returns to the open sites with "Work paused at …%"; the expense and the drain end. | |
+| **Suspend.** Suspend it. | It returns to the open sites with "Work paused at …%"; the drain ends. | |
 | **Lose the ground.** Cede or lose the state mid-dig. | The dig suspends; the new owner with the technology sees the site open, with the progress kept. | |
 | **Finish.** Debug c. | A monument with the site's own name stands in the state (Library of Ashurbanipal, Troy), civic, at its levels (Forensic +2); *An Excavation Is Finished* fires. Mosul and Hüdavendigâr hold no monument in 1836: the building is new. | No building: `gm_state_tr_receive` did not run. A raw key: the loc did not load. |
 | **Beside.** As Greece, dig Mycenae, then Olympia (or Delphi beside the Parthenon in Attica). | The building grows by the levels, the first one's dedication kept, and the second is a row in Also Standing Here and in Our Monuments. | The levels lost: `gm_state_tr_add_levels`. |
@@ -67,17 +67,18 @@ site did not seed).
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **1836.** Play the Two Sicilies; wait a month. | Pompeii is a dig in Archaeological Expeditions: "an Antiquarian dig, 33% done" or so, £300 a week, Suspend Dig. The Budget shows it. | Not there: the seeding's `excavating` branch (`gm_arch_seed_dig`). |
+| **1836.** Play the Two Sicilies; wait a month. | Pompeii is a dig in Archaeological Expeditions: "an Antiquarian dig, 33% done" or so, diverting 5 weekly innovation, Suspend Dig. The Budget shows nothing for it. | Not there: the seeding's `excavating` branch (`gm_arch_seed_dig`). |
 | **An old save.** Load a save made before Pompeii was added. | A month later Pompeii is a dig of Campania's owner. | `gm_arch_seed_round`. |
-| **Restart.** With Empiricism, suspend and press Systematic. | The dig restarts at its progress, slower and dearer. | |
+| **Restart.** With Empiricism, suspend and press Systematic. | The dig restarts at its progress, slower, and diverts 20 weekly innovation. | |
 
 ## Costs and time
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Cost.** Hover the three buttons of a 10-level site (Nineveh). | £200, £500 and £2,000 a week, the same for a small country as for a great power; 25, 40 and 29 months. A 5-level site (the Winged Victory) shows half the cost and 17, 27 and 20 months. | A cost that moves with GDP: an old `gm_arch_cost_*` read. A blank: `gm_arch_site_cost_*` on the container. |
-| **The row.** Launch a dig. | Its row says "Costs £… a week", the same figure the budget's Archaeological Digs row adds. | |
-| **The AI.** Observe a poor AI with a weekly deficit for ten years. | It opens no dig. A rich one opens the grandest it can afford. | |
+| **Cost.** Hover the three buttons of a 10-level site (Nineveh). | 5, 20 and 100 weekly innovation and no money; 25, 40 and 29 months. A 5-level site (the Winged Victory) shows the same innovation and 17, 27 and 20 months. | A money figure: an old tooltip. A blank month count: `gm_arch_site_months_*` on the container. |
+| **The row.** Launch a dig. | Its row says "Diverts 20 weekly innovation" for Systematic; the summary line's total is the sum of the rows. | A 0: `gm_arch_site_innovation` reads no method. |
+| **An old save.** Load a save made with the MVP while a dig ran. | Within a month the Excavation Costs modifier is gone from the entry and the Budget's Archaeological Digs row is empty. | `gm_arch_remove_national` did not run, or the engine dropped the modifier on load (harmless). |
+| **The AI.** Observe a small AI making under 20 weekly innovation for ten years. | It opens no dig. One making 80 to 400 digs by Systematic; above 400 with Computer Networks, by Forensic. | |
 
 ## The events
 
@@ -109,7 +110,7 @@ site did not seed).
 | Check | Expect | If it fails |
 |---|---|---|
 | **Section.** Open the entry, and the Timeline Extended window's Grand Monuments tab. | The section sits after the Opportunity and before National Effects; its header collapses; the digs list above the open sites; rows are 480 wide; the summary and costs lines have tooltips. | A raw key; a row wider than the panel. |
-| **Buttons.** Hover Launch and Suspend. | The tooltip names the method, its months, its weekly cost and innovation, and the failing conditions when it is greyed. | |
+| **Buttons.** Hover Launch and Suspend. | The tooltip names the method, its months, its weekly innovation, and the failing conditions when it is greyed. | |
 
 ## Known limits
 

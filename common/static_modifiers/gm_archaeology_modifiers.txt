@@ -1,10 +1,12 @@
 ﻿# ============================================================================
-# GRAND MONUMENTS — archaeology: the digs' costs (issue #939)
+# GRAND MONUMENTS — archaeology: the digs' cost (issue #939)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
-# Both ride on je:je_grand_monuments, refreshed by gm_apply_national_modifiers
-# with a multiplier that is a country variable (gm_arch_add_national): one unit
-# each, scaled by the digs the country runs (gm_arch_pass).
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md,
+# reworked by 2026-10-16-grand-monument-archaeology-rework-design.md.
+# gm_arch_diversion rides on je:je_grand_monuments, refreshed by
+# gm_apply_national_modifiers with a multiplier that is a country variable
+# (gm_arch_add_national): one unit, scaled by the digs the country runs
+# (gm_arch_pass).
 
 # The scholars in the field are not in the universities: the weekly innovation
 # falls by the units. The cap does not (owner, 2026-10-14).
@@ -13,7 +15,10 @@ gm_arch_diversion = {
 	country_weekly_innovation_add = -1
 }
 
-# The digs' weekly cost, a share of the country's GDP.
+# RETIRED 2026-10-16: the digs' weekly treasury cost. Digs now cost innovation
+# alone (owner, 2026-10-16). Nothing adds it; it survives so a save made while
+# it was applied loads clean, and gm_arch_remove_national strips it on the
+# first refresh. Its Budget Breakdown row (Archaeological Digs) stays empty.
 gm_arch_expense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_expenses_add = 1
