@@ -407,13 +407,18 @@ charity give some care everywhere; a health law adds more with each level of the
 Ministry of Health, in incorporated states only. So a Public Health Insurance
 law does little before antibiotics, and medicine without a health system
 reaches less than half the people. The medical technologies and the health,
-policing, pension and labor laws show what they do to each cause in their
-tooltips. Later technologies make work and everyday life safer whatever the
+policing, criminal justice, pension and labor laws show what they do to each
+cause in their tooltips. Deaths from accidents and violence fall with every
+police law but No Police, 2% for each level of the Ministry of Public Safety (1%
+under Private Policing), and with Restorative Justice (4%) and
+Rehabilitation-Focused Criminal Justice (8%); Penal Labor Camps raise deaths at
+work. Later technologies make work and everyday life safer whatever the
 laws: Prefabricated Construction, Industrial Robotics, Containerization and
 Knowledge Economy together prevent nine in ten deaths at work, and Modern Urban
 Planning, Computer-Aided Design and Cellular Networks two in five deaths from
-accidents and violence. Life expectancy and infant mortality are the census's own figures,
-before famine, war and disasters.
+accidents and violence, half once Autonomous Vehicles is researched. Life
+expectancy and infant mortality are the census's own figures, before famine, war
+and disasters.
 
 Medicine also takes time to arrive. A new medical technology, health law or
 Ministry of Health level moves a state's medicine part of the way at each yearly
@@ -489,8 +494,8 @@ in its treasury.
 From mRNA Therapeutics on, medicine slows ageing itself as well as treating
 illness, and the census tracks each person's body apart from the calendar.
 People in longevity care age nine-tenths of a year each year with mRNA
-Therapeutics, three-quarters once Personalized Medicine and Genetic Engineering
-follow, and not at all with Biological Immortality, under which bodies older than
+Therapeutics, seven-tenths once Personalized Medicine, Genetic Engineering and
+Synthetic Biology follow, and not at all with Biological Immortality, under which bodies older than
 35 also wind back toward 35. Children are never treated: people join at 25.
 
 Who is in care depends on your laws and your people's wealth.
@@ -543,7 +548,9 @@ are greyed.
 
 A measure takes effect as soon as you start it and costs its upkeep while it
 runs: a weekly share of GDP for the ones paid in money, recalculated each year,
-authority, or a costlier Ministry of Education. Each also moves the approval of
+authority, or a costlier Ministry of Education. A measure acts on every state
+at once, so the ones that need enforcement cost more authority than a decree
+does for one state, and one child with the Crash Campaign takes 700. Each also moves the approval of
 the interest groups its tooltip lists. Once started, a measure runs for at least
 five years, and its button can't end it before then. A change to a law that
 doesn't allow a measure ends it at once, with a notice, and taking it up again
@@ -555,15 +562,15 @@ five years and can't return for ten.
 |---|---|---|---|
 | Child Allowance | Pro-Natalist Policy, Communal Child-Rearing | Families want more children | 0.5% of GDP a year, more where children are many |
 | Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
-| Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy | Families want a few more children | 25 authority |
-| Restricted Contraception | Pro-Natalist Policy | Families have less means to plan their children; more mothers die; the feminist movement gains support | 50 authority |
+| Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy | Families want a few more children | 50 authority |
+| Restricted Contraception | Pro-Natalist Policy | Families have less means to plan their children; more mothers die; the feminist movement gains support | 200 authority |
 | Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year, by the share of women at work |
 | Free Contraception | State-Sponsored Family Planning, Population Control Measures | Families have more means to plan their children | 0.1% of GDP a year |
 | Sex Education | State-Sponsored Family Planning, Population Control Measures | Knowing how to plan a family reaches people as if literacy were 20 points higher | The Ministry of Education costs 10% more bureaucracy |
-| Later, Longer, Fewer | State-Sponsored Family Planning, Population Control Measures | Families want fewer children | 50 authority |
-| Birth Limit | Population Control Measures | Families want far fewer children, fewer still at one child; once Microprocessor is researched, more boys are born than girls | 100 authority |
+| Later, Longer, Fewer | State-Sponsored Family Planning, Population Control Measures | Families want fewer children | 150 authority |
+| Birth Limit | Population Control Measures | Families want far fewer children, fewer still at one child; once Microprocessor is researched, more boys are born than girls | 300 authority, 400 at one child |
 | Rural Exemption | Population Control Measures, with Birth Limit | Halves Birth Limit for farming families, by the state's share of Peasants and Farmers | None |
-| Crash Campaign | Population Control Measures | Families want fewer children still; legitimacy −10 and more radicals from movements | 100 authority |
+| Crash Campaign | Population Control Measures | Families want fewer children still; legitimacy −10 and more radicals from movements | 300 authority |
 
 The census reads a measure at each state's next yearly count: how many
 children families want, city life's pull toward smaller families, the means to

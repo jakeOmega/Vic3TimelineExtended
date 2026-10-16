@@ -108,6 +108,9 @@ autonomous_vehicles = {
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_voting_power_mult = 0.2
+		# census only, modern safety (demographics_params.SAFETY_TYPES): cars that don't speed, drink or fall asleep end
+		# most of the traffic deaths the Combustion Engine brought
+		state_external_safety_add = 0.1
 	}
 
 	ai_weight = {
@@ -156,6 +159,10 @@ synthetic_biology = {
 
 	modifier = {
 		country_st_res_artillery_decay_add = -0.002
+		# the census's ageing rate for those in longevity care (demographics phase 3, the late-game design's call 3):
+		# engineered cells that repair their own damage; 0.05 of the ladder moved here from Biological Immortality
+		# (2026-10-16), so era 11 reaches 0.70
+		state_ageing_rate_add = -0.05
 	}
 
 	ai_weight = {

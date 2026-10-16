@@ -219,5 +219,8 @@ INJECT:institution_police = {
 	modifier = {
 		country_colonial_garrison_effectiveness_add = 0.05
 		country_legislative_override_capacity_add = 0.1
+		# the census's deaths from violence and accidents, per level (demographics_params.MORTALITY_TYPES): patrols and
+		# detectives deter and solve homicides, traffic police enforce the roads' rules
+		state_external_mortality_mult = -0.02
 	}
 }

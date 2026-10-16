@@ -68,7 +68,8 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
         allowed = {P.ACCESS_TYPE: {"law_institution"},
                    **{t: {"technology"} for t in P.TREATMENT_TYPE.values()},
                    P.TREATMENT_TYPE["chronic"]: {"technology", "law"},
-                   "state_external_mortality_mult": {"technology", "law", "institution"},
+                   # Private Policing's +0.01 a level gives back half the Ministry of Public Safety's cut (2026-10-16)
+                   "state_external_mortality_mult": {"technology", "law", "law_institution", "institution"},
                    "state_work_mortality_mult": {"law", "law_institution", "technology"},   # phase 3: Mind Backups
                    "state_chronic_mortality_mult": {"law"},
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
@@ -110,7 +111,8 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_modern_safety_sits_on_the_era_7_to_9_technologies(self):
         """Modern safety (owner, 2026-10-16): work safety from building, robots, container ports and office work, 0.90 by
-        era 9; accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40."""
+        era 9; accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40, and
+        self-driving cars in era 11, 0.50."""
         carried = {}
         for c in self.carriers:
             if c.type in P.SAFETY_TYPES.values():
@@ -119,8 +121,31 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             P.SAFETY_TYPES["work"]: {"prefabricated_construction": 0.15, "robotics": 0.35, "containerization": 0.15,
                                      "knowledge_economy": 0.25},
             P.SAFETY_TYPES["external"]: {"modern_urban_planning": 0.2, "computer_aided_design": 0.1,
-                                         "cellular_networks": 0.1}})
+                                         "cellular_networks": 0.1, "autonomous_vehicles": 0.1}})
         self.assertLessEqual(max(sum(v.values()) for v in carried.values()), P.SAFETY_MAX)
+
+    def test_policing_and_criminal_justice_lower_deaths_from_violence(self):
+        """Accidents and violence (2026-10-16): every police law but No Police, the Ministry of Public Safety a level
+        (Private Policing gives half of it back, as it does the Ministry's turmoil cut) and the two progressive
+        criminal-justice laws lower the cause; Penal Labor Camps raise work deaths, as Child Labor Allowed does."""
+        ext = {(c.kind, c.key): c.value for c in self.carriers if c.type == "state_external_mortality_mult"}
+        self.assertLessEqual({
+            ("law", "law_local_police"): -0.05, ("law", "law_dedicated_police"): -0.1,
+            ("law", "law_militarized_police"): -0.1, ("law", "law_private_policing"): -0.05,
+            ("institution", "institution_police"): -0.02, ("law_institution", "law_private_policing"): 0.01,
+            ("law", "law_restorative_justice"): -0.04, ("law", "law_rehabilitation_focused_criminal_justice"): -0.08,
+        }.items(), ext.items())
+        for key in ("law_no_police", "law_punishment_focused_criminal_justice", "law_penal_labor_camps"):
+            self.assertNotIn(("law", key), ext)
+        work = {c.key: c.value for c in self.carriers if c.type == "state_work_mortality_mult" and c.kind == "law"}
+        self.assertEqual(work["law_penal_labor_camps"], work["law_child_labor_allowed"])
+        # a Dedicated Police Force at the Ministry's level 9 under Rehabilitation-Focused criminal justice
+        t = DM.totals(self.carriers, laws={"law_dedicated_police", "law_rehabilitation_focused_criminal_justice"},
+                      institutions={"institution_police": 9})
+        self.assertAlmostEqual(t["state_external_mortality_mult"], -0.36)
+        # Private Policing at the same level keeps half the Ministry's cut
+        t = DM.totals(self.carriers, laws={"law_private_policing"}, institutions={"institution_police": 9})
+        self.assertAlmostEqual(t["state_external_mortality_mult"], -0.14)
 
     def test_medicine_spreads_from_a_tenth_to_two_fifths(self):
         """The Causes of Death plan: communication and medical-training techs carry the spread of medicine, +0.05 each,

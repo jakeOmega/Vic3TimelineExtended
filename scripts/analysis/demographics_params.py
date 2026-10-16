@@ -107,7 +107,12 @@ LAND_TENURE = {
 ACCESS_TYPE = "state_health_care_access_add"
 MEDICINE_CAUSES = ("infection", "maternal", "chronic")
 TREATMENT_TYPE = {cause: f"state_{cause}_treatment_add" for cause in MEDICINE_CAUSES}
-# The plain per-cause multipliers: 1 + the cause's type, floored.
+# The plain per-cause multipliers: 1 + the cause's type, floored. Accidents and violence (2026-10-16): the police laws
+# (Local Police -0.05, Dedicated and Militarized -0.10, Private Policing -0.05), the Ministry of Public Safety -0.02 a level
+# (Private Policing gives back +0.01 a level, as it halves the Ministry's turmoil cut), Restorative Justice -0.04,
+# Rehabilitation-Focused -0.08, the Ministry of Consumer Protection -0.08 a level, the Combustion Engine +0.30 and the
+# late-era lines (LATE_EXTERNAL_LINES). Work: Child Labor Allowed and Penal Labor Camps +0.10, Regulatory Bodies and
+# Worker Protections -0.10 a Workplace Safety level, Mind Backups.
 MORTALITY_TYPES = {
     "external": ("state_external_mortality_mult",),
     "work": ("state_work_mortality_mult",),
@@ -518,7 +523,9 @@ CAUSE_SHORT = {"infection": "inf", "work": "work", "external": "ext", "maternal"
 # from before stored none, so the factor reads 1 until the state's next step. Carriers (their own era_N.txt definitions):
 # work, Prefabricated Construction 0.15, Industrial Robotics 0.35, Containerization 0.15, Knowledge Economy 0.25 (0.90 by
 # era 9: x0.05 with Workplace Safety at level 5, near today's rich-world 2-4 deaths a year per 100,000 workers);
-# accidents and violence, Modern Urban Planning 0.20, Computer-Aided Design 0.10, Cellular Networks 0.10 (0.40).
+# accidents and violence, Modern Urban Planning 0.20, Computer-Aided Design 0.10, Cellular Networks 0.10 (0.40), and
+# Autonomous Vehicles 0.10 in era 11 (0.50; 2026-10-16: the late-game design's §1.4 proposal, traffic deaths, built here
+# rather than as a laws line, since self-driving cars save lives whatever the laws).
 SAFETY_TYPES = {"work": "state_work_safety_add", "external": "state_external_safety_add"}
 SAFETY_MAX = 0.95
 DEMOG_TYPES = DEMOG_TYPES + tuple(SAFETY_TYPES.values())
@@ -795,13 +802,14 @@ PRO_NATALIST_LAW = "law_pro_natalist_subsidies"
 # The ageing rate r of those in care (§1.2): biological years a calendar year, 1 + state_ageing_rate_add, within 0-1;
 # Biological Immortality's pull (§1.4): each year a treated body above LX_PULL_TO closes this share of its gap to it,
 # state_rejuvenation_add. Both are census-only state types (demographics_modifier_types.txt) on the technologies below
-# (call 3: the ladder 0.9 at era 10, 0.75 at era 11, 0 at era 12; call 4: the pull 3% a year).
+# (call 3: the ladder 0.9 at era 10, 0.75 at era 11, 0 at era 12; call 4: the pull 3% a year). 2026-10-16 (owner): 0.05 of
+# Biological Immortality's line moved to Synthetic Biology, so era 11 reaches 0.70 and era 12 still 0.
 AGEING_RATE_TYPE = "state_ageing_rate_add"
 REJUVENATION_TYPE = "state_rejuvenation_add"
 LATE_TYPES = (AGEING_RATE_TYPE, REJUVENATION_TYPE)
 DEMOG_TYPES = DEMOG_TYPES + LATE_TYPES
 AGEING_RATE_LINES = {"mrna_therapeutics": -0.10, "personalized_medicine": -0.10, "genetic_engineering": -0.05,
-                     "biological_immortality": -0.75}
+                     "synthetic_biology": -0.05, "biological_immortality": -0.70}
 REJUVENATION_LINES = {"biological_immortality": 0.03}
 # Who is treated (§1.2-§1.3, call 8): a treated share te_dg_s<j> and their mean deficit te_dg_d<j> (calendar less
 # biological age) per five-year birth band j = slot // LX_BAND_WIDTH (birth year / 5 mod 30), adults only: a cohort
@@ -846,8 +854,8 @@ LX_LIVING_TO = 100
 LX_OLD_AGE_NONE = 130
 # The late-era lines (§8.4, call 19): under Full the census carries them; outside Full their flat lines stay (they sit on
 # the absorbed family since phase 3). Mental Health Awareness: accidents and violence -10% (suicide); Mind Backups:
-# accidents and violence and work deaths -50% (the backed-up are restored). autonomous_vehicles' -10% (traffic) was
-# §1.4's proposal only, not call 19's: not built.
+# accidents and violence and work deaths -50% (the backed-up are restored). autonomous_vehicles' -10% (traffic), §1.4's
+# proposal, is built as modern safety instead (SAFETY_TYPES, 2026-10-16).
 LATE_EXTERNAL_LINES = {"mental_health_awareness": -0.10, "mind_backups": -0.5}
 LATE_WORK_LINES = {"mind_backups": -0.5}
 # Fertility (§3.1-§3.2, call 5): planned births follow the calendar for their timing and the body for whether it allows

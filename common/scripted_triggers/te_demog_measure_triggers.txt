@@ -186,7 +186,7 @@ te_demog_ms_ai_keep_family_housing = {
 }
 te_demog_ms_ai_start_honours = {
 	te_demog_ms_ai_pronatal = yes
-	local_var:te_dg_ms_auth >= 50
+	local_var:te_dg_ms_auth >= 75
 }
 te_demog_ms_ai_keep_honours = {
 	te_demog_ms_ai_pronatal = yes
@@ -195,7 +195,7 @@ te_demog_ms_ai_keep_honours = {
 te_demog_ms_ai_start_restricted_contraception = {
 	te_demog_ms_ai_pronatal_far = yes
 	te_demog_ms_ai_legitimate = yes
-	local_var:te_dg_ms_auth >= 75
+	local_var:te_dg_ms_auth >= 225
 }
 te_demog_ms_ai_keep_restricted_contraception = {
 	te_demog_ms_ai_pronatal_far = yes
@@ -227,7 +227,7 @@ te_demog_ms_ai_keep_sex_education = {
 }
 te_demog_ms_ai_start_later_longer_fewer = {
 	te_demog_ms_ai_popcontrol = yes
-	local_var:te_dg_ms_auth >= 75
+	local_var:te_dg_ms_auth >= 175
 }
 te_demog_ms_ai_keep_later_longer_fewer = {
 	te_demog_ms_ai_popcontrol = yes
@@ -235,16 +235,18 @@ te_demog_ms_ai_keep_later_longer_fewer = {
 }
 te_demog_ms_ai_start_birth_limit = {
 	te_demog_ms_ai_popcontrol = yes
-	local_var:te_dg_ms_auth >= 125
+	local_var:te_dg_ms_auth >= 325
 }
 te_demog_ms_ai_keep_birth_limit = {
 	te_demog_ms_ai_popcontrol = yes
 	authority >= 0
 }
-# the one child: from two, with the target far off and legitimacy high (no further upkeep)
+# the one child: from two, with the target far off and legitimacy high, and the one child's further 100 upkeep with the
+# margin
 te_demog_ms_ai_tighten_birth_limit = {
 	te_demog_ms_ai_popcontrol_far = yes
 	te_demog_ms_ai_legitimate = yes
+	local_var:te_dg_ms_auth >= 125
 }
 # the exemption softens the limit: taken while the need isn't pressing
 te_demog_ms_ai_start_rural_exemption = {
@@ -258,6 +260,6 @@ te_demog_ms_ai_keep_rural_exemption = {
 te_demog_ms_ai_start_crash_campaign = {
 	te_demog_ms_ai_popcontrol_far = yes
 	te_demog_ms_ai_legitimate = yes
-	local_var:te_dg_ms_auth >= 125
+	local_var:te_dg_ms_auth >= 325
 	NOT = { te_demog_ms_crash_campaign_barred = yes }
 }

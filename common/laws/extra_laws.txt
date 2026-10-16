@@ -1516,6 +1516,9 @@ law_penal_labor_camps = {
 		country_authority_add = 100
 		country_legitimacy_base_add = -10
 		country_suppression_attraction_factor = -0.1
+		# the census's work deaths: forced labour in mines, forests and
+		# plantations with no safety at all, as Child Labor Allowed's +0.1
+		state_work_mortality_mult = 0.1
 		state_pop_support_movement_civil_rights_mult = 0.1
 		building_group_bg_mining_throughput_add = 0.05
 		building_group_bg_logging_throughput_add = 0.05
@@ -1549,6 +1552,7 @@ law_restorative_justice = {
 		state_loyalists_from_political_movements_mult = 0.1
 		state_demog_replaced_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_male_labor_participation_add = 0.02	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
+		state_external_mortality_mult = -0.04	# the census's deaths from violence: offenders who meet their victims reoffend less, violent ones most of all
 	}
 }
 
@@ -1569,6 +1573,7 @@ law_rehabilitation_focused_criminal_justice = {
 		state_loyalists_from_political_movements_mult = 0.2
 		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_male_labor_participation_add = 0.03	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
+		state_external_mortality_mult = -0.08	# the census's deaths from violence: treatment, schooling and work in prison cut violent reoffending
 	}
 }
 
@@ -5086,6 +5091,10 @@ law_private_policing = {
 		# -0.5 (legislative_override_capacity.txt). The institution's own +0.1
 		# a level still applies.
 		country_legislative_override_capacity_add = -0.5
+		# The census's deaths from violence and accidents: guarded districts,
+		# alarm networks and patrols where someone pays, as Local Police's -0.05
+		# (te_demog_law_injections.txt)
+		state_external_mortality_mult = -0.05
 	}
 
 	# Per level of investment, i.e. per size of the private force.
@@ -5097,6 +5106,9 @@ law_private_policing = {
 		# Unrest happens where nobody pays for cover: cancels half of the
 		# institution's own -10% turmoil effects a level.
 		state_turmoil_effects_mult = 0.05
+		# The same for the census's deaths from violence and accidents: half of
+		# the institution's own -0.02 a level (extra_institutions.txt)
+		state_external_mortality_mult = 0.01
 		# Owners pay for their protection: the guards are service workers on
 		# shops', offices' and estates' payrolls, so Urban Center owners and
 		# Services buyers, mostly the better-off, bear the cost through prices.

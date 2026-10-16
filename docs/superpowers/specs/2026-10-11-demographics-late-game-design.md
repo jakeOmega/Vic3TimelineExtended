@@ -2,7 +2,7 @@
 
 > **Built 2026-10-12** (branch `feat/demog-p3-late-game`, from this spec with no plan document, owner's process of that
 > day): `docs/systems/mod_systems.md` § Phase 3: the late game says what shipped and where it settles what this design
-> left open (the postponement shift held at 0; `autonomous_vehicles` not built; the gap's politics behind a switch, off;
+> left open (the postponement shift held at 0; `autonomous_vehicles` not built (since 2026-10-16 a modern-safety carrier instead); the gap's politics behind a switch, off;
 > the harness's `lategame` results against the sketched figures). The design below is unchanged.
 >
 > **2026-10-16 (owner):** the gap's politics are on at call 15's sizes, and the play-test checks them rather than sizing
@@ -219,7 +219,8 @@ split state) starts each band at s = E and d = (1 − r) × (calendar − 25), t
 | `mrna_therapeutics` | 10 | −0.10 | biologics such as senolytics, which clear senescent cells (first human trial: Justice et al. 2019, *EBioMedicine*), and mRNA-delivered therapies; of the mod's two era-10 medical technologies, the one that acts on the body (`telemedicine` is how care reaches it) |
 | `personalized_medicine` | 11 | −0.10 | geroprotective drugs (the rapamycin class), dosed to the person |
 | `genetic_engineering` | 11 | −0.05 | gene therapies against the hallmarks of ageing |
-| `biological_immortality` | 12 | −0.75 (r = 0) and `state_rejuvenation_add` +0.03 | ageing stops; the body winds back |
+| `synthetic_biology` | 11 | −0.05 (since 2026-10-16) | engineered cells that repair their own damage |
+| `biological_immortality` | 12 | −0.70 (r = 0; −0.75 until 2026-10-16) and `state_rejuvenation_add` +0.03 | ageing stops; the body winds back |
 
 The ladder (owner, 2026-10-11) is r = 0.9 at era 10, 0.75 at era 11, then 0. At 0.9 a treated person's steady-state
 life expectancy is about 82, against 77.5 untreated with the same medicine (sketch). At 0.75 it is about 103, near the
@@ -852,7 +853,9 @@ The owner approved every call as recommended. Call 15 waits for a play-test and 
 3. **The ageing ladder: 0.9 at era 10, 0.75 at era 11, 0 at era 12.** *Decided (owner, 2026-10-11)* for era 10's step
    (0.9, the owner's value); carried by `mrna_therapeutics` −0.10, then `personalized_medicine` −0.10 and
    `genetic_engineering` −0.05. Treated life expectancy about 82 at 0.9 and 103 at 0.75. Era 11's 0.75 is decided too;
-   the parent's 0.5 (about 130) was the alternative.
+   the parent's 0.5 (about 130) was the alternative. *Amended (owner, 2026-10-16):* era 11 reaches 0.70, with
+   `synthetic_biology` −0.05 taken from `biological_immortality` (now −0.70), so some of the slowing arrives an era
+   earlier; era 12 is still 0. The census's treated life expectancy at 0.70 is about 110 (105 at 0.75).
 4. **Immortality's pull toward 35: 3% a year** (deaths per 1,000 from 8 to about 3.6 in ten years). *Decided (owner,
    2026-10-11).* Alternative considered: 10% (2.4 in ten years).
 5. **Fertility under immortality: planned by calendar, unplanned by biology**, no new variables; growth ×1.23–1.30 in 50
