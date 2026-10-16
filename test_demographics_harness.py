@@ -1248,7 +1248,9 @@ class TestConsequences(unittest.TestCase):
         self.assertGreater(fast["y"], 0.5)
         self.assertLessEqual(fast["y"], 1.0)
         self.assertLess(slow["y"], fast["y"])
-        self.assertLessEqual(fast["peak_term"], P.CONSCRIPTION_MAX)
+        # no ceiling on the term (owner, 2026-10-16): the pool of a sharp transition lifts it past the old +0.25 (0.41)
+        self.assertGreater(fast["peak_term"], 0.25)
+        self.assertLess(fast["peak_term"], 0.6)
 
     def _census_save(self, tmp):
         from test_demographics_save_inputs import TINY
