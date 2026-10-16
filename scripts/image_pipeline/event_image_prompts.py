@@ -1262,9 +1262,11 @@ IMAGES = {
         "style": "oil painting, contemporary realism, dark screen light",
         "events": ["modern_election_events.30", "society_technology_events.14"],
     },
+    # Pending (#982): the first render's banners came out as gibberish lettering,
+    # so the .dds was deleted and both events show interim art until regenerated.
     "student_protest_campus": {
-        "prompt": "A university campus protest: students occupying a building, banners hanging from windows, teach-ins on the lawn. Faculty divided — some joining, some condemning. The perennial engine of youthful idealism challenging institutional complacency.",
-        "style": "oil painting, social realism, campus daylight",
+        "prompt": "A crowd of students seated on a university lawn before a columned stone lecture hall, seen from across the quad. A few students stand on the hall's front steps, one with an arm raised mid-speech. Upper windows are open, students leaning out to listen. At the lawn's edge a small knot of older faculty in tweed jackets stands apart, arms folded.",
+        "style": "oil painting, social realism, soft afternoon daylight",
         "events": ["decolonization_events.53", "society_technology_events.15"],
     },
     "neural_interface_consumer": {

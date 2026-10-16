@@ -1389,7 +1389,7 @@ society_technology_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/student_protest_campus.dds" }
+	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
