@@ -627,3 +627,17 @@ class TestLateGameCountry(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestLateReseedConsole(unittest.TestCase):
+    """Console option c_world (te_debug_demog.1): every late state re-seeded, our census taken at once."""
+
+    def test_the_census_runs_for_root_alone(self):
+        """te_demog_country_census writes its bands and lists to ROOT (te_demog_add_bands_to_root's root = { }), so run
+        inside every_country from the player's event it would add every country's bands to the player's census."""
+        body = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"), "te_debug_demog_reseed_late")
+        self.assertNotIn("every_country", body)
+        self.assertIn("te_demog_country_census = yes", body)
+        self.assertIn("te_demog_seed_off_pulse = yes", body)
+        self.assertNotIn("te_demog_seed = yes", body)
+        self.assertIn("has_variable = te_dg_elig", body)
