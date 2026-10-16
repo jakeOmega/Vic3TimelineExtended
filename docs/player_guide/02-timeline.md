@@ -450,12 +450,13 @@ The Grand Monument is a building you can raise in any state from the start of
 the game. A government raises one to what it stands for: its crown, its
 republic, its revolution, its leader, its faith or the nation. Each level costs
 1,000 construction and needs only maintenance and a small caretaker staff. A
-monument's level is its **grandeur**, and it has no cap. The Grand Monuments
-game rule can switch the system off.
+monument's **grandeur** starts at its levels and grows as the monument ages
+(see [A finished monument and its age](#a-finished-monument-and-its-age)). The
+Grand Monuments game rule can switch the system off.
 
 Everything a monument gives grows with grandeur in steps. The first step takes 5
 grandeur and each further step takes twice as much as the one before, so steps
-complete at 5, 15, 35, 75, 155 and so on. Inside a step every level counts.
+complete at 5, 15, 35, 75, 155 and so on. Inside a step every point counts.
 Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
@@ -498,7 +499,8 @@ ends with an Open Journal Entry button.
 
 The state panel of a state with a Grand Monument, yours or another country's,
 shows a Grand Monument card under the tourism card: the monument's status, name
-and dedication, its grandeur with a bar toward its next step, and the Tourism
+and dedication, its grandeur with a bar toward its next step, its levels and age
+once finished, and the Tourism
 Industry throughput and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
 the Timeline Extended window, where the buttons are. While you can carry the
@@ -537,28 +539,64 @@ Every monument, whatever it honors, gives:
   grandeur, so its first five levels match one of the base game's monuments.
 - +1 cultural pull for each step of standing grandeur (steps of 10), up to +5.
 
+### A finished monument and its age
+
+A monument is **finished** once it is dedicated and the levels queued for it are
+built. Levels still queued when the dedication ceremony asks join it, so build a
+monument to the size you want before its construction runs out. After that its
+levels are fixed: the state card and its row under Our Monuments show
+"Finished: 15 levels · Age: +3.2".
+
+A finished monument grows grander with the years: by 2% of its levels a year, so
+it doubles its grandeur in fifty years and triples it in a hundred.
+
+| Levels | +25 years | +50 years | +100 years |
+|---|---|---|---|
+| 5 | 7.5 | 10 | 15 |
+| 10 | 15 | 20 | 30 |
+| 25 | 37.5 | 50 | 75 |
+
+It ages while its message stands or while it is kept as heritage, at half the
+rate under Mothballed, and not at all while it is contested or undedicated. A
+trophy abroad does not age; it starts again once home. Each anniversary's first
+option adds a tenth of the monument's levels to its grandeur, at least 1, and
+completing an [opportunity](#monument-opportunities) adds 5. Pulling a monument
+down throws its years away with its stone, and rededicating it halves both, so
+an old monument is worth more than a new one of the same size.
+
+More levels built in the state of a finished monument raise a **new monument
+beside it**, with its own dedication ceremony, name and picture, as below. The
+building can't be expanded while the monument there is contested, while a
+dedication, unveiling or naming is under way, or once six monuments stand
+there; the build tooltip names the reason. The AI raises new monuments in other
+states before it builds beside one.
+
 ### Several monuments in one state
 
 A state has one Grand Monument building, so a second monument there stands
-beside the first instead of as a second building. It is usually a
-[trophy](#monument-trophies) that came home to a state with a monument already
-standing, such as the Luxor Obelisk coming back to Upper Egypt, where the
-Obelisks of Karnak stand. It keeps its own name, picture and dedication.
+beside the first instead of as a second building. It is a monument raised beside
+a finished one, a [trophy](#monument-trophies) that came home to a state with a
+monument already standing, such as the Luxor Obelisk coming back to Upper Egypt,
+where the Obelisks of Karnak stand, or a [buried site](#buried-sites) dug up
+where a monument stands. Each keeps its own name, picture and dedication.
 
-The building's level is every monument's grandeur together, and the building
-runs on the dedication of the first. What it gives the state counts all of them,
-and your national effects count each monument's grandeur once. A returned
-monument adds to your prestige and cultural pull, but its dedication gives
-nothing of its own, so a civic artifact beside a crown monument does not add to
-the crown's legitimacy.
+The building's level is every monument's levels together. Each monument counts
+on its own: its dedication gives its own effect in the state and in the nation
+while its message stands, its interest groups approve or object, and it ages and
+can be contested on its own. A civic obelisk beside a crown column adds to the
+Petty Bourgeoisie's approval, not to the crown's legitimacy, and Tourism
+Industry throughput counts every monument's grandeur together.
 
-Each of the others has its own row in the state's monument card, under the
-first one's details, and under Our Monuments. An army that holds the state
-carries monuments off one at a time, with the Carry It Off on the first one's
-details or on another's row, and the rest stay. If the first
+The first monument is the grandest: once a new monument raised beside it has
+its dedication and name, the grander of the two stands first. Each of the others
+has its own row in the state's monument card, under the first one's details, and
+under Our Monuments, with its status and grandeur. A contested one's row under
+Our Monuments has Pull Down, Rededicate and Keep as Heritage; rededicating it
+makes it the state's first monument, rebuilt at half its levels. An army that
+holds the state carries monuments off one at a time, with the Carry It Off on
+the first one's details or on another's row, and the rest stay. If the first
 monument is pulled down or carried off whole, the largest of the others takes
-the building and its dedication. Rededicate applies to the first monument only,
-at half its own grandeur.
+its place.
 
 ### Monument dedications
 
@@ -570,7 +608,8 @@ tooltips list each dedication's effects. The ceremony lists every dedication:
 one you can't raise yet is greyed out, with what it needs. An undedicated
 monument, draped until its unveiling, gives only the
 prestige, tourism and cultural pull above; the ceremony asks again at its next
-level.
+level. Dedicating a monument finishes it once its queued levels are built (see
+[A finished monument and its age](#a-finished-monument-and-its-age)).
 
 | Dedication | Requires | Approves / objects | National, per step | In its state, per step |
 |---|---|---|---|---|
@@ -632,10 +671,10 @@ year before time runs out, a notice reminds you.
 | Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality |
 | The Environmental Movement researched | Rural Folk | Botanical Gardens | Anywhere | +25% pollution health effects reduction |
 
-An opportunity asks for 5 grandeur of its dedication within 60 months in a
-great power, 120 in a major power and 180 in any other. Grandeur you add to fitting monuments of the dedication
-counts, whether you raise an old monument or build a new one, and an
-opportunity for the capital counts only the capital's monument. One for the
+An opportunity asks for 5 levels of its dedication within 60 months in a
+great power, 120 in a major power and 180 in any other. Levels you build in fitting monuments of the dedication
+count, in a new monument or one raised beside a finished one; years of age do
+not. An opportunity for the capital counts only the capital's monuments. One for the
 capital can be met anywhere when the capital already holds a monument of
 another dedication. A monument that becomes contested stops counting. When a new
 monument's dedication ceremony could answer the open opportunity, its first
@@ -654,12 +693,11 @@ formed or released in play is founded the year it appears. Other countries of
 
 | Outcome | What follows |
 |---|---|
-| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it is rebuilt 5 levels taller at no cost, keeping its dedication, name and style. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
+| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it gains 5 grandeur at no cost. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
 | Let it pass, or time runs out | Nothing. The next moment can bring another. |
 | Lapsed | Nothing. An opportunity lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
 
-A second boon of the same kind restarts its ten years. The rebuilt monument
-reaches level 200 at most, so a monument already that tall gets no extra levels.
+A second boon of the same kind restarts its ten years.
 
 The AI gets the same offers. It seizes one unless it is below a major power, at
 war, in hard times, has more than a year of government construction queued or
@@ -743,7 +781,7 @@ the Grand Monuments tab.
 | Choice | What happens |
 |---|---|
 | Pull Down | The monument and all its grandeur are gone. The new government gains legitimacy that fades over about five years. The group that objected to the old message approves and the group that raised it resents it, both fading. |
-| Rededicate | Costs 500 per level. The monument is rebuilt at half its level, rounded up, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
+| Rededicate | Costs 500 per level. The monument is rebuilt at half its levels, rounded up, keeps half its years, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
 | Keep as Heritage | The monument stays and its prestige returns, but under this government it lends no legitimacy and gives no approval. The group that objected resents it, less each year. |
 
 Pulling down many monuments at once gives what pulling down one of their
@@ -778,10 +816,10 @@ monument that loses a piece is spared for ten years.
 | Form | What is carried off |
 |---|---|
 | Column, obelisk, statue, stele, pillar, high cross, rune stone, menorah, sun stone or stela | The whole monument |
-| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one. The monument is rebuilt smaller, keeping its name and dedication. |
+| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one, and the same share of its years. The monument is rebuilt smaller, keeping its name and dedication. |
 | Any other form: halls, a pantheon, forum, mausoleum, pyramid, pagoda or church, and the five civic-progress buildings | A tenth of its levels, at least one |
 
-A trophy stands in its taker's capital. It counts for half the levels carried
+A trophy stands in its taker's capital. It counts for half the grandeur carried
 off, rounded up, in the standing grandeur that gives prestige and cultural pull,
 and the Armed Forces approve of it. Whoever holds that capital's state holds the
 trophy, so conquering the state takes its trophies too. A trophy keeps its
@@ -813,7 +851,7 @@ state and what they count for together. The card opens in Full, and your choice
 lasts until you leave the game.
 
 A trophy that comes home goes back where it was taken from, with all the levels
-carried off. A piece of the monument standing there rejoins it, as the Quadriga
+and years carried off. A piece of the monument standing there rejoins it, as the Quadriga
 goes back on the Brandenburg Gate. Anything else stands beside the monument that
 is there, as [several monuments in one state](#several-monuments-in-one-state);
 with no monument standing, the monument is rebuilt with its name, style and
