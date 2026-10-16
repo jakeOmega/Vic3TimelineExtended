@@ -527,7 +527,7 @@ extra_law_events.7 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/surveillance_cameras_cityscape.dds" }
+	event_image = { texture = "gfx/event_pictures/religious_political_power.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -6574,7 +6574,7 @@ extra_law_events.67 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 

@@ -481,7 +481,8 @@ IMAGES = {
             "extra_law_events.51", "extra_law_events.53", "extra_law_events.54",
             "extra_law_events.55", "extra_law_events.57", "extra_law_events.60",
             "extra_law_events.61", "extra_law_events.62", "extra_law_events.63",
-            "extra_law_events.64", "extra_law_events.68", "extra_law_events.69",
+            "extra_law_events.64", "extra_law_events.67", "extra_law_events.68",
+            "extra_law_events.69",
             "extra_law_events.70", "extra_law_events.71", "extra_law_events.72",
             "extra_law_events.74", "extra_law_events.75", "extra_law_events.77",
             "extra_law_events.78", "extra_law_events.79", "extra_law_events.81",
@@ -492,7 +493,7 @@ IMAGES = {
         "prompt": "An urban street corner dominated by a surveillance camera.",
         "style": "oil painting, contemporary realism, desaturated",
         "events": [
-            "extra_law_events.6", "extra_law_events.7", "extra_law_events.41",
+            "extra_law_events.6", "extra_law_events.41",
             "extra_law_events.42", "extra_law_events.65", "extra_law_events.66",
             "society_technology_events.12",
         ],
@@ -500,7 +501,7 @@ IMAGES = {
     "genetics_laboratory": {
         "prompt": "A state-of-the-art genetics laboratory interior.",
         "style": "oil painting, cool clinical light, scientific",
-        "events": ["extra_law_events.8", "extra_law_events.67"],
+        "events": ["extra_law_events.8"],
     },
     "automation_robots_factory": {
         "prompt": "A factory floor with synchronized robotic arms.",
@@ -1079,7 +1080,7 @@ IMAGES = {
     "religious_political_power": {
         "prompt": "Religious leaders meeting politicians in a government office.",
         "style": "oil painting, academic art, warm interior light",
-        "events": ["extra_law_events.43", "extra_law_events.52", "religious_revival_events.7"],
+        "events": ["extra_law_events.7", "extra_law_events.43", "extra_law_events.52", "religious_revival_events.7"],
     },
 
     # =========================================================================

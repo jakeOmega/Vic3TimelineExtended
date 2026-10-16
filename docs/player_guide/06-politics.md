@@ -456,7 +456,7 @@ included, from 5 levels to 9.
 | Ministry of Refugee Affairs | Civil Rights Movement | Any migration law except Closed Borders | Faster cultural acceptance, more mass migration |
 | Ministry of Propaganda | Mass Media | Single-Party State, Secret Police or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
 | Ministry of Science | Nuclear Weapons | | +5% research speed, academics' political strength |
-| Ministry of Thought Control | Automated Surveillance | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
+| Ministry of Thought Control | Television Broadcasting | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
 | Ministry of Consumer Protection | Consumer Credit | Regulatory Bodies or Workers' Protections | +0.5 standard of living, lower mortality, production research, −10% opium plantation throughput a level |
 | Ministry of Urban Planning | Urbanization | | Urban centers produce more and need less urbanization per level; +10% [migration crowding tolerance](08-states.md#raising-crowding-tolerance); faster recovery from devastation |
 | Ministry of Religion | Mass Media | State Religion or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
