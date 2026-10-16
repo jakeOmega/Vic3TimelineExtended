@@ -17,6 +17,24 @@
 #                               years".
 #   iw_defender_event_cooldown  set with its _age by covert_warfare.2; both go
 #                               after 24 months, so the event can come again.
+#   iw_last_exposed_public      1 when that exposure turned the public against
+#                               the interest groups friendly to the attacker
+#                               (covert_backlash_public), for covert_warfare.2's
+#                               text. Like the rest of the record it is only
+#                               overwritten, never aged: every burn passes
+#                               covert_backlash_public, which sets or removes it.
+#   iw_cis_protector            the country running Counterintelligence Support
+#                               here (covert_op_create). Dropped once it no longer
+#                               does, whatever ended it without the break hook (a
+#                               protector annexed, a pact removed by script): here
+#                               and not in the protector's pulse, which a dead
+#                               protector no longer runs. One protector per ally
+#                               reads it, so a stale one would block the next.
+#                               Asked from the protector's side with
+#                               is_initiator = yes, as un_lobby_runs_campaign_on
+#                               does (un_lobby_triggers.txt: the target's side
+#                               did not see the initiator's one-sided pact in play;
+#                               vanilla 03_lobbies.txt uses the same form).
 on_monthly_pulse_country = {
 	on_actions = {
 		covert_warfare_monthly_country
@@ -37,6 +55,17 @@ covert_warfare_monthly_country = {
 				remove_variable = iw_defender_event_cooldown
 				remove_variable = iw_defender_event_cooldown_age
 			}
+		}
+		if = {
+			limit = {
+				has_variable = iw_cis_protector
+				NOT = {
+					var:iw_cis_protector ?= {
+						has_diplomatic_pact = { who = ROOT type = covert_counterintel_support_action is_initiator = yes }
+					}
+				}
+			}
+			remove_variable = iw_cis_protector
 		}
 	}
 }
