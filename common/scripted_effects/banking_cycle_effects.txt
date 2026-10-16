@@ -1688,7 +1688,8 @@ banking_contagion_crash_check = {
 }
 
 # Apply contagion effects to a country hit by financial contagion (event .7).
-# Checks scope:contagion_crashed, event .7's own roll (banking_contagion_crash_check, saved in its immediate).
+# Checks banking_contagion_own_roll_crashed: event .7's own roll (banking_contagion_crash_check, saved in its
+# immediate as scope:contagion_crashed), not one the event inherited from an upstream crash.
 # If crash: applies full crash effects (same as origin crash).
 # If scare: applies minor cycle/momentum reduction (markets wobble but hold).
 apply_banking_contagion_effects = {
@@ -1697,7 +1698,7 @@ apply_banking_contagion_effects = {
 	# bracketed: neither figure may end above where it stood.
 	banking_crash_note_prior_state = yes
 	if = {
-		limit = { exists = scope:contagion_crashed }	# event .7's own roll, saved in its immediate
+		limit = { banking_contagion_own_roll_crashed = yes }	# event .7's own roll, saved in its immediate
 		# Full crash — reuse origin crash effects (cycle ceiling, bubble clear)
 		apply_banking_crash_origin_effects = yes
 	}
@@ -1806,7 +1807,7 @@ banking_crisis_wave_init = {
 }
 
 # Increment wave tracking when a contagion crash triggers in a target country.
-# Called from event .7 after block when its own roll crashed (scope:contagion_crashed).
+# Called from event .7 after block when its own roll crashed (banking_contagion_own_roll_crashed).
 banking_crisis_wave_increment = {
 	if = {
 		limit = { NOT = { has_variable = banking_crisis_wave_counted } }
@@ -2587,6 +2588,11 @@ banking_cycle_update_progress_bars = {
 # 6. Refresh phase modifiers and progress bars after a banking event option.
 #    Called from banking event `after` blocks where scope:journal_entry
 #    is NOT available, so we scope via the je: accessor instead.
+#    The entry can be missing for a moment: a revolution's winner takes it
+#    over from the loser, but an event queued before the war ended can
+#    resolve first (Bunyoro, 2026-10-16: a contagion event two seconds after
+#    its revolution, every je: read unset). The clamps still run; the phase
+#    modifiers and bars live on the entry, and its monthly pulse redoes both.
 banking_cycle_post_event_refresh = {
 	hidden_effect = {
 		# Clamp before bar update — events may push vars below 0 / above 100
@@ -2595,24 +2601,27 @@ banking_cycle_post_event_refresh = {
 		if = { limit = { ROOT.var:finance_cycle_value > 100 } ROOT = { set_variable = { name = finance_cycle_value value = 100 } } }
 		if = { limit = { ROOT.var:bubble_pressure < 0 }       ROOT = { set_variable = { name = bubble_pressure value = 0 } } }
 		if = { limit = { ROOT.var:bubble_pressure > 100 }     ROOT = { set_variable = { name = bubble_pressure value = 100 } } }
-		banking_cycle_apply_phase_modifiers = yes
-		je:je_banking_cycle = {
-			set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }
-			set_bar_progress = { name = banking_bubble_pressure_bar value = ROOT.var:bubble_pressure }
-			if = {
-				limit = { ROOT = { has_variable = te_mon_stance_bar_pos } }
-				set_bar_progress = { name = banking_policy_stance_bar value = ROOT.var:te_mon_stance_bar_pos }
-			}
-			if = {
-				limit = { ROOT.var:finance_cycle_momentum < -5 }
-				set_bar_progress = { name = banking_cycle_momentum_bar value = -5 }
-			}
-			else_if = {
-				limit = { ROOT.var:finance_cycle_momentum > 5 }
-				set_bar_progress = { name = banking_cycle_momentum_bar value = 5 }
-			}
-			else = {
-				set_bar_progress = { name = banking_cycle_momentum_bar value = ROOT.var:finance_cycle_momentum }
+		if = {
+			limit = { ROOT = { has_journal_entry = je_banking_cycle } }
+			banking_cycle_apply_phase_modifiers = yes
+			je:je_banking_cycle = {
+				set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }
+				set_bar_progress = { name = banking_bubble_pressure_bar value = ROOT.var:bubble_pressure }
+				if = {
+					limit = { ROOT = { has_variable = te_mon_stance_bar_pos } }
+					set_bar_progress = { name = banking_policy_stance_bar value = ROOT.var:te_mon_stance_bar_pos }
+				}
+				if = {
+					limit = { ROOT.var:finance_cycle_momentum < -5 }
+					set_bar_progress = { name = banking_cycle_momentum_bar value = -5 }
+				}
+				else_if = {
+					limit = { ROOT.var:finance_cycle_momentum > 5 }
+					set_bar_progress = { name = banking_cycle_momentum_bar value = 5 }
+				}
+				else = {
+					set_bar_progress = { name = banking_cycle_momentum_bar value = ROOT.var:finance_cycle_momentum }
+				}
 			}
 		}
 	}

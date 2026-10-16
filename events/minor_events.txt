@@ -599,18 +599,19 @@ minor_events_timelineextended.7 = {
 	}
 
 	immediate = {
-		# A saved scope rides into events triggered from `after`, so a crashed origin's contagion_crashed would reach
-		# every country it spreads to: clear any inherited one before this event's own roll.
+		# For the self-check in `after`: did a roll come in with the event? A saved scope rides into events
+		# triggered from `after`, so a cascade's target arrives holding the upstream country as contagion_crashed.
 		if = {
 			limit = { exists = scope:contagion_crashed }
-			clear_saved_scope = contagion_crashed
+			set_variable = { name = banking_contagion_roll_inherited value = 1 }
 		}
 		banking_contagion_crash_check = yes
 		# The roll, kept for this event alone. Two contagion events can be open for one country at once (a second
 		# origin's crash in the same pulse re-runs banking_crisis_wave_init, which clears the reached marks), and the
 		# first one's `after` removes contagion_crash before the second resolves, so the options and `after` read
-		# this saved scope, not the variable (observer run, 2026-10-12: three unset reads in a second). An object
-		# scope (the country), since `exists` on object scopes has vanilla precedent.
+		# this saved scope, not the variable (observer run, 2026-10-12: three unset reads in a second). It is the
+		# country, and banking_contagion_own_roll_crashed asks that it be this one: an inherited scope is the upstream
+		# country's, and clear_saved_scope did not remove it (2026-10-16, the European Union's scare read as a crash).
 		if = {
 			limit = { var:contagion_crash > 0 }
 			save_scope_as = contagion_crashed
@@ -627,7 +628,7 @@ minor_events_timelineextended.7 = {
 		apply_banking_contagion_effects = yes
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		if = {
-			limit = { exists = scope:contagion_crashed }
+			limit = { banking_contagion_own_roll_crashed = yes }
 			add_modifier = {
 				name = banking_crisis_protectionism_modifier
 				days = short_modifier_time
@@ -659,7 +660,7 @@ minor_events_timelineextended.7 = {
 		name = minor_events_timelineextended.7.b
 		apply_banking_contagion_effects = yes
 		if = {
-			limit = { exists = scope:contagion_crashed }
+			limit = { banking_contagion_own_roll_crashed = yes }
 			add_radicals = {
 				value = medium_radicals
 				strata = upper
@@ -697,7 +698,7 @@ minor_events_timelineextended.7 = {
 	option = {
 		name = minor_events_timelineextended.7.capital_controls
 		trigger = {
-			exists = scope:contagion_crashed
+			banking_contagion_own_roll_crashed = yes
 			OR = {
 				has_law = law_type:law_interventionism
 				has_law = law_type:law_command_economy
@@ -738,7 +739,7 @@ minor_events_timelineextended.7 = {
 	option = {
 		name = minor_events_timelineextended.7.monetary_intervention
 		trigger = {
-			exists = scope:contagion_crashed
+			banking_contagion_own_roll_crashed = yes
 			institution_investment_level = { institution = institution_national_bank value >= 1 }
 		}
 		apply_banking_contagion_effects = yes
@@ -775,7 +776,7 @@ minor_events_timelineextended.7 = {
 	option = {
 		name = minor_events_timelineextended.7.confidence_messaging
 		trigger = {
-			exists = scope:contagion_crashed
+			banking_contagion_own_roll_crashed = yes
 			institution_investment_level = { institution = institution_ministry_of_propaganda value >= 1 }
 		}
 		apply_banking_contagion_effects = yes
@@ -802,13 +803,44 @@ minor_events_timelineextended.7 = {
 	}
 
 	after = {
-		# Cascade: if contagion triggered a crash, spread contagion from this country
+		# TE_SELF_CHECK contagion_roll_scope (docs/testing/banking-playtest.md): the options and the cascade read the
+		# roll from the saved scope; contagion_crash holds the same roll. A mismatch is BROKEN every time (a second
+		# copy of this event open at once can overwrite contagion_crash, so read the line beside the event that
+		# logged it). OK is once a game, from the first cascade target whose own roll crashed: only there does the
+		# country's save have to replace the upstream country's scope.
 		if = {
-			limit = { exists = scope:contagion_crashed }
+			limit = { has_variable = contagion_crash }
+			if = {
+				limit = {
+					var:contagion_crash > 0
+					NOT = { banking_contagion_own_roll_crashed = yes }
+				}
+				debug_log = "TE_SELF_CHECK BROKEN contagion_roll_scope country=[THIS.GetCountry.GetTagName] roll=crash read=scare (the event's save did not replace an inherited scope: a cascade target's crash plays as a scare and spreads nothing; take the fallback in docs/testing/banking-playtest.md)"
+			}
+			else_if = {
+				limit = {
+					var:contagion_crash < 1
+					banking_contagion_own_roll_crashed = yes
+				}
+				debug_log = "TE_SELF_CHECK BROKEN contagion_roll_scope country=[THIS.GetCountry.GetTagName] roll=scare read=crash (a scare took the crash options and cascade: the 2026-10-16 bug is back)"
+			}
+			else_if = {
+				limit = {
+					var:contagion_crash > 0
+					has_variable = banking_contagion_roll_inherited
+					NOT = { has_global_variable = te_selfcheck_contagion_roll_scope_ok }
+				}
+				set_global_variable = { name = te_selfcheck_contagion_roll_scope_ok value = yes }
+				debug_log = "TE_SELF_CHECK OK contagion_roll_scope country=[THIS.GetCountry.GetTagName] (a cascade target's own crash replaced the inherited scope)"
+			}
+		}
+		# Cascade: if this event's own roll crashed the country, spread contagion from it. Not
+		# `exists = scope:contagion_crashed`: a target reached by a cascade inherits the upstream country's.
+		if = {
+			limit = { banking_contagion_own_roll_crashed = yes }
 			# Track this crash in the crisis wave (Great Depression mechanic)
 			banking_crisis_wave_increment = yes
 			save_scope_as = banking_crash_origin_country
-			clear_saved_scope = contagion_crashed	# this event's roll, not the targets' (their immediate also clears it)
 			banking_cycle_spread_contagion = yes
 			# Check if enough countries have crashed for Great Depression
 			banking_crisis_wave_check_great_depression = yes
@@ -818,6 +850,10 @@ minor_events_timelineextended.7 = {
 		# reads its title when it is queued, before its immediate rolls again,
 		# so a value left here titled that event with this wave's outcome.
 		remove_variable = contagion_crash
+		if = {
+			limit = { has_variable = banking_contagion_roll_inherited }
+			remove_variable = banking_contagion_roll_inherited
+		}
 	}
 }
 
