@@ -4554,5 +4554,33 @@ class AnniversaryAgeTests(unittest.TestCase):
                           "gm_state_add_age = { AGE = gm_evt_grandeur } } }", a, n)
         self.assertIn("gm_evt_grandeur_tt", loc())
 
+
+class RebuildGateTests(unittest.TestCase):
+    """Ageing rework (spec 2026-10-16 §8): create_building may check
+    can_build_government (unverified), so the expansion gate stands open while
+    script rebuilds a monument, and a self-check reads the rebuilt level."""
+
+    def test_the_gate_is_open_while_script_rebuilds(self):
+        gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
+        self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } }"), gate)
+        for path in ("common/scripted_effects/gm_trophy_effects.txt", MON_EFFECTS, EFFECTS):
+            body = strip_comments(read(path))
+            for m in re.finditer(r"te_construction_market_build_specified_level\s*=\s*\{\s*SPEC_TYPE\s*=\s*"
+                                 r"building_grand_monument", body):
+                before = body[max(0, m.start() - 1600):m.start()]
+                self.assertIn("name = gm_rebuilding days = 1", before, path)
+                after = body[m.end():m.end() + 200]
+                self.assertIn("name = gm_rebuild_asked value = var:gm_rebuild_level", after, path)
+
+    def test_the_rebuild_self_check(self):
+        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_rebuild_self_check")))
+        self.assertIn("TE_SELF_CHECK OK monument_rebuild_ungated", body)
+        self.assertIn("TE_SELF_CHECK BROKEN monument_rebuild_ungated", body)
+        self.assertIn("NOT = { has_global_variable = gm_rebuild_self_checked }", body)
+        self.assertIn("gm_state_level = var:gm_rebuild_asked", body)
+        self.assertNotIn("GetName", body)
+        self.assertTrue(squash(block(read(EFFECTS), "gm_state_monthly")).startswith(
+            "gm_remove_local_modifiers = yes gm_state_restore_dedication = yes gm_monument_rebuild_self_check = yes"))
+
 if __name__ == "__main__":
     unittest.main()

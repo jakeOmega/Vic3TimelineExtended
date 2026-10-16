@@ -289,6 +289,7 @@ gm_state_tr_remove_piece = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
+	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
 	# What stands is the frozen monument now (spec 2026-10-16 §3.1).
 	if = {
 		limit = { has_variable = gm_levels }
@@ -570,6 +571,7 @@ gm_state_tr_add_levels = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
+	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
 	remove_variable = gm_rebuild_level
 }
 
@@ -598,6 +600,7 @@ gm_state_tr_rebuild_from_moving = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
+	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
 	gm_state_tr_take_records_from_moving = yes
 	remove_variable = gm_rebuild_level
 }

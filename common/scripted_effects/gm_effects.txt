@@ -399,6 +399,7 @@ gm_state_monthly = {
 	gm_remove_local_modifiers = yes
 	# A gifted monument's dedication back (opportunities spec §3.1).
 	gm_state_restore_dedication = yes
+	gm_monument_rebuild_self_check = yes
 	if = {
 		limit = { has_building = building_grand_monument }
 		# A month older (spec 2026-10-16 §2), before this month's steps read it.
@@ -1405,6 +1406,7 @@ gm_state_rededicate = {
 			SPEC_TYPE = building_grand_monument
 			SPEC_LEVEL = var:gm_rebuild_level
 		}
+		set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
 		if = {
 			limit = { var:gm_rededicate_age > 0 }
 			set_variable = { name = gm_age value = var:gm_rededicate_age }

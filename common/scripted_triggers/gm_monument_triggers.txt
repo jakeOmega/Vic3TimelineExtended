@@ -277,29 +277,39 @@ gm_mon_ages = {
 # unveiling or naming is under way, while script is rebuilding it or putting
 # its method back, or once six monuments stand on a finished one (returns and
 # archaeology may pass six; construction may not).
+# Open while script rebuilds it (gm_rebuilding, one day, set before every
+# rebuild's create_building): since 1.13.9 create_building checks some of a
+# building's requirements, and whether that includes can_build_government is
+# unverified (scripting_best_practices.md; the te_cm_placing_site pattern), so
+# a rebuild must never meet a closed gate. gm_monument_rebuild_self_check
+# reads whether rebuilds come back at the level asked.
 gm_state_can_expand = {
-	custom_tooltip = {
-		text = gm_expand_contested_tt
-		NOT = { gm_state_is_contested = yes }
-	}
-	custom_tooltip = {
-		text = gm_expand_pending_tt
-		NOT = { has_variable = gm_ceremony_pending }
-		NOT = { has_variable = gm_unveil_pending }
-		NOT = { has_variable = gm_name_choice_open }
-		NOT = { has_variable = gm_being_named }
-	}
-	custom_tooltip = {
-		text = gm_expand_rebuilding_tt
-		NOT = { has_variable = gm_restore_pm }
-		NOT = { has_variable = gm_gift }
-		NOT = { has_variable = gm_rebuilding }
-	}
-	custom_tooltip = {
-		text = gm_expand_full_tt
-		OR = {
-			NOT = { has_variable = gm_levels }
-			gm_state_monument_count < 6
+	trigger_if = {
+		limit = {
+			NOT = { has_variable = gm_rebuilding }
+		}
+		custom_tooltip = {
+			text = gm_expand_contested_tt
+			NOT = { gm_state_is_contested = yes }
+		}
+		custom_tooltip = {
+			text = gm_expand_pending_tt
+			NOT = { has_variable = gm_ceremony_pending }
+			NOT = { has_variable = gm_unveil_pending }
+			NOT = { has_variable = gm_name_choice_open }
+			NOT = { has_variable = gm_being_named }
+		}
+		custom_tooltip = {
+			text = gm_expand_rebuilding_tt
+			NOT = { has_variable = gm_restore_pm }
+			NOT = { has_variable = gm_gift }
+		}
+		custom_tooltip = {
+			text = gm_expand_full_tt
+			OR = {
+				NOT = { has_variable = gm_levels }
+				gm_state_monument_count < 6
+			}
 		}
 	}
 }

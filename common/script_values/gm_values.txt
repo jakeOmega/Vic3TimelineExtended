@@ -434,6 +434,16 @@ gm_state_age_step = {
 	multiply = gm_policy_factor_age
 }
 
+# State scope. The level the last rebuild asked for (gm_rebuild_asked), for
+# gm_monument_rebuild_self_check's line; 0 with none.
+gm_disp_rebuild_asked = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_rebuild_asked }
+		value = var:gm_rebuild_asked
+	}
+}
+
 # State scope. 1 while the primary is finished (gm_levels, ageing spec
 # 2026-10-16 §3.1): the card's and the row's Finished line.
 gm_state_disp_frozen = {

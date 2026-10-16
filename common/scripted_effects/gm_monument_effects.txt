@@ -226,7 +226,7 @@ gm_state_found_beside = {
 	set_variable = gm_newcomer
 	gm_state_undedicate = yes
 	gm_state_start_ceremony = yes
-	debug_log = "TE_MONUMENTS: new levels founded a monument beside the one standing: [THIS.GetName]"
+	debug_log = "TE_MONUMENTS: new levels founded a monument beside the one standing; the building stands at [SCOPE.ScriptValue('gm_state_level')|0] levels, [SCOPE.ScriptValue('gm_state_monument_count')|0] monuments"
 	owner = { trigger_event = { id = monument_events.20 } }
 }
 
@@ -980,6 +980,7 @@ gm_state_tr_shrink_by = {
 			SPEC_TYPE = building_grand_monument
 			SPEC_LEVEL = var:gm_rebuild_level
 		}
+		set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
 		remove_variable = gm_rebuild_level
 		owner = { trigger_event = { id = monument_events.20 } }
 	}
@@ -1061,6 +1062,37 @@ gm_seed_landmark_beside = {
 			trigger_event = { id = monument_events.20 }
 		}
 		debug_log = "TE_MONUMENTS: landmark $KEY$ placed beside the monument already standing in its state: level $LEVEL$, form $FORM$"
+	}
+}
+
+# ---- Self-check: a rebuild comes back (ageing spec 2026-10-16 §8) ------------------------
+# State scope, from gm_state_monthly. Every rebuild records the level it asked
+# for (gm_rebuild_asked, set after the ladder); the state's next pulse, the
+# rebuild's day over, reads the building back once a game: the expansion gate
+# (gm_state_can_expand) is held open around a rebuild in case create_building
+# checks can_build_government, and this says whether a rebuild came back at
+# all. No rebuild, no line, so OK cannot be a false pass.
+gm_monument_rebuild_self_check = {
+	if = {
+		limit = {
+			has_variable = gm_rebuild_asked
+			NOT = { has_variable = gm_rebuilding }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = gm_rebuild_self_checked } }
+			set_global_variable = gm_rebuild_self_checked
+			if = {
+				limit = {
+					has_building = building_grand_monument
+					gm_state_level = var:gm_rebuild_asked
+				}
+				debug_log = "TE_SELF_CHECK OK monument_rebuild_ungated (a Grand Monument rebuilt by script stands at the level asked, [SCOPE.ScriptValue('gm_state_level')|0])"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN monument_rebuild_ungated (a Grand Monument rebuilt by script did not come back at the level asked: asked [SCOPE.ScriptValue('gm_disp_rebuild_asked')|0], stands [SCOPE.ScriptValue('gm_state_level')|0]; see docs/testing/grand-monuments-ageing-playtest.md)"
+			}
+		}
+		remove_variable = gm_rebuild_asked
 	}
 }
 
