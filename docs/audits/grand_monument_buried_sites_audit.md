@@ -50,7 +50,7 @@ Each is a real excavation with a clear discovery story, picked to spread the sit
 
 | Proposed site | State | Vector, technology (date) | Form, levels | Why |
 |---|---|---|---|---|
-| Angkor | Cambodia | survey, Romanticism (Mouhot 1860, EFEO clearance from 1907) | colonnade or pyramid, 15 | Southeast Asia's great rediscovery; a natural French concession |
+| Angkor Thom and the Bayon | Cambodia | survey, Civilizing Mission (Mouhot 1860, EFEO clearance from 1908) | gate, 15 | the jungle-covered city around Angkor Wat, which stands from 1836 as the base game's monument; a natural French concession |
 | Dunhuang Library Cave | Gansu | incidental, Civilizing Mission (1900; Stein and Pelliot 1907–08) | hall, 10 | 50,000 manuscripts, the Diamond Sutra; the textbook case of foreign removal, ideal for the concession |
 | Yinxu (Anyang), oracle bones | Henan | incidental, Mass Propaganda (1899 bones, 1928 dig) | hall, 10 | the Shang capital and the earliest Chinese writing |
 | Susa and the Code of Hammurabi | Khuzestan | survey, Civilizing Mission (French monopoly from 1895; the Code 1901) | stele, 10 | Iran has nothing; France's real monopoly is the concession's history |
@@ -108,8 +108,18 @@ they are. It recommends a 50-site roster: the original 30, a "Core 12" and eight
 - It calls the list front-loaded into 1850–1930. That is half right: seven sites open from 1974 to 1995 (the Terracotta Army,
   Vergina, Marquis Yi, Sipán, Ötzi, Caral, Göbekli Tepe). The real gap is after 2000, where there is nothing but the two
   speculative finds, in a game that runs past 2100.
-- It picks Mahendraparvata "since Angkor Wat is already standing", but the mod has no Angkor landmark, and Angkor's clearance
-  by the École française d'Extrême-Orient from 1907 is itself a dig.
+
+### Where it is right: Angkor Wat stands
+
+Angkor Wat already stands. The base game places it in Cambodia as a unique monument
+(`building_angkor_wat`), and the landmark rules keep base-game monuments out of the Grand Monuments
+(`2026-10-12-grand-monuments-landmarks-design.md`). Angkor Wat was never lost either: it was a working Buddhist monastery
+and a pilgrimage site through 1836. What was overgrown and later cleared was the city around it: Angkor Thom, the Bayon,
+Ta Prohm and Banteay Srei, cleared and rebuilt by the École française d'Extrême-Orient from 1908. That is the Machu Picchu
+case (standing ruins under forest, known to the people living nearby), which the list already treats as a buried site, so
+the dig is Angkor Thom and the Bayon, standing beside the base game's Angkor Wat as Beijing's Temple of Heaven stands beside
+the Forbidden City. Mahendraparvata, the city on Phnom Kulen found by LiDAR in 2012, would be Cambodia's second dig, after
+2000.
 
 ### Facts to check before building from it
 
@@ -149,7 +159,7 @@ the 36, that makes 52, close to Gemini's 50.
 | Mapungubwe | Transvaal | 1933 | southern Africa |
 | Mesa Verde | Colorado | 1888 | North America |
 | Pazyryk | Altai | 1929 | Russia and the steppe |
-| Angkor | Cambodia | 1860, 1907 | Southeast Asia; French Indochina's concession |
+| Angkor Thom and the Bayon | Cambodia | 1860, 1908 | Southeast Asia; French Indochina's concession |
 | Susa | Khuzestan | 1884, 1901 | Iran; France's real monopoly |
 | Taxila | Punjab | 1913 | India beyond the Indus |
 | Tillya Tepe | Balkh | 1978 | Afghanistan; a Cold War find |
