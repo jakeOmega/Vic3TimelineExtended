@@ -1077,6 +1077,7 @@ The bare-prefix form `relations:scope:target_country >= relations_threshold:amic
 - **Wrong (silently misfires):** `relations:scope:target_country >= relations_threshold:amicable`
 - **Right:** `scope:target_country.relations:root >= relations_threshold:amicable`
 - **Also right:** `scope:target_country.relations:prev >= relations_threshold:cordial` (when previous scope is the comparison side)
+- **In a reusable trigger, use `this`:** `$TARGET$.relations:this` compares the target with the country the trigger is evaluated in; the link's argument resolves in the scope the chain starts from (vanilla `12_military_assistance.txt`, `scope:source_country.relations:this` inside an enemy iterator). `relations:root` is right only where ROOT is that country: `covert_is_friend` first shipped with it, and from the defender's side of the backlash (ROOT the attacker) it would have compared the attacker with itself.
 
 Vanilla source-of-truth: `common/diplomatic_actions/12_rivalry.txt`, `01_expel_diplomats.txt`, `04_trade_states.txt`, `13_embargo.txt`, `03_violate_sovereignty.txt` — all use `scope:target_country.relations:root` form.
 
