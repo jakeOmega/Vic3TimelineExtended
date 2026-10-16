@@ -30,6 +30,11 @@
 #                               and not in the protector's pulse, which a dead
 #                               protector no longer runs. One protector per ally
 #                               reads it, so a stale one would block the next.
+#                               Asked from the protector's side with
+#                               is_initiator = yes, as un_lobby_runs_campaign_on
+#                               does (un_lobby_triggers.txt: the target's side
+#                               did not see the initiator's one-sided pact in play;
+#                               vanilla 03_lobbies.txt uses the same form).
 on_monthly_pulse_country = {
 	on_actions = {
 		covert_warfare_monthly_country
