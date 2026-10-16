@@ -2061,7 +2061,6 @@ te_demog_k_pool_from = { value = 20 }
 te_demog_k_pool_to = { value = 39 }
 te_demog_k_conscription_ref = { value = 0.139 }
 te_demog_k_conscription_min = { value = -1 }
-te_demog_k_conscription_max = { value = 0.25 }
 te_demog_k_youth_from = { value = 0.18 }
 te_demog_k_youth_span = { value = 0.06 }
 te_demog_k_youth_unemployment_full = { value = 0.2 }

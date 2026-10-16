@@ -3375,6 +3375,7 @@
  nuclear_incident.4.t_struck:0 "What We Have Done"
  nuclear_incident.40.a:0 "Fix the procedure that failed, and check the ones that didn't."
  nuclear_incident.40.b:0 "No harm done. File the report and move on."
+ nuclear_incident.40.c:0 "Classify the report. Officially, a meteorite fell on the garden."
  nuclear_incident.40.d_alarm:0 "Mechanics repairing a bomber at one of our bases accidentally set off the base alarm, the one reserved for a real attack. Crews ran for their aircraft, a bomber taxied toward the runway with its engines running, and for several minutes the base behaved exactly as it would at the start of a war. The mistake was caught before anything left the ground."
  nuclear_incident.40.d_drop:0 "A crewman searching for a locking pin aboard one of our bombers grabbed the emergency release instead, and a nuclear weapon fell onto farmland below. It carried no nuclear core, but its conventional charge detonated on impact, leaving a crater in a family's garden, a wrecked house and several injured civilians. The family is asking for compensation, and the press is asking what else is flying overhead."
  nuclear_incident.40.d_klaxon:0 "An intruder alarm at one of our air defence centres reported someone climbing the perimeter fence. Faulty wiring carried the alarm to other bases; at one of them the wrong klaxon sounded, and interceptor crews armed with nuclear weapons raced to their aircraft believing war had begun. A car drove onto the runway to stop them moments before take-off. The intruder was a bear."

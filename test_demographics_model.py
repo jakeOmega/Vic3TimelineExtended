@@ -700,7 +700,7 @@ class TestMigrantBooking(unittest.TestCase):
             M.step(ring, inp, year, engine_pop=ring.people() * 1.09, migration=0.07 * ring.people())
         figures = M.consequence_figures(ring)
         self.assertLess(figures["sex_balance"], P.SEX_MORE_FROM)
-        self.assertLessEqual(figures["term"], P.CONSCRIPTION_MAX)
+        self.assertLess(figures["term"], 0.25)   # the old ceiling, now only a band: migration alone does not push T there
 
 
 class TestInequality(unittest.TestCase):
@@ -1208,11 +1208,15 @@ class TestConsequences(unittest.TestCase):
         ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
         self.assertLess(abs(M.conscription_term(ring.fam, ring.people())), 0.02)
 
-    def test_the_term_falls_as_far_as_the_pool_and_rises_a_quarter(self):
+    def test_the_term_falls_as_far_as_the_pool_and_rises_without_limit(self):
+        """Owner, 2026-10-16: the +0.25 ceiling is gone; only the -1 floor (no conscripts) remains."""
         self.assertEqual(M.conscription_term(0.0, 1000.0), P.CONSCRIPTION_MIN)
-        self.assertEqual(M.conscription_term(500.0, 1000.0), P.CONSCRIPTION_MAX)
+        self.assertAlmostEqual(M.conscription_term(500.0, 1000.0), 500.0 / 1000.0 / P.CONSCRIPTION_REF - 1)
+        self.assertGreater(M.conscription_term(500.0, 1000.0), 2.0)
+        self.assertAlmostEqual(M.conscription_term(P.CONSCRIPTION_REF * 1.5 * 1000.0, 1000.0), 0.5)
         self.assertAlmostEqual(M.conscription_term(P.CONSCRIPTION_REF * 0.75 * 1000.0, 1000.0), -0.25)
-        self.assertEqual((P.CONSCRIPTION_MIN, P.CONSCRIPTION_MAX), (-1.0, 0.25))
+        self.assertEqual(P.CONSCRIPTION_MIN, -1.0)
+        self.assertFalse(hasattr(P, "CONSCRIPTION_MAX"))
 
     def test_war_dead_come_from_the_pools_ages(self):
         """§4.2: a year's war dead leave the cohorts of rate ages 20-39, 95% of them men."""
