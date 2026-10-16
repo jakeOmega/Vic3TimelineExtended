@@ -134,9 +134,20 @@ variable; the header rule is never to read `parent`. My call for the defender's 
   `any_in_list = { variable = iw_ops var:iw_target ?= <defender> var:iw_type_code = <code> has_variable = iw_known }`
   on the attacker. That avoids holding references to containers another country destroys.
   A relaunch of the same type has no `iw_known` flag, so the old record doesn't adopt it.
-- **Reaping:** the defender's monthly pulse destroys records whose operation no longer
-  exists or whose attacker is gone (`remove_list_variable` before `destroy_container`, as
-  `iw_ops` does). Old saves: every read of the new list behind `has_variable_list`.
+- **Reaping:** wherever the attacker's container is destroyed (`covert_op_destroy`, and
+  the direct reap in `covert_op_sync`), the defender's record for it goes too, so no row
+  outlives its operation by a month. The defender's monthly pulse is the backstop: it
+  destroys records whose operation no longer exists or whose attacker is gone
+  (`remove_list_variable` before `destroy_container`, as `iw_ops` does). Old saves: every
+  read of the new list behind `has_variable_list`.
+- **One exposure in flight per attacker.** `.1` keeps the burned operation's state on the
+  attacker itself (`iw_burned_type_code` and its siblings; its own comment says two open
+  instances would overwrite each other). The new flow makes that reachable: a roll, a
+  defender's decision, several Expose clicks and the AI's monthly expose rolls can all land
+  inside `.1`'s three days. My call: a lockout. While a `.1` is open on an attacker, Expose
+  on that attacker's operations is greyed with a reason, and roll or AI exposures wait for
+  the next month. Reworking `.1` to carry per-instance state is the alternative, and much
+  larger.
 
 ### Network growth
 
@@ -146,7 +157,9 @@ each watched operation grows that network as an operation of the defender's own 
 weighted by the watched operation's priority (a busier operation shows more of the
 attacker's service). Starting figures, my call: 4 points a month at priority 1, × the
 existing priority effect multipliers (1.35, 1.6), through `covert_net_gain` so the
-diminishing return above half strength and the Tradecraft multiplier apply. Compare: an
+diminishing return above half strength applies. The Tradecraft (and UN host) multipliers
+live in `covert_net_tick_gain`, not `covert_net_gain`, so the watch gain goes through the
+tick or applies them itself. Compare: an
 operation of one's own grows its network by 2 a month (`covert_net_gain_base`), and the
 "retaliate in kind" seed is 25 once. A watched network should outgrow exposing and
 retaliating within about six months, because watching costs the defender the operation's
@@ -255,10 +268,15 @@ Owner: the block goes away entirely; you can run anything against a friend and p
   disruption and ideological subversion; `iw_no_cordial_relations_tt` (cordial) on
   destabilization. Also destabilization's `requirement_to_maintain` clause that ends it
   once relations reach cordial (`covert_operations.txt` ~line 1558).
-- **AI unchanged:** move the old relations tests into each action's AI `will_propose`, so
-  the AI doesn't start spying on friends (my call; anti-goal above). Its `will_break`
-  should end such an operation if relations improve past the old threshold, as the
-  removed `requirement_to_maintain` did for destabilization.
+- **AI (owner, option c):** the six formerly blocked operations get `NOT = { covert_is_friend = { TARGET = scope:target_country } }`
+  in their AI `will_propose`, so the AI doesn't start running them against friends (anti-goal
+  above). The other hostile operations (industrial, military and space espionage, influence
+  campaign, cultivate assets, secure material) keep their AI logic, which has no relations
+  test today: the AI goes on spying on friends with them and pays the new backlash when
+  caught. Where the action has a `will_break` that isn't `always = no`, it also ends such an
+  operation once the target becomes a friend, after the usual `covert_ai_op_settled` wait;
+  the two wartime operations keep `will_break = { always = no }` (their war-or-play gate
+  ends them).
 - **Launch preview:** when the target is a friend, the action's tooltip says so and what a
   catch would cost at home.
 - **Kept:** the intelligence-sharing treaty gate (`iw_no_intel_sharing_tt`, on all 14
@@ -412,8 +430,9 @@ the bigger leak and option 3 is the only fix for it.
    target was a friend.
 6. Defender side: −5% / −10% / −15% political strength on the pro-attacker lobby's groups,
    ×1.5 for a friend, 2.5 years, decaying.
-7. AI keeps the old relations tests in its launch logic.
+7. (Owner chose option c; see § B.) AI `will_break` on the formerly blocked operations waits for `covert_ai_op_settled` like other breaks.
 8. The intelligence-sharing treaty gate stays on all hostile operations.
 9. Counterintelligence Support: +8 per axis unit, mild-tier influence (25), ungated by
    technology, AI runs at most one.
 10. Watch records are lost if the defender's government falls to a revolution.
+11. One exposure in flight per attacker; a player's Expose can wait up to three days.
