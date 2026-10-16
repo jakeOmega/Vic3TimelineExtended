@@ -742,8 +742,9 @@ carries its member modifier. Its effects are multiplied by the UN's enforcement,
 never below ×0.01, so a Moribund UN leaves conventions dormant rather than
 lapsed. Most also name winners and losers among the parties. Our Obligations
 lists each convention you are party to, with your terms under it; hover a
-convention or a term to see its modifier. Terms are re-read when the tier
-changes and once a year.
+convention or a term to see its modifier. Your terms start the day you
+ratify a convention or join, and are re-read when the tier changes and once a
+year.
 
 | Convention (agency) | Can come to the floor with | Parties gain | Winners and losers |
 |---|---|---|---|

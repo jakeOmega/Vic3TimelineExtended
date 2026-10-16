@@ -38,7 +38,8 @@
 #   un_regime_country_pulse        je_united_nations on_monthly_pulse (everyone)
 #   un_regime_refresh_country      the pulse above; un_vote_apply_treaty_modifier
 #                                  (ratifying); un_apply_ratified_conventions
-#                                  (joining)
+#                                  (joining); un_events.36 option A (ratifying
+#                                  what passed while our voice was suspended)
 #   un_regime_clear_country        un_membership_end_effect (leaving, dissolving)
 #   un_regime_icc_note_crime       the first-strike and tactical nuclear effects
 #                                  (extra_effects.txt), covert_warfare.1
@@ -104,6 +105,14 @@ un_regime_country_pulse = {
 # ---- Reading a country's terms ------------------------------------------------------
 
 # Clear and re-apply everything the regimes do to this country.
+#
+# Membership and every convention are read from the modifier OR its mirror
+# (<modifier>_on, un_state_record). Ratifying, joining and un_events.36 add the
+# modifiers in the very block that calls this, where has_modifier cannot see
+# them yet; the stamp below then keeps the monthly pulse from reading our terms
+# again until the next un_regime_bump, up to un_regime_refresh_months later. On
+# the pulse itself un_state_reconcile has just made each mirror match its
+# modifier, so the mirror changes nothing there.
 # Scope: country
 un_regime_refresh_country = {
 	un_regime_clear_country = yes
@@ -114,7 +123,10 @@ un_regime_refresh_country = {
 	if = {
 		limit = {
 			has_global_variable = un_founded
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			OR = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				has_variable = un_member_modifier_on
+			}
 		}
 		un_regime_reapply_conventions = yes
 
@@ -125,7 +137,10 @@ un_regime_refresh_country = {
 			limit = {
 				has_game_rule = global_warming_enabled
 				has_global_variable = un_agency_unep
-				je:je_united_nations ?= { has_modifier = un_climate_binding_modifier }
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_climate_binding_modifier }
+					has_variable = un_climate_binding_modifier_on
+				}
 			}
 			if = {
 				limit = { un_regime_climate_emitter = yes }
@@ -150,7 +165,10 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_iaea
-				je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier }
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier }
+					has_variable = un_nonproliferation_modifier_on
+				}
 			}
 			if = {
 				limit = { un_regime_npt_threshold = yes }
@@ -171,7 +189,10 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_itlos
-				has_modifier = un_law_of_sea_modifier
+				OR = {
+					has_modifier = un_law_of_sea_modifier
+					has_variable = un_law_of_sea_modifier_on
+				}
 				un_regime_naval_power = yes
 			}
 			add_modifier = {
@@ -183,7 +204,10 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unhrc
-				je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
+					has_variable = un_human_rights_declaration_modifier_on
+				}
 				un_regime_human_rights_violator = yes
 			}
 			add_modifier = {
@@ -206,7 +230,10 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unhcr
-				je:je_united_nations ?= { has_modifier = un_refugee_program_modifier }
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_refugee_program_modifier }
+					has_variable = un_refugee_program_modifier_on
+				}
 			}
 			if = {
 				limit = { un_regime_refugee_host = yes }
@@ -228,7 +255,10 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unoosa
-				je:je_united_nations ?= { has_modifier = un_space_partnership_modifier }
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_space_partnership_modifier }
+					has_variable = un_space_partnership_modifier_on
+				}
 			}
 			if = {
 				limit = { un_regime_space_leader = yes }
@@ -256,7 +286,10 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unesco
-				je:je_united_nations ?= { has_modifier = un_heritage_program_modifier }
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_heritage_program_modifier }
+					has_variable = un_heritage_program_modifier_on
+				}
 				un_regime_heritage_site = yes
 			}
 			add_modifier = {
@@ -267,8 +300,6 @@ un_regime_refresh_country = {
 		# Cultural diversity (CCD, redesign phase 7): the world's cultural
 		# hegemon, if a party, projects less cultural pull. The parties'
 		# own terms are in the member modifier (un_cultural_diversity_modifier).
-		# Its mirror counts too: ratifying adds the modifier in the block
-		# that calls this refresh, where it is not yet visible.
 		if = {
 			limit = {
 				has_global_variable = un_agency_ccd

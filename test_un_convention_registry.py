@@ -840,6 +840,49 @@ class RegimeTests(unittest.TestCase):
                 with self.subTest(key=c.key, modifier=mod):
                     self.assertEqual(where.get(mod), {c.in_force})
 
+    # Ratifying (un_vote_apply_treaty_modifier), joining
+    # (un_apply_ratified_conventions) and un_events.36 option A add the member
+    # modifier in the block that calls the refresh, where has_modifier cannot
+    # see it. The refresh then stamps the country, so a branch that reads the
+    # modifier alone leaves the terms off until the next un_regime_bump, up to
+    # a year later. Each read ORs in the mirror un_state_record sets.
+
+    @staticmethod
+    def _read_with_mirror(modifier, scope):
+        live = f"has_modifier = {modifier}"
+        if scope == "je":
+            live = "je:je_united_nations ?= { " + live + " }"
+        return f"OR = {{ {live} has_variable = {modifier}_on }}"
+
+    def test_each_term_reads_its_convention_with_the_mirror(self):
+        refresh = _flat(_block(self.effects, "un_regime_refresh_country"))
+        vars_ = "|".join(re.escape(c.in_force) for c in CONVENTIONS)
+        segments = _segments(refresh, rf"has_global_variable\s*=\s*({vars_})\b")
+        for c in RATIFIED:
+            if not c.regime_modifiers:
+                continue
+            seg = segments[c.in_force]
+            with self.subTest(key=c.key):
+                self.assertIn(self._read_with_mirror(c.member_modifier, c.scope), seg)
+                self.assertEqual(len(re.findall(rf"has_modifier = {c.member_modifier}\b", seg)), 1)
+
+    def test_membership_is_read_with_the_mirror(self):
+        member = self._read_with_mirror("un_member_modifier", "je")
+        refresh = _flat(_block(self.effects, "un_regime_refresh_country"))
+        with self.subTest(site="un_regime_refresh_country"):
+            self.assertIn("limit = { has_global_variable = un_founded " + member + " }", refresh)
+        intelligence = _flat(_block(self.triggers, "un_regime_shared_intelligence"))
+        with self.subTest(site="un_regime_shared_intelligence"):
+            self.assertIn(member, intelligence)
+
+    def test_no_bare_membership_or_convention_read_in_the_refresh(self):
+        refresh = _flat(_block(self.effects, "un_regime_refresh_country"))
+        reads = [("un_member_modifier", "je")] + [(c.member_modifier, c.scope) for c in RATIFIED]
+        for modifier, scope in reads:
+            with self.subTest(modifier=modifier):
+                self.assertEqual(len(re.findall(rf"has_modifier = {modifier}\b", refresh)),
+                                 refresh.count(self._read_with_mirror(modifier, scope)))
+
     def test_every_term_is_cleared_listed_and_shown(self):
         expected = {m for c in CONVENTIONS for m in c.regime_modifiers}
         cleared = set(re.findall(r"MODIFIER\s*=\s*(un_regime_\w+_modifier)",
