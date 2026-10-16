@@ -49,6 +49,14 @@ gm_monument_monthly = {
 					limit = { gm_mon_ages = yes }
 					gm_mon_add_age = { AGE = gm_mon_age_step }
 				}
+				# An order its event never ran (the building was gone that day):
+				# its state's event again, which runs it or drops it.
+				if = {
+					limit = { has_variable = gm_mon_order }
+					var:gm_tr_origin ?= {
+						trigger_event = { id = monument_events.30 }
+					}
+				}
 			}
 		}
 		gm_monument_pass = yes
@@ -1171,7 +1179,9 @@ gm_monument_rebuild_self_check = {
 			if = {
 				limit = {
 					has_building = building_grand_monument
-					gm_state_level = var:gm_rebuild_asked
+					# At least the level asked: construction finished since
+					# may have added to it.
+					gm_state_level >= var:gm_rebuild_asked
 				}
 				debug_log = "TE_SELF_CHECK OK monument_rebuild_ungated (a Grand Monument rebuilt by script stands at the level asked, [SCOPE.ScriptValue('gm_state_level')|0])"
 			}

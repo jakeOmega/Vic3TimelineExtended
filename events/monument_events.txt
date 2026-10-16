@@ -1531,7 +1531,10 @@ monument_events.16 = {
 		if = {
 			limit = {
 				has_variable_list = gm_notice_mons
-				any_in_list = { variable = gm_notice_mons }
+				any_in_list = {
+					variable = gm_notice_mons
+					exists = this
+				}
 			}
 			custom_tooltip = gm_notice_mons_rows_tt
 		}

@@ -33,7 +33,7 @@ A fixed item is struck through with the commit that fixed it.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Queued levels join it.** Build a new monument with five levels queued at once. | The ceremony asks at the first level; dedicate it. The other four join it, and its Finished line appears once the last is done, at 5 levels. | Finished at 1: `gm_state_record_frozen_levels` did not wait for `is_under_construction`. |
+| **Queued levels join it.** Build a new monument with five levels queued at once. | The ceremony asks at the first level; dedicate it. The other four join it, and its Finished line appears once the last is done, at 5 levels. | Finished at 1: `gm_state_record_frozen_levels` did not wait for `is_under_construction`. Queued levels cancelled or stalled while the ceremony asked: the gate closed on a monument still being built (it should hold only a finished one, `has_variable = gm_levels`). |
 | **Building beside.** Queue three more levels on that finished monument. | When the first finishes, the old monument moves to Also Standing Here with its name, picture and dedication, and a new draped monument stands first and is asked its dedication. The other two levels join the new one. | The old one lost its name or dedication: a record missed `gm_state_demote_primary`. |
 | **The grandest stands first.** Name the new one. | Within a month the older, grander monument is the state's own again and the new one stands beside it, each with its own dedication. | |
 | **Both dedications count.** A crown monument beside a civic one. | Legitimacy counts the crown's grandeur, Petty Bourgeoisie approval the civic one's; the local effects show both dedications in the state's modifiers. | |
@@ -45,7 +45,7 @@ A fixed item is struck through with the commit that fixed it.
 | Check | Expect | If it fails |
 |---|---|---|
 | **A contested secondary.** Have a crown monument stand beside another, then change to a republic. | Its row in Our Monuments shows Contested with Pull Down, Rededicate and Keep as Heritage; the contest notice lists it. | |
-| **Pull Down two at once.** Use Tear Them All Down on the notice with two contested secondaries in one state. | Both go, the building shrinks once by their levels together, the next day or two. | A building at the wrong level: `.30` ran two rebuilds. |
+| **Pull Down two at once.** Use Tear Them All Down on the notice with two contested secondaries in one state. | Both go, and the building ends at its level less their levels together: in one shrink if the queued `.30` events run after the option, or a day apart if each runs at once. | A building at the wrong level: a second shrink read the first one's stale level. |
 | **Rededicate a secondary.** | It becomes the state's own monument at half its levels and half its age, asked its dedication; the old first one stands beside it. | |
 
 ## Opportunities and events

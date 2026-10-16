@@ -4599,7 +4599,7 @@ class RebuildGateTests(unittest.TestCase):
 
     def test_the_gate_is_open_while_script_rebuilds(self):
         gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
-        self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } }"), gate)
+        self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } "), gate)
         for path in ("common/scripted_effects/gm_trophy_effects.txt", MON_EFFECTS, EFFECTS):
             body = strip_comments(read(path))
             for m in re.finditer(r"te_construction_market_build_specified_level\s*=\s*\{\s*SPEC_TYPE\s*=\s*"
@@ -4614,10 +4614,56 @@ class RebuildGateTests(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK OK monument_rebuild_ungated", body)
         self.assertIn("TE_SELF_CHECK BROKEN monument_rebuild_ungated", body)
         self.assertIn("NOT = { has_global_variable = gm_rebuild_self_checked }", body)
-        self.assertIn("gm_state_level = var:gm_rebuild_asked", body)
+        self.assertIn("gm_state_level >= var:gm_rebuild_asked", body)
         self.assertNotIn("GetName", body)
         self.assertTrue(squash(block(read(EFFECTS), "gm_state_monthly")).startswith(
             "gm_remove_local_modifiers = yes gm_state_restore_dedication = yes gm_monument_rebuild_self_check = yes"))
+
+
+class FinalReviewFixTests(unittest.TestCase):
+    """The whole-branch review of the ageing rework (2026-10-16)."""
+
+    def test_the_gate_holds_only_a_frozen_monument(self):
+        # Important 1: a monument still being built takes its queued levels
+        # whatever is pending; only a finished one founds beside.
+        gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
+        self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } "
+                                        "has_variable = gm_levels }"), gate)
+
+    def test_the_notice_counts_monuments_beside_another(self):
+        # Important 2.
+        body = squash(block(read(VALUES), "gm_notice_count"))
+        self.assertIn("variable = gm_notice_states", body)
+        self.assertIn("every_in_list = { variable = gm_notice_mons add = 1 }", body)
+
+    def test_no_loc_reads_grandeur_as_levels(self):
+        L = loc()
+        self.assertNotIn("ScriptValue('gm_state_grandeur')|0]#! levels", L["monument_trophy_events.1.d"])
+        self.assertIn("ScriptValue('gm_state_primary_levels')", L["monument_trophy_events.1.d"])
+        for key in ("gm_tr_row_site_value_tt", "gm_tr_row_value_tt", "gm_mon_take_tt"):
+            self.assertNotIn("half the levels", L[key], key)
+            self.assertNotIn("half its levels", L[key], key)
+
+    def test_the_rebuild_check_allows_levels_built_since(self):
+        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_rebuild_self_check")))
+        self.assertIn("gm_state_level >= var:gm_rebuild_asked", body)
+
+    def test_a_stale_order_is_run_again(self):
+        monthly = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_monthly")))
+        self.assertIn("if = { limit = { has_variable = gm_mon_order } var:gm_tr_origin ?= { "
+                      "trigger_event = { id = monument_events.30 } } }", monthly)
+
+    def test_records_taken_on_cache_their_grandeur(self):
+        take = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"),
+                            "gm_state_tr_take_records_from_moving"))
+        self.assertIn("change_variable = { name = gm_g_cache add = scope:gm_tr_moving.var:gm_tr_age }", take)
+        self.assertIn("set_variable = { name = gm_grandeur value = var:gm_g_cache }", take)
+        self.assertNotIn("set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }", take)
+
+    def test_the_contested_count_and_the_notice_guard(self):
+        self.assertIn("variable = gm_monuments_held", squash(block(read(VALUES), "gm_sum_contested")))
+        ev16 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.16\s*=\s*\{")))
+        self.assertNotIn("any_in_list = { variable = gm_notice_mons }", ev16)
 
 if __name__ == "__main__":
     unittest.main()

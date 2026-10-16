@@ -287,6 +287,11 @@ gm_state_can_expand = {
 	trigger_if = {
 		limit = {
 			NOT = { has_variable = gm_rebuilding }
+			# Only a finished monument founds beside; one still being built
+			# takes its queued levels whatever is pending (a ceremony asking at
+			# its first level, a restore after a return), and closing the gate
+			# then could cancel or stall them.
+			has_variable = gm_levels
 		}
 		custom_tooltip = {
 			text = gm_expand_contested_tt
@@ -306,10 +311,7 @@ gm_state_can_expand = {
 		}
 		custom_tooltip = {
 			text = gm_expand_full_tt
-			OR = {
-				NOT = { has_variable = gm_levels }
-				gm_state_monument_count < 6
-			}
+			gm_state_monument_count < 6
 		}
 	}
 }

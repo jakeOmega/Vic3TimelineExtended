@@ -641,7 +641,14 @@ gm_state_tr_take_records_from_moving = {
 	else = {
 		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
 	}
-	set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }
+	# Its grandeur until the next pulse writes it: its levels and its age.
+	set_variable = { name = gm_g_cache value = scope:gm_tr_moving.var:gm_tr_levels }
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } }
+		change_variable = { name = gm_g_cache add = scope:gm_tr_moving.var:gm_tr_age }
+	}
+	set_variable = { name = gm_grandeur value = var:gm_g_cache }
+	remove_variable = gm_g_cache
 	if = {
 		limit = { scope:gm_tr_moving = { has_variable = gm_tr_built_by } }
 		set_variable = { name = gm_built_by value = scope:gm_tr_moving.var:gm_tr_built_by }

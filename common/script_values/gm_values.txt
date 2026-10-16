@@ -690,6 +690,14 @@ gm_sum_contested = {
 		limit = { gm_state_is_contested = yes }
 		add = 1
 	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_is_contested = yes }
+			add = 1
+		}
+	}
 }
 
 # ---- Displays (country scope; guarded: a save older than the system has none
@@ -725,6 +733,14 @@ gm_notice_count = {
 		limit = { has_variable_list = gm_notice_states }
 		every_in_list = {
 			variable = gm_notice_states
+			add = 1
+		}
+	}
+	# And the monuments beside another (ageing spec 2026-10-16 §4.3).
+	if = {
+		limit = { has_variable_list = gm_notice_mons }
+		every_in_list = {
+			variable = gm_notice_mons
 			add = 1
 		}
 	}

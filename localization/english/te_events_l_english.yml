@@ -2941,7 +2941,7 @@
 #
  monument_trophy_events.1.a:0 "Carry it off"
  monument_trophy_events.1.b:0 "Leave it standing"
- monument_trophy_events.1.d:0 "Our armies hold [SCOPE.sState('monument_state').GetName], where [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] stands, raised by [SCOPE.sCountry('monument_owner').GetName]. The officers ask whether it should be crated and shipped home as a trophy: #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_grandeur')|0]#! levels."
+ monument_trophy_events.1.d:0 "Our armies hold [SCOPE.sState('monument_state').GetName], where [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] stands, raised by [SCOPE.sCountry('monument_owner').GetName]. The officers ask whether it should be crated and shipped home as a trophy: #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels."
  monument_trophy_events.1.f:0 "“The French took the Quadriga from Berlin in 1806,” the colonel says. “Paris cheered it for eight years.”\n\n“And Berlin cheered it home for a century,” says the diplomat."
  monument_trophy_events.1.t:0 "Within Our Reach"
 
