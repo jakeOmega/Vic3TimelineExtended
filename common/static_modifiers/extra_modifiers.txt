@@ -5936,27 +5936,27 @@ digital_rights_stagnation_modifier = {
 # Event 1: Whistleblower reform / prosecution
 whistleblower_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_prestige_mult = 0.02
+	country_prestige_mult = 0.05
 	country_authority_add = -25
 }
 
 whistleblower_prosecuted_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 50
-	country_prestige_mult = -0.02
+	country_prestige_mult = -0.03
 }
 
 # Event 2: Data protection / surveillance expansion
 data_protection_strengthened_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_prestige_mult = 0.02
-	country_bureaucracy_mult = -0.02
+	country_prestige_mult = 0.05
+	country_bureaucracy_mult = -0.05
 }
 
 surveillance_expanded_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 75
-	country_prestige_mult = -0.02
+	country_prestige_mult = -0.03
 }
 
 # Event 100: Security state
@@ -5971,19 +5971,19 @@ security_state_established_modifier = {
 hacker_collaboration_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_weekly_innovation_mult = 0.03
-	country_prestige_mult = 0.005
+	country_authority_add = -25
 }
 
 hacker_manhunt_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 50
-	country_bureaucracy_mult = -0.02
+	country_bureaucracy_mult = -0.03
 }
 
 surveillance_massive_expansion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 100
-	country_prestige_mult = -0.02
+	country_prestige_mult = -0.03
 }
 
 # Event 4: AI predictive policing
@@ -6006,20 +6006,36 @@ ai_policing_banned_modifier = {
 # Event 5: Foreign cyber-espionage
 cyber_defense_strengthened_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_prestige_mult = 0.02
-	country_bureaucracy_mult = -0.02
+	country_prestige_mult = 0.05
 }
 
 counter_espionage_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 50
-	country_prestige_mult = 0.005
 }
 
 foreign_threat_surveillance_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 100
-	country_prestige_mult = -0.02
+	country_prestige_mult = -0.03
+}
+
+# surveillance_events.1 option c: the story is suppressed at home before it breaks abroad.
+whistleblower_suppressed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = 25
+}
+
+# surveillance_events.2 option c: the breach is downplayed and trust erodes as its extent comes out.
+data_breach_downplayed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -5
+}
+
+# surveillance_events.3, every option: the leak has happened whatever we do about the hackers.
+government_systems_breached_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
 }
 
 # ============================================================================

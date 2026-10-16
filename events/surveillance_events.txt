@@ -3,6 +3,12 @@
 # ============================================================================
 # DIGITAL RIGHTS & SURVEILLANCE DEBATE EVENTS
 # ============================================================================
+#
+# Pooled from je_digital_rights' monthly pulse (400 = 0 beside five 10s). The
+# three leak stories (.1 whistleblower, .2 data breach, .3 hacker collective)
+# share a two-year lockout, te_dr_leak_recent, so one never follows another
+# within two years. With the cooldowns that comes to four to six events over
+# the entry's fifteen years.
 
 # Event 1: Whistleblower Revelation
 surveillance_events.1 = {
@@ -32,7 +38,7 @@ surveillance_events.1 = {
 	flavor = surveillance_events.1.f
 
 	duration = 3
-	cooldown = { days = normal_modifier_time }
+	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		OR = {
@@ -40,9 +46,11 @@ surveillance_events.1 = {
 			has_technology_researched = cybersecurity
 		}
 		NOT = { has_law = law_type:law_strong_privacy_rights }
+		NOT = { has_variable = te_dr_leak_recent }
 	}
 
 	immediate = {
+		set_variable = { name = te_dr_leak_recent days = 730 }
 	}
 
 	# Protect the whistleblower - reform
@@ -78,11 +86,29 @@ surveillance_events.1 = {
 		}
 	}
 
-	# Suppress the story
+	# Suppress the story: only a state that can silence its press. The story never
+	# breaks abroad, so no prestige is lost, but the programme's critics at home know.
 	option = {
 		name = surveillance_events.1.c
+		trigger = {
+			NOT = { has_law = law_type:law_protected_speech }
+		}
 		ai_chance = {
 			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_censorship
+						has_law = law_type:law_outlawed_dissent
+					}
+				}
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = whistleblower_suppressed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
 		}
 		add_radicals = {
 			value = small_radicals
@@ -116,9 +142,11 @@ surveillance_events.2 = {
 			has_technology_researched = cybersecurity
 		}
 		NOT = { has_law = law_type:law_strong_privacy_rights }
+		NOT = { has_variable = te_dr_leak_recent }
 	}
 
 	immediate = {
+		set_variable = { name = te_dr_leak_recent days = 730 }
 	}
 
 	# Strengthen data protections
@@ -133,8 +161,9 @@ surveillance_events.2 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		# Business carries the compliance cost of the new rules.
+		ig_approval_effect = { IG = ig_intelligentsia  MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
 	# Use breach to justify more surveillance
@@ -154,15 +183,17 @@ surveillance_events.2 = {
 		}
 	}
 
-	# Downplay the breach
+	# Downplay the breach: the cheap lane. Nothing is spent and nobody takes to the
+	# streets, but trust in the government erodes as the full extent comes out.
 	option = {
 		name = surveillance_events.2.c
 		ai_chance = {
 			base = 1
 		}
-		add_radicals = {
-			value = very_small_radicals
-			pop_type = academics
+		add_modifier = {
+			name = data_breach_downplayed_modifier
+			days = short_modifier_time
+			is_decaying = yes
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
@@ -205,17 +236,28 @@ surveillance_events.3 = {
 			has_technology_researched = cybersecurity
 		}
 		NOT = { has_law = law_type:law_strong_privacy_rights }
+		NOT = { has_variable = te_dr_leak_recent }
 	}
 
 	immediate = {
+		set_variable = { name = te_dr_leak_recent days = 730 }
 	}
 
-	# Hire the hackers - reform through collaboration
+	# Every option carries government_systems_breached_modifier: the leak has
+	# already happened, whatever we do about the hackers.
+
+	# Hire the hackers - reform through collaboration. The security services see
+	# the state rewarding an attack on itself.
 	option = {
 		name = surveillance_events.3.a
 		default_option = yes
 		ai_chance = {
 			base = 2
+		}
+		add_modifier = {
+			name = government_systems_breached_modifier
+			days = short_modifier_time
+			is_decaying = yes
 		}
 		add_modifier = {
 			name = hacker_collaboration_modifier
@@ -226,6 +268,7 @@ surveillance_events.3 = {
 			value = very_small_radicals
 			pop_type = academics
 		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
 	# Hunt them down - expand surveillance to catch them
@@ -233,6 +276,11 @@ surveillance_events.3 = {
 		name = surveillance_events.3.b
 		ai_chance = {
 			base = 2
+		}
+		add_modifier = {
+			name = government_systems_breached_modifier
+			days = short_modifier_time
+			is_decaying = yes
 		}
 		add_modifier = {
 			name = hacker_manhunt_modifier
@@ -243,6 +291,7 @@ surveillance_events.3 = {
 			value = very_small_radicals
 			pop_type = academics
 		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	# Use breach to justify massive surveillance expansion
@@ -260,6 +309,11 @@ surveillance_events.3 = {
 				trigger = { has_law = law_type:law_intrusive_surveillance }
 				add = 3
 			}
+		}
+		add_modifier = {
+			name = government_systems_breached_modifier
+			days = short_modifier_time
+			is_decaying = yes
 		}
 		add_modifier = {
 			name = surveillance_massive_expansion_modifier
@@ -429,9 +483,10 @@ surveillance_events.5 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# About three weeks of income.
 		add_treasury = {
 			value = yearly_gross_income
-			multiply = -0.15
+			multiply = -0.06
 		}
 	}
 
@@ -450,6 +505,7 @@ surveillance_events.5 = {
 			value = very_small_radicals
 			pop_type = academics
 		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
 	# Use to justify domestic surveillance expansion
