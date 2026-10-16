@@ -1,0 +1,31 @@
+﻿### Orbital debris — the Space Race panel's readout (Global Commons § 6).
+###
+### One line in Mission Control (te_sr_sec_control, space_race_widget.gui),
+### so every milestone's live sections show it, in the journal and on the
+### Timeline Extended window's Space Race tab, which instance the same types:
+### "Orbital Debris: 12.3 (Clear)". Its hover gives the two pools, what the
+### index does to every country that uses orbit at this level, the tiers'
+### extra hazards when reached, and who is cleaning (the world's removal, ours,
+### how many countries, the largest). Kept in its own file and type so the
+### Mission Control edit is one line.
+###
+### DATA CONTRACT — everything shown comes from script:
+###   index, pools          ScriptValue('te_debris_index'), ('te_debris_low_value'),
+###                         ('te_debris_high_value')
+###   tier                  GetCustom('te_debris_tier')
+###   effects at this level ScriptValue('te_debris_disp_risk_pct' / _pace_pct /
+###                         _throughput_pct)
+###   cleanup               ScriptValue('te_debris_disp_removal_world'),
+###                         ('te_debris_removal_country'), ('te_debris_disp_cleaners');
+###                         the largest cleaner from the global te_debris_top_cleaner,
+###                         read only while te_debris_disp_cleaners > 0
+### (common/script_values/te_orbital_debris_values.txt). All read globals or
+### the country's own modifiers, so the row is safe for any country.
+
+types te_orbital_debris_types
+{
+	type te_sr_debris_row = te_sr_text {
+		text = "te_debris_row"
+		tooltip = "te_debris_row_tt"
+	}
+}

@@ -305,6 +305,7 @@ handful that connect the space race to other systems:
 | A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | 5 points of progress, and a ten-year, fading bonus from either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
 | Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | 5 or 15 points of colonization progress; full integration adds research and prestige, fading over ten years |
 | The Elevator Advantage | You own a Space Elevator and are building the Moon Base, landing on Mars or colonizing | 8 or 12 points of progress on those missions |
+| The Kessler Threshold | Orbital Flight is under way, or any milestone is once [orbital debris](16-space.md#orbital-debris) is Cluttered or worse | 3 or 8 points of progress, the larger with radical academics, or better relations with spacefaring powers |
 
 The Space Elevator and the Extraplanetary Base are covered in [The extended
 timeline](02-timeline.md), tourism in [States and population](08-states.md), and

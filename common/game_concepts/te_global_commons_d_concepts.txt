@@ -1,0 +1,3 @@
+﻿# Global Commons — orbital debris (spec § 6). The term the Space Race panel's
+# Mission Control row and the anti-satellite strike's texts link.
+concept_orbital_debris = {}

@@ -1,0 +1,31 @@
+﻿# ============================================================================
+# Orbital debris — customizable localization (Global Commons § 6.1)
+# ============================================================================
+# te_debris_tier: the index's tier, for text only (spec § 6.1). Read by the
+# Mission Control row (te_sr_debris_row, te_orbital_debris_widget.gui), its
+# hover, and space_race_events.31. The thresholds are the script values
+# te_debris_tier_cluttered / _hazardous and te_debris_kessler_threshold; the
+# index reads globals only, so the branches are safe for any country.
+# ============================================================================
+
+te_debris_tier = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_debris_index >= te_debris_kessler_threshold }
+		localization_key = te_debris_tier_kessler
+	}
+	text = {
+		trigger = { te_debris_index >= te_debris_tier_hazardous }
+		localization_key = te_debris_tier_hazardous
+	}
+	text = {
+		trigger = { te_debris_index >= te_debris_tier_cluttered }
+		localization_key = te_debris_tier_cluttered
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_debris_tier_clear
+	}
+}

@@ -1,0 +1,393 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS AND THE ANTI-SATELLITE STRIKE — script values (Global Commons § 6)
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6.
+#
+# STATE. Two global variables, because real debris splits by altitude:
+#   orbital_debris_low    below ~600 km; drag clears it in years
+#   orbital_debris_high   higher orbits; it stays for a century
+# written only by te_debris_global_monthly and te_debris_add
+# (te_orbital_debris_effects.txt). The index is their sum, capped at 100, and
+# the pools themselves are held to that sum (te_debris_clamp_pools, the low
+# pool giving way first), so what the panel shows is what cleanup has to remove.
+#
+# Also global, written by the monthly pulse for the panel:
+#   te_debris_removal_month   the world's removal last month
+#   te_debris_cleaners        how many countries removed debris last month
+#   te_debris_top_cleaner     the country that removed the most (absent with none)
+#   te_debris_programs        running Space Programs counted last month
+# and by the strike (te_asat_strike_effect), for the UN phase:
+#   te_asat_last_strike_month te_history_month_index of the last strike
+#   te_asat_strikes_total     strikes since the game began
+#
+# Country variable te_asat_struck_month: when the country was last struck
+# (the action's 12-month cooldown on a target). Everything else per country is
+# a modifier rebuilt by the monthly country pulse, so a revolution's winner
+# loses nothing it needs (CLAUDE.md, "the winner continues the nation").
+#
+# Every tunable number of the system is here, once. Where a static modifier or
+# a production method must carry a literal, a value below mirrors it for the
+# panel and the AI, and test_orbital_debris.py holds the two equal.
+# ============================================================================
+
+# ---- Tuning: the pools ----------------------------------------------------------
+
+# Share of each pool lost each month. 1.5% is a half-life of about 4 years
+# (most of Kosmos 1408's fragments, 2021, re-entered within three years);
+# 0.05% about 115 years (Fengyun-1C, 2007, at 865 km).
+te_debris_low_decay = { value = 0.015 }
+te_debris_high_decay = { value = 0.0005 }
+te_debris_low_keep = {
+	value = 1
+	subtract = te_debris_low_decay
+}
+te_debris_high_keep = {
+	value = 1
+	subtract = te_debris_high_decay
+}
+
+# Background traffic: each running Space Program adds this to the low pool a
+# month. Six programs settle near 4 points (0.06 / 0.015).
+te_debris_traffic_per_program = { value = 0.01 }
+
+# The Kessler cascade: from this index, collisions add te_debris_kessler_rate
+# to the high pool every month on their own, until removal brings the index
+# back under it. Also the Kessler Cascade tier.
+te_debris_kessler_threshold = { value = 75 }
+te_debris_kessler_rate = { value = 0.2 }
+
+# The index's ceiling.
+te_debris_index_cap = { value = 100 }
+
+# The tiers, for text only: Clear below 25, Cluttered from 25, Hazardous from
+# 50, Kessler Cascade from te_debris_kessler_threshold.
+te_debris_tier_cluttered = { value = 25 }
+te_debris_tier_hazardous = { value = 50 }
+
+# ---- Tuning: what debris does ---------------------------------------------------
+
+# The ribbon strike: from Hazardous, a Space Elevator owner rolls each month
+# with this chance in percent per index point (1.5% at 75).
+te_debris_ribbon_chance_per_point = { value = 0.02 }
+
+# The ribbon strike's damage lasts this many days: ridden out (6 months), or
+# after the emergency repair (2 months), which costs te_debris_ribbon_repair_cost.
+te_debris_ribbon_days_long = { value = 182 }
+te_debris_ribbon_days_short = { value = 61 }
+# Twice vanilla's very large event sum (gdp x 0.0025): about a week of a great
+# power's revenue for four months of a Space Elevator back.
+# Scope: the elevator's owner (ROOT of te_orbital_debris.1)
+te_debris_ribbon_repair_cost = {
+	value = money_amount_multiplier_very_large
+	multiply = 2
+}
+
+# te_orbital_debris's per-point figures, as percentages, for the panel. The
+# modifier carries them as literals (te_orbital_debris_modifiers.txt).
+te_debris_per_point_risk_pct = { value = 1 }
+te_debris_per_point_pace_pct = { value = 0.3 }
+te_debris_per_point_throughput_pct = { value = 0.2 }
+
+# ---- Tuning: cleanup --------------------------------------------------------------
+
+# The removal multiplier counts up to this (+100%): ten fully staffed Space
+# Elevator levels, +10% each (pm_space_elevator).
+te_debris_removal_mult_cap = { value = 1 }
+
+# te_debris_cleaner_prestige steps (+1% prestige each) per point removed a
+# month: +1% per 0.1.
+te_debris_cleaner_steps_per_point = { value = 10 }
+
+# Each removal method's weekly Launch Capacity, for the AI's bill. The methods
+# carry them as literals (te_orbital_debris_pms.txt).
+te_debris_units_active = { value = 300 }
+te_debris_units_laser = { value = 300 }
+te_debris_units_fusion = { value = 150 }
+# The Laser Broom's weekly electricity, priced at base for the bill.
+te_debris_units_laser_electricity = { value = 500 }
+
+# ---- Tuning: the anti-satellite strike --------------------------------------------
+
+# The debris one strike adds to each pool.
+te_asat_debris_low = { value = 6 }
+te_asat_debris_high = { value = 6 }
+# What the striker pays. The case-strength points are un_dos_points_asat
+# (un_dossier_values.txt), where every other ground's are.
+te_asat_infamy_base = { value = 5 }
+te_asat_relations = { value = -30 }
+# A party to the Moratorium (te_asat_moratorium_party) pays this many times
+# the infamy and the case strength.
+te_asat_moratorium_factor = { value = 2 }
+# Months before a struck country can be struck again.
+te_asat_cooldown_months = { value = 12 }
+# How long the target's network stays disrupted, in days: 12 months, or 6 when
+# its Space Program runs the Mars Mission or higher; and the share of the
+# penalty an Orbital Battlestation leaves.
+te_asat_disruption_days = { value = 365 }
+te_asat_disruption_days_short = { value = 182 }
+te_asat_battlestation_factor = { value = 0.5 }
+
+# ---- The index ------------------------------------------------------------------
+
+# Scope: any (reads globals only)
+te_debris_low_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = orbital_debris_low }
+		add = global_var:orbital_debris_low
+	}
+}
+te_debris_high_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = orbital_debris_high }
+		add = global_var:orbital_debris_high
+	}
+}
+te_debris_index = {
+	value = te_debris_low_value
+	add = te_debris_high_value
+	min = 0
+	max = te_debris_index_cap
+}
+
+# The pools as te_debris_clamp_pools leaves them: each at least 0, and their
+# sum at most te_debris_index_cap, the low pool giving way first. Keeping the
+# long-lived debris is the conservative choice: if the high pool gave way, a
+# strike at the ceiling would swap a century of debris for a few years of it,
+# and striking would clean orbit. Repeated min/max are sequential clamps
+# (scripting_best_practices.md). te_debris_clamp_pools sets the high pool
+# first, so the low one is clamped against the new high value.
+te_debris_high_clamped = {
+	value = te_debris_high_value
+	min = 0
+	max = te_debris_index_cap
+}
+te_debris_low_clamped = {
+	value = te_debris_index_cap
+	subtract = te_debris_high_value
+	max = te_debris_low_value
+	min = 0
+}
+
+# This month's background traffic, from te_debris_programs (set by the pulse
+# just before it is read).
+te_debris_traffic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_debris_programs }
+		add = global_var:te_debris_programs
+	}
+	multiply = te_debris_traffic_per_program
+}
+
+# Running Space Programs. The tech test is cheap and every Space Program
+# needs it (building_space_program's unlocking technology).
+# Scope: any
+te_debris_programs_running = {
+	value = 0
+	every_country = {
+		limit = {
+			has_technology_researched = guided_missiles
+			sr_has_space_program = yes
+		}
+		add = 1
+	}
+}
+
+# ---- Cleanup ----------------------------------------------------------------------
+
+# This country's removal a month: its removal, times one plus its multiplier
+# (counted up to te_debris_removal_mult_cap). The multiplier alone removes
+# nothing: a Space Elevator doubles a removal method, it is not one.
+# Scope: country
+te_debris_removal_country = {
+	value = modifier:country_orbital_debris_removal_add
+	multiply = {
+		value = 1
+		add = {
+			value = modifier:country_orbital_debris_removal_mult
+			min = -1
+			max = te_debris_removal_mult_cap
+		}
+	}
+	min = 0
+}
+
+# The world's removal a month, from every country with a removal method.
+# Scope: any
+te_debris_removal_world = {
+	value = 0
+	every_country = {
+		limit = { modifier:country_orbital_debris_removal_add > 0 }
+		add = te_debris_removal_country
+	}
+}
+
+# Steps of te_debris_cleaner_prestige. Scope: country
+te_debris_cleaner_steps = {
+	value = te_debris_removal_country
+	multiply = te_debris_cleaner_steps_per_point
+}
+
+# The monthly ribbon-strike chance, in percent. Scope: any
+te_debris_ribbon_chance = {
+	value = te_debris_index
+	multiply = te_debris_ribbon_chance_per_point
+}
+
+# The AI's weekly bill for the best removal method it has: its Launch
+# Capacity at our market's price, never below base (sr_launch_capacity_unit_price,
+# space_race_values.txt), plus the Laser Broom's electricity at base price.
+# Scope: country
+te_debris_best_removal_bill = {
+	value = te_debris_units_active
+	if = {
+		limit = { has_technology_researched = compact_fusion_reactors }
+		value = te_debris_units_fusion
+	}
+	else_if = {
+		limit = { has_technology_researched = directed_energy_weapons }
+		value = te_debris_units_laser
+	}
+	multiply = sr_launch_capacity_unit_price
+	if = {
+		limit = {
+			NOT = { has_technology_researched = compact_fusion_reactors }
+			has_technology_researched = directed_energy_weapons
+		}
+		add = te_debris_laser_electricity_bill
+	}
+}
+te_debris_laser_electricity_bill = {
+	value = te_debris_units_laser_electricity
+	g:electricity = {
+		multiply = base_price
+	}
+}
+
+# ---- The anti-satellite strike ------------------------------------------------------
+
+# Months since this country was last struck (a large number if never).
+# Scope: country
+te_asat_months_since_struck = {
+	value = 1000
+	if = {
+		limit = { has_variable = te_asat_struck_month }
+		value = te_history_month_index
+		subtract = var:te_asat_struck_month
+	}
+}
+
+# Months left on a struck country's cooldown, for the action's tooltip.
+# Scope: country
+te_asat_cooldown_left = {
+	value = te_asat_cooldown_months
+	subtract = te_asat_months_since_struck
+	min = 0
+}
+
+# What this striker pays in infamy and case strength. Scope: the striker
+te_asat_infamy = {
+	value = te_asat_infamy_base
+	if = {
+		limit = { te_asat_moratorium_party = yes }
+		multiply = te_asat_moratorium_factor
+	}
+}
+te_asat_case_points = {
+	value = un_dos_points_asat
+	if = {
+		limit = { te_asat_moratorium_party = yes }
+		multiply = te_asat_moratorium_factor
+	}
+}
+
+# A country's orbital investment, for the AI's weights (spec § 6.3): its
+# Space Program's tier (Earth Orbit 1 ... Interstellar Mission 6, from the
+# programme bools each mission carries) plus its orbital megaprojects' levels.
+# Scope: country
+te_asat_orbital_investment = {
+	value = 0
+	if = {
+		limit = { modifier:country_sr_interstellar_mission_program_bool = yes }
+		add = 6
+	}
+	else_if = {
+		limit = { modifier:country_sr_deep_space_exploration_program_bool = yes }
+		add = 5
+	}
+	else_if = {
+		limit = { modifier:country_sr_solar_colonization_program_bool = yes }
+		add = 4
+	}
+	else_if = {
+		limit = { modifier:country_sr_mars_mission_program_bool = yes }
+		add = 3
+	}
+	else_if = {
+		limit = { modifier:country_sr_moon_mission_program_bool = yes }
+		add = 2
+	}
+	else_if = {
+		limit = { modifier:country_sr_earth_orbit_program_bool = yes }
+		add = 1
+	}
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				OR = {
+					is_building_type = building_space_elevator
+					is_building_type = building_solar_collector
+					is_building_type = building_orbital_battlestation
+				}
+			}
+			add = level
+		}
+	}
+}
+
+# ---- Display reads (the Mission Control row and its hover) -------------------------
+# Scope: any. The panel reads them through JournalEntry.GetCountry.MakeScope.
+
+te_debris_disp_removal_world = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_debris_removal_month }
+		add = global_var:te_debris_removal_month
+	}
+}
+te_debris_disp_cleaners = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_debris_cleaners }
+		add = global_var:te_debris_cleaners
+	}
+}
+te_debris_disp_risk_pct = {
+	value = te_debris_index
+	multiply = te_debris_per_point_risk_pct
+}
+te_debris_disp_pace_pct = {
+	value = te_debris_index
+	multiply = te_debris_per_point_pace_pct
+}
+te_debris_disp_throughput_pct = {
+	value = te_debris_index
+	multiply = te_debris_per_point_throughput_pct
+}
+# 1 when the index has reached a tier, for the hover's lines. Scope: any
+te_debris_disp_hazardous = {
+	value = 0
+	if = {
+		limit = { te_debris_index >= te_debris_tier_hazardous }
+		value = 1
+	}
+}
+te_debris_disp_kessler = {
+	value = 0
+	if = {
+		limit = { te_debris_index >= te_debris_kessler_threshold }
+		value = 1
+	}
+}

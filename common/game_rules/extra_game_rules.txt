@@ -146,6 +146,12 @@ space_race_rule = {
 
 	space_race_disabled = {
 		flag = space_race_disabled
+		# Orbital debris belongs to the space race (Global Commons § 6): with
+		# no debris to remove, the Space Program's removal methods would cost
+		# Launch Capacity for nothing (te_orbital_debris_pms.txt).
+		flag = disable_pm_debris_active_removal
+		flag = disable_pm_debris_laser_broom
+		flag = disable_pm_debris_fusion_sweepers
 	}
 }
 

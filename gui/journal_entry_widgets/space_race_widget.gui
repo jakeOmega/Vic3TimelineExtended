@@ -973,6 +973,9 @@ types space_race_widget_types
 				}
 			}
 
+			### Orbital debris, for every milestone (te_orbital_debris_widget.gui).
+			te_sr_debris_row = {}
+
 			### The mission profile. Its heading keeps its top margin only
 			### when the controls are above it, so the section never opens on
 			### an empty line.

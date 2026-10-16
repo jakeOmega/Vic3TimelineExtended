@@ -1015,6 +1015,7 @@ REPLACE_OR_CREATE:building_space_program = {
 
 	production_method_groups = {
 		pmg_base_building_space_program
+		pmg_space_program_debris_removal # orbital debris cleanup (te_orbital_debris_pmgs.txt)
 	}
 
 	possible = {

@@ -988,6 +988,11 @@ space_race_events.30 = {
 }
 
 # Event 31: Orbital Debris Concerns (mid-progress choice)
+# Offered during Orbital Flight, as before, and also to any programme with a
+# milestone running once orbital debris is Cluttered or worse (Global Commons
+# § 7): more programmes can draw it then, and its text names the tier
+# (te_debris_tier). Its options move Orbital Flight while that runs, or every
+# running milestone otherwise.
 space_race_events.31 = {
 	type = country_event
 	placement = root
@@ -997,15 +1002,31 @@ space_race_events.31 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.31.t
-	desc = space_race_events.31.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.31.d_debris
+				trigger = { te_debris_index >= te_debris_tier_cluttered }
+			}
+			desc = space_race_events.31.d
+		}
+	}
 	flavor = space_race_events.31.f
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_orbital
-		var:sr_progress_orbital >= 30
+		OR = {
+			AND = {
+				has_variable = sr_active_orbital
+				var:sr_progress_orbital >= 30
+			}
+			AND = {
+				te_debris_index >= te_debris_tier_cluttered
+				sr_has_running_milestone = yes
+			}
+		}
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1016,10 +1037,18 @@ space_race_events.31 = {
 		default_option = yes
 		ai_chance = { base = 5 }
 		# Invest in debris tracking and cleanup
-		custom_tooltip = SR_PROGRESS_ADD_3_TT
-		change_variable = {
-			name = sr_progress_orbital
-			add = 3
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			custom_tooltip = SR_PROGRESS_ADD_3_TT
+			change_variable = {
+				name = sr_progress_orbital
+				add = 3
+			}
+		}
+		else = {
+			custom_tooltip = SR_PROGRESS_ADD_3_TT
+			set_variable = { name = sr_progress_boost value = 3 }
+			sr_boost_active_milestones = yes
 		}
 	}
 
@@ -1027,10 +1056,18 @@ space_race_events.31 = {
 		name = space_race_events.31.b
 		ai_chance = { base = 2 }
 		# Ignore the problem, full speed ahead
-		custom_tooltip = SR_PROGRESS_ADD_8_TT
-		change_variable = {
-			name = sr_progress_orbital
-			add = 8
+		if = {
+			limit = { has_variable = sr_active_orbital }
+			custom_tooltip = SR_PROGRESS_ADD_8_TT
+			change_variable = {
+				name = sr_progress_orbital
+				add = 8
+			}
+		}
+		else = {
+			custom_tooltip = SR_PROGRESS_ADD_8_TT
+			set_variable = { name = sr_progress_boost value = 8 }
+			sr_boost_active_milestones = yes
 		}
 		# But increased failure chance next time
 		add_radicals = { value = small_radicals pop_type = academics }

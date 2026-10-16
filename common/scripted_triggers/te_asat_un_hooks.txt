@@ -1,0 +1,17 @@
+﻿# ============================================================================
+# THE ANTI-SATELLITE STRIKE <-> THE UN — trigger hooks (Global Commons § 6.5)
+# ============================================================================
+# Stubs. The orbital debris branch (§ 6.1-6.4) reads these; the UN branch
+# (§ 6.5, the Moratorium on Destructive Anti-Satellite Tests) ships the same
+# file with the real bodies, and that version replaces this one at
+# integration. Keep the names and scopes.
+#
+# Readers: te_asat_infamy and te_asat_case_points (te_orbital_debris_values.txt).
+# ============================================================================
+
+# The country is a party to the Moratorium: its anti-satellite strike costs
+# te_asat_moratorium_factor (2) times the infamy and the case strength.
+# Scope: country (the striker)
+te_asat_moratorium_party = {
+	always = no
+}
