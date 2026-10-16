@@ -120,11 +120,13 @@ give the same national effects as one tall one" stays true).
 - At dedication (`gm_state_dedicate`) the primary's levels are recorded in `gm_levels`. After that, its levels change
   only by script: a piece carried off or rejoining, Rededicate, a promotion, a return rebuild, each of which rewrites
   `gm_levels`.
-- **The ceremony waits for the construction to finish** *(design)*: `gm_state_start_ceremony` (both paths:
-  `monument_events.1` and the refresh's `gm_state_offer_missed_ceremony`) also needs the building not to be under
-  construction (`is_under_construction`, building scope, as `gm_com_monument_under_construction` reads it). Otherwise
-  the first of ten queued levels would ask, and dedicating would freeze the monument at one level with nine queued.
-  Its loc says dedicating finishes the monument; "leave it undedicated" keeps building.
+- **The freeze waits for the construction to finish** *(design, changed while planning)*: `gm_levels` is written once
+  the dedicated monument's building is not under construction (`is_under_construction`, building scope, as
+  `gm_com_monument_under_construction` reads it). The ceremony still asks at the first finished level, as today; the
+  levels still queued then join the monument, and only levels started after its construction stopped found a new one.
+  (The first draft made the ceremony wait instead, but a copy standing on a dedication while its levels build would
+  then be read as dedicated, contested or recorded for weeks; switching it to Undedicated cannot be read back in the
+  same effect.)
 
 ### 3.2 New levels on a dedicated monument found a new one
 
