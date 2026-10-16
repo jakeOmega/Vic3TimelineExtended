@@ -594,6 +594,132 @@ monument_events.2 = {
 			gm_state_dedicate_timeless = { KEY = athletic AXIS = building_athletic }
 		}
 	}
+	# To Victory: a special this country holds (signatures spec §5.3), on its
+	# parent's own gate. Hidden, not greyed, while none is held.
+	option = {
+		name = monument_events.2.sig_to_victory
+		trigger = {
+			gm_state_ceremony_offers_special = { SIG = to_victory }
+		}
+		ai_chance = {
+			# The AI takes a held special whenever it is offered: holding one
+			# gains nothing. An open opportunity's dedication still comes first.
+			base = 1000
+			modifier = {
+				trigger = { gm_state_ceremony_for_commission = { KEY = war_memorial } }
+				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = war_memorial } }
+				factor = 0
+			}
+		}
+		custom_tooltip = {
+			text = monument_events.2.sig_to_victory.tt
+			gm_state_dedicate_sig_to_victory = yes
+		}
+	}
+	# To the Unknown Soldier: a special this country holds (signatures spec §5.3), on its
+	# parent's own gate. Hidden, not greyed, while none is held.
+	option = {
+		name = monument_events.2.sig_unknown_soldier
+		trigger = {
+			gm_state_ceremony_offers_special = { SIG = unknown_soldier }
+		}
+		ai_chance = {
+			# The AI takes a held special whenever it is offered: holding one
+			# gains nothing. An open opportunity's dedication still comes first.
+			base = 1000
+			modifier = {
+				trigger = { gm_state_ceremony_for_commission = { KEY = war_memorial } }
+				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = war_memorial } }
+				factor = 0
+			}
+		}
+		custom_tooltip = {
+			text = monument_events.2.sig_unknown_soldier.tt
+			gm_state_dedicate_sig_unknown_soldier = yes
+		}
+	}
+	# To the Concert of Nations: a special this country holds (signatures spec §5.3), on its
+	# parent's own gate. Hidden, not greyed, while none is held.
+	option = {
+		name = monument_events.2.sig_concert_of_nations
+		trigger = {
+			gm_state_ceremony_offers_special = { SIG = concert_of_nations }
+		}
+		ai_chance = {
+			# The AI takes a held special whenever it is offered: holding one
+			# gains nothing. An open opportunity's dedication still comes first.
+			base = 1000
+			modifier = {
+				trigger = { gm_state_ceremony_for_commission = { KEY = civic } }
+				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = civic } }
+				factor = 0
+			}
+		}
+		custom_tooltip = {
+			text = monument_events.2.sig_concert_of_nations.tt
+			gm_state_dedicate_sig_concert_of_nations = yes
+		}
+	}
+	# To the Conquerors of Space: a special this country holds (signatures spec §5.3), on its
+	# parent's own gate. Hidden, not greyed, while none is held.
+	option = {
+		name = monument_events.2.sig_conquerors_of_space
+		trigger = {
+			gm_state_ceremony_offers_special = { SIG = conquerors_of_space }
+		}
+		ai_chance = {
+			# The AI takes a held special whenever it is offered: holding one
+			# gains nothing. An open opportunity's dedication still comes first.
+			base = 1000
+			modifier = {
+				trigger = { gm_state_ceremony_for_commission = { KEY = civic } }
+				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = civic } }
+				factor = 0
+			}
+		}
+		custom_tooltip = {
+			text = monument_events.2.sig_conquerors_of_space.tt
+			gm_state_dedicate_sig_conquerors_of_space = yes
+		}
+	}
+	# Olympic: a special this country holds (signatures spec §5.3), on its
+	# parent's own gate. Hidden, not greyed, while none is held.
+	option = {
+		name = monument_events.2.sig_olympic
+		trigger = {
+			gm_state_ceremony_offers_special = { SIG = olympic }
+			owner = { has_technology_researched = television_broadcasting }
+		}
+		ai_chance = {
+			# The AI takes a held special whenever it is offered: holding one
+			# gains nothing. An open opportunity's dedication still comes first.
+			base = 1000
+			modifier = {
+				trigger = { gm_state_ceremony_for_commission = { KEY = athletic } }
+				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = athletic } }
+				factor = 0
+			}
+		}
+		custom_tooltip = {
+			text = monument_events.2.sig_olympic.tt
+			gm_state_dedicate_sig_olympic = yes
+		}
+	}
 }
 
 # ============================================================================
@@ -1077,6 +1203,7 @@ monument_events.21 = {
 		trigger = {
 			has_variable = gm_com_source
 			OR = {
+				var:gm_com_source = flag:historical
 				var:gm_com_source = flag:tech_artistic
 				var:gm_com_source = flag:tech_scientific
 				var:gm_com_source = flag:tech_industrial
@@ -1205,6 +1332,14 @@ monument_events.21 = {
 				trigger = { var:gm_com_source = flag:tech_naturalist }
 				desc = monument_events.21.d_tech_naturalist
 			}
+			# A historical monument, offered once a game (signatures spec §6).
+			triggered_desc = {
+				trigger = {
+					var:gm_com_source = flag:historical
+					exists = scope:gm_com_where
+				}
+				desc = monument_events.21.d_historical
+			}
 			# A save's v2 petition, offered before the rework.
 			triggered_desc = {
 				desc = monument_events.21.d_other
@@ -1286,6 +1421,10 @@ monument_events.26 = {
 
 	immediate = {
 		gm_state_gift_grandeur = yes
+		# A historical opportunity's landmark (signatures spec §6.2), then its
+		# special (§5.2), written with the gift.
+		gm_state_hist_take = yes
+		gm_state_sig_take_grant = yes
 	}
 }
 
@@ -1406,11 +1545,51 @@ monument_events.28 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = monument_events.28.t
+	# With its special (signatures spec §5.2): given to the monument, or held for
+	# the next of its dedication when that one already carries a signature.
 	desc = {
 		first_valid = {
+			# A historical opportunity made its landmark (signatures spec §6.2).
+			triggered_desc = {
+				trigger = {
+					exists = scope:monument_state
+					has_variable = gm_com_seized_landmark
+				}
+				desc = monument_events.28.d_historical
+			}
+			triggered_desc = {
+				trigger = { has_variable = gm_com_seized_landmark }
+				desc = monument_events.28.d_unnamed_historical
+			}
+			triggered_desc = {
+				trigger = {
+					exists = scope:monument_state
+					has_variable = gm_com_seized_special
+					NOT = { has_variable = gm_com_seized_special_held }
+				}
+				desc = monument_events.28.d_special
+			}
+			triggered_desc = {
+				trigger = {
+					exists = scope:monument_state
+					has_variable = gm_com_seized_special_held
+				}
+				desc = monument_events.28.d_held
+			}
 			triggered_desc = {
 				trigger = { exists = scope:monument_state }
 				desc = monument_events.28.d
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = gm_com_seized_special
+					NOT = { has_variable = gm_com_seized_special_held }
+				}
+				desc = monument_events.28.d_unnamed_special
+			}
+			triggered_desc = {
+				trigger = { has_variable = gm_com_seized_special_held }
+				desc = monument_events.28.d_unnamed_held
 			}
 			triggered_desc = {
 				desc = monument_events.28.d_unnamed

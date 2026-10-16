@@ -7,6 +7,88 @@ gm_dedication_name = {
 	type = state
 	random_valid = no
 
+	# A unique dedication on its parent prints in its place (signatures spec §3):
+	# a landmark's own name, else its effect group's.
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = grande_armee } has_variable = gm_landmark var:gm_landmark = flag:arc_de_triomphe }
+		localization_key = gm_sig_name_arc_de_triomphe
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = mandate_of_heaven } has_variable = gm_landmark var:gm_landmark = flag:temple_of_heaven }
+		localization_key = gm_sig_name_temple_of_heaven
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = glory_of_athens } has_variable = gm_landmark var:gm_landmark = flag:parthenon }
+		localization_key = gm_sig_name_parthenon
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = first_emperor } has_variable = gm_landmark var:gm_landmark = flag:terracotta_army }
+		localization_key = gm_sig_name_terracotta_army
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = antiquity } }
+		localization_key = gm_sig_antiquity
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = archive } }
+		localization_key = gm_sig_archive
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = throne } }
+		localization_key = gm_sig_throne
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = royal_pantheon } }
+		localization_key = gm_sig_royal_pantheon
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = martial_glory } }
+		localization_key = gm_sig_martial_glory
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = liberty } }
+		localization_key = gm_sig_liberty
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = grande_armee } }
+		localization_key = gm_sig_grande_armee
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = mandate_of_heaven } }
+		localization_key = gm_sig_mandate_of_heaven
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = glory_of_athens } }
+		localization_key = gm_sig_glory_of_athens
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = first_emperor } }
+		localization_key = gm_sig_first_emperor
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = to_victory } }
+		localization_key = gm_sig_to_victory
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = unknown_soldier } }
+		localization_key = gm_sig_unknown_soldier
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = concert_of_nations } }
+		localization_key = gm_sig_concert_of_nations
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = conquerors_of_space } }
+		localization_key = gm_sig_conquerors_of_space
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = olympic } }
+		localization_key = gm_sig_olympic
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes gm_sig_var_is = { VAR = gm_signature SIG = heroes } }
+		localization_key = gm_sig_heroes
+	}
 	text = {
 		trigger = { gm_state_has_pm = { PM = pm_monument_crown } }
 		localization_key = pm_monument_crown
@@ -639,6 +721,30 @@ gm_skin_name = {
 		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_pompeii }
 		localization_key = gm_skin_landmark_pompeii
 	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_walhalla }
+		localization_key = gm_skin_landmark_walhalla
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_bunker_hill_monument }
+		localization_key = gm_skin_landmark_bunker_hill_monument
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_obelisk_of_the_second_of_may }
+		localization_key = gm_skin_landmark_obelisk_of_the_second_of_may
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_muhammad_ali_mosque }
+		localization_key = gm_skin_landmark_muhammad_ali_mosque
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_nelsons_column }
+		localization_key = gm_skin_landmark_nelsons_column
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_washington_monument }
+		localization_key = gm_skin_landmark_washington_monument
+	}
 	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
 	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
@@ -1149,6 +1255,30 @@ gm_landmark_name_evt = {
 		localization_key = gm_landmark_pompeii_evt
 	}
 	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_walhalla }
+		localization_key = gm_landmark_walhalla_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_bunker_hill_monument }
+		localization_key = gm_landmark_bunker_hill_monument_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_obelisk_of_the_second_of_may }
+		localization_key = gm_landmark_obelisk_of_the_second_of_may_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_muhammad_ali_mosque }
+		localization_key = gm_landmark_muhammad_ali_mosque_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_nelsons_column }
+		localization_key = gm_landmark_nelsons_column_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_washington_monument }
+		localization_key = gm_landmark_washington_monument_evt
+	}
+	text = {
 		localization_key = gm_landmark_name_evt_none
 	}
 }
@@ -1506,6 +1636,30 @@ gm_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_landmark var:gm_landmark = flag:pompeii }
 		localization_key = gm_landmark_pompeii_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:walhalla }
+		localization_key = gm_landmark_walhalla_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:bunker_hill_monument }
+		localization_key = gm_landmark_bunker_hill_monument_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:obelisk_of_the_second_of_may }
+		localization_key = gm_landmark_obelisk_of_the_second_of_may_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:muhammad_ali_mosque }
+		localization_key = gm_landmark_muhammad_ali_mosque_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:nelsons_column }
+		localization_key = gm_landmark_nelsons_column_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:washington_monument }
+		localization_key = gm_landmark_washington_monument_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none
@@ -2639,6 +2793,31 @@ gm_com_occasion_name = {
 		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_naturalist }
 		localization_key = environmental_movement
 	}
+	# A historical opportunity's landmark (signatures spec §6).
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:historical has_variable = gm_com_landmark var:gm_com_landmark = flag:walhalla }
+		localization_key = gm_skin_landmark_walhalla
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:historical has_variable = gm_com_landmark var:gm_com_landmark = flag:bunker_hill_monument }
+		localization_key = gm_skin_landmark_bunker_hill_monument
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:historical has_variable = gm_com_landmark var:gm_com_landmark = flag:obelisk_of_the_second_of_may }
+		localization_key = gm_skin_landmark_obelisk_of_the_second_of_may
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:historical has_variable = gm_com_landmark var:gm_com_landmark = flag:muhammad_ali_mosque }
+		localization_key = gm_skin_landmark_muhammad_ali_mosque
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:historical has_variable = gm_com_landmark var:gm_com_landmark = flag:nelsons_column }
+		localization_key = gm_skin_landmark_nelsons_column
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:historical has_variable = gm_com_landmark var:gm_com_landmark = flag:washington_monument }
+		localization_key = gm_skin_landmark_washington_monument
+	}
 	text = {
 		localization_key = gm_com_occasion_petition
 	}
@@ -2707,6 +2886,11 @@ gm_com_boon_name = {
 	text = {
 		trigger = { gm_com_source_is = { SRC = tech_naturalist } }
 		localization_key = gm_boon_tech_naturalist
+	}
+	# A historical opportunity has no boon: what it gives is the landmark.
+	text = {
+		trigger = { gm_com_source_is = { SRC = historical } }
+		localization_key = gm_com_boon_historical
 	}
 	text = {
 		localization_key = gm_boon_none
@@ -2843,6 +3027,30 @@ gm_com_time_words = {
 	type = country
 	random_valid = no
 
+	# A historical opportunity of ten levels has twice as long (signatures spec §6.1).
+	text = {
+		trigger = {
+			has_variable = gm_com_target
+			var:gm_com_target > 5
+			country_rank >= rank_value:great_power
+		}
+		localization_key = gm_com_time_10_years
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_target
+			var:gm_com_target > 5
+			country_rank >= rank_value:major_power
+		}
+		localization_key = gm_com_time_20_years
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_target
+			var:gm_com_target > 5
+		}
+		localization_key = gm_com_time_30_years
+	}
 	text = {
 		trigger = { country_rank >= rank_value:great_power }
 		localization_key = gm_com_time_5_years

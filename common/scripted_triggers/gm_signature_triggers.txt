@@ -1,0 +1,303 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — unique dedications (signatures): scripted triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md.
+# A signature is a parent dedication plus a record, as a law variant is its
+# parent plus a skin. Two flags on the monument:
+#   gm_signature / gm_tr_signature     the effect group: a family (§4.1), a
+#                                      one-off (§4.2) or a special (§5)
+#   gm_sig_parent / gm_tr_sig_parent   the dedication it was given on, one of
+#                                      the twelve keys
+# The first pair is a state's (its primary monument), the second a container's
+# (a monument beside another, a trophy, a shadow, a buried site). A signature
+# counts only while its monument stands on its parent; on another dedication
+# it is dormant. test_grand_monument_registry.py's SIGNATURES is the table.
+
+# ---- Which signature ---------------------------------------------------------------
+# Any scope. The flag variable $VAR$ (gm_signature or gm_tr_signature) holds
+# signature $SIG$.
+gm_sig_var_is = {
+	has_variable = $VAR$
+	var:$VAR$ = flag:$SIG$
+}
+
+# Any scope. The signature in $VAR$ counts toward $SIG$'s sums: it is $SIG$, or
+# a one-off of the family $SIG$ (§4.2: a one-off counts in its family's sum and
+# adds a flourish of its own). One per signature, so a sum can dispatch on
+# its key.
+gm_sig_counts_as_antiquity = {
+	has_variable = $VAR$
+	OR = {
+		var:$VAR$ = flag:antiquity
+		var:$VAR$ = flag:glory_of_athens
+		var:$VAR$ = flag:first_emperor
+	}
+}
+
+gm_sig_counts_as_archive = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = archive }
+}
+
+gm_sig_counts_as_throne = {
+	has_variable = $VAR$
+	OR = {
+		var:$VAR$ = flag:throne
+		var:$VAR$ = flag:mandate_of_heaven
+	}
+}
+
+gm_sig_counts_as_royal_pantheon = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = royal_pantheon }
+}
+
+gm_sig_counts_as_martial_glory = {
+	has_variable = $VAR$
+	OR = {
+		var:$VAR$ = flag:martial_glory
+		var:$VAR$ = flag:grande_armee
+	}
+}
+
+gm_sig_counts_as_liberty = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = liberty }
+}
+
+gm_sig_counts_as_grande_armee = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = grande_armee }
+}
+
+gm_sig_counts_as_mandate_of_heaven = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = mandate_of_heaven }
+}
+
+gm_sig_counts_as_glory_of_athens = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = glory_of_athens }
+}
+
+gm_sig_counts_as_first_emperor = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = first_emperor }
+}
+
+gm_sig_counts_as_to_victory = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = to_victory }
+}
+
+gm_sig_counts_as_unknown_soldier = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = unknown_soldier }
+}
+
+gm_sig_counts_as_concert_of_nations = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = concert_of_nations }
+}
+
+gm_sig_counts_as_conquerors_of_space = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = conquerors_of_space }
+}
+
+gm_sig_counts_as_olympic = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = olympic }
+}
+
+gm_sig_counts_as_heroes = {
+	gm_sig_var_is = { VAR = $VAR$ SIG = heroes }
+}
+
+# ---- On its parent (§1) --------------------------------------------------------------
+# State scope. The primary carries a signature and stands on its parent: the
+# dedication it was given on. On another dedication, or undedicated, it is
+# dormant. Explicit branches, not a comparison of two flag variables, which
+# nobody has seen the engine make.
+gm_state_sig_on_parent = {
+	has_variable = gm_signature
+	has_variable = gm_sig_parent
+	gm_state_is_dedicated = yes
+	OR = {
+		AND = { var:gm_sig_parent = flag:crown gm_state_has_pm = { PM = pm_monument_crown } }
+		AND = { var:gm_sig_parent = flag:republic gm_state_has_pm = { PM = pm_monument_republic } }
+		AND = { var:gm_sig_parent = flag:revolution gm_state_has_pm = { PM = pm_monument_revolution } }
+		AND = { var:gm_sig_parent = flag:leader gm_state_has_pm = { PM = pm_monument_leader } }
+		AND = { var:gm_sig_parent = flag:religious gm_state_has_pm = { PM = pm_monument_religious } }
+		AND = { var:gm_sig_parent = flag:civic gm_state_has_pm = { PM = pm_monument_civic } }
+		AND = { var:gm_sig_parent = flag:war_memorial gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		AND = { var:gm_sig_parent = flag:artistic gm_state_has_pm = { PM = pm_monument_artistic } }
+		AND = { var:gm_sig_parent = flag:naturalist gm_state_has_pm = { PM = pm_monument_naturalist } }
+		AND = { var:gm_sig_parent = flag:scientific gm_state_has_pm = { PM = pm_monument_scientific } }
+		AND = { var:gm_sig_parent = flag:industrial gm_state_has_pm = { PM = pm_monument_industrial } }
+		AND = { var:gm_sig_parent = flag:athletic gm_state_has_pm = { PM = pm_monument_athletic } }
+	}
+}
+
+# Container scope: a monument beside another, a trophy, a shadow or a site, on
+# its own records (gm_tr_dedication).
+gm_mon_sig_on_parent = {
+	has_variable = gm_tr_signature
+	has_variable = gm_tr_sig_parent
+	OR = {
+		AND = { var:gm_tr_sig_parent = flag:crown gm_mon_is = { KEY = crown } }
+		AND = { var:gm_tr_sig_parent = flag:republic gm_mon_is = { KEY = republic } }
+		AND = { var:gm_tr_sig_parent = flag:revolution gm_mon_is = { KEY = revolution } }
+		AND = { var:gm_tr_sig_parent = flag:leader gm_mon_is = { KEY = leader } }
+		AND = { var:gm_tr_sig_parent = flag:religious gm_mon_is = { KEY = religious } }
+		AND = { var:gm_tr_sig_parent = flag:civic gm_mon_is = { KEY = civic } }
+		AND = { var:gm_tr_sig_parent = flag:war_memorial gm_mon_is = { KEY = war_memorial } }
+		AND = { var:gm_tr_sig_parent = flag:artistic gm_mon_is = { KEY = artistic } }
+		AND = { var:gm_tr_sig_parent = flag:naturalist gm_mon_is = { KEY = naturalist } }
+		AND = { var:gm_tr_sig_parent = flag:scientific gm_mon_is = { KEY = scientific } }
+		AND = { var:gm_tr_sig_parent = flag:industrial gm_mon_is = { KEY = industrial } }
+		AND = { var:gm_tr_sig_parent = flag:athletic gm_mon_is = { KEY = athletic } }
+	}
+}
+
+# State scope. Its signature counts nationally (§1's table): upheld on its
+# parent. Heritage and contested monuments keep only their local effect.
+gm_state_sig_counts = {
+	gm_state_status_fits = yes
+	gm_state_sig_on_parent = yes
+}
+
+# Container scope, a monument beside another: the same.
+gm_mon_sig_counts = {
+	gm_mon_status_fits = yes
+	gm_mon_sig_on_parent = yes
+}
+
+# ---- Its interest group (§2.3) ------------------------------------------------------
+# Any scope. The signature in $VAR$ names the Intelligentsia as a group of its
+# own: Ancestral Antiquity and its one-offs, the Epigraphic Archive, and To the
+# Conquerors of Space. No other group has a signature; nothing opposes one.
+gm_sig_asks_intelligentsia = {
+	OR = {
+		gm_sig_counts_as_antiquity = { VAR = $VAR$ }
+		gm_sig_counts_as_archive = { VAR = $VAR$ }
+		gm_sig_counts_as_conquerors_of_space = { VAR = $VAR$ }
+	}
+}
+
+# State scope, for gm_compute_ig: the primary's signature adds its grandeur to
+# the group's net, beside its dedication's, while it stands on its parent
+# (the caller checks gm_state_status_fits). One per group, the empty ones too,
+# since gm_compute_ig asks each.
+gm_state_sig_approved_by_armed_forces = {
+	always = no
+}
+
+gm_state_sig_approved_by_devout = {
+	always = no
+}
+
+gm_state_sig_approved_by_industrialists = {
+	always = no
+}
+
+gm_state_sig_approved_by_intelligentsia = {
+	gm_state_sig_on_parent = yes
+	gm_sig_asks_intelligentsia = { VAR = gm_signature }
+}
+
+gm_state_sig_approved_by_landowners = {
+	always = no
+}
+
+gm_state_sig_approved_by_petty_bourgeoisie = {
+	always = no
+}
+
+gm_state_sig_approved_by_rural_folk = {
+	always = no
+}
+
+gm_state_sig_approved_by_trade_unions = {
+	always = no
+}
+
+# Container scope, a monument beside another: the same (the caller checks
+# gm_mon_status_fits).
+gm_mon_sig_approved_by_armed_forces = {
+	always = no
+}
+
+gm_mon_sig_approved_by_devout = {
+	always = no
+}
+
+gm_mon_sig_approved_by_industrialists = {
+	always = no
+}
+
+gm_mon_sig_approved_by_intelligentsia = {
+	gm_mon_sig_on_parent = yes
+	gm_sig_asks_intelligentsia = { VAR = gm_tr_signature }
+}
+
+gm_mon_sig_approved_by_landowners = {
+	always = no
+}
+
+gm_mon_sig_approved_by_petty_bourgeoisie = {
+	always = no
+}
+
+gm_mon_sig_approved_by_rural_folk = {
+	always = no
+}
+
+gm_mon_sig_approved_by_trade_unions = {
+	always = no
+}
+
+# ---- Special dedications held (§5.2, §5.3) --------------------------------------
+# Country scope. The country holds special $SIG$ for its next monument of that
+# dedication: completed while no monument could take it (gm_sig_held_<special>,
+# a count in a country variable, so a civil war's winner keeps it).
+gm_sig_holds = {
+	has_variable = gm_sig_held_$SIG$
+	var:gm_sig_held_$SIG$ > 0
+}
+
+# Country scope. It holds no special at all: part of the National Effects
+# section's gates (gm_disp_national_any, gm_disp_boon_any).
+gm_sig_held_idle = {
+	NOT = { gm_sig_holds = { SIG = to_victory } }
+	NOT = { gm_sig_holds = { SIG = unknown_soldier } }
+	NOT = { gm_sig_holds = { SIG = concert_of_nations } }
+	NOT = { gm_sig_holds = { SIG = conquerors_of_space } }
+	NOT = { gm_sig_holds = { SIG = olympic } }
+}
+
+# State scope, a monument at its ceremony (monument_events.2): the option for
+# special $SIG$ shows. The owner holds one, and the monument carries no
+# signature (one a monument: a landmark rededicated keeps its own, §1). The
+# parent's own gate is the option's.
+gm_state_ceremony_offers_special = {
+	NOT = { has_variable = gm_signature }
+	owner = { gm_sig_holds = { SIG = $SIG$ } }
+}
+
+# State scope. The special in gm_sig_grant can be written on this monument: it
+# carries no signature and stands on the special's parent.
+gm_state_takes_grant = {
+	has_variable = gm_sig_grant
+	NOT = { has_variable = gm_signature }
+	gm_state_is_dedicated = yes
+	OR = {
+		AND = { var:gm_sig_grant = flag:to_victory gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		AND = { var:gm_sig_grant = flag:unknown_soldier gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		AND = { var:gm_sig_grant = flag:concert_of_nations gm_state_has_pm = { PM = pm_monument_civic } }
+		AND = { var:gm_sig_grant = flag:conquerors_of_space gm_state_has_pm = { PM = pm_monument_civic } }
+		AND = { var:gm_sig_grant = flag:olympic gm_state_has_pm = { PM = pm_monument_athletic } }
+	}
+}
+
+# Container scope, a monument beside another that completed an opportunity:
+# the same, for the special the country (scope:gm_sig_granter) is granting.
+gm_mon_takes_special = {
+	NOT = { has_variable = gm_tr_signature }
+	scope:gm_sig_granter = { has_variable = gm_sig_special }
+	OR = {
+		AND = { scope:gm_sig_granter = { var:gm_sig_special = flag:to_victory } gm_mon_is = { KEY = war_memorial } }
+		AND = { scope:gm_sig_granter = { var:gm_sig_special = flag:unknown_soldier } gm_mon_is = { KEY = war_memorial } }
+		AND = { scope:gm_sig_granter = { var:gm_sig_special = flag:concert_of_nations } gm_mon_is = { KEY = civic } }
+		AND = { scope:gm_sig_granter = { var:gm_sig_special = flag:conquerors_of_space } gm_mon_is = { KEY = civic } }
+		AND = { scope:gm_sig_granter = { var:gm_sig_special = flag:olympic } gm_mon_is = { KEY = athletic } }
+	}
+}
