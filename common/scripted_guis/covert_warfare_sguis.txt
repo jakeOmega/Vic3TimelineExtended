@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # COVERT WARFARE — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGETS
 # ============================================================================
-# Read from gui/journal_entry_widgets/covert_operations_widget.gui. Five kinds
-# of entry live here. (A sixth, the funding-ladder tooltip builder, went when
+# Read from gui/journal_entry_widgets/covert_operations_widget.gui. Six kinds
+# of entry live here. (A seventh, the funding-ladder tooltip builder, went when
 # the Funding section's ladder became a table of GUI rows, style-guide round 3.)
 #
 # 1. THE FUNDING CONTROL (covert_funding_sgui). Delegates to the same
@@ -40,6 +40,10 @@
 # 5. THE PRIORITY STEPPER (covert_priority_up_sgui, covert_priority_down_sgui).
 #    One handler per direction; the row's container arrives as the saved scope
 #    iw_op. See their section header.
+#
+# 6. THE EXPOSE BUTTON (covert_expose_known_sgui). One handler for the Known
+#    Foreign Operations rows; the row's record container arrives as the saved
+#    scope iw_known. See its section header.
 #
 # Every entry declares `ai_is_valid = { always = no }`: the AI's path into
 # covert funding is je_covert_warfare's monthly pulse, and it must never
@@ -589,6 +593,86 @@ covert_ops_priority_ready_sgui = {
 	}
 
 	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- EXPOSE: the Known Foreign Operations button ------------------------------
+# One handler for every row of the section. The row's record container (the
+# defender's iw_known_rec, parented to the defender; see § WATCHING A CAUGHT
+# OPERATION in covert_warfare_effects.txt) travels alone in a SINGLE
+# AddScope( 'iw_known', ScriptContainer.MakeScope ), the shape the priority
+# stepper uses, and the root is the viewer's own country (the buttons read
+# GetPlayer, not JournalEntry, because their tooltip renders inside a
+# datamodel item that has no JournalEntry, gotcha #24).
+#
+# FAIL-CLOSED, like covert_priority_op_is_ours: passing a container through
+# AddScope into a scripted GUI has no vanilla precedent. If it arrives unset,
+# or is anything but a record in OUR iw_known_ops, the button greys out and
+# does nothing. The worst case is a permanently disabled Expose, never an
+# exposure of the wrong operation.
+#
+# The effect only orders the work. It marks the record and triggers the hidden
+# covert_warfare.4, which walks every record with iw_expose_ordered and runs
+# covert_watch_expose_record on each; the engine walks a scripted GUI's effect
+# every frame to draw its tooltip, so the exposure itself must not live here
+# (the trophies pattern, monument_trophy_events.10-.13). custom_tooltip shows
+# the prose and not the engine's line for the two statements.
+#
+# Greyed, each with its reason as a tick-or-cross line:
+#   - the record is not ours or is gone;
+#   - an exposure was already ordered or sent for it (iw_expose_ordered stays
+#     until the record is forgotten, so one line covers both);
+#   - an exposure of that attacker is already in flight
+#     (covert_exposure_in_flight): covert_warfare.1 keeps one burned operation
+#     on the attacker at a time, so a second one waits its turn.
+covert_expose_known_sgui = {
+	scope = country
+	saved_scopes = { iw_known }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = iw_expose_known_exists_tt
+			exists = scope:iw_known
+		}
+		custom_tooltip = {
+			text = iw_expose_known_ours_tt
+			exists = scope:iw_known
+			has_variable_list = iw_known_ops
+			is_target_in_variable_list = { name = iw_known_ops target = scope:iw_known }
+			scope:iw_known ?= { has_tag = iw_known_rec }
+		}
+		custom_tooltip = {
+			text = iw_expose_known_unordered_tt
+			scope:iw_known ?= {
+				NOT = { has_variable = iw_expose_ordered }
+			}
+		}
+		custom_tooltip = {
+			text = iw_expose_known_free_tt
+			scope:iw_known ?= {
+				var:iw_attacker ?= {
+					NOT = { covert_exposure_in_flight = yes }
+				}
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = covert_known_expose_effect_tt
+			scope:iw_known = {
+				set_variable = { name = iw_expose_ordered value = 1 }
+			}
+			trigger_event = { id = covert_warfare.4 }
+		}
+	}
 
 	ai_is_valid = {
 		always = no

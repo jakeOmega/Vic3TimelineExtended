@@ -21,11 +21,12 @@ VALUES = os.path.join(REPO, "common", "script_values", "covert_display_values.tx
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "covert_gui_icons.md")
+SGUIS_FILE = os.path.join(REPO, "common", "scripted_guis", "covert_warfare_sguis.txt")
 
 # Owner, round 2: Funding second, next to its overview icon; Detection Risk
 # is a table at the top of Operations, not a section of its own.
 STATUS = ["te_covert_sec_operations", "te_covert_sec_funding", "te_covert_sec_networks",
-          "te_covert_sec_counterintel"]
+          "te_covert_sec_counterintel", "te_covert_sec_known"]
 REFERENCE = ["te_covert_sec_how"]
 # root name -> (container, what it wraps)
 ROOTS = {
@@ -37,7 +38,7 @@ OLD_ROOTS = ["widget_je_covert_command_centre", "widget_je_covert_operations", "
 
 # Explanations that live in "How Covert Warfare Works" only.
 HOW_KEYS = ["je_iw_how_ops", "je_iw_how_funding", "je_iw_how_detection", "je_iw_net_header_tooltip",
-            "je_iw_how_tradecraft", "je_iw_how_ci", "je_iw_how_standing"]
+            "je_iw_how_tradecraft", "je_iw_how_ci", "je_iw_how_watching", "je_iw_how_standing"]
 
 DORMANT = "GetScriptedGui('covert_ops_dormant_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
 CAUGHT = "GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
@@ -165,7 +166,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"covert_ops_closed", "covert_nets_closed", "covert_funding_closed",
-                                 "covert_counterintel_closed", "covert_how_open"})
+                                 "covert_counterintel_closed", "covert_known_closed", "covert_how_open"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -342,7 +343,9 @@ class OperationRowTest(unittest.TestCase):
                     "je_iw_op_row_detection_tt", "je_iw_net_row_trend_growing", "je_iw_net_row_trend_decaying",
                     "je_iw_net_row_trend_holding", "je_iw_net_row_intel_service_tooltip",
                     "je_iw_net_row_intel_ops_tooltip", "je_iw_net_row_strength_tt",
-                    "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3"):
+                    "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3",
+                    "je_iw_known_row_tt", "je_iw_known_row_months", "je_iw_known_row_attacker",
+                    "je_iw_known_ordered", "je_iw_known_ordered_tt", "je_iw_known_expose_tooltip"):
             self.assertNotIn("JournalEntry", loc[key], key)
 
 
@@ -394,6 +397,140 @@ def _git_files():
     out = subprocess.run(["git", "ls-files", "gfx/interface/icons/diplomatic_action_icons"], cwd=REPO,
                          capture_output=True, text=True).stdout
     return out.split("\n")
+
+
+HOSTILE = tuple(t for t in OP_TYPES if t != "counterintel_support")   # the types a defender can watch
+KNOWN_TT_KEYS = ("iw_expose_known_exists_tt", "iw_expose_known_ours_tt", "iw_expose_known_unordered_tt",
+                 "iw_expose_known_free_tt", "covert_known_expose_effect_tt")
+
+
+class KnownSectionTest(unittest.TestCase):
+    """Known Foreign Operations (watching a caught operation): one row per
+    record in the viewer's iw_known_ops, hidden while it is empty, with an
+    Expose button that hands the row's record to covert_expose_known_sgui."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.sec = _type_body(cls.gui, "te_covert_sec_known")
+        cls.row = _type_body(cls.gui, "widget_je_covert_known_row")
+        cls.sgui = _braced(_read(SGUIS_FILE), r"^covert_expose_known_sgui = \{")
+        cls.loc = _loc()
+
+    def test_the_composer_instances_it_after_counterintelligence(self):
+        composer = _type_body(self.gui, "te_covert_status_sections")
+        self.assertLess(composer.index("te_covert_sec_counterintel = {}"), composer.index("te_covert_sec_known = {}"))
+
+    def test_the_military_tab_gets_it_from_the_composer(self):
+        # The Covert tab instances te_covert_status_sections, so it needs no edit of its own.
+        self.assertNotIn("te_covert_sec_known", _read(MILITARY))
+        self.assertIn("te_covert_status_sections = {}", _read(MILITARY))
+
+    def test_hidden_while_nothing_is_watched(self):
+        self.assertIn("visible = \"[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops') ) )]\"",
+                      self.sec[:260])
+
+    def test_rows_come_from_the_known_list_and_read_their_record(self):
+        self.assertEqual(self.sec.count("datamodel ="), 1)
+        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops')]\"", self.sec)
+        item = self.sec[self.sec.index("item = {"):]
+        self.assertIn("widget_je_covert_known_row = {", item)
+        self.assertIn("datacontext = \"[Scope.GetScriptContainer]\"", item)
+
+    def test_the_header_toggles_an_open_by_default_flag(self):
+        self.assertEqual(len(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.sec)), 1)
+        self.assertIn("GetVariableSystem.Toggle('covert_known_closed')", self.sec)
+        self.assertIn('text = "je_iw_known_header"', self.sec)
+
+    def test_each_hostile_type_has_its_icon_name_and_effect_hover(self):
+        icons = re.findall(r"visible = \"\[ScriptContainer\.HasTag\('iw_known_(\w+)'\)\]\"\s*"
+                           r"texture = \"gfx/interface/icons/diplomatic_action_icons/covert_(\w+)_action\.dds\"", self.row)
+        self.assertEqual([a for a, _ in icons], list(HOSTILE))
+        self.assertTrue(all(a == b for a, b in icons))
+        tracked = "\n".join(_git_files())
+        for t in HOSTILE:
+            self.assertIn(f"gfx/interface/icons/diplomatic_action_icons/covert_{t}_action.dds", tracked, t)
+        names = re.findall(r"visible = \"\[ScriptContainer\.HasTag\('iw_known_(\w+)'\)\]\"\s*"
+                           r"text = \"iw_op_name_(\w+)\"\s*tooltip = \"iw_op_exposed_desc_(\w+)\"", self.row)
+        self.assertEqual([a for a, _, _ in names], list(HOSTILE))
+        self.assertTrue(all(a == b == c for a, b, c in names))
+        # The old operation rows' own tags are not reused here.
+        self.assertNotIn("HasTag('iw_op_", self.row)
+
+    def test_the_flag_and_the_attackers_name_wait_for_the_stored_capital(self):
+        head = self.row[: self.row.index('text = "je_iw_known_row_attacker"')]
+        wrapper = head[head.rindex("widget = {"):]
+        self.assertIn("flag = {", wrapper)
+        self.assertIn("visible = \"[ScriptContainer.HasVariable('iw_attacker_capital')]\"", wrapper[:wrapper.index("flag = {")])
+        self.assertIn("datacontext = \"[ScriptContainer.MakeScope.Var('iw_attacker_capital').GetState.GetCountry]\"", wrapper)
+        title = self.row[self.row.rindex("visible =", 0, self.row.index('text = "je_iw_known_row_attacker"')):]
+        self.assertIn("ScriptContainer.HasVariable('iw_attacker_capital')", title[:160])
+        self.assertIn("Var('iw_attacker_capital').GetState.GetCountry.GetName", self.loc["je_iw_known_row_attacker"])
+
+    def test_the_row_says_how_long_and_the_hover_what_it_earns_and_costs(self):
+        self.assertIn("GetVariableValue('iw_watch_months')", self.loc["je_iw_known_row_months"])
+        # The months line is underlined: the row's hover is under it (rule 3).
+        line = self.row[self.row.rindex("widget_je_covert_operation_detail = {", 0, self.row.index('text = "je_iw_known_row_months"')):]
+        self.assertIn('default_format = "#tooltippable"', line[:120])
+        self.assertIn('tooltip = "je_iw_known_row_tt"', self.row)
+        hover = self.loc["je_iw_known_row_tt"]
+        for part in ("iw_watch_months", "iw_watch_net", "covert_net_watch_gain_p1", "covert_net_watch_gain_p3"):
+            self.assertIn(part, hover, part)
+
+    def test_an_ordered_exposure_is_a_line_of_its_own(self):
+        line = self.row[self.row.rindex("visible =", 0, self.row.index('text = "je_iw_known_ordered"')):]
+        self.assertIn("ScriptContainer.HasVariable('iw_expose_ordered')", line[:120])
+        self.assertIn('tooltip = "je_iw_known_ordered_tt"', line[:260])
+
+    def test_the_button_hands_its_record_to_the_scripted_gui(self):
+        button = self.row[self.row.index("button = {"):]
+        self.assertEqual(len(re.findall(r"^\t+button = \{", self.row, re.M)), 1)
+        self.assertIn("datacontext = \"[GetScriptedGui('covert_expose_known_sgui')]\"", button)
+        scope = "GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'iw_known', ScriptContainer.MakeScope ).End"
+        self.assertIn(f"enabled = \"[ScriptedGui.IsValid( {scope} )]\"", button)
+        self.assertIn(f"onclick = \"[ScriptedGui.Execute( {scope} )]\"", button)
+        self.assertIn('tooltip = "je_iw_known_expose_tooltip"', button)
+        self.assertIn('text = "je_iw_known_expose_button"', button)
+        # Below every line of the row, centred.
+        self.assertGreater(self.row.index("button = {"), self.row.index('text = "je_iw_known_row_months"'))
+        # The tooltip reads the same scope, and the engine's reasons and effect lines.
+        tip = self.loc["je_iw_known_expose_tooltip"]
+        self.assertIn(f"ScriptedGui.IsValidTooltip( {scope} )", tip)
+        self.assertIn(f"ScriptedGui.ExecuteTooltip( {scope} )", tip)
+        self.assertNotIn("JournalEntry", tip)
+
+    def test_the_scripted_gui_fails_closed_and_only_orders_the_work(self):
+        s = _words(self.sgui)
+        self.assertIn("saved_scopes = { iw_known }", s)
+        valid = _words(_braced(self.sgui, r"^\tis_valid = \{"))
+        for part in ("exists = scope:iw_known", "has_variable_list = iw_known_ops",
+                     "is_target_in_variable_list = { name = iw_known_ops target = scope:iw_known }",
+                     "has_tag = iw_known_rec", "NOT = { has_variable = iw_expose_ordered }",
+                     "var:iw_attacker ?= { NOT = { covert_exposure_in_flight = yes } }"):
+            self.assertIn(part, valid, part)
+        effect = _words(_braced(self.sgui, r"^\teffect = \{"))
+        self.assertTrue(effect.startswith("custom_tooltip = { text = covert_known_expose_effect_tt"), effect)
+        self.assertIn("scope:iw_known = { set_variable = { name = iw_expose_ordered value = 1 } }", effect)
+        self.assertIn("trigger_event = { id = covert_warfare.4 }", effect)
+        # Nothing else: the exposure itself is the hidden event's work.
+        self.assertNotIn("covert_exposure_fire", effect)
+        self.assertIn("ai_is_valid = { always = no }", s)
+        for key in KNOWN_TT_KEYS:
+            self.assertIn(key, self.sgui, key)
+            self.assertIn(key, self.loc, key)
+
+    def test_how_it_works_explains_watching(self):
+        how = _type_body(self.gui, "te_covert_sec_how")
+        self.assertIn('text = "je_iw_how_sub_watching"', how)
+        self.assertLess(how.index("je_iw_how_ci"), how.index("je_iw_how_sub_watching"))
+        self.assertLess(how.index("je_iw_how_sub_watching"), how.index("je_iw_how_sub_standing"))
+        # Names the section the exposure comes from.
+        self.assertIn("Known Foreign Operations", self.loc["je_iw_how_watching"])
+        # The Counterintelligence text no longer says a catch is named in Last
+        # Caught (only an exposure is) or that nothing else names a sponsor.
+        ci = self.loc["je_iw_how_ci"]
+        self.assertNotIn("When our counterintelligence catches a foreign operation, its sponsor is named", ci)
+        self.assertIn("Known Foreign Operations", ci)
 
 
 class FundingTableTest(unittest.TestCase):
@@ -491,7 +628,9 @@ FIXED_CELLS = [
     # Section headers: 520 wide, less the arrow.
     ("je_iw_sec_ops_header", 440, "large"), ("je_iw_funding_header", 440, "large"),
     ("je_iw_net_header", 440, "large"), ("je_iw_defense_header", 440, "large"),
-    ("je_iw_how_header", 440, "large"),
+    ("je_iw_known_header", 440, "large"), ("je_iw_how_header", 440, "large"),
+    # The Known Foreign Operations button: 150 wide, less the margin.
+    ("je_iw_known_expose_button", 140, "large"), ("je_iw_known_ordered", 460, "medium"),
 ]
 # Columns of the row types, by block name: (width, font).
 ROW_COLUMNS = {
