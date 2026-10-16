@@ -306,7 +306,10 @@ te_debris_selfcheck_removal = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_debris_selfcheck_removal_done }
+			# The technology test first: until someone has Reusable Rocketry
+			# no method can run, and the building walk is skipped.
 			any_country = {
+				has_technology_researched = reusable_rocketry
 				any_scope_building = {
 					is_building_type = building_space_program
 					NOT = { has_active_production_method = pm_debris_removal_none }
@@ -317,6 +320,7 @@ te_debris_selfcheck_removal = {
 		set_global_variable = { name = te_debris_selfcheck_removal_done value = 1 }
 		random_country = {
 			limit = {
+				has_technology_researched = reusable_rocketry
 				any_scope_building = {
 					is_building_type = building_space_program
 					NOT = { has_active_production_method = pm_debris_removal_none }
