@@ -6374,10 +6374,12 @@ class TestCausesSection(unittest.TestCase):
         "Workers' Protections"; the mod renames the Health System "Ministry of Health")."""
         for key, names in (("te_demog_st_work_tt", ("$law_regulatory_bodies$", "$law_worker_protections$")),
                            ("te_demog_st_acc_tt", ("$institution_health_system$",)),
-                           ("te_demog_st_ext_tt", ("$institution_ministry_of_consumer_protection$", "$combustion_engine$"))):
+                           ("te_demog_st_ext_tt", ("$institution_ministry_of_consumer_protection$", "$combustion_engine$",
+                                                   "$institution_police$", "$autonomous_vehicles$"))):
             for name in names:
                 self.assertIn(name, self.loc[key], key)
-        typed = re.compile(r"Worker Protections|Regulatory Bodies|Ministry of Health|Consumer Protection|Combustion Engine")
+        typed = re.compile(r"Worker Protections|Regulatory Bodies|Ministry of Health|Consumer Protection|Combustion Engine|"
+                           r"Public Safety|Restorative Justice|Penal Labor")
         for key, value in self.loc.items():
             if key.startswith("te_demog_st_"):
                 self.assertIsNone(typed.search(value), key)

@@ -1198,6 +1198,18 @@ nd_display_yield_pressure = {
 	}
 }
 
+# Any scope: the crises running past the eight the World Crises section lists
+# (global_var:nd_wc_count, written by nd_world_crises_refresh).
+nd_world_crises_unlisted = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_wc_count }
+		add = global_var:nd_wc_count
+		subtract = 8
+	}
+	min = 0
+}
+
 # Weeks until the target is pressed again (nd_crisis_weekly_tick fires the
 # event on the tick at which the counter reaches the interval), from either
 # side. At least 1: the soonest is next week.

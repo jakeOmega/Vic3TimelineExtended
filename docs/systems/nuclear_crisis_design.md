@@ -29,7 +29,7 @@ Built on 2026-09-25 in one pass from §1–§14. None of it has run in a game ye
 | Crisis events (`nuclear_crisis.*`) | `events/nuclear_crisis_events.txt` |
 | Incident chains (`nuclear_incident.*`) | `events/nuclear_incident_events.txt` |
 | Back-down hook; monthly clean-up after the entry closes | `common/on_actions/nuclear_crisis_on_actions.txt` |
-| Posture and crisis panels | `gui/journal_entry_widgets/nuclear_deterrence_widget.gui`, `common/scripted_guis/nuclear_deterrence_sguis.txt`, `common/customizable_localization/nuclear_deterrence_custom_loc.txt` (op table: `journal_entry_systems.md` § Nuclear Deterrence Widget) |
+| Posture and crisis panels, and World Crises (every running crisis; `nd_world_crises_refresh` in the crisis effects writes its slots) | `gui/journal_entry_widgets/nuclear_deterrence_widget.gui`, `common/scripted_guis/nuclear_deterrence_sguis.txt`, `common/customizable_localization/nuclear_deterrence_custom_loc.txt` (op table: `journal_entry_systems.md` § Nuclear Deterrence Widget) |
 | Static modifiers | `common/static_modifiers/nuclear_deterrence_modifiers.txt` |
 | Console harness (`event te_debug_deterrence.1`–`.5`) | `events/te_debug_deterrence_events.txt` |
 | Consistency tests (panel ops, fired events, loc keys, modifier families) | `test_nuclear_deterrence.py` |
@@ -477,6 +477,7 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 60. **Guarantee gates (2026-10-05).** Item 55 (Budapest) now runs with the gates below; the pressers on the new state's `nd_bp_guarantors` list skip both, and their guarantees must still be created. Check also that a listed presser's guarantee tooltip leaves out the two gate lines rather than showing them as met.
 61. **Outgun gate.** An armed guarantor proposing to a country believed armed with a larger public estimate is refused with "holds more warheads than the world believes"; a secretly armed target (never tested) counts as 0 and passes, and the tooltip shows no number.
 62. **Ties gate.** A guarantee with no alliance, defensive pact, Guarantee Independence or shared bloc is refused. It passes for a fellow member of any bloc, with an alliance or a Guarantee Independence (guarantor as source) added to the same draft, and with either already in force.
+63. **World Crises (2026-10-16).** `event te_debug_deterrence.3` option d opens a private crisis between two other countries: the World Crises section appears under our own crisis, names both countries with the stage, "(private)" and the danger, and its hover gives the dispute and the deadline ("has not reached its target yet" for the first three weeks). Opened again and again, the rows stay ordered by danger; a ninth crisis adds "And 1 more". The section disappears the day the last crisis ends. A crisis whose issuer is annexed loses its row at once; only the "And N more" count can lag, until the next monthly refresh.
 
 ### 0.10 Civil wars, custody and loose warheads (agreed 2026-09-25; built 2026-09-26)
 

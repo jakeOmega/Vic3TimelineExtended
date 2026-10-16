@@ -2,9 +2,9 @@
 ### entry's sections (je_nuclear_program, "Nuclear Weapons"). The entry attaches
 ### the named roots at the foot of this file; the sections are types in
 ### nuclear_program_widget.gui (programme, taboo, delivery and defence, powers)
-### and nuclear_deterrence_widget.gui (crisis, posture, forces, at home,
-### reputation); the overview is nuclear_overview_widget.gui. A future tab
-### (style guide rule 9) would compose the same types.
+### and nuclear_deterrence_widget.gui (crisis, world crises, posture, forces,
+### at home, reputation); the overview is nuclear_overview_widget.gui. A future
+### tab (style guide rule 9) would compose the same types.
 ###
 ### The whole panel, top to bottom (gui/journal_entry.gui draws container_1,
 ### the status desc (188), container_2, the button grid (hidden from humans),
@@ -18,7 +18,8 @@
 ###                next warhead
 ###   native bar   progress toward the next warhead
 ###   container_4  widget_je_nuclear_status     the live sections, open:
-###                Nuclear Crisis (only in one), Nuclear Posture, Forces and
+###                Nuclear Crisis (only in one), World Crises (only while
+###                there is one anywhere), Nuclear Posture, Forces and
 ###                At Home (only while armed), Reputation (once there is a
 ###                record), The Nuclear Taboo (from the first warhead), Delivery
 ###                and Defence, Nuclear Powers (from the first warhead)
@@ -31,7 +32,8 @@
 types nuclear_layout_widget_types
 {
 	### Everything a returning player checks, open by default. The crisis comes
-	### first while there is one: it has a deadline.
+	### first while there is one: it has a deadline. The world's crises follow
+	### it, for the same reason.
 	type te_nuclear_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -40,6 +42,7 @@ types nuclear_layout_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_nuclear_sec_crisis = {}
+		te_nuclear_sec_world_crises = {}
 		te_nuclear_sec_posture = {}
 		te_nuclear_sec_forces = {}
 		te_nuclear_sec_home = {}

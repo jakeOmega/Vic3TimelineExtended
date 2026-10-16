@@ -8,8 +8,9 @@
 #             measure is a dimmed row under "Other Laws", naming the laws that allow it
 #   is_valid  greyed with the failing reason only (gui_style_guide.md rule 6): the rule isn't Full ("Family policy
 #             measures act only under the Full Demographics rule"), the law, the five-year term with the year it ends,
-#             the Crash Campaign's run and bar, the Rural Exemption's need for Birth Limit. Each reason is a
-#             trigger_if that shows only when it fails, so a pressable button lists none
+#             the Crash Campaign's run and bar, the Rural Exemption's need for Birth Limit, and for a measure with an
+#             authority upkeep that upkeep free to start (Birth Limit's further 100 to tighten), as a decree's cost.
+#             Each reason is a trigger_if that shows only when it fails, so a pressable button lists none
 #   effect    one press (te_demog_ms_press; Birth Limit's cycles off, two, one): what it does in words, the switching
 #             hidden (its modifiers show on the row's name)
 # The AI never presses them (ai_is_valid); its own yearly pulse is te_demog_ms_ai_choose.
@@ -149,6 +150,17 @@ te_demog_ms_honours_sgui = {
 				te_demog_ms_term_run = { M = honours }
 			}
 		}
+		# the upkeep free, to start (as a decree's cost; the rebalance's review, 2026-10-16)
+		trigger_if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_honours }
+				authority < te_demog_ms_authority_honours
+			}
+			custom_tooltip = {
+				text = te_demog_ms_honours_authority_tt
+				authority >= te_demog_ms_authority_honours
+			}
+		}
 	}
 	effect = {
 		if = {
@@ -194,6 +206,17 @@ te_demog_ms_restricted_contraception_sgui = {
 			custom_tooltip = {
 				text = te_demog_ms_restricted_contraception_term_tt
 				te_demog_ms_term_run = { M = restricted_contraception }
+			}
+		}
+		# the upkeep free, to start (as a decree's cost; the rebalance's review, 2026-10-16)
+		trigger_if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_restricted_contraception }
+				authority < te_demog_ms_authority_restricted_contraception
+			}
+			custom_tooltip = {
+				text = te_demog_ms_restricted_contraception_authority_tt
+				authority >= te_demog_ms_authority_restricted_contraception
 			}
 		}
 	}
@@ -384,6 +407,17 @@ te_demog_ms_later_longer_fewer_sgui = {
 				te_demog_ms_term_run = { M = later_longer_fewer }
 			}
 		}
+		# the upkeep free, to start (as a decree's cost; the rebalance's review, 2026-10-16)
+		trigger_if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_later_longer_fewer }
+				authority < te_demog_ms_authority_later_longer_fewer
+			}
+			custom_tooltip = {
+				text = te_demog_ms_later_longer_fewer_authority_tt
+				authority >= te_demog_ms_authority_later_longer_fewer
+			}
+		}
 	}
 	effect = {
 		if = {
@@ -430,6 +464,29 @@ te_demog_ms_birth_limit_sgui = {
 			custom_tooltip = {
 				text = te_demog_ms_birth_limit_term_tt
 				te_demog_ms_term_run = { M = birth_limit }
+			}
+		}
+		# the upkeep free, to start (as a decree's cost; the rebalance's review, 2026-10-16), and the one child's further
+		# upkeep, to tighten
+		trigger_if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_birth_limit }
+				authority < te_demog_ms_authority_birth_limit
+			}
+			custom_tooltip = {
+				text = te_demog_ms_birth_limit_authority_tt
+				authority >= te_demog_ms_authority_birth_limit
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_variable = te_dg_ms_birth_limit
+				NOT = { has_variable = te_dg_ms_birth_limit_one }
+				authority < te_demog_ms_authority_birth_limit_tighten
+			}
+			custom_tooltip = {
+				text = te_demog_ms_birth_limit_tighten_authority_tt
+				authority >= te_demog_ms_authority_birth_limit_tighten
 			}
 		}
 	}
@@ -547,6 +604,17 @@ te_demog_ms_crash_campaign_sgui = {
 			custom_tooltip = {
 				text = te_demog_ms_crash_campaign_barred_tt
 				NOT = { te_demog_ms_crash_campaign_barred = yes }
+			}
+		}
+		# the upkeep free, to start (as a decree's cost; the rebalance's review, 2026-10-16)
+		trigger_if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_crash_campaign }
+				authority < te_demog_ms_authority_crash_campaign
+			}
+			custom_tooltip = {
+				text = te_demog_ms_crash_campaign_authority_tt
+				authority >= te_demog_ms_authority_crash_campaign
 			}
 		}
 	}
