@@ -274,13 +274,13 @@ PENSION_AI_UNEMPLOYMENT_LOW = 0.05
 # women's share from the women of those ages.
 POOL_FROM = 20                 # calendar: legal adulthood
 POOL_TO = 39                   # biological: fitness
-# Conscription T = clamp(the pool / people / CONSCRIPTION_REF - 1, CONSCRIPTION_MIN, CONSCRIPTION_MAX) on
-# state_conscription_rate_mult (§4.1). The reference is the 1836 save's world, people-weighted: 0.1389 in the census's
-# own seeded bands (the overnight Full run's 1836.2.1 save) and 0.1390 in the model's 1836 agrarian stable structure
-# (starting value 0.14). No floor but -1 (call 21); parent §7's -0.25 floor is gone.
+# Conscription T = max(the pool / people / CONSCRIPTION_REF - 1, CONSCRIPTION_MIN) on state_conscription_rate_mult
+# (§4.1). The reference is the 1836 save's world, people-weighted: 0.1389 in the census's own seeded bands (the
+# overnight Full run's 1836.2.1 save) and 0.1390 in the model's 1836 agrarian stable structure (starting value 0.14). No
+# floor but -1 (call 21); parent §7's -0.25 floor is gone. No ceiling either (owner, 2026-10-16): the spec's +0.25 is
+# gone, so a state rich in young men raises as many more conscripts as its pool's share is above the reference.
 CONSCRIPTION_REF = 0.139
 CONSCRIPTION_MIN = -1.0
-CONSCRIPTION_MAX = 0.25
 # On since the migrant booking (2026-10-12; docs/testing/demographics-migrant-booking-2026-10-12.md), with the youth bulge
 # and the sex balance. Step 4 held all three back (controller's decision, 2026-10-12, after its review): T reads the men
 # the census's booking of the residual distorted (in the overnight Full run's 1848 save 32 states sat at T -0.5 or below

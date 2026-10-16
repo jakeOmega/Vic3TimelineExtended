@@ -583,14 +583,18 @@ nd_monthly_update = {
 				nd_ai_review_posture = yes
 			}
 		}
-		# Routine mishaps have an independent monthly budget.
-		random = {
-			chance = 10
+		# Routine mishaps have an independent monthly budget, and none rolls
+		# for five years after the last (nd_mishap_cooldown_months).
+		if = {
+			limit = { NOT = { has_variable = nd_mishap_cooldown_months } }
 			random = {
-				chance = nd_routine_mishap_tenth_percent
-				nd_log_context = yes
-				debug_log = "TE_NUCLEAR: type=incident; family=routine_mishap; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
-				trigger_event = { id = nuclear_incident.40 }
+				chance = 10
+				random = {
+					chance = nd_routine_mishap_tenth_percent
+					nd_log_context = yes
+					debug_log = "TE_NUCLEAR: type=incident; family=routine_mishap; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					trigger_event = { id = nuclear_incident.40 }
+				}
 			}
 		}
 		# ---- the Monopoly Window (not an incident: a decision, §8.5) ----------
@@ -632,6 +636,7 @@ nd_monthly_update = {
 	nd_tick_countdown = { VAR = nd_monopoly_window_months }
 	nd_tick_countdown = { VAR = nd_first_use_cooldown }
 	nd_tick_countdown = { VAR = nd_auto_answered_months }
+	nd_tick_countdown = { VAR = nd_mishap_cooldown_months }
 	if = {
 		limit = { has_variable = nd_credibility }
 		change_variable = { name = nd_credibility add = nd_credibility_step }
@@ -1674,8 +1679,11 @@ nd_start_unconfirmed_warning = {
 	else = {
 		# No plausible attacker after all (the eligibility test saw one this
 		# month; the pick can still come up empty if relations moved): a routine
-		# mishap instead of an impossible warning.
-		trigger_event = { id = nuclear_incident.40 }
+		# mishap instead of an impossible warning, unless one is on cooldown.
+		if = {
+			limit = { NOT = { has_variable = nd_mishap_cooldown_months } }
+			trigger_event = { id = nuclear_incident.40 }
+		}
 	}
 }
 
