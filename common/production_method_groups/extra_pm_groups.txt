@@ -541,7 +541,18 @@ INJECT:pmg_ownership_building_art_academy = {
 		pm_artificial_personalities
 	}
 }
+# most_productive, as vanilla gives the port and railway base groups (#933).
+# Under the default most_profitable the AI took the least-loss method whenever
+# its plants' own output pushed the local electricity price down, and moved back
+# up when the price recovered. Each switch is five years of pm_retooling, which
+# the AI's power-plant subsidy pays. In a 4x fast run's 1912 save, 70% of AI
+# power plants were retooling (railways 38%, ports 29%), and they carried 92% of
+# the plants' subsidies; 203 of 630 plants were back on the early method. The
+# base-group switches (about 70 a year) came without an input shortage.
+# most_productive takes the highest-output unlocked method and stays on it; an
+# input shortage still steers it off (NAI output-penalty factor).
 INJECT:pmg_base_building_power_plant = {
+	ai_selection = most_productive
 	production_methods = {
 		pm_modern_coal-fired_plant
 		pm_modern_oil-fired_plant
