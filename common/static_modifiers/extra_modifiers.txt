@@ -6838,6 +6838,17 @@ covert_space_espionage_detected = {
 	country_authority_add = -3
 }
 
+# Counterintelligence Support (2026-10-16): applied to the TARGET, a friend,
+# by covert_op_apply_target_effect at the operation's phase x priority (1 to
+# 3.2), so 8 to 26 per axis. Heightened Vigilance is +25 for a while after a
+# catch; the UN's shared intelligence +5 a step.
+covert_counterintel_support = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_covert_defense_economic_add = 8
+	country_covert_defense_military_add = 8
+	country_covert_defense_ideological_add = 8
+}
+
 # ============================================================================
 # CULTURAL HEGEMONY EVENTS - Timed modifiers from cultural hegemony events
 # ============================================================================
@@ -7315,6 +7326,25 @@ covert_op_heightened_vigilance_modifier = {
 	country_covert_defense_ideological_add = 25
 	country_covert_defense_economic_add = 25
 	country_covert_defense_military_add = 25
+}
+
+# Covert warfare: an operation against a friend was caught. Applied by
+# covert_backlash_home (covert_warfare_effects.txt) to the attacker with a
+# literal multiplier of 3 / 5 / 8 (full share) or 2 / 3 / 4 (half) by tier,
+# for short_modifier_time, decaying. One unit is -1 legitimacy.
+covert_friend_spying_scandal = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -1
+}
+
+# Covert warfare: a foreign operation was exposed at home. Applied by
+# covert_backlash_public to each interest group in a lobby that favours the
+# attacker, with a literal multiplier of 1 / 2 / 3 by tier (x1.5 when the
+# attacker was a friend), for short_modifier_time, decaying. One unit is -5%
+# political strength.
+covert_foreign_ties_discredited = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_pol_str_mult = -0.05
 }
 
 # Banking contagion: protectionist trade measures to contain financial crisis

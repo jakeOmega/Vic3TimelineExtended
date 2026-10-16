@@ -26,7 +26,7 @@ te_debug_covert_set_funding = {
 # a container with no pact at the next monthly pulse.
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $DEFENSE_MOD$ = type-specific defense modifier,
-#             $CODE$ = operation type code 0-12, matching the branches of
+#             $CODE$ = operation type code 0-14, matching the branches of
 #                      covert_last_exposed_type_name
 #             $MONTHS$ = duration to plant
 # Scope: country; scope:te_debug_covert_target must be set
@@ -142,13 +142,15 @@ te_debug_covert_refresh_display = {
 # Make the detection roll land on one specific operation: pin a random running
 # operation's iw_detect to 100 and run the shipping roll effect, so the roll,
 # the temporary-list pick and the scope hand-off to covert_warfare.1 are all
-# exercised. The next monthly sync restores the honest figure.
+# exercised. The next monthly sync restores the honest figure. A hostile one:
+# the roll never rolls Counterintelligence Support.
 # Scope: country
 te_debug_covert_force_detection = {
 	if = {
 		limit = { has_variable_list = iw_ops }
 		random_in_list = {
 			variable = iw_ops
+			limit = { covert_op_is_hostile = yes }
 			set_variable = { name = iw_detect value = 100 }
 		}
 		covert_ops_roll_detection_all = yes
@@ -279,6 +281,8 @@ te_debug_covert_hostile_networks = {
 		limit = { has_variable_list = iw_ops }
 		every_in_list = {
 			variable = iw_ops
+			# A friend we protect is not a hostile host.
+			limit = { covert_op_is_hostile = yes }
 			var:iw_target ?= {
 				if = {
 					limit = { is_country_alive = yes }
@@ -438,6 +442,122 @@ te_debug_covert_seed_new_ops = {
 			DEFENSE_MOD = country_covert_defense_economic_add
 			CODE = 11
 			MONTHS = 14
+		}
+	}
+}
+
+# ============================================================================
+# te_debug_covert.7 — watching caught operations, backlash, Counterintelligence
+# Support (2026-10-16). Every helper below is console-only.
+# ============================================================================
+
+# Every country running a hostile operation against us that we don't already
+# watch has those operations' detection set to 100 (its others to 0) and rolls
+# at once, through the shipping roll. A player with a covert service gets
+# covert_warfare.3 for each attacker's catch; one without, today's flow. An
+# attacker whose exposure is already in flight rolls nothing. The detection
+# figures are re-staged at the attacker's next sync.
+# Scope: country (the defender)
+te_debug_covert_catch_foreign = {
+	save_scope_as = te_debug_covert_victim
+	every_country = {
+		limit = {
+			NOT = { this = scope:te_debug_covert_victim }
+			has_variable_list = iw_ops
+			any_in_list = {
+				variable = iw_ops
+				var:iw_target ?= scope:te_debug_covert_victim
+				covert_op_is_hostile = yes
+				NOT = { has_variable = iw_known }
+			}
+		}
+		every_in_list = {
+			variable = iw_ops
+			if = {
+				limit = {
+					var:iw_target ?= scope:te_debug_covert_victim
+					covert_op_is_hostile = yes
+					NOT = { has_variable = iw_known }
+				}
+				set_variable = { name = iw_detect value = 100 }
+			}
+			else = {
+				set_variable = { name = iw_detect value = 0 }
+			}
+		}
+		covert_ops_roll_detection_all = yes
+	}
+}
+
+# Order the exposure of every operation we watch, as the panel's Expose button
+# does, then fire the hidden event that carries the orders out. Attackers whose
+# exposure is already in flight wait for the monthly pass.
+# Scope: country (the defender)
+te_debug_covert_expose_watched = {
+	if = {
+		limit = { has_variable_list = iw_known_ops }
+		every_in_list = {
+			variable = iw_known_ops
+			set_variable = { name = iw_expose_ordered value = 1 }
+		}
+		trigger_event = { id = covert_warfare.4 }
+	}
+}
+
+# Relations +60 with every country running a hostile operation against us, so
+# a catch of theirs counts as spying on a friend (covert_is_friend: cordial
+# with a tie, or amicable).
+# Scope: country (the defender)
+te_debug_covert_befriend_attackers = {
+	save_scope_as = te_debug_covert_victim
+	every_country = {
+		limit = {
+			NOT = { this = scope:te_debug_covert_victim }
+			has_variable_list = iw_ops
+			any_in_list = {
+				variable = iw_ops
+				var:iw_target ?= scope:te_debug_covert_victim
+				covert_op_is_hostile = yes
+			}
+		}
+		change_relations = { country = scope:te_debug_covert_victim value = 60 }
+	}
+}
+
+# Start Counterintelligence Support from us on a friend that has no protector,
+# six months in (establishing, so its defence boost applies at the next pulse).
+# Funding is raised to 1 if it is lower, or the pact would lapse. The friend
+# test is asked from the candidate's side: covert_is_friend's TARGET must be a
+# scope: reference, since vanilla's alliance triggers read it inside a scope
+# where prev is someone else.
+# Scope: country (the protector)
+te_debug_covert_start_support = {
+	save_scope_as = te_debug_covert_protector
+	random_country = {
+		limit = {
+			NOT = { this = scope:te_debug_covert_protector }
+			NOT = { has_variable = iw_cis_protector }
+			covert_is_friend = { TARGET = scope:te_debug_covert_protector }
+		}
+		save_scope_as = te_debug_covert_target
+	}
+	if = {
+		limit = { exists = scope:te_debug_covert_target }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = iw_funding_level }
+					var:iw_funding_level < 1
+				}
+			}
+			te_debug_covert_set_funding = { LEVEL = 1 }
+		}
+		te_debug_covert_plant_op = {
+			TYPE = counterintel_support
+			ACTION = covert_counterintel_support_action
+			DEFENSE_MOD = country_covert_defense_ideological_add
+			CODE = 14
+			MONTHS = 6
 		}
 	}
 }

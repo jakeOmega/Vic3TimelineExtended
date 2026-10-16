@@ -771,9 +771,10 @@ show_as_tooltip = { ... }                  — Show effects as tooltip only
 ### Duration Constants
 | Constant | Approximate Value |
 |----------|-------------------|
-| `short_modifier_time` | ~1 year (365 days) |
-| `normal_modifier_time` | ~3 years (1095 days) |
-| `long_modifier_time` | ~5 years (1825 days) |
+| `very_short_modifier_time` | 1 year (365 days) |
+| `short_modifier_time` | 2.5 years (913 days) |
+| `normal_modifier_time` | 5 years (1825 days) |
+| `long_modifier_time` | 10 years (3650 days) |
 
 ### Modifier Type Definition Template
 When adding custom modifier fields, register them in `common/modifier_type_definitions/`:

@@ -51,7 +51,25 @@ OPS = (
     ("space_espionage", 11, "economic", "mild", "covert_space_espionage_detected"),
     ("cultivate_assets", 12, "ideological", "mild", None),
     ("secure_material", 13, "military", "mild", None),
+    ("counterintel_support", 14, "ideological", "mild", "covert_counterintel_support"),
 )
+
+# Operations that work FOR their target, not against it: Counterintelligence
+# Support raises a friend's covert defences. The action is not hostile
+# (is_hostile = no), it is never rolled for detection, caught or watched
+# (covert_op_is_hostile), and it feeds no network, Tradecraft or head start.
+# It still sits in one tier trigger (mild, nominal) and every type table, so
+# the registry stays one list.
+FRIENDLY = {"counterintel_support"}
+
+# Types whose widget icon is still another type's art, until an icon pass
+# draws their own: type -> the type whose diplomatic-action icon the row and
+# the action borrow. The icon pass adds
+# gfx/interface/icons/diplomatic_action_icons/covert_<type>_action.dds and its
+# lens_toolbar_icons byte copy, then deletes the entry, which re-arms the
+# icon and lens tests for that type. Until then the engine logs a VFSOpen
+# error for the missing lens icon once a session.
+PLACEHOLDER_ICON = {"counterintel_support": "cultivate_assets"}
 
 # Types with no target marker that still act in the monthly pulse, on
 # something that is not a modifier: secure material finds warheads in the
@@ -64,6 +82,7 @@ NUMBER_WORDS = ("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "
                 "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
                 "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty")
 TYPES = tuple(op[0] for op in OPS)
+HOSTILE_TYPES = tuple(t for t in TYPES if t not in FRIENDLY)
 CODES = {op[0]: op[1] for op in OPS}
 TIERS = {op[0]: op[3] for op in OPS}
 TIER_CODES = {tier: {op[1] for op in OPS if op[3] == tier} for tier in TIER_NAMES}
@@ -153,7 +172,8 @@ class DiplomaticActionTests(unittest.TestCase):
                     % (t, axis, code),
                     block,
                 )
-                self.assertIn("is_hostile = yes", block)
+                # The action's own field (one tab in), not covert_op_is_hostile.
+                self.assertIn("\n\tis_hostile = %s\n" % ("no" if t in FRIENDLY else "yes"), block)
                 self.assertIn("manual_break_effect = { covert_op_end = { TYPE = %s } }" % t, block)
                 self.assertIn("auto_break_effect = { covert_op_end = { TYPE = %s } }" % t, block)
                 self.assertIn("covert_ops_type_below_cap = { TYPE = covert_%s_action }" % t, block)
@@ -292,9 +312,13 @@ class CustomLocTests(unittest.TestCase):
         # The two name blocks, and the description the defender's event shows
         # on hover over the operation's name (covert_exposed_op_tt).
         body = _text(CUSTOM_LOC)
+        # covert_caught_type_name is the defender's decision event
+        # (covert_warfare.3); a friendly type is never caught, but listing it
+        # there too keeps this one table.
         for entry, var, prefix in (
             ("covert_last_exposed_type_name", "iw_last_exposed_type", "iw_op_name_"),
             ("covert_burned_type_name", "iw_burned_type_code", "iw_op_name_"),
+            ("covert_caught_type_name", "iw_caught_type_code", "iw_op_name_"),
             ("covert_last_exposed_type_desc", "iw_last_exposed_type", "iw_op_exposed_desc_"),
         ):
             with self.subTest(entry=entry):
@@ -351,7 +375,14 @@ class LocTests(unittest.TestCase):
         loc = _loc()
         for t, _, _, tier, _ in OPS:
             with self.subTest(type=t):
-                self.assertIn("$iw_exposure_tier_%s_note$" % tier, loc["covert_%s_action_desc" % t])
+                desc = loc["covert_%s_action_desc" % t]
+                if t in FRIENDLY:
+                    # Never exposed, so no "if this is exposed" note at all;
+                    # its mild tier is nominal.
+                    for name in TIER_NAMES:
+                        self.assertNotIn("$iw_exposure_tier_%s_note$" % name, desc)
+                else:
+                    self.assertIn("$iw_exposure_tier_%s_note$" % tier, desc)
 
     def test_election_interference_text_claims_only_what_its_modifier_does(self):
         # Three strings promised "legitimacy and authority" while the modifier
@@ -409,6 +440,8 @@ class LensIconTests(unittest.TestCase):
     @unittest.skipUnless(LENS_ICONS.is_dir(), "gfx/ not checked out (sparse worktree)")
     def test_every_action_has_a_lens_icon(self):
         for t in TYPES:
+            if t in PLACEHOLDER_ICON:
+                continue
             with self.subTest(type=t):
                 self.assertTrue((LENS_ICONS / ("covert_%s_action.dds" % t)).is_file())
 
