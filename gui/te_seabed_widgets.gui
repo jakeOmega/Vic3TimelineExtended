@@ -100,7 +100,6 @@ types te_seabed_widget_types
 		ignoreinvisible = yes
 		margin = { 4 1 }
 		block "row_visible" {}
-		block "row_tooltip" {}
 
 		textbox = {
 			minimumsize = { 110 -1 }
@@ -109,6 +108,7 @@ types te_seabed_widget_types
 			align = left|nobaseline
 			using = fontsize_large
 			default_format = "#tooltippable"
+			block "row_tooltip" {}
 			block "basin_name" {}
 		}
 		textbox = {
@@ -225,77 +225,83 @@ types te_seabed_widget_types
 	### lines, read from te_seabed_regime and te_seabed_itlos_party), then the
 	### country's licences.
 	### ----------------------------------------------------------------------
-	type te_seabed_overview_panel = te_seabed_panel {
-		te_seabed_value_row = {
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_ov_policy_tt"
+	type te_seabed_overview_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_seabed_panel = {
+			te_seabed_value_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_ov_policy_tt"
+				}
+				blockoverride "row_label" {
+					text = "te_seabed_ov_policy"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_value'), '(CFixedPoint)3' ), 'te_seabed_policy_name_3', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_value'), '(CFixedPoint)2' ), 'te_seabed_policy_name_2', 'te_seabed_policy_name_1' ) )]"
+				}
 			}
-			blockoverride "row_label" {
-				text = "te_seabed_ov_policy"
+			te_seabed_value_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_ov_regime_tt"
+				}
+				blockoverride "row_label" {
+					text = "te_seabed_ov_regime"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_regime_value'), '(CFixedPoint)3' ), 'te_seabed_regime_name_3', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_regime_value'), '(CFixedPoint)2' ), 'te_seabed_regime_name_2', 'te_seabed_regime_name_1' ) )]"
+				}
 			}
-			blockoverride "row_value" {
-				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_value'), '(CFixedPoint)3' ), 'te_seabed_policy_name_3', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_value'), '(CFixedPoint)2' ), 'te_seabed_policy_name_2', 'te_seabed_policy_name_1' ) )]"
+			te_seabed_value_row = {
+				blockoverride "row_visible" {
+					visible = "[GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_ov_itlos_tt"
+				}
+				blockoverride "row_label" {
+					text = "te_seabed_ov_itlos"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( GetScriptedGui('te_seabed_itlos_party_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_seabed_ov_itlos_yes', 'te_seabed_ov_itlos_no' )]"
+				}
 			}
-		}
-		te_seabed_value_row = {
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_ov_regime_tt"
+			te_seabed_value_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_ov_licences_tt"
+				}
+				blockoverride "row_label" {
+					text = "te_seabed_ov_licences"
+				}
+				blockoverride "row_value" {
+					text = "te_seabed_ov_licences_value"
+				}
 			}
-			blockoverride "row_label" {
-				text = "te_seabed_ov_regime"
+			te_seabed_value_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_ov_distant_tt"
+				}
+				blockoverride "row_label" {
+					text = "te_seabed_ov_distant"
+				}
+				blockoverride "row_value" {
+					text = "te_seabed_ov_distant_value"
+				}
 			}
-			blockoverride "row_value" {
-				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_regime_value'), '(CFixedPoint)3' ), 'te_seabed_regime_name_3', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_regime_value'), '(CFixedPoint)2' ), 'te_seabed_regime_name_2', 'te_seabed_regime_name_1' ) )]"
-			}
-		}
-		te_seabed_value_row = {
-			blockoverride "row_visible" {
-				visible = "[GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_ov_itlos_tt"
-			}
-			blockoverride "row_label" {
-				text = "te_seabed_ov_itlos"
-			}
-			blockoverride "row_value" {
-				text = "[SelectLocalization( GetScriptedGui('te_seabed_itlos_party_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_seabed_ov_itlos_yes', 'te_seabed_ov_itlos_no' )]"
-			}
-		}
-		te_seabed_value_row = {
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_ov_licences_tt"
-			}
-			blockoverride "row_label" {
-				text = "te_seabed_ov_licences"
-			}
-			blockoverride "row_value" {
-				text = "te_seabed_ov_licences_value"
-			}
-		}
-		te_seabed_value_row = {
-			blockoverride "row_visible" {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_ov_distant_tt"
-			}
-			blockoverride "row_label" {
-				text = "te_seabed_ov_distant"
-			}
-			blockoverride "row_value" {
-				text = "te_seabed_ov_distant_value"
-			}
-		}
-		te_seabed_value_row = {
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_ov_room_tt"
-			}
-			blockoverride "row_label" {
-				text = "te_seabed_ov_room"
-			}
-			blockoverride "row_value" {
-				text = "te_seabed_ov_room_value"
+			te_seabed_value_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_ov_room_tt"
+				}
+				blockoverride "row_label" {
+					text = "te_seabed_ov_room"
+				}
+				blockoverride "row_value" {
+					text = "te_seabed_ov_room_value"
+				}
 			}
 		}
 	}
@@ -304,41 +310,47 @@ types te_seabed_widget_types
 	### The policy: one national choice (§ 2.5), three buttons centred under
 	### the heading. 3 x 156 + 2 x 6 = 480.
 	### ----------------------------------------------------------------------
-	type te_seabed_policy_panel = te_seabed_panel {
-		te_seabed_subheader = {
-			blockoverride "subheader_text" {
-				text = "te_seabed_policy_header"
-			}
-		}
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			spacing = 6
-			margin_top = 6
-			margin_bottom = 4
+	type te_seabed_policy_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
 
-			te_seabed_policy_button = {
-				blockoverride "policy_context" {
-					datacontext = "[GetScriptedGui('te_seabed_policy_1_sgui')]"
-				}
-				blockoverride "policy_text" {
-					text = "te_seabed_policy_name_1"
+		te_seabed_panel = {
+			te_seabed_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_seabed_policy_header"
 				}
 			}
-			te_seabed_policy_button = {
-				blockoverride "policy_context" {
-					datacontext = "[GetScriptedGui('te_seabed_policy_2_sgui')]"
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				spacing = 6
+				margin_top = 6
+				margin_bottom = 4
+
+				te_seabed_policy_button = {
+					blockoverride "policy_context" {
+						datacontext = "[GetScriptedGui('te_seabed_policy_1_sgui')]"
+					}
+					blockoverride "policy_text" {
+						text = "te_seabed_policy_name_1"
+					}
 				}
-				blockoverride "policy_text" {
-					text = "te_seabed_policy_name_2"
+				te_seabed_policy_button = {
+					blockoverride "policy_context" {
+						datacontext = "[GetScriptedGui('te_seabed_policy_2_sgui')]"
+					}
+					blockoverride "policy_text" {
+						text = "te_seabed_policy_name_2"
+					}
 				}
-			}
-			te_seabed_policy_button = {
-				blockoverride "policy_context" {
-					datacontext = "[GetScriptedGui('te_seabed_policy_3_sgui')]"
-				}
-				blockoverride "policy_text" {
-					text = "te_seabed_policy_name_3"
+				te_seabed_policy_button = {
+					blockoverride "policy_context" {
+						datacontext = "[GetScriptedGui('te_seabed_policy_3_sgui')]"
+					}
+					blockoverride "policy_text" {
+						text = "te_seabed_policy_name_3"
+					}
 				}
 			}
 		}
@@ -348,126 +360,132 @@ types te_seabed_widget_types
 	### The basins: a row per basin where the country has weight or holds
 	### licences, home or distant (§ 2.7). Open: it changes every year.
 	### ----------------------------------------------------------------------
-	type te_seabed_basins_panel = te_seabed_panel {
-		te_seabed_subheader = {
-			blockoverride "subheader_text" {
-				text = "te_seabed_basins_header"
+	type te_seabed_basins_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_seabed_panel = {
+			te_seabed_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_seabed_basins_header"
+				}
 			}
-		}
-		te_seabed_basin_head = {}
-		te_seabed_basin_row = {
-			blockoverride "row_visible" {
-				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_pacific'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_pacific'), '(CFixedPoint)0' ) )]"
+			te_seabed_basin_head = {}
+			te_seabed_basin_row = {
+				blockoverride "row_visible" {
+					visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_pacific'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_pacific'), '(CFixedPoint)0' ) )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_basin_tt_pacific"
+				}
+				blockoverride "basin_name" {
+					text = "te_seabed_basin_pacific"
+				}
+				blockoverride "basin_coast" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+				}
+				blockoverride "basin_weight" {
+					text = "te_seabed_basin_weight_pacific"
+				}
+				blockoverride "basin_share" {
+					text = "te_seabed_basin_share_pacific"
+				}
+				blockoverride "basin_world" {
+					text = "te_seabed_basin_world_pacific"
+				}
 			}
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_basin_tt_pacific"
+			te_seabed_basin_row = {
+				blockoverride "row_visible" {
+					visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_atlantic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_atlantic'), '(CFixedPoint)0' ) )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_basin_tt_atlantic"
+				}
+				blockoverride "basin_name" {
+					text = "te_seabed_basin_atlantic"
+				}
+				blockoverride "basin_coast" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+				}
+				blockoverride "basin_weight" {
+					text = "te_seabed_basin_weight_atlantic"
+				}
+				blockoverride "basin_share" {
+					text = "te_seabed_basin_share_atlantic"
+				}
+				blockoverride "basin_world" {
+					text = "te_seabed_basin_world_atlantic"
+				}
 			}
-			blockoverride "basin_name" {
-				text = "te_seabed_basin_pacific"
+			te_seabed_basin_row = {
+				blockoverride "row_visible" {
+					visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_indian'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_indian'), '(CFixedPoint)0' ) )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_basin_tt_indian"
+				}
+				blockoverride "basin_name" {
+					text = "te_seabed_basin_indian"
+				}
+				blockoverride "basin_coast" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+				}
+				blockoverride "basin_weight" {
+					text = "te_seabed_basin_weight_indian"
+				}
+				blockoverride "basin_share" {
+					text = "te_seabed_basin_share_indian"
+				}
+				blockoverride "basin_world" {
+					text = "te_seabed_basin_world_indian"
+				}
 			}
-			blockoverride "basin_coast" {
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+			te_seabed_basin_row = {
+				blockoverride "row_visible" {
+					visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_arctic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_arctic'), '(CFixedPoint)0' ) )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_basin_tt_arctic"
+				}
+				blockoverride "basin_name" {
+					text = "te_seabed_basin_arctic"
+				}
+				blockoverride "basin_coast" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+				}
+				blockoverride "basin_weight" {
+					text = "te_seabed_basin_weight_arctic"
+				}
+				blockoverride "basin_share" {
+					text = "te_seabed_basin_share_arctic"
+				}
+				blockoverride "basin_world" {
+					text = "te_seabed_basin_world_arctic"
+				}
 			}
-			blockoverride "basin_weight" {
-				text = "te_seabed_basin_weight_pacific"
-			}
-			blockoverride "basin_share" {
-				text = "te_seabed_basin_share_pacific"
-			}
-			blockoverride "basin_world" {
-				text = "te_seabed_basin_world_pacific"
-			}
-		}
-		te_seabed_basin_row = {
-			blockoverride "row_visible" {
-				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_atlantic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_atlantic'), '(CFixedPoint)0' ) )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_basin_tt_atlantic"
-			}
-			blockoverride "basin_name" {
-				text = "te_seabed_basin_atlantic"
-			}
-			blockoverride "basin_coast" {
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
-			}
-			blockoverride "basin_weight" {
-				text = "te_seabed_basin_weight_atlantic"
-			}
-			blockoverride "basin_share" {
-				text = "te_seabed_basin_share_atlantic"
-			}
-			blockoverride "basin_world" {
-				text = "te_seabed_basin_world_atlantic"
-			}
-		}
-		te_seabed_basin_row = {
-			blockoverride "row_visible" {
-				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_indian'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_indian'), '(CFixedPoint)0' ) )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_basin_tt_indian"
-			}
-			blockoverride "basin_name" {
-				text = "te_seabed_basin_indian"
-			}
-			blockoverride "basin_coast" {
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
-			}
-			blockoverride "basin_weight" {
-				text = "te_seabed_basin_weight_indian"
-			}
-			blockoverride "basin_share" {
-				text = "te_seabed_basin_share_indian"
-			}
-			blockoverride "basin_world" {
-				text = "te_seabed_basin_world_indian"
-			}
-		}
-		te_seabed_basin_row = {
-			blockoverride "row_visible" {
-				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_arctic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_arctic'), '(CFixedPoint)0' ) )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_basin_tt_arctic"
-			}
-			blockoverride "basin_name" {
-				text = "te_seabed_basin_arctic"
-			}
-			blockoverride "basin_coast" {
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
-			}
-			blockoverride "basin_weight" {
-				text = "te_seabed_basin_weight_arctic"
-			}
-			blockoverride "basin_share" {
-				text = "te_seabed_basin_share_arctic"
-			}
-			blockoverride "basin_world" {
-				text = "te_seabed_basin_world_arctic"
-			}
-		}
-		te_seabed_basin_row = {
-			blockoverride "row_visible" {
-				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_southern'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_southern'), '(CFixedPoint)0' ) )]"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "te_seabed_basin_tt_southern"
-			}
-			blockoverride "basin_name" {
-				text = "te_seabed_basin_southern"
-			}
-			blockoverride "basin_coast" {
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
-			}
-			blockoverride "basin_weight" {
-				text = "te_seabed_basin_weight_southern"
-			}
-			blockoverride "basin_share" {
-				text = "te_seabed_basin_share_southern"
-			}
-			blockoverride "basin_world" {
-				text = "te_seabed_basin_world_southern"
+			te_seabed_basin_row = {
+				blockoverride "row_visible" {
+					visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_southern'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_southern'), '(CFixedPoint)0' ) )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "te_seabed_basin_tt_southern"
+				}
+				blockoverride "basin_name" {
+					text = "te_seabed_basin_southern"
+				}
+				blockoverride "basin_coast" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+				}
+				blockoverride "basin_weight" {
+					text = "te_seabed_basin_weight_southern"
+				}
+				blockoverride "basin_share" {
+					text = "te_seabed_basin_share_southern"
+				}
+				blockoverride "basin_world" {
+					text = "te_seabed_basin_world_southern"
+				}
 			}
 		}
 	}
