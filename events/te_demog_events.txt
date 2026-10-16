@@ -74,5 +74,6 @@ te_demog_events.4 = {
 		te_demog_lines_refresh = yes
 		te_demog_workforce_lines_refresh = yes
 		te_demog_workforce_heal = yes
+		te_demog_rates_heal = yes
 	}
 }
