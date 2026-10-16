@@ -292,6 +292,17 @@ gm_remove_local_modifiers = {
 	}
 }
 
+# State scope. Add $AGE$ to the primary's age grandeur (gm_age), creating it.
+gm_state_add_age = {
+	if = {
+		limit = { has_variable = gm_age }
+		change_variable = { name = gm_age add = $AGE$ }
+	}
+	else = {
+		set_variable = { name = gm_age value = $AGE$ }
+	}
+}
+
 gm_remove_state_var = {
 	if = {
 		limit = { has_variable = $VAR$ }
@@ -332,6 +343,8 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_supporter_ig }
 	gm_remove_state_var = { VAR = gm_new_contest }
 	gm_remove_state_var = { VAR = gm_grandeur }
+	# Its age (spec 2026-10-16 §1). Rededicate keeps half of it (gm_state_rededicate).
+	gm_remove_state_var = { VAR = gm_age }
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	gm_remove_state_var = { VAR = gm_ceremony_level }
 	# Its name (v2 §3, gm_name_effects.txt): a rebuilt monument is named again.

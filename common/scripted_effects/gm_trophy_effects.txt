@@ -93,6 +93,7 @@ gm_state_tr_take = {
 		else = {
 			set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 			set_variable = { name = gm_tr_take_levels value = gm_state_tr_levels }
+			set_variable = { name = gm_tr_take_age value = gm_state_tr_age }
 			set_variable = { name = gm_tr_take_value value = gm_state_tr_value }
 			set_variable = { name = gm_tr_take_whole value = gm_state_tr_whole }
 			set_variable = { name = gm_tr_take_left value = gm_state_tr_levels_left }
@@ -114,6 +115,7 @@ gm_state_tr_take = {
 		}
 		gm_remove_state_var = { VAR = gm_tr_take_target }
 		gm_remove_state_var = { VAR = gm_tr_take_levels }
+		gm_remove_state_var = { VAR = gm_tr_take_age }
 		gm_remove_state_var = { VAR = gm_tr_take_value }
 		gm_remove_state_var = { VAR = gm_tr_take_whole }
 		gm_remove_state_var = { VAR = gm_tr_take_left }
@@ -142,6 +144,7 @@ gm_state_tr_make_trophy = {
 			set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
 			set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
+			set_variable = { name = gm_tr_age value = scope:gm_tr_state.var:gm_tr_take_age }
 			set_variable = { name = gm_tr_grandeur value = scope:gm_tr_state.var:gm_tr_take_value }
 			set_variable = { name = gm_tr_year value = gm_this_year }
 			set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
@@ -286,7 +289,19 @@ gm_state_tr_remove_piece = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
-	set_variable = { name = gm_grandeur value = var:gm_tr_take_left }
+	# The age that stays with what stands (spec 2026-10-16 §5).
+	if = {
+		limit = { has_variable = gm_age }
+		change_variable = { name = gm_age subtract = var:gm_tr_take_age }
+		clamp_variable = { name = gm_age min = 0 }
+	}
+	set_variable = {
+		name = gm_grandeur
+		value = {
+			value = var:gm_tr_take_left
+			add = gm_state_primary_age
+		}
+	}
 	remove_variable = gm_rebuild_level
 	set_variable = { name = gm_tr_cooldown days = 3650 }
 	# The refresh puts the dedication back once the rebuilt building reads.
@@ -502,6 +517,12 @@ gm_state_tr_receive = {
 	if = {
 		limit = { has_building = building_grand_monument }
 		gm_state_tr_add_levels = yes
+		# Its age comes back with its levels (spec 2026-10-16 §5); a trophy
+		# from an older save has none.
+		if = {
+			limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } }
+			gm_state_add_age = { AGE = scope:gm_tr_moving.var:gm_tr_age }
+		}
 	}
 	else = {
 		gm_state_tr_rebuild_from_moving = yes
@@ -579,6 +600,7 @@ gm_state_tr_rebuild_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree TO = gm_honoree }
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
+	gm_tr_copy_to_state = { FROM = gm_tr_age TO = gm_age }
 	set_variable = gm_seen
 	set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }

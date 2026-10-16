@@ -3043,7 +3043,7 @@
  gm_local_war_memorial:0 "Grand Monument: War Memorial"
  gm_local_war_memorial_desc:0 "A war memorial in this state. Grows with its [concept_grandeur]."
  gm_mon_row_detail:0 "[ScriptContainer.GetCustom('gm_tr_form_name')], [ScriptContainer.GetCustom('gm_tr_dedication_name')]"
- gm_mon_row_value:0 "Adds #v [ScriptContainer.MakeScope.ScriptValue('gm_mon_grandeur')|0]#! levels to the building"
+ gm_mon_row_value:0 "Adds #v [ScriptContainer.MakeScope.ScriptValue('gm_mon_levels')|0]#! levels to the building"
  gm_mon_row_value_tt:0 "#b Its levels#!\nA monument that stands beside the first one here adds its levels to the one building, which runs on the first's dedication. What the building gives this state and the nation counts every monument's levels once, and the Grand Monuments tab of the Timeline Extended window lists the effects.\nA country whose armies hold half the state in a war can carry this one off, and the others stay."
  gm_mon_row_where:0 "Stands in #v [ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetName]#!"
  gm_mon_sgui_route_tt:0 "Our armies hold half the state where it stands, in a war with its owner"
