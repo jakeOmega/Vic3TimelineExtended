@@ -253,7 +253,10 @@ class NumbersTest(unittest.TestCase):
     def test_compensation_share(self):
         self.assertEqual(_constant("RT_COMPENSATION_SHARE"), 0.25)
         for key in ("rt_how_programmes", "rt_law_phaseout_rule_tt"):
-            self.assertIn("a quarter of what it would cost to build", _loc_value(key), key)
+            text = _loc_value(key)
+            self.assertIn("a quarter of what it would cost to build at base prices", text, key)
+            # The script only debits the treasury: nothing pays an owner.
+            self.assertIn("no owner receives it", text, key)
         for key in ("concept_fossil_transition_desc",):
             self.assertIn(f"#v {int(_constant('RT_RETIRE_INTERVAL_MONTHS'))}#! months", _loc_value(key), key)
 
@@ -272,6 +275,20 @@ class InGameTextTest(unittest.TestCase):
             for phrase in ("whoever owns it, foreign investors included", "the whole building goes, every level",
                            "from the treasury"):
                 self.assertIn(phrase, text, key)
+
+    def test_no_text_says_an_owner_is_paid(self):
+        """rt_retire_smallest only debits the treasury; no effect pays a
+        building's owners, so no text may say they are paid."""
+        keys = ["rt_how_programmes", "rt_law_phaseout_rule_tt", "concept_fossil_transition_desc"]
+        for industry in INDUSTRIES:
+            keys += [f"rt_start_{industry}_button_desc", f"rt_start_{industry}_tt",
+                     f"notification_rt_{industry}_retired_notice_desc"]
+        for key in keys:
+            text = _loc_value(key).lower()
+            self.assertIn("from the treasury", text, key)
+            for phrase in ("owners are paid", "compensate its owners", "compensate owners",
+                           "paid to its owners", "paid to the owners"):
+                self.assertNotIn(phrase, text, key)
 
     def test_the_moratorium_line_names_foreign_investors_and_what_carries_on(self):
         text = _loc_value("rt_law_moratorium_tt")

@@ -257,6 +257,73 @@ class PrivilegesTests(unittest.TestCase):
         self.assertGreaterEqual(je.count("un_member_privileges_modifier"), 3)
 
 
+def _close(text, start):
+    """Index of the brace that closes the first ``{`` at or after ``start``."""
+    depth = 0
+    for i in range(text.index("{", start), len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+    raise AssertionError("unclosed block")
+
+
+_NPT = "un_npt_disarmament_modifier"
+_NPT_GUARDED_REMOVE = re.compile(
+    r"if\s*=\s*\{\s*limit\s*=\s*\{\s*(?P<limit>[^{}]*(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}[^{}]*)*)\}\s*"
+    r"je:je_united_nations\s*\?=\s*\{\s*remove_modifier\s*=\s*" + _NPT + r"\s*\}\s*\}")
+
+
+class NptDisarmamentTests(unittest.TestCase):
+    """NPT enforcement binds members only (je_un_preview_npt_tt), and leaving
+    "ends every UN commitment and benefit" (UN_LEAVE_DESC). An ex-member that
+    kept un_npt_disarmament_modifier had its programme and stockpile zeroed
+    every week (je_nuclear_program) until it rejoined or the UN dissolved."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ladder = _read(_path("common", "scripted_effects", "un_ladder_effects.txt"))
+        cls.je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
+
+    def test_membership_end_lifts_disarmament(self):
+        end = _block(self.ladder, "un_membership_end_effect")
+        m = _NPT_GUARDED_REMOVE.search(end)
+        self.assertIsNotNone(m, "un_membership_end_effect must remove " + _NPT)
+        self.assertIn("has_modifier = " + _NPT, m.group("limit"))
+
+    def test_every_departure_runs_the_end_effect(self):
+        # Leaving (the button and un_events.34 both call un_leave_organisation)
+        # and dissolution. An expulsion vote takes only the permanent seat, and
+        # a revolution's winner inherits the entry without its modifiers.
+        for name in ("un_leave_organisation", "un_dissolve_strip_country"):
+            with self.subTest(effect=name):
+                self.assertIn("un_membership_end_effect = yes", _block(self.ladder, name))
+
+    def test_pulse_frees_a_non_member(self):
+        # The net for any other way out, and for a save in which a country
+        # left before un_membership_end_effect lifted it: outside the
+        # member-only block, which a non-member never enters.
+        member = re.search(r"if\s*=\s*\{\s*limit\s*=\s*\{\s*je:je_united_nations\s*\?=\s*"
+                           r"\{\s*has_modifier\s*=\s*un_member_modifier\s*\}\s*\}", self.je)
+        self.assertIsNotNone(member, "member-only block not found")
+        lo, hi = member.start(), _close(self.je, member.start())
+        nets = [m for m in _NPT_GUARDED_REMOVE.finditer(self.je)
+                if not lo <= m.start() <= hi
+                and re.search(r"NOT\s*=\s*\{\s*je:je_united_nations\s*\?=\s*\{\s*"
+                              r"has_modifier\s*=\s*un_member_modifier\s*\}\s*\}", m.group("limit"))]
+        self.assertEqual(len(nets), 1, "expected one non-member removal of " + _NPT)
+        # And the only place it is added is inside the member block (the
+        # activation preview aside, which the engine only tooltips).
+        pulse = self.je[:self.je.index("event_outcome_activated_effect_desc")]
+        adds = [m.start() for m in re.finditer(r"name\s*=\s*" + _NPT, pulse)]
+        self.assertTrue(adds)
+        for pos in adds:
+            with self.subTest(pos=pos):
+                self.assertTrue(lo <= pos <= hi)
+
+
 class TransitionTests(unittest.TestCase):
     def test_pulse_announces_and_strips(self):
         body = _block(_read(_path("common", "scripted_effects", "un_membership_effects.txt")),

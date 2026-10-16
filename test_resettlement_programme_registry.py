@@ -787,16 +787,18 @@ class PoliticsTests(unittest.TestCase):
 
 
 class DeclarationTests(unittest.TestCase):
-    def test_party_reads_the_conventions_member_and_reservations_modifiers(self):
+    def test_party_reads_the_conventions_member_modifier(self):
         body = squash(block(read(TRIGGERS), "resettlement_is_declaration_party"))
         self.assertIn("je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }", body)
-        self.assertIn("has_modifier = un_human_rights_reservations_modifier", body)
+        # Ratifying with reservations went with the proposer events' option B
+        # (#419): nothing applies un_human_rights_reservations_modifier.
+        self.assertNotIn("reservations", body)
 
-    def test_intensity_sums_the_coercive_programmes_and_halves_under_reservations(self):
+    def test_intensity_sums_the_coercive_programmes(self):
         body = squash(block(read(EFFECTS), "resettlement_refresh_declaration"))
         summed = set(re.findall(r"var:rs_intensity_(\w+)", body))
         self.assertEqual(summed, {p.key for p in COERCIVE})
-        self.assertIn("change_variable = { name = rs_declaration_intensity multiply = 0.5 }", body)
+        self.assertNotIn("multiply = 0.5", body)
         self.assertIn("add_modifier = { name = resettlement_declaration_violation multiplier = var:rs_declaration_intensity }", body)
         self.assertIn("trigger_event = { id = resettlement.20 }", body)
 

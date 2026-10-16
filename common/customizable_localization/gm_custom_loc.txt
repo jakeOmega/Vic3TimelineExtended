@@ -635,6 +635,10 @@ gm_skin_name = {
 		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_tomb_of_alexander }
 		localization_key = gm_skin_landmark_tomb_of_alexander
 	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_pompeii }
+		localization_key = gm_skin_landmark_pompeii
+	}
 	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
 	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
@@ -1141,6 +1145,10 @@ gm_landmark_name_evt = {
 		localization_key = gm_landmark_tomb_of_alexander_evt
 	}
 	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_pompeii }
+		localization_key = gm_landmark_pompeii_evt
+	}
+	text = {
 		localization_key = gm_landmark_name_evt_none
 	}
 }
@@ -1494,6 +1502,10 @@ gm_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_landmark var:gm_landmark = flag:tomb_of_alexander }
 		localization_key = gm_landmark_tomb_of_alexander_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:pompeii }
+		localization_key = gm_landmark_pompeii_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

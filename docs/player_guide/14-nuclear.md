@@ -531,8 +531,9 @@ exposure reads Extreme in a dangerous crisis. Two High Alert countries at danger
 no strain and Existential Deterrence, have about a 50% chance of at least one
 meaningful incident over two weekly checks each.
 
-Routine mishaps have their own monthly roll: 0.5% at Recessed, 1% at Routine,
-2% at Heightened and 4% at High Alert. They do not replace a meaningful incident.
+Routine mishaps have their own monthly roll: 0.2% at Recessed, 0.5% at Routine,
+1% at Heightened and 2% at High Alert. After one, no other comes for five years.
+They do not replace a meaningful incident.
 
 | Incident | Can happen when | What it is |
 |---|---|---|

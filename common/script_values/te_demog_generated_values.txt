@@ -1522,14 +1522,31 @@ te_demog_mult_infection = {
 te_demog_f_work_laws = {
 	value = 1 add = var:te_dg_in_work min = 0.2
 }
+# State scope: work's safety factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_work_safety = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_in_saf_work }
+		subtract = var:te_dg_in_saf_work
+	}
+}
 # State scope: the work cause's multiplier, the product of its factors (demographics_model.cause_multipliers).
 te_demog_mult_work = {
 	value = te_demog_f_work_laws
+	multiply = te_demog_f_work_safety
 }
 
 # State scope: external's laws factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_external_laws = {
 	value = 1 add = var:te_dg_in_ext min = 0.2
+}
+# State scope: external's safety factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_external_safety = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_in_saf_ext }
+		subtract = var:te_dg_in_saf_ext
+	}
 }
 # State scope: external's turmoil factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_external_turmoil = {
@@ -1538,6 +1555,7 @@ te_demog_f_external_turmoil = {
 # State scope: the external cause's multiplier, the product of its factors (demographics_model.cause_multipliers).
 te_demog_mult_external = {
 	value = te_demog_f_external_laws
+	multiply = te_demog_f_external_safety
 	multiply = te_demog_f_external_turmoil
 }
 

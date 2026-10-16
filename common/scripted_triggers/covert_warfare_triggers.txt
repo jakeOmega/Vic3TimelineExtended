@@ -48,7 +48,18 @@ is_covert_operation_pact = {
 		is_diplomatic_action_type = covert_space_espionage_action
 		is_diplomatic_action_type = covert_cultivate_assets_action
 		is_diplomatic_action_type = covert_secure_material_action
+		is_diplomatic_action_type = covert_counterintel_support_action
 	}
+}
+
+# A covert operation pact that works against its second country: every type
+# but Counterintelligence Support, which protects a friend. The pact-scope
+# twin of covert_op_is_hostile, for counts that read pacts rather than
+# containers (a network's tier-2 count of operations against us).
+# Scope: diplomatic_pact
+is_hostile_covert_operation_pact = {
+	is_covert_operation_pact = yes
+	NOT = { is_diplomatic_action_type = covert_counterintel_support_action }
 }
 
 # Target eligibility shared by all covert actions. Decentralized countries have
@@ -56,6 +67,46 @@ is_covert_operation_pact = {
 # so they are never a valid covert target. Scope: country (prospective target).
 covert_action_valid_target = {
 	NOT = { is_country_type = decentralized }
+}
+
+# The one definition of a friend, for every covert rule that asks. Relations
+# of at least cordial AND a tie (alliance, defensive pact, the same power
+# bloc, or one the other's overlord or subject), or relations of at least
+# amicable with no tie. A tie never counts on its own: two members of one
+# bloc who dislike each other are not friends. Consumers: the attacker's
+# backlash and the defender's backlash scaling, the AI's watch odds,
+# Counterintelligence Support's possible and requirement_to_maintain, and the
+# AI's launch and break checks for the six operations that used to be
+# refused at good relations.
+# The bloc tie is guarded on the country in scope being in one: two countries
+# in none can otherwise read as being in the same one.
+# `is_subject_of` also counts a subject's subject. It has no mirror, so the
+# overlord direction enters $TARGET$ and reads PREV (the country in scope).
+# Relations are symmetric, so the answer is the same from either side.
+# Relations are read as $TARGET$.relations:this: the link's argument resolves
+# in the scope the chain starts from (vanilla 12_military_assistance.txt,
+# `scope:source_country.relations:this` inside an enemy iterator), so the
+# trigger works from any country, not only ROOT. The backlash reads it from
+# the defender's side with ROOT the attacker.
+# Parameters: $TARGET$ = country (a scope: reference)
+# Scope: country
+covert_is_friend = {
+	OR = {
+		AND = {
+			$TARGET$.relations:this >= relations_threshold:cordial
+			OR = {
+				has_treaty_alliance_with = { TARGET = $TARGET$ }
+				has_treaty_defensive_pact_with = { TARGET = $TARGET$ }
+				AND = {
+					is_in_power_bloc = yes
+					is_in_same_power_bloc = $TARGET$
+				}
+				is_subject_of = $TARGET$
+				$TARGET$ = { is_subject_of = PREV }
+			}
+		}
+		$TARGET$.relations:this >= relations_threshold:amicable
+	}
 }
 
 # True while the country runs fewer operations of this type than
@@ -272,6 +323,9 @@ covert_code_tier_mild = {
 		var:$VAR$ = 11
 		var:$VAR$ = 12
 		var:$VAR$ = 13
+		# Counterintelligence Support: nominal. It is never caught, so no
+		# exposure cost ever reads this; it sits here so every code has a tier.
+		var:$VAR$ = 14
 	}
 }
 
@@ -320,6 +374,79 @@ covert_exposure_is_costless = {
 	covert_code_tier_war = { VAR = iw_burned_type_code }
 	has_variable = iw_burned_at_war
 	var:iw_burned_at_war = 1
+}
+
+# A political lobby that favours $TARGET$: lobby_pro_country with that target,
+# or lobby_pro_overlord when it is the overlord of the lobby's country (the
+# type a pro-country lobby swaps to once its country becomes a subject). THE
+# one place that says which lobbies the backlash reaches: the attacker's home
+# appeasement hit (covert_backlash_home) and the defender's discredited
+# interest groups (covert_backlash_public) both ask it.
+# Parameters: $TARGET$ = the country the lobby favours (a scope: reference)
+# Scope: political_lobby
+covert_backlash_pro_lobby_of = {
+	OR = {
+		is_political_lobby_type = lobby_pro_country
+		is_political_lobby_type = lobby_pro_overlord
+	}
+	target = $TARGET$
+}
+
+# ============================================================================
+# WATCHING A CAUGHT OPERATION
+# ============================================================================
+# A caught operation goes to its target first when the target runs a covert
+# service: expose it (covert_warfare.1, as before) or let it run and watch it
+# (covert_watch_start). The record shape and the flow: covert_warfare_effects.txt,
+# § WATCHING A CAUGHT OPERATION.
+
+# True when this country can decide what to do with an operation it caught:
+# the service that would watch it, the same test covert_warfare.2's
+# "Retaliate in kind" applies. Without it a catch goes straight to the exposure.
+# Scope: country (the target of the caught operation)
+covert_can_watch = {
+	has_game_rule = covert_warfare_enabled
+	has_journal_entry = je_covert_warfare
+}
+
+# One exposure in flight per attacker. covert_warfare.1 keeps the operation it
+# is resolving on the attacker itself (iw_burned_type_code and its siblings),
+# so a second one opened before the first closes would overwrite them. True
+# from the moment an exposure is ordered (iw_expose_inflight, set by
+# covert_exposure_fire before the event is triggered, since trigger_event may
+# not run the event's immediate inside the calling effect) until the event's
+# `after` clears both. While it holds, the detection roll waits a month and
+# every other exposure of this attacker's operations waits its turn.
+# Scope: country (the attacker)
+covert_exposure_in_flight = {
+	OR = {
+		has_variable = iw_burned_type_code
+		has_variable = iw_expose_inflight
+	}
+}
+
+# True for an operation that works against its target: every type but
+# Counterintelligence Support, which protects a friend and is never rolled for
+# detection, caught or watched.
+# Scope: covert operation container
+covert_op_is_hostile = {
+	NOT = { has_tag = iw_op_counterintel_support }
+}
+
+# True for the operation a watch record stands for: run against $DEFENDER$,
+# of the type code $CODE$, and known to its target. The no-duplicate rule
+# makes (type, target) unique per operator, so this picks at most one of the
+# attacker's operations. $CODE$ is read in the operation's scope: pass a
+# number or a country-variable chain (scope:<country>.var:<staged code>),
+# never a container's own var: or PREV.
+# Parameters: $DEFENDER$ = the watching country (a scope: reference)
+#             $CODE$ = operation type code
+# Scope: covert operation container
+covert_watch_op_matches = {
+	has_variable = iw_known
+	var:iw_target ?= $DEFENDER$
+	has_variable = iw_type_code
+	var:iw_type_code = $CODE$
 }
 
 # ============================================================================
@@ -487,6 +614,8 @@ covert_ai_can_spare_influence = {
 # ends only once the operation's reason has gone, judged more loosely than
 # will_propose judges it at launch (covert_ai_hostility_gone), so a target
 # drifting in and out of the launch test does not make the AI stop and start.
+# The four breakable operations that used to be refused at good relations
+# also end once the target is a friend (covert_is_friend), after the same wait.
 # The launch-only tests (free slot, intelligence capacity, target size, debt)
 # are never break reasons.
 

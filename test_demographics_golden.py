@@ -108,6 +108,16 @@ BOOKING_DIGESTS = {
     ("generated_effects", "te_demog_enter_class"):
         "07f944c3f25667c54c199dea7cba21d956615a0f8fb065f1fd3e5d802f34ad7a",
 }
+# Modern safety (2026-10-16; demographics_params.SAFETY_TYPES) changes three blocks on purpose: work's and accidents'
+# products gain the safety factor, and the store keeps its two shares. No golden case holds an era 7-9 safety carrier, so
+# the factor reads 1 and every recorded number stays as it was; test_demographics_registry holds the factor to the model.
+SAFETY_DIGESTS = {
+    ("generated_effects", "te_demog_cause_inputs_store"):
+        "ea5de18c153f5597a81fc108d6da4912c39eabc255620a4244193aa413746813",
+    ("generated_values", "te_demog_mult_external"): "ffbb862bd4f3b5ff0e40cacb055afe81b71ea992e5373e2dfe67431980cae92b",
+    ("generated_values", "te_demog_mult_work"): "20d60f152aa79ab820c226b8ddefd63053b58c552a68cc03b0f49d1899323155",
+}
+SAFETY_VARS = {"te_dg_in_saf_work", "te_dg_in_saf_ext"}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -250,7 +260,8 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS,
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS
+                             - SAFETY_VARS,
                              set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
@@ -273,7 +284,8 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for key, rec in self.golden["blocks"].items():
             for name, digest in rec.items():
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
-                want = PHASE3_DIGESTS.get((key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))
+                want = SAFETY_DIGESTS.get((key, name), PHASE3_DIGESTS.get((key, name), BOOKING_DIGESTS.get(
+                    (key, name), STEP3_DIGESTS.get((key, name), digest))))
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):
