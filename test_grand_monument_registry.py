@@ -607,9 +607,8 @@ class LocalPulseTests(unittest.TestCase):
         body = squash(block(self.e, "gm_state_monthly"))
         self.assertTrue(body.startswith("gm_remove_local_modifiers = yes"))
         self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
-        # The monument policy (v2 §5) scales the steps: tourism and the local effect separately.
-        self.assertIn("set_variable = { name = gm_local_steps value = { value = gm_curve_steps_f5 "
-                      "multiply = gm_policy_factor_local } }", body)
+        # The monument policy (v2 §5) scales the steps: tourism and the local
+        # effect separately (each dedication's, SecondaryFitTests).
         self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_f5 "
                       "multiply = gm_policy_factor_tourism } }", body)
         self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
@@ -617,9 +616,7 @@ class LocalPulseTests(unittest.TestCase):
             self.assertIn(f"b:building_grand_monument ?= {{ add_modifier = {{ name = gm_policy_upkeep_{policy} }} }}",
                           body)
         for d in DEDICATIONS:
-            self.assertIn(f"gm_add_local = {{ KEY = {d.key} }}", body)
-        self.assertIn("add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }",
-                      squash(block(self.e, "gm_add_local")))
+            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} }}", body)
 
     def test_backing_variable_is_never_removed(self):
         self.assertNotRegex(strip_comments(self.e), r"remove_variable = gm_local_steps")
@@ -3732,9 +3729,12 @@ class MultiMonumentLevelTests(unittest.TestCase):
             self.assertNotIn("add = gm_state_grandeur", body, name)
 
     def test_standing_counts_every_secondary_even_under_a_contested_primary(self):
+        # A secondary's own contest takes it out (spec 2026-10-16 §4.2); its
+        # primary's does not.
         body = squash(block(self.v, "gm_sum_standing"))
         self.assertIn("limit = { gm_state_counts_standing = yes } add = gm_state_primary_grandeur", body)
-        self.assertIn("limit = { has_building = building_grand_monument } add = gm_state_secondary_grandeur", body)
+        self.assertIn("variable = gm_monuments_held limit = { gm_mon_counts_standing = yes } add = gm_mon_grandeur", body)
+        self.assertNotIn("gm_state_is_contested", squash(block(read(MON_TRIGGERS), "gm_mon_counts_standing")))
         self.assertTrue(body.endswith("add = gm_tr_disp_held_grandeur"))
 
     def test_rededicate_costs_the_primarys_levels(self):
@@ -4253,6 +4253,101 @@ class FreezeTests(unittest.TestCase):
         self.assertIn("can_build_government = { gm_state_can_expand = yes }", building)
         self.assertIn("can_build_private = { gm_state_can_expand = yes }", building)
         self.assertIn("add = { value = gm_state_monument_count multiply = -25 }", building)
+
+
+class SecondaryFitTests(unittest.TestCase):
+    """Ageing rework (spec 2026-10-16 §4.1, §4.2): a monument standing beside
+    another carries its own dedication's fit, approvals and effects, read from
+    its container (gm_tr_dedication) and its state's owner."""
+
+    def setUp(self):
+        self.t = read(MON_TRIGGERS)
+        self.v = read(VALUES)
+
+    def test_kinds_match_the_table(self):
+        kind_trigger = {"regime": "gm_mon_kind_regime", "ruler": "gm_mon_kind_ruler", "faith": "gm_mon_kind_faith"}
+        for d in DEDICATIONS:
+            for kind, trig in kind_trigger.items():
+                present = f"gm_mon_is = {{ KEY = {d.key} }}" in squash(block(self.t, trig))
+                self.assertEqual(present, d.kind == kind, f"{d.key} in {trig}")
+        self.assertEqual(squash(block(self.t, "gm_mon_is")),
+                         "has_variable = gm_tr_dedication var:gm_tr_dedication = flag:$KEY$")
+
+    def test_bound_messages_fit_only_for_the_raiser(self):
+        body = squash(block(self.t, "gm_mon_message_fits"))
+        self.assertTrue(body.startswith("OR = { gm_mon_is_bound = no AND = { gm_mon_raised_by_owner = yes OR = {"))
+        for key, gate in REGIME_GATE.items():
+            self.assertIn(f"AND = {{ gm_mon_is = {{ KEY = {key} }} var:gm_tr_origin ?= {{ owner = {{ {gate} = yes }} }} }}",
+                          body)
+        self.assertIn("AND = { gm_mon_kind_ruler = yes gm_mon_leader_fits = yes }", body)
+        self.assertIn("AND = { gm_mon_kind_faith = yes gm_mon_shrine_fits = yes }", body)
+        self.assertIn("ruler ?= { this = scope:gm_tmp_mon_honoree }", squash(block(self.t, "gm_mon_leader_fits")))
+        self.assertIn("religion = scope:gm_tmp_mon_faith", squash(block(self.t, "gm_mon_shrine_fits")))
+        self.assertIn("owner = scope:gm_tmp_mon_raiser", squash(block(self.t, "gm_mon_raised_by_owner")))
+
+    def test_statuses(self):
+        self.assertEqual(squash(block(self.t, "gm_mon_status_fits")),
+                         "has_tag = gm_monument has_variable = gm_tr_dedication has_variable = gm_tr_seen "
+                         "gm_mon_is_contested = no gm_mon_is_heritage = no gm_mon_message_fits = yes")
+        self.assertEqual(squash(block(self.t, "gm_mon_counts_standing")),
+                         "has_tag = gm_monument gm_mon_is_contested = no")
+
+    def test_ig_alignment_matches_the_table(self):
+        for ig in IGS:
+            approve = squash(block(self.t, f"gm_mon_approved_by_{ig}"))
+            oppose = squash(block(self.t, f"gm_mon_opposed_by_{ig}"))
+            for d in DEDICATIONS:
+                self.assertEqual(f"gm_mon_is = {{ KEY = {d.key} }}" in approve, d.approve == ig, f"{ig} approves {d.key}")
+                self.assertEqual(f"gm_mon_is = {{ KEY = {d.key} }}" in oppose, d.oppose == ig, f"{ig} opposes {d.key}")
+            self.assertIn(f"gm_mon_leader_ig_is = {{ IG = {ig} }}", approve)
+            self.assertIn(f"gm_mon_leader_opposed_by = {{ IG = {ig} }}", oppose)
+
+    def test_first_sight(self):
+        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_mon_first_sight")))
+        for s in ("NOT = { has_variable = gm_tr_seen }", "set_variable = gm_tr_seen",
+                  "set_variable = { name = gm_tr_raised_by value = scope:gm_tmp_mon_owner }",
+                  "set_variable = { name = gm_tr_built_by value = scope:gm_tmp_mon_owner }"):
+            self.assertIn(s, body)
+        self.assertIn("gm_mon_first_sight = yes", squash(block(read(MON_EFFECTS), "gm_monument_monthly")))
+
+    def test_national_sums_walk_the_held_secondaries(self):
+        standing = squash(block(self.v, "gm_sum_standing"))
+        self.assertIn("every_in_list = { variable = gm_monuments_held limit = { gm_mon_counts_standing = yes } "
+                      "add = gm_mon_grandeur }", standing)
+        self.assertNotIn("gm_state_secondary_grandeur", standing)
+        self.assertIn("every_in_list = { variable = gm_monuments_held limit = { gm_mon_status_fits = yes "
+                      "OR = { gm_mon_kind_regime = yes gm_mon_kind_ruler = yes } } add = gm_mon_grandeur }",
+                      squash(block(self.v, "gm_sum_regime")))
+        for key in NATIONAL:
+            self.assertIn(f"every_in_list = {{ variable = gm_monuments_held limit = {{ gm_mon_status_fits = yes "
+                          f"gm_mon_is = {{ KEY = {key} }} }} add = gm_mon_grandeur }}",
+                          squash(block(self.v, f"gm_sum_{key}")), key)
+
+    def test_ig_nets_walk_the_held_secondaries(self):
+        body = squash(strip_comments(block(read(EFFECTS), "gm_compute_ig")))
+        for s in ("variable = gm_monuments_held",
+                  "gm_mon_status_fits = yes gm_mon_approved_by_$IG$ = yes",
+                  "gm_mon_status_fits = yes gm_mon_opposed_by_$IG$ = yes",
+                  "gm_mon_is_contested = yes has_variable = gm_tr_base_ig var:gm_tr_base_ig = flag:$IG$"):
+            self.assertIn(s, body)
+        self.assertLess(body.find("variable = gm_monuments_held"), body.find("var:gm_ig_net_$IG$ >= 0"))
+
+    def test_local_effects_by_dedication(self):
+        monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
+        for d in DEDICATIONS:
+            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} }}", monthly, d.key)
+        one = squash(strip_comments(block(read(EFFECTS), "gm_state_local_steps_one")))
+        for s in ("gm_state_has_pm = { PM = pm_monument_$KEY$ } } add = gm_state_primary_grandeur",
+                  "every_in_list = { variable = gm_monuments_here limit = { gm_mon_is = { KEY = $KEY$ } } "
+                  "add = gm_mon_grandeur }",
+                  "name = gm_local_steps_$KEY$ value = { value = gm_curve_steps_f5 multiply = gm_policy_factor_local }",
+                  "add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps_$KEY$ }"):
+            self.assertIn(s, one)
+
+    def test_the_overview_counts_secondaries(self):
+        for name in ("gm_disp_count_upheld", "gm_disp_count_heritage", "gm_disp_count_contested"):
+            self.assertIn("variable = gm_monuments_held", squash(block(self.v, name)), name)
+        self.assertIn("variable = gm_monuments_held", squash(block(self.v, "gm_sum_monuments")))
 
 if __name__ == "__main__":
     unittest.main()

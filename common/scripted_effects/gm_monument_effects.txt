@@ -42,7 +42,9 @@ gm_monument_monthly = {
 				# A landmark whose picture is drawn later, or a monument from an
 				# older save, catches up within a month (as a trophy does).
 				gm_tr_update_picture = yes
-				# A month older (spec 2026-10-16 §2).
+				# Its raiser recorded once (spec 2026-10-16 §4.4), then a month
+				# older (§2).
+				gm_mon_first_sight = yes
 				if = {
 					limit = { gm_mon_ages = yes }
 					gm_mon_add_age = { AGE = gm_mon_age_step }
@@ -86,6 +88,49 @@ gm_monument_pass = {
 			NOT = { has_building = building_grand_monument }
 		}
 		gm_state_promote_secondary = yes
+	}
+}
+
+# Container scope, a secondary monument. Its records from its state's owner,
+# once (spec 2026-10-16 §4.4), as gm_state_first_sight writes a state's: a
+# returned trophy, a landmark seeded beside another, a dig placed beside or a
+# monument from an older save has no raiser, and a bound one would read as
+# "does not fit". A demoted primary carries its own and is seen already.
+gm_mon_first_sight = {
+	if = {
+		limit = {
+			NOT = { has_variable = gm_tr_seen }
+			has_tag = gm_monument
+			has_variable = gm_tr_dedication
+			var:gm_tr_origin ?= { exists = owner }
+		}
+		clear_saved_scope = gm_tmp_mon_owner
+		var:gm_tr_origin = {
+			owner = { save_scope_as = gm_tmp_mon_owner }
+		}
+		set_variable = gm_tr_seen
+		if = {
+			limit = { NOT = { has_variable = gm_tr_built_by } }
+			set_variable = { name = gm_tr_built_by value = scope:gm_tmp_mon_owner }
+		}
+		if = {
+			limit = {
+				gm_mon_is_bound = yes
+				NOT = { has_variable = gm_tr_raised_by }
+			}
+			set_variable = { name = gm_tr_raised_by value = scope:gm_tmp_mon_owner }
+		}
+		if = {
+			limit = {
+				gm_mon_kind_faith = yes
+				NOT = { has_variable = gm_tr_faith }
+			}
+			clear_saved_scope = gm_tmp_mon_faith_s
+			scope:gm_tmp_mon_owner = {
+				religion = { save_scope_as = gm_tmp_mon_faith_s }
+			}
+			set_variable = { name = gm_tr_faith value = scope:gm_tmp_mon_faith_s }
+		}
 	}
 }
 

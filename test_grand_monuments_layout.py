@@ -847,7 +847,8 @@ class StateCardTest(unittest.TestCase):
         """The local effects step on gm_curve_steps_f5, so the bar is f = 5 and
         its next step is gm_curve_next_f5's, read from the live level."""
         values = _read(VALUES)
-        monthly = _squash(_block(_read(EFFECTS), "gm_state_monthly"))
+        # Each dedication's local effect (ageing spec 2026-10-16 §4.2).
+        monthly = _squash(_block(_read(EFFECTS), "gm_state_local_steps_one"))
         self.assertIn("value = gm_curve_steps_f5 multiply = gm_policy_factor_local", monthly)
         curve = _squash(_block(values, "gm_curve_next_f5"))
         nxt = _squash(_block(values, "gm_state_disp_next_step"))

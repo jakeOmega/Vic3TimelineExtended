@@ -388,6 +388,7 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_tr_offered_to }
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
+	gm_state_zero_local_steps = yes
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -407,15 +408,9 @@ gm_state_monthly = {
 		}
 		# Last known level, read if the building disappears before the next pulse.
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
+		# Tourism counts everything standing here; the monument policy (v2 §5)
+		# scales it and each local effect.
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
-		# The monument policy (v2 §5) scales tourism and the local effect.
-		set_variable = {
-			name = gm_local_steps
-			value = {
-				value = gm_curve_steps_f5
-				multiply = gm_policy_factor_local
-			}
-		}
 		set_variable = {
 			name = gm_local_tourism_steps
 			value = {
@@ -438,21 +433,22 @@ gm_state_monthly = {
 			}
 			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_mothballed } }
 		}
-		if = {
-			limit = { gm_state_is_dedicated = yes }
-			gm_add_local = { KEY = crown }
-			gm_add_local = { KEY = republic }
-			gm_add_local = { KEY = revolution }
-			gm_add_local = { KEY = leader }
-			gm_add_local = { KEY = religious }
-			gm_add_local = { KEY = civic }
-			gm_add_local = { KEY = war_memorial }
-			gm_add_local = { KEY = artistic }
-			gm_add_local = { KEY = naturalist }
-			gm_add_local = { KEY = scientific }
-			gm_add_local = { KEY = industrial }
-			gm_add_local = { KEY = athletic }
-		}
+		# Each dedication's own effect counts the grandeur of that dedication
+		# standing here, the primary's and those beside it (spec 2026-10-16
+		# §4.2); gm_local_steps keeps the primary's for the card.
+		set_variable = { name = gm_local_steps value = 0 }
+		gm_state_local_steps_one = { KEY = crown }
+		gm_state_local_steps_one = { KEY = republic }
+		gm_state_local_steps_one = { KEY = revolution }
+		gm_state_local_steps_one = { KEY = leader }
+		gm_state_local_steps_one = { KEY = religious }
+		gm_state_local_steps_one = { KEY = civic }
+		gm_state_local_steps_one = { KEY = war_memorial }
+		gm_state_local_steps_one = { KEY = artistic }
+		gm_state_local_steps_one = { KEY = naturalist }
+		gm_state_local_steps_one = { KEY = scientific }
+		gm_state_local_steps_one = { KEY = industrial }
+		gm_state_local_steps_one = { KEY = athletic }
 		# Trophies (gm_trophy_effects.txt): the owner stamped, an occupier's
 		# offer or roll. Last: a taking removes the building.
 		gm_state_tr_monthly = yes
@@ -489,15 +485,105 @@ gm_state_monthly = {
 			limit = { has_variable = gm_local_tourism_steps }
 			set_variable = { name = gm_local_tourism_steps value = 0 }
 		}
+		gm_state_zero_local_steps = yes
 	}
 }
 
-gm_add_local = {
-	if = {
-		limit = {
-			gm_state_has_pm = { PM = pm_monument_$KEY$ }
+# State scope, from gm_state_monthly. Dedication $KEY$'s local effect here: the
+# curve over the grandeur of every monument of that dedication standing here,
+# a dedicated primary's (fits, heritage or contested alike, §2.3) and each
+# secondary's. Its multiplier variable is zeroed, never removed.
+gm_state_local_steps_one = {
+	set_variable = {
+		name = gm_curve_in
+		value = {
+			value = 0
+			if = {
+				limit = {
+					gm_state_is_dedicated = yes
+					gm_state_has_pm = { PM = pm_monument_$KEY$ }
+				}
+				add = gm_state_primary_grandeur
+			}
+			if = {
+				limit = { has_variable_list = gm_monuments_here }
+				every_in_list = {
+					variable = gm_monuments_here
+					limit = { gm_mon_is = { KEY = $KEY$ } }
+					add = gm_mon_grandeur
+				}
+			}
 		}
-		add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }
+	}
+	set_variable = {
+		name = gm_local_steps_$KEY$
+		value = {
+			value = gm_curve_steps_f5
+			multiply = gm_policy_factor_local
+		}
+	}
+	if = {
+		limit = { var:gm_local_steps_$KEY$ > 0 }
+		add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps_$KEY$ }
+		if = {
+			limit = {
+				gm_state_is_dedicated = yes
+				gm_state_has_pm = { PM = pm_monument_$KEY$ }
+			}
+			set_variable = { name = gm_local_steps value = var:gm_local_steps_$KEY$ }
+		}
+	}
+}
+
+# State scope. Every dedication's local step variable at 0, where one exists.
+gm_state_zero_local_steps = {
+	if = {
+		limit = { has_variable = gm_local_steps_crown }
+		set_variable = { name = gm_local_steps_crown value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_republic }
+		set_variable = { name = gm_local_steps_republic value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_revolution }
+		set_variable = { name = gm_local_steps_revolution value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_leader }
+		set_variable = { name = gm_local_steps_leader value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_religious }
+		set_variable = { name = gm_local_steps_religious value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_civic }
+		set_variable = { name = gm_local_steps_civic value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_war_memorial }
+		set_variable = { name = gm_local_steps_war_memorial value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_artistic }
+		set_variable = { name = gm_local_steps_artistic value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_naturalist }
+		set_variable = { name = gm_local_steps_naturalist value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_scientific }
+		set_variable = { name = gm_local_steps_scientific value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_industrial }
+		set_variable = { name = gm_local_steps_industrial value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_athletic }
+		set_variable = { name = gm_local_steps_athletic value = 0 }
 	}
 }
 
@@ -797,6 +883,44 @@ gm_compute_ig = {
 			}
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur }
+			}
+		}
+	}
+	# And each monument standing beside another (spec 2026-10-16 §4.2), by its
+	# own dedication: its grandeur cached on it, then added on the country.
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		save_scope_as = gm_ig_country
+		every_in_list = {
+			variable = gm_monuments_held
+			set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+			if = {
+				limit = {
+					gm_mon_status_fits = yes
+					gm_mon_approved_by_$IG$ = yes
+				}
+				scope:gm_ig_country = {
+					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
+				}
+			}
+			if = {
+				limit = {
+					gm_mon_status_fits = yes
+					gm_mon_opposed_by_$IG$ = yes
+				}
+				scope:gm_ig_country = {
+					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
+				}
+			}
+			if = {
+				limit = {
+					gm_mon_is_contested = yes
+					has_variable = gm_tr_base_ig
+					var:gm_tr_base_ig = flag:$IG$
+				}
+				scope:gm_ig_country = {
+					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
+				}
 			}
 		}
 	}
