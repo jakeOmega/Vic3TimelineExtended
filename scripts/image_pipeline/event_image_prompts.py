@@ -1035,8 +1035,10 @@ IMAGES = {
         "style": "digital painting, clean light, speculative future",
         "events": ["post_scarcity_events.3"],
     },
+    # Pending (#982): the first render's storefront signs came out as gibberish
+    # lettering, so the .dds was deleted and the event shows interim art.
     "neo_luddite_protest": {
-        "prompt": "Protesters attacking delivery drones and automation equipment.",
+        "prompt": "Inside a dim automated warehouse at night, masked figures swing sledgehammers at a row of industrial robot arms. A fire spreads across stacked equipment behind them, sparks scattering over the concrete floor.",
         "style": "oil painting, social realism, dramatic firelight",
         "events": ["post_scarcity_events.4"],
     },
@@ -1208,8 +1210,10 @@ IMAGES = {
         "style": "oil painting, social realism, dramatic light",
         "events": ["social_tensions_events.13", "social_tensions_events.14"],
     },
+    # Pending (#982): the first render's placards came out as gibberish
+    # lettering, so the .dds was deleted and both events show interim art.
     "globalization_protest_march": {
-        "prompt": "Protesters demonstrating outside an international summit.",
+        "prompt": "A dense crowd of marchers fills a wide boulevard before a glass-fronted conference centre, seen from a raised vantage point. A line of riot police in dark uniforms stands across the road ahead of them under an overcast sky.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["social_tensions_events.15", "social_tensions_events.16"],
     },
@@ -1297,9 +1301,11 @@ IMAGES = {
         "style": "oil painting, dramatic light, industrial crisis",
         "events": ["society_technology_events.22", "society_technology_events.23"],
     },
+    # Pending (#982): the first render's placards came out as gibberish
+    # lettering, so the .dds was deleted and the event shows interim art.
     "anti_nuclear_energy_protest": {
-        "prompt": "An anti-nuclear protest camp outside a power plant.",
-        "style": "oil painting, social realism, dramatic light",
+        "prompt": "A protest camp of tents and campfires on open ground outside a nuclear power plant at dusk, its cooling towers rising behind a chain-link fence. Small groups sit around the fires; a few police stand at the distant gate.",
+        "style": "oil painting, social realism, dusk light",
         "events": ["society_technology_events.24"],
     },
     "deepfake_crisis_screen": {
