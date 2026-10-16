@@ -376,7 +376,7 @@ te_demog_state_yearly = {
 		te_demog_workforce_refresh = yes
 		# phase 2 step 4: conscription, the youth bulge and sex balance (te_demog_consequence_effects.txt)
 		te_demog_consequences_refresh = yes
-		# phase 3: the longevity gap's politics, off until a play-test (te_demog_lx_effects.txt)
+		# phase 3: the longevity gap's politics, on since 2026-10-16 (te_demog_lx_effects.txt)
 		te_demog_lx_politics_refresh = yes
 	}
 }
@@ -1558,6 +1558,8 @@ te_demog_country_yearly = {
 	}
 	# phase 2 step 2: the AI's pension position, after the census set this year's bill
 	te_demog_pension_ai = yes
+	# phase 3: the longevity gap's country modifier off outside Full, which the census's own refresh can't reach
+	te_demog_lx_politics_clear = yes
 }
 
 # THIS = a country (phase 2 step 1; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.2):

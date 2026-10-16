@@ -1676,7 +1676,7 @@ def cmd_history(args):
         if year is None:
             print(f"{path}: no game_date in its meta_data; give the year with --year", file=sys.stderr)
             return 1
-        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS + MALARIA_VARS)
+        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS + MALARIA_VARS + SAFETY_VARS)
         stored = {sid: rec["vars"] for sid, rec in walked.items()}
         saved = saved_shares(stored)
         rows, world, bare = history_rows(sections, year, anchors, carriers, stored, shares=shares_by_year.get(year),
@@ -2354,10 +2354,12 @@ def census_inputs(inp, got):
     if all(v in got for v in MALARIA_VARS):
         malaria = int(got["te_dg_in_mal"])
         mods[P.MALARIA_CONTROL_TYPE] = got["te_dg_in_malc"]
-    # the safety shares the step stored; a census from before stored none and had no safety factor
+    # the safety shares the step stored; a census from before stored none, so the state keeps its owner's (what the
+    # census does from its next step; fidelity_rows takes them as 0, what that census did)
     for cause, t in P.SAFETY_TYPES.items():
         stored = f"te_dg_in_saf_{P.CAUSE_SHORT[cause]}"
-        mods[t] = got.get(stored, 0.0)
+        if stored in got:
+            mods[t] = got[stored]
     return dataclasses.replace(inp, medicine=medicine, turmoil=got["te_dg_in_turm"], crowding=got["te_dg_in_crowd"],
                                mods=mods, malaria=malaria)
 
@@ -2389,6 +2391,8 @@ def fidelity_rows(path, carriers=None, tags=(), counts=None):
                                       literacy=got.get("te_dg_in_lit", got.get("te_dg_lit", st.literacy)))
             if not all(v in got for v in MALARIA_VARS):
                 inp = dataclasses.replace(inp, malaria=0)   # a census from before calibration step 3: no malaria factor
+            if not all(v in got for v in SAFETY_VARS):      # a census from before modern safety: no safety factor
+                inp = dataclasses.replace(inp, mods={**inp.mods, **{t: 0.0 for t in P.SAFETY_TYPES.values()}})
             own = census_inputs(inp, got)
             if counts is not None:
                 counts["stored" if own is not inp else "save"] += 1

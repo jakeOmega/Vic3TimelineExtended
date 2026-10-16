@@ -6,7 +6,9 @@
 > the harness's `lategame` results against the sketched figures). The design below is unchanged.
 >
 > **2026-10-16 (owner):** the gap's politics are on at call 15's sizes, and the play-test checks them rather than sizing
-> them first. §1.4's adult-mortality check is answered for men by a modern-safety factor on work and accidents and violence
+> them first. As built (#947) the approval multiplier is the gap × the share of all the country's people not in care, not
+> the lower strata's untreated share (milder where the market reaches the rich first), and the labor line is
+> `state_pop_support_movement_labor_mult` at +10% × the state's gap, not the `_add` §4.4 names. §1.4's adult-mortality check is answered for men by a modern-safety factor on work and accidents and violence
 > (era 7-9 technologies; `docs/systems/mod_systems.md` § Causes of Death); women's excess is adult infection and chronic
 > deaths, left until the AI's insolvency (#933) is fixed.
 >

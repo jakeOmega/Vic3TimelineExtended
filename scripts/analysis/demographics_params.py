@@ -867,10 +867,12 @@ LX_ECTO_BUILDING = "building_state_youth_centers"
 LX_ECTO_TECH = "biotechnology"     # the method's technology: the census counts the buildings only once the owner has it
 LX_ECTO_PER_LEVEL = 1000
 LX_ECTO_MAX = 0.9
-# The gap's politics (§4.4, call 15): Trade Unions and Rural Folk approval down to LX_POLITICS_APPROVAL with the national
-# gap x the lower strata's untreated share; Labor movement support up to LX_POLITICS_LABOR in states where the gap is
-# large. Generated as te_demog_k_lx_politics. Built off until a play-test sized it; on at the spec's sizes since
-# 2026-10-16 (owner), which the play-test checks instead.
+# The gap's politics (§4.4, call 15): Trade Unions and Rural Folk approval down to LX_POLITICS_APPROVAL at full, the
+# multiplier the national gap x the share of all the country's people not in care (te_demog_lx_gap_politics_x; the spec
+# names the lower strata's untreated share, which the census doesn't keep: the built form is milder where the market
+# reaches the rich first); Labor movement support up to LX_POLITICS_LABOR x the state's gap (state_pop_support_movement_
+# labor_mult; the spec's _add). Generated as te_demog_k_lx_politics. Built off until a play-test sized it; on at the
+# spec's sizes since 2026-10-16 (owner), which the play-test checks instead.
 LONGEVITY_POLITICS = True
 LX_POLITICS_APPROVAL = -3
 LX_POLITICS_LABOR = 0.10

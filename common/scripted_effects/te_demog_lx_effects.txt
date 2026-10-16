@@ -1075,6 +1075,20 @@ te_demog_lx_rate_slope = {
 	}
 }
 
+# THIS = a country, on its yearly pulse whatever the rule (te_demog_country_yearly): the country's longevity-gap modifier
+# comes off once the rule is no longer Full. Its refresh site (te_demog_lx_country_store) runs only inside the census, which
+# Disabled never reaches, so a game switched from Full to Disabled would otherwise keep the unions' and farmers' approval
+# down for good. The state's modifier needs no such step: its refresh runs on every state pulse whatever the rule.
+te_demog_lx_politics_clear = {
+	if = {
+		limit = {
+			NOT = { te_demog_effects_run = yes }
+			has_modifier = te_demog_lx_gap_politics
+		}
+		remove_modifier = te_demog_lx_gap_politics
+	}
+}
+
 # THIS = ROOT = a state, after the census's other terms (te_demog_state_yearly, fast mode's clock step): the longevity gap's
 # state modifier (late-game §4.4, call 15), the one refresh site of te_demog_lx_gap_labor. Applied only under Full with
 # te_demog_k_lx_politics on (on since 2026-10-16, owner), at the state's gap (Living to 100, treated less untreated).

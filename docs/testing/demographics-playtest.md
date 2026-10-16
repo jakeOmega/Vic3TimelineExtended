@@ -520,8 +520,10 @@ effect on. Display only shows the same pyramids as Full; neither changes the gam
 
 Modern safety: work deaths and deaths from accidents and violence × (1 − the share the era 7-9 technologies prevent),
 a factor of its own beside laws (`docs/systems/mod_systems.md` § Causes of Death). The gap's politics: call 15 on at
-the late-game design's sizes. Both act under Full only. Neither rests on a new engine fact (a script-only type on a
-technology reaching a state is #892's; the two politics modifiers were built and tested off), so no self-check.
+the late-game design's sizes. Both act on the game under Full only; under Display only the census's figures (the
+hovers, life expectancy) move with safety but births and deaths don't. Neither rests on a new engine fact that a
+self-check could read (a script-only type on a technology reaching a state is #892's), so no self-check; item 5's
+fractional approval is the one unknown, and the game itself shows it.
 
 1. **The hovers multiply (Full or Display only).** In a state of a country with Industrial Robotics, the subtab's Work
    row hovers "Laws ×a" and "Safety ×b" and reads a × b; Accidents and Violence hovers laws, safety and turmoil and reads
@@ -529,8 +531,9 @@ technology reaching a state is #892's; the two politics modifiers were built and
 2. **The carriers' tooltips.** Prefabricated Construction, Industrial Robotics, Containerization and Knowledge Economy
    show "Safer Work"; Modern Urban Planning, Computer-Aided Design and Cellular Networks "Safer Streets and Homes".
    Option l doesn't print them; the hover is the check.
-3. **Life expectancy moves a little (Full).** A rich country's life expectancy rises about a year and a half over its
-   era 7-9 research (the harness's rich state: 76.7 → 78.3). Nothing moves before era 7.
+3. **Life expectancy moves a little (Full or Display only).** A rich country's life expectancy rises about two and a
+   half years over its era 7-9 research (the harness's rich state with the Combustion Engine: 75.9 → 78.3). Nothing
+   moves before era 7.
 4. **The gap's politics appear (Full, late game).** With longevity care reaching some people and not others (option v,
    a Private Health Insurance country, so the market reaches the rich first), the country carries "The Longevity Gap"
    with Trade Unions and Rural Folk approval down to −3 × the gap × the share not in care, and a state with a wide gap
@@ -540,5 +543,11 @@ technology reaching a state is #892's; the two politics modifiers were built and
    small and so do the modifiers; under Private Health Insurance the unions' approval should fall by one or two points
    at most while the market reaches only the rich. If the unions turn on every late country, halve
    `LX_POLITICS_APPROVAL`; if no one notices, the gap may not get wide enough for the sizes to matter.
+   **Fractional approval (the one engine unknown):** the country modifier is −3 × a multiplier between 0 and 1, so it
+   applies fractions such as −0.9, and no approval line in the base game or the mod has been fractional before. At a
+   multiplier around 0.3, the Trade Unions' approval tooltip should list The Longevity Gap at about −0.9 and the total
+   should move by it. If the line shows 0, or approval doesn't move until the multiplier reaches 1/3, round to whole
+   points as the tax code's reactions do (`gen_tax_code.py`: a −1 modifier at a whole-number multiplier, applied from 1).
 6. **Outside Full nothing changes.** Under Display only and Disabled no "The Longevity Gap" modifier anywhere, and
-   births and deaths follow the base game whatever a country researches.
+   births and deaths follow the base game whatever a country researches. A game switched from Full to Disabled loses the
+   country's modifier at its next 31 December (`te_demog_lx_politics_clear`) and the state's at its next state pulse.

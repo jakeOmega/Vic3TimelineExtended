@@ -489,6 +489,20 @@ class TestGapPolitics(unittest.TestCase):
         eng.call("te_demog_lx_politics_refresh")
         self.assertEqual(eng.modifiers, {}, "outside Full nothing")
 
+    def test_the_country_modifier_comes_off_outside_full(self):
+        """The review of #979: the country's refresh runs only inside the census, so a game switched from Full to Disabled
+        kept the unions' and farmers' approval down; the yearly pulse's clear step, outside the census, takes it off."""
+        eng = _Engine({}, triggers={"te_demog_effects_run": False})
+        eng.modifiers["te_demog_lx_gap_politics"] = 0.4
+        eng.call("te_demog_lx_politics_clear")
+        self.assertEqual(eng.modifiers, {})
+        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng.modifiers["te_demog_lx_gap_politics"] = 0.4
+        eng.call("te_demog_lx_politics_clear")
+        self.assertEqual(eng.modifiers, {"te_demog_lx_gap_politics": 0.4}, "under Full the census's refresh owns it")
+        yearly = _block(_text(ROOT / "common" / "scripted_effects" / "te_demog_effects.txt"), "te_demog_country_yearly")
+        self.assertIn("te_demog_lx_politics_clear = yes", yearly)
+
     def test_the_sizes(self):
         mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_lx_modifiers.txt"])
         self.assertIn(f"interest_group_ig_trade_unions_approval_add = {P.LX_POLITICS_APPROVAL}", mods["te_demog_lx_gap_politics"])
