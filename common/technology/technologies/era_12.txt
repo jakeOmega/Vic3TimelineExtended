@@ -282,8 +282,8 @@ biological_immortality = {
 		# rate and the pull below; outside Full the flat line stays
 		state_demog_absorbed_mortality_mult = -0.2
 		# the census's ageing stops for those in longevity care and the body winds back toward 35 (demographics phase 3,
-		# the late-game design's calls 3 and 4)
-		state_ageing_rate_add = -0.75
+		# the late-game design's calls 3 and 4; -0.75 until 2026-10-16, when Synthetic Biology took 0.05 of it)
+		state_ageing_rate_add = -0.70
 		state_rejuvenation_add = 0.03
 		character_health_add = 100
 		state_arable_land_mult = 0.25

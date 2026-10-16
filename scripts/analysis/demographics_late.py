@@ -23,7 +23,8 @@ TFR = 1.6
 YEAR0, YEAR_END = 2020, 2300
 MILESTONES = (30, 50, 60, 100, YEAR_END - YEAR0)
 # today's rich state: the medicine scenarios' Rich today (health law, institutions) with the workforce scenarios' laws
-# (2026-10-16: with the Combustion Engine's traffic and modern safety's era 7-9 carriers, which a state of 2020 holds)
+# (2026-10-16: with the Combustion Engine's traffic and modern safety's era 7-9 carriers, which a state of 2020 holds,
+# and the Ministry of Public Safety at 5, whose levels lower deaths from violence since the same day)
 _RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines", "antibiotic_mass_production",
                          "contraceptive_pill", "modern_pharmaceuticals", "vulcanization", "feminism",
                          "second_wave_feminism", "personal_appliances", "telemedicine", "combustion_engine",
@@ -32,9 +33,10 @@ _RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "mo
 _RICH_LAWS = frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
                         "law_public_health_insurance", "law_dedicated_police", "law_worker_protections"})
 _RICH_INSTITUTIONS = {"institution_health_system": 9, "institution_workplace_safety": 5,
-                      "institution_ministry_of_consumer_protection": 4, "institution_social_security": 5}
+                      "institution_ministry_of_consumer_protection": 4, "institution_social_security": 5,
+                      "institution_police": 5}
 ERA10 = frozenset({"mrna_therapeutics"})
-ERA11 = ERA10 | {"personalized_medicine", "genetic_engineering"}
+ERA11 = ERA10 | {"personalized_medicine", "genetic_engineering", "synthetic_biology"}
 ERA12 = ERA11 | {"biological_immortality"}
 # everyone within reach (the design's "everyone treated"): the public route at full access, a rich wealth band
 EVERYONE = dict(wealth_bands={30: 1.0}, lx_w=float(P.LX_MARKET_START))
@@ -157,7 +159,7 @@ def scenarios(carriers=None, lines=None):
         ("No change", lambda t: base),
         ("Era 11 medicine, no slowing", lambda t: era11_no_slowing),
         ("Era 10 (ageing 0.9)", lambda t: era10),
-        ("Era 10 for 20 years, then era 11 (0.75)", lambda t: era10 if t < 20 else era11),
+        ("Era 10 for 20 years, then era 11 (0.70)", lambda t: era10 if t < 20 else era11),
         ("Immortality (pull 3%) from today", lambda t: era12),
         ("The ladder: era 10, era 11 at 20 years, immortality at 40", lambda t: era10 if t < 20 else era11 if t < 40
          else era12),
@@ -172,8 +174,11 @@ STEADY = [  # (name, scenario, years, {figure: (lo, hi)})
      {"e0": (79, 85), "l100": (0.17, 0.30), "old_age": (80, 85)}),
     ("Era 11 medicine, no slowing", "Era 11 medicine, no slowing", 280,
      {"e0": (84, 92), "l100": (0.28, 0.42), "old_age": (86, 92)}),
-    ("Ageing 0.75", "Era 10 for 20 years, then era 11 (0.75)", 280,
-     {"e0": (97, 110), "l100": (0.55, 0.75), "old_age": (108, 120)}),
+    # the sketch's bands were for 0.75 (e0 103, Living to 100 67%, old age 117/110); era 11 reaches 0.70 since 2026-10-16
+    # (Synthetic Biology), which moves the census's own tables by about +4.5 years of e0, +0.04 and +6 years: the bands
+    # move with them
+    ("Ageing 0.70", "Era 10 for 20 years, then era 11 (0.70)", 280,
+     {"e0": (101, 115), "l100": (0.59, 0.79), "old_age": (113, 126)}),
     ("Immortality", "Immortality (pull 3%) from today", 280,
      {"l100": (0.72, 0.88), "old_age": (P.LX_OLD_AGE_NONE, 150)}),
 ]
@@ -184,7 +189,7 @@ PROJECTION = [  # (scenario, {figure: (lo, hi)})
     ("No change", {"people": (0.50, 0.65), "old65": (0.25, 0.37), "need": (1.5, 1.95)}),
     ("Era 11 medicine, no slowing", {"people": (0.60, 0.78), "old65": (0.35, 0.50), "need": (1.85, 2.40)}),
     ("Era 10 (ageing 0.9)", {"people": (0.54, 0.70), "old65": (0.30, 0.42), "need": (1.45, 1.95)}),
-    ("Era 10 for 20 years, then era 11 (0.75)", {"people": (0.65, 0.85), "old65": (0.40, 0.56), "need": (1.6, 2.15)}),
+    ("Era 10 for 20 years, then era 11 (0.70)", {"people": (0.65, 0.85), "old65": (0.40, 0.56), "need": (1.6, 2.15)}),
     # the sketch's row timed every birth by the calendar (x1.19, 67% over 65); the census times unplanned births by the
     # body (call 5), which §3.3 puts at x1.30 in 50 years: more children, so more people and a younger calendar structure
     ("Immortality (pull 3%) from today", {"people": (1.10, 1.55), "old65": (0.45, 0.75), "mean_bio": (26, 36),
@@ -218,7 +223,7 @@ TRUTH_CASES = [  # (name, technologies, share treated)
     ("Immortality, 20% treated", ERA12, 0.2),
     ("Immortality, 50% treated", ERA12, 0.5),
     ("Immortality, 90% treated", ERA12, 0.9),
-    ("Era 11 (r 0.75), 50% treated", ERA11, 0.5),
+    ("Era 11 (r 0.70), 50% treated", ERA11, 0.5),
 ]
 TRUTH_TOLERANCE = 0.5      # deaths per 1,000; the multiple within 2%
 

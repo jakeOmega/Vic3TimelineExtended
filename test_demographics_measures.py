@@ -45,19 +45,19 @@ CATALOGUE = {
     "child_allowance": ({PN, COMMUNAL}, {
         "state_desired_fertility_mult": 0.14,   # step 3b's fit (§3.4's +8%)
         "interest_group_ig_devout_approval_add": 1, "interest_group_ig_trade_unions_approval_add": 1}),
-    "family_housing": ({PN, FP}, {
+    "family_housing": ({PN, FP, COMMUNAL}, {
         "state_urban_fertility_relief_add": 0.5, "interest_group_ig_trade_unions_approval_add": 1}),
     "honours": ({TRADITIONAL, PN}, {
         "state_desired_fertility_mult": 0.05, "interest_group_ig_devout_approval_add": 1,   # the fit (+3%)
-        "country_authority_add": -25}),
+        "country_authority_add": -50}),   # the authority upkeeps: the rebalance of 2026-10-16 (owner)
     "restricted_contraception": ({PN}, {
         "state_fertility_means_add": -0.2, "state_maternal_mortality_mult": 0.25,
         "interest_group_ig_devout_approval_add": 2, "interest_group_ig_intelligentsia_approval_add": -2,
-        "state_pop_support_movement_feminist_mult": 0.1, "country_authority_add": -50}),
+        "state_pop_support_movement_feminist_mult": 0.1, "country_authority_add": -200}),
     "parental_leave": ({FP, COMMUNAL}, {
         "state_desired_fertility_mult": 0.05, "state_demog_womens_work_ratio_add": 0.02,
         "interest_group_ig_trade_unions_approval_add": 1, "interest_group_ig_industrialists_approval_add": -1}),
-    "free_contraception": ({FP, PC}, {
+    "free_contraception": ({FP, PC, COMMUNAL}, {
         "state_fertility_means_add": 0.1, "interest_group_ig_intelligentsia_approval_add": 1,
         "interest_group_ig_devout_approval_add": -2}),
     "sex_education": ({FP, PC}, {
@@ -65,23 +65,23 @@ CATALOGUE = {
         "country_institution_cost_institution_schools_mult": 0.1}),
     "later_longer_fewer": ({FP, PC}, {
         "state_desired_fertility_mult": -0.1, "interest_group_ig_devout_approval_add": -1,
-        "interest_group_ig_rural_folk_approval_add": -1, "country_authority_add": -50}),
+        "interest_group_ig_rural_folk_approval_add": -1, "country_authority_add": -150}),
     "birth_limit": ({PC}, {
         "state_desired_fertility_mult": -0.3, "state_sex_ratio_at_birth_add": 5,
         "interest_group_ig_rural_folk_approval_add": -3, "interest_group_ig_devout_approval_add": -2,
-        "country_authority_add": -100}),
+        "country_authority_add": -300}),
     "rural_exemption": ({PC}, {
         "state_birth_limit_relief_add": 0.5, "interest_group_ig_rural_folk_approval_add": 1}),
     "crash_campaign": ({PC}, {
         "state_desired_fertility_mult": -0.2, "country_legitimacy_base_add": -10,
         "state_radicals_from_political_movements_mult": 0.25, "interest_group_ig_rural_folk_approval_add": -3,
         "interest_group_ig_devout_approval_add": -3, "interest_group_ig_intelligentsia_approval_add": -2,
-        "interest_group_ig_trade_unions_approval_add": -2, "country_authority_add": -100}),
+        "interest_group_ig_trade_unions_approval_add": -2, "country_authority_add": -300}),
 }
 BIRTH_LIMIT_ONE = {
     "state_desired_fertility_mult": -0.45, "state_sex_ratio_at_birth_add": 10,
     "interest_group_ig_rural_folk_approval_add": -3, "interest_group_ig_devout_approval_add": -2,
-    "country_authority_add": -100}
+    "country_authority_add": -400}
 MONEY = {"child_allowance": 0.005, "family_housing": 0.0025, "parental_leave": 0.003, "free_contraception": 0.001}
 NEW_TYPES = ("state_desired_fertility_mult", "state_urban_fertility_relief_add", "state_means_literacy_add",
              "state_maternal_mortality_mult", "state_birth_limit_relief_add", "state_sex_ratio_at_birth_add")
@@ -103,14 +103,15 @@ class _MeasureEngine(_Engine):
     trigger_if, an add_modifier without a multiplier (which fails when the name is already held: a same-name
     add_modifier stacks), set_variable = yes, and the notices and the self-check recorded instead of run."""
 
-    def __init__(self, law=PN, year=1900, month=0, full=True, fixtures=None, triggers=None):
+    def __init__(self, law=PN, year=1900, month=0, full=True, fixtures=None, triggers=None, others=()):
         super().__init__({"te_history_month_index": _date(year, month), "gdp": 52_000_000.0,
-                          "capital.te_demog_women_rate": 0.5, **(fixtures or {})},
+                          "capital.te_demog_women_rate": 0.5, "authority": 1000.0, **(fixtures or {})},
                          triggers={"te_demog_effects_run": full, "is_ai": False, **(triggers or {})})
         self.effects.update(_raw_blocks([MS_EFFECTS]))
         self.values.update(_raw_blocks([MS_VALUES]))
         self.triggers.update(_raw_blocks([MS_TRIGGERS]))
         self.law = law
+        self.others = set(others)   # laws in force in other groups (the form of government, free speech)
         self.notices, self.selfchecks = [], []
         self.exists = {"capital"}
 
@@ -122,8 +123,8 @@ class _MeasureEngine(_Engine):
         return self.value(self._tree(self.values, name))
 
     def _test(self, key, op, arg):
-        if key == "has_law":
-            return arg == f"law_type:{self.law}"
+        if key in ("has_law", "has_law_or_variant"):   # no variants among the laws the tests hold
+            return arg == f"law_type:{self.law}" or arg in {f"law_type:{law}" for law in self.others}
         if key == "exists":
             return arg in self.exists
         if key == "trigger_if":
@@ -271,6 +272,44 @@ class TestCatalogue(unittest.TestCase):
             for key, (laws, _) in CATALOGUE.items():
                 self.assertEqual(eng.holds_trigger(f"te_demog_ms_allowed_{key}"), law in laws, f"{key} under {law}")
 
+    def test_communal_child_rearing_allows_more_by_who_governs(self):
+        """The review of #989 (owner): under Communal Child-Rearing a council or an anarchist commune adds Sex
+        Education, a party state or an autocrat that outlaws dissent adds Honours and Restricted Contraception; Birth
+        Limit and the Crash Campaign stay Population Control Measures' alone."""
+        utopia = {"sex_education"}
+        dystopia = {"honours", "restricted_contraception"}
+        alone = {key for key, (laws, _) in CATALOGUE.items() if COMMUNAL in laws}
+        self.assertEqual(alone, {"child_allowance", "parental_leave", "family_housing", "free_contraception"})
+        cases = [
+            ((), alone),
+            (("law_council_republic",), alone | utopia),
+            (("law_anarchy",), alone | utopia),
+            (("law_single_party_state", "law_outlawed_dissent"), alone | dystopia),
+            (("law_autocracy", "law_outlawed_dissent"), alone | dystopia),
+            (("law_single_party_state",), alone),             # dissent not outlawed: no dystopia
+            (("law_autocracy", "law_censorship"), alone),
+        ]
+        for others, want in cases:
+            with self.subTest(others):
+                eng = _MeasureEngine(law=COMMUNAL, others=others)
+                got = {key for key in CATALOGUE if eng.holds_trigger(f"te_demog_ms_allowed_{key}")}
+                self.assertEqual(got, want)
+        # the government's laws alone, without the communal law, allow nothing of either
+        for others in (("law_council_republic",), ("law_single_party_state", "law_outlawed_dissent")):
+            for law in set(FAMILY_LAWS) - {COMMUNAL}:
+                eng = _MeasureEngine(law=law, others=others)
+                got = {key for key in CATALOGUE if eng.holds_trigger(f"te_demog_ms_allowed_{key}")}
+                self.assertEqual(got, {key for key, (laws, _) in CATALOGUE.items() if law in laws}, (law, others))
+        # the reasons and hovers name the government's laws
+        loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
+        for key, names in (("sex_education", ("$law_council_republic$", "$law_anarchy$")),
+                           ("honours", ("$law_single_party_state$", "$law_autocracy$", "$law_outlawed_dissent$")),
+                           ("restricted_contraception", ("$law_single_party_state$", "$law_outlawed_dissent$"))):
+            for suffix in ("_law_tt", "_other_tt", "_tt"):
+                line = re.search(rf"(?m)^ te_demog_ms_{key}{suffix}:0 \"(.*)\"$", loc).group(1)
+                for name in names + ("$law_communal_child_rearing$",):
+                    self.assertIn(name, line, f"{key}{suffix}")
+
     def test_desired_constants_match_the_modifiers(self):
         """The self-check's expected change (te_demog_ms_desired_<measure>) is each modifier's own line."""
         eng = _MeasureEngine()
@@ -365,6 +404,48 @@ class TestButtons(unittest.TestCase):
         self.assertTrue(eng.sgui_valid("rural_exemption"))
 
 
+    def test_a_measure_needs_its_authority_upkeep_free_to_start(self):
+        """The review of #989 (owner, 2026-10-16): as a decree does, a measure with an authority upkeep greys its Start
+        until that much authority is free, with the reason; once on, it can still end with none free."""
+        authority = {key: -lines["country_authority_add"] for key, (_, lines) in CATALOGUE.items()
+                     if "country_authority_add" in lines}
+        self.assertEqual(set(authority), {"honours", "restricted_contraception", "later_longer_fewer", "birth_limit",
+                                          "crash_campaign"})
+        loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
+        for key, cost in authority.items():
+            with self.subTest(key):
+                law = next(iter(CATALOGUE[key][0]))
+                eng = _MeasureEngine(law=law, year=1900, fixtures={"authority": cost - 1.0})
+                self.assertFalse(eng.sgui_valid(key), "short of the upkeep")
+                eng.fixtures["authority"] = float(cost)
+                self.assertTrue(eng.sgui_valid(key))
+                body = _block(_text(MS_SGUIS), f"te_demog_ms_{key}_sgui")
+                self.assertIn(f"text = te_demog_ms_{key}_authority_tt", body)
+                self.assertIn(f"authority >= te_demog_ms_authority_{key}", body)
+                self.assertIn(f" te_demog_ms_{key}_authority_tt:0 \"Needs @aut! [GetPlayer.MakeScope.ScriptValue("
+                              f"'te_demog_ms_authority_{key}')|0] free authority to start\"", loc)
+                if key != "crash_campaign":   # the campaign has no off: the pulse ends it
+                    eng.press(key).at(1905)
+                    eng.fixtures["authority"] = -50.0
+                    if key == "birth_limit":
+                        eng.vars["te_dg_ms_birth_limit_one"] = 1.0
+                    self.assertTrue(eng.sgui_valid(key), "ending needs no authority")
+        # the measures paid in money or bureaucracy have no such reason
+        for key in set(CATALOGUE) - set(authority):
+            self.assertNotIn("authority", _block(_text(MS_SGUIS), f"te_demog_ms_{key}_sgui"), key)
+
+    def test_birth_limit_needs_the_one_childs_further_upkeep_to_tighten(self):
+        eng = _MeasureEngine(law=PC, fixtures={"authority": 300.0}).press("birth_limit")
+        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_tighten"), 100)
+        eng.fixtures["authority"] = 99.0
+        self.assertFalse(eng.sgui_valid("birth_limit"), "100 more to tighten")
+        eng.fixtures["authority"] = 100.0
+        eng.press("birth_limit")
+        self.assertIn("te_demog_ms_birth_limit_one", eng.modifiers)
+        self.assertIn("text = te_demog_ms_birth_limit_tighten_authority_tt",
+                      _block(_text(MS_SGUIS), "te_demog_ms_birth_limit_sgui"))
+
+
 class TestTerm(unittest.TestCase):
     """§3.3: a five-year term from switching on, to the month."""
 
@@ -454,6 +535,16 @@ class TestLeavingTheLaw(unittest.TestCase):
         eng.law = FP
         eng.at(1962).press("parental_leave")
         self.assertAlmostEqual(eng.vars["te_dg_ms_parental_leave"], 1962.0)
+
+    def test_a_change_of_government_ends_the_communes_measures(self):
+        """on_law_activated runs the check on every law, so a party state that stops outlawing dissent loses Honours."""
+        eng = _MeasureEngine(law=COMMUNAL, year=1960, others=("law_single_party_state", "law_outlawed_dissent"))
+        eng.press("honours").press("family_housing")
+        eng.others = {"law_single_party_state", "law_censorship"}
+        eng.at(1961).do("te_demog_ms_law_check")
+        self.assertEqual(eng.notices, ["te_demog_ms_ended_honours"])
+        self.assertIn("te_demog_ms_family_housing", eng.modifiers)
+        self.assertNotIn("te_demog_ms_honours", eng.modifiers)
 
     def test_birth_limit_takes_the_exemption_along(self):
         eng = _MeasureEngine(law=PC, year=1980).press("birth_limit").press("rural_exemption")
@@ -577,8 +668,8 @@ class TestAI(unittest.TestCase):
 
     def test_the_pulse_spends_its_authority_once(self):
         """A modifier added in the pulse isn't visible to it, so the start triggers read a local budget: a famine AI
-        with 130 free authority starts Birth Limit (100) and nothing else that costs authority."""
-        eng = self._eng(PC, year=1980, authority=130.0, government_legitimacy=80.0)
+        with 330 free authority starts Birth Limit (300) and nothing else that costs authority."""
+        eng = self._eng(PC, year=1980, authority=330.0, government_legitimacy=80.0)
         eng.trigger_fixtures.update(has_famine=True, te_demog_ms_ai_crowded=True)
         eng.do("te_demog_ms_yearly")
         self.assertIn("te_demog_ms_birth_limit", eng.modifiers)
@@ -586,13 +677,53 @@ class TestAI(unittest.TestCase):
         self.assertNotIn("te_demog_ms_crash_campaign", eng.modifiers)
         spent = sum(-v for k, (_, lines) in CATALOGUE.items() if f"te_demog_ms_{k}" in eng.modifiers
                     for f, v in lines.items() if f == "country_authority_add")
-        self.assertLessEqual(spent, 130)
+        self.assertLessEqual(spent, 330)
 
     def test_the_upkeep_constants_match_the_modifiers(self):
         eng = _MeasureEngine()
         for key, (_, lines) in CATALOGUE.items():
             self.assertEqual(eng.sv(f"te_demog_ms_authority_{key}"), -lines.get("country_authority_add", 0), key)
             self.assertEqual(eng.sv(f"te_demog_ms_paid_{key}"), 1 if key in MONEY else 0, key)
+        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_one"), -BIRTH_LIMIT_ONE["country_authority_add"])
+        # the row shows what Birth Limit costs at its setting: two children's, then the one child's
+        eng = _MeasureEngine(law=PC)
+        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_shown"), 300)
+        eng.press("birth_limit")
+        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_shown"), 300)
+        eng.press("birth_limit")
+        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_shown"), 400)
+
+    def test_authority_upkeep_rises_with_the_enforcement_a_measure_needs(self):
+        """The rebalance (owner, 2026-10-16): a measure acts on every state where a decree costs 100 for one, so every
+        coercive measure costs more than a decree, and the costs rise with the enforcement each needs."""
+        cost = {key: -lines.get("country_authority_add", 0) for key, (_, lines) in CATALOGUE.items()}
+        cost["birth_limit_one"] = -BIRTH_LIMIT_ONE["country_authority_add"]
+        for key in ("restricted_contraception", "later_longer_fewer", "birth_limit", "birth_limit_one", "crash_campaign"):
+            self.assertGreater(cost[key], 100, key)
+        self.assertLess(cost["honours"], cost["later_longer_fewer"])
+        self.assertLess(cost["later_longer_fewer"], cost["restricted_contraception"])
+        self.assertLess(cost["restricted_contraception"], cost["birth_limit"])
+        self.assertLess(cost["birth_limit"], cost["birth_limit_one"])
+        # the panel's rows say the same
+        loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
+        for key in ("honours", "restricted_contraception", "later_longer_fewer", "crash_campaign"):
+            self.assertIn(f' te_demog_ms_{key}_upkeep:0 "@aut! {cost[key]}"', loc, key)
+        self.assertIn(" te_demog_ms_birth_limit_upkeep:0 \"@aut! [GetPlayer.MakeScope.ScriptValue("
+                      "'te_demog_ms_authority_birth_limit_shown')|0]\"", loc)
+
+    def test_the_one_child_needs_its_further_upkeep(self):
+        """The AI tightens Birth Limit to one child only with the one child's further 100 free, and the pulse's budget
+        takes it."""
+        eng = self._eng(PC, year=1980, authority=400.0, government_legitimacy=80.0)
+        eng.trigger_fixtures.update(has_famine=True, te_demog_ms_ai_crowded=True)
+        eng.at(1980).do("te_demog_ms_yearly")
+        self.assertIn("te_demog_ms_birth_limit", eng.modifiers)
+        eng.fixtures["authority"] = 100.0
+        eng.at(1981).do("te_demog_ms_yearly")
+        self.assertNotIn("te_demog_ms_birth_limit_one", eng.modifiers, "100 free is short of the 100 and the margin")
+        eng.fixtures["authority"] = 130.0
+        eng.at(1982).do("te_demog_ms_yearly")
+        self.assertIn("te_demog_ms_birth_limit_one", eng.modifiers)
 
     def test_crowding_means_half_the_people_at_the_ceiling(self):
         trigger = _block(_text(MS_TRIGGERS), "te_demog_ms_ai_crowded")
@@ -610,7 +741,7 @@ class TestAI(unittest.TestCase):
         self.assertEqual(eng.measure_mods(), {})
 
     def test_a_famine_takes_population_control_and_the_term_binds(self):
-        eng = self._eng(PC, year=1980)
+        eng = self._eng(PC, year=1980, authority=1000.0)
         eng.trigger_fixtures.update(has_famine=True, te_demog_ms_ai_crowded=True)
         eng.fixtures["government_legitimacy"] = 80.0
         eng.at(1980).do("te_demog_ms_yearly")

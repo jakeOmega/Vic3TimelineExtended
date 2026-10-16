@@ -1,27 +1,30 @@
 ﻿# Demographics: law terms for the census's causes of death.
 # Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md (stage 1).
 # Read only by the census (te_demog_mult_*); the engine never applies these types. A law's
-# modifier reaches every state the country owns; the Workplace Safety lines (institution_modifier)
-# are per level of the institution and reach incorporated states only. The health laws' access
+# modifier reaches every state the country owns; the Workplace Safety lines and the police lines
+# (institution_modifier) are per level of the institution and reach incorporated states only.
+# The police laws' lines sit on the Ministry of Public Safety's levels (2026-10-16, owner: a law
+# with the Ministry at level 0 or 1 gave the full cut), larger for a national force: Local Police
+# -2% a level, Dedicated and Militarized -3% (Private Policing's -2% is in extra_laws.txt). The health laws' access
 # lines sit inside their existing blocks in modified_health_system.txt; the women's-rights laws'
 # natural fertility (phase 2 step 4) inside their INJECTs in extra_laws.txt, except Women Own
 # Property's, which has no other INJECT.
 
 INJECT:law_local_police = {
-	modifier = {
-		state_external_mortality_mult = -0.05
+	institution_modifier = {
+		state_external_mortality_mult = -0.02
 	}
 }
 
 INJECT:law_dedicated_police = {
-	modifier = {
-		state_external_mortality_mult = -0.1
+	institution_modifier = {
+		state_external_mortality_mult = -0.03
 	}
 }
 
 INJECT:law_militarized_police = {
-	modifier = {
-		state_external_mortality_mult = -0.1
+	institution_modifier = {
+		state_external_mortality_mult = -0.03
 	}
 }
 

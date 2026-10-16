@@ -10,6 +10,11 @@
 ###                             deadline, danger, the pressure on the target,
 ###                             what conceding costs, follow-through, the next
 ###                             pressure and our stakes, then Our Moves.
+### te_nuclear_sec_world_crises Every crisis in the world, ours included
+###                             (open, only while there is one): one row each,
+###                             most dangerous first, details on hover
+###                             (nd_world_crisis_row_sgui, op = slot 1-8, 9 =
+###                             how many more; nd_world_crisis_detail_sgui).
 ### te_nuclear_sec_posture      Doctrine, readiness, launch authority, the
 ###                             umbrella, loose warheads, upkeep and incident
 ###                             exposure (open, only while armed), with the
@@ -486,6 +491,28 @@ types nuclear_deterrence_widget_types
 		}
 	}
 
+	### One row of World Crises: a line built in script, with its details on
+	### hover. The textbox lets the hover through to the row, as nd_row's do.
+	type nd_world_crisis_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 6 1 }
+
+		block "row_tooltip" {}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 468 -1 }
+			maximumsize = { 468 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			alwaystransparent = yes
+			block "row_text" {}
+		}
+	}
+
 	### ======================================================================
 	### SECTIONS. nuclear_layout_widget.gui composes them, in its order.
 	### ======================================================================
@@ -748,6 +775,130 @@ types nuclear_deterrence_widget_types
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+				}
+			}
+		}
+	}
+
+	### Every nuclear crisis in the world (open; only while there is one), most
+	### dangerous first: one row each, its details on hover, and how many run
+	### past the eighth. Our own is listed too, so the list is the whole world.
+	### Private warnings are listed: the public may not know of one, but
+	### governments do (owner, 2026-10-16). The rows render the slots
+	### nd_world_crises_refresh writes (nuclear_crisis_effects.txt); nothing here
+	### sorts the world's countries. Each row sets its handler as its datacontext
+	### before any op literal, so test_nuclear_deterrence.gui_ops never counts
+	### these ops as the crisis moves' above.
+	type te_nuclear_sec_world_crises = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('nd_world_crises_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+		nd_section_header = {
+			blockoverride "left_text" {
+				text = "nd_w_world_crises_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('nd_world_crises_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('nd_world_crises_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('nd_world_crises_closed'))]"
+			}
+		}
+
+		nd_panel = {
+			visible = "[Not(GetVariableSystem.Exists('nd_world_crises_closed'))]"
+
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "[GetScriptedGui('nd_world_crisis_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				}
+			}
+			nd_world_crisis_row = {
+				datacontext = "[GetScriptedGui('nd_world_crisis_row_sgui')]"
+				visible = "[GetScriptedGui('nd_world_crisis_row_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('nd_world_crisis_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				}
 			}
 		}

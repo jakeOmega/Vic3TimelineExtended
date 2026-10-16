@@ -455,19 +455,35 @@ te_demog_ms_birth_limit_part = {
 }
 
 # ---- Each measure's upkeep, for the AI pulse's budget (te_demog_ms_ai_spent) -------------------------------------
-# te_demog_ms_authority_<measure>: its country_authority_add, as a cost; te_demog_ms_paid_<measure>: 1 for a money
+# te_demog_ms_authority_<measure>: its country_authority_add, as a cost (Birth Limit's at two children; the one child's
+# is te_demog_ms_authority_birth_limit_one); te_demog_ms_paid_<measure>: 1 for a money
 # upkeep. test_demographics_measures.py pins both to te_demog_measure_modifiers.txt.
 te_demog_ms_authority_child_allowance = { value = 0 }
 te_demog_ms_authority_family_housing = { value = 0 }
-te_demog_ms_authority_honours = { value = 25 }
-te_demog_ms_authority_restricted_contraception = { value = 50 }
+te_demog_ms_authority_honours = { value = 50 }
+te_demog_ms_authority_restricted_contraception = { value = 200 }
 te_demog_ms_authority_parental_leave = { value = 0 }
 te_demog_ms_authority_free_contraception = { value = 0 }
 te_demog_ms_authority_sex_education = { value = 0 }
-te_demog_ms_authority_later_longer_fewer = { value = 50 }
-te_demog_ms_authority_birth_limit = { value = 100 }
+te_demog_ms_authority_later_longer_fewer = { value = 150 }
+te_demog_ms_authority_birth_limit = { value = 300 }
+te_demog_ms_authority_birth_limit_one = { value = 400 }
+# the further upkeep of tightening Birth Limit to one child (its button needs it free; the AI pulse takes it off its budget)
+te_demog_ms_authority_birth_limit_tighten = {
+	value = te_demog_ms_authority_birth_limit_one
+	subtract = te_demog_ms_authority_birth_limit
+}
 te_demog_ms_authority_rural_exemption = { value = 0 }
-te_demog_ms_authority_crash_campaign = { value = 100 }
+te_demog_ms_authority_crash_campaign = { value = 300 }
+# Country: Birth Limit's upkeep for its row (te_demog_ms_birth_limit_upkeep): the one child's once the button has moved
+# to it, else the two children's (what it costs now, or would cost when first pressed).
+te_demog_ms_authority_birth_limit_shown = {
+	value = te_demog_ms_authority_birth_limit
+	if = {
+		limit = { has_modifier = te_demog_ms_birth_limit_one }
+		value = te_demog_ms_authority_birth_limit_one
+	}
+}
 te_demog_ms_paid_child_allowance = { value = 1 }
 te_demog_ms_paid_family_housing = { value = 1 }
 te_demog_ms_paid_honours = { value = 0 }
