@@ -46,7 +46,7 @@ The other `artificial_intelligence` methods (`pm_ai_governance`, `pm_automated_l
 `pm_ai_managed_fab` (the five fab industries in the Exact row; every base method employs 4,500 a level, so the cancel is exact):
 
 - `level_scaled` engineers −1,990 → −2,000: zero a level on every base.
-- `unscaled = { building_employment_engineers_add = 1000 }`: 1,000 (owner, 2026-10-16: the game hires small groups unevenly, so a larger crew is safer than the Grand Monument caretakers' 250). It breaks even with today's 10 a level at level 100, so most fab buildings hire more than before, and only very large ones fewer.
+- `unscaled = { building_employment_engineers_add = 1000 }`: 1,000 (owner, 2026-10-16: the game hires small groups unevenly, so a larger crew is safer than the Grand Monument caretakers' 250). It breaks even with today's 10 a level at level 100. The point is not the headcount: with a fixed crew, a building's level is no longer limited by the population available to staff it, so an era 12 economy can build as many levels as it can afford. Buildings past level 100 are common by then (owner, 2026-10-16).
 - Self-check `ai_managed_flat_staff` (`common/on_actions/te_aipm_selfcheck_on_actions.txt`): once a game, the first fab building of level 5 or more on the method logs its engineer slots. About 1,000 is OK. About 1,000 × level means `unscaled` employment is read per level; 0 means it isn't summed. Fallback: restore −1,990 and drop the `unscaled` block. Row in `docs/testing/ai-managed-flat-staff-playtest.md`.
 - The method's generated `# Employment:` line (`pm_costs.py`) reads −4,500, the per-level cut alone; the flat 1,000 isn't in it. `pm_employment_audit` buckets by block and passes: the level bucket nets to 0, the unscaled one is +1,000.
 
