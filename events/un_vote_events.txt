@@ -414,12 +414,14 @@ un_vote.1 = {
 	option = {
 		# Target-perspective override: voting "in favor" of a condemnation /
 		# sanctions resolution against ROOT means accepting the verdict. Only
-		# on a resolution that accuses its target: a refugee resolution names
-		# the country its refugees flee, and voting for it accepts nothing.
+		# on a resolution whose verdict the target can accept
+		# (un_resolution_target_may_accept): a refugee resolution names the
+		# country its refugees flee, and an expulsion, a mandate or a court
+		# referral lands in full whatever the target votes.
 		name = {
 			trigger = {
 				scope:un_vote_target ?= this
-				scope:un_resolution ?= { un_resolution_accuses_target = yes }
+				scope:un_resolution ?= { un_resolution_target_may_accept = yes }
 			}
 			text = un_vote.1.a_target
 		}
@@ -1362,15 +1364,17 @@ un_vote.2 = {
 				}
 				# Cash the loc promise of "Colonial powers face increased
 				# international pressure" — apply a one-shot decaying
-				# pressure modifier on every overseas-colonial owner.
+				# pressure modifier on every overseas-colonial owner. Its own
+				# modifier, not the crackdown's anti_colonial_momentum_modifier:
+				# the two stack, so a country that cracked down is not spared.
 				hidden_effect = {
 					every_country = {
 						limit = {
 							any_scope_state = { is_overseas_colonial_state = yes }
-							NOT = { has_modifier = anti_colonial_momentum_modifier }
+							NOT = { has_modifier = un_decolonization_pressure_modifier }
 						}
 						add_modifier = {
-							name = anti_colonial_momentum_modifier
+							name = un_decolonization_pressure_modifier
 							days = normal_modifier_time
 							is_decaying = yes
 						}
@@ -1476,24 +1480,12 @@ un_vote.2 = {
 						}
 					}
 				}
-				# Contributors already carry their programme cost (charged by
-				# un_peacekeeping_mission_button, or at pledge time in
-				# un_vote_apply_resolution_compliance); the deployment only
-				# puts them on cooldown. This block used to strip that cost and
-				# re-add it with a multiplier that read gdp in journal-entry
-				# scope ('none'), from a loop whose ROOT is another country.
-				hidden_effect = {
-					every_country = {
-						limit = {
-							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
-						}
-						add_modifier = {
-							name = un_peacekeeping_cooldown
-							days = long_modifier_time
-							is_decaying = yes
-						}
-					}
-				}
+				# Contributors are charged and put on the programme's ten-year
+				# cooldown when they pledge, in un_vote.3
+				# (un_vote_apply_resolution_compliance). This block used to give
+				# the cooldown to every member already in the programme, before
+				# anyone had pledged: new pledgers could leave at once, and
+				# members that refused this mission were locked in again.
 			}
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
@@ -1588,15 +1580,18 @@ un_vote.2 = {
 				}
 				custom_tooltip = un_vote_sanctions_passed_tt
 				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
-				# Proposer becomes sanctions enforcer
-				add_modifier = { name = un_sanctions_enforcer_modifier }
-				# ...and in three months decides how strictly to enforce
-				# (un_events.5; redesign phase 4: fired here, not rolled).
+				# Proposer becomes sanctions enforcer, and in three months
+				# decides how strictly to enforce (un_events.5; redesign phase
+				# 4: fired here, not rolled). Only when a regime starts below:
+				# a target that voted for its own sanctions carries none, and
+				# an enforcer with nothing to enforce could table no sanctions
+				# again until it paid credibility to lift nothing.
 				if = {
 					limit = {
 						exists = scope:un_vote_target
 						NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
 					}
+					add_modifier = { name = un_sanctions_enforcer_modifier }
 					hidden_effect = {
 						scope:un_vote_target = { save_scope_as = sanctioned_country }
 						trigger_event = { id = un_events.5 days = 90 }
@@ -1945,8 +1940,20 @@ un_vote.3 = {
 		# actually decide, which depends on the kind of resolution. A
 		# convention binds only the members that ratify it; a request for aid
 		# or peacekeepers asks each member to take part; anything else is a
-		# decision of the whole Assembly that stands whatever we answer.
+		# decision of the whole Assembly that stands whatever we answer. A veto
+		# that held has blocked it or left only a form that binds no one, so
+		# answering it is a statement only (options B and C).
 		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+						un_resolution_has_vote = { LIST = un_res_no }
+					}
+				}
+				desc = un_vote.3.d_choice_vetoed
+			}
 			triggered_desc = {
 				trigger = { un_vote_3_we_opposed_passed = { KIND = convention } }
 				desc = un_vote.3.d_choice_convention
@@ -2066,9 +2073,16 @@ un_vote.3 = {
 		# costs no standing. A supervised referendum is the same: it binds the
 		# overlord alone, which answers for it in un_referendum.1 (holding the
 		# vote pays standing, refusing books standing and defiance).
+		#
+		# A veto that held leaves nothing binding to comply with: it blocks a
+		# reform, a mandate, a standing force, a referendum or the ICC outright
+		# (un_vote_effects.txt applies none of them), and softens the rest into
+		# forms that bind no one (a rebuke, voluntary measures, observers). An
+		# overridden veto removes the tag, so its resolution pays in full.
 		if = {
 			limit = {
 				scope:un_resolution ?= { un_resolution_is_binding = yes }
+				NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
@@ -2146,6 +2160,10 @@ un_vote.3 = {
 		}
 
 		if = {
+			limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+			custom_tooltip = un_vote.3.c_vetoed_tt
+		}
+		else_if = {
 			limit = { scope:un_resolution ?= { un_resolution_is_convention = yes } }
 			custom_tooltip = un_vote.3.c_convention_tt
 		}
@@ -2174,9 +2192,12 @@ un_vote.3 = {
 		# denouncing the referral costs only the relations and infamy above.
 		# A supervised referendum likewise: the overlord's refusal is booked
 		# in un_referendum.1.
+		# A vetoed resolution binds no one (option B's note), so denouncing it
+		# defies nothing.
 		if = {
 			limit = {
 				scope:un_resolution ?= { un_resolution_is_binding = yes }
+				NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 			}

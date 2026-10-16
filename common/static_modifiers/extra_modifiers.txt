@@ -3615,12 +3615,6 @@ un_human_rights_declaration_modifier = {
 	country_institution_size_change_speed_mult = 0.1
 }
 
-un_human_rights_reservations_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_acceptance_no_shared_language_trait_add = 5
-	country_prestige_mult = 0.02
-}
-
 # Redesign phase 4 (design §1.3): the defiant options paid too well. 100 -> 50.
 un_human_rights_refusal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -3827,11 +3821,6 @@ un_heritage_program_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_prestige_mult = 0.05
 	country_tech_research_speed_mult = 0.01
-}
-
-un_heritage_token_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.02
 }
 
 # Decaying penalty for refusing to table it (un_events.9, option C), which bars
@@ -4109,6 +4098,17 @@ un_colonial_defender_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_infamy_decay_mult = -0.10
 	country_authority_add = 25
+}
+
+# Every country holding an overseas colony when the decolonization declaration
+# carries, member or not, for normal_modifier_time, decaying (un_vote.2). It
+# has the effects of anti_colonial_momentum_modifier, which the crackdown in
+# decolonization_events.8 gives, but its own name, so a country that never
+# cracked down is not told it did, and a country that did still takes it.
+un_decolonization_pressure_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.05
+	interest_group_ig_intelligentsia_pol_str_mult = 0.10
 }
 
 # ---- Ideological Confrontation Modifiers ----
@@ -4411,13 +4411,6 @@ un_law_of_sea_refusal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.03
 	country_infamy_generation_mult = 0.05
-}
-
-# Reservations modifier (non-vote path)
-un_law_of_sea_reservations_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_port_connection_cost_mult = -0.02
-	country_prestige_mult = 0.01
 }
 
 # ---- Physical Protection of Nuclear Material (CPPNM) ----

@@ -29,3 +29,17 @@ tagged hover (`#tooltippable;tooltip:[GetPlayer.GetTooltipTag],<key>`) on a prop
 | **Our Obligations.** As a party to a convention, hover its name. | Its full terms, not only the member modifier. | Only the member modifier means the old `je_un_chamber_conv_<key>_tt` loaded from a stale copy (search `te_unused_l_english.yml`). |
 | **Length.** Hover the longest: Decolonization Resolution, Request a Peacekeeping Deployment, Charter Reform II. | The tooltip fits the screen at 1080p. | Too tall: move the shared outcomes (`$je_un_terms_common$`) off the proposal titles and keep them on the card only. |
 | **UNESCO in play.** With UNESCO in force, occupy a state with a Grand Monument and carry it off. | The infamy the trophy row shows is twice the figure without UNESCO, matching the agency's tooltip. | A mismatch means `gm_trophy_values.txt` and `je_un_terms_heritage` disagree: `test_un_terms_tooltips.py` should have caught it. |
+
+## What a carried resolution does to the members (2026-10-16)
+
+The same PR fixed seven things the terms audit found the script doing against its own design
+(`test_un_vote_consequences.py` pins each offline). What only the game shows:
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **A held veto.** Vote against a sanctions resolution, have a permanent member veto it, and let it carry in its voluntary form. | `un_vote.3` says the veto left nothing binding; Accept shows no standing gain, and Denounce shows relations and infamy but no standing loss or defiance record. | A standing line means `un_res_vetoed` was gone by `un_vote.3`: check where `un_vote_effects.txt` removes it. |
+| **Peacekeeping pledges.** As a major power in the Peacekeeping programme, refuse a carried full deployment; as another, pledge to one. | The refuser's End Peacekeeping button stays as it was; the pledger gains Peacekeeping Commitment Active (one copy) and cannot end the programme for ten years. | Two copies of the commitment mean the remove before the add in `un_vote_apply_resolution_compliance` did not take. |
+| **Bloc leverage.** As a bloc leader, vote for a peacekeeping request that a veto cuts to observers. | No +50 leverage over the requester. | Leverage means the limit in `un_vote_apply_resolution_compliance` lost `un_resolution_peacekeeping_full`. |
+| **Sanctions against us.** Be the target of sanctions and vote for them. | When they carry, the proposer gets no Sanctions Enforcer modifier and can table sanctions again. | An enforcer modifier means `un_res_target_accepted` was not set on the resolution: check `un_vote_cast_yes`. |
+| **Expulsion, mandate or referral against us.** Vote for it as its target. | The option reads as an ordinary vote in favour, and no Self-Corrected modifier appears. | "We accept the resolution." means `un_vote.1` option A's name does not read `un_resolution_target_may_accept`. |
+| **Decolonization pressure.** Hold an overseas colony when the declaration carries, having cracked down on intellectuals beforehand. | Both Anti-Colonial Backlash and Decolonisation Declaration: International Pressure, each with its own description. | Backlash alone means `un_vote.2` still reads the crackdown's modifier. |

@@ -297,9 +297,9 @@ The other seven are:
 | Topic | Who may table it | If it carries |
 |---|---|---|
 | Condemnation of Aggression | A member with a rival that started a war it is still fighting and has a [case](#grounds-for-un-censure) of 30+ | Condemned for ten years: prestige, relations improvement speed and infamy decay, × enforcement. |
-| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions. That ends its own regime and any whose enforcer has left the UN or is gone; a regime another member still enforces continues. |
+| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions; if the target voted for them, none apply and nobody enforces them. Lifting ends its own regime and any whose enforcer has left the UN or is gone; a regime another member still enforces continues. |
 | Authorized Military Mandate | See [UN military mandates](#un-military-mandates) | A mandate for the proposer. |
-| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it; nobody else is asked. |
+| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it, and cannot leave the Peacekeeping programme for ten years; nobody else is asked. |
 | Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted and take part pay for ten years. |
 | Charter Reform | A major power, once the charter is ripe | The next reform. |
 | Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years | The seat is stripped. |
@@ -395,7 +395,8 @@ else (Denounce the decision) is a statement on the record that changes nothing.
 Refusing costs 20 relations with the proposer and 3 infamy, and for a binding
 resolution also 5 standing and 10 case strength. Accepting a binding resolution
 you opposed earns 2 standing, except a peacekeeping request, whose contribution
-is its own reward. A referral to the World Court and a supervised referendum
+is its own reward. A resolution that a veto blocked or softened binds no one, so
+accepting or refusing it moves no standing or case strength. A referral to the World Court and a supervised referendum
 bind only the country they name, which answers in its own event, so accepting
 or refusing them here moves no standing or case strength. A member that voted in favor,
 or did not vote, ratifies a carried convention without being asked, except that
@@ -683,8 +684,9 @@ while you are still at peace and holding elections, an Electoral Observer
 Mission goes to your capital, paid from the UN's budget, so
 nobody sends a contingent. At strength 1 it gives you +5 legitimacy and makes
 Election Interference against you easier to catch, and its state −10% turmoil
-effects and −10% radicals from political movements. While it is there,
-Election Interference cuts your electoral confidence by half as much. It
+effects and −10% radicals from political movements. While it is there, unless
+the UN is Moribund, Election Interference cuts your electoral confidence by
+half as much. It
 succeeds when an election campaign ends while it is there and you still hold
 its state and your seat (UN delivery and 3 standing for you), fails if you are
 attacked or stop holding elections (which also costs 2 standing), and lapses
