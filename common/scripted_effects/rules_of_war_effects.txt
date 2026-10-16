@@ -3,28 +3,46 @@
 # The world's reading of a new law: a one-time infamy change when a Rules of
 # War law takes effect. Each law's on_activate passes its infamy standing
 # (STANDING: Total War +25, Traditional 0, War Crimes Forbidden -10,
-# Humanitarian Regulations -15, Limited War -20), and infamy moves by the new
-# standing minus the one already charged, so the change is path-independent:
-# Traditional to Total War is +25, Total War back to Traditional -25, Total
-# War to Limited War -45. A round trip nets zero (less whatever the floor at 0
-# infamy swallowed), so cycling between restrictive laws can't wipe infamy.
+# Humanitarian Regulations -15, Limited War -20). A move to a looser law adds
+# the full difference between the new standing and the one already charged;
+# a move to a stricter law takes off 90% of it (te_row_infamy_reduction_share),
+# rounded toward zero. Traditional to Total War is +25, back is -22; Total War
+# to Limited War is -40. So a move there and back costs 1 to 5 infamy, and
+# cycling the restrictive laws can't wipe it.
 #
-# te_row_infamy_standing holds the standing charged so far, 0 when unset: the
-# start law (every country starts on Traditional, extra_history.txt), and a
-# country from a save made before this effect, which was charged nothing. No
-# pulse resyncs it to the law in force, since that would hand such a country a
-# refund for infamy it never paid. Revolutionaries start with no variables,
-# so if their movement wins them a different Rules of War law, the winner may
-# keep the loser's standing for a law it never paid for; rare, at most 45.
+# te_row_infamy_standing holds the standing of the law last charged, read
+# through te_row_charged_standing (0 when unset): the start law (every country
+# starts on Traditional, extra_history.txt), and a country from a save made
+# before this effect, which was charged nothing. No pulse resyncs it to the
+# law in force, since that would hand such a country a cut for infamy it
+# never paid. Revolutionaries start with no variables, so if their movement
+# wins them a different Rules of War law, the winner may keep the loser's
+# standing for a law it never paid for; rare, at most 45.
 #
 # The change renders in the enactment preview, computed from the standing
-# before enactment. Country scope.
+# before enactment; a change of 0 (a stale standing) shows nothing.
+# Country scope.
 te_row_charge_infamy = {
-	change_infamy = {
-		value = $STANDING$
-		if = {
-			limit = { has_variable = te_row_infamy_standing }
-			subtract = var:te_row_infamy_standing
+	# A looser law: the full difference.
+	if = {
+		limit = { te_row_charged_standing < $STANDING$ }
+		change_infamy = {
+			value = $STANDING$
+			subtract = te_row_charged_standing
+		}
+	}
+	# A stricter law: 90% of the difference, rounded toward zero. The product
+	# is a whole or half number (the standings are multiples of 5); the 0.01
+	# keeps fixed-point error on a whole one from flooring it a point low.
+	else_if = {
+		limit = { te_row_charged_standing > $STANDING$ }
+		change_infamy = {
+			value = te_row_charged_standing
+			subtract = $STANDING$
+			multiply = te_row_infamy_reduction_share
+			add = 0.01
+			floor = yes
+			multiply = -1
 		}
 	}
 	hidden_effect = {

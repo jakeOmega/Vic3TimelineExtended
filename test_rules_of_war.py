@@ -17,12 +17,14 @@ wars small. What these checks pin, none of which the engine would report:
   serious war, back down at peace);
 - the stance lists keep the new backers;
 - social_tensions_events.7's reform option can actually appear;
-- each law charges its infamy standing once on taking effect, net of the
-  standing already charged, so a round trip of laws can't wipe infamy.
+- each law charges its infamy standing once on taking effect: the full
+  difference from the standing already charged toward a looser law, 90% of it
+  rounded down toward a stricter one, so every round trip costs infamy.
 
 No game install needed.
 """
 
+import math
 import os
 import re
 import unittest
@@ -49,6 +51,7 @@ MODIFIER_TYPES = os.path.join(
 )
 SOCIAL_EVENTS = os.path.join(REPO, "events", "social_tensions_events.txt")
 ROW_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "rules_of_war_effects.txt")
+ROW_VALUES = os.path.join(REPO, "common", "script_values", "rules_of_war_values.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 
@@ -329,6 +332,9 @@ class InfamyStandingTests(unittest.TestCase):
             call = _body(on_activate["te_row_charge_infamy"])
             cls.standing[name] = float(_body(call["STANDING"]))
         cls.effect = _block(_strip_comments(_read(ROW_EFFECTS)), "te_row_charge_infamy")
+        cls.values = _strip_comments(_read(ROW_VALUES))
+        share = re.search(r"(?m)^te_row_infamy_reduction_share = ([\d.]+)$", cls.values)
+        cls.share = float(share.group(1))
 
     def test_total_war_costs_infamy_and_the_restrictive_laws_cut_it(self):
         self.assertGreater(self.standing[TOTAL], 0)
@@ -351,38 +357,78 @@ class InfamyStandingTests(unittest.TestCase):
 
     def test_the_charge_is_net_of_the_standing_already_charged(self):
         body = re.sub(r"\s+", " ", self.effect)
-        self.assertIn("change_infamy = { value = $STANDING$", body)
-        self.assertIn(
-            "limit = { has_variable = te_row_infamy_standing } "
-            "subtract = var:te_row_infamy_standing",
-            body,
+        gain = (
+            "if = { limit = { te_row_charged_standing < $STANDING$ } "
+            "change_infamy = { value = $STANDING$ subtract = te_row_charged_standing } }"
         )
+        cut = (
+            "else_if = { limit = { te_row_charged_standing > $STANDING$ } "
+            "change_infamy = { value = te_row_charged_standing subtract = $STANDING$ "
+            "multiply = te_row_infamy_reduction_share add = 0.01 floor = yes multiply = -1 } }"
+        )
+        self.assertIn(gain, body)
+        self.assertIn(cut, body)
         self.assertIn(
             "hidden_effect = { set_variable = { name = te_row_infamy_standing "
             "value = $STANDING$ } }",
             body,
         )
+        charged = re.sub(r"\s+", " ", _block(self.values, "te_row_charged_standing"))
+        self.assertIn("value = 0", charged)
+        self.assertIn(
+            "limit = { has_variable = te_row_infamy_standing } "
+            "value = var:te_row_infamy_standing",
+            charged,
+        )
 
-    def test_cycling_laws_cannot_wipe_infamy(self):
-        # The effect, replayed: from an unset standing (0, the start law), any
-        # sequence of laws ends charged exactly the last law's standing, and a
-        # restrictive law re-enacted after a looser one only takes back what
-        # the looser one charged.
+    def test_a_cut_keeps_less_than_the_whole_difference(self):
+        self.assertLess(self.share, 1)
+        self.assertGreater(self.share, 0)
+
+    def _change(self, old, new):
+        """The effect's change for a move from standing `old` to `new`."""
+        if new > old:
+            return new - old
+        if new < old:
+            return -math.floor((old - new) * self.share + 0.01)
+        return 0
+
+    def test_every_stricter_law_still_cuts_infamy(self):
+        # Rounded toward zero, not to nearest: 0.9 x 5 = 4.5 would round to 5
+        # and make the five-point steps free to loop.
+        cuts = {}
+        for old in LAWS_IN_GROUP:
+            for new in LAWS_IN_GROUP:
+                gap = self.standing[old] - self.standing[new]
+                if gap > 0:
+                    cut = -self._change(self.standing[old], self.standing[new])
+                    with self.subTest(old=old, new=new):
+                        self.assertGreaterEqual(cut, 1)
+                        self.assertLess(cut, gap)
+                        self.assertEqual(cut, int(cut))
+                    cuts[gap] = cut
+        self.assertEqual(cuts[5], 4)
+        self.assertEqual(cuts[25], 22)
+        self.assertEqual(cuts[45], 40)
+
+    def test_a_round_trip_costs_infamy(self):
+        # The effect, replayed with the floor at 0 infamy: from an unset
+        # standing (0, the start law), every loop back to a law leaves more
+        # infamy than staying put, so cycling the restrictive laws can't wipe it.
         def replay(laws, infamy):
             charged = 0.0
             for name in laws:
-                infamy = max(0.0, infamy + self.standing[name] - charged)
+                infamy = max(0.0, infamy + self._change(charged, self.standing[name]))
                 charged = self.standing[name]
             return infamy
 
         start = 60.0
         once = replay([LIMITED], start)
-        cycled = replay([LIMITED, HUMANITARIAN, LIMITED, WCF, LIMITED], start)
-        self.assertEqual(cycled, once)
-        self.assertEqual(replay([TOTAL, TRADITIONAL], start), start)
-        self.assertEqual(
-            replay([TOTAL, LIMITED], start), start + self.standing[LIMITED]
-        )
+        self.assertEqual(once, start - 18)
+        self.assertGreater(replay([LIMITED, HUMANITARIAN, LIMITED], start), once)
+        self.assertGreater(replay([LIMITED, WCF, LIMITED, HUMANITARIAN, LIMITED], start), once)
+        self.assertEqual(replay([TOTAL, TRADITIONAL], start), start + 3)
+        self.assertEqual(replay([TOTAL, LIMITED], start), start + 25 - 40)
 
 
 if __name__ == "__main__":

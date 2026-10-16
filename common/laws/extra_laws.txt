@@ -751,9 +751,9 @@ law_state_universal_heir = {
 #
 #  Each law has an infamy standing, charged once when it takes effect: Total
 #  War +25, Traditional 0, War Crimes Forbidden -10, Humanitarian Regulations
-#  -15, Limited War -20. A change moves infamy by the new standing minus the
-#  old (te_row_charge_infamy), so a round trip nets zero and cycling the
-#  restrictive laws can't wipe infamy.
+#  -15, Limited War -20. A move to a looser law adds the full difference from
+#  the old standing, a move to a stricter one takes off 90% of it, rounded
+#  down (te_row_charge_infamy), so a move there and back costs infamy.
 #
 #  The nuclear bans are the two script-only booleans in
 #  nuclear_program_modifier_types.txt: they show in the law tooltip, and
@@ -799,8 +799,8 @@ law_total_war = {
 		country_un_authority_target_add = -2
 	}
 
-	# Infamy moves by this law's standing minus the old law's
-	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
 	on_activate = {
 		te_row_charge_infamy = { STANDING = 25 }
 	}
@@ -832,8 +832,8 @@ law_traditional_rules_of_war = {
 		unit_experience_gain_mult = 0.25
 	}
 
-	# Infamy moves by this law's standing minus the old law's
-	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
 	on_activate = {
 		te_row_charge_infamy = { STANDING = 0 }
 	}
@@ -875,8 +875,8 @@ law_war_crimes_forbidden = {
 		country_un_authority_target_add = 0.5
 	}
 
-	# Infamy moves by this law's standing minus the old law's
-	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
 	on_activate = {
 		te_row_charge_infamy = { STANDING = -10 }
 	}
@@ -921,8 +921,8 @@ law_humanitarian_regulations = {
 		country_un_authority_target_add = 1
 	}
 
-	# Infamy moves by this law's standing minus the old law's
-	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
 	on_activate = {
 		te_row_charge_infamy = { STANDING = -15 }
 	}
@@ -978,8 +978,8 @@ law_limited_war = {
 		country_un_authority_target_add = 1.5
 	}
 
-	# Infamy moves by this law's standing minus the old law's
-	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
 	on_activate = {
 		te_row_charge_infamy = { STANDING = -20 }
 	}
