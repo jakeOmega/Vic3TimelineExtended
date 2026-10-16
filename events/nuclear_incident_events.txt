@@ -1474,7 +1474,8 @@ nuclear_incident.30 = {
 }
 
 # ---- .40 A Routine Mishap -----------------------------------------------------------
-# The always-eligible fallback. nd_mishap_kind:
+# The always-eligible fallback, at most one every five years
+# (nd_mishap_cooldown_months). nd_mishap_kind:
 #   1 a sabotage alarm, the wrong klaxon, interceptors on the runway (Duluth and
 #     Volk Field, the bear)             — readiness heightened or higher
 #   2 a mechanic's slip sets off the base alarm (Kincheloe)
@@ -1520,6 +1521,9 @@ nuclear_incident.40 = {
 	}
 
 	immediate = {
+		# Every firing starts the cooldown, the warning fallback's and the
+		# debug event's included; the two callers skip .40 while it runs.
+		set_variable = { name = nd_mishap_cooldown_months value = nd_routine_mishap_cooldown_months_value }
 		random_list = {
 			0 = {
 				modifier = {
