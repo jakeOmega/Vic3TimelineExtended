@@ -68,10 +68,15 @@ gm_state_tr_occupied_by = {
 			$WHO$ = { has_variable = te_cw_role }
 		}
 	}
-	any_province = {
-		percent >= 0.5
-		controller = $WHO$
-	}
+	gm_state_tr_holds_half = { WHO = $WHO$ }
+}
+
+# State scope. $WHO$ controls half or more of the state's provinces, counted by
+# a script value: a state can't iterate its provinces in a trigger or an effect
+# (gm_trophy_values.txt, Occupation).
+gm_state_tr_holds_half = {
+	$WHO$ = { save_temporary_scope_as = gm_tmp_tr_who }
+	gm_state_tr_who_province_share >= 0.5
 }
 
 # State scope. The country that first saw this monument dedicated still owns

@@ -161,9 +161,31 @@ class RouteTests(unittest.TestCase):
     def test_occupation_reads_the_provinces(self):
         body = squash(block(read(TR_TRIGGERS), "gm_state_tr_occupied_by"))
         self.assertIn("owner = { has_war_with = $WHO$ }", body)
-        self.assertIn("any_province = { percent >= 0.5 controller = $WHO$ }", body)
+        self.assertIn("gm_state_tr_holds_half = { WHO = $WHO$ }", body)
         self.assertIn("NOT = { AND = { owner = { has_variable = te_cw_role } $WHO$ = { has_variable = te_cw_role } } }",
                       body, "never between the two sides of a civil war")
+        half = squash(block(read(TR_TRIGGERS), "gm_state_tr_holds_half"))
+        self.assertEqual(half, "$WHO$ = { save_temporary_scope_as = gm_tmp_tr_who } gm_state_tr_who_province_share >= 0.5")
+        share = squash(block(read(TR_VALUES), "gm_state_tr_who_province_share"))
+        self.assertIn("every_province = { limit = { controller = scope:gm_tmp_tr_who } add = 1 }", share)
+
+    def test_no_province_iterator_runs_from_a_state(self):
+        """2026-10-16: the engine registers the province iterators from a province. random_province in
+        gm_state_tr_find_occupier logged 'Wrong scope for effect: state, expected province' once a month for every
+        monument state and never found an occupier, so no trophy was ever taken by occupation. Only a script value's
+        every_province reads a state's provinces (the base game's occupation_values.txt)."""
+        for path in (TR_EFFECTS, TR_TRIGGERS, EFFECTS, "common/scripted_triggers/gm_monument_triggers.txt"):
+            code = re.sub(r"#[^\n]*", "", read(path))
+            self.assertIsNone(re.search(r"\b(random|any|every|ordered)_province\b", code), path)
+        find = squash(block(read(TR_EFFECTS), "gm_state_tr_find_occupier"))
+        self.assertIn("random_enemy_in_war = {", find)
+        self.assertIn("gm_state_tr_occupied_by = { WHO = scope:gm_tmp_tr_enemy }", find)
+        # the self-check gm_occupation_read, once a game, in a save under way too
+        self.assertIn("gm_tr_occupation_read_self_check = yes", squash(block(read(EFFECTS), "gm_state_monthly")))
+        check = squash(block(read(TR_EFFECTS), "gm_tr_occupation_read_self_check"))
+        for line in ("owner = { is_at_war = no }", "gm_state_tr_holds_half = { WHO = owner }",
+                     "TE_SELF_CHECK OK gm_occupation_read", "TE_SELF_CHECK BROKEN gm_occupation_read"):
+            self.assertIn(line, check)
 
     def test_own_state_only_unincorporated_and_not_ours(self):
         body = squash(block(read(TR_TRIGGERS), "gm_state_tr_own_takeable_by"))

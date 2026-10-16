@@ -111,6 +111,8 @@
 #   te_dg_mw, te_dg_wf_rem  phase 2 step 2's workforce term and the lines on top of it (te_demog_work_effects.txt)
 #   te_dg_mc, te_dg_yb  phase 2 step 4, under Full only (te_demog_consequence_effects.txt): the conscription term and
 #                       the youth bulge's multiplier the state's modifiers carry
+#   te_dg_unemp         the unemployment the census read (te_demog_consequences_refresh, both settings), for the
+#                       panel's youth bulge: a scripted GUI reads state_unemployment_rate as none
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
