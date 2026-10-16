@@ -282,7 +282,9 @@ TOPIC_ICONS = ["topic_condemn", "topic_sanctions", "topic_expulsion", "topic_man
                # Phase 7 (un_redesign_design.md §0.12), codes 18-28.
                "topic_cultural_diversity", "topic_nuclear_ban", "topic_court_referral", "topic_arms_embargo",
                "topic_credentials", "topic_standing_force", "topic_observer_request", "topic_food_reserve",
-               "topic_ceasefire", "topic_development_fund", "topic_referendum", "topic_narcotics"]
+               "topic_ceasefire", "topic_development_fund", "topic_referendum", "topic_narcotics",
+               # §0.12a, code 30.
+               "topic_lift_sanctions"]
 AGENCY_KEYS = ["who", "unesco", "icj", "unhrc", "iaea", "unep", "unhcr", "unoosa", "itlos", "icc", "cppnm",
                "ccd", "tpnw", "incb"]
 # Icons the UN GUI uses as they are: vanilla's, used as vanilla uses them, and

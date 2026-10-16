@@ -95,6 +95,7 @@ The session strip, one per `un_disp_res_topic_code`, at 40 px. The same disc as 
 | 27 | World Development Fund | a stack of gold coins with a seedling sprouting from the top | `topic_development_fund.dds` |
 | 28 | Supervised referendum | a wooden ballot box, a paper ballot in its slot | `topic_referendum.dds` |
 | 29 | Narcotics convention | INCB's poppy + the scroll | `topic_narcotics.dds` |
+| 30 | Petition to lift sanctions (§0.12a) | for now a copy of International sanctions' crate, under its own name; wants its own art (the crate with its chain broken) | `topic_lift_sanctions.dds` |
 
 ## Overview: member-share pies
 

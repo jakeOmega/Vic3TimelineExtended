@@ -2,7 +2,8 @@
 # THE CHARTER'S NEW BUSINESS — JUSTICE: THE FIGURES (redesign phase 7)
 # ============================================================================
 # docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4: the referral to
-# the World Court, the arms embargo and the suspension of credentials. The
+# the World Court, the arms embargo and the suspension of credentials; and
+# §0.12a, the petition to lift sanctions. The
 # writers are in common/scripted_effects/un_justice_effects.txt (whose header
 # lists the state they keep), the tests in
 # common/scripted_triggers/un_justice_triggers.txt, the court's ruling in
@@ -224,6 +225,20 @@ un_credentials_relations = { value = -20 }
 # A member the Assembly has disgraced cannot challenge another's credentials.
 un_credentials_standing_floor = { value = 20 }
 
+# ---- Lift the Sanctions Against Us -------------------------------------------------
+
+# The months a regime has stood (un_sanctions_months) by which the Assembly no
+# longer holds its youth against a petition (un_lean_lift_sanctions_fresh).
+un_lift_fresh_months = { value = 60 }
+# Display: the months the regime on us has stood. Scope: country
+un_disp_sanctions_months = {
+	value = 0
+	if = {
+		limit = { has_variable = un_sanctions_months }
+		add = var:un_sanctions_months
+	}
+}
+
 # ---- The lean: our interests ---------------------------------------------------------
 # Each topic's term in un_lean_charter_interests (un_charter_values.txt). Voter
 # scope (THIS and ROOT the voter), with scope:un_resolution,
@@ -357,6 +372,79 @@ un_lean_interests_credentials = {
 	}
 }
 
+un_lean_lift_enforcer = { value = -30 }
+un_lean_lift_embargo = { value = -10 }
+un_lean_lift_grounds_factor = { value = 0.5 }
+un_lean_lift_fresh_per_month = { value = -0.4 }
+un_lean_lift_free_trade = { value = 10 }
+un_lean_lift_isolationist = { value = 10 }
+
+# A petition to lift sanctions. Its proposer is its target, so the ties to it
+# reach every member through un_lean_proposer. The enforcer, and the members
+# whose embargo the Assembly imposed, stand by the regime. The room weighs
+# how far the target's record has fallen below the sanctions' grounds, and
+# does not lightly reverse a regime it imposed recently. Free traders and
+# isolationists never wanted it.
+un_lean_interests_lift_sanctions = {
+	value = 0
+	if = {
+		limit = { NOT = { scope:un_vote_target ?= this } }
+		if = {
+			limit = { scope:un_vote_target ?= { var:un_sanctions_enforced_by ?= ROOT } }
+			add = un_lean_lift_enforcer
+		}
+		if = {
+			limit = {
+				scope:un_vote_target ?= {
+					has_variable_list = un_embargo_by
+					is_target_in_variable_list = { name = un_embargo_by target = ROOT }
+				}
+			}
+			add = un_lean_lift_embargo
+		}
+		add = un_lean_lift_sanctions_grounds
+		add = un_lean_lift_sanctions_fresh
+		if = {
+			limit = { has_law = law_type:law_free_trade }
+			add = un_lean_lift_free_trade
+		}
+		if = {
+			limit = { has_law = law_type:law_isolationism }
+			add = un_lean_lift_isolationist
+		}
+	}
+}
+
+# How far the target's record has fallen below the sanctions' grounds (a case
+# of 50), halved, between -20 and +20: a record that would still support
+# sanctions keeps them. un_lean_grounds, read the other way.
+un_lean_lift_sanctions_grounds = {
+	value = 0
+	if = {
+		limit = { exists = scope:un_vote_target }
+		add = un_case_threshold_sanctions
+		scope:un_vote_target = { subtract = un_case_strength }
+		multiply = un_lean_lift_grounds_factor
+		min = -20
+		max = 20
+	}
+}
+
+# A regime the Assembly imposed recently: -0.4 for each month short of five
+# years in force, so -24 when it is new and nothing from its fifth year. A
+# regime not yet counted (un_sanctions_months is written at the first monthly
+# update) counts as new.
+un_lean_lift_sanctions_fresh = {
+	value = 0
+	if = {
+		limit = { scope:un_vote_target ?= { un_sanctions_regime_on = yes } }
+		add = un_lift_fresh_months
+		scope:un_vote_target = { subtract = un_disp_sanctions_months }
+		min = 0
+		multiply = un_lean_lift_fresh_per_month
+	}
+}
+
 # ---- The AI's weights (the scripted buttons' ai_chance) ------------------------------
 # Proposer scope (ROOT the proposer). Modelled on the sanctions and
 # condemnation buttons (un_buttons.txt).
@@ -445,5 +533,34 @@ un_credentials_ai_chance = {
 	if = {
 		limit = { un_regime_human_rights_violator = yes }
 		value = 0
+	}
+}
+
+un_ai_lift_grounds_gone = { value = 20 }
+un_ai_lift_record_clean = { value = 15 }
+un_ai_lift_regime_old = { value = 10 }
+un_lift_ai_min_months = { value = 24 }
+
+# A petition to lift the sanctions on us: once our record no longer supports
+# sanctions and the regime has stood two years, more as the record clears and
+# the regime ages. A failed petition bars our next motion for ten years, so
+# the AI waits until the room might carry it.
+un_lift_sanctions_ai_chance = {
+	value = 0
+	if = {
+		limit = {
+			un_sanctions_regime_on = yes
+			un_case_strength < un_case_threshold_sanctions
+			un_disp_sanctions_months >= un_lift_ai_min_months
+		}
+		add = un_ai_lift_grounds_gone
+		if = {
+			limit = { un_case_strength < un_case_threshold_condemn }
+			add = un_ai_lift_record_clean
+		}
+		if = {
+			limit = { un_disp_sanctions_months >= un_lift_fresh_months }
+			add = un_ai_lift_regime_old
+		}
 	}
 }

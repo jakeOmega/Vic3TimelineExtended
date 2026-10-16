@@ -56,12 +56,13 @@ Leave the United Nations ends your membership, seat, programs and conventions.
 It costs 5 [standing](#international-standing) and gives UN Withdrawal
 Consequences for five years (−25% relations improvement speed, −5% prestige),
 during which you cannot rejoin. Sanctions against you stay in force, and so do
-unpaid dues. A permanent member walking out knocks authority down at once (4
-points for a typical great power, up to 8).
+unpaid dues. Sanctions you enforce lapse the month after you leave. A permanent
+member walking out knocks authority down at once (4 points for a typical great
+power, up to 8).
 
-When a revolution wins, the mod carries the nation's membership, seat and
-conventions over to the winner and rebuilds them in the following months (see
-[After a revolution](06-politics.md#after-a-revolution)).
+When a revolution wins, the mod carries the nation's membership, seat,
+conventions and any UN sanctions on it over to the winner and rebuilds them in
+the following months (see [After a revolution](06-politics.md#after-a-revolution)).
 
 ### Subjects and suspended representation
 
@@ -225,7 +226,7 @@ representation. A member two years behind on its dues cannot be seated.
 
 ### Vetoes in the Security Council
 
-A permanent member may veto one of the eleven binding topics, from the vote event
+A permanent member may veto one of the twelve binding topics, from the vote event
 or the chamber. The veto kills the binding form; if the Assembly still carried
 the resolution, a weaker form applies:
 
@@ -242,6 +243,7 @@ the resolution, a weaker form applies:
 | Establish the Standing UN Force | Blocked outright. |
 | Binding Ceasefire | A call for a ceasefire: one drop in the aggressor's war support. |
 | Supervised Self-Determination Referendum | Blocked outright. |
+| Lift the Sanctions Against Us | Blocked outright. |
 
 After Charter Reform II, a resolution that two thirds of the members with a vote
 carry overrides the veto and takes its full form. This covers every binding
@@ -283,21 +285,22 @@ members that sits in the Assembly; when it falls, the bloc loses 3.
 
 ### General Assembly topics
 
-There are thirty topics. Eleven are binding and can be vetoed:
-Condemnation of Aggression, International Sanctions, Request a Peacekeeping
-Deployment, the International Criminal Court, Charter Reform, Authorized
-Military Mandate, Refer a Dispute to the World Court, Arms Embargo, Establish
-the Standing UN Force, Binding Ceasefire and Supervised Self-Determination
-Referendum. The other nineteen are recommendatory. Fourteen topics, the ICC
-among them, are conventions (see [UN conventions and
+There are thirty-one topics. Twelve are binding and can be vetoed:
+Condemnation of Aggression, International Sanctions, Lift the Sanctions Against
+Us, Request a Peacekeeping Deployment, the International Criminal Court, Charter
+Reform, Authorized Military Mandate, Refer a Dispute to the World Court, Arms
+Embargo, Establish the Standing UN Force, Binding Ceasefire and Supervised
+Self-Determination Referendum. The other nineteen are recommendatory. Fourteen
+topics, the ICC among them, are conventions (see [UN conventions and
 agencies](#un-conventions-and-agencies)). Nine open with the charter reforms
 (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
-The other seven are:
+The other eight are:
 
 | Topic | Who may table it | If it carries |
 |---|---|---|
 | Condemnation of Aggression | A member with a rival that started a war it is still fighting and has a [case](#grounds-for-un-censure) of 30+ | Condemned for ten years: prestige, relations improvement speed and infamy decay, × enforcement. |
-| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions; if the target voted for them, none apply and nobody enforces them. Lifting ends its own regime and any whose enforcer has left the UN or is gone; a regime another member still enforces continues. |
+| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions or the Assembly lifts them; if the target voted for them, none apply and nobody enforces them. Sanctions whose enforcer leaves the UN or is gone lapse the next month. |
+| Lift the Sanctions Against Us | A member under sanctions, for itself | The sanctions end, with the embargoes the Assembly imposed, and the enforcer may table sanctions again. |
 | Authorized Military Mandate | See [UN military mandates](#un-military-mandates) | A mandate for the proposer. |
 | Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it, and cannot leave the Peacekeeping programme for ten years; nobody else is asked. |
 | Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted and take part pay for ten years. |
@@ -312,6 +315,14 @@ an embargo by choice once its first year is out counts as busting the sanctions.
 A condemnation adds Shunned by the United Nations (−6 diplomatic reputation ×
 enforcement) from Strong, and Restrained by the United Nations (fewer play
 maneuvers, more infamy) at Supranational.
+
+Members weigh a petition to lift sanctions by how far your case strength has
+fallen below the 50 that supports them, and are slow to lift sanctions that have
+stood less than five years. Their enforcer and the members embargoing you vote
+against it; your allies and bloc partners lean for it and your rivals against.
+The Propose a Resolution row names the enforcer and how many months the
+sanctions have stood. A failed petition bars your next motion as any other does,
+so wait until your record has cleared.
 
 ### Grounds for UN censure
 
@@ -397,14 +408,15 @@ resolution also 5 standing and 10 case strength. Accepting a binding resolution
 you opposed earns 2 standing, except a peacekeeping request, whose contribution
 is its own reward. A resolution that a veto blocked or softened binds no one, so
 accepting or refusing it moves no standing or case strength. A referral to the World Court and a supervised referendum
-bind only the country they name, which answers in its own event, so accepting
-or refusing them here moves no standing or case strength. A member that voted in favor,
+bind only the country they name, which answers in its own event, and a petition
+to lift sanctions asks nothing of the members, so accepting or refusing these
+moves no standing or case strength. A member that voted in favor,
 or did not vote, ratifies a carried convention without being asked, except that
 a member holding warheads that did not vote stays outside the nuclear ban.
 
 ### Tabling UN business
 
-You table the seven topics above, and the nine the reformed charter opens, from
+You table the eight topics above, and the nine the reformed charter opens, from
 the Propose a Resolution rows or the UN tab's buttons, and any convention
 from those rows. The rows sit under
 the General Assembly while no resolution is in session. Each gives the topic,
@@ -1017,10 +1029,12 @@ side with a strong stake in the topic (interests of +35, or −35 or less) run o
 campaign each, when they have 300 influence to spare: a nuclear power against
 the prohibition treaty, poor members for a World Development Fund that would
 pay them well. They never run campaigns on human members.
-- They table the sixteen non-convention topics through the journal entry's
+- They table the seventeen non-convention topics through the journal entry's
 buttons when their situation calls for it, and reach conventions only through
 the docket, so a qualifying human is offered convention business first. They
-refer a dispute to the World Court only on odds of 60% or better.
+refer a dispute to the World Court only on odds of 60% or better, and petition
+to lift sanctions on themselves only once their case is below 50 and the
+sanctions have stood two years.
 - They pledge grain to the World Food Reserve when they hold 2,000 units or
 more, and withdraw the pledge when famine strikes at home.
 - They join or leave by what a seat is worth to them: their laws and rank, the

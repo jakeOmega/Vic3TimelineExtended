@@ -206,6 +206,13 @@ types un_layout_widget_types
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)28' )]"
 							texture = "gfx/interface/icons/un_icons/topic_referendum.dds"
 						}
+						# §0.12a: for now a copy of International Sanctions' icon, under
+						# its own name, so new art drops in.
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)30' )]"
+							texture = "gfx/interface/icons/un_icons/topic_lift_sanctions.dds"
+						}
 					}
 
 					flowcontainer = {

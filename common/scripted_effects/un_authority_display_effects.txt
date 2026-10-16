@@ -529,6 +529,8 @@ un_authority_log_resolution_lines = {
 	un_authority_log_topic_case = { TOPIC = ceasefire KEY = je_un_led_topic_ceasefire }
 	un_authority_log_topic_case = { TOPIC = development_fund KEY = je_un_led_topic_development_fund }
 	un_authority_log_topic_case = { TOPIC = referendum KEY = je_un_led_topic_referendum }
+	# §0.12a.
+	un_authority_log_topic_case = { TOPIC = lift_sanctions KEY = je_un_led_topic_lift_sanctions }
 }
 
 # One topic, printed if the entry's resolution carries its tag. Exactly one

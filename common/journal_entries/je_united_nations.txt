@@ -70,6 +70,8 @@
 	scripted_button = un_propose_ceasefire_button
 	scripted_button = un_propose_development_fund_button
 	scripted_button = un_propose_referendum_button
+	# The sanctioned country's petition to lift its sanctions (§0.12a).
+	scripted_button = un_propose_lift_sanctions_button
 
 	# ---- The World Food Reserve's pledges (redesign phase 7, §0.12 item 10;
 	# common/scripted_buttons/un_economy_buttons.txt) ----
