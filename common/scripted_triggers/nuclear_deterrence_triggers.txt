@@ -1073,7 +1073,7 @@ nd_is_crisis_target = {
 nd_world_crisis_slot_live = {
 	has_global_variable = nd_wc_$SLOT$
 	exists = global_var:nd_wc_$SLOT$
-	global_var:nd_wc_$SLOT$ = { nd_is_crisis_owner = yes }
+	global_var:nd_wc_$SLOT$ ?= { nd_is_crisis_owner = yes }
 }
 
 # Both records still point at each other with the same id. Owner scope.

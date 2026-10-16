@@ -1437,6 +1437,7 @@ nd_world_crises_refresh = {
 		ordered_country = {
 			limit = { nd_is_crisis_owner = yes }
 			order_by = nd_display_crisis_danger
+			min = 0
 			max = 99
 			check_range_bounds = no
 
