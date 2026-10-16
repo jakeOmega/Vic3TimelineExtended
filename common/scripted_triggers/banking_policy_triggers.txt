@@ -1036,6 +1036,20 @@ banking_crisis_wave_reached = {
 	}
 }
 
+# Did this contagion event's (minor_events_timelineextended.7) own roll crash
+# the country? Its immediate saves the country as scope:contagion_crashed on a
+# crash. A saved scope also rides into the events an `after` triggers, so a
+# country reached by a cascade arrives holding the upstream country's: the
+# question is whether the saved country is this one, not whether one exists.
+# clear_saved_scope did not remove the inherited one (2026-10-16 save: the
+# European Union rolled a scare, banking_crisis_wave_scared, and took the crash
+# options and cascade anyway). The upstream country is never ROOT, since
+# banking_cycle_spread_contagion leaves out the origin.
+banking_contagion_own_roll_crashed = {
+	exists = scope:contagion_crashed
+	root = scope:contagion_crashed
+}
+
 # External tools require the full monetary layer; no inert simplified-mode toggles.
 banking_external_available = {
 	te_mon_full_system = yes

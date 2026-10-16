@@ -115,13 +115,17 @@ class Registry:
 REGISTRY = Registry()
 EFFECTS = definitions("common/scripted_effects/banking_cycle_effects.txt")
 MINOR_EVENTS = definitions("events/minor_events.txt")
+TRIGGERS = definitions("common/scripted_triggers/banking_policy_triggers.txt")
 
 
 class Interp:
     def __init__(self, variables, laws=(), scopes=()):
         self.vars = dict(variables)
         self.laws = set(laws)
-        self.scopes = set(scopes)   # saved scopes, e.g. event .7's own roll (contagion_crashed)
+        # Saved scopes, name -> the scope saved: "ROOT" for the event's own country, any other
+        # name for another country. Event .7 saves its own roll as contagion_crashed = ROOT; a
+        # cascade's target inherits the upstream country's. A bare name means ROOT.
+        self.scopes = dict(scopes) if isinstance(scopes, dict) else dict.fromkeys(scopes, "ROOT")
         self.tooltips = []
 
     def num(self, token):
@@ -142,6 +146,10 @@ class Interp:
                 answer = val.removeprefix("law_type:") in self.laws
             elif key == "exists" and val.startswith("scope:"):
                 answer = val.removeprefix("scope:") in self.scopes
+            elif key in ("root", "ROOT") and val.startswith("scope:"):
+                answer = self.scopes.get(val.removeprefix("scope:")) == "ROOT"
+            elif key in TRIGGERS and val == "yes":
+                answer = self.check(TRIGGERS[key])
             elif key.startswith("var:"):
                 answer = {"=": operator.eq, ">": operator.gt, "<": operator.lt,
                           ">=": operator.ge, "<=": operator.le}[op](self.num(key), self.num(val))
@@ -344,15 +352,18 @@ class EveryCrashOptionTest(unittest.TestCase):
         options = option_bodies("minor_events_timelineextended.7")
         self.assertGreaterEqual(len(options), 5)
         for name, body in options:
-            for crashed, laws in itertools.product((0, 1), ContagionScareTest.LAWS):
+            # event .7 keeps its roll as a saved scope (its immediate): the country, if it crashed. A
+            # scare saves nothing, and may hold the upstream country's (ContagionRollScopeTest).
+            rolls = ((0, {}), (0, ContagionRollScopeTest.INHERITED), (1, ContagionRollScopeTest.OWN))
+            for (crashed, scopes), laws in itertools.product(rolls, ContagionScareTest.LAWS):
                 for severity in (5, 45, 85):
-                    with self.subTest(option=name, contagion_crash=crashed, laws=laws, sev=severity):
+                    with self.subTest(option=name, contagion_crash=crashed, scopes=scopes, laws=laws,
+                                      sev=severity):
                         for value, momentum in itertools.product(VALUES, MOMENTA):
                             start = {"finance_cycle_value": value, "finance_cycle_momentum": momentum,
                                      "bubble_pressure": 30, "contagion_crash": crashed,
                                      "crash_severity": severity}
-                            # event .7 keeps its roll as a saved scope (its immediate): crashed if it exists
-                            it = run_option(body, start, laws, {"contagion_crashed"} if crashed else ())
+                            it = run_option(body, start, laws, scopes)
                             self.assertLessEqual(it.vars["finance_cycle_value"], value + EPS)
                             self.assertLessEqual(it.vars["finance_cycle_momentum"], momentum + EPS)
                             for prior in PRIOR_VARS:
@@ -360,26 +371,77 @@ class EveryCrashOptionTest(unittest.TestCase):
 
 
 class ContagionRollScopeTest(unittest.TestCase):
-    """Event .7 keeps its roll in a saved scope, cleared before its own roll (scopes ride into events `after` triggers)."""
+    """Event .7 keeps its roll in a saved scope and reads it as this country's own.
 
-    def blocks(self):
-        return {key: val for key, _, val in MINOR_EVENTS["minor_events_timelineextended.7"]
-                if key in ("immediate", "after")}
+    A saved scope rides into the events an `after` triggers, so a country a cascade
+    reaches arrives holding the upstream country as contagion_crashed, and
+    clear_saved_scope did not remove it. On 2026-10-16 the European Union rolled a
+    scare (its save: banking_crisis_wave_scared) and still took the crash branch, at
+    the tier of a crash_severity an earlier crash had left (25: cycle 59.9 to 30), and
+    the cascade (banking_crisis_wave_counted). Every read now asks that the saved
+    country be ROOT (banking_contagion_own_roll_crashed).
+    """
+    EVENT = "minor_events_timelineextended.7"
+    INHERITED = {"contagion_crashed": "UPSTREAM"}
+    OWN = {"contagion_crashed": "ROOT"}
+    EU = {"finance_cycle_value": 59.871, "finance_cycle_momentum": 0.012,
+          "bubble_pressure": 0, "contagion_crash": 0, "crash_severity": 25.083}
+    COOP = ("law_cooperative_ownership",)
 
-    def test_immediate_clears_an_inherited_roll_before_saving_its_own(self):
-        text = repr(self.blocks()["immediate"])
-        self.assertIn("clear_saved_scope", text)
-        self.assertLess(text.index("clear_saved_scope"), text.index("banking_contagion_crash_check"))
-        self.assertLess(text.index("banking_contagion_crash_check"), text.index("save_scope_as"))
+    def block(self, name):
+        return field(MINOR_EVENTS[self.EVENT], name)
 
-    def test_after_clears_the_roll_before_spreading(self):
-        text = repr(self.blocks()["after"])
-        self.assertLess(text.index("clear_saved_scope"), text.index("banking_cycle_spread_contagion"))
+    def cascade(self):
+        """The `if` in `after` that spreads the contagion on."""
+        return next(val for key, _, val in self.block("after")
+                    if key == "if" and "banking_cycle_spread_contagion" in repr(val))
 
-    def test_no_option_or_after_reads_the_variable(self):
-        for key, _, val in MINOR_EVENTS["minor_events_timelineextended.7"]:
+    def test_the_eu_case_an_inherited_roll_plays_as_a_scare(self):
+        for name, body in option_bodies(self.EVENT):
+            with self.subTest(option=name):
+                end = run_option(body, self.EU, self.COOP, self.INHERITED).vars
+                # the cooperative scare: -2 value, -0.5 momentum
+                self.assertAlmostEqual(end["finance_cycle_value"], 57.871)
+                self.assertAlmostEqual(end["finance_cycle_momentum"], -0.488)
+
+    def test_its_own_crash_still_crashes(self):
+        start = dict(self.EU, contagion_crash=1)
+        for name, body in option_bodies(self.EVENT):
+            with self.subTest(option=name):
+                end = run_option(body, start, self.COOP, self.OWN).vars
+                # severity 25: the Market Downturn's ceilings
+                self.assertEqual((end["finance_cycle_value"], end["finance_cycle_momentum"]), (30, -2))
+
+    def test_after_cascades_on_its_own_roll_only(self):
+        limit = field(self.cascade(), "limit")
+        self.assertTrue(Interp({}, scopes=self.OWN).check(limit))
+        self.assertFalse(Interp({}, scopes=self.INHERITED).check(limit))
+        self.assertFalse(Interp({}).check(limit))
+
+    def test_nothing_reads_the_roll_by_existence_alone(self):
+        needle = repr(("exists", "=", "scope:contagion_crashed"))
+        for key, _, val in MINOR_EVENTS[self.EVENT]:
             if key in ("option", "after"):
-                self.assertNotIn("var:contagion_crash", repr(val), key)
+                self.assertNotIn(needle, repr(val), key)
+        self.assertNotIn(needle, repr(EFFECTS["apply_banking_contagion_effects"]))
+
+    def test_crash_only_options_ask_for_its_own_roll(self):
+        gated = [field(val, "name") for key, _, val in MINOR_EVENTS[self.EVENT]
+                 if key == "option" and any(k == "trigger" for k, _, _ in val)
+                 and ("banking_contagion_own_roll_crashed", "=", "yes") in field(val, "trigger")]
+        self.assertEqual(len(gated), 3)  # capital controls, monetary intervention, confidence messaging
+
+    def test_immediate_saves_the_roll_after_rolling_it(self):
+        text = repr(self.block("immediate"))
+        self.assertLess(text.index("banking_contagion_crash_check"), text.index("save_scope_as"))
+        self.assertNotIn("clear_saved_scope", text)  # it did not remove an inherited scope
+
+    def test_the_cascade_and_options_do_not_read_the_variable(self):
+        # Two copies of the event can be open for one country at once; only the self-check reads it.
+        self.assertNotIn("var:contagion_crash", repr(self.cascade()))
+        for key, _, val in MINOR_EVENTS[self.EVENT]:
+            if key == "option":
+                self.assertNotIn("var:contagion_crash", repr(val))
 
 
 class LocTest(unittest.TestCase):
