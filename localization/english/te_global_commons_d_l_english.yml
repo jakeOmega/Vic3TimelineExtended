@@ -99,3 +99,6 @@
  te_debug_debris_set_pools_tt:0 "Sets both debris pools and re-applies our debris penalty."
  te_debug_debris_run_month_tt:0 "Runs the world's monthly debris step and ours: decay, traffic, the cascade, removal, the penalty, cleaner prestige and the ribbon roll."
  te_debug_debris_ribbon_strike_tt:0 "Fires the ribbon strike event (it needs Hazardous debris or worse)."
+
+ # ---- Space race event .31, at Cluttered debris or worse (Global Commons § 7) ----
+ space_race_events.31.d_debris:0 "The debris around Earth is now [ROOT.GetCountry.GetCustom('te_debris_tier')]: spent stages, dead satellites and the fragments of every collision and strike, crossing the orbits our missions fly through. Each launch has to be planned around it, and scientists warn that past a certain density the collisions feed themselves."
