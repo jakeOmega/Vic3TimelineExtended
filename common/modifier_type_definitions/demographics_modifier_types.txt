@@ -170,8 +170,10 @@ state_sex_ratio_at_birth_add = {
 #                             (mRNA Therapeutics -0.10, Personalized Medicine -0.10, Genetic Engineering -0.05,
 #                             Biological Immortality -0.75: the ladder 0.9, 0.75, 0)
 #   state_rejuvenation_add    the share of a treated body's gap to 35 closed each year (Biological Immortality 0.03)
+# The ageing rate's carriers are all negative and a slower pace is the benefit, so it is color = bad (positive red,
+# negative green); color = good painted every tooltip line red.
 state_ageing_rate_add = {
-	color = good
+	color = bad
 	percent = yes
 	decimals = 0
 	script_only = yes

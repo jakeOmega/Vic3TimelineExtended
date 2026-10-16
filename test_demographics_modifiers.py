@@ -84,6 +84,22 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
+    def test_ageing_rate_reads_green_because_less_is_better(self):
+        """color = good paints a negative value red. The ageing ladder is all negative (a slower pace is the benefit), so
+        the type is color = bad, which flips with sign; the rejuvenation pull is positive, so it stays good."""
+        text = (ROOT / "common" / "modifier_type_definitions" / "demographics_modifier_types.txt").read_text(
+            encoding="utf-8-sig")
+
+        def color(name):
+            return re.search(rf"^{name} = \{{[^}}]*?\bcolor = (\w+)", text, re.M).group(1)
+
+        ageing = [c.value for c in self.carriers if c.type == P.AGEING_RATE_TYPE]
+        self.assertTrue(ageing and all(v < 0 for v in ageing), ageing)
+        self.assertEqual(color(P.AGEING_RATE_TYPE), "bad")
+        pull = [c.value for c in self.carriers if c.type == P.REJUVENATION_TYPE]
+        self.assertTrue(pull and all(v > 0 for v in pull), pull)
+        self.assertEqual(color(P.REJUVENATION_TYPE), "good")
+
     def test_malaria_prevention_alone_controls_malaria(self):
         """Calibration step 3 (the spec's §2.2): the malaria factor ends with Malaria Prevention, not quinine (it protected
         colonists, not the people who lived there), and nothing else carries the control."""
