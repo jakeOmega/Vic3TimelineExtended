@@ -274,6 +274,19 @@ gm_state_is_contested = {
 	has_variable = gm_contested
 }
 
+# Levels built on a finished monument (spec 2026-10-16 §3.2): its own levels
+# above those recorded when its construction stopped. Not while script is
+# rebuilding it or putting its method back, nor while a ceremony asks.
+gm_state_has_new_levels = {
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	has_variable = gm_levels
+	gm_state_primary_levels > var:gm_levels
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_rebuilding }
+	NOT = { has_variable = gm_ceremony_pending }
+}
+
 # Its years add to its grandeur this month (spec 2026-10-16 §2): dedicated and
 # recorded, not contested (a heritage monument ages), and not while its method
 # is being put back, a ceremony asks or a rebuild is under way. An undedicated

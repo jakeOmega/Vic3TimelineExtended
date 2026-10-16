@@ -56,6 +56,14 @@ monument_events.1 = {
 						}
 						gm_state_vanity_backlash = yes
 					}
+					# Levels built on a finished monument found a new one beside
+					# it (spec 2026-10-16 §3.2); the last level of a monument's
+					# construction freezes it.
+					if = {
+						limit = { gm_state_has_new_levels = yes }
+						gm_state_found_beside = yes
+					}
+					gm_state_record_frozen_levels = yes
 					# A new monument stands on its siblings' dedication
 					# (gm_state_has_copied_dedication): the ceremony replaces it.
 					gm_state_reset_copied_dedication = yes
@@ -1295,6 +1303,31 @@ monument_events.26 = {
 
 	immediate = {
 		gm_state_gift_grandeur = yes
+	}
+}
+
+# ============================================================================
+# Event 29: a monument's own work (ageing spec 2026-10-16 §3)
+# ============================================================================
+# Hidden plumbing, a state event from the refresh (gm_country_refresh), which
+# tooltips walk without writing: levels built on a finished monument found a
+# new one beside it (gm_state_found_beside), and a newcomer that has settled
+# gives the state's first place back to a grander monument beside it
+# (gm_state_settle_newcomer). Each reads back what it writes.
+monument_events.29 = {
+	type = state_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		has_building = building_grand_monument
+	}
+
+	immediate = {
+		if = {
+			limit = { gm_state_has_new_levels = yes }
+			gm_state_found_beside = yes
+		}
 	}
 }
 

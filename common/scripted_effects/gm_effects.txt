@@ -292,6 +292,27 @@ gm_remove_local_modifiers = {
 	}
 }
 
+# ---- The freeze (spec 2026-10-16 §3.1) ----------------------------------------
+# State scope, from the refresh and monument_events.1. A dedicated monument is
+# finished once its construction stops: its levels then are recorded
+# (gm_levels), and levels built after that found a new monument beside it
+# (gm_state_found_beside, gm_monument_effects.txt). Levels still queued when
+# the ceremony asked join it first; so do levels a player queued before this
+# rule existed (an older save's monument is frozen the same way).
+gm_state_record_frozen_levels = {
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			has_variable = gm_seen
+			NOT = { has_variable = gm_levels }
+			NOT = { has_variable = gm_restore_pm }
+			NOT = { has_variable = gm_ceremony_pending }
+			b:building_grand_monument ?= { is_under_construction = no }
+		}
+		set_variable = { name = gm_levels value = gm_state_primary_levels }
+	}
+}
+
 # State scope. Add $AGE$ to the primary's age grandeur (gm_age), creating it.
 gm_state_add_age = {
 	if = {
@@ -343,8 +364,11 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_supporter_ig }
 	gm_remove_state_var = { VAR = gm_new_contest }
 	gm_remove_state_var = { VAR = gm_grandeur }
-	# Its age (spec 2026-10-16 §1). Rededicate keeps half of it (gm_state_rededicate).
+	# Its age, its frozen levels and a newcomer's mark (spec 2026-10-16 §1, §3).
+	# Rededicate keeps half the age (gm_state_rededicate).
 	gm_remove_state_var = { VAR = gm_age }
+	gm_remove_state_var = { VAR = gm_levels }
+	gm_remove_state_var = { VAR = gm_newcomer }
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	gm_remove_state_var = { VAR = gm_ceremony_level }
 	# Its name (v2 §3, gm_name_effects.txt): a rebuilt monument is named again.
@@ -608,6 +632,14 @@ gm_country_refresh = {
 		}
 		# A ceremony a finished level's hook missed.
 		gm_state_offer_missed_ceremony = yes
+		# Frozen once its construction stops; levels built after found a new
+		# monument beside it, from a hidden event (the refresh runs inside
+		# tooltips, which write nothing; the founding reads back what it writes).
+		gm_state_record_frozen_levels = yes
+		if = {
+			limit = { gm_state_has_new_levels = yes }
+			trigger_event = { id = monument_events.29 }
+		}
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
 		}

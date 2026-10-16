@@ -22,6 +22,41 @@ gm_mon_ages = {
 	NOT = { has_variable = gm_tr_contested }
 }
 
+# State scope. More levels may be built here (spec 2026-10-16 §3.2): on a
+# finished monument they found a new one beside it. The building's
+# can_build_government / can_build_private, so each reason shows in the
+# build tooltip. Not while the monument here is contested (decide first: a
+# level would move the contest into a monument beside), while a ceremony,
+# unveiling or naming is under way, while script is rebuilding it or putting
+# its method back, or once six monuments stand on a finished one (returns and
+# archaeology may pass six; construction may not).
+gm_state_can_expand = {
+	custom_tooltip = {
+		text = gm_expand_contested_tt
+		NOT = { gm_state_is_contested = yes }
+	}
+	custom_tooltip = {
+		text = gm_expand_pending_tt
+		NOT = { has_variable = gm_ceremony_pending }
+		NOT = { has_variable = gm_unveil_pending }
+		NOT = { has_variable = gm_name_choice_open }
+		NOT = { has_variable = gm_being_named }
+	}
+	custom_tooltip = {
+		text = gm_expand_rebuilding_tt
+		NOT = { has_variable = gm_restore_pm }
+		NOT = { has_variable = gm_gift }
+		NOT = { has_variable = gm_rebuilding }
+	}
+	custom_tooltip = {
+		text = gm_expand_full_tt
+		OR = {
+			NOT = { has_variable = gm_levels }
+			gm_state_monument_count < 6
+		}
+	}
+}
+
 # ---- A trophy comes home (spec §4.1) -----------------------------------------------
 # State scope, with scope:gm_tr_moving the returning trophy. What stands here
 # is what the trophy is a piece of: the landmark it came from, or, with

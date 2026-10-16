@@ -289,6 +289,11 @@ gm_state_tr_remove_piece = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
+	# What stands is the frozen monument now (spec 2026-10-16 §3.1).
+	if = {
+		limit = { has_variable = gm_levels }
+		set_variable = { name = gm_levels value = var:gm_tr_take_left }
+	}
 	# The age that stays with what stands (spec 2026-10-16 §5).
 	if = {
 		limit = { has_variable = gm_age }
@@ -517,6 +522,11 @@ gm_state_tr_receive = {
 	if = {
 		limit = { has_building = building_grand_monument }
 		gm_state_tr_add_levels = yes
+		# The piece is part of the monument again: its frozen levels too.
+		if = {
+			limit = { has_variable = gm_levels }
+			change_variable = { name = gm_levels add = scope:gm_tr_moving.var:gm_tr_levels }
+		}
 		# Its age comes back with its levels (spec 2026-10-16 §5); a trophy
 		# from an older save has none.
 		if = {
@@ -601,6 +611,9 @@ gm_state_tr_rebuild_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
 	gm_tr_copy_to_state = { FROM = gm_tr_age TO = gm_age }
+	# Finished as it was: a monument rebuilt from its records is frozen at its
+	# own levels (spec 2026-10-16 §3.1).
+	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = gm_seen
 	set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }

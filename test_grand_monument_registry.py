@@ -4101,8 +4101,9 @@ class AgeTests(unittest.TestCase):
 
     def test_a_return_brings_its_age(self):
         receive = squash(strip_comments(block(read(self.TR), "gm_state_tr_receive")))
-        self.assertIn("gm_state_tr_add_levels = yes if = { limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } } "
+        self.assertIn("if = { limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } } "
                       "gm_state_add_age = { AGE = scope:gm_tr_moving.var:gm_tr_age } }", receive)
+        self.assertLess(receive.find("gm_state_tr_add_levels = yes"), receive.find("gm_state_add_age"))
         rejoin = squash(strip_comments(block(read(MON_EFFECTS), "gm_tr_rejoin_secondary")))
         self.assertIn("change_variable = { name = gm_tr_age add = scope:gm_tr_moving.var:gm_tr_age }", rejoin)
         rebuild = squash(block(read(self.TR), "gm_state_tr_rebuild_from_moving"))
@@ -4154,6 +4155,104 @@ class AgeingTests(unittest.TestCase):
         add = squash(block(read(MON_EFFECTS), "gm_mon_add_age"))
         self.assertEqual(add, "if = { limit = { has_variable = gm_tr_age } change_variable = { name = gm_tr_age add = $AGE$ } } "
                               "else = { set_variable = { name = gm_tr_age value = $AGE$ } }")
+
+
+# Every state record a demoted primary keeps on its container (spec
+# 2026-10-16 §4.4): state variable -> container variable.
+CONTAINER_RECORDS = (
+    ("gm_skin", "gm_tr_skin"), ("gm_form", "gm_tr_form"), ("gm_landmark", "gm_tr_landmark"),
+    ("gm_namesake", "gm_tr_namesake"), ("gm_name_year", "gm_tr_name_year"), ("gm_name_char", "gm_tr_name_char"),
+    ("gm_name_occasion", "gm_tr_name_occasion"), ("gm_name_enemy_cap", "gm_tr_name_enemy_cap"),
+    ("gm_name", "gm_tr_name"), ("gm_honoree", "gm_tr_honoree"), ("gm_honoree_ig", "gm_tr_honoree_ig"),
+    ("gm_age", "gm_tr_age"), ("gm_raised_by", "gm_tr_raised_by"), ("gm_faith", "gm_tr_faith"),
+    ("gm_built_by", "gm_tr_built_by"), ("gm_contested", "gm_tr_contested"), ("gm_heritage", "gm_tr_heritage"),
+    ("gm_base_ig", "gm_tr_base_ig"), ("gm_supporter_ig", "gm_tr_supporter_ig"),
+    ("gm_ceremony_level", "gm_tr_ceremony_level"),
+)
+
+
+class FreezeTests(unittest.TestCase):
+    """Ageing rework (spec 2026-10-16 §3): a dedicated monument's levels are
+    recorded once its construction stops (gm_levels); levels built after
+    that found a new monument beside it."""
+
+    TR = "common/scripted_effects/gm_trophy_effects.txt"
+
+    def test_the_freeze_waits_for_the_construction(self):
+        body = squash(strip_comments(block(read(EFFECTS), "gm_state_record_frozen_levels")))
+        for s in ("gm_state_is_dedicated = yes", "has_variable = gm_seen", "NOT = { has_variable = gm_levels }",
+                  "NOT = { has_variable = gm_restore_pm }", "NOT = { has_variable = gm_ceremony_pending }",
+                  "b:building_grand_monument ?= { is_under_construction = no }"):
+            self.assertIn(s, body)
+        self.assertIn("set_variable = { name = gm_levels value = gm_state_primary_levels }", body)
+        clear = squash(block(read(EFFECTS), "gm_clear_state"))
+        self.assertIn("gm_remove_state_var = { VAR = gm_levels }", clear)
+        self.assertIn("gm_remove_state_var = { VAR = gm_newcomer }", clear)
+
+    def test_new_levels_are_read_only_on_a_frozen_monument(self):
+        new = squash(block(read(TRIGGERS), "gm_state_has_new_levels"))
+        for s in ("gm_state_is_dedicated = yes", "has_variable = gm_seen", "has_variable = gm_levels",
+                  "gm_state_primary_levels > var:gm_levels", "NOT = { has_variable = gm_restore_pm }",
+                  "NOT = { has_variable = gm_rebuilding }", "NOT = { has_variable = gm_ceremony_pending }"):
+            self.assertIn(s, new)
+
+    def test_founding_beside_demotes_then_asks(self):
+        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_found_beside")))
+        order = ["set_variable = { name = gm_demote_levels value = var:gm_levels }", "gm_state_demote_primary = yes",
+                 "set_variable = gm_newcomer", "gm_state_undedicate = yes", "gm_state_start_ceremony = yes"]
+        positions = [body.find(x) for x in order]
+        self.assertNotIn(-1, positions, dict(zip(order, positions)))
+        self.assertEqual(positions, sorted(positions))
+
+    def test_demotion_keeps_every_record(self):
+        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_demote_primary")))
+        self.assertIn("create_container = { tags = { gm_monument }", body)
+        self.assertIn("set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_demote_levels }", body)
+        self.assertIn("gm_tr_record_dedication = yes", body)
+        for frm, to in CONTAINER_RECORDS:
+            self.assertIn(f"gm_tr_copy_from_state = {{ FROM = {frm} TO = {to} }}", body, frm)
+        for s in ("add_to_global_variable_list = { name = gm_monuments target = scope:gm_mon_new }",
+                  "add_to_variable_list = { name = gm_monuments_here target = scope:gm_mon_new }",
+                  "add_to_variable_list = { name = gm_monuments_held target = scope:gm_mon_new }",
+                  "set_variable = gm_tr_seen", "gm_tr_update_picture = yes"):
+            self.assertIn(s, body)
+        # The records are copied before the state forgets them.
+        self.assertLess(body.find("gm_tr_copy_from_state"), body.find("gm_clear_state = { KEEP_LANDMARK = no }"))
+
+    def test_the_refresh_only_asks_the_hidden_event(self):
+        refresh = squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
+        for s in ("create_container", "destroy_container", "remove_building", "gm_state_found_beside"):
+            self.assertNotIn(s, refresh)
+        self.assertIn("gm_state_record_frozen_levels = yes", refresh)
+        self.assertIn("if = { limit = { gm_state_has_new_levels = yes } trigger_event = { id = monument_events.29 } }",
+                      refresh)
+        ev29 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.29\s*=\s*\{")))
+        self.assertIn("type = state_event hidden = yes", ev29)
+        self.assertIn("if = { limit = { gm_state_has_new_levels = yes } gm_state_found_beside = yes }", ev29)
+        ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
+        self.assertIn("if = { limit = { gm_state_has_new_levels = yes } gm_state_found_beside = yes }", ev1)
+        self.assertIn("gm_state_record_frozen_levels = yes", ev1)
+
+    def test_script_keeps_the_frozen_levels(self):
+        receive = squash(strip_comments(block(read(self.TR), "gm_state_tr_receive")))
+        self.assertIn("if = { limit = { has_variable = gm_levels } change_variable = { name = gm_levels "
+                      "add = scope:gm_tr_moving.var:gm_tr_levels } }", receive)
+        piece = squash(strip_comments(block(read(self.TR), "gm_state_tr_remove_piece")))
+        self.assertIn("if = { limit = { has_variable = gm_levels } set_variable = { name = gm_levels "
+                      "value = var:gm_tr_take_left } }", piece)
+        rebuild = squash(block(read(self.TR), "gm_state_tr_rebuild_from_moving"))
+        self.assertIn("set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }", rebuild)
+
+    def test_the_expansion_gate(self):
+        gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
+        for key in ("gm_expand_contested_tt", "gm_expand_pending_tt", "gm_expand_rebuilding_tt", "gm_expand_full_tt"):
+            self.assertIn(f"text = {key}", gate)
+            self.assertIn(key, loc())
+        self.assertIn("gm_state_monument_count < 6", gate)
+        building = squash(block(read(BUILDING), "building_grand_monument"))
+        self.assertIn("can_build_government = { gm_state_can_expand = yes }", building)
+        self.assertIn("can_build_private = { gm_state_can_expand = yes }", building)
+        self.assertIn("add = { value = gm_state_monument_count multiply = -25 }", building)
 
 if __name__ == "__main__":
     unittest.main()

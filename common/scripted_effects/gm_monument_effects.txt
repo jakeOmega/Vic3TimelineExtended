@@ -168,6 +168,84 @@ gm_state_promote_secondary = {
 	}
 }
 
+# ---- Building beside (spec 2026-10-16 §3.2) ----------------------------------------
+# State scope, real execution only (monument_events.1 and .29; never the
+# refresh, which tooltips walk). Levels were built on a finished monument:
+# it moves into a container beside the levels' new monument, which stands as
+# the state's primary, undedicated, and is asked its dedication at once. Its
+# remaining queued levels join it until its own construction stops.
+# gm_newcomer marks it for the settle check (gm_state_settle_newcomer).
+gm_state_found_beside = {
+	set_variable = { name = gm_demote_levels value = var:gm_levels }
+	gm_state_demote_primary = yes
+	set_variable = gm_newcomer
+	gm_state_undedicate = yes
+	gm_state_start_ceremony = yes
+	debug_log = "TE_MONUMENTS: new levels founded a monument beside the one standing: [THIS.GetName]"
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# State scope (var:gm_demote_levels its levels). The primary becomes a
+# secondary monument: a gm_monument container with every record the state
+# held (CONTAINER_RECORDS in test_grand_monument_registry.py), joined to the
+# lists at once; then the state forgets it. The building is untouched: its
+# level is still everything standing here.
+gm_state_demote_primary = {
+	save_scope_as = gm_tr_state
+	clear_saved_scope = gm_mon_new
+	create_container = {
+		tags = { gm_monument }
+		save_scope_as = gm_mon_new
+		on_created = {
+			save_scope_as = gm_mon_new
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_mon_new }
+		scope:gm_mon_new = {
+			set_variable = { name = gm_tr_origin value = scope:gm_tr_state }
+			set_variable = { name = gm_tr_origin_region value = scope:gm_tr_state.state_region }
+			set_variable = { name = gm_tr_site value = scope:gm_tr_state }
+			set_variable = { name = gm_tr_site_region value = scope:gm_tr_state.state_region }
+			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_demote_levels }
+			set_variable = { name = gm_tr_share value = flag:whole }
+			gm_tr_record_dedication = yes
+			gm_tr_copy_from_state = { FROM = gm_skin TO = gm_tr_skin }
+			gm_tr_copy_from_state = { FROM = gm_form TO = gm_tr_form }
+			gm_tr_copy_from_state = { FROM = gm_landmark TO = gm_tr_landmark }
+			gm_tr_copy_from_state = { FROM = gm_namesake TO = gm_tr_namesake }
+			gm_tr_copy_from_state = { FROM = gm_name_year TO = gm_tr_name_year }
+			gm_tr_copy_from_state = { FROM = gm_name_char TO = gm_tr_name_char }
+			gm_tr_copy_from_state = { FROM = gm_name_occasion TO = gm_tr_name_occasion }
+			gm_tr_copy_from_state = { FROM = gm_name_enemy_cap TO = gm_tr_name_enemy_cap }
+			gm_tr_copy_from_state = { FROM = gm_name TO = gm_tr_name }
+			gm_tr_copy_from_state = { FROM = gm_honoree TO = gm_tr_honoree }
+			gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
+			gm_tr_copy_from_state = { FROM = gm_age TO = gm_tr_age }
+			gm_tr_copy_from_state = { FROM = gm_raised_by TO = gm_tr_raised_by }
+			gm_tr_copy_from_state = { FROM = gm_faith TO = gm_tr_faith }
+			gm_tr_copy_from_state = { FROM = gm_built_by TO = gm_tr_built_by }
+			gm_tr_copy_from_state = { FROM = gm_contested TO = gm_tr_contested }
+			gm_tr_copy_from_state = { FROM = gm_heritage TO = gm_tr_heritage }
+			gm_tr_copy_from_state = { FROM = gm_base_ig TO = gm_tr_base_ig }
+			gm_tr_copy_from_state = { FROM = gm_supporter_ig TO = gm_tr_supporter_ig }
+			gm_tr_copy_from_state = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
+			set_variable = gm_tr_seen
+			gm_tr_update_picture = yes
+		}
+		add_to_global_variable_list = { name = gm_monuments target = scope:gm_mon_new }
+		set_global_variable = gm_mon_lists_written
+		add_to_variable_list = { name = gm_monuments_here target = scope:gm_mon_new }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+		owner = {
+			add_to_variable_list = { name = gm_monuments_held target = scope:gm_mon_new }
+			set_variable = gm_mon_listed
+		}
+		gm_clear_state = { KEEP_LANDMARK = no }
+	}
+	remove_variable = gm_demote_levels
+}
+
 # ---- Home again, as a monument of its own (spec §4.1) --------------------------------
 # Container scope, the returning trophy (scope:gm_tr_moving; gm_tr_return_home).
 # A piece of a monument already standing beside the primary rejoins that one:
