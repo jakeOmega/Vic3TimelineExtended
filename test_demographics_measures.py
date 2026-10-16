@@ -45,7 +45,7 @@ CATALOGUE = {
     "child_allowance": ({PN, COMMUNAL}, {
         "state_desired_fertility_mult": 0.14,   # step 3b's fit (§3.4's +8%)
         "interest_group_ig_devout_approval_add": 1, "interest_group_ig_trade_unions_approval_add": 1}),
-    "family_housing": ({PN, FP}, {
+    "family_housing": ({PN, FP, COMMUNAL}, {
         "state_urban_fertility_relief_add": 0.5, "interest_group_ig_trade_unions_approval_add": 1}),
     "honours": ({TRADITIONAL, PN}, {
         "state_desired_fertility_mult": 0.05, "interest_group_ig_devout_approval_add": 1,   # the fit (+3%)
@@ -57,7 +57,7 @@ CATALOGUE = {
     "parental_leave": ({FP, COMMUNAL}, {
         "state_desired_fertility_mult": 0.05, "state_demog_womens_work_ratio_add": 0.02,
         "interest_group_ig_trade_unions_approval_add": 1, "interest_group_ig_industrialists_approval_add": -1}),
-    "free_contraception": ({FP, PC}, {
+    "free_contraception": ({FP, PC, COMMUNAL}, {
         "state_fertility_means_add": 0.1, "interest_group_ig_intelligentsia_approval_add": 1,
         "interest_group_ig_devout_approval_add": -2}),
     "sex_education": ({FP, PC}, {
@@ -103,7 +103,7 @@ class _MeasureEngine(_Engine):
     trigger_if, an add_modifier without a multiplier (which fails when the name is already held: a same-name
     add_modifier stacks), set_variable = yes, and the notices and the self-check recorded instead of run."""
 
-    def __init__(self, law=PN, year=1900, month=0, full=True, fixtures=None, triggers=None):
+    def __init__(self, law=PN, year=1900, month=0, full=True, fixtures=None, triggers=None, others=()):
         super().__init__({"te_history_month_index": _date(year, month), "gdp": 52_000_000.0,
                           "capital.te_demog_women_rate": 0.5, "authority": 1000.0, **(fixtures or {})},
                          triggers={"te_demog_effects_run": full, "is_ai": False, **(triggers or {})})
@@ -111,6 +111,7 @@ class _MeasureEngine(_Engine):
         self.values.update(_raw_blocks([MS_VALUES]))
         self.triggers.update(_raw_blocks([MS_TRIGGERS]))
         self.law = law
+        self.others = set(others)   # laws in force in other groups (the form of government, free speech)
         self.notices, self.selfchecks = [], []
         self.exists = {"capital"}
 
@@ -122,8 +123,8 @@ class _MeasureEngine(_Engine):
         return self.value(self._tree(self.values, name))
 
     def _test(self, key, op, arg):
-        if key == "has_law":
-            return arg == f"law_type:{self.law}"
+        if key in ("has_law", "has_law_or_variant"):   # no variants among the laws the tests hold
+            return arg == f"law_type:{self.law}" or arg in {f"law_type:{law}" for law in self.others}
         if key == "exists":
             return arg in self.exists
         if key == "trigger_if":
@@ -270,6 +271,44 @@ class TestCatalogue(unittest.TestCase):
             eng = _MeasureEngine(law=law)
             for key, (laws, _) in CATALOGUE.items():
                 self.assertEqual(eng.holds_trigger(f"te_demog_ms_allowed_{key}"), law in laws, f"{key} under {law}")
+
+    def test_communal_child_rearing_allows_more_by_who_governs(self):
+        """The review of #989 (owner): under Communal Child-Rearing a council or an anarchist commune adds Sex
+        Education, a party state or an autocrat that outlaws dissent adds Honours and Restricted Contraception; Birth
+        Limit and the Crash Campaign stay Population Control Measures' alone."""
+        utopia = {"sex_education"}
+        dystopia = {"honours", "restricted_contraception"}
+        alone = {key for key, (laws, _) in CATALOGUE.items() if COMMUNAL in laws}
+        self.assertEqual(alone, {"child_allowance", "parental_leave", "family_housing", "free_contraception"})
+        cases = [
+            ((), alone),
+            (("law_council_republic",), alone | utopia),
+            (("law_anarchy",), alone | utopia),
+            (("law_single_party_state", "law_outlawed_dissent"), alone | dystopia),
+            (("law_autocracy", "law_outlawed_dissent"), alone | dystopia),
+            (("law_single_party_state",), alone),             # dissent not outlawed: no dystopia
+            (("law_autocracy", "law_censorship"), alone),
+        ]
+        for others, want in cases:
+            with self.subTest(others):
+                eng = _MeasureEngine(law=COMMUNAL, others=others)
+                got = {key for key in CATALOGUE if eng.holds_trigger(f"te_demog_ms_allowed_{key}")}
+                self.assertEqual(got, want)
+        # the government's laws alone, without the communal law, allow nothing of either
+        for others in (("law_council_republic",), ("law_single_party_state", "law_outlawed_dissent")):
+            for law in set(FAMILY_LAWS) - {COMMUNAL}:
+                eng = _MeasureEngine(law=law, others=others)
+                got = {key for key in CATALOGUE if eng.holds_trigger(f"te_demog_ms_allowed_{key}")}
+                self.assertEqual(got, {key for key, (laws, _) in CATALOGUE.items() if law in laws}, (law, others))
+        # the reasons and hovers name the government's laws
+        loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
+        for key, names in (("sex_education", ("$law_council_republic$", "$law_anarchy$")),
+                           ("honours", ("$law_single_party_state$", "$law_autocracy$", "$law_outlawed_dissent$")),
+                           ("restricted_contraception", ("$law_single_party_state$", "$law_outlawed_dissent$"))):
+            for suffix in ("_law_tt", "_other_tt", "_tt"):
+                line = re.search(rf"(?m)^ te_demog_ms_{key}{suffix}:0 \"(.*)\"$", loc).group(1)
+                for name in names + ("$law_communal_child_rearing$",):
+                    self.assertIn(name, line, f"{key}{suffix}")
 
     def test_desired_constants_match_the_modifiers(self):
         """The self-check's expected change (te_demog_ms_desired_<measure>) is each modifier's own line."""
@@ -496,6 +535,16 @@ class TestLeavingTheLaw(unittest.TestCase):
         eng.law = FP
         eng.at(1962).press("parental_leave")
         self.assertAlmostEqual(eng.vars["te_dg_ms_parental_leave"], 1962.0)
+
+    def test_a_change_of_government_ends_the_communes_measures(self):
+        """on_law_activated runs the check on every law, so a party state that stops outlawing dissent loses Honours."""
+        eng = _MeasureEngine(law=COMMUNAL, year=1960, others=("law_single_party_state", "law_outlawed_dissent"))
+        eng.press("honours").press("family_housing")
+        eng.others = {"law_single_party_state", "law_censorship"}
+        eng.at(1961).do("te_demog_ms_law_check")
+        self.assertEqual(eng.notices, ["te_demog_ms_ended_honours"])
+        self.assertIn("te_demog_ms_family_housing", eng.modifiers)
+        self.assertNotIn("te_demog_ms_honours", eng.modifiers)
 
     def test_birth_limit_takes_the_exemption_along(self):
         eng = _MeasureEngine(law=PC, year=1980).press("birth_limit").press("rural_exemption")

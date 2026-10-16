@@ -18,16 +18,21 @@ te_demog_ms_allowed_family_housing = {
 	OR = {
 		has_law = law_type:law_pro_natalist_subsidies
 		has_law = law_type:law_state_sponsored_family_planning
+		has_law = law_type:law_communal_child_rearing
 	}
 }
 te_demog_ms_allowed_honours = {
 	OR = {
 		has_law = law_type:law_traditional_family_structure
 		has_law = law_type:law_pro_natalist_subsidies
+		te_demog_ms_communal_dystopia = yes
 	}
 }
 te_demog_ms_allowed_restricted_contraception = {
-	has_law = law_type:law_pro_natalist_subsidies
+	OR = {
+		has_law = law_type:law_pro_natalist_subsidies
+		te_demog_ms_communal_dystopia = yes
+	}
 }
 te_demog_ms_allowed_parental_leave = {
 	OR = {
@@ -39,12 +44,14 @@ te_demog_ms_allowed_free_contraception = {
 	OR = {
 		has_law = law_type:law_state_sponsored_family_planning
 		has_law = law_type:law_population_control_measures
+		has_law = law_type:law_communal_child_rearing
 	}
 }
 te_demog_ms_allowed_sex_education = {
 	OR = {
 		has_law = law_type:law_state_sponsored_family_planning
 		has_law = law_type:law_population_control_measures
+		te_demog_ms_communal_utopia = yes
 	}
 }
 te_demog_ms_allowed_later_longer_fewer = {
@@ -61,6 +68,29 @@ te_demog_ms_allowed_rural_exemption = {
 }
 te_demog_ms_allowed_crash_campaign = {
 	has_law = law_type:law_population_control_measures
+}
+
+# Communal Child-Rearing's measures by who governs (owner, the review of #989): on its own the law allows Child
+# Allowance, Parental Leave, Family Housing (the 1920s house-communes, the kibbutz's dining halls) and Free Contraception
+# (Kollontai, the kibbutzim). Under a council or an anarchist commune it also allows Sex Education (the anarchist free
+# schools, Emma Goldman's birth-control lectures); under a party state or an autocrat that outlaws dissent, Honours for
+# Large Families and Restricted Contraception (the state raises the children it orders born: Lebensborn, Decree 770).
+# Birth Limit and the Crash Campaign stay Population Control Measures' alone. A change to the government's laws ends a
+# measure they no longer allow (te_demog_ms_law_check runs on every law activated).
+te_demog_ms_communal_utopia = {
+	has_law = law_type:law_communal_child_rearing
+	OR = {
+		has_law = law_type:law_council_republic
+		has_law = law_type:law_anarchy
+	}
+}
+te_demog_ms_communal_dystopia = {
+	has_law = law_type:law_communal_child_rearing
+	OR = {
+		has_law = law_type:law_single_party_state
+		has_law_or_variant = law_type:law_autocracy
+	}
+	has_law = law_type:law_outlawed_dissent
 }
 
 # ---- The term (§3.3) ------------------------------------------------------------------------------------------------

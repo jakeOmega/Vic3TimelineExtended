@@ -581,3 +581,10 @@ script-only type on a carrier the census already reads (#892's fact), so no self
 6. **AI authority (observer run, Full).** A famine AI on Population Control Measures starts Birth Limit only with 325
    or more free authority and tightens it only with 125 more; no AI runs into negative authority from the measures
    alone. Read `te_dg_ms_*` and the country's authority in a plain-text save.
+7. **Communal Child-Rearing by who governs (Full).** Under Communal Child-Rearing alone the section's rows are Child
+   Allowance, Parental Leave, Family Housing and Free Contraception, and the others sit dimmed, Sex Education's hover
+   naming a Council Republic or Anarchy and Honours' and Restricted Contraception's a Single-Party State or Autocracy
+   with Outlawed Dissent. Console a Council Republic: Sex Education becomes a row. Console a Single-Party State and
+   Outlawed Dissent with Honours on, then Censorship: Honours ends at once with its "Honours for Large Families Ended"
+   notice, which names the government as a cause. Birth Limit and the Crash Campaign stay dimmed under every
+   government.

@@ -558,19 +558,23 @@ measure needs no authority. Each also moves the approval of
 the interest groups its tooltip lists. Once started, a measure runs for at least
 five years, and its button can't end it before then. A change to a law that
 doesn't allow a measure ends it at once, with a notice, and taking it up again
-under another law starts a new term. Birth Limit's button moves from two
+under another law starts a new term. Under Communal Child-Rearing your form of
+government adds measures: a Council Republic or Anarchy also allows Sex
+Education, and a Single-Party State or Autocracy that has outlawed dissent also
+allows Honours for Large Families and Restricted Contraception. A change of
+government ends what the new laws don't allow. Birth Limit's button moves from two
 children to one child, then ends the limit. The Crash Campaign ends itself after
 five years and can't return for ten.
 
 | Measure | Laws that allow it | What it aims at | Upkeep |
 |---|---|---|---|
 | Child Allowance | Pro-Natalist Policy, Communal Child-Rearing | Families want more children | 0.5% of GDP a year, more where children are many |
-| Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
-| Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy | Families want a few more children | 50 authority |
-| Restricted Contraception | Pro-Natalist Policy | Families have less means to plan their children; more mothers die; the feminist movement gains support | 200 authority |
+| Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
+| Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families want a few more children | 50 authority |
+| Restricted Contraception | Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families have less means to plan their children; more mothers die; the feminist movement gains support | 200 authority |
 | Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year, by the share of women at work |
-| Free Contraception | State-Sponsored Family Planning, Population Control Measures | Families have more means to plan their children | 0.1% of GDP a year |
-| Sex Education | State-Sponsored Family Planning, Population Control Measures | Knowing how to plan a family reaches people as if literacy were 20 points higher | The Ministry of Education costs 10% more bureaucracy |
+| Free Contraception | State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Families have more means to plan their children | 0.1% of GDP a year |
+| Sex Education | State-Sponsored Family Planning, Population Control Measures; Communal Child-Rearing under a Council Republic or Anarchy | Knowing how to plan a family reaches people as if literacy were 20 points higher | The Ministry of Education costs 10% more bureaucracy |
 | Later, Longer, Fewer | State-Sponsored Family Planning, Population Control Measures | Families want fewer children | 150 authority |
 | Birth Limit | Population Control Measures | Families want far fewer children, fewer still at one child; once Microprocessor is researched, more boys are born than girls | 300 authority, 400 at one child |
 | Rural Exemption | Population Control Measures, with Birth Limit | Halves Birth Limit for farming families, by the state's share of Peasants and Farmers | None |
