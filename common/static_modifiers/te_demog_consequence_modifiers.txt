@@ -1,18 +1,21 @@
 ﻿# Demographics phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4):
 # conscription, the youth bulge and sex balance. State modifiers, under Full only, applied by the census at multipliers
-# from 0 to 1 (te_demog_consequence_effects.txt); each field's size is demographics_params' (a test pins them). They
-# show in a state's modifier list, unlike the census's births and deaths terms: they are effects the player plans
-# around, not bookkeeping. None is applied yet: demographics_params' three switches hold all of them back until a
-# follow-up fixes the census's migrant booking (te_demog_consequence_effects.txt).
+# from 0 to 1 (te_demog_consequence_effects.txt); each field's size is demographics_params' (a test pins them). The
+# youth bulge and the sex balance's pair show in a state's modifier list: they are effects the player plans around.
+# The conscription pair does not (owner, 2026-10-16): like the census's births and deaths terms it takes the mod's
+# invisible icon, and its multiplier is the census's term T with no ceiling (demographics_params.CONSCRIPTION_MIN
+# only), so a state rich in young men would otherwise list a different figure every year. Its name still heads the
+# state's conscription breakdown. The state panel's name filter and gui_state_hidden_modifier_count hide it
+# (test_hidden_state_modifiers.py).
 
 # The pool (men of fighting age) against 1836's: one of the pair at a time, multiplier |T| (no negative multiplier).
 te_demog_census_conscription_up = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_conscription_rate_mult = 1
 }
 
 te_demog_census_conscription_down = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_conscription_rate_mult = -1
 }
 

@@ -6887,6 +6887,41 @@ class TestConsequencesScript(unittest.TestCase):
                     self.assertEqual(eng.modifiers, {})
 
     @ALL_ON
+    def test_the_conscription_term_has_no_ceiling(self):
+        """Owner, 2026-10-16: the +0.25 cap is gone. A pool of half the people (T about 2.6) is stored and applied
+        whole, by the script as by the model; only the -1 floor remains."""
+        eng = self._state(fam=50000.0)
+        eng.call("te_demog_consequences_refresh")
+        want = demographics_model.conscription_term(50000.0, 100000.0)
+        self.assertGreater(want, 2.0)
+        self.assertAlmostEqual(eng.vars["te_dg_mc"], want, places=4)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_conscription_up"], want, places=4)
+        self.assertNotIn("te_demog_conscription_down", eng.modifiers)
+        eng = self._state(fam=0.0)
+        eng.call("te_demog_consequences_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mc"], -1.0)
+        for text in (_text(CONSEQ_VALUES), _text(GENERATED_VALUES)):
+            self.assertNotIn("te_demog_k_conscription_max", text)
+
+    def test_the_conscription_pair_is_hidden(self):
+        """Owner, 2026-10-16: like the census's births and deaths terms, the pair takes the mod's invisible icon, so
+        the state panel's name filter and gui_state_hidden_modifier_count hide it (test_hidden_state_modifiers.py
+        keeps those in step); its name still heads the conscription breakdown."""
+        mods = _raw_blocks([CONSEQ_MODIFIERS])
+        for name in ("te_demog_census_conscription_up", "te_demog_census_conscription_down"):
+            self.assertIn("icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds", mods[name], name)
+        for name in ("te_demog_census_youth_bulge", "te_demog_census_fewer_men", "te_demog_census_more_men"):
+            self.assertNotIn("modifier_system.dds", mods[name], name)
+        panel = _text(ROOT / "gui" / "states_panel.gui")
+        hidden = _block(_text(ROOT / "common" / "script_values" / "gui_chart_script_values.txt"),
+                        "gui_state_hidden_modifier_count")
+        loc = "".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*.yml")))
+        for name in ("te_demog_census_conscription_up", "te_demog_census_conscription_down"):
+            self.assertEqual(panel.count(f"Localize('{name}')"), 2, name)
+            self.assertIn(f"has_modifier = {name}", hidden)
+            self.assertIn(f' {name}:0 "Census: Fighting-Age Men"', loc)
+
+    @ALL_ON
     def test_a_change_of_sign_swaps_the_pair(self):
         eng = self._state(fam=7000.0)
         eng.call("te_demog_consequences_refresh")

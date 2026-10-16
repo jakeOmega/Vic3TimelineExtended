@@ -573,8 +573,9 @@ def sex_women_add(balance):
 
 
 def conscription_term(fam, people):
-    """T on state_conscription_rate_mult (te_demog_conscription_term): the pool over people against the 1836 world's."""
-    return clamp(fam / max(people, 1.0) / P.CONSCRIPTION_REF - 1, P.CONSCRIPTION_MIN, P.CONSCRIPTION_MAX)
+    """T on state_conscription_rate_mult (te_demog_conscription_term): the pool over people against the 1836 world's,
+    down to P.CONSCRIPTION_MIN and with no ceiling."""
+    return max(fam / max(people, 1.0) / P.CONSCRIPTION_REF - 1, P.CONSCRIPTION_MIN)
 
 
 def conscription_applied(term):

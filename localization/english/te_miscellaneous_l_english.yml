@@ -5488,7 +5488,7 @@
  te_demog_debug_working_adults:0 "Test: Working Adults"
  te_demog_debug_working_adults_desc:0 "The demographics test console's 60-day probe of how fast a working-adult ratio modifier takes hold in a pop's workforce share."
  te_demog_fam:0 "Fighting-Age Men"
- te_demog_fam_rule:0 "Men of fighting age, 20 to 39, against their share of the world's people in 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, give a state's multiplier on its [Concept('concept_conscript_battalion','$concept_conscript_battalions$')]: an older people, or one that has lost its young men, fewer, down to none; a young one more, up to a quarter more. War dead come from the same men."
+ te_demog_fam_rule:0 "Men of fighting age, 20 to 39, against their share of the world's people in 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, give a state's multiplier on its [Concept('concept_conscript_battalion','$concept_conscript_battalions$')]: an older people, or one that has lost its young men, fewer, down to none; a young one more, with no ceiling. War dead come from the same men."
  te_demog_family_limitation:0 "Family Limitation"
  te_demog_family_limitation_desc:0 "Couples here stop at the family size they want, by means older than any modern method: withdrawal and abstinence. Where the demographic census sets births, the practice spreads from neighbours who have it, grows where smallholders split their land among all heirs and in literate, secular societies, and gives way to modern contraception as that arrives."
  te_demog_fast_births:0 "Test: Fast Demography (Births)"
