@@ -1,22 +1,31 @@
-﻿# AI-managed flat-staff prototype: a once-a-game self-check.
+﻿# AI-managed flat-staff prototype: two once-a-game self-checks.
 #
 # pm_ai_managed_fab cancels its base method's per-level workforce exactly and
 # adds a fixed crew of 1,000 engineers in `unscaled`
-# (docs/superpowers/specs/2026-10-16-ai-managed-flat-staff-design.md). The
-# engine fact under test: an `unscaled` employment add is summed once per
-# building, not once per level and not dropped. The first yearly pulse of a
-# country with a fab building of level 5 or more on the method reads that
-# building's engineer slots:
+# (docs/superpowers/specs/2026-10-16-ai-managed-flat-staff-design.md).
+#
+# ai_managed_flat_staff: is an `unscaled` employment add summed once per
+# building? The first yearly pulse of a country with a fab building of level 5
+# or more on the method reads one such building's engineer slots:
 #   OK      about 1,000 at any level (flat, as built)
 #   BROKEN  about 1,000 x level (unscaled read as per level: the crew grows with
-#           the building, as the old 10 a level did) or 0 (unscaled employment
-#           not summed: no one is hired and the building stands idle).
-# Fallback for either BROKEN: restore `building_employment_engineers_add = -1990`
+#           the building) or 0 (not summed, or the read failed: confirm in the
+#           building panel before taking the fallback).
+#
+# ai_managed_flat_output: do `workforce_scaled` goods still follow level x the
+# staffed share when the whole crew is flat? Once a fab building of level 5 or
+# more on the method is 90% staffed, its robotics input (4 a level, from this
+# method alone in all five fab buildings) is read per level:
+#   OK      2 to 20 a level (4 x staffed share, times throughput)
+#   BROKEN  under 2 (goods scale with one level's worth, or none) or over 20.
+#
+# Fallback for any BROKEN: restore `building_employment_engineers_add = -1990`
 # in level_scaled and drop the unscaled block (10 engineers a level, as before).
-# Play-test row: docs/testing/ai-managed-flat-staff-playtest.md.
+# Play-test rows: docs/testing/ai-managed-flat-staff-playtest.md.
 on_yearly_pulse_country = {
 	on_actions = {
 		te_aipm_flat_staff_selfcheck
+		te_aipm_flat_output_selfcheck
 	}
 }
 
@@ -46,7 +55,42 @@ te_aipm_flat_staff_selfcheck = {
 					debug_log = "TE_SELF_CHECK OK ai_managed_flat_staff (a fab building on AI-managed production hires a flat crew: engineers=[SCOPE.ScriptValue('te_aipm_chk_engineers_g')|0] at level=[SCOPE.ScriptValue('te_aipm_chk_level_g')|0])"
 				}
 				else = {
-					debug_log = "TE_SELF_CHECK BROKEN ai_managed_flat_staff (a fab building on AI-managed production has engineers=[SCOPE.ScriptValue('te_aipm_chk_engineers_g')|0] at level=[SCOPE.ScriptValue('te_aipm_chk_level_g')|0], not a flat 1000: about 1000 x level means unscaled employment is read per level, 0 means it is not summed; take the fallback in docs/testing/ai-managed-flat-staff-playtest.md)"
+					debug_log = "TE_SELF_CHECK BROKEN ai_managed_flat_staff (a fab building on AI-managed production has engineers=[SCOPE.ScriptValue('te_aipm_chk_engineers_g')|0] at level=[SCOPE.ScriptValue('te_aipm_chk_level_g')|0], not a flat 1000: about 1000 x level means unscaled employment is read per level, 0 means it is not summed or the read failed (confirm in the building panel); see docs/testing/ai-managed-flat-staff-playtest.md)"
+				}
+			}
+		}
+	}
+}
+
+te_aipm_flat_output_selfcheck = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_aipm_flat_output_checked }
+				any_scope_building = {
+					has_active_production_method = pm_ai_managed_fab
+					level >= 5
+					occupancy >= 0.9
+				}
+			}
+			set_global_variable = te_aipm_flat_output_checked
+			random_scope_building = {
+				limit = {
+					has_active_production_method = pm_ai_managed_fab
+					level >= 5
+					occupancy >= 0.9
+				}
+				set_global_variable = { name = te_aipm_chk_robotics_per_level value = te_aipm_robotics_per_level }
+				set_global_variable = { name = te_aipm_chk_output_level value = level }
+				if = {
+					limit = {
+						te_aipm_robotics_per_level >= 2
+						te_aipm_robotics_per_level <= 20
+					}
+					debug_log = "TE_SELF_CHECK OK ai_managed_flat_output (a 90%-staffed fab building on AI-managed production takes robotics_per_level=[SCOPE.ScriptValue('te_aipm_chk_robotics_per_level_g')|2] at level=[SCOPE.ScriptValue('te_aipm_chk_output_level_g')|0]: goods follow every level with a flat crew)"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN ai_managed_flat_output (a 90%-staffed fab building on AI-managed production takes robotics_per_level=[SCOPE.ScriptValue('te_aipm_chk_robotics_per_level_g')|2] at level=[SCOPE.ScriptValue('te_aipm_chk_output_level_g')|0], not 2 to 20: workforce-scaled goods do not follow the levels of a building with a flat crew; see docs/testing/ai-managed-flat-staff-playtest.md)"
 				}
 			}
 		}
