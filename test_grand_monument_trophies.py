@@ -1157,7 +1157,8 @@ class OurMonumentsListTests(unittest.TestCase):
         self.assertNotEqual(first, -1)
         self.assertGreater(second, first)
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
-                      "blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } }", sec)
+                      "blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
+                      "blockoverride \"mon_choices\" {", sec)
 
     def test_the_row_says_where_it_stands_only_where_asked(self):
         gui = strip_comments(read(TR_GUI))

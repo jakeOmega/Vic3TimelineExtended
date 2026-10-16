@@ -434,6 +434,19 @@ gm_state_age_step = {
 	multiply = gm_policy_factor_age
 }
 
+# State scope. 1 while the primary is finished (gm_levels, ageing spec
+# 2026-10-16 §3.1): the card's and the row's Finished line.
+gm_state_disp_frozen = {
+	value = 0
+	if = {
+		limit = {
+			has_building = building_grand_monument
+			has_variable = gm_levels
+		}
+		value = 1
+	}
+}
+
 # State scope. What an anniversary's public option adds to the monument's age
 # grandeur (ageing spec 2026-10-16 §5): a tenth of its levels, at least 1.
 gm_evt_grandeur = {
