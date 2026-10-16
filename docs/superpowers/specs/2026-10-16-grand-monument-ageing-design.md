@@ -39,6 +39,31 @@ secondary's levels off the building; anything that walks a rebuild inside a tool
 | Ageing rate | **2% of the monument's levels a year**: it doubles in 50 years and triples in 100 |
 | Opportunities | Progress counts **new levels** of fitting monuments of the dedication, not ageing. **The gift is +5 grandeur** added to the monument, with no rebuild |
 | Issue #936 (a merged state loses its monument's records) | **Fold the fix in, or delegate it to a subagent; it can be deferred** (§9) |
+| Anniversaries for monuments standing beside another | **Every monument is ideal; the main monument only is fine for now if needed** (§5): built after §1–§4, and the first thing cut if the branch runs long |
+
+## 0.5 First: the review's fixes to several monuments in one state
+
+The owner's other ask on 2026-10-16 was a review of PR #958's logic. Its fixes land first, as their own commits,
+because the rework builds on the same rebuilds:
+
+1. **Two rebuilds of one state in one effect** (Return Cultural Property bringing the Luxor Obelisk and the Dendera
+   Zodiac home together; two digs finishing in one month): whether a rebuilt building reads back later in the same
+   effect is unread (`scripting_best_practices.md`, "Building Lifecycle Effect Gotchas"), and the second return reads
+   the first one's stale level, or no building. Every Grand Monument rebuild goes through one helper that records the
+   level it built (`gm_known_level`, one day), and the level and "has a building" reads go through `gm_state_level` /
+   `gm_state_has_monument`, which read the record while it stands.
+2. **The AI's roll and the player's occupation offer skip a secondary** beside an undedicated primary or a Grand
+   Shrine: `gm_state_tr_monthly` gates both on the primary's `gm_state_tr_takeable`. Gate on either route, and aim the
+   roll at a secondary when only that route is open.
+3. **A rebuilt undedicated primary takes its siblings' dedication** (the engine's copy), because only a dedicated one
+   records the method to put back. Record `flag:undedicated` too, put back by the same restore.
+4. **A return during a pending ceremony** records the copy as the method to put back; skip it while the ceremony asks,
+   and let the ceremony's answer clear `gm_restore_pm`.
+5. **Our Monuments' primary row shows the whole building's level** as its grandeur.
+6. **`gm_state_tr_rebuild_from_moving`'s default level ignores secondaries still listed** (a building lost before the
+   pass promotes one).
+7. **A change of owner leaves the Our Monuments lists stale** for up to a month: the pass runs from
+   `gm_state_changed_hands` when secondaries stand.
 
 ## 1. Grandeur = levels + age
 
@@ -60,7 +85,8 @@ secondary's levels off the building; anything that walks a rebuild inside a tool
   Σ `gm_mon_grandeur`.
 - **Old saves:** no `gm_age` reads 0, so every monument starts the update at exactly today's grandeur. A dedicated
   primary with no `gm_levels` has it written at the next refresh from its levels then, so loading never reads as
-  building beside *(design)*.
+  building beside *(design)*; but only once its building is not under construction, so levels a player queued before
+  the update join the old monument, once, instead of founding a surprise new one beside it.
 - Five decimals: a 1-level monument ages 1 × 2 ÷ 1200 = 0.00167 a month, well inside the engine's 1e-5.
 
 ## 2. Ageing
@@ -196,7 +222,7 @@ pass), as `gm_state_first_sight` does for the state: a missing record would read
 | **A trophy abroad** | counts for ceil(levels ÷ 2), fixed when taken | counts for ceil(grandeur ÷ 2), rewritten by the monthly pass; no ageing abroad |
 | **A trophy home** | rejoins, stands beside, or is rebuilt | the same, with its age: rejoining adds it to the monument's `gm_age`, standing beside keeps it, a rebuild sets the state's `gm_age` |
 | **Archaeology** | a site placed at its levels | the same; age 0 |
-| **Anniversaries** (`.3`–`.10`, `.12`–`.15`) | the paid option buys a modifier | the paid option also adds 10% of the monument's levels, at least 1, to its age grandeur (`gm_evt_grandeur`) *(design)*; its tooltip says so |
+| **Anniversaries** (`.3`–`.10`, `.12`–`.15`) | the paid option buys a modifier; only a state's primary holds them (`gm_state_holds_anniversary`, which reads `b:building_grand_monument.level >= 3` directly) | the paid option also adds 10% of the monument's levels, at least 1, to its age grandeur (`gm_evt_grandeur`) *(design)*; its tooltip says so. The level read becomes the monument's own grandeur. **Every monument holds them** (owner: ideal), so each event picks the grandest fitting monument of its dedication across primaries and secondaries and names a secondary by its container name (`gm_trophy_name`); if the branch runs long, primaries only (owner: fine for now) |
 | **Vanity backlash** | each finished level in hard times | unchanged: every finished level is still construction |
 | **Upkeep, staff** | by the building's level | unchanged (the building's level is still the sum of levels) |
 | **Rename, Name It** | the primary | the primary only *(design)*: a secondary keeps its name |
