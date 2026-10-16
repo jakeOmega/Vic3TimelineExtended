@@ -84,3 +84,18 @@
 
  # ---- The UN: Our Record ----
  je_un_record_asat:0 "Anti-satellite strikes"
+
+ # ---- Orbital debris: the test console (te_debug_orbital_debris.1) ----
+ te_debug_orbital_debris.1.t:0 "Orbital Debris Test Console"
+ te_debug_orbital_debris.1.d:0 "Console-only shortcuts for testing orbital debris. None of these can happen in normal play.\n\nThe index is [ROOT.GetCountry.MakeScope.ScriptValue('te_debris_index')|1]: low orbits [ROOT.GetCountry.MakeScope.ScriptValue('te_debris_low_value')|1], high orbits [ROOT.GetCountry.MakeScope.ScriptValue('te_debris_high_value')|1]. Each option that changes the pools re-applies our debris penalty at once and writes a TE_DEBRIS line to debug.log."
+ te_debug_orbital_debris.1.f:0 "Testing, testing."
+ te_debug_orbital_debris.1.a:0 "Cluttered: 10 low, 20 high"
+ te_debug_orbital_debris.1.b:0 "Hazardous: 20 low, 40 high"
+ te_debug_orbital_debris.1.c:0 "Kessler Cascade: 10 low, 80 high"
+ te_debug_orbital_debris.1.i:0 "Clear orbit"
+ te_debug_orbital_debris.1.e:0 "Run this month's debris step now"
+ te_debug_orbital_debris.1.g:0 "A ribbon strike on our Space Elevator now"
+ te_debug_orbital_debris.1.h:0 "Our Space Program on the best removal method we have"
+ te_debug_debris_set_pools_tt:0 "Sets both debris pools and re-applies our debris penalty."
+ te_debug_debris_run_month_tt:0 "Runs the world's monthly debris step and ours: decay, traffic, the cascade, removal, the penalty, cleaner prestige and the ribbon roll."
+ te_debug_debris_ribbon_strike_tt:0 "Fires the ribbon strike event (it needs Hazardous debris or worse)."
