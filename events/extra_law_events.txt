@@ -958,6 +958,9 @@ extra_law_events.12 = {
 
 # ======================================================================
 # 13 – Tongues of the Nation  (Language Policy)
+#  Assimilationist and standardizing laws only: the push argues for a
+#  common tongue and raises assimilation, which contradicts Multilingual
+#  Federalism and Ubiquitous Translation (they have .28, .49 and .73).
 # ======================================================================
 extra_law_events.13 = {
 	type = country_event
@@ -982,10 +985,8 @@ extra_law_events.13 = {
 	trigger = {
 		OR = {
 			is_enacting_law = law_type:law_civic_monolingualism
-			is_enacting_law = law_type:law_multilingual_federalism
 			is_enacting_law = law_type:law_linguistic_purity
 			is_enacting_law = law_type:law_state_led_language_reform
-			is_enacting_law = law_type:law_ubiquitous_translation
 		}
 		NOR = {
 			has_modifier = langpol_cultural_resistance_advance

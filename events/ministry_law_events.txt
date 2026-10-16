@@ -127,8 +127,11 @@ ministry_law_events.2 = {
 		add_enactment_modifier = {
 			name = ministry_budget_advance
 		}
-		# Domain side-effect
-		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		# Domain side-effect: the full budget draws down the treasury (as .40.b)
+		add_treasury = {
+			value = sv_treasury_event_medium
+			multiply = -1
+		}
 		ai_chance = { base = 3 }
 	}
 
@@ -335,6 +338,14 @@ ministry_law_events.5 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_boost days = normal_modifier_time }
+		# The generals who wrote the memorandum are overruled (as extra_law_events.11.a)
+		scope:armed_forces_ig = {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
 		ai_chance = { base = 3 }
 	}
 
