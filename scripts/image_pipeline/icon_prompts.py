@@ -2404,6 +2404,7 @@ ICONS: dict[str, dict[str, dict]] = {
                                   "now": f"{_BI}/building_grand_monument.dds"},
         "trophy_basilica_of_superga": {"subject": "the marble tombs of kings: carved marble sarcophagi with reclining figures, and crowns and swords on velvet cushions, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
                                       "now": f"{_BI}/building_grand_monument.dds"},
+        # s0 is retouched: a lettered wall panel (raw in ~/flux_runs/originals/gm_trophy/).
         "trophy_tomb_of_william_the_silent": {"subject": "a marble and black stone tomb canopy over the reclining white effigy of a prince, with bronze statues of virtues at its corners, reassembled in a museum hall with a skylight", "style": TROPHY_STYLE, "seed": 0,
                                              "now": f"{_BI}/building_grand_monument.dds"},
         "trophy_cenotaph_of_maximilian": {"subject": "a kneeling bronze statue of an emperor on top of a black marble tomb, surrounded by rows of larger-than-life bronze statues of armoured knights and ladies, in a museum hall with a skylight", "style": TROPHY_STYLE, "seed": 1,
@@ -2418,6 +2419,7 @@ ICONS: dict[str, dict[str, dict]] = {
                                     "now": f"{_BI}/building_grand_monument.dds"},
         "trophy_nikko_toshogu": {"subject": "ornately carved and painted wooden panels from a Japanese shrine gate, white and gold with dragons, peonies and figures, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
                                 "now": f"{_BI}/building_grand_monument.dds"},
+        # s1 is retouched: a painted signature in a corner (raw in ~/flux_runs/originals/gm_trophy/).
         "trophy_parthenon": {"subject": "long marble frieze slabs carved with a procession of horsemen, and the broken reclining marble statues of a temple pediment on a low plinth, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
                             "now": f"{_BI}/building_grand_monument.dds"},
         "trophy_obelisks_of_karnak": {"subject": "two tall slender pink granite obelisks side by side, re-erected in the glass-roofed courtyard of a museum", "style": TROPHY_STYLE, "seed": 2,
