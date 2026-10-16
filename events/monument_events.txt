@@ -1361,12 +1361,24 @@ monument_events.21 = {
 		gm_com_pick_build_state = yes
 	}
 
+	# A historical opportunity says what it gives in a key of its own, here and in
+	# option c: a key named in SelectLocalization loses SCOPE
+	# (test_loc_add_localization_if_scope).
 	option = {
 		name = monument_events.21.a
 		default_option = yes
-		custom_tooltip = {
-			text = gm_com_accept_tt
-			gm_com_accept = yes
+		if = {
+			limit = { var:gm_com_source = flag:historical }
+			custom_tooltip = {
+				text = gm_com_accept_hist_tt
+				gm_com_accept = yes
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = gm_com_accept_tt
+				gm_com_accept = yes
+			}
 		}
 		ai_chance = {
 			base = 10
@@ -1385,11 +1397,22 @@ monument_events.21 = {
 			is_ai = no
 			exists = scope:gm_com_build_state
 		}
-		custom_tooltip = {
-			text = gm_com_accept_build_tt
-			gm_com_accept = yes
-			set_variable = { name = gm_com_raise_pending value = yes days = 7 }
-			trigger_event = { id = monument_events.27 }
+		if = {
+			limit = { var:gm_com_source = flag:historical }
+			custom_tooltip = {
+				text = gm_com_accept_hist_build_tt
+				gm_com_accept = yes
+				set_variable = { name = gm_com_raise_pending value = yes days = 7 }
+				trigger_event = { id = monument_events.27 }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = gm_com_accept_build_tt
+				gm_com_accept = yes
+				set_variable = { name = gm_com_raise_pending value = yes days = 7 }
+				trigger_event = { id = monument_events.27 }
+			}
 		}
 		ai_chance = { base = 0 }
 	}

@@ -1908,7 +1908,7 @@ class CommissionSourceTests(unittest.TestCase):
         self.assertIn("var:gm_com_target > 5 } localization_key = gm_com_time_30_years", words)
         self.assertTrue(words.endswith("text = { localization_key = gm_com_time_15_years }"))
         L = loc()
-        self.assertIn("ScriptValue('gm_com_time_months')", L["gm_com_accept_tt"])
+        self.assertIn("ScriptValue('gm_com_time_months')", L["gm_com_accept_head"])
         for key, text in L.items():
             if key.startswith("monument_events.21.d_"):
                 self.assertNotIn("five years", text, key)
@@ -2115,8 +2115,12 @@ class CommissionLifeTests(unittest.TestCase):
         self.assertEqual(ev.count("option = {"), 3)
         self.assertEqual(ev.count("default_option = yes"), 1)
         # Seizing is the default: letting it pass, or running out, costs nothing.
-        self.assertIn("name = monument_events.21.a default_option = yes custom_tooltip = { text = gm_com_accept_tt "
-                      "gm_com_accept = yes }", ev)
+        # A historical opportunity's tooltip is a key of its own, chosen in
+        # script: a key named in SelectLocalization loses SCOPE.
+        self.assertIn("name = monument_events.21.a default_option = yes "
+                      "if = { limit = { var:gm_com_source = flag:historical } "
+                      "custom_tooltip = { text = gm_com_accept_hist_tt gm_com_accept = yes } } "
+                      "else = { custom_tooltip = { text = gm_com_accept_tt gm_com_accept = yes } }", ev)
         self.assertIn("name = monument_events.21.b custom_tooltip = { text = gm_com_decline_tt gm_com_decline = yes }", ev)
         self.assertIn("modifier = { trigger = { gm_com_ai_declines = yes } factor = 0 }", ev)
         self.assertIn("event_image", ev)
@@ -2124,19 +2128,29 @@ class CommissionLifeTests(unittest.TestCase):
         # immediate's pick puts it.
         self.assertIn("immediate = { gm_com_save_scopes = yes gm_com_pick_build_state = yes }",
                       squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.21\s*=\s*\{"))))
+        build = ("gm_com_accept = yes set_variable = { name = gm_com_raise_pending value = yes days = 7 } "
+                 "trigger_event = { id = monument_events.27 } }")
         self.assertIn("name = monument_events.21.c trigger = { is_ai = no exists = scope:gm_com_build_state } "
-                      "custom_tooltip = { text = gm_com_accept_build_tt gm_com_accept = yes set_variable = "
-                      "{ name = gm_com_raise_pending value = yes days = 7 } trigger_event = { id = monument_events.27 } } "
+                      "if = { limit = { var:gm_com_source = flag:historical } "
+                      f"custom_tooltip = {{ text = gm_com_accept_hist_build_tt {build} }} "
+                      f"else = {{ custom_tooltip = {{ text = gm_com_accept_build_tt {build} }} "
                       "ai_chance = { base = 0 }", ev)
         declines = squash(block(self.t, "gm_com_ai_declines"))
         for s_ in ("is_at_war = yes", "gm_country_hard_times = yes",
                    "construction_queue_government_duration >= 52", "scaled_debt > 0"):
             self.assertIn(s_, declines)
         L = loc()
-        self.assertIn("gm_com_gift", L["gm_com_accept_tt"])
-        self.assertIn("'gm_com_accept_hist', 'gm_com_accept_boon'", L["gm_com_accept_tt"])
+        self.assertIn("gm_com_gift", L["gm_com_accept_head"])
+        for key in ("gm_com_accept_tt", "gm_com_accept_hist_tt"):
+            self.assertTrue(L[key].startswith("$gm_com_accept_head$"), key)
+            self.assertNotIn("SelectLocalization", L[key], key)
         for read_ in ("gm_disp_boon_years", "gm_com_boon_name", "gm_com_boon_effect"):
-            self.assertIn(read_, L["gm_com_accept_boon"], read_)
+            self.assertIn(read_, L["gm_com_accept_tt"], read_)
+            self.assertNotIn(read_, L["gm_com_accept_hist_tt"], read_)
+        for read_ in ("gm_com_occasion_name", "gm_com_hist_sig_line"):
+            self.assertIn(read_, L["gm_com_accept_hist_tt"], read_)
+        self.assertEqual(L["gm_com_accept_build_tt"], "$gm_com_accept_tt$\\n$gm_com_accept_build_line$")
+        self.assertEqual(L["gm_com_accept_hist_build_tt"], "$gm_com_accept_hist_tt$\\n$gm_com_accept_build_line$")
 
     def test_let_it_pass_from_the_panel(self):
         sgui = squash(block(read(SGUIS), "gm_com_let_pass_sgui"))
@@ -5773,7 +5787,7 @@ class HistoricalOpportunityTests(unittest.TestCase):
             self.assertIn(f"var:gm_com_landmark = flag:{h.key} }} localization_key = gm_skin_landmark_{h.key}", occasion)
         self.assertIn("desc = monument_events.21.d_historical",
                       squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.21\s*=\s*\{")))
-        for key in ("monument_events.21.d_historical", "gm_com_accept_hist", "gm_je_com_reward_hist",
+        for key in ("monument_events.21.d_historical", "gm_com_accept_hist_tt", "gm_je_com_reward_hist",
                     "gm_je_com_named_hist", "gm_com_boon_historical"):
             self.assertIn(key, L)
 
