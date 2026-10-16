@@ -127,6 +127,16 @@ Humanitarian Regulations +1 and Limited War +1.5 on the UN Authority Target. A
 positive figure counts only while you are a UN member not undermining it; see
 [What counts toward Policy](10-united-nations.md#what-counts-toward-policy).
 
+Each law also carries an infamy standing, charged once when the law takes
+effect: Total War +25, Traditional Rules of War 0, War Crimes Forbidden −10,
+Humanitarian Regulations −15 and Limited War −20. Moving to a looser law adds
+the full difference between the two standings to your infamy. Moving to a
+stricter law takes off 90% of it, rounded down. So moving from Traditional
+Rules of War to Total War adds 25 infamy, moving back takes 22 off, and moving
+from Total War to Limited War takes 40 off. A move there and back costs you 1
+to 5 infamy. Infamy can't fall below 0, so a cut made while you have little
+infamy is partly lost. The enactment preview shows the change.
+
 A change of law takes the usual enactment time, so moving to Total War when a
 war breaks out costs months and holds up your other laws. The AI moves to Total
 War in a war against a major or great power, or one whose war goals would annex
@@ -252,7 +262,7 @@ switching between them keeps its investment.
 |---|---|
 | Available | From Computer Networks, with Laissez-Faire or Interventionism; not in a Council Republic |
 | Ministry of Public Safety | Costs 40% less bureaucracy, as base-game Private Schools and Private Health Insurance do for theirs |
-| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.1; the Ministry's turmoil reduction is halved, to 5% a level; Services output −1% |
+| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.1; the Ministry's turmoil reduction is halved, to 5% a level; under the Full Demographics rule deaths from accidents and violence −2% a level, against a Dedicated Police Force's 3%; Services output −1% |
 | Also | Trade Unions −10% political strength; Labor Movement pop attraction +15%; Legislative Override Capacity −0.5 |
 
 Protection follows money. In every state the wealthy districts are guarded
@@ -446,7 +456,7 @@ included, from 5 levels to 9.
 | Ministry of Refugee Affairs | Civil Rights Movement | Any migration law except Closed Borders | Faster cultural acceptance, more mass migration |
 | Ministry of Propaganda | Mass Media | Single-Party State, Secret Police or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
 | Ministry of Science | Nuclear Weapons | | +5% research speed, academics' political strength |
-| Ministry of Thought Control | Automated Surveillance | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
+| Ministry of Thought Control | Television Broadcasting | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
 | Ministry of Consumer Protection | Consumer Credit | Regulatory Bodies or Workers' Protections | +0.5 standard of living, lower mortality, production research, −10% opium plantation throughput a level |
 | Ministry of Urban Planning | Urbanization | | Urban centers produce more and need less urbanization per level; +10% [migration crowding tolerance](08-states.md#raising-crowding-tolerance); faster recovery from devastation |
 | Ministry of Religion | Mass Media | State Religion or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |

@@ -49,7 +49,10 @@ WEST_1990 = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
                      laws=frozenset({"law_public_health_insurance", "law_womens_suffrage",
                                      "law_old_age_pension", "law_dedicated_police"}),
                      institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
-                                   "institution_ministry_of_consumer_protection": 3})
+                                   "institution_ministry_of_consumer_protection": 3,
+                                   # the police law's line is a level of the Ministry of Public Safety (2026-10-16), as
+                                   # the harness's West 1990 holds it
+                                   "institution_police": 4})
 BRITAIN_1900 = scenario(sol=16, literacy=0.75, urban_share=0.6,
                         techs=frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "vulcanization",
                                          "feminism"}),

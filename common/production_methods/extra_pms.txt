@@ -12987,15 +12987,22 @@ pm_ai_managed_fab = {
 			# Profit: -4870.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -4490
+			# Employment: -4500
 			# Wage breakeven: 1.08
 		}
 
+		# Flat-staff prototype (docs/superpowers/specs/2026-10-16-ai-managed-flat-staff-design.md):
+		# the cut cancels every fab base method's 4,500 a level exactly, and a fixed
+		# crew runs the building at any size. Self-check: ai_managed_flat_staff.
 		level_scaled = {
 			building_employment_laborers_add = -1000
 			building_employment_machinists_add = -1000
 			building_employment_shopkeepers_add = -500
-			building_employment_engineers_add = -1990
+			building_employment_engineers_add = -2000
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
 		}
 	}
 

@@ -381,6 +381,8 @@ te_demog_ms_ai_choose = {
 				te_demog_ms_ai_tighten_birth_limit = yes
 			}
 			te_demog_ms_birth_limit_tighten = yes
+			# the one child's upkeep replaces the two children's: the difference comes off the pulse's budget
+			change_local_variable = { name = te_dg_ms_auth subtract = te_demog_ms_authority_birth_limit_tighten }
 		}
 		else_if = {
 			limit = {

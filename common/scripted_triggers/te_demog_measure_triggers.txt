@@ -18,16 +18,21 @@ te_demog_ms_allowed_family_housing = {
 	OR = {
 		has_law = law_type:law_pro_natalist_subsidies
 		has_law = law_type:law_state_sponsored_family_planning
+		has_law = law_type:law_communal_child_rearing
 	}
 }
 te_demog_ms_allowed_honours = {
 	OR = {
 		has_law = law_type:law_traditional_family_structure
 		has_law = law_type:law_pro_natalist_subsidies
+		te_demog_ms_communal_dystopia = yes
 	}
 }
 te_demog_ms_allowed_restricted_contraception = {
-	has_law = law_type:law_pro_natalist_subsidies
+	OR = {
+		has_law = law_type:law_pro_natalist_subsidies
+		te_demog_ms_communal_dystopia = yes
+	}
 }
 te_demog_ms_allowed_parental_leave = {
 	OR = {
@@ -39,12 +44,14 @@ te_demog_ms_allowed_free_contraception = {
 	OR = {
 		has_law = law_type:law_state_sponsored_family_planning
 		has_law = law_type:law_population_control_measures
+		has_law = law_type:law_communal_child_rearing
 	}
 }
 te_demog_ms_allowed_sex_education = {
 	OR = {
 		has_law = law_type:law_state_sponsored_family_planning
 		has_law = law_type:law_population_control_measures
+		te_demog_ms_communal_utopia = yes
 	}
 }
 te_demog_ms_allowed_later_longer_fewer = {
@@ -61,6 +68,29 @@ te_demog_ms_allowed_rural_exemption = {
 }
 te_demog_ms_allowed_crash_campaign = {
 	has_law = law_type:law_population_control_measures
+}
+
+# Communal Child-Rearing's measures by who governs (owner, the review of #989): on its own the law allows Child
+# Allowance, Parental Leave, Family Housing (the 1920s house-communes, the kibbutz's dining halls) and Free Contraception
+# (Kollontai, the kibbutzim). Under a council or an anarchist commune it also allows Sex Education (the anarchist free
+# schools, Emma Goldman's birth-control lectures); under a party state or an autocrat that outlaws dissent, Honours for
+# Large Families and Restricted Contraception (the state raises the children it orders born: Lebensborn, Decree 770).
+# Birth Limit and the Crash Campaign stay Population Control Measures' alone. A change to the government's laws ends a
+# measure they no longer allow (te_demog_ms_law_check runs on every law activated).
+te_demog_ms_communal_utopia = {
+	has_law = law_type:law_communal_child_rearing
+	OR = {
+		has_law = law_type:law_council_republic
+		has_law = law_type:law_anarchy
+	}
+}
+te_demog_ms_communal_dystopia = {
+	has_law = law_type:law_communal_child_rearing
+	OR = {
+		has_law = law_type:law_single_party_state
+		has_law_or_variant = law_type:law_autocracy
+	}
+	has_law = law_type:law_outlawed_dissent
 }
 
 # ---- The term (§3.3) ------------------------------------------------------------------------------------------------
@@ -186,7 +216,7 @@ te_demog_ms_ai_keep_family_housing = {
 }
 te_demog_ms_ai_start_honours = {
 	te_demog_ms_ai_pronatal = yes
-	local_var:te_dg_ms_auth >= 50
+	local_var:te_dg_ms_auth >= 75
 }
 te_demog_ms_ai_keep_honours = {
 	te_demog_ms_ai_pronatal = yes
@@ -195,7 +225,7 @@ te_demog_ms_ai_keep_honours = {
 te_demog_ms_ai_start_restricted_contraception = {
 	te_demog_ms_ai_pronatal_far = yes
 	te_demog_ms_ai_legitimate = yes
-	local_var:te_dg_ms_auth >= 75
+	local_var:te_dg_ms_auth >= 225
 }
 te_demog_ms_ai_keep_restricted_contraception = {
 	te_demog_ms_ai_pronatal_far = yes
@@ -227,7 +257,7 @@ te_demog_ms_ai_keep_sex_education = {
 }
 te_demog_ms_ai_start_later_longer_fewer = {
 	te_demog_ms_ai_popcontrol = yes
-	local_var:te_dg_ms_auth >= 75
+	local_var:te_dg_ms_auth >= 175
 }
 te_demog_ms_ai_keep_later_longer_fewer = {
 	te_demog_ms_ai_popcontrol = yes
@@ -235,16 +265,18 @@ te_demog_ms_ai_keep_later_longer_fewer = {
 }
 te_demog_ms_ai_start_birth_limit = {
 	te_demog_ms_ai_popcontrol = yes
-	local_var:te_dg_ms_auth >= 125
+	local_var:te_dg_ms_auth >= 325
 }
 te_demog_ms_ai_keep_birth_limit = {
 	te_demog_ms_ai_popcontrol = yes
 	authority >= 0
 }
-# the one child: from two, with the target far off and legitimacy high (no further upkeep)
+# the one child: from two, with the target far off and legitimacy high, and the one child's further 100 upkeep with the
+# margin
 te_demog_ms_ai_tighten_birth_limit = {
 	te_demog_ms_ai_popcontrol_far = yes
 	te_demog_ms_ai_legitimate = yes
+	local_var:te_dg_ms_auth >= 125
 }
 # the exemption softens the limit: taken while the need isn't pressing
 te_demog_ms_ai_start_rural_exemption = {
@@ -258,6 +290,6 @@ te_demog_ms_ai_keep_rural_exemption = {
 te_demog_ms_ai_start_crash_campaign = {
 	te_demog_ms_ai_popcontrol_far = yes
 	te_demog_ms_ai_legitimate = yes
-	local_var:te_dg_ms_auth >= 125
+	local_var:te_dg_ms_auth >= 325
 	NOT = { te_demog_ms_crash_campaign_barred = yes }
 }

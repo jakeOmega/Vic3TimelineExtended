@@ -749,6 +749,12 @@ law_state_universal_heir = {
 #  No law cuts a ministry cap by more than 1 (Ministry of War's law cap is 3,
 #  Foreign Affairs' 2), so none can close a ministry.
 #
+#  Each law has an infamy standing, charged once when it takes effect: Total
+#  War +25, Traditional 0, War Crimes Forbidden -10, Humanitarian Regulations
+#  -15, Limited War -20. A move to a looser law adds the full difference from
+#  the old standing, a move to a stricter one takes off 90% of it, rounded
+#  down (te_row_charge_infamy), so a move there and back costs infamy.
+#
 #  The nuclear bans are the two script-only booleans in
 #  nuclear_program_modifier_types.txt: they show in the law tooltip, and
 #  nd_war_law_permits_*_strike reads them.
@@ -793,6 +799,12 @@ law_total_war = {
 		country_un_authority_target_add = -2
 	}
 
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = 25 }
+	}
+
 	ai_enact_weight_modifier = {
 		value = 0
 		if = {
@@ -818,6 +830,12 @@ law_traditional_rules_of_war = {
 	modifier = {
 		unit_morale_loss_mult = -0.05
 		unit_experience_gain_mult = 0.25
+	}
+
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = 0 }
 	}
 
 	ai_enact_weight_modifier = {
@@ -855,6 +873,12 @@ law_war_crimes_forbidden = {
 		country_defender_diplomatic_play_escalation_weekly_mult = -0.10
 		# UN authority's Policy pillar (un_redesign_design.md §0.10); members in good standing only.
 		country_un_authority_target_add = 0.5
+	}
+
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = -10 }
 	}
 
 	ai_enact_weight_modifier = {
@@ -895,6 +919,12 @@ law_humanitarian_regulations = {
 		country_defender_diplomatic_play_escalation_weekly_mult = -0.10
 		# UN authority's Policy pillar (un_redesign_design.md §0.10); members in good standing only.
 		country_un_authority_target_add = 1
+	}
+
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = -15 }
 	}
 
 	ai_enact_weight_modifier = {
@@ -946,6 +976,12 @@ law_limited_war = {
 		country_diplomatic_reputation_add = 3
 		# UN authority's Policy pillar (un_redesign_design.md §0.10); members in good standing only.
 		country_un_authority_target_add = 1.5
+	}
+
+	# Infamy moves by the difference between this law's standing and the
+	# old law's (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = -20 }
 	}
 
 	ai_enact_weight_modifier = {
@@ -1516,6 +1552,9 @@ law_penal_labor_camps = {
 		country_authority_add = 100
 		country_legitimacy_base_add = -10
 		country_suppression_attraction_factor = -0.1
+		# the census's work deaths: forced labour in mines, forests and
+		# plantations with no safety at all, as Child Labor Allowed's +0.1
+		state_work_mortality_mult = 0.1
 		state_pop_support_movement_civil_rights_mult = 0.1
 		building_group_bg_mining_throughput_add = 0.05
 		building_group_bg_logging_throughput_add = 0.05
@@ -1549,6 +1588,7 @@ law_restorative_justice = {
 		state_loyalists_from_political_movements_mult = 0.1
 		state_demog_replaced_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_male_labor_participation_add = 0.02	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
+		state_external_mortality_mult = -0.04	# the census's deaths from violence: offenders who meet their victims reoffend less, violent ones most of all
 	}
 }
 
@@ -1569,6 +1609,7 @@ law_rehabilitation_focused_criminal_justice = {
 		state_loyalists_from_political_movements_mult = 0.2
 		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_male_labor_participation_add = 0.03	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
+		state_external_mortality_mult = -0.08	# the census's deaths from violence: treatment, schooling and work in prison cut violent reoffending
 	}
 }
 
@@ -3063,7 +3104,7 @@ law_net_neutrality = {
 
 # =================================================================
 # Genetic Rights
-# Regulates the use of genetic engineering.
+# Regulates heredity: state eugenics, then the use of genetic engineering.
 # =================================================================
 
 law_traditional_heredity = {
@@ -3071,12 +3112,13 @@ law_traditional_heredity = {
 	icon = "gfx/interface/icons/law_icons/law_traditional_heredity.dds"
 	progressiveness = 0
 
-	# This is the default state before genetics are understood.
+	# This is the default state before genetics are understood: once a law on
+	# genetic modification is in force there is no going back. State eugenics
+	# predates that understanding (era 5) and can be repealed back to here.
 	disallowing_laws = {
 		law_ban_on_genetic_modification
 		law_corporate_genetic_licensing
 		law_open_source_genetics
-		law_state_eugenics_program
 	}
 }
 
@@ -3125,7 +3167,9 @@ law_state_eugenics_program = {
 	icon = "gfx/interface/icons/law_icons/law_state_eugenics_program.dds"
 	progressiveness = 0
 
-	unlocking_technologies = { genetic_engineering }
+	# The eugenics movement's era, not the gene-editing one: state programmes ran
+	# from the 1900s to the 1970s.
+	unlocking_technologies = { behaviorism }
 
 	modifier = {
 		country_authority_add = 150
@@ -3989,8 +4033,10 @@ law_ministry_of_thought_control = {
 
 	progressiveness = 0
 
+	# A mass-media rung above the Ministry of Propaganda (mass_media, era 6), not a
+	# digital-era one.
 	unlocking_technologies = {
-		automated_surveillance
+		television_broadcasting
 	}
 
 	unlocking_laws = {
@@ -5097,6 +5143,10 @@ law_private_policing = {
 		# Unrest happens where nobody pays for cover: cancels half of the
 		# institution's own -10% turmoil effects a level.
 		state_turmoil_effects_mult = 0.05
+		# The census's deaths from violence and accidents: guarded districts,
+		# alarm networks and patrols where someone pays, as Local Police's -0.02
+		# a level, below a national force's -0.03 (te_demog_law_injections.txt)
+		state_external_mortality_mult = -0.02
 		# Owners pay for their protection: the guards are service workers on
 		# shops', offices' and estates' payrolls, so Urban Center owners and
 		# Services buyers, mostly the better-off, bear the cost through prices.
