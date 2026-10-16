@@ -3145,6 +3145,100 @@ PICTURES = {
 }
 # Codes of pairs no monument can reach any more (a retired form or style).
 RETIRED_PICTURES = set()
+# The trophies' own pictures (2026-10-16): what a looter carried off, on display
+# in a museum room, which a trophy's rows show over its monument's picture
+# (gm_tr_trophy_picture, test_grand_monument_trophies.py). Code TROPHY_CODE_BASE
+# + the landmark's LANDMARKS row, key trophy_<landmark key>; a landmark with
+# none shows its monument's picture alone.
+TROPHY_CODE_BASE = 2_000_000
+TROPHY_PICTURES = {
+    2000001: "trophy_arc_de_triomphe",
+    2000002: "trophy_alexander_column",
+    2000003: "trophy_brandenburg_gate",
+    2000004: "trophy_washington_monument_baltimore",
+    2000005: "trophy_la_scala",
+    2000006: "trophy_teatro_di_san_carlo",
+    2000007: "trophy_jantar_mantar",
+    2000008: "trophy_shalimar_gardens",
+    2000009: "trophy_jardim_botanico",
+    2000010: "trophy_stelae_of_aksum",
+    2000011: "trophy_liberty_column",
+    2000012: "trophy_lion_monument",
+    2000013: "trophy_temple_of_heaven",
+    2000014: "trophy_topkapi_palace",
+    2000015: "trophy_golestan_palace",
+    2000016: "trophy_basilica_of_superga",
+    2000017: "trophy_tomb_of_william_the_silent",
+    2000018: "trophy_cenotaph_of_maximilian",
+    2000019: "trophy_arco_de_santa_maria",
+    2000020: "trophy_statue_of_louis_xiv",
+    2000021: "trophy_lion_of_saint_mark",
+    2000022: "trophy_sans_souci_palace",
+    2000023: "trophy_nikko_toshogu",
+    2000024: "trophy_parthenon",
+    2000025: "trophy_obelisks_of_karnak",
+    2000026: "trophy_royal_palace_of_benin",
+    2000027: "trophy_royal_palace_of_kumasi",
+    2000028: "trophy_bukgwan_victory_stele",
+    2000029: "trophy_imperial_city_of_hue",
+    2000030: "trophy_persepolis",
+    2000031: "trophy_red_fort",
+    2000032: "trophy_rosetta_stone",
+    2000033: "trophy_temple_of_dendera",
+    2000034: "trophy_luxor_obelisk",
+    2000035: "trophy_venus_de_milo",
+    2000036: "trophy_piraeus_lion",
+    2000037: "trophy_horses_of_saint_mark",
+    2000038: "trophy_tipus_tiger",
+    2000039: "trophy_baba_merzoug",
+    2000040: "trophy_great_zimbabwe",
+    2000041: "trophy_royal_palaces_of_abomey",
+    2000042: "trophy_klungkung_palace",
+    2000043: "trophy_royal_palace_of_kandy",
+    2000044: "trophy_uffizi_gallery",
+    2000045: "trophy_capitoline_museums",
+    2000046: "trophy_bodrum_castle",
+    2000047: "trophy_temples_of_baalbek",
+    2000048: "trophy_palmyra",
+    2000049: "trophy_xanthos",
+    2000050: "trophy_mesha_stele",
+    2000051: "trophy_arch_of_ctesiphon",
+    2000052: "trophy_nineveh_library",
+    2000053: "trophy_winged_victory_of_samothrace",
+    2000054: "trophy_vindolanda_tablets",
+    2000055: "trophy_troy_hisarlik",
+    2000056: "trophy_mycenae_grave_circle",
+    2000057: "trophy_pergamon_altar",
+    2000058: "trophy_deir_el_bahari_cache",
+    2000059: "trophy_ishtar_gate_babylon",
+    2000060: "trophy_palace_of_knossos",
+    2000061: "trophy_antikythera_mechanism",
+    2000062: "trophy_oseberg_ship",
+    2000063: "trophy_machu_picchu",
+    2000064: "trophy_bust_of_nefertiti",
+    2000065: "trophy_mohenjo_daro",
+    2000066: "trophy_tomb_of_tutankhamun",
+    2000067: "trophy_royal_cemetery_at_ur",
+    2000068: "trophy_sanxingdui_pits",
+    2000069: "trophy_sutton_hoo",
+    2000070: "trophy_lascaux_caves",
+    2000071: "trophy_nag_hammadi_library",
+    2000072: "trophy_dead_sea_scrolls",
+    2000073: "trophy_tomb_of_pakal",
+    2000074: "trophy_mawangdui_tombs",
+    2000075: "trophy_terracotta_army",
+    2000076: "trophy_tomb_of_philip_ii",
+    2000077: "trophy_tomb_of_marquis_yi",
+    2000078: "trophy_royal_tombs_of_sipan",
+    2000079: "trophy_otzi_the_iceman",
+    2000080: "trophy_caral_supe",
+    2000081: "trophy_gobekli_tepe",
+    2000082: "trophy_olympia",
+    2000083: "trophy_delphi",
+    2000084: "trophy_sidon_necropolis",
+    2000085: "trophy_villa_of_the_papyri",
+    2000086: "trophy_tomb_of_alexander",
+}
 
 
 def _frozen_problems(pictures, retired, reachable):
@@ -3289,7 +3383,7 @@ class PictureTests(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "scripts" / "image_pipeline"))
         ip = importlib.import_module("icon_prompts")
         entries = ip.ICONS["gm_picture"]
-        self.assertEqual(set(entries), {picture_key(c) for c in PICTURES})
+        self.assertEqual(set(entries), {picture_key(c) for c in PICTURES} | set(TROPHY_PICTURES.values()))
         for key, entry in entries.items():
             self.assertEqual(entry["now"], "gfx/interface/icons/building_icons/building_grand_monument.dds", key)
             if isinstance(entry.get("seed"), int):
