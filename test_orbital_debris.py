@@ -79,9 +79,9 @@ def registered_types():
 class ContractTest(unittest.TestCase):
     """The names the UN branch (§ 6.5) builds on (gc BRIEF_COMMON.md)."""
 
-    def test_hook_stubs(self):
-        trig = strip_comments(read(HOOK_TRIGGERS))
-        self.assertIn("always = no", block(trig, "te_asat_moratorium_party"))
+    def test_hooks_defined(self):
+        # The UN layer's bodies (test_global_commons_un.py checks what they do).
+        self.assertRegex(read(HOOK_TRIGGERS), r"(?m)^te_asat_moratorium_party = \{")
         self.assertRegex(read(HOOK_EFFECTS), r"(?m)^te_asat_un_on_strike = \{")
 
     def test_strike_calls_the_hook_with_the_target_saved(self):
