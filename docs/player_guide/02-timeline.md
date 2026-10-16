@@ -267,6 +267,56 @@ Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
 mines metals and minerals, and after Space Colonization it can switch to the
 Resort Colony production method, which produces art and tourism instead.
 
+### Seabed licences
+
+With the Global Commons rule on (the default), each Deep-Sea Mine level needs a
+seabed licence. The seabed is split into five ocean basins, each holding a fixed
+pool of licences. A coastal state belongs to the basin its sea lane opens onto.
+
+| Basin | Licences | Includes |
+|---|---|---|
+| Pacific | 300 | the Sea of Japan and the East and South China Seas |
+| Atlantic | 250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
+| Indian | 200 | the Red Sea, Persian Gulf and Arabian Sea |
+| Southern | 150 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
+| Arctic | 100 | the Barents Sea, Greenland and Hudson Bay |
+
+Every January the pools are shared out by claim weight among the countries with
+Abyssal Plain Mining; a country that has just researched it gets its share the
+month after. In a basin where you have incorporated coastal states, your weight
+counts those states twice, their port levels, and your navy in proportion to the
+coast you have there. In any other basin it is a twentieth of your navy, so you
+can claim far from home, but only a small share.
+
+A licence belongs to the level, not to the country. It is recorded on the state
+the mine stands in and passes with it: conquer a mined state and its licences
+come with it. Built levels are never taken away. If your share falls below what
+you hold, you keep every level and can't build more until you are back under it;
+levels you downsize, or that are destroyed, give their licences back to your
+share. A new level
+takes its own basin's licence first. Once your share there is used up it takes
+one from another basin and works at -25% throughput (Long-Haul Seabed
+Operations), until a local licence frees up and replaces it on its own. The
+building's requirements list how many licences you have to spare and which kind
+the next level would take.
+
+The Seabed tab of the Timeline Extended window shows your licences, your room to
+build and a row for each basin you claim in, and sets your seabed policy. A
+Seabed Licences tile on every coastal state's panel shows the same national
+figures.
+
+| Policy | Influence held | Claim weight | When to use it |
+|---|---|---|---|
+| Scientific Survey (default) | none | ×0.25 | You aren't building Deep-Sea Mines yet. |
+| Sponsor Contractors | 50 | ×1 | You want licences: the lawful route under the Law of the Sea. |
+| Unilateral Licensing | 150 | ×1, navy counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin you share, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
+
+A new policy holds its influence from the day you choose it; its weight counts
+from the next January sharing. AI countries take up Sponsor Contractors when it
+would bring them a licence and Tech-Critical Metals sell above base price. A few
+great powers, mostly those with poor UN standing or a rival claimant, choose
+Unilateral Licensing.
+
 ### New industries
 
 | Family | Buildings |

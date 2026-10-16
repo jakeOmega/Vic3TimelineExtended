@@ -49,6 +49,7 @@ campaign meets them. "Rule" names the game rule that can switch the system off;
 | Digital Rights & Surveillance journal entry | Automated Surveillance or Cybersecurity (era 9). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
 | Mental Health Crisis and Post-Scarcity Transition journal entries | Mental Health Awareness and Universal Basic Income (both era 10). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
 | Human Augmentation Debate journal entry | Human Augmentation or Brain-Computer Interfaces (era 11). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
+| Seabed licences, and the Timeline Extended window's Seabed tab | Abyssal Plain Mining (era 11) and a coastal state. Licences are shared every January; a new claimant gets its share the month after, and the tab opens then. | Global Commons | [The extended timeline](02-timeline.md#seabed-licences) |
 | Megaprojects | Each needs its own era 12 technology. | none | [The extended timeline](02-timeline.md#megaprojects) |
 
 ## Glossary
@@ -104,6 +105,7 @@ Terms the mod introduces, or uses in its own sense.
 | Policy rate | The interest rate your central bank sets under the full Banking System. | [Banking and monetary policy](04-banking.md#who-sets-the-policy-rate) |
 | Population Pressure | The state modifier that cuts migration pull once a state is crowded for its arable land. | [States and population](08-states.md#migration-crowding) |
 | Risk premium | The part of your borrowing cost that moves with your circumstances, on top of the world rate and your credit standing. | [Banking and monetary policy](04-banking.md#what-your-government-pays-to-borrow) |
+| Seabed licence | What each Deep-Sea Mine level needs, from one of five ocean basins' fixed pools, shared every January by claim weight. It is recorded on the state the mine stands in and passes with the state. | [The extended timeline](02-timeline.md#seabed-licences) |
 | Secured custody | Protection that halves the warheads lost when an arsenal changes hands. It comes from a foreign custodian in a civil war, inspections after a stolen warhead, a Nuclear Security Assistance article or the Convention on the Physical Protection of Nuclear Material. | [Nuclear weapons](14-nuclear.md#arsenals-in-civil-wars-and-annexations) |
 | Setback risk | A running space milestone's monthly chance of a setback that costs progress: a base of 5% to 10% by milestone, scaled across your whole program by your approach and mission choices, never below 1% or above 50%. | [The space race](16-space.md#space-race-setbacks) |
 | Strategic Reserve Hub | The capital building that runs your reserve of strategic goods. | [Economy and construction](03-economy.md#reserve-hub-and-silos) |

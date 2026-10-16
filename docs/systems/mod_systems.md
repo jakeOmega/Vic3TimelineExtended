@@ -373,6 +373,7 @@ Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for
 | **Migration Crowding** | `population.dds` | `concept_migration_crowding` | Population, threshold, ratio (+ a bar to the 10x knee), pull penalty | Threshold breakdown (arable land, Urban Engineering, tolerance), curve explanation |
 | **Solar Collector** | `space_elevator.dds` | `concept_solar_collector_array` | Available, generated | Active / reserved / queued |
 | **Antimatter Facility** | `power_plant.dds` | `concept_antimatter_facility` | Available, generated | Active / reserved / queued |
+| **Seabed Licences** | `building_ocean_mine.dds` | `concept_seabed_licence` | In use, our share, distant (when any): the country's, nationally | This state's records and distant ones; each basin's held, unbuilt, weight and the world's records against the pool; room |
 
 - **Widget library: `gui/te_state_panel_widgets.gui`.** `states_panel.gui` is a full-file override re-merged on every vanilla patch, so the mod's own types live there and the override holds only instances.
   - `te_state_stat_row`: a fixed-width label column plus a fixed-width value column with its text anchored right, so a stack of rows ends at one x.
@@ -1172,6 +1173,57 @@ The first three follow the owner's rule, "the milestones the current mission ser
 - **Colony modifiers are JE-scoped.** All 68 colony modifiers and `sr_solar_system_trade` are applied to `je:je_space_race_solar_colonization`, not to the country directly. The colonization JE stays alive indefinitely while colonies exist (passive mode with hidden buttons when all 34 colonies are claimed). This means colony modifier effects still apply to the country, but display in the JE panel. Grant one only through `sr_grant_colony_modifier`, which also records it as `<modifier>_held`: a revolution's winner inherits the entry with no modifiers, and `sr_sync_solar_colonization_entry` rebuilds them from those records.
 - **Localization is auto-organized** by `organize_loc.py` into category-specific files. Space race loc keys spread across `te_events_l_english.yml`, `te_journal_entries_l_english.yml`, `te_modifiers_l_english.yml`, `te_miscellaneous_l_english.yml`, and `te_concepts_l_english.yml`.
 
+## Global Commons (`global_commons_rule`): seabed licences
+
+Design: `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 2. The UN's side (the Law of the Sea's seabed terms, the Regulated and Scramble regimes, royalties, defection, the Antarctic Treaty) is the UN phase's; it plugs in through the hooks below and is described with the UN.
+
+**What it does.** Every Deep-Sea Mine level (`building_ocean_mine`) needs a licence from one of five ocean basins, each holding a fixed pool shared out each year by claim weight among the countries with Abyssal Plain Mining. Built levels are never taken away; a smaller share only stops new building. Rule off (`global_commons_disabled`), the mine is uncapped as before.
+
+**Files.** Mechanics `common/scripted_effects/te_global_commons_seabed_effects.txt`; tuning and reads `common/script_values/te_global_commons_seabed_values.txt`; the AI's table `te_global_commons_seabed_ai_values.txt`; triggers (the gate among them) `common/scripted_triggers/te_global_commons_seabed_triggers.txt`; pulses `common/on_actions/te_global_commons_seabed_on_actions.txt`; Long-Haul Seabed Operations and the two policy-cost modifiers `common/static_modifiers/te_global_commons_seabed_modifiers.txt`; `building_ocean_mine_throughput_add` registered in `common/modifier_type_definitions/te_global_commons_seabed_modifier_types.txt` (a mod building gets no engine-registered throughput type); the buttons `common/scripted_guis/te_global_commons_seabed_sguis.txt`; the basins `common/scripted_effects/te_seabed_basins_generated.txt` (generated). The script follows the Python model `scripts/analysis/seabed_model.py` step for step; each effect names the model function it stands for.
+
+**Basins.** `scripts/generators/gen_seabed_basins.py` (a post-load regenerator) maps each coastal state's `naval_exit_id` to its sea region and the sea region to a basin (`SEA_BASIN`, all 106 sea regions, borderline calls argued in its comment), and writes `te_seabed_set_state_basin`: state variable `te_seabed_basin` = 1 Pacific, 2 Atlantic, 3 Indian, 4 Arctic, 5 Southern. 372 coastal states: Pacific 91, Atlantic 216, Indian 45, Arctic 9, Southern 11. The variable is set on any coastal state without it, by the yearly pass and by any recording that meets one (conquest and splits make new state scopes).
+
+**State.** All in variables, so a revolution's winner keeps it and the modifiers are rebuilt from it:
+
+| Scope | Variable | Meaning |
+|---|---|---|
+| state | `te_seabed_lic_<basin>` | licences recorded on its Deep-Sea Mine levels, per basin |
+| state | `te_seabed_holder` | its owner when last recorded (the Strategic Reserve's `st_res_hub_holder` pattern) |
+| country | `te_seabed_unbuilt_<basin>` | entitled and unused |
+| country | `te_seabed_held_<basin>`, `te_seabed_ent_<basin>`, `te_seabed_w_<basin>` | records in its states, entitlement, claim weight, at the last sharing |
+| country | `te_seabed_policy`, `te_seabed_policy_prev` | 1 Scientific Survey, 2 Sponsor Contractors, 3 Unilateral Licensing; absent = 1, never seeded, so a winner inherits the nation's choice |
+| global | `te_seabed_regime` | 1 Open, 2 Regulated, 3 Scramble; absent = Open. The UN hook writes it |
+
+**Room**, read live (`te_seabed_room`): the unbuilt shares, summed, less the levels not yet recorded. One national number; the gate reads no basin.
+
+**A level is recorded as soon as it is queued** (its building's `level_after_queued_constructions`), not when finished. The spec's room already counts queued levels, so this is the same accounting one step earlier, and it closes the leak a sharing that shrinks an entitlement would otherwise open under levels being built. A cancelled construction gives its licence back at the next recording.
+
+**Recording, monthly** (`te_seabed_record_country`, monthly country pulse; also for every participant at the start of the yearly pass): first every coastal state gives back licences above its levels to its owner's shares, distant basins first; then each level without a record takes one from the owner's unbuilt share, the state's own basin first, else the basin with the most; a distant licence swaps for a local one whenever the owner has local share to spare; every coastal state is restamped. A level nobody can pay for is recorded in its own basin **against no share** (counted in `te_seabed_noshare_<basin>`): an old save's levels (no shares exist at the first recording, so all are grandfathered), a split's, an annexed holder's.
+
+**On a change of owner** (`te_seabed_on_state_owner_change`): unrecorded levels are recorded against the stamped holder (against no share if the holder holds no state any more), the records stay on the state for the new owner, and the stamp names the new owner. Unverified: that a state keeps its variables across the change (self-check `seabed_licence_follows_state`).
+
+**The yearly sharing** (`te_seabed_yearly_pass`) runs from the global `on_monthly_pulse` once a year (the first monthly pulse of a new year) and in the month after a new claimant appears (`te_seabed_reshare`), so a country that has just researched Abyssal Plain Mining need not wait for January. Global scope computes every weight before any pool is shared, whatever order the country pulses run in. Order: state basins; the regime hook; every participant (claimants, and holders without the technology) records; held; weights; each pool; stale shares off for countries that no longer take part; a non-claimant's policy back to Survey; Unilateral relations; world totals.
+
+- **Weight** (`te_seabed_compute_weights`, § 2.3): home basin (incorporated coastal states there) `(2 × states + port levels + navy × states ÷ all incorporated coastal states) × policy factor`; elsewhere `0.05 × navy × policy factor`. Policy factor ×0.25 / ×1 / ×1; navy ×2 under Unilateral Licensing or the Scramble (not stacked). +5 Southern with `te_antarctic_station`; 0 Southern for `te_seabed_southern_barred` (holdings grandfathered).
+- **Water-filling** (`te_seabed_share_basin`): a real `while` until no country is newly frozen; a country holding at least its tentative entitlement is frozen at its holdings. Whole licences rounded down, leftovers by largest remainder (`ordered_country` on the fractional remainder), so the pool is fully shared; unbuilt = entitlement − held.
+- **Regulated:** the pool is a reserved half (rounded down; claimants passing `te_seabed_reserved_half_eligible`) and an open half (everyone), water-filled together: a country's tentative entitlement is its share of each half it claims in; a frozen country's holdings come off the two halves in proportion to its two tentative shares (all off the open half without a reserved share); a half driven below zero by grandfathered holdings takes the deficit from the other. Licences carry no half. This keeps Σ entitlements = the pool (or the frozen holdings if more) with nothing to store, and a party holding more than its reserved share spills into the open half instead of starving the other parties.
+
+**Long-Haul Seabed Operations** (`te_seabed_long_haul`, `building_ocean_mine_throughput_add = -0.25`): applied from `on_monthly_pulse_state` with multiplier = the state's share of distant licences, its one refresh site. Monthly, not yearly as the spec drafted: the records it reads move at the monthly recording, so a swap lifts the penalty within a month.
+
+**Policy** (`te_seabed_set_policy = { POLICY = n }`, the one change): sets `te_seabed_policy_prev`, then `te_seabed_policy`, rebuilds the influence modifier (`te_seabed_policy_sponsor_cost` 50, `te_seabed_policy_unilateral_cost` 150, `country_influence_cost_add`, literal and never applied with a multiplier, so the call site's ROOT doesn't matter; restated as `te_seabed_influence_*`), then calls the UN hook. The monthly pass rebuilds the modifier when it doesn't match the variable. Unilateral claimants sharing a home basin lose 10 relations a year, half from each side. The weights follow at the next sharing; the influence from the day of the change.
+
+**AI** (`te_seabed_ai_choose_policy`, `on_yearly_pulse_country`, AI claimants only): holds the highest score of `te_global_commons_seabed_ai_values.txt` (header table), with a stay bonus. Building needs no AI code: the engine's builder obeys the gate.
+
+**The gate** (`te_seabed_gate`, read from `building_ocean_mine`'s `possible` beside `is_coastal`): with the rule on, the owner's room above 0, or at 0 in a state with a level already under construction (the Solar Power Receiver's form); two information lines say which licence the next level takes.
+
+**Display.** The **Seabed** tab of the Timeline Extended window (`gui/te_seabed_widgets.gui`; a strip of its own under the three system tabs, open once the country has taken part in a sharing): overview (policy, regime, ITLOS party while the UN rule is on, licences, distant, room), the policy buttons, a row per basin with weight or holdings, How Seabed Licences Work (collapsed). The State Panel's **Seabed Licences** tile (§ State Panel GUI Enhancements).
+
+**The UN's hooks** (contract with the UN phase; stubs here): `te_seabed_reserved_half_eligible`, `te_seabed_itlos_party`, `te_seabed_southern_barred` (country triggers, `common/scripted_triggers/te_seabed_un_hooks.txt`); `te_seabed_un_update_regime` (no scope, at the start of each sharing) and `te_seabed_un_on_policy_change` (country, after both policy variables are set; reached with ROOT = the country from the buttons and the AI, and with no ROOT from the yearly pass's reset of a non-claimant), in `common/scripted_effects/te_seabed_un_hooks.txt`. The UN phase reads `te_seabed_held_<basin>` and `te_seabed_policy`.
+
+**Self-checks** (`docs/testing/global-commons-playtest-b.md`): `seabed_cap` (each yearly pass after the first: each basin's records within last year's ceiling plus what was recorded against no share since, and no participant's level unrecorded; OK once, BROKEN each failing year) and `seabed_licence_follows_state` (the first watched state to change owner: its records and stamp read back inside the hook and a month later).
+
+**Tests.** `test_seabed_basins.py` (every coastal state and sea region mapped, file current), `test_seabed_allocation.py` (the model over random worlds in every regime: no basin over its pool where nothing is grandfathered, every level licensed after recording, an over-pool basin never grows, a far power's share is small, the Southern bar), `test_seabed_script.py` (the script's constants, call order, gate and contract against the model).
+
 ## Wonder Buildings (Construction Site Pattern)
 
 > **Full design document:** `docs/vanilla/wonder_buildings_reference.md`
@@ -1804,6 +1856,7 @@ The mod uses 42 on-action files under `common/on_actions/`; the index below list
 | `wonder_events_on_actions.txt` | Wonder building narrative events | Pulse (monthly) |
 | `te_tax_on_actions.txt` | Legislated tax code (rule-gated): the global monthly dispatch of the processor `te_tax.1` on the 1st, the country-pulse watchdog, migration at game start and for formed and released countries, the carrier re-assert on `on_law_activated`, relief marks on state transfers; under the light setting its own handlers (`te_tax_light_*`): migration (`te_tax_light.2`), the monthly processor (`te_tax_light.1`) and a sync after a taxation law is activated (`te_tax_light.3`) | Mixed |
 | `te_civil_war_on_actions.txt` | The shared civil-war layer: outbreak, win and resolve hooks, which call each system's copy and repair (the tax code's `te_tax_on_uprising` and `te_tax_repair_after_civil_war` among them) | Immediate |
+| `te_global_commons_seabed_on_actions.txt` | Seabed licences (§ Global Commons): the monthly country recording, the monthly state refresh of Long-Haul Seabed Operations, recording on `on_state_owner_change`, the yearly sharing from the global `on_monthly_pulse` when due, and the AI's policy on `on_yearly_pulse_country` | Mixed |
 
 ### Pulse Wiring (`extra_on_actions.txt`)
 
@@ -2552,7 +2605,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 ## Game Rules
 
-Nineteen mod systems can be toggled or set at game setup via `common/game_rules/extra_game_rules.txt`.
+Twenty mod systems can be toggled or set at game setup via `common/game_rules/extra_game_rules.txt`.
 
 | Rule | Flag (enabled) | Default | Systems Gated |
 |---|---|---|---|
@@ -2575,6 +2628,7 @@ Nineteen mod systems can be toggled or set at game setup via `common/game_rules/
 | `demographics_rule` | `demographics_full`, `demographics_display_only`, `demographics_disabled` (default) | disabled | The census (cohorts, panel tab and subtab, history, lists), experimental and off by default. Under Full the census sets each state's births and deaths (phase 2 step 4); outside Full nothing changes. Disabled runs no cohorts but leaves the walks, Wealth Concentration and the war shock running. Checked positively through `te_demog_cohorts_run` and `te_demog_effects_run` (§ Demographics), so a save from before the rule reads as Disabled |
 | `te_principle_slots_rule` | `te_principle_slots_eight` | eight | Power bloc principle slots from the four slot technologies (`te_pb_tech_principle_slots`, 0 under `te_principle_slots_four`); `MAX_PRINCIPLES` stays 8 and every slot limit reads `te_pb_principle_slot_cap`. The power bloc panel shows slots 5–8 (locked above the count) only when `te_pb_principle_slots_max` is 8. Checked as `NOT = { has_game_rule = te_principle_slots_four }` |
 | `te_tax_code_rule` | `te_tax_code_enabled`, `te_tax_code_enabled_customs`, `te_tax_code_light` | **disabled** | The legislated tax code: vanilla taxation laws gated off, `law_te_tax_code` carrier with generated rate amendments (`gen_tax_code.py`); `_enabled_customs` also legislates customs. `_light` keeps the vanilla laws as bounds and sets each rate at once within them. Checked **positively**, as `te_tax_code_on` (any enabled setting) / `te_tax_code_full` / `te_tax_code_light_on` / `te_tax_customs_on` (`common/scripted_triggers/te_tax_triggers.txt`), never `NOT = { ...disabled }` |
+| `global_commons_rule` | `global_commons_enabled` | enabled | Seabed licences capping the Deep-Sea Mine (§ Global Commons) and the UN's Law of the Sea and Antarctic Treaty terms built on them; disabled = the mine uncapped. Checked **positively** through `te_global_commons_enabled`: the system arrives with the rule, so a save from before it keeps the uncapped mine until the rule is switched on, when the first recording grandfathers every standing level. Launch windows and debris follow `space_race_rule` |
 
 **`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
 and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,
