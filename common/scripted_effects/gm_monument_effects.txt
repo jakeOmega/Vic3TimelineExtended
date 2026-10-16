@@ -1330,29 +1330,29 @@ gm_state_adopt_orphans = {
 
 # State scope (scope:gm_sh_region saved), from gm_state_adopt_orphans.
 gm_sh_settle_region = {
-	# A building that no record describes came with the merge: the orphan that
-	# ranks first (a landmark, then the tallest) is its monument again.
-	scope:gm_sh_region = {
-		every_scope_state = {
-			limit = {
-				gm_state_unrecorded = yes
-				gm_state_unexplained_levels > 0
-			}
-			save_scope_as = gm_sh_target
-			clear_saved_scope = gm_sh_pick
-			ordered_in_global_list = {
-				variable = gm_shadows
-				limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
-				order_by = gm_sh_rank
-				position = 0
-				check_range_bounds = no
-				save_scope_as = gm_sh_pick
-			}
-			if = {
-				limit = { exists = scope:gm_sh_pick }
-				gm_state_raise_orphan = yes
-			}
+	# A building that no record describes came with the merge: each orphan,
+	# landmarks first (the issue's rule: a landmark's identity wins), takes the
+	# one in its region that holds the most levels unaccounted for as its own
+	# monument, while one is unclaimed.
+	every_in_global_list = {
+		variable = gm_shadows
+		limit = {
+			gm_sh_orphan_of = { REGION = scope:gm_sh_region }
+			has_variable = gm_tr_landmark
 		}
+		add_to_temporary_list = gm_sh_raising
+	}
+	every_in_global_list = {
+		variable = gm_shadows
+		limit = {
+			gm_sh_orphan_of = { REGION = scope:gm_sh_region }
+			NOT = { has_variable = gm_tr_landmark }
+		}
+		add_to_temporary_list = gm_sh_raising
+	}
+	every_in_list = {
+		list = gm_sh_raising
+		gm_sh_try_raise = yes
 	}
 	# Every other orphan stands beside the recorded monument whose building
 	# holds the most levels its records don't account for, or is lost.
@@ -1364,6 +1364,31 @@ gm_sh_settle_region = {
 	every_in_list = {
 		list = gm_sh_left
 		gm_sh_settle_one = yes
+	}
+}
+
+# Container scope, an orphaned shadow (scope:gm_sh_region its region): raised
+# onto the unclaimed building no record describes that holds the most levels
+# unaccounted for, if there is one (not a new monument of 1 level that happens
+# to stand in another part of the region, when the merge brought a taller one).
+gm_sh_try_raise = {
+	save_scope_as = gm_sh_pick
+	clear_saved_scope = gm_sh_target
+	scope:gm_sh_region = {
+		ordered_scope_state = {
+			limit = {
+				gm_state_unrecorded = yes
+				gm_state_unexplained_levels > 0
+			}
+			order_by = gm_state_unexplained_levels
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_sh_target
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_sh_target }
+		scope:gm_sh_target = { gm_state_raise_orphan = yes }
 	}
 }
 

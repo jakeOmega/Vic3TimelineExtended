@@ -4600,7 +4600,7 @@ class MergeShadowTests(unittest.TestCase):
     an orphaned shadow, before anything reads its levels as new ones."""
 
     SHADOW_EFFECTS = ("gm_shadow_monthly", "gm_state_write_shadow", "gm_state_drop_shadow", "gm_sh_drop",
-                      "gm_state_adopt_orphans", "gm_sh_settle_region", "gm_sh_settle_one", "gm_sh_adopt_beside",
+                      "gm_state_adopt_orphans", "gm_sh_settle_region", "gm_sh_try_raise", "gm_sh_settle_one", "gm_sh_adopt_beside",
                       "gm_state_raise_orphan", "gm_sh_lost", "gm_sh_log_numbers", "gm_sh_mirror", "gm_mon_repair_origin",
                       "gm_monument_merge_self_check")
 
@@ -4765,13 +4765,22 @@ class MergeShadowTests(unittest.TestCase):
     # ---- the three outcomes ---------------------------------------------------------
     def test_a_building_nothing_records_takes_the_first_orphan_as_its_own(self):
         region = self.body("gm_sh_settle_region")
-        self.assertIn("limit = { gm_state_unrecorded = yes gm_state_unexplained_levels > 0 } "
-                      "save_scope_as = gm_sh_target", region)
-        self.assertIn("order_by = gm_sh_rank", region)
-        self.assertIn("if = { limit = { exists = scope:gm_sh_pick } gm_state_raise_orphan = yes }", region)
-        self.assertLess(region.find("gm_state_raise_orphan = yes"), region.find("gm_sh_settle_one = yes"))
-        self.assertEqual(self.body("gm_sh_rank", self.v),
-                         "value = gm_mon_levels if = { limit = { has_variable = gm_tr_landmark } add = 1000 }")
+        # Landmarks first: a landmark's identity wins a building two orphans want.
+        landmarks = region.find("gm_sh_orphan_of = { REGION = scope:gm_sh_region } has_variable = gm_tr_landmark } "
+                                "add_to_temporary_list = gm_sh_raising")
+        others = region.find("gm_sh_orphan_of = { REGION = scope:gm_sh_region } NOT = { has_variable = gm_tr_landmark } "
+                             "} add_to_temporary_list = gm_sh_raising")
+        self.assertNotEqual(landmarks, -1, region)
+        self.assertLess(landmarks, others)
+        raising = region.find("every_in_list = { list = gm_sh_raising gm_sh_try_raise = yes }")
+        self.assertLess(others, raising)
+        self.assertLess(raising, region.find("gm_sh_settle_one = yes"))
+        # The building that holds the most levels unaccounted for, not the first found.
+        try_ = self.body("gm_sh_try_raise")
+        self.assertIn("ordered_scope_state = { limit = { gm_state_unrecorded = yes gm_state_unexplained_levels > 0 } "
+                      "order_by = gm_state_unexplained_levels position = 0", try_)
+        self.assertIn("if = { limit = { exists = scope:gm_sh_target } scope:gm_sh_target = { "
+                      "gm_state_raise_orphan = yes } }", try_)
         raise_ = self.body("gm_state_raise_orphan")
         order = ["scope:gm_sh_pick = { gm_sh_adopt_beside = yes }", "scope:gm_sh_pick = { save_scope_as = gm_mon_raise }",
                  "gm_state_raise_secondary = yes", "gm_state_restore_dedication = yes", "gm_state_write_shadow = yes"]
@@ -4801,7 +4810,7 @@ class MergeShadowTests(unittest.TestCase):
                   "gm_tr_update_picture = yes"):
             self.assertIn(s, beside)
         # The levels are already in the building: no rebuild.
-        for name in ("gm_sh_adopt_beside", "gm_state_raise_orphan", "gm_sh_settle_region", "gm_sh_settle_one"):
+        for name in ("gm_sh_adopt_beside", "gm_state_raise_orphan", "gm_sh_settle_region", "gm_sh_try_raise", "gm_sh_settle_one"):
             b = self.body(name)
             for s in ("remove_building", "te_construction_market_build_specified_level", "gm_state_tr_add_levels"):
                 self.assertNotIn(s, b, name)

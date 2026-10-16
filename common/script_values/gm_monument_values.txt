@@ -253,17 +253,6 @@ gm_state_unexplained_levels = {
 	min = 0
 }
 
-# Container scope, an orphaned shadow. Which one a building that no record
-# describes takes as its own monument first (gm_sh_settle_region): a landmark,
-# then the tallest.
-gm_sh_rank = {
-	value = gm_mon_levels
-	if = {
-		limit = { has_variable = gm_tr_landmark }
-		add = 1000
-	}
-}
-
 # What the merge's log lines and self-check print (gm_sh_log_numbers): copied
 # into global variables first, as nd_log_context does, because a ScriptValue
 # read inside debug_log evaluates against ROOT and cannot see a saved scope
