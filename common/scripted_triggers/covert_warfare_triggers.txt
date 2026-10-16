@@ -379,6 +379,63 @@ covert_backlash_pro_lobby_of = {
 }
 
 # ============================================================================
+# WATCHING A CAUGHT OPERATION
+# ============================================================================
+# A caught operation goes to its target first when the target runs a covert
+# service: expose it (covert_warfare.1, as before) or let it run and watch it
+# (covert_watch_start). The record shape and the flow: covert_warfare_effects.txt,
+# § WATCHING A CAUGHT OPERATION.
+
+# True when this country can decide what to do with an operation it caught:
+# the service that would watch it, the same test covert_warfare.2's
+# "Retaliate in kind" applies. Without it a catch goes straight to the exposure.
+# Scope: country (the target of the caught operation)
+covert_can_watch = {
+	has_game_rule = covert_warfare_enabled
+	has_journal_entry = je_covert_warfare
+}
+
+# One exposure in flight per attacker. covert_warfare.1 keeps the operation it
+# is resolving on the attacker itself (iw_burned_type_code and its siblings),
+# so a second one opened before the first closes would overwrite them. True
+# from the moment an exposure is ordered (iw_expose_inflight, set by
+# covert_exposure_fire before the event is triggered, since trigger_event may
+# not run the event's immediate inside the calling effect) until the event's
+# `after` clears both. While it holds, the detection roll waits a month and
+# every other exposure of this attacker's operations waits its turn.
+# Scope: country (the attacker)
+covert_exposure_in_flight = {
+	OR = {
+		has_variable = iw_burned_type_code
+		has_variable = iw_expose_inflight
+	}
+}
+
+# True for an operation that works against its target: every type but
+# Counterintelligence Support, which protects a friend and is never rolled for
+# detection, caught or watched.
+# Scope: covert operation container
+covert_op_is_hostile = {
+	NOT = { has_tag = iw_op_counterintel_support }
+}
+
+# True for the operation a watch record stands for: run against $DEFENDER$,
+# of the type code $CODE$, and known to its target. The no-duplicate rule
+# makes (type, target) unique per operator, so this picks at most one of the
+# attacker's operations. $CODE$ is read in the operation's scope: pass a
+# number or a country-variable chain (scope:<country>.var:<staged code>),
+# never a container's own var: or PREV.
+# Parameters: $DEFENDER$ = the watching country (a scope: reference)
+#             $CODE$ = operation type code
+# Scope: covert operation container
+covert_watch_op_matches = {
+	has_variable = iw_known
+	var:iw_target ?= $DEFENDER$
+	has_variable = iw_type_code
+	var:iw_type_code = $CODE$
+}
+
+# ============================================================================
 # TRADECRAFT (slice 5)
 # ============================================================================
 # The agency-experience tiers. These four are the only place the floors are

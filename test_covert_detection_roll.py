@@ -69,7 +69,13 @@ class RollEffectTests(unittest.TestCase):
         self.assertIn("random_in_list = {", block)
         self.assertIn("save_scope_as = iw_burned_op", block)
         self.assertIn("exists = scope:iw_burned_op", block)
-        self.assertIn("trigger_event = { id = covert_warfare.1 }", block)
+        # The exposure itself goes through covert_exposure_fire, the one place
+        # that opens covert_warfare.1 (it takes the one-exposure-in-flight lock
+        # first; test_covert_watch pins the rest).
+        self.assertIn("covert_exposure_fire = yes", block)
+        fire = _top_level_block(_text(EFFECTS), "covert_exposure_fire = {")
+        self.assertIn("exists = scope:iw_burned_op", fire)
+        self.assertIn("trigger_event = { id = covert_warfare.1 }", fire)
 
     def test_roll_chance_value_reads_the_container(self):
         data = _parse(VALUES)

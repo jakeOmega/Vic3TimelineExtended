@@ -276,6 +276,36 @@ covert_ai_spare_reserves_ratio = 0.5
 # (covert_ai_can_spare_influence): above a great power's severe-tier cost of
 # 200 (a pact cost of 100, doubled for its rank), with 100 to spare.
 covert_ai_influence_floor = 300
+# ---- Watching a caught operation (starting figures, to tune in play) ----
+# Each operation a defender watches grows its network inside the attacker by
+# this much a month, as an operation of its own would but more (a busy
+# operation shows more of the other service): 4 at priority 1, x the priority
+# effect multipliers (1.35, 1.6) above it. Through covert_net_gain, so the
+# diminishing return above half strength applies, and x the defender's
+# Tradecraft (and UN host) multiplier (covert_net_watch_tick_gain). An
+# operation of one's own grows a network by 2, and a "retaliate in kind" seed
+# is 25 once, so one watched operation outgrows the seed in about six months:
+# what watching costs is the harm the operation keeps doing meanwhile.
+covert_net_watch_gain_p1 = 4
+covert_net_watch_gain_p2 = 5.4
+covert_net_watch_gain_p3 = 6.4
+# The AI defender's choice at the catch (covert_ai_watch_chance), in percent:
+# watch a mild, moderate or wartime operation at 60, a severe one at 15 (it is
+# attacking the state), 20 more when the attacker is a friend (watching keeps
+# it out of the papers); 10 flat once our network inside the attacker is this
+# strong (intelligence tier 2: little left to learn).
+covert_ai_watch_chance_base = 60
+covert_ai_watch_chance_severe = 15
+covert_ai_watch_friend_add = 20
+covert_ai_watch_chance_net_done = 10
+covert_ai_watch_net_done = 75
+# ...and each month, per watched operation, its chance of exposing it
+# (covert_ai_watch_expose_chance): 2 + 0.1 per point of network strength
+# inside the attacker, 25 once the network is done, 5 more for a severe one.
+covert_ai_watch_expose_base = 2
+covert_ai_watch_expose_per_point = 0.1
+covert_ai_watch_expose_net_done = 25
+covert_ai_watch_expose_severe_add = 5
 
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
@@ -1207,6 +1237,96 @@ covert_net_tick_gain = {
 		}
 		multiply = covert_net_cultivate_mult
 	}
+}
+
+# This month's gain from the operations the network's operator watches inside
+# its target (covert_watch_start): var:iw_net_watch_gain is summed per watched
+# operation by covert_nets_sync step 2 (covert_net_watch_gain_p1..3, by the
+# operation's priority), then multiplied by the Tradecraft and UN multipliers
+# covert_net_tick_gain applies. Not by the cultivate-assets factor, which is an
+# operation of the operator's own. Missing reads as 0 / x1.
+# Scope: network container
+covert_net_watch_tick_gain = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_net_watch_gain }
+		add = var:iw_net_watch_gain
+	}
+	if = {
+		limit = { has_variable = iw_net_tc_mult }
+		multiply = var:iw_net_tc_mult
+	}
+	if = {
+		limit = { has_variable = iw_net_un_mult }
+		multiply = var:iw_net_un_mult
+	}
+}
+
+# The AI defender's chance, in percent, of watching the operation it has just
+# caught instead of exposing it (covert_watch_ai_decide). Reads what that
+# effect stages on the defender: iw_watch_stage_code (the operation's type
+# code), iw_watch_stage_net (our network's strength inside the attacker, 0
+# without one) and iw_watch_stage_friend (1 when the attacker is a friend,
+# covert_is_friend). Figures: Section 1, "Watching a caught operation".
+# Scope: country (the defender)
+covert_ai_watch_chance = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = iw_watch_stage_net
+			var:iw_watch_stage_net >= covert_ai_watch_net_done
+		}
+		add = covert_ai_watch_chance_net_done
+	}
+	else = {
+		if = {
+			limit = { covert_code_tier_severe = { VAR = iw_watch_stage_code } }
+			add = covert_ai_watch_chance_severe
+		}
+		else = {
+			add = covert_ai_watch_chance_base
+		}
+		if = {
+			limit = {
+				has_variable = iw_watch_stage_friend
+				var:iw_watch_stage_friend = 1
+			}
+			add = covert_ai_watch_friend_add
+		}
+	}
+	min = 0
+	max = 100
+}
+
+# The AI defender's chance, in percent, of exposing a watched operation this
+# month (covert_watch_monthly). Reads the record: iw_watch_net (our network's
+# strength inside the attacker, restated just before) and iw_type_code.
+# Scope: watch record container
+covert_ai_watch_expose_chance = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = iw_watch_net
+			var:iw_watch_net >= covert_ai_watch_net_done
+		}
+		add = covert_ai_watch_expose_net_done
+	}
+	else = {
+		add = covert_ai_watch_expose_base
+		if = {
+			limit = { has_variable = iw_watch_net }
+			add = {
+				value = var:iw_watch_net
+				multiply = covert_ai_watch_expose_per_point
+			}
+		}
+	}
+	if = {
+		limit = { covert_code_tier_severe = { VAR = iw_type_code } }
+		add = covert_ai_watch_expose_severe_add
+	}
+	min = 0
+	max = 100
 }
 
 

@@ -308,6 +308,75 @@ covert_burned_type_name = {
 	}
 }
 
+# The operation covert_warfare.3 asks its target about (expose it, or watch
+# it). Same mapping as covert_burned_type_name, read from the code the event's
+# `immediate` copies onto the target, iw_caught_type_code (the event's loc
+# cannot see the container).
+covert_caught_type_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { var:iw_caught_type_code = 0 }
+		localization_key = iw_op_name_election_interference
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 1 }
+		localization_key = iw_op_name_financial_subversion
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 2 }
+		localization_key = iw_op_name_infrastructure_sabotage
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 3 }
+		localization_key = iw_op_name_comms_disruption
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 4 }
+		localization_key = iw_op_name_industrial_espionage
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 5 }
+		localization_key = iw_op_name_military_espionage
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 6 }
+		localization_key = iw_op_name_influence_campaign
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 7 }
+		localization_key = iw_op_name_ideological_subversion
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 8 }
+		localization_key = iw_op_name_destabilization
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 9 }
+		localization_key = iw_op_name_regime_change
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 10 }
+		localization_key = iw_op_name_nuclear_sabotage
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 11 }
+		localization_key = iw_op_name_space_espionage
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 12 }
+		localization_key = iw_op_name_cultivate_assets
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 13 }
+		localization_key = iw_op_name_secure_material
+	}
+	text = {
+		localization_key = iw_op_name_unknown
+	}
+}
+
 # How hostile the world considers the operation covert_warfare.1 is reporting.
 # The tier table (covert_code_tier_*) is the only place the codes are listed;
 # this just picks the word for it.

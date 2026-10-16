@@ -292,9 +292,13 @@ class CustomLocTests(unittest.TestCase):
         # The two name blocks, and the description the defender's event shows
         # on hover over the operation's name (covert_exposed_op_tt).
         body = _text(CUSTOM_LOC)
+        # covert_caught_type_name is the defender's decision event
+        # (covert_warfare.3); a friendly type is never caught, but listing it
+        # there too keeps this one table.
         for entry, var, prefix in (
             ("covert_last_exposed_type_name", "iw_last_exposed_type", "iw_op_name_"),
             ("covert_burned_type_name", "iw_burned_type_code", "iw_op_name_"),
+            ("covert_caught_type_name", "iw_caught_type_code", "iw_op_name_"),
             ("covert_last_exposed_type_desc", "iw_last_exposed_type", "iw_op_exposed_desc_"),
         ):
             with self.subTest(entry=entry):

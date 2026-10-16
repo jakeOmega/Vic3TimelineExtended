@@ -17,6 +17,10 @@
 #                              (covert_warfare_script_values.txt, slice 3 section)
 #           iw_net_head_start  whole months of head start from the target's
 #                              network, fixed at creation (slice 4)
+#           iw_known           1 while its target watches it; iw_catch_pending
+#                              while the target decides (§ WATCHING A CAUGHT
+#                              OPERATION, which also documents the target's
+#                              record containers, listed in its iw_known_ops)
 #
 # The operator keeps references in its `iw_ops` variable list. Iterate that
 # list, never every_container: the global iterator scans every container in
@@ -120,6 +124,9 @@ covert_op_create = {
 
 # Destroy the $TYPE$ operation against $TARGET$, if there is one. The
 # no-duplicate gate on every covert action keeps (type, target) unique.
+# A watched operation's record on its target goes with it, so no row of the
+# target's Known Foreign Operations outlives the operation (the direct reap in
+# covert_op_sync does the same).
 # Parameters: $TYPE$ = short name, $TARGET$ = target country
 # Scope: operator country
 covert_op_destroy = {
@@ -132,6 +139,7 @@ covert_op_destroy = {
 				var:iw_target ?= $TARGET$
 			}
 		}
+		save_scope_as = iw_ended_op_operator
 		random_in_list = {
 			variable = iw_ops
 			limit = {
@@ -139,6 +147,10 @@ covert_op_destroy = {
 				var:iw_target ?= $TARGET$
 			}
 			save_scope_as = iw_ended_op
+		}
+		if = {
+			limit = { scope:iw_ended_op ?= { has_variable = iw_known } }
+			$TARGET$ = { covert_watch_forget = { ATTACKER = scope:iw_ended_op_operator TYPE = $TYPE$ } }
 		}
 		remove_list_variable = { name = iw_ops target = scope:iw_ended_op }
 		scope:iw_ended_op = { destroy_container = yes }
@@ -808,17 +820,22 @@ covert_retaliation_seed_network = {
 # straight after covert_ops_sync_all — never from covert_ops_sync_all itself,
 # which also runs on every funding and priority click and would grow networks
 # per click.
-#   1. Ensure a network exists for every operation's target.
+#   1. Ensure a network exists for every operation's target, and inside
+#      every attacker whose operation we watch (§ WATCHING A CAUGHT OPERATION).
 #   2. Count operations per network (zero every count, then walk iw_ops once),
-#      and flag networks a cultivate-assets operation feeds (slice 6).
-#   3. Tick: grow with >= 1 operation, otherwise decay (halved at funding
-#      >= covert_net_maintain_funding_level); restate trend and display
-#      capital (the head-start offer and the intelligence tier follow every
-#      write, in covert_net_clamp), then refresh the report the tier earns
-#      (covert_net_refresh_intel, slice 7).
+#      and flag networks a cultivate-assets operation feeds (slice 6). Then sum
+#      what the operations we watch add to the network inside their attacker
+#      (iw_net_watch_gain, by each operation's priority; an operation whose
+#      exposure has been ordered adds nothing).
+#   3. Tick: grow with >= 1 operation or any watch gain, otherwise decay
+#      (halved at funding >= covert_net_maintain_funding_level); restate trend
+#      and display capital (the head-start offer and the intelligence tier
+#      follow every write, in covert_net_clamp), then refresh the report the
+#      tier earns (covert_net_refresh_intel, slice 7).
 #      Gains are multiplied by the operator's Tradecraft (iw_net_tc_mult).
-#   4. Reap networks whose target is gone, or that hit 0 with no operations:
-#      temporary list -> remove_list_variable -> destroy_container.
+#   4. Reap networks whose target is gone, or that hit 0 with no operations
+#      and nothing watched: temporary list -> remove_list_variable ->
+#      destroy_container.
 # Detection (staged inside covert_ops_sync_all) therefore reads last month's
 # strength — a one-month lag, accepted.
 # Scope: operator country
@@ -840,12 +857,26 @@ covert_nets_sync = {
 		}
 	}
 	if = {
+		limit = { has_variable_list = iw_known_ops }
+		every_in_list = {
+			variable = iw_known_ops
+			var:iw_attacker ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					save_scope_as = iw_net_ensure_tgt
+					scope:iw_net_operator = { covert_net_create = { TARGET = scope:iw_net_ensure_tgt } }
+				}
+			}
+		}
+	}
+	if = {
 		limit = { has_variable_list = iw_nets }
 		# ---- 2. Count ----
 		every_in_list = {
 			variable = iw_nets
 			set_variable = { name = iw_net_ops value = 0 }
 			set_variable = { name = iw_net_cultivating value = 0 }
+			set_variable = { name = iw_net_watch_gain value = 0 }
 		}
 		if = {
 			limit = { has_variable_list = iw_ops }
@@ -883,6 +914,65 @@ covert_nets_sync = {
 				}
 			}
 		}
+		# Watched operations: each adds covert_net_watch_gain_p<priority> to our
+		# network inside its attacker. The priority is read on the attacker's
+		# live operation (covert_watch_op_matches) and staged here, zeroed first,
+		# so a record whose operation is gone (covert_watch_monthly reaps it
+		# after this pass) adds nothing. The record's code is staged on us for
+		# the comparison inside the attacker's list, like the detection stagings.
+		if = {
+			limit = { has_variable_list = iw_known_ops }
+			every_in_list = {
+				variable = iw_known_ops
+				limit = { NOT = { has_variable = iw_expose_ordered } }
+				scope:iw_net_operator = {
+					set_variable = { name = iw_watch_code_staging value = PREV.var:iw_type_code }
+					set_variable = { name = iw_watch_gain_staging value = 0 }
+				}
+				var:iw_attacker ?= {
+					save_scope_as = iw_net_watch_tgt
+					if = {
+						limit = { has_variable_list = iw_ops }
+						random_in_list = {
+							variable = iw_ops
+							limit = { covert_watch_op_matches = { DEFENDER = scope:iw_net_operator CODE = scope:iw_net_operator.var:iw_watch_code_staging } }
+							if = {
+								limit = { covert_op_priority_at_least = { N = 3 } }
+								scope:iw_net_operator = { set_variable = { name = iw_watch_gain_staging value = covert_net_watch_gain_p3 } }
+							}
+							else_if = {
+								limit = { covert_op_priority_at_least = { N = 2 } }
+								scope:iw_net_operator = { set_variable = { name = iw_watch_gain_staging value = covert_net_watch_gain_p2 } }
+							}
+							else = {
+								scope:iw_net_operator = { set_variable = { name = iw_watch_gain_staging value = covert_net_watch_gain_p1 } }
+							}
+						}
+					}
+					scope:iw_net_operator = {
+						random_in_list = {
+							variable = iw_nets
+							limit = { var:iw_target ?= scope:iw_net_watch_tgt }
+							set_variable = {
+								name = iw_net_watch_gain
+								value = {
+									value = var:iw_net_watch_gain
+									add = scope:iw_net_operator.var:iw_watch_gain_staging
+								}
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = { has_variable = iw_watch_code_staging }
+				remove_variable = iw_watch_code_staging
+			}
+			if = {
+				limit = { has_variable = iw_watch_gain_staging }
+				remove_variable = iw_watch_gain_staging
+			}
+		}
 		# ---- 3. Tick ----
 		every_in_list = {
 			variable = iw_nets
@@ -913,9 +1003,22 @@ covert_nets_sync = {
 				limit = { has_variable = iw_net_un_mult }
 				remove_variable = iw_net_un_mult
 			}
+			# A watched operation keeps the network active, as one of our own does.
 			if = {
-				limit = { var:iw_net_ops >= 1 }
-				covert_net_gain = { AMOUNT = covert_net_tick_gain }
+				limit = {
+					OR = {
+						var:iw_net_ops >= 1
+						var:iw_net_watch_gain > 0
+					}
+				}
+				if = {
+					limit = { var:iw_net_ops >= 1 }
+					covert_net_gain = { AMOUNT = covert_net_tick_gain }
+				}
+				if = {
+					limit = { var:iw_net_watch_gain > 0 }
+					covert_net_gain = { AMOUNT = covert_net_watch_tick_gain }
+				}
 				if = {
 					limit = { var:iw_net_strength >= covert_net_max }
 					set_variable = { name = iw_net_trend value = 0 }
@@ -958,6 +1061,7 @@ covert_nets_sync = {
 					AND = {
 						var:iw_net_ops < 1
 						var:iw_net_strength <= 0
+						var:iw_net_watch_gain <= 0
 					}
 				}
 			}
@@ -1214,6 +1318,11 @@ covert_op_sync = {
 		}
 		every_in_list = {
 			list = iw_ended_ops_$TYPE$
+			# A watched operation's record goes with it (see covert_op_destroy).
+			if = {
+				limit = { has_variable = iw_known }
+				var:iw_target ?= { covert_watch_forget = { ATTACKER = scope:iw_operator TYPE = $TYPE$ } }
+			}
 			scope:iw_operator = { remove_list_variable = { name = iw_ops target = PREV } }
 			destroy_container = yes
 		}
@@ -1610,12 +1719,46 @@ covert_ops_apply_all_phase_effects = {
 # The burned operation reaches covert_warfare.1 as scope:iw_burned_op (saved
 # scopes survive trigger_event). The event reads it in `immediate` only.
 #
+# Not rolled: an operation its target already watches (iw_known: it is known,
+# so it is not caught again), one whose target is still deciding
+# (iw_catch_pending, while covert_warfare.3 is open), and a friendly one
+# (covert_op_is_hostile). Nothing at all is rolled while an exposure of this
+# attacker is in flight (covert_exposure_in_flight): the catch waits a month
+# rather than open a second covert_warfare.1.
+#
+# The catch then goes to its target first (§ WATCHING A CAUGHT OPERATION):
+#   - target with a covert service (covert_can_watch), a player: the operation
+#     is marked pending and covert_warfare.3 asks the target, expose or watch;
+#   - the same, an AI: covert_watch_ai_decide watches it by chance, and if it
+#     did not, the operation is exposed at once;
+#   - target without a service: exposed at once, the flow from before watching.
+# Exposed = covert_exposure_fire, which opens covert_warfare.1 here.
+# The attacker is saved as scope:iw_catcher_attacker for all of them: the
+# operation carries no operator, and covert_warfare.3 runs on the target.
+#
 # Scope: country (the journal entry pulse runs here). Caller gates on funding.
 covert_ops_roll_detection_all = {
 	if = {
-		limit = { has_variable_list = iw_ops }
+		limit = {
+			has_variable_list = iw_ops
+			NOT = { covert_exposure_in_flight = yes }
+		}
+		save_scope_as = iw_catcher_attacker
+		if = {
+			limit = { exists = scope:iw_burned_op }
+			clear_saved_scope = iw_burned_op
+		}
+		if = {
+			limit = { exists = scope:iw_catch_target }
+			clear_saved_scope = iw_catch_target
+		}
 		every_in_list = {
 			variable = iw_ops
+			limit = {
+				covert_op_is_hostile = yes
+				NOT = { has_variable = iw_known }
+				NOT = { has_variable = iw_catch_pending }
+			}
 			random = {
 				chance = covert_op_roll_chance
 				add_to_temporary_list = iw_detected_ops
@@ -1627,7 +1770,563 @@ covert_ops_roll_detection_all = {
 		}
 		if = {
 			limit = { exists = scope:iw_burned_op }
-			trigger_event = { id = covert_warfare.1 }
+			scope:iw_burned_op = {
+				var:iw_target ?= { save_scope_as = iw_catch_target }
+			}
+			if = {
+				limit = {
+					exists = scope:iw_catch_target
+					scope:iw_catch_target = { covert_can_watch = yes }
+				}
+				if = {
+					limit = { scope:iw_catch_target = { is_player = no } }
+					scope:iw_catch_target = { covert_watch_ai_decide = yes }
+					if = {
+						limit = { scope:iw_burned_op = { NOT = { has_variable = iw_known } } }
+						covert_exposure_fire = yes
+					}
+				}
+				else = {
+					scope:iw_burned_op = { set_variable = { name = iw_catch_pending value = 1 } }
+					scope:iw_catch_target = { trigger_event = { id = covert_warfare.3 } }
+				}
+			}
+			else = {
+				covert_exposure_fire = yes
+			}
+		}
+	}
+}
+
+# ============================================================================
+# WATCHING A CAUGHT OPERATION
+# ============================================================================
+# A target with a covert service (covert_can_watch) decides what to do with an
+# operation it catches: expose it (covert_warfare.1 on the attacker, as before)
+# or let it run and watch it. A watched operation keeps doing its harm at full
+# strength, the attacker is told nothing, and the target's network inside the
+# attacker grows each month while it runs (covert_nets_sync). The target can
+# expose it at any time (the Known Foreign Operations panel orders
+# covert_warfare.4; an AI rolls monthly in covert_watch_monthly).
+#
+# The flow:
+#   covert_ops_roll_detection_all (attacker's pulse; scope:iw_burned_op,
+#   scope:iw_catcher_attacker)
+#     - player target with a service: iw_catch_pending on the operation,
+#       covert_warfare.3 on the target
+#         .a Expose -> covert_exposure_fire on the attacker -> covert_warfare.1
+#            (attacker locked: watch with the exposure ordered, covert_warfare.4
+#            in four days)
+#         .b Let it run -> covert_watch_start
+#     - AI target with a service: covert_watch_ai_decide (watch by chance),
+#       else covert_exposure_fire -> covert_warfare.1
+#     - target without a service: covert_exposure_fire -> covert_warfare.1
+#   later: iw_expose_ordered on a record -> covert_warfare.4 (the panel) or
+#   covert_watch_monthly (a retry, or the AI's roll) -> covert_watch_expose_record
+#   -> covert_exposure_fire on the attacker -> covert_warfare.1, whose `after`
+#   burns the operation; covert_op_destroy then forgets the record.
+#
+# On the OPERATION container (the attacker's, never read through `parent`):
+#   iw_known          1 while its target watches it. The roll skips it.
+#   iw_catch_pending  set to 1 at the roll while covert_warfare.3 is open; the
+#                     roll skips it. covert_warfare.3's `after` clears it;
+#                     covert_watch_attacker_monthly clears one left a month.
+# On the ATTACKER:
+#   iw_expose_inflight  the one-exposure-in-flight lock (covert_exposure_in_flight),
+#                       from covert_exposure_fire to covert_warfare.1's `after`.
+#
+# On the TARGET, one RECORD container per watched operation:
+#
+#   tags    iw_known_rec, iw_known_<TYPE>
+#   parent  the target (the watching country)
+#   vars    iw_attacker          the operation's operator (country)
+#           iw_attacker_capital  its capital state (display chain, as on operations)
+#           iw_type_code         the operation's type code
+#           iw_watch_months      months watched
+#           iw_watch_net         our network's strength inside the attacker,
+#                                restated monthly (display; the AI's expose chance)
+#           iw_expose_ordered    1 once an exposure is ordered (by the panel's
+#                                Expose, covert_warfare.3's Expose while the
+#                                attacker was locked, or the AI); it waits while
+#                                the attacker is locked
+#           iw_expose_sent       1 once covert_warfare.1 has been opened for it
+#
+# listed in the target's `iw_known_ops`. A record names its operation by
+# (attacker, type), not by a reference to the attacker's container: the
+# no-duplicate rule makes the pair unique per operator, and the live operation
+# is the one covert_watch_op_matches finds in the attacker's iw_ops. A
+# relaunch of the same type carries no iw_known, so an old record never adopts
+# it. Every path that destroys an operation forgets its record
+# (covert_op_destroy, covert_op_sync's reap); covert_watch_monthly reaps any
+# left over. Old saves: every read of iw_known_ops behind has_variable_list.
+# A revolution's winner inherits neither the list nor the containers, so a
+# government that falls loses what it watched (owner's call, 2026-10-16);
+# covert_watch_attacker_monthly then makes those operations catchable again.
+
+# Open covert_warfare.1 on this attacker for the operation in scope:iw_burned_op,
+# taking the one-exposure-in-flight lock first. THE one place covert_warfare.1
+# is triggered: the roll, the AI's catch, the target's decision and every later
+# exposure of a watched operation come through here, so every exposure pays the
+# backlash, infamy and Tradecraft loss the event resolves. The lock is set
+# before the event is triggered: trigger_event may not run the event's
+# immediate (which copies iw_burned_type_code, the lock's other half) inside
+# the calling effect. Callers check the lock and choose what to do when it is
+# held; this only refuses.
+# Scope: the attacker (the operation's operator); scope:iw_burned_op = the operation
+covert_exposure_fire = {
+	if = {
+		limit = {
+			NOT = { covert_exposure_in_flight = yes }
+			exists = scope:iw_burned_op
+		}
+		set_variable = { name = iw_expose_inflight value = 1 }
+		trigger_event = { id = covert_warfare.1 }
+	}
+}
+
+# An AI target's decision at the catch: watch the operation with
+# covert_ai_watch_chance, else leave it to the roll, which exposes it when it
+# finds no iw_known afterwards. The chance reads three values staged here on
+# the target, removed afterwards: the operation's type code, our network's
+# strength inside the attacker (zeroed first, written inside the lookup) and
+# whether the attacker is a friend.
+# Scope: the target (an AI with a covert service); scope:iw_burned_op = the
+#        caught operation, scope:iw_catcher_attacker = its operator
+covert_watch_ai_decide = {
+	save_scope_as = iw_watch_ai_defender
+	scope:iw_burned_op = {
+		scope:iw_watch_ai_defender = { set_variable = { name = iw_watch_stage_code value = PREV.var:iw_type_code } }
+	}
+	set_variable = { name = iw_watch_stage_net value = 0 }
+	if = {
+		limit = { has_variable_list = iw_nets }
+		random_in_list = {
+			variable = iw_nets
+			limit = { var:iw_target ?= scope:iw_catcher_attacker }
+			scope:iw_watch_ai_defender = { set_variable = { name = iw_watch_stage_net value = PREV.var:iw_net_strength } }
+		}
+	}
+	if = {
+		limit = { covert_is_friend = { TARGET = scope:iw_catcher_attacker } }
+		set_variable = { name = iw_watch_stage_friend value = 1 }
+	}
+	else = {
+		set_variable = { name = iw_watch_stage_friend value = 0 }
+	}
+	random = {
+		chance = covert_ai_watch_chance
+		scope:iw_burned_op = { save_scope_as = iw_caught_op }
+		covert_watch_start = yes
+	}
+	remove_variable = iw_watch_stage_code
+	remove_variable = iw_watch_stage_net
+	remove_variable = iw_watch_stage_friend
+}
+
+# Let it run: mark the operation known to its target, make sure the target has
+# a network inside the attacker for it to feed, and record it (one record per
+# watched operation; the tag carries the type, which create_container needs as
+# a literal, hence one branch per hostile type). The attacker is told nothing.
+# Clears the pending mark covert_warfare.3 holds. Leaves scope:iw_new_rec on
+# the new record, cleared first so a failed create leaves it unset rather than
+# the previous record.
+# Scope: the target (the watching country); scope:iw_caught_op = the operation,
+#        scope:iw_catcher_attacker = its operator
+covert_watch_start = {
+	save_scope_as = iw_watch_defender
+	if = {
+		limit = { exists = scope:iw_new_rec }
+		clear_saved_scope = iw_new_rec
+	}
+	if = {
+		limit = {
+			exists = scope:iw_caught_op
+			exists = scope:iw_catcher_attacker
+		}
+		scope:iw_caught_op = {
+			set_variable = { name = iw_known value = 1 }
+			if = {
+				limit = { has_variable = iw_catch_pending }
+				remove_variable = iw_catch_pending
+			}
+		}
+		# Before the record, which reads the network's strength.
+		covert_net_create = { TARGET = scope:iw_catcher_attacker }
+		if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_election_interference } }
+			covert_watch_record_create = { TYPE = election_interference }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_financial_subversion } }
+			covert_watch_record_create = { TYPE = financial_subversion }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_infrastructure_sabotage } }
+			covert_watch_record_create = { TYPE = infrastructure_sabotage }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_comms_disruption } }
+			covert_watch_record_create = { TYPE = comms_disruption }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_industrial_espionage } }
+			covert_watch_record_create = { TYPE = industrial_espionage }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_military_espionage } }
+			covert_watch_record_create = { TYPE = military_espionage }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_influence_campaign } }
+			covert_watch_record_create = { TYPE = influence_campaign }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_ideological_subversion } }
+			covert_watch_record_create = { TYPE = ideological_subversion }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_destabilization } }
+			covert_watch_record_create = { TYPE = destabilization }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_regime_change } }
+			covert_watch_record_create = { TYPE = regime_change }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_nuclear_sabotage } }
+			covert_watch_record_create = { TYPE = nuclear_sabotage }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_space_espionage } }
+			covert_watch_record_create = { TYPE = space_espionage }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_cultivate_assets } }
+			covert_watch_record_create = { TYPE = cultivate_assets }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_secure_material } }
+			covert_watch_record_create = { TYPE = secure_material }
+		}
+	}
+}
+
+# Record the operation in scope:iw_caught_op on the target, replacing any older
+# record of the same (attacker, type). Only covert_watch_start's dispatch calls
+# it. Guarded on the new container (rule 6: an option's tooltip render walks
+# this without creating anything).
+# Parameters: $TYPE$ = short name
+# Scope: the target; scope:iw_watch_defender = the same,
+#        scope:iw_caught_op, scope:iw_catcher_attacker
+covert_watch_record_create = {
+	covert_watch_forget = { ATTACKER = scope:iw_catcher_attacker TYPE = $TYPE$ }
+	create_container = {
+		tags = { iw_known_rec iw_known_$TYPE$ }
+		parent = scope:iw_watch_defender
+		save_scope_as = iw_new_rec
+	}
+	if = {
+		limit = { exists = scope:iw_new_rec }
+		scope:iw_new_rec = {
+			set_variable = { name = iw_attacker value = scope:iw_catcher_attacker }
+			set_variable = { name = iw_watch_months value = 0 }
+			set_variable = { name = iw_watch_net value = 0 }
+		}
+		scope:iw_caught_op = {
+			scope:iw_new_rec = { set_variable = { name = iw_type_code value = PREV.var:iw_type_code } }
+		}
+		scope:iw_catcher_attacker = {
+			capital ?= {
+				scope:iw_new_rec = { set_variable = { name = iw_attacker_capital value = PREV } }
+			}
+		}
+		if = {
+			limit = { has_variable_list = iw_nets }
+			random_in_list = {
+				variable = iw_nets
+				limit = { var:iw_target ?= scope:iw_catcher_attacker }
+				scope:iw_new_rec = { set_variable = { name = iw_watch_net value = PREV.var:iw_net_strength } }
+			}
+		}
+		add_to_variable_list = { name = iw_known_ops target = scope:iw_new_rec }
+	}
+}
+
+# Forget the record of $ATTACKER$'s $TYPE$ operation against us: wherever that
+# operation's container is destroyed (covert_op_destroy, covert_op_sync's
+# reap), and before a new record of the same pair is made. Records are unique
+# per (attacker, type), so one pick is enough; the any_in_list guard makes it
+# fresh. Remove from the list before destroying (rule 2).
+# Parameters: $ATTACKER$ = the operation's operator (a scope: reference)
+#             $TYPE$ = short name
+# Scope: the operation's target (the watching country)
+covert_watch_forget = {
+	if = {
+		limit = {
+			has_variable_list = iw_known_ops
+			any_in_list = {
+				variable = iw_known_ops
+				has_tag = iw_known_$TYPE$
+				var:iw_attacker ?= $ATTACKER$
+			}
+		}
+		random_in_list = {
+			variable = iw_known_ops
+			limit = {
+				has_tag = iw_known_$TYPE$
+				var:iw_attacker ?= $ATTACKER$
+			}
+			save_scope_as = iw_forget_rec
+		}
+		remove_list_variable = { name = iw_known_ops target = scope:iw_forget_rec }
+		scope:iw_forget_rec = { destroy_container = yes }
+	}
+}
+
+# Expose the watched operation a record stands for, through covert_warfare.1
+# on its attacker like every exposure. Sets iw_expose_ordered: while an
+# exposure of that attacker is in flight the record waits, and the next
+# covert_warfare.4 or monthly pass tries again. Once the event is opened the
+# record also carries iw_expose_sent; covert_warfare.1 burns the operation and
+# covert_op_destroy forgets the record. A record whose operation or attacker
+# is gone is forgotten here. The lookup opens the event from inside the
+# random_in_list, so a miss opens nothing; the record's code is staged on us
+# for the comparison inside the attacker's list.
+# Callers walk a temporary list, never iw_known_ops itself: this can remove a
+# record from it.
+# Scope: the target (the watching country); scope:iw_expose_rec = one of its records
+covert_watch_expose_record = {
+	save_scope_as = iw_expose_defender
+	if = {
+		limit = { exists = scope:iw_expose_rec }
+		scope:iw_expose_rec = {
+			scope:iw_expose_defender = { set_variable = { name = iw_expose_code_staging value = PREV.var:iw_type_code } }
+		}
+		if = {
+			limit = {
+				scope:iw_expose_rec = {
+					var:iw_attacker ?= {
+						is_country_alive = yes
+						has_variable_list = iw_ops
+						any_in_list = {
+							variable = iw_ops
+							covert_watch_op_matches = { DEFENDER = scope:iw_expose_defender CODE = scope:iw_expose_defender.var:iw_expose_code_staging }
+						}
+					}
+				}
+			}
+			scope:iw_expose_rec = {
+				set_variable = { name = iw_expose_ordered value = 1 }
+				var:iw_attacker = {
+					save_scope_as = iw_expose_attacker
+					if = {
+						limit = { NOT = { covert_exposure_in_flight = yes } }
+						random_in_list = {
+							variable = iw_ops
+							limit = { covert_watch_op_matches = { DEFENDER = scope:iw_expose_defender CODE = scope:iw_expose_defender.var:iw_expose_code_staging } }
+							save_scope_as = iw_burned_op
+							scope:iw_expose_rec = { set_variable = { name = iw_expose_sent value = 1 } }
+							scope:iw_expose_attacker = { covert_exposure_fire = yes }
+						}
+					}
+				}
+			}
+		}
+		else = {
+			remove_list_variable = { name = iw_known_ops target = scope:iw_expose_rec }
+			scope:iw_expose_rec = { destroy_container = yes }
+		}
+		remove_variable = iw_expose_code_staging
+	}
+}
+
+# The target's side of watching, once a month from je_covert_warfare's pulse,
+# straight after covert_nets_sync (which has just counted the records towards
+# its networks; growth has no other clock):
+#   1. Reap records whose attacker or operation is gone (the destroy hooks
+#      forget them first; this is the backstop for the engine culling a dead
+#      attacker's containers).
+#   2. Age the rest (iw_watch_months) and restate what the row shows: the
+#      attacker's capital and our network's strength inside the attacker.
+#   3. Exposures ordered and still waiting: try again. One already sent whose
+#      operation is still alive and whose attacker is no longer locked means
+#      covert_warfare.1 never ran: say so once a game, then try again.
+#   4. An AI exposes each watched operation with covert_ai_watch_expose_chance
+#      (is_player = no: a choice, like covert_ai_manage_priorities).
+# Scope: the target (the watching country)
+covert_watch_monthly = {
+	save_scope_as = iw_watch_defender
+	if = {
+		limit = { has_variable_list = iw_known_ops }
+		# ---- 1. Reap ----
+		every_in_list = {
+			variable = iw_known_ops
+			scope:iw_watch_defender = { set_variable = { name = iw_watch_code_staging value = PREV.var:iw_type_code } }
+			if = {
+				limit = {
+					NOT = {
+						var:iw_attacker ?= {
+							is_country_alive = yes
+							has_variable_list = iw_ops
+							any_in_list = {
+								variable = iw_ops
+								covert_watch_op_matches = { DEFENDER = scope:iw_watch_defender CODE = scope:iw_watch_defender.var:iw_watch_code_staging }
+							}
+						}
+					}
+				}
+				add_to_temporary_list = iw_watch_dead_recs
+			}
+		}
+		every_in_list = {
+			list = iw_watch_dead_recs
+			scope:iw_watch_defender = { remove_list_variable = { name = iw_known_ops target = PREV } }
+			destroy_container = yes
+		}
+		if = {
+			limit = { has_variable = iw_watch_code_staging }
+			remove_variable = iw_watch_code_staging
+		}
+		# ---- 2. Age and restate ----
+		every_in_list = {
+			variable = iw_known_ops
+			save_scope_as = iw_watch_rec
+			change_variable = { name = iw_watch_months add = 1 }
+			set_variable = { name = iw_watch_net value = 0 }
+			var:iw_attacker ?= {
+				save_scope_as = iw_watch_rec_attacker
+				capital ?= {
+					scope:iw_watch_rec = { set_variable = { name = iw_attacker_capital value = PREV } }
+				}
+				scope:iw_watch_defender = {
+					if = {
+						limit = { has_variable_list = iw_nets }
+						random_in_list = {
+							variable = iw_nets
+							limit = { var:iw_target ?= scope:iw_watch_rec_attacker }
+							scope:iw_watch_rec = { set_variable = { name = iw_watch_net value = PREV.var:iw_net_strength } }
+						}
+					}
+				}
+			}
+		}
+		# ---- 3. Waiting exposures ----
+		every_in_list = {
+			variable = iw_known_ops
+			limit = { has_variable = iw_expose_ordered }
+			add_to_temporary_list = iw_watch_orders
+		}
+		every_in_list = {
+			list = iw_watch_orders
+			if = {
+				limit = {
+					has_variable = iw_expose_sent
+					NOT = { has_global_variable = te_selfcheck_covert_watch_broken }
+					var:iw_attacker ?= { NOT = { covert_exposure_in_flight = yes } }
+				}
+				set_global_variable = { name = te_selfcheck_covert_watch_broken value = yes }
+				scope:iw_watch_defender = {
+					debug_log = "TE_SELF_CHECK BROKEN covert_watch_expose target=[THIS.GetCountry.GetTagName] (an exposure of a watched operation was sent a month ago, its operation still runs and its attacker is no longer locked: covert_warfare.1 never ran on the attacker, so a saved scope did not cross from the target to the attacker; take the fallback in docs/testing/covert-counterintel-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+			save_scope_as = iw_expose_rec
+			scope:iw_watch_defender = { covert_watch_expose_record = yes }
+		}
+		# ---- 4. The AI's exposures ----
+		if = {
+			limit = { is_player = no }
+			every_in_list = {
+				variable = iw_known_ops
+				limit = { NOT = { has_variable = iw_expose_ordered } }
+				add_to_temporary_list = iw_watch_ai_pool
+			}
+			every_in_list = {
+				list = iw_watch_ai_pool
+				random = {
+					chance = covert_ai_watch_expose_chance
+					save_scope_as = iw_expose_rec
+					scope:iw_watch_defender = { covert_watch_expose_record = yes }
+				}
+			}
+		}
+	}
+}
+
+# The attacker's side of watching, once a month from je_covert_warfare's
+# pulse, before the detection roll. Three watchdogs, each for an event that
+# should have run and did not:
+#   1. The exposure lock (iw_expose_inflight): set by covert_exposure_fire and
+#      cleared by covert_warfare.1's `after`. While no covert_warfare.1 is open
+#      (no iw_burned_type_code) it counts the passes and goes at the second:
+#      not the first, because an exposure the target ordered earlier the same
+#      day may not have opened its event yet.
+#   2. A pending decision (iw_catch_pending, 1 from the roll): covert_warfare.3
+#      clears it within its three days. Still there a month later, the event
+#      never ran (it needs the scopes the roll saved to reach the target):
+#      clear it, so the operation can be caught again, and say so once a game.
+#   3. An operation known to its target (iw_known) whose target holds no record
+#      of it (a government overthrown by revolution loses its lists): it is no
+#      longer watched, so it can be caught again.
+# Scope: the attacker
+covert_watch_attacker_monthly = {
+	save_scope_as = iw_watch_attacker
+	# ---- 1. The exposure lock ----
+	if = {
+		limit = {
+			has_variable = iw_expose_inflight
+			NOT = { has_variable = iw_burned_type_code }
+		}
+		if = {
+			limit = { var:iw_expose_inflight >= 2 }
+			remove_variable = iw_expose_inflight
+		}
+		else = {
+			change_variable = { name = iw_expose_inflight add = 1 }
+		}
+	}
+	if = {
+		limit = { has_variable_list = iw_ops }
+		# ---- 2. Pending decisions ----
+		every_in_list = {
+			variable = iw_ops
+			limit = { has_variable = iw_catch_pending }
+			change_variable = { name = iw_catch_pending add = 1 }
+			if = {
+				limit = { var:iw_catch_pending >= 2 }
+				remove_variable = iw_catch_pending
+				if = {
+					limit = { NOT = { has_global_variable = te_selfcheck_covert_catch_broken } }
+					set_global_variable = { name = te_selfcheck_covert_catch_broken value = yes }
+					scope:iw_watch_attacker = {
+						debug_log = "TE_SELF_CHECK BROKEN covert_catch_decision attacker=[THIS.GetCountry.GetTagName] (a caught operation waited a month for its target's decision: covert_warfare.3 never ran, so the scopes the roll saved did not reach the target; take the fallback in docs/testing/covert-counterintel-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
+			}
+		}
+		# ---- 3. Known without a record ----
+		every_in_list = {
+			variable = iw_ops
+			limit = { has_variable = iw_known }
+			scope:iw_watch_attacker = { set_variable = { name = iw_known_code_staging value = PREV.var:iw_type_code } }
+			if = {
+				limit = {
+					NOT = {
+						var:iw_target ?= {
+							has_variable_list = iw_known_ops
+							any_in_list = {
+								variable = iw_known_ops
+								var:iw_attacker ?= scope:iw_watch_attacker
+								var:iw_type_code = scope:iw_watch_attacker.var:iw_known_code_staging
+							}
+						}
+					}
+				}
+				remove_variable = iw_known
+			}
+		}
+		if = {
+			limit = { has_variable = iw_known_code_staging }
+			remove_variable = iw_known_code_staging
 		}
 	}
 }
