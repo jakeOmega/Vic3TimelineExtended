@@ -112,7 +112,7 @@ def _holds(key, op, value, world, side):
         results = [_holds(k, o, v, world, side) for k, o, v in value]
         return any(results) if key == "OR" else all(results)
     if side == "self":
-        if key == "T.relations:root" and op == ">=" and value in THRESHOLDS:
+        if key == "T.relations:this" and op == ">=" and value in THRESHOLDS:
             return world["relations"] >= THRESHOLDS[value]
         if key == "has_treaty_alliance_with" and value == [("TARGET", "=", "T")]:
             return world["alliance"]

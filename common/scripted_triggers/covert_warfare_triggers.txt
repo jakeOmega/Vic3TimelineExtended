@@ -72,15 +72,17 @@ covert_action_valid_target = {
 # `is_subject_of` also counts a subject's subject. It has no mirror, so the
 # overlord direction enters $TARGET$ and reads PREV (the country in scope).
 # Relations are symmetric, so the answer is the same from either side.
-# Relations are read as $TARGET$.relations:root, as the other covert gates do,
-# so ROOT must be the country in scope: the actor of a diplomatic action, or
-# a caller that has re-entered it with `root = { }`.
+# Relations are read as $TARGET$.relations:this: the link's argument resolves
+# in the scope the chain starts from (vanilla 12_military_assistance.txt,
+# `scope:source_country.relations:this` inside an enemy iterator), so the
+# trigger works from any country, not only ROOT. The backlash reads it from
+# the defender's side with ROOT the attacker.
 # Parameters: $TARGET$ = country (a scope: reference)
 # Scope: country
 covert_is_friend = {
 	OR = {
 		AND = {
-			$TARGET$.relations:root >= relations_threshold:cordial
+			$TARGET$.relations:this >= relations_threshold:cordial
 			OR = {
 				has_treaty_alliance_with = { TARGET = $TARGET$ }
 				has_treaty_defensive_pact_with = { TARGET = $TARGET$ }
@@ -92,7 +94,7 @@ covert_is_friend = {
 				$TARGET$ = { is_subject_of = PREV }
 			}
 		}
-		$TARGET$.relations:root >= relations_threshold:amicable
+		$TARGET$.relations:this >= relations_threshold:amicable
 	}
 }
 
