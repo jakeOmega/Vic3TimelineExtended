@@ -3107,6 +3107,41 @@ PICTURES = {
     1000049: ("landmark_xanthos", "rock_cut", None),
     1000050: ("landmark_mesha_stele", "stele", None),
     1000051: ("landmark_arch_of_ctesiphon", "arch", None),
+    1000052: ("landmark_nineveh_library", "hall", None),
+    1000053: ("landmark_winged_victory_of_samothrace", "statue", None),
+    1000054: ("landmark_vindolanda_tablets", "hall", None),
+    1000055: ("landmark_troy_hisarlik", "gate", None),
+    1000056: ("landmark_mycenae_grave_circle", "mausoleum", None),
+    1000057: ("landmark_pergamon_altar", "pantheon", None),
+    1000058: ("landmark_deir_el_bahari_cache", "rock_cut", None),
+    1000059: ("landmark_ishtar_gate_babylon", "gate", None),
+    1000060: ("landmark_palace_of_knossos", "hall", None),
+    1000061: ("landmark_antikythera_mechanism", "statue", None),
+    1000062: ("landmark_oseberg_ship", "statue", None),
+    1000063: ("landmark_machu_picchu", "gate", None),
+    1000064: ("landmark_bust_of_nefertiti", "statue", None),
+    1000065: ("landmark_mohenjo_daro", "forum", None),
+    1000066: ("landmark_tomb_of_tutankhamun", "mausoleum", None),
+    1000067: ("landmark_royal_cemetery_at_ur", "mausoleum", None),
+    1000068: ("landmark_sanxingdui_pits", "hall", None),
+    1000069: ("landmark_sutton_hoo", "mausoleum", None),
+    1000070: ("landmark_lascaux_caves", "rock_cut", None),
+    1000071: ("landmark_nag_hammadi_library", "stele", None),
+    1000072: ("landmark_dead_sea_scrolls", "stele", None),
+    1000073: ("landmark_tomb_of_pakal", "pyramid", None),
+    1000074: ("landmark_mawangdui_tombs", "mausoleum", None),
+    1000075: ("landmark_terracotta_army", "mausoleum", None),
+    1000076: ("landmark_tomb_of_philip_ii", "mausoleum", None),
+    1000077: ("landmark_tomb_of_marquis_yi", "hall", None),
+    1000078: ("landmark_royal_tombs_of_sipan", "pyramid", None),
+    1000079: ("landmark_otzi_the_iceman", "statue", None),
+    1000080: ("landmark_caral_supe", "pyramid", None),
+    1000081: ("landmark_gobekli_tepe", "colonnade", None),
+    1000082: ("landmark_olympia", "pantheon", None),
+    1000083: ("landmark_delphi", "stoa", None),
+    1000084: ("landmark_sidon_necropolis", "mausoleum", None),
+    1000085: ("landmark_villa_of_the_papyri", "hall", None),
+    1000086: ("landmark_tomb_of_alexander", "mausoleum", None),
 }
 # Codes of pairs no monument can reach any more (a retired form or style).
 RETIRED_PICTURES = set()
@@ -3150,7 +3185,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_picture_from_look"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 130)
+        self.assertEqual(len(PICTURES), 165)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():
