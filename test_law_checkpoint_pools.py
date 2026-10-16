@@ -6,14 +6,19 @@ event with its checkpoint: advance, debate or stall. A stall is a checkpoint the
 law lost, so a stall event whose options push the law turns the opposition's
 roll into a bonus. Fourteen events from before issue #81 sat in the stall pool
 that way (The Automation Question gave +10% or +2% success on a "stall"),
-beside the stall events #81 wrote for the same laws. What these checks pin:
+beside the stall events #81 wrote for the same laws. Every debate option pushed
+the law too, so any checkpoint short of a stall helped it; since 2026-10-16
+each debate offers a concession that slows the law in return for a benefit.
+What these checks pin:
 
 - every option of a stall-pool event slows the law (an enactment setback or a
   modifier with negative country_law_enactment_success_add) and none pushes it;
 - no option of an advance-pool event slows the law;
+- every debate-pool event has an option that pushes the law and one that
+  slows it;
+- no event sits in two pools, whose rules exclude each other;
 - every event a pool names exists.
 
-Debate events may push the law by different amounts, so they are not checked.
 No game install needed.
 """
 
@@ -127,6 +132,21 @@ class LawCheckpointPoolTests(unittest.TestCase):
                 _, slows = self._push_and_slow(effects)
                 with self.subTest(event=event, option=name):
                     self.assertFalse(slows, f"{event} option {name} slows the law: {effects}")
+
+    def test_debate_events_offer_a_push_and_a_concession(self):
+        for event in self.pools["debate"]:
+            shapes = [self._push_and_slow(effects) for _, effects in self._options(event)]
+            with self.subTest(event=event):
+                self.assertIn((True, False), shapes, f"{event} has no option that pushes the law")
+                self.assertIn((False, True), shapes, f"{event} has no option that slows the law")
+
+    def test_each_event_sits_in_one_pool(self):
+        seen = {}
+        for checkpoint, pool in self.pools.items():
+            for event in pool:
+                with self.subTest(event=event):
+                    self.assertNotIn(event, seen, f"{event} is in the {seen.get(event)} and {checkpoint} pools")
+                seen[event] = checkpoint
 
     def test_the_automation_question_is_a_debate(self):
         self.assertIn("extra_law_events.22", self.pools["debate"])

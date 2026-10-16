@@ -386,6 +386,13 @@ banking scare that helps financial reform or a new ministry struggling to find
 staff. Several offer an amendment as the price of passage (see [Amendments to
 the mod's laws](#amendments-to-the-mods-laws)).
 
+The checkpoint decides what the choices can do. At an advance, every choice
+helps the law. At a debate, one choice pushes the law and another gives ground
+to its critics: the law loses 5% enactment success, and you gain something in
+return, such as an interest group's approval or a few loyalists.
+Turning an amendment down is that kind of choice. At a stall, every choice slows
+the law, and you pick between a setback and a longer drag on its success.
+
 ### Forceful Legislation
 
 When you start enacting any law, the **Forceful Legislation** event offers to

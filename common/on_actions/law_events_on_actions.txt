@@ -8,20 +8,22 @@
 #  vanilla:
 #    ADVANCE  – every option pushes the law (advance or cautious
 #               modifier); the choice is between side effects.
-#    DEBATE   – a genuine two-sided argument; options push the law by
-#               different amounts for different side effects.
-#               Opposition-pushback events whose options still push
-#               the law (overrule vs accommodate) belong here too.
+#    DEBATE   – a genuine two-sided argument: at least one option
+#               pushes the law at a cost (an advance modifier, or
+#               accepting an amendment), and at least one is a
+#               concession that slows it (a `_concession` or other
+#               -0.05 modifier) in return for a benefit. Overrule vs
+#               accommodate, or one policy direction vs another.
 #    STALL    – every option slows the law: an enactment setback or a
 #               `_stall` drag modifier. The player picks which way the
 #               law slows, not whether (law_enactment_modifiers.txt).
 #               An option that pushes the law never goes in this pool:
 #               the event window labels the event a stall.
 #
-#  An event can sit in ADVANCE and DEBATE when its narrative fits both.
-#  Compromise/amendment events live in DEBATE only — their narratives
+#  An event sits in one pool only, since the pools' rules exclude each
+#  other. Compromise/amendment events live in DEBATE — their narratives
 #  are about deal-making, not opposition pushback.
-#  test_law_checkpoint_pools.py checks the ADVANCE and STALL rules.
+#  test_law_checkpoint_pools.py checks all three rules.
 # ======================================================================
 
 # Root = owner Country of the Law
@@ -55,7 +57,6 @@ on_law_checkpoint_debate = {
 		# --- Extra Law Events (non-ministry) ---
 		10 = extra_law_events.1		# The Bankers' Lobby (Financial Regulation)
 		10 = extra_law_events.3		# The Gold Question (Monetary Policy)
-		10 = extra_law_events.5		# The Wiretapping Scandal (Privacy Rights)
 		10 = extra_law_events.7		# The Ethics of the Gene (Genetic Rights)
 		10 = extra_law_events.8		# The Robber Barons (Antitrust)
 		10 = extra_law_events.9		# The Pirate's Dilemma (Intellectual Property)
@@ -65,7 +66,6 @@ on_law_checkpoint_debate = {
 		10 = extra_law_events.15	# The Question of Autonomy (State Power)
 		10 = extra_law_events.16	# The Augmentation Hearing (Human Augmentation)
 		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
-		10 = extra_law_events.18	# Petitions of the Heart (LGBTQ Rights)
 		10 = extra_law_events.19	# The Cradle and the State (Family & Reproductive Policy)
 		10 = extra_law_events.22	# The Automation Question (Welfare / UBI)
 		10 = extra_law_events.24	# The People's Assembly (Governance – Direct Democracy)

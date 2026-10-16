@@ -1,11 +1,16 @@
 ﻿# ======================================================================
 #  ENACTMENT MODIFIERS  –  used by events/extra_law_events.txt
 #
-#  Design principle:  enactment events come in three flavors, matching
-#  vanilla — advance, cautious, stall.
+#  Design principle:  each checkpoint pool has its own shape, matching
+#  vanilla (common/on_actions/law_events_on_actions.txt).
 #    * Advance modifiers give a strong push (+0.10/+0.15 success_add).
 #    * Cautious modifiers give a small nudge (+0.02/+0.05 success_add)
 #      in exchange for some other benefit (loyalists, IG approval).
+#      Advance-pool events pair the two: every option pushes the law.
+#    * Concession modifiers give a mild drag (-0.05 success_add) in
+#      exchange for a benefit. Debate-pool events pair one with an
+#      advance modifier and a cost, so the player picks between
+#      pushing the law and slowing it.
 #    * Stall modifiers give a sustained drag (-0.10/-0.15 success_add).
 #      Paired with — or chosen against — `add_enactment_setback = 1`
 #      in the corresponding stall event, so the player picks WHICH way
@@ -21,9 +26,9 @@ finreg_bankers_lobby_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-finreg_bankers_lobby_cautious = {
+finreg_bankers_lobby_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 finreg_bankers_lobby_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -47,9 +52,9 @@ monpol_gold_hoarders_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-monpol_gold_hoarders_cautious = {
+monpol_gold_hoarders_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 monpol_gold_hoarders_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -101,9 +106,9 @@ genetics_ethics_debate_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-genetics_ethics_debate_cautious = {
+genetics_ethics_debate_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 genetics_ethics_debate_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -115,9 +120,9 @@ antitrust_public_outrage_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.15
 }
-antitrust_public_outrage_cautious = {
+antitrust_public_outrage_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.05
+	country_law_enactment_success_add = -0.05
 }
 antitrust_public_outrage_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -129,9 +134,9 @@ ip_piracy_debate_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ip_piracy_debate_cautious = {
+ip_piracy_debate_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ip_piracy_debate_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -155,9 +160,9 @@ row_military_pushback_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-row_military_pushback_cautious = {
+row_military_pushback_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 row_military_pushback_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -169,9 +174,9 @@ crimjust_reform_debate_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-crimjust_reform_debate_cautious = {
+crimjust_reform_debate_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 crimjust_reform_debate_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -183,9 +188,9 @@ langpol_cultural_resistance_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-langpol_cultural_resistance_cautious = {
+langpol_cultural_resistance_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 langpol_cultural_resistance_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -211,9 +216,9 @@ statepower_autonomy_debate_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-statepower_autonomy_debate_cautious = {
+statepower_autonomy_debate_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 statepower_autonomy_debate_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -225,9 +230,9 @@ augment_ethics_board_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-augment_ethics_board_cautious = {
+augment_ethics_board_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 augment_ethics_board_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -239,9 +244,9 @@ inherit_succession_dispute_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-inherit_succession_dispute_cautious = {
+inherit_succession_dispute_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 inherit_succession_dispute_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -267,9 +272,9 @@ famrep_demographic_debate_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-famrep_demographic_debate_cautious = {
+famrep_demographic_debate_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 famrep_demographic_debate_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -309,9 +314,9 @@ welfare_automation_fears_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-welfare_automation_fears_cautious = {
+welfare_automation_fears_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 welfare_automation_fears_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -335,9 +340,9 @@ govprin_popular_assembly_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_law_enactment_success_add = 0.15
 }
-govprin_popular_assembly_cautious = {
+govprin_popular_assembly_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_law_enactment_success_add = 0.05
+	country_law_enactment_success_add = -0.05
 }
 govprin_popular_assembly_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
@@ -345,22 +350,24 @@ govprin_popular_assembly_stall = {
 }
 
 # ----- Amendment Events (generic) -----
+# Accepting the amendment pushes the law; passing it as written is the
+# debate's concession (-0.05): the would-be sponsors hold back.
 amendment_compromise_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_law_enactment_success_add = 0.05
 }
 amendment_purist_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.02
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ======================================================================
 #  DEBATE MODIFIERS (paired directional choices)
 #
-#  Each system gets two modifiers naming a policy direction. Both apply
-#  the same +0.03 success_add — neither is "the right answer" for
-#  enactment speed. The choice in the corresponding debate event is
-#  about WHO benefits (IG alignment), not how fast the law moves.
+#  Each system gets two modifiers naming a policy direction. One pushes
+#  the law (+0.03 success_add) and its option carries a cost; the other
+#  is the debate's concession (-0.05) and its option carries a benefit.
+#  The option with the benefit side effect took the concession.
 # ======================================================================
 
 # ----- Financial Regulation -----
@@ -369,30 +376,30 @@ finreg_industry_consultation = {
 	country_law_enactment_success_add = 0.03
 }
 finreg_public_consultation = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 finreg_speculator_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.03
 }
 finreg_deposit_guarantees = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Monetary Policy -----
 monpol_aristocrat_settlement = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 monpol_industrial_alignment = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.03
 }
 monpol_wage_indexation = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 monpol_capital_protection = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -405,14 +412,14 @@ privacy_civil_liberties_carve_outs = {
 	country_law_enactment_success_add = 0.03
 }
 privacy_national_security_exemptions = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Internet Governance -----
 internet_freedom_safeguards = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 internet_content_moderation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -421,8 +428,8 @@ internet_content_moderation = {
 
 # ----- Genetic Rights -----
 genetics_research_exemption = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 genetics_religious_carve_outs = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -431,8 +438,8 @@ genetics_religious_carve_outs = {
 
 # ----- Antitrust -----
 antitrust_established_firms_carve_out = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 antitrust_strict_enforcement = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -445,8 +452,8 @@ ip_creator_protection = {
 	country_law_enactment_success_add = 0.03
 }
 ip_public_domain_expansion = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Rules of War -----
@@ -455,12 +462,12 @@ row_strict_humanitarian = {
 	country_law_enactment_success_add = 0.03
 }
 row_realpolitik_exemptions = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 row_civilian_oversight = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 row_military_self_regulation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -469,8 +476,8 @@ row_military_self_regulation = {
 
 # ----- Criminal Justice -----
 crimjust_rehabilitation_focus = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 crimjust_retribution_focus = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -479,8 +486,8 @@ crimjust_retribution_focus = {
 
 # ----- Language Policy -----
 langpol_pluralist_accommodation = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 langpol_assimilationist_push = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -493,14 +500,14 @@ electfin_hard_caps = {
 	country_law_enactment_success_add = 0.03
 }
 electfin_voluntary_disclosure = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- State Power -----
 statepower_federal_protections = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 statepower_centralized = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -513,8 +520,8 @@ augment_permissive_ethics = {
 	country_law_enactment_success_add = 0.03
 }
 augment_restrictive_ethics = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Inheritance -----
@@ -523,8 +530,8 @@ inherit_equal_split = {
 	country_law_enactment_success_add = 0.03
 }
 inherit_primogeniture_preserved = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- LGBTQ Rights -----
@@ -533,14 +540,14 @@ lgbtq_marriage_first = {
 	country_law_enactment_success_add = 0.03
 }
 lgbtq_employment_first = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Family & Reproductive Policy -----
 famrep_pronatalist_incentives = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 famrep_family_planning = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -553,8 +560,8 @@ rti_transparency_first = {
 	country_law_enactment_success_add = 0.03
 }
 rti_stability_first = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Minority Rights -----
@@ -563,14 +570,14 @@ minrights_affirmative_action = {
 	country_law_enactment_success_add = 0.03
 }
 minrights_equal_treatment = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Welfare (UBI / Post-Scarcity) -----
 welfare_retraining_first = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 welfare_ubi_first = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -579,8 +586,8 @@ welfare_ubi_first = {
 
 # ----- Governance Principles (Algorithmic / Direct Democracy / Neocameralism) -----
 govprin_tech_first = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 govprin_human_first = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -591,8 +598,8 @@ govprin_direct_voting = {
 	country_law_enactment_success_add = 0.03
 }
 govprin_deliberative_chambers = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ======================================================================

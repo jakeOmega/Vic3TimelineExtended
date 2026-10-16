@@ -2,11 +2,14 @@
 #  MINISTRY LAW ENACTMENT MODIFIERS
 #  Used by events/ministry_law_events.txt
 #
-#  Design principle:  same as law_enactment_modifiers.txt — three flavors,
-#  matching vanilla.
+#  Design principle:  same as law_enactment_modifiers.txt — one shape
+#  per checkpoint pool, matching vanilla.
 #    * Advance modifiers give a strong push (+0.10/+0.15 success_add).
 #    * Cautious modifiers give a small nudge (+0.02/+0.05 success_add)
-#      in exchange for some other benefit.
+#      in exchange for some other benefit (advance-pool events).
+#    * Concession modifiers give a mild drag (-0.05 success_add) in
+#      exchange for a benefit (debate-pool events, against an advance
+#      modifier with a cost).
 #    * Stall modifiers give a sustained drag (-0.10/-0.15 success_add).
 #      Paired with — or chosen against — `add_enactment_setback = 1`
 #      in the corresponding stall event.
@@ -31,9 +34,9 @@ ministry_budget_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_budget_cautious = {
+ministry_budget_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_budget_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -45,9 +48,9 @@ ministry_turf_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_turf_cautious = {
+ministry_turf_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_turf_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -59,9 +62,9 @@ ministry_dissolution_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.15
 }
-ministry_dissolution_cautious = {
+ministry_dissolution_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.05
+	country_law_enactment_success_add = -0.05
 }
 ministry_dissolution_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -73,9 +76,9 @@ ministry_war_generals_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_war_generals_cautious = {
+ministry_war_generals_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_war_generals_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -115,9 +118,9 @@ ministry_culture_patronage_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_culture_patronage_cautious = {
+ministry_culture_patronage_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_culture_patronage_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
@@ -129,9 +132,9 @@ ministry_labor_struggle_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_labor_struggle_cautious = {
+ministry_labor_struggle_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_labor_struggle_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -143,9 +146,9 @@ ministry_env_smokestacks_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_law_enactment_success_add = 0.15
 }
-ministry_env_smokestacks_cautious = {
+ministry_env_smokestacks_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_law_enactment_success_add = 0.05
+	country_law_enactment_success_add = -0.05
 }
 ministry_env_smokestacks_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -157,9 +160,9 @@ ministry_intel_shadow_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_intel_shadow_cautious = {
+ministry_intel_shadow_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_intel_shadow_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -185,9 +188,9 @@ ministry_prop_loudspeaker_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_prop_loudspeaker_cautious = {
+ministry_prop_loudspeaker_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_prop_loudspeaker_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -213,9 +216,9 @@ ministry_thought_watchers_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_thought_watchers_cautious = {
+ministry_thought_watchers_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_thought_watchers_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -227,9 +230,9 @@ ministry_consumer_tainted_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_law_enactment_success_add = 0.15
 }
-ministry_consumer_tainted_cautious = {
+ministry_consumer_tainted_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_law_enactment_success_add = 0.05
+	country_law_enactment_success_add = -0.05
 }
 ministry_consumer_tainted_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -241,9 +244,9 @@ ministry_urban_sprawl_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_urban_sprawl_cautious = {
+ministry_urban_sprawl_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_urban_sprawl_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
@@ -269,9 +272,9 @@ ministry_aid_distant_advance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_law_enactment_success_add = 0.1
 }
-ministry_aid_distant_cautious = {
+ministry_aid_distant_concession = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_law_enactment_success_add = 0.02
+	country_law_enactment_success_add = -0.05
 }
 ministry_aid_distant_stall = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
@@ -281,15 +284,15 @@ ministry_aid_distant_stall = {
 # ======================================================================
 #  DEBATE MODIFIERS (paired directional choices)
 #
-#  Each system gets two modifiers naming a policy direction. Both apply
-#  the same +0.03 success_add — neither dominates for enactment speed;
-#  the choice is about IG alignment, not advance speed.
+#  Each system gets two modifiers naming a policy direction. One pushes
+#  the law (+0.03 success_add) and its option carries a cost; the other
+#  is the debate's concession (-0.05) and its option carries a benefit.
 # ======================================================================
 
 # ----- Generic: Staffing the New Ministry -----
 ministry_staffing_professional = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_staffing_loyalist = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -298,8 +301,8 @@ ministry_staffing_loyalist = {
 
 # ----- Generic: The Budget Debate -----
 ministry_budget_lean = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_budget_generous = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -312,8 +315,8 @@ ministry_turf_consolidate = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_turf_coexist = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Generic: The Redundant Clerks (Dissolution) -----
@@ -322,14 +325,14 @@ ministry_dissolution_swift = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_dissolution_phased = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of War: The Generals' War Room -----
 ministry_war_civilian_led = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_war_general_led = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -338,8 +341,8 @@ ministry_war_general_led = {
 
 # ----- Ministry of Foreign Affairs: The Ambassador's Dilemma -----
 ministry_fa_hawkish = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_fa_dovish = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -352,8 +355,8 @@ ministry_commerce_protectionist = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_commerce_free_trade = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of Culture: The Artist's Subsidy -----
@@ -362,8 +365,8 @@ ministry_culture_state_curated = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_culture_independent_grants = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of Labor: Capital vs. Labor -----
@@ -372,14 +375,14 @@ ministry_labor_pro_capital = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_labor_pro_labor = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of the Environment: The Smokestack Question -----
 ministry_env_strict_mandatory = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_env_voluntary = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -388,8 +391,8 @@ ministry_env_voluntary = {
 
 # ----- Ministry of Intelligence and Security: The Shadow Files -----
 ministry_intel_domestic_focus = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_intel_foreign_focus = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -402,8 +405,8 @@ ministry_refugee_generous = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_refugee_restrictive = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of Propaganda: The Loudspeaker State -----
@@ -412,14 +415,14 @@ ministry_prop_state_controlled = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_prop_private_partnership = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of Science: The Laboratory of the State -----
 ministry_sci_basic_focus = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_sci_applied_focus = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -432,8 +435,8 @@ ministry_thought_permissive = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_thought_restrictive = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of Consumer Protection: The Tainted Product -----
@@ -442,14 +445,14 @@ ministry_consumer_strict = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_consumer_industry_led = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ----- Ministry of Urban Planning: The City Rises -----
 ministry_urban_density_focused = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_urban_sprawl_friendly = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -458,8 +461,8 @@ ministry_urban_sprawl_friendly = {
 
 # ----- Ministry of Religion: The Pulpit and the State -----
 ministry_religion_established_faith = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 ministry_religion_pluralist = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
@@ -472,8 +475,8 @@ ministry_aid_strategic = {
 	country_law_enactment_success_add = 0.03
 }
 ministry_aid_humanitarian = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_law_enactment_success_add = 0.03
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_law_enactment_success_add = -0.05
 }
 
 # ======================================================================

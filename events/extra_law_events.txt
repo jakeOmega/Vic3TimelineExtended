@@ -31,7 +31,7 @@ extra_law_events.1 = {
 		}
 		NOR = {
 			has_modifier = finreg_bankers_lobby_advance
-			has_modifier = finreg_bankers_lobby_cautious
+			has_modifier = finreg_bankers_lobby_concession
 		}
 		any_interest_group = {
 			ig_counts_as_marginal = no
@@ -70,17 +70,19 @@ extra_law_events.1 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = finreg_interest_rate_hike days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Hear their concerns to build broader support
 		name = extra_law_events.1.b
 		add_enactment_modifier = {
-			name = finreg_bankers_lobby_cautious
+			name = finreg_bankers_lobby_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -186,7 +188,7 @@ extra_law_events.3 = {
 		}
 		NOR = {
 			has_modifier = monpol_gold_hoarders_advance
-			has_modifier = monpol_gold_hoarders_cautious
+			has_modifier = monpol_gold_hoarders_concession
 		}
 		any_interest_group = {
 			ig_counts_as_marginal = no
@@ -227,16 +229,18 @@ extra_law_events.3 = {
 			value = small_radicals
 			strata = upper
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Bring the opposition into the conversation
 		name = extra_law_events.3.b
 		add_enactment_modifier = {
-			name = monpol_gold_hoarders_cautious
+			name = monpol_gold_hoarders_concession
 		}
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_stability days = normal_modifier_time multiplier = sv_money_flow_event_small }
 		add_modifier = { name = monpol_currency_stability_pressure days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -542,7 +546,7 @@ extra_law_events.7 = {
 		}
 		NOR = {
 			has_modifier = genetics_ethics_debate_advance
-			has_modifier = genetics_ethics_debate_cautious
+			has_modifier = genetics_ethics_debate_concession
 		}
 	}
 
@@ -571,15 +575,17 @@ extra_law_events.7 = {
 				days = normal_modifier_time
 			}
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Invite the clergy into the drafting process
 		name = extra_law_events.7.b
 		add_enactment_modifier = {
-			name = genetics_ethics_debate_cautious
+			name = genetics_ethics_debate_concession
 		}
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -614,7 +620,7 @@ extra_law_events.8 = {
 		}
 		NOR = {
 			has_modifier = antitrust_public_outrage_advance
-			has_modifier = antitrust_public_outrage_cautious
+			has_modifier = antitrust_public_outrage_concession
 		}
 		ig:ig_industrialists ?= {
 			ig_counts_as_marginal = no
@@ -642,12 +648,13 @@ extra_law_events.8 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = antitrust_market_competition_boost days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Negotiate a compromise with industry
 		name = extra_law_events.8.b
 		add_enactment_modifier = {
-			name = antitrust_public_outrage_cautious
+			name = antitrust_public_outrage_concession
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
@@ -655,6 +662,7 @@ extra_law_events.8 = {
 				days = normal_modifier_time
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -689,7 +697,7 @@ extra_law_events.9 = {
 		}
 		NOR = {
 			has_modifier = ip_piracy_debate_advance
-			has_modifier = ip_piracy_debate_cautious
+			has_modifier = ip_piracy_debate_concession
 		}
 	}
 
@@ -714,12 +722,13 @@ extra_law_events.9 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_chill days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Build an academic consensus with the intelligentsia
 		name = extra_law_events.9.b
 		add_enactment_modifier = {
-			name = ip_piracy_debate_cautious
+			name = ip_piracy_debate_concession
 		}
 		scope:intelligentsia_ig = {
 			add_modifier = {
@@ -727,6 +736,7 @@ extra_law_events.9 = {
 				days = normal_modifier_time
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -826,7 +836,7 @@ extra_law_events.11 = {
 		}
 		NOR = {
 			has_modifier = row_military_pushback_advance
-			has_modifier = row_military_pushback_cautious
+			has_modifier = row_military_pushback_concession
 		}
 		ig:ig_armed_forces ?= {
 			ig_counts_as_marginal = no
@@ -862,15 +872,17 @@ extra_law_events.11 = {
 				days = normal_modifier_time
 			}
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Accommodate their concerns to keep them on side
 		name = extra_law_events.11.b
 		add_enactment_modifier = {
-			name = row_military_pushback_cautious
+			name = row_military_pushback_concession
 		}
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -904,7 +916,7 @@ extra_law_events.12 = {
 		}
 		NOR = {
 			has_modifier = crimjust_reform_debate_advance
-			has_modifier = crimjust_reform_debate_cautious
+			has_modifier = crimjust_reform_debate_concession
 		}
 	}
 
@@ -927,18 +939,20 @@ extra_law_events.12 = {
 		add_enactment_modifier = {
 			name = crimjust_reform_debate_advance
 		}
-		add_radicals = {
-			value = small_radicals
-		}
+		# Domain side-effect
+		add_modifier = { name = crimjust_radicalism_uptick days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Frame it as tough-on-crime reform to win over skeptics
 		name = extra_law_events.12.b
 		add_enactment_modifier = {
-			name = crimjust_reform_debate_cautious
+			name = crimjust_reform_debate_concession
 		}
-		# Domain side-effect
-		add_modifier = { name = crimjust_radicalism_uptick days = normal_modifier_time }
+		add_loyalists = {
+			value = small_radicals
+		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -975,7 +989,7 @@ extra_law_events.13 = {
 		}
 		NOR = {
 			has_modifier = langpol_cultural_resistance_advance
-			has_modifier = langpol_cultural_resistance_cautious
+			has_modifier = langpol_cultural_resistance_concession
 		}
 		any_interest_group = {
 			ig_counts_as_marginal = no
@@ -1014,12 +1028,13 @@ extra_law_events.13 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = langpol_assimilation_boost days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Make concessions to the periphery to ease passage
 		name = extra_law_events.13.b
 		add_enactment_modifier = {
-			name = langpol_cultural_resistance_cautious
+			name = langpol_cultural_resistance_concession
 		}
 		scope:opposing_ig = {
 			add_modifier = {
@@ -1027,6 +1042,7 @@ extra_law_events.13 = {
 				days = normal_modifier_time
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1126,7 +1142,7 @@ extra_law_events.15 = {
 		}
 		NOR = {
 			has_modifier = statepower_autonomy_debate_advance
-			has_modifier = statepower_autonomy_debate_cautious
+			has_modifier = statepower_autonomy_debate_concession
 		}
 	}
 
@@ -1148,16 +1164,18 @@ extra_law_events.15 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Allow the regions a voice in the drafting process
 		name = extra_law_events.15.b
 		add_enactment_modifier = {
-			name = statepower_autonomy_debate_cautious
+			name = statepower_autonomy_debate_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1194,7 +1212,7 @@ extra_law_events.16 = {
 		}
 		NOR = {
 			has_modifier = augment_ethics_board_advance
-			has_modifier = augment_ethics_board_cautious
+			has_modifier = augment_ethics_board_concession
 		}
 	}
 
@@ -1220,18 +1238,20 @@ extra_law_events.16 = {
 		add_enactment_modifier = {
 			name = augment_ethics_board_advance
 		}
-		add_radicals = {
-			value = small_radicals
-		}
+		# Domain side-effect
+		add_modifier = { name = augment_health_panic days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Appoint an ethics board to reassure the public
 		name = extra_law_events.16.b
 		add_enactment_modifier = {
-			name = augment_ethics_board_cautious
+			name = augment_ethics_board_concession
 		}
-		# Domain side-effect
-		add_modifier = { name = augment_health_panic days = normal_modifier_time }
+		add_loyalists = {
+			value = small_radicals
+		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1267,7 +1287,7 @@ extra_law_events.17 = {
 		}
 		NOR = {
 			has_modifier = inherit_succession_dispute_advance
-			has_modifier = inherit_succession_dispute_cautious
+			has_modifier = inherit_succession_dispute_concession
 		}
 		ig:ig_landowners ?= {
 			ig_counts_as_marginal = no
@@ -1295,12 +1315,13 @@ extra_law_events.17 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = inherit_wealth_consolidation days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Offer a transition period to ease the landowners’ fears
 		name = extra_law_events.17.b
 		add_enactment_modifier = {
-			name = inherit_succession_dispute_cautious
+			name = inherit_succession_dispute_concession
 		}
 		scope:landowners_ig = {
 			add_modifier = {
@@ -1308,6 +1329,7 @@ extra_law_events.17 = {
 				days = normal_modifier_time
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1415,7 +1437,7 @@ extra_law_events.19 = {
 		}
 		NOR = {
 			has_modifier = famrep_demographic_debate_advance
-			has_modifier = famrep_demographic_debate_cautious
+			has_modifier = famrep_demographic_debate_concession
 		}
 	}
 
@@ -1441,16 +1463,18 @@ extra_law_events.19 = {
 			limit = { is_enacting_law = law_type:law_pro_natalist_subsidies }
 			add_modifier = { name = famrep_birth_rate_boost days = normal_modifier_time }
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Frame it as supporting families to build consensus
 		name = extra_law_events.19.b
 		add_enactment_modifier = {
-			name = famrep_demographic_debate_cautious
+			name = famrep_demographic_debate_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1635,7 +1659,7 @@ extra_law_events.22 = {
 		}
 		NOR = {
 			has_modifier = welfare_automation_fears_advance
-			has_modifier = welfare_automation_fears_cautious
+			has_modifier = welfare_automation_fears_concession
 		}
 		ig:ig_trade_unions ?= {
 			ig_counts_as_marginal = no
@@ -1666,12 +1690,13 @@ extra_law_events.22 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = welfare_investment_chill days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Phase it in gradually to win over industry
 		name = extra_law_events.22.b
 		add_enactment_modifier = {
-			name = welfare_automation_fears_cautious
+			name = welfare_automation_fears_concession
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
@@ -1679,6 +1704,7 @@ extra_law_events.22 = {
 				days = normal_modifier_time
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1778,7 +1804,7 @@ extra_law_events.24 = {
 		collective_governance_is_popular = yes
 		NOR = {
 			has_modifier = govprin_popular_assembly_advance
-			has_modifier = govprin_popular_assembly_cautious
+			has_modifier = govprin_popular_assembly_concession
 		}
 		any_interest_group = {
 			ig_counts_as_marginal = no
@@ -1817,15 +1843,17 @@ extra_law_events.24 = {
 		}
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Bring the opposition into the process
 		name = extra_law_events.24.b
 		add_enactment_modifier = {
-			name = govprin_popular_assembly_cautious
+			name = govprin_popular_assembly_concession
 		}
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -4024,7 +4052,7 @@ extra_law_events.37 = {
 		}
 		NOR = {
 			has_modifier = finreg_bankers_lobby_advance
-			has_modifier = finreg_bankers_lobby_cautious
+			has_modifier = finreg_bankers_lobby_concession
 			has_modifier = finreg_bankers_lobby_stall
 		}
 		any_interest_group = {
@@ -4236,7 +4264,7 @@ extra_law_events.39 = {
 		}
 		NOR = {
 			has_modifier = monpol_gold_hoarders_advance
-			has_modifier = monpol_gold_hoarders_cautious
+			has_modifier = monpol_gold_hoarders_concession
 			has_modifier = monpol_gold_hoarders_stall
 		}
 		any_interest_group = {
@@ -4608,7 +4636,7 @@ extra_law_events.43 = {
 		}
 		NOR = {
 			has_modifier = genetics_ethics_debate_advance
-			has_modifier = genetics_ethics_debate_cautious
+			has_modifier = genetics_ethics_debate_concession
 			has_modifier = genetics_ethics_debate_stall
 		}
 		any_interest_group = {
@@ -4695,7 +4723,7 @@ extra_law_events.44 = {
 		}
 		NOR = {
 			has_modifier = antitrust_public_outrage_advance
-			has_modifier = antitrust_public_outrage_cautious
+			has_modifier = antitrust_public_outrage_concession
 			has_modifier = antitrust_public_outrage_stall
 		}
 		any_interest_group = {
@@ -4782,7 +4810,7 @@ extra_law_events.45 = {
 		}
 		NOR = {
 			has_modifier = ip_piracy_debate_advance
-			has_modifier = ip_piracy_debate_cautious
+			has_modifier = ip_piracy_debate_concession
 			has_modifier = ip_piracy_debate_stall
 		}
 		any_interest_group = {
@@ -4957,7 +4985,7 @@ extra_law_events.47 = {
 		}
 		NOR = {
 			has_modifier = row_military_pushback_advance
-			has_modifier = row_military_pushback_cautious
+			has_modifier = row_military_pushback_concession
 			has_modifier = row_military_pushback_stall
 		}
 		any_interest_group = {
@@ -5043,7 +5071,7 @@ extra_law_events.48 = {
 		}
 		NOR = {
 			has_modifier = crimjust_reform_debate_advance
-			has_modifier = crimjust_reform_debate_cautious
+			has_modifier = crimjust_reform_debate_concession
 			has_modifier = crimjust_reform_debate_stall
 		}
 		any_interest_group = {
@@ -5132,7 +5160,7 @@ extra_law_events.49 = {
 		}
 		NOR = {
 			has_modifier = langpol_cultural_resistance_advance
-			has_modifier = langpol_cultural_resistance_cautious
+			has_modifier = langpol_cultural_resistance_concession
 			has_modifier = langpol_cultural_resistance_stall
 		}
 		any_interest_group = {
@@ -5305,7 +5333,7 @@ extra_law_events.51 = {
 		}
 		NOR = {
 			has_modifier = statepower_autonomy_debate_advance
-			has_modifier = statepower_autonomy_debate_cautious
+			has_modifier = statepower_autonomy_debate_concession
 			has_modifier = statepower_autonomy_debate_stall
 		}
 		any_interest_group = {
@@ -5396,7 +5424,7 @@ extra_law_events.52 = {
 		}
 		NOR = {
 			has_modifier = augment_ethics_board_advance
-			has_modifier = augment_ethics_board_cautious
+			has_modifier = augment_ethics_board_concession
 			has_modifier = augment_ethics_board_stall
 		}
 		any_interest_group = {
@@ -5484,7 +5512,7 @@ extra_law_events.53 = {
 		}
 		NOR = {
 			has_modifier = inherit_succession_dispute_advance
-			has_modifier = inherit_succession_dispute_cautious
+			has_modifier = inherit_succession_dispute_concession
 			has_modifier = inherit_succession_dispute_stall
 		}
 		any_interest_group = {
@@ -5661,7 +5689,7 @@ extra_law_events.55 = {
 		}
 		NOR = {
 			has_modifier = famrep_demographic_debate_advance
-			has_modifier = famrep_demographic_debate_cautious
+			has_modifier = famrep_demographic_debate_concession
 			has_modifier = famrep_demographic_debate_stall
 		}
 		any_interest_group = {
@@ -5924,7 +5952,7 @@ extra_law_events.58 = {
 		}
 		NOR = {
 			has_modifier = welfare_automation_fears_advance
-			has_modifier = welfare_automation_fears_cautious
+			has_modifier = welfare_automation_fears_concession
 			has_modifier = welfare_automation_fears_stall
 		}
 		any_interest_group = {
@@ -6094,7 +6122,7 @@ extra_law_events.60 = {
 		collective_governance_is_popular = yes
 		NOR = {
 			has_modifier = govprin_popular_assembly_advance
-			has_modifier = govprin_popular_assembly_cautious
+			has_modifier = govprin_popular_assembly_concession
 			has_modifier = govprin_popular_assembly_stall
 		}
 		any_interest_group = {
@@ -6206,6 +6234,7 @@ extra_law_events.61 = {
 		add_enactment_modifier = { name = finreg_industry_consultation }
 		# Domain side-effect
 		add_modifier = { name = finreg_interest_rate_hike days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -6213,6 +6242,7 @@ extra_law_events.61 = {
 		add_enactment_modifier = { name = finreg_public_consultation }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -6287,6 +6317,7 @@ extra_law_events.62 = {
 		add_enactment_modifier = { name = finreg_speculator_crackdown }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -6294,6 +6325,7 @@ extra_law_events.62 = {
 		add_enactment_modifier = { name = finreg_deposit_guarantees }
 		# Domain side-effect
 		add_modifier = { name = finreg_banking_stability days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -6344,6 +6376,7 @@ extra_law_events.63 = {
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_stability days = normal_modifier_time multiplier = sv_money_flow_event_small }
 		add_modifier = { name = monpol_currency_stability_pressure days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6351,6 +6384,7 @@ extra_law_events.63 = {
 		add_enactment_modifier = { name = monpol_industrial_alignment }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6396,6 +6430,7 @@ extra_law_events.64 = {
 		add_enactment_modifier = { name = monpol_wage_indexation }
 		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6405,6 +6440,7 @@ extra_law_events.64 = {
 		te_mon_effect_fx_shock_tt = { TEXT = TE_FX_SHOCK_MINUS_5_DESC POINTS = -13 } # [P4] ~5 points weaker (a shock lands 38% of nominal)
 		add_modifier = { name = monpol_currency_devaluation days = normal_modifier_time multiplier = sv_money_flow_event_small }
 		add_modifier = { name = monpol_currency_devaluation_pressure days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6454,6 +6490,7 @@ extra_law_events.65 = {
 		add_enactment_modifier = { name = privacy_civil_liberties_carve_outs }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_drain days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -6461,6 +6498,7 @@ extra_law_events.65 = {
 		add_enactment_modifier = { name = privacy_national_security_exemptions }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -6510,6 +6548,7 @@ extra_law_events.66 = {
 		add_enactment_modifier = { name = internet_freedom_safeguards }
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6517,6 +6556,7 @@ extra_law_events.66 = {
 		add_enactment_modifier = { name = internet_content_moderation }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6567,6 +6607,7 @@ extra_law_events.67 = {
 		add_enactment_modifier = { name = genetics_research_exemption }
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6574,6 +6615,7 @@ extra_law_events.67 = {
 		add_enactment_modifier = { name = genetics_religious_carve_outs }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6623,6 +6665,7 @@ extra_law_events.68 = {
 		add_enactment_modifier = { name = antitrust_established_firms_carve_out }
 		# Domain side-effect
 		add_modifier = { name = antitrust_market_competition_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6630,6 +6673,7 @@ extra_law_events.68 = {
 		add_enactment_modifier = { name = antitrust_strict_enforcement }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6679,6 +6723,7 @@ extra_law_events.69 = {
 		add_enactment_modifier = { name = ip_creator_protection }
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_chill days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -6686,6 +6731,7 @@ extra_law_events.69 = {
 		add_enactment_modifier = { name = ip_public_domain_expansion }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -6735,6 +6781,7 @@ extra_law_events.70 = {
 		add_enactment_modifier = { name = row_strict_humanitarian }
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_drain days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -6742,6 +6789,7 @@ extra_law_events.70 = {
 		add_enactment_modifier = { name = row_realpolitik_exemptions }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -6790,6 +6838,7 @@ extra_law_events.71 = {
 		add_enactment_modifier = { name = row_civilian_oversight }
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6797,6 +6846,7 @@ extra_law_events.71 = {
 		add_enactment_modifier = { name = row_military_self_regulation }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6845,6 +6895,7 @@ extra_law_events.72 = {
 		add_enactment_modifier = { name = crimjust_rehabilitation_focus }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6852,6 +6903,7 @@ extra_law_events.72 = {
 		add_enactment_modifier = { name = crimjust_retribution_focus }
 		# Domain side-effect
 		add_modifier = { name = crimjust_radicalism_uptick days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6904,6 +6956,7 @@ extra_law_events.73 = {
 		add_enactment_modifier = { name = langpol_pluralist_accommodation }
 		# Domain side-effect
 		add_modifier = { name = langpol_assimilation_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -6911,6 +6964,7 @@ extra_law_events.73 = {
 		add_enactment_modifier = { name = langpol_assimilationist_push }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -6959,6 +7013,7 @@ extra_law_events.74 = {
 		add_enactment_modifier = { name = electfin_hard_caps }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -6966,6 +7021,7 @@ extra_law_events.74 = {
 		add_enactment_modifier = { name = electfin_voluntary_disclosure }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -7016,6 +7072,7 @@ extra_law_events.75 = {
 		add_enactment_modifier = { name = statepower_federal_protections }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -7023,6 +7080,7 @@ extra_law_events.75 = {
 		add_enactment_modifier = { name = statepower_centralized }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -7074,6 +7132,7 @@ extra_law_events.76 = {
 		add_enactment_modifier = { name = augment_permissive_ethics }
 		# Domain side-effect
 		add_modifier = { name = augment_health_panic days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -7081,6 +7140,7 @@ extra_law_events.76 = {
 		add_enactment_modifier = { name = augment_restrictive_ethics }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -7131,6 +7191,7 @@ extra_law_events.77 = {
 		add_enactment_modifier = { name = inherit_equal_split }
 		# Domain side-effect
 		add_modifier = { name = inherit_wealth_consolidation days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -7138,6 +7199,7 @@ extra_law_events.77 = {
 		add_enactment_modifier = { name = inherit_primogeniture_preserved }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -7188,6 +7250,7 @@ extra_law_events.78 = {
 		add_enactment_modifier = { name = lgbtq_marriage_first }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -7195,6 +7258,7 @@ extra_law_events.78 = {
 		add_enactment_modifier = { name = lgbtq_employment_first }
 		# Domain side-effect
 		add_modifier = { name = lgbtq_social_progress days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -7250,6 +7314,7 @@ extra_law_events.79 = {
 			limit = { is_enacting_law = law_type:law_pro_natalist_subsidies }
 			add_modifier = { name = famrep_birth_rate_boost days = normal_modifier_time }
 		}
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -7257,6 +7322,7 @@ extra_law_events.79 = {
 		add_enactment_modifier = { name = famrep_family_planning }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -7305,6 +7371,7 @@ extra_law_events.80 = {
 		add_enactment_modifier = { name = rti_transparency_first }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -7312,6 +7379,7 @@ extra_law_events.80 = {
 		add_enactment_modifier = { name = rti_stability_first }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -7362,6 +7430,7 @@ extra_law_events.81 = {
 		add_enactment_modifier = { name = minrights_affirmative_action }
 		# Domain side-effect
 		add_modifier = { name = minrights_majority_grievance days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -7369,6 +7438,7 @@ extra_law_events.81 = {
 		add_enactment_modifier = { name = minrights_equal_treatment }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		add_radicals = { value = small_radicals strata = lower }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -7418,6 +7488,7 @@ extra_law_events.82 = {
 		add_enactment_modifier = { name = welfare_retraining_first }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -7425,6 +7496,7 @@ extra_law_events.82 = {
 		add_enactment_modifier = { name = welfare_ubi_first }
 		# Domain side-effect
 		add_modifier = { name = welfare_investment_chill days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -7472,6 +7544,7 @@ extra_law_events.83 = {
 		add_enactment_modifier = { name = govprin_tech_first }
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -7479,6 +7552,7 @@ extra_law_events.83 = {
 		add_enactment_modifier = { name = govprin_human_first }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -7525,6 +7599,7 @@ extra_law_events.84 = {
 		add_enactment_modifier = { name = govprin_direct_voting }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -7532,6 +7607,7 @@ extra_law_events.84 = {
 		add_enactment_modifier = { name = govprin_deliberative_chambers }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
