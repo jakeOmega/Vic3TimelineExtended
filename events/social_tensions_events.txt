@@ -1275,7 +1275,7 @@ social_tensions_events.15 = {
 	}
 	flavor = social_tensions_events.15.f
 
-	event_image = { texture = "gfx/event_pictures/globalization_protest_march.dds" }
+	event_image = { video = "unspecific_factory_closed" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1358,7 +1358,7 @@ social_tensions_events.16 = {
 	}
 	flavor = social_tensions_events.16.f
 
-	event_image = { texture = "gfx/event_pictures/globalization_protest_march.dds" }
+	event_image = { texture = "gfx/event_pictures/cultural_festival_revival.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 

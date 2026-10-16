@@ -192,7 +192,7 @@ augmentation_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/neo_luddite_protest.dds" }
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
