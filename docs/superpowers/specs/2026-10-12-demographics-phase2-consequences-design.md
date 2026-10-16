@@ -636,6 +636,24 @@ upkeep is a share of GDP a year.
 | Rural Exemption | Population Control, with Birth Limit | halves Birth Limit by the state's agrarian share | none | Rural Folk +1 | China's "1.5-child" rule (1984) |
 | Crash Campaign | Population Control | desired a further −20%, five years at most; legitimacy −10; radicals from movements +25% | 100 authority | Rural Folk −3, Devout −3, Intelligentsia −2, Trade Unions −2 | India's Emergency (1975–77) |
 
+- **Authority upkeep, rebalanced (owner, 2026-10-16).** The table's 25–100 authority was less than one decree (100, for
+  one state) for a measure that acts on every state. Authority is flat in the game (100 base plus 50–250 from each of the
+  power-structure, religion, speech and citizenship laws, times the authority technologies: roughly 300 for a late
+  democracy and 700–1,500 for a strong autocracy), so the upkeep stays a flat line and rises with the enforcement each
+  measure needs: Honours 50 (a medal and a ceremony), Later, Longer, Fewer 150 (persuasion through local cadres in every
+  county), Restricted Contraception 200 (a ban the police enforce), Birth Limit 300 at two children and 400 at one
+  (permits, fines and quotas in every county; the one child's upkeep replaces the two's), the Crash Campaign 300
+  (sterilization quotas, five years at most). The coercive package, one child with the Crash Campaign, costs 700: most
+  of a strong autocracy's authority and out of reach of most democracies, which is the political price §3.4's last
+  bullet asks for. The AI starts each with its upkeep plus 25 free, and tightens Birth Limit with the further 100 plus
+  25. A player's Start is greyed until the upkeep is free, as a decree is (Tighten until the further 100 is); ending
+  needs none.
+- **Communal Child-Rearing's measures by who governs (owner, 2026-10-16).** The table gave the law Child Allowance and
+  Parental Leave only. The law alone now also allows Family Housing (the 1920s house-communes, the kibbutz's dining
+  halls) and Free Contraception (Kollontai, the kibbutzim); with a Council Republic or Anarchy, Sex Education too (the
+  anarchist free schools, Emma Goldman's birth-control lectures); with a Single-Party State or Autocracy and Outlawed
+  Dissent, Honours for Large Families and Restricted Contraception (the state raises the children it orders born:
+  Lebensborn, Decree 770). Birth Limit and the Crash Campaign stay Population Control Measures' alone.
 - **Prenatal sexing** has no technology of its own. Proposal: `microprocessor` (era 8), since real-time portable
   ultrasound spread with it in the 1980s. The sex ratio at birth is a census input under Full only
   (`state_sex_ratio_at_birth_add`, §3.5): it moves the newborns' split in the step (`te_demog_k_*_births_per_100k`

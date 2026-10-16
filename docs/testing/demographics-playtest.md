@@ -190,7 +190,8 @@ others; check the switching, the costs and the politics.
    (the 0-14 share ÷ 0.3), weekly; the Devout and Trade Unions gain +1 approval; the term reads "On to <year + 5>";
    the button reads End, greyed, its tooltip "Its five-year term runs to <year>". Each 31 December the expense
    follows GDP.
-3. **Honours, Later Longer Fewer, Birth Limit, the Crash Campaign**: authority falls by 25, 50, 100, 100. Sex
+3. **Honours, Later Longer Fewer, Birth Limit, the Crash Campaign**: authority falls by 50, 150, 300, 300 (the
+   rebalance of 2026-10-16; Restricted Contraception 200, Birth Limit 400 once tightened to one child). Sex
    Education: the Ministry of Education's bureaucracy cost +10%. Restricted Contraception: feminist movement support
    up, and (option l) the capital's `fmeans` falls by 0.2; Free Contraception raises it by 0.1.
 4. **Birth Limit's button**: Start (two children), Tighten (one child, the modifier swaps at once), then End once five
@@ -550,3 +551,40 @@ self-check.
 6. **Outside Full nothing changes.** Under Display only and Disabled no "The Longevity Gap" modifier anywhere, and
    births and deaths follow the base game whatever a country researches. A game switched from Full to Disabled loses the
    country's modifier at its next 31 December (`te_demog_lx_politics_clear`) and the state's at its next state pulse.
+
+## Policing, criminal justice, Synthetic Biology and the measures' authority (2026-10-16)
+
+The Ministry of Public Safety and the criminal-justice laws on accidents and violence, Autonomous Vehicles as modern
+safety, Synthetic Biology's step on the ageing ladder and the Family Policy measures' new authority upkeep
+(`docs/systems/mod_systems.md` § Causes of Death, § Phase 3: the late game, § Family Policy measures). Every line is a
+script-only type on a carrier the census already reads (#892's fact), so no self-check.
+
+1. **The carriers' tooltips.** Each police law's institution lines show Deaths from Violence and Accidents a level of
+   the Ministry of Public Safety: Local Police and Private Policing −2%, Dedicated and Militarized −3%; Restorative Justice −4%,
+   Rehabilitation-Focused −8%; Penal Labor Camps Deaths at Work +10%; Autonomous Vehicles "Safer Streets and Homes"
+   +10%; Synthetic Biology Ageing in Longevity Care −5% and Biological Immortality −70%.
+2. **The hover moves (Full or Display only).** In an incorporated state of a Dedicated Police country with the
+   Ministry at level 5, Accidents and Violence's "Laws and Institutions" factor reads 0.15 lower than with the Ministry
+   at 0, after the state's next count; under Rehabilitation-Focused criminal justice a further 0.08 lower. Its lore line
+   names the Ministry and both laws. An unincorporated state reads no police line at all (the law's line is per
+   Ministry level, which reaches incorporated states only).
+3. **The ladder (Full, late game).** With mRNA Therapeutics, Personalized Medicine, Genetic Engineering and Synthetic
+   Biology, the Biological Age hover's ageing rate reads 0.70 in the capital (0.75 without Synthetic Biology); with
+   Biological Immortality 0.
+4. **Birth Limit's row** reads 300 authority, still 300 after Start, and 400 after Tighten; the country's authority
+   falls by the same. The Missing Girls event's relax option says the upkeep falls by 100, and authority rises by 100
+   when it is taken.
+5. **A player's Start needs the upkeep free.** With less free authority than a measure's upkeep its Start is greyed
+   with "Needs @aut! N free authority to start", N the upkeep; Birth Limit at two children greys Tighten under 100
+   free. End is never greyed for authority. The engine reads `authority >= <script value>` as the UN's buttons read
+   `influence >= un_found_influence_cost`.
+6. **AI authority (observer run, Full).** A famine AI on Population Control Measures starts Birth Limit only with 325
+   or more free authority and tightens it only with 125 more; no AI runs into negative authority from the measures
+   alone. Read `te_dg_ms_*` and the country's authority in a plain-text save.
+7. **Communal Child-Rearing by who governs (Full).** Under Communal Child-Rearing alone the section's rows are Child
+   Allowance, Parental Leave, Family Housing and Free Contraception, and the others sit dimmed, Sex Education's hover
+   naming a Council Republic or Anarchy and Honours' and Restricted Contraception's a Single-Party State or Autocracy
+   with Outlawed Dissent. Console a Council Republic: Sex Education becomes a row. Console a Single-Party State and
+   Outlawed Dissent with Honours on, then Censorship: Honours ends at once with its "Honours for Large Families Ended"
+   notice, which names the government as a cause. Birth Limit and the Crash Campaign stay dimmed under every
+   government.
