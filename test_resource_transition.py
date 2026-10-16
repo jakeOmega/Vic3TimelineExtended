@@ -253,7 +253,10 @@ class NumbersTest(unittest.TestCase):
     def test_compensation_share(self):
         self.assertEqual(_constant("RT_COMPENSATION_SHARE"), 0.25)
         for key in ("rt_how_programmes", "rt_law_phaseout_rule_tt"):
-            self.assertIn("a quarter of what it would cost to build", _loc_value(key), key)
+            text = _loc_value(key)
+            self.assertIn("a quarter of what it would cost to build at base prices", text, key)
+            # The script only debits the treasury: nothing pays an owner.
+            self.assertIn("no owner receives it", text, key)
         for key in ("concept_fossil_transition_desc",):
             self.assertIn(f"#v {int(_constant('RT_RETIRE_INTERVAL_MONTHS'))}#! months", _loc_value(key), key)
 
