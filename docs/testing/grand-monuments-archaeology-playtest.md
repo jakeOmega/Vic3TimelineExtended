@@ -70,6 +70,7 @@ site did not seed).
 | **1836.** Play the Two Sicilies; wait a month. | Pompeii is a dig in Archaeological Expeditions: "an Antiquarian dig, 33% done" or so, diverting 5 weekly innovation, Suspend Dig. The Budget shows nothing for it. | Not there: the seeding's `excavating` branch (`gm_arch_seed_dig`). |
 | **An old save.** Load a save made before Pompeii was added. | A month later Pompeii is a dig of Campania's owner. | `gm_arch_seed_round`. |
 | **Restart.** With Empiricism, suspend and press Systematic. | The dig restarts at its progress, slower, and diverts 20 weekly innovation. | |
+| **Its pictures (2026-10-16).** Finish the dig (debug c), then carry off a piece. | The monument's row and the state card show the dug-out forum under Vesuvius, not the Latin forum stand-in; the trophy's row shows the battle mosaic in a museum room. | The stand-in: `gm_state_picture_landmark` for `pompeii` (code 1,000,087). The forum without the mosaic: `gm_tr_picture_trophy` (2,000,087). |
 
 ## Costs and time
 
@@ -99,6 +100,7 @@ site did not seed).
 | **Permit.** The same with an Excavation Permit (Britain needs Empiricism). | The whole monument stands in Mosul; Britain has Foreign Scholarship (+10 prestige, +1 cultural pull) for ten years. | |
 | **Change of heart.** Withdraw from the treaty mid-dig. | The dig suspends with its progress; the Ottomans can take it up. | |
 | **A rock-cut site.** A concession at Deir el-Bahari. | No trophy; the site stands whole; Foreign Scholarship. | |
+| **Article icons (2026-10-16).** Open a treaty's article list. | Excavation Concession shows a spade by a broken amphora, Excavation Permit a sealed permit with a trowel, Return Cultural Property a bust in a crate, Surrender a Monument a hand lifting a statue. None shares Cultural Exchange's, Seize Company's or the science aid icons. | A borrowed icon: the article's `icon` line. |
 
 ## The AI
 
@@ -115,6 +117,5 @@ site did not seed).
 
 ## Known limits
 
-- Pompeii shows its form's stand-in picture; the other 35 sites have their own.
 - A split state is dug by any of its owners, or anyone holding an article on a part of it; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
 - No console harness signs a treaty: test digging abroad through the treaty screen.
