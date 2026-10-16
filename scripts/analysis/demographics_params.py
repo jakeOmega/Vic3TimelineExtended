@@ -107,9 +107,9 @@ LAND_TENURE = {
 ACCESS_TYPE = "state_health_care_access_add"
 MEDICINE_CAUSES = ("infection", "maternal", "chronic")
 TREATMENT_TYPE = {cause: f"state_{cause}_treatment_add" for cause in MEDICINE_CAUSES}
-# The plain per-cause multipliers: 1 + the cause's type, floored. Accidents and violence (2026-10-16): the police laws
-# (Local Police -0.05, Dedicated and Militarized -0.10, Private Policing -0.05), the Ministry of Public Safety -0.02 a level
-# (Private Policing gives back +0.01 a level, as it halves the Ministry's turmoil cut), Restorative Justice -0.04,
+# The plain per-cause multipliers: 1 + the cause's type, floored. Accidents and violence (2026-10-16): the police laws a
+# level of the Ministry of Public Safety (their institution_modifier, so the law with the Ministry at 0 gives nothing:
+# Local Police and Private Policing -0.02, Dedicated and Militarized -0.03), Restorative Justice -0.04,
 # Rehabilitation-Focused -0.08, the Ministry of Consumer Protection -0.08 a level, the Combustion Engine +0.30 and the
 # late-era lines (LATE_EXTERNAL_LINES). Work: Child Labor Allowed and Penal Labor Camps +0.10, Regulatory Bodies and
 # Worker Protections -0.10 a Workplace Safety level, Mind Backups.

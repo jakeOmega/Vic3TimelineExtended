@@ -5091,10 +5091,6 @@ law_private_policing = {
 		# -0.5 (legislative_override_capacity.txt). The institution's own +0.1
 		# a level still applies.
 		country_legislative_override_capacity_add = -0.5
-		# The census's deaths from violence and accidents: guarded districts,
-		# alarm networks and patrols where someone pays, as Local Police's -0.05
-		# (te_demog_law_injections.txt)
-		state_external_mortality_mult = -0.05
 	}
 
 	# Per level of investment, i.e. per size of the private force.
@@ -5106,9 +5102,10 @@ law_private_policing = {
 		# Unrest happens where nobody pays for cover: cancels half of the
 		# institution's own -10% turmoil effects a level.
 		state_turmoil_effects_mult = 0.05
-		# The same for the census's deaths from violence and accidents: half of
-		# the institution's own -0.02 a level (extra_institutions.txt)
-		state_external_mortality_mult = 0.01
+		# The census's deaths from violence and accidents: guarded districts,
+		# alarm networks and patrols where someone pays, as Local Police's -0.02
+		# a level, below a national force's -0.03 (te_demog_law_injections.txt)
+		state_external_mortality_mult = -0.02
 		# Owners pay for their protection: the guards are service workers on
 		# shops', offices' and estates' payrolls, so Urban Center owners and
 		# Services buyers, mostly the better-off, bear the cost through prices.

@@ -252,7 +252,7 @@ switching between them keeps its investment.
 |---|---|
 | Available | From Computer Networks, with Laissez-Faire or Interventionism; not in a Council Republic |
 | Ministry of Public Safety | Costs 40% less bureaucracy, as base-game Private Schools and Private Health Insurance do for theirs |
-| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.1; the Ministry's turmoil reduction is halved, to 5% a level, and so is its cut to deaths from accidents and violence under the Full Demographics rule, to 1% a level; Services output −1% |
+| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.1; the Ministry's turmoil reduction is halved, to 5% a level; under the Full Demographics rule deaths from accidents and violence −2% a level, against a Dedicated Police Force's 3%; Services output −1% |
 | Also | Trade Unions −10% political strength; Labor Movement pop attraction +15%; Legislative Override Capacity −0.5 |
 
 Protection follows money. In every state the wealthy districts are guarded

@@ -646,7 +646,8 @@ upkeep is a share of GDP a year.
   (sterilization quotas, five years at most). The coercive package, one child with the Crash Campaign, costs 700: most
   of a strong autocracy's authority and out of reach of most democracies, which is the political price §3.4's last
   bullet asks for. The AI starts each with its upkeep plus 25 free, and tightens Birth Limit with the further 100 plus
-  25.
+  25. A player's Start is greyed until the upkeep is free, as a decree is (Tighten until the further 100 is); ending
+  needs none.
 - **Prenatal sexing** has no technology of its own. Proposal: `microprocessor` (era 8), since real-time portable
   ultrasound spread with it in the 1980s. The sex ratio at birth is a census input under Full only
   (`state_sex_ratio_at_birth_add`, §3.5): it moves the newborns' split in the step (`te_demog_k_*_births_per_100k`

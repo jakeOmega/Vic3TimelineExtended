@@ -468,6 +468,11 @@ te_demog_ms_authority_sex_education = { value = 0 }
 te_demog_ms_authority_later_longer_fewer = { value = 150 }
 te_demog_ms_authority_birth_limit = { value = 300 }
 te_demog_ms_authority_birth_limit_one = { value = 400 }
+# the further upkeep of tightening Birth Limit to one child (its button needs it free; the AI pulse takes it off its budget)
+te_demog_ms_authority_birth_limit_tighten = {
+	value = te_demog_ms_authority_birth_limit_one
+	subtract = te_demog_ms_authority_birth_limit
+}
 te_demog_ms_authority_rural_exemption = { value = 0 }
 te_demog_ms_authority_crash_campaign = { value = 300 }
 # Country: Birth Limit's upkeep for its row (te_demog_ms_birth_limit_upkeep): the one child's once the button has moved

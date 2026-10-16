@@ -559,20 +559,25 @@ safety, Synthetic Biology's step on the ageing ladder and the Family Policy meas
 (`docs/systems/mod_systems.md` § Causes of Death, § Phase 3: the late game, § Family Policy measures). Every line is a
 script-only type on a carrier the census already reads (#892's fact), so no self-check.
 
-1. **The carriers' tooltips.** The Ministry of Public Safety shows Deaths from Violence and Accidents −2% a level;
-   Private Policing +1% a level in its institution lines and −5% in its own; Restorative Justice −4%,
+1. **The carriers' tooltips.** Each police law's institution lines show Deaths from Violence and Accidents a level of
+   the Ministry of Public Safety: Local Police and Private Policing −2%, Dedicated and Militarized −3%; Restorative Justice −4%,
    Rehabilitation-Focused −8%; Penal Labor Camps Deaths at Work +10%; Autonomous Vehicles "Safer Streets and Homes"
    +10%; Synthetic Biology Ageing in Longevity Care −5% and Biological Immortality −70%.
 2. **The hover moves (Full or Display only).** In an incorporated state of a Dedicated Police country with the
-   Ministry at level 5, Accidents and Violence's "Laws and Institutions" factor reads 0.10 lower than with the Ministry
+   Ministry at level 5, Accidents and Violence's "Laws and Institutions" factor reads 0.15 lower than with the Ministry
    at 0, after the state's next count; under Rehabilitation-Focused criminal justice a further 0.08 lower. Its lore line
-   names the Ministry and both laws. An unincorporated state reads no Ministry line.
+   names the Ministry and both laws. An unincorporated state reads no police line at all (the law's line is per
+   Ministry level, which reaches incorporated states only).
 3. **The ladder (Full, late game).** With mRNA Therapeutics, Personalized Medicine, Genetic Engineering and Synthetic
    Biology, the Biological Age hover's ageing rate reads 0.70 in the capital (0.75 without Synthetic Biology); with
    Biological Immortality 0.
 4. **Birth Limit's row** reads 300 authority, still 300 after Start, and 400 after Tighten; the country's authority
    falls by the same. The Missing Girls event's relax option says the upkeep falls by 100, and authority rises by 100
    when it is taken.
-5. **AI authority (observer run, Full).** A famine AI on Population Control Measures starts Birth Limit only with 325
+5. **A player's Start needs the upkeep free.** With less free authority than a measure's upkeep its Start is greyed
+   with "Needs @aut! N free authority to start", N the upkeep; Birth Limit at two children greys Tighten under 100
+   free. End is never greyed for authority. The engine reads `authority >= <script value>` as the UN's buttons read
+   `influence >= un_found_influence_cost`.
+6. **AI authority (observer run, Full).** A famine AI on Population Control Measures starts Birth Limit only with 325
    or more free authority and tightens it only with 125 more; no AI runs into negative authority from the measures
    alone. Read `te_dg_ms_*` and the country's authority in a plain-text save.

@@ -105,7 +105,7 @@ class _MeasureEngine(_Engine):
 
     def __init__(self, law=PN, year=1900, month=0, full=True, fixtures=None, triggers=None):
         super().__init__({"te_history_month_index": _date(year, month), "gdp": 52_000_000.0,
-                          "capital.te_demog_women_rate": 0.5, **(fixtures or {})},
+                          "capital.te_demog_women_rate": 0.5, "authority": 1000.0, **(fixtures or {})},
                          triggers={"te_demog_effects_run": full, "is_ai": False, **(triggers or {})})
         self.effects.update(_raw_blocks([MS_EFFECTS]))
         self.values.update(_raw_blocks([MS_VALUES]))
@@ -363,6 +363,48 @@ class TestButtons(unittest.TestCase):
         self.assertFalse(eng.sgui_valid("rural_exemption"))
         eng.press("birth_limit")
         self.assertTrue(eng.sgui_valid("rural_exemption"))
+
+
+    def test_a_measure_needs_its_authority_upkeep_free_to_start(self):
+        """The review of #989 (owner, 2026-10-16): as a decree does, a measure with an authority upkeep greys its Start
+        until that much authority is free, with the reason; once on, it can still end with none free."""
+        authority = {key: -lines["country_authority_add"] for key, (_, lines) in CATALOGUE.items()
+                     if "country_authority_add" in lines}
+        self.assertEqual(set(authority), {"honours", "restricted_contraception", "later_longer_fewer", "birth_limit",
+                                          "crash_campaign"})
+        loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
+        for key, cost in authority.items():
+            with self.subTest(key):
+                law = next(iter(CATALOGUE[key][0]))
+                eng = _MeasureEngine(law=law, year=1900, fixtures={"authority": cost - 1.0})
+                self.assertFalse(eng.sgui_valid(key), "short of the upkeep")
+                eng.fixtures["authority"] = float(cost)
+                self.assertTrue(eng.sgui_valid(key))
+                body = _block(_text(MS_SGUIS), f"te_demog_ms_{key}_sgui")
+                self.assertIn(f"text = te_demog_ms_{key}_authority_tt", body)
+                self.assertIn(f"authority >= te_demog_ms_authority_{key}", body)
+                self.assertIn(f" te_demog_ms_{key}_authority_tt:0 \"Needs @aut! [GetPlayer.MakeScope.ScriptValue("
+                              f"'te_demog_ms_authority_{key}')|0] free authority to start\"", loc)
+                if key != "crash_campaign":   # the campaign has no off: the pulse ends it
+                    eng.press(key).at(1905)
+                    eng.fixtures["authority"] = -50.0
+                    if key == "birth_limit":
+                        eng.vars["te_dg_ms_birth_limit_one"] = 1.0
+                    self.assertTrue(eng.sgui_valid(key), "ending needs no authority")
+        # the measures paid in money or bureaucracy have no such reason
+        for key in set(CATALOGUE) - set(authority):
+            self.assertNotIn("authority", _block(_text(MS_SGUIS), f"te_demog_ms_{key}_sgui"), key)
+
+    def test_birth_limit_needs_the_one_childs_further_upkeep_to_tighten(self):
+        eng = _MeasureEngine(law=PC, fixtures={"authority": 300.0}).press("birth_limit")
+        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_tighten"), 100)
+        eng.fixtures["authority"] = 99.0
+        self.assertFalse(eng.sgui_valid("birth_limit"), "100 more to tighten")
+        eng.fixtures["authority"] = 100.0
+        eng.press("birth_limit")
+        self.assertIn("te_demog_ms_birth_limit_one", eng.modifiers)
+        self.assertIn("text = te_demog_ms_birth_limit_tighten_authority_tt",
+                      _block(_text(MS_SGUIS), "te_demog_ms_birth_limit_sgui"))
 
 
 class TestTerm(unittest.TestCase):

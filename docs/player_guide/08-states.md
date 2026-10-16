@@ -408,10 +408,11 @@ Ministry of Health, in incorporated states only. So a Public Health Insurance
 law does little before antibiotics, and medicine without a health system
 reaches less than half the people. The medical technologies and the health,
 policing, criminal justice, pension and labor laws show what they do to each
-cause in their tooltips. Deaths from accidents and violence fall with every
-police law but No Police, 2% for each level of the Ministry of Public Safety (1%
-under Private Policing), and with Restorative Justice (4%) and
-Rehabilitation-Focused Criminal Justice (8%); Penal Labor Camps raise deaths at
+cause in their tooltips. Deaths from accidents and violence fall with each
+level of the Ministry of Public Safety in incorporated states: 3% a level under a
+Dedicated or Militarized Police Force, 2% under Local Police or Private Policing,
+nothing under No Police. Restorative Justice lowers them 4% and
+Rehabilitation-Focused Criminal Justice 8%; Penal Labor Camps raise deaths at
 work. Later technologies make work and everyday life safer whatever the
 laws: Prefabricated Construction, Industrial Robotics, Containerization and
 Knowledge Economy together prevent nine in ten deaths at work, and Modern Urban
@@ -550,7 +551,10 @@ A measure takes effect as soon as you start it and costs its upkeep while it
 runs: a weekly share of GDP for the ones paid in money, recalculated each year,
 authority, or a costlier Ministry of Education. A measure acts on every state
 at once, so the ones that need enforcement cost more authority than a decree
-does for one state, and one child with the Crash Campaign takes 700. Each also moves the approval of
+does for one state, and one child with the Crash Campaign takes 700. As with a
+decree, a measure paid in authority can't start until you have its upkeep free,
+and Birth Limit can't tighten to one child without the further 100; ending a
+measure needs no authority. Each also moves the approval of
 the interest groups its tooltip lists. Once started, a measure runs for at least
 five years, and its button can't end it before then. A change to a law that
 doesn't allow a measure ends it at once, with a notice, and taking it up again
