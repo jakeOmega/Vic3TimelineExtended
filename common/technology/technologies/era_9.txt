@@ -328,7 +328,7 @@ missile_defense_systems = {
 }
 
 automated_surveillance = {
-	# Intrusive Surveillance System, Ministry of Thought Control laws
+	# Intrusive Surveillance System law
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/automated_surveillance.dds"
 	category = military
