@@ -459,3 +459,16 @@ class GateScriptTest(unittest.TestCase):
             for kind in ("name", "line_open", "line_wait", "line_paid", "line_verdict"):
                 with self.subTest(body=b.key, kind=kind):
                     self.assertIn(f"sr_window_{kind}_{b.key}", keys)
+
+
+class NumberRangeTest(unittest.TestCase):
+    """The script's numbers are fixed-point, about +-2.1 million."""
+
+    def test_never_is_above_every_premium_and_its_arithmetic_stays_in_range(self):
+        values = _strip(_raw("common", "script_values", "sr_launch_window_values.txt"))
+        never = float(re.search(r"sr_launch_never = \{\s*value = ([\d.]+)", values).group(1))
+        self.assertGreater(never, glw.PREMIUM_CAP)
+        highest_goal = 650
+        self.assertLess((1 + never) * highest_goal, 2_000_000)  # sr_launch_fleet_cost
+        self.assertLess(highest_goal * glw.PREMIUM_CAP / 0.5, 2_000_000)  # sr_launch_months_cost_<body>, pace floor
+        self.assertLess(never * 2, 2_000_000)  # sr_launch_months_allowed

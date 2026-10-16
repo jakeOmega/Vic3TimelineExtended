@@ -8,10 +8,12 @@
 # said otherwise.
 # ============================================================================
 
-# "Can't launch": above any premium the generator stores (at most 1000, i.e.
-# +100,000%), and inside the script's number range. Any scope.
+# "Can't launch": just above any premium the generator stores (at most 1000,
+# i.e. +100,000%), and small enough that goal x (1 + it) and twice it stay far
+# inside the script's number range (about two million). Also the stage's wait
+# when it has nothing left (sr_window_stage_wait). Any scope.
 sr_launch_never = {
-	value = 100000
+	value = 1001
 }
 
 # How much the approach values a colony now against every later one: Standard
