@@ -692,6 +692,8 @@ def _stored(inp):
            "te_dg_in_turm": min(max(inp.turmoil, 0.0), 1.0), "te_dg_in_crowd": inp.crowding,
            "te_dg_in_mal": float(inp.malaria),
            "te_dg_in_malc": min(max(inp.mods.get(P.MALARIA_CONTROL_TYPE, 0.0), 0.0), 1.0)}
+    for cause, st in P.SAFETY_TYPES.items():
+        out[f"te_dg_in_saf_{P.CAUSE_SHORT[cause]}"] = min(max(inp.mods.get(st, 0.0), 0.0), P.SAFETY_MAX)
     for cause in P.MEDICINE_CAUSES:
         out[f"te_dg_trt_{P.CAUSE_SHORT[cause]}"] = med[cause]
     for cause, types in P.MORTALITY_TYPES.items():
@@ -6402,6 +6404,10 @@ class TestCauseFactorsScript(unittest.TestCase):
         {P.ACCESS_TYPE: 1.5, P.TREATMENT_TYPE["infection"]: 0.3},
         {"state_work_mortality_mult": -0.9, "state_external_mortality_mult": -0.1},
         {"state_work_mortality_mult": 0.1, "state_external_mortality_mult": 0.3, "state_chronic_mortality_mult": -0.9},
+        # modern safety (2026-10-16): today's carriers on Workplace Safety's level 5, and a sum past the cap
+        {"state_work_mortality_mult": -0.5, P.SAFETY_TYPES["work"]: 0.9, P.SAFETY_TYPES["external"]: 0.4,
+         "state_external_mortality_mult": -0.12},
+        {"state_work_mortality_mult": -0.9, P.SAFETY_TYPES["work"]: 1.3, P.SAFETY_TYPES["external"]: 0.2},
     ]
     STATES = ((3, 0.1, 0.0, 0.0), (6.5, 0.2, 0.4, 0.05), (8, 0.0, 1.0, 0.0), (20, 0.5, 0.2, 0.6), (40, 1.0, 0.0, 0.0))
 
@@ -6487,6 +6493,27 @@ class TestCauseFactorsScript(unittest.TestCase):
         eng.vars.update(te_dg_sol=7.0, te_dg_lit=0.1)
         eng.call("te_demog_cause_inputs_store")
         self.assertEqual((eng.vars["te_dg_in_mal"], eng.vars["te_dg_in_malc"]), (1.0, 1.0), "the control is 0 to 1")
+
+    def test_the_safety_factor_cuts_work_and_accidents_past_the_laws_floor(self):
+        """Modern safety (2026-10-16): 1 - the stored share, at most SAFETY_MAX, multiplying below the laws factor's
+        floor; a step from before it stored no share and reads 1, so the hover still multiplies to the row."""
+        inp = demographics_model.Inputs(sol=40, literacy=1.0, mods=dict(self.CASES[-1]))
+        eng = self._eng(inp)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_laws")), P.MORTALITY_MULT_FLOOR)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_safety")), 1 - P.SAFETY_MAX)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_mult_work")),
+                               P.MORTALITY_MULT_FLOOR * (1 - P.SAFETY_MAX), places=9)
+        del eng.vars["te_dg_in_saf_work"], eng.vars["te_dg_in_saf_ext"]
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_safety")), 1.0)
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_external_safety")), 1.0)
+
+    def test_the_store_takes_the_safety_shares(self):
+        inp = demographics_model.Inputs(sol=40, literacy=1.0, mods=dict(self.CASES[-1]))
+        eng = _Engine(_mod_fixtures(inp))
+        eng.vars.update(te_dg_sol=40.0, te_dg_lit=1.0)
+        eng.call("te_demog_cause_inputs_store")
+        self.assertEqual((eng.vars["te_dg_in_saf_work"], eng.vars["te_dg_in_saf_ext"]), (P.SAFETY_MAX, 0.2),
+                         "each share is 0 to SAFETY_MAX")
 
     def test_a_walk_between_steps_moves_no_factor(self):
         """The reviews of #916 (logic M2, panel M4): a walk without a step (a second pulse in a year, the console's

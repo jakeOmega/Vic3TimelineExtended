@@ -80,7 +80,7 @@ te_demog_state_clock_step = {
 	te_demog_workforce_refresh = yes
 	# phase 2 step 4: conscription, the youth bulge and sex balance, as on the yearly pulse
 	te_demog_consequences_refresh = yes
-	# phase 3: the longevity gap's politics, off until a play-test (te_demog_lx_effects.txt)
+	# phase 3: the longevity gap's politics, on since 2026-10-16 (te_demog_lx_effects.txt)
 	te_demog_lx_politics_refresh = yes
 }
 
