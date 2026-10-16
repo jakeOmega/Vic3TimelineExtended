@@ -1,0 +1,25 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — the seabed's hooks into the UN (effects)
+# ============================================================================
+# STUBS. The seabed licences call these; the UN phase (spec § 3) owns the real
+# bodies and replaces this file whole. Names and scopes are a contract:
+# docs/superpowers/specs/2026-10-16-global-commons-design.md, § 3.
+# ============================================================================
+
+# No scope needed. Called once at the start of the yearly sharing
+# (te_seabed_yearly_pass), before any weight or share: sets
+# global_var:te_seabed_regime (1 Open, 2 Regulated, 3 Scramble). Here: Open
+# when unset.
+te_seabed_un_update_regime = {
+	if = {
+		limit = { NOT = { has_global_variable = te_seabed_regime } }
+		set_global_variable = { name = te_seabed_regime value = 1 }
+	}
+}
+
+# Country scope. Called by te_seabed_set_policy once te_seabed_policy holds the
+# new value and te_seabed_policy_prev the old one: the UN phase adds § 3.3's
+# defection costs and the five-year cooldown here.
+te_seabed_un_on_policy_change = {
+	# REVIEWED 2026-10-16 (empty_block): hook, filled by the UN phase
+}

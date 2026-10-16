@@ -1,0 +1,31 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: static modifiers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md §§ 2.4-2.5.
+# ============================================================================
+
+# Long-Haul Seabed Operations (§ 2.4): a Deep-Sea Mine level on a distant
+# basin's licence works at -25% throughput. A unit state modifier, applied
+# from on_monthly_pulse_state with multiplier = the state's share of distant
+# licences (te_seabed_long_haul_mult); its one refresh site is
+# te_seabed_refresh_long_haul. The figure is restated as
+# te_seabed_long_haul_penalty_pct for display.
+te_seabed_long_haul = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_ocean_mine_throughput_add = -0.25
+}
+
+# The seabed policy's influence, held while the policy stands (§ 2.5), flat as
+# the UN's stances and programmes hold theirs. Literal values, never applied
+# with a multiplier; te_seabed_influence_sponsor / _unilateral restate them
+# (test_seabed_script.py pins the pairs). Rebuilt from te_seabed_policy by
+# te_seabed_policy_cost_check.
+te_seabed_policy_sponsor_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_cost_add = 50
+}
+
+te_seabed_policy_unilateral_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_cost_add = 150
+}

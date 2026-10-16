@@ -1,0 +1,27 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — the seabed's hooks into the UN (triggers)
+# ============================================================================
+# STUBS. The seabed licences (te_global_commons_seabed_*.txt) read these; the
+# UN phase (spec § 3, § 4: ITLOS's seabed terms, the Antarctic Treaty) owns the
+# real bodies and replaces this file whole. Names and scopes are a contract:
+# docs/superpowers/specs/2026-10-16-global-commons-design.md, § 3.2 and § 4.
+# ============================================================================
+
+# Country scope. Claims in the reserved half of each pool under the Regulated
+# regime (§ 3.2): an ITLOS party whose GDP per head is below the members'
+# average.
+te_seabed_reserved_half_eligible = {
+	always = no
+}
+
+# Country scope. A party to ITLOS for seabed purposes (pays royalties, § 3.3).
+# Read by the Seabed section's "ITLOS party" line.
+te_seabed_itlos_party = {
+	always = no
+}
+
+# Country scope. A party to the Antarctic Treaty (§ 4): its Southern
+# entitlement is 0 and its Southern holdings are grandfathered.
+te_seabed_southern_barred = {
+	always = no
+}

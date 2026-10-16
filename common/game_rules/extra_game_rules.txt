@@ -468,3 +468,23 @@ te_principle_slots_rule = {
 		flag = te_principle_slots_four
 	}
 }
+
+# Global Commons (docs/superpowers/specs/2026-10-16-global-commons-design.md
+# § 2.9): the seabed licences that cap the Deep-Sea Mine, and the UN's Law of
+# the Sea and Antarctic Treaty terms built on them. Disabled, the Deep-Sea Mine
+# is uncapped as before. Launch windows and orbital debris belong to the space
+# race and follow space_race_rule. Checked as has_game_rule =
+# global_commons_enabled (te_global_commons_enabled): the system arrives with
+# the rule, so a save from before it keeps the uncapped mine until the rule is
+# switched on.
+global_commons_rule = {
+	default = global_commons_enabled
+
+	global_commons_enabled = {
+		flag = global_commons_enabled
+	}
+
+	global_commons_disabled = {
+		flag = global_commons_disabled
+	}
+}
