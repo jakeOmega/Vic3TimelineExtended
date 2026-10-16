@@ -52,10 +52,8 @@ te_decision_open_antarctic_station = {
 				limit = { country_rank >= rank_value:major_power }
 				add = 30
 			}
-			else = {
-				add = 5
-			}
-			# A Southern coastline (the seabed basins' map, where it runs).
+			# A Southern coastline (the seabed basins' map, where it runs): the
+			# only reason a smaller power runs a station.
 			if = {
 				limit = {
 					any_scope_state = {

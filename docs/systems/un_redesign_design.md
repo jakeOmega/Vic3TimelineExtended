@@ -952,6 +952,7 @@ good standing; a negative one counts for anyone (§0.10 ruling 2). All are pinne
 | United Nations Headquarters (the host) | +1 | `pm_un_headquarters` |
 | Peace Palace | +0.5 | `pm_wonder_peace_palace` |
 | Palais des Nations | +0.5 | `pm_wonder_palais_des_nations` |
+| A party to the Antarctic Treaty (the Global Commons, 2026-10-16) | +0.25 | `un_antarctic_policy_modifier`, applied at ×1 from party status (`te_antarctic_policy_refresh`), never with the convention's enforcement multiplier |
 
 **Rulings.**
 

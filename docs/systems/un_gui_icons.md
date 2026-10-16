@@ -1,6 +1,6 @@
 # UN GUI: Icons
 
-The UN overview and the General Assembly's session strip draw 43 icons of their own, plus a pie pair. They were vanilla placeholders in the first round of the UN GUI pass (PR #567), and PR #572 replaced them. All of them live in `gfx/interface/icons/un_icons/`.
+The UN overview and the General Assembly's session strip draw 62 icons of their own, plus a pie pair. They were vanilla placeholders in the first round of the UN GUI pass (PR #567), and PR #572 replaced them. All of them live in `gfx/interface/icons/un_icons/`.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/un_overview_widget.gui` (membership, tier, crisis, vacant seat, agencies, pies) or `un_layout_widget.gui` (topics), chosen by a display value's code. No script reads the paths. `UnIconsTest` in `test_un_overview_data.py` holds each code to its file and fails on any placeholder left in either file.
 
@@ -58,6 +58,8 @@ One drawn disc (UN-blue enamel, a gold rim) under one warm or light symbol each.
 | CCD | a wooden painter's palette with red, yellow and green paint | `agency_ccd.dds` |
 | TPNW | a brass aerial bomb wrapped in an iron chain | `agency_tpnw.dds` |
 | INCB | a red poppy and its green seed pod | `agency_incb.dds` |
+| ATS (the Antarctic Treaty) | placeholder: a copy of UNEP's leaf until its own art is rendered | `agency_ats.dds` |
+| UNODA (the anti-satellite moratorium) | placeholder: a copy of UNOOSA's planet until its own art is rendered | `agency_unoda.dds` |
 
 ## General Assembly: resolution topics
 
@@ -95,6 +97,10 @@ The session strip, one per `un_disp_res_topic_code`, at 40 px. The same disc as 
 | 27 | World Development Fund | a stack of gold coins with a seedling sprouting from the top | `topic_development_fund.dds` |
 | 28 | Supervised referendum | a wooden ballot box, a paper ballot in its slot | `topic_referendum.dds` |
 | 29 | Narcotics convention | INCB's poppy + the scroll | `topic_narcotics.dds` |
+| 30 | Antarctic Treaty | placeholder: a copy of `topic_climate.dds` | `topic_antarctic.dds` |
+| 31 | Anti-satellite moratorium | placeholder: a copy of `topic_space.dds` | `topic_asat.dds` |
+
+The four Global Commons icons (2026-10-16) are copies of existing art under their own names, so new art drops in with no GUI edit; they have no entries in `icon_prompts.py` yet. The copies were added from a sparse worktree without `gfx/` by staging the source blob under the new path (`git update-index --add --cacheinfo 100644,<blob>,<path>`, then `--skip-worktree`), which needs no texture on disk.
 
 ## Overview: member-share pies
 

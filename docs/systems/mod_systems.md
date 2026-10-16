@@ -1172,6 +1172,38 @@ The first three follow the owner's rule, "the milestones the current mission ser
 - **Colony modifiers are JE-scoped.** All 68 colony modifiers and `sr_solar_system_trade` are applied to `je:je_space_race_solar_colonization`, not to the country directly. The colonization JE stays alive indefinitely while colonies exist (passive mode with hidden buttons when all 34 colonies are claimed). This means colony modifier effects still apply to the country, but display in the JE panel. Grant one only through `sr_grant_colony_modifier`, which also records it as `<modifier>_held`: a revolution's winner inherits the entry with no modifiers, and `sr_sync_solar_colonization_entry` rebuilds them from those records.
 - **Localization is auto-organized** by `organize_loc.py` into category-specific files. Space race loc keys spread across `te_events_l_english.yml`, `te_journal_entries_l_english.yml`, `te_modifiers_l_english.yml`, `te_miscellaneous_l_english.yml`, and `te_concepts_l_english.yml`.
 
+## Global Commons: the UN layer
+
+The UN's part of the Global Commons (`docs/superpowers/specs/2026-10-16-global-commons-design.md` §3, §4, §6.5): the Law of the Sea's seabed terms, the Antarctic research station and the Antarctic Treaty, and the Moratorium on Destructive Anti-Satellite Tests. The seabed licences, basins, pools and the seabed policy are the seabed system's (its section beside this one); the strike and the debris index are the space race's. The UN details (docket items, vote sites, the registry) are in `journal_entry_systems.md` § United Nations, "The Global Commons".
+
+**Files:** `common/script_values/te_global_commons_un_values.txt` (every figure), `common/scripted_triggers/te_global_commons_un_triggers.txt`, `common/scripted_effects/te_global_commons_un_effects.txt` (every writer), `common/static_modifiers/te_global_commons_un_modifiers.txt`, `common/decisions/te_global_commons_un_decisions.txt`, `common/on_actions/te_global_commons_un_on_actions.txt`, `common/messages/te_global_commons_un_messages.txt`, `events/te_global_commons_un_events.txt` (the self-check), the two conventions' sites in the UN files, and the hooks: `common/scripted_triggers/te_seabed_un_hooks.txt` + `common/scripted_effects/te_seabed_un_hooks.txt` (the seabed allocation calls them), `common/scripted_triggers/te_asat_un_hooks.txt` + `common/scripted_effects/te_asat_un_hooks.txt` (the anti-satellite strike calls them). Tests: `test_global_commons_un.py`, `test_un_convention_registry.py`.
+
+### The interface with the seabed and debris systems
+
+| Name | Kind | Written by | Read by |
+|---|---|---|---|
+| `te_seabed_regime` | global var: 1 Open, 2 Regulated, 3 Scramble (absent = Open) | `te_seabed_un_update_regime`, once a year at the start of the seabed allocation | the allocation (reserved half, navy ×2), royalties, Our Obligations |
+| `te_seabed_itlos_party` | trigger (country) | here | the allocation, the Seabed section's party status |
+| `te_seabed_reserved_half_eligible` | trigger (country) | here | the allocation's reserved half |
+| `te_seabed_southern_barred` | trigger (country): an Antarctic Treaty party | here | the allocation (Southern entitlement 0, built levels grandfathered) |
+| `te_seabed_un_on_policy_change` | effect (country), after `te_seabed_policy` / `te_seabed_policy_prev` are set | here | called by the seabed policy's change |
+| `te_seabed_policy`, `te_seabed_held_<basin>`, state `te_seabed_basin` | country / state vars | the seabed system | here, every read guarded |
+| `te_antarctic_station` | country var | the station decisions here | the seabed allocation's +5 Southern weight |
+| `te_asat_moratorium_party` | trigger (country) | here | the strike (twice the infamy and the case) |
+| `te_asat_un_on_strike` | effect (the striker; `scope:te_asat_target`) | here | called by the strike |
+| `te_asat_last_strike_month`, `te_asat_strikes_total`, `modifier:country_orbital_debris_removal_add` | globals; a country modifier | the debris system | here, guarded |
+
+### Mechanics
+
+- **Regimes.** Open while the Law of the Sea is not in force, its seabed terms are asleep (nobody has Abyssal Plain Mining, `te_seabed_terms_awake`) or the UN rule is off; Scramble while two or more great powers hold Unilateral Licensing; Regulated otherwise. A Scramble returns to Regulated 24 months after fewer than two remain (`te_seabed_scramble_return_month`, read at the yearly pass, so two passes). Each change of regime is a notification to every country with Abyssal Plain Mining.
+- **Party status.** Ratified (the member modifier or its mirror), not on Unilateral Licensing, and not cooling off: a party that switches to Unilateral Licensing while the convention governs the seabed (in force and awake, the live condition `te_seabed_itlos_governs`, not the stored regime, so nobody slips out between a vote and the next pass) pays 10 infamy, 5 standing and 10 defiance once (`te_seabed_defected`); leaving Unilateral Licensing for either lawful policy starts `te_seabed_party_cooldown_end` (60 months). Under the Scramble a defection still costs, since the convention still governs; royalties and the reserved half are suspended.
+- **Royalties.** A party under Regulated pays `te_seabed_ocean_mine_levels × te_seabed_royalty_per_level` a week (4% of 44,700, the base method's proposed output value at base prices: 1,788), billed as dues are (`te_seabed_royalty_modifier` × `var:te_seabed_royalty_cached`, refreshed monthly, one site). The monthly global pulse sums them into `te_seabed_royalties_weekly`; `un_dev_fund_pot_weekly_value` adds it while the World Development Fund stands and `un_budget_weekly_value` otherwise. Budget Breakdown: United Nations.
+- **The station.** A decision for any country with Space Exploration under the Global Commons rule. +2% research speed, +25 innovation cap, upkeep 0.1% of GDP a year with a floor of 1,000 a week (Budget Breakdown: Space Race). `var:te_antarctic_station` is the truth; `te_antarctic_station_refresh` rebuilds both modifiers monthly.
+- **The Antarctic Treaty.** Raised by a country's first station (docket item 15). Parties: +2% prestige (×E), no new Southern licences, +3% research with a station (regime term ×E), +0.25 Policy at ×1 (`te_antarctic_policy_refresh`). Denounced by decision (10 infamy, 5 standing, 10 defiance, `te_antarctic_denounced` until a new treaty); lapses monthly-checked when two great powers outside it hold Southern licences.
+- **The Moratorium.** Raised by a destructive anti-satellite strike (docket item 16, `un_dkt_asat_pending`); the striker is not offered it for two years. Parties: +5% prestige (×E); the strike reads `te_asat_moratorium_party`; once a year a party with a removal method books 0.25 × weight to Delivery (reason 40).
+- **Rules.** The station and the treaty need the Global Commons rule (`has_game_rule = global_commons_enabled`); the moratorium the space race rule; all UN business the UN rule (the regime is Open without it).
+- **Revolutions.** Everything that must survive is a variable or a convention's mirror; the royalty, station, upkeep and Policy modifiers are derived monthly. `je_immediate_reset_audit` has nothing to flag: nothing here runs in an `immediate`.
+
 ## Wonder Buildings (Construction Site Pattern)
 
 > **Full design document:** `docs/vanilla/wonder_buildings_reference.md`
