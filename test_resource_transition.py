@@ -276,6 +276,20 @@ class InGameTextTest(unittest.TestCase):
                            "from the treasury"):
                 self.assertIn(phrase, text, key)
 
+    def test_no_text_says_an_owner_is_paid(self):
+        """rt_retire_smallest only debits the treasury; no effect pays a
+        building's owners, so no text may say they are paid."""
+        keys = ["rt_how_programmes", "rt_law_phaseout_rule_tt", "concept_fossil_transition_desc"]
+        for industry in INDUSTRIES:
+            keys += [f"rt_start_{industry}_button_desc", f"rt_start_{industry}_tt",
+                     f"notification_rt_{industry}_retired_notice_desc"]
+        for key in keys:
+            text = _loc_value(key).lower()
+            self.assertIn("from the treasury", text, key)
+            for phrase in ("owners are paid", "compensate its owners", "compensate owners",
+                           "paid to its owners", "paid to the owners"):
+                self.assertNotIn(phrase, text, key)
+
     def test_the_moratorium_line_names_foreign_investors_and_what_carries_on(self):
         text = _loc_value("rt_law_moratorium_tt")
         for phrase in ("whoever invests, foreign investors included", "Those already running carry on"):
