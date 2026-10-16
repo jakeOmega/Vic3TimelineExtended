@@ -223,6 +223,12 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = villa_of_the_papyri CODE = 1000085 }
 	gm_state_picture_landmark = { KEY = tomb_of_alexander CODE = 1000086 }
 	gm_state_picture_landmark = { KEY = pompeii CODE = 1000087 }
+	gm_state_picture_landmark = { KEY = walhalla CODE = 220 }
+	gm_state_picture_landmark = { KEY = bunker_hill_monument CODE = 12 }
+	gm_state_picture_landmark = { KEY = obelisk_of_the_second_of_may CODE = 12 }
+	gm_state_picture_landmark = { KEY = muhammad_ali_mosque CODE = 304 }
+	gm_state_picture_landmark = { KEY = nelsons_column CODE = 10 }
+	gm_state_picture_landmark = { KEY = washington_monument CODE = 12 }
 }
 
 gm_state_picture_landmark = {

@@ -264,7 +264,8 @@ class TakingTests(unittest.TestCase):
                                   ("gm_name_year", "gm_tr_name_year"), ("gm_name_char", "gm_tr_name_char"),
                                   ("gm_name_occasion", "gm_tr_name_occasion"),
                                   ("gm_name_enemy_cap", "gm_tr_name_enemy_cap"), ("gm_name", "gm_tr_name"),
-                                  ("gm_honoree", "gm_tr_honoree"), ("gm_honoree_ig", "gm_tr_honoree_ig")):
+                                  ("gm_honoree", "gm_tr_honoree"), ("gm_honoree_ig", "gm_tr_honoree_ig"),
+                                  ("gm_signature", "gm_tr_signature"), ("gm_sig_parent", "gm_tr_sig_parent")):
             self.assertIn(f"gm_tr_copy_from_state = {{ FROM = {state_var} TO = {tr_var} }}", make, state_var)
             rebuilt = (squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving")) + " "
                        + squash(block(read(TR_EFFECTS), "gm_state_tr_take_records_from_moving")))
@@ -410,6 +411,21 @@ class TotalsTests(unittest.TestCase):
             else:
                 self.assertRegex(v, rf"(?m)^gm_tr_ig_share_{ig} = 0$", ig)
 
+    def test_a_trophys_signature_counts_for_its_holder(self):
+        """Signatures spec 2026-10-16 §2.4: a trophy keeps its unique dedication
+        and its holder counts the trophy's own grandeur toward its sum, on its
+        parent, whatever the holder's government; no local effect, no group."""
+        sums = squash(strip_comments(block(read("common/scripted_effects/gm_signature_effects.txt"),
+                                           "gm_sig_compute_sums")))
+        held = sums[sums.index("variable = gm_trophies_held"):]
+        self.assertTrue(held.startswith("variable = gm_trophies_held limit = { has_variable = gm_tr_signature "
+                                        "has_variable = gm_tr_grandeur gm_mon_sig_on_parent = yes }"), held[:200])
+        self.assertIn("gm_mon_sig_add_to_sum = { SIG = antiquity G = gm_tr_grandeur }", held)
+        self.assertNotIn("gm_mon_status_fits", held[:held.index("gm_mon_sig_add_to_sum")])
+        piece = squash(block(read("common/scripted_effects/gm_monument_effects.txt"), "gm_mon_tr_take_piece"))
+        for key in ("gm_tr_signature", "gm_tr_sig_parent"):
+            self.assertIn(f"gm_mon_copy_record = {{ KEY = {key} }}", piece, key)
+
     def test_the_entry_stays_for_trophies(self):
         je = squash(strip_comments(read(JE)))
         self.assertEqual(je.count("gm_tr_country_has_any = yes"), 2, "is_shown_when_inactive and possible")
@@ -457,8 +473,10 @@ class NameTests(unittest.TestCase):
             self.assertNotIn("State.", L[key].replace("GetState.", ""), f"{key} reads a State context")
 
     def test_dedication_and_honours_names(self):
-        self.assertEqual({f for f, _ in custom_loc_branches("gm_tr_dedication_name")}, {d.key for d in DEDICATIONS})
-        for d, key in custom_loc_branches("gm_tr_dedication_name"):
+        # A unique dedication's names come first (signatures spec §3), the twelve after.
+        plain = [(f, key) for f, key in custom_loc_branches("gm_tr_dedication_name") if key.startswith("pm_monument_")]
+        self.assertEqual({f for f, _ in plain}, {d.key for d in DEDICATIONS})
+        for d, key in plain:
             self.assertEqual(key, f"pm_monument_{d}")
 
 
@@ -669,12 +687,12 @@ class PictureTests(unittest.TestCase):
 
     def test_set_when_made_seeded_and_every_month(self):
         e = read(TR_EFFECTS)
-        self.assertIn("gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig } gm_tr_update_picture = yes",
+        self.assertIn("gm_tr_copy_from_state = { FROM = gm_sig_parent TO = gm_tr_sig_parent } gm_tr_update_picture = yes",
                       squash(block(e, "gm_state_tr_make_trophy")), "after the records it reads")
-        self.assertIn("set_variable = { name = gm_tr_namesake value = flag:landmark } gm_tr_update_picture = yes",
-                      squash(block(e, "gm_seed_trophy")))
+        self.assertIn("set_variable = { name = gm_tr_namesake value = flag:landmark } gm_tr_sig_backfill = yes "
+                      "gm_tr_update_picture = yes", squash(block(e, "gm_seed_trophy")))
         self.assertIn("every_in_global_list = { variable = gm_trophies gm_tr_repair_places = yes "
-                      "gm_tr_update_picture = yes }", squash(block(e, "gm_trophy_monthly")),
+                      "gm_tr_update_picture = yes gm_tr_sig_backfill = yes }", squash(block(e, "gm_trophy_monthly")),
                       "a landmark drawn later, or an older save's trophy, catches up")
 
     def test_display_value_defaults_to_the_draped_picture(self):
@@ -801,7 +819,8 @@ class Trophies1836Tests(unittest.TestCase):
                 self.assertEqual(lm.state, tr.origin, f"{tr.landmark}: a piece comes from its landmark's state")
             if tr.share != "whole":
                 self.assertIn(tr.landmark, LANDMARK_PARTS, f"{tr.landmark}: a part names what was taken")
-        unplaced = {lm.key for lm in LANDMARKS if not lm.placed and not lm.buried}
+        # A buried site and a historical opportunity's landmark (signatures spec §6) are unplaced too.
+        unplaced = {lm.key for lm in LANDMARKS if not lm.placed and not lm.buried and not lm.year}
         self.assertEqual(unplaced - set(seen), set(), "an unplaced landmark exists only for its trophy")
 
     def test_a_call_per_row(self):

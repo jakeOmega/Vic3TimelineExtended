@@ -53,6 +53,16 @@ IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners
 FRACS = {"prestige": "standing", "legitimacy": "regime", "culture": "culture",
          "leader": "leader", "religious": "religious", "war_memorial": "war_memorial",
          "artistic": "artistic", "scientific": "scientific", "industrial": "industrial"}
+# The unique dedications with a national effect (signatures spec 2026-10-16 §8):
+# a row each after the dedications', in SIGNATURES' order
+# (test_grand_monument_registry.py), each on its own curve (gm_sig_set_steps).
+SIG_ROWS = ("antiquity", "archive", "throne", "royal_pantheon", "martial_glory", "liberty", "grande_armee",
+            "mandate_of_heaven", "glory_of_athens", "to_victory", "unknown_soldier", "concert_of_nations",
+            "conquerors_of_space", "olympic", "heroes")
+# The specials, held for the next monument of their dedication, under Opportunities Seized.
+SPECIALS = ("to_victory", "unknown_soldier", "concert_of_nations", "conquerors_of_space", "olympic")
+SIG_VALUES = os.path.join(REPO, "common", "script_values", "gm_signature_values.txt")
+SIG_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "gm_signature_effects.txt")
 
 # The panel's icons (docs/systems/grand_monuments_gui_icons.md; the art is
 # PR #586's): status code or cell -> texture. Remaking one keeps its file
@@ -378,11 +388,11 @@ class NationalEmptyStateTest(unittest.TestCase):
         """gm_disp_national_any is 1 exactly when some row of National Effects
         shows: every gm_display_* a row is gated on reads a variable the value
         tests, and gm_disp_ig_any's variables are in it too."""
-        values = _read(VALUES)
+        values = _read(VALUES) + "\n" + _read(SIG_VALUES)
         nat = _type_body(_gui(), "te_gm_sec_national")
         anyv = _squash(_block(values, "gm_disp_national_any"))
         gates = set(re.findall(r"ScriptValue\('(gm_display_\w+)'\), '\(CFixedPoint\)0' \)", nat))
-        self.assertEqual(len(gates), len(FRACS) + len(IGS) + len(FADING))
+        self.assertEqual(len(gates), len(FRACS) + len(IGS) + len(FADING) + len(SIG_ROWS))
         for display in gates:
             read_vars = set(re.findall(r"var:(\w+)", _block(values, display)))
             self.assertEqual(len(read_vars), 1, display)
@@ -393,6 +403,9 @@ class NationalEmptyStateTest(unittest.TestCase):
         # The boon rows: gm_disp_boon_any is gm_boons_idle's negation, and the
         # empty state counts it.
         self.assertIn("gm_boons_idle = no", anyv)
+        # A special held shows under the boons (signatures spec §8).
+        self.assertIn("gm_sig_held_idle = no", anyv)
+        self.assertIn("gm_sig_held_idle = yes", _squash(_block(_read(COM_VALUES), "gm_disp_boon_any")))
         idle = _squash(_block(_read(COM_TRIGGERS), "gm_boons_idle"))
         for boon in BOONS:
             self.assertIn(f"NOT = {{ has_variable = gm_boon_{boon} }}", idle, boon)
@@ -477,7 +490,7 @@ class IconsTest(unittest.TestCase):
 class DisplayValuesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.values = _read(VALUES) + "\n" + _read(COM_VALUES)
+        cls.values = _read(VALUES) + "\n" + _read(COM_VALUES) + "\n" + _read(SIG_VALUES)
         cls.loc = _loc()
         gui = _gui()
         keys = set(re.findall(r'(?:text|tooltip) = "([a-z]\w*)"', gui))
@@ -655,13 +668,13 @@ class LabelBudgetTest(unittest.TestCase):
         nat = _squash(_type_body(self.gui, "te_gm_sec_national"))
         label, value = _cells(_type_body(self.gui, "gm_step_row"))
         steps = re.findall(r'gm_step_row = \{.*?"row_label" \{ text = "(\w+)" \}.*?"row_value" \{ text = "(\w+)" \}', nat)
-        self.assertEqual(len(steps), len(FRACS))
+        self.assertEqual(len(steps), len(FRACS) + len(SIG_ROWS))
         for lbl, val in steps:
             self._fits(lbl, label)
             self._fits(val, value, LONGEST_VALUE)
         label, value = _cells(_type_body(self.gui, "gm_value_row"))
         rows = re.findall(r'gm_value_row = \{.*?"row_label" \{ text = "(\w+)" \}.*?"row_value" \{ text = "(\w+)" \}', nat)
-        self.assertEqual(len(rows), len(IGS) + len(FADING) + len(BOONS))
+        self.assertEqual(len(rows), len(IGS) + len(FADING) + len(BOONS) + len(SPECIALS))
         for lbl, val in rows:
             self._fits(lbl, label)
             self._fits(val, value, LONGEST_VALUE)
@@ -872,9 +885,12 @@ class StateCardLabelBudgetTest(LabelBudgetTest):
         labels = set(re.findall(r"localization_key = (\w+)", _block(custom, "gm_local_effect_label")))
         values = set(re.findall(r"localization_key = (\w+)", _block(custom, "gm_local_effect_value")))
         self.assertTrue(labels and values)
-        for key in labels | {"gm_state_lbl_grandeur", "gm_state_lbl_tourism"}:
+        # And the unique dedications' rows (signatures spec §2.2, §8).
+        for key in labels | {"gm_state_lbl_grandeur", "gm_state_lbl_tourism", "gm_state_lbl_sig_tourism",
+                             "gm_state_lbl_sig_university"}:
             self._fits(key, (label, "fontsize_medium"))
-        for key in values | {"gm_state_val_grandeur", "gm_state_val_tourism"}:
+        for key in values | {"gm_state_val_grandeur", "gm_state_val_tourism", "gm_state_val_sig_tourism",
+                             "gm_state_val_sig_university"}:
             self._fits(key, (value, "fontsize_medium"), "-40,000")
 
     # The journal entry's own budgets are LabelBudgetTest's.
@@ -933,6 +949,54 @@ class AgeingPanelTests(unittest.TestCase):
         for key in ("gm_button_mon_tear_down_tooltip", "gm_button_mon_rededicate_tooltip",
                     "gm_button_mon_preserve_tooltip"):
             self.assertIn("AddScope( 'gm_mon', ScriptContainer.MakeScope )", loc[key])
+
+class SignatureRowsTest(unittest.TestCase):
+    """Signatures spec 2026-10-16 §8: a row per unique dedication in force, after
+    the dedications' and before approval, each bar on its own curve; a held
+    special's row under Opportunities Seized; the card's unique-dedication
+    lines, hidden at 0."""
+
+    def test_rows_in_order_between_the_dedications_and_approval(self):
+        nat = _squash(_type_body(_gui(), "te_gm_sec_national"))
+        positions = [nat.find(f'tooltip = "gm_je_tt_sig_{k}"') for k in SIG_ROWS]
+        self.assertNotIn(-1, positions)
+        self.assertEqual(positions, sorted(positions))
+        self.assertLess(nat.find('tooltip = "gm_je_tt_industrial"'), positions[0])
+        self.assertLess(positions[-1], nat.find('text = "gm_je_sub_approval"'))
+        for k in SIG_ROWS:
+            self.assertIn(f"gm_step_row = {{ visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+                          f".ScriptValue('gm_display_sig_{k}'), '(CFixedPoint)0' )]\" tooltip = \"gm_je_tt_sig_{k}\"",
+                          nat, k)
+            self.assertIn(f"ScriptValue('gm_disp_frac_sig_{k}')", nat, k)
+
+    def test_each_bar_follows_its_curve(self):
+        values = _read(SIG_VALUES)
+        steps = _squash(_block(_read(SIG_EFFECTS), "gm_sig_set_steps"))
+        self.assertIn("gm_set_steps = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ NEXT = gm_n_sig_$SIG$ F = 5 }", steps)
+        for k in SIG_ROWS:
+            body = _squash(_block(values, f"gm_disp_frac_sig_{k}"))
+            self.assertIn(f"value = var:gm_g_sig_{k} multiply = 2 subtract = var:gm_n_sig_{k} add = 5 "
+                          f"divide = {{ value = var:gm_n_sig_{k} add = 5 }}", body, k)
+            self.assertTrue(body.endswith("min = 0 max = 1"), k)
+
+    def test_held_specials_under_the_boons(self):
+        nat = _squash(_type_body(_gui(), "te_gm_sec_national"))
+        last_boon = nat.find('tooltip = "gm_je_tt_boon_tech_naturalist"')
+        policy = nat.find('text = "gm_je_sub_policy"')
+        for k in SPECIALS:
+            pos = nat.find(f'tooltip = "gm_je_tt_sig_held_{k}"')
+            self.assertGreater(pos, last_boon, k)
+            self.assertLess(pos, policy, k)
+            self.assertIn(f"ScriptValue('gm_disp_sig_held_{k}')", nat, k)
+
+    def test_the_card_lines_hide_at_zero(self):
+        card = _squash(_read(STATE_GUI))
+        for value, tip in (("gm_state_disp_sig_tourism", "gm_state_sig_tourism_tt"),
+                           ("gm_state_disp_sig_university", "gm_state_sig_university_tt")):
+            self.assertIn(f"te_state_gm_row = {{ visible = \"[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue("
+                          f"'{value}'), '(CFixedPoint)0')]\" blockoverride \"row_tooltip\" {{ tooltip = \"{tip}\" }}",
+                          card, value)
+
 
 if __name__ == "__main__":
     unittest.main()

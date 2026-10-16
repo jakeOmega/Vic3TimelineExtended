@@ -26,6 +26,11 @@
 # No scope. Repair each secondary's state, then the lists. Nothing to do in a
 # game none has touched: gm_mon_lists_written stands while any list does.
 gm_monument_monthly = {
+	# Old saves' held specials, once a round (signatures spec §5.6).
+	if = {
+		limit = { gm_system_enabled = yes }
+		gm_sig_seed_monthly = yes
+	}
 	if = {
 		limit = {
 			gm_system_enabled = yes
@@ -42,6 +47,8 @@ gm_monument_monthly = {
 				# A landmark whose picture is drawn later, or a monument from an
 				# older save, catches up within a month (as a trophy does).
 				gm_tr_update_picture = yes
+				# And its unique dedication (signatures spec §4.4).
+				gm_tr_sig_backfill = yes
 				# Its raiser recorded once (spec 2026-10-16 §4.4), then a month
 				# older (§2).
 				gm_mon_first_sight = yes
@@ -336,6 +343,8 @@ gm_state_demote_primary = {
 			gm_tr_copy_from_state = { FROM = gm_base_ig TO = gm_tr_base_ig }
 			gm_tr_copy_from_state = { FROM = gm_supporter_ig TO = gm_tr_supporter_ig }
 			gm_tr_copy_from_state = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
+			gm_tr_copy_from_state = { FROM = gm_signature TO = gm_tr_signature }
+			gm_tr_copy_from_state = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
 			set_variable = gm_tr_seen
 			gm_tr_update_picture = yes
 		}
@@ -1068,6 +1077,10 @@ gm_mon_tr_take_piece = {
 			gm_mon_copy_record = { KEY = gm_tr_honoree }
 			gm_mon_copy_record = { KEY = gm_tr_honoree_ig }
 			gm_mon_copy_record = { KEY = gm_tr_dedication }
+			# Its unique dedication: a piece counts for its taker at half
+			# (signatures spec §2.4, §7).
+			gm_mon_copy_record = { KEY = gm_tr_signature }
+			gm_mon_copy_record = { KEY = gm_tr_sig_parent }
 			gm_tr_update_picture = yes
 		}
 		change_variable = { name = gm_tr_levels subtract = scope:gm_tr_state.var:gm_tr_take_levels }
@@ -1196,6 +1209,7 @@ gm_seed_landmark_beside = {
 			set_variable = { name = gm_tr_origin_region value = scope:gm_mon_seed_state.state_region }
 			set_variable = { name = gm_tr_site value = scope:gm_mon_seed_state }
 			set_variable = { name = gm_tr_site_region value = scope:gm_mon_seed_state.state_region }
+			gm_tr_sig_backfill = yes
 			gm_tr_update_picture = yes
 		}
 		# The levels on the building, then the container in the lists.
@@ -1363,6 +1377,8 @@ gm_state_write_shadow = {
 				gm_sh_mirror = { FROM = gm_base_ig TO = gm_tr_base_ig }
 				gm_sh_mirror = { FROM = gm_supporter_ig TO = gm_tr_supporter_ig }
 				gm_sh_mirror = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
+				gm_sh_mirror = { FROM = gm_signature TO = gm_tr_signature }
+				gm_sh_mirror = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
 				gm_sh_mirror = { FROM = gm_picture_code TO = gm_tr_picture_code }
 				set_variable = gm_tr_seen
 			}

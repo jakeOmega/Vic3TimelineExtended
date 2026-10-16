@@ -647,3 +647,83 @@ te_debug_monuments.7 = { # REVIEWED 2026-10-14: console-only test event (`event 
 		}
 	}
 }
+
+# ============================================================================
+# UNIQUE DEDICATIONS (signatures) — console test event: `event te_debug_monuments.8`
+# ============================================================================
+# Docs: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md §10.
+# Option a holds one of every special, so the next ceremony offers them; b runs
+# the landmark backfill now (states, monuments beside another, trophies); c
+# gives our tallest monument the next signature in turn, on its dedication now,
+# as .4 steps through pictures (after the last, none; the backfill gives a
+# landmark its own back); d logs every signature total and every monument's
+# signature, parent and whether it counts on TE_MONUMENTS: lines.
+te_debug_monuments.8 = { # REVIEWED 2026-10-16: console-only test event (`event te_debug_monuments.8`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.8.t
+	desc = te_debug_monuments.8.desc
+	flavor = te_debug_monuments.8.flavor
+
+	immediate = {
+		ordered_scope_state = {
+			limit = { has_building = building_grand_monument }
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_dbg_m1
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.8.a
+		gm_sig_hold = { SIG = to_victory }
+		gm_sig_hold = { SIG = unknown_soldier }
+		gm_sig_hold = { SIG = concert_of_nations }
+		gm_sig_hold = { SIG = conquerors_of_space }
+		gm_sig_hold = { SIG = olympic }
+		trigger_event = { id = monument_events.20 }
+	}
+
+	option = {
+		name = te_debug_monuments.8.b
+		every_state = {
+			limit = { has_variable = gm_landmark }
+			gm_state_sig_backfill = yes
+		}
+		if = {
+			limit = { has_global_variable_list = gm_monuments }
+			every_in_global_list = {
+				variable = gm_monuments
+				gm_tr_sig_backfill = yes
+			}
+		}
+		if = {
+			limit = { has_global_variable_list = gm_trophies }
+			every_in_global_list = {
+				variable = gm_trophies
+				gm_tr_sig_backfill = yes
+			}
+		}
+		trigger_event = { id = monument_events.20 }
+	}
+
+	option = {
+		name = te_debug_monuments.8.c
+		trigger = { exists = scope:gm_dbg_m1 }
+		scope:gm_dbg_m1 = { gm_debug_next_signature = yes }
+		trigger_event = { id = monument_events.20 }
+		trigger_event = { id = te_debug_monuments.8 }
+	}
+
+	option = {
+		name = te_debug_monuments.8.d
+		default_option = yes
+		gm_sig_debug_log = yes
+	}
+}

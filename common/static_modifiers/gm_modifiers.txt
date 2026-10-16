@@ -69,6 +69,88 @@ gm_national_promise = {
 	country_legitimacy_base_add = 1
 }
 
+# ---- Unique dedications (signatures spec 2026-10-16 §2.1): on je:je_grand_monuments ----
+# One step each, the multiplier the signature's step count (gm_sig_compute_sums,
+# gm_signature_effects.txt), as the dedications' are. gm_signature_values.txt
+# mirrors every value as gm_step_sig_*; the registry test's SIGNATURES pins both.
+# Ancestral Antiquity's national effect is cultural pull, a script value
+# (cultural_pull_from_antiquity). The Epigraphic Archive's two fields are two
+# modifiers on the same steps, so each carries one.
+gm_national_sig_archive = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_weekly_innovation_max_add = 2
+}
+
+gm_national_sig_archive_spread = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_tech_spread_mult = 0.02
+}
+
+gm_national_sig_throne = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_authority_mult = 0.03
+}
+
+gm_national_sig_royal_pantheon = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_loyalists_from_legitimacy_mult = 0.05
+}
+
+gm_national_sig_martial_glory = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	unit_morale_recovery_mult = 0.05
+}
+
+gm_national_sig_liberty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_migration_pull_mult = 0.03
+}
+
+gm_national_sig_grande_armee = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.03
+}
+
+gm_national_sig_mandate_of_heaven = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 1
+}
+
+gm_national_sig_glory_of_athens = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_influence_mult = 0.02
+}
+
+gm_national_sig_to_victory = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.02
+}
+
+gm_national_sig_unknown_soldier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_radicals_from_legitimacy_mult = -0.05
+}
+
+gm_national_sig_concert_of_nations = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_influence_mult = 0.02
+}
+
+gm_national_sig_conquerors_of_space = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_weekly_innovation_mult = 0.02
+}
+
+gm_national_sig_olympic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_mortality_mult = -0.01
+}
+
+gm_national_sig_heroes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_assimilation_mult = 0.05
+}
+
 # ---- Opportunity boons (opportunities spec §3.2): on je:je_grand_monuments ----
 # One per moment, flat, while the country's gm_boon_<source> counts its 120
 # months down (gm_add_boons, gm_commission_effects.txt). test_grand_monument_
@@ -256,6 +338,24 @@ gm_local_industrial = {
 gm_local_athletic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	state_turmoil_effects_mult = -0.10
+}
+
+# ---- Unique dedications' local effects (signatures spec §2.2): on the state ----------
+# Refreshed by gm_state_monthly (gm_state_sig_local_steps_one) from
+# on_monthly_pulse_state, multiplier = the steps of what carries it here.
+gm_local_sig_antiquity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_tourism_industry_throughput_add = 0.1
+}
+
+gm_local_sig_archive = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_university_throughput_add = 0.1
+}
+
+gm_local_sig_first_emperor = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_tourism_industry_throughput_add = 0.25
 }
 
 # ---- Typed names (v2 §3.5): on the country only while a naming is open ----------
