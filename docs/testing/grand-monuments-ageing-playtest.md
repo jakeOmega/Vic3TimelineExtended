@@ -19,6 +19,7 @@ A fixed item is struck through with the commit that fixed it.
 | Line | Means | If BROKEN, take the fallback |
 |---|---|---|
 | `TE_SELF_CHECK OK/BROKEN monument_rebuild_ungated` | The first Grand Monument a script rebuilt (a return, a piece taken, a promotion, Rededicate) stands at the level it asked for, a pulse later. | `create_building` refuses or changes a rebuild even with the expansion gate held open (`gm_state_can_expand` passes while `gm_rebuilding` stands). Read the line's two numbers: no building means the rebuild failed outright; raise a global flag around each rebuild as `te_cm_placing_site` does and accept it in `can_build_government` too. |
+| `TE_SELF_CHECK OK/BROKEN monument_merge_kept` | The first time a game settles a monument whose state merged into another part of its region (issue #936): OK when its shadow was adopted, as the state's own monument or beside the one there, because a building in the region held levels its records lacked; BROKEN when none did. The line prints the levels recorded, the most levels found unaccounted for and the buildings standing in the region. | BROKEN with no building in the region: the absorbed part's building does not survive a merge, so nothing can be adopted; the records could only be rebuilt (`gm_state_tr_rebuild_from_moving` from the shadow in the most populous state of the region), which costs a rebuild on a pulse. BROKEN with buildings standing: the absorbed building's levels do not join the survivor's (it keeps its own); then adopt the shadow beside with no levels check and add its levels to the building through `gm_state_tr_add_levels`. Note which part survived (read 1 below) either way. |
 
 ## Ageing
 
@@ -39,6 +40,22 @@ A fixed item is struck through with the commit that fixed it.
 | **Both dedications count.** A crown monument beside a civic one. | Legitimacy counts the crown's grandeur, Petty Bourgeoisie approval the civic one's; the local effects show both dedications in the state's modifiers. | |
 | **The gate.** Try to expand a contested monument, and one in a state where six already stand. | The build button is greyed with the reason. | It builds anyway: `can_build_government` does not gate expansion. New levels on a contested monument still found a monument beside it (the contest moves with the old one). Note it; the gate is UX only. |
 | **The AI.** Watch an AI country with a monument for a decade. | It builds new monuments in other states before it builds beside one. | |
+
+## A merged state (issue #936)
+
+Every check reads `TE_MONUMENTS:` and `TE_SELF_CHECK` lines in `debug.log`; note the state card and Our Monuments before
+and after. The probe answers the issue's five reads: which state survives the merge (the acquirer's part, the larger part,
+or a new state); whether the absorbed part's variables are lost; whether its `building_grand_monument` moves into the
+merged state and whether its levels add to a monument already there; whether `on_state_owner_change` fires for the
+absorbed part, and before or after the merge; and what colonizing a decentralized nation's last province does.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The Red Fort.** As the East India Company, annex the Mughals (`MUG`, one province of Delhi) and wait a month. | Within the month the Red Fort stands again in the Company's Delhi, with its name, picture, landmark line and age: as the state's own monument if the Company's part had none, or beside the one there. A `TE_MONUMENTS:` line says which, and the self-check logs OK. It is contested (the Company did not raise it), as any conquered monument. | A `TE_MONUMENTS: ... is lost` line and BROKEN: read its numbers against the Self-checks row. A dedication ceremony for the Red Fort, or a draped "new monument" beside: the adoption ran after something read the building (`gm_state_merge_pending` missed it). |
+| **The Jantar Mantar.** As Jodhpur, take Jaipur's part of Rajputana (`JAI`) in a war. | As above, in Jodhpur's Rajputana, but not contested: a scientific monument honours no order. | As above. |
+| **Into a monument.** Before the annexation, build and dedicate a monument in the Company's part of Delhi, and let its construction finish. | The Red Fort stands beside it after the merge, and the building's level is the sum of both. If the Red Fort is grander, it does not swap in: only a newcomer settles that way. | The building at the Company's level only: levels do not add (BROKEN); the Red Fort is lost. |
+| **Colonization.** Colonize the last province of a decentralized nation's part of a state that a landmark stands in (Great Zimbabwe, `STATE_ZAMBEZI`, Mashona). | The same adoption as a merge, if the building comes along. | Nothing adopted: note what happened to the part's building. |
+| **No loss in ordinary play.** A monument whose state changes hands whole (no other part held by the new owner). | Nothing changes: the state survives, and its shadow is refreshed in place. | |
 
 ## Secondaries' contests
 
