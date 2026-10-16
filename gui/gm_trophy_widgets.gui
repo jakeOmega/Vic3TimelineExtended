@@ -692,6 +692,11 @@ types gm_trophy_widget_types
 			texture = "gfx/interface/icons/gm_pictures/landmark_luxor_obelisk__obelisk.dds"
 		}
 		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000035' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_venus_de_milo__statue.dds"
+		}
+		icon = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000036' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_piraeus_lion__statue.dds"
@@ -945,6 +950,11 @@ types gm_trophy_widget_types
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000086' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_alexander__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000087' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pompeii__forum.dds"
 		}
 	}
 
@@ -1388,6 +1398,11 @@ types gm_trophy_widget_types
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000086' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_alexander.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000087' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_pompeii.dds"
 		}
 	}
 

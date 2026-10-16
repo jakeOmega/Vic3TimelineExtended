@@ -48,6 +48,7 @@ GUI has stacked a type's icons over another type inside one widget before, so th
 | **On display.** As Britain in 1836, open the Home Counties' Trophies on Display, and the journal entry's Trophies section, a month in. | The Marbles row shows the marbles in a skylit room, the Rosetta Stone in its room, Tipu's Tiger in its case; Paris's rows the Luxor Obelisk in a glass-roofed court. Before the first month's pass: the monument's picture. | The monument's picture after a month: `gm_tr_picture_trophies` did not set a code (`gm_tr_trophy_picture_code`). Nothing at all, or the monument's picture over the trophy's: the overlay type doesn't draw as stacked; fall back to `gm_tr_picture = {}` in the three trophy rows (the data stays, the trophy pictures go unused). |
 | **Held Abroad.** As Greece, open Held Abroad. | The Marbles and the Piraeus Lion rows show their trophy pictures. | As above. |
 | **Home again.** Return the Luxor Obelisk to Upper Egypt (it stands beside Karnak). | Its row under the monument card shows the obelisk standing at Luxor (its monument picture), not the museum court. | The museum picture on a secondary's row: `gm_mon_row_site` uses the trophy type. |
+| **The Venus de Milo home (2026-10-16).** Return her to Greece (Return Cultural Property, or debug). | Her row and the West Aegean Islands' state card show her armless on a pedestal among the island's ruins, not the bronze rider stand-in. | The stand-in: `gm_state_picture_landmark` for `venus_de_milo` (code 1,000,035). |
 
 ## Carrying off
 
