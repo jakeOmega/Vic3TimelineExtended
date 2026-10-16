@@ -14,8 +14,10 @@
 ###     `iw_ops` list of script containers; see
 ###     common/scripted_effects/covert_warfare_effects.txt for their tags and
 ###     variables), Funding (the stepper and the Funding Levels table), Agent Networks
-###     (one row per `iw_nets` container, slices 4 and 7) and
-###     Counterintelligence.
+###     (one row per `iw_nets` container, slices 4 and 7), Counterintelligence
+###     and Known Foreign Operations (one row per operation we caught and let
+###     run, from the defender's `iw_known_ops` list; hidden while it is
+###     empty; each row has an Expose button).
 ###   widget_je_covert_reference  custom_widget_container_3  te_covert_reference_sections
 ###     "How Covert Warfare Works", collapsed: every explanation, one heading
 ###     per topic.
@@ -38,6 +40,11 @@
 ### the covert_stand_down_<type>_sgui entries (one per type) the instance points at — so
 ### the target can travel alone in a SINGLE AddScope, the only shape vanilla
 ### demonstrates. Fail-closed: see covert_possible_stand_down.
+###
+### The Known Foreign Operations rows' "Expose" buttons use none either: one
+### scripted GUI, covert_expose_known_sgui, with the row's record container
+### as the saved scope `iw_known` (see its header for why the buttons read
+### GetPlayer rather than JournalEntry).
 ###
 ### The per-row priority stepper also uses no op code: up and down are two
 ### scripted GUIs (covert_priority_up_sgui / _down_sgui), and the row's
@@ -566,6 +573,13 @@ types covert_operations_widget_types
 					visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 					texture = "gfx/interface/icons/diplomatic_action_icons/covert_secure_material_action.dds"
 				}
+				# PLACEHOLDER: cultivate assets' art until an icon pass draws
+				# Counterintelligence Support's own (test_covert_op_registry.PLACEHOLDER_ICON).
+				icon = {
+					size = { 32 32 }
+					visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+					texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
+				}
 			}
 
 			widget_je_covert_operation_text = {
@@ -624,6 +638,10 @@ types covert_operations_widget_types
 				visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 				text = "je_iw_op_row_secure_material"
 			}
+			widget_je_covert_operation_text = {
+				visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+				text = "je_iw_op_row_counterintel_support"
+			}
 		}
 
 		# ---- Phase, and how long until the next one ----
@@ -654,10 +672,18 @@ types covert_operations_widget_types
 			text = "je_iw_op_row_cultivate_detail"
 		}
 
-		# ---- This operation's own monthly detection risk; the arithmetic on hover ----
+		# ---- This operation's own monthly detection risk; the arithmetic on hover.
+		#      Counterintelligence Support is a public pact, never rolled
+		#      (covert_op_is_hostile), so its row says so instead of a figure ----
 		widget_je_covert_operation_detail = {
+			visible = "[Not( ScriptContainer.HasTag('iw_op_counterintel_support') )]"
 			text = "je_iw_op_row_detection"
 			tooltip = "je_iw_op_row_detection_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+			text = "je_iw_op_row_detection_none"
+			tooltip = "je_iw_op_row_detection_none_tt"
 		}
 
 		# ---- Espionage only: technology stolen so far and the latest
@@ -796,6 +822,301 @@ types covert_operations_widget_types
 				}
 				blockoverride "sd_visible" {
 					visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
+				}
+			}
+			covert_op_stand_down_button = {
+				blockoverride "sd_context" {
+					datacontext = "[GetScriptedGui('covert_stand_down_counterintel_support_sgui')]"
+				}
+				blockoverride "sd_visible" {
+					visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+				}
+			}
+		}
+	}
+
+	### ---- KNOWN FOREIGN OPERATION ROW (watching a caught operation) -----
+
+	### The operation's name beside its icon, one instance per type (only the
+	### row's own tag is visible). The name is the hover for what the
+	### operation does to us, so it is underlined.
+	type widget_je_covert_known_op_name = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 362 -1 }
+		maximumsize = { 362 -1 }
+		parentanchor = vcenter
+		align = left|nobaseline
+		using = fontsize_large
+		default_format = "#tooltippable"
+	}
+
+	### One operation we caught and let run: a record in the viewer's
+	### `iw_known_ops`, a container the defender owns (tags `iw_known_rec`,
+	### `iw_known_<type>`; variables and flow in covert_warfare_effects.txt,
+	### § WATCHING A CAUGHT OPERATION). Its attacker's flag and name, the
+	### operation's icon and name, how many months it has been watched, and an
+	### Expose button centred beneath.
+	###
+	### The attacker is reached through `iw_attacker_capital`, the capital state
+	### the monthly pass restates (gotcha #11 and #15: a country is not read
+	### straight out of a variable). A record whose attacker has no capital has
+	### none, so the flag and the name wait for the variable, as the network
+	### row's flag does.
+	###
+	### What watching earns (our network inside the attacker) and costs (the
+	### operation keeps doing its harm) is the row's hover; hovering the
+	### operation's name says what it does. Both render with the record's
+	### ScriptContainer and GetPlayer only (gotcha #24).
+	type widget_je_covert_known_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 2
+		margin = { 20 8 }
+		tooltip = "je_iw_known_row_tt"
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+
+		# ---- The attacker's flag, then its name over the operation's icon and name ----
+		flowcontainer = {
+			direction = horizontal
+			spacing = 8
+			ignoreinvisible = yes
+
+			widget = {
+				size = { 70 48 }
+				parentanchor = vcenter
+				visible = "[ScriptContainer.HasVariable('iw_attacker_capital')]"
+
+				flag = {
+					parentanchor = center
+					datacontext = "[ScriptContainer.MakeScope.Var('iw_attacker_capital').GetState.GetCountry]"
+				}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				spacing = 2
+				parentanchor = vcenter
+				ignoreinvisible = yes
+
+				textbox = {
+					visible = "[ScriptContainer.HasVariable('iw_attacker_capital')]"
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 402 -1 }
+					maximumsize = { 402 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					text = "je_iw_known_row_attacker"
+				}
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+					ignoreinvisible = yes
+
+					# The operations' own diplomatic-action icons, as the Operations
+					# rows draw them, gated on the record's type tag.
+					widget = {
+						size = { 32 32 }
+						parentanchor = vcenter
+
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_election_interference')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_election_interference_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_financial_subversion')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_financial_subversion_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_infrastructure_sabotage')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_infrastructure_sabotage_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_comms_disruption')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_comms_disruption_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_industrial_espionage')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_industrial_espionage_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_military_espionage')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_military_espionage_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_influence_campaign')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_influence_campaign_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_ideological_subversion')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_ideological_subversion_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_destabilization')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_destabilization_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_regime_change')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_regime_change_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_nuclear_sabotage')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_nuclear_sabotage_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_space_espionage')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_space_espionage_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_cultivate_assets')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
+						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_secure_material')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_secure_material_action.dds"
+						}
+					}
+
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_election_interference')]"
+						text = "iw_op_name_election_interference"
+						tooltip = "iw_op_exposed_desc_election_interference"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_financial_subversion')]"
+						text = "iw_op_name_financial_subversion"
+						tooltip = "iw_op_exposed_desc_financial_subversion"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_infrastructure_sabotage')]"
+						text = "iw_op_name_infrastructure_sabotage"
+						tooltip = "iw_op_exposed_desc_infrastructure_sabotage"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_comms_disruption')]"
+						text = "iw_op_name_comms_disruption"
+						tooltip = "iw_op_exposed_desc_comms_disruption"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_industrial_espionage')]"
+						text = "iw_op_name_industrial_espionage"
+						tooltip = "iw_op_exposed_desc_industrial_espionage"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_military_espionage')]"
+						text = "iw_op_name_military_espionage"
+						tooltip = "iw_op_exposed_desc_military_espionage"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_influence_campaign')]"
+						text = "iw_op_name_influence_campaign"
+						tooltip = "iw_op_exposed_desc_influence_campaign"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_ideological_subversion')]"
+						text = "iw_op_name_ideological_subversion"
+						tooltip = "iw_op_exposed_desc_ideological_subversion"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_destabilization')]"
+						text = "iw_op_name_destabilization"
+						tooltip = "iw_op_exposed_desc_destabilization"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_regime_change')]"
+						text = "iw_op_name_regime_change"
+						tooltip = "iw_op_exposed_desc_regime_change"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_nuclear_sabotage')]"
+						text = "iw_op_name_nuclear_sabotage"
+						tooltip = "iw_op_exposed_desc_nuclear_sabotage"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_space_espionage')]"
+						text = "iw_op_name_space_espionage"
+						tooltip = "iw_op_exposed_desc_space_espionage"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_cultivate_assets')]"
+						text = "iw_op_name_cultivate_assets"
+						tooltip = "iw_op_exposed_desc_cultivate_assets"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_secure_material')]"
+						text = "iw_op_name_secure_material"
+						tooltip = "iw_op_exposed_desc_secure_material"
+					}
+				}
+			}
+		}
+
+		# ---- How long we have watched it (iw_watch_months, written at the record's
+		#      creation and aged monthly, so there is nothing to wait for) ----
+		# Underlined: the row's hover (what watching earns and what the
+		# operation still costs us) is under it.
+		widget_je_covert_operation_detail = {
+			default_format = "#tooltippable"
+			text = "je_iw_known_row_months"
+		}
+
+		# ---- Once an exposure is ordered the row says so (rule 7: a line shown
+		#      only in the state it describes). The record leaves the list when
+		#      covert_warfare.1 has burned the operation ----
+		widget_je_covert_operation_detail = {
+			visible = "[ScriptContainer.HasVariable('iw_expose_ordered')]"
+			default_format = "#tooltippable"
+			text = "je_iw_known_ordered"
+			tooltip = "je_iw_known_ordered_tt"
+		}
+
+		# ---- Expose, centred beneath. One handler for every row: the record
+		#      travels as the saved scope iw_known, and the handler fails closed
+		#      (covert_expose_known_sgui) ----
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			margin_top = 4
+
+			button = {
+				using = default_button_action
+				size = { 150 32 }
+				parentanchor = vcenter
+				datacontext = "[GetScriptedGui('covert_expose_known_sgui')]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'iw_known', ScriptContainer.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'iw_known', ScriptContainer.MakeScope ).End )]"
+				tooltip = "je_iw_known_expose_tooltip"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 140
+					elide = right
+					using = fontsize_large
+					text = "je_iw_known_expose_button"
 				}
 			}
 		}
@@ -1765,6 +2086,49 @@ types covert_operations_widget_types
 		}
 	}
 
+	### Known Foreign Operations (watching a caught operation): one row per
+	### operation we caught and chose to let run, from the defender's
+	### `iw_known_ops` list. A live list, so it is open by default. The whole
+	### section is shown only while the list has a record, so a country that
+	### watches nothing sees nothing here (as Agent Networks waits for a
+	### network).
+	type te_covert_sec_known = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops') ) )]"
+
+		covert_section_header = {
+			blockoverride "left_text" {
+				text = "je_iw_known_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('covert_known_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('covert_known_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('covert_known_closed'))]"
+			}
+		}
+
+		flowcontainer = {
+			direction = vertical
+			parentanchor = hcenter
+			spacing = 4
+			visible = "[Not(GetVariableSystem.Exists('covert_known_closed'))]"
+			datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops')]"
+
+			item = {
+				widget_je_covert_known_row = {
+					datacontext = "[Scope.GetScriptContainer]"
+				}
+			}
+		}
+	}
+
 	### "How Covert Warfare Works": every explanation, gathered out of the live
 	### sections into one section, collapsed by default, one heading per topic
 	### (style rule 1; the UN's te_un_sec_how).
@@ -1843,6 +2207,14 @@ types covert_operations_widget_types
 			}
 			covert_subheader = {
 				blockoverride "subheader_text" {
+					text = "je_iw_how_sub_watching"
+				}
+			}
+			covert_note = {
+				text = "je_iw_how_watching"
+			}
+			covert_subheader = {
+				blockoverride "subheader_text" {
 					text = "je_iw_how_sub_standing"
 				}
 			}
@@ -1868,6 +2240,7 @@ types covert_operations_widget_types
 		te_covert_sec_funding = {}
 		te_covert_sec_networks = {}
 		te_covert_sec_counterintel = {}
+		te_covert_sec_known = {}
 	}
 
 	### How it all works, collapsed.

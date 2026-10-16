@@ -236,8 +236,8 @@ beneath:
 - Your funding level ("Funding 3"), an envelope of banknotes, or an empty grey
   one at 0.
 - Your Tradecraft tier, a fedora with up to four chevrons.
-- Spy Caught, while your counterintelligence has caught a foreign operation in
-  the last ten years.
+- Spy Caught, while you have exposed a foreign operation in the last ten
+  years.
 
 Below the icons, Operation Slots shows how many slots you hold and how many are
 in use, as case files lit while an operation fills them. Two bars follow:
@@ -254,8 +254,9 @@ The sections below are open by default, except the explanations at the foot:
 | Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: its icon, type and target, its phase, its own Detection Risk, the priority stepper and Stand down. |
 | Funding | Open | What your funding level is doing, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
 | Agent Networks | Open, once you have a network | A row for each network: the target's flag (hover it for the country, click it to open the country), its strength with a bar and an arrow for growing or decaying, and what it reports. |
-| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while a catch stands. |
-| How Covert Warfare Works | Collapsed | The explanations: operations, funding, detection, networks, Tradecraft, counterintelligence and intelligence standing. |
+| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while an exposure stands. |
+| Known Foreign Operations | Open, while you are watching an operation | A row for each foreign operation you caught and let run: its sponsor's flag and name, the operation, the months you have watched it and an Expose button. |
+| How Covert Warfare Works | Collapsed | The explanations: operations, funding, detection, networks, Tradecraft, counterintelligence, watching and intelligence standing. |
 
 ### Intelligence capacity and operation slots
 
@@ -309,16 +310,21 @@ From level 3, idle networks also decay half as fast.
 
 ### The covert operations
 
-There are fourteen operations. Every one needs a free slot, room under the
-per-type limit, no operation of the same type already running against that
-target, funding of at least 1, a target that is not decentralized, no truce with
-it, and no Intelligence Sharing Pact binding it (see [The Intelligence Sharing
-Pact's defense
-shield](09-diplomacy.md#the-intelligence-sharing-pacts-defense-shield)).
-Election Interference, Financial Subversion, Ideological Subversion and the two
-wartime operations can't target a country with amicable relations or better
-toward you, and Destabilization can't target one at cordial or better. The
-others have no relations limit.
+There are fifteen operations: fourteen run against another country, and one,
+Counterintelligence Support, helps a friend. Every operation against another
+country needs a free slot, room under the per-type limit, no operation of the
+same type already running against that target, funding of at least 1, a target
+that is not decentralized, no truce with it, and no Intelligence Sharing Pact
+binding it (see [The Intelligence Sharing Pact's defense
+shield](09-diplomacy.md#the-intelligence-sharing-pacts-defense-shield)). Good
+relations don't stop any of them: you can run an operation against a friend, and
+pay for it if it is exposed (see [Detection and
+exposure](#detection-and-exposure)).
+
+A **friend** is a country with which you have cordial relations plus an
+alliance, a defensive pact, the same power bloc or an overlord or subject tie,
+or amicable relations on their own. Two members of a bloc who dislike each other
+are not friends.
 
 Seven operations also need a technology, named first in the table's last
 column: Mass Media and Cryptography (era 6), Television Broadcasting, Pop
@@ -343,12 +349,20 @@ have agencies of their own.
 | Space Programme Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
+| Counterintelligence Support | Target: +8 economic, military and ideological covert defense. You: nothing | Target is a friend and has no other protector | 25 |
 
 An operation uses its influence for as long as it runs, more the worse the
 world would take its exposure (see [Detection and
 exposure](#detection-and-exposure)). As with any pact, a great power pays double
 and a major power half again as much, and you need the influence available to
 launch it.
+
+Counterintelligence Support is open: it is never rolled for detection and never
+exposed, needs no technology, and an Intelligence Sharing Pact with the target
+doesn't block it. A country has one protector at a time, and the support ends
+if the friendship does. It uses a slot and upkeep like any operation but gives
+you nothing back. Its defense adds to the target's own (see [Covert
+defense](#covert-defense)).
 
 If you run several Space Programme Espionage operations, their bonuses come
 from the strongest and don't add up. Stolen technology does add up: each
@@ -412,7 +426,9 @@ Every country you run operations against keeps a network of yours, rated 0 to
 operation there, faster with two or three and more slowly above 50, so one
 operation takes it to 50 in about two years (Cultivate Assets, in about 17
 months). With nothing running it decays by 1.5 a month. An exposed operation
-costs its network 25.
+costs its network 25. Counterintelligence Support plants no network, but an
+operation you [watch](#what-the-target-learns) grows your network inside its
+sponsor and keeps it from decaying.
 
 A strong network gives new operations there a head start of up to five months
 (strength ÷ 20) and takes up to 5 points off their detection risk. It also adds
@@ -432,12 +448,13 @@ panel](16-space.md#the-space-milestone-panel)).
 ### Tradecraft
 
 Tradecraft is your agency's experience, from 0 to 100. Each month every
-operation past its preparatory phase adds 1 (a preparatory one half that, and
-Cultivate Assets always half), counting at most four operations, and gains slow
-above 50. An exposed operation costs 3 (routine espionage or wartime sabotage),
-6 (interference) or 9 (an attempt on a government). With nothing running,
-Tradecraft drifts down by a quarter point a month. Standing an operation down
-costs nothing.
+operation against another country past its preparatory phase adds 1 (a
+preparatory one half that, and Cultivate Assets always half), counting at most
+four operations, and gains slow above 50. An exposed operation costs 3
+(routine espionage or wartime sabotage), 6 (interference) or 9 (an attempt on a
+government). With no such operation running, Tradecraft drifts down by a
+quarter point a month; Counterintelligence Support adds nothing and doesn't stop
+the drift. Standing an operation down costs nothing.
 
 | Tier | Tradecraft | Unlocks |
 |---|---|---|
@@ -452,22 +469,25 @@ networks grow 15% faster. Falling below a tier never ends a running operation.
 
 ### Detection and exposure
 
-Each operation has its own monthly Detection Risk, shown on its row (hover
-it for how it is made up). It starts at 10%, falls with your Funding Stealth and
-your network in the target, and rises with priority, with the target's
-counterintelligence (its capacity plus its defense against that kind of
-operation, compared to yours; up to +20 points) and with any network the target
-holds inside your country (up to +10 points). Your Efficiency Factor, from
+Each operation against another country has its own monthly Detection Risk,
+shown on its row (hover it for how it is made up). It starts at 10%, falls with
+your Funding Stealth and your network in the target, and rises with priority,
+with the target's counterintelligence (its capacity plus its defense against
+that kind of operation, compared to yours; up to +20 points) and with any
+network the target holds inside your country (up to +10 points). Your
+Efficiency Factor, from
 the Covert Operation Efficiency modifier that technologies, laws and the
 Ministry of Intelligence and Security give, then cuts it by up to four fifths,
 within a range of 0.1% to 50%. The Operations section lists the base risk, your
 Funding Stealth and your Efficiency Factor above the rows. Each operation rolls
 separately, so three at 10% give about a 27% monthly chance of a catch, but at
-most one is exposed a month.
+most one is caught a month.
 
-A caught operation ends in the Operation Compromised event, which also costs its
-network 25 and costs you Tradecraft. Recalling your operatives and apologizing
-takes the full infamy and half the relations damage. Denying everything takes
+A caught operation goes to its target first, which can [expose it or let it
+run](#what-the-target-learns). An exposed operation ends in the Operation
+Compromised event, which also costs its network 25 and costs you Tradecraft.
+Recalling your operatives and apologizing takes the full infamy and half the
+relations damage. Denying everything takes
 half the infamy and the full relations damage, and the target gains Heightened
 Vigilance (+25 to all three of its covert defenses, decaying over five years). At
 the establishing phase the costs are:
@@ -477,32 +497,78 @@ the establishing phase the costs are:
 | Routine espionage | Industrial, Military and Space Programme Espionage, Cultivate Assets, Secure Loose Material | +1 infamy, −5 relations | +0.5 infamy, −10 relations |
 | Interference in internal affairs | Election Interference, Financial Subversion, Influence Campaign | +2 infamy, −10 relations | +1 infamy, −20 relations |
 | Attempt to bring down a government | Ideological Subversion, Destabilization, Regime Change, Nuclear Programme Sabotage | +4 infamy, −20 relations | +2 infamy, −40 relations |
-| Wartime sabotage, caught during the war | Infrastructure Sabotage, Communications Disruption | Nothing | Nothing |
-| Wartime sabotage, caught before the war | The same | +4 infamy, −10 relations | +2 infamy, −20 relations |
+| Wartime sabotage, exposed during the war | Infrastructure Sabotage, Communications Disruption | Nothing | Nothing |
+| Wartime sabotage, exposed before the war | The same | +4 infamy, −10 relations | +2 infamy, −20 relations |
 
-An operation caught while preparatory costs half as much, and one caught fully
-operational half as much again. Exposing an attempt on a government also costs
-10 relations with every country in the target's power bloc and every treaty ally
-of the target, and the United Nations records it (see [The United
-Nations](10-united-nations.md)).
+An operation exposed while preparatory costs half as much, and one exposed fully
+operational half as much again, which makes an operation its target has watched
+into that phase the costliest to have exposed. Exposing an attempt on a
+government also costs 10 relations with every country in the target's power
+bloc and every treaty ally of the target, and the United Nations records it
+(see [The United Nations](10-united-nations.md)).
+
+Spying on a friend costs more. The relations damage is half again as large, and
+at home the political lobby that favors that friend loses appeasement and your
+government loses legitimacy (Caught Spying on a Friend), fading over about two
+and a half years. Each is 3, 5 or 8 points by exposure tier (routine espionage,
+interference, attempt on a government; wartime sabotage exposed before the war
+pays the highest) if you recall your operatives and apologize, and 2, 3 or 4 if
+you deny everything. The operation's phase doesn't change them. With no lobby
+that favors the friend, only the legitimacy is lost. Hover the options for the
+figures.
 
 ### What the target learns
 
-A country that catches your operation gets the Foreign Interference Detected
+A country that catches your operation decides first whether to expose it. If it
+runs a Covert Warfare journal entry of its own, a player gets an event, A
+Foreign Operation Uncovered, and chooses between "Expose them" and "Let it run,
+and watch"; a country without the entry exposes at once, and the AI chooses by
+chance (see [How the AI runs covert
+operations](#how-the-ai-runs-covert-operations)).
+
+Exposing makes the operation public: you answer for it as described under
+[Detection and exposure](#detection-and-exposure), and the operation ends. It
+also turns the exposing country's public against the interest groups at home
+that are friendly to you. Every group in a political lobby that favors your
+country loses 5, 10 or 15% political strength (Foreign Ties Discredited) by
+exposure tier, half as much again if you were its friend, fading over about two
+and a half years. That follows every exposure that costs anything, whoever
+chose it.
+
+If the country lets the operation run, you are not told, and it keeps working
+against that country at full strength. In return its network inside yours stops
+decaying and grows each month, by 4 to 6.4 depending on the operation's
+priority (more with Tradecraft, more slowly above half strength), and the
+operation is not caught again. The country can expose it whenever it likes from
+Known Foreign Operations, a section of its Covert Warfare journal entry and
+Covert tab that lists each operation it watches with your flag and name and the
+months watched. The exposure goes out at once; while another exposure of your
+operations is still open, the button is grayed until you have answered for it.
+
+A country that exposes your operation gets the Foreign Interference Detected
 event, which names you and the operation. It can shore up its
 counterintelligence (Counterintelligence Alert: +6 intelligence capacity and
 more separatism and coup resistance, fading over five years), retaliate in kind
 (a network of up to 25 inside your country, if it has a Covert Warfare journal
 entry of its own), or expel your diplomats (−25 relations; your network inside
 its country loses another 25, and any network it runs inside yours loses 25 when
-you answer in kind). The event
-fires at most once every two years per country, whether or not that country has
-a Covert Warfare journal entry. The Spy Caught icon and the Last Caught line in
-the Counterintelligence section show your latest catch, and who ran it, for ten
-years. Nothing else names the country behind an operation. A target can see the
-effects among its own modifiers, gets an unsigned Election Interference Detected
-notification with each confidence hit, and can count the operations against it
-through a strong network of its own.
+you answer in kind). The event fires at most once every two years per country,
+whether or not that country has a Covert Warfare journal entry.
+
+When you are the target, the Spy Caught icon and the Last Caught line in the
+Counterintelligence section show the latest operation exposed against you, and
+who ran it, for ten years, and Known Foreign Operations names the sponsor of
+each operation you watch. Outside these two sections and the events A Foreign
+Operation Uncovered and Foreign Interference Detected, nothing names the country
+behind an operation. You can also see an operation's effects among your own
+modifiers, get an unsigned Election Interference Detected notification with
+each confidence hit, and count the operations against you through a strong
+network of your own.
+
+Watching pays when the operation does little harm to you and the sponsor's
+service is worth learning: one watched operation takes your network inside the
+sponsor past the 25 that retaliating in kind plants in about six months. Expose
+an operation that is hurting you.
 
 ### Covert defense
 
@@ -512,10 +578,12 @@ garrisons. You also have three covert defenses, economic, military and
 ideological, each added to your capacity against operations of its kind. Strict
 IP Protection and Central Bank Independence raise economic defense and Publicly
 Funded Elections ideological defense, by 10 each; No IP Protection, Unregulated
-Banking and No Campaign Finance Laws lower them. Against an agency of about 100
-capacity, 10 points of defense add about 1.5 points to its Detection Risk. The
-Intelligence Sharing Pact treaty article adds intelligence capacity and lends
-the weaker partner part of the stronger one's covert defenses.
+Banking and No Campaign Finance Laws lower them. A friend's Counterintelligence
+Support raises all three at once, by 8 each at base strength and up to 26 fully
+operational at priority 3. Against an agency of about 100 capacity, 10 points
+of defense add about 1.5 points to its Detection Risk. The Intelligence Sharing
+Pact treaty article adds intelligence capacity and lends the weaker partner part
+of the stronger one's covert defenses.
 
 ### When operations end
 
@@ -524,9 +592,10 @@ An operation runs until one of these happens:
 - It is exposed.
 - You press Stand down on its row, or break the pact in the diplomacy outliner. This frees the slot at once at no infamy or relations cost, but the months invested are lost.
 - Your funding drops to 0, which ends every operation.
-- A truce with the target begins.
+- A truce with the target begins (not for Counterintelligence Support).
+- The target of Counterintelligence Support stops being a friend.
 - A wartime operation's war ends, or its diplomatic play ends without one.
-- Something it needs goes: the target's elections, its political movements, its lead in space, the last technology you could steal from it, its missing warheads or its nuclear program (frozen by treaty, held at an arsenal ceiling or while it dismantles, or given up), your rivalry, or your power bloc lead over a target outside the bloc. Destabilization also ends if relations reach cordial. The technologies named in the operations table and Tradecraft only gate the launch.
+- Something it needs goes: the target's elections, its political movements, its lead in space, the last technology you could steal from it, its missing warheads or its nuclear program (frozen by treaty, held at an arsenal ceiling or while it dismantles, or given up), your rivalry, or your power bloc lead over a target outside the bloc. The technologies named in the operations table and Tradecraft only gate the launch.
 
 A war with the target does not end a peacetime operation.
 
@@ -550,9 +619,24 @@ Nuclear Programme Sabotage and Secure Loose Material ignore the target's size,
 and so does a wartime operation against a country the AI is losing to. The AI
 raises priority to 2 against rivals and to 3 when a great power is at war with
 the target. Once launched, an operation stays until it is fully operational,
-unless it is caught or something it needs goes. After that the AI calls it off
+unless it is exposed or something it needs goes. After that the AI calls it off
 only when its reason has gone: no rivalry either way, no hostile attitude and
 relations above poor, or no space milestone of its own under way, or when its
 influence runs into deficit. It launches an operation that uses influence only
-while it holds 300 or more. It stops Cultivate Assets once its network reaches 75. It needs Seasoned Tradecraft for the two most severe operations, as
-you do, so it rarely launches them.
+while it holds 300 or more. It stops Cultivate Assets once its network reaches
+75. It needs Seasoned Tradecraft for the two most severe operations, as you do,
+so it rarely launches them.
+
+The AI doesn't start Election Interference, Financial Subversion, Infrastructure
+Sabotage, Communications Disruption, Ideological Subversion or Destabilization
+against a friend, and calls off Election Interference, Financial Subversion,
+Ideological Subversion and Destabilization once they are fully operational and
+the target has become a friend. Its other operations have no friend test: it
+still spies on friends, and pays when it is exposed. An AI with a Covert Warfare
+journal entry that catches an operation lets it run 6 times in 10 (15% for an
+attempt on a government; 20 points more when the sponsor is a friend), but only
+1 in 10 once its network inside the sponsor reaches 75. It then exposes each
+operation it watches by a monthly chance that grows with that network: 25% once
+it reaches 75. An AI that funds its service and whose agency is stronger than
+that of a friend in a bloc it leads, or of its subject or ally, offers that
+friend Counterintelligence Support, one at a time.

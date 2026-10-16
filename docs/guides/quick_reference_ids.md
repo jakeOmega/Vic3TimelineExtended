@@ -44,7 +44,7 @@ Mod-added law groups are in `common/laws/extra_laws.txt`. Key ones: `lawgroup_an
 
 ## Modifier Duration Script Values
 
-`short_modifier_time` (~1 year / 365 days), `normal_modifier_time` (~3 years / 1095 days), `long_modifier_time` (~5 years / 1825 days).
+`very_short_modifier_time` (1 year / 365 days), `short_modifier_time` (2.5 years / 913 days), `normal_modifier_time` (5 years / 1825 days), `long_modifier_time` (10 years / 3650 days). All are days, not months (vanilla `common/script_values/`; the full table is in `docs/vanilla/modding-reference.md`).
 
 ## Custom Script-Only Modifiers (Mod-Added)
 

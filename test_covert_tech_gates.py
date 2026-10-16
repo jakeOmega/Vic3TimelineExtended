@@ -48,6 +48,9 @@ UNGATED = {
     "space_espionage",
     "nuclear_sabotage",
     "secure_material",
+    # Defence shouldn't wait on technology the attacker may not need
+    # (spec § C, my call 9).
+    "counterintel_support",
 }
 
 

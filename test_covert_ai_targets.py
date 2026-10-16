@@ -37,8 +37,10 @@ GATED = {
     "infrastructure_sabotage",
     "comms_disruption",
 }
-# The payoff is our research or space progress, or the threat removed.
+# The payoff is our research or space progress, the threat removed, or a
+# friend protected (counterintelligence support: aimed at weaker friends).
 EXEMPT = {
+    "counterintel_support",
     "industrial_espionage",
     "military_espionage",
     "space_espionage",
@@ -70,6 +72,7 @@ BREAK_WHEN = {
 }
 # Never by choice: requirement_to_maintain ends them when their purpose goes.
 NEVER_BREAK = {
+    "counterintel_support",
     "infrastructure_sabotage",
     "comms_disruption",
     "influence_campaign",

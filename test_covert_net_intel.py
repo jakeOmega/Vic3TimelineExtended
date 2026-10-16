@@ -139,7 +139,9 @@ class EffectTests(unittest.TestCase):
         block = _top_level_block(_text(EFFECTS), "covert_net_refresh_intel = {")
         loop = block[block.index("every_scope_diplomatic_pact = {"):]
         limit = loop[: loop.index("scope:iw_net_intel_net = { change_variable")]
-        self.assertIn("is_covert_operation_pact = yes", limit)
+        # Hostile pacts only: a friend's Counterintelligence Support is not an
+        # operation against us (spec 2026-10-16 § C).
+        self.assertIn("is_hostile_covert_operation_pact = yes", limit)
         self.assertIn("first_country = scope:iw_net_intel_tgt", limit)
         self.assertIn("second_country = { this = scope:iw_net_operator }", limit)
         # Accumulated, the shape slice 4 chose over any_* count >= N.
