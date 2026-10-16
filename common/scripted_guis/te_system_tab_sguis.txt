@@ -314,6 +314,7 @@ te_window_launcher_sgui = {
 			has_game_rule = space_race_enabled
 			has_game_rule = decolonization_enabled
 			gm_system_enabled = yes
+			te_global_commons_enabled = yes
 		}
 	}
 	ai_is_valid = { always = no }
@@ -497,5 +498,30 @@ te_window_grand_monuments_tab_unlock_sgui = {
 	is_shown = { gm_system_enabled = yes }
 	ai_is_valid = { always = no }
 	is_valid = { gm_entry_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Seabed (Global Commons, te_global_commons_seabed_*.txt). No journal entry:
+# open once the country has taken part in a seabed sharing (te_seabed_shared,
+# set by the yearly pass, which runs within a month of a new claimant), on
+# the strip while the rule is on.
+# ---------------------------------------------------------------------------
+te_window_seabed_tab_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_shared
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_seabed_tab_unlock_sgui = {
+	scope = country
+	is_shown = { te_global_commons_enabled = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_seabed_tab_unlocked = yes }
 	effect = { }
 }

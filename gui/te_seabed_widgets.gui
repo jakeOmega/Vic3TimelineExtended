@@ -1,0 +1,546 @@
+﻿### Global Commons: the Seabed tab of the Timeline Extended window
+### (gui/te_systems_window.gui instances the four panels; spec § 2.7). House
+### style: docs/guides/gui_style_guide.md. The live sections are open; How
+### Seabed Licences Work is collapsed.
+###
+### DATA. No journal entry, so every read goes through GetPlayer.MakeScope:
+### the guarded *_disp_* script values (te_global_commons_seabed_values.txt),
+### which read 0 where a variable is missing, and the tab's gate
+### (te_window_seabed_tab_sgui: the country has taken part in a sharing) on a
+### parent in the window. The buttons' scripted GUIs are in
+### common/scripted_guis/te_global_commons_seabed_sguis.txt; the AI chooses
+### its policy in script (te_seabed_ai_choose_policy), so they carry
+### ai_is_valid = no.
+###
+### WIDTHS. A 520 column, panels with 480 inside. Rows in the large type,
+### captions and column heads in medium (style guide rule 3).
+
+types te_seabed_widget_types
+{
+	type te_seabed_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+		minimumsize = { 520 -1 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	### A heading inside a panel, with a faint rule under it.
+	type te_seabed_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		margin_top = 6
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text in How Seabed Licences Work.
+	type te_seabed_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	### "Label: value". 4 + 300 + 172 + 4 = 480.
+	type te_seabed_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+		block "row_visible" {}
+
+		textbox = {
+			minimumsize = { 300 -1 }
+			maximumsize = { 300 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#tooltippable"
+			block "row_tooltip" {}
+			block "row_label" {}
+		}
+		textbox = {
+			minimumsize = { 172 -1 }
+			maximumsize = { 172 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_large
+			block "row_value" {}
+		}
+	}
+
+	### A basin's row: name, coast, weight, share, the world's records against
+	### the pool. 4 + 110 + 90 + 80 + 80 + 112 + 4 = 480. The longest name,
+	### "Southern", is 8 characters (88 at the large budget); "World" holds
+	### "300 / 300" (9 characters, 99).
+	type te_seabed_basin_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+		block "row_visible" {}
+		block "row_tooltip" {}
+
+		textbox = {
+			minimumsize = { 110 -1 }
+			maximumsize = { 110 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#tooltippable"
+			block "basin_name" {}
+		}
+		textbox = {
+			minimumsize = { 90 -1 }
+			maximumsize = { 90 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_large
+			block "basin_coast" {}
+		}
+		textbox = {
+			minimumsize = { 80 -1 }
+			maximumsize = { 80 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_large
+			block "basin_weight" {}
+		}
+		textbox = {
+			minimumsize = { 80 -1 }
+			maximumsize = { 80 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_large
+			block "basin_share" {}
+		}
+		textbox = {
+			minimumsize = { 112 -1 }
+			maximumsize = { 112 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_large
+			block "basin_world" {}
+		}
+	}
+
+	### The column heads over the basin rows, in medium.
+	type te_seabed_basin_head = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+
+		textbox = {
+			minimumsize = { 110 -1 }
+			maximumsize = { 110 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#title"
+			text = "te_seabed_col_basin"
+		}
+		textbox = {
+			minimumsize = { 90 -1 }
+			maximumsize = { 90 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#title"
+			text = "te_seabed_col_coast"
+		}
+		textbox = {
+			minimumsize = { 80 -1 }
+			maximumsize = { 80 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			tooltip = "te_seabed_col_weight_tt"
+			text = "te_seabed_col_weight"
+		}
+		textbox = {
+			minimumsize = { 80 -1 }
+			maximumsize = { 80 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			tooltip = "te_seabed_col_share_tt"
+			text = "te_seabed_col_share"
+		}
+		textbox = {
+			minimumsize = { 112 -1 }
+			maximumsize = { 112 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			tooltip = "te_seabed_col_world_tt"
+			text = "te_seabed_col_world"
+		}
+	}
+
+	### One policy button: greyed with its reasons, its effect on hover.
+	type te_seabed_policy_button = button {
+		using = default_button
+		size = { 156 32 }
+		block "policy_context" {}
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 150
+			using = fontsize_large
+			block "policy_text" {}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The overview: always open. Policy, regime and ITLOS party (the UN's
+	### lines, read from te_seabed_regime and te_seabed_itlos_party), then the
+	### country's licences.
+	### ----------------------------------------------------------------------
+	type te_seabed_overview_panel = te_seabed_panel {
+		te_seabed_value_row = {
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_ov_policy_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_seabed_ov_policy"
+			}
+			blockoverride "row_value" {
+				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_value'), '(CFixedPoint)3' ), 'te_seabed_policy_name_3', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_value'), '(CFixedPoint)2' ), 'te_seabed_policy_name_2', 'te_seabed_policy_name_1' ) )]"
+			}
+		}
+		te_seabed_value_row = {
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_ov_regime_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_seabed_ov_regime"
+			}
+			blockoverride "row_value" {
+				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_regime_value'), '(CFixedPoint)3' ), 'te_seabed_regime_name_3', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_regime_value'), '(CFixedPoint)2' ), 'te_seabed_regime_name_2', 'te_seabed_regime_name_1' ) )]"
+			}
+		}
+		te_seabed_value_row = {
+			blockoverride "row_visible" {
+				visible = "[GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_ov_itlos_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_seabed_ov_itlos"
+			}
+			blockoverride "row_value" {
+				text = "[SelectLocalization( GetScriptedGui('te_seabed_itlos_party_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_seabed_ov_itlos_yes', 'te_seabed_ov_itlos_no' )]"
+			}
+		}
+		te_seabed_value_row = {
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_ov_licences_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_seabed_ov_licences"
+			}
+			blockoverride "row_value" {
+				text = "te_seabed_ov_licences_value"
+			}
+		}
+		te_seabed_value_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_ov_distant_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_seabed_ov_distant"
+			}
+			blockoverride "row_value" {
+				text = "te_seabed_ov_distant_value"
+			}
+		}
+		te_seabed_value_row = {
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_ov_room_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_seabed_ov_room"
+			}
+			blockoverride "row_value" {
+				text = "te_seabed_ov_room_value"
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The policy: one national choice (§ 2.5), three buttons centred under
+	### the heading. 3 x 156 + 2 x 6 = 480.
+	### ----------------------------------------------------------------------
+	type te_seabed_policy_panel = te_seabed_panel {
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_policy_header"
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			spacing = 6
+			margin_top = 6
+			margin_bottom = 4
+
+			te_seabed_policy_button = {
+				blockoverride "policy_context" {
+					datacontext = "[GetScriptedGui('te_seabed_policy_1_sgui')]"
+				}
+				blockoverride "policy_text" {
+					text = "te_seabed_policy_name_1"
+				}
+			}
+			te_seabed_policy_button = {
+				blockoverride "policy_context" {
+					datacontext = "[GetScriptedGui('te_seabed_policy_2_sgui')]"
+				}
+				blockoverride "policy_text" {
+					text = "te_seabed_policy_name_2"
+				}
+			}
+			te_seabed_policy_button = {
+				blockoverride "policy_context" {
+					datacontext = "[GetScriptedGui('te_seabed_policy_3_sgui')]"
+				}
+				blockoverride "policy_text" {
+					text = "te_seabed_policy_name_3"
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The basins: a row per basin where the country has weight or holds
+	### licences, home or distant (§ 2.7). Open: it changes every year.
+	### ----------------------------------------------------------------------
+	type te_seabed_basins_panel = te_seabed_panel {
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_basins_header"
+			}
+		}
+		te_seabed_basin_head = {}
+		te_seabed_basin_row = {
+			blockoverride "row_visible" {
+				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_pacific'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_pacific'), '(CFixedPoint)0' ) )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_basin_tt_pacific"
+			}
+			blockoverride "basin_name" {
+				text = "te_seabed_basin_pacific"
+			}
+			blockoverride "basin_coast" {
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+			}
+			blockoverride "basin_weight" {
+				text = "te_seabed_basin_weight_pacific"
+			}
+			blockoverride "basin_share" {
+				text = "te_seabed_basin_share_pacific"
+			}
+			blockoverride "basin_world" {
+				text = "te_seabed_basin_world_pacific"
+			}
+		}
+		te_seabed_basin_row = {
+			blockoverride "row_visible" {
+				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_atlantic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_atlantic'), '(CFixedPoint)0' ) )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_basin_tt_atlantic"
+			}
+			blockoverride "basin_name" {
+				text = "te_seabed_basin_atlantic"
+			}
+			blockoverride "basin_coast" {
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+			}
+			blockoverride "basin_weight" {
+				text = "te_seabed_basin_weight_atlantic"
+			}
+			blockoverride "basin_share" {
+				text = "te_seabed_basin_share_atlantic"
+			}
+			blockoverride "basin_world" {
+				text = "te_seabed_basin_world_atlantic"
+			}
+		}
+		te_seabed_basin_row = {
+			blockoverride "row_visible" {
+				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_indian'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_indian'), '(CFixedPoint)0' ) )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_basin_tt_indian"
+			}
+			blockoverride "basin_name" {
+				text = "te_seabed_basin_indian"
+			}
+			blockoverride "basin_coast" {
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+			}
+			blockoverride "basin_weight" {
+				text = "te_seabed_basin_weight_indian"
+			}
+			blockoverride "basin_share" {
+				text = "te_seabed_basin_share_indian"
+			}
+			blockoverride "basin_world" {
+				text = "te_seabed_basin_world_indian"
+			}
+		}
+		te_seabed_basin_row = {
+			blockoverride "row_visible" {
+				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_arctic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_arctic'), '(CFixedPoint)0' ) )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_basin_tt_arctic"
+			}
+			blockoverride "basin_name" {
+				text = "te_seabed_basin_arctic"
+			}
+			blockoverride "basin_coast" {
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+			}
+			blockoverride "basin_weight" {
+				text = "te_seabed_basin_weight_arctic"
+			}
+			blockoverride "basin_share" {
+				text = "te_seabed_basin_share_arctic"
+			}
+			blockoverride "basin_world" {
+				text = "te_seabed_basin_world_arctic"
+			}
+		}
+		te_seabed_basin_row = {
+			blockoverride "row_visible" {
+				visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_w_disp_southern'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_held_disp_southern'), '(CFixedPoint)0' ) )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_seabed_basin_tt_southern"
+			}
+			blockoverride "basin_name" {
+				text = "te_seabed_basin_southern"
+			}
+			blockoverride "basin_coast" {
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_coast_home', 'te_seabed_coast_distant' )]"
+			}
+			blockoverride "basin_weight" {
+				text = "te_seabed_basin_weight_southern"
+			}
+			blockoverride "basin_share" {
+				text = "te_seabed_basin_share_southern"
+			}
+			blockoverride "basin_world" {
+				text = "te_seabed_basin_world_southern"
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### How Seabed Licences Work: collapsed (te_seabed_how_open).
+	### ----------------------------------------------------------------------
+	type te_seabed_how_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		section_header_button = {
+			blockoverride "layout" {
+				parentanchor = hcenter
+				size = { 520 38 }
+			}
+			blockoverride "left_text" {
+				text = "te_seabed_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_seabed_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_seabed_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_seabed_how_open')]"
+			}
+		}
+
+		te_seabed_panel = {
+			visible = "[GetVariableSystem.Exists('te_seabed_how_open')]"
+
+			te_seabed_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_seabed_how_sub_pools"
+				}
+			}
+			te_seabed_note = {
+				text = "te_seabed_how_pools"
+			}
+			te_seabed_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_seabed_how_sub_weight"
+				}
+			}
+			te_seabed_note = {
+				text = "te_seabed_how_weight"
+			}
+			te_seabed_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_seabed_how_sub_licences"
+				}
+			}
+			te_seabed_note = {
+				text = "te_seabed_how_licences"
+			}
+			te_seabed_note = {
+				text = "te_seabed_how_distant"
+			}
+			te_seabed_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_seabed_how_sub_policy"
+				}
+			}
+			te_seabed_note = {
+				text = "te_seabed_how_policy"
+			}
+			te_seabed_note = {
+				text = "te_seabed_how_regime"
+			}
+		}
+	}
+}

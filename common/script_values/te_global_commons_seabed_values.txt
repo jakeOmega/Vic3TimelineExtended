@@ -690,3 +690,71 @@ te_seabed_world_records_disp_southern = {
 		value = global_var:te_seabed_records_southern
 	}
 }
+
+# Country scope: 1 where the country borders the Pacific (a home basin).
+te_seabed_home_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_pacific }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Atlantic (a home basin).
+te_seabed_home_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_atlantic }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Indian (a home basin).
+te_seabed_home_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_indian }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Arctic (a home basin).
+te_seabed_home_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_arctic }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Southern (a home basin).
+te_seabed_home_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_southern }
+		value = 1
+	}
+}
+
+# State scope: the State Panel's Seabed Licences tile shows (spec § 2.7): the
+# rule on, a coastal state, an owner that has taken part in a sharing.
+te_seabed_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			te_global_commons_enabled = yes
+			is_coastal = yes
+			owner = { has_variable = te_seabed_shared }
+		}
+		value = 1
+	}
+}
+
+# State scope, for the tile's hover: the state's basin, 0 when it has none yet.
+te_seabed_state_basin_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_basin }
+		value = var:te_seabed_basin
+	}
+}

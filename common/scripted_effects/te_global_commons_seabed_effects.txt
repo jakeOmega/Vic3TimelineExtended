@@ -274,11 +274,14 @@ te_seabed_take = {
 			local_var:te_sb_n > 0
 			scope:te_seabed_payer = { var:te_seabed_unbuilt_$B$ > 0 }
 		}
+		scope:te_seabed_payer = {
+			set_local_variable = { name = te_sb_u value = var:te_seabed_unbuilt_$B$ }
+		}
 		set_local_variable = {
 			name = te_sb_k
 			value = {
 				value = local_var:te_sb_n
-				max = scope:te_seabed_payer.var:te_seabed_unbuilt_$B$
+				max = local_var:te_sb_u
 			}
 		}
 		change_variable = { name = te_seabed_lic_$B$ add = local_var:te_sb_k }
@@ -444,7 +447,8 @@ te_seabed_on_state_owner_change = {
 		te_seabed_state_record_new = yes
 		owner = { te_seabed_init_country = yes }
 	}
-	set_variable = { name = te_seabed_holder value = owner }
+	owner = { save_scope_as = te_seabed_new_owner }
+	set_variable = { name = te_seabed_holder value = scope:te_seabed_new_owner }
 }
 
 # ============================================================================
@@ -896,6 +900,7 @@ te_seabed_share_round = {
 				NOT = { has_variable = te_seabed_bonus_$B$ }
 			}
 			order_by = te_seabed_frac_value_$B$
+			position = 0
 			change_variable = { name = te_seabed_ent_$B$ add = 1 }
 			set_variable = te_seabed_bonus_$B$
 			change_global_variable = { name = te_seabed_left_$B$ subtract = 1 }
@@ -919,6 +924,7 @@ te_seabed_share_round = {
 				var:te_seabed_ent_$B$ > var:te_seabed_held_$B$
 			}
 			order_by = te_seabed_frac_neg_value_$B$
+			position = 0
 			change_variable = { name = te_seabed_ent_$B$ subtract = 1 }
 			set_variable = te_seabed_cut_$B$
 			change_global_variable = { name = te_seabed_left_$B$ add = 1 }

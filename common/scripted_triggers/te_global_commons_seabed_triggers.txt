@@ -185,3 +185,59 @@ te_seabed_pass_due = {
 	}
 	any_country = { te_seabed_is_claimant = yes }
 }
+
+# Country scope: the Seabed tab's checklist (te_window_seabed_tab_unlock_sgui),
+# te_seabed_is_claimant with a line per condition. The tab opens at the next
+# sharing after both hold.
+te_seabed_tab_unlocked = {
+	custom_tooltip = {
+		text = te_seabed_unlock_tech_tt
+		has_technology_researched = abyssal_plain_mining
+	}
+	custom_tooltip = {
+		text = te_seabed_unlock_coast_tt
+		any_scope_state = { is_coastal = yes }
+	}
+}
+
+# Country scope: the Seabed tab's policy buttons (te_global_commons_seabed_sguis.txt).
+# A claimant may change to a policy it doesn't hold; one that holds influence
+# needs that much available, as the UN's stances do.
+te_seabed_can_choose_survey = {
+	te_seabed_policy_buttons_open = yes
+	custom_tooltip = {
+		text = te_seabed_policy_not_current_tt
+		NOT = { te_seabed_policy_survey = yes }
+	}
+}
+
+te_seabed_can_choose_sponsor = {
+	te_seabed_policy_buttons_open = yes
+	custom_tooltip = {
+		text = te_seabed_policy_not_current_tt
+		NOT = { te_seabed_policy_sponsor = yes }
+	}
+	custom_tooltip = {
+		text = te_seabed_policy_influence_2_tt
+		influence >= te_seabed_influence_sponsor
+	}
+}
+
+te_seabed_can_choose_unilateral = {
+	te_seabed_policy_buttons_open = yes
+	custom_tooltip = {
+		text = te_seabed_policy_not_current_tt
+		NOT = { te_seabed_policy_unilateral = yes }
+	}
+	custom_tooltip = {
+		text = te_seabed_policy_influence_3_tt
+		influence >= te_seabed_influence_unilateral
+	}
+}
+
+te_seabed_policy_buttons_open = {
+	custom_tooltip = {
+		text = te_seabed_policy_claimant_tt
+		te_seabed_is_claimant = yes
+	}
+}
