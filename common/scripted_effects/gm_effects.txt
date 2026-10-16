@@ -1070,9 +1070,12 @@ gm_check_contests = {
 				# A gifted monument whose rebuilt method may still be the
 				# engine's copy of another dedication (opportunities spec §3.1).
 				NOT = { has_variable = gm_restore_pm }
-				# Recorded: first sight or the ceremony always comes first, except
-				# for a building a merge brought, which waits to be adopted
-				# (issue #936, gm_state_merge_pending) and is not contested meanwhile.
+				# Recorded: in the refresh's order, first sight or a ceremony
+				# always comes first (gm_country_refresh's state loop runs before
+				# this), except for a building a merge brought, which waits to be
+				# adopted (issue #936, gm_state_merge_pending) and is not contested
+				# meanwhile. Moving this check ahead of that loop would skip new
+				# monuments for a month.
 				has_variable = gm_seen
 			}
 			if = {

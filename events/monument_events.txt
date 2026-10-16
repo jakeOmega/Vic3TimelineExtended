@@ -22,6 +22,11 @@
 # Event 27      - Raise It: an opportunity's missing levels queued (hidden).
 # Event 28      - an opportunity seized: the monument, its gift and the boon,
 #                 players only.
+# Event 29      - a monument's own work: building beside, the grandest standing
+#                 first (hidden, ageing spec 2026-10-16 §3).
+# Event 30      - choices on a monument beside another (hidden, §4.3).
+# Event 31      - a merged state's monuments adopted from their shadows
+#                 (hidden, issue #936).
 # ============================================================================
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
