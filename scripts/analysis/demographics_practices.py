@@ -41,7 +41,8 @@ def read_save(path):
     which the fit caches by path and re-uses at every grid point."""
     sections = S.read_sections(path)
     _countries, svars = S.read_variables(path, (), ("te_dg_fjob_share", *BAND_VARS, *H.CENSUS_INPUT_VARS,
-                                                    *H.PRACTICE_VARS, *H.MALARIA_VARS))
+                                                    *H.PRACTICE_VARS, *H.MALARIA_VARS,
+                                                    *H.SAFETY_VARS))
     return sections, svars
 
 

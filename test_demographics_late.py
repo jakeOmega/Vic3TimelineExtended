@@ -465,11 +465,16 @@ class TestWealthSlope(unittest.TestCase):
 
 
 class TestGapPolitics(unittest.TestCase):
-    """§4.4, call 15: built behind demographics_params.LONGEVITY_POLITICS, off until a play-test sizes it."""
+    """§4.4, call 15: built behind demographics_params.LONGEVITY_POLITICS, off until a play-test sized it; on at the spec's
+    sizes since 2026-10-16 (owner)."""
+
+    def test_the_switch_is_on(self):
+        self.assertTrue(P.LONGEVITY_POLITICS)
+        values = (ROOT / "common" / "script_values" / "te_demog_lx_generated_values.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("te_demog_k_lx_politics = { value = 1 }", values)
 
     def test_off_applies_nothing(self):
-        self.assertFalse(P.LONGEVITY_POLITICS)
-        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng = _Engine({"te_demog_k_lx_politics": 0.0}, triggers={"te_demog_effects_run": True})
         eng.vars.update(te_dg_lx_l100t=0.8, te_dg_lx_l100u=0.3)
         eng.modifiers["te_demog_lx_gap_labor"] = 0.4      # a game that had it on: it goes
         eng.call("te_demog_lx_politics_refresh")
@@ -483,6 +488,20 @@ class TestGapPolitics(unittest.TestCase):
         eng.trigger_fixtures["te_demog_effects_run"] = False
         eng.call("te_demog_lx_politics_refresh")
         self.assertEqual(eng.modifiers, {}, "outside Full nothing")
+
+    def test_the_country_modifier_comes_off_outside_full(self):
+        """The review of #979: the country's refresh runs only inside the census, so a game switched from Full to Disabled
+        kept the unions' and farmers' approval down; the yearly pulse's clear step, outside the census, takes it off."""
+        eng = _Engine({}, triggers={"te_demog_effects_run": False})
+        eng.modifiers["te_demog_lx_gap_politics"] = 0.4
+        eng.call("te_demog_lx_politics_clear")
+        self.assertEqual(eng.modifiers, {})
+        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng.modifiers["te_demog_lx_gap_politics"] = 0.4
+        eng.call("te_demog_lx_politics_clear")
+        self.assertEqual(eng.modifiers, {"te_demog_lx_gap_politics": 0.4}, "under Full the census's refresh owns it")
+        yearly = _block(_text(ROOT / "common" / "scripted_effects" / "te_demog_effects.txt"), "te_demog_country_yearly")
+        self.assertIn("te_demog_lx_politics_clear = yes", yearly)
 
     def test_the_sizes(self):
         mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_lx_modifiers.txt"])
@@ -510,6 +529,17 @@ class TestLateGameHarness(unittest.TestCase):
             d_truth, x_truth = self.L.truth(inp, share, self.start, years=30)
             self.assertLess(abs(d_band - d_truth), 0.1, (share, d_band, d_truth))
             self.assertLess(abs(x_band / x_truth - 1), 0.01, (share, x_band, x_truth))
+
+    def test_modern_safety_brings_mens_adult_deaths_into_band(self):
+        """Modern safety (2026-10-16): today's rich state, with the era 7-9 carriers, has men's 35q15 inside the band and
+        work deaths near the rich world's. Women's stays over its band, from adult infection and chronic deaths (#894's
+        follow-up, after #933), so this pins only that it fell from the 0.08 it read before."""
+        q = self.L.adult_mortality(self.carriers, self.lines)
+        lo, hi = self.L.ADULT_BANDS["men"]
+        self.assertTrue(lo <= q["men"] <= hi, q)
+        self.assertLess(q["women"], 0.06, q)
+        by_cause = self.L.adult_mortality_by_cause(self.carriers, self.lines)
+        self.assertLess(by_cause["men"]["work"], 0.005, by_cause)
 
     def test_the_command_meets_its_bands(self):
         import argparse

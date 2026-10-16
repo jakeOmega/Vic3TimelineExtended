@@ -197,7 +197,8 @@ gm_tr_copy_from_state = {
 # shows its monument. Set when the trophy is made or seeded and again by the
 # monthly pass, so a landmark whose picture is drawn later, or a trophy from
 # an older save, catches up within a month; gm_tr_disp_picture_code reads the
-# draped picture until then.
+# draped picture until then. Then the trophy's own picture, when its landmark
+# has one (gm_tr_picture_trophies; added 2026-10-16).
 gm_tr_update_picture = {
 	gm_tr_lend_look = { FROM = gm_tr_skin TO = gm_skin }
 	gm_tr_lend_look = { FROM = gm_tr_form TO = gm_form }
@@ -213,6 +214,7 @@ gm_tr_update_picture = {
 	gm_remove_state_var = { VAR = gm_form }
 	gm_remove_state_var = { VAR = gm_landmark }
 	gm_remove_state_var = { VAR = gm_picture_code }
+	gm_tr_picture_trophies = yes
 }
 
 # Container scope: the trophy's variable $FROM$, when it has one, as $TO$, for

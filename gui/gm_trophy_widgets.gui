@@ -17,7 +17,8 @@
 ### gm_trophies_here lists, rebuilt by the monthly pass, each item under
 ### datacontext = "[Scope.GetScriptContainer]". It names itself through the
 ### container custom localization in gm_trophy_custom_loc.txt, and shows the
-### picture of the monument it was taken from (gm_tr_picture).
+### picture of the monument it was taken from (gm_tr_picture), with its own
+### over it where one is drawn (gm_tr_trophy_picture).
 ###
 ### EDITING RULES (as grand_monuments_widget.gui's)
 ### * Numbers come from ScriptValue reads: the country's gm_tr_disp_* and the
@@ -770,6 +771,624 @@ types gm_trophy_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_arch_of_ctesiphon__arch.dds"
 		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000052' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_nineveh_library__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000053' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_winged_victory_of_samothrace__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000054' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_vindolanda_tablets__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000055' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_troy_hisarlik__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000056' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mycenae_grave_circle__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000057' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pergamon_altar__pantheon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000058' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_deir_el_bahari_cache__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000059' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_ishtar_gate_babylon__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000060' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_palace_of_knossos__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000061' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_antikythera_mechanism__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000062' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_oseberg_ship__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000063' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_machu_picchu__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000064' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_bust_of_nefertiti__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000065' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mohenjo_daro__forum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000066' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_tutankhamun__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000067' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_royal_cemetery_at_ur__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000068' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_sanxingdui_pits__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000069' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_sutton_hoo__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000070' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_lascaux_caves__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000071' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_nag_hammadi_library__stele.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000072' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_dead_sea_scrolls__stele.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000073' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_pakal__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000074' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mawangdui_tombs__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000075' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_terracotta_army__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000076' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_philip_ii__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000077' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_marquis_yi__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000078' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_royal_tombs_of_sipan__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000079' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_otzi_the_iceman__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000080' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_caral_supe__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000081' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_gobekli_tepe__colonnade.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000082' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_olympia__pantheon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000083' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_delphi__stoa.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000084' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_sidon_necropolis__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000085' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_villa_of_the_papyri__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000086' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_alexander__mausoleum.dds"
+		}
+	}
+
+	### A trophy's row picture (Trophies, Held Abroad, Trophies on Display): its
+	### monument's picture (gm_tr_picture) and over it the trophy's own, what was
+	### carried off on display in a museum room, when its landmark has one drawn
+	### (gm_tr_disp_trophy_picture_code above 0; gm_tr_picture_trophies). Added
+	### 2026-10-16. A secondary monument's row (gm_mon_row_site) is no trophy and
+	### keeps gm_tr_picture alone.
+	type gm_tr_trophy_picture = widget {
+		size = { 96 96 }
+
+		gm_tr_picture = {}
+		### The trophy pictures, from 2,000,001.
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000001' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_arc_de_triomphe.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000002' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_alexander_column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000003' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_brandenburg_gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000004' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_washington_monument_baltimore.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000005' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_la_scala.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000006' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_teatro_di_san_carlo.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000007' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_jantar_mantar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000008' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_shalimar_gardens.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000009' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_jardim_botanico.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000010' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_stelae_of_aksum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000011' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_liberty_column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000012' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_lion_monument.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000013' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_temple_of_heaven.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000014' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_topkapi_palace.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000015' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_golestan_palace.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000016' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_basilica_of_superga.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000017' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_william_the_silent.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000018' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_cenotaph_of_maximilian.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000019' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_arco_de_santa_maria.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000020' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_statue_of_louis_xiv.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000021' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_lion_of_saint_mark.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000022' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_sans_souci_palace.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000023' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_nikko_toshogu.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000024' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_parthenon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000025' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_obelisks_of_karnak.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000026' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_royal_palace_of_benin.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000027' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_royal_palace_of_kumasi.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000028' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_bukgwan_victory_stele.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000029' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_imperial_city_of_hue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000030' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_persepolis.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000031' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_red_fort.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000032' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_rosetta_stone.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000033' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_temple_of_dendera.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000034' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_luxor_obelisk.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000035' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_venus_de_milo.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000036' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_piraeus_lion.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000037' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_horses_of_saint_mark.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000038' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tipus_tiger.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000039' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_baba_merzoug.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000040' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_great_zimbabwe.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000041' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_royal_palaces_of_abomey.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000042' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_klungkung_palace.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000043' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_royal_palace_of_kandy.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000044' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_uffizi_gallery.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000045' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_capitoline_museums.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000046' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_bodrum_castle.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000047' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_temples_of_baalbek.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000048' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_palmyra.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000049' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_xanthos.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000050' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mesha_stele.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000051' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_arch_of_ctesiphon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000052' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_nineveh_library.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000053' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_winged_victory_of_samothrace.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000054' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_vindolanda_tablets.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000055' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_troy_hisarlik.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000056' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mycenae_grave_circle.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000057' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_pergamon_altar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000058' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_deir_el_bahari_cache.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000059' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_ishtar_gate_babylon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000060' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_palace_of_knossos.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000061' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_antikythera_mechanism.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000062' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_oseberg_ship.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000063' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_machu_picchu.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000064' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_bust_of_nefertiti.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000065' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mohenjo_daro.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000066' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_tutankhamun.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000067' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_royal_cemetery_at_ur.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000068' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_sanxingdui_pits.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000069' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_sutton_hoo.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000070' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_lascaux_caves.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000071' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_nag_hammadi_library.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000072' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_dead_sea_scrolls.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000073' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_pakal.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000074' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mawangdui_tombs.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000075' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_terracotta_army.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000076' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_philip_ii.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000077' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_marquis_yi.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000078' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_royal_tombs_of_sipan.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000079' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_otzi_the_iceman.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000080' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_caral_supe.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000081' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_gobekli_tepe.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000082' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_olympia.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000083' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_delphi.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000084' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_sidon_necropolis.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000085' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_villa_of_the_papyri.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000086' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_alexander.dds"
+		}
 	}
 
 	### A trophy we hold: its name, what it was and where from, what it counts
@@ -785,7 +1404,7 @@ types gm_trophy_widget_types
 			ignoreinvisible = yes
 			spacing = 8
 
-			gm_tr_picture = {}
+			gm_tr_trophy_picture = {}
 
 			flowcontainer = {
 				direction = vertical
@@ -842,7 +1461,7 @@ types gm_trophy_widget_types
 		ignoreinvisible = yes
 		spacing = 8
 
-		gm_tr_picture = {}
+		gm_tr_trophy_picture = {}
 
 		flowcontainer = {
 			direction = vertical
@@ -883,7 +1502,7 @@ types gm_trophy_widget_types
 			ignoreinvisible = yes
 			spacing = 8
 
-			gm_tr_picture = {}
+			gm_tr_trophy_picture = {}
 
 			flowcontainer = {
 				direction = vertical

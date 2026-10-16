@@ -503,6 +503,8 @@ knowledge_economy = {
 		# Colonial empire (je_colonial_empire): information era makes empire
 		# harder to suppress; international scrutiny rises.
 		country_colonial_stability_drift_add = -0.75
+		# census only, modern safety (demographics_params.SAFETY_TYPES): most work moves into offices
+		state_work_safety_add = 0.25
 	}
 
 	ai_weight = {

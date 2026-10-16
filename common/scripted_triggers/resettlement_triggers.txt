@@ -177,13 +177,10 @@ resettlement_valid_source = {
 }
 
 # ---- The political layer and the Declaration (§7.2, §7.4) -------------------
-# Country scope. Party to the Universal Declaration of Human Rights, in full or
-# with reservations (read as un_human_rights_signatories does).
+# Country scope. Party to the Universal Declaration of Human Rights (read as
+# un_human_rights_signatories does).
 resettlement_is_declaration_party = {
-	OR = {
-		je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
-		has_modifier = un_human_rights_reservations_modifier
-	}
+	je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
 }
 
 # Country scope. A program's political reaction has not yet faded.
