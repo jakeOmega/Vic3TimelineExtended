@@ -90,7 +90,7 @@ ministry_law_events.2 = {
 		is_enacting_any_ministry_law = yes
 		NOR = {
 			has_modifier = ministry_budget_advance
-			has_modifier = ministry_budget_cautious
+			has_modifier = ministry_budget_concession
 		}
 		any_interest_group = {
 			ig_counts_as_marginal = no
@@ -127,14 +127,18 @@ ministry_law_events.2 = {
 		add_enactment_modifier = {
 			name = ministry_budget_advance
 		}
-		# Domain side-effect
-		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		# Domain side-effect: the full budget draws down the treasury (as .40.b)
+		add_treasury = {
+			value = sv_treasury_event_medium
+			multiply = -1
+		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Promise a lean operation to win over the skeptics
 		name = ministry_law_events.2.b
 		add_enactment_modifier = {
-			name = ministry_budget_cautious
+			name = ministry_budget_concession
 		}
 		scope:opposing_ig = {
 			add_modifier = {
@@ -143,6 +147,7 @@ ministry_law_events.2 = {
 				is_decaying = yes
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -173,7 +178,7 @@ ministry_law_events.3 = {
 		is_enacting_any_ministry_law = yes
 		NOR = {
 			has_modifier = ministry_turf_advance
-			has_modifier = ministry_turf_cautious
+			has_modifier = ministry_turf_concession
 		}
 	}
 
@@ -197,15 +202,17 @@ ministry_law_events.3 = {
 			value = small_radicals
 			strata = middle
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Allow a transitional period to ease the change
 		name = ministry_law_events.3.b
 		add_enactment_modifier = {
-			name = ministry_turf_cautious
+			name = ministry_turf_concession
 		}
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -236,7 +243,7 @@ ministry_law_events.4 = {
 		is_dissolving_any_ministry_law = yes
 		NOR = {
 			has_modifier = ministry_dissolution_advance
-			has_modifier = ministry_dissolution_cautious
+			has_modifier = ministry_dissolution_concession
 		}
 	}
 
@@ -260,17 +267,19 @@ ministry_law_events.4 = {
 			value = medium_radicals
 			strata = middle
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Offer generous severance and retraining
 		name = ministry_law_events.4.b
 		add_enactment_modifier = {
-			name = ministry_dissolution_cautious
+			name = ministry_dissolution_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -301,7 +310,7 @@ ministry_law_events.5 = {
 		is_enacting_law = law_type:law_ministry_of_war
 		NOR = {
 			has_modifier = ministry_war_generals_advance
-			has_modifier = ministry_war_generals_cautious
+			has_modifier = ministry_war_generals_concession
 		}
 		ig:ig_armed_forces ?= {
 			ig_counts_as_marginal = no
@@ -329,12 +338,21 @@ ministry_law_events.5 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_boost days = normal_modifier_time }
+		# The generals who wrote the memorandum are overruled (as extra_law_events.11.a)
+		scope:armed_forces_ig = {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Grant operational autonomy to ease the transition
 		name = ministry_law_events.5.b
 		add_enactment_modifier = {
-			name = ministry_war_generals_cautious
+			name = ministry_war_generals_concession
 		}
 		scope:armed_forces_ig = {
 			add_modifier = {
@@ -343,6 +361,7 @@ ministry_law_events.5 = {
 				is_decaying = yes
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -508,7 +527,7 @@ ministry_law_events.8 = {
 		is_enacting_law = law_type:law_ministry_of_culture
 		NOR = {
 			has_modifier = ministry_culture_patronage_advance
-			has_modifier = ministry_culture_patronage_cautious
+			has_modifier = ministry_culture_patronage_concession
 		}
 		ig:ig_intelligentsia ?= {
 			ig_counts_as_marginal = no
@@ -538,15 +557,17 @@ ministry_law_events.8 = {
 			value = small_radicals
 			strata = middle
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Let the artists help design it to win their support
 		name = ministry_law_events.8.b
 		add_enactment_modifier = {
-			name = ministry_culture_patronage_cautious
+			name = ministry_culture_patronage_concession
 		}
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -580,7 +601,7 @@ ministry_law_events.9 = {
 		}
 		NOR = {
 			has_modifier = ministry_labor_struggle_advance
-			has_modifier = ministry_labor_struggle_cautious
+			has_modifier = ministry_labor_struggle_concession
 		}
 	}
 
@@ -609,16 +630,18 @@ ministry_law_events.9 = {
 		add_radicals = {
 			value = small_radicals
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Proceed carefully to minimize opposition
 		name = ministry_law_events.9.b
 		add_enactment_modifier = {
-			name = ministry_labor_struggle_cautious
+			name = ministry_labor_struggle_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 		}
+		ai_chance = { base = 1 }
 	}
 
 	option = { # Invite the key stakeholders to shape the ministry
@@ -677,6 +700,7 @@ ministry_law_events.9 = {
 				}
 			}
 		}
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -707,7 +731,7 @@ ministry_law_events.10 = {
 		is_enacting_law = law_type:law_ministry_of_the_environment
 		NOR = {
 			has_modifier = ministry_env_smokestacks_advance
-			has_modifier = ministry_env_smokestacks_cautious
+			has_modifier = ministry_env_smokestacks_concession
 		}
 		ig:ig_industrialists ?= {
 			ig_counts_as_marginal = no
@@ -735,12 +759,13 @@ ministry_law_events.10 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = ministry_env_pollution_reduction days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Offer industry a seat at the table
 		name = ministry_law_events.10.b
 		add_enactment_modifier = {
-			name = ministry_env_smokestacks_cautious
+			name = ministry_env_smokestacks_concession
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
@@ -749,6 +774,7 @@ ministry_law_events.10 = {
 				is_decaying = yes
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -779,7 +805,7 @@ ministry_law_events.11 = {
 		is_enacting_law = law_type:law_ministry_of_intelligence_and_security
 		NOR = {
 			has_modifier = ministry_intel_shadow_advance
-			has_modifier = ministry_intel_shadow_cautious
+			has_modifier = ministry_intel_shadow_concession
 		}
 	}
 
@@ -801,17 +827,19 @@ ministry_law_events.11 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Build in strict oversight to reassure the public
 		name = ministry_law_events.11.b
 		add_enactment_modifier = {
-			name = ministry_intel_shadow_cautious
+			name = ministry_intel_shadow_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -905,7 +933,7 @@ ministry_law_events.13 = {
 		is_enacting_law = law_type:law_ministry_of_propaganda
 		NOR = {
 			has_modifier = ministry_prop_loudspeaker_advance
-			has_modifier = ministry_prop_loudspeaker_cautious
+			has_modifier = ministry_prop_loudspeaker_concession
 		}
 	}
 
@@ -930,16 +958,18 @@ ministry_law_events.13 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Rebrand it as public information to calm the press
 		name = ministry_law_events.13.b
 		add_enactment_modifier = {
-			name = ministry_prop_loudspeaker_cautious
+			name = ministry_prop_loudspeaker_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1039,7 +1069,7 @@ ministry_law_events.15 = {
 		is_enacting_law = law_type:law_ministry_of_thought_control
 		NOR = {
 			has_modifier = ministry_thought_watchers_advance
-			has_modifier = ministry_thought_watchers_cautious
+			has_modifier = ministry_thought_watchers_concession
 		}
 	}
 
@@ -1064,17 +1094,19 @@ ministry_law_events.15 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Start with modest powers to avoid a backlash
 		name = ministry_law_events.15.b
 		add_enactment_modifier = {
-			name = ministry_thought_watchers_cautious
+			name = ministry_thought_watchers_concession
 		}
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1105,7 +1137,7 @@ ministry_law_events.16 = {
 		is_enacting_law = law_type:law_ministry_of_consumer_protection
 		NOR = {
 			has_modifier = ministry_consumer_tainted_advance
-			has_modifier = ministry_consumer_tainted_cautious
+			has_modifier = ministry_consumer_tainted_concession
 		}
 		ig:ig_industrialists ?= {
 			ig_counts_as_marginal = no
@@ -1133,12 +1165,13 @@ ministry_law_events.16 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = ministry_consumer_protection days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Let industry self-regulate within the new framework
 		name = ministry_law_events.16.b
 		add_enactment_modifier = {
-			name = ministry_consumer_tainted_cautious
+			name = ministry_consumer_tainted_concession
 		}
 		scope:industrialists_ig = {
 			add_modifier = {
@@ -1147,6 +1180,7 @@ ministry_law_events.16 = {
 				is_decaying = yes
 			}
 		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1177,7 +1211,7 @@ ministry_law_events.17 = {
 		is_enacting_law = law_type:law_ministry_of_urban_planning
 		NOR = {
 			has_modifier = ministry_urban_sprawl_advance
-			has_modifier = ministry_urban_sprawl_cautious
+			has_modifier = ministry_urban_sprawl_concession
 		}
 	}
 
@@ -1197,19 +1231,21 @@ ministry_law_events.17 = {
 		add_enactment_modifier = {
 			name = ministry_urban_sprawl_advance
 		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
-		}
+		# Domain side-effect
+		add_modifier = { name = ministry_urban_housing_strain days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Consult with developers to smooth the transition
 		name = ministry_law_events.17.b
 		add_enactment_modifier = {
-			name = ministry_urban_sprawl_cautious
+			name = ministry_urban_sprawl_concession
 		}
-		# Domain side-effect
-		add_modifier = { name = ministry_urban_housing_strain days = normal_modifier_time }
+		add_loyalists = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1312,7 +1348,7 @@ ministry_law_events.19 = {
 		is_enacting_law = law_type:law_ministry_of_international_aid
 		NOR = {
 			has_modifier = ministry_aid_distant_advance
-			has_modifier = ministry_aid_distant_cautious
+			has_modifier = ministry_aid_distant_concession
 		}
 	}
 
@@ -1336,15 +1372,17 @@ ministry_law_events.19 = {
 			value = small_radicals
 			strata = upper
 		}
+		ai_chance = { base = 3 }
 	}
 
 	option = { # Frame it as strategic investment to win domestic support
 		name = ministry_law_events.19.b
 		add_enactment_modifier = {
-			name = ministry_aid_distant_cautious
+			name = ministry_aid_distant_concession
 		}
 		# Domain side-effect
 		add_modifier = { name = te_diplomatic_relations_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -1470,7 +1508,7 @@ ministry_law_events.21 = {
 		is_enacting_any_ministry_law = yes
 		NOR = {
 			has_modifier = ministry_budget_advance
-			has_modifier = ministry_budget_cautious
+			has_modifier = ministry_budget_concession
 			has_modifier = ministry_budget_stall
 		}
 		any_interest_group = {
@@ -1553,7 +1591,7 @@ ministry_law_events.22 = {
 		is_enacting_any_ministry_law = yes
 		NOR = {
 			has_modifier = ministry_turf_advance
-			has_modifier = ministry_turf_cautious
+			has_modifier = ministry_turf_concession
 			has_modifier = ministry_turf_stall
 		}
 		any_interest_group = {
@@ -1638,7 +1676,7 @@ ministry_law_events.23 = {
 		is_dissolving_any_ministry_law = yes
 		NOR = {
 			has_modifier = ministry_dissolution_advance
-			has_modifier = ministry_dissolution_cautious
+			has_modifier = ministry_dissolution_concession
 			has_modifier = ministry_dissolution_stall
 		}
 		any_interest_group = {
@@ -1723,7 +1761,7 @@ ministry_law_events.24 = {
 		is_enacting_law = law_type:law_ministry_of_war
 		NOR = {
 			has_modifier = ministry_war_generals_advance
-			has_modifier = ministry_war_generals_cautious
+			has_modifier = ministry_war_generals_concession
 			has_modifier = ministry_war_generals_stall
 		}
 		any_interest_group = {
@@ -1972,7 +2010,7 @@ ministry_law_events.27 = {
 		is_enacting_law = law_type:law_ministry_of_culture
 		NOR = {
 			has_modifier = ministry_culture_patronage_advance
-			has_modifier = ministry_culture_patronage_cautious
+			has_modifier = ministry_culture_patronage_concession
 			has_modifier = ministry_culture_patronage_stall
 		}
 		any_interest_group = {
@@ -2060,7 +2098,7 @@ ministry_law_events.28 = {
 		}
 		NOR = {
 			has_modifier = ministry_labor_struggle_advance
-			has_modifier = ministry_labor_struggle_cautious
+			has_modifier = ministry_labor_struggle_concession
 			has_modifier = ministry_labor_struggle_stall
 		}
 		any_interest_group = {
@@ -2143,7 +2181,7 @@ ministry_law_events.29 = {
 		is_enacting_law = law_type:law_ministry_of_the_environment
 		NOR = {
 			has_modifier = ministry_env_smokestacks_advance
-			has_modifier = ministry_env_smokestacks_cautious
+			has_modifier = ministry_env_smokestacks_concession
 			has_modifier = ministry_env_smokestacks_stall
 		}
 		any_interest_group = {
@@ -2226,7 +2264,7 @@ ministry_law_events.30 = {
 		is_enacting_law = law_type:law_ministry_of_intelligence_and_security
 		NOR = {
 			has_modifier = ministry_intel_shadow_advance
-			has_modifier = ministry_intel_shadow_cautious
+			has_modifier = ministry_intel_shadow_concession
 			has_modifier = ministry_intel_shadow_stall
 		}
 		any_interest_group = {
@@ -2392,7 +2430,7 @@ ministry_law_events.32 = {
 		is_enacting_law = law_type:law_ministry_of_propaganda
 		NOR = {
 			has_modifier = ministry_prop_loudspeaker_advance
-			has_modifier = ministry_prop_loudspeaker_cautious
+			has_modifier = ministry_prop_loudspeaker_concession
 			has_modifier = ministry_prop_loudspeaker_stall
 		}
 		any_interest_group = {
@@ -2558,7 +2596,7 @@ ministry_law_events.34 = {
 		is_enacting_law = law_type:law_ministry_of_thought_control
 		NOR = {
 			has_modifier = ministry_thought_watchers_advance
-			has_modifier = ministry_thought_watchers_cautious
+			has_modifier = ministry_thought_watchers_concession
 			has_modifier = ministry_thought_watchers_stall
 		}
 		any_interest_group = {
@@ -2641,7 +2679,7 @@ ministry_law_events.35 = {
 		is_enacting_law = law_type:law_ministry_of_consumer_protection
 		NOR = {
 			has_modifier = ministry_consumer_tainted_advance
-			has_modifier = ministry_consumer_tainted_cautious
+			has_modifier = ministry_consumer_tainted_concession
 			has_modifier = ministry_consumer_tainted_stall
 		}
 		any_interest_group = {
@@ -2724,7 +2762,7 @@ ministry_law_events.36 = {
 		is_enacting_law = law_type:law_ministry_of_urban_planning
 		NOR = {
 			has_modifier = ministry_urban_sprawl_advance
-			has_modifier = ministry_urban_sprawl_cautious
+			has_modifier = ministry_urban_sprawl_concession
 			has_modifier = ministry_urban_sprawl_stall
 		}
 		any_interest_group = {
@@ -2890,7 +2928,7 @@ ministry_law_events.38 = {
 		is_enacting_law = law_type:law_ministry_of_international_aid
 		NOR = {
 			has_modifier = ministry_aid_distant_advance
-			has_modifier = ministry_aid_distant_cautious
+			has_modifier = ministry_aid_distant_concession
 			has_modifier = ministry_aid_distant_stall
 		}
 		any_interest_group = {
@@ -2995,6 +3033,7 @@ ministry_law_events.39 = {
 		add_enactment_modifier = { name = ministry_staffing_professional }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3002,6 +3041,7 @@ ministry_law_events.39 = {
 		add_enactment_modifier = { name = ministry_staffing_loyalist }
 		add_loyalists = { value = small_radicals strata = upper }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3047,6 +3087,7 @@ ministry_law_events.40 = {
 		add_enactment_modifier = { name = ministry_budget_lean }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3057,6 +3098,7 @@ ministry_law_events.40 = {
 			value = sv_treasury_event_medium
 			multiply = -1
 		}
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3102,6 +3144,7 @@ ministry_law_events.41 = {
 		add_enactment_modifier = { name = ministry_turf_consolidate }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3109,6 +3152,7 @@ ministry_law_events.41 = {
 		add_enactment_modifier = { name = ministry_turf_coexist }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3154,6 +3198,7 @@ ministry_law_events.42 = {
 		add_enactment_modifier = { name = ministry_dissolution_swift }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3161,6 +3206,7 @@ ministry_law_events.42 = {
 		add_enactment_modifier = { name = ministry_dissolution_phased }
 		# Domain side-effect: dissolution — swift cuts free up treasury
 		add_treasury = sv_treasury_event_small
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3206,6 +3252,7 @@ ministry_law_events.43 = {
 		add_enactment_modifier = { name = ministry_war_civilian_led }
 		# Domain side-effect
 		add_modifier = { name = te_military_morale_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3213,6 +3260,7 @@ ministry_law_events.43 = {
 		add_enactment_modifier = { name = ministry_war_general_led }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3258,6 +3306,7 @@ ministry_law_events.44 = {
 		add_enactment_modifier = { name = ministry_fa_hawkish }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3265,6 +3314,7 @@ ministry_law_events.44 = {
 		add_enactment_modifier = { name = ministry_fa_dovish }
 		# Domain side-effect
 		add_modifier = { name = te_diplomatic_relations_drain days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3310,6 +3360,7 @@ ministry_law_events.45 = {
 		add_enactment_modifier = { name = ministry_commerce_protectionist }
 		# Domain side-effect
 		add_modifier = { name = welfare_investment_chill days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3317,6 +3368,7 @@ ministry_law_events.45 = {
 		add_enactment_modifier = { name = ministry_commerce_free_trade }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3362,6 +3414,7 @@ ministry_law_events.46 = {
 		add_enactment_modifier = { name = ministry_culture_state_curated }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3369,6 +3422,7 @@ ministry_law_events.46 = {
 		add_enactment_modifier = { name = ministry_culture_independent_grants }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3417,6 +3471,7 @@ ministry_law_events.47 = {
 		add_enactment_modifier = { name = ministry_labor_pro_capital }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3424,6 +3479,7 @@ ministry_law_events.47 = {
 		add_enactment_modifier = { name = ministry_labor_pro_labor }
 		ig:ig_trade_unions ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3469,6 +3525,7 @@ ministry_law_events.48 = {
 		add_enactment_modifier = { name = ministry_env_strict_mandatory }
 		# Domain side-effect
 		add_modifier = { name = ministry_env_pollution_reduction days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3476,6 +3533,7 @@ ministry_law_events.48 = {
 		add_enactment_modifier = { name = ministry_env_voluntary }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3521,6 +3579,7 @@ ministry_law_events.49 = {
 		add_enactment_modifier = { name = ministry_intel_domestic_focus }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3528,6 +3587,7 @@ ministry_law_events.49 = {
 		add_enactment_modifier = { name = ministry_intel_foreign_focus }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3573,6 +3633,7 @@ ministry_law_events.50 = {
 		add_enactment_modifier = { name = ministry_refugee_generous }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3580,6 +3641,7 @@ ministry_law_events.50 = {
 		add_enactment_modifier = { name = ministry_refugee_restrictive }
 		# Domain side-effect
 		add_modifier = { name = te_diplomatic_relations_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3625,6 +3687,7 @@ ministry_law_events.51 = {
 		add_enactment_modifier = { name = ministry_prop_state_controlled }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_drain days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3632,6 +3695,7 @@ ministry_law_events.51 = {
 		add_enactment_modifier = { name = ministry_prop_private_partnership }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3677,6 +3741,7 @@ ministry_law_events.52 = {
 		add_enactment_modifier = { name = ministry_sci_basic_focus }
 		# Domain side-effect
 		add_modifier = { name = te_research_speed_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3684,6 +3749,7 @@ ministry_law_events.52 = {
 		add_enactment_modifier = { name = ministry_sci_applied_focus }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3729,6 +3795,7 @@ ministry_law_events.53 = {
 		add_enactment_modifier = { name = ministry_thought_permissive }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3736,6 +3803,7 @@ ministry_law_events.53 = {
 		add_enactment_modifier = { name = ministry_thought_restrictive }
 		# Domain side-effect
 		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3781,6 +3849,7 @@ ministry_law_events.54 = {
 		add_enactment_modifier = { name = ministry_consumer_strict }
 		# Domain side-effect
 		add_modifier = { name = ministry_consumer_protection days = normal_modifier_time }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3788,6 +3857,7 @@ ministry_law_events.54 = {
 		add_enactment_modifier = { name = ministry_consumer_industry_led }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_petty_bourgeoisie ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3833,6 +3903,7 @@ ministry_law_events.55 = {
 		add_enactment_modifier = { name = ministry_urban_density_focused }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_landowners ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3840,6 +3911,7 @@ ministry_law_events.55 = {
 		add_enactment_modifier = { name = ministry_urban_sprawl_friendly }
 		ig:ig_industrialists ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3885,6 +3957,7 @@ ministry_law_events.56 = {
 		add_enactment_modifier = { name = ministry_religion_established_faith }
 		# Domain side-effect
 		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 
 	option = {
@@ -3892,6 +3965,7 @@ ministry_law_events.56 = {
 		add_enactment_modifier = { name = ministry_religion_pluralist }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_devout ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 }
 
@@ -3937,6 +4011,7 @@ ministry_law_events.57 = {
 		add_enactment_modifier = { name = ministry_aid_strategic }
 		ig:ig_armed_forces ?= { add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time } }
 		ig:ig_intelligentsia ?= { add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time } }
+		ai_chance = { base = 3 }
 	}
 
 	option = {
@@ -3944,6 +4019,7 @@ ministry_law_events.57 = {
 		add_enactment_modifier = { name = ministry_aid_humanitarian }
 		# Domain side-effect
 		add_modifier = { name = te_diplomatic_relations_boost days = normal_modifier_time }
+		ai_chance = { base = 1 }
 	}
 }
 

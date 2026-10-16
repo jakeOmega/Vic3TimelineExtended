@@ -1,22 +1,29 @@
 ﻿# ======================================================================
 #  LAW ENACTMENT EVENTS – ON ACTIONS
-#  Wires extra_law_events and ministry_law_events into the three
-#  law-enactment checkpoint on-actions (advance / debate / stall).
+#  Wires extra_law_events, ministry_law_events and inheritance_events
+#  into the three law-enactment checkpoint on-actions (advance /
+#  debate / stall).
 #
-#  Classification (by narrative context, not option outcome -
-#  ALL event options advance the law; the difference is tradeoffs):
-#    ADVANCE  – momentum narrative (crises, scandals, rallies that
-#               naturally fit when the law is already progressing)
-#    DEBATE   – balanced narrative (genuine two-sided arguments)
-#    STALL    – opposition narrative (pushback events that fit when
-#               the law faces resistance; options still advance)
+#  Classification follows what the options do to the law, as in
+#  vanilla:
+#    ADVANCE  – every option pushes the law (advance or cautious
+#               modifier); the choice is between side effects.
+#    DEBATE   – a genuine two-sided argument: at least one option
+#               pushes the law at a cost (an advance modifier, or
+#               accepting an amendment), and at least one is a
+#               concession that slows it (a `_concession` or other
+#               -0.05 modifier) in return for a benefit. Overrule vs
+#               accommodate, or one policy direction vs another.
+#    STALL    – every option slows the law: an enactment setback or a
+#               `_stall` drag modifier. The player picks which way the
+#               law slows, not whether (law_enactment_modifiers.txt).
+#               An option that pushes the law never goes in this pool:
+#               the event window labels the event a stall.
 #
-#  Some events appear in two categories where the narrative fits both
-#  (e.g. an opposition-IG event with debate-style options can sit in
-#  both DEBATE and STALL).
-#
-#  Compromise/amendment events live in DEBATE only — their narratives
+#  An event sits in one pool only, since the pools' rules exclude each
+#  other. Compromise/amendment events live in DEBATE — their narratives
 #  are about deal-making, not opposition pushback.
+#  test_law_checkpoint_pools.py checks all three rules.
 # ======================================================================
 
 # Root = owner Country of the Law
@@ -50,15 +57,15 @@ on_law_checkpoint_debate = {
 		# --- Extra Law Events (non-ministry) ---
 		10 = extra_law_events.1		# The Bankers' Lobby (Financial Regulation)
 		10 = extra_law_events.3		# The Gold Question (Monetary Policy)
-		10 = extra_law_events.5		# The Wiretapping Scandal (Privacy Rights)
 		10 = extra_law_events.7		# The Ethics of the Gene (Genetic Rights)
 		10 = extra_law_events.8		# The Robber Barons (Antitrust)
 		10 = extra_law_events.9		# The Pirate's Dilemma (Intellectual Property)
+		10 = extra_law_events.11	# The Generals Object (Rules of War – military pushback)
 		10 = extra_law_events.12	# A Question of Punishment (Criminal Justice)
 		10 = extra_law_events.13	# Tongues of the Nation (Language Policy)
 		10 = extra_law_events.15	# The Question of Autonomy (State Power)
 		10 = extra_law_events.16	# The Augmentation Hearing (Human Augmentation)
-		10 = extra_law_events.18	# Petitions of the Heart (LGBTQ Rights)
+		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
 		10 = extra_law_events.19	# The Cradle and the State (Family & Reproductive Policy)
 		10 = extra_law_events.22	# The Automation Question (Welfare / UBI)
 		10 = extra_law_events.24	# The People's Assembly (Governance – Direct Democracy)
@@ -150,18 +157,8 @@ on_law_checkpoint_debate = {
 # Root = owner Country of the Law
 on_law_checkpoint_stall = {
 	random_events = {
-		# --- Extra Law Events (non-ministry) ---
-		10 = extra_law_events.1		# The Bankers' Lobby (Financial Regulation – bankers block reform)
-		10 = extra_law_events.3		# The Gold Question (Monetary Policy – hard-money faction resists)
-		10 = extra_law_events.8		# The Robber Barons (Antitrust – industrialists dig in)
-		10 = extra_law_events.11	# The Generals Object (Rules of War – military pushback)
-		10 = extra_law_events.13	# Tongues of the Nation (Language Policy – cultural resistance)
-		10 = extra_law_events.15	# The Question of Autonomy (State Power – regional resistance)
-		10 = extra_law_events.17	# The Eldest Son's Complaint (Inheritance – landowner resistance)
-		10 = extra_law_events.22	# The Automation Question (Welfare – competing interests clash)
+		# --- Extra Law Events — issue #81 stall flavor (.37 – .60) ---
 		10 = extra_law_events.37	# Bankers Block the Bill (Financial Regulation – financiers stall the bill)
-
-		# --- Extra Law Events — issue #81 stall flavor ---
 		10 = extra_law_events.38	# Bank Run Triggers Doubt (Financial Regulation)
 		10 = extra_law_events.39	# Gold Outflow Crisis (Monetary Policy)
 		10 = extra_law_events.40	# The Spectre of Runaway Prices (Monetary Policy)
@@ -186,16 +183,8 @@ on_law_checkpoint_stall = {
 		10 = extra_law_events.59	# The Algorithm Fails (Algorithmic Governance or Automated Bureaucracy)
 		10 = extra_law_events.60	# Demagogues at the Forum (Direct Democracy)
 
-		# --- Ministry Law Events ---
-		10 = ministry_law_events.2	# The Budget Debate (Generic – fiscal opposition)
-		10 = ministry_law_events.5	# The Generals' War Room (War – generals resist civilian control)
-		10 = ministry_law_events.10	# The Smokestack Question (Environment – industry blocks regulation)
-		10 = ministry_law_events.13	# The Loudspeaker State (Propaganda – press opposition)
-		10 = ministry_law_events.15	# The Watchers (Thought Control – resistance and backlash)
-		10 = ministry_law_events.16	# The Tainted Product (Consumer Protection – manufacturers fight back)
+		# --- Ministry Law Events — issue #81 stall flavor (.20 – .38) ---
 		10 = ministry_law_events.20	# Underqualified Hires Exposed (Generic Staffing – patronage scandal stalls)
-
-		# --- Ministry Law Events — issue #81 stall flavor ---
 		10 = ministry_law_events.21	# Treasury Pushes Back (Generic Budget)
 		10 = ministry_law_events.22	# Bureaucratic Sabotage (Generic Turf)
 		10 = ministry_law_events.23	# Final Stand of the Bureau (Generic Dissolution)

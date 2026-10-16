@@ -1307,7 +1307,7 @@
  extra_law_events.12.f:0 "\"The man who emerges from our prisons today is harder, angrier, and less capable of honest work than the day he entered. We have built factories of recidivism and called them houses of justice. There must be a better way.\""
  extra_law_events.12.t:0 "A Question of Punishment"
  extra_law_events.13.a:0 "A common tongue strengthens national unity."
- extra_law_events.13.b:0 "Make concessions to the periphery to ease passage."
+ extra_law_events.13.b:0 "Make concessions to the periphery, even if it delays the bill."
  extra_law_events.13.d:0 "Our proposed language reforms have met fierce resistance from the [SCOPE.gsInterestGroup('opposing_ig').GetName], who see the legislation as an assault on the cultural identity of communities across the nation."
  extra_law_events.13.f:0 "\"A language is not merely a tool for commerce. It is the vessel of a people's history, their songs, their prayers. The schoolmaster told me last week that his pupils no longer know the words to the harvest hymn. He has been teaching it for thirty years.\""
  extra_law_events.13.t:0 "Tongues of the Nation"
