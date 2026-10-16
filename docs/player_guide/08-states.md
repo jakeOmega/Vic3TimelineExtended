@@ -740,8 +740,7 @@ If you are a party to the Universal Declaration of Human Rights, a UN convention
 ([UN conventions and
 agencies](10-united-nations.md#un-conventions-and-agencies)), running Penal
 Transportation, Special Settlements or Rustication gives you Violating the
-Declaration: up to −10% prestige as the programs grow, halved if you ratified
-with reservations. It fades over several years after they stop. The first month
+Declaration: up to −10% prestige as the programs grow. It fades over several years after they stop. The first month
 you run a coercive program as a party, an event explains the penalty and offers
 to switch every coercive program to your best voluntary one.
 

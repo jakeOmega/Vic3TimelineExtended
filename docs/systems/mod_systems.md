@@ -2750,6 +2750,7 @@ article, power-bloc principle, GUI.
   - **Preparatory phase** (<6 months): No effect.
   - **Establishing phase** (6–11 months): `-0.05` electoral confidence.
   - **Fully Operational** (12+ months): `-0.1` electoral confidence.
+  - Both are halved while the country hosts a UN electoral observer mission with any strength (`un_mission_hosts_with_strength`): a Moribund UN's mission has none and halves nothing.
 - **Operation matching:** For each attacker with an election-interference pact against ROOT, reads the attacker's `iw_ops` container tagged `iw_op_election_interference` whose `iw_target` is ROOT, and takes its phase.
 - **On-action:** `covert_warfare_on_actions.txt` → `on_election_campaign_end` → `on_actions = { covert_warfare_election_end }` → calls `covert_op_election_confidence_effect` scripted effect.
 - **Notification:** `iw_election_interference_confidence` message sent to the affected country.
