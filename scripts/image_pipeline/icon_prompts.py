@@ -739,6 +739,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "swap_line": {"subject": "two short stacks of plain coins side by side, one gold and one silver, with one gold coin and one silver coin swapped on top of the other stack", "seed": 1},
         "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": 2},
         "debt_receivership": {"subject": "a thick brown leather ledger book bound shut with a heavy iron chain and a closed iron padlock", "seed": 1},
+        # The Grand Monuments' articles (2026-10-16), on borrowed icons until now.
+        "surrender_monument": {"subject": "a large hand lifting a small bronze statue of a robed figure off its square white stone pedestal", "seed": 2},
+        "return_cultural_property": {"subject": "a small white marble bust packed in an open wooden crate full of straw, a green ribbon tied in a bow around the crate", "seed": 3},
+        "archaeological_concession": {"subject": "an iron spade stuck upright in a small mound of brown earth beside a terracotta amphora split cleanly into two halves", "seed": 3},
+        "excavation_permit": {"subject": "a rolled parchment scroll sealed with a big red wax seal, a small iron trowel and a soft brush lying across it", "seed": 0},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -2370,6 +2375,8 @@ ICONS: dict[str, dict[str, dict]] = {
                                               "now": f"{_BI}/building_grand_monument.dds"},
         "landmark_tomb_of_alexander__mausoleum": {"subject": "a cut-away of the city of Alexandria: beneath its streets, a domed mosque and palm trees, a sealed underground royal tomb of white alabaster opened by excavators, its burial chamber holding a golden sarcophagus, the harbour and a lighthouse tower beyond", "seed": 1,
                                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_pompeii__forum": {"subject": "the excavated ruins of a Roman town dug out of grey volcanic ash: a long open forum paved with pale stone slabs, lined on both sides by rows of broken columns, a ruined temple on a high red brick podium at its far end, roofless houses with red and ochre plastered walls along straight stone-paved streets all around, a steep bank of grey ash at the edge of the dig, the broad cone of the volcano Vesuvius beyond with a thin plume of smoke, vineyards and umbrella pines", "seed": 2,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
         # The trophies' own pictures (2026-10-16): what was carried off, close, in a museum room
         # (TROPHY_STYLE); keys trophy_<landmark>, codes TROPHY_PICTURES in the registry test.
         "trophy_arc_de_triomphe": {"subject": "great sculpted stone relief groups of soldiers rallied by a winged figure with outspread wings, cut from a triumphal arch and set up along the walls of a museum room with a skylight", "style": TROPHY_STYLE, "seed": 0,
@@ -2546,6 +2553,8 @@ ICONS: dict[str, dict[str, dict]] = {
                                       "now": f"{_BI}/building_grand_monument.dds"},
         "trophy_tomb_of_alexander": {"subject": "a golden sarcophagus, a golden wreath of oak leaves and an alabaster funeral bier from the tomb of a Macedonian king, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_pompeii": {"subject": "a huge ancient Roman floor mosaic of a battle made of tiny stone tiles in ochre, brown, black and white, horsemen with long spears charging a king who turns back in his chariot among rearing horses, the mosaic set upright in a heavy frame against the wall, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                          "now": f"{_BI}/building_grand_monument.dds"},
     },
 }
 

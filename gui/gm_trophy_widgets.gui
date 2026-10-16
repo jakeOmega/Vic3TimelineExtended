@@ -946,6 +946,11 @@ types gm_trophy_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_alexander__mausoleum.dds"
 		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000087' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pompeii__forum.dds"
+		}
 	}
 
 	### A trophy's row picture (Trophies, Held Abroad, Trophies on Display): its
@@ -1388,6 +1393,11 @@ types gm_trophy_widget_types
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000086' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_alexander.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000087' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_pompeii.dds"
 		}
 	}
 

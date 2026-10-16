@@ -222,7 +222,7 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = sidon_necropolis CODE = 1000084 }
 	gm_state_picture_landmark = { KEY = villa_of_the_papyri CODE = 1000085 }
 	gm_state_picture_landmark = { KEY = tomb_of_alexander CODE = 1000086 }
-	gm_state_picture_landmark = { KEY = pompeii CODE = 102 }
+	gm_state_picture_landmark = { KEY = pompeii CODE = 1000087 }
 }
 
 gm_state_picture_landmark = {
@@ -330,6 +330,7 @@ gm_tr_picture_trophies = {
 	gm_tr_picture_trophy = { KEY = sidon_necropolis CODE = 2000084 }
 	gm_tr_picture_trophy = { KEY = villa_of_the_papyri CODE = 2000085 }
 	gm_tr_picture_trophy = { KEY = tomb_of_alexander CODE = 2000086 }
+	gm_tr_picture_trophy = { KEY = pompeii CODE = 2000087 }
 }
 
 gm_tr_picture_trophy = {
@@ -1040,6 +1041,10 @@ gm_debug_next_picture = {
 	}
 	else_if = {
 		limit = { var:gm_picture_code = 1000086 }
+		set_variable = { name = gm_picture_code value = 1000087 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000087 }
 		set_variable = { name = gm_picture_code value = 1 }
 	}
 	else = {
