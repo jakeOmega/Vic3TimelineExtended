@@ -688,7 +688,7 @@ covert_expose_known_sgui = {
 	effect = {
 		custom_tooltip = {
 			text = covert_known_expose_effect_tt
-			scope:iw_known = {
+			scope:iw_known ?= {
 				set_variable = { name = iw_expose_ordered value = 1 }
 			}
 			trigger_event = { id = covert_warfare.4 }

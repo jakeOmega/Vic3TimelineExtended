@@ -415,6 +415,41 @@ class Watchdogs(unittest.TestCase):
         outer = str(_innermost_enclosing(body, "change_variable = { name = iw_expose_inflight add = 1 }", "if = {"))
         self.assertIn("NOT = { has_variable = iw_burned_type_code }", outer)
 
+    def test_event_1_copies_left_two_passes_are_released(self):
+        # A revolution that wins while covert_warfare.1 is open hands its copies
+        # to the winner and the event's `after` never runs; covert_exposure_in_flight
+        # reads iw_burned_type_code, so the attacker would be locked for good.
+        # The first pass marks the copies seen, the second removes them.
+        body = scripted_effect("covert_watch_attacker_monthly")
+        stale = str(_innermost_enclosing(body, "remove_variable = iw_burned_type_code", "if = {"))
+        self.assertTrue(
+            stale.startswith("if = {\n\t\t\tlimit = { has_variable = iw_burned_seen }"),
+            stale[:80],
+        )
+        for var in ("iw_burned_phase", "iw_burned_at_war", "iw_burned_friend",
+                    "iw_expose_inflight", "iw_burned_seen"):
+            self.assertIn("remove_variable = %s" % var, stale)
+        self.assertIn("TE_SELF_CHECK BROKEN covert_exposure_lock", stale)
+        self.assertIn("has_global_variable = te_selfcheck_covert_exposure_lock_broken", stale)
+        self.assertIn("set_global_variable = { name = te_selfcheck_covert_exposure_lock_broken", stale)
+        mark = str(_innermost_enclosing(body, "set_variable = { name = iw_burned_seen value = 1 }", "if = {"))
+        self.assertTrue(
+            mark.startswith("if = {\n\t\tlimit = { has_variable = iw_burned_type_code }"),
+            mark[:80],
+        )
+        self.assertIn(stale, mark)
+        self.assertLess(mark.index(stale), mark.index("else = {"))
+        # ...and `after` removes the mark with the copies, outside the burn's
+        # guard, or the next covert_warfare.1 would be wiped at its first pass.
+        after = event_block(event(".1"), "after")
+        guarded = str(_innermost_enclosing(after, "covert_op_burn = {", "if = {"))
+        self.assertNotIn("iw_burned_seen", guarded)
+        self.assertIn(
+            "if = {\n\t\t\tlimit = { has_variable = iw_burned_seen }\n"
+            "\t\t\tremove_variable = iw_burned_seen\n\t\t}",
+            after,
+        )
+
     def test_orphaned_known_flag_is_dropped(self):
         # A watched operation whose record is gone (a revolution loses the
         # defender's lists) becomes catchable again.

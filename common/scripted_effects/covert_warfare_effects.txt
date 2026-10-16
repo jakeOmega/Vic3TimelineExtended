@@ -262,7 +262,7 @@ covert_op_refresh_detection = {
 # the pact doesn't exist yet — so this creates the container directly
 # instead of reconciling against pacts.
 # Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier,
-#             $CODE$ = operation type code 0-12, matching the branches of
+#             $CODE$ = operation type code 0-14, matching the branches of
 #                      covert_last_exposed_type_name
 # Scope: operator country; scope:target_country must be set
 covert_op_start = {
@@ -321,7 +321,7 @@ covert_op_end = {
 #
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $TARGET$ = target country,
-#             $CODE$ = operation type code 0-12, matching the branches of
+#             $CODE$ = operation type code 0-14, matching the branches of
 #                      covert_last_exposed_type_name
 # Scope: operator country
 covert_op_burn = {
@@ -1312,7 +1312,7 @@ covert_tradecraft_monthly = {
 # Parameters: $TYPE$ = short name
 #             $ACTION$ = diplomatic_action_type key (e.g. covert_election_interference_action)
 #             $DEFENSE_MOD$ = type-specific defense modifier
-#             $CODE$ = operation type code 0-12 (the covert_last_exposed_type_name
+#             $CODE$ = operation type code 0-14 (the covert_last_exposed_type_name
 #                      mapping); written on every container so old saves gain it
 # Scope: operator country
 covert_op_sync = {
@@ -1831,8 +1831,16 @@ covert_ops_roll_detection_all = {
 				add_to_temporary_list = iw_detected_ops
 			}
 		}
+		# Only this country's own operations: a temporary list lives for the
+		# whole top-level effect, so a second roll in one effect (the console
+		# harness rolls every attacker inside one every_country) finds the
+		# first roller's catches still in it. PREV is the list item, one scope
+		# back (te_tax_display_values.txt reads `owner = { ... target = PREV }`).
 		random_in_list = {
 			list = iw_detected_ops
+			limit = {
+				scope:iw_catcher_attacker = { is_target_in_variable_list = { name = iw_ops target = PREV } }
+			}
 			save_scope_as = iw_burned_op
 		}
 		if = {
@@ -2327,6 +2335,14 @@ covert_watch_monthly = {
 #      (no iw_burned_type_code) it counts the passes and goes at the second:
 #      not the first, because an exposure the target ordered earlier the same
 #      day may not have opened its event yet.
+#      While one is open (iw_burned_type_code) the pass marks it seen
+#      (iw_burned_seen), and `after` removes the mark with the copies. A
+#      covert_warfare.1 lasts three days, so it can straddle one monthly pass
+#      but never two: copies still marked at the next pass belong to an event
+#      whose `after` never ran (a revolution that won while it was open hands
+#      them to the winner, and the loser's event dies with it). Left alone they
+#      would hold the lock for good, so they go with the lock, once-a-game
+#      BROKEN line and all.
 #   2. A pending decision (iw_catch_pending, 1 from the roll): covert_warfare.3
 #      clears it within its three days. Still there a month later, the event
 #      never ran (it needs the scopes the roll saved to reach the target):
@@ -2349,6 +2365,38 @@ covert_watch_attacker_monthly = {
 		}
 		else = {
 			change_variable = { name = iw_expose_inflight add = 1 }
+		}
+	}
+	if = {
+		limit = { has_variable = iw_burned_type_code }
+		if = {
+			limit = { has_variable = iw_burned_seen }
+			remove_variable = iw_burned_type_code
+			if = {
+				limit = { has_variable = iw_burned_phase }
+				remove_variable = iw_burned_phase
+			}
+			if = {
+				limit = { has_variable = iw_burned_at_war }
+				remove_variable = iw_burned_at_war
+			}
+			if = {
+				limit = { has_variable = iw_burned_friend }
+				remove_variable = iw_burned_friend
+			}
+			if = {
+				limit = { has_variable = iw_expose_inflight }
+				remove_variable = iw_expose_inflight
+			}
+			remove_variable = iw_burned_seen
+			if = {
+				limit = { NOT = { has_global_variable = te_selfcheck_covert_exposure_lock_broken } }
+				set_global_variable = { name = te_selfcheck_covert_exposure_lock_broken value = yes }
+				debug_log = "TE_SELF_CHECK BROKEN covert_exposure_lock attacker=[THIS.GetCountry.GetTagName] (covert_warfare.1's copies outlived a whole month, so its after never ran: a revolution won while it was open, or the event was lost; the lock was released, so this attacker's operations can be caught and exposed again; see docs/testing/covert-counterintel-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		else = {
+			set_variable = { name = iw_burned_seen value = 1 }
 		}
 	}
 	if = {

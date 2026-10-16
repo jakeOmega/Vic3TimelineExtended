@@ -514,7 +514,9 @@ class KnownSectionTest(unittest.TestCase):
             self.assertIn(part, valid, part)
         effect = _words(_braced(self.sgui, r"^\teffect = \{"))
         self.assertTrue(effect.startswith("custom_tooltip = { text = covert_known_expose_effect_tt"), effect)
-        self.assertIn("scope:iw_known = { set_variable = { name = iw_expose_ordered value = 1 } }", effect)
+        # `?=`: the tooltip walks the effect every hover frame, and a link that
+        # failed to bind would otherwise log an undefined scope each time.
+        self.assertIn("scope:iw_known ?= { set_variable = { name = iw_expose_ordered value = 1 } }", effect)
         self.assertIn("trigger_event = { id = covert_warfare.4 }", effect)
         # Nothing else: the exposure itself is the hidden event's work.
         self.assertNotIn("covert_exposure_fire", effect)

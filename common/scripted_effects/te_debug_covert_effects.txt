@@ -26,7 +26,7 @@ te_debug_covert_set_funding = {
 # a container with no pact at the next monthly pulse.
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $DEFENSE_MOD$ = type-specific defense modifier,
-#             $CODE$ = operation type code 0-12, matching the branches of
+#             $CODE$ = operation type code 0-14, matching the branches of
 #                      covert_last_exposed_type_name
 #             $MONTHS$ = duration to plant
 # Scope: country; scope:te_debug_covert_target must be set
@@ -526,7 +526,10 @@ te_debug_covert_befriend_attackers = {
 
 # Start Counterintelligence Support from us on a friend that has no protector,
 # six months in (establishing, so its defence boost applies at the next pulse).
-# Funding is raised to 1 if it is lower, or the pact would lapse.
+# Funding is raised to 1 if it is lower, or the pact would lapse. The friend
+# test is asked from the candidate's side: covert_is_friend's TARGET must be a
+# scope: reference, since vanilla's alliance triggers read it inside a scope
+# where prev is someone else.
 # Scope: country (the protector)
 te_debug_covert_start_support = {
 	save_scope_as = te_debug_covert_protector
@@ -534,7 +537,7 @@ te_debug_covert_start_support = {
 		limit = {
 			NOT = { this = scope:te_debug_covert_protector }
 			NOT = { has_variable = iw_cis_protector }
-			scope:te_debug_covert_protector = { covert_is_friend = { TARGET = prev } }
+			covert_is_friend = { TARGET = scope:te_debug_covert_protector }
 		}
 		save_scope_as = te_debug_covert_target
 	}

@@ -67,6 +67,14 @@ class RollEffectTests(unittest.TestCase):
         self.assertIn("chance = covert_op_roll_chance", block)
         self.assertIn("add_to_temporary_list = iw_detected_ops", block)
         self.assertIn("random_in_list = {", block)
+        # The pick is the roller's own: a temporary list lives for the whole
+        # top-level effect, so a second roll in one effect (the console
+        # harness) would otherwise find another attacker's catch in it.
+        self.assertIn(
+            "list = iw_detected_ops\n\t\t\tlimit = {\n\t\t\t\tscope:iw_catcher_attacker = "
+            "{ is_target_in_variable_list = { name = iw_ops target = PREV } }",
+            block,
+        )
         self.assertIn("save_scope_as = iw_burned_op", block)
         self.assertIn("exists = scope:iw_burned_op", block)
         # The exposure itself goes through covert_exposure_fire, the one place

@@ -307,6 +307,13 @@ covert_warfare.1 = {
 			limit = { has_variable = iw_burned_friend }
 			remove_variable = iw_burned_friend
 		}
+		# The monthly watchdog's mark that this event was open at a pass
+		# (covert_watch_attacker_monthly): gone with the copies, or the next
+		# covert_warfare.1 would be taken for a stale one at the first pass.
+		if = {
+			limit = { has_variable = iw_burned_seen }
+			remove_variable = iw_burned_seen
+		}
 		# The exposure is resolved: the next one of this attacker's operations
 		# may go (covert_exposure_in_flight). Outside the guard, like the copies.
 		if = {
