@@ -301,8 +301,8 @@ building you built in 1850 keeps upgrading. Mines move on to Continuous Miners,
 Smart Miners and Laser Excavation Technology; grain farms to Modern Farming,
 Automated Harvesters and Planters and Designed Crops; plantations to Mechanized
 Farm and GMO Plantation; and automation groups end in AI-managed methods such as
-AI Managed Fab. A few polluting buildings get pollution-control groups ([State
-pollution](15-climate.md#state-pollution)), and many get a hidden maintenance
+AI Managed Fab. A few polluting buildings get pollution-control groups
+([Pollution-control methods](15-climate.md#pollution-control-methods)), and many get a hidden maintenance
 group used by the construction market ([Construction maintenance and
 retooling](03-economy.md#construction-maintenance-and-retooling)).
 
