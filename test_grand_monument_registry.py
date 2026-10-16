@@ -42,6 +42,10 @@ SGUIS = "common/scripted_guis/gm_sguis.txt"
 WIDGET = "gui/journal_entry_widgets/grand_monuments_widget.gui"
 DEBUG_EVENTS = "events/te_debug_monuments_events.txt"
 MISC_LOC = "te_miscellaneous_l_english.yml"
+SIG_TRIGGERS = "common/scripted_triggers/gm_signature_triggers.txt"
+SIG_EFFECTS = "common/scripted_effects/gm_signature_effects.txt"
+SIG_VALUES = "common/script_values/gm_signature_values.txt"
+SIG_CUSTOM_LOC = "common/customizable_localization/gm_signature_custom_loc.txt"
 
 Dedication = namedtuple(
     "Dedication",
@@ -1099,8 +1103,12 @@ INSCRIPTION_FAITHS = {"catholic": "latin", "jewish": "hebrew", "hindu": "sanskri
 # in (spec 2026-10-13-multiple-monuments-per-state-design.md §6): it follows that
 # state's first row, and the seeding stands it beside it as a secondary monument
 # rather than skipping it. Rome, Beijing and Athens are the next.
-Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed beside buried",
-                      defaults=(True, False, False))
+# A row with a year is a historical opportunity's landmark (signatures spec
+# 2026-10-16 §6): never placed at the start, offered once a game to whoever
+# holds its state from that year for forty years (HISTORICAL_OPPORTUNITIES), its
+# level the opportunity's target. Its owner is whoever completes it, so no tag.
+Landmark = namedtuple("Landmark", "key state tag dedication form standin level placed beside buried year",
+                      defaults=(True, False, False, None))
 LANDMARKS = (
     Landmark("arc_de_triomphe", "STATE_ILE_DE_FRANCE", "FRA", "war_memorial", "arch", ("generic", "arch"), 15),
     Landmark("alexander_column", "STATE_INGRIA", "RUS", "crown", "column", ("generic", "column"), 10),
@@ -1217,6 +1225,20 @@ LANDMARKS = (
     Landmark("tomb_of_alexander", "STATE_LOWER_EGYPT", None, "civic", "mausoleum", ("generic", "mausoleum"), 15, False, False, True),
     # Added 2026-10-16 (owner): being dug in 1836, so seeded as a dig already under way (VECTOR = excavating).
     Landmark("pompeii", "STATE_CAMPANIA", None, "civic", "forum", ("heritage_latin", "forum"), 15, False, False, True),
+    # Added 2026-10-16 (signatures spec §6.4): the first historical opportunities, raised by completing one.
+    Landmark("walhalla", "STATE_BAVARIA", None, "civic", "hall_of_fame", ("heritage_gothic", "hall_of_fame"), 5, False,
+             year=1836),
+    Landmark("bunker_hill_monument", "STATE_MASSACHUSETTS", None, "war_memorial", "obelisk", ("generic", "obelisk"), 5,
+             False, year=1836),
+    Landmark("obelisk_of_the_second_of_may", "STATE_NEW_CASTILE", None, "war_memorial", "obelisk",
+             ("generic", "obelisk"), 5, False, year=1836),
+    # A Grand Shrine stands in its faith's own building: the form is the skin's (gm_form_name).
+    Landmark("muhammad_ali_mosque", "STATE_LOWER_EGYPT", None, "religious", "faith", ("faith_sunni", "faith"), 10,
+             False, year=1836),
+    Landmark("nelsons_column", "STATE_HOME_COUNTIES", None, "war_memorial", "column", ("generic", "column"), 5, False,
+             year=1840),
+    Landmark("washington_monument", "STATE_DISTRICT_OF_COLUMBIA", None, "republic", "obelisk", ("generic", "obelisk"),
+             10, False, year=1848),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
@@ -1247,7 +1269,9 @@ class CeremonyTests(unittest.TestCase):
     def test_every_dedication_has_its_option(self):
         options = ceremony_options()
         # "opp": the open opportunity's dedication, first (usability §3).
-        self.assertEqual(set(options), set(CEREMONY_OPTION.values()) | {"a", "opp"})
+        # "sig_<special>": a held special (signatures spec §5.3).
+        self.assertEqual(set(options), set(CEREMONY_OPTION.values()) | {"a", "opp"}
+                         | {f"sig_{s.key}" for s in SIGNATURES if s.kind == "special"})
         for d in DEDICATIONS:
             body = squash(strip_comments(options[CEREMONY_OPTION[d.key]]))
             self.assertIn(f"text = monument_events.2.{CEREMONY_OPTION[d.key]}.tt {wrapper_call(d)}", body, d.key)
@@ -1523,7 +1547,7 @@ class WidgetTests(unittest.TestCase):
         return text
 
     def test_national_lines_read_guarded_displays(self):
-        values = read(VALUES)
+        values = read(VALUES) + "\n" + read(SIG_VALUES)
         shown_text = self._shown_text()
         for display in re.findall(r"ScriptValue\('(gm_display_\w+)'\)", shown_text):
             body = squash(block(values, display))
@@ -1702,14 +1726,17 @@ NAME_TRIGGERS = "common/scripted_triggers/gm_name_triggers.txt"
 NAME_EFFECTS = "common/scripted_effects/gm_name_effects.txt"
 HISTORY = "common/history/extra_history.txt"
 
-Source = namedtuple("Source", "key begins fixed boon_field boon_value boon_shown")
+Source = namedtuple("Source", "key begins fixed boon_field boon_value boon_shown special", defaults=(None,))
 # One row per moment (docs/superpowers/specs/2026-10-12-grand-monument-
 # opportunities-design.md §1): what it asks for, how the monument would be
 # named, and its boon. A fixed source names the capital (gm_com_fix_to_capital),
 # falling back to anywhere when the capital holds a monument of another
 # dedication. A begin is the gm_com_begin call less its SOURCE; "$KEY$" is the
 # regime's or the technology's dedication. boon_shown is how the boon's
-# effect loc prints the value.
+# effect loc prints the value. special: the unique dedication completing one
+# gives the monument that completed it (signatures spec 2026-10-16 §5.4;
+# SIGNATURES). A historical opportunity (§6) has no boon and is
+# HISTORICAL_OPPORTUNITIES', not a row here.
 COMMISSION_SOURCES = (
     Source("reign", ("DEDICATION = crown NAMESAKE = ruler FORM = column",
                      "DEDICATION = leader NAMESAKE = ruler FORM = statue"), False,
@@ -1717,23 +1744,23 @@ COMMISSION_SOURCES = (
     Source("regime", ("DEDICATION = $KEY$ NAMESAKE = year FORM = column",), False,
            "country_loyalists_from_legitimacy_mult", 0.25, "+25%"),
     Source("great_power", ("DEDICATION = civic NAMESAKE = honours FORM = column",), True,
-           "country_influence_mult", 0.1, "+10%"),
+           "country_influence_mult", 0.1, "+10%", "concert_of_nations"),
     Source("victory", ("DEDICATION = war_memorial NAMESAKE = occasion FORM = arch",), False,
-           "country_prestige_mult", 0.1, "+10%"),
+           "country_prestige_mult", 0.1, "+10%", "to_victory"),
     Source("defeat", ("DEDICATION = war_memorial NAMESAKE = occasion FORM = hall",), False,
-           "country_radicals_from_legitimacy_mult", -0.25, "−25%"),
+           "country_radicals_from_legitimacy_mult", -0.25, "−25%", "unknown_soldier"),
     Source("centenary", ("DEDICATION = civic NAMESAKE = occasion FORM = column",), True,
            "state_assimilation_mult", 0.25, "+25%"),
     Source("ruler_death", ("DEDICATION = civic NAMESAKE = ruler FORM = mausoleum",), True,
            "country_legitimacy_base_add", 5, "+5"),
     Source("space", ("DEDICATION = civic NAMESAKE = occasion FORM = obelisk",), True,
-           "country_weekly_innovation_mult", 0.1, "+10%"),
+           "country_weekly_innovation_mult", 0.1, "+10%", "conquerors_of_space"),
     Source("faith", ("DEDICATION = religious NAMESAKE = honours FORM = default",), False,
            "state_conversion_mult", 0.25, "+25%"),
     Source("tech_artistic", (), False, "building_art_academy_throughput_add", 0.1, "+10%"),
     Source("tech_scientific", (), False, "country_tech_spread_mult", 0.1, "+10%"),
     Source("tech_industrial", (), False, "building_group_bg_manufacturing_throughput_add", 0.05, "+5%"),
-    Source("tech_athletic", (), False, "state_mortality_mult", -0.05, "−5%"),
+    Source("tech_athletic", (), False, "state_mortality_mult", -0.05, "−5%", "olympic"),
     Source("tech_naturalist", (), False, "state_pollution_reduction_health_mult", -0.25, "−25%"),
 )
 SOURCE_KEYS = tuple(s.key for s in COMMISSION_SOURCES)
@@ -1863,9 +1890,11 @@ class CommissionSourceTests(unittest.TestCase):
         levels are 5,000 construction (owner, 2026-10-05)."""
         can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
         self.assertNotIn("country_rank", can)
-        self.assertEqual(squash(block(read(COM_VALUES), "gm_com_time_months")),
+        self.assertEqual(squash(strip_comments(block(read(COM_VALUES), "gm_com_time_months"))),
                          "value = 180 if = { limit = { country_rank >= rank_value:great_power } value = 60 } "
-                         "else_if = { limit = { country_rank >= rank_value:major_power } value = 120 }")
+                         "else_if = { limit = { country_rank >= rank_value:major_power } value = 120 } "
+                         "if = { limit = { has_variable = gm_com_target var:gm_com_target > 5 } "
+                         "multiply = var:gm_com_target divide = 5 }")
         self.assertIn("set_variable = { name = gm_com_months_left value = gm_com_time_months }",
                       squash(block(read(COM_EFFECTS), "gm_com_accept")))
         self.assertIn("OR = { NOT = { country_rank >= rank_value:major_power }",
@@ -1873,9 +1902,13 @@ class CommissionSourceTests(unittest.TestCase):
         words = squash(block(read(CUSTOM_LOC), "gm_com_time_words"))
         for rank, key in (("great_power", "gm_com_time_5_years"), ("major_power", "gm_com_time_10_years")):
             self.assertIn(f"country_rank >= rank_value:{rank} }} localization_key = {key}", words)
+        # A historical opportunity of ten levels has twice as long (signatures spec §6.1).
+        for rank, key in (("great_power", "gm_com_time_10_years"), ("major_power", "gm_com_time_20_years")):
+            self.assertIn(f"var:gm_com_target > 5 country_rank >= rank_value:{rank} }} localization_key = {key}", words)
+        self.assertIn("var:gm_com_target > 5 } localization_key = gm_com_time_30_years", words)
         self.assertTrue(words.endswith("text = { localization_key = gm_com_time_15_years }"))
         L = loc()
-        self.assertIn("ScriptValue('gm_com_time_months')", L["gm_com_accept_tt"])
+        self.assertIn("ScriptValue('gm_com_time_months')", L["gm_com_accept_head"])
         for key, text in L.items():
             if key.startswith("monument_events.21.d_"):
                 self.assertNotIn("five years", text, key)
@@ -2063,7 +2096,8 @@ class CommissionLifeTests(unittest.TestCase):
         fulfil = squash(block(self.e, "gm_com_fulfil"))
         self.assertIn(f"gm_country_ledger_ig_by_flag = {{ VAR = gm_com_ig AMOUNT = {REWARDS['ig']} }} "
                       "gm_com_grant_boon = yes", fulfil)
-        self.assertIn("set_variable = gm_gift trigger_event = { id = monument_events.26 }", fulfil)
+        self.assertIn("set_variable = gm_gift", fulfil)
+        self.assertLess(fulfil.index("set_variable = gm_gift"), fulfil.index("trigger_event = { id = monument_events.26 }"))
         for name in ("gm_com_decline", "gm_com_miss", "gm_com_lapse", "gm_com_close", "gm_com_clear"):
             body = squash(block(self.e, name))
             self.assertNotIn("ledger", body, name)
@@ -2081,8 +2115,12 @@ class CommissionLifeTests(unittest.TestCase):
         self.assertEqual(ev.count("option = {"), 3)
         self.assertEqual(ev.count("default_option = yes"), 1)
         # Seizing is the default: letting it pass, or running out, costs nothing.
-        self.assertIn("name = monument_events.21.a default_option = yes custom_tooltip = { text = gm_com_accept_tt "
-                      "gm_com_accept = yes }", ev)
+        # A historical opportunity's tooltip is a key of its own, chosen in
+        # script: a key named in SelectLocalization loses SCOPE.
+        self.assertIn("name = monument_events.21.a default_option = yes "
+                      "if = { limit = { var:gm_com_source = flag:historical } "
+                      "custom_tooltip = { text = gm_com_accept_hist_tt gm_com_accept = yes } } "
+                      "else = { custom_tooltip = { text = gm_com_accept_tt gm_com_accept = yes } }", ev)
         self.assertIn("name = monument_events.21.b custom_tooltip = { text = gm_com_decline_tt gm_com_decline = yes }", ev)
         self.assertIn("modifier = { trigger = { gm_com_ai_declines = yes } factor = 0 }", ev)
         self.assertIn("event_image", ev)
@@ -2090,17 +2128,29 @@ class CommissionLifeTests(unittest.TestCase):
         # immediate's pick puts it.
         self.assertIn("immediate = { gm_com_save_scopes = yes gm_com_pick_build_state = yes }",
                       squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.21\s*=\s*\{"))))
+        build = ("gm_com_accept = yes set_variable = { name = gm_com_raise_pending value = yes days = 7 } "
+                 "trigger_event = { id = monument_events.27 } }")
         self.assertIn("name = monument_events.21.c trigger = { is_ai = no exists = scope:gm_com_build_state } "
-                      "custom_tooltip = { text = gm_com_accept_build_tt gm_com_accept = yes set_variable = "
-                      "{ name = gm_com_raise_pending value = yes days = 7 } trigger_event = { id = monument_events.27 } } "
+                      "if = { limit = { var:gm_com_source = flag:historical } "
+                      f"custom_tooltip = {{ text = gm_com_accept_hist_build_tt {build} }} "
+                      f"else = {{ custom_tooltip = {{ text = gm_com_accept_build_tt {build} }} "
                       "ai_chance = { base = 0 }", ev)
         declines = squash(block(self.t, "gm_com_ai_declines"))
         for s_ in ("is_at_war = yes", "gm_country_hard_times = yes",
                    "construction_queue_government_duration >= 52", "scaled_debt > 0"):
             self.assertIn(s_, declines)
         L = loc()
-        for read_ in ("gm_com_gift", "gm_disp_boon_years", "gm_com_boon_name", "gm_com_boon_effect"):
+        self.assertIn("gm_com_gift", L["gm_com_accept_head"])
+        for key in ("gm_com_accept_tt", "gm_com_accept_hist_tt"):
+            self.assertTrue(L[key].startswith("$gm_com_accept_head$"), key)
+            self.assertNotIn("SelectLocalization", L[key], key)
+        for read_ in ("gm_disp_boon_years", "gm_com_boon_name", "gm_com_boon_effect"):
             self.assertIn(read_, L["gm_com_accept_tt"], read_)
+            self.assertNotIn(read_, L["gm_com_accept_hist_tt"], read_)
+        for read_ in ("gm_com_occasion_name", "gm_com_hist_sig_line"):
+            self.assertIn(read_, L["gm_com_accept_hist_tt"], read_)
+        self.assertEqual(L["gm_com_accept_build_tt"], "$gm_com_accept_tt$\\n$gm_com_accept_build_line$")
+        self.assertEqual(L["gm_com_accept_hist_build_tt"], "$gm_com_accept_hist_tt$\\n$gm_com_accept_build_line$")
 
     def test_let_it_pass_from_the_panel(self):
         sgui = squash(block(read(SGUIS), "gm_com_let_pass_sgui"))
@@ -2240,7 +2290,8 @@ class GiftTests(unittest.TestCase):
         ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.26\s*=\s*\{"))
         self.assertIn("type = state_event hidden = yes", ev)
         self.assertIn("trigger = { gm_system_enabled = yes has_variable = gm_gift }", ev)
-        self.assertIn("immediate = { gm_state_gift_grandeur = yes }", ev)
+        self.assertIn("immediate = { gm_state_gift_grandeur = yes gm_state_hist_take = yes gm_state_sig_take_grant = yes }",
+                      squash(strip_comments(raw_block_at(self.events, r"(?m)^monument_events\.26\s*=\s*\{"))))
 
     def test_the_gift_is_age(self):
         # Ageing rework (spec 2026-10-16 §5; owner): +5 grandeur, no rebuild.
@@ -2682,7 +2733,9 @@ class NameTests(unittest.TestCase):
         self.assertIn("gm_state_com_form_fits = yes", take, "the commission's form only when it fits the skin")
         fulfil = squash(block(read(COM_EFFECTS), "gm_com_fulfil"))
         # A petition (the city's name) does not overwrite a name already given (owner call, PR body).
+        fulfil = squash(strip_comments(block(read(COM_EFFECTS), "gm_com_fulfil")))
         self.assertIn("NOT = { has_variable = gm_unveiled_for_com } gm_state_has_historical_name = no "
+                      "NOT = { owner = { has_variable = gm_com_landmark } } "
                       "OR = { NOT = { has_variable = gm_namesake } "
                       "owner = { NOT = { var:gm_com_namesake = flag:city } } } } gm_state_take_commission_name = yes",
                       fulfil)
@@ -3462,11 +3515,17 @@ class LandmarkTests(unittest.TestCase):
                                 f"{lm.key}: seeded beside a landmark that is seeded first")
         for lm in LANDMARKS:
             self.assertIn(lm.dedication, BY_KEY, lm.key)
-            self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values(), lm.key)
+            # A shrine's form is its faith's own building.
+            self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values()
+                            or (lm.form == "faith" and lm.dedication == "religious"), lm.key)
             if lm.form in BUILDING_FORMS.values():
                 self.assertEqual(BUILDING_FORMS[lm.dedication], lm.form, f"{lm.key}: a building's own form")
             if lm.placed:
                 self.assertGreaterEqual(lm.level, 5, lm.key)
+            elif lm.year:
+                # A historical opportunity's landmark: its level is the opportunity's target.
+                self.assertIn(lm.level, (5, 10), lm.key)
+                self.assertIsNone(lm.tag, f"{lm.key}: whoever completes it owns it")
             elif lm.buried:
                 # A buried site (issue #939) is placed by an excavation, whoever owns the ground then:
                 # a level of its own, no owner of its own.
@@ -3581,9 +3640,10 @@ class LandmarkLockTests(unittest.TestCase):
         clear = squash(block(self.e, "gm_clear_state"))
         look = ("if = { limit = { NOT = { AND = { always = $KEEP_LANDMARK$ gm_state_is_landmark = yes } } } "
                 "gm_remove_state_var = { VAR = gm_landmark } gm_remove_state_var = { VAR = gm_skin } "
-                "gm_remove_state_var = { VAR = gm_form } gm_remove_state_var = { VAR = gm_picture_code } }")
+                "gm_remove_state_var = { VAR = gm_form } gm_remove_state_var = { VAR = gm_picture_code } "
+                "gm_remove_state_var = { VAR = gm_signature } gm_remove_state_var = { VAR = gm_sig_parent } }")
         self.assertIn(look, clear)
-        for var in ("gm_landmark", "gm_skin", "gm_form", "gm_picture_code"):
+        for var in ("gm_landmark", "gm_skin", "gm_form", "gm_picture_code", "gm_signature", "gm_sig_parent"):
             self.assertEqual(clear.count(f"gm_remove_state_var = {{ VAR = {var} }}"), 1, var)
         calls = []
         for rel in [p.relative_to(ROOT).as_posix() for d in ("common", "events")
@@ -3608,7 +3668,7 @@ class LandmarkLockTests(unittest.TestCase):
 
     def test_a_met_commission_keeps_a_historical_name(self):
         fulfil = squash(block(read(COM_EFFECTS), "gm_com_fulfil"))
-        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } gm_state_has_historical_name = no OR = {", fulfil)
+        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } gm_state_has_historical_name = no", fulfil)
 
     def test_the_ai_preserves_a_landmark_more_readily(self):
         ai = squash(block(self.e, "gm_ai_decide_contests"))
@@ -4299,6 +4359,8 @@ CONTAINER_RECORDS = (
     ("gm_built_by", "gm_tr_built_by"), ("gm_contested", "gm_tr_contested"), ("gm_heritage", "gm_tr_heritage"),
     ("gm_base_ig", "gm_tr_base_ig"), ("gm_supporter_ig", "gm_tr_supporter_ig"),
     ("gm_ceremony_level", "gm_tr_ceremony_level"),
+    # A unique dedication (signatures spec 2026-10-16 §1, §7).
+    ("gm_signature", "gm_tr_signature"), ("gm_sig_parent", "gm_tr_sig_parent"),
 )
 
 
@@ -5146,3 +5208,608 @@ class MergeShadowTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---- Unique dedications (signatures spec 2026-10-16) ----------------------------------
+
+Signature = namedtuple("Signature", "key kind family name national local ig parent source members")
+# The checklist for adding a signature (docs/superpowers/specs/2026-10-16-grand-
+# monument-signatures-design.md §10). kind: a family (§4.1), a one-off (§4.2: a
+# family of one with a flourish, counted in its family's sums too) or a special
+# (§5: given by completing its opportunity). national: (modifier suffix, field,
+# step) per field, each its own one-field modifier gm_national_sig_<key><suffix>
+# (Ancestral Antiquity's is cultural pull, a script value); local: (field, step)
+# of gm_local_sig_<key>; ig: the one group of its own (§2.3); parent: a
+# special's dedication; source: a special's moment (COMMISSION_SOURCES);
+# members: the landmarks that carry it (a one-off's is its one landmark). The
+# row order is the debug codes' (gm_disp_sig_code).
+SIGNATURES = (
+    Signature("antiquity", "family", None, "Ancestral Antiquity", (("", "cultural_pull", 1),),
+              ("building_tourism_industry_throughput_add", 0.10), "intelligentsia", None, None,
+              ("stelae_of_aksum", "obelisks_of_karnak", "persepolis", "luxor_obelisk", "venus_de_milo",
+               "piraeus_lion", "horses_of_saint_mark", "great_zimbabwe", "uffizi_gallery", "capitoline_museums",
+               "temples_of_baalbek", "palmyra", "xanthos", "arch_of_ctesiphon", "winged_victory_of_samothrace",
+               "troy_hisarlik", "mycenae_grave_circle", "pergamon_altar", "deir_el_bahari_cache",
+               "ishtar_gate_babylon", "palace_of_knossos", "oseberg_ship", "machu_picchu", "bust_of_nefertiti",
+               "tomb_of_tutankhamun", "royal_cemetery_at_ur", "sanxingdui_pits", "sutton_hoo", "tomb_of_pakal",
+               "tomb_of_philip_ii", "tomb_of_marquis_yi", "royal_tombs_of_sipan", "olympia", "delphi",
+               "sidon_necropolis", "tomb_of_alexander", "pompeii")),
+    Signature("archive", "family", None, "Epigraphic Archive",
+              (("", "country_weekly_innovation_max_add", 2), ("_spread", "country_tech_spread_mult", 0.02)),
+              ("building_university_throughput_add", 0.10), "intelligentsia", None, None,
+              ("rosetta_stone", "temple_of_dendera", "mesha_stele", "nineveh_library", "vindolanda_tablets",
+               "antikythera_mechanism", "mohenjo_daro", "lascaux_caves", "nag_hammadi_library", "dead_sea_scrolls",
+               "mawangdui_tombs", "otzi_the_iceman", "caral_supe", "gobekli_tepe", "villa_of_the_papyri")),
+    Signature("throne", "family", None, "Seat of the Throne", (("", "country_authority_mult", 0.03),), None, None,
+              None, None,
+              ("topkapi_palace", "golestan_palace", "sans_souci_palace", "royal_palace_of_benin",
+               "royal_palace_of_kumasi", "imperial_city_of_hue", "red_fort", "royal_palaces_of_abomey",
+               "klungkung_palace", "royal_palace_of_kandy")),
+    Signature("royal_pantheon", "family", None, "Royal Pantheon",
+              (("", "country_loyalists_from_legitimacy_mult", 0.05),), None, None, None, None,
+              ("alexander_column", "basilica_of_superga", "tomb_of_william_the_silent", "cenotaph_of_maximilian",
+               "arco_de_santa_maria", "statue_of_louis_xiv", "nikko_toshogu")),
+    Signature("martial_glory", "family", None, "Martial Glory", (("", "unit_morale_recovery_mult", 0.05),), None,
+              None, None, None,
+              ("brandenburg_gate", "lion_monument", "bukgwan_victory_stele", "tipus_tiger", "baba_merzoug",
+               "bodrum_castle", "bunker_hill_monument", "obelisk_of_the_second_of_may", "nelsons_column")),
+    Signature("liberty", "family", None, "Liberty", (("", "state_migration_pull_mult", 0.03),), None, None, None,
+              None, ("washington_monument_baltimore", "liberty_column", "lion_of_saint_mark", "washington_monument")),
+    Signature("grande_armee", "one_off", "martial_glory", "To the Grande Armée",
+              (("", "country_prestige_mult", 0.03),), None, None, None, None, ("arc_de_triomphe",)),
+    Signature("mandate_of_heaven", "one_off", "throne", "The Mandate of Heaven",
+              (("", "country_legitimacy_base_add", 1),), None, None, None, None, ("temple_of_heaven",)),
+    Signature("glory_of_athens", "one_off", "antiquity", "The Glory of Athens", (("", "country_influence_mult", 0.02),),
+              None, None, None, None, ("parthenon",)),
+    Signature("first_emperor", "one_off", "antiquity", "The First Emperor’s Army", (),
+              ("building_tourism_industry_throughput_add", 0.25), None, None, None, ("terracotta_army",)),
+    Signature("to_victory", "special", None, "To Victory", (("", "country_prestige_mult", 0.02),), None, None,
+              "war_memorial", "victory", ()),
+    Signature("unknown_soldier", "special", None, "To the Unknown Soldier",
+              (("", "country_radicals_from_legitimacy_mult", -0.05),), None, None, "war_memorial", "defeat", ()),
+    Signature("concert_of_nations", "special", None, "To the Concert of Nations",
+              (("", "country_influence_mult", 0.02),), None, None, "civic", "great_power", ()),
+    Signature("conquerors_of_space", "special", None, "To the Conquerors of Space",
+              (("", "country_weekly_innovation_mult", 0.02),), None, "intelligentsia", "civic", "space", ()),
+    Signature("olympic", "special", None, "Olympic", (("", "state_mortality_mult", -0.01),), None, None, "athletic",
+              "tech_athletic", ()),
+    # Phase C (§6.3): the national pantheons.
+    Signature("heroes", "family", None, "Heroes of the Nation", (("", "state_assimilation_mult", 0.05),), None,
+              None, None, None, ("walhalla",)),
+)
+SIG_BY_KEY = {s.key: s for s in SIGNATURES}
+SIG_NATIONAL = tuple(s.key for s in SIGNATURES if s.national)
+SIG_LOCAL = tuple(s.key for s in SIGNATURES if s.local)
+SPECIAL_SIGS = tuple(s for s in SIGNATURES if s.kind == "special")
+# A special is its opportunity's boon made permanent, a fifth a step (§5.4).
+SPECIAL_BOON_SHARE = 0.2
+# The civic-progress five carry no family (§4.1), and the shrine of §6.4 none.
+NO_SIGNATURE = ("la_scala", "teatro_di_san_carlo", "jantar_mantar", "shalimar_gardens", "jardim_botanico",
+                "muhammad_ali_mosque")
+
+
+def counts_as(key):
+    """The signatures that count toward key's sums: itself and its one-offs."""
+    return (key,) + tuple(s.key for s in SIGNATURES if s.family == key)
+
+
+def landmark_signature(lm):
+    return next((s.key for s in SIGNATURES if lm.key in s.members), None)
+
+
+# Historical opportunities (§6): one per row, in gm_com_track_historical's
+# order. condition: the holder's (gm_com_hist_cond_<condition>); ig: the
+# parent's approving group (DEDICATIONS.approve).
+HistoricalOpportunity = namedtuple("HistoricalOpportunity", "key condition ig")
+HISTORICAL_OPPORTUNITIES = (
+    HistoricalOpportunity("walhalla", "german", "petty_bourgeoisie"),
+    HistoricalOpportunity("bunker_hill_monument", "none", "armed_forces"),
+    HistoricalOpportunity("obelisk_of_the_second_of_may", "none", "armed_forces"),
+    HistoricalOpportunity("muhammad_ali_mosque", "sunni", "devout"),
+    HistoricalOpportunity("nelsons_column", "none", "armed_forces"),
+    HistoricalOpportunity("washington_monument", "republic", "intelligentsia"),
+)
+HIST_CONDITIONS = {"none": "always = yes",
+                   "german": "any_primary_culture = { has_discrimination_trait = language_germanophone }",
+                   "sunni": "country_has_state_religion = rel:sunni",
+                   "republic": "monument_government_is_republican = yes"}
+
+
+class SignatureTableTests(unittest.TestCase):
+    def test_the_table(self):
+        keys = [s.key for s in SIGNATURES]
+        self.assertEqual(len(keys), len(set(keys)))
+        members = [m for s in SIGNATURES for m in s.members]
+        self.assertEqual(len(members), len(set(members)), "one signature a landmark")
+        landmark_keys = {lm.key for lm in LANDMARKS}
+        self.assertEqual(set(members) | set(NO_SIGNATURE), landmark_keys, "every landmark has one, or is listed without")
+        for s in SIGNATURES:
+            self.assertIn(s.kind, ("family", "one_off", "special"), s.key)
+            if s.kind == "one_off":
+                self.assertEqual(SIG_BY_KEY[s.family].kind, "family", s.key)
+                self.assertEqual(len(s.members), 1, s.key)
+            if s.kind == "special":
+                self.assertIn(s.source, SOURCE_KEYS, s.key)
+                self.assertIn(s.parent, BY_KEY, s.key)
+                self.assertFalse(s.members, s.key)
+            self.assertTrue(s.national or s.local, f"{s.key}: does something")
+
+    def test_a_special_is_its_boon_at_a_fifth(self):
+        sources = {src.key: src for src in COMMISSION_SOURCES}
+        for s in SPECIAL_SIGS:
+            ((_, field, step),) = s.national
+            src = sources[s.source]
+            self.assertEqual(field, src.boon_field, s.key)
+            self.assertAlmostEqual(step, src.boon_value * SPECIAL_BOON_SHARE, msg=s.key)
+            self.assertEqual(src.special, s.key, s.key)
+            # Its parent is its opportunity's only dedication (§5.4).
+            begins = src.begins or ("DEDICATION = $KEY$",)
+            self.assertEqual(len(begins), 1, s.key)
+
+    def test_the_modifiers_and_their_step_mirrors(self):
+        mods = read(MODIFIERS)
+        values = read(SIG_VALUES)
+        for s in SIGNATURES:
+            for suffix, field, step in s.national:
+                if field == "cultural_pull":
+                    continue
+                body = block(mods, f"gm_national_sig_{s.key}{suffix}")
+                self.assertIsNotNone(body, s.key)
+                self.assertAlmostEqual(number(body, field), step, msg=s.key)
+                self.assertIn("modifier_statue_positive.dds", body)
+                mirror = re.search(rf"(?m)^gm_step_sig_{s.key}{suffix} = (-?[\d.]+)\s*$", strip_comments(values))
+                self.assertIsNotNone(mirror, s.key)
+                self.assertAlmostEqual(float(mirror.group(1)), step, msg=s.key)
+            if s.local:
+                field, step = s.local
+                body = block(mods, f"gm_local_sig_{s.key}")
+                self.assertIsNotNone(body, s.key)
+                self.assertAlmostEqual(number(body, field), step, msg=s.key)
+                mirror = re.search(rf"(?m)^gm_step_sig_local_{s.key} = (-?[\d.]+)\s*$", strip_comments(values))
+                self.assertAlmostEqual(float(mirror.group(1)), step, msg=s.key)
+        # No other signature modifier.
+        named = {n for n, _ in top_level_blocks(mods) if n.startswith(("gm_national_sig_", "gm_local_sig_"))}
+        expected = {f"gm_national_sig_{s.key}{suf}" for s in SIGNATURES for suf, f, _ in s.national if f != "cultural_pull"}
+        expected |= {f"gm_local_sig_{k}" for k in SIG_LOCAL}
+        self.assertEqual(named, expected)
+
+    def test_antiquitys_cultural_pull(self):
+        body = squash(block(read(CULTURAL), "cultural_pull_from_antiquity"))
+        self.assertIn("value = var:gm_s_sig_antiquity multiply = gm_step_sig_antiquity", body)
+        self.assertTrue(body.endswith("max = gm_sig_antiquity_cap"))
+        self.assertRegex(strip_comments(read(SIG_VALUES)), r"(?m)^gm_sig_antiquity_cap = 3\s*$")
+        self.assertIn("add = cultural_pull_from_antiquity", squash(block(read(CULTURAL), "cultural_pull_from_monuments")))
+        self.assertTrue(squash(block(read(SIG_VALUES), "gm_display_sig_antiquity")).endswith("max = gm_sig_antiquity_cap"))
+
+    def test_loc(self):
+        L = loc()
+        for s in SIGNATURES:
+            self.assertIn(f"gm_sig_{s.key}", L, s.key)
+            self.assertIn(f"gm_sig_{s.key}_effect", L, s.key)
+            if s.kind == "one_off":
+                lm = s.members[0]
+                self.assertEqual(L[f"gm_sig_name_{lm}"], s.name, s.key)
+                self.assertEqual(L[f"gm_sig_{s.key}"], f"$gm_sig_name_{lm}$", s.key)
+            else:
+                self.assertEqual(L[f"gm_sig_{s.key}"], s.name, s.key)
+            for suffix, field, _ in s.national:
+                if field != "cultural_pull":
+                    self.assertIn(f"gm_national_sig_{s.key}{suffix}", L)
+                    self.assertIn(f"gm_national_sig_{s.key}{suffix}_desc", L)
+            if s.local:
+                self.assertIn(f"gm_local_sig_{s.key}", L)
+                self.assertIn(f"gm_local_sig_{s.key}_desc", L)
+
+
+class SignatureRecordTests(unittest.TestCase):
+    """§1, §4.4, §7: the records, the landmark's signature, every copy point."""
+
+    def test_on_its_parent(self):
+        t = read(SIG_TRIGGERS)
+        state = squash(block(t, "gm_state_sig_on_parent"))
+        mon = squash(block(t, "gm_mon_sig_on_parent"))
+        self.assertTrue(state.startswith("has_variable = gm_signature has_variable = gm_sig_parent "
+                                         "gm_state_is_dedicated = yes OR = {"))
+        self.assertTrue(mon.startswith("has_variable = gm_tr_signature has_variable = gm_tr_sig_parent OR = {"))
+        for d in DEDICATIONS:
+            self.assertIn(f"AND = {{ var:gm_sig_parent = flag:{d.key} gm_state_has_pm = {{ PM = pm_monument_{d.key} }} }}",
+                          state, d.key)
+            self.assertIn(f"AND = {{ var:gm_tr_sig_parent = flag:{d.key} gm_mon_is = {{ KEY = {d.key} }} }}", mon, d.key)
+        self.assertEqual(squash(block(t, "gm_state_sig_counts")),
+                         "gm_state_status_fits = yes gm_state_sig_on_parent = yes")
+        self.assertEqual(squash(block(t, "gm_mon_sig_counts")), "gm_mon_status_fits = yes gm_mon_sig_on_parent = yes")
+
+    def test_counts_as_its_family(self):
+        t = read(SIG_TRIGGERS)
+        for s in SIGNATURES:
+            body = squash(block(t, f"gm_sig_counts_as_{s.key}"))
+            self.assertIsNotNone(body, s.key)
+            found = set(re.findall(r"flag:(\w+)", body)) | set(re.findall(r"SIG = (\w+)", body))
+            self.assertEqual(found, set(counts_as(s.key)), s.key)
+
+    def test_each_landmark_member_has_its_branch(self):
+        body = squash(block(read(SIG_EFFECTS), "gm_sig_from_landmark"))
+        branches = re.findall(r"limit = \{ has_variable = \$LM\$ (.*?) \} set_variable = \{ name = \$SIG\$ value = "
+                              r"flag:(\w+) \} set_variable = \{ name = \$PARENT\$ value = flag:(\w+) \}", body)
+        found = {}
+        for keys, sig, parent in branches:
+            for k in re.findall(r"var:\$LM\$ = flag:(\w+)", keys):
+                self.assertNotIn(k, found, k)
+                found[k] = (sig, parent)
+        by_key = {lm.key: lm for lm in LANDMARKS}
+        expected = {lm.key: (landmark_signature(lm), lm.dedication) for lm in LANDMARKS if landmark_signature(lm)}
+        self.assertEqual(found, expected)
+        for k in NO_SIGNATURE:
+            self.assertNotIn(k, found)
+            self.assertIn(k, by_key)
+
+    def test_the_backfill_and_its_callers(self):
+        e = read(SIG_EFFECTS)
+        self.assertEqual(squash(block(e, "gm_state_sig_backfill")),
+                         "if = { limit = { has_variable = gm_landmark NOT = { has_variable = gm_signature } } "
+                         "gm_sig_from_landmark = { LM = gm_landmark SIG = gm_signature PARENT = gm_sig_parent } }")
+        self.assertEqual(squash(block(e, "gm_tr_sig_backfill")),
+                         "if = { limit = { has_variable = gm_tr_landmark NOT = { has_variable = gm_tr_signature } } "
+                         "gm_sig_from_landmark = { LM = gm_tr_landmark SIG = gm_tr_signature PARENT = gm_tr_sig_parent } }")
+        self.assertIn("gm_state_sig_backfill = yes", squash(block(read(EFFECTS), "gm_country_refresh")))
+        self.assertIn("gm_tr_sig_backfill = yes", squash(block(read(MON_EFFECTS), "gm_monument_monthly")))
+        tr = read("common/scripted_effects/gm_trophy_effects.txt")
+        self.assertIn("gm_tr_sig_backfill = yes", squash(block(tr, "gm_trophy_monthly")))
+        self.assertIn("gm_tr_sig_backfill = yes", squash(block(tr, "gm_seed_trophy")))
+        self.assertIn("gm_state_sig_backfill = yes", squash(block(read(LANDMARK_EFFECTS), "gm_seed_landmark")))
+        self.assertIn("gm_tr_sig_backfill = yes", squash(block(read(MON_EFFECTS), "gm_seed_landmark_beside")))
+        arch = read("common/scripted_effects/gm_archaeology_effects.txt")
+        self.assertIn("gm_tr_sig_backfill = yes", squash(block(arch, "gm_arch_place")))
+        partage = squash(block(arch, "gm_arch_partage"))
+        self.assertIn("gm_tr_sig_backfill = yes", partage)
+        for var in ("gm_tr_signature", "gm_tr_sig_parent"):
+            self.assertIn(f"set_variable = {{ name = {var} value = scope:gm_arch_partage_site.var:{var} }}", partage)
+
+    def test_the_trophy_copies(self):
+        """TROPHY_RECORDS: a piece too (§7); a demotion, shadow and raise are
+        CONTAINER_RECORDS' (FreezeTests, MergeShadowTests, SwapTests)."""
+        tr = read("common/scripted_effects/gm_trophy_effects.txt")
+        make = squash(block(tr, "gm_state_tr_make_trophy"))
+        piece = squash(block(read(MON_EFFECTS), "gm_mon_tr_take_piece"))
+        for frm, to in (("gm_signature", "gm_tr_signature"), ("gm_sig_parent", "gm_tr_sig_parent")):
+            self.assertIn((frm, to), CONTAINER_RECORDS)
+            self.assertIn(f"gm_tr_copy_from_state = {{ FROM = {frm} TO = {to} }}", make)
+            self.assertIn(f"gm_mon_copy_record = {{ KEY = {to} }}", piece)
+        # Carried off whole, the container keeps its records: nothing forgets them.
+        self.assertNotIn("signature", squash(block(read(MON_EFFECTS), "gm_mon_forget_home")))
+
+
+class SignatureEffectTests(unittest.TestCase):
+    """§2: national sums, local effects, the interest group."""
+
+    def test_the_sums_walk_once(self):
+        sums = squash(strip_comments(block(read(SIG_EFFECTS), "gm_sig_compute_sums")))
+        self.assertEqual(sums.count("every_scope_state"), 1)
+        self.assertEqual(sums.count("every_in_list"), 2)
+        self.assertIn("limit = { has_building = building_grand_monument has_variable = gm_signature "
+                      "gm_state_sig_counts = yes }", sums)
+        self.assertIn("variable = gm_monuments_held limit = { has_variable = gm_tr_signature gm_mon_sig_counts = yes } "
+                      "set_variable = { name = gm_tr_g value = gm_mon_grandeur }", sums)
+        for k in SIG_NATIONAL:
+            self.assertIn(f"gm_sig_zero_sum = {{ SIG = {k} }}", sums, k)
+            self.assertIn(f"gm_state_sig_add_to_sum = {{ SIG = {k} }}", sums, k)
+            self.assertIn(f"gm_mon_sig_add_to_sum = {{ SIG = {k} G = gm_tr_g }}", sums, k)
+            self.assertIn(f"gm_mon_sig_add_to_sum = {{ SIG = {k} G = gm_tr_grandeur }}", sums, k)
+            self.assertIn(f"gm_sig_set_steps = {{ SIG = {k} }}", sums, k)
+        steps = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps"))
+        self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }", steps)
+        self.assertIn("gm_sig_compute_sums = yes", squash(block(read(EFFECTS), "gm_compute_totals")))
+
+    def test_national_hooks_from_root(self):
+        apply = squash(block(read(EFFECTS), "gm_apply_national_modifiers"))
+        removed = squash(block(read(EFFECTS), "gm_remove_national_modifiers"))
+        for s in SIGNATURES:
+            for suffix, field, _ in s.national:
+                if field == "cultural_pull":
+                    continue
+                self.assertIn(f"gm_add_national = {{ NAME = gm_national_sig_{s.key}{suffix} VAR = gm_s_sig_{s.key} }}",
+                              apply, s.key)
+                self.assertIn(f"remove_modifier = gm_national_sig_{s.key}{suffix}", removed, s.key)
+
+    def test_local_effects_on_the_state_pulse(self):
+        monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
+        remove = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
+        zero = squash(block(read(SIG_EFFECTS), "gm_state_sig_zero_local_steps"))
+        for k in SIG_LOCAL:
+            self.assertIn(f"gm_state_sig_local_steps_one = {{ SIG = {k} }}", monthly, k)
+            self.assertIn(f"remove_modifier = gm_local_sig_{k}", remove, k)
+            self.assertIn(f"gm_state_sig_zero_local_steps_one = {{ SIG = {k} }}", zero, k)
+        self.assertEqual(monthly.count("gm_state_sig_zero_local_steps = yes"), 1, "in the pulse's else")
+        self.assertIn("gm_state_sig_zero_local_steps = yes", squash(block(read(EFFECTS), "gm_clear_state")))
+        one = squash(block(read(SIG_EFFECTS), "gm_state_sig_local_steps_one"))
+        for s_ in ("gm_state_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_signature }",
+                   "add = gm_state_primary_grandeur", "variable = gm_monuments_here",
+                   "gm_mon_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_tr_signature }",
+                   "multiply = gm_policy_factor_local",
+                   "add_modifier = { name = gm_local_sig_$SIG$ multiplier = var:gm_sig_local_steps_$SIG$ }"):
+            self.assertIn(s_, one)
+        self.assertNotIn("remove_variable", one, "zeroed, never removed")
+
+    def test_its_interest_group(self):
+        t = read(SIG_TRIGGERS)
+        asks = {s.key for s in SIGNATURES if s.ig}
+        body = squash(block(t, "gm_sig_asks_intelligentsia"))
+        self.assertEqual(set(re.findall(r"gm_sig_counts_as_(\w+) = \{ VAR = \$VAR\$ \}", body)), asks)
+        self.assertEqual({s.ig for s in SIGNATURES if s.ig}, {"intelligentsia"})
+        for ig in IGS:
+            for scope, var in (("state", "gm_signature"), ("mon", "gm_tr_signature")):
+                trig = squash(block(t, f"gm_{scope}_sig_approved_by_{ig}"))
+                if ig == "intelligentsia":
+                    self.assertEqual(trig, f"gm_{scope}_sig_on_parent = yes gm_sig_asks_intelligentsia = {{ VAR = {var} }}")
+                else:
+                    self.assertEqual(trig, "always = no")
+        ig = squash(block(read(EFFECTS), "gm_compute_ig"))
+        self.assertIn("limit = { gm_state_status_fits = yes gm_state_sig_approved_by_$IG$ = yes } "
+                      "owner = { change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur } }", ig)
+        self.assertIn("limit = { gm_mon_status_fits = yes gm_mon_sig_approved_by_$IG$ = yes } "
+                      "scope:gm_ig_country = { change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g } }", ig)
+
+
+class SignatureNameTests(unittest.TestCase):
+    """§3: the name in place of the dedication's, the parent on hover (the
+    state's label) or on its own line (a container's, §3's fallback)."""
+
+    def _branches(self, text, name):
+        return re.findall(r"text = \{ trigger = \{ (.*?) \} localization_key = (\w+) \}", squash(block(text, name)))
+
+    def test_names_come_before_the_twelve(self):
+        for text, name, on, sigvar, lmvar in ((read(CUSTOM_LOC), "gm_dedication_name", "gm_state_sig_on_parent",
+                                               "gm_signature", "gm_landmark"),
+                                              (read("common/customizable_localization/gm_trophy_custom_loc.txt"),
+                                               "gm_tr_dedication_name", "gm_mon_sig_on_parent", "gm_tr_signature",
+                                               "gm_tr_landmark")):
+            branches = self._branches(text, name)
+            keys = [k for _, k in branches]
+            first_plain = keys.index("pm_monument_crown")
+            for s in SIGNATURES:
+                i = keys.index(f"gm_sig_{s.key}")
+                self.assertLess(i, first_plain, s.key)
+                self.assertEqual(branches[i][0], f"{on} = yes gm_sig_var_is = {{ VAR = {sigvar} SIG = {s.key} }}")
+                if s.kind == "one_off":
+                    lm = s.members[0]
+                    j = keys.index(f"gm_sig_name_{lm}")
+                    self.assertLess(j, i, f"{s.key}: the landmark's own name first")
+                    self.assertEqual(branches[j][0], f"{on} = yes gm_sig_var_is = {{ VAR = {sigvar} SIG = {s.key} }} "
+                                                     f"has_variable = {lmvar} var:{lmvar} = flag:{lm}")
+
+    def test_the_label_and_its_hover(self):
+        L = loc()
+        label = squash(block(read(SIG_CUSTOM_LOC), "gm_dedication_label"))
+        self.assertEqual(label, "type = state random_valid = no text = { trigger = { has_variable = gm_signature } "
+                                "localization_key = gm_sig_label } text = { localization_key = gm_sig_label_plain }")
+        self.assertEqual(L["gm_sig_label"],
+                         "#tooltippable;tooltip:[State.GetTooltipTag],gm_sig_parent_tt [State.GetCustom('gm_dedication_name')]#!")
+        self.assertEqual(L["gm_sig_label_plain"], "[State.GetCustom('gm_dedication_name')]")
+        for key in ("gm_row_title", "gm_row_title_named"):
+            self.assertIn("[State.GetCustom('gm_dedication_label')]", L[key])
+        for part in ("gm_sig_name", "gm_sig_parent_name", "gm_sig_effect", "gm_sig_status"):
+            self.assertIn(f"[State.GetCustom('{part}')]", L["gm_sig_parent_tt"], part)
+
+    def test_a_containers_line(self):
+        L = loc()
+        gui = read("gui/gm_trophy_widgets.gui")
+        line = ('gm_tr_line = { visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('
+                "'gm_tr_disp_has_sig'), '(CFixedPoint)1' )]\" default_format = \"#tooltippable\" "
+                'tooltip = "gm_tr_sig_tt" text = "gm_tr_row_sig" }')
+        self.assertEqual(squash(gui).count(line), 4, "the three trophy rows and a monument beside another")
+        self.assertEqual(L["gm_tr_row_sig"], "[ScriptContainer.GetCustom('gm_tr_sig_line')]")
+        for key in ("gm_tr_sig_line_on", "gm_tr_sig_line_dormant", "gm_tr_sig_tt"):
+            self.assertNotIn("State.", L[key].replace("GetState.", ""), key)
+
+    def test_effect_names_shown(self):
+        L = loc()
+        for s in SIGNATURES:
+            if s.kind == "one_off":
+                self.assertIn(f"$gm_sig_{s.family}$", L[f"gm_sig_{s.key}_effect"], "names its family's effect")
+            if s.ig:
+                self.assertIn(f"$ig_{s.ig}$", L[f"gm_sig_{s.key}_effect"], s.key)
+
+
+class SignatureSpecialTests(unittest.TestCase):
+    """§5: one monument a completion, held when it can't, the ceremony's option."""
+
+    def test_the_source_mapping(self):
+        body = squash(block(read(SIG_EFFECTS), "gm_sig_special_for_source"))
+        self.assertTrue(body.startswith("gm_remove_state_var = { VAR = gm_sig_special }"))
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"limit = {{ has_variable = gm_com_source var:gm_com_source = flag:{s.source} }} "
+                          f"set_variable = {{ name = gm_sig_special value = flag:{s.key} }}", body, s.key)
+        parent = squash(block(read(SIG_EFFECTS), "gm_sig_set_special_parent"))
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"limit = {{ var:$SIGVAR$ = flag:{s.key} }} set_variable = {{ name = $VAR$ value = flag:{s.parent} }}",
+                          parent, s.key)
+        self.assertEqual({src.special for src in COMMISSION_SOURCES if src.special},
+                         {s.key for s in SPECIAL_SIGS})
+
+    def test_granted_on_both_paths(self):
+        fulfil = squash(strip_comments(block(read(COM_EFFECTS), "gm_com_fulfil")))
+        self.assertIn("save_scope_as = gm_sig_granter gm_sig_special_for_source = yes", fulfil)
+        self.assertIn("set_variable = { name = gm_sig_grant value = scope:gm_sig_granter.var:gm_sig_special }", fulfil)
+        self.assertLess(fulfil.index("set_variable = gm_gift"), fulfil.index("name = gm_sig_grant"))
+        self.assertLess(fulfil.index("name = gm_sig_grant"), fulfil.index("trigger_event = { id = monument_events.26 }"))
+        beside = fulfil[fulfil.index("scope:gm_com_gift_mon = { gm_mon_add_age = { AGE = gm_com_gift } }"):]
+        self.assertIn("scope:gm_com_gift_mon = { gm_mon_takes_special = yes } } scope:gm_com_gift_mon = "
+                      "{ gm_mon_sig_take_special = yes }", beside)
+        self.assertIn("else = { gm_sig_hold_special = yes }", beside)
+        ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.26\s*=\s*\{")))
+        self.assertIn("gm_state_sig_take_grant = yes", ev)
+        take = squash(block(read(SIG_EFFECTS), "gm_state_sig_take_grant"))
+        self.assertIn("limit = { gm_state_takes_grant = yes } set_variable = { name = gm_signature value = var:gm_sig_grant }",
+                      take)
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"limit = {{ var:gm_sig_grant = flag:{s.key} }} owner = {{ gm_sig_hold = {{ SIG = {s.key} }} }}",
+                          take, s.key)
+        takes = squash(block(read(SIG_TRIGGERS), "gm_state_takes_grant"))
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"AND = {{ var:gm_sig_grant = flag:{s.key} gm_state_has_pm = {{ PM = pm_monument_{s.parent} }} }}",
+                          takes, s.key)
+
+    def test_held_in_a_country_variable(self):
+        hold = squash(block(read(SIG_EFFECTS), "gm_sig_hold"))
+        self.assertIn("change_variable = { name = gm_sig_held_$SIG$ add = 1 }", hold)
+        self.assertIn("set_variable = { name = gm_sig_held_$SIG$ value = 1 }", hold)
+        idle = squash(block(read(SIG_TRIGGERS), "gm_sig_held_idle"))
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"NOT = {{ gm_sig_holds = {{ SIG = {s.key} }} }}", idle, s.key)
+            self.assertIn(f"gm_disp_sig_held_{s.key}", read(WIDGET), s.key)
+
+    def test_the_ceremony_option(self):
+        options = ceremony_options()
+        L = loc()
+        for s in SPECIAL_SIGS:
+            body = squash(strip_comments(options[f"sig_{s.key}"]))
+            self.assertIn(f"trigger = {{ gm_state_ceremony_offers_special = {{ SIG = {s.key} }}", body, s.key)
+            self.assertNotIn("show_as_unavailable", body, "hidden, not greyed")
+            self.assertIn(f"custom_tooltip = {{ text = monument_events.2.sig_{s.key}.tt "
+                          f"gm_state_dedicate_sig_{s.key} = yes }}", body, s.key)
+            self.assertIn("base = 1000", body, "the AI takes one whenever offered")
+            parent = BY_KEY[s.parent]
+            if s.parent in TECH_GATES:
+                self.assertIn(f"has_technology_researched = {TECH_GATES[s.parent]}", body, s.key)
+            wrapper = squash(block(read(SIG_EFFECTS), f"gm_state_dedicate_sig_{s.key}"))
+            self.assertEqual(wrapper, f"{wrapper_call(parent)} gm_state_sig_give = {{ SIG = {s.key} PARENT = {s.parent} }}")
+            tt = L[f"monument_events.2.sig_{s.key}.tt"]
+            self.assertIn(f"$monument_events.2.{CEREMONY_OPTION[s.parent]}.tt$", tt, "names the parent's effects too")
+            self.assertNotRegex(tt.split("$monument_events")[0], r"#G [+\-−]?\d", "numbers from gm_step_sig_*")
+        give = squash(block(read(SIG_EFFECTS), "gm_state_sig_give"))
+        self.assertEqual(give, "set_variable = { name = gm_signature value = flag:$SIG$ } set_variable = "
+                               "{ name = gm_sig_parent value = flag:$PARENT$ } owner = { gm_sig_unhold = { SIG = $SIG$ } }")
+        offers = squash(block(read(SIG_TRIGGERS), "gm_state_ceremony_offers_special"))
+        self.assertEqual(offers, "NOT = { has_variable = gm_signature } owner = { gm_sig_holds = { SIG = $SIG$ } }")
+
+    def test_the_offer_line(self):
+        L = loc()
+        line = squash(block(read(SIG_CUSTOM_LOC), "gm_com_special_line"))
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"gm_com_source_is = {{ SRC = {s.source} }} }} localization_key = gm_com_special_line_{s.key}",
+                          line, s.key)
+            self.assertIn(f"$gm_sig_{s.key}$", L[f"gm_com_special_line_{s.key}"])
+        for key, ctx in (("gm_com_accept_tt", "ROOT.GetCountry"), ("gm_je_com_reward_tt", "JournalEntry.GetCountry")):
+            self.assertIn(f"[{ctx}.GetCustom('gm_com_special_line')]", L[key])
+        for key, ctx in (("gm_com_decline_tt", "ROOT.GetCountry"),
+                         ("gm_button_com_let_pass_tooltip", "JournalEntry.GetCountry")):
+            self.assertIn(f"[{ctx}.GetCustom('gm_com_special_pass_line')]", L[key])
+        once = squash(block(read(SIG_CUSTOM_LOC), "gm_com_special_pass_line"))
+        for s in SPECIAL_SIGS:
+            # A moment that comes once a game says that letting it pass loses it.
+            self.assertEqual(f"gm_com_special_pass_{s.key}" in once, s.source in ("great_power", "space", "tech_athletic"))
+
+    def test_old_saves(self):
+        seed = squash(block(read(SIG_EFFECTS), "gm_sig_seed_monthly"))
+        self.assertIn("global_var:gm_sig_seed_round < gm_sig_seed_rounds", seed)
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"limit = {{ has_variable = gm_boon_{s.source} var:gm_boon_{s.source} > 0 }} "
+                          f"gm_sig_hold = {{ SIG = {s.key} }}", seed, s.key)
+        self.assertIn("gm_sig_seed_monthly = yes", squash(block(read(MON_EFFECTS), "gm_monument_monthly")))
+
+    def test_the_seized_event_names_it(self):
+        ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.28\s*=\s*\{")))
+        for key in ("d_special", "d_held", "d_unnamed_special", "d_unnamed_held", "d_historical", "d_unnamed_historical"):
+            self.assertIn(f"desc = monument_events.28.{key}", ev, key)
+            self.assertIn(f"monument_events.28.{key}", loc(), key)
+
+
+class HistoricalOpportunityTests(unittest.TestCase):
+    """§6: offered once a game, to whoever holds its state, for forty years from
+    the year its construction began; completing it makes the landmark."""
+
+    def test_a_call_per_row(self):
+        by_key = {lm.key: lm for lm in LANDMARKS}
+        body = squash(block(read(COM_EFFECTS), "gm_com_track_historical"))
+        calls = re.findall(r"gm_com_try_historical = \{[^{}]*\}", body)
+        expected = []
+        for h in HISTORICAL_OPPORTUNITIES:
+            lm = by_key[h.key]
+            self.assertEqual(h.ig, BY_KEY[lm.dedication].approve, h.key)
+            expected.append(f"gm_com_try_historical = {{ KEY = {h.key} STATE = {lm.state} FROM = {lm.year} "
+                            f"UNTIL = {lm.year + 40} DEDICATION = {lm.dedication} LEVEL = {lm.level} IG = {h.ig} "
+                            f"COND = {h.condition} }}")
+        self.assertEqual(calls, expected)
+        self.assertEqual({h.key for h in HISTORICAL_OPPORTUNITIES}, {lm.key for lm in LANDMARKS if lm.year})
+        self.assertTrue(squash(block(read(COM_EFFECTS), "gm_com_world_monthly")).endswith(
+            "gm_com_track_historical = yes"), "last: a window waits for the moments")
+
+    def test_the_offer(self):
+        body = squash(block(read(COM_EFFECTS), "gm_com_try_historical"))
+        for s_ in ("NOT = { has_global_variable = gm_hist_offered_$KEY$ }", "game_date >= $FROM$.1.1",
+                   "game_date < $UNTIL$.1.1", "gm_com_can_offer = yes", "has_state_in_state_region = $STATE$",
+                   "gm_com_hist_cond_$COND$ = yes", "gm_country_can_raise_$DEDICATION$ = yes",
+                   "set_global_variable = gm_hist_offered_$KEY$",
+                   "gm_com_begin = { SOURCE = historical DEDICATION = $DEDICATION$ NAMESAKE = year FORM = default }",
+                   "set_variable = { name = gm_com_landmark value = flag:$KEY$ }",
+                   "set_variable = { name = gm_com_target value = $LEVEL$ }",
+                   "set_variable = { name = gm_com_ig value = flag:$IG$ }", "gm_com_send_offer = yes"):
+            self.assertIn(s_, body)
+        self.assertNotIn("country_rank", body, "no rank gate")
+        t = read(COM_TRIGGERS)
+        for cond, trig in HIST_CONDITIONS.items():
+            self.assertEqual(squash(block(t, f"gm_com_hist_cond_{cond}")), trig, cond)
+            self.assertIn(f"AND = {{ var:gm_com_hist_cond = flag:{cond} gm_com_hist_cond_{cond} = yes }}",
+                          squash(block(t, "gm_com_hist_cond_holds")))
+        self.assertIn("gm_com_hist_cond_holds = no", squash(block(t, "gm_com_has_lapsed")))
+        clear = squash(block(read(COM_EFFECTS), "gm_com_clear"))
+        for var in ("gm_com_landmark", "gm_com_hist_cond"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", clear)
+        self.assertNotIn("gm_com_grant_boon_one = { SRC = historical }",
+                         squash(block(read(COM_EFFECTS), "gm_com_grant_boon")), "no boon")
+
+    def test_completion_makes_the_landmark(self):
+        by_key = {lm.key: lm for lm in LANDMARKS}
+        take = squash(block(read(COM_EFFECTS), "gm_state_hist_take"))
+        mon = squash(block(read(COM_EFFECTS), "gm_mon_hist_take"))
+        for h in HISTORICAL_OPPORTUNITIES:
+            lm = by_key[h.key]
+            self.assertIn(f"limit = {{ var:gm_hist_become = flag:{h.key} }} gm_state_become_landmark = "
+                          f"{{ KEY = {h.key} FORM = {lm.form} }}", take, h.key)
+            self.assertIn(f"gm_mon_become_landmark = {{ KEY = {h.key} FORM = {lm.form} }}", mon, h.key)
+        become = squash(block(read(COM_EFFECTS), "gm_state_become_landmark"))
+        for s_ in ("set_variable = { name = gm_landmark value = flag:$KEY$ }",
+                   "set_variable = { name = gm_skin value = flag:landmark_$KEY$ }",
+                   "set_variable = { name = gm_form value = flag:$FORM$ }",
+                   "set_variable = { name = gm_namesake value = flag:landmark }", "gm_state_sig_backfill = yes",
+                   "gm_state_update_picture = yes"):
+            self.assertIn(s_, become)
+        fulfil = squash(strip_comments(block(read(COM_EFFECTS), "gm_com_fulfil")))
+        self.assertIn("set_variable = { name = gm_hist_become value = scope:gm_sig_granter.var:gm_com_landmark }", fulfil)
+        self.assertIn("scope:gm_com_gift_mon = { gm_mon_hist_take = yes }", fulfil)
+
+    def test_time_and_text(self):
+        L = loc()
+        self.assertIn("var:gm_com_target > 5 } multiply = var:gm_com_target divide = 5",
+                      squash(strip_comments(block(read(COM_VALUES), "gm_com_time_months"))))
+        occasion = squash(block(read(CUSTOM_LOC), "gm_com_occasion_name"))
+        for h in HISTORICAL_OPPORTUNITIES:
+            self.assertIn(f"var:gm_com_landmark = flag:{h.key} }} localization_key = gm_skin_landmark_{h.key}", occasion)
+        self.assertIn("desc = monument_events.21.d_historical",
+                      squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.21\s*=\s*\{")))
+        for key in ("monument_events.21.d_historical", "gm_com_accept_hist_tt", "gm_je_com_reward_hist",
+                    "gm_je_com_named_hist", "gm_com_boon_historical"):
+            self.assertIn(key, L)
+
+
+class SignatureDebugTests(unittest.TestCase):
+    def test_the_debug_event(self):
+        text = read(DEBUG_EVENTS)
+        self.assertRegex(text, r"(?m)^te_debug_monuments\.8 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
+        ev = squash(strip_comments(raw_block_at(text, r"(?m)^te_debug_monuments\.8\s*=\s*\{")))
+        for s in SPECIAL_SIGS:
+            self.assertIn(f"gm_sig_hold = {{ SIG = {s.key} }}", ev)
+        self.assertIn("gm_state_sig_backfill = yes", ev)
+        self.assertIn("gm_tr_sig_backfill = yes", ev)
+        self.assertIn("scope:gm_dbg_m1 = { gm_debug_next_signature = yes }", ev)
+        self.assertIn("name = te_debug_monuments.8.d default_option = yes gm_sig_debug_log = yes", ev)
+        L = loc()
+        for k in ("t", "desc", "flavor", "a", "b", "c", "d"):
+            self.assertIn(f"te_debug_monuments.8.{k}", L)
+        code = squash(block(read(SIG_VALUES), "gm_disp_sig_code"))
+        for i, s in enumerate(SIGNATURES, 1):
+            self.assertIn(f"gm_sig_var_is = {{ VAR = gm_signature SIG = {s.key} }} }} value = {i} }}", code, s.key)
+        log = squash(block(read(SIG_EFFECTS), "gm_sig_debug_log"))
+        self.assertNotIn(".MakeScope", log, "debug_log's working form only")
+        for k in SIG_NATIONAL:
+            self.assertIn(f"gm_display_g_sig_{k}", log)

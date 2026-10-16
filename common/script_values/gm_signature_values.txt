@@ -1,0 +1,1057 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — unique dedications (signatures): script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md.
+# The sums are written by gm_sig_compute_sums (gm_signature_effects.txt); these
+# read them for the panels, every read guarded (a save older than signatures
+# has none of these variables until its first refresh).
+
+# ---- Per-step values (§2, §12) ----------------------------------------------------
+# Mirrors of the static modifiers in gm_modifiers.txt, each of which carries one
+# step (the multiplier is the step count). The loc reads these; the registry
+# test pins every pair equal (SIGNATURES).
+gm_step_sig_antiquity = 1
+gm_step_sig_archive = 2
+gm_step_sig_archive_spread = 0.02
+gm_step_sig_throne = 0.03
+gm_step_sig_royal_pantheon = 0.05
+gm_step_sig_martial_glory = 0.05
+gm_step_sig_liberty = 0.03
+gm_step_sig_grande_armee = 0.03
+gm_step_sig_mandate_of_heaven = 1
+gm_step_sig_glory_of_athens = 0.02
+gm_step_sig_to_victory = 0.02
+gm_step_sig_unknown_soldier = -0.05
+gm_step_sig_concert_of_nations = 0.02
+gm_step_sig_conquerors_of_space = 0.02
+gm_step_sig_olympic = -0.01
+gm_step_sig_heroes = 0.05
+
+gm_step_sig_local_antiquity = 0.1
+gm_step_sig_local_archive = 0.1
+gm_step_sig_local_first_emperor = 0.25
+
+# Ancestral Antiquity's cultural pull has a cap of its own (§2.1), apart from
+# the +5 of cultural_pull_from_grand_monuments.
+gm_sig_antiquity_cap = 3
+
+# ---- National Effects (country scope) ----------------------------------------------
+# Per signature with a national effect: what it gives (steps x step), the
+# grandeur behind it, where its next step completes and how many monuments
+# carry it, then the row's bar: (2G - N + 5) / (N + 5), as gm_disp_frac_* in
+# gm_values.txt on the curve with first step 5.
+gm_display_sig_antiquity = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_antiquity }
+		value = var:gm_s_sig_antiquity
+		multiply = gm_step_sig_antiquity
+	}
+	max = gm_sig_antiquity_cap
+}
+
+gm_display_g_sig_antiquity = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_antiquity }
+		value = var:gm_g_sig_antiquity
+	}
+}
+
+gm_display_n_sig_antiquity = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_antiquity }
+		value = var:gm_n_sig_antiquity
+	}
+}
+
+gm_display_c_sig_antiquity = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_antiquity }
+		value = var:gm_c_sig_antiquity
+	}
+}
+
+gm_disp_frac_sig_antiquity = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_antiquity
+			has_variable = gm_n_sig_antiquity
+		}
+		value = var:gm_g_sig_antiquity
+		multiply = 2
+		subtract = var:gm_n_sig_antiquity
+		add = 5
+		divide = {
+			value = var:gm_n_sig_antiquity
+			add = 5
+		}
+	}
+	# Full once its cultural pull is at its cap.
+	if = {
+		limit = { gm_display_sig_antiquity >= gm_sig_antiquity_cap }
+		value = 1
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_archive = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_archive }
+		value = var:gm_s_sig_archive
+		multiply = gm_step_sig_archive
+	}
+}
+
+gm_display_sig_archive_spread = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_archive }
+		value = var:gm_s_sig_archive
+		multiply = gm_step_sig_archive_spread
+	}
+}
+
+gm_display_g_sig_archive = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_archive }
+		value = var:gm_g_sig_archive
+	}
+}
+
+gm_display_n_sig_archive = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_archive }
+		value = var:gm_n_sig_archive
+	}
+}
+
+gm_display_c_sig_archive = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_archive }
+		value = var:gm_c_sig_archive
+	}
+}
+
+gm_disp_frac_sig_archive = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_archive
+			has_variable = gm_n_sig_archive
+		}
+		value = var:gm_g_sig_archive
+		multiply = 2
+		subtract = var:gm_n_sig_archive
+		add = 5
+		divide = {
+			value = var:gm_n_sig_archive
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_throne = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_throne }
+		value = var:gm_s_sig_throne
+		multiply = gm_step_sig_throne
+	}
+}
+
+gm_display_g_sig_throne = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_throne }
+		value = var:gm_g_sig_throne
+	}
+}
+
+gm_display_n_sig_throne = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_throne }
+		value = var:gm_n_sig_throne
+	}
+}
+
+gm_display_c_sig_throne = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_throne }
+		value = var:gm_c_sig_throne
+	}
+}
+
+gm_disp_frac_sig_throne = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_throne
+			has_variable = gm_n_sig_throne
+		}
+		value = var:gm_g_sig_throne
+		multiply = 2
+		subtract = var:gm_n_sig_throne
+		add = 5
+		divide = {
+			value = var:gm_n_sig_throne
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_royal_pantheon = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_royal_pantheon }
+		value = var:gm_s_sig_royal_pantheon
+		multiply = gm_step_sig_royal_pantheon
+	}
+}
+
+gm_display_g_sig_royal_pantheon = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_royal_pantheon }
+		value = var:gm_g_sig_royal_pantheon
+	}
+}
+
+gm_display_n_sig_royal_pantheon = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_royal_pantheon }
+		value = var:gm_n_sig_royal_pantheon
+	}
+}
+
+gm_display_c_sig_royal_pantheon = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_royal_pantheon }
+		value = var:gm_c_sig_royal_pantheon
+	}
+}
+
+gm_disp_frac_sig_royal_pantheon = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_royal_pantheon
+			has_variable = gm_n_sig_royal_pantheon
+		}
+		value = var:gm_g_sig_royal_pantheon
+		multiply = 2
+		subtract = var:gm_n_sig_royal_pantheon
+		add = 5
+		divide = {
+			value = var:gm_n_sig_royal_pantheon
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_martial_glory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_martial_glory }
+		value = var:gm_s_sig_martial_glory
+		multiply = gm_step_sig_martial_glory
+	}
+}
+
+gm_display_g_sig_martial_glory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_martial_glory }
+		value = var:gm_g_sig_martial_glory
+	}
+}
+
+gm_display_n_sig_martial_glory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_martial_glory }
+		value = var:gm_n_sig_martial_glory
+	}
+}
+
+gm_display_c_sig_martial_glory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_martial_glory }
+		value = var:gm_c_sig_martial_glory
+	}
+}
+
+gm_disp_frac_sig_martial_glory = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_martial_glory
+			has_variable = gm_n_sig_martial_glory
+		}
+		value = var:gm_g_sig_martial_glory
+		multiply = 2
+		subtract = var:gm_n_sig_martial_glory
+		add = 5
+		divide = {
+			value = var:gm_n_sig_martial_glory
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_liberty = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_liberty }
+		value = var:gm_s_sig_liberty
+		multiply = gm_step_sig_liberty
+	}
+}
+
+gm_display_g_sig_liberty = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_liberty }
+		value = var:gm_g_sig_liberty
+	}
+}
+
+gm_display_n_sig_liberty = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_liberty }
+		value = var:gm_n_sig_liberty
+	}
+}
+
+gm_display_c_sig_liberty = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_liberty }
+		value = var:gm_c_sig_liberty
+	}
+}
+
+gm_disp_frac_sig_liberty = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_liberty
+			has_variable = gm_n_sig_liberty
+		}
+		value = var:gm_g_sig_liberty
+		multiply = 2
+		subtract = var:gm_n_sig_liberty
+		add = 5
+		divide = {
+			value = var:gm_n_sig_liberty
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_grande_armee = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_grande_armee }
+		value = var:gm_s_sig_grande_armee
+		multiply = gm_step_sig_grande_armee
+	}
+}
+
+gm_display_g_sig_grande_armee = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_grande_armee }
+		value = var:gm_g_sig_grande_armee
+	}
+}
+
+gm_display_n_sig_grande_armee = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_grande_armee }
+		value = var:gm_n_sig_grande_armee
+	}
+}
+
+gm_display_c_sig_grande_armee = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_grande_armee }
+		value = var:gm_c_sig_grande_armee
+	}
+}
+
+gm_disp_frac_sig_grande_armee = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_grande_armee
+			has_variable = gm_n_sig_grande_armee
+		}
+		value = var:gm_g_sig_grande_armee
+		multiply = 2
+		subtract = var:gm_n_sig_grande_armee
+		add = 5
+		divide = {
+			value = var:gm_n_sig_grande_armee
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_mandate_of_heaven = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_mandate_of_heaven }
+		value = var:gm_s_sig_mandate_of_heaven
+		multiply = gm_step_sig_mandate_of_heaven
+	}
+}
+
+gm_display_g_sig_mandate_of_heaven = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_mandate_of_heaven }
+		value = var:gm_g_sig_mandate_of_heaven
+	}
+}
+
+gm_display_n_sig_mandate_of_heaven = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_mandate_of_heaven }
+		value = var:gm_n_sig_mandate_of_heaven
+	}
+}
+
+gm_display_c_sig_mandate_of_heaven = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_mandate_of_heaven }
+		value = var:gm_c_sig_mandate_of_heaven
+	}
+}
+
+gm_disp_frac_sig_mandate_of_heaven = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_mandate_of_heaven
+			has_variable = gm_n_sig_mandate_of_heaven
+		}
+		value = var:gm_g_sig_mandate_of_heaven
+		multiply = 2
+		subtract = var:gm_n_sig_mandate_of_heaven
+		add = 5
+		divide = {
+			value = var:gm_n_sig_mandate_of_heaven
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_glory_of_athens = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_glory_of_athens }
+		value = var:gm_s_sig_glory_of_athens
+		multiply = gm_step_sig_glory_of_athens
+	}
+}
+
+gm_display_g_sig_glory_of_athens = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_glory_of_athens }
+		value = var:gm_g_sig_glory_of_athens
+	}
+}
+
+gm_display_n_sig_glory_of_athens = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_glory_of_athens }
+		value = var:gm_n_sig_glory_of_athens
+	}
+}
+
+gm_display_c_sig_glory_of_athens = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_glory_of_athens }
+		value = var:gm_c_sig_glory_of_athens
+	}
+}
+
+gm_disp_frac_sig_glory_of_athens = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_glory_of_athens
+			has_variable = gm_n_sig_glory_of_athens
+		}
+		value = var:gm_g_sig_glory_of_athens
+		multiply = 2
+		subtract = var:gm_n_sig_glory_of_athens
+		add = 5
+		divide = {
+			value = var:gm_n_sig_glory_of_athens
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_to_victory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_to_victory }
+		value = var:gm_s_sig_to_victory
+		multiply = gm_step_sig_to_victory
+	}
+}
+
+gm_display_g_sig_to_victory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_to_victory }
+		value = var:gm_g_sig_to_victory
+	}
+}
+
+gm_display_n_sig_to_victory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_to_victory }
+		value = var:gm_n_sig_to_victory
+	}
+}
+
+gm_display_c_sig_to_victory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_to_victory }
+		value = var:gm_c_sig_to_victory
+	}
+}
+
+gm_disp_frac_sig_to_victory = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_to_victory
+			has_variable = gm_n_sig_to_victory
+		}
+		value = var:gm_g_sig_to_victory
+		multiply = 2
+		subtract = var:gm_n_sig_to_victory
+		add = 5
+		divide = {
+			value = var:gm_n_sig_to_victory
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_unknown_soldier = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_unknown_soldier }
+		value = var:gm_s_sig_unknown_soldier
+		multiply = gm_step_sig_unknown_soldier
+	}
+}
+
+gm_display_g_sig_unknown_soldier = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_unknown_soldier }
+		value = var:gm_g_sig_unknown_soldier
+	}
+}
+
+gm_display_n_sig_unknown_soldier = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_unknown_soldier }
+		value = var:gm_n_sig_unknown_soldier
+	}
+}
+
+gm_display_c_sig_unknown_soldier = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_unknown_soldier }
+		value = var:gm_c_sig_unknown_soldier
+	}
+}
+
+gm_disp_frac_sig_unknown_soldier = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_unknown_soldier
+			has_variable = gm_n_sig_unknown_soldier
+		}
+		value = var:gm_g_sig_unknown_soldier
+		multiply = 2
+		subtract = var:gm_n_sig_unknown_soldier
+		add = 5
+		divide = {
+			value = var:gm_n_sig_unknown_soldier
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_concert_of_nations = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_concert_of_nations }
+		value = var:gm_s_sig_concert_of_nations
+		multiply = gm_step_sig_concert_of_nations
+	}
+}
+
+gm_display_g_sig_concert_of_nations = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_concert_of_nations }
+		value = var:gm_g_sig_concert_of_nations
+	}
+}
+
+gm_display_n_sig_concert_of_nations = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_concert_of_nations }
+		value = var:gm_n_sig_concert_of_nations
+	}
+}
+
+gm_display_c_sig_concert_of_nations = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_concert_of_nations }
+		value = var:gm_c_sig_concert_of_nations
+	}
+}
+
+gm_disp_frac_sig_concert_of_nations = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_concert_of_nations
+			has_variable = gm_n_sig_concert_of_nations
+		}
+		value = var:gm_g_sig_concert_of_nations
+		multiply = 2
+		subtract = var:gm_n_sig_concert_of_nations
+		add = 5
+		divide = {
+			value = var:gm_n_sig_concert_of_nations
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_conquerors_of_space = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_conquerors_of_space }
+		value = var:gm_s_sig_conquerors_of_space
+		multiply = gm_step_sig_conquerors_of_space
+	}
+}
+
+gm_display_g_sig_conquerors_of_space = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_conquerors_of_space }
+		value = var:gm_g_sig_conquerors_of_space
+	}
+}
+
+gm_display_n_sig_conquerors_of_space = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_conquerors_of_space }
+		value = var:gm_n_sig_conquerors_of_space
+	}
+}
+
+gm_display_c_sig_conquerors_of_space = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_conquerors_of_space }
+		value = var:gm_c_sig_conquerors_of_space
+	}
+}
+
+gm_disp_frac_sig_conquerors_of_space = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_conquerors_of_space
+			has_variable = gm_n_sig_conquerors_of_space
+		}
+		value = var:gm_g_sig_conquerors_of_space
+		multiply = 2
+		subtract = var:gm_n_sig_conquerors_of_space
+		add = 5
+		divide = {
+			value = var:gm_n_sig_conquerors_of_space
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_olympic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_olympic }
+		value = var:gm_s_sig_olympic
+		multiply = gm_step_sig_olympic
+	}
+}
+
+gm_display_g_sig_olympic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_olympic }
+		value = var:gm_g_sig_olympic
+	}
+}
+
+gm_display_n_sig_olympic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_olympic }
+		value = var:gm_n_sig_olympic
+	}
+}
+
+gm_display_c_sig_olympic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_olympic }
+		value = var:gm_c_sig_olympic
+	}
+}
+
+gm_disp_frac_sig_olympic = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_olympic
+			has_variable = gm_n_sig_olympic
+		}
+		value = var:gm_g_sig_olympic
+		multiply = 2
+		subtract = var:gm_n_sig_olympic
+		add = 5
+		divide = {
+			value = var:gm_n_sig_olympic
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+gm_display_sig_heroes = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_heroes }
+		value = var:gm_s_sig_heroes
+		multiply = gm_step_sig_heroes
+	}
+}
+
+gm_display_g_sig_heroes = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_sig_heroes }
+		value = var:gm_g_sig_heroes
+	}
+}
+
+gm_display_n_sig_heroes = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_sig_heroes }
+		value = var:gm_n_sig_heroes
+	}
+}
+
+gm_display_c_sig_heroes = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_c_sig_heroes }
+		value = var:gm_c_sig_heroes
+	}
+}
+
+gm_disp_frac_sig_heroes = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_sig_heroes
+			has_variable = gm_n_sig_heroes
+		}
+		value = var:gm_g_sig_heroes
+		multiply = 2
+		subtract = var:gm_n_sig_heroes
+		add = 5
+		divide = {
+			value = var:gm_n_sig_heroes
+			add = 5
+		}
+	}
+	min = 0
+	max = 1
+}
+# ---- A monument's signature (state and container scope) ---------------------------------
+# State scope. 1 while the primary carries a signature, on its parent or
+# dormant: its row's and card's label then has a hover (gm_dedication_label).
+gm_disp_has_sig = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_signature }
+		value = 1
+	}
+}
+
+# Container scope. The same for a monument beside another or a trophy: its
+# row's line naming the parent (§3's fallback; a container has no tooltip tag
+# anyone has seen work).
+gm_tr_disp_has_sig = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_signature }
+		value = 1
+	}
+}
+
+# State scope, the card: what the unique dedications standing here give its
+# Tourism Industry (Ancestral Antiquity's, and the First Emperor's Army's on top)
+# and its universities (the Epigraphic Archive's), as gm_state_monthly last
+# refreshed them. The state's whole, as the card's tourism is.
+gm_state_disp_sig_tourism = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_sig_local_steps_antiquity }
+		add = {
+			value = var:gm_sig_local_steps_antiquity
+			multiply = gm_step_sig_local_antiquity
+		}
+	}
+	if = {
+		limit = { has_variable = gm_sig_local_steps_first_emperor }
+		add = {
+			value = var:gm_sig_local_steps_first_emperor
+			multiply = gm_step_sig_local_first_emperor
+		}
+	}
+}
+
+gm_state_disp_sig_university = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_sig_local_steps_archive }
+		value = var:gm_sig_local_steps_archive
+		multiply = gm_step_sig_local_archive
+	}
+}
+
+# ---- Debug codes (te_debug_monuments.8) ----------------------------------------------------
+# debug_log prints numbers only. A signature's code is its row in SIGNATURES
+# (1-based, 0 for none); its parent's, its dedication's in DEDICATIONS; whether
+# it counts: 1 nationally, 2 locally only (heritage or contested), 3 dormant
+# (on another dedication), 0 none.
+gm_disp_sig_code = {
+	value = 0
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = antiquity } } value = 1 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = archive } } value = 2 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = throne } } value = 3 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = royal_pantheon } } value = 4 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = martial_glory } } value = 5 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = liberty } } value = 6 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = grande_armee } } value = 7 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = mandate_of_heaven } } value = 8 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = glory_of_athens } } value = 9 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = first_emperor } } value = 10 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = to_victory } } value = 11 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = unknown_soldier } } value = 12 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = concert_of_nations } } value = 13 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = conquerors_of_space } } value = 14 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = olympic } } value = 15 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_signature SIG = heroes } } value = 16 }
+}
+
+gm_disp_sig_parent_code = {
+	value = 0
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:crown } value = 1 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:republic } value = 2 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:revolution } value = 3 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:leader } value = 4 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:religious } value = 5 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:civic } value = 6 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:war_memorial } value = 7 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:artistic } value = 8 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:naturalist } value = 9 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:scientific } value = 10 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:industrial } value = 11 }
+	if = { limit = { has_variable = gm_sig_parent var:gm_sig_parent = flag:athletic } value = 12 }
+}
+
+gm_tr_disp_sig_code = {
+	value = 0
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = antiquity } } value = 1 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = archive } } value = 2 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = throne } } value = 3 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = royal_pantheon } } value = 4 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = martial_glory } } value = 5 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = liberty } } value = 6 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = grande_armee } } value = 7 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = mandate_of_heaven } } value = 8 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = glory_of_athens } } value = 9 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = first_emperor } } value = 10 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = to_victory } } value = 11 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = unknown_soldier } } value = 12 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = concert_of_nations } } value = 13 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = conquerors_of_space } } value = 14 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = olympic } } value = 15 }
+	if = { limit = { gm_sig_var_is = { VAR = gm_tr_signature SIG = heroes } } value = 16 }
+}
+
+gm_tr_disp_sig_parent_code = {
+	value = 0
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:crown } value = 1 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:republic } value = 2 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:revolution } value = 3 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:leader } value = 4 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:religious } value = 5 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:civic } value = 6 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:war_memorial } value = 7 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:artistic } value = 8 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:naturalist } value = 9 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:scientific } value = 10 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:industrial } value = 11 }
+	if = { limit = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:athletic } value = 12 }
+}
+
+gm_disp_sig_counts = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_signature }
+		value = 3
+		if = { limit = { gm_state_sig_on_parent = yes } value = 2 }
+		if = { limit = { gm_state_sig_counts = yes } value = 1 }
+	}
+}
+
+# A trophy on its parent counts for its holder, at its own grandeur (§2.4).
+gm_tr_disp_sig_counts = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_signature }
+		value = 3
+		if = { limit = { gm_mon_sig_on_parent = yes } value = 2 }
+		if = {
+			limit = {
+				gm_mon_sig_on_parent = yes
+				OR = {
+					has_tag = gm_trophy
+					gm_mon_status_fits = yes
+				}
+			}
+			value = 1
+		}
+	}
+}
+
+# ---- Special dedications held (§5.3, §8) --------------------------------------------
+# The seeding's round for old saves (gm_sig_seed_monthly): a game seeded in an
+# earlier round runs it again.
+gm_sig_seed_rounds = { value = 1 }
+
+# Country scope. How many of each special the country holds, for the rows
+# under Opportunities Seized.
+gm_disp_sig_held_to_victory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_sig_held_to_victory }
+		value = var:gm_sig_held_to_victory
+	}
+}
+
+gm_disp_sig_held_unknown_soldier = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_sig_held_unknown_soldier }
+		value = var:gm_sig_held_unknown_soldier
+	}
+}
+
+gm_disp_sig_held_concert_of_nations = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_sig_held_concert_of_nations }
+		value = var:gm_sig_held_concert_of_nations
+	}
+}
+
+gm_disp_sig_held_conquerors_of_space = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_sig_held_conquerors_of_space }
+		value = var:gm_sig_held_conquerors_of_space
+	}
+}
+
+gm_disp_sig_held_olympic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_sig_held_olympic }
+		value = var:gm_sig_held_olympic
+	}
+}

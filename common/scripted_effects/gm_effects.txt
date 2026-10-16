@@ -286,6 +286,10 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_scientific
 	remove_modifier = gm_local_industrial
 	remove_modifier = gm_local_athletic
+	# A unique dedication's (gm_signature_effects.txt).
+	remove_modifier = gm_local_sig_antiquity
+	remove_modifier = gm_local_sig_archive
+	remove_modifier = gm_local_sig_first_emperor
 	b:building_grand_monument ?= {
 		remove_modifier = gm_policy_upkeep_open
 		remove_modifier = gm_policy_upkeep_mothballed
@@ -356,6 +360,11 @@ gm_clear_state = {
 		gm_remove_state_var = { VAR = gm_skin }
 		gm_remove_state_var = { VAR = gm_form }
 		gm_remove_state_var = { VAR = gm_picture_code }
+		# Its unique dedication (signatures spec §4.4, §5.2): a landmark
+		# rededicated keeps it, dormant until it stands on its parent again; any
+		# other monument's goes, a special for good.
+		gm_remove_state_var = { VAR = gm_signature }
+		gm_remove_state_var = { VAR = gm_sig_parent }
 	}
 	gm_remove_state_var = { VAR = gm_skin_axis }
 	gm_remove_state_var = { VAR = gm_contested }
@@ -389,6 +398,7 @@ gm_clear_state = {
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
 	gm_state_zero_local_steps = yes
+	gm_state_sig_zero_local_steps = yes
 	# Its shadow (issue #936, gm_monument_effects.txt): the pass writes the next
 	# monument's once it is recorded.
 	gm_state_drop_shadow = yes
@@ -454,6 +464,11 @@ gm_state_monthly = {
 		gm_state_local_steps_one = { KEY = scientific }
 		gm_state_local_steps_one = { KEY = industrial }
 		gm_state_local_steps_one = { KEY = athletic }
+		# And each unique dedication's (signatures spec §2.2), counted the same
+		# way, beside its parent's.
+		gm_state_sig_local_steps_one = { SIG = antiquity }
+		gm_state_sig_local_steps_one = { SIG = archive }
+		gm_state_sig_local_steps_one = { SIG = first_emperor }
 		# Trophies (gm_trophy_effects.txt): the owner stamped, an occupier's
 		# offer or roll. Last: a taking removes the building.
 		gm_state_tr_monthly = yes
@@ -491,6 +506,7 @@ gm_state_monthly = {
 			set_variable = { name = gm_local_tourism_steps value = 0 }
 		}
 		gm_state_zero_local_steps = yes
+		gm_state_sig_zero_local_steps = yes
 	}
 }
 
@@ -700,6 +716,8 @@ gm_country_refresh = {
 		limit = { has_building = building_grand_monument }
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
+		# A landmark's unique dedication (signatures spec §4.4).
+		gm_state_sig_backfill = yes
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		# A part of this region merged into this state, and the records of a
 		# monument that stood there wait to be adopted here (issue #936): the
@@ -861,6 +879,8 @@ gm_compute_totals = {
 	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_standing }
 	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
 	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
+	# The unique dedications' sums (signatures spec §2.1), steps and policy.
+	gm_sig_compute_sums = yes
 	gm_compute_ig = { IG = armed_forces }
 	gm_compute_ig = { IG = devout }
 	gm_compute_ig = { IG = industrialists }
@@ -888,6 +908,17 @@ gm_compute_ig = {
 			limit = {
 				gm_state_status_fits = yes
 				gm_state_approved_by_$IG$ = yes
+			}
+			owner = {
+				change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur }
+			}
+		}
+		# A unique dedication's own group (signatures spec §2.3), beside the
+		# dedication's.
+		if = {
+			limit = {
+				gm_state_status_fits = yes
+				gm_state_sig_approved_by_$IG$ = yes
 			}
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur }
@@ -925,6 +956,15 @@ gm_compute_ig = {
 				limit = {
 					gm_mon_status_fits = yes
 					gm_mon_approved_by_$IG$ = yes
+				}
+				scope:gm_ig_country = {
+					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
+				}
+			}
+			if = {
+				limit = {
+					gm_mon_status_fits = yes
+					gm_mon_sig_approved_by_$IG$ = yes
 				}
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
@@ -989,6 +1029,23 @@ gm_apply_national_modifiers = {
 		gm_add_national = { NAME = gm_national_industrial VAR = gm_s_industrial }
 		gm_add_national = { NAME = gm_national_teardown VAR = gm_s_teardown }
 		gm_add_national = { NAME = gm_national_vanity VAR = gm_vanity_ledger }
+		# The unique dedications (signatures spec §2.1); Ancestral Antiquity's is
+		# cultural pull, a script value (cultural_pull_from_antiquity).
+		gm_add_national = { NAME = gm_national_sig_archive VAR = gm_s_sig_archive }
+		gm_add_national = { NAME = gm_national_sig_archive_spread VAR = gm_s_sig_archive }
+		gm_add_national = { NAME = gm_national_sig_throne VAR = gm_s_sig_throne }
+		gm_add_national = { NAME = gm_national_sig_royal_pantheon VAR = gm_s_sig_royal_pantheon }
+		gm_add_national = { NAME = gm_national_sig_martial_glory VAR = gm_s_sig_martial_glory }
+		gm_add_national = { NAME = gm_national_sig_liberty VAR = gm_s_sig_liberty }
+		gm_add_national = { NAME = gm_national_sig_grande_armee VAR = gm_s_sig_grande_armee }
+		gm_add_national = { NAME = gm_national_sig_mandate_of_heaven VAR = gm_s_sig_mandate_of_heaven }
+		gm_add_national = { NAME = gm_national_sig_glory_of_athens VAR = gm_s_sig_glory_of_athens }
+		gm_add_national = { NAME = gm_national_sig_to_victory VAR = gm_s_sig_to_victory }
+		gm_add_national = { NAME = gm_national_sig_unknown_soldier VAR = gm_s_sig_unknown_soldier }
+		gm_add_national = { NAME = gm_national_sig_concert_of_nations VAR = gm_s_sig_concert_of_nations }
+		gm_add_national = { NAME = gm_national_sig_conquerors_of_space VAR = gm_s_sig_conquerors_of_space }
+		gm_add_national = { NAME = gm_national_sig_olympic VAR = gm_s_sig_olympic }
+		gm_add_national = { NAME = gm_national_sig_heroes VAR = gm_s_sig_heroes }
 		gm_add_boons = yes
 		gm_tr_add_national = yes
 		gm_arch_add_national = yes
@@ -1017,6 +1074,21 @@ gm_remove_national_modifiers = {
 	remove_modifier = gm_national_vanity
 	# v2's commission reward: nothing adds it now, but a save may carry it.
 	remove_modifier = gm_national_promise
+	remove_modifier = gm_national_sig_archive
+	remove_modifier = gm_national_sig_archive_spread
+	remove_modifier = gm_national_sig_throne
+	remove_modifier = gm_national_sig_royal_pantheon
+	remove_modifier = gm_national_sig_martial_glory
+	remove_modifier = gm_national_sig_liberty
+	remove_modifier = gm_national_sig_grande_armee
+	remove_modifier = gm_national_sig_mandate_of_heaven
+	remove_modifier = gm_national_sig_glory_of_athens
+	remove_modifier = gm_national_sig_to_victory
+	remove_modifier = gm_national_sig_unknown_soldier
+	remove_modifier = gm_national_sig_concert_of_nations
+	remove_modifier = gm_national_sig_conquerors_of_space
+	remove_modifier = gm_national_sig_olympic
+	remove_modifier = gm_national_sig_heroes
 	gm_remove_boons = yes
 	gm_tr_remove_national = yes
 	gm_arch_remove_national = yes

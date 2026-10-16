@@ -404,6 +404,7 @@ cultural_pull_from_monuments = {
 		}
 	}
 	add = cultural_pull_from_grand_monuments
+	add = cultural_pull_from_antiquity
 }
 
 # Grand Monument pull: standing grandeur (every monument not contested) through
@@ -419,6 +420,21 @@ cultural_pull_from_grand_monuments = {
 		multiply = gm_step_culture
 	}
 	max = 5
+}
+
+# Ancestral Antiquity's pull (Grand Monument signatures, spec
+# docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md §2.1):
+# the steps of the grandeur of the monuments and trophies that carry it, +1
+# each, with a cap of its own (+3) beside the monuments' +5. gm_s_sig_antiquity
+# is set by gm_country_refresh (gm_signature_effects.txt).
+cultural_pull_from_antiquity = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_sig_antiquity }
+		value = var:gm_s_sig_antiquity
+		multiply = gm_step_sig_antiquity
+	}
+	max = gm_sig_antiquity_cap
 }
 
 # Megaproject bonus: +1 per completed megaproject (not in bg_monuments)

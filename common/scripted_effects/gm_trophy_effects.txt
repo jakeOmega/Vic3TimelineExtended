@@ -175,6 +175,10 @@ gm_state_tr_make_trophy = {
 			gm_tr_copy_from_state = { FROM = gm_name TO = gm_tr_name }
 			gm_tr_copy_from_state = { FROM = gm_honoree TO = gm_tr_honoree }
 			gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
+			# Its unique dedication, a piece's too: it counts for whoever holds it,
+			# at the trophy's grandeur (signatures spec §2.4, §7).
+			gm_tr_copy_from_state = { FROM = gm_signature TO = gm_tr_signature }
+			gm_tr_copy_from_state = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
 			gm_tr_update_picture = yes
 		}
 	}
@@ -636,6 +640,8 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_heritage TO = gm_heritage }
 	gm_tr_copy_to_state = { FROM = gm_tr_base_ig TO = gm_base_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
+	gm_tr_copy_to_state = { FROM = gm_tr_signature TO = gm_signature }
+	gm_tr_copy_to_state = { FROM = gm_tr_sig_parent TO = gm_sig_parent }
 	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1).
 	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = gm_seen
@@ -895,6 +901,9 @@ gm_trophy_monthly = {
 			variable = gm_trophies
 			gm_tr_repair_places = yes
 			gm_tr_update_picture = yes
+			# A trophy of 1836, or one from a save older than signatures, takes
+			# its landmark's unique dedication (signatures spec §4.4).
+			gm_tr_sig_backfill = yes
 		}
 		# Returns that waited for a rebuild (gm_tr_return_home): one to each
 		# state now; another bound for the same state waits again.
@@ -1315,6 +1324,7 @@ gm_seed_trophy = {
 				set_variable = { name = gm_tr_form value = flag:$FORM$ }
 				set_variable = { name = gm_tr_landmark value = flag:$LANDMARK$ }
 				set_variable = { name = gm_tr_namesake value = flag:landmark }
+				gm_tr_sig_backfill = yes
 				gm_tr_update_picture = yes
 			}
 			debug_log = "TE_MONUMENTS: trophy $LANDMARK$ placed: from $ORIGIN_TAG$'s part of $ORIGIN$, standing in $SITE_TAG$'s part of $SITE$, $LEVELS$ levels"

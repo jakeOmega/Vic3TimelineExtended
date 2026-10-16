@@ -138,7 +138,10 @@ class TableTests(unittest.TestCase):
     def test_the_picture_codes_follow_the_rows(self):
         first = LANDMARKS.index(BURIED[0]) + 1
         self.assertEqual(first, 52, "append-only: the first buried site is row 52")
-        self.assertEqual(len(LANDMARKS), 51 + len(BURIED))
+        # Then the historical opportunities' landmarks (signatures spec §6), after every buried site.
+        historical = tuple(lm for lm in LANDMARKS if lm.year)
+        self.assertEqual(len(LANDMARKS), 51 + len(BURIED) + len(historical))
+        self.assertEqual(LANDMARKS[51 + len(BURIED):], historical)
 
     def test_the_issues_candidates_are_all_there(self):
         # Issue #939's list: the sites it names, by the key this table gives them.

@@ -1250,8 +1250,71 @@ gm_disp_national_any = {
 					has_variable = gm_vanity_ledger
 					NOT = { var:gm_vanity_ledger = 0 }
 				}
+				# A unique dedication's (gm_signature_values.txt).
+				AND = {
+					has_variable = gm_s_sig_antiquity
+					NOT = { var:gm_s_sig_antiquity = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_archive
+					NOT = { var:gm_s_sig_archive = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_throne
+					NOT = { var:gm_s_sig_throne = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_royal_pantheon
+					NOT = { var:gm_s_sig_royal_pantheon = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_martial_glory
+					NOT = { var:gm_s_sig_martial_glory = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_liberty
+					NOT = { var:gm_s_sig_liberty = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_grande_armee
+					NOT = { var:gm_s_sig_grande_armee = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_mandate_of_heaven
+					NOT = { var:gm_s_sig_mandate_of_heaven = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_glory_of_athens
+					NOT = { var:gm_s_sig_glory_of_athens = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_to_victory
+					NOT = { var:gm_s_sig_to_victory = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_unknown_soldier
+					NOT = { var:gm_s_sig_unknown_soldier = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_concert_of_nations
+					NOT = { var:gm_s_sig_concert_of_nations = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_conquerors_of_space
+					NOT = { var:gm_s_sig_conquerors_of_space = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_olympic
+					NOT = { var:gm_s_sig_olympic = 0 }
+				}
+				AND = {
+					has_variable = gm_s_sig_heroes
+					NOT = { var:gm_s_sig_heroes = 0 }
+				}
 				# An opportunity's boon (gm_boons_idle, gm_commission_triggers.txt).
 				gm_boons_idle = no
+				# A special held (signatures spec §8), listed under the boons.
+				gm_sig_held_idle = no
 				AND = {
 					has_variable = gm_s_ig_armed_forces
 					NOT = { var:gm_s_ig_armed_forces = 0 }

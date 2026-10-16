@@ -58,6 +58,9 @@ gm_com_clear = {
 	gm_remove_state_var = { VAR = gm_com_offer_watch }
 	gm_remove_state_var = { VAR = gm_com_build_where }
 	gm_remove_state_var = { VAR = gm_com_raise_pending }
+	# A historical opportunity's landmark and holder condition (signatures spec §6).
+	gm_remove_state_var = { VAR = gm_com_landmark }
+	gm_remove_state_var = { VAR = gm_com_hist_cond }
 	every_scope_state = {
 		limit = { has_variable = gm_unveiled_for_com }
 		remove_variable = gm_unveiled_for_com
@@ -572,6 +575,16 @@ gm_com_monthly = {
 # then; nothing here reads them back).
 gm_com_fulfil = {
 	clear_saved_scope = gm_com_named_state
+	# Its special (signatures spec §5.2), if its moment has one: one monument
+	# takes it, the one the gift lands on, or the country holds it.
+	save_scope_as = gm_sig_granter
+	gm_sig_special_for_source = yes
+	gm_remove_state_var = { VAR = gm_com_seized_special }
+	gm_remove_state_var = { VAR = gm_com_seized_special_held }
+	if = {
+		limit = { has_variable = gm_sig_special }
+		set_variable = { name = gm_com_seized_special value = var:gm_sig_special }
+	}
 	if = {
 		limit = {
 			has_variable = gm_com_last_state
@@ -597,6 +610,9 @@ gm_com_fulfil = {
 					# A landmark keeps its historical name; the opportunity is
 					# still completed (phase 4 §3.2).
 					gm_state_has_historical_name = no
+					# A historical opportunity's monument takes the landmark's
+					# name instead (signatures spec §6.2).
+					NOT = { owner = { has_variable = gm_com_landmark } }
 					OR = {
 						NOT = { has_variable = gm_namesake }
 						owner = {
@@ -607,6 +623,24 @@ gm_com_fulfil = {
 				gm_state_take_commission_name = yes
 			}
 			set_variable = gm_gift
+			# A historical opportunity: the monument becomes its landmark, in
+			# monument_events.26 with the gift (signatures spec §6.2).
+			if = {
+				limit = { scope:gm_sig_granter = { has_variable = gm_com_landmark } }
+				set_variable = { name = gm_hist_become value = scope:gm_sig_granter.var:gm_com_landmark }
+			}
+			# The special lands with the gift (monument_events.26); a monument that
+			# already carries a signature keeps it, and the country holds this one.
+			if = {
+				limit = { scope:gm_sig_granter = { has_variable = gm_sig_special } }
+				if = {
+					limit = { NOT = { has_variable = gm_signature } }
+					set_variable = { name = gm_sig_grant value = scope:gm_sig_granter.var:gm_sig_special }
+				}
+				else = {
+					scope:gm_sig_granter = { gm_sig_hold_special = yes }
+				}
+			}
 			trigger_event = { id = monument_events.26 }
 		}
 		# What monument_events.28 names after the record closes (usability §5).
@@ -632,12 +666,40 @@ gm_com_fulfil = {
 		if = {
 			limit = { exists = scope:gm_com_gift_mon }
 			scope:gm_com_gift_mon = { gm_mon_add_age = { AGE = gm_com_gift } }
+			# A historical opportunity's landmark (signatures spec §6.2).
+			if = {
+				limit = { has_variable = gm_com_landmark }
+				scope:gm_com_gift_mon = { gm_mon_hist_take = yes }
+			}
+			# Its special beside the gift, variables only (signatures spec §5.2).
+			if = {
+				limit = { has_variable = gm_sig_special }
+				if = {
+					limit = { scope:gm_com_gift_mon = { gm_mon_takes_special = yes } }
+					scope:gm_com_gift_mon = { gm_mon_sig_take_special = yes }
+				}
+				else = {
+					gm_sig_hold_special = yes
+				}
+			}
+		}
+		# No monument could take it: held for the next of its dedication.
+		else_if = {
+			limit = { has_variable = gm_sig_special }
+			gm_sig_hold_special = yes
 		}
 	}
 	if = {
 		limit = { has_variable = gm_com_source }
 		set_variable = { name = gm_com_seized_source value = var:gm_com_source }
 	}
+	# The landmark a historical one made, for monument_events.28.
+	gm_remove_state_var = { VAR = gm_com_seized_landmark }
+	if = {
+		limit = { has_variable = gm_com_landmark }
+		set_variable = { name = gm_com_seized_landmark value = var:gm_com_landmark }
+	}
+	gm_remove_state_var = { VAR = gm_sig_special }
 	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = 15 }
 	gm_com_grant_boon = yes
 	set_variable = gm_active
@@ -901,6 +963,7 @@ gm_com_world_monthly = {
 	gm_com_track_space = yes
 	gm_com_track_centenary = yes
 	gm_com_track_tech = yes
+	gm_com_track_historical = yes
 }
 
 # Country scope. The first time the world pass sees a country (a new game, a
@@ -1354,4 +1417,157 @@ gm_seed_founding_year = {
 			set_variable = { name = gm_founded_year value = $YEAR$ }
 		}
 	}
+}
+
+# ---- Historical opportunities (signatures spec §6) ---------------------------------
+# Country scope, from the world pass, last: a historical monument is a window,
+# not a moment, so it waits while another opportunity is open and is offered
+# when that closes, while its window lasts. One call per row of
+# HISTORICAL_OPPORTUNITIES in test_grand_monument_registry.py, in its order.
+gm_com_track_historical = {
+	gm_com_try_historical = { KEY = walhalla STATE = STATE_BAVARIA FROM = 1836 UNTIL = 1876 DEDICATION = civic LEVEL = 5 IG = petty_bourgeoisie COND = german }
+	gm_com_try_historical = { KEY = bunker_hill_monument STATE = STATE_MASSACHUSETTS FROM = 1836 UNTIL = 1876 DEDICATION = war_memorial LEVEL = 5 IG = armed_forces COND = none }
+	gm_com_try_historical = { KEY = obelisk_of_the_second_of_may STATE = STATE_NEW_CASTILE FROM = 1836 UNTIL = 1876 DEDICATION = war_memorial LEVEL = 5 IG = armed_forces COND = none }
+	gm_com_try_historical = { KEY = muhammad_ali_mosque STATE = STATE_LOWER_EGYPT FROM = 1836 UNTIL = 1876 DEDICATION = religious LEVEL = 10 IG = devout COND = sunni }
+	gm_com_try_historical = { KEY = nelsons_column STATE = STATE_HOME_COUNTIES FROM = 1840 UNTIL = 1880 DEDICATION = war_memorial LEVEL = 5 IG = armed_forces COND = none }
+	gm_com_try_historical = { KEY = washington_monument STATE = STATE_DISTRICT_OF_COLUMBIA FROM = 1848 UNTIL = 1888 DEDICATION = republic LEVEL = 10 IG = intelligentsia COND = republic }
+}
+
+# Offered once a game (gm_hist_offered_$KEY$, global), to whoever holds a part
+# of $STATE$, from the year its construction began for forty years ($FROM$ to
+# $UNTIL$), at any rank, while its holder condition holds ($COND$: none, a
+# German primary culture, Sunni, a republic) and its dedication can be raised.
+# Its asking group is the dedication's approving one; its target is the
+# landmark's levels, and its state the holder's part of the region. It names
+# nothing on its own (NAMESAKE = year): completing it makes the monument the
+# landmark (gm_state_become_landmark). No boon: what it gives is the landmark.
+gm_com_try_historical = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_hist_offered_$KEY$ }
+			game_date >= $FROM$.1.1
+			game_date < $UNTIL$.1.1
+			gm_com_can_offer = yes
+			has_state_in_state_region = $STATE$
+			gm_com_hist_cond_$COND$ = yes
+			gm_country_can_raise_$DEDICATION$ = yes
+		}
+		set_global_variable = gm_hist_offered_$KEY$
+		gm_com_begin = { SOURCE = historical DEDICATION = $DEDICATION$ NAMESAKE = year FORM = default }
+		set_variable = { name = gm_com_landmark value = flag:$KEY$ }
+		set_variable = { name = gm_com_hist_cond value = flag:$COND$ }
+		set_variable = { name = gm_com_target value = $LEVEL$ }
+		set_variable = { name = gm_com_ig value = flag:$IG$ }
+		clear_saved_scope = gm_com_hist_state
+		random_scope_state = {
+			limit = { state_region = s:$STATE$ }
+			save_scope_as = gm_com_hist_state
+		}
+		if = {
+			limit = { exists = scope:gm_com_hist_state }
+			set_variable = { name = gm_com_state value = scope:gm_com_hist_state }
+		}
+		gm_com_send_offer = yes
+	}
+}
+
+# ---- Completion makes the landmark (§6.2) -------------------------------------------
+# State scope, from monument_events.26 (gm_com_fulfil marked the completing
+# monument with gm_hist_become beside its gift): it becomes the landmark the
+# opportunity named. One branch per historical landmark.
+gm_state_hist_take = {
+	if = {
+		limit = { has_variable = gm_hist_become }
+		if = {
+			limit = { var:gm_hist_become = flag:walhalla }
+			gm_state_become_landmark = { KEY = walhalla FORM = hall_of_fame }
+		}
+		if = {
+			limit = { var:gm_hist_become = flag:bunker_hill_monument }
+			gm_state_become_landmark = { KEY = bunker_hill_monument FORM = obelisk }
+		}
+		if = {
+			limit = { var:gm_hist_become = flag:obelisk_of_the_second_of_may }
+			gm_state_become_landmark = { KEY = obelisk_of_the_second_of_may FORM = obelisk }
+		}
+		if = {
+			limit = { var:gm_hist_become = flag:muhammad_ali_mosque }
+			gm_state_become_landmark = { KEY = muhammad_ali_mosque FORM = faith }
+		}
+		if = {
+			limit = { var:gm_hist_become = flag:nelsons_column }
+			gm_state_become_landmark = { KEY = nelsons_column FORM = column }
+		}
+		if = {
+			limit = { var:gm_hist_become = flag:washington_monument }
+			gm_state_become_landmark = { KEY = washington_monument FORM = obelisk }
+		}
+		remove_variable = gm_hist_become
+	}
+}
+
+# State scope. The monument becomes landmark $KEY$: its key, its own skin and
+# form (the style and form chosen at its unveiling give way), its historical
+# name (the landmark namesake, which the historical-name lock holds), its
+# unique dedication and its picture. It stands beside whatever else stands in
+# the state.
+gm_state_become_landmark = {
+	set_variable = { name = gm_landmark value = flag:$KEY$ }
+	set_variable = { name = gm_skin value = flag:landmark_$KEY$ }
+	set_variable = { name = gm_form value = flag:$FORM$ }
+	gm_remove_state_var = { VAR = gm_skin_axis }
+	gm_state_clear_namesake = yes
+	set_variable = { name = gm_namesake value = flag:landmark }
+	gm_remove_state_var = { VAR = gm_name }
+	gm_state_sig_backfill = yes
+	if = {
+		limit = { NOT = { has_variable = gm_restore_pm } }
+		gm_state_update_picture = yes
+	}
+	debug_log = "TE_MONUMENTS: a historical opportunity completed: the monument is now the landmark $KEY$"
+}
+
+# Container scope, a monument beside another that completed a historical
+# opportunity (gm_com_fulfil, beside its gift; scope:gm_sig_granter its
+# country): it becomes the landmark, on its own records.
+gm_mon_hist_take = {
+	if = {
+		limit = { scope:gm_sig_granter = { var:gm_com_landmark = flag:walhalla } }
+		gm_mon_become_landmark = { KEY = walhalla FORM = hall_of_fame }
+	}
+	if = {
+		limit = { scope:gm_sig_granter = { var:gm_com_landmark = flag:bunker_hill_monument } }
+		gm_mon_become_landmark = { KEY = bunker_hill_monument FORM = obelisk }
+	}
+	if = {
+		limit = { scope:gm_sig_granter = { var:gm_com_landmark = flag:obelisk_of_the_second_of_may } }
+		gm_mon_become_landmark = { KEY = obelisk_of_the_second_of_may FORM = obelisk }
+	}
+	if = {
+		limit = { scope:gm_sig_granter = { var:gm_com_landmark = flag:muhammad_ali_mosque } }
+		gm_mon_become_landmark = { KEY = muhammad_ali_mosque FORM = faith }
+	}
+	if = {
+		limit = { scope:gm_sig_granter = { var:gm_com_landmark = flag:nelsons_column } }
+		gm_mon_become_landmark = { KEY = nelsons_column FORM = column }
+	}
+	if = {
+		limit = { scope:gm_sig_granter = { var:gm_com_landmark = flag:washington_monument } }
+		gm_mon_become_landmark = { KEY = washington_monument FORM = obelisk }
+	}
+}
+
+gm_mon_become_landmark = {
+	set_variable = { name = gm_tr_landmark value = flag:$KEY$ }
+	set_variable = { name = gm_tr_skin value = flag:landmark_$KEY$ }
+	set_variable = { name = gm_tr_form value = flag:$FORM$ }
+	set_variable = { name = gm_tr_namesake value = flag:landmark }
+	gm_remove_state_var = { VAR = gm_tr_name }
+	gm_remove_state_var = { VAR = gm_tr_name_year }
+	gm_remove_state_var = { VAR = gm_tr_name_char }
+	gm_remove_state_var = { VAR = gm_tr_name_occasion }
+	gm_remove_state_var = { VAR = gm_tr_name_enemy_cap }
+	gm_tr_sig_backfill = yes
+	gm_tr_update_picture = yes
+	debug_log = "TE_MONUMENTS: a historical opportunity completed beside another monument: it is now the landmark $KEY$"
 }

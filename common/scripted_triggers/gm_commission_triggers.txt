@@ -239,6 +239,8 @@ gm_com_has_lapsed = {
 				NOT = { owner = scope:gm_tmp_com_holder }
 			}
 		}
+		# A historical opportunity's holder condition (signatures spec §6.1).
+		gm_com_hist_cond_holds = no
 	}
 }
 
@@ -303,5 +305,36 @@ gm_com_can_raise = {
 	custom_tooltip = {
 		text = gm_com_raise_nowhere_tt
 		has_variable = gm_com_build_where
+	}
+}
+
+# ---- Historical opportunities' holders (signatures spec §6.1) ---------------------
+# Country scope. Held when the offer is made and while it is open; when it
+# stops holding, the opportunity lapses (gm_com_has_lapsed).
+gm_com_hist_cond_none = {
+	always = yes
+}
+
+gm_com_hist_cond_german = {
+	any_primary_culture = { has_discrimination_trait = language_germanophone }
+}
+
+gm_com_hist_cond_sunni = {
+	country_has_state_religion = rel:sunni
+}
+
+gm_com_hist_cond_republic = {
+	monument_government_is_republican = yes
+}
+
+# Country scope. The open historical opportunity's condition (gm_com_hist_cond)
+# still holds; true for any other opportunity.
+gm_com_hist_cond_holds = {
+	OR = {
+		NOT = { has_variable = gm_com_hist_cond }
+		AND = { var:gm_com_hist_cond = flag:none gm_com_hist_cond_none = yes }
+		AND = { var:gm_com_hist_cond = flag:german gm_com_hist_cond_german = yes }
+		AND = { var:gm_com_hist_cond = flag:sunni gm_com_hist_cond_sunni = yes }
+		AND = { var:gm_com_hist_cond = flag:republic gm_com_hist_cond_republic = yes }
 	}
 }
