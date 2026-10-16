@@ -204,7 +204,9 @@ Two sources on the card set a state's output bonus:
 | Cities | +100% for the largest city in the world, 5% less for each place below it, nothing below 20th. See [World city rankings](#world-city-rankings). |
 
 The card's "All modifiers" line adds everything else that changes output. An
-Airport or Spaceport adds +15% per level, scaled by staffing. Laws add between
+Airport or Spaceport adds +15% per level, scaled by staffing. A Highway adds +5%
+on the Civil, Electric Civil and Autonomous Highway methods and +2.5% on the
+Industrial and Electric Industrial ones. Laws add between
 −30% (Secret Police, Outlawed Dissent) and +15% (Universal Citizenship).
 Pollution, turmoil and obstinance cut output in proportion to how bad they are,
 at their worst by 200%, 100% and 50%, so heavy pollution can shut a state's
@@ -212,16 +214,19 @@ tourism off entirely.
 
 ### Tourism throughput
 
-Five sources set a state's throughput bonus, and each capped one shows a bar
+Four sources set a state's throughput bonus, and each capped one shows a bar
 toward its cap:
 
 | Source | Bonus | Cap |
 |---|---|---|
-| Ports | +0.2% per Port level up to 100, then +0.04% per level up to 500 | +36% |
-| Transit | +0.1% per Railway level and per Highway level up to 100, then +0.02% per level up to 500 | +18% from each |
+| Excess Infrastructure | The infrastructure the state produces less what its buildings use: +25% at 10,000, +50% at 30,000, +75% at 90,000. Each point adds less than the one before. | +100%, never quite reached |
 | Art | +1% per Creative Industry level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
 | Monuments | +10% for a Skyscraper, +25% for each monument | none |
+
+Railways and Highways raise Excess Infrastructure by supplying infrastructure.
+Each building you add uses some, so a crowded industrial state has little to
+spare for visitors.
 
 The "All modifiers" line for throughput also carries the Promote Tourism decree
 (+50%), a Grand Monument (+25% for each step of its grandeur, see [Grand

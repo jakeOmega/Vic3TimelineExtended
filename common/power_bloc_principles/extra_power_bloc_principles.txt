@@ -2512,7 +2512,8 @@ principle_environmental_sustainability_3 = {
 		goods_input_oil_mult = -0.15
 		goods_input_coal_mult = -0.15
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
-		state_pollution_reduction_health_mult = 0.2
+		# Negative is the protective sign: the modifier is `color = bad` (a cut to pollution's health effects, as vanilla's health laws carry it)
+		state_pollution_reduction_health_mult = -0.2
 		country_greenhouse_gas_emissions_mult = -0.15
 	}
 
@@ -2543,7 +2544,7 @@ principle_environmental_sustainability_4 = {
 		goods_input_oil_mult = -0.2
 		goods_input_coal_mult = -0.2
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
-		state_pollution_reduction_health_mult = 0.2
+		state_pollution_reduction_health_mult = -0.2
 		country_greenhouse_gas_emissions_mult = -0.2
 	}
 
@@ -2575,7 +2576,7 @@ principle_environmental_sustainability_5 = {
 		goods_input_oil_mult = -0.25
 		goods_input_coal_mult = -0.25
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
-		state_pollution_reduction_health_mult = 0.2
+		state_pollution_reduction_health_mult = -0.2
 		country_greenhouse_gas_emissions_mult = -0.25
 	}
 

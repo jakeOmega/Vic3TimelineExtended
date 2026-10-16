@@ -65,8 +65,9 @@ gm_seed_landmarks = {
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
-# proves wrong, or a Grand Monument already standing there (create_building
-# would keep the larger level), places nothing and says so in debug.log.
+# proves wrong, or this landmark already standing there, places nothing and
+# says so in debug.log; a part with another monument in it takes this one
+# beside it (gm_seed_landmark_beside).
 gm_seed_landmark = {
 	if = {
 		limit = {
@@ -96,8 +97,24 @@ gm_seed_landmark = {
 			owner = { trigger_event = { id = monument_events.20 } }
 		}
 	}
+	# A monument already stands in that part (a landmark seeded before this
+	# one): the engine has one building a state, so this one stands beside it
+	# as a secondary monument, its levels on the same building
+	# (gm_monument_effects.txt). Not when this landmark already stands there:
+	# the debug event runs the seeding again.
+	else_if = {
+		limit = {
+			s:$STATE$.region_state:$TAG$ ?= {
+				has_building = building_grand_monument
+				NOT = { gm_state_has_landmark = { KEY = $KEY$ } }
+			}
+		}
+		s:$STATE$.region_state:$TAG$ = {
+			gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ }
+		}
+	}
 	else = {
-		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or a Grand Monument already stands there"
+		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or it already stands there"
 	}
 }
 
@@ -158,6 +175,41 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = xanthos }
 	gm_debug_log_landmark = { KEY = mesha_stele }
 	gm_debug_log_landmark = { KEY = arch_of_ctesiphon }
+	gm_debug_log_landmark = { KEY = nineveh_library }
+	gm_debug_log_landmark = { KEY = winged_victory_of_samothrace }
+	gm_debug_log_landmark = { KEY = vindolanda_tablets }
+	gm_debug_log_landmark = { KEY = troy_hisarlik }
+	gm_debug_log_landmark = { KEY = mycenae_grave_circle }
+	gm_debug_log_landmark = { KEY = pergamon_altar }
+	gm_debug_log_landmark = { KEY = deir_el_bahari_cache }
+	gm_debug_log_landmark = { KEY = ishtar_gate_babylon }
+	gm_debug_log_landmark = { KEY = palace_of_knossos }
+	gm_debug_log_landmark = { KEY = antikythera_mechanism }
+	gm_debug_log_landmark = { KEY = oseberg_ship }
+	gm_debug_log_landmark = { KEY = machu_picchu }
+	gm_debug_log_landmark = { KEY = bust_of_nefertiti }
+	gm_debug_log_landmark = { KEY = mohenjo_daro }
+	gm_debug_log_landmark = { KEY = tomb_of_tutankhamun }
+	gm_debug_log_landmark = { KEY = royal_cemetery_at_ur }
+	gm_debug_log_landmark = { KEY = sanxingdui_pits }
+	gm_debug_log_landmark = { KEY = sutton_hoo }
+	gm_debug_log_landmark = { KEY = lascaux_caves }
+	gm_debug_log_landmark = { KEY = nag_hammadi_library }
+	gm_debug_log_landmark = { KEY = dead_sea_scrolls }
+	gm_debug_log_landmark = { KEY = tomb_of_pakal }
+	gm_debug_log_landmark = { KEY = mawangdui_tombs }
+	gm_debug_log_landmark = { KEY = terracotta_army }
+	gm_debug_log_landmark = { KEY = tomb_of_philip_ii }
+	gm_debug_log_landmark = { KEY = tomb_of_marquis_yi }
+	gm_debug_log_landmark = { KEY = royal_tombs_of_sipan }
+	gm_debug_log_landmark = { KEY = otzi_the_iceman }
+	gm_debug_log_landmark = { KEY = caral_supe }
+	gm_debug_log_landmark = { KEY = gobekli_tepe }
+	gm_debug_log_landmark = { KEY = olympia }
+	gm_debug_log_landmark = { KEY = delphi }
+	gm_debug_log_landmark = { KEY = sidon_necropolis }
+	gm_debug_log_landmark = { KEY = villa_of_the_papyri }
+	gm_debug_log_landmark = { KEY = tomb_of_alexander }
 }
 
 gm_debug_log_landmark = {

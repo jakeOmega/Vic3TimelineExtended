@@ -422,7 +422,14 @@ gm_sum_standing = {
 	value = 0
 	every_scope_state = {
 		limit = { gm_state_counts_standing = yes }
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
+	}
+	# Every secondary monument stands whatever its state's primary is
+	# (gm_monument_values.txt): a contested crown monument does not take the
+	# marbles returned beside it.
+	every_scope_state = {
+		limit = { has_building = building_grand_monument }
+		add = gm_state_secondary_grandeur
 	}
 	add = gm_tr_disp_held_grandeur
 }
@@ -438,7 +445,7 @@ gm_sum_regime = {
 				gm_state_kind_ruler = yes
 			}
 		}
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
 	}
 }
 
@@ -450,7 +457,7 @@ gm_sum_leader = {
 			gm_state_status_fits = yes
 			gm_state_has_pm = { PM = pm_monument_leader }
 		}
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
 	}
 }
 
@@ -461,7 +468,7 @@ gm_sum_religious = {
 			gm_state_status_fits = yes
 			gm_state_has_pm = { PM = pm_monument_religious }
 		}
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
 	}
 }
 
@@ -472,7 +479,7 @@ gm_sum_war_memorial = {
 			gm_state_status_fits = yes
 			gm_state_has_pm = { PM = pm_monument_war_memorial }
 		}
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
 	}
 }
 
@@ -483,7 +490,7 @@ gm_sum_artistic = {
 			gm_state_status_fits = yes
 			gm_state_has_pm = { PM = pm_monument_artistic }
 		}
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
 	}
 }
 
@@ -494,7 +501,7 @@ gm_sum_scientific = {
 			gm_state_status_fits = yes
 			gm_state_has_pm = { PM = pm_monument_scientific }
 		}
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
 	}
 }
 
@@ -505,7 +512,7 @@ gm_sum_industrial = {
 			gm_state_status_fits = yes
 			gm_state_has_pm = { PM = pm_monument_industrial }
 		}
-		add = gm_state_grandeur
+		add = gm_state_primary_grandeur
 	}
 }
 
@@ -547,7 +554,7 @@ gm_display_contested = {
 # State scope. What Rededicate costs: 500 a level (v2 §1: v1's 5,000, cut with the
 # construction price).
 gm_state_rededicate_cost = {
-	value = gm_state_grandeur
+	value = gm_state_primary_grandeur
 	multiply = 500
 }
 

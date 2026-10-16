@@ -1,0 +1,221 @@
+﻿### Grand Monument archaeology (docs/superpowers/specs/2026-10-14-grand-monument-
+### archaeology-design.md, issue #939). Types only, composed elsewhere:
+###   te_gm_sec_archaeology   the journal entry's Archaeological Expeditions
+###     section, in te_gm_status_sections
+###     (journal_entry_widgets/grand_monuments_widget.gui) after the opportunity
+### A site is a script container (gm_archaeology_effects.txt): its rows come from
+### the country's gm_arch_digging and gm_arch_available lists, rebuilt by the
+### monthly pass and after every order, each item under
+### datacontext = "[Scope.GetScriptContainer]". It names itself through the
+### container custom localization in gm_trophy_custom_loc.txt
+### (gm_tr_landmark_name), which a site shares with a trophy's records.
+###
+### EDITING RULES (as grand_monuments_widget.gui's)
+### * Numbers come from ScriptValue reads: the country's gm_arch_disp_* and the
+###   container's (gm_archaeology_values.txt), every one guarded.
+### * Buttons pass the row's site as gm_arch, and are shown by their scripted
+###   GUI's is_shown (gm_archaeology_sguis.txt).
+### * The collapse flag says its default: *_closed sections are open until
+###   closed.
+
+types gm_archaeology_widget_types
+{
+	### A line of a site's row, the panel's width.
+	type gm_arch_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+	}
+
+	### A row's button: its scripted GUI, tooltip and label from the instance,
+	### its site as gm_arch. Three of these fit a row (3 x 150 + 2 x 8 = 466).
+	type gm_arch_button = button {
+		using = default_button_action
+		size = { 150 26 }
+		margin_top = 2
+
+		block "arch_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 140
+			elide = right
+			using = fontsize_small
+			block "arch_button_text" {}
+		}
+	}
+
+	### A site we may dig: its name, where and what it raises, what is done if
+	### a dig was suspended, and a launch button for each method whose
+	### technology we have.
+	type gm_arch_row_open = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		gm_arch_line = {
+			using = fontsize_large
+			text = "gm_arch_row_title"
+		}
+		gm_arch_line = {
+			text = "gm_arch_row_open_detail"
+		}
+		gm_arch_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress'), '(CFixedPoint)0' )]"
+			text = "gm_arch_row_resume"
+		}
+		gm_arch_line = {
+			default_format = "#tooltippable"
+			tooltip = "gm_tr_row_landmark_tt"
+			text = "gm_row_landmark"
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
+			margin_top = 2
+
+			gm_arch_button = {
+				blockoverride "arch_button" {
+					datacontext = "[GetScriptedGui('gm_arch_launch_antiquarian_sgui')]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					tooltip = "gm_arch_launch_antiquarian_tooltip"
+				}
+				blockoverride "arch_button_text" {
+					text = "gm_arch_launch_antiquarian"
+				}
+			}
+			gm_arch_button = {
+				blockoverride "arch_button" {
+					datacontext = "[GetScriptedGui('gm_arch_launch_systematic_sgui')]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					tooltip = "gm_arch_launch_systematic_tooltip"
+				}
+				blockoverride "arch_button_text" {
+					text = "gm_arch_launch_systematic"
+				}
+			}
+			gm_arch_button = {
+				blockoverride "arch_button" {
+					datacontext = "[GetScriptedGui('gm_arch_launch_forensic_sgui')]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					tooltip = "gm_arch_launch_forensic_tooltip"
+				}
+				blockoverride "arch_button_text" {
+					text = "gm_arch_launch_forensic"
+				}
+			}
+		}
+	}
+
+	### A dig we run: its name, its method, how far it has come, and Suspend.
+	type gm_arch_row_digging = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		gm_arch_line = {
+			using = fontsize_large
+			text = "gm_arch_row_title"
+		}
+		gm_arch_line = {
+			text = "gm_arch_row_dig_detail"
+		}
+		gm_arch_line = {
+			default_format = "#tooltippable"
+			tooltip = "gm_tr_row_landmark_tt"
+			text = "gm_row_landmark"
+		}
+
+		gm_arch_button = {
+			blockoverride "arch_button" {
+				datacontext = "[GetScriptedGui('gm_arch_suspend_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+				tooltip = "gm_arch_suspend_tooltip"
+			}
+			blockoverride "arch_button_text" {
+				text = "gm_arch_suspend"
+			}
+		}
+	}
+
+	### Archaeological Expeditions (open): shown while a dig runs or a site
+	### waits for us. Digs first, then the sites open to us.
+	type te_gm_sec_archaeology = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_shown'), '(CFixedPoint)1' )]"
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_archaeology_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_arch_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_arch_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_arch_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_arch_closed'))]"
+			spacing = 2
+
+			gm_text = {
+				default_format = "#tooltippable"
+				tooltip = "gm_je_arch_summary_tt"
+				text = "gm_je_arch_summary"
+			}
+			gm_text = {
+				visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_dig_count'), '(CFixedPoint)0' )]"
+				default_format = "#tooltippable"
+				tooltip = "gm_je_arch_costs_tt"
+				text = "gm_je_arch_costs"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				margin_top = 4
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_arch_digging')]"
+
+				item = {
+					gm_arch_row_digging = { datacontext = "[Scope.GetScriptContainer]" }
+				}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				margin_top = 4
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_arch_available')]"
+
+				item = {
+					gm_arch_row_open = { datacontext = "[Scope.GetScriptContainer]" }
+				}
+			}
+		}
+	}
+}

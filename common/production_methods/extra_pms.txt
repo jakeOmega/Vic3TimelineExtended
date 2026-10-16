@@ -10799,6 +10799,7 @@ pm_civil_highway = {
 			state_max_trade_advantage_from_capacity_add = 0.05
 			goods_output_transportation_mult = 0.1
 			state_migration_crowding_density_mult = 0.1
+			goods_output_tourism_mult = 0.05
 			building_economy_of_scale_level_cap_add = 5
 		}
 	}
@@ -10840,6 +10841,7 @@ pm_industrial_highway = {
 			state_infrastructure_add = 25
 			state_max_trade_advantage_from_capacity_add = 0.05
 			state_trade_capacity_mult = 0.2
+			goods_output_tourism_mult = 0.025
 			building_economy_of_scale_level_cap_add = 5
 		}
 	}
@@ -10909,6 +10911,7 @@ pm_electric_civil_highway = {
 			state_max_trade_advantage_from_capacity_add = 0.05
 			goods_output_transportation_mult = 0.1
 			state_migration_crowding_density_mult = 0.1
+			goods_output_tourism_mult = 0.05
 			building_economy_of_scale_level_cap_add = 5
 		}
 	}
@@ -10954,6 +10957,7 @@ pm_electric_industrial_highway = {
 			state_infrastructure_from_automobiles_consumption_add = 0.25
 			state_trade_capacity_mult = 0.2
 			state_max_trade_advantage_from_capacity_add = 0.05
+			goods_output_tourism_mult = 0.025
 			building_economy_of_scale_level_cap_add = 5
 		}
 	}
@@ -11002,6 +11006,7 @@ pm_autonomous_highway = {
 			state_trade_capacity_mult = 0.2
 			goods_output_transportation_mult = 0.1
 			state_migration_crowding_density_mult = 0.1
+			goods_output_tourism_mult = 0.05
 			building_economy_of_scale_level_cap_add = 5
 		}
 	}

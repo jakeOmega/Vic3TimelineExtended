@@ -3924,6 +3924,17 @@ in `docs/data/tech_modifier_polarity.yml`, check vanilla's color annotation
 first; use it as the default and only override when the mod's design
 intent inverts vanilla's frame.
 
+A name that says "reduction" does not make a positive value a reduction.
+`state_pollution_reduction_health_mult` ("Pollution Health Effects
+Reduction") is `color = bad`: **negative protects**, as in vanilla's health
+laws (−0.1 / −0.15) and technology (−0.1). The Environmental Sustainability
+principles (tiers III–V) and the Green Movement boon shipped it positive and so
+raised pollution's health effects, in red. Engine-silent; read the sign off
+the vanilla uses before copying a modifier's name's meaning.
+`test_pollution_health_polarity.py` guards the mod's protective sources. The
+health-law INJECTs in `modified_health_system.txt` are positive on purpose:
+they cancel vanilla's negative lines.
+
 ### Adding Technology Progress From Script
 
 Probed in game on 2026-10-06 (`te_debug_covert.6`–`.10` on the throwaway branch `probe/tech-progress`):

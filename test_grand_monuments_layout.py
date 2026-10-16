@@ -23,8 +23,9 @@ CONCEPT_LOC = os.path.join(REPO, "localization", "english", "te_concepts_l_engli
 
 # Trophies and Held Abroad are types in gui/gm_trophy_widgets.gui
 # (test_grand_monument_trophies.py holds their flags and gates).
-STATUS = ["te_gm_sec_commission", "te_gm_sec_national", "te_gm_sec_monuments", "te_gm_sec_trophies",
-          "te_gm_sec_abroad"]
+# Archaeological Expeditions is a type in gui/gm_archaeology_widgets.gui.
+STATUS = ["te_gm_sec_commission", "te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_monuments",
+          "te_gm_sec_trophies", "te_gm_sec_abroad"]
 REFERENCE = ["te_gm_sec_how"]
 # root -> (container, what it wraps)
 ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_panel"),
@@ -753,7 +754,12 @@ class StateCardTest(unittest.TestCase):
                            r"blockoverride \"status_texture\" \{ texture = \"([^\"]+)\" \}", self.flat)
         self.assertEqual({int(c): t for c, _, t in found}, {k: v for k, v in ICONS.items() if isinstance(k, int)})
         # The three hidden ones take no room.
-        self.assertIn("container = { flowcontainer = { direction = horizontal ignoreinvisible = yes ", self.flat)
+        # The picture and details are a horizontal row in a vertical flow that
+        # carries the margin, width and background, so the monuments standing
+        # beside this one (te_state_gm_beside) can span the card under them.
+        self.assertIn("container = { flowcontainer = { direction = vertical ignoreinvisible = yes margin = { 10 8 } "
+                      "spacing = 8 minimumsize = { 530 -1 } background = { using = entry_bg_simple } "
+                      "flowcontainer = { direction = horizontal ignoreinvisible = yes spacing = 10 ", self.flat)
         row = _squash(_type_body(_gui(), "gm_monument_row"))
         for code, tooltip, _ in found:
             self.assertIn(f"'(CFixedPoint){code}' )]\" tooltip = \"{tooltip}\"", row, "the row's tooltip")

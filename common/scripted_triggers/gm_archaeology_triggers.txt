@@ -1,0 +1,124 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — archaeology: scripted triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939).
+# A buried site is a script container tagged gm_site (gm_archaeology_effects.txt).
+# Its records, under the names a returned trophy's carry so the container
+# custom localization names it (gm_trophy_custom_loc.txt) and the monument
+# machinery places it unchanged (gm_monument_effects.txt):
+#   gm_tr_landmark, gm_tr_skin, gm_tr_form, gm_tr_levels, gm_tr_dedication,
+#   gm_tr_namesake, gm_tr_share, gm_tr_origin_region   the monument it will be
+#   gm_site_tech, gm_site_vector                       what opens it (below)
+#   gm_site_status                                     1 buried, 2 known,
+#                                                      3 being dug, 4 unearthed
+#   gm_site_sponsor, gm_site_method, gm_site_progress  the dig
+# The technology gate (gm_arch_has_gate_for) is in gm_archaeology_gate_triggers.txt: one branch
+# for each technology the table uses, kept in step with it by test_grand_monument_archaeology.py.
+
+# ---- What a site is -----------------------------------------------------------------
+# Container scope. A survey site is open to anyone with its technology as soon
+# as it is buried; an incidental one only once it has been turned up (status 2),
+# which a monthly chance does (gm_arch_site_monthly). Neither while it is dug.
+gm_arch_site_open = {
+	has_variable = gm_site_status
+	OR = {
+		var:gm_site_status = 2
+		AND = {
+			var:gm_site_status = 1
+			var:gm_site_vector = flag:survey
+		}
+	}
+}
+
+# Container scope. Being dug now.
+gm_arch_site_digging = {
+	has_variable = gm_site_status
+	var:gm_site_status = 3
+}
+
+# Container scope. $WHO$ is the country digging it.
+gm_arch_digs_for = {
+	gm_arch_site_digging = yes
+	var:gm_site_sponsor ?= { this = $WHO$ }
+}
+
+# ---- Who may dig ----------------------------------------------------------------------------
+# Container scope. $WHO$ (a country) holds a part of the ground the site lies
+# under. Foreign digs, by concession, are a later step (spec § Deferred).
+gm_arch_owns_ground = {
+	var:gm_tr_origin_region ?= {
+		any_scope_state = { owner = $WHO$ }
+	}
+}
+
+# Container scope. The site's own conditions for $WHO$: open, on its ground,
+# and its technology in hand. The methods add their own (below).
+gm_arch_can_dig = {
+	gm_system_enabled = yes
+	has_tag = gm_site
+	gm_arch_site_open = yes
+	gm_arch_owns_ground = { WHO = $WHO$ }
+	gm_arch_has_gate_for = { WHO = $WHO$ }
+}
+
+# The same, for a tooltip: each condition on its own line.
+gm_arch_can_dig_tt = {
+	custom_tooltip = {
+		text = gm_arch_dig_open_tt
+		gm_arch_site_open = yes
+	}
+	custom_tooltip = {
+		text = gm_arch_dig_ground_tt
+		gm_arch_owns_ground = { WHO = $WHO$ }
+	}
+	custom_tooltip = {
+		text = gm_arch_dig_tech_tt
+		gm_arch_has_gate_for = { WHO = $WHO$ }
+	}
+}
+
+# ---- The three methods (spec § Methods) -----------------------------------------------------
+# Country scope. Antiquarian & Dynamite needs Romanticism, Systematic
+# Stratigraphy Empiricism, Forensic & Remote Sensing Computer Networks.
+gm_arch_method_antiquarian_ok = {
+	has_technology_researched = romanticism
+}
+
+gm_arch_method_systematic_ok = {
+	has_technology_researched = empiricism
+}
+
+gm_arch_method_forensic_ok = {
+	has_technology_researched = computer_networks
+}
+
+# ---- A country's side -------------------------------------------------------------------------
+# Country scope. It digs, or a site waits for it (gm_arch_pass writes the
+# counts): the journal entry stays for either.
+gm_arch_country_has_any = {
+	OR = {
+		AND = {
+			has_variable = gm_arch_dig_count
+			var:gm_arch_dig_count > 0
+		}
+		AND = {
+			has_variable = gm_arch_open_count
+			var:gm_arch_open_count > 0
+		}
+	}
+}
+
+# Country scope. Nothing dug, nothing waiting, no cost or drain still on.
+# Part of gm_ledgers_idle.
+gm_arch_country_idle = {
+	gm_arch_country_has_any = no
+}
+
+# ---- The AI -------------------------------------------------------------------------------------
+# Country scope. An AI digs only at peace and out of default, with at most two
+# digs going (gm_arch_ai_decide).
+gm_arch_ai_may_dig = {
+	is_ai = yes
+	is_at_war = no
+	in_default = no
+}

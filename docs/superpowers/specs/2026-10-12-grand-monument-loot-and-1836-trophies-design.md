@@ -172,7 +172,7 @@ Each state has one owner in 1836, so none is exposed to #936.
 
 - **Still buried in 1836:** the Pergamon Altar (1878), Priam's Treasure (1873), the Sidon sarcophagi (1855, 1887),
   Nineveh's and Nimrud's reliefs (1840s). The Siloam inscription (1880) lay in Hezekiah's tunnel under Jerusalem.
-  Monuments uncovered during the game are issue #939.
+  Monuments uncovered during the game are issue #939, built as `2026-10-14-grand-monument-archaeology-design.md`.
 - **Standing but unknown to Europe in 1836:** the Nereid Monument at Xanthos (1838) and the Mesha Stele at Dhiban
   (1868). Both added under the revised rule (§1.3).
 - **Palmyra:** like Great Zimbabwe, its weight in 1836 was legend and travellers' romance (Lady Hester Stanhope, 1813),
@@ -281,8 +281,24 @@ added after §1.1's three, 1,000,043.
 | 43 | `royal_palace_of_kandy` | Royal Palace of Kandy | Hall | Generic · Hall |
 
 "One per state" counts placed rows only: the Dendera Zodiac and the Luxor Obelisk come from Upper Egypt, where the
-Obelisks of Karnak stand. A trophy that goes home to a state with a monument adds its levels to it, as the Quadriga goes
-back on the Gate.
+Obelisks of Karnak stand. **Superseded 2026-10-13** (`2026-10-13-multiple-monuments-per-state-design.md` §4.1): a
+trophy that goes home to a state with a monument adds its levels to it only when it is a *piece of that monument* (the
+Quadriga goes back on the Gate, the Marbles on the Parthenon). Anything else stays a monument of its own beside the
+one standing, on the state's one building: the Luxor Obelisk and the Dendera Zodiac in Upper Egypt, the Piraeus Lion
+in Attica, the Horses of Saint Mark in Eastern Thrace. It is the same container, retagged `gm_monument`, and keeps its
+name, form, landmark, picture and dedication.
+
+### 2.2.1 Landmarks placed beside another (2026-10-13)
+
+A second *placed* landmark in a state (a row with `beside=True` in `LANDMARKS`, after the state's first row) is
+seeded by the same `gm_seed_landmark` call. Where a monument already stands in the part, the call stands it beside
+that one (`gm_seed_landmark_beside`, `gm_monument_effects.txt`): a secondary monument whose levels go on the state's
+building, which keeps the first one's dedication. A landmark already standing there is not placed again, so the
+debug event can run twice. No row uses it yet. The next candidates are Rome (the Colosseum and the Roman Forum beside
+the Capitoline Museums), Beijing (the Forbidden City and the Old Summer Palace beside the Temple of Heaven) and Athens
+(the Panathenaic Stadium beside the Parthenon). Each is an ordinary landmark row first: key, state, owner, dedication,
+form, stand-in picture and level, with the name, history line and picture branch the registry's failures list; then
+`beside=True`.
 
 ### 2.3 Seeding
 

@@ -164,7 +164,7 @@ Plus:
 - **Migration crowding** — density-based (`state_population / arable_land`) reduction in migration pull, scaled quadratically up to a 10× density knee then linearly. Counter-modifier `state_migration_crowding_density_mult` from `institution_ministry_of_urban_planning`.
 - **Dynamic homelands** — monthly progress bars that create / remove homelands based on primary-culture status and population thresholds, with live blocker explanations in the state panel.
 - **Cultural acceptance** — extended yearly cultural-acceptance accumulation tied to homeland status and policies.
-- **Tourism** — per-state tourism modifier scaled by city ranks, ports, transit, art production, parks, and monuments. ~3000 lines of state-region script values in `common/script_values/tourism.txt`. Re-applied via `on_yearly_pulse_state`.
+- **Tourism** — per-state tourism modifier scaled by city ranks, excess infrastructure, art production, parks, and monuments. ~3000 lines of state-region script values in `common/script_values/tourism.txt`. Re-applied via `on_monthly_pulse_state`.
 - **City rank tiering** — city tier updates monthly, used in tourism and cultural displays.
 - **Pop ideology / IG-feminism** — `apply_ideologies.py` regenerates `common/ideologies/modified.txt` from `ideology_modifications.py`; `ig_feminism.py` regenerates `common/interest_groups/zz_te_ig_female_chance.txt`, which INJECTs higher female commander/politician/agitator chances into vanilla's interest groups.
 

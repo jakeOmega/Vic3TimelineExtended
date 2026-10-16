@@ -150,6 +150,27 @@
  amendment_petition_events.9.t:0 "Those Who Speak Up"
 
 #
+# ARCH_EVENTS
+#
+ arch_events.1.a:0 "Open a Systematic dig"
+ arch_events.1.b:0 "Open an Antiquarian dig"
+ arch_events.1.c:0 "Seal the site for now"
+ arch_events.1.c.tt:0 "The site waits among our Archaeological Expeditions, open to a dig at any time"
+ arch_events.1.d:0 "A plough, a railway cutting or a hiker has turned up what antiquarians believe is [ROOT.GetCountry.GetCustom('gm_arch_site_name')]. The scholars of the capital ask for the ground to be opened properly, before the finders open it for us."
+ arch_events.1.f:0 "Every dig takes scholars from the universities and money from the treasury, and what it finds stands where it was found."
+ arch_events.1.t:0 "Something Under the Spade"
+ arch_events.2.a:0 "A great day for scholarship"
+ arch_events.2.a.tt:0 "The monument is standing, with its row in our Grand Monuments"
+ arch_events.2.d:0 "After months in the field, the excavation has uncovered [ROOT.GetCountry.GetCustom('gm_arch_site_name')]. It stands now as a monument in our land, and its levels count toward our [concept_grandeur]."
+ arch_events.2.f:0 "The scholars who dug it have gone home, and the visitors have begun to arrive."
+ arch_events.2.t:0 "An Excavation Is Finished"
+ arch_events.3.a:0 "A pity"
+ arch_events.3.a.tt:0 "The monument is standing, with half the levels it would have had"
+ arch_events.3.d:0 "The dig on [ROOT.GetCountry.GetCustom('gm_arch_site_name')] was quick, and too quick: the diggers cleared walls and floors with dynamite and carted off the finds, and half of what the ground held was lost before anyone recorded it. What survived stands as a monument all the same."
+ arch_events.3.f:0 "A later generation of archaeologists will read the spoil heaps for what was thrown away."
+ arch_events.3.t:0 "Stratigraphic Destruction"
+
+#
 # AUGMENTATION_EVENTS
 #
  augmentation_events.1.a:0 "Subsidize augmentation for all"
@@ -5365,6 +5386,17 @@
  te_debug_monuments.6.desc:0 "Carry off a monument as a trophy without a war, from another country or from our own states; return every trophy we hold; or run the monthly trophy pass now."
  te_debug_monuments.6.flavor:0 "Logging writes our trophies held and abroad, what they count for and the Homecoming's months to debug.log."
  te_debug_monuments.6.t:0 "Debug: Trophies"
+ te_debug_monuments.7.a:0 "Seed the buried sites and turn up every incidental one"
+ te_debug_monuments.7.a.tt:0 "Seeds the sites (never twice) and marks every incidental site known"
+ te_debug_monuments.7.b:0 "Dig the grandest open site by the best method"
+ te_debug_monuments.7.b.tt:0 "Starts the grandest site we may dig, by the best method we have"
+ te_debug_monuments.7.c:0 "Bring our digs to their last month and run the pass"
+ te_debug_monuments.7.c.tt:0 "Sets our digs to 99% and runs the monthly pass, which finishes them"
+ te_debug_monuments.7.d:0 "Run the pass and log the sites"
+ te_debug_monuments.7.d.tt:0 "Runs the monthly pass and logs every site that has moved on TE_MONUMENTS: lines"
+ te_debug_monuments.7.desc:0 "Seeds the buried sites, digs, finishes and logs them."
+ te_debug_monuments.7.flavor:0 "Console only: event te_debug_monuments.7"
+ te_debug_monuments.7.t:0 "Archaeology test"
 
 #
 # TE_DEBUG_NUCLEAR

@@ -1986,6 +1986,30 @@ types grand_monuments_widget_types
 					gm_monument_row = { datacontext = "[Scope.GetState]" }
 				}
 			}
+
+			### The monuments that stand beside a state's primary one
+			### (gm_monuments_held, the monthly pass): a row each, under the
+			### states', with where it stands. A trophy's container still, so
+			### the trophy row's picture and title serve it
+			### (gui/gm_trophy_widgets.gui).
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				margin_top = 10
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_monuments_held')]"
+
+				item = {
+					gm_mon_row_site = {
+						datacontext = "[Scope.GetScriptContainer]"
+						blockoverride "mon_where" {
+							gm_tr_line = {
+								text = "gm_mon_row_where"
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -2112,6 +2136,9 @@ types grand_monuments_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_gm_sec_commission = {}
+		# Archaeological Expeditions (gui/gm_archaeology_widgets.gui): the digs we
+		# run and the sites open to us.
+		te_gm_sec_archaeology = {}
 		te_gm_sec_national = {}
 		te_gm_sec_monuments = {}
 		# Trophies (gui/gm_trophy_widgets.gui): ours, and ours held abroad.

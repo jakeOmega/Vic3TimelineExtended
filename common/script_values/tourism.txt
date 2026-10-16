@@ -2743,66 +2743,29 @@ tourism_bonus_from_urban_centers = {
 # --- INDIVIDUAL TOURISM THROUGHPUT MODIFIERS ---
 
 
-# Tiered bonus from Ports
-tourism_throughput_from_ports = {
-	value = 0
-	if = {
-		limit = { has_building = building_port }
-		add = {
-			value = b:building_port.level
-			max = 100
-			multiply = 0.002
-		}
-		if = {
-			limit = { b:building_port.level > 100 }
-			add = {
-				value = b:building_port.level
-				subtract = 100
-				max = 400
-				multiply = 0.0004
-			}
-		}
-	}
+# Infrastructure the state has to spare: what it produces less what its
+# buildings use (vanilla's state_infrastructure_balance, which goes negative
+# when usage outruns supply), floored at 0. Visitors need roads, rails and
+# harbours the state's own economy is not already using.
+tourism_excess_infrastructure = {
+	value = state_infrastructure_balance
+	min = 0
 }
 
-# Tiered bonus from land transport infrastructure
-tourism_throughput_from_land_transport = {
-	value = 0
-	# Railways
-	if = {
-		limit = { has_building = building_railway }
-		add = {
-			value = b:building_railway.level
-			max = 100
-			multiply = 0.001
-		}
-		if = {
-			limit = { b:building_railway.level > 100 }
-			add = {
-				value = b:building_railway.level
-				subtract = 100
-				max = 400
-				multiply = 0.0002
-			}
-		}
-	}
-	# Highways
-	if = {
-		limit = { has_building = building_highway }
-		add = {
-			value = b:building_highway.level
-			max = 100
-			multiply = 0.001
-		}
-		if = {
-			limit = { b:building_highway.level > 100 }
-			add = {
-				value = b:building_highway.level
-				subtract = 100
-				max = 400
-				multiply = 0.0002
-			}
-		}
+# Bonus from excess infrastructure, replacing the old per-level Port, Railway
+# and Highway tiers (which maxed at +36% for ports and +18% for each of
+# railways and highways). Diminishing returns: every point adds less than the
+# one before, and the bonus approaches +100% without reaching it. At 30,000
+# excess infrastructure it is half of that, +50%.
+#   bonus = excess / (excess + 30000)
+# The 30000 is the owner's figure; it has not been measured against a
+# late-game save. Keep it in step with te_state_tourism_infrastructure_tt and
+# tourism_fill_infrastructure_pct.
+tourism_throughput_from_infrastructure = {
+	value = tourism_excess_infrastructure
+	divide = {
+		value = tourism_excess_infrastructure
+		add = 30000
 	}
 }
 
@@ -2893,8 +2856,7 @@ total_tourism_output_bonus_percent = {
 }
 
 total_tourism_throughput_bonus_percent = {
-	value = tourism_throughput_from_ports
-	add = tourism_throughput_from_land_transport
+	value = tourism_throughput_from_infrastructure
 	add = tourism_throughput_from_art
 	add = tourism_throughput_from_parks
 	add = tourism_throughput_from_monuments
@@ -2924,19 +2886,11 @@ tourism_fill_urban_centers_pct = {
 	max = 100
 }
 
-# Cap +36%: 100 levels x 0.2% + 400 levels x 0.04%.
-tourism_fill_ports_pct = {
-	value = tourism_throughput_from_ports
-	divide = 0.36
-	multiply = 100
-	min = 0
-	max = 100
-}
-
-# Cap +36%: railways and highways, each 100 levels x 0.1% + 400 levels x 0.02%.
-tourism_fill_land_transport_pct = {
-	value = tourism_throughput_from_land_transport
-	divide = 0.36
+# Ceiling +100%, which excess infrastructure approaches but never reaches
+# (tourism_throughput_from_infrastructure). The bar is half full at 30,000
+# excess infrastructure.
+tourism_fill_infrastructure_pct = {
+	value = tourism_throughput_from_infrastructure
 	multiply = 100
 	min = 0
 	max = 100

@@ -152,10 +152,7 @@ concept_tourism_throughput = {
 concept_tourism_cities = {
 	texture = "gfx/interface/icons/building_icons/urban_center.dds"
 }
-concept_tourism_ports = {
-	texture = "gfx/interface/icons/building_icons/building_port.dds"
-}
-concept_tourism_transit = {
+concept_tourism_infrastructure = {
 	texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
 }
 concept_tourism_art = {

@@ -449,6 +449,8 @@ gm_ledgers_idle = {
 	gm_boons_idle = yes
 	# No trophy held or abroad, no Homecoming (gm_trophy_triggers.txt).
 	gm_tr_country_idle = yes
+	# No dig running and no site waiting (gm_archaeology_triggers.txt).
+	gm_arch_country_idle = yes
 }
 
 # ======================================================================
