@@ -63,6 +63,14 @@ site did not seed).
 | **Stratigraphic Destruction.** Dig a 10-level site Antiquarian several times (debug a, b, c). | About one in three comes out at 5 levels with *Stratigraphic Destruction*. | |
 | **A looted find.** Occupy a state with a dug site. | Carry It Off offers its piece by name ("Troy — Priam's Treasure"). | The generic part name: `gm_tr_part_name`. |
 
+## Pompeii
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1836.** Play the Two Sicilies; wait a month. | Pompeii is a dig in Archaeological Expeditions: "an Antiquarian dig, 33% done" or so, £300 a week, Suspend Dig. The Budget shows it. | Not there: the seeding's `excavating` branch (`gm_arch_seed_dig`). |
+| **An old save.** Load a save made before Pompeii was added. | A month later Pompeii is a dig of Campania's owner. | `gm_arch_seed_round`. |
+| **Restart.** With Empiricism, suspend and press Systematic. | The dig restarts at its progress, slower and dearer. | |
+
 ## Costs and time
 
 | Check | Expect | If it fails |

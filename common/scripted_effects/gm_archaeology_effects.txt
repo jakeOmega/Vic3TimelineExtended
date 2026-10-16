@@ -14,8 +14,10 @@
 # the monument machinery serve it unchanged, and the dig's own:
 #   gm_site_tech, gm_site_vector     what opens it: a technology (a flag, the
 #                                    hyphen an underscore) and `survey` (open as
-#                                    soon as its owner has the technology) or
+#                                    soon as its owner has the technology),
 #                                    `incidental` (turned up by a monthly chance)
+#                                    or `excavating` (a dig already under way when
+#                                    it is seeded, gm_arch_seed_dig: Pompeii)
 #   gm_site_status                   1 buried, 2 known, 3 being dug, 4 unearthed
 #   gm_site_sponsor, gm_site_method  who digs it, and how: `antiquarian`,
 #                                    `systematic` or `forensic`
@@ -51,8 +53,21 @@ gm_arch_monthly = {
 		if = {
 			limit = { NOT = { has_global_variable = gm_arch_seeded } }
 			set_global_variable = gm_arch_seeded
+			set_global_variable = { name = gm_arch_seed_round value = gm_arch_seed_rounds }
 			gm_arch_seed_sites = yes
 			gm_arch_self_check = yes
+		}
+		# A site added since a game was seeded is seeded the next month: the
+		# seeding makes no site twice (gm_arch_seed_site), so running it again
+		# adds only the new rows. Pompeii is round 2 (2026-10-16).
+		if = {
+			limit = { NOT = { has_global_variable = gm_arch_seed_round } }
+			set_global_variable = { name = gm_arch_seed_round value = 1 }
+		}
+		if = {
+			limit = { global_var:gm_arch_seed_round < gm_arch_seed_rounds }
+			set_global_variable = { name = gm_arch_seed_round value = gm_arch_seed_rounds }
+			gm_arch_seed_sites = yes
 		}
 		if = {
 			limit = { has_global_variable_list = gm_arch_sites }
@@ -124,6 +139,7 @@ gm_arch_seed_sites = {
 	gm_arch_seed_site = { KEY = sidon_necropolis STATE = STATE_LEBANON TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 5 }
 	gm_arch_seed_site = { KEY = villa_of_the_papyri STATE = STATE_CAMPANIA TECH = microprocessor VECTOR = survey FORM = hall LEVEL = 10 }
 	gm_arch_seed_site = { KEY = tomb_of_alexander STATE = STATE_LOWER_EGYPT TECH = mainframe_computers VECTOR = survey FORM = mausoleum LEVEL = 15 }
+	gm_arch_seed_site = { KEY = pompeii STATE = STATE_CAMPANIA TECH = romanticism VECTOR = excavating FORM = forum LEVEL = 15 }
 }
 
 # No scope, once a game after the seeding. The one engine fact nobody has seen
@@ -238,8 +254,38 @@ gm_arch_seed_site = {
 				set_variable = { name = gm_site_tech value = flag:$TECH$ }
 				set_variable = { name = gm_site_vector value = flag:$VECTOR$ }
 				set_variable = { name = gm_site_status value = 1 }
+				# Being dug when the game begins (Pompeii): a dig already under way.
+				if = {
+					limit = { var:gm_site_vector = flag:excavating }
+					gm_arch_seed_dig = yes
+				}
 			}
 		}
+	}
+}
+
+# Container scope, a site just seeded with VECTOR = excavating: being dug when
+# the game begins, as Pompeii was from 1748. The owner of its ground digs it by
+# the Antiquarian method, part done (gm_arch_excavating_progress), and pays for
+# it from the first month; it may suspend it or, with Empiricism, start it again
+# by Systematic Stratigraphy, keeping the progress. With no owner, it waits as a
+# known site with the progress made.
+gm_arch_seed_dig = {
+	clear_saved_scope = gm_arch_seed_sponsor
+	var:gm_tr_origin_region ?= {
+		random_scope_state = {
+			limit = { exists = owner }
+			owner = { save_scope_as = gm_arch_seed_sponsor }
+		}
+	}
+	set_variable = { name = gm_site_progress value = gm_arch_excavating_progress }
+	if = {
+		limit = { exists = scope:gm_arch_seed_sponsor }
+		set_variable = { name = gm_site_method value = flag:antiquarian }
+		gm_arch_begin_dig = { WHO = scope:gm_arch_seed_sponsor }
+	}
+	else = {
+		set_variable = { name = gm_site_status value = 2 }
 	}
 }
 
@@ -320,7 +366,7 @@ gm_arch_tell_found = {
 		clear_saved_scope = gm_arch_ev_survey
 		gm_arch_ev_mark = { STATE = $STATE$ }
 		if = {
-			limit = { var:gm_site_vector = flag:survey }
+			limit = { NOT = { var:gm_site_vector = flag:incidental } }
 			$STATE$ = { save_scope_as = gm_arch_ev_survey }
 		}
 		$WHO$ = { trigger_event = { id = arch_events.1 } }
@@ -723,6 +769,7 @@ gm_arch_ev_mark = {
 	clear_saved_scope = gm_arch_ev_sidon_necropolis
 	clear_saved_scope = gm_arch_ev_villa_of_the_papyri
 	clear_saved_scope = gm_arch_ev_tomb_of_alexander
+	clear_saved_scope = gm_arch_ev_pompeii
 	if = {
 		limit = { var:gm_tr_landmark = flag:nineveh_library }
 		$STATE$ = { save_scope_as = gm_arch_ev_nineveh_library }
@@ -862,6 +909,10 @@ gm_arch_ev_mark = {
 	else_if = {
 		limit = { var:gm_tr_landmark = flag:tomb_of_alexander }
 		$STATE$ = { save_scope_as = gm_arch_ev_tomb_of_alexander }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:pompeii }
+		$STATE$ = { save_scope_as = gm_arch_ev_pompeii }
 	}
 }
 

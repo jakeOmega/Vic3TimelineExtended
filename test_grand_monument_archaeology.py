@@ -83,6 +83,7 @@ ARCH_SITES = (
     Site("sidon_necropolis", "empiricism", "survey"),
     Site("villa_of_the_papyri", "microprocessor", "survey"),
     Site("tomb_of_alexander", "mainframe_computers", "survey"),
+    Site("pompeii", "romanticism", "excavating"),
 )
 BURIED = tuple(lm for lm in LANDMARKS if lm.buried)
 METHODS = {"antiquarian": ("romanticism", 4), "systematic": ("empiricism", 2.5), "forensic": ("computer_networks", 3.5)}
@@ -120,7 +121,7 @@ def seed_call(lm, site):
 class TableTests(unittest.TestCase):
     def test_a_row_for_every_buried_landmark_in_order(self):
         self.assertEqual([s.key for s in ARCH_SITES], [lm.key for lm in BURIED])
-        self.assertEqual(len(ARCH_SITES), 35)
+        self.assertEqual(len(ARCH_SITES), 36)
 
     def test_what_a_site_is(self):
         states, techs = state_regions(), technologies()
@@ -130,7 +131,7 @@ class TableTests(unittest.TestCase):
             self.assertFalse(lm.placed, lm.key)
             self.assertIn(lm.state, states, f"{lm.key}: a state region that exists")
             self.assertIn(site.tech, techs, f"{lm.key}: a technology that exists")
-            self.assertIn(site.vector, ("survey", "incidental"), lm.key)
+            self.assertIn(site.vector, ("survey", "incidental", "excavating"), lm.key)
             self.assertEqual(lm.dedication, "civic", f"{lm.key}: the antiquity and archive dedications are deferred")
             self.assertIsNone(lm.tag, lm.key)
 
@@ -197,7 +198,37 @@ class SeedTests(unittest.TestCase):
         body = squash(block(self.e, "gm_arch_monthly"))
         self.assertTrue(body.startswith("if = { limit = { gm_system_enabled = yes } if = { limit = { NOT = { "
                                         "has_global_variable = gm_arch_seeded } } set_global_variable = "
-                                        "gm_arch_seeded gm_arch_seed_sites = yes gm_arch_self_check = yes }"), body[:300])
+                                        "gm_arch_seeded set_global_variable = { name = gm_arch_seed_round value = "
+                                        "gm_arch_seed_rounds } gm_arch_seed_sites = yes gm_arch_self_check = yes }"),
+                        body[:300])
+
+    def test_a_site_added_later_is_seeded_in_a_game_already_seeded(self):
+        body = squash(block(self.e, "gm_arch_monthly"))
+        self.assertIn("if = { limit = { NOT = { has_global_variable = gm_arch_seed_round } } set_global_variable = { "
+                      "name = gm_arch_seed_round value = 1 } } if = { limit = { global_var:gm_arch_seed_round < "
+                      "gm_arch_seed_rounds } set_global_variable = { name = gm_arch_seed_round value = "
+                      "gm_arch_seed_rounds } gm_arch_seed_sites = yes }", body)
+        self.assertLess(body.index("gm_arch_self_check = yes"), body.index("global_var:gm_arch_seed_round <"),
+                        "the self-check stays once a game")
+        self.assertEqual(squash(block(read(VALUES), "gm_arch_seed_rounds")), "value = 2",
+                         "raise it with every row added to ARCH_SITES after a game may have been seeded")
+
+    def test_a_site_being_dug_in_1836_starts_as_a_dig(self):
+        excavating = [s.key for s in ARCH_SITES if s.vector == "excavating"]
+        self.assertEqual(excavating, ["pompeii"])
+        seed = squash(block(self.e, "gm_arch_seed_site"))
+        self.assertIn("limit = { var:gm_site_vector = flag:excavating } gm_arch_seed_dig = yes", seed)
+        self.assertLess(seed.index("name = gm_site_status value = 1"), seed.index("gm_arch_seed_dig = yes"))
+        dig = squash(block(self.e, "gm_arch_seed_dig"))
+        self.assertIn("random_scope_state = { limit = { exists = owner } owner = { save_scope_as = gm_arch_seed_sponsor } }",
+                      dig, "the owner of its ground digs it")
+        self.assertIn("set_variable = { name = gm_site_progress value = gm_arch_excavating_progress }", dig)
+        self.assertIn("set_variable = { name = gm_site_method value = flag:antiquarian } "
+                      "gm_arch_begin_dig = { WHO = scope:gm_arch_seed_sponsor }", dig)
+        self.assertIn("else = { set_variable = { name = gm_site_status value = 2 } }", dig, "with no owner, known")
+        self.assertLess(dig.index("gm_site_progress value"), dig.index("gm_arch_begin_dig"),
+                        "the progress is set first, so the dig keeps it")
+        self.assertEqual(squash(block(read(VALUES), "gm_arch_excavating_progress")), "value = 30")
         on = squash(strip_comments(read(ON_ACTIONS)))
         self.assertIn("on_monthly_pulse = { on_actions = { gm_arch_monthly_on_action } }", on)
         self.assertIn("gm_arch_monthly_on_action = { effect = { gm_arch_monthly = yes } }", on)
@@ -691,7 +722,8 @@ class EventTests(unittest.TestCase):
         self.assertIn("is_target_in_variable_list = { name = gm_site_told target = $WHO$ }", tell)
         self.assertLess(tell.index("add_to_variable_list = { name = gm_site_told target = $WHO$ }"),
                         tell.index("trigger_event = { id = arch_events.1 }"))
-        self.assertIn("var:gm_site_vector = flag:survey } $STATE$ = { save_scope_as = gm_arch_ev_survey }", tell)
+        self.assertIn("NOT = { var:gm_site_vector = flag:incidental } } $STATE$ = { save_scope_as = gm_arch_ev_survey }",
+                      tell, "a site the scholars know: survey, or one already being dug")
         self.assertIn("gm_arch_tell_found = { WHO = scope:gm_arch_finder STATE = scope:gm_arch_find_state }",
                       squash(block(e, "gm_arch_found")))
         self.assertIn("gm_arch_tell_found = { WHO = scope:gm_arch_ls_who STATE = scope:gm_arch_ls_state }",

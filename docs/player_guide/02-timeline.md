@@ -848,6 +848,12 @@ Terracotta Army, Göbekli Tepe and others. A dug-up site is a historical monumen
 like those standing at the start. It keeps its name and look, and an army can
 carry it off as a [trophy](#monument-trophies).
 
+Pompeii is already being dug when the game begins: whoever holds Campania runs
+an Antiquarian dig there, a third done, and pays for it from the first month. At
+15 levels it is one of the largest sites. Suspend it to save the money, or
+restart it by Systematic Stratigraphy once you have Empiricism to bring it out
+whole; the progress is kept either way.
+
 A site opens when you own a part of its state and have its technology:
 Romanticism for Nineveh, Empiricism for Troy, Mycenae, Pergamon, Olympia and
 Sidon, and later ones for the finds of the twentieth century, up to E-commerce

@@ -14,6 +14,15 @@ gm_arch_find_chance = {
 	value = 1
 }
 
+# ---- Seeding ------------------------------------------------------------------------------
+# The seeding's round: a game seeded in an earlier round runs the seeding again,
+# which adds only the sites added since (gm_arch_monthly). 2: Pompeii.
+gm_arch_seed_rounds = { value = 2 }
+
+# How far a dig seeded already under way has come (Pompeii, being dug since
+# 1748, a third or so cleared by 1836).
+gm_arch_excavating_progress = { value = 30 }
+
 # ---- A site's records, guarded ----------------------------------------------------------
 # Each is guarded: a site that was never dug has no progress or method.
 # gm_arch_disp_status: 1 buried, 2 known, 3 being dug, 4 unearthed.

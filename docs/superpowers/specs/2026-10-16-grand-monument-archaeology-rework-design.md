@@ -162,6 +162,23 @@ game's technology without a rule that switches one off.
   `gm_arch_abroad_concession_sgui`, `gm_arch_abroad_permit_sgui`; the row is shared by every country that may dig it, so the
   line is decided for the viewer).
 
+## 5. Pompeii, and an audit of the site list
+
+Asked for by the owner the same day: "audit our current list of 35 buried archaeological sites. Add Pompeii as a
+'discoverable' site already being excavated, review the existing list for gaps, and propose additional plausible fictional
+sites to add."
+
+**Pompeii** is row 87 (`pompeii`, Campania, a forum, 15 levels, Romanticism, the Alexander Mosaic as its piece). It was being
+dug in 1836, by the Bourbons since 1748, so it is seeded as a dig already under way: a third vector, `excavating`, makes the
+seeding start an Antiquarian dig by the owner of its ground at 30% (`gm_arch_seed_dig`, `gm_arch_excavating_progress`). The
+owner pays for it from the first month and may suspend it, or restart it by Systematic Stratigraphy, keeping the progress;
+with no owner it waits as a known site. A game seeded before this change gets Pompeii the next month: the seeding now runs
+again whenever `gm_arch_seed_round` is below `gm_arch_seed_rounds` (2), and makes no site twice. *(design: 30% and the
+Antiquarian method stand for the Bourbon treasure-hunting before Fiorelli's methods of 1863.)*
+
+The audit of the list (gaps by region and era, real sites to fill them, and plausible speculative ones) is
+`docs/audits/grand_monument_buried_sites_audit.md`. Nothing from it is built beyond Pompeii.
+
 ## Tests, debug, docs
 
 - `test_grand_monument_archaeology.py`: the prices, the size factor and the month table, the cost written on the container

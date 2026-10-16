@@ -210,6 +210,7 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = sidon_necropolis }
 	gm_debug_log_landmark = { KEY = villa_of_the_papyri }
 	gm_debug_log_landmark = { KEY = tomb_of_alexander }
+	gm_debug_log_landmark = { KEY = pompeii }
 }
 
 gm_debug_log_landmark = {
