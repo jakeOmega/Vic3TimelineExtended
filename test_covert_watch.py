@@ -396,7 +396,9 @@ class SelfChecks(unittest.TestCase):
     def test_pending_watchdog_logs_broken_once(self):
         body = scripted_effect("covert_watch_attacker_monthly")
         self.assertIn("TE_SELF_CHECK BROKEN covert_catch_decision", body)
-        self.assertIn("var:iw_catch_pending >= 2", body)
+        # Not at the second pass: a player may leave covert_warfare.3 open for
+        # its whole duration, which is in months.
+        self.assertIn("var:iw_catch_pending >= covert_open_event_stale_passes", body)
         self.assertIn("set_global_variable = { name = te_selfcheck_covert_catch_broken", body)
 
     def test_monthly_expose_check_needs_a_sent_order(self):
@@ -407,7 +409,26 @@ class SelfChecks(unittest.TestCase):
         self.assertIn("te_selfcheck_covert_watch_broken", broken)
 
 
+def stale_passes():
+    m = re.search(r"(?m)^covert_open_event_stale_passes = (\d+)$", _text(VALUES))
+    if m is None:
+        raise AssertionError("covert_open_event_stale_passes is not a whole-number constant")
+    return int(m.group(1))
+
+
 class Watchdogs(unittest.TestCase):
+    def test_stale_passes_outlast_an_unanswered_event(self):
+        # An event's `duration` is in months (NEvents.DEFAULT_MONTHS_VALID): a
+        # player may leave covert_warfare.1 or .3 open that long. The count
+        # starts at 1 on the day the event opens at the earliest, so it reaches
+        # N no sooner than N - 1 months later; N >= duration + 2 keeps a
+        # month's margin past expiry.
+        passes = stale_passes()
+        for suffix in (".1", ".3"):
+            m = re.search(r"\n\tduration = (\d+)\n", event(suffix))
+            self.assertIsNotNone(m, suffix)
+            self.assertGreaterEqual(passes, int(m.group(1)) + 2, suffix)
+
     def test_lock_failsafe_waits_for_a_second_month_without_event_1(self):
         body = scripted_effect("covert_watch_attacker_monthly")
         fail = str(_innermost_enclosing(body, "remove_variable = iw_expose_inflight", "if = {"))
@@ -415,16 +436,19 @@ class Watchdogs(unittest.TestCase):
         outer = str(_innermost_enclosing(body, "change_variable = { name = iw_expose_inflight add = 1 }", "if = {"))
         self.assertIn("NOT = { has_variable = iw_burned_type_code }", outer)
 
-    def test_event_1_copies_left_two_passes_are_released(self):
+    def test_event_1_copies_left_past_the_stale_passes_are_released(self):
         # A revolution that wins while covert_warfare.1 is open hands its copies
         # to the winner and the event's `after` never runs; covert_exposure_in_flight
         # reads iw_burned_type_code, so the attacker would be locked for good.
-        # The first pass marks the copies seen, the second removes them.
+        # Each pass that finds the copies counts itself on iw_burned_seen; at
+        # covert_open_event_stale_passes they go. Not sooner: a .1 a player
+        # hasn't answered is open for months, and its copies must survive.
         body = scripted_effect("covert_watch_attacker_monthly")
         stale = str(_innermost_enclosing(body, "remove_variable = iw_burned_type_code", "if = {"))
         self.assertTrue(
-            stale.startswith("if = {\n\t\t\tlimit = { has_variable = iw_burned_seen }"),
-            stale[:80],
+            stale.startswith(
+                "if = {\n\t\t\tlimit = { var:iw_burned_seen >= covert_open_event_stale_passes }"),
+            stale[:100],
         )
         for var in ("iw_burned_phase", "iw_burned_at_war", "iw_burned_friend",
                     "iw_expose_inflight", "iw_burned_seen"):
@@ -437,10 +461,15 @@ class Watchdogs(unittest.TestCase):
             mark.startswith("if = {\n\t\tlimit = { has_variable = iw_burned_type_code }"),
             mark[:80],
         )
+        # Counted on every pass (set on the first, raised after), before the
+        # test that releases them.
         self.assertIn(stale, mark)
-        self.assertLess(mark.index(stale), mark.index("else = {"))
-        # ...and `after` removes the mark with the copies, outside the burn's
-        # guard, or the next covert_warfare.1 would be wiped at its first pass.
+        count = str(_innermost_enclosing(mark, "change_variable = { name = iw_burned_seen add = 1 }", "if = {"))
+        self.assertTrue(count.startswith("if = {\n\t\t\tlimit = { has_variable = iw_burned_seen }"), count[:80])
+        self.assertLess(mark.index("set_variable = { name = iw_burned_seen value = 1 }"), mark.index(stale))
+        self.assertLess(mark.index(count), mark.index(stale))
+        # ...and `after` removes the count with the copies, outside the burn's
+        # guard, or the next covert_warfare.1 would start part-way there.
         after = event_block(event(".1"), "after")
         guarded = str(_innermost_enclosing(after, "covert_op_burn = {", "if = {"))
         self.assertNotIn("iw_burned_seen", guarded)

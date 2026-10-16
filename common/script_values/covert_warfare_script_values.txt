@@ -306,6 +306,15 @@ covert_ai_watch_expose_base = 2
 covert_ai_watch_expose_per_point = 0.1
 covert_ai_watch_expose_net_done = 25
 covert_ai_watch_expose_severe_add = 5
+# How many monthly passes of covert_watch_attacker_monthly a covert_warfare.1
+# (iw_burned_seen counts them) or a covert_warfare.3 (iw_catch_pending, 1 from
+# the roll) may outlast before the watchdog takes it for an event whose `after`
+# never ran. An event's `duration` is in months (NEvents.DEFAULT_MONTHS_VALID,
+# auto-opened NUM_DAYS_TO_AUTO_OPEN_EVENT = 30 days before it expires), so both,
+# at duration = 3, stay open up to three months for a player who doesn't
+# answer. At 5 the watchdog acts four months after the event opened at the
+# soonest: the three months and a month's margin.
+covert_open_event_stale_passes = 5
 
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY

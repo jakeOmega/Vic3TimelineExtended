@@ -3666,7 +3666,7 @@
  iw_decrease_warning_none:0 "\n#italic Lower funding costs less but raises the monthly chance that an operation is detected.#!"
  iw_decrease_warning_stands_down:0 "\n@warning! #R Stepping down to zero stands every running operation down.#! All [GetPlayer.MakeScope.ScriptValue('covert_active_display')|0] of them lapse, and the months already invested are lost."
  iw_expose_known_exists_tt:0 "The operation on this row can be identified"
- iw_expose_known_free_tt:0 "No exposure of this country's operations is under way (one closes within a few days)"
+ iw_expose_known_free_tt:0 "No exposure of this country's operations is under way (one closes when the country answers for it, which can take weeks)"
  iw_expose_known_ours_tt:0 "We are watching this operation"
  iw_expose_known_unordered_tt:0 "No exposure of this operation has been ordered or sent"
  iw_exposure_tier_mild:0 "routine espionage"

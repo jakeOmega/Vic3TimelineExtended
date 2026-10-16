@@ -542,8 +542,8 @@ priority (more with Tradecraft, more slowly above half strength), and the
 operation is not caught again. The country can expose it whenever it likes from
 Known Foreign Operations, a section of its Covert Warfare journal entry and
 Covert tab that lists each operation it watches with your flag and name and the
-months watched. The exposure goes out within days; while another exposure of
-your operations is under way, the button is grayed.
+months watched. The exposure goes out at once; while another exposure of your
+operations is still open, the button is grayed until you have answered for it.
 
 A country that exposes your operation gets the Foreign Interference Detected
 event, which names you and the operation. It can shore up its

@@ -32,11 +32,11 @@ covert_warfare.1 = {
 	immediate = {
 		# The burned operation arrives as scope:iw_burned_op from
 		# covert_ops_roll_detection_all. Read it HERE and only here: the options
-		# and `after` run when the player clicks, up to `duration` days later, by
+		# and `after` run when the player clicks, up to `duration` months later, by
 		# which time stand-down or the monthly sync may have destroyed it.
 		# Event loc cannot reach a container either, so the type code is copied
 		# onto ROOT (scripting_best_practices.md, container rule 10). The phase
-		# is copied for the same reason as the code — the options fire days
+		# is copied for the same reason as the code — the options may fire weeks
 		# later and read only country variables. The war state is copied for
 		# the same reason again, and because the war can begin between the
 		# event firing and the player clicking: a wartime operation started
@@ -75,7 +75,7 @@ covert_warfare.1 = {
 		}
 		# ---- Domestic backlash (covert_backlash_home / _public) ----
 		# Whether the target was a friend, pinned HERE for the same reason as
-		# the type code: the options fire days later, and the relations the
+		# the type code: the options may fire weeks later, and the relations the
 		# test reads may have moved. The relations hit abroad scales on it
 		# (covert_exposure_relations_deny), the attacker's home costs need it
 		# (covert_backlash_home), and so does the defender's public reaction
@@ -307,9 +307,9 @@ covert_warfare.1 = {
 			limit = { has_variable = iw_burned_friend }
 			remove_variable = iw_burned_friend
 		}
-		# The monthly watchdog's mark that this event was open at a pass
+		# The monthly watchdog's count of the passes this event was open at
 		# (covert_watch_attacker_monthly): gone with the copies, or the next
-		# covert_warfare.1 would be taken for a stale one at the first pass.
+		# covert_warfare.1 would start part-way to being taken for a stale one.
 		if = {
 			limit = { has_variable = iw_burned_seen }
 			remove_variable = iw_burned_seen
@@ -567,12 +567,15 @@ covert_warfare.2 = {
 # every catch reaches the target.
 #   a. Expose them: covert_warfare.1 on the attacker, today's flow. If an
 #      exposure of that attacker is already in flight, the operation is
-#      watched with its exposure ordered, and covert_warfare.4 tries again
-#      once the open covert_warfare.1 (three days) has closed.
+#      watched with its exposure ordered. covert_warfare.4 tries again four
+#      days later, and the monthly pass (covert_watch_monthly) after that,
+#      until the attacker has answered the open covert_warfare.1, which a
+#      player may leave open for up to its three months (duration is in
+#      months).
 #   b. Let it run: covert_watch_start. The attacker is not told.
-# The operation can end over the event's three days (stand-down, the monthly
-# sync, a lapsed pact); every use is guarded with `exists`, and the options
-# say so instead of acting.
+# The operation can end while the event is open, up to three months
+# (stand-down, the monthly sync, a lapsed pact); every use is guarded with
+# `exists`, and the options say so instead of acting.
 # ============================================================================
 
 covert_warfare.3 = {
