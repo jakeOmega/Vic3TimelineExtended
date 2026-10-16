@@ -1,0 +1,16 @@
+﻿# Rules of War infamy (te_row_charge_infamy, common/scripted_effects/rules_of_war_effects.txt).
+
+# The infamy standing already charged: the standing of the Rules of War law
+# last charged, 0 when none has been (the start law, or a save from before the
+# charge). Country scope.
+te_row_charged_standing = {
+	value = 0
+	if = {
+		limit = { has_variable = te_row_infamy_standing }
+		value = var:te_row_infamy_standing
+	}
+}
+
+# The share of the difference a move to a stricter law takes off. Below 1, so
+# a move there and back costs infamy (owner, 2026-10-16).
+te_row_infamy_reduction_share = 0.9

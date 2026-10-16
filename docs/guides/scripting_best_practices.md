@@ -1269,6 +1269,10 @@ Two shipped idioms compose into the substitute:
 
 Known wrinkle with the two-marker shape: it is non-monotonic if a great power somehow holds the later marker without the earlier one. Acceptable for a smoothly-varying quantity; not acceptable if you are branching on discrete eras.
 
+## No Trigger Says Which Sea a Coastal State Faces — Map `naval_exit_id` Offline
+
+`is_coastal` is yes/no, and `docs/engine/event_targets_summary.txt` has no state → sea accessor. The map data has the answer: every coastal land state in `map_data/state_regions/*.txt` carries `naval_exit_id = <n>`, the `id` of one sea "state region" in `map_data/state_regions/99_seas.txt` (105 of them; 372 coastal states use 85). For anything keyed on an ocean (seabed basins, a sea-lane rule), have a generator map state → sea region → group and emit an effect that caches the answer in a state variable from the monthly state pulse (conquest and splits create new state scopes), rather than a hundred-way `OR` of `state_region = s:STATE_X` in a `possible` the AI builder evaluates constantly. Design that relies on it: `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 2.1. Fleet location is not readable per sea either; `navy_size` (flotillas) and `naval_combat_power` are country-level values.
+
 ## Mod-Only Ministry Laws: Calibrate to Bureaucratic Apparatus, Not Office-Holder Existence
 
 The mod's `law_ministry_of_*` laws (foreign_affairs, war, commerce, religion, etc.) spawn institutions whose investment levels grant meaningful country-wide bonuses. When deciding starting assignments, the test is **"did this state run a substantial Western-style ministerial bureaucracy?"** — not "did someone hold that portfolio?".
