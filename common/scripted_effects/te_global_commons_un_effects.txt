@@ -1,0 +1,346 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE UN LAYER — THE WRITERS
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3 (the seabed
+# under the Law of the Sea), §4 (the Antarctic research station and the
+# Antarctic Treaty) and §6.5 (the Moratorium on Destructive Anti-Satellite
+# Tests). The figures are in te_global_commons_un_values.txt, the tests in
+# te_global_commons_un_triggers.txt. The hooks the seabed allocation and the
+# anti-satellite strike call are in te_seabed_un_hooks.txt and
+# te_asat_un_hooks.txt; the two conventions' Assembly business (the docket's
+# items 15 and 16, the proposer events un_events.40 and .41, the vote) is in
+# the UN's own files beside every other convention's.
+#
+# WHO WRITES WHAT
+#   te_seabed_terms_awake (global)          te_gc_un_global_monthly, once: some
+#                                           country has Abyssal Plain Mining
+#   te_seabed_royalties_weekly (global)     te_gc_un_global_monthly: the payers'
+#                                           royalties a week, for the World
+#                                           Development Fund or the UN budget
+#   te_seabed_royalty_cached (country)      te_seabed_royalty_refresh, the
+#   te_seabed_royalty_modifier              single refresh site (never removed
+#                                           while the modifier stands)
+#   te_antarctic_station (country)          te_antarctic_station_open / _close:
+#                                           the month it opened
+#   te_antarctic_station_modifier,          te_antarctic_station_refresh (and
+#   te_antarctic_station_upkeep (+ the      the opening decision, so its
+#   cached figure)                          tooltip shows them)
+#   un_antarctic_policy_modifier            te_antarctic_policy_refresh
+#   te_antarctic_denounced (country)        te_antarctic_treaty_denounce;
+#                                           cleared by a new treaty
+#   te_antarctic_treaty_lapsed (global)     te_antarctic_treaty_lapse; cleared
+#                                           by a new treaty
+#   te_asat_delivery_months (global)        te_gc_un_global_monthly: the
+#                                           Moratorium's yearly clock
+#
+# CALL SITES
+#   te_gc_un_global_monthly   te_gc_un_global_on_action (on_monthly_pulse)
+#   te_gc_un_country_monthly  te_gc_un_country_on_action (on_monthly_pulse_country)
+#   te_antarctic_station_open / _close, te_antarctic_treaty_denounce
+#                             the decisions in te_global_commons_un_decisions.txt
+#   te_antarctic_treaty_on_passed  un_vote.2, the treaty carried
+#
+# Every state that must survive a revolution is a variable or a convention's
+# member modifier with its mirror; the modifiers here are rebuilt from them
+# each month (CLAUDE.md, the winner continues the nation).
+# ============================================================================
+
+# ---- The monthly pulses --------------------------------------------------------------
+
+# Global monthly upkeep (no-country scope).
+te_gc_un_global_monthly = {
+	# The seabed terms wake for good once anyone can mine the seabed.
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_seabed_terms_awake }
+			any_country = { has_technology_researched = abyssal_plain_mining }
+		}
+		set_global_variable = te_seabed_terms_awake
+	}
+
+	# The royalties, for the World Development Fund's pot or the UN budget.
+	if = {
+		limit = { te_seabed_royalties_total_value > 0 }
+		set_global_variable = { name = te_seabed_royalties_weekly value = te_seabed_royalties_total_value }
+	}
+	else_if = {
+		limit = { has_global_variable = te_seabed_royalties_weekly }
+		remove_global_variable = te_seabed_royalties_weekly
+	}
+
+	if = {
+		limit = { has_global_variable = un_founded }
+		# The Antarctic Treaty lapses when two great powers outside it hold
+		# Southern licences.
+		if = {
+			limit = {
+				has_global_variable = un_agency_ats
+				te_antarctic_lapse_condition = yes
+			}
+			te_antarctic_treaty_lapse = yes
+		}
+		# The Moratorium's cleaners count toward the Delivery pillar once a
+		# year.
+		if = {
+			limit = { has_global_variable = un_agency_unoda }
+			te_asat_moratorium_delivery_monthly = yes
+		}
+	}
+}
+
+# One country's month.
+# Scope: country
+te_gc_un_country_monthly = {
+	te_seabed_royalty_refresh = yes
+	te_antarctic_station_refresh = yes
+	te_antarctic_policy_refresh = yes
+}
+
+# ---- The seabed royalties (§3.3) ---------------------------------------------------------
+
+# A payer's weekly royalty, re-priced from its levels; anyone else's removed.
+# The single refresh site of te_seabed_royalty_modifier.
+# Scope: country
+te_seabed_royalty_refresh = {
+	if = {
+		limit = { te_seabed_royalty_payer = yes }
+		set_variable = { name = te_seabed_royalty_cached value = te_seabed_royalty_weekly_value }
+		if = {
+			limit = { has_modifier = te_seabed_royalty_modifier }
+			remove_modifier = te_seabed_royalty_modifier
+		}
+		add_modifier = {
+			name = te_seabed_royalty_modifier
+			multiplier = var:te_seabed_royalty_cached
+		}
+	}
+	else_if = {
+		limit = { has_modifier = te_seabed_royalty_modifier }
+		remove_modifier = te_seabed_royalty_modifier
+	}
+}
+
+# ---- The Antarctic research station (§4) -----------------------------------------------
+
+# Open a station. Its research and its upkeep at once (so the decision's
+# tooltip shows both); the monthly refresh keeps them. A party's terms are
+# re-read at its next monthly pulse, which gives it the treaty's station term.
+# The country's first station is docket business while the treaty is not in
+# force (un_docket_antarctic_candidate).
+# Scope: country
+te_antarctic_station_open = {
+	set_variable = { name = te_antarctic_station value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_modifier = te_antarctic_station_modifier } }
+		add_modifier = { name = te_antarctic_station_modifier }
+	}
+	set_variable = { name = te_antarctic_station_upkeep_cached value = te_antarctic_station_upkeep_value }
+	if = {
+		limit = { has_modifier = te_antarctic_station_upkeep }
+		remove_modifier = te_antarctic_station_upkeep
+	}
+	add_modifier = {
+		name = te_antarctic_station_upkeep
+		multiplier = var:te_antarctic_station_upkeep_cached
+	}
+	if = {
+		limit = { te_antarctic_treaty_party = yes }
+		custom_tooltip = te_antarctic_station_treaty_term_tt
+	}
+	hidden_effect = { te_antarctic_reread_terms = yes }
+}
+
+# Close it. The research, the upkeep and the treaty's station term go.
+# Scope: country
+te_antarctic_station_close = {
+	remove_variable = te_antarctic_station
+	if = {
+		limit = { has_modifier = te_antarctic_station_modifier }
+		remove_modifier = te_antarctic_station_modifier
+	}
+	if = {
+		limit = { has_modifier = te_antarctic_station_upkeep }
+		remove_modifier = te_antarctic_station_upkeep
+	}
+	hidden_effect = { te_antarctic_reread_terms = yes }
+}
+
+# The station's modifiers, from the variable: added while it runs (re-priced
+# every month), removed otherwise. Under the disabled Global Commons rule
+# nobody can open one, so a station is never there to keep.
+# Scope: country
+te_antarctic_station_refresh = {
+	if = {
+		limit = { te_antarctic_has_station = yes }
+		if = {
+			limit = { NOT = { has_modifier = te_antarctic_station_modifier } }
+			add_modifier = { name = te_antarctic_station_modifier }
+		}
+		set_variable = { name = te_antarctic_station_upkeep_cached value = te_antarctic_station_upkeep_value }
+		if = {
+			limit = { has_modifier = te_antarctic_station_upkeep }
+			remove_modifier = te_antarctic_station_upkeep
+		}
+		add_modifier = {
+			name = te_antarctic_station_upkeep
+			multiplier = var:te_antarctic_station_upkeep_cached
+		}
+	}
+	else = {
+		if = {
+			limit = { has_modifier = te_antarctic_station_modifier }
+			remove_modifier = te_antarctic_station_modifier
+		}
+		if = {
+			limit = { has_modifier = te_antarctic_station_upkeep }
+			remove_modifier = te_antarctic_station_upkeep
+		}
+	}
+}
+
+# A party re-reads its regime terms at its next monthly pulse (the station
+# term follows the station), as un_state_restore_all has a restored member do.
+# Scope: country
+te_antarctic_reread_terms = {
+	if = {
+		limit = { has_variable = un_regime_stamp }
+		remove_variable = un_regime_stamp
+	}
+}
+
+# ---- The Antarctic Treaty (§4) ------------------------------------------------------
+
+# Every party's contribution to the Policy pillar, at x1, from its party
+# status (the member modifier or its mirror). The single refresh site of
+# un_antarctic_policy_modifier.
+# Scope: country
+te_antarctic_policy_refresh = {
+	if = {
+		limit = { te_antarctic_treaty_party = yes }
+		if = {
+			limit = { NOT = { has_modifier = un_antarctic_policy_modifier } }
+			# The self-check reads the country's total before the add, which
+			# this block cannot see yet (te_gc_un_selfcheck_policy_start).
+			te_gc_un_selfcheck_policy_start = yes
+			add_modifier = { name = un_antarctic_policy_modifier }
+		}
+	}
+	else_if = {
+		limit = { has_modifier = un_antarctic_policy_modifier }
+		remove_modifier = un_antarctic_policy_modifier
+	}
+}
+
+# The treaty has carried: a new treaty, so an old denunciation and an old
+# lapse are history.
+# Scope: any
+te_antarctic_treaty_on_passed = {
+	if = {
+		limit = { has_global_variable = te_antarctic_treaty_lapsed }
+		remove_global_variable = te_antarctic_treaty_lapsed
+	}
+	every_country = {
+		limit = { has_variable = te_antarctic_denounced }
+		remove_variable = te_antarctic_denounced
+	}
+}
+
+# Denounce the treaty: 10 infamy, 5 standing and 10 case strength (the
+# defiance record), and out of it. The denouncer is not brought back into it
+# by rejoining the UN or by un_events.36 (te_antarctic_denounced); a new
+# treaty, carried again, clears the mark.
+# Scope: country (a party)
+te_antarctic_treaty_denounce = {
+	custom_tooltip = te_antarctic_denounce_tt
+	change_infamy = te_antarctic_denounce_infamy
+	custom_tooltip = {
+		text = te_antarctic_denounce_standing_tt
+		un_standing_loss = { AMOUNT = te_antarctic_denounce_standing REASON = 49 }
+	}
+	custom_tooltip = te_antarctic_denounce_case_tt
+	un_dossier_record = { RECORD = defiance POINTS = te_antarctic_denounce_case }
+	un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
+	set_variable = te_antarctic_denounced
+	if = {
+		limit = { has_modifier = un_antarctic_policy_modifier }
+		remove_modifier = un_antarctic_policy_modifier
+	}
+	hidden_effect = { te_antarctic_reread_terms = yes }
+}
+
+# The treaty lapses: two or more great powers outside it hold Southern
+# licences. Every party leaves it, the Southern basin opens to all (the
+# seabed allocation reads te_seabed_southern_barred, false with no treaty in
+# force), and the docket does not raise it again while the condition holds
+# (un_docket_topic_open_antarctic).
+# Scope: any
+te_antarctic_treaty_lapse = {
+	remove_global_variable = un_agency_ats
+	set_global_variable = te_antarctic_treaty_lapsed
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_antarctic_treaty_modifier
+				has_variable = un_antarctic_treaty_modifier_on
+			}
+		}
+		un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
+		te_antarctic_reread_terms = yes
+	}
+	every_country = {
+		limit = {
+			OR = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				te_antarctic_has_station = yes
+			}
+		}
+		post_notification = te_antarctic_treaty_lapsed_notice
+	}
+}
+
+# ---- The Moratorium on Destructive Anti-Satellite Tests (§6.5) ------------------------
+
+# Once a year, every party running a debris-removal method books
+# un_asat_cleaner_delivery_points toward the Delivery pillar, weighted by its
+# weight in world affairs, as aid delivered is.
+# Scope: any (the Moratorium in force)
+te_asat_moratorium_delivery_monthly = {
+	if = {
+		limit = { NOT = { has_global_variable = te_asat_delivery_months } }
+		set_global_variable = { name = te_asat_delivery_months value = 0 }
+	}
+	change_global_variable = { name = te_asat_delivery_months add = 1 }
+	if = {
+		limit = { global_var:te_asat_delivery_months >= 12 }
+		set_global_variable = { name = te_asat_delivery_months value = 0 }
+		every_country = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				te_asat_moratorium_cleaner = yes
+			}
+			un_ledger_actor_entry = { PILLAR = delivery POINTS = un_asat_cleaner_delivery_points REASON = 40 }
+		}
+	}
+}
+
+# ---- Self-check (CLAUDE.md "In-game checks") -------------------------------------------
+
+# antarctic_policy_grant, once a game. The Policy pillar sums every country's
+# country_un_authority_target_add, a script-only modifier type, and nobody has
+# yet watched that sum in game (un_redesign_design.md §0.10's checklist). The
+# first time a party gains un_antarctic_policy_modifier, its total before the
+# add is stored; a week later (te_global_commons_un.1) the total should be
+# 0.25 higher. OK when it is within 0.01, BROKEN otherwise, with the figures.
+# A law change in that week moves the total too: the line prints both
+# figures, so a BROKEN with a whole-step gap is that, not the engine.
+# Scope: country (te_antarctic_policy_refresh, before the add)
+te_gc_un_selfcheck_policy_start = {
+	if = {
+		limit = { NOT = { has_global_variable = te_gc_selfcheck_policy_done } }
+		set_global_variable = te_gc_selfcheck_policy_done
+		set_variable = { name = te_gc_chk_policy_before value = modifier:country_un_authority_target_add }
+		debug_log = "TE_SELF_CHECK START antarctic_policy_grant before=[THIS.ScriptValue('te_gc_chk_policy_before_value')|2] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+		trigger_event = { id = te_global_commons_un.1 days = 7 }
+	}
+}

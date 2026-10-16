@@ -1,0 +1,37 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE UN LAYER — NOTIFICATIONS
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3.2 and §4.
+# ============================================================================
+
+# The seabed regime has changed (te_seabed_un_set_regime): to every country
+# that has researched Abyssal Plain Mining.
+te_seabed_regime_open_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_seabed_regime_regulated_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_seabed_regime_scramble_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+# The Antarctic Treaty has lapsed (te_antarctic_treaty_lapse): to every UN
+# member and every country running a station.
+te_antarctic_treaty_lapsed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}

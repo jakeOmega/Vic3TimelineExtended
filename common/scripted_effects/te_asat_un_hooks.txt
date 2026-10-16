@@ -1,0 +1,37 @@
+﻿# ============================================================================
+# A DESTRUCTIVE ANTI-SATELLITE STRIKE — THE UN'S HOOK
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §6.5. Same name
+# and scope as the stub the debris branch shipped; this file is the real one.
+#
+#   te_asat_un_on_strike   the striker; scope:te_asat_target is the struck
+#                          country. Called by the strike, after it has booked
+#                          its own costs (the dossier ground, the infamy, the
+#                          relations) and global_var:te_asat_last_strike_month.
+#
+# The strike becomes docket business: the situation "A destructive
+# anti-satellite strike" (item 16, un_docket_effects.txt), which raises the
+# Moratorium on Destructive Anti-Satellite Tests while it is not in force. The
+# striker is not offered it (un_propose_asat_qualifies).
+#
+# WHO WRITES WHAT
+#   un_dkt_asat_pending (global, 730 days)   the striker, until the docket
+#                                            takes the strike up or it goes
+#                                            stale (an item that opens a
+#                                            resolution waits for a free floor,
+#                                            as the nuclear and covert
+#                                            grievances do for two years)
+#   un_dkt_asat_struck (country, 730 days)   on the striker
+# ============================================================================
+
+# Scope: the striker (scope:te_asat_target the struck country)
+te_asat_un_on_strike = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_game_rule = space_race_enabled
+		}
+		set_variable = { name = un_dkt_asat_struck value = 1 days = 730 }
+		set_global_variable = { name = un_dkt_asat_pending value = THIS days = 730 }
+	}
+}
