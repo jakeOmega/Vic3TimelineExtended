@@ -56,27 +56,37 @@ monument_events.1 = {
 						}
 						gm_state_vanity_backlash = yes
 					}
-					# Levels built on a finished monument found a new one beside
-					# it (spec 2026-10-16 §3.2); the last level of a monument's
-					# construction freezes it.
+					# A part of this region merged into this state (issue #936):
+					# the monuments that stood there are adopted first, so their
+					# levels found no monument beside and start no ceremony.
 					if = {
-						limit = { gm_state_has_new_levels = yes }
-						gm_state_found_beside = yes
+						limit = { gm_state_merge_pending = yes }
+						gm_state_adopt_orphans = yes
 					}
-					gm_state_record_frozen_levels = yes
-					# A new monument stands on its siblings' dedication
-					# (gm_state_has_copied_dedication): the ceremony replaces it.
-					gm_state_reset_copied_dedication = yes
-					# Not for a script's rebuild (gm_rebuilding, one day): its
-					# monument has not grown, and a ceremony asked at this level
-					# already (gm_state_offer_missed_ceremony asks again only
-					# above gm_ceremony_level). Rededicate starts its own.
 					if = {
-						limit = {
-							gm_state_is_dedicated = no
-							NOT = { has_variable = gm_rebuilding }
+						limit = { gm_state_merge_pending = no }
+						# Levels built on a finished monument found a new one
+						# beside it (spec 2026-10-16 §3.2); the last level of a
+						# monument's construction freezes it.
+						if = {
+							limit = { gm_state_has_new_levels = yes }
+							gm_state_found_beside = yes
 						}
-						gm_state_start_ceremony = yes
+						gm_state_record_frozen_levels = yes
+						# A new monument stands on its siblings' dedication
+						# (gm_state_has_copied_dedication): the ceremony replaces it.
+						gm_state_reset_copied_dedication = yes
+						# Not for a script's rebuild (gm_rebuilding, one day): its
+						# monument has not grown, and a ceremony asked at this level
+						# already (gm_state_offer_missed_ceremony asks again only
+						# above gm_ceremony_level). Rededicate starts its own.
+						if = {
+							limit = {
+								gm_state_is_dedicated = no
+								NOT = { has_variable = gm_rebuilding }
+							}
+							gm_state_start_ceremony = yes
+						}
 					}
 					# The monument an opportunity completed by this level names
 					# (opportunities spec §3).
@@ -1369,7 +1379,8 @@ monument_events.26 = {
 # tooltips walk without writing: levels built on a finished monument found a
 # new one beside it (gm_state_found_beside), and a newcomer that has settled
 # gives the state's first place back to a grander monument beside it
-# (gm_state_settle_newcomer). Each reads back what it writes.
+# (gm_state_settle_newcomer). Each reads back what it writes. A merge's
+# monuments are adopted first (issue #936), so their levels found nothing.
 monument_events.29 = {
 	type = state_event
 	hidden = yes
@@ -1381,13 +1392,43 @@ monument_events.29 = {
 
 	immediate = {
 		if = {
-			limit = { gm_state_has_new_levels = yes }
-			gm_state_found_beside = yes
+			limit = { gm_state_merge_pending = yes }
+			gm_state_adopt_orphans = yes
 		}
-		else_if = {
-			limit = { gm_state_newcomer_settled = yes }
-			gm_state_settle_newcomer = yes
+		if = {
+			limit = { gm_state_merge_pending = no }
+			if = {
+				limit = { gm_state_has_new_levels = yes }
+				gm_state_found_beside = yes
+			}
+			else_if = {
+				limit = { gm_state_newcomer_settled = yes }
+				gm_state_settle_newcomer = yes
+			}
 		}
+	}
+}
+
+# ============================================================================
+# Event 31: a merged state's monuments (issue #936)
+# ============================================================================
+# Hidden plumbing, a state event on a state of a region where a monument's
+# state is gone (its part of the region merged into another): the monthly pass
+# sends it (gm_shadow_monthly), and gm_state_adopt_orphans sends it again a day
+# later while a building in the region is being rebuilt. It adopts every
+# orphaned shadow there (gm_monument_effects.txt § "A merged state"). No
+# has_building: with no building left in the region a shadow is dropped, and
+# the self-check's line needs a state as ROOT.
+monument_events.31 = {
+	type = state_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+	}
+
+	immediate = {
+		gm_state_adopt_orphans = yes
 	}
 }
 

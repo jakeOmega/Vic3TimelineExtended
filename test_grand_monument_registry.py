@@ -856,8 +856,11 @@ class ContestTests(unittest.TestCase):
         self.assertTrue(body.startswith("if = { limit = { NOT = { has_variable = te_cw_role } }"))
         # Nor a gifted monument whose rebuilt method may still read as another
         # dedication (opportunities spec §3.1).
+        # Nor one no record describes: a building a merge brought waits to be
+        # adopted (issue #936), and first sight or the ceremony always comes first.
         self.assertIn("limit = { gm_state_is_dedicated = yes gm_state_is_bound = yes "
-                      "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } }", body)
+                      "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } "
+                      "has_variable = gm_seen }", body)
         self.assertIn("owner = { has_variable = gm_cw_adopting } } gm_state_adopt_for_winner = yes", body)
         # A shrine this country did not raise always becomes heritage, whatever
         # the route it arrived by (conquest, a secession that drops te_cw_role,
@@ -4598,7 +4601,7 @@ class MergeShadowTests(unittest.TestCase):
 
     SHADOW_EFFECTS = ("gm_shadow_monthly", "gm_state_write_shadow", "gm_state_drop_shadow", "gm_sh_drop",
                       "gm_state_adopt_orphans", "gm_sh_settle_region", "gm_sh_settle_one", "gm_sh_adopt_beside",
-                      "gm_sh_raise", "gm_sh_lost", "gm_sh_log_numbers", "gm_sh_mirror", "gm_mon_repair_origin",
+                      "gm_state_raise_orphan", "gm_sh_lost", "gm_sh_log_numbers", "gm_sh_mirror", "gm_mon_repair_origin",
                       "gm_monument_merge_self_check")
 
     def setUp(self):
@@ -4626,7 +4629,7 @@ class MergeShadowTests(unittest.TestCase):
             for name, body in top_level_blocks(read(path.relative_to(ROOT))):
                 if "gm_state_write_shadow = yes" in body:
                     sites.append(name)
-        self.assertEqual(sorted(sites), ["gm_sh_raise", "gm_shadow_monthly"])
+        self.assertEqual(sorted(sites), ["gm_shadow_monthly", "gm_state_raise_orphan"])
         refresh = squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
         for s in ("gm_state_write_shadow", "gm_state_adopt_orphans", "gm_shadow_monthly", "create_container",
                   "destroy_container"):
@@ -4671,7 +4674,9 @@ class MergeShadowTests(unittest.TestCase):
         for name in self.SHADOW_EFFECTS:
             b = block(self.m, name)
             self.assertIsNotNone(b, name)
-            self.assertNotRegex(strip_comments(b), r"\bdays\s*=\s*(?!1\s*\})", name)
+            # A day's wait on a hidden event is not a variable.
+            rest = re.sub(r"trigger_event\s*=\s*\{[^{}]*\}", "", strip_comments(b))
+            self.assertNotRegex(rest, r"\bdays\s*=", name)
 
     def test_a_shadow_whose_state_records_no_primary_goes(self):
         monthly = self.body("gm_shadow_monthly")
@@ -4763,12 +4768,12 @@ class MergeShadowTests(unittest.TestCase):
         self.assertIn("limit = { gm_state_unrecorded = yes gm_state_unexplained_levels > 0 } "
                       "save_scope_as = gm_sh_target", region)
         self.assertIn("order_by = gm_sh_rank", region)
-        self.assertIn("scope:gm_sh_pick = { gm_sh_raise = yes }", region)
-        self.assertLess(region.find("gm_sh_raise = yes"), region.find("gm_sh_settle_one = yes"))
+        self.assertIn("if = { limit = { exists = scope:gm_sh_pick } gm_state_raise_orphan = yes }", region)
+        self.assertLess(region.find("gm_state_raise_orphan = yes"), region.find("gm_sh_settle_one = yes"))
         self.assertEqual(self.body("gm_sh_rank", self.v),
                          "value = gm_mon_levels if = { limit = { has_variable = gm_tr_landmark } add = 1000 }")
-        raise_ = self.body("gm_sh_raise")
-        order = ["gm_sh_adopt_beside = yes", "scope:gm_sh_moving = { save_scope_as = gm_mon_raise }",
+        raise_ = self.body("gm_state_raise_orphan")
+        order = ["scope:gm_sh_pick = { gm_sh_adopt_beside = yes }", "scope:gm_sh_pick = { save_scope_as = gm_mon_raise }",
                  "gm_state_raise_secondary = yes", "gm_state_restore_dedication = yes", "gm_state_write_shadow = yes"]
         positions = [raise_.find(s) for s in order]
         self.assertNotIn(-1, positions, dict(zip(order, positions)))
@@ -4796,7 +4801,7 @@ class MergeShadowTests(unittest.TestCase):
                   "gm_tr_update_picture = yes"):
             self.assertIn(s, beside)
         # The levels are already in the building: no rebuild.
-        for name in ("gm_sh_adopt_beside", "gm_sh_raise", "gm_sh_settle_region", "gm_sh_settle_one"):
+        for name in ("gm_sh_adopt_beside", "gm_state_raise_orphan", "gm_sh_settle_region", "gm_sh_settle_one"):
             b = self.body(name)
             for s in ("remove_building", "te_construction_market_build_specified_level", "gm_state_tr_add_levels"):
                 self.assertNotIn(s, b, name)

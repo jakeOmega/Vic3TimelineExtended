@@ -53,6 +53,12 @@ gm_monument_monthly = {
 		}
 		gm_monument_pass = yes
 	}
+	# Every recorded primary's shadow, in a game with no secondary too (issue
+	# #936, § "A merged state" below).
+	if = {
+		limit = { gm_system_enabled = yes }
+		gm_shadow_monthly = yes
+	}
 }
 
 # Any scope. Every state's list of secondaries, from the global list. Last
@@ -1062,6 +1068,478 @@ gm_seed_landmark_beside = {
 			trigger_event = { id = monument_events.20 }
 		}
 		debug_log = "TE_MONUMENTS: landmark $KEY$ placed beside the monument already standing in its state: level $LEVEL$, form $FORM$"
+	}
+}
+
+# ---- A merged state (issue #936; ageing spec 2026-10-16 §9) ------------------------
+# A state is a (region, owner) pair: when one country comes to hold two parts
+# of a state region the engine merges them, and the part absorbed takes its
+# variables with it, where a primary monument's records live (its skin, form,
+# landmark, name, raiser, age, contest). Its building may come along, levels
+# and all (unread: docs/testing/grand-monuments-ageing-playtest.md).
+# So each month the pass keeps a SHADOW of every recorded primary: a parentless
+# container tagged gm_shadow, in the global list gm_shadows, linked from its
+# state (gm_shadow) and back (gm_tr_origin, gm_tr_origin_region), with the
+# records a demotion copies (CONTAINER_RECORDS in
+# test_grand_monument_registry.py) and its levels (gm_tr_levels). A shadow
+# whose state is gone is an ORPHAN, and the state that now holds its region's
+# ground adopts it (gm_state_adopt_orphans): a building no record describes
+# takes it as its own monument, a recorded one whose building holds levels
+# its records don't account for takes it beside its own, and with neither it
+# is lost. That runs before anything reads the building's levels as new ones:
+# monument_events.1, .29, the refresh and gm_state_changed_hands ask
+# gm_state_merge_pending first. A shadow is written only by the pass and a
+# raise; the refresh, which tooltips walk, only asks the hidden event.
+# No timed variable on a shadow (container_timed_variable_audit).
+
+# No scope, from gm_monument_monthly. Orphans first, then stale shadows, then
+# every recorded primary's shadow written afresh.
+gm_shadow_monthly = {
+	if = {
+		limit = { has_global_variable_list = gm_shadows }
+		# A region with no state left keeps nothing.
+		every_in_global_list = {
+			variable = gm_shadows
+			limit = {
+				gm_sh_is_orphan = yes
+				var:gm_tr_origin_region = {
+					NOT = { any_scope_state = { exists = owner } }
+				}
+			}
+			add_to_temporary_list = gm_sh_nowhere
+		}
+		every_in_list = {
+			list = gm_sh_nowhere
+			debug_log = "TE_MONUMENTS: a monument's shadow is dropped: no state is left in its region"
+			gm_sh_drop = yes
+		}
+		# Each orphan's region to a hidden event on one of its states, which
+		# adopts every orphan there, with that state as ROOT for its log lines.
+		every_in_global_list = {
+			variable = gm_shadows
+			limit = { gm_sh_is_orphan = yes }
+			var:gm_tr_origin_region = { add_to_temporary_list = gm_sh_orphan_regions }
+		}
+		every_in_list = {
+			list = gm_sh_orphan_regions
+			random_scope_state = {
+				trigger_event = { id = monument_events.31 }
+			}
+		}
+		# A shadow whose state stands with no recorded primary, or links another.
+		every_in_global_list = {
+			variable = gm_shadows
+			limit = {
+				exists = var:gm_tr_origin
+				save_temporary_scope_as = gm_tmp_sh
+				var:gm_tr_origin = {
+					OR = {
+						NOT = { has_building = building_grand_monument }
+						NOT = { has_variable = gm_seen }
+						NOT = { var:gm_shadow ?= scope:gm_tmp_sh }
+					}
+				}
+			}
+			add_to_temporary_list = gm_sh_stale
+		}
+		every_in_list = { list = gm_sh_stale gm_sh_drop = yes }
+	}
+	every_state = {
+		limit = {
+			has_variable = gm_seen
+			has_building = building_grand_monument
+		}
+		gm_state_write_shadow = yes
+	}
+}
+
+# State scope, from gm_shadow_monthly and gm_state_raise_orphan. A recorded
+# primary's shadow, made once and refreshed in place. Not while its method is
+# being put back, a ceremony asks or a rebuild is under way, when its
+# dedication may read as the engine's copy: last month's stands meanwhile.
+gm_state_write_shadow = {
+	if = {
+		limit = {
+			has_building = building_grand_monument
+			has_variable = gm_seen
+			gm_state_is_dedicated = yes
+			NOT = { has_variable = gm_restore_pm }
+			NOT = { has_variable = gm_ceremony_pending }
+			NOT = { has_variable = gm_rebuilding }
+		}
+		save_scope_as = gm_tr_state
+		clear_saved_scope = gm_sh_new
+		if = {
+			limit = {
+				has_variable = gm_shadow
+				exists = var:gm_shadow
+			}
+			var:gm_shadow = { save_scope_as = gm_sh_new }
+		}
+		else = {
+			create_container = {
+				tags = { gm_shadow }
+				save_scope_as = gm_sh_new
+				on_created = {
+					save_scope_as = gm_sh_new
+				}
+			}
+			if = {
+				limit = { exists = scope:gm_sh_new }
+				add_to_global_variable_list = { name = gm_shadows target = scope:gm_sh_new }
+				set_variable = { name = gm_shadow value = scope:gm_sh_new }
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_sh_new }
+			set_variable = { name = gm_sh_levels value = gm_state_shadow_levels }
+			scope:gm_sh_new = {
+				set_variable = { name = gm_tr_origin value = scope:gm_tr_state }
+				set_variable = { name = gm_tr_origin_region value = scope:gm_tr_state.state_region }
+				set_variable = { name = gm_tr_site value = scope:gm_tr_state }
+				set_variable = { name = gm_tr_site_region value = scope:gm_tr_state.state_region }
+				set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_sh_levels }
+				set_variable = { name = gm_tr_share value = flag:whole }
+				gm_tr_record_dedication = yes
+				gm_sh_mirror = { FROM = gm_skin TO = gm_tr_skin }
+				gm_sh_mirror = { FROM = gm_form TO = gm_tr_form }
+				gm_sh_mirror = { FROM = gm_landmark TO = gm_tr_landmark }
+				gm_sh_mirror = { FROM = gm_namesake TO = gm_tr_namesake }
+				gm_sh_mirror = { FROM = gm_name_year TO = gm_tr_name_year }
+				gm_sh_mirror = { FROM = gm_name_char TO = gm_tr_name_char }
+				gm_sh_mirror = { FROM = gm_name_occasion TO = gm_tr_name_occasion }
+				gm_sh_mirror = { FROM = gm_name_enemy_cap TO = gm_tr_name_enemy_cap }
+				gm_sh_mirror = { FROM = gm_name TO = gm_tr_name }
+				gm_sh_mirror = { FROM = gm_honoree TO = gm_tr_honoree }
+				gm_sh_mirror = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
+				gm_sh_mirror = { FROM = gm_age TO = gm_tr_age }
+				gm_sh_mirror = { FROM = gm_raised_by TO = gm_tr_raised_by }
+				gm_sh_mirror = { FROM = gm_faith TO = gm_tr_faith }
+				gm_sh_mirror = { FROM = gm_built_by TO = gm_tr_built_by }
+				gm_sh_mirror = { FROM = gm_contested TO = gm_tr_contested }
+				gm_sh_mirror = { FROM = gm_heritage TO = gm_tr_heritage }
+				gm_sh_mirror = { FROM = gm_base_ig TO = gm_tr_base_ig }
+				gm_sh_mirror = { FROM = gm_supporter_ig TO = gm_tr_supporter_ig }
+				gm_sh_mirror = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
+				gm_sh_mirror = { FROM = gm_picture_code TO = gm_tr_picture_code }
+				set_variable = gm_tr_seen
+			}
+			remove_variable = gm_sh_levels
+		}
+	}
+}
+
+# Container scope, a shadow (scope:gm_tr_state its state): the state's variable
+# $FROM$ as $TO$, or none when the state has none (a contest lifted, a name
+# cleared), so a shadow refreshed in place keeps no record its monument lost.
+gm_sh_mirror = {
+	if = {
+		limit = {
+			scope:gm_tr_state = { has_variable = $FROM$ }
+		}
+		set_variable = { name = $TO$ value = scope:gm_tr_state.var:$FROM$ }
+	}
+	else = {
+		gm_remove_state_var = { VAR = $TO$ }
+	}
+}
+
+# Container scope, a shadow: out of the list, its state's link to it gone,
+# destroyed.
+gm_sh_drop = {
+	save_scope_as = gm_sh_dropping
+	if = {
+		limit = {
+			has_variable = gm_tr_origin
+			exists = var:gm_tr_origin
+			var:gm_tr_origin = { var:gm_shadow ?= scope:gm_sh_dropping }
+		}
+		var:gm_tr_origin = { remove_variable = gm_shadow }
+	}
+	remove_list_global_variable = { name = gm_shadows target = scope:gm_sh_dropping }
+	destroy_container = yes
+}
+
+# State scope, from gm_clear_state and gm_state_tr_remove_whole: this state's
+# primary is forgotten or gone, and its shadow goes at once. A merge later this
+# month would otherwise adopt a demoted monument a second time beside its own
+# container, or raise one carried off.
+gm_state_drop_shadow = {
+	if = {
+		limit = { has_variable = gm_shadow }
+		if = {
+			limit = { exists = var:gm_shadow }
+			var:gm_shadow = { gm_sh_drop = yes }
+		}
+		gm_remove_state_var = { VAR = gm_shadow }
+	}
+}
+
+# State scope, real execution only: monument_events.1, .29 and .31, and
+# gm_state_changed_hands. Adopt every orphan of this state's region. With a
+# building in the region rebuilt today (it may not read back yet: one rebuild
+# a state a day), it waits a day.
+gm_state_adopt_orphans = {
+	clear_saved_scope = gm_sh_region
+	state_region = { save_scope_as = gm_sh_region }
+	if = {
+		limit = {
+			scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
+		}
+		trigger_event = { id = monument_events.31 days = 1 }
+	}
+	else = {
+		# The monuments that stood beside it come first: their levels are in the
+		# building too, and the lists must name them before a level is counted.
+		if = {
+			limit = {
+				has_global_variable_list = gm_monuments
+				any_in_global_list = {
+					variable = gm_monuments
+					gm_sh_orphan_of = { REGION = scope:gm_sh_region }
+				}
+			}
+			every_in_global_list = {
+				variable = gm_monuments
+				limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
+				gm_tr_repair_places = yes
+			}
+			gm_monument_pass = yes
+		}
+		if = {
+			limit = {
+				has_global_variable_list = gm_shadows
+				any_in_global_list = {
+					variable = gm_shadows
+					gm_sh_orphan_of = { REGION = scope:gm_sh_region }
+				}
+			}
+			# The pass may have promoted one onto a building that was lost: a rebuild.
+			if = {
+				limit = {
+					scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
+				}
+				trigger_event = { id = monument_events.31 days = 1 }
+			}
+			else = {
+				gm_sh_settle_region = yes
+			}
+		}
+	}
+}
+
+# State scope (scope:gm_sh_region saved), from gm_state_adopt_orphans.
+gm_sh_settle_region = {
+	# A building that no record describes came with the merge: the orphan that
+	# ranks first (a landmark, then the tallest) is its monument again.
+	scope:gm_sh_region = {
+		every_scope_state = {
+			limit = {
+				gm_state_unrecorded = yes
+				gm_state_unexplained_levels > 0
+			}
+			save_scope_as = gm_sh_target
+			clear_saved_scope = gm_sh_pick
+			ordered_in_global_list = {
+				variable = gm_shadows
+				limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
+				order_by = gm_sh_rank
+				position = 0
+				check_range_bounds = no
+				save_scope_as = gm_sh_pick
+			}
+			if = {
+				limit = { exists = scope:gm_sh_pick }
+				gm_state_raise_orphan = yes
+			}
+		}
+	}
+	# Every other orphan stands beside the recorded monument whose building
+	# holds the most levels its records don't account for, or is lost.
+	every_in_global_list = {
+		variable = gm_shadows
+		limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
+		add_to_temporary_list = gm_sh_left
+	}
+	every_in_list = {
+		list = gm_sh_left
+		gm_sh_settle_one = yes
+	}
+}
+
+# Container scope, an orphaned shadow (scope:gm_sh_region its region).
+gm_sh_settle_one = {
+	clear_saved_scope = gm_sh_target
+	scope:gm_sh_region = {
+		ordered_scope_state = {
+			limit = { gm_state_takes_orphan_beside = yes }
+			order_by = gm_state_unexplained_levels
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_sh_target
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_sh_target }
+		gm_sh_adopt_beside = yes
+		debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for"
+	}
+	else = {
+		gm_sh_lost = yes
+	}
+}
+
+# Container scope, an orphaned shadow, with scope:gm_sh_target the state that
+# holds its region's ground (scope:gm_sh_region its region). It stands there as
+# a monument beside the one there, as a returned trophy does
+# (gm_tr_become_monument): the same container, retagged and moved from
+# gm_shadows to gm_monuments, in the state's and its owner's lists at once. No
+# rebuild: its levels are in the building already, and it counts no more of
+# them than the building holds unaccounted for (a piece carried off since its
+# shadow was written).
+gm_sh_adopt_beside = {
+	save_scope_as = gm_sh_moving
+	gm_sh_log_numbers = yes
+	scope:gm_sh_target = {
+		set_variable = { name = gm_sh_room value = gm_state_unexplained_levels }
+	}
+	set_variable = {
+		name = gm_tr_levels
+		value = {
+			value = var:gm_tr_levels
+			max = scope:gm_sh_target.var:gm_sh_room
+		}
+	}
+	scope:gm_sh_target = { remove_variable = gm_sh_room }
+	remove_list_global_variable = { name = gm_shadows target = scope:gm_sh_moving }
+	add_to_global_variable_list = { name = gm_monuments target = scope:gm_sh_moving }
+	set_global_variable = gm_mon_lists_written
+	remove_tag = gm_shadow
+	add_tag = gm_monument
+	set_variable = { name = gm_tr_origin value = scope:gm_sh_target }
+	set_variable = { name = gm_tr_origin_region value = scope:gm_sh_target.state_region }
+	set_variable = { name = gm_tr_site value = scope:gm_sh_target }
+	set_variable = { name = gm_tr_site_region value = scope:gm_sh_target.state_region }
+	gm_tr_update_picture = yes
+	scope:gm_sh_target = {
+		add_to_variable_list = { name = gm_monuments_here target = scope:gm_sh_moving }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
+		owner = {
+			add_to_variable_list = { name = gm_monuments_held target = scope:gm_sh_moving }
+			set_variable = gm_mon_listed
+			trigger_event = { id = monument_events.20 }
+		}
+	}
+	set_global_variable = { name = gm_sh_log_kept_now value = 1 }
+	gm_monument_merge_self_check = yes
+}
+
+# State scope, a building no record describes (scope:gm_sh_target), with
+# scope:gm_sh_pick an orphaned shadow of its region: the building is that
+# monument's, come with the merge. It stands beside first (the lists), then is
+# raised onto the state's variables as a swap raises a secondary
+# (gm_state_raise_secondary): its records, its dedication put back through
+# gm_restore_pm, frozen at its levels. No rebuild. Its shadow again at once
+# when its method already reads back.
+gm_state_raise_orphan = {
+	scope:gm_sh_pick = { gm_sh_adopt_beside = yes }
+	clear_saved_scope = gm_mon_raise
+	scope:gm_sh_pick = { save_scope_as = gm_mon_raise }
+	gm_state_raise_secondary = yes
+	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands again as the monument of the state that holds its building: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for"
+	gm_state_restore_dedication = yes
+	gm_state_write_shadow = yes
+}
+
+# Container scope, an orphaned shadow no state in its region takes: its building
+# did not come with the merge, or holds none of its levels. Logged, then gone.
+gm_sh_lost = {
+	gm_sh_log_numbers = yes
+	set_global_variable = { name = gm_sh_log_kept_now value = 0 }
+	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region is lost, no building there holding levels nothing records: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings in its region"
+	gm_monument_merge_self_check = yes
+	gm_sh_drop = yes
+}
+
+# Container scope, an orphaned shadow (scope:gm_sh_region its region), before it
+# is adopted or lost: the numbers its log lines and the self-check print, as
+# global variables (gm_sh_log_levels and its siblings, gm_monument_values.txt).
+gm_sh_log_numbers = {
+	set_global_variable = { name = gm_sh_log_levels_now value = gm_mon_levels }
+	set_global_variable = { name = gm_sh_log_found_now value = 0 }
+	set_global_variable = { name = gm_sh_log_buildings_now value = 0 }
+	set_global_variable = { name = gm_sh_log_readable_now value = 1 }
+	scope:gm_sh_region = {
+		every_scope_state = {
+			limit = { has_building = building_grand_monument }
+			change_global_variable = { name = gm_sh_log_buildings_now add = 1 }
+			if = {
+				limit = { gm_state_unexplained_levels > global_var:gm_sh_log_found_now }
+				set_global_variable = { name = gm_sh_log_found_now value = gm_state_unexplained_levels }
+			}
+			if = {
+				limit = { gm_state_levels_readable = no }
+				set_global_variable = { name = gm_sh_log_readable_now value = 0 }
+			}
+		}
+	}
+}
+
+# Container scope, a monument beside another whose state is gone, from
+# gm_tr_repair_places: its state again is the one in its region whose building
+# holds its levels unaccounted for, which after a merge need not be the most
+# populous; with none, gm_tr_repair_places's rule.
+gm_mon_repair_origin = {
+	save_scope_as = gm_mon_repairing
+	clear_saved_scope = gm_tr_repair_state
+	var:gm_tr_origin_region = {
+		ordered_scope_state = {
+			limit = {
+				has_building = building_grand_monument
+				gm_state_unexplained_levels >= scope:gm_mon_repairing.var:gm_tr_levels
+			}
+			order_by = gm_state_unexplained_levels
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_tr_repair_state
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_tr_repair_state }
+		set_variable = { name = gm_tr_origin value = scope:gm_tr_repair_state }
+		set_variable = { name = gm_tr_site value = scope:gm_tr_repair_state }
+		set_variable = { name = gm_tr_site_region value = scope:gm_tr_repair_state.state_region }
+	}
+}
+
+# ---- Self-check: a merge keeps its monument (issue #936) -------------------------------
+# Any scope (the globals gm_sh_log_numbers wrote), from gm_sh_adopt_beside and
+# gm_sh_lost, the first time a game settles an orphaned shadow: whether a
+# monument's levels came with a merge into a building of its region, which
+# nobody has seen the engine do. No verdict with no levels recorded, or with a
+# building in the region whose levels its records cannot tell apart (a primary
+# still being built, or one a ceremony asked about and left undedicated), so
+# OK and BROKEN read only exact arithmetic.
+gm_monument_merge_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_merge_self_checked }
+			has_global_variable = gm_sh_log_levels_now
+			global_var:gm_sh_log_levels_now >= 1
+			global_var:gm_sh_log_readable_now = 1
+		}
+		set_global_variable = gm_merge_self_checked
+		if = {
+			limit = { global_var:gm_sh_log_kept_now = 1 }
+			debug_log = "TE_SELF_CHECK OK monument_merge_kept (a monument whose state merged into another part of its region stands again from its shadow: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found in a building there that its records lacked, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings in the region)"
+		}
+		else_if = {
+			limit = { global_var:gm_sh_log_buildings_now = 0 }
+			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no Grand Monument stands in the region, so its building did not survive the merge; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded; see docs/testing/grand-monuments-ageing-playtest.md)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings stand in the region, none holding levels its records lack, so its levels did not join the building there; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded; see docs/testing/grand-monuments-ageing-playtest.md)"
+		}
 	}
 }
 

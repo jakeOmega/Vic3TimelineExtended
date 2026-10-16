@@ -260,6 +260,9 @@ gm_state_tr_remove_whole = {
 	}
 	remove_building = building_grand_monument
 	set_variable = gm_carried_off
+	# Its shadow too, now: its records stay a month, but a merge must not raise
+	# a monument carried off (issue #936).
+	gm_state_drop_shadow = yes
 	# Another monument stood beside it: the building passes to the largest, at
 	# the levels of all that remain (gm_monument_effects.txt), which clears the
 	# taken one's records as a rebuild does.
@@ -889,8 +892,18 @@ gm_trophy_monthly = {
 }
 
 # Container scope. A state that has stopped existing (a region's parts merged)
-# is found again in its region: the most populous state there.
+# is found again in its region: the most populous state there. A monument
+# standing beside another goes back to the state whose building holds its
+# levels first (gm_mon_repair_origin, issue #936).
 gm_tr_repair_places = {
+	if = {
+		limit = {
+			has_tag = gm_monument
+			NOT = { exists = var:gm_tr_origin }
+			has_variable = gm_tr_origin_region
+		}
+		gm_mon_repair_origin = yes
+	}
 	if = {
 		limit = {
 			NOT = { exists = var:gm_tr_origin }
