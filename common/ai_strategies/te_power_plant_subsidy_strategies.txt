@@ -1,18 +1,22 @@
-﻿# Experiment (#933): `should_remove` takes a building out of the AI's
-# subsidies. No vanilla strategy uses it and no engine doc lists the subsidy
-# priorities; it sits beside must_have and nice_to_have among the game
-# executable's strings. A strategy's value overrides the default's, and an
-# INJECT can't change a key the default's vanilla subsidies block already holds
-# (edited_default_strategy.txt), so it goes in every administrative strategy.
-# Read in game 2026-10-16: 54 AI power plants in the first three strategies'
-# countries 1% subsidized, against 99% of 256 elsewhere. building_power_plant
-# is the coal and oil plant; nuclear, fusion and renewable plants are their own
-# buildings, which no strategy subsidizes. The yearly self-check
-# te_ai_subsidy_should_remove_selfcheck reads the groups apart;
-# docs/testing/ai-economy-playtest.md.
+﻿# The AI doesn't subsidize its coal and oil power plants (#933).
+# building_power_plant is the coal and oil plant; nuclear, fusion and renewable
+# plants are their own buildings, which no strategy subsidizes. Vanilla's
+# default strategy pins it must_have, so the AI's treasury paid every plant's
+# losses, retooling included, even where cleaner plants had undercut it.
+#
+# should_remove makes the AI drop the subsidy. No vanilla strategy uses it and
+# no engine doc lists the subsidy priorities; it sits beside must_have and
+# nice_to_have among the game executable's strings. An INJECT can't change a
+# key the default strategy's vanilla subsidies block already holds
+# (edited_default_strategy.txt), but a strategy's value overrides the
+# default's, so the value goes in every vanilla administrative strategy.
+# Read in game 2026-10-16 (owner's late-game save, 2034.9.13 to 2035.1.1): AI
+# power plants 1% subsidized in the first three strategies' countries (54
+# plants) and 19% in the other four's (257 plants, 99% before), railways 98%
+# throughout. docs/testing/ai-economy-playtest.md; the INJECT rules are in
+# docs/guides/scripting_best_practices.md.
 
-# No subsidies block in vanilla: each INJECT adds one with no key in common
-# (group=clean, te_ai_subsidy_clean_strategy).
+# No subsidies block in vanilla: each INJECT adds one.
 INJECT:ai_strategy_agricultural_expansion = {
 	subsidies = {
 		building_power_plant = should_remove
@@ -31,9 +35,8 @@ INJECT:ai_strategy_placate_population = {
 	}
 }
 
-# A subsidies block in vanilla, naming other buildings: whether an INJECT's
-# second block adds a new key to it is unread (group=merged,
-# te_ai_subsidy_merged_strategy). If it doesn't, REPLACE these four.
+# A subsidies block in vanilla, naming other buildings: the INJECT's second
+# block adds its new key to it.
 INJECT:ai_strategy_resource_expansion = {
 	subsidies = {
 		building_power_plant = should_remove

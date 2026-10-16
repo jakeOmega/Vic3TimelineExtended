@@ -38,51 +38,29 @@ as vanilla gives the port and railway base groups. Baseline, Fast A before the c
 | **Subsidy bill.** Power plants' share of `balance_subsidies`, and subsidies as a share of income (the note's §4 slot map). | Power plants' share well under 57%; fewer bankrupt countries than the baseline's. | A bill that stays high with little retooling means the non-retooling plants' losses grew: compare `goods_sales` with `goods_cost` on plants that aren't retooling (baseline: £54.9M against £58.6M). |
 | **Oil.** The oil price and the oil shortage on power plants (`input_goods_shortage`). | AI plants move toward Modern Oil-Fired (140 electricity against Modern Coal's 90). Oil may tighten, but plants shouldn't flip between coal and oil every year. | Coal–oil flips driven by oil shortage would want a look at oil supply, not at the group. |
 
-## Experiment: `should_remove` for power plants (#933, draft)
+## The AI doesn't subsidize coal and oil power plants (#933)
 
 `building_power_plant = should_remove` (the coal and oil plant; nuclear, fusion and renewable plants are their own
 buildings, which no strategy subsidizes) in every vanilla administrative strategy, by INJECT
-(`common/ai_strategies/te_power_plant_subsidy_strategies.txt`). A strategy's value overrides the default's. The default
-strategy's INJECT (`edited_default_strategy.txt`) sets it too, but that line is inert: an INJECT can't change a key
-vanilla's `subsidies` block already holds (read in round 1). The strategies fall in two kinds:
+(`common/ai_strategies/te_power_plant_subsidy_strategies.txt`; `test_power_plant_subsidy_strategies.py` keeps the list
+complete). A strategy's value overrides the default's. The default strategy's own INJECT (`edited_default_strategy.txt`)
+is inert: an INJECT can't change a key vanilla's `subsidies` block already holds, though it adds a new one
+(`scripting_best_practices.md`). AI countries running no administrative strategy keep the default's `must_have`.
 
-- **clean**: `ai_strategy_agricultural_expansion`, `_plantation_economy`, `_placate_population`, with no `subsidies` block
-  in vanilla, so the INJECT adds one with no key in common.
-- **merged**: `ai_strategy_resource_expansion`, `_industrial_expansion`, `_colonial_extraction`, `_montenegro_admin`, whose
-  vanilla `subsidies` block names other buildings, so the INJECT adds a second block. Whether its new key merges in (as
-  an INJECTed list does) is unread.
-- **rest**: AI countries running none of the seven, which keep the default's `must_have`.
+**How it was read.** A once-a-game self-check, removed once it had answered, logged the subsidized share of AI power plants
+and railways (the `must_have` control) by the country's administrative strategy, in the owner's European Union game loaded
+at 2034.9.13 and run to 2035.1.1 (2026-10-16):
 
-**Self-check.** Once a game for each group, as soon as its AI countries own 5 power plants and 5 railways, the yearly
-pulse logs `TE_SELF_CHECK OK|BROKEN ai_power_plant_should_remove group=clean|merged|rest` with the counts and subsidized
-shares (`common/scripted_effects/te_ai_subsidy_selfcheck_effects.txt`). OK is under half the group's power plants
-subsidized while its railways, still `must_have`, read half or more. The railways are the control: a low railway share
-means `is_subsidized` doesn't read the subsidy, and the line says so. No line for a group means it hasn't reached 5 plants
-yet; `rest` may never print if every AI country runs one of the seven. Run it from a save made before the experiment (the
-done flags are global variables in the save).
+| Round | Strategies with `should_remove` | Power plants subsidized | Railways subsidized |
+|---|---|---|---|
+| 1 | The three with no vanilla `subsidies` block | Those three: 1% of 54. The other four, reached only by the default's INJECT: 99% of 256 | 98% |
+| 2 | All seven | The three: 1% of 54. The other four (a second `subsidies` block): 19% of 257 | 98% |
 
-**Round 1 (owner's European Union game, loaded at 2034.9.13 and run to 2035.1.1, 2026-10-16; clean strategies only, the
-others reached by the default's INJECT alone):** `group=clean` OK, 54 power plants 1% subsidized, railways 98%;
-`group=other` BROKEN, 256 power plants 99% subsidized, railways 98%. So `should_remove` works, and the default strategy's
-INJECT is inert (the mod's earlier `nice_to_have` never applied either; `scripting_best_practices.md`).
-
-**Round 2 (the same save, loaded at 2034.9.13 and run to 2035.1.1, 2026-10-16; all seven strategies):** `group=clean` OK,
-54 power plants 1% subsidized, railways 98%; `group=merged` OK, 257 power plants 19% subsidized (99% in round 1),
-railways 98%; no `group=rest` line (fewer than 5 power plants or railways in AI countries outside the seven). An
-INJECTed second `subsidies` block adds its new key (`scripting_best_practices.md`). Still open: why 19% of the merged
-group's plants stay subsidized after 3½ months (slow stripping, or a case where the AI keeps one), and how unsubsidized
-plants fare (the checks below).
-
-| Round 2 result | Reading | Next |
-|---|---|---|
-| merged OK | An INJECTed second `subsidies` block adds its new key. Every AI country on one of the seven drops its power-plant subsidies. | Run the subsidy checks below; record the merge in `scripting_best_practices.md`. |
-| merged BROKEN | The engine drops the second block's keys (or keeps only the first block). | REPLACE the four merged strategies with vanilla's bodies plus the power-plant line. |
-| clean BROKEN | Round 1 read OK, so something else changed: check `error.log` and `debug.log` for the strategy files at load. | Compare with round 1's build. |
-| rest BROKEN | Expected: those countries keep the default's `must_have`. | Only a concern if the group is large; it says who runs no administrative strategy. |
+No load error named a strategy file in either round. Still open: why 19% of the second group's plants stayed subsidized
+after 3½ months (slow stripping, or a case where the AI keeps one), and how unsubsidized plants fare.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Load.** Search `error.log` and `debug.log` for `ai_strateg`, `should_remove` and `te_power_plant_subsidy_strategies` after the game loads. | Nothing. | An unknown-value error means the engine rejects `should_remove`: revert to `nice_to_have`. |
-| **Subsidies.** In a plain-text save past the self-check, count AI power plants with `subsidized=yes` by group (owner country's strategy). | Clean and merged groups near none if their lines read OK. Railways and ports unchanged (about 99%). | As the self-check table. |
-| **Plants without a subsidy.** The same save: power plants' `staffing` against `previous_staffing`, `cash_reserves`, and the electricity price where plants lost their subsidy. | Retooling or loss-making plants cut wages and shed some staff; electricity's price rises until plants cover their costs. No state left without power. | Plants emptying out and electricity shortages spreading to factories mean the AI needs the subsidy: revert, and lean on the base group's `most_productive` alone. |
-| **Budgets.** Subsidies as a share of income and the bankrupt share of people (the fast-mode note's §4), against the section above. | Lower than with `most_productive` alone. | No change means the subsidy flag wasn't the bill: keep `most_productive`, drop the experiment. |
+| **Subsidies.** A few years after the change, count AI power plants with `subsidized=yes` in a plain-text save (or read big AI countries' power plants in game). | Near none outside countries with no administrative strategy; the 19% left after 3½ months has fallen. Railways and ports unchanged (about 99%). | A share that stays near 19%: find which countries keep the subsidy and what they share (strategy, budget, electricity shortage). |
+| **Plants without a subsidy.** The same save: power plants' `staffing` against `previous_staffing`, `cash_reserves`, and the electricity price where plants lost their subsidy. | Retooling or loss-making plants cut wages and shed some staff; electricity's price rises until plants cover their costs. No state left without power. | Plants emptying out and electricity shortages spreading to factories mean the AI needs the subsidy: drop `te_power_plant_subsidy_strategies.txt` and lean on the base group's `most_productive` alone. |
+| **Budgets.** Subsidies as a share of income and the bankrupt share of people (the fast-mode note's §4), against the section above. | Lower than with `most_productive` alone. | No change means the subsidy flag wasn't the bill: keep `most_productive`, and reconsider the strategies. |
