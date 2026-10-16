@@ -221,3 +221,72 @@ gm_state_mon_disp_here = {
 		}
 	}
 }
+
+# ---- A merged state (issue #936; gm_monument_effects.txt § "A merged state") --------
+# State scope. The levels the shadow of this state's primary records
+# (gm_state_write_shadow): its frozen levels once it is finished, else what it
+# stands for now.
+gm_state_shadow_levels = {
+	value = gm_state_primary_levels
+	if = {
+		limit = { has_variable = gm_levels }
+		value = var:gm_levels
+	}
+}
+
+# State scope. Levels in this state's building that no record here accounts
+# for: the building's level less its secondaries' and its primary's. A frozen
+# primary accounts for its gm_levels, one still being built for the levels its
+# ceremony asked at (it stands for at least those), one recorded with neither
+# for all that remains; a building no record describes (a merge brought it)
+# for none. 0 with no building.
+gm_state_unexplained_levels = {
+	value = gm_state_level
+	subtract = gm_state_secondary_levels
+	if = {
+		limit = { has_variable = gm_levels }
+		subtract = var:gm_levels
+	}
+	else_if = {
+		limit = {
+			has_variable = gm_seen
+			has_variable = gm_ceremony_level
+		}
+		subtract = var:gm_ceremony_level
+	}
+	else_if = {
+		limit = { has_variable = gm_seen }
+		value = 0
+	}
+	min = 0
+}
+
+# What the merge's log lines and self-check print (gm_sh_log_numbers): copied
+# into global variables first, as nd_log_context does, because a ScriptValue
+# read inside debug_log evaluates against ROOT and cannot see a saved scope
+# (scripting_best_practices.md § "`debug_log` Loc-String Templating
+# Limitations"). The orphan's recorded levels, the most levels any building in
+# its region holds unaccounted for, and how many buildings stand there.
+gm_sh_log_levels = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_levels_now }
+		value = global_var:gm_sh_log_levels_now
+	}
+}
+
+gm_sh_log_found = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_found_now }
+		value = global_var:gm_sh_log_found_now
+	}
+}
+
+gm_sh_log_buildings = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_buildings_now }
+		value = global_var:gm_sh_log_buildings_now
+	}
+}

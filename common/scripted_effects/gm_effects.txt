@@ -389,6 +389,9 @@ gm_clear_state = {
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
 	gm_state_zero_local_steps = yes
+	# Its shadow (issue #936, gm_monument_effects.txt): the pass writes the next
+	# monument's once it is recorded.
+	gm_state_drop_shadow = yes
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -697,39 +700,49 @@ gm_country_refresh = {
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-		# A new monument copies its siblings' dedication: the ceremony
-		# replaces it.
-		gm_state_reset_copied_dedication = yes
-		gm_state_first_sight = yes
-		# A dedication's unveiling, deferred to here (gm_state_offer_skins);
-		# then a monument older than names, or one nobody named, takes the
-		# default name (v2 §3.3).
+		# A part of this region merged into this state, and the records of a
+		# monument that stood there wait to be adopted here (issue #936): the
+		# hidden event adopts them first, and nothing reads this building as a
+		# copy, a first sight or new levels until it has.
 		if = {
-			limit = { has_variable = gm_unveil_pending }
-			remove_variable = gm_unveil_pending
-			gm_state_unveil = yes
+			limit = { gm_state_merge_pending = yes }
+			trigger_event = { id = monument_events.29 }
 		}
-		gm_state_name_if_unnamed = yes
-		# Not while a gifted monument's method may still read as another's.
-		if = {
-			limit = {
-				NOT = { has_variable = gm_restore_pm }
+		else = {
+			# A new monument copies its siblings' dedication: the ceremony
+			# replaces it.
+			gm_state_reset_copied_dedication = yes
+			gm_state_first_sight = yes
+			# A dedication's unveiling, deferred to here (gm_state_offer_skins);
+			# then a monument older than names, or one nobody named, takes the
+			# default name (v2 §3.3).
+			if = {
+				limit = { has_variable = gm_unveil_pending }
+				remove_variable = gm_unveil_pending
+				gm_state_unveil = yes
 			}
-			gm_state_update_picture = yes
-		}
-		# A ceremony a finished level's hook missed.
-		gm_state_offer_missed_ceremony = yes
-		# Frozen once its construction stops; levels built after found a new
-		# monument beside it, from a hidden event (the refresh runs inside
-		# tooltips, which write nothing; the founding reads back what it writes).
-		gm_state_record_frozen_levels = yes
-		if = {
-			limit = { gm_state_has_new_levels = yes }
-			trigger_event = { id = monument_events.29 }
-		}
-		if = {
-			limit = { gm_state_newcomer_settled = yes }
-			trigger_event = { id = monument_events.29 }
+			gm_state_name_if_unnamed = yes
+			# Not while a gifted monument's method may still read as another's.
+			if = {
+				limit = {
+					NOT = { has_variable = gm_restore_pm }
+				}
+				gm_state_update_picture = yes
+			}
+			# A ceremony a finished level's hook missed.
+			gm_state_offer_missed_ceremony = yes
+			# Frozen once its construction stops; levels built after found a new
+			# monument beside it, from a hidden event (the refresh runs inside
+			# tooltips, which write nothing; the founding reads back what it writes).
+			gm_state_record_frozen_levels = yes
+			if = {
+				limit = { gm_state_has_new_levels = yes }
+				trigger_event = { id = monument_events.29 }
+			}
+			if = {
+				limit = { gm_state_newcomer_settled = yes }
+				trigger_event = { id = monument_events.29 }
+			}
 		}
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
@@ -1057,6 +1070,13 @@ gm_check_contests = {
 				# A gifted monument whose rebuilt method may still be the
 				# engine's copy of another dedication (opportunities spec §3.1).
 				NOT = { has_variable = gm_restore_pm }
+				# Recorded: in the refresh's order, first sight or a ceremony
+				# always comes first (gm_country_refresh's state loop runs before
+				# this), except for a building a merge brought, which waits to be
+				# adopted (issue #936, gm_state_merge_pending) and is not contested
+				# meanwhile. Moving this check ahead of that loop would skip new
+				# monuments for a month.
+				has_variable = gm_seen
 			}
 			if = {
 				limit = {
@@ -1175,6 +1195,12 @@ gm_state_lift_contest = {
 # a revolutionary country); the nation that raised it taking it back fails
 # `gm_state_raised_by_owner = no`, and the monthly check restores it.
 gm_state_changed_hands = {
+	# A part of this region merged into this state (issue #936): the records of
+	# the monuments that stood there are adopted before anything here is judged.
+	if = {
+		limit = { gm_state_merge_pending = yes }
+		gm_state_adopt_orphans = yes
+	}
 	# A commission's mark and a naming in progress belong to the old owner
 	# (v2 §3.3, §3.5); its naming is closed by its own sweep.
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
@@ -1207,6 +1233,8 @@ gm_state_changed_hands = {
 				is_revolutionary = no
 			}
 			gm_state_raised_by_owner = no
+			# Not a building still waiting to be adopted (a rebuild in its region).
+			gm_state_merge_pending = no
 		}
 		set_variable = gm_seen
 		if = {

@@ -558,3 +558,84 @@ gm_state_has_landmark = {
 		}
 	}
 }
+
+# ---- A merged state (issue #936; gm_monument_effects.txt § "A merged state") --------
+# Container scope, a shadow: its state is gone (its part of the region merged
+# into another, or lost its last province).
+gm_sh_is_orphan = {
+	has_tag = gm_shadow
+	has_variable = gm_tr_origin_region
+	NOT = { exists = var:gm_tr_origin }
+}
+
+# Container scope, a shadow or a monument beside another: its state is gone and
+# it stood in the state region $REGION$.
+gm_sh_orphan_of = {
+	has_variable = gm_tr_origin_region
+	NOT = { exists = var:gm_tr_origin }
+	var:gm_tr_origin_region ?= $REGION$
+}
+
+# State scope. A monument from another part of this state's region may be
+# waiting to be adopted here (gm_state_adopt_orphans): a shadow, or a monument
+# that stood beside one, whose state is gone, while this building holds levels
+# nothing here records. Until it is settled nothing reads this building as the
+# engine's copy, a new dedication or new levels built beside. The cheap reads
+# first: the refresh, which tooltips walk, asks it of every monument.
+gm_state_merge_pending = {
+	has_building = building_grand_monument
+	OR = {
+		NOT = { has_variable = gm_seen }
+		gm_state_unexplained_levels > 0
+	}
+	state_region = { save_temporary_scope_as = gm_tmp_sh_region }
+	OR = {
+		AND = {
+			has_global_variable_list = gm_shadows
+			any_in_global_list = {
+				variable = gm_shadows
+				gm_sh_orphan_of = { REGION = scope:gm_tmp_sh_region }
+			}
+		}
+		AND = {
+			has_global_variable_list = gm_monuments
+			any_in_global_list = {
+				variable = gm_monuments
+				gm_sh_orphan_of = { REGION = scope:gm_tmp_sh_region }
+			}
+		}
+	}
+}
+
+# State scope. A building here that no record describes: no ceremony has asked
+# about it and none is under way. A building a merge brought, or (for a day) a
+# new one before its first ceremony.
+gm_state_unrecorded = {
+	has_building = building_grand_monument
+	NOT = { has_variable = gm_seen }
+	NOT = { has_variable = gm_ceremony_level }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_newcomer }
+}
+
+# State scope. An orphaned shadow may stand beside this state's primary: its
+# records account for its own levels, and its building holds more.
+gm_state_takes_orphan_beside = {
+	has_building = building_grand_monument
+	has_variable = gm_seen
+	gm_state_unexplained_levels > 0
+}
+
+# State scope. Its building's levels are told apart exactly: nothing records
+# it, or its primary is frozen (gm_levels). The merge self-check gives a
+# verdict only for a region whose every building is so.
+gm_state_levels_readable = {
+	OR = {
+		gm_state_unrecorded = yes
+		AND = {
+			has_variable = gm_seen
+			has_variable = gm_levels
+		}
+	}
+}

@@ -271,6 +271,15 @@ building with no records adopts it as its primary. Engine behaviour unread (whic
 merge their levels), so it ships behind a `TE_SELF_CHECK` and the probe in the issue goes on the play-test list. Built
 last; a subagent may take it once §1–§5 are on the branch.
 
+**Built (2026-10-16, subagent):** `gm_shadow_monthly` writes the shadows (`gm_state_write_shadow`, refreshed in place,
+set-or-remove); `gm_clear_state` and a whole taking drop a state's shadow at once (no stale shadow beside its demoted
+container). An orphan's region goes to the hidden `monument_events.31`; `.1`, `.29` and a change of owner adopt first
+wherever `gm_state_merge_pending` holds, and the refresh only asks `.29`. `gm_state_adopt_orphans` waits a day for a
+rebuild in the region, repairs the orphaned secondaries to the building that holds their levels, then raises each
+orphan (landmarks first) onto the building no record describes that holds the most unaccounted levels, stands the rest beside a recorded
+monument with unaccounted levels (no more levels than it holds unaccounted; a primary still being built accounts for its
+ceremony level), and drops the rest. Self-check `monument_merge_kept`. Undedicated primaries have no shadow.
+
 ## 10. Self-checks and the play-test list
 
 `docs/testing/grand-monuments-ageing-playtest.md`, with two `TE_SELF_CHECK` lines (pattern: `gm_monument_self_check`):
