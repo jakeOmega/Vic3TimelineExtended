@@ -58,6 +58,44 @@ covert_action_valid_target = {
 	NOT = { is_country_type = decentralized }
 }
 
+# The one definition of a friend, for every covert rule that asks. Relations
+# of at least cordial AND a tie (alliance, defensive pact, the same power
+# bloc, or one the other's overlord or subject), or relations of at least
+# amicable with no tie. A tie never counts on its own: two members of one
+# bloc who dislike each other are not friends. Consumers: the attacker's
+# backlash and the defender's backlash scaling, the AI's watch odds,
+# Counterintelligence Support's possible and requirement_to_maintain, and the
+# AI's launch and break checks for the six operations that used to be
+# refused at good relations.
+# The bloc tie is guarded on the country in scope being in one: two countries
+# in none can otherwise read as being in the same one.
+# `is_subject_of` also counts a subject's subject. It has no mirror, so the
+# overlord direction enters $TARGET$ and reads PREV (the country in scope).
+# Relations are symmetric, so the answer is the same from either side.
+# Relations are read as $TARGET$.relations:root, as the other covert gates do,
+# so ROOT must be the country in scope: the actor of a diplomatic action, or
+# a caller that has re-entered it with `root = { }`.
+# Parameters: $TARGET$ = country (a scope: reference)
+# Scope: country
+covert_is_friend = {
+	OR = {
+		AND = {
+			$TARGET$.relations:root >= relations_threshold:cordial
+			OR = {
+				has_treaty_alliance_with = { TARGET = $TARGET$ }
+				has_treaty_defensive_pact_with = { TARGET = $TARGET$ }
+				AND = {
+					is_in_power_bloc = yes
+					is_in_same_power_bloc = $TARGET$
+				}
+				is_subject_of = $TARGET$
+				$TARGET$ = { is_subject_of = PREV }
+			}
+		}
+		$TARGET$.relations:root >= relations_threshold:amicable
+	}
+}
+
 # True while the country runs fewer operations of this type than
 # covert_ops_max_per_type. That script value is the only place the cap lives:
 # each operation is its own script container, so raising the cap needs no
@@ -487,6 +525,8 @@ covert_ai_can_spare_influence = {
 # ends only once the operation's reason has gone, judged more loosely than
 # will_propose judges it at launch (covert_ai_hostility_gone), so a target
 # drifting in and out of the launch test does not make the AI stop and start.
+# The four breakable operations that used to be refused at good relations
+# also end once the target is a friend (covert_is_friend), after the same wait.
 # The launch-only tests (free slot, intelligence capacity, target size, debt)
 # are never break reasons.
 
