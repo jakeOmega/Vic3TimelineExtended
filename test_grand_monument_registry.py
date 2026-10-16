@@ -3927,8 +3927,9 @@ class ReviewFixes20261016Tests(unittest.TestCase):
 
     def test_a_dig_in_a_state_rebuilt_today_waits_a_month(self):
         finish = squash(strip_comments(block(read(self.ARCH), "gm_arch_finish")))
+        # The terms (#965's partage) wait with it, so a piece is shipped once.
         self.assertIn("scope:gm_arch_dig_state = { NOT = { has_variable = gm_rebuilding } } } "
-                      "gm_arch_settle_levels = yes gm_arch_place = yes", finish)
+                      "gm_arch_settle_levels = yes gm_arch_settle_terms = yes gm_arch_place = yes", finish)
 
     def test_the_occupiers_roll_sees_a_secondary_beside_an_untakeable_primary(self):
         # Finding 2.

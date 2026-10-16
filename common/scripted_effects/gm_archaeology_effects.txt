@@ -604,6 +604,9 @@ gm_arch_partage = {
 			set_variable = { name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece }
 			set_variable = { name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur }
+			# A taken piece carries its share of the monument's years (ageing
+			# spec 2026-10-16 §5); a site just unearthed has none.
+			set_variable = { name = gm_tr_age value = 0 }
 			set_variable = { name = gm_tr_year value = gm_this_year }
 			set_variable = { name = gm_tr_taken_by value = scope:gm_arch_sponsor }
 			set_variable = { name = gm_tr_share value = flag:piece }
