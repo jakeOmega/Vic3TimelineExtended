@@ -13,10 +13,10 @@
 #     Vanilla's law_extraction_economy dismantles privately owned industry the
 #     same way on enactment. Partial, level-by-level retirement is not
 #     available: no effect downsizes a building by a level.
-#   - the country pays the owners compensation (rt_compensation_<key>_here):
-#     the building's construction value at the construction good's base price,
-#     times RT_COMPENSATION_SHARE. It leaves the treasury; nothing reaches a
-#     foreign owner's treasury.
+#   - the country pays compensation (rt_compensation_<key>_here): the
+#     building's construction value at the construction good's base price,
+#     times RT_COMPENSATION_SHARE. It leaves the treasury and reaches no owner,
+#     domestic or foreign: the loc says so.
 #   - the state gets Transition Assistance (rt_transition_assistance,
 #     RT_ASSISTANCE_YEARS years): retraining and income support for the workers
 #     the closure lays off.
