@@ -3,10 +3,13 @@
 # ============================================================================
 # EVENT 1: Covert Operation Detected (Attacker's Perspective)
 # ============================================================================
-# Fired by covert_ops_roll_detection_all with the burned operation in
-# scope:iw_burned_op. The pact and container are removed in after; the
-# attacker gains infamy and the target is notified.
-# after also charges the agency's Tradecraft by the burned operation's tier.
+# Fired by covert_exposure_fire, the only place that opens it, with the burned
+# operation in scope:iw_burned_op: from the detection roll, from the target's
+# decision (covert_warfare.3, or an AI's at the roll), or when the target
+# exposes an operation it has been watching. The pact and container are
+# removed in after; the attacker gains infamy and the target is notified.
+# after also charges the agency's Tradecraft by the burned operation's tier,
+# and releases the one-exposure-in-flight lock (iw_expose_inflight).
 # ============================================================================
 
 covert_warfare.1 = {
@@ -20,7 +23,12 @@ covert_warfare.1 = {
 	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
-	duration = 3
+	# One month (`duration` is in months, and the event opens itself 30 days
+	# before it expires, so at once). While it is open the attacker's roll and
+	# every Expose against it wait (covert_exposure_in_flight), so a longer
+	# event would let a player stall detection by leaving it unanswered: at
+	# one month a stall skips at most one monthly roll per catch.
+	duration = 1
 
 	trigger = {
 		exists = scope:iw_burned_op
@@ -29,19 +37,21 @@ covert_warfare.1 = {
 	immediate = {
 		# The burned operation arrives as scope:iw_burned_op from
 		# covert_ops_roll_detection_all. Read it HERE and only here: the options
-		# and `after` run when the player clicks, up to `duration` days later, by
+		# and `after` run when the player clicks, up to `duration` months later, by
 		# which time stand-down or the monthly sync may have destroyed it.
 		# Event loc cannot reach a container either, so the type code is copied
 		# onto ROOT (scripting_best_practices.md, container rule 10). The phase
-		# is copied for the same reason as the code — the options fire days
+		# is copied for the same reason as the code — the options may fire weeks
 		# later and read only country variables. The war state is copied for
 		# the same reason again, and because the war can begin between the
 		# event firing and the player clicking: a wartime operation started
 		# during the diplomatic play may be caught before the war and clicked
 		# through after it starts, so the state has to be pinned here too.
 		# Two instances open at once would share iw_burned_type_code (the second
-		# immediate overwrites it); not reachable at the monthly pulse's one-burn
-		# cadence with duration = 3.
+		# immediate overwrites it). The lock covert_exposure_fire takes
+		# (covert_exposure_in_flight) keeps it to one per attacker: the roll,
+		# the target's decision and every exposure of a watched operation wait
+		# while one is open.
 		scope:iw_burned_op = {
 			var:iw_target = { save_scope_as = detected_by_country }
 			ROOT = {
@@ -55,6 +65,36 @@ covert_warfare.1 = {
 					set_variable = { name = iw_burned_at_war value = 0 }
 				}
 			}
+		}
+		# Self-check, once a game: an operation its target was watching reached
+		# this event, so the target's order crossed to the attacker with its
+		# saved scope (covert_watch_expose_record; the BROKEN half is in
+		# covert_watch_monthly).
+		if = {
+			limit = {
+				scope:iw_burned_op = { has_variable = iw_known }
+				NOT = { has_global_variable = te_selfcheck_covert_watch_done }
+			}
+			set_global_variable = { name = te_selfcheck_covert_watch_done value = yes }
+			debug_log = "TE_SELF_CHECK OK covert_watch_expose attacker=[THIS.GetCountry.GetTagName] (a watched operation its target exposed reached covert_warfare.1) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		# ---- Domestic backlash (covert_backlash_home / _public) ----
+		# Whether the target was a friend, pinned HERE for the same reason as
+		# the type code: the options may fire weeks later, and the relations the
+		# test reads may have moved. The relations hit abroad scales on it
+		# (covert_exposure_relations_deny), the attacker's home costs need it
+		# (covert_backlash_home), and so does the defender's public reaction
+		# (covert_backlash_public, which reads it as ROOT.var:iw_burned_friend).
+		# Removed in `after` with the other copies.
+		if = {
+			limit = {
+				exists = scope:detected_by_country
+				covert_is_friend = { TARGET = scope:detected_by_country }
+			}
+			set_variable = { name = iw_burned_friend value = 1 }
+		}
+		else = {
+			set_variable = { name = iw_burned_friend value = 0 }
 		}
 		# UN redesign phase 3: an exposed severe operation is a record the
 		# General Assembly can hold against us (un_dossier_effects.txt), unless
@@ -105,6 +145,11 @@ covert_warfare.1 = {
 			}
 			covert_exposure_third_party_blowback = yes
 		}
+		# At home, if the target was a friend: the full share for owning it.
+		# Every gate lives in the effect; it adds nothing otherwise. Bare on
+		# purpose: test_covert_exposure_tiers counts this option's guards
+		# (costless x2, severe tier x1) exactly, so no `if` around it.
+		covert_backlash_home = { SHARE = full }
 
 		ai_chance = {
 			base = 10
@@ -151,6 +196,8 @@ covert_warfare.1 = {
 			}
 			covert_exposure_third_party_blowback = yes
 		}
+		# At home, if the target was a friend: half the share for denying it.
+		covert_backlash_home = { SHARE = half }
 
 		ai_chance = {
 			base = 5
@@ -227,6 +274,19 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 13 }
 				covert_op_burn = { TYPE = secure_material ACTION = covert_secure_material_action TARGET = scope:detected_by_country CODE = 13 }
 			}
+			# Counterintelligence Support is never rolled (covert_op_is_hostile),
+			# so this branch is never reached; it keeps the chain one row per code.
+			else_if = {
+				limit = { var:iw_burned_type_code = 14 }
+				covert_op_burn = { TYPE = counterintel_support ACTION = covert_counterintel_support_action TARGET = scope:detected_by_country CODE = 14 }
+			}
+
+			# The defender's public turns on the interest groups friendly to
+			# us (covert_backlash_public). Here and not in covert_warfare.2,
+			# which has a 24-month cooldown and would skip it; before .2 is
+			# triggered, so its text can say so; while iw_burned_type_code and
+			# iw_burned_friend still exist, which it reads as ROOT.
+			scope:detected_by_country = { covert_backlash_public = yes }
 
 			# The agency's experience takes the hit (slice 5), by tier. Here,
 			# while iw_burned_type_code still exists; removed further down.
@@ -247,6 +307,23 @@ covert_warfare.1 = {
 		if = {
 			limit = { has_variable = iw_burned_at_war }
 			remove_variable = iw_burned_at_war
+		}
+		if = {
+			limit = { has_variable = iw_burned_friend }
+			remove_variable = iw_burned_friend
+		}
+		# The monthly watchdog's count of the passes this event was open at
+		# (covert_watch_attacker_monthly): gone with the copies, or the next
+		# covert_warfare.1 would start part-way to being taken for a stale one.
+		if = {
+			limit = { has_variable = iw_burned_seen }
+			remove_variable = iw_burned_seen
+		}
+		# The exposure is resolved: the next one of this attacker's operations
+		# may go (covert_exposure_in_flight). Outside the guard, like the copies.
+		if = {
+			limit = { has_variable = iw_expose_inflight }
+			remove_variable = iw_expose_inflight
 		}
 	}
 }
@@ -298,6 +375,25 @@ covert_warfare.2 = {
 			triggered_desc = {
 				trigger = { always = yes }
 				desc = covert_warfare.2.d
+			}
+		}
+		# A second paragraph when the exposure turned the public at home
+		# against the interest groups friendly to the perpetrator (the
+		# defender-side backlash effect in covert_warfare.1's `after` sets
+		# iw_last_exposed_public, and clears it on every exposure that did
+		# not). A sibling of the first_valid above, so the two concatenate;
+		# the texts open with a blank line.
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = iw_last_exposed_public
+					exists = scope:iw_exposed_by
+				}
+				desc = covert_warfare.2.d_public
+			}
+			triggered_desc = {
+				trigger = { has_variable = iw_last_exposed_public }
+				desc = covert_warfare.2.d_public_unnamed
 			}
 		}
 	}
@@ -459,6 +555,173 @@ covert_warfare.2 = {
 				}
 				factor = 0.2
 			}
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 3: A Foreign Operation Caught (Defender's Decision)
+# ============================================================================
+# Fired by covert_ops_roll_detection_all on the target of the operation it
+# caught, when the target is a player with a covert service of its own
+# (covert_can_watch); an AI target decides in script at the roll. The
+# operation arrives as scope:iw_burned_op and its operator as
+# scope:iw_catcher_attacker, both saved by the roll in the attacker's pulse.
+# While this is open the operation carries iw_catch_pending and is not rolled
+# again; `after` clears it. Not behind covert_warfare.2's 24-month cooldown:
+# every catch reaches the target.
+#   a. Expose them: covert_warfare.1 on the attacker, today's flow. If an
+#      exposure of that attacker is already in flight, the operation is
+#      watched with its exposure ordered. covert_warfare.4 tries again four
+#      days later, and the monthly pass (covert_watch_monthly) after that,
+#      until the attacker has answered the open covert_warfare.1, which a
+#      player may leave open for up to its month (duration is in months).
+#   b. Let it run: covert_watch_start. The attacker is not told.
+# The operation can end while the event is open, up to three months
+# (stand-down, the monthly sync, a lapsed pact); every use is guarded with
+# `exists`, and the options say so instead of acting.
+# ============================================================================
+
+covert_warfare.3 = {
+	type = country_event
+	placement = root
+
+	title = covert_warfare.3.t
+	desc = covert_warfare.3.d
+	flavor = covert_warfare.3.f
+
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:iw_burned_op
+		exists = scope:iw_catcher_attacker
+	}
+
+	immediate = {
+		# Under its own name: covert_exposure_fire re-saves iw_burned_op for
+		# covert_warfare.1, and covert_watch_start reads iw_caught_op.
+		scope:iw_burned_op = {
+			save_scope_as = iw_caught_op
+			# The event's loc cannot see the container: the type code goes on
+			# ROOT for covert_caught_type_name. Overwritten by the next catch;
+			# two of these open at once (two attackers in one pulse) would show
+			# the later one's operation, and act on their own.
+			ROOT = { set_variable = { name = iw_caught_type_code value = PREV.var:iw_type_code } }
+		}
+		# Self-check, once a game: the scopes the roll saved in the attacker's
+		# pulse reached the target's event (the BROKEN half is
+		# covert_watch_attacker_monthly's pending-decision watchdog).
+		if = {
+			limit = { NOT = { has_global_variable = te_selfcheck_covert_catch_done } }
+			set_global_variable = { name = te_selfcheck_covert_catch_done value = yes }
+			debug_log = "TE_SELF_CHECK OK covert_catch_decision target=[THIS.GetCountry.GetTagName] (the caught operation and its attacker reached the target's decision event) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+
+	option = {
+		name = covert_warfare.3.a
+		default_option = yes
+
+		# Expose them
+		if = {
+			limit = {
+				exists = scope:iw_caught_op
+				scope:iw_catcher_attacker = { is_country_alive = yes }
+			}
+			if = {
+				limit = { scope:iw_catcher_attacker = { covert_exposure_in_flight = yes } }
+				custom_tooltip = covert_warfare.3.a_wait_tt
+				hidden_effect = {
+					covert_watch_start = yes
+					if = {
+						limit = { exists = scope:iw_new_rec }
+						scope:iw_new_rec = { set_variable = { name = iw_expose_ordered value = 1 } }
+					}
+					trigger_event = { id = covert_warfare.4 days = 4 }
+				}
+			}
+			else = {
+				custom_tooltip = covert_warfare.3.a_tt
+				hidden_effect = {
+					scope:iw_caught_op = { save_scope_as = iw_burned_op }
+					scope:iw_catcher_attacker = { covert_exposure_fire = yes }
+				}
+			}
+		}
+		else = {
+			custom_tooltip = covert_warfare.3.gone_tt
+		}
+	}
+
+	option = {
+		name = covert_warfare.3.b
+
+		# Let it run
+		if = {
+			limit = {
+				exists = scope:iw_caught_op
+				scope:iw_catcher_attacker = { is_country_alive = yes }
+			}
+			custom_tooltip = covert_warfare.3.b_tt
+			hidden_effect = {
+				covert_watch_start = yes
+			}
+		}
+		else = {
+			custom_tooltip = covert_warfare.3.gone_tt
+		}
+	}
+
+	after = {
+		# The decision is made (or the operation is gone): the operation may be
+		# rolled again unless it is now watched.
+		if = {
+			limit = { exists = scope:iw_caught_op }
+			scope:iw_caught_op = {
+				if = {
+					limit = { has_variable = iw_catch_pending }
+					remove_variable = iw_catch_pending
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 4: Expose a Watched Operation (hidden)
+# ============================================================================
+# Ordered by the Known Foreign Operations panel's Expose button (which sets
+# iw_expose_ordered on its record first) and by covert_warfare.3's Expose when
+# the attacker was locked. Every record with an exposure ordered goes through
+# covert_watch_expose_record: opened now if its attacker is free, left
+# waiting otherwise (covert_watch_monthly tries again). A hidden event, not
+# the panel's scripted GUI effect, because the engine walks scripted-GUI
+# effects to render their tooltips (the trophies pattern,
+# monument_trophy_events.10-.13). The records are copied to a temporary list
+# first: covert_watch_expose_record can forget one.
+# ============================================================================
+
+covert_warfare.4 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable_list = iw_known_ops
+	}
+
+	immediate = {
+		every_in_list = {
+			variable = iw_known_ops
+			limit = { has_variable = iw_expose_ordered }
+			add_to_temporary_list = iw_expose_queue
+		}
+		every_in_list = {
+			list = iw_expose_queue
+			save_scope_as = iw_expose_rec
+			ROOT = { covert_watch_expose_record = yes }
 		}
 	}
 }

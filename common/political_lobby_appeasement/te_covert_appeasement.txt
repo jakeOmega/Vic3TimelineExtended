@@ -1,0 +1,16 @@
+﻿# Covert Warfare: the line a lobby's appeasement tooltip shows when its country
+# was caught spying on a friend (covert_backlash_home, covert_warfare_effects.txt).
+#
+# is_always_usable = yes is what makes this work. A factor without it must be
+# listed in the lobby type's appeasement_factors_pro / _anti, which would mean
+# changing vanilla's lobby_pro_country and lobby_pro_overlord. An always-usable
+# factor is accepted by every lobby type for either sign of amount, and must
+# not be listed there (vanilla's appeasement_lobby_loss is the precedent;
+# common/political_lobbies/political_lobbies.md). The fallback, if the engine
+# ever rejects it, is appeasement_special_events_negative, which every
+# pro-country lobby lists.
+appeasement_covert_spying_exposed = {
+	duration_to_show = { months = 60 }
+
+	is_always_usable = yes
+}

@@ -106,7 +106,10 @@ class EffectMultiplierTests(unittest.TestCase):
 
 class ScaledApplicationTests(unittest.TestCase):
     def test_no_literal_phase_multiplier_is_left(self):
-        body = _text(EFFECTS)
+        # The domestic-backlash effects (covert_backlash_*) scale their own
+        # modifiers by exposure tier, with literal multipliers on purpose
+        # (test_covert_backlash.py); they are not phase multipliers.
+        body = re.sub(r"\ncovert_backlash_\w+ = \{.*?\n\}\n", "\n", _text(EFFECTS), flags=re.S)
         self.assertNotRegex(
             body,
             r"multiplier = 2\b",

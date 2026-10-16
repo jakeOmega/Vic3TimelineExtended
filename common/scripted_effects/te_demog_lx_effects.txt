@@ -359,10 +359,12 @@ te_demog_lx_slot_pre = {
 # planned births with no fecundity loss and no maternal death, from the cohort's women and men alike (§3.5). Sets te_dg_b
 # and the women's own births by part, te_dg_lx_bmu and te_dg_lx_bmt, which carry the maternal deaths
 # (te_demog_lx_deaths); adds to the step's births and maternal deaths, and to the births to women of 50 and over.
+# Each term multiplies the people and the schedule (per 100,000) first and divides by 100000 last: the engine keeps five
+# decimals, and TFR / 100000 taken first (0.00001 for a TFR of 1 to 2) times a share under 1 came out 0, so no late state
+# under a TFR of 2 had a birth (scripting_best_practices.md § values in units of 1e-5).
 te_demog_lx_births = {
 	set_local_variable = { name = te_dg_lx_ft value = { value = local_var:te_dg_f multiply = local_var:te_dg_lx_sk } }
 	set_local_variable = { name = te_dg_lx_fu value = { value = local_var:te_dg_f subtract = local_var:te_dg_lx_ft } }
-	set_local_variable = { name = te_dg_lx_base value = { value = local_var:te_dg_tfr divide = 100000 } }
 	set_local_variable = { name = te_dg_lx_int value = 0 }
 	set_local_variable = { name = te_dg_lx_plu value = 0 }
 	set_local_variable = { name = te_dg_lx_unu value = 0 }
@@ -376,16 +378,23 @@ te_demog_lx_births = {
 		set_local_variable = {
 			name = te_dg_lx_plu
 			value = {
-				value = local_var:te_dg_sh_pl
-				multiply = local_var:te_dg_lx_base
-				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
-				multiply = local_var:te_dg_lx_fu
+				value = local_var:te_dg_lx_fu
 				multiply = local_var:te_dg_asfr
+				multiply = local_var:te_dg_sh_pl
+				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
+				multiply = local_var:te_dg_tfr
+				divide = 100000
 			}
 		}
 		set_local_variable = {
 			name = te_dg_lx_unu
-			value = { value = local_var:te_dg_sh_un multiply = local_var:te_dg_lx_base multiply = local_var:te_dg_lx_fu multiply = local_var:te_dg_asfr }
+			value = {
+				value = local_var:te_dg_lx_fu
+				multiply = local_var:te_dg_asfr
+				multiply = local_var:te_dg_sh_un
+				multiply = local_var:te_dg_tfr
+				divide = 100000
+			}
 		}
 		set_local_variable = { name = te_dg_lx_int value = local_var:te_dg_lx_int0 }
 	}
@@ -397,17 +406,24 @@ te_demog_lx_births = {
 		set_local_variable = {
 			name = te_dg_lx_plt
 			value = {
-				value = local_var:te_dg_sh_pl
-				multiply = local_var:te_dg_lx_base
-				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
-				multiply = local_var:te_dg_lx_ft
+				value = local_var:te_dg_lx_ft
 				multiply = local_var:te_dg_lx_intr
 				multiply = local_var:te_dg_lx_fec
+				multiply = local_var:te_dg_sh_pl
+				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
+				multiply = local_var:te_dg_tfr
+				divide = 100000
 			}
 		}
 		set_local_variable = {
 			name = te_dg_lx_unt
-			value = { value = local_var:te_dg_sh_un multiply = local_var:te_dg_lx_base multiply = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_asfr }
+			value = {
+				value = local_var:te_dg_lx_ft
+				multiply = local_var:te_dg_lx_asfr
+				multiply = local_var:te_dg_sh_un
+				multiply = local_var:te_dg_tfr
+				divide = 100000
+			}
 		}
 		set_local_variable = { name = te_dg_lx_int value = local_var:te_dg_lx_intr }
 	}
@@ -421,12 +437,14 @@ te_demog_lx_births = {
 			add = local_var:te_dg_lx_plt
 			add = local_var:te_dg_lx_unt
 			add = {
-				value = local_var:te_dg_sh_pl
-				multiply = local_var:te_dg_lx_base
-				multiply = local_var:te_dg_lx_ecto
-				multiply = { value = local_var:te_dg_f add = local_var:te_dg_m }
-				multiply = 0.5
+				value = local_var:te_dg_f
+				add = local_var:te_dg_m
 				multiply = local_var:te_dg_lx_int
+				multiply = 0.5
+				multiply = local_var:te_dg_sh_pl
+				multiply = local_var:te_dg_lx_ecto
+				multiply = local_var:te_dg_tfr
+				divide = 100000
 			}
 		}
 	}

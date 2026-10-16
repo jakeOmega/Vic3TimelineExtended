@@ -22,10 +22,10 @@
 # five years, power plants in 40 states in ten.
 RT_RETIRE_INTERVAL_MONTHS = 3
 
-# Share of a building's construction value its owners are paid when it is
-# retired: construction points per level x the construction good's base price
-# x the country's construction cost scaling, x this. A quarter: a written-down
-# plant, not a new one.
+# Share of a building's construction value the treasury pays in compensation
+# when it is retired (no owner receives it): construction points per level x
+# the construction good's base price x the country's construction cost
+# scaling, x this. A quarter: a written-down plant, not a new one.
 RT_COMPENSATION_SHARE = 0.25
 
 # How long a state keeps Transition Assistance after a retirement there.
@@ -76,7 +76,7 @@ rt_retire_order_power = {
 	multiply = -1
 }
 
-# Money paid to the owners per construction point retired: the construction
+# Compensation paid per construction point retired: the construction
 # good's base price, scaled as the owner's construction costs are
 # (te_construction_market_goods_per_point), times the compensation share. Base
 # price rather than the market price, so a passing spike in the construction
