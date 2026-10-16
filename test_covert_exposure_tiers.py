@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 
 from paradox_file_parser import ParadoxFileParser
-from test_covert_op_registry import CODES, TIER_CODES, TIERS as ACTION_TIER
+from test_covert_op_registry import CODES, FRIENDLY, TIER_CODES, TIERS as ACTION_TIER
 
 ROOT = Path(__file__).resolve().parent
 TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
@@ -567,6 +567,10 @@ class PreLaunchTierNoteTests(unittest.TestCase):
             for p in sorted((ROOT / "localization/english").rglob("*.yml"))
         )
         for op_type, tier in ACTION_TIER.items():
+            if op_type in FRIENDLY:
+                # Never exposed, so its description has no tier note
+                # (test_covert_op_registry holds that).
+                continue
             line = next(
                 l for l in loc.splitlines()
                 if l.strip().startswith("covert_%s_action_desc:" % op_type)
@@ -577,13 +581,15 @@ class PreLaunchTierNoteTests(unittest.TestCase):
                 "covert_%s_action_desc must show the %s tier" % (op_type, tier),
             )
 
-    def test_every_covert_action_is_hostile(self):
+    def test_every_covert_action_but_the_friendly_ones_is_hostile(self):
         body = _text(ACTIONS)
+        # The action field only (one tab in), not covert_op_is_hostile.
         self.assertEqual(
-            len(CODES),
-            body.count("is_hostile = yes"),
-            "every covert operation must be marked hostile",
+            len(CODES) - len(FRIENDLY),
+            body.count("\n\tis_hostile = yes"),
+            "every covert operation but the friendly ones must be marked hostile",
         )
+        self.assertEqual(len(FRIENDLY), body.count("\n\tis_hostile = no"))
 
 
 class DebugHarnessTests(unittest.TestCase):

@@ -34,11 +34,23 @@
 # services. Launch only, like the Tradecraft unlocks. test_covert_tech_gates.py
 # holds the table and checks the tooltips and descriptions against it.
 #
+# FRIENDS: good relations no longer refuse an operation. covert_is_friend
+# (covert_warfare_triggers.txt) is a cost, not a gate: each hostile launch
+# preview warns when the target is a friend and what a catch would cost at
+# home. Counterintelligence Support (last in the file) is the reverse: it may
+# only be run on a friend.
+# The AI is kept off friends with the six operations that used to be refused
+# at good relations (election interference, financial subversion,
+# infrastructure sabotage, communications disruption, ideological subversion,
+# destabilization); the others keep the AI logic they had.
+# test_covert_friend.py holds the rule.
+#
 # AI DESIGN:
 # - Low evaluation_chance (0.02–0.05) — strategic long-term decisions, not
 #   re-evaluated every tick. Prevents spammy on/off toggling.
 # - will_propose guards: country rank, financial health (in_default = no),
-#   attitude/rivalry requirement, IC advantage for some ops.
+#   attitude/rivalry requirement, IC advantage for some ops, and, for the six
+#   operations named under FRIENDS, a target that is not a friend.
 # - propose_score scales with rivalry, rank, ruler personality.
 # - Wartime ops have higher eval chance — urgency justifies faster decisions.
 # - Ruler personality: aggressive rulers more likely, cautious less.
@@ -56,9 +68,11 @@
 #   operation until it is fully operational (covert_ai_op_settled), then ends
 #   it only once its reason has gone, judged more loosely than at launch:
 #   hostility (covert_ai_hostility_gone), nothing left to steal, no milestone
-#   of our own, or influence in deficit. Wartime operations, influence campaign and secure loose
-#   material are never called off by choice; their requirement_to_maintain
-#   ends them. Cultivate assets also stops once its network reaches
+#   of our own, influence in deficit, or (election interference, financial
+#   subversion, ideological subversion, destabilization) a target that has
+#   become a friend. Wartime operations, influence campaign, secure loose
+#   material and counterintelligence support are never called off by choice;
+#   their requirement_to_maintain ends them. Cultivate assets also stops once its network reaches
 #   covert_cultivate_ai_net_done. Launch-only tests (free slot, intelligence
 #   capacity, target size, debt) never break anything.
 # ============================================================================
@@ -90,6 +104,12 @@ covert_election_interference_action = {
 		}
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
 		}
 		covert_op_start = { TYPE = election_interference DEFENSE_MOD = country_covert_defense_ideological_add CODE = 0 }
 	}
@@ -148,10 +168,6 @@ covert_election_interference_action = {
 					any_scope_article = { has_type = intelligence_sharing_pact }
 				}
 			}
-		}
-		custom_tooltip = {
-			text = iw_no_good_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 	}
 
@@ -215,6 +231,8 @@ covert_election_interference_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Not a friend: spying on one costs us at home if caught
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
 			country_rank >= rank_value:major_power
 			OR = {
 				has_diplomatic_pact = { who = scope:target_country type = rivalry }
@@ -228,13 +246,14 @@ covert_election_interference_action = {
 			covert_ai_can_spare_influence = { TYPE = covert_election_interference_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone or
-		# influence runs into deficit
+		# Kept until fully operational, then until the hostility is gone, the
+		# target has become a friend or influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = election_interference TARGET = scope:target_country }
 			OR = {
 				covert_ai_hostility_gone = { TARGET = scope:target_country }
 				influence < 0
+				covert_is_friend = { TARGET = scope:target_country }
 			}
 		}
 
@@ -284,6 +303,12 @@ covert_financial_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
 		covert_op_start = { TYPE = financial_subversion DEFENSE_MOD = country_covert_defense_economic_add CODE = 1 }
 	}
 
@@ -330,10 +355,6 @@ covert_financial_subversion_action = {
 					any_scope_article = { has_type = intelligence_sharing_pact }
 				}
 			}
-		}
-		custom_tooltip = {
-			text = iw_no_good_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 	}
 
@@ -385,6 +406,8 @@ covert_financial_subversion_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Not a friend: spying on one costs us at home if caught
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
 			country_rank >= rank_value:major_power
 			OR = {
 				has_diplomatic_pact = { who = scope:target_country type = rivalry }
@@ -398,13 +421,14 @@ covert_financial_subversion_action = {
 			covert_ai_can_spare_influence = { TYPE = covert_financial_subversion_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone or
-		# influence runs into deficit
+		# Kept until fully operational, then until the hostility is gone, the
+		# target has become a friend or influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = financial_subversion TARGET = scope:target_country }
 			OR = {
 				covert_ai_hostility_gone = { TARGET = scope:target_country }
 				influence < 0
+				covert_is_friend = { TARGET = scope:target_country }
 			}
 		}
 
@@ -457,6 +481,12 @@ covert_infrastructure_sabotage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
 		covert_op_start = { TYPE = infrastructure_sabotage DEFENSE_MOD = country_covert_defense_military_add CODE = 2 }
 	}
 
@@ -498,10 +528,6 @@ covert_infrastructure_sabotage_action = {
 					any_scope_article = { has_type = intelligence_sharing_pact }
 				}
 			}
-		}
-		custom_tooltip = {
-			text = iw_no_good_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_at_war_or_play_tt
@@ -561,6 +587,8 @@ covert_infrastructure_sabotage_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Not a friend: spying on one costs us at home if caught
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
 			# Much weaker targets only with money to burn, unless losing to them
 			OR = {
 				is_losing_war_against = { ENEMY = scope:target_country }
@@ -619,6 +647,12 @@ covert_comms_disruption_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
 		covert_op_start = { TYPE = comms_disruption DEFENSE_MOD = country_covert_defense_military_add CODE = 3 }
 	}
 
@@ -664,10 +698,6 @@ covert_comms_disruption_action = {
 					any_scope_article = { has_type = intelligence_sharing_pact }
 				}
 			}
-		}
-		custom_tooltip = {
-			text = iw_no_good_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_at_war_or_play_tt
@@ -727,6 +757,8 @@ covert_comms_disruption_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Not a friend: spying on one costs us at home if caught
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
 			# Much weaker targets only with money to burn, unless losing to them
 			OR = {
 				is_losing_war_against = { ENEMY = scope:target_country }
@@ -795,6 +827,12 @@ covert_industrial_espionage_action = {
 		}
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
 		}
 		covert_op_start = { TYPE = industrial_espionage DEFENSE_MOD = country_covert_defense_economic_add CODE = 4 }
 	}
@@ -961,6 +999,12 @@ covert_military_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
 		covert_op_start = { TYPE = military_espionage DEFENSE_MOD = country_covert_defense_military_add CODE = 5 }
 	}
 
@@ -1114,6 +1158,12 @@ covert_influence_campaign_action = {
 		}
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
 		}
 		covert_op_start = { TYPE = influence_campaign DEFENSE_MOD = country_covert_defense_ideological_add CODE = 6 }
 	}
@@ -1293,6 +1343,12 @@ covert_ideological_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
 		covert_op_start = { TYPE = ideological_subversion DEFENSE_MOD = country_covert_defense_ideological_add CODE = 7 }
 	}
 
@@ -1339,10 +1395,6 @@ covert_ideological_subversion_action = {
 					any_scope_article = { has_type = intelligence_sharing_pact }
 				}
 			}
-		}
-		custom_tooltip = {
-			text = iw_no_good_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
 			text = iw_target_has_movements_tt
@@ -1411,6 +1463,8 @@ covert_ideological_subversion_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Not a friend: spying on one costs us at home if caught
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
 			country_rank >= rank_value:major_power
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
@@ -1426,13 +1480,14 @@ covert_ideological_subversion_action = {
 			covert_ai_can_spare_influence = { TYPE = covert_ideological_subversion_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone or
-		# influence runs into deficit
+		# Kept until fully operational, then until the hostility is gone, the
+		# target has become a friend or influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = ideological_subversion TARGET = scope:target_country }
 			OR = {
 				covert_ai_hostility_gone = { TARGET = scope:target_country }
 				influence < 0
+				covert_is_friend = { TARGET = scope:target_country }
 			}
 		}
 
@@ -1478,6 +1533,12 @@ covert_destabilization_action = {
 		}
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
 		}
 		covert_op_start = { TYPE = destabilization DEFENSE_MOD = country_covert_defense_ideological_add CODE = 8 }
 	}
@@ -1527,10 +1588,6 @@ covert_destabilization_action = {
 			}
 		}
 		custom_tooltip = {
-			text = iw_no_cordial_relations_tt
-			NOT = { scope:target_country.relations:root >= relations_threshold:cordial }
-		}
-		custom_tooltip = {
 			text = iw_target_has_movements_tt
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
@@ -1550,12 +1607,6 @@ covert_destabilization_action = {
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
-			}
-		}
-
-		requirement_to_maintain = {
-			trigger = {
-				NOT = { scope:target_country.relations:root >= relations_threshold:cordial }
 			}
 		}
 
@@ -1604,6 +1655,8 @@ covert_destabilization_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Not a friend: spying on one costs us at home if caught
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
 			country_rank >= rank_value:major_power
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
@@ -1614,13 +1667,14 @@ covert_destabilization_action = {
 			covert_ai_can_spare_influence = { TYPE = covert_destabilization_action }
 		}
 
-		# Kept until fully operational, then until the hostility is gone or
-		# influence runs into deficit
+		# Kept until fully operational, then until the hostility is gone, the
+		# target has become a friend or influence runs into deficit
 		will_break = {
 			covert_ai_op_settled = { TYPE = destabilization TARGET = scope:target_country }
 			OR = {
 				covert_ai_hostility_gone = { TARGET = scope:target_country }
 				influence < 0
+				covert_is_friend = { TARGET = scope:target_country }
 			}
 		}
 
@@ -1671,6 +1725,12 @@ covert_regime_change_action = {
 		}
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
 		}
 		covert_op_start = { TYPE = regime_change DEFENSE_MOD = country_covert_defense_ideological_add CODE = 9 }
 	}
@@ -1856,6 +1916,12 @@ covert_nuclear_sabotage_action = {
 		}
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
 		}
 		covert_op_start = { TYPE = nuclear_sabotage DEFENSE_MOD = country_covert_defense_military_add CODE = 10 }
 	}
@@ -2047,6 +2113,12 @@ covert_space_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
 		covert_op_start = { TYPE = space_espionage DEFENSE_MOD = country_covert_defense_economic_add CODE = 11 }
 	}
 
@@ -2204,6 +2276,12 @@ covert_cultivate_assets_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
 		covert_op_start = { TYPE = cultivate_assets DEFENSE_MOD = country_covert_defense_ideological_add CODE = 12 }
 	}
 
@@ -2330,13 +2408,15 @@ covert_cultivate_assets_action = {
 
 		propose_score = {
 			value = 5
-			# Feed the network another operation there already benefits from.
+			# Feed the network another operation there already benefits from
+			# (a hostile one: Counterintelligence Support feeds no network).
 			if = {
 				limit = {
 					has_variable_list = iw_ops
 					any_in_list = {
 						variable = iw_ops
 						var:iw_target ?= scope:target_country
+						covert_op_is_hostile = yes
 					}
 				}
 				add = 5
@@ -2372,6 +2452,12 @@ covert_secure_material_action = {
 		}
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
 		}
 		covert_op_start = { TYPE = secure_material DEFENSE_MOD = country_covert_defense_military_add CODE = 13 }
 	}
@@ -2496,6 +2582,174 @@ covert_secure_material_action = {
 			# A warhead in a neighbour's hands is a warhead near us.
 			if = {
 				limit = { is_adjacent_to_country = scope:target_country }
+				add = 5
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# COUNTERINTELLIGENCE SUPPORT (2026-10-16, spec
+# docs/superpowers/specs/2026-10-16-covert-counterintel-backlash-design.md § C)
+# ----------------------------------------------------------------------------
+# The one operation that works FOR its target: our officers and analysts lent
+# to a friend's counterintelligence, raising its three covert defences
+# (covert_counterintel_support, through covert_op_apply_target_effect like any
+# target effect, so phase and priority scale it). Public, not hostile: an
+# ordinary visible pact, never rolled for detection, never caught or watched
+# (covert_op_is_hostile). The protector gets nothing back: no network inside
+# the ally, no head start, no Tradecraft. It costs a slot, upkeep and
+# mild-tier influence, and counts against the per-type cap; its mild tier is
+# nominal, since it is never exposed, so its description carries no tier note.
+# Only for a friend (covert_is_friend, at launch and to keep it), an
+# intelligence-sharing partner included: that treaty gate is for hostile
+# operations. One protector per ally (iw_cis_protector on the target, see
+# covert_op_create): a named modifier does not stack with itself, so a second
+# protector could only overwrite the first.
+covert_counterintel_support_action = {
+	# PLACEHOLDER: cultivate assets' art until an icon pass draws this one
+	# (test_covert_op_registry.PLACEHOLDER_ICON; the lens icon is missing too).
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = no
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_counterintel_support }
+			}
+		}
+		custom_tooltip = {
+			text = covert_counterintel_support_phase_tt
+		}
+		custom_tooltip = {
+			text = covert_counterintel_support_public_tt
+		}
+		covert_op_start = { TYPE = counterintel_support DEFENSE_MOD = country_covert_defense_ideological_add CODE = 14 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
+			text = covert_op_capacity_counterintel_support_tt
+			covert_ops_type_below_cap = { TYPE = covert_counterintel_support_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_counterintel_support_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = covert_cis_target_is_friend_tt
+			covert_is_friend = { TARGET = scope:target_country }
+		}
+		# One protector per ally. A mark of our own can only be stale (the
+		# no-duplicate gate above), so it does not block us.
+		custom_tooltip = {
+			text = covert_cis_one_protector_tt
+			scope:target_country = {
+				OR = {
+					NOT = { has_variable = iw_cis_protector }
+					var:iw_cis_protector ?= ROOT
+				}
+			}
+		}
+	}
+
+	pact = {
+		cost = 25 # influence, mild tier (INFLUENCE, file header)
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# Lapses when the friendship does.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = covert_cis_target_is_friend_tt
+					covert_is_friend = { TARGET = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = counterintel_support } }
+		auto_break_effect = { covert_op_end = { TYPE = counterintel_support } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.05
+		}
+
+		# A friend whose service is weaker than ours, among the bloc we lead,
+		# our subjects and our allies; at most one at a time (the spec's call:
+		# the AI has hostile work for its slots too).
+		will_propose = {
+			covert_is_friend = { TARGET = scope:target_country }
+			OR = {
+				AND = {
+					is_power_bloc_leader = yes
+					is_in_same_power_bloc = scope:target_country
+				}
+				scope:target_country = { is_subject_of = ROOT }
+				has_treaty_alliance_with = { TARGET = scope:target_country }
+			}
+			intelligence_capacity_total > scope:target_country.intelligence_capacity_total
+			NOT = {
+				any_scope_diplomatic_pact = {
+					is_diplomatic_action_type = covert_counterintel_support_action
+					first_country = prev
+				}
+			}
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_counterintel_support_action }
+		}
+
+		# Never called off by choice: requirement_to_maintain ends it when the
+		# friendship does.
+		will_break = { always = no }
+
+		propose_score = {
+			value = 5
+			# A subject's security is ours.
+			if = {
+				limit = { scope:target_country = { is_subject_of = ROOT } }
 				add = 5
 			}
 		}

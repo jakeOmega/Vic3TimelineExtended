@@ -692,6 +692,8 @@ def _stored(inp):
            "te_dg_in_turm": min(max(inp.turmoil, 0.0), 1.0), "te_dg_in_crowd": inp.crowding,
            "te_dg_in_mal": float(inp.malaria),
            "te_dg_in_malc": min(max(inp.mods.get(P.MALARIA_CONTROL_TYPE, 0.0), 0.0), 1.0)}
+    for cause, st in P.SAFETY_TYPES.items():
+        out[f"te_dg_in_saf_{P.CAUSE_SHORT[cause]}"] = min(max(inp.mods.get(st, 0.0), 0.0), P.SAFETY_MAX)
     for cause in P.MEDICINE_CAUSES:
         out[f"te_dg_trt_{P.CAUSE_SHORT[cause]}"] = med[cause]
     for cause, types in P.MORTALITY_TYPES.items():
@@ -2792,8 +2794,50 @@ class TestWindowEvents(unittest.TestCase):
         true = tuple(end[f"te_dg_w_{k}"] * 12 / 1e5 for k in ("eb", "ed"))   # a steady engine without the term
         self.assert_books((clock.vars["te_dg_eb"], clock.vars["te_dg_ed"]), true)
 
+    def test_a_step_with_no_births_moves_the_terms(self):
+        """A step that recorded no births is still a step (te_dg_stepped 1): the refresh moves M's births term toward the
+        census's 0, to the floor, instead of keeping the term an earlier step left. The late game's births read 0 under
+        a TFR of 2 before the fixed-point fix of 2026-10-16, and their states' terms froze for decades."""
+        eng = self._engine()
+        eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.25, te_dg_stepped=1.0, te_dg_cbr_model=0.0,
+                        te_dg_cdr_model=self.CDR)
+        eng.modifiers.update(te_demog_census_births_down=0.3, te_demog_census_deaths_down=0.25)
+        eng.locals.update(self.walk(self.STEADY, *self._set_reads(eng, 0.02, 0.05)))
+        eng.call("te_demog_rates_refresh")
+        self.assertLess(eng.vars["te_dg_mb"], -0.3)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1, "no births: the term is at its floor")
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_births_down"], -eng.vars["te_dg_mb"])
+
+    def test_a_lost_term_comes_back_within_a_month(self):
+        """#937: te_demog_rates_heal, beside the moved lines' refresh in the monthly and owner-change hooks and
+        te_demog_events.4. A state holding M's variables without the modifiers they call for has them back; the pair's
+        gate (te_demog_lines_apply) reads only te_dg_mb, so it would otherwise have neither M nor the pair."""
+        terms = dict(te_dg_mb=-0.3, te_dg_md=0.2, te_dg_w=-0.1)
+        want = {"te_demog_census_births_down": 0.3, "te_demog_census_deaths_up": 0.2, "te_demog_census_wealth_down": 0.1}
+        for lost in (list(want), ["te_demog_census_deaths_up"]):
+            with self.subTest(lost=lost):
+                eng = self._engine()
+                eng.vars.update(terms)
+                eng.modifiers.update({k: v for k, v in want.items() if k not in lost})
+                eng.call("te_demog_rates_heal")
+                self.assertEqual(set(eng.modifiers), set(want))
+                for name, mult in want.items():
+                    self.assertAlmostEqual(eng.modifiers[name], mult, msg=name)
+        eng = self._engine(full=False)
+        eng.vars.update(terms)
+        eng.call("te_demog_rates_heal")
+        self.assertEqual(eng.modifiers, {}, "outside Full the census's next refresh clears M instead")
+        eng = self._engine()
+        eng.vars.update(te_dg_mb=0.0, te_dg_md=0.0, te_dg_w=0.0)
+        eng.call("te_demog_rates_heal")
+        self.assertEqual(eng.modifiers, {}, "terms of 0 call for no modifier")
+        on_actions = _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt")
+        self.assertIn("te_demog_rates_heal = yes", _block(on_actions, "te_demog_lines_on_action"))
+        self.assertIn("te_demog_rates_heal = yes", _block(_text(ROOT / "events" / "te_demog_events.txt"),
+                                                         "te_demog_events.4"))
+
     def test_a_refresh_that_sets_no_term_drops_the_start_rate(self):
-        """A step with no births (te_dg_stepped 0) sets no term: the rate stored a window earlier is not this window's
+        """A seed (te_dg_stepped 0) sets no term: the rate stored a window earlier is not this window's
         start, so it goes and the next window takes the snapshot."""
         eng = self._engine()
         eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.25, te_dg_stepped=0.0, te_dg_cbr_model=self.CBR,
@@ -4075,6 +4119,17 @@ class TestTrend(unittest.TestCase):
         return {k: eng.vars.get(k) for k in ("te_dg_trend_ok", "te_dg_stepped")}, \
             {k: k in eng.vars for k in ("te_dg_prev_median", "te_dg_prev_cbr", "te_dg_prev_tfr", "te_dg_prev_e0")}
 
+    def test_a_step_with_no_births_is_still_a_step(self):
+        """te_dg_stepped says a step ran, not that it had births: a state with no women (here every woman taken out of
+        the ring) steps, records 0 births and keeps its arrows. Read from the births, the step looked like a seed."""
+        eng = self.stepped_engine()
+        self.step(eng, 1837)
+        for name in [n for n in eng.vars if re.fullmatch(r"te_dg_f\d+", n)] + ["te_dg_pf"]:
+            eng.vars[name] = 0.0
+        self.step(eng, 1838)
+        self.assertEqual(eng.vars["te_dg_births"], 0.0)
+        self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
+
     def test_state_arrows_come_from_the_second_step_on(self):
         eng = self.stepped_engine()
         flags, prev = self.seen(eng)
@@ -4319,6 +4374,18 @@ class TestCountry(unittest.TestCase):
         return _CountryEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": fws},
                               triggers={"is_ai": ai, "te_demog_cohorts_run": True}, **kwargs)
 
+    def test_a_country_has_stepped_when_a_state_has(self):
+        """The country's te_dg_stepped: 1 when any of its states' figures came from a step, births or none; 0 when
+        every one came from a seed (game start, the console's re-seeds)."""
+        for stepped, want in (((1.0, 0.0, 0.0), 1.0), ((0.0, 0.0, 0.0), 0.0)):
+            with self.subTest(stepped=stepped):
+                states = self.three()
+                for st, flag in zip(states, stepped):
+                    st.update(te_dg_stepped=flag, te_dg_births=0.0)
+                eng = self.country(states)
+                eng.call("te_demog_country_census")
+                self.assertEqual(eng.vars["te_dg_stepped"], want)
+
     def test_figures_are_the_weighted_sums_of_the_census_states(self):
         states = self.three()
         nope = {"te_dg_people": 9e9, "te_dg_births": 9e9, "te_dg_urban": 9e9, "state_population": 9e9}   # no te_dg_year
@@ -4512,9 +4579,10 @@ class TestCountry(unittest.TestCase):
         flags = []
         for rounds, born in ((2, False), (1, True), (1, True), (1, True)):
             for _ in range(rounds):
-                if born:
+                if born:   # the states stepped: births, and the flag a step writes (te_demog_set_trend)
                     for s in seeds:
                         s["te_dg_births"], s["te_dg_deaths"] = s["te_dg_people"] * 0.038, s["te_dg_people"] * 0.031
+                        s["te_dg_stepped"] = 1.0
                 eng.call("te_demog_country_census")
                 flags.append((eng.vars["te_dg_trend_ok"], eng.vars["te_dg_stepped"]))
                 if not born:   # no births: infant mortality is the states' by people, not 0
@@ -6336,6 +6404,10 @@ class TestCauseFactorsScript(unittest.TestCase):
         {P.ACCESS_TYPE: 1.5, P.TREATMENT_TYPE["infection"]: 0.3},
         {"state_work_mortality_mult": -0.9, "state_external_mortality_mult": -0.1},
         {"state_work_mortality_mult": 0.1, "state_external_mortality_mult": 0.3, "state_chronic_mortality_mult": -0.9},
+        # modern safety (2026-10-16): today's carriers on Workplace Safety's level 5, and a sum past the cap
+        {"state_work_mortality_mult": -0.5, P.SAFETY_TYPES["work"]: 0.9, P.SAFETY_TYPES["external"]: 0.4,
+         "state_external_mortality_mult": -0.12},
+        {"state_work_mortality_mult": -0.9, P.SAFETY_TYPES["work"]: 1.3, P.SAFETY_TYPES["external"]: 0.2},
     ]
     STATES = ((3, 0.1, 0.0, 0.0), (6.5, 0.2, 0.4, 0.05), (8, 0.0, 1.0, 0.0), (20, 0.5, 0.2, 0.6), (40, 1.0, 0.0, 0.0))
 
@@ -6421,6 +6493,27 @@ class TestCauseFactorsScript(unittest.TestCase):
         eng.vars.update(te_dg_sol=7.0, te_dg_lit=0.1)
         eng.call("te_demog_cause_inputs_store")
         self.assertEqual((eng.vars["te_dg_in_mal"], eng.vars["te_dg_in_malc"]), (1.0, 1.0), "the control is 0 to 1")
+
+    def test_the_safety_factor_cuts_work_and_accidents_past_the_laws_floor(self):
+        """Modern safety (2026-10-16): 1 - the stored share, at most SAFETY_MAX, multiplying below the laws factor's
+        floor; a step from before it stored no share and reads 1, so the hover still multiplies to the row."""
+        inp = demographics_model.Inputs(sol=40, literacy=1.0, mods=dict(self.CASES[-1]))
+        eng = self._eng(inp)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_laws")), P.MORTALITY_MULT_FLOOR)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_safety")), 1 - P.SAFETY_MAX)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_mult_work")),
+                               P.MORTALITY_MULT_FLOOR * (1 - P.SAFETY_MAX), places=9)
+        del eng.vars["te_dg_in_saf_work"], eng.vars["te_dg_in_saf_ext"]
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_safety")), 1.0)
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_external_safety")), 1.0)
+
+    def test_the_store_takes_the_safety_shares(self):
+        inp = demographics_model.Inputs(sol=40, literacy=1.0, mods=dict(self.CASES[-1]))
+        eng = _Engine(_mod_fixtures(inp))
+        eng.vars.update(te_dg_sol=40.0, te_dg_lit=1.0)
+        eng.call("te_demog_cause_inputs_store")
+        self.assertEqual((eng.vars["te_dg_in_saf_work"], eng.vars["te_dg_in_saf_ext"]), (P.SAFETY_MAX, 0.2),
+                         "each share is 0 to SAFETY_MAX")
 
     def test_a_walk_between_steps_moves_no_factor(self):
         """The reviews of #916 (logic M2, panel M4): a walk without a step (a second pulse in a year, the console's

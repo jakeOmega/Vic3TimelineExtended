@@ -80,6 +80,9 @@
 #   te_dg_in_ext, te_dg_in_work, te_dg_in_chr, te_dg_in_turm, te_dg_in_crowd, te_dg_in_sol, te_dg_in_lit  the
 #                       step's other inputs the factors read (te_demog_cause_inputs_store; the last two the
 #                       walk's te_dg_sol and te_dg_lit as the step used them)
+#   te_dg_in_saf_work, te_dg_in_saf_ext  the share of work and of accident and violence deaths modern safety prevents
+#                       (the era 7-9 technologies; te_demog_cause_inputs_store); absent before a state's first step
+#                       since 2026-10-16, when the factor reads 1
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share,
 #   te_dg_dependency, te_dg_sex_balance, te_dg_cbr, te_dg_cdr, te_dg_w1549
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
@@ -131,9 +134,9 @@
 #                       te_demog_fast_deaths, applied at the clock's last step
 #
 # The trend arrows (Task 10), on a state and on a country alike:
-#   te_dg_stepped       1 when the figures stored now came from a step (births above 0), 0 when
-#                       a seed wrote them: a seed writes 0 births and deaths, so its CBR and CDR
-#                       are no year to compare with
+#   te_dg_stepped       1 when the figures stored now came from a step (whatever its births), 0
+#                       when a seed wrote them: a seed writes 0 births and deaths, so its CBR and
+#                       CDR are no year to compare with
 #   te_dg_trend_ok      1 when te_dg_prev_<name> holds last year's figure from a step and the
 #                       figure stored now is a step's as well: false in a seed's census year and
 #                       in the first step's after it, true from the second step on. A panel
@@ -373,7 +376,7 @@ te_demog_state_yearly = {
 		te_demog_workforce_refresh = yes
 		# phase 2 step 4: conscription, the youth bulge and sex balance (te_demog_consequence_effects.txt)
 		te_demog_consequences_refresh = yes
-		# phase 3: the longevity gap's politics, off until a play-test (te_demog_lx_effects.txt)
+		# phase 3: the longevity gap's politics, on since 2026-10-16 (te_demog_lx_effects.txt)
 		te_demog_lx_politics_refresh = yes
 	}
 }
@@ -703,6 +706,8 @@ te_demog_seed = {
 		remove_variable = te_dg_ss_d
 	}
 	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
+	# a seed's figures, not a step's (te_demog_set_trend)
+	set_local_variable = { name = te_dg_from_step value = 0 }
 	te_demog_set_scale = yes
 	# phase 3: a state seeded once ageing is slowed starts its bands at the steady state (te_demog_lx_effects.txt)
 	te_demog_lx_seed = yes
@@ -1553,6 +1558,8 @@ te_demog_country_yearly = {
 	}
 	# phase 2 step 2: the AI's pension position, after the census set this year's bill
 	te_demog_pension_ai = yes
+	# phase 3: the longevity gap's country modifier off outside Full, which the census's own refresh can't reach
+	te_demog_lx_politics_clear = yes
 }
 
 # THIS = a country (phase 2 step 1; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.2):
@@ -1908,6 +1915,8 @@ te_demog_step_finish = {
 			divide = { value = state_population min = 1 }
 		}
 	}
+	# a step's figures, whatever its births (te_demog_set_trend)
+	set_local_variable = { name = te_dg_from_step value = 1 }
 	te_demog_set_scale = yes
 	# phase 3: the biological pyramid, at the new scale (te_demog_lx_effects.txt)
 	if = {
@@ -1918,8 +1927,8 @@ te_demog_step_finish = {
 
 # THIS = a state, after its census (demographics_model.structure, by band): the
 # panel's figures. Last year's value of each goes to te_dg_prev_<name> first, for the
-# trend arrows, when it came from a step (te_demog_keep_figures); the births the step
-# wrote mark this pass as a step's (te_demog_set_trend).
+# trend arrows, when it came from a step (te_demog_keep_figures); the local te_dg_from_step
+# (1 from te_demog_step_finish, 0 from te_demog_seed) marks this pass as a step's (te_demog_set_trend).
 te_demog_state_figures = {
 	te_demog_band_figures = { B = te_dg_b }
 	te_demog_keep_figures = yes
@@ -1927,7 +1936,6 @@ te_demog_state_figures = {
 	# births and deaths per 1,000 people
 	set_variable = { name = te_dg_cbr value = { value = var:te_dg_births divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
 	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
-	set_local_variable = { name = te_dg_born value = var:te_dg_births }
 	te_demog_set_trend = yes
 	# the state pyramid's scale, once here instead of in every bar's range each frame
 	set_variable = { name = te_dg_pyr_max value = te_demog_state_pyramid_max }
@@ -1971,14 +1979,16 @@ te_demog_store_figures = {
 	set_variable = { name = te_dg_w1549 value = local_var:te_dg_w1549 }
 }
 
-# THIS = a state or a country, after its figures are stored, with the births behind them
-# in the local te_dg_born. Births above 0 mean a step; a seed's are 0. Reads te_dg_was
-# from te_demog_keep_figures. The trend is drawn only when the figures stored now and
-# the ones kept came from steps, so it starts with the second step after a seed.
+# THIS = a state or a country, after its figures are stored, with the local te_dg_from_step
+# saying where they came from: 1 a step, 0 a seed (a country: any of its states stepped). Not
+# from the births: a step with none (a late-game state under a TFR of 2 before the fixed-point
+# fix of 2026-10-16) read as a seed, so te_demog_rates_refresh froze its births and deaths terms.
+# Reads te_dg_was from te_demog_keep_figures. The trend is drawn only when the figures stored
+# now and the ones kept came from steps, so it starts with the second step after a seed.
 te_demog_set_trend = {
 	set_local_variable = { name = te_dg_now value = 0 }
 	if = {
-		limit = { local_var:te_dg_born > 0 }
+		limit = { local_var:te_dg_from_step > 0 }
 		set_local_variable = { name = te_dg_now value = 1 }
 	}
 	set_variable = { name = te_dg_trend_ok value = { value = local_var:te_dg_was multiply = local_var:te_dg_now } }
@@ -2005,6 +2015,8 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_deaths value = 0 }
 	set_local_variable = { name = te_dg_c_mig value = 0 }
 	set_local_variable = { name = te_dg_c_mig_raw value = 0 }
+	# 1 once any of its states' figures came from a step (te_demog_set_trend)
+	set_local_variable = { name = te_dg_c_stepped value = 0 }
 	set_local_variable = { name = te_dg_c_tfr_w value = 0 }
 	set_local_variable = { name = te_dg_c_tfr_model_w value = 0 }
 	set_local_variable = { name = te_dg_c_women value = 0 }
@@ -2046,6 +2058,13 @@ te_demog_country_census = {
 		change_local_variable = { name = te_dg_c_pm add = local_var:te_dg_c_s_pm }
 		change_local_variable = { name = te_dg_c_births add = var:te_dg_births }
 		change_local_variable = { name = te_dg_c_deaths add = var:te_dg_deaths }
+		if = {
+			limit = {
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+			}
+			set_local_variable = { name = te_dg_c_stepped value = 1 }
+		}
 		change_local_variable = { name = te_dg_c_mig add = var:te_dg_net_migration }
 		# a state from a save made before te_dg_mig_raw existed has none until its next step
 		if = {
@@ -2144,7 +2163,7 @@ te_demog_country_census = {
 		te_demog_up_country = yes
 		te_demog_country_lists = yes
 		set_variable = { name = te_dg_census_year value = te_demog_year }
-		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }
+		set_local_variable = { name = te_dg_from_step value = local_var:te_dg_c_stepped }
 		te_demog_set_trend = yes
 		# the player's outline twenty years ahead, on the country's average rates: the model's own, the
 		# mortality (te_dg_m_*, unscaled) and the children per woman (te_dg_tfr_model) alike, so the outline is

@@ -71,7 +71,7 @@
 # (te_demog_on_top_scales) and console option n read te_dg_eb / te_dg_ed, so they all take the window's
 # events. The refresh and fast mode read the walk's locals, today's snapshot, as they should: M and the
 # term are fitted to today's lines.
-# A refresh that sets no term (a seed, a step with no births) drops the start's rate, so the next window
+# A refresh that sets no term (a seed) drops the start's rate, so the next window
 # takes the snapshot rather than a rate two windows old.
 # Second order: a pop the change in M moves across the floor (from just above 0 to below it, or back)
 # counts as the walk found it. A second pulse in one year (no step) refits M and stores the start again
@@ -571,7 +571,7 @@ te_demog_rates_refresh = {
 			set_local_variable = { name = te_dg_rate_new_d value = var:te_dg_md }
 		}
 	}
-	# no start rate stored (a seed, a step with no births, nobody): the one two windows old goes, and the next
+	# no start rate stored (a seed, nobody): the one two windows old goes, and the next
 	# window takes the snapshot
 	if = {
 		limit = { local_var:te_dg_rate_sr = 0 }
@@ -639,6 +639,49 @@ te_demog_rates_apply = {
 	else_if = {
 		limit = { var:te_dg_w < 0 }
 		add_modifier = { name = te_demog_census_wealth_down multiplier = te_demog_rate_wealth_down }
+	}
+}
+
+# THIS = ROOT = a state, beside te_demog_lines_refresh in the monthly and owner-change hooks and te_demog_events.4
+# (#937): under Full, a state that keeps M's variables but lost a modifier they call for (a save quirk, a state that
+# copied its variables) has its terms back within a month, as W's are (te_demog_workforce_heal). Otherwise the moved
+# lines' pair's gate (te_demog_lines_apply, which reads te_dg_mb) would leave it with neither M nor the pair until its
+# next census step. Any term missing re-applies all three (te_demog_rates_apply removes and re-adds them).
+te_demog_rates_heal = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_mb
+			has_variable = te_dg_md
+			has_variable = te_dg_w
+			OR = {
+				AND = {
+					var:te_dg_mb > 0
+					NOT = { has_modifier = te_demog_census_births_up }
+				}
+				AND = {
+					var:te_dg_mb < 0
+					NOT = { has_modifier = te_demog_census_births_down }
+				}
+				AND = {
+					var:te_dg_md > 0
+					NOT = { has_modifier = te_demog_census_deaths_up }
+				}
+				AND = {
+					var:te_dg_md < 0
+					NOT = { has_modifier = te_demog_census_deaths_down }
+				}
+				AND = {
+					var:te_dg_w > 0
+					NOT = { has_modifier = te_demog_census_wealth_up }
+				}
+				AND = {
+					var:te_dg_w < 0
+					NOT = { has_modifier = te_demog_census_wealth_down }
+				}
+			}
+		}
+		te_demog_rates_apply = yes
 	}
 }
 

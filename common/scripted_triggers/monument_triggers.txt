@@ -118,9 +118,19 @@ gm_state_has_pm = {
 	b:building_grand_monument ?= { has_active_production_method = $PM$ }
 }
 
+# A rebuilt undedicated monument stands on the engine's copy of its siblings'
+# dedication until its own method reads back (gm_restore_pm = undedicated,
+# gm_state_mark_restore_pm): undedicated meanwhile, so no sum, first sight or
+# contest takes the copy for a dedication.
 gm_state_is_dedicated = {
 	has_building = building_grand_monument
 	NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } }
+	NOT = {
+		AND = {
+			has_variable = gm_restore_pm
+			var:gm_restore_pm = flag:undedicated
+		}
+	}
 }
 
 # A dedication no ceremony gave it and no pulse has recorded. A new building
@@ -262,6 +272,53 @@ gm_state_message_fits = {
 
 gm_state_is_contested = {
 	has_variable = gm_contested
+}
+
+# Levels built on a finished monument (spec 2026-10-16 §3.2): its own levels
+# above those recorded when its construction stopped. Not while script is
+# rebuilding it or putting its method back, nor while a ceremony asks.
+gm_state_has_new_levels = {
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	has_variable = gm_levels
+	gm_state_primary_levels > var:gm_levels
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_rebuilding }
+	NOT = { has_variable = gm_ceremony_pending }
+}
+
+# A monument founded beside another (gm_newcomer, spec 2026-10-16 §3.2) is
+# dedicated, finished and named, with nothing under way: the settle check may
+# give the state's first place back to a grander one (gm_state_settle_newcomer).
+gm_state_newcomer_settled = {
+	has_variable = gm_newcomer
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	has_variable = gm_levels
+	OR = {
+		has_variable = gm_namesake
+		has_variable = gm_name
+	}
+	NOT = { has_variable = gm_unveil_pending }
+	NOT = { has_variable = gm_name_choice_open }
+	NOT = { has_variable = gm_skin_axis }
+	NOT = { has_variable = gm_being_named }
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_rebuilding }
+}
+
+# Its years add to its grandeur this month (spec 2026-10-16 §2): dedicated and
+# recorded, not contested (a heritage monument ages), and not while its method
+# is being put back, a ceremony asks or a rebuild is under way. An undedicated
+# monument is still being built and never ages.
+gm_state_ages = {
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	gm_state_is_contested = no
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_rebuilding }
 }
 
 gm_state_is_heritage = {
@@ -470,10 +527,10 @@ gm_country_has_revived = {
 #  Anniversaries (spec §6.1)
 # ======================================================================
 # State scope. A monument of this dedication that fits and is a real
-# landmark (level 3 or more) holds anniversaries; a contested or heritage one
-# does not.
+# landmark (grandeur 3 or more, its own) holds anniversaries; a contested or
+# heritage one does not.
 gm_state_holds_anniversary = {
 	gm_state_status_fits = yes
 	gm_state_has_pm = { PM = $PM$ }
-	b:building_grand_monument ?= { level >= 3 }
+	gm_state_primary_grandeur >= 3
 }

@@ -28,7 +28,7 @@ tooltip breaks the numbers down.
 | Antimatter Facility | Once your country has one | Engine and warhead-plant slots available and generated (5 per staffed level). |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](10-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
-| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state, the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
+| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state, the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
 
 In every version of the mod, the birth, death and workforce effects of laws,
 technologies and institutions appear in the birth rate, mortality and workforce
@@ -408,7 +408,11 @@ Ministry of Health, in incorporated states only. So a Public Health Insurance
 law does little before antibiotics, and medicine without a health system
 reaches less than half the people. The medical technologies and the health,
 policing, pension and labor laws show what they do to each cause in their
-tooltips. Life expectancy and infant mortality are the census's own figures,
+tooltips. Later technologies make work and everyday life safer whatever the
+laws: Prefabricated Construction, Industrial Robotics, Containerization and
+Knowledge Economy together prevent nine in ten deaths at work, and Modern Urban
+Planning, Computer-Aided Design and Cellular Networks two in five deaths from
+accidents and violence. Life expectancy and infant mortality are the census's own figures,
 before famine, war and disasters.
 
 Medicine also takes time to arrive. A new medical technology, health law or
@@ -520,7 +524,10 @@ children per woman: the brakes are the means to plan a family and the size of
 family people want. Old Age From rises with longer lives and reads None once no
 age has fifteen years left; Linked to Average Longevity follows it, Linked to
 Common Longevity follows those not in care, and the AI moves to Linked to Common
-when the gap is wide. Mental Health Awareness and Mind Backups cut deaths from
+when the gap is wide. Under Full a wide gap also costs you politically: the
+Trade Unions and the Rural Folk lose up to 3 approval, more the wider the gap and
+the fewer of your people are in care, and the labor movement gains support in
+the states where the gap is widest. Mental Health Awareness and Mind Backups cut deaths from
 accidents and violence (and at work, for Mind Backups) instead of a flat cut to
 deaths. Outside Full these technologies cut deaths by a flat share, and nothing
 else of this changes the game.
@@ -740,8 +747,7 @@ If you are a party to the Universal Declaration of Human Rights, a UN convention
 ([UN conventions and
 agencies](10-united-nations.md#un-conventions-and-agencies)), running Penal
 Transportation, Special Settlements or Rustication gives you Violating the
-Declaration: up to −10% prestige as the programs grow, halved if you ratified
-with reservations. It fades over several years after they stop. The first month
+Declaration: up to −10% prestige as the programs grow. It fades over several years after they stop. The first month
 you run a coercive program as a party, an event explains the penalty and offers
 to switch every coercive program to your best voluntary one.
 

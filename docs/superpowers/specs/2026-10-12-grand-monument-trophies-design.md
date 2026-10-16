@@ -199,6 +199,13 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
   and from the monthly pass, so a landmark whose own picture is drawn later, or a trophy from an older save, catches
   up within a month. The `gm_tr_picture` type holds `gm_picture`'s icons, read from the container, without the
   grandeur frame.
+- **The trophy's own picture** (added 2026-10-16, owner's request): what was carried off, on display in a museum
+  room (the marbles, the Quadriga, the Luxor obelisk in a glass-roofed court), drawn over the monument's picture in
+  the three trophy rows by `gm_tr_trophy_picture`. Each landmark with one has a code, `TROPHY_CODE_BASE` (2,000,000) +
+  its `LANDMARKS` row (`TROPHY_PICTURES` in the registry test), and `gm_tr_update_picture` ends by setting
+  `gm_tr_trophy_picture_code` from `gm_tr_picture_trophies` (0 for a landmark with none, or a monument that isn't a
+  landmark, whose rows show the monument's picture alone). A secondary monument's row keeps `gm_tr_picture` alone:
+  it is no trophy.
 - **Held Abroad** (open), while trophies taken from the country's lands stand abroad: a row per trophy, its holder and
   where it stands, the ways home on hover.
 - **The state card:** Carry It Off under the monument, while the viewer could take it (share, levels, value and
@@ -287,7 +294,10 @@ The receiver gets The Homecoming; a holder returning to another country gets rel
    piece is taken (the gift's open question).
 10. **The picture (2026-10-13):** each trophy row shows its monument's picture: the Parthenon's for the marbles, the
     Brandenburg Gate's for the Quadriga, and a carried-off column's own style and form. An older save's trophies show
-    the draped picture until the next month's pass.
+    the draped picture until the next month's pass. **Since 2026-10-16** a landmark's trophy shows its own picture over
+    that one (the marbles in a museum room, the Luxor obelisk in a glass-roofed court) in Trophies, Held Abroad and
+    Trophies on Display, from the next month's pass; a returned trophy standing as a secondary monument shows its
+    monument's picture again.
 11. **The three views (2026-10-13):** on the Home Counties (four of the trophies of 1836 stand there) the card opens in Full with a Grandeur line under each row and the summary line above them. Short is a
     line per trophy: check that no title wraps in the 392-wide cell (a long one wrapping is tolerable, but note which),
     that the grandeur in brackets matches the Full rows, that hovering a line shows the dedication, origin, year and

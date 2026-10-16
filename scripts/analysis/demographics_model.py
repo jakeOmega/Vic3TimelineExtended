@@ -141,6 +141,8 @@ def cause_factors(inp):
             return plain_multiplier(inp, cause)
         if factor == "turmoil":
             return 1 + P.TURMOIL_EXTERNAL_WEIGHT * clamp(inp.turmoil, 0.0, 1.0)
+        if factor == "safety":
+            return 1 - clamp(inp.mods.get(P.SAFETY_TYPES[cause], 0.0), 0.0, P.SAFETY_MAX)
         if factor == "malaria":
             control = clamp(inp.mods.get(P.MALARIA_CONTROL_TYPE, 0.0), 0.0, 1.0)
             return 1 + P.MALARIA_INFECTION.get(inp.malaria, 0.0) * (1 - control)
@@ -1463,14 +1465,14 @@ def lx_births(lx, ring, k, r, f, m, tfr, planned_share):
     fu = f - ft
     a_r = asfr_planned(r)
     i_r = intended(r)
-    base = tfr / 100000.0
-    pl_u = planned_share * base * (1 - e) * fu * a_r
-    un_u = (1 - planned_share) * base * fu * asfr_unplanned(r)
+    # in the script's order: the people and the schedule first, / 100000 last (the engine keeps five decimals)
+    pl_u = fu * a_r * planned_share * (1 - e) * tfr / 100000.0
+    un_u = fu * asfr_unplanned(r) * (1 - planned_share) * tfr / 100000.0
     pl_t = un_t = 0.0
     if sk > 0:
-        pl_t = planned_share * base * (1 - e) * ft * i_r * fecundity(rb)
-        un_t = (1 - planned_share) * base * ft * asfr_unplanned(rb)
-    ecto = planned_share * base * e * (f + m) * 0.5 * i_r
+        pl_t = ft * i_r * fecundity(rb) * planned_share * (1 - e) * tfr / 100000.0
+        un_t = ft * asfr_unplanned(rb) * (1 - planned_share) * tfr / 100000.0
+    ecto = (f + m) * i_r * 0.5 * planned_share * e * tfr / 100000.0
     b = pl_u + un_u + pl_t + un_t + ecto
     if r >= 50:
         lx["b50"] += b

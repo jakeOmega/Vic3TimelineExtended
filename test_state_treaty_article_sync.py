@@ -37,6 +37,18 @@ ONE_SHOT = {
     "surrender_monument": "gm_state_tr_order_take",
 }
 
+# A state-input article whose right is read from the treaty itself, live,
+# wherever it is used, and that writes nothing on the state: a treaty that
+# ends by any road, or a state that changes hands, ends the right with no
+# hook. article -> the trigger that reads the treaty.
+LIVE = {
+    # Grand Monument archaeology: the right to dig a buried site abroad
+    # (gm_archaeology_triggers.txt; rework spec 2026-10-16 § 3).
+    "archaeological_concession": "gm_arch_state_conceded_to",
+    "excavation_permit": "gm_arch_state_conceded_to",
+}
+LIVE_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "gm_archaeology_triggers.txt")
+
 # article -> (apply effect, clear effect, the variable the sync gates on)
 ARTICLES = {
     "free_port_concession": ("te_free_port_state_apply", "te_free_port_state_clear", "has_free_port"),
@@ -101,7 +113,7 @@ class StateInputArticleRoster(unittest.TestCase):
             and re.search(r"\bstate\b", _body(body, "required_inputs"))
         }
         self.assertEqual(
-            state_input, set(ARTICLES) | set(ONE_SHOT),
+            state_input, set(ARTICLES) | set(ONE_SHOT) | set(LIVE),
             "a treaty article with a state input must get an apply/clear pair and "
             "a branch in te_sync_state_treaty_articles and te_restore_state_treaty_articles",
         )
@@ -115,6 +127,24 @@ class StateInputArticleRoster(unittest.TestCase):
                 self.assertFalse(_modifiers_added(force), "a one-shot article adds no modifier")
                 for hook in ("on_break", "on_withdrawal"):
                     self.assertEqual(_body(articles[name], hook).strip(), "", hook)
+
+
+    def test_a_live_article_leaves_nothing_on_the_state(self):
+        articles = _article_texts()
+        triggers = _read(LIVE_TRIGGERS)
+        for name, trigger in LIVE.items():
+            with self.subTest(article=name):
+                for hook in ("on_entry_into_force", "on_break", "on_withdrawal"):
+                    body = _body(articles[name], hook)
+                    self.assertFalse(_modifiers_added(body), f"{hook} adds no modifier")
+                    self.assertNotIn("set_variable", body, f"{hook} writes nothing on the state")
+                    self.assertNotIn("input_state", body, f"{hook} touches no state")
+                for hook in ("on_break", "on_withdrawal"):
+                    self.assertEqual(_body(articles[name], hook).strip(), "", hook)
+                body = re.sub(r"\s+", " ", _top_level(triggers, trigger))
+                self.assertIn("any_scope_treaty = { any_scope_article = { has_type = $ARTICLE$", body)
+                self.assertIn("source_country = scope:gm_arch_cs_host input_state = scope:gm_arch_cs_state", body)
+                self.assertIn(f"ARTICLE = {name}", _read(LIVE_TRIGGERS))
 
 
 class ArticleHooksUseTheHelpers(unittest.TestCase):

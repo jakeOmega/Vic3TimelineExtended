@@ -450,12 +450,13 @@ The Grand Monument is a building you can raise in any state from the start of
 the game. A government raises one to what it stands for: its crown, its
 republic, its revolution, its leader, its faith or the nation. Each level costs
 1,000 construction and needs only maintenance and a small caretaker staff. A
-monument's level is its **grandeur**, and it has no cap. The Grand Monuments
-game rule can switch the system off.
+monument's **grandeur** starts at its levels and grows as the monument ages
+(see [A finished monument and its age](#a-finished-monument-and-its-age)). The
+Grand Monuments game rule can switch the system off.
 
 Everything a monument gives grows with grandeur in steps. The first step takes 5
 grandeur and each further step takes twice as much as the one before, so steps
-complete at 5, 15, 35, 75, 155 and so on. Inside a step every level counts.
+complete at 5, 15, 35, 75, 155 and so on. Inside a step every point counts.
 Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
@@ -498,7 +499,8 @@ ends with an Open Journal Entry button.
 
 The state panel of a state with a Grand Monument, yours or another country's,
 shows a Grand Monument card under the tourism card: the monument's status, name
-and dedication, its grandeur with a bar toward its next step, and the Tourism
+and dedication, its grandeur with a bar toward its next step, its levels and age
+once finished, and the Tourism
 Industry throughput and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
 the Timeline Extended window, where the buttons are. While you can carry the
@@ -522,7 +524,7 @@ These sections follow:
 | Section | Starts | Shows |
 |---|---|---|
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
-| Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and what they cost each week, then the sites you can dig, each with its state, the levels it will raise and a button for each method you can use. |
+| Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
 | Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
@@ -537,28 +539,64 @@ Every monument, whatever it honors, gives:
   grandeur, so its first five levels match one of the base game's monuments.
 - +1 cultural pull for each step of standing grandeur (steps of 10), up to +5.
 
+### A finished monument and its age
+
+A monument is **finished** once it is dedicated and the levels queued for it are
+built. Levels still queued when the dedication ceremony asks join it, so build a
+monument to the size you want before its construction runs out. After that its
+levels are fixed: the state card and its row under Our Monuments show
+"Finished: 15 levels · Age: +3.2".
+
+A finished monument grows grander with the years: by 2% of its levels a year, so
+it doubles its grandeur in fifty years and triples it in a hundred.
+
+| Levels | +25 years | +50 years | +100 years |
+|---|---|---|---|
+| 5 | 7.5 | 10 | 15 |
+| 10 | 15 | 20 | 30 |
+| 25 | 37.5 | 50 | 75 |
+
+It ages while its message stands or while it is kept as heritage, at half the
+rate under Mothballed, and not at all while it is contested or undedicated. A
+trophy abroad does not age; it starts again once home. Each anniversary's first
+option adds a tenth of the monument's levels to its grandeur, at least 1, and
+completing an [opportunity](#monument-opportunities) adds 5. Pulling a monument
+down throws its years away with its stone, and rededicating it halves both, so
+an old monument is worth more than a new one of the same size.
+
+More levels built in the state of a finished monument raise a **new monument
+beside it**, with its own dedication ceremony, name and picture, as below. The
+building can't be expanded while the monument there is contested, while a
+dedication, unveiling or naming is under way, or once six monuments stand
+there; the build tooltip names the reason. The AI raises new monuments in other
+states before it builds beside one.
+
 ### Several monuments in one state
 
 A state has one Grand Monument building, so a second monument there stands
-beside the first instead of as a second building. It is usually a
-[trophy](#monument-trophies) that came home to a state with a monument already
-standing, such as the Luxor Obelisk coming back to Upper Egypt, where the
-Obelisks of Karnak stand. It keeps its own name, picture and dedication.
+beside the first instead of as a second building. It is a monument raised beside
+a finished one, a [trophy](#monument-trophies) that came home to a state with a
+monument already standing, such as the Luxor Obelisk coming back to Upper Egypt,
+where the Obelisks of Karnak stand, or a [buried site](#buried-sites) dug up
+where a monument stands. Each keeps its own name, picture and dedication.
 
-The building's level is every monument's grandeur together, and the building
-runs on the dedication of the first. What it gives the state counts all of them,
-and your national effects count each monument's grandeur once. A returned
-monument adds to your prestige and cultural pull, but its dedication gives
-nothing of its own, so a civic artifact beside a crown monument does not add to
-the crown's legitimacy.
+The building's level is every monument's levels together. Each monument counts
+on its own: its dedication gives its own effect in the state and in the nation
+while its message stands, its interest groups approve or object, and it ages and
+can be contested on its own. A civic obelisk beside a crown column adds to the
+Petty Bourgeoisie's approval, not to the crown's legitimacy, and Tourism
+Industry throughput counts every monument's grandeur together.
 
-Each of the others has its own row in the state's monument card, under the
-first one's details, and under Our Monuments. An army that holds the state
-carries monuments off one at a time, with the Carry It Off on the first one's
-details or on another's row, and the rest stay. If the first
+The first monument is the grandest: once a new monument raised beside it has
+its dedication and name, the grander of the two stands first. Each of the others
+has its own row in the state's monument card, under the first one's details, and
+under Our Monuments, with its status and grandeur. A contested one's row under
+Our Monuments has Pull Down, Rededicate and Keep as Heritage; rededicating it
+makes it the state's first monument, rebuilt at half its levels. An army that
+holds the state carries monuments off one at a time, with the Carry It Off on
+the first one's details or on another's row, and the rest stay. If the first
 monument is pulled down or carried off whole, the largest of the others takes
-the building and its dedication. Rededicate applies to the first monument only,
-at half its own grandeur.
+its place.
 
 ### Monument dedications
 
@@ -570,7 +608,8 @@ tooltips list each dedication's effects. The ceremony lists every dedication:
 one you can't raise yet is greyed out, with what it needs. An undedicated
 monument, draped until its unveiling, gives only the
 prestige, tourism and cultural pull above; the ceremony asks again at its next
-level.
+level. Dedicating a monument finishes it once its queued levels are built (see
+[A finished monument and its age](#a-finished-monument-and-its-age)).
 
 | Dedication | Requires | Approves / objects | National, per step | In its state, per step |
 |---|---|---|---|---|
@@ -632,10 +671,10 @@ year before time runs out, a notice reminds you.
 | Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality |
 | The Environmental Movement researched | Rural Folk | Botanical Gardens | Anywhere | +25% pollution health effects reduction |
 
-An opportunity asks for 5 grandeur of its dedication within 60 months in a
-great power, 120 in a major power and 180 in any other. Grandeur you add to fitting monuments of the dedication
-counts, whether you raise an old monument or build a new one, and an
-opportunity for the capital counts only the capital's monument. One for the
+An opportunity asks for 5 levels of its dedication within 60 months in a
+great power, 120 in a major power and 180 in any other. Levels you build in fitting monuments of the dedication
+count, in a new monument or one raised beside a finished one; years of age do
+not. An opportunity for the capital counts only the capital's monuments. One for the
 capital can be met anywhere when the capital already holds a monument of
 another dedication. A monument that becomes contested stops counting. When a new
 monument's dedication ceremony could answer the open opportunity, its first
@@ -654,12 +693,11 @@ formed or released in play is founded the year it appears. Other countries of
 
 | Outcome | What follows |
 |---|---|
-| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it is rebuilt 5 levels taller at no cost, keeping its dedication, name and style. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
+| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it gains 5 grandeur at no cost. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
 | Let it pass, or time runs out | Nothing. The next moment can bring another. |
 | Lapsed | Nothing. An opportunity lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
 
-A second boon of the same kind restarts its ten years. The rebuilt monument
-reaches level 200 at most, so a monument already that tall gets no extra levels.
+A second boon of the same kind restarts its ten years.
 
 The AI gets the same offers. It seizes one unless it is below a major power, at
 war, in hard times, has more than a year of government construction queued or
@@ -743,7 +781,7 @@ the Grand Monuments tab.
 | Choice | What happens |
 |---|---|
 | Pull Down | The monument and all its grandeur are gone. The new government gains legitimacy that fades over about five years. The group that objected to the old message approves and the group that raised it resents it, both fading. |
-| Rededicate | Costs 500 per level. The monument is rebuilt at half its level, rounded up, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
+| Rededicate | Costs 500 per level. The monument is rebuilt at half its levels, rounded up, keeps half its years, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
 | Keep as Heritage | The monument stays and its prestige returns, but under this government it lends no legitimacy and gives no approval. The group that objected resents it, less each year. |
 
 Pulling down many monuments at once gives what pulling down one of their
@@ -778,10 +816,10 @@ monument that loses a piece is spared for ten years.
 | Form | What is carried off |
 |---|---|
 | Column, obelisk, statue, stele, pillar, high cross, rune stone, menorah, sun stone or stela | The whole monument |
-| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one. The monument is rebuilt smaller, keeping its name and dedication. |
+| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one, and the same share of its years. The monument is rebuilt smaller, keeping its name and dedication. |
 | Any other form: halls, a pantheon, forum, mausoleum, pyramid, pagoda or church, and the five civic-progress buildings | A tenth of its levels, at least one |
 
-A trophy stands in its taker's capital. It counts for half the levels carried
+A trophy stands in its taker's capital. It counts for half the grandeur carried
 off, rounded up, in the standing grandeur that gives prestige and cultural pull,
 and the Armed Forces approve of it. Whoever holds that capital's state holds the
 trophy, so conquering the state takes its trophies too. A trophy keeps its
@@ -813,7 +851,7 @@ state and what they count for together. The card opens in Full, and your choice
 lasts until you leave the game.
 
 A trophy that comes home goes back where it was taken from, with all the levels
-carried off. A piece of the monument standing there rejoins it, as the Quadriga
+and years carried off. A piece of the monument standing there rejoins it, as the Quadriga
 goes back on the Brandenburg Gate. Anything else stands beside the monument that
 is there, as [several monuments in one state](#several-monuments-in-one-state);
 with no monument standing, the monument is rebuilt with its name, style and
@@ -841,42 +879,83 @@ ally or a power bloc partner.
 ### Buried sites
 
 Thirty-five monuments lie buried when a game begins, and a country that holds
-the ground can dig them up: Nineveh's library, Troy, Mycenae, Olympia, Delphi,
-Knossos, the Pergamon Altar, the Ishtar Gate of Babylon, Machu Picchu, the
-tombs of Tutankhamun and Philip II, the Terracotta Army, Göbekli Tepe and others.
-A dug-up site is a historical monument like those standing at the start. It
-keeps its name and look, and an army can carry it off as a [trophy](#monument-trophies).
+the ground, or the right to dig it by treaty, can dig them up: Nineveh's
+library, Troy, Mycenae, Olympia, Delphi, Knossos, the Pergamon Altar, the Ishtar
+Gate of Babylon, Machu Picchu, the tombs of Tutankhamun and Philip II, the
+Terracotta Army, Göbekli Tepe and others. A dug-up site is a historical monument
+like those standing at the start. It keeps its name and look, and an army can
+carry it off as a [trophy](#monument-trophies).
+
+Pompeii is already being dug when the game begins: whoever holds Campania runs
+an Antiquarian dig there, a third done, which diverts 5 innovation a week from
+the first month. At 15 levels it is one of the largest sites. Suspend it to
+keep the innovation, or
+restart it by Systematic Stratigraphy once you have Empiricism to bring it out
+whole; the progress is kept either way.
 
 A site opens when you own a part of its state and have its technology:
 Romanticism for Nineveh, Empiricism for Troy, Mycenae, Pergamon, Olympia and
 Sidon, and later ones for the finds of the twentieth century, up to E-commerce
-for Göbekli Tepe. Some are known and open at once. The rest are found by chance:
-once you have the technology, each month there is about a 1% chance that a
-plough, a railway cutting or a hiker turns one up, and an event offers you the
-dig. Only the holder of the ground digs; digging abroad is not possible.
+for Göbekli Tepe. Some are known and open at once, and The Scholars Know Where
+to Look tells you when one is. The rest are found by chance: once you have the
+technology, each month there is about a 1% chance that a plough, a railway
+cutting or a hiker turns one up, and Something Under the Spade tells you. Both
+events name the place and the state, say what was found, add a short note on
+how it was found in history, and offer the dig.
 
 You choose a method for each dig, from the Archaeological Expeditions section
 of the Grand Monuments tab. A button appears for each method you have the
 technology for.
 
-| Method | Needs | Takes | Weekly innovation | Weekly cost | Result |
-|---|---|---|---|---|---|
-| Antiquarian | Romanticism | 25 months | −5 | the base | A 35% chance the dig destroys half the levels, at least 3 |
-| Systematic | Empiricism | 40 months | −15 | 2.5 times the base | The whole monument |
-| Forensic | Computer Networks | 29 months | −30 | 5 times the base | 2 levels more than the site's own |
+| Method | Needs | Months (5, 10, 15 levels) | Weekly innovation | Result |
+|---|---|---|---|---|
+| Antiquarian | Romanticism | 17, 25, 34 | −5 | A 35% chance the dig destroys half the levels, at least 3 |
+| Systematic | Empiricism | 27, 40, 54 | −20 | The whole monument |
+| Forensic | Computer Networks | 20, 29, 39 | −100 | 2 levels more than the site's own |
 
-The base is a share of your GDP, with a floor, and the button's tooltip gives it.
-Nothing caps how many digs you run, but each one lowers your weekly
-innovation (the cap stays) and costs money every week, which the
-Budget's Breakdown shows as Archaeological Digs under Programme Costs. Suspend Dig stops a
-dig and keeps its progress. A dig also stops if you lose the state, and whoever
-holds it next can take it up from where it stopped.
+Innovation is the only cost: a dig takes no money from the treasury. Each dig
+lowers your weekly innovation by its method's figure for as long as it runs;
+the innovation cap stays. A site's size sets its months, so a 10-level site dug
+by Systematic Stratigraphy diverts 20 innovation a week for 40 months, a 5-level
+one for 27. The button's tooltip gives this site's months, and a dig's row
+gives the innovation it diverts. Nothing caps how many digs you run, but a
+method's button is greyed while you make less weekly innovation than it would
+divert, so a new dig never takes your innovation below zero. Suspend Dig stops
+a dig and keeps its progress. A dig also stops if you lose the state,
+or the treaty that let you dig there ends, and whoever may dig it next can take
+it up from where it stopped.
 
-A finished dig stands in your part of the state, To the Nation, at the site's
+A finished dig stands in the state it was dug in, To the Nation, at the site's
 levels (5 to 15). With no monument there it is a new one; otherwise it stands
 beside the one there as [several monuments in one state](#several-monuments-in-one-state).
-An event tells you how it went. The AI, at peace and out of default, starts a
-dig now and then with the best method it has, and never runs more than two.
+An event tells you how it went, again with the place, the find and its history.
+The AI, at peace and out of default, starts a dig now and then, never runs
+more than two, and digs only by a method whose innovation it makes four times
+over: 20 weekly innovation for Antiquarian, 80 for Systematic, 400 for
+Forensic.
+
+#### Digging abroad
+
+Two treaty articles let you dig the buried sites in another country's state.
+Both name a state that has a site open to you: a known site whose technology
+you have, or a chance find already turned up. The country that owns it
+concedes, and you pay the influence. While the article stands, the site is
+listed in your Archaeological Expeditions with the terms, and you dig it as you
+would at home, diverting the same innovation.
+
+| Article | You need | Influence | When the dig finishes |
+|---|---|---|---|
+| Excavation Concession | Romanticism | 75 | Half the levels, rounded down, go to your capital as a trophy; the rest stand in the host's state as its monument. A rock-cut site has nothing to carry: it stays whole, and you gain Foreign Scholarship. |
+| Excavation Permit | Empiricism | 40 | The monument stands in the host's state at its full levels, and you gain Foreign Scholarship: +10 prestige and +1 cultural pull for ten years. |
+
+A concession's trophy is like any other: it counts for half its levels in your
+grandeur, and the host can ask for it back with Return Cultural Property or
+take it in a war. The host may still dig its own sites, and may end the treaty,
+which stops your dig with its progress kept; the host can then finish the dig
+itself. A war can enforce a concession but not a permit. An AI host signs a
+permit far more readily than a concession, and hardly ever a concession once it
+has researched Pan-nationalism. A major AI power with Empiricism asks for one
+now and then.
 
 ### Vanity backlash
 

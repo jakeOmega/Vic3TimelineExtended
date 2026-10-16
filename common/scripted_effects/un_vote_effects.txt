@@ -945,6 +945,20 @@ un_vote_apply_resolution_compliance = {
 			set_variable = { name = un_peacekeeping_contribution_count value = 0 }
 		}
 		change_variable = { name = un_peacekeeping_contribution_count add = 1 }
+		# The pledge holds the pledger in the programme for ten years, as
+		# un_peacekeeping_mission_button does. Removed first, because a
+		# same-name add_modifier stacks a second copy.
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = un_peacekeeping_cooldown }
+				remove_modifier = un_peacekeeping_cooldown
+			}
+		}
+		add_modifier = {
+			name = un_peacekeeping_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
 		un_vote_standing_request_contribution = yes
 		# ...and joins the mission the resolution opened (redesign phase 6).
 		un_mission_join_resolution = yes
@@ -980,15 +994,18 @@ un_vote_apply_resolution_compliance = {
 	}
 
 	# Power bloc leader providing aid/peacekeeping: gain leverage over the
-	# recipient. A member that cast no ballot pledged nothing above, so it is
-	# not credited with providing anything either.
+	# recipient. Only for a pledge made above, so the same gates: a ballot
+	# cast, major-power rank, and a full deployment rather than observers (a
+	# vetoed request, or one carried below Established). A bloc leader that
+	# provides nothing is not credited with providing anything.
 	if = {
 		limit = {
 			OR = {
 				scope:un_resolution ?= { has_tag = un_topic_aid_request }
-				scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+				scope:un_resolution ?= { un_resolution_peacekeeping_full = yes }
 			}
 			scope:un_resolution ?= { un_lobby_has_voted = { COUNTRY = ROOT } }
+			country_rank >= rank_value:major_power
 			is_power_bloc_leader = yes
 			exists = scope:un_vote_proposer
 			NOT = { THIS = scope:un_vote_proposer }

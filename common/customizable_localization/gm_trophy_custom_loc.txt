@@ -437,6 +437,10 @@ gm_tr_part_name = {
 		localization_key = gm_tr_part_sidon_sarcophagi
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:pompeii }
+		localization_key = gm_tr_part_alexander_mosaic
+	}
+	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:arch }
 		localization_key = gm_tr_part_reliefs
 	}
@@ -895,6 +899,10 @@ gm_tr_landmark_name = {
 		localization_key = gm_skin_landmark_tomb_of_alexander
 	}
 	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:pompeii }
+		localization_key = gm_skin_landmark_pompeii
+	}
+	text = {
 		localization_key = gm_form_monument
 	}
 }
@@ -1249,6 +1257,10 @@ gm_tr_landmark_desc = {
 	text = {
 		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:tomb_of_alexander }
 		localization_key = gm_landmark_tomb_of_alexander_desc
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:pompeii }
+		localization_key = gm_landmark_pompeii_desc
 	}
 	text = {
 		localization_key = gm_landmark_desc_none

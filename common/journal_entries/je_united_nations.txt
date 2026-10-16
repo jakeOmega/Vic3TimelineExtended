@@ -234,6 +234,16 @@
 					}
 					je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 				}
+				# Nor is it held to NPT disarmament (je_un_preview_npt_tt): the same
+				# net, which also frees a country that left before
+				# un_membership_end_effect lifted it.
+				if = {
+					limit = {
+						je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier }
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					}
+					je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
+				}
 				# Strip non-permanent SC seats from sub-GP holders (legacy save migration).
 				if = {
 					limit = {
@@ -404,7 +414,9 @@
 						}
 						je:je_united_nations ?= { add_modifier = { name = un_npt_disarmament_modifier } }
 					}
-					# Remove if the tier drops or they become nuclear
+					# Remove if the tier drops or they become nuclear. Leaving
+					# removes it too (un_membership_end_effect), with the
+					# non-member net above for any other way out.
 					if = {
 						limit = {
 							je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier }

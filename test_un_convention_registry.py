@@ -633,7 +633,7 @@ class ChamberTests(unittest.TestCase):
                 self.assertIn(f"TOPIC = {c.key} ", body + " ")
                 # When the docket raises it is said on hover over the title.
                 title = values[f"je_un_chamber_propose_topic_{c.key}"]
-                tip = re.search(r"#tooltippable;tooltip:(\w+) ", title)
+                tip = re.search(r"#tooltippable;tooltip:(?:\[GetPlayer\.GetTooltipTag\],)?(\w+) ", title)
                 self.assertTrue(tip, title)
                 raised = re.findall(r"\$je_un_chamber_raised_(\w+)\$", values.get(tip.group(1), ""))
                 self.assertEqual(len(raised), 1, raised)

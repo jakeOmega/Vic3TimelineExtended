@@ -694,10 +694,6 @@ resettlement_refresh_declaration = {
 				max = 1
 			}
 		}
-		if = {
-			limit = { has_modifier = un_human_rights_reservations_modifier }
-			change_variable = { name = rs_declaration_intensity multiply = 0.5 }
-		}
 	}
 	remove_modifier = resettlement_declaration_violation
 	if = {

@@ -7,15 +7,26 @@
 # for countries that have never had an opportunity.
 
 # ---- Progress (spec §2) ---------------------------------------------------------
-# The grandeur of the monuments that count toward the open opportunity today
-# (gm_state_com_counts): fitting, of its dedication, in its state if it has one.
+# The levels of the monuments that count toward the open opportunity today
+# (gm_state_com_counts, gm_mon_com_counts): fitting, of its dedication, in its
+# state if it has one. Levels, never age (owner, 2026-10-16): only building,
+# a new monument or one beside another, completes an opportunity. The name
+# stays for saves (the gm_com_* records).
 gm_com_fit_grandeur = {
 	value = 0
 	if = {
 		limit = { has_variable = gm_com_dedication }
 		every_scope_state = {
 			limit = { gm_state_com_counts = yes }
-			add = gm_state_primary_grandeur
+			add = gm_state_primary_levels
+		}
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			every_in_list = {
+				variable = gm_monuments_held
+				limit = { gm_mon_com_counts = yes }
+				add = gm_mon_levels
+			}
 		}
 	}
 }
@@ -178,8 +189,8 @@ gm_state_disp_com_counts = {
 }
 
 # ---- What completing one gives (spec §3), for the effects and the tooltips ----------
-# The monument that completed it is rebuilt this many levels taller (the
-# monument's gift, gm_state_gift_grandeur), at most to level 200.
+# The grandeur the monument that completed it gains, added to its age (the
+# monument's gift, gm_state_gift_grandeur; ageing spec 2026-10-16 §5).
 gm_com_gift = 5
 
 # The asking group's ledger rises by this much grandeur (gm_com_fulfil): about

@@ -22,16 +22,29 @@ gm_state_tr_share = {
 # The levels a taking carries off: the share, rounded up, at least one and at
 # most every level.
 gm_state_tr_levels = {
-	value = gm_state_primary_grandeur
+	value = gm_state_primary_levels
 	multiply = gm_state_tr_share
 	ceiling = yes
 	min = 1
-	max = gm_state_primary_grandeur
+	max = gm_state_primary_levels
 }
 
-# What those levels count for abroad: half, rounded up (spec §1).
+# The age a taking carries off with its levels (spec 2026-10-16 §5): all of
+# it whole, else the levels' share of it.
+gm_state_tr_age = {
+	value = gm_state_primary_age
+	if = {
+		limit = { gm_state_tr_whole = 0 }
+		multiply = gm_state_tr_levels
+		divide = gm_state_primary_levels
+	}
+}
+
+# What they count for abroad: half their grandeur, levels and age, rounded up
+# (spec §1).
 gm_state_tr_value = {
 	value = gm_state_tr_levels
+	add = gm_state_tr_age
 	divide = 2
 	ceiling = yes
 }
@@ -40,14 +53,14 @@ gm_state_tr_value = {
 gm_state_tr_whole = {
 	value = 0
 	if = {
-		limit = { gm_state_tr_levels >= gm_state_primary_grandeur }
+		limit = { gm_state_tr_levels >= gm_state_primary_levels }
 		value = 1
 	}
 }
 
 # What is left standing after a piece is taken.
 gm_state_tr_levels_left = {
-	value = gm_state_primary_grandeur
+	value = gm_state_primary_levels
 	subtract = gm_state_tr_levels
 	min = 0
 }
@@ -258,6 +271,17 @@ gm_tr_disp_picture_code = {
 	if = {
 		limit = { has_variable = gm_tr_picture_code }
 		value = var:gm_tr_picture_code
+	}
+}
+
+# Container scope. The trophy's own picture (gm_tr_picture_trophies), for the
+# gm_tr_trophy_picture type: 0, which shows nothing over the monument's picture,
+# until the monthly pass sets one, or for a landmark with none drawn.
+gm_tr_disp_trophy_picture_code = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_trophy_picture_code }
+		value = var:gm_tr_trophy_picture_code
 	}
 }
 
