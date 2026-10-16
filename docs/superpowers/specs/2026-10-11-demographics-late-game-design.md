@@ -5,6 +5,11 @@
 > left open (the postponement shift held at 0; `autonomous_vehicles` not built; the gap's politics behind a switch, off;
 > the harness's `lategame` results against the sketched figures). The design below is unchanged.
 >
+> **2026-10-16 (owner):** the gap's politics are on at call 15's sizes, and the play-test checks them rather than sizing
+> them first. §1.4's adult-mortality check is answered for men by a modern-safety factor on work and accidents and violence
+> (era 7-9 technologies; `docs/systems/mod_systems.md` § Causes of Death); women's excess is adult infection and chronic
+> deaths, left until the AI's insolvency (#933) is fixed.
+>
 > **Status: approved design, 2026-10-11.** The owner approved every call in §9 as recommended the same day; call 15 (the
 > gap's politics) waits for a play-test and call 16's B for a fit. It was revised after an independent review the same
 > day (who is treated is now tracked per band, §1.2–§1.3). It answers the owner's request of 2026-10-11: scope the late
@@ -897,7 +902,8 @@ The owner approved every call as recommended. Call 15 waits for a play-test and 
     state's rate.
 15. **The gap's politics**: Trade Unions and Rural Folk approval down to −3, Labor movement support up, both scaled by
     the gap and the lower strata's untreated share. *Decided (owner, 2026-10-11): play-test later*: build the gap and
-    its display first, and size the politics when a game shows one.
+    its display first, and size the politics when a game shows one. *On at these sizes since 2026-10-16 (owner): the
+    play-test checks them instead.*
 16. **Pension money cost: GDP ÷ 52 × pensioners' share × B**, B = 0.08 per Social Security level as a starting value.
     *Decided (owner, 2026-10-11): B is fit later*, against the game's revenue in a late-game save before tuning.
 17. **The pension bill stacks on vanilla's welfare by recipient**: Old Age Pension's welfare payments go to low-paid

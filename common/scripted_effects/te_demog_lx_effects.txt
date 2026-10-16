@@ -1077,7 +1077,7 @@ te_demog_lx_rate_slope = {
 
 # THIS = ROOT = a state, after the census's other terms (te_demog_state_yearly, fast mode's clock step): the longevity gap's
 # state modifier (late-game §4.4, call 15), the one refresh site of te_demog_lx_gap_labor. Applied only under Full with
-# te_demog_k_lx_politics on (off until a play-test sizes it), at the state's gap (Living to 100, treated less untreated).
+# te_demog_k_lx_politics on (on since 2026-10-16, owner), at the state's gap (Living to 100, treated less untreated).
 te_demog_lx_politics_refresh = {
 	if = {
 		limit = { has_modifier = te_demog_lx_gap_labor }
@@ -1199,7 +1199,7 @@ te_demog_lx_country_store = {
 		te_demog_lx_clear = yes
 	}
 	# the longevity gap's politics (late-game §4.4, call 15): the country's one refresh site of te_demog_lx_gap_politics,
-	# at the gap x the share of people not in care, under Full with te_demog_k_lx_politics on (off until a play-test)
+	# at the gap x the share of people not in care, under Full with te_demog_k_lx_politics on (on since 2026-10-16)
 	if = {
 		limit = { has_modifier = te_demog_lx_gap_politics }
 		remove_modifier = te_demog_lx_gap_politics

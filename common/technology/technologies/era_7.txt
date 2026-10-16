@@ -298,6 +298,11 @@ prefabricated_construction = {
 		modern_skyscrapers
 	}
 
+	modifier = {
+		# census only, modern safety (demographics_params.SAFETY_TYPES): buildings put together from parts made in factories, not on the scaffold
+		state_work_safety_add = 0.15
+	}
+
 	ai_weight = {
 		value = 1
 	}
@@ -582,6 +587,8 @@ modern_urban_planning = {
 		state_migration_crowding_density_mult = 0.2
 		country_institution_ministry_of_urban_planning_max_investment_add = 2
 		country_modern_urban_planning_pb_principles_bool = yes
+		# census only, modern safety (demographics_params.SAFETY_TYPES): roads built for traffic, fire and building codes
+		state_external_safety_add = 0.2
 	}
 
 	ai_weight = {

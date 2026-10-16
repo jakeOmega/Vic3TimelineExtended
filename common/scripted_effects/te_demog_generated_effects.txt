@@ -7534,6 +7534,9 @@ te_demog_cause_inputs_store = {
 	# calibration step 3: the state's malaria trait (te_demog_malaria_level) and its control, 0 to 1
 	set_variable = { name = te_dg_in_mal value = te_demog_malaria_level }
 	set_variable = { name = te_dg_in_malc value = { value = modifier:state_malaria_control_add min = 0 max = 1 } }
+	# modern safety (2026-10-16): the share of each cause's deaths the era 7-9 technologies prevent
+	set_variable = { name = te_dg_in_saf_work value = { value = modifier:state_work_safety_add min = 0 max = 0.95 } }
+	set_variable = { name = te_dg_in_saf_ext value = { value = modifier:state_external_safety_add min = 0 max = 0.95 } }
 }
 
 # THIS = a state: the drifted medicine at its targets (te_demog_seed; te_demog_medicine_drift for a state

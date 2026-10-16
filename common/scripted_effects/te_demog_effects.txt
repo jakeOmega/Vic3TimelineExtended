@@ -80,6 +80,9 @@
 #   te_dg_in_ext, te_dg_in_work, te_dg_in_chr, te_dg_in_turm, te_dg_in_crowd, te_dg_in_sol, te_dg_in_lit  the
 #                       step's other inputs the factors read (te_demog_cause_inputs_store; the last two the
 #                       walk's te_dg_sol and te_dg_lit as the step used them)
+#   te_dg_in_saf_work, te_dg_in_saf_ext  the share of work and of accident and violence deaths modern safety prevents
+#                       (the era 7-9 technologies; te_demog_cause_inputs_store); absent before a state's first step
+#                       since 2026-10-16, when the factor reads 1
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share,
 #   te_dg_dependency, te_dg_sex_balance, te_dg_cbr, te_dg_cdr, te_dg_w1549
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is

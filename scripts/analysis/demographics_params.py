@@ -504,13 +504,24 @@ CROWDING_INFECTION_MAX = 0.5             # at most +50%, just past ten times the
 # Death section reads the same values, so the display and the census can't disagree.
 CAUSE_FACTORS = {
     "infection": ("medicine", "sol", "poverty", "literacy", "crowding", "malaria"),
-    "work": ("laws",),
-    "external": ("laws", "turmoil"),
+    "work": ("laws", "safety"),
+    "external": ("laws", "safety", "turmoil"),
     "maternal": ("medicine", "laws"),   # laws: phase 2 step 3b's state_maternal_mortality_mult
     "chronic": ("medicine", "laws", "sol"),
 }
 # Short names of the state variables (te_dg_m_<short>, te_dg_trt_<short>, te_dg_in_<short>).
 CAUSE_SHORT = {"infection": "inf", "work": "work", "external": "ext", "maternal": "mat", "chronic": "chr"}
+# Modern safety (owner, 2026-10-16; the late-game build's adult-mortality check, #947): era 7-9 technologies make work
+# and everyday life safer whatever the laws do, so each prevents a share of the cause's deaths, 1 - the type's sum, at
+# most SAFETY_MAX. The laws factor's floor (MORTALITY_MULT_FLOOR) doesn't reach it: robots and container ports cut the
+# deaths of every job that remains, under any law. The step stores each sum, clamped, as te_dg_in_saf_<short>; a step
+# from before stored none, so the factor reads 1 until the state's next step. Carriers (their own era_N.txt definitions):
+# work, Prefabricated Construction 0.15, Industrial Robotics 0.35, Containerization 0.15, Knowledge Economy 0.25 (0.90 by
+# era 9: x0.05 with Workplace Safety at level 5, near today's rich-world 2-4 deaths a year per 100,000 workers);
+# accidents and violence, Modern Urban Planning 0.20, Computer-Aided Design 0.10, Cellular Networks 0.10 (0.40).
+SAFETY_TYPES = {"work": "state_work_safety_add", "external": "state_external_safety_add"}
+SAFETY_MAX = 0.95
+DEMOG_TYPES = DEMOG_TYPES + tuple(SAFETY_TYPES.values())
 
 # ---- Calibration step 3: the regional mortality gap (owner, 2026-10-12; #894) ----------------------------------------
 # docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md. Owner calls 1-3 approved 2026-10-12.
@@ -856,10 +867,11 @@ LX_ECTO_BUILDING = "building_state_youth_centers"
 LX_ECTO_TECH = "biotechnology"     # the method's technology: the census counts the buildings only once the owner has it
 LX_ECTO_PER_LEVEL = 1000
 LX_ECTO_MAX = 0.9
-# The gap's politics (§4.4, call 15): built behind this switch, off until a play-test sizes it. Trade Unions and Rural Folk
-# approval down to LX_POLITICS_APPROVAL with the national gap x the lower strata's untreated share; Labor movement support
-# up to LX_POLITICS_LABOR in states where the gap is large. Generated as te_demog_k_lx_politics.
-LONGEVITY_POLITICS = False
+# The gap's politics (§4.4, call 15): Trade Unions and Rural Folk approval down to LX_POLITICS_APPROVAL with the national
+# gap x the lower strata's untreated share; Labor movement support up to LX_POLITICS_LABOR in states where the gap is
+# large. Generated as te_demog_k_lx_politics. Built off until a play-test sized it; on at the spec's sizes since
+# 2026-10-16 (owner), which the play-test checks instead.
+LONGEVITY_POLITICS = True
 LX_POLITICS_APPROVAL = -3
 LX_POLITICS_LABOR = 0.10
 # The AI's pension pulse (late-game §2.2): a longevity gap (Living to 100, treated less untreated) over PENSION_AI_GAP picks
