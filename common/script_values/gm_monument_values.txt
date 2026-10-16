@@ -10,7 +10,43 @@
 # gm_state_grandeur (gm_values.txt) is the building's level, so the state's
 # whole; gm_state_primary_grandeur is the primary's own part of it.
 
-# Container scope. The levels a secondary monument stands for.
+# Container scope. The levels a secondary monument stands for in the building.
+gm_mon_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_levels }
+		value = var:gm_tr_levels
+	}
+}
+
+# State scope. The levels of the secondaries standing here (the monthly pass
+# writes the list), 0 with none: the rebuilds' arithmetic.
+gm_state_secondary_levels = {
+	value = 0
+	if = {
+		limit = { has_variable_list = gm_monuments_here }
+		every_in_list = {
+			variable = gm_monuments_here
+			add = gm_mon_levels
+		}
+	}
+}
+
+# State scope. The primary's own levels: the building's less its secondaries',
+# at least 1; 0 with no building. Every reader that means "what was built"
+# (rebuild heights, trophy shares, Rededicate's cost, the ceremony's level)
+# reads this, never gm_state_primary_grandeur.
+gm_state_primary_levels = {
+	value = gm_state_level
+	subtract = gm_state_secondary_levels
+	min = 1
+	if = {
+		limit = { NOT = { has_building = building_grand_monument } }
+		value = 0
+	}
+}
+
+# Container scope. The grandeur a secondary monument stands for.
 gm_mon_grandeur = {
 	value = 0
 	if = {
@@ -82,18 +118,18 @@ gm_mon_tr_share = {
 # The levels a taking carries off: the share, rounded up, at least one and at
 # most every level.
 gm_mon_tr_levels = {
-	value = gm_mon_grandeur
+	value = gm_mon_levels
 	multiply = gm_mon_tr_share
 	ceiling = yes
 	min = 1
-	max = gm_mon_grandeur
+	max = gm_mon_levels
 }
 
 # 1 when a taking carries off the whole monument.
 gm_mon_tr_whole = {
 	value = 0
 	if = {
-		limit = { gm_mon_tr_levels >= gm_mon_grandeur }
+		limit = { gm_mon_tr_levels >= gm_mon_levels }
 		value = 1
 	}
 }

@@ -141,8 +141,8 @@ class ShareTests(unittest.TestCase):
     def test_levels_and_value(self):
         v = read(TR_VALUES)
         self.assertEqual(squash(block(v, "gm_state_tr_levels")),
-                         "value = gm_state_primary_grandeur multiply = gm_state_tr_share ceiling = yes min = 1 "
-                         "max = gm_state_primary_grandeur")
+                         "value = gm_state_primary_levels multiply = gm_state_tr_share ceiling = yes min = 1 "
+                         "max = gm_state_primary_levels")
         self.assertEqual(squash(block(v, "gm_state_tr_value")),
                          "value = gm_state_tr_levels divide = 2 ceiling = yes")
 
@@ -925,9 +925,9 @@ class LootingASecondaryTests(unittest.TestCase):
         self.assertIn(f"limit = {{ gm_mon_form_is_object = yes }} value = {SHARE_VALUES['object']}", share)
         self.assertLess(share.find("gm_mon_form_is_piece"), share.find("gm_mon_form_is_object"))
         self.assertEqual(squash(block(v, "gm_mon_tr_levels")),
-                         "value = gm_mon_grandeur multiply = gm_mon_tr_share ceiling = yes min = 1 max = gm_mon_grandeur")
+                         "value = gm_mon_levels multiply = gm_mon_tr_share ceiling = yes min = 1 max = gm_mon_levels")
         self.assertEqual(squash(block(v, "gm_mon_tr_whole")),
-                         "value = 0 if = { limit = { gm_mon_tr_levels >= gm_mon_grandeur } value = 1 }")
+                         "value = 0 if = { limit = { gm_mon_tr_levels >= gm_mon_levels } value = 1 }")
 
     def test_a_click_names_the_monument_and_only_orders(self):
         order = squash(block(read(MON_EFFECTS), "gm_mon_tr_order_take"))
@@ -1005,7 +1005,7 @@ class LootingASecondaryTests(unittest.TestCase):
     def test_shrinking_leaves_the_primary_and_the_rest_standing(self):
         body = squash(block(read(MON_EFFECTS), "gm_state_tr_shrink_by"))
         self.assertIn("gm_state_mark_restore_pm = yes", body)
-        self.assertIn("name = gm_rebuild_level value = { value = gm_state_grandeur "
+        self.assertIn("name = gm_rebuild_level value = { value = gm_state_level "
                       "subtract = var:gm_tr_take_levels min = 1 max = 200 }", body)
         self.assertLess(body.find("remove_building = building_grand_monument"),
                         body.find("te_construction_market_build_specified_level"))

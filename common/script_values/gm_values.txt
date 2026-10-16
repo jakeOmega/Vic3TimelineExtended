@@ -108,6 +108,17 @@ gm_event_income = {
 }
 
 # ---- A monument's own numbers (state scope) --------------------------------
+# The building's level, or 0: the levels of every monument standing here
+# together (gm_monument_values.txt splits them). What every rebuild reads; never
+# grandeur, which is levels + age (spec 2026-10-16 §1).
+gm_state_level = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = b:building_grand_monument.level
+	}
+}
+
 # Its level, or 0.
 gm_state_grandeur = {
 	value = 0
@@ -552,9 +563,9 @@ gm_display_contested = {
 
 # ---- Contests (§4.3, §4.5) ----------------------------------------------------
 # State scope. What Rededicate costs: 500 a level (v2 §1: v1's 5,000, cut with the
-# construction price).
+# construction price), of the primary's own levels: the stone, not its age.
 gm_state_rededicate_cost = {
-	value = gm_state_primary_grandeur
+	value = gm_state_primary_levels
 	multiply = 500
 }
 

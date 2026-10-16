@@ -1169,10 +1169,10 @@ gm_state_rededicate = {
 		set_variable = {
 			name = gm_rebuild_level
 			value = {
-				value = var:gm_grandeur
+				value = gm_state_primary_levels
 				divide = 2
 				ceiling = yes
-				add = gm_state_secondary_grandeur
+				add = gm_state_secondary_levels
 				max = 200
 			}
 		}
@@ -1239,7 +1239,7 @@ gm_state_start_ceremony = {
 			NOT = { has_variable = gm_restore_pm }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		set_variable = { name = gm_ceremony_level value = gm_state_primary_grandeur }
+		set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		trigger_event = { id = monument_events.2 }
 	}
 }
@@ -1261,7 +1261,7 @@ gm_state_offer_missed_ceremony = {
 				NOT = { has_variable = gm_ceremony_level }
 				AND = {
 					has_variable = gm_ceremony_level
-					var:gm_ceremony_level < gm_state_primary_grandeur
+					var:gm_ceremony_level < gm_state_primary_levels
 				}
 			}
 		}

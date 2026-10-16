@@ -277,7 +277,7 @@ gm_state_tr_remove_piece = {
 		name = gm_rebuild_level
 		value = {
 			value = var:gm_tr_take_left
-			add = gm_state_secondary_grandeur
+			add = gm_state_secondary_levels
 			max = 200
 		}
 	}
@@ -528,7 +528,7 @@ gm_state_tr_add_levels = {
 	set_variable = {
 		name = gm_rebuild_level
 		value = {
-			value = gm_state_grandeur
+			value = gm_state_level
 			add = scope:gm_tr_moving.var:gm_tr_levels
 			max = 200
 		}
@@ -557,7 +557,7 @@ gm_state_tr_rebuild_from_moving = {
 			name = gm_rebuild_level
 			value = {
 				value = scope:gm_tr_moving.var:gm_tr_levels
-				add = gm_state_secondary_grandeur
+				add = gm_state_secondary_levels
 				max = 200
 			}
 		}
