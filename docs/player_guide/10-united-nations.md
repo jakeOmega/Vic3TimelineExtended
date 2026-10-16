@@ -817,8 +817,8 @@ resettlement](08-states.md#costs-and-consequences-of-resettlement)).
 
 ### The Law of the Sea and the seabed
 
-The Convention on the Law of the Sea has seabed terms that sleep until some
-country researches Abyssal Plain Mining. From then on the seabed has one
+Under the Global Commons rule, the Convention on the Law of the Sea has seabed
+terms that sleep until some country researches Abyssal Plain Mining. From then on the seabed has one
 regime for the whole world, and the Seabed section and Our Obligations show it.
 It is read once a year, when the basins' licences are shared out (see [Seabed
 licences](02-timeline.md) for the basins, the claim weights and the seabed

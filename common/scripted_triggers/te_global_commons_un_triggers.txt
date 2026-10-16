@@ -12,8 +12,8 @@
 # ---- The seabed (§3) ----------------------------------------------------------------
 
 # The seabed terms of the Law of the Sea are awake: some country has
-# researched Abyssal Plain Mining (te_gc_un_global_monthly sets the flag,
-# once). Scope: any
+# researched Abyssal Plain Mining under the Global Commons rule
+# (te_gc_un_global_monthly sets the flag, once). Scope: any
 te_seabed_terms_awake = {
 	has_global_variable = te_seabed_terms_awake
 }
@@ -37,10 +37,11 @@ te_seabed_regime_is_governed = {
 }
 
 # The regime the seabed should have now, before the Scramble's two-year
-# return: the Law of the Sea in force, its seabed terms awake, and the UN
-# rule on. Scope: any
+# return: the Law of the Sea in force, its seabed terms awake, and the UN and
+# Global Commons rules on. Scope: any
 te_seabed_itlos_governs = {
 	has_game_rule = united_nations_enabled
+	has_game_rule = global_commons_enabled
 	has_global_variable = un_agency_itlos
 	te_seabed_terms_awake = yes
 }

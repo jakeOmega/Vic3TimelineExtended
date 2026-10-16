@@ -49,9 +49,11 @@
 
 # Global monthly upkeep (no-country scope).
 te_gc_un_global_monthly = {
-	# The seabed terms wake for good once anyone can mine the seabed.
+	# The seabed terms wake for good once anyone can mine the seabed. Under
+	# the disabled Global Commons rule the seabed has no licences to govern.
 	if = {
 		limit = {
+			has_game_rule = global_commons_enabled
 			NOT = { has_global_variable = te_seabed_terms_awake }
 			any_country = { has_technology_researched = abyssal_plain_mining }
 		}
