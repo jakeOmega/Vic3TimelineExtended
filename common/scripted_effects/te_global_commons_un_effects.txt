@@ -124,8 +124,10 @@ te_seabed_royalty_refresh = {
 
 # ---- The Antarctic research station (§4) -----------------------------------------------
 
-# Open a station. Its research and its upkeep at once (so the decision's
-# tooltip shows both); the monthly refresh keeps them. A party's terms are
+# Open a station. Its research and its upkeep at once; the monthly refresh
+# keeps them. The decision's tooltip shows the research modifier and states
+# the upkeep in words: the upkeep's multiplier is a variable set in this
+# block, which a tooltip (which runs nothing) cannot read. A party's terms are
 # re-read at its next monthly pulse, which gives it the treaty's station term.
 # The country's first station is docket business while the treaty is not in
 # force (un_docket_antarctic_candidate).
@@ -136,14 +138,17 @@ te_antarctic_station_open = {
 		limit = { NOT = { has_modifier = te_antarctic_station_modifier } }
 		add_modifier = { name = te_antarctic_station_modifier }
 	}
-	set_variable = { name = te_antarctic_station_upkeep_cached value = te_antarctic_station_upkeep_value }
-	if = {
-		limit = { has_modifier = te_antarctic_station_upkeep }
-		remove_modifier = te_antarctic_station_upkeep
-	}
-	add_modifier = {
-		name = te_antarctic_station_upkeep
-		multiplier = var:te_antarctic_station_upkeep_cached
+	custom_tooltip = te_antarctic_station_upkeep_tt
+	hidden_effect = {
+		set_variable = { name = te_antarctic_station_upkeep_cached value = te_antarctic_station_upkeep_value }
+		if = {
+			limit = { has_modifier = te_antarctic_station_upkeep }
+			remove_modifier = te_antarctic_station_upkeep
+		}
+		add_modifier = {
+			name = te_antarctic_station_upkeep
+			multiplier = var:te_antarctic_station_upkeep_cached
+		}
 	}
 	if = {
 		limit = { te_antarctic_treaty_party = yes }

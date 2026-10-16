@@ -37,6 +37,7 @@
  te_decision_open_antarctic_station_desc:0 "Send a wintering party south and keep it there: ice cores, ozone readings, the long night's sky. The station costs a tenth of a percent of our GDP a year, and never less than @money!1,000 a week, for research, a higher innovation cap and a claim on the Southern seabed."
  te_decision_close_antarctic_station:0 "Close the Antarctic Research Station"
  te_decision_close_antarctic_station_desc:0 "Bring the wintering party home. The station's research and its upkeep end."
+ te_antarctic_station_upkeep_tt:0 "#R Upkeep#!: a tenth of a percent of our GDP a year, billed by the week, and never less than @money!1,000 a week."
  te_antarctic_tt_not_in_default:0 "We are not in default"
  te_antarctic_station_treaty_term_tt:0 "As a party to the Antarctic Treaty, our station also shares its science with the other parties' (#G +3%#! research speed, scaled by [concept_un_enforcement]) from our next monthly UN review."
  te_antarctic_station_modifier:0 "Antarctic Research Station"

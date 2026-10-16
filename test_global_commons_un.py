@@ -221,7 +221,8 @@ class HandTypedFiguresTest(unittest.TestCase):
         share = _value("te_antarctic_station_upkeep_share")
         floor = _value("te_antarctic_station_upkeep_floor")
         self.assertEqual(share, 0.001)
-        for key in ("te_antarctic_station_upkeep_desc", "te_decision_open_antarctic_station_desc"):
+        for key in ("te_antarctic_station_upkeep_desc", "te_decision_open_antarctic_station_desc",
+                    "te_antarctic_station_upkeep_tt"):
             with self.subTest(key=key):
                 self.assertIn("a tenth of a percent", LOC[key])
                 self.assertRegex(LOC[key], rf"{floor:,.0f} a week")
