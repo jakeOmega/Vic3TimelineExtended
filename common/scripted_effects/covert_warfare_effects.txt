@@ -2341,7 +2341,7 @@ covert_watch_monthly = {
 #      While one is open (iw_burned_type_code) each pass counts itself on
 #      iw_burned_seen, and `after` removes the count with the copies. An
 #      event's `duration` is in months: a .1 a player leaves unanswered stays
-#      open up to three of them, so the count reaches
+#      open up to one (a .3, three), so the count reaches
 #      covert_open_event_stale_passes only for copies whose `after` never ran
 #      (a revolution that won while the event was open hands them to the
 #      winner, and the loser's event dies with it). Left alone they would hold

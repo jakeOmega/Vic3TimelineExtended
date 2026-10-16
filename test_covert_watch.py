@@ -338,7 +338,7 @@ class Events(unittest.TestCase):
         self.assertIn("covert_exposure_in_flight = yes", opt)
         self.assertIn("covert_exposure_fire = yes", opt)
         # Locked: watch now, with the exposure ordered, and look again once
-        # the open covert_warfare.1 (duration 3) has closed.
+        # the open covert_warfare.1 (up to a month) has closed.
         self.assertIn("name = iw_expose_ordered value = 1", opt)
         self.assertIn("trigger_event = { id = covert_warfare.4 days = 4 }", opt)
 
@@ -428,6 +428,13 @@ class Watchdogs(unittest.TestCase):
             m = re.search(r"\n\tduration = (\d+)\n", event(suffix))
             self.assertIsNotNone(m, suffix)
             self.assertGreaterEqual(passes, int(m.group(1)) + 2, suffix)
+
+    def test_event_1_lasts_one_month(self):
+        # While a covert_warfare.1 is open its attacker is locked: no roll, no
+        # Expose against it. A player could stall detection by leaving it
+        # unanswered, so it lasts one month (duration is in months): a stall
+        # skips at most one monthly roll per catch.
+        self.assertRegex(event(".1"), r"\n\tduration = 1\n")
 
     def test_lock_failsafe_waits_for_a_second_month_without_event_1(self):
         body = scripted_effect("covert_watch_attacker_monthly")

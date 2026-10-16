@@ -310,10 +310,10 @@ covert_ai_watch_expose_severe_add = 5
 # (iw_burned_seen counts them) or a covert_warfare.3 (iw_catch_pending, 1 from
 # the roll) may outlast before the watchdog takes it for an event whose `after`
 # never ran. An event's `duration` is in months (NEvents.DEFAULT_MONTHS_VALID,
-# auto-opened NUM_DAYS_TO_AUTO_OPEN_EVENT = 30 days before it expires), so both,
-# at duration = 3, stay open up to three months for a player who doesn't
-# answer. At 5 the watchdog acts four months after the event opened at the
-# soonest: the three months and a month's margin.
+# auto-opened NUM_DAYS_TO_AUTO_OPEN_EVENT = 30 days before it expires): .1, at
+# duration = 1, stays open up to a month for a player who doesn't answer, and
+# .3, at duration = 3, up to three. At 5 the watchdog acts four months after
+# the event opened at the soonest: the longer of the two and a month's margin.
 covert_open_event_stale_passes = 5
 
 # ============================================================================

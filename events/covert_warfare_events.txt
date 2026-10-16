@@ -23,7 +23,12 @@ covert_warfare.1 = {
 	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
-	duration = 3
+	# One month (`duration` is in months, and the event opens itself 30 days
+	# before it expires, so at once). While it is open the attacker's roll and
+	# every Expose against it wait (covert_exposure_in_flight), so a longer
+	# event would let a player stall detection by leaving it unanswered: at
+	# one month a stall skips at most one monthly roll per catch.
+	duration = 1
 
 	trigger = {
 		exists = scope:iw_burned_op
@@ -570,8 +575,7 @@ covert_warfare.2 = {
 #      watched with its exposure ordered. covert_warfare.4 tries again four
 #      days later, and the monthly pass (covert_watch_monthly) after that,
 #      until the attacker has answered the open covert_warfare.1, which a
-#      player may leave open for up to its three months (duration is in
-#      months).
+#      player may leave open for up to its month (duration is in months).
 #   b. Let it run: covert_watch_start. The attacker is not told.
 # The operation can end while the event is open, up to three months
 # (stand-down, the monthly sync, a lapsed pact); every use is guarded with
