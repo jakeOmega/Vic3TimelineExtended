@@ -1,0 +1,21 @@
+﻿# Values for the logistics_input_cut self-check
+# (common/on_actions/te_global_commons_logistics_selfcheck_on_actions.txt).
+
+# Building scope: how many of the Extraplanetary Base's two logistics upgrades it runs.
+te_gc_logistics_active_upgrades = {
+	value = 0
+	if = {
+		limit = { has_active_production_method = pm_tethered_launch_building_space_mine }
+		add = 1
+	}
+	if = {
+		limit = { has_active_production_method = pm_fusion_tugs_building_space_mine }
+		add = 1
+	}
+}
+
+# debug_log prints a value from another scope only through a global variable and
+# a SCOPE.ScriptValue wrapper. Each is read only after the check sets it.
+te_gc_logistics_chk_cut_g = { value = global_var:te_gc_logistics_chk_cut }
+te_gc_logistics_chk_level_g = { value = global_var:te_gc_logistics_chk_level }
+te_gc_logistics_chk_upgrades_g = { value = global_var:te_gc_logistics_chk_upgrades }

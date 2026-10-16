@@ -56,6 +56,25 @@ Building-local effects sit in the PM. A national or state effect is a count in a
 
 Any other source can declare these types (a law, a decree, a building) and the same pulse converts it; the tooltip breaks the count down by source. The reserve conversion assumes the engine sizes conscription from population (the `CONSCRIPTION_CENTER_LEVEL_POPULATION_DIVISOR` define says civilian population; the modifier text says workforce). If a reserve battalion turns out to buy only about half a conscription center in game, the engine uses workforce and the 1000 needs raising.
 
+### Deep-Sea Mine and Extraplanetary Base logistics (Global Commons § 1)
+
+The Deep-Sea Mine (`building_ocean_mine`) and the Extraplanetary Base (`building_space_mine`) both mine the five metal and mineral goods. Seabed licences cap the first, so each of its levels earns more than an Extraplanetary Base level until era 12's propulsion (spec `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 1). Per level at base prices, the shared `pmg_maintenance_intensive` left out:
+
+| Method (era) | Construction | Staff | Profit | With Fusion Tugs | With both upgrades |
+|---|---|---|---|---|---|
+| Deep-Sea Mining (11) | 5,000 | 1,000 | 22,700 (103%) | | |
+| Advanced Deep-Sea Mining (12, Advanced Nanofabrication) | | 1,000 | 63,900 (251%) | | |
+| Automated Deep-Sea Mining (12, Artificial General Intelligence) | | 10 | 59,100 (195%) | | |
+| Asteroid Mine (11) | 20,000 | 1,000 | 7,250 (24%) | 14,450 | 21,650 |
+| Mining Colony (12, Space Colonization) | | 1,000 | 37,000 (33%) | 65,800 | 94,600 |
+| Resort Colony (12, Space Colonization) | | 1,000 | 38,000 (34%) | 66,800 | 95,600 |
+
+- `pm_ocean_mine` mines the polymetallic-nodule mix (mostly manganese and nickel–cobalt, so Structural and Tech-Critical Metals 260 each) and covers every output of the Asteroid Mine on lower inputs and the same staff. The era-12 methods produce twice its output on their own inputs. The base method's margin stays under the late land tech-metal mines' (Smart Miners, 172%); the era-12 ones exceed it (spec § 11 #3).
+- **Logistics groups** (`common/production_methods/te_global_commons_logistics_pms.txt`, groups in `te_global_commons_logistics_pm_groups.txt`): Launch to Orbit (Chemical Launch, default; Tethered Launch, `space_elevator`) and Transport in Space (Chemical Tugs; Fusion Tugs, `compact_fusion_reactors`). Each upgrade is `goods_input_launch_capacity_mult = -0.3` in `building_modifiers.unscaled` (registered in `mod_entity_modifier_types.txt`; vanilla registers that axis for six goods only). The two add to −60%. `space_elevator` requires `compact_fusion_reactors`, so Fusion Tugs always comes first. A method can't be gated on owning a building, so Tethered Launch needs the technology, not an elevator.
+- **AI:** the groups keep the default `ai_selection` (most_profitable). An upgrade lowers only the Launch Capacity bill, so it is the more profitable method at every price and can't flip with the market.
+- **Known gap:** Space Colonization (society) and Advanced Nanofabrication (production) are both era 12 and independent, so a country with only the first runs a Mining Colony (37,000) beside an era-11 Deep-Sea Mine (22,700). Per point of construction the Deep-Sea Mine still earns 2.4× as much.
+- `test_deep_sea_rebalance.py` holds the orderings from the files (`--table` prints the table above); the cost comments in `extra_pms.txt` are `pm_costs.py`'s.
+
 ## Global Warming (`je_global_warming`)
 
 > See also: `docs/systems/journal_entry_systems.md` for full JE system documentation.

@@ -267,6 +267,16 @@ Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
 mines metals and minerals, and after Space Colonization it can switch to the
 Resort Colony production method, which produces art and tourism instead.
 
+The Deep-Sea Mine costs 5,000 construction per level, a quarter of the
+Extraplanetary Base's, and at base prices earns more per level: about three
+times as much in era 11, and still more than a Mining Colony after Advanced
+Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
+Capacity. In era 12 it gains two production method groups that cut it, each by
+30%: Launch to Orbit, whose Tethered Launch needs the Space Elevator technology
+(not an elevator of your own), and Transport in Space, whose Fusion Tugs need
+Muon-Catalyzed Fusion Reactors. A Mining Colony with both upgrades earns more
+per level than a Deep-Sea Mine.
+
 ### New industries
 
 | Family | Buildings |
