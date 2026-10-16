@@ -16,9 +16,9 @@ JE = os.path.join(REPO, "common", "journal_entries", "je_nuclear_program.txt")
 ICON_DOC = os.path.join(REPO, "docs", "systems", "nuclear_gui_icons.md")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_posture", "te_nuclear_sec_forces",
-          "te_nuclear_sec_home", "te_nuclear_sec_reputation", "te_nuclear_sec_taboo",
-          "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
+STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_world_crises", "te_nuclear_sec_posture",
+          "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
+          "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 REFERENCE = ["te_nuclear_sec_how"]
 # (root name, container, the one type it wraps), in the entry's declaration order.
 ROOTS = [("widget_je_nuclear_overview", "custom_widget_container_1", "te_nuclear_overview_panel"),
@@ -126,6 +126,7 @@ class GateTest(unittest.TestCase):
     GATES = {
         "te_nuclear_sec_programme": [_sgui("nuclear_program_has_programme_sgui")],
         "te_nuclear_sec_crisis": [_sgui("nd_in_crisis_sgui")],
+        "te_nuclear_sec_world_crises": [_sgui("nd_world_crises_sgui")],
         "te_nuclear_sec_posture": [_sgui("nd_armed_sgui")],
         "te_nuclear_sec_forces": [_sgui("nd_armed_sgui")],
         "te_nuclear_sec_home": [_sgui("nd_armed_sgui")],
@@ -193,6 +194,7 @@ class FlagTest(unittest.TestCase):
     def test_live_sections_open_reference_collapsed(self):
         opened = {"te_nuclear_sec_programme": "nuclear_program_programme_closed",
                   "te_nuclear_sec_crisis": "nd_crisis_closed",
+                  "te_nuclear_sec_world_crises": "nd_world_crises_closed",
                   "te_nuclear_sec_posture": "nd_posture_closed",
                   "te_nuclear_sec_forces": "nd_capabilities_closed",
                   "te_nuclear_sec_home": "nd_home_closed",
