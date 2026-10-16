@@ -15663,6 +15663,14 @@ pm_space_colony_vacation = {
 	required_input_goods = digital_access
 }
 
+# Deep-Sea Mine (Global Commons § 1.1, docs/superpowers/specs/2026-10-16-global-commons-design.md).
+# Seabed licences cap its levels, so each level must be worth claiming. Against the
+# Extraplanetary Base's era-11 method (pm_space_mine) every output is at least as large,
+# inputs are lower, the workforce is the same and construction is a quarter of the cost.
+# The advanced and automated methods produce twice the base output on their own inputs.
+# It out-earns the Extraplanetary Base per level until that building has Space Colonization
+# and both era-12 logistics upgrades (te_global_commons_logistics_pms.txt).
+# test_deep_sea_rebalance.py holds both orderings at base prices.
 pm_ocean_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
 
@@ -15677,25 +15685,25 @@ pm_ocean_mine = {
 			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (29.09%)
 			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (21.82%)
 			# Output goods
-			goods_output_lead_add = 260                          # Price:   40, Total cost: 10400.0 (36.88%)
-			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (17.73%)
-			goods_output_tech_metals_add = 100                   # Price:   80, Total cost:  8000.0 (28.37%)
-			goods_output_gold_add = 40                           # Price:  100, Total cost:  4000.0 (14.18%)
-			goods_output_iron_add = 20                           # Price:   40, Total cost:   800.0 (2.84%)
+			goods_output_lead_add = 150                          # Price:   40, Total cost:  6000.0 (13.42%)
+			goods_output_sulfur_add = 50                         # Price:   50, Total cost:  2500.0 (5.59%)
+			goods_output_tech_metals_add = 260                   # Price:   80, Total cost: 20800.0 (46.53%)
+			goods_output_gold_add = 50                           # Price:  100, Total cost:  5000.0 (11.19%)
+			goods_output_iron_add = 260                          # Price:   40, Total cost: 10400.0 (23.27%)
 			# Total input cost: 22000.0
-			# Total output cost: 28200.0
-			# Profit: 6200.0
-			# Profit margin: 28.18%
-			# Zero profit price multiplier: 0.78
-			# Employment: 2000
-			# Wage breakeven: 3.10
+			# Total output cost: 44700.0
+			# Profit: 22700.0
+			# Profit margin: 103.18%
+			# Zero profit price multiplier: 0.49
+			# Employment: 1000
+			# Wage breakeven: 22.70
 		}
 
 		level_scaled = {
 			# employment
-			building_employment_machinists_add = 1000
-			building_employment_engineers_add = 800
-			building_employment_academics_add = 200
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 400
+			building_employment_academics_add = 100
 		}
 	}
 
@@ -15722,18 +15730,18 @@ pm_advanced_ocean_mine  = {
 			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (18.82%)
 			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (15.69%)
 			# Output goods
-			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
-			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
-			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
-			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
-			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
+			goods_output_lead_add = 300                          # Price:   40, Total cost: 12000.0 (13.42%)
+			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (5.59%)
+			goods_output_tech_metals_add = 520                   # Price:   80, Total cost: 41600.0 (46.53%)
+			goods_output_gold_add = 100                          # Price:  100, Total cost: 10000.0 (11.19%)
+			goods_output_iron_add = 520                          # Price:   40, Total cost: 20800.0 (23.27%)
 			# Total input cost: 25500.0
-			# Total output cost: 56400.0
-			# Profit: 30900.0
-			# Profit margin: 121.18%
-			# Zero profit price multiplier: 0.45
+			# Total output cost: 89400.0
+			# Profit: 63900.0
+			# Profit margin: 250.59%
+			# Zero profit price multiplier: 0.29
 			# Employment: 1000
-			# Wage breakeven: 30.90
+			# Wage breakeven: 63.90
 		}
 
 		level_scaled = {
@@ -15766,18 +15774,18 @@ pm_automated_ocean_mine  = {
 			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (31.68%)
 			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (13.20%)
 			# Output goods
-			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
-			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
-			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
-			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
-			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
+			goods_output_lead_add = 300                          # Price:   40, Total cost: 12000.0 (13.42%)
+			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (5.59%)
+			goods_output_tech_metals_add = 520                   # Price:   80, Total cost: 41600.0 (46.53%)
+			goods_output_gold_add = 100                          # Price:  100, Total cost: 10000.0 (11.19%)
+			goods_output_iron_add = 520                          # Price:   40, Total cost: 20800.0 (23.27%)
 			# Total input cost: 30300.0
-			# Total output cost: 56400.0
-			# Profit: 26100.0
-			# Profit margin: 86.14%
-			# Zero profit price multiplier: 0.54
+			# Total output cost: 89400.0
+			# Profit: 59100.0
+			# Profit margin: 195.05%
+			# Zero profit price multiplier: 0.34
 			# Employment: 10
-			# Wage breakeven: 2610.00
+			# Wage breakeven: 5910.00
 		}
 
 		level_scaled = {

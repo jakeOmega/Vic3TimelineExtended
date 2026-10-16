@@ -959,6 +959,8 @@ REPLACE_OR_CREATE:building_space_mine = {
 
 	production_method_groups = {
 		pmg_base_building_space_mine
+		pmg_launch_to_orbit_building_space_mine	# Global Commons § 1.2: era-12 logistics
+		pmg_transport_in_space_building_space_mine
 		pmg_maintenance_intensive
 	}
 

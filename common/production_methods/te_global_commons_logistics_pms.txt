@@ -1,0 +1,60 @@
+﻿# Extraplanetary Base logistics (Global Commons § 1.2,
+# docs/superpowers/specs/2026-10-16-global-commons-design.md).
+#
+# Asteroid mining is a launch-cost business: Launch Capacity is 80-86% of building_space_mine's
+# input bill. Era 12's two propulsion tracks each cut it, through two secondary groups
+# (pmg_launch_to_orbit_building_space_mine and pmg_transport_in_space_building_space_mine in
+# te_global_commons_logistics_pm_groups.txt). Each group holds one choice, so the two cuts stack
+# to -60%. With Space Colonization and both, the base out-earns the Deep-Sea Mine per level;
+# test_deep_sea_rebalance.py holds that ordering.
+#
+# A method can be gated only by technology, law, principle, identity or another method
+# (scripting_best_practices.md § Locking Production Methods), so Tethered Launch gates on the
+# space_elevator technology, not on owning one.
+#
+# The cut is a multiplier on the building's own input, so it sits in `unscaled`: level_scaled or
+# workforce_scaled would multiply it by the building's level (scripting_best_practices.md
+# § A Building's Own `_mult` in a PM Belongs in `unscaled`). goods_input_launch_capacity_mult is
+# registered in mod_entity_modifier_types.txt.
+
+# --- Launch to orbit ---
+
+pm_chemical_launch_building_space_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p2.dds"
+	is_default = yes
+}
+
+pm_tethered_launch_building_space_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p1.dds"
+
+	unlocking_technologies = {
+		space_elevator
+	}
+
+	building_modifiers = {
+		unscaled = {
+			goods_input_launch_capacity_mult = -0.3
+		}
+	}
+}
+
+# --- Transport in space ---
+
+pm_chemical_tugs_building_space_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+	is_default = yes
+}
+
+pm_fusion_tugs_building_space_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_purple_p3.dds"
+
+	unlocking_technologies = {
+		compact_fusion_reactors
+	}
+
+	building_modifiers = {
+		unscaled = {
+			goods_input_launch_capacity_mult = -0.3
+		}
+	}
+}

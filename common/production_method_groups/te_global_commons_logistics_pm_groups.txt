@@ -1,0 +1,25 @@
+﻿# Extraplanetary Base logistics groups (Global Commons § 1.2); the methods and the design notes
+# are in common/production_methods/te_global_commons_logistics_pms.txt.
+#
+# No ai_selection: under the default, most_profitable, the AI should take an upgrade once it has
+# the technology. Each upgrade only lowers the Launch Capacity bill, with the same output and
+# staff, so it is the more profitable method at every price and the choice can't flip back and
+# forth with the market (scripting_best_practices.md § AI PM Hysteresis). Its retooling (the
+# 0.2 construction a week of maintenance at +1000% for five years, at most 520,000 a level at
+# base prices) is repaid in about 18 weeks on Mining Colony and 72 on Asteroid Mine.
+
+pmg_launch_to_orbit_building_space_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_chemical_launch_building_space_mine
+		pm_tethered_launch_building_space_mine
+	}
+}
+
+pmg_transport_in_space_building_space_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_chemical_tugs_building_space_mine
+		pm_fusion_tugs_building_space_mine
+	}
+}
