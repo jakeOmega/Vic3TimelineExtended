@@ -4352,6 +4352,7 @@
  nd_tt_refuse_talks_resume:0 "The pressure events resume in #v 6#! weeks"
  nd_tt_reject_defiance:0 "The threat was public, so our refusal is recorded as #R defiance#!: under #v Nuclear Compellence#!, that licenses them to strike us in a war"
  nd_tt_reliability_down_15:0 "#v Command reliability#! falls by #R 15#! now, then recovers over the following months to the level our safeguards and crew strain support"
+ nd_tt_reliability_down_2:0 "#v Command reliability#! falls by #R 2#! now, then recovers over the following months to the level our safeguards and crew strain support"
  nd_tt_reliability_up_10:0 "#v Command reliability#! rises by #G 10#! now, then drifts back over the following months to the level our safeguards and crew strain support"
  nd_tt_reliability_up_3:0 "#v Command reliability#! rises by #G 3#! now, then drifts back over the following months to the level our safeguards and crew strain support"
  nd_tt_stage_to_confrontation:0 "The crisis becomes a #v Confrontation#!: from now on they press us every #v 6#! weeks"
