@@ -571,7 +571,6 @@ un_membership_end_effect = {
 	un_state_off = { MODIFIER = un_undermine_order_cost }
 	# Permanent treaty commitments
 	un_state_off = { MODIFIER = un_human_rights_declaration_modifier }
-	remove_modifier = un_human_rights_reservations_modifier
 	un_state_off = { MODIFIER = un_nonproliferation_modifier }
 	un_state_off = { MODIFIER = un_climate_binding_modifier }
 	un_state_off = { MODIFIER = un_heritage_program_modifier }

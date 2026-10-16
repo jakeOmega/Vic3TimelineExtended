@@ -93,6 +93,24 @@ un_mission_hosts = {
 	}
 }
 
+# The scoped country hosts an active mission of $TYPE$ with some strength this
+# month. A Moribund UN's missions have none (un_mission_values.txt § STRENGTH),
+# so a benefit that is not multiplied by the strength gates on this instead:
+# the electoral observers' halving of Election Interference's blow
+# (covert_warfare_effects.txt).
+# Scope: country (the host)
+un_mission_hosts_with_strength = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		has_tag = un_msn_active
+		has_tag = un_msn_$TYPE$
+		var:un_msn_host ?= PREV
+		has_variable = un_msn_strength
+		var:un_msn_strength > 0
+	}
+}
+
 # The scoped country hosts an active mission of $TYPE$ that has been in the
 # field for $MONTHS$ months or more. The AI's answer to an appeal weighs it: a
 # member is less willing to put a contingent into a mission that has dragged on

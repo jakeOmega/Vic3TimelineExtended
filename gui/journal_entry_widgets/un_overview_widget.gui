@@ -458,7 +458,11 @@ types un_overview_widget_types
 					}
 				}
 
-				### Agencies: the label and the two rows centred.
+				### Agencies: the label and the two rows centred. Each hover is its
+				### own loc key: the agency's name, Founded or not (a
+				### SelectLocalization on un_disp_agency_<x> inside the loc), and
+				### its convention's terms (je_un_terms_<topic>), every effect it
+				### has on any system.
 				flowcontainer = {
 					direction = vertical
 					spacing = 2
@@ -475,7 +479,7 @@ types un_overview_widget_types
 						spacing = 4
 						parentanchor = hcenter
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_who_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_who'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_who_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_who.dds"
 							}
@@ -487,7 +491,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unesco_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unesco'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_unesco_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_unesco.dds"
 							}
@@ -499,7 +503,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_icj_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_icj'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_icj_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_icj.dds"
 							}
@@ -511,7 +515,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unhrc_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unhrc'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_unhrc_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_unhrc.dds"
 							}
@@ -523,7 +527,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_iaea_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_iaea'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_iaea_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_iaea.dds"
 							}
@@ -535,7 +539,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unep_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unep'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_unep_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_unep.dds"
 							}
@@ -552,7 +556,7 @@ types un_overview_widget_types
 						spacing = 4
 						parentanchor = hcenter
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unhcr_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unhcr'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_unhcr_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_unhcr.dds"
 							}
@@ -564,7 +568,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_unoosa_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoosa'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_unoosa_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_unoosa.dds"
 							}
@@ -576,7 +580,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_itlos_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_itlos'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_itlos_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_itlos.dds"
 							}
@@ -588,7 +592,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_icc_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_icc'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_icc_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_icc.dds"
 							}
@@ -600,7 +604,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_cppnm_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_cppnm'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_cppnm_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_cppnm.dds"
 							}
@@ -612,7 +616,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_incb_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_incb'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_incb_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_incb.dds"
 							}
@@ -624,7 +628,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_ccd_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_ccd'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_ccd_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_ccd.dds"
 							}
@@ -636,7 +640,7 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
-							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_tpnw_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_tpnw'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							tooltip = "je_un_ov_agency_tpnw_tt"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_tpnw.dds"
 							}
