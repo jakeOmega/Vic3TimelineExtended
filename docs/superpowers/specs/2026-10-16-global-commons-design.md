@@ -47,6 +47,17 @@ weapons drive up and remediation drives down.
   - the Extraplanetary Base rework into "zone receiving complexes";
   - +300 innovation-cap rewards.
 
+Second round (owner, 2026-10-16, on the PR):
+
+- **Soft caps, not eligibility gates.** "For stuff like this I'd generally lean towards soft
+  caps," such as a very large penalty for powers with no far-southern coastline in place of a
+  ban. So any coastal power can claim in any basin, at a steep weight penalty where it has no
+  coast (§ 2.3). Licences are national, so a mine can stand in any coastal state (§ 2.4).
+- **No micromanagement while waiting for a window.** The mental model is supplies put in orbit
+  while the window is awaited. Progress made while a colonization bar waits is staged in orbit
+  and spent when the window opens, so lowering funding while waiting gains nothing (§ 5.2). The
+  Mars Landing's arrival-season gate is dropped, which leaves one waiting rule.
+
 Where this document says "compact fusion drives" it means the era 12 technology
 `compact_fusion_reactors`, shown in game as **Muon-Catalyzed Fusion Reactors**.
 
@@ -55,6 +66,8 @@ Where this document says "compact fusion drives" it means the era 12 technology
 - A Deep-Sea Mine level is a licence: scarce, worth claiming and worth more than an
   Extraplanetary Base level until era 12's propulsion arrives.
 - Built levels are never taken away. A shrinking entitlement only stops new construction.
+- Soft caps: every coastal power can claim in every basin, and geography sets the size of its
+  share, not whether it may have one.
 - Minor coastal countries keep a share when the Law of the Sea regulates the seabed (the real
   UNCLOS "parallel system": half of each basin is reserved for developing parties).
 - Defecting from the Law of the Sea is a real choice with a real price (the US has never
@@ -82,6 +95,8 @@ Where this document says "compact fusion drives" it means the era 12 technology
   but the reserved half and the regime rules must leave minors a way in.
 - The seabed panel asks for five decisions a year. Policy is national, and basins are readouts.
 - A full space-race bar sits waiting for a window with no explanation of why or for how long.
+- Waiting rewards fiddling: a player who cuts funding while a bar waits for its window, and
+  restores it afterwards, must come out no better off than one who left it alone.
 
 ## Engine facts this rests on
 
@@ -209,7 +224,12 @@ exceed demand. The deposit totals say they don't.)
 ### 2.1 Basins
 
 Five basins: **Pacific**, **Atlantic**, **Indian**, **Arctic** and **Southern**. Each coastal
-state belongs to exactly one, the basin of its naval exit's sea region.
+state belongs to exactly one, the basin of its naval exit's sea region. A state's basin decides
+where its owner's claim weight comes from (§ 2.3), and which basin its mines draw on first
+(§ 2.4). It doesn't decide where a mine may stand. Licences are national, and a Deep-Sea Mine in
+any coastal state is the port and processing complex the ore ships come home to. That is also
+how real contracts work: Germany, Belgium, France and the UK hold International Seabed Authority
+contracts in the Pacific's Clarion-Clipperton Zone.
 
 - A generator, `scripts/generators/gen_seabed_basins.py`, reads `naval_exit_id` from
   `map_data/state_regions/*.txt` and a hand-written table of the 105 sea regions → basin. It
@@ -223,9 +243,9 @@ state belongs to exactly one, the basin of its naval exit's sea region.
   Beaufort, Greenland and Norwegian Seas, the Northwest Passage, Baffin Bay, Davis Strait and Hudson
   Bay. Southern: Patagonian Sea, Patagonian Channels, Cape of Good Hope, Great Australian Bight and
   Tasman Sea. The builder checks each borderline case against the map.
-- The state variable is cached from the monthly state pulse for any coastal state without it,
-  since conquest and splits make new state scopes. `possible` then reads one variable instead of
-  a hundred-way `OR`.
+- The yearly allocation pass sets the variable on any coastal state without it, since conquest
+  and splits make new state scopes. Nothing evaluated often reads the basin: the building gate
+  (§ 2.6) doesn't.
 
 ### 2.2 Pools
 
@@ -237,37 +257,65 @@ doesn't touch. Pools don't grow with technology (§ 11).
 
 ### 2.3 Claim weight
 
-Yearly, for each country with Abyssal Plain Mining and each basin it touches:
+Yearly, for each coastal country with Abyssal Plain Mining, in every basin:
 
 ```
-coast    = 2 × its incorporated coastal states in the basin
-ports    = levels of building_port in those states
-navy     = navy_size × (coast states in this basin ÷ all its coastal states)
-weight   = (coast + ports + navy) × policy factor (§ 2.5)
+a basin it borders (it owns an incorporated coastal state there):
+  coast  = 2 × its incorporated coastal states in the basin
+  ports  = levels of building_port in those states
+  navy   = navy_size × (its coastal states in this basin ÷ all its coastal states)
+  weight = (coast + ports + navy) × policy factor (§ 2.5)
+
+a basin it doesn't border:
+  weight = 0.05 × navy_size × policy factor
 ```
 
 Fleets don't sit in a basin in any way script can read, so national navy size is spread over
-the country's coastline. The Southern basin adds +10 weight per Antarctic research station
-(phase 2, § 4).
+the country's coastline. An Antarctic research station adds +5 Southern weight whether or not
+the country borders the Southern basin (phase 2, § 4).
 
-### 2.4 Entitlements and licence room
+**A soft cap, not a gate.** A power can claim far from home, but it brings no coast or ports
+and a twentieth of its navy, so its share there is small. Take an Australia-like country with 5
+of its 12 coastal states on the Southern Ocean, 8 port levels there and 60 flotillas: 10 + 8 +
+25 = 43. A great power with 200 flotillas and no southern coast gets 10, or 15 with a station.
+At home in its own Pacific (10 of 30 coastal states, 15 port levels), the same great power gets
+20 + 15 + 67 = 102. So a far basin is worth about a tenth of a home one to it. All of these are
+first estimates.
 
-Each country gets an **entitlement** per basin, recomputed yearly from the country pulse after
-the weights. It is shared "water-filling" style, so the cap stays hard even with grandfathered
-levels:
+### 2.4 Entitlements, licences and room
 
-1. Let the active set be every claimant. `remaining = pool`.
-2. Each active country's entitlement is `remaining × weight ÷ Σ active weights`.
-3. A country already built at or above that (grandfathered) is frozen at its built level, leaves
-   the active set, and its built levels come off `remaining`. Repeat from 2. Three passes are
-   enough in practice; use a bounded `while` (`common/scripted_effects/decolonization.txt:271`
-   shows one).
+Each country gets an **entitlement** in each basin. Its **licences** are the sum of its
+entitlements, and its **room** is licences − its Deep-Sea Mine levels, built and queued, wherever
+they stand. Room is one national number, a copy of `solar_receiver_slots_remaining` with its
+own modifier. A yearly pass from the country pulse, run after the weights, keeps each basin's
+pool a hard cap even though levels are national:
 
-Entitlements are stored as country variables `te_seabed_entitlement_<basin>`. The building gate
-reads **room** = entitlement − own built and queued levels in that basin's states, a
-per-basin copy of `solar_receiver_slots_remaining` that iterates only the owner's states. No
-entitlement changes between recomputations, so total built never exceeds the pool. Under the
-regulated regime (§ 3) the pool splits in two, and steps 1–3 run once per half.
+1. **Attribute** each country's levels to basins. Levels go first to the basin of the state they
+   stand in, up to last year's entitlement there. The rest fill its other basins' entitlements,
+   bordering basins first.
+2. **Share each pool by water-filling**, with the attributed levels as each country's built
+   levels:
+   1. Start with every claimant active and `remaining = pool`.
+   2. Each active country's entitlement is `remaining × weight ÷ Σ active weights`.
+   3. A country whose attributed levels are at or above that (grandfathered) is frozen at them.
+      It leaves the active set, and they come off `remaining`. Repeat from step ii.
+   Repeat until no country is newly frozen, which takes at most one pass per claimant: use a
+   `while` (`common/scripted_effects/decolonization.txt:271` shows one), not a fixed count. A
+   model of this section needed up to 9 passes in randomized worlds. Entitlements are whole
+   licences, rounded down, and the leftovers go out by largest remainder so each pool is fully
+   shared.
+3. **Store** `te_seabed_entitlement_<basin>` and the total, `te_seabed_licences`.
+
+Between passes no entitlement changes and room can't go below zero, so every level fits inside
+last year's entitlements. A frozen country keeps its attributed levels as its entitlement, so the
+next attribution fits too. The levels attributed to a basin therefore never exceed its pool, and
+no built level is ever without a licence. A model of steps 1–3 (3,000 random worlds, 60 years of
+building each) held all three properties. Under the regulated regime (§ 3) each pool splits in
+two, and step 2 runs once per half.
+
+**Levels that change hands with a state** come without a licence. The next pass attributes them
+where they stand, as an old save's are, and grandfathers them. If that pushes a basin over its
+pool, no one gets new room there until it is back under.
 
 ### 2.5 Seabed policy
 
@@ -282,29 +330,31 @@ the policy stands, as covert operations and UN tabling hold it:
 
 ### 2.6 The building gate
 
-`building_ocean_mine` keeps `is_coastal = yes` and adds, with the game rule on: the state has a
-`te_seabed_basin`, and the owner has room in it (custom tooltip naming the basin, room and pool,
-as `building_solar_receiver_slots_tt` does). With the rule off, the building is unchanged.
+`building_ocean_mine` keeps `is_coastal = yes` and adds, with the game rule on, that the owner
+has room. A custom tooltip gives the licences, the levels, the room and the basins the licences
+come from, as `building_solar_receiver_slots_tt` does. The gate reads no basin. With the rule off,
+the building is unchanged.
 
 ### 2.7 Display
 
 - **State Panel tile** on coastal states once the owner has Abyssal Plain Mining, beside the
-  Solar Collector and Antimatter Facility tiles (`gui/states_panel.gui`): "Pacific seabed: 12 / 30
-  licensed (world 180 / 300)". Hover for the weight breakdown.
+  Solar Collector and Antimatter Facility tiles (`gui/states_panel.gui`): "Seabed licences:
+  34 / 40". Hover for each basin's entitlement and the levels attributed to it, the world's
+  total against each pool, and the weight breakdown.
 - **Seabed section** on a Timeline Extended window tab (UN or Economy, builder's call): the
-  policy buttons and a row per basin the country touches, with the regime (§ 3). Explanations
-  collapsed per `docs/guides/gui_style_guide.md`.
+  policy buttons and a row per basin where the country has weight, home or distant, with its
+  share, plus the regime (§ 3). Explanations collapsed per `docs/guides/gui_style_guide.md`.
 
 ### 2.8 AI
 
 Building needs no AI code (the engine's builder obeys `possible`). Policy is chosen yearly by a
 score in one script-values table, as global warming's is (`common/script_values/global_warming_ai_values.txt`):
 
-- **Sponsor Contractors** when it touches a basin and Tech-Critical Metals sell above base price
-  in its market.
-- **Unilateral Licensing** only for a great or major power, more likely with low UN standing, a
-  rivalry with a fellow claimant, or a Tech-Critical Metals price above 1.25× base. Never for a
-  country whose UN standing is Exemplary.
+- **Sponsor Contractors** when that policy would give it at least one licence and Tech-Critical
+  Metals sell above base price in its market.
+- **Unilateral Licensing** weighted by rank, so mostly great and major powers. More likely with
+  low UN standing, a rivalry with a fellow claimant, or a Tech-Critical Metals price above 1.25×
+  base. Exemplary UN standing carries a large negative weight, not a ban.
 - **Scientific Survey** otherwise.
 
 ### 2.9 Game rule and old saves
@@ -312,8 +362,10 @@ score in one script-values table, as global warming's is (`common/script_values/
 The rule is `global_commons_rule`, with `global_commons_enabled` (default) and
 `global_commons_disabled`. Disabled, the Deep-Sea Mine is uncapped as today, and §§ 3–4 don't
 appear. Launch windows and debris (§§ 5–6) belong to the space race and follow `space_race_rule`.
-In an old save, every built Deep-Sea Mine level is grandfathered by § 2.4's step 3 on the first
-yearly pass, and its owner's room starts at zero where it is over.
+In an old save, the first yearly pass attributes every built Deep-Sea Mine level to the basin
+it stands in, with no earlier entitlement to stop it, and the water-filling grandfathers it. A
+country over its share starts with zero room. Where a basin's old levels already exceed its pool,
+no one else gets room there until levels go.
 
 ## 3. The Law of the Sea governs the seabed (phase 1b)
 
@@ -350,11 +402,12 @@ One global regime, held in a global variable and shown in the Seabed section:
 
 ## 4. The Antarctic Treaty (phase 2)
 
-- **Antarctic research station.** A decision for a major power or better, or a country with a
-  Southern-basin coast, from Space Exploration (era 7; the real treaty dates from 1959, after the
-  International Geophysical Year). It brings a small research modifier (+2% research speed, +25
-  innovation cap) for a weekly upkeep (billed as the mod's other standing programs are; builder's
-  call), and +10 Southern weight (§ 2.3).
+- **Antarctic research station.** A decision for any country with Space Exploration (era 7; the
+  real treaty dates from 1959, after the International Geophysical Year). There is no rank or
+  coastline gate: the upkeep is the limit, and about thirty countries run real stations. It
+  brings a small research modifier (+2% research speed, +25 innovation cap) for a weekly upkeep
+  (billed as the mod's other standing programs are; builder's call), and +5 Southern weight
+  (§ 2.3).
 - **Antarctic Treaty**, a new UN convention, raised on the docket by a country's first station.
   Terms:
   - Parties hold **no Southern licences**: their Southern entitlement is 0, and levels built
@@ -363,8 +416,8 @@ One global regime, held in a global variable and shown in the Seabed section:
   - The treaty counts +0.25 toward each party's UN Authority Target (Policy pillar).
   - The real Madrid Protocol's mining ban is the point of the convention, so there is no
     separate vote for it.
-- **Denunciation** needs a station. It costs 10 infamy, 5 standing and 10 case strength, and
-  takes the country out of the treaty. When two or more great powers are out and holding
+- **Denunciation** costs 10 infamy, 5 standing and 10 case strength, and takes the country out
+  of the treaty. When two or more great powers are out and holding
   Southern licences, the treaty lapses and the Southern basin opens to all.
 - With the UN rule off, there is no treaty, and the Southern basin is Open once anyone researches
   Abyssal Plain Mining.
@@ -385,18 +438,42 @@ methods (§ 1.2). The transport track works through windows.
 
 ### 5.2 What the windows gate
 
-- **Solar System Colonization.** A site can be drawn only while its destination's window is
-  open. Add the window condition to each site's `trigger` in `sr_establish_colony_effect`. When
-  the bar fills and no site in the stage has an open window, no colony is founded. Progress keeps
-  accruing past the goal (the overflow is already kept), capped at two colonies' worth, and one
-  colony is founded per month while a window is open. Funding is still billed: the hardware is
-  being built.
-- **Mars Landing** completes only in a **Mars arrival season**, the months in which a craft
-  launched in the last window arrives (window + the computed transfer time, about 8–9 months).
-- **Not gated:** the Moon (always reachable), the Deep-Space Probe (its target is chosen after
-  it starts), the Interstellar Probe, and Mercury, whose 4-month synodic cycle leaves it nearly
-  always reachable. In reality Mercury needs gravity assists rather than windows.
-- Holding `compact_fusion_reactors` removes every window, for that country only.
+Only **Solar System Colonization** waits for windows. A site can be drawn only while its
+destination's window is open: add the window condition to each site's `trigger` in
+`sr_establish_colony_effect`.
+
+**Supplies wait in orbit (owner, 2026-10-16).** While no site in the stage has an open window,
+the program keeps building: the hardware, habitats and propellant for the next colony fleets go
+up and are staged in orbit. In script, nothing new is needed for most of this:
+
+- **The bar keeps filling past the goal, with no cap.** The bar-fill check already keeps the
+  overflow (`je_space_race.txt`, "preserve overflow"). Each full goal of staged progress is one
+  colony fleet ready to go.
+- **When a window opens, the fleets depart.** One colony is founded each month the window is
+  open, as long as staged progress covers a goal. A three-month window sends up to three; what's
+  left waits for the next window.
+- **Staged progress survives a stage change.** If the stage's last sites go to rivals, the fleets
+  carry on to the next stage, since the overflow already survives a stage change. Progress still
+  staged when the last of the 34 worlds is claimed is lost, as an unfinished bar is today.
+- **Setbacks hit only the fleet being readied.** A setback takes its share (×0.75 or ×0.85 and
+  the flat amount) of at most one goal, never of the whole stage: loss = share ×
+  min(progress, goal). Without this cap, a big staged bank would make every setback ruinous, and
+  the player would have a reason to cut funding while waiting.
+- **Nothing to manage.** Funding and approach keep running and keep buying progress that will be
+  used, so lowering them while waiting only delays the fleets that follow. The bill is the
+  hardware being built.
+
+**Not gated:**
+
+- The Moon, which is always reachable.
+- The Mars Landing. The arrival-season gate in this spec's first draft is dropped, to leave one
+  waiting rule.
+- The Deep-Space Probe (its target is chosen after it starts) and the Interstellar Probe.
+- Mercury, whose 4-month synodic cycle leaves it nearly always reachable. In reality Mercury needs
+  gravity assists rather than windows.
+
+Holding `compact_fusion_reactors` removes every window, for that country only. Fleets then depart
+as soon as they are ready, as colonies are founded today.
 
 ### 5.3 Computing the windows
 
@@ -412,8 +489,7 @@ of the transfer ellipse from Earth's radius at *d* to the target's at arrival. E
 The window is the optimum's calendar month ±1 (three months). The generator writes, from 1900 to
 the game's `END_DATE` (2136.1.1), month-index ranges against `te_history_month_index`:
 
-- `common/scripted_triggers/sr_launch_windows_generated.txt`: `sr_window_open_<body>` and
-  `sr_mars_arrival_season`.
+- `common/scripted_triggers/sr_launch_windows_generated.txt`: `sr_window_open_<body>`.
 - `common/script_values/sr_launch_windows_generated.txt`: `sr_window_months_to_next_<body>`, an
   `if` chain read only by tooltips.
 
@@ -446,10 +522,11 @@ launch since 1964 inside its computed window:
 | Perseverance, Tianwen-1, Hope | 2020-07-30 | 2020-07-30 | 2020.06–2020.08 |
 
 Venus (Venera 7 and 9, the Pioneer Venus multiprobe, Vega, Venus Express) and Jupiter (Pioneer 10
-and 11, the Voyagers, Juno) launches all fall within four weeks of their computed optima too. Mars windows in era 11
-(about 2030–2060), for scale:
+and 11, the Voyagers, Juno) launches all fall within four weeks of their computed optima too.
+Mars windows in era 11 (about 2030–2060), for scale. Arrival is for the colony event's text only
+("the fleet reached Mars in November"); nothing waits on it:
 
-| Window | Arrival season | | Window | Arrival season |
+| Window | Arrival | | Window | Arrival |
 |---|---|---|---|---|
 | 2030.12–2031.02 | 2031.09 | | 2045.12–2046.02 | 2046.09 |
 | 2033.03–2033.05 | 2033.11 | | 2048.01–2048.03 | 2048.10 |
@@ -461,12 +538,13 @@ and 11, the Voyagers, Juno) launches all fall within four weeks of their compute
 
 ### 5.4 Display and AI
 
-- The overview's approach row reads **Awaiting window** while a full bar waits. Hover it for
-  each candidate destination's months to its next window, and for "Compact fusion drives remove
-  launch windows".
+- While a full bar waits, the overview's approach row reads **Staged in orbit: 1.4 fleets**, the
+  staged progress in goals. Hover it for each candidate destination's months to its next window,
+  that the fleets depart one a month while a window is open, and that compact fusion drives
+  remove launch windows.
 - Mission Control gains a **Next windows** line listing the stage's destinations with the months
   to each.
-- AI: no change. It keeps funding, and the bank of progress means waiting costs it only time.
+- AI: no change. It keeps funding, and staged progress means waiting costs it only time.
 
 ## 6. Orbital debris (phase 4)
 
@@ -525,9 +603,10 @@ A diplomatic action, `te_asat_strike_action`, on the `nuke.txt` pattern:
   that uses orbit, and the debris it shares with everyone.
 - **Non-kinetic interference stays the existing covert operation Communications Disruption**,
   unchanged.
-- **AI:** low base weight. It strikes only an enemy whose orbital investment (Space Program tier
-  plus orbital megaproject levels) exceeds its own, and never at index ≥ 50 unless it is losing
-  the war.
+- **AI:** low base weight. The weight is zero unless the enemy's orbital investment (Space Program
+  tier plus orbital megaproject levels) exceeds the AI's own, and near zero at index ≥ 50 unless
+  the AI is losing the war. These are AI weights, not rules: a player faces only the action's own
+  requirements.
 
 ### 6.4 Cleanup
 
@@ -582,6 +661,11 @@ Each method carries a registered country modifier, `country_orbital_debris_remov
   - `test_deep_sea_rebalance.py`: per-level base-price profit of the Deep-Sea Mine ≥ the
     Extraplanetary Base's for every method pair without the two logistics upgrades, and less
     with both (§ 1.2's table).
+  - `test_seabed_allocation.py`: a Python model of § 2.4's attribution and water-filling, run
+    over randomized worlds and years of building. No basin's attributed levels exceed its pool,
+    every built level stays licensed, a basin over its pool (old saves, conquest) never grows,
+    and a power with no coast in a basin gets a small share there. The scratch model behind
+    § 2.4's claims is the starting point. The script's numbers follow the model, as the demographics census's do.
 - **Audits:**
   - `loc_coverage_audit` for every new key.
   - `modifier_visibility_audit`.
@@ -595,11 +679,12 @@ Each method carries a registered country modifier, `country_orbital_debris_remov
     moratorium, the new case ground), 16 (windows, debris, cleanup, the anti-satellite strike),
     17 (reference).
 - **Self-checks** (`TE_SELF_CHECK`, pattern in `CLAUDE.md`):
-  - `seabed_cap`: the world's built levels per basin ≤ pool, once a year after the first
-    allocation.
+  - `seabed_cap`: each basin's attributed levels ≤ its pool, and each country's levels ≤ its
+    licences, once a year after the first allocation.
   - `window_gate`: no colony founded while its body's window is closed.
-- **Play-test list:** the State Panel tile, a waiting bar's tooltip, a ribbon strike, a Kessler
-  cascade cleared by Fusion Sweepers.
+- **Play-test list:** the State Panel tile, a Deep-Sea Mine built in a state outside the basin
+  its licence comes from, fleets staged in orbit departing when the window opens, a setback
+  while fleets are staged, a ribbon strike, and a Kessler cascade cleared by Fusion Sweepers.
 
 ## 9. Phasing
 
@@ -608,7 +693,7 @@ Each method carries a registered country modifier, `country_orbital_debris_remov
 | 1 | § 1 (rebalance and the Extraplanetary Base logistics methods), § 2 (basins, pools, weights, entitlements, policy, gate, tile, AI) with the Open regime only | — |
 | 1b | § 3 (ITLOS seabed terms, Regulated and Scramble regimes, royalties) | 1, UN rule |
 | 2 | § 4 (stations, Antarctic Treaty) | 1b |
-| 3 | § 5 (launch windows, arrival season) | — (independent of 1) |
+| 3 | § 5 (launch windows, staging in orbit) | — (independent of 1) |
 | 4 | § 6 (debris index, effects, anti-satellite strike, cleanup methods, the UN moratorium) | — |
 
 Phases 3 and 4 can run in parallel with phase 1.
@@ -626,10 +711,9 @@ Phases 3 and 4 can run in parallel with phase 1.
 
 ## 11. My calls, for the owner to check
 
-1. **Five basins** with the Southern basin built only from Southern-coast states. A station-holding
-   great power with no southern coast gains a say in the treaty, but no mines there. The
-   alternative, a national Southern pool usable from any coastal state, is closer to how
-   Antarctic mining would really be shipped, but it makes the per-basin accounting much messier.
+1. **The distant-basin penalty** (§ 2.3): a twentieth of the navy, no coast or ports, +5 for an
+   Antarctic station. In the worked example, a far basin is worth about a tenth of a home basin
+   to a great power. The factor is one number to tune.
 2. **Pools are fixed** (1,000 levels in all). Growth with technology is listed as later work.
 3. **The Deep-Sea Mine's numbers** (§ 1.1): ~103% margin at the base method and ~250% with
    Advanced Nanofabrication. These are high, but each level is a scarce licence. Alternatively,
@@ -638,10 +722,15 @@ Phases 3 and 4 can run in parallel with phase 1.
 4. **The logistics methods gate on technology, not on owning a Space Elevator.** Methods can't be
    gated by a building. The elevator's owner is rewarded through Launch Capacity prices and
    debris removal.
-5. **A waiting colonization bar keeps billing funding.** The alternative, pausing the bill like
-   Idle, is kinder but adds a fourth "running" state to an entry that already has three.
-6. **Launch windows also gate the Mars Landing**, through its arrival season. This could be cut
-   if one waiting rule (colonization) is enough.
+5. **Staged fleets depart one a month** while a window is open, with no cap on what can be
+   staged. The alternative, every ready fleet leaving in the window's first month, is quicker
+   but fires several colony events at once.
+6. **Windows stay a hard timing rule, softened by staging.** A softer version, closer to the
+   lean toward soft caps: a colony can launch outside a window at a progress premium that grows
+   with distance from the optimum, the delta-v cost of an off-window transfer. It would be
+   founded automatically once staged progress covers the premium, so there is still nothing to
+   manage. It is more realistic but harder to read than "next window in 7 months". I'd keep the
+   windows.
 7. **Royalties of 4% of output value**, to the World Development Fund.
 8. **The anti-satellite strike starts at Guided Missiles (era 7)**, as history did, rather than
    at Space Militarization (era 11).

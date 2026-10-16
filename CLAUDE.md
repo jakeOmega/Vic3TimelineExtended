@@ -165,6 +165,13 @@ Squash-merging the parent leaves the child's branch unable to see that it alread
 
 In-game checks don't gate a merge. A PR lands on the offline gate (CI, the audits, the tests) and adds what only the game can show to a play-test list, `docs/testing/demographics-playtest.md` for Demographics; the play-test before a release works through it. Where a build rests on an engine fact nobody has verified, ship the preferred version with a once-a-game `debug_log` line, `TE_SELF_CHECK OK|BROKEN <name>` with the numbers (pattern: `te_debug_demog_pr_selfcheck_start` / `te_debug_demog.5`), and name the fallback in the list's Self-checks table. Exclude degenerate inputs so OK can't be a false pass, and read a week after the change, since a modifier sum can lag a day.
 
+### Design defaults for gameplay systems (owner, 2026-10-16)
+
+- **Soft caps, not eligibility gates.** Where a rule decides who may take part (a rank, a coastline, a region), prefer a steep penalty that leaves everyone a way in over a ban. Physical prerequisites, such as the technology or the building that does the work, can stay hard gates.
+- **No micromanagement.** A wait or a limit must never reward switching a setting off and back on. Progress made while blocked is kept for when the block lifts, not lost or billed for nothing.
+
+Worked examples: distant seabed claims and launch-window staging in `docs/superpowers/specs/2026-10-16-global-commons-design.md` §§ 2.3, 5.2.
+
 ### Play-testing unmerged work
 
 Build one integration branch from the stack tips, check it out in the **full** main checkout (`scripts/deploy.sh` rsyncs with `--delete` and includes `gfx/`, so deploying from a sparse worktree would delete the textures), `POST /reload`, then `./scripts/deploy.sh --apply`. Before `--apply`, confirm the branch contains `origin/main` (`git merge-base --is-ancestor origin/main <branch>`; merge it in if not) and read the dry run on its own: a `deleting` line means the deploy would roll back newer `main` content or someone else's deployed branch (2026-09-28: a stale PR branch deleted #570's art from the game folder). Make sure the launcher playset does not also enable a Steam Workshop copy of this mod: a later-loaded copy overrides same-path files and produces a half-old, half-new game. Vic3's console has **no `effect` command** (that is CK3) — run test script with `event <id>` (see `events/te_debug_un_events.txt`).
