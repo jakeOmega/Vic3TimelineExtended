@@ -604,22 +604,13 @@ monument_events.3 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_civic }
-		}
+		gm_country_holds_anniversary = { KEY = civic }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_civic }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = civic }
 	}
 
 	option = {
@@ -627,9 +618,7 @@ monument_events.3 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_state_occasion days = normal_modifier_time }
@@ -717,22 +706,13 @@ monument_events.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_religious }
-		}
+		gm_country_holds_anniversary = { KEY = religious }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_religious }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = religious }
 	}
 
 	option = {
@@ -740,9 +720,7 @@ monument_events.4 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_treasury = gm_event_cost
 		scope:monument_state = {
@@ -776,22 +754,13 @@ monument_events.5 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_war_memorial }
-		}
+		gm_country_holds_anniversary = { KEY = war_memorial }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_war_memorial }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = war_memorial }
 	}
 
 	option = {
@@ -799,9 +768,7 @@ monument_events.5 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_modifier = { name = gm_evt_remembrance_day days = normal_modifier_time }
 		ai_chance = { base = 1 }
@@ -833,22 +800,13 @@ monument_events.6 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_artistic }
-		}
+		gm_country_holds_anniversary = { KEY = artistic }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_artistic }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = artistic }
 	}
 
 	option = {
@@ -856,9 +814,7 @@ monument_events.6 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_modifier = { name = gm_evt_artists_defended days = normal_modifier_time }
 		ai_chance = { base = 1 }
@@ -888,22 +844,13 @@ monument_events.7 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_naturalist }
-		}
+		gm_country_holds_anniversary = { KEY = naturalist }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_naturalist }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = naturalist }
 	}
 
 	option = {
@@ -911,9 +858,7 @@ monument_events.7 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_treasury = gm_event_cost
 		scope:monument_state = {
@@ -946,22 +891,13 @@ monument_events.8 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_scientific }
-		}
+		gm_country_holds_anniversary = { KEY = scientific }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_scientific }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = scientific }
 	}
 
 	option = {
@@ -969,9 +905,7 @@ monument_events.8 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		scope:monument_state = {
 			add_modifier = { name = gm_evt_public_lectures days = normal_modifier_time }
@@ -1003,22 +937,13 @@ monument_events.9 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_industrial }
-		}
+		gm_country_holds_anniversary = { KEY = industrial }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_industrial }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = industrial }
 	}
 
 	option = {
@@ -1026,9 +951,7 @@ monument_events.9 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_modifier = { name = gm_evt_domestic_exhibition days = normal_modifier_time }
 		ai_chance = { base = 1 }
@@ -1058,22 +981,13 @@ monument_events.10 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_athletic }
-		}
+		gm_country_holds_anniversary = { KEY = athletic }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_athletic }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = athletic }
 	}
 
 	option = {
@@ -1081,9 +995,7 @@ monument_events.10 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_treasury = gm_event_cost
 		scope:monument_state = {
@@ -2938,29 +2850,28 @@ monument_events.12 = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = monument_events.12.t
-	desc = monument_events.12.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:monument_mon }
+				desc = monument_events.12.d_beside
+			}
+			desc = monument_events.12.d
+		}
+	}
 	flavor = monument_events.12.f
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_crown }
-		}
+		gm_country_holds_anniversary = { KEY = crown }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_crown }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = crown }
 	}
 
 	option = {
@@ -2968,9 +2879,7 @@ monument_events.12 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_jubilee days = normal_modifier_time }
@@ -2996,29 +2905,28 @@ monument_events.13 = {
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
 	title = monument_events.13.t
-	desc = monument_events.13.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:monument_mon }
+				desc = monument_events.13.d_beside
+			}
+			desc = monument_events.13.d
+		}
+	}
 	flavor = monument_events.13.f
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_republic }
-		}
+		gm_country_holds_anniversary = { KEY = republic }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_republic }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = republic }
 	}
 
 	option = {
@@ -3026,9 +2934,7 @@ monument_events.13 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_modifier = { name = gm_evt_citizens_assembly days = normal_modifier_time }
 		ai_chance = { base = 1 }
@@ -3051,29 +2957,28 @@ monument_events.14 = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = monument_events.14.t
-	desc = monument_events.14.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:monument_mon }
+				desc = monument_events.14.d_beside
+			}
+			desc = monument_events.14.d
+		}
+	}
 	flavor = monument_events.14.f
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_revolution }
-		}
+		gm_country_holds_anniversary = { KEY = revolution }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_revolution }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = revolution }
 	}
 
 	option = {
@@ -3081,9 +2986,7 @@ monument_events.14 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_mass_rally days = normal_modifier_time }
@@ -3110,29 +3013,28 @@ monument_events.15 = {
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
 
 	title = monument_events.15.t
-	desc = monument_events.15.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:monument_mon }
+				desc = monument_events.15.d_beside
+			}
+			desc = monument_events.15.d
+		}
+	}
 	flavor = monument_events.15.f
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		any_scope_state = {
-			gm_state_holds_anniversary = { PM = pm_monument_leader }
-		}
+		gm_country_holds_anniversary = { KEY = leader }
 	}
 
-	# The country's tallest monument of this dedication that holds anniversaries.
+	# The country's grandest monument of this dedication that holds anniversaries,
+	# a state's own or one beside another (ageing spec 2026-10-16 §5).
 	immediate = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_holds_anniversary = { PM = pm_monument_leader }
-			}
-			order_by = gm_state_grandeur
-			position = 0
-			check_range_bounds = no
-			save_scope_as = monument_state
-		}
+		gm_ann_pick = { KEY = leader }
 	}
 
 	option = {
@@ -3140,9 +3042,7 @@ monument_events.15 = {
 		# The occasion adds to its fame (ageing spec 2026-10-16 §5).
 		custom_tooltip = {
 			text = gm_evt_grandeur_tt
-			scope:monument_state = {
-				gm_state_add_age = { AGE = gm_evt_grandeur }
-			}
+			gm_ann_add_age = yes
 		}
 		add_treasury = gm_event_cost
 		add_modifier = { name = gm_evt_leader_celebrated days = normal_modifier_time }

@@ -1598,8 +1598,10 @@ class FlavourTests(unittest.TestCase):
         body = squash(block(read(ON_ACTIONS), "monument_events_on_action"))
         self.assertIn("trigger = { gm_system_enabled = yes "
                       "NOT = { gm_policy_is = { P = mothballed STANDARD = no } } }", body)
+        # Every monument of the dedication, those beside another too (ageing
+        # spec 2026-10-16 §5; AnniversaryAgeTests).
         for d in DEDICATIONS:
-            self.assertIn(f"gm_state_holds_anniversary = {{ PM = pm_monument_{d.key} }} }} }} "
+            self.assertIn(f"gm_country_holds_anniversary = {{ KEY = {d.key} }} }} "
                           f"trigger_event = {{ id = monument_events.{d.event} }}", body)
 
     def test_only_a_fitting_landmark_holds_anniversaries(self):
@@ -1614,9 +1616,8 @@ class FlavourTests(unittest.TestCase):
             self.assertIsNotNone(ev, d.event)
             se = strip_comments(ev)
             s = squash(se)
-            self.assertIn(f"gm_state_holds_anniversary = {{ PM = pm_monument_{d.key} }}", s)
-            self.assertIn("order_by = gm_state_grandeur position = 0", s)
-            self.assertIn("save_scope_as = monument_state", s)
+            self.assertIn(f"gm_country_holds_anniversary = {{ KEY = {d.key} }}", s)
+            self.assertIn(f"gm_ann_pick = {{ KEY = {d.key} }}", s)
             self.assertEqual(s.count("default_option = yes"), 1, d.event)
             options = [squash(_match_brace(se, m.end())) for m in re.finditer(r"option\s*=\s*\{", se)]
             self.assertEqual(len(options), 2, d.event)
@@ -4550,9 +4551,45 @@ class AnniversaryAgeTests(unittest.TestCase):
         for n in ANNIVERSARIES:
             ev = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.%d\s*=\s*\{" % n)))
             a = ev[ev.find("name = monument_events.%d.a" % n):ev.find("name = monument_events.%d.b" % n)]
-            self.assertIn("custom_tooltip = { text = gm_evt_grandeur_tt scope:monument_state = { "
-                          "gm_state_add_age = { AGE = gm_evt_grandeur } } }", a, n)
-        self.assertIn("gm_evt_grandeur_tt", loc())
+            self.assertIn("custom_tooltip = { text = gm_evt_grandeur_tt gm_ann_add_age = yes }", a, n)
+        self.assertIn("Var('gm_ann_gain')", loc()["gm_evt_grandeur_tt"])
+        add = squash(strip_comments(block(read(MON_EFFECTS), "gm_ann_add_age")))
+        self.assertIn("scope:monument_mon = { gm_mon_add_age = { AGE = gm_mon_evt_grandeur } }", add)
+        self.assertIn("scope:monument_state = { gm_state_add_age = { AGE = gm_evt_grandeur } }", add)
+
+    def test_every_monument_holds_anniversaries(self):
+        # Owner, 2026-10-16: ideally every monument, those beside another too.
+        events = read(EVENTS)
+        oa = squash(strip_comments(read(ON_ACTIONS)))
+        keys = {3: "civic", 4: "religious", 5: "war_memorial", 6: "artistic", 7: "naturalist", 8: "scientific",
+                9: "industrial", 10: "athletic", 12: "crown", 13: "republic", 14: "revolution", 15: "leader"}
+        for n, key in keys.items():
+            ev = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.%d\s*=\s*\{" % n)))
+            self.assertIn(f"trigger = {{ gm_country_holds_anniversary = {{ KEY = {key} }} }}", ev, n)
+            self.assertIn(f"immediate = {{ gm_ann_pick = {{ KEY = {key} }} }}", ev, n)
+            self.assertIn(f"trigger = {{ gm_country_holds_anniversary = {{ KEY = {key} }} }} "
+                          f"trigger_event = {{ id = monument_events.{n} }}", oa, n)
+        country = squash(block(read(MON_TRIGGERS), "gm_country_holds_anniversary"))
+        self.assertIn("gm_state_holds_anniversary = { PM = pm_monument_$KEY$ }", country)
+        self.assertIn("gm_mon_holds_anniversary = { KEY = $KEY$ }", country)
+        mon = squash(block(read(MON_TRIGGERS), "gm_mon_holds_anniversary"))
+        self.assertEqual(mon, "gm_mon_status_fits = yes gm_mon_is = { KEY = $KEY$ } gm_mon_grandeur >= 3")
+        pick = squash(strip_comments(block(read(MON_EFFECTS), "gm_ann_pick")))
+        self.assertIn("order_by = gm_state_primary_grandeur", pick)
+        self.assertIn("order_by = gm_mon_grandeur", pick)
+        self.assertIn("scope:gm_ann_mon.var:gm_tr_g > var:gm_ann_g", pick)
+        self.assertIn("save_scope_as = monument_mon", pick)
+
+    def test_a_named_anniversary_beside_another_names_the_first(self):
+        # Event loc cannot reach a container (scripting_best_practices.md), so
+        # the four that name their monument have a text for one beside another.
+        L = loc()
+        events = read(EVENTS)
+        for n in (12, 13, 14, 15):
+            ev = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.%d\s*=\s*\{" % n)))
+            self.assertIn(f"triggered_desc = {{ trigger = {{ exists = scope:monument_mon }} "
+                          f"desc = monument_events.{n}.d_beside }}", ev, n)
+            self.assertIn("the monument standing beside", L[f"monument_events.{n}.d_beside"], n)
 
 
 class RebuildGateTests(unittest.TestCase):

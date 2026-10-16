@@ -371,6 +371,34 @@ gm_mon_com_counts = {
 	}
 }
 
+# ---- Anniversaries (ageing spec 2026-10-16 §5) -------------------------------------
+# Container scope. A monument beside another of dedication $KEY$ that fits and
+# is a real landmark (grandeur 3 or more) holds anniversaries, as
+# gm_state_holds_anniversary does for a state's own.
+gm_mon_holds_anniversary = {
+	gm_mon_status_fits = yes
+	gm_mon_is = { KEY = $KEY$ }
+	gm_mon_grandeur >= 3
+}
+
+# Country scope. Some monument of dedication $KEY$ holds anniversaries: a
+# state's own or one beside another. The dispatcher and each anniversary ask
+# this.
+gm_country_holds_anniversary = {
+	OR = {
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_$KEY$ }
+		}
+		AND = {
+			has_variable_list = gm_monuments_held
+			any_in_list = {
+				variable = gm_monuments_held
+				gm_mon_holds_anniversary = { KEY = $KEY$ }
+			}
+		}
+	}
+}
+
 # ---- A trophy comes home (spec §4.1) -----------------------------------------------
 # State scope, with scope:gm_tr_moving the returning trophy. What stands here
 # is what the trophy is a piece of: the landmark it came from, or, with

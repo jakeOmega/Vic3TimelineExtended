@@ -55,3 +55,4 @@ A fixed item is struck through with the commit that fixed it.
 | **Progress counts levels.** Seize an opportunity, then wait without building. | Progress does not move with ageing. Building a new monument, or levels beside a finished one, moves it. | |
 | **The gift.** Complete one. | The completing monument gains +5 Grandeur, no rebuild (its staff stay). | |
 | **An anniversary.** Take an anniversary's first option. | The monument gains a tenth of its levels as grandeur, at least 1, and the option's tooltip says so. | |
+| **An anniversary beside another.** A crown monument standing beside a grander civic one. | The Jubilee comes for it; its text reads "the monument standing beside <the first one> in <state>", and its first option adds to the crown monument's age, not the first one's. | The first one's age rose: `gm_ann_add_age` read `monument_state`. |

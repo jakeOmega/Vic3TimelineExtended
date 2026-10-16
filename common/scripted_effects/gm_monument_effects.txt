@@ -712,6 +712,93 @@ gm_state_settle_newcomer = {
 	}
 }
 
+# ---- Anniversaries (ageing spec 2026-10-16 §5) -------------------------------------
+# Country scope, an anniversary's immediate. The grandest monument of
+# dedication $KEY$ that holds anniversaries, a state's own or one beside
+# another: scope:monument_state its state, scope:monument_mon the container
+# when it is one beside another. What its public option would add to its age
+# is cached on the country (gm_ann_gain), for the option's tooltip: event loc
+# cannot reach a container (scripting_best_practices.md).
+gm_ann_pick = {
+	clear_saved_scope = monument_state
+	clear_saved_scope = monument_mon
+	clear_saved_scope = gm_ann_mon
+	set_variable = { name = gm_ann_g value = 0 }
+	set_variable = { name = gm_ann_gain value = 0 }
+	if = {
+		limit = {
+			any_scope_state = { gm_state_holds_anniversary = { PM = pm_monument_$KEY$ } }
+		}
+		ordered_scope_state = {
+			limit = { gm_state_holds_anniversary = { PM = pm_monument_$KEY$ } }
+			order_by = gm_state_primary_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = monument_state
+		}
+		scope:monument_state = {
+			set_variable = { name = gm_ann_g_here value = gm_state_primary_grandeur }
+			set_variable = { name = gm_ann_gain_here value = gm_evt_grandeur }
+		}
+		set_variable = { name = gm_ann_g value = scope:monument_state.var:gm_ann_g_here }
+		set_variable = { name = gm_ann_gain value = scope:monument_state.var:gm_ann_gain_here }
+		scope:monument_state = {
+			remove_variable = gm_ann_g_here
+			remove_variable = gm_ann_gain_here
+		}
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		ordered_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_holds_anniversary = { KEY = $KEY$ } }
+			order_by = gm_mon_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_ann_mon
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_ann_mon }
+		scope:gm_ann_mon = {
+			set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+			set_variable = { name = gm_ann_gain_here value = gm_mon_evt_grandeur }
+		}
+		if = {
+			limit = {
+				OR = {
+					NOT = { exists = scope:monument_state }
+					scope:gm_ann_mon.var:gm_tr_g > var:gm_ann_g
+				}
+			}
+			scope:gm_ann_mon = {
+				save_scope_as = monument_mon
+				var:gm_tr_origin ?= { save_scope_as = monument_state }
+			}
+			set_variable = { name = gm_ann_gain value = scope:gm_ann_mon.var:gm_ann_gain_here }
+		}
+		scope:gm_ann_mon = { remove_variable = gm_ann_gain_here }
+	}
+	remove_variable = gm_ann_g
+}
+
+# Country scope, an anniversary's public option: the occasion adds to the fame
+# of the monument gm_ann_pick chose.
+gm_ann_add_age = {
+	if = {
+		limit = { exists = scope:monument_mon }
+		scope:monument_mon = {
+			gm_mon_add_age = { AGE = gm_mon_evt_grandeur }
+		}
+	}
+	else_if = {
+		limit = { exists = scope:monument_state }
+		scope:monument_state = {
+			gm_state_add_age = { AGE = gm_evt_grandeur }
+		}
+	}
+}
+
 # ---- Home again, as a monument of its own (spec §4.1) --------------------------------
 # Container scope, the returning trophy (scope:gm_tr_moving; gm_tr_return_home).
 # A piece of a monument already standing beside the primary rejoins that one:

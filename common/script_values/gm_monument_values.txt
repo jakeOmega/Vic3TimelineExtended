@@ -199,6 +199,14 @@ gm_mon_status_code = {
 	}
 }
 
+# Container scope. What an anniversary's public option adds to a secondary's
+# age (gm_evt_grandeur's twin): a tenth of its levels, at least 1.
+gm_mon_evt_grandeur = {
+	value = gm_mon_levels
+	multiply = 0.1
+	min = 1
+}
+
 # ---- The state view (spec §5.1) ---------------------------------------------------
 # State scope. Secondary monuments standing here (the list the monthly pass and
 # every return or taking keep), 0 with none: the Also Standing Here card shows
