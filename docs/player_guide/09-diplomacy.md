@@ -1,6 +1,6 @@
 # Diplomacy
 
-The mod adds 37 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 39 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
 of power bloc principles, and ten late-game formable countries. None of this has
 a game rule or journal entry of its own: it works through the base game's treaty
@@ -23,9 +23,10 @@ influence.
 
 ### Choosing a company or state for an article
 
-Seven articles ask you to name something. Seize Company and Disband Company take a
+Nine articles ask you to name something. Seize Company and Disband Company take a
 company. Minority Protection, Free Port Concession, Religious Mission Rights,
-Demilitarized Zone and Surrender a Monument take a state. When you add one to a draft, the article shows
+Demilitarized Zone, Surrender a Monument, Excavation Concession and Excavation
+Permit take a state. When you add one to a draft, the article shows
 a button with its current choice; click it to pick from a list.
 
 The state or company always belongs to the conceding country, so only a
@@ -43,6 +44,10 @@ conceding country being annexed. If the other party is annexed instead, they
 end within a month. A state taken by rebels in a civil war keeps them, and one
 that returns to the conceding country while the treaty still stands gets them
 back.
+
+Excavation Concession and Excavation Permit leave nothing on the state. They
+let the other side dig there only while the treaty is in force and the conceding
+country owns the state, so a dig under one stops as soon as either ends.
 
 ![Choosing the company for a Disband Company article. The list holds the conceding country's companies.](images/disband_company.png)
 
@@ -68,6 +73,8 @@ The humanitarian and cultural articles move people, faiths and cultures.
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
 | Return Cultural Property | The Grand Monuments rule | Yes | The conceding country returns every [Grand Monument trophy](02-timeline.md#monument-trophies) taken from the other's lands, once. Each is rebuilt where it stood. |
 | Surrender a Monument | The Grand Monuments rule | Yes | The conceding country gives up the Grand Monument in the chosen state as a trophy, once: the whole of it, a quarter or a tenth, by its form. Never a Grand Shrine. |
+| Excavation Concession | The Grand Monuments rule; the digging side needs Romanticism | Yes | The other side may [dig the buried sites](02-timeline.md#digging-abroad) around the chosen state, and half of what each dig finds goes to its capital as a trophy. It pays 75 influence. |
+| Excavation Permit | The Grand Monuments rule; the digging side needs Empiricism | No | The other side may dig the buried sites around the chosen state; the finds stay, and it gains Foreign Scholarship. It pays 40 influence. |
 
 The military and security articles cover disarmament and cooperation between
 armed forces.

@@ -1,7 +1,10 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: scripted effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939).
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939),
+# reworked by 2026-10-16-grand-monument-archaeology-rework-design.md: costs by the
+# site, sized digs, events that name the place, the find and its history, and
+# foreign digs by treaty (an Excavation Concession, with partage, or a Permit).
 #
 # A buried site is a script container tagged gm_site, with no parent (it
 # outlives every country), in the global list gm_arch_sites. It holds the
@@ -11,12 +14,18 @@
 # the monument machinery serve it unchanged, and the dig's own:
 #   gm_site_tech, gm_site_vector     what opens it: a technology (a flag, the
 #                                    hyphen an underscore) and `survey` (open as
-#                                    soon as its owner has the technology) or
+#                                    soon as its owner has the technology),
 #                                    `incidental` (turned up by a monthly chance)
+#                                    or `excavating` (a dig already under way when
+#                                    it is seeded, gm_arch_seed_dig: Pompeii)
 #   gm_site_status                   1 buried, 2 known, 3 being dug, 4 unearthed
 #   gm_site_sponsor, gm_site_method  who digs it, and how: `antiquarian`,
 #                                    `systematic` or `forensic`
 #   gm_site_progress                 0 to 100, kept when a dig is suspended
+#   gm_site_terms                    where the sponsor digs: `own` ground, or
+#                                    abroad by `concession` or `permit` (the
+#                                    two treaty articles; rework spec § 3)
+#   gm_site_told                     the players told of it (arch_events.1)
 # No timed variable on a container: it would never expire
 # (container_timed_variable_audit).
 #
@@ -43,8 +52,21 @@ gm_arch_monthly = {
 		if = {
 			limit = { NOT = { has_global_variable = gm_arch_seeded } }
 			set_global_variable = gm_arch_seeded
+			set_global_variable = { name = gm_arch_seed_round value = gm_arch_seed_rounds }
 			gm_arch_seed_sites = yes
 			gm_arch_self_check = yes
+		}
+		# A site added since a game was seeded is seeded the next month: the
+		# seeding makes no site twice (gm_arch_seed_site), so running it again
+		# adds only the new rows. Pompeii is round 2 (2026-10-16).
+		if = {
+			limit = { NOT = { has_global_variable = gm_arch_seed_round } }
+			set_global_variable = { name = gm_arch_seed_round value = 1 }
+		}
+		if = {
+			limit = { global_var:gm_arch_seed_round < gm_arch_seed_rounds }
+			set_global_variable = { name = gm_arch_seed_round value = gm_arch_seed_rounds }
+			gm_arch_seed_sites = yes
 		}
 		if = {
 			limit = { has_global_variable_list = gm_arch_sites }
@@ -116,6 +138,7 @@ gm_arch_seed_sites = {
 	gm_arch_seed_site = { KEY = sidon_necropolis STATE = STATE_LEBANON TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 5 }
 	gm_arch_seed_site = { KEY = villa_of_the_papyri STATE = STATE_CAMPANIA TECH = microprocessor VECTOR = survey FORM = hall LEVEL = 10 }
 	gm_arch_seed_site = { KEY = tomb_of_alexander STATE = STATE_LOWER_EGYPT TECH = mainframe_computers VECTOR = survey FORM = mausoleum LEVEL = 15 }
+	gm_arch_seed_site = { KEY = pompeii STATE = STATE_CAMPANIA TECH = romanticism VECTOR = excavating FORM = forum LEVEL = 15 }
 }
 
 # No scope, once a game after the seeding. The one engine fact nobody has seen
@@ -230,8 +253,38 @@ gm_arch_seed_site = {
 				set_variable = { name = gm_site_tech value = flag:$TECH$ }
 				set_variable = { name = gm_site_vector value = flag:$VECTOR$ }
 				set_variable = { name = gm_site_status value = 1 }
+				# Being dug when the game begins (Pompeii): a dig already under way.
+				if = {
+					limit = { var:gm_site_vector = flag:excavating }
+					gm_arch_seed_dig = yes
+				}
 			}
 		}
+	}
+}
+
+# Container scope, a site just seeded with VECTOR = excavating: being dug when
+# the game begins, as Pompeii was from 1748. The owner of its ground digs it by
+# the Antiquarian method, part done (gm_arch_excavating_progress), and pays for
+# it from the first month; it may suspend it or, with Empiricism, start it again
+# by Systematic Stratigraphy, keeping the progress. With no owner, it waits as a
+# known site with the progress made.
+gm_arch_seed_dig = {
+	clear_saved_scope = gm_arch_seed_sponsor
+	var:gm_tr_origin_region ?= {
+		random_scope_state = {
+			limit = { exists = owner }
+			owner = { save_scope_as = gm_arch_seed_sponsor }
+		}
+	}
+	set_variable = { name = gm_site_progress value = gm_arch_excavating_progress }
+	if = {
+		limit = { exists = scope:gm_arch_seed_sponsor }
+		set_variable = { name = gm_site_method value = flag:antiquarian }
+		gm_arch_begin_dig = { WHO = scope:gm_arch_seed_sponsor }
+	}
+	else = {
+		set_variable = { name = gm_site_status value = 2 }
 	}
 }
 
@@ -256,10 +309,11 @@ gm_arch_site_monthly = {
 # Container scope. An incidental site whose ground belongs to a country with the
 # technology that gates it: a monthly chance (gm_arch_find_chance) that the
 # plough, the railway cutting or a hiker turns it up. The finder is one of the
-# ground's owners with the technology.
+# ground's owners with the technology, and the state its part.
 gm_arch_try_find = {
 	save_scope_as = gm_arch_find_site
 	clear_saved_scope = gm_arch_finder
+	clear_saved_scope = gm_arch_find_state
 	var:gm_tr_origin_region ?= {
 		random_scope_state = {
 			limit = {
@@ -267,11 +321,15 @@ gm_arch_try_find = {
 				owner = { save_temporary_scope_as = gm_arch_cand }
 				scope:gm_arch_find_site = { gm_arch_has_gate_for = { WHO = scope:gm_arch_cand } }
 			}
+			save_scope_as = gm_arch_find_state
 			owner = { save_scope_as = gm_arch_finder }
 		}
 	}
 	if = {
-		limit = { exists = scope:gm_arch_finder }
+		limit = {
+			exists = scope:gm_arch_finder
+			exists = scope:gm_arch_find_state
+		}
 		random = {
 			chance = gm_arch_find_chance
 			gm_arch_found = yes
@@ -279,52 +337,67 @@ gm_arch_try_find = {
 	}
 }
 
-# Container scope (scope:gm_arch_finder). It is known now, and open to whoever
-# owns the ground and has the technology. A player is told; the AI finds it in
-# its list at the next review.
+# Container scope (scope:gm_arch_finder, scope:gm_arch_find_state). It is known
+# now, and open to whoever may dig its ground with the technology. A player
+# finder is told at once (arch_events.1); any other player who may dig it is
+# told when the pass first lists it for them, and the AI finds it in its list.
 gm_arch_found = {
 	set_variable = { name = gm_site_status value = 2 }
-	save_scope_as = gm_arch_pick
 	debug_log = "TE_MONUMENTS: site turned up (incidental)"
-	scope:gm_arch_finder = {
-		set_variable = { name = gm_arch_last value = scope:gm_arch_pick.var:gm_tr_landmark }
-		if = {
-			limit = { is_ai = no }
-			trigger_event = { id = arch_events.1 }
+	gm_arch_tell_found = { WHO = scope:gm_arch_finder STATE = scope:gm_arch_find_state }
+}
+
+# Container scope. $WHO$, a player who may dig the site, is told of it once
+# (gm_site_told): arch_events.1, with the site as scope:gm_arch_pick and the
+# state it would dig ($STATE$) under the site's own name (gm_arch_ev_mark), so
+# the popup names this site and this state whatever else is told this month.
+gm_arch_tell_found = {
+	if = {
+		limit = {
+			$WHO$ = { is_ai = no }
+			OR = {
+				NOT = { has_variable_list = gm_site_told }
+				NOT = { is_target_in_variable_list = { name = gm_site_told target = $WHO$ } }
+			}
 		}
+		add_to_variable_list = { name = gm_site_told target = $WHO$ }
+		save_scope_as = gm_arch_pick
+		clear_saved_scope = gm_arch_ev_survey
+		gm_arch_ev_mark = { STATE = $STATE$ }
+		if = {
+			limit = { NOT = { var:gm_site_vector = flag:incidental } }
+			$STATE$ = { save_scope_as = gm_arch_ev_survey }
+		}
+		$WHO$ = { trigger_event = { id = arch_events.1 } }
 	}
 }
 
-# Container scope, a dig in progress. A month of progress by the method, from
-# the sponsor's part of the ground: a sponsor that no longer holds any (the
-# ground changed hands, or the country is gone) suspends it, with its
-# progress kept. A dig that reaches 100 is put on gm_arch_done, to be finished
-# once the walk over the list is over.
+# Container scope, a dig in progress. A month of progress by the method and the
+# site's size (gm_arch_site_rate_<method>), from the state it is dug in
+# (gm_arch_save_dig_state): a sponsor that may dig none of the ground any longer
+# (it changed hands, the treaty that let it dig abroad ended, or the country
+# is gone) suspends it, with its progress kept. A dig that reaches 100 is put
+# on gm_arch_done, to be finished once the walk over the list is over.
 gm_arch_dig_step = {
 	clear_saved_scope = gm_arch_sponsor
 	clear_saved_scope = gm_arch_dig_state
 	var:gm_site_sponsor ?= { save_scope_as = gm_arch_sponsor }
 	if = {
 		limit = { exists = scope:gm_arch_sponsor }
-		var:gm_tr_origin_region ?= {
-			random_scope_state = {
-				limit = { owner = scope:gm_arch_sponsor }
-				save_scope_as = gm_arch_dig_state
-			}
-		}
+		gm_arch_save_dig_state = yes
 	}
 	if = {
 		limit = { exists = scope:gm_arch_dig_state }
 		if = {
 			limit = { var:gm_site_method = flag:antiquarian }
-			change_variable = { name = gm_site_progress add = gm_arch_rate_antiquarian }
+			change_variable = { name = gm_site_progress add = gm_arch_site_rate_antiquarian }
 		}
 		else_if = {
 			limit = { var:gm_site_method = flag:systematic }
-			change_variable = { name = gm_site_progress add = gm_arch_rate_systematic }
+			change_variable = { name = gm_site_progress add = gm_arch_site_rate_systematic }
 		}
 		else = {
-			change_variable = { name = gm_site_progress add = gm_arch_rate_forensic }
+			change_variable = { name = gm_site_progress add = gm_arch_site_rate_forensic }
 		}
 		clamp_variable = { name = gm_site_progress max = 100 min = 0 }
 		if = {
@@ -337,8 +410,51 @@ gm_arch_dig_step = {
 	}
 }
 
+# Container scope, with scope:gm_arch_sponsor. The state the sponsor digs in:
+# its own part of the ground if it holds one, else a part whose owner granted
+# it the right to dig there, by an Excavation Concession before a Permit (the
+# treaty read live, gm_arch_state_conceded_to). Writes the terms on the
+# container (gm_site_terms); with none, scope:gm_arch_dig_state stays unset.
+gm_arch_save_dig_state = {
+	clear_saved_scope = gm_arch_dig_state
+	var:gm_tr_origin_region ?= {
+		random_scope_state = {
+			limit = { owner = scope:gm_arch_sponsor }
+			save_scope_as = gm_arch_dig_state
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_arch_dig_state }
+		set_variable = { name = gm_site_terms value = flag:own }
+	}
+	else = {
+		var:gm_tr_origin_region ?= {
+			random_scope_state = {
+				limit = { gm_arch_state_conceded_to = { WHO = scope:gm_arch_sponsor ARTICLE = archaeological_concession } }
+				save_scope_as = gm_arch_dig_state
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_arch_dig_state }
+			set_variable = { name = gm_site_terms value = flag:concession }
+		}
+		else = {
+			var:gm_tr_origin_region ?= {
+				random_scope_state = {
+					limit = { gm_arch_state_conceded_to = { WHO = scope:gm_arch_sponsor ARTICLE = excavation_permit } }
+					save_scope_as = gm_arch_dig_state
+				}
+			}
+			if = {
+				limit = { exists = scope:gm_arch_dig_state }
+				set_variable = { name = gm_site_terms value = flag:permit }
+			}
+		}
+	}
+}
+
 # Container scope. The dig stops; what was done is kept, and the site is open
-# to whoever owns the ground and has the technology.
+# to whoever may dig its ground and has the technology.
 gm_arch_suspend = {
 	set_variable = { name = gm_site_status value = 2 }
 	remove_variable = gm_site_sponsor
@@ -346,21 +462,17 @@ gm_arch_suspend = {
 
 # ---- Finishing a dig -------------------------------------------------------------------------------
 # Container scope, from gm_arch_monthly's walk of gm_arch_done. The method
-# decides what the dig makes of it (gm_arch_settle_levels), then it stands
-# in the sponsor's part of the ground, or the dig is suspended if the sponsor
-# has none left.
+# decides what the dig makes of it (gm_arch_settle_levels), the terms what the
+# sponsor takes home from a dig abroad (gm_arch_settle_terms), then it stands
+# in the state it was dug in, or the dig is suspended if the sponsor may dig
+# there no longer.
 gm_arch_finish = {
 	clear_saved_scope = gm_arch_sponsor
 	clear_saved_scope = gm_arch_dig_state
 	var:gm_site_sponsor ?= { save_scope_as = gm_arch_sponsor }
 	if = {
 		limit = { exists = scope:gm_arch_sponsor }
-		var:gm_tr_origin_region ?= {
-			random_scope_state = {
-				limit = { owner = scope:gm_arch_sponsor }
-				save_scope_as = gm_arch_dig_state
-			}
-		}
+		gm_arch_save_dig_state = yes
 	}
 	# Its state's building was rebuilt today (another dig finished there this
 	# month, or a return): placing it rebuilds the building again, which must
@@ -374,6 +486,7 @@ gm_arch_finish = {
 			}
 		}
 		gm_arch_settle_levels = yes
+		gm_arch_settle_terms = yes
 		gm_arch_place = yes
 	}
 	else_if = {
@@ -414,13 +527,110 @@ gm_arch_settle_levels = {
 	}
 }
 
+# Container scope (scope:gm_arch_sponsor, scope:gm_arch_dig_state). What a dig
+# abroad leaves its sponsor (rework spec § 3). Under an Excavation Concession,
+# the partage: half the levels go to the sponsor's capital as a trophy
+# (gm_arch_partage), save at a rock-cut site, which has nothing to carry off.
+# Under a Permit, or at a rock-cut site, the finds stay and the sponsor gains
+# Foreign Scholarship. gm_arch_partaged and gm_arch_scholar tell the events.
+gm_arch_settle_terms = {
+	if = {
+		limit = { has_variable = gm_arch_partaged }
+		remove_variable = gm_arch_partaged
+	}
+	if = {
+		limit = { has_variable = gm_arch_scholar }
+		remove_variable = gm_arch_scholar
+	}
+	if = {
+		limit = {
+			has_variable = gm_site_terms
+			var:gm_site_terms = flag:concession
+			NOT = { var:gm_tr_form = flag:rock_cut }
+			gm_arch_disp_levels >= 2
+			scope:gm_arch_sponsor = { exists = capital }
+		}
+		gm_arch_partage = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = gm_site_terms
+			OR = {
+				var:gm_site_terms = flag:concession
+				var:gm_site_terms = flag:permit
+			}
+		}
+		set_variable = gm_arch_scholar
+		scope:gm_arch_sponsor = {
+			add_modifier = { name = gm_arch_scholarship days = 3650 }
+		}
+	}
+}
+
 # Container scope (scope:gm_arch_sponsor, scope:gm_arch_dig_state). The
-# monument stands in the sponsor's part. With none there, the state's building
-# is built from the records (gm_state_tr_receive, as a trophy's return is) and
-# the container is done with. With one standing, the building takes the levels
-# and the container stays as a monument beside it.
+# partage: a trophy made from the dig's own records, as gm_state_tr_make_trophy
+# makes one from a state's, standing in the sponsor's capital, its origin the
+# host's state, a piece of half the levels (gm_arch_partage_levels), counting
+# for half of them abroad, taken by the sponsor this year. The site keeps the
+# rest, to stand in the host's state. Everything after is the trophies' own:
+# the host may claim the piece back, and a returned piece rejoins the monument.
+# No infamy and no anger: the host signed for it.
+gm_arch_partage = {
+	save_scope_as = gm_arch_partage_site
+	clear_saved_scope = gm_tr_new
+	clear_saved_scope = gm_arch_partage_home
+	set_variable = { name = gm_site_piece value = gm_arch_partage_levels }
+	set_variable = { name = gm_site_piece_grandeur value = gm_arch_partage_grandeur }
+	scope:gm_arch_sponsor = {
+		capital = { save_scope_as = gm_arch_partage_home }
+	}
+	if = {
+		limit = { exists = scope:gm_arch_partage_home }
+		create_container = {
+			tags = { gm_trophy }
+			save_scope_as = gm_tr_new
+			on_created = {
+				save_scope_as = gm_tr_new
+			}
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_tr_new }
+		add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }
+		scope:gm_tr_new = {
+			set_variable = { name = gm_tr_origin value = scope:gm_arch_dig_state }
+			set_variable = { name = gm_tr_origin_region value = scope:gm_arch_partage_site.var:gm_tr_origin_region }
+			set_variable = { name = gm_tr_site value = scope:gm_arch_partage_home }
+			set_variable = { name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region }
+			set_variable = { name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece }
+			set_variable = { name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur }
+			set_variable = { name = gm_tr_year value = gm_this_year }
+			set_variable = { name = gm_tr_taken_by value = scope:gm_arch_sponsor }
+			set_variable = { name = gm_tr_share value = flag:piece }
+			set_variable = { name = gm_tr_dedication value = scope:gm_arch_partage_site.var:gm_tr_dedication }
+			set_variable = { name = gm_tr_skin value = scope:gm_arch_partage_site.var:gm_tr_skin }
+			set_variable = { name = gm_tr_form value = scope:gm_arch_partage_site.var:gm_tr_form }
+			set_variable = { name = gm_tr_landmark value = scope:gm_arch_partage_site.var:gm_tr_landmark }
+			set_variable = { name = gm_tr_namesake value = scope:gm_arch_partage_site.var:gm_tr_namesake }
+			gm_tr_update_picture = yes
+		}
+		change_variable = { name = gm_tr_levels subtract = var:gm_site_piece }
+		set_variable = gm_arch_partaged
+		debug_log = "TE_MONUMENTS: partage, a piece shipped to the sponsor's capital"
+	}
+	remove_variable = gm_site_piece
+	remove_variable = gm_site_piece_grandeur
+}
+
+# Container scope (scope:gm_arch_sponsor, scope:gm_arch_dig_state). The
+# monument stands in the state it was dug in, the host's when the dig was
+# abroad. With none there, the state's building is built from the records
+# (gm_state_tr_receive, as a trophy's return is) and the container is done
+# with. With one standing, the building takes the levels and the container
+# stays as a monument beside it.
 gm_arch_place = {
 	save_scope_as = gm_tr_moving
+	clear_saved_scope = gm_arch_host
 	set_variable = { name = gm_site_status value = 4 }
 	set_variable = { name = gm_tr_origin value = scope:gm_arch_dig_state }
 	set_variable = { name = gm_tr_site value = scope:gm_arch_dig_state }
@@ -428,25 +638,14 @@ gm_arch_place = {
 	set_variable = { name = gm_tr_year value = gm_this_year }
 	gm_tr_update_picture = yes
 	scope:gm_arch_sponsor = {
-		set_variable = { name = gm_arch_last value = scope:gm_tr_moving.var:gm_tr_landmark }
 		set_variable = gm_active
 	}
-	debug_log = "TE_MONUMENTS: site unearthed and placed"
-	# A player is told how it went, before the container may go: the text reads
-	# the sponsor's gm_arch_last, and the monument's own refresh follows.
-	if = {
-		limit = {
-			exists = scope:gm_arch_sponsor
-			scope:gm_arch_sponsor = { is_ai = no }
-		}
-		if = {
-			limit = { has_variable = gm_arch_ruined }
-			scope:gm_arch_sponsor = { trigger_event = { id = arch_events.3 } }
-		}
-		else = {
-			scope:gm_arch_sponsor = { trigger_event = { id = arch_events.2 } }
-		}
+	scope:gm_arch_dig_state = {
+		owner = { save_scope_as = gm_arch_host }
 	}
+	debug_log = "TE_MONUMENTS: site unearthed and placed"
+	# The players are told before the container may go.
+	gm_arch_tell_finished = yes
 	if = {
 		limit = { scope:gm_arch_dig_state = { has_building = building_grand_monument } }
 		gm_arch_stand_beside = yes
@@ -454,6 +653,55 @@ gm_arch_place = {
 	else = {
 		scope:gm_arch_dig_state = { gm_state_tr_receive = yes }
 		gm_arch_retire = yes
+	}
+}
+
+# Container scope (scope:gm_arch_sponsor, scope:gm_arch_host,
+# scope:gm_arch_dig_state). arch_events.2 for the sponsor if a player, and for
+# the host of a dig abroad if a player. The event reads which case it is from
+# saved scopes, each cleared first so none rides in from another site finished
+# this month: the site's own (gm_arch_ev_mark), and gm_arch_ev_ruined,
+# _concession, _permit, _scholar, and _host_view for the host's copy only.
+gm_arch_tell_finished = {
+	clear_saved_scope = gm_arch_ev_ruined
+	clear_saved_scope = gm_arch_ev_concession
+	clear_saved_scope = gm_arch_ev_permit
+	clear_saved_scope = gm_arch_ev_scholar
+	clear_saved_scope = gm_arch_ev_host_view
+	gm_arch_ev_mark = { STATE = scope:gm_arch_dig_state }
+	if = {
+		limit = { has_variable = gm_arch_ruined }
+		scope:gm_arch_dig_state = { save_scope_as = gm_arch_ev_ruined }
+	}
+	if = {
+		limit = { has_variable = gm_arch_partaged }
+		scope:gm_arch_dig_state = { save_scope_as = gm_arch_ev_concession }
+	}
+	else_if = {
+		limit = {
+			has_variable = gm_arch_scholar
+			has_variable = gm_site_terms
+			var:gm_site_terms = flag:permit
+		}
+		scope:gm_arch_dig_state = { save_scope_as = gm_arch_ev_permit }
+	}
+	else_if = {
+		limit = { has_variable = gm_arch_scholar }
+		scope:gm_arch_dig_state = { save_scope_as = gm_arch_ev_scholar }
+	}
+	if = {
+		limit = { scope:gm_arch_sponsor = { is_ai = no } }
+		scope:gm_arch_sponsor = { trigger_event = { id = arch_events.2 } }
+	}
+	if = {
+		limit = {
+			exists = scope:gm_arch_host
+			NOT = { scope:gm_arch_host = scope:gm_arch_sponsor }
+			scope:gm_arch_host = { is_ai = no }
+		}
+		scope:gm_arch_dig_state = { save_scope_as = gm_arch_ev_host_view }
+		scope:gm_arch_host = { trigger_event = { id = arch_events.2 } }
+		clear_saved_scope = gm_arch_ev_host_view
 	}
 }
 
@@ -486,6 +734,197 @@ gm_arch_stand_beside = {
 gm_arch_retire = {
 	remove_list_global_variable = { name = gm_arch_sites target = scope:gm_tr_moving }
 	destroy_container = yes
+}
+
+# ---- The events' site (arch_events.1, .2) -------------------------------------------------------------------
+# Container scope. An event cannot reach a container's custom localization, and
+# a country variable is overwritten by the next popup. So the state the site
+# lies in ($STATE$) is saved under a name of its own for each site, after every
+# such name is cleared: saved scopes travel with trigger_event, so each popup
+# holds exactly one, picks this site's lines by `exists = scope:gm_arch_ev_<key>`
+# and names its state through it. One branch per row of ARCH_SITES in
+# test_grand_monument_archaeology.py, in LANDMARKS order.
+gm_arch_ev_mark = {
+	clear_saved_scope = gm_arch_ev_nineveh_library
+	clear_saved_scope = gm_arch_ev_winged_victory_of_samothrace
+	clear_saved_scope = gm_arch_ev_vindolanda_tablets
+	clear_saved_scope = gm_arch_ev_troy_hisarlik
+	clear_saved_scope = gm_arch_ev_mycenae_grave_circle
+	clear_saved_scope = gm_arch_ev_pergamon_altar
+	clear_saved_scope = gm_arch_ev_deir_el_bahari_cache
+	clear_saved_scope = gm_arch_ev_ishtar_gate_babylon
+	clear_saved_scope = gm_arch_ev_palace_of_knossos
+	clear_saved_scope = gm_arch_ev_antikythera_mechanism
+	clear_saved_scope = gm_arch_ev_oseberg_ship
+	clear_saved_scope = gm_arch_ev_machu_picchu
+	clear_saved_scope = gm_arch_ev_bust_of_nefertiti
+	clear_saved_scope = gm_arch_ev_mohenjo_daro
+	clear_saved_scope = gm_arch_ev_tomb_of_tutankhamun
+	clear_saved_scope = gm_arch_ev_royal_cemetery_at_ur
+	clear_saved_scope = gm_arch_ev_sanxingdui_pits
+	clear_saved_scope = gm_arch_ev_sutton_hoo
+	clear_saved_scope = gm_arch_ev_lascaux_caves
+	clear_saved_scope = gm_arch_ev_nag_hammadi_library
+	clear_saved_scope = gm_arch_ev_dead_sea_scrolls
+	clear_saved_scope = gm_arch_ev_tomb_of_pakal
+	clear_saved_scope = gm_arch_ev_mawangdui_tombs
+	clear_saved_scope = gm_arch_ev_terracotta_army
+	clear_saved_scope = gm_arch_ev_tomb_of_philip_ii
+	clear_saved_scope = gm_arch_ev_tomb_of_marquis_yi
+	clear_saved_scope = gm_arch_ev_royal_tombs_of_sipan
+	clear_saved_scope = gm_arch_ev_otzi_the_iceman
+	clear_saved_scope = gm_arch_ev_caral_supe
+	clear_saved_scope = gm_arch_ev_gobekli_tepe
+	clear_saved_scope = gm_arch_ev_olympia
+	clear_saved_scope = gm_arch_ev_delphi
+	clear_saved_scope = gm_arch_ev_sidon_necropolis
+	clear_saved_scope = gm_arch_ev_villa_of_the_papyri
+	clear_saved_scope = gm_arch_ev_tomb_of_alexander
+	clear_saved_scope = gm_arch_ev_pompeii
+	if = {
+		limit = { var:gm_tr_landmark = flag:nineveh_library }
+		$STATE$ = { save_scope_as = gm_arch_ev_nineveh_library }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:winged_victory_of_samothrace }
+		$STATE$ = { save_scope_as = gm_arch_ev_winged_victory_of_samothrace }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:vindolanda_tablets }
+		$STATE$ = { save_scope_as = gm_arch_ev_vindolanda_tablets }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:troy_hisarlik }
+		$STATE$ = { save_scope_as = gm_arch_ev_troy_hisarlik }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:mycenae_grave_circle }
+		$STATE$ = { save_scope_as = gm_arch_ev_mycenae_grave_circle }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:pergamon_altar }
+		$STATE$ = { save_scope_as = gm_arch_ev_pergamon_altar }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:deir_el_bahari_cache }
+		$STATE$ = { save_scope_as = gm_arch_ev_deir_el_bahari_cache }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:ishtar_gate_babylon }
+		$STATE$ = { save_scope_as = gm_arch_ev_ishtar_gate_babylon }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:palace_of_knossos }
+		$STATE$ = { save_scope_as = gm_arch_ev_palace_of_knossos }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:antikythera_mechanism }
+		$STATE$ = { save_scope_as = gm_arch_ev_antikythera_mechanism }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:oseberg_ship }
+		$STATE$ = { save_scope_as = gm_arch_ev_oseberg_ship }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:machu_picchu }
+		$STATE$ = { save_scope_as = gm_arch_ev_machu_picchu }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:bust_of_nefertiti }
+		$STATE$ = { save_scope_as = gm_arch_ev_bust_of_nefertiti }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:mohenjo_daro }
+		$STATE$ = { save_scope_as = gm_arch_ev_mohenjo_daro }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:tomb_of_tutankhamun }
+		$STATE$ = { save_scope_as = gm_arch_ev_tomb_of_tutankhamun }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:royal_cemetery_at_ur }
+		$STATE$ = { save_scope_as = gm_arch_ev_royal_cemetery_at_ur }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:sanxingdui_pits }
+		$STATE$ = { save_scope_as = gm_arch_ev_sanxingdui_pits }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:sutton_hoo }
+		$STATE$ = { save_scope_as = gm_arch_ev_sutton_hoo }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:lascaux_caves }
+		$STATE$ = { save_scope_as = gm_arch_ev_lascaux_caves }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:nag_hammadi_library }
+		$STATE$ = { save_scope_as = gm_arch_ev_nag_hammadi_library }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:dead_sea_scrolls }
+		$STATE$ = { save_scope_as = gm_arch_ev_dead_sea_scrolls }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:tomb_of_pakal }
+		$STATE$ = { save_scope_as = gm_arch_ev_tomb_of_pakal }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:mawangdui_tombs }
+		$STATE$ = { save_scope_as = gm_arch_ev_mawangdui_tombs }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:terracotta_army }
+		$STATE$ = { save_scope_as = gm_arch_ev_terracotta_army }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:tomb_of_philip_ii }
+		$STATE$ = { save_scope_as = gm_arch_ev_tomb_of_philip_ii }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:tomb_of_marquis_yi }
+		$STATE$ = { save_scope_as = gm_arch_ev_tomb_of_marquis_yi }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:royal_tombs_of_sipan }
+		$STATE$ = { save_scope_as = gm_arch_ev_royal_tombs_of_sipan }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:otzi_the_iceman }
+		$STATE$ = { save_scope_as = gm_arch_ev_otzi_the_iceman }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:caral_supe }
+		$STATE$ = { save_scope_as = gm_arch_ev_caral_supe }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:gobekli_tepe }
+		$STATE$ = { save_scope_as = gm_arch_ev_gobekli_tepe }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:olympia }
+		$STATE$ = { save_scope_as = gm_arch_ev_olympia }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:delphi }
+		$STATE$ = { save_scope_as = gm_arch_ev_delphi }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:sidon_necropolis }
+		$STATE$ = { save_scope_as = gm_arch_ev_sidon_necropolis }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:villa_of_the_papyri }
+		$STATE$ = { save_scope_as = gm_arch_ev_villa_of_the_papyri }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:tomb_of_alexander }
+		$STATE$ = { save_scope_as = gm_arch_ev_tomb_of_alexander }
+	}
+	else_if = {
+		limit = { var:gm_tr_landmark = flag:pompeii }
+		$STATE$ = { save_scope_as = gm_arch_ev_pompeii }
+	}
 }
 
 # ---- Orders (the scripted GUI's and the events' side) ------------------------------------------------------
@@ -562,10 +1001,10 @@ gm_arch_stop_dig = {
 	}
 }
 
-# ---- Lists, costs, the national side -------------------------------------------------------------------------
-# No scope. Every country's lists of what it digs and what waits for it, and what
-# the digs cost, from the sites. Last month's are cleared first; the lists are
-# rebuilt each time, after a click too (arch_events.10, .11).
+# ---- Lists, innovation, the national side --------------------------------------------------------------------
+# No scope. Every country's lists of what it digs and what waits for it, and the
+# innovation the digs divert, from the sites. Last month's are cleared first; the
+# lists are rebuilt each time, after a click too (arch_events.10, .11).
 gm_arch_pass = {
 	every_country = {
 		limit = { has_variable = gm_arch_listed }
@@ -574,7 +1013,6 @@ gm_arch_pass = {
 		set_variable = { name = gm_arch_dig_count value = 0 }
 		set_variable = { name = gm_arch_open_count value = 0 }
 		set_variable = { name = gm_arch_innovation_units value = 0 }
-		set_variable = { name = gm_arch_cost_units value = 0 }
 	}
 	if = {
 		limit = { has_global_variable_list = gm_arch_sites }
@@ -585,27 +1023,22 @@ gm_arch_pass = {
 	}
 }
 
-# Container scope. This site into the lists of the country that digs it or the
-# countries that may.
+# Container scope. This site into the lists of the country that digs it, or of
+# the countries that may: the owners of its ground with the technology, and
+# whoever holds the right to dig a part of it by treaty (rework spec § 3).
 gm_arch_list_one = {
 	save_scope_as = gm_arch_listing
 	if = {
 		limit = { gm_arch_site_digging = yes }
 		clear_saved_scope = gm_arch_sponsor
 		var:gm_site_sponsor ?= { save_scope_as = gm_arch_sponsor }
-		clear_saved_scope = gm_arch_view_state
 		if = {
 			limit = { exists = scope:gm_arch_sponsor }
-			# The state the row names: the sponsor's part of the ground.
-			var:gm_tr_origin_region ?= {
-				random_scope_state = {
-					limit = { owner = scope:gm_arch_sponsor }
-					save_scope_as = gm_arch_view_state
-				}
-			}
+			# The state the row names, and the terms it is dug on.
+			gm_arch_save_dig_state = yes
 			if = {
-				limit = { exists = scope:gm_arch_view_state }
-				set_variable = { name = gm_site_view_state value = scope:gm_arch_view_state }
+				limit = { exists = scope:gm_arch_dig_state }
+				set_variable = { name = gm_site_view_state value = scope:gm_arch_dig_state }
 			}
 			scope:gm_arch_sponsor = {
 				gm_arch_country_listed = yes
@@ -614,16 +1047,13 @@ gm_arch_list_one = {
 				if = {
 					limit = { scope:gm_arch_listing = { var:gm_site_method = flag:antiquarian } }
 					change_variable = { name = gm_arch_innovation_units add = gm_arch_innovation_antiquarian }
-					change_variable = { name = gm_arch_cost_units add = gm_arch_cost_antiquarian }
 				}
 				else_if = {
 					limit = { scope:gm_arch_listing = { var:gm_site_method = flag:systematic } }
 					change_variable = { name = gm_arch_innovation_units add = gm_arch_innovation_systematic }
-					change_variable = { name = gm_arch_cost_units add = gm_arch_cost_systematic }
 				}
 				else = {
 					change_variable = { name = gm_arch_innovation_units add = gm_arch_innovation_forensic }
-					change_variable = { name = gm_arch_cost_units add = gm_arch_cost_forensic }
 				}
 			}
 		}
@@ -631,21 +1061,69 @@ gm_arch_list_one = {
 	else_if = {
 		limit = { gm_arch_site_open = yes }
 		var:gm_tr_origin_region ?= {
-			# A country holds one state in a region (a part another holds is a state
-			# of the other), so each owner is listed once.
+			# The owners of its ground, with the technology.
 			every_scope_state = {
 				limit = {
 					exists = owner
 					owner = { save_temporary_scope_as = gm_arch_cand }
 					scope:gm_arch_listing = { gm_arch_has_gate_for = { WHO = scope:gm_arch_cand } }
 				}
+				save_scope_as = gm_arch_ls_state
+				owner = { save_scope_as = gm_arch_ls_who }
+				scope:gm_arch_listing = { gm_arch_list_for = yes }
+			}
+			# Whoever an owner granted the right to dig its part, by either article.
+			every_scope_state = {
+				limit = { exists = owner }
+				save_scope_as = gm_arch_ls_state
 				owner = {
-					gm_arch_country_listed = yes
-					add_to_variable_list = { name = gm_arch_available target = scope:gm_arch_listing }
-					change_variable = { name = gm_arch_open_count add = 1 }
+					save_scope_as = gm_arch_ls_host
+					every_scope_treaty = {
+						every_scope_article = {
+							limit = {
+								OR = {
+									has_type = archaeological_concession
+									has_type = excavation_permit
+								}
+								source_country = scope:gm_arch_ls_host
+								input_state = scope:gm_arch_ls_state
+							}
+							target_country = { save_scope_as = gm_arch_ls_who }
+							if = {
+								limit = {
+									NOT = { scope:gm_arch_ls_who = scope:gm_arch_ls_host }
+									scope:gm_arch_listing = { gm_arch_has_gate_for = { WHO = scope:gm_arch_ls_who } }
+								}
+								scope:gm_arch_listing = { gm_arch_list_for = yes }
+							}
+						}
+					}
 				}
 			}
 		}
+	}
+}
+
+# Container scope (scope:gm_arch_listing, scope:gm_arch_ls_who the country,
+# scope:gm_arch_ls_state the state it would dig). Into its list once: a country
+# may hold a part of the ground and the right to dig another, or both articles.
+# A player not yet told of the site is told (gm_arch_tell_found).
+gm_arch_list_for = {
+	if = {
+		limit = {
+			scope:gm_arch_ls_who = {
+				OR = {
+					NOT = { has_variable_list = gm_arch_available }
+					NOT = { is_target_in_variable_list = { name = gm_arch_available target = scope:gm_arch_listing } }
+				}
+			}
+		}
+		scope:gm_arch_ls_who = {
+			gm_arch_country_listed = yes
+			add_to_variable_list = { name = gm_arch_available target = scope:gm_arch_listing }
+			change_variable = { name = gm_arch_open_count add = 1 }
+		}
+		gm_arch_tell_found = { WHO = scope:gm_arch_ls_who STATE = scope:gm_arch_ls_state }
 	}
 }
 
@@ -658,28 +1136,25 @@ gm_arch_country_listed = {
 		set_variable = { name = gm_arch_dig_count value = 0 }
 		set_variable = { name = gm_arch_open_count value = 0 }
 		set_variable = { name = gm_arch_innovation_units value = 0 }
-		set_variable = { name = gm_arch_cost_units value = 0 }
 	}
 	set_variable = gm_active
 }
 
 # Journal-entry scope (ROOT = the country), from gm_apply_national_modifiers.
-# The digs' weekly innovation drain and weekly cost, each the units
-# gm_arch_pass summed: the modifiers carry one unit.
+# The digs' weekly innovation drain, the units gm_arch_pass summed: the
+# modifier carries one unit. Digs cost no money (owner, 2026-10-16).
 gm_arch_add_national = {
-	# Only a country gm_arch_pass has listed has the variables, and
-	# gm_add_national reads them unguarded (the boons' guard, gm_add_boon).
+	# Only a country gm_arch_pass has listed has the variable, and
+	# gm_add_national reads it unguarded (the boons' guard, gm_add_boon).
 	if = {
 		limit = { root = { has_variable = gm_arch_innovation_units } }
 		gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units }
 	}
-	if = {
-		limit = { root = { has_variable = gm_arch_cost_units } }
-		gm_add_national = { NAME = gm_arch_expense VAR = gm_arch_cost_units }
-	}
 }
 
-# Journal-entry scope, from gm_remove_national_modifiers.
+# Journal-entry scope, from gm_remove_national_modifiers. gm_arch_expense is
+# retired: nothing adds it, and removing it here sheds it from a save made while
+# digs cost money.
 gm_arch_remove_national = {
 	remove_modifier = gm_arch_diversion
 	remove_modifier = gm_arch_expense
@@ -687,10 +1162,12 @@ gm_arch_remove_national = {
 
 # ---- The AI ---------------------------------------------------------------------------------------------------------
 # Country scope, monthly, an AI at peace and out of default (gm_arch_ai_may_dig)
-# that is listed. With a site waiting and fewer than two digs going, one
-# month in twelve it opens the grandest, by the best method its technology
-# allows: Forensic, then Systematic, then Antiquarian. The cost and the
-# drained innovation are the brakes, as for a player.
+# that is listed. With a site waiting, fewer than two digs going and the weekly
+# innovation to spare for at least an Antiquarian dig (gm_arch_ai_affords_<method>:
+# four times what the method diverts), one month in twelve it opens the grandest
+# site waiting, by the best method it affords: Forensic, then Systematic, then
+# Antiquarian (gm_arch_start_affordable). The diverted innovation is the brake,
+# as for a player.
 gm_arch_ai_decide = {
 	if = {
 		limit = {
@@ -702,10 +1179,12 @@ gm_arch_ai_decide = {
 				NOT = { has_variable_list = gm_arch_digging }
 				NOT = { any_in_list = { variable = gm_arch_digging count >= 2 } }
 			}
+			gm_arch_ai_affords_antiquarian = yes
 		}
 		random = {
 			chance = 8
 			clear_saved_scope = gm_arch_ai_pick
+			save_scope_as = gm_arch_ai_country
 			ordered_in_list = {
 				variable = gm_arch_available
 				order_by = gm_arch_disp_levels
@@ -715,17 +1194,41 @@ gm_arch_ai_decide = {
 			}
 			if = {
 				limit = { exists = scope:gm_arch_ai_pick }
-				save_scope_as = gm_arch_ai_country
 				scope:gm_arch_ai_pick = {
-					gm_arch_start_best = { WHO = scope:gm_arch_ai_country }
+					gm_arch_start_affordable = { WHO = scope:gm_arch_ai_country }
 				}
 			}
 		}
 	}
 }
 
+# Container scope. $WHO$, an AI, digs the site by the best method whose
+# innovation it can spare (gm_arch_ai_affords_<method>), Antiquarian at worst
+# (gm_arch_ai_decide has checked that one).
+gm_arch_start_affordable = {
+	if = {
+		limit = { $WHO$ = { gm_arch_ai_affords_forensic = yes } }
+		set_variable = { name = gm_site_order_method value = flag:forensic }
+	}
+	else_if = {
+		limit = { $WHO$ = { gm_arch_ai_affords_systematic = yes } }
+		set_variable = { name = gm_site_order_method value = flag:systematic }
+	}
+	else = {
+		set_variable = { name = gm_site_order_method value = flag:antiquarian }
+	}
+	if = {
+		limit = { gm_arch_can_dig = { WHO = $WHO$ } }
+		gm_arch_start_dig = { WHO = $WHO$ }
+	}
+	else = {
+		remove_variable = gm_site_order_method
+	}
+}
+
 # Container scope. $WHO$ digs the site by the best method its technology
-# allows: Forensic, then Systematic, then Antiquarian, if it may dig it at all.
+# allows: Forensic, then Systematic, then Antiquarian, if it may dig it at all,
+# whatever the innovation (the debug events, te_debug_monuments_events.txt).
 gm_arch_start_best = {
 	if = {
 		limit = { $WHO$ = { gm_arch_method_forensic_ok = yes } }
