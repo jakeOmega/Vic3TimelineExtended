@@ -148,7 +148,7 @@ class BuildingEmissionsTest(unittest.TestCase):
 
     def test_covered_fuel_methods_use_merged_inputs(self):
         outputs, count = emissions.plan_outputs(self.state, ROOT)
-        self.assertEqual(count, 247)
+        self.assertEqual(count, 250)
         self.assertEqual(set(outputs), {emissions.OUTPUT})
         pms = self.state.mod_parsers["PMs"].data
         for name, expected in (("pm_modern_coal-fired_plant", "5.00"),
@@ -305,7 +305,7 @@ class BuildingEmissionsTest(unittest.TestCase):
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             method["goods_input_coal_add"] = ("=", "30")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 247)
+            self.assertEqual(count, 250)
             rewritten = output[Path("common/production_methods/extra_pms.txt")]
             parser = ParadoxFileParser()
             parsed_path = root / "result.txt"
@@ -314,7 +314,7 @@ class BuildingEmissionsTest(unittest.TestCase):
             self.assertEqual(scalar(state_scaled(parser.data["pm_modern_coal-fired_plant"]), emissions.STATE_MODIFIER), 6)
             method["goods_input_coal_add"] = ("=", "0")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 246)
+            self.assertEqual(count, 249)
             parser = ParadoxFileParser()
             parsed_path.write_text(output[Path("common/production_methods/extra_pms.txt")], encoding="utf-8-sig")
             parser.parse_file(str(parsed_path), apply_directives=False)
@@ -416,7 +416,7 @@ class DirectAirCaptureTest(unittest.TestCase):
                 "gw_direct_air_capture_coal_equivalent = 210", "gw_direct_air_capture_coal_equivalent = 420"),
                 encoding="utf-8-sig")
             outputs, count = emissions.plan_outputs(self.state, root)
-            self.assertEqual(count, 247)
+            self.assertEqual(count, 250)
             text = outputs[Path("common/production_methods/direct_air_capture.txt")]
             self.assertIn(f"{emissions.ATMOSPHERIC_MODIFIER} = 84.00", text)
             self.assertNotIn("goods_output_coal_add", text)

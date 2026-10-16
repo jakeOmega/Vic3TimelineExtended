@@ -57,6 +57,27 @@ The other `artificial_intelligence` methods (`pm_ai_governance`, `pm_automated_l
   - Fallback for either: restore −1,990 and drop the `unscaled` block. Rows in `docs/testing/ai-managed-flat-staff-playtest.md`.
 - The method's generated `# Employment:` line (`pm_costs.py`) reads −4,500, the per-level cut alone; the flat 1,000 isn't in it. `pm_employment_audit` buckets by block and passes: the level bucket nets to 0, the unscaled one is +1,000.
 
+## Rollout to the Exact row
+
+The other four methods behind the Exact row take the same change: `pm_ai_managed_building_arms_industry` (engineers −740 → −750), `pm_ai_managed_chemical_plant` and `pm_ai_managed_explosives_factory` (−1,990 → −2,000) and `pm_ai_managed_power_plant` (−90 → −100), each with the 1,000-engineer `unscaled` crew. All 21 buildings in the Exact row then employ the crew alone. Merge once the fab self-checks read OK; they test the same engine facts.
+
+## The residual buildings (owner, 2026-10-16)
+
+Seven residual buildings are split by base method, so each copy cancels exactly; every copy is hidden when unavailable, so a building shows one AI-managed option, and carries the same crew. In a save, a building already running the old method on a base that the method no longer lists may lose it, and then needs the AI-managed option picked again (unread: the game's handling of a method that became invalid).
+
+| Building | New method | Its bases | Narrowed method keeps |
+|---|---|---|---|
+| Artillery Foundry | `pm_ai_managed_building_artillery_foundry` | the four artillery bases | `…arms_industry`: the three small-arms bases |
+| Motor Industry | `pm_ai_managed_building_motor_industry_turbine` (+250 shopkeepers cut) | Gas Turbine Engines | the three later engines |
+| Tooling Workshop | `pm_ai_managed_building_tooling_workshop_handling` (+250 shopkeepers cut) | Material Handling Equipment, Electrochemical Machining | Industrial Robotics, Nanobot Assemblers |
+| Munition Plant | `pm_ai_managed_building_munition_plant_shells` (+500 shopkeepers cut) | Explosive Shells | the five later munitions |
+| Fusion and Nuclear plants | `pm_ai_managed_power_plant_reactor` (+100 academics cut) | the three fusion bases and the nuclear base | `…power_plant`: the five fossil and two renewable bases |
+| Hydro Plant | `pm_ai_managed_power_plant_hydro` | the hydro base | (same) |
+
+`pm_ai_managed_power_plant` had no base list before; it now names its seven bases, so a new power base needs adding there to get AI management.
+
+**Left as they are.** Furniture Manufactory and Textile Mill keep their luxury and branding shopkeepers (up to 1,500 a level from those groups, plus the base's 500) and their 10 engineers a level: the owner chose to keep that staff human. Opium Synthetics on Alkaloid Extraction keeps 1,500 laborers a level on top of the crew; splitting it needs its own automation group or a 43-method base list on the shared chemical method, and a later pharma base clears it.
+
 ## Economic side effects to watch
 
 The output a level is unchanged; only the people change. The per-worker figures behave as they do on a heavily automated base today:
@@ -67,5 +88,5 @@ The output a level is unchanged; only the people change. The per-worker figures 
 ## Owner calls
 
 1. Crew size: settled at 1,000 engineers (owner, 2026-10-16).
-2. Roll out B to the other 16 buildings in the Exact row once both self-checks read OK?
-3. For the ten buildings with a residual, split the method per base, try C, or leave the residual? Under the owner's aim (levels unconstrained by population), a residual keeps those buildings population-bound.
+2. Roll out B to the other 16 buildings in the Exact row: built as a draft (owner, 2026-10-16), to merge once both self-checks read OK.
+3. The ten buildings with a residual: seven split, Furniture, Textile and Opium on Alkaloid Extraction left as they are (owner, 2026-10-16).

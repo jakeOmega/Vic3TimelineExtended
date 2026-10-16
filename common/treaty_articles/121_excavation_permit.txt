@@ -14,7 +14,7 @@
 # test_state_treaty_article_sync.py).
 # =================================================================
 excavation_permit = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/science_aid_2.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/excavation_permit.dds"
 	kind = directed
 	cost = 40
 
