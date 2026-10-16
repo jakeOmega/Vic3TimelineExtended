@@ -45,6 +45,7 @@ subsections under Nuclear Posture.
 |---|---|---|
 | The Programme | You have a program | Programme funding (a stepper), warhead production a month, the time to the next warhead, and the year of your first device and whether it was the world's first |
 | Nuclear Crisis | You are in a crisis | Your side, the dispute, the stage, the weeks to the deadline, danger, pressure, what conceding would cost, whether the threat can be carried out and your stakes; your buttons under Our Moves |
+| World Crises | Any crisis is running, anywhere | Every crisis, yours included, most dangerous first: who threatened whom, the stage, public or private, and the danger; hover a row for the dispute, the deadline and any talks. Private warnings are listed too, since governments know of them even when the public doesn't |
 | Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to), launch authority, your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure; Change Doctrine and Change Readiness or Launch Authority under it |
 | Forces | You hold warheads | Warheads held beside the world's estimate, survivability, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; your arsenal ceiling and dismantling under Arsenal Size |
 | At Home | You hold warheads | A small table for each interest group with a view of your posture |

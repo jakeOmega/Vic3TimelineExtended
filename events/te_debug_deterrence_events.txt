@@ -10,7 +10,8 @@
 #   .1  arm and initialise; reset tenure so every posture button is live;
 #       Recessed or Automatic Retaliation at once
 #   .2  force an incident of a chosen family (and toggle forced odds)
-#   .3  open a crisis with a neighbour, private or public
+#   .3  open a crisis with a neighbour, private or public, or between two
+#       other countries (the World Crises list)
 #   .4  push the live crisis: to its deadline, to acute, or to an outcome
 #   .5  re-observe every public arsenal estimate; give a neighbour a guarantee
 #
@@ -258,6 +259,33 @@ te_debug_deterrence.3 = { # REVIEWED 2026-09-25: console-only test event (`event
 			}
 			save_scope_as = te_dbg_neighbour
 		}
+		# Two other countries, for the World Crises list: one of them, and a
+		# neighbour of its own.
+		random_country = {
+			limit = {
+				NOT = { this = scope:te_dbg_self }
+				NOT = { is_country_type = decentralized }
+				nd_in_crisis = no
+				any_neighbouring_state = {
+					owner = {
+						NOT = { this = scope:te_dbg_self }
+						NOT = { is_country_type = decentralized }
+						nd_in_crisis = no
+					}
+				}
+			}
+			save_scope_as = te_dbg_other_issuer
+			random_country = {
+				limit = {
+					NOT = { this = scope:te_dbg_self }
+					NOT = { this = scope:te_dbg_other_issuer }
+					is_adjacent_to_country = scope:te_dbg_other_issuer
+					NOT = { is_country_type = decentralized }
+					nd_in_crisis = no
+				}
+				save_scope_as = te_dbg_other_target
+			}
+		}
 	}
 
 	# A private warning. With no real dispute the crisis is classed as an alert
@@ -295,6 +323,33 @@ te_debug_deterrence.3 = { # REVIEWED 2026-09-25: console-only test event (`event
 				add_modifier = { name = nuclear_power }
 			}
 			nd_crisis_open = { TARGET = scope:te_dbg_self PUBLIC = yes }
+		}
+	}
+
+	# Two other countries: the first warns the second privately, so the World
+	# Crises section lists a crisis we are not in, labelled private. Arms the
+	# issuer first. Pick it again for another pair (nine for the overflow line).
+	option = {
+		name = te_debug_deterrence.3.d
+		trigger = {
+			exists = scope:te_dbg_other_issuer
+			exists = scope:te_dbg_other_target
+		}
+		scope:te_dbg_other_issuer = {
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_variable = nuclear_weapon_stockpile }
+						var:nuclear_weapon_stockpile < 5
+					}
+				}
+				set_variable = { name = nuclear_weapon_stockpile value = 5 }
+			}
+			if = {
+				limit = { NOT = { has_modifier = nuclear_power } }
+				add_modifier = { name = nuclear_power }
+			}
+			nd_crisis_open = { TARGET = scope:te_dbg_other_target PUBLIC = no }
 		}
 	}
 }

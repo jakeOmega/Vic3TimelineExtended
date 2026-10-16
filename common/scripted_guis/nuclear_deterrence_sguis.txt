@@ -5,13 +5,15 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and fourteen DISPLAY handlers: the six
+# Reserve / nuclear programme pattern), and seventeen DISPLAY handlers: the six
 # yes/no questions and names below (nd_umbrella_sgui draws the umbrella
 # line), three that hide the moves our side cannot
 # make (nd_crisis_we_issued_sgui, nd_crisis_we_are_target_sgui,
 # nd_crisis_private_sgui), and three that print script-built text
 # (nd_crisis_pressure_breakdown_sgui, nd_crisis_danger_breakdown_sgui,
-# nd_crisis_next_pressure_sgui) — plus the At Home list and its footer,
+# nd_crisis_next_pressure_sgui) — plus the World Crises list's gate, rows and
+# row hovers (nd_world_crises_sgui, nd_world_crisis_row_sgui,
+# nd_world_crisis_detail_sgui), and the At Home list and its footer,
 # nd_home_list_sgui and nd_home_footer_sgui. The op
 # tables are repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md — keep all three in step.
@@ -523,6 +525,187 @@ nd_crisis_next_pressure_sgui = {
 		}
 		else = {
 			custom_tooltip_no_bullet = nd_next_pressure_weeks
+		}
+	}
+}
+
+# ---- World Crises: every crisis running anywhere ------------------------------
+# The section lists the slots nd_world_crises_refresh writes
+# (global_var:nd_wc_1 … nd_wc_8, most dangerous first; nuclear_crisis_effects.txt),
+# private warnings included: the public may not know of one, but governments
+# do. Nothing here sorts or counts the world's countries per frame.
+#
+# The section's gate: any slot holds a running crisis. Scope-free.
+nd_world_crises_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			nd_world_crisis_slot_live = { SLOT = 1 }
+			nd_world_crisis_slot_live = { SLOT = 2 }
+			nd_world_crisis_slot_live = { SLOT = 3 }
+			nd_world_crisis_slot_live = { SLOT = 4 }
+			nd_world_crisis_slot_live = { SLOT = 5 }
+			nd_world_crisis_slot_live = { SLOT = 6 }
+			nd_world_crisis_slot_live = { SLOT = 7 }
+			nd_world_crisis_slot_live = { SLOT = 8 }
+		}
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# The rows, one GUI row and one ExecuteTooltip each, so a crisis's two
+# countries never share a block with another crisis's (gui_modding_guide.md
+# gotchas #18 and #27).
+#   op 1-8  slot N: issuer → target, stage, public or private, danger
+#   op 9    "…and N more", past the eighth crisis
+# is_shown fails OPEN, like nuclear_program_powers_sgui: with no scope:op every
+# row shows and the effect prints nothing for an empty slot (gotcha #22; the
+# saved scope has been seen to arrive, 2026-09-29).
+nd_world_crisis_row_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		trigger_if = {
+			limit = { NOT = { exists = scope:op } }
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 1 }
+			nd_world_crisis_slot_live = { SLOT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 2 }
+			nd_world_crisis_slot_live = { SLOT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 3 }
+			nd_world_crisis_slot_live = { SLOT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 4 }
+			nd_world_crisis_slot_live = { SLOT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 5 }
+			nd_world_crisis_slot_live = { SLOT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 6 }
+			nd_world_crisis_slot_live = { SLOT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 7 }
+			nd_world_crisis_slot_live = { SLOT = 7 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 8 }
+			nd_world_crisis_slot_live = { SLOT = 8 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 9 }
+			has_global_variable = nd_wc_count
+			global_var:nd_wc_count > 8
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+
+	effect = {
+		if = {
+			limit = { exists = scope:op  scope:op = 1 }
+			nd_world_crisis_row_at = { SLOT = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 2 }
+			nd_world_crisis_row_at = { SLOT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 3 }
+			nd_world_crisis_row_at = { SLOT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 4 }
+			nd_world_crisis_row_at = { SLOT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 5 }
+			nd_world_crisis_row_at = { SLOT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 6 }
+			nd_world_crisis_row_at = { SLOT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 7 }
+			nd_world_crisis_row_at = { SLOT = 7 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 8 }
+			nd_world_crisis_row_at = { SLOT = 8 }
+		}
+		else_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 9
+				has_global_variable = nd_wc_count
+				global_var:nd_wc_count > 8
+			}
+			custom_tooltip_no_bullet = nd_wc_more_text
+		}
+	}
+}
+
+# A row's hover: the dispute, the clock, talks, a guarantor, and whether the
+# warning was private. op 1-8 as for the rows.
+nd_world_crisis_detail_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_nuclear_program
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+
+	effect = {
+		if = {
+			limit = { exists = scope:op  scope:op = 1 }
+			nd_world_crisis_detail_at = { SLOT = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 2 }
+			nd_world_crisis_detail_at = { SLOT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 3 }
+			nd_world_crisis_detail_at = { SLOT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 4 }
+			nd_world_crisis_detail_at = { SLOT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 5 }
+			nd_world_crisis_detail_at = { SLOT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 6 }
+			nd_world_crisis_detail_at = { SLOT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 7 }
+			nd_world_crisis_detail_at = { SLOT = 7 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 8 }
+			nd_world_crisis_detail_at = { SLOT = 8 }
 		}
 	}
 }
