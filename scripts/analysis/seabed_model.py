@@ -178,7 +178,7 @@ def state_return_excess(world: World, s: State) -> None:
 
 
 def _argmax_unbuilt(c: Country):
-    """te_seabed_most_unbuilt_basin: the basin with the most unbuilt share,
+    """te_seabed_take_most (with te_seabed_unbuilt_max): the basin with the most unbuilt share,
     the first in basin order on a tie; None when all are 0."""
     best = None
     for b in BASINS:
