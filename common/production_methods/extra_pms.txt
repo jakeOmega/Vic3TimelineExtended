@@ -7979,15 +7979,21 @@ pm_ai_managed_chemical_plant = {
 			# Profit: -1925.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -5490
+			# Employment: -5500
 			# Wage breakeven: 0.35
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
+		# workforce, and a fixed crew runs the building at any size.
 		level_scaled = {
 			building_employment_laborers_add = -2000
 			building_employment_machinists_add = -1000
 			building_employment_shopkeepers_add = -500
-			building_employment_engineers_add = -1990
+			building_employment_engineers_add = -2000
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
 		}
 	}
 
@@ -8029,15 +8035,21 @@ pm_ai_managed_explosives_factory = {
 			# Profit: -1925.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -5490
+			# Employment: -5500
 			# Wage breakeven: 0.35
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
+		# workforce, and a fixed crew runs the building at any size.
 		level_scaled = {
 			building_employment_laborers_add = -2000
 			building_employment_machinists_add = -1000
 			building_employment_shopkeepers_add = -500
-			building_employment_engineers_add = -1990
+			building_employment_engineers_add = -2000
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
 		}
 	}
 
@@ -11489,14 +11501,20 @@ pm_ai_managed_power_plant = {
 			# Profit: -1425.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -990
-			# Wage breakeven: 1.44
+			# Employment: -1000
+			# Wage breakeven: 1.43
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
+		# workforce, and a fixed crew runs the building at any size.
 		level_scaled = {
 			building_employment_laborers_add = -500
 			building_employment_machinists_add = -400
-			building_employment_engineers_add = -90
+			building_employment_engineers_add = -100
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
 		}
 	}
 
@@ -12653,14 +12671,20 @@ pm_ai_managed_building_arms_industry = {
 			# Profit: -1420.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: -4990
+			# Employment: -5000
 			# Wage breakeven: 0.28
 		}
 
+		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
+		# workforce, and a fixed crew runs the building at any size.
 		level_scaled = {
 			building_employment_laborers_add = -3000
 			building_employment_machinists_add = -1250
-			building_employment_engineers_add = -740
+			building_employment_engineers_add = -750
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
 		}
 	}
 

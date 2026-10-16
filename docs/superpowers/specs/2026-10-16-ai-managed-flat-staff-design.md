@@ -57,6 +57,10 @@ The other `artificial_intelligence` methods (`pm_ai_governance`, `pm_automated_l
   - Fallback for either: restore −1,990 and drop the `unscaled` block. Rows in `docs/testing/ai-managed-flat-staff-playtest.md`.
 - The method's generated `# Employment:` line (`pm_costs.py`) reads −4,500, the per-level cut alone; the flat 1,000 isn't in it. `pm_employment_audit` buckets by block and passes: the level bucket nets to 0, the unscaled one is +1,000.
 
+## Rollout to the Exact row
+
+The other four methods behind the Exact row take the same change: `pm_ai_managed_building_arms_industry` (engineers −740 → −750), `pm_ai_managed_chemical_plant` and `pm_ai_managed_explosives_factory` (−1,990 → −2,000) and `pm_ai_managed_power_plant` (−90 → −100), each with the 1,000-engineer `unscaled` crew. All 21 buildings in the Exact row then employ the crew alone. Five residual buildings share one of these methods. Artillery Foundry, Fusion Plant, Nuclear Plant, Hydro Plant, and Opium Synthetics on Alkaloid Extraction get the crew on top of what their base methods still employ a level, until they are split or otherwise handled. Merge once the fab self-checks read OK; they test the same engine facts.
+
 ## Economic side effects to watch
 
 The output a level is unchanged; only the people change. The per-worker figures behave as they do on a heavily automated base today:
@@ -67,5 +71,5 @@ The output a level is unchanged; only the people change. The per-worker figures 
 ## Owner calls
 
 1. Crew size: settled at 1,000 engineers (owner, 2026-10-16).
-2. Roll out B to the other 16 buildings in the Exact row once both self-checks read OK?
+2. Roll out B to the other 16 buildings in the Exact row: built as a draft (owner, 2026-10-16), to merge once both self-checks read OK.
 3. For the ten buildings with a residual, split the method per base, try C, or leave the residual? Under the owner's aim (levels unconstrained by population), a residual keeps those buildings population-bound.
