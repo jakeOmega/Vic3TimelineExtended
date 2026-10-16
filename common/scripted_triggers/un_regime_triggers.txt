@@ -140,11 +140,16 @@ un_regime_hq_intelligence_host = {
 }
 
 # Members share intelligence from the Strong tier: a small counter-intelligence
-# bonus against every kind of covert operation.
+# bonus against every kind of covert operation. The mirror counts as
+# membership, as in un_regime_refresh_country: a joiner's modifier is not yet
+# visible in the block that reads this.
 # Scope: country
 un_regime_shared_intelligence = {
 	un_tier_at_least_strong = yes
-	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	OR = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		has_variable = un_member_modifier_on
+	}
 }
 
 # ---- Cultural heritage (UNESCO) ---------------------------------------------------------

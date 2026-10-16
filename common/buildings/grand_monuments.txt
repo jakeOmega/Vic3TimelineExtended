@@ -38,6 +38,18 @@ building_grand_monument = {
 
 	required_construction = construction_cost_grand_monument
 
+	# A finished monument takes no more levels of its own: more found a new
+	# monument beside it (spec 2026-10-16 §3.2), except while it is contested,
+	# a ceremony or naming is under way, script is rebuilding it, or six
+	# monuments stand (gm_state_can_expand, state scope). Monuments are
+	# government-funded; private investors are held to the same gate.
+	can_build_government = {
+		gm_state_can_expand = yes
+	}
+	can_build_private = {
+		gm_state_can_expand = yes
+	}
+
 	# The game rule (spec §7).
 	possible = {
 		custom_tooltip = {
@@ -82,6 +94,13 @@ building_grand_monument = {
 				owner ?= { is_at_war = yes }
 			}
 			add = -100
+		}
+
+		# Every monument already standing here: found new ones elsewhere first
+		# (spec 2026-10-16 §3.2).
+		add = {
+			value = gm_state_monument_count
+			multiply = -25
 		}
 
 		# Never in hard times: a level finished then costs legitimacy (§5).

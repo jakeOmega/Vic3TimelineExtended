@@ -669,6 +669,22 @@ types te_state_panel_widget_types
 							}
 						}
 
+						### FINISHED — dedicated and its construction done (ageing
+						### spec 2026-10-16 §3): its levels and its years, the
+						### rest on hover.
+						textbox = {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_frozen'), '(CFixedPoint)1' )]"
+							autoresize = yes
+							multiline = yes
+							minimumsize = { 380 -1 }
+							maximumsize = { 380 -1 }
+							align = left|nobaseline
+							using = fontsize_medium
+							default_format = "#tooltippable"
+							tooltip = "gm_row_frozen_tt"
+							text = "gm_row_frozen"
+						}
+
 						### IN THIS STATE — zero rows hide (before the first
 						### pulse, and the local effect while undedicated).
 						te_state_gm_row = {

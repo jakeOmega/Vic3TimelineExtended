@@ -115,6 +115,6 @@ site did not seed).
 
 ## Known limits
 
-- A site shows its form's stand-in picture; none of the 35 has its own.
+- Pompeii shows its form's stand-in picture; the other 35 sites have their own.
 - A split state is dug by any of its owners, or anyone holding an article on a part of it; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
 - No console harness signs a treaty: test digging abroad through the treaty screen.

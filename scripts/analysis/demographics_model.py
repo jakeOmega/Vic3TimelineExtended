@@ -141,6 +141,8 @@ def cause_factors(inp):
             return plain_multiplier(inp, cause)
         if factor == "turmoil":
             return 1 + P.TURMOIL_EXTERNAL_WEIGHT * clamp(inp.turmoil, 0.0, 1.0)
+        if factor == "safety":
+            return 1 - clamp(inp.mods.get(P.SAFETY_TYPES[cause], 0.0), 0.0, P.SAFETY_MAX)
         if factor == "malaria":
             control = clamp(inp.mods.get(P.MALARIA_CONTROL_TYPE, 0.0), 0.0, 1.0)
             return 1 + P.MALARIA_INFECTION.get(inp.malaria, 0.0) * (1 - control)

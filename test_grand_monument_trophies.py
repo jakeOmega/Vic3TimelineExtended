@@ -17,8 +17,8 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILDING_FORMS, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, block, loc, picture_key,
-    raw_block_at, read, squash, strip_comments,
+    BUILDING_FORMS, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
+    TROPHY_PICTURES, block, committed, loc, picture_key, raw_block_at, read, squash, strip_comments,
 )
 
 TR_EFFECTS = "common/scripted_effects/gm_trophy_effects.txt"
@@ -142,10 +142,10 @@ class ShareTests(unittest.TestCase):
     def test_levels_and_value(self):
         v = read(TR_VALUES)
         self.assertEqual(squash(block(v, "gm_state_tr_levels")),
-                         "value = gm_state_primary_grandeur multiply = gm_state_tr_share ceiling = yes min = 1 "
-                         "max = gm_state_primary_grandeur")
+                         "value = gm_state_primary_levels multiply = gm_state_tr_share ceiling = yes min = 1 "
+                         "max = gm_state_primary_levels")
         self.assertEqual(squash(block(v, "gm_state_tr_value")),
-                         "value = gm_state_tr_levels divide = 2 ceiling = yes")
+                         "value = gm_state_tr_levels add = gm_state_tr_age divide = 2 ceiling = yes")
 
     def test_never_a_shrine_and_never_twice_in_ten_years(self):
         takeable = squash(block(read(TR_TRIGGERS), "gm_state_tr_takeable"))
@@ -244,7 +244,8 @@ class TakingTests(unittest.TestCase):
                                   ("gm_name_enemy_cap", "gm_tr_name_enemy_cap"), ("gm_name", "gm_tr_name"),
                                   ("gm_honoree", "gm_tr_honoree"), ("gm_honoree_ig", "gm_tr_honoree_ig")):
             self.assertIn(f"gm_tr_copy_from_state = {{ FROM = {state_var} TO = {tr_var} }}", make, state_var)
-            rebuilt = squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving"))
+            rebuilt = (squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving")) + " "
+                       + squash(block(read(TR_EFFECTS), "gm_state_tr_take_records_from_moving")))
             self.assertIn(f"gm_tr_copy_to_state = {{ FROM = {tr_var} TO = {state_var} }}", rebuilt, tr_var)
         record = squash(block(read(TR_EFFECTS), "gm_tr_record_dedication"))
         for d in DEDICATIONS:
@@ -255,7 +256,8 @@ class TakingTests(unittest.TestCase):
         # trophy's records (gm_state_tr_receive picks).
         add = squash(block(read(TR_EFFECTS), "gm_state_tr_add_levels"))
         self.assertIn("add = scope:gm_tr_moving.var:gm_tr_levels max = 200", add)
-        rebuilt = squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving"))
+        rebuilt = (squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving")) + " "
+                       + squash(block(read(TR_EFFECTS), "gm_state_tr_take_records_from_moving")))
         self.assertIn("gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }", rebuilt)
         for line in ("set_variable = gm_seen",
                      "set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }",
@@ -636,7 +638,8 @@ class PictureTests(unittest.TestCase):
                          "gm_state_picture_landmarks = yes "
                          "set_variable = { name = gm_tr_picture_code value = var:gm_picture_code } "
                          "gm_remove_state_var = { VAR = gm_skin } gm_remove_state_var = { VAR = gm_form } "
-                         "gm_remove_state_var = { VAR = gm_landmark } gm_remove_state_var = { VAR = gm_picture_code }")
+                         "gm_remove_state_var = { VAR = gm_landmark } gm_remove_state_var = { VAR = gm_picture_code } "
+                         "gm_tr_picture_trophies = yes")
         self.assertEqual(squash(block(read(TR_EFFECTS), "gm_tr_lend_look")),
                          "if = { limit = { has_variable = $FROM$ } set_variable = { name = $TO$ value = var:$FROM$ } }")
         # The state's own update runs the same table, behind its dedicated check.
@@ -671,11 +674,58 @@ class PictureTests(unittest.TestCase):
     def test_every_row_shows_it(self):
         gui = read(TR_GUI)
         for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site"):
-            self.assertIn("gm_tr_picture = {}", squash(raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")), row)
+            # With the trophy's own picture over it (TrophyOwnPictureTests).
+            self.assertIn("gm_tr_trophy_picture = {}", squash(raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")), row)
+        self.assertTrue(squash(raw_block_at(gui, r"(?m)^\ttype gm_tr_trophy_picture = widget \{"))
+                        .startswith("size = { 96 96 } gm_tr_picture = {}"), "the monument's picture under it")
         self.assertNotIn("modifier_statue_positive", gui)
         # Beside the picture, the row's lines: 96 + 8 + 376 = 480, a monument row's width.
         line = squash(raw_block_at(gui, r"(?m)^\ttype gm_tr_line = textbox \{"))
         self.assertIn("minimumsize = { 376 -1 } maximumsize = { 376 -1 }", line)
+
+
+
+class TrophyOwnPictureTests(unittest.TestCase):
+    """A trophy's own picture (2026-10-16): what was carried off, on display in a museum room, drawn
+    over its monument's picture in a trophy's rows, for the landmarks that have one."""
+
+    def test_codes_follow_the_rows(self):
+        for code, key in TROPHY_PICTURES.items():
+            lm = LANDMARKS[code - TROPHY_CODE_BASE - 1]
+            self.assertEqual(key, f"trophy_{lm.key}", code)
+        self.assertEqual(list(TROPHY_PICTURES), sorted(TROPHY_PICTURES))
+
+    def test_the_trophy_takes_its_code(self):
+        e = read(PICTURE_EFFECTS)
+        body = squash(block(e, "gm_tr_picture_trophies"))
+        expected = "set_variable = { name = gm_tr_trophy_picture_code value = 0 }"
+        expected += "".join(f" gm_tr_picture_trophy = {{ KEY = {key[len('trophy_'):]} CODE = {code} }}"
+                            for code, key in TROPHY_PICTURES.items())
+        self.assertEqual(body, expected, "reset first, so a stale code can't stick")
+        self.assertEqual(squash(block(e, "gm_tr_picture_trophy")),
+                         "if = { limit = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:$KEY$ } "
+                         "set_variable = { name = gm_tr_trophy_picture_code value = $CODE$ } }")
+
+    def test_display_value_defaults_to_none(self):
+        self.assertEqual(squash(block(read(TR_VALUES), "gm_tr_disp_trophy_picture_code")),
+                         "value = 0 if = { limit = { has_variable = gm_tr_trophy_picture_code } "
+                         "value = var:gm_tr_trophy_picture_code }")
+
+    def test_widget_draws_it_over_the_monuments(self):
+        body = squash(strip_comments(raw_block_at(read(TR_GUI), r"(?m)^\ttype gm_tr_trophy_picture = widget \{")))
+        self.assertTrue(body.startswith("size = { 96 96 } gm_tr_picture = {}"), body[:80])
+        for code, key in TROPHY_PICTURES.items():
+            self.assertIn(f"icon = {{ visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue("
+                          f"'gm_tr_disp_trophy_picture_code'), '(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
+                          f"texture = \"gfx/interface/icons/gm_pictures/{key}.dds\" }}", body, code)
+            self.assertTrue(committed(f"gfx/interface/icons/gm_pictures/{key}.dds"), key)
+        self.assertEqual(body.count("icon = {"), len(TROPHY_PICTURES))
+
+    def test_only_a_trophys_rows(self):
+        gui = read(TR_GUI)
+        row = squash(raw_block_at(gui, r"(?m)^\ttype gm_mon_row_site = \w+ \{"))
+        self.assertIn("gm_tr_picture = {}", row)
+        self.assertNotIn("gm_tr_trophy_picture", row, "a secondary monument is no trophy")
 
 
 # The trophies already abroad on 1 January 1836 (loot spec 2026-10-12 §2), in
@@ -926,9 +976,9 @@ class LootingASecondaryTests(unittest.TestCase):
         self.assertIn(f"limit = {{ gm_mon_form_is_object = yes }} value = {SHARE_VALUES['object']}", share)
         self.assertLess(share.find("gm_mon_form_is_piece"), share.find("gm_mon_form_is_object"))
         self.assertEqual(squash(block(v, "gm_mon_tr_levels")),
-                         "value = gm_mon_grandeur multiply = gm_mon_tr_share ceiling = yes min = 1 max = gm_mon_grandeur")
+                         "value = gm_mon_levels multiply = gm_mon_tr_share ceiling = yes min = 1 max = gm_mon_levels")
         self.assertEqual(squash(block(v, "gm_mon_tr_whole")),
-                         "value = 0 if = { limit = { gm_mon_tr_levels >= gm_mon_grandeur } value = 1 }")
+                         "value = 0 if = { limit = { gm_mon_tr_levels >= gm_mon_levels } value = 1 }")
 
     def test_a_click_names_the_monument_and_only_orders(self):
         order = squash(block(read(MON_EFFECTS), "gm_mon_tr_order_take"))
@@ -1006,7 +1056,7 @@ class LootingASecondaryTests(unittest.TestCase):
     def test_shrinking_leaves_the_primary_and_the_rest_standing(self):
         body = squash(block(read(MON_EFFECTS), "gm_state_tr_shrink_by"))
         self.assertIn("gm_state_mark_restore_pm = yes", body)
-        self.assertIn("name = gm_rebuild_level value = { value = gm_state_grandeur "
+        self.assertIn("name = gm_rebuild_level value = { value = gm_state_level "
                       "subtract = var:gm_tr_take_levels min = 1 max = 200 }", body)
         self.assertLess(body.find("remove_building = building_grand_monument"),
                         body.find("te_construction_market_build_specified_level"))
@@ -1017,11 +1067,15 @@ class LootingASecondaryTests(unittest.TestCase):
     def test_the_ai_picks_one_monument_of_the_state_to_loot(self):
         pick = squash(block(read(MON_EFFECTS), "gm_state_tr_ai_choose_target"))
         self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_target }", pick)
-        self.assertIn("limit = { gm_state_has_secondary = yes }", pick)
-        self.assertIn("random = { chance = gm_state_tr_ai_secondary_chance "
-                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } "
+        self.assertIn("limit = { gm_state_has_secondary = yes gm_state_tr_takeable_secondary = yes }", pick)
+        # A primary that cannot go leaves the roll to the secondaries (review
+        # 2026-10-16, finding 2); otherwise every monument is as likely.
+        self.assertIn("if = { limit = { gm_state_tr_takeable = no } "
+                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } } "
+                      "else = { random = { chance = gm_state_tr_ai_secondary_chance "
+                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } } } "
                       "if = { limit = { exists = scope:gm_mon_pick } "
-                      "set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick } } }", pick)
+                      "set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick } }", pick)
         monthly = squash(block(read(TR_EFFECTS), "gm_state_tr_monthly"))
         self.assertIn("random = { chance = gm_tr_ai_loot_chance gm_state_tr_ai_choose_target = yes "
                       "gm_state_tr_take = { WHO = scope:gm_tr_occupier ROUTE = occupation } }", monthly)
@@ -1117,7 +1171,7 @@ class AlsoStandingHereTests(unittest.TestCase):
     def test_a_secondarys_picture_catches_up_each_month(self):
         monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
         self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes "
-                      "gm_tr_update_picture = yes }", monthly)
+                      "gm_tr_update_picture = yes ", monthly)
 
 
 class OurMonumentsListTests(unittest.TestCase):
@@ -1152,7 +1206,8 @@ class OurMonumentsListTests(unittest.TestCase):
         self.assertNotEqual(first, -1)
         self.assertGreater(second, first)
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
-                      "blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } }", sec)
+                      "blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
+                      "blockoverride \"mon_choices\" {", sec)
 
     def test_the_row_says_where_it_stands_only_where_asked(self):
         gui = strip_comments(read(TR_GUI))
