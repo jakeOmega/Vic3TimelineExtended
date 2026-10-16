@@ -1,14 +1,14 @@
-﻿# Experiment (#933): does `should_remove` take a building out of the AI's
-# subsidies? It sits beside must_have and nice_to_have among the game
-# executable's strings, but no vanilla strategy uses it and no engine doc lists
-# the subsidy priorities, so it is unread. The three administrative strategies
-# below have no subsidies block in vanilla, so each INJECT adds one with no key
-# in common with vanilla's. The default strategy's INJECT
-# (edited_default_strategy.txt) sets the same value on a key vanilla's block
-# already holds, where which value the engine keeps is unread too. A strategy's
-# value overrides the default's (vanilla's 00_default_strategy.txt). The yearly
-# self-check te_ai_subsidy_should_remove_selfcheck reads the two groups apart;
-# what each result means: docs/testing/ai-economy-playtest.md.
+﻿# Experiment (#933): `should_remove` takes a building out of the AI's
+# subsidies. No vanilla strategy uses it and no engine doc lists the subsidy
+# priorities; it sits beside must_have and nice_to_have among the game
+# executable's strings. The three administrative strategies below have no
+# subsidies block in vanilla, so each INJECT adds one with no key in common
+# with vanilla's, and a strategy's value overrides the default's. Read in game
+# 2026-10-16: 54 AI power plants in these strategies' countries 1% subsidized,
+# against 99% of 256 where only the default strategy's INJECT set the value
+# (inert: edited_default_strategy.txt). The yearly self-check
+# te_ai_subsidy_should_remove_selfcheck reads the two groups;
+# docs/testing/ai-economy-playtest.md.
 INJECT:ai_strategy_agricultural_expansion = {
 	subsidies = {
 		building_power_plant = should_remove

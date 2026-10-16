@@ -56,6 +56,12 @@ its railways, still `must_have`, read half or more. The railways are the control
 doesn't read the subsidy, and the line says so. No line for a group means it hasn't reached 5 plants yet. In a normal
 game that is about the 1890s for the other group and later for the clean one; the 4× fast run gets there sooner.
 
+**Result (owner's European Union game, loaded at 2034.9.13 and run to 2035.1.1, 2026-10-16):**
+`group=clean` OK, 54 power plants 1% subsidized, railways 98%; `group=other` BROKEN, 256 power plants 99% subsidized,
+railways 98%. So `should_remove` works, and the default strategy's INJECT is inert (the mod's earlier `nice_to_have`
+never applied either; `scripting_best_practices.md`). Still unread: whether an INJECT adds a new key to the four
+administrative strategies whose vanilla `subsidies` block exists, and how unsubsidized plants fare (the checks below).
+
 | Result | Reading | Next |
 |---|---|---|
 | clean OK, other OK | `should_remove` works and the INJECT replaces vanilla's value. | Run the subsidy checks below. |
