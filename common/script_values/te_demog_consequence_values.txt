@@ -121,14 +121,13 @@ te_demog_fam_men_share = {
 }
 
 # State scope: T, the conscription term (demographics_model.conscription_term): the pool's share against the 1836
-# world's, less 1, from te_demog_k_conscription_min (-1: no conscripts) to te_demog_k_conscription_max. Under Full the
-# census applies it (te_dg_mc); under Display only the panel shows what it would be.
+# world's, less 1, down to te_demog_k_conscription_min (-1: no conscripts) and with no ceiling (owner, 2026-10-16). Under
+# Full the census applies it (te_dg_mc); under Display only the panel shows what it would be.
 te_demog_conscription_term = {
 	value = te_demog_fam_share
 	divide = { value = te_demog_k_conscription_ref min = 0.001 }
 	subtract = 1
 	min = te_demog_k_conscription_min
-	max = te_demog_k_conscription_max
 }
 
 # Country scope: the same for the country's census states together (te_dg_fam_share, its country census).
@@ -140,7 +139,6 @@ te_demog_country_conscription = {
 		divide = { value = te_demog_k_conscription_ref min = 0.001 }
 		subtract = 1
 		min = te_demog_k_conscription_min
-		max = te_demog_k_conscription_max
 	}
 }
 

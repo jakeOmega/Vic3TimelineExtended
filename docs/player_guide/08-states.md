@@ -315,8 +315,10 @@ state's yearly census:
 
 - **Census: Fighting-Age Men** scales the state's conscription by its share of
   men of fighting age against 1836's: a state short of young men raises fewer
-  conscripts, and one rich in them up to a quarter more. An aging country loses
-  conscripts as its people grow older.
+  conscripts, and one rich in them proportionally more, with no upper limit. An
+  aging country loses conscripts as its people grow older. This one stays out of
+  the state's modifier list; the conscription tooltip names it and the Fighting-Age
+  Men row on the Demographics tab shows the figure.
 - **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
   18% of the people while work is short. At full strength (24% young adults and
   a fifth of the workforce without work) radicals from movements rise by 15% and

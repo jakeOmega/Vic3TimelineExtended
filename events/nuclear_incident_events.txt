@@ -1474,11 +1474,13 @@ nuclear_incident.30 = {
 }
 
 # ---- .40 A Routine Mishap -----------------------------------------------------------
-# The always-eligible fallback. nd_mishap_kind:
+# The always-eligible fallback, at most one every five years
+# (nd_mishap_cooldown_months). nd_mishap_kind:
 #   1 a sabotage alarm, the wrong klaxon, interceptors on the runway (Duluth and
 #     Volk Field, the bear)             — readiness heightened or higher
 #   2 a mechanic's slip sets off the base alarm (Kincheloe)
-#   3 a practice bomb, no core, lands in a garden (Mars Bluff)
+#   3 a practice bomb, no core, lands in a garden (Mars Bluff) — public: the
+#     open options carry a scandal, and .c can classify the report instead
 #   4 a tornado across a bomber base (Andover)
 nuclear_incident.40 = {
 	type = country_event
@@ -1520,6 +1522,9 @@ nuclear_incident.40 = {
 	}
 
 	immediate = {
+		# Every firing starts the cooldown, the warning fallback's and the
+		# debug event's included; the two callers skip .40 while it runs.
+		set_variable = { name = nd_mishap_cooldown_months value = nd_routine_mishap_cooldown_months_value }
 		random_list = {
 			0 = {
 				modifier = {
@@ -1552,22 +1557,62 @@ nuclear_incident.40 = {
 			change_variable = { name = nd_reliability add = 3 }
 			clamp_variable = { name = nd_reliability min = 0 max = 100 }
 		}
+		# The bomb in the garden is already in the papers: owning it is a
+		# scandal, which only classifying the report (.c) avoids.
+		if = {
+			limit = { nd_mishap_kind_is = { K = 3 } }
+			add_modifier = {
+				name = nd_incident_scandal
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
 		ai_chance = {
 			base = 3
 		}
 	}
 
-	# Nothing happened.
+	# Nothing happened. Nobody checks anything twice, and the crews notice.
 	option = {
 		name = nuclear_incident.40.b
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.40.b; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
-		# Gameplay unchanged; observer choice logged: the no-cost choice beside paying to fix the procedure
+		custom_tooltip = {
+			text = nd_tt_reliability_down_2
+			change_variable = { name = nd_reliability subtract = 2 }
+			clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		}
+		if = {
+			limit = { nd_mishap_kind_is = { K = 3 } }
+			add_modifier = {
+				name = nd_incident_scandal
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
 		ai_chance = {
 			base = 2
 			modifier = {
 				trigger = { in_default = yes }
 				add = 5
+			}
+		}
+	}
+
+	# Classify the report (the bomb in the garden only): no scandal now, but
+	# the concealment weighs on command reliability while it is kept and can
+	# still come out (nuclear_incident.60), as for a hidden weapons accident.
+	option = {
+		name = nuclear_incident.40.c
+		trigger = { nd_mishap_kind_is = { K = 3 } }
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.40.c; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		nd_inquiry_conceal = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_is_democratic = no }
+				add = 3
 			}
 		}
 	}
