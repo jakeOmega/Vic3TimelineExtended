@@ -65,6 +65,34 @@ gm_state_tr_levels_left = {
 	min = 0
 }
 
+# ---- Occupation (spec §2.1), state scope ------------------------------------------
+# The engine registers the province iterators from a province, not a state
+# (Supported Scopes: province): random_province in a state's effect logs "Wrong
+# scope for effect: state, expected province" and does nothing (2026-10-16, once
+# a month for every monument state), and any_province is registered the same
+# way. A script value's every_province reads a state's provinces: the base game
+# counts them so (occupation_values.txt, root = state). The self-check
+# gm_occupation_read confirms it in game (gm_tr_occupation_read_self_check).
+
+# How many provinces the state has.
+gm_state_province_count = {
+	value = 0
+	every_province = {
+		add = 1
+	}
+}
+
+# The share of them scope:gm_tmp_tr_who controls, 0-1 (gm_state_tr_holds_half
+# saves it).
+gm_state_tr_who_province_share = {
+	value = 0
+	every_province = {
+		limit = { controller = scope:gm_tmp_tr_who }
+		add = 1
+	}
+	divide = { value = gm_state_province_count min = 1 }
+}
+
 # ---- Consequences (spec §3) --------------------------------------------------------
 # Country scope, the taker, with the levels taken in var:gm_tr_tmp_levels: 2,
 # plus 1 per 5 levels, at most 8; doubled once UNESCO is in force.

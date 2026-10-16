@@ -194,9 +194,15 @@ Variable 'te_dg_n_up' is used but is never set
 Variable 'te_dg_y_lo' is used but is never set
 Variable 'te_dg_y_mi' is used but is never set
 Variable 'te_dg_y_up' is used but is never set
+Variable 'gm_com_extended' is used but is never set
+Variable 'gm_com_gap_half' is used but is never set
+Variable 'gm_promise_ledger' is used but is never set
+Variable 'gm_com_cooldown' is used but is never set
+Variable 'te_dg_m1840' is used but is never set
+Variable 'te_dg_f1840' is used but is never set
 ```
 
-`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`), the UN dissolution sweep (`un_ladder_effects.txt`) and the trading-partners refresh (`trade_partner_effects.txt`, the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`) and the demographics Gini store (`te_demog_gini_band_store` in `te_demog_generated_effects.txt`, written by gen_demographics.py: the six strata sums `te_dg_<n|y>_<lo|mi|up>` from before the wealth bands, #854) remove variables an older save may still hold and nothing sets any more. The validator reports each read once per launch. The signatures name all thirty-one variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
+`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`), the UN dissolution sweep (`un_ladder_effects.txt`) and the trading-partners refresh (`trade_partner_effects.txt`, the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`) and the demographics Gini store (`te_demog_gini_band_store` in `te_demog_generated_effects.txt`, written by gen_demographics.py: the six strata sums `te_dg_<n|y>_<lo|mi|up>` from before the wealth bands, #854), the Grand Monument opportunity's record (`gm_com_clear` and the first-sight sweep in `gm_commission_effects.txt`: v2's `gm_com_extended` and `gm_com_gap_half`, and `gm_promise_ledger` and `gm_com_cooldown`, retired by #915) and the demographics census (`te_demog_effects.txt`: the 18-40 sums `te_dg_m1840` / `te_dg_f1840`, which a census from before phase 2 step 4, #942, kept instead of the fighting-age pool) remove variables an older save may still hold and nothing sets any more; the census also reads the old sums once, for the war dead's window. The validator reports each read once per launch. The signatures name all thirty-seven variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
 
 ### `jomini_eventmanager.cpp:376` — `un_vote.5` kept for events queued in older saves
 - source: `jomini_eventmanager.cpp:376`

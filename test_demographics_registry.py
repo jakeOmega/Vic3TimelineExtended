@@ -7036,9 +7036,36 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertEqual(eng.modifiers, {})
         self.assertNotIn("te_dg_mc", eng.vars)
         self.assertNotIn("te_dg_yb", eng.vars)
-        # the panel still shows what Full would do: the term and the bulge from the census and today's unemployment
+        # the panel still shows what Full would do: the term and the bulge from the census and the unemployment it read
         self.assertLess(eng.value(eng._tree(eng.values, "te_demog_conscription_term")), 0)
         self.assertGreater(eng.value(eng._tree(eng.values, "te_demog_youth_bulge_shown")), 0)
+        self.assertAlmostEqual(eng.vars["te_dg_unemp"], 0.3)
+
+    def test_the_panel_never_reads_unemployment_live(self):
+        """2026-10-16: read from a scripted GUI, state_unemployment_rate is none. The state subtab's Youth row gate
+        (te_demog_state_youth_sgui) read it through te_demog_youth_bulge_shown, logged 'Got value of type none'
+        thousands of times a session and never showed. The census stores its read (te_dg_unemp) under both settings,
+        and everything the row reads goes through that."""
+        values = _raw_blocks([CONSEQ_VALUES, GENERATED_VALUES])
+
+        def live(name, seen):
+            if name in seen or name not in values:
+                return False
+            seen.add(name)
+            body = values[name]
+            return "state_unemployment_rate" in body or any(live(n, seen) for n in re.findall(r"\b\w+\b", body))
+
+        loc = "".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*.yml")))
+        row = "".join(re.search(rf"^ {key}:0 .*$", loc, re.M).group(0)
+                      for key in ("te_demog_st_youth_tt", "te_demog_st_youth_effects", "te_demog_st_youth_value"))
+        gate = _raw_blocks([SGUIS])["te_demog_state_youth_sgui"]
+        names = set(re.findall(r"\bte_demog_\w+", gate)) | set(re.findall(r"ScriptValue\('(\w+)'\)", row))
+        self.assertIn("te_demog_youth_bulge_shown", names)
+        for name in sorted(names):
+            self.assertFalse(live(name, set()), name)
+        refresh = _raw_blocks([CONSEQ_EFFECTS])["te_demog_consequences_refresh"]
+        store = "set_variable = { name = te_dg_unemp value = te_demog_unemployment }"
+        self.assertLess(refresh.index(store), refresh.index("if = {"))   # outside the Full-only branch
 
     def test_a_census_from_before_step_4_takes_nothing(self):
         eng = self._state()

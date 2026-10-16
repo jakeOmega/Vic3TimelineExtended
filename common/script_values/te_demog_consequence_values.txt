@@ -187,10 +187,23 @@ te_demog_conscription_down = {
 # ---- The youth bulge (§4.3) -------------------------------------------------------------------------------------------
 
 # State scope: the engine's unemployment rate, 0-1 (vanilla reads it as a value: mon_unemployment_estimate). The
-# self-check unemployment_rate_read tests that scale (docs/testing/demographics-playtest.md).
+# self-check unemployment_rate_read tests that scale (docs/testing/demographics-playtest.md). Effects only: read from a
+# scripted GUI it returns none (the panel reads te_demog_unemployment_census instead).
 te_demog_unemployment = {
 	value = state_unemployment_rate
 	min = 0
+}
+
+# State scope: the unemployment the state's last census read (te_dg_unemp, te_demog_consequences_refresh), 0 before one.
+# The panel's youth bulge reads this. A scripted GUI's is_shown reading state_unemployment_rate gets none: the Youth
+# row's gate logged it thousands of times a session and never showed (2026-10-16), while the census's reads of the same
+# value in effects logged nothing.
+te_demog_unemployment_census = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_unemp }
+		value = var:te_dg_unemp
+	}
 }
 
 # State scope: the youth bulge's multiplier now, y = clamp((the share aged 20-29 - te_demog_k_youth_from) / the span,
@@ -225,16 +238,18 @@ te_demog_youth_applied = {
 }
 
 # State scope: the youth bulge the panel shows: the one in force under Full (te_dg_yb, set at the yearly census), else
-# what it would be now.
+# what it would be at the census's own reads (te_demog_youth_bulge_now's formula, with the unemployment it stored). No
+# live engine read: the Youth row's gate (te_demog_state_youth_sgui) evaluates it from a scripted GUI.
 te_demog_youth_bulge_shown = {
-	value = te_demog_youth_bulge_now
+	value = te_demog_youth_share_part
+	multiply = te_demog_youth_unemployment_part
 	if = {
 		limit = { has_variable = te_dg_yb }
 		value = var:te_dg_yb
 	}
 }
 
-# State scope: the youth-bulge share of its full size, either factor alone (the hover's two parts).
+# State scope: the youth-bulge share of its full size, either factor alone, from the last census.
 te_demog_youth_share_part = {
 	value = te_demog_youth_share
 	subtract = te_demog_k_youth_from
@@ -243,7 +258,7 @@ te_demog_youth_share_part = {
 	max = 1
 }
 te_demog_youth_unemployment_part = {
-	value = te_demog_unemployment
+	value = te_demog_unemployment_census
 	divide = { value = te_demog_k_youth_unemployment_full min = 0.001 }
 	min = 0
 	max = 1

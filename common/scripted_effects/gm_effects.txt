@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # GRAND MONUMENTS — scripted effects
 # ============================================================================
 # Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
@@ -403,6 +403,7 @@ gm_state_monthly = {
 	# A gifted monument's dedication back (opportunities spec §3.1).
 	gm_state_restore_dedication = yes
 	gm_monument_rebuild_self_check = yes
+	gm_tr_occupation_read_self_check = yes
 	if = {
 		limit = { has_building = building_grand_monument }
 		# A month older (spec 2026-10-16 §2), before this month's steps read it.

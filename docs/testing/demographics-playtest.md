@@ -381,7 +381,10 @@ below are written for them on. Spec: `docs/superpowers/specs/2026-10-12-demograp
    35–39 fall, 15–19 and 40–44 don't.
 4. **A youth-bulge state shows its modifier (Full).** In a later game (1880s or after), a state whose Demographics
    subtab shows a Youth row: its modifiers list "Census: Youth Bulge", radicals and turmoil effects at the strength the
-   row's hover gives; option t's `unemp=` matches the state panel's unemployment (the self-check's scale).
+   row's hover gives; option t's `unemp=` matches the state panel's unemployment (the self-check's scale). Until the
+   2026-10-16 log triage the Youth row never showed: its gate read `state_unemployment_rate` from a scripted GUI, which
+   gets none. The census now stores its read (`te_dg_unemp`) and the row reads that, so in a save from before, a state
+   shows the row from its next census. `error.log` has no `te_demog_sguis.txt:516` line.
 5. **The sex-balance modifiers (Full).** A state below 90 men per 100 women (after a war with many dead; console
    option t's `sex`) lists "Census: Fewer Men" at the strength its Sex Balance hover gives, its children per woman's
    breakdown shows "Few men to marry" below 1.00, and option t's `sxb` is its balance; a state at 110 or more lists
