@@ -507,6 +507,10 @@ effect on. Display only shows the same pyramids as Full; neither changes the gam
    northern Mexico) stays near 100–110 men per 100 women. This is the band's price, not a bug: the results doc's
    § The frontier gives the owner's choice.
 4. **Conscription terms stay moderate (Full).** The great powers' Fighting-Age Men rows read ×0.95 to ×1.10 through the
-   19th century; no state below ×0.85 or at the ×1.25 ceiling from migration alone. The next run's `consequences` on
-   its saves should agree with the re-walk (people past ±0.15: under 2%).
+   19th century; no state below ×0.85 or above ×1.25 (the old ceiling, removed 2026-10-16) from migration alone. The
+   next run's `consequences` on its saves should agree with the re-walk (people past ±0.15: under 2%).
+   **Hidden (2026-10-16):** a state's modifier list, both the full view and the condensed one, no longer shows "Census:
+   Fighting-Age Men" even where the row reads other than ×1.00, and a state with only the hidden census modifiers
+   leaves the condensed box faded; the state's conscription rate tooltip still names it; a state far above ×1.25 (a
+   frontier or a young-pool boom) is the case to look for, since nothing caps it.
 5. **`debug.log`:** no errors from `te_demog_migrant_rates` or `te_demog_labour_balance`.

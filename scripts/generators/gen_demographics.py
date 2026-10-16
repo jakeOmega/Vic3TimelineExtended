@@ -1657,7 +1657,6 @@ def consequence_values(o):
     k = {
         "pool_from": P.POOL_FROM, "pool_to": P.POOL_TO,
         "conscription_ref": P.CONSCRIPTION_REF, "conscription_min": P.CONSCRIPTION_MIN,
-        "conscription_max": P.CONSCRIPTION_MAX,
         "youth_from": P.YOUTH_FROM, "youth_span": P.YOUTH_SPAN, "youth_unemployment_full": P.YOUTH_UNEMPLOYMENT_FULL,
         "sex_fewer_from": P.SEX_FEWER_FROM, "sex_fewer_span": P.SEX_FEWER_FROM - P.SEX_FEWER_FULL,
         "sex_births_floor": P.SEX_BIRTHS_FLOOR, "sex_women_rate": P.SEX_WOMEN_RATE,
