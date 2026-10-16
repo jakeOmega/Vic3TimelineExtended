@@ -193,13 +193,24 @@ class GateTest(unittest.TestCase):
 class ContractTest(unittest.TestCase):
     """The names shared with the UN branch (BRIEF_COMMON.md, interface contract)."""
 
-    def test_hook_stubs(self):
+    def test_the_hooks_are_defined(self):
+        """Only that they exist: the UN phase replaces the stubs' bodies."""
         trig = read(HOOK_TRIGGERS)
         for name in ("te_seabed_reserved_half_eligible", "te_seabed_itlos_party", "te_seabed_southern_barred"):
-            self.assertIn("always = no", block(trig, name), name)
+            block(trig, name)
         eff = read(HOOK_EFFECTS)
-        self.assertIn("set_global_variable = { name = te_seabed_regime value = 1 }", block(eff, "te_seabed_un_update_regime"))
+        block(eff, "te_seabed_un_update_regime")
         block(eff, "te_seabed_un_on_policy_change")
+
+    def test_the_hooks_are_called_where_the_contract_says(self):
+        effects = strip_comments(read(EFFECTS))
+        triggers = strip_comments(read(TRIGGERS))
+        self.assertIn("te_seabed_reserved_half_eligible = yes", block(effects, "te_seabed_share_basin"))
+        self.assertIn("te_seabed_southern_barred = yes", block(effects, "te_seabed_compute_weights"))
+        self.assertIn("te_seabed_un_update_regime = yes", block(effects, "te_seabed_yearly_pass"))
+        self.assertIn("te_seabed_itlos_party = yes",
+                      read("common/scripted_guis/te_global_commons_seabed_sguis.txt"))
+        self.assertIn("te_seabed_reserved_half_eligible", triggers + effects)
 
     def test_the_policy_change_calls_the_hook_after_setting_both_variables(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_set_policy"))

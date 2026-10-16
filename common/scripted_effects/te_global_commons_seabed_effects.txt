@@ -243,7 +243,11 @@ te_seabed_state_record_new = {
 
 te_seabed_record_into = {
 	if = {
-		limit = { exists = scope:te_seabed_payer }
+		limit = {
+			exists = scope:te_seabed_payer
+			# a stamped holder that was never recorded has no shares to read
+			scope:te_seabed_payer = { has_variable = te_seabed_unbuilt_pacific }
+		}
 		te_seabed_take = { B = $OWN$ }
 		# The basin with the most, until the levels are covered or the shares
 		# are spent: at most four rounds.
