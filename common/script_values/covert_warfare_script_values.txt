@@ -92,6 +92,11 @@ covert_exposure_phase_mult_operational = 1.5
 covert_exposure_acknowledge_relations_mult = 0.5
 covert_exposure_deny_infamy_mult = 0.5
 
+# A betrayal costs more with the friend than a spat with a stranger: the
+# bilateral relations hit is multiplied by this when the target was a friend
+# (iw_burned_friend, copied by covert_warfare.1). Infamy is not.
+covert_exposure_friend_relations_mult = 1.5
+
 # What a severe exposure costs with everyone tied to the target. The
 # tooltip prints it through covert_exposure_third_party_relations_display
 # below rather than retyping the number, so retuning this line retunes the
@@ -1022,10 +1027,20 @@ covert_exposure_infamy_deny = {
 	multiply = covert_exposure_deny_infamy_mult
 }
 
-# Denying it: the full bilateral relations hit.
+# Denying it: the full bilateral relations hit, times the friend factor when
+# the target was a friend. Applied here and only here: the Acknowledge value
+# below is half of this one, so it carries the factor too. The factor comes
+# before the clamp, so a friend at the severe tier stays inside it.
 covert_exposure_relations_deny = {
 	value = covert_exposure_relations_base
 	multiply = covert_exposure_phase_mult
+	if = {
+		limit = {
+			has_variable = iw_burned_friend
+			var:iw_burned_friend = 1
+		}
+		multiply = covert_exposure_friend_relations_mult
+	}
 	min = -100
 	max = 0
 }

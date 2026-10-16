@@ -17,6 +17,12 @@
 #                               years".
 #   iw_defender_event_cooldown  set with its _age by covert_warfare.2; both go
 #                               after 24 months, so the event can come again.
+#   iw_last_exposed_public      1 when that exposure turned the public against
+#                               the interest groups friendly to the attacker
+#                               (covert_backlash_public), for covert_warfare.2's
+#                               text. Like the rest of the record it is only
+#                               overwritten, never aged: every burn passes
+#                               covert_backlash_public, which sets or removes it.
 on_monthly_pulse_country = {
 	on_actions = {
 		covert_warfare_monthly_country

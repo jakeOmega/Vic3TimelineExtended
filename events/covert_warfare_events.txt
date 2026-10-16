@@ -56,6 +56,24 @@ covert_warfare.1 = {
 				}
 			}
 		}
+		# ---- Domestic backlash (covert_backlash_home / _public) ----
+		# Whether the target was a friend, pinned HERE for the same reason as
+		# the type code: the options fire days later, and the relations the
+		# test reads may have moved. The relations hit abroad scales on it
+		# (covert_exposure_relations_deny), the attacker's home costs need it
+		# (covert_backlash_home), and so does the defender's public reaction
+		# (covert_backlash_public, which reads it as ROOT.var:iw_burned_friend).
+		# Removed in `after` with the other copies.
+		if = {
+			limit = {
+				exists = scope:detected_by_country
+				covert_is_friend = { TARGET = scope:detected_by_country }
+			}
+			set_variable = { name = iw_burned_friend value = 1 }
+		}
+		else = {
+			set_variable = { name = iw_burned_friend value = 0 }
+		}
 		# UN redesign phase 3: an exposed severe operation is a record the
 		# General Assembly can hold against us (un_dossier_effects.txt), unless
 		# the exposure is costless (a wartime operation caught at war).
@@ -105,6 +123,11 @@ covert_warfare.1 = {
 			}
 			covert_exposure_third_party_blowback = yes
 		}
+		# At home, if the target was a friend: the full share for owning it.
+		# Every gate lives in the effect; it adds nothing otherwise. Bare on
+		# purpose: test_covert_exposure_tiers counts this option's guards
+		# (costless x2, severe tier x1) exactly, so no `if` around it.
+		covert_backlash_home = { SHARE = full }
 
 		ai_chance = {
 			base = 10
@@ -151,6 +174,8 @@ covert_warfare.1 = {
 			}
 			covert_exposure_third_party_blowback = yes
 		}
+		# At home, if the target was a friend: half the share for denying it.
+		covert_backlash_home = { SHARE = half }
 
 		ai_chance = {
 			base = 5
@@ -228,6 +253,13 @@ covert_warfare.1 = {
 				covert_op_burn = { TYPE = secure_material ACTION = covert_secure_material_action TARGET = scope:detected_by_country CODE = 13 }
 			}
 
+			# The defender's public turns on the interest groups friendly to
+			# us (covert_backlash_public). Here and not in covert_warfare.2,
+			# which has a 24-month cooldown and would skip it; before .2 is
+			# triggered, so its text can say so; while iw_burned_type_code and
+			# iw_burned_friend still exist, which it reads as ROOT.
+			scope:detected_by_country = { covert_backlash_public = yes }
+
 			# The agency's experience takes the hit (slice 5), by tier. Here,
 			# while iw_burned_type_code still exists; removed further down.
 			covert_tradecraft_burn_loss = yes
@@ -247,6 +279,10 @@ covert_warfare.1 = {
 		if = {
 			limit = { has_variable = iw_burned_at_war }
 			remove_variable = iw_burned_at_war
+		}
+		if = {
+			limit = { has_variable = iw_burned_friend }
+			remove_variable = iw_burned_friend
 		}
 	}
 }
@@ -298,6 +334,25 @@ covert_warfare.2 = {
 			triggered_desc = {
 				trigger = { always = yes }
 				desc = covert_warfare.2.d
+			}
+		}
+		# A second paragraph when the exposure turned the public at home
+		# against the interest groups friendly to the perpetrator (the
+		# defender-side backlash effect in covert_warfare.1's `after` sets
+		# iw_last_exposed_public, and clears it on every exposure that did
+		# not). A sibling of the first_valid above, so the two concatenate;
+		# the texts open with a blank line.
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = iw_last_exposed_public
+					exists = scope:iw_exposed_by
+				}
+				desc = covert_warfare.2.d_public
+			}
+			triggered_desc = {
+				trigger = { has_variable = iw_last_exposed_public }
+				desc = covert_warfare.2.d_public_unnamed
 			}
 		}
 	}

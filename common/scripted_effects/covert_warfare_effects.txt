@@ -311,6 +311,245 @@ covert_op_burn = {
 	}
 }
 
+# ----------------------------------------------------------------------------
+# DOMESTIC BACKLASH OF AN EXPOSURE
+# ----------------------------------------------------------------------------
+# Two halves, both called from covert_warfare.1 and neither reading anything
+# the event does not copy onto the operator (iw_burned_type_code, iw_burned_friend,
+# iw_burned_at_war): the options fire days after `immediate`, and the operation's
+# container may be gone by then.
+#
+# Every magnitude is a literal, branched by tier. add_modifier stores its
+# `multiplier` expression and re-evaluates it against ROOT on later ticks, and
+# iw_burned_type_code is removed in `after`, so a multiplier that read it (or a
+# script value that did) would fall to zero the day after. The tiers are
+# covert_code_tier_*; a war-tier code that is not costless (caught in the
+# run-up to the war) takes the severe values, and an unrecognised code the
+# moderate ones, as the blowback script values read them.
+
+# The attacker's side, from each option of covert_warfare.1: caught spying on a
+# friend costs the lobby at home that favours the target some appeasement, and
+# the government some legitimacy. Acknowledge pays the full share, Deny half
+# ("Deny costs less at home, more abroad"): a plain dispatch onto the internals
+# that hold the literals. Does nothing unless the target was a friend and the
+# exposure costs anything (a wartime operation caught at war does not).
+# Parameters: $SHARE$ = full | half
+# Scope: operator country; scope:detected_by_country is the target
+covert_backlash_home = {
+	if = {
+		limit = {
+			exists = scope:detected_by_country
+			has_variable = iw_burned_friend
+			var:iw_burned_friend = 1
+			NOT = { covert_exposure_is_costless = yes }
+		}
+		covert_backlash_home_$SHARE$ = yes
+	}
+}
+
+# The full share: appeasement -3 / -5 / -8 and legitimacy -3 / -5 / -8 (mild /
+# moderate / severe), the latter fading over short_modifier_time. With no
+# lobby at home that favours the target the appeasement line is replaced by a
+# note saying so, rather than a lobby that is not there; legitimacy still falls.
+# The lobby's interest groups lose approval through the lobby itself, so no
+# separate approval hit. appeasement_covert_spying_exposed is always usable, so
+# the lobby types need not list it (te_covert_appeasement.txt).
+# Scope: operator country; scope:detected_by_country is the target
+covert_backlash_home_full = {
+	if = {
+		limit = {
+			any_political_lobby = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+		}
+		if = {
+			limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+			every_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+				change_appeasement = { amount = -3 factor = appeasement_covert_spying_exposed }
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					covert_code_tier_severe = { VAR = iw_burned_type_code }
+					covert_code_tier_war = { VAR = iw_burned_type_code }
+				}
+			}
+			every_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+				change_appeasement = { amount = -8 factor = appeasement_covert_spying_exposed }
+			}
+		}
+		else = {
+			every_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+				change_appeasement = { amount = -5 factor = appeasement_covert_spying_exposed }
+			}
+		}
+	}
+	else = {
+		custom_tooltip = covert_backlash_no_lobby_tt
+	}
+	if = {
+		limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		add_modifier = { name = covert_friend_spying_scandal days = short_modifier_time is_decaying = yes multiplier = 3 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				covert_code_tier_severe = { VAR = iw_burned_type_code }
+				covert_code_tier_war = { VAR = iw_burned_type_code }
+			}
+		}
+		add_modifier = { name = covert_friend_spying_scandal days = short_modifier_time is_decaying = yes multiplier = 8 }
+	}
+	else = {
+		add_modifier = { name = covert_friend_spying_scandal days = short_modifier_time is_decaying = yes multiplier = 5 }
+	}
+}
+
+# The half share, for Deny: appeasement and legitimacy -2 / -3 / -4. Same shape
+# as covert_backlash_home_full; only the literals differ.
+# Scope: operator country; scope:detected_by_country is the target
+covert_backlash_home_half = {
+	if = {
+		limit = {
+			any_political_lobby = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+		}
+		if = {
+			limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+			every_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+				change_appeasement = { amount = -2 factor = appeasement_covert_spying_exposed }
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					covert_code_tier_severe = { VAR = iw_burned_type_code }
+					covert_code_tier_war = { VAR = iw_burned_type_code }
+				}
+			}
+			every_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+				change_appeasement = { amount = -4 factor = appeasement_covert_spying_exposed }
+			}
+		}
+		else = {
+			every_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+				change_appeasement = { amount = -3 factor = appeasement_covert_spying_exposed }
+			}
+		}
+	}
+	else = {
+		custom_tooltip = covert_backlash_no_lobby_tt
+	}
+	if = {
+		limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		add_modifier = { name = covert_friend_spying_scandal days = short_modifier_time is_decaying = yes multiplier = 2 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				covert_code_tier_severe = { VAR = iw_burned_type_code }
+				covert_code_tier_war = { VAR = iw_burned_type_code }
+			}
+		}
+		add_modifier = { name = covert_friend_spying_scandal days = short_modifier_time is_decaying = yes multiplier = 4 }
+	}
+	else = {
+		add_modifier = { name = covert_friend_spying_scandal days = short_modifier_time is_decaying = yes multiplier = 3 }
+	}
+}
+
+# The defender's side, on every exposure: the public turns on the interest
+# groups at home that favour the attacker. Each member of a lobby that favours
+# the attacker (covert_backlash_pro_lobby_of) takes covert_foreign_ties_discredited
+# (-5% political strength per unit) for short_modifier_time, decaying: 1 / 2 / 3
+# units by tier (mild / moderate / severe), times 1.5 when the attacker was a
+# friend (1.5 / 3 / 4.5). Called wherever a burn passes, after covert_op_burn
+# and before covert_warfare.2 is triggered, not from .2 itself, whose 24-month
+# cooldown would skip it.
+#
+# Sets iw_last_exposed_public = 1 on the defender when it hit anyone, so the
+# defender's event can say so; otherwise removes it. iw_last_exposed_* is never
+# cleared, only overwritten, so a costless or lobby-less exposure has to clear
+# the flag itself or an earlier burn's would print the line again.
+#
+# ROOT is the operator, and it holds the iw_burned_* copies: the tier, friend
+# and costless reads are all wrapped in ROOT = { }, because the defender holds
+# none of them (reading a missing variable is an engine error).
+# Scope: defender country; ROOT = the operator, covert_warfare.1 still open
+covert_backlash_public = {
+	if = {
+		limit = {
+			ROOT = {
+				has_variable = iw_burned_type_code
+				NOT = { covert_exposure_is_costless = yes }
+			}
+			any_political_lobby = { covert_backlash_pro_lobby_of = { TARGET = ROOT } }
+		}
+		set_variable = { name = iw_last_exposed_public value = 1 }
+		every_political_lobby = {
+			limit = { covert_backlash_pro_lobby_of = { TARGET = ROOT } }
+			every_lobby_member = {
+				if = {
+					limit = {
+						ROOT = {
+							has_variable = iw_burned_friend
+							var:iw_burned_friend = 1
+						}
+					}
+					if = {
+						limit = { ROOT = { covert_code_tier_mild = { VAR = iw_burned_type_code } } }
+						add_modifier = { name = covert_foreign_ties_discredited days = short_modifier_time is_decaying = yes multiplier = 1.5 }
+					}
+					else_if = {
+						limit = {
+							ROOT = {
+								OR = {
+									covert_code_tier_severe = { VAR = iw_burned_type_code }
+									covert_code_tier_war = { VAR = iw_burned_type_code }
+								}
+							}
+						}
+						add_modifier = { name = covert_foreign_ties_discredited days = short_modifier_time is_decaying = yes multiplier = 4.5 }
+					}
+					else = {
+						add_modifier = { name = covert_foreign_ties_discredited days = short_modifier_time is_decaying = yes multiplier = 3 }
+					}
+				}
+				else = {
+					if = {
+						limit = { ROOT = { covert_code_tier_mild = { VAR = iw_burned_type_code } } }
+						add_modifier = { name = covert_foreign_ties_discredited days = short_modifier_time is_decaying = yes multiplier = 1 }
+					}
+					else_if = {
+						limit = {
+							ROOT = {
+								OR = {
+									covert_code_tier_severe = { VAR = iw_burned_type_code }
+									covert_code_tier_war = { VAR = iw_burned_type_code }
+								}
+							}
+						}
+						add_modifier = { name = covert_foreign_ties_discredited days = short_modifier_time is_decaying = yes multiplier = 3 }
+					}
+					else = {
+						add_modifier = { name = covert_foreign_ties_discredited days = short_modifier_time is_decaying = yes multiplier = 2 }
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { has_variable = iw_last_exposed_public }
+			remove_variable = iw_last_exposed_public
+		}
+	}
+}
+
 # Recompute iw_priority_cost_sum: each running operation's share of the covert
 # budget (1 at priority 1, covert_op_priority_2/3_cost_mult above). The upkeep
 # values read this instead of the pact count, so a priority-3 operation costs

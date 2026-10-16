@@ -362,6 +362,22 @@ covert_exposure_is_costless = {
 	var:iw_burned_at_war = 1
 }
 
+# A political lobby that favours $TARGET$: lobby_pro_country with that target,
+# or lobby_pro_overlord when it is the overlord of the lobby's country (the
+# type a pro-country lobby swaps to once its country becomes a subject). THE
+# one place that says which lobbies the backlash reaches: the attacker's home
+# appeasement hit (covert_backlash_home) and the defender's discredited
+# interest groups (covert_backlash_public) both ask it.
+# Parameters: $TARGET$ = the country the lobby favours (a scope: reference)
+# Scope: political_lobby
+covert_backlash_pro_lobby_of = {
+	OR = {
+		is_political_lobby_type = lobby_pro_country
+		is_political_lobby_type = lobby_pro_overlord
+	}
+	target = $TARGET$
+}
+
 # ============================================================================
 # TRADECRAFT (slice 5)
 # ============================================================================
