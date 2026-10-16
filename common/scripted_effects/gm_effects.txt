@@ -726,6 +726,10 @@ gm_country_refresh = {
 			limit = { gm_state_has_new_levels = yes }
 			trigger_event = { id = monument_events.29 }
 		}
+		if = {
+			limit = { gm_state_newcomer_settled = yes }
+			trigger_event = { id = monument_events.29 }
+		}
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
 		}
@@ -759,6 +763,14 @@ gm_country_monthly = {
 	every_scope_state = {
 		limit = { gm_state_is_contested = yes }
 		change_variable = { name = gm_contested add = 1 }
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_is_contested = yes }
+			change_variable = { name = gm_tr_contested add = 1 }
+		}
 	}
 	gm_ai_decide_contests = yes
 	gm_policy_ai_choose = yes
@@ -1085,6 +1097,15 @@ gm_check_contests = {
 				gm_state_contest = yes
 			}
 		}
+		# Each monument standing beside another, on its own (spec 2026-10-16
+		# §4.3; gm_monument_effects.txt).
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			every_in_list = {
+				variable = gm_monuments_held
+				gm_mon_check_contest = yes
+			}
+		}
 	}
 }
 
@@ -1164,6 +1185,10 @@ gm_state_changed_hands = {
 	# with the standing grandeur, which reads the state's own list at once.
 	if = {
 		limit = { gm_state_has_secondary = yes }
+		every_in_list = {
+			variable = gm_monuments_here
+			gm_mon_changed_hands = yes
+		}
 		gm_monument_pass = yes
 	}
 	if = {
@@ -1217,6 +1242,19 @@ gm_repair_after_civil_war = {
 			limit = { has_building = building_grand_monument }
 			gm_state_adopt_for_winner = yes
 		}
+		# The monuments beside another (spec 2026-10-16 §4.3), from the global
+		# list: the winner inherits no lists until the pass writes them.
+		if = {
+			limit = { has_global_variable_list = gm_monuments }
+			every_in_global_list = {
+				variable = gm_monuments
+				limit = {
+					var:gm_tr_origin ?= { owner = root }
+				}
+				gm_mon_adopt_for_winner = yes
+			}
+		}
+		gm_monument_pass = yes
 	}
 }
 
@@ -1542,6 +1580,53 @@ gm_ai_decide_contests = {
 				}
 			}
 		}
+		# The monuments beside another (spec 2026-10-16 §4.3): Pull Down or Keep
+		# as Heritage. Rededicating one moves it into the state's first place,
+		# which the AI leaves to its own monument.
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			every_in_list = {
+				variable = gm_monuments_held
+				limit = {
+					gm_mon_is_contested = yes
+					var:gm_tr_contested >= 2
+					NOT = { has_variable = gm_mon_order }
+				}
+				set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+				random_list = {
+					10 = {
+						modifier = {
+							if = {
+								limit = { var:gm_tr_g < 5 }
+								add = 10
+							}
+							if = {
+								limit = {
+									var:gm_tr_origin ?= {
+										owner = { gm_government_is_revolutionary = yes }
+									}
+								}
+								add = 10
+							}
+						}
+						gm_mon_order_choice = { CHOICE = tear_down }
+					}
+					10 = {
+						modifier = {
+							if = {
+								limit = { var:gm_tr_g >= 10 }
+								add = 10
+							}
+							if = {
+								limit = { has_variable = gm_tr_landmark }
+								multiply = 3
+							}
+						}
+						gm_mon_preserve = yes
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -1551,7 +1636,16 @@ gm_ai_decide_contests = {
 gm_notify_new_contests = {
 	if = {
 		limit = {
-			any_scope_state = { has_variable = gm_new_contest }
+			OR = {
+				any_scope_state = { has_variable = gm_new_contest }
+				AND = {
+					has_variable_list = gm_monuments_held
+					any_in_list = {
+						variable = gm_monuments_held
+						has_variable = gm_tr_new_contest
+					}
+				}
+			}
 		}
 		if = {
 			limit = { is_ai = no }
@@ -1561,6 +1655,14 @@ gm_notify_new_contests = {
 			every_scope_state = {
 				limit = { has_variable = gm_new_contest }
 				remove_variable = gm_new_contest
+			}
+			if = {
+				limit = { has_variable_list = gm_monuments_held }
+				every_in_list = {
+					variable = gm_monuments_held
+					limit = { has_variable = gm_tr_new_contest }
+					remove_variable = gm_tr_new_contest
+				}
 			}
 		}
 	}

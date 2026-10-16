@@ -291,6 +291,427 @@ gm_state_demote_primary = {
 	remove_variable = gm_demote_levels
 }
 
+# ---- A monument beside another: contests (spec 2026-10-16 §4.3) --------------------
+# Container scope throughout, a secondary monument: the state's contest effects'
+# twins (gm_effects.txt), on its gm_tr_* records.
+
+# The IG that opposed its message (the new order's base) and the IG that
+# approved it (its supporters), as flags, recorded now.
+gm_mon_record_contest_igs = {
+	set_variable = { name = gm_tr_base_ig value = flag:none }
+	set_variable = { name = gm_tr_supporter_ig value = flag:none }
+	if = {
+		limit = { gm_mon_is = { KEY = crown } }
+		set_variable = { name = gm_tr_base_ig value = flag:intelligentsia }
+		set_variable = { name = gm_tr_supporter_ig value = flag:landowners }
+	}
+	else_if = {
+		limit = { gm_mon_is = { KEY = republic } }
+		set_variable = { name = gm_tr_base_ig value = flag:landowners }
+		set_variable = { name = gm_tr_supporter_ig value = flag:intelligentsia }
+	}
+	else_if = {
+		limit = { gm_mon_is = { KEY = revolution } }
+		set_variable = { name = gm_tr_base_ig value = flag:industrialists }
+		set_variable = { name = gm_tr_supporter_ig value = flag:trade_unions }
+	}
+	else_if = {
+		limit = { gm_mon_kind_faith = yes }
+		set_variable = { name = gm_tr_supporter_ig value = flag:devout }
+	}
+	else_if = {
+		limit = { gm_mon_kind_ruler = yes }
+		clear_saved_scope = gm_tmp_mon_cowner
+		var:gm_tr_origin ?= {
+			owner = { save_scope_as = gm_tmp_mon_cowner }
+		}
+		if = {
+			limit = {
+				exists = scope:gm_tmp_mon_cowner
+				scope:gm_tmp_mon_cowner = { has_variable = gm_opposition_ig }
+			}
+			set_variable = { name = gm_tr_base_ig value = scope:gm_tmp_mon_cowner.var:gm_opposition_ig }
+		}
+		if = {
+			limit = { has_variable = gm_tr_honoree_ig }
+			set_variable = { name = gm_tr_supporter_ig value = var:gm_tr_honoree_ig }
+		}
+	}
+}
+
+gm_mon_contest = {
+	set_variable = { name = gm_tr_contested value = 0 }
+	set_variable = gm_tr_new_contest
+	gm_mon_record_contest_igs = yes
+}
+
+gm_mon_lift_contest = {
+	gm_remove_state_var = { VAR = gm_tr_contested }
+	gm_remove_state_var = { VAR = gm_tr_heritage }
+	gm_remove_state_var = { VAR = gm_tr_new_contest }
+	gm_remove_state_var = { VAR = gm_tr_base_ig }
+	gm_remove_state_var = { VAR = gm_tr_supporter_ig }
+}
+
+# From gm_check_contests (the owner's refresh), each secondary it holds. Seen
+# first, a civil war's winner's adoption, then the state's three branches: a
+# shrine its owner did not raise is heritage, a contest whose message stands
+# again is lifted, a message that falls is contested.
+gm_mon_check_contest = {
+	gm_mon_first_sight = yes
+	if = {
+		limit = {
+			var:gm_tr_origin ?= {
+				owner = { has_variable = gm_cw_adopting }
+			}
+		}
+		gm_mon_adopt_for_winner = yes
+	}
+	if = {
+		limit = {
+			has_tag = gm_monument
+			has_variable = gm_tr_seen
+			gm_mon_is_bound = yes
+		}
+		if = {
+			limit = {
+				gm_mon_kind_faith = yes
+				gm_mon_raised_by_owner = no
+				gm_mon_is_heritage = no
+			}
+			gm_mon_lift_contest = yes
+			set_variable = gm_tr_heritage
+		}
+		else_if = {
+			limit = {
+				OR = {
+					gm_mon_is_contested = yes
+					gm_mon_is_heritage = yes
+				}
+				gm_mon_message_fits = yes
+			}
+			gm_mon_lift_contest = yes
+		}
+		else_if = {
+			limit = {
+				gm_mon_is_contested = no
+				gm_mon_is_heritage = no
+				gm_mon_message_fits = no
+			}
+			gm_mon_contest = yes
+		}
+	}
+}
+
+# From gm_state_changed_hands, each secondary in the state: a bound one the new
+# owner did not raise honours a foreign order (contested), a shrine becomes
+# heritage. Not for a civil war's transfers.
+gm_mon_changed_hands = {
+	if = {
+		limit = {
+			var:gm_tr_origin ?= {
+				owner = { has_variable = gm_cw_adopting }
+			}
+		}
+		gm_mon_adopt_for_winner = yes
+	}
+	if = {
+		limit = {
+			has_variable = gm_tr_seen
+			gm_mon_is_bound = yes
+			var:gm_tr_origin ?= {
+				owner = {
+					NOT = { has_variable = te_cw_role }
+					is_revolutionary = no
+				}
+			}
+			gm_mon_raised_by_owner = no
+		}
+		if = {
+			limit = { gm_mon_kind_faith = yes }
+			gm_mon_lift_contest = yes
+			set_variable = gm_tr_heritage
+		}
+		else = {
+			gm_remove_state_var = { VAR = gm_tr_heritage }
+			gm_mon_contest = yes
+		}
+	}
+}
+
+# A civil war's loser raised it; the winner, its state's owner now, did.
+gm_mon_adopt_for_winner = {
+	clear_saved_scope = gm_tmp_mon_winner
+	var:gm_tr_origin ?= {
+		owner = { save_scope_as = gm_tmp_mon_winner }
+	}
+	if = {
+		limit = {
+			exists = scope:gm_tmp_mon_winner
+			has_variable = gm_tr_raised_by
+			scope:gm_tmp_mon_winner = { has_variable = gm_cw_loser }
+			scope:gm_tmp_mon_winner.var:gm_cw_loser ?= { save_temporary_scope_as = gm_tmp_mon_loser }
+			var:gm_tr_raised_by = scope:gm_tmp_mon_loser
+		}
+		set_variable = { name = gm_tr_raised_by value = scope:gm_tmp_mon_winner }
+	}
+}
+
+# FACTOR x this monument's grandeur to its owner's ledger of the IG its
+# variable $WHO$ names (gm_tr_base_ig or gm_tr_supporter_ig), as
+# gm_state_ledger_ig does. The owner's ledgers must exist (gm_init_ledgers).
+gm_mon_ledger_ig = {
+	set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+	save_scope_as = gm_mon_led
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = armed_forces }
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = devout }
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = industrialists }
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = intelligentsia }
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = landowners }
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = petty_bourgeoisie }
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = rural_folk }
+	gm_mon_ledger_ig_one = { WHO = $WHO$ FACTOR = $FACTOR$ IG = trade_unions }
+}
+
+gm_mon_ledger_ig_one = {
+	if = {
+		limit = {
+			has_variable = $WHO$
+			var:$WHO$ = flag:$IG$
+		}
+		var:gm_tr_origin ?= {
+			owner = {
+				set_variable = {
+					name = gm_ig_ledger_$IG$
+					value = {
+						value = scope:gm_mon_led.var:gm_tr_g
+						multiply = $FACTOR$
+						add = var:gm_ig_ledger_$IG$
+					}
+				}
+			}
+		}
+	}
+}
+
+# Keep as Heritage: its prestige returns, no legitimacy or approval under this
+# government; the group that objected resents it (gm_state_preserve). No
+# rebuild, so it runs where it is chosen.
+gm_mon_preserve = {
+	var:gm_tr_origin ?= {
+		owner = { gm_init_ledgers = yes }
+	}
+	gm_mon_ledger_ig = { WHO = gm_tr_base_ig FACTOR = -1 }
+	gm_mon_lift_contest = yes
+	set_variable = gm_tr_heritage
+}
+
+# Pull Down or Rededicate (CHOICE = tear_down or rededicate) only orders the
+# work: both rebuild the building, so its state's hidden event does it
+# (monument_events.30, gm_state_run_mon_orders), outside any tooltip's walk,
+# one rebuild a day. The order holds for the country that gave it.
+gm_mon_order_choice = {
+	set_variable = { name = gm_mon_order value = flag:$CHOICE$ }
+	clear_saved_scope = gm_mon_order_owner
+	var:gm_tr_origin ?= {
+		owner = { save_scope_as = gm_mon_order_owner }
+	}
+	if = {
+		limit = { exists = scope:gm_mon_order_owner }
+		set_variable = { name = gm_mon_order_by value = scope:gm_mon_order_owner }
+	}
+	var:gm_tr_origin ?= {
+		trigger_event = { id = monument_events.30 }
+	}
+}
+
+# Pull Down, from gm_state_run_mon_orders (scope:gm_mon_run_state its state):
+# its grandeur to the teardown ledger and the IG ledgers, as
+# gm_state_record_teardown does, its levels added to what the state's one
+# shrink takes off (var:gm_tr_take_levels), then it is gone.
+gm_mon_tear_down_one = {
+	save_scope_as = gm_mon_down
+	set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+	var:gm_tr_origin ?= {
+		owner = {
+			gm_init_ledgers = yes
+			set_variable = {
+				name = gm_teardown_ledger
+				value = {
+					value = var:gm_teardown_ledger
+					add = scope:gm_mon_down.var:gm_tr_g
+				}
+			}
+			set_variable = gm_active
+		}
+	}
+	gm_mon_ledger_ig = { WHO = gm_tr_base_ig FACTOR = 1 }
+	gm_mon_ledger_ig = { WHO = gm_tr_supporter_ig FACTOR = -1 }
+	scope:gm_mon_run_state = {
+		change_variable = { name = gm_tr_take_levels add = scope:gm_mon_down.var:gm_tr_levels }
+		remove_list_variable = { name = gm_monuments_here target = scope:gm_mon_down }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = -1 }
+		owner = {
+			remove_list_variable = { name = gm_monuments_held target = scope:gm_mon_down }
+		}
+	}
+	remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_down }
+	destroy_container = yes
+}
+
+# State scope, from monument_events.30. One rebuild-type action a run: every
+# Pull Down ordered here at once, as one shrink by their levels together,
+# else one Rededicate (the secondary swapped in as the state's monument, then
+# gm_state_rededicate). A state rebuilt today waits a day; orders left over,
+# tomorrow. An order whose state changed hands, or whose monument is no
+# longer contested, is dropped.
+gm_state_run_mon_orders = {
+	if = {
+		limit = { has_variable = gm_rebuilding }
+		trigger_event = { id = monument_events.30 days = 1 }
+	}
+	else_if = {
+		limit = { has_variable_list = gm_monuments_here }
+		save_scope_as = gm_mon_run_state
+		owner = { save_scope_as = gm_mon_run_owner }
+		every_in_list = {
+			variable = gm_monuments_here
+			limit = {
+				has_variable = gm_mon_order
+				OR = {
+					gm_mon_is_contested = no
+					NOT = { var:gm_mon_order_by ?= { this = scope:gm_mon_run_owner } }
+				}
+			}
+			remove_variable = gm_mon_order
+			gm_remove_state_var = { VAR = gm_mon_order_by }
+		}
+		every_in_list = {
+			variable = gm_monuments_here
+			limit = {
+				has_variable = gm_mon_order
+				var:gm_mon_order = flag:tear_down
+			}
+			add_to_temporary_list = gm_mon_tearing
+		}
+		set_variable = { name = gm_tr_take_levels value = 0 }
+		every_in_list = {
+			list = gm_mon_tearing
+			gm_mon_tear_down_one = yes
+		}
+		if = {
+			limit = { var:gm_tr_take_levels > 0 }
+			gm_state_tr_shrink_by = yes
+		}
+		else = {
+			clear_saved_scope = gm_mon_raise
+			random_in_list = {
+				variable = gm_monuments_here
+				limit = {
+					has_variable = gm_mon_order
+					var:gm_mon_order = flag:rededicate
+				}
+				save_scope_as = gm_mon_raise
+			}
+			if = {
+				limit = { exists = scope:gm_mon_raise }
+				scope:gm_mon_raise = {
+					remove_variable = gm_mon_order
+					gm_remove_state_var = { VAR = gm_mon_order_by }
+				}
+				if = {
+					limit = { gm_state_can_rededicate_beside = yes }
+					gm_state_swap_primary = yes
+					gm_state_rededicate = yes
+				}
+			}
+		}
+		remove_variable = gm_tr_take_levels
+		if = {
+			limit = {
+				has_variable_list = gm_monuments_here
+				any_in_list = {
+					variable = gm_monuments_here
+					has_variable = gm_mon_order
+				}
+			}
+			trigger_event = { id = monument_events.30 days = 1 }
+		}
+		owner = { trigger_event = { id = monument_events.20 } }
+	}
+}
+
+# Container scope. Leaving home (carried off whole): its standing at home is
+# forgotten, so it is seen again, its raiser recorded afresh, if it returns.
+gm_mon_forget_home = {
+	gm_remove_state_var = { VAR = gm_tr_seen }
+	gm_remove_state_var = { VAR = gm_tr_raised_by }
+	gm_remove_state_var = { VAR = gm_tr_contested }
+	gm_remove_state_var = { VAR = gm_tr_heritage }
+	gm_remove_state_var = { VAR = gm_tr_base_ig }
+	gm_remove_state_var = { VAR = gm_tr_supporter_ig }
+	gm_remove_state_var = { VAR = gm_tr_new_contest }
+	gm_remove_state_var = { VAR = gm_mon_order }
+	gm_remove_state_var = { VAR = gm_mon_order_by }
+}
+
+# ---- The swap (spec 2026-10-16 §3.3) -----------------------------------------------
+# State scope, real execution only, with scope:gm_mon_raise a secondary here.
+# The secondary becomes the state's monument and the primary stands beside it:
+# no rebuild, the building's level is still the sum. The raised one's
+# dedication is put back by gm_state_restore_dedication (gm_restore_pm).
+gm_state_swap_primary = {
+	set_variable = { name = gm_demote_levels value = gm_state_primary_levels }
+	gm_state_demote_primary = yes
+	gm_state_raise_secondary = yes
+}
+
+# State scope (scope:gm_mon_raise). Its records onto the state, as a rebuild
+# from a returning trophy takes them, then the container goes.
+gm_state_raise_secondary = {
+	scope:gm_mon_raise = { save_scope_as = gm_tr_moving }
+	gm_clear_state = { KEEP_LANDMARK = no }
+	gm_state_tr_take_records_from_moving = yes
+	remove_list_variable = { name = gm_monuments_here target = scope:gm_mon_raise }
+	gm_tr_count_add = { VAR = gm_mon_here_count ADD = -1 }
+	owner = {
+		remove_list_variable = { name = gm_monuments_held target = scope:gm_mon_raise }
+	}
+	remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_raise }
+	scope:gm_mon_raise = { destroy_container = yes }
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# State scope, from monument_events.29 once a newcomer (gm_newcomer, a
+# monument founded beside another) is dedicated, finished and named
+# (gm_state_newcomer_settled): the grandest monument here stands first, so the
+# Arc de Triomphe stays Paris's monument and the new column stands beside it.
+# Once per newcomer, not as ageing changes the order.
+gm_state_settle_newcomer = {
+	remove_variable = gm_newcomer
+	if = {
+		limit = { has_variable_list = gm_monuments_here }
+		save_scope_as = gm_settle_state
+		set_variable = { name = gm_settle_g value = gm_state_primary_grandeur }
+		clear_saved_scope = gm_mon_raise
+		ordered_in_list = {
+			variable = gm_monuments_here
+			order_by = gm_mon_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_mon_raise
+		}
+		if = {
+			limit = {
+				exists = scope:gm_mon_raise
+				scope:gm_mon_raise = { gm_mon_grandeur > scope:gm_settle_state.var:gm_settle_g }
+			}
+			gm_state_swap_primary = yes
+		}
+		remove_variable = gm_settle_g
+	}
+}
+
 # ---- Home again, as a monument of its own (spec §4.1) --------------------------------
 # Container scope, the returning trophy (scope:gm_tr_moving; gm_tr_return_home).
 # A piece of a monument already standing beside the primary rejoins that one:
@@ -423,6 +844,7 @@ gm_mon_tr_take_whole = {
 	add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }
 	remove_tag = gm_monument
 	add_tag = gm_trophy
+	gm_mon_forget_home = yes
 	set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
 	set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
 	set_variable = { name = gm_tr_year value = gm_this_year }

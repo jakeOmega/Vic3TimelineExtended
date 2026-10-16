@@ -243,7 +243,8 @@ class TakingTests(unittest.TestCase):
                                   ("gm_name_enemy_cap", "gm_tr_name_enemy_cap"), ("gm_name", "gm_tr_name"),
                                   ("gm_honoree", "gm_tr_honoree"), ("gm_honoree_ig", "gm_tr_honoree_ig")):
             self.assertIn(f"gm_tr_copy_from_state = {{ FROM = {state_var} TO = {tr_var} }}", make, state_var)
-            rebuilt = squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving"))
+            rebuilt = (squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving")) + " "
+                       + squash(block(read(TR_EFFECTS), "gm_state_tr_take_records_from_moving")))
             self.assertIn(f"gm_tr_copy_to_state = {{ FROM = {tr_var} TO = {state_var} }}", rebuilt, tr_var)
         record = squash(block(read(TR_EFFECTS), "gm_tr_record_dedication"))
         for d in DEDICATIONS:
@@ -254,7 +255,8 @@ class TakingTests(unittest.TestCase):
         # trophy's records (gm_state_tr_receive picks).
         add = squash(block(read(TR_EFFECTS), "gm_state_tr_add_levels"))
         self.assertIn("add = scope:gm_tr_moving.var:gm_tr_levels max = 200", add)
-        rebuilt = squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving"))
+        rebuilt = (squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving")) + " "
+                       + squash(block(read(TR_EFFECTS), "gm_state_tr_take_records_from_moving")))
         self.assertIn("gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }", rebuilt)
         for line in ("set_variable = gm_seen",
                      "set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }",

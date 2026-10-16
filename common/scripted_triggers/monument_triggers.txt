@@ -287,6 +287,27 @@ gm_state_has_new_levels = {
 	NOT = { has_variable = gm_ceremony_pending }
 }
 
+# A monument founded beside another (gm_newcomer, spec 2026-10-16 §3.2) is
+# dedicated, finished and named, with nothing under way: the settle check may
+# give the state's first place back to a grander one (gm_state_settle_newcomer).
+gm_state_newcomer_settled = {
+	has_variable = gm_newcomer
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	has_variable = gm_levels
+	OR = {
+		has_variable = gm_namesake
+		has_variable = gm_name
+	}
+	NOT = { has_variable = gm_unveil_pending }
+	NOT = { has_variable = gm_name_choice_open }
+	NOT = { has_variable = gm_skin_axis }
+	NOT = { has_variable = gm_being_named }
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_rebuilding }
+}
+
 # Its years add to its grandeur this month (spec 2026-10-16 §2): dedicated and
 # recorded, not contested (a heritage monument ages), and not while its method
 # is being put back, a ceremony asks or a rebuild is under way. An undedicated

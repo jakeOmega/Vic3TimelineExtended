@@ -598,6 +598,18 @@ gm_state_tr_rebuild_from_moving = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
+	gm_state_tr_take_records_from_moving = yes
+	remove_variable = gm_rebuild_level
+}
+
+# State scope (scope:gm_tr_moving a trophy or a secondary monument). Its
+# records as this state's primary monument's, after gm_clear_state: its look,
+# name, landmark, honoree, age and contest, its dedication to put back
+# (gm_restore_pm), recorded as seen so it is never read as the engine's copy,
+# frozen at its own levels. A container that kept its raiser and builder (a
+# demoted primary) hands them over; a trophy has none, and its new owner
+# raised it.
+gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_skin TO = gm_skin }
 	gm_tr_copy_to_state = { FROM = gm_tr_form TO = gm_form }
 	gm_tr_copy_to_state = { FROM = gm_tr_landmark TO = gm_landmark }
@@ -611,14 +623,34 @@ gm_state_tr_rebuild_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
 	gm_tr_copy_to_state = { FROM = gm_tr_age TO = gm_age }
-	# Finished as it was: a monument rebuilt from its records is frozen at its
-	# own levels (spec 2026-10-16 §3.1).
+	gm_tr_copy_to_state = { FROM = gm_tr_faith TO = gm_faith }
+	gm_tr_copy_to_state = { FROM = gm_tr_contested TO = gm_contested }
+	gm_tr_copy_to_state = { FROM = gm_tr_heritage TO = gm_heritage }
+	gm_tr_copy_to_state = { FROM = gm_tr_base_ig TO = gm_base_ig }
+	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
+	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1).
 	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = gm_seen
-	set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
-	set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }
-	set_variable = { name = gm_built_by value = owner }
 	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_ceremony_level } }
+		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_ceremony_level }
+	}
+	else = {
+		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
+	}
+	set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_built_by } }
+		set_variable = { name = gm_built_by value = scope:gm_tr_moving.var:gm_tr_built_by }
+	}
+	else = {
+		set_variable = { name = gm_built_by value = owner }
+	}
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_raised_by } }
+		set_variable = { name = gm_raised_by value = scope:gm_tr_moving.var:gm_tr_raised_by }
+	}
+	else_if = {
 		limit = {
 			scope:gm_tr_moving = {
 				has_variable = gm_tr_dedication
@@ -632,7 +664,6 @@ gm_state_tr_rebuild_from_moving = {
 		}
 		set_variable = { name = gm_raised_by value = owner }
 	}
-	remove_variable = gm_rebuild_level
 }
 
 # State scope: the trophy's variable $FROM$, when it has one, as $TO$.

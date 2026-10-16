@@ -304,6 +304,22 @@ gm_state_can_expand = {
 	}
 }
 
+# State scope. A secondary here may be rededicated (spec 2026-10-16 §4.3): it is
+# swapped in as the state's monument first, so the one standing there now must
+# be a finished, named dedicated monument with nothing under way.
+gm_state_can_rededicate_beside = {
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	has_variable = gm_levels
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_rebuilding }
+	NOT = { has_variable = gm_unveil_pending }
+	NOT = { has_variable = gm_name_choice_open }
+	NOT = { has_variable = gm_skin_axis }
+	NOT = { has_variable = gm_being_named }
+}
+
 # ---- A trophy comes home (spec §4.1) -----------------------------------------------
 # State scope, with scope:gm_tr_moving the returning trophy. What stands here
 # is what the trophy is a piece of: the landmark it came from, or, with
