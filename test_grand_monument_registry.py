@@ -1728,7 +1728,7 @@ COMMISSION_SOURCES = (
     Source("tech_scientific", (), False, "country_tech_spread_mult", 0.1, "+10%"),
     Source("tech_industrial", (), False, "building_group_bg_manufacturing_throughput_add", 0.05, "+5%"),
     Source("tech_athletic", (), False, "state_mortality_mult", -0.05, "−5%"),
-    Source("tech_naturalist", (), False, "state_pollution_reduction_health_mult", 0.25, "+25%"),
+    Source("tech_naturalist", (), False, "state_pollution_reduction_health_mult", -0.25, "−25%"),
 )
 SOURCE_KEYS = tuple(s.key for s in COMMISSION_SOURCES)
 # The technology moments (§1): each civic-progress dedication's own gate, but

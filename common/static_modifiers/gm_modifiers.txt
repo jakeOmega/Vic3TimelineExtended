@@ -140,7 +140,7 @@ gm_boon_tech_athletic = {
 
 gm_boon_tech_naturalist = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	state_pollution_reduction_health_mult = 0.25
+	state_pollution_reduction_health_mult = -0.25
 }
 
 # A trophy brought home (trophies spec §3, gm_trophy_effects.txt): ten years,

@@ -2447,7 +2447,7 @@
  gm_boon_tech_industrial_effect:0 "#G +5%#! $bg_manufacturing$ throughput"
  gm_boon_tech_naturalist:0 "The Green Movement"
  gm_boon_tech_naturalist_desc:0 "Botanical gardens turn the public's mind to clean air and water. From an opportunity we seized."
- gm_boon_tech_naturalist_effect:0 "#G +25%#! $state_pollution_reduction_health_mult$"
+ gm_boon_tech_naturalist_effect:0 "#G −25%#! $state_pollution_reduction_health_mult$"
  gm_boon_tech_scientific:0 "An Age of Inquiry"
  gm_boon_tech_scientific_desc:0 "A grand observatory draws scholars from abroad, and their ideas with them. From an opportunity we seized."
  gm_boon_tech_scientific_effect:0 "#G +10%#! [concept_technology_spread]"
