@@ -118,9 +118,19 @@ gm_state_has_pm = {
 	b:building_grand_monument ?= { has_active_production_method = $PM$ }
 }
 
+# A rebuilt undedicated monument stands on the engine's copy of its siblings'
+# dedication until its own method reads back (gm_restore_pm = undedicated,
+# gm_state_mark_restore_pm): undedicated meanwhile, so no sum, first sight or
+# contest takes the copy for a dedication.
 gm_state_is_dedicated = {
 	has_building = building_grand_monument
 	NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } }
+	NOT = {
+		AND = {
+			has_variable = gm_restore_pm
+			var:gm_restore_pm = flag:undedicated
+		}
+	}
 }
 
 # A dedication no ceremony gave it and no pulse has recorded. A new building

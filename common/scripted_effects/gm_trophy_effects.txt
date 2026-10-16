@@ -420,8 +420,29 @@ gm_tr_return_home = {
 	var:gm_tr_site ?= {
 		owner = { save_scope_as = gm_tr_giver }
 	}
+	# Its origin's building was rebuilt today (gm_rebuilding, one day): every way
+	# home rebuilds it again, and whether a rebuilt building reads back later in
+	# the same effect is unread (scripting_best_practices.md, "Building
+	# Lifecycle Effect Gotchas"), so a second return would read the first one's
+	# stale level, or no building at all (Return Cultural Property brings the
+	# Luxor Obelisk and the Dendera Zodiac home in one effect). It waits for the
+	# monthly pass instead (gm_tr_return_queued), which brings one home to each
+	# state at a time.
 	if = {
+		limit = {
+			exists = scope:gm_tr_receiver
+			var:gm_tr_origin ?= { has_variable = gm_rebuilding }
+		}
+		set_variable = gm_tr_return_queued
+		if = {
+			limit = { always = $RELATIONS$ }
+			set_variable = gm_tr_return_relations
+		}
+	}
+	else_if = {
 		limit = { exists = scope:gm_tr_receiver }
+		gm_remove_state_var = { VAR = gm_tr_return_queued }
+		gm_remove_state_var = { VAR = gm_tr_return_relations }
 		# A piece of a secondary rejoins it; anything else with a monument
 		# standing in its origin becomes a monument of its own (spec
 		# 2026-10-13 §4.1); a piece of the primary, or with none standing, is
@@ -490,14 +511,16 @@ gm_state_tr_receive = {
 
 # State scope (scope:gm_tr_moving the trophy or monument). The standing building
 # takes the levels: removed and built again, the ladder's only way to add
-# levels (gm_state_gift_grandeur). The primary's dedication is recorded first,
-# so the rebuilt building gets it back (gm_restore_pm) and whatever else
-# stands here keeps its place in the level (the building's whole, plus these).
+# levels (gm_state_gift_grandeur). The primary's method is recorded first,
+# Undedicated too, so the rebuilt building gets it back (gm_restore_pm) and
+# whatever else stands here keeps its place in the level (the building's
+# whole, plus these). Not while a ceremony asks: its answer sets the method,
+# and a recorded copy would be put back over it.
 gm_state_tr_add_levels = {
 	if = {
 		limit = {
-			gm_state_is_dedicated = yes
 			NOT = { has_variable = gm_restore_pm }
+			NOT = { has_variable = gm_ceremony_pending }
 		}
 		gm_state_mark_restore_pm = yes
 	}
@@ -522,8 +545,10 @@ gm_state_tr_add_levels = {
 # State scope (scope:gm_tr_moving the trophy or monument to stand as this
 # state's primary monument; the state has no building, or just lost it). Built
 # at var:gm_rebuild_level when the caller set one, else at the moving
-# container's own levels, with its records. Whatever the state recorded of an
-# earlier monument is cleared first.
+# container's own levels plus those of any secondary still listed here (a
+# building lost before the monthly pass promoted one: a return or a dig
+# placed now must not leave them off the level), with its records. Whatever
+# the state recorded of an earlier monument is cleared first.
 gm_state_tr_rebuild_from_moving = {
 	gm_clear_state = { KEEP_LANDMARK = no }
 	if = {
@@ -532,6 +557,7 @@ gm_state_tr_rebuild_from_moving = {
 			name = gm_rebuild_level
 			value = {
 				value = scope:gm_tr_moving.var:gm_tr_levels
+				add = gm_state_secondary_grandeur
 				max = 200
 			}
 		}
@@ -639,8 +665,11 @@ gm_state_tr_monthly = {
 		limit = { has_variable = gm_seen }
 		gm_state_record_builder = yes
 	}
+	# The primary or a monument beside it (gm_monument_triggers.txt). A player's
+	# offer (.1) names the primary, so it comes only while the primary can go;
+	# a secondary has its own Carry It Off on the state card.
 	if = {
-		limit = { gm_state_tr_takeable = yes }
+		limit = { gm_state_tr_any_takeable = yes }
 		clear_saved_scope = gm_tr_occupier
 		gm_state_tr_find_occupier = yes
 		if = {
@@ -661,6 +690,7 @@ gm_state_tr_monthly = {
 			}
 			else_if = {
 				limit = {
+					gm_state_tr_takeable = yes
 					NOT = {
 						has_variable = gm_tr_offered_to
 						var:gm_tr_offered_to ?= { this = scope:gm_tr_occupier }
@@ -749,8 +779,26 @@ gm_trophy_monthly = {
 			gm_tr_repair_places = yes
 			gm_tr_update_picture = yes
 		}
+		# Returns that waited for a rebuild (gm_tr_return_home): one to each
+		# state now; another bound for the same state waits again.
 		every_in_global_list = {
 			variable = gm_trophies
+			limit = { has_variable = gm_tr_return_queued }
+			add_to_temporary_list = gm_tr_queued_home
+		}
+		every_in_list = {
+			list = gm_tr_queued_home
+			if = {
+				limit = { has_variable = gm_tr_return_relations }
+				gm_tr_return_home = { RELATIONS = yes }
+			}
+			else = {
+				gm_tr_return_home = { RELATIONS = no }
+			}
+		}
+		every_in_global_list = {
+			variable = gm_trophies
+			limit = { NOT = { has_variable = gm_tr_return_queued } }
 			gm_tr_monthly_one = yes
 		}
 		every_in_list = {

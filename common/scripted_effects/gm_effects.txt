@@ -985,6 +985,13 @@ gm_state_changed_hands = {
 	gm_remove_state_var = { VAR = gm_being_named }
 	# The country it came from, for a trophy taken from it (gm_trophy_effects.txt).
 	gm_state_tr_changed_hands = yes
+	# The monuments beside it change owner too: the owners' Our Monuments lists
+	# (gm_monuments_held) now, not at the next monthly pass, so the panels agree
+	# with the standing grandeur, which reads the state's own list at once.
+	if = {
+		limit = { gm_state_has_secondary = yes }
+		gm_monument_pass = yes
+	}
 	if = {
 		limit = {
 			owner = { has_variable = gm_cw_adopting }
@@ -1284,6 +1291,8 @@ gm_state_undedicate = {
 			production_method = pm_monument_undedicated
 		}
 	}
+	# The answer stands (gm_state_dedicate's note).
+	gm_remove_state_var = { VAR = gm_restore_pm }
 	# Draped at once: gm_state_update_picture would read back the PM just activated.
 	# A landmark keeps its own picture (phase 4 §5.1).
 	set_variable = { name = gm_picture_code value = 1 }
@@ -1400,6 +1409,9 @@ gm_state_dedicate = {
 		}
 	}
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
+	# The ceremony's answer is the method now: a restore recorded before it
+	# (a return during the ceremony) must not put another back.
+	gm_remove_state_var = { VAR = gm_restore_pm }
 	set_variable = gm_seen
 	gm_state_record_builder = yes
 	# The monument a commission met by this dedication names (v2 §2.3).

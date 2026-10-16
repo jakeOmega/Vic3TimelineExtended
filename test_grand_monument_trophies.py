@@ -1016,11 +1016,15 @@ class LootingASecondaryTests(unittest.TestCase):
     def test_the_ai_picks_one_monument_of_the_state_to_loot(self):
         pick = squash(block(read(MON_EFFECTS), "gm_state_tr_ai_choose_target"))
         self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_target }", pick)
-        self.assertIn("limit = { gm_state_has_secondary = yes }", pick)
-        self.assertIn("random = { chance = gm_state_tr_ai_secondary_chance "
-                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } "
+        self.assertIn("limit = { gm_state_has_secondary = yes gm_state_tr_takeable_secondary = yes }", pick)
+        # A primary that cannot go leaves the roll to the secondaries (review
+        # 2026-10-16, finding 2); otherwise every monument is as likely.
+        self.assertIn("if = { limit = { gm_state_tr_takeable = no } "
+                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } } "
+                      "else = { random = { chance = gm_state_tr_ai_secondary_chance "
+                      "random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick } } } "
                       "if = { limit = { exists = scope:gm_mon_pick } "
-                      "set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick } } }", pick)
+                      "set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick } }", pick)
         monthly = squash(block(read(TR_EFFECTS), "gm_state_tr_monthly"))
         self.assertIn("random = { chance = gm_tr_ai_loot_chance gm_state_tr_ai_choose_target = yes "
                       "gm_state_tr_take = { WHO = scope:gm_tr_occupier ROUTE = occupation } }", monthly)

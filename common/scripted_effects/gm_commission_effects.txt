@@ -796,8 +796,13 @@ gm_state_gift_grandeur = {
 	}
 }
 
-# State scope. Record the active dedication as gm_restore_pm (a flag naming it).
+# State scope. Record the active dedication as gm_restore_pm (a flag naming it),
+# or flag:undedicated: a rebuilt building starts on the engine's copy of its
+# siblings' dedication, so an undedicated monument needs its own method put
+# back as much as a dedicated one (gm_state_is_dedicated reads it as
+# undedicated meanwhile).
 gm_state_mark_restore_pm = {
+	gm_state_mark_restore_pm_one = { KEY = undedicated }
 	gm_state_mark_restore_pm_one = { KEY = crown }
 	gm_state_mark_restore_pm_one = { KEY = republic }
 	gm_state_mark_restore_pm_one = { KEY = revolution }
@@ -831,6 +836,7 @@ gm_state_restore_dedication = {
 			has_variable = gm_restore_pm
 			has_building = building_grand_monument
 		}
+		gm_state_restore_dedication_one = { KEY = undedicated }
 		gm_state_restore_dedication_one = { KEY = crown }
 		gm_state_restore_dedication_one = { KEY = republic }
 		gm_state_restore_dedication_one = { KEY = revolution }

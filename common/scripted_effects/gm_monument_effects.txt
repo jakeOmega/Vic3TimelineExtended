@@ -377,10 +377,12 @@ gm_state_tr_shrink_by = {
 	if = {
 		limit = { has_variable = gm_shrink_click }
 		remove_variable = gm_shrink_click
+		# Its method, Undedicated too, and not while a ceremony asks
+		# (gm_state_tr_add_levels).
 		if = {
 			limit = {
-				gm_state_is_dedicated = yes
 				NOT = { has_variable = gm_restore_pm }
+				NOT = { has_variable = gm_ceremony_pending }
 			}
 			gm_state_mark_restore_pm = yes
 		}
@@ -407,19 +409,30 @@ gm_state_tr_shrink_by = {
 # ---- The AI's choice of which monument ----------------------------------------------
 # State scope, before gm_state_tr_take on the AI's occupation roll. One roll
 # falls on one monument of the state: the primary, or (every monument as
-# likely) a secondary, named in gm_tr_take_target.
+# likely) a secondary, named in gm_tr_take_target. A primary that cannot go
+# (undedicated, a Grand Shrine: gm_state_tr_takeable) leaves the roll to the
+# secondaries, which the caller's gm_state_tr_any_takeable found open.
 gm_state_tr_ai_choose_target = {
 	gm_remove_state_var = { VAR = gm_tr_take_target }
 	if = {
-		limit = { gm_state_has_secondary = yes }
+		limit = {
+			gm_state_has_secondary = yes
+			gm_state_tr_takeable_secondary = yes
+		}
 		clear_saved_scope = gm_mon_pick
-		random = {
-			chance = gm_state_tr_ai_secondary_chance
+		if = {
+			limit = { gm_state_tr_takeable = no }
 			random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick }
-			if = {
-				limit = { exists = scope:gm_mon_pick }
-				set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick }
+		}
+		else = {
+			random = {
+				chance = gm_state_tr_ai_secondary_chance
+				random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick }
 			}
+		}
+		if = {
+			limit = { exists = scope:gm_mon_pick }
+			set_variable = { name = gm_tr_take_target value = scope:gm_mon_pick }
 		}
 	}
 }

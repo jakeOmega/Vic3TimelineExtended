@@ -59,8 +59,15 @@ monument_events.1 = {
 					# A new monument stands on its siblings' dedication
 					# (gm_state_has_copied_dedication): the ceremony replaces it.
 					gm_state_reset_copied_dedication = yes
+					# Not for a script's rebuild (gm_rebuilding, one day): its
+					# monument has not grown, and a ceremony asked at this level
+					# already (gm_state_offer_missed_ceremony asks again only
+					# above gm_ceremony_level). Rededicate starts its own.
 					if = {
-						limit = { gm_state_is_dedicated = no }
+						limit = {
+							gm_state_is_dedicated = no
+							NOT = { has_variable = gm_rebuilding }
+						}
 						gm_state_start_ceremony = yes
 					}
 					# The monument an opportunity completed by this level names

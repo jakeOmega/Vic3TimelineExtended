@@ -362,12 +362,24 @@ gm_arch_finish = {
 			}
 		}
 	}
+	# Its state's building was rebuilt today (another dig finished there this
+	# month, or a return): placing it rebuilds the building again, which must
+	# wait (gm_tr_return_home's note). It stays at 100 and finishes next month,
+	# before its method is settled, so a Forensic bonus is not added twice.
 	if = {
-		limit = { exists = scope:gm_arch_dig_state }
+		limit = {
+			exists = scope:gm_arch_dig_state
+			scope:gm_arch_dig_state = {
+				NOT = { has_variable = gm_rebuilding }
+			}
+		}
 		gm_arch_settle_levels = yes
 		gm_arch_place = yes
 	}
-	else = {
+	else_if = {
+		limit = {
+			NOT = { exists = scope:gm_arch_dig_state }
+		}
 		gm_arch_suspend = yes
 	}
 }

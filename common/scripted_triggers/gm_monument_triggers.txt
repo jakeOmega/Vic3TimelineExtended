@@ -114,6 +114,20 @@ gm_state_tr_takeable_secondary = {
 	NOT = { has_variable = gm_tr_cooldown }
 }
 
+# State scope. Some monument here can be carried off: the primary
+# (gm_state_tr_takeable, which needs it dedicated and not a Grand Shrine) or
+# one standing beside it. An occupier's monthly roll asks this, so a returned
+# artifact beside an undedicated primary or a shrine can still be looted.
+gm_state_tr_any_takeable = {
+	OR = {
+		gm_state_tr_takeable = yes
+		AND = {
+			gm_state_has_secondary = yes
+			gm_state_tr_takeable_secondary = yes
+		}
+	}
+}
+
 # Container scope, a secondary monument. $WHO$ (a country) occupies its state
 # in a war and may carry it off.
 gm_mon_tr_can_take = {
