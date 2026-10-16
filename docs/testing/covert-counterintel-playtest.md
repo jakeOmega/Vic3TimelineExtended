@@ -12,7 +12,7 @@ the things only the game can show. Strike a fixed item through with the commit t
   watched operation; c: relations +60 with every country running operations against us, so their catches count as
   spying on a friend; d: start Counterintelligence Support from us on a friend without a protector, six months in). The older harness events still
   work: `te_debug_covert.1` forces a detection.
-- **Logs.** Read `debug.log`, not `error.log`. Search `TE_SELF_CHECK` for the two self-checks below.
+- **Logs.** Read `debug.log`, not `error.log`. Search `TE_SELF_CHECK` for the self-checks below.
 
 ## Self-checks
 
@@ -22,6 +22,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 | `TE_SELF_CHECK BROKEN covert_catch_decision` | `.3` never ran for a pending catch; the operation was released for the next roll. | As above. |
 | `TE_SELF_CHECK OK covert_watch_expose` | An exposure of a watched operation reached the attacker's `covert_warfare.1`, defender to attacker. | — |
 | `TE_SELF_CHECK BROKEN covert_watch_expose` | An ordered exposure was sent but `.1` never ran. | `covert_watch_expose_record` flags the operation (`iw_expose_requested`), and the attacker's own monthly pass finds it and calls `covert_exposure_fire`. |
+| `TE_SELF_CHECK BROKEN covert_exposure_lock` | A `.1`'s copies (`iw_burned_type_code` and siblings) outlived a whole monthly pass, so its `after` never ran; the watchdog has released the lock. Expected only after a revolution won while that `.1` was open. | Without a revolution behind it, `.1` closes without running `after` (check an event left to time out): remove the copies and the lock in each option as well. |
 
 ## Watching a caught operation
 
@@ -67,6 +68,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 |---|---|---|
 | **Launch.** Hover the action on a friend, on a non-friend, and on an ally that already has a protector. | On a friend: the target's three +8 defence lines, the phase line and the "open arrangement" line, no detection warning. On a non-friend the friend line fails; with another protector the one-protector line fails. | |
 | **Notification.** | The ally gets "[us] has begun supporting our counterintelligence services." | |
+| **Launch toast on a hostile operation.** An AI launches an operation against a player. | Unknown, a question from before this branch: every covert action defines an `_action_notification_desc` addressed to its target. If the target gets a toast naming the initiator, targets learn of every launch by name, which undercuts detection as a whole, and the guide's detection section needs a sentence. The Notification row above is the same mechanism. | Nothing to fix in this branch. The fix is modelling operations without pacts (spec § D, option 3). |
 | **Row.** The Operations section. | Cultivate Assets' icon (placeholder until an icon pass), "Supporting Counterintelligence in X", phase, priority stepper, "Detection Risk: none" with its hover, Stand down. Stand down clears the protector mark, so another country can launch it there. | |
 | **Effect.** From month 6. | The ally's covert defences rise by +8 per axis, ×2 from month 12, ×1.35 / ×1.6 at priority 2 / 3 (its modifier breakdown). | |
 | **Nothing for the protector.** | No Agent Networks row for the ally; Tradecraft doesn't rise from it; with only Counterintelligence Support running, Tradecraft decays. | |
