@@ -66,6 +66,13 @@ others reached by the default's INJECT alone):** `group=clean` OK, 54 power plan
 `group=other` BROKEN, 256 power plants 99% subsidized, railways 98%. So `should_remove` works, and the default strategy's
 INJECT is inert (the mod's earlier `nice_to_have` never applied either; `scripting_best_practices.md`).
 
+**Round 2 (the same save, loaded at 2034.9.13 and run to 2035.1.1, 2026-10-16; all seven strategies):** `group=clean` OK,
+54 power plants 1% subsidized, railways 98%; `group=merged` OK, 257 power plants 19% subsidized (99% in round 1),
+railways 98%; no `group=rest` line (fewer than 5 power plants or railways in AI countries outside the seven). An
+INJECTed second `subsidies` block adds its new key (`scripting_best_practices.md`). Still open: why 19% of the merged
+group's plants stay subsidized after 3½ months (slow stripping, or a case where the AI keeps one), and how unsubsidized
+plants fare (the checks below).
+
 | Round 2 result | Reading | Next |
 |---|---|---|
 | merged OK | An INJECTed second `subsidies` block adds its new key. Every AI country on one of the seven drops its power-plant subsidies. | Run the subsidy checks below; record the merge in `scripting_best_practices.md`. |
