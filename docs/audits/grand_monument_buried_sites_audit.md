@@ -75,8 +75,8 @@ Each is a real excavation with a clear discovery story, picked to spread the sit
 
 Speculative finds in the spirit of S3 and S4: real lost places that historians think exist, which a game could let a
 country find. Each would be a plain site (no parent dig), late-game, survey or incidental, with a historical note saying
-plainly that it has never been found. The issue's breakthroughs that are not sites (S1, S2, S5, S6, S7) would need the
-deferred breakthrough mechanic; S8 can be a site.
+plainly that it has never been found. The issue's breakthroughs that are not places to dig (S1, S2, S5, S7: two
+decipherments, the Amber Room and a single tablet) would need the deferred breakthrough mechanic; S6 and S8 can be sites.
 
 | Proposed site | State | Vector, technology | Form, levels | Premise |
 |---|---|---|---|---|
@@ -94,3 +94,69 @@ deferred breakthrough mechanic; S8 can be a site.
 | The Mercury Palace of Qin Shi Huang (S6) | Xian | survey, an era-10 technology | mausoleum, 10 | could stand beside the Terracotta Army as the opened tomb |
 
 Fantasy finds (the issue's E1–E6, Atlantis and the rest) stay out, per the owner's 2026-10-14 ruling.
+
+## A second opinion: Gemini's prioritisation
+
+The owner pasted a ranking from Gemini on 2026-10-16 (not the owner's view, and not authoritative). It ranks 38 sites in
+four tiers against three tests: regions with no dig, eras with no dig, and a mix of portable hoards and sites that stay where
+they are. It recommends a 50-site roster: the original 30, a "Core 12" and eight more.
+
+### What it gets wrong about this mod
+
+- Its baseline is "the original 30". The game has 36: Olympia, Delphi, Sidon, the Villa of the Papyri, the Tomb of Alexander
+  and Pompeii besides. The Tomb of Alexander, in its Tier 2, is already built (row 86).
+- It calls the list front-loaded into 1850–1930. That is half right: seven sites open from 1974 to 1995 (the Terracotta Army,
+  Vergina, Marquis Yi, Sipán, Ötzi, Caral, Göbekli Tepe). The real gap is after 2000, where there is nothing but the two
+  speculative finds, in a game that runs past 2100.
+- It picks Mahendraparvata "since Angkor Wat is already standing", but the mod has no Angkor landmark, and Angkor's clearance
+  by the École française d'Extrême-Orient from 1907 is itself a dig.
+
+### Facts to check before building from it
+
+- Pazyryk (Rudenko, 1929 and 1947–49) and the Ice Maiden (1993, the Ukok plateau) are different sites.
+- The first Olmec head (1862) came from Tres Zapotes, not San Lorenzo.
+- Derinkuyu has about eight levels, not eighteen, and the people living above it always knew of parts of it.
+- Olduvai Gorge's finds are fossils and stone tools. They suit a Grand Monument poorly (nothing stands there to be raised or
+  carried off), and fit the deferred breakthroughs better.
+
+### Where the two lists agree
+
+Both rank highly Yinxu (Anyang), the Dunhuang Library Cave, Ife or Igbo-Ukwu, Mapungubwe, Mesa Verde, Pazyryk, and the
+speculative Inner Mausoleum of Qin, Tomb of Genghis Khan and Paititi. Both list Nok, Skara Brae and the Library of Ivan the
+Terrible lower down. Agreement between two independent passes is the strongest signal here.
+
+### What each adds
+
+- **From Gemini, worth taking:** Taxila (India beyond the Indus), Tillya Tepe (Afghanistan, 1978, hidden through the wars
+  and shown again in 2003), Mahendraparvata (a 2012 LiDAR find, which fills the gap after 2000), the Olmec heads of La Venta,
+  Monte Albán's Tomb 7, the Varna necropolis, the Belitung wreck (a find at sea) and Lake Mungo (Oceania, which has
+  nothing). Two of its ideas are mechanics rather than sites: a chance find driven by what is built in the state (tin mines
+  turning up Nok, as the issue's design wanted for every incidental site), and a looting disaster where a country without
+  heritage law loses a site to private diggers (the Spiro Mounds, 1933–35).
+- **From this audit, missing from Gemini's:** Susa and the Code of Hammurabi (Iran), Hattusa, Templo Mayor, Altamira (it has
+  nothing in Iberia), Akrotiri, Heracleion, and the speculative tombs of Cleopatra and Imhotep and the army of Cambyses.
+
+### A merged next wave (a proposal for the owner to amend)
+
+Twelve sites that put a dig in every region that has none, spread from the 1860s to the 1970s, and four for after 2000. With
+the 36, that makes 52, close to Gemini's 50.
+
+| Site | State | Found | Fills |
+|---|---|---|---|
+| Yinxu (Anyang), the oracle bones and Fu Hao's tomb | Henan | 1899, 1928, 1976 | the Shang, beside China's four |
+| Dunhuang Library Cave | Gansu | 1900 | Central Asia; the textbook case for the concession |
+| Ife heads (or Igbo-Ukwu) | Nigeria (Niger Delta for Igbo-Ukwu) | 1938 | West Africa |
+| Mapungubwe | Transvaal | 1933 | southern Africa |
+| Mesa Verde | Colorado | 1888 | North America |
+| Pazyryk | Altai | 1929 | Russia and the steppe |
+| Angkor | Cambodia | 1860, 1907 | Southeast Asia; French Indochina's concession |
+| Susa | Khuzestan | 1884, 1901 | Iran; France's real monopoly |
+| Taxila | Punjab | 1913 | India beyond the Indus |
+| Tillya Tepe | Balkh | 1978 | Afghanistan; a Cold War find |
+| La Venta (or Templo Mayor) | Veracruz (Mexico for Templo Mayor) | 1925, 1940 (1978) | Mexico beyond Palenque |
+| Altamira | Asturias | 1868, 1879 | Iberia |
+| Mahendraparvata | Cambodia | 2012 | after 2000: LiDAR |
+| Inner Mausoleum of Qin Shi Huang | Xian | speculative | after 2000; beside the Terracotta Army |
+| Tomb of Genghis Khan | Urga | speculative | after 2000 |
+| Paititi | Ica | speculative | after 2000 |
+
