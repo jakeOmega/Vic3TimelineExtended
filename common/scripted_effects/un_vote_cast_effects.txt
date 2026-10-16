@@ -115,6 +115,16 @@ un_vote_cast_yes = {
 				add_modifier = { name = un_narcotics_control_modifier multiplier = un_convention_multiplier }
 			}
 			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_antarctic } }
+				add_modifier = { name = un_antarctic_treaty_modifier multiplier = un_convention_multiplier }
+				custom_tooltip = un_antarctic_terms_tt
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_asat } }
+				add_modifier = { name = un_asat_moratorium_modifier multiplier = un_convention_multiplier }
+				custom_tooltip = un_asat_terms_tt
+			}
+			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
 				add_modifier = { name = un_cultural_diversity_modifier multiplier = un_convention_multiplier }
 				un_cultural_diversity_terms_tt = yes

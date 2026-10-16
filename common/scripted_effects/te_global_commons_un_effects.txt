@@ -344,3 +344,53 @@ te_gc_un_selfcheck_policy_start = {
 		trigger_event = { id = te_global_commons_un.1 days = 7 }
 	}
 }
+
+# ---- Display: Our Obligations (un_chamber_regime_lines) ---------------------------------
+
+# Our standing on the seabed under the Law of the Sea (§3), under the
+# convention's own line, once its seabed terms are awake: the regime, then our
+# part in it (royalties paid, the reserved half, a defection and its five
+# years). Read-only; it reads only modifiers and variables, since the chamber
+# re-renders it every frame (no level count here).
+# Scope: country (a member)
+un_chamber_seabed_lines = {
+	if = {
+		limit = {
+			te_seabed_terms_awake = yes
+			te_seabed_itlos_ratified = yes
+		}
+		if = {
+			limit = { te_seabed_regime_is_regulated = yes }
+			custom_tooltip_no_bullet = je_un_chamber_seabed_regulated
+		}
+		else_if = {
+			limit = { te_seabed_regime_is_scramble = yes }
+			custom_tooltip_no_bullet = je_un_chamber_seabed_scramble
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_seabed_open
+		}
+		if = {
+			limit = {
+				has_modifier = te_seabed_royalty_modifier
+				has_variable = te_seabed_royalty_cached
+			}
+			custom_tooltip_no_bullet = je_un_chamber_seabed_royalty
+		}
+		if = {
+			limit = { te_seabed_on_unilateral = yes }
+			custom_tooltip_no_bullet = je_un_chamber_seabed_defected
+		}
+		else_if = {
+			limit = { te_seabed_party_cooling = yes }
+			custom_tooltip_no_bullet = je_un_chamber_seabed_cooling
+		}
+		else_if = {
+			limit = {
+				te_seabed_regime_is_regulated = yes
+				te_seabed_reserved_half_eligible = yes
+			}
+			custom_tooltip_no_bullet = je_un_chamber_seabed_reserved
+		}
+	}
+}

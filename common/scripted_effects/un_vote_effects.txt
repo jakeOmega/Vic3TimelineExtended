@@ -648,6 +648,26 @@ un_vote_apply_treaty_modifier = {
 		}
 		un_convention_country_on = { MODIFIER = un_icc_member_modifier }
 	}
+	# The Global Commons' conventions (2026-10-16-global-commons-design.md §4,
+	# §6.5): country-scoped too, so the seabed allocation and the
+	# anti-satellite strike read them without a je: hop
+	# (te_seabed_southern_barred, te_asat_moratorium_party).
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_antarctic }
+			NOT = { has_modifier = un_antarctic_treaty_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_antarctic_treaty_modifier }
+		custom_tooltip = un_antarctic_terms_tt
+	}
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_asat }
+			NOT = { has_modifier = un_asat_moratorium_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
+		custom_tooltip = un_asat_terms_tt
+	}
 	# The convention regimes (redesign phase 5, §5.3): read our terms now —
 	# the member modifiers at the current E, and whatever the regimes make us
 	# win or pay (un_regime_effects.txt; the chamber's Our Obligations lists
@@ -779,6 +799,26 @@ un_apply_ratified_conventions = {
 			NOT = { has_modifier = un_icc_member_modifier }
 		}
 		un_convention_country_on = { MODIFIER = un_icc_member_modifier }
+	}
+	# The Antarctic Treaty (ATS in force). Country-scoped — matches
+	# un_vote_apply_treaty_modifier. Not for a joiner that denounced it: it
+	# left the treaty on purpose, and rejoining the Assembly does not bring it
+	# back (te_antarctic_denounced; a new treaty clears the mark).
+	if = {
+		limit = {
+			has_global_variable = un_agency_ats
+			NOT = { has_modifier = un_antarctic_treaty_modifier }
+			NOT = { has_variable = te_antarctic_denounced }
+		}
+		un_convention_country_on = { MODIFIER = un_antarctic_treaty_modifier }
+	}
+	# The anti-satellite moratorium (UNODA in force). Country-scoped.
+	if = {
+		limit = {
+			has_global_variable = un_agency_unoda
+			NOT = { has_modifier = un_asat_moratorium_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
 	}
 	# The joiner's terms under the regimes in force (redesign phase 5).
 	un_regime_refresh_country = yes

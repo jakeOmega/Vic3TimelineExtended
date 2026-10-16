@@ -62,6 +62,12 @@ un_docket_score_agenda = { value = 20 }
 # Redesign phase 5: a member in a banking panic or default during a contagion
 # wave, offered the emergency lending facility (item 14).
 un_docket_score_loan = { value = 45 }
+# The Global Commons (2026-10-16-global-commons-design.md §4, §6.5): a
+# country's first Antarctic research station (item 15), and a destructive
+# anti-satellite strike (item 16), graver than a new world reached and below
+# a new nuclear power.
+un_docket_score_antarctic = { value = 35 }
+un_docket_score_asat = { value = 55 }
 
 # Warming: a higher threshold is a graver summit.
 un_docket_score_warming = {

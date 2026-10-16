@@ -148,7 +148,8 @@ un_rep_convention_missed = {
 # Any convention missed. The list is un_apply_ratified_conventions's
 # (un_vote_effects.txt); test_un_membership.py keeps the two in step. The
 # nuclear ban counts only for an unarmed member, which is the only one
-# un_events.36 would ratify it for.
+# un_events.36 would ratify it for, and the Antarctic Treaty only for a member
+# that has not denounced it.
 # Scope: country
 un_rep_any_convention_missed = {
 	OR = {
@@ -168,5 +169,10 @@ un_rep_any_convention_missed = {
 			un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
 			nd_is_armed = no
 		}
+		AND = {
+			un_rep_convention_missed = { AGENCY = ats MODIFIER = un_antarctic_treaty_modifier }
+			NOT = { has_variable = te_antarctic_denounced }
+		}
+		un_rep_convention_missed = { AGENCY = unoda MODIFIER = un_asat_moratorium_modifier }
 	}
 }

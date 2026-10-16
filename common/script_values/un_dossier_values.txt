@@ -650,6 +650,68 @@ un_lean_interests = {
 		if = { limit = { country_rank >= rank_value:great_power } add = 10 }
 		if = { limit = { has_law = law_type:law_isolationism } add = -20 }
 		if = { limit = { has_law = law_type:law_protectionism } add = -10 }
+		# Its seabed terms, once anyone can mine the seabed (the Global
+		# Commons, §3): a poorer coastal member gains the reserved half; a
+		# great power that mines the seabed would pay royalties on it.
+		if = {
+			limit = { te_seabed_terms_awake = yes }
+			if = {
+				limit = {
+					any_scope_state = { is_coastal = yes }
+					has_global_variable = un_dev_fund_avg
+					un_dev_fund_gdp_per_head < global_var:un_dev_fund_avg
+				}
+				add = 10
+			}
+			if = {
+				limit = {
+					country_rank >= rank_value:great_power
+					te_seabed_ocean_mine_levels > 0
+				}
+				add = -10
+			}
+		}
+	}
+	else_if = {
+		# The Antarctic Treaty (the Global Commons, §4): a station's
+		# scientists want it, a great power licensing the seabed on its own
+		# terms does not, and one with a Southern coastline to claim from
+		# least of all.
+		limit = { scope:un_resolution ?= { has_tag = un_topic_antarctic } }
+		if = { limit = { te_antarctic_has_station = yes } add = 15 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -15 }
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+				te_seabed_on_unilateral = yes
+			}
+			add = -25
+			if = {
+				limit = {
+					any_scope_state = {
+						has_variable = te_seabed_basin
+						var:te_seabed_basin = 5
+					}
+				}
+				add = -15
+			}
+		}
+	}
+	else_if = {
+		# The anti-satellite moratorium (the Global Commons, §6.5): a power
+		# with satellites to lose wants it, the debris every strike leaves
+		# makes everyone want it more, and a power that has struck does not.
+		limit = { scope:un_resolution ?= { has_tag = un_topic_asat } }
+		if = { limit = { sr_has_space_program = yes } add = 15 }
+		if = {
+			limit = {
+				has_global_variable = te_asat_strikes_total
+				global_var:te_asat_strikes_total >= 2
+			}
+			add = 10
+		}
+		if = { limit = { has_variable = un_dkt_asat_struck } add = -40 }
+		if = { limit = { has_law = law_type:law_total_war } add = -15 }
 	}
 	else_if = {
 		# Physical protection of nuclear material (nuclear_crisis_design.md

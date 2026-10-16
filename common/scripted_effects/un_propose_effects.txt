@@ -801,3 +801,35 @@ un_propose_narcotics_effect = {
 	un_propose_own_motion_costs = yes
 	un_propose_narcotics_table = yes
 }
+
+# The Antarctic Treaty (the Global Commons, §4): the scientists for it, the
+# armed forces wary of a demilitarized continent.
+un_propose_antarctic_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = antarctic }
+	}
+}
+
+un_propose_antarctic_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_antarctic_table = yes
+}
+
+# The Moratorium on Destructive Anti-Satellite Tests (the Global Commons,
+# §6.5): the scientists for it, the armed forces against a limit on a weapon.
+un_propose_asat_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = asat }
+	}
+}
+
+un_propose_asat_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_asat_table = yes
+}

@@ -47,6 +47,9 @@
 #   36-47 redesign phase 7 (§0.12), in blocks of three per owner: 36-38
 #         justice, 39-41 order, 42-44 economy, 45-47 missions. Each owner's
 #         file header names its codes.
+#   48 (a loss) defected from the regulated seabed (the Global Commons,
+#      te_seabed_un_hooks.txt); 49 (a loss) denounced the Antarctic Treaty
+#      (te_global_commons_un_effects.txt)
 #
 # The 30+ range belongs to resolution lobbying
 # (common/scripted_effects/un_lobby_effects.txt). Both of its codes are stamped
