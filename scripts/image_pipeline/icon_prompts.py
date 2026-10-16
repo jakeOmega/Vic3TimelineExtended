@@ -740,7 +740,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": 2},
         "debt_receivership": {"subject": "a thick brown leather ledger book bound shut with a heavy iron chain and a closed iron padlock", "seed": 1},
         # The Grand Monuments' articles (2026-10-16), on borrowed icons until now.
-        "surrender_monument": {"subject": "a large hand lifting a small bronze statue of a robed figure off its square white stone pedestal", "seed": 2},
+        "surrender_monument": {"subject": "a large hand lifting a small bronze statue of a robed figure off its square white stone pedestal", "seed": 0},
         "return_cultural_property": {"subject": "a small white marble bust packed in an open wooden crate full of straw, a green ribbon tied in a bow around the crate", "seed": 3},
         "archaeological_concession": {"subject": "an iron spade stuck upright in a small mound of brown earth beside a terracotta amphora split cleanly into two halves", "seed": 3},
         "excavation_permit": {"subject": "a rolled parchment scroll sealed with a big red wax seal, a small iron trowel and a soft brush lying across it", "seed": 0},
