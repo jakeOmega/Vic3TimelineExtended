@@ -133,6 +133,14 @@ un_vote.1 = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
 			}
 			triggered_desc = {
+				desc = un_vote.1.t_antarctic
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_antarctic } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_asat
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
+			}
+			triggered_desc = {
 				desc = un_vote.1.t_icc
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 			}
@@ -280,6 +288,14 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_narcotics
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_antarctic
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_antarctic } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_asat
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_icc
@@ -784,6 +800,24 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
 				desc = un_vote.2.d_narcotics_failed
+			}
+			# The Antarctic Treaty and the anti-satellite moratorium (the Global
+			# Commons) - Passed, then Failed
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_antarctic has_tag = un_res_passed } }
+				desc = un_vote.2.d_antarctic_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_antarctic } }
+				desc = un_vote.2.d_antarctic_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat has_tag = un_res_passed } }
+				desc = un_vote.2.d_asat_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
+				desc = un_vote.2.d_asat_failed
 			}
 			# International Criminal Court - Passed (vetoed: symbolic censure only)
 			triggered_desc = {
@@ -1697,6 +1731,28 @@ un_vote.2 = {
 				set_global_variable = un_agency_incb
 			}
 
+			# ---- The Antarctic Treaty (the Global Commons §4): parties hold no
+			#      new Southern seabed licences, a party with a station shares
+			#      its science, every party counts toward the Policy pillar.
+			#      A new treaty: old denunciations and an old lapse are history ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_antarctic } }
+				custom_tooltip = un_vote_antarctic_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_ats
+				hidden_effect = { te_antarctic_treaty_on_passed = yes }
+			}
+
+			# ---- The Moratorium on Destructive Anti-Satellite Tests (the Global
+			#      Commons §6.5): a party's strike costs twice the infamy and the
+			#      case, parties gain prestige, cleaners count toward Delivery ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_asat } }
+				custom_tooltip = un_vote_asat_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_unoda
+			}
+
 			# ---- Convention on Cultural Diversity (redesign phase 7, §0.12
 			#      item 5): parties' minorities assimilate and lose their
 			#      homelands more slowly, trailing parties feel the hegemon's
@@ -2290,6 +2346,25 @@ un_vote.3 = {
 					}
 				}
 				add = 20
+			}
+			# The Antarctic Treaty: a great power that means to claim the
+			# Southern seabed stays out
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_antarctic }
+					country_rank >= rank_value:great_power
+					te_seabed_on_unilateral = yes
+				}
+				add = 30
+			}
+			# The anti-satellite moratorium: a power that has struck, or keeps
+			# the weapon at the ready, stays out
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_asat }
+					has_variable = un_dkt_asat_struck
+				}
+				add = 50
 			}
 			# The nuclear ban: an armed power will not ratify its own disarmament
 			modifier = {

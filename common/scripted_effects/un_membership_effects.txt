@@ -124,6 +124,8 @@ un_rep_convention_snapshot = {
 	un_rep_convention_mark = { AGENCY = icc }
 	un_rep_convention_mark = { AGENCY = ccd }
 	un_rep_convention_mark = { AGENCY = tpnw }
+	un_rep_convention_mark = { AGENCY = ats }
+	un_rep_convention_mark = { AGENCY = unoda }
 }
 
 # Parameters: $AGENCY$. Scope: country
@@ -151,6 +153,8 @@ un_rep_convention_forget = {
 	un_rep_convention_unmark = { AGENCY = icc }
 	un_rep_convention_unmark = { AGENCY = ccd }
 	un_rep_convention_unmark = { AGENCY = tpnw }
+	un_rep_convention_unmark = { AGENCY = ats }
+	un_rep_convention_unmark = { AGENCY = unoda }
 }
 
 # Parameters: $AGENCY$. Scope: country

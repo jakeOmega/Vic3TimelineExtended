@@ -44,6 +44,8 @@ BOOKINGS = Counter([
     ("events/un_events.txt", "0.25", "1072"),
     ("events/un_events.txt", "0.5", "18"),
     ("events/un_referendum_events.txt", "un_ref_delivery_credit", "33"),
+    # The Global Commons: a moratorium party cleaning orbit, once a year.
+    ("common/scripted_effects/te_global_commons_un_effects.txt", "un_asat_cleaner_delivery_points", "40"),
 ])
 
 # Script values the bookings name, at their halved figures.
@@ -54,6 +56,7 @@ VALUES = {
     "un_mission_failure_delivery": -1,
     "un_cf_delivery_credit": 0.75,
     "un_ref_delivery_credit": 0.5,
+    "un_asat_cleaner_delivery_points": 0.25,
 }
 
 # Loc key -> (the figure it states, the booking or value it describes).

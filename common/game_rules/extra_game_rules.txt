@@ -474,3 +474,20 @@ te_principle_slots_rule = {
 		flag = te_principle_slots_four
 	}
 }
+
+# The Global Commons (docs/superpowers/specs/2026-10-16-global-commons-design.md
+# §2.9): seabed licences, the Law of the Sea's seabed terms and the Antarctic
+# Treaty. Disabled, the Deep-Sea Mine is uncapped and §§3-4 do not appear.
+# Launch windows and orbital debris follow space_race_rule. (The seabed and
+# UN branches both define it, identically; keep one.)
+global_commons_rule = {
+	default = global_commons_enabled
+
+	global_commons_enabled = {
+		flag = global_commons_enabled
+	}
+
+	global_commons_disabled = {
+		flag = global_commons_disabled
+	}
+}

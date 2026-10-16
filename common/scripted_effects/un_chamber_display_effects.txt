@@ -115,6 +115,14 @@ un_chamber_topic_line = {
 		custom_tooltip_no_bullet = je_un_chamber_topic_narcotics
 	}
 	else_if = {
+		limit = { has_tag = un_topic_antarctic }
+		custom_tooltip_no_bullet = je_un_chamber_topic_antarctic
+	}
+	else_if = {
+		limit = { has_tag = un_topic_asat }
+		custom_tooltip_no_bullet = je_un_chamber_topic_asat
+	}
+	else_if = {
 		limit = { has_tag = un_topic_icc }
 		custom_tooltip_no_bullet = je_un_chamber_topic_icc
 	}
@@ -476,6 +484,14 @@ un_chamber_consequences_line = {
 	else_if = {
 		limit = { has_tag = un_topic_narcotics }
 		custom_tooltip_no_bullet = je_un_chamber_conseq_narcotics
+	}
+	else_if = {
+		limit = { has_tag = un_topic_antarctic }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_antarctic
+	}
+	else_if = {
+		limit = { has_tag = un_topic_asat }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_asat
 	}
 	else_if = {
 		limit = { has_tag = un_topic_icc }
@@ -1091,6 +1107,9 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 42 } custom_tooltip_no_bullet = je_un_standing_reason_42 }
 	else_if = { limit = { var:un_standing_last_reason = 45 } custom_tooltip_no_bullet = je_un_standing_reason_45 }
 	else_if = { limit = { var:un_standing_last_reason = 46 } custom_tooltip_no_bullet = je_un_standing_reason_46 }
+	# The Global Commons: 48 a seabed defection, 49 the Antarctic Treaty denounced.
+	else_if = { limit = { var:un_standing_last_reason = 48 } custom_tooltip_no_bullet = je_un_standing_reason_48 }
+	else_if = { limit = { var:un_standing_last_reason = 49 } custom_tooltip_no_bullet = je_un_standing_reason_49 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
@@ -1489,7 +1508,7 @@ un_chamber_propose_referendum_row = {
 	}
 }
 
-# The fourteen conventions and declarations (ops 7-19 and 29). The docket raises them for
+# The sixteen conventions and declarations (ops 7-19 and 29-31). The docket raises them for
 # everyone (redesign phase 4, un_docket_effects.txt), and a member may table
 # one on its own motion. Each row says what the topic is, whether it binds,
 # its passage rule (when the docket raises it anyway is on hover over the
@@ -1871,6 +1890,20 @@ un_chamber_docket_last_line = {
 			has_global_variable = un_dkt_last_subject
 		}
 		custom_tooltip_no_bullet = je_un_chamber_docket_last_14
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 15
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_15
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 16
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_16
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_docket_last_other
@@ -2254,10 +2287,17 @@ un_chamber_regime_lines = {
 	un_chamber_regime_line = { MODIFIER = un_regime_space_weapon_modifier LINE = je_un_chamber_regime_space_weapon }
 	un_chamber_convention_line_country = { MODIFIER = un_law_of_sea_modifier LINE = je_un_chamber_conv_law_of_sea }
 	un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
+	# The seabed under the Law of the Sea (the Global Commons, §3): our standing
+	# under the regime, read from variables and the hooks, so it is a line of
+	# its own under the convention's.
+	un_chamber_seabed_lines = yes
 	un_chamber_convention_line_country = { MODIFIER = un_physical_protection_modifier LINE = je_un_chamber_conv_physical_protection }
 	un_chamber_convention_line_country = { MODIFIER = un_narcotics_control_modifier LINE = je_un_chamber_conv_narcotics }
 	un_chamber_convention_line_country = { MODIFIER = un_cultural_diversity_modifier LINE = je_un_chamber_conv_cultural_diversity }
 	un_chamber_regime_line = { MODIFIER = un_regime_cultural_hegemon_modifier LINE = je_un_chamber_regime_cultural_hegemon }
+	un_chamber_convention_line_country = { MODIFIER = un_antarctic_treaty_modifier LINE = je_un_chamber_conv_antarctic }
+	un_chamber_regime_line = { MODIFIER = un_regime_antarctic_station_modifier LINE = je_un_chamber_regime_antarctic_station }
+	un_chamber_convention_line_country = { MODIFIER = un_asat_moratorium_modifier LINE = je_un_chamber_conv_asat }
 	un_chamber_convention_line_country = { MODIFIER = un_nuclear_ban_modifier LINE = je_un_chamber_conv_nuclear_ban }
 	# The ban's ceiling on our arsenal (nd_taboo_refresh_ban_ceiling): its
 	# terms are a variable, not a regime modifier, so the line is its own.
@@ -2759,6 +2799,35 @@ un_chamber_deleg_firm_list = {
 				custom_tooltip = je_un_chamber_deleg_firm_against_entry
 			}
 		}
+	}
+}
+
+# The Antarctic Treaty (the Global Commons, §4). The row is hidden under the
+# disabled Global Commons rule (un_chamber_global_commons_rule_sgui).
+# Scope: country
+un_chamber_propose_antarctic_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_antarctic
+		TOPIC = antarctic
+		BINDING = je_un_chamber_recommendatory
+		IN_FORCE = un_propose_antarctic_in_force
+		AVAILABLE = un_propose_antarctic_available
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# The Moratorium on Destructive Anti-Satellite Tests (the Global Commons,
+# §6.5). The row is hidden under the disabled space race rule
+# (un_chamber_space_race_rule_sgui).
+# Scope: country
+un_chamber_propose_asat_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_asat
+		TOPIC = asat
+		BINDING = je_un_chamber_recommendatory
+		IN_FORCE = un_propose_asat_in_force
+		AVAILABLE = un_propose_asat_available
+		NO_CASE = je_un_chamber_topic_in_force
 	}
 }
 

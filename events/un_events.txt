@@ -9,7 +9,8 @@
 # (common/scripted_effects/un_docket_effects.txt) for a real situation and sent
 # to the countries it concerns, or fired where the thing it answers happens:
 #   docket    2 (an appeal: nuclear strike, aggression, covert operation),
-#             3, 6, 9, 12, 14, 16, 17, 18, 19, 21, 22, 23, 37, 38 (topics to table),
+#             3, 6, 9, 12, 14, 16, 17, 18, 19, 21, 22, 23, 37, 38, 39, 40, 41
+#             (topics to table),
 #             4 (a collapsing state), 7 (a famine), 15 (an embargo)
 #   hooks     5 (sanctions adopted), 8 (a court case from event 2),
 #             10 (the crisis opens), 11 (a veto), 20 (a great power leaves),
@@ -4146,7 +4147,7 @@ un_events.36 = {
 			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
 			un_convention_on = { MODIFIER = un_space_partnership_modifier }
 		}
-		# The six country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The eight country-scoped conventions, as un_apply_ratified_conventions has them.
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
 			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
@@ -4177,6 +4178,19 @@ un_events.36 = {
 			}
 			un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
 			un_nuclear_ban_terms_tt = yes
+		}
+		# Not for a member that denounced the Antarctic Treaty, as for a
+		# joiner (un_apply_ratified_conventions).
+		if = {
+			limit = {
+				un_rep_convention_missed = { AGENCY = ats MODIFIER = un_antarctic_treaty_modifier }
+				NOT = { has_variable = te_antarctic_denounced }
+			}
+			un_convention_country_on = { MODIFIER = un_antarctic_treaty_modifier }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = unoda MODIFIER = un_asat_moratorium_modifier } }
+			un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
 		}
 		# Our terms under the regimes now in force, as a joiner's.
 		un_regime_refresh_country = yes
@@ -4280,6 +4294,216 @@ un_events.39 = {
 		un_vote_release = yes
 		hidden_effect = {
 			un_docket_offer_topic_next = { TOPIC = narcotics EVENT = un_events.39 }
+		}
+	}
+}
+
+# Event 40: The Antarctic Treaty (the Global Commons,
+# 2026-10-16-global-commons-design.md §4). Raised by the docket when a country
+# opens its first Antarctic research station (item 15).
+un_events.40 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/climate_research_station.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.40.t
+	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 15).
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.40.d_cause_station
+				trigger = { global_var:un_dkt_last_type ?= 15 }
+			}
+		}
+		first_valid = {
+			triggered_desc = { desc = un_events.40.d_station trigger = { te_antarctic_has_station = yes } }
+			desc = un_events.40.d
+		}
+	}
+	flavor = un_events.40.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = global_commons_enabled
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_docket_topic_open_antarctic = yes
+		has_technology_researched = space_exploration
+		NOT = { has_modifier = un_antarctic_treaty_modifier }
+		NOT = { has_modifier = un_antarctic_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
+	}
+
+	immediate = {
+		un_vote_reserve = yes
+	}
+
+	# Option A: Table the Antarctic Treaty.
+	option = {
+		name = un_events.40.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { te_antarctic_has_station = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { te_seabed_on_unilateral = yes }
+				add = -4
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
+		# The proposer ratifies on passage with every other member. What
+		# tabling it does is the chamber's Propose control's script too
+		# (un_propose_antarctic_table, un_propose_effects.txt).
+		un_propose_antarctic_table = yes
+	}
+
+	# Option B: Leave it to another delegation.
+	option = {
+		name = un_docket_option_pass
+		ai_chance = {
+			base = 3
+		}
+		custom_tooltip = un_docket_pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = antarctic EVENT = un_events.40 }
+		}
+	}
+
+	# Option C: The ice will not stay closed for ever.
+	option = {
+		name = un_events.40.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					country_rank >= rank_value:great_power
+					te_seabed_on_unilateral = yes
+				}
+				add = 4
+			}
+		}
+		add_modifier = {
+			name = un_antarctic_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_1
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1401 }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = antarctic EVENT = un_events.40 }
+		}
+	}
+}
+
+# Event 41: The Moratorium on Destructive Anti-Satellite Tests (the Global
+# Commons, 2026-10-16-global-commons-design.md §6.5; the General Assembly's
+# resolution 77/41). Raised by the docket after a destructive anti-satellite
+# strike (item 16). The striker is not asked (un_dkt_asat_struck).
+un_events.41 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_debris_collision.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_events.41.t
+	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 16).
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.41.d_cause_strike
+				trigger = {
+					global_var:un_dkt_last_type ?= 16
+					has_global_variable = un_dkt_last_subject
+				}
+			}
+		}
+		desc = un_events.41.d
+	}
+	flavor = un_events.41.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = space_race_enabled
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_docket_topic_open_asat = yes
+		has_technology_researched = space_exploration
+		NOT = { has_variable = un_dkt_asat_struck }
+		NOT = { has_modifier = un_asat_moratorium_modifier }
+		NOT = { has_modifier = un_asat_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
+	}
+
+	immediate = {
+		un_vote_reserve = yes
+	}
+
+	# Option A: Table the moratorium.
+	option = {
+		name = un_events.41.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { sr_has_space_program = yes }
+				add = 3
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
+		# What tabling it does is the chamber's Propose control's script too
+		# (un_propose_asat_table, un_propose_effects.txt).
+		un_propose_asat_table = yes
+	}
+
+	# Option B: Leave it to another delegation.
+	option = {
+		name = un_docket_option_pass
+		ai_chance = {
+			base = 3
+		}
+		custom_tooltip = un_docket_pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = asat EVENT = un_events.41 }
+		}
+	}
+
+	# Option C: Keep the weapon in reserve.
+	option = {
+		name = un_events.41.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_technology_researched = guided_missiles }
+				add = 1
+			}
+		}
+		add_modifier = {
+			name = un_asat_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_1
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1411 }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = asat EVENT = un_events.41 }
 		}
 	}
 }

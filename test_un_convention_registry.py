@@ -134,6 +134,16 @@ CONVENTIONS = (
     Convention("nuclear_ban", "un_agency_tpnw", "un_nuclear_ban_modifier", "country",
                19, 38, 1381, "un_nuclear_ban_refusal_modifier",
                (), ("nuclear_weapons_enabled", "un_chamber_nuclear_rule_sgui"), True),
+    # The Global Commons (docs/superpowers/specs/2026-10-16-global-commons-design.md
+    # §4 and §6.5). Both are raised by a situation only: a country's first
+    # Antarctic research station, and a destructive anti-satellite strike.
+    Convention("antarctic", "un_agency_ats", "un_antarctic_treaty_modifier", "country",
+               30, 40, 1401, "un_antarctic_refusal_modifier",
+               ("un_regime_antarctic_station_modifier",),
+               ("global_commons_enabled", "un_chamber_global_commons_rule_sgui"), False),
+    Convention("asat", "un_agency_unoda", "un_asat_moratorium_modifier", "country",
+               31, 41, 1411, "un_asat_refusal_modifier",
+               (), ("space_race_enabled", "un_chamber_space_race_rule_sgui"), False),
 )
 
 KEYS = tuple(c.key for c in CONVENTIONS)

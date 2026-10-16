@@ -21,7 +21,7 @@
 ###   un_chamber_propose_sgui  tables one of thirty topics
 ###                            (op 0 condemn / 1 sanctions / 2 expulsion /
 ###                             3 mandate / 4 peacekeepers / 5 aid /
-###                             6 charter reform / 7-19 and 29 the fourteen conventions)
+###                             6 charter reform / 7-19 and 29-31 the sixteen conventions)
 ### Both run the same script the existing paths run — un_vote.1's option bodies,
 ### the journal entry's own proposal buttons, and (ops 7-19 and 29) the docket's
 ### proposer events — so the AI, which still votes by event and proposes by
@@ -3037,7 +3037,7 @@ types un_chamber_widget_types
 				}
 			}
 
-			# The fourteen conventions and declarations. The docket also raises each of
+			# The sixteen conventions and declarations. The docket also raises each of
 			# them for everyone (un_docket_effects.txt); these rows let a member
 			# table one on its own motion. The climate accord's row is hidden under
 			# the disabled global warming rule and the physical-protection
@@ -3194,6 +3194,32 @@ types un_chamber_widget_types
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End ) ) )]"
+				}
+			}
+
+			un_chamber_propose_row = {
+				visible = "[GetScriptedGui('un_chamber_global_commons_rule_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End)]"
+				}
+				blockoverride "row_action" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End ) ) )]"
+				}
+			}
+
+			un_chamber_propose_row = {
+				visible = "[GetScriptedGui('un_chamber_space_race_rule_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				blockoverride "row_text" {
+					text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End)]"
+				}
+				blockoverride "row_action" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End ) ) )]"
 				}
 			}
 

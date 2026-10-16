@@ -314,6 +314,28 @@ un_regime_refresh_country = {
 				multiplier = un_enforcement
 			}
 		}
+		# The Antarctic Treaty (ATS, the Global Commons §4): a party that runs
+		# an Antarctic research station shares its science. Its other terms are
+		# read as checks (te_seabed_southern_barred) and its Policy grant is
+		# applied at x1 (te_antarctic_policy_refresh).
+		if = {
+			limit = {
+				has_global_variable = un_agency_ats
+				OR = {
+					has_modifier = un_antarctic_treaty_modifier
+					has_variable = un_antarctic_treaty_modifier_on
+				}
+				te_antarctic_has_station = yes
+			}
+			add_modifier = {
+				name = un_regime_antarctic_station_modifier
+				multiplier = un_enforcement
+			}
+		}
+		# The anti-satellite moratorium (UNODA, the Global Commons §6.5) has
+		# no regime modifier: its terms are the strike's doubled costs
+		# (te_asat_moratorium_party) and the cleaners' Delivery entries
+		# (te_asat_moratorium_delivery_monthly).
 		# The prohibition of nuclear weapons (TPNW, redesign phase 7) has no
 		# regime modifier: its terms are the ceiling the nuclear entry keeps
 		# (nd_taboo_refresh_ban_ceiling, nuclear_taboo_effects.txt) and the
@@ -381,6 +403,8 @@ un_regime_reapply_conventions = {
 	un_regime_reapply_country = { MODIFIER = un_narcotics_control_modifier }
 	un_regime_reapply_country = { MODIFIER = un_cultural_diversity_modifier }
 	un_regime_reapply_country = { MODIFIER = un_nuclear_ban_modifier }
+	un_regime_reapply_country = { MODIFIER = un_antarctic_treaty_modifier }
+	un_regime_reapply_country = { MODIFIER = un_asat_moratorium_modifier }
 }
 
 # Parameters: $MODIFIER$ = a convention member modifier on the journal entry
@@ -431,6 +455,7 @@ un_regime_clear_country = {
 	un_regime_clear_modifier = { MODIFIER = un_regime_space_weapon_modifier }
 	un_regime_clear_modifier = { MODIFIER = un_regime_heritage_site_modifier }
 	un_regime_clear_modifier = { MODIFIER = un_regime_cultural_hegemon_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_antarctic_station_modifier }
 	un_regime_clear_modifier = { MODIFIER = un_regime_shared_intelligence_modifier }
 	every_interest_group = {
 		limit = {

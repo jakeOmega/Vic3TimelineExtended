@@ -38,11 +38,15 @@ SOURCES = {
             "un_peacekeeping_contributor_cost",
             "un_development_contributor_cost", "un_humanitarian_aid_cost", "un_humanitarian_token_cost",
             "un_observer_mission_cost", "un_peacekeeping_deployment_cost", "un_mission_service_cost",
-            "un_dues_modifier", "un_loan_repayment_modifier",
+            "un_dues_modifier", "un_loan_repayment_modifier", "te_seabed_royalty_modifier",
         )),
         "nuclear": ("Nuclear Program", ("nd_upkeep_cost", "nd_exercise_cost")),
         "nuclear_taboo": ("Nuclear Civil Defence", ("nd_taboo_civil_defence",)),
-        "space": ("Space Race", ("we_se_debris_clearance",)),
+        # The Antarctic research station needs Space Exploration; its upkeep
+        # is listed with the space programmes rather than in a category of
+        # its own (a new category needs a pie colour model and regenerates
+        # the charts).
+        "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep")),
         "drugs": ("Drug Shortage Response", ("drugs_shortage_spending",)),
         "family": ("Family Policy", (
             "te_demog_ms_child_allowance_cost", "te_demog_ms_family_housing_cost", "te_demog_ms_parental_leave_cost",

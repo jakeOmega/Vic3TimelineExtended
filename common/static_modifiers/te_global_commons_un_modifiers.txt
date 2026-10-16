@@ -1,0 +1,100 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE UN LAYER — STATIC MODIFIERS
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3 (the seabed
+# under the Law of the Sea), §4 (the Antarctic Treaty) and §6.5 (the
+# Moratorium on Destructive Anti-Satellite Tests). The writers are in
+# common/scripted_effects/te_global_commons_un_effects.txt; every figure a
+# writer applies is in common/script_values/te_global_commons_un_values.txt.
+# ============================================================================
+
+# ---- The seabed under the Law of the Sea (§3.3) ----
+
+# An ITLOS party's seabed royalty, while the Law of the Sea regulates the
+# seabed: 4% of its Deep-Sea Mine levels' base output value a week. Applied
+# with multiplier = var:te_seabed_royalty_cached (the weekly sum,
+# te_seabed_royalty_weekly_value) by te_seabed_royalty_refresh, the single
+# refresh site, as un_dues_modifier is billed.
+te_seabed_royalty_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
+}
+
+# ---- The Antarctic research station (§4) ----
+
+# A country running an Antarctic research station (var:te_antarctic_station).
+# Re-added from the variable each month by te_antarctic_station_refresh, so a
+# revolution's winner keeps it.
+te_antarctic_station_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+	country_weekly_innovation_max_add = 25
+}
+
+# The station's weekly upkeep. Applied with multiplier =
+# var:te_antarctic_station_upkeep_cached (te_antarctic_station_upkeep_value)
+# by te_antarctic_station_refresh, the single refresh site, and by the
+# decision that opens the station. Counted in the Budget Breakdown under
+# Space Race (scripts/generators/gen_budget_breakdown.py).
+te_antarctic_station_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_space_add = 1
+}
+
+# ---- The Antarctic Treaty (un_agency_ats) ----
+
+# A party. Its real terms are not here: a party holds no Southern seabed
+# licences (te_seabed_southern_barred, which the seabed allocation reads),
+# a party with a station gains research (un_regime_antarctic_station_modifier)
+# and every party counts toward the UN Authority Target's Policy pillar
+# (un_antarctic_policy_modifier). Re-applied at the UN's enforcement by the
+# regime layer (un_regime_reapply_conventions): the figure below is at x1.
+un_antarctic_treaty_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.02
+}
+
+# Decaying penalty for refusing to table it (un_events.40, option C), which
+# bars the refuser from tabling it (un_propose_antarctic_qualifies) while it
+# lasts.
+un_antarctic_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}
+
+# Regime term (un_regime_refresh_country): a party that runs an Antarctic
+# research station shares its science. Applied at x E.
+un_regime_antarctic_station_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.03
+}
+
+# A party's contribution to the UN Authority Target's Policy pillar. Applied
+# at x1 to every party by te_antarctic_policy_refresh, never with the
+# convention's enforcement multiplier: a grant that rode on the UN's own tier
+# would feed authority back into its own target (un_redesign_design.md §0.10
+# ruling 4; test_un_policy_pillar.py pins every grant).
+un_antarctic_policy_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_un_authority_target_add = 0.25
+}
+
+# ---- The Moratorium on Destructive Anti-Satellite Tests (un_agency_unoda) ----
+
+# A party. Its other terms are not here: a party's anti-satellite strike costs
+# twice the infamy and twice the case strength (te_asat_moratorium_party,
+# which the strike reads), and a party running a debris-removal method counts
+# toward the Delivery pillar each year (te_asat_moratorium_delivery_yearly).
+# Re-applied at the UN's enforcement by the regime layer: the figure is at x1.
+un_asat_moratorium_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.05
+}
+
+# Decaying penalty for refusing to table it (un_events.41, option C).
+un_asat_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}
