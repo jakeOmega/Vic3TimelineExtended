@@ -57,8 +57,8 @@ tech gate "any country has it", which would show a site to an owner who cannot d
 
 ### The sites
 
-The years are the issue's; each site's technology stands for its period. The picture is the stand-in of its form until its own is
-drawn. All use the To the Nation (civic) dedication until the antiquity and archive dedications exist.
+The years are the issue's; each site's technology stands for its period. Each has its own picture (codes 1,000,052–1,000,086, drawn
+2026-10-16: the site as it stands once dug, a portable find where it was found). All use the To the Nation (civic) dedication until the antiquity and archive dedications exist.
 
 | Key | Name | State | Technology | Vector | Form | Levels |
 |---|---|---|---|---|---|---|
@@ -168,7 +168,23 @@ From the issue's design, not built (owner, 2026-10-14: the mechanisms and the mo
   (Genghis Khan's tomb); S3 and S4 are sites.
 - **Special-site events**: Lascaux's sickness, the dam rescue, the language-reform tie-in; the Ötzi global-warming trigger.
 - **The easter eggs** and their game rule, skipped on the owner's instruction.
-- **Pictures** for the 35 sites. Each shows its form's stand-in; the icon session draws them (append-only codes 1,000,052–1,000,086).
+- **The finds' pictures, drawn ahead (2026-10-16).** S5, S6, S8 and E1–E6 would each place a monument, so each has a
+  `gm_picture` subject and a picked seed, rendered and reviewed but not committed: a picture needs its `LANDMARKS` row
+  (the registry test ties every `gm_picture` entry to a `PICTURES` code). When a row is added, give its entry this subject
+  and seed (the key's form is a guess until then; S6 would be a second picture for the Terracotta Army) and render that seed
+  alone. S1, S2 and S7 only grant modifiers.
+
+| Find | Key | Seed | Subject |
+|---|---|---|---|
+| S8 | `landmark_tomb_of_genghis_khan__mausoleum` | 1 | the sacred mountain Burkhan Khaldun in Mongolia: a broad mountain of dark larch forest rising above a wide grassy steppe valley, on its bare summit stone cairns hung with blue silk scarves, below them on a high meadow an excavated burial precinct of low earthen walls around an opened timber burial chamber, white felt tents and horses on the steppe |
+| S5 | `landmark_amber_room__hall` | 2 | the Catherine Palace at Tsarskoye Selo: a very long Baroque palace with a sky-blue facade, white columns and gilded statues of men holding up its upper floor, five gilded onion domes on its chapel at one end, a formal garden in front, the roof cut away over one room whose walls are panelled entirely in carved golden-orange amber and gilded mirrors |
+| S6 | `landmark_terracotta_army_mercury_palace__mausoleum` | 1 | the opened burial mound of the First Emperor of China: a great earthen mound planted with trees, cut away to show beneath it an underground palace hall of bronze and black lacquer, a model landscape of rivers and seas of shining silver liquid mercury on its floor, a ceiling painted with stars, rows of grey clay soldiers in trenches outside the mound |
+| E1 | `landmark_submerged_citadel__colonnade` | 1 | a submerged ancient citadel on the floor of a shallow turquoise sea beside a rocky volcanic Atlantic island: concentric rings of dressed-stone harbour walls and water channels around a central island of ruined temples and colonnades of red, white and black stone, seen through the clear water, a small research ship anchored above |
+| E2 | `landmark_deep_stratum_anomaly__hall` | 1 | a vast open-pit coal mine cut in terraced steps into the earth, giant excavators and floodlights on its benches, in one deep layer of the pit wall a thin glittering seam of black glassy material and silvery lattice fragments exposed under a white scientists' tent |
+| E3 | `landmark_polar_monolith__pyramid` | 1 | a deep canyon melted into a vast white ice sheet, at its bottom a huge smooth black stone structure with perfectly straight edges and stepped geometric terraces emerging from the blue ice, a research station of red huts and a white radar dome on the ice above |
+| E4 | `landmark_lunar_artifact__stele` | 0 | an excavation pit dug into the grey cratered surface of the Moon beside a small lunar base of white modules, at the bottom of the pit a tall perfectly smooth black rectangular slab standing upright, astronauts in white spacesuits and a lunar lander around it, the blue Earth in the black sky |
+| E5 | `landmark_sealed_reliquary__rock_cut` | 0 | a sealed chamber cut deep into the rock beneath a green highland hill, the hillside cut away to show inside a gilded wooden chest with two golden winged figures facing each other on its lid, on a stone platform lit by oil lamps, archaeologists at the narrow entrance tunnel, round thatched houses and terraced fields on the hills |
+| E6 | `landmark_sunken_terraces_of_ryukyu__pyramid` | 1 | huge flat stepped rock terraces and straight-sided stone platforms under clear turquoise water at the foot of a green subtropical island cliff, divers swimming over the steps, a small fishing harbour and a lighthouse on the headland |
 
 ## Tests, debug, docs
 

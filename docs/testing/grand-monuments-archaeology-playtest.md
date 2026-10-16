@@ -71,6 +71,5 @@ site did not seed).
 
 ## Known limits
 
-- A site shows its form's stand-in picture; none of the 35 has its own.
 - Only the holder of the ground digs. A split state is dug by any of its owners; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
 - A find's popup names the last site found or dug (`gm_arch_last`), so a popup left unanswered while another site turns up or finishes names that one.
