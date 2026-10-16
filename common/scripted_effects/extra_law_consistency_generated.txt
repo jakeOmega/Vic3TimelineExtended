@@ -4307,7 +4307,6 @@ te_fix_inconsistent_lawgroup_genetic_rights = {
 				has_law = law_type:law_ban_on_genetic_modification
 				has_law = law_type:law_corporate_genetic_licensing
 				has_law = law_type:law_open_source_genetics
-				has_law = law_type:law_state_eugenics_program
 			}
 		}
 		if = {

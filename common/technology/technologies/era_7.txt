@@ -443,7 +443,8 @@ inertial_navigation_systems = {
 }
 
 television_broadcasting = {
-	# High Pressure Sodium Streetlights PM for Urban Centers, Broadcast Television PM for Arts Academy
+	# High Pressure Sodium Streetlights PM for Urban Centers, Broadcast Television PM for Arts Academy,
+	# Ministry of Thought Control law
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/television_broadcasting.dds"
 	category = society
