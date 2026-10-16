@@ -54,7 +54,6 @@ from __future__ import annotations
 import argparse
 import math
 import re
-import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
