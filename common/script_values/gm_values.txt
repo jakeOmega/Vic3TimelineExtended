@@ -108,12 +108,26 @@ gm_event_income = {
 }
 
 # ---- A monument's own numbers (state scope) --------------------------------
-# Its level, or 0.
-gm_state_grandeur = {
+# The building's level, or 0: the levels of every monument standing here
+# together (gm_monument_values.txt splits them). What every rebuild reads; never
+# grandeur, which is levels + age (spec 2026-10-16 §1).
+gm_state_level = {
 	value = 0
 	if = {
 		limit = { has_building = building_grand_monument }
 		value = b:building_grand_monument.level
+	}
+}
+
+# The grandeur of everything standing here: the primary's levels and age and
+# every secondary's (gm_monument_values.txt), or 0. What tourism, the card and
+# the frame read; the building's level is gm_state_level.
+gm_state_grandeur = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = gm_state_primary_grandeur
+		add = gm_state_secondary_grandeur
 	}
 }
 
@@ -397,6 +411,60 @@ gm_policy_factor_local = {
 	}
 }
 
+# ---- Ageing (spec 2026-10-16 §2) ----------------------------------------------
+# State scope, the owner's policy: Mothballed halves how fast its monuments
+# age; no other policy changes it.
+gm_policy_factor_age = {
+	value = 1
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+		}
+		value = 0.5
+	}
+}
+
+# State scope. What a month adds to the primary's age grandeur: 2% of its
+# levels a year (owner, 2026-10-16: it doubles in fifty years), as two whole
+# numbers (no six-decimal literal, scripting_best_practices.md).
+gm_state_age_step = {
+	value = gm_state_primary_levels
+	multiply = 2
+	divide = 1200
+	multiply = gm_policy_factor_age
+}
+
+# State scope. The level the last rebuild asked for (gm_rebuild_asked), for
+# gm_monument_rebuild_self_check's line; 0 with none.
+gm_disp_rebuild_asked = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_rebuild_asked }
+		value = var:gm_rebuild_asked
+	}
+}
+
+# State scope. 1 while the primary is finished (gm_levels, ageing spec
+# 2026-10-16 §3.1): the card's and the row's Finished line.
+gm_state_disp_frozen = {
+	value = 0
+	if = {
+		limit = {
+			has_building = building_grand_monument
+			has_variable = gm_levels
+		}
+		value = 1
+	}
+}
+
+# State scope. What an anniversary's public option adds to the monument's age
+# grandeur (ageing spec 2026-10-16 §5): a tenth of its levels, at least 1.
+gm_evt_grandeur = {
+	value = gm_state_primary_levels
+	multiply = 0.1
+	min = 1
+}
+
 # Country scope, for the overview's policy line: months until the policy may
 # change again (0 when it may).
 gm_disp_policy_months_left = {
@@ -424,17 +492,22 @@ gm_sum_standing = {
 		limit = { gm_state_counts_standing = yes }
 		add = gm_state_primary_grandeur
 	}
-	# Every secondary monument stands whatever its state's primary is
-	# (gm_monument_values.txt): a contested crown monument does not take the
-	# marbles returned beside it.
-	every_scope_state = {
-		limit = { has_building = building_grand_monument }
-		add = gm_state_secondary_grandeur
+	# Every secondary monument not contested stands whatever its state's
+	# primary is (spec 2026-10-16 §4.2): a contested crown monument does not
+	# take the marbles returned beside it.
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_counts_standing = yes }
+			add = gm_mon_grandeur
+		}
 	}
 	add = gm_tr_disp_held_grandeur
 }
 
-# Regime grandeur: regime and ruler monuments that fit (legitimacy).
+# Regime grandeur: regime and ruler monuments that fit (legitimacy), those
+# standing beside another too (spec 2026-10-16 §4.2).
 gm_sum_regime = {
 	value = 0
 	every_scope_state = {
@@ -446,6 +519,20 @@ gm_sum_regime = {
 			}
 		}
 		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_status_fits = yes
+				OR = {
+					gm_mon_kind_regime = yes
+					gm_mon_kind_ruler = yes
+				}
+			}
+			add = gm_mon_grandeur
+		}
 	}
 }
 
@@ -459,6 +546,17 @@ gm_sum_leader = {
 		}
 		add = gm_state_primary_grandeur
 	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_status_fits = yes
+				gm_mon_is = { KEY = leader }
+			}
+			add = gm_mon_grandeur
+		}
+	}
 }
 
 gm_sum_religious = {
@@ -469,6 +567,17 @@ gm_sum_religious = {
 			gm_state_has_pm = { PM = pm_monument_religious }
 		}
 		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_status_fits = yes
+				gm_mon_is = { KEY = religious }
+			}
+			add = gm_mon_grandeur
+		}
 	}
 }
 
@@ -481,6 +590,17 @@ gm_sum_war_memorial = {
 		}
 		add = gm_state_primary_grandeur
 	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_status_fits = yes
+				gm_mon_is = { KEY = war_memorial }
+			}
+			add = gm_mon_grandeur
+		}
+	}
 }
 
 gm_sum_artistic = {
@@ -491,6 +611,17 @@ gm_sum_artistic = {
 			gm_state_has_pm = { PM = pm_monument_artistic }
 		}
 		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_status_fits = yes
+				gm_mon_is = { KEY = artistic }
+			}
+			add = gm_mon_grandeur
+		}
 	}
 }
 
@@ -503,6 +634,17 @@ gm_sum_scientific = {
 		}
 		add = gm_state_primary_grandeur
 	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_status_fits = yes
+				gm_mon_is = { KEY = scientific }
+			}
+			add = gm_mon_grandeur
+		}
+	}
 }
 
 gm_sum_industrial = {
@@ -514,6 +656,17 @@ gm_sum_industrial = {
 		}
 		add = gm_state_primary_grandeur
 	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_status_fits = yes
+				gm_mon_is = { KEY = industrial }
+			}
+			add = gm_mon_grandeur
+		}
+	}
 }
 
 gm_sum_monuments = {
@@ -522,6 +675,13 @@ gm_sum_monuments = {
 		limit = { has_building = building_grand_monument }
 		add = 1
 	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			add = 1
+		}
+	}
 }
 
 gm_sum_contested = {
@@ -529,6 +689,14 @@ gm_sum_contested = {
 	every_scope_state = {
 		limit = { gm_state_is_contested = yes }
 		add = 1
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_is_contested = yes }
+			add = 1
+		}
 	}
 }
 
@@ -552,9 +720,9 @@ gm_display_contested = {
 
 # ---- Contests (§4.3, §4.5) ----------------------------------------------------
 # State scope. What Rededicate costs: 500 a level (v2 §1: v1's 5,000, cut with the
-# construction price).
+# construction price), of the primary's own levels: the stone, not its age.
 gm_state_rededicate_cost = {
-	value = gm_state_primary_grandeur
+	value = gm_state_primary_levels
 	multiply = 500
 }
 
@@ -565,6 +733,14 @@ gm_notice_count = {
 		limit = { has_variable_list = gm_notice_states }
 		every_in_list = {
 			variable = gm_notice_states
+			add = 1
+		}
+	}
+	# And the monuments beside another (ageing spec 2026-10-16 §4.3).
+	if = {
+		limit = { has_variable_list = gm_notice_mons }
+		every_in_list = {
+			variable = gm_notice_mons
 			add = 1
 		}
 	}
@@ -907,6 +1083,18 @@ gm_disp_count_upheld = {
 		}
 		add = 1
 	}
+	# And those standing beside another (spec 2026-10-16 §4.2), each its own.
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_is_heritage = no
+				gm_mon_is_contested = no
+			}
+			add = 1
+		}
+	}
 }
 
 gm_disp_count_heritage = {
@@ -918,6 +1106,17 @@ gm_disp_count_heritage = {
 			gm_state_is_contested = no
 		}
 		add = 1
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_is_heritage = yes
+				gm_mon_is_contested = no
+			}
+			add = 1
+		}
 	}
 }
 
@@ -942,6 +1141,14 @@ gm_disp_count_contested = {
 			gm_state_is_contested = yes
 		}
 		add = 1
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_is_contested = yes }
+			add = 1
+		}
 	}
 }
 

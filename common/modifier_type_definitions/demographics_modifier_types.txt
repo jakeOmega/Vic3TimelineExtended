@@ -115,6 +115,21 @@ state_malaria_control_add = {
 	decimals = 0
 	script_only = yes
 }
+# Modern safety (owner, 2026-10-16; demographics_params.SAFETY_TYPES): the share of work deaths, and of deaths from
+# accidents and violence, that the era 7-9 technologies prevent, at most 95%. The census's safety factor on each cause is
+# 1 - it. Read only by the census; a release comments its carriers out (scripts/release/comment_out_census_inputs.py).
+state_work_safety_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_external_safety_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
 
 # Family Policy measures (phase 2 step 3a: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
 # §3.5). Carried by the measures' country modifiers (te_demog_measure_modifiers.txt); a state's read includes its

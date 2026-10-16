@@ -853,6 +853,10 @@ def medicine_effects(o):
     o("# calibration step 3: the state's malaria trait (te_demog_malaria_level) and its control, 0 to 1")
     o("set_variable = { name = te_dg_in_mal value = te_demog_malaria_level }")
     o(f"set_variable = {{ name = te_dg_in_malc value = {{ value = modifier:{P.MALARIA_CONTROL_TYPE} min = 0 max = 1 }} }}")
+    o("# modern safety (2026-10-16): the share of each cause's deaths the era 7-9 technologies prevent")
+    for cause, t in P.SAFETY_TYPES.items():
+        o(f"set_variable = {{ name = te_dg_in_saf_{P.CAUSE_SHORT[cause]} value = {{ value = modifier:{t} min = 0 "
+          f"max = {lit(P.SAFETY_MAX)} }} }}")
     o("}")
     o("")
     pairs = [("te_dg_acc", "te_demog_access_target")]
@@ -1395,6 +1399,14 @@ def _factor_body(o, cause, factor):
         o(f"value = 1 add = var:te_dg_in_{s} min = {lit(P.MORTALITY_MULT_FLOOR)}")
     elif factor == "turmoil":
         o(f"value = var:te_dg_in_turm multiply = {lit(P.TURMOIL_EXTERNAL_WEIGHT)} add = 1")
+    elif factor == "safety":
+        # modern safety: 1 - the share the step stored; a step from before it stored none, so the factor reads 1 until
+        # the state's next step
+        o("value = 1")
+        o("if = {")
+        o(f"limit = {{ has_variable = te_dg_in_saf_{s} }}")
+        o(f"subtract = var:te_dg_in_saf_{s}")
+        o("}")
     elif factor == "malaria":
         # calibration step 3: 1 + the trait's excess x (1 - the control); a step from before it stored neither, so the
         # factor reads 1 until the state's next step

@@ -11,6 +11,396 @@ gm_state_has_secondary = {
 	any_in_list = { variable = gm_monuments_here exists = this }
 }
 
+# ---- A monument beside another: its own dedication (spec 2026-10-16 §4.1) -------------
+# Container scope, a secondary monument (tag gm_monument), reading its records
+# (gm_tr_dedication, gm_tr_raised_by, gm_tr_honoree, gm_tr_faith) and its
+# state's owner through var:gm_tr_origin: the state triggers' twins
+# (monument_triggers.txt). A missing record reads as "does not fit", never as
+# "fits". test_grand_monument_registry.py pins them to DEDICATIONS.
+gm_mon_is = {
+	has_variable = gm_tr_dedication
+	var:gm_tr_dedication = flag:$KEY$
+}
+
+gm_mon_kind_regime = {
+	OR = {
+		gm_mon_is = { KEY = crown }
+		gm_mon_is = { KEY = republic }
+		gm_mon_is = { KEY = revolution }
+	}
+}
+
+gm_mon_kind_ruler = {
+	gm_mon_is = { KEY = leader }
+}
+
+gm_mon_kind_faith = {
+	gm_mon_is = { KEY = religious }
+}
+
+gm_mon_is_bound = {
+	OR = {
+		gm_mon_kind_regime = yes
+		gm_mon_kind_ruler = yes
+		gm_mon_kind_faith = yes
+	}
+}
+
+# The country that raised it owns its state.
+gm_mon_raised_by_owner = {
+	has_variable = gm_tr_raised_by
+	var:gm_tr_raised_by ?= { save_temporary_scope_as = gm_tmp_mon_raiser }
+	var:gm_tr_origin ?= { owner = scope:gm_tmp_mon_raiser }
+}
+
+# The honoured character still rules its state's owner.
+gm_mon_leader_fits = {
+	has_variable = gm_tr_honoree
+	var:gm_tr_honoree ?= { save_temporary_scope_as = gm_tmp_mon_honoree }
+	var:gm_tr_origin ?= {
+		owner = {
+			ruler ?= { this = scope:gm_tmp_mon_honoree }
+		}
+	}
+}
+
+# The owner's state religion is still the one it honours, not under State
+# Atheism.
+gm_mon_shrine_fits = {
+	has_variable = gm_tr_faith
+	var:gm_tr_faith ?= { save_temporary_scope_as = gm_tmp_mon_faith }
+	var:gm_tr_origin ?= {
+		owner = {
+			NOT = { has_law_or_variant = law_type:law_state_atheism }
+			religion = scope:gm_tmp_mon_faith
+		}
+	}
+}
+
+# Its message still stands, read live from its state's owner.
+gm_mon_message_fits = {
+	OR = {
+		gm_mon_is_bound = no
+		AND = {
+			gm_mon_raised_by_owner = yes
+			OR = {
+				AND = {
+					gm_mon_is = { KEY = crown }
+					var:gm_tr_origin ?= { owner = { monument_government_is_crowned = yes } }
+				}
+				AND = {
+					gm_mon_is = { KEY = republic }
+					var:gm_tr_origin ?= { owner = { monument_government_is_republican = yes } }
+				}
+				AND = {
+					gm_mon_is = { KEY = revolution }
+					var:gm_tr_origin ?= { owner = { gm_government_is_revolutionary = yes } }
+				}
+				AND = {
+					gm_mon_kind_ruler = yes
+					gm_mon_leader_fits = yes
+				}
+				AND = {
+					gm_mon_kind_faith = yes
+					gm_mon_shrine_fits = yes
+				}
+			}
+		}
+	}
+}
+
+gm_mon_is_contested = {
+	has_variable = gm_tr_contested
+}
+
+gm_mon_is_heritage = {
+	has_variable = gm_tr_heritage
+}
+
+# "Fits": its politics count. At home, dedicated and seen (gm_mon_first_sight
+# has written its raiser), neither contested nor heritage, its message
+# standing.
+gm_mon_status_fits = {
+	has_tag = gm_monument
+	has_variable = gm_tr_dedication
+	has_variable = gm_tr_seen
+	gm_mon_is_contested = no
+	gm_mon_is_heritage = no
+	gm_mon_message_fits = yes
+}
+
+# Standing grandeur (prestige, cultural pull): every monument at home not
+# contested.
+gm_mon_counts_standing = {
+	has_tag = gm_monument
+	gm_mon_is_contested = no
+}
+
+# ---- Its interest groups (the state's IG alignment, monument_triggers.txt) --------
+# The Leader's pair is dynamic: the ruler's own IG approves, the strongest IG
+# outside the government (gm_opposition_ig on the owner) opposes.
+gm_mon_leader_ig_is = {
+	gm_mon_kind_ruler = yes
+	var:gm_tr_origin ?= {
+		owner = {
+			ruler ?= { interest_group ?= { is_interest_group_type = ig_$IG$ } }
+		}
+	}
+}
+
+gm_mon_leader_opposed_by = {
+	gm_mon_kind_ruler = yes
+	var:gm_tr_origin ?= {
+		owner = {
+			has_variable = gm_opposition_ig
+			var:gm_opposition_ig = flag:$IG$
+		}
+	}
+}
+
+gm_mon_approved_by_armed_forces = {
+	OR = {
+		gm_mon_is = { KEY = war_memorial }
+		gm_mon_leader_ig_is = { IG = armed_forces }
+	}
+}
+
+gm_mon_opposed_by_armed_forces = {
+	gm_mon_leader_opposed_by = { IG = armed_forces }
+}
+
+gm_mon_approved_by_devout = {
+	OR = {
+		gm_mon_is = { KEY = religious }
+		gm_mon_leader_ig_is = { IG = devout }
+	}
+}
+
+gm_mon_opposed_by_devout = {
+	gm_mon_leader_opposed_by = { IG = devout }
+}
+
+gm_mon_approved_by_industrialists = {
+	OR = {
+		gm_mon_is = { KEY = industrial }
+		gm_mon_leader_ig_is = { IG = industrialists }
+	}
+}
+
+gm_mon_opposed_by_industrialists = {
+	OR = {
+		gm_mon_is = { KEY = revolution }
+		gm_mon_leader_opposed_by = { IG = industrialists }
+	}
+}
+
+gm_mon_approved_by_intelligentsia = {
+	OR = {
+		gm_mon_is = { KEY = republic }
+		gm_mon_is = { KEY = artistic }
+		gm_mon_is = { KEY = scientific }
+		gm_mon_leader_ig_is = { IG = intelligentsia }
+	}
+}
+
+gm_mon_opposed_by_intelligentsia = {
+	OR = {
+		gm_mon_is = { KEY = crown }
+		gm_mon_leader_opposed_by = { IG = intelligentsia }
+	}
+}
+
+gm_mon_approved_by_landowners = {
+	OR = {
+		gm_mon_is = { KEY = crown }
+		gm_mon_leader_ig_is = { IG = landowners }
+	}
+}
+
+gm_mon_opposed_by_landowners = {
+	OR = {
+		gm_mon_is = { KEY = republic }
+		gm_mon_leader_opposed_by = { IG = landowners }
+	}
+}
+
+gm_mon_approved_by_petty_bourgeoisie = {
+	OR = {
+		gm_mon_is = { KEY = civic }
+		gm_mon_leader_ig_is = { IG = petty_bourgeoisie }
+	}
+}
+
+gm_mon_opposed_by_petty_bourgeoisie = {
+	gm_mon_leader_opposed_by = { IG = petty_bourgeoisie }
+}
+
+gm_mon_approved_by_rural_folk = {
+	OR = {
+		gm_mon_is = { KEY = naturalist }
+		gm_mon_leader_ig_is = { IG = rural_folk }
+	}
+}
+
+gm_mon_opposed_by_rural_folk = {
+	gm_mon_leader_opposed_by = { IG = rural_folk }
+}
+
+gm_mon_approved_by_trade_unions = {
+	OR = {
+		gm_mon_is = { KEY = revolution }
+		gm_mon_is = { KEY = athletic }
+		gm_mon_leader_ig_is = { IG = trade_unions }
+	}
+}
+
+gm_mon_opposed_by_trade_unions = {
+	gm_mon_leader_opposed_by = { IG = trade_unions }
+}
+
+# Container scope. A secondary monument's years add to its grandeur this month
+# (spec 2026-10-16 §2): it stands at home, dedicated, not contested. A trophy
+# abroad (tag gm_trophy) never ages.
+gm_mon_ages = {
+	has_tag = gm_monument
+	has_variable = gm_tr_dedication
+	has_variable = gm_tr_origin
+	exists = var:gm_tr_origin
+	NOT = { has_variable = gm_tr_contested }
+}
+
+# State scope. More levels may be built here (spec 2026-10-16 §3.2): on a
+# finished monument they found a new one beside it. The building's
+# can_build_government / can_build_private, so each reason shows in the
+# build tooltip. Not while the monument here is contested (decide first: a
+# level would move the contest into a monument beside), while a ceremony,
+# unveiling or naming is under way, while script is rebuilding it or putting
+# its method back, or once six monuments stand on a finished one (returns and
+# archaeology may pass six; construction may not).
+# Open while script rebuilds it (gm_rebuilding, one day, set before every
+# rebuild's create_building): since 1.13.9 create_building checks some of a
+# building's requirements, and whether that includes can_build_government is
+# unverified (scripting_best_practices.md; the te_cm_placing_site pattern), so
+# a rebuild must never meet a closed gate. gm_monument_rebuild_self_check
+# reads whether rebuilds come back at the level asked.
+gm_state_can_expand = {
+	trigger_if = {
+		limit = {
+			NOT = { has_variable = gm_rebuilding }
+			# Only a finished monument founds beside; one still being built
+			# takes its queued levels whatever is pending (a ceremony asking at
+			# its first level, a restore after a return), and closing the gate
+			# then could cancel or stall them.
+			has_variable = gm_levels
+		}
+		custom_tooltip = {
+			text = gm_expand_contested_tt
+			NOT = { gm_state_is_contested = yes }
+		}
+		custom_tooltip = {
+			text = gm_expand_pending_tt
+			NOT = { has_variable = gm_ceremony_pending }
+			NOT = { has_variable = gm_unveil_pending }
+			NOT = { has_variable = gm_name_choice_open }
+			NOT = { has_variable = gm_being_named }
+		}
+		custom_tooltip = {
+			text = gm_expand_rebuilding_tt
+			NOT = { has_variable = gm_restore_pm }
+			NOT = { has_variable = gm_gift }
+		}
+		custom_tooltip = {
+			text = gm_expand_full_tt
+			gm_state_monument_count < 6
+		}
+	}
+}
+
+# State scope. A secondary here may be rededicated (spec 2026-10-16 §4.3): it is
+# swapped in as the state's monument first, so the one standing there now must
+# be a finished, named dedicated monument with nothing under way.
+gm_state_can_rededicate_beside = {
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	has_variable = gm_levels
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_rebuilding }
+	NOT = { has_variable = gm_unveil_pending }
+	NOT = { has_variable = gm_name_choice_open }
+	NOT = { has_variable = gm_skin_axis }
+	NOT = { has_variable = gm_being_named }
+}
+
+# Container scope. Its dedication is the one its state's owner's variable $VAR$
+# names (gm_state_has_dedication_flag's twin, gm_commission_triggers.txt).
+gm_mon_has_dedication_flag = {
+	var:gm_tr_origin ?= { owner = { has_variable = $VAR$ } }
+	OR = {
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:crown } } gm_mon_is = { KEY = crown } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:republic } } gm_mon_is = { KEY = republic } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:revolution } } gm_mon_is = { KEY = revolution } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:leader } } gm_mon_is = { KEY = leader } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:religious } } gm_mon_is = { KEY = religious } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:civic } } gm_mon_is = { KEY = civic } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:war_memorial } } gm_mon_is = { KEY = war_memorial } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:artistic } } gm_mon_is = { KEY = artistic } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:naturalist } } gm_mon_is = { KEY = naturalist } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:scientific } } gm_mon_is = { KEY = scientific } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:industrial } } gm_mon_is = { KEY = industrial } }
+		AND = { var:gm_tr_origin ?= { owner = { var:$VAR$ = flag:athletic } } gm_mon_is = { KEY = athletic } }
+	}
+}
+
+# Container scope. This secondary counts toward its owner's open opportunity
+# (spec 2026-10-16 §5), as gm_state_com_counts does for a state's own: it fits,
+# it is of the opportunity's dedication, and it stands in the opportunity's
+# state if that names one.
+gm_mon_com_counts = {
+	var:gm_tr_origin ?= { owner = { has_variable = gm_com_dedication } }
+	gm_mon_status_fits = yes
+	gm_mon_has_dedication_flag = { VAR = gm_com_dedication }
+	var:gm_tr_origin ?= {
+		OR = {
+			owner = {
+				NOT = { has_variable = gm_com_state }
+			}
+			AND = {
+				owner.var:gm_com_state ?= { save_temporary_scope_as = gm_tmp_mon_com_state }
+				this = scope:gm_tmp_mon_com_state
+			}
+		}
+	}
+}
+
+# ---- Anniversaries (ageing spec 2026-10-16 §5) -------------------------------------
+# Container scope. A monument beside another of dedication $KEY$ that fits and
+# is a real landmark (grandeur 3 or more) holds anniversaries, as
+# gm_state_holds_anniversary does for a state's own.
+gm_mon_holds_anniversary = {
+	gm_mon_status_fits = yes
+	gm_mon_is = { KEY = $KEY$ }
+	gm_mon_grandeur >= 3
+}
+
+# Country scope. Some monument of dedication $KEY$ holds anniversaries: a
+# state's own or one beside another. The dispatcher and each anniversary ask
+# this.
+gm_country_holds_anniversary = {
+	OR = {
+		any_scope_state = {
+			gm_state_holds_anniversary = { PM = pm_monument_$KEY$ }
+		}
+		AND = {
+			has_variable_list = gm_monuments_held
+			any_in_list = {
+				variable = gm_monuments_held
+				gm_mon_holds_anniversary = { KEY = $KEY$ }
+			}
+		}
+	}
+}
+
 # ---- A trophy comes home (spec §4.1) -----------------------------------------------
 # State scope, with scope:gm_tr_moving the returning trophy. What stands here
 # is what the trophy is a piece of: the landmark it came from, or, with
@@ -114,6 +504,20 @@ gm_state_tr_takeable_secondary = {
 	NOT = { has_variable = gm_tr_cooldown }
 }
 
+# State scope. Some monument here can be carried off: the primary
+# (gm_state_tr_takeable, which needs it dedicated and not a Grand Shrine) or
+# one standing beside it. An occupier's monthly roll asks this, so a returned
+# artifact beside an undedicated primary or a shrine can still be looted.
+gm_state_tr_any_takeable = {
+	OR = {
+		gm_state_tr_takeable = yes
+		AND = {
+			gm_state_has_secondary = yes
+			gm_state_tr_takeable_secondary = yes
+		}
+	}
+}
+
 # Container scope, a secondary monument. $WHO$ (a country) occupies its state
 # in a war and may carry it off.
 gm_mon_tr_can_take = {
@@ -151,6 +555,87 @@ gm_state_has_landmark = {
 				has_variable = gm_tr_landmark
 				var:gm_tr_landmark = flag:$KEY$
 			}
+		}
+	}
+}
+
+# ---- A merged state (issue #936; gm_monument_effects.txt § "A merged state") --------
+# Container scope, a shadow: its state is gone (its part of the region merged
+# into another, or lost its last province).
+gm_sh_is_orphan = {
+	has_tag = gm_shadow
+	has_variable = gm_tr_origin_region
+	NOT = { exists = var:gm_tr_origin }
+}
+
+# Container scope, a shadow or a monument beside another: its state is gone and
+# it stood in the state region $REGION$.
+gm_sh_orphan_of = {
+	has_variable = gm_tr_origin_region
+	NOT = { exists = var:gm_tr_origin }
+	var:gm_tr_origin_region ?= $REGION$
+}
+
+# State scope. A monument from another part of this state's region may be
+# waiting to be adopted here (gm_state_adopt_orphans): a shadow, or a monument
+# that stood beside one, whose state is gone, while this building holds levels
+# nothing here records. Until it is settled nothing reads this building as the
+# engine's copy, a new dedication or new levels built beside. The cheap reads
+# first: the refresh, which tooltips walk, asks it of every monument.
+gm_state_merge_pending = {
+	has_building = building_grand_monument
+	OR = {
+		NOT = { has_variable = gm_seen }
+		gm_state_unexplained_levels > 0
+	}
+	state_region = { save_temporary_scope_as = gm_tmp_sh_region }
+	OR = {
+		AND = {
+			has_global_variable_list = gm_shadows
+			any_in_global_list = {
+				variable = gm_shadows
+				gm_sh_orphan_of = { REGION = scope:gm_tmp_sh_region }
+			}
+		}
+		AND = {
+			has_global_variable_list = gm_monuments
+			any_in_global_list = {
+				variable = gm_monuments
+				gm_sh_orphan_of = { REGION = scope:gm_tmp_sh_region }
+			}
+		}
+	}
+}
+
+# State scope. A building here that no record describes: no ceremony has asked
+# about it and none is under way. A building a merge brought, or (for a day) a
+# new one before its first ceremony.
+gm_state_unrecorded = {
+	has_building = building_grand_monument
+	NOT = { has_variable = gm_seen }
+	NOT = { has_variable = gm_ceremony_level }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_newcomer }
+}
+
+# State scope. An orphaned shadow may stand beside this state's primary: its
+# records account for its own levels, and its building holds more.
+gm_state_takes_orphan_beside = {
+	has_building = building_grand_monument
+	has_variable = gm_seen
+	gm_state_unexplained_levels > 0
+}
+
+# State scope. Its building's levels are told apart exactly: nothing records
+# it, or its primary is frozen (gm_levels). The merge self-check gives a
+# verdict only for a region whose every building is so.
+gm_state_levels_readable = {
+	OR = {
+		gm_state_unrecorded = yes
+		AND = {
+			has_variable = gm_seen
+			has_variable = gm_levels
 		}
 	}
 }

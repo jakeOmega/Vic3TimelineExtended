@@ -474,13 +474,25 @@ gm_arch_finish = {
 		limit = { exists = scope:gm_arch_sponsor }
 		gm_arch_save_dig_state = yes
 	}
+	# Its state's building was rebuilt today (another dig finished there this
+	# month, or a return): placing it rebuilds the building again, which must
+	# wait (gm_tr_return_home's note). It stays at 100 and finishes next month,
+	# before its method is settled, so a Forensic bonus is not added twice.
 	if = {
-		limit = { exists = scope:gm_arch_dig_state }
+		limit = {
+			exists = scope:gm_arch_dig_state
+			scope:gm_arch_dig_state = {
+				NOT = { has_variable = gm_rebuilding }
+			}
+		}
 		gm_arch_settle_levels = yes
 		gm_arch_settle_terms = yes
 		gm_arch_place = yes
 	}
-	else = {
+	else_if = {
+		limit = {
+			NOT = { exists = scope:gm_arch_dig_state }
+		}
 		gm_arch_suspend = yes
 	}
 }
@@ -592,6 +604,9 @@ gm_arch_partage = {
 			set_variable = { name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece }
 			set_variable = { name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur }
+			# A taken piece carries its share of the monument's years (ageing
+			# spec 2026-10-16 §5); a site just unearthed has none.
+			set_variable = { name = gm_tr_age value = 0 }
 			set_variable = { name = gm_tr_year value = gm_this_year }
 			set_variable = { name = gm_tr_taken_by value = scope:gm_arch_sponsor }
 			set_variable = { name = gm_tr_share value = flag:piece }

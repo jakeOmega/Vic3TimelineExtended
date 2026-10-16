@@ -233,11 +233,11 @@ the resolution, a weaker form applies:
 |---|---|
 | Condemnation of Aggression | A non-binding rebuke. |
 | International Sanctions | Voluntary partial sanctions, with no enforcer. |
-| Request a Peacekeeping Deployment | An observer mission only. |
+| Request a Peacekeeping Deployment | Observers only: five years of better relations and prestige for the requester, not a mission. |
 | International Criminal Court | A symbolic censure of the vetoer; no court. |
 | Charter Reform | Blocked outright. |
 | Authorized Military Mandate | Blocked outright. |
-| Refer a Dispute to the World Court | An advisory opinion: the court rules, but nothing changes hands. |
+| Refer a Dispute to the World Court | An advisory opinion: the court rules, but nothing changes hands; an opinion against the holder costs it 2 standing. |
 | Arms Embargo | A voluntary embargo at half strength, for five years. |
 | Establish the Standing UN Force | Blocked outright. |
 | Binding Ceasefire | A call for a ceasefire: one drop in the aggressor's war support. |
@@ -297,9 +297,9 @@ The other seven are:
 | Topic | Who may table it | If it carries |
 |---|---|---|
 | Condemnation of Aggression | A member with a rival that started a war it is still fighting and has a [case](#grounds-for-un-censure) of 30+ | Condemned for ten years: prestige, relations improvement speed and infamy decay, × enforcement. |
-| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions. That ends its own regime and any whose enforcer has left the UN or is gone; a regime another member still enforces continues. |
+| International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions; if the target voted for them, none apply and nobody enforces them. Lifting ends its own regime and any whose enforcer has left the UN or is gone; a regime another member still enforces continues. |
 | Authorized Military Mandate | See [UN military mandates](#un-military-mandates) | A mandate for the proposer. |
-| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it; nobody else is asked. |
+| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it, and cannot leave the Peacekeeping programme for ten years; nobody else is asked. |
 | Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted and take part pay for ten years. |
 | Charter Reform | A major power, once the charter is ripe | The next reform. |
 | Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years | The seat is stripped. |
@@ -388,13 +388,15 @@ carry the random −20 to +20, so a close vote can turn on the day it is cast.
 
 When a resolution carries, every member that voted against it may accept it or
 refuse. Refusing a convention (Refuse to ratify it) keeps you outside it, with
-neither its obligations nor its benefits. Refusing an aid or peacekeeping
+neither its party terms nor its benefits, though any term that reaches every
+country still reaches you. Refusing an aid or peacekeeping
 request (Refuse to take part) means you contribute nothing. Refusing anything
 else (Denounce the decision) is a statement on the record that changes nothing.
 Refusing costs 20 relations with the proposer and 3 infamy, and for a binding
 resolution also 5 standing and 10 case strength. Accepting a binding resolution
 you opposed earns 2 standing, except a peacekeeping request, whose contribution
-is its own reward. A referral to the World Court and a supervised referendum
+is its own reward. A resolution that a veto blocked or softened binds no one, so
+accepting or refusing it moves no standing or case strength. A referral to the World Court and a supervised referendum
 bind only the country they name, which answers in its own event, so accepting
 or refusing them here moves no standing or case strength. A member that voted in favor,
 or did not vote, ratifies a carried convention without being asked, except that
@@ -408,9 +410,11 @@ from those rows. The rows sit under
 the General Assembly while no resolution is in session. Each gives the topic,
 whether it is a Binding Resolution (which can be vetoed) or a Recommendatory
 one, its passage rule and its target. "Target: None" means no country gives
-grounds right now; hover it for why. Hover a convention's name for the agency it
-would found and when the docket raises it. A greyed Propose button lists in its
-tooltip what stops you.
+grounds right now; hover it for why. Hover a topic's name for everything it
+would do, to its target, its proposer, the members and other systems, and for a
+convention the agency it founds and when the docket raises it. On the resolution
+in session, Its Terms after "If it carries" shows the same. A greyed Propose
+button lists in its tooltip what stops you.
 
 Tabling on your own motion uses influence for two years, and you need that much
 available to table:
@@ -680,8 +684,9 @@ while you are still at peace and holding elections, an Electoral Observer
 Mission goes to your capital, paid from the UN's budget, so
 nobody sends a contingent. At strength 1 it gives you +5 legitimacy and makes
 Election Interference against you easier to catch, and its state −10% turmoil
-effects and −10% radicals from political movements. While it is there,
-Election Interference cuts your electoral confidence by half as much. It
+effects and −10% radicals from political movements. While it is there, unless
+the UN is Moribund, Election Interference cuts your electoral confidence by
+half as much. It
 succeeds when an election campaign ends while it is there and you still hold
 its state and your seat (UN delivery and 3 standing for you), fails if you are
 attacked or stop holding elections (which also costs 2 standing), and lapses
@@ -742,8 +747,10 @@ carries its member modifier. Its effects are multiplied by the UN's enforcement,
 never below ×0.01, so a Moribund UN leaves conventions dormant rather than
 lapsed. Most also name winners and losers among the parties. Our Obligations
 lists each convention you are party to, with your terms under it; hover a
-convention or a term to see its modifier. Terms are re-read when the tier
-changes and once a year.
+convention for all its terms, or a term for its modifier. Hover an agency in the
+overview for its convention's terms, founded or not. Your terms start the day
+you ratify a convention or join, and are re-read when the tier changes and once
+a year.
 
 | Convention (agency) | Can come to the floor with | Parties gain | Winners and losers |
 |---|---|---|---|
@@ -753,7 +760,7 @@ changes and once a year.
 | Climate Accord (UNEP) | Authority 30; Environmental Movement; the Global Warming rule | Environment ministry impact, prestige | Market leaders with 10%+ of world emissions cut emissions and heavy industry; low emitters get adaptation aid. |
 | Global Pandemic Response (WHO) | Authority 20; a major-power proposer with Antibiotics | Cheaper health system, prestige | None. |
 | International Refugee Resolution (UNHCR) | Authority 20; a country at war or with a state below 6 standard of living | Refugee ministry impact, prestige, migration pull | The 20 richest countries per head take in migrants and turmoil; the poorest gain standard of living. |
-| Cultural Heritage Program (UNESCO) | Authority 40 | Prestige, research speed | Countries with a wonder gain cultural pull and tourism, and build slower. |
+| Cultural Heritage Program (UNESCO) | Authority 40 | Prestige, research speed | Countries with a monument (any building in the Monuments group, the Space Program included, but not a Grand Monument) gain cultural pull and tourism, and build slower in every state. |
 | Decolonization Resolution | Authority 30; Decolonization; a country holding a subject | Binds every member | Colonial powers lose colonial stability; members' colonies gain liberty desire. |
 | International Space Cooperation (UNOOSA) | Authority 40; a major-power proposer with Space Exploration | Science ministry impact, space race progress | The space race leader slows and laggards speed up; orbital battlestation holders lose prestige. |
 | Convention on the Law of the Sea (ITLOS) | Authority 30; International Trade | Cheaper port connections, prestige | Great powers gain less prestige from their navies. |
@@ -768,7 +775,10 @@ makes casualties cost more war support, and the Convention on Cultural
 Diversity slows the assimilation of your minorities. While in force, the NPT,
 the CPPNM and the TPNW also raise the target of the [nuclear
 taboo](14-nuclear.md#what-moves-the-nuclear-taboo), by up to 8, 4 and 6 points,
-in proportion to UN authority.
+in proportion to UN authority. While UNESCO stands, carrying off a Grand
+Monument or a trophy in a war costs every country twice the infamy, party or
+not, and the AI loots a quarter as often (see [Monument
+trophies](02-timeline.md#monument-trophies)).
 
 The narcotics convention shifts Drugs production toward medicine. Its figures
 above are at ×1 enforcement and scale with the UN's enforcement. Countries with
@@ -782,7 +792,8 @@ The overview shows fourteen specialized agencies, each lit once founded. Thirtee
 come from the conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR,
 UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity, the TPNW and the INCB. The
 fourteenth, the International Court of Justice, is founded the first time a
-country accepts a World Court ruling against it. Once
+country accepts a World Court ruling against it, and has no effects of its own.
+Hover an agency for its convention's terms. Once
 the International Criminal Court convention is in force, the court indicts the
 ruler of a country that ratified it (from Established) or of any country (at
 Supranational) for a nuclear first or tactical strike or an exposed

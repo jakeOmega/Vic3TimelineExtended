@@ -998,6 +998,19 @@ class TestFidelity(unittest.TestCase):
         inp = M.Inputs(sol=8.0, literacy=0.2)
         self.assertIs(H.census_inputs(inp, got), inp)
 
+    def test_the_safety_shares_come_from_the_step_where_it_stored_them(self):
+        """Modern safety (2026-10-16): a step's stored shares replace the owner's; a census whose step stored none keeps
+        the owner's (the review of #979: history and practices-fit read no safety share and zeroed it)."""
+        work, ext = H.P.SAFETY_TYPES["work"], H.P.SAFETY_TYPES["external"]
+        inp = M.Inputs(sol=40.0, literacy=1.0, mods={work: 0.9, ext: 0.4})
+        got = dict(self.STORED)
+        kept = H.census_inputs(inp, got)
+        self.assertEqual((kept.mods[work], kept.mods[ext]), (0.9, 0.4))
+        got.update(te_dg_in_saf_work=0.5, te_dg_in_saf_ext=0.1)
+        own = H.census_inputs(inp, got)
+        self.assertEqual((own.mods[work], own.mods[ext]), (0.5, 0.1))
+        self.assertTrue(set(H.SAFETY_VARS) <= set(H.FIDELITY_VARS))
+
     STEP_SOL, STEP_LIT = 12.0, 0.6   # the step's stored SoL and literacy, where a later walk moved the walk's
 
     def step_infection(self, sol, literacy):

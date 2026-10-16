@@ -350,12 +350,7 @@ un_climate_signatories = {
 un_human_rights_signatories = {
 	value = 0
 	every_country = {
-		limit = {
-			OR = {
-				je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
-				has_modifier = un_human_rights_reservations_modifier
-			}
-		}
+		limit = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 		add = 1
 	}
 }
@@ -363,12 +358,7 @@ un_human_rights_signatories = {
 un_heritage_participants = {
 	value = 0
 	every_country = {
-		limit = {
-			OR = {
-				je:je_united_nations ?= { has_modifier = un_heritage_program_modifier }
-				has_modifier = un_heritage_token_modifier
-			}
-		}
+		limit = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 		add = 1
 	}
 }

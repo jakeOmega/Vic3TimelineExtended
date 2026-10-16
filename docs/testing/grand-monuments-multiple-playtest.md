@@ -31,8 +31,22 @@ stand, the owner proved wrong, or the system is off).
 |---|---|---|
 | **Luxor Obelisk home.** As Egypt (or any owner of Upper Egypt), get the Luxor Obelisk returned (Return Cultural Property, or take it from France in a war). | Upper Egypt keeps the Obelisks of Karnak as the state's monument and gains the Luxor Obelisk beside it. The state's building is 5 levels taller, on the same dedication, and the monument card lists the Obelisk with its own picture and name under Karnak's details. The Homecoming runs. | The card missing with the building taller: the monthly pass did not list it (`gm_monuments_here`). The Obelisk merged into Karnak: read the self-check. |
 | **Both home.** Return the Dendera Zodiac too. | Two rows on the card; the building is 12 levels (Karnak 5, Luxor 5, the Zodiac 2). Karnak's own grandeur on the state card's Grandeur hover reads 5. | A building that fell back to 5 or 10: the rebuild level read `gm_state_grandeur` at the wrong time. |
+| **Both home in one treaty** (review 2026-10-16). Enforce Return Cultural Property on France with both trophies still in Paris. | One comes home at once; the other stays in Paris until the next monthly pass, then comes home beside it (`gm_tr_return_queued`: a state rebuilt today takes no second rebuild). Within a month: Karnak, Luxor and the Zodiac all listed, the building at 12. | One trophy never coming home: the pass did not pick up `gm_tr_return_queued`. Karnak gone: a second rebuild ran the same day. |
+| **An undedicated primary** (review 2026-10-16). Leave a new monument in Upper Egypt undedicated (its ceremony's "leave it undedicated") while your other monuments carry a dedication, then bring a trophy home beside it. | The monument stays Undedicated after the rebuild (`gm_restore_pm = undedicated` puts the method back), no ceremony asks until it grows, and it is not counted as dedicated in National Effects meanwhile. | It reads as your other monuments' dedication: the restore did not run. |
 | **A piece rejoins.** Return the Parthenon's marbles to Attica. | The levels go on the Parthenon; no new row. The Piraeus Lion returned there stands beside it as a row. | The marbles as a row of their own: self-check. |
 | **Dedication kept.** Return a civic artifact to a state whose monument is Crown. | The building keeps Crown; legitimacy from regime grandeur does not rise by the artifact's levels; prestige does. | Crown legitimacy rising: a dedication sum still reads `gm_state_grandeur`. |
+
+## Trophy pictures (2026-10-16, #972)
+
+A landmark's trophy shows its own picture, what was carried off on display in a museum room, drawn over its monument's
+picture by a widget type that instances `gm_tr_picture` and puts more icons over it (`gm_tr_trophy_picture`). No mod
+GUI has stacked a type's icons over another type inside one widget before, so this is the check that proves it.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **On display.** As Britain in 1836, open the Home Counties' Trophies on Display, and the journal entry's Trophies section, a month in. | The Marbles row shows the marbles in a skylit room, the Rosetta Stone in its room, Tipu's Tiger in its case; Paris's rows the Luxor Obelisk in a glass-roofed court. Before the first month's pass: the monument's picture. | The monument's picture after a month: `gm_tr_picture_trophies` did not set a code (`gm_tr_trophy_picture_code`). Nothing at all, or the monument's picture over the trophy's: the overlay type doesn't draw as stacked; fall back to `gm_tr_picture = {}` in the three trophy rows (the data stays, the trophy pictures go unused). |
+| **Held Abroad.** As Greece, open Held Abroad. | The Marbles and the Piraeus Lion rows show their trophy pictures. | As above. |
+| **Home again.** Return the Luxor Obelisk to Upper Egypt (it stands beside Karnak). | Its row under the monument card shows the obelisk standing at Luxor (its monument picture), not the museum court. | The museum picture on a secondary's row: `gm_mon_row_site` uses the trophy type. |
 
 ## Carrying off
 
@@ -43,6 +57,7 @@ stand, the owner proved wrong, or the system is off).
 | **Tear Down.** Pull down the primary of a state with a secondary. | The same as above. | |
 | **Rededicate.** Rededicate the primary of a state with a secondary. | The primary is rebuilt at half its own grandeur plus the secondaries' levels in full; the cost is 500 a level of the primary's own. | A building at half of everything: `gm_state_rededicate` read the whole level. |
 | **The AI.** Let an AI occupy such a state for a few years. | It carries off a monument now and then, any one of them. | |
+| **The AI beside a shrine** (review 2026-10-16). Let an AI occupy a state whose primary is a Grand Shrine or undedicated, with a secondary beside it. | It carries off the secondary now and then (`gm_state_tr_any_takeable`); the shrine stays. A player occupier gets no offer event there (it names the primary), but the secondary's row has Carry It Off. | Never looted: the roll still gates on the primary. |
 
 ## Panels
 
