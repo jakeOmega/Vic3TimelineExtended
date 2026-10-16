@@ -1508,7 +1508,7 @@ un_chamber_propose_referendum_row = {
 	}
 }
 
-# The fourteen conventions and declarations (ops 7-19 and 29). The docket raises them for
+# The sixteen conventions and declarations (ops 7-19 and 29-31). The docket raises them for
 # everyone (redesign phase 4, un_docket_effects.txt), and a member may table
 # one on its own motion. Each row says what the topic is, whether it binds,
 # its passage rule (when the docket raises it anyway is on hover over the

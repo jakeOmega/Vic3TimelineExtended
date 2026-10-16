@@ -624,8 +624,8 @@ un_disp_agency_incb = {
 	value = 0
 	if = { limit = { has_global_variable = un_agency_incb } value = 1 }
 }
-# The Global Commons' two conventions (2026-10-16-global-commons-design.md §4,
-# §6.5).
+# The Antarctic Treaty and the anti-satellite moratorium (the Global
+# Commons, 2026-10-16-global-commons-design.md §4, §6.5).
 un_disp_agency_ats = {
 	value = 0
 	if = { limit = { has_global_variable = un_agency_ats } value = 1 }

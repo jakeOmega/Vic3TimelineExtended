@@ -4147,7 +4147,7 @@ un_events.36 = {
 			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
 			un_convention_on = { MODIFIER = un_space_partnership_modifier }
 		}
-		# The six country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The eight country-scoped conventions, as un_apply_ratified_conventions has them.
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
 			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }

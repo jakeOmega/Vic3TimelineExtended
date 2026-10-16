@@ -3,7 +3,7 @@
 # ============================================================================
 # What each of the seven member-initiated topics actually does when tabled:
 # the costs and cooldowns it takes, the target it names, and the
-# un_resolution_open call that opens the vote. The fourteen conventions follow at
+# un_resolution_open call that opens the vote. The sixteen conventions follow at
 # the bottom of the file, with their own header.
 #
 # Extracted word for word out of each scripted button's `effect` in
@@ -421,11 +421,12 @@ un_propose_referendum_effect = {
 }
 
 # ============================================================================
-# THE FOURTEEN CONVENTIONS
+# THE SIXTEEN CONVENTIONS
 # ============================================================================
 # Human rights, ICC, NPT, climate, pandemic, refugee, heritage,
 # decolonization, space, the law of the sea, the physical protection of
-# nuclear material, cultural diversity and the prohibition of nuclear weapons.
+# nuclear material, cultural diversity, the prohibition of nuclear weapons,
+# narcotic drugs, the Antarctic Treaty and the anti-satellite moratorium.
 # Each has two effects:
 #
 #   un_propose_<key>_table   what tabling it does, whoever tables it: the

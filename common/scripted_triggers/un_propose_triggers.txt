@@ -611,9 +611,9 @@ un_propose_referendum_possible = {
 }
 
 # ============================================================================
-# THE FOURTEEN CONVENTIONS
+# THE SIXTEEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-19 and 29 of
+# Tabled on our own motion from the chamber (ops 7-19 and 29-31 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.

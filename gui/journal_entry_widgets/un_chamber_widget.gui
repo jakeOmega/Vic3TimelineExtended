@@ -21,7 +21,7 @@
 ###   un_chamber_propose_sgui  tables one of thirty topics
 ###                            (op 0 condemn / 1 sanctions / 2 expulsion /
 ###                             3 mandate / 4 peacekeepers / 5 aid /
-###                             6 charter reform / 7-19 and 29 the fourteen conventions)
+###                             6 charter reform / 7-19 and 29-31 the sixteen conventions)
 ### Both run the same script the existing paths run — un_vote.1's option bodies,
 ### the journal entry's own proposal buttons, and (ops 7-19 and 29) the docket's
 ### proposer events — so the AI, which still votes by event and proposes by
@@ -3029,7 +3029,7 @@ types un_chamber_widget_types
 				}
 			}
 
-			# The fourteen conventions and declarations. The docket also raises each of
+			# The sixteen conventions and declarations. The docket also raises each of
 			# them for everyone (un_docket_effects.txt); these rows let a member
 			# table one on its own motion. The climate accord's row is hidden under
 			# the disabled global warming rule and the physical-protection

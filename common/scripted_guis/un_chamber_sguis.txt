@@ -1230,7 +1230,7 @@ un_chamber_vote_sgui = {
 #   op 5   request humanitarian aid
 #   op 6   charter reform (redesign phase 2)
 #
-#   The fourteen conventions, which the docket also raises (no scripted button):
+#   The sixteen conventions, which the docket also raises (no scripted button):
 #   op 7   Universal Declaration of Human Rights
 #   op 8   International Criminal Court
 #   op 9   Nuclear Non-Proliferation Treaty
