@@ -16,7 +16,9 @@ wars small. What these checks pin, none of which the engine would report:
 - the AI weighs a war footing (ai_enact_weight_modifier: Total War for a
   serious war, back down at peace);
 - the stance lists keep the new backers;
-- social_tensions_events.7's reform option can actually appear.
+- social_tensions_events.7's reform option can actually appear;
+- each law charges its infamy standing once on taking effect, net of the
+  standing already charged, so a round trip of laws can't wipe infamy.
 
 No game install needed.
 """
@@ -46,6 +48,7 @@ MODIFIER_TYPES = os.path.join(
     REPO, "common", "modifier_type_definitions", "nuclear_program_modifier_types.txt"
 )
 SOCIAL_EVENTS = os.path.join(REPO, "events", "social_tensions_events.txt")
+ROW_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "rules_of_war_effects.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 
@@ -312,6 +315,74 @@ class WarCrimeScandalTests(unittest.TestCase):
         reform = next(o for o in options if "social_tensions_events.7.c" in o)
         laws = self._laws_in(_block(reform, "\t\ttrigger"))
         self.assertEqual(laws, {TRADITIONAL, WCF})
+
+
+class InfamyStandingTests(unittest.TestCase):
+    """A one-time infamy change when a law takes effect (te_row_charge_infamy)."""
+
+    @classmethod
+    def setUpClass(cls):
+        data = _parse(LAWS)
+        cls.standing = {}
+        for name in LAWS_IN_GROUP:
+            on_activate = _body(_body(data[name])["on_activate"])
+            call = _body(on_activate["te_row_charge_infamy"])
+            cls.standing[name] = float(_body(call["STANDING"]))
+        cls.effect = _block(_strip_comments(_read(ROW_EFFECTS)), "te_row_charge_infamy")
+
+    def test_total_war_costs_infamy_and_the_restrictive_laws_cut_it(self):
+        self.assertGreater(self.standing[TOTAL], 0)
+        self.assertEqual(self.standing[TRADITIONAL], 0)
+        for name in (WCF, HUMANITARIAN, LIMITED):
+            with self.subTest(law=name):
+                self.assertLess(self.standing[name], 0)
+
+    def test_the_stricter_the_law_the_larger_the_cut(self):
+        order = [TOTAL, TRADITIONAL, WCF, HUMANITARIAN, LIMITED]
+        values = [self.standing[name] for name in order]
+        self.assertEqual(values, sorted(values, reverse=True))
+        self.assertEqual(len(set(values)), len(values))
+
+    def test_a_change_from_the_start_law_is_about_25_at_most(self):
+        # The owner's order of magnitude: a law change is rare.
+        for name, value in self.standing.items():
+            with self.subTest(law=name):
+                self.assertLessEqual(abs(value), 25)
+
+    def test_the_charge_is_net_of_the_standing_already_charged(self):
+        body = re.sub(r"\s+", " ", self.effect)
+        self.assertIn("change_infamy = { value = $STANDING$", body)
+        self.assertIn(
+            "limit = { has_variable = te_row_infamy_standing } "
+            "subtract = var:te_row_infamy_standing",
+            body,
+        )
+        self.assertIn(
+            "hidden_effect = { set_variable = { name = te_row_infamy_standing "
+            "value = $STANDING$ } }",
+            body,
+        )
+
+    def test_cycling_laws_cannot_wipe_infamy(self):
+        # The effect, replayed: from an unset standing (0, the start law), any
+        # sequence of laws ends charged exactly the last law's standing, and a
+        # restrictive law re-enacted after a looser one only takes back what
+        # the looser one charged.
+        def replay(laws, infamy):
+            charged = 0.0
+            for name in laws:
+                infamy = max(0.0, infamy + self.standing[name] - charged)
+                charged = self.standing[name]
+            return infamy
+
+        start = 60.0
+        once = replay([LIMITED], start)
+        cycled = replay([LIMITED, HUMANITARIAN, LIMITED, WCF, LIMITED], start)
+        self.assertEqual(cycled, once)
+        self.assertEqual(replay([TOTAL, TRADITIONAL], start), start)
+        self.assertEqual(
+            replay([TOTAL, LIMITED], start), start + self.standing[LIMITED]
+        )
 
 
 if __name__ == "__main__":

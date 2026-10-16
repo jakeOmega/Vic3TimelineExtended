@@ -127,6 +127,16 @@ Humanitarian Regulations +1 and Limited War +1.5 on the UN Authority Target. A
 positive figure counts only while you are a UN member not undermining it; see
 [What counts toward Policy](10-united-nations.md#what-counts-toward-policy).
 
+Each law also carries an infamy standing, charged once when the law takes
+effect: Total War +25, Traditional Rules of War 0, War Crimes Forbidden −10,
+Humanitarian Regulations −15 and Limited War −20. A change of law moves your
+infamy by the new law's standing minus the old one's, so moving from
+Traditional Rules of War to Total War adds 25 infamy, moving back takes 25 off,
+and moving from Total War to Limited War takes 45 off. Going back and forth
+gains nothing. Infamy can't fall below 0, so a cut made while you have little
+infamy is partly lost, and returning to a looser law still costs the full
+difference. The enactment preview shows the change.
+
 A change of law takes the usual enactment time, so moving to Total War when a
 war breaks out costs months and holds up your other laws. The AI moves to Total
 War in a war against a major or great power, or one whose war goals would annex

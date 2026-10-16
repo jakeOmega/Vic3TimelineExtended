@@ -749,6 +749,12 @@ law_state_universal_heir = {
 #  No law cuts a ministry cap by more than 1 (Ministry of War's law cap is 3,
 #  Foreign Affairs' 2), so none can close a ministry.
 #
+#  Each law has an infamy standing, charged once when it takes effect: Total
+#  War +25, Traditional 0, War Crimes Forbidden -10, Humanitarian Regulations
+#  -15, Limited War -20. A change moves infamy by the new standing minus the
+#  old (te_row_charge_infamy), so a round trip nets zero and cycling the
+#  restrictive laws can't wipe infamy.
+#
 #  The nuclear bans are the two script-only booleans in
 #  nuclear_program_modifier_types.txt: they show in the law tooltip, and
 #  nd_war_law_permits_*_strike reads them.
@@ -793,6 +799,12 @@ law_total_war = {
 		country_un_authority_target_add = -2
 	}
 
+	# Infamy moves by this law's standing minus the old law's
+	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = 25 }
+	}
+
 	ai_enact_weight_modifier = {
 		value = 0
 		if = {
@@ -818,6 +830,12 @@ law_traditional_rules_of_war = {
 	modifier = {
 		unit_morale_loss_mult = -0.05
 		unit_experience_gain_mult = 0.25
+	}
+
+	# Infamy moves by this law's standing minus the old law's
+	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = 0 }
 	}
 
 	ai_enact_weight_modifier = {
@@ -855,6 +873,12 @@ law_war_crimes_forbidden = {
 		country_defender_diplomatic_play_escalation_weekly_mult = -0.10
 		# UN authority's Policy pillar (un_redesign_design.md §0.10); members in good standing only.
 		country_un_authority_target_add = 0.5
+	}
+
+	# Infamy moves by this law's standing minus the old law's
+	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = -10 }
 	}
 
 	ai_enact_weight_modifier = {
@@ -895,6 +919,12 @@ law_humanitarian_regulations = {
 		country_defender_diplomatic_play_escalation_weekly_mult = -0.10
 		# UN authority's Policy pillar (un_redesign_design.md §0.10); members in good standing only.
 		country_un_authority_target_add = 1
+	}
+
+	# Infamy moves by this law's standing minus the old law's
+	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = -15 }
 	}
 
 	ai_enact_weight_modifier = {
@@ -946,6 +976,12 @@ law_limited_war = {
 		country_diplomatic_reputation_add = 3
 		# UN authority's Policy pillar (un_redesign_design.md §0.10); members in good standing only.
 		country_un_authority_target_add = 1.5
+	}
+
+	# Infamy moves by this law's standing minus the old law's
+	# (te_row_charge_infamy, rules_of_war_effects.txt).
+	on_activate = {
+		te_row_charge_infamy = { STANDING = -20 }
 	}
 
 	ai_enact_weight_modifier = {
