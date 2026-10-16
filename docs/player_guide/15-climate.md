@@ -89,10 +89,12 @@ produces fuel while capturing carbon.
 ## Capturing carbon at the source
 
 Stationary coal and oil consumers have Carbon Capture controls, including
-industrial plants, mine pumps, steam-powered automation and eligible company
-sites. Each fuel-consuming production group has its own control. A Steel Mill
-can capture its furnace emissions and its automation emissions independently.
-Only the variants matching the group's current fuel use appear.
+industrial plants, mining equipment, steam-powered automation and eligible
+company sites. Each eligible fuel-consuming production group has its own
+control. A Steel Mill can capture its furnace emissions and its automation
+emissions independently. Each tier comes in a variant for every fuel recipe,
+named for it, such as Partial Carbon Capture (10 Coal), and only the variants
+matching the group's current method appear.
 
 | Method | Needs | Captures |
 |---|---|---|
@@ -106,17 +108,19 @@ additional electricity. Costs follow the fuel used by that production group.
 The tooltips show the reduction and goods cost. Capturing a fossil power
 plant's emissions can make it unprofitable, so subsidies may be needed.
 
-Switching fuel can reset your capture choice. Under Managed Fossil Phaseout,
+Changing a group's method to one that burns a different amount of coal or oil
+can reset your capture choice. Under Managed Fossil Phaseout,
 eligible sources must use at least the middle tier. Without that law, select
 the tier yourself; the AI generally prefers the cheaper option without capture.
 A method with no eligible fuel use has Capture Not Applicable and stays valid
 under the mandate.
 
-Transport exhaust, dispersed agricultural and logging machinery, mobile mine
-excavators and street lighting have no source capture. Oil used as plastics,
-textile and other chemical feedstock, refinery inventory, and synthetic-fuel
-carbon already credited elsewhere are also exempt. These consumers still show
-emissions and contribute to the industrial climate total.
+Transport exhaust, fishing and whaling fleets, dispersed agricultural and
+logging machinery, mobile mine excavators and street lighting have no source
+capture. Oil and coal used as plastics, textile and other chemical feedstock,
+oil held at refineries and depots, and Synthetic Fuel Works, whose fuel output
+already counts against their emissions, are also exempt. These consumers still
+show emissions and contribute to the industrial climate total.
 
 ## The Global Warming journal entry
 
@@ -444,8 +448,16 @@ lasts, a Settlement Authority on Managed Retreat can move people off your coasts
 
 ## State pollution
 
+Pollution works as in the base game: a state region's buildings generate
+pollution, and the region's pollution impact moves a little each day toward a
+level set by that generation and the region's arable land. The mod changes how
+much of a state's generation counts, adds pollution-control production methods
+and makes heavy pollution hurt more.
+
+### Generated pollution cuts
+
 The mod adds a Generated Pollution modifier that scales how much pollution a
-state's buildings produce, recalculated monthly. It is lowered by:
+state generates, recalculated monthly. It is lowered by:
 
 | Source | Generated Pollution |
 |---|---|
@@ -456,32 +468,69 @@ state's buildings produce, recalculated monthly. It is lowered by:
 | Novo Nordisk Kalundborg Plant, in its own state | Up to −15% |
 | Biotechnology company, while prosperous | −5% |
 | Electric Vehicles technology | −5% |
+| The region's own pollution ([Heavy pollution](#heavy-pollution)) | Up to −90% |
+
+The Environmental Grandfather Clause amendment raises it by 5%. The cuts add
+together, and at −100% nothing the state generates counts. They apply to what is
+left after the flat cuts below.
 
 Each level of the Ministry of the Environment also cuts emissions by 5% and
 raises the National Park level cap by one. Each level costs 1% mining and
 logging throughput, 2% oil extraction throughput and 5% more construction goods.
 
+Other sources take a fixed amount off a state's generated pollution, per level
+at full staffing: the pollution-control methods below, a National Park (500 on
+the National Park and National Wildlife Refuge methods, 250 on National Forest)
+and a monument dedicated as Botanical Gardens (5,000 a step; see [Monument
+dedications](02-timeline.md#monument-dedications)). A polluting production
+method adds between 3 and 100 a level.
+
+### Pollution-control methods
+
+Seven production method groups let polluting buildings clean up, each with a
+method that does nothing, a basic one and an advanced one:
+
+| Group | Buildings | Basic, per level | Advanced, per level |
+|---|---|---|---|
+| Tailings and Wastewater Management | Mines | Settling Ponds, −5 | Tailings Treatment, −10 |
+| Facility Emission Standards | Tooling Workshops, Arms Industries, Munition Plants | Ventilation Systems, −5 | Green Assembly, −10 |
+| Industrial Synthesis Scrubbing | Fertilizer Plants | Basic Fume Scrubbers, −10 | Closed-Loop Synthesis, −15 |
+| Precision Environmental Management | Rye, Wheat, Rice, Maize and Millet Farms | Improved Crop Rotation, −5 | Precision Agriculture, −10 |
+| Effluent Filtration | Paper Mills | Waste Fiber Recovery, −3 | Effluent Filtration, −5 |
+| Fume Ventilation | Glassworks | Fume Extraction, −5 | Closed-Loop Recycling, −10 |
+| Emissions Control | Power Plants, Automotive Industries, Ports, Steel Mills | Basic Emissions Control, −10 | Advanced Emissions Control, −20 |
+
+The basic methods need Pollution Control. The advanced ones need the Ministry of
+the Environment and, outside Emissions Control, one of the building's later
+production methods; the tooltips name them. Once the ministry is established,
+the methods that do nothing are no longer allowed, so these buildings run at
+least the basic method. Improved Crop Rotation and Waste Fiber Recovery cost
+nothing; the others use electricity, tools or fertilizer. The groups cut local
+pollution only: greenhouse gas emissions have their own controls ([Capturing
+carbon at the source](#capturing-carbon-at-the-source)).
+
+### Heavy pollution
+
 Heavy pollution hurts more than in the base game. As a state region's pollution
-rises toward its maximum, it adds up to +5% mortality, −3 standard of living and
-−5% working-age population on top of the base-game penalty, and wipes out
-tourism output.
+impact rises toward 100%, the mod adds up to +5% mortality, −3 standard of
+living and −5% workforce ratio on top of the base game's penalty. It also cuts
+tourism output by up to 200%, so a region at half its maximum pollution has no
+tourism left.
 
-It also damps new pollution generation by up to 90% as pollution rises. Because
-pollution reduces its own generation, a state's pollution percentage settles at a
-steady value instead of climbing without limit. This creates a steepening curve:
-in an unpolluted state, all generated pollution counts, but at maximum pollution
-impact, damping reaches 90%, so only 10% counts: a tenfold increase in the gross
-pollution needed per point of impact. Pushing a state from roughly 89% pollution
-(where 20% counts) to 100% (where 10% counts) requires twice as much gross
-generation.
+Pollution impact also damps each state's own generation, adding up to −90% to
+its Generated Pollution modifier: −45% at 50% impact and −90% at 100%. The
+dirtier a region gets, the less each extra unit of pollution adds, so its impact
+settles lower than it would in the base game. With no other cuts, generation
+that would hold a region at 50% impact in the base game holds it near 34%,
+generation that would just reach 100% holds it near 53%, and it takes ten times
+that much to reach 100%.
 
-The steeper curve ensures a region never accumulates so much excess pollution
-that reducing pollution does nothing. In the base game, an industrial heartland
-can produce far more pollution than the 100% impact cap requires, leaving a
-deep backlog where cutting emissions has no visible effect for years. Under this
-damping, pollution cannot run away beyond the cap, so adopting clean production
-methods, decrees or ministry funding always lowers the pollution percentage
-right away.
+This keeps a dirty region responsive to cleanup. In the base game, a region that
+generates several times what it takes to reach 100% stays at 100% until its
+generation falls below that level, so the first cuts show nothing. Here the same
+region sits below 100%, and every cut lowers it unless the region still
+generates ten times that level. Cuts take effect gradually: the modifier is
+recalculated monthly, and impact moves toward its new level a little each day.
 
 ### The Environmental Movement
 
@@ -489,8 +538,12 @@ The Environmental Movement is a political movement that forms once you research
 Pollution Control, if you have not established the Ministry of the Environment.
 Its support comes from polluted states, from academics and literate middle-class
 pops, and from warming, rising at 0.5, 1.0, 1.5 and 2 °C; the Environmental
-Movement technology doubles it. Each climate policy you have in force lowers its
-radicalism, each one you could adopt but haven't raises it, and so does each
-unfunded level of the ministry. It disbands once the Ministry of the Environment
-is established and funded to its maximum. Its support also pushes AI countries
-toward climate policies.
+Movement technology doubles it, and Genetic Engineering adds a quarter more.
+Seven climate policies move its radicalism by 10 points: Carbon Tax, Renewable
+Investment, Climate Adaptation, Emission Standards, Reforestation Subsidies,
+Public Transit and Fossil-Fuel Divestment. Each one in force lowers it, and each
+one you could adopt but haven't raises it. Carbon Removal Support only lowers
+it, by 5 points, and Green Building Codes and Fossil-Fuel Tariffs don't count.
+Each unfunded level of the ministry raises it by 5 points. It disbands once the
+Ministry of the Environment is established and funded to its maximum. Its
+support also pushes AI countries toward climate policies.
