@@ -8,6 +8,7 @@ behaviour against the design (§1.2-§1.5, §4.2): selection, ageing, the pull, 
 """
 
 import dataclasses
+import functools
 import random
 import sys
 import unittest
@@ -66,9 +67,9 @@ def _ring(inp, seed=1, pool=(30.0, 20.0), late=True):
     return ring
 
 
-def _engine(ring, inp, pop, war_dead=0.0, kills=0.0, migration=0.0):
+def _engine(ring, inp, pop, war_dead=0.0, kills=0.0, migration=0.0, truncate=False):
     """The script's state with the ring's variables, its flows stubbed from the model's own formulas (the registry's
-    TestCohortScript.step_both)."""
+    TestCohortScript.step_both). truncate: the engine's fixed point (_Engine's truncate)."""
     prof = M.migrant_profile(inp)
     locals_ = {"te_dg_war_ff": min(0.5, war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw),
                "te_dg_war_fm": min(0.5, war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam),
@@ -80,7 +81,7 @@ def _engine(ring, inp, pop, war_dead=0.0, kills=0.0, migration=0.0):
     stub = {"te_demog_flows": "\n".join(
         [f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in locals_.items()]
         + ["te_demog_migrant_rates = yes"])}
-    eng = _engine_for(inp, YEAR + 1, pop, effects=stub)
+    eng = _engine_for(inp, YEAR + 1, pop, effects=stub, engine=functools.partial(_Engine, truncate=truncate))
     for k in range(N):
         if ring.f[k] or ring.m[k]:
             eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = ring.f[k], ring.m[k]
@@ -105,10 +106,10 @@ class TestLateGameScript(unittest.TestCase):
     def close(self, got, want, rel=1e-8, what=""):
         self.assertLessEqual(abs(got - want), rel * max(abs(want), 1.0), f"{what}: {got} vs {want}")
 
-    def step_both(self, inp, ring=None, **flows):
+    def step_both(self, inp, ring=None, truncate=False, **flows):
         ring = ring or _ring(inp)
         pop = ring.total * 1.004
-        eng = _engine(ring, inp, pop, **flows)
+        eng = _engine(ring, inp, pop, truncate=truncate, **flows)
         eng.call("te_demog_step")
         out = M.step(ring, inp, YEAR + 1, engine_pop=pop, war_dead=flows.get("war_dead", 0.0),
                      kills=flows.get("kills", 0.0), migration=flows.get("migration", 0.0))
@@ -279,6 +280,49 @@ class TestLateGameScript(unittest.TestCase):
                 self.close(eng.vars[f"te_dg_s{j}"], ring.lx_s[j], 1e-9, f"band {j}")
                 self.close(eng.vars[f"te_dg_d{j}"], ring.lx_d[j], 1e-9, f"band {j}'s deficit")
 
+    def check_fixed_point(self, eng, ring, out, rel=1e-3):
+        """A step run in the engine's fixed point against the model's floats: the year's births and deaths and every
+        cohort. The cut moves the step's own inputs a little (a TFR of 3.0609164 is stored as 3.06067), hence rel."""
+        self.close(eng.vars["te_dg_births"], out["births"], rel, "births")
+        self.close(eng.vars["te_dg_deaths"], out["deaths"], rel, "deaths")
+        for k in range(N):
+            if f"te_dg_f{k}" in eng.vars:
+                self.close(eng.vars[f"te_dg_f{k}"], ring.f[k], rel, f"women in slot {k}")
+                self.close(eng.vars[f"te_dg_m{k}"], ring.m[k], rel, f"men in slot {k}")
+
+    def test_fixed_point_births(self):
+        """The engine keeps five decimals (values in units of 1e-5), so a product of small factors comes out cut. Late
+        births once took TFR / 100000 first (0.00001 for any TFR from 1 to 2, 0 below 1) and then a share under 1, which
+        cut the product to 0: every late state with a TFR under 2 had no births, and above 2 about half (the France ->
+        European Union game, 2033). Each term now multiplies the women and the schedule first and divides last."""
+        for natural in (0.0, -0.45, -0.64, -0.7):     # TFR about 3.06, 1.68, 1.10, 0.92
+            inp = _inp(**{P.NATURAL_FERTILITY_TYPE: natural})
+            with self.subTest(natural=natural):
+                eng, ring, out = self.step_both(inp, truncate=True)
+                self.assertGreater(out["births"], 0.0)
+                self.check_fixed_point(eng, ring, out)
+
+    def test_fixed_point_late_steps(self):
+        """The late steps above, in the engine's fixed point (test_fixed_point_births)."""
+        cases = [_inp(), _inp(**{P.AGEING_RATE_TYPE: -1.0, P.REJUVENATION_TYPE: 0.03}),
+                 dataclasses.replace(_inp(), laws=BASE.laws | {P.LX_BAN_LAW}),
+                 dataclasses.replace(_inp(), wealth_bands={30: 100000.0}, lx_w=20.0)]
+        for i, inp in enumerate(cases):
+            with self.subTest(case=i):
+                eng, ring, out = self.step_both(inp, truncate=True, war_dead=500.0, migration=-3000.0)
+                self.check_fixed_point(eng, ring, out)
+
+    def test_fixed_point_artificial_wombs(self):
+        inp = dataclasses.replace(_inp(**{P.NATURAL_FERTILITY_TYPE: -0.64}), ecto_levels=3.0)
+        ring = _ring(inp)
+        ring.births = 1000.0
+        eng = _engine(ring, inp, ring.total * 1.004, truncate=True)
+        eng.vars["te_dg_births"] = 1000.0
+        eng.call("te_demog_step")
+        out = M.step(ring, inp, YEAR + 1, engine_pop=ring.total * 1.004)
+        self.assertGreater(out["lx"]["ecto"], 0.0)
+        self.check_fixed_point(eng, ring, out)
+
     def test_no_carrier_takes_the_plain_sweep(self):
         """Before the first carrier nothing of the late game runs: no variable, the plain sweep."""
         inp = _inp(**{P.AGEING_RATE_TYPE: 0.0})
@@ -421,11 +465,16 @@ class TestWealthSlope(unittest.TestCase):
 
 
 class TestGapPolitics(unittest.TestCase):
-    """§4.4, call 15: built behind demographics_params.LONGEVITY_POLITICS, off until a play-test sizes it."""
+    """§4.4, call 15: built behind demographics_params.LONGEVITY_POLITICS, off until a play-test sized it; on at the spec's
+    sizes since 2026-10-16 (owner)."""
+
+    def test_the_switch_is_on(self):
+        self.assertTrue(P.LONGEVITY_POLITICS)
+        values = (ROOT / "common" / "script_values" / "te_demog_lx_generated_values.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("te_demog_k_lx_politics = { value = 1 }", values)
 
     def test_off_applies_nothing(self):
-        self.assertFalse(P.LONGEVITY_POLITICS)
-        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng = _Engine({"te_demog_k_lx_politics": 0.0}, triggers={"te_demog_effects_run": True})
         eng.vars.update(te_dg_lx_l100t=0.8, te_dg_lx_l100u=0.3)
         eng.modifiers["te_demog_lx_gap_labor"] = 0.4      # a game that had it on: it goes
         eng.call("te_demog_lx_politics_refresh")
@@ -439,6 +488,20 @@ class TestGapPolitics(unittest.TestCase):
         eng.trigger_fixtures["te_demog_effects_run"] = False
         eng.call("te_demog_lx_politics_refresh")
         self.assertEqual(eng.modifiers, {}, "outside Full nothing")
+
+    def test_the_country_modifier_comes_off_outside_full(self):
+        """The review of #979: the country's refresh runs only inside the census, so a game switched from Full to Disabled
+        kept the unions' and farmers' approval down; the yearly pulse's clear step, outside the census, takes it off."""
+        eng = _Engine({}, triggers={"te_demog_effects_run": False})
+        eng.modifiers["te_demog_lx_gap_politics"] = 0.4
+        eng.call("te_demog_lx_politics_clear")
+        self.assertEqual(eng.modifiers, {})
+        eng = _Engine({}, triggers={"te_demog_effects_run": True})
+        eng.modifiers["te_demog_lx_gap_politics"] = 0.4
+        eng.call("te_demog_lx_politics_clear")
+        self.assertEqual(eng.modifiers, {"te_demog_lx_gap_politics": 0.4}, "under Full the census's refresh owns it")
+        yearly = _block(_text(ROOT / "common" / "scripted_effects" / "te_demog_effects.txt"), "te_demog_country_yearly")
+        self.assertIn("te_demog_lx_politics_clear = yes", yearly)
 
     def test_the_sizes(self):
         mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_lx_modifiers.txt"])
@@ -466,6 +529,17 @@ class TestLateGameHarness(unittest.TestCase):
             d_truth, x_truth = self.L.truth(inp, share, self.start, years=30)
             self.assertLess(abs(d_band - d_truth), 0.1, (share, d_band, d_truth))
             self.assertLess(abs(x_band / x_truth - 1), 0.01, (share, x_band, x_truth))
+
+    def test_modern_safety_brings_mens_adult_deaths_into_band(self):
+        """Modern safety (2026-10-16): today's rich state, with the era 7-9 carriers, has men's 35q15 inside the band and
+        work deaths near the rich world's. Women's stays over its band, from adult infection and chronic deaths (#894's
+        follow-up, after #933), so this pins only that it fell from the 0.08 it read before."""
+        q = self.L.adult_mortality(self.carriers, self.lines)
+        lo, hi = self.L.ADULT_BANDS["men"]
+        self.assertTrue(lo <= q["men"] <= hi, q)
+        self.assertLess(q["women"], 0.06, q)
+        by_cause = self.L.adult_mortality_by_cause(self.carriers, self.lines)
+        self.assertLess(by_cause["men"]["work"], 0.005, by_cause)
 
     def test_the_command_meets_its_bands(self):
         import argparse
@@ -583,3 +657,17 @@ class TestLateGameCountry(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestLateReseedConsole(unittest.TestCase):
+    """Console option c_world (te_debug_demog.1): every late state re-seeded, our census taken at once."""
+
+    def test_the_census_runs_for_root_alone(self):
+        """te_demog_country_census writes its bands and lists to ROOT (te_demog_add_bands_to_root's root = { }), so run
+        inside every_country from the player's event it would add every country's bands to the player's census."""
+        body = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"), "te_debug_demog_reseed_late")
+        self.assertNotIn("every_country", body)
+        self.assertIn("te_demog_country_census = yes", body)
+        self.assertIn("te_demog_seed_off_pulse = yes", body)
+        self.assertNotIn("te_demog_seed = yes", body)
+        self.assertIn("has_variable = te_dg_elig", body)

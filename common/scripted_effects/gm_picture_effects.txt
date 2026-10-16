@@ -222,6 +222,7 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = sidon_necropolis CODE = 1000084 }
 	gm_state_picture_landmark = { KEY = villa_of_the_papyri CODE = 1000085 }
 	gm_state_picture_landmark = { KEY = tomb_of_alexander CODE = 1000086 }
+	gm_state_picture_landmark = { KEY = pompeii CODE = 102 }
 }
 
 gm_state_picture_landmark = {

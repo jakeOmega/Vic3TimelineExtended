@@ -256,8 +256,20 @@ je_covert_warfare = {
 			# Ensures a network per target, grows or decays each, reaps the dead.
 			covert_nets_sync = yes
 
+			# ---- Operations we watch (the target's side) ----
+			# Straight after the network pass, which has just counted them:
+			# reap records whose operation is gone, age the rest, retry an
+			# exposure that waited, and let an AI expose by chance.
+			covert_watch_monthly = yes
+
 			# ---- Age operation durations ----
 			covert_ops_age_all_durations = yes
+
+			# ---- Our caught operations (the attacker's side) ----
+			# Before the detection roll: frees an exposure lock or a pending
+			# decision whose event never ran, and makes an operation whose
+			# target lost its record catchable again. Runs at any funding.
+			covert_watch_attacker_monthly = yes
 
 			# ---- Tradecraft (slice 5) ----
 			# Once a month, here and only here (the steppers re-run the sync).

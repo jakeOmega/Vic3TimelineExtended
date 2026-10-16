@@ -359,10 +359,12 @@ te_demog_lx_slot_pre = {
 # planned births with no fecundity loss and no maternal death, from the cohort's women and men alike (§3.5). Sets te_dg_b
 # and the women's own births by part, te_dg_lx_bmu and te_dg_lx_bmt, which carry the maternal deaths
 # (te_demog_lx_deaths); adds to the step's births and maternal deaths, and to the births to women of 50 and over.
+# Each term multiplies the people and the schedule (per 100,000) first and divides by 100000 last: the engine keeps five
+# decimals, and TFR / 100000 taken first (0.00001 for a TFR of 1 to 2) times a share under 1 came out 0, so no late state
+# under a TFR of 2 had a birth (scripting_best_practices.md § values in units of 1e-5).
 te_demog_lx_births = {
 	set_local_variable = { name = te_dg_lx_ft value = { value = local_var:te_dg_f multiply = local_var:te_dg_lx_sk } }
 	set_local_variable = { name = te_dg_lx_fu value = { value = local_var:te_dg_f subtract = local_var:te_dg_lx_ft } }
-	set_local_variable = { name = te_dg_lx_base value = { value = local_var:te_dg_tfr divide = 100000 } }
 	set_local_variable = { name = te_dg_lx_int value = 0 }
 	set_local_variable = { name = te_dg_lx_plu value = 0 }
 	set_local_variable = { name = te_dg_lx_unu value = 0 }
@@ -376,16 +378,23 @@ te_demog_lx_births = {
 		set_local_variable = {
 			name = te_dg_lx_plu
 			value = {
-				value = local_var:te_dg_sh_pl
-				multiply = local_var:te_dg_lx_base
-				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
-				multiply = local_var:te_dg_lx_fu
+				value = local_var:te_dg_lx_fu
 				multiply = local_var:te_dg_asfr
+				multiply = local_var:te_dg_sh_pl
+				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
+				multiply = local_var:te_dg_tfr
+				divide = 100000
 			}
 		}
 		set_local_variable = {
 			name = te_dg_lx_unu
-			value = { value = local_var:te_dg_sh_un multiply = local_var:te_dg_lx_base multiply = local_var:te_dg_lx_fu multiply = local_var:te_dg_asfr }
+			value = {
+				value = local_var:te_dg_lx_fu
+				multiply = local_var:te_dg_asfr
+				multiply = local_var:te_dg_sh_un
+				multiply = local_var:te_dg_tfr
+				divide = 100000
+			}
 		}
 		set_local_variable = { name = te_dg_lx_int value = local_var:te_dg_lx_int0 }
 	}
@@ -397,17 +406,24 @@ te_demog_lx_births = {
 		set_local_variable = {
 			name = te_dg_lx_plt
 			value = {
-				value = local_var:te_dg_sh_pl
-				multiply = local_var:te_dg_lx_base
-				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
-				multiply = local_var:te_dg_lx_ft
+				value = local_var:te_dg_lx_ft
 				multiply = local_var:te_dg_lx_intr
 				multiply = local_var:te_dg_lx_fec
+				multiply = local_var:te_dg_sh_pl
+				multiply = { value = 1 subtract = local_var:te_dg_lx_ecto }
+				multiply = local_var:te_dg_tfr
+				divide = 100000
 			}
 		}
 		set_local_variable = {
 			name = te_dg_lx_unt
-			value = { value = local_var:te_dg_sh_un multiply = local_var:te_dg_lx_base multiply = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_asfr }
+			value = {
+				value = local_var:te_dg_lx_ft
+				multiply = local_var:te_dg_lx_asfr
+				multiply = local_var:te_dg_sh_un
+				multiply = local_var:te_dg_tfr
+				divide = 100000
+			}
 		}
 		set_local_variable = { name = te_dg_lx_int value = local_var:te_dg_lx_intr }
 	}
@@ -421,12 +437,14 @@ te_demog_lx_births = {
 			add = local_var:te_dg_lx_plt
 			add = local_var:te_dg_lx_unt
 			add = {
-				value = local_var:te_dg_sh_pl
-				multiply = local_var:te_dg_lx_base
-				multiply = local_var:te_dg_lx_ecto
-				multiply = { value = local_var:te_dg_f add = local_var:te_dg_m }
-				multiply = 0.5
+				value = local_var:te_dg_f
+				add = local_var:te_dg_m
 				multiply = local_var:te_dg_lx_int
+				multiply = 0.5
+				multiply = local_var:te_dg_sh_pl
+				multiply = local_var:te_dg_lx_ecto
+				multiply = local_var:te_dg_tfr
+				divide = 100000
 			}
 		}
 	}
@@ -1057,9 +1075,23 @@ te_demog_lx_rate_slope = {
 	}
 }
 
+# THIS = a country, on its yearly pulse whatever the rule (te_demog_country_yearly): the country's longevity-gap modifier
+# comes off once the rule is no longer Full. Its refresh site (te_demog_lx_country_store) runs only inside the census, which
+# Disabled never reaches, so a game switched from Full to Disabled would otherwise keep the unions' and farmers' approval
+# down for good. The state's modifier needs no such step: its refresh runs on every state pulse whatever the rule.
+te_demog_lx_politics_clear = {
+	if = {
+		limit = {
+			NOT = { te_demog_effects_run = yes }
+			has_modifier = te_demog_lx_gap_politics
+		}
+		remove_modifier = te_demog_lx_gap_politics
+	}
+}
+
 # THIS = ROOT = a state, after the census's other terms (te_demog_state_yearly, fast mode's clock step): the longevity gap's
 # state modifier (late-game §4.4, call 15), the one refresh site of te_demog_lx_gap_labor. Applied only under Full with
-# te_demog_k_lx_politics on (off until a play-test sizes it), at the state's gap (Living to 100, treated less untreated).
+# te_demog_k_lx_politics on (on since 2026-10-16, owner), at the state's gap (Living to 100, treated less untreated).
 te_demog_lx_politics_refresh = {
 	if = {
 		limit = { has_modifier = te_demog_lx_gap_labor }
@@ -1181,7 +1213,7 @@ te_demog_lx_country_store = {
 		te_demog_lx_clear = yes
 	}
 	# the longevity gap's politics (late-game §4.4, call 15): the country's one refresh site of te_demog_lx_gap_politics,
-	# at the gap x the share of people not in care, under Full with te_demog_k_lx_politics on (off until a play-test)
+	# at the gap x the share of people not in care, under Full with te_demog_k_lx_politics on (on since 2026-10-16)
 	if = {
 		limit = { has_modifier = te_demog_lx_gap_politics }
 		remove_modifier = te_demog_lx_gap_politics

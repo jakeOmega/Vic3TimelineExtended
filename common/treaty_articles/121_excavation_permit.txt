@@ -1,0 +1,155 @@
+﻿# =================================================================
+# TREATY ARTICLE: excavation_permit
+# The source lets the target dig the buried sites around a state it owns, on
+# condition that every find stays where it was found: the monument stands in
+# the state at its full levels, and the target gains Foreign Scholarship
+# (gm_arch_settle_terms).
+# docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md § 3.
+# Historical: the antiquities laws that ended the export of finds (Ottoman
+# 1884, Egypt after the Tutankhamun excavation, Iraq 1934), under which the
+# foreign schools still dig by licence.
+#
+# The treaty is the record, as for the concession: read live by the dig
+# (gm_arch_state_conceded_to); nothing is written on the state (LIVE in
+# test_state_treaty_article_sync.py).
+# =================================================================
+excavation_permit = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/science_aid_2.dds"
+	kind = directed
+	cost = 40
+
+	flags = {
+		can_be_renegotiated
+		friendly
+		giftable
+	}
+
+	usage_limit = once_per_side_with_same_inputs
+
+	# The country that digs (target) pays the upkeep.
+	maintenance_paid_by = target_country
+
+	required_inputs = {
+		state
+	}
+
+	visible = {
+		gm_system_enabled = yes
+	}
+
+	# ROOT is the prospective source (the host), scope:other_country the
+	# prospective target (the sponsor).
+	possible = {
+		gm_system_enabled = yes
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+		NOT = { has_war_with = scope:other_country }
+		gm_arch_country_offers_site = { WHO = scope:other_country }
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			no_duplicate_treaty_article = { ARTICLE_TYPE = excavation_permit }
+		}
+		custom_tooltip = {
+			text = gm_arch_article_sponsor_tech_permit_tt
+			scope:target_country ?= {
+				gm_arch_method_systematic_ok = yes
+			}
+		}
+	}
+
+	# ROOT is the source: a state it owns, with a site in its region open to
+	# the target (scope:other_country).
+	state_valid_trigger = {
+		scope:input = {
+			owner = root
+			gm_arch_state_offers_site = { WHO = scope:other_country }
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			exists = scope:article.input_state
+		}
+	}
+
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = excavation_permit_effects_desc
+		# The target's lists now, as for the concession.
+		hidden_effect = {
+			scope:article_options ?= {
+				if = {
+					limit = { exists = target_country }
+					target_country = {
+						trigger_event = { id = arch_events.12 days = 1 }
+					}
+				}
+			}
+		}
+	}
+
+	on_withdrawal = {}
+	on_break = {}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { request }
+
+		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			# A major power or greater, at peace, with fewer than two digs and the
+			# innovation to spare for a Systematic dig (gm_arch_ai_affords_systematic),
+			# asks now and then: less often than for a concession, which brings finds
+			# home.
+			value = 0
+			if = {
+				limit = {
+					gm_system_enabled = yes
+					country_rank >= rank_value:major_power
+					is_at_war = no
+					gm_arch_ai_affords_systematic = yes
+					gm_arch_disp_dig_count < 2
+				}
+				add = 0.005
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# The host keeps everything, and only lets foreigners in.
+			if = {
+				limit = { scope:article.source_country ?= root }
+				add = {
+					desc = "GM_ARCH_PERMIT_RELUCTANCE"
+					value = -10
+				}
+				if = {
+					limit = {
+						scope:article.target_country ?= { save_temporary_scope_as = gm_arch_ai_partner }
+						OR = {
+							has_attitude = { who = scope:gm_arch_ai_partner attitude = genial }
+							has_attitude = { who = scope:gm_arch_ai_partner attitude = cooperative }
+							has_attitude = { who = scope:gm_arch_ai_partner attitude = conciliatory }
+						}
+					}
+					add = {
+						desc = "AI_FRIENDLY_ATTITUDE"
+						value = 20
+					}
+				}
+			}
+			# The sponsor wants the dig, if not as much as with the finds.
+			else = {
+				add = {
+					desc = "GM_ARCH_DIG_WANTED"
+					value = 15
+				}
+			}
+		}
+	}
+}

@@ -6,6 +6,7 @@
 #     event te_debug_covert.4     the four slice-6 operations
 #     event te_debug_covert.5     network intelligence (slice 7)
 #     event te_debug_covert.6     technology theft (one monthly pass)
+#     event te_debug_covert.7     watching caught operations, backlash, Counterintelligence Support
 # ============================================================================
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires these events.
@@ -296,5 +297,47 @@ te_debug_covert.6 = { # REVIEWED 2026-10-06: console-only test event (`event te_
 			limit = { has_variable_list = iw_ops }
 			covert_ops_steal_tech_all = yes
 		}
+	}
+}
+
+te_debug_covert.7 = { # REVIEWED 2026-10-16: console-only test event (`event te_debug_covert.7`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = te_debug_covert.7.t
+	desc = te_debug_covert.7.d
+	flavor = te_debug_covert.7.f
+
+	# ---- Every foreign operation against us is caught now (one per attacker,
+	#      through the shipping roll): covert_warfare.3 for each.
+	option = {
+		name = te_debug_covert.7.a
+		default_option = yes
+		te_debug_covert_catch_foreign = yes
+	}
+
+	# ---- Expose every operation we watch (as the panel's button does).
+	option = {
+		name = te_debug_covert.7.b
+		te_debug_covert_expose_watched = yes
+	}
+
+	# ---- Relations +60 with every country spying on us, so their catches
+	#      count as spying on a friend (the backlash).
+	option = {
+		name = te_debug_covert.7.c
+		te_debug_covert_befriend_attackers = yes
+	}
+
+	# ---- Start Counterintelligence Support from us on a friend.
+	option = {
+		name = te_debug_covert.7.d_opt
+		te_debug_covert_start_support = yes
 	}
 }

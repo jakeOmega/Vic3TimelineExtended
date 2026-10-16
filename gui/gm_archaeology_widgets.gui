@@ -50,9 +50,9 @@ types gm_archaeology_widget_types
 		}
 	}
 
-	### A site we may dig: its name, where and what it raises, what is done if
-	### a dig was suspended, and a launch button for each method whose
-	### technology we have.
+	### A site we may dig: its name, what it raises, the terms if we would dig
+	### it abroad, what is done if a dig was suspended, and a launch button for
+	### each method whose technology we have.
 	type gm_arch_row_open = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -64,6 +64,16 @@ types gm_archaeology_widget_types
 		}
 		gm_arch_line = {
 			text = "gm_arch_row_open_detail"
+		}
+		### Abroad: decided for the viewer (gm_arch_abroad_*_sgui), the row
+		### being shared by every country that may dig the site.
+		gm_arch_line = {
+			visible = "[GetScriptedGui('gm_arch_abroad_concession_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+			text = "gm_arch_row_abroad_concession"
+		}
+		gm_arch_line = {
+			visible = "[GetScriptedGui('gm_arch_abroad_permit_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+			text = "gm_arch_row_abroad_permit"
 		}
 		gm_arch_line = {
 			visible = "[GreaterThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress'), '(CFixedPoint)0' )]"
@@ -120,7 +130,8 @@ types gm_archaeology_widget_types
 		}
 	}
 
-	### A dig we run: its name, its method, how far it has come, and Suspend.
+	### A dig we run: its name, its method, how far it has come, what it costs,
+	### the terms if it is abroad, and Suspend.
 	type gm_arch_row_digging = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -132,6 +143,17 @@ types gm_archaeology_widget_types
 		}
 		gm_arch_line = {
 			text = "gm_arch_row_dig_detail"
+		}
+		gm_arch_line = {
+			text = "gm_arch_row_dig_innovation"
+		}
+		gm_arch_line = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)1' )]"
+			text = "gm_arch_row_dig_concession"
+		}
+		gm_arch_line = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)2' )]"
+			text = "gm_arch_row_dig_permit"
 		}
 		gm_arch_line = {
 			default_format = "#tooltippable"

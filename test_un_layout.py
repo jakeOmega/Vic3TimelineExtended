@@ -248,8 +248,19 @@ def _loc_or_none(key):
         return None
 
 
+def _expanded(value, depth=4):
+    """`value` with each `$key$` that names a loc key replaced by that key's
+    text, as the engine substitutes it (a convention's hover reads its terms
+    through `$je_un_terms_<topic>$`)."""
+    for _ in range(depth):
+        value = re.sub(r"\$(\w+)\$", lambda m: _loc_or_none(m.group(1)) or m.group(0), value)
+    return value
+
+
 def _tooltip_key(value):
-    m = re.search(r"#tooltippable;tooltip:(\w+) ", value)
+    """The key a hoverable word opens: the plain form, or the tagged form a
+    tooltip that reads data takes (gui_modding_guide.md gotcha #32)."""
+    m = re.search(r"#tooltippable;tooltip:(?:\[GetPlayer\.GetTooltipTag\],)?(\w+) ", value)
     return m and m.group(1)
 
 
@@ -398,7 +409,7 @@ class ObligationsTest(unittest.TestCase):
         line = _loc(line_key)
         m = re.search(r"#tooltippable;tooltip:\[GetPlayer\.GetTooltipTag\],(\w+) ", line)
         self.assertTrue(m, f"{line_key} does not hover its modifier: {line}")
-        self.assertIn(f"GetStaticModifier('{modifier}').GetDesc", _loc(m.group(1)))
+        self.assertIn(f"GetStaticModifier('{modifier}').GetDesc", _expanded(_loc(m.group(1))))
         self.assertTrue(_modifier_name(modifier), f"{modifier} has no name")
 
     def test_our_dues_sit_beside_the_budget(self):

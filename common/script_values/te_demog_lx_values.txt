@@ -122,7 +122,7 @@ te_demog_lx_gap = {
 }
 
 # Country scope: the longevity gap's politics' multiplier (§4.4, call 15): the gap x the share of people not in care,
-# 0 to 1 (te_demog_lx_gap_politics, off until a play-test sizes it).
+# 0 to 1 (te_demog_lx_gap_politics; on since 2026-10-16).
 te_demog_lx_gap_politics_x = {
 	value = 0
 	if = {

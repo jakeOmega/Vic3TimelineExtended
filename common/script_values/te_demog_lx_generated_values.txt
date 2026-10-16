@@ -19,7 +19,7 @@ te_demog_k_lx_public_health_weight = { value = 0.5 }
 te_demog_k_lx_old_age_none = { value = 130 }
 te_demog_k_lx_ecto_per_level = { value = 1000 }
 te_demog_k_lx_ecto_max = { value = 0.9 }
-te_demog_k_lx_politics = { value = 0 }
+te_demog_k_lx_politics = { value = 1 }
 te_demog_k_lx_politics_approval = { value = -3 }
 te_demog_k_lx_politics_labor = { value = 0.1 }
 te_demog_k_lx_postponement = { value = 0 }

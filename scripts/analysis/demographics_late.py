@@ -23,9 +23,12 @@ TFR = 1.6
 YEAR0, YEAR_END = 2020, 2300
 MILESTONES = (30, 50, 60, 100, YEAR_END - YEAR0)
 # today's rich state: the medicine scenarios' Rich today (health law, institutions) with the workforce scenarios' laws
+# (2026-10-16: with the Combustion Engine's traffic and modern safety's era 7-9 carriers, which a state of 2020 holds)
 _RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines", "antibiotic_mass_production",
                          "contraceptive_pill", "modern_pharmaceuticals", "vulcanization", "feminism",
-                         "second_wave_feminism", "personal_appliances", "telemedicine"})
+                         "second_wave_feminism", "personal_appliances", "telemedicine", "combustion_engine",
+                         "prefabricated_construction", "modern_urban_planning", "robotics", "containerization",
+                         "computer_aided_design", "cellular_networks", "knowledge_economy"})
 _RICH_LAWS = frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
                         "law_public_health_insurance", "law_dedicated_police", "law_worker_protections"})
 _RICH_INSTITUTIONS = {"institution_health_system": 9, "institution_workplace_safety": 5,
@@ -295,16 +298,35 @@ def truth(inp, share, start, years=50, ages=400):
     return 1000 * deaths / people, people / people0
 
 
+def _q35(q):
+    """35q15 from group rates per 100k."""
+    alive = 1.0
+    for a in range(15, 50):
+        alive *= 1 - q[P.group_of(a)] / 1e5
+    return 1 - alive
+
+
 def adult_mortality(carriers, lines):
     """§1.4's late check (call 20): the probability of dying between 15 and 50, 35q15, for the rich state today."""
     inp = inputs(carriers, lines)
     qf, qm, _ = M.group_rates(inp)
+    return {"women": _q35(qf), "men": _q35(qm)}
+
+
+def adult_mortality_by_cause(carriers, lines):
+    """{sex: {cause: 35q15 from that cause alone}} for the rich state today: which schedules the figure comes from."""
+    inp = inputs(carriers, lines)
+    m = M.cause_multipliers(inp)
+    work = dict(zip("fm", M.work_split(inp, m["work"])))
     out = {}
-    for sx, q in (("women", qf), ("men", qm)):
-        alive = 1.0
-        for a in range(15, 50):
-            alive *= 1 - q[P.group_of(a)] / 1e5
-        out[sx] = 1 - alive
+    for sx, name in (("f", "women"), ("m", "men")):
+        groups = range(len(P.GROUPS))
+        out[name] = {
+            "infection": _q35([P.INFECTION[sx][g] * m["infection"] for g in groups]),
+            "work": _q35([P.WORK_BASE[g] * work[sx] for g in groups]),
+            "accidents and violence": _q35([P.EXTERNAL[sx][g] * m["external"] for g in groups]),
+            "chronic": _q35([P.CHRONIC[sx][g] * m["chronic"] for g in groups]),
+        }
     return out
 
 
@@ -361,9 +383,15 @@ def main(args):
         print(f"  {name:34s} truth {d_truth:5.1f} per 1,000, x{x_truth:4.2f}   bands {d_band:5.1f}, x{x_band:4.2f}"
               f"{'' if ok else '  OUT'}")
     print("\nAdult mortality today (§1.4, call 20): 35q15, the probability of dying between 15 and 50:")
+    causes = adult_mortality_by_cause(carriers, lines)
     for sx, v in adult_mortality(carriers, lines).items():
         lo, hi = ADULT_BANDS[sx]
         ok = lo <= v <= hi
-        print(f"  {sx:6s} {v:.3f} [{lo:g}-{hi:g}]{'' if ok else ' OUT: the base external and work schedules (1836-1900) '}"
-              f"{'' if ok else 'run high today; under immortality they are the whole death rate'}")
+        split = ", ".join(f"{c} {q:.3f}" for c, q in causes[sx].items())
+        print(f"  {sx:6s} {v:.3f} [{lo:g}-{hi:g}]{'' if ok else ' OUT'}  ({split})")
+    # Modern safety (2026-10-16) brought work and accidents down; what is left over the women's band is adult infection
+    # and chronic deaths (the rich world's 15-49s: about 0.001 and 0.02), a medicine and schedule question left until the
+    # AI's insolvency (#933) is fixed and today's states are as rich as they should be (#894).
+    print("  (rich-world 2000-2020 by cause, about: infection 0.001-0.002, work 0.001, accidents and violence 0.004-0.012 "
+          "for women and 0.014-0.037 for men, chronic 0.02-0.03)")
     return 1 if bad else 0

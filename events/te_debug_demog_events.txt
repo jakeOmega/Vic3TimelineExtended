@@ -162,6 +162,23 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		}
 	}
 
+	# ---- c_world: re-seed every late-game census (te_debug_demog_reseed_late) -------------
+	option = {
+		name = te_debug_demog.1.c_world
+		trigger = {
+			te_demog_cohorts_run = yes
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.c_world.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_reseed_late = yes
+			}
+		}
+	}
+
 	# ---- d: benchmark -------------------------------------------------------
 	option = {
 		name = te_debug_demog.1.d

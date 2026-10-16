@@ -97,6 +97,8 @@ containerization = {
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_containerization_pb_principles_bool = yes
 		country_te_pb_principle_slots_add = 1
+		# census only, modern safety (demographics_params.SAFETY_TYPES): cranes and boxes replace the docker's hands
+		state_work_safety_add = 0.15
 	}
 
 	unlocking_technologies = {
@@ -194,6 +196,8 @@ robotics = {
 	modifier = {
 		country_max_weekly_construction_progress_add = 15
 		country_robotics_pb_principles_bool = yes
+		# census only, modern safety (demographics_params.SAFETY_TYPES): robots take the most dangerous jobs on the line
+		state_work_safety_add = 0.35
 	}
 
 	ai_weight = {
@@ -347,6 +351,11 @@ computer_aided_design = {
 		computer_networks
 	}
 
+	modifier = {
+		# census only, modern safety (demographics_params.SAFETY_TYPES): cars and buildings designed and crash-tested on computers
+		state_external_safety_add = 0.1
+	}
+
 	ai_weight = {
 		value = 1
 	}
@@ -369,6 +378,8 @@ cellular_networks = {
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_voting_power_mult = 0.1
 		country_cellular_pb_principles_bool = yes
+		# census only, modern safety (demographics_params.SAFETY_TYPES): help can be called from anywhere
+		state_external_safety_add = 0.1
 	}
 
 	ai_weight = {
