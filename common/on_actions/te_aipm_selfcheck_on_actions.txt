@@ -1,0 +1,54 @@
+﻿# AI-managed flat-staff prototype: a once-a-game self-check.
+#
+# pm_ai_managed_fab cancels its base method's per-level workforce exactly and
+# adds a fixed crew of 1,000 engineers in `unscaled`
+# (docs/superpowers/specs/2026-10-16-ai-managed-flat-staff-design.md). The
+# engine fact under test: an `unscaled` employment add is summed once per
+# building, not once per level and not dropped. The first yearly pulse of a
+# country with a fab building of level 5 or more on the method reads that
+# building's engineer slots:
+#   OK      about 1,000 at any level (flat, as built)
+#   BROKEN  about 1,000 x level (unscaled read as per level: the crew grows with
+#           the building, as the old 10 a level did) or 0 (unscaled employment
+#           not summed: no one is hired and the building stands idle).
+# Fallback for either BROKEN: restore `building_employment_engineers_add = -1990`
+# in level_scaled and drop the unscaled block (10 engineers a level, as before).
+# Play-test row: docs/testing/ai-managed-flat-staff-playtest.md.
+on_yearly_pulse_country = {
+	on_actions = {
+		te_aipm_flat_staff_selfcheck
+	}
+}
+
+te_aipm_flat_staff_selfcheck = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_aipm_flat_staff_checked }
+				any_scope_building = {
+					has_active_production_method = pm_ai_managed_fab
+					level >= 5
+				}
+			}
+			set_global_variable = te_aipm_flat_staff_checked
+			random_scope_building = {
+				limit = {
+					has_active_production_method = pm_ai_managed_fab
+					level >= 5
+				}
+				set_global_variable = { name = te_aipm_chk_engineers value = modifier:building_employment_engineers_add }
+				set_global_variable = { name = te_aipm_chk_level value = level }
+				if = {
+					limit = {
+						modifier:building_employment_engineers_add >= 800
+						modifier:building_employment_engineers_add <= 1200
+					}
+					debug_log = "TE_SELF_CHECK OK ai_managed_flat_staff (a fab building on AI-managed production hires a flat crew: engineers=[SCOPE.ScriptValue('te_aipm_chk_engineers_g')|0] at level=[SCOPE.ScriptValue('te_aipm_chk_level_g')|0])"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN ai_managed_flat_staff (a fab building on AI-managed production has engineers=[SCOPE.ScriptValue('te_aipm_chk_engineers_g')|0] at level=[SCOPE.ScriptValue('te_aipm_chk_level_g')|0], not a flat 1000: about 1000 x level means unscaled employment is read per level, 0 means it is not summed; take the fallback in docs/testing/ai-managed-flat-staff-playtest.md)"
+				}
+			}
+		}
+	}
+}

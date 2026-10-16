@@ -1,0 +1,5 @@
+﻿# Readers for the ai_managed_flat_staff self-check's debug_log line
+# (common/on_actions/te_aipm_selfcheck_on_actions.txt). debug_log prints a value
+# from another scope only through a global variable and a SCOPE.ScriptValue wrapper.
+te_aipm_chk_engineers_g = { value = global_var:te_aipm_chk_engineers }
+te_aipm_chk_level_g = { value = global_var:te_aipm_chk_level }
