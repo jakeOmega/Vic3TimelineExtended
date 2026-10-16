@@ -1,0 +1,803 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — unique dedications (signatures): customizable localization
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md §3.
+# State scope (the primary) or container scope (a monument beside another, a
+# trophy), first valid entry wins. The names are plain keys, so they serve
+# events and tooltips alike; gm_dedication_name and gm_tr_dedication_name
+# (gm_custom_loc.txt, gm_trophy_custom_loc.txt) print them in place of the
+# parent's while the monument stands on it.
+
+# Its signature's name, on its parent or dormant: a landmark's own (§4.3), else
+# the effect group's. Empty without one.
+gm_sig_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = grande_armee } has_variable = gm_landmark var:gm_landmark = flag:arc_de_triomphe }
+		localization_key = gm_sig_name_arc_de_triomphe
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = mandate_of_heaven } has_variable = gm_landmark var:gm_landmark = flag:temple_of_heaven }
+		localization_key = gm_sig_name_temple_of_heaven
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = glory_of_athens } has_variable = gm_landmark var:gm_landmark = flag:parthenon }
+		localization_key = gm_sig_name_parthenon
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = first_emperor } has_variable = gm_landmark var:gm_landmark = flag:terracotta_army }
+		localization_key = gm_sig_name_terracotta_army
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = antiquity } }
+		localization_key = gm_sig_antiquity
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = archive } }
+		localization_key = gm_sig_archive
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = throne } }
+		localization_key = gm_sig_throne
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = royal_pantheon } }
+		localization_key = gm_sig_royal_pantheon
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = martial_glory } }
+		localization_key = gm_sig_martial_glory
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = liberty } }
+		localization_key = gm_sig_liberty
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = grande_armee } }
+		localization_key = gm_sig_grande_armee
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = mandate_of_heaven } }
+		localization_key = gm_sig_mandate_of_heaven
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = glory_of_athens } }
+		localization_key = gm_sig_glory_of_athens
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = first_emperor } }
+		localization_key = gm_sig_first_emperor
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = to_victory } }
+		localization_key = gm_sig_to_victory
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = unknown_soldier } }
+		localization_key = gm_sig_unknown_soldier
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = concert_of_nations } }
+		localization_key = gm_sig_concert_of_nations
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = conquerors_of_space } }
+		localization_key = gm_sig_conquerors_of_space
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = olympic } }
+		localization_key = gm_sig_olympic
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = heroes } }
+		localization_key = gm_sig_heroes
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+gm_tr_sig_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = grande_armee } has_variable = gm_tr_landmark var:gm_tr_landmark = flag:arc_de_triomphe }
+		localization_key = gm_sig_name_arc_de_triomphe
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = mandate_of_heaven } has_variable = gm_tr_landmark var:gm_tr_landmark = flag:temple_of_heaven }
+		localization_key = gm_sig_name_temple_of_heaven
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = glory_of_athens } has_variable = gm_tr_landmark var:gm_tr_landmark = flag:parthenon }
+		localization_key = gm_sig_name_parthenon
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = first_emperor } has_variable = gm_tr_landmark var:gm_tr_landmark = flag:terracotta_army }
+		localization_key = gm_sig_name_terracotta_army
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = antiquity } }
+		localization_key = gm_sig_antiquity
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = archive } }
+		localization_key = gm_sig_archive
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = throne } }
+		localization_key = gm_sig_throne
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = royal_pantheon } }
+		localization_key = gm_sig_royal_pantheon
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = martial_glory } }
+		localization_key = gm_sig_martial_glory
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = liberty } }
+		localization_key = gm_sig_liberty
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = grande_armee } }
+		localization_key = gm_sig_grande_armee
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = mandate_of_heaven } }
+		localization_key = gm_sig_mandate_of_heaven
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = glory_of_athens } }
+		localization_key = gm_sig_glory_of_athens
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = first_emperor } }
+		localization_key = gm_sig_first_emperor
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = to_victory } }
+		localization_key = gm_sig_to_victory
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = unknown_soldier } }
+		localization_key = gm_sig_unknown_soldier
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = concert_of_nations } }
+		localization_key = gm_sig_concert_of_nations
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = conquerors_of_space } }
+		localization_key = gm_sig_conquerors_of_space
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = olympic } }
+		localization_key = gm_sig_olympic
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = heroes } }
+		localization_key = gm_sig_heroes
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# The dedication its signature was given on (gm_dedication_name's names).
+gm_sig_parent_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:crown }
+		localization_key = pm_monument_crown
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:republic }
+		localization_key = pm_monument_republic
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:revolution }
+		localization_key = pm_monument_revolution
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:leader }
+		localization_key = pm_monument_leader
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:religious }
+		localization_key = pm_monument_religious
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:civic }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:war_memorial }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:artistic }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:naturalist }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:scientific }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:industrial }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { has_variable = gm_sig_parent var:gm_sig_parent = flag:athletic }
+		localization_key = pm_monument_athletic
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# The dedication its signature was given on (gm_dedication_name's names).
+gm_tr_sig_parent_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:crown }
+		localization_key = pm_monument_crown
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:republic }
+		localization_key = pm_monument_republic
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:revolution }
+		localization_key = pm_monument_revolution
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:leader }
+		localization_key = pm_monument_leader
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:religious }
+		localization_key = pm_monument_religious
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:civic }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:war_memorial }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:artistic }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:naturalist }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:scientific }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:industrial }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { has_variable = gm_tr_sig_parent var:gm_tr_sig_parent = flag:athletic }
+		localization_key = pm_monument_athletic
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# What its signature adds, a step of grandeur (gm_sig_<key>_effect).
+gm_sig_effect = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = antiquity } }
+		localization_key = gm_sig_antiquity_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = archive } }
+		localization_key = gm_sig_archive_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = throne } }
+		localization_key = gm_sig_throne_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = royal_pantheon } }
+		localization_key = gm_sig_royal_pantheon_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = martial_glory } }
+		localization_key = gm_sig_martial_glory_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = liberty } }
+		localization_key = gm_sig_liberty_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = grande_armee } }
+		localization_key = gm_sig_grande_armee_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = mandate_of_heaven } }
+		localization_key = gm_sig_mandate_of_heaven_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = glory_of_athens } }
+		localization_key = gm_sig_glory_of_athens_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = first_emperor } }
+		localization_key = gm_sig_first_emperor_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = to_victory } }
+		localization_key = gm_sig_to_victory_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = unknown_soldier } }
+		localization_key = gm_sig_unknown_soldier_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = concert_of_nations } }
+		localization_key = gm_sig_concert_of_nations_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = conquerors_of_space } }
+		localization_key = gm_sig_conquerors_of_space_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = olympic } }
+		localization_key = gm_sig_olympic_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_signature SIG = heroes } }
+		localization_key = gm_sig_heroes_effect
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# What its signature adds, a step of grandeur (gm_sig_<key>_effect).
+gm_tr_sig_effect = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = antiquity } }
+		localization_key = gm_sig_antiquity_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = archive } }
+		localization_key = gm_sig_archive_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = throne } }
+		localization_key = gm_sig_throne_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = royal_pantheon } }
+		localization_key = gm_sig_royal_pantheon_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = martial_glory } }
+		localization_key = gm_sig_martial_glory_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = liberty } }
+		localization_key = gm_sig_liberty_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = grande_armee } }
+		localization_key = gm_sig_grande_armee_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = mandate_of_heaven } }
+		localization_key = gm_sig_mandate_of_heaven_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = glory_of_athens } }
+		localization_key = gm_sig_glory_of_athens_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = first_emperor } }
+		localization_key = gm_sig_first_emperor_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = to_victory } }
+		localization_key = gm_sig_to_victory_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = unknown_soldier } }
+		localization_key = gm_sig_unknown_soldier_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = concert_of_nations } }
+		localization_key = gm_sig_concert_of_nations_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = conquerors_of_space } }
+		localization_key = gm_sig_conquerors_of_space_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = olympic } }
+		localization_key = gm_sig_olympic_effect
+	}
+	text = {
+		trigger = { gm_sig_var_is = { VAR = gm_tr_signature SIG = heroes } }
+		localization_key = gm_sig_heroes_effect
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# Whether its signature counts (§1's table): upheld on its parent, nationally
+# and locally; heritage, contested or not upheld on its parent, locally only;
+# on another dedication, dormant.
+gm_sig_status = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_sig_counts = yes }
+		localization_key = gm_sig_status_counts
+	}
+	text = {
+		trigger = { gm_state_sig_on_parent = yes }
+		localization_key = gm_sig_status_local
+	}
+	text = {
+		localization_key = gm_sig_status_dormant
+	}
+}
+
+# A trophy on its parent counts for its holder at its own grandeur (§2.4); a
+# monument beside another, as a state's own.
+gm_tr_sig_status = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_tag = gm_trophy gm_mon_sig_on_parent = yes }
+		localization_key = gm_tr_sig_status_trophy
+	}
+	text = {
+		trigger = { gm_mon_sig_counts = yes }
+		localization_key = gm_tr_sig_status_counts
+	}
+	text = {
+		trigger = { gm_mon_sig_on_parent = yes }
+		localization_key = gm_tr_sig_status_local
+	}
+	text = {
+		localization_key = gm_tr_sig_status_dormant
+	}
+}
+
+# The label the row title, the state card's title print in place of the plain
+# name (§3): with a signature, the name as a hover span whose tooltip says what
+# it is a unique dedication of, what it adds and whether it counts. Read through
+# `State` only (the GUI's rows and card); events print gm_dedication_name.
+gm_dedication_label = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_signature }
+		localization_key = gm_sig_label
+	}
+	text = {
+		localization_key = gm_sig_label_plain
+	}
+}
+
+# The row line under a monument beside another or a trophy (§3's fallback, by
+# design for a container: no tooltip tag of a container is known to work).
+# The line carries the tooltip (gm_tr_sig_tt).
+gm_tr_sig_line = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { gm_mon_sig_on_parent = yes }
+		localization_key = gm_tr_sig_line_on
+	}
+	text = {
+		localization_key = gm_tr_sig_line_dormant
+	}
+}
+
+# ---- Specials from opportunities (§5.5, §5.2) ---------------------------------------
+# Country scope. What completing the open opportunity, or the one just seized
+# (gm_com_source_is reads gm_com_seized_source once the record is gone), gives
+# beside its boon: a line for its special, empty for a moment without one. A
+# moment that comes once says that letting it pass loses it for good. Plain
+# keys: the offer's tooltip and the panel's both print them.
+gm_com_special_line = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { gm_com_source_is = { SRC = victory } }
+		localization_key = gm_com_special_line_to_victory
+	}
+	text = {
+		trigger = { gm_com_source_is = { SRC = defeat } }
+		localization_key = gm_com_special_line_unknown_soldier
+	}
+	text = {
+		trigger = { gm_com_source_is = { SRC = great_power } }
+		localization_key = gm_com_special_line_concert_of_nations
+	}
+	text = {
+		trigger = { gm_com_source_is = { SRC = space } }
+		localization_key = gm_com_special_line_conquerors_of_space
+	}
+	text = {
+		trigger = { gm_com_source_is = { SRC = tech_athletic } }
+		localization_key = gm_com_special_line_olympic
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# Country scope. Letting a once-a-game moment pass loses its special for good.
+gm_com_special_pass_line = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { gm_com_source_is = { SRC = great_power } }
+		localization_key = gm_com_special_pass_concert_of_nations
+	}
+	text = {
+		trigger = { gm_com_source_is = { SRC = space } }
+		localization_key = gm_com_special_pass_conquerors_of_space
+	}
+	text = {
+		trigger = { gm_com_source_is = { SRC = tech_athletic } }
+		localization_key = gm_com_special_pass_olympic
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# Country scope, monument_events.28: the special the opportunity just seized
+# gave (gm_com_seized_special), its name, its parent and its effect.
+gm_com_special_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:to_victory }
+		localization_key = gm_sig_to_victory
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:unknown_soldier }
+		localization_key = gm_sig_unknown_soldier
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:concert_of_nations }
+		localization_key = gm_sig_concert_of_nations
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:conquerors_of_space }
+		localization_key = gm_sig_conquerors_of_space
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:olympic }
+		localization_key = gm_sig_olympic
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+gm_com_special_parent_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:to_victory }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:unknown_soldier }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:concert_of_nations }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:conquerors_of_space }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:olympic }
+		localization_key = pm_monument_athletic
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+gm_com_special_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:to_victory }
+		localization_key = gm_sig_to_victory_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:unknown_soldier }
+		localization_key = gm_sig_unknown_soldier_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:concert_of_nations }
+		localization_key = gm_sig_concert_of_nations_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:conquerors_of_space }
+		localization_key = gm_sig_conquerors_of_space_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_special var:gm_com_seized_special = flag:olympic }
+		localization_key = gm_sig_olympic_effect
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+# ---- Historical opportunities (§6) -------------------------------------------------
+# Country scope. The open historical opportunity's landmark (gm_com_landmark), or
+# the one just completed (gm_com_seized_landmark, for monument_events.28): its
+# history, and its unique dedication's line. Plain keys.
+gm_com_hist_desc = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:walhalla }
+		localization_key = gm_landmark_walhalla_desc
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:bunker_hill_monument }
+		localization_key = gm_landmark_bunker_hill_monument_desc
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:obelisk_of_the_second_of_may }
+		localization_key = gm_landmark_obelisk_of_the_second_of_may_desc
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:muhammad_ali_mosque }
+		localization_key = gm_landmark_muhammad_ali_mosque_desc
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:nelsons_column }
+		localization_key = gm_landmark_nelsons_column_desc
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:washington_monument }
+		localization_key = gm_landmark_washington_monument_desc
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+gm_com_hist_seized_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:walhalla }
+		localization_key = gm_skin_landmark_walhalla
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:bunker_hill_monument }
+		localization_key = gm_skin_landmark_bunker_hill_monument
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:obelisk_of_the_second_of_may }
+		localization_key = gm_skin_landmark_obelisk_of_the_second_of_may
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:muhammad_ali_mosque }
+		localization_key = gm_skin_landmark_muhammad_ali_mosque
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:nelsons_column }
+		localization_key = gm_skin_landmark_nelsons_column
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:washington_monument }
+		localization_key = gm_skin_landmark_washington_monument
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+gm_com_hist_sig_line = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:walhalla }
+		localization_key = gm_com_hist_sig_heroes
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:bunker_hill_monument }
+		localization_key = gm_com_hist_sig_martial_glory
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:obelisk_of_the_second_of_may }
+		localization_key = gm_com_hist_sig_martial_glory
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:nelsons_column }
+		localization_key = gm_com_hist_sig_martial_glory
+	}
+	text = {
+		trigger = { has_variable = gm_com_landmark var:gm_com_landmark = flag:washington_monument }
+		localization_key = gm_com_hist_sig_liberty
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}
+
+gm_com_hist_seized_sig_line = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:walhalla }
+		localization_key = gm_com_hist_sig_heroes
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:bunker_hill_monument }
+		localization_key = gm_com_hist_sig_martial_glory
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:obelisk_of_the_second_of_may }
+		localization_key = gm_com_hist_sig_martial_glory
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:nelsons_column }
+		localization_key = gm_com_hist_sig_martial_glory
+	}
+	text = {
+		trigger = { has_variable = gm_com_seized_landmark var:gm_com_seized_landmark = flag:washington_monument }
+		localization_key = gm_com_hist_sig_liberty
+	}
+	text = {
+		localization_key = gm_sig_none
+	}
+}

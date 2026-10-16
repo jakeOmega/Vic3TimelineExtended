@@ -62,6 +62,16 @@ gm_com_time_months = {
 		limit = { country_rank >= rank_value:major_power }
 		value = 120
 	}
+	# A historical opportunity of ten levels has twice as long (signatures spec
+	# §6.1): the rank's months times its target over five.
+	if = {
+		limit = {
+			has_variable = gm_com_target
+			var:gm_com_target > 5
+		}
+		multiply = var:gm_com_target
+		divide = 5
+	}
 }
 
 # ---- Journal entry displays (grand_monuments_widget.gui, Opportunity) ------------
@@ -323,7 +333,24 @@ gm_disp_boon_tech_naturalist = {
 gm_disp_boon_any = {
 	value = 1
 	if = {
-		limit = { gm_boons_idle = yes }
+		limit = {
+			gm_boons_idle = yes
+			# Or a special held for the next monument (signatures spec §8).
+			gm_sig_held_idle = yes
+		}
 		value = 0
+	}
+}
+
+# Country scope. 1 while the open opportunity is a historical one (signatures
+# spec §6): its panel and its offer say it becomes a landmark, not a boon.
+gm_disp_com_historical = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:historical
+		}
+		value = 1
 	}
 }

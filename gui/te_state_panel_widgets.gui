@@ -719,6 +719,41 @@ types te_state_panel_widget_types
 							}
 						}
 
+						### UNIQUE DEDICATIONS standing here (signatures spec §2.2, §8):
+						### Ancestral Antiquity's tourism and the Epigraphic Archive's
+						### universities, the state's whole, each hidden at 0.
+						te_state_gm_row = {
+							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_sig_tourism'), '(CFixedPoint)0')]"
+							blockoverride "row_tooltip" {
+								tooltip = "gm_state_sig_tourism_tt"
+							}
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/goods_icons/tourism.dds"
+							}
+							blockoverride "row_label" {
+								text = "gm_state_lbl_sig_tourism"
+							}
+							blockoverride "row_value" {
+								text = "gm_state_val_sig_tourism"
+							}
+						}
+
+						te_state_gm_row = {
+							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_sig_university'), '(CFixedPoint)0')]"
+							blockoverride "row_tooltip" {
+								tooltip = "gm_state_sig_university_tt"
+							}
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+							}
+							blockoverride "row_label" {
+								text = "gm_state_lbl_sig_university"
+							}
+							blockoverride "row_value" {
+								text = "gm_state_val_sig_university"
+							}
+						}
+
 						### COUNTS toward the owner's open opportunity (opportunities
 						### usability §4).
 						textbox = {

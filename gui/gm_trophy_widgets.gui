@@ -1433,6 +1433,14 @@ types gm_trophy_widget_types
 				gm_tr_line = {
 					text = "gm_tr_row_detail"
 				}
+				### Its unique dedication (signatures spec §3): the parent named on
+				### its own line, what it gives on hover.
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_sig_tt"
+					text = "gm_tr_row_sig"
+				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
 					default_format = "#tooltippable"
@@ -1490,6 +1498,14 @@ types gm_trophy_widget_types
 			gm_tr_line = {
 				text = "gm_tr_row_detail"
 			}
+			### Its unique dedication (signatures spec §3): the parent named on
+			### its own line, what it gives on hover.
+			gm_tr_line = {
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+				default_format = "#tooltippable"
+				tooltip = "gm_tr_sig_tt"
+				text = "gm_tr_row_sig"
+			}
 			gm_tr_line = {
 				visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
 				default_format = "#tooltippable"
@@ -1530,6 +1546,14 @@ types gm_trophy_widget_types
 				}
 				gm_tr_line = {
 					text = "gm_tr_row_detail"
+				}
+				### Its unique dedication (signatures spec §3): the parent named on
+				### its own line, what it gives on hover.
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_sig_tt"
+					text = "gm_tr_row_sig"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
@@ -1914,6 +1938,14 @@ types gm_trophy_widget_types
 				}
 				gm_tr_line = {
 					text = "gm_mon_row_detail"
+				}
+				### Its unique dedication (signatures spec §3): the parent named on
+				### its own line, what it gives on hover.
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_sig_tt"
+					text = "gm_tr_row_sig"
 				}
 				### Its status (ageing spec 2026-10-16 §4.3), a code each.
 				gm_tr_line = {

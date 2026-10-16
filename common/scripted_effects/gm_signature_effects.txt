@@ -1,0 +1,944 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — unique dedications (signatures): scripted effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md.
+# The records are listed in gm_signature_triggers.txt. A signature adds its
+# name (the custom localization, gm_signature_custom_loc.txt) and its effects to
+# its parent dedication, which does everything it does today: the production
+# method, kind, fit, contests, interest-group stances and opportunity progress
+# are the parent's, and nothing here touches them.
+#
+# Where its effects are applied, as the dedications' are (gm_effects.txt):
+# national ones on the journal entry from gm_apply_national_modifiers, ROOT =
+# the country; local ones on the state from gm_state_monthly, ROOT = the state.
+# A variable backing a multiplier is zeroed, never removed.
+
+# ---- A landmark's signature (§4.4) -------------------------------------------------
+# Any scope. The signature of the landmark whose key the variable $LM$ holds,
+# into $SIG$, and its historical dedication (its LANDMARKS row's) into $PARENT$:
+# a branch per signature and parent, listing its landmarks. A family can hold
+# landmarks on different parents (Liberty: the Baltimore column To the Republic,
+# the Liberty Column To the Nation). A landmark with none (the civic-progress
+# five) is left as it is. test_grand_monument_registry.py pins each member.
+gm_sig_from_landmark = {
+	if = {
+		limit = {
+			has_variable = $LM$
+			OR = {
+				var:$LM$ = flag:stelae_of_aksum
+				var:$LM$ = flag:obelisks_of_karnak
+				var:$LM$ = flag:persepolis
+				var:$LM$ = flag:luxor_obelisk
+				var:$LM$ = flag:venus_de_milo
+				var:$LM$ = flag:piraeus_lion
+				var:$LM$ = flag:horses_of_saint_mark
+				var:$LM$ = flag:great_zimbabwe
+				var:$LM$ = flag:uffizi_gallery
+				var:$LM$ = flag:capitoline_museums
+				var:$LM$ = flag:temples_of_baalbek
+				var:$LM$ = flag:palmyra
+				var:$LM$ = flag:xanthos
+				var:$LM$ = flag:arch_of_ctesiphon
+				var:$LM$ = flag:winged_victory_of_samothrace
+				var:$LM$ = flag:troy_hisarlik
+				var:$LM$ = flag:mycenae_grave_circle
+				var:$LM$ = flag:pergamon_altar
+				var:$LM$ = flag:deir_el_bahari_cache
+				var:$LM$ = flag:ishtar_gate_babylon
+				var:$LM$ = flag:palace_of_knossos
+				var:$LM$ = flag:oseberg_ship
+				var:$LM$ = flag:machu_picchu
+				var:$LM$ = flag:bust_of_nefertiti
+				var:$LM$ = flag:tomb_of_tutankhamun
+				var:$LM$ = flag:royal_cemetery_at_ur
+				var:$LM$ = flag:sanxingdui_pits
+				var:$LM$ = flag:sutton_hoo
+				var:$LM$ = flag:tomb_of_pakal
+				var:$LM$ = flag:tomb_of_philip_ii
+				var:$LM$ = flag:tomb_of_marquis_yi
+				var:$LM$ = flag:royal_tombs_of_sipan
+				var:$LM$ = flag:olympia
+				var:$LM$ = flag:delphi
+				var:$LM$ = flag:sidon_necropolis
+				var:$LM$ = flag:tomb_of_alexander
+				var:$LM$ = flag:pompeii
+			}
+		}
+		set_variable = { name = $SIG$ value = flag:antiquity }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			OR = {
+				var:$LM$ = flag:rosetta_stone
+				var:$LM$ = flag:temple_of_dendera
+				var:$LM$ = flag:nineveh_library
+				var:$LM$ = flag:vindolanda_tablets
+				var:$LM$ = flag:antikythera_mechanism
+				var:$LM$ = flag:mohenjo_daro
+				var:$LM$ = flag:lascaux_caves
+				var:$LM$ = flag:nag_hammadi_library
+				var:$LM$ = flag:dead_sea_scrolls
+				var:$LM$ = flag:mawangdui_tombs
+				var:$LM$ = flag:otzi_the_iceman
+				var:$LM$ = flag:caral_supe
+				var:$LM$ = flag:gobekli_tepe
+				var:$LM$ = flag:villa_of_the_papyri
+			}
+		}
+		set_variable = { name = $SIG$ value = flag:archive }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:mesha_stele
+		}
+		set_variable = { name = $SIG$ value = flag:archive }
+		set_variable = { name = $PARENT$ value = flag:war_memorial }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			OR = {
+				var:$LM$ = flag:topkapi_palace
+				var:$LM$ = flag:golestan_palace
+				var:$LM$ = flag:sans_souci_palace
+				var:$LM$ = flag:royal_palace_of_benin
+				var:$LM$ = flag:royal_palace_of_kumasi
+				var:$LM$ = flag:imperial_city_of_hue
+				var:$LM$ = flag:red_fort
+				var:$LM$ = flag:royal_palaces_of_abomey
+				var:$LM$ = flag:klungkung_palace
+			}
+		}
+		set_variable = { name = $SIG$ value = flag:throne }
+		set_variable = { name = $PARENT$ value = flag:crown }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:royal_palace_of_kandy
+		}
+		set_variable = { name = $SIG$ value = flag:throne }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			OR = {
+				var:$LM$ = flag:alexander_column
+				var:$LM$ = flag:basilica_of_superga
+				var:$LM$ = flag:tomb_of_william_the_silent
+				var:$LM$ = flag:cenotaph_of_maximilian
+				var:$LM$ = flag:arco_de_santa_maria
+				var:$LM$ = flag:statue_of_louis_xiv
+				var:$LM$ = flag:nikko_toshogu
+			}
+		}
+		set_variable = { name = $SIG$ value = flag:royal_pantheon }
+		set_variable = { name = $PARENT$ value = flag:crown }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			OR = {
+				var:$LM$ = flag:brandenburg_gate
+				var:$LM$ = flag:tipus_tiger
+			}
+		}
+		set_variable = { name = $SIG$ value = flag:martial_glory }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			OR = {
+				var:$LM$ = flag:lion_monument
+				var:$LM$ = flag:bukgwan_victory_stele
+				var:$LM$ = flag:baba_merzoug
+				var:$LM$ = flag:bodrum_castle
+				var:$LM$ = flag:bunker_hill_monument
+				var:$LM$ = flag:obelisk_of_the_second_of_may
+				var:$LM$ = flag:nelsons_column
+			}
+		}
+		set_variable = { name = $SIG$ value = flag:martial_glory }
+		set_variable = { name = $PARENT$ value = flag:war_memorial }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			OR = {
+				var:$LM$ = flag:washington_monument_baltimore
+				var:$LM$ = flag:lion_of_saint_mark
+				var:$LM$ = flag:washington_monument
+			}
+		}
+		set_variable = { name = $SIG$ value = flag:liberty }
+		set_variable = { name = $PARENT$ value = flag:republic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:liberty_column
+		}
+		set_variable = { name = $SIG$ value = flag:liberty }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:arc_de_triomphe
+		}
+		set_variable = { name = $SIG$ value = flag:grande_armee }
+		set_variable = { name = $PARENT$ value = flag:war_memorial }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:temple_of_heaven
+		}
+		set_variable = { name = $SIG$ value = flag:mandate_of_heaven }
+		set_variable = { name = $PARENT$ value = flag:crown }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:parthenon
+		}
+		set_variable = { name = $SIG$ value = flag:glory_of_athens }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:terracotta_army
+		}
+		set_variable = { name = $SIG$ value = flag:first_emperor }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+	else_if = {
+		limit = {
+			has_variable = $LM$
+			var:$LM$ = flag:walhalla
+		}
+		set_variable = { name = $SIG$ value = flag:heroes }
+		set_variable = { name = $PARENT$ value = flag:civic }
+	}
+}
+# State scope, from the refresh (gm_country_refresh) and the seeding: a landmark
+# without a signature gets its own. The net for the landmarks of 1836, a site
+# as it is unearthed, a landmark from a save older than signatures, and any copy
+# point that misses the records: within a month every landmark has its own.
+gm_state_sig_backfill = {
+	if = {
+		limit = {
+			has_variable = gm_landmark
+			NOT = { has_variable = gm_signature }
+		}
+		gm_sig_from_landmark = { LM = gm_landmark SIG = gm_signature PARENT = gm_sig_parent }
+	}
+}
+
+# Container scope (a monument beside another, a trophy, a site): the same, from
+# the monthly passes (gm_monument_monthly, gm_trophy_monthly) and the seeding.
+gm_tr_sig_backfill = {
+	if = {
+		limit = {
+			has_variable = gm_tr_landmark
+			NOT = { has_variable = gm_tr_signature }
+		}
+		gm_sig_from_landmark = { LM = gm_tr_landmark SIG = gm_tr_signature PARENT = gm_tr_sig_parent }
+	}
+}
+
+# ---- The national sums (§2.1, §2.4) -----------------------------------------------
+# Country scope, from gm_compute_totals. Each signature's grandeur, from one walk
+# over the states and one over each list, not a walk per signature: the
+# primaries that count (gm_state_sig_counts), the monuments beside another
+# that count, and the trophies this country holds on their parent, at their own
+# grandeur (gm_tr_grandeur, already half what was carried off) whatever its
+# government. A family's sum counts its one-offs (gm_sig_counts_as_*). Then the
+# curve with a first step of 5, and the monument policy's standing factor, as
+# the standing grandeur's prestige (Mothballed halves it).
+gm_sig_compute_sums = {
+	gm_sig_zero_sum = { SIG = antiquity }
+	gm_sig_zero_sum = { SIG = archive }
+	gm_sig_zero_sum = { SIG = throne }
+	gm_sig_zero_sum = { SIG = royal_pantheon }
+	gm_sig_zero_sum = { SIG = martial_glory }
+	gm_sig_zero_sum = { SIG = liberty }
+	gm_sig_zero_sum = { SIG = grande_armee }
+	gm_sig_zero_sum = { SIG = mandate_of_heaven }
+	gm_sig_zero_sum = { SIG = glory_of_athens }
+	gm_sig_zero_sum = { SIG = to_victory }
+	gm_sig_zero_sum = { SIG = unknown_soldier }
+	gm_sig_zero_sum = { SIG = concert_of_nations }
+	gm_sig_zero_sum = { SIG = conquerors_of_space }
+	gm_sig_zero_sum = { SIG = olympic }
+	gm_sig_zero_sum = { SIG = heroes }
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			has_variable = gm_signature
+			gm_state_sig_counts = yes
+		}
+		gm_state_sig_add_to_sum = { SIG = antiquity }
+		gm_state_sig_add_to_sum = { SIG = archive }
+		gm_state_sig_add_to_sum = { SIG = throne }
+		gm_state_sig_add_to_sum = { SIG = royal_pantheon }
+		gm_state_sig_add_to_sum = { SIG = martial_glory }
+		gm_state_sig_add_to_sum = { SIG = liberty }
+		gm_state_sig_add_to_sum = { SIG = grande_armee }
+		gm_state_sig_add_to_sum = { SIG = mandate_of_heaven }
+		gm_state_sig_add_to_sum = { SIG = glory_of_athens }
+		gm_state_sig_add_to_sum = { SIG = to_victory }
+		gm_state_sig_add_to_sum = { SIG = unknown_soldier }
+		gm_state_sig_add_to_sum = { SIG = concert_of_nations }
+		gm_state_sig_add_to_sum = { SIG = conquerors_of_space }
+		gm_state_sig_add_to_sum = { SIG = olympic }
+		gm_state_sig_add_to_sum = { SIG = heroes }
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		save_scope_as = gm_sig_country
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				has_variable = gm_tr_signature
+				gm_mon_sig_counts = yes
+			}
+			set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = antiquity G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = archive G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = throne G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = royal_pantheon G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = martial_glory G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = liberty G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = grande_armee G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = mandate_of_heaven G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = glory_of_athens G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = to_victory G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = unknown_soldier G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = concert_of_nations G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = conquerors_of_space G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = olympic G = gm_tr_g }
+			gm_mon_sig_add_to_sum = { SIG = heroes G = gm_tr_g }
+		}
+	}
+	# A trophy counts for whoever holds it (§2.4): no fit, no local effect, no
+	# interest group; its standing grandeur already counts the same way.
+	if = {
+		limit = { has_variable_list = gm_trophies_held }
+		save_scope_as = gm_sig_country
+		every_in_list = {
+			variable = gm_trophies_held
+			limit = {
+				has_variable = gm_tr_signature
+				has_variable = gm_tr_grandeur
+				gm_mon_sig_on_parent = yes
+			}
+			gm_mon_sig_add_to_sum = { SIG = antiquity G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = archive G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = throne G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = royal_pantheon G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = martial_glory G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = liberty G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = grande_armee G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = mandate_of_heaven G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = glory_of_athens G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = to_victory G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = unknown_soldier G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = concert_of_nations G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = conquerors_of_space G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = olympic G = gm_tr_grandeur }
+			gm_mon_sig_add_to_sum = { SIG = heroes G = gm_tr_grandeur }
+		}
+	}
+	gm_sig_set_steps = { SIG = antiquity }
+	gm_sig_set_steps = { SIG = archive }
+	gm_sig_set_steps = { SIG = throne }
+	gm_sig_set_steps = { SIG = royal_pantheon }
+	gm_sig_set_steps = { SIG = martial_glory }
+	gm_sig_set_steps = { SIG = liberty }
+	gm_sig_set_steps = { SIG = grande_armee }
+	gm_sig_set_steps = { SIG = mandate_of_heaven }
+	gm_sig_set_steps = { SIG = glory_of_athens }
+	gm_sig_set_steps = { SIG = to_victory }
+	gm_sig_set_steps = { SIG = unknown_soldier }
+	gm_sig_set_steps = { SIG = concert_of_nations }
+	gm_sig_set_steps = { SIG = conquerors_of_space }
+	gm_sig_set_steps = { SIG = olympic }
+	gm_sig_set_steps = { SIG = heroes }
+}
+
+# Country scope. A signature's grandeur and count at 0 before the walks.
+gm_sig_zero_sum = {
+	set_variable = { name = gm_g_sig_$SIG$ value = 0 }
+	set_variable = { name = gm_c_sig_$SIG$ value = 0 }
+}
+
+# State scope, a primary that counts: its grandeur (gm_grandeur, written by the
+# refresh's state loop) to its owner's sum of $SIG$, if it counts toward it.
+gm_state_sig_add_to_sum = {
+	if = {
+		limit = { gm_sig_counts_as_$SIG$ = { VAR = gm_signature } }
+		owner = {
+			change_variable = { name = gm_g_sig_$SIG$ add = prev.var:gm_grandeur }
+			change_variable = { name = gm_c_sig_$SIG$ add = 1 }
+		}
+	}
+}
+
+# Container scope (scope:gm_sig_country the country summing): its grandeur, the
+# variable $G$ on it, to that country's sum of $SIG$, if it counts toward it.
+gm_mon_sig_add_to_sum = {
+	if = {
+		limit = { gm_sig_counts_as_$SIG$ = { VAR = gm_tr_signature } }
+		scope:gm_sig_country = {
+			change_variable = { name = gm_g_sig_$SIG$ add = prev.var:$G$ }
+			change_variable = { name = gm_c_sig_$SIG$ add = 1 }
+		}
+	}
+}
+
+# Country scope. Grandeur -> steps and the next step, then the policy factor.
+gm_sig_set_steps = {
+	gm_set_steps = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ NEXT = gm_n_sig_$SIG$ F = 5 }
+	gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }
+}
+
+# ---- The local effects (§2.2): on_monthly_pulse_state, ROOT = the state --------------
+# From gm_state_monthly, beside gm_state_local_steps_one. Signature $SIG$'s
+# local effect here: the curve over the grandeur of every monument standing here
+# that carries it on its parent, the primary's and each secondary's, whatever
+# its status (heritage and contested too, as the dedications' local effects).
+# Its multiplier variable is zeroed, never removed.
+gm_state_sig_local_steps_one = {
+	set_variable = {
+		name = gm_curve_in
+		value = {
+			value = 0
+			if = {
+				limit = {
+					gm_state_sig_on_parent = yes
+					gm_sig_counts_as_$SIG$ = { VAR = gm_signature }
+				}
+				add = gm_state_primary_grandeur
+			}
+			if = {
+				limit = { has_variable_list = gm_monuments_here }
+				every_in_list = {
+					variable = gm_monuments_here
+					limit = {
+						gm_mon_sig_on_parent = yes
+						gm_sig_counts_as_$SIG$ = { VAR = gm_tr_signature }
+					}
+					add = gm_mon_grandeur
+				}
+			}
+		}
+	}
+	set_variable = {
+		name = gm_sig_local_steps_$SIG$
+		value = {
+			value = gm_curve_steps_f5
+			multiply = gm_policy_factor_local
+		}
+	}
+	if = {
+		limit = { var:gm_sig_local_steps_$SIG$ > 0 }
+		add_modifier = { name = gm_local_sig_$SIG$ multiplier = var:gm_sig_local_steps_$SIG$ }
+	}
+}
+
+# State scope. Every signature's local step variable at 0, where one exists.
+gm_state_sig_zero_local_steps = {
+	gm_state_sig_zero_local_steps_one = { SIG = antiquity }
+	gm_state_sig_zero_local_steps_one = { SIG = archive }
+	gm_state_sig_zero_local_steps_one = { SIG = first_emperor }
+}
+
+gm_state_sig_zero_local_steps_one = {
+	if = {
+		limit = { has_variable = gm_sig_local_steps_$SIG$ }
+		set_variable = { name = gm_sig_local_steps_$SIG$ value = 0 }
+	}
+}
+
+# ---- Special dedications from opportunities (§5) ----------------------------------
+# Country scope, from gm_com_fulfil. The open opportunity's special, from its
+# moment, as gm_sig_special (a flag; none for a moment without one). One per
+# source: a moment whose dedication is not single (A New Reign, A New Order)
+# has none (§5.4). test_grand_monument_registry.py pins it to SIGNATURES.
+gm_sig_special_for_source = {
+	gm_remove_state_var = { VAR = gm_sig_special }
+	if = {
+		limit = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:victory
+		}
+		set_variable = { name = gm_sig_special value = flag:to_victory }
+	}
+	if = {
+		limit = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:defeat
+		}
+		set_variable = { name = gm_sig_special value = flag:unknown_soldier }
+	}
+	if = {
+		limit = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:great_power
+		}
+		set_variable = { name = gm_sig_special value = flag:concert_of_nations }
+	}
+	if = {
+		limit = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+		}
+		set_variable = { name = gm_sig_special value = flag:conquerors_of_space }
+	}
+	if = {
+		limit = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:tech_athletic
+		}
+		set_variable = { name = gm_sig_special value = flag:olympic }
+	}
+}
+
+# Any scope. The parent of the special in the flag variable $SIGVAR$, into
+# $VAR$: the dedication its opportunity asks for.
+gm_sig_set_special_parent = {
+	if = {
+		limit = { var:$SIGVAR$ = flag:to_victory }
+		set_variable = { name = $VAR$ value = flag:war_memorial }
+	}
+	else_if = {
+		limit = { var:$SIGVAR$ = flag:unknown_soldier }
+		set_variable = { name = $VAR$ value = flag:war_memorial }
+	}
+	else_if = {
+		limit = { var:$SIGVAR$ = flag:concert_of_nations }
+		set_variable = { name = $VAR$ value = flag:civic }
+	}
+	else_if = {
+		limit = { var:$SIGVAR$ = flag:conquerors_of_space }
+		set_variable = { name = $VAR$ value = flag:civic }
+	}
+	else_if = {
+		limit = { var:$SIGVAR$ = flag:olympic }
+		set_variable = { name = $VAR$ value = flag:athletic }
+	}
+}
+
+# Country scope. One more of special $SIG$ held, for the next monument of its
+# dedication; and one less, once a ceremony gives it.
+gm_sig_hold = {
+	if = {
+		limit = { has_variable = gm_sig_held_$SIG$ }
+		change_variable = { name = gm_sig_held_$SIG$ add = 1 }
+	}
+	else = {
+		set_variable = { name = gm_sig_held_$SIG$ value = 1 }
+	}
+}
+
+gm_sig_unhold = {
+	if = {
+		limit = { has_variable = gm_sig_held_$SIG$ }
+		change_variable = { name = gm_sig_held_$SIG$ add = -1 }
+		if = {
+			limit = { var:gm_sig_held_$SIG$ <= 0 }
+			remove_variable = gm_sig_held_$SIG$
+		}
+	}
+}
+
+# Country scope. The special in the country's gm_sig_special held (no monument
+# could take it).
+gm_sig_hold_special = {
+	if = {
+		limit = {
+			has_variable = gm_sig_special
+			var:gm_sig_special = flag:to_victory
+		}
+		gm_sig_hold = { SIG = to_victory }
+	}
+	if = {
+		limit = {
+			has_variable = gm_sig_special
+			var:gm_sig_special = flag:unknown_soldier
+		}
+		gm_sig_hold = { SIG = unknown_soldier }
+	}
+	if = {
+		limit = {
+			has_variable = gm_sig_special
+			var:gm_sig_special = flag:concert_of_nations
+		}
+		gm_sig_hold = { SIG = concert_of_nations }
+	}
+	if = {
+		limit = {
+			has_variable = gm_sig_special
+			var:gm_sig_special = flag:conquerors_of_space
+		}
+		gm_sig_hold = { SIG = conquerors_of_space }
+	}
+	if = {
+		limit = {
+			has_variable = gm_sig_special
+			var:gm_sig_special = flag:olympic
+		}
+		gm_sig_hold = { SIG = olympic }
+	}
+	set_variable = gm_com_seized_special_held
+}
+
+# State scope, from monument_events.26 (the monument gm_com_fulfil marked with
+# gm_sig_grant beside gm_gift). The completing monument takes the special, its
+# dedication being the special's parent, so nothing is rebuilt; one that
+# already carries a signature, or no longer stands on the parent, leaves it
+# held by its owner for the next.
+gm_state_sig_take_grant = {
+	if = {
+		limit = { has_variable = gm_sig_grant }
+		if = {
+			limit = { gm_state_takes_grant = yes }
+			set_variable = { name = gm_signature value = var:gm_sig_grant }
+			gm_sig_set_special_parent = { VAR = gm_sig_parent SIGVAR = gm_signature }
+			owner = { trigger_event = { id = monument_events.20 } }
+		}
+		else = {
+			if = {
+				limit = { var:gm_sig_grant = flag:to_victory }
+				owner = { gm_sig_hold = { SIG = to_victory } }
+			}
+			if = {
+				limit = { var:gm_sig_grant = flag:unknown_soldier }
+				owner = { gm_sig_hold = { SIG = unknown_soldier } }
+			}
+			if = {
+				limit = { var:gm_sig_grant = flag:concert_of_nations }
+				owner = { gm_sig_hold = { SIG = concert_of_nations } }
+			}
+			if = {
+				limit = { var:gm_sig_grant = flag:conquerors_of_space }
+				owner = { gm_sig_hold = { SIG = conquerors_of_space } }
+			}
+			if = {
+				limit = { var:gm_sig_grant = flag:olympic }
+				owner = { gm_sig_hold = { SIG = olympic } }
+			}
+		}
+		remove_variable = gm_sig_grant
+	}
+}
+
+# Container scope, a monument beside another that completed an opportunity
+# (gm_com_fulfil, beside its gift of age; scope:gm_sig_granter its country):
+# it takes the special, which writes variables only, as the gift does there.
+gm_mon_sig_take_special = {
+	set_variable = { name = gm_tr_signature value = scope:gm_sig_granter.var:gm_sig_special }
+	gm_sig_set_special_parent = { VAR = gm_tr_sig_parent SIGVAR = gm_tr_signature }
+}
+
+# ---- The ceremony's held specials (§5.3) ------------------------------------------
+# State scope, an option of monument_events.2: the parent's own dedication, then
+# the special's records, then one fewer held. The option's tooltip says both
+# (silent_variable_audit).
+gm_state_sig_give = {
+	set_variable = { name = gm_signature value = flag:$SIG$ }
+	set_variable = { name = gm_sig_parent value = flag:$PARENT$ }
+	owner = { gm_sig_unhold = { SIG = $SIG$ } }
+}
+
+gm_state_dedicate_sig_to_victory = {
+	gm_state_dedicate_timeless = { KEY = war_memorial AXIS = heritage }
+	gm_state_sig_give = { SIG = to_victory PARENT = war_memorial }
+}
+
+gm_state_dedicate_sig_unknown_soldier = {
+	gm_state_dedicate_timeless = { KEY = war_memorial AXIS = heritage }
+	gm_state_sig_give = { SIG = unknown_soldier PARENT = war_memorial }
+}
+
+gm_state_dedicate_sig_concert_of_nations = {
+	gm_state_dedicate_timeless = { KEY = civic AXIS = heritage }
+	gm_state_sig_give = { SIG = concert_of_nations PARENT = civic }
+}
+
+gm_state_dedicate_sig_conquerors_of_space = {
+	gm_state_dedicate_timeless = { KEY = civic AXIS = heritage }
+	gm_state_sig_give = { SIG = conquerors_of_space PARENT = civic }
+}
+
+gm_state_dedicate_sig_olympic = {
+	gm_state_dedicate_timeless = { KEY = athletic AXIS = building_athletic }
+	gm_state_sig_give = { SIG = olympic PARENT = athletic }
+}
+
+# ---- Old saves (§5.6) --------------------------------------------------------------
+# No scope, from gm_monument_monthly, once a round (gm_sig_seed_round against
+# gm_sig_seed_rounds, as gm_arch_seed_round). A save from before specials holds
+# none: each country gets one held special for every moment whose boon still
+# runs, an opportunity completed in the last ten years. No monument takes it
+# then; the next ceremony that can raise its parent offers it.
+gm_sig_seed_monthly = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_global_variable = gm_sig_seed_round }
+				global_var:gm_sig_seed_round < gm_sig_seed_rounds
+			}
+		}
+		set_global_variable = { name = gm_sig_seed_round value = gm_sig_seed_rounds }
+		every_country = {
+			limit = { gm_boons_idle = no }
+			if = {
+				limit = {
+					has_variable = gm_boon_victory
+					var:gm_boon_victory > 0
+				}
+				gm_sig_hold = { SIG = to_victory }
+			}
+			if = {
+				limit = {
+					has_variable = gm_boon_defeat
+					var:gm_boon_defeat > 0
+				}
+				gm_sig_hold = { SIG = unknown_soldier }
+			}
+			if = {
+				limit = {
+					has_variable = gm_boon_great_power
+					var:gm_boon_great_power > 0
+				}
+				gm_sig_hold = { SIG = concert_of_nations }
+			}
+			if = {
+				limit = {
+					has_variable = gm_boon_space
+					var:gm_boon_space > 0
+				}
+				gm_sig_hold = { SIG = conquerors_of_space }
+			}
+			if = {
+				limit = {
+					has_variable = gm_boon_tech_athletic
+					var:gm_boon_tech_athletic > 0
+				}
+				gm_sig_hold = { SIG = olympic }
+			}
+		}
+	}
+}
+
+# ---- Debug (te_debug_monuments.8) ----------------------------------------------------
+# State scope. The next signature in SIGNATURES' order, on the monument's
+# dedication now so it counts; after the last, none.
+gm_debug_next_signature = {
+	if = {
+		limit = { NOT = { has_variable = gm_signature } }
+		set_variable = { name = gm_signature value = flag:antiquity }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:antiquity }
+		set_variable = { name = gm_signature value = flag:archive }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:archive }
+		set_variable = { name = gm_signature value = flag:throne }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:throne }
+		set_variable = { name = gm_signature value = flag:royal_pantheon }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:royal_pantheon }
+		set_variable = { name = gm_signature value = flag:martial_glory }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:martial_glory }
+		set_variable = { name = gm_signature value = flag:liberty }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:liberty }
+		set_variable = { name = gm_signature value = flag:grande_armee }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:grande_armee }
+		set_variable = { name = gm_signature value = flag:mandate_of_heaven }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:mandate_of_heaven }
+		set_variable = { name = gm_signature value = flag:glory_of_athens }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:glory_of_athens }
+		set_variable = { name = gm_signature value = flag:first_emperor }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:first_emperor }
+		set_variable = { name = gm_signature value = flag:to_victory }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:to_victory }
+		set_variable = { name = gm_signature value = flag:unknown_soldier }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:unknown_soldier }
+		set_variable = { name = gm_signature value = flag:concert_of_nations }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:concert_of_nations }
+		set_variable = { name = gm_signature value = flag:conquerors_of_space }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:conquerors_of_space }
+		set_variable = { name = gm_signature value = flag:olympic }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:olympic }
+		set_variable = { name = gm_signature value = flag:heroes }
+	}
+	else_if = {
+		limit = { var:gm_signature = flag:heroes }
+		remove_variable = gm_signature
+	}
+	gm_remove_state_var = { VAR = gm_sig_parent }
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_crown }
+		}
+		set_variable = { name = gm_sig_parent value = flag:crown }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_republic }
+		}
+		set_variable = { name = gm_sig_parent value = flag:republic }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_revolution }
+		}
+		set_variable = { name = gm_sig_parent value = flag:revolution }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_leader }
+		}
+		set_variable = { name = gm_sig_parent value = flag:leader }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_religious }
+		}
+		set_variable = { name = gm_sig_parent value = flag:religious }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_civic }
+		}
+		set_variable = { name = gm_sig_parent value = flag:civic }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_war_memorial }
+		}
+		set_variable = { name = gm_sig_parent value = flag:war_memorial }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_artistic }
+		}
+		set_variable = { name = gm_sig_parent value = flag:artistic }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_naturalist }
+		}
+		set_variable = { name = gm_sig_parent value = flag:naturalist }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_scientific }
+		}
+		set_variable = { name = gm_sig_parent value = flag:scientific }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_industrial }
+		}
+		set_variable = { name = gm_sig_parent value = flag:industrial }
+	}
+	if = {
+		limit = {
+			has_variable = gm_signature
+			gm_state_has_pm = { PM = pm_monument_athletic }
+		}
+		set_variable = { name = gm_sig_parent value = flag:athletic }
+	}
+	debug_log = "TE_MONUMENTS: debug signature [SCOPE.ScriptValue('gm_disp_sig_code')|0] on parent [SCOPE.ScriptValue('gm_disp_sig_parent_code')|0]"
+}
+
+# Country scope. TE_MONUMENTS: lines (gm_debug_log's form): each signature's
+# grandeur, steps' effect and monuments; then every monument's signature code,
+# parent code, whether it counts (gm_disp_sig_counts: 1 nationally, 2 locally
+# only, 3 dormant) and grandeur, and the specials held.
+gm_sig_debug_log = {
+	debug_log = "TE_MONUMENTS: signature antiquity: grandeur [SCOPE.ScriptValue('gm_display_g_sig_antiquity')|1] from [SCOPE.ScriptValue('gm_display_c_sig_antiquity')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_antiquity')|3]"
+	debug_log = "TE_MONUMENTS: signature archive: grandeur [SCOPE.ScriptValue('gm_display_g_sig_archive')|1] from [SCOPE.ScriptValue('gm_display_c_sig_archive')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_archive')|3]"
+	debug_log = "TE_MONUMENTS: signature throne: grandeur [SCOPE.ScriptValue('gm_display_g_sig_throne')|1] from [SCOPE.ScriptValue('gm_display_c_sig_throne')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_throne')|3]"
+	debug_log = "TE_MONUMENTS: signature royal_pantheon: grandeur [SCOPE.ScriptValue('gm_display_g_sig_royal_pantheon')|1] from [SCOPE.ScriptValue('gm_display_c_sig_royal_pantheon')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_royal_pantheon')|3]"
+	debug_log = "TE_MONUMENTS: signature martial_glory: grandeur [SCOPE.ScriptValue('gm_display_g_sig_martial_glory')|1] from [SCOPE.ScriptValue('gm_display_c_sig_martial_glory')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_martial_glory')|3]"
+	debug_log = "TE_MONUMENTS: signature liberty: grandeur [SCOPE.ScriptValue('gm_display_g_sig_liberty')|1] from [SCOPE.ScriptValue('gm_display_c_sig_liberty')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_liberty')|3]"
+	debug_log = "TE_MONUMENTS: signature grande_armee: grandeur [SCOPE.ScriptValue('gm_display_g_sig_grande_armee')|1] from [SCOPE.ScriptValue('gm_display_c_sig_grande_armee')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_grande_armee')|3]"
+	debug_log = "TE_MONUMENTS: signature mandate_of_heaven: grandeur [SCOPE.ScriptValue('gm_display_g_sig_mandate_of_heaven')|1] from [SCOPE.ScriptValue('gm_display_c_sig_mandate_of_heaven')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_mandate_of_heaven')|3]"
+	debug_log = "TE_MONUMENTS: signature glory_of_athens: grandeur [SCOPE.ScriptValue('gm_display_g_sig_glory_of_athens')|1] from [SCOPE.ScriptValue('gm_display_c_sig_glory_of_athens')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_glory_of_athens')|3]"
+	debug_log = "TE_MONUMENTS: signature to_victory: grandeur [SCOPE.ScriptValue('gm_display_g_sig_to_victory')|1] from [SCOPE.ScriptValue('gm_display_c_sig_to_victory')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_to_victory')|3]"
+	debug_log = "TE_MONUMENTS: signature unknown_soldier: grandeur [SCOPE.ScriptValue('gm_display_g_sig_unknown_soldier')|1] from [SCOPE.ScriptValue('gm_display_c_sig_unknown_soldier')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_unknown_soldier')|3]"
+	debug_log = "TE_MONUMENTS: signature concert_of_nations: grandeur [SCOPE.ScriptValue('gm_display_g_sig_concert_of_nations')|1] from [SCOPE.ScriptValue('gm_display_c_sig_concert_of_nations')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_concert_of_nations')|3]"
+	debug_log = "TE_MONUMENTS: signature conquerors_of_space: grandeur [SCOPE.ScriptValue('gm_display_g_sig_conquerors_of_space')|1] from [SCOPE.ScriptValue('gm_display_c_sig_conquerors_of_space')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_conquerors_of_space')|3]"
+	debug_log = "TE_MONUMENTS: signature olympic: grandeur [SCOPE.ScriptValue('gm_display_g_sig_olympic')|1] from [SCOPE.ScriptValue('gm_display_c_sig_olympic')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_olympic')|3]"
+	debug_log = "TE_MONUMENTS: signature heroes: grandeur [SCOPE.ScriptValue('gm_display_g_sig_heroes')|1] from [SCOPE.ScriptValue('gm_display_c_sig_heroes')|0] monuments and trophies, effect [SCOPE.ScriptValue('gm_display_sig_heroes')|3]"
+	every_scope_state = {
+		limit = { has_variable = gm_signature }
+		debug_log = "TE_MONUMENTS: primary signature [SCOPE.ScriptValue('gm_disp_sig_code')|0] parent [SCOPE.ScriptValue('gm_disp_sig_parent_code')|0] counts [SCOPE.ScriptValue('gm_disp_sig_counts')|0] grandeur [SCOPE.ScriptValue('gm_state_primary_grandeur')|1]"
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { has_variable = gm_tr_signature }
+			debug_log = "TE_MONUMENTS: beside signature [SCOPE.ScriptValue('gm_tr_disp_sig_code')|0] parent [SCOPE.ScriptValue('gm_tr_disp_sig_parent_code')|0] counts [SCOPE.ScriptValue('gm_tr_disp_sig_counts')|0] grandeur [SCOPE.ScriptValue('gm_mon_grandeur')|1]"
+		}
+	}
+	if = {
+		limit = { has_variable_list = gm_trophies_held }
+		every_in_list = {
+			variable = gm_trophies_held
+			limit = { has_variable = gm_tr_signature }
+			debug_log = "TE_MONUMENTS: trophy signature [SCOPE.ScriptValue('gm_tr_disp_sig_code')|0] parent [SCOPE.ScriptValue('gm_tr_disp_sig_parent_code')|0] counts [SCOPE.ScriptValue('gm_tr_disp_sig_counts')|0] grandeur [SCOPE.ScriptValue('gm_tr_disp_grandeur')|0]"
+		}
+	}
+	debug_log = "TE_MONUMENTS: specials held: to_victory [SCOPE.ScriptValue('gm_disp_sig_held_to_victory')|0], unknown_soldier [SCOPE.ScriptValue('gm_disp_sig_held_unknown_soldier')|0], concert_of_nations [SCOPE.ScriptValue('gm_disp_sig_held_concert_of_nations')|0], conquerors_of_space [SCOPE.ScriptValue('gm_disp_sig_held_conquerors_of_space')|0], olympic [SCOPE.ScriptValue('gm_disp_sig_held_olympic')|0]"
+}
