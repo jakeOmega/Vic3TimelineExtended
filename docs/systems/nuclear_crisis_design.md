@@ -214,7 +214,10 @@ bands, not another probability roll. `nd_refresh_risk_band` projects it weekly
 low, under 12 elevated, under 100 high, 100 or more extreme (band 4, added
 2026-10-06 so a dangerous crisis does not read like a strained peacetime High
 Alert). Routine mishaps independently occur
-with monthly chances 0.5%, 1%, 2%, 4% by readiness.
+with monthly chances 0.2%, 0.5%, 1%, 2% by readiness (halved 2026-10-16), and
+none for 60 months after one (`nd_mishap_cooldown_months`, set in `.40`'s
+`immediate`; the monthly roll and the warning fallback both skip `.40` while
+it runs).
 
 **Balance target, not a historical estimate:** two countries at High Alert,
 danger ≥75, no strain, reliability 60, Existential doctrine, two weekly checks
