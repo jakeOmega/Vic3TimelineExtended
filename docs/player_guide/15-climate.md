@@ -128,8 +128,8 @@ show emissions and contribute to the industrial climate total.
 
 ## The Global Warming journal entry
 
-The entry is listed, grayed out, for every country from the start of the game,
-with a line saying that it opens once the world has warmed by 0.1 °C and its
+With the Global Warming rule on, the entry is listed, grayed out, for every
+country from the start of the game, with a line saying that it opens once the world has warmed by 0.1 °C and its
 climate policies at 0.5 °C. It activates for everyone once the anomaly reaches
 0.1 °C and then stays active: it never completes and never goes away, even if
 the world cools again. It also activates early for a country that adopts Fossil
@@ -176,7 +176,7 @@ every value multiplied by the current anomaly. At 1 °C it is:
 - +1% migration quota, as climate refugees move;
 - 25% worse floods, droughts, extreme winds and torrential rains, and 50% worse
 heatwaves and wildfires, in both impact and duration;
-- 15% milder frost and hailstorms;
+- 15% milder frost, in impact and duration, and 15% weaker hailstorms;
 - 25% weaker pollinator surges and 10% weaker moderate rainfall, the two
 harvest conditions that help.
 
@@ -199,7 +199,7 @@ current multiplier. A Treaty-Bound icon joins them while an Enforce Emissions
 Reduction treaty binds you.
 
 Below them is the Temperature bar, from 0 to 4 °C, with a headline such as
-"1.61 → 1.82 °C (+0.02/yr)": the anomaly now, the anomaly in ten years if every
+"1.61 → 1.81 °C (+0.02/yr)": the anomaly now, the anomaly in ten years if every
 year warms as much as the last, and last year's change. The bar shows the same
 projection. While the world warms, the solid fill ends at today's reading and a
 red stretch runs on to the projection: red is warming to come. While it cools,
@@ -215,12 +215,13 @@ They update each January; before the first January of a game, a line says when
 they arrive.
 
 Two pies close the overview. Our Share is your market's share of world
-emissions. Emissions Cut shows your country's policy reduction to its remaining industrial emissions; hover it for how many of the ten
-policies you run. The cut changes the moment a policy is adopted or repealed.
+emissions. Emissions Cut is how far your country's remaining industrial
+emissions are cut, by its policies, the Ministry of the Environment and every
+other source together; hover it for how many of the ten policies you run. The cut changes the moment a policy is adopted or repealed.
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mitigation Policies | Open | Ten policies: market-wide Fossil-Fuel Tariffs first, then nine National policies. Each row has an icon, its name and effect tooltip, an active check, and Adopt or Repeal. Grayed controls explain the warming, authority, market ownership and customs conditions. Adoption Around the World counts countries using each policy; the tariff row counts market leaders. |
+| Mitigation Policies | Open | Ten policies: market-wide Fossil-Fuel Tariffs first, then nine National policies. Each row has an icon, its name and effect tooltip, an active check, and Adopt or Repeal. Grayed controls explain the warming, authority, technology, treaty, market ownership and customs conditions. Adoption Around the World counts countries using each policy; the tariff row counts market leaders. |
 | Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the full list. Figures update each January; rankings update monthly. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
@@ -373,11 +374,11 @@ your states every 3 months, starting 3 months after you press Start:
 
 - the whole building goes, every level, whoever owns it: your government, a
 company, your investors or a foreign investor;
-- you pay its owners compensation, a quarter of what the building would cost to
-build today;
-- its state gets Transition Assistance for 5 years: half the radicals that a fall
-in standard of living would make, and +25% qualifications as the laid-off
-workers retrain.
+- you pay compensation from the treasury, a quarter of what the building would
+cost to build at base prices, though no owner receives it;
+- its state gets Transition Assistance for 5 years: half the radicals and
+loyalists that a change in standard of living would make, and +25%
+qualifications as the laid-off workers retrain.
 
 Hover a row for the next building to close, its state and its compensation, and
 for the cost of closing all that are left. Stop ends a programme; what it closed
@@ -475,7 +476,7 @@ state generates, recalculated monthly. It is lowered by:
 | Novo Nordisk Kalundborg Plant, in its own state | Up to −15% |
 | Biotechnology company, while prosperous | −5% |
 | Electric Vehicles technology | −5% |
-| The region's own pollution ([Heavy pollution](#heavy-pollution)) | Up to −90% |
+| The region's pollution impact ([Heavy pollution](#heavy-pollution)) | Up to −90% |
 
 The Environmental Grandfather Clause amendment raises it by 5%. The cuts add
 together, and at −100% nothing the state generates counts. They apply to what is
@@ -485,12 +486,12 @@ Each level of the Ministry of the Environment also cuts emissions by 5% and
 raises the National Park level cap by one. Each level costs 1% mining and
 logging throughput, 2% oil extraction throughput and 5% more construction goods.
 
-Other sources take a fixed amount off a state's generated pollution, per level
-at full staffing: the pollution-control methods below, a National Park (500 on
-the National Park and National Wildlife Refuge methods, 250 on National Forest)
-and a monument dedicated as Botanical Gardens (5,000 a step; see [Monument
-dedications](02-timeline.md#monument-dedications)). A polluting production
-method adds between 3 and 100 a level.
+Other sources take a fixed amount off a state's generated pollution. The
+pollution-control methods below and National Parks do it per level at full
+staffing (500 on the National Park and National Wildlife Refuge methods, 250 on
+National Forest), and a monument dedicated as Botanical Gardens takes 5,000 a
+step (see [Monument dedications](02-timeline.md#monument-dedications)). A
+polluting production method adds between 3 and 100 a level.
 
 ### Pollution-control methods
 
