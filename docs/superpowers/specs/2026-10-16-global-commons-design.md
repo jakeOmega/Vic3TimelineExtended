@@ -69,6 +69,13 @@ Third round (owner, 2026-10-16, on the PR):
 - **"Avoid", not "never".** Rewarding a toggle is to be avoided, but there are times it is worth
   it for other reasons. `CLAUDE.md`'s design default now says so.
 
+Fourth round (owner, 2026-10-16, on the PR):
+
+- **Licences: option (a), local first and distant at a penalty**, "Awesome!" (§ 2.4).
+- **No cap on the off-window premium.** "Given that it is calculated, should we not cap it?" The
+  computed premium is the price. A launch outside a window happens when the months it saves
+  outweigh the months its extra progress costs, weighted by the approach (§ 5.2a).
+
 Where this document says "compact fusion drives" it means the era 12 technology
 `compact_fusion_reactors`, shown in game as **Muon-Catalyzed Fusion Reactors**.
 
@@ -244,7 +251,7 @@ Five basins: **Pacific**, **Atlantic**, **Indian**, **Arctic** and **Southern**.
 state belongs to exactly one, the basin of its naval exit's sea region. A state's basin decides
 where its owner's claim weight comes from (§ 2.3), and which licence its mines use first
 (§ 2.4). It doesn't bar a mine from another basin's licence, which works at a long-haul penalty
-(§ 2.4, proposal). Real contracts reach across oceans: Germany, Belgium, France and the UK hold
+(§ 2.4). Real contracts reach across oceans: Germany, Belgium, France and the UK hold
 International Seabed Authority contracts in the Pacific's Clarion-Clipperton Zone.
 
 - A generator, `scripts/generators/gen_seabed_basins.py`, reads `naval_exit_id` from
@@ -370,7 +377,7 @@ check 3), and it is still unverified here. Ship with the self-check `seabed_lice
 (§ 8). If it fails, keep the records in global variables per coastal state region (the generator of
 § 2.1 can emit them), with the holder stamp beside them.
 
-**Which licence a level uses** (proposal, owner to confirm, § 11):
+**Which licence a level uses** (owner, 2026-10-16: option (a) of § 11 #1):
 - Its own basin's first.
 - A level on a distant licence (another basin's, because its own basin's share is used up) works
   at −25% throughput, **Long-Haul Seabed Operations**. This is a unit state modifier,
@@ -547,7 +554,7 @@ players into it. The three steps:
 | Step | Technology | Launches |
 |---|---|---|
 | Chemical | Directed Energy Weapons opens colonization (era 11) | In a window only |
-| Propellant depots | Asteroid Mining (era 11) | In a window, free. Outside one, at a premium up to +100% |
+| Propellant depots | Asteroid Mining (era 11) | In a window, free. Outside one, at the computed premium, when it saves time (below) |
 | Fusion drives | Muon-Catalyzed Fusion Reactors (era 12) | Any month, free |
 
 Asteroid Mining requires Directed Energy Weapons, so it always comes second. It fits the step
@@ -560,29 +567,56 @@ for each departure date, the minimum Δv over all transfer times. It uses a Lamb
 target. The premium is the rocket equation's extra mass,
 `exp(extra Δv ÷ 3.7 km/s) − 1`, at a methane-oxygen engine's exhaust velocity. The minimum for
 Mars comes out at 4.45 km/s; the real figure is about 3.6 km/s to depart plus 0.9 km/s to
-capture. Premiums by months from a window's optimum (2033–34 cycles; "closed" is above the
-+100% cap):
+capture. Premiums by months from a window's optimum (2033–34 cycles):
 
 | Months from the optimum | −6 | −5 | −4 | −3 | −2 | −1 to +1 (window) | +2 | +3 | +4 | +5 | +6 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Mars | closed | closed | +64% | +35% | +17% | free | +35% | +51% | +60% | +87% | closed |
-| Venus | +80% | +59% | +40% | +24% | +13% | free | +63% | closed | closed | closed | closed |
-| Jupiter | closed | closed | closed | closed | closed | free | +75% | closed | closed | closed | closed |
+| Mars | +193% | +109% | +64% | +35% | +17% | free | +35% | +51% | +60% | +87% | +183% |
+| Venus | +80% | +59% | +40% | +24% | +13% | free | +63% | +149% | +276% | +485% | +864% |
+| Jupiter | > +1,000% | > +1,000% | > +1,000% | +925% | +214% | free | +75% | +424% | > +1,000% | > +1,000% | > +1,000% |
 
-With depots, Mars can be reached about 10 months in 26, Venus 9 in 19 and Jupiter 4 in 13.
+**No cap: the computed premium is the price** (owner, 2026-10-16: "given that it is calculated,
+should we not cap it?"). The previous draft closed months above +100%. A cap is unnecessary, because
+what kept the automatic launch from wasting progress was never the price, but when to pay it.
+Paying +400% when the next free window is three months away throws progress away, whatever the
+physics allows. So the rule launches outside a window only when that gains time:
 
-**Who launches when** is set by the approach the program already has, with no new control:
+- Launching now brings this colony forward by *m*, the months until the stage's next free
+  window, the soonest among its unclaimed sites.
+- It sets every later colony back by goal × premium ÷ pace months, the extra progress spent at
+  the program's monthly pace (`sr_progress`, the panel's figure).
+- The approach the program already has decides the trade, with no new control:
 
-| Approach | Launches outside a window |
+| Approach | Launches outside a window when |
 |---|---|
-| Safe | Never; waits for the window |
-| Standard | Up to +25% |
-| Ambitious | Up to the +100% cap |
+| Safe | Never; it waits for the window |
+| Standard | goal × premium ÷ pace ≤ *m*: it saves at least as many months as it costs |
+| Ambitious | goal × premium ÷ pace ≤ 2*m*: it values the colony now twice as much, in a race for first claims |
 
-**The launch rule.** Each month, take the stage's cheapest open site within the approach's limit.
-When staged progress covers goal × (1 + premium), the colony is founded and that much progress is
-spent, one colony a month as before. Inside a window the premium is zero, so steps 1 and 2 behave
-alike there.
+**The launch rule.** Each month:
+1. Take the stage's cheapest site that passes the approach's test.
+2. When staged progress covers goal × (1 + premium), the colony is founded and that much progress
+   is spent.
+
+That is still one colony a month. Inside a window the premium is zero, so steps 1 and 2 of the
+propulsion ladder behave alike there.
+
+What the rule does on Mars (goal 400; the prototype's premiums; 3 months of the 26 are the window
+itself):
+
+| Pace | Standard launches | Ambitious launches |
+|---|---|---|
+| 5 a month | in the window only (3 months in 26) | also 2–3 months after it (5 in 26) |
+| 10 a month | 2–3 months after (5 in 26) | 2–5 months after (7 in 26) |
+| 20 a month | 2–5 months after (7 in 26) | 2–6 months after (8 in 26) |
+| 40 a month | 2–6 months after (8 in 26) | also 2–3 months before (10 in 26) |
+
+It launches mostly just after a window closes, when the next one is two years away: a program
+that missed the window by two months pays +35% rather than waiting two years. It almost never
+launches just before a window, since waiting is cheap then. A faster program launches off-window
+more often, as its extra progress costs it less time. Expensive months never pass the test at any
+plausible pace. The generator stores premiums only up to +100,000%, a ceiling for the script's
+number range that no test can reach (it would need a pace above 16,000 a month).
 
 Holding `compact_fusion_reactors` removes every window and premium, for that country only. Fleets
 then depart as soon as they are ready, as colonies are founded today.
@@ -607,7 +641,7 @@ the game's `END_DATE` (2136.1.1), month-index ranges against `te_history_month_i
   - `sr_launch_offset_<body>`, the signed months from the nearest optimum, one branch per cycle;
   - `sr_launch_premium_<body>`, a lookup of § 5.2a's premium by that offset. The generator
     averages the Lambert curve over all cycles, reports how far individual cycles stray, and
-    writes 9999 for a closed month.
+    stores premiums up to +100,000% (§ 5.2a).
 
 A global monthly pulse caches each body's open/closed state and premium in global variables, so
 country pulses and site triggers read one variable each. Window bodies:
@@ -660,7 +694,8 @@ Mars windows in era 11 (about 2030–2060), for scale. Arrival is for the colony
   remove launch windows.
 - Mission Control gains a **Next windows** line listing the stage's destinations with the months
   to each. After Asteroid Mining, each also shows today's premium when it is open, as in "Ceres:
-  +35% now, window in 4 months", and which of them the approach would accept.
+  +35% now, window in 4 months". It also says whether the approach would launch there now, with
+  the months it would save against the months it would cost.
 - AI: no change. It keeps funding, and staged progress means waiting costs it only time.
 
 ## 6. Orbital debris (phase 4)
@@ -773,8 +808,11 @@ Each method carries a registered country modifier, `country_orbital_debris_remov
 - **Tests:**
   - `test_seabed_basins.py`: every coastal state maps to a basin, and the generated file is
     current.
-  - `test_launch_windows.py`: the historical launch table in § 5.3 stays inside its windows, and
-    the generated files are current.
+  - `test_launch_windows.py`:
+    - the historical launch table in § 5.3 stays inside its windows;
+    - each premium curve's minimum falls in its window's middle month;
+    - § 5.2a's Mars table comes out of the break-even rule;
+    - the generated files are current.
   - `test_deep_sea_rebalance.py`: per-level base-price profit of the Deep-Sea Mine ≥ the
     Extraplanetary Base's for every method pair without the two logistics upgrades, and less
     with both (§ 1.2's table).
@@ -839,19 +877,11 @@ Phases 3 and 4 can run in parallel with phase 1.
 
 ## 11. My calls, for the owner to check
 
-1. **Where a licence can be used** (§ 2.4). The owner was unsure about the second draft's
-   national licences. Three options:
-   - **(a) Proposed: local first, distant at a penalty.** A level uses its own basin's licence
-     if the owner has one to spare, otherwise another basin's at −25% throughput (Long-Haul
-     Seabed Operations). It switches to a local licence once one frees up. Geography matters
-     for where you mine, and nobody is locked out.
-   - **(b) National, no penalty** (the second draft). This is simplest, but a mine's basin
-     barely matters.
-   - **(c) Basin-bound.** A licence works only in states facing its own basin. Distant claims
-     would then need a coastal state there, which makes them a hard cap again (against the
-     soft-caps default).
-   The distant-basin claim penalty of § 2.3 (a twentieth of the navy, no coast or ports, +5 for
-   an Antarctic station) is a separate number to tune under any of the three.
+1. **Where a licence can be used: decided** (owner, 2026-10-16: option (a), local first and
+   distant at a penalty, § 2.4). Still to tune:
+   - the long-haul penalty (−25% throughput);
+   - the distant-basin claim penalty of § 2.3 (a twentieth of the navy, no coast or ports, +5
+     for an Antarctic station).
 2. **Pools are fixed** (1,000 levels in all). Growth with technology is listed as later work.
 3. **The Deep-Sea Mine's numbers** (§ 1.1): ~103% margin at the base method and ~250% with
    Advanced Nanofabrication. These are high, but each level is a scarce licence. Alternatively,
@@ -863,11 +893,11 @@ Phases 3 and 4 can run in parallel with phase 1.
 5. **Staged fleets depart one a month** while a window is open, with no cap on what can be
    staged. The alternative, every ready fleet leaving in the window's first month, is quicker
    but fires several colony events at once.
-6. **Off-window launches** (§ 5.2a; owner: unlock them with more technology).
+6. **Off-window launches** (§ 5.2a). The owner asked for them to unlock with more technology,
+   and for no cap. Still to check:
    - Asteroid Mining as the middle step.
-   - The approach deciding how much premium a program accepts: Safe none, Standard +25%,
-     Ambitious +100%.
-   - A +100% cap past which a month is closed.
+   - The break-even test's weights: Standard launches when it saves at least as many months as
+     it costs, Ambitious when it saves at least half as many. Safe never launches off-window.
    - A methane-oxygen exhaust velocity (3.7 km/s) in the premium. A hydrogen-oxygen one (4.4)
      would make every premium a sixth to a fifth smaller.
 7. **Royalties of 4% of output value**, to the World Development Fund.
