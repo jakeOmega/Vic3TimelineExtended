@@ -148,7 +148,7 @@ Three sections follow the overview:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), and the Mission Profile. |
+| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), the Orbital Debris index (see [Orbital debris](#orbital-debris)), and the Mission Profile. |
 | Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
 | How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals and the programme. |
 
@@ -437,6 +437,95 @@ you can switch it to Earth Orbit, which uses 500 Launch Capacity instead of up t
 specialization, an option that adds progress keeps some value after the race:
 below the cap, it is worth about a quarter of what the mining options give.
 AI powers gain Commercial Space Industry in the same way.
+
+## Orbital debris
+
+Debris in Earth orbit is one figure for the whole world, the orbital debris
+index, from 0 to 100. It has two parts. Debris in low orbits is dragged down by
+the upper atmosphere within a few years: 1.5% of it goes each month. Debris in
+high orbits stays for a century, losing 0.05% a month. Every running Space
+Program adds 0.01 to the low orbits each month, so six programs keep about 4
+points up, and each [anti-satellite strike](#the-anti-satellite-strike) adds 6
+to each part. Mission Control shows the index on every milestone's panel, as
+"Orbital Debris: 12.3 (Clear)". Hover it for the two parts, what the index
+costs you now and who is cleaning it up.
+
+| Tier | Index | What changes |
+|---|---|---|
+| Clear | below 25 | Only the costs below. |
+| Cluttered | 25 | AI powers start removing debris. |
+| Hazardous | 50 | Space Elevators risk ribbon strikes. |
+| Kessler Cascade | 75 | Collisions add 0.2 to the high orbits every month until removal brings the index back under 75. |
+
+Every country that uses orbit pays for each point of the index: one with a
+Space Program, a Space Elevator, an Orbital Solar Collector, an Orbital
+Battlestation or an Extraplanetary Base.
+
+| Each point | At 50 | At 100 |
+|---|---|---|
+| +1% setback risk | +50% | +100% (risk still stops at 50% a month) |
+| −0.3% space race pace | −15% | −30% (pace never drops below 0.5 a month) |
+| −0.2% throughput for Extraplanetary Bases, Space Elevators, Orbital Battlestations and Solar Receivers | −10% | −20% |
+
+Nothing stops: your milestones keep moving, and every cost fades as the debris
+does. An Orbital Battlestation's lower throughput also lowers the military
+bonuses it gives, along with its upkeep.
+
+From Hazardous on, a Space Elevator owner has a 0.02% chance per point each
+month (1.5% at 75) of a ribbon strike. The event Ribbon Strike runs your
+elevator at −50% throughput for six months, or, if you pay for an emergency
+repair (the cost grows with your GDP), for two. A ribbon still under repair
+isn't struck again.
+
+### Clearing orbital debris
+
+Your Space Program has a second production method group, Debris Removal. It
+starts on No Debris Removal. Each other method removes debris every month,
+taking it from the high orbits first, and adds a little prestige:
+
+| Method | Technology | Launch Capacity a week | Removed a month |
+|---|---|---|---|
+| Active Debris Removal | Reusable Rocketry | 300 | 0.05 |
+| Laser Broom | Directed Energy Weapons | 300, and 500 electricity | 0.15 |
+| Fusion Sweepers | Muon-Catalyzed Fusion Reactors | 150 | 0.5 |
+
+Each fully staffed Space Elevator level raises what you remove by 10%, up to
++100% at ten levels, and its Launch Capacity makes every method cheaper in your
+market. Removal also follows the Space Program's throughput, so each funding
+level raises it along with the bill. Cleaning earns Orbital Cleanup: +1%
+prestige for each 0.1 you remove a month. The decision Begin Orbital Debris
+Removal switches your Space Program to the best method you have, and appears
+again when a better one arrives. Switch removal off in the building's
+production methods.
+
+Every country in orbit gains from what anyone removes. Fusion Sweepers with a
+ten-level Space Elevator clear 30 points in about two and a half years. One
+program on Active Debris Removal can't stop a Kessler Cascade: that takes
+several cleaners, or better technology. AI powers that use orbit take the
+decision once debris is Cluttered, more readily at Hazardous, if their weekly
+surplus covers the method's Launch Capacity.
+
+### The anti-satellite strike
+
+Anti-Satellite Strike is a diplomatic action against a country you are at war
+with. It needs Guided Missiles (era 7), a Space Program of your own, and a
+target with a Space Program, a Space Elevator, an Orbital Solar Collector or an
+Orbital Battlestation. A country can be struck once every 12 months, by anyone.
+
+| Who | What the strike does |
+|---|---|
+| The target | Orbital Network Disrupted for a year: −10% unit offense and defense, −20% space race pace, and −25% throughput for its Space Elevators, Orbital Battlestations and Solar Receivers. It lasts six months if its Space Program runs the Mars Mission or a later method, and is half as strong if it has an Orbital Battlestation. It ends on its own. |
+| You | 5 infamy, 15 case strength at the UN (see [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)), and −30 relations with every other country that uses orbit. |
+| Everyone | 6 more debris in low orbits and 6 in high orbits, which your own program flies through too. |
+
+The strike suits a war against a power with more in orbit than you, whose
+fleet and space race lean on its satellites. Its debris and its diplomatic cost
+fall on you as well, and a strike in a crowded orbit can tip the world into a
+Kessler Cascade. AI powers strike rarely, only when the enemy has more in orbit
+than they do (its Space Program's mission plus its orbital megaprojects'
+levels), and almost never once debris is Hazardous, unless they are losing the
+war. Communications Disruption, the covert operation, interferes with a
+country's networks without the debris (see [The covert operations](11-influence.md#the-covert-operations)).
 
 ## Space race events
 
