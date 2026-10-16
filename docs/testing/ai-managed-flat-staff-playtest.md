@@ -17,3 +17,4 @@ The fab buildings are the Wired and Wireless Telecommunications, Consumer Applia
 2. A month later, its employment shows about 1,000 engineers and no other professions. Before this change it showed 10 engineers a level (50 at level 5).
 3. Its output is its base method's output per level × its level (× throughput), as the output tooltip lists. Check this most of all. Don't compare it with a building that isn't AI-managed: in era 12 those are often short of workers.
 4. The rollout gives the same crew to Arms Industries, Chemical Plants, Explosives Factories, the Synthetics Plants, and Power and Renewable Energy Plants. Spot-check one of them: about 1,000 engineers and no one else, at any level.
+5. The split buildings show one AI-managed option each, whatever their base method: an Artillery Foundry, a Motor Industry on Gas Turbine Engines, a Munition Plant on Explosive Shells, a Fusion Plant and a Hydro Plant. Each employs the crew alone.

@@ -196,7 +196,7 @@ class HouseholdEmissionsTest(unittest.TestCase):
             checked += 1
             if name not in emissions.SYNTHETIC_CREDITS:  # net of the output credit; checked below
                 self.assertEqual(scalar(state_scaled(pm), emissions.STATE_MODIFIER), gross, name)
-        self.assertEqual(checked, 247)
+        self.assertEqual(checked, 250)
         for name, pm in parsed("common/production_methods/carbon_capture_generated_pms.txt").items():
             if "state_modifiers" in emissions.unwrap(pm):
                 self.assertLess(scalar(state_scaled(pm), emissions.STATE_MODIFIER), 0, name)
