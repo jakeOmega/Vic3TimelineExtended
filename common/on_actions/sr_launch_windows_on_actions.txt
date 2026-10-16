@@ -1,0 +1,27 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the launch window cache, once a month
+# ============================================================================
+# Global scope (no ROOT): every body's window state, months to its next
+# window and this month's premium are the same for everyone, so they are
+# worked out once a month for the world (sr_launch_windows_refresh_cache,
+# sr_launch_window_effects.txt) and read from global variables by the
+# journal entries, the colony draw and the panel. The engine unions same-name
+# on_action declarations across files. The global monthly pulse fires on the
+# 1st; a journal entry whose pulse comes earlier that day refreshes the cache
+# itself (sr_launch_windows_ensure_cache).
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		sr_launch_windows_on_action
+	}
+}
+
+sr_launch_windows_on_action = {
+	effect = {
+		if = {
+			limit = { has_game_rule = space_race_enabled }
+			sr_launch_windows_refresh_cache = yes
+		}
+	}
+}

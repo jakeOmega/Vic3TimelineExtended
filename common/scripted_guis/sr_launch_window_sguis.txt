@@ -1,0 +1,59 @@
+﻿# ============================================================================
+# Solar System Colonization — launch windows on the panel (display only)
+# ============================================================================
+# Called through ExecuteTooltip from gui/sr_launch_window_widgets.gui and never
+# Executed: is_valid is always = no. Root: the panel's country. The lines are
+# printed by sr_launch_window_lines (sr_launch_window_effects.txt), one per
+# window body of the stage with a site left:
+#
+#   scope:op = 0  the overview's "Staged in Orbit" tooltip: the fleets, each
+#                 destination's next window, how they depart
+#   scope:op = 1  Mission Control's Next Windows block: each destination, and
+#                 after Asteroid Mining the premium to launch now and the
+#                 approach's verdict
+#
+# Each line is its own custom_tooltip at the root's scope, so they print in
+# order (gotcha #18 is about nested scopes only).
+# ============================================================================
+
+sr_launch_windows_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			custom_tooltip_no_bullet = sr_window_staged_intro
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_window_cache_month } }
+			custom_tooltip_no_bullet = sr_window_list_pending
+		}
+		else_if = {
+			limit = { NOT = { sr_launch_windows_apply = yes } }
+			custom_tooltip_no_bullet = sr_window_list_fusion
+		}
+		else = {
+			sr_launch_window_lines = yes
+			if = {
+				limit = { exists = scope:op scope:op = 0 }
+				custom_tooltip_no_bullet = sr_window_staged_footer
+				if = {
+					limit = { sr_launch_has_depots = yes }
+					custom_tooltip_no_bullet = sr_window_staged_footer_depots
+				}
+				else = {
+					custom_tooltip_no_bullet = sr_window_staged_footer_chemical
+				}
+			}
+		}
+	}
+}

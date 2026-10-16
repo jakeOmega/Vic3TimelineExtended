@@ -697,6 +697,7 @@ def render_values(plans: list[BodyPlan], first: int, last: int) -> str:
         out.append("\tvalue = 0")
         out += _premium_tree(key, plan.premium, offsets, 1)
         out += ["}", ""]
+    out += render_readers(plans)
     return "\n".join(out)
 
 
@@ -706,7 +707,75 @@ def render_triggers(plans: list[BodyPlan]) -> str:
         key = plan.body.key
         out.append(f"# {plan.body.name}: {len(plan.windows)} windows, sites {', '.join(plan.body.sites)}")
         out.append(f"sr_window_open_{key} = {{ sr_window_months_to_next_{key} <= 0 }}")
+    out += ["", IN_PLAY_PREAMBLE]
+    for plan in plans:
+        out += _in_play(f"sr_window_body_in_play_{plan.body.key}", plan.body.stage, plan.body.sites)
+    for site, stage in UNGATED_SITES.items():
+        out += _in_play(f"sr_window_{site}_in_play", stage, (site,))
     return "\n".join(out) + "\n"
+
+
+def _in_play(name: str, stage: int, sites: tuple[str, ...]) -> list[str]:
+    lines = [f"{name} = {{", f"\tsr_current_colonization_stage = {stage}"]
+    if len(sites) == 1:
+        lines.append(f"\tNOT = {{ has_global_variable = sr_colony_{sites[0]} }}")
+    else:
+        lines.append("\tOR = {")
+        lines += [f"\t\tNOT = {{ has_global_variable = sr_colony_{site} }}" for site in sites]
+        lines.append("\t}")
+    return lines + ["}"]
+
+
+def render_readers(plans: list[BodyPlan]) -> list[str]:
+    """Per-body readers of the window cache and the stage's minima: the body
+    list's boilerplate, so a window body is added in one place (BODIES)."""
+    out = [READERS_PREAMBLE]
+    for plan in plans:
+        k = plan.body.key
+        out += [
+            f"# {plan.body.name}",
+            f"sr_window_wait_months_{k} = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_global_variable = sr_window_wait_{k} }} value = global_var:sr_window_wait_{k} }}",
+            "}",
+            f"sr_window_premium_now_{k} = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_global_variable = sr_window_cost_{k} }} value = global_var:sr_window_cost_{k} }}",
+            "}",
+            f"sr_launch_cost_{k} = {{",
+            "\tvalue = sr_launch_never",
+            f"\tif = {{ limit = {{ sr_launch_departs_free = {{ BODY = {k} }} }} value = 0 }}",
+            f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_now_{k} }}",
+            "}",
+            f"sr_launch_months_cost_{k} = {{",
+            "\tvalue = sr_solar_colonization_goal",
+            f"\tmultiply = sr_window_premium_now_{k}",
+            "\tdivide = sr_pace_rate_solar_colonization",
+            "}",
+            f"sr_window_disp_verdict_{k} = {{",
+            "\tvalue = 0",
+            "\tif = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }",
+            f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = 1 }}",
+            "}",
+        ]
+    out += ["", "# The stage's soonest window among its unclaimed sites (m in the off-window",
+            "# rule, spec § 5.2a): 0 while one is open or Mercury is left; sr_launch_never",
+            "# when the stage has nothing left. Any scope.",
+            "sr_window_stage_wait = {", "\tvalue = sr_launch_never"]
+    for plan in plans:
+        k = plan.body.key
+        out.append(f"\tif = {{ limit = {{ sr_window_body_in_play_{k} = yes }} max = sr_window_wait_months_{k} }}")
+    for site in UNGATED_SITES:
+        out.append(f"\tif = {{ limit = {{ sr_window_{site}_in_play = yes }} max = 0 }}")
+    out += ["}", "", "# The cheapest premium this country can launch at now, over the stage's",
+            "# unclaimed sites; sr_launch_never when none can depart. Country scope.",
+            "sr_launch_best_cost = {", "\tvalue = sr_launch_never"]
+    for plan in plans:
+        out.append(f"\tmax = sr_launch_cost_{plan.body.key}")
+    for site in UNGATED_SITES:
+        out.append(f"\tif = {{ limit = {{ sr_window_{site}_in_play = yes }} max = 0 }}")
+    out += ["}", ""]
+    return out
 
 
 VALUES_PREAMBLE = """# Launch windows for Solar System Colonization (Global Commons spec § 5.3).
@@ -729,6 +798,26 @@ VALUES_PREAMBLE = """# Launch windows for Solar System Colonization (Global Comm
 #   sr_launch_premium_<body>         the off-window premium at that offset, a
 #                                    fraction (0.35 = +35%); 0 in the window
 # The optima's dates are in docs/engine/launch_windows_report.md.
+"""
+
+IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body is in the current colonization stage
+# and has a site nobody has claimed (the sites are the generator's BODIES
+# table; space_race_effects.txt's sr_establish_colony_effect draws them).
+# Any scope. sr_window_mercury_in_play: the same for Mercury, never gated.
+"""
+
+READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
+# sr_window_wait_months_<body>  months to its next window, cached (0 if none yet)
+# sr_window_premium_now_<body>  this month's premium, cached (0 if none yet)
+# sr_launch_cost_<body>         country: the premium it launches there at now, 0
+#                               in a window or with fusion drives, sr_launch_never
+#                               if it can't (sr_launch_departs_free / _paid,
+#                               common/scripted_triggers/sr_launch_window_triggers.txt)
+# sr_launch_months_cost_<body>  country: goal x premium / pace, the months the
+#                               premium sets every later colony back
+# sr_window_disp_verdict_<body> country, the panel's verdict on launching there
+#                               now outside its window: 1 the approach would,
+#                               0 it waits, 2 Safe (never off-window)
 """
 
 TRIGGERS_PREAMBLE = """# Launch windows for Solar System Colonization (Global Commons spec § 5.3).

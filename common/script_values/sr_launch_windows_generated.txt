@@ -4811,3 +4811,344 @@ sr_launch_premium_kuiper = {
 		}
 	}
 }
+
+# ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
+# sr_window_wait_months_<body>  months to its next window, cached (0 if none yet)
+# sr_window_premium_now_<body>  this month's premium, cached (0 if none yet)
+# sr_launch_cost_<body>         country: the premium it launches there at now, 0
+#                               in a window or with fusion drives, sr_launch_never
+#                               if it can't (sr_launch_departs_free / _paid,
+#                               common/scripted_triggers/sr_launch_window_triggers.txt)
+# sr_launch_months_cost_<body>  country: goal x premium / pace, the months the
+#                               premium sets every later colony back
+# sr_window_disp_verdict_<body> country, the panel's verdict on launching there
+#                               now outside its window: 1 the approach would,
+#                               0 it waits, 2 Safe (never off-window)
+
+# Mars
+sr_window_wait_months_mars = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_mars } value = global_var:sr_window_wait_mars }
+}
+sr_window_premium_now_mars = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_mars } value = global_var:sr_window_cost_mars }
+}
+sr_launch_cost_mars = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = mars } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = mars } } value = sr_window_premium_now_mars }
+}
+sr_launch_months_cost_mars = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_mars
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_mars = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = mars } } value = 1 }
+}
+# Ceres
+sr_window_wait_months_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_ceres } value = global_var:sr_window_wait_ceres }
+}
+sr_window_premium_now_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ceres } value = global_var:sr_window_cost_ceres }
+}
+sr_launch_cost_ceres = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = ceres } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = ceres } } value = sr_window_premium_now_ceres }
+}
+sr_launch_months_cost_ceres = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_ceres
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = ceres } } value = 1 }
+}
+# Vesta
+sr_window_wait_months_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_vesta } value = global_var:sr_window_wait_vesta }
+}
+sr_window_premium_now_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_vesta } value = global_var:sr_window_cost_vesta }
+}
+sr_launch_cost_vesta = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = vesta } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = vesta } } value = sr_window_premium_now_vesta }
+}
+sr_launch_months_cost_vesta = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_vesta
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = vesta } } value = 1 }
+}
+# Psyche
+sr_window_wait_months_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_psyche } value = global_var:sr_window_wait_psyche }
+}
+sr_window_premium_now_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_psyche } value = global_var:sr_window_cost_psyche }
+}
+sr_launch_cost_psyche = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = psyche } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = psyche } } value = sr_window_premium_now_psyche }
+}
+sr_launch_months_cost_psyche = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_psyche
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = psyche } } value = 1 }
+}
+# Pallas
+sr_window_wait_months_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_pallas } value = global_var:sr_window_wait_pallas }
+}
+sr_window_premium_now_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_pallas } value = global_var:sr_window_cost_pallas }
+}
+sr_launch_cost_pallas = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = pallas } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = pallas } } value = sr_window_premium_now_pallas }
+}
+sr_launch_months_cost_pallas = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_pallas
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = pallas } } value = 1 }
+}
+# Hygiea
+sr_window_wait_months_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_hygiea } value = global_var:sr_window_wait_hygiea }
+}
+sr_window_premium_now_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_hygiea } value = global_var:sr_window_cost_hygiea }
+}
+sr_launch_cost_hygiea = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = hygiea } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = hygiea } } value = sr_window_premium_now_hygiea }
+}
+sr_launch_months_cost_hygiea = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_hygiea
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = hygiea } } value = 1 }
+}
+# Jupiter system
+sr_window_wait_months_jupiter = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_jupiter } value = global_var:sr_window_wait_jupiter }
+}
+sr_window_premium_now_jupiter = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_jupiter } value = global_var:sr_window_cost_jupiter }
+}
+sr_launch_cost_jupiter = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = jupiter } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = jupiter } } value = sr_window_premium_now_jupiter }
+}
+sr_launch_months_cost_jupiter = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_jupiter
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_jupiter = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = jupiter } } value = 1 }
+}
+# Venus
+sr_window_wait_months_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_venus } value = global_var:sr_window_wait_venus }
+}
+sr_window_premium_now_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_venus } value = global_var:sr_window_cost_venus }
+}
+sr_launch_cost_venus = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = venus } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = venus } } value = sr_window_premium_now_venus }
+}
+sr_launch_months_cost_venus = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_venus
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = venus } } value = 1 }
+}
+# Saturn system
+sr_window_wait_months_saturn = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_saturn } value = global_var:sr_window_wait_saturn }
+}
+sr_window_premium_now_saturn = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_saturn } value = global_var:sr_window_cost_saturn }
+}
+sr_launch_cost_saturn = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = saturn } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = saturn } } value = sr_window_premium_now_saturn }
+}
+sr_launch_months_cost_saturn = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_saturn
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_saturn = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = saturn } } value = 1 }
+}
+# Uranus system
+sr_window_wait_months_uranus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_uranus } value = global_var:sr_window_wait_uranus }
+}
+sr_window_premium_now_uranus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_uranus } value = global_var:sr_window_cost_uranus }
+}
+sr_launch_cost_uranus = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = uranus } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = uranus } } value = sr_window_premium_now_uranus }
+}
+sr_launch_months_cost_uranus = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_uranus
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_uranus = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = uranus } } value = 1 }
+}
+# Neptune system
+sr_window_wait_months_neptune = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_neptune } value = global_var:sr_window_wait_neptune }
+}
+sr_window_premium_now_neptune = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_neptune } value = global_var:sr_window_cost_neptune }
+}
+sr_launch_cost_neptune = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = neptune } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = neptune } } value = sr_window_premium_now_neptune }
+}
+sr_launch_months_cost_neptune = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_neptune
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_neptune = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = neptune } } value = 1 }
+}
+# Kuiper Belt
+sr_window_wait_months_kuiper = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_wait_kuiper } value = global_var:sr_window_wait_kuiper }
+}
+sr_window_premium_now_kuiper = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_kuiper } value = global_var:sr_window_cost_kuiper }
+}
+sr_launch_cost_kuiper = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = kuiper } } value = 0 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = kuiper } } value = sr_window_premium_now_kuiper }
+}
+sr_launch_months_cost_kuiper = {
+	value = sr_solar_colonization_goal
+	multiply = sr_window_premium_now_kuiper
+	divide = sr_pace_rate_solar_colonization
+}
+sr_window_disp_verdict_kuiper = {
+	value = 0
+	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = kuiper } } value = 1 }
+}
+
+# The stage's soonest window among its unclaimed sites (m in the off-window
+# rule, spec § 5.2a): 0 while one is open or Mercury is left; sr_launch_never
+# when the stage has nothing left. Any scope.
+sr_window_stage_wait = {
+	value = sr_launch_never
+	if = { limit = { sr_window_body_in_play_mars = yes } max = sr_window_wait_months_mars }
+	if = { limit = { sr_window_body_in_play_ceres = yes } max = sr_window_wait_months_ceres }
+	if = { limit = { sr_window_body_in_play_vesta = yes } max = sr_window_wait_months_vesta }
+	if = { limit = { sr_window_body_in_play_psyche = yes } max = sr_window_wait_months_psyche }
+	if = { limit = { sr_window_body_in_play_pallas = yes } max = sr_window_wait_months_pallas }
+	if = { limit = { sr_window_body_in_play_hygiea = yes } max = sr_window_wait_months_hygiea }
+	if = { limit = { sr_window_body_in_play_jupiter = yes } max = sr_window_wait_months_jupiter }
+	if = { limit = { sr_window_body_in_play_venus = yes } max = sr_window_wait_months_venus }
+	if = { limit = { sr_window_body_in_play_saturn = yes } max = sr_window_wait_months_saturn }
+	if = { limit = { sr_window_body_in_play_uranus = yes } max = sr_window_wait_months_uranus }
+	if = { limit = { sr_window_body_in_play_neptune = yes } max = sr_window_wait_months_neptune }
+	if = { limit = { sr_window_body_in_play_kuiper = yes } max = sr_window_wait_months_kuiper }
+	if = { limit = { sr_window_mercury_in_play = yes } max = 0 }
+}
+
+# The cheapest premium this country can launch at now, over the stage's
+# unclaimed sites; sr_launch_never when none can depart. Country scope.
+sr_launch_best_cost = {
+	value = sr_launch_never
+	max = sr_launch_cost_mars
+	max = sr_launch_cost_ceres
+	max = sr_launch_cost_vesta
+	max = sr_launch_cost_psyche
+	max = sr_launch_cost_pallas
+	max = sr_launch_cost_hygiea
+	max = sr_launch_cost_jupiter
+	max = sr_launch_cost_venus
+	max = sr_launch_cost_saturn
+	max = sr_launch_cost_uranus
+	max = sr_launch_cost_neptune
+	max = sr_launch_cost_kuiper
+	if = { limit = { sr_window_mercury_in_play = yes } max = 0 }
+}
