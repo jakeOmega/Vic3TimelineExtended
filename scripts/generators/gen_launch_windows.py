@@ -500,10 +500,18 @@ def plan_body(body: Body, first_month: int, last_month: int) -> BodyPlan:
     return plan
 
 
+# The computation depends only on the constants above and END_DATE, so a
+# long-running server computes it once (about two seconds) and every later
+# reload reuses it.
+_PLAN_CACHE: dict[tuple[int, int], list[BodyPlan]] = {}
+
+
 def plan_all(root: Path = ROOT) -> tuple[list[BodyPlan], int, int]:
     end_year, end_month, _ = end_date(root)
     first, last = month_index(START_YEAR, 1), month_index(end_year, end_month)
-    return [plan_body(b, first, last) for b in BODIES], first, last
+    if (first, last) not in _PLAN_CACHE:
+        _PLAN_CACHE[first, last] = [plan_body(b, first, last) for b in BODIES]
+    return _PLAN_CACHE[first, last], first, last
 
 
 # ---------------------------------------------------------------------------
