@@ -12,5 +12,5 @@
 # Scope: the striker, with scope:te_asat_target = the struck country.
 # Globals already written: te_asat_last_strike_month, te_asat_strikes_total.
 te_asat_un_on_strike = {
-	# REVIEWED 2026-10-16 (empty_block): hook, filled by the UN phase
+	# Empty here: a hook, filled by the UN phase.
 }

@@ -2054,7 +2054,7 @@ IMAGES = {
     "space_elevator_structural_alarm": {
         "prompt": "Engineers in the space elevator control room staring at structural stress readings spiking red on their monitors. The tether sways visibly outside the observation deck. Micro-fractures detected. The tallest structure ever built threatening to fail.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["wonder_events.2"],
+        "events": ["wonder_events.2", "te_orbital_debris.1"],
     },
     "space_elevator_complete": {
         "prompt": "Fully operational space elevator with multiple climbers moving along a tether above a vast coastal spaceport.",

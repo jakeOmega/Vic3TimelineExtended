@@ -29,7 +29,7 @@ te_orbital_debris = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_space_race_risk_mult = 0.01
 	country_space_race_progress_mult = -0.003
-	building_space_mine_throughput_add = -0.002
+	building_space_mine_throughput_add = -0.002 # REVIEWED 2026-10-16: a unit modifier applied with multiplier = the index, so it shows −10% at 50; only the per-point line rounds to 0
 	building_space_elevator_throughput_add = -0.002
 	building_orbital_battlestation_throughput_add = -0.002
 	building_solar_receiver_throughput_add = -0.002

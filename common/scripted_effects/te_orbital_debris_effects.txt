@@ -40,12 +40,13 @@ te_debris_init_pools = {
 }
 
 # Hold the pools to the index's ceiling: neither below 0, and their sum at
-# most te_debris_index_cap, the high pool giving way first. A cascade at the
-# ceiling therefore cannot pile up debris the index does not show.
+# most te_debris_index_cap, the low pool giving way first (te_debris_low_clamped
+# says why). A cascade at the ceiling therefore cannot pile up debris the index
+# does not show. The high pool is set first: the low one is clamped against it.
 # Scope: any
 te_debris_clamp_pools = {
-	set_global_variable = { name = orbital_debris_low value = te_debris_low_clamped }
 	set_global_variable = { name = orbital_debris_high value = te_debris_high_clamped }
+	set_global_variable = { name = orbital_debris_low value = te_debris_low_clamped }
 }
 
 # Add debris to the pools. Parameters: $LOW$, $HIGH$ (numbers or script values)

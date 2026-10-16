@@ -8,8 +8,8 @@
 #   orbital_debris_high   higher orbits; it stays for a century
 # written only by te_debris_global_monthly and te_debris_add
 # (te_orbital_debris_effects.txt). The index is their sum, capped at 100, and
-# the pools themselves are held to that sum (te_debris_clamp_pools), so what the
-# panel shows is what cleanup has to remove.
+# the pools themselves are held to that sum (te_debris_clamp_pools, the low
+# pool giving way first), so what the panel shows is what cleanup has to remove.
 #
 # Also global, written by the monthly pulse for the panel:
 #   te_debris_removal_month   the world's removal last month
@@ -152,17 +152,21 @@ te_debris_index = {
 }
 
 # The pools as te_debris_clamp_pools leaves them: each at least 0, and their
-# sum at most te_debris_index_cap, the high pool giving way first.
-# Repeated min/max are sequential clamps (scripting_best_practices.md).
-te_debris_low_clamped = {
-	value = te_debris_low_value
+# sum at most te_debris_index_cap, the low pool giving way first. Keeping the
+# long-lived debris is the conservative choice: if the high pool gave way, a
+# strike at the ceiling would swap a century of debris for a few years of it,
+# and striking would clean orbit. Repeated min/max are sequential clamps
+# (scripting_best_practices.md). te_debris_clamp_pools sets the high pool
+# first, so the low one is clamped against the new high value.
+te_debris_high_clamped = {
+	value = te_debris_high_value
 	min = 0
 	max = te_debris_index_cap
 }
-te_debris_high_clamped = {
+te_debris_low_clamped = {
 	value = te_debris_index_cap
-	subtract = te_debris_low_clamped
-	max = te_debris_high_value
+	subtract = te_debris_high_value
+	max = te_debris_low_value
 	min = 0
 }
 
