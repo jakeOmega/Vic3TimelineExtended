@@ -52,11 +52,22 @@ Second round (owner, 2026-10-16, on the PR):
 - **Soft caps, not eligibility gates.** "For stuff like this I'd generally lean towards soft
   caps," such as a very large penalty for powers with no far-southern coastline in place of a
   ban. So any coastal power can claim in any basin, at a steep weight penalty where it has no
-  coast (§ 2.3). Licences are national, so a mine can stand in any coastal state (§ 2.4).
+  coast (§ 2.3). Where such a licence can be used: third round.
 - **No micromanagement while waiting for a window.** The mental model is supplies put in orbit
   while the window is awaited. Progress made while a colonization bar waits is staged in orbit
   and spent when the window opens, so lowering funding while waiting gains nothing (§ 5.2). The
   Mars Landing's arrival-season gate is dropped, which leaves one waiting rule.
+
+Third round (owner, 2026-10-16, on the PR):
+
+- **Conquest carries the licences.** "Could we just say you conquered the licenses too?" Yes.
+  Licences are recorded on the state the mine stands in and change hands with it (§ 2.4).
+- **National licences: the owner is unsure.** § 2.4 now proposes local licences first, with a
+  long-haul penalty on a distant one. § 11 #1 sets out the options.
+- **Soft windows with more technology**, "to ease people into it." Asteroid Mining unlocks
+  launches outside a window at the premium the extra propellant costs (§ 5.2a).
+- **"Avoid", not "never".** Rewarding a toggle is to be avoided, but there are times it is worth
+  it for other reasons. `CLAUDE.md`'s design default now says so.
 
 Where this document says "compact fusion drives" it means the era 12 technology
 `compact_fusion_reactors`, shown in game as **Muon-Catalyzed Fusion Reactors**.
@@ -115,6 +126,12 @@ Where this document says "compact fusion drives" it means the era 12 technology
   coastal land state in the mod's `map_data/state_regions/` has a `naval_exit_id` naming one of
   the 105 sea regions in `map_data/state_regions/99_seas.txt` (372 coastal states, 85 sea regions
   in use). A generator can map state → sea region → basin offline (§ 2.1).
+- **`on_state_owner_change` gives only the state, under its new owner**, with no scope for the
+  previous one (`scripting_best_practices.md`, the `on_state_owner_change` bullet under § `any_state`
+  from State Scope Iterates Owner's States). The Strategic
+  Reserve stamps the holder on the state ahead of time for that reason (`st_res_hub_holder`).
+  **Whether a state keeps its variables across the change is unverified**; Grand Monuments rests
+  on it too. § 2.4 depends on it and ships a self-check.
 - **A production method can be gated only by technology, law, principle, identity or another
   method**, never by a trigger (`scripting_best_practices.md` § Locking Production Methods). So
   per-basin yields can't be separate methods, and the era-12 logistics methods (§ 1.2) gate on
@@ -225,11 +242,10 @@ exceed demand. The deposit totals say they don't.)
 
 Five basins: **Pacific**, **Atlantic**, **Indian**, **Arctic** and **Southern**. Each coastal
 state belongs to exactly one, the basin of its naval exit's sea region. A state's basin decides
-where its owner's claim weight comes from (§ 2.3), and which basin its mines draw on first
-(§ 2.4). It doesn't decide where a mine may stand. Licences are national, and a Deep-Sea Mine in
-any coastal state is the port and processing complex the ore ships come home to. That is also
-how real contracts work: Germany, Belgium, France and the UK hold International Seabed Authority
-contracts in the Pacific's Clarion-Clipperton Zone.
+where its owner's claim weight comes from (§ 2.3), and which licence its mines use first
+(§ 2.4). It doesn't bar a mine from another basin's licence, which works at a long-haul penalty
+(§ 2.4, proposal). Real contracts reach across oceans: Germany, Belgium, France and the UK hold
+International Seabed Authority contracts in the Pacific's Clarion-Clipperton Zone.
 
 - A generator, `scripts/generators/gen_seabed_basins.py`, reads `naval_exit_id` from
   `map_data/state_regions/*.txt` and a hand-written table of the 105 sea regions → basin. It
@@ -282,40 +298,89 @@ At home in its own Pacific (10 of 30 coastal states, 15 port levels), the same g
 20 + 15 + 67 = 102. So a far basin is worth about a tenth of a home one to it. All of these are
 first estimates.
 
-### 2.4 Entitlements, licences and room
+### 2.4 Licences: shares, records and room
 
-Each country gets an **entitlement** in each basin. Its **licences** are the sum of its
-entitlements, and its **room** is licences − its Deep-Sea Mine levels, built and queued, wherever
-they stand. Room is one national number, a copy of `solar_receiver_slots_remaining` with its
-own modifier. A yearly pass from the country pulse, run after the weights, keeps each basin's
-pool a hard cap even though levels are national:
+**A licence belongs to a level, not to a country** (owner, 2026-10-16: "you conquered the licences
+too"). Licences are recorded on the state the mine stands in, so they change hands with it. Three
+pieces of state:
 
-1. **Attribute** each country's levels to basins. Levels go first to the basin of the state they
-   stand in, up to last year's entitlement there. The rest fill its other basins' entitlements,
-   bordering basins first.
-2. **Share each pool by water-filling**, with the attributed levels as each country's built
-   levels:
+- **State records.** A state with Deep-Sea Mine levels carries `te_seabed_lic_<basin>`, the number
+  of its levels holding a licence from each basin (usually only its own). It also carries
+  `te_seabed_holder`, its owner when last recorded. The Strategic Reserve's holder stamp
+  (`st_res_hub_holder`) is the pattern.
+- **Unbuilt shares.** Each country carries `te_seabed_unbuilt_<basin>`: the licences it is entitled
+  to in that basin and hasn't used.
+- **Room**, read live: the country's unbuilt shares, summed, minus the levels in its states not
+  yet recorded (built or queued). This is a copy of `solar_receiver_slots_remaining` over those
+  variables. It is one national number, so the building gate (§ 2.6) reads no basin.
+
+**Recording, monthly**, from the monthly country pulse over the owner's states:
+- A level not yet recorded takes a licence from the owner's unbuilt share, from the state's own
+  basin if any is left, otherwise from the basin with the most. That share goes down by one.
+- A distant licence is swapped for a local one as soon as the owner has local share to spare, so
+  nothing needs managing.
+- Levels that went (downsized, destroyed) give their licences back to the owner's shares, distant
+  ones first.
+- Each pass re-stamps `te_seabed_holder` on the state.
+
+**Recording on a change of owner.** `on_state_owner_change` gives script only the state, under its
+new owner (§ Engine facts). So it first records any levels not yet recorded against the stamped
+holder's shares; a level finished last month can't cross a border without a licence. If the
+holder no longer exists (annexed whole), they are recorded against no share. Then the records
+stay where they are: the new owner holds those licences from now on, and its own unbuilt shares
+are untouched.
+
+**Sharing, yearly**, from the country pulse after the weights:
+
+1. Each country's **held** licences in a basin are the records in its states.
+2. **Share each pool by water-filling**, with held licences as each country's built levels:
    1. Start with every claimant active and `remaining = pool`.
    2. Each active country's entitlement is `remaining × weight ÷ Σ active weights`.
-   3. A country whose attributed levels are at or above that (grandfathered) is frozen at them.
-      It leaves the active set, and they come off `remaining`. Repeat from step ii.
+   3. A country holding at least that many (grandfathered, or after a conquest) is frozen at what
+      it holds. It leaves the active set, and its holdings come off `remaining`. Repeat from
+      step ii.
    Repeat until no country is newly frozen, which takes at most one pass per claimant: use a
    `while` (`common/scripted_effects/decolonization.txt:271` shows one), not a fixed count. A
    model of this section needed up to 9 passes in randomized worlds. Entitlements are whole
    licences, rounded down, and the leftovers go out by largest remainder so each pool is fully
    shared.
-3. **Store** `te_seabed_entitlement_<basin>` and the total, `te_seabed_licences`.
+3. **Store** each unbuilt share as entitlement − held.
 
-Between passes no entitlement changes and room can't go below zero, so every level fits inside
-last year's entitlements. A frozen country keeps its attributed levels as its entitlement, so the
-next attribution fits too. The levels attributed to a basin therefore never exceed its pool, and
-no built level is ever without a licence. A model of steps 1–3 (3,000 random worlds, 60 years of
-building each) held all three properties. Under the regulated regime (§ 3) each pool splits in
+**Why the pools hold.** Records are made only out of unbuilt shares and move only with their
+states. Between passes, a basin's records therefore never exceed the entitlements shared out of
+its pool. A frozen country keeps everything it holds, so no licence in use is ever taken away. A
+model of this section ran 2,000 random worlds for 60 years each, with building, conquest and
+demolition every month, and conquest landing between building and recording. No basin rose
+above its pool and no level was left without a licence. Without the owner-change recording, the
+same model leaked: 319 basin-years over pool. Under the regulated regime (§ 3) each pool splits in
 two, and step 2 runs once per half.
 
-**Levels that change hands with a state** come without a licence. The next pass attributes them
-where they stand, as an old save's are, and grandfathers them. If that pushes a basin over its
-pool, no one gets new room there until it is back under.
+**What can still go over.** Three kinds of levels are recorded where they stand, against no share:
+- an old save's levels;
+- levels a state brings with it when a split creates it;
+- unrecorded levels whose holder was annexed whole.
+
+The water-filling then freezes whoever holds them (grandfathered). Only these can leave a basin
+over its pool, and no one gets new room there until it is back under. The third is at most a
+month's building.
+
+**The engine fact underneath:** a state keeps its variables when it changes owner. Grand Monuments
+relies on the same fact (`docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md`, in-game
+check 3), and it is still unverified here. Ship with the self-check `seabed_licence_follows_state`
+(§ 8). If it fails, keep the records in global variables per coastal state region (the generator of
+§ 2.1 can emit them), with the holder stamp beside them.
+
+**Which licence a level uses** (proposal, owner to confirm, § 11):
+- Its own basin's first.
+- A level on a distant licence (another basin's, because its own basin's share is used up) works
+  at −25% throughput, **Long-Haul Seabed Operations**. This is a unit state modifier,
+  `building_ocean_mine_throughput_add = -0.25`, applied from `on_yearly_pulse_state` with the
+  state's share of distant-licence levels as its multiplier. That is the state pulse, as
+  state-scoped scaling requires, and its one refresh site.
+- `building_<type>_throughput_add` works at state scope: the mining-region state traits use it
+  (`common/state_traits/te_mining_traits.txt`).
+- The gate's tooltip says which licence the next level would take, and the penalty if it is
+  distant.
 
 ### 2.5 Seabed policy
 
@@ -331,16 +396,18 @@ the policy stands, as covert operations and UN tabling hold it:
 ### 2.6 The building gate
 
 `building_ocean_mine` keeps `is_coastal = yes` and adds, with the game rule on, that the owner
-has room. A custom tooltip gives the licences, the levels, the room and the basins the licences
-come from, as `building_solar_receiver_slots_tt` does. The gate reads no basin. With the rule off,
-the building is unchanged.
+has room. A custom tooltip, as `building_solar_receiver_slots_tt` does, gives:
+- the room and the unbuilt share in each basin;
+- which licence the next level here would take: local, or distant at −25% (§ 2.4).
+
+The gate itself reads no basin. With the rule off, the building is unchanged.
 
 ### 2.7 Display
 
 - **State Panel tile** on coastal states once the owner has Abyssal Plain Mining, beside the
   Solar Collector and Antimatter Facility tiles (`gui/states_panel.gui`): "Seabed licences:
-  34 / 40". Hover for each basin's entitlement and the levels attributed to it, the world's
-  total against each pool, and the weight breakdown.
+  34 / 40", plus "6 distant" when some are. Hover for the state's own records, each basin's
+  licences held and unbuilt, the world's total against each pool, and the weight breakdown.
 - **Seabed section** on a Timeline Extended window tab (UN or Economy, builder's call): the
   policy buttons and a row per basin where the country has weight, home or distant, with its
   share, plus the regime (§ 3). Explanations collapsed per `docs/guides/gui_style_guide.md`.
@@ -362,10 +429,10 @@ score in one script-values table, as global warming's is (`common/script_values/
 The rule is `global_commons_rule`, with `global_commons_enabled` (default) and
 `global_commons_disabled`. Disabled, the Deep-Sea Mine is uncapped as today, and §§ 3–4 don't
 appear. Launch windows and debris (§§ 5–6) belong to the space race and follow `space_race_rule`.
-In an old save, the first yearly pass attributes every built Deep-Sea Mine level to the basin
-it stands in, with no earlier entitlement to stop it, and the water-filling grandfathers it. A
-country over its share starts with zero room. Where a basin's old levels already exceed its pool,
-no one else gets room there until levels go.
+In an old save, the first recording gives every built Deep-Sea Mine level a licence from the
+basin it stands in, against no share, and the water-filling grandfathers it. A country over its
+share starts with zero room. Where a basin's old levels already exceed its pool, no one else gets
+room there until levels go.
 
 ## 3. The Law of the Sea governs the seabed (phase 1b)
 
@@ -431,7 +498,7 @@ Getting off Earth and moving between planets are separate problems:
 | Track | Chemical (default) | Better |
 |---|---|---|
 | Launch to orbit (cost) | Aerospace Industry rockets | Reusable Rocketry (era 10, already +progress), Space Elevator (era 12) |
-| Transport in space (timing) | Hohmann transfers in launch windows | Compact fusion drives (era 12): no windows |
+| Transport in space (timing) | Hohmann transfers in launch windows | Asteroid Mining (era 11): outside a window at a premium; compact fusion drives (era 12): no windows |
 
 The launch-to-orbit track works through Launch Capacity's price and the Extraplanetary Base
 methods (§ 1.2). The transport track works through windows.
@@ -472,8 +539,53 @@ up and are staged in orbit. In script, nothing new is needed for most of this:
 - Mercury, whose 4-month synodic cycle leaves it nearly always reachable. In reality Mercury needs
   gravity assists rather than windows.
 
-Holding `compact_fusion_reactors` removes every window, for that country only. Fleets then depart
-as soon as they are ready, as colonies are founded today.
+### 5.2a Three steps of propulsion
+
+The owner's ruling (2026-10-16): make the softer version available with more technology, to ease
+players into it. The three steps:
+
+| Step | Technology | Launches |
+|---|---|---|
+| Chemical | Directed Energy Weapons opens colonization (era 11) | In a window only |
+| Propellant depots | Asteroid Mining (era 11) | In a window, free. Outside one, at a premium up to +100% |
+| Fusion drives | Muon-Catalyzed Fusion Reactors (era 12) | Any month, free |
+
+Asteroid Mining requires Directed Energy Weapons, so it always comes second. It fits the step
+historically: water and ore mined in space refill propellant depots in orbit, and the margin they
+give is what makes an off-window transfer affordable.
+
+**The premium is the propellant an off-window transfer needs.** The generator's prototype finds,
+for each departure date, the minimum Δv over all transfer times. It uses a Lambert solver on the
+§ 5.3 orbital elements, departure from low Earth orbit and capture into a loose orbit at the
+target. The premium is the rocket equation's extra mass,
+`exp(extra Δv ÷ 3.7 km/s) − 1`, at a methane-oxygen engine's exhaust velocity. The minimum for
+Mars comes out at 4.45 km/s; the real figure is about 3.6 km/s to depart plus 0.9 km/s to
+capture. Premiums by months from a window's optimum (2033–34 cycles; "closed" is above the
++100% cap):
+
+| Months from the optimum | −6 | −5 | −4 | −3 | −2 | −1 to +1 (window) | +2 | +3 | +4 | +5 | +6 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Mars | closed | closed | +64% | +35% | +17% | free | +35% | +51% | +60% | +87% | closed |
+| Venus | +80% | +59% | +40% | +24% | +13% | free | +63% | closed | closed | closed | closed |
+| Jupiter | closed | closed | closed | closed | closed | free | +75% | closed | closed | closed | closed |
+
+With depots, Mars can be reached about 10 months in 26, Venus 9 in 19 and Jupiter 4 in 13.
+
+**Who launches when** is set by the approach the program already has, with no new control:
+
+| Approach | Launches outside a window |
+|---|---|
+| Safe | Never; waits for the window |
+| Standard | Up to +25% |
+| Ambitious | Up to the +100% cap |
+
+**The launch rule.** Each month, take the stage's cheapest open site within the approach's limit.
+When staged progress covers goal × (1 + premium), the colony is founded and that much progress is
+spent, one colony a month as before. Inside a window the premium is zero, so steps 1 and 2 behave
+alike there.
+
+Holding `compact_fusion_reactors` removes every window and premium, for that country only. Fleets
+then depart as soon as they are ready, as colonies are founded today.
 
 ### 5.3 Computing the windows
 
@@ -490,11 +602,15 @@ The window is the optimum's calendar month ±1 (three months). The generator wri
 the game's `END_DATE` (2136.1.1), month-index ranges against `te_history_month_index`:
 
 - `common/scripted_triggers/sr_launch_windows_generated.txt`: `sr_window_open_<body>`.
-- `common/script_values/sr_launch_windows_generated.txt`: `sr_window_months_to_next_<body>`, an
-  `if` chain read only by tooltips.
+- `common/script_values/sr_launch_windows_generated.txt`:
+  - `sr_window_months_to_next_<body>`, an `if` chain read only by tooltips;
+  - `sr_launch_offset_<body>`, the signed months from the nearest optimum, one branch per cycle;
+  - `sr_launch_premium_<body>`, a lookup of § 5.2a's premium by that offset. The generator
+    averages the Lambert curve over all cycles, reports how far individual cycles stray, and
+    writes 9999 for a closed month.
 
-A global monthly pulse caches each body's open/closed state in a global variable, so country
-pulses and site triggers read one variable. Window bodies:
+A global monthly pulse caches each body's open/closed state and premium in global variables, so
+country pulses and site triggers read one variable each. Window bodies:
 
 - Mars: 26-month cycle, about 111 windows to 2136.
 - Venus: 19 months.
@@ -543,7 +659,8 @@ Mars windows in era 11 (about 2030–2060), for scale. Arrival is for the colony
   that the fleets depart one a month while a window is open, and that compact fusion drives
   remove launch windows.
 - Mission Control gains a **Next windows** line listing the stage's destinations with the months
-  to each.
+  to each. After Asteroid Mining, each also shows today's premium when it is open, as in "Ceres:
+  +35% now, window in 4 months", and which of them the approach would accept.
 - AI: no change. It keeps funding, and staged progress means waiting costs it only time.
 
 ## 6. Orbital debris (phase 4)
@@ -661,11 +778,12 @@ Each method carries a registered country modifier, `country_orbital_debris_remov
   - `test_deep_sea_rebalance.py`: per-level base-price profit of the Deep-Sea Mine ≥ the
     Extraplanetary Base's for every method pair without the two logistics upgrades, and less
     with both (§ 1.2's table).
-  - `test_seabed_allocation.py`: a Python model of § 2.4's attribution and water-filling, run
-    over randomized worlds and years of building. No basin's attributed levels exceed its pool,
-    every built level stays licensed, a basin over its pool (old saves, conquest) never grows,
-    and a power with no coast in a basin gets a small share there. The scratch model behind
-    § 2.4's claims is the starting point. The script's numbers follow the model, as the demographics census's do.
+  - `test_seabed_allocation.py`: a Python model of § 2.4 (records, unbuilt shares, monthly and
+    owner-change recording, water-filling), run over randomized worlds with building, conquest
+    and demolition. No basin's records exceed its pool, every level stays licensed, a basin over
+    its pool (old saves) never grows, and a power with no coast in a basin gets a small share
+    there. The scratch model behind § 2.4's claims is the starting point. The script's numbers
+    follow the model, as the demographics census's do.
 - **Audits:**
   - `loc_coverage_audit` for every new key.
   - `modifier_visibility_audit`.
@@ -679,12 +797,22 @@ Each method carries a registered country modifier, `country_orbital_debris_remov
     moratorium, the new case ground), 16 (windows, debris, cleanup, the anti-satellite strike),
     17 (reference).
 - **Self-checks** (`TE_SELF_CHECK`, pattern in `CLAUDE.md`):
-  - `seabed_cap`: each basin's attributed levels ≤ its pool, and each country's levels ≤ its
-    licences, once a year after the first allocation.
+  - `seabed_cap`: each basin's recorded licences ≤ its pool, and every Deep-Sea Mine level is
+    recorded, once a year after the first allocation.
+  - `seabed_licence_follows_state`: the first time a state with recorded licences changes owner,
+    OK when its `te_seabed_lic_*` and holder stamp read back inside `on_state_owner_change` and a
+    month later; BROKEN otherwise. Fallback: § 2.4's per-region global records.
   - `window_gate`: no colony founded while its body's window is closed.
-- **Play-test list:** the State Panel tile, a Deep-Sea Mine built in a state outside the basin
-  its licence comes from, fleets staged in orbit departing when the window opens, a setback
-  while fleets are staged, a ribbon strike, and a Kessler cascade cleared by Fusion Sweepers.
+- **Play-test list:**
+  - the State Panel tile;
+  - a Deep-Sea Mine level on a distant licence, its long-haul penalty, and the swap to a local
+    licence once one frees up;
+  - a conquered state's licences arriving with it;
+  - fleets staged in orbit departing when the window opens, and a setback while fleets are
+    staged;
+  - an off-window launch after Asteroid Mining;
+  - a ribbon strike;
+  - a Kessler cascade cleared by Fusion Sweepers.
 
 ## 9. Phasing
 
@@ -693,7 +821,7 @@ Each method carries a registered country modifier, `country_orbital_debris_remov
 | 1 | § 1 (rebalance and the Extraplanetary Base logistics methods), § 2 (basins, pools, weights, entitlements, policy, gate, tile, AI) with the Open regime only | — |
 | 1b | § 3 (ITLOS seabed terms, Regulated and Scramble regimes, royalties) | 1, UN rule |
 | 2 | § 4 (stations, Antarctic Treaty) | 1b |
-| 3 | § 5 (launch windows, staging in orbit) | — (independent of 1) |
+| 3 | § 5 (launch windows, staging in orbit, off-window launches after Asteroid Mining) | — (independent of 1) |
 | 4 | § 6 (debris index, effects, anti-satellite strike, cleanup methods, the UN moratorium) | — |
 
 Phases 3 and 4 can run in parallel with phase 1.
@@ -711,9 +839,19 @@ Phases 3 and 4 can run in parallel with phase 1.
 
 ## 11. My calls, for the owner to check
 
-1. **The distant-basin penalty** (§ 2.3): a twentieth of the navy, no coast or ports, +5 for an
-   Antarctic station. In the worked example, a far basin is worth about a tenth of a home basin
-   to a great power. The factor is one number to tune.
+1. **Where a licence can be used** (§ 2.4). The owner was unsure about the second draft's
+   national licences. Three options:
+   - **(a) Proposed: local first, distant at a penalty.** A level uses its own basin's licence
+     if the owner has one to spare, otherwise another basin's at −25% throughput (Long-Haul
+     Seabed Operations). It switches to a local licence once one frees up. Geography matters
+     for where you mine, and nobody is locked out.
+   - **(b) National, no penalty** (the second draft). This is simplest, but a mine's basin
+     barely matters.
+   - **(c) Basin-bound.** A licence works only in states facing its own basin. Distant claims
+     would then need a coastal state there, which makes them a hard cap again (against the
+     soft-caps default).
+   The distant-basin claim penalty of § 2.3 (a twentieth of the navy, no coast or ports, +5 for
+   an Antarctic station) is a separate number to tune under any of the three.
 2. **Pools are fixed** (1,000 levels in all). Growth with technology is listed as later work.
 3. **The Deep-Sea Mine's numbers** (§ 1.1): ~103% margin at the base method and ~250% with
    Advanced Nanofabrication. These are high, but each level is a scarce licence. Alternatively,
@@ -725,12 +863,13 @@ Phases 3 and 4 can run in parallel with phase 1.
 5. **Staged fleets depart one a month** while a window is open, with no cap on what can be
    staged. The alternative, every ready fleet leaving in the window's first month, is quicker
    but fires several colony events at once.
-6. **Windows stay a hard timing rule, softened by staging.** A softer version, closer to the
-   lean toward soft caps: a colony can launch outside a window at a progress premium that grows
-   with distance from the optimum, the delta-v cost of an off-window transfer. It would be
-   founded automatically once staged progress covers the premium, so there is still nothing to
-   manage. It is more realistic but harder to read than "next window in 7 months". I'd keep the
-   windows.
+6. **Off-window launches** (§ 5.2a; owner: unlock them with more technology).
+   - Asteroid Mining as the middle step.
+   - The approach deciding how much premium a program accepts: Safe none, Standard +25%,
+     Ambitious +100%.
+   - A +100% cap past which a month is closed.
+   - A methane-oxygen exhaust velocity (3.7 km/s) in the premium. A hydrogen-oxygen one (4.4)
+     would make every premium a sixth to a fifth smaller.
 7. **Royalties of 4% of output value**, to the World Development Fund.
 8. **The anti-satellite strike starts at Guided Missiles (era 7)**, as history did, rather than
    at Space Militarization (era 11).
