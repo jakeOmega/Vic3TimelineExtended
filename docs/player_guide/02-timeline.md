@@ -537,7 +537,8 @@ Every monument, whatever it honors, gives:
   is not contested.
 - +25% Tourism Industry throughput in its state for each step of its own
   grandeur, so its first five levels match one of the base game's monuments.
-- +1 cultural pull for each step of standing grandeur (steps of 10), up to +5.
+- +1 cultural pull for each step of standing grandeur (steps of 10), with no
+  ceiling: past the eighth step, at 2,550 grandeur, the steps keep doubling.
 
 ### A finished monument and its age
 

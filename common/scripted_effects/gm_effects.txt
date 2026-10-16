@@ -835,6 +835,40 @@ gm_set_steps = {
 	set_variable = { name = $NEXT$ value = gm_curve_next_f$F$ }
 }
 
+# Country scope. gm_set_steps without the curve's end: past its eighth step
+# the doubling carries on, so the effect keeps growing, each step costing
+# twice the grandeur of the one before. The step that completes at N is
+# followed by one that completes at 2N + $F$; the partial step is the bar's
+# (2G - N + F) / (N + F) (gm_disp_frac_*). Cultural pull's: diminishing
+# returns, no ceiling (owner, 2026-10-16).
+gm_set_steps_open = {
+	gm_set_steps = { IN = $IN$ OUT = $OUT$ NEXT = $NEXT$ F = $F$ }
+	if = {
+		limit = { var:$IN$ >= var:$NEXT$ }
+		change_variable = { name = $NEXT$ multiply = 2 }
+		change_variable = { name = $NEXT$ add = $F$ }
+		while = {
+			limit = { var:$IN$ >= var:$NEXT$ }
+			change_variable = { name = $OUT$ add = 1 }
+			change_variable = { name = $NEXT$ multiply = 2 }
+			change_variable = { name = $NEXT$ add = $F$ }
+		}
+		change_variable = {
+			name = $OUT$
+			add = {
+				value = var:$IN$
+				multiply = 2
+				subtract = var:$NEXT$
+				add = $F$
+				divide = {
+					value = var:$NEXT$
+					add = $F$
+				}
+			}
+		}
+	}
+}
+
 gm_compute_totals = {
 	set_variable = { name = gm_g_standing value = gm_sum_standing }
 	set_variable = { name = gm_g_regime value = gm_sum_regime }
@@ -845,7 +879,7 @@ gm_compute_totals = {
 	set_variable = { name = gm_g_scientific value = gm_sum_scientific }
 	set_variable = { name = gm_g_industrial value = gm_sum_industrial }
 	gm_set_steps = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing F = 5 }
-	gm_set_steps = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }
+	gm_set_steps_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }
 	gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
 	gm_set_steps = { IN = gm_g_leader OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
 	gm_set_steps = { IN = gm_g_religious OUT = gm_s_religious NEXT = gm_n_religious F = 5 }

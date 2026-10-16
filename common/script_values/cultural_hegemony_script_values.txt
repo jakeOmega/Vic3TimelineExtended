@@ -373,7 +373,7 @@ cultural_pull_from_tech_leadership = {
 }
 
 # Monument / wonder bonus: counts monument-group wonders, excluding power bloc statues
-# Also folds in the capped Grand Monument contribution below, so the "Monuments" line
+# Also folds in the Grand Monument contribution below, so the "Monuments" line
 # in the Cultural Hegemony JE breakdown stays a complete account of monument pull.
 #
 # The two *_has_building_group_levels gates are engine lookups that skip a
@@ -407,9 +407,11 @@ cultural_pull_from_monuments = {
 }
 
 # Grand Monument pull: standing grandeur (every monument not contested) through
-# the doubling curve with a first step of 10, capped at 5 steps (+5, the old
-# ceiling). gm_s_culture is set by gm_country_refresh (gm_effects.txt); absent
-# until a country's first refresh. Spec
+# the doubling curve with a first step of 10, +1 a step. No ceiling: the curve
+# is the diminishing return, and past its eighth step it carries on doubling
+# (gm_set_steps_open; owner, 2026-10-16, replacing the old +5 cap).
+# gm_s_culture is set by gm_country_refresh (gm_effects.txt); absent until a
+# country's first refresh. Spec
 # docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md §2.4.
 cultural_pull_from_grand_monuments = {
 	value = 0
@@ -418,7 +420,6 @@ cultural_pull_from_grand_monuments = {
 		value = var:gm_s_culture
 		multiply = gm_step_culture
 	}
-	max = 5
 }
 
 # Megaproject bonus: +1 per completed megaproject (not in bg_monuments)
@@ -924,9 +925,9 @@ ch_bar_tech_max = {
 }
 
 # Monuments 0-60: twenty monuments at cultural_pull_monument_bonus (+3) each,
-# the grand-monument bonus (at most +5) included. The mod has some fifty
-# monument buildings, so there is no practical ceiling; the leading power in
-# the owner's test game read 38.
+# the grand-monument bonus included (+5 at 310 standing grandeur, +8 at 2,550;
+# no ceiling). The mod has some fifty monument buildings, so there is no
+# practical ceiling; the leading power in the owner's test game read 38.
 ch_bar_monuments_max = {
 	value = 20
 	multiply = cultural_pull_monument_bonus
