@@ -7,8 +7,8 @@
 # Pooled from je_digital_rights' monthly pulse (400 = 0 beside five 10s). The
 # three leak stories (.1 whistleblower, .2 data breach, .3 hacker collective)
 # share a two-year lockout, te_dr_leak_recent, so one never follows another
-# within two years. With the cooldowns that comes to four to six events over
-# the entry's fifteen years.
+# within two years. With the cooldowns that comes to about four to six events
+# over the entry's fifteen years (six with all five events valid).
 
 # Event 1: Whistleblower Revelation
 surveillance_events.1 = {
@@ -84,10 +84,12 @@ surveillance_events.1 = {
 			value = very_small_radicals
 			pop_type = academics
 		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 
-	# Suppress the story: only a state that can silence its press. The story never
-	# breaks abroad, so no prestige is lost, but the programme's critics at home know.
+	# Suppress the story: only a state that can silence its press. The press is
+	# gagged before the story spreads, so no prestige is lost, but the programme's
+	# critics at home know.
 	option = {
 		name = surveillance_events.1.c
 		trigger = {

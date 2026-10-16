@@ -6020,7 +6020,7 @@ foreign_threat_surveillance_modifier = {
 	country_prestige_mult = -0.03
 }
 
-# surveillance_events.1 option c: the story is suppressed at home before it breaks abroad.
+# surveillance_events.1 option c: the press is gagged before the story spreads past its first reports.
 whistleblower_suppressed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 25
