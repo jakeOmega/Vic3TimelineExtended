@@ -1,7 +1,9 @@
 # Grand Monuments: archaeology, play-test checklist
 
 What the next play-test should look at for the buried sites and the dig (spec
-`docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md`, issue #939). In-game checks do not gate a merge
+`docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md`, issue #939, and the rework
+`docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md`: innovation the only cost, sized digs, the sites' events,
+foreign digs by treaty). In-game checks do not gate a merge
 (CLAUDE.md, "In-game checks: self-checks and the play-test list"): the PR landed on the offline gate and this is what only the
 game can show. A fixed item is struck through with the commit that fixed it.
 
@@ -33,6 +35,11 @@ site did not seed).
 | `chance = <named script value>` in a container scope | The incidental find, and the Antiquarian's destruction. | Roll `random_list` with a literal percentage. |
 | `save_temporary_scope_as = gm_arch_cand` in a `limit`, read at once | Who may dig, and who finds (`gm_arch_try_find`, `gm_arch_list_one`): the country as an argument to `gm_arch_has_gate_for`. `gm_tr_holder_owns_origin` does the same. | A saved scope in the effect before the loop. |
 | `any_in_list = { variable = … count >= 2 }` after a `has_variable_list` guard | The AI's two-dig cap. | |
+| A saved scope per site (`gm_arch_ev_<key>`), cleared and set before `trigger_event`, rides with each popup, so two popups of one month name their own sites | `arch_events.1` and `.2` (`gm_arch_ev_mark`). Two survey sites open in one month for Greece at Empiricism (Mycenae, Olympia): each popup must name its own. | Copy the site's row number to a saved scope value and pick the description by it. |
+| `title`/`desc`/`flavor` `first_valid` read saved scopes set by the caller | Both events: the title of a survey find, a ruined dig, a dig abroad, the host's copy. | A separate event per case. |
+| `[SCOPE.sState('gm_arch_ev_<key>').GetName]` inside a key pulled in with `$…$` from the event's description | Every site's text names its state. | Name the state in the event's own key. |
+| `any_scope_treaty = { any_scope_article = { has_type … source_country = … input_state = … } }` reads an article in force, from a country, in a trigger | Digging abroad (`gm_arch_state_conceded_to`), the free port's sync uses the same shape. | |
+| `country_innovation >= <named script value>` is net of the `country_weekly_innovation_add` modifiers (the digs already running); the owner is all but sure it is | The player's launch gate (`gm_arch_spares_<method>`) and the AI's floors (`gm_arch_ai_affords_<method>`). | Subtract `gm_arch_disp_innovation` before comparing. |
 
 ## Seeding and listing
 
@@ -47,14 +54,51 @@ site did not seed).
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Launch.** Press Systematic on a survey site. | At once: the row moves to the top as a dig ("a Systematic dig, 0% done, about 40 months to go"), a Suspend Dig button appears, and the Budget's expenses (Archaeological Digs, under Programme Costs in the Breakdown) and the weekly innovation change by the amounts on the tooltip (`gm_arch_expense`, `gm_arch_diversion` on the entry). The research bar's *cap* is unchanged. | The row staying under the open sites: the pass did not run (`arch_events.10`). A changed cap: a modifier with `max`. |
+| **Launch.** Press Systematic on a survey site. | At once: the row moves to the top as a dig ("a Systematic dig, 0% done, about 40 months to go"), a Suspend Dig button appears, and the weekly innovation falls by the amount on the tooltip, 20 (`gm_arch_diversion` on the entry). The Budget's expenses do not change: digs cost no money. The research bar's *cap* is unchanged. | The row staying under the open sites: the pass did not run (`arch_events.10`). A changed cap: a modifier with `max`. |
 | **A month.** Wait one. | Progress 2.5% (4% Antiquarian, 3.5% Forensic). | |
-| **Suspend.** Suspend it. | It returns to the open sites with "Work paused at …%"; the expense and the drain end. | |
+| **Suspend.** Suspend it. | It returns to the open sites with "Work paused at …%"; the drain ends. | |
 | **Lose the ground.** Cede or lose the state mid-dig. | The dig suspends; the new owner with the technology sees the site open, with the progress kept. | |
 | **Finish.** Debug c. | A monument with the site's own name stands in the state (Library of Ashurbanipal, Troy), civic, at its levels (Forensic +2); *An Excavation Is Finished* fires. Mosul and Hüdavendigâr hold no monument in 1836: the building is new. | No building: `gm_state_tr_receive` did not run. A raw key: the loc did not load. |
 | **Beside.** As Greece, dig Mycenae, then Olympia (or Delphi beside the Parthenon in Attica). | The building grows by the levels, the first one's dedication kept, and the second is a row in Also Standing Here and in Our Monuments. | The levels lost: `gm_state_tr_add_levels`. |
 | **Stratigraphic Destruction.** Dig a 10-level site Antiquarian several times (debug a, b, c). | About one in three comes out at 5 levels with *Stratigraphic Destruction*. | |
 | **A looted find.** Occupy a state with a dug site. | Carry It Off offers its piece by name ("Troy — Priam's Treasure"). | The generic part name: `gm_tr_part_name`. |
+
+## Pompeii
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1836.** Play the Two Sicilies; wait a month. | Pompeii is a dig in Archaeological Expeditions: "an Antiquarian dig, 33% done" or so, diverting 5 weekly innovation, Suspend Dig. The Budget shows nothing for it. | Not there: the seeding's `excavating` branch (`gm_arch_seed_dig`). |
+| **An old save.** Load a save made before Pompeii was added. | A month later Pompeii is a dig of Campania's owner. | `gm_arch_seed_round`. |
+| **Restart.** With Empiricism, suspend and press Systematic. | The dig restarts at its progress, slower, and diverts 20 weekly innovation. | |
+
+## Costs and time
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Cost.** Hover the three buttons of a 10-level site (Nineveh). | 5, 20 and 100 weekly innovation and no money; 25, 40 and 29 months. A 5-level site (the Winged Victory) shows the same innovation and 17, 27 and 20 months. | A money figure: an old tooltip. A blank month count: `gm_arch_site_months_*` on the container. |
+| **The row.** Launch a dig. | Its row says "Diverts 20 weekly innovation" for Systematic; the summary line's total is the sum of the rows. | A 0: `gm_arch_site_innovation` reads no method. |
+| **The gate.** As a country making about 30 weekly innovation with Empiricism, launch a Systematic dig, then hover Systematic on another site. | The first launches; the second button is greyed with "We make at least 20 weekly innovation…" failing, and Antiquarian (5) is still open. | A second launch passes: `country_innovation` is gross, or not refreshed before the next click. |
+| **An old save.** Load a save made with the MVP while a dig ran. | Within a month the Excavation Costs modifier is gone from the entry and the Budget's Archaeological Digs row is empty. | `gm_arch_remove_national` did not run, or the engine dropped the modifier on load (harmless). |
+| **The AI.** Observe a small AI making under 20 weekly innovation for ten years. | It opens no dig. One making 80 to 400 digs by Systematic; above 400 with Computer Networks, by Forensic. | |
+
+## The events
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Survey.** As the Ottomans, research Romanticism (or start with it). | *The Scholars Know Where to Look* names Nineveh, Mosul, the mounds of Kuyunjik and Nebi Yunus, what the scholars expect, and a historical note on Botta, Layard and Rassam; it offers a dig. Once only. | The fallback text: the saved scope did not ride with the event. Another site's text: a scope not cleared. |
+| **Two at once.** As Greece, research Empiricism. | Two popups, Mycenae and Olympia, each with its own text and both naming the Peloponnese. | Both naming one site. |
+| **Chance find.** Debug a, then wait for a find (or keep the 1% chance). | *Something Under the Spade* with the site's own chance find. | |
+| **Finished.** Debug c. | *An Excavation Is Finished* (or *Stratigraphic Destruction*) with the site's find and history, and the monument standing. | |
+
+## Digging abroad
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Concession.** As Britain with Romanticism, draft an Excavation Concession with the Ottomans. | Only Ottoman states with a site open to Britain can be picked (Mosul for Nineveh). Britain pays 75 influence. A day after it is signed, Nineveh is in Britain's Archaeological Expeditions with "Abroad, by an Excavation Concession" and launch buttons, and *The Scholars Know Where to Look* fires for Britain. | No state to pick: `gm_arch_state_offers_site`. Not listed: `gm_arch_state_conceded_to` (the treaty read). |
+| **Partage.** Dig it, debug c. | Half the levels (5 of 10) stand in Mosul as the Ottomans' monument; a 5-level piece stands in London as Britain's trophy, counting for 3. Britain gets *Our Expedition Returns*; an Ottoman player *A Foreign Expedition Finishes*. The Ottomans may claim the piece with Return Cultural Property. | No trophy: `gm_arch_partage`. The piece not named for its part: `gm_tr_share`. |
+| **Permit.** The same with an Excavation Permit (Britain needs Empiricism). | The whole monument stands in Mosul; Britain has Foreign Scholarship (+10 prestige, +1 cultural pull) for ten years. | |
+| **Change of heart.** Withdraw from the treaty mid-dig. | The dig suspends with its progress; the Ottomans can take it up. | |
+| **A rock-cut site.** A concession at Deir el-Bahari. | No trophy; the site stands whole; Foreign Scholarship. | |
 
 ## The AI
 
@@ -67,10 +111,10 @@ site did not seed).
 | Check | Expect | If it fails |
 |---|---|---|
 | **Section.** Open the entry, and the Timeline Extended window's Grand Monuments tab. | The section sits after the Opportunity and before National Effects; its header collapses; the digs list above the open sites; rows are 480 wide; the summary and costs lines have tooltips. | A raw key; a row wider than the panel. |
-| **Buttons.** Hover Launch and Suspend. | The tooltip names the method, its months, its weekly cost and innovation, and the failing conditions when it is greyed. | |
+| **Buttons.** Hover Launch and Suspend. | The tooltip names the method, its months, its weekly innovation, and the failing conditions when it is greyed. | |
 
 ## Known limits
 
 - A site shows its form's stand-in picture; none of the 35 has its own.
-- Only the holder of the ground digs. A split state is dug by any of its owners; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
-- A find's popup names the last site found or dug (`gm_arch_last`), so a popup left unanswered while another site turns up or finishes names that one.
+- A split state is dug by any of its owners, or anyone holding an article on a part of it; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
+- No console harness signs a treaty: test digging abroad through the treaty screen.
