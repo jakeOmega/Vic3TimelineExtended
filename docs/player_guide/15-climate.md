@@ -16,7 +16,7 @@ Each country counts the buildings and households in its own states. Buildings
 contribute their production methods' greenhouse gases, with source capture and
 synthetic-fuel credits subtracted. The country's own industrial reductions cut
 its remaining industrial emissions. Households add a heating footprint estimated
-from population and average wealth. Direct Air Capture at Carbon Conversion
+from population and average standard of living. Direct Air Capture at Carbon Conversion
 Works subtracts atmospheric removal. Buildings count where they stand, including
 foreign-owned sites. Markets sum their members; every country's net annual
 contribution adds once to the world's cumulative total and sets warming.
@@ -41,12 +41,13 @@ Coal Mines and Graphite Mines burn some of their own coal. Their Atmospheric
 Engine Pump, Condensing Engine Pump and Steam Donkey methods take that coal off
 the mine's output instead of listing it as an input, so the methods show no coal
 cost but still show the emissions: 2.00 and 3.00 a level for the two pumps and
-0.60 for the Steam Donkey, at full staffing and base throughput. These are the
-same figures an Iron Mine shows for the same pumps. Oil-fired methods in every
+0.60 for the Steam Donkey, at full staffing and base throughput. An Iron Mine
+shows the same 2.00 and 3.00 for these pumps; its Steam Donkey, which lists 4
+coal as an input, shows 0.80. Oil-fired methods in every
 mine list their oil as an input and show it as usual.
 
-Household heating demand follows the buy packages at your states' average
-wealth, with fossil heating weighted by the coal, oil, wood, fabric and
+Household heating demand follows the buy packages at each state's average
+standard of living, with fossil heating weighted by the coal, oil, wood, fabric and
 electricity available in the market. Peasants contribute only 5% of the
 purchased heating estimate. Green Building Codes cuts the estimated household fossil footprint by
 60%, Renewable Investment by 25%, and Fossil-Fuel Divestment by 15%. These cuts
@@ -71,9 +72,12 @@ it does not undo what is already there.
 
 Industrial policy reductions come from each country's Carbon Tax, Renewable
 Investment, Emission Standards, Ministry of the Environment (−5% per level),
-Environmental Sustainability principle (−5% to −25% by tier) and other national
-measures. A market member's own ministry reduces its own states' emissions.
-The industrial cuts add together and stop at complete elimination. Atmospheric
+Environmental Sustainability principle (−5% to −25% by tier) and a few event
+and United Nations outcomes, such as Climate Summit Leadership. Some event
+choices, the Environmental Grandfather Clause amendment and the Directed Credit
+to Heavy Industry banking policy raise industrial emissions instead, by 5% to
+10% each. A market member's own ministry reduces its own states' emissions.
+All of these add together, and the cuts stop at complete elimination. Atmospheric
 removal retains its full credit and can take a country or market below zero.
 
 Carbon Conversion Works unlock with Carbon Capture and Storage in era 10,
@@ -251,12 +255,12 @@ and Fossil-Fuel Tariffs need no technology.
 National policies stay with a country when it changes market, and the leader's
 adoption or repeal changes only its own country. Most policies carry an
 Authority Cost for as long as they are in force; adoption requires producing
-more authority than that cost. Emission Standards charges only the adopter.
+more authority than that cost.
 
 Fossil-Fuel Tariffs raises coal and oil import and export tariffs and costs 100
 Authority. It adds 2.5 percentage points at Low, 5 at High and 10 at Maximum.
-The leader's native tariff levels stay as chosen; None still collects no
-tariffs. Repeal removes only the rate increase. It can coexist with legislated
+The leader's native tariff levels stay as chosen; a good on No Tariffs or
+Subventions still collects none. Repeal removes only the rate increase. It can coexist with legislated
 customs. Losing market control ends the former leader's policy. Tariffs can
 change trade and fuel costs; they grant no automatic emissions reduction and
 also apply to traded synthetic coal and oil, which use the same goods as fossil
@@ -264,7 +268,7 @@ fuels.
 
 | Policy | Scope | Authority | Effects |
 |---|---|---|---|
-| Fossil-Fuel Tariffs | Market leader | 100 | Coal and oil import/export tariffs +2.5/+5/+10 percentage points at Low/High/Maximum; None stays tariff-free. |
+| Fossil-Fuel Tariffs | Market leader | 100 | Coal and oil import/export tariffs +2.5/+5/+10 percentage points at Low/High/Maximum Tariffs; No Tariffs or Subventions stays tariff-free. |
 | Carbon Tax | National | none | Industrial emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
 | Renewable Investment | National | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
 | Emission Standards | National | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
@@ -283,10 +287,10 @@ the buildings yourself. Direct Air Capture has no sales income, so withdrawing
 its funding stops it as its workers leave.
 
 Carbon Tax, Renewable Investment and Emission Standards cut your own industrial emissions directly. Green
-Building Codes and Fossil-Fuel Divestment cut your own household footprint.
+Building Codes, Renewable Investment and Fossil-Fuel Divestment cut your own household footprint.
 Other national measures protect people and calm the Environmental Movement ([The Environmental
-Movement](#the-environmental-movement)). Climate Adaptation is the one that pays
-off even if nobody else acts.
+Movement](#the-environmental-movement)). Climate Adaptation and Reforestation
+Subsidies soften warming's harm at home whatever other countries do.
 
 Your industrial policies, household measures and capture work whether you lead
 your market or are a member. Tariffs are a separate choice for leaders: they can
@@ -308,13 +312,16 @@ policy costs or helps:
 - the Environmental Movement's support, for every policy;
 - standard of living against the world average: wealth favors most policies
 but counts against Climate Adaptation and Reforestation Subsidies;
-- how far the market is a net exporter of coal and oil, strongly against the
-Carbon Tax and Fossil-Fuel Divestment.
+- how far the market is a net exporter of coal and oil, strongly against
+Fossil-Fuel Divestment, the Carbon Tax and Fossil-Fuel Tariffs, and mildly
+against Renewable Investment, Public Transit and Emission Standards.
 
 The AI adopts a policy once the will reaches the threshold, if it has the
-authority and the policy's technology, and repeals it only once the will falls
-15 points below the threshold, or while its authority is negative. Between the two it leaves the
-policy alone, so an election doesn't flip policies back and forth.
+authority and the policy's technology; for Carbon Removal Support it also needs
+a Carbon Conversion Works. It repeals a policy only once the will falls more
+than 15 points below the threshold, or while its authority is negative, and it
+also drops Carbon Removal Support when it has no works. Between the two it
+leaves the policy alone, so an election doesn't flip policies back and forth.
 
 | Policy | Threshold |
 |---|---|
@@ -324,7 +331,7 @@ policy alone, so an election doesn't flip policies back and forth.
 | Public Transit | 40 |
 | Green Building Codes, Emission Standards | 45 |
 | Carbon Removal Support | 50 |
-| Carbon Tax | 55 |
+| Carbon Tax, Fossil-Fuel Tariffs | 55 |
 | Fossil-Fuel Divestment | 70 |
 
 In practice most countries take up Climate Adaptation around 1.25 °C if they
