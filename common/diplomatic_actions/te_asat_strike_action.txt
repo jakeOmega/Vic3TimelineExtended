@@ -1,0 +1,139 @@
+﻿# ============================================================================
+# THE ANTI-SATELLITE STRIKE (Global Commons § 6.3)
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6.3, on the
+# pattern of the nuclear strike actions (nuke.txt): a one-shot hostile action
+# with no pact and no approval, an AI that decides through a scripted trigger
+# in will_propose, and a low evaluation_chance.
+#
+# Needs: at war with the target, Guided Missiles (era 7; the Soviet and US
+# tests of 1968-1985), our own Space Program, a target with a Space Program or
+# an orbital megaproject (te_asat_has_orbital_assets), and the target not
+# struck by anyone in the last 12 months (te_asat_struck_recently). The space
+# race rule (debris belongs to the space race).
+#
+# What it does is the infamy, here, and te_asat_strike_effect
+# (te_orbital_debris_effects.txt): the target's te_orbital_network_disrupted,
+# the striker's UN case
+# ("Destructive anti-satellite strike", un_dos_asat), -30 relations with every
+# other country that uses orbit, +6 low and +6 high debris, the records and
+# the UN phase's hook. The engine walks accept_effect for the confirmation
+# box's tooltip every frame without running it, so the work is in a
+# hidden_effect and the preview is custom tooltips, with the infamy shown by
+# the real effect.
+#
+# Non-kinetic interference stays the covert operation Communications
+# Disruption (covert_operations.txt), unchanged.
+#
+# Texture: covert_space_espionage_action.dds is a placeholder; the lens copy
+# (gfx/interface/icons/lens_toolbar_icons/te_asat_strike_action.dds) is the
+# same picture. Listed in docs/testing/global-commons-playtest-d.md.
+# ============================================================================
+
+te_asat_strike_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_space_espionage_action.dds"
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = yes
+
+	potential = {
+		has_game_rule = space_race_enabled
+		has_technology_researched = guided_missiles
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = te_asat_tt_at_war
+			has_war_with = scope:target_country
+		}
+		custom_tooltip = {
+			text = te_asat_tt_own_program
+			sr_has_space_program = yes
+		}
+		custom_tooltip = {
+			text = te_asat_tt_target_in_orbit
+			scope:target_country = { te_asat_has_orbital_assets = yes }
+		}
+		custom_tooltip = {
+			text = te_asat_tt_not_struck_recently
+			NOT = { scope:target_country = { te_asat_struck_recently = yes } }
+		}
+	}
+
+	accept_effect = {
+		custom_tooltip = te_asat_tt_effect_network
+		# The infamy is the action's own visible effect, so the box shows the
+		# figure (doubled for a party to the Moratorium); the rest is
+		# te_asat_strike_effect's.
+		change_infamy = te_asat_infamy
+		custom_tooltip = te_asat_tt_effect_case
+		custom_tooltip = te_asat_tt_effect_relations
+		custom_tooltip = te_asat_tt_effect_debris
+		hidden_effect = {
+			te_asat_strike_effect = yes
+		}
+	}
+
+	ai = {
+		# Whether the AI strikes at all is te_asat_ai_would_strike in
+		# will_propose (at war, not in default, the enemy has more in orbit);
+		# this sets how often it asks. Low by design (spec § 6.3), and near
+		# zero once debris is Hazardous unless the AI is losing the war: it
+		# shares the debris it makes.
+		evaluation_chance = {
+			value = 0.03
+			if = {
+				limit = {
+					te_debris_index >= te_debris_tier_hazardous
+					NOT = {
+						AND = {
+							exists = scope:target_country
+							is_losing_war_against = { ENEMY = scope:target_country }
+						}
+					}
+				}
+				multiply = 0.05
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				multiply = 2
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.25
+			}
+			max = 1
+		}
+
+		will_propose = {
+			te_asat_ai_would_strike = { ENEMY = scope:target_country }
+		}
+
+		propose_score = {
+			value = 10
+			# The more the enemy has in orbit, the more a strike takes away.
+			add = {
+				value = 0
+				scope:target_country = {
+					add = te_asat_orbital_investment
+				}
+				subtract = te_asat_orbital_investment
+				min = 0
+				max = 20
+			}
+			if = {
+				limit = {
+					any_scope_war = {
+						is_war_participant = scope:target_country
+						is_at_war_with_rival = ROOT
+					}
+				}
+				multiply = 1.5
+			}
+		}
+	}
+}

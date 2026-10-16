@@ -37,6 +37,8 @@
 #   nuclear     nuclear_first_strike / _tactical_strike / _response_strike
 #               (extra_effects.txt); nuclear_weapon_events.18 option d (a
 #               programme referred under the Non-Proliferation Treaty, #448)
+#   asat        te_asat_strike_effect (te_orbital_debris_effects.txt): a
+#               destructive anti-satellite strike (Global Commons § 6.3)
 # ============================================================================
 
 # ---- The dossier -------------------------------------------------------------------
@@ -44,7 +46,7 @@
 # Add $POINTS$ to this country's $RECORD$, capped at un_dossier_record_cap. A
 # no-op while no UN exists: the dossier is the Assembly's file on a country,
 # and there is no Assembly to keep one.
-# Parameters: $RECORD$ = aggression | defiance | violation | covert | nuclear
+# Parameters: $RECORD$ = aggression | defiance | violation | covert | nuclear | asat
 #             $POINTS$ = a number or a script value (evaluated in this scope)
 # Scope: the country the record is against
 un_dossier_record = {
@@ -104,6 +106,7 @@ un_dossier_monthly_update = {
 		un_dossier_decay_record = { RECORD = violation }
 		un_dossier_decay_record = { RECORD = covert }
 		un_dossier_decay_record = { RECORD = nuclear }
+		un_dossier_decay_record = { RECORD = asat }
 	}
 	every_country = {
 		limit = {

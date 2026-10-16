@@ -1,0 +1,86 @@
+﻿l_english:
+ # ---- Orbital debris (Global Commons § 6): modifier types ----
+ country_orbital_debris_removal_add:0 "[concept_orbital_debris] Removal per Month"
+ country_orbital_debris_removal_add_desc:0 "Points of [concept_orbital_debris] this country clears from orbit each month, taken from the high orbits first. Every country that uses orbit benefits."
+ country_orbital_debris_removal_mult:0 "[concept_orbital_debris] Removal"
+ country_orbital_debris_removal_mult_desc:0 "Scales this country's orbital debris removal, up to +100%. It removes nothing on its own: it needs a Space Program running a debris removal method."
+ building_space_elevator_throughput_add:0 "$building_space_elevator$ [concept_throughput]"
+ building_space_elevator_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_space_elevator$ buildings"
+ building_orbital_battlestation_throughput_add:0 "$building_orbital_battlestation$ [concept_throughput]"
+ building_orbital_battlestation_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_orbital_battlestation$ buildings, and to the military bonuses they give"
+ building_solar_receiver_throughput_add:0 "$building_solar_receiver$ [concept_throughput]"
+ building_solar_receiver_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_solar_receiver$ buildings"
+
+ # ---- Orbital debris: static modifiers ----
+ te_orbital_debris:0 "Orbital Debris"
+ te_orbital_debris_desc:0 "Debris in Earth orbit makes every launch riskier, every mission slower and every orbital building less productive. It scales with the [concept_orbital_debris] index and clears as the debris does."
+ te_debris_cleaner_prestige:0 "Orbital Cleanup"
+ te_debris_cleaner_prestige_desc:0 "Our Space Program clears debris that every country in orbit would otherwise have to fly through, and the world notices: +1% prestige for every 0.1 point we remove a month."
+ te_orbital_network_disrupted:0 "Orbital Network Disrupted"
+ te_orbital_network_disrupted_desc:0 "An anti-satellite strike destroyed our satellites. Our forces have lost their reconnaissance and links, and our space programme its tracking network, until replacements are launched."
+ te_ribbon_strike_damage:0 "Ribbon Strike"
+ te_ribbon_strike_damage_desc:0 "Debris cut into the elevator's tether. The climbers run on the undamaged strands at half their rate until the ribbon is re-laid."
+
+ # ---- Orbital debris: the Space Program's removal methods ----
+ pmg_space_program_debris_removal:0 "Debris Removal"
+ pm_debris_removal_none:0 "No Debris Removal"
+ pm_debris_removal_none_desc:0 "The programme flies its missions and leaves the debris to others."
+ pm_debris_active_removal:0 "Active Debris Removal"
+ pm_debris_active_removal_desc:0 "Servicer spacecraft rendezvous with dead satellites and spent stages, grapple them and drag them down to burn up. Slow and costly, one object at a time."
+ pm_debris_laser_broom:0 "Laser Broom"
+ pm_debris_laser_broom_desc:0 "Ground and orbital lasers ablate the surface of small fragments, nudging them into lower orbits where the air drags them down."
+ pm_debris_fusion_sweepers:0 "Fusion Sweepers"
+ pm_debris_fusion_sweepers_desc:0 "Fusion-driven tugs sweep whole orbital shells, gathering debris by the tonne for re-entry or for salvage."
+
+ # ---- Orbital debris: the decision ----
+ te_decision_debris_removal:0 "Begin Orbital Debris Removal"
+ te_decision_debris_removal_desc:0 "Put our Space Program to work clearing [concept_orbital_debris]. Everyone in orbit benefits from what we remove, and we gain prestige for doing it."
+ te_decision_debris_removal_tt:0 "Our Space Program's #bold Debris Removal#! switches to the best method we have: #bold Fusion Sweepers#! with Muon-Catalyzed Fusion Reactors, otherwise the #bold Laser Broom#! with Directed Energy Weapons, otherwise #bold Active Debris Removal#!. Each method uses Launch Capacity every week. Switch it off in the Space Program's production methods."
+
+ # ---- Orbital debris: tiers and the concept ----
+ te_debris_tier_clear:0 "Clear"
+ te_debris_tier_cluttered:0 "Cluttered"
+ te_debris_tier_hazardous:0 "Hazardous"
+ te_debris_tier_kessler:0 "Kessler Cascade"
+ concept_orbital_debris:0 "Orbital Debris"
+ concept_orbital_debris_desc:0 "Fragments of satellites and spent rockets in Earth orbit, measured by an index from 0 to 100: debris in low orbits, which drag clears within a few years, plus debris in high orbits, which stays for a century. Every running Space Program adds a little each month, and every anti-satellite strike adds 12. Every country that uses orbit pays for it in higher [concept_sr_setback_risk], slower space race progress and lower [concept_throughput] for its orbital buildings, but nothing stops. The tiers are Clear, Cluttered from 25, Hazardous from 50, when Space Elevators risk ribbon strikes, and Kessler Cascade from 75, when collisions add debris on their own until removal outpaces them. A Space Program can remove debris from Reusable Rocketry on, and a Space Elevator doubles what it removes."
+
+ # ---- Orbital debris: the Space Race panel's Mission Control row ----
+ te_debris_row:0 "[concept_orbital_debris]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_index')|1]#! ([JournalEntry.GetCountry.GetCustom('te_debris_tier')])"
+ te_debris_row_tt:0 "#header Orbital Debris#!\nLow orbits: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_low_value')|1]#!, cleared by drag in a few years. High orbits: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_high_value')|1]#!, which stay for a century.\n$TOOLTIP_DELIMITER$\nAt this level, every country that uses orbit has #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_risk_pct')|0]%#! setback risk, #R −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_pace_pct')|1]%#! space race pace, and #R −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_throughput_pct')|1]%#! [concept_throughput] for its Extraplanetary Bases, Space Elevators, Orbital Battlestations and Solar Receivers.[AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_hazardous'), '(CFixedPoint)0' ), 'te_debris_row_tt_hazardous' )][AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_kessler'), '(CFixedPoint)0' ), 'te_debris_row_tt_kessler' )]\n$TOOLTIP_DELIMITER$\n[AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ), 'te_debris_row_tt_cleaners' )][AddLocalizationIf( Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ) ), 'te_debris_row_tt_no_cleaners' )]"
+ te_debris_row_tt_hazardous:0 "\nEach Space Elevator risks a #bold ribbon strike#! every month: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_ribbon_chance')|1]%#! now."
+ te_debris_row_tt_kessler:0 "\n#R Kessler Cascade:#! collisions add #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_kessler_rate')|1]#! to the high orbits each month until removal brings the index under #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_kessler_threshold')|0]#!."
+ te_debris_row_tt_cleaners:0 "Removed last month: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_removal_world')|2]#! by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners')|0]#! countries, the most by [GetGlobalVariable('te_debris_top_cleaner').GetCountry.GetName]. Ours: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_removal_country')|2]#! a month."
+ te_debris_row_tt_no_cleaners:0 "Nobody is removing debris. A Space Program can, from Reusable Rocketry on: the #bold Debris Removal#! methods, or the decision #bold Begin Orbital Debris Removal#!."
+
+ # ---- Orbital debris: the ribbon strike (te_orbital_debris.1) ----
+ te_orbital_debris.1.t:0 "Ribbon Strike"
+ te_orbital_debris.1.d:0 "A fragment no bigger than a bolt, one of the thousands now crossing the elevator's altitude every day, has cut through part of the tether. Nothing has fallen and the climbers are still running, on the undamaged strands and at half their rate. Our engineers can re-lay the damaged section from the ground station over the next six months, or we can pay to splice it from both ends at once and have the elevator back at full rate in two."
+ te_orbital_debris.1.f:0 "\"We built it to survive a hurricane. Nobody asked what it would do against a bolt at eight kilometres a second.\""
+ te_orbital_debris.1.a:0 "Keep the climbers running"
+ te_orbital_debris.1.a.tt:0 "Our Space Elevator, for 6 months: [GetStaticModifier('te_ribbon_strike_damage').GetDesc]"
+ te_orbital_debris.1.b:0 "Splice it from both ends"
+ te_orbital_debris.1.b.tt:0 "Our Space Elevator, for 2 months: [GetStaticModifier('te_ribbon_strike_damage').GetDesc]"
+
+ # ---- The anti-satellite strike (te_asat_strike_action) ----
+ te_asat_strike_action:0 "Anti-Satellite Strike"
+ te_asat_strike_action_desc:0 "Destroy their satellites with interceptor missiles. Their forces and their space programme lose their eyes and links in orbit for a year, but the debris stays up for everyone, us included, and the world will hold it against us."
+ te_asat_strike_action_action_propose_name:0 "Launch an Anti-Satellite Strike"
+ te_asat_strike_action_action_notification_name:0 "Anti-Satellite Strike"
+ te_asat_strike_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has destroyed our satellites with interceptor missiles. Our orbital network is disrupted until replacements are up."
+ te_asat_strike_action_action_notification_third_party_name:0 "Anti-Satellite Strike by [INITIATOR_COUNTRY.GetName]"
+ te_asat_strike_action_action_notification_third_party_desc:0 "[INITIATOR_COUNTRY.GetName] has destroyed the satellites of [TARGET_COUNTRY.GetName] with interceptor missiles. The debris is a hazard to every country in orbit."
+ te_asat_strike_action_effect_desc_first:0 "[COUNTRY.GetAdjectiveNoFlag] interceptors destroy the satellites of [TARGET_COUNTRY.GetName]"
+ te_asat_strike_action_effect_desc_global:0 "Destroys their satellites and leaves debris in orbit"
+ te_asat_strike_action_effect_desc_third:0 "[COUNTRY.GetName] has destroyed the satellites of [TARGET_COUNTRY.GetName]"
+ te_asat_tt_at_war:0 "We are at war with them"
+ te_asat_tt_own_program:0 "We have a Space Program of our own to track and intercept with"
+ te_asat_tt_target_in_orbit:0 "They have something in orbit to hit: a Space Program, a Space Elevator, an Orbital Solar Collector or an Orbital Battlestation"
+ te_asat_tt_not_struck_recently:0 "No one has struck their satellites in the last #v [GetPlayer.MakeScope.ScriptValue('te_asat_cooldown_months')|0]#! months"
+ te_asat_tt_effect_network:0 "Their orbital network is disrupted for a year, or six months if their Space Program runs the Mars Mission or a later one, and half as badly if they have an Orbital Battlestation: [GetStaticModifier('te_orbital_network_disrupted').GetDesc]"
+ te_asat_tt_effect_case:0 "Our case strength at the UN #R +[GetPlayer.MakeScope.ScriptValue('te_asat_case_points')|0]#! (Destructive anti-satellite strike), halving every five years"
+ te_asat_tt_effect_relations:0 "Relations #R [GetPlayer.MakeScope.ScriptValue('te_asat_relations')|0]#! with every other country that uses orbit"
+ te_asat_tt_effect_debris:0 "[concept_orbital_debris] #R +[GetPlayer.MakeScope.ScriptValue('te_asat_debris_low')|0]#! in low orbits and #R +[GetPlayer.MakeScope.ScriptValue('te_asat_debris_high')|0]#! in high orbits, which every country in orbit flies through, us included (now #v [GetPlayer.MakeScope.ScriptValue('te_debris_index')|1]#!)"
+
+ # ---- The UN: Our Record ----
+ je_un_record_asat:0 "Anti-satellite strikes"

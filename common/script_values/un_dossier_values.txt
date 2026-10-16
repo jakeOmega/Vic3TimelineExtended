@@ -4,7 +4,7 @@
 # docs/systems/un_redesign_design.md §5.1, §6 and §8.3; as shipped, §0.3.
 #
 # THE DOSSIER. Every country carries a record of what it has done that the
-# Assembly could hold against it: five decaying country variables written only
+# Assembly could hold against it: six decaying country variables written only
 # by un_dossier_record (un_dossier_effects.txt), plus its infamy, read live.
 #
 #   un_dos_aggression   wars begun without a mandate, weighted by the power
@@ -15,6 +15,8 @@
 #   un_dos_covert       severe covert operations exposed
 #   un_dos_nuclear      nuclear use, and nuclear programmes referred to the
 #                       Assembly under the Non-Proliferation Treaty (#448)
+#   un_dos_asat         destructive anti-satellite strikes (Global Commons
+#                       § 6.3, te_asat_strike_effect)
 #
 # Their sum, with the infamy term, is the CASE STRENGTH (0-100). A punitive
 # topic can be tabled against a country only when its case reaches the topic's
@@ -68,6 +70,10 @@ un_dos_points_retaliation = { value = 10 }
 # reaches sanctions' 50 alone; with infamy or another record it can.
 un_dos_points_npt_referral = { value = 20 }
 un_dos_points_npt_breach = { value = 30 }
+# A destructive anti-satellite strike (te_asat_strike_action; Global Commons
+# § 6.3): debris every user of orbit shares. Twice as much from a party to the
+# Moratorium (te_asat_case_points, te_orbital_debris_values.txt).
+un_dos_points_asat = { value = 15 }
 
 # The grounds each punitive topic needs.
 un_case_threshold_condemn = { value = 30 }
@@ -129,6 +135,10 @@ un_case_strength = {
 		limit = { has_variable = un_dos_nuclear }
 		add = var:un_dos_nuclear
 	}
+	if = {
+		limit = { has_variable = un_dos_asat }
+		add = var:un_dos_asat
+	}
 	# The Supranational standing case against an outsider, or a member
 	# building a bomb outside the Non-Proliferation Treaty (redesign phase 5,
 	# #804; un_teeth_values.txt): 0 for everyone else.
@@ -188,6 +198,13 @@ un_disp_dos_nuclear = {
 	if = {
 		limit = { has_variable = un_dos_nuclear }
 		add = var:un_dos_nuclear
+	}
+}
+un_disp_dos_asat = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_asat }
+		add = var:un_dos_asat
 	}
 }
 

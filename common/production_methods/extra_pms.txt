@@ -15376,6 +15376,9 @@ pm_space_elevator = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_space_race_progress_add = 1
+			# Orbital debris removal +10% a fully staffed level; counted up to
+			# +100% (te_debris_removal_mult_cap, te_orbital_debris_values.txt).
+			country_orbital_debris_removal_mult = 0.1
 		}
 	}
 

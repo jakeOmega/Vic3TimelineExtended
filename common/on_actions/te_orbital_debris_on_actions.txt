@@ -1,0 +1,43 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS — the monthly pulses (Global Commons § 6)
+# ============================================================================
+# The world's step runs once a month from the global on_monthly_pulse (no
+# ROOT; the 1st of the month), never per country: the pools are one global
+# state. The per-country half runs from on_monthly_pulse_country, the one
+# refresh site of te_orbital_debris and te_debris_cleaner_prestige, which
+# re-apply them with multipliers that read the pools (globals, so the scope
+# the multiplier resolves against does not matter). Both follow the space
+# race rule (spec § 2.9: debris belongs to the space race).
+# The engine unions same-name on_action declarations across files.
+# Effects: common/scripted_effects/te_orbital_debris_effects.txt.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		te_debris_global_monthly_on_action
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_debris_country_monthly_on_action
+	}
+}
+
+te_debris_global_monthly_on_action = {
+	effect = {
+		if = {
+			limit = { has_game_rule = space_race_enabled }
+			te_debris_global_monthly = yes
+		}
+	}
+}
+
+te_debris_country_monthly_on_action = {
+	trigger = {
+		has_game_rule = space_race_enabled
+	}
+	effect = {
+		te_debris_country_monthly = yes
+	}
+}

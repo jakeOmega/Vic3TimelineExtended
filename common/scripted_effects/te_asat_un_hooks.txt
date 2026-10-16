@@ -1,0 +1,16 @@
+﻿# ============================================================================
+# THE ANTI-SATELLITE STRIKE <-> THE UN — effect hooks (Global Commons § 6.5)
+# ============================================================================
+# Stubs. The orbital debris branch (§ 6.1-6.4) calls these; the UN branch
+# (§ 6.5) ships the same file with the real bodies, and that version replaces
+# this one at integration. Keep the names and scopes.
+# ============================================================================
+
+# Called once per strike from te_asat_strike_effect (te_orbital_debris_effects.txt),
+# after the strike's own costs, debris and records are applied: the
+# Moratorium's docket situation is raised from here.
+# Scope: the striker, with scope:te_asat_target = the struck country.
+# Globals already written: te_asat_last_strike_month, te_asat_strikes_total.
+te_asat_un_on_strike = {
+	# REVIEWED 2026-10-16 (empty_block): hook, filled by the UN phase
+}

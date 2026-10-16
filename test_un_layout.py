@@ -462,7 +462,8 @@ class ObligationsTest(unittest.TestCase):
 
 
 RECORD_TERMS = ("un_case_infamy_term", "un_disp_dos_aggression", "un_disp_dos_defiance",
-                "un_disp_dos_violation", "un_disp_dos_covert", "un_disp_dos_nuclear")
+                "un_disp_dos_violation", "un_disp_dos_covert", "un_disp_dos_nuclear",
+                "un_disp_dos_asat")
 
 
 class RecordTest(unittest.TestCase):
