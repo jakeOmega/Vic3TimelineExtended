@@ -1120,7 +1120,7 @@ class AlsoStandingHereTests(unittest.TestCase):
     def test_a_secondarys_picture_catches_up_each_month(self):
         monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
         self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes "
-                      "gm_tr_update_picture = yes }", monthly)
+                      "gm_tr_update_picture = yes ", monthly)
 
 
 class OurMonumentsListTests(unittest.TestCase):

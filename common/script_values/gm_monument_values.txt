@@ -56,6 +56,22 @@ gm_mon_age = {
 	}
 }
 
+# Container scope. What a month adds to a secondary's age grandeur: 2% of its
+# levels a year, half under its owner's Mothballed (gm_state_age_step).
+gm_mon_age_step = {
+	value = gm_mon_levels
+	multiply = 2
+	divide = 1200
+	if = {
+		limit = {
+			var:gm_tr_origin ?= {
+				owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+			}
+		}
+		multiply = 0.5
+	}
+}
+
 # Container scope. The grandeur a secondary monument stands for: its levels and
 # its age.
 gm_mon_grandeur = {

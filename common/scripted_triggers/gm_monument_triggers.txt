@@ -11,6 +11,17 @@ gm_state_has_secondary = {
 	any_in_list = { variable = gm_monuments_here exists = this }
 }
 
+# Container scope. A secondary monument's years add to its grandeur this month
+# (spec 2026-10-16 §2): it stands at home, dedicated, not contested. A trophy
+# abroad (tag gm_trophy) never ages.
+gm_mon_ages = {
+	has_tag = gm_monument
+	has_variable = gm_tr_dedication
+	has_variable = gm_tr_origin
+	exists = var:gm_tr_origin
+	NOT = { has_variable = gm_tr_contested }
+}
+
 # ---- A trophy comes home (spec §4.1) -----------------------------------------------
 # State scope, with scope:gm_tr_moving the returning trophy. What stands here
 # is what the trophy is a piece of: the landmark it came from, or, with

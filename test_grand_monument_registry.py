@@ -3693,7 +3693,7 @@ class MultiMonumentDataTests(unittest.TestCase):
         monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
         self.assertIn("gm_system_enabled = yes", monthly)
         self.assertIn("every_in_global_list = { variable = gm_monuments gm_tr_repair_places = yes "
-                      "gm_tr_update_picture = yes }", monthly)
+                      "gm_tr_update_picture = yes ", monthly)
         self.assertLess(monthly.find("gm_tr_repair_places = yes"), monthly.find("gm_monument_pass = yes"))
 
     def test_the_pass_has_nothing_to_do_in_a_game_with_no_secondary(self):
@@ -4110,6 +4110,50 @@ class AgeTests(unittest.TestCase):
         add = squash(strip_comments(block(read(EFFECTS), "gm_state_add_age")))
         self.assertEqual(add, "if = { limit = { has_variable = gm_age } change_variable = { name = gm_age add = $AGE$ } } "
                               "else = { set_variable = { name = gm_age value = $AGE$ } }")
+
+
+class AgeingTests(unittest.TestCase):
+    """Ageing rework (spec 2026-10-16 §2): a dedicated monument that is not
+    contested adds 2% of its levels a year to its age grandeur, half that
+    under Mothballed; undedicated monuments and trophies abroad never age."""
+
+    def test_the_monthly_step(self):
+        values = read(VALUES)
+        self.assertEqual(squash(block(values, "gm_policy_factor_age")),
+                         "value = 1 if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } "
+                         "value = 0.5 }")
+        self.assertEqual(squash(block(values, "gm_state_age_step")),
+                         "value = gm_state_primary_levels multiply = 2 divide = 1200 multiply = gm_policy_factor_age")
+        self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_age_step")),
+                         "value = gm_mon_levels multiply = 2 divide = 1200 if = { limit = { var:gm_tr_origin ?= { "
+                         "owner = { gm_policy_is = { P = mothballed STANDARD = no } } } } multiply = 0.5 }")
+
+    def test_what_ages(self):
+        ages = squash(block(read(TRIGGERS), "gm_state_ages"))
+        for s in ("gm_state_is_dedicated = yes", "has_variable = gm_seen", "gm_state_is_contested = no",
+                  "NOT = { has_variable = gm_restore_pm }", "NOT = { has_variable = gm_ceremony_pending }",
+                  "NOT = { has_variable = gm_rebuilding }"):
+            self.assertIn(s, ages)
+        mon = squash(block(read(MON_TRIGGERS), "gm_mon_ages"))
+        for s in ("has_tag = gm_monument", "has_variable = gm_tr_dedication", "exists = var:gm_tr_origin",
+                  "NOT = { has_variable = gm_tr_contested }"):
+            self.assertIn(s, mon)
+
+    def test_the_primary_ages_before_its_steps_are_read(self):
+        monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
+        step = "if = { limit = { gm_state_ages = yes } gm_state_add_age = { AGE = gm_state_age_step } }"
+        self.assertIn(step, monthly)
+        self.assertLess(monthly.find(step), monthly.find("name = gm_curve_in"))
+
+    def test_secondaries_age_in_the_pass_and_trophies_never(self):
+        monthly = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_monthly")))
+        self.assertIn("if = { limit = { gm_mon_ages = yes } gm_mon_add_age = { AGE = gm_mon_age_step } }", monthly)
+        tr = squash(strip_comments(read("common/scripted_effects/gm_trophy_effects.txt")))
+        self.assertNotIn("gm_mon_add_age", tr)
+        self.assertNotIn("age_step", tr)
+        add = squash(block(read(MON_EFFECTS), "gm_mon_add_age"))
+        self.assertEqual(add, "if = { limit = { has_variable = gm_tr_age } change_variable = { name = gm_tr_age add = $AGE$ } } "
+                              "else = { set_variable = { name = gm_tr_age value = $AGE$ } }")
 
 if __name__ == "__main__":
     unittest.main()

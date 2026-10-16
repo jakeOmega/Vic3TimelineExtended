@@ -411,6 +411,29 @@ gm_policy_factor_local = {
 	}
 }
 
+# ---- Ageing (spec 2026-10-16 §2) ----------------------------------------------
+# State scope, the owner's policy: Mothballed halves how fast its monuments
+# age; no other policy changes it.
+gm_policy_factor_age = {
+	value = 1
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+		}
+		value = 0.5
+	}
+}
+
+# State scope. What a month adds to the primary's age grandeur: 2% of its
+# levels a year (owner, 2026-10-16: it doubles in fifty years), as two whole
+# numbers (no six-decimal literal, scripting_best_practices.md).
+gm_state_age_step = {
+	value = gm_state_primary_levels
+	multiply = 2
+	divide = 1200
+	multiply = gm_policy_factor_age
+}
+
 # Country scope, for the overview's policy line: months until the policy may
 # change again (0 when it may).
 gm_disp_policy_months_left = {

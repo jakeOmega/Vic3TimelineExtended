@@ -376,6 +376,11 @@ gm_state_monthly = {
 	gm_state_restore_dedication = yes
 	if = {
 		limit = { has_building = building_grand_monument }
+		# A month older (spec 2026-10-16 §2), before this month's steps read it.
+		if = {
+			limit = { gm_state_ages = yes }
+			gm_state_add_age = { AGE = gm_state_age_step }
+		}
 		# Last known level, read if the building disappears before the next pulse.
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }

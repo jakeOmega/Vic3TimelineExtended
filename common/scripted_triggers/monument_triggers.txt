@@ -274,6 +274,19 @@ gm_state_is_contested = {
 	has_variable = gm_contested
 }
 
+# Its years add to its grandeur this month (spec 2026-10-16 §2): dedicated and
+# recorded, not contested (a heritage monument ages), and not while its method
+# is being put back, a ceremony asks or a rebuild is under way. An undedicated
+# monument is still being built and never ages.
+gm_state_ages = {
+	gm_state_is_dedicated = yes
+	has_variable = gm_seen
+	gm_state_is_contested = no
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_rebuilding }
+}
+
 gm_state_is_heritage = {
 	has_variable = gm_heritage
 }

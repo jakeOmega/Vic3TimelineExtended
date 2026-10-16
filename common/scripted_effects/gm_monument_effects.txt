@@ -42,6 +42,11 @@ gm_monument_monthly = {
 				# A landmark whose picture is drawn later, or a monument from an
 				# older save, catches up within a month (as a trophy does).
 				gm_tr_update_picture = yes
+				# A month older (spec 2026-10-16 §2).
+				if = {
+					limit = { gm_mon_ages = yes }
+					gm_mon_add_age = { AGE = gm_mon_age_step }
+				}
 			}
 		}
 		gm_monument_pass = yes
@@ -81,6 +86,17 @@ gm_monument_pass = {
 			NOT = { has_building = building_grand_monument }
 		}
 		gm_state_promote_secondary = yes
+	}
+}
+
+# Container scope. Add $AGE$ to its age grandeur (gm_tr_age), creating it.
+gm_mon_add_age = {
+	if = {
+		limit = { has_variable = gm_tr_age }
+		change_variable = { name = gm_tr_age add = $AGE$ }
+	}
+	else = {
+		set_variable = { name = gm_tr_age value = $AGE$ }
 	}
 }
 
