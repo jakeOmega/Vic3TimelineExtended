@@ -879,6 +879,22 @@ every `POST /reload` and writes `docs/engine/pm_employment_report.md`. **Editing
 refreshes the `# Employment`/cost comments (`extra_pms.txt` is hand-authored except
 those comment headers).
 
+## A Group Whose Default Is Law-Gated Needs an Allowed Method for Every Combination
+
+`unlocking_production_methods` is an OR, and no field negates another method: there
+is `disallowing_laws` but no `disallowing_production_methods`. So a method can't be
+gated on "none of these is active". That matters when a law takes a group's
+do-nothing method away, as the Ministry of the Environment does `pm_no_*` in the seven
+pollution-control groups: every combination of the building's other groups must still
+allow one of the rest. The Glassworks' tiers unlock only beside a polluting method, so
+that no combination goes below zero pollution. That left Forest Glass or Bioplastics
+without polluting automation with nothing allowed under the ministry. The fix is a
+stand-in gated as closely as an OR list allows, with `replacement_if_valid` naming the
+method that should win wherever both are allowed (`pm_glassworks_fume_free_process`;
+unverified in game, `docs/testing/pollution-control-playtest.md`).
+`test_pollution_control_groups.py` enumerates every combination of the seven groups
+under both laws.
+
 ## A Building's Own `_mult` in a PM Belongs in `unscaled`
 
 A PM's `level_scaled` and `workforce_scaled` blocks multiply every value by the building's level (or staffed level). That is right for flat adds, and wrong for a multiplier on the building itself: `level_scaled = { building_mobilization_cost_mult = -0.5 }` on a 20-level barracks would apply −1000%. Put such a modifier in `unscaled`. `building_mobilization_cost_mult` scales vanilla's `mobilized_battalion_consumption` static modifier (`building_goods_input_mult = 1` while a battalion is mobilized), so −0.1 trims a barracks' wartime goods surcharge from +100% to +90%. It doesn't touch mobilization options' own goods (`pm_expeditionary_logistics`).

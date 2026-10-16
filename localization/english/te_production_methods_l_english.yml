@@ -1136,6 +1136,8 @@
  pm_getzner_bludenz_textile_works:0 "Getzner Bludenz Textile Works"
  pm_glassworks_closed_loop_recycling:0 "Closed-Loop Recycling"
  pm_glassworks_fume_extraction:0 "Fume Extraction"
+ pm_glassworks_fume_free_process:0 "Fume-Free Process"
+ pm_glassworks_fume_free_process_desc:0 "None of this Glassworks' production methods give off fumes, so the Ministry of the Environment requires no ventilation."
  pm_global_ports:0 "Global Ports"
  pm_gm_name_carrier_anchor:0 "Monument Name Placeholder"
  pm_googleplex:0 "The Googleplex"

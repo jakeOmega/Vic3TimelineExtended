@@ -19426,7 +19426,8 @@ pm_no_glassworks_fume_ventilation = {
 # ---- Glassworks Fume Extraction (Basic) ----
 # Pollution reduction: -5
 # Gated behind any PM with >=5 pollution so no combo goes negative
-# Min possible: leaded_glass(5)+manual(0)-5 = 0; forest_glass(0)+auto(5)-5 = 0
+# Min possible: leaded_glass(5)+manual(0)-5 = 0; forest_glass(0)+auto(5)-5 = 0;
+# bioplastics(0)+massed_produced_plastics(5)-5 = 0
 # Operational cost: +1 electricity
 
 pm_glassworks_fume_extraction = {
@@ -19443,6 +19444,7 @@ pm_glassworks_fume_extraction = {
 		pm_injection_molding
 		pm_blow_molding
 		pm_automatic_bottle_blowers
+		pm_massed_produced_plastics
 	}
 
 	state_modifiers = {
@@ -19511,6 +19513,37 @@ pm_glassworks_closed_loop_recycling = {
 	}
 
 	required_input_goods = electricity
+}
+
+# ---- Glassworks Fume-Free Process (Ministry, no polluting method) ----
+# Pollution reduction: none. Operational cost: none.
+# The ministry's stand-in for No Fume Ventilation on a Glassworks whose methods
+# make no pollution: Forest Glass or Bioplastics with Manual Glassblowing or
+# Programmable Plastics. Without it such a building has no allowed method in
+# the group: No Fume Ventilation needs law_no_ministry_of_the_environment, and
+# the two tiers would cut below 0, so their unlock lists leave it out.
+# unlocking_production_methods is an OR, so it can't say "no polluting method
+# is active". Forest Glass and Bioplastics also run beside Automatic Bottle
+# Blowers or Mass-Produced Plastics (5 pollution); Fume Extraction is valid
+# there too, and replacement_if_valid moves the building onto it, so the
+# ministry still forces the basic tier wherever there is pollution to cut.
+# Last in the group, so a fallback that takes the first valid method lands on
+# Fume Extraction before this. Unverified in game:
+# docs/testing/pollution-control-playtest.md.
+
+pm_glassworks_fume_free_process = {
+	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p0.dds"
+	replacement_if_valid = pm_glassworks_fume_extraction
+	is_hidden_when_unavailable = yes
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	unlocking_production_methods = {
+		pm_forest_glass
+		pm_bioplastics
+	}
 }
 
 # ===== SOLAR COLLECTOR ARRAY =====
