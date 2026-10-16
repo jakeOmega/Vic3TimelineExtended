@@ -23,6 +23,13 @@
 #                               text. Like the rest of the record it is only
 #                               overwritten, never aged: every burn passes
 #                               covert_backlash_public, which sets or removes it.
+#   iw_cis_protector            the country running Counterintelligence Support
+#                               here (covert_op_create). Dropped once it no longer
+#                               does, whatever ended it without the break hook (a
+#                               protector annexed, a pact removed by script): here
+#                               and not in the protector's pulse, which a dead
+#                               protector no longer runs. One protector per ally
+#                               reads it, so a stale one would block the next.
 on_monthly_pulse_country = {
 	on_actions = {
 		covert_warfare_monthly_country
@@ -43,6 +50,17 @@ covert_warfare_monthly_country = {
 				remove_variable = iw_defender_event_cooldown
 				remove_variable = iw_defender_event_cooldown_age
 			}
+		}
+		if = {
+			limit = {
+				has_variable = iw_cis_protector
+				NOT = {
+					var:iw_cis_protector ?= {
+						has_diplomatic_pact = { who = ROOT type = covert_counterintel_support_action is_initiator = yes }
+					}
+				}
+			}
+			remove_variable = iw_cis_protector
 		}
 	}
 }

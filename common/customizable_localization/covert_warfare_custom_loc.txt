@@ -167,6 +167,10 @@ covert_last_exposed_type_name = {
 		localization_key = iw_op_name_secure_material
 	}
 	text = {
+		trigger = { var:iw_last_exposed_type = 14 }
+		localization_key = iw_op_name_counterintel_support
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -234,6 +238,10 @@ covert_last_exposed_type_desc = {
 	text = {
 		trigger = { var:iw_last_exposed_type = 13 }
 		localization_key = iw_op_exposed_desc_secure_material
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 14 }
+		localization_key = iw_op_exposed_desc_counterintel_support
 	}
 	text = {
 		localization_key = iw_op_exposed_desc_unknown
@@ -304,6 +312,10 @@ covert_burned_type_name = {
 		localization_key = iw_op_name_secure_material
 	}
 	text = {
+		trigger = { var:iw_burned_type_code = 14 }
+		localization_key = iw_op_name_counterintel_support
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -371,6 +383,10 @@ covert_caught_type_name = {
 	text = {
 		trigger = { var:iw_caught_type_code = 13 }
 		localization_key = iw_op_name_secure_material
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 14 }
+		localization_key = iw_op_name_counterintel_support
 	}
 	text = {
 		localization_key = iw_op_name_unknown

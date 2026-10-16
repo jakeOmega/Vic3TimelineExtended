@@ -27,6 +27,7 @@ import unittest
 from test_covert_launch_preview import _strip_comments
 from test_covert_op_registry import (
     ACTIONS,
+    HOSTILE_TYPES,
     LOC_DIR,
     TRIGGERS,
     TYPES,
@@ -193,8 +194,9 @@ class RelationsBlockRemoved(unittest.TestCase):
                 self.assertIn("friend", loc[key])
 
     def test_the_intelligence_sharing_gate_stays(self):
-        # A treaty obligation, not the relations block (spec: Kept).
-        for typ in TYPES:
+        # A treaty obligation, not the relations block (spec: Kept). Only on
+        # the hostile operations: a partner may be protected (spec § C).
+        for typ in HOSTILE_TYPES:
             self.assertIn("text = iw_no_intel_sharing_tt", blocks(action(typ), "possible")[0], typ)
 
     def test_formerly_gated_ai_avoids_friends(self):
@@ -205,7 +207,8 @@ class RelationsBlockRemoved(unittest.TestCase):
     def test_other_hostile_operations_keep_their_ai(self):
         # Owner's choice (spec § B, option c): the AI goes on spying on
         # friends with the rest and pays the backlash when caught.
-        for typ in TYPES:
+        # Counterintelligence Support is for friends only, so its AI asks.
+        for typ in HOSTILE_TYPES:
             if typ not in FORMERLY_GATED:
                 with self.subTest(typ):
                     self.assertNotIn("covert_is_friend", "\n".join(blocks(action(typ), "ai")))
@@ -231,7 +234,9 @@ class RelationsBlockRemoved(unittest.TestCase):
 
 class LaunchPreview(unittest.TestCase):
     def test_launch_preview_warns_on_friend(self):
-        for typ in TYPES:
+        # Every hostile operation; Counterintelligence Support is only ever
+        # run on a friend, and its preview shows the boost instead.
+        for typ in HOSTILE_TYPES:
             accept = blocks(action(typ), "accept_effect")[0]
             with self.subTest(typ):
                 self.assertIn(FRIEND_WARNING, accept)

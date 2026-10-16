@@ -35,8 +35,10 @@
 # holds the table and checks the tooltips and descriptions against it.
 #
 # FRIENDS: good relations no longer refuse an operation. covert_is_friend
-# (covert_warfare_triggers.txt) is a cost, not a gate: each launch preview
-# warns when the target is a friend and what a catch would cost at home.
+# (covert_warfare_triggers.txt) is a cost, not a gate: each hostile launch
+# preview warns when the target is a friend and what a catch would cost at
+# home. Counterintelligence Support (last in the file) is the reverse: it may
+# only be run on a friend.
 # The AI is kept off friends with the six operations that used to be refused
 # at good relations (election interference, financial subversion,
 # infrastructure sabotage, communications disruption, ideological subversion,
@@ -68,9 +70,9 @@
 #   hostility (covert_ai_hostility_gone), nothing left to steal, no milestone
 #   of our own, influence in deficit, or (election interference, financial
 #   subversion, ideological subversion, destabilization) a target that has
-#   become a friend. Wartime operations, influence campaign and secure loose
-#   material are never called off by choice; their requirement_to_maintain
-#   ends them. Cultivate assets also stops once its network reaches
+#   become a friend. Wartime operations, influence campaign, secure loose
+#   material and counterintelligence support are never called off by choice;
+#   their requirement_to_maintain ends them. Cultivate assets also stops once its network reaches
 #   covert_cultivate_ai_net_done. Launch-only tests (free slot, intelligence
 #   capacity, target size, debt) never break anything.
 # ============================================================================
@@ -2406,13 +2408,15 @@ covert_cultivate_assets_action = {
 
 		propose_score = {
 			value = 5
-			# Feed the network another operation there already benefits from.
+			# Feed the network another operation there already benefits from
+			# (a hostile one: Counterintelligence Support feeds no network).
 			if = {
 				limit = {
 					has_variable_list = iw_ops
 					any_in_list = {
 						variable = iw_ops
 						var:iw_target ?= scope:target_country
+						covert_op_is_hostile = yes
 					}
 				}
 				add = 5
@@ -2578,6 +2582,174 @@ covert_secure_material_action = {
 			# A warhead in a neighbour's hands is a warhead near us.
 			if = {
 				limit = { is_adjacent_to_country = scope:target_country }
+				add = 5
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# COUNTERINTELLIGENCE SUPPORT (2026-10-16, spec
+# docs/superpowers/specs/2026-10-16-covert-counterintel-backlash-design.md § C)
+# ----------------------------------------------------------------------------
+# The one operation that works FOR its target: our officers and analysts lent
+# to a friend's counterintelligence, raising its three covert defences
+# (covert_counterintel_support, through covert_op_apply_target_effect like any
+# target effect, so phase and priority scale it). Public, not hostile: an
+# ordinary visible pact, never rolled for detection, never caught or watched
+# (covert_op_is_hostile). The protector gets nothing back: no network inside
+# the ally, no head start, no Tradecraft. It costs a slot, upkeep and
+# mild-tier influence, and counts against the per-type cap; its mild tier is
+# nominal, since it is never exposed, so its description carries no tier note.
+# Only for a friend (covert_is_friend, at launch and to keep it), an
+# intelligence-sharing partner included: that treaty gate is for hostile
+# operations. One protector per ally (iw_cis_protector on the target, see
+# covert_op_create): a named modifier does not stack with itself, so a second
+# protector could only overwrite the first.
+covert_counterintel_support_action = {
+	# PLACEHOLDER: cultivate assets' art until an icon pass draws this one
+	# (test_covert_op_registry.PLACEHOLDER_ICON; the lens icon is missing too).
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = no
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_counterintel_support }
+			}
+		}
+		custom_tooltip = {
+			text = covert_counterintel_support_phase_tt
+		}
+		custom_tooltip = {
+			text = covert_counterintel_support_public_tt
+		}
+		covert_op_start = { TYPE = counterintel_support DEFENSE_MOD = country_covert_defense_ideological_add CODE = 14 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
+			text = covert_op_capacity_counterintel_support_tt
+			covert_ops_type_below_cap = { TYPE = covert_counterintel_support_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_counterintel_support_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = covert_cis_target_is_friend_tt
+			covert_is_friend = { TARGET = scope:target_country }
+		}
+		# One protector per ally. A mark of our own can only be stale (the
+		# no-duplicate gate above), so it does not block us.
+		custom_tooltip = {
+			text = covert_cis_one_protector_tt
+			scope:target_country = {
+				OR = {
+					NOT = { has_variable = iw_cis_protector }
+					var:iw_cis_protector ?= ROOT
+				}
+			}
+		}
+	}
+
+	pact = {
+		cost = 25 # influence, mild tier (INFLUENCE, file header)
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# Lapses when the friendship does.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = covert_cis_target_is_friend_tt
+					covert_is_friend = { TARGET = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = counterintel_support } }
+		auto_break_effect = { covert_op_end = { TYPE = counterintel_support } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.05
+		}
+
+		# A friend whose service is weaker than ours, among the bloc we lead,
+		# our subjects and our allies; at most one at a time (the spec's call:
+		# the AI has hostile work for its slots too).
+		will_propose = {
+			covert_is_friend = { TARGET = scope:target_country }
+			OR = {
+				AND = {
+					is_power_bloc_leader = yes
+					is_in_same_power_bloc = scope:target_country
+				}
+				scope:target_country = { is_subject_of = ROOT }
+				has_treaty_alliance_with = { TARGET = scope:target_country }
+			}
+			intelligence_capacity_total > scope:target_country.intelligence_capacity_total
+			NOT = {
+				any_scope_diplomatic_pact = {
+					is_diplomatic_action_type = covert_counterintel_support_action
+					first_country = prev
+				}
+			}
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_counterintel_support_action }
+		}
+
+		# Never called off by choice: requirement_to_maintain ends it when the
+		# friendship does.
+		will_break = { always = no }
+
+		propose_score = {
+			value = 5
+			# A subject's security is ours.
+			if = {
+				limit = { scope:target_country = { is_subject_of = ROOT } }
 				add = 5
 			}
 		}

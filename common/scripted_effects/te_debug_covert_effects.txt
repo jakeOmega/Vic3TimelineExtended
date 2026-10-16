@@ -142,13 +142,15 @@ te_debug_covert_refresh_display = {
 # Make the detection roll land on one specific operation: pin a random running
 # operation's iw_detect to 100 and run the shipping roll effect, so the roll,
 # the temporary-list pick and the scope hand-off to covert_warfare.1 are all
-# exercised. The next monthly sync restores the honest figure.
+# exercised. The next monthly sync restores the honest figure. A hostile one:
+# the roll never rolls Counterintelligence Support.
 # Scope: country
 te_debug_covert_force_detection = {
 	if = {
 		limit = { has_variable_list = iw_ops }
 		random_in_list = {
 			variable = iw_ops
+			limit = { covert_op_is_hostile = yes }
 			set_variable = { name = iw_detect value = 100 }
 		}
 		covert_ops_roll_detection_all = yes
@@ -279,6 +281,8 @@ te_debug_covert_hostile_networks = {
 		limit = { has_variable_list = iw_ops }
 		every_in_list = {
 			variable = iw_ops
+			# A friend we protect is not a hostile host.
+			limit = { covert_op_is_hostile = yes }
 			var:iw_target ?= {
 				if = {
 					limit = { is_country_alive = yes }

@@ -22,6 +22,19 @@
 #                              OPERATION, which also documents the target's
 #                              record containers, listed in its iw_known_ops)
 #
+# Counterintelligence Support (iw_op_counterintel_support) is the one type that
+# works FOR its target. covert_op_is_hostile tells it apart, and everything
+# that treats an operation as a foothold or a threat skips it: the detection
+# roll, the network ensure and count (covert_nets_sync), the head start and
+# network in covert_op_create, Tradecraft, the tier-2 count of operations
+# against us (is_hostile_covert_operation_pact) and the AI's priority
+# escalation. It still costs a slot, upkeep and influence. Its target carries
+#           iw_cis_protector   the country supporting it (one per ally), set by
+#                              covert_op_create, cleared by covert_op_destroy and
+#                              covert_op_sync's reap, and dropped when stale by
+#                              every country's monthly pulse
+#                              (covert_warfare_monthly_country)
+#
 # The operator keeps references in its `iw_ops` variable list. Iterate that
 # list, never every_container: the global iterator scans every container in
 # the game, parent filter or not.
@@ -76,10 +89,13 @@
 # diplomatic action's tooltip or confirmation box renders its accept_effect,
 # the engine resolves scope links inside hidden_effect but never creates the
 # container, so the scope is unset.
+# Counterintelligence Support takes no head start and makes no network: the
+# protector gets nothing inside the ally (spec 2026-10-16 § C). It marks its
+# target with its protector instead, which its action's possible reads.
 # Parameters: $TYPE$ = short name (e.g. election_interference)
 #             $TARGET$ = target country (a scope: reference — it is read inside on_created)
-#             $CODE$ = operation type code 0-12, matching the branches of
-#                      covert_last_exposed_type_name
+#             $CODE$ = operation type code (test_covert_op_registry.OPS), matching
+#                      the branches of covert_last_exposed_type_name
 # Scope: operator country
 covert_op_create = {
 	save_scope_as = iw_operator
@@ -100,12 +116,22 @@ covert_op_create = {
 			set_variable = { name = iw_net_head_start value = 0 }
 		}
 		if = {
-			limit = { has_variable_list = iw_nets }
-			random_in_list = {
-				variable = iw_nets
-				limit = { var:iw_target ?= $TARGET$ }
-				scope:iw_new_op = { set_variable = { name = iw_net_head_start value = PREV.var:iw_net_head_start_offer } }
+			limit = { scope:iw_new_op = { covert_op_is_hostile = yes } }
+			if = {
+				limit = { has_variable_list = iw_nets }
+				random_in_list = {
+					variable = iw_nets
+					limit = { var:iw_target ?= $TARGET$ }
+					scope:iw_new_op = { set_variable = { name = iw_net_head_start value = PREV.var:iw_net_head_start_offer } }
+				}
 			}
+			# The network row appears on the day the first operation starts,
+			# not at the next monthly pulse. After the lookup, so a first
+			# operation gets no head start from an empty network.
+			covert_net_create = { TARGET = $TARGET$ }
+		}
+		else = {
+			$TARGET$ = { set_variable = { name = iw_cis_protector value = scope:iw_operator } }
 		}
 		scope:iw_new_op = {
 			# Initialise the display phase so the widget never reads a variable
@@ -114,10 +140,6 @@ covert_op_create = {
 			covert_op_refresh_phase = yes
 		}
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
-		# The network row appears on the day the first operation starts,
-		# not at the next monthly pulse. After the lookup, so a first
-		# operation gets no head start from an empty network.
-		covert_net_create = { TARGET = $TARGET$ }
 		covert_refresh_priority_cost = yes
 	}
 }
@@ -126,7 +148,8 @@ covert_op_create = {
 # no-duplicate gate on every covert action keeps (type, target) unique.
 # A watched operation's record on its target goes with it, so no row of the
 # target's Known Foreign Operations outlives the operation (the direct reap in
-# covert_op_sync does the same).
+# covert_op_sync does the same), and so does a Counterintelligence Support's
+# protector mark on its target, if it is still ours.
 # Parameters: $TYPE$ = short name, $TARGET$ = target country
 # Scope: operator country
 covert_op_destroy = {
@@ -151,6 +174,15 @@ covert_op_destroy = {
 		if = {
 			limit = { scope:iw_ended_op ?= { has_variable = iw_known } }
 			$TARGET$ = { covert_watch_forget = { ATTACKER = scope:iw_ended_op_operator TYPE = $TYPE$ } }
+		}
+		if = {
+			limit = { scope:iw_ended_op ?= { covert_op_is_hostile = no } }
+			$TARGET$ = {
+				if = {
+					limit = { var:iw_cis_protector ?= scope:iw_ended_op_operator }
+					remove_variable = iw_cis_protector
+				}
+			}
 		}
 		remove_list_variable = { name = iw_ops target = scope:iw_ended_op }
 		scope:iw_ended_op = { destroy_container = yes }
@@ -686,7 +718,9 @@ covert_net_clamp = {
 # the old value stays stored but the widget hides it.
 #   tier >= 1  iw_net_intel_ic     the target's intelligence_capacity_total
 #              iw_net_intel_techs  the target's techs_researched
-#   tier 2     iw_net_intel_ops    covert pacts the target runs against the operator
+#   tier 2     iw_net_intel_ops    hostile covert pacts the target runs against the
+#                                  operator (not Counterintelligence Support: a
+#                                  friend's protection is not an operation against us)
 # The count reads pacts (the source of truth for whether an operation exists),
 # not the target's own iw_ops, whose sync only runs while the target's journal
 # entry is active; every phase counts. It is the ONE place the mod tells a
@@ -731,7 +765,7 @@ covert_net_refresh_intel = {
 				save_scope_as = iw_net_intel_tgt
 				every_scope_diplomatic_pact = {
 					limit = {
-						is_covert_operation_pact = yes
+						is_hostile_covert_operation_pact = yes
 						first_country = scope:iw_net_intel_tgt
 						second_country = { this = scope:iw_net_operator }
 					}
@@ -820,9 +854,10 @@ covert_retaliation_seed_network = {
 # straight after covert_ops_sync_all — never from covert_ops_sync_all itself,
 # which also runs on every funding and priority click and would grow networks
 # per click.
-#   1. Ensure a network exists for every operation's target, and inside
-#      every attacker whose operation we watch (§ WATCHING A CAUGHT OPERATION).
-#   2. Count operations per network (zero every count, then walk iw_ops once),
+#   1. Ensure a network exists for every hostile operation's target, and
+#      inside every attacker whose operation we watch (§ WATCHING A CAUGHT
+#      OPERATION). Counterintelligence Support plants none inside the ally.
+#   2. Count hostile operations per network (zero every count, then walk iw_ops once),
 #      and flag networks a cultivate-assets operation feeds (slice 6). Then sum
 #      what the operations we watch add to the network inside their attacker
 #      (iw_net_watch_gain, by each operation's priority; an operation whose
@@ -850,6 +885,7 @@ covert_nets_sync = {
 		limit = { has_variable_list = iw_ops }
 		every_in_list = {
 			variable = iw_ops
+			limit = { covert_op_is_hostile = yes }
 			var:iw_target ?= {
 				save_scope_as = iw_net_ensure_tgt
 				scope:iw_net_operator = { covert_net_create = { TARGET = scope:iw_net_ensure_tgt } }
@@ -882,6 +918,7 @@ covert_nets_sync = {
 			limit = { has_variable_list = iw_ops }
 			every_in_list = {
 				variable = iw_ops
+				limit = { covert_op_is_hostile = yes }
 				var:iw_target ?= {
 					save_scope_as = iw_net_count_tgt
 					scope:iw_net_operator = {
@@ -1198,11 +1235,13 @@ covert_tradecraft_refresh_bonus = {
 # never from covert_ops_sync_all or covert_refresh_funding_state, which run on
 # every stepper click.
 #   1. Seed if missing.
-#   2. Weigh the running operations into iw_tradecraft_ops: 1 for each at
-#      establishing or better, covert_tradecraft_prep_gain_fraction for each
+#   2. Weigh the running hostile operations into iw_tradecraft_ops: 1 for each
+#      at establishing or better, covert_tradecraft_prep_gain_fraction for each
 #      still preparatory and for every cultivate-assets operation (slice 6);
-#      the total capped at covert_tradecraft_ops_counted.
-#   3. Gain if anything counted; else decay if no operation runs at all.
+#      the total capped at covert_tradecraft_ops_counted. Counterintelligence
+#      Support teaches nothing (the protector gets nothing, spec 2026-10-16 § C).
+#   3. Gain if anything counted; else decay if no hostile operation runs: a
+#      service that only protects a friend is idle for this purpose.
 #   4. Refresh the tier bonus.
 # Scope: operator country
 covert_tradecraft_monthly = {
@@ -1213,6 +1252,7 @@ covert_tradecraft_monthly = {
 		limit = { has_variable_list = iw_ops }
 		every_in_list = {
 			variable = iw_ops
+			limit = { covert_op_is_hostile = yes }
 			if = {
 				limit = {
 					covert_op_is_established = yes
@@ -1243,7 +1283,17 @@ covert_tradecraft_monthly = {
 		covert_tradecraft_gain = { AMOUNT = covert_tradecraft_monthly_gain_nominal REASON = 1 }
 	}
 	else_if = {
-		limit = { covert_operations_active < 1 }
+		limit = {
+			NOT = {
+				AND = {
+					has_variable_list = iw_ops
+					any_in_list = {
+						variable = iw_ops
+						covert_op_is_hostile = yes
+					}
+				}
+			}
+		}
 		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_decay REASON = 24 }
 	}
 	covert_tradecraft_refresh_bonus = yes
@@ -1318,10 +1368,20 @@ covert_op_sync = {
 		}
 		every_in_list = {
 			list = iw_ended_ops_$TYPE$
-			# A watched operation's record goes with it (see covert_op_destroy).
+			# A watched operation's record goes with it, and a protector mark
+			# that is still ours (see covert_op_destroy).
 			if = {
 				limit = { has_variable = iw_known }
 				var:iw_target ?= { covert_watch_forget = { ATTACKER = scope:iw_operator TYPE = $TYPE$ } }
+			}
+			if = {
+				limit = { covert_op_is_hostile = no }
+				var:iw_target ?= {
+					if = {
+						limit = { var:iw_cis_protector ?= scope:iw_operator }
+						remove_variable = iw_cis_protector
+					}
+				}
 			}
 			scope:iw_operator = { remove_list_variable = { name = iw_ops target = PREV } }
 			destroy_container = yes
@@ -1370,6 +1430,7 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = space_espionage ACTION = covert_space_espionage_action DEFENSE_MOD = country_covert_defense_economic_add CODE = 11 }
 	covert_op_sync = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 12 }
 	covert_op_sync = { TYPE = secure_material ACTION = covert_secure_material_action DEFENSE_MOD = country_covert_defense_military_add CODE = 13 }
+	covert_op_sync = { TYPE = counterintel_support ACTION = covert_counterintel_support_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 14 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1680,6 +1741,12 @@ covert_ops_apply_all_phase_effects = {
 
 		# Cultivate assets (slice 6) is deliberately absent: it acts on
 		# nothing but the network (covert_nets_sync / covert_net_tick_gain).
+
+		# ---- Counterintelligence Support (2026-10-16): the friend's three
+		#      covert defences, on the TARGET. One protector per ally
+		#      (iw_cis_protector), so the named modifier never has two
+		#      sources to fight over. ----
+		covert_op_apply_target_effect = { TYPE = counterintel_support MODIFIER = covert_counterintel_support }
 
 		# ---- Secure Loose Material (nuclear_crisis_design.md §0.10 step 5):
 		#      no modifier. Once established, a monthly chance, scaled by
@@ -2599,11 +2666,13 @@ covert_effect_priority_down = {
 
 # The AI's priorities. Per operation, a wanted level: 1 in default or
 # bankruptcy; 3 for a great power at war with the target; 2 against a rival;
-# otherwise 1. It then steps toward that level one at a time, through the same
-# covert_possible_priority_* gates the stepper uses, so any gate added there
-# (slice 5's Tradecraft requirement) binds the AI as well. Two steps each way
-# covers the whole 1-3 range. The variable is set directly: the monthly pulse
-# runs the sync and the effects straight after this.
+# otherwise 1. Counterintelligence Support always wants 1: the war and rival
+# levels assume a hostile target. It then steps toward that level one at a
+# time, through the same covert_possible_priority_* gates the stepper uses, so
+# any gate added there (slice 5's Tradecraft requirement) binds the AI as
+# well. Two steps each way covers the whole 1-3 range. The variable is set
+# directly: the monthly pulse runs the sync and the effects straight after
+# this.
 # Scope: country (is_player = no; the caller guards it)
 covert_ai_manage_priorities = {
 	save_scope_as = iw_ai_operator
@@ -2615,6 +2684,7 @@ covert_ai_manage_priorities = {
 			set_variable = { name = iw_ai_priority value = 1 }
 			if = {
 				limit = {
+					covert_op_is_hostile = yes
 					scope:iw_ai_operator = {
 						NOT = { in_default = yes }
 						NOT = { has_modifier = declared_bankruptcy }

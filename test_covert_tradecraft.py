@@ -180,7 +180,9 @@ class MonthlyTests(unittest.TestCase):
         self.assertIn("add = covert_tradecraft_prep_gain_fraction", block)
         self.assertIn("var:iw_tradecraft_ops > 0", block)
         self.assertIn("covert_tradecraft_gain = { AMOUNT = covert_tradecraft_monthly_gain_nominal REASON = 1 }", block)
-        self.assertIn("covert_operations_active < 1", block)
+        # Idle decay runs while no hostile operation runs: Counterintelligence
+        # Support neither earns Tradecraft nor holds it (spec 2026-10-16 § C).
+        self.assertIn("covert_op_is_hostile = yes", block[block.index("else_if = {"):])
         self.assertIn("covert_tradecraft_loss = { AMOUNT = covert_tradecraft_decay REASON = 24 }", block)
         self.assertIn("covert_tradecraft_refresh_bonus = yes", block)
 

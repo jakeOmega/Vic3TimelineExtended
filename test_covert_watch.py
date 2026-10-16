@@ -30,10 +30,11 @@ from test_covert_exposure_tiers import (
 from test_covert_op_registry import (
     CUSTOM_LOC,
     EFFECTS,
+    FRIENDLY,
+    HOSTILE_TYPES,
     OPS,
     ROOT,
     TRIGGERS,
-    TYPES,
     _loc,
     _text,
     _top_level_block,
@@ -41,11 +42,9 @@ from test_covert_op_registry import (
 
 JE = ROOT / "common/journal_entries/je_covert_warfare.txt"
 
-# Every type a defender can watch. Counterintelligence Support (Task 5) is a
-# friendly operation: never rolled, so never caught and never watched.
-FRIENDLY_TYPES = {"counterintel_support"}
-HOSTILE_TYPES = tuple(t for t in TYPES if t not in FRIENDLY_TYPES)
-HOSTILE_CODES = {t: code for t, code, _, _, _ in OPS if t not in FRIENDLY_TYPES}
+# Every type a defender can watch (HOSTILE_TYPES). Counterintelligence Support
+# is a friendly operation: never rolled, so never caught and never watched.
+HOSTILE_CODES = {t: code for t, code, _, _, _ in OPS if t not in FRIENDLY}
 
 
 def strip_comments(text):

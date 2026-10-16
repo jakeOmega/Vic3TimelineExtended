@@ -573,6 +573,13 @@ types covert_operations_widget_types
 					visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 					texture = "gfx/interface/icons/diplomatic_action_icons/covert_secure_material_action.dds"
 				}
+				# PLACEHOLDER: cultivate assets' art until an icon pass draws
+				# Counterintelligence Support's own (test_covert_op_registry.PLACEHOLDER_ICON).
+				icon = {
+					size = { 32 32 }
+					visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+					texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
+				}
 			}
 
 			widget_je_covert_operation_text = {
@@ -631,6 +638,10 @@ types covert_operations_widget_types
 				visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 				text = "je_iw_op_row_secure_material"
 			}
+			widget_je_covert_operation_text = {
+				visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+				text = "je_iw_op_row_counterintel_support"
+			}
 		}
 
 		# ---- Phase, and how long until the next one ----
@@ -661,10 +672,18 @@ types covert_operations_widget_types
 			text = "je_iw_op_row_cultivate_detail"
 		}
 
-		# ---- This operation's own monthly detection risk; the arithmetic on hover ----
+		# ---- This operation's own monthly detection risk; the arithmetic on hover.
+		#      Counterintelligence Support is a public pact, never rolled
+		#      (covert_op_is_hostile), so its row says so instead of a figure ----
 		widget_je_covert_operation_detail = {
+			visible = "[Not( ScriptContainer.HasTag('iw_op_counterintel_support') )]"
 			text = "je_iw_op_row_detection"
 			tooltip = "je_iw_op_row_detection_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+			text = "je_iw_op_row_detection_none"
+			tooltip = "je_iw_op_row_detection_none_tt"
 		}
 
 		# ---- Espionage only: technology stolen so far and the latest
@@ -803,6 +822,14 @@ types covert_operations_widget_types
 				}
 				blockoverride "sd_visible" {
 					visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
+				}
+			}
+			covert_op_stand_down_button = {
+				blockoverride "sd_context" {
+					datacontext = "[GetScriptedGui('covert_stand_down_counterintel_support_sgui')]"
+				}
+				blockoverride "sd_visible" {
+					visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
 				}
 			}
 		}

@@ -24,6 +24,7 @@ import unittest
 from test_covert_op_registry import (
     ACTIONS,
     EFFECTS,
+    FRIENDLY,
     ROOT,
     TYPES,
     _loc,
@@ -35,6 +36,9 @@ MODIFIERS = ROOT / "common/static_modifiers/extra_modifiers.txt"
 
 HEADER_TT = "covert_op_preview_header_tt"
 PHASE_TT = "covert_op_phase_warning_tt"
+# A friendly operation's own phase line: the shared one promises a head start
+# from our network and a heavier exposure later on, neither of which it has.
+FRIENDLY_PHASE_TT = "covert_%s_phase_tt"
 SELF_NOTE_TT = "covert_op_self_effect_note_tt"
 # Espionage also steals technology (covert_ops_steal_tech_all), which does add
 # up across operations, so its previews carry their own note and a theft line.
@@ -191,8 +195,9 @@ class LaunchPreviewTests(unittest.TestCase):
             accept = _accept_effect(t)
             with self.subTest(type=t):
                 has_effects = bool(pulse[t]["all"])
+                phase_tt = FRIENDLY_PHASE_TT % t if t in FRIENDLY else PHASE_TT
                 self.assertEqual("text = %s\n" % HEADER_TT in accept, has_effects)
-                self.assertEqual("text = %s\n" % PHASE_TT in accept, has_effects)
+                self.assertEqual("text = %s\n" % phase_tt in accept, has_effects)
                 # A self effect comes from the type's strongest operation only
                 # (covert_op_apply_self_effect): a second one adds nothing to us.
                 # Espionage says so with its own note, because its stolen
@@ -205,7 +210,7 @@ class LaunchPreviewTests(unittest.TestCase):
                     self.assertEqual("text = %s\n" % SELF_NOTE_TT in accept, bool(pulse[t]["self"]))
                 if has_effects:
                     self.assertLess(accept.index(HEADER_TT), accept.index("show_as_tooltip"))
-                    self.assertLess(accept.index("show_as_tooltip"), accept.index(PHASE_TT))
+                    self.assertLess(accept.index("show_as_tooltip"), accept.index(phase_tt))
 
     def test_preview_lines_are_position_neutral(self):
         # In game the scope:target_country block renders after the root-level
@@ -219,7 +224,8 @@ class LaunchPreviewTests(unittest.TestCase):
 
     def test_preview_keys_exist(self):
         loc = _loc()
-        for key in {HEADER_TT, PHASE_TT, SELF_NOTE_TT, ESPIONAGE_NOTE_TT} | set(THEFT_TT.values()) | {row[0] for row in STATED}:
+        keys = {HEADER_TT, PHASE_TT, SELF_NOTE_TT, ESPIONAGE_NOTE_TT} | set(THEFT_TT.values()) | {row[0] for row in STATED}
+        for key in keys | {FRIENDLY_PHASE_TT % t for t in FRIENDLY}:
             with self.subTest(key=key):
                 self.assertIn(key, loc)
 

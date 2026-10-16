@@ -48,7 +48,18 @@ is_covert_operation_pact = {
 		is_diplomatic_action_type = covert_space_espionage_action
 		is_diplomatic_action_type = covert_cultivate_assets_action
 		is_diplomatic_action_type = covert_secure_material_action
+		is_diplomatic_action_type = covert_counterintel_support_action
 	}
+}
+
+# A covert operation pact that works against its second country: every type
+# but Counterintelligence Support, which protects a friend. The pact-scope
+# twin of covert_op_is_hostile, for counts that read pacts rather than
+# containers (a network's tier-2 count of operations against us).
+# Scope: diplomatic_pact
+is_hostile_covert_operation_pact = {
+	is_covert_operation_pact = yes
+	NOT = { is_diplomatic_action_type = covert_counterintel_support_action }
 }
 
 # Target eligibility shared by all covert actions. Decentralized countries have
@@ -312,6 +323,9 @@ covert_code_tier_mild = {
 		var:$VAR$ = 11
 		var:$VAR$ = 12
 		var:$VAR$ = 13
+		# Counterintelligence Support: nominal. It is never caught, so no
+		# exposure cost ever reads this; it sits here so every code has a tier.
+		var:$VAR$ = 14
 	}
 }
 

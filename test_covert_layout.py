@@ -12,6 +12,7 @@ import os
 import re
 import unittest
 
+from test_covert_op_registry import HOSTILE_TYPES, PLACEHOLDER_ICON
 from test_covert_op_registry import TYPES as OP_TYPES
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -307,12 +308,15 @@ class OperationRowTest(unittest.TestCase):
         cls.row = _type_body(_read(GUI), "widget_je_covert_operation_row")
 
     def test_each_type_has_its_own_icon(self):
+        # A type still waiting for its own art borrows another type's
+        # (PLACEHOLDER_ICON); the icon pass deletes its entry.
         found = re.findall(r"visible = \"\[ScriptContainer\.HasTag\('iw_op_(\w+)'\)\]\"\s*"
                            r"texture = \"gfx/interface/icons/diplomatic_action_icons/covert_(\w+)_action\.dds\"", self.row)
         self.assertEqual([a for a, _ in found], list(OP_TYPES))
-        self.assertTrue(all(a == b for a, b in found))
+        self.assertTrue(all(PLACEHOLDER_ICON.get(a, a) == b for a, b in found))
         for t in OP_TYPES:
-            self.assertIn(f"gfx/interface/icons/diplomatic_action_icons/covert_{t}_action.dds",
+            art = PLACEHOLDER_ICON.get(t, t)
+            self.assertIn(f"gfx/interface/icons/diplomatic_action_icons/covert_{art}_action.dds",
                           "\n".join(_git_files()), t)
 
     def test_controls_are_centred_beneath_the_lines(self):
@@ -399,7 +403,7 @@ def _git_files():
     return out.split("\n")
 
 
-HOSTILE = tuple(t for t in OP_TYPES if t != "counterintel_support")   # the types a defender can watch
+HOSTILE = HOSTILE_TYPES   # the types a defender can watch
 KNOWN_TT_KEYS = ("iw_expose_known_exists_tt", "iw_expose_known_ours_tt", "iw_expose_known_unordered_tt",
                  "iw_expose_known_free_tt", "covert_known_expose_effect_tt")
 
