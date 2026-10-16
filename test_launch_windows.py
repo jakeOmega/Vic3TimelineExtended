@@ -344,3 +344,118 @@ class GeneratedFilesTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------------------------------------------------------------------------
+# The gate's script
+# ---------------------------------------------------------------------------
+def _strip(text):
+    return re.sub(r"#[^\n]*", "", text)
+
+
+def _block(text, name):
+    m = re.search(r"(?m)^" + re.escape(name) + r"\s*=\s*\{", text)
+    if m is None:
+        raise AssertionError(f"{name} not found")
+    depth, i = 0, m.end() - 1
+    for j in range(i, len(text)):
+        depth += {"{": 1, "}": -1}.get(text[j], 0)
+        if depth == 0:
+            return text[m.end():j]
+    raise AssertionError("unclosed block")
+
+
+class GateScriptTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))
+        cls.windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        cls.colony = _block(cls.effects, "sr_establish_colony_effect")
+        cls.site_body = {site: b.key for b in glw.BODIES for site in b.sites}
+
+    def test_every_colony_site_is_drawn_through_its_window_body(self):
+        branches = re.findall(r"trigger = \{(.*?)\}\s*set_global_variable = \{ name = sr_colony_(\w+) value = yes \}(.*?)"
+                              r"trigger_event", self.colony, re.S)
+        sites = {site for _, site, _ in branches}
+        self.assertEqual(sites, set(self.site_body) | set(glw.UNGATED_SITES))
+        self.assertEqual(len(branches), 34)
+        for trigger, site, effect in branches:
+            with self.subTest(site=site):
+                self.assertIn(f"NOT = {{ has_global_variable = sr_colony_{site} }}", trigger)
+                if site in glw.UNGATED_SITES:
+                    self.assertIn("sr_launch_mercury_departs = yes", trigger)
+                    self.assertNotIn("sr_launch_window_gate_check", effect)
+                else:
+                    body = self.site_body[site]
+                    self.assertEqual(re.findall(r"sr_launch_site_departs = \{ BODY = (\w+) \}", trigger), [body])
+                    self.assertEqual(re.findall(r"sr_launch_window_gate_check = \{ BODY = (\w+) \}", effect), [body])
+
+    def test_each_stage_holds_its_bodies_sites(self):
+        draws = self.colony[:self.colony.index("change_variable = { name = sr_colony_count")]
+        stages = re.split(r"global_var:sr_colonization_stage = (\d)", draws)
+        for i in range(1, len(stages), 2):
+            stage, body = int(stages[i]), stages[i + 1]
+            drawn = set(re.findall(r"name = sr_colony_(\w+) value = yes", body))
+            expected = {s for b in glw.BODIES if b.stage == stage for s in b.sites}
+            expected |= {s for s, st in glw.UNGATED_SITES.items() if st == stage}
+            with self.subTest(stage=stage):
+                self.assertEqual(drawn, expected)
+
+    def test_the_cache_and_the_panel_list_every_body(self):
+        keys = [b.key for b in glw.BODIES]
+        cache = _block(self.windows, "sr_launch_windows_refresh_cache")
+        self.assertEqual(re.findall(r"sr_launch_window_cache_body = \{ BODY = (\w+) \}", cache), keys)
+        lines = _block(self.windows, "sr_launch_window_lines")
+        self.assertEqual(re.findall(r"sr_launch_window_line = \{ BODY = (\w+) \}", lines), keys)
+
+    def test_the_journal_entry_launches_through_the_rule(self):
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        entry = _block(je, "je_space_race_solar_colonization")
+        pulse = entry[entry.index("on_monthly_pulse"):]
+        self.assertIn("sr_launch_month = yes", pulse)
+        self.assertNotIn("sr_establish_colony_effect", pulse)
+        month = _block(self.windows, "sr_launch_month")
+        self.assertLess(month.index("sr_launch_windows_ensure_cache = yes"), month.index("sr_launch_fleet_ready"))
+        # Spent only on a claim, at the cost read before the stage can move.
+        self.assertLess(month.index("value = sr_launch_fleet_cost"), month.index("sr_establish_colony_effect = yes"))
+        self.assertIn("local_var:sr_launch_claimed_before < sr_total_global_colonies", month)
+
+    def test_setback_cap_applies_to_solar_colonization_only(self):
+        for name, mult in (("sr_apply_ambitious_failure_progress_loss", "0.75"),
+                           ("sr_apply_safe_setback_progress_loss", "0.85")):
+            body = _block(self.effects, name)
+            with self.subTest(helper=name):
+                self.assertIn(f"sr_apply_solar_colonization_progress_loss = {{ MULT = {mult} }}", body)
+                self.assertEqual(len(re.findall(rf"sr_apply_progress_loss_base = \{{ MILESTONE = \w+\s+MULT = {mult} \}}",
+                                                body)), 7)
+        self.assertNotIn("MILESTONE = solar_colonization MULT", self.effects)
+
+    def test_setback_cap_takes_a_share_of_one_goal_at_most(self):
+        # The helper's arithmetic, step by step, against loss = share x min(P, G).
+        body = _block(self.windows, "sr_apply_solar_colonization_progress_loss")
+        self.assertIn("var:sr_progress_solar_colonization > sr_solar_colonization_goal", body)
+        steps = re.findall(r"(subtract|add|multiply) = (\S+) \}", body)
+        self.assertEqual(steps, [("multiply", "$MULT$"), ("subtract", "sr_solar_colonization_goal"),
+                                 ("add", "local_var:sr_setback_readied"), ("multiply", "$MULT$")])
+        for progress in (100.0, 400.0, 1000.0):
+            for mult in (0.75, 0.85):
+                goal = 400.0
+                after = progress - goal + goal * mult if progress > goal else progress * mult
+                self.assertAlmostEqual(progress - after, (1 - mult) * min(progress, goal))
+
+    def test_global_variable_reads_are_guarded(self):
+        values = _strip(_raw("common", "script_values", "sr_launch_window_values.txt"))
+        values += _strip(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+        for var in set(re.findall(r"global_var:(\w+)", values)):
+            with self.subTest(var=var):
+                for m in re.finditer(rf"global_var:{var}\b", values):
+                    guard = values[max(0, m.start() - 160):m.start()]
+                    self.assertIn(f"has_global_variable = {var}", guard)
+
+    def test_every_body_has_its_panel_lines(self):
+        loc = _raw("localization", "english", "te_global_commons_c_l_english.yml")
+        keys = set(re.findall(r"(?m)^ (\w+):0 ", loc))
+        for b in glw.BODIES:
+            for kind in ("name", "line_open", "line_wait", "line_paid", "line_verdict"):
+                with self.subTest(body=b.key, kind=kind):
+                    self.assertIn(f"sr_window_{kind}_{b.key}", keys)
