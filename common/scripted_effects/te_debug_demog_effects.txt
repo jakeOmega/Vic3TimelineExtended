@@ -228,6 +228,37 @@ te_debug_demog_pulse_line = {
 	}
 }
 
+# ---- c_world: re-seed every late-game census -------------------------------------
+# THIS = ROOT = the player. Every state of the world whose late game has started (te_dg_elig) starts its census
+# again at its own equilibrium, as option c does for ours: the walks first, then a seed off the state's pulse (so
+# it seeds again at its next one), then each owner's census. The repair for the late sweep's lost births (fixed
+# 2026-10-16): until then a late state under a TFR of 2 recorded none, so its ring holds too few young people,
+# and once the census steers births again it would carry that gap forward for decades.
+te_debug_demog_reseed_late = {
+	set_local_variable = { name = te_dg_dbg_n value = 0 }
+	every_state = {
+		limit = {
+			te_demog_has_census = yes
+			has_variable = te_dg_elig
+		}
+		te_demog_walks = yes
+		te_demog_seed_off_pulse = yes
+		change_local_variable = { name = te_dg_dbg_n add = 1 }
+	}
+	every_country = {
+		limit = {
+			any_scope_state = {
+				te_demog_has_census = yes
+				has_variable = te_dg_elig
+			}
+		}
+		te_demog_country_census = yes
+	}
+	set_variable = { name = te_dg_dbg_states value = local_var:te_dg_dbg_n }
+	debug_log = "TE_DEMOG_RESEED_LATE states=[THIS.Var('te_dg_dbg_states').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_dg_dbg_states
+}
+
 # ---- d: benchmark ----------------------------------------------------------------
 # THIS = ROOT = the player. The cohort step in every state of the world with a census,
 # three passes; debug.log's timestamps (whole seconds) around each pass time it (spec
