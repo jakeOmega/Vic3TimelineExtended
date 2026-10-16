@@ -1,7 +1,9 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: scripted triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939).
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939),
+# reworked by 2026-10-16-grand-monument-archaeology-rework-design.md (foreign
+# digs by treaty: gm_arch_may_dig_ground, gm_arch_state_conceded_to).
 # A buried site is a script container tagged gm_site (gm_archaeology_effects.txt).
 # Its records, under the names a returned trophy's carry so the container
 # custom localization names it (gm_trophy_custom_loc.txt) and the monument
@@ -44,20 +46,78 @@ gm_arch_digs_for = {
 
 # ---- Who may dig ----------------------------------------------------------------------------
 # Container scope. $WHO$ (a country) holds a part of the ground the site lies
-# under. Foreign digs, by concession, are a later step (spec § Deferred).
+# under.
 gm_arch_owns_ground = {
 	var:gm_tr_origin_region ?= {
 		any_scope_state = { owner = $WHO$ }
 	}
 }
 
-# Container scope. The site's own conditions for $WHO$: open, on its ground,
-# and its technology in hand. The methods add their own (below).
+# State scope. $WHO$ holds an in-force treaty article of type $ARTICLE$
+# (archaeological_concession or excavation_permit) granted by this state's
+# owner and naming this state. The treaty is the record: nothing is written on
+# the state, so a treaty that ends by any road, or a state that changes hands,
+# ends the right at once (te_country_concedes_state_article's shape;
+# scripting_best_practices.md § "A Treaty Article's State-Side Effects Must Be
+# Checked Against the Treaty").
+gm_arch_state_conceded_to = {
+	save_temporary_scope_as = gm_arch_cs_state
+	exists = owner
+	owner = {
+		save_temporary_scope_as = gm_arch_cs_host
+		NOT = { this = $WHO$ }
+	}
+	$WHO$ = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = $ARTICLE$
+				source_country = scope:gm_arch_cs_host
+				input_state = scope:gm_arch_cs_state
+			}
+		}
+	}
+}
+
+# State scope. $WHO$ may dig here by either article.
+gm_arch_state_open_abroad = {
+	OR = {
+		gm_arch_state_conceded_to = { WHO = $WHO$ ARTICLE = archaeological_concession }
+		gm_arch_state_conceded_to = { WHO = $WHO$ ARTICLE = excavation_permit }
+	}
+}
+
+# Container scope. $WHO$ may dig the site's ground: it holds a part of it, or
+# the right to dig a part another holds (rework spec § 3).
+gm_arch_may_dig_ground = {
+	var:gm_tr_origin_region ?= {
+		any_scope_state = {
+			OR = {
+				owner = $WHO$
+				gm_arch_state_open_abroad = { WHO = $WHO$ }
+			}
+		}
+	}
+}
+
+# Container scope. $WHO$ would dig this site abroad, under the article
+# $ARTICLE$ (and not on its own ground), for the open rows' terms line. A
+# concession wins over a permit when both are in force.
+gm_arch_would_dig_abroad_by = {
+	NOT = { gm_arch_owns_ground = { WHO = $WHO$ } }
+	var:gm_tr_origin_region ?= {
+		any_scope_state = {
+			gm_arch_state_conceded_to = { WHO = $WHO$ ARTICLE = $ARTICLE$ }
+		}
+	}
+}
+
+# Container scope. The site's own conditions for $WHO$: open, on ground it may
+# dig, and its technology in hand. The methods add their own (below).
 gm_arch_can_dig = {
 	gm_system_enabled = yes
 	has_tag = gm_site
 	gm_arch_site_open = yes
-	gm_arch_owns_ground = { WHO = $WHO$ }
+	gm_arch_may_dig_ground = { WHO = $WHO$ }
 	gm_arch_has_gate_for = { WHO = $WHO$ }
 }
 
@@ -69,11 +129,28 @@ gm_arch_can_dig_tt = {
 	}
 	custom_tooltip = {
 		text = gm_arch_dig_ground_tt
-		gm_arch_owns_ground = { WHO = $WHO$ }
+		gm_arch_may_dig_ground = { WHO = $WHO$ }
 	}
 	custom_tooltip = {
 		text = gm_arch_dig_tech_tt
 		gm_arch_has_gate_for = { WHO = $WHO$ }
+	}
+}
+
+# ---- What a state offers a foreign sponsor (the articles' inputs) ------------------------------
+# State scope. A site in this state's region is open to $WHO$: a survey site
+# whose technology it has, or an incidental one already turned up. The
+# articles name only such a state, so none is signed for nothing.
+gm_arch_state_offers_site = {
+	save_temporary_scope_as = gm_arch_os_state
+	has_global_variable_list = gm_arch_sites
+	any_in_global_list = {
+		variable = gm_arch_sites
+		gm_arch_site_open = yes
+		gm_arch_has_gate_for = { WHO = $WHO$ }
+		var:gm_tr_origin_region ?= {
+			any_scope_state = { this = scope:gm_arch_os_state }
+		}
 	}
 }
 
@@ -114,6 +191,21 @@ gm_arch_country_idle = {
 	gm_arch_country_has_any = no
 }
 
+# Country scope, the host. A site on its ground is open to $WHO$: the
+# articles' `possible`, walking the 35 sites rather than every state.
+gm_arch_country_offers_site = {
+	save_temporary_scope_as = gm_arch_os_host
+	has_global_variable_list = gm_arch_sites
+	any_in_global_list = {
+		variable = gm_arch_sites
+		gm_arch_site_open = yes
+		gm_arch_has_gate_for = { WHO = $WHO$ }
+		var:gm_tr_origin_region ?= {
+			any_scope_state = { owner = scope:gm_arch_os_host }
+		}
+	}
+}
+
 # ---- The AI -------------------------------------------------------------------------------------
 # Country scope. An AI digs only at peace and out of default, with at most two
 # digs going (gm_arch_ai_decide).
@@ -121,4 +213,12 @@ gm_arch_ai_may_dig = {
 	is_ai = yes
 	is_at_war = no
 	in_default = no
+}
+
+# Container scope, with scope:gm_arch_ai_country the AI and its weekly fixed
+# surplus copied to its gm_arch_ai_budget (gm_arch_ai_decide): the dig by its
+# best method costs at most a quarter of that surplus (gm_arch_ai_cost_needed).
+gm_arch_ai_affordable = {
+	scope:gm_arch_ai_country ?= { has_variable = gm_arch_ai_budget }
+	gm_arch_ai_cost_needed <= scope:gm_arch_ai_country.var:gm_arch_ai_budget
 }

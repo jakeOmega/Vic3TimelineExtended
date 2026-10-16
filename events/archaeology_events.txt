@@ -3,20 +3,29 @@
 # ============================================================================
 # GRAND MONUMENTS — archaeology (issue #939)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
-# .1-.3 are the events a player reads: a site turned up, a dig finished, a dig
-# that destroyed half of what it found. .10 and .11 are hidden: they do the
-# work a scripted GUI or an option ordered (gm_archaeology_effects.txt), outside
-# any tooltip's walk. A site travels as scope:gm_arch_pick; its name, which
-# an event cannot reach in a container, is the country's gm_arch_last
-# (gm_arch_site_name).
+# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md,
+# reworked by 2026-10-16-grand-monument-archaeology-rework-design.md (§ 2).
+# .1 and .2 are the events a player reads: a site found or located, and a dig
+# finished. Each names its site, its place and state, the find and a
+# historical note: the effect that fires it saves the state under the site's
+# own name (gm_arch_ev_mark, scope:gm_arch_ev_<key>), and the description picks
+# the site's lines by that scope (gm_arch_site_<key>_found / _dug, which embed
+# _place and _history). An event cannot reach a container's custom
+# localization, and a country variable would be overwritten by the next
+# popup; a saved scope travels with each. .10 and .11 are hidden: they do the
+# work a scripted GUI or an option ordered (gm_archaeology_effects.txt),
+# outside any tooltip's walk.
 
 # ============================================================================
-# Event 1: something under the spade (incidental find)
+# Event 1: a site found or located
 # ============================================================================
-# A country event from gm_arch_found, players only (the AI finds the site in its
-# list at the next review). scope:gm_arch_pick is the site, now known (status 2).
+# A country event from gm_arch_tell_found, players only, once a site
+# (gm_site_told). scope:gm_arch_pick is the site; scope:gm_arch_ev_<key> the
+# state we would dig, our own or one we hold the right to dig;
+# scope:gm_arch_ev_survey is set for a survey site (located by scholars) and
+# not for an incidental one (turned up by chance).
 arch_events.1 = {
+	# REVIEWED 2026-10-16 (system_ungated): the World War it mentions is a date in the Sutton Hoo historical note (gm_arch_site_sutton_hoo_history), not the world war system; the event reads its own system (gm_system_enabled, the Grand Monuments rule)
 	type = country_event
 	placement = ROOT
 
@@ -24,9 +33,175 @@ arch_events.1 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
-	title = arch_events.1.t
-	desc = arch_events.1.d
-	flavor = arch_events.1.f
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_survey }
+				desc = arch_events.1.t_survey
+			}
+			triggered_desc = {
+				desc = arch_events.1.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_nineveh_library }
+				desc = gm_arch_site_nineveh_library_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_winged_victory_of_samothrace }
+				desc = gm_arch_site_winged_victory_of_samothrace_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_vindolanda_tablets }
+				desc = gm_arch_site_vindolanda_tablets_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_troy_hisarlik }
+				desc = gm_arch_site_troy_hisarlik_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mycenae_grave_circle }
+				desc = gm_arch_site_mycenae_grave_circle_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_pergamon_altar }
+				desc = gm_arch_site_pergamon_altar_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_deir_el_bahari_cache }
+				desc = gm_arch_site_deir_el_bahari_cache_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_ishtar_gate_babylon }
+				desc = gm_arch_site_ishtar_gate_babylon_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_palace_of_knossos }
+				desc = gm_arch_site_palace_of_knossos_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_antikythera_mechanism }
+				desc = gm_arch_site_antikythera_mechanism_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_oseberg_ship }
+				desc = gm_arch_site_oseberg_ship_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_machu_picchu }
+				desc = gm_arch_site_machu_picchu_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_bust_of_nefertiti }
+				desc = gm_arch_site_bust_of_nefertiti_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mohenjo_daro }
+				desc = gm_arch_site_mohenjo_daro_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_tutankhamun }
+				desc = gm_arch_site_tomb_of_tutankhamun_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_royal_cemetery_at_ur }
+				desc = gm_arch_site_royal_cemetery_at_ur_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_sanxingdui_pits }
+				desc = gm_arch_site_sanxingdui_pits_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_sutton_hoo }
+				desc = gm_arch_site_sutton_hoo_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_lascaux_caves }
+				desc = gm_arch_site_lascaux_caves_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_nag_hammadi_library }
+				desc = gm_arch_site_nag_hammadi_library_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_dead_sea_scrolls }
+				desc = gm_arch_site_dead_sea_scrolls_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_pakal }
+				desc = gm_arch_site_tomb_of_pakal_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mawangdui_tombs }
+				desc = gm_arch_site_mawangdui_tombs_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_terracotta_army }
+				desc = gm_arch_site_terracotta_army_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_philip_ii }
+				desc = gm_arch_site_tomb_of_philip_ii_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_marquis_yi }
+				desc = gm_arch_site_tomb_of_marquis_yi_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_royal_tombs_of_sipan }
+				desc = gm_arch_site_royal_tombs_of_sipan_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_otzi_the_iceman }
+				desc = gm_arch_site_otzi_the_iceman_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_caral_supe }
+				desc = gm_arch_site_caral_supe_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_gobekli_tepe }
+				desc = gm_arch_site_gobekli_tepe_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_olympia }
+				desc = gm_arch_site_olympia_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_delphi }
+				desc = gm_arch_site_delphi_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_sidon_necropolis }
+				desc = gm_arch_site_sidon_necropolis_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_villa_of_the_papyri }
+				desc = gm_arch_site_villa_of_the_papyri_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_alexander }
+				desc = gm_arch_site_tomb_of_alexander_found
+			}
+			triggered_desc = {
+				desc = arch_events.1.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_survey }
+				desc = arch_events.1.f_survey
+			}
+			triggered_desc = {
+				desc = arch_events.1.f
+			}
+		}
+	}
 
 	duration = 3
 
@@ -35,7 +210,7 @@ arch_events.1 = {
 		exists = scope:gm_arch_pick
 		scope:gm_arch_pick = {
 			gm_arch_site_open = yes
-			gm_arch_owns_ground = { WHO = root }
+			gm_arch_may_dig_ground = { WHO = root }
 		}
 	}
 
@@ -61,7 +236,7 @@ arch_events.1 = {
 		}
 	}
 
-	# Leave it sealed. It waits in the Archaeological Expeditions section.
+	# Leave it. It waits in the Archaeological Expeditions section.
 	option = {
 		name = arch_events.1.c
 		# REVIEWED 2026-10-14 (no_effect_option): sealing the site is the point; it stays open in the journal entry's Known Antiquities
@@ -72,9 +247,17 @@ arch_events.1 = {
 # ============================================================================
 # Event 2: a dig is finished
 # ============================================================================
-# A country event from gm_arch_place, players only. The monument stands; the
-# monument's own refresh has opened its row.
+# A country event from gm_arch_tell_finished, players only: the sponsor, and
+# the host of a dig abroad. scope:gm_arch_ev_<key> is the state the monument
+# stands in; scope:gm_arch_sponsor and scope:gm_arch_host the two countries.
+# Which case it is rides in saved scopes, each cleared before it is set:
+# gm_arch_ev_ruined (an Antiquarian dig destroyed half), gm_arch_ev_concession
+# (the partage sent half to the sponsor's capital), gm_arch_ev_permit and
+# gm_arch_ev_scholar (the finds stayed with the host, under a permit or at a
+# rock-cut site), gm_arch_ev_host_view (the host's copy). The description is
+# the site's in every case; the title, flavour and option say which.
 arch_events.2 = {
+	# REVIEWED 2026-10-16 (system_ungated): the World War it mentions is a date in the Sutton Hoo historical note (gm_arch_site_sutton_hoo_history), not the world war system; the event reads its own system (gm_system_enabled, the Grand Monuments rule)
 	type = country_event
 	placement = ROOT
 
@@ -82,51 +265,309 @@ arch_events.2 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
-	title = arch_events.2.t
-	desc = arch_events.2.d
-	flavor = arch_events.2.f
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_host_view }
+				desc = arch_events.2.t_host
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_ruined }
+				desc = arch_events.2.t_ruined
+			}
+			triggered_desc = {
+				trigger = {
+					OR = {
+						exists = scope:gm_arch_ev_concession
+						exists = scope:gm_arch_ev_permit
+						exists = scope:gm_arch_ev_scholar
+					}
+				}
+				desc = arch_events.2.t_abroad
+			}
+			triggered_desc = {
+				desc = arch_events.2.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_nineveh_library }
+				desc = gm_arch_site_nineveh_library_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_winged_victory_of_samothrace }
+				desc = gm_arch_site_winged_victory_of_samothrace_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_vindolanda_tablets }
+				desc = gm_arch_site_vindolanda_tablets_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_troy_hisarlik }
+				desc = gm_arch_site_troy_hisarlik_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mycenae_grave_circle }
+				desc = gm_arch_site_mycenae_grave_circle_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_pergamon_altar }
+				desc = gm_arch_site_pergamon_altar_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_deir_el_bahari_cache }
+				desc = gm_arch_site_deir_el_bahari_cache_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_ishtar_gate_babylon }
+				desc = gm_arch_site_ishtar_gate_babylon_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_palace_of_knossos }
+				desc = gm_arch_site_palace_of_knossos_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_antikythera_mechanism }
+				desc = gm_arch_site_antikythera_mechanism_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_oseberg_ship }
+				desc = gm_arch_site_oseberg_ship_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_machu_picchu }
+				desc = gm_arch_site_machu_picchu_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_bust_of_nefertiti }
+				desc = gm_arch_site_bust_of_nefertiti_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mohenjo_daro }
+				desc = gm_arch_site_mohenjo_daro_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_tutankhamun }
+				desc = gm_arch_site_tomb_of_tutankhamun_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_royal_cemetery_at_ur }
+				desc = gm_arch_site_royal_cemetery_at_ur_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_sanxingdui_pits }
+				desc = gm_arch_site_sanxingdui_pits_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_sutton_hoo }
+				desc = gm_arch_site_sutton_hoo_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_lascaux_caves }
+				desc = gm_arch_site_lascaux_caves_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_nag_hammadi_library }
+				desc = gm_arch_site_nag_hammadi_library_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_dead_sea_scrolls }
+				desc = gm_arch_site_dead_sea_scrolls_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_pakal }
+				desc = gm_arch_site_tomb_of_pakal_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mawangdui_tombs }
+				desc = gm_arch_site_mawangdui_tombs_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_terracotta_army }
+				desc = gm_arch_site_terracotta_army_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_philip_ii }
+				desc = gm_arch_site_tomb_of_philip_ii_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_marquis_yi }
+				desc = gm_arch_site_tomb_of_marquis_yi_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_royal_tombs_of_sipan }
+				desc = gm_arch_site_royal_tombs_of_sipan_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_otzi_the_iceman }
+				desc = gm_arch_site_otzi_the_iceman_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_caral_supe }
+				desc = gm_arch_site_caral_supe_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_gobekli_tepe }
+				desc = gm_arch_site_gobekli_tepe_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_olympia }
+				desc = gm_arch_site_olympia_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_delphi }
+				desc = gm_arch_site_delphi_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_sidon_necropolis }
+				desc = gm_arch_site_sidon_necropolis_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_villa_of_the_papyri }
+				desc = gm_arch_site_villa_of_the_papyri_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tomb_of_alexander }
+				desc = gm_arch_site_tomb_of_alexander_dug
+			}
+			triggered_desc = {
+				desc = arch_events.2.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					exists = scope:gm_arch_ev_host_view
+					exists = scope:gm_arch_ev_concession
+				}
+				desc = arch_events.2.f_host_concession
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_host_view }
+				desc = arch_events.2.f_host
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_ruined }
+				desc = arch_events.2.f_ruined
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_concession }
+				desc = arch_events.2.f_concession
+			}
+			triggered_desc = {
+				trigger = {
+					OR = {
+						exists = scope:gm_arch_ev_permit
+						exists = scope:gm_arch_ev_scholar
+					}
+				}
+				desc = arch_events.2.f_permit
+			}
+			triggered_desc = {
+				desc = arch_events.2.f
+			}
+		}
+	}
 
 	duration = 3
 
 	trigger = {
 		gm_system_enabled = yes
-		has_variable = gm_arch_last
 	}
 
+	# Our own dig, whole.
 	option = {
 		name = arch_events.2.a
+		trigger = {
+			NOT = { exists = scope:gm_arch_ev_host_view }
+			NOT = { exists = scope:gm_arch_ev_ruined }
+			NOT = { exists = scope:gm_arch_ev_concession }
+			NOT = { exists = scope:gm_arch_ev_permit }
+			NOT = { exists = scope:gm_arch_ev_scholar }
+		}
 		default_option = yes
 		custom_tooltip = arch_events.2.a.tt
 	}
-}
 
-# ============================================================================
-# Event 3: Stratigraphic Destruction
-# ============================================================================
-# The same, after an Antiquarian dig whose haste destroyed half of what it found.
-arch_events.3 = {
-	type = country_event
-	placement = ROOT
-
-	event_image = { video = "middleeast_jungle_expedition" }
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_map.dds"
-
-	title = arch_events.3.t
-	desc = arch_events.3.d
-	flavor = arch_events.3.f
-
-	duration = 3
-
-	trigger = {
-		gm_system_enabled = yes
-		has_variable = gm_arch_last
+	# Our own dig, half of it lost to haste.
+	option = {
+		name = arch_events.2.b
+		trigger = {
+			NOT = { exists = scope:gm_arch_ev_host_view }
+			exists = scope:gm_arch_ev_ruined
+			NOT = { exists = scope:gm_arch_ev_concession }
+			NOT = { exists = scope:gm_arch_ev_permit }
+			NOT = { exists = scope:gm_arch_ev_scholar }
+		}
+		default_option = yes
+		custom_tooltip = arch_events.2.b.tt
 	}
 
+	# Our expedition abroad, under a concession: half the finds come home.
 	option = {
-		name = arch_events.3.a
+		name = arch_events.2.c
+		trigger = {
+			NOT = { exists = scope:gm_arch_ev_host_view }
+			exists = scope:gm_arch_ev_concession
+		}
 		default_option = yes
-		custom_tooltip = arch_events.3.a.tt
+		custom_tooltip = arch_events.2.c.tt
+		if = {
+			limit = { exists = scope:gm_arch_ev_ruined }
+			custom_tooltip = arch_events.2.ruined.tt
+		}
+	}
+
+	# Our expedition abroad, the finds left with the host.
+	option = {
+		name = arch_events.2.d
+		trigger = {
+			NOT = { exists = scope:gm_arch_ev_host_view }
+			OR = {
+				exists = scope:gm_arch_ev_permit
+				exists = scope:gm_arch_ev_scholar
+			}
+		}
+		default_option = yes
+		custom_tooltip = arch_events.2.d.tt
+		if = {
+			limit = { exists = scope:gm_arch_ev_ruined }
+			custom_tooltip = arch_events.2.ruined.tt
+		}
+	}
+
+	# The host of a foreign dig, under a concession.
+	option = {
+		name = arch_events.2.e
+		trigger = {
+			exists = scope:gm_arch_ev_host_view
+			exists = scope:gm_arch_ev_concession
+		}
+		default_option = yes
+		custom_tooltip = arch_events.2.e.tt
+		if = {
+			limit = { exists = scope:gm_arch_ev_ruined }
+			custom_tooltip = arch_events.2.ruined.tt
+		}
+	}
+
+	# The host of a foreign dig whose finds stay with us.
+	option = {
+		name = arch_events.2.f
+		trigger = {
+			exists = scope:gm_arch_ev_host_view
+			NOT = { exists = scope:gm_arch_ev_concession }
+		}
+		default_option = yes
+		custom_tooltip = arch_events.2.f.tt
+		if = {
+			limit = { exists = scope:gm_arch_ev_ruined }
+			custom_tooltip = arch_events.2.ruined.tt
+		}
 	}
 }
 
@@ -183,6 +624,27 @@ arch_events.11 = {
 		scope:gm_arch_pick = {
 			gm_arch_stop_dig = yes
 		}
+		gm_arch_pass = yes
+		trigger_event = { id = monument_events.20 }
+	}
+}
+
+# ============================================================================
+# Event 12: the right to dig abroad granted (hidden)
+# ============================================================================
+# ROOT = the sponsor, from an Excavation Concession's or Permit's
+# on_entry_into_force a day later (the pass walks the treaties). Lists the
+# sites the treaty opens now rather than at the next monthly pass, and tells a
+# player of them (arch_events.1).
+arch_events.12 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+	}
+
+	immediate = {
 		gm_arch_pass = yes
 		trigger_event = { id = monument_events.20 }
 	}

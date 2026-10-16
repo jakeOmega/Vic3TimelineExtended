@@ -522,7 +522,7 @@ These sections follow:
 | Section | Starts | Shows |
 |---|---|---|
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
-| Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and what they cost each week, then the sites you can dig, each with its state, the levels it will raise and a button for each method you can use. |
+| Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and what they cost each week, each with its state, its weekly cost and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
 | Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
@@ -841,42 +841,74 @@ ally or a power bloc partner.
 ### Buried sites
 
 Thirty-five monuments lie buried when a game begins, and a country that holds
-the ground can dig them up: Nineveh's library, Troy, Mycenae, Olympia, Delphi,
-Knossos, the Pergamon Altar, the Ishtar Gate of Babylon, Machu Picchu, the
-tombs of Tutankhamun and Philip II, the Terracotta Army, Göbekli Tepe and others.
-A dug-up site is a historical monument like those standing at the start. It
-keeps its name and look, and an army can carry it off as a [trophy](#monument-trophies).
+the ground, or the right to dig it by treaty, can dig them up: Nineveh's
+library, Troy, Mycenae, Olympia, Delphi, Knossos, the Pergamon Altar, the Ishtar
+Gate of Babylon, Machu Picchu, the tombs of Tutankhamun and Philip II, the
+Terracotta Army, Göbekli Tepe and others. A dug-up site is a historical monument
+like those standing at the start. It keeps its name and look, and an army can
+carry it off as a [trophy](#monument-trophies).
 
 A site opens when you own a part of its state and have its technology:
 Romanticism for Nineveh, Empiricism for Troy, Mycenae, Pergamon, Olympia and
 Sidon, and later ones for the finds of the twentieth century, up to E-commerce
-for Göbekli Tepe. Some are known and open at once. The rest are found by chance:
-once you have the technology, each month there is about a 1% chance that a
-plough, a railway cutting or a hiker turns one up, and an event offers you the
-dig. Only the holder of the ground digs; digging abroad is not possible.
+for Göbekli Tepe. Some are known and open at once, and The Scholars Know Where
+to Look tells you when one is. The rest are found by chance: once you have the
+technology, each month there is about a 1% chance that a plough, a railway
+cutting or a hiker turns one up, and Something Under the Spade tells you. Both
+events name the place and the state, say what was found, add a short note on
+how it was found in history, and offer the dig.
 
 You choose a method for each dig, from the Archaeological Expeditions section
 of the Grand Monuments tab. A button appears for each method you have the
 technology for.
 
-| Method | Needs | Takes | Weekly innovation | Weekly cost | Result |
+| Method | Needs | Months (5, 10, 15 levels) | Weekly innovation | Weekly cost per level | Result |
 |---|---|---|---|---|---|
-| Antiquarian | Romanticism | 25 months | −5 | the base | A 35% chance the dig destroys half the levels, at least 3 |
-| Systematic | Empiricism | 40 months | −15 | 2.5 times the base | The whole monument |
-| Forensic | Computer Networks | 29 months | −30 | 5 times the base | 2 levels more than the site's own |
+| Antiquarian | Romanticism | 17, 25, 34 | −5 | £20 | A 35% chance the dig destroys half the levels, at least 3 |
+| Systematic | Empiricism | 27, 40, 54 | −15 | £50 | The whole monument |
+| Forensic | Computer Networks | 20, 29, 39 | −30 | £200 | 2 levels more than the site's own |
 
-The base is a share of your GDP, with a floor, and the button's tooltip gives it.
-Nothing caps how many digs you run, but each one lowers your weekly
-innovation (the cap stays) and costs money every week, which the
-Budget's Breakdown shows as Archaeological Digs under Programme Costs. Suspend Dig stops a
-dig and keeps its progress. A dig also stops if you lose the state, and whoever
-holds it next can take it up from where it stopped.
+A site's size sets both its months and its weekly cost: a 10-level site dug by
+Systematic Stratigraphy costs £500 a week for 40 months, a 5-level one £250 a
+week for 27. The cost is the same for a small country as for a great power.
+The button's tooltip gives this site's months and weekly cost, and a dig's row
+gives what it costs now. Nothing caps how many digs you run, but each one lowers
+your weekly innovation (the cap stays) and costs money every week, which the
+Budget's Breakdown shows as Archaeological Digs under Programme Costs. Suspend
+Dig stops a dig and keeps its progress. A dig also stops if you lose the state,
+or the treaty that let you dig there ends, and whoever may dig it next can take
+it up from where it stopped.
 
-A finished dig stands in your part of the state, To the Nation, at the site's
+A finished dig stands in the state it was dug in, To the Nation, at the site's
 levels (5 to 15). With no monument there it is a new one; otherwise it stands
 beside the one there as [several monuments in one state](#several-monuments-in-one-state).
-An event tells you how it went. The AI, at peace and out of default, starts a
-dig now and then with the best method it has, and never runs more than two.
+An event tells you how it went, again with the place, the find and its history.
+The AI, at peace and out of default, starts a dig now and then with the best
+method it has, only when its weekly surplus is at least four times the dig's
+weekly cost, and never runs more than two.
+
+#### Digging abroad
+
+Two treaty articles let you dig the buried sites in another country's state.
+Both name a state that has a site open to you: a known site whose technology
+you have, or a chance find already turned up. The country that owns it
+concedes, and you pay the influence. While the article stands, the site is
+listed in your Archaeological Expeditions with the terms, and you dig it as you
+would at home, paying the money and innovation.
+
+| Article | You need | Influence | When the dig finishes |
+|---|---|---|---|
+| Excavation Concession | Romanticism | 75 | Half the levels, rounded down, go to your capital as a trophy; the rest stand in the host's state as its monument. A rock-cut site has nothing to carry: it stays whole, and you gain Foreign Scholarship. |
+| Excavation Permit | Empiricism | 40 | The monument stands in the host's state at its full levels, and you gain Foreign Scholarship: +10 prestige and +1 cultural pull for ten years. |
+
+A concession's trophy is like any other: it counts for half its levels in your
+grandeur, and the host can ask for it back with Return Cultural Property or
+take it in a war. The host may still dig its own sites, and may end the treaty,
+which stops your dig with its progress kept; the host can then finish the dig
+itself. A war can enforce a concession but not a permit. An AI host signs a
+permit far more readily than a concession, and hardly ever a concession once it
+has researched Pan-nationalism. A major AI power with Empiricism asks for one
+now and then.
 
 ### Vanity backlash
 

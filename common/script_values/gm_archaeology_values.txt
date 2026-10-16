@@ -2,7 +2,9 @@
 # GRAND MONUMENTS — archaeology: script values
 # ============================================================================
 # Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md
-# (issue #939). Container scope unless a comment says country.
+# (issue #939), reworked by 2026-10-16-grand-monument-archaeology-rework-design.md
+# (the costs by the site, its size, foreign digs). Container scope unless a
+# comment says country. Each value is defined before the values that read it.
 
 # ---- Discovery -----------------------------------------------------------------------
 # The monthly chance, in percent, that an incidental site is turned up while
@@ -12,49 +14,7 @@ gm_arch_find_chance = {
 	value = 1
 }
 
-# ---- Methods ----------------------------------------------------------------------------
-# Progress a month, in percent of the dig (25, 40 and 29 months).
-gm_arch_rate_antiquarian = { value = 4 }
-gm_arch_rate_systematic = { value = 2.5 }
-gm_arch_rate_forensic = { value = 3.5 }
-
-# What an Antiquarian dig risks: the chance, in percent, that its haste
-# destroys half of what it finds (Stratigraphic Destruction).
-gm_arch_destruction_chance = { value = 35 }
-
-# Levels a Forensic dig adds to what it unearths.
-gm_arch_forensic_bonus = { value = 2 }
-
-# ---- The brakes (country scope, the sponsor) -----------------------------------------------
-# The weekly innovation a dig diverts: the scholars, philologists and
-# chemists in the field are not in the universities. Only the weekly flow
-# falls; the innovation cap does not (owner, 2026-10-14).
-gm_arch_innovation_antiquarian = { value = 5 }
-gm_arch_innovation_systematic = { value = 15 }
-gm_arch_innovation_forensic = { value = 30 }
-
-# The weekly treasury cost of one standard dig: a share of the sponsor's GDP,
-# with a floor so a small state feels it in absolute pounds. The method scales
-# it (1x, 2.5x, 5x). The modifier that charges it (gm_arch_expense) carries
-# country_expenses_add = 1, so this is the multiplier.
-gm_arch_cost_base = {
-	value = gdp
-	multiply = 0.0002
-	min = 100
-}
-gm_arch_cost_antiquarian = {
-	value = gm_arch_cost_base
-}
-gm_arch_cost_systematic = {
-	value = gm_arch_cost_base
-	multiply = 2.5
-}
-gm_arch_cost_forensic = {
-	value = gm_arch_cost_base
-	multiply = 5
-}
-
-# ---- Display ---------------------------------------------------------------------------------
+# ---- A site's records, guarded ----------------------------------------------------------
 # Each is guarded: a site that was never dug has no progress or method.
 # gm_arch_disp_status: 1 buried, 2 known, 3 being dug, 4 unearthed.
 gm_arch_disp_status = {
@@ -93,20 +53,174 @@ gm_arch_disp_progress = {
 	}
 }
 
-# The percent a month this dig makes, by its method.
+# The levels it will raise, before the method's luck: the site's own.
+gm_arch_disp_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_tr_levels }
+		value = var:gm_tr_levels
+	}
+}
+
+# ---- Methods: time ----------------------------------------------------------------------
+# Progress a month, in percent of the dig, for a site of 10 levels (25, 40 and
+# 29 months). A site's own rate is this times its size factor
+# (gm_arch_site_rate_<method>).
+gm_arch_rate_antiquarian = { value = 4 }
+gm_arch_rate_systematic = { value = 2.5 }
+gm_arch_rate_forensic = { value = 3.5 }
+
+# A site's months scale with (levels + 5) / 15, so its rate is divided by that:
+# 1.5 for 5 levels, 1 for 10, 0.75 for 15. A small find comes out quickly, a
+# great one takes years (rework spec § Time).
+gm_arch_size_factor = {
+	value = 15
+	divide = {
+		value = gm_arch_disp_levels
+		add = 5
+	}
+}
+
+gm_arch_site_rate_antiquarian = {
+	value = gm_arch_rate_antiquarian
+	multiply = gm_arch_size_factor
+}
+gm_arch_site_rate_systematic = {
+	value = gm_arch_rate_systematic
+	multiply = gm_arch_size_factor
+}
+gm_arch_site_rate_forensic = {
+	value = gm_arch_rate_forensic
+	multiply = gm_arch_size_factor
+}
+
+# A whole dig's months by each method, for the launch buttons.
+gm_arch_site_months_antiquarian = {
+	value = 100
+	divide = gm_arch_site_rate_antiquarian
+	ceiling = yes
+}
+gm_arch_site_months_systematic = {
+	value = 100
+	divide = gm_arch_site_rate_systematic
+	ceiling = yes
+}
+gm_arch_site_months_forensic = {
+	value = 100
+	divide = gm_arch_site_rate_forensic
+	ceiling = yes
+}
+
+# What an Antiquarian dig risks: the chance, in percent, that its haste
+# destroys half of what it finds (Stratigraphic Destruction).
+gm_arch_destruction_chance = { value = 35 }
+
+# Levels a Forensic dig adds to what it unearths.
+gm_arch_forensic_bonus = { value = 2 }
+
+# ---- The brakes ----------------------------------------------------------------------------
+# Country scope, the sponsor. The weekly innovation a dig diverts: the
+# scholars, philologists and chemists in the field are not in the
+# universities. Only the weekly flow falls; the innovation cap does not
+# (owner, 2026-10-14).
+gm_arch_innovation_antiquarian = { value = 5 }
+gm_arch_innovation_systematic = { value = 15 }
+gm_arch_innovation_forensic = { value = 30 }
+
+# The weekly treasury cost of a dig, for each level the site will raise, by
+# method: a price for the dig, not a share of the sponsor's GDP (owner,
+# 2026-10-16). Forensic needs Computer Networks and is priced for its era.
+gm_arch_price_antiquarian = { value = 20 }
+gm_arch_price_systematic = { value = 50 }
+gm_arch_price_forensic = { value = 200 }
+
+# This site's weekly cost by each method: its levels at the method's price.
+gm_arch_site_cost_antiquarian = {
+	value = gm_arch_disp_levels
+	multiply = gm_arch_price_antiquarian
+}
+gm_arch_site_cost_systematic = {
+	value = gm_arch_disp_levels
+	multiply = gm_arch_price_systematic
+}
+gm_arch_site_cost_forensic = {
+	value = gm_arch_disp_levels
+	multiply = gm_arch_price_forensic
+}
+
+# A dig: what it costs a week by the method it runs. The monthly pass writes it
+# on the container (gm_site_weekly_cost) and sums the sponsor's digs into
+# gm_arch_cost_units, the multiplier of gm_arch_expense (country_expenses_add = 1).
+gm_arch_site_cost = {
+	value = 0
+	if = {
+		limit = { gm_arch_disp_method = 1 }
+		value = gm_arch_site_cost_antiquarian
+	}
+	else_if = {
+		limit = { gm_arch_disp_method = 2 }
+		value = gm_arch_site_cost_systematic
+	}
+	else_if = {
+		limit = { gm_arch_disp_method = 3 }
+		value = gm_arch_site_cost_forensic
+	}
+}
+
+# ---- The AI ---------------------------------------------------------------------------------
+# An AI digs only with a weekly fixed surplus of at least this many times the
+# dig's weekly cost.
+gm_arch_ai_surplus_multiple = { value = 4 }
+
+# With scope:gm_arch_ai_country the AI that may dig the site: what the dig
+# would cost a week by the best method it has (gm_arch_start_best's order),
+# times that multiple. gm_arch_ai_affordable compares it with the surplus.
+gm_arch_ai_cost_needed = {
+	value = gm_arch_site_cost_antiquarian
+	if = {
+		limit = { scope:gm_arch_ai_country = { gm_arch_method_forensic_ok = yes } }
+		value = gm_arch_site_cost_forensic
+	}
+	else_if = {
+		limit = { scope:gm_arch_ai_country = { gm_arch_method_systematic_ok = yes } }
+		value = gm_arch_site_cost_systematic
+	}
+	multiply = gm_arch_ai_surplus_multiple
+}
+
+# ---- Foreign digs (rework spec § 3) -----------------------------------------------------------
+# The levels an Excavation Concession's partage sends to the sponsor's capital:
+# half, rounded down, at least one. The host keeps the rest standing.
+gm_arch_partage_levels = {
+	value = gm_arch_disp_levels
+	divide = 2
+	floor = yes
+	min = 1
+}
+
+# What a partage trophy counts for abroad: half its levels, rounded up, as
+# every trophy does (gm_state_tr_value).
+gm_arch_partage_grandeur = {
+	value = gm_arch_partage_levels
+	divide = 2
+	ceiling = yes
+}
+
+# ---- Display ---------------------------------------------------------------------------------
+# The percent a month this dig makes, by its method and the site's size.
 gm_arch_disp_rate = {
 	value = 0
 	if = {
 		limit = { gm_arch_disp_method = 1 }
-		value = gm_arch_rate_antiquarian
+		value = gm_arch_site_rate_antiquarian
 	}
 	else_if = {
 		limit = { gm_arch_disp_method = 2 }
-		value = gm_arch_rate_systematic
+		value = gm_arch_site_rate_systematic
 	}
 	else_if = {
 		limit = { gm_arch_disp_method = 3 }
-		value = gm_arch_rate_forensic
+		value = gm_arch_site_rate_forensic
 	}
 }
 
@@ -122,12 +236,29 @@ gm_arch_disp_months_left = {
 	}
 }
 
-# The levels it will raise, before the method's luck: the site's own.
-gm_arch_disp_levels = {
+# A dig's weekly cost, as the last pass wrote it.
+gm_arch_disp_site_cost = {
 	value = 0
 	if = {
-		limit = { has_variable = gm_tr_levels }
-		value = var:gm_tr_levels
+		limit = { has_variable = gm_site_weekly_cost }
+		value = var:gm_site_weekly_cost
+	}
+}
+
+# A dig's terms, as the last pass found them: 0 on our own ground, 1 under an
+# Excavation Concession, 2 under an Excavation Permit.
+gm_arch_disp_terms = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_site_terms }
+		if = {
+			limit = { var:gm_site_terms = flag:concession }
+			value = 1
+		}
+		else_if = {
+			limit = { var:gm_site_terms = flag:permit }
+			value = 2
+		}
 	}
 }
 

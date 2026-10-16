@@ -18,7 +18,7 @@ gm_arch_launch_antiquarian_sgui = {
 		exists = scope:gm_arch
 		scope:gm_arch = {
 			gm_arch_site_open = yes
-			gm_arch_owns_ground = { WHO = root }
+			gm_arch_may_dig_ground = { WHO = root }
 		}
 		gm_arch_method_antiquarian_ok = yes
 	}
@@ -49,7 +49,7 @@ gm_arch_launch_systematic_sgui = {
 		exists = scope:gm_arch
 		scope:gm_arch = {
 			gm_arch_site_open = yes
-			gm_arch_owns_ground = { WHO = root }
+			gm_arch_may_dig_ground = { WHO = root }
 		}
 		gm_arch_method_systematic_ok = yes
 	}
@@ -80,7 +80,7 @@ gm_arch_launch_forensic_sgui = {
 		exists = scope:gm_arch
 		scope:gm_arch = {
 			gm_arch_site_open = yes
-			gm_arch_owns_ground = { WHO = root }
+			gm_arch_may_dig_ground = { WHO = root }
 		}
 		gm_arch_method_forensic_ok = yes
 	}
@@ -134,4 +134,35 @@ gm_arch_suspend_sgui = {
 	ai_is_valid = {
 		always = no
 	}
+}
+
+# Display only, never executed: the open row's terms line for a site we would
+# dig abroad (rework spec § 4). The row is shared by every country that may dig
+# the site, so the line is decided for the viewer here. A concession wins over
+# a permit when both are in force, as gm_arch_save_dig_state decides.
+gm_arch_abroad_concession_sgui = {
+	scope = country
+	saved_scopes = { gm_arch }
+
+	is_shown = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_would_dig_abroad_by = { WHO = root ARTICLE = archaeological_concession }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+gm_arch_abroad_permit_sgui = {
+	scope = country
+	saved_scopes = { gm_arch }
+
+	is_shown = {
+		exists = scope:gm_arch
+		scope:gm_arch = {
+			gm_arch_would_dig_abroad_by = { WHO = root ARTICLE = excavation_permit }
+			NOT = { gm_arch_would_dig_abroad_by = { WHO = root ARTICLE = archaeological_concession } }
+		}
+	}
+	ai_is_valid = { always = no }
 }

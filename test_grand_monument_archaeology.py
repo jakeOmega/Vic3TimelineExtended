@@ -2,7 +2,10 @@
 them, the dig, and what a finished dig hands to the monument machinery, pinned
 against the landmark registry.
 
-Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
+Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md,
+reworked by 2026-10-16-grand-monument-archaeology-rework-design.md (costs by the
+site, sized digs, events that name the place, the find and its history, and
+foreign digs by treaty).
 A buried site is a LANDMARKS row with buried=True (test_grand_monument_registry.py)
 plus a row of ARCH_SITES here: the technology that opens it and how it is found.
 Adding a site is a row in each, and the failures name every other place.
@@ -35,6 +38,8 @@ JE = "common/journal_entries/je_grand_monuments.txt"
 GM_EFFECTS = "common/scripted_effects/gm_effects.txt"
 MON_TRIGGERS = "common/scripted_triggers/monument_triggers.txt"
 TR_CUSTOM_LOC = "common/customizable_localization/gm_trophy_custom_loc.txt"
+CONCESSION = "common/treaty_articles/120_archaeological_concession.txt"
+PERMIT = "common/treaty_articles/121_excavation_permit.txt"
 
 Site = namedtuple("Site", "key tech vector")
 # key, the technology that opens it (as the table writes it), and how it is
@@ -81,6 +86,11 @@ ARCH_SITES = (
 )
 BURIED = tuple(lm for lm in LANDMARKS if lm.buried)
 METHODS = {"antiquarian": ("romanticism", 4), "systematic": ("empiricism", 2.5), "forensic": ("computer_networks", 3.5)}
+# The weekly price of a dig for each level the site will raise (rework spec § 1).
+PRICES = {"antiquarian": 20, "systematic": 50, "forensic": 200}
+# Months for a site of 5, 10 and 15 levels: the 10-level months scaled by (levels + 5) / 15.
+MONTHS = {"antiquarian": (17, 25, 34), "systematic": (27, 40, 54), "forensic": (20, 29, 39)}
+ARTICLES = ("archaeological_concession", "excavation_permit")
 
 
 def flag(tech):
@@ -232,8 +242,11 @@ class GateTests(unittest.TestCase):
                          "var:gm_tr_origin_region ?= { any_scope_state = { owner = $WHO$ } }")
         can = squash(block(t, "gm_arch_can_dig"))
         for part in ("gm_system_enabled = yes", "has_tag = gm_site", "gm_arch_site_open = yes",
-                     "gm_arch_owns_ground = { WHO = $WHO$ }", "gm_arch_has_gate_for = { WHO = $WHO$ }"):
+                     "gm_arch_may_dig_ground = { WHO = $WHO$ }", "gm_arch_has_gate_for = { WHO = $WHO$ }"):
             self.assertIn(part, can)
+        self.assertEqual(squash(block(t, "gm_arch_may_dig_ground")),
+                         "var:gm_tr_origin_region ?= { any_scope_state = { OR = { owner = $WHO$ "
+                         "gm_arch_state_open_abroad = { WHO = $WHO$ } } } }")
         opened = squash(block(t, "gm_arch_site_open"))
         self.assertIn("var:gm_site_status = 2", opened, "a site turned up")
         self.assertIn("var:gm_site_status = 1 var:gm_site_vector = flag:survey", opened,
@@ -257,10 +270,31 @@ class DigTests(unittest.TestCase):
             self.assertEqual(squash(block(self.v, f"gm_arch_rate_{method}")), f"value = {rate:g}", method)
         self.assertEqual([math.ceil(100 / rate) for _t, rate in METHODS.values()], [25, 40, 29])
 
+    def test_a_site_takes_longer_the_larger_it_is(self):
+        self.assertEqual(squash(block(self.v, "gm_arch_size_factor")),
+                         "value = 15 divide = { value = gm_arch_disp_levels add = 5 }")
+        for method, (_tech, rate) in METHODS.items():
+            self.assertEqual(squash(block(self.v, f"gm_arch_site_rate_{method}")),
+                             f"value = gm_arch_rate_{method} multiply = gm_arch_size_factor", method)
+            self.assertEqual(squash(block(self.v, f"gm_arch_site_months_{method}")),
+                             f"value = 100 divide = gm_arch_site_rate_{method} ceiling = yes", method)
+            months = tuple(math.ceil(100 / (rate * 15 / (levels + 5))) for levels in (5, 10, 15))
+            self.assertEqual(months, MONTHS[method], method)
+        self.assertIn("value = gm_arch_site_rate_systematic", block(self.v, "gm_arch_disp_rate"),
+                      "the row's months to go read the site's own rate")
+
+    def test_every_value_is_defined_before_it_is_read(self):
+        text = strip_comments(self.v)
+        names = re.findall(r"(?m)^(gm_arch_\w+)\s*=", text)
+        for i, name in enumerate(names):
+            for later in names[i + 1:]:
+                self.assertNotRegex(block(self.v, name), rf"\b{later}\b", f"{name} reads {later}, defined after it")
+
     def test_a_month_of_progress(self):
         body = squash(block(self.e, "gm_arch_dig_step"))
+        self.assertIn("gm_arch_save_dig_state = yes", body, "dug where the sponsor may dig, at home or abroad")
         for method in METHODS:
-            self.assertIn(f"change_variable = {{ name = gm_site_progress add = gm_arch_rate_{method} }}", body)
+            self.assertIn(f"change_variable = {{ name = gm_site_progress add = gm_arch_site_rate_{method} }}", body)
         self.assertIn("clamp_variable = { name = gm_site_progress max = 100 min = 0 }", body)
         self.assertIn("var:gm_site_progress >= 100 } add_to_temporary_list = gm_arch_done", body,
                       "finished after the walk over the list, not in it")
@@ -307,8 +341,16 @@ class PlacingTests(unittest.TestCase):
 
     def test_it_stands_in_the_sponsors_part(self):
         body = squash(block(self.e, "gm_arch_finish"))
-        self.assertIn("limit = { owner = scope:gm_arch_sponsor } save_scope_as = gm_arch_dig_state", body)
-        self.assertIn("gm_arch_settle_levels = yes gm_arch_place = yes", body)
+        self.assertIn("gm_arch_save_dig_state = yes", body)
+        self.assertIn("gm_arch_settle_levels = yes gm_arch_settle_terms = yes gm_arch_place = yes", body)
+        where = squash(block(self.e, "gm_arch_save_dig_state"))
+        self.assertTrue(where.startswith("clear_saved_scope = gm_arch_dig_state var:gm_tr_origin_region ?= { "
+                                         "random_scope_state = { limit = { owner = scope:gm_arch_sponsor } "
+                                         "save_scope_as = gm_arch_dig_state } }"), "its own ground first")
+        # Abroad, a concession before a permit, each read from the treaty.
+        self.assertLess(where.index("ARTICLE = archaeological_concession"), where.index("ARTICLE = excavation_permit"))
+        for terms in ("own", "concession", "permit"):
+            self.assertIn(f"set_variable = {{ name = gm_site_terms value = flag:{terms} }}", where)
 
     def test_the_records_a_return_reads(self):
         body = squash(block(self.e, "gm_arch_place"))
@@ -327,9 +369,18 @@ class PlacingTests(unittest.TestCase):
 
     def test_a_player_is_told_before_the_container_may_go(self):
         body = squash(block(self.e, "gm_arch_place"))
-        self.assertLess(body.index("trigger_event = { id = arch_events.3 }"), body.index("gm_arch_retire = yes"))
-        self.assertLess(body.index("trigger_event = { id = arch_events.2 }"), body.index("gm_arch_retire = yes"))
-        self.assertIn("name = gm_arch_last value = scope:gm_tr_moving.var:gm_tr_landmark", body)
+        self.assertLess(body.index("gm_arch_tell_finished = yes"), body.index("gm_arch_retire = yes"))
+        self.assertLess(body.index("gm_arch_tell_finished = yes"), body.index("gm_arch_stand_beside = yes"))
+        self.assertIn("scope:gm_arch_dig_state = { owner = { save_scope_as = gm_arch_host } }", body)
+        tell = squash(block(self.e, "gm_arch_tell_finished"))
+        self.assertIn("scope:gm_arch_sponsor = { trigger_event = { id = arch_events.2 } }", tell)
+        self.assertIn("scope:gm_arch_host = { trigger_event = { id = arch_events.2 } }", tell)
+        # The host's copy alone carries the host's view.
+        self.assertIn("scope:gm_arch_dig_state = { save_scope_as = gm_arch_ev_host_view } scope:gm_arch_host = { "
+                      "trigger_event = { id = arch_events.2 } } clear_saved_scope = gm_arch_ev_host_view", tell)
+        self.assertLess(tell.index("id = arch_events.2 } } } if"), tell.index("save_scope_as = gm_arch_ev_host_view"))
+        for case in ("ruined", "concession", "permit", "scholar", "host_view"):
+            self.assertLess(tell.index(f"clear_saved_scope = gm_arch_ev_{case}"), tell.index("gm_arch_ev_mark"), case)
 
     def test_beside_is_a_retag_and_the_lists_a_seeded_landmark_beside_uses(self):
         body = squash(block(self.e, "gm_arch_stand_beside"))
@@ -359,15 +410,59 @@ class PlacingTests(unittest.TestCase):
 
 
 class NamesTests(unittest.TestCase):
-    def test_the_event_names_follow_the_rows(self):
-        body = squash(block(read(CUSTOM_LOC), "gm_arch_site_name"))
-        self.assertTrue(body.startswith("type = country random_valid = no"))
-        branches = re.findall(r"var:gm_arch_last = flag:(\w+) \} localization_key = (\w+)", body)
-        self.assertEqual(branches, [(lm.key, f"gm_landmark_{lm.key}_evt") for lm in BURIED])
-        self.assertTrue(body.endswith("text = { localization_key = gm_arch_site_name_none }"))
+    """The events name their site, its place and state, the find and its history,
+    through a saved scope of the site's own (rework spec § 2)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(EFFECTS)
+        cls.ev = strip_comments(read(EVENTS))
+
+    def test_each_popup_carries_one_site(self):
+        body = squash(block(self.e, "gm_arch_ev_mark"))
+        clears = re.findall(r"clear_saved_scope = gm_arch_ev_(\w+)", body)
+        self.assertEqual(clears, [lm.key for lm in BURIED], "every name is cleared first")
+        branches = re.findall(r"limit = \{ var:gm_tr_landmark = flag:(\w+) \} \$STATE\$ = \{ "
+                              r"save_scope_as = gm_arch_ev_(\w+) \}", body)
+        self.assertEqual(branches, [(lm.key, lm.key) for lm in BURIED])
+        self.assertLess(body.rindex("clear_saved_scope"), body.index("if = {"))
+        for name in ("gm_arch_tell_found", "gm_arch_tell_finished"):
+            self.assertIn("gm_arch_ev_mark = { STATE =", squash(block(self.e, name)), name)
+
+    def test_each_event_picks_the_sites_lines(self):
+        for n, kind in ((1, "found"), (2, "dug")):
+            ev = squash(raw_block_at(self.ev, rf"(?m)^arch_events\.{n}\s*=\s*\{{"))
+            desc = ev[ev.index("desc = { first_valid"):]
+            got = re.findall(r"triggered_desc = \{ trigger = \{ exists = scope:gm_arch_ev_(\w+) \} "
+                             rf"desc = gm_arch_site_(\w+)_{kind} \}}", desc)
+            self.assertEqual(got, [(lm.key, lm.key) for lm in BURIED], n)
+            self.assertIn(f"triggered_desc = {{ desc = arch_events.{n}.d }} }} }}", desc, "a plain fallback")
+
+    def test_every_site_says_where_what_and_its_history(self):
         L = loc()
-        for _, key in branches:
-            self.assertIn(key, L)
+        self.assertIn("gm_arch_history_lead", L)
+        for lm in BURIED:
+            k = lm.key
+            for part in ("place", "found", "dug", "history"):
+                self.assertIn(f"gm_arch_site_{k}_{part}", L, f"{k} {part}")
+            for part in ("found", "dug"):
+                text = L[f"gm_arch_site_{k}_{part}"]
+                self.assertIn(f"$gm_arch_site_{k}_place$", text, f"{k} {part}: the place")
+                self.assertIn(f"[SCOPE.sState('gm_arch_ev_{k}').GetName]", text, f"{k} {part}: the state, by its own scope")
+                self.assertTrue(text.endswith(f"\\n\\n$gm_arch_history_lead$ $gm_arch_site_{k}_history$"),
+                                f"{k} {part}: the historical note last")
+            history = L[f"gm_arch_site_{k}_history"]
+            self.assertRegex(history, r"\b1[89]\d\d\b|\b20[0-2]\d\b|\bBC\b|\bAD\b", f"{k}: a date in its history")
+            self.assertTrue(history.endswith("."), k)
+            self.assertGreater(len(L[f"gm_arch_site_{k}_dug"]), 200, k)
+
+    def test_no_country_variable_names_the_site(self):
+        # The variable the MVP used was overwritten by the next popup.
+        for rel in (EFFECTS, EVENTS, CUSTOM_LOC):
+            self.assertNotIn("gm_arch_last", strip_comments(read(rel)), rel)
+        self.assertNotIn("gm_arch_site_name", strip_comments(read(CUSTOM_LOC)))
+        for key in ("arch_events.1.d", "arch_events.2.d"):
+            self.assertNotIn("GetCustom", loc()[key])
 
     def test_the_method_names(self):
         body = squash(block(read(CUSTOM_LOC), "gm_arch_method_name"))
@@ -394,17 +489,30 @@ class BrakeTests(unittest.TestCase):
         v = read(VALUES)
         for method, units in (("antiquarian", 5), ("systematic", 15), ("forensic", 30)):
             self.assertEqual(squash(block(v, f"gm_arch_innovation_{method}")), f"value = {units}", method)
-        self.assertEqual(squash(block(v, "gm_arch_cost_base")), "value = gdp multiply = 0.0002 min = 100")
-        self.assertEqual(squash(block(v, "gm_arch_cost_antiquarian")), "value = gm_arch_cost_base")
-        self.assertEqual(squash(block(v, "gm_arch_cost_systematic")), "value = gm_arch_cost_base multiply = 2.5")
-        self.assertEqual(squash(block(v, "gm_arch_cost_forensic")), "value = gm_arch_cost_base multiply = 5")
+        for method, price in PRICES.items():
+            self.assertEqual(squash(block(v, f"gm_arch_price_{method}")), f"value = {price}", method)
+            self.assertEqual(squash(block(v, f"gm_arch_site_cost_{method}")),
+                             f"value = gm_arch_disp_levels multiply = gm_arch_price_{method}", method)
+        site = squash(block(v, "gm_arch_site_cost"))
+        for n, method in enumerate(METHODS, start=1):
+            self.assertIn(f"gm_arch_disp_method = {n} }} value = gm_arch_site_cost_{method}", site)
+
+    def test_no_cost_reads_the_economy(self):
+        # A price for the dig, not a share of the sponsor's GDP (owner, 2026-10-16).
+        v = strip_comments(read(VALUES))
+        for word in ("gdp", "income", "gm_arch_cost_base"):
+            self.assertNotRegex(v, rf"\b{word}\b", word)
 
     def test_the_pass_sums_the_digs_by_method(self):
         body = squash(block(read(EFFECTS), "gm_arch_list_one"))
         for method in METHODS:
             self.assertIn(f"change_variable = {{ name = gm_arch_innovation_units add = gm_arch_innovation_{method} }}",
                           body)
-            self.assertIn(f"change_variable = {{ name = gm_arch_cost_units add = gm_arch_cost_{method} }}", body)
+        # Each dig's cost is written on its container, for its row, and summed.
+        self.assertIn("set_variable = { name = gm_site_weekly_cost value = gm_arch_site_cost }", body)
+        self.assertIn("change_variable = { name = gm_arch_cost_units add = scope:gm_arch_listing.var:gm_site_weekly_cost }",
+                      body)
+        self.assertLess(body.index("name = gm_site_weekly_cost value"), body.index("name = gm_arch_cost_units add"))
 
     def test_the_modifiers_ride_the_journal_entry(self):
         e = read(EFFECTS)
@@ -524,6 +632,17 @@ class AiTests(unittest.TestCase):
         self.assertIn("OR = { NOT = { has_variable_list = gm_arch_digging } NOT = { any_in_list = { variable = "
                       "gm_arch_digging count >= 2 } } }", decide, "two digs at most; a country that never dug has no list")
         self.assertIn("gm_arch_start_best = { WHO = scope:gm_arch_ai_country }", decide)
+        # It digs only what it can afford, from a weekly surplus.
+        self.assertIn("net_fixed_income > 0", decide)
+        self.assertIn("set_variable = { name = gm_arch_ai_budget value = net_fixed_income }", decide)
+        self.assertIn("limit = { gm_arch_ai_affordable = yes } order_by = gm_arch_disp_levels", decide)
+        self.assertLess(decide.index("limit = { gm_arch_ai_affordable"), decide.index("remove_variable = gm_arch_ai_budget"))
+        self.assertIn("gm_arch_ai_cost_needed <= scope:gm_arch_ai_country.var:gm_arch_ai_budget",
+                      squash(block(t, "gm_arch_ai_affordable")))
+        need = squash(block(read(VALUES), "gm_arch_ai_cost_needed"))
+        self.assertLess(need.index("forensic_ok"), need.index("systematic_ok"), "its best method, as gm_arch_start_best")
+        self.assertTrue(need.endswith("multiply = gm_arch_ai_surplus_multiple"))
+        self.assertEqual(squash(block(read(VALUES), "gm_arch_ai_surplus_multiple")), "value = 4")
         monthly = squash(block(e, "gm_arch_monthly"))
         self.assertIn("gm_arch_ai_may_dig = yes } gm_arch_ai_decide = yes", monthly)
 
@@ -541,8 +660,8 @@ class EventTests(unittest.TestCase):
     def test_the_events(self):
         self.assertTrue(read(EVENTS).lstrip("﻿").startswith("namespace = arch_events"))
         ids = re.findall(r"(?m)^(arch_events\.\d+)\s*=\s*\{", self.ev)
-        self.assertEqual(ids, [f"arch_events.{n}" for n in (1, 2, 3, 10, 11)])
-        for n in (1, 2, 3):
+        self.assertEqual(ids, [f"arch_events.{n}" for n in (1, 2, 10, 11, 12)])
+        for n in (1, 2):
             body = squash(raw_block_at(self.ev, rf"(?m)^arch_events\.{n}\s*=\s*\{{"))
             self.assertIn("type = country_event", body)
             self.assertIn("event_image = { video =", body)
@@ -556,12 +675,34 @@ class EventTests(unittest.TestCase):
 
     def test_loc(self):
         L = loc()
-        for n, parts in ((1, ("t", "d", "f", "a", "b", "c", "c.tt")), (2, ("t", "d", "f", "a", "a.tt")),
-                         (3, ("t", "d", "f", "a", "a.tt"))):
+        for n, parts in ((1, ("t", "t_survey", "d", "f", "f_survey", "a", "b", "c", "c.tt")),
+                         (2, ("t", "t_ruined", "t_abroad", "t_host", "d", "f", "f_ruined", "f_concession", "f_permit",
+                              "f_host_concession", "f_host", "a", "a.tt", "b", "b.tt", "c", "c.tt", "d", "d.tt",
+                              "e", "e.tt", "f", "f.tt", "ruined.tt"))):
             for p in parts:
                 self.assertIn(f"arch_events.{n}.{p}", L)
-        for n in (2, 3):
-            self.assertIn("[ROOT.GetCountry.GetCustom('gm_arch_site_name')]", L[f"arch_events.{n}.d"])
+        for k in L:
+            self.assertFalse(k.startswith("arch_events.3."), k)
+
+    def test_a_survey_site_is_announced_once(self):
+        e = read(EFFECTS)
+        tell = squash(block(e, "gm_arch_tell_found"))
+        self.assertIn("$WHO$ = { is_ai = no }", tell)
+        self.assertIn("is_target_in_variable_list = { name = gm_site_told target = $WHO$ }", tell)
+        self.assertLess(tell.index("add_to_variable_list = { name = gm_site_told target = $WHO$ }"),
+                        tell.index("trigger_event = { id = arch_events.1 }"))
+        self.assertIn("var:gm_site_vector = flag:survey } $STATE$ = { save_scope_as = gm_arch_ev_survey }", tell)
+        self.assertIn("gm_arch_tell_found = { WHO = scope:gm_arch_finder STATE = scope:gm_arch_find_state }",
+                      squash(block(e, "gm_arch_found")))
+        self.assertIn("gm_arch_tell_found = { WHO = scope:gm_arch_ls_who STATE = scope:gm_arch_ls_state }",
+                      squash(block(e, "gm_arch_list_for")))
+
+    def test_the_finished_dig_says_which_case_it_is(self):
+        ev = squash(raw_block_at(self.ev, r"(?m)^arch_events\.2\s*=\s*\{"))
+        self.assertEqual(ev.count("option = {"), 6)
+        title = ev[ev.index("title = {"):ev.index(" desc = { first_valid")]
+        order = [title.index(f"arch_events.2.t_{c}") for c in ("host", "ruined", "abroad")]
+        self.assertEqual(order, sorted(order), "the host's view first, then the ruin, then abroad")
 
     def test_the_debug_event(self):
         ev = squash(raw_block_at(strip_comments(read(DEBUG_EVENTS)), r"(?m)^te_debug_monuments\.7\s*=\s*\{"))
@@ -597,10 +738,28 @@ class PanelTests(unittest.TestCase):
 
     def test_each_button_is_a_scripted_gui(self):
         for sgui in ("gm_arch_launch_antiquarian_sgui", "gm_arch_launch_systematic_sgui",
-                     "gm_arch_launch_forensic_sgui", "gm_arch_suspend_sgui"):
+                     "gm_arch_launch_forensic_sgui", "gm_arch_suspend_sgui",
+                     "gm_arch_abroad_concession_sgui", "gm_arch_abroad_permit_sgui"):
             self.assertIn(f"GetScriptedGui('{sgui}')", self.gui)
             self.assertIn(f"{sgui} = {{", read(SGUIS))
-        self.assertEqual(self.gui.count("AddScope( 'gm_arch', ScriptContainer.MakeScope )"), 12)
+        self.assertEqual(self.gui.count("AddScope( 'gm_arch', ScriptContainer.MakeScope )"), 14)
+
+    def test_the_buttons_give_this_sites_months_and_cost(self):
+        L = loc()
+        for method in METHODS:
+            tip = L[f"gm_arch_launch_{method}_tooltip"]
+            self.assertIn(f"ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_{method}')", tip, method)
+            self.assertIn(f"ScriptContainer.MakeScope.ScriptValue('gm_arch_site_cost_{method}')", tip, method)
+            self.assertIn(f"GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_{method}')", tip, method)
+            self.assertNotIn("GetPlayer.MakeScope.ScriptValue('gm_arch_cost", tip, "no country-scope cost")
+
+    def test_a_dig_row_shows_its_cost_and_its_terms(self):
+        L = loc()
+        self.assertIn("ScriptValue('gm_arch_disp_site_cost')", L["gm_arch_row_dig_cost"])
+        for n, key in ((1, "gm_arch_row_dig_concession"), (2, "gm_arch_row_dig_permit")):
+            self.assertIn(f"ScriptValue('gm_arch_disp_terms'), '(CFixedPoint){n}' )]\"\n\t\t\ttext = \"{key}\"",
+                          self.gui, key)
+            self.assertIn("Var('gm_site_view_state').GetState.GetOwner.GetName", L[key])
 
     def test_every_rendered_key_exists(self):
         L = loc()
@@ -652,6 +811,123 @@ class RegistryTests(unittest.TestCase):
             self.assertTrue(line.endswith("."), lm.key)
             self.assertGreater(len(line), 60, lm.key)
             self.assertNotIn("1836", line, f"{lm.key}: a buried site is not a monument of 1836")
+
+
+class ForeignTests(unittest.TestCase):
+    """Foreign digs by treaty: an Excavation Concession (partage) or an Excavation
+    Permit (the finds stay), read live from the treaty (rework spec § 3)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(EFFECTS)
+        cls.t = read(TRIGGERS)
+        cls.arts = {"archaeological_concession": read(CONCESSION), "excavation_permit": read(PERMIT)}
+
+    def test_the_articles(self):
+        for name, text in self.arts.items():
+            self.assertTrue((ROOT / (CONCESSION if name == ARTICLES[0] else PERMIT)).read_bytes()
+                            .startswith(b"\xef\xbb\xbf"), name)
+            self.assertFalse((ROOT / (CONCESSION if name == ARTICLES[0] else PERMIT)).read_bytes()
+                             .startswith(b"\xef\xbb\xbf" * 2), name)
+            body = squash(raw_block_at(strip_comments(text), rf"(?m)^{name}\s*=\s*\{{"))
+            for part in ("kind = directed", "maintenance_paid_by = target_country", "required_inputs = { state }",
+                         "visible = { gm_system_enabled = yes }",
+                         "gm_arch_country_offers_site = { WHO = scope:other_country }",
+                         "state_valid_trigger = { scope:input = { owner = root "
+                         "gm_arch_state_offers_site = { WHO = scope:other_country } } }",
+                         f"no_duplicate_treaty_article = {{ ARTICLE_TYPE = {name} }}",
+                         f"custom_tooltip_no_bullet = {name}_effects_desc",
+                         "trigger_event = { id = arch_events.12 days = 1 }",
+                         "on_withdrawal = {} on_break = {}"):
+                self.assertIn(part, body, f"{name}: {part}")
+            self.assertNotIn("set_variable", body, f"{name}: nothing written on the state")
+        self.assertIn("gm_arch_method_antiquarian_ok = yes", self.arts["archaeological_concession"])
+        self.assertIn("gm_arch_method_systematic_ok = yes", squash(block(strip_comments(self.arts["excavation_permit"]),
+                                                                         "can_ratify")))
+        self.assertIn("can_be_enforced", self.arts["archaeological_concession"])
+        self.assertNotIn("can_be_enforced", self.arts["excavation_permit"])
+        L = loc()
+        for name in ARTICLES:
+            for suffix in ("", "_desc", "_effects_desc", "_article_short_desc"):
+                self.assertIn(f"{name}{suffix}", L)
+            self.assertNotIn("SOURCE_COUNTRY", L[f"{name}_desc"], "blank names in _desc")
+        for key in ("GM_ARCH_CONCESSION_RELUCTANCE", "GM_ARCH_ANTIQUITIES_NATIONALISM", "GM_ARCH_PERMIT_RELUCTANCE",
+                    "GM_ARCH_SUBJECT", "GM_ARCH_DIG_WANTED", "gm_arch_article_sponsor_tech_concession_tt",
+                    "gm_arch_article_sponsor_tech_permit_tt"):
+            self.assertIn(key, L)
+
+    def test_the_right_is_read_from_the_treaty(self):
+        body = squash(block(self.t, "gm_arch_state_conceded_to"))
+        self.assertIn("save_temporary_scope_as = gm_arch_cs_state", body)
+        self.assertIn("owner = { save_temporary_scope_as = gm_arch_cs_host NOT = { this = $WHO$ } }", body)
+        self.assertIn("$WHO$ = { any_scope_treaty = { any_scope_article = { has_type = $ARTICLE$ "
+                      "source_country = scope:gm_arch_cs_host input_state = scope:gm_arch_cs_state } } }", body)
+        both = squash(block(self.t, "gm_arch_state_open_abroad"))
+        for name in ARTICLES:
+            self.assertIn(f"ARTICLE = {name}", both)
+
+    def test_whoever_holds_the_right_is_listed_once(self):
+        body = squash(block(self.e, "gm_arch_list_one"))
+        self.assertIn("every_scope_treaty = { every_scope_article = { limit = { OR = { has_type = "
+                      "archaeological_concession has_type = excavation_permit } source_country = scope:gm_arch_ls_host "
+                      "input_state = scope:gm_arch_ls_state } target_country = { save_scope_as = gm_arch_ls_who }", body)
+        listed = squash(block(self.e, "gm_arch_list_for"))
+        self.assertIn("is_target_in_variable_list = { name = gm_arch_available target = scope:gm_arch_listing }", listed)
+
+    def test_the_terms_decide_what_the_sponsor_takes_home(self):
+        body = squash(block(self.e, "gm_arch_settle_terms"))
+        self.assertIn("var:gm_site_terms = flag:concession NOT = { var:gm_tr_form = flag:rock_cut }", body,
+                      "a rock-cut site has nothing to carry")
+        self.assertIn("gm_arch_partage = yes", body)
+        self.assertIn("add_modifier = { name = gm_arch_scholarship days = 3650 }", body)
+        mods = squash(strip_comments(read(MODIFIERS)))
+        self.assertIn("gm_arch_scholarship = { icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds "
+                      "country_prestige_add = 10 country_cultural_pull_add = 1 }", mods)
+        for key in ("gm_arch_scholarship", "gm_arch_scholarship_desc"):
+            self.assertIn(key, loc())
+
+    def test_partage_makes_a_trophy_from_the_digs_records(self):
+        body = squash(block(self.e, "gm_arch_partage"))
+        self.assertIn("create_container = { tags = { gm_trophy } save_scope_as = gm_tr_new", body)
+        self.assertIn("add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }", body)
+        for record in ("name = gm_tr_origin value = scope:gm_arch_dig_state",
+                       "name = gm_tr_site value = scope:gm_arch_partage_home",
+                       "name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region",
+                       "name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece",
+                       "name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur",
+                       "name = gm_tr_taken_by value = scope:gm_arch_sponsor",
+                       "name = gm_tr_share value = flag:piece",
+                       "name = gm_tr_landmark value = scope:gm_arch_partage_site.var:gm_tr_landmark"):
+            self.assertIn(f"set_variable = {{ {record} }}", body, record)
+        self.assertIn("gm_tr_update_picture = yes", body)
+        self.assertIn("change_variable = { name = gm_tr_levels subtract = var:gm_site_piece }", body,
+                      "the host keeps the rest")
+        v = read(VALUES)
+        self.assertEqual(squash(block(v, "gm_arch_partage_levels")),
+                         "value = gm_arch_disp_levels divide = 2 floor = yes min = 1")
+        self.assertEqual(squash(block(v, "gm_arch_partage_grandeur")),
+                         "value = gm_arch_partage_levels divide = 2 ceiling = yes")
+        # Every record a trophy made from a state carries, this one carries.
+        made = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_state_tr_make_trophy"))
+        for record in re.findall(r"set_variable = \{ name = (gm_tr_\w+) value", made):
+            self.assertIn(f"name = {record} value", body, record)
+
+    def test_the_grant_refreshes_the_sponsor(self):
+        ev = squash(raw_block_at(strip_comments(read(EVENTS)), r"(?m)^arch_events\.12\s*=\s*\{"))
+        self.assertIn("type = country_event hidden = yes", ev)
+        self.assertIn("gm_arch_pass = yes trigger_event = { id = monument_events.20 }", ev)
+
+    def test_the_open_row_says_abroad_for_the_viewer(self):
+        sg = read(SGUIS)
+        self.assertIn("gm_arch_would_dig_abroad_by = { WHO = root ARTICLE = archaeological_concession }",
+                      squash(block(sg, "gm_arch_abroad_concession_sgui")))
+        permit = squash(block(sg, "gm_arch_abroad_permit_sgui"))
+        self.assertIn("NOT = { gm_arch_would_dig_abroad_by = { WHO = root ARTICLE = archaeological_concession } }", permit,
+                      "a concession wins over a permit")
+        for name in ("gm_arch_abroad_concession_sgui", "gm_arch_abroad_permit_sgui"):
+            self.assertNotIn("effect", block(sg, name), "display only")
+        for name in ("gm_arch_launch_antiquarian_sgui", "gm_arch_launch_systematic_sgui", "gm_arch_launch_forensic_sgui"):
+            self.assertIn("gm_arch_may_dig_ground = { WHO = root }", squash(block(sg, name)), name)
 
 
 if __name__ == "__main__":

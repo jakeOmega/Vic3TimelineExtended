@@ -1,7 +1,9 @@
 # Grand Monuments: archaeology, play-test checklist
 
 What the next play-test should look at for the buried sites and the dig (spec
-`docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md`, issue #939). In-game checks do not gate a merge
+`docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md`, issue #939, and the rework
+`docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md`: fixed costs, sized digs, the sites' events,
+foreign digs by treaty). In-game checks do not gate a merge
 (CLAUDE.md, "In-game checks: self-checks and the play-test list"): the PR landed on the offline gate and this is what only the
 game can show. A fixed item is struck through with the commit that fixed it.
 
@@ -33,6 +35,11 @@ site did not seed).
 | `chance = <named script value>` in a container scope | The incidental find, and the Antiquarian's destruction. | Roll `random_list` with a literal percentage. |
 | `save_temporary_scope_as = gm_arch_cand` in a `limit`, read at once | Who may dig, and who finds (`gm_arch_try_find`, `gm_arch_list_one`): the country as an argument to `gm_arch_has_gate_for`. `gm_tr_holder_owns_origin` does the same. | A saved scope in the effect before the loop. |
 | `any_in_list = { variable = … count >= 2 }` after a `has_variable_list` guard | The AI's two-dig cap. | |
+| A saved scope per site (`gm_arch_ev_<key>`), cleared and set before `trigger_event`, rides with each popup, so two popups of one month name their own sites | `arch_events.1` and `.2` (`gm_arch_ev_mark`). Two survey sites open in one month for Greece at Empiricism (Mycenae, Olympia): each popup must name its own. | Copy the site's row number to a saved scope value and pick the description by it. |
+| `title`/`desc`/`flavor` `first_valid` read saved scopes set by the caller | Both events: the title of a survey find, a ruined dig, a dig abroad, the host's copy. | A separate event per case. |
+| `[SCOPE.sState('gm_arch_ev_<key>').GetName]` inside a key pulled in with `$…$` from the event's description | Every site's text names its state. | Name the state in the event's own key. |
+| `any_scope_treaty = { any_scope_article = { has_type … source_country = … input_state = … } }` reads an article in force, from a country, in a trigger | Digging abroad (`gm_arch_state_conceded_to`), the free port's sync uses the same shape. | |
+| `set_variable = { … value = net_fixed_income }`, compared from a container through `scope:x.var:` | The AI's affordability (`gm_arch_ai_affordable`). | A country-scope value with the levels copied to a country variable. |
 
 ## Seeding and listing
 
@@ -56,6 +63,33 @@ site did not seed).
 | **Stratigraphic Destruction.** Dig a 10-level site Antiquarian several times (debug a, b, c). | About one in three comes out at 5 levels with *Stratigraphic Destruction*. | |
 | **A looted find.** Occupy a state with a dug site. | Carry It Off offers its piece by name ("Troy — Priam's Treasure"). | The generic part name: `gm_tr_part_name`. |
 
+## Costs and time
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Cost.** Hover the three buttons of a 10-level site (Nineveh). | £200, £500 and £2,000 a week, the same for a small country as for a great power; 25, 40 and 29 months. A 5-level site (the Winged Victory) shows half the cost and 17, 27 and 20 months. | A cost that moves with GDP: an old `gm_arch_cost_*` read. A blank: `gm_arch_site_cost_*` on the container. |
+| **The row.** Launch a dig. | Its row says "Costs £… a week", the same figure the budget's Archaeological Digs row adds. | |
+| **The AI.** Observe a poor AI with a weekly deficit for ten years. | It opens no dig. A rich one opens the grandest it can afford. | |
+
+## The events
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Survey.** As the Ottomans, research Romanticism (or start with it). | *The Scholars Know Where to Look* names Nineveh, Mosul, the mounds of Kuyunjik and Nebi Yunus, what the scholars expect, and a historical note on Botta, Layard and Rassam; it offers a dig. Once only. | The fallback text: the saved scope did not ride with the event. Another site's text: a scope not cleared. |
+| **Two at once.** As Greece, research Empiricism. | Two popups, Mycenae and Olympia, each with its own text and both naming the Peloponnese. | Both naming one site. |
+| **Chance find.** Debug a, then wait for a find (or keep the 1% chance). | *Something Under the Spade* with the site's own chance find. | |
+| **Finished.** Debug c. | *An Excavation Is Finished* (or *Stratigraphic Destruction*) with the site's find and history, and the monument standing. | |
+
+## Digging abroad
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Concession.** As Britain with Romanticism, draft an Excavation Concession with the Ottomans. | Only Ottoman states with a site open to Britain can be picked (Mosul for Nineveh). Britain pays 75 influence. A day after it is signed, Nineveh is in Britain's Archaeological Expeditions with "Abroad, by an Excavation Concession" and launch buttons, and *The Scholars Know Where to Look* fires for Britain. | No state to pick: `gm_arch_state_offers_site`. Not listed: `gm_arch_state_conceded_to` (the treaty read). |
+| **Partage.** Dig it, debug c. | Half the levels (5 of 10) stand in Mosul as the Ottomans' monument; a 5-level piece stands in London as Britain's trophy, counting for 3. Britain gets *Our Expedition Returns*; an Ottoman player *A Foreign Expedition Finishes*. The Ottomans may claim the piece with Return Cultural Property. | No trophy: `gm_arch_partage`. The piece not named for its part: `gm_tr_share`. |
+| **Permit.** The same with an Excavation Permit (Britain needs Empiricism). | The whole monument stands in Mosul; Britain has Foreign Scholarship (+10 prestige, +1 cultural pull) for ten years. | |
+| **Change of heart.** Withdraw from the treaty mid-dig. | The dig suspends with its progress; the Ottomans can take it up. | |
+| **A rock-cut site.** A concession at Deir el-Bahari. | No trophy; the site stands whole; Foreign Scholarship. | |
+
 ## The AI
 
 | Check | Expect | If it fails |
@@ -72,5 +106,5 @@ site did not seed).
 ## Known limits
 
 - A site shows its form's stand-in picture; none of the 35 has its own.
-- Only the holder of the ground digs. A split state is dug by any of its owners; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
-- A find's popup names the last site found or dug (`gm_arch_last`), so a popup left unanswered while another site turns up or finishes names that one.
+- A split state is dug by any of its owners, or anyone holding an article on a part of it; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
+- No console harness signs a treaty: test digging abroad through the treaty screen.

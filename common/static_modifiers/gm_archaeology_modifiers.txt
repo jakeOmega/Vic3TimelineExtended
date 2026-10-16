@@ -19,3 +19,13 @@ gm_arch_expense = {
 	country_expenses_add = 1
 	country_te_budget_expense_archaeology_add = 1
 }
+
+# A dig abroad that left its finds with the host: under an Excavation Permit,
+# or a Concession at a rock-cut site, which has nothing to carry off (rework
+# spec § 3). The sponsor's scholars publish, and its name is on the site. Ten
+# years, from gm_arch_settle_terms.
+gm_arch_scholarship = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_prestige_add = 10
+	country_cultural_pull_add = 1
+}

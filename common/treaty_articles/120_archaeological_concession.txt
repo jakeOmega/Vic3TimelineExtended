@@ -1,0 +1,222 @@
+﻿# =================================================================
+# TREATY ARTICLE: archaeological_concession
+# The source grants the target the right to dig the buried sites around a
+# state it owns, and to carry half of what it finds home: when a dig finishes,
+# half its levels go to the target's capital as a trophy and the rest stand in
+# the state as its monument (the partage, gm_arch_partage). A rock-cut site has
+# nothing to carry, and the target gains Foreign Scholarship instead.
+# docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md § 3.
+# Historical: the Ottoman firmans that let Layard dig Nimrud, Humann Pergamon
+# and Koldewey Babylon; France's monopoly on excavation in Persia (1895-1927);
+# the division of finds in Egypt that sent Nefertiti's bust to Berlin (1913).
+#
+# The treaty is the record: nothing is written on the state. The dig reads the
+# target's treaties live (gm_arch_state_conceded_to), so a treaty that ends by
+# any road, or a state that changes hands, ends the right at once and suspends
+# a dig under it with its progress kept (LIVE in
+# test_state_treaty_article_sync.py).
+# =================================================================
+archaeological_concession = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/science_aid.dds"
+	kind = directed
+	cost = 75
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	usage_limit = once_per_side_with_same_inputs
+
+	# The country that digs (target) pays the upkeep.
+	maintenance_paid_by = target_country
+
+	required_inputs = {
+		state
+	}
+
+	visible = {
+		gm_system_enabled = yes
+	}
+
+	# ROOT is the prospective source (the host), scope:other_country the
+	# prospective target (the sponsor). A war goal enforcing the article checks
+	# this and not can_ratify: the host must own a state with a site open to
+	# the sponsor.
+	possible = {
+		gm_system_enabled = yes
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+		gm_arch_country_offers_site = { WHO = scope:other_country }
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			no_duplicate_treaty_article = { ARTICLE_TYPE = archaeological_concession }
+		}
+		custom_tooltip = {
+			text = gm_arch_article_sponsor_tech_concession_tt
+			scope:target_country ?= {
+				gm_arch_method_antiquarian_ok = yes
+			}
+		}
+	}
+
+	# ROOT is the source: a state it owns, with a site in its region open to
+	# the target (scope:other_country), so no concession is signed for nothing.
+	state_valid_trigger = {
+		scope:input = {
+			owner = root
+			gm_arch_state_offers_site = { WHO = scope:other_country }
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			exists = scope:article.input_state
+		}
+	}
+
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = archaeological_concession_effects_desc
+		# The target's lists now, not at the next monthly pass. The designer's
+		# preview runs this hook every frame with scope:article_options unbound,
+		# hence the guard; a day's delay because the pass walks the treaties.
+		hidden_effect = {
+			scope:article_options ?= {
+				if = {
+					limit = { exists = target_country }
+					target_country = {
+						trigger_event = { id = arch_events.12 days = 1 }
+					}
+				}
+			}
+		}
+	}
+
+	on_withdrawal = {}
+	on_break = {}
+
+	ai = {
+		treaty_categories = { other }
+		# A would-be sponsor asks for one.
+		article_ai_usage = { request }
+
+		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			# A major power or greater, at peace, with Empiricism and fewer than
+			# two digs, asks now and then.
+			value = 0
+			if = {
+				limit = {
+					gm_system_enabled = yes
+					country_rank >= rank_value:major_power
+					is_at_war = no
+					gm_arch_method_systematic_ok = yes
+					gm_arch_disp_dig_count < 2
+				}
+				add = 0.01
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# The host gives away half of what is found, and a host with
+			# Pan-nationalism guards its antiquities.
+			if = {
+				limit = { scope:article.source_country ?= root }
+				add = {
+					desc = "GM_ARCH_CONCESSION_RELUCTANCE"
+					value = -50
+				}
+				if = {
+					limit = { has_technology_researched = pan-nationalism }
+					add = {
+						desc = "GM_ARCH_ANTIQUITIES_NATIONALISM"
+						value = -40
+					}
+				}
+				if = {
+					limit = {
+						scope:article.target_country ?= { save_temporary_scope_as = gm_arch_ai_partner }
+						OR = {
+							has_attitude = { who = scope:gm_arch_ai_partner attitude = genial }
+							has_attitude = { who = scope:gm_arch_ai_partner attitude = cooperative }
+							has_attitude = { who = scope:gm_arch_ai_partner attitude = conciliatory }
+						}
+					}
+					add = {
+						desc = "AI_FRIENDLY_ATTITUDE"
+						value = 20
+					}
+				}
+				if = {
+					limit = {
+						scope:article.target_country ?= { save_temporary_scope_as = gm_arch_ai_partner }
+						is_subject_of = scope:gm_arch_ai_partner
+					}
+					add = {
+						desc = "GM_ARCH_SUBJECT"
+						value = 30
+					}
+				}
+				if = {
+					limit = {
+						scope:article.target_country ?= { save_temporary_scope_as = gm_arch_ai_partner }
+						is_in_same_power_bloc = scope:gm_arch_ai_partner
+					}
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = 15
+					}
+				}
+			}
+			# The sponsor wants the dig and half the finds.
+			else = {
+				add = {
+					desc = "GM_ARCH_DIG_WANTED"
+					value = 30
+				}
+			}
+		}
+	}
+
+	# Pushed in a play: the state is contested.
+	wargoal = {
+		execution_priority = 40
+		contestion_type = control_target_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 1.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 3
+			}
+		}
+	}
+}

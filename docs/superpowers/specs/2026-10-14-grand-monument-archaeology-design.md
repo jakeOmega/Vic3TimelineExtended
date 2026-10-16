@@ -160,6 +160,7 @@ From the issue's design, not built (owner, 2026-10-14: the mechanisms and the mo
 
 - **Foreign digs**: the `archaeological_concession` treaty article, its influence upkeep, the partage split (the host keeps the
   ruin, the sponsor takes the portable masterpiece as a trophy) and the Host's change of heart. Only the holder of the ground digs.
+  *(Built by `2026-10-16-grand-monument-archaeology-rework-design.md` § 3, which also replaced the GDP-share cost.)*
 - **Political brakes**: the interest groups' stances, Hard Times backlash (*Gold for the Dead, Crumbs for the Living*), the
   Starved-of-Specialists slowdown.
 - **The two dedications** (Ancestral Antiquity, Epigraphic and Prehistoric Archive) and their production methods. Every site is
