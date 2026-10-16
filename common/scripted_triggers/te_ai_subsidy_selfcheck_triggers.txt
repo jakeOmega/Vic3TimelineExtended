@@ -1,0 +1,10 @@
+﻿# The should_remove experiment (#933, te_power_plant_subsidy_strategies.txt):
+# the administrative strategies whose INJECT adds a subsidies block of their own.
+# Country scope.
+te_ai_subsidy_clean_strategy = {
+	OR = {
+		has_strategy = ai_strategy_agricultural_expansion
+		has_strategy = ai_strategy_plantation_economy
+		has_strategy = ai_strategy_placate_population
+	}
+}

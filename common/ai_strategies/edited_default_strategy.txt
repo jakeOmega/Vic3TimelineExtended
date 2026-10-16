@@ -318,14 +318,20 @@
 			value = 10
 		}
 	}
-	# Demote coal power plant subsidy from vanilla's must_have to nice_to_have.
-	# Vanilla pins building_power_plant = must_have for the whole game; with the
-	# mod's late-game fusion/nuclear/renewable options that locks the AI into
-	# permanent coal subsidies. nice_to_have is the lowest priority the engine
-	# accepts (no do_not_subsidize value exists). Railway and port keep their
-	# vanilla must_have via INJECT merge semantics.
+	# Power plants' subsidy priority. Vanilla pins building_power_plant =
+	# must_have for the whole game, so the AI's treasury pays every power plant's
+	# losses, retooling included. The mod demoted it to nice_to_have, but a 4x
+	# fast run's 1912 save still had 604 of 630 AI power plants subsidized (#933).
+	# Experiment: should_remove, a value the game executable lists beside
+	# must_have and nice_to_have that no vanilla strategy uses. Whether it does
+	# anything is unread, and so is whether this INJECT replaces vanilla's value
+	# on the same key. te_power_plant_subsidy_strategies.txt sets it in three
+	# administrative strategies too, where no key collides, and a yearly
+	# self-check reads the two apart (docs/testing/ai-economy-playtest.md).
+	# Railways and ports keep vanilla's must_have (99% of both were subsidized
+	# in that save).
 	subsidies = {
-		building_power_plant = nice_to_have
+		building_power_plant = should_remove
 	}
 	goods_stances = {
 		construction = {
