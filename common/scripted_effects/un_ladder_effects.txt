@@ -475,17 +475,17 @@ un_dissolve_remove_global = {
 }
 
 # One country's part in a dissolution: everything a member sheds on leaving
-# (un_membership_end_effect), plus what only the end of the organisation
-# ends — pariah status, the authority-scaled modifiers, the standing tier
-# modifier, the headquarters marker, sanctions regimes on either side, and the
-# fire-once and cached variables the next UN must start without.
+# (un_membership_end_effect, NPT disarmament among it), plus what only the
+# end of the organisation ends — pariah status, the retired infamy modifier,
+# the standing tier modifier, the headquarters marker, sanctions regimes on
+# either side, and the fire-once and cached variables the next UN must start
+# without.
 # Scope: country
 un_dissolve_strip_country = {
 	un_membership_end_effect = yes
 	# The organisation's claims die with it (redesign phase 5).
 	un_dues_clear = yes
 	je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
-	je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
 	un_state_off = { MODIFIER = un_headquarters_modifier }
@@ -517,11 +517,11 @@ un_dissolve_strip_country = {
 }
 
 # Everything a member sheds when its membership ends: the membership and its
-# benefits, any seat, every programme and its cost, our own sanctions
-# enforcement, and every convention we were bound by. Sanctions AGAINST us are
-# deliberately not here: they are the members' measure, not a membership
-# obligation, so walking out must not shed them (only un_lift_sanctions_button
-# or a dissolution ends a regime).
+# benefits, NPT disarmament, any seat, every programme and its cost, our own
+# sanctions enforcement, and every convention we were bound by. Sanctions
+# AGAINST us are deliberately not here: they are the members' measure, not a
+# membership obligation, so walking out must not shed them (only
+# un_lift_sanctions_button or a dissolution ends a regime).
 # Called from un_leave_button (inside its tooltip) and un_dissolve_strip_country.
 # Scope: country
 un_membership_end_effect = {
@@ -543,6 +543,13 @@ un_membership_end_effect = {
 		remove_modifier = un_regime_colony_liberty_modifier
 	}
 	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+	# NPT enforcement binds members only (je_un_preview_npt_tt), so a member
+	# held to disarmament is released the day it goes; otherwise its programme
+	# and stockpile were zeroed every week until it rejoined.
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier } }
+		je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
+	}
 	# The World Development Fund's grant and the World Food Reserve pledge end
 	# with membership (redesign phase 7, un_economy_effects.txt).
 	un_economy_on_membership_end = yes

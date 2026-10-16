@@ -3436,7 +3436,7 @@ un_nonmember_pariah_modifier = {
 
 # Applied to non-nuclear members from the Strong UN tier, once the IAEA exists
 # (un_tier_at_least_strong in je_united_nations; it was authority 80 before
-# the tier ladder)
+# the tier ladder); lifted when membership ends (un_membership_end_effect)
 # Represents NPT enforcement pressure: blocks nuclear program
 un_npt_disarmament_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
