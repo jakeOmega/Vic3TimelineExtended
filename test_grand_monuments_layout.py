@@ -34,7 +34,7 @@ ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_
 FLAGS = {"gm_commission_closed", "gm_national_closed", "gm_monuments_closed", "gm_how_open"}
 LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_national", "te_gm_sec_monuments",
                  "gm_monument_row"]
-HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_national", "gm_je_how_counts",
+HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_national", "gm_je_how_counts",
             "gm_je_how_counts_other", "gm_je_how_contested", "gm_je_how_choices",
             "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
             "gm_je_how_names", "gm_je_how_policy", "gm_je_how_trophies", "gm_je_how_trophies_home"]
@@ -847,7 +847,8 @@ class StateCardTest(unittest.TestCase):
         """The local effects step on gm_curve_steps_f5, so the bar is f = 5 and
         its next step is gm_curve_next_f5's, read from the live level."""
         values = _read(VALUES)
-        monthly = _squash(_block(_read(EFFECTS), "gm_state_monthly"))
+        # Each dedication's local effect (ageing spec 2026-10-16 §4.2).
+        monthly = _squash(_block(_read(EFFECTS), "gm_state_local_steps_one"))
         self.assertIn("value = gm_curve_steps_f5 multiply = gm_policy_factor_local", monthly)
         curve = _squash(_block(values, "gm_curve_next_f5"))
         nxt = _squash(_block(values, "gm_state_disp_next_step"))
@@ -892,6 +893,44 @@ class PictureLayoutTests(unittest.TestCase):
         self.assertRegex(card, r"gm_picture = \{\s*size = \{ 120 120 \}")
         self.assertRegex(card, r"minimumsize = \{ 380 -1 \}")
 
+
+
+class AgeingPanelTests(unittest.TestCase):
+    """Ageing rework (spec 2026-10-16 §6): a finished monument's levels and
+    years on the card and its row; a monument beside another shows its status
+    and grandeur, and its row in Our Monuments carries a contested one's
+    three choices."""
+
+    def test_the_finished_line(self):
+        loc = _loc()
+        card = _type_body(_read(STATE_GUI), "te_state_gm_card")
+        row = _type_body(_gui(), "gm_monument_row")
+        for body in (card, row):
+            self.assertIn("ScriptValue('gm_state_disp_frozen')", body)
+            self.assertIn('tooltip = "gm_row_frozen_tt"', body)
+            self.assertIn('text = "gm_row_frozen"', body)
+        self.assertIn("gm_state_primary_age", loc["gm_row_frozen"])
+        self.assertIn("2% of its levels a year", loc["gm_row_frozen_tt"])
+        self.assertIn("gm_state_primary_age", loc["gm_state_grandeur_tt_one"])
+
+    def test_a_secondarys_row(self):
+        loc = _loc()
+        trophy_gui = _read("gui/gm_trophy_widgets.gui")
+        site = _type_body(trophy_gui, "gm_mon_row_site")
+        for code, key in ((2, "upheld"), (3, "heritage"), (4, "contested")):
+            self.assertIn(f"ScriptValue('gm_mon_status_code'), '(CFixedPoint){code}'", site)
+            self.assertIn(f'text = "gm_mon_row_status_{key}"', site)
+            self.assertIn(f"gm_mon_row_status_{key}", loc)
+        self.assertIn('block "mon_choices" {}', site)
+        self.assertIn("ScriptValue('gm_mon_grandeur')", loc["gm_mon_row_value"])
+        button = _type_body(trophy_gui, "gm_mon_choice_button")
+        self.assertIn("AddScope( 'gm_mon', ScriptContainer.MakeScope )", button)
+        je = _gui()
+        for sgui in ("gm_mon_tear_down_sgui", "gm_mon_rededicate_sgui", "gm_mon_preserve_sgui"):
+            self.assertIn(f"GetScriptedGui('{sgui}')", je)
+        for key in ("gm_button_mon_tear_down_tooltip", "gm_button_mon_rededicate_tooltip",
+                    "gm_button_mon_preserve_tooltip"):
+            self.assertIn("AddScope( 'gm_mon', ScriptContainer.MakeScope )", loc[key])
 
 if __name__ == "__main__":
     unittest.main()

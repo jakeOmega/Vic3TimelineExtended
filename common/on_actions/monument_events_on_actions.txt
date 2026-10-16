@@ -46,108 +46,84 @@ monument_events_on_action = {
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_civic }
-					}
+					gm_country_holds_anniversary = { KEY = civic }
 				}
 				trigger_event = { id = monument_events.3 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_religious }
-					}
+					gm_country_holds_anniversary = { KEY = religious }
 				}
 				trigger_event = { id = monument_events.4 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_war_memorial }
-					}
+					gm_country_holds_anniversary = { KEY = war_memorial }
 				}
 				trigger_event = { id = monument_events.5 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_artistic }
-					}
+					gm_country_holds_anniversary = { KEY = artistic }
 				}
 				trigger_event = { id = monument_events.6 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_naturalist }
-					}
+					gm_country_holds_anniversary = { KEY = naturalist }
 				}
 				trigger_event = { id = monument_events.7 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_scientific }
-					}
+					gm_country_holds_anniversary = { KEY = scientific }
 				}
 				trigger_event = { id = monument_events.8 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_industrial }
-					}
+					gm_country_holds_anniversary = { KEY = industrial }
 				}
 				trigger_event = { id = monument_events.9 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_athletic }
-					}
+					gm_country_holds_anniversary = { KEY = athletic }
 				}
 				trigger_event = { id = monument_events.10 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_crown }
-					}
+					gm_country_holds_anniversary = { KEY = crown }
 				}
 				trigger_event = { id = monument_events.12 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_republic }
-					}
+					gm_country_holds_anniversary = { KEY = republic }
 				}
 				trigger_event = { id = monument_events.13 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_revolution }
-					}
+					gm_country_holds_anniversary = { KEY = revolution }
 				}
 				trigger_event = { id = monument_events.14 }
 			}
 
 			3 = {
 				trigger = {
-					any_scope_state = {
-						gm_state_holds_anniversary = { PM = pm_monument_leader }
-					}
+					gm_country_holds_anniversary = { KEY = leader }
 				}
 				trigger_event = { id = monument_events.15 }
 			}

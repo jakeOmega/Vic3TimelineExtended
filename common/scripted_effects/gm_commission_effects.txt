@@ -31,7 +31,7 @@
 # left).
 #
 # Seized and completed, an opportunity pays three ways (spec §3): the monument
-# that completed it is rebuilt five levels taller (monument_events.26), the
+# that completed it gains five grandeur (monument_events.26), the
 # asking IG's ledger rises (gm_ig_ledger_<ig>) and a boon runs for ten years.
 
 # ---- The record ------------------------------------------------------------------
@@ -247,19 +247,26 @@ gm_com_pick_build_state = {
 	clear_saved_scope = gm_com_build_state
 	if = {
 		limit = { has_variable = gm_com_state }
-		var:gm_com_state ?= { save_scope_as = gm_com_build_state }
+		var:gm_com_state ?= {
+			if = {
+				limit = { gm_state_can_expand = yes }
+				save_scope_as = gm_com_build_state
+			}
+		}
 	}
 	else_if = {
 		limit = {
 			any_scope_state = {
 				gm_state_status_fits = yes
 				gm_state_has_dedication_flag = { VAR = gm_com_dedication }
+				gm_state_can_expand = yes
 			}
 		}
 		ordered_scope_state = {
 			limit = {
 				gm_state_status_fits = yes
 				gm_state_has_dedication_flag = { VAR = gm_com_dedication }
+				gm_state_can_expand = yes
 			}
 			order_by = gm_state_grandeur
 			position = 0
@@ -272,12 +279,14 @@ gm_com_pick_build_state = {
 			any_scope_state = {
 				has_building = building_grand_monument
 				gm_state_is_dedicated = no
+				gm_state_can_expand = yes
 			}
 		}
 		random_scope_state = {
 			limit = {
 				has_building = building_grand_monument
 				gm_state_is_dedicated = no
+				gm_state_can_expand = yes
 			}
 			save_scope_as = gm_com_build_state
 		}
@@ -286,6 +295,7 @@ gm_com_pick_build_state = {
 		limit = {
 			capital ?= {
 				NOT = { has_building = building_grand_monument }
+				gm_state_can_expand = yes
 			}
 		}
 		capital = { save_scope_as = gm_com_build_state }
@@ -295,12 +305,14 @@ gm_com_pick_build_state = {
 			any_scope_state = {
 				is_incorporated = yes
 				NOT = { has_building = building_grand_monument }
+				gm_state_can_expand = yes
 			}
 		}
 		ordered_scope_state = {
 			limit = {
 				is_incorporated = yes
 				NOT = { has_building = building_grand_monument }
+				gm_state_can_expand = yes
 			}
 			order_by = state_population
 			position = 0
@@ -602,6 +614,25 @@ gm_com_fulfil = {
 	}
 	else = {
 		gm_remove_state_var = { VAR = gm_com_seized_state }
+		# A monument beside another completed it (ageing spec 2026-10-16 §5):
+		# the gift on the largest that counts; it keeps its name, and .28 names
+		# none.
+		clear_saved_scope = gm_com_gift_mon
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			ordered_in_list = {
+				variable = gm_monuments_held
+				limit = { gm_mon_com_counts = yes }
+				order_by = gm_mon_grandeur
+				position = 0
+				check_range_bounds = no
+				save_scope_as = gm_com_gift_mon
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_com_gift_mon }
+			scope:gm_com_gift_mon = { gm_mon_add_age = { AGE = gm_com_gift } }
+		}
 	}
 	if = {
 		limit = { has_variable = gm_com_source }
@@ -743,61 +774,30 @@ gm_remove_boons = {
 	remove_modifier = gm_boon_tech_naturalist
 }
 
-# ---- The monument's gift (spec §3.1) -------------------------------------------------
+# ---- The monument's gift (spec §3.1; ageing spec 2026-10-16 §5) ----------------------
 # State scope, from monument_events.26 (the monument gm_com_fulfil marked with
-# gm_gift). Rebuilt gm_com_gift levels taller, at most 200 (the rebuild
-# ladder's reach), keeping everything the state records: its dedication's
-# raiser, honoree and faith, its style, form, name, picture and gm_seen. No
-# effect adds levels to a building the state already has predictably
-# (scripting_best_practices.md, "Building Lifecycle Effect Gotchas"), so it is
-# removed and built again, as Rededicate does. The rebuilt building starts on
-# the engine's copy of a dedication (grand_monument_pms.txt), so the state
-# records its own (gm_restore_pm) for gm_state_restore_dedication to put back;
-# monument_events.20 runs it in a refresh of its own, once the new building is
-# readable. gm_rebuilding spares the rebuild's own on_building_built vanity
-# backlash, as for Rededicate.
+# gm_gift). gm_com_gift grandeur added to its age: no rebuild, no cap (owner,
+# 2026-10-16; until then it was rebuilt 5 levels taller). The event stays so a
+# save with a gift pending still gets it.
 gm_state_gift_grandeur = {
 	gm_remove_state_var = { VAR = gm_gift }
 	if = {
 		limit = {
 			has_building = building_grand_monument
 			gm_state_is_dedicated = yes
-			NOT = { has_variable = gm_restore_pm }
-			gm_state_grandeur < 200
 		}
-		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-		set_variable = {
-			name = gm_rebuild_level
-			# The building's whole level: the gift lands on the primary and
-			# every secondary standing beside it stays.
-			value = {
-				value = gm_state_grandeur
-				add = gm_com_gift
-				max = 200
-			}
-		}
-		gm_state_mark_restore_pm = yes
-		set_variable = { name = gm_rebuilding days = 1 }
-		remove_building = building_grand_monument
-		te_construction_market_build_specified_level = {
-			SPEC_TYPE = building_grand_monument
-			SPEC_LEVEL = var:gm_rebuild_level
-		}
-		set_variable = {
-			name = gm_grandeur
-			value = {
-				value = var:gm_rebuild_level
-				subtract = gm_state_secondary_grandeur
-				min = 1
-			}
-		}
-		remove_variable = gm_rebuild_level
+		gm_state_add_age = { AGE = gm_com_gift }
 		owner = { trigger_event = { id = monument_events.20 } }
 	}
 }
 
-# State scope. Record the active dedication as gm_restore_pm (a flag naming it).
+# State scope. Record the active dedication as gm_restore_pm (a flag naming it),
+# or flag:undedicated: a rebuilt building starts on the engine's copy of its
+# siblings' dedication, so an undedicated monument needs its own method put
+# back as much as a dedicated one (gm_state_is_dedicated reads it as
+# undedicated meanwhile).
 gm_state_mark_restore_pm = {
+	gm_state_mark_restore_pm_one = { KEY = undedicated }
 	gm_state_mark_restore_pm_one = { KEY = crown }
 	gm_state_mark_restore_pm_one = { KEY = republic }
 	gm_state_mark_restore_pm_one = { KEY = revolution }
@@ -831,6 +831,7 @@ gm_state_restore_dedication = {
 			has_variable = gm_restore_pm
 			has_building = building_grand_monument
 		}
+		gm_state_restore_dedication_one = { KEY = undedicated }
 		gm_state_restore_dedication_one = { KEY = crown }
 		gm_state_restore_dedication_one = { KEY = republic }
 		gm_state_restore_dedication_one = { KEY = revolution }

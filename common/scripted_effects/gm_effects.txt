@@ -292,6 +292,38 @@ gm_remove_local_modifiers = {
 	}
 }
 
+# ---- The freeze (spec 2026-10-16 §3.1) ----------------------------------------
+# State scope, from the refresh and monument_events.1. A dedicated monument is
+# finished once its construction stops: its levels then are recorded
+# (gm_levels), and levels built after that found a new monument beside it
+# (gm_state_found_beside, gm_monument_effects.txt). Levels still queued when
+# the ceremony asked join it first; so do levels a player queued before this
+# rule existed (an older save's monument is frozen the same way).
+gm_state_record_frozen_levels = {
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			has_variable = gm_seen
+			NOT = { has_variable = gm_levels }
+			NOT = { has_variable = gm_restore_pm }
+			NOT = { has_variable = gm_ceremony_pending }
+			b:building_grand_monument ?= { is_under_construction = no }
+		}
+		set_variable = { name = gm_levels value = gm_state_primary_levels }
+	}
+}
+
+# State scope. Add $AGE$ to the primary's age grandeur (gm_age), creating it.
+gm_state_add_age = {
+	if = {
+		limit = { has_variable = gm_age }
+		change_variable = { name = gm_age add = $AGE$ }
+	}
+	else = {
+		set_variable = { name = gm_age value = $AGE$ }
+	}
+}
+
 gm_remove_state_var = {
 	if = {
 		limit = { has_variable = $VAR$ }
@@ -332,6 +364,11 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_supporter_ig }
 	gm_remove_state_var = { VAR = gm_new_contest }
 	gm_remove_state_var = { VAR = gm_grandeur }
+	# Its age, its frozen levels and a newcomer's mark (spec 2026-10-16 §1, §3).
+	# Rededicate keeps half the age (gm_state_rededicate).
+	gm_remove_state_var = { VAR = gm_age }
+	gm_remove_state_var = { VAR = gm_levels }
+	gm_remove_state_var = { VAR = gm_newcomer }
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	gm_remove_state_var = { VAR = gm_ceremony_level }
 	# Its name (v2 §3, gm_name_effects.txt): a rebuilt monument is named again.
@@ -351,6 +388,10 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_tr_offered_to }
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
+	gm_state_zero_local_steps = yes
+	# Its shadow (issue #936, gm_monument_effects.txt): the pass writes the next
+	# monument's once it is recorded.
+	gm_state_drop_shadow = yes
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -361,19 +402,19 @@ gm_state_monthly = {
 	gm_remove_local_modifiers = yes
 	# A gifted monument's dedication back (opportunities spec §3.1).
 	gm_state_restore_dedication = yes
+	gm_monument_rebuild_self_check = yes
 	if = {
 		limit = { has_building = building_grand_monument }
+		# A month older (spec 2026-10-16 §2), before this month's steps read it.
+		if = {
+			limit = { gm_state_ages = yes }
+			gm_state_add_age = { AGE = gm_state_age_step }
+		}
 		# Last known level, read if the building disappears before the next pulse.
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
+		# Tourism counts everything standing here; the monument policy (v2 §5)
+		# scales it and each local effect.
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
-		# The monument policy (v2 §5) scales tourism and the local effect.
-		set_variable = {
-			name = gm_local_steps
-			value = {
-				value = gm_curve_steps_f5
-				multiply = gm_policy_factor_local
-			}
-		}
 		set_variable = {
 			name = gm_local_tourism_steps
 			value = {
@@ -396,21 +437,22 @@ gm_state_monthly = {
 			}
 			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_mothballed } }
 		}
-		if = {
-			limit = { gm_state_is_dedicated = yes }
-			gm_add_local = { KEY = crown }
-			gm_add_local = { KEY = republic }
-			gm_add_local = { KEY = revolution }
-			gm_add_local = { KEY = leader }
-			gm_add_local = { KEY = religious }
-			gm_add_local = { KEY = civic }
-			gm_add_local = { KEY = war_memorial }
-			gm_add_local = { KEY = artistic }
-			gm_add_local = { KEY = naturalist }
-			gm_add_local = { KEY = scientific }
-			gm_add_local = { KEY = industrial }
-			gm_add_local = { KEY = athletic }
-		}
+		# Each dedication's own effect counts the grandeur of that dedication
+		# standing here, the primary's and those beside it (spec 2026-10-16
+		# §4.2); gm_local_steps keeps the primary's for the card.
+		set_variable = { name = gm_local_steps value = 0 }
+		gm_state_local_steps_one = { KEY = crown }
+		gm_state_local_steps_one = { KEY = republic }
+		gm_state_local_steps_one = { KEY = revolution }
+		gm_state_local_steps_one = { KEY = leader }
+		gm_state_local_steps_one = { KEY = religious }
+		gm_state_local_steps_one = { KEY = civic }
+		gm_state_local_steps_one = { KEY = war_memorial }
+		gm_state_local_steps_one = { KEY = artistic }
+		gm_state_local_steps_one = { KEY = naturalist }
+		gm_state_local_steps_one = { KEY = scientific }
+		gm_state_local_steps_one = { KEY = industrial }
+		gm_state_local_steps_one = { KEY = athletic }
 		# Trophies (gm_trophy_effects.txt): the owner stamped, an occupier's
 		# offer or roll. Last: a taking removes the building.
 		gm_state_tr_monthly = yes
@@ -447,15 +489,105 @@ gm_state_monthly = {
 			limit = { has_variable = gm_local_tourism_steps }
 			set_variable = { name = gm_local_tourism_steps value = 0 }
 		}
+		gm_state_zero_local_steps = yes
 	}
 }
 
-gm_add_local = {
-	if = {
-		limit = {
-			gm_state_has_pm = { PM = pm_monument_$KEY$ }
+# State scope, from gm_state_monthly. Dedication $KEY$'s local effect here: the
+# curve over the grandeur of every monument of that dedication standing here,
+# a dedicated primary's (fits, heritage or contested alike, §2.3) and each
+# secondary's. Its multiplier variable is zeroed, never removed.
+gm_state_local_steps_one = {
+	set_variable = {
+		name = gm_curve_in
+		value = {
+			value = 0
+			if = {
+				limit = {
+					gm_state_is_dedicated = yes
+					gm_state_has_pm = { PM = pm_monument_$KEY$ }
+				}
+				add = gm_state_primary_grandeur
+			}
+			if = {
+				limit = { has_variable_list = gm_monuments_here }
+				every_in_list = {
+					variable = gm_monuments_here
+					limit = { gm_mon_is = { KEY = $KEY$ } }
+					add = gm_mon_grandeur
+				}
+			}
 		}
-		add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }
+	}
+	set_variable = {
+		name = gm_local_steps_$KEY$
+		value = {
+			value = gm_curve_steps_f5
+			multiply = gm_policy_factor_local
+		}
+	}
+	if = {
+		limit = { var:gm_local_steps_$KEY$ > 0 }
+		add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps_$KEY$ }
+		if = {
+			limit = {
+				gm_state_is_dedicated = yes
+				gm_state_has_pm = { PM = pm_monument_$KEY$ }
+			}
+			set_variable = { name = gm_local_steps value = var:gm_local_steps_$KEY$ }
+		}
+	}
+}
+
+# State scope. Every dedication's local step variable at 0, where one exists.
+gm_state_zero_local_steps = {
+	if = {
+		limit = { has_variable = gm_local_steps_crown }
+		set_variable = { name = gm_local_steps_crown value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_republic }
+		set_variable = { name = gm_local_steps_republic value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_revolution }
+		set_variable = { name = gm_local_steps_revolution value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_leader }
+		set_variable = { name = gm_local_steps_leader value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_religious }
+		set_variable = { name = gm_local_steps_religious value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_civic }
+		set_variable = { name = gm_local_steps_civic value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_war_memorial }
+		set_variable = { name = gm_local_steps_war_memorial value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_artistic }
+		set_variable = { name = gm_local_steps_artistic value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_naturalist }
+		set_variable = { name = gm_local_steps_naturalist value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_scientific }
+		set_variable = { name = gm_local_steps_scientific value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_industrial }
+		set_variable = { name = gm_local_steps_industrial value = 0 }
+	}
+	if = {
+		limit = { has_variable = gm_local_steps_athletic }
+		set_variable = { name = gm_local_steps_athletic value = 0 }
 	}
 }
 
@@ -568,28 +700,50 @@ gm_country_refresh = {
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-		# A new monument copies its siblings' dedication: the ceremony
-		# replaces it.
-		gm_state_reset_copied_dedication = yes
-		gm_state_first_sight = yes
-		# A dedication's unveiling, deferred to here (gm_state_offer_skins);
-		# then a monument older than names, or one nobody named, takes the
-		# default name (v2 §3.3).
+		# A part of this region merged into this state, and the records of a
+		# monument that stood there wait to be adopted here (issue #936): the
+		# hidden event adopts them first, and nothing reads this building as a
+		# copy, a first sight or new levels until it has.
 		if = {
-			limit = { has_variable = gm_unveil_pending }
-			remove_variable = gm_unveil_pending
-			gm_state_unveil = yes
+			limit = { gm_state_merge_pending = yes }
+			trigger_event = { id = monument_events.29 }
 		}
-		gm_state_name_if_unnamed = yes
-		# Not while a gifted monument's method may still read as another's.
-		if = {
-			limit = {
-				NOT = { has_variable = gm_restore_pm }
+		else = {
+			# A new monument copies its siblings' dedication: the ceremony
+			# replaces it.
+			gm_state_reset_copied_dedication = yes
+			gm_state_first_sight = yes
+			# A dedication's unveiling, deferred to here (gm_state_offer_skins);
+			# then a monument older than names, or one nobody named, takes the
+			# default name (v2 §3.3).
+			if = {
+				limit = { has_variable = gm_unveil_pending }
+				remove_variable = gm_unveil_pending
+				gm_state_unveil = yes
 			}
-			gm_state_update_picture = yes
+			gm_state_name_if_unnamed = yes
+			# Not while a gifted monument's method may still read as another's.
+			if = {
+				limit = {
+					NOT = { has_variable = gm_restore_pm }
+				}
+				gm_state_update_picture = yes
+			}
+			# A ceremony a finished level's hook missed.
+			gm_state_offer_missed_ceremony = yes
+			# Frozen once its construction stops; levels built after found a new
+			# monument beside it, from a hidden event (the refresh runs inside
+			# tooltips, which write nothing; the founding reads back what it writes).
+			gm_state_record_frozen_levels = yes
+			if = {
+				limit = { gm_state_has_new_levels = yes }
+				trigger_event = { id = monument_events.29 }
+			}
+			if = {
+				limit = { gm_state_newcomer_settled = yes }
+				trigger_event = { id = monument_events.29 }
+			}
 		}
-		# A ceremony a finished level's hook missed.
-		gm_state_offer_missed_ceremony = yes
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
 		}
@@ -623,6 +777,14 @@ gm_country_monthly = {
 	every_scope_state = {
 		limit = { gm_state_is_contested = yes }
 		change_variable = { name = gm_contested add = 1 }
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_is_contested = yes }
+			change_variable = { name = gm_tr_contested add = 1 }
+		}
 	}
 	gm_ai_decide_contests = yes
 	gm_policy_ai_choose = yes
@@ -750,6 +912,44 @@ gm_compute_ig = {
 			}
 		}
 	}
+	# And each monument standing beside another (spec 2026-10-16 §4.2), by its
+	# own dedication: its grandeur cached on it, then added on the country.
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		save_scope_as = gm_ig_country
+		every_in_list = {
+			variable = gm_monuments_held
+			set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+			if = {
+				limit = {
+					gm_mon_status_fits = yes
+					gm_mon_approved_by_$IG$ = yes
+				}
+				scope:gm_ig_country = {
+					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
+				}
+			}
+			if = {
+				limit = {
+					gm_mon_status_fits = yes
+					gm_mon_opposed_by_$IG$ = yes
+				}
+				scope:gm_ig_country = {
+					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
+				}
+			}
+			if = {
+				limit = {
+					gm_mon_is_contested = yes
+					has_variable = gm_tr_base_ig
+					var:gm_tr_base_ig = flag:$IG$
+				}
+				scope:gm_ig_country = {
+					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
+				}
+			}
+		}
+	}
 	if = {
 		limit = { var:gm_ig_net_$IG$ >= 0 }
 		set_variable = { name = gm_curve_in value = var:gm_ig_net_$IG$ }
@@ -870,6 +1070,13 @@ gm_check_contests = {
 				# A gifted monument whose rebuilt method may still be the
 				# engine's copy of another dedication (opportunities spec §3.1).
 				NOT = { has_variable = gm_restore_pm }
+				# Recorded: in the refresh's order, first sight or a ceremony
+				# always comes first (gm_country_refresh's state loop runs before
+				# this), except for a building a merge brought, which waits to be
+				# adopted (issue #936, gm_state_merge_pending) and is not contested
+				# meanwhile. Moving this check ahead of that loop would skip new
+				# monuments for a month.
+				has_variable = gm_seen
 			}
 			if = {
 				limit = {
@@ -909,6 +1116,15 @@ gm_check_contests = {
 					gm_state_message_fits = no
 				}
 				gm_state_contest = yes
+			}
+		}
+		# Each monument standing beside another, on its own (spec 2026-10-16
+		# §4.3; gm_monument_effects.txt).
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			every_in_list = {
+				variable = gm_monuments_held
+				gm_mon_check_contest = yes
 			}
 		}
 	}
@@ -979,12 +1195,29 @@ gm_state_lift_contest = {
 # a revolutionary country); the nation that raised it taking it back fails
 # `gm_state_raised_by_owner = no`, and the monthly check restores it.
 gm_state_changed_hands = {
+	# A part of this region merged into this state (issue #936): the records of
+	# the monuments that stood there are adopted before anything here is judged.
+	if = {
+		limit = { gm_state_merge_pending = yes }
+		gm_state_adopt_orphans = yes
+	}
 	# A commission's mark and a naming in progress belong to the old owner
 	# (v2 §3.3, §3.5); its naming is closed by its own sweep.
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
 	gm_remove_state_var = { VAR = gm_being_named }
 	# The country it came from, for a trophy taken from it (gm_trophy_effects.txt).
 	gm_state_tr_changed_hands = yes
+	# The monuments beside it change owner too: the owners' Our Monuments lists
+	# (gm_monuments_held) now, not at the next monthly pass, so the panels agree
+	# with the standing grandeur, which reads the state's own list at once.
+	if = {
+		limit = { gm_state_has_secondary = yes }
+		every_in_list = {
+			variable = gm_monuments_here
+			gm_mon_changed_hands = yes
+		}
+		gm_monument_pass = yes
+	}
 	if = {
 		limit = {
 			owner = { has_variable = gm_cw_adopting }
@@ -1000,6 +1233,8 @@ gm_state_changed_hands = {
 				is_revolutionary = no
 			}
 			gm_state_raised_by_owner = no
+			# Not a building still waiting to be adopted (a rebuild in its region).
+			gm_state_merge_pending = no
 		}
 		set_variable = gm_seen
 		if = {
@@ -1036,6 +1271,19 @@ gm_repair_after_civil_war = {
 			limit = { has_building = building_grand_monument }
 			gm_state_adopt_for_winner = yes
 		}
+		# The monuments beside another (spec 2026-10-16 §4.3), from the global
+		# list: the winner inherits no lists until the pass writes them.
+		if = {
+			limit = { has_global_variable_list = gm_monuments }
+			every_in_global_list = {
+				variable = gm_monuments
+				limit = {
+					var:gm_tr_origin ?= { owner = root }
+				}
+				gm_mon_adopt_for_winner = yes
+			}
+		}
+		gm_monument_pass = yes
 	}
 }
 
@@ -1162,11 +1410,20 @@ gm_state_rededicate = {
 		set_variable = {
 			name = gm_rebuild_level
 			value = {
-				value = var:gm_grandeur
+				value = gm_state_primary_levels
 				divide = 2
 				ceiling = yes
-				add = gm_state_secondary_grandeur
+				add = gm_state_secondary_levels
 				max = 200
+			}
+		}
+		# Half its years too (ageing spec 2026-10-16 §5): its grandeur halves,
+		# and it ages again once the ceremony dedicates it.
+		set_variable = {
+			name = gm_rededicate_age
+			value = {
+				value = gm_state_primary_age
+				divide = 2
 			}
 		}
 		remove_building = building_grand_monument
@@ -1177,6 +1434,12 @@ gm_state_rededicate = {
 			SPEC_TYPE = building_grand_monument
 			SPEC_LEVEL = var:gm_rebuild_level
 		}
+		set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
+		if = {
+			limit = { var:gm_rededicate_age > 0 }
+			set_variable = { name = gm_age value = var:gm_rededicate_age }
+		}
+		remove_variable = gm_rededicate_age
 		remove_variable = gm_rebuild_level
 		remove_variable = gm_rebuild_cost
 		gm_state_start_ceremony = yes
@@ -1232,7 +1495,7 @@ gm_state_start_ceremony = {
 			NOT = { has_variable = gm_restore_pm }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		set_variable = { name = gm_ceremony_level value = gm_state_primary_grandeur }
+		set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		trigger_event = { id = monument_events.2 }
 	}
 }
@@ -1254,7 +1517,7 @@ gm_state_offer_missed_ceremony = {
 				NOT = { has_variable = gm_ceremony_level }
 				AND = {
 					has_variable = gm_ceremony_level
-					var:gm_ceremony_level < gm_state_primary_grandeur
+					var:gm_ceremony_level < gm_state_primary_levels
 				}
 			}
 		}
@@ -1284,6 +1547,8 @@ gm_state_undedicate = {
 			production_method = pm_monument_undedicated
 		}
 	}
+	# The answer stands (gm_state_dedicate's note).
+	gm_remove_state_var = { VAR = gm_restore_pm }
 	# Draped at once: gm_state_update_picture would read back the PM just activated.
 	# A landmark keeps its own picture (phase 4 §5.1).
 	set_variable = { name = gm_picture_code value = 1 }
@@ -1359,6 +1624,53 @@ gm_ai_decide_contests = {
 				}
 			}
 		}
+		# The monuments beside another (spec 2026-10-16 §4.3): Pull Down or Keep
+		# as Heritage. Rededicating one moves it into the state's first place,
+		# which the AI leaves to its own monument.
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			every_in_list = {
+				variable = gm_monuments_held
+				limit = {
+					gm_mon_is_contested = yes
+					var:gm_tr_contested >= 2
+					NOT = { has_variable = gm_mon_order }
+				}
+				set_variable = { name = gm_tr_g value = gm_mon_grandeur }
+				random_list = {
+					10 = {
+						modifier = {
+							if = {
+								limit = { var:gm_tr_g < 5 }
+								add = 10
+							}
+							if = {
+								limit = {
+									var:gm_tr_origin ?= {
+										owner = { gm_government_is_revolutionary = yes }
+									}
+								}
+								add = 10
+							}
+						}
+						gm_mon_order_choice = { CHOICE = tear_down }
+					}
+					10 = {
+						modifier = {
+							if = {
+								limit = { var:gm_tr_g >= 10 }
+								add = 10
+							}
+							if = {
+								limit = { has_variable = gm_tr_landmark }
+								multiply = 3
+							}
+						}
+						gm_mon_preserve = yes
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -1368,7 +1680,16 @@ gm_ai_decide_contests = {
 gm_notify_new_contests = {
 	if = {
 		limit = {
-			any_scope_state = { has_variable = gm_new_contest }
+			OR = {
+				any_scope_state = { has_variable = gm_new_contest }
+				AND = {
+					has_variable_list = gm_monuments_held
+					any_in_list = {
+						variable = gm_monuments_held
+						has_variable = gm_tr_new_contest
+					}
+				}
+			}
 		}
 		if = {
 			limit = { is_ai = no }
@@ -1378,6 +1699,14 @@ gm_notify_new_contests = {
 			every_scope_state = {
 				limit = { has_variable = gm_new_contest }
 				remove_variable = gm_new_contest
+			}
+			if = {
+				limit = { has_variable_list = gm_monuments_held }
+				every_in_list = {
+					variable = gm_monuments_held
+					limit = { has_variable = gm_tr_new_contest }
+					remove_variable = gm_tr_new_contest
+				}
 			}
 		}
 	}
@@ -1400,6 +1729,9 @@ gm_state_dedicate = {
 		}
 	}
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
+	# The ceremony's answer is the method now: a restore recorded before it
+	# (a return during the ceremony) must not put another back.
+	gm_remove_state_var = { VAR = gm_restore_pm }
 	set_variable = gm_seen
 	gm_state_record_builder = yes
 	# The monument a commission met by this dedication names (v2 §2.3).

@@ -1845,6 +1845,32 @@ types gm_trophy_widget_types
 		}
 	}
 
+	### A choice on a monument beside another, in the journal entry's row
+	### (gm_mon_tear_down_sgui and its siblings), its monument as gm_mon: the
+	### shape of the journal entry's gm_choice_button.
+	type gm_mon_choice_button = button {
+		using = default_button_action
+		size = { 150 24 }
+		margin_top = 2
+
+		block "choice_context" {}
+
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+
+		block "choice_tooltip" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 140
+			elide = right
+			using = fontsize_small
+			block "choice_text" {}
+		}
+	}
+
 	### A monument standing beside the state's primary, on the Also Standing
 	### Here card: the picture, name, form and dedication of what came home,
 	### what it adds to the building, and Carry It Off while our armies hold
@@ -1874,14 +1900,33 @@ types gm_trophy_widget_types
 				gm_tr_line = {
 					text = "gm_mon_row_detail"
 				}
+				### Its status (ageing spec 2026-10-16 §4.3), a code each.
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)2' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_je_status_upheld_tt"
+					text = "gm_mon_row_status_upheld"
+				}
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)3' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_je_status_heritage_tt"
+					text = "gm_mon_row_status_heritage"
+				}
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)4' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_je_status_contested_tt"
+					text = "gm_mon_row_status_contested"
+				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
 					default_format = "#tooltippable"
 					tooltip = "gm_tr_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
-				### What it adds: its levels, with how the building sums
-				### them on hover.
+				### Its grandeur: its levels and its years, with how the
+				### building sums the levels on hover.
 				gm_tr_line = {
 					default_format = "#tooltippable"
 					tooltip = "gm_mon_row_value_tt"
@@ -1894,6 +1939,8 @@ types gm_trophy_widget_types
 		}
 
 		gm_mon_take_button = {}
+		### The journal entry's rows: a contested one's choices.
+		block "mon_choices" {}
 	}
 
 	### The monuments that stand beside a state's own, a section of the state

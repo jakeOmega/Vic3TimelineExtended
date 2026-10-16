@@ -93,6 +93,7 @@ gm_state_tr_take = {
 		else = {
 			set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 			set_variable = { name = gm_tr_take_levels value = gm_state_tr_levels }
+			set_variable = { name = gm_tr_take_age value = gm_state_tr_age }
 			set_variable = { name = gm_tr_take_value value = gm_state_tr_value }
 			set_variable = { name = gm_tr_take_whole value = gm_state_tr_whole }
 			set_variable = { name = gm_tr_take_left value = gm_state_tr_levels_left }
@@ -114,6 +115,7 @@ gm_state_tr_take = {
 		}
 		gm_remove_state_var = { VAR = gm_tr_take_target }
 		gm_remove_state_var = { VAR = gm_tr_take_levels }
+		gm_remove_state_var = { VAR = gm_tr_take_age }
 		gm_remove_state_var = { VAR = gm_tr_take_value }
 		gm_remove_state_var = { VAR = gm_tr_take_whole }
 		gm_remove_state_var = { VAR = gm_tr_take_left }
@@ -142,6 +144,7 @@ gm_state_tr_make_trophy = {
 			set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
 			set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
+			set_variable = { name = gm_tr_age value = scope:gm_tr_state.var:gm_tr_take_age }
 			set_variable = { name = gm_tr_grandeur value = scope:gm_tr_state.var:gm_tr_take_value }
 			set_variable = { name = gm_tr_year value = gm_this_year }
 			set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
@@ -259,6 +262,9 @@ gm_state_tr_remove_whole = {
 	}
 	remove_building = building_grand_monument
 	set_variable = gm_carried_off
+	# Its shadow too, now: its records stay a month, but a merge must not raise
+	# a monument carried off (issue #936).
+	gm_state_drop_shadow = yes
 	# Another monument stood beside it: the building passes to the largest, at
 	# the levels of all that remain (gm_monument_effects.txt), which clears the
 	# taken one's records as a rebuild does.
@@ -279,7 +285,7 @@ gm_state_tr_remove_piece = {
 		name = gm_rebuild_level
 		value = {
 			value = var:gm_tr_take_left
-			add = gm_state_secondary_grandeur
+			add = gm_state_secondary_levels
 			max = 200
 		}
 	}
@@ -288,7 +294,25 @@ gm_state_tr_remove_piece = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
-	set_variable = { name = gm_grandeur value = var:gm_tr_take_left }
+	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
+	# What stands is the frozen monument now (spec 2026-10-16 §3.1).
+	if = {
+		limit = { has_variable = gm_levels }
+		set_variable = { name = gm_levels value = var:gm_tr_take_left }
+	}
+	# The age that stays with what stands (spec 2026-10-16 §5).
+	if = {
+		limit = { has_variable = gm_age }
+		change_variable = { name = gm_age subtract = var:gm_tr_take_age }
+		clamp_variable = { name = gm_age min = 0 }
+	}
+	set_variable = {
+		name = gm_grandeur
+		value = {
+			value = var:gm_tr_take_left
+			add = gm_state_primary_age
+		}
+	}
 	remove_variable = gm_rebuild_level
 	set_variable = { name = gm_tr_cooldown days = 3650 }
 	# The refresh puts the dedication back once the rebuilt building reads.
@@ -422,8 +446,29 @@ gm_tr_return_home = {
 	var:gm_tr_site ?= {
 		owner = { save_scope_as = gm_tr_giver }
 	}
+	# Its origin's building was rebuilt today (gm_rebuilding, one day): every way
+	# home rebuilds it again, and whether a rebuilt building reads back later in
+	# the same effect is unread (scripting_best_practices.md, "Building
+	# Lifecycle Effect Gotchas"), so a second return would read the first one's
+	# stale level, or no building at all (Return Cultural Property brings the
+	# Luxor Obelisk and the Dendera Zodiac home in one effect). It waits for the
+	# monthly pass instead (gm_tr_return_queued), which brings one home to each
+	# state at a time.
 	if = {
+		limit = {
+			exists = scope:gm_tr_receiver
+			var:gm_tr_origin ?= { has_variable = gm_rebuilding }
+		}
+		set_variable = gm_tr_return_queued
+		if = {
+			limit = { always = $RELATIONS$ }
+			set_variable = gm_tr_return_relations
+		}
+	}
+	else_if = {
 		limit = { exists = scope:gm_tr_receiver }
+		gm_remove_state_var = { VAR = gm_tr_return_queued }
+		gm_remove_state_var = { VAR = gm_tr_return_relations }
 		# A piece of a secondary rejoins it; anything else with a monument
 		# standing in its origin becomes a monument of its own (spec
 		# 2026-10-13 §4.1); a piece of the primary, or with none standing, is
@@ -483,6 +528,17 @@ gm_state_tr_receive = {
 	if = {
 		limit = { has_building = building_grand_monument }
 		gm_state_tr_add_levels = yes
+		# The piece is part of the monument again: its frozen levels too.
+		if = {
+			limit = { has_variable = gm_levels }
+			change_variable = { name = gm_levels add = scope:gm_tr_moving.var:gm_tr_levels }
+		}
+		# Its age comes back with its levels (spec 2026-10-16 §5); a trophy
+		# from an older save has none.
+		if = {
+			limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } }
+			gm_state_add_age = { AGE = scope:gm_tr_moving.var:gm_tr_age }
+		}
 	}
 	else = {
 		gm_state_tr_rebuild_from_moving = yes
@@ -492,14 +548,16 @@ gm_state_tr_receive = {
 
 # State scope (scope:gm_tr_moving the trophy or monument). The standing building
 # takes the levels: removed and built again, the ladder's only way to add
-# levels (gm_state_gift_grandeur). The primary's dedication is recorded first,
-# so the rebuilt building gets it back (gm_restore_pm) and whatever else
-# stands here keeps its place in the level (the building's whole, plus these).
+# levels (gm_state_gift_grandeur). The primary's method is recorded first,
+# Undedicated too, so the rebuilt building gets it back (gm_restore_pm) and
+# whatever else stands here keeps its place in the level (the building's
+# whole, plus these). Not while a ceremony asks: its answer sets the method,
+# and a recorded copy would be put back over it.
 gm_state_tr_add_levels = {
 	if = {
 		limit = {
-			gm_state_is_dedicated = yes
 			NOT = { has_variable = gm_restore_pm }
+			NOT = { has_variable = gm_ceremony_pending }
 		}
 		gm_state_mark_restore_pm = yes
 	}
@@ -507,7 +565,7 @@ gm_state_tr_add_levels = {
 	set_variable = {
 		name = gm_rebuild_level
 		value = {
-			value = gm_state_grandeur
+			value = gm_state_level
 			add = scope:gm_tr_moving.var:gm_tr_levels
 			max = 200
 		}
@@ -518,14 +576,17 @@ gm_state_tr_add_levels = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
+	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
 	remove_variable = gm_rebuild_level
 }
 
 # State scope (scope:gm_tr_moving the trophy or monument to stand as this
 # state's primary monument; the state has no building, or just lost it). Built
 # at var:gm_rebuild_level when the caller set one, else at the moving
-# container's own levels, with its records. Whatever the state recorded of an
-# earlier monument is cleared first.
+# container's own levels plus those of any secondary still listed here (a
+# building lost before the monthly pass promoted one: a return or a dig
+# placed now must not leave them off the level), with its records. Whatever
+# the state recorded of an earlier monument is cleared first.
 gm_state_tr_rebuild_from_moving = {
 	gm_clear_state = { KEEP_LANDMARK = no }
 	if = {
@@ -534,6 +595,7 @@ gm_state_tr_rebuild_from_moving = {
 			name = gm_rebuild_level
 			value = {
 				value = scope:gm_tr_moving.var:gm_tr_levels
+				add = gm_state_secondary_levels
 				max = 200
 			}
 		}
@@ -543,6 +605,19 @@ gm_state_tr_rebuild_from_moving = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
 	}
+	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
+	gm_state_tr_take_records_from_moving = yes
+	remove_variable = gm_rebuild_level
+}
+
+# State scope (scope:gm_tr_moving a trophy or a secondary monument). Its
+# records as this state's primary monument's, after gm_clear_state: its look,
+# name, landmark, honoree, age and contest, its dedication to put back
+# (gm_restore_pm), recorded as seen so it is never read as the engine's copy,
+# frozen at its own levels. A container that kept its raiser and builder (a
+# demoted primary) hands them over; a trophy has none, and its new owner
+# raised it.
+gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_skin TO = gm_skin }
 	gm_tr_copy_to_state = { FROM = gm_tr_form TO = gm_form }
 	gm_tr_copy_to_state = { FROM = gm_tr_landmark TO = gm_landmark }
@@ -555,11 +630,42 @@ gm_state_tr_rebuild_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree TO = gm_honoree }
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
+	gm_tr_copy_to_state = { FROM = gm_tr_age TO = gm_age }
+	gm_tr_copy_to_state = { FROM = gm_tr_faith TO = gm_faith }
+	gm_tr_copy_to_state = { FROM = gm_tr_contested TO = gm_contested }
+	gm_tr_copy_to_state = { FROM = gm_tr_heritage TO = gm_heritage }
+	gm_tr_copy_to_state = { FROM = gm_tr_base_ig TO = gm_base_ig }
+	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
+	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1).
+	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = gm_seen
-	set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
-	set_variable = { name = gm_grandeur value = scope:gm_tr_moving.var:gm_tr_levels }
-	set_variable = { name = gm_built_by value = owner }
 	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_ceremony_level } }
+		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_ceremony_level }
+	}
+	else = {
+		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
+	}
+	# Its grandeur until the next pulse writes it: its levels and its age.
+	set_variable = { name = gm_g_cache value = scope:gm_tr_moving.var:gm_tr_levels }
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } }
+		change_variable = { name = gm_g_cache add = scope:gm_tr_moving.var:gm_tr_age }
+	}
+	set_variable = { name = gm_grandeur value = var:gm_g_cache }
+	remove_variable = gm_g_cache
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_built_by } }
+		set_variable = { name = gm_built_by value = scope:gm_tr_moving.var:gm_tr_built_by }
+	}
+	else = {
+		set_variable = { name = gm_built_by value = owner }
+	}
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_raised_by } }
+		set_variable = { name = gm_raised_by value = scope:gm_tr_moving.var:gm_tr_raised_by }
+	}
+	else_if = {
 		limit = {
 			scope:gm_tr_moving = {
 				has_variable = gm_tr_dedication
@@ -573,7 +679,6 @@ gm_state_tr_rebuild_from_moving = {
 		}
 		set_variable = { name = gm_raised_by value = owner }
 	}
-	remove_variable = gm_rebuild_level
 }
 
 # State scope: the trophy's variable $FROM$, when it has one, as $TO$.
@@ -641,8 +746,11 @@ gm_state_tr_monthly = {
 		limit = { has_variable = gm_seen }
 		gm_state_record_builder = yes
 	}
+	# The primary or a monument beside it (gm_monument_triggers.txt). A player's
+	# offer (.1) names the primary, so it comes only while the primary can go;
+	# a secondary has its own Carry It Off on the state card.
 	if = {
-		limit = { gm_state_tr_takeable = yes }
+		limit = { gm_state_tr_any_takeable = yes }
 		clear_saved_scope = gm_tr_occupier
 		gm_state_tr_find_occupier = yes
 		if = {
@@ -663,6 +771,7 @@ gm_state_tr_monthly = {
 			}
 			else_if = {
 				limit = {
+					gm_state_tr_takeable = yes
 					NOT = {
 						has_variable = gm_tr_offered_to
 						var:gm_tr_offered_to ?= { this = scope:gm_tr_occupier }
@@ -751,8 +860,26 @@ gm_trophy_monthly = {
 			gm_tr_repair_places = yes
 			gm_tr_update_picture = yes
 		}
+		# Returns that waited for a rebuild (gm_tr_return_home): one to each
+		# state now; another bound for the same state waits again.
 		every_in_global_list = {
 			variable = gm_trophies
+			limit = { has_variable = gm_tr_return_queued }
+			add_to_temporary_list = gm_tr_queued_home
+		}
+		every_in_list = {
+			list = gm_tr_queued_home
+			if = {
+				limit = { has_variable = gm_tr_return_relations }
+				gm_tr_return_home = { RELATIONS = yes }
+			}
+			else = {
+				gm_tr_return_home = { RELATIONS = no }
+			}
+		}
+		every_in_global_list = {
+			variable = gm_trophies
+			limit = { NOT = { has_variable = gm_tr_return_queued } }
 			gm_tr_monthly_one = yes
 		}
 		every_in_list = {
@@ -774,8 +901,18 @@ gm_trophy_monthly = {
 }
 
 # Container scope. A state that has stopped existing (a region's parts merged)
-# is found again in its region: the most populous state there.
+# is found again in its region: the most populous state there. A monument
+# standing beside another goes back to the state whose building holds its
+# levels first (gm_mon_repair_origin, issue #936).
 gm_tr_repair_places = {
+	if = {
+		limit = {
+			has_tag = gm_monument
+			NOT = { exists = var:gm_tr_origin }
+			has_variable = gm_tr_origin_region
+		}
+		gm_mon_repair_origin = yes
+	}
 	if = {
 		limit = {
 			NOT = { exists = var:gm_tr_origin }

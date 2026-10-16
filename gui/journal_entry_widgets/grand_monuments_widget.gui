@@ -1343,7 +1343,16 @@ types grand_monuments_widget_types
 					text = "gm_row_landmark"
 				}
 				gm_row_line = {
+					default_format = "#tooltippable"
+					tooltip = "gm_row_detail_tt"
 					text = "gm_row_detail"
+				}
+				# Finished: its levels and its years (ageing spec 2026-10-16 §3).
+				gm_row_line = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_frozen'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_row_frozen_tt"
+					text = "gm_row_frozen"
 				}
 				# It counts toward the open opportunity (usability §4).
 				gm_row_line = {
@@ -2182,6 +2191,32 @@ types grand_monuments_widget_types
 								text = "gm_mon_row_where"
 							}
 						}
+						### A contested one's three choices, centred under it
+						### (ageing spec 2026-10-16 §4.3).
+						blockoverride "mon_choices" {
+							flowcontainer = {
+								direction = horizontal
+								spacing = 4
+								parentanchor = hcenter
+								visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)4' )]"
+
+								gm_mon_choice_button = {
+									blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_mon_tear_down_sgui')]" }
+									blockoverride "choice_tooltip" { tooltip = "gm_button_mon_tear_down_tooltip" }
+									blockoverride "choice_text" { text = "gm_button_tear_down" }
+								}
+								gm_mon_choice_button = {
+									blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_mon_rededicate_sgui')]" }
+									blockoverride "choice_tooltip" { tooltip = "gm_button_mon_rededicate_tooltip" }
+									blockoverride "choice_text" { text = "gm_button_rededicate" }
+								}
+								gm_mon_choice_button = {
+									blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_mon_preserve_sgui')]" }
+									blockoverride "choice_tooltip" { tooltip = "gm_button_mon_preserve_tooltip" }
+									blockoverride "choice_text" { text = "gm_button_preserve" }
+								}
+							}
+						}
 					}
 				}
 			}
@@ -2223,6 +2258,9 @@ types grand_monuments_widget_types
 			}
 			gm_note = {
 				text = "gm_je_how_grandeur"
+			}
+			gm_note = {
+				text = "gm_je_how_grandeur_age"
 			}
 			gm_note = {
 				text = "gm_je_how_grandeur_national"
