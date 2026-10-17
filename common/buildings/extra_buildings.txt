@@ -959,6 +959,8 @@ REPLACE_OR_CREATE:building_space_mine = {
 
 	production_method_groups = {
 		pmg_base_building_space_mine
+		pmg_launch_to_orbit_building_space_mine	# Global Commons § 1.2: era-12 logistics
+		pmg_transport_in_space_building_space_mine
 		pmg_maintenance_intensive
 	}
 
@@ -986,6 +988,9 @@ REPLACE_OR_CREATE:building_ocean_mine = {
 	has_max_level = no
 	possible = {
 		is_coastal = yes
+		# Global Commons (§ 2.6): with the rule on, a seabed licence to spare
+		# (te_seabed_gate, te_global_commons_seabed_triggers.txt).
+		te_seabed_gate = yes
 	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -1013,6 +1018,7 @@ REPLACE_OR_CREATE:building_space_program = {
 
 	production_method_groups = {
 		pmg_base_building_space_program
+		pmg_space_program_debris_removal # orbital debris cleanup (te_orbital_debris_pmgs.txt)
 	}
 
 	possible = {

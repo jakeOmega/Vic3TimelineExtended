@@ -1,0 +1,38 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE UN LAYER — PULSES
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
+# The writers are in common/scripted_effects/te_global_commons_un_effects.txt.
+# The seabed regime is written once a year by the seabed allocation, which
+# calls te_seabed_un_update_regime (te_seabed_un_hooks.txt) before it shares
+# the pools; nothing here writes it.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		te_gc_un_global_on_action
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_gc_un_country_on_action
+	}
+}
+
+# The seabed terms waking, the royalties' sum for the World Development Fund
+# or the UN budget, the Antarctic Treaty's lapse, and the Moratorium's yearly
+# Delivery entries.
+te_gc_un_global_on_action = {
+	effect = {
+		te_gc_un_global_monthly = yes
+	}
+}
+
+# A country's royalties, its Antarctic station and its share of the Policy
+# pillar as a treaty party, each rebuilt from variables.
+te_gc_un_country_on_action = {
+	effect = {
+		te_gc_un_country_monthly = yes
+	}
+}

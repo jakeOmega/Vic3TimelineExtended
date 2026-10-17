@@ -1,0 +1,151 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE UN LAYER — TRIGGERS
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
+# The three seabed hooks the seabed allocation reads are in
+# te_seabed_un_hooks.txt and the anti-satellite one in te_asat_un_hooks.txt;
+# this file holds the tests they and the UN layer share. Every read of a
+# variable another system writes (te_seabed_policy, te_seabed_held_<basin>,
+# te_asat_*) is guarded, so the layer runs whether or not that system has.
+# ============================================================================
+
+# ---- The seabed (§3) ----------------------------------------------------------------
+
+# The seabed terms of the Law of the Sea are awake: some country has
+# researched Abyssal Plain Mining under the Global Commons rule
+# (te_gc_un_global_monthly sets the flag, once). Scope: any
+te_seabed_terms_awake = {
+	has_global_variable = te_seabed_terms_awake
+}
+
+# The regime, by number (te_seabed_regime: 1 Open, 2 Regulated, 3 Scramble;
+# absent is Open). Scope: any
+te_seabed_regime_is_regulated = {
+	has_global_variable = te_seabed_regime
+	global_var:te_seabed_regime = 2
+}
+
+te_seabed_regime_is_scramble = {
+	has_global_variable = te_seabed_regime
+	global_var:te_seabed_regime = 3
+}
+
+# The Law of the Sea governs the seabed: Regulated or Scramble. Scope: any
+te_seabed_regime_is_governed = {
+	has_global_variable = te_seabed_regime
+	global_var:te_seabed_regime >= 2
+}
+
+# The regime the seabed should have now, before the Scramble's two-year
+# return: the Law of the Sea in force, its seabed terms awake, and the UN and
+# Global Commons rules on. Scope: any
+te_seabed_itlos_governs = {
+	has_game_rule = united_nations_enabled
+	has_game_rule = global_commons_enabled
+	has_global_variable = un_agency_itlos
+	te_seabed_terms_awake = yes
+}
+
+# The scoped country's seabed policy is Unilateral Licensing (3). The seabed
+# panel writes te_seabed_policy; absent is Scientific Survey (1).
+# Scope: country
+te_seabed_on_unilateral = {
+	has_variable = te_seabed_policy
+	var:te_seabed_policy = 3
+}
+
+# The policy it held before the change being answered was Unilateral
+# Licensing (te_seabed_policy_prev, written beside te_seabed_policy).
+# Scope: country
+te_seabed_was_unilateral = {
+	has_variable = te_seabed_policy_prev
+	var:te_seabed_policy_prev = 3
+}
+
+# Ratified the Law of the Sea while it is in force: its member modifier, or
+# the mirror a revolution's winner keeps (un_state_effects.txt).
+# Scope: country
+te_seabed_itlos_ratified = {
+	has_global_variable = un_agency_itlos
+	OR = {
+		has_modifier = un_law_of_sea_modifier
+		has_variable = un_law_of_sea_modifier_on
+	}
+}
+
+# A defector that has left Unilateral Licensing and is not yet a party again.
+# Scope: country
+te_seabed_party_cooling = {
+	has_variable = te_seabed_party_cooldown_end
+	var:te_seabed_party_cooldown_end > te_history_month_index
+}
+
+# Switching to Unilateral Licensing now would be a defection (§3.3), so the
+# seabed panel's Unilateral Licensing button can warn before the switch, as a
+# tooltip cannot see the costs te_seabed_un_on_policy_change charges after it
+# (its limit reads the new policy). Optional for the panel.
+# Scope: country
+te_seabed_defection_would_cost = {
+	NOT = { te_seabed_on_unilateral = yes }
+	te_seabed_itlos_ratified = yes
+	te_seabed_itlos_governs = yes
+}
+
+# A party pays royalties this month: a seabed party while the seabed is
+# regulated, with Deep-Sea Mine levels to pay on. Scope: country
+te_seabed_royalty_payer = {
+	te_seabed_regime_is_regulated = yes
+	te_seabed_itlos_party = yes
+	te_seabed_ocean_mine_levels > 0
+}
+
+# ---- The Antarctic Treaty (§4) ------------------------------------------------------
+
+# A country running an Antarctic research station. Scope: country
+te_antarctic_has_station = {
+	has_variable = te_antarctic_station
+}
+
+# A party to the treaty in force: its member modifier, or its mirror.
+# Scope: country
+te_antarctic_treaty_party = {
+	has_global_variable = un_agency_ats
+	OR = {
+		has_modifier = un_antarctic_treaty_modifier
+		has_variable = un_antarctic_treaty_modifier_on
+	}
+}
+
+# A great power outside the treaty (it refused it, denounced it, or is not a
+# member) that holds Southern seabed licences (te_seabed_held_southern, the
+# seabed allocation's yearly count). Scope: country
+te_antarctic_outside_holding_southern = {
+	country_rank >= rank_value:great_power
+	NOT = { te_antarctic_treaty_party = yes }
+	has_variable = te_seabed_held_southern
+	var:te_seabed_held_southern > 0
+}
+
+# Two or more such great powers: the treaty cannot hold (§4, "the treaty
+# lapses and the Southern basin opens to all"). Also bars the docket from
+# raising it again while it holds. Scope: any
+te_antarctic_lapse_condition = {
+	te_antarctic_outside_southern_great_powers >= te_antarctic_lapse_threshold
+}
+
+# The scoped country may denounce the treaty. Scope: country
+te_antarctic_may_denounce = {
+	te_antarctic_treaty_party = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_representation_suspended = yes }
+}
+
+# ---- The Moratorium on Destructive Anti-Satellite Tests (§6.5) ------------------------
+
+# A party running a debris-removal method (the space program's
+# pmg_space_program_debris_removal, through the country modifier the debris
+# system registers). Scope: country
+te_asat_moratorium_cleaner = {
+	te_asat_moratorium_party = yes
+	modifier:country_orbital_debris_removal_add > 0
+}

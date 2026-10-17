@@ -96,7 +96,7 @@ class SessionStripTest(unittest.TestCase):
     def test_every_topic_has_an_icon(self):
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('un_disp_res_topic_code'\), '\(CFixedPoint\)(\d+)'", _read(LAYOUT))}
-        self.assertEqual(codes, set(range(31)))
+        self.assertEqual(codes, set(range(33)))
 
 AUTHORITY = os.path.join(W, "un_authority_widget.gui")
 PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")
@@ -233,7 +233,8 @@ CHAMBER_SGUIS = os.path.join(REPO, "common", "scripted_guis", "un_chamber_sguis.
 NAMED_TARGETS = ("condemn", "sanctions", "expulsion", "mandate", "refugee")
 UNNAMED_CASES = ("peacekeepers", "aid", "decolonization")
 CONVENTIONS = ("human_rights", "icc", "npt", "climate", "pandemic", "refugee", "heritage",
-               "decolonization", "space", "law_of_sea", "physical_protection", "narcotics")
+               "decolonization", "space", "law_of_sea", "physical_protection", "narcotics",
+               "antarctic", "asat")
 
 
 def _block(text, name):
@@ -371,6 +372,8 @@ MEMBER_MODIFIERS = {   # convention -> (member modifier, where it sits); test_un
     "law_of_sea": ("un_law_of_sea_modifier", "country"),
     "physical_protection": ("un_physical_protection_modifier", "country"),
     "narcotics": ("un_narcotics_control_modifier", "country"),
+    "antarctic": ("un_antarctic_treaty_modifier", "country"),
+    "asat": ("un_asat_moratorium_modifier", "country"),
 }
 TERMS = {   # convention -> its regime terms, in display order
     "human_rights": ("un_regime_rights_violator_modifier",),
@@ -381,6 +384,7 @@ TERMS = {   # convention -> its regime terms, in display order
     "space": ("un_regime_space_leader_modifier", "un_regime_space_laggard_modifier",
               "un_regime_space_weapon_modifier"),
     "law_of_sea": ("un_regime_naval_curb_modifier",),
+    "antarctic": ("un_regime_antarctic_station_modifier",),
 }
 OTHER_TERMS = ("un_regime_colonial_pressure_modifier", "un_regime_shared_intelligence_modifier")
 
@@ -462,7 +466,8 @@ class ObligationsTest(unittest.TestCase):
 
 
 RECORD_TERMS = ("un_case_infamy_term", "un_disp_dos_aggression", "un_disp_dos_defiance",
-                "un_disp_dos_violation", "un_disp_dos_covert", "un_disp_dos_nuclear")
+                "un_disp_dos_violation", "un_disp_dos_covert", "un_disp_dos_nuclear",
+                "un_disp_dos_asat")
 
 
 class RecordTest(unittest.TestCase):
@@ -628,7 +633,7 @@ class TabUnlockTooltipTest(unittest.TestCase):
 
 
 CONV_KEYS = ("human_rights", "icc", "npt", "climate", "pandemic", "refugee", "heritage", "decolonization",
-             "space", "law_of_sea", "physical_protection", "narcotics")
+             "space", "law_of_sea", "physical_protection", "narcotics", "antarctic", "asat")
 REGIME_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_regime_triggers.txt")
 
 

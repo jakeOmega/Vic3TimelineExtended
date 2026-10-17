@@ -1,0 +1,73 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS TEST CONSOLE — fired only from the console: `event te_debug_orbital_debris.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event. Its options call
+# the console-only helpers in
+# common/scripted_effects/te_debug_orbital_debris_effects.txt, so each tier,
+# the ribbon strike and a cascade's cleanup (docs/testing/global-commons-playtest.md)
+# can be reached in a couple of clicks.
+# ============================================================================
+namespace = te_debug_orbital_debris
+
+te_debug_orbital_debris.1 = { # REVIEWED 2026-10-16: console-only test event (`event te_debug_orbital_debris.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/kessler_debris_field.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_orbital_debris.1.t
+	desc = te_debug_orbital_debris.1.d
+	flavor = te_debug_orbital_debris.1.f
+
+	# Cluttered: 10 low, 20 high.
+	option = {
+		name = te_debug_orbital_debris.1.a
+		default_option = yes
+		te_debug_debris_set_pools = { LOW = 10 HIGH = 20 }
+	}
+
+	# Hazardous: 20 low, 40 high (ribbon strikes possible).
+	option = {
+		name = te_debug_orbital_debris.1.b
+		te_debug_debris_set_pools = { LOW = 20 HIGH = 40 }
+	}
+
+	# Kessler Cascade: 10 low, 80 high.
+	option = {
+		name = te_debug_orbital_debris.1.c
+		te_debug_debris_set_pools = { LOW = 10 HIGH = 80 }
+	}
+
+	# Clear orbit.
+	option = {
+		name = te_debug_orbital_debris.1.i
+		te_debug_debris_set_pools = { LOW = 0 HIGH = 0 }
+	}
+
+	# Run the world's monthly step and ours now, then log the state.
+	option = {
+		name = te_debug_orbital_debris.1.e
+		te_debug_debris_run_month = yes
+	}
+
+	# A ribbon strike now (needs a Space Elevator and Hazardous debris).
+	option = {
+		name = te_debug_orbital_debris.1.g
+		trigger = {
+			any_scope_building = { is_building_type = building_space_elevator }
+		}
+		te_debug_debris_ribbon_strike = yes
+	}
+
+	# Our Space Program on the best removal method we have.
+	option = {
+		name = te_debug_orbital_debris.1.h
+		trigger = { sr_has_space_program = yes }
+		te_debris_activate_best_removal = yes
+	}
+}

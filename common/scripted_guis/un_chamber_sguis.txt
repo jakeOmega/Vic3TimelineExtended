@@ -1230,7 +1230,7 @@ un_chamber_vote_sgui = {
 #   op 5   request humanitarian aid
 #   op 6   charter reform (redesign phase 2)
 #
-#   The fourteen conventions, which the docket also raises (no scripted button):
+#   The sixteen conventions, which the docket also raises (no scripted button):
 #   op 7   Universal Declaration of Human Rights
 #   op 8   International Criminal Court
 #   op 9   Nuclear Non-Proliferation Treaty
@@ -1255,6 +1255,8 @@ un_chamber_vote_sgui = {
 #   op 28  Supervised Self-Determination Referendum (phase 7, Reform II)
 #   op 29  Single Convention on Narcotic Drugs
 #   op 30  Lift the Sanctions Against Us (§0.12a, no reform)
+#   op 31  The Antarctic Treaty (the Global Commons, §4)
+#   op 32  Moratorium on Destructive Anti-Satellite Tests (the Global Commons, §6.5)
 #
 # The op table is repeated in the widget and in the row renderers in
 # common/scripted_effects/un_chamber_display_effects.txt; keep all three in
@@ -1262,7 +1264,7 @@ un_chamber_vote_sgui = {
 # every effect is shared through common/scripted_triggers/un_propose_triggers.txt
 # and common/scripted_effects/un_propose_effects.txt: ops 0-6, 20-28 and 30
 # with the journal-entry buttons, so a human proposing here and an AI proposing
-# through the button grid run identical script; ops 7-19 and 29 with the docket's
+# through the button grid run identical script; ops 7-19, 29, 31 and 32 with the docket's
 # proposer events, which call the same un_propose_<key>_table the Propose
 # control does.
 #
@@ -1433,6 +1435,22 @@ un_chamber_propose_sgui = {
 				un_propose_narcotics_available = yes
 			}
 			un_propose_narcotics_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 31 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_antarctic
+				un_propose_antarctic_available = yes
+			}
+			un_propose_antarctic_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 32 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_asat
+				un_propose_asat_available = yes
+			}
+			un_propose_asat_possible = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 18 }
@@ -1613,6 +1631,14 @@ un_chamber_propose_sgui = {
 			un_propose_narcotics_effect = yes
 		}
 		else_if = {
+			limit = { exists = scope:op scope:op = 31 }
+			un_propose_antarctic_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 32 }
+			un_propose_asat_effect = yes
+		}
+		else_if = {
 			limit = { exists = scope:op scope:op = 18 }
 			un_propose_cultural_diversity_effect = yes
 		}
@@ -1757,6 +1783,14 @@ un_chamber_propose_row_sgui = {
 				un_chamber_propose_narcotics_row = yes
 			}
 			else_if = {
+				limit = { exists = scope:op scope:op = 31 }
+				un_chamber_propose_antarctic_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 32 }
+				un_chamber_propose_asat_row = yes
+			}
+			else_if = {
 				limit = { exists = scope:op scope:op = 18 }
 				un_chamber_propose_cultural_diversity_row = yes
 			}
@@ -1844,6 +1878,35 @@ un_chamber_nuclear_rule_sgui = {
 
 	is_shown = {
 		has_game_rule = nuclear_weapons_enabled
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+# The Antarctic Treaty's row (the Global Commons, §4): never under the
+# disabled Global Commons rule, where no station is opened and the treaty is
+# never raised. A root-only yes/no GUI, like the two above.
+un_chamber_global_commons_rule_sgui = {
+	scope = country
+
+	is_shown = {
+		has_game_rule = global_commons_enabled
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+# The anti-satellite moratorium's row (the Global Commons, §6.5): never under
+# the disabled space race rule, where there is no orbit to protect.
+un_chamber_space_race_rule_sgui = {
+	scope = country
+
+	is_shown = {
+		has_game_rule = space_race_enabled
 	}
 	ai_is_valid = { always = no }
 

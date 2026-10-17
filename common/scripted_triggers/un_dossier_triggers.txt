@@ -23,6 +23,7 @@ un_dossier_has_records = {
 		has_variable = un_dos_violation
 		has_variable = un_dos_covert
 		has_variable = un_dos_nuclear
+		has_variable = un_dos_asat
 	}
 }
 

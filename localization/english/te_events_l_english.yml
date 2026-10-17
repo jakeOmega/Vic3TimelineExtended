@@ -4698,6 +4698,7 @@
  space_race_events.31.b:0 "The debris can wait: we cannot."
  space_race_events.31.c:0 "Propose an international framework."
  space_race_events.31.d:0 "As our orbital program accelerates, so does the cloud of spent rocket stages, dead satellites, and assorted debris accumulating in low Earth orbit. Scientists warn that an uncontrolled cascade could render entire orbital bands unusable."
+ space_race_events.31.d_debris:0 "The debris around Earth is now [ROOT.GetCountry.GetCustom('te_debris_tier')]: spent stages, dead satellites and the fragments of every collision and strike, crossing the orbits our missions fly through. Each launch has to be planned around it, and scientists warn that past a certain density the collisions feed themselves."
  space_race_events.31.f:0 "\"Every bolt, every fleck of paint up there is a bullet at orbital velocity. We're building a minefield around our own planet.\"\n\n— Orbital Dynamics Researcher\n\n\"A manageable problem: if we manage it now rather than later.\"\n\n— Space Agency Deputy Director"
  space_race_events.31.t:0 "The Kessler Threshold"
  space_race_events.32.a:0 "Military pilots have the right stuff."
@@ -5305,6 +5306,17 @@
  te_debug_gw.1.t:0 "Climate Test Console"
 
 #
+# TE_DEBUG_LAUNCH_WINDOWS
+#
+ te_debug_launch_windows.1.a:0 "Stage two and a half colony fleets in orbit"
+ te_debug_launch_windows.1.b:0 "Write every launch window to the debug log"
+ te_debug_launch_windows.1.c:0 "Let the window_gate self-checks log again"
+ te_debug_launch_windows.1.d:0 "Console-only shortcuts for testing Solar System Colonization's launch windows. None of these can happen in normal play.\n\nThe log options write TE_LAUNCH_WINDOWS lines to the debug log: each destination's cached window, the date's own answer, and what launching there would cost us."
+ te_debug_launch_windows.1.f:0 "'Mars is on the far side of the Sun until spring after next.'\n\n'Then we build until spring after next.'"
+ te_debug_launch_windows.1.t:0 "Launch Windows Test Console"
+ te_debug_launch_windows.1.z:0 "Close"
+
+#
 # TE_DEBUG_MONETARY
 #
  te_debug_monetary.1.a:0 "Run one monthly update now (target, drift, premium, inflation, rate paid, stance)"
@@ -5493,6 +5505,20 @@
  te_debug_nuclear.3.tt_age:0 "Ten years are added to the tradition of non-use"
  te_debug_nuclear.3.tt_renounce:0 "We are noted as having given up ten warheads. If we are still armed, the next monthly step books us a breakout"
  te_debug_nuclear.3.tt_step:0 "The world's monthly taboo step runs now"
+
+#
+# TE_DEBUG_ORBITAL_DEBRIS
+#
+ te_debug_orbital_debris.1.a:0 "Cluttered: 10 low, 20 high"
+ te_debug_orbital_debris.1.b:0 "Hazardous: 20 low, 40 high"
+ te_debug_orbital_debris.1.c:0 "Kessler Cascade: 10 low, 80 high"
+ te_debug_orbital_debris.1.d:0 "Console-only shortcuts for testing orbital debris. None of these can happen in normal play.\n\nThe index is [ROOT.GetCountry.MakeScope.ScriptValue('te_debris_index')|1]: low orbits [ROOT.GetCountry.MakeScope.ScriptValue('te_debris_low_value')|1], high orbits [ROOT.GetCountry.MakeScope.ScriptValue('te_debris_high_value')|1]. Each option that changes the pools re-applies our debris penalty at once and writes a TE_DEBRIS line to debug.log."
+ te_debug_orbital_debris.1.e:0 "Run this month's debris step now"
+ te_debug_orbital_debris.1.f:0 "Testing, testing."
+ te_debug_orbital_debris.1.g:0 "A ribbon strike on our Space Elevator now"
+ te_debug_orbital_debris.1.h:0 "Our Space Program on the best removal method we have"
+ te_debug_orbital_debris.1.i:0 "Clear orbit"
+ te_debug_orbital_debris.1.t:0 "Orbital Debris Test Console"
 
 #
 # TE_DEBUG_PB
@@ -5709,6 +5735,17 @@
  te_map_modes.1.f:0 "Maps are arguments, not records — and tonight we choose the argument."
  te_map_modes.1.f_dismiss:0 "Never mind."
  te_map_modes.1.t:0 "Cartographic Survey"
+
+#
+# TE_ORBITAL_DEBRIS
+#
+ te_orbital_debris.1.a:0 "Keep the climbers running"
+ te_orbital_debris.1.a.tt:0 "Our Space Elevator, for 6 months: [GetStaticModifier('te_ribbon_strike_damage').GetDesc]"
+ te_orbital_debris.1.b:0 "Splice it from both ends"
+ te_orbital_debris.1.b.tt:0 "Our Space Elevator, for 2 months: [GetStaticModifier('te_ribbon_strike_damage').GetDesc]"
+ te_orbital_debris.1.d:0 "A fragment no bigger than a bolt, one of the thousands now crossing the elevator's altitude every day, has cut through part of the tether. Nothing has fallen and the climbers are still running, on the undamaged strands and at half their rate. Our engineers can re-lay the damaged section from the ground station over the next six months, or we can pay to splice it from both ends at once and have the elevator back at full rate in two."
+ te_orbital_debris.1.f:0 "\"We built it to survive a hurricane. Nobody asked what it would do against a bolt at eight kilometres a second.\""
+ te_orbital_debris.1.t:0 "Ribbon Strike"
 
 #
 # TE_PEG
@@ -6137,6 +6174,19 @@
  un_events.4.d:0 "Order has broken down in [SCOPE.sCountry('peacekeeping_target').GetName]. The General Assembly has put the collapse on its docket, and the Secretary-General has asked the powers able to help to send peacekeepers. [ROOT.GetCountry.GetName] is among them."
  un_events.4.f:0 "The colonel studied the deployment orders and folded them carefully into his breast pocket. 'Blue helmets,' he said to his adjutant. 'Rules of engagement that would embarrass a traffic warden. No authority to fire unless fired upon, and even then, only if committee approves.'\n\nHe paused at the door. 'Still. Someone has to stand between the guns.'"
  un_events.4.t:0 "A State Has Collapsed"
+ un_events.40.a:0 "Table the Antarctic Treaty."
+ un_events.40.c:0 "The ice will not stay closed for ever."
+ un_events.40.d:0 "Research stations winter on the Antarctic ice, and the delegates ask us to table a treaty that would keep the continent for research alone: no weapons, no claims pressed, no mining. Its parties would hold no new Southern seabed licences, would share their stations' science, and would add to the UN's authority."
+ un_events.40.d_cause_station:0 "A new research station winters on the Antarctic ice, and the Assembly is asked who the continent belongs to.\n\n"
+ un_events.40.d_station:0 "Our own wintering party has seen what the ice holds for science. The delegates ask us to table a treaty that would keep the continent for research alone: no weapons, no claims pressed, no mining. Its parties would hold no new Southern seabed licences, would share their stations' science, and would add to the UN's authority."
+ un_events.40.f:0 "The 1959 treaty froze every claim to the continent. The Madrid Protocol of 1991 added the ban that mattered most: no mining, for fifty years at least."
+ un_events.40.t:0 "The Antarctic Treaty"
+ un_events.41.a:0 "Table the moratorium."
+ un_events.41.c:0 "Keep the weapon in reserve."
+ un_events.41.d:0 "The delegates ask us to table a moratorium on destructive anti-satellite tests. Its parties would pay twice the price for a strike of their own, gain standing in the world, and count their debris removal toward the UN's delivery."
+ un_events.41.d_cause_strike:0 "[GetGlobalVariable('un_dkt_last_subject').GetCountry.GetName] has destroyed a satellite in orbit, and its debris now threatens every craft that shares the altitude.\n\n"
+ un_events.41.f:0 "In 2022 the General Assembly called on every state to stop destructive direct-ascent anti-satellite missile tests. One hundred and fifty-five voted for it."
+ un_events.41.t:0 "A Moratorium on Anti-Satellite Tests"
  un_events.5.a:0 "Enforce the sanctions strictly."
  un_events.5.b:0 "Partial compliance - the letter of the law."
  un_events.5.c:0 "Quietly profit from the gaps."
@@ -6228,8 +6278,10 @@
  un_vote.1.b_target:0 "We refuse the resolution."
  un_vote.1.d:0 "A resolution has been proposed to the General Assembly. All member states are called upon to cast their vote."
  un_vote.1.d_aid_request:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a request for international humanitarian assistance before the General Assembly. The country faces severe hardship and asks the international community for coordinated relief. A vote in favor commits member nations to provide aid and resources."
+ un_vote.1.d_antarctic:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed an Antarctic Treaty: the continent set aside for science, closed to weapons and to mining. A vote in favor commits our country to it: its parties hold no new Southern seabed licences, share their stations' science, and add to the UN's authority."
  un_vote.1.d_arms_embargo:0 "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to impose an arms embargo on [SCOPE.sCountry('un_vote_target').GetName]. Its record gives the Assembly grounds, and its wars are the reason: cut off from the world's rifles, shells and aircraft, it would find them harder to wage. How shall [ROOT.GetCountry.GetName] vote?"
  un_vote.1.d_arms_embargo_target:0 "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to impose an arms embargo on us. If it carries, our trade in every military good will suffer for ten years and our armies will cost more to keep. We may fight the resolution, or vote for it and accept a voluntary embargo, at half the penalty and for half as long, in place of the full one."
+ un_vote.1.d_asat:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a moratorium on destructive anti-satellite tests. A vote in favor commits our country to it: a strike of our own would cost us twice the infamy and twice the case, our standing in the world would rise, and our debris removal would count toward the UN's delivery."
  un_vote.1.d_ceasefire:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order [SCOPE.sCountry('un_vote_target').GetName] to cease fire in the war it started against [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_cf_named_victim_capital').GetState.GetCountry.GetName], a member of this chamber. The order would bind: for two years, every month of fighting would cost the aggressor support for the war at home. No one would impose a peace. How shall [ROOT.GetCountry.GetName] vote?"
  un_vote.1.d_ceasefire_target:0 "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order us to cease fire in our war against [ROOT.GetCountry.MakeScope.Var('un_cf_named_victim_capital').GetState.GetCountry.GetName]. If it carries, every month we fight on will cost us support for the war at home. To vote against is to deny the charge. To vote in favour is to accept the verdict, and to be told to stop rather than censured."
  un_vote.1.d_climate:0 "The General Assembly has received a proposal for a binding Climate Accord from [SCOPE.sCountry('un_vote_proposer').GetName]. A vote in favor commits our country to its terms: the leaders of the markets that put out the most [concept_greenhouse_gas_emissions] must cut them, and the parties that lead no such market are helped to adapt."
@@ -6272,7 +6324,9 @@
  un_vote.1.later:0 "We will decide later."
  un_vote.1.t:0 "UN General Assembly Vote"
  un_vote.1.t_aid_request:0 "Humanitarian Aid Request Vote"
+ un_vote.1.t_antarctic:0 "Antarctic Treaty Vote"
  un_vote.1.t_arms_embargo:0 "Arms Embargo Vote"
+ un_vote.1.t_asat:0 "Anti-Satellite Moratorium Vote"
  un_vote.1.t_ceasefire:0 "Binding Ceasefire Vote"
  un_vote.1.t_climate:0 "Climate Accord Vote"
  un_vote.1.t_condemn:0 "Condemnation Resolution Vote"
@@ -6306,9 +6360,13 @@
  un_vote.2.a:0 "So it is decided."
  un_vote.2.d_aid_request_failed:0 "The humanitarian aid request by [SCOPE.sCountry('un_vote_proposer').GetName] has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Domestic suffering continues without international relief."
  un_vote.2.d_aid_request_passed:0 "The General Assembly has voted to authorize a humanitarian aid program for [SCOPE.sCountry('un_vote_proposer').GetName]. Member nations have committed to providing material assistance and resources. The vote carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]."
+ un_vote.2.d_antarctic_failed:0 "The Antarctic Treaty has failed to pass the General Assembly. The Southern Ocean's seabed stays open to every claimant."
+ un_vote.2.d_antarctic_passed:0 "The General Assembly has adopted the Antarctic Treaty and established the Antarctic Treaty Secretariat. Ratifying members keep the ice for science: no new Southern seabed licences for any of them."
  un_vote.2.d_arms_embargo_failed:0 "The General Assembly has refused to embargo arms to [SCOPE.sCountry('un_vote_target').GetName]. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Its arsenals stay open to the world's sellers."
  un_vote.2.d_arms_embargo_passed:0 "The General Assembly has imposed an arms embargo on [SCOPE.sCountry('un_vote_target').GetName], [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. For ten years its trade in arms and munitions is choked, and every army it keeps costs more to supply."
  un_vote.2.d_arms_embargo_passed_vetoed:0 "The Assembly carried the arms embargo, and a [concept_un_permanent_member] vetoed it in the [concept_un_security_council]. What remains is a voluntary embargo: [SCOPE.sCountry('un_vote_target').GetName]'s arms trade suffers half the penalty, for five years."
+ un_vote.2.d_asat_failed:0 "The Moratorium on Destructive Anti-Satellite Tests has failed to pass the General Assembly. A strike costs what it costs, and no more."
+ un_vote.2.d_asat_passed:0 "The General Assembly has adopted the Moratorium on Destructive Anti-Satellite Tests, under the UN Office for Disarmament Affairs. Ratifying members forswear the strikes that leave orbit strewn with debris."
  un_vote.2.d_ceasefire_failed:0 "The General Assembly has declined to order [SCOPE.sCountry('un_vote_target').GetName] to cease fire. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The war goes on without the chamber's word against it."
  un_vote.2.d_ceasefire_passed:0 "The General Assembly has ordered [SCOPE.sCountry('un_vote_target').GetName] to cease fire. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. For the next two years, every month it fights on against a member will cost it support for the war at home."
  un_vote.2.d_ceasefire_passed_vetoed:0 "The General Assembly voted to order [SCOPE.sCountry('un_vote_target').GetName] to cease fire, but a [concept_un_veto] in the [concept_un_security_council] reduced the order to a call for one. The call binds no one: it lowers the aggressor's support for the war once, and nothing follows."

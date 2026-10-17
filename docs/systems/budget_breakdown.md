@@ -80,6 +80,16 @@ Expenses/Income once. Only the unattributed remainder appears in Other
 Additional Expenses/Income. No live formula is reevaluated to guess what a
 timed modifier currently charges.
 
+A new static modifier with `country_expenses_add` or `country_tax_income_add`
+must join a category: list it in `SOURCES` in
+`scripts/generators/gen_budget_breakdown.py` and give it that category's
+accounting field (`test_budget_breakdown.py` fails on a monetary modifier left
+out). Adding a name to an existing category changes no generated file, so the
+generator need not be rerun; a new category needs a pie colour model and
+regenerates the values, the charts and the loc. The Global Commons put the
+seabed royalties under United Nations and the Antarctic station's upkeep under
+Space Race for that reason.
+
 The copy field also appears in the source modifier's ordinary tooltip, beside
 the native line, so every cost or income modifier shows its amount twice. No
 modifier-type key hides a field (vanilla's

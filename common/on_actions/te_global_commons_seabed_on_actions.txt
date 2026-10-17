@@ -1,0 +1,115 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: on-actions
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md § 2.
+# Effects: common/scripted_effects/te_global_commons_seabed_effects.txt.
+#
+#   on_monthly_pulse_country  record the country's levels (monthly recording)
+#   on_monthly_pulse_state    Long-Haul Seabed Operations, its one refresh site
+#   on_state_owner_change     record against the stamped holder, restamp
+#   on_monthly_pulse          the yearly sharing, when due, from global scope:
+#                             every weight is computed before any pool is
+#                             shared, whatever order the country pulses run
+#                             in; and the follow-state self-check's second half
+#   on_yearly_pulse_country   the AI's policy (31 December: the sharing of the
+#                             new year, in January, reads it)
+#   on_civil_war_won          a sharing next month, for the winner's shares
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_seabed_monthly_country_on_action
+	}
+}
+
+te_seabed_monthly_country_on_action = {
+	effect = {
+		te_seabed_monthly_country = yes
+	}
+}
+
+on_monthly_pulse_state = {
+	on_actions = {
+		te_seabed_monthly_state_on_action
+	}
+}
+
+# ROOT = the state (scripting_best_practices.md: on_monthly_pulse_state fires
+# on each state although the engine's log declares no scope), so the
+# multiplier reads the state.
+te_seabed_monthly_state_on_action = {
+	trigger = {
+		has_variable = te_seabed_lic_pacific
+	}
+	effect = {
+		te_seabed_refresh_long_haul = yes
+	}
+}
+
+on_state_owner_change = {
+	on_actions = {
+		te_seabed_on_state_owner_change_on_action
+	}
+}
+
+# ROOT = the state, under its new owner.
+te_seabed_on_state_owner_change_on_action = {
+	trigger = {
+		te_global_commons_enabled = yes
+		is_coastal = yes
+	}
+	effect = {
+		te_seabed_on_state_owner_change = yes
+	}
+}
+
+# No root scope.
+on_monthly_pulse = {
+	on_actions = {
+		te_seabed_global_monthly_on_action
+	}
+}
+
+te_seabed_global_monthly_on_action = {
+	effect = {
+		te_seabed_global_monthly = yes
+	}
+}
+
+on_yearly_pulse_country = {
+	on_actions = {
+		te_seabed_ai_policy_on_action
+	}
+}
+
+te_seabed_ai_policy_on_action = {
+	trigger = {
+		is_ai = yes
+	}
+	effect = {
+		te_seabed_ai_choose_policy = yes
+	}
+}
+
+# ROOT = the winner of a civil war (fired after on_revolution_end). A winning
+# revolution keeps its own variables over the nation's (CLAUDE.md, Top
+# gotchas), so its shares were the rebel claimant's: ask for a sharing next
+# month, which works them out again from the records on the states (review L3).
+on_civil_war_won = {
+	on_actions = {
+		te_seabed_civil_war_won_on_action
+	}
+}
+
+te_seabed_civil_war_won_on_action = {
+	trigger = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_country
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_seabed_reshare } }
+			set_global_variable = te_seabed_reshare
+		}
+	}
+}

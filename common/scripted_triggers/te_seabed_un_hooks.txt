@@ -1,0 +1,53 @@
+﻿# ============================================================================
+# THE SEABED UNDER THE LAW OF THE SEA — THE UN'S ANSWERS TO THE ALLOCATION
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3 and §4. The
+# seabed allocation (the yearly sharing of each basin's pool, and the building
+# gate) asks these three questions; the UN layer answers them.
+#
+#   te_seabed_itlos_party             a party for seabed purposes: it claims
+#                                     in the reserved half (if poor enough)
+#                                     and pays royalties while Regulated
+#   te_seabed_reserved_half_eligible  claims in the reserved half
+#   te_seabed_southern_barred         an Antarctic Treaty party: its Southern
+#                                     entitlement is 0 (built levels are
+#                                     grandfathered by the allocation)
+#
+# The tests they build on are in te_global_commons_un_triggers.txt. Everything
+# is read from variables or from a convention's member modifier with its
+# mirror, so a revolution's winner keeps its standing (CLAUDE.md, the winner
+# continues the nation).
+# ============================================================================
+
+# A party to the Law of the Sea for the seabed: it ratified the convention in
+# force, is not on Unilateral Licensing, and is not cooling off from a
+# defection (te_seabed_un_on_policy_change starts the five years when a
+# defector leaves Unilateral Licensing). A member outside the convention, or a
+# country outside the UN, is not a party (§3.3: the open half only, no
+# royalties).
+# Scope: country
+te_seabed_itlos_party = {
+	te_seabed_itlos_ratified = yes
+	NOT = { te_seabed_on_unilateral = yes }
+	NOT = { te_seabed_party_cooling = yes }
+}
+
+# Claims in the reserved half of each basin under the Regulated regime (§3.2):
+# a party whose GDP per head is below the members' average, the World
+# Development Fund's yardstick (un_dev_fund_gdp_per_head against
+# global_var:un_dev_fund_avg, which the Fund's monthly update keeps whether or
+# not the Fund stands).
+# Scope: country
+te_seabed_reserved_half_eligible = {
+	te_seabed_itlos_party = yes
+	has_global_variable = un_dev_fund_avg
+	un_dev_fund_gdp_per_head < global_var:un_dev_fund_avg
+}
+
+# An Antarctic Treaty party (§4): it holds no new Southern licences. While the
+# treaty is not in force (never passed, lapsed, the UN dissolved or its rule
+# off) nobody is barred and the Southern basin is shared like any other.
+# Scope: country
+te_seabed_southern_barred = {
+	te_antarctic_treaty_party = yes
+}

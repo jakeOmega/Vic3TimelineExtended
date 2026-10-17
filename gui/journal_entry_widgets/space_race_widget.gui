@@ -973,6 +973,13 @@ types space_race_widget_types
 				}
 			}
 
+			### Orbital debris, for every milestone (te_orbital_debris_widget.gui).
+			te_sr_debris_row = {}
+
+			### Milestone-specific rows: solar colonization's Next Windows
+			### (te_sr_sec_windows, gui/sr_launch_window_widgets.gui).
+			block "control_extra" {}
+
 			### The mission profile. Its heading keeps its top margin only
 			### when the controls are above it, so the section never opens on
 			### an empty line.
@@ -2428,6 +2435,9 @@ types space_race_widget_types
 			blockoverride "profile_text" {
 				block "sr_profile_text" {}
 			}
+			blockoverride "control_extra" {
+				block "sr_control_extra" {}
+			}
 		}
 		te_sr_sec_rivals = {
 			blockoverride "rivals_onclick" {
@@ -3785,8 +3795,11 @@ types space_race_widget_types
 			blockoverride "sr_progress_label" {
 				text = "je_space_race_widget_ov_colony_label"
 			}
-			# The 34 worlds: every one claimed, ours on top.
+			# Fleets staged in orbit while a full bar waits for a launch window
+			# (gui/sr_launch_window_widgets.gui), then the 34 worlds: every one
+			# claimed, ours on top.
 			blockoverride "sr_extra_rows" {
+				te_sr_ov_staged = {}
 				te_sr_ov_pie = {
 					parentanchor = hcenter
 					tooltip = "je_space_race_widget_ov_worlds_tt"
@@ -3847,6 +3860,10 @@ types space_race_widget_types
 			}
 			blockoverride "sr_profile_text" {
 				text = "je_space_race_widget_profile_solar_colonization"
+			}
+			# Launch windows (gui/sr_launch_window_widgets.gui).
+			blockoverride "sr_control_extra" {
+				te_sr_sec_windows = {}
 			}
 			blockoverride "sr_rivals_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_solar_colonization_closed')]"

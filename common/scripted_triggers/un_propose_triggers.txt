@@ -29,9 +29,10 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE FOURTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# THE SIXTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
-# nuclear material, cultural diversity, the prohibition of nuclear weapons) are
+# nuclear material, cultural diversity, the prohibition of nuclear weapons,
+# narcotic drugs, the Antarctic Treaty, the anti-satellite moratorium) are
 # at the bottom of the file. The docket raises them for everyone through the proposer events in
 # events/un_events.txt; a human member may also table one from the chamber on
 # its own motion. They have no scripted button: the AI reaches them only
@@ -627,9 +628,9 @@ un_propose_lift_sanctions_possible = {
 }
 
 # ============================================================================
-# THE FOURTEEN CONVENTIONS
+# THE SIXTEEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-19 and 29 of
+# Tabled on our own motion from the chamber (ops 7-19, 29, 31 and 32 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -1216,4 +1217,87 @@ un_propose_narcotics_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_narcotics = yes
 	un_propose_narcotics_qualifies = yes
+}
+
+# ---- The Antarctic Treaty (ATS) ----
+# The Global Commons (2026-10-16-global-commons-design.md §4). Raised by a
+# country's first Antarctic research station (the docket's item 15). Parties
+# hold no new Southern seabed licences (te_seabed_southern_barred), a party
+# with a station shares its science (un_regime_antarctic_station_modifier) and
+# every party counts toward the Policy pillar (un_antarctic_policy_modifier).
+# The Global Commons rule and a station somewhere are global gates
+# (un_docket_topic_open_antarctic).
+# Scope: any
+un_propose_antarctic_in_force = {
+	has_global_variable = un_agency_ats
+}
+
+# Scope: the prospective proposer: a state that could run a station itself.
+un_propose_antarctic_qualifies = {
+	has_technology_researched = space_exploration
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_antarctic_treaty_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_antarctic_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_antarctic_available = {
+	has_game_rule = global_commons_enabled
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_antarctic_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_antarctic_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_antarctic = yes
+	un_propose_antarctic_qualifies = yes
+}
+
+# ---- The Moratorium on Destructive Anti-Satellite Tests (UNODA) ----
+# The Global Commons (2026-10-16-global-commons-design.md §6.5; the General
+# Assembly's resolution 77/41). Raised by a destructive anti-satellite strike
+# (the docket's item 16). A party's strike costs twice the infamy and twice
+# the case strength (te_asat_moratorium_party), and a party running a
+# debris-removal method counts toward the Delivery pillar. The space race rule
+# and a strike seen somewhere are global gates (un_docket_topic_open_asat).
+# Scope: any
+un_propose_asat_in_force = {
+	has_global_variable = un_agency_unoda
+}
+
+# Scope: the prospective proposer: a spacefaring state, and not the striker.
+un_propose_asat_qualifies = {
+	has_technology_researched = space_exploration
+	custom_tooltip = {
+		text = un_propose_asat_not_striker_tt
+		NOT = { has_variable = un_dkt_asat_struck }
+	}
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_asat_moratorium_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_asat_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_asat_available = {
+	has_game_rule = space_race_enabled
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_asat_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_asat_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_asat = yes
+	un_propose_asat_qualifies = yes
 }

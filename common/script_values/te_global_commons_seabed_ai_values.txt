@@ -1,0 +1,298 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: how the AI chooses its seabed policy
+# ============================================================================
+# Read ONLY by te_seabed_ai_choose_policy (te_global_commons_seabed_effects.txt),
+# yearly from on_yearly_pulse_country for AI claimants: the AI holds the policy
+# with the highest score (§ 2.8). Nothing here gates a player's choice; the
+# panel's buttons have their own conditions (te_global_commons_seabed_sguis.txt).
+# Building needs no AI code: the engine's builder obeys the gate (§ 2.6).
+#
+# Scope: country, with ROOT = the same country (the yearly country pulse).
+#
+#   policy        when it scores
+#   Survey        always te_seabed_ai_will_survey: the default
+#   Sponsor       the policy would bring at least one licence AND Tech-Critical
+#                 Metals sell above base price at home: 30, +40 per 100% the
+#                 price stands above base, at most +20
+#   Unilateral    the same licence test, then by rank (great +25, major +10,
+#                 others -20), UN standing (poor or disgraced +15, respected
+#                 -15, exemplary -60: a large weight, not a ban), a rival that
+#                 also claims +10, Tech-Critical Metals above 1.25x base +15,
+#                 an ITLOS party under the Regulated regime -15 (defection
+#                 costs, § 3.3)
+#
+# The policy held now gets te_seabed_ai_stay_bonus, a band wider than any one
+# term that flips on its own (the rivalry, the standing tiers' edges), so a
+# country near a boundary doesn't change policy every year. A policy that
+# holds influence scores only while the AI can spare it: the cost plus
+# te_seabed_ai_influence_spare to take it up, and it is dropped once influence
+# runs into deficit (te_seabed_ai_influence_deficit_pull).
+# ============================================================================
+
+te_seabed_ai_will_survey = 20
+te_seabed_ai_stay_bonus = 10
+te_seabed_ai_influence_spare = 100
+te_seabed_ai_influence_deficit_pull = 50
+
+# ---- The licence test: what Sponsor Contractors would bring ----
+# Σ over basins of pool × w' ÷ (W − w + w'), w' = w × r: the country's weight
+# at the Sponsor factor against last year's world weight, r = the Sponsor
+# factor over the current one. An estimate, for the AI only.
+te_seabed_ai_ratio = {
+	value = te_seabed_policy_factor_sponsor
+	divide = te_seabed_policy_factor
+}
+
+te_seabed_ai_projected_pacific = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_pacific
+			var:te_seabed_w_pacific > 0
+			has_global_variable = te_seabed_world_w_pacific
+		}
+		value = te_seabed_pool_pacific
+		multiply = var:te_seabed_w_pacific
+		multiply = te_seabed_ai_ratio
+		divide = {
+			value = te_seabed_ai_ratio
+			subtract = 1
+			multiply = var:te_seabed_w_pacific
+			add = global_var:te_seabed_world_w_pacific
+			min = 1
+		}
+	}
+}
+
+te_seabed_ai_projected_atlantic = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_atlantic
+			var:te_seabed_w_atlantic > 0
+			has_global_variable = te_seabed_world_w_atlantic
+		}
+		value = te_seabed_pool_atlantic
+		multiply = var:te_seabed_w_atlantic
+		multiply = te_seabed_ai_ratio
+		divide = {
+			value = te_seabed_ai_ratio
+			subtract = 1
+			multiply = var:te_seabed_w_atlantic
+			add = global_var:te_seabed_world_w_atlantic
+			min = 1
+		}
+	}
+}
+
+te_seabed_ai_projected_indian = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_indian
+			var:te_seabed_w_indian > 0
+			has_global_variable = te_seabed_world_w_indian
+		}
+		value = te_seabed_pool_indian
+		multiply = var:te_seabed_w_indian
+		multiply = te_seabed_ai_ratio
+		divide = {
+			value = te_seabed_ai_ratio
+			subtract = 1
+			multiply = var:te_seabed_w_indian
+			add = global_var:te_seabed_world_w_indian
+			min = 1
+		}
+	}
+}
+
+te_seabed_ai_projected_arctic = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_arctic
+			var:te_seabed_w_arctic > 0
+			has_global_variable = te_seabed_world_w_arctic
+		}
+		value = te_seabed_pool_arctic
+		multiply = var:te_seabed_w_arctic
+		multiply = te_seabed_ai_ratio
+		divide = {
+			value = te_seabed_ai_ratio
+			subtract = 1
+			multiply = var:te_seabed_w_arctic
+			add = global_var:te_seabed_world_w_arctic
+			min = 1
+		}
+	}
+}
+
+te_seabed_ai_projected_southern = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_southern
+			var:te_seabed_w_southern > 0
+			has_global_variable = te_seabed_world_w_southern
+		}
+		value = te_seabed_pool_southern
+		multiply = var:te_seabed_w_southern
+		multiply = te_seabed_ai_ratio
+		divide = {
+			value = te_seabed_ai_ratio
+			subtract = 1
+			multiply = var:te_seabed_w_southern
+			add = global_var:te_seabed_world_w_southern
+			min = 1
+		}
+	}
+}
+
+te_seabed_ai_projected = {
+	value = te_seabed_ai_projected_pacific
+	add = te_seabed_ai_projected_atlantic
+	add = te_seabed_ai_projected_indian
+	add = te_seabed_ai_projected_arctic
+	add = te_seabed_ai_projected_southern
+}
+
+# How far above base Tech-Critical Metals sell in the country's market, as a
+# fraction (0 at or below base). The block form, as vanilla reads market
+# goods from country scope (scripting_best_practices.md, market_goods_pricier).
+te_seabed_ai_tech_metals_premium = {
+	value = 0
+	market = {
+		mg:tech_metals = { add = market_goods_pricier }
+	}
+	min = 0
+}
+
+# ---- The wills ----
+
+te_seabed_ai_will_sponsor = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_ai_projected >= 1
+			te_seabed_ai_tech_metals_premium > 0
+		}
+		value = 30
+		add = {
+			value = te_seabed_ai_tech_metals_premium
+			multiply = 40
+			max = 20
+		}
+	}
+}
+
+te_seabed_ai_will_unilateral = {
+	value = 0
+	if = {
+		limit = { te_seabed_ai_projected >= 1 }
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = 25
+		}
+		else_if = {
+			limit = { country_rank >= rank_value:major_power }
+			add = 10
+		}
+		else = {
+			add = -20
+		}
+		if = {
+			limit = {
+				OR = {
+					un_standing_tier_poor = yes
+					un_standing_tier_disgraced = yes
+				}
+			}
+			add = 15
+		}
+		else_if = {
+			limit = { un_standing_tier_respected = yes }
+			add = -15
+		}
+		else_if = {
+			limit = { un_standing_tier_exemplary = yes }
+			add = -60
+		}
+		if = {
+			limit = {
+				any_country = {
+					has_variable = te_seabed_shared
+					has_diplomatic_pact = { who = ROOT type = rivalry }
+				}
+			}
+			add = 10
+		}
+		if = {
+			limit = { te_seabed_ai_tech_metals_premium > 0.25 }
+			add = 15
+		}
+		if = {
+			limit = {
+				te_seabed_regime_regulated = yes
+				te_seabed_itlos_party = yes
+			}
+			add = -15
+		}
+	}
+}
+
+# ---- The scores the choice compares ----
+
+# Influence an AI must have to take up a policy that holds it.
+te_seabed_ai_sponsor_influence_start = {
+	value = te_seabed_influence_sponsor
+	add = te_seabed_ai_influence_spare
+}
+
+te_seabed_ai_unilateral_influence_start = {
+	value = te_seabed_influence_unilateral
+	add = te_seabed_ai_influence_spare
+}
+
+te_seabed_ai_score_survey = {
+	value = te_seabed_ai_will_survey
+	if = {
+		limit = { te_seabed_policy_survey = yes }
+		add = te_seabed_ai_stay_bonus
+	}
+}
+
+te_seabed_ai_score_sponsor = {
+	value = te_seabed_ai_will_sponsor
+	if = {
+		limit = { te_seabed_policy_sponsor = yes }
+		add = te_seabed_ai_stay_bonus
+		if = {
+			limit = { influence < 0 }
+			subtract = te_seabed_ai_influence_deficit_pull
+		}
+	}
+	else_if = {
+		limit = {
+			influence < te_seabed_ai_sponsor_influence_start
+		}
+		value = 0
+	}
+}
+
+te_seabed_ai_score_unilateral = {
+	value = te_seabed_ai_will_unilateral
+	if = {
+		limit = { te_seabed_policy_unilateral = yes }
+		add = te_seabed_ai_stay_bonus
+		if = {
+			limit = { influence < 0 }
+			subtract = te_seabed_ai_influence_deficit_pull
+		}
+	}
+	else_if = {
+		limit = {
+			influence < te_seabed_ai_unilateral_influence_start
+		}
+		value = 0
+	}
+}

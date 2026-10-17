@@ -1,0 +1,98 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — launch windows: the rule's numbers
+# ============================================================================
+# Global Commons spec § 5.2a. The per-body values (sr_launch_cost_<body>,
+# sr_launch_months_cost_<body>) and the stage's minima (sr_window_stage_wait,
+# sr_launch_best_cost) are generated beside the windows
+# (common/script_values/sr_launch_windows_generated.txt). Country scope unless
+# said otherwise.
+# ============================================================================
+
+# "Can't launch": just above any premium the generator stores (at most 1000,
+# i.e. +100,000%), and small enough that goal x (1 + it) and twice it stay far
+# inside the script's number range (about two million). Also the stage's wait
+# when it has nothing left (sr_window_stage_wait). Any scope.
+sr_launch_never = {
+	value = 1001
+}
+
+# How much the approach values a colony now against every later one: Standard
+# launches off-window when it saves at least as many months as it costs,
+# Ambitious when it saves at least half as many (spec § 5.2a). Safe never
+# launches off-window (sr_launch_departs_paid).
+sr_launch_approach_weight_standard = {
+	value = 1
+}
+sr_launch_approach_weight_ambitious = {
+	value = 2
+}
+sr_launch_approach_weight = {
+	value = sr_launch_approach_weight_standard
+	if = {
+		limit = { has_variable = sr_ambitious_solar_colonization }
+		value = sr_launch_approach_weight_ambitious
+	}
+}
+
+# k x m: the most months of progress an off-window launch may cost every later
+# colony, where m is the months it brings this one forward (the stage's next
+# free window among its unclaimed sites, sr_window_stage_wait).
+sr_launch_months_allowed = {
+	value = sr_window_stage_wait
+	multiply = sr_launch_approach_weight
+}
+
+# Whole fleets staged: progress in goals, rounded down (sr_launch_bank_staged_fleets).
+sr_launch_staged_whole_fleets = {
+	value = sr_progress_solar_colonization_value
+	divide = sr_solar_colonization_goal
+	floor = yes
+}
+
+# What the month's fleet costs: goal x (1 + the cheapest premium). Read only
+# while sr_launch_best_cost is below sr_launch_never (sr_launch_fleet_ready).
+sr_launch_fleet_cost = {
+	value = sr_launch_best_cost
+	add = 1
+	multiply = sr_solar_colonization_goal
+}
+
+# ======= Display (gui/sr_launch_window_widgets.gui) =======
+# Read by the solar colonization panel only; no script reads them.
+
+# Fleets staged in orbit: progress in goals.
+sr_launch_staged_fleets = {
+	value = sr_progress_solar_colonization_value
+	divide = sr_solar_colonization_goal
+}
+
+# 1 while a full bar waits: the programme runs, a colony is left to claim, and
+# staged progress covers at least one goal. Fusion drives can still leave a
+# bar waiting for a moment, between a fill and the month's launch, so the line
+# reads the bar, not the windows.
+sr_launch_staged_shown = {
+	value = 0
+	if = {
+		limit = {
+			sr_solar_colonization_running = yes
+			NOT = { has_global_variable = sr_all_colonies_complete }
+			sr_progress_solar_colonization_value >= sr_solar_colonization_goal
+		}
+		value = 1
+	}
+}
+
+# The month the cache was taken for (the window_gate self-check's log).
+sr_window_disp_cache_month = {
+	value = 0
+	if = {
+		limit = { has_global_variable = sr_window_cache_month }
+		value = global_var:sr_window_cache_month
+	}
+}
+
+# The months an off-window launch would bring this colony forward (m).
+sr_window_disp_months_saved = {
+	value = sr_window_stage_wait
+	max = 999
+}

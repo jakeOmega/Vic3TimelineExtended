@@ -1,0 +1,63 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS — static modifiers (Global Commons § 6)
+# ============================================================================
+# Unit modifiers, each applied with a multiplier from one refresh site:
+#
+#   te_orbital_debris            one debris point; multiplier = te_debris_index,
+#                                re-applied by te_debris_refresh_penalty from the
+#                                monthly country pulse to every country that
+#                                uses orbit (te_debris_uses_orbit). The per-point
+#                                figures are mirrored for the panel by
+#                                te_debris_per_point_* (te_orbital_debris_values.txt),
+#                                held equal by test_orbital_debris.py.
+#   te_debris_cleaner_prestige   +1% prestige; multiplier = te_debris_cleaner_steps
+#                                (one step per 0.1 removal a month), re-applied by
+#                                te_debris_refresh_cleaner_prestige from the same
+#                                pulse.
+#
+# Timed modifiers:
+#   te_orbital_network_disrupted the anti-satellite strike's target, 12 months
+#                                (6 with a Space Program on the Mars Mission or
+#                                higher), multiplier 0.5 with an Orbital
+#                                Battlestation (te_asat_strike_effect).
+#   te_ribbon_strike_damage      on a Space Elevator building: the ribbon strike
+#                                event (te_orbital_debris.1), 6 months, or 2
+#                                after paying for the repair.
+# ============================================================================
+
+te_orbital_debris = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_space_race_risk_mult = 0.01
+	country_space_race_progress_mult = -0.003
+	building_space_mine_throughput_add = -0.002 # REVIEWED 2026-10-16: a unit modifier applied with multiplier = the index, so it shows −10% at 50; only the per-point line rounds to 0
+	building_space_elevator_throughput_add = -0.002
+	building_orbital_battlestation_throughput_add = -0.002
+	building_solar_receiver_throughput_add = -0.002
+}
+
+te_debris_cleaner_prestige = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.01
+}
+
+# The removal method's own prestige, +1 a unit; multiplier =
+# te_debris_method_prestige (50 / 100 / 200 by method).
+te_debris_removal_method_prestige = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 1
+}
+
+te_orbital_network_disrupted = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	unit_offense_mult = -0.1
+	unit_defense_mult = -0.1
+	country_space_race_progress_mult = -0.2
+	building_space_elevator_throughput_add = -0.25
+	building_orbital_battlestation_throughput_add = -0.25
+	building_solar_receiver_throughput_add = -0.25
+}
+
+te_ribbon_strike_damage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_throughput_add = -0.5
+}

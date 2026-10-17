@@ -657,3 +657,74 @@ un_docket_may_propose_narcotics = {
 	un_docket_can_be_offered = yes
 	un_propose_narcotics_qualifies = yes
 }
+
+# The Antarctic Treaty (the Global Commons, §4): once a country runs an
+# Antarctic research station, and not while two great powers outside a
+# treaty hold Southern licences (it would lapse at once,
+# te_antarctic_lapse_condition). No treaty under the disabled Global Commons
+# rule.
+un_docket_topic_open_antarctic = {
+	has_game_rule = global_commons_enabled
+	custom_tooltip = {
+		text = un_antarctic_station_somewhere_tt
+		any_country = { te_antarctic_has_station = yes }
+	}
+	custom_tooltip = {
+		text = un_antarctic_not_lapsing_tt
+		NOT = { te_antarctic_lapse_condition = yes }
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_antarctic_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = antarctic } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_30_tt
+		global_var:un_authority >= 30
+	}
+}
+
+un_docket_may_propose_antarctic = {
+	un_docket_can_be_offered = yes
+	un_propose_antarctic_qualifies = yes
+}
+
+# A country's Antarctic station that the docket has not yet taken up (item
+# 15): each country's first station raises the treaty, and the same country
+# raises it again after ten years. Scope: country
+un_docket_antarctic_candidate = {
+	te_antarctic_has_station = yes
+	NOT = { has_variable = un_dkt_antarctic_raised }
+}
+
+# The Moratorium on Destructive Anti-Satellite Tests (the Global Commons,
+# §6.5): once a destructive anti-satellite strike has been seen
+# (te_asat_last_strike_month, which the strike records). No moratorium under
+# the disabled space race rule.
+un_docket_topic_open_asat = {
+	has_game_rule = space_race_enabled
+	custom_tooltip = {
+		text = un_asat_strike_seen_tt
+		has_global_variable = te_asat_last_strike_month
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_asat_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = asat } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_30_tt
+		global_var:un_authority >= 30
+	}
+}
+
+un_docket_may_propose_asat = {
+	un_docket_can_be_offered = yes
+	un_propose_asat_qualifies = yes
+}

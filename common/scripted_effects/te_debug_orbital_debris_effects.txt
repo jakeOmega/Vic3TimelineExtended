@@ -1,0 +1,41 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS TEST CONSOLE — helpers for te_debug_orbital_debris.1
+# ============================================================================
+# Console only (events/te_debug_orbital_debris_events.txt). Each wraps its
+# writes in a custom_tooltip saying what it does.
+# ============================================================================
+
+# Set both pools. Parameters: $LOW$, $HIGH$. Scope: any
+te_debug_debris_set_pools = {
+	custom_tooltip = {
+		text = te_debug_debris_set_pools_tt
+		set_global_variable = { name = orbital_debris_low value = $LOW$ }
+		set_global_variable = { name = orbital_debris_high value = $HIGH$ }
+		te_debris_clamp_pools = yes
+		te_debris_refresh_penalty = yes
+		te_debug_debris_log = yes
+	}
+}
+
+# The world's step, then ours. Scope: country
+te_debug_debris_run_month = {
+	custom_tooltip = {
+		text = te_debug_debris_run_month_tt
+		te_debris_global_monthly = yes
+		te_debris_country_monthly = yes
+		te_debug_debris_log = yes
+	}
+}
+
+# Fire the ribbon strike event now. Scope: country
+te_debug_debris_ribbon_strike = {
+	custom_tooltip = {
+		text = te_debug_debris_ribbon_strike_tt
+		trigger_event = { id = te_orbital_debris.1 }
+	}
+}
+
+# Log the system's state. Scope: country
+te_debug_debris_log = {
+	debug_log = "TE_DEBRIS low=[GetGlobalVariable('orbital_debris_low').GetValue] high=[GetGlobalVariable('orbital_debris_high').GetValue] index=[THIS.ScriptValue('te_debris_index')|2] removal_world=[THIS.ScriptValue('te_debris_disp_removal_world')|3] removal_ours=[THIS.ScriptValue('te_debris_removal_country')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+}

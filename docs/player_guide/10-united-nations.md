@@ -141,6 +141,7 @@ weight, so for a typical great power each point is one point of target.
 | United Nations Headquarters (the host) | +1 |
 | Peace Palace | +0.5 |
 | Palais des Nations | +0.5 |
+| Party to the Antarctic Treaty | +0.25 |
 
 The positive entries count only while you are a member and are not undermining
 the UN; the negative ones count whatever you do. A member great power under
@@ -285,12 +286,12 @@ members that sits in the Assembly; when it falls, the bloc loses 3.
 
 ### General Assembly topics
 
-There are thirty-one topics. Twelve are binding and can be vetoed:
+There are thirty-three topics. Twelve are binding and can be vetoed:
 Condemnation of Aggression, International Sanctions, Lift the Sanctions Against
 Us, Request a Peacekeeping Deployment, the International Criminal Court, Charter
 Reform, Authorized Military Mandate, Refer a Dispute to the World Court, Arms
 Embargo, Establish the Standing UN Force, Binding Ceasefire and Supervised
-Self-Determination Referendum. The other nineteen are recommendatory. Fourteen
+Self-Determination Referendum. The other twenty-one are recommendatory. Sixteen
 topics, the ICC among them, are conventions (see [UN conventions and
 agencies](#un-conventions-and-agencies)). Nine open with the charter reforms
 (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
@@ -343,6 +344,9 @@ Punitive topics need grounds. Every country has a **case strength** from 0 to
 | Tactical nuclear strike | 20 |
 | Nuclear retaliation | 10 |
 | Nuclear program referred under the Non-Proliferation Treaty | 20, or 30 for a signatory |
+| Destructive anti-satellite strike | 15, or 30 for a party to the Moratorium on Destructive Anti-Satellite Tests |
+| Unilateral Licensing as a party to a Law of the Sea that governs the seabed | 10 |
+| Antarctic Treaty denounced | 10 |
 | Infamy | 0.8 per point, up to 50 |
 
 Each entry halves every five years. A condemnation needs 30, an arms embargo or a
@@ -468,12 +472,14 @@ situation and offers it to the countries it concerns. Roughly from gravest down:
 | A warming threshold (0.5, 1, 2 and 3 °C) | A proposer | Climate Change Resolution |
 | A country's first nuclear bomb | A proposer | Nuclear Non-Proliferation Treaty |
 | A severe covert operation exposed | The target first | An Appeal to the Assembly |
+| A destructive anti-satellite strike | A proposer, never the striker | A Moratorium on Anti-Satellite Tests |
 | A state collapse | Up to three peacekeeping powers | A State Has Collapsed |
 | The charter outgrown | A great power | The Charter Has Been Outgrown |
 | A famine | Up to three donor powers | Humanitarian Crisis Demands Response |
 | A banking panic or default in a contagion wave | The member in trouble | An Emergency Lending Facility |
 | A colonial empire's collapse | A proposer | Decolonization Resolution |
 | The first Moon landing or colony | A proposer | International Space Cooperation |
+| A country's first Antarctic research station | A proposer | The Antarctic Treaty |
 | A trade embargo between members | The weaker party | International Trade Dispute |
 | Nothing graver, at most once in 24 months (12 while a great power member is Respected or better) | A proposer | A convention no situation raises |
 
@@ -777,11 +783,13 @@ a year.
 | Cultural Heritage Program (UNESCO) | Authority 40 | Prestige, research speed | Countries with a monument (any building in the Monuments group, the Space Program included, but not a Grand Monument) gain cultural pull and tourism, and build slower in every state. |
 | Decolonization Resolution | Authority 30; Decolonization; a country holding a subject | Binds every member | Colonial powers lose colonial stability; members' colonies gain liberty desire. |
 | International Space Cooperation (UNOOSA) | Authority 40; a major-power proposer with Space Exploration | Science ministry impact, space race progress | The space race leader slows and laggards speed up; orbital battlestation holders lose prestige. |
-| Convention on the Law of the Sea (ITLOS) | Authority 30; International Trade | Cheaper port connections, prestige | Great powers gain less prestige from their navies. |
+| Convention on the Law of the Sea (ITLOS) | Authority 30; International Trade | Cheaper port connections, prestige | Great powers gain less prestige from their navies. Once anyone has Abyssal Plain Mining it also regulates the seabed (see [The Law of the Sea and the seabed](#the-law-of-the-sea-and-the-seabed)). |
 | Convention on the Physical Protection of Nuclear Material (CPPNM) | Authority 30; warheads missing; a proposer with Nuclear Weapons; the Nuclear Weapons rule | Prestige | Half as many of the parties' warheads go missing, and they may recover lost ones. |
 | Single Convention on Narcotic Drugs (INCB) | Authority 20; a member with Antibiotic Mass Production; a major-power proposer with Pharmaceuticals | Pharmaceutical Industries throughput +5%, prestige +3% | Opium Plantation throughput −15%; no additional exporter penalty. |
 | Convention on Cultural Diversity | Charter Reform I; authority 40; UNESCO in force; a proposer with Mass Media that is not the cultural hegemon | Prestige; half the Foreign Cultural Benchmark (none at Supranational); minorities assimilate 20% more slowly and their homelands fade 30% more slowly | A cultural hegemon that is a party projects 10% less cultural pull. |
 | Treaty on the Prohibition of Nuclear Weapons (TPNW) | Charter Reform II; authority 40; the NPT in force; a proposer with Nuclear Weapons and no warheads; the Nuclear Weapons rule | Prestige | An armed party is held to its arsenal at ratification, a fifth fewer every five years, none after 25; an unarmed party may build none. An armed member that cast no ballot on it, or joins later, is not bound. |
+| Antarctic Treaty (ATS) | Authority 30; a country running an Antarctic research station; a proposer with Space Exploration; the Global Commons rule | Prestige +2%; +0.25 toward UN Authority's target, not scaled | Parties hold no new Southern seabed licences. A party with a research station gains +3% research speed. |
+| Moratorium on Destructive Anti-Satellite Tests (UNODA) | Authority 30; a destructive anti-satellite strike somewhere; a proposer with Space Exploration that has not struck in two years; the Space Race rule | Prestige +5% | A party's own strike costs twice the infamy and twice the case strength. A party running a debris-removal method counts toward the Delivery pillar each year. |
 
 Four member modifiers also carry a cost: the NPT raises infamy generation and
 lowers your units' kill rate, the Climate Accord lowers bureaucracy, the ICC
@@ -802,10 +810,11 @@ strongly. Public Health Insurance favors quotas; Laissez-Faire opposes them.
 A powerful Landowners group makes a country that voted against the convention
 more likely to refuse ratification.
 
-The overview shows fourteen specialized agencies, each lit once founded. Thirteen
+The overview shows sixteen specialized agencies, each lit once founded. Fifteen
 come from the conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR,
-UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity, the TPNW and the INCB. The
-fourteenth, the International Court of Justice, is founded the first time a
+UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity, the TPNW, the INCB, the
+Antarctic Treaty Secretariat and the Office for Disarmament Affairs. The
+sixteenth, the International Court of Justice, is founded the first time a
 country accepts a World Court ruling against it, and has no effects of its own.
 Hover an agency for its convention's terms. Once
 the International Criminal Court convention is in force, the court indicts the
@@ -820,6 +829,65 @@ full strength. A party to the
 Declaration that runs a coercive resettlement program is penalized (see [Costs
 and consequences of
 resettlement](08-states.md#costs-and-consequences-of-resettlement)).
+
+### The Law of the Sea and the seabed
+
+Under the Global Commons rule, the Convention on the Law of the Sea has seabed
+terms that sleep until some country researches Abyssal Plain Mining. From then
+on the seabed has one regime for the whole world, and the Timeline Extended
+window's Seabed tab and Our Obligations show it. It is read once a year, when
+the basins' licences are shared out (see [Seabed
+licences](02-timeline.md#seabed-licences) for the basins, the claim weights and
+the seabed policies).
+
+| Regime | When | How each basin's licences are shared |
+|---|---|---|
+| Open | The convention is not in force, or the United Nations rule is off | By weight among all claimants. |
+| Regulated | The convention is in force | Half of each basin, the reserved half, by weight among the parties whose GDP per head is below the members' average (the World Development Fund's yardstick). The other half by weight among all claimants. While no such party claims in a basin, its reserved half is shared with the open half. |
+| Scramble | Two or more great powers on Unilateral Licensing while Regulated | The whole basin among all claimants, every navy counting double. It is Regulated again two years after fewer than two great powers remain on Unilateral Licensing. |
+
+While the seabed is Regulated, a party pays royalties each week: 4% of its
+Deep-Sea Mines' base output value, about 1,800 a level. The money goes to the
+World Development Fund while it stands, otherwise to the UN budget. A party
+that switches to Unilateral Licensing while the convention governs the seabed
+defects: 10 infamy once, 5 standing and 10 case strength. It loses its place in
+the reserved half and pays no royalties. It becomes a party again five years
+after it leaves Unilateral Licensing for Sponsor Contractors or Scientific
+Survey. A member that refused the convention, or a country outside the UN,
+claims in the open half only and pays nothing. Unilateral Licensing costs it
+nothing extra. The AI weighs the seabed terms when it votes on the convention:
+poorer coastal members lean for it, great powers with Deep-Sea Mines against.
+
+### The Antarctic Treaty and research stations
+
+Any country with Space Exploration can take the decision Open an Antarctic
+Research Station. A station gives +2% research speed and +25 innovation cap for
+a weekly upkeep of a tenth of a percent of GDP a year, never less than 1,000 a
+week. It also adds to your claim weight in the Southern basin, coastline or
+not. The decision Close the Antarctic Research Station ends both. The AI opens a station when
+its weekly surplus covers ten times the upkeep: great and major powers, and
+smaller powers with a Southern coastline or a place in the Antarctic Treaty.
+
+A country's first station puts the Antarctic Treaty on the docket. Its parties
+hold no new Southern seabed licences; levels built before they ratified keep
+theirs. A party running a station gains +3% research speed (scaled by
+enforcement), and every party adds 0.25 to UN Authority's target, times its
+weight. A party can take the decision Denounce the Antarctic Treaty, for 10
+infamy, 5 standing and 10 case strength. It is then outside the treaty and
+free to claim the Southern seabed; rejoining the UN does not bring it back in,
+but a new treaty does. When two or more great powers outside the treaty hold
+Southern licences, the treaty lapses for everyone and the Southern basin opens
+to all. The docket does not raise it again while that holds.
+
+### The anti-satellite moratorium
+
+A destructive anti-satellite strike (see [The space race](16-space.md#the-anti-satellite-strike)) puts
+the Moratorium on Destructive Anti-Satellite Tests on the docket, offered to a
+proposer other than the striker. A party's own strike then costs twice the
+infamy and twice the case strength. Parties gain prestige, and once a year each
+party running a debris-removal method on its Space Program adds 0.25 times its
+weight to the Delivery pillar, as aid delivered does. A country that struck in
+the last two years leans hard against it, and a space power leans for it.
 
 ## UN military mandates
 
@@ -996,7 +1064,7 @@ the crisis runs, and your standing. Below them are the authority bar, with a
 tick at the target and the monthly change, and three pies: the members' share
 of the world's countries, GDP and population. Then come the Security Council's
 five flags (hover one for the country, click it to open the country), the
-fourteen agencies, lit once founded, and the headquarters. Hover any of them for
+sixteen agencies, lit once founded, and the headquarters. Hover any of them for
 the detail.
 
 The sections below are open by default when they change month to month, and

@@ -548,6 +548,21 @@ goods_output_launch_capacity_mult = {
 	}
 }
 
+# The Extraplanetary Base's era-12 logistics methods (te_global_commons_logistics_pms.txt) cut
+# its Launch Capacity input with this. Vanilla registers the goods_input_<good>_mult axis for
+# six goods only, so a mod good's goes here or the method silently does nothing. Vanilla's
+# shape (decimals 0, bad, percent), with the negative ai_value the mod gives the other input
+# mults (coal, electricity, construction): a cut is good for the building.
+goods_input_launch_capacity_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
 goods_output_electronic_components_mult = {
 	color = good
 	percent = yes

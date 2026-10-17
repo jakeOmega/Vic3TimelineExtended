@@ -1,0 +1,404 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS AND THE ANTI-SATELLITE STRIKE — effects (Global Commons § 6)
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6; the figures
+# in common/script_values/te_orbital_debris_values.txt, the tests in
+# common/scripted_triggers/te_orbital_debris_triggers.txt.
+#
+# WHO WRITES WHAT
+#   orbital_debris_low / _high (global)   te_debris_global_monthly, te_debris_add
+#   te_debris_removal_month, te_debris_cleaners, te_debris_top_cleaner,
+#   te_debris_programs (global)           te_debris_global_monthly
+#   te_asat_last_strike_month, te_asat_strikes_total (global)
+#                                         te_asat_strike_effect
+#   te_asat_struck_month (country)        te_asat_strike_effect, on the target
+#   te_orbital_debris, te_debris_cleaner_prestige (country modifiers)
+#                                         te_debris_country_monthly, their one
+#                                         refresh site
+#   te_orbital_network_disrupted (country modifier, timed)
+#                                         te_asat_strike_effect
+#   infamy (the striker's)                te_asat_strike_action's accept_effect
+#   te_ribbon_strike_damage (building modifier, timed)
+#                                         te_orbital_debris.1's options
+#
+# Everything runs only with the space race rule on (the on_actions' gate and
+# the strike action's potential); with it off the pools never exist.
+# ============================================================================
+
+# ---- The pools ------------------------------------------------------------------
+
+# Create both pools at 0 if missing. Scope: any
+te_debris_init_pools = {
+	if = {
+		limit = { NOT = { has_global_variable = orbital_debris_low } }
+		set_global_variable = { name = orbital_debris_low value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_global_variable = orbital_debris_high } }
+		set_global_variable = { name = orbital_debris_high value = 0 }
+	}
+}
+
+# Hold the pools to the index's ceiling: neither below 0, and their sum at
+# most te_debris_index_cap, the low pool giving way first (te_debris_low_clamped
+# says why). A cascade at the ceiling therefore cannot pile up debris the index
+# does not show. The high pool is set first: the low one is clamped against it.
+# Scope: any
+te_debris_clamp_pools = {
+	set_global_variable = { name = orbital_debris_high value = te_debris_high_clamped }
+	set_global_variable = { name = orbital_debris_low value = te_debris_low_clamped }
+}
+
+# Add debris to the pools. Parameters: $LOW$, $HIGH$ (numbers or script values)
+# Scope: any
+te_debris_add = {
+	te_debris_init_pools = yes
+	change_global_variable = { name = orbital_debris_low add = $LOW$ }
+	change_global_variable = { name = orbital_debris_high add = $HIGH$ }
+	te_debris_clamp_pools = yes
+}
+
+# The world's monthly step, from te_orbital_debris_on_actions.txt (global
+# on_monthly_pulse, no ROOT; space race rule on). NOT IDEMPOTENT WITHIN A
+# MONTH: the pools grow and decay on every call.
+#   1. Sources: background traffic into the low pool, and the Kessler
+#      cascade into the high pool when last month's index reached it.
+#   2. Decay: each pool loses its share.
+#   3. Removal: the world's removal, from the high pool first (real removal
+#      missions go after large, long-lived objects), the rest from the low.
+#   4. The ceiling.
+#   5. The panel's readings: removal, cleaners, the largest cleaner.
+#   6. The removal self-check, once a game.
+te_debris_global_monthly = {
+	te_debris_init_pools = yes
+	# 1. Sources, on last month's index.
+	if = {
+		limit = { te_debris_index >= te_debris_kessler_threshold }
+		change_global_variable = { name = orbital_debris_high add = te_debris_kessler_rate }
+	}
+	set_global_variable = { name = te_debris_programs value = te_debris_programs_running }
+	change_global_variable = { name = orbital_debris_low add = te_debris_traffic }
+	# 2. Decay.
+	change_global_variable = { name = orbital_debris_low multiply = te_debris_low_keep }
+	change_global_variable = { name = orbital_debris_high multiply = te_debris_high_keep }
+	# 3. Removal, high pool first.
+	set_global_variable = { name = te_debris_removal_month value = te_debris_removal_world }
+	if = {
+		limit = { global_var:te_debris_removal_month > 0 }
+		if = {
+			limit = { global_var:orbital_debris_high >= global_var:te_debris_removal_month }
+			change_global_variable = { name = orbital_debris_high subtract = global_var:te_debris_removal_month }
+		}
+		else = {
+			set_global_variable = {
+				name = te_debris_removal_left
+				value = {
+					value = global_var:te_debris_removal_month
+					subtract = global_var:orbital_debris_high
+				}
+			}
+			set_global_variable = { name = orbital_debris_high value = 0 }
+			change_global_variable = { name = orbital_debris_low subtract = global_var:te_debris_removal_left }
+			remove_global_variable = te_debris_removal_left
+		}
+	}
+	# 4. The ceiling (and the floor at 0 the low pool may have crossed).
+	te_debris_clamp_pools = yes
+	# 5. The panel's readings.
+	set_global_variable = { name = te_debris_cleaners value = 0 }
+	if = {
+		limit = { has_global_variable = te_debris_top_cleaner }
+		remove_global_variable = te_debris_top_cleaner
+	}
+	if = {
+		limit = { global_var:te_debris_removal_month > 0 }
+		every_country = {
+			limit = { modifier:country_orbital_debris_removal_add > 0 }
+			change_global_variable = { name = te_debris_cleaners add = 1 }
+		}
+		ordered_country = {
+			limit = { modifier:country_orbital_debris_removal_add > 0 }
+			order_by = te_debris_removal_country
+			set_global_variable = { name = te_debris_top_cleaner value = THIS }
+		}
+	}
+	# 6. Self-check.
+	te_debris_selfcheck_removal = yes
+}
+
+# ---- What debris does, per country ---------------------------------------------
+
+# The monthly country step, from te_orbital_debris_on_actions.txt (space race
+# rule on). The one refresh site of te_orbital_debris and
+# te_debris_cleaner_prestige, and the ribbon-strike roll.
+# Scope: country (ROOT)
+te_debris_country_monthly = {
+	te_debris_refresh_penalty = yes
+	te_debris_refresh_cleaner_prestige = yes
+	te_debris_roll_ribbon_strike = yes
+	te_asat_rebuild_disruption = yes
+}
+
+# Orbital Network Disrupted is a timed modifier, which a revolution's winner
+# doesn't inherit (CLAUDE.md, "the winner continues the nation"). The strike
+# records its end month and strength (te_asat_disrupted_until, _factor): while
+# it should still run and is missing, put the rest of it back; once it is
+# over, clear the record. Scope: country
+te_asat_rebuild_disruption = {
+	if = {
+		limit = { has_variable = te_asat_disrupted_until }
+		if = {
+			limit = { te_history_month_index >= var:te_asat_disrupted_until }
+			remove_variable = te_asat_disrupted_until
+			if = {
+				limit = { has_variable = te_asat_disrupted_factor }
+				remove_variable = te_asat_disrupted_factor
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_modifier = te_orbital_network_disrupted } }
+			add_modifier = {
+				name = te_orbital_network_disrupted
+				days = te_asat_disruption_days_left
+				multiplier = te_asat_disruption_factor_held
+			}
+		}
+	}
+}
+
+# te_orbital_debris at multiplier = the index, on a country that uses orbit.
+# Remove-then-add: a same-name add_modifier stacks (scripting_best_practices.md).
+# Scope: country
+te_debris_refresh_penalty = {
+	if = {
+		limit = { has_modifier = te_orbital_debris }
+		remove_modifier = te_orbital_debris
+	}
+	if = {
+		limit = {
+			te_debris_index > 0
+			te_debris_uses_orbit = yes
+		}
+		add_modifier = { name = te_orbital_debris multiplier = te_debris_index }
+	}
+}
+
+# +1% prestige per 0.1 removal a month (spec § 6.4): cleanup is more than
+# charity. Also the running method's own prestige. The one refresh site of
+# both. Scope: country
+te_debris_refresh_cleaner_prestige = {
+	if = {
+		limit = { has_modifier = te_debris_cleaner_prestige }
+		remove_modifier = te_debris_cleaner_prestige
+	}
+	if = {
+		limit = {
+			modifier:country_orbital_debris_removal_add > 0
+			te_debris_cleaner_steps > 0
+		}
+		add_modifier = { name = te_debris_cleaner_prestige multiplier = te_debris_cleaner_steps }
+	}
+	# The method's own prestige (te_orbital_debris_pms.txt says why it isn't
+	# on the method).
+	if = {
+		limit = { has_modifier = te_debris_removal_method_prestige }
+		remove_modifier = te_debris_removal_method_prestige
+	}
+	if = {
+		limit = { te_debris_method_prestige > 0 }
+		add_modifier = { name = te_debris_removal_method_prestige multiplier = te_debris_method_prestige }
+	}
+}
+
+# From Hazardous, a Space Elevator owner rolls te_debris_ribbon_chance each
+# month for a ribbon strike (te_orbital_debris.1, whose own trigger keeps a
+# second strike off a ribbon still under repair). Scope: country
+te_debris_roll_ribbon_strike = {
+	if = {
+		limit = {
+			te_debris_index >= te_debris_tier_hazardous
+			has_technology_researched = space_elevator
+			any_scope_building = {
+				is_building_type = building_space_elevator
+				level >= 1
+			}
+		}
+		# 10% × the chance in per mille = the chance in percent, with no
+		# fraction passed to random (te_debris_ribbon_permille).
+		random = {
+			chance = 10
+			random = {
+				chance = te_debris_ribbon_permille
+				trigger_event = { id = te_orbital_debris.1 }
+			}
+		}
+	}
+}
+
+# ---- The anti-satellite strike ----------------------------------------------------
+
+# The strike itself, but for the infamy: te_asat_strike_action's
+# accept_effect, inside its hidden_effect (the action prints its own preview
+# and applies the infamy, te_asat_infamy, as a visible effect).
+# Scope: the striker (ROOT), with scope:target_country the struck country.
+te_asat_strike_effect = {
+	scope:target_country = {
+		save_scope_as = te_asat_target
+	}
+	# The target's network: remove-then-add, so a strike never stacks a second
+	# copy (the cooldown already prevents one).
+	scope:te_asat_target = {
+		if = {
+			limit = { has_modifier = te_orbital_network_disrupted }
+			remove_modifier = te_orbital_network_disrupted
+		}
+		if = {
+			limit = {
+				modifier:country_sr_mars_mission_program_bool = yes
+				any_scope_building = { is_building_type = building_orbital_battlestation }
+			}
+			add_modifier = {
+				name = te_orbital_network_disrupted
+				days = te_asat_disruption_days_short
+				multiplier = te_asat_battlestation_factor
+			}
+		}
+		else_if = {
+			limit = { modifier:country_sr_mars_mission_program_bool = yes }
+			add_modifier = {
+				name = te_orbital_network_disrupted
+				days = te_asat_disruption_days_short
+			}
+		}
+		else_if = {
+			limit = { any_scope_building = { is_building_type = building_orbital_battlestation } }
+			add_modifier = {
+				name = te_orbital_network_disrupted
+				days = te_asat_disruption_days
+				multiplier = te_asat_battlestation_factor
+			}
+		}
+		else = {
+			add_modifier = {
+				name = te_orbital_network_disrupted
+				days = te_asat_disruption_days
+			}
+		}
+		set_variable = { name = te_asat_struck_month value = te_history_month_index }
+		# The same disruption in variables, which a revolution's winner
+		# inherits where it gets no modifiers: te_asat_rebuild_disruption
+		# puts the rest of it back.
+		set_variable = { name = te_asat_disrupted_until value = te_asat_disruption_end_month }
+		set_variable = { name = te_asat_disrupted_factor value = 1 }
+		if = {
+			limit = { any_scope_building = { is_building_type = building_orbital_battlestation } }
+			set_variable = { name = te_asat_disrupted_factor value = te_asat_battlestation_factor }
+		}
+	}
+	# The striker's costs: the UN case and every other user of orbit. The
+	# infamy (te_asat_infamy) is the action's own visible effect.
+	un_dossier_record = { RECORD = asat POINTS = te_asat_case_points }
+	every_country = {
+		limit = {
+			NOT = { THIS = ROOT }
+			te_debris_uses_orbit = yes
+		}
+		change_relations = { country = ROOT value = te_asat_relations }
+	}
+	# The debris everyone shares.
+	te_debris_add = { LOW = te_asat_debris_low HIGH = te_asat_debris_high }
+	# The records the UN phase reads.
+	set_global_variable = { name = te_asat_last_strike_month value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_global_variable = te_asat_strikes_total } }
+		set_global_variable = { name = te_asat_strikes_total value = 0 }
+	}
+	change_global_variable = { name = te_asat_strikes_total add = 1 }
+	# The UN phase's hook (te_asat_un_hooks.txt): the Moratorium's docket.
+	te_asat_un_on_strike = yes
+}
+
+# ---- Cleanup ------------------------------------------------------------------------
+
+# Switch our Space Program to the best removal method we have:
+# te_decision_debris_removal's when_taken.
+# Scope: country
+te_debris_activate_best_removal = {
+	if = {
+		limit = { has_technology_researched = compact_fusion_reactors }
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_debris_fusion_sweepers
+		}
+	}
+	else_if = {
+		limit = { has_technology_researched = directed_energy_weapons }
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_debris_laser_broom
+		}
+	}
+	else = {
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_debris_active_removal
+		}
+	}
+}
+
+# ---- Self-check ---------------------------------------------------------------------
+
+# TE_SELF_CHECK debris_removal (docs/testing/global-commons-playtest.md):
+# a Space Program that runs a removal method with its staff in place must give
+# its country removal above 0. It rests on two unverified facts: that a
+# secondary method group's workforce-scaled country modifier reaches the
+# country, and that the registered type is read by
+# modifier:country_orbital_debris_removal_add. Armed on the first such country,
+# the verdict a month later on that country (a modifier sum can lag a day after
+# a method changes, CLAUDE.md "In-game checks"); re-armed if it no longer
+# qualifies by then. Once a game.
+# Scope: any (the global pulse)
+te_debris_selfcheck_removal = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_debris_selfcheck_removal_done }
+			# The technology test first: until someone has Reusable Rocketry
+			# no method can run, and the building walk is skipped.
+			any_country = {
+				has_technology_researched = reusable_rocketry
+				te_debris_selfcheck_qualifies = yes
+			}
+		}
+		if = {
+			limit = {
+				has_global_variable = te_debris_selfcheck_removal_armed
+				te_history_month_index > global_var:te_debris_selfcheck_removal_armed
+			}
+			remove_global_variable = te_debris_selfcheck_removal_armed
+			global_var:te_debris_selfcheck_removal_country ?= {
+				if = {
+					limit = { te_debris_selfcheck_qualifies = yes }
+					set_global_variable = { name = te_debris_selfcheck_removal_done value = 1 }
+					if = {
+						limit = { modifier:country_orbital_debris_removal_add > 0 }
+						debug_log = "TE_SELF_CHECK OK debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] world=[GetGlobalVariable('te_debris_removal_month').GetValue] date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] (a Space Program has run a removal method at half staff or more for a month, and its country removes nothing: the method's country modifier does not reach the country; take the fallback in docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_global_variable = te_debris_selfcheck_removal_armed } }
+			random_country = {
+				limit = {
+					has_technology_researched = reusable_rocketry
+					te_debris_selfcheck_qualifies = yes
+				}
+				set_global_variable = { name = te_debris_selfcheck_removal_armed value = te_history_month_index }
+				set_global_variable = { name = te_debris_selfcheck_removal_country value = THIS }
+			}
+		}
+	}
+}

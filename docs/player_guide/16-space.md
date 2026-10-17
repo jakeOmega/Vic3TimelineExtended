@@ -148,7 +148,7 @@ Three sections follow the overview:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), and the Mission Profile. |
+| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), the Orbital Debris index (see [Orbital debris](#orbital-debris)), and the Mission Profile. |
 | Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
 | How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals and the programme. |
 
@@ -163,8 +163,13 @@ them.
 
 Solar System Colonization's overview shows its stage (Stage: 2 of 5) in place
 of the first, and its bar is Next Colony, the progress toward your next colony.
-Under the bar, the Worlds pie counts the 34 worlds: gold for your colonies, red
-for other powers' and grey for the worlds no one holds; hover it for the counts.
+While a full bar waits for a launch window, Staged in Orbit gives the progress
+built so far in colony fleets ("1.4 fleets"); hover it for each destination's
+next window. Under the bar, the Worlds pie counts the 34 worlds: gold for your
+colonies, red for other powers' and grey for the worlds no one holds; hover it
+for the counts. Its Mission Control adds Next Windows, the destinations of the
+stage with a world left and the months to each window (see [Launch
+windows](#launch-windows)).
 While the program isn't running, because every world is claimed or your Space
 Program no longer runs the method it needs, the approach reads Idle, the risk
 and progress rows are hidden, and Mission Control shows only the Mission
@@ -300,7 +305,8 @@ On a Safe or Standard approach you get a minor setback: missing parts, bad weath
 scandal, a quarrel with a foreign supplier. It costs 15% of the milestone's
 progress plus a few points, with no lasting modifier and no safety period. A few
 setbacks, on any approach, also cut the Space Program's throughput for some
-months.
+months. In Solar System Colonization the 25% or 15% is of one colony's progress
+at most, so fleets staged in orbit are never lost to a setback.
 
 A setback never ends a milestone; it only costs time. Two things do: dropping
 below major power, or losing the production method or building the milestone
@@ -353,8 +359,9 @@ confirms its discovery; the reward is the same.
 
 ## Colonizing the solar system
 
-Solar System Colonization is repeatable. Each time its bar fills, you found a
-colony on a random unclaimed world in the current stage. Each world can be
+Solar System Colonization is repeatable. Each time its bar fills, a colony fleet
+founds a colony on a random unclaimed world in the current stage that it can
+reach that month (see [Launch windows](#launch-windows)). Each world can be
 claimed once, by anyone, so every other country racing for colonies competes for
 the same 34 sites. A stage opens for everyone once every world in the one before
 it has been claimed, and each stage needs more progress per colony.
@@ -386,6 +393,52 @@ Colonization finishes within a month for every country that holds a colony,
 whoever took the last world and whether or not its program is running.
 Finishing grants Interplanetary Trade Networks: +10% prestige, +5% research
 speed, +10% influence and +15% cultural pull.
+
+### Launch windows
+
+Every world but Mercury is reached on a transfer orbit that lines up only once
+in a while. A world's launch window is the month of its best departure and the
+month on either side. The windows are worked out from the planets' and
+asteroids' real orbits: Mars opens one every 26 months or so, each asteroid
+every 15 to 17, Venus every 19, Jupiter every 13, and Saturn, Uranus, Neptune
+and the Kuiper Belt about once a year. Next Windows in Mission Control lists the
+stage's destinations with the months to each.
+
+While no destination with a world left is open, the program keeps building.
+Progress past a colony's goal is fleets staged in orbit, shown on the overview
+as Staged in Orbit. When a window opens, one fleet departs each month it stays
+open while staged progress covers a colony, so a three-month window can send
+three. What is left waits for the next window. It carries on to the next stage
+if rivals take the stage's last worlds, and is lost when the last of the 34
+worlds is claimed. Cutting funding while you wait gains nothing: whatever you
+build now leaves in a later window.
+
+Until you hold a colony, the program starts over whenever it stops: when your
+Space Program leaves the Solar Colonization method, when you fall below major
+power, or after a revolution. The colony being readied is lost, as an
+unfinished bar always is, but whole fleets already staged stay in orbit and
+are back on the bar in the program's first month once it runs again. Once you
+hold a colony, the program never stops this way and keeps all its progress.
+
+Propulsion technology loosens the windows in three steps:
+
+| Technology | Launches |
+|---|---|
+| Directed Energy Weapons (opens colonization) | In a window only. |
+| Asteroid Mining | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
+| Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
+
+The premium is the extra propellant an off-window transfer needs, so it climbs
+fast away from the window: on Mars, about +40% the month after a window closes
+and +150% the month after that. With Asteroid Mining, Next Windows shows
+today's figure for each closed destination. A fleet leaves outside a window, for the cheapest
+destination, when the months it saves (until the stage's next window) are worth
+the months its premium costs (the goal times the premium, at your monthly pace).
+Standard launches when it saves at least as many months as it costs, Ambitious
+when it saves at least half as many, and Safe always waits for a window. A fleet
+that leaves outside a window spends the goal plus the premium. In practice a fast
+program launches just after a window closes rather than wait two years for Mars,
+and almost never just before one, when waiting is cheap.
 
 ### Rare colony discoveries
 
@@ -438,6 +491,95 @@ specialization, an option that adds progress keeps some value after the race:
 below the cap, it is worth about a quarter of what the mining options give.
 AI powers gain Commercial Space Industry in the same way.
 
+## Orbital debris
+
+Debris in Earth orbit is one figure for the whole world, the orbital debris
+index, from 0 to 100. It has two parts. Debris in low orbits is dragged down by
+the upper atmosphere within a few years: 1.5% of it goes each month. Debris in
+high orbits stays for a century, losing 0.05% a month. Every running Space
+Program adds 0.01 to the low orbits each month, so six programs keep about 4
+points up, and each [anti-satellite strike](#the-anti-satellite-strike) adds 6
+to each part. Mission Control shows the index on every milestone's panel, as
+"Orbital Debris: 12.3 (Clear)". Hover it for the two parts, what the index
+costs you now and who is cleaning it up.
+
+| Tier | Index | What changes |
+|---|---|---|
+| Clear | below 25 | Only the costs below. |
+| Cluttered | 25 | AI powers start removing debris. |
+| Hazardous | 50 | Space Elevators risk ribbon strikes. |
+| Kessler Cascade | 75 | Collisions add 0.2 to the high orbits every month until removal brings the index back under 75. |
+
+Every country that uses orbit pays for each point of the index: one with a
+Space Program, a Space Elevator, an Orbital Solar Collector, an Orbital
+Battlestation or an Extraplanetary Base.
+
+| Each point | At 50 | At 100 |
+|---|---|---|
+| +1% setback risk | +50% | +100% (risk still stops at 50% a month) |
+| −0.3% space race pace | −15% | −30% (pace never drops below 0.5 a month) |
+| −0.2% throughput for Extraplanetary Bases, Space Elevators, Orbital Battlestations and Solar Receivers | −10% | −20% |
+
+Nothing stops: your milestones keep moving, and every cost fades as the debris
+does. An Orbital Battlestation's lower throughput also lowers the military
+bonuses it gives, along with its upkeep.
+
+From Hazardous on, a Space Elevator owner has a 0.02% chance per point each
+month (1.5% at 75) of a ribbon strike. The event Ribbon Strike runs your
+elevator at −50% throughput for six months, or, if you pay for an emergency
+repair (the cost grows with your GDP), for two. A ribbon still under repair
+isn't struck again.
+
+### Clearing orbital debris
+
+Your Space Program has a second production method group, Debris Removal. It
+starts on No Debris Removal. Each other method removes debris every month,
+taking it from the high orbits first, and adds a little prestige:
+
+| Method | Technology | Launch Capacity a week | Removed a month |
+|---|---|---|---|
+| Active Debris Removal | Reusable Rocketry | 300 | 0.05 |
+| Laser Broom | Directed Energy Weapons | 300, and 500 electricity | 0.15 |
+| Fusion Sweepers | Muon-Catalyzed Fusion Reactors | 150 | 0.5 |
+
+Each fully staffed Space Elevator level raises what you remove by 10%, up to
++100% at ten levels, and its Launch Capacity makes every method cheaper in your
+market. Removal also follows the Space Program's throughput, so each funding
+level raises it along with the bill. Cleaning earns Orbital Cleanup: +1%
+prestige for each 0.1 you remove a month. The decision Begin Orbital Debris
+Removal switches your Space Program to the best method you have, and appears
+again when a better one arrives. Switch removal off in the building's
+production methods.
+
+Every country in orbit gains from what anyone removes. Fusion Sweepers with a
+ten-level Space Elevator clear 30 points in about two and a half years. One
+program on Active Debris Removal can't stop a Kessler Cascade: that takes
+several cleaners, or better technology. AI powers that use orbit take the
+decision once debris is Cluttered, more readily at Hazardous, if their weekly
+surplus covers the method's Launch Capacity.
+
+### The anti-satellite strike
+
+Anti-Satellite Strike is a diplomatic action against a country you are at war
+with. It needs Guided Missiles (era 7), a Space Program of your own, and a
+target with a Space Program, a Space Elevator, an Orbital Solar Collector or an
+Orbital Battlestation. A country can be struck once every 12 months, by anyone.
+
+| Who | What the strike does |
+|---|---|
+| The target | Orbital Network Disrupted for a year: −10% unit offense and defense, −20% space race pace, and −25% throughput for its Space Elevators, Orbital Battlestations and Solar Receivers. It lasts six months if its Space Program runs the Mars Mission or a later method, and is half as strong if it has an Orbital Battlestation. It ends on its own. |
+| You | 5 infamy, 15 case strength at the UN (see [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)), twice both as a party to the [Moratorium on Destructive Anti-Satellite Tests](10-united-nations.md#the-anti-satellite-moratorium), and −30 relations with every other country that uses orbit. |
+| Everyone | 6 more debris in low orbits and 6 in high orbits, which your own program flies through too. |
+
+The strike suits a war against a power with more in orbit than you, whose
+fleet and space race lean on its satellites. Its debris and its diplomatic cost
+fall on you as well, and a strike in a crowded orbit can tip the world into a
+Kessler Cascade. AI powers strike rarely, only when the enemy has more in orbit
+than they do (its Space Program's mission plus its orbital megaprojects'
+levels), and almost never once debris is Hazardous, unless they are losing the
+war. Communications Disruption, the covert operation, interferes with a
+country's networks without the debris (see [The covert operations](11-influence.md#the-covert-operations)).
+
 ## Space race events
 
 Besides the choice, setback and completion events above, the space race has
@@ -465,7 +607,9 @@ out. Such an AI winds its funding down to 0 and pays nothing for the approach
 it has chosen until it climbs back into the top three. AI great powers prefer
 the Ambitious approach, more so when another country is running the same
 milestone; AI major powers lean toward Safe. The AI raises funding while it has
-innovation to spare and cuts it when innovation runs short.
+innovation to spare and cuts it when innovation runs short. Launch windows bind
+the AI as they bind you, and its approach decides its launches outside a window
+the same way.
 
 A revolution's winner continues the old country's program, with its progress
 (except progress toward a first colony) and its rewards, and rebels can't start

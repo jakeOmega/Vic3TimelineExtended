@@ -1,0 +1,157 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE ANTARCTIC DECISIONS
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §4. The writers
+# are in common/scripted_effects/te_global_commons_un_effects.txt, the figures
+# in common/script_values/te_global_commons_un_values.txt.
+#
+# The station has no rank or coastline gate: the upkeep is the limit (about
+# thirty countries run real stations). The AI weighs that upkeep against its
+# weekly surplus (net_fixed_income, the affordability reader the mod's AI uses),
+# and its rank, as it does for the Strategic Reserve and the Space Program.
+# Players and the AI meet the same requirements.
+# ============================================================================
+
+# Open an Antarctic research station: research and a higher innovation cap for
+# a weekly upkeep, and a claim on the Southern seabed (the seabed allocation
+# adds Southern weight for a station).
+te_decision_open_antarctic_station = {
+	is_shown = {
+		has_game_rule = global_commons_enabled
+		has_technology_researched = space_exploration
+		NOT = { is_country_type = decentralized }
+		# A running revolution's rebels found no station of their own: the
+		# winner continues the nation, and inherits the nation's.
+		is_revolutionary = no
+		NOT = { te_antarctic_has_station = yes }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = te_antarctic_tt_not_in_default
+			in_default = no
+		}
+	}
+
+	when_taken = {
+		te_antarctic_station_open = yes
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				in_default = no
+				net_fixed_income > te_antarctic_station_ai_surplus_needed
+			}
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 60
+			}
+			else_if = {
+				limit = { country_rank >= rank_value:major_power }
+				add = 30
+			}
+			# A Southern coastline (the seabed basins' map, where it runs): the
+			# only reason a smaller power runs a station.
+			if = {
+				limit = {
+					any_scope_state = {
+						has_variable = te_seabed_basin
+						var:te_seabed_basin = 5
+					}
+				}
+				add = 20
+			}
+			# A party shares in the treaty's science.
+			if = {
+				limit = { te_antarctic_treaty_party = yes }
+				add = 10
+			}
+		}
+	}
+}
+
+# Close the station: the research and the upkeep go.
+te_decision_close_antarctic_station = {
+	is_shown = {
+		te_antarctic_has_station = yes
+	}
+
+	possible = {
+		te_antarctic_has_station = yes
+	}
+
+	when_taken = {
+		te_antarctic_station_close = yes
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					in_default = yes
+					net_fixed_income < 0
+				}
+			}
+			add = 100
+		}
+	}
+}
+
+# Denounce the Antarctic Treaty: 10 infamy, 5 standing and 10 case strength,
+# and out of it, free to claim Southern seabed licences again.
+te_decision_denounce_antarctic_treaty = {
+	is_shown = {
+		has_game_rule = global_commons_enabled
+		te_antarctic_treaty_party = yes
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = te_antarctic_tt_may_denounce
+			te_antarctic_may_denounce = yes
+		}
+	}
+
+	when_taken = {
+		te_antarctic_treaty_denounce = yes
+	}
+
+	# Mostly a great power licensing the seabed on its own terms, with a
+	# Southern coastline to claim from and a record it no longer guards.
+	# Exemplary standing holds it back hard, not absolutely.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				country_rank >= rank_value:great_power
+				te_seabed_on_unilateral = yes
+			}
+			add = 10
+			if = {
+				limit = {
+					any_scope_state = {
+						has_variable = te_seabed_basin
+						var:te_seabed_basin = 5
+					}
+				}
+				add = 15
+			}
+			if = {
+				limit = {
+					OR = {
+						un_standing_tier_poor = yes
+						un_standing_tier_disgraced = yes
+					}
+				}
+				add = 10
+			}
+			if = {
+				limit = { un_standing_tier_exemplary = yes }
+				multiply = 0.1
+			}
+		}
+	}
+}

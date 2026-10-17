@@ -1,0 +1,173 @@
+﻿# ============================================================================
+# THE SEABED UNDER THE LAW OF THE SEA — THE UN'S HOOKS IN THE ALLOCATION
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3. Called by
+# the seabed allocation and policy (te_global_commons_seabed_effects.txt).
+#
+#   te_seabed_un_update_regime      no scope needed. Called once a year at the
+#                                   start of the seabed allocation, before the
+#                                   pools are shared: writes the regime
+#   te_seabed_un_on_policy_change   country. Called by the seabed policy's
+#                                   change, after te_seabed_policy holds the
+#                                   new value and te_seabed_policy_prev the old
+#
+# WHO WRITES WHAT
+#   te_seabed_regime (global)              te_seabed_un_set_regime: 1 Open,
+#                                          2 Regulated, 3 Scramble (§3.2)
+#   te_seabed_scramble_return_month        the month a calm Scramble returns to
+#     (global)                             regulation; set when fewer than two
+#                                          great powers remain on Unilateral
+#                                          Licensing, cleared when two are again
+#   te_seabed_defected (country)           a party that defected and still holds
+#                                          Unilateral Licensing
+#   te_seabed_party_cooldown_end (country) the month a defector that left
+#                                          Unilateral Licensing is a party again
+#
+# The figures are in te_global_commons_un_values.txt. All of it is variables,
+# so a revolution's winner keeps the regime's memory of it.
+# ============================================================================
+
+# Write the regime (§3.2):
+#   - Open: the Law of the Sea not in force, its seabed terms asleep (nobody
+#     has researched Abyssal Plain Mining), or the UN rule off;
+#   - Scramble: two or more great powers on Unilateral Licensing while the
+#     Law of the Sea governs;
+#   - Regulated: otherwise. A Scramble returns to it two years after fewer than
+#     two great powers remain on Unilateral Licensing (te_seabed_scramble_
+#     return_months). Called once a year, so the two years are two passes.
+# Scope: any
+te_seabed_un_update_regime = {
+	if = {
+		limit = { NOT = { te_seabed_itlos_governs = yes } }
+		te_seabed_un_set_regime = { REGIME = 1 }
+		te_seabed_un_clear_scramble_clock = yes
+	}
+	else_if = {
+		limit = { te_seabed_unilateral_great_powers >= te_seabed_scramble_threshold }
+		te_seabed_un_set_regime = { REGIME = 3 }
+		te_seabed_un_clear_scramble_clock = yes
+	}
+	else_if = {
+		limit = { te_seabed_regime_is_scramble = yes }
+		if = {
+			limit = { NOT = { has_global_variable = te_seabed_scramble_return_month } }
+			set_global_variable = { name = te_seabed_scramble_return_month value = te_seabed_scramble_return_month_value }
+		}
+		if = {
+			limit = { te_history_month_index >= global_var:te_seabed_scramble_return_month }
+			te_seabed_un_set_regime = { REGIME = 2 }
+			te_seabed_un_clear_scramble_clock = yes
+		}
+	}
+	else = {
+		te_seabed_un_set_regime = { REGIME = 2 }
+		te_seabed_un_clear_scramble_clock = yes
+	}
+}
+
+# Set the regime to $REGIME$, and tell every country that mines the seabed or
+# could when it changes (not when it is first written as Open).
+# Parameters: $REGIME$ = 1 | 2 | 3
+# Scope: any
+te_seabed_un_set_regime = {
+	if = {
+		limit = {
+			has_global_variable = te_seabed_regime
+			NOT = { global_var:te_seabed_regime = $REGIME$ }
+		}
+		set_global_variable = { name = te_seabed_regime value = $REGIME$ }
+		te_seabed_un_regime_notices = yes
+	}
+	else_if = {
+		limit = { NOT = { has_global_variable = te_seabed_regime } }
+		set_global_variable = { name = te_seabed_regime value = $REGIME$ }
+		if = {
+			limit = { te_seabed_regime_is_governed = yes }
+			te_seabed_un_regime_notices = yes
+		}
+	}
+}
+
+# The regime just written, told to every country that has researched Abyssal
+# Plain Mining (a variable is readable in the block that sets it).
+# Scope: any
+te_seabed_un_regime_notices = {
+	every_country = {
+		limit = {
+			has_technology_researched = abyssal_plain_mining
+			NOT = { is_country_type = decentralized }
+		}
+		if = {
+			limit = { te_seabed_regime_is_regulated = yes }
+			post_notification = te_seabed_regime_regulated_notice
+		}
+		else_if = {
+			limit = { te_seabed_regime_is_scramble = yes }
+			post_notification = te_seabed_regime_scramble_notice
+		}
+		else = {
+			post_notification = te_seabed_regime_open_notice
+		}
+	}
+}
+
+# Scope: any
+te_seabed_un_clear_scramble_clock = {
+	if = {
+		limit = { has_global_variable = te_seabed_scramble_return_month }
+		remove_global_variable = te_seabed_scramble_return_month
+	}
+}
+
+# A change of seabed policy, answered (§3.3):
+#   - a party that switches to Unilateral Licensing while the Law of the Sea
+#     governs the seabed (in force, its seabed terms awake: Regulated or
+#     Scramble) defects: 10 infamy once, 5 standing and 10 case
+#     strength (the defiance record, "binding resolution refused"). It leaves
+#     the reserved half and pays no royalties while it holds the policy
+#     (te_seabed_itlos_party reads the policy itself);
+#   - a defector that leaves Unilateral Licensing is a party again five years
+#     later (te_seabed_party_cooldown_months). The spec names the return to
+#     Sponsor Contractors; Scientific Survey is lawful under the convention
+#     too, so leaving for either starts the five years, and a later switch
+#     between the two never restarts them;
+#   - a non-party (it refused the convention, or is outside the UN) pays
+#     nothing extra for Unilateral Licensing: the seabed's own relations
+#     penalty is all.
+# Scope: country (after te_seabed_policy and te_seabed_policy_prev are set)
+te_seabed_un_on_policy_change = {
+	if = {
+		limit = {
+			te_seabed_on_unilateral = yes
+			NOT = { te_seabed_was_unilateral = yes }
+			te_seabed_itlos_ratified = yes
+			# The convention governs the seabed now, whether or not this
+			# year's allocation has written the regime yet: a party cannot
+			# slip out between the vote and the next pass.
+			te_seabed_itlos_governs = yes
+		}
+		custom_tooltip = te_seabed_defection_tt
+		change_infamy = te_seabed_defection_infamy
+		custom_tooltip = {
+			text = te_seabed_defection_standing_tt
+			un_standing_loss = { AMOUNT = te_seabed_defection_standing REASON = 48 }
+		}
+		custom_tooltip = te_seabed_defection_case_tt
+		un_dossier_record = { RECORD = defiance POINTS = te_seabed_defection_case }
+		set_variable = te_seabed_defected
+		if = {
+			limit = { has_variable = te_seabed_party_cooldown_end }
+			remove_variable = te_seabed_party_cooldown_end
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { te_seabed_on_unilateral = yes }
+			te_seabed_was_unilateral = yes
+			has_variable = te_seabed_defected
+		}
+		remove_variable = te_seabed_defected
+		set_variable = { name = te_seabed_party_cooldown_end value = te_seabed_party_cooldown_end_value }
+		custom_tooltip = te_seabed_party_cooldown_tt
+	}
+}

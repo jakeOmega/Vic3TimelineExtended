@@ -1,0 +1,109 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS AND THE ANTI-SATELLITE STRIKE — triggers (Global Commons § 6)
+# ============================================================================
+# The figures are in common/script_values/te_orbital_debris_values.txt, the
+# writers in common/scripted_effects/te_orbital_debris_effects.txt.
+# ============================================================================
+
+# The country uses orbit, so debris costs it (spec § 6.2): it has a Space
+# Program, an orbital megaproject (Space Elevator, Orbital Solar Collector,
+# Orbital Battlestation) or an Extraplanetary Base. The technology tests are
+# cheap and come first: each of those buildings needs one of them, and most
+# countries hold none, so the building walk runs only for the few that might.
+# Scope: country
+te_debris_uses_orbit = {
+	OR = {
+		has_technology_researched = guided_missiles
+		has_technology_researched = asteroid_mining
+		has_technology_researched = space_elevator
+		has_technology_researched = space_based_solar_power
+		has_technology_researched = orbital_weapon_platforms
+	}
+	any_scope_building = {
+		OR = {
+			is_building_type = building_space_program
+			is_building_type = building_space_elevator
+			is_building_type = building_solar_collector
+			is_building_type = building_orbital_battlestation
+			is_building_type = building_space_mine
+		}
+	}
+}
+
+# The country has something in orbit an anti-satellite strike can hit: a
+# Space Program or an orbital megaproject (spec § 6.3; an Extraplanetary Base
+# alone is not a target).
+# Scope: country
+te_asat_has_orbital_assets = {
+	any_scope_building = {
+		OR = {
+			is_building_type = building_space_program
+			is_building_type = building_space_elevator
+			is_building_type = building_solar_collector
+			is_building_type = building_orbital_battlestation
+		}
+	}
+}
+
+# Struck within the last te_asat_cooldown_months: the action cannot be used
+# against it again yet, by anyone. Scope: the target
+te_asat_struck_recently = {
+	has_variable = te_asat_struck_month
+	te_asat_months_since_struck < te_asat_cooldown_months
+}
+
+# The AI's test for striking $ENEMY$ (spec § 6.3): only when the enemy has
+# more in orbit than we do (Space Program tier plus orbital megaproject
+# levels), so the strike costs it more than the debris costs us. An AI weight,
+# not a rule: the action's own `possible` is all a player faces. The restraint
+# at Hazardous debris and above is in the action's evaluation_chance.
+# Scope: the AI (ROOT of the action's ai block)
+te_asat_ai_would_strike = {
+	has_war_with = $ENEMY$
+	in_default = no
+	$ENEMY$ = {
+		te_asat_orbital_investment > root.te_asat_orbital_investment
+	}
+}
+
+# The best removal method this country has is not the one its Space Program
+# runs: the decision te_decision_debris_removal is offered. The best is the
+# latest technology's (Fusion Sweepers > Laser Broom > Active Debris Removal),
+# since each removes more for no more Launch Capacity.
+# Scope: country
+te_debris_best_removal_off = {
+	has_technology_researched = reusable_rocketry
+	any_scope_building = {
+		is_building_type = building_space_program
+		OR = {
+			AND = {
+				owner = { has_technology_researched = compact_fusion_reactors }
+				NOT = { has_active_production_method = pm_debris_fusion_sweepers }
+			}
+			AND = {
+				owner = {
+					NOT = { has_technology_researched = compact_fusion_reactors }
+					has_technology_researched = directed_energy_weapons
+				}
+				NOT = { has_active_production_method = pm_debris_laser_broom }
+			}
+			AND = {
+				owner = {
+					NOT = { has_technology_researched = compact_fusion_reactors }
+					NOT = { has_technology_researched = directed_energy_weapons }
+				}
+				NOT = { has_active_production_method = pm_debris_active_removal }
+			}
+		}
+	}
+}
+
+# The debris_removal self-check's subject: a Space Program running a removal
+# method at half staff or more (te_debris_selfcheck_removal). Scope: country
+te_debris_selfcheck_qualifies = {
+	any_scope_building = {
+		is_building_type = building_space_program
+		NOT = { has_active_production_method = pm_debris_removal_none }
+		occupancy >= 0.5
+	}
+}

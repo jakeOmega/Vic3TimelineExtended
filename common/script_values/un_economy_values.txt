@@ -246,6 +246,15 @@ un_dev_fund_pot_weekly_value = {
 		}
 		add = global_var:un_dev_fund_donations
 	}
+	# The seabed royalties (the Global Commons, §3.3) go to the Fund while it
+	# stands, and to the budget otherwise (un_budget_weekly_value).
+	if = {
+		limit = {
+			has_global_variable = un_inst_development_fund
+			has_global_variable = te_seabed_royalties_weekly
+		}
+		add = global_var:te_seabed_royalties_weekly
+	}
 }
 
 # What it would pay out a week if it stood today (the chamber's preview): its
@@ -256,11 +265,25 @@ un_dev_fund_pot_preview_value = {
 	if = {
 		limit = { has_global_variable = un_budget_weekly }
 		add = global_var:un_budget_weekly
+		# Until the Fund stands the budget holds the seabed royalties
+		# (un_dues_values.txt); a standing Fund takes them whole, below, so
+		# they leave the budget's share here.
+		if = {
+			limit = {
+				NOT = { has_global_variable = un_inst_development_fund }
+				has_global_variable = te_seabed_royalties_weekly
+			}
+			subtract = global_var:te_seabed_royalties_weekly
+		}
 		multiply = un_dev_fund_budget_share_at_level
 	}
 	if = {
 		limit = { has_global_variable = un_dev_fund_donations }
 		add = global_var:un_dev_fund_donations
+	}
+	if = {
+		limit = { has_global_variable = te_seabed_royalties_weekly }
+		add = global_var:te_seabed_royalties_weekly
 	}
 }
 

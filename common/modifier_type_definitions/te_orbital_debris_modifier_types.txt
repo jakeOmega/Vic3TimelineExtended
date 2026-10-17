@@ -1,0 +1,63 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS — modifier types (Global Commons § 6)
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6.
+#
+# country_orbital_debris_removal_add   points of debris a month this country
+#                                      removes: the Space Program's debris
+#                                      removal methods (pmg_space_program_debris_removal,
+#                                      te_orbital_debris_pms.txt), workforce-scaled.
+# country_orbital_debris_removal_mult  scales it: the Space Elevator, +10% per
+#                                      fully staffed level (pm_space_elevator).
+#                                      te_debris_removal_country counts it only
+#                                      up to te_debris_removal_mult_cap (+100%).
+#   Both are read by te_debris_removal_country (te_orbital_debris_values.txt),
+#   which the global monthly pulse sums over every country. The UN's
+#   anti-satellite moratorium reads the _add (its Delivery-pillar term).
+#
+# The three building throughput types are the orbital megaprojects the engine
+# does not register on its own (docs/engine/modifier_patterns.md:
+# building_{building}_throughput_add has members only for vanilla buildings).
+# building_space_mine_throughput_add is already registered
+# (mod_entity_modifier_types.txt). The Solar Collector's own throughput is
+# deliberately not used: its only output is the workforce-scaled
+# country_solar_receiver_max_level_add, so a throughput cut there shrinks the
+# receiver slots, and overbuild_protection_on_action (extra_on_actions.txt)
+# then demolishes receivers. The receivers are where its power comes out.
+# ============================================================================
+
+country_orbital_debris_removal_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_orbital_debris_removal_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}
+
+building_space_elevator_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 1
+}
+
+building_orbital_battlestation_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 1
+}
+
+building_solar_receiver_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 1
+}

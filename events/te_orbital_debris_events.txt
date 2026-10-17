@@ -1,0 +1,92 @@
+﻿namespace = te_orbital_debris
+
+# ============================================================================
+# ORBITAL DEBRIS — events (Global Commons § 6.2)
+# ============================================================================
+# .1  A ribbon strike: debris cuts into our Space Elevator's tether. Rolled
+#     monthly from Hazardous debris (te_debris_roll_ribbon_strike,
+#     te_orbital_debris_effects.txt, index x 0.02% a month). Ride it out at
+#     -50% throughput for six months, or pay for an emergency repair and lose
+#     two. Nothing halts: the elevator keeps working at half its rate.
+# ============================================================================
+
+te_orbital_debris.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_elevator_structural_alarm.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = te_orbital_debris.1.t
+	desc = te_orbital_debris.1.d
+	flavor = te_orbital_debris.1.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = space_race_enabled
+		te_debris_index >= te_debris_tier_hazardous
+		any_scope_building = {
+			is_building_type = building_space_elevator
+			level >= 1
+		}
+		# A ribbon still under repair is not struck twice: the damage would
+		# stack to a standstill.
+		NOT = {
+			any_scope_building = {
+				is_building_type = building_space_elevator
+				has_modifier = te_ribbon_strike_damage
+			}
+		}
+	}
+
+	# Ride it out: the climbers keep running on the undamaged strands.
+	option = {
+		name = te_orbital_debris.1.a
+		default_option = yes
+		custom_tooltip = {
+			text = te_orbital_debris.1.a.tt
+			every_scope_building = {
+				limit = { is_building_type = building_space_elevator }
+				add_modifier = {
+					name = te_ribbon_strike_damage
+					days = te_debris_ribbon_days_long
+				}
+			}
+		}
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	# An emergency repair: splice the tether from both ends at once.
+	option = {
+		name = te_orbital_debris.1.b
+		add_treasury = {
+			value = te_debris_ribbon_repair_cost
+			multiply = -1
+		}
+		custom_tooltip = {
+			text = te_orbital_debris.1.b.tt
+			every_scope_building = {
+				limit = { is_building_type = building_space_elevator }
+				add_modifier = {
+					name = te_ribbon_strike_damage
+					days = te_debris_ribbon_days_short
+				}
+			}
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { in_default = yes }
+				factor = 0
+			}
+			modifier = {
+				trigger = { scaled_debt > 0.5 }
+				factor = 0.2
+			}
+		}
+	}
+}

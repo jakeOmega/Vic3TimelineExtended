@@ -121,6 +121,12 @@ sr_cleanup_inactive_space_race_milestones = {
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_base          }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = mars_landing       }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = interstellar_probe }
+	# Solar colonization's fleets staged in orbit wait for a deactivated
+	# programme to restart (sr_launch_bank_staged_fleets, sr_launch_window_effects.txt).
+	if = {
+		limit = { NOT = { has_journal_entry = je_space_race_solar_colonization } }
+		sr_launch_bank_staged_fleets = yes
+	}
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = solar_colonization }
 	# interstellar_results uses a different variable set (only sr_active_interstellar_results
 	# and sr_interstellar_transit_progress) — cannot share the standard 5-var base.
@@ -195,7 +201,9 @@ sr_apply_ambitious_failure_progress_loss = {
 	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.75 }
 	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.75 }
 	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = solar_colonization MULT = 0.75 }
+	# Solar colonization: a share of at most one goal, never of the fleets
+	# staged in orbit (Global Commons § 5.2, sr_launch_window_effects.txt).
+	sr_apply_solar_colonization_progress_loss = { MULT = 0.75 }
 }
 
 sr_apply_safe_setback_progress_loss = {
@@ -207,7 +215,9 @@ sr_apply_safe_setback_progress_loss = {
 	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.85 }
 	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.85 }
 	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = solar_colonization MULT = 0.85 }
+	# Solar colonization: a share of at most one goal, never of the fleets
+	# staged in orbit (Global Commons § 5.2, sr_launch_window_effects.txt).
+	sr_apply_solar_colonization_progress_loss = { MULT = 0.85 }
 }
 
 sr_clear_failed_milestone_flags = {
@@ -797,7 +807,13 @@ sr_apply_moon_base_reward          = { sr_apply_milestone_reward_base = { MILEST
 sr_apply_mars_landing_reward       = { sr_apply_milestone_reward_base = { MILESTONE = mars_landing       } }
 sr_apply_interstellar_probe_reward = { sr_apply_milestone_reward_base = { MILESTONE = interstellar_probe } }
 
-# Solar System Colonization - establish a colony at a random unclaimed location
+# Solar System Colonization - establish a colony at a random unclaimed location.
+# Only a site a fleet can leave for now is drawn, and only among the cheapest
+# (Global Commons § 5.2): each site's trigger asks sr_launch_site_departs for
+# its window body (Mercury, never gated, sr_launch_mercury_departs). The body of
+# each site is the generator's BODIES table (scripts/generators/
+# gen_launch_windows.py; test_launch_windows.py holds the two equal). Called
+# from sr_launch_month only, which checks first that some site can depart.
 sr_establish_colony_effect = {
 	# Initialize stage if needed
 	if = {
@@ -815,61 +831,101 @@ sr_establish_colony_effect = {
 		limit = { global_var:sr_colonization_stage = 1 }
 		random_list = {
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_valles_marineris } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_valles_marineris }
+					sr_launch_site_departs = { BODY = mars }
+				}
 				set_global_variable = { name = sr_colony_valles_marineris value = yes }
+				sr_launch_window_gate_check = { BODY = mars }
 				trigger_event = { id = space_race_colony_events.1 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_olympus_mons } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_olympus_mons }
+					sr_launch_site_departs = { BODY = mars }
+				}
 				set_global_variable = { name = sr_colony_olympus_mons value = yes }
+				sr_launch_window_gate_check = { BODY = mars }
 				sr_seed_colony_discovery = { DISCOVERY = olympus_tubes }
 				trigger_event = { id = space_race_colony_events.2 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_hellas_planitia } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_hellas_planitia }
+					sr_launch_site_departs = { BODY = mars }
+				}
 				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
+				sr_launch_window_gate_check = { BODY = mars }
 				sr_seed_colony_discovery = { DISCOVERY = hellas_fossils }
 				trigger_event = { id = space_race_colony_events.3 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_utopia_planitia } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_utopia_planitia }
+					sr_launch_site_departs = { BODY = mars }
+				}
 				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
+				sr_launch_window_gate_check = { BODY = mars }
 				sr_seed_colony_discovery = { DISCOVERY = utopia_glacier }
 				trigger_event = { id = space_race_colony_events.4 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_arcadia_planitia } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_arcadia_planitia }
+					sr_launch_site_departs = { BODY = mars }
+				}
 				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
+				sr_launch_window_gate_check = { BODY = mars }
 				sr_seed_colony_discovery = { DISCOVERY = arcadia_brines }
 				trigger_event = { id = space_race_colony_events.5 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_ceres } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_ceres }
+					sr_launch_site_departs = { BODY = ceres }
+				}
 				set_global_variable = { name = sr_colony_ceres value = yes }
+				sr_launch_window_gate_check = { BODY = ceres }
 				sr_seed_colony_discovery = { DISCOVERY = ceres_reservoir }
 				trigger_event = { id = space_race_colony_events.6 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_vesta } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_vesta }
+					sr_launch_site_departs = { BODY = vesta }
+				}
 				set_global_variable = { name = sr_colony_vesta value = yes }
+				sr_launch_window_gate_check = { BODY = vesta }
 				sr_seed_colony_discovery = { DISCOVERY = vesta_impactor }
 				trigger_event = { id = space_race_colony_events.7 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_psyche } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_psyche }
+					sr_launch_site_departs = { BODY = psyche }
+				}
 				set_global_variable = { name = sr_colony_psyche value = yes }
+				sr_launch_window_gate_check = { BODY = psyche }
 				sr_seed_colony_discovery = { DISCOVERY = psyche_metal }
 				trigger_event = { id = space_race_colony_events.8 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_pallas } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_pallas }
+					sr_launch_site_departs = { BODY = pallas }
+				}
 				set_global_variable = { name = sr_colony_pallas value = yes }
+				sr_launch_window_gate_check = { BODY = pallas }
 				sr_seed_colony_discovery = { DISCOVERY = pallas_water }
 				trigger_event = { id = space_race_colony_events.9 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_hygiea } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_hygiea }
+					sr_launch_site_departs = { BODY = hygiea }
+				}
 				set_global_variable = { name = sr_colony_hygiea value = yes }
+				sr_launch_window_gate_check = { BODY = hygiea }
 				trigger_event = { id = space_race_colony_events.10 }
 			}
 		}
@@ -879,43 +935,71 @@ sr_establish_colony_effect = {
 		limit = { global_var:sr_colonization_stage = 2 }
 		random_list = {
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_io } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_io }
+					sr_launch_site_departs = { BODY = jupiter }
+				}
 				set_global_variable = { name = sr_colony_io value = yes }
+				sr_launch_window_gate_check = { BODY = jupiter }
 				sr_seed_colony_discovery = { DISCOVERY = io_roof }
 				trigger_event = { id = space_race_colony_events.11 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_europa } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_europa }
+					sr_launch_site_departs = { BODY = jupiter }
+				}
 				set_global_variable = { name = sr_colony_europa value = yes }
+				sr_launch_window_gate_check = { BODY = jupiter }
 				sr_seed_colony_discovery = { DISCOVERY = europa_life }
 				sr_seed_colony_discovery = { DISCOVERY = europa_vents }
 				trigger_event = { id = space_race_colony_events.12 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_ganymede } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_ganymede }
+					sr_launch_site_departs = { BODY = jupiter }
+				}
 				set_global_variable = { name = sr_colony_ganymede value = yes }
+				sr_launch_window_gate_check = { BODY = jupiter }
 				sr_seed_colony_discovery = { DISCOVERY = ganymede_layers }
 				trigger_event = { id = space_race_colony_events.13 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_callisto } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_callisto }
+					sr_launch_site_departs = { BODY = jupiter }
+				}
 				set_global_variable = { name = sr_colony_callisto value = yes }
+				sr_launch_window_gate_check = { BODY = jupiter }
 				sr_seed_colony_discovery = { DISCOVERY = callisto_archive }
 				trigger_event = { id = space_race_colony_events.14 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_himalia } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_himalia }
+					sr_launch_site_departs = { BODY = jupiter }
+				}
 				set_global_variable = { name = sr_colony_himalia value = yes }
+				sr_launch_window_gate_check = { BODY = jupiter }
 				trigger_event = { id = space_race_colony_events.15 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_amalthea } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_amalthea }
+					sr_launch_site_departs = { BODY = jupiter }
+				}
 				set_global_variable = { name = sr_colony_amalthea value = yes }
+				sr_launch_window_gate_check = { BODY = jupiter }
 				trigger_event = { id = space_race_colony_events.16 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_venus } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_venus }
+					sr_launch_site_departs = { BODY = venus }
+				}
 				set_global_variable = { name = sr_colony_venus value = yes }
+				sr_launch_window_gate_check = { BODY = venus }
 				sr_seed_colony_discovery = { DISCOVERY = venus_waves }
 				trigger_event = { id = space_race_colony_events.17 }
 			}
@@ -926,36 +1010,59 @@ sr_establish_colony_effect = {
 		limit = { global_var:sr_colonization_stage = 3 }
 		random_list = {
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_mercury } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_mercury }
+					sr_launch_mercury_departs = yes
+				}
 				set_global_variable = { name = sr_colony_mercury value = yes }
 				sr_seed_colony_discovery = { DISCOVERY = mercury_archive }
 				trigger_event = { id = space_race_colony_events.18 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_titan } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_titan }
+					sr_launch_site_departs = { BODY = saturn }
+				}
 				set_global_variable = { name = sr_colony_titan value = yes }
+				sr_launch_window_gate_check = { BODY = saturn }
 				sr_seed_colony_discovery = { DISCOVERY = titan_chemistry }
 				trigger_event = { id = space_race_colony_events.19 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_enceladus } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_enceladus }
+					sr_launch_site_departs = { BODY = saturn }
+				}
 				set_global_variable = { name = sr_colony_enceladus value = yes }
+				sr_launch_window_gate_check = { BODY = saturn }
 				sr_seed_colony_discovery = { DISCOVERY = enceladus_life }
 				trigger_event = { id = space_race_colony_events.20 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_rhea } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_rhea }
+					sr_launch_site_departs = { BODY = saturn }
+				}
 				set_global_variable = { name = sr_colony_rhea value = yes }
+				sr_launch_window_gate_check = { BODY = saturn }
 				trigger_event = { id = space_race_colony_events.21 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_mimas } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_mimas }
+					sr_launch_site_departs = { BODY = saturn }
+				}
 				set_global_variable = { name = sr_colony_mimas value = yes }
+				sr_launch_window_gate_check = { BODY = saturn }
 				trigger_event = { id = space_race_colony_events.22 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_iapetus } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_iapetus }
+					sr_launch_site_departs = { BODY = saturn }
+				}
 				set_global_variable = { name = sr_colony_iapetus value = yes }
+				sr_launch_window_gate_check = { BODY = saturn }
 				trigger_event = { id = space_race_colony_events.23 }
 			}
 		}
@@ -965,35 +1072,59 @@ sr_establish_colony_effect = {
 		limit = { global_var:sr_colonization_stage = 4 }
 		random_list = {
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_titania } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_titania }
+					sr_launch_site_departs = { BODY = uranus }
+				}
 				set_global_variable = { name = sr_colony_titania value = yes }
+				sr_launch_window_gate_check = { BODY = uranus }
 				sr_seed_colony_discovery = { DISCOVERY = titania_ocean }
 				trigger_event = { id = space_race_colony_events.24 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_oberon } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_oberon }
+					sr_launch_site_departs = { BODY = uranus }
+				}
 				set_global_variable = { name = sr_colony_oberon value = yes }
+				sr_launch_window_gate_check = { BODY = uranus }
 				trigger_event = { id = space_race_colony_events.25 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_miranda } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_miranda }
+					sr_launch_site_departs = { BODY = uranus }
+				}
 				set_global_variable = { name = sr_colony_miranda value = yes }
+				sr_launch_window_gate_check = { BODY = uranus }
 				trigger_event = { id = space_race_colony_events.26 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_ariel } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_ariel }
+					sr_launch_site_departs = { BODY = uranus }
+				}
 				set_global_variable = { name = sr_colony_ariel value = yes }
+				sr_launch_window_gate_check = { BODY = uranus }
 				trigger_event = { id = space_race_colony_events.27 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_triton } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_triton }
+					sr_launch_site_departs = { BODY = neptune }
+				}
 				set_global_variable = { name = sr_colony_triton value = yes }
+				sr_launch_window_gate_check = { BODY = neptune }
 				sr_seed_colony_discovery = { DISCOVERY = triton_jet }
 				trigger_event = { id = space_race_colony_events.28 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_proteus } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_proteus }
+					sr_launch_site_departs = { BODY = neptune }
+				}
 				set_global_variable = { name = sr_colony_proteus value = yes }
+				sr_launch_window_gate_check = { BODY = neptune }
 				trigger_event = { id = space_race_colony_events.29 }
 			}
 		}
@@ -1003,29 +1134,49 @@ sr_establish_colony_effect = {
 		limit = { global_var:sr_colonization_stage = 5 }
 		random_list = {
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_pluto } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_pluto }
+					sr_launch_site_departs = { BODY = kuiper }
+				}
 				set_global_variable = { name = sr_colony_pluto value = yes }
+				sr_launch_window_gate_check = { BODY = kuiper }
 				sr_seed_colony_discovery = { DISCOVERY = pluto_antifreeze }
 				trigger_event = { id = space_race_colony_events.30 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_eris } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_eris }
+					sr_launch_site_departs = { BODY = kuiper }
+				}
 				set_global_variable = { name = sr_colony_eris value = yes }
+				sr_launch_window_gate_check = { BODY = kuiper }
 				trigger_event = { id = space_race_colony_events.31 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_makemake } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_makemake }
+					sr_launch_site_departs = { BODY = kuiper }
+				}
 				set_global_variable = { name = sr_colony_makemake value = yes }
+				sr_launch_window_gate_check = { BODY = kuiper }
 				trigger_event = { id = space_race_colony_events.32 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_haumea } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_haumea }
+					sr_launch_site_departs = { BODY = kuiper }
+				}
 				set_global_variable = { name = sr_colony_haumea value = yes }
+				sr_launch_window_gate_check = { BODY = kuiper }
 				trigger_event = { id = space_race_colony_events.33 }
 			}
 			10 = {
-				trigger = { NOT = { has_global_variable = sr_colony_sedna } }
+				trigger = {
+					NOT = { has_global_variable = sr_colony_sedna }
+					sr_launch_site_departs = { BODY = kuiper }
+				}
 				set_global_variable = { name = sr_colony_sedna value = yes }
+				sr_launch_window_gate_check = { BODY = kuiper }
 				trigger_event = { id = space_race_colony_events.34 }
 			}
 		}

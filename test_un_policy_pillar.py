@@ -51,6 +51,8 @@ GRANTS = {
     ("common/production_methods/unique_pms.txt", "pm_un_headquarters"): 1,
     ("common/production_methods/unique_pms.txt", "pm_wonder_peace_palace"): 0.5,
     ("common/production_methods/unique_pms.txt", "pm_wonder_palais_des_nations"): 0.5,
+    # The Antarctic Treaty's parties (the Global Commons, §4), applied at x1.
+    ("common/static_modifiers/te_global_commons_un_modifiers.txt", "un_antarctic_policy_modifier"): 0.25,
 }
 MAX_INSTITUTION_INVESTMENT = 9  # common/defines/extra_defines.txt
 

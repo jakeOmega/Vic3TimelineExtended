@@ -1,0 +1,220 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE UN LAYER — EVERY FIGURE
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
+# One place per number; the writers are in
+# common/scripted_effects/te_global_commons_un_effects.txt and the hook files
+# (te_seabed_un_hooks.txt, te_asat_un_hooks.txt), the tests in
+# common/scripted_triggers/te_global_commons_un_triggers.txt.
+# ============================================================================
+
+# ---- The seabed under the Law of the Sea: royalties (§3.3) ----------------------------
+
+# A Deep-Sea Mine level's base output value a week at base prices, on the
+# base method's proposed outputs (pm_ocean_mine after the §1.1 rebalance):
+#   Structural Metals (iron)            260 x  40 = 10,400
+#   Tech-Critical Metals                260 x  80 = 20,800
+#   Conductive and Base Metals (lead)   150 x  40 =  6,000
+#   Gold                                 50 x 100 =  5,000
+#   Chemical and Industrial Minerals     50 x  50 =  2,500
+#   (sulfur)                                        ------
+#                                                   44,700
+# Change the output figures here when the method changes: the royalty
+# follows them.
+te_seabed_level_output_value = {
+	value = 0
+	add = { value = 260 multiply = 40 }
+	add = { value = 260 multiply = 80 }
+	add = { value = 150 multiply = 40 }
+	add = { value = 50 multiply = 100 }
+	add = { value = 50 multiply = 50 }
+}
+
+# The royalty, as a share of that value (the draft Mining Code's ad valorem
+# rate is a few percent; spec §11 #7).
+te_seabed_royalty_rate = { value = 0.04 }
+
+# What one level pays a week: about 1,800.
+te_seabed_royalty_per_level = {
+	value = te_seabed_level_output_value
+	multiply = te_seabed_royalty_rate
+}
+
+# The country's Deep-Sea Mine levels. Scope: country
+te_seabed_ocean_mine_levels = {
+	value = 0
+	every_scope_state = {
+		limit = { is_coastal = yes }
+		every_scope_building = {
+			limit = { is_building_type = building_ocean_mine }
+			add = level
+		}
+	}
+}
+
+# A payer's royalty a week (te_seabed_royalty_payer): the multiplier of
+# te_seabed_royalty_modifier, cached as var:te_seabed_royalty_cached.
+# Scope: country
+te_seabed_royalty_weekly_value = {
+	value = te_seabed_ocean_mine_levels
+	multiply = te_seabed_royalty_per_level
+}
+
+# What the payers pay a week, all together: snapshotted monthly as
+# global_var:te_seabed_royalties_weekly, which the World Development Fund's pot
+# (un_dev_fund_pot_weekly_value) adds while the Fund stands, and the UN's
+# budget (un_budget_weekly_value) otherwise. Globals only.
+te_seabed_royalties_total_value = {
+	value = 0
+	every_country = {
+		limit = {
+			has_modifier = te_seabed_royalty_modifier
+			has_variable = te_seabed_royalty_cached
+		}
+		add = var:te_seabed_royalty_cached
+	}
+}
+
+# ---- The seabed regimes (§3.2) ------------------------------------------------------
+
+# The great powers on Unilateral Licensing. Two or more turn a regulated
+# seabed into a scramble (te_seabed_scramble_threshold). Globals only.
+te_seabed_unilateral_great_powers = {
+	value = 0
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			te_seabed_on_unilateral = yes
+		}
+		add = 1
+	}
+}
+
+te_seabed_scramble_threshold = { value = 2 }
+
+# A scramble returns to regulation this many months after fewer than two
+# great powers remain on Unilateral Licensing.
+te_seabed_scramble_return_months = { value = 24 }
+
+# The month a Scramble that has calmed this month returns to regulation.
+# Scope: any
+te_seabed_scramble_return_month_value = {
+	value = te_history_month_index
+	add = te_seabed_scramble_return_months
+}
+
+# ---- Defecting from the regulated seabed (§3.3) -------------------------------------
+
+# A party that switches to Unilateral Licensing while the Law of the Sea
+# governs the seabed: once, at the switch.
+te_seabed_defection_infamy = { value = 10 }
+te_seabed_defection_standing = { value = 5 }
+# Case strength, as the defiance record ("binding resolution refused").
+te_seabed_defection_case = { value = 10 }
+
+# A defector that leaves Unilateral Licensing is a party again this many
+# months later.
+te_seabed_party_cooldown_months = { value = 60 }
+
+# The month a defector leaving Unilateral Licensing now is a party again.
+# Scope: country
+te_seabed_party_cooldown_end_value = {
+	value = te_history_month_index
+	add = te_seabed_party_cooldown_months
+}
+
+# The months until a cooling defector is a party again (display). Scope: country
+te_seabed_party_cooldown_left = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_party_cooldown_end }
+		add = var:te_seabed_party_cooldown_end
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+
+# ---- The Antarctic research station (§4) --------------------------------------------
+
+# The upkeep: a tenth of a percent of GDP a year, billed by the week as the UN
+# programmes are (un_program_expense_value bills 0.5%), never less than the
+# floor. The floor is the limit for a small country: about thirty countries
+# run real stations.
+te_antarctic_station_upkeep_share = { value = 0.001 }
+te_antarctic_station_upkeep_floor = { value = 1000 }
+
+# Scope: country
+te_antarctic_station_upkeep_value = {
+	value = gdp
+	multiply = te_antarctic_station_upkeep_share
+	divide = 52
+	min = te_antarctic_station_upkeep_floor
+}
+
+# The AI opens a station only with a weekly surplus this many times the upkeep.
+te_antarctic_station_ai_surplus_factor = { value = 10 }
+
+# Scope: country
+te_antarctic_station_ai_surplus_needed = {
+	value = te_antarctic_station_upkeep_value
+	multiply = te_antarctic_station_ai_surplus_factor
+}
+
+# ---- The Antarctic Treaty (§4) ------------------------------------------------------
+
+# Denouncing it: once.
+te_antarctic_denounce_infamy = { value = 10 }
+te_antarctic_denounce_standing = { value = 5 }
+te_antarctic_denounce_case = { value = 10 }
+
+# The great powers outside the treaty that hold Southern licences. Two or more
+# and the treaty lapses (te_antarctic_lapse_threshold). Globals only.
+te_antarctic_outside_southern_great_powers = {
+	value = 0
+	every_country = {
+		limit = { te_antarctic_outside_holding_southern = yes }
+		add = 1
+	}
+}
+
+te_antarctic_lapse_threshold = { value = 2 }
+
+# ---- The Moratorium on Destructive Anti-Satellite Tests (§6.5) ------------------------
+
+# A party running a debris-removal method books this much toward the Delivery
+# pillar once a year, weighted by its weight in world affairs (as aid
+# delivered is: un_events.7's relief effort books 0.75, what can be spared
+# 0.25). At the four-year half-life a great power that keeps cleaning holds
+# about 1.6 points of the pillar.
+un_asat_cleaner_delivery_points = { value = 0.25 }
+
+# ---- The antarctic_policy_grant self-check (te_gc_un_selfcheck_policy_start, te_global_commons_un.1) ----
+
+# Scope: country
+te_gc_chk_policy_before_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_gc_chk_policy_before }
+		add = var:te_gc_chk_policy_before
+	}
+}
+
+# What the total gained since the add. Scope: country
+te_gc_chk_policy_added = {
+	value = modifier:country_un_authority_target_add
+	subtract = te_gc_chk_policy_before_value
+}
+
+# The grant, as un_antarctic_policy_modifier writes it (a literal there:
+# test_un_policy_pillar.py reads it). Change both together.
+te_gc_chk_policy_expected = { value = 0.25 }
+
+# How far the gain is from the grant. Scope: country
+te_gc_chk_policy_gap = {
+	value = te_gc_chk_policy_added
+	subtract = te_gc_chk_policy_expected
+	if = {
+		limit = { te_gc_chk_policy_added < te_gc_chk_policy_expected }
+		multiply = -1
+	}
+}

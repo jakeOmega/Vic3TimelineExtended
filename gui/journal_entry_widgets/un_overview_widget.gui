@@ -550,6 +550,30 @@ types un_overview_widget_types
 								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unep'), '(CFixedPoint)1' ) )]"
 							}
 						}
+						te_un_ov_agency = {
+							tooltip = "je_un_ov_agency_ats_tt"
+							blockoverride "agency_texture" {
+								texture = "gfx/interface/icons/un_icons/agency_ats.dds"
+							}
+							blockoverride "lit" {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_ats'), '(CFixedPoint)1' )]"
+							}
+							blockoverride "unlit" {
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_ats'), '(CFixedPoint)1' ) )]"
+							}
+						}
+						te_un_ov_agency = {
+							tooltip = "je_un_ov_agency_unoda_tt"
+							blockoverride "agency_texture" {
+								texture = "gfx/interface/icons/un_icons/agency_unoda.dds"
+							}
+							blockoverride "lit" {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoda'), '(CFixedPoint)1' )]"
+							}
+							blockoverride "unlit" {
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoda'), '(CFixedPoint)1' ) )]"
+							}
+						}
 					}
 					flowcontainer = {
 						direction = horizontal

@@ -1,0 +1,75 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: scripted GUIs (the Seabed tab of the
+# Timeline Extended window, gui/te_seabed_widgets.gui)
+# ============================================================================
+# The policy buttons call te_seabed_set_policy, the one policy change. The AI
+# chooses its policy in script, yearly (te_seabed_ai_choose_policy), so none
+# of these is the AI's: ai_is_valid = no.
+# ============================================================================
+
+te_seabed_policy_1_sgui = {
+	scope = country
+	is_shown = { te_global_commons_enabled = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_seabed_can_choose_survey = yes }
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_policy_effect_1_tt
+			te_seabed_set_policy = { POLICY = 1 }
+		}
+	}
+}
+
+te_seabed_policy_2_sgui = {
+	scope = country
+	is_shown = { te_global_commons_enabled = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_seabed_can_choose_sponsor = yes }
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_policy_effect_2_tt
+			te_seabed_set_policy = { POLICY = 2 }
+		}
+	}
+}
+
+te_seabed_policy_3_sgui = {
+	scope = country
+	is_shown = { te_global_commons_enabled = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_seabed_can_choose_unilateral = yes }
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_policy_effect_3_tt
+			te_seabed_set_policy = { POLICY = 3 }
+		}
+		# The defection price, shown before the switch: the tooltip above can't
+		# show it, because te_seabed_un_on_policy_change charges it only once the
+		# new policy holds (te_global_commons_un_triggers.txt).
+		if = {
+			limit = { te_seabed_defection_would_cost = yes }
+			custom_tooltip = te_seabed_defection_tt
+			custom_tooltip = te_seabed_defection_infamy_tt
+			custom_tooltip = te_seabed_defection_standing_tt
+			custom_tooltip = te_seabed_defection_case_tt
+		}
+	}
+}
+
+# Read-only: the overview's ITLOS party line (the UN hook decides).
+te_seabed_itlos_party_sgui = {
+	scope = country
+	is_shown = { te_seabed_itlos_party = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Read-only: the ITLOS party line shows while the UN can regulate the seabed.
+te_seabed_un_line_sgui = {
+	scope = country
+	is_shown = { has_game_rule = united_nations_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

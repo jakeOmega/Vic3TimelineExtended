@@ -1,0 +1,760 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: tuning and reads
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md § 2.
+# Mechanics: common/scripted_effects/te_global_commons_seabed_effects.txt,
+# which follows the Python model scripts/analysis/seabed_model.py step for
+# step (test_seabed_allocation.py). Every number the system uses is defined
+# here once; the model's constants restate them (POOLS, POLICY_FACTOR, ...),
+# and test_seabed_script.py holds the two to each other.
+#
+# Basins: 1 Pacific, 2 Atlantic, 3 Indian, 4 Arctic, 5 Southern (the state
+# variable te_seabed_basin, from gen_seabed_basins.py).
+# ============================================================================
+
+# ---- Pools (§ 2.2), in Deep-Sea Mine levels: first estimates ----
+te_seabed_pool_pacific = 300
+te_seabed_pool_atlantic = 250
+te_seabed_pool_indian = 200
+te_seabed_pool_arctic = 100
+te_seabed_pool_southern = 150
+
+# The reserved half of each pool under the Regulated regime (§ 3.2), rounded
+# down; the open half is the rest.
+te_seabed_pool_reserved_pacific = {
+	value = te_seabed_pool_pacific
+	divide = 2
+	floor = yes
+}
+te_seabed_pool_reserved_atlantic = {
+	value = te_seabed_pool_atlantic
+	divide = 2
+	floor = yes
+}
+te_seabed_pool_reserved_indian = {
+	value = te_seabed_pool_indian
+	divide = 2
+	floor = yes
+}
+te_seabed_pool_reserved_arctic = {
+	value = te_seabed_pool_arctic
+	divide = 2
+	floor = yes
+}
+te_seabed_pool_reserved_southern = {
+	value = te_seabed_pool_southern
+	divide = 2
+	floor = yes
+}
+
+# ---- Claim weight (§ 2.3): first estimates ----
+# Home basin: (coast weight × incorporated coastal states there + port levels
+# there + navy × its share of the country's incorporated coastal states)
+# × policy factor. Distant basin: distant navy share × navy × policy factor.
+te_seabed_coast_weight = 2
+te_seabed_distant_navy_share = 0.05
+# Added to Southern weight by an Antarctic research station (§ 4), after the
+# policy factor.
+te_seabed_station_weight = 5
+# Unilateral Licensing, or the Scramble regime for everyone: navy × this.
+te_seabed_assertive_navy_mult = 2
+# Policy factors (§ 2.5).
+te_seabed_policy_factor_survey = 0.25
+te_seabed_policy_factor_sponsor = 1
+te_seabed_policy_factor_unilateral = 1
+
+# ---- Policy (§ 2.5) ----
+# Influence held while the policy stands, as country_influence_cost_add on
+# te_seabed_policy_sponsor_cost / te_seabed_policy_unilateral_cost
+# (te_global_commons_seabed_modifiers.txt), which restate these figures;
+# test_seabed_script.py pins the pair.
+te_seabed_influence_sponsor = 50
+te_seabed_influence_unilateral = 150
+# Relations a year with each other Unilateral claimant sharing a home basin.
+# Applied as half from each side (te_seabed_unilateral_relations), since
+# relations are one figure for the pair.
+te_seabed_unilateral_relations = -10
+te_seabed_unilateral_relations_half = {
+	value = te_seabed_unilateral_relations
+	divide = 2
+}
+
+# ---- Long-haul (§ 2.4) ----
+# Display figure: te_seabed_long_haul (te_global_commons_seabed_modifiers.txt)
+# carries building_ocean_mine_throughput_add = -0.25 at multiplier 1.
+te_seabed_long_haul_penalty_pct = 25
+
+# ============================================================================
+# Reads
+# ============================================================================
+
+# ---- The policy and the regime (contract defaults: absent = 1) ----
+
+# Country scope. 1 Scientific Survey, 2 Sponsor Contractors, 3 Unilateral
+# Licensing.
+te_seabed_policy_value = {
+	value = 1
+	if = {
+		limit = { has_variable = te_seabed_policy }
+		value = var:te_seabed_policy
+	}
+}
+
+# Country scope, the policy before the last change (1 when none).
+te_seabed_policy_prev_value = {
+	value = 1
+	if = {
+		limit = { has_variable = te_seabed_policy_prev }
+		value = var:te_seabed_policy_prev
+	}
+}
+
+# Any scope. 1 Open, 2 Regulated, 3 Scramble.
+te_seabed_regime_value = {
+	value = 1
+	if = {
+		limit = { has_global_variable = te_seabed_regime }
+		value = global_var:te_seabed_regime
+	}
+}
+
+# Country scope: the policy factor.
+te_seabed_policy_factor = {
+	value = te_seabed_policy_factor_survey
+	if = {
+		limit = { te_seabed_policy_value = 2 }
+		value = te_seabed_policy_factor_sponsor
+	}
+	else_if = {
+		limit = { te_seabed_policy_value = 3 }
+		value = te_seabed_policy_factor_unilateral
+	}
+}
+
+# Country scope: the navy that counts toward claims (model: compute_weights).
+te_seabed_navy_effective = {
+	value = navy_size
+	if = {
+		limit = { te_seabed_navy_assertive = yes }
+		multiply = te_seabed_assertive_navy_mult
+	}
+}
+
+# ---- State reads (state scope) ----
+
+# Deep-Sea Mine levels in the state, built or queued (model: State.levels).
+te_seabed_state_levels = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_ocean_mine }
+		add = level_after_queued_constructions
+	}
+}
+
+# Licences recorded on the state, all basins (model: State.records).
+te_seabed_state_records = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_pacific }
+		add = var:te_seabed_lic_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_lic_atlantic }
+		add = var:te_seabed_lic_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lic_indian }
+		add = var:te_seabed_lic_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_lic_arctic }
+		add = var:te_seabed_lic_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lic_southern }
+		add = var:te_seabed_lic_southern
+	}
+}
+
+# The state's records from its own basin.
+te_seabed_state_local_records = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_basin
+			has_variable = te_seabed_lic_pacific
+		}
+		if = {
+			limit = { var:te_seabed_basin = 1 }
+			value = var:te_seabed_lic_pacific
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 2 }
+			value = var:te_seabed_lic_atlantic
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 3 }
+			value = var:te_seabed_lic_indian
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 4 }
+			value = var:te_seabed_lic_arctic
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 5 }
+			value = var:te_seabed_lic_southern
+		}
+	}
+}
+
+# Records from other basins (model: State.distant).
+te_seabed_state_distant_records = {
+	value = te_seabed_state_records
+	subtract = te_seabed_state_local_records
+}
+
+# Levels with no record (model: unrecorded).
+te_seabed_state_unrecorded = {
+	value = te_seabed_state_levels
+	subtract = te_seabed_state_records
+	min = 0
+}
+
+# Records above the levels: licences to give back.
+te_seabed_state_excess = {
+	value = te_seabed_state_records
+	subtract = te_seabed_state_levels
+	min = 0
+}
+
+# Port levels in the state (§ 2.3's "ports").
+te_seabed_state_port_levels = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_port }
+		add = level
+	}
+}
+
+# The owner's unbuilt share in this state's basin.
+te_seabed_state_owner_local_unbuilt = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_basin
+			owner = { has_variable = te_seabed_unbuilt_pacific }
+		}
+		if = {
+			limit = { var:te_seabed_basin = 1 }
+			owner = { add = var:te_seabed_unbuilt_pacific }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 2 }
+			owner = { add = var:te_seabed_unbuilt_atlantic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 3 }
+			owner = { add = var:te_seabed_unbuilt_indian }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 4 }
+			owner = { add = var:te_seabed_unbuilt_arctic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 5 }
+			owner = { add = var:te_seabed_unbuilt_southern }
+		}
+	}
+}
+
+# Long-Haul Seabed Operations' multiplier: the state's share of its licences
+# that are distant (§ 2.4). Read by te_seabed_refresh_long_haul from
+# on_monthly_pulse_state (ROOT = the state).
+te_seabed_long_haul_mult = {
+	value = 0
+	if = {
+		limit = { te_seabed_state_records > 0 }
+		value = te_seabed_state_distant_records
+		divide = te_seabed_state_records
+	}
+	min = 0
+	max = 1
+}
+
+# ---- Country reads (country scope) ----
+
+# Unbuilt shares, summed.
+te_seabed_unbuilt_total = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_pacific }
+		add = var:te_seabed_unbuilt_pacific
+		add = var:te_seabed_unbuilt_atlantic
+		add = var:te_seabed_unbuilt_indian
+		add = var:te_seabed_unbuilt_arctic
+		add = var:te_seabed_unbuilt_southern
+	}
+}
+
+# Levels in the country's coastal states without a record, built or queued.
+te_seabed_unrecorded_total = {
+	value = 0
+	every_scope_state = {
+		limit = { is_coastal = yes }
+		add = te_seabed_state_unrecorded
+	}
+}
+
+# Room (§ 2.4): the unbuilt shares less the levels not yet recorded, a copy of
+# solar_receiver_slots_remaining over those variables. One national number:
+# the building gate (te_seabed_gate) reads no basin.
+te_seabed_room = {
+	value = te_seabed_unbuilt_total
+	subtract = te_seabed_unrecorded_total
+}
+
+# Display: room, never below 0.
+te_seabed_room_shown = {
+	value = te_seabed_room
+	min = 0
+}
+
+# Licences the country holds and is entitled to, all basins (the tile's
+# "34 / 40"), as of the last recording and sharing.
+te_seabed_held_total = {
+	value = 0
+	every_scope_state = {
+		limit = { is_coastal = yes }
+		add = te_seabed_state_records
+	}
+}
+
+te_seabed_entitled_total = {
+	value = te_seabed_held_total
+	add = te_seabed_unbuilt_total
+}
+
+# Licences on distant basins (the tile's "6 distant").
+te_seabed_distant_total = {
+	value = 0
+	every_scope_state = {
+		limit = { is_coastal = yes }
+		add = te_seabed_state_distant_records
+	}
+}
+
+# The largest unbuilt share (te_seabed_take_most): repeated `min` clamps are
+# sequential, so this is the maximum of the five.
+te_seabed_unbuilt_max = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_pacific }
+		value = var:te_seabed_unbuilt_pacific
+		min = var:te_seabed_unbuilt_atlantic
+		min = var:te_seabed_unbuilt_indian
+		min = var:te_seabed_unbuilt_arctic
+		min = var:te_seabed_unbuilt_southern
+	}
+}
+
+# ---- The sharing's largest-remainder order (te_seabed_share_round) ----
+# order_by takes a script value: each country's fractional remainder in a
+# basin, and its negative for the smallest-first pass.
+te_seabed_frac_value_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_frac_pacific }
+		value = var:te_seabed_frac_pacific
+	}
+}
+te_seabed_frac_value_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_frac_atlantic }
+		value = var:te_seabed_frac_atlantic
+	}
+}
+te_seabed_frac_value_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_frac_indian }
+		value = var:te_seabed_frac_indian
+	}
+}
+te_seabed_frac_value_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_frac_arctic }
+		value = var:te_seabed_frac_arctic
+	}
+}
+te_seabed_frac_value_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_frac_southern }
+		value = var:te_seabed_frac_southern
+	}
+}
+te_seabed_frac_neg_value_pacific = {
+	value = 0
+	subtract = te_seabed_frac_value_pacific
+}
+te_seabed_frac_neg_value_atlantic = {
+	value = 0
+	subtract = te_seabed_frac_value_atlantic
+}
+te_seabed_frac_neg_value_indian = {
+	value = 0
+	subtract = te_seabed_frac_value_indian
+}
+te_seabed_frac_neg_value_arctic = {
+	value = 0
+	subtract = te_seabed_frac_value_arctic
+}
+te_seabed_frac_neg_value_southern = {
+	value = 0
+	subtract = te_seabed_frac_value_southern
+}
+
+# ============================================================================
+# Display (guarded reads: every value is 0 where its variable is missing, so
+# a panel or tooltip never logs "Failed to fetch variable")
+# ============================================================================
+
+# Country scope: unbuilt share, Pacific.
+te_seabed_unbuilt_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_pacific }
+		value = var:te_seabed_unbuilt_pacific
+	}
+}
+
+# Country scope: licences held, Pacific.
+te_seabed_held_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_held_pacific }
+		value = var:te_seabed_held_pacific
+	}
+}
+
+# Country scope: entitlement, Pacific.
+te_seabed_ent_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_pacific }
+		value = var:te_seabed_ent_pacific
+	}
+}
+
+# Country scope: claim weight, Pacific.
+te_seabed_w_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_w_pacific }
+		value = var:te_seabed_w_pacific
+	}
+}
+
+# State scope: licences recorded here from the Pacific.
+te_seabed_lic_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_pacific }
+		value = var:te_seabed_lic_pacific
+	}
+}
+
+# Any scope: the world's Pacific records at the last sharing.
+te_seabed_world_records_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_pacific }
+		value = global_var:te_seabed_records_pacific
+	}
+}
+
+# Country scope: unbuilt share, Atlantic.
+te_seabed_unbuilt_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_atlantic }
+		value = var:te_seabed_unbuilt_atlantic
+	}
+}
+
+# Country scope: licences held, Atlantic.
+te_seabed_held_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_held_atlantic }
+		value = var:te_seabed_held_atlantic
+	}
+}
+
+# Country scope: entitlement, Atlantic.
+te_seabed_ent_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_atlantic }
+		value = var:te_seabed_ent_atlantic
+	}
+}
+
+# Country scope: claim weight, Atlantic.
+te_seabed_w_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_w_atlantic }
+		value = var:te_seabed_w_atlantic
+	}
+}
+
+# State scope: licences recorded here from the Atlantic.
+te_seabed_lic_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_atlantic }
+		value = var:te_seabed_lic_atlantic
+	}
+}
+
+# Any scope: the world's Atlantic records at the last sharing.
+te_seabed_world_records_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_atlantic }
+		value = global_var:te_seabed_records_atlantic
+	}
+}
+
+# Country scope: unbuilt share, Indian.
+te_seabed_unbuilt_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_indian }
+		value = var:te_seabed_unbuilt_indian
+	}
+}
+
+# Country scope: licences held, Indian.
+te_seabed_held_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_held_indian }
+		value = var:te_seabed_held_indian
+	}
+}
+
+# Country scope: entitlement, Indian.
+te_seabed_ent_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_indian }
+		value = var:te_seabed_ent_indian
+	}
+}
+
+# Country scope: claim weight, Indian.
+te_seabed_w_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_w_indian }
+		value = var:te_seabed_w_indian
+	}
+}
+
+# State scope: licences recorded here from the Indian.
+te_seabed_lic_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_indian }
+		value = var:te_seabed_lic_indian
+	}
+}
+
+# Any scope: the world's Indian records at the last sharing.
+te_seabed_world_records_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_indian }
+		value = global_var:te_seabed_records_indian
+	}
+}
+
+# Country scope: unbuilt share, Arctic.
+te_seabed_unbuilt_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_arctic }
+		value = var:te_seabed_unbuilt_arctic
+	}
+}
+
+# Country scope: licences held, Arctic.
+te_seabed_held_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_held_arctic }
+		value = var:te_seabed_held_arctic
+	}
+}
+
+# Country scope: entitlement, Arctic.
+te_seabed_ent_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_arctic }
+		value = var:te_seabed_ent_arctic
+	}
+}
+
+# Country scope: claim weight, Arctic.
+te_seabed_w_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_w_arctic }
+		value = var:te_seabed_w_arctic
+	}
+}
+
+# State scope: licences recorded here from the Arctic.
+te_seabed_lic_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_arctic }
+		value = var:te_seabed_lic_arctic
+	}
+}
+
+# Any scope: the world's Arctic records at the last sharing.
+te_seabed_world_records_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_arctic }
+		value = global_var:te_seabed_records_arctic
+	}
+}
+
+# Country scope: unbuilt share, Southern.
+te_seabed_unbuilt_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_southern }
+		value = var:te_seabed_unbuilt_southern
+	}
+}
+
+# Country scope: licences held, Southern.
+te_seabed_held_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_held_southern }
+		value = var:te_seabed_held_southern
+	}
+}
+
+# Country scope: entitlement, Southern.
+te_seabed_ent_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_southern }
+		value = var:te_seabed_ent_southern
+	}
+}
+
+# Country scope: claim weight, Southern.
+te_seabed_w_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_w_southern }
+		value = var:te_seabed_w_southern
+	}
+}
+
+# State scope: licences recorded here from the Southern.
+te_seabed_lic_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_southern }
+		value = var:te_seabed_lic_southern
+	}
+}
+
+# Any scope: the world's Southern records at the last sharing.
+te_seabed_world_records_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_southern }
+		value = global_var:te_seabed_records_southern
+	}
+}
+
+# Country scope: 1 where the country borders the Pacific (a home basin).
+te_seabed_home_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_pacific }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Atlantic (a home basin).
+te_seabed_home_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_atlantic }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Indian (a home basin).
+te_seabed_home_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_indian }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Arctic (a home basin).
+te_seabed_home_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_arctic }
+		value = 1
+	}
+}
+
+# Country scope: 1 where the country borders the Southern (a home basin).
+te_seabed_home_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_southern }
+		value = 1
+	}
+}
+
+# State scope: the State Panel's Seabed Licences tile shows (spec § 2.7): the
+# rule on, a coastal state, an owner that has taken part in a sharing.
+te_seabed_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			te_global_commons_enabled = yes
+			is_coastal = yes
+			owner = { has_variable = te_seabed_shared }
+		}
+		value = 1
+	}
+}
+
+# State scope, for the tile's hover: the state's basin, 0 when it has none yet.
+te_seabed_state_basin_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_basin }
+		value = var:te_seabed_basin
+	}
+}

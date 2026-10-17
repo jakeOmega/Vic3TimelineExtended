@@ -1,0 +1,46 @@
+﻿namespace = te_global_commons_un
+
+# ============================================================================
+# THE GLOBAL COMMONS: THE UN LAYER — HIDDEN EVENTS
+# ============================================================================
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §4. The UN's
+# Assembly business for the two new conventions (un_events.40 and .41) is in
+# events/un_events.txt beside every other convention's.
+# ============================================================================
+
+# antarctic_policy_grant's verdict (te_gc_un_selfcheck_policy_start), a week
+# after a party first gained un_antarctic_policy_modifier. OK: the country's
+# country_un_authority_target_add rose by the grant, so the Policy pillar sums
+# a script-only type added by add_modifier. BROKEN: it did not; the treaty's
+# Policy term and every other modifier grant to the pillar need checking
+# (docs/testing/global-commons-playtest.md, Self-checks).
+te_global_commons_un.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_gc_chk_policy_before
+				has_modifier = un_antarctic_policy_modifier
+			}
+			if = {
+				limit = { te_gc_chk_policy_gap < 0.01 }
+				debug_log = "TE_SELF_CHECK OK antarctic_policy_grant added=[THIS.ScriptValue('te_gc_chk_policy_added')|2] expected=[THIS.ScriptValue('te_gc_chk_policy_expected')|2] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN antarctic_policy_grant added=[THIS.ScriptValue('te_gc_chk_policy_added')|2] expected=[THIS.ScriptValue('te_gc_chk_policy_expected')|2] (a whole-step gap is a law change in the week; otherwise the pillar does not see a script-only type from add_modifier) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+		}
+		else = {
+			# The grant went in the week (the treaty denounced or lapsed):
+			# re-arm for a later party.
+			remove_global_variable = te_gc_selfcheck_policy_done
+		}
+		if = {
+			limit = { has_variable = te_gc_chk_policy_before }
+			remove_variable = te_gc_chk_policy_before
+		}
+	}
+}

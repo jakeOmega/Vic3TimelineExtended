@@ -238,6 +238,8 @@ un_regime_any_convention = {
 		has_global_variable = un_agency_icc
 		has_global_variable = un_agency_ccd
 		has_global_variable = un_agency_tpnw
+		has_global_variable = un_agency_ats
+		has_global_variable = un_agency_unoda
 	}
 }
 
@@ -261,6 +263,7 @@ un_regime_has_terms = {
 		has_modifier = un_regime_space_weapon_modifier
 		has_modifier = un_regime_heritage_site_modifier
 		has_modifier = un_regime_cultural_hegemon_modifier
+		has_modifier = un_regime_antarctic_station_modifier
 		has_modifier = un_regime_shared_intelligence_modifier
 		has_modifier = un_regime_colony_liberty_modifier
 	}
@@ -291,6 +294,8 @@ un_chamber_party_to_a_convention = {
 		has_modifier = un_narcotics_control_modifier
 		has_modifier = un_cultural_diversity_modifier
 		has_modifier = un_nuclear_ban_modifier
+		has_modifier = un_antarctic_treaty_modifier
+		has_modifier = un_asat_moratorium_modifier
 		has_modifier = un_regime_colonial_pressure_modifier
 		has_modifier = un_regime_colony_liberty_modifier
 	}

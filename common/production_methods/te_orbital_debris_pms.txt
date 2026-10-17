@@ -1,0 +1,111 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS REMOVAL — the Space Program's cleanup methods (Global Commons § 6.4)
+# ============================================================================
+# The production methods of pmg_space_program_debris_removal
+# (te_orbital_debris_pmgs.txt), a secondary group on building_space_program.
+# Each removes debris through country_orbital_debris_removal_add (points a
+# month, workforce-scaled, so a half-staffed programme removes half) and
+# carries a little prestige. The removal is summed by the global monthly pulse
+# and taken from the high pool first (te_orbital_debris_effects.txt).
+#
+#   method                  gate                     Launch Capacity/wk  removal/mo  LC per point
+#   None (default)          -                        0                   0           -
+#   Active Debris Removal   reusable_rocketry        300                 0.05        ~26,000
+#   Laser Broom             directed_energy_weapons  300 (+500 power)    0.15        ~8,700
+#   Fusion Sweepers         compact_fusion_reactors  150                 0.5         ~1,300
+#
+# The Space Elevator doubles removal (+10% per fully staffed level, up to
+# +100%: pm_space_elevator, te_debris_removal_mult_cap), and its own Launch
+# Capacity makes every method cheaper in its market.
+#
+# The weekly Launch Capacity figures are mirrored by te_debris_units_*
+# (te_orbital_debris_values.txt) for the AI's bill; test_orbital_debris.py
+# holds them equal. No method employs anyone: the programme's own mission
+# method staffs the building, and the debris methods ride on its workforce
+# (pm_employment_audit stays clean).
+# ============================================================================
+
+pm_debris_removal_none = {
+	texture = "gfx/interface/icons/production_method_icons/no_automation.dds"
+}
+
+# Each method's prestige is not here but in te_debris_removal_method_prestige,
+# applied from script (te_debris_refresh_cleaner_prestige): the group's
+# ai_selection = most_productive would otherwise give the AI's building
+# manager a reason to switch removal on at any debris level, around the
+# decision te_decision_debris_removal and its index gate (spec § 6.4).
+pm_debris_active_removal = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p1.dds"
+
+	unlocking_technologies = {
+		reusable_rocketry
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 300                # Price:  200, Total cost: 60000.0 (100.00%)
+			# Output goods
+			# Total input cost: 60000.0
+			# Total output cost: 0
+			# Profit: -60000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_orbital_debris_removal_add = 0.05
+		}
+	}
+}
+
+pm_debris_laser_broom = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p2.dds"
+
+	unlocking_technologies = {
+		directed_energy_weapons
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 300                # Price:  200, Total cost: 60000.0 (80.00%)
+			goods_input_electricity_add = 500                    # Price:   30, Total cost: 15000.0 (20.00%)
+			# Output goods
+			# Total input cost: 75000.0
+			# Total output cost: 0
+			# Profit: -75000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_orbital_debris_removal_add = 0.15
+		}
+	}
+}
+
+pm_debris_fusion_sweepers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p5.dds"
+
+	unlocking_technologies = {
+		compact_fusion_reactors
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 150                # Price:  200, Total cost: 30000.0 (100.00%)
+			# Output goods
+			# Total input cost: 30000.0
+			# Total output cost: 0
+			# Profit: -30000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_orbital_debris_removal_add = 0.5
+		}
+	}
+}

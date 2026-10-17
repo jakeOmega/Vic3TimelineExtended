@@ -1245,6 +1245,9 @@ je_space_race_interstellar_results = {
 # Stage 3: Mercury & Saturn System
 # Stage 4: Uranus & Neptune Systems
 # Stage 5: Kuiper Belt & Beyond
+# Launch windows (Global Commons § 5): each world but Mercury is reached only
+# in its launch window until Asteroid Mining (off-window at a premium) or
+# fusion drives (no windows); see sr_launch_window_effects.txt.
 # ===========================================
 je_space_race_solar_colonization = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
@@ -1331,7 +1334,9 @@ je_space_race_solar_colonization = {
 			# bar's baseline; this bar restarts at every colony, so it would
 			# read negative for the rest of the game. So a colony-less
 			# programme restarts, as it always did, and a revolution costs it
-			# the progress towards its first colony.
+			# the progress towards its first colony. The whole fleets it had
+			# staged in orbit are kept apart first and come back with its next
+			# launch month (sr_launch_bank_staged_fleets, Global Commons § 5.2).
 			if = { # REVIEWED 2026-09-26: deliberate reset of a bar input, see above
 				limit = {
 					OR = {
@@ -1339,6 +1344,7 @@ je_space_race_solar_colonization = {
 						NOT = { sr_has_space_colony = yes }
 					}
 				}
+				sr_launch_bank_staged_fleets = yes
 				set_variable = { name = sr_progress_solar_colonization value = 0 }
 			}
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
@@ -1415,6 +1421,8 @@ je_space_race_solar_colonization = {
 		sr_report_program_loss = { MILESTONE = solar_colonization }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
+			# Fleets staged in orbit wait for the programme to restart.
+			sr_launch_bank_staged_fleets = yes
 			sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
 		}
 	}
@@ -1446,20 +1454,14 @@ je_space_race_solar_colonization = {
 							}
 						}
 					}
-					# Bar-fill detection: when progress reaches goal, establish a colony and reset
-					if = {
-						limit = {
-							has_variable = sr_progress_solar_colonization
-							var:sr_progress_solar_colonization >= sr_solar_colonization_goal
-						}
-						# Save pre-stage-change goal before colony effect (which may advance the stage and raise the goal)
-						set_variable = { name = sr_goal_before_colony value = sr_solar_colonization_goal }
-						# Establish a colony at a random unclaimed location in the current stage
-						sr_establish_colony_effect = yes
-						# Reset progress (preserve overflow using the pre-advancement goal)
-						change_variable = { name = sr_progress_solar_colonization subtract = var:sr_goal_before_colony }
-						remove_variable = sr_goal_before_colony
-					}
+					# The month's launch (Global Commons § 5.2, sr_launch_window_effects.txt):
+					# the bar fills past the goal with no cap, and progress past it is
+					# fleets staged in orbit. One colony a month at most, founded when
+					# staged progress covers goal x (1 + premium) for the stage's cheapest
+					# site that can depart: in its launch window, any month with fusion
+					# drives, or outside it at the premium with Asteroid Mining when the
+					# approach's test passes. The overflow is kept, as it always was.
+					sr_launch_month = yes
 				}
 			}
 			# Once every world is claimed, the programme is over for every colony
