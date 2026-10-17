@@ -1,0 +1,107 @@
+﻿# ============================================================================
+# DIPLOMATIC ACTION: Administer Seabed Claims (seabed claims, phase 2)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md
+# § 5.2; model: scripts/analysis/seabed_model.py § SUBJECTS. An overlord's
+# pact with a direct subject, modelled on vanilla raise_payments without its
+# DLC gate. While it stands the subject's unused seabed claims pass to the
+# overlord at once and after every sharing, with no total
+# (te_seabed_pact_start, te_seabed_pass_subject_claims), and the licences the
+# overlord builds on them count as the subject's holdings at the sharing. The
+# subject keeps its own licences. Only the overlord starts or ends it.
+# Liberty desire rises at Raise Payments' rate, relations fall as they do.
+# ============================================================================
+te_seabed_administer_claims = {
+	groups = {
+		overlord
+	}
+	requires_approval = no
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/raise_payments.dds"
+
+	selectable = {
+		te_global_commons_enabled = yes
+	}
+
+	potential = {
+		te_global_commons_enabled = yes
+		te_seabed_is_claimant = yes
+		scope:target_country = {
+			is_direct_subject_of = root
+			NOT = { is_diplomatic_play_enemy_of = root }
+			NOR = {
+				is_subject_type = subject_type_protectorate
+				is_subject_type = subject_type_personal_union
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = te_seabed_administer_subject_claimant_tt
+			scope:target_country = { te_seabed_is_claimant = yes }
+		}
+	}
+
+	accept_effect = {
+		custom_tooltip = {
+			text = te_seabed_administer_accept_tt
+			scope:target_country = { save_scope_as = te_sb_subject }
+			te_seabed_pact_start = yes
+		}
+	}
+
+	pact = {
+		cost = 25
+
+		maintenance_paid_by = first_country
+		relations_progress_per_day = -1
+
+		second_modifier = {
+			country_liberty_desire_add = 0.10
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE"
+					NOT = { has_war_with = scope:target_country }
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = te_seabed_administer_subject_tt
+					scope:target_country = { is_direct_subject_of = root }
+				}
+			}
+		}
+	}
+
+	ai = {
+		max_influence_spending_fraction = 0.1
+
+		evaluation_chance = {
+			value = 0.25
+		}
+
+		propose_score = {
+			value = 10
+		}
+
+		# A subject with claims it isn't using, content enough to bear it.
+		will_propose = {
+			exists = scope:target_country
+			scope:target_country ?= {
+				te_seabed_own_claims_total > 0
+				liberty_desire < 25
+			}
+		}
+
+		will_break = {
+			scope:target_country ?= { liberty_desire >= 50 }
+		}
+	}
+}

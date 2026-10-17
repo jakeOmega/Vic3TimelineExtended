@@ -18,8 +18,8 @@ game rule. A directed article binds one side, the conceding country, and gives
 something to the other. An enforceable article can also be demanded as a war
 goal. The draft shows each article's influence cost and who pays it. A demand
 is paid for by the country making it, so Seize Company, Disband Company, Return
-Cultural Property and Surrender a Monument cost the conceding country no
-influence.
+Cultural Property, Surrender a Monument and the Lease Seabed Claims articles
+cost the conceding country no influence.
 
 ### Choosing a company or state for an article
 
@@ -123,6 +123,7 @@ The remaining articles belong to systems with chapters of their own.
 | Nuclear Disarmament, Nuclear Program Freeze, Nuclear Program Aid, Nuclear Guarantee, Nuclear Security Assistance, Nuclear Arms Limitation | Nuclear Weapons | [Nuclear weapons](14-nuclear.md) |
 | Require UN Membership | United Nations | [The United Nations](10-united-nations.md) |
 | Enforce Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
+| Lease Pacific, Atlantic, Indian, Arctic and Southern Seabed Claims | Global Commons | [The extended timeline](02-timeline.md#leasing-seabed-claims) |
 
 ### Treaty article events
 
@@ -480,7 +481,9 @@ borrow](04-banking.md#what-your-government-pays-to-borrow)).
 
 Colonial Culture Change lets an overlord with three times a colonial subject's
 prestige replace the subject's primary cultures and religion with its own, at
-+20 liberty desire. Covert operations are in [Cultural hegemony and covert
++20 liberty desire. Administer Seabed Claims lets an overlord take its
+subject's unused seabed claims while it stands (see [Leasing seabed
+claims](02-timeline.md#leasing-seabed-claims)). Covert operations are in [Cultural hegemony and covert
 warfare](11-influence.md), nuclear warnings and strikes in [Nuclear
 weapons](14-nuclear.md), and UN lobbying in [The United
 Nations](10-united-nations.md).

@@ -51,11 +51,14 @@ holding fee, Sponsor's protection, the policy lock and the panel
 | `TE_SELF_CHECK … seabed_cap` | each yearly sharing after the first (the global monthly pulse of a new year), after every participant has recorded. OK logs once a game, and only with licences recorded somewhere; BROKEN every year it fails | every basin's records are within last year's ceiling (its pool, or its grandfathered records if more) plus what has been recorded against no share since (`slack` ≥ 0 for all five); no monthly recording grandfathered a state that carries a stamp (`stamped_noshare=0`); no participant leaves a level unlicensed while it still holds unbuilt share (`escaped=0`). `pending` counts levels waiting for a licence because their owner queued past its room (the gate's under-construction branch): expected, not BROKEN | `stamped_noshare` above 0: a stamped state's levels went against no share, the review's H1 leak (a level a month through the gate's second branch), which the no-share count in `slack` would absorb. `escaped` above 0: a level escaped recording although its owner had share (a state without a basin variable, or a building the walk can't see). A negative `slack`: a basin's records grew past its ceiling some other way | read the basin's states in the variable inspector: which states hold records beyond their levels, and whose shares went negative. The model (`scripts/analysis/seabed_model.py`) is the reference; reproduce the case there first (`UnderConstructionBranchTest` is the H1 case) |
 | `TE_SELF_CHECK START/OK/BROKEN seabed_licence_follows_state` | once a game: `START` when the first state that held licences at a recording changes owner (inside `on_state_owner_change`), the verdict at the first global monthly pulse a month or more later | the state's `te_seabed_lic_*` and `te_seabed_holder` read back inside the hook and again a month later: a state keeps its variables when it changes owner (the engine fact § 2.4 rests on; Grand Monuments relies on it too) | `BROKEN` at once: the hook found a watched state with no records or no stamp, so the variables were gone before the hook ran. `BROKEN` a month later: they read back in the hook but were gone after | keep the records in **global variables per coastal state region**, with the holder stamp beside them: `gen_seabed_basins.py` emits, per coastal region, a branch that reads and writes `te_seabed_lic_<basin>_<REGION>` and `te_seabed_holder_<REGION>` (an `if` chain on `state_region = s:STATE_X`, as the basin effect is), and the state steps of `te_seabed_record_country` and `te_seabed_on_state_owner_change` call it in place of the state variables. A region split between two owners then shares one record, charged to the larger part's owner. Not implemented |
 | `TE_SELF_CHECK … seabed_floor_fits` | after each sharing in which a Sponsor Contractors floor protected something (`protected` above 0 in some basin); OK once a game, BROKEN every sharing it fails | every basin's entitlements stay within its pool, or its holdings if more, after the floors are fitted (`te_seabed_fit_floors` scaled the protected parts down where they didn't fit) | `over` above 0: a basin's unbuilt claims exceed what its pool leaves beyond its licences, so a floor pushed shares past the pool | reproduce the basin in the model (`FloorTest.test_floors_scale_down_to_fit`); read each participant's `te_seabed_fz_<basin>` and `te_seabed_floor_<basin>` in the variable inspector |
+| `TE_SELF_CHECK … seabed_lease_entry` | a day after a Lease Seabed Claims article comes into force (`te_seabed.1`); OK once a game, BROKEN each time it fails | the start event found the in-force article naming the lessee, read its lessor and quantity (`n`), and moved up to that many of the lessor's own claims (`moved`) | no such article a day after entry: the lessee's `every_scope_treaty` walk, the article's `target_country` test or `input_quantity` doesn't read as assumed (or the treaty ended within the day) | read the quantity in the hook instead (`scope:article_options.input_quantity`, unproven), or start the lease at the next sharing, whose walk reads the same article (`te_seabed_lease_shift_basin`) |
+| `TE_SELF_CHECK … seabed_pact_read` | a day after an overlord takes Administer Seabed Claims (`te_seabed.2`); OK once a game, BROKEN each time it fails | the subject sees the pact from its own side (`has_diplomatic_pact`), as every sharing reads it (`te_seabed_pact_stands`) | the pact isn't seen from the subject's side, or the overlord ended it within the day: then no sharing passes claims or counts the licences built on them as the subject's | read the pact from the overlord's side (iterate its `every_direct_subject` in `te_seabed_pass_subject_claims` and `te_seabed_lease_shift_held`) |
 
 The checks exclude the degenerate case: `seabed_cap` waits for a previous sharing (the ceilings) and
 logs OK only with records in the world; `seabed_licence_follows_state` watches only states the
 monthly recording saw holding licences (a global list kept apart from the states' own variables);
-`seabed_floor_fits` runs only after a sharing in which some floor protected a claim.
+`seabed_floor_fits` runs only after a sharing in which some floor protected a claim; `seabed_pact_read`
+gives no verdict for a country no longer a subject.
 
 ### Play-test list
 
@@ -183,6 +186,40 @@ monthly recording saw holding licences (a global list kept apart from the states
 20. **Sponsor's cost at scale.** In a late-game save, a great power on Sponsor Contractors with most
     of a basin's claims: its influence bill (50 + 0.5 a claim) should be noticeable but affordable;
     tune `te_seabed_influence_per_claim` from the figures.
+21. **A lease at entry and at the sharing.** Sign a treaty with Lease Pacific Seabed Claims for 20
+    claims to us: a day later our Pacific claims rise by up to 20 and the lessor's fall as much, and
+    the overview's claims hover says how many are leased. Queue levels past our own claims: the
+    leased count falls and the licences hover counts those built on the lease. At the next sharing
+    the lease is topped back up to 20 less what we built on it, from the lessor's new share, and the
+    lessor's own share is short by those licences, not ours.
+22. **An enforced lease from a war.** Win a war with Lease <Basin> Seabed Claims as a war goal: the
+    loser's claims pass at once. An AI presses it only against a country with claims there, and
+    only when it is short of claims itself.
+23. **A lease ends.** Break the treaty, or let it lapse: our unused leased claims stay until the
+    next sharing, then go back; the levels we built on it keep their licences, and the lessor's
+    share at that sharing still pays for them (a third party's share doesn't move). A new lease from
+    the same lessor is offered; one from another lessor in that basin is refused, with the tooltip
+    naming the old lease. A lessor annexed by a third country clears the record at the next
+    sharing. Re-sign with the same lessor before the next sharing: check the new lease's claims
+    arrive (the old lease's licences may still count against the new total until that sharing).
+24. **Administer Seabed Claims.** As an overlord with Abyssal Plain Mining, take the action on a
+    puppet or dominion that claims: its claims read 0 and ours rise by them, its liberty desire
+    rises and relations fall. A protectorate or personal union isn't offered it; Raise Subject
+    Payments' DLC isn't needed. Build on the passed claims: the subject's share at the next sharing
+    pays for those licences. End it: the passed claims stay until the next sharing, then the
+    subject keeps its own, less the licences built on them; take it again and nothing is lost or
+    gained.
+25. **Unincorporated coast.** A country whose only coast in a basin is unincorporated: the basin is
+    home, its weight hover shows the coast at half ("1.5 coast" for one incorporated and one
+    unincorporated state) with the ports in full, and the Free hover lists the unincorporated states
+    too: a level there works at full throughput.
+26. **AI leases and pacts, observer run.** Over a few decades past era 11, AIs lease out claims they
+    aren't using and ask for them when short; a lessor shouldn't lease away claims it then needs
+    (if it does, raise `te_seabed_ai_lease_margin`). AI overlords take Administer Seabed Claims on
+    content subjects and end it as liberty desire climbs. Watch for an AI overlord taking and
+    returning it on the same subject year after year (will_propose below 25 liberty desire,
+    will_break at 50): it should now cost a third party nothing, but it churns. Watch, too, AIs
+    leasing out almost all their claims as soon as they have the technology (nothing queued yet).
 
 ### Engine facts the build assumes, unverified
 
@@ -210,6 +247,15 @@ monthly recording saw holding licences (a global list kept apart from the states
   Unilateral carve-out); and a state saved with `save_temporary_scope_as` inside a tooltip-only
   `ordered_scope_state` prints through `SCOPE.sState(...)` (the UN mission list's pattern, used for
   countries). Items 13, 17 and 18 test them.
+- A Lease Seabed Claims article's `on_entry_into_force` runs with `scope:article_options`'
+  `source_country` and `target_country` bound (the guard skips the designer's preview pass), and a
+  day later the lessee's `every_scope_treaty` / `every_scope_article` walk finds the article with
+  `target_country = scope:x` and reads `input_quantity` (self-check `seabed_lease_entry`).
+- `quantity_max_value` reads ROOT as the source, as vanilla Money Transfer's `fixed_income` does.
+- A no-approval pact action's `accept_effect` runs with ROOT the overlord and
+  `scope:target_country` the subject, as vanilla Rivalry's does, and `has_diplomatic_pact` sees the
+  pact from the subject's side (self-check `seabed_pact_read`); `every_direct_subject` visits an
+  overlord's direct subjects.
 - The policy cost's multiplier, `var:te_seabed_policy_cost_cached`, reads the variable on ROOT, and
   every caller that adds the modifier has ROOT = the country (item 8: the figure in the influence
   breakdown).
