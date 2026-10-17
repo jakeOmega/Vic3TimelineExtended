@@ -923,3 +923,661 @@ te_seabed_state_basin_disp = {
 		value = var:te_seabed_basin
 	}
 }
+
+# ============================================================================
+# The Seabed panel (seabed claims spec § 3): guarded reads, 0 (or the stated
+# default) where a variable is missing
+# ============================================================================
+
+# Any scope: the last sharing's month and year, for the table's "as of".
+te_seabed_asof_year_disp = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_last_sharing_month }
+		value = global_var:te_seabed_last_sharing_month
+		divide = 12
+		floor = yes
+	}
+}
+
+# 1 January .. 12 December; 0 before the first sharing.
+te_seabed_asof_month_disp = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_last_sharing_month }
+		value = global_var:te_seabed_last_sharing_month
+		subtract = {
+			value = te_seabed_asof_year_disp
+			multiply = 12
+		}
+		add = 1
+	}
+}
+
+# Country scope: at most what the next January sharing can take, over every
+# basin: all our claims off Sponsor Contractors, a quarter of them (rounded up)
+# on it (te_seabed_set_floors keeps te_seabed_floor_keep, rounded down).
+te_seabed_jan_loss_disp = {
+	value = 0
+	add = te_seabed_jan_loss_pacific
+	add = te_seabed_jan_loss_atlantic
+	add = te_seabed_jan_loss_indian
+	add = te_seabed_jan_loss_arctic
+	add = te_seabed_jan_loss_southern
+}
+
+# ---- Pacific ----
+
+# Country scope: what the next January sharing can take of our claims here.
+te_seabed_jan_loss_pacific = {
+	value = te_seabed_unbuilt_disp_pacific
+	if = {
+		limit = {
+			NOT = { te_seabed_floor_void = yes }
+		}
+		subtract = {
+			value = te_seabed_unbuilt_disp_pacific
+			multiply = te_seabed_floor_keep
+			floor = yes
+		}
+	}
+}
+
+# Country scope: our share of the basin's claim weight, in percent.
+te_seabed_weight_pct_disp_pacific = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_pacific
+			has_global_variable = te_seabed_world_w_pacific
+			global_var:te_seabed_world_w_pacific > 0
+		}
+		value = var:te_seabed_w_pacific
+		divide = global_var:te_seabed_world_w_pacific
+		multiply = 100
+	}
+}
+
+# Country scope: our entitlement here, the rivals ranking's order.
+te_seabed_ent_value_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_pacific }
+		value = var:te_seabed_ent_pacific
+	}
+}
+
+# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+te_seabed_need_navy_disp_pacific = {
+	value = -2
+	if = {
+		limit = { has_variable = te_seabed_need_navy_pacific }
+		value = var:te_seabed_need_navy_pacific
+	}
+}
+
+# Country scope: licences on our queued levels here, and all our licences here.
+te_seabed_queued_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_queued_pacific }
+		value = var:te_seabed_queued_pacific
+	}
+}
+
+te_seabed_our_lic_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_now_pacific }
+		value = var:te_seabed_lic_now_pacific
+	}
+}
+
+# Any scope / country scope: the pool bar's whole (the pool, or the shares if
+# grandfathered holdings put them over it), and the rivals' licences as of the
+# last sharing.
+te_seabed_bar_pool_pacific = {
+	value = te_seabed_pool_pacific
+	if = {
+		limit = { has_global_variable = te_seabed_ceiling_pacific }
+		value = global_var:te_seabed_ceiling_pacific
+	}
+}
+
+te_seabed_rival_lic_pacific = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_pacific }
+		value = global_var:te_seabed_records_pacific
+		subtract = te_seabed_held_disp_pacific
+		min = 0
+	}
+}
+
+# Country scope: the pool bar's cumulative fractions, 0..1: our built
+# licences, + our queued licences, + our claims, + rivals' licences; the bar's
+# background is rivals' claims (up for grabs).
+te_seabed_bar_pacific_1 = {
+	value = te_seabed_our_lic_pacific
+	subtract = te_seabed_queued_disp_pacific
+	divide = te_seabed_bar_pool_pacific
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_pacific_2 = {
+	value = te_seabed_our_lic_pacific
+	divide = te_seabed_bar_pool_pacific
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_pacific_3 = {
+	value = te_seabed_our_lic_pacific
+	add = te_seabed_unbuilt_disp_pacific
+	divide = te_seabed_bar_pool_pacific
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_pacific_4 = {
+	value = te_seabed_our_lic_pacific
+	add = te_seabed_unbuilt_disp_pacific
+	add = te_seabed_rival_lic_pacific
+	divide = te_seabed_bar_pool_pacific
+	min = 0
+	max = 1
+}
+
+# ---- Atlantic ----
+
+# Country scope: what the next January sharing can take of our claims here.
+te_seabed_jan_loss_atlantic = {
+	value = te_seabed_unbuilt_disp_atlantic
+	if = {
+		limit = {
+			NOT = { te_seabed_floor_void = yes }
+		}
+		subtract = {
+			value = te_seabed_unbuilt_disp_atlantic
+			multiply = te_seabed_floor_keep
+			floor = yes
+		}
+	}
+}
+
+# Country scope: our share of the basin's claim weight, in percent.
+te_seabed_weight_pct_disp_atlantic = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_atlantic
+			has_global_variable = te_seabed_world_w_atlantic
+			global_var:te_seabed_world_w_atlantic > 0
+		}
+		value = var:te_seabed_w_atlantic
+		divide = global_var:te_seabed_world_w_atlantic
+		multiply = 100
+	}
+}
+
+# Country scope: our entitlement here, the rivals ranking's order.
+te_seabed_ent_value_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_atlantic }
+		value = var:te_seabed_ent_atlantic
+	}
+}
+
+# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+te_seabed_need_navy_disp_atlantic = {
+	value = -2
+	if = {
+		limit = { has_variable = te_seabed_need_navy_atlantic }
+		value = var:te_seabed_need_navy_atlantic
+	}
+}
+
+# Country scope: licences on our queued levels here, and all our licences here.
+te_seabed_queued_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_queued_atlantic }
+		value = var:te_seabed_queued_atlantic
+	}
+}
+
+te_seabed_our_lic_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_now_atlantic }
+		value = var:te_seabed_lic_now_atlantic
+	}
+}
+
+# Any scope / country scope: the pool bar's whole (the pool, or the shares if
+# grandfathered holdings put them over it), and the rivals' licences as of the
+# last sharing.
+te_seabed_bar_pool_atlantic = {
+	value = te_seabed_pool_atlantic
+	if = {
+		limit = { has_global_variable = te_seabed_ceiling_atlantic }
+		value = global_var:te_seabed_ceiling_atlantic
+	}
+}
+
+te_seabed_rival_lic_atlantic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_atlantic }
+		value = global_var:te_seabed_records_atlantic
+		subtract = te_seabed_held_disp_atlantic
+		min = 0
+	}
+}
+
+# Country scope: the pool bar's cumulative fractions, 0..1: our built
+# licences, + our queued licences, + our claims, + rivals' licences; the bar's
+# background is rivals' claims (up for grabs).
+te_seabed_bar_atlantic_1 = {
+	value = te_seabed_our_lic_atlantic
+	subtract = te_seabed_queued_disp_atlantic
+	divide = te_seabed_bar_pool_atlantic
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_atlantic_2 = {
+	value = te_seabed_our_lic_atlantic
+	divide = te_seabed_bar_pool_atlantic
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_atlantic_3 = {
+	value = te_seabed_our_lic_atlantic
+	add = te_seabed_unbuilt_disp_atlantic
+	divide = te_seabed_bar_pool_atlantic
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_atlantic_4 = {
+	value = te_seabed_our_lic_atlantic
+	add = te_seabed_unbuilt_disp_atlantic
+	add = te_seabed_rival_lic_atlantic
+	divide = te_seabed_bar_pool_atlantic
+	min = 0
+	max = 1
+}
+
+# ---- Indian ----
+
+# Country scope: what the next January sharing can take of our claims here.
+te_seabed_jan_loss_indian = {
+	value = te_seabed_unbuilt_disp_indian
+	if = {
+		limit = {
+			NOT = { te_seabed_floor_void = yes }
+		}
+		subtract = {
+			value = te_seabed_unbuilt_disp_indian
+			multiply = te_seabed_floor_keep
+			floor = yes
+		}
+	}
+}
+
+# Country scope: our share of the basin's claim weight, in percent.
+te_seabed_weight_pct_disp_indian = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_indian
+			has_global_variable = te_seabed_world_w_indian
+			global_var:te_seabed_world_w_indian > 0
+		}
+		value = var:te_seabed_w_indian
+		divide = global_var:te_seabed_world_w_indian
+		multiply = 100
+	}
+}
+
+# Country scope: our entitlement here, the rivals ranking's order.
+te_seabed_ent_value_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_indian }
+		value = var:te_seabed_ent_indian
+	}
+}
+
+# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+te_seabed_need_navy_disp_indian = {
+	value = -2
+	if = {
+		limit = { has_variable = te_seabed_need_navy_indian }
+		value = var:te_seabed_need_navy_indian
+	}
+}
+
+# Country scope: licences on our queued levels here, and all our licences here.
+te_seabed_queued_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_queued_indian }
+		value = var:te_seabed_queued_indian
+	}
+}
+
+te_seabed_our_lic_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_now_indian }
+		value = var:te_seabed_lic_now_indian
+	}
+}
+
+# Any scope / country scope: the pool bar's whole (the pool, or the shares if
+# grandfathered holdings put them over it), and the rivals' licences as of the
+# last sharing.
+te_seabed_bar_pool_indian = {
+	value = te_seabed_pool_indian
+	if = {
+		limit = { has_global_variable = te_seabed_ceiling_indian }
+		value = global_var:te_seabed_ceiling_indian
+	}
+}
+
+te_seabed_rival_lic_indian = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_indian }
+		value = global_var:te_seabed_records_indian
+		subtract = te_seabed_held_disp_indian
+		min = 0
+	}
+}
+
+# Country scope: the pool bar's cumulative fractions, 0..1: our built
+# licences, + our queued licences, + our claims, + rivals' licences; the bar's
+# background is rivals' claims (up for grabs).
+te_seabed_bar_indian_1 = {
+	value = te_seabed_our_lic_indian
+	subtract = te_seabed_queued_disp_indian
+	divide = te_seabed_bar_pool_indian
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_indian_2 = {
+	value = te_seabed_our_lic_indian
+	divide = te_seabed_bar_pool_indian
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_indian_3 = {
+	value = te_seabed_our_lic_indian
+	add = te_seabed_unbuilt_disp_indian
+	divide = te_seabed_bar_pool_indian
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_indian_4 = {
+	value = te_seabed_our_lic_indian
+	add = te_seabed_unbuilt_disp_indian
+	add = te_seabed_rival_lic_indian
+	divide = te_seabed_bar_pool_indian
+	min = 0
+	max = 1
+}
+
+# ---- Arctic ----
+
+# Country scope: what the next January sharing can take of our claims here.
+te_seabed_jan_loss_arctic = {
+	value = te_seabed_unbuilt_disp_arctic
+	if = {
+		limit = {
+			NOT = { te_seabed_floor_void = yes }
+		}
+		subtract = {
+			value = te_seabed_unbuilt_disp_arctic
+			multiply = te_seabed_floor_keep
+			floor = yes
+		}
+	}
+}
+
+# Country scope: our share of the basin's claim weight, in percent.
+te_seabed_weight_pct_disp_arctic = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_arctic
+			has_global_variable = te_seabed_world_w_arctic
+			global_var:te_seabed_world_w_arctic > 0
+		}
+		value = var:te_seabed_w_arctic
+		divide = global_var:te_seabed_world_w_arctic
+		multiply = 100
+	}
+}
+
+# Country scope: our entitlement here, the rivals ranking's order.
+te_seabed_ent_value_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_arctic }
+		value = var:te_seabed_ent_arctic
+	}
+}
+
+# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+te_seabed_need_navy_disp_arctic = {
+	value = -2
+	if = {
+		limit = { has_variable = te_seabed_need_navy_arctic }
+		value = var:te_seabed_need_navy_arctic
+	}
+}
+
+# Country scope: licences on our queued levels here, and all our licences here.
+te_seabed_queued_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_queued_arctic }
+		value = var:te_seabed_queued_arctic
+	}
+}
+
+te_seabed_our_lic_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_now_arctic }
+		value = var:te_seabed_lic_now_arctic
+	}
+}
+
+# Any scope / country scope: the pool bar's whole (the pool, or the shares if
+# grandfathered holdings put them over it), and the rivals' licences as of the
+# last sharing.
+te_seabed_bar_pool_arctic = {
+	value = te_seabed_pool_arctic
+	if = {
+		limit = { has_global_variable = te_seabed_ceiling_arctic }
+		value = global_var:te_seabed_ceiling_arctic
+	}
+}
+
+te_seabed_rival_lic_arctic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_arctic }
+		value = global_var:te_seabed_records_arctic
+		subtract = te_seabed_held_disp_arctic
+		min = 0
+	}
+}
+
+# Country scope: the pool bar's cumulative fractions, 0..1: our built
+# licences, + our queued licences, + our claims, + rivals' licences; the bar's
+# background is rivals' claims (up for grabs).
+te_seabed_bar_arctic_1 = {
+	value = te_seabed_our_lic_arctic
+	subtract = te_seabed_queued_disp_arctic
+	divide = te_seabed_bar_pool_arctic
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_arctic_2 = {
+	value = te_seabed_our_lic_arctic
+	divide = te_seabed_bar_pool_arctic
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_arctic_3 = {
+	value = te_seabed_our_lic_arctic
+	add = te_seabed_unbuilt_disp_arctic
+	divide = te_seabed_bar_pool_arctic
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_arctic_4 = {
+	value = te_seabed_our_lic_arctic
+	add = te_seabed_unbuilt_disp_arctic
+	add = te_seabed_rival_lic_arctic
+	divide = te_seabed_bar_pool_arctic
+	min = 0
+	max = 1
+}
+
+# ---- Southern ----
+
+# Country scope: what the next January sharing can take of our claims here.
+te_seabed_jan_loss_southern = {
+	value = te_seabed_unbuilt_disp_southern
+	if = {
+		limit = {
+			NOT = { te_seabed_floor_void = yes }
+			NOT = { te_seabed_southern_barred = yes }
+		}
+		subtract = {
+			value = te_seabed_unbuilt_disp_southern
+			multiply = te_seabed_floor_keep
+			floor = yes
+		}
+	}
+}
+
+# Country scope: our share of the basin's claim weight, in percent.
+te_seabed_weight_pct_disp_southern = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_w_southern
+			has_global_variable = te_seabed_world_w_southern
+			global_var:te_seabed_world_w_southern > 0
+		}
+		value = var:te_seabed_w_southern
+		divide = global_var:te_seabed_world_w_southern
+		multiply = 100
+	}
+}
+
+# Country scope: our entitlement here, the rivals ranking's order.
+te_seabed_ent_value_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ent_southern }
+		value = var:te_seabed_ent_southern
+	}
+}
+
+# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+te_seabed_need_navy_disp_southern = {
+	value = -2
+	if = {
+		limit = { has_variable = te_seabed_need_navy_southern }
+		value = var:te_seabed_need_navy_southern
+	}
+}
+
+# Country scope: licences on our queued levels here, and all our licences here.
+te_seabed_queued_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_queued_southern }
+		value = var:te_seabed_queued_southern
+	}
+}
+
+te_seabed_our_lic_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lic_now_southern }
+		value = var:te_seabed_lic_now_southern
+	}
+}
+
+# Any scope / country scope: the pool bar's whole (the pool, or the shares if
+# grandfathered holdings put them over it), and the rivals' licences as of the
+# last sharing.
+te_seabed_bar_pool_southern = {
+	value = te_seabed_pool_southern
+	if = {
+		limit = { has_global_variable = te_seabed_ceiling_southern }
+		value = global_var:te_seabed_ceiling_southern
+	}
+}
+
+te_seabed_rival_lic_southern = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_records_southern }
+		value = global_var:te_seabed_records_southern
+		subtract = te_seabed_held_disp_southern
+		min = 0
+	}
+}
+
+# Country scope: the pool bar's cumulative fractions, 0..1: our built
+# licences, + our queued licences, + our claims, + rivals' licences; the bar's
+# background is rivals' claims (up for grabs).
+te_seabed_bar_southern_1 = {
+	value = te_seabed_our_lic_southern
+	subtract = te_seabed_queued_disp_southern
+	divide = te_seabed_bar_pool_southern
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_southern_2 = {
+	value = te_seabed_our_lic_southern
+	divide = te_seabed_bar_pool_southern
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_southern_3 = {
+	value = te_seabed_our_lic_southern
+	add = te_seabed_unbuilt_disp_southern
+	divide = te_seabed_bar_pool_southern
+	min = 0
+	max = 1
+}
+
+te_seabed_bar_southern_4 = {
+	value = te_seabed_our_lic_southern
+	add = te_seabed_unbuilt_disp_southern
+	add = te_seabed_rival_lic_southern
+	divide = te_seabed_bar_pool_southern
+	min = 0
+	max = 1
+}

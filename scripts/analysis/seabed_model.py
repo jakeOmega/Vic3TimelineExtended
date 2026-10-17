@@ -109,6 +109,7 @@ STATION_WEIGHT = 5
 ASSERTIVE_NAVY_MULT = 2
 FLOOR_KEEP = 0.75                    # te_seabed_floor_keep: Sponsor keeps at least this much of its claims
 FEE_RATE = 0.02                      # te_seabed_fee_rate: the holding fee, of a level's base output value a week
+READOUT_FULL_BELOW = 0.01            # te_seabed_readout: a half with less than this left for us reads "full"
 
 
 def fx(x: float) -> float:
@@ -572,7 +573,9 @@ def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
     this form for the entitlement itself (step=0) and for one more (Open
     regime; under the Regulated regime the halves can make it overstate by
     more). "Full" means no licence for certain; the rounding may still hand
-    the last one over, at a high weight. It assumes
+    the last one over, at a high weight. A half with less than
+    READOUT_FULL_BELOW of a licence left for us reads "full", which the
+    engine's fixed point needs too. It assumes
     no rival is pushed down to its holdings or floor by our growth, and under
     the Regulated regime that no frozen party is eligible (its holdings come
     off the halves by shares our weight moves); where either fails it can
@@ -602,7 +605,7 @@ def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
     d = max(0.0, t - sum(shares))
     best = None
     for (R, W), e in zip(halves, shares):
-        if R - e - d > 1e-6:                     # at 0 the licence is never certain: "full"
+        if R - e - d > READOUT_FULL_BELOW:       # at 0 the licence is never certain: "full"
             x = d * W / (R - e - d)
             best = x if best is None else min(best, x)
     return best

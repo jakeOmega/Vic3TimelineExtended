@@ -136,7 +136,8 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_wsum_res", "te_seabed_wsum_all", "te_seabed_left", "te_seabed_pool",
                   "te_seabed_policy_factor_", "te_seabed_coast_weight", "te_seabed_distant_navy_share",
                   "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare",
-                  "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare", "te_seabed_relinq"}
+                  "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare", "te_seabed_relinq",
+                  "te_seabed_dr", "te_seabed_need_navy", "te_seabed_queued"}
         named = {n.rstrip("_") for n in named}
         everything = defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
@@ -478,6 +479,97 @@ class LockTest(unittest.TestCase):
         body = strip_comments(block(read(TRIGGERS), "te_seabed_policy_locked"))
         self.assertIn("has_variable = te_seabed_policy_changed", body)
         self.assertIn("te_seabed_policy_unlock_month_value > te_history_month_index", body)
+
+
+class PanelDataTest(unittest.TestCase):
+    """The panel's figures (seabed claims spec § 3): the readout, the rankings,
+    queued licences per basin and the pool bar."""
+
+    SGUIS = "common/scripted_guis/te_global_commons_seabed_sguis.txt"
+
+    def test_readout_written_before_active_flags_go(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_share_round"))
+        self.assertLess(body.index("te_seabed_readout = { B = $B$ }"), body.index("remove_variable = te_seabed_act_$B$"))
+
+    def test_readout_follows_the_model(self):
+        """Model: need_weight and need_navy: t = entitlement + 1 (frozen: what it
+        is frozen at + 1, its holdings back in the halves they came off), the
+        deficit form per half, "full" below the model's threshold, navy rounded
+        up; -1 full, -2 no weight here."""
+        ro = strip_comments(block(read(EFFECTS), "te_seabed_readout"))
+        for term in ("var:te_seabed_ent_$B$", "var:te_seabed_fz_$B$", "te_seabed_dr_$B$",
+                     "global_var:te_seabed_rem_open_$B$", "global_var:te_seabed_wsum_all_$B$",
+                     "global_var:te_seabed_rem_res_$B$", "global_var:te_seabed_wsum_res_$B$",
+                     "has_variable = te_seabed_rsv_$B$", "ceiling = yes",
+                     "te_seabed_distant_navy_share", "var:te_seabed_coast_$B$", "var:te_seabed_coast_all",
+                     "te_seabed_policy_factor", "te_seabed_assertive_navy_mult"):
+            self.assertIn(term, ro)
+        self.assertIn(f"> {m.READOUT_FULL_BELOW}", ro)
+        self.assertIn("name = te_seabed_need_navy_$B$ value = -1", ro)
+        self.assertIn("name = te_seabed_need_navy_$B$ value = -2", ro)
+        self.assertIn("name = te_seabed_dr_$B$", strip_comments(block(read(EFFECTS), "te_seabed_share_freeze")))
+        ws = strip_comments(block(read(EFFECTS), "te_seabed_weight_set"))
+        self.assertIn("name = te_seabed_coast_$B$", ws)
+        self.assertIn("name = te_seabed_coast_all", strip_comments(block(read(EFFECTS), "te_seabed_compute_weights")))
+
+    def test_ranks_every_basin(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        for b in m.BASINS:
+            self.assertIn(f"te_seabed_rank_basin = {{ B = {b} }}", body)
+        self.assertIn("name = te_seabed_last_sharing_month value = te_history_month_index", body)
+
+    def test_rank_flags_go_through_the_capital(self):
+        rank = strip_comments(block(read(EFFECTS), "te_seabed_rank_basin"))
+        self.assertIn("order_by = te_seabed_ent_value_$B$", rank)
+        self.assertIn("remove_global_variable = te_seabed_rk_$B$_6", rank)
+        self.assertIn("name = te_seabed_rk_more_$B$", rank)
+        self.assertIn("is_player = yes", rank)
+        seat = strip_comments(block(read(EFFECTS), "te_seabed_rank_seat"))
+        self.assertIn("te_seabed_rkcap_$B$_$N$", seat)
+        self.assertIn("capital = { save_scope_as = te_seabed_rank_capital }", seat)
+        self.assertIn("name = te_seabed_rkcap_count_$B$", seat)
+
+    def test_rival_row_follows_the_leaderboard_pattern(self):
+        body = block(read(self.SGUIS), "te_seabed_rival_row_sgui")
+        self.assertIn("saved_scopes = { op }", body)
+        self.assertIn("custom_tooltip_no_bullet", body)
+        self.assertIn("?=", body)
+        for i, b in enumerate(m.BASINS, 1):
+            for n in range(1, 7):
+                self.assertIn(f"scope:op = {10 * i + n} }}", body)
+                self.assertIn(f"global_var:te_seabed_rk_{b}_{n} ?= {{ custom_tooltip_no_bullet = te_seabed_rival_row_{b} }}", body)
+
+    def test_bar_values_exist(self):
+        v = strip_comments(read(VALUES))
+        for b in m.BASINS:
+            for k in (1, 2, 3, 4):
+                body = block(v, f"te_seabed_bar_{b}_{k}")
+                self.assertIn("max = 1", body)
+                self.assertIn("min = 0", body)
+            self.assertIn(f"te_seabed_queued_disp_{b}", block(v, f"te_seabed_bar_{b}_1"))
+            self.assertIn(f"te_seabed_rival_lic_{b}", block(v, f"te_seabed_bar_{b}_4"))
+            for name in (f"te_seabed_weight_pct_disp_{b}", f"te_seabed_ent_value_{b}", f"te_seabed_need_navy_disp_{b}",
+                         f"te_seabed_jan_loss_{b}", f"te_seabed_queued_disp_{b}", f"te_seabed_our_lic_{b}",
+                         f"te_seabed_bar_pool_{b}", f"te_seabed_rival_lic_{b}"):
+                block(v, name)
+        for name in ("te_seabed_jan_loss_disp", "te_seabed_asof_year_disp", "te_seabed_asof_month_disp"):
+            block(v, name)
+
+    def test_jan_loss_is_what_the_floor_leaves(self):
+        loss = strip_comments(block(read(VALUES), "te_seabed_jan_loss_southern"))
+        self.assertIn("multiply = te_seabed_floor_keep", loss)
+        self.assertIn("te_seabed_southern_barred", loss)
+        self.assertIn("te_seabed_floor_void = yes", strip_comments(block(read(VALUES), "te_seabed_jan_loss_pacific")))
+
+    def test_recording_writes_queued_per_basin(self):
+        rec = strip_comments(block(read(EFFECTS), "te_seabed_record_country"))
+        self.assertIn("te_seabed_queued_", rec)
+        self.assertIn("te_seabed_queued_state = yes", rec)
+        state = strip_comments(block(read(EFFECTS), "te_seabed_queued_state"))
+        # distant licences first, in basin order, then the state's own
+        at = [state.index(f"te_seabed_queued_take_distant = {{ B = {b} N = {i} }}") for i, b in enumerate(m.BASINS, 1)]
+        self.assertEqual(at, sorted(at))
+        self.assertLess(at[-1], state.index("te_seabed_queued_take_own = { B = pacific N = 1 }"))
 
 
 class GateTest(unittest.TestCase):
