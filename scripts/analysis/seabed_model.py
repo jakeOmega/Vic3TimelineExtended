@@ -13,7 +13,8 @@ THE STATE (as the script keeps it)
 - Country: te_seabed_unbuilt_<basin> (U: entitled and unused),
   te_seabed_held_<basin> (records in its states, refreshed yearly),
   te_seabed_w_<basin> (claim weight), te_seabed_ent_<basin> (entitlement),
-  te_seabed_policy (1 Survey, 2 Sponsor, 3 Unilateral).
+  te_seabed_policy (1 Survey, 2 Sponsor, 3 Unilateral), te_seabed_floor_<basin>
+  (the share a sharing may not go below, fixed at the year's first sharing).
 - Global: te_seabed_regime (1 Open, 2 Regulated, 3 Scramble).
 
 ONE DEPARTURE FROM THE SPEC'S WORDING (decided by the builder): a level is
@@ -41,6 +42,23 @@ when a share pays for it. Only the three cases of § 2.4 are recorded against no
 share: an old save's first recording or a split's new state (no stamp), and a
 holder gone by the time its state changes hands (annexed whole). A holder that
 exists but can't pay leaves the level pending with the new owner.
+
+SPONSOR CONTRACTORS' FLOORS (seabed claims spec § 2.2). At the year's first
+sharing (the one that finds te_seabed_pass_year below the current year:
+January, or the first mid-year sharing of a year with no January pass),
+te_seabed_set_floors stores on each claimant on Sponsor Contractors, outside a
+Scramble, a floor per basin: its holdings plus three quarters of its claims
+going into the sharing, rounded down (its Southern floor is its holdings where
+the Antarctic Treaty bars it). Every sharing in the year then freezes a country
+at max(held, floor) instead of held (te_seabed_fit_floors); a mid-year sharing
+honours the stored floor without recomputing it, so protection never compounds
+within a year, and treats it as 0 for a country no longer on Sponsor or no
+longer a claimant, or in a Scramble. Where the frozen amounts exceed what the
+basin can share (its pool, or its holdings if more), every protected part is
+scaled down by one factor, rounding down, and holdings are never touched. A
+floor may spill into a Regulated pool's reserved half, as a frozen holding does
+(the convention's pioneer investors); it fades by a quarter a year, so the half
+refills.
 
 HOW THE REGULATED REGIME SPLITS A POOL (decided by the builder; § 3.2 says
 "step 2 runs once per half"). Each pool is a reserved half (rounded down)
@@ -78,6 +96,7 @@ COAST_WEIGHT = 2
 DISTANT_NAVY_SHARE = 0.05
 STATION_WEIGHT = 5
 ASSERTIVE_NAVY_MULT = 2
+FLOOR_KEEP = 0.75                    # te_seabed_floor_keep: Sponsor keeps at least this much of its claims
 
 
 def fx(x: float) -> float:
@@ -99,6 +118,7 @@ class Country:
     held: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
     ent: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
     weight: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0.0))
+    floor: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))   # te_seabed_floor_<basin>; 0 = none
 
 
 @dataclass
@@ -347,11 +367,11 @@ def compute_weights(world: World, cid) -> dict:
 def share_basin(world: World, b: str, part: list) -> dict:
     """te_seabed_share_basin (§ 2.4 step 2, § 3.2): water-fill pool b among the
     participants `part` (claimants and holders), held licences as each one's
-    built levels. Returns {cid: entitlement}."""
+    built levels, raised to its floor (fit_floors). Returns {cid: entitlement}."""
     v = world.v
     pool = POOLS[b]
     countries = world.countries
-    h = {cid: countries[cid].held[b] for cid in part}
+    h = fit_floors(world, b, part)
     w = {cid: countries[cid].weight[b] for cid in part}
     elig = {cid: world.regime == REGULATED and countries[cid].eligible for cid in part}
     rem_res = pool // 2 if world.regime == REGULATED else 0          # te_seabed_rem_res_<b>
@@ -425,12 +445,55 @@ def share_basin(world: World, b: str, part: list) -> dict:
     return ent
 
 
-def yearly_pass(world: World) -> None:
+def floor_in_force(world: World, c: Country, b: str) -> int:
+    """The stored floor a sharing honours (te_seabed_fit_floors' read): 0 off
+    Sponsor Contractors, in a Scramble, for a country that is no longer a
+    claimant, and in the Southern Ocean for a country the Antarctic Treaty
+    bars."""
+    if c.policy != SPONSOR or world.regime == SCRAMBLE or not is_claimant(world, c.cid):
+        return 0
+    if b == "southern" and c.barred:
+        return 0
+    return c.floor[b]
+
+
+def set_floors(world: World, cid) -> None:
+    """te_seabed_set_floors (the year's first sharing, after recording and
+    held, before weights): on Sponsor Contractors, outside a Scramble, a
+    claimant's floor in each basin is its holdings plus FLOOR_KEEP of its
+    claims going into the sharing, rounded down; its Southern floor is its
+    holdings where the Antarctic Treaty bars it. Otherwise no floor."""
+    c = world.countries[cid]
+    if c.policy != SPONSOR or world.regime == SCRAMBLE or not is_claimant(world, cid):
+        c.floor = dict.fromkeys(BASINS, 0)
+        return
+    for b in BASINS:
+        keep = 0 if (b == "southern" and c.barred) else math.floor(FLOOR_KEEP * c.unbuilt[b])
+        c.floor[b] = c.held[b] + keep
+
+
+def fit_floors(world: World, b: str, part: list) -> dict:
+    """te_seabed_fit_floors (te_seabed_fz_<basin>): what each participant is
+    frozen at, max(held, floor). Where those exceed what the basin can share
+    (its pool, or its holdings if more), every protected part (floor - held)
+    is scaled down by one factor, rounding down; holdings are never touched."""
+    countries = world.countries
+    held = {cid: countries[cid].held[b] for cid in part}
+    prot = {cid: max(0, floor_in_force(world, countries[cid], b) - held[cid]) for cid in part}
+    room_left = max(POOLS[b], sum(held.values())) - sum(held.values())
+    total = sum(prot.values())
+    if total > room_left:
+        prot = {cid: p * room_left // total for cid, p in prot.items()}
+    return {cid: held[cid] + prot[cid] for cid in part}
+
+
+def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
     """te_seabed_yearly_pass: (1) state basins (the generator's table, fixed in
     the model); (2) te_seabed_un_update_regime (the caller sets world.regime);
-    (3) every participant records; (4) held; (5) weights; (6) sharing;
-    (7) unbuilt = entitlement - held, and every country that takes no part
-    loses any stale share."""
+    (3) every participant records; (4) held, and at the year's first sharing
+    the floors (te_seabed_set_floors); (5) weights; (6) sharing; (7) unbuilt =
+    entitlement - held, and every country that takes no part loses any stale
+    share and floor."""
     holders = {s.owner for s in world.states.values() if s.records() > 0 or s.levels > 0}
     part = sorted(cid for cid in world.countries
                   if world.alive(cid) and (is_claimant(world, cid) or cid in holders))
@@ -440,6 +503,8 @@ def yearly_pass(world: World) -> None:
         c = world.countries[cid]
         for b in BASINS:
             c.held[b] = sum(s.lic[b] for s in world.owned(cid))
+        if first_of_year:
+            set_floors(world, cid)
         c.weight = compute_weights(world, cid) if is_claimant(world, cid) else dict.fromkeys(BASINS, 0.0)
     for b in BASINS:
         ent = share_basin(world, b, [cid for cid in part
@@ -453,6 +518,7 @@ def yearly_pass(world: World) -> None:
             c.unbuilt = dict.fromkeys(BASINS, 0)
             c.held = dict.fromkeys(BASINS, 0)
             c.ent = dict.fromkeys(BASINS, 0)
+            c.floor = dict.fromkeys(BASINS, 0)
 
 
 # ---------------------------------------------------------------------------
