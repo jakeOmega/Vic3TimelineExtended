@@ -200,7 +200,8 @@ gives no verdict for a country no longer a subject.
     share at that sharing still pays for them (a third party's share doesn't move). A new lease from
     the same lessor is offered; one from another lessor in that basin is refused, with the tooltip
     naming the old lease. A lessor annexed by a third country clears the record at the next
-    sharing.
+    sharing. Re-sign with the same lessor before the next sharing: check the new lease's claims
+    arrive (the old lease's licences may still count against the new total until that sharing).
 24. **Administer Seabed Claims.** As an overlord with Abyssal Plain Mining, take the action on a
     puppet or dominion that claims: its claims read 0 and ours rise by them, its liberty desire
     rises and relations fall. A protectorate or personal union isn't offered it; Raise Subject
