@@ -1189,50 +1189,61 @@ nuclear_disarmament = {
 			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.05
 			if = {
-				limit = { any_rival_country = { always = yes } }
+				limit = { any_rival_country = { nuclear_disarmament_matters = yes } }
 				add = 0.1
 			}
 		}
+		# Per-partner gate, as nuclear_program_pause's: never asked for or
+		# pressed as a war goal against a country with nothing to give up, and
+		# most wanted against a known arsenal.
+		proposal_weight = { value = nuclear_disarmament_ai_demand_weight }
+		wargoal_score_multiplier = { value = nuclear_disarmament_ai_demand_weight }
 		inherent_accept_score = {
 			value = 0
 			if = {
 				limit = { scope:target_country = this }
 				# TARGET (demander) perspective: do I want the source, the other side, disarmed?
-				# Strongly want rivals/enemies to disarm
+				# Only a disarmament that takes something away is worth asking
+				# for: warheads, a programme, or a major power's chance of one
+				# (nuclear_disarmament_matters, nuke_triggers.txt).
 				if = {
-					limit = { any_rival_country = { THIS = scope:source_country } }
-					add = {
-						desc = "AI_IS_RIVAL"
-						value = 50
+					limit = { scope:source_country = { nuclear_disarmament_matters = yes } }
+					# Strongly want rivals/enemies to disarm
+					if = {
+						limit = { any_rival_country = { THIS = scope:source_country } }
+						add = {
+							desc = "AI_IS_RIVAL"
+							value = 50
+						}
 					}
-				}
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = domineering } }
-					add = {
-						desc = "AI_HOSTILE_ATTITUDE"
-						value = 40
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = domineering } }
+						add = {
+							desc = "AI_HOSTILE_ATTITUDE"
+							value = 40
+						}
 					}
-				}
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = belligerent } }
-					add = {
-						desc = "AI_BELLIGERENT_ATTITUDE"
-						value = 30
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = belligerent } }
+						add = {
+							desc = "AI_BELLIGERENT_ATTITUDE"
+							value = 30
+						}
 					}
-				}
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = antagonistic } }
-					add = {
-						desc = "AI_ANTAGONISTIC_ATTITUDE"
-						value = 20
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = antagonistic } }
+						add = {
+							desc = "AI_ANTAGONISTIC_ATTITUDE"
+							value = 20
+						}
 					}
-				}
-				# Wary countries still somewhat want rivals disarmed
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = wary } }
-					add = {
-						desc = "AI_WARY_ATTITUDE"
-						value = 5
+					# Wary countries still somewhat want rivals disarmed
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = wary } }
+						add = {
+							desc = "AI_WARY_ATTITUDE"
+							value = 5
+						}
 					}
 				}
 				# Do NOT want allies to disarm - their nukes help us
@@ -1516,6 +1527,9 @@ nuclear_program_aid = {
 			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.1
 		}
+		# Per-partner gate: no aid offered to a recipient without the
+		# nuclear_weapons tech, which could not use it.
+		proposal_weight = { value = nuclear_program_aid_ai_offer_weight }
 		inherent_accept_score = {
 			value = 0
 			if = {
@@ -2223,48 +2237,61 @@ nuclear_program_pause = {
 			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.1
 			if = {
-				limit = { any_rival_country = { always = yes } }
+				limit = { any_rival_country = { nuclear_program_freeze_matters = yes } }
 				add = 0.15
 			}
 		}
+		# Per-partner gate (evaluation_chance has root only): the AI neither asks
+		# for a freeze in a treaty nor presses one as a war goal unless it would
+		# stop something, and prefers a programme funded right now. An
+		# insignificant power with the nuclear_weapons tech but no standing to
+		# build was being made to freeze nothing (2026-10-16).
+		proposal_weight = { value = nuclear_program_pause_ai_demand_weight }
+		wargoal_score_multiplier = { value = nuclear_program_pause_ai_demand_weight }
 		inherent_accept_score = {
 			value = 0
 			if = {
 				limit = { scope:target_country = this }
 				# Requester perspective: do I want the other side to freeze their program?
+				# Only a freeze that stops something is worth asking for:
+				# not one on a country without the standing to build
+				# (nuclear_program_freeze_matters, nuke_triggers.txt).
 				if = {
-					limit = { any_rival_country = { THIS = scope:source_country } }
-					add = {
-						desc = "AI_IS_RIVAL"
-						value = 40
+					limit = { scope:source_country = { nuclear_program_freeze_matters = yes } }
+					if = {
+						limit = { any_rival_country = { THIS = scope:source_country } }
+						add = {
+							desc = "AI_IS_RIVAL"
+							value = 40
+						}
 					}
-				}
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = domineering } }
-					add = {
-						desc = "AI_HOSTILE_ATTITUDE"
-						value = 30
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = domineering } }
+						add = {
+							desc = "AI_HOSTILE_ATTITUDE"
+							value = 30
+						}
 					}
-				}
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = belligerent } }
-					add = {
-						desc = "AI_BELLIGERENT_ATTITUDE"
-						value = 25
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = belligerent } }
+						add = {
+							desc = "AI_BELLIGERENT_ATTITUDE"
+							value = 25
+						}
 					}
-				}
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = antagonistic } }
-					add = {
-						desc = "AI_ANTAGONISTIC_ATTITUDE"
-						value = 15
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = antagonistic } }
+						add = {
+							desc = "AI_ANTAGONISTIC_ATTITUDE"
+							value = 15
+						}
 					}
-				}
-				if = {
-					limit = { has_attitude = { who = scope:source_country attitude = wary } }
-					add = {
-						desc = "AI_WARY_ATTITUDE"
-						value = 5
+					if = {
+						limit = { has_attitude = { who = scope:source_country attitude = wary } }
+						add = {
+							desc = "AI_WARY_ATTITUDE"
+							value = 5
+						}
 					}
 				}
 				# Don't want allies to freeze

@@ -178,6 +178,32 @@ nuclear_program_can_be_paused = {
 	NOT = { modifier:country_nuclear_program_pause_bool = yes }
 }
 
+# Country scope: would a nuclear_program_pause on this country stop anything?
+# The freeze only holds programme funding at zero, so it binds a country with a
+# programme, or a major power that gains one on researching ICBMs while the
+# treaty lasts (nd_taboo_has_programme_standing). Any smaller country has the
+# nuclear_weapons tech without the standing to build, and freezing it stops
+# nothing. The AI asks this before it values a freeze, as requester in the
+# article's acceptance and through nuclear_program_pause_ai_demand_weight.
+# Players are not bound: `possible` still lists the article.
+nuclear_program_freeze_matters = {
+	has_technology_researched = nuclear_weapons
+	OR = {
+		nuclear_program_has_programme = yes
+		country_rank >= rank_value:major_power
+	}
+}
+
+# Country scope: the same for nuclear_disarmament, which also takes away the
+# warheads and the progress. An arsenal the world knows of (nd_believed_armed)
+# is worth taking at any rank, even with no programme to rebuild it.
+nuclear_disarmament_matters = {
+	OR = {
+		nd_believed_armed = yes
+		nuclear_program_freeze_matters = yes
+	}
+}
+
 # Country scope: True if scope:country has existential war goals against ROOT
 # (any subjugation war goal, or outright annexation incl. the mod's te_reunify_country)
 # Requires scope:country to be set (the enemy)
