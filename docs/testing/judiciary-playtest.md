@@ -42,6 +42,8 @@ fallback.
 4. **Entrenchment.** As the United States, start enacting Universal Suffrage: the enactment's modifier list shows
    "Constitutional Challenge" (−10% enactment success), and the self-check above reads OK. Under Autocracy (any
    paper court) with Constitutional Review, nothing is added.
+   The first build (#1022) opened `type = { }` on the law, so this line couldn't fire; since the 2026-10-17
+   fix `debug.log` carries no `Inconsistent trigger scopes` line for `te_judiciary_triggers.txt` at load.
 5. **Spending.** Forceful Legislation's options show the score's cost (−5, −10, −20). Take one; at the next monthly
    pulse the Judicial Independence modifier is smaller. The tax code's Force Through costs 10.
 6. **Shock.** As the United States, enact Executive Tribunals. A week after it passes a hidden event applies Court

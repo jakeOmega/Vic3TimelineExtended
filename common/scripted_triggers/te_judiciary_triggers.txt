@@ -37,12 +37,15 @@ te_jud_is_islamic_state = {
 # The law under enactment belongs to the constitution's core (spec § 3.4):
 # Distribution of Power, Governance Principles, Church and State, Citizenship,
 # Free Speech, Internal Security, State Power, Judiciary. currently_enacting_law
-# is a country -> law link, type a law -> law type link. Whether the link
-# resolves at on_law_enactment_started is unread: te_jud_selfcheck_enacting_scope
-# reports it once a game.
+# is a country -> law link and law_type a law -> law type link. Not `type`:
+# the load-time scope check takes it as building -> building type and logs
+# "Inconsistent trigger scopes (building_type vs. law_type)" at every line
+# below (2026-10-17). Whether currently_enacting_law resolves at
+# on_law_enactment_started is unread: te_jud_selfcheck_enacting_scope reports
+# it once a game.
 te_jud_enacting_core_law = {
 	currently_enacting_law ?= {
-		type = {
+		law_type = {
 			OR = {
 				is_same_law_group_as = law_type:law_autocracy
 				is_same_law_group_as = law_type:law_monarchy
@@ -61,7 +64,7 @@ te_jud_enacting_core_law = {
 # Slavery, Minority Rights, LGBTQ+ Rights, Privacy Rights.
 te_jud_enacting_rights_law = {
 	currently_enacting_law ?= {
-		type = {
+		law_type = {
 			OR = {
 				is_same_law_group_as = law_type:law_no_womens_rights
 				is_same_law_group_as = law_type:law_slavery_banned

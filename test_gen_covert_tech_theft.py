@@ -71,6 +71,7 @@ class RenderTest(unittest.TestCase):
     def test_ladder_branch_requires_research_and_target(self):
         ladder = self.steal[: self.steal.index("random_list = {")]
         self.assertEqual(ladder.count("is_researching_technology = "), len(self.production))
+        self.assertEqual(ladder.count("NOT = { has_technology_researched = "), len(self.production))
         self.assertEqual(
             ladder.count("scope:iw_theft_target ?= { has_technology_researched = "), len(self.production)
         )

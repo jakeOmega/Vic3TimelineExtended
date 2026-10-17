@@ -910,9 +910,12 @@ science_aid_2 = {
 				# any_scope_treaty requires a country scope (vanilla 00_alliance.txt
 				# wraps it in scope:first_country). In can_ratify the ambient scope is
 				# the treaty, so scope to the proposer before iterating its treaties.
+				# can_ratify names the parties scope:source_country and
+				# scope:target_country; scope:other_country is unset here, so reading
+				# it made both paths false and the article unratifiable (2026-10-17).
 				scope:source_country ?= {
 					any_scope_treaty = {
-						binds = scope:other_country
+						binds = scope:target_country
 						any_scope_article = {
 							has_type = science_aid
 							source_country = scope:source_country
@@ -923,7 +926,7 @@ science_aid_2 = {
 					any_scope_article_option = {
 						has_type = science_aid
 						source_country = scope:source_country
-						target_country = scope:other_country
+						target_country = scope:target_country
 					}
 				}
 			}

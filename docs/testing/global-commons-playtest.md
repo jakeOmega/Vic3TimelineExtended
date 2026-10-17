@@ -62,6 +62,12 @@ monthly recording saw holding licences (a global list kept apart from the states
 gives no verdict for a country no longer a subject; `seabed_power_projection` reads only claimants with a
 navy, and says BROKEN only when all of them read 0.
 
+`seabed_power_projection` first fired on 2026-10-17 with `OK … claimants=5 reading=4`, but none of
+its `INFO` lines printed: they named the country with a bare `[THIS.GetNameNoFormatting]`, which
+drops the whole line (so would the lease and pact lines have). Fixed and re-armed
+(`te_seabed_npp_check_done_v2`): the first sharing on a build with the fix logs the whole set again,
+even in that save, and the scale comes from those lines.
+
 ### Play-test list
 
 1. **The State Panel tile.** A coastal state of a country with Abyssal Plain Mining, the month after

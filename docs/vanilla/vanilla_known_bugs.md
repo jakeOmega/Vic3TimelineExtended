@@ -352,7 +352,7 @@ Event target link 'scope' returned an invalid object
 
 Vanilla ship-transfer treaty article references a scope that's invalidated during certain treaty-evaluation paths. High repeat count under treaty-heavy gameplay. Vanilla bug. Skip.
 
-Not registered, because the mod causes them: in 1.14.5 the same article's `SHIP_TRANSFER_REQUIRES_RECIPROCAL_ARTICLE` check (line 58) runs `any_scope_article_option = { NOT = { has_type = alliance } NOT = { has_type = defensive_pact } target_country = scope:source_country }`. It leaves out vanilla's only two mutual articles, but the mod adds four more (`joint_military_exercises` and `intelligence_sharing_pact` in common/treaty_articles/extra_treaty_articles.txt, `cultural_exchange_program`, `nuclear_arms_limitation`), so a treaty holding one logs `Can only get target_country of directed article options. <article> is not directed`, `Event target link 'target_country' returned an unset scope` and `Invalid left side during comparison 'target_country'` (34 lines across the 2026-10-10 and 2026-10-11 observer runs, all from the first two). Until 2026-10-11 the bare `31_ship_transfer.txt:54` signature tagged them as this entry (#873).
+Not registered, because the mod causes them: in 1.14.5 the same article's `SHIP_TRANSFER_REQUIRES_RECIPROCAL_ARTICLE` check (line 58) runs `any_scope_article_option = { NOT = { has_type = alliance } NOT = { has_type = defensive_pact } target_country = scope:source_country }`. It leaves out vanilla's only two mutual articles, but the mod adds four more (`joint_military_exercises` and `intelligence_sharing_pact` in common/treaty_articles/extra_treaty_articles.txt, `cultural_exchange_program`, `nuclear_arms_limitation`), so a treaty holding one logs `Can only get target_country of directed article options. <article> is not directed`, `Event target link 'target_country' returned an unset scope` and `Invalid left side during comparison 'target_country'` (34 lines across the 2026-10-10 and 2026-10-11 observer runs, all from the first two). Until 2026-10-11 the bare `31_ship_transfer.txt:54` signature tagged them as this entry (#873). Since 2026-10-17 they are tracked mod noise (mod_known_noise.md, open_issues.md L27).
 
 ### `events/agitators_events/land_ownership_law_events.txt:945`/`:946` — `Undefined event target 'farmer_wealth_concentration_state_scope'` cascading into wrong-scope effects
 
@@ -984,26 +984,31 @@ InterestGroup is insurrectionary
 
 These options add or remove ruling interest groups without checking whether the group has joined a revolution. One line each, 2026-10-10.
 
-### `events/amazon_events.txt:366`, `events/iberia_events/ip4_monument_events.txt:813`, `events/iberia_events/dominican_events.txt:204` and `events/agitators_events/yeet_agitator_events.txt:92` — character and player effects on a character or player that is gone
+### `events/amazon_events.txt:365, 366`, `events/iberia_events/ip4_monument_events.txt:813`, `events/iberia_events/dominican_events.txt:204` and `events/agitators_events/yeet_agitator_events.txt:92` — character and player effects on a character or player that is gone
+- stack: vanilla only
 
 ```
 kill_character effect [ Character is already dead. ]
+kill_character effect [ Wrong scope for effect: none, expected character ]
+Undefined event target 'hunter_character'
+Event target link 'scope' returned an unset scope
 kill_character effect [ Wrong scope for effect: country, expected character ]
 play_as effect [ Failed to switch player to new country in play_as effect - no player for scoped country ]
 is already exiled
 ```
 
-The Amazon hunter dies twice; the Pedro Peláez event's `scope:relevant_character` holds a country; the Dominican event's `play_as = c:DOM` fails when no player is involved (an observer game); exiling an agitator through vanilla's `exile_character_with_role_cleanup` fails when the agitator was already exiled. One or two lines each, 2026-10-10.
+The Amazon hunter dies twice, or is gone by the time `amazon.4.b` fires, so `scope:hunter_character` is unset (three lines, 2026-10-17); the Pedro Peláez event's `scope:relevant_character` holds a country; the Dominican event's `play_as = c:DOM` fails when no player is involved (an observer game); exiling an agitator through vanilla's `exile_character_with_role_cleanup` fails when the agitator was already exiled. One or two lines each, 2026-10-10.
 
-### `events/soi_events/00_lobbies_events_01.txt:1223`, `events/soi_events/00_lobbies_events_04.txt:4942` and `events/india_events/india_home_rule_events.txt:799` — lobby membership and creation without checks
+### `events/soi_events/00_lobbies_events_01.txt:1223`, `events/soi_events/00_lobbies_events_04.txt:1808, 4942` and `events/india_events/india_home_rule_events.txt:799` — lobby membership and creation without checks
 
 ```
 Attempting to add interest group that is already member of lobby to lobby
 Attempting to create lobby targeting null country
+Attempting to create lobby that already exists
 add_lobby_member effect [ Invalid target interest group ]
 ```
 
-`add_lobby_member` on a group already in the lobby or on a group the country lacks (`ig:ig_petty_bourgeoisie`), and `create_political_lobby` aimed at a country that has died. One or two lines each, 2026-10-10. The last is followed in the same second by the `Attempted to create relations for invalid countries!` engine assert, which stays unregistered.
+`add_lobby_member` on a group already in the lobby or on a group the country lacks (`ig:ig_petty_bourgeoisie`), and `create_political_lobby` aimed at a country that has died, or creating a lobby the country already has (line 1808, once on 2026-10-17). One or two lines each, 2026-10-10. The last is followed in the same second by the `Attempted to create relations for invalid countries!` engine assert, which stays unregistered.
 
 ## Expected mod-override noise
 

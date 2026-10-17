@@ -228,3 +228,15 @@ Flag 'memorial' is used but is never set
 ```
 
 Four lines once per launch. The skin choice has no `default_option` by design, the never-built name-carrier building lacks the same unidentified UI texture as the silo (L17), `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see, and `flag:memorial` is read only to name a Memorial-form monument or commission from a save older than #909, which retired that form. Each signature names its own event, building or flag, so another event without a default, another building's missing texture or another never-set flag still shows up.
+
+### `common/treaty_articles/31_ship_transfer.txt:58` — vanilla ship transfer's reciprocal check reads the mod's mutual articles
+- tracked: `docs/audits/open_issues.md#l27-ship-transfer-reciprocal-check-reads-mod-mutual-articles`
+- stack: vanilla only
+
+```
+Can only get target_country of directed article options.
+Event target link 'target_country' returned an unset scope
+Invalid left side during comparison 'target_country'
+```
+
+Vanilla's reciprocal-article check skips its own two mutual articles but not the mod's four, so a draft holding one logs these three lines; the check's outcome is still correct. Anchored on the vanilla article, with no mod frame in its stack, so the two generic lines can't hide a mod treaty's error. Tracked at `docs/audits/open_issues.md#l27-ship-transfer-reciprocal-check-reads-mod-mutual-articles`.

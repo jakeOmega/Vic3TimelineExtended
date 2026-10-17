@@ -274,6 +274,17 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures 
 
 ---
 
+### L27. Ship transfer reciprocal check reads mod mutual articles
+**Files:** vanilla `common/treaty_articles/31_ship_transfer.txt:58`; the mod's mutual articles `joint_military_exercises`, `intelligence_sharing_pact` (`common/treaty_articles/extra_treaty_articles.txt`), `cultural_exchange_program`, `nuclear_arms_limitation`
+
+**Problem (2026-10-11, registered 2026-10-17):** vanilla's `SHIP_TRANSFER_REQUIRES_RECIPROCAL_ARTICLE` check walks the draft's article options, skips `alliance` and `defensive_pact` (vanilla's only mutual articles) and reads `target_country` on the rest. A mod mutual article in the same draft logs three lines per evaluation: `Can only get target_country of directed article options. <article> is not directed`, `Event target link 'target_country' returned an unset scope` and `Invalid left side during comparison 'target_country'`. The outcome is still right: a mutual article can't be the reciprocal directed one, and the comparison fails as the check wants. Six lines on 2026-10-17, 34 across the 2026-10-10 and 2026-10-11 observer runs.
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** only a whole-article override of vanilla's `ship_transfer` that skips every mutual article (`kind`, or the four by name), which the mod avoids for vanilla content (INJECT over REPLACE). Owner's call; nothing to do while the result stays correct.
+
+---
+
 ## Vanilla 1.13.7 patch impact (2026-05-27)
 
 Verify+flag pass after vanilla released **1.13.7**. The patch is overwhelmingly vanilla-internal (AI fleet logic, naval balance, Japan/USA content, bugfixes); the mod does not override Japan, USA decisions, tolls, treaty articles, or vanilla canals, so most of it needs no action. The real overlap is the **naval domain**.
