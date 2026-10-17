@@ -74,7 +74,9 @@ fix it. Every mod reader outside the Demographics census now reads `te_state_une
 read live, over the workforce's share of the state's people, which a yearly walk of each state's pops counts
 (`common/script_values/te_unemployment_values.txt`; § Unemployment as a Share of the Workforce in `mod_systems.md`).
 Their thresholds now mean a share of the workforce, so each bites at about a quarter of the unemployment it did. The
-Settlement Authority's was raised from 5% to 10% as well (owner, 2026-10-17). The census keeps its own count (`te_dg_unemp`).
+Settlement Authority's was raised from 5% to 10% as well (owner, 2026-10-17). The Demographics census stores the same
+conversion at its walk (`te_dg_unemp`), which its youth bulge, event wave, pension AI and panel read (owner, 2026-10-17:
+one source); its own count stays beside it (`te_dg_unemp_walk`) for its self-check.
 
 | Reader | Threshold | Effect |
 |---|---|---|
@@ -82,6 +84,7 @@ Settlement Authority's was raised from 5% to 10% as well (owner, 2026-10-17). Th
 | Greenest Grass Campaign `ai_weight` (`common/decrees/extra_decrees.txt`) | 10% or more | × 0 |
 | Recruitment Drive `ai_weight` (the same file) | above 10% | +50 |
 | `migration_attraction_script_value` (`common/script_values/extra_script_values.txt`), the mass-migration destination's order | above 10% | × 0 |
+| Demographics, under the census: the youth bulge (full at 20%), the event wave's Youth Bulge, the pension AI (10% and 5%) and the panel's Youth row, through `te_dg_unemp` | their own | the census's stored figure, as before; only its source moved from the walk's count to the conversion |
 
 **How much more often.** The 1898 observer autosave (2026-10-17, Full) holds the engine's figure, as the census stored
 it then, and the walk's workforce share for 826 census states. The workforce was still a quarter of the people
@@ -100,7 +103,7 @@ China's and Bengal's large states carry most of the people: a fifth to a third o
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … unemployment_share_read` | any rule: once a game, the first state at its yearly walk (`te_unemp_share_yearly`) with a workforce of at least 10,000 and at least 2% of it with no workplace | `conv` (`te_state_unemployment_share`, read after the walk) is within a quarter below or a third above `exact` (the walk's workforce with no workplace over its workforce). Equivalently `read` ≈ `per_people`: the engine's figure is the idle workforce over all the state's people, so the conversion is the share the readers mean. `prev_wf_share` is the share readers held before the walk (0.25: none yet) | `conv` about 4 × `exact` (`read` ≈ `exact`): the figure is already per worker, and the conversion counts it four times. Any other ratio: the figure is something else again | about 4 ×: take the division out of `te_state_unemployment_share` (the figure as it is). Otherwise have it read `var:te_unemp_share_exact`, the walk's own count, up to a year old (`te_state_workforce_share`'s `has_variable` pattern), and correct the notes in `scripting_best_practices.md` § The op slots |
+| `TE_SELF_CHECK … unemployment_share_read` | any rule: once a game, the first state at its yearly walk (`te_unemp_share_yearly`) with a workforce of at least 10,000 and at least 2% of it with no workplace | `conv` (`te_state_unemployment_share`, read after the walk) is within a quarter below or a third above `exact` (the walk's workforce with no workplace over its workforce). Equivalently `read` ≈ `per_people`: the engine's figure is the idle workforce over all the state's people, so the conversion is the share the readers mean. `prev_wf_share` is the share readers held before the walk (0.25: none yet) | `conv` about 4 × `exact` (`read` ≈ `exact`): the figure is already per worker, and the conversion counts it four times. Any other ratio: the figure is something else again | about 4 ×: take the division out of `te_state_unemployment_share` (the figure as it is). Otherwise have it read `var:te_unemp_share_exact`, the walk's own count, up to a year old (`te_state_workforce_share`'s `has_variable` pattern), and correct the notes in `scripting_best_practices.md` § The op slots. Either way the census can go back to its own count at once: store `te_dg_unemp` from the walk's `te_dg_unemp_walk` count in `te_demog_work_walk_store` |
 
 No line after a few years means no state with a workforce of 10,000 had 2% of it idle at its yearly walk; compare the
 state panel's unemployed in a state with visibly idle workers.

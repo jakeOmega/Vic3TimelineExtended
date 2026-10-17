@@ -232,8 +232,8 @@ te_demog_health_bill_down_mult = { value = var:te_dg_health_term multiply = -1 m
 
 # ---- The AI's yearly pulse (country scope; §2.2) ---------------------------------------------------------------
 
-# Unemployment, people-weighted over the country's states: each state's walk count (te_demog_unemployment, the workforce
-# with no workplace over the workforce, 0-1; the engine's state_unemployment_rate reads about a quarter of it).
+# Unemployment, people-weighted over the country's states: each state's at its last census (te_demog_unemployment,
+# te_state_unemployment_share stored then: the share of the workforce with no work, 0-1).
 te_demog_country_unemployment = {
 	value = 0
 	every_scope_state = {

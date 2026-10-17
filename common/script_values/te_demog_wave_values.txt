@@ -100,8 +100,8 @@ te_demog_wave_greying_bar = {
 	}
 }
 
-# Unemployment over the country's states, by people, through the census's state count (te_demog_unemployment, the walk's
-# workforce with no workplace over the workforce at each state's last census).
+# Unemployment over the country's states, by people, through the census's state figure (te_demog_unemployment,
+# te_state_unemployment_share at each state's last census: the share of the workforce with no work).
 te_demog_wave_unemployment = {
 	value = 0
 	every_scope_state = {

@@ -186,12 +186,14 @@ te_demog_conscription_down = {
 
 # ---- The youth bulge (§4.3) -------------------------------------------------------------------------------------------
 
-# State scope: the unemployment the walk counted at the state's last census walk (te_dg_unemp, te_demog_work_walk_store):
-# the workforce of pops with no workplace over all the workforce, 0-1, 0 before one. The youth bulge, the event wave and
-# the pension AI read this, as the harness reads the same count from a save (demographics_save_inputs.state_unemployment).
-# Not the engine's state_unemployment_rate: the self-check unemployment_rate_read (2026-10-17) read it at 0.048 where the
-# pops' share was 0.195, about the idle workforce over all the state's people, a quarter of the share in 1836 (vanilla's
-# mon_unemployment_estimate doubles it, "way off actual unemployment rate"). And a scripted GUI reads that as none.
+# State scope: the unemployment the census stored at the state's last census walk (te_dg_unemp, te_demog_work_walk_store):
+# te_state_unemployment_share then, the share of the workforce with no work that every mod reader takes
+# (te_unemployment_values.txt), 0-1, 0 before one. The youth bulge, the event wave, the pension AI and the panel read
+# this. The harness counts the same share from a save's pops (demographics_save_inputs.state_unemployment); the
+# conversion equals it where the engine's figure is per person, as the self-checks unemployment_rate_read and
+# unemployment_share_read test. Not the engine's state_unemployment_rate bare: it read 0.048 where the pops' share was
+# 0.195 (2026-10-17), the idle workforce over all the state's people. And a scripted GUI reads it as none, so the
+# figure is stored from an effect and read from the variable.
 te_demog_unemployment = {
 	value = 0
 	if = {

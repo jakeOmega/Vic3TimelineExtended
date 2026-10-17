@@ -5,9 +5,10 @@ The engine's state_unemployment_rate is the idle workforce over all the state's 
 share of the workforce: in Mecklenburg-Strelitz in January 1836 it read 0.048 where the pops held 0.195 of their
 workforce with no workplace (the Demographics self-check unemployment_rate_read, 2026-10-17). A threshold written as a
 share of the workforce (> 0.1) bit at about four times that. te_state_unemployment_share divides the figure by the
-workforce's share of the people, which a yearly walk of each state's pops stores (te_unemp_wf_share). These tests
-keep a new reader from thresholding the engine's figure directly, and the walk, its wiring and its self-check whole.
-The engine reports none of it.
+workforce's share of the people, which a yearly walk of each state's pops stores (te_unemp_wf_share). The Demographics
+census stores it at its walk (te_dg_unemp, owner 2026-10-17), and its youth bulge, event wave, pension AI and panel read
+that. These tests keep a new reader from thresholding the engine's figure directly, and the walk, its wiring and its
+self-check whole. The engine reports none of it.
 """
 
 import os
@@ -20,6 +21,9 @@ VALUES = os.path.join(REPO, "common", "script_values", "te_unemployment_values.t
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_unemployment_effects.txt")
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "te_unemployment_on_actions.txt")
 PLAYTEST = os.path.join(REPO, "docs", "testing", "ai-economy-playtest.md")
+DEMOG_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_demog_effects.txt")
+DEMOG_VALUES = [os.path.join(REPO, "common", "script_values", name) for name in
+                ("te_demog_consequence_values.txt", "te_demog_wave_values.txt", "te_demog_work_values.txt")]
 
 # file -> the script values allowed to read the engine's figure there: the conversion and its effect wrapper, and the
 # Demographics self-check's wrapper (the census reads its own count, test_demographics_registry).
@@ -114,9 +118,36 @@ class EveryReaderGoesThroughTheConversion(unittest.TestCase):
                 for name in files:
                     path = os.path.join(root, name)
                     with open(path, encoding="utf-8-sig", errors="replace") as f:
-                        if "te_state_unemployment_share" in f.read():
-                            hits.append(os.path.relpath(path, REPO))
+                        text = f.read()
+                    # a loc line reads it through ScriptValue('...'); a GUI or scripted GUI by name
+                    read = ("ScriptValue('te_state_unemployment_share')" in text if folder == "localization"
+                            else re.search(r"\bte_state_unemployment_share\b", re.sub(r"#[^\n]*", "", text)))
+                    if read:
+                        hits.append(os.path.relpath(path, REPO))
         self.assertEqual(hits, [])
+
+
+class TheCensusStoresTheConversion(unittest.TestCase):
+    """One source for every reader (owner, 2026-10-17). A scripted GUI reads the trigger as none, so the census stores
+    the conversion from an effect and its effects and panel read the variable."""
+
+    def test_the_census_figure_is_the_conversion(self):
+        store = _squash(_body(_read(DEMOG_EFFECTS), "te_demog_work_walk_store"))
+        self.assertIn("set_variable = { name = te_dg_unemp value = te_state_unemployment_share }", store)
+        # a state the conversion's walk hasn't reached takes the census walk's workforce share, not the fallback
+        self.assertLess(store.index("set_variable = { name = te_unemp_wf_share value = var:te_dg_wf_engine }"),
+                        store.index("name = te_dg_unemp value"))
+
+    def test_its_readers_read_the_stored_figure(self):
+        values = {}
+        for path in DEMOG_VALUES:
+            values.update(_top_blocks(_read(path)))
+        self.assertIn("value = var:te_dg_unemp", _squash(values["te_demog_unemployment"]))
+        self.assertEqual(_squash(values["te_demog_unemployment_census"]), "value = te_demog_unemployment")
+        for name in ("te_demog_youth_bulge_now", "te_demog_wave_unemployment", "te_demog_country_unemployment"):
+            with self.subTest(name=name):
+                self.assertIn("value = te_demog_unemployment", _squash(values[name]))
+                self.assertNotIn("te_state_unemployment_share", values[name])
 
 
 class TheConversion(unittest.TestCase):

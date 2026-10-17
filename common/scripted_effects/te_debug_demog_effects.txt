@@ -1031,15 +1031,18 @@ te_debug_demog_work_census_line = {
 #                           script reads a state's potential conscripts: army_size_including_conscripts counts raised
 #                           ones). Another change to the field inside the week (a military technology, a law) reads as
 #                           BROKEN with its own size: the line prints both.
-#   unemployment_rate_read  the first census state whose walk counted unemployment above 0.02 (te_dg_unemp: the
-#                           workforce of pops with no workplace over all the workforce, which the youth bulge, the wave
-#                           and the pension AI read since 2026-10-17): the engine's state_unemployment_rate against that
-#                           count x the walk's workforce share (te_dg_wf_engine), the idle workforce over all the state's
-#                           people. The 2026-10-17 observer run read 0.048 against a count of 0.195 in January 1836,
-#                           when the workforce is about a quarter of the people. OK within a third either way: the
-#                           engine's figure is per person, so the census is right to count its own. BROKEN: it is
-#                           another figure again; nothing in the census reads it now, so only the notes on it change
-#                           (docs/testing/demographics-playtest.md).
+#   unemployment_rate_read  the first census state whose walk counted unemployment above 0.02 (te_dg_unemp_walk: the
+#                           workforce of pops with no workplace over all the workforce): the engine's
+#                           state_unemployment_rate against that count x the walk's workforce share (te_dg_wf_engine),
+#                           the idle workforce over all the state's people. The 2026-10-17 observer run read 0.048
+#                           against a count of 0.195 in January 1836, when the workforce is about a quarter of the
+#                           people. OK within a quarter below or a third above: the engine's figure is per person, so
+#                           the conversion the census stores (te_dg_unemp, te_state_unemployment_share; the youth
+#                           bulge, the wave, the pension AI and the panel read it since 2026-10-17) is the share of the
+#                           workforce. BROKEN: it is another figure again, and the conversion is wrong for every reader;
+#                           take unemployment_share_read's fallback (docs/testing/demographics-playtest.md). The same
+#                           comparison as unemployment_share_read (te_unemployment_effects.txt), made from the census's
+#                           walk: one engine fact, read twice.
 te_debug_demog_conscription_selfcheck_start = {
 	if = {
 		limit = {
@@ -1065,24 +1068,24 @@ te_debug_demog_unemployment_selfcheck = {
 		limit = {
 			te_demog_cohorts_run = yes
 			NOT = { has_global_variable = te_demog_selfcheck_unemp_done }
-			has_variable = te_dg_unemp
+			has_variable = te_dg_unemp_walk
 			has_variable = te_dg_wf_engine
-			var:te_dg_unemp > 0.02
+			var:te_dg_unemp_walk > 0.02
 			var:te_dg_wf_engine > 0.05
 		}
 		set_global_variable = { name = te_demog_selfcheck_unemp_done value = yes }
 		set_variable = { name = te_dg_chk_unemp_read value = te_debug_demog_unemp_engine_read }
-		set_variable = { name = te_dg_chk_unemp_people value = { value = var:te_dg_unemp multiply = var:te_dg_wf_engine } }
+		set_variable = { name = te_dg_chk_unemp_people value = { value = var:te_dg_unemp_walk multiply = var:te_dg_wf_engine } }
 		set_variable = { name = te_dg_chk_unemp_ratio value = { value = var:te_dg_chk_unemp_read divide = { value = var:te_dg_chk_unemp_people min = 0.00001 } } }
 		if = {
 			limit = {
 				var:te_dg_chk_unemp_ratio >= 0.75
 				var:te_dg_chk_unemp_ratio <= 1.33
 			}
-			debug_log = "TE_SELF_CHECK OK unemployment_rate_read read=[THIS.Var('te_dg_chk_unemp_read').GetValue|3] census=[THIS.Var('te_dg_unemp').GetValue|3] wf_share=[THIS.Var('te_dg_wf_engine').GetValue|3] per_people=[THIS.Var('te_dg_chk_unemp_people').GetValue|3] (the engine's figure is the idle workforce over all the state's people; the census counts its own share of the workforce) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK unemployment_rate_read read=[THIS.Var('te_dg_chk_unemp_read').GetValue|3] walk=[THIS.Var('te_dg_unemp_walk').GetValue|3] census=[THIS.Var('te_dg_unemp').GetValue|3] wf_share=[THIS.Var('te_dg_wf_engine').GetValue|3] per_people=[THIS.Var('te_dg_chk_unemp_people').GetValue|3] (the engine's figure is the idle workforce over all the state's people, so the conversion the census stores, census=, is the share of the workforce, walk=) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN unemployment_rate_read read=[THIS.Var('te_dg_chk_unemp_read').GetValue|3] census=[THIS.Var('te_dg_unemp').GetValue|3] wf_share=[THIS.Var('te_dg_wf_engine').GetValue|3] per_people=[THIS.Var('te_dg_chk_unemp_people').GetValue|3] (the engine's figure is neither per person nor the census's share; the census reads its own count either way, so correct the notes on it, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN unemployment_rate_read read=[THIS.Var('te_dg_chk_unemp_read').GetValue|3] walk=[THIS.Var('te_dg_unemp_walk').GetValue|3] census=[THIS.Var('te_dg_unemp').GetValue|3] wf_share=[THIS.Var('te_dg_wf_engine').GetValue|3] per_people=[THIS.Var('te_dg_chk_unemp_people').GetValue|3] (the engine's figure is not per person, so the conversion the census stores, census=, is not the share of the workforce, walk=; take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 		remove_variable = te_dg_chk_unemp_read
@@ -1096,7 +1099,7 @@ te_debug_demog_unemployment_selfcheck = {
 # and the country's (TE_DEMOG_CONSEQ_COUNTRY): what the panel shows and what the four modifiers carry.
 te_debug_demog_consequence_lines = {
 	capital = {
-		debug_log = "TE_DEMOG_CONSEQ fam=[THIS.ScriptValue('te_debug_demog_cq_fam')|0] faw=[THIS.ScriptValue('te_debug_demog_cq_faw')|0] people=[THIS.ScriptValue('te_debug_demog_cq_people')|0] share=[THIS.ScriptValue('te_demog_fam_share')|4] men_share=[THIS.ScriptValue('te_demog_fam_men_share')|3] term=[THIS.ScriptValue('te_demog_conscription_term')|3] mc=[THIS.ScriptValue('te_debug_demog_cq_mc')|3] consc_mod=[THIS.ScriptValue('te_debug_demog_cq_consc_mod')|3] youth=[THIS.ScriptValue('te_demog_youth_share')|3] unemp=[THIS.ScriptValue('te_demog_unemployment')|3] y_now=[THIS.ScriptValue('te_demog_youth_bulge_now')|3] yb=[THIS.ScriptValue('te_debug_demog_cq_yb')|3] sex=[THIS.ScriptValue('te_debug_demog_cq_sex')|1] sxb=[THIS.ScriptValue('te_debug_demog_cq_sxb')|1] tfr_sex=[THIS.ScriptValue('te_demog_tfr_sex')|3] women_add=[THIS.ScriptValue('te_demog_sex_women_add')|3] fewer=[THIS.ScriptValue('te_demog_sex_fewer_men')|3] more=[THIS.ScriptValue('te_demog_sex_more_men')|3] radicals_mod=[THIS.ScriptValue('te_debug_demog_cq_radicals_mod')|3] turmoil_mod=[THIS.ScriptValue('te_debug_demog_cq_turmoil_mod')|3] feminist_mod=[THIS.ScriptValue('te_debug_demog_cq_feminist_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log = "TE_DEMOG_CONSEQ fam=[THIS.ScriptValue('te_debug_demog_cq_fam')|0] faw=[THIS.ScriptValue('te_debug_demog_cq_faw')|0] people=[THIS.ScriptValue('te_debug_demog_cq_people')|0] share=[THIS.ScriptValue('te_demog_fam_share')|4] men_share=[THIS.ScriptValue('te_demog_fam_men_share')|3] term=[THIS.ScriptValue('te_demog_conscription_term')|3] mc=[THIS.ScriptValue('te_debug_demog_cq_mc')|3] consc_mod=[THIS.ScriptValue('te_debug_demog_cq_consc_mod')|3] youth=[THIS.ScriptValue('te_demog_youth_share')|3] unemp=[THIS.ScriptValue('te_demog_unemployment')|3] unemp_walk=[THIS.ScriptValue('te_debug_demog_unemp_walk')|3] y_now=[THIS.ScriptValue('te_demog_youth_bulge_now')|3] yb=[THIS.ScriptValue('te_debug_demog_cq_yb')|3] sex=[THIS.ScriptValue('te_debug_demog_cq_sex')|1] sxb=[THIS.ScriptValue('te_debug_demog_cq_sxb')|1] tfr_sex=[THIS.ScriptValue('te_demog_tfr_sex')|3] women_add=[THIS.ScriptValue('te_demog_sex_women_add')|3] fewer=[THIS.ScriptValue('te_demog_sex_fewer_men')|3] more=[THIS.ScriptValue('te_demog_sex_more_men')|3] radicals_mod=[THIS.ScriptValue('te_debug_demog_cq_radicals_mod')|3] turmoil_mod=[THIS.ScriptValue('te_debug_demog_cq_turmoil_mod')|3] feminist_mod=[THIS.ScriptValue('te_debug_demog_cq_feminist_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 	debug_log = "TE_DEMOG_CONSEQ_COUNTRY fam_share=[THIS.ScriptValue('te_debug_demog_cq_c_share')|4] fam_men=[THIS.ScriptValue('te_debug_demog_cq_c_men')|3] term=[THIS.ScriptValue('te_demog_country_conscription')|3] youth=[THIS.ScriptValue('te_demog_country_youth_share')|3] yb_states=[THIS.ScriptValue('te_debug_demog_cq_c_yb_n')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 }

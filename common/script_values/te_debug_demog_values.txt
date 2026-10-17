@@ -827,9 +827,12 @@ te_debug_demog_wc_gap = {
 		multiply = -1
 	}
 }
-# THIS = a state: the engine's state_unemployment_rate, which unemployment_rate_read compares with the walk's count (an
-# effect's set_variable can't take the bare trigger read: scripting_best_practices.md, "The op slots accept ...").
+# THIS = a state: the engine's state_unemployment_rate, which unemployment_rate_read compares with the walk's own count
+# (an effect's set_variable can't take the bare trigger read: scripting_best_practices.md, "The op slots accept ...").
 te_debug_demog_unemp_engine_read = { value = state_unemployment_rate }
+# THIS = a state: the walk's own count of its unemployment at the last census (te_dg_unemp_walk), -1 before one: option
+# t's unemp_walk, beside unemp (te_demog_unemployment, the conversion the census stores).
+te_debug_demog_unemp_walk = { value = -1 if = { limit = { has_variable = te_dg_unemp_walk } value = var:te_dg_unemp_walk } }
 # THIS = a state: 1 where has_state_trait reads the mild malaria trait, else 0 (malaria_trait_read).
 te_debug_demog_mal_trait_read = { value = 0 if = { limit = { has_state_trait = state_trait_malaria } add = 1 } }
 

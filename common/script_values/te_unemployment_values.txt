@@ -10,7 +10,9 @@
 # te_state_unemployment_share converts it: the engine's figure, read live, over the workforce's share of the
 # people, which moves over years (laws, the mix of pop types) and is counted once a year by a walk of the state's pops
 # (te_unemp_share_refresh, common/scripted_effects/te_unemployment_effects.txt). Every mod reader of a state's
-# unemployment outside the Demographics census reads it. The census counts its own share (te_dg_unemp) and keeps it.
+# unemployment reads it. The Demographics census stores it at its walk (te_dg_unemp, te_demog_work_walk_store), so its
+# panel, which can't read the trigger, and its effects read one figure; a state the census walks before this walk has
+# reached it takes the census walk's workforce share, the same sum (owner, 2026-10-17: one source for every reader).
 #
 # Variables, state scope (te_unemp_share_refresh):
 #   te_unemp_wf_share     the walk's workforce over its people (pops' workforce over their total_size), 0-1
