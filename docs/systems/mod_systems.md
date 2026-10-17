@@ -1248,7 +1248,7 @@ Design: `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 2; claim
 | country | `te_seabed_subj_unused_<basin>`; on a subject `te_seabed_pass_unused_<basin>`, `te_seabed_pass_built_<basin>` | claims its subjects passed it, unused (part of unbuilt); a subject's own share of those, and the licences its overlord built on them |
 | country | `te_seabed_policy_changed`, `te_seabed_policy_cost_cached`, `te_seabed_fee_cached` | the month of the last policy change (the lock; absent = free), and the two modifiers' multipliers |
 | country | `te_seabed_queued_<basin>`, `te_seabed_lic_now_<basin>` | licences on its queued levels (distant ones first) and all its licences, by basin, monthly |
-| country | `te_seabed_need_navy_<basin>`, `te_seabed_coast_<basin>`, `te_seabed_ports_<basin>`, `te_seabed_coast_all`, `te_seabed_dr_<basin>` | the "+1 licence" readout (-1 full, -2 no weight) and its inputs (coast counted with unincorporated states at half), yearly; `te_seabed_coast_inc_<basin>` the incorporated states the Free hover lists |
+| country | `te_seabed_need_navy_<basin>`, `te_seabed_coast_<basin>`, `te_seabed_ports_<basin>`, `te_seabed_coast_all`, `te_seabed_dr_<basin>` | the "+1 licence" readout (-1 full, -2 no weight) and its inputs (coast counted with unincorporated states at half), yearly; `te_seabed_coast_states_<basin>` every coastal state there, which the Free hover lists |
 | global, player | `te_seabed_rk_<basin>_<n>`, `te_seabed_rk_more_<basin>`; `te_seabed_rkcap_<basin>_<n>`, `te_seabed_rkcap_count_<basin>` | the six largest shares by basin and the rest; on each player, the ranked countries' capitals for the flags |
 | global | `te_seabed_last_sharing_month` | the panel's "as of" |
 

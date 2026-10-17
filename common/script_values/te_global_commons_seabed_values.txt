@@ -1913,13 +1913,12 @@ te_seabed_coast_gain_pacific = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_pacific = {
 	value = 0
 	if = {
-		limit = { has_variable = te_seabed_coast_inc_pacific }
-		value = var:te_seabed_coast_inc_pacific
+		limit = { has_variable = te_seabed_coast_states_pacific }
+		value = var:te_seabed_coast_states_pacific
 	}
 	subtract = 5
 	min = 0
@@ -1987,13 +1986,12 @@ te_seabed_coast_gain_atlantic = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_atlantic = {
 	value = 0
 	if = {
-		limit = { has_variable = te_seabed_coast_inc_atlantic }
-		value = var:te_seabed_coast_inc_atlantic
+		limit = { has_variable = te_seabed_coast_states_atlantic }
+		value = var:te_seabed_coast_states_atlantic
 	}
 	subtract = 5
 	min = 0
@@ -2061,13 +2059,12 @@ te_seabed_coast_gain_indian = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_indian = {
 	value = 0
 	if = {
-		limit = { has_variable = te_seabed_coast_inc_indian }
-		value = var:te_seabed_coast_inc_indian
+		limit = { has_variable = te_seabed_coast_states_indian }
+		value = var:te_seabed_coast_states_indian
 	}
 	subtract = 5
 	min = 0
@@ -2135,13 +2132,12 @@ te_seabed_coast_gain_arctic = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_arctic = {
 	value = 0
 	if = {
-		limit = { has_variable = te_seabed_coast_inc_arctic }
-		value = var:te_seabed_coast_inc_arctic
+		limit = { has_variable = te_seabed_coast_states_arctic }
+		value = var:te_seabed_coast_states_arctic
 	}
 	subtract = 5
 	min = 0
@@ -2209,13 +2205,12 @@ te_seabed_coast_gain_southern = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_southern = {
 	value = 0
 	if = {
-		limit = { has_variable = te_seabed_coast_inc_southern }
-		value = var:te_seabed_coast_inc_southern
+		limit = { has_variable = te_seabed_coast_states_southern }
+		value = var:te_seabed_coast_states_southern
 	}
 	subtract = 5
 	min = 0

@@ -163,14 +163,26 @@ class UnincorporatedCoastTest(unittest.TestCase):
     def test_the_tally_counts_unincorporated_at_half(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_weight_tally"))
         self.assertIn("add = local_var:te_sb_wc", body)
-        self.assertIn("te_sb_wi_$B$", body)               # the incorporated count, for the Build-in hover
+        self.assertIn("te_sb_ws_$B$", body)               # every coastal state, for the Build-in hover (review I4)
         walk = strip_comments(block(read(EFFECTS), "te_seabed_compute_weights"))
         self.assertIn("change_local_variable = { name = te_sb_wn_all add = local_var:te_sb_wc }", walk)
 
-    def test_the_build_in_hover_counts_incorporated_states(self):
+    def test_the_build_in_hover_lists_every_coastal_state(self):
+        """Review I4: a level in an unincorporated coastal state of its own basin
+        works at full throughput (the mine has no incorporation test, long-haul
+        goes by basin), so the Free hover lists every coastal state there and
+        counts them all."""
         values = read(VALUES)
         for b in m.BASINS:
-            self.assertIn(f"te_seabed_coast_inc_{b}", block(values, f"te_seabed_build_more_{b}"))
+            self.assertIn(f"te_seabed_coast_states_{b}", block(values, f"te_seabed_build_more_{b}"))
+        effects = strip_comments(read(EFFECTS))
+        for name in ("te_seabed_build_in_list", "te_seabed_build_in_slot"):
+            self.assertNotIn("is_incorporated", block(effects, name), name)
+        self.assertIn("change_local_variable = { name = te_sb_ws_$B$ add = 1 }", block(effects, "te_seabed_weight_tally"))
+        loc = english_loc()
+        for b in m.BASINS:
+            line = re.search(rf"(?m)^ te_seabed_build_in_none_{b}:0 \"(.*)\"$", loc).group(1)
+            self.assertNotIn("incorporated", line)
 
     def test_counted_coast_shows_a_decimal(self):
         loc = english_loc()

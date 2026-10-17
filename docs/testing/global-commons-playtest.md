@@ -210,8 +210,8 @@ gives no verdict for a country no longer a subject.
     gained.
 25. **Unincorporated coast.** A country whose only coast in a basin is unincorporated: the basin is
     home, its weight hover shows the coast at half ("1.5 coast" for one incorporated and one
-    unincorporated state) with the ports in full, and the Free hover lists only the incorporated
-    states.
+    unincorporated state) with the ports in full, and the Free hover lists the unincorporated states
+    too: a level there works at full throughput.
 26. **AI leases and pacts, observer run.** Over a few decades past era 11, AIs lease out claims they
     aren't using and ask for them when short; a lessor shouldn't lease away claims it then needs
     (if it does, raise `te_seabed_ai_lease_margin`). AI overlords take Administer Seabed Claims on

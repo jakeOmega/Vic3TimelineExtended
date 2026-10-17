@@ -60,8 +60,8 @@
 #            te_seabed_lic_now_<basin>    all its licences, by basin (monthly)
 #            te_seabed_need_navy_<basin>  the "+1 licence" readout (yearly)
 #            te_seabed_coast_<basin>/_all coastal states, unincorporated ones
-#                                         at half (yearly); _coast_inc_<basin>
-#                                         the incorporated ones
+#                                         at half (yearly); _coast_states_
+#                                         <basin> all of them, counted whole
 #            te_seabed_dr_<basin>         a frozen share's reserved-half part
 #            te_seabed_rkcap_<b>_<n>      players: ranked rivals' capitals
 #   global   te_seabed_rk_<basin>_<n>     the six largest shares by basin
@@ -893,21 +893,19 @@ te_seabed_compute_weights = {
 te_seabed_weight_reset = {
 	set_local_variable = { name = te_sb_wn_$B$ value = 0 }
 	set_local_variable = { name = te_sb_wp_$B$ value = 0 }
-	set_local_variable = { name = te_sb_wi_$B$ value = 0 }
+	set_local_variable = { name = te_sb_ws_$B$ value = 0 }
 }
 
 # State scope (inside te_seabed_compute_weights' walk): the state's coast
 # count (local te_sb_wc, half if unincorporated), its port levels in full, and
-# the incorporated states the Free figure's hover lists.
+# the coastal states the Free figure's hover lists (review I4: a level in an
+# unincorporated one works at full throughput too).
 te_seabed_weight_tally = {
 	if = {
 		limit = { var:te_seabed_basin = $N$ }
 		change_local_variable = { name = te_sb_wn_$B$ add = local_var:te_sb_wc }
 		change_local_variable = { name = te_sb_wp_$B$ add = te_seabed_state_port_levels }
-		if = {
-			limit = { is_incorporated = yes }
-			change_local_variable = { name = te_sb_wi_$B$ add = 1 }
-		}
+		change_local_variable = { name = te_sb_ws_$B$ add = 1 }
 	}
 }
 
@@ -916,7 +914,7 @@ te_seabed_weight_tally = {
 # flag stays, so the coast still counts as home).
 te_seabed_weight_set = {
 	set_variable = { name = te_seabed_coast_$B$ value = local_var:te_sb_wn_$B$ }
-	set_variable = { name = te_seabed_coast_inc_$B$ value = local_var:te_sb_wi_$B$ }
+	set_variable = { name = te_seabed_coast_states_$B$ value = local_var:te_sb_ws_$B$ }
 	set_variable = { name = te_seabed_ports_$B$ value = local_var:te_sb_wp_$B$ }
 	if = {
 		limit = { local_var:te_sb_wn_$B$ > 0 }
@@ -1077,8 +1075,8 @@ te_seabed_share_basin = {
 
 # ---- The Free figure's hover (seabed claims spec § 3.3) ----
 
-# Country scope, a tooltip only (te_seabed_build_in_sgui): our incorporated
-# coastal states in basin $B$ ($N$), five at most, those with the most port
+# Country scope, a tooltip only (te_seabed_build_in_sgui): our coastal states
+# in basin $B$ ($N$), unincorporated ones included (review I4), five at most, those with the most port
 # levels first, then how many more. Each state is saved as a temporary scope
 # and printed from the country's scope (gotcha #27's fix (a): an iterator that
 # prints nothing adds no header).
@@ -1087,7 +1085,6 @@ te_seabed_build_in_list = {
 		limit = {
 			any_scope_state = {
 				is_coastal = yes
-				is_incorporated = yes
 				has_variable = te_seabed_basin
 				var:te_seabed_basin = $N$
 			}
@@ -1112,7 +1109,6 @@ te_seabed_build_in_slot = {
 	ordered_scope_state = {
 		limit = {
 			is_coastal = yes
-			is_incorporated = yes
 			has_variable = te_seabed_basin
 			var:te_seabed_basin = $N$
 		}
