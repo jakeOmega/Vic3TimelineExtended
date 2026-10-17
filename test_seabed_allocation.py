@@ -9,7 +9,10 @@ Antarctic Treaty's Southern bar.
 
 What must hold:
 - no basin's records exceed its pool (where nothing is grandfathered);
-- every level, built or queued, is licensed after its owner's recording;
+- every level, built or queued, is licensed after its owner's recording,
+  except one its owner queued past its room through the gate's
+  under-construction branch, which waits unrecorded while the owner has no
+  share left (review H1) and never takes a licence no share paid for;
 - a basin over its pool (an old save) never grows;
 - a power with no coast in a basin gets a small share there;
 - no licence in use is taken away (entitlement >= holdings), and room is
@@ -48,21 +51,27 @@ def run(world, rng, years, *, regime_schedule=None, check=None, **step):
 
 class PoolsHoldTest(unittest.TestCase):
     """No annexation and no splits: nothing is ever recorded against no share,
-    so every basin stays within its pool, in every regime."""
+    so every basin stays within its pool, in every regime, with builders using
+    both branches of the gate."""
 
     def _check(self, world, when):
         for b in m.BASINS:
             self.assertLessEqual(world.basin_records(b), m.POOLS[b], (b, when))
             self.assertLessEqual(world.basin_records(b) + world.basin_unbuilt(b), m.POOLS[b], (b, when))
             self.assertEqual(world.no_share[b], 0, b)
+        self.assertEqual(world.stamped_no_share, 0)
         for s in world.states.values():
             if s.coastal and world.alive(s.owner):
-                self.assertEqual(s.records(), s.levels, f"state {s.sid} unlicensed after recording")
+                self.assertLessEqual(s.records(), s.levels, f"state {s.sid} holds licences it has no levels for")
         for c in world.countries.values():
             for b in m.BASINS:
                 self.assertGreaterEqual(c.unbuilt[b], 0)
-            if when == "pass" and c.alive:
-                self.assertGreaterEqual(m.room(world, c.cid), 0)
+            if not c.alive:
+                continue
+            if when == "month" and m.pending(world, c.cid) > 0:
+                # a level waits for a licence only while its owner has no share left
+                self.assertEqual(sum(c.unbuilt.values()), 0, f"country {c.cid} leaves a level unlicensed")
+            if when == "pass":
                 for b in m.BASINS:
                     self.assertGreaterEqual(c.ent[b], c.held[b], "a licence in use was taken away")
 
@@ -92,11 +101,34 @@ class PoolsHoldTest(unittest.TestCase):
         """The engine's 1e-5 truncation, as the script computes."""
         self._worlds(m.REGULATED, 5, fixed=True)
 
-    def test_pools_fill(self):
-        """After a sharing with claimants, every pool is fully shared."""
-        rng = random.Random(6)
-        for _ in range(20):
+    def test_full_pools(self):
+        """Little demolition: the pools fill and builders sit at room 0 with
+        construction under way, the review's H1 case, in every regime."""
+        for i in range(WORLDS // 2):
+            rng = random.Random(6300 + i)
+            world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
+            run(world, rng, YEARS, check=self._check, annex=0, split=0, demolish=0.002, conquest=0.01)
+            self.assertGreater(sum(world.basin_records(b) for b in m.BASINS), 0)
+
+    def test_one_unlicensed_level_at_most(self):
+        """Without conquest moving one between owners, a country never has more
+        than the one level the gate's second branch let in at room 0."""
+        def check(world, when):
+            self._check(world, when)
+            for c in world.countries.values():
+                if c.alive:
+                    self.assertLessEqual(m.pending(world, c.cid), 1, c.cid)
+        for i in range(WORLDS // 2):
+            rng = random.Random(6100 + i)
             world = m.random_world(rng)
+            run(world, rng, YEARS, check=check, annex=0, split=0, conquest=0)
+
+    def test_pools_fill(self):
+        """After a sharing with claimants, every pool is fully shared, under
+        either regime (an unclaimed reserved half joins the open half)."""
+        rng = random.Random(6)
+        for k in range(40):
+            world = m.random_world(rng, regime=m.REGULATED if k % 2 else m.OPEN)
             m.yearly_pass(world)
             for b in m.BASINS:
                 if any(c.weight[b] > 0 for c in world.countries.values() if c.alive):
@@ -124,15 +156,17 @@ class GrandfatheredTest(unittest.TestCase):
                     grandfathered = world.no_share[b] - since[b]
                     self.assertLessEqual(world.basin_records(b), cap[b] + grandfathered, f"{b} grew past its ceiling")
                     self.assertLessEqual(world.basin_records(b) + world.basin_unbuilt(b), cap[b] + grandfathered, b)
+                for c in world.countries.values():
+                    if c.alive and m.pending(world, c.cid) > 0:
+                        self.assertEqual(sum(c.unbuilt.values()), 0, f"country {c.cid} leaves a level unlicensed")
             m.yearly_pass(world)
+            # grandfathering only through § 2.4's cases: never a stamped state
+            self.assertEqual(world.stamped_no_share, 0)
             for b in m.BASINS:
                 if world.basin_records(b) > m.POOLS[b]:
                     self.assertEqual(world.basin_unbuilt(b), 0, f"room in {b}, over its pool")
             cap = ceiling()
             since = dict(world.no_share)
-            for c in world.countries.values():
-                if c.alive:
-                    self.assertGreaterEqual(m.room(world, c.cid), 0)
 
     def test_old_save(self):
         for i in range(WORLDS // 2):
@@ -201,7 +235,7 @@ class OwnerChangeTest(unittest.TestCase):
         self.assertEqual(world.basin_records("arctic"), m.POOLS["arctic"])
 
         world = full_world()
-        world.states[0].owner = world.states[0].holder = 1     # the hook left out
+        world.states[0].owner = 1     # the hook left out: nothing restamps the state either
         m.record_country(world, 1)
         self.assertEqual(world.no_share["arctic"], 1)
         # the holder's unused share still stands beside the record taken
@@ -218,6 +252,72 @@ class OwnerChangeTest(unittest.TestCase):
         m.on_state_owner_change(world, world.states[0], 1)
         self.assertEqual(world.no_share["indian"], 2)
         self.assertEqual(world.states[0].lic["indian"], 2)
+
+
+class UnderConstructionBranchTest(unittest.TestCase):
+    """Review H1: the gate's second branch (room >= 0 in a state with a level
+    under construction) lets one more level in at room 0. Two Arctic claimants
+    at 50/50 fill their shares; A keeps a construction going and queues
+    another level every month."""
+
+    def _arctic(self, control):
+        world = m.World({0: m.Country(0, policy=m.SPONSOR), 1: m.Country(1, policy=m.SPONSOR)},
+                        {0: m.State(0, "arctic", 0), 1: m.State(1, "arctic", 1)},
+                        shortfall_no_share=control)
+        m.yearly_pass(world)
+        for cid in (0, 1):
+            world.states[cid].levels = world.countries[cid].unbuilt["arctic"]
+            m.record_country(world, cid)
+        world.states[0].queued = 1          # one level of A's still under construction
+        for month in range(24):
+            if month and month % 12 == 0:
+                m.yearly_pass(world)
+            s = world.states[0]
+            if m.can_build(world, 0, s):
+                s.levels += 1
+                s.queued += 1
+            for cid in (0, 1):
+                m.record_country(world, cid)
+        return world
+
+    def test_the_reviews_leak_before_the_fix(self):
+        world = self._arctic(control=True)
+        self.assertEqual(world.basin_records("arctic"), 124)
+        self.assertEqual(world.no_share["arctic"], 24)
+        # what seabed_cap now reads as BROKEN, though the ceiling absorbs the 24
+        self.assertEqual(world.stamped_no_share, 24)
+
+    def test_the_fix_keeps_the_pool(self):
+        world = self._arctic(control=False)
+        self.assertEqual(world.basin_records("arctic"), m.POOLS["arctic"])
+        self.assertEqual(world.no_share["arctic"], 0)
+        self.assertEqual(world.stamped_no_share, 0)
+        self.assertEqual(m.pending(world, 0), 1)       # the one level the branch let in waits
+        self.assertLess(m.room(world, 0), 0)           # and shuts both branches
+
+    def test_a_waiting_level_takes_a_licence_once_one_frees(self):
+        world = self._arctic(control=False)
+        world.countries[0].navy = 20                   # A now claims far from home too
+        m.yearly_pass(world)                           # and the sharing gives it distant shares
+        m.record_country(world, 0)
+        self.assertEqual(m.pending(world, 0), 0)       # the waiting level takes one of them
+        self.assertEqual(world.basin_records("arctic") - world.states[1].records(), 100 - 50)
+        self.assertEqual(world.basin_records("arctic"), m.POOLS["arctic"])
+        self.assertEqual(sum(s.distant() for s in world.states.values()), 1)
+
+    def test_random_worlds_leak_without_the_fix(self):
+        over = 0
+        for i in range(WORLDS // 3):
+            rng = random.Random(6200 + i)
+            world = m.random_world(rng)
+            world.shortfall_no_share = True
+            for _ in range(YEARS):
+                for _ in range(12):
+                    # little demolition, so the pools fill and builders reach room 0
+                    m.step_month(world, rng, annex=0, split=0, demolish=0.002, conquest=0.01)
+                m.yearly_pass(world)
+                over += sum(1 for b in m.BASINS if world.basin_records(b) > m.POOLS[b])
+        self.assertGreater(over, 0)
 
 
 class LicenceChoiceTest(unittest.TestCase):

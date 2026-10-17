@@ -13,6 +13,7 @@
 #                             in; and the follow-state self-check's second half
 #   on_yearly_pulse_country   the AI's policy (31 December: the sharing of the
 #                             new year, in January, reads it)
+#   on_civil_war_won          a sharing next month, for the winner's shares
 # ============================================================================
 
 on_monthly_pulse_country = {
@@ -87,5 +88,28 @@ te_seabed_ai_policy_on_action = {
 	}
 	effect = {
 		te_seabed_ai_choose_policy = yes
+	}
+}
+
+# ROOT = the winner of a civil war (fired after on_revolution_end). A winning
+# revolution keeps its own variables over the nation's (CLAUDE.md, Top
+# gotchas), so its shares were the rebel claimant's: ask for a sharing next
+# month, which works them out again from the records on the states (review L3).
+on_civil_war_won = {
+	on_actions = {
+		te_seabed_civil_war_won_on_action
+	}
+}
+
+te_seabed_civil_war_won_on_action = {
+	trigger = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_country
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_seabed_reshare } }
+			set_global_variable = te_seabed_reshare
+		}
 	}
 }

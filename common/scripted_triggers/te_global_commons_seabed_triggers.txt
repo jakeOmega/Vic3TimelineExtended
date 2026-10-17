@@ -99,8 +99,17 @@ te_seabed_state_next_local = {
 # State scope: building_ocean_mine's licence gate (§ 2.6), read from its
 # possible. With the rule on, the owner must have room; as for the Solar Power
 # Receiver, a state with a level already under construction passes at 0 room,
-# so construction under way is not halted by its own queued level. The second
-# and third lines are information: which licence the next level would take.
+# so construction under way is not halted by its own queued level. That second
+# branch can't tell re-checking a queued level from queueing one more, so at
+# room 0 it lets one extra level in; the recording leaves that level waiting
+# unrecorded (te_seabed_record_country, review H1), room drops below 0 and both
+# branches shut until a share pays for it. Whether the engine re-checks
+# possible on construction under way at all is unread
+# (docs/testing/global-commons-playtest.md): if it doesn't, the branch can go.
+# The second and third lines are information: which licence the next level
+# would take. Every room read sits behind a cheap test first (review M1): the
+# unbuilt shares (a variable sum), or a Deep-Sea Mine under construction here,
+# since te_seabed_room walks every building of every coastal state.
 te_seabed_gate = {
 	trigger_if = {
 		limit = { te_global_commons_enabled = yes }
@@ -122,7 +131,10 @@ te_seabed_gate = {
 		}
 		trigger_if = {
 			limit = {
-				owner = { te_seabed_room > 0 }
+				owner = {
+					te_seabed_unbuilt_total > 0
+					te_seabed_room > 0
+				}
 			}
 			trigger_if = {
 				limit = { te_seabed_state_next_local = yes }

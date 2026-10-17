@@ -126,7 +126,7 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_noshare", "te_seabed_rem_res", "te_seabed_rem_open", "te_seabed_act",
                   "te_seabed_wsum_res", "te_seabed_wsum_all", "te_seabed_left", "te_seabed_pool",
                   "te_seabed_policy_factor_", "te_seabed_coast_weight", "te_seabed_distant_navy_share",
-                  "te_seabed_station_weight", "te_seabed_navy_assertive_mult"}
+                  "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare"}
         named = {n.rstrip("_") for n in named}
         everything = defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
@@ -150,8 +150,8 @@ class YearlyPassOrderTest(unittest.TestCase):
 
     def test_recording_returns_before_new_levels(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_record_country"))
-        order = ["te_seabed_state_return_excess", "te_seabed_state_record_new", "te_seabed_state_swap_local",
-                 "te_seabed_holder"]
+        order = ["te_seabed_state_return_excess", "name = te_sb_pend value = 1", "te_seabed_state_record_new",
+                 "te_seabed_state_swap_local", "name = te_seabed_holder value"]
         at = [body.index(s) for s in order]
         self.assertEqual(at, sorted(at))
 
@@ -165,6 +165,57 @@ class YearlyPassOrderTest(unittest.TestCase):
         self.assertIn("te_seabed_global_monthly = yes", block(on, "te_seabed_global_monthly_on_action"))
         self.assertRegex(on, r"on_monthly_pulse = \{\s*on_actions = \{\s*te_seabed_global_monthly_on_action")
         self.assertIn("te_seabed_yearly_pass = yes", block(read(EFFECTS), "te_seabed_global_monthly"))
+
+
+class ReviewFixesTest(unittest.TestCase):
+    """The review's H1, M1, M2, L1 and L3 fixes, as the model has them."""
+
+    def test_an_owners_own_shortfall_waits(self):
+        """H1: the no-share fallback skips a payer flagged te_sb_pend, which
+        the monthly recording sets for a state stamped by its owner and the
+        owner-change hook for a holder that exists."""
+        effects = strip_comments(read(EFFECTS))
+        into = block(effects, "te_seabed_record_into")
+        fallback = into[into.index("local_var:te_sb_n > 0\n\t\t\tNOT = { local_var:te_sb_pend = 1 }"):]
+        self.assertIn("change_global_variable = { name = te_seabed_noshare_$OWN$", fallback)
+        self.assertIn("var:te_seabed_holder ?= { this = scope:te_seabed_payer }", block(effects, "te_seabed_record_country"))
+        hook = block(effects, "te_seabed_on_state_owner_change")
+        self.assertLess(hook.index("name = te_sb_pend value = 1"), hook.index("te_seabed_state_record_new = yes"))
+        self.assertIn("limit = { exists = scope:te_seabed_payer }", hook)
+
+    def test_the_cap_check_flags_the_leak(self):
+        effects = strip_comments(read(EFFECTS))
+        cap = block(effects, "te_seabed_cap_check")
+        for term in ("global_var:te_seabed_cap_stamped_noshare = 0", "global_var:te_seabed_cap_escaped = 0"):
+            self.assertIn(term, cap)
+        self.assertIn("te_seabed_cap_stamped_noshare", block(effects, "te_seabed_record_into"))
+
+    def test_the_gates_room_reads_sit_behind_a_cheap_test(self):
+        """M1: every te_seabed_room read follows te_seabed_unbuilt_total > 0 or a
+        Deep-Sea Mine under construction in the state."""
+        gate = strip_comments(block(read(TRIGGERS), "te_seabed_gate"))
+        for at in [m_.start() for m_ in re.finditer(r"te_seabed_room [>=]", gate)]:
+            before = gate[max(0, at - 260):at]
+            self.assertTrue("te_seabed_unbuilt_total > 0" in before or "is_under_construction = yes" in before, before)
+
+    def test_relations_once_a_year(self):
+        """M2: a new claimant's mid-year sharing charges no relations."""
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        at = body.index("te_seabed_unilateral_relations = yes")
+        guard = body.rindex("if = {", 0, at)
+        self.assertIn("global_var:te_seabed_relations_year < te_history_current_year", body[guard:at])
+
+    def test_an_unclaimed_reserved_half_joins_the_open_half(self):
+        """L1, model: share_basin's fold_unclaimed."""
+        effects = strip_comments(read(EFFECTS))
+        self.assertIn("te_seabed_share_fold_unclaimed = { B = $B$ }", block(effects, "te_seabed_share_basin"))
+        self.assertIn("te_seabed_share_fold_unclaimed = { B = $B$ }", block(effects, "te_seabed_share_round"))
+
+    def test_a_revolutions_side_writes_no_policy(self):
+        """L3."""
+        self.assertIn("NOT = { is_revolutionary = yes }",
+                      strip_comments(block(read(EFFECTS), "te_seabed_ai_choose_policy")))
+        self.assertIn("te_seabed_reshare", strip_comments(read(ON_ACTIONS)))
 
 
 class GateTest(unittest.TestCase):
