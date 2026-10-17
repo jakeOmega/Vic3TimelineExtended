@@ -17,11 +17,10 @@ te_nation_override_bar = {
 	max = 1
 }
 
-# The strongest Forceful Legislation option the capacity opens
-# (minor_events_timelineextended.2 in events/minor_events.txt): 0 the event
-# isn't offered (below 0), 1 expedite, 2 push decisively (at 2), 3 force it
-# through (at 4). Authority decides the rest, as the event says.
-te_nation_override_tier = {
+# The strongest Forceful Legislation option the capacity alone opens
+# (minor_events_timelineextended.2 in events/minor_events.txt): 0 none (below
+# 0), 1 expedite, 2 push decisively (at 2), 3 force it through (at 4).
+te_nation_override_cap_tier = {
 	value = 0
 	if = {
 		limit = { te_nation_override_capacity >= 4 }
@@ -34,6 +33,64 @@ te_nation_override_tier = {
 	else_if = {
 		limit = { te_nation_override_capacity >= 0 }
 		value = 1
+	}
+}
+
+# The strongest option open now: the event also needs more authority
+# produced than each option costs (its trigger and options' triggers).
+te_nation_override_tier = {
+	value = 0
+	if = {
+		limit = {
+			te_nation_override_capacity >= 4
+			produced_authority > forced_law_through_event_authority_cost_large
+		}
+		value = 3
+	}
+	else_if = {
+		limit = {
+			te_nation_override_capacity >= 2
+			produced_authority > forced_law_through_event_authority_cost_medium
+		}
+		value = 2
+	}
+	else_if = {
+		limit = {
+			te_nation_override_capacity >= 0
+			produced_authority > forced_law_through_event_authority_cost_small
+		}
+		value = 1
+	}
+}
+
+# The authority the next option needs, while authority, not capacity, holds
+# the tier below what the capacity opens; 0 otherwise.
+te_nation_override_next_cost = {
+	value = 0
+	if = {
+		limit = { te_nation_override_cap_tier > te_nation_override_tier }
+		if = {
+			limit = { te_nation_override_tier = 0 }
+			value = forced_law_through_event_authority_cost_small
+		}
+		else_if = {
+			limit = { te_nation_override_tier = 1 }
+			value = forced_law_through_event_authority_cost_medium
+		}
+		else = {
+			value = forced_law_through_event_authority_cost_large
+		}
+	}
+}
+
+# Global Technological Development: the technology spread the yearly pulse
+# last applied (tech_spread_on_action), 0 before it. Never the sweep itself
+# (global_tech_spread_script_value), which the GUI would rerun every frame.
+te_nation_tech_spread = {
+	value = 0
+	if = {
+		limit = { has_variable = te_global_tech_spread_applied }
+		value = var:te_global_tech_spread_applied
 	}
 }
 

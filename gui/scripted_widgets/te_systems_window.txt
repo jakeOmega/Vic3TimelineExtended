@@ -4,6 +4,6 @@
 # file in this folder loads, so no vanilla file is replaced.
 #
 # The Timeline Extended window: the launcher under the sidebar, and the window
-# with its Space Race, Colonial Empire and Grand Monuments tabs.
+# with its Nation, Space Race, Grand Monuments, Colonial Empire and Seabed tabs.
 gui/te_systems_window.gui = te_systems_window_launcher
 gui/te_systems_window.gui = te_systems_window

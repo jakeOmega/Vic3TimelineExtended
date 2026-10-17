@@ -270,7 +270,7 @@ types te_systems_window_types
 					}
 				}
 
-				# TEMPORARY: second strip avoids shrinking the three full system labels.
+				# TEMPORARY: a strip of its own (the third) avoids shrinking the system tabs' full names.
 				tab_buttons = {
 					visible = "[GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					blockoverride "first_button" { text = "te_tp_tab" }

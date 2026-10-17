@@ -91,6 +91,11 @@ SECTIONS = {
         # Colonial programmes (the Colonial Empire entry's policy dials)
         "colonial_cultural_assimilation_modifier", "colonial_development_investment_modifier",
         "colonial_military_garrison_modifier",
+        # The colonial empire's ending, for good (decol_grant_permanent_modifier,
+        # `days = -1`), and the Imperial Federation and Mandate System decisions.
+        # Solidified is also the entry's top band, which never reaches the country.
+        "colonial_empire_solidified_modifier", "commonwealth_path_modifier", "iron_fist_path_modifier",
+        "quiet_assimilation_path_modifier", "imperial_federation_modifier", "mandate_system_modifier",
     ),
     "science_and_space": (
         # Space race milestones (first and later), the probe's data, the dividend
@@ -118,6 +123,9 @@ SECTIONS = {
         "intelligence_sharing_defense_shield_modifier", "nd_taboo_*",
         # A colonial subject's overlord in decline
         "colonial_overlord_*",
+        # Foreign cultures' pull on legitimacy, scaled monthly by the cultural
+        # hegemony entry's pulse but added to the country itself
+        "cultural_hegemony_foreign_benchmark",
     ),
 }
 
@@ -214,7 +222,8 @@ _STRING_OR_COMMENT = re.compile(r'"[^"\n]*"|#[^\n]*')
 _OPENER = re.compile(r"([\w.:@$-]+)\s*\??=\s*\{|\{|\}")
 _ADD = re.compile(r"\badd_modifier\s*=\s*\{")
 _NAME = re.compile(r"\bname\s*=\s*([\w$]+)")
-_DURATION = re.compile(r"\b(?:days|weeks|months|years)\s*=")
+# A duration, but not `= -1`, which is forever (vanilla's `months = -1 # FOREVER`).
+_DURATION = re.compile(r"\b(?:days|weeks|months|years)\s*=(?!\s*-)")
 _CALL = re.compile(r"\b(\w+)\s*=\s*\{([^{}]*)\}")
 _ARG = re.compile(r"\b([A-Z][A-Z0-9_]*)\s*=\s*([\w$.:]+)")
 _PARAM = re.compile(r"\$([A-Z][A-Z0-9_]*)\$")
@@ -464,36 +473,50 @@ def generated_panel(vanilla_text=None):
     text = VANILLA_PANEL.read_text(encoding="utf-8-sig") if vanilla_text is None else vanilla_text
     lines = text.splitlines()
     head = [line for line in lines if re.match(r"@panel_width\w* = ", line)]
-    start = next(i for i, line in enumerate(lines) if line.strip().startswith(f"type {PANEL_TYPE} = "))
+
+    def moved(what):
+        return ValueError(f"vanilla's {PANEL_TYPE} moved {what}: update generated_panel()")
+
+    start = next((i for i, line in enumerate(lines) if line.strip().startswith(f"type {PANEL_TYPE} = ")), None)
+    if start is None:
+        raise moved(f"(no `type {PANEL_TYPE} = `)")
     depth, end = 0, None
     for i in range(start, len(lines)):
         depth += lines[i].count("{") - lines[i].count("}")
         if depth == 0:
             end = i
             break
+    if end is None:
+        raise moved("(the type never closes)")
     body = lines[start:end + 1]
-    timed = next(i for i, line in enumerate(body) if line.strip() == "### TIMED MODIFIERS")
-    out, empties, item = body[:timed], 0, False
+    timed = next((i for i, line in enumerate(body) if line.strip() == "### TIMED MODIFIERS"), None)
+    if timed is None:
+        raise moved("its modifier list (no `### TIMED MODIFIERS`)")
+    out, empties, item = body[:timed], 0, None
     for line in body[timed:]:
         indent = line[:len(line) - len(line.lstrip())]
-        if line.strip() == _EMPTY:
+        if item is not None:
+            # The filter goes on the item's root, so a hidden row leaves no
+            # blank item: the line after `item = {` must open it.
+            if line.strip() != "container = {" or indent != item + "\t":
+                raise moved(f"its list item (`{line.strip()}` is the item's root, not `container = {{`)")
+            item = None
+            out.append(line)
+            out += _mod_block(indent + "\t", "hidden while the Nation tab shows it (gui/te_nation_generated.gui)",
+                              [], ["using = te_nation_hidden_filter"])
+        elif line.strip() == _EMPTY:
             empties += 1
             new = [_SHOWN] + (["ignoreinvisible = yes"] if empties == 2 else [])
             why = ("the header shows while a modifier the Nation tab doesn't show is left" if empties == 1
                    else "the list skips what the Nation tab shows")
             out += _mod_block(indent, why, [line], new)
         elif line.strip() == "item = {":
-            item = True
+            item = indent
             out.append(line)
-        elif item and line.strip() == "container = {":
-            item = False
-            out.append(line)
-            out += _mod_block(indent + "\t", "hidden while the Nation tab shows it (gui/te_nation_generated.gui)",
-                              [], ["using = te_nation_hidden_filter"])
         else:
             out.append(line)
-    if empties != 2 or item or not any("te_nation_hidden_filter" in line for line in out):
-        raise ValueError(f"vanilla's {PANEL_TYPE} moved its modifier list: update generated_panel()")
+    if empties != 2 or item is not None or not any("te_nation_hidden_filter" in line for line in out):
+        raise moved("its modifier list (its two IsDataModelEmpty lines or its item)")
     parts = [
         f"### {HEADER}",
         f"### Vanilla's {PANEL_TYPE} (gui/country_panel.gui, the country panel's Information",

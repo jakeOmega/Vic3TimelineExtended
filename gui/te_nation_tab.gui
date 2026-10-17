@@ -379,6 +379,11 @@ types te_nation_widget_types
 				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)3' )]"
 				text = "te_nation_override_tier_3"
 			}
+			### While authority produced, not capacity, holds it there.
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
+				text = "te_nation_override_short"
+			}
 
 			### The Algorithmic Mandate, under Algorithmic Governance only.
 			flowcontainer = {
@@ -424,7 +429,9 @@ types te_nation_widget_types
 		te_nation_panel = {
 			te_nation_row = {
 				text = "te_nation_wc_row"
-				tooltip = "te_nation_wc_row_tt"
+				### The Population panel's Demographics tab is there only under the
+				### Demographics rule (te_pops_demog_tab_sgui).
+				tooltip = "[SelectLocalization( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_nation_wc_row_demog_tt', 'te_nation_wc_row_tt' )]"
 			}
 			te_nation_target_bar = {
 				blockoverride "high" {
@@ -504,7 +511,7 @@ types te_nation_widget_types
 	### Drawn only with something to show (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_science_and_space = flowcontainer {
-		visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('global_tech_spread_script_value'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' ) )]"
+		visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' ) )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -516,7 +523,7 @@ types te_nation_widget_types
 		}
 		te_nation_panel = {
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('global_tech_spread_script_value'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 

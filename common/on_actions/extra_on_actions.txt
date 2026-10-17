@@ -1193,10 +1193,14 @@ tech_spread_on_action = {
 	effect = {
 		if = {
 			limit = { global_tech_spread_script_value > 0 }
+			# The value applied, for the Nation tab's row (te_nation_tech_spread):
+			# the GUI re-reads every frame, and the script value sweeps 54
+			# technologies across every country.
+			set_variable = { name = te_global_tech_spread_applied value = global_tech_spread_script_value }
 			remove_modifier = global_technological_development
 			add_modifier = {
 				name = global_technological_development
-				multiplier = global_tech_spread_script_value
+				multiplier = var:te_global_tech_spread_applied
 			}
 		}
 	}
