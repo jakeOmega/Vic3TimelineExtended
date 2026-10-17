@@ -89,6 +89,10 @@ Canada 0.56. Every region's lines on top count ×1.35 to ×1.8 against the censu
 - **Working conditions' 2.4× (I).** The walk adds the table as constants, and also reads
   `building_group_<g>_<type>_mortality_mult`. The 2026-10-09 growth probe found those reads 0 at the capital in 1949;
   if they read the table elsewhere, the walk counts it twice.
+  - **Settled 2026-10-17 (P2 BROKEN):** a Walloon mine read 0.100 in January 1836. The table applies to each building
+    × (1 + `building_working_conditions_mult`), and the 1949 capital's 0 was France's Workplace Safety at five. The
+    constants are gone (`engine_rate_terms`); §2.1's choice for building-scope lines (bare weight or the census's rate)
+    is still open, and the walk keeps bare weight.
   - The engine may still apply it once. Then the West's +1.1 to +2.2 per 1,000 of own lines are partly booked deaths
     the engine doesn't deliver, and they read as emigration.
   - The saves can't separate that from real emigration. In-game check P2.
@@ -463,6 +467,8 @@ a false pass.
   - OK: under 0.05 (about 0, the growth probe's capital reading), so the walk's constant is the only copy. BROKEN:
     about 0.1, so the walk counts the table twice. Fallback: drop the constants from `te_demog_pop_death_mult`, then
     redo 2.1's choice for building-scope lines.
+  - **Read 2026-10-17: BROKEN, `read=0.100` at a Walloon mine.** The constants are gone (§1's "Working conditions'
+    2.4×" has why); the check now tests the read against the table at the building's scale. 2.1's choice is open.
 - **P3, the malaria traits: the self-check `malaria_trait_read`** (inline, no event).
   - `disabling_technologies` disables the trait's modifier, not the trait. **Preferred reading, built:**
     `has_state_trait` still reads the trait afterwards. Vanilla assumes the same: `cultural_community_values.txt`

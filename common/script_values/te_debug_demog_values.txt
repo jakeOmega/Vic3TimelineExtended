@@ -800,8 +800,39 @@ te_debug_demog_fr_ratio = {
 }
 # THIS = a building: working conditions' laborers key on a mine as the building reads it (te_debug_demog.41).
 te_debug_demog_wc_mine_read = { value = modifier:building_group_bg_mining_laborers_mortality_mult }
-# THIS = the state te_debug_demog.41 picked: the mine's read the check stored there.
+# THIS = a building: the size working conditions apply at, 1 + its building_working_conditions_mult (Workplace Safety's
+# -0.2 a level, vanilla's -0.1 amendment and trait), at least 0.
+te_debug_demog_wc_mine_scale = {
+	value = 1
+	add = modifier:building_working_conditions_mult
+	min = 0
+}
+# THIS = a building: the read the walk relies on, the table's laborers line for bg_mining (working_conditions, vanilla's
+# 00_code_static_modifiers.txt; test_gen_demographics holds it to the table) at the building's scale.
+te_debug_demog_wc_table_mining_laborers = { value = 0.1 }
+te_debug_demog_wc_mine_expected = {
+	value = te_debug_demog_wc_table_mining_laborers
+	multiply = te_debug_demog_wc_mine_scale
+}
+# THIS = the state te_debug_demog.41 picked: the mine's read, its expected read and its scale, as the check stored them
+# there, and how far the read is from the expected.
 te_debug_demog_wc_read = { value = -1 if = { limit = { has_variable = te_dbg_wc_read } value = var:te_dbg_wc_read } }
+te_debug_demog_wc_expected = { value = -1 if = { limit = { has_variable = te_dbg_wc_exp } value = var:te_dbg_wc_exp } }
+te_debug_demog_wc_scale = { value = -1 if = { limit = { has_variable = te_dbg_wc_scale } value = var:te_dbg_wc_scale } }
+te_debug_demog_wc_gap = {
+	value = te_debug_demog_wc_read
+	subtract = te_debug_demog_wc_expected
+	if = {
+		limit = { te_debug_demog_wc_read < te_debug_demog_wc_expected }
+		multiply = -1
+	}
+}
+# THIS = a state: the engine's state_unemployment_rate, which unemployment_rate_read compares with the walk's own count
+# (an effect's set_variable can't take the bare trigger read: scripting_best_practices.md, "The op slots accept ...").
+te_debug_demog_unemp_engine_read = { value = state_unemployment_rate }
+# THIS = a state: the walk's own count of its unemployment at the last census (te_dg_unemp_walk), -1 before one: option
+# t's unemp_walk, beside unemp (te_demog_unemployment, the conversion the census stores).
+te_debug_demog_unemp_walk = { value = -1 if = { limit = { has_variable = te_dg_unemp_walk } value = var:te_dg_unemp_walk } }
 # THIS = a state: 1 where has_state_trait reads the mild malaria trait, else 0 (malaria_trait_read).
 te_debug_demog_mal_trait_read = { value = 0 if = { limit = { has_state_trait = state_trait_malaria } add = 1 } }
 
@@ -835,18 +866,27 @@ te_debug_demog_wf_dependents_gap = {
 	}
 }
 
-# workforce_follows_target: the census years since W landed in this capital, how far W has moved since (the check waits
-# until it has moved at least te_debug_demog_wft_min_move, so an OK can't come from a ratio that never changed), how far
-# the engine's figure has moved W's way since (te_dg_wft_e0, the walk's at landing) and half of W's move, the OK line.
+# workforce_follows_target: the census years since W landed in this capital; the move the engine's figure had to make
+# since, from where it stood at the landing (te_dg_wft_e0, the walk's then) to the ratio its pops are set to now
+# (te_demog_wf_set: the pops' bases, W and the lines on top), signed (te_debug_demog_wft_needed); its size
+# (te_debug_demog_wft_moved: the check waits until it is at least te_debug_demog_wft_min_move, so an OK can't come
+# from a figure that had nowhere to go); how far the engine has moved that way; and half of the move, the OK line.
+# Not W's own move: W lands from the moved lines' pair, which the engine may not have reached, and then a W that falls
+# back to where the engine stood asks no move of it. Braunschweig's capital, 2026-10-17: W 0.039 to 0.002 over five
+# years, the engine 0.249 at the landing against a set ratio of about 0.289 and 0.252 after, beside a set ratio of
+# 0.252; W's rule asked 0.018 of a move down, and read BROKEN.
 te_debug_demog_wft_years = {
 	value = te_demog_year
 	subtract = var:te_dg_wft_y0
 }
+te_debug_demog_wft_needed = {
+	value = te_demog_wf_set
+	subtract = var:te_dg_wft_e0
+}
 te_debug_demog_wft_moved = {
-	value = var:te_dg_mw
-	subtract = var:te_dg_wft_w0
+	value = te_debug_demog_wft_needed
 	if = {
-		limit = { var:te_dg_mw < var:te_dg_wft_w0 }
+		limit = { te_debug_demog_wft_needed < 0 }
 		multiply = -1
 	}
 }
@@ -857,7 +897,7 @@ te_debug_demog_wft_engine_moved = {
 	value = var:te_dg_wf_engine
 	subtract = var:te_dg_wft_e0
 	if = {
-		limit = { var:te_dg_mw < var:te_dg_wft_w0 }
+		limit = { te_debug_demog_wft_needed < 0 }
 		multiply = -1
 	}
 }

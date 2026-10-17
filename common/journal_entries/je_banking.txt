@@ -202,6 +202,17 @@
 			remove_variable = banking_bank_holiday_reopening # REVIEWED 2026-10-05: cleared on purpose; the holiday this marker belongs to did not survive the revolution, so no reopening bounce is owed
 		}
 
+		# Likewise banking_contagion_pending, the mark that gives a country one
+		# contagion event at a time (banking_contagion_mark_pending): the event
+		# it stands for belonged to the loser, and went with it. The mark is
+		# timed, but whether the merge keeps a timer is unverified, and a mark
+		# kept for good would shut the country out of contagion for the game.
+		# On a first activation there is none: the spread reaches only holders.
+		if = {
+			limit = { has_variable = banking_contagion_pending }
+			remove_variable = banking_contagion_pending # REVIEWED 2026-10-17: cleared on purpose; the contagion event this mark stands for did not survive the revolution, so the winner may be reached again
+		}
+
 		# The four bars, drawn from the variables above by the monthly pulse's
 		# own effect (its momentum clamp, and its has_variable test on the
 		# monetary system's te_mon_stance_bar_pos). On an inherited copy the

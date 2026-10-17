@@ -70,6 +70,8 @@ LX_GEN_VALUES = ROOT / "common" / "script_values" / "te_demog_lx_generated_value
 FL_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fl_effects.txt"
 SPREAD_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_spread_effects_generated.txt"
 SPREAD_VALUES = ROOT / "common" / "script_values" / "te_demog_spread_values_generated.txt"
+# The shared unemployment conversion (te_state_unemployment_share), which the census stores at its walk (2026-10-17)
+UNEMP_VALUES = ROOT / "common" / "script_values" / "te_unemployment_values.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -446,7 +448,8 @@ class _Engine:
         self.effects.update(SELF_CHECK_STUBS)
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
-                                   WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES])
+                                   WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES,
+                                   UNEMP_VALUES])
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -1460,12 +1463,31 @@ class TestWorkWalk(unittest.TestCase):
         self.assertEqual(eng.vars, {})
 
     def test_under_the_census_the_store_divides_by_the_walks_people(self):
-        eng = _Engine({}, triggers={"te_demog_cohorts_run": True})
+        # the engine's figure per person (unemployment_rate_read, 2026-10-17): 50 idle of 1,000 people
+        eng = _Engine({"state_unemployment_rate": 0.05}, triggers={"te_demog_cohorts_run": True})
         eng.call("te_demog_work_walk_init")
-        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0)
+        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0, te_dg_w_un=50.0)
         eng.call("te_demog_work_walk_store")
         self.assertEqual((eng.vars["te_dg_low_share"], eng.vars["te_dg_wbase"], eng.vars["te_dg_wf_engine"]),
                          (0.8, 0.26, 0.25))
+        self.assertEqual(eng.vars["te_dg_unemp_walk"], 0.2)   # the walk's own count: over the workforce, not the people
+        # the census's figure is the shared conversion (owner, 2026-10-17); a state its own walk hasn't reached takes
+        # this walk's workforce share, so the conversion matches the count
+        self.assertEqual(eng.vars["te_unemp_wf_share"], 0.25)
+        self.assertEqual(eng.vars["te_dg_unemp"], 0.2)
+
+    def test_the_census_stores_the_conversion_at_the_shared_workforce_share(self):
+        """Where the conversion's own walk has stored the workforce share (te_unemp_share_refresh), the census leaves it
+        and divides by it, as every other reader does: one source."""
+        eng = _Engine({"state_unemployment_rate": 0.06}, triggers={"te_demog_cohorts_run": True})
+        eng.call("te_demog_work_walk_init")
+        eng.vars["te_unemp_wf_share"] = 0.3
+        eng.locals.update(te_dg_w_pop=1000.0, te_dg_w_low=800.0, te_dg_w_wbase=260.0, te_dg_w_wf=250.0, te_dg_w_un=50.0)
+        eng.call("te_demog_work_walk_store")
+        self.assertEqual(eng.vars["te_unemp_wf_share"], 0.3)
+        self.assertAlmostEqual(eng.vars["te_dg_unemp"], 0.2)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_unemployment")), 0.2)
+        self.assertEqual(eng.vars["te_dg_unemp_walk"], 0.2)
 
     def test_three_pops_through_the_walk_effects(self):
         """Each pop's sums as te_demog_walks makes them, one pop at a time (TestGini.walk's pattern; the review of #923):
@@ -1482,10 +1504,14 @@ class TestWorkWalk(unittest.TestCase):
 
         eng = _PopEngine({}, triggers={"te_demog_cohorts_run": True})
         eng.call("te_demog_work_walk_init")
-        pops = (("aristocrats", "upper", 100.0, 18.0), ("slaves", "lower", 400.0, 210.0),
-                ("laborers", "lower", 500.0, 130.0))
-        for pop_type, strata, size, workforce in pops:
-            eng.pop_type, eng.strata = pop_type, strata
+        # the laborers have no workplace: the walk's count (te_dg_unemp_walk, 2026-10-17) is their workforce over all;
+        # the engine's figure is their workforce over all the people (unemployment_rate_read), which the census
+        # stores over the workforce share (te_dg_unemp, te_state_unemployment_share)
+        eng.fixtures["state_unemployment_rate"] = 130 / 1000
+        pops = (("aristocrats", "upper", 100.0, 18.0, "bg_agriculture"), ("slaves", "lower", 400.0, 210.0, "bg_mining"),
+                ("laborers", "lower", 500.0, 130.0, None))
+        for pop_type, strata, size, workforce, workplace in pops:
+            eng.pop_type, eng.strata, eng.workplace = pop_type, strata, workplace
             eng.fixtures.update(total_size=size, workforce=workforce)
             eng.call("te_demog_work_walk_pop")
         eng.locals["te_dg_w_pop"] = 1000.0          # the walk's own people sum (te_demog_walks keeps it)
@@ -1493,6 +1519,11 @@ class TestWorkWalk(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_low_share"], (400 + 500) / 1000)
         self.assertAlmostEqual(eng.vars["te_dg_wbase"], (100 * 0.2 + 400 * 0.5 + 500 * 0.25) / 1000)
         self.assertAlmostEqual(eng.vars["te_dg_wf_engine"], (18 + 210 + 130) / 1000)
+        self.assertAlmostEqual(eng.vars["te_dg_unemp_walk"], 130 / (18 + 210 + 130))
+        self.assertAlmostEqual(eng.vars["te_dg_unemp"], 130 / (18 + 210 + 130), places=4)
+        # what te_demog_unemployment, and so the youth bulge, the wave, the pension AI and the panel, read
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_unemployment")), 130 / (18 + 210 + 130),
+                               places=4)
 
     def test_the_figures_are_stored_where_the_denominator_is_whole(self):
         """D4: in the seed straight after the accumulators close, in the step after the newborns join te_dg_raw."""
@@ -4756,10 +4787,19 @@ class TestWealth(unittest.TestCase):
         # owner's ruling on #830: only a loser a war goal was enforced against
         self.assertLess(lost.index("exists = scope:victim_of_wargoal"), lost.index("te_demog_wc_shock"))
         banking = _text(BANKING)
-        sites = [m.end() for m in re.finditer(r"set_variable = \{ name = banking_crisis_wave_crashed value = 1 \}", banking)]
+        # A reach turned away while the country's contagion event is open books that event's crash for the new
+        # wave (banking_contagion_reach, 2026-10-17): no second crash, so no second shock.
+        reach = _block(banking, "banking_contagion_reach")
+        self.assertIn("banking_crisis_wave_crashed", reach)
+        self.assertNotIn("te_demog_wc_shock", reach)
+        crashes = banking.replace(reach, "")
+        sites = re.findall(r"set_variable = \{ name = banking_crisis_wave_crashed value = 1 \}", crashes)
         self.assertEqual(len(sites), 2)
-        for end in sites:
-            self.assertIn("te_demog_wc_shock = { AMOUNT = -5 }", banking[end:end + 300])
+        # The two crashes: an origin's (the wave's start) and a contagion roll's. Each marks it, then shocks.
+        for name in ("banking_crisis_wave_init", "banking_contagion_crash_check"):
+            body = _block(banking, name)
+            self.assertLess(body.index("set_variable = { name = banking_crisis_wave_crashed value = 1 }"),
+                            body.index("te_demog_wc_shock = { AMOUNT = -5 }"), name)
 
     def test_a_won_left_revolution_reads_the_resolved_sides(self):
         """The repair runs between te_civil_war_resolve_sides and te_civil_war_clear (which removes
@@ -6960,10 +7000,14 @@ class TestConsequencesScript(unittest.TestCase):
 
     def _state(self, fam=11000.0, people=100000.0, balance=94.0, youth=(8000.0, 8100.0, 7900.0, 7950.0),
                unemployment=0.0, full=True):
-        eng = _Engine({"state_unemployment_rate": unemployment, **_switch_fixtures()},
+        # the unemployment the census stored (te_dg_unemp, te_demog_work_walk_store: te_state_unemployment_share at the
+        # walk), the share of the workforce the model takes; the engine's state_unemployment_rate, a quarter of it in
+        # 1836 (unemployment_rate_read), is read by nothing here
+        eng = _Engine({"state_unemployment_rate": unemployment / 4, **_switch_fixtures()},
                       triggers={"te_demog_effects_run": full})
         eng.vars.update(te_dg_fam=fam, te_dg_faw=fam * 1.02, te_dg_people=people, te_dg_sex_balance=balance,
-                        te_dg_bf4=youth[0], te_dg_bm4=youth[1], te_dg_bf5=youth[2], te_dg_bm5=youth[3])
+                        te_dg_bf4=youth[0], te_dg_bm4=youth[1], te_dg_bf5=youth[2], te_dg_bm5=youth[3],
+                        te_dg_unemp=unemployment)
         return eng
 
     def test_full_applies_the_models_terms(self):
@@ -7091,9 +7135,29 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertIn("te_demog_youth_bulge_shown", names)
         for name in sorted(names):
             self.assertFalse(live(name, set()), name)
+        # the walk stores it under the cohorts, both settings (2026-10-17: the shared conversion from an effect, beside
+        # the walk's own count), and the refresh doesn't write it
         refresh = _raw_blocks([CONSEQ_EFFECTS])["te_demog_consequences_refresh"]
-        store = "set_variable = { name = te_dg_unemp value = te_demog_unemployment }"
-        self.assertLess(refresh.index(store), refresh.index("if = {"))   # outside the Full-only branch
+        self.assertNotIn("name = te_dg_unemp", refresh)
+        store = _raw_blocks([EFFECTS])["te_demog_work_walk_store"]
+        self.assertIn("set_variable = { name = te_dg_unemp value = te_state_unemployment_share }", store)
+        self.assertIn("set_variable = { name = te_dg_unemp_walk value = { value = local_var:te_dg_w_un divide = "
+                      "{ value = local_var:te_dg_w_wf min = 1 } } }", store)
+
+    def test_nothing_in_the_census_reads_the_engines_unemployment(self):
+        """unemployment_rate_read (2026-10-17): state_unemployment_rate read 0.048 where the pops' share was 0.195, the
+        idle workforce over all the people. The youth bulge, the wave, the pension AI and the panel read the shared
+        conversion the census stores (te_state_unemployment_share, owner 2026-10-17); only the self-check reads the
+        engine's figure here, through its wrapper."""
+        readers = []
+        for folder in ("script_values", "scripted_effects", "scripted_triggers"):
+            for path in sorted((ROOT / "common" / folder).glob("te_demog*.txt")):
+                if "state_unemployment_rate" in re.sub(r"#[^\n]*", "", _text(path)):
+                    readers.append(path.name)
+        self.assertEqual(readers, [])
+        debug = re.sub(r"#[^\n]*", "", _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt"))
+        self.assertEqual(re.findall(r"^(\w+) = \{[^\n]*state_unemployment_rate", debug, re.M),
+                         ["te_debug_demog_unemp_engine_read"])
 
     def test_a_census_from_before_step_4_takes_nothing(self):
         eng = self._state()

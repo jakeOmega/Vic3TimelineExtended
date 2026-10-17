@@ -642,6 +642,34 @@ types te_state_panel_widget_types
 							text = "gm_row_landmark"
 						}
 
+						### A REVOLT'S SPLIT PIECE, and the monument whose piece stands
+						### in another part of its region (owner's call 2026-10-17):
+						### where the other part stands, why on hover.
+						textbox = {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_piece'), '(CFixedPoint)1' )]"
+							autoresize = yes
+							multiline = yes
+							minimumsize = { 350 -1 }
+							maximumsize = { 350 -1 }
+							align = left|nobaseline
+							using = fontsize_medium
+							default_format = "#tooltippable"
+							tooltip = "gm_row_piece_tt"
+							text = "gm_row_piece"
+						}
+						textbox = {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_has_piece'), '(CFixedPoint)1' )]"
+							autoresize = yes
+							multiline = yes
+							minimumsize = { 350 -1 }
+							maximumsize = { 350 -1 }
+							align = left|nobaseline
+							using = fontsize_medium
+							default_format = "#tooltippable"
+							tooltip = "gm_row_split_tt"
+							text = "gm_row_split"
+						}
+
 						### GRANDEUR and the step now being filled.
 						te_state_meter = {
 							blockoverride "meter_tooltip" {

@@ -788,10 +788,14 @@ te_debug_demog.40 = {
 	}
 }
 
-# .41: working_conditions_read. OK: a mine outside the capital reads working conditions' laborers line as about 0 (the
-# 2026-10-09 growth probe's capital reading), so the walk's constant (the table's 0.1) is its only copy. BROKEN: it reads
-# about 0.1, so the walk counts the table twice; drop the constants from te_demog_pop_death_mult (gen_demographics.py,
-# engine_rate_terms) and refit (docs/testing/demographics-playtest.md, "Self-checks").
+# .41: working_conditions_read. A week after the first country with a mine where working conditions apply at half
+# their size or more, one such mine's read of the table's laborers key against the table's 0.1 x the building's scale
+# (1 + its building_working_conditions_mult). The 2026-10-17 observer run read 0.100 at a Walloon mine (scale 1), so
+# the building's read carries the table and the walk now takes it from that read alone; the growth probe's 1949 capital
+# read 0 under Workplace Safety at five, the scale's 0. OK: the read is the table at the building's scale, the read the
+# walk relies on. BROKEN: it isn't; read 0 means the read can't see the table there, so the walk misses working
+# conditions: put the table's constants back in te_demog_pop_death_mult (gen_demographics.py, engine_rate_terms), scaled
+# by the workplace's 1 + building_working_conditions_mult (docs/testing/demographics-playtest.md, "Self-checks").
 te_debug_demog.41 = {
 	type = country_event
 	hidden = yes
@@ -802,17 +806,23 @@ te_debug_demog.41 = {
 			random_scope_building = {
 				limit = { te_debug_demog_wc_mine = yes }
 				set_local_variable = { name = te_s3_wc value = te_debug_demog_wc_mine_read }
+				set_local_variable = { name = te_s3_wc_exp value = te_debug_demog_wc_mine_expected }
+				set_local_variable = { name = te_s3_wc_scale value = te_debug_demog_wc_mine_scale }
 				state = {
 					set_variable = { name = te_dbg_wc_read value = local_var:te_s3_wc }
+					set_variable = { name = te_dbg_wc_exp value = local_var:te_s3_wc_exp }
+					set_variable = { name = te_dbg_wc_scale value = local_var:te_s3_wc_scale }
 					if = {
-						limit = { var:te_dbg_wc_read < 0.05 }
-						debug_log = "TE_SELF_CHECK OK working_conditions_read read=[THIS.ScriptValue('te_debug_demog_wc_read')|3] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+						limit = { te_debug_demog_wc_gap < 0.01 }
+						debug_log = "TE_SELF_CHECK OK working_conditions_read read=[THIS.ScriptValue('te_debug_demog_wc_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wc_expected')|3] scale=[THIS.ScriptValue('te_debug_demog_wc_scale')|2] state=[THIS.GetState.GetNameNoFormatting] (the read carries the table at the building's scale: the walk's group reads count working conditions once) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 					else = {
-						debug_log = "TE_SELF_CHECK BROKEN working_conditions_read read=[THIS.ScriptValue('te_debug_demog_wc_read')|3] state=[THIS.GetState.GetNameNoFormatting] (about 0.1: the mine's read carries working conditions' table, which the walk adds again as a constant; drop the constants, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+						debug_log = "TE_SELF_CHECK BROKEN working_conditions_read read=[THIS.ScriptValue('te_debug_demog_wc_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wc_expected')|3] scale=[THIS.ScriptValue('te_debug_demog_wc_scale')|2] state=[THIS.GetState.GetNameNoFormatting] (read 0: the read can't see working conditions here, so the walk misses them; put the table's constants back, scaled by the building's, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 					}
 					debug_log_scopes = yes
 					remove_variable = te_dbg_wc_read
+					remove_variable = te_dbg_wc_exp
+					remove_variable = te_dbg_wc_scale
 				}
 			}
 		}

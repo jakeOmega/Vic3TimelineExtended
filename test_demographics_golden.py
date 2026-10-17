@@ -128,6 +128,14 @@ LAW_LINE_DIGESTS = {
     ("generated_values", "te_demog_pr_target_lm"): "de886021da9fd961f0cc501e1c2616e270e9a86705be20bcb4562ddb859593e0",
 }
 LAW_LINE_MOVED = {("generated_values", "te_demog_wc_land_term")}
+# Working conditions read once (2026-10-17; the self-check working_conditions_read): a mine's read of its laborers' key
+# held the table's 0.1 in 1836, so the walk's expected deaths drop the table's constants and keep the group reads,
+# which carry it at the building's scale. The interpreter doesn't walk pops (the docstring), so no recorded number
+# moves; test_gen_demographics holds the reads.
+WORKING_CONDITIONS_DIGESTS = {
+    ("generated_values", "te_demog_pop_death_mult"):
+        "153898ca4dea6c88b75e1a376403de78d040eb99b27fe0d56a91b8d22698a469",
+}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -299,6 +307,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
                 want = LAW_LINE_DIGESTS.get((key, name), SAFETY_DIGESTS.get((key, name), PHASE3_DIGESTS.get(
                     (key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))))
+                want = WORKING_CONDITIONS_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

@@ -788,8 +788,8 @@ event list](19-appendix-events.md#resettlement-event-list).
 ### Resettlement and the AI
 
 The AI values a Settlement Authority on an open frontier when one of its states
-has unemployment above 5% or migration crowding, and on any frontier emptier
-than 0.5 people per km². It stops founding new ones once it has three. It issues
-the Recruitment Drive in states with unemployment above 10% or a crowding
-penalty above 10%. The mod gives the coercive programs a low AI weight, but only
+has more than 10% of its workforce out of work or migration crowding, and on any
+frontier emptier than 0.5 people per km². It stops founding new ones once it has
+three. It issues the Recruitment Drive in states with more than 10% of the
+workforce out of work or a crowding penalty above 10%. The mod gives the coercive programs a low AI weight, but only
 the AI Voluntary Only rule guarantees that AI countries stay off them.

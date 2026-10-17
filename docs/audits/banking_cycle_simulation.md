@@ -2039,6 +2039,17 @@ same tier-ceiling helper and clear the bubble only on a crash. Scares lower cycl
 3/1 in a market economy, 1/0.5 under command and 2/0.5 under cooperative ownership; their floor
 clamps cannot lift either figure above its prior value.
 
+**Scare only for a year (2026-10-17).** Within twelve months of a crash, the country's own or an
+imported one, an arrival is a scare with no roll (`crashed_last_year`, the script's
+`banking_contagion_scare_only`, a 365-day marker set where each crash is decided). The table below
+predates it. Rerun on the table's cells (fiat / price stability, seed 20260922, 100 × 100 years,
+10-year arrivals; the run without the rule reproduces its zero-point rows exactly), it moves
+little: market at 0 points goes from 2.05 to 1.96 imported crashes a century and from 8.14 to
+8.33 scares, market at 8 points from 2.09 to 2.02, cooperative at 0 points from 1.91 to 1.88, and
+command at 0 points from 1.20 to 1.17. An imported arrival seldom lands within a year of a crash
+at a 10-year mean interval; the rule matters most to a country a wave reaches again soon after it
+crashed, which this channel does not model.
+
 `State.imported_crashes` and `imported_scares` record arrival month, foreign severity, local severity,
 prior state, tier and actual drops. They never enter `State.crashes` or start an origin recovery
 clock. The extra summary reports both populations' counts per century and mean drops, plus the

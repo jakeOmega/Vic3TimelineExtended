@@ -2100,11 +2100,19 @@ def apply_imported_effects(cfg: Config, state: State, severity: float | None) ->
     return None
 
 
+def crashed_last_year(state: State, month: int) -> bool:
+    """banking_contagion_scare_only: the country crashed, its own crash or an imported one, in the
+    last year (banking_crashed_last_year, 365 days; twelve of the simulator's months)."""
+    return (any(month - crash[0] < 12 for crash in state.crashes)
+            or any(month - event.month < 12 for event in state.imported_crashes))
+
+
 def imported_crash(cfg: Config, state: State, rng: random.Random, month: int) -> bool:
     """An arrival has already reached the country; roll crash versus scare.
 
     Fixed uniform foreign tier mix avoids coupling imports to local tuning.
     Backstop and decaying contagion event options are deliberately omitted.
+    Within a year of a crash the arrival is a scare, with no roll (banking_contagion_scare_only).
     """
     foreign = rng.choice((10.0, 30.0, 50.0, 70.0, 90.0))
     boost, severity_boost = (30, 20) if foreign >= 80 else (20, 15) if foreign >= 60 else (10, 10) if foreign >= 40 else (5, 5)
@@ -2112,7 +2120,7 @@ def imported_crash(cfg: Config, state: State, rng: random.Random, month: int) ->
                       + law_modifier_sum(cfg, "country_banking_crash_chance_mult"))
     weight = (state.bubble_pressure + boost) * chance_mult
     weight *= ECONOMY_CRASH_MULT["banking_contagion_chance_economy_mult"][cfg.economy]
-    crashed = rng.random() < weight / (weight + 100)
+    crashed = not crashed_last_year(state, month) and rng.random() < weight / (weight + 100)
     severity = 0.0
     if crashed:
         severity = state.bubble_pressure * tuned("sev_scale", K.sv("banking_crash_severity_scale_value")) + severity_boost

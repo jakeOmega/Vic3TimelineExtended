@@ -288,9 +288,12 @@ def state_inputs(sections):
 
 
 def state_unemployment(sections):
-    """{state id: (workforce, workforce with no workplace)} from the pops (phase 2 step 4's youth bulge reads the
-    engine's state_unemployment_rate; a save holds no such figure, so this is its stand-in, the same as the
-    unemployment_rate_read self-check counts in game)."""
+    """{state id: (workforce, workforce with no workplace)} from the pops: the share of the workforce with no work, as
+    phase 2 step 4's youth bulge takes it. In game the census stores te_state_unemployment_share (te_dg_unemp, 2026-10-17):
+    the engine's state_unemployment_rate, the idle workforce over all the people, over the workforce's share of the
+    people. That equals this count where the engine's figure is per person, as the self-checks unemployment_rate_read
+    and unemployment_share_read test. A save holds neither figure, so this is the stand-in, the walk's own count
+    (te_dg_unemp_walk)."""
     out = {}
     for rec in sections["pops"].values():
         wf = _num(rec.get("workforce"))
