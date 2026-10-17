@@ -10,9 +10,11 @@ te_seabed_asof_month = {
 	type = country
 	random_valid = no
 
+	# Before this version's first sharing nothing stores the month; the panel
+	# then reads te_seabed_basins_asof_old instead of this.
 	text = {
 		trigger = { te_seabed_asof_month_disp < 1 }
-		localization_key = te_seabed_asof_none
+		localization_key = JANUARY
 	}
 	text = {
 		trigger = { te_seabed_asof_month_disp = 1 }

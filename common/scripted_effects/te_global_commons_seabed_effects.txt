@@ -1010,6 +1010,58 @@ te_seabed_share_basin = {
 	te_seabed_share_round = { B = $B$ }
 }
 
+# ---- The Free figure's hover (seabed claims spec § 3.3) ----
+
+# Country scope, a tooltip only (te_seabed_build_in_sgui): our incorporated
+# coastal states in basin $B$ ($N$), five at most, those with the most port
+# levels first, then how many more. Each state is saved as a temporary scope
+# and printed from the country's scope (gotcha #27's fix (a): an iterator that
+# prints nothing adds no header).
+te_seabed_build_in_list = {
+	if = {
+		limit = {
+			any_scope_state = {
+				is_coastal = yes
+				is_incorporated = yes
+				has_variable = te_seabed_basin
+				var:te_seabed_basin = $N$
+			}
+		}
+		custom_tooltip_no_bullet = te_seabed_build_in_head_$B$
+		te_seabed_build_in_slot = { N = $N$ K = 1 P = 0 }
+		te_seabed_build_in_slot = { N = $N$ K = 2 P = 1 }
+		te_seabed_build_in_slot = { N = $N$ K = 3 P = 2 }
+		te_seabed_build_in_slot = { N = $N$ K = 4 P = 3 }
+		te_seabed_build_in_slot = { N = $N$ K = 5 P = 4 }
+		if = {
+			limit = { te_seabed_build_more_$B$ > 0 }
+			custom_tooltip_no_bullet = te_seabed_build_in_more_$B$
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = te_seabed_build_in_none_$B$
+	}
+}
+
+te_seabed_build_in_slot = {
+	ordered_scope_state = {
+		limit = {
+			is_coastal = yes
+			is_incorporated = yes
+			has_variable = te_seabed_basin
+			var:te_seabed_basin = $N$
+		}
+		order_by = te_seabed_state_port_levels
+		position = $P$
+		check_range_bounds = no
+		save_temporary_scope_as = te_sb_build_$K$
+	}
+	if = {
+		limit = { exists = scope:te_sb_build_$K$ }
+		custom_tooltip_no_bullet = te_seabed_build_in_state_$K$
+	}
+}
+
 # ---- The rivals (seabed claims spec § 3.4) ----
 
 # No scope, the yearly pass's step 10. The six largest shares in basin $B$ as

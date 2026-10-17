@@ -588,3 +588,45 @@ te_seabed_rival_row_sgui = {
 		}
 	}
 }
+
+# Read-only: a basin's Free figure's hover (seabed claims spec § 3.3), the
+# coastal states to build in, op = the basin (1 Pacific .. 5 Southern).
+te_seabed_build_in_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_seabed_build_in_list = { B = pacific N = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_seabed_build_in_list = { B = atlantic N = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			te_seabed_build_in_list = { B = indian N = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			te_seabed_build_in_list = { B = arctic N = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			te_seabed_build_in_list = { B = southern N = 5 }
+		}
+	}
+}
