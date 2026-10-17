@@ -2362,6 +2362,61 @@ types state_panel_types
 				}
 			}
 
+			### SEABED LICENCES (Global Commons, spec § 2.7): on a coastal state
+			### once its owner has taken part in a seabed sharing
+			### (te_seabed_tile_shown). The country's licences in use and its
+			### share, and how many are another basin's; the hover has this
+			### state's records, each basin's figures and the world's.
+			state_panel_status_item_small = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_SEABED_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_SEABED_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_SEABED_ROW_HELD"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_total')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_SEABED_ROW_SHARE"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.GetOwner.MakeScope.ScriptValue('te_seabed_entitled_total')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.GetOwner.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_SEABED_ROW_DISTANT"
+							}
+							blockoverride "row_value" {
+								raw_text = "#R [State.GetOwner.MakeScope.ScriptValue('te_seabed_distant_total')|0]#!"
+							}
+						}
+					}
+				}
+			}
+
 			### UN MISSION (UN redesign phase 6; phase 7 added the electoral
 			### kind and the Standing UN Force's line in the tooltip)
 			### One tile while an active UN mission works in this state: its

@@ -1,6 +1,7 @@
 """The Timeline Extended window (gui/te_systems_window.gui): the mod's own
 window for the systems with no vanilla home, a tab each for the Space Race, the
-Colonial Empire and Grand Monuments, opened from a button under the sidebar
+Colonial Empire and Grand Monuments, and the Seabed (Global Commons) on a strip
+of its own, opened from a button under the sidebar
 (docs/systems/system_panels_feasibility.md §3.1, §3.5, §3.6; style guide rule 9).
 
 These tests hold the registration to the file, the launcher's and the window's
@@ -27,12 +28,17 @@ ICON_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md
 TABS = [("space_race", "has_game_rule = space_race_enabled", "first"),
         ("colonial_empire", "has_game_rule = decolonization_enabled", "second"),
         ("grand_monuments", "gm_system_enabled = yes", "third")]
+# The Seabed tab: the first slot of a strip of its own under the three, so
+# their full names keep their width (a fourth on one strip leaves 115 each).
+SEABED = ("seabed", "te_global_commons_enabled = yes", "first")
+SEABED_STRIP = "te_systems_window_seabed_strip"
+ALL_TABS = TABS + [SEABED]
 SR = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
       "interstellar_probe", "interstellar_results", "solar_colonization"]   # je_space_race.txt order
 # The systems' full names, and the width a tab's name gets: three tabs share
 # about 540, less tab_text_properties' 10 px margin each side (no icon).
 FULL_NAMES = {"space_race": "Space Race", "colonial_empire": "Colonial Empire",
-              "grand_monuments": "Grand Monuments"}
+              "grand_monuments": "Grand Monuments", "seabed": "Seabed"}
 NAME_WIDTH = 540 / 3 - 2 * 10
 # Tab labels are budgeted at the medium rate, 8.6 units a character plus 10%,
 # not the large row font's 10. Vanilla's tab text is the default EB Garamond 17
@@ -195,7 +201,7 @@ class LauncherTest(unittest.TestCase):
         self.assertLess(hud, self.root.index(button))
         self.assertIn(f'visible = "[{_gate("te_window_launcher_sgui")}]"', button)
         sgui = _txt_block(_read(TAB_SGUIS), "te_window_launcher_sgui")
-        for _, rule, _ in TABS:
+        for _, rule, _ in ALL_TABS:
             self.assertIn(rule, sgui)
         self.assertIn("OR = {", sgui)
 
@@ -281,7 +287,7 @@ class WindowTest(unittest.TestCase):
         # (an entry that has run its course): te_window_tab_met_tt, since
         # IsValidTooltip then renders nothing (play-test 2026-09-30).
         # Otherwise: the locked line and the checklist.
-        for sys_ in ("space_race", "colonial_empire", "grand_monuments"):
+        for sys_ in ("space_race", "colonial_empire", "grand_monuments", "seabed"):
             with self.subTest(tab=sys_):
                 m = re.search(r"tooltip = \"(\[SelectLocalization\( GetScriptedGui\('te_window_%s_tab_sgui'\)[^\"]*)\"" % sys_,
                               self.panel)
@@ -289,10 +295,12 @@ class WindowTest(unittest.TestCase):
                 tt = m.group(1)
                 self.assertIn("'te_window_tab_%s_tt'" % sys_, tt)
                 self.assertIn("GetScriptedGui('te_window_%s_tab_unlock_sgui').IsValid(" % sys_, tt)
-                self.assertIn("'te_window_tab_met_tt'", tt)
+                # the Seabed tab has no journal entry, so its own "met" line
+                met = "'te_window_tab_seabed_met_tt'" if sys_ == "seabed" else "'te_window_tab_met_tt'"
+                self.assertIn(met, tt)
                 self.assertIn("Localize( 'te_window_tab_%s_locked_tt' )" % sys_, tt)
                 self.assertIn("GetScriptedGui('te_window_%s_tab_unlock_sgui').IsValidTooltip(" % sys_, tt)
-                self.assertLess(tt.index(".IsValid("), tt.index("'te_window_tab_met_tt'"))
+                self.assertLess(tt.index(".IsValid("), tt.index(met))
         self.assertIn("te_window_tab_met_tt", _all_loc())
         self.assertRegex(self.panel, r'blockoverride "header_close_button" \{\s*'
                                      r"onclick = \"\[GetVariableSystem\.Clear\('com_open_window'\)\]\"\s*\}")
@@ -322,14 +330,14 @@ class SelectionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         gui = _read(GUI)
-        cls.sel = {t: _template(gui, f"te_systems_window_{t}_selected") for t, _, _ in TABS}
-        cls.unsel = {t: _template(gui, f"te_systems_window_{t}_unselected") for t, _, _ in TABS}
+        cls.sel = {t: _template(gui, f"te_systems_window_{t}_selected") for t, _, _ in ALL_TABS}
+        cls.unsel = {t: _template(gui, f"te_systems_window_{t}_unselected") for t, _, _ in ALL_TABS}
         cls.none = _template(gui, "te_systems_window_none_open")
 
     def _cases(self):
-        order = [t for t, _, _ in TABS]
-        for opened in itertools.product([False, True], repeat=3):
-            for on_strip in itertools.product([False, True], repeat=3):
+        order = [t for t, _, _ in ALL_TABS]
+        for opened in itertools.product([False, True], repeat=len(order)):
+            for on_strip in itertools.product([False, True], repeat=len(order)):
                 if any(o and not s for o, s in zip(opened, on_strip)):
                     continue    # a tab opens only while its rule is on
                 for stored in [None] + order:
@@ -338,7 +346,7 @@ class SelectionTest(unittest.TestCase):
                     yield dict(zip(order, opened)), dict(zip(order, on_strip)), stored, shown
 
     def test_exactly_the_right_tab_is_shown(self):
-        order = [t for t, _, _ in TABS]
+        order = [t for t, _, _ in ALL_TABS]
         for opened, _, stored, shown in self._cases():
             if stored and opened[stored]:
                 expected = stored
@@ -369,29 +377,40 @@ class StripTest(unittest.TestCase):
         cls.panel = _type_body(cls.gui, "te_systems_window_panel")
         cls.sguis = _read(TAB_SGUIS)
 
-    def _override(self, name):
-        m = re.search(rf'blockoverride "{name}" \{{', self.panel)
+    def _override(self, name, within=None):
+        text = within or self.panel
+        m = re.search(rf'blockoverride "{name}" \{{', text)
         self.assertTrue(m, name)
-        return self.panel[m.end():_close(self.panel, m.end() - 1)]
+        return text[m.end():_close(text, m.end() - 1)]
 
     def test_each_tab_is_greyed_until_open_and_stores_the_choice(self):
-        for tab, _, slot in TABS:
+        seabed_strip = _named(self.gui, SEABED_STRIP)
+        for tab, _, slot in ALL_TABS:
+            within = seabed_strip if tab == "seabed" else None
             with self.subTest(tab=tab):
-                click = self._override(f"{slot}_button_click")
+                click = self._override(f"{slot}_button_click", within)
                 self.assertIn(f'enabled = "[{_gate(f"te_window_{tab}_tab_sgui")}]"', click)
                 self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_systems_window_tab', '{tab}')]\"", click)
-                self.assertIn(f"using = te_systems_window_{tab}_selected", self._override(f"{slot}_button_visibility"))
+                self.assertIn(f"using = te_systems_window_{tab}_selected",
+                              self._override(f"{slot}_button_visibility", within))
                 self.assertIn(f"using = te_systems_window_{tab}_unselected",
-                              self._override(f"{slot}_button_visibility_checked"))
-                tooltip = self._override(f"{slot}_button_tooltip")
+                              self._override(f"{slot}_button_visibility_checked", within))
+                tooltip = self._override(f"{slot}_button_tooltip", within)
                 self.assertIn(f"'te_window_tab_{tab}_tt'", tooltip)
                 self.assertIn(f"Localize( 'te_window_tab_{tab}_locked_tt' )", tooltip)
                 self.assertIn(f"GetScriptedGui('te_window_{tab}_tab_unlock_sgui').IsValidTooltip(", tooltip)
                 for half in (f"{slot}_button", f"{slot}_button_selected"):
-                    self.assertIn(f'text = "te_window_tab_{tab}"', self._override(half))
+                    self.assertIn(f'text = "te_window_tab_{tab}"', self._override(half, within))
+
+    def test_the_seabed_strip_is_up_while_the_rule_is_on(self):
+        strip = _named(self.gui, SEABED_STRIP)
+        self.assertIn(f'visible = "[{_gate("te_window_seabed_tab_unlock_sgui")}]"', strip.split("\n\n")[0])
+        # under the three-tab strip, above the developer strip
+        self.assertLess(self.panel.index('blockoverride "third_button_selected"'), self.panel.index(SEABED_STRIP))
+        self.assertLess(self.panel.index(SEABED_STRIP), self.panel.index("te_tp_tab_sgui"))
 
     def test_the_gates_read_the_rule_and_the_entries(self):
-        for tab, rule, _ in TABS:
+        for tab, rule, _ in ALL_TABS:
             with self.subTest(tab=tab):
                 gate = _txt_block(self.sguis, f"te_window_{tab}_tab_sgui")
                 self.assertIn(rule, gate)
@@ -404,6 +423,8 @@ class StripTest(unittest.TestCase):
         self.assertEqual(re.findall(r"has_journal_entry = je_space_race_(\w+)", sr), SR)
         self.assertIn("has_journal_entry = je_colonial_empire", _txt_block(self.sguis, "te_window_colonial_empire_tab_sgui"))
         self.assertIn("has_journal_entry = je_grand_monuments", _txt_block(self.sguis, "te_window_grand_monuments_tab_sgui"))
+        # no journal entry: open once the country has taken part in a sharing
+        self.assertIn("has_variable = te_seabed_shared", _txt_block(self.sguis, "te_window_seabed_tab_sgui"))
         for m in SR:
             gate = _txt_block(self.sguis, f"te_window_space_race_{m}_sgui")
             self.assertIn("has_game_rule = space_race_enabled", gate)
@@ -411,7 +432,7 @@ class StripTest(unittest.TestCase):
 
     def test_the_checklists_are_the_entries_own_tests(self):
         unlocks = {"space_race": "sr_entry_unlocked", "colonial_empire": "ce_entry_unlocked",
-                   "grand_monuments": "gm_entry_unlocked"}
+                   "grand_monuments": "gm_entry_unlocked", "seabed": "te_seabed_tab_unlocked"}
         for tab, trigger in unlocks.items():
             self.assertIn(f"is_valid = {{ {trigger} = yes }}", _txt_block(self.sguis, f"te_window_{tab}_tab_unlock_sgui"))
         # Suborbital Flight's `possible`, less its completion guard.
@@ -591,6 +612,37 @@ class TabContentTest(unittest.TestCase):
         entry = _read(os.path.join(JE_DIR, "je_grand_monuments.txt"))
         for absent in ("status_desc", "scripted_button", "scripted_progress_bar", "progressbar"):
             self.assertNotRegex(_strip_comments(entry), rf"\b{absent} =")
+
+
+class SeabedTabTest(unittest.TestCase):
+    """The Seabed tab: no journal entry, so its sections read GetPlayer, under
+    the tab's gate on a parent, in a fixed 520 column, the header outside the
+    gate (gui/te_seabed_widgets.gui holds the types)."""
+
+    def test_the_seabed_tab(self):
+        gui = _read(GUI)
+        tab = _named(gui, "te_systems_window_seabed_tab")
+        self.assertIn("using = te_systems_window_seabed_selected", tab.split("\n\n")[0])
+        gate = tab.index(f'visible = "[{_gate("te_window_seabed_tab_sgui")}]"')
+        self.assertLess(tab.index("default_header"), gate)
+        body = tab[gate:]
+        self.assertIn("minimumsize = { 520 -1 }", body)
+        self.assertEqual(re.findall(r"^\t+(te_seabed_\w+) = \{\}", body, re.M),
+                         ["te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel",
+                          "te_seabed_how_panel"])
+        widgets = _read(os.path.join(REPO, "gui", "te_seabed_widgets.gui"))
+        for name in ("te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel",
+                     "te_seabed_how_panel"):
+            self.assertIn(f"type {name} = ", widgets)
+        # the reference collapsed, named after its default (style guide rule 7)
+        self.assertIn("GetVariableSystem.Toggle('te_seabed_how_open')", widgets)
+        with open(os.path.join(REPO, "gui", "te_seabed_widgets.gui"), "rb") as f:
+            self.assertEqual(f.read(3), b"\xef\xbb\xbf")
+
+    def test_the_tabs_order_after_the_monuments(self):
+        gui = _read(GUI)
+        self.assertLess(gui.index('name = "te_systems_window_grand_monuments_tab"'),
+                        gui.index('name = "te_systems_window_seabed_tab"'))
 
 
 class LocTest(unittest.TestCase):

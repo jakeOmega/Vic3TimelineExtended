@@ -1739,7 +1739,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 38 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 11 additive files (marked below):
+Currently 39 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 12 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1772,6 +1772,7 @@ Currently 38 GUI files at the top of `gui/`: 27 full-file replacements of vanill
 | `te_budget_generated_charts.gui` | (additive, generated type library) | Budget income/expense pies, stacked bars and category lists; regenerate with `scripts/generators/gen_budget_breakdown.py` |
 | `te_debug_tax_widgets.gui` | (additive, temporary) | The tax probe harness's panel (`te_tp_panel`), shown only under the armed-country tab of the Timeline Extended window; removed before release (`docs/testing/tax-code-probes.md`) |
 | `te_demographics_widgets.gui` | (additive, type library) | The Population panel's Demographics tab as types: the overview, the population pyramid (a row type a state's pyramid reuses through its range and value blocks), Wealth, Where People Live, States, History and How Demographics Works, composed by `te_demog_tab_sections`; and the state panel's Demographics subtab (`te_state_demog_content`: figures, pyramid without the outline, Gini and Wealth Concentration, How Demographics Works). Every figure sits under a gate that asks script whether it exists (`common/scripted_guis/te_demog_sguis.txt`) |
+| `te_seabed_widgets.gui` | (additive, type library) | The Seabed tab's panels (Global Commons): the overview, the seabed policy buttons, the basins table and How Seabed Licences Work, instanced from `te_systems_window.gui` |
 | `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card, the Grand Monument card (only where one stands; it instances the journal entry's `gm_row_status`) |
 | `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels: a journal entry's bars, goal bar, status description and button grid (`te_je_*`), and `te_tab_buttons_six`, vanilla's tab strip with a sixth slot (the Budget, Diplomacy and Market panels) |
 | `te_systems_window.gui` | (additive, scripted widget) | The Timeline Extended window, the mod's own, with a tab each for the Space Race, the Colonial Empire and Grand Monuments (the entries' composers under `GetPlayerJournalEntry`), and its launcher, a small sidebar button under Map List. Registered in `gui/scripted_widgets/te_systems_window.txt`, so it replaces nothing; see [Creating Standalone Panels](#creating-standalone-panels) |

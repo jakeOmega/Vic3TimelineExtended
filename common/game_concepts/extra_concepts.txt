@@ -173,6 +173,9 @@ concept_solar_collector_array = {
 concept_antimatter_facility = {
 	texture = "gfx/interface/icons/building_icons/building_antimatter_facility.dds"
 }
+concept_seabed_licence = {
+	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+}
 
 # Military & Diplomacy
 concept_combined_arms = {}

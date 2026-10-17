@@ -1,0 +1,13 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: modifier types
+# ============================================================================
+# building_ocean_mine is a mod building, so the engine registers no
+# building_<type>_throughput_add for it (docs/engine/modifier_patterns.md):
+# Long-Haul Seabed Operations (te_seabed_long_haul) needs this one, or it
+# would do nothing and log nothing.
+
+building_ocean_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}

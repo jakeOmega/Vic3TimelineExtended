@@ -1,0 +1,243 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md § 2.
+# The UN's side (who claims in the reserved half, who is an ITLOS party, who
+# the Antarctic Treaty bars) is in te_seabed_un_hooks.txt.
+# ============================================================================
+
+# Any scope. The Global Commons rule (§ 2.9). The system arrives with this rule,
+# so the check names the setting that turns it on: a save started before the
+# rule existed has neither setting and keeps the uncapped Deep-Sea Mine until
+# the rule is switched on (game rules can change mid-game). When it is, the
+# first recording grandfathers every standing level (§ 2.9).
+te_global_commons_enabled = {
+	has_game_rule = global_commons_enabled
+}
+
+# Country scope. A claimant (§ 2.3): Abyssal Plain Mining and a coastal state.
+te_seabed_is_claimant = {
+	has_technology_researched = abyssal_plain_mining
+	any_scope_state = { is_coastal = yes }
+}
+
+# Country scope. Takes part in the yearly sharing: a claimant, or a holder of
+# licences without one (a conqueror without the technology), whose holdings
+# are frozen at what it holds.
+te_seabed_takes_part = {
+	OR = {
+		te_seabed_is_claimant = yes
+		AND = {
+			has_variable = te_seabed_country
+			any_scope_state = {
+				is_coastal = yes
+				te_seabed_state_records > 0
+			}
+		}
+	}
+}
+
+# Country scope. Recorded monthly: a claimant, or any country that has held
+# seabed records (te_seabed_country is set at its first recording, and on a
+# state with records arriving).
+te_seabed_records_monthly = {
+	OR = {
+		te_seabed_is_claimant = yes
+		has_variable = te_seabed_country
+	}
+}
+
+# Any scope. The regimes (§ 3.2), from global_var:te_seabed_regime (absent = Open).
+te_seabed_regime_regulated = {
+	has_global_variable = te_seabed_regime
+	global_var:te_seabed_regime = 2
+}
+
+te_seabed_regime_scramble = {
+	has_global_variable = te_seabed_regime
+	global_var:te_seabed_regime = 3
+}
+
+# Country scope. The policy (§ 2.5), from te_seabed_policy (absent = Survey).
+te_seabed_policy_survey = {
+	te_seabed_policy_value = 1
+}
+
+te_seabed_policy_sponsor = {
+	te_seabed_policy_value = 2
+}
+
+te_seabed_policy_unilateral = {
+	te_seabed_policy_value = 3
+}
+
+# Country scope. The navy counts double: Unilateral Licensing, or the Scramble
+# for everyone (§ 2.5, § 3.2). The two don't stack.
+te_seabed_navy_assertive = {
+	OR = {
+		te_seabed_policy_unilateral = yes
+		te_seabed_regime_scramble = yes
+	}
+}
+
+# State scope. The state has seabed data to record: records, or a Deep-Sea
+# Mine (finished or under construction).
+te_seabed_state_has_data = {
+	OR = {
+		te_seabed_state_records > 0
+		any_scope_building = { is_building_type = building_ocean_mine }
+	}
+}
+
+# State scope. The next Deep-Sea Mine level here would take a licence from the
+# state's own basin (the owner has unbuilt share there); otherwise a distant
+# one, at the long-haul penalty. For the gate's tooltip only.
+te_seabed_state_next_local = {
+	te_seabed_state_owner_local_unbuilt > 0
+}
+
+# State scope: building_ocean_mine's licence gate (§ 2.6), read from its
+# possible. With the rule on, the owner must have room; as for the Solar Power
+# Receiver, a state with a level already under construction passes at 0 room,
+# so construction under way is not halted by its own queued level. The second
+# and third lines are information: which licence the next level would take.
+te_seabed_gate = {
+	trigger_if = {
+		limit = { te_global_commons_enabled = yes }
+		custom_tooltip = {
+			text = te_seabed_gate_room_tt
+			OR = {
+				owner = {
+					te_seabed_unbuilt_total > 0
+					te_seabed_room > 0
+				}
+				AND = {
+					any_scope_building = {
+						is_building_type = building_ocean_mine
+						is_under_construction = yes
+					}
+					owner = { te_seabed_room >= 0 }
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				owner = { te_seabed_room > 0 }
+			}
+			trigger_if = {
+				limit = { te_seabed_state_next_local = yes }
+				custom_tooltip = {
+					text = te_seabed_gate_next_local_tt
+					always = yes
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					text = te_seabed_gate_next_distant_tt
+					always = yes
+				}
+			}
+		}
+	}
+}
+
+# Country scope (yearly sharing): shares a home basin with scope:te_seabed_uni,
+# both having incorporated coastal states there (te_seabed_home_<basin>, set
+# by te_seabed_compute_weights).
+te_seabed_shares_home_basin_with_uni = {
+	OR = {
+		AND = {
+			has_variable = te_seabed_home_pacific
+			scope:te_seabed_uni = { has_variable = te_seabed_home_pacific }
+		}
+		AND = {
+			has_variable = te_seabed_home_atlantic
+			scope:te_seabed_uni = { has_variable = te_seabed_home_atlantic }
+		}
+		AND = {
+			has_variable = te_seabed_home_indian
+			scope:te_seabed_uni = { has_variable = te_seabed_home_indian }
+		}
+		AND = {
+			has_variable = te_seabed_home_arctic
+			scope:te_seabed_uni = { has_variable = te_seabed_home_arctic }
+		}
+		AND = {
+			has_variable = te_seabed_home_southern
+			scope:te_seabed_uni = { has_variable = te_seabed_home_southern }
+		}
+	}
+}
+
+# Any scope: the yearly sharing is due (te_seabed_global_monthly). Once a
+# year, from the first global monthly pulse of a new year, and in the month
+# after a new claimant appears (te_seabed_reshare), so a country that has just
+# researched Abyssal Plain Mining need not wait for January to build. Never
+# before anyone can claim.
+te_seabed_pass_due = {
+	OR = {
+		NOT = { has_global_variable = te_seabed_pass_year }
+		AND = {
+			has_global_variable = te_seabed_pass_year
+			global_var:te_seabed_pass_year < te_history_current_year
+		}
+		has_global_variable = te_seabed_reshare
+	}
+	any_country = { te_seabed_is_claimant = yes }
+}
+
+# Country scope: the Seabed tab's checklist (te_window_seabed_tab_unlock_sgui),
+# te_seabed_is_claimant with a line per condition. The tab opens at the next
+# sharing after both hold.
+te_seabed_tab_unlocked = {
+	custom_tooltip = {
+		text = te_seabed_unlock_tech_tt
+		has_technology_researched = abyssal_plain_mining
+	}
+	custom_tooltip = {
+		text = te_seabed_unlock_coast_tt
+		any_scope_state = { is_coastal = yes }
+	}
+}
+
+# Country scope: the Seabed tab's policy buttons (te_global_commons_seabed_sguis.txt).
+# A claimant may change to a policy it doesn't hold; one that holds influence
+# needs that much available, as the UN's stances do.
+te_seabed_can_choose_survey = {
+	te_seabed_policy_buttons_open = yes
+	custom_tooltip = {
+		text = te_seabed_policy_not_current_tt
+		NOT = { te_seabed_policy_survey = yes }
+	}
+}
+
+te_seabed_can_choose_sponsor = {
+	te_seabed_policy_buttons_open = yes
+	custom_tooltip = {
+		text = te_seabed_policy_not_current_tt
+		NOT = { te_seabed_policy_sponsor = yes }
+	}
+	custom_tooltip = {
+		text = te_seabed_policy_influence_2_tt
+		influence >= te_seabed_influence_sponsor
+	}
+}
+
+te_seabed_can_choose_unilateral = {
+	te_seabed_policy_buttons_open = yes
+	custom_tooltip = {
+		text = te_seabed_policy_not_current_tt
+		NOT = { te_seabed_policy_unilateral = yes }
+	}
+	custom_tooltip = {
+		text = te_seabed_policy_influence_3_tt
+		influence >= te_seabed_influence_unilateral
+	}
+}
+
+te_seabed_policy_buttons_open = {
+	custom_tooltip = {
+		text = te_seabed_policy_claimant_tt
+		te_seabed_is_claimant = yes
+	}
+}
