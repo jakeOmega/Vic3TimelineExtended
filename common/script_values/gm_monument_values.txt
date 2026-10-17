@@ -366,6 +366,16 @@ gm_sh_log_put_back = {
 	}
 }
 
+# The levels a revolt's split took from this monument (gm_split_levels), for its
+# row's and card's line (gm_row_split; owner's call 2026-10-17).
+gm_state_disp_split_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_split_levels }
+		value = var:gm_split_levels
+	}
+}
+
 # What a revolt's split piece prints (gm_monument_effects.txt § "A revolt's
 # split piece"): the piece's levels, what its monument lacked at the split, and
 # the monument's records when the piece takes them.

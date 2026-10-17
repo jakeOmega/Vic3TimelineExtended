@@ -5619,6 +5619,86 @@ class SplitPieceTests(unittest.TestCase):
             self.assertIn(s, playtest)
 
 
+
+class SplitPieceLineTests(unittest.TestCase):
+    """Owner's call 2026-10-17: a revolt's split piece says it is a piece, on its
+    row in Our Monuments and on its state card, and its monument says where the
+    piece stands. The data path is the trophy rows' (gm_tr_row_held_by: a
+    state held in a variable, then .GetState.GetName / .GetOwner.GetName)."""
+
+    LINES = (("gm_disp_is_piece", "gm_row_piece"), ("gm_disp_has_piece", "gm_row_split"))
+
+    def visible(self, value):
+        return f"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('{value}'), '(CFixedPoint)1' )]"
+
+    def test_the_toggles(self):
+        values = read(VALUES)
+        self.assertEqual(squash(block(values, "gm_disp_is_piece")),
+                         "value = 0 if = { limit = { has_variable = gm_piece_of exists = var:gm_piece_of } value = 1 }")
+        self.assertEqual(squash(block(values, "gm_disp_has_piece")),
+                         "value = 0 if = { limit = { has_variable = gm_split_piece "
+                         "var:gm_split_piece ?= { has_variable = gm_piece_of } } value = 1 }")
+        self.assertEqual(squash(block(read(MON_VALUES), "gm_state_disp_split_levels")),
+                         "value = 0 if = { limit = { has_variable = gm_split_levels } value = var:gm_split_levels }")
+
+    def test_row_and_card(self):
+        row = squash(read(WIDGET))  # raw: strip_comments would eat "#tooltippable"
+        card = squash(read("gui/te_state_panel_widgets.gui"))
+        landmark_row = row.find('text = "gm_row_landmark" }')
+        landmark_card = card.find('text = "gm_row_landmark" }')
+        for value, key in self.LINES:
+            line = (f'gm_row_line = {{ visible = "{self.visible(value)}" default_format = "#tooltippable" '
+                    f'tooltip = "{key}_tt" text = "{key}" }}')
+            self.assertIn(line, row)
+            # Under the landmark line, before the details.
+            self.assertLess(landmark_row, row.find(line))
+            self.assertLess(row.find(line), row.find('text = "gm_row_detail"'))
+            box = (f'visible = "{self.visible(value)}" autoresize = yes multiline = yes minimumsize = {{ 350 -1 }} '
+                   f'maximumsize = {{ 350 -1 }} align = left|nobaseline using = fontsize_medium '
+                   f'default_format = "#tooltippable" tooltip = "{key}_tt" text = "{key}"')
+            self.assertIn(box, card)
+            self.assertLess(landmark_card, card.find(box))
+
+    def test_the_lines_name_the_other_part_and_its_owner(self):
+        L = loc()
+        self.assertEqual(L["gm_row_piece"], "A piece of the monument in [State.GetCustom('gm_piece_where')]")
+        self.assertEqual(L["gm_row_split"], "A piece of it stands in [State.GetCustom('gm_split_where')]: "
+                                            "#v [State.MakeScope.ScriptValue('gm_state_disp_split_levels')|0]#! levels")
+        for link, custom, trigger in (("gm_piece_of", "gm_piece_where", "gm_state_piece_whole_abroad"),
+                                      ("gm_split_piece", "gm_split_where", "gm_state_split_piece_abroad")):
+            body = squash(block(read(CUSTOM_LOC), custom))
+            self.assertIn("type = state random_valid = no", body)
+            self.assertIn(f"text = {{ trigger = {{ {trigger} = yes }} localization_key = {custom}_abroad }} "
+                          f"text = {{ localization_key = {custom}_home }}", body)
+            where = f"State.MakeScope.Var('{link}').GetState"
+            self.assertEqual(L[f"{custom}_home"], f"#v [{where}.GetName]#!")
+            self.assertEqual(L[f"{custom}_abroad"], f"#v [{where}.GetName]#! (#v [{where}.GetOwner.GetName]#!)")
+            abroad = squash(block(read(MON_TRIGGERS), trigger))
+            self.assertIn(f"has_variable = {link}", abroad)
+            self.assertIn("owner = { save_temporary_scope_as = gm_tmp_split_here_owner }", abroad)
+            self.assertIn(f"var:{link} ?= {{ exists = owner NOT = {{ owner = scope:gm_tmp_split_here_owner }} }}", abroad)
+        # The trophy rows read their states the same way.
+        self.assertIn("MakeScope.Var('gm_tr_site').GetState.GetOwner.GetName", L["gm_tr_row_held_by"])
+
+    def test_the_hover_says_why_and_how_it_ends(self):
+        L = loc()
+        for key, title in (("gm_row_piece_tt", "#b A piece of a monument#!"), ("gm_row_split_tt", "#b Split by a revolt#!")):
+            tt = L[key]
+            self.assertTrue(tt.startswith(title + "\\n"), tt[:60])
+            self.assertIn("A revolt took part of", tt)
+            self.assertIn("When one country holds both parts again", tt)
+            self.assertIn("whichever side won", tt)
+        self.assertIn("State.MakeScope.ScriptValue('gm_state_primary_levels')", L["gm_row_piece_tt"])
+        self.assertIn("State.MakeScope.ScriptValue('gm_state_disp_split_levels')", L["gm_row_split_tt"])
+        for key in ("gm_row_piece", "gm_row_piece_tt", "gm_row_split", "gm_row_split_tt", "gm_piece_where_abroad",
+                    "gm_piece_where_home", "gm_split_where_abroad", "gm_split_where_home"):
+            self.assertEqual(loc_file_of(key), MISC_LOC, key)
+
+    def test_the_play_test_row(self):
+        playtest = (ROOT / "docs/testing/grand-monuments-ageing-playtest.md").read_text(encoding="utf-8")
+        self.assertIn("A piece's card and row", playtest)
+
+
 class ShortRepairTests(unittest.TestCase):
     """Owner's call 2026-10-17: a one-off repair of monuments already short of a
     piece long gone, as the 1898 crash save's Arc de Triomphe (11 levels on

@@ -1025,9 +1025,11 @@ country takes becomes heritage at once and cannot be pulled down. After a civil
 war the winner inherits the monuments the loser raised, and they are contested
 only if its laws no longer fit them. A revolt that takes part of a monument's
 state takes a piece of it: the rebels' part shows the same monument, with its
-name and dedication, at the levels it took, and asks no ceremony. When the two
-parts come under one country again the piece rejoins the monument, whichever
-side won, and any levels lost in between are rebuilt.
+name and dedication, at the levels it took, and asks no ceremony. Its card and
+row say it is a piece and where the monument stands, and the monument's say
+where its piece is. When the two parts come under one country again the piece
+rejoins the monument, whichever side won, and any levels lost in between are
+rebuilt.
 
 A Grand Monument cannot be downsized or demolished from its building panel, by
 you or by the AI. Pull Down is the only way to remove one yourself.

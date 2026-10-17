@@ -768,6 +768,30 @@ gm_state_whole_merged_into_piece = {
 	}
 }
 
+# State scope, for the row's and card's line (gm_piece_where, gm_split_where):
+# the other part of a revolt's split stands in another country, so the line
+# names its owner too. In practice always: one country's two parts of a region
+# merge into one state.
+gm_state_piece_whole_abroad = {
+	has_variable = gm_piece_of
+	exists = owner
+	owner = { save_temporary_scope_as = gm_tmp_split_here_owner }
+	var:gm_piece_of ?= {
+		exists = owner
+		NOT = { owner = scope:gm_tmp_split_here_owner }
+	}
+}
+
+gm_state_split_piece_abroad = {
+	has_variable = gm_split_piece
+	exists = owner
+	owner = { save_temporary_scope_as = gm_tmp_split_here_owner }
+	var:gm_split_piece ?= {
+		exists = owner
+		NOT = { owner = scope:gm_tmp_split_here_owner }
+	}
+}
+
 # Container scope, an orphaned shadow (scope:gm_sh_region its region). It is a
 # revolt's piece (gm_tr_piece_of) and the monument it is a piece of stands in
 # its region: it rejoins that monument (gm_sh_rejoin), whatever else the
