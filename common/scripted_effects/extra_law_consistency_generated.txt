@@ -2684,6 +2684,30 @@ te_fix_inconsistent_lawgroup_policing = {
 
 }
 
+te_fix_inconsistent_lawgroup_judiciary = {
+	# Active: law_religious_courts  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_religious_courts
+			OR = {
+				has_law = law_type:law_total_separation
+				has_law = law_type:law_state_atheism
+			}
+		}
+		if = {
+			limit = {
+				has_technology_researched = rationalism
+			}
+			activate_law = law_type:law_statutory_courts
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_executive_tribunals
+		}
+	}
+
+}
+
 te_fix_inconsistent_lawgroup_trade_policy = {
 	# Active: law_free_trade  ->  detect violation, cascade replacements
 	if = {
@@ -5451,6 +5475,7 @@ te_fix_inconsistent_laws = {
 	te_fix_inconsistent_lawgroup_army_model = yes
 	te_fix_inconsistent_lawgroup_internal_security = yes
 	te_fix_inconsistent_lawgroup_policing = yes
+	te_fix_inconsistent_lawgroup_judiciary = yes
 	te_fix_inconsistent_lawgroup_trade_policy = yes
 	te_fix_inconsistent_lawgroup_taxation = yes
 	te_fix_inconsistent_lawgroup_land_reform = yes

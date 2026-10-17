@@ -70,6 +70,15 @@ lawgroup_state_power = {
 	affected_by_regime_change = yes
 }
 
+# Judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md): who checks
+# the government, and how far the courts are trusted to. Courts were imposed
+# with regimes (West Germany 1951, Japan 1947), so regime change carries them.
+lawgroup_judiciary = {
+	law_group_category = power_structure
+	ideological_opinion_impact = 0.5
+	affected_by_regime_change = yes
+}
+
 lawgroup_electoral_finance = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0.25
