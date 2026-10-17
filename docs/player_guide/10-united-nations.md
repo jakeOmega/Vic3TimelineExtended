@@ -819,11 +819,12 @@ resettlement](08-states.md#costs-and-consequences-of-resettlement)).
 ### The Law of the Sea and the seabed
 
 Under the Global Commons rule, the Convention on the Law of the Sea has seabed
-terms that sleep until some country researches Abyssal Plain Mining. From then on the seabed has one
-regime for the whole world, and the Seabed section and Our Obligations show it.
-It is read once a year, when the basins' licences are shared out (see [Seabed
-licences](02-timeline.md) for the basins, the claim weights and the seabed
-policies).
+terms that sleep until some country researches Abyssal Plain Mining. From then
+on the seabed has one regime for the whole world, and the Timeline Extended
+window's Seabed tab and Our Obligations show it. It is read once a year, when
+the basins' licences are shared out (see [Seabed
+licences](02-timeline.md#seabed-licences) for the basins, the claim weights and
+the seabed policies).
 
 | Regime | When | How each basin's licences are shared |
 |---|---|---|
@@ -866,7 +867,7 @@ to all. The docket does not raise it again while that holds.
 
 ### The anti-satellite moratorium
 
-A destructive anti-satellite strike (see [The space race](16-space.md)) puts
+A destructive anti-satellite strike (see [The space race](16-space.md#the-anti-satellite-strike)) puts
 the Moratorium on Destructive Anti-Satellite Tests on the docket, offered to a
 proposer other than the striker. A party's own strike then costs twice the
 infamy and twice the case strength. Parties gain prestige, and once a year each

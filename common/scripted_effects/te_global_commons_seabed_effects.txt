@@ -1182,7 +1182,7 @@ te_seabed_ai_choose_policy = {
 }
 
 # ============================================================================
-# Self-checks (CLAUDE.md, "In-game checks"; docs/testing/global-commons-playtest-b.md)
+# Self-checks (CLAUDE.md, "In-game checks"; docs/testing/global-commons-playtest.md)
 # ============================================================================
 
 # No scope, in the yearly pass after every participant has recorded: seabed_cap.
@@ -1230,7 +1230,7 @@ te_seabed_cap_check = {
 			}
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN seabed_cap unrecorded_states=[GetGlobalVariable('te_seabed_cap_unrecorded').GetValue] slack pacific=[GetGlobalVariable('te_seabed_cap_slack_pacific').GetValue] atlantic=[GetGlobalVariable('te_seabed_cap_slack_atlantic').GetValue] indian=[GetGlobalVariable('te_seabed_cap_slack_indian').GetValue] arctic=[GetGlobalVariable('te_seabed_cap_slack_arctic').GetValue] southern=[GetGlobalVariable('te_seabed_cap_slack_southern').GetValue] (a negative slack: a basin's records grew past its ceiling; unrecorded_states above 0: a level escaped recording. docs/testing/global-commons-playtest-b.md)"
+			debug_log = "TE_SELF_CHECK BROKEN seabed_cap unrecorded_states=[GetGlobalVariable('te_seabed_cap_unrecorded').GetValue] slack pacific=[GetGlobalVariable('te_seabed_cap_slack_pacific').GetValue] atlantic=[GetGlobalVariable('te_seabed_cap_slack_atlantic').GetValue] indian=[GetGlobalVariable('te_seabed_cap_slack_indian').GetValue] arctic=[GetGlobalVariable('te_seabed_cap_slack_arctic').GetValue] southern=[GetGlobalVariable('te_seabed_cap_slack_southern').GetValue] (a negative slack: a basin's records grew past its ceiling; unrecorded_states above 0: a level escaped recording. docs/testing/global-commons-playtest.md)"
 		}
 	}
 }
@@ -1301,7 +1301,7 @@ te_seabed_follow_check_hook = {
 		else = {
 			set_global_variable = te_seabed_follow_chk_done
 			clear_global_variable_list = te_seabed_follow_watch
-			debug_log = "TE_SELF_CHECK BROKEN seabed_licence_follows_state state=[THIS.GetState.GetNameNoFormatting] records=[THIS.ScriptValue('te_seabed_state_records')|0] (a state that held seabed licences reached on_state_owner_change without its te_seabed_lic_* or te_seabed_holder: take the fallback, per-region global records, docs/testing/global-commons-playtest-b.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN seabed_licence_follows_state state=[THIS.GetState.GetNameNoFormatting] records=[THIS.ScriptValue('te_seabed_state_records')|0] (a state that held seabed licences reached on_state_owner_change without its te_seabed_lic_* or te_seabed_holder: take the fallback, per-region global records, docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }
@@ -1328,7 +1328,7 @@ te_seabed_follow_check_month = {
 					debug_log = "TE_SELF_CHECK OK seabed_licence_follows_state state=[THIS.GetState.GetNameNoFormatting] records=[THIS.ScriptValue('te_seabed_state_records')|0] (its records and holder stamp read back inside on_state_owner_change and a month later) date=[TimeKeeper.GetCurrentDate.GetString]"
 				}
 				else = {
-					debug_log = "TE_SELF_CHECK BROKEN seabed_licence_follows_state state=[THIS.GetState.GetNameNoFormatting] records=[THIS.ScriptValue('te_seabed_state_records')|0] (its records read back inside on_state_owner_change but not a month later: take the fallback, per-region global records, docs/testing/global-commons-playtest-b.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					debug_log = "TE_SELF_CHECK BROKEN seabed_licence_follows_state state=[THIS.GetState.GetNameNoFormatting] records=[THIS.ScriptValue('te_seabed_state_records')|0] (its records read back inside on_state_owner_change but not a month later: take the fallback, per-region global records, docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 				}
 			}
 			set_global_variable = te_seabed_follow_chk_done

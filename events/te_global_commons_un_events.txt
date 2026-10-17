@@ -13,7 +13,7 @@
 # country_un_authority_target_add rose by the grant, so the Policy pillar sums
 # a script-only type added by add_modifier. BROKEN: it did not; the treaty's
 # Policy term and every other modifier grant to the pillar need checking
-# (docs/testing/global-commons-playtest-e.md, Self-checks).
+# (docs/testing/global-commons-playtest.md, Self-checks).
 te_global_commons_un.1 = {
 	type = country_event
 	hidden = yes

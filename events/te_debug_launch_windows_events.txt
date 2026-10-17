@@ -4,7 +4,7 @@
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires this event. The helpers are
 # in common/scripted_effects/te_debug_launch_window_effects.txt; the play-test
-# list that uses them is docs/testing/global-commons-playtest-c.md.
+# list that uses them is docs/testing/global-commons-playtest.md.
 # ============================================================================
 namespace = te_debug_launch_windows
 

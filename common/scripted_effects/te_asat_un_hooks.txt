@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # A DESTRUCTIVE ANTI-SATELLITE STRIKE — THE UN'S HOOK
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §6.5. Same name
-# and scope as the stub the debris branch shipped; this file is the real one.
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §6.5. Called by
+# the anti-satellite strike (te_orbital_debris_effects.txt).
 #
 #   te_asat_un_on_strike   the striker; scope:te_asat_target is the struck
 #                          country. Called by the strike, after it has booked

@@ -12,7 +12,7 @@
 #           unscaled is read per level, and a large base would buy no Launch Capacity at all.
 # Fallback: for 0, fix the registration; for a per-level sum, apply the cut as a static
 # modifier on the building from a yearly pulse instead (the Strategic Reserve hub's pattern).
-# Play-test rows: docs/testing/global-commons-playtest-a.md.
+# Play-test rows: docs/testing/global-commons-playtest.md.
 on_yearly_pulse_country = {
 	on_actions = {
 		te_gc_logistics_input_cut_selfcheck
@@ -52,7 +52,7 @@ te_gc_logistics_input_cut_selfcheck = {
 					debug_log = "TE_SELF_CHECK OK logistics_input_cut (an Extraplanetary Base on upgrades=[SCOPE.ScriptValue('te_gc_logistics_chk_upgrades_g')|0] logistics upgrades reads goods_input_launch_capacity_mult=[SCOPE.ScriptValue('te_gc_logistics_chk_cut_g')|2] at level=[SCOPE.ScriptValue('te_gc_logistics_chk_level_g')|0]: the cut counts once per building)"
 				}
 				else = {
-					debug_log = "TE_SELF_CHECK BROKEN logistics_input_cut (an Extraplanetary Base on upgrades=[SCOPE.ScriptValue('te_gc_logistics_chk_upgrades_g')|0] logistics upgrades reads goods_input_launch_capacity_mult=[SCOPE.ScriptValue('te_gc_logistics_chk_cut_g')|2] at level=[SCOPE.ScriptValue('te_gc_logistics_chk_level_g')|0], not -0.3 per upgrade: about 0 means the type is unregistered or not summed, about -0.3 x upgrades x level means unscaled is read per level; see docs/testing/global-commons-playtest-a.md)"
+					debug_log = "TE_SELF_CHECK BROKEN logistics_input_cut (an Extraplanetary Base on upgrades=[SCOPE.ScriptValue('te_gc_logistics_chk_upgrades_g')|0] logistics upgrades reads goods_input_launch_capacity_mult=[SCOPE.ScriptValue('te_gc_logistics_chk_cut_g')|2] at level=[SCOPE.ScriptValue('te_gc_logistics_chk_level_g')|0], not -0.3 per upgrade: about 0 means the type is unregistered or not summed, about -0.3 x upgrades x level means unscaled is read per level; see docs/testing/global-commons-playtest.md)"
 				}
 			}
 		}

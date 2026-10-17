@@ -1739,7 +1739,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 39 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 12 additive files (marked below):
+Currently 40 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 13 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|

@@ -191,10 +191,10 @@ class GateTest(unittest.TestCase):
 
 
 class ContractTest(unittest.TestCase):
-    """The names shared with the UN branch (BRIEF_COMMON.md, interface contract)."""
+    """The names shared with the UN layer (te_seabed_un_hooks.txt)."""
 
     def test_the_hooks_are_defined(self):
-        """Only that they exist: the UN phase replaces the stubs' bodies."""
+        """Only that they exist: test_global_commons_un.py checks their bodies."""
         trig = read(HOOK_TRIGGERS)
         for name in ("te_seabed_reserved_half_eligible", "te_seabed_itlos_party", "te_seabed_southern_barred"):
             block(trig, name)

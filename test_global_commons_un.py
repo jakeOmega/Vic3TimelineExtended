@@ -147,8 +147,8 @@ class HookContractTest(unittest.TestCase):
 
 
 class ForeignReadsAreGuardedTest(unittest.TestCase):
-    """Variables the seabed and debris branches write may be absent (this branch alone,
-    an old save, the rule off): every read has its existence check beside it."""
+    """Variables the seabed and debris code writes may be absent (an old save, the rule
+    off, a system not yet run): every read has its existence check beside it."""
 
     COUNTRY = ("te_seabed_policy", "te_seabed_policy_prev", "te_seabed_held_southern",
                "te_seabed_held_pacific", "te_seabed_held_atlantic", "te_seabed_held_indian",

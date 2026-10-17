@@ -4,7 +4,7 @@ docs/superpowers/specs/2026-10-16-global-commons-design.md § 6. The system
 keeps several numbers twice: a static modifier or a production method must
 carry a literal, and the panel or the AI reads a script value mirroring it.
 It also extends hand-kept lists elsewhere (the UN dossier's records), names
-the interface the UN branch builds on, and rests on the spec's arithmetic
+the interface the UN layer builds on, and rests on the spec's arithmetic
 (background traffic settles near 4, fusion sweepers with an elevator clear 30
 points in about 2.5 years, a cascade is beyond one early cleaner). The engine
 checks none of it, so each test pins one copy to its source.
@@ -77,7 +77,7 @@ def registered_types():
 
 
 class ContractTest(unittest.TestCase):
-    """The names the UN branch (§ 6.5) builds on (gc BRIEF_COMMON.md)."""
+    """The names the UN layer (§ 6.5) builds on."""
 
     def test_hooks_defined(self):
         # The UN layer's bodies (test_global_commons_un.py checks what they do).

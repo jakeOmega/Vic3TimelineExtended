@@ -10,7 +10,7 @@
 # does with such methods is unobserved (scripting_best_practices.md, "AI and
 # Cost-Only Buildings"), so the lever the AI is known to pull is the decision
 # te_decision_debris_removal (te_orbital_debris_decisions.txt), whose ai_chance
-# carries the spec's conditions. Watch item: docs/testing/global-commons-playtest-d.md.
+# carries the spec's conditions. Watch item: docs/testing/global-commons-playtest.md.
 # ============================================================================
 
 pmg_space_program_debris_removal = {

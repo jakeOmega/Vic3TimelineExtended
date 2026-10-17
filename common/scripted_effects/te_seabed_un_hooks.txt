@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # THE SEABED UNDER THE LAW OF THE SEA — THE UN'S HOOKS IN THE ALLOCATION
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3. Same names
-# and scopes as the stubs the seabed branch shipped; this file is the real one.
+# docs/superpowers/specs/2026-10-16-global-commons-design.md §3. Called by
+# the seabed allocation and policy (te_global_commons_seabed_effects.txt).
 #
 #   te_seabed_un_update_regime      no scope needed. Called once a year at the
 #                                   start of the seabed allocation, before the

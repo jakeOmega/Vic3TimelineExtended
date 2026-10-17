@@ -43,12 +43,16 @@ te_seabed_policy_3_sgui = {
 			text = te_seabed_policy_effect_3_tt
 			te_seabed_set_policy = { POLICY = 3 }
 		}
-		# INTEGRATION (UN phase): the defection warning goes here, a line shown
-		# only when the switch would cost a party the Law of the Sea's
-		# defection price, e.g.
-		#   if = { limit = { te_seabed_defection_would_cost = yes }
-		#       custom_tooltip = te_seabed_policy_defection_warning_tt }
-		# (te_seabed_defection_would_cost is the UN branch's trigger).
+		# The defection price, shown before the switch: the tooltip above can't
+		# show it, because te_seabed_un_on_policy_change charges it only once the
+		# new policy holds (te_global_commons_un_triggers.txt).
+		if = {
+			limit = { te_seabed_defection_would_cost = yes }
+			custom_tooltip = te_seabed_defection_tt
+			custom_tooltip = te_seabed_defection_infamy_tt
+			custom_tooltip = te_seabed_defection_standing_tt
+			custom_tooltip = te_seabed_defection_case_tt
+		}
 	}
 }
 

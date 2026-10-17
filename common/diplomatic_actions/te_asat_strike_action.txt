@@ -27,7 +27,7 @@
 #
 # Texture: covert_space_espionage_action.dds is a placeholder; the lens copy
 # (gfx/interface/icons/lens_toolbar_icons/te_asat_strike_action.dds) is the
-# same picture. Listed in docs/testing/global-commons-playtest-d.md.
+# same picture. Listed in docs/testing/global-commons-playtest.md.
 # ============================================================================
 
 te_asat_strike_action = {

@@ -5,7 +5,7 @@
 # to run script by hand. Nothing in the mod fires this event. Its options call
 # the console-only helpers in
 # common/scripted_effects/te_debug_orbital_debris_effects.txt, so each tier,
-# the ribbon strike and a cascade's cleanup (docs/testing/global-commons-playtest-d.md)
+# the ribbon strike and a cascade's cleanup (docs/testing/global-commons-playtest.md)
 # can be reached in a couple of clicks.
 # ============================================================================
 namespace = te_debug_orbital_debris

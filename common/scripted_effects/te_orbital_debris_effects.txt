@@ -295,7 +295,7 @@ te_debris_activate_best_removal = {
 
 # ---- Self-check ---------------------------------------------------------------------
 
-# TE_SELF_CHECK debris_removal (docs/testing/global-commons-playtest-d.md):
+# TE_SELF_CHECK debris_removal (docs/testing/global-commons-playtest.md):
 # the first month a Space Program runs a removal method with its staff in
 # place, its country's removal must read above 0. It rests on two unverified
 # facts: that a secondary method group's workforce-scaled country modifier
@@ -332,7 +332,7 @@ te_debris_selfcheck_removal = {
 				debug_log = "TE_SELF_CHECK OK debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] world=[GetGlobalVariable('te_debris_removal_month').GetValue] date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] (a Space Program runs a removal method at half staff or more, and its country removes nothing: the method's country modifier does not reach the country; take the fallback in docs/testing/global-commons-playtest-d.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] (a Space Program runs a removal method at half staff or more, and its country removes nothing: the method's country modifier does not reach the country; take the fallback in docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 	}
