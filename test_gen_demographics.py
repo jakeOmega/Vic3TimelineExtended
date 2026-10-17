@@ -381,28 +381,49 @@ class TestEngineRateTerms(unittest.TestCase):
             self.assertIn(f"else = {{ add = {want[-1]} }}", branch)
             self.assertNotRegex(branch, r"add = -?(0\.9|1)\s")   # never flat
     def test_working_conditions_reach_the_mods_construction_sector(self):
-        """REPLACE:bg_construction re-parents construction under heavy industry, so its laborers take heavy
-        industry's working_conditions (0.1) as well as their own group's reads."""
+        """REPLACE:bg_construction re-parents construction under heavy industry, so its laborers read heavy industry's
+        group keys, which carry its working_conditions (0.1), as well as their own group's."""
         laborers = self.death.split("is_pop_type = laborers }", 1)[1].split("is_pop_type = machinists }", 1)[0]
         heavy = re.search(r"limit = \{ workplace = \{ OR = \{ is_building_group = bg_heavy_industry ([^}]*)\} \} \}"
                           r"(.*?)\n\t*\}", laborers, re.S)
         self.assertIsNotNone(heavy)
         self.assertIn("is_building_group = bg_construction", heavy.group(1))
-        self.assertIn("add = 0.1", heavy.group(2))
+        self.assertIn("add = workplace.modifier:building_group_bg_heavy_industry_laborers_mortality_mult", heavy.group(2))
         mining = re.search(r"limit = \{ workplace = \{ (?:OR = \{ )?is_building_group = bg_mining\b.*?\n(.*?)\n\t*\}", laborers, re.S)
-        self.assertIn("add = 0.1", mining.group(1))
+        self.assertIn("add = workplace.modifier:building_group_bg_mining_laborers_mortality_mult", mining.group(1))
 
-    def test_every_working_conditions_row_is_applied(self):
+    def test_every_working_conditions_row_is_read_not_added(self):
+        """The self-check working_conditions_read (2026-10-17): a mine's read of its laborers' key holds the table's
+        0.1, scaled by the building's building_working_conditions_mult (the growth probe's 1949 capital read 0 under
+        Workplace Safety at five). So the walk reads each row through its workplace's group key and adds no constant:
+        until then it added the table on top and counted working conditions twice."""
         rows = gen.static_modifier(ROOT, "working_conditions")
         self.assertEqual(len(rows), 31)
-        for key, value in rows.items():
+        for key in rows:
             group, ptype = re.fullmatch(r"building_group_(bg_\w+?)_(laborers|machinists|engineers|slaves)_mortality_mult",
                                         key).groups()
             branch = self.death.split(f"is_pop_type = {ptype} }}", 1)[1].split("is_pop_type = ", 1)[0]
             gate = re.search(rf"limit = \{{ workplace = \{{ (?:OR = \{{ )?is_building_group = {group}\b.*?\n(.*?)\n\t*\}}",
                              branch, re.S)
             self.assertIsNotNone(gate, key)
-            self.assertIn(f"add = {gen.lit(value)}", gate.group(1), key)
+            self.assertIn(f"add = workplace.modifier:{key}", gate.group(1), key)
+        # no literal in any workplace group's gate: every line there is a read
+        gates = re.findall(r"limit = \{ workplace = \{ [^\n]*\n(.*?)\n\t*\}", self.death, re.S)
+        self.assertGreater(len(gates), 30)
+        for body in gates:
+            self.assertNotRegex(body, r"add = -?[0-9.]+\s*$")
+            self.assertNotRegex(body, r"add = -?[0-9.]+\n")
+
+    def test_the_self_check_reads_the_tables_mining_line(self):
+        """working_conditions_read's expected read is the table's bg_mining laborers line at the building's scale."""
+        values = (ROOT / "common" / "script_values" / "te_debug_demog_values.txt").read_text(encoding="utf-8-sig")
+        table = gen.static_modifier(ROOT, "working_conditions")["building_group_bg_mining_laborers_mortality_mult"]
+        self.assertIn(f"te_debug_demog_wc_table_mining_laborers = {{ value = {gen.lit(table)} }}", values)
+        self.assertIn("te_debug_demog_wc_mine_read = { value = modifier:building_group_bg_mining_laborers_mortality_mult }",
+                      values)
+        scale = values.split("te_debug_demog_wc_mine_scale = {", 1)[1].split("\n}", 1)[0]
+        self.assertIn("add = modifier:building_working_conditions_mult", scale)
+        self.assertIn("min = 0", scale)
 
     def test_class_and_workplace_reads(self):
         laborers = self.death.split("is_pop_type = laborers }", 1)[1].split("is_pop_type = machinists }", 1)[0]

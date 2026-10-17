@@ -23,7 +23,8 @@
 # Event 28      - an opportunity seized: the monument, its gift and the boon,
 #                 players only.
 # Event 29      - a monument's own work: building beside, the grandest standing
-#                 first (hidden, ageing spec 2026-10-16 §3).
+#                 first (hidden, ageing spec 2026-10-16 §3), and a revolt's
+#                 split piece (its identity, its return).
 # Event 30      - choices on a monument beside another (hidden, §4.3).
 # Event 31      - a merged state's monuments adopted from their shadows
 #                 (hidden, issue #936).
@@ -70,10 +71,17 @@ monument_events.1 = {
 					}
 					if = {
 						limit = { gm_state_merge_pending = no }
-						# Levels built on a finished monument found a new one
-						# beside it (spec 2026-10-16 §3.2); the last level of a
-						# monument's construction freezes it.
+						# A revolt's piece whose monument merged into its state
+						# is the monument itself: the merge's levels are its own
+						# (gm_monument_effects.txt § "A revolt's split piece").
+						# Otherwise levels built on a finished monument found a
+						# new one beside it (spec 2026-10-16 §3.2); the last level
+						# of a monument's construction freezes it.
 						if = {
+							limit = { gm_state_piece_whole_gone = yes }
+							gm_state_piece_takes_whole = yes
+						}
+						else_if = {
 							limit = { gm_state_has_new_levels = yes }
 							gm_state_found_beside = yes
 						}
@@ -1459,7 +1467,10 @@ monument_events.26 = {
 # new one beside it (gm_state_found_beside), and a newcomer that has settled
 # gives the state's first place back to a grander monument beside it
 # (gm_state_settle_newcomer). Each reads back what it writes. A merge's
-# monuments are adopted first (issue #936), so their levels found nothing.
+# monuments are adopted first (issue #936), so their levels found nothing, and
+# a revolt's split piece is settled next (owner's call 2026-10-17): it takes
+# its monument's identity at first sight, and after the merge back rejoins it
+# or stands as the monument itself.
 monument_events.29 = {
 	type = state_event
 	hidden = yes
@@ -1476,7 +1487,24 @@ monument_events.29 = {
 		}
 		if = {
 			limit = { gm_state_merge_pending = no }
+			# A revolt's split piece (gm_monument_effects.txt § "A revolt's
+			# split piece"): at first sight it takes its monument's identity;
+			# once a merge has made the two one state again, the piece's levels
+			# rejoin the monument, or the piece is the monument itself. Before
+			# new levels are read: a merge's levels found nothing beside.
 			if = {
+				limit = { gm_state_split_pending = yes }
+				gm_state_take_split_identity = yes
+			}
+			else_if = {
+				limit = { gm_state_split_piece_gone = yes }
+				gm_state_split_piece_home = yes
+			}
+			else_if = {
+				limit = { gm_state_piece_whole_gone = yes }
+				gm_state_piece_takes_whole = yes
+			}
+			else_if = {
 				limit = { gm_state_has_new_levels = yes }
 				gm_state_found_beside = yes
 			}

@@ -263,7 +263,8 @@ mineral deposits](03-economy.md#new-mineral-deposits).
 
 Two late buildings mine several goods at once. The Deep-Sea Mine (Abyssal Plain
 Mining) can be built in any coastal state, and each level needs a seabed licence
-([Seabed licences](#seabed-licences)). The
+([Seabed licences](#seabed-licences)). Like a fishing wharf, it loses up to
+three quarters of its throughput while its state is blockaded. The
 Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
 mines metals and minerals, and after Space Colonization it can switch to the
 Resort Colony production method, which produces art and tourism instead.
@@ -298,10 +299,19 @@ Every January the pools are shared out by claim weight among the countries with
 Abyssal Plain Mining. A country that has just researched it gets its share the
 month after, and that sharing divides every pool again, so your own share can
 move in the middle of a year. In a basin where you have coastal states, your
-weight counts those states twice, their port levels, and your navy in
-proportion to the coast you have there; an unincorporated state counts half,
-its ports in full. In any other basin it is a twentieth of your navy, so you
-can claim far from home, but only a small share.
+weight counts those states twice, their port levels, and your naval power
+projection, scaled to about one unit a warship (the weight hover shows the
+divisor), in proportion to the coast you have there; an unincorporated state
+counts half, its ports in full. In any other basin it is a
+twentieth of that naval term, so you can claim far from home, but only a small
+share. Power projection rather than fleet size counts, so a modern fleet
+outweighs a larger obsolete one.
+
+An event announces the seabed rush when the first coastal country researches
+Abyssal Plain Mining. After that, a notification tells you when a country wins
+its first share in a basin on your coast where you have one, and when a basin
+you have coast or a share in has all its licences held. Both can be muted in
+the message settings, under Seabed Licences.
 
 A licence is held by a level, built or queued, and stays with it for good. It
 belongs to the state the mine stands in and passes with it: conquer a mined
@@ -383,8 +393,8 @@ has a row for each basin: Free is your claims there, green where you have coast
 to build on at full throughput; Pool is a bar of the whole pool, from your
 mines and claims to rivals' mines and the rivals' claims a buildup could win;
 Weight is your share of the basin's claim weight; +1 licence is about how much
-more navy would win you one more licence at the next sharing, a figure that is
-enough and often more than needed. Click a basin to see its claimants, largest
+more naval power projection would win you one more licence at the next sharing,
+a figure that is enough and often more than needed. Click a basin to see its claimants, largest
 share first, with your own row and its Relinquish button. A Seabed Licences
 tile on every coastal state's panel shows the same national figures.
 
@@ -392,7 +402,7 @@ tile on every coastal state's panel shows the same national figures.
 |---|---|---|---|
 | Scientific Survey (default) | none | ×0.25 | You aren't building Deep-Sea Mines yet. |
 | Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licences, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
-| Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, navy counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
+| Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, naval power projection counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 
 A new policy holds its influence from the day you choose it; its weight counts
 from the next sharing. Any change holds your policy for five years, whichever
@@ -1023,7 +1033,13 @@ comes back, for example when the monarchy is restored, it counts in full again.
 Pulling it down is the only permanent choice. A shrine in a state that another
 country takes becomes heritage at once and cannot be pulled down. After a civil
 war the winner inherits the monuments the loser raised, and they are contested
-only if its laws no longer fit them.
+only if its laws no longer fit them. A revolt that takes part of a monument's
+state takes a piece of it: the rebels' part shows the same monument, with its
+name and dedication, at the levels it took, and asks no ceremony. Its card and
+row say it is a piece and where the monument stands, and the monument's say
+where its piece is. When the two parts come under one country again the piece
+rejoins the monument, whichever side won, and any levels lost in between are
+rebuilt.
 
 A Grand Monument cannot be downsized or demolished from its building panel, by
 you or by the AI. Pull Down is the only way to remove one yourself.

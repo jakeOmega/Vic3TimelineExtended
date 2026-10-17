@@ -972,7 +972,10 @@ REPLACE_OR_CREATE:building_space_mine = {
 REPLACE_OR_CREATE:building_ocean_mine = {
 	building_group = bg_exotic
 	icon = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
-	city_type = city
+	# port, the field every blockade-affected vanilla building shares, so a
+	# blockade cuts the mine's throughput (seabed claims spec § 6.2; unverified:
+	# docs/testing/global-commons-playtest.md names the fallback)
+	city_type = port
 	levels_per_mesh = -1
 
 	unlocking_technologies = {

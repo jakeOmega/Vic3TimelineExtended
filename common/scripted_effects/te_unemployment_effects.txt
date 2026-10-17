@@ -1,0 +1,99 @@
+﻿# Unemployment as a share of the workforce: the walk that counts a state's workforce share, and its self-check.
+# Values and the variables' meanings: common/script_values/te_unemployment_values.txt. Wiring:
+# common/on_actions/te_unemployment_on_actions.txt.
+
+# THIS = a state, its yearly pulse: the share readers held until now (for the self-check's line), the walk, then the
+# self-check.
+te_unemp_share_yearly = {
+	set_local_variable = { name = te_unemp_c_prev value = te_state_workforce_share }
+	te_unemp_share_refresh = yes
+	te_unemp_share_selfcheck = yes
+}
+
+# THIS = a state: walk its pops once and store the workforce's share of its people (te_unemp_wf_share) and the share
+# of its workforce with no workplace (te_unemp_share_exact). The census's walk counts the same workforce
+# (te_demog_work_walk_pop), but only where the census runs, and Demographics is off by default. Leaves its sums in
+# locals for te_unemp_share_selfcheck. A state with no people keeps what it had.
+te_unemp_share_refresh = {
+	set_local_variable = { name = te_unemp_w_pop value = 0 }
+	set_local_variable = { name = te_unemp_w_wf value = 0 }
+	set_local_variable = { name = te_unemp_w_idle value = 0 }
+	every_scope_pop = {
+		change_local_variable = { name = te_unemp_w_pop add = total_size }
+		change_local_variable = { name = te_unemp_w_wf add = workforce }
+		if = {
+			limit = { NOT = { exists = workplace } }
+			change_local_variable = { name = te_unemp_w_idle add = workforce }
+		}
+	}
+	if = {
+		limit = { local_var:te_unemp_w_pop > 0 }
+		set_variable = {
+			name = te_unemp_wf_share
+			value = { value = local_var:te_unemp_w_wf divide = local_var:te_unemp_w_pop }
+		}
+		set_variable = {
+			name = te_unemp_share_exact
+			value = { value = local_var:te_unemp_w_idle divide = { value = local_var:te_unemp_w_wf min = 1 } }
+		}
+	}
+}
+
+# TE_SELF_CHECK unemployment_share_read (docs/testing/ai-economy-playtest.md, Self-checks). Once a game, the first
+# state at its yearly walk with a workforce of at least 10,000 and at least 2% of it with no workplace: the conversion
+# readers use (te_state_unemployment_share, read after the walk stored the state's workforce share) against the walk's
+# own count of the workforce with no workplace over all the workforce.
+#   OK      within a quarter below or a third above: the engine's figure is the idle workforce over all the state's
+#           people (the 2026-10-17 diagnosis), so the conversion is the share of the workforce the readers mean.
+#   BROKEN  anything else. About 4 x: the figure is already per worker, and the conversion counts it four times. The
+#           fallback is te_unemp_share_exact, a year stale (the playtest row).
+# conv / exact is read / per_people (the idle workforce over the people) whenever the clamps don't bind, so the line
+# tests the per-person scale directly. prev_wf_share is the share readers held before this walk (0.25 where none:
+# the fallback), so the line also shows a year's drift.
+te_unemp_share_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_unemp_share_check_done }
+			local_var:te_unemp_w_wf >= 10000
+		}
+		set_local_variable = {
+			name = te_unemp_c_exact
+			value = { value = local_var:te_unemp_w_idle divide = { value = local_var:te_unemp_w_wf min = 1 } }
+		}
+		if = {
+			limit = { local_var:te_unemp_c_exact >= 0.02 }
+			set_global_variable = { name = te_unemp_share_check_done value = yes }
+			set_variable = { name = te_unemp_chk_read value = te_unemp_engine_read }
+			set_variable = { name = te_unemp_chk_conv value = te_state_unemployment_share }
+			set_variable = { name = te_unemp_chk_exact value = local_var:te_unemp_c_exact }
+			set_variable = {
+				name = te_unemp_chk_per_people
+				value = { value = local_var:te_unemp_w_idle divide = { value = local_var:te_unemp_w_pop min = 1 } }
+			}
+			set_variable = { name = te_unemp_chk_prev value = local_var:te_unemp_c_prev }
+			set_variable = { name = te_unemp_chk_wf value = local_var:te_unemp_w_wf }
+			set_variable = {
+				name = te_unemp_chk_ratio
+				value = { value = var:te_unemp_chk_conv divide = { value = var:te_unemp_chk_exact min = 0.00001 } }
+			}
+			if = {
+				limit = {
+					var:te_unemp_chk_ratio >= 0.75
+					var:te_unemp_chk_ratio <= 1.33
+				}
+				debug_log = "TE_SELF_CHECK OK unemployment_share_read state=[THIS.GetState.GetNameNoFormatting] conv=[THIS.Var('te_unemp_chk_conv').GetValue|3] exact=[THIS.Var('te_unemp_chk_exact').GetValue|3] read=[THIS.Var('te_unemp_chk_read').GetValue|3] per_people=[THIS.Var('te_unemp_chk_per_people').GetValue|3] wf_share=[THIS.Var('te_unemp_wf_share').GetValue|3] prev_wf_share=[THIS.Var('te_unemp_chk_prev').GetValue|3] workforce=[THIS.Var('te_unemp_chk_wf').GetValue|0] (the engine's figure is the idle workforce over all the state's people, so te_state_unemployment_share is the share of the workforce the mod's readers mean) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN unemployment_share_read state=[THIS.GetState.GetNameNoFormatting] conv=[THIS.Var('te_unemp_chk_conv').GetValue|3] exact=[THIS.Var('te_unemp_chk_exact').GetValue|3] read=[THIS.Var('te_unemp_chk_read').GetValue|3] per_people=[THIS.Var('te_unemp_chk_per_people').GetValue|3] wf_share=[THIS.Var('te_unemp_wf_share').GetValue|3] prev_wf_share=[THIS.Var('te_unemp_chk_prev').GetValue|3] workforce=[THIS.Var('te_unemp_chk_wf').GetValue|0] (te_state_unemployment_share is not the share of the workforce with no workplace: about 4 x exact means the engine's figure is already per worker; take the fallback in docs/testing/ai-economy-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_variable = te_unemp_chk_read
+			remove_variable = te_unemp_chk_conv
+			remove_variable = te_unemp_chk_exact
+			remove_variable = te_unemp_chk_per_people
+			remove_variable = te_unemp_chk_prev
+			remove_variable = te_unemp_chk_wf
+			remove_variable = te_unemp_chk_ratio
+		}
+	}
+}

@@ -153,9 +153,13 @@ decree_greenest_grass_campaign = {
 			}
 			multiply = 2.0
 		}
+		# No pull into a state where a tenth of the workforce has no work
+		# (te_state_unemployment_share). Vanilla's Greener Grass compares the
+		# engine's per-person state_unemployment_rate with the same 0.1, about
+		# 40% of the workforce while the workforce is a quarter of the people.
 		if = {
 			limit = {
-				state_unemployment_rate >= 0.1
+				te_state_unemployment_share >= 0.1
 			}
 			multiply = 0
 		}
@@ -510,7 +514,7 @@ decree_resettlement_recruitment_drive = {
 					any_scope_state = { has_building = building_resettlement_colony }
 				}
 				OR = {
-					state_unemployment_rate > 0.1
+					te_state_unemployment_share > 0.1 # a tenth of the workforce without work
 					migration_crowding_mult > 1
 				}
 			}

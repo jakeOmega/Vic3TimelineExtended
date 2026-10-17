@@ -1,0 +1,48 @@
+﻿# Unemployment as a share of the workforce (docs/systems/mod_systems.md § Unemployment as a Share of the Workforce).
+#
+# The engine's state_unemployment_rate is not a share of the workforce. In Mecklenburg-Strelitz in January 1836 it
+# read 0.048 where the pops held 0.195 of their workforce with no workplace (the Demographics self-check
+# unemployment_rate_read, 2026-10-17): about the idle workforce over all the state's people, dependents included,
+# a quarter of the share while the workforce is a quarter of the people. Vanilla's mon_unemployment_estimate doubles
+# it ("way off actual unemployment rate"). A threshold written as a share of the workforce (> 0.1) read against it
+# bites at about four times that.
+#
+# te_state_unemployment_share converts it: the engine's figure, read live, over the workforce's share of the
+# people, which moves over years (laws, the mix of pop types) and is counted once a year by a walk of the state's pops
+# (te_unemp_share_refresh, common/scripted_effects/te_unemployment_effects.txt). Every mod reader of a state's
+# unemployment reads it. The Demographics census stores it at its walk (te_dg_unemp, te_demog_work_walk_store), so its
+# panel, which can't read the trigger, and its effects read one figure; a state the census walks before this walk has
+# reached it takes the census walk's workforce share, the same sum (owner, 2026-10-17: one source for every reader).
+#
+# Variables, state scope (te_unemp_share_refresh):
+#   te_unemp_wf_share     the walk's workforce over its people (pops' workforce over their total_size), 0-1
+#   te_unemp_share_exact  the walk's workforce with no workplace over its workforce, 0-1: the fallback source if the
+#                         self-check unemployment_share_read reads BROKEN (docs/testing/ai-economy-playtest.md)
+
+# THIS = a state: the share of its workforce with no workplace, 0-1. Not for a scripted GUI or loc: a GUI reads
+# state_unemployment_rate as none (scripting_best_practices.md § The op slots); store it from an effect first.
+te_state_unemployment_share = {
+	value = state_unemployment_rate
+	divide = te_state_workforce_share
+	max = 1
+	min = 0
+}
+
+# THIS = a state: its workforce over its people, as its last walk counted them. A state not walked yet (the first
+# month of a game or of a save from before this, a state just split off) takes the 1836 figure: a quarter.
+te_state_workforce_share = {
+	value = te_unemp_k_wf_share_fallback
+	if = {
+		limit = { has_variable = te_unemp_wf_share }
+		value = var:te_unemp_wf_share
+	}
+	min = 0.05
+}
+
+# The workforce's share of the people where no walk has counted it: pop_types.md's default working_adult_ratio, and
+# the 1898 observer save's median over 826 census states (0.251, 2026-10-17).
+te_unemp_k_wf_share_fallback = { value = 0.25 }
+
+# THIS = a state: the engine's figure, for an effect to store (set_variable's value slot can't take the bare trigger
+# read: scripting_best_practices.md, "The op slots accept ...").
+te_unemp_engine_read = { value = state_unemployment_rate }

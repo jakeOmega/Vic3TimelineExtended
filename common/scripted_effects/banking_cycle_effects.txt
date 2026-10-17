@@ -1580,42 +1580,62 @@ banking_crash_check_overdrawn_interventions = {
 	}
 }
 
+# A banking crash is decided here: the next year's contagion rolls are scares
+# (banking_contagion_scare_only). Called where each crash is decided, beside
+# banking_recent_crash: the origin roll in banking_cycle_check_and_execute_crash
+# (the monthly pulse) and the contagion roll below (event .7's immediate). Not in
+# apply_banking_crash_origin_effects, which zeroes the bubble: it runs in the
+# crash events' options, up to their three-month duration later, so a contagion
+# event could still roll a second crash in between, and option effects are also
+# walked for the tooltips.
+banking_mark_crashed_last_year = {
+	set_variable = { name = banking_crashed_last_year value = 1 days = 365 }
+}
+
 # Run contagion crash check in event .7 immediate block.
 # Probability based on TARGET's own bubble pressure, elevated by origin crash severity.
 # Countries with low bubble pressure are mostly immune; high bubble = very vulnerable.
 # Sets contagion_crash = 1 (crash) or 0 (scare).
 # If crash: calculates crash_severity from target's bubble + origin boost + random multiplier.
+# A country that crashed in the last year only takes a scare (banking_contagion_scare_only): no roll, so
+# contagion_crash = 0 and the event plays its scare text and options, marked banking_crisis_wave_scared.
 banking_contagion_crash_check = {
-	random_list = {
-		0 = {
-			modifier = {
-				# Target's own bubble pressure is the primary crash factor
-				add = var:bubble_pressure
-				# Boost from origin crash severity — even responsible countries
-				# face elevated risk from a severe foreign collapse
-				if = {
-					limit = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } }
-					add = 30
+	if = {
+		limit = { banking_contagion_scare_only = yes }
+		set_variable = { name = contagion_crash value = 0 }
+	}
+	else = {
+		random_list = {
+			0 = {
+				modifier = {
+					# Target's own bubble pressure is the primary crash factor
+					add = var:bubble_pressure
+					# Boost from origin crash severity — even responsible countries
+					# face elevated risk from a severe foreign collapse
+					if = {
+						limit = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } }
+						add = 30
+					}
+					else_if = {
+						limit = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
+						add = 20
+					}
+					else_if = {
+						limit = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } }
+						add = 10
+					}
+					else = {
+						add = 5
+					}
+					multiply = banking_contagion_chance_economy_mult
+					multiply = banking_crash_chance_multiplier_value
+					min = 0
 				}
-				else_if = {
-					limit = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
-					add = 20
-				}
-				else_if = {
-					limit = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } }
-					add = 10
-				}
-				else = {
-					add = 5
-				}
-				multiply = banking_contagion_chance_economy_mult
-				multiply = banking_crash_chance_multiplier_value
-				min = 0
+				set_variable = { name = contagion_crash value = 1 }
 			}
-			set_variable = { name = contagion_crash value = 1 }
-		}
-		100 = {
-			set_variable = { name = contagion_crash value = 0 }
+			100 = {
+				set_variable = { name = contagion_crash value = 0 }
+			}
 		}
 	}
 
@@ -1633,6 +1653,8 @@ banking_contagion_crash_check = {
 		te_demog_wc_shock = { AMOUNT = -5 }
 		# Five years of "recent banking failures" (banking_had_recent_crash).
 		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
+		# And a year in which contagion can only scare it.
+		banking_mark_crashed_last_year = yes
 		# Crash severity = target's own bubble pressure (scaled as for an origin
 		# crash — banking_crash_severity_scale_value) + boost from origin severity
 		set_variable = {
@@ -1684,6 +1706,214 @@ banking_contagion_crash_check = {
 		# country has carried since banking_cycle_spread_contagion reached it:
 		# until this roll, it is neither a casualty nor a survivor (#428).
 		set_variable = { name = banking_crisis_wave_scared value = 1 }
+	}
+}
+
+# ONE CONTAGION EVENT AT A TIME (owner, 2026-10-17: "Ideally, only one"). A country holds at most one
+# contagion event (minor_events_timelineextended.7), from when banking_cycle_spread_contagion sends it to its
+# `after`. Before, a second origin crashing in the same pulse re-ran banking_crisis_wave_init, which clears
+# every reached mark, so its spread could reach the country again: two copies, two rolls, two popups, and the
+# first copy's options read the second's crash_severity. The mark, banking_contagion_pending, goes on when the
+# spread SENDS the event, not when it opens: both copies of that case are sent in the same pulse, a week
+# before either fires, so a mark set in `immediate` cannot stop the second being sent. An event `trigger`
+# checked when the copy fires would rest on the engine's order within one day (does the second copy's trigger
+# see the first copy's immediate? unverified), and a copy its trigger stops runs no script, so its reach could
+# not be squared with the wave's marks. banking_crisis_wave_init leaves the mark alone. The event's
+# `immediate` sets it again (which may restart its clock; if not, it runs on from the send, and either way it
+# outlasts the event) and so marks a copy an older build sent; its `after` removes it.
+#
+# BACKSTOP. The mark is timed, 120 days, so a copy nothing ever answers frees the country then. An event
+# waits 7 days to fire and stays open at most its `duration`, 3 months (scripting_best_practices.md: "An
+# event's duration is in months"), so a live copy never outlasts its mark, while a wave's tiers land a week
+# apart (the 7th, 14th, 21st and 28th of the pulse's month): a lost copy shields its country through about
+# four monthly pulses. A revolution's winner inherits the loser's variables but not its events, so
+# je_banking_cycle's `immediate`, which runs again on the inherited copy, removes the mark there.
+banking_contagion_mark_pending = {
+	set_variable = { name = banking_contagion_pending value = 1 days = 120 }
+}
+
+# One target of banking_cycle_spread_contagion whose roll has reached it. Without the mark, the country is
+# reached and gets the event a week later. With it, the reach is turned away, and the country's event, on its
+# way or open, answers for this wave too. The country is marked reached, so the wave's later tiers pass it
+# by, and never reached-but-undecided with no roll to come (#428's window, banking_crisis_wave_init): an open
+# event has already rolled, and with one copy at a time contagion_crash is that roll, so its outcome goes on
+# this wave's books now; an event still on its way decides it when it fires, as for any target. The turned-
+# away reach adds nothing to the Great Depression count: only the event's own crash does, once, in its
+# `after` (banking_crisis_wave_increment, behind banking_crisis_wave_counted).
+banking_contagion_reach = {
+	if = {
+		limit = { has_variable = banking_contagion_pending }
+		set_variable = { name = banking_crisis_wave_hit value = 1 }
+		if = {
+			limit = { has_variable = contagion_crash }
+			if = {
+				limit = { var:contagion_crash > 0 }
+				set_variable = { name = banking_crisis_wave_crashed value = 1 }
+			}
+			else = {
+				set_variable = { name = banking_crisis_wave_scared value = 1 }
+			}
+		}
+		banking_contagion_selfcheck_turned_away = yes
+	}
+	else = {
+		banking_contagion_clear_stale = yes
+		# Reached, not crashed: whether it crashes is the contagion event's to decide
+		# (banking_contagion_crash_check sets _crashed or _scared).
+		set_variable = { name = banking_crisis_wave_hit value = 1 }
+		banking_contagion_mark_pending = yes
+		trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
+	}
+}
+
+# A contagion event is about to be sent and the country holds none (no mark): clear what a copy whose `after`
+# never ran left behind once its mark ran out. A stale contagion_crash would read as an open event's roll in
+# banking_contagion_reach, and a stale count as a second copy open in the self-check below.
+banking_contagion_clear_stale = {
+	if = {
+		limit = { has_variable = contagion_crash }
+		remove_variable = contagion_crash
+	}
+	if = {
+		limit = { has_variable = banking_contagion_open }
+		remove_variable = banking_contagion_open
+	}
+	if = {
+		limit = { has_variable = banking_contagion_roll_inherited }
+		remove_variable = banking_contagion_roll_inherited
+	}
+	if = {
+		limit = { has_variable = banking_contagion_turned_away }
+		remove_variable = banking_contagion_turned_away
+	}
+}
+
+# TWO SELF-CHECKS, both run from event .7 (docs/testing/banking-playtest.md).
+#
+# TE_SELF_CHECK contagion_one_open: the block above holds. banking_contagion_open counts the copies open (up
+# in `immediate`, down in `after`) and should never pass 1. BROKEN, once a game, when a copy opens while
+# another is open. OK, once a game, when a copy closes alone after the spread turned a reach away for it
+# (banking_contagion_turned_away): only then was there a second copy to stop, so a game with no turned-away
+# reach logs no OK. A save from before the block can hold two copies sent already; a BROKEN in the week
+# after loading one is that.
+#
+# TE_SELF_CHECK contagion_roll_scope: event .7 keeps its roll twice: in its own saved scope
+# (scope:contagion_crashed, the country, saved on a crash), which its text, options and cascade read, and in
+# the country variable contagion_crash, which this check compares it with. Before the block, a second copy
+# open at once overwrote the variable with its own roll, and every BROKEN line of the 2026-10-17 observer run
+# (five, both directions) was that. A copy is still judged only when it was alone: the count is 1 at its
+# `after` and contagion_crash is still set (every `after` removes it, so a copy that opened and closed in the
+# meantime leaves it unset). A copy whose `after` never runs (its country annexed first) leaves the count
+# high until banking_contagion_clear_stale: a verdict skipped, never a false one. The event removes
+# contagion_crash at the end of its `after`, and nothing between this verdict and that removal may write it
+# or run another copy's `immediate` (a trigger_event with no delay there would run one inside the `after`).
+
+# banking_contagion_reach turned a reach away: this country's event answers for it.
+banking_contagion_selfcheck_turned_away = {
+	if = {
+		limit = { has_variable = banking_contagion_turned_away }
+		change_variable = { name = banking_contagion_turned_away add = 1 }
+	}
+	else = {
+		set_variable = { name = banking_contagion_turned_away value = 1 }
+	}
+}
+
+# Event .7's immediate, before its roll: one more copy open, and whether a roll came in with the event (a
+# saved scope rides into the events an `after` triggers, so a cascade's target arrives holding the upstream
+# country as contagion_crashed).
+banking_contagion_selfcheck_open = {
+	if = {
+		limit = { has_variable = banking_contagion_open }
+		change_variable = { name = banking_contagion_open add = 1 }
+	}
+	else = {
+		set_variable = { name = banking_contagion_open value = 1 }
+	}
+	if = {
+		limit = { exists = scope:contagion_crashed }
+		set_variable = { name = banking_contagion_roll_inherited value = 1 }
+	}
+	if = {
+		limit = {
+			var:banking_contagion_open > 1
+			NOT = { has_global_variable = te_selfcheck_contagion_one_open_broken }
+		}
+		set_global_variable = { name = te_selfcheck_contagion_one_open_broken value = yes }
+		# Two lines, so the accessor never reads a variable that is not there.
+		if = {
+			limit = { has_variable = banking_contagion_turned_away }
+			debug_log = "TE_SELF_CHECK BROKEN contagion_one_open country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] open=[THIS.Var('banking_contagion_open').GetValue|0] turned_away=[THIS.Var('banking_contagion_turned_away').GetValue|0] (a second contagion event opened while one was open: two rolls and two popups for one country again; take the fallback in docs/testing/banking-playtest.md)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN contagion_one_open country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] open=[THIS.Var('banking_contagion_open').GetValue|0] turned_away=0 (a second contagion event opened while one was open: two rolls and two popups for one country again; take the fallback in docs/testing/banking-playtest.md)"
+		}
+	}
+}
+
+# Event .7's after, before the cascade: the verdicts, then one copy fewer. contagion_roll_scope's OK is once
+# a game, from the first cascade target whose own roll crashed: only there does the event's save have to
+# replace the upstream country's scope. Its flag is new since 2026-10-17, because the check before then also
+# judged copies that were not alone, so an older save's OK proves nothing.
+banking_contagion_selfcheck_close = {
+	if = {
+		limit = {
+			has_variable = contagion_crash
+			has_variable = banking_contagion_open
+			var:banking_contagion_open < 2
+		}
+		if = {
+			limit = {
+				var:contagion_crash > 0
+				NOT = { banking_contagion_own_roll_crashed = yes }
+			}
+			debug_log = "TE_SELF_CHECK BROKEN contagion_roll_scope country=[THIS.GetCountry.GetTagName] roll=crash read=scare open=1 (the event was alone, so the variable is its own roll: its save did not replace an inherited scope, and a cascade target's crash plays as a scare and spreads nothing; take the fallback in docs/testing/banking-playtest.md)"
+		}
+		else_if = {
+			limit = {
+				var:contagion_crash < 1
+				banking_contagion_own_roll_crashed = yes
+			}
+			debug_log = "TE_SELF_CHECK BROKEN contagion_roll_scope country=[THIS.GetCountry.GetTagName] roll=scare read=crash open=1 (the event was alone, so the variable is its own roll: a scare took the crash options and cascade, the 2026-10-16 bug; take the fallback in docs/testing/banking-playtest.md)"
+		}
+		else_if = {
+			limit = {
+				var:contagion_crash > 0
+				has_variable = banking_contagion_roll_inherited
+				NOT = { has_global_variable = te_selfcheck_contagion_roll_alone_ok }
+			}
+			set_global_variable = { name = te_selfcheck_contagion_roll_alone_ok value = yes }
+			debug_log = "TE_SELF_CHECK OK contagion_roll_scope country=[THIS.GetCountry.GetTagName] open=1 (the event was alone, and a cascade target's own crash replaced the inherited scope)"
+		}
+	}
+	if = {
+		limit = {
+			has_variable = banking_contagion_turned_away
+			has_variable = banking_contagion_open
+			var:banking_contagion_open < 2
+			NOT = { has_global_variable = te_selfcheck_contagion_one_open_ok }
+		}
+		set_global_variable = { name = te_selfcheck_contagion_one_open_ok value = yes }
+		debug_log = "TE_SELF_CHECK OK contagion_one_open country=[THIS.GetCountry.GetTagName] turned_away=[THIS.Var('banking_contagion_turned_away').GetValue|0] (a wave reached this country while its contagion event was on its way or open, was turned away, and the event closed alone)"
+	}
+	if = {
+		limit = {
+			has_variable = banking_contagion_open
+			var:banking_contagion_open > 1
+		}
+		change_variable = { name = banking_contagion_open add = -1 }
+	}
+	else_if = {
+		limit = { has_variable = banking_contagion_open }
+		remove_variable = banking_contagion_open
+	}
+	if = {
+		limit = { has_variable = banking_contagion_roll_inherited }
+		remove_variable = banking_contagion_roll_inherited
+	}
+	if = {
+		limit = { has_variable = banking_contagion_turned_away }
+		remove_variable = banking_contagion_turned_away
 	}
 }
 
@@ -1779,6 +2009,9 @@ apply_banking_contagion_effects = {
 # casualty text on _crashed and its survivor text on _scared, and an undecided
 # country reads the general text. Until #428 _crashed was set on every target
 # before the contagion event decided anything, so a scare read as a crash.
+# It leaves banking_contagion_pending alone: a second origin crashing in the
+# same pulse clears the first wave's marks, and that mark is what keeps its
+# spread from sending a country a second contagion event (banking_contagion_reach).
 banking_crisis_wave_init = {
 	# Clear previous wave flags from all countries
 	every_country = {
@@ -1801,6 +2034,10 @@ banking_crisis_wave_init = {
 	# Mark this country as part of the wave: reached, and crashed.
 	set_variable = { name = banking_crisis_wave_hit value = 1 }
 	set_variable = { name = banking_crisis_wave_crashed value = 1 }
+	# And counted: the 1 above is this country. Without the mark, a contagion
+	# event it still held from an earlier wave, whose own roll had crashed,
+	# counted it a second time in its `after` (banking_crisis_wave_increment).
+	set_variable = { name = banking_crisis_wave_counted value = 1 }
 	# Bond fortunes vanish in a crash: every state's Wealth Concentration falls
 	# 5 (demographics spec §4.2). ROOT is the country (je_banking_cycle's pulse).
 	te_demog_wc_shock = { AMOUNT = -5 }
@@ -2150,6 +2387,8 @@ banking_cycle_check_and_execute_crash = {
 		te_history_record_banking_marker = { MARK = crash }
 		# Five years of "recent banking failures" (banking_had_recent_crash).
 		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
+		# And a year in which contagion can only scare it.
+		banking_mark_crashed_last_year = yes
 
 		# Severity scales with bubble pressure (random multiplier 0.5–2.0).
 		# Seeded from banking_crash_severity_scale_value x bubble, not bubble
@@ -2335,13 +2574,11 @@ banking_cycle_spread_contagion = {
 					save_scope_as = banking_crash_origin_country
 				}
 
-				# Mark target immediately so cascading spreads from other countries
-				# in this wave cannot hit the same country twice. Reached, not
-				# crashed: whether it crashes is the contagion event's to decide
-				# (banking_contagion_crash_check sets _crashed or _scared).
-				set_variable = { name = banking_crisis_wave_hit value = 1 }
-
-				trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
+				# Mark the target reached at once, so cascading spreads from other
+				# countries in this wave cannot hit it twice, and send it the
+				# contagion event, unless it holds one already, on its way or
+				# open: one at a time, across waves too (banking_contagion_reach).
+				banking_contagion_reach = yes
 			}
 		}
 	}

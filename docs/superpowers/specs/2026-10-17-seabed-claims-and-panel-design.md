@@ -571,6 +571,12 @@ Notifications (the `te_notifications_l_english.yml` pattern), no events:
 - **"The <Basin> Is Fully Licensed"**, to each claimant there, when the world's licences in a
   basin reach its pool.
 
+**Amended in phase 3 (owner, 2026-10-17):** "The Seabed Rush Begins" is an event, not a
+notification, because the research already had a headline notification
+(`headlines_tech_abyssal_plain_mining`) saying much the same. While the Global Commons rule is on,
+the event (`te_seabed.3`) goes to every player in its place; with the rule off the headline stays.
+The other two stay notifications.
+
 ## 8. AI, in one place
 
 - Policy: the existing yearly score, obeying the lock (§ 2.4). Sponsor's protection raises its
@@ -628,5 +634,6 @@ Phase 3 can run beside phase 1.
    built plus unused (§ 4).
 6. Unincorporated coast at half (§ 5.1); the subject action's cost at Raise Payments' rate (§ 5.2).
 7. Rivals: first six and "us", collapsed by default (§ 3.4).
-8. Notifications, not events, for the rush (§ 7).
+8. Notifications, not events, for the rush (§ 7). Owner, 2026-10-17: the first is an event, in
+   place of the research's headline (§ 7's amendment).
 9. Power projection scaled by a constant to today's flotilla term (§ 6.1).

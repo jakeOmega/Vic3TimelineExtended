@@ -1090,6 +1090,18 @@ banking_had_recent_crash = {
 	has_variable = banking_recent_crash
 }
 
+# Has this country's banking system crashed, at home or by contagion, in the
+# last year? Then a contagion roll can only be a scare (owner, 2026-10-17:
+# "Scare only for a year"; banking_contagion_crash_check). Its crash zeroed its
+# bubble pressure, but the roll still weighs a crash at 5 to 30 points of the
+# origin's severity against 100 for a scare, so banks that had just failed
+# could fail again within weeks. banking_crashed_last_year is a timed variable
+# (365 days), set beside banking_recent_crash where each crash is decided
+# (banking_mark_crashed_last_year).
+banking_contagion_scare_only = {
+	has_variable = banking_crashed_last_year
+}
+
 # banking_cycle_events.16 (market branch: the central bank governor pushes back
 # on politicians who want cheaper money). There has to be a central bank whose
 # rate is not the government's to set. Under the full monetary system that is a
@@ -1139,7 +1151,12 @@ banking_crisis_wave_reached = {
 # clear_saved_scope did not remove the inherited one (2026-10-16 save: the
 # European Union rolled a scare, banking_crisis_wave_scared, and took the crash
 # options and cascade anyway). The upstream country is never ROOT, since
-# banking_cycle_spread_contagion leaves out the origin.
+# banking_cycle_spread_contagion leaves out the origin. The event's own
+# save_scope_as does replace an inherited scope: in the 2026-10-17 observer
+# run's autosave, targets two and three tiers out (contagion events on the 14th
+# and 21st of a month) had taken options this trigger gates. The event's text
+# reads it too, so a second copy open for the same country at once, which
+# overwrites the variable contagion_crash, cannot retitle this one.
 banking_contagion_own_roll_crashed = {
 	exists = scope:contagion_crashed
 	root = scope:contagion_crashed

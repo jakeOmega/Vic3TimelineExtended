@@ -5206,7 +5206,7 @@
  te_debug_demog.1.s.tt:0 "Removes the year our pension setting was chosen, so another can be chosen at once. A play-test tool: the setting itself stays. Writes a TE_DEMOG_PENSION line."
  te_debug_demog.1.t:0 "Demographics Test Console"
  te_debug_demog.1.t_opt:0 "Conscription, youth and sex balance: log our capital"
- te_debug_demog.1.t_opt.tt:0 "Writes a TE_DEMOG_CONSEQ line for our capital: fam and faw are its men aged 20 to 39 and the women of those ages, share their share of its people and men_share of its men, term the conscription term from them, mc the one the census applies under Full and consc_mod the state's conscription multiplier; youth is the share aged 20 to 29, unemp the engine's unemployment, y_now the youth bulge's strength now and yb the one in force; sex is men per 100 women aged 20 to 59, sxb the balance this year's births read, tfr_sex and women_add its terms, fewer and more the two sex-balance modifiers' strengths; radicals_mod, turmoil_mod and feminist_mod are the state's reads of the fields they move. A TE_DEMOG_CONSEQ_COUNTRY line gives our census states together."
+ te_debug_demog.1.t_opt.tt:0 "Writes a TE_DEMOG_CONSEQ line for our capital: fam and faw are its men aged 20 to 39 and the women of those ages, share their share of its people and men_share of its men, term the conscription term from them, mc the one the census applies under Full and consc_mod the state's conscription multiplier; youth is the share aged 20 to 29, unemp the share of its workforce without work the census stored and unemp_walk the walk's own count of it, y_now the youth bulge's strength now and yb the one in force; sex is men per 100 women aged 20 to 59, sxb the balance this year's births read, tfr_sex and women_add its terms, fewer and more the two sex-balance modifiers' strengths; radicals_mod, turmoil_mod and feminist_mod are the state's reads of the fields they move. A TE_DEMOG_CONSEQ_COUNTRY line gives our census states together."
  te_debug_demog.1.u:0 "The late game: log our capital's longevity figures"
  te_debug_demog.1.u.tt:0 "Writes a TE_DEMOG_LATE line for our capital: the ageing rate and the pull of those in longevity care, eligibility (the share within reach), cover, the adults' ever-treated share, the public route's share and its reach now, the market threshold, the augmentation and health laws' reads, the ectogenesis levels, Living to 100 (the state's, in care, not in care), old age from (the state's and the untreated's), rho, the wealth slope, its mean and the wealth pair in force, the mean calendar and biological ages, the mean age at childbirth, the share of births to women of 50 and over, band 5's share and deficit and the pool's; -1 where the census holds none. A TE_DEMOG_LATE_COUNTRY line gives our country's."
  te_debug_demog.1.v:0 "The late game: research the ageing ladder now"
@@ -5786,6 +5786,18 @@
  te_peg.3.d:0 "Five years ago [ROOT.GetCountry.GetName] stopped paying gold for its notes \"for the duration\". The duration is up. The decree that suspended convertibility lapses with the month, and before it does the government must say what the currency is: a promise to pay in gold at the old parity, as the statute book still has it, or the paper it has quietly been ever since."
  te_peg.3.f:0 "\"The bankers want the old parity back, and so does everyone who lives on a fixed income.\"\n\n\"And the factories?\"\n\n\"The factories have had five years of a central bank that answers to them rather than to the vault. Ask them which they prefer.\""
  te_peg.3.t:0 "The Suspension Lapses"
+
+#
+# TE_SEABED
+#
+ te_seabed.3.a:0 "Another frontier, another scramble."
+ te_seabed.3.a.tt:0 "Once we take part in a sharing, the Seabed tab of the $te_systems_window_title$ window shows our claims and every claimant's share of each basin."
+ te_seabed.3.a_first:0 "The deep sea is open for business."
+ te_seabed.3.d_coastal:0 "[SCOPE.sCountry('te_seabed_first_claimant').GetName] has proved that the metal nodules of the abyssal plains can be lifted at a profit. Each ocean basin holds a fixed pool of [concept_seabed_licence]s, shared out every January by claim weight among the coastal countries with $abyssal_plain_mining$. A licence a mine holds is kept for good, so the sooner we can mine, the more of the seabed stays ours."
+ te_seabed.3.d_first:0 "Our contractors have proved that the metal nodules of the abyssal plains can be lifted at a profit, and $building_ocean_mine$ levels can now rise along our coasts. Each ocean basin holds a fixed pool of [concept_seabed_licence]s, shared out every January by claim weight among the coastal countries with $abyssal_plain_mining$. Every claimant that follows will take its share of the pools from those already there."
+ te_seabed.3.d_landlocked:0 "[SCOPE.sCountry('te_seabed_first_claimant').GetName] has proved that the metal nodules of the abyssal plains can be lifted at a profit. The seabed's licences go only to countries with a coast: without one, we can only watch the coastal powers divide the ocean floor among themselves."
+ te_seabed.3.f:0 "\"Manganese, cobalt, nickel, rare earths, lying loose on the floor of the abyss like potatoes in a field. Nobody planted them and nobody owns them.\"\n\n\"Nobody owns them yet. The lawyers are already drawing lines on the charts.\"\n\n\"Lines on the water. And who decides where they go?\"\n\n\"Whoever has the longest coast, the busiest ports and the biggest fleet, as usual. The only new thing is how deep the lines go.\""
+ te_seabed.3.t:0 "The Seabed Rush Begins"
 
 #
 # TE_UNION

@@ -24,6 +24,9 @@ class Oracle(Script):
         super().__init__()
         self.values.update(definitions('common/script_values/extra_script_values.txt'))
         self.triggers.update(definitions('common/scripted_triggers/market_triggers.txt'))
+        # The contagion roll's own helper (a crash starts its year of scares only).
+        cycle = definitions('common/scripted_effects/banking_cycle_effects.txt')
+        self.effects['banking_mark_crashed_last_year'] = cycle['banking_mark_crashed_last_year']
         self.cfg, self.state = cfg, state
         self.vars.update(finance_cycle_value=state.finance_cycle_value,
                          finance_cycle_momentum=state.finance_cycle_momentum,
@@ -143,7 +146,8 @@ class Extensions(unittest.TestCase):
             oracle.foreign = foreign
             oracle.inputs.update(te_mon_has_effective_backstop=False,
                                  **{'modifier:country_banking_crash_chance_mult': 0})
-            actual_weight = oracle.value(Script.field(Script.field(Script.field(effect, 'random_list'), '0'), 'modifier'))
+            roll = Script.field(Script.field(effect, 'else'), 'random_list')  # the roll, past the scare-only year
+            actual_weight = oracle.value(Script.field(Script.field(roll, '0'), 'modifier'))
             self.assertEqual(weight, actual_weight)
             oracle.rolls = iter((probability - 1e-8, .95))
             oracle.execute(effect)
@@ -161,6 +165,34 @@ class Extensions(unittest.TestCase):
             self.assertGreaterEqual(record.momentum_drop, 0)
             self.assertFalse(S.imported_crash(cfg, S.State(economy=economy, bubble_pressure=bubble),
                                              Draws(foreign, probability + 1e-8), 18))
+
+    def test_an_arrival_within_a_year_of_a_crash_is_a_scare(self):
+        # banking_contagion_scare_only: the script skips the roll while banking_crashed_last_year is set
+        # (365 days); the simulator skips it within twelve months of the country's own or an imported crash.
+        effect = definitions('common/scripted_effects/banking_cycle_effects.txt')['banking_contagion_crash_check']
+        for economy, bubble, crash_kind, ago in itertools.product(
+                ('market', 'command', 'coop'), (0, 40, 100), ('own', 'imported'), (0, 5, 11, 12, 30)):
+            with self.subTest(economy=economy, bubble=bubble, crash=crash_kind, months_ago=ago):
+                cfg = S.Config(economy=economy)
+                state = S.State(economy=economy, finance_cycle_value=12,
+                                finance_cycle_momentum=-6, bubble_pressure=bubble)
+                if crash_kind == 'own':
+                    state.crashes.append((40 - ago, 30.0, 30.0))
+                else:
+                    state.imported_crashes.append(S.ImportedEvent(40 - ago, 50.0, 30.0, 50.0, 0.0, 30.0, 20.0, 2.0))
+                recent = ago < 12
+                self.assertEqual(S.crashed_last_year(state, 40), recent)
+                if recent:  # a certain crash roll is never drawn
+                    self.assertFalse(S.imported_crash(cfg, state, Draws(90.0), 40))
+                    oracle = Oracle(cfg, state)
+                    oracle.foreign = 90.0
+                    oracle.vars['banking_crashed_last_year'] = 1
+                    oracle.rolls = iter(())
+                    oracle.execute(effect)
+                    self.assertEqual(oracle.vars['contagion_crash'], 0)
+                    self.assertNotIn('crash_severity', oracle.vars)
+                else:
+                    self.assertTrue(S.imported_crash(cfg, state, Draws(90.0, 0.0, .95), 40))
 
     def test_import_rate_and_separate_summary(self):
         cfg = S.Config(years=100, imported_crash_years=10)

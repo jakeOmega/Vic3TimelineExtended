@@ -68,10 +68,16 @@
 #            te_seabed_last_sharing_month the panel's "as of"
 #            te_seabed_country            flag: has been recorded
 #            te_seabed_shared             flag: took part in a sharing
+#            te_seabed_claimed_<basin>    flag: has had a share there (the
+#                                         new-claimant notice)
 #   global   te_seabed_regime             1 Open, 2 Regulated, 3 Scramble
 #                                         (the UN hook writes it)
 #            te_seabed_records_<basin>    the world's records (yearly)
 #            te_seabed_world_w_<basin>    the world's claim weight (yearly)
+#            te_seabed_first_claimant     the country the rush event names
+#            te_seabed_rush_announced,    flags: the rush event sent; the
+#            te_seabed_full_<basin>,      basin told it is fully licensed;
+#            te_seabed_claimed_seeded     the claimed marks seeded
 #
 # ONE DEPARTURE FROM THE SPEC'S WORDING: a level is recorded as soon as it is
 # queued (its building's level_after_queued_constructions), not when it is
@@ -95,8 +101,9 @@
 #   treaty article    a Lease <Basin> Seabed Claims article's entry
 #                     (122_seabed_lease.txt): te_seabed_lease_start, then the
 #                     hidden te_seabed.1 a day later (te_seabed_events.txt)
-#   monthly global    te_seabed_global_monthly: the yearly sharing when due
-#                     (te_seabed_yearly_pass), the follow-state self-check
+#   monthly global    te_seabed_global_monthly: the rush event, the yearly
+#                     sharing when due (te_seabed_yearly_pass), the
+#                     follow-state self-check
 #   yearly country    te_seabed_ai_choose_policy (AI countries only)
 # ============================================================================
 
@@ -636,8 +643,8 @@ te_seabed_on_state_owner_change = {
 # The yearly sharing (model: yearly_pass)
 # ============================================================================
 
-# No scope (on_monthly_pulse). Runs the sharing when due (te_seabed_pass_due),
-# and the second half of the follow-state self-check.
+# No scope (on_monthly_pulse). The rush event, once a game; the sharing when
+# due (te_seabed_pass_due); the second half of the follow-state self-check.
 te_seabed_global_monthly = {
 	# The rule switched off after the system ran, then on again: levels built
 	# while it was off take a licence like an old save's (§ 2.9), so the
@@ -662,6 +669,34 @@ te_seabed_global_monthly = {
 			every_scope_state = {
 				limit = { has_variable = te_seabed_holder }
 				remove_variable = te_seabed_holder
+			}
+		}
+	}
+	# The rush, announced (seabed claims spec § 7; an event, owner 2026-10-17),
+	# once a game: the first month a country can claim, before its first
+	# sharing runs (which sets te_seabed_pass_year this same month), to every
+	# player (the event is news, with nothing for an AI to choose). A game
+	# already past its first sharing, an old save, sets the flag without it.
+	# The first claimant is also kept in a global variable, which te_seabed.3
+	# reads back. With the rule on, the research's headline stands down
+	# (common/on_actions/headlines.txt).
+	if = {
+		limit = {
+			te_global_commons_enabled = yes
+			NOT = { has_global_variable = te_seabed_rush_announced }
+			any_country = { te_seabed_is_claimant = yes }
+		}
+		set_global_variable = te_seabed_rush_announced
+		if = {
+			limit = { NOT = { has_global_variable = te_seabed_pass_year } }
+			random_country = {
+				limit = { te_seabed_is_claimant = yes }
+				save_scope_as = te_seabed_first_claimant
+			}
+			set_global_variable = { name = te_seabed_first_claimant value = scope:te_seabed_first_claimant }
+			every_country = {
+				limit = { is_ai = no }
+				trigger_event = { id = te_seabed.3 popup = yes }
 			}
 		}
 	}
@@ -774,6 +809,9 @@ te_seabed_yearly_pass = {
 	# subjects under Administer Seabed Claims pass their claims again.
 	te_seabed_settle_leases = yes
 	te_seabed_pass_subject_claims = yes
+	# 7c. The rush's newcomers: a country this sharing first gave a share in a
+	# basin, told to the countries already there (seabed claims spec § 7).
+	te_seabed_claimant_notices = yes
 	# 8. A policy that holds influence for a country that can no longer claim.
 	every_country = {
 		limit = {
@@ -814,6 +852,7 @@ te_seabed_yearly_pass = {
 	te_seabed_rank_basin = { B = southern }
 	set_global_variable = { name = te_seabed_last_sharing_month value = te_history_month_index }
 	te_seabed_floor_check = yes
+	te_seabed_power_projection_check = yes
 	if = {
 		limit = { has_global_variable = te_seabed_first_of_year }
 		remove_global_variable = te_seabed_first_of_year
@@ -2330,6 +2369,49 @@ te_seabed_floor_check = {
 	}
 }
 
+# No scope, at the end of the sharing: the seabed_power_projection self-check
+# (seabed claims spec § 6.1), once a game, at the first sharing with a
+# claimant that has a navy (navy_size > 0, so a country with no fleet can't
+# make OK pass). One line for each such claimant, its naval power projection
+# read as a value, its navy_size and their ratio (the play-test sets
+# te_seabed_power_projection_scale from the median), then the verdict: OK when
+# the read gives any of them power projection above 0, BROKEN when all read 0
+# (the read fails and the navy term is 0 for everyone: fall back to
+# navy_size). A fleet with no crews can read 0 honestly, so BROKEN needs all.
+te_seabed_power_projection_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_seabed_npp_check_done }
+			any_country = {
+				te_seabed_is_claimant = yes
+				navy_size > 0
+			}
+		}
+		set_global_variable = te_seabed_npp_check_done
+		set_global_variable = { name = te_seabed_npp_chk_n value = 0 }
+		set_global_variable = { name = te_seabed_npp_chk_ok value = 0 }
+		every_country = {
+			limit = {
+				te_seabed_is_claimant = yes
+				navy_size > 0
+			}
+			change_global_variable = { name = te_seabed_npp_chk_n add = 1 }
+			if = {
+				limit = { te_seabed_npp_disp > 0 }
+				change_global_variable = { name = te_seabed_npp_chk_ok add = 1 }
+			}
+			debug_log = "TE_SELF_CHECK INFO seabed_power_projection country=[THIS.GetNameNoFormatting] npp=[THIS.ScriptValue('te_seabed_npp_disp')|1] navy_size=[THIS.ScriptValue('te_seabed_navy_size_disp')|0] ratio=[THIS.ScriptValue('te_seabed_npp_ratio_disp')|2]"
+		}
+		if = {
+			limit = { global_var:te_seabed_npp_chk_ok > 0 }
+			debug_log = "TE_SELF_CHECK OK seabed_power_projection claimants=[GetGlobalVariable('te_seabed_npp_chk_n').GetValue] reading=[GetGlobalVariable('te_seabed_npp_chk_ok').GetValue] (naval_power_projection reads as a value for the claimants with a navy; the INFO lines above give each one's ratio to navy_size: set te_seabed_power_projection_scale to their median)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN seabed_power_projection claimants=[GetGlobalVariable('te_seabed_npp_chk_n').GetValue] reading=0 (every claimant with a navy reads 0 naval power projection as a value, so the claim weight's navy term is 0: revert te_seabed_navy_effective to navy_size, docs/testing/global-commons-playtest.md)"
+		}
+	}
+}
+
 # Entitlements = records + unbuilt (te_seabed_world_totals); over when the
 # unbuilt exceed what the pool leaves beyond the records.
 te_seabed_floor_check_basin = {
@@ -2801,6 +2883,104 @@ te_seabed_world_totals = {
 	}
 	set_global_variable = { name = te_seabed_noshare_$B$ value = 0 }
 	set_global_variable = { name = te_seabed_cap_stamped_noshare value = 0 }
+	# The basin fully licensed (seabed claims spec § 7): told once each time the
+	# world's licences reach the pool, and re-armed only when they fall below
+	# it, to every player with a share there or coast on it. A full basin's
+	# shares equal their holdings, so a share alone would miss a coastal
+	# claimant with no mines there yet (review I3).
+	if = {
+		limit = { global_var:te_seabed_records_$B$ >= te_seabed_pool_$B$ }
+		if = {
+			limit = { NOT = { has_global_variable = te_seabed_full_$B$ } }
+			set_global_variable = te_seabed_full_$B$
+			every_country = {
+				limit = {
+					is_ai = no
+					has_variable = te_seabed_shared
+					OR = {
+						AND = {
+							has_variable = te_seabed_ent_$B$
+							var:te_seabed_ent_$B$ > 0
+						}
+						AND = {
+							has_variable = te_seabed_coast_$B$
+							var:te_seabed_coast_$B$ > 0
+						}
+					}
+				}
+				post_notification = te_seabed_basin_full_notice_$B$
+			}
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = te_seabed_full_$B$ }
+		remove_global_variable = te_seabed_full_$B$
+	}
+}
+
+# No scope, after the sharing's leases and pacts (seabed claims spec § 7): in
+# each basin, a country this sharing first gives a share (te_seabed_ent above
+# 0 and no te_seabed_claimed mark yet) is told to every other player with a
+# share there since an earlier sharing and coast on the basin (review I2: a
+# distant share in every basin had a great power hear of each newcomer about
+# four times; the message group lets a player mute the rest); then every
+# country with a share is marked, for good, so one that loses its share and
+# wins it back isn't new.
+# The first sharing this runs, a new game's first or an old save's first since
+# the notices came in, only marks: every share is new then.
+te_seabed_claimant_notices = {
+	if = {
+		limit = { has_global_variable = te_seabed_claimed_seeded }
+		te_seabed_claimant_notice = { B = pacific }
+		te_seabed_claimant_notice = { B = atlantic }
+		te_seabed_claimant_notice = { B = indian }
+		te_seabed_claimant_notice = { B = arctic }
+		te_seabed_claimant_notice = { B = southern }
+	}
+	te_seabed_mark_claimed = { B = pacific }
+	te_seabed_mark_claimed = { B = atlantic }
+	te_seabed_mark_claimed = { B = indian }
+	te_seabed_mark_claimed = { B = arctic }
+	te_seabed_mark_claimed = { B = southern }
+	set_global_variable = te_seabed_claimed_seeded
+}
+
+# No scope. Each newcomer in basin $B$ in turn is saved as te_seabed_newcomer,
+# the scope its notice names; two newcomers of one sharing aren't told of
+# each other.
+te_seabed_claimant_notice = {
+	every_country = {
+		limit = {
+			has_variable = te_seabed_ent_$B$
+			var:te_seabed_ent_$B$ > 0
+			NOT = { has_variable = te_seabed_claimed_$B$ }
+		}
+		save_scope_as = te_seabed_newcomer
+		every_country = {
+			limit = {
+				NOT = { this = scope:te_seabed_newcomer }
+				is_ai = no
+				has_variable = te_seabed_claimed_$B$
+				has_variable = te_seabed_ent_$B$
+				var:te_seabed_ent_$B$ > 0
+				has_variable = te_seabed_coast_$B$
+				var:te_seabed_coast_$B$ > 0
+			}
+			post_notification = te_seabed_new_claimant_notice_$B$
+		}
+	}
+}
+
+# No scope: every country with a share in basin $B$ now has had one.
+te_seabed_mark_claimed = {
+	every_country = {
+		limit = {
+			has_variable = te_seabed_ent_$B$
+			var:te_seabed_ent_$B$ > 0
+			NOT = { has_variable = te_seabed_claimed_$B$ }
+		}
+		set_variable = te_seabed_claimed_$B$
+	}
 }
 
 # ============================================================================

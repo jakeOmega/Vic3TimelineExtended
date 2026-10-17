@@ -1,0 +1,97 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE SEABED RUSH — NOTIFICATIONS
+# ============================================================================
+# docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md § 7,
+# posted from te_global_commons_seabed_effects.txt; the rush itself is an event,
+# te_seabed.3 (events/te_seabed_events.txt). Loc:
+# notification_<message>_name/_desc/_tooltip, which organize_loc files in
+# localization/english/te_notifications_l_english.yml. One message per basin,
+# so each title names its basin.
+# ============================================================================
+
+# A sharing first gives a country a share in the basin (te_seabed_claimant_notice):
+# to every other player with a share there since an earlier sharing and coast
+# on the basin. All ten sit in one group, so Message Settings can mute them.
+
+te_seabed_new_claimant_notice_pacific = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = bad
+}
+
+te_seabed_new_claimant_notice_atlantic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = bad
+}
+
+te_seabed_new_claimant_notice_indian = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = bad
+}
+
+te_seabed_new_claimant_notice_arctic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = bad
+}
+
+te_seabed_new_claimant_notice_southern = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = bad
+}
+
+# The world's licences reach the basin's pool (te_seabed_world_totals): to every
+# player with a share there or coast on it, once each time it fills.
+
+te_seabed_basin_full_notice_pacific = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = neutral
+}
+
+te_seabed_basin_full_notice_atlantic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = neutral
+}
+
+te_seabed_basin_full_notice_indian = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = neutral
+}
+
+te_seabed_basin_full_notice_arctic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = neutral
+}
+
+te_seabed_basin_full_notice_southern = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	group = "te_seabed_notification_group"
+	color = neutral
+}

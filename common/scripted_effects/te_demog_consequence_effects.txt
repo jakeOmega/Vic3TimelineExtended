@@ -52,10 +52,9 @@ te_demog_sex_births_store = {
 
 # THIS = ROOT = a state, straight after te_demog_rates_refresh in the effect that ran its walks and census.
 te_demog_consequences_refresh = {
-	# the self-check unemployment_rate_read (te_debug_demog_effects.txt): once a game, where the census runs
+	# the self-check unemployment_rate_read (te_debug_demog_effects.txt): once a game, where the census runs, the
+	# engine's unemployment figure against the walk's own count (te_dg_unemp_walk)
 	te_debug_demog_unemployment_selfcheck = yes
-	# under both settings, for the panel's youth bulge (te_demog_unemployment_census: a scripted GUI can't read it live)
-	set_variable = { name = te_dg_unemp value = te_demog_unemployment }
 	if = {
 		limit = {
 			te_demog_effects_run = yes

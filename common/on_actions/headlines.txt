@@ -175,6 +175,11 @@ extra_headlines_tech = {
 		headlines_tech_announce_effect = { TECH = virtual_reality }
 		headlines_tech_announce_effect = { TECH = wireless_internet }
 		headlines_tech_announce_effect = { TECH = world_wide_web }
-		headlines_tech_announce_effect = { TECH = abyssal_plain_mining }
+		# With the Global Commons rule on, the seabed rush event (te_seabed.3,
+		# events/te_seabed_events.txt) tells this news instead.
+		if = {
+			limit = { NOT = { te_global_commons_enabled = yes } }
+			headlines_tech_announce_effect = { TECH = abyssal_plain_mining }
+		}
 	}
 }

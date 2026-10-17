@@ -849,9 +849,11 @@ migration_attraction_script_value = {
 		}
 		multiply = 2
 	}
+	# No mass migration into a state where a tenth of the workforce has no work
+	# (te_state_unemployment_share, te_unemployment_values.txt).
 	if = {
 		limit = {
-			state_unemployment_rate > 0.1
+			te_state_unemployment_share > 0.1
 		}
 		multiply = 0
 	}

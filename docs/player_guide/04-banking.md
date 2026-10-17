@@ -192,7 +192,9 @@ the ties are close and when the crash was severe.
 A week later, the reached country's own bubble pressure (plus a bump for the
 original crash's severity) decides whether it crashes outright or only suffers a
 scare of −3 cycle value and −1 momentum. A country with a small bubble is mostly
-safe. One that does crash passes contagion on, so one crash can become a wave.
+safe, and one whose banks crashed in the last year, at home or by contagion, can
+only take the scare. One that does crash passes contagion on, so one crash can
+become a wave.
 
 Command and cooperative economies are harder to infect. A Bank Holiday or a
 banking union lowers the chance of catching a crash, and a Lender of Last Resort

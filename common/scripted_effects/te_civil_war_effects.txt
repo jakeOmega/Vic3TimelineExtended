@@ -173,6 +173,13 @@ te_civil_war_resolve_sides = {
 				debug_log = "TE_CIVIL_WAR: the loser's variables read, but te_cw_role is neither 1 nor 2"
 			}
 		}
+		# Seen when the loser had already won a concurrent civil war and
+		# te_civil_war_clear removed its role (2026-10-17: Portugal won one of
+		# two uprisings, then lost the other). The clear now keeps the role
+		# while another uprising points at the winner, so after that this line
+		# means a war begun before the role existed. The outcome flags above
+		# come from the end-hook pair either way, so the repairs run on the
+		# right side.
 		else = {
 			debug_log = "TE_CIVIL_WAR: the loser resolves but its te_cw_role does not read"
 		}
@@ -218,6 +225,22 @@ te_civil_war_clear = {
 	if = {
 		limit = { has_variable = te_cw_role }
 		remove_variable = te_cw_role
+	}
+	# Still the government in another civil war: an uprising still alive points at
+	# ROOT (te_civil_war_repoint_uprisings ran first), so ROOT stays a side until
+	# that one ends too. Until 2026-10-17 a government that won one of two
+	# concurrent uprisings lost its role for the rest of the other (Portugal,
+	# 1887), so Grand Monuments read its transfers as a conquest, trophy
+	# occupation missed the twins, and the tax repair skipped its second win;
+	# the merge then gave it the dead rebels' te_cw_role = 2.
+	if = {
+		limit = {
+			any_country = {
+				NOT = { this = ROOT }
+				var:te_cw_origin ?= ROOT
+			}
+		}
+		set_variable = { name = te_cw_role value = 1 }
 	}
 	te_civil_war_clear_ending = yes
 }
