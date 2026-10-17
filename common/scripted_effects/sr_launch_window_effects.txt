@@ -124,7 +124,8 @@ sr_launch_window_gate_check = {
 			if = {
 				limit = { NOT = { has_global_variable = sr_window_gate_broken_logged } }
 				set_global_variable = { name = sr_window_gate_broken_logged value = yes }
-				debug_log = "TE_SELF_CHECK BROKEN window_gate body=$BODY$ month=[THIS.ScriptValue('te_history_month_index')|0] months_to_next=[THIS.ScriptValue('sr_window_months_to_next_$BODY$')|0] cached_wait=[THIS.ScriptValue('sr_window_wait_months_$BODY$')|0] cache_month=[THIS.ScriptValue('sr_window_disp_cache_month')|0] country=[THIS.GetCountry.GetNameNoFormatting] (a colony was founded while its body's window was closed, for a country with no off-window launches: the cache or the gate is wrong; docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				sr_window_log_copy = { BODY = $BODY$ }
+				debug_log = "TE_SELF_CHECK BROKEN window_gate body=[GetGlobalVariable('sr_window_log_body_now').GetValue|0] (1 Mars, 2 Ceres, 3 Vesta, 4 Psyche, 5 Pallas, 6 Hygiea, 7 Jupiter system, 8 Venus, 9 Saturn system, 10 Uranus system, 11 Neptune system, 12 Kuiper Belt) month=[THIS.ScriptValue('te_history_month_index')|0] months_to_next=[GetGlobalVariable('sr_window_log_wait_date_now').GetValue|0] cached_wait=[GetGlobalVariable('sr_window_log_wait_cached_now').GetValue|0] cache_month=[THIS.ScriptValue('sr_window_disp_cache_month')|0] country=[THIS.GetCountry.GetNameNoFormatting] (a colony was founded while its body's window was closed, for a country with no off-window launches: the cache or the gate is wrong; docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 		else_if = {
@@ -133,7 +134,8 @@ sr_launch_window_gate_check = {
 				NOT = { has_global_variable = sr_window_gate_ok_logged }
 			}
 			set_global_variable = { name = sr_window_gate_ok_logged value = yes }
-			debug_log = "TE_SELF_CHECK OK window_gate body=$BODY$ month=[THIS.ScriptValue('te_history_month_index')|0] held_months=[THIS.Var('sr_launch_held_months').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (closed windows held a full bar, and the colony left in its window) date=[TimeKeeper.GetCurrentDate.GetString]"
+			sr_window_log_copy = { BODY = $BODY$ }
+			debug_log = "TE_SELF_CHECK OK window_gate body=[GetGlobalVariable('sr_window_log_body_now').GetValue|0] (1 Mars, 2 Ceres, 3 Vesta, 4 Psyche, 5 Pallas, 6 Hygiea, 7 Jupiter system, 8 Venus, 9 Saturn system, 10 Uranus system, 11 Neptune system, 12 Kuiper Belt) month=[THIS.ScriptValue('te_history_month_index')|0] held_months=[THIS.Var('sr_launch_held_months').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (closed windows held a full bar, and the colony left in its window) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 	else_if = {
@@ -143,8 +145,29 @@ sr_launch_window_gate_check = {
 			NOT = { has_global_variable = sr_window_gate_paid_logged }
 		}
 		set_global_variable = { name = sr_window_gate_paid_logged value = yes }
-		debug_log = "TE_SELF_CHECK OK window_gate_paid body=$BODY$ month=[THIS.ScriptValue('te_history_month_index')|0] premium_cached=[THIS.ScriptValue('sr_window_premium_now_$BODY$')|2] premium_date=[THIS.ScriptValue('sr_launch_premium_$BODY$')|2] spent=[THIS.Var('sr_goal_before_colony').GetValue|0] goal=[THIS.ScriptValue('sr_solar_colonization_goal')|0] (an off-window launch: spent should be goal x (1 + premium), and the two premiums equal) country=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		sr_window_log_copy = { BODY = $BODY$ }
+		debug_log = "TE_SELF_CHECK OK window_gate_paid body=[GetGlobalVariable('sr_window_log_body_now').GetValue|0] (1 Mars, 2 Ceres, 3 Vesta, 4 Psyche, 5 Pallas, 6 Hygiea, 7 Jupiter system, 8 Venus, 9 Saturn system, 10 Uranus system, 11 Neptune system, 12 Kuiper Belt) month=[THIS.ScriptValue('te_history_month_index')|0] premium_cached=[GetGlobalVariable('sr_window_log_premium_cached_now').GetValue|2] premium_date=[GetGlobalVariable('sr_window_log_premium_date_now').GetValue|2] spent=[THIS.Var('sr_goal_before_colony').GetValue|0] goal=[THIS.ScriptValue('sr_solar_colonization_goal')|0] (an off-window launch: spent should be goal x (1 + premium), and the two premiums equal) country=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
+}
+
+# One body's figures copied into fixed-name globals for a debug line: a
+# $BODY$ can't be printed or interpolated inside a debug_log string (the
+# character before it is lost and the closing $ stays; scripting_best_practices.md,
+# "No $PARAM$ inside the string"), so the lines read these through
+# GetGlobalVariable and name the body by its code (sr_window_body_code_<body>,
+# legend BODY_CODE_LEGEND in scripts/generators/gen_launch_windows.py). Any
+# scope; the country-dependent figures are this scope's. Debug only: nothing
+# else reads the sr_window_log_*_now globals.
+sr_window_log_copy = {
+	set_global_variable = { name = sr_window_log_body_now value = sr_window_body_code_$BODY$ }
+	set_global_variable = { name = sr_window_log_wait_date_now value = sr_window_months_to_next_$BODY$ }
+	set_global_variable = { name = sr_window_log_wait_cached_now value = sr_window_wait_months_$BODY$ }
+	set_global_variable = { name = sr_window_log_offset_now value = sr_launch_offset_$BODY$ }
+	set_global_variable = { name = sr_window_log_premium_cached_now value = sr_window_premium_now_$BODY$ }
+	set_global_variable = { name = sr_window_log_premium_date_now value = sr_launch_premium_$BODY$ }
+	set_global_variable = { name = sr_window_log_cost_now value = sr_launch_cost_$BODY$ }
+	set_global_variable = { name = sr_window_log_months_cost_now value = sr_launch_months_cost_$BODY$ }
+	set_global_variable = { name = sr_window_log_verdict_now value = sr_window_disp_verdict_$BODY$ }
 }
 
 # ---- Setbacks hit only the fleet being readied (spec § 5.2) ------------------------

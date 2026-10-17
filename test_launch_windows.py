@@ -477,3 +477,44 @@ class NumberRangeTest(unittest.TestCase):
         self.assertLess((1 + never) * highest_goal, 2_000_000)  # sr_launch_fleet_cost
         self.assertLess(highest_goal * glw.PREMIUM_CAP / 0.5, 2_000_000)  # sr_launch_months_cost_<body>, pace floor
         self.assertLess(never * 2, 2_000_000)  # sr_launch_months_allowed
+
+
+class DebugLineTest(unittest.TestCase):
+    """A $PARAM$ inside a debug_log string is mangled (scripting_best_practices.md, "No $PARAM$ inside the
+    string"): the self-checks and the console copy figures into fixed-name globals and name the body by code."""
+
+    FILES = (("common", "scripted_effects", "sr_launch_window_effects.txt"),
+             ("common", "scripted_effects", "te_debug_launch_window_effects.txt"))
+
+    def test_no_parameter_inside_a_debug_line(self):
+        for parts in self.FILES:
+            for line in re.findall(r'debug_log = "([^"]*)"', _raw(*parts)):
+                with self.subTest(file=parts[-1], line=line[:60]):
+                    self.assertNotIn("$", line)
+
+    def test_self_check_lines_spell_out_the_generator_s_body_codes(self):
+        effects = _raw(*self.FILES[0])
+        gate = _block(_strip(effects), "sr_launch_window_gate_check")
+        self.assertEqual(gate.count("sr_window_log_copy = { BODY = $BODY$ }"), 3)
+        lines = re.findall(r'debug_log = "(TE_SELF_CHECK [^"]*)"', effects)
+        self.assertEqual(len(lines), 3)
+        for line in lines:
+            self.assertIn(f"({glw.BODY_CODE_LEGEND})", line)
+        values = _raw("common", "script_values", "sr_launch_windows_generated.txt")
+        for code, body in enumerate(glw.BODIES, start=1):
+            self.assertIn(f"sr_window_body_code_{body.key} = {{ value = {code} }}", values)
+
+    def test_the_console_names_the_body_it_copied(self):
+        console = _raw(*self.FILES[1])
+        pairs = re.findall(r'sr_window_log_copy = \{ BODY = (\w+) \}\s*debug_log = "TE_LAUNCH_WINDOWS (\w+) ', console)
+        self.assertEqual([a for a, _ in pairs], [b.key for b in glw.BODIES])
+        for copied, named in pairs:
+            self.assertEqual(copied, named)
+
+    def test_every_global_a_line_reads_is_copied(self):
+        copy = _block(_strip(_raw(*self.FILES[0])), "sr_window_log_copy")
+        copied = set(re.findall(r"name = (sr_window_log_\w+_now)", copy))
+        for parts in self.FILES:
+            for name in re.findall(r"GetGlobalVariable\('(sr_window_log_\w+_now)'\)", _raw(*parts)):
+                with self.subTest(file=parts[-1], name=name):
+                    self.assertIn(name, copied)
