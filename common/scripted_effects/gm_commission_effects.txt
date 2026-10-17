@@ -567,12 +567,16 @@ gm_com_monthly = {
 # unveiled while this opportunity was open, when the player already chose its
 # name with the opportunity's offered first (gm_unveiled_for_com), or the
 # opportunity asks only for the city's name and the monument already has a
-# name: that would erase a chosen name for everyone's default -- and is rebuilt
-# taller by monument_events.26 (gm_gift; never here: this runs inside the
+# name: that would erase a chosen name for everyone's default -- and takes the
+# gift in monument_events.26 (gm_gift; never here: this runs inside the
 # refresh, which tooltips walk). Then the asking group's approval and the boon,
 # and for a player monument_events.28, which names the monument and the boon
 # from gm_com_seized_state and gm_com_seized_source (the record is gone by
-# then; nothing here reads them back).
+# then; nothing here reads them back). monument_events.26 fires last, once the
+# record is closed: a trigger_event with no delay runs the event at once, inside
+# this effect, and the gift's refresh (monument_events.20) would find the
+# opportunity still open and seize it again, without end (two stack-overflow
+# crashes, 2026-10-17).
 gm_com_fulfil = {
 	clear_saved_scope = gm_com_named_state
 	# Its special (signatures spec §5.2), if its moment has one: one monument
@@ -641,7 +645,6 @@ gm_com_fulfil = {
 					scope:gm_sig_granter = { gm_sig_hold_special = yes }
 				}
 			}
-			trigger_event = { id = monument_events.26 }
 		}
 		# What monument_events.28 names after the record closes (usability §5).
 		set_variable = { name = gm_com_seized_state value = scope:gm_com_named_state }
@@ -708,6 +711,7 @@ gm_com_fulfil = {
 		trigger_event = { id = monument_events.28 }
 	}
 	gm_com_close = yes
+	scope:gm_com_named_state ?= { trigger_event = { id = monument_events.26 } }
 }
 
 # Country scope. Time ran out: the moment passes, at no cost.
