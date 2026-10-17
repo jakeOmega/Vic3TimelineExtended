@@ -482,3 +482,32 @@ te_seabed_is_southern_arctic = {
 te_seabed_is_southern_southern = {
 	always = yes
 }
+
+# ---- Subjects: Administer Seabed Claims (seabed claims spec § 5.2) ----
+
+# Country scope, a subject, its overlord saved as scope:te_sb_over. The
+# pact's terms without the pact itself (its accept_effect runs before the pact
+# exists): both claim; in the Southern Ocean neither is barred.
+te_seabed_pact_ok = {
+	exists = scope:te_sb_over
+	te_seabed_is_claimant = yes
+	scope:te_sb_over = { te_seabed_is_claimant = yes }
+	trigger_if = {
+		limit = { te_seabed_is_southern_$B$ = yes }
+		NOT = { te_seabed_southern_barred = yes }
+		scope:te_sb_over = {
+			NOT = { te_seabed_southern_barred = yes }
+		}
+	}
+}
+
+# Country scope, a subject, its overlord saved as scope:te_sb_over. Model:
+# pact_stands. The pact is the record: it stands in basin $B$ while the
+# overlord holds it, the country is still its direct subject and the terms
+# hold (te_seabed_pact_ok).
+te_seabed_pact_stands = {
+	exists = scope:te_sb_over
+	is_direct_subject_of = scope:te_sb_over
+	has_diplomatic_pact = { who = scope:te_sb_over type = te_seabed_administer_claims }
+	te_seabed_pact_ok = { B = $B$ }
+}

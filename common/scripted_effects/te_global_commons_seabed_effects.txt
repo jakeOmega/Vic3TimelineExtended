@@ -40,6 +40,13 @@
 #                                         _built_ and _unused_<basin> (its
 #                                         total, licences built on it, unused
 #                                         claims, part of unbuilt)
+#            te_seabed_subj_unused_<basin> claims its subjects passed it,
+#                                         unused (part of unbuilt); on a
+#                                         subject te_seabed_pass_unused_ and
+#                                         _pass_built_<basin>, its own share
+#                                         of them and the licences built on
+#                                         them; te_seabed_shleft_<basin> the
+#                                         sharing's holdings not yet shifted
 #            te_seabed_fee_cached         the holding fee a week, the
 #                                         modifier's multiplier
 #            te_seabed_policy_changed     month of the last policy change
@@ -760,8 +767,10 @@ te_seabed_yearly_pass = {
 		set_variable = te_seabed_shared
 		remove_variable = te_seabed_part
 	}
-	# 7b. Leases: those no longer standing go, the rest are topped up.
+	# 7b. Leases: those no longer standing go, the rest are topped up; then
+	# subjects under Administer Seabed Claims pass their claims again.
 	te_seabed_settle_leases = yes
+	te_seabed_pass_subject_claims = yes
 	# 8. A policy that holds influence for a country that can no longer claim.
 	every_country = {
 		limit = {
@@ -980,6 +989,14 @@ te_seabed_clear_share = {
 	if = {
 		limit = { has_variable = te_seabed_lease_unused_$B$ }
 		set_variable = { name = te_seabed_lease_unused_$B$ value = 0 }
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_$B$ }
+		set_variable = { name = te_seabed_subj_unused_$B$ value = 0 }
+	}
+	if = {
+		limit = { has_variable = te_seabed_pass_unused_$B$ }
+		set_variable = { name = te_seabed_pass_unused_$B$ value = 0 }
 	}
 	set_variable = { name = te_seabed_ent_$B$ value = 0 }
 	te_seabed_zero_weight = { B = $B$ }
@@ -1287,10 +1304,18 @@ te_seabed_relinquish = {
 	set_variable = { name = te_seabed_floor_$B$ value = 0 }
 	set_variable = { name = te_seabed_fprot_$B$ value = 0 }
 	set_variable = te_seabed_relinq_$B$
-	# Leased claims go too, without counting as built on the lease.
+	# Leased and subject-passed claims go too, without counting as built.
 	if = {
 		limit = { has_variable = te_seabed_lease_unused_$B$ }
 		set_variable = { name = te_seabed_lease_unused_$B$ value = 0 }
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_$B$ }
+		set_variable = { name = te_seabed_subj_unused_$B$ value = 0 }
+	}
+	every_direct_subject = {
+		limit = { has_variable = te_seabed_pass_unused_$B$ }
+		set_variable = { name = te_seabed_pass_unused_$B$ value = 0 }
 	}
 }
 
@@ -1392,7 +1417,8 @@ te_seabed_lease_enter = {
 
 # Country scope (the end of te_seabed_record_country). Model: lease_consume.
 # What the recording took comes off the country's own claims first, then off
-# its leased ones, which become licences built on the lease.
+# those its subjects passed it, then off its leased ones, which become
+# licences built on the lease.
 te_seabed_lease_consume = {
 	te_seabed_lease_consume_basin = { B = pacific }
 	te_seabed_lease_consume_basin = { B = atlantic }
@@ -1424,12 +1450,73 @@ te_seabed_lease_consume_basin = {
 		}
 		set_variable = { name = te_seabed_lease_unused_$B$ value = local_var:te_sb_lc }
 	}
+	# Then claims its subjects passed it: what the recording took beyond its
+	# own claims and before its leased ones, booked on each direct subject as
+	# built on its claims.
+	if = {
+		limit = {
+			has_variable = te_seabed_subj_unused_$B$
+			var:te_seabed_subj_unused_$B$ > 0
+		}
+		set_local_variable = {
+			name = te_sb_sl
+			value = {
+				value = var:te_seabed_unbuilt_$B$
+				min = 0
+			}
+		}
+		if = {
+			limit = { has_variable = te_seabed_lease_unused_$B$ }
+			change_local_variable = { name = te_sb_sl subtract = var:te_seabed_lease_unused_$B$ }
+		}
+		if = {
+			limit = { var:te_seabed_subj_unused_$B$ > local_var:te_sb_sl }
+			set_local_variable = {
+				name = te_sb_su
+				value = {
+					value = var:te_seabed_subj_unused_$B$
+					subtract = local_var:te_sb_sl
+				}
+			}
+			set_variable = {
+				name = te_seabed_subj_unused_$B$
+				value = {
+					value = local_var:te_sb_sl
+					min = 0
+				}
+			}
+			every_direct_subject = {
+				limit = {
+					has_variable = te_seabed_pass_unused_$B$
+					var:te_seabed_pass_unused_$B$ > 0
+				}
+				if = {
+					limit = { local_var:te_sb_su > 0 }
+					set_local_variable = {
+						name = te_sb_sk
+						value = {
+							value = local_var:te_sb_su
+							max = var:te_seabed_pass_unused_$B$
+						}
+					}
+					change_variable = { name = te_seabed_pass_unused_$B$ subtract = local_var:te_sb_sk }
+					if = {
+						limit = { NOT = { has_variable = te_seabed_pass_built_$B$ } }
+						set_variable = { name = te_seabed_pass_built_$B$ value = 0 }
+					}
+					change_variable = { name = te_seabed_pass_built_$B$ add = local_var:te_sb_sk }
+					change_local_variable = { name = te_sb_su subtract = local_var:te_sb_sk }
+				}
+			}
+		}
+	}
 }
 
 # No scope, the yearly pass after every participant's held. Model: share_held.
 # Every participant's te_seabed_sh_<basin> starts at its held; then each
 # standing lease's licences, at most the lessee's holdings, count as its
-# lessor's instead.
+# lessor's instead; then each standing pact's, at most what is left
+# (te_seabed_shleft_<basin>), as the subject's.
 te_seabed_lease_shift_held = {
 	every_country = {
 		limit = { has_variable = te_seabed_part }
@@ -1438,6 +1525,11 @@ te_seabed_lease_shift_held = {
 		set_variable = { name = te_seabed_sh_indian value = var:te_seabed_held_indian }
 		set_variable = { name = te_seabed_sh_arctic value = var:te_seabed_held_arctic }
 		set_variable = { name = te_seabed_sh_southern value = var:te_seabed_held_southern }
+		set_variable = { name = te_seabed_shleft_pacific value = var:te_seabed_held_pacific }
+		set_variable = { name = te_seabed_shleft_atlantic value = var:te_seabed_held_atlantic }
+		set_variable = { name = te_seabed_shleft_indian value = var:te_seabed_held_indian }
+		set_variable = { name = te_seabed_shleft_arctic value = var:te_seabed_held_arctic }
+		set_variable = { name = te_seabed_shleft_southern value = var:te_seabed_held_southern }
 	}
 	every_country = {
 		limit = { has_variable = te_seabed_part }
@@ -1447,6 +1539,25 @@ te_seabed_lease_shift_held = {
 		te_seabed_lease_shift_basin = { B = indian }
 		te_seabed_lease_shift_basin = { B = arctic }
 		te_seabed_lease_shift_basin = { B = southern }
+	}
+	# Then each standing pact's: what the overlord built on its subject's
+	# passed claims, from what its lease left of its holdings.
+	every_country = {
+		limit = {
+			has_variable = te_seabed_part
+			exists = overlord
+		}
+		save_scope_as = te_sb_subject
+		if = {
+			limit = { exists = scope:te_sb_over }
+			clear_saved_scope = te_sb_over
+		}
+		overlord = { save_scope_as = te_sb_over }
+		te_seabed_pact_shift_basin = { B = pacific }
+		te_seabed_pact_shift_basin = { B = atlantic }
+		te_seabed_pact_shift_basin = { B = indian }
+		te_seabed_pact_shift_basin = { B = arctic }
+		te_seabed_pact_shift_basin = { B = southern }
 	}
 }
 
@@ -1502,6 +1613,7 @@ te_seabed_lease_shift_basin = {
 				}
 			}
 			change_variable = { name = te_seabed_sh_$B$ subtract = local_var:te_sb_ls }
+			change_variable = { name = te_seabed_shleft_$B$ subtract = local_var:te_sb_ls }
 			scope:te_sb_lessor = {
 				change_variable = { name = te_seabed_sh_$B$ add = local_var:te_sb_ls }
 			}
@@ -1567,6 +1679,153 @@ te_seabed_settle_lease = {
 				change_variable = { name = te_seabed_lease_unused_$B$ add = local_var:te_sb_lt }
 			}
 		}
+	}
+}
+
+# ============================================================================
+# Subjects: Administer Seabed Claims (model: pact_stands, pass_claims,
+# start_pact, pass_subject_claims; seabed claims spec § 5.2)
+# ============================================================================
+# An overlord's pact with a direct subject (te_seabed_administer_claims.txt)
+# is a lease with no total that keeps the same two counters, on the subject:
+# te_seabed_pass_unused_<basin> (its claims at the overlord, unused) and
+# te_seabed_pass_built_<basin> (the licences the overlord built on them). The
+# overlord's te_seabed_subj_unused_<basin> is their sum, part of its unbuilt.
+# At the sharing the subject's pass_built counts as its holdings, not the
+# overlord's (te_seabed_pact_shift_basin), so its weight pays for them once:
+# without that the pair would take a third party's share year by year. The
+# pact is the record (te_seabed_pact_stands): when it ends, nothing moves
+# until the next sharing re-divides the passed claims.
+
+# Country scope, the overlord, from the action's accept_effect with the
+# subject saved as scope:te_sb_subject. Model: start_pact. A former pact's
+# counters go (the licences it built are their builder's own) and the
+# subject's own claims pass at once.
+te_seabed_pact_start = {
+	save_scope_as = te_sb_over
+	te_seabed_init_country = yes
+	scope:te_sb_subject = {
+		te_seabed_init_country = yes
+		set_variable = { name = te_seabed_pass_built_pacific value = 0 }
+		set_variable = { name = te_seabed_pass_built_atlantic value = 0 }
+		set_variable = { name = te_seabed_pass_built_indian value = 0 }
+		set_variable = { name = te_seabed_pass_built_arctic value = 0 }
+		set_variable = { name = te_seabed_pass_built_southern value = 0 }
+		set_variable = { name = te_seabed_pass_unused_pacific value = 0 }
+		set_variable = { name = te_seabed_pass_unused_atlantic value = 0 }
+		set_variable = { name = te_seabed_pass_unused_indian value = 0 }
+		set_variable = { name = te_seabed_pass_unused_arctic value = 0 }
+		set_variable = { name = te_seabed_pass_unused_southern value = 0 }
+		te_seabed_pass_basin = { B = pacific }
+		te_seabed_pass_basin = { B = atlantic }
+		te_seabed_pass_basin = { B = indian }
+		te_seabed_pass_basin = { B = arctic }
+		te_seabed_pass_basin = { B = southern }
+	}
+}
+
+# Country scope, a subject, its overlord saved as scope:te_sb_over. Model:
+# pass_claims, one basin. Its own claims in basin $B$ pass to the overlord,
+# where the pact's terms hold, unless the overlord relinquished the basin.
+te_seabed_pass_basin = {
+	if = {
+		limit = {
+			te_seabed_pact_ok = { B = $B$ }
+			scope:te_sb_over = {
+				NOT = { has_variable = te_seabed_relinq_$B$ }
+			}
+			te_seabed_own_claims_$B$ > 0
+		}
+		set_local_variable = { name = te_sb_pk value = te_seabed_own_claims_$B$ }
+		change_variable = { name = te_seabed_unbuilt_$B$ subtract = local_var:te_sb_pk }
+		if = {
+			limit = { NOT = { has_variable = te_seabed_pass_unused_$B$ } }
+			set_variable = { name = te_seabed_pass_unused_$B$ value = 0 }
+		}
+		change_variable = { name = te_seabed_pass_unused_$B$ add = local_var:te_sb_pk }
+		scope:te_sb_over = {
+			if = {
+				limit = { NOT = { has_variable = te_seabed_subj_unused_$B$ } }
+				set_variable = { name = te_seabed_subj_unused_$B$ value = 0 }
+			}
+			change_variable = { name = te_seabed_unbuilt_$B$ add = local_var:te_sb_pk }
+			change_variable = { name = te_seabed_subj_unused_$B$ add = local_var:te_sb_pk }
+		}
+	}
+}
+
+# Country scope, a participant with an overlord saved as scope:te_sb_over
+# (te_seabed_lease_shift_held's third walk). Model: share_held's pact part.
+# What the overlord built on this subject's passed claims, at most what its
+# lease left of its holdings, counts as this subject's.
+te_seabed_pact_shift_basin = {
+	if = {
+		limit = {
+			has_variable = te_seabed_pass_built_$B$
+			var:te_seabed_pass_built_$B$ > 0
+			te_seabed_pact_stands = { B = $B$ }
+			scope:te_sb_over = {
+				has_variable = te_seabed_part
+				has_variable = te_seabed_shleft_$B$
+			}
+		}
+		set_local_variable = {
+			name = te_sb_ps
+			value = {
+				value = var:te_seabed_pass_built_$B$
+				max = scope:te_sb_over.var:te_seabed_shleft_$B$
+				min = 0
+			}
+		}
+		change_variable = { name = te_seabed_sh_$B$ add = local_var:te_sb_ps }
+		scope:te_sb_over = {
+			change_variable = { name = te_seabed_sh_$B$ subtract = local_var:te_sb_ps }
+			change_variable = { name = te_seabed_shleft_$B$ subtract = local_var:te_sb_ps }
+		}
+	}
+}
+
+# No scope, the yearly pass after te_seabed_settle_leases. Model:
+# pass_subject_claims.
+te_seabed_pass_subject_claims = {
+	every_country = {
+		limit = { has_variable = te_seabed_country }
+		save_scope_as = te_sb_subject
+		if = {
+			limit = { exists = scope:te_sb_over }
+			clear_saved_scope = te_sb_over
+		}
+		overlord ?= { save_scope_as = te_sb_over }
+		te_seabed_pact_settle = { B = pacific }
+		te_seabed_pact_settle = { B = atlantic }
+		te_seabed_pact_settle = { B = indian }
+		te_seabed_pact_settle = { B = arctic }
+		te_seabed_pact_settle = { B = southern }
+	}
+}
+
+# Country scope, a recorded country, its overlord (if any) saved as
+# scope:te_sb_over. Where its pact no longer stands, the licences built on it
+# are the overlord's own; where it stands, at most the overlord's holdings
+# count as built on it, and its claims pass again.
+te_seabed_pact_settle = {
+	if = {
+		limit = { te_seabed_pact_stands = { B = $B$ } }
+		if = {
+			limit = { has_variable = te_seabed_pass_built_$B$ }
+			set_variable = {
+				name = te_seabed_pass_built_$B$
+				value = {
+					value = var:te_seabed_pass_built_$B$
+					max = scope:te_sb_over.var:te_seabed_held_$B$
+				}
+			}
+		}
+		te_seabed_pass_basin = { B = $B$ }
+	}
+	else_if = {
+		limit = { has_variable = te_seabed_pass_built_$B$ }
+		set_variable = { name = te_seabed_pass_built_$B$ value = 0 }
 	}
 }
 
@@ -1913,6 +2172,14 @@ te_seabed_share_round = {
 		if = {
 			limit = { has_variable = te_seabed_lease_unused_$B$ }
 			set_variable = { name = te_seabed_lease_unused_$B$ value = 0 }
+		}
+		if = {
+			limit = { has_variable = te_seabed_subj_unused_$B$ }
+			set_variable = { name = te_seabed_subj_unused_$B$ value = 0 }
+		}
+		if = {
+			limit = { has_variable = te_seabed_pass_unused_$B$ }
+			set_variable = { name = te_seabed_pass_unused_$B$ value = 0 }
 		}
 		if = {
 			limit = { has_variable = te_seabed_act_$B$ }

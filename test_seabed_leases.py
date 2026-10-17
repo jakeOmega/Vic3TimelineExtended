@@ -160,6 +160,110 @@ class LeaseSharingTest(unittest.TestCase):
             self.assertIn("min = 0", body)
 
 
+ACTION = "common/diplomatic_actions/te_seabed_administer_claims.txt"
+
+
+def action():
+    return block(read(ACTION), "te_seabed_administer_claims")
+
+
+class SubjectActionTest(unittest.TestCase):
+    """Administer Seabed Claims (spec § 5.2; model: SubjectTest): an overlord's
+    pact, no approval, no DLC gate, Raise Payments' liberty desire."""
+
+    def test_action_shape(self):
+        body = action()
+        self.assertIn("requires_approval = no", body)
+        self.assertIn("country_liberty_desire_add = 0.10", body)
+        self.assertNotIn("has_dlc_feature", body)
+        self.assertIn("subject_type_protectorate", body)
+        self.assertIn("subject_type_personal_union", body)
+        self.assertRegex(body, r"groups = \{\s*overlord\s*\}")
+        self.assertIn("is_direct_subject_of = root", body)
+        self.assertIn("te_seabed_is_claimant = yes", body)
+        self.assertIn("relations_progress_per_day = -1", body)
+        self.assertIn("DIPLOMATIC_PACT_REQUIREMENT_AT_PEACE", body)
+
+    def test_entry_passes_the_claims_at_once(self):
+        body = strip_comments(block(action(), "\taccept_effect"))
+        self.assertIn("te_seabed_pact_start = yes", body)
+        start = strip_comments(block(read(EFFECTS), "te_seabed_pact_start"))
+        self.assertIn("te_seabed_pass_built_", start)          # a former pact's counters go
+        self.assertIn("te_seabed_pass_basin", start)
+
+    def test_claims_pass_after_the_leases_settle(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        self.assertLess(body.index("te_seabed_settle_leases"), body.index("te_seabed_pass_subject_claims"))
+        self.assertLess(body.index("te_seabed_pass_subject_claims"), body.index("te_seabed_world_totals = { B = pacific }"))
+
+    def test_the_pact_is_the_record(self):
+        stands = strip_comments(block(read(TRIGGERS), "te_seabed_pact_stands"))
+        self.assertIn("has_diplomatic_pact = { who = scope:te_sb_over type = te_seabed_administer_claims }", stands)
+        self.assertIn("is_direct_subject_of = scope:te_sb_over", stands)
+        self.assertIn("te_seabed_pact_ok = { B = $B$ }", stands)
+        ok = strip_comments(block(read(TRIGGERS), "te_seabed_pact_ok"))
+        self.assertIn("te_seabed_is_claimant = yes", ok)
+        self.assertIn("te_seabed_southern_barred", ok)
+
+    def test_the_pass_takes_own_claims_and_spares_a_relinquished_basin(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_pass_basin"))
+        self.assertIn("te_seabed_own_claims_$B$", body)
+        self.assertIn("te_seabed_relinq_$B$", body)
+        self.assertIn("te_seabed_subj_unused_$B$", body)
+        self.assertIn("te_seabed_pass_unused_$B$", body)
+
+    def test_the_sharing_counts_passed_licences_as_the_subjects(self):
+        shift = strip_comments(block(read(EFFECTS), "te_seabed_lease_shift_held"))
+        self.assertIn("te_seabed_pact_shift_basin = { B = pacific }", shift)
+        self.assertLess(shift.index("te_seabed_lease_shift_basin = { B = southern }"),
+                        shift.index("te_seabed_pact_shift_basin = { B = pacific }"))
+        body = strip_comments(block(read(EFFECTS), "te_seabed_pact_shift_basin"))
+        self.assertIn("te_seabed_pass_built_$B$", body)
+        self.assertIn("te_seabed_shleft_$B$", body)
+        self.assertIn("te_seabed_pact_stands = { B = $B$ }", body)
+
+    def test_settle_drops_a_former_pacts_licences(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_pact_settle"))
+        self.assertIn("te_seabed_pact_stands = { B = $B$ }", body)
+        self.assertIn("te_seabed_pass_built_$B$", body)
+        self.assertIn("te_seabed_pass_basin = { B = $B$ }", body)
+
+    def test_consume_drains_subject_claims_before_leased(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_lease_consume_basin"))
+        self.assertIn("te_seabed_subj_unused_$B$", body)
+        self.assertIn("every_direct_subject", body)
+        self.assertIn("te_seabed_pass_built_$B$", body)
+        # the lease keeps its claims longest: its part is settled first
+        self.assertLess(body.index("te_seabed_lease_unused_$B$"), body.index("te_seabed_subj_unused_$B$"))
+
+    def test_the_sharing_re_divides_passed_claims(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_share_round"))
+        self.assertIn("te_seabed_subj_unused_$B$", body)
+        self.assertIn("te_seabed_pass_unused_$B$", body)
+
+    def test_relinquish_drops_passed_claims(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_relinquish"))
+        self.assertIn("te_seabed_subj_unused_$B$", body)
+        self.assertIn("every_direct_subject", body)
+
+    def test_ai(self):
+        ai = strip_comments(block(action(), "\tai"))
+        propose = block(ai, "\t\twill_propose")
+        self.assertIn("liberty_desire < 25", propose)
+        self.assertIn("te_seabed_own_claims_total > 0", propose)
+        self.assertIn("liberty_desire >= 50", block(ai, "\t\twill_break"))
+
+    def test_loc(self):
+        loc = english_loc()
+        for suffix in ("", "_desc", "_action_notification_name", "_action_notification_desc",
+                       "_action_notification_break_name", "_action_notification_break_desc",
+                       "_action_propose_name", "_action_break_name", "_pact_desc"):
+            self.assertRegex(loc, rf"(?m)^ te_seabed_administer_claims{suffix}:0 \"", suffix)
+        desc = re.search(r"(?m)^ te_seabed_administer_claims_desc:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("licence", desc)
+        self.assertIn("long-haul", desc.lower())
+
+
 class EventFileTest(unittest.TestCase):
     def test_bom_and_namespace(self):
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), EVENTS), "rb") as f:

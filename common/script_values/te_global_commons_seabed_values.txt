@@ -140,6 +140,15 @@ te_seabed_regime_value = {
 	}
 }
 
+# Country scope: its own unused claims, summed (Administer Seabed Claims' AI).
+te_seabed_own_claims_total = {
+	value = te_seabed_own_claims_pacific
+	add = te_seabed_own_claims_atlantic
+	add = te_seabed_own_claims_indian
+	add = te_seabed_own_claims_arctic
+	add = te_seabed_own_claims_southern
+}
+
 # Country scope: the claims Sponsor Contractors protects, its own unused claims
 # in every basin (a relinquished basin's are 0). Leased and subject-passed
 # claims are re-divided at every sharing and no floor protects them (seabed
