@@ -7,8 +7,9 @@ and most industry uses a little of it as upkeep. It runs from the first day of
 the game under the Free Market Construction game rule, which also offers four
 alternative settings. The rest of the chapter covers what construction costs in rich
 countries, how living-standard expectations adapt, what wealthy pops buy, the
-Bulk Transportation good, the Strategic Reserve journal entry, wartime demand
-for ammunition and the mod's new mineral deposits.
+Bulk Transportation good, setting tariffs for all goods at once, the Strategic
+Reserve journal entry, wartime demand for ammunition and the mod's new mineral
+deposits.
 
 ## The construction market
 
@@ -379,6 +380,22 @@ AI-managed production to e-commerce, department stores and shopping malls.
 An agrarian economy barely touches it. An industrial one needs railways, ports
 and highways to keep up, and a Bulk Transportation shortage raises costs across
 construction, mining and industry at once.
+
+## Tariffs for all goods at once
+
+On your own market, the Trade tab of the Market panel opens with two All Goods
+rows above the goods list, one for imports and one for exports. Each row has the
+seven levels a good's own row has, from Maximum Tariffs to Maximum Subventions,
+and a click sets that level on every tradeable good, including goods your market
+doesn't trade yet. A good under a No Tariffs or No Subventions treaty article
+keeps its level when the level you pick is one the article forbids.
+
+Only the market owner can use the rows, and only at levels your Trade Policy
+allows: under Free Trade the tariff levels are grayed out. After you use a row,
+you have a week to change that direction again to correct it; then the row
+waits 3 months, as each good's own buttons do after a change. Hover a level to
+see what it will do and what is stopping it. Under *Tax Code and Customs
+Enabled* the rows are grayed out with the other tariff buttons.
 
 ## The Strategic Reserve
 

@@ -1,0 +1,125 @@
+﻿# ============================================================================
+# ALL-GOODS TARIFFS — the Market panel's "All Goods" rows
+# ============================================================================
+# One import or export level on every tradeable good at once, from the Trade
+# tab (gui/te_bulk_tariff_widgets.gui, te_bulk_tariff_sguis.txt). The checks
+# the engine's per-good buttons make, and why this restates them, are in
+# common/scripted_triggers/te_bulk_tariff_triggers.txt. Country scope.
+#
+# Cooldown. The per-good buttons wait 3 months after a change, with a week of
+# grace to correct it (1.14.5 00_defines.txt:643-646; capability ledger row 15
+# in docs/testing/tax-code-capability-ledger.md). The script setter is not
+# known to observe that cooldown, so the rows keep their own, per direction and
+# of the same length: a use outside the grace week starts both timers, and a
+# use inside it changes the levels again without restarting them.
+# ============================================================================
+
+# DIR = import | export; KIND = tariff | subvention | none (which treaty can bar
+# the level); LEVEL = the engine's level key (max_tariffs ... max_subventions).
+te_bulk_tariff_apply = {
+	custom_tooltip = te_bulk_tariff_effect_$DIR$_$LEVEL$
+	if = {
+		limit = { has_variable = te_bulk_tariff_grace_$DIR$ }
+		custom_tooltip = te_bulk_tariff_effect_grace_$DIR$
+	}
+	else = {
+		custom_tooltip = te_bulk_tariff_effect_cd_$DIR$
+	}
+	hidden_effect = {
+		te_bulk_tariff_all_goods = { DIR = $DIR$ KIND = $KIND$ LEVEL = $LEVEL$ }
+		if = {
+			limit = { NOT = { has_variable = te_bulk_tariff_grace_$DIR$ } }
+			set_variable = { name = te_bulk_tariff_cd_$DIR$ months = 3 }
+			set_variable = { name = te_bulk_tariff_grace_$DIR$ days = 7 }
+		}
+	}
+}
+
+# Every good a market sets tariffs on: every good, vanilla and mod, that is
+# neither local (services, transportation, electricity, digital access: never
+# traded between markets) nor untradeable (gold). The Tax Code's customs
+# catalog, gen_tax_code.customs_catalog(); test_bulk_tariffs.py fails when a
+# good is added or removed without this list following. A good not yet traded
+# in the market is set too, so it arrives at the chosen level.
+te_bulk_tariff_all_goods = {
+	te_bulk_tariff_good_$KIND$ = { GOOD = advanced_materials DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = aeroplanes DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = ammunition DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = artillery DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = automobiles DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = clippers DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = clothes DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = coal DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = coffee DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = construction DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = consumer_appliances DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = digital_assets DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = dye DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = electronic_components DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = engines DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = explosives DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = fabric DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = fertilizer DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = fine_art DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = fish DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = fruit DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = furniture DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = glass DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = grain DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = groceries DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = hardwood DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = iron DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = ironclads DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = launch_capacity DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = lead DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = liquor DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = luxury_clothes DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = luxury_furniture DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = magnetic_drive_ships DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = manowars DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = meat DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = merchant_marine DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = motor_ships DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = oil DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = opium DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = paper DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = porcelain DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = radios DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = robotics DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = rubber DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = silk DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = small_arms DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = steamers DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = steel DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = sugar DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = sulfur DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = tanks DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = tea DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = tech_metals DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = telephones DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = tobacco DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = tools DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = tourism DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = wine DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = wood DIR = $DIR$ LEVEL = $LEVEL$ }
+}
+
+# One good. Dispatched on KIND, so each kind names GOOD, DIR and LEVEL.
+te_bulk_tariff_good_tariff = {
+	if = {
+		limit = { NOT = { te_bulk_tariff_barred = { GOOD = $GOOD$ ARTICLE = no_tariffs } } }
+		set_$DIR$_tariff_level = { goods = g:$GOOD$ level = $LEVEL$ }
+	}
+}
+
+te_bulk_tariff_good_subvention = {
+	if = {
+		limit = { NOT = { te_bulk_tariff_barred = { GOOD = $GOOD$ ARTICLE = no_subventions } } }
+		set_$DIR$_tariff_level = { goods = g:$GOOD$ level = $LEVEL$ }
+	}
+}
+
+# No tariffs or subventions: what both articles require, so no treaty bars it.
+te_bulk_tariff_good_none = {
+	set_$DIR$_tariff_level = { goods = g:$GOOD$ level = $LEVEL$ }
+}

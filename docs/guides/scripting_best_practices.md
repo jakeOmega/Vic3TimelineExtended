@@ -2053,6 +2053,8 @@ The `free_port_state_modifier` required a remove-then-reapply pattern because th
 
 Key pattern: `remove_modifier` + `add_modifier` with `multiplier` calculated from current game state.
 
+**A player control that sets tariff levels from script restates the per-good buttons' checks.** The engine's buttons (`GetPlayer.SetImportTariffsMax(Goods)` and siblings) refuse a level for four reasons, named by vanilla loc `SET_TARIFF_LEVEL_*`: not the market owner, the trade policy or a treaty forbids it, the good is on its 3-month cooldown, or it is already set. `set_import_tariff_level` / `set_export_tariff_level` is a script effect, and vanilla's No Tariffs and No Subventions articles call it to clear a level whatever the cooldown, so assume it checks none of them (unverified; capability ledger row 15). The All Goods rows' triggers (`common/scripted_triggers/te_bulk_tariff_triggers.txt`) are the pattern: `te_tax_owns_market`, the capital's `modifier:state_<tariff|subvention>_<import|export>_add > 0` for the trade policy, `any_scope_treaty = { any_scope_article = { has_type = no_tariffs source_country = <country> input_goods = g:<good> } }` for a treaty, and a cooldown of the control's own in timed variables. A script that legislates or enforces a level (the Tax Code's customs sync, a treaty) is a different case and may want to override them.
+
 ## `change_variable` Operations
 
 `change_variable` supports: `add`, `subtract`, `multiply`, `divide`, `modulo`, `min`, `max`. The `multiply = -1` pattern is valid for negating a variable's value (used in heir education rebel child mechanic). All operations are applied to the variable's current value.
