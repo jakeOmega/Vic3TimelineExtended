@@ -1996,5 +1996,116 @@ class MovementEndpointTests(unittest.TestCase):
                          ["lawgroup_privacy"])
 
 
+class PmEmploymentEndpointTests(unittest.TestCase):
+    """GET /pm-employment through do_GET (#990), on test_pm_employment_audit's
+    fixture."""
+
+    def setUp(self):
+        from test_pm_employment_audit import EmploymentCombinationTests
+        fx = EmploymentCombinationTests()
+        fx.setUp()
+        stub = _StubModState(data={"Buildings": fx.buildings, "PM Groups": fx.pmgs,
+                                   "PMs": fx.pms})
+        patch = mock.patch.object(mss, "ms", stub)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_building_and_select(self):
+        status, body = self.get("/pm-employment/building_x")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["combinations"], 12)
+        status, body = self.get("/pm-employment/building_x?select=pm_ai_managed_*&bucket=unscaled")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["combinations"], 5)
+        self.assertEqual(body["buckets"], ["unscaled"])
+        self.assertEqual(body["select_matched"], ["pm_ai_managed_x"])
+
+    def test_cross_building_select(self):
+        status, body = self.get("/pm-employment?select=pm_low,pm_ai_managed_x")
+        self.assertEqual(status, 200)
+        self.assertEqual([b["building"] for b in body["buildings"]],
+                         ["building_x", "building_y"])
+        self.assertEqual(body["select_unmatched"], [])
+
+    def test_errors(self):
+        for path, status in (
+            ("/pm-employment", 400),
+            ("/pm-employment/building_x?bucket=other", 400),
+            ("/pm-employment/building_x?limit=x", 400),
+            ("/pm-employment/building_x?select=pm_nope", 400),
+            ("/pm-employment/building_nope", 404),
+            ("/pm-employment/building_x/extra", 404),
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self.get(path)[0], status)
+
+
+class VariableUsageEndpointTests(unittest.TestCase):
+    """GET /variable-usage through do_GET (#973), on test_variable_usage's
+    fixture."""
+
+    def setUp(self):
+        import test_variable_usage as tvu
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        tvu._write(tmp.name, "common/scripted_effects/te_ops_effects.txt", tvu.EFFECTS)
+        tvu._write(tmp.name, "common/scripted_triggers/te_ops_triggers.txt", tvu.TRIGGERS)
+        tvu._write(tmp.name, "gui/te_ops.gui", tvu.GUI)
+        for name, value in (("mod_path", tmp.name), ("_variable_usage_cache", None)):
+            patch = mock.patch.object(mss, name, value)
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_name_and_filters(self):
+        status, body = self.get("/variable-usage/te_ops")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["summary"]["iterations"], 4)
+        self.assertIn("gui_GetList", [s["op"] for s in body["sites"]])
+        status, body = self.get("/variable-usage/te_ops?store=global")
+        self.assertEqual([s["op"] for s in body["sites"]], ["every_in_global_list"])
+        status, body = self.get("/variable-usage/te_ops?unfiltered_by=te_op_is_hostile")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["unfiltered_by"]["wrappers"], ["te_op_is_wrapped"])
+        self.assertEqual(sorted(s["line"] for s in body["sites"]), [13, 28])
+
+    def test_patterns_toggle(self):
+        self.assertEqual(self.get("/variable-usage/te_steel_stock")[0], 200)
+        self.assertEqual(self.get("/variable-usage/te_steel_stock?patterns=false")[0], 404)
+
+    def test_names_listing(self):
+        status, body = self.get("/variable-usage?prefix=te_ops&kind=list")
+        self.assertEqual(status, 200)
+        self.assertEqual([r["name"] for r in body["names"]], ["te_ops"])
+
+    def test_index_cached_per_generation(self):
+        self.get("/variable-usage/te_ops")
+        first = mss._variable_usage_cache[1]
+        self.get("/variable-usage/te_ops_count")
+        self.assertIs(mss._variable_usage_cache[1], first)
+        with mock.patch.object(mss, "_call_index_generation", mss._call_index_generation + 1):
+            self.get("/variable-usage/te_ops")
+            self.assertIsNot(mss._variable_usage_cache[1], first)
+
+    def test_errors(self):
+        for path, status in (
+            ("/variable-usage/te_nothing", 404),
+            ("/variable-usage/te_ops/extra", 404),
+            ("/variable-usage/te_ops?kind=other", 400),
+            ("/variable-usage/te_ops?store=other", 400),
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self.get(path)[0], status)
+
+
 if __name__ == "__main__":
     unittest.main()
