@@ -324,7 +324,8 @@ a state's target starts. Land tenure, who owns the state's capital, how unequal
 incomes are, taxes on wealth and your economic laws move it from there.
 Laissez-Faire (+10), Extraction Economy (+5), Freedom of Contract and Guilds and
 Chartered Monopolies (+5) raise it; Interventionism, Antitrust Enforcement and
-Regulated Utilities (−5 each) lower it. War losses, a lost war that
+Regulated Utilities (−5 each) lower it. Each land, tax and economic law that
+moves it lists its part among its modifiers. War losses, a lost war that
 cost you a war goal, a winning revolution of the left and a banking crash knock
 scores down at once, and devastation lowers a state's score every year it lasts. A new law therefore takes
 about a generation to show: a country that abolishes entail still has great

@@ -88,14 +88,22 @@ MEANS_CAP = 0.95
 # carries this much; France starts with it (§2.6: its transition began around 1800).
 FAMILY_LIMITATION_MEANS = 0.6
 
-# ---- Wealth Concentration (§4.2): land tenure, by base law -------------------------
-# Vanilla's variants (`parent = law_x`: Manorialism, Latifundias, Expanded Latifundias,
-# Homesteading) take their parent's value; the generator expands them from the laws'
-# parent fields. The spec's "Homesteading -10" is its parent, Peasant Proprietorship.
-LAND_TENURE = {
-    "law_serfdom": 15, "law_tenant_farmers": 5, "law_commercialized_agriculture": 0,
-    "law_peasant_proprietorship": -10, "law_collectivized_agriculture": -20,
-}
+# ---- Wealth Concentration (§4.2): the laws' terms ----------------------------------
+# Script-only types on the laws since 2026-10-17, so each law's tooltip says what it does
+# (demographics_wealth_concentration_types.txt; the vanilla laws' lines in
+# te_demog_wealth_law_injections.txt, Graduated Taxation's in te_tax_vanilla_law_gates.txt, the
+# antitrust laws' in extra_laws.txt). Not census
+# inputs, so not in DEMOG_TYPES: Wealth Concentration runs whatever the Demographics rule, and
+# a release keeps them. Land tenure, x a state's agrarian share: Serfdom +15, Tenant Farmers +5,
+# Commercialized Agriculture none, Peasant Proprietorship -10, Collectivized Agriculture -20,
+# each variant (`parent = law_x`: Manorialism, Latifundias, Expanded Latifundias, Homesteading)
+# at its parent's value. Taxes: Graduated Taxation -5. The economic laws: Laissez-Faire +10,
+# Extraction Economy +5, Interventionism -5, Guilds and Chartered Monopolies and Freedom of
+# Contract +5, Antitrust Enforcement and Regulated Utilities -5.
+WC_LAND_TYPE = "state_wealth_concentration_land_add"
+WC_TAX_TYPE = "country_wealth_concentration_tax_add"
+WC_ECONOMY_TYPE = "country_wealth_concentration_economy_add"
+WC_LAW_TYPES = (WC_LAND_TYPE, WC_TAX_TYPE, WC_ECONOMY_TYPE)
 
 # ---- Mortality inputs as modifier types (modifier-types design, stage 1) -----------
 # Laws, technology and institutions reach the census's causes of death only through these
@@ -157,11 +165,12 @@ MEANS_ACCESS_BASE = 0.3
 # at every seed and step and applies none of them until step 2, whose harness fits the numbers (owner, 2026-10-12).
 # Participation (late-game §2.1; #894): people x start(calendar age) x [below the end of the working ages ? 1 : the
 # after-pension share] x capacity(biological age) x the sex's rate.
-CHILD_WORK_AGE = 10            # calendar: the 10-14s work at the childrens'-rights law's share (parent §7)
+CHILD_WORK_AGE = 10            # calendar: the 10-14s work at the childrens'-rights laws' share (parent §7)
 WORKING_AGE = 15               # calendar: everyone from here
-CHILD_WORK_SHARE = {"law_child_labor_allowed": 0.3, "law_restricted_child_labor": 0.1,
-                    "law_compulsory_primary_school": 0.0}
-CHILD_WORK_SHARE_DEFAULT = 0.3  # a country with none of the three (vanilla gives every country one)
+# The 10-14s' share at work, within 0-1: a census-only type on the childrens'-rights laws (since 2026-10-17, so a law's
+# tooltip says it; te_demog_law_injections.txt): Child Labor Allowed 0.3, Restricted Child Labor 0.1, Compulsory Primary
+# School none. In DEMOG_TYPES (below).
+CHILD_WORK_TYPE = "state_child_labor_participation_add"
 CAPACITY = {0: 1.0, 60: 1.0, 65: 0.95, 70: 0.85, 75: 0.7, 80: 0.5, 85: 0.2}   # by biological band start
 AFTER_PENSION_SHARE = 0.3      # the share of the eligible who keep working, x capacity
 MEN_RATE = 0.92
@@ -203,7 +212,7 @@ PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYP
 # malaria_prevention at 1 (te_demog_tech_injections.txt).
 MALARIA_CONTROL_TYPE = "state_malaria_control_add"
 DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES
-               + (MALARIA_CONTROL_TYPE,))
+               + (MALARIA_CONTROL_TYPE, CHILD_WORK_TYPE))
 
 # ---- Phase 2 step 2: the workforce, pensions and health costs ------------------------------------------------------
 # docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2 and §5. Everything here acts under
@@ -402,10 +411,13 @@ PRACTICE_EROSION_SPAN = 0.2
 PRACTICE_EROSION_ACCESS = {"lm": 0.0, "bs": 0.3}
 PRACTICE_ACCESS_SPAN = 0.5
 # Late Marriage's drivers (call 6): impartible inheritance x the agrarian share; women's paid work before marriage,
-# x the women's job share x the law's women's work share / FULL_FEMALE_WORK_SHARE.
-LM_INHERITANCE = 0.15
+# x the women's job share x the law's women's work share / FULL_FEMALE_WORK_SHARE. Impartible inheritance is a
+# census-only type (since 2026-10-17, so its tooltip says it), 0.15 on Primogeniture (extra_laws.txt) and on Undivided
+# Farm Succession (extra_amendments.txt, an amendment: load_carriers' kind "amendment"). The two never meet: the
+# amendment sits only on Forced Heirship and Customary Inheritance.
+LM_FARMS_TYPE = "state_late_marriage_farms_add"
+DEMOG_TYPES = DEMOG_TYPES + (LM_FARMS_TYPE,)
 LM_WOMENS_WORK = 0.3
-IMPARTIBLE_LAWS = ("law_primogeniture",)   # and Undivided Farm Succession (te_inh_has_undivided_farms), script only
 # The panel (spec 5.3): women's mean age at first marriage, about 19 + 7 x the Late Marriage share.
 MARRIAGE_AGE_AT_ZERO, MARRIAGE_AGE_SPAN = 19, 7
 
@@ -440,15 +452,17 @@ FL_SPREAD = 0.02
 #   inheritance), not with Undivided Farm Succession, which switches the rural cut off today too. It is Forced Heirship's
 #   old rural birth cut (inh_forced_heirship_rural, -15% x the farm share), folded in under Full (section 13);
 #   + literacy, read through the church law: FL_LITERACY x clamp((literacy - FL_LITERACY_FROM) / FL_LITERACY_SPAN, 0, 1)
-#   x FL_CHURCH[the law] (a secular, literate society limits births; the game's literacy rises fast in the West, so the
-#   term starts late and stays small).
+#   x the church laws' weight, 1 + FL_LITERACY_TYPE (a secular, literate society limits births; the game's literacy
+#   rises fast in the West, so the term starts late and stays small).
 FL_HEIRSHIP = 1.0
 FL_LITERACY = 0.3
 FL_LITERACY_FROM = 0.8
 FL_LITERACY_SPAN = 0.2
-FL_CHURCH = {"law_state_religion": 0.5, "law_freedom_of_conscience": 1.0, "law_total_separation": 1.5,
-             "law_state_atheism": 1.5}   # a State Religion variant takes its parent's (has_law_or_variant)
-FL_CHURCH_DEFAULT = 1.0
+# The church laws' weight: a census-only country type (since 2026-10-17, so a law's tooltip says it;
+# te_demog_law_injections.txt): State Religion, the Millet System and People of the Book -0.5, Total Separation and
+# State Atheism +0.5, Freedom of Conscience none. The weight is 1 + it, at least 0.
+FL_LITERACY_TYPE = "country_family_limitation_literacy_mult"
+DEMOG_TYPES = DEMOG_TYPES + (FL_LITERACY_TYPE,)
 # Modern methods replace it: the line is share x (1 - the erosion Late Marriage and Birth Spacing take from contraception,
 # te_demog_pr_erosion_contraception), at the country's people-weighted literacy. The couples who practised it now use
 # the methods the means already count (the techs' state_contraception_add), so the West of 1950 isn't counted twice.

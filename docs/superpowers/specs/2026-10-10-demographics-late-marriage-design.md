@@ -484,7 +484,8 @@ Each year, on the state pulse, after the walk and before the fertility term:
     target = clamp(start × (1 − erosion) + inheritance + women's work, 0, 1)
     erosion = 0.7 × clamp((contraception − 0.1) / 0.2, 0, 1)
     contraception = state_contraception_add × (0.3 + 0.7 × literacy)
-    inheritance = 0.15 × agrarian share, under Primogeniture or with Undivided Farm Succession
+    inheritance = 0.15 × agrarian share, under Primogeniture or with Undivided Farm Succession (since 2026-10-17
+                  the law's and the amendment's state_late_marriage_farms_add line, which never meet)
     women's work = 0.3 × women's job share × women's work share ÷ 0.48
     share += 0.025 × (target − share) + 0.005 × (neighbours' mean − share)
 

@@ -118,6 +118,16 @@ SAFETY_DIGESTS = {
     ("generated_values", "te_demog_mult_work"): "20d60f152aa79ab820c226b8ddefd63053b58c552a68cc03b0f49d1899323155",
 }
 SAFETY_VARS = {"te_dg_in_saf_work", "te_dg_in_saf_ext"}
+# The laws' terms as modifier lines (2026-10-17, so each law's tooltip says what the census does with it): Late
+# Marriage's target reads Primogeniture's and Undivided Farm Succession's state_late_marriage_farms_add (0.15, the old
+# constant) instead of testing the law and the amendment, and the land-tenure term moved to the hand-written
+# te_demog_values.txt, reading the land laws' lines. No golden case holds Primogeniture, the amendment or a land law, so
+# every recorded number stays as it was (the cases' Child Labor Allowed and Compulsory Primary School read the same
+# 0.3 and 0 from their lines); test_demographics_registry holds both blocks to the laws' lines.
+LAW_LINE_DIGESTS = {
+    ("generated_values", "te_demog_pr_target_lm"): "de886021da9fd961f0cc501e1c2616e270e9a86705be20bcb4562ddb859593e0",
+}
+LAW_LINE_MOVED = {("generated_values", "te_demog_wc_land_term")}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -283,9 +293,12 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         free. Task 6's refactor of #892's renderers must leave its three files' blocks as they were."""
         for key, rec in self.golden["blocks"].items():
             for name, digest in rec.items():
+                if (key, name) in LAW_LINE_MOVED:
+                    self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
+                    continue
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
-                want = SAFETY_DIGESTS.get((key, name), PHASE3_DIGESTS.get((key, name), BOOKING_DIGESTS.get(
-                    (key, name), STEP3_DIGESTS.get((key, name), digest))))
+                want = LAW_LINE_DIGESTS.get((key, name), SAFETY_DIGESTS.get((key, name), PHASE3_DIGESTS.get(
+                    (key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))))
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):
