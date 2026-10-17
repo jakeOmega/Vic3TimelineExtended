@@ -132,6 +132,42 @@ te_asat_disruption_days = { value = 365 }
 te_asat_disruption_days_short = { value = 182 }
 te_asat_battlestation_factor = { value = 0.5 }
 
+# The month a strike's disruption ends, from the struck country's own scope
+# (the Mars Mission halves its length): te_asat_disrupted_until. Scope: country
+te_asat_disruption_end_month = {
+	value = te_asat_disruption_days
+	if = {
+		limit = { modifier:country_sr_mars_mission_program_bool = yes }
+		value = te_asat_disruption_days_short
+	}
+	divide = 30
+	round = yes
+	add = te_history_month_index
+}
+
+# What is left of a recorded disruption, in days, for te_asat_rebuild_disruption.
+# Scope: country
+te_asat_disruption_days_left = {
+	value = 0
+	if = {
+		limit = { has_variable = te_asat_disrupted_until }
+		value = var:te_asat_disrupted_until
+		subtract = te_history_month_index
+		multiply = 30
+	}
+	min = 1
+}
+
+# The recorded disruption's strength (1, or te_asat_battlestation_factor with
+# an Orbital Battlestation). Scope: country
+te_asat_disruption_factor_held = {
+	value = 1
+	if = {
+		limit = { has_variable = te_asat_disrupted_factor }
+		value = var:te_asat_disrupted_factor
+	}
+}
+
 # ---- The index ------------------------------------------------------------------
 
 # Scope: any (reads globals only)

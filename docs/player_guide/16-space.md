@@ -561,7 +561,7 @@ Orbital Battlestation. A country can be struck once every 12 months, by anyone.
 | Who | What the strike does |
 |---|---|
 | The target | Orbital Network Disrupted for a year: −10% unit offense and defense, −20% space race pace, and −25% throughput for its Space Elevators, Orbital Battlestations and Solar Receivers. It lasts six months if its Space Program runs the Mars Mission or a later method, and is half as strong if it has an Orbital Battlestation. It ends on its own. |
-| You | 5 infamy, 15 case strength at the UN (see [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)), and −30 relations with every other country that uses orbit. |
+| You | 5 infamy, 15 case strength at the UN (see [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)), twice both as a party to the [Moratorium on Destructive Anti-Satellite Tests](10-united-nations.md#the-anti-satellite-moratorium), and −30 relations with every other country that uses orbit. |
 | Everyone | 6 more debris in low orbits and 6 in high orbits, which your own program flies through too. |
 
 The strike suits a war against a power with more in orbit than you, whose

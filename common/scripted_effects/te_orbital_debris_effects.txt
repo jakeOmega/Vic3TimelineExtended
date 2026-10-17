@@ -136,6 +136,34 @@ te_debris_country_monthly = {
 	te_debris_refresh_penalty = yes
 	te_debris_refresh_cleaner_prestige = yes
 	te_debris_roll_ribbon_strike = yes
+	te_asat_rebuild_disruption = yes
+}
+
+# Orbital Network Disrupted is a timed modifier, which a revolution's winner
+# doesn't inherit (CLAUDE.md, "the winner continues the nation"). The strike
+# records its end month and strength (te_asat_disrupted_until, _factor): while
+# it should still run and is missing, put the rest of it back; once it is
+# over, clear the record. Scope: country
+te_asat_rebuild_disruption = {
+	if = {
+		limit = { has_variable = te_asat_disrupted_until }
+		if = {
+			limit = { te_history_month_index >= var:te_asat_disrupted_until }
+			remove_variable = te_asat_disrupted_until
+			if = {
+				limit = { has_variable = te_asat_disrupted_factor }
+				remove_variable = te_asat_disrupted_factor
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_modifier = te_orbital_network_disrupted } }
+			add_modifier = {
+				name = te_orbital_network_disrupted
+				days = te_asat_disruption_days_left
+				multiplier = te_asat_disruption_factor_held
+			}
+		}
+	}
 }
 
 # te_orbital_debris at multiplier = the index, on a country that uses orbit.
@@ -257,6 +285,15 @@ te_asat_strike_effect = {
 			}
 		}
 		set_variable = { name = te_asat_struck_month value = te_history_month_index }
+		# The same disruption in variables, which a revolution's winner
+		# inherits where it gets no modifiers: te_asat_rebuild_disruption
+		# puts the rest of it back.
+		set_variable = { name = te_asat_disrupted_until value = te_asat_disruption_end_month }
+		set_variable = { name = te_asat_disrupted_factor value = 1 }
+		if = {
+			limit = { any_scope_building = { is_building_type = building_orbital_battlestation } }
+			set_variable = { name = te_asat_disrupted_factor value = te_asat_battlestation_factor }
+		}
 	}
 	# The striker's costs: the UN case and every other user of orbit. The
 	# infamy (te_asat_infamy) is the action's own visible effect.
