@@ -5615,8 +5615,115 @@ class SplitPieceTests(unittest.TestCase):
 
     def test_the_play_test_list(self):
         playtest = (ROOT / "docs/testing/grand-monuments-ageing-playtest.md").read_text(encoding="utf-8")
-        for s in ("monument_split_identity", "A revolt that wins", "A secession that wins"):
+        for s in ("monument_split_identity", "A revolt that wins", "A secession that wins", "monument_short_repair"):
             self.assertIn(s, playtest)
+
+
+class ShortRepairTests(unittest.TestCase):
+    """Owner's call 2026-10-17: a one-off repair of monuments already short of a
+    piece long gone, as the 1898 crash save's Arc de Triomphe (11 levels on
+    records of 15, the Paris Commune's piece lost in 1887, before gm_sh_rejoin)."""
+
+    def setUp(self):
+        self.m = read(MON_EFFECTS)
+        self.t = read(MON_TRIGGERS)
+
+    def body(self, name, text=None):
+        b = block(text if text is not None else self.m, name)
+        self.assertIsNotNone(b, name)
+        return squash(b)
+
+    def test_it_runs_from_the_monthly_pass_and_carries_its_removal_date(self):
+        monthly = self.body("gm_monument_monthly")
+        call = "if = { limit = { gm_system_enabled = yes } gm_short_repair_monthly = yes }"
+        self.assertIn(call, monthly)
+        # Before the shadows, which then note what it put back.
+        self.assertLess(monthly.find(call), monthly.find("gm_shadow_monthly = yes"))
+        sites = [name for path in _mod_txt_files() for name, body in top_level_blocks(read(path.relative_to(ROOT)))
+                 if "gm_short_repair_monthly = yes" in body]
+        self.assertEqual(sites, ["gm_monument_monthly"])
+        refresh = squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
+        self.assertNotIn("gm_short_repair", refresh)
+        marker = "# OLD-SAVE REPAIR (#936): remove after 2026-12-17 or at vanilla 1.15, whichever comes first."
+        raw = (ROOT / MON_EFFECTS).read_text(encoding="utf-8-sig")
+        self.assertIn(marker + "\n#\n# Before 2026-10-17", raw)
+        self.assertIn(marker, (ROOT / MON_TRIGGERS).read_text(encoding="utf-8-sig"))
+
+    def test_once_a_save_with_a_year_for_what_waits(self):
+        body = self.body("gm_short_repair_monthly")
+        self.assertIn("if = { limit = { NOT = { has_global_variable = gm_short_repair_done } }", body)
+        self.assertIn("change_global_variable = { name = gm_short_repair_passes add = 1 }", body)
+        self.assertIn("limit = { gm_state_short_unexplained = yes gm_state_short_ready = yes } "
+                      "add_to_temporary_list = gm_short_repairing", body)
+        self.assertIn("every_in_list = { list = gm_short_repairing gm_state_short_repair = yes }", body)
+        self.assertIn("OR = { global_var:gm_short_repair_passes >= 12 NOT = { any_state = { "
+                      "gm_state_short_unexplained = yes } } } } set_global_variable = gm_short_repair_done", body)
+        self.assertIn("TE_MONUMENTS:", body)
+
+    def test_every_other_explanation_is_left_alone(self):
+        unexplained = self.body("gm_state_short_unexplained", self.t)
+        for s in ("has_variable = gm_seen", "has_variable = gm_levels", "gm_state_levels_short >= 1",
+                  "NOT = { has_variable = gm_short_repaired }",
+                  # A revolt's piece still out there.
+                  "NOT = { has_variable = gm_split_piece }", "NOT = { has_variable = gm_piece_of }",
+                  "state_region = { NOT = { any_scope_state = { NOT = { this = scope:gm_tmp_short_state } "
+                  "has_building = building_grand_monument } } }",
+                  # The combined level's cap.
+                  "gm_state_level < 200"):
+            self.assertIn(s, unexplained)
+        ready = self.body("gm_state_short_ready", self.t)
+        for s in ("b:building_grand_monument ?= { is_under_construction = no }",
+                  "NOT = { has_variable = gm_rebuilding }", "NOT = { has_variable = gm_restore_pm }",
+                  "NOT = { has_variable = gm_ceremony_pending }", "NOT = { has_variable = gm_gift }",
+                  "NOT = { has_variable = gm_carried_off }",
+                  "owner = { is_at_war = no NOT = { has_variable = te_cw_role } }",
+                  "has_variable = gm_mon_order",
+                  "variable = gm_shadows gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }",
+                  "variable = gm_monuments gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }"):
+            self.assertIn(s, ready)
+        # A trophy's piece and a Pull Down beside it take their levels out of the
+        # records, so they leave no shortfall to exclude.
+        tr = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_state_tr_remove_piece"))
+        self.assertIn("set_variable = { name = gm_levels value = var:gm_tr_take_left }", tr)
+        self.assertIn("change_variable = { name = gm_tr_levels subtract = scope:gm_tr_state.var:gm_tr_take_levels }",
+                      self.body("gm_mon_tr_take_piece"))
+
+    def test_one_rebuild_marked_first(self):
+        repair = self.body("gm_state_short_repair")
+        self.assertTrue(repair.startswith("set_variable = gm_short_repaired"), repair[:80])
+        order = ["set_variable = gm_short_repaired",
+                 "set_variable = { name = gm_short_put_back value = gm_state_levels_short }",
+                 "create_container = { tags = { gm_repair } save_scope_as = gm_short_standin",
+                 "set_variable = { name = gm_tr_levels value = scope:gm_short_state.var:gm_short_put_back } "
+                 "save_scope_as = gm_tr_moving",
+                 "gm_state_tr_add_levels = yes",
+                 # Under its own name: what the rebuild runs inside this effect
+                 # may save another container as gm_tr_moving.
+                 "scope:gm_short_standin = { destroy_container = yes }"]
+        positions = [repair.find(s) for s in order]
+        self.assertNotIn(-1, positions, dict(zip(order, positions)))
+        self.assertEqual(positions, sorted(positions))
+        self.assertEqual(repair.count("gm_state_tr_add_levels = yes"), 1)
+        self.assertNotIn("scope:gm_tr_moving = { destroy_container", repair)
+        self.assertNotRegex(repair, r"trigger_event")
+        self.assertIn("TE_MONUMENTS:", repair)
+
+    def test_the_self_check(self):
+        check = self.body("gm_monument_short_repair_self_check")
+        self.assertIn("TE_SELF_CHECK OK monument_short_repair", check)
+        self.assertEqual(check.count("TE_SELF_CHECK BROKEN monument_short_repair"), 1)
+        # Only after a repair, and once: the pass after the first that repaired.
+        self.assertTrue(check.startswith("if = { limit = { has_global_variable = gm_short_repair_check_due } "
+                                         "remove_global_variable = gm_short_repair_check_due "
+                                         "set_global_variable = gm_short_repair_checked"), check[:200])
+        self.assertIn("OR = { NOT = { has_building = building_grand_monument } gm_state_levels_short >= 1 }", check)
+        self.assertIn("if = { limit = { NOT = { has_global_variable = gm_short_repair_checked } } "
+                      "set_global_variable = gm_short_repair_check_due }", self.body("gm_state_short_repair"))
+        self.assertTrue(self.body("gm_short_repair_monthly").startswith("gm_monument_short_repair_self_check = yes"))
+        values = read(MON_VALUES)
+        for sv in ("gm_short_log_n", "gm_short_log_levels", "gm_short_log_bad"):
+            self.assertIn(f"[SCOPE.ScriptValue('{sv}')|0]", check)
+            self.assertIsNotNone(block(values, sv), sv)
 
 
 if __name__ == "__main__":

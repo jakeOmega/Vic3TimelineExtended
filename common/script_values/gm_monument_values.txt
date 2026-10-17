@@ -392,3 +392,55 @@ gm_split_log_records = {
 		value = global_var:gm_split_log_records_now
 	}
 }
+
+# OLD-SAVE REPAIR (#936): remove after 2026-12-17 or at vanilla 1.15, whichever comes first.
+# What the one-off repair of monuments short of a piece long gone prints
+# (gm_short_repair_monthly): globals, read through wrappers as above.
+
+gm_short_log_n = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_short_repair_n }
+		value = global_var:gm_short_repair_n
+	}
+}
+
+gm_short_log_levels = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_short_repair_levels }
+		value = global_var:gm_short_repair_levels
+	}
+}
+
+gm_short_log_left = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_short_repair_left }
+		value = global_var:gm_short_repair_left
+	}
+}
+
+gm_short_log_bad = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_short_check_bad }
+		value = global_var:gm_short_check_bad
+	}
+}
+
+gm_short_log_put_back = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_short_log_put_back_now }
+		value = global_var:gm_short_log_put_back_now
+	}
+}
+
+gm_short_log_stood = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_short_log_stood_now }
+		value = global_var:gm_short_log_stood_now
+	}
+}
