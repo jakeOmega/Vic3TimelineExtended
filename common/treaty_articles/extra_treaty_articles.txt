@@ -911,8 +911,8 @@ science_aid_2 = {
 				# wraps it in scope:first_country). In can_ratify the ambient scope is
 				# the treaty, so scope to the proposer before iterating its treaties.
 				# can_ratify names the parties scope:source_country and
-				# scope:target_country; scope:other_country is unset here, so reading
-				# it made both paths false and the article unratifiable (2026-10-17).
+				# scope:target_country; scope:other_country is unset here, so until
+				# 2026-10-17 neither path could test the right partner.
 				scope:source_country ?= {
 					any_scope_treaty = {
 						binds = scope:target_country
