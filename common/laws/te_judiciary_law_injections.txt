@@ -1,0 +1,36 @@
+﻿# ======================================================================
+#  JUDICIARY — paper courts (spec § 3.1, § 3.4)
+#  A regime whose executive answers to nobody: its courts earn half the
+#  trust and challenge nothing. The lines show on the law's own tooltip.
+#  Variants carry their own modifier blocks, so Bakufu and Neo-Absolutism
+#  are injected as well as Autocracy. Algorithmic Governance, a mod law,
+#  carries the same two lines inline (extra_laws.txt).
+# ======================================================================
+
+INJECT:law_autocracy = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}
+
+INJECT:law_bakufu = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}
+
+INJECT:law_neo_absolutism = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}
+
+INJECT:law_single_party_state = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}

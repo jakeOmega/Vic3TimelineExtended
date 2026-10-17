@@ -58,6 +58,9 @@ GLOBAL = {
 			name = nuclear_weapon_stockpile
 			value = 0
 		}
+		# Judiciary (spec § 5): the starting court by rule. Per-country
+		# overrides and starting scores follow in the country blocks.
+		te_jud_assign_court_by_rule = yes
 	}
 	# Only the Great Powers had Western-style ministerial bureaucracies of meaningful
 	# scale by 1836. Smaller recognized states had foreign/war ministers but with
@@ -72,6 +75,9 @@ GLOBAL = {
 		activate_law = law_type:law_ministry_of_foreign_affairs # Quai d'Orsay, 1547
 		activate_law = law_type:law_ministry_of_war # Ministère de la Guerre, 1791
 		activate_law = law_type:law_legal_limbo # Decriminalized during Revolution, 1791
+		# Judiciary: the Code civil (spec § 5)
+		activate_law = law_type:law_statutory_courts
+		set_variable = { name = te_judicial_independence value = 35 }
 	}
 	c:GBR = {
 		activate_law = law_type:law_primogeniture
@@ -81,11 +87,17 @@ GLOBAL = {
 		activate_law = law_type:law_ministry_of_foreign_affairs # Foreign Office, 1782
 		activate_law = law_type:law_ministry_of_war # Distributed war administration; unified as War Office 1854
 		activate_law = law_type:law_gold_standard # Gold Standard Act 1816
+		# Judiciary: Judges' tenure from the Act of Settlement, 1701 (spec § 5)
+		activate_law = law_type:law_statutory_courts
+		set_variable = { name = te_judicial_independence value = 70 }
 	}
 	c:PRU = { # Prussia
 		activate_law = law_type:law_traditional_ip_protection # Prussian Patent Law, 1815
 		activate_law = law_type:law_ministry_of_foreign_affairs
 		activate_law = law_type:law_ministry_of_war # Kriegsministerium 1808 (Scharnhorst reforms)
+		# Judiciary: the General Code of 1794 (spec § 5)
+		activate_law = law_type:law_statutory_courts
+		set_variable = { name = te_judicial_independence value = 35 }
 	}
 	c:JAP = {
 		activate_law = law_type:law_primogeniture
@@ -104,6 +116,9 @@ GLOBAL = {
 		activate_law = law_type:law_federal_system
 		activate_law = law_type:law_free_mutual_banking
 		activate_law = law_type:law_traditional_ip_protection # Copyright Act 1790, Patent Act 1790
+		# Judiciary: Marbury v. Madison, 1803 (spec § 5)
+		activate_law = law_type:law_constitutional_review
+		set_variable = { name = te_judicial_independence value = 60 }
 	}
 	c:SIA = { # Siam
 		activate_law = law_type:law_minority_rights_indifference
@@ -172,6 +187,9 @@ GLOBAL = {
 	}
 	c:BEL = { # Belgium
 		activate_law = law_type:law_legal_limbo # Decriminalized 1795 under French rule
+		# Judiciary (spec § 5)
+		activate_law = law_type:law_statutory_courts
+		set_variable = { name = te_judicial_independence value = 40 }
 	}
 	c:URU = { # Uruguay
 		activate_law = law_type:law_devolution
@@ -206,11 +224,17 @@ GLOBAL = {
 	c:SWE = { # Sweden
 		activate_law = law_type:law_universal_banking_light_prudence
 		activate_law = law_type:law_national_bank # Sveriges Riksbank, 1668 (oldest central bank in the world)
+		# Judiciary (spec § 5)
+		activate_law = law_type:law_statutory_courts
+		set_variable = { name = te_judicial_independence value = 50 }
 	}
 	c:NET = { # Netherlands
 		activate_law = law_type:law_universal_banking_light_prudence
 		activate_law = law_type:law_national_bank # De Nederlandsche Bank, 1814
 		activate_law = law_type:law_legal_limbo # Decriminalized 1811 under Napoleonic code
+		# Judiciary (spec § 5)
+		activate_law = law_type:law_statutory_courts
+		set_variable = { name = te_judicial_independence value = 50 }
 	}
 	c:DEN = { # Denmark
 		activate_law = law_type:law_civic_monolingualism

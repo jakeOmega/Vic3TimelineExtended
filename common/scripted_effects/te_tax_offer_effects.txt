@@ -234,6 +234,9 @@ te_tax_force_into = {
 			years = 5
 			is_decaying = yes
 		}
+		# Judicial Independence, as the Forceful Legislation option whose
+		# modifiers this applies (judiciary spec § 3.3).
+		te_jud_spend = { AMOUNT = 10 }
 		if = {
 			limit = { is_ai = no }
 			debug_log = "TE_TAX forced_through legislative override used to pass the bill; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"

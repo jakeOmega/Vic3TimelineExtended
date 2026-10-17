@@ -1,0 +1,220 @@
+﻿# ======================================================================
+#  JUDICIARY — scripted effects (country scope)
+#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  The score lives in var:te_judicial_independence (0-100) and nowhere else,
+#  so a revolution's winner inherits it (te_jud_monthly never seeds the
+#  rebels, whose own score would win the merge) and te_jud_refresh rebuilds
+#  the modifiers.
+# ======================================================================
+
+# An unset score starts at half the ceiling (spec § 5); history sets some
+# first. Called from the monthly pulse only, where the laws' modifier sums
+# are in place.
+te_jud_seed_score = {
+	if = {
+		limit = { NOT = { has_variable = te_judicial_independence } }
+		set_variable = {
+			name = te_judicial_independence
+			value = te_jud_seed_value
+		}
+	}
+	set_variable = te_jud_seeded
+}
+
+# The yearly step toward the ceiling (spec § 3.1): +4 below it, -10 above it,
+# stopping at it either way.
+te_jud_yearly_update = {
+	if = {
+		limit = { has_variable = te_judicial_independence }
+		if = {
+			limit = { var:te_judicial_independence < te_jud_ceiling }
+			change_variable = {
+				name = te_judicial_independence
+				add = 4
+			}
+			if = {
+				limit = { var:te_judicial_independence > te_jud_ceiling }
+				set_variable = {
+					name = te_judicial_independence
+					value = te_jud_ceiling
+				}
+			}
+		}
+		else_if = {
+			limit = { var:te_judicial_independence > te_jud_ceiling }
+			change_variable = {
+				name = te_judicial_independence
+				subtract = 10
+			}
+			if = {
+				limit = { var:te_judicial_independence < te_jud_ceiling }
+				set_variable = {
+					name = te_judicial_independence
+					value = te_jud_ceiling
+				}
+			}
+		}
+	}
+}
+
+# Spends AMOUNT of the score, floored at 0 (spec § 3.3). Callers wrap it in a
+# custom_tooltip naming the cost; the modifier follows at the next monthly
+# refresh.
+te_jud_spend = {
+	if = {
+		limit = { has_variable = te_judicial_independence }
+		change_variable = {
+			name = te_judicial_independence
+			subtract = $AMOUNT$
+		}
+		if = {
+			limit = { var:te_judicial_independence < 0 }
+			set_variable = {
+				name = te_judicial_independence
+				value = 0
+			}
+		}
+	}
+}
+
+# ROOT the country (te_jud_monthly, on_monthly_pulse_country). The ONLY
+# writer of the four scaled modifiers. Their multiplier variables are kept,
+# never removed: the engine re-reads them.
+te_jud_refresh = {
+	# The score (spec § 3.2).
+	if = {
+		limit = { has_variable = te_judicial_independence }
+		set_variable = {
+			name = te_jud_modifier_mult
+			value = te_jud_modifier_mult_value
+		}
+		if = {
+			limit = { has_modifier = te_judicial_independence }
+			remove_modifier = te_judicial_independence
+		}
+		if = {
+			limit = { var:te_jud_modifier_mult > 0 }
+			add_modifier = {
+				name = te_judicial_independence
+				multiplier = var:te_jud_modifier_mult
+			}
+		}
+	}
+	# Statutory Courts' two lines (spec § 2.3): legitimacy from votes under an
+	# elected government, authority without one. Each multiplier is the law's
+	# tooltip line, so 0 under any other court.
+	set_variable = {
+		name = te_jud_votes_mult
+		value = te_jud_votes_mult_value
+	}
+	set_variable = {
+		name = te_jud_authority_mult
+		value = te_jud_authority_mult_value
+	}
+	if = {
+		limit = { has_modifier = te_jud_votes_legitimacy }
+		remove_modifier = te_jud_votes_legitimacy
+	}
+	if = {
+		limit = { has_modifier = te_jud_unelected_authority }
+		remove_modifier = te_jud_unelected_authority
+	}
+	if = {
+		limit = {
+			te_jud_elected_government = yes
+			var:te_jud_votes_mult > 0
+		}
+		add_modifier = {
+			name = te_jud_votes_legitimacy
+			multiplier = var:te_jud_votes_mult
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { te_jud_elected_government = yes }
+			var:te_jud_authority_mult > 0
+		}
+		add_modifier = {
+			name = te_jud_unelected_authority
+			multiplier = var:te_jud_authority_mult
+		}
+	}
+	# Algorithmic Jurisprudence's capture (spec § 2.6).
+	set_variable = {
+		name = te_jud_capture_mult
+		value = te_jud_capture_mult_value
+	}
+	if = {
+		limit = { has_modifier = te_jud_algorithmic_capture }
+		remove_modifier = te_jud_algorithmic_capture
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_algorithmic_governance
+			var:te_jud_capture_mult > 0
+		}
+		add_modifier = {
+			name = te_jud_algorithmic_capture
+			multiplier = var:te_jud_capture_mult
+		}
+	}
+}
+
+# The starting court by rule (spec § 5): history, and an old save's one-time
+# seeding (te_repair_judiciary_seed). activate_law ignores unlock
+# technologies, as history does.
+te_jud_assign_court_by_rule = {
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_theocracy
+				AND = {
+					te_jud_is_islamic_state = yes
+					OR = {
+						has_law_or_variant = law_type:law_state_religion
+						has_law = law_type:law_freedom_of_conscience
+					}
+				}
+			}
+		}
+		activate_law = law_type:law_religious_courts
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_landed_voting
+				has_law = law_type:law_wealth_voting
+				has_law = law_type:law_census_voting
+				has_law = law_type:law_universal_suffrage
+			}
+		}
+		activate_law = law_type:law_statutory_courts
+	}
+	else = {
+		activate_law = law_type:law_executive_tribunals
+	}
+}
+
+# Once a game (spec § 9; CLAUDE.md "In-game checks"): does
+# currently_enacting_law resolve at on_law_enactment_started? Only a country
+# whose court challenges, and only while an enactment runs, so a missing link
+# can't read as OK. No line at all after such an enactment means the hook's
+# ROOT isn't the country.
+te_jud_selfcheck_enacting_scope = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jud_selfcheck_enacting_done }
+			enacting_any_law = yes
+			modifier:country_constitutional_law_enactment_success_add < 0
+			NOT = { te_jud_paper_court = yes }
+		}
+		set_global_variable = te_jud_selfcheck_enacting_done
+		if = {
+			limit = { exists = currently_enacting_law }
+			debug_log = "TE_SELF_CHECK OK judiciary_enacting_law_scope country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN judiciary_enacting_law_scope country=[THIS.GetCountry.GetNameNoFormatting] currently_enacting_law missing at on_law_enactment_started"
+		}
+	}
+}
