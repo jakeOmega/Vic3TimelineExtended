@@ -15676,6 +15676,7 @@ pm_space_colony_vacation = {
 # test_deep_sea_rebalance.py holds both orderings at base prices.
 pm_ocean_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	is_hidden_when_unavailable = yes
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15715,6 +15716,7 @@ pm_ocean_mine = {
 
 pm_advanced_ocean_mine  = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
 		advanced_nanofabrication
@@ -15759,6 +15761,7 @@ pm_advanced_ocean_mine  = {
 
 pm_automated_ocean_mine  = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p3.dds"
+	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -15789,6 +15792,140 @@ pm_automated_ocean_mine  = {
 			# Zero profit price multiplier: 0.34
 			# Employment: 10
 			# Wage breakeven: 5910.00
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_academics_add = 10
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+# Deep-Sea Mine with the Global Commons rule off (global_commons_disabled): the
+# methods as they were before § 1.1's rebalance, since an uncapped mine keeps
+# today's output (spec § 2.9: "uncapped as today"). The rule's settings switch
+# the two families with disable_pm_ flags (extra_game_rules.txt), so a building
+# shows one family only. pm_costs.py owns the cost comments.
+pm_ocean_mine_uncapped = {
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	is_hidden_when_unavailable = yes
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_motor_ships_add = 40                     # Price:   90, Total cost:  3600.0 (16.36%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.73%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (4.55%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (10.91%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (14.55%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (29.09%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (21.82%)
+			# Output goods
+			goods_output_lead_add = 260                          # Price:   40, Total cost: 10400.0 (36.88%)
+			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (17.73%)
+			goods_output_tech_metals_add = 100                   # Price:   80, Total cost:  8000.0 (28.37%)
+			goods_output_gold_add = 40                           # Price:  100, Total cost:  4000.0 (14.18%)
+			goods_output_iron_add = 20                           # Price:   40, Total cost:   800.0 (2.84%)
+			# Total input cost: 22000.0
+			# Total output cost: 28200.0
+			# Profit: 6200.0
+			# Profit margin: 28.18%
+			# Zero profit price multiplier: 0.78
+			# Employment: 2000
+			# Wage breakeven: 3.10
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_academics_add = 200
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_advanced_ocean_mine_uncapped = {
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		advanced_nanofabrication
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (7.06%)
+			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (5.10%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.35%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.92%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (9.41%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (12.55%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (25.10%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (18.82%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (15.69%)
+			# Output goods
+			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
+			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
+			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
+			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
+			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
+			# Total input cost: 25500.0
+			# Total output cost: 56400.0
+			# Profit: 30900.0
+			# Profit margin: 121.18%
+			# Zero profit price multiplier: 0.45
+			# Employment: 1000
+			# Wage breakeven: 30.90
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_engineers_add = 800
+			building_employment_academics_add = 200
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_automated_ocean_mine_uncapped = {
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p3.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		artificial_intelligence
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (5.94%)
+			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (4.29%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (1.98%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.30%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (7.92%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (10.56%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (21.12%)
+			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (31.68%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (13.20%)
+			# Output goods
+			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
+			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
+			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
+			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
+			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
+			# Total input cost: 30300.0
+			# Total output cost: 56400.0
+			# Profit: 26100.0
+			# Profit margin: 86.14%
+			# Zero profit price multiplier: 0.54
+			# Employment: 10
+			# Wage breakeven: 2610.00
 		}
 
 		level_scaled = {

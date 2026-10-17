@@ -4,16 +4,19 @@
 # common/production_methods/te_global_commons_logistics_pms.txt) cut its Launch Capacity input
 # with goods_input_launch_capacity_mult in building_modifiers.unscaled. Vanilla registers that
 # axis for six goods only; the mod registers this one (mod_entity_modifier_types.txt). The first
-# yearly pulse of a country with an Extraplanetary Base of level 3 or more on either upgrade
-# reads one such building's sum of the type:
+# monthly pulse of a country with an Extraplanetary Base of level 3 or more on either upgrade
+# arms the check on one such building; a month later, if it still qualifies, it reads that
+# building's sum of the type (a month, not the same day: a modifier sum can lag a day after a
+# method changes, CLAUDE.md "In-game checks"):
 #   OK      -0.65 to -0.25: one or two cuts of 30%, summed once per building
 #   BROKEN  about 0: the type is unknown to the engine or the block isn't summed, so the
 #           upgrades do nothing (debug.log then says "Unknown modifier type"); -0.9 or below:
 #           unscaled is read per level, and a large base would buy no Launch Capacity at all.
+# A building that no longer qualifies at the verdict re-arms the check.
 # Fallback: for 0, fix the registration; for a per-level sum, apply the cut as a static
 # modifier on the building from a yearly pulse instead (the Strategic Reserve hub's pattern).
 # Play-test rows: docs/testing/global-commons-playtest.md.
-on_yearly_pulse_country = {
+on_monthly_pulse_country = {
 	on_actions = {
 		te_gc_logistics_input_cut_selfcheck
 	}
@@ -22,37 +25,64 @@ on_yearly_pulse_country = {
 te_gc_logistics_input_cut_selfcheck = {
 	effect = {
 		if = {
-			limit = {
-				NOT = { has_global_variable = te_gc_logistics_input_cut_checked }
-				any_scope_building = {
-					level >= 3
-					OR = {
-						has_active_production_method = pm_tethered_launch_building_space_mine
-						has_active_production_method = pm_fusion_tugs_building_space_mine
+			limit = { NOT = { has_global_variable = te_gc_logistics_input_cut_checked } }
+			# The verdict, a month or more after arming, on the armed building.
+			if = {
+				limit = {
+					has_global_variable = te_gc_logistics_chk_armed
+					global_var:te_gc_logistics_chk_country ?= ROOT
+					te_history_month_index > global_var:te_gc_logistics_chk_armed
+				}
+				remove_global_variable = te_gc_logistics_chk_armed
+				global_var:te_gc_logistics_chk_building ?= {
+					if = {
+						limit = {
+							level >= 3
+							OR = {
+								has_active_production_method = pm_tethered_launch_building_space_mine
+								has_active_production_method = pm_fusion_tugs_building_space_mine
+							}
+						}
+						set_global_variable = te_gc_logistics_input_cut_checked
+						set_global_variable = { name = te_gc_logistics_chk_cut value = modifier:goods_input_launch_capacity_mult }
+						set_global_variable = { name = te_gc_logistics_chk_level value = level }
+						set_global_variable = { name = te_gc_logistics_chk_upgrades value = te_gc_logistics_active_upgrades }
+						if = {
+							limit = {
+								modifier:goods_input_launch_capacity_mult >= -0.65
+								modifier:goods_input_launch_capacity_mult <= -0.25
+							}
+							debug_log = "TE_SELF_CHECK OK logistics_input_cut (an Extraplanetary Base on upgrades=[SCOPE.ScriptValue('te_gc_logistics_chk_upgrades_g')|0] logistics upgrades reads goods_input_launch_capacity_mult=[SCOPE.ScriptValue('te_gc_logistics_chk_cut_g')|2] at level=[SCOPE.ScriptValue('te_gc_logistics_chk_level_g')|0]: the cut counts once per building)"
+						}
+						else = {
+							debug_log = "TE_SELF_CHECK BROKEN logistics_input_cut (an Extraplanetary Base on upgrades=[SCOPE.ScriptValue('te_gc_logistics_chk_upgrades_g')|0] logistics upgrades reads goods_input_launch_capacity_mult=[SCOPE.ScriptValue('te_gc_logistics_chk_cut_g')|2] at level=[SCOPE.ScriptValue('te_gc_logistics_chk_level_g')|0], not -0.3 per upgrade: about 0 means the type is unregistered or not summed, about -0.3 x upgrades x level means unscaled is read per level; see docs/testing/global-commons-playtest.md)"
+						}
 					}
 				}
 			}
-			set_global_variable = te_gc_logistics_input_cut_checked
-			random_scope_building = {
+			# Arm on one qualifying building of this country.
+			else_if = {
 				limit = {
-					level >= 3
-					OR = {
-						has_active_production_method = pm_tethered_launch_building_space_mine
-						has_active_production_method = pm_fusion_tugs_building_space_mine
+					NOT = { has_global_variable = te_gc_logistics_chk_armed }
+					any_scope_building = {
+						level >= 3
+						OR = {
+							has_active_production_method = pm_tethered_launch_building_space_mine
+							has_active_production_method = pm_fusion_tugs_building_space_mine
+						}
 					}
 				}
-				set_global_variable = { name = te_gc_logistics_chk_cut value = modifier:goods_input_launch_capacity_mult }
-				set_global_variable = { name = te_gc_logistics_chk_level value = level }
-				set_global_variable = { name = te_gc_logistics_chk_upgrades value = te_gc_logistics_active_upgrades }
-				if = {
+				set_global_variable = { name = te_gc_logistics_chk_armed value = te_history_month_index }
+				set_global_variable = { name = te_gc_logistics_chk_country value = ROOT }
+				random_scope_building = {
 					limit = {
-						modifier:goods_input_launch_capacity_mult >= -0.65
-						modifier:goods_input_launch_capacity_mult <= -0.25
+						level >= 3
+						OR = {
+							has_active_production_method = pm_tethered_launch_building_space_mine
+							has_active_production_method = pm_fusion_tugs_building_space_mine
+						}
 					}
-					debug_log = "TE_SELF_CHECK OK logistics_input_cut (an Extraplanetary Base on upgrades=[SCOPE.ScriptValue('te_gc_logistics_chk_upgrades_g')|0] logistics upgrades reads goods_input_launch_capacity_mult=[SCOPE.ScriptValue('te_gc_logistics_chk_cut_g')|2] at level=[SCOPE.ScriptValue('te_gc_logistics_chk_level_g')|0]: the cut counts once per building)"
-				}
-				else = {
-					debug_log = "TE_SELF_CHECK BROKEN logistics_input_cut (an Extraplanetary Base on upgrades=[SCOPE.ScriptValue('te_gc_logistics_chk_upgrades_g')|0] logistics upgrades reads goods_input_launch_capacity_mult=[SCOPE.ScriptValue('te_gc_logistics_chk_cut_g')|2] at level=[SCOPE.ScriptValue('te_gc_logistics_chk_level_g')|0], not -0.3 per upgrade: about 0 means the type is unregistered or not summed, about -0.3 x upgrades x level means unscaled is read per level; see docs/testing/global-commons-playtest.md)"
+					set_global_variable = { name = te_gc_logistics_chk_building value = THIS }
 				}
 			}
 		}

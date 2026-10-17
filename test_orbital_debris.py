@@ -183,7 +183,9 @@ class CleanupTest(unittest.TestCase):
                 self.assertIn(tech, block(body, "unlocking_technologies"))
                 country = block(block(body, "country_modifiers"), "workforce_scaled")
                 self.assertAlmostEqual(field(country, "country_orbital_debris_removal_add"), removal)
-                self.assertGreater(field(country, "country_prestige_add"), 0)
+                # The prestige is script's (te_debris_removal_method_prestige), so the
+                # group's most_productive gives the AI no reason to switch removal on.
+                self.assertNotIn("prestige", body)
                 goods = block(block(body, "building_modifiers"), "workforce_scaled")
                 self.assertEqual(field(goods, "goods_input_launch_capacity_add"), units)
                 self.assertEqual(number(self.values, mirror), units)
@@ -295,7 +297,8 @@ class WiringTest(unittest.TestCase):
         """te_orbital_debris and te_debris_cleaner_prestige are added in one place."""
         for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").rglob("*.txt")):
             text = strip_comments(read(path))
-            for name in ("te_orbital_debris", "te_debris_cleaner_prestige"):
+            for name in ("te_orbital_debris", "te_debris_cleaner_prestige",
+                         "te_debris_removal_method_prestige"):
                 hits = re.findall(rf"add_modifier = \{{ name = {name}\b", text)
                 if hits:
                     self.assertEqual(path, EFFECTS, f"{name} added in {path}")

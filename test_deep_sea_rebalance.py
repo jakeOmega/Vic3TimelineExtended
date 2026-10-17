@@ -40,6 +40,10 @@ LOGISTICS = {
 LOGISTICS_MODIFIER = "goods_input_launch_capacity_mult"
 LOGISTICS_CUT = -0.3
 LAND_TECH_METAL_MINE = "pm_smart_miners_building_tech_metals_mine"
+# The rebalance holds under the Global Commons rule; with it off the mine is uncapped
+# and keeps the methods it had before (spec § 2.9), its *_uncapped family.
+RULE, RULE_ON, RULE_OFF = "global_commons_rule", "global_commons_enabled", "global_commons_disabled"
+UNCAPPED = "_uncapped"
 
 
 def _unwrap(value):
@@ -81,6 +85,7 @@ class _Data:
         self.techs = _parse_dir("common", "technology", "technologies")
         self.values = _parse_dir("common", "script_values")
         self.modifier_types = _parse_dir("common", "modifier_type_definitions")
+        self.rules = _parse_dir("common", "game_rules")
         self._vanilla_techs = None
 
     def era(self, tech):
@@ -100,8 +105,17 @@ class _Data:
     def building_groups(self, building):
         return [str(g) for g in _list(self.buildings[building].get("production_method_groups"))]
 
-    def group_methods(self, group):
-        return [str(m) for m in _list(self.groups[group].get("production_methods"))]
+    def group_methods(self, group, setting=RULE_ON):
+        """The group's methods a game under `setting` of the Global Commons rule can use."""
+        off = self.rule_disabled(setting)
+        return [str(m) for m in _list(self.groups[group].get("production_methods"))
+                if str(m) not in off]
+
+    def rule_disabled(self, setting):
+        """The methods a setting of the Global Commons rule switches off (disable_pm_ flags)."""
+        body = _block(self.rules[RULE], setting)
+        flags = [str(_unwrap(f)) for f in _list(body.get("flag"))]
+        return {f[len("disable_"):] for f in flags if f.startswith("disable_pm_")}
 
     def base_group(self, building):
         return self.building_groups(building)[0]
@@ -228,6 +242,35 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
             return self.d.profit(pm) / self.d.value(pm, "input")
 
         self.assertLess(margin(base), margin(LAND_TECH_METAL_MINE))
+
+
+class RuleOffKeepsTheOldMine(unittest.TestCase):
+    """§ 2.9: with the Global Commons rule off the mine is uncapped, so it keeps the
+    pre-rebalance methods; the rule's two settings switch the families."""
+
+    def setUp(self):
+        self.d = _DATA
+        self.group = self.d.base_group(DEEP_SEA)
+        self.on = self.d.group_methods(self.group, RULE_ON)
+        self.off = self.d.group_methods(self.group, RULE_OFF)
+
+    def test_each_setting_shows_one_family(self):
+        self.assertTrue(self.on)
+        self.assertEqual(self.off, [pm + UNCAPPED for pm in self.on])
+        self.assertEqual(sorted(self.on + self.off), sorted(self.d.group_methods(self.group, None)))
+
+    def test_the_twins_differ_only_in_output_and_staff(self):
+        for capped, old in zip(self.on, self.off):
+            with self.subTest(method=capped):
+                for key in ("texture", "unlocking_technologies", "required_input_goods"):
+                    self.assertEqual(self.d.pms[capped].get(key), self.d.pms[old].get(key), key)
+                self.assertEqual(self.d.goods(capped, "input"), self.d.goods(old, "input"))
+                self.assertGreater(self.d.profit(capped), self.d.profit(old))
+
+    def test_every_method_hides_when_unavailable(self):
+        for pm in self.on + self.off:
+            with self.subTest(method=pm):
+                self.assertEqual(str(_unwrap(self.d.pms[pm].get("is_hidden_when_unavailable"))), "yes")
 
 
 class ExtraplanetaryBaseLogistics(unittest.TestCase):

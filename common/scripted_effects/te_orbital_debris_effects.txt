@@ -156,7 +156,8 @@ te_debris_refresh_penalty = {
 }
 
 # +1% prestige per 0.1 removal a month (spec § 6.4): cleanup is more than
-# charity. Scope: country
+# charity. Also the running method's own prestige. The one refresh site of
+# both. Scope: country
 te_debris_refresh_cleaner_prestige = {
 	if = {
 		limit = { has_modifier = te_debris_cleaner_prestige }
@@ -168,6 +169,16 @@ te_debris_refresh_cleaner_prestige = {
 			te_debris_cleaner_steps > 0
 		}
 		add_modifier = { name = te_debris_cleaner_prestige multiplier = te_debris_cleaner_steps }
+	}
+	# The method's own prestige (te_orbital_debris_pms.txt says why it isn't
+	# on the method).
+	if = {
+		limit = { has_modifier = te_debris_removal_method_prestige }
+		remove_modifier = te_debris_removal_method_prestige
+	}
+	if = {
+		limit = { te_debris_method_prestige > 0 }
+		add_modifier = { name = te_debris_removal_method_prestige multiplier = te_debris_method_prestige }
 	}
 }
 
@@ -184,9 +195,14 @@ te_debris_roll_ribbon_strike = {
 				level >= 1
 			}
 		}
+		# 10% × the chance in per mille = the chance in percent, with no
+		# fraction passed to random (te_debris_ribbon_permille).
 		random = {
-			chance = te_debris_ribbon_chance
-			trigger_event = { id = te_orbital_debris.1 }
+			chance = 10
+			random = {
+				chance = te_debris_ribbon_permille
+				trigger_event = { id = te_orbital_debris.1 }
+			}
 		}
 	}
 }
@@ -296,11 +312,14 @@ te_debris_activate_best_removal = {
 # ---- Self-check ---------------------------------------------------------------------
 
 # TE_SELF_CHECK debris_removal (docs/testing/global-commons-playtest.md):
-# the first month a Space Program runs a removal method with its staff in
-# place, its country's removal must read above 0. It rests on two unverified
-# facts: that a secondary method group's workforce-scaled country modifier
-# reaches the country, and that the registered type is read by
-# modifier:country_orbital_debris_removal_add. Once a game.
+# a Space Program that runs a removal method with its staff in place must give
+# its country removal above 0. It rests on two unverified facts: that a
+# secondary method group's workforce-scaled country modifier reaches the
+# country, and that the registered type is read by
+# modifier:country_orbital_debris_removal_add. Armed on the first such country,
+# the verdict a month later on that country (a modifier sum can lag a day after
+# a method changes, CLAUDE.md "In-game checks"); re-armed if it no longer
+# qualifies by then. Once a game.
 # Scope: any (the global pulse)
 te_debris_selfcheck_removal = {
 	if = {
@@ -310,29 +329,38 @@ te_debris_selfcheck_removal = {
 			# no method can run, and the building walk is skipped.
 			any_country = {
 				has_technology_researched = reusable_rocketry
-				any_scope_building = {
-					is_building_type = building_space_program
-					NOT = { has_active_production_method = pm_debris_removal_none }
-					occupancy >= 0.5
+				te_debris_selfcheck_qualifies = yes
+			}
+		}
+		if = {
+			limit = {
+				has_global_variable = te_debris_selfcheck_removal_armed
+				te_history_month_index > global_var:te_debris_selfcheck_removal_armed
+			}
+			remove_global_variable = te_debris_selfcheck_removal_armed
+			global_var:te_debris_selfcheck_removal_country ?= {
+				if = {
+					limit = { te_debris_selfcheck_qualifies = yes }
+					set_global_variable = { name = te_debris_selfcheck_removal_done value = 1 }
+					if = {
+						limit = { modifier:country_orbital_debris_removal_add > 0 }
+						debug_log = "TE_SELF_CHECK OK debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] world=[GetGlobalVariable('te_debris_removal_month').GetValue] date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] (a Space Program has run a removal method at half staff or more for a month, and its country removes nothing: the method's country modifier does not reach the country; take the fallback in docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
 				}
 			}
 		}
-		set_global_variable = { name = te_debris_selfcheck_removal_done value = 1 }
-		random_country = {
-			limit = {
-				has_technology_researched = reusable_rocketry
-				any_scope_building = {
-					is_building_type = building_space_program
-					NOT = { has_active_production_method = pm_debris_removal_none }
-					occupancy >= 0.5
+		else_if = {
+			limit = { NOT = { has_global_variable = te_debris_selfcheck_removal_armed } }
+			random_country = {
+				limit = {
+					has_technology_researched = reusable_rocketry
+					te_debris_selfcheck_qualifies = yes
 				}
-			}
-			if = {
-				limit = { modifier:country_orbital_debris_removal_add > 0 }
-				debug_log = "TE_SELF_CHECK OK debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] world=[GetGlobalVariable('te_debris_removal_month').GetValue] date=[TimeKeeper.GetCurrentDate.GetString]"
-			}
-			else = {
-				debug_log = "TE_SELF_CHECK BROKEN debris_removal country=[THIS.GetCountry.GetTagName] removal=[THIS.ScriptValue('te_debris_removal_country')|3] (a Space Program runs a removal method at half staff or more, and its country removes nothing: the method's country modifier does not reach the country; take the fallback in docs/testing/global-commons-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				set_global_variable = { name = te_debris_selfcheck_removal_armed value = te_history_month_index }
+				set_global_variable = { name = te_debris_selfcheck_removal_country value = THIS }
 			}
 		}
 	}

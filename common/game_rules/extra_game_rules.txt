@@ -488,9 +488,18 @@ global_commons_rule = {
 
 	global_commons_enabled = {
 		flag = global_commons_enabled
+		# The capped Deep-Sea Mine's methods (§ 1.1) only; the pre-rebalance
+		# family stays for the rule off (extra_pms.txt, *_uncapped).
+		flag = disable_pm_ocean_mine_uncapped
+		flag = disable_pm_advanced_ocean_mine_uncapped
+		flag = disable_pm_automated_ocean_mine_uncapped
 	}
 
 	global_commons_disabled = {
 		flag = global_commons_disabled
+		# Uncapped as today (§ 2.9): the Deep-Sea Mine keeps its old methods.
+		flag = disable_pm_ocean_mine
+		flag = disable_pm_advanced_ocean_mine
+		flag = disable_pm_automated_ocean_mine
 	}
 }

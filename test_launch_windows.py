@@ -453,8 +453,13 @@ class GateScriptTest(unittest.TestCase):
                     self.assertIn(f"has_global_variable = {var}", guard)
 
     def test_every_body_has_its_panel_lines(self):
-        loc = _raw("localization", "english", "te_global_commons_c_l_english.yml")
-        keys = set(re.findall(r"(?m)^ (\w+):0 ", loc))
+        # organize_loc files the keys by shape, so read every English loc file.
+        loc_dir = os.path.join(REPO, "localization", "english")
+        keys = set()
+        for name in sorted(os.listdir(loc_dir)):
+            if name.endswith(".yml"):
+                with open(os.path.join(loc_dir, name), encoding="utf-8-sig") as f:
+                    keys |= set(re.findall(r"(?m)^ (\w+):0 ", f.read()))
         for b in glw.BODIES:
             for kind in ("name", "line_open", "line_wait", "line_paid", "line_verdict"):
                 with self.subTest(body=b.key, kind=kind):

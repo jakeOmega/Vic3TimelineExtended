@@ -1008,6 +1008,10 @@ REPLACE_OR_CREATE:pmg_base_building_ocean_mine = {
 		pm_ocean_mine
 		pm_advanced_ocean_mine
 		pm_automated_ocean_mine
+		# Global Commons rule off (extra_game_rules.txt switches the families)
+		pm_ocean_mine_uncapped
+		pm_advanced_ocean_mine_uncapped
+		pm_automated_ocean_mine_uncapped
 	}
 }
 REPLACE_OR_CREATE:pmg_base_building_space_elevator_construction_site = {

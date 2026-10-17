@@ -29,6 +29,11 @@ pm_debris_removal_none = {
 	texture = "gfx/interface/icons/production_method_icons/no_automation.dds"
 }
 
+# Each method's prestige is not here but in te_debris_removal_method_prestige,
+# applied from script (te_debris_refresh_cleaner_prestige): the group's
+# ai_selection = most_productive would otherwise give the AI's building
+# manager a reason to switch removal on at any debris level, around the
+# decision te_decision_debris_removal and its index gate (spec § 6.4).
 pm_debris_active_removal = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p1.dds"
 
@@ -50,7 +55,6 @@ pm_debris_active_removal = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_orbital_debris_removal_add = 0.05
-			country_prestige_add = 50
 		}
 	}
 }
@@ -77,7 +81,6 @@ pm_debris_laser_broom = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_orbital_debris_removal_add = 0.15
-			country_prestige_add = 100
 		}
 	}
 }
@@ -103,7 +106,6 @@ pm_debris_fusion_sweepers = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_orbital_debris_removal_add = 0.5
-			country_prestige_add = 200
 		}
 	}
 }

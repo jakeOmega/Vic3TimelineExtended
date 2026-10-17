@@ -275,8 +275,10 @@ Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
 Capacity, and in era 12 two production method groups each cut that bill by 30%:
 Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (not
 an elevator of your own), and Transport in Space, whose Fusion Tugs need
-Muon-Catalyzed Fusion Reactors. A Mining Colony with both upgrades earns more
-per level than a Deep-Sea Mine.
+Muon-Catalyzed Fusion Reactors. A Mining Colony with Fusion Tugs already earns
+about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
+as much again. With the Global Commons rule off, the Deep-Sea Mine has no
+licences and keeps its older, smaller output.
 
 ### Seabed licences
 

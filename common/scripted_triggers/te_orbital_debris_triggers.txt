@@ -97,3 +97,13 @@ te_debris_best_removal_off = {
 		}
 	}
 }
+
+# The debris_removal self-check's subject: a Space Program running a removal
+# method at half staff or more (te_debris_selfcheck_removal). Scope: country
+te_debris_selfcheck_qualifies = {
+	any_scope_building = {
+		is_building_type = building_space_program
+		NOT = { has_active_production_method = pm_debris_removal_none }
+		occupancy >= 0.5
+	}
+}

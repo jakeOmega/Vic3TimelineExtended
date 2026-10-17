@@ -40,6 +40,13 @@ te_debris_cleaner_prestige = {
 	country_prestige_mult = 0.01
 }
 
+# The removal method's own prestige, +1 a unit; multiplier =
+# te_debris_method_prestige (50 / 100 / 200 by method).
+te_debris_removal_method_prestige = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_add = 1
+}
+
 te_orbital_network_disrupted = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
 	unit_offense_mult = -0.1

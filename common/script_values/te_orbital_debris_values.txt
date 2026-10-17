@@ -98,6 +98,11 @@ te_debris_removal_mult_cap = { value = 1 }
 # month: +1% per 0.1.
 te_debris_cleaner_steps_per_point = { value = 10 }
 
+# Each removal method's own prestige while it runs (te_debris_removal_method_prestige).
+te_debris_prestige_active = { value = 50 }
+te_debris_prestige_laser = { value = 100 }
+te_debris_prestige_fusion = { value = 200 }
+
 # Each removal method's weekly Launch Capacity, for the AI's bill. The methods
 # carry them as literals (te_orbital_debris_pms.txt).
 te_debris_units_active = { value = 300 }
@@ -224,6 +229,29 @@ te_debris_removal_world = {
 	}
 }
 
+# The prestige of the removal method the Space Program runs, for
+# te_debris_removal_method_prestige. Scope: country
+te_debris_method_prestige = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_space_program }
+			if = {
+				limit = { has_active_production_method = pm_debris_fusion_sweepers }
+				add = te_debris_prestige_fusion
+			}
+			else_if = {
+				limit = { has_active_production_method = pm_debris_laser_broom }
+				add = te_debris_prestige_laser
+			}
+			else_if = {
+				limit = { has_active_production_method = pm_debris_active_removal }
+				add = te_debris_prestige_active
+			}
+		}
+	}
+}
+
 # Steps of te_debris_cleaner_prestige. Scope: country
 te_debris_cleaner_steps = {
 	value = te_debris_removal_country
@@ -234,6 +262,15 @@ te_debris_cleaner_steps = {
 te_debris_ribbon_chance = {
 	value = te_debris_index
 	multiply = te_debris_ribbon_chance_per_point
+}
+
+# The same chance in whole per mille (10 to 20 from Hazardous up), for the
+# inner of the ribbon strike's two rolls: random's chance is never passed a
+# fraction (scripting_best_practices.md, "A Per-Mille Chance"). Scope: any
+te_debris_ribbon_permille = {
+	value = te_debris_ribbon_chance
+	multiply = 10
+	round = yes
 }
 
 # The AI's weekly bill for the best removal method it has: its Launch
