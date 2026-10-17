@@ -233,6 +233,15 @@ ideology_multicultural = {
 	non_interest_group_leader_weight = {
 		value = 0
 	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = strongly_disapprove
+		law_religious_courts = strongly_disapprove
+		law_statutory_courts = neutral
+		law_constitutional_review = approve
+		law_judicial_supremacy = strongly_approve
+		law_algorithmic_jurisprudence = disapprove
+	}
 }
 
 ideology_multicultural_ig = {
@@ -583,6 +592,15 @@ ideology_optimist_transhumanist = {
 			}
 		}
 	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = disapprove
+		law_religious_courts = strongly_disapprove
+		law_statutory_courts = approve
+		law_constitutional_review = approve
+		law_judicial_supremacy = disapprove
+		law_algorithmic_jurisprudence = strongly_approve
+	}
 }
 
 ideology_islamic_inheritance = {
@@ -599,6 +617,15 @@ ideology_islamic_inheritance = {
 		law_free_testation = disapprove
 		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
+	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = neutral
+		law_religious_courts = strongly_approve
+		law_statutory_courts = disapprove
+		law_constitutional_review = disapprove
+		law_judicial_supremacy = strongly_disapprove
+		law_algorithmic_jurisprudence = strongly_disapprove
 	}
 }
 
@@ -742,6 +769,15 @@ ideology_corporate = {
 				value = 2
 			}
 		}
+	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = disapprove
+		law_religious_courts = disapprove
+		law_statutory_courts = approve
+		law_constitutional_review = strongly_approve
+		law_judicial_supremacy = disapprove
+		law_algorithmic_jurisprudence = approve
 	}
 }
 
@@ -1913,6 +1949,15 @@ ideology_custom_religion_theocratic_society = {
 		law_migration_controls = neutral
 		law_closed_borders = strongly_approve
 	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = neutral
+		law_religious_courts = strongly_approve
+		law_statutory_courts = disapprove
+		law_constitutional_review = disapprove
+		law_judicial_supremacy = strongly_disapprove
+		law_algorithmic_jurisprudence = strongly_disapprove
+	}
 }
 
 
@@ -1993,6 +2038,15 @@ ideology_custom_religion_aristocratic_governance = {
 		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = strongly_approve
 	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = approve
+		law_religious_courts = neutral
+		law_statutory_courts = approve
+		law_constitutional_review = disapprove
+		law_judicial_supremacy = strongly_disapprove
+		law_algorithmic_jurisprudence = disapprove
+	}
 }
 
 ideology_custom_religion_technocratic_governance = {
@@ -2072,6 +2126,15 @@ ideology_custom_religion_technocratic_governance = {
 		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = approve
 	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = disapprove
+		law_religious_courts = strongly_disapprove
+		law_statutory_courts = approve
+		law_constitutional_review = approve
+		law_judicial_supremacy = disapprove
+		law_algorithmic_jurisprudence = strongly_approve
+	}
 }
 
 ideology_custom_religion_republican_governance = {
@@ -2150,6 +2213,15 @@ ideology_custom_religion_republican_governance = {
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = approve
+	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = strongly_disapprove
+		law_religious_courts = disapprove
+		law_statutory_courts = approve
+		law_constitutional_review = strongly_approve
+		law_judicial_supremacy = neutral
+		law_algorithmic_jurisprudence = disapprove
 	}
 }
 
@@ -2238,6 +2310,15 @@ ideology_custom_religion_corporate_governance = {
 		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = approve
 	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = disapprove
+		law_religious_courts = disapprove
+		law_statutory_courts = approve
+		law_constitutional_review = strongly_approve
+		law_judicial_supremacy = disapprove
+		law_algorithmic_jurisprudence = approve
+	}
 }
 
 ideology_custom_religion_imperial_cult_governance = {
@@ -2317,6 +2398,15 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = strongly_approve
 	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = strongly_approve
+		law_religious_courts = neutral
+		law_statutory_courts = disapprove
+		law_constitutional_review = strongly_disapprove
+		law_judicial_supremacy = strongly_disapprove
+		law_algorithmic_jurisprudence = neutral
+	}
 }
 
 ideology_custom_religion_theocratic_governance = {
@@ -2395,6 +2485,15 @@ ideology_custom_religion_theocratic_governance = {
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = strongly_approve
+	}
+
+	lawgroup_judiciary = {
+		law_executive_tribunals = neutral
+		law_religious_courts = strongly_approve
+		law_statutory_courts = disapprove
+		law_constitutional_review = disapprove
+		law_judicial_supremacy = strongly_disapprove
+		law_algorithmic_jurisprudence = strongly_disapprove
 	}
 }
 

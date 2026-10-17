@@ -504,5 +504,65 @@ class SpendTest(unittest.TestCase):
             self.assertIn(key, keys)
 
 
+IDEOLOGY_FILES = sorted(glob.glob(os.path.join(REPO, "common", "ideologies", "*.txt")))
+CONSISTENCY = os.path.join(REPO, "common", "scripted_effects", "extra_law_consistency_generated.txt")
+VANILLA_IDEOLOGIES = os.path.join(REPO, "vanilla_parsed", "common", "ideologies.json")
+
+# Spec § 7, mod ideologies written by hand in extra_ideologies.txt.
+MOD_STANCES = {
+    "ideology_islamic_inheritance": "religious",
+    "ideology_corporate": "market",
+    "ideology_multicultural": "rights",
+    "ideology_optimist_transhumanist": "technocratic",
+    "ideology_custom_religion_theocratic_governance": "religious",
+    "ideology_custom_religion_theocratic_society": "religious",
+    "ideology_custom_religion_technocratic_governance": "technocratic",
+    "ideology_custom_religion_republican_governance": "liberal",
+    "ideology_custom_religion_aristocratic_governance": "traditional",
+    "ideology_custom_religion_corporate_governance": "market",
+    "ideology_custom_religion_imperial_cult_governance": "absolutist",
+}
+
+
+class StancesTest(unittest.TestCase):
+    def test_lists_name_all_six_laws(self):
+        import ideology_modifications as im
+        for name, stances in im.JUDICIARY_LISTS.items():
+            self.assertEqual(tuple(law for law, _ in stances), COURT_LAWS, name)
+
+    def test_vanilla_keys_exist(self):
+        import ideology_modifications as im
+        with open(VANILLA_IDEOLOGIES, encoding="utf-8") as fh:
+            vanilla = set(json.load(fh))
+        self.assertLessEqual(set(im.JUDICIARY_STANCES), vanilla)
+        for ideology, name in im.JUDICIARY_STANCES.items():
+            self.assertEqual(im.modifications[ideology]["lawgroup_judiciary"], im.JUDICIARY_LISTS[name], ideology)
+
+    def test_every_block_in_script_names_all_six(self):
+        seen = set()
+        for path in IDEOLOGY_FILES:
+            for key, node in _parse(path).items():
+                body = _body(node)
+                if isinstance(body, dict) and "lawgroup_judiciary" in body:
+                    block = _body(body["lawgroup_judiciary"])
+                    self.assertEqual(set(block), set(COURT_LAWS), key)
+                    seen.add(key.split(":")[-1])
+        import ideology_modifications as im
+        self.assertLessEqual(set(im.JUDICIARY_STANCES) | set(MOD_STANCES), seen)
+
+    def test_mod_ideologies_use_their_lists(self):
+        import ideology_modifications as im
+        data = _parse(os.path.join(REPO, "common", "ideologies", "extra_ideologies.txt"))
+        for ideology, name in MOD_STANCES.items():
+            block = {k: _body(v) for k, v in _body(_body(data[ideology])["lawgroup_judiciary"]).items()}
+            self.assertEqual(block, dict(im.JUDICIARY_LISTS[name]), ideology)
+
+    def test_religious_courts_fall_to_statutory(self):
+        block = _block(_read(CONSISTENCY), "te_fix_inconsistent_lawgroup_judiciary")
+        religious = block[block.index("law_type:law_religious_courts"):]
+        self.assertLess(religious.index("law_type:law_statutory_courts"),
+                        religious.index("law_type:law_executive_tribunals"))
+
+
 if __name__ == "__main__":
     unittest.main()
