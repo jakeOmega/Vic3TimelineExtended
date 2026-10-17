@@ -635,7 +635,8 @@ def working_ages_end(inp, old_age):
     if kind == 1:
         return (P.PENSION_AGE["standard"] if inp.pension_age is None else inp.pension_age), True, True
     if kind == 2:
-        return old_age, True, False
+        # an old age at or past LX_OLD_AGE_NONE is the panel's None: no age has fifteen years left, so no end
+        return (old_age if old_age < P.LX_OLD_AGE_NONE else float(P.NO_WORKING_AGE_END)), True, False
     return float(P.NO_WORKING_AGE_END), False, False
 
 

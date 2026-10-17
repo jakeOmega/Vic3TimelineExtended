@@ -999,6 +999,11 @@ te_demog_work_setup = {
 			limit = { local_var:te_dg_wa_oa >= 0 }
 			set_local_variable = { name = te_dg_wa_end value = local_var:te_dg_wa_oa }
 		}
+		# the panel's None (no age has fifteen years left): no end, as with no pension law
+		if = {
+			limit = { local_var:te_dg_wa_end >= te_demog_k_lx_old_age_none }
+			set_local_variable = { name = te_dg_wa_end value = 999 }
+		}
 		set_local_variable = { name = te_dg_pens_on value = 1 }
 	}
 	# te_demog_slot_births's two-term form reads these (not while the schedules are one)
