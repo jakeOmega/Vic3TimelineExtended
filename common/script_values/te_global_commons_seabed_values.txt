@@ -62,12 +62,14 @@ te_seabed_station_weight = 5
 # Unilateral Licensing, or the Scramble regime for everyone: navy × this.
 te_seabed_assertive_navy_mult = 2
 # The navy term is naval power projection ÷ this (seabed claims spec § 6.1), so
-# a typical fleet's term stays near its old flotilla count beside the coast
-# and port terms. A first estimate: vanilla scales the navy's power
-# projection modifiers up to 1,000 (NAVY_POWER_PROJECTION_MODIFIER_MAX_SCALING).
-# Set it from the median ratio the seabed_power_projection self-check logs
+# a typical fleet's term stays near its old count of ships (navy_size) beside
+# the coast and port terms. Each ship projects its ship_power_projection_add:
+# 35-465 for vanilla's hulls, 75-1,350 for the mod's era-10 to 12 ones
+# (common/ship_types/extra_ship_types.txt), so an era-11 fleet, when Abyssal
+# Plain Mining comes, averages about 300 a ship. A first estimate: set it from
+# the median ratio the seabed_power_projection self-check logs
 # (docs/testing/global-commons-playtest.md).
-te_seabed_power_projection_scale = 5
+te_seabed_power_projection_scale = 300
 # Policy factors (§ 2.5).
 te_seabed_policy_factor_survey = 0.25
 te_seabed_policy_factor_sponsor = 1

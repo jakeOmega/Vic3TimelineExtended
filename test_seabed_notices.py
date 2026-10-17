@@ -68,10 +68,18 @@ class SeabedNoticeTest(unittest.TestCase):
         self.assertIn("NOT = { has_variable = te_seabed_claimed_$B$ }", body)
         self.assertIn("save_scope_as = te_seabed_newcomer", body)
         receivers = body[body.index("save_scope_as = te_seabed_newcomer"):]
-        for term in ("NOT = { this = scope:te_seabed_newcomer }", "NOT = { is_country_type = decentralized }",
+        for term in ("NOT = { this = scope:te_seabed_newcomer }", "is_ai = no",
                      "has_variable = te_seabed_claimed_$B$", "var:te_seabed_ent_$B$ > 0",
                      "post_notification = te_seabed_new_claimant_notice_$B$"):
             self.assertIn(term, receivers)
+
+    def test_new_claimant_receivers_have_home_coast_there(self):
+        """Review I2: a distant share in every basin made a great power hear of
+        every newcomer about four times; only a basin we have coast on counts."""
+        body = strip_comments(block(read(EFFECTS), "te_seabed_claimant_notice"))
+        receivers = body[body.index("save_scope_as = te_seabed_newcomer"):]
+        self.assertRegex(receivers, r"has_variable = te_seabed_coast_\$B\$\s*var:te_seabed_coast_\$B\$ > 0[\s\S]*"
+                                    r"post_notification = te_seabed_new_claimant_notice_\$B\$")
 
     def test_first_sharing_only_marks(self):
         """An old save's first sharing with this code, or a new game's first,
@@ -102,8 +110,13 @@ class SeabedNoticeTest(unittest.TestCase):
                         full.index("remove_global_variable = te_seabed_full_$B$"))
 
     def test_full_notice_to_claimants_there(self):
+        """Review I3: when a basin is full every share equals its holdings, so
+        a share alone missed the coastal claimant with no mines there yet,
+        the reader the notice is written for."""
         body = strip_comments(block(read(EFFECTS), "te_seabed_world_totals"))
-        self.assertRegex(body, r"var:te_seabed_ent_\$B\$ > 0\s*\}\s*post_notification = te_seabed_basin_full_notice_\$B\$")
+        full = body[body.index("set_global_variable = te_seabed_full_$B$"):body.index("post_notification = te_seabed_basin_full_notice_$B$")]
+        self.assertIn("is_ai = no", full)
+        self.assertRegex(full, r"OR = \{[\s\S]*var:te_seabed_ent_\$B\$ > 0[\s\S]*var:te_seabed_coast_\$B\$ > 0")
 
     def test_messages(self):
         text = read(MESSAGES)
@@ -114,6 +127,10 @@ class SeabedNoticeTest(unittest.TestCase):
             body = block(text, name)
             self.assertIn("type = country", body, name)
             self.assertIn("notification_type = feed", body, name)
+            # Review I2: a group lists them in Message Settings, so a player can mute them.
+            self.assertIn('group = "te_seabed_notification_group"', body, name)
+        self.assertRegex(read("localization/english/te_miscellaneous_l_english.yml") + read(NOTIF_LOC),
+                         re.compile(r'^ te_seabed_notification_group:0 "', re.M))
 
     def test_loc(self):
         loc = read(NOTIF_LOC)

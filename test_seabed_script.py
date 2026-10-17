@@ -743,7 +743,10 @@ class NavyMeasureTest(unittest.TestCase):
         self.assertNotIn("navy_size", body)
 
     def test_scale_constant(self):
-        self.assertEqual(literal(read(VALUES), "te_seabed_power_projection_scale"), 5)
+        """Review I1: vanilla ships project 35-465 each and the mod's late ones
+        75-1,350, while navy_size counts ships; 300, the era-11 hull average,
+        keeps the navy term near the old flotilla count."""
+        self.assertEqual(literal(read(VALUES), "te_seabed_power_projection_scale"), 300)
 
     def test_self_check_excludes_no_navy(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_power_projection_check"))
@@ -781,6 +784,15 @@ class NavyMeasureTest(unittest.TestCase):
     def test_fallback_is_named(self):
         with open(os.path.join(REPO, "docs/testing/global-commons-playtest.md"), encoding="utf-8") as f:
             self.assertIn("seabed_power_projection", f.read())
+
+    def test_concept_names_power_projection(self):
+        """Review M1: the licence concept described the weight with \"navy\" and
+        \"incorporated coastal states\"."""
+        loc = read("localization/english/te_concepts_l_english.yml")
+        line = re.search(r"^ concept_seabed_licence_desc:0 \"(.*)\"$", loc, re.M).group(1)
+        self.assertIn("naval power projection", line)
+        self.assertNotIn("our navy", line)
+        self.assertNotIn("incorporated coastal states", line)
 
 
 class BlockadeTest(unittest.TestCase):

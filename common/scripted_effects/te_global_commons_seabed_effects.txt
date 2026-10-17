@@ -2883,9 +2883,11 @@ te_seabed_world_totals = {
 	}
 	set_global_variable = { name = te_seabed_noshare_$B$ value = 0 }
 	set_global_variable = { name = te_seabed_cap_stamped_noshare value = 0 }
-	# The basin fully licensed (seabed claims spec § 7): told to every country
-	# with a share there once each time the world's licences reach the pool,
-	# and re-armed only when they fall below it.
+	# The basin fully licensed (seabed claims spec § 7): told once each time the
+	# world's licences reach the pool, and re-armed only when they fall below
+	# it, to every player with a share there or coast on it. A full basin's
+	# shares equal their holdings, so a share alone would miss a coastal
+	# claimant with no mines there yet (review I3).
 	if = {
 		limit = { global_var:te_seabed_records_$B$ >= te_seabed_pool_$B$ }
 		if = {
@@ -2893,10 +2895,18 @@ te_seabed_world_totals = {
 			set_global_variable = te_seabed_full_$B$
 			every_country = {
 				limit = {
-					NOT = { is_country_type = decentralized }
+					is_ai = no
 					has_variable = te_seabed_shared
-					has_variable = te_seabed_ent_$B$
-					var:te_seabed_ent_$B$ > 0
+					OR = {
+						AND = {
+							has_variable = te_seabed_ent_$B$
+							var:te_seabed_ent_$B$ > 0
+						}
+						AND = {
+							has_variable = te_seabed_coast_$B$
+							var:te_seabed_coast_$B$ > 0
+						}
+					}
 				}
 				post_notification = te_seabed_basin_full_notice_$B$
 			}
@@ -2910,9 +2920,12 @@ te_seabed_world_totals = {
 
 # No scope, after the sharing's leases and pacts (seabed claims spec § 7): in
 # each basin, a country this sharing first gives a share (te_seabed_ent above
-# 0 and no te_seabed_claimed mark yet) is told to every other country with a
-# share there since an earlier sharing; then every country with a share is
-# marked, for good, so one that loses its share and wins it back isn't new.
+# 0 and no te_seabed_claimed mark yet) is told to every other player with a
+# share there since an earlier sharing and coast on the basin (review I2: a
+# distant share in every basin had a great power hear of each newcomer about
+# four times; the message group lets a player mute the rest); then every
+# country with a share is marked, for good, so one that loses its share and
+# wins it back isn't new.
 # The first sharing this runs, a new game's first or an old save's first since
 # the notices came in, only marks: every share is new then.
 te_seabed_claimant_notices = {
@@ -2946,10 +2959,12 @@ te_seabed_claimant_notice = {
 		every_country = {
 			limit = {
 				NOT = { this = scope:te_seabed_newcomer }
-				NOT = { is_country_type = decentralized }
+				is_ai = no
 				has_variable = te_seabed_claimed_$B$
 				has_variable = te_seabed_ent_$B$
 				var:te_seabed_ent_$B$ > 0
+				has_variable = te_seabed_coast_$B$
+				var:te_seabed_coast_$B$ > 0
 			}
 			post_notification = te_seabed_new_claimant_notice_$B$
 		}

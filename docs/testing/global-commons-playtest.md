@@ -224,7 +224,7 @@ navy, and says BROKEN only when all of them read 0.
     leasing out almost all their claims as soon as they have the technology (nothing queued yet).
 27. **Naval power projection in the claim weight** (seabed claims spec § 6.1). Hover a home basin's
     weight: the naval term's figure is the military panel's naval power projection (twice it under
-    Unilateral Licensing or a scramble), divided by the scale. The "+1 licence" cell reads in the
+    Unilateral Licensing or a scramble), divided by the scale (300). The "+1 licence" cell reads in the
     same units. Build or modernise ships: the term rises at the next sharing; a large obsolete fleet
     should now weigh less than a smaller modern one. Read the `seabed_power_projection` lines first.
 28. **A blockade cuts the Deep-Sea Mine** (seabed claims spec § 6.2). The building is now
@@ -249,11 +249,13 @@ navy, and says BROKEN only when all of them read 0.
     landlocked country's if we have no coast), and no "turning to the ocean floor" headline for the
     research. With the Global Commons rule off the headline comes as before and no event. An old
     save past its first sharing gets nothing. (b) A later country's first share in
-    a basin where we have one: "A New Claimant in the <Basin> Ocean", naming it; nothing at the
-    game's first sharing, nor when a country wins back a share it lost. When two countries win their
+    a basin on our coast where we have one: "A New Claimant in the <Basin> Ocean", naming it;
+    nothing for a basin we only claim from afar, nothing at the game's first sharing, nor when a
+    country wins back a share it lost. Message Settings lists both notices under Seabed Licences,
+    and muting them works. When two countries win their
     first share at one sharing, check each notice names its own country (the scope is saved again
     for each). (c) A basin's licences all held: "The <Basin> Ocean Is Fully Licensed" to each
-    country with a share there, once; destroy or downsize a level and refill it for the second.
+    player with a share there or coast on it (one with coast and no mines there too), once; destroy or downsize a level and refill it for the second.
 
 ### Engine facts the build assumes, unverified
 
