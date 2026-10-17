@@ -478,5 +478,31 @@ class ShockTest(unittest.TestCase):
         self.assertIn("te_jud_overhaul_gap >= 20", trigger)
 
 
+MINOR_EVENTS = os.path.join(REPO, "events", "minor_events.txt")
+TAX_OFFER = os.path.join(REPO, "common", "scripted_effects", "te_tax_offer_effects.txt")
+
+
+class SpendTest(unittest.TestCase):
+    def test_forceful_legislation_spends_and_says_so(self):
+        event = _block(_read(MINOR_EVENTS), "minor_events_timelineextended.2")
+        options = re.split(r"\n\toption = \{", event)[1:]
+        by_name = {re.search(r"name = (\S+)", o).group(1): o for o in options}
+        for name, amount, key in (("minor_events_timelineextended.2.b", 5, "te_jud_spend_small_tt"),
+                                  ("minor_events_timelineextended.2.c", 10, "te_jud_spend_medium_tt"),
+                                  ("minor_events_timelineextended.2.e", 20, "te_jud_spend_large_tt")):
+            self.assertRegex(by_name[name],
+                             r"custom_tooltip = \{\s*text = %s\s*te_jud_spend = \{ AMOUNT = %d \}" % (key, amount), name)
+        self.assertNotIn("te_jud_spend", by_name["minor_events_timelineextended.2.a"])
+
+    def test_tax_force_through_spends(self):
+        block = _block(_read(TAX_OFFER), "te_tax_force_into")
+        self.assertIn("te_jud_spend = { AMOUNT = 10 }", block)
+
+    def test_loc(self):
+        keys = _loc_keys()
+        for key in ("te_jud_spend_small_tt", "te_jud_spend_medium_tt", "te_jud_spend_large_tt"):
+            self.assertIn(key, keys)
+
+
 if __name__ == "__main__":
     unittest.main()

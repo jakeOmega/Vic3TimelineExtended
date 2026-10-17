@@ -86,6 +86,10 @@ minor_events_timelineextended.2 = {
 		add_enactment_modifier = {
 			name = forced_law_through_event_enactment_small
 		}
+		custom_tooltip = {
+			text = te_jud_spend_small_tt
+			te_jud_spend = { AMOUNT = 5 }
+		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -125,6 +129,10 @@ minor_events_timelineextended.2 = {
 		add_enactment_modifier = {
 			name = forced_law_through_event_enactment_medium
 		}
+		custom_tooltip = {
+			text = te_jud_spend_medium_tt
+			te_jud_spend = { AMOUNT = 10 }
+		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -163,6 +171,10 @@ minor_events_timelineextended.2 = {
 		}
 		add_enactment_modifier = {
 			name = forced_law_through_event_enactment_large
+		}
+		custom_tooltip = {
+			text = te_jud_spend_large_tt
+			te_jud_spend = { AMOUNT = 20 }
 		}
 		add_enactment_phase = 1
 		add_radicals = {
