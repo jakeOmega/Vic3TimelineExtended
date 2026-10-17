@@ -14,7 +14,8 @@ THE STATE (as the script keeps it)
   te_seabed_held_<basin> (records in its states, refreshed yearly),
   te_seabed_w_<basin> (claim weight), te_seabed_ent_<basin> (entitlement),
   te_seabed_policy (1 Survey, 2 Sponsor, 3 Unilateral), te_seabed_floor_<basin>
-  (the share a sharing may not go below, fixed at the year's first sharing).
+  (the share a sharing may not go below, fixed at the year's first sharing),
+  te_seabed_relinq_<basin> (1 = relinquished: weight 0 there until Claim Again).
 - Global: te_seabed_regime (1 Open, 2 Regulated, 3 Scramble).
 
 ONE DEPARTURE FROM THE SPEC'S WORDING (decided by the builder): a level is
@@ -119,6 +120,7 @@ class Country:
     ent: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
     weight: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0.0))
     floor: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))   # te_seabed_floor_<basin>; 0 = none
+    relinquished: dict = field(default_factory=lambda: dict.fromkeys(BASINS, False))   # te_seabed_relinq_<basin>
 
 
 @dataclass
@@ -361,7 +363,28 @@ def compute_weights(world: World, cid) -> dict:
         w["southern"] += STATION_WEIGHT
     if c.barred:
         w["southern"] = 0
+    for b in BASINS:
+        if c.relinquished[b]:
+            w[b] = 0
     return w
+
+
+def relinquish(world: World, cid, b: str) -> None:
+    """te_seabed_relinquish (the basin's Relinquish button, seabed claims spec
+    § 2.5): the country's claims in basin b go at once, its floor there with
+    them, and its weight there is 0 at every sharing until it claims again.
+    Licences on its levels stay. It never sets te_seabed_reshare: the freed
+    claims wait for the next sharing something else brings about."""
+    c = world.countries[cid]
+    c.unbuilt[b] = 0
+    c.floor[b] = 0
+    c.relinquished[b] = True
+
+
+def claim_again(world: World, cid, b: str) -> None:
+    """te_seabed_claim_again: the country claims basin b again from the next
+    sharing; nothing comes back before it."""
+    world.countries[cid].relinquished[b] = False
 
 
 def share_basin(world: World, b: str, part: list) -> dict:

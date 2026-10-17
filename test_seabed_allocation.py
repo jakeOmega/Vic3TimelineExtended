@@ -620,5 +620,78 @@ class FloorTest(unittest.TestCase):
                 check(self, world, "pass")
 
 
+class RelinquishTest(unittest.TestCase):
+    """Relinquish and Claim Again (seabed claims spec § 2.5)."""
+
+    def _world(self):
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        w.states[0].levels = 3
+        m.record_country(w, 0)
+        m.yearly_pass(w)                                        # a floor is stored
+        return w
+
+    def test_relinquish_drops_claims_now_and_keeps_licences(self):
+        w = self._world()
+        self.assertGreater(w.countries[0].unbuilt["pacific"], 0)
+        self.assertGreater(w.countries[0].floor["pacific"], 3)
+        m.relinquish(w, 0, "pacific")
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
+        self.assertEqual(w.basin_records("pacific"), 3)
+        self.assertEqual(w.countries[0].floor["pacific"], 0)
+        self.assertGreater(w.countries[0].unbuilt["atlantic"], 0)      # other basins untouched
+
+    def test_no_weight_until_claim_again(self):
+        w = self._world()
+        m.relinquish(w, 0, "pacific")
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].weight["pacific"], 0)
+        self.assertEqual(w.countries[0].ent["pacific"], w.countries[0].held["pacific"])
+        self.assertGreater(w.countries[0].weight["atlantic"], 0)
+        m.claim_again(w, 0, "pacific")
+        m.yearly_pass(w)
+        self.assertGreater(w.countries[0].weight["pacific"], 0)
+        self.assertGreater(w.countries[0].unbuilt["pacific"], 0)
+
+    def test_the_freed_claims_wait_for_the_next_sharing(self):
+        w = self._world()
+        rival = w.countries[1].unbuilt["pacific"]
+        m.relinquish(w, 0, "pacific")
+        m.record_country(w, 1)
+        self.assertEqual(w.countries[1].unbuilt["pacific"], rival)
+        m.yearly_pass(w)
+        self.assertGreater(w.countries[1].unbuilt["pacific"], rival)
+
+    def test_relinquish_never_pays(self):
+        """Two copies of a world, driven by generators seeded alike, differ
+        only in that one country relinquishes a basin and claims it again
+        before the next sharing (January's or a mid-year one): it never ends
+        that sharing with more."""
+        import copy
+        worse = 0
+        for i in range(200):
+            rng = random.Random(9500 + i)
+            world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
+            run(world, rng, 1, annex=0, split=0)
+            other = copy.deepcopy(world)
+            ra, rb = random.Random(i), random.Random(i)
+            for _ in range(12):
+                m.step_month(world, ra, annex=0, split=0)
+                m.step_month(other, rb, annex=0, split=0)
+            cid = rng.randrange(len(world.countries))
+            b = rng.choice(m.BASINS)
+            m.relinquish(world, cid, b)
+            m.claim_again(world, cid, b)
+            first = i % 2 == 0
+            m.yearly_pass(world, first_of_year=first)
+            m.yearly_pass(other, first_of_year=first)
+            mine, theirs = world.countries[cid], other.countries[cid]
+            self.assertLessEqual(mine.ent[b], theirs.ent[b], (i, cid, b))
+            self.assertLessEqual(sum(mine.ent.values()), sum(theirs.ent.values()), (i, cid, b))
+            worse += mine.ent[b] < theirs.ent[b]
+        self.assertGreater(worse, 0)
+
+
 if __name__ == "__main__":
     unittest.main()
