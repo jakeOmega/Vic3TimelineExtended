@@ -82,6 +82,7 @@ OTHER_TOPICS = {
     "observer_request": "observer_request", "food_reserve": "food_reserve",
     "ceasefire": "ceasefire", "development_fund": "development_fund",
     "referendum": "referendum", "reform_1": "reform", "reform_2": "reform",
+    "lift_sanctions": "lift_sanctions",
 }
 PROPOSE = {c.key: c.key for c in CONVENTIONS} | OTHER_TOPICS
 
@@ -215,6 +216,18 @@ class HandTypedFiguresTest(unittest.TestCase):
         self.assertIn(f"loses {_fmt(_script_value(order, 'un_cf_fight_on_loss'))} standing, "
                       f"or {_fmt(_script_value(order, 'un_cf_fight_on_accepted_loss'))}", terms)
         self.assertIn(f"falls once by {_fmt(_script_value(order, 'un_cf_call_hit_base'))} (scaled)", terms)
+
+    def test_lift_sanctions_figures(self):
+        dossier = "common/script_values/un_dossier_values.txt"
+        justice = "common/script_values/un_justice_values.txt"
+        case = _fmt(_script_value(dossier, "un_case_threshold_sanctions"))
+        self.assertEqual(_script_value(justice, "un_lift_fresh_months"), 60)
+        terms = LOC["je_un_terms_lift_sanctions"]
+        self.assertIn(f"below the {case} that supports sanctions", terms)
+        self.assertIn("stood less than five years", terms)
+        desc = LOC["UN_PROPOSE_LIFT_SANCTIONS_DESC"]
+        self.assertIn(f"a case strength of {case}", desc)
+        self.assertIn("stood less than five years", desc)
 
     def test_failure_costs_influence_not_prestige(self):
         mods = _read("common", "static_modifiers", "extra_modifiers.txt")

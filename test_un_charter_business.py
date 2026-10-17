@@ -2,7 +2,8 @@
 """The charter's new business (redesign phase 7): every hook the shared UN
 machinery calls for the nine phase 7 decisions, requests and institutions
 exists, and every topic is wired the way docs/systems/un_redesign_design.md
-§0.12 says.
+§0.12 says. The petition to lift sanctions (§0.12a) uses the same hooks and is
+checked with them.
 
 The two phase 7 conventions (cultural_diversity, nuclear_ban) are in
 test_un_convention_registry.py's CONVENTIONS with the other conventions.
@@ -68,6 +69,9 @@ TOPICS = (
     # No reform since 2026-10-02: a reform strengthens a standing Fund instead.
     Topic("development_fund", 0, False, False, False, False, False, False, False, False),
     Topic("referendum", 2, True, True, False, False, True, True, False, True),
+    # §0.12a (2026-10-16): the sanctioned country's petition. Its proposer is
+    # its target, so it names no one and helps its target.
+    Topic("lift_sanctions", 0, True, True, False, False, False, False, True, False),
 )
 KEYS = tuple(t.key for t in TOPICS)
 
@@ -279,11 +283,12 @@ class ReformInViewTests(unittest.TestCase):
     """Only the next reform's business shows: a Reform II row is hidden until
     Reform I carries, a Reform I row never is (owner's ruling, §0.12)."""
 
-    # Chamber op of each phase 7 topic, conventions included, and its reform.
+    # Chamber op of each phase 7 topic, conventions included, and its reform;
+    # and the petition to lift sanctions (§0.12a).
     OPS = {18: ("cultural_diversity", 1), 19: ("nuclear_ban", 2), 20: ("court_referral", 1),
            21: ("arms_embargo", 1), 22: ("credentials", 1), 23: ("standing_force", 1),
            24: ("observer_request", 1), 25: ("food_reserve", 0), 26: ("ceasefire", 2),
-           27: ("development_fund", 0), 28: ("referendum", 2)}
+           27: ("development_fund", 0), 28: ("referendum", 2), 30: ("lift_sanctions", 0)}
 
     def _rows(self):
         """{op: the row's own `visible` line, or ""} for the proposal rows."""

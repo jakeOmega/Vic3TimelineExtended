@@ -1253,13 +1253,15 @@ un_chamber_vote_sgui = {
 #   op 26  Binding Ceasefire (phase 7, Reform II)
 #   op 27  Establish the World Development Fund (phase 7, no reform)
 #   op 28  Supervised Self-Determination Referendum (phase 7, Reform II)
+#   op 29  Single Convention on Narcotic Drugs
+#   op 30  Lift the Sanctions Against Us (§0.12a, no reform)
 #
 # The op table is repeated in the widget and in the row renderers in
 # common/scripted_effects/un_chamber_display_effects.txt; keep all three in
 # step (test_un_chamber_propose_ops.py checks that they are). Every gate and
 # every effect is shared through common/scripted_triggers/un_propose_triggers.txt
-# and common/scripted_effects/un_propose_effects.txt: ops 0-6 and 20-28 with
-# the journal-entry buttons, so a human proposing here and an AI proposing
+# and common/scripted_effects/un_propose_effects.txt: ops 0-6, 20-28 and 30
+# with the journal-entry buttons, so a human proposing here and an AI proposing
 # through the button grid run identical script; ops 7-19 and 29 with the docket's
 # proposer events, which call the same un_propose_<key>_table the Propose
 # control does.
@@ -1520,6 +1522,14 @@ un_chamber_propose_sgui = {
 			}
 			un_propose_referendum_possible = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 30 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_lift_sanctions
+				un_propose_lift_sanctions_available = yes
+			}
+			un_propose_lift_sanctions_possible = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -1645,6 +1655,10 @@ un_chamber_propose_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 28 }
 			un_propose_referendum_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 30 }
+			un_propose_lift_sanctions_effect = yes
 		}
 	}
 }
@@ -1785,6 +1799,10 @@ un_chamber_propose_row_sgui = {
 			else_if = {
 				limit = { exists = scope:op scope:op = 28 }
 				un_chamber_propose_referendum_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 30 }
+				un_chamber_propose_lift_sanctions_row = yes
 			}
 		}
 	}

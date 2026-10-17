@@ -14,6 +14,15 @@
 #   credentials     Suspension of Credentials. Recommendatory, decided by two
 #                   thirds of the members with a vote. Punitive, case 50.
 #
+# and, needing no reform (§0.12a, 2026-10-16), the sanctioned country's own
+# petition:
+#
+#   lift_sanctions  Lift the Sanctions Against Us. Binding; a veto blocks it
+#                   outright. Simple majority. Tabled by the country under a
+#                   sanctions regime, which is its own target and beneficiary.
+#                   The same file keeps every regime to its record each month
+#                   (un_sanctions_regime_monthly_update).
+#
 # The shared machinery reaches them only through the hooks
 # common/scripted_effects/un_charter_effects.txt names. The figures are in
 # common/script_values/un_justice_values.txt, the tests in
@@ -56,6 +65,12 @@
 #   un_court_bar_charged     (timed, twenty years; on the claimant) the
 #                            diplomatic play the bar's surcharge was last
 #                            charged in, so one play is charged once
+#   un_sanctions_enforced_by (written by un_vote.2) the enforcer of the
+#                            sanctions regime on us: the regime's record.
+#                            Its modifier is re-applied from it when missing
+#                            every month, and it lapses with its enforcer
+#   un_sanctions_months      months the regime on us has stood, counted every
+#                            month from the first month it is seen
 # On a court_referral resolution: un_res_court_odds, un_res_court_state and
 # un_res_court_region (the state's region, which outlives a state that merges
 # away) when it is tabled; un_res_court_odds_ruled, un_res_court_verdict (1 for
@@ -740,6 +755,136 @@ un_credentials_chamber_preview = {
 }
 
 # ============================================================================
+# LIFT THE SANCTIONS AGAINST US
+# ============================================================================
+
+# End the sanctions regime on the scoped country: its penalties, its record,
+# its months, the embargoes the Assembly imposed with it, and its enforcer's
+# role, so the enforcer may table sanctions again (an enforcer holds one
+# regime at a time, un_propose_sanctions_available). Called by a carried
+# petition and when a regime is orphaned. The enforcer's own Lift Sanctions
+# button (un_buttons.txt) does the same inline, because gen_un_button_descs.py
+# reads the effects it lists from the button's own block.
+# Scope: the sanctioned country
+un_sanctions_lift_regime = {
+	remove_modifier = un_sanctions_target_modifier
+	if = {
+		limit = { has_variable = un_sanctions_enforced_by }
+		var:un_sanctions_enforced_by ?= {
+			if = {
+				limit = { has_modifier = un_sanctions_enforcer_modifier }
+				remove_modifier = un_sanctions_enforcer_modifier
+			}
+		}
+		remove_variable = un_sanctions_enforced_by
+	}
+	if = {
+		limit = { has_variable = un_sanctions_months }
+		remove_variable = un_sanctions_months
+	}
+	un_teeth_lift_embargoes = yes
+}
+
+# The petition carried. A veto that held blocks it outright: there is no
+# lesser form of lifting a regime. Otherwise the regime on the proposer ends,
+# if it still stands; its enforcer may have lifted it, or it may have lapsed,
+# while the Assembly voted, and the motion is then moot.
+# Scope: un_vote.2's ROOT (the proposer, which is the sanctioned country);
+# expects scope:un_resolution
+un_lift_sanctions_on_carried = {
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+		custom_tooltip = un_vote_lift_sanctions_passed_vetoed_tt
+	}
+	else_if = {
+		limit = { un_sanctions_regime_on = yes }
+		custom_tooltip = un_vote_lift_sanctions_passed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+		hidden_effect = { un_sanctions_lift_regime = yes }
+	}
+	else = {
+		custom_tooltip = un_vote_lift_sanctions_moot_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+	}
+}
+
+# The chamber's preview of a petition: who enforces the regime on us, and how
+# long it has stood. A regime from an older save names no enforcer.
+# Scope: country (the viewer, ROOT)
+un_lift_sanctions_chamber_preview = {
+	if = {
+		limit = { has_variable = un_sanctions_enforced_by }
+		var:un_sanctions_enforced_by ?= { save_temporary_scope_as = un_lift_sanctions_enforcer }
+		custom_tooltip_no_bullet = je_un_chamber_propose_preview_lift_sanctions
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_propose_preview_lift_sanctions_unrecorded
+	}
+}
+
+# Once a month, from un_justice_monthly_update: every sanctions regime is kept
+# to its record, un_sanctions_enforced_by on the target.
+# - A regime whose enforcer no longer enforces it (un_sanctions_regime_orphaned:
+#   it left the UN, ceased to exist, or won or lost a revolution) lapses, and
+#   a human target is told. Before 2026-10-16 such a regime stood until some
+#   other enforcer pressed Lift Sanctions, which might never happen.
+# - A recorded regime whose modifier is missing has it re-applied: a
+#   revolution's winner inherits the record but not the modifier (§0.9). The
+#   embargoes the Assembly imposed are a list, which the winner does not
+#   inherit either, and are not rebuilt.
+# - Each regime counts its months in force (un_sanctions_months), which the
+#   lean on a petition reads (un_lean_lift_sanctions_fresh).
+# - An enforcer that no regime names any more (its target was annexed) is
+#   released, so it may table sanctions again without paying credibility to
+#   lift nothing. Not while a regime from an older save names no one, which
+#   may be its own.
+# Scope: none
+un_sanctions_regime_monthly_update = {
+	every_country = {
+		limit = { un_sanctions_regime_orphaned = yes }
+		if = {
+			limit = {
+				un_sanctions_regime_on = yes
+				is_ai = no
+			}
+			post_notification = un_sanctions_lapsed_notice
+		}
+		un_sanctions_lift_regime = yes
+	}
+	every_country = {
+		limit = {
+			has_variable = un_sanctions_enforced_by
+			NOT = { un_sanctions_regime_on = yes }
+		}
+		add_modifier = {
+			name = un_sanctions_target_modifier
+			multiplier = un_enforcement
+		}
+	}
+	every_country = {
+		limit = { un_sanctions_regime_on = yes }
+		if = {
+			limit = { has_variable = un_sanctions_months }
+			change_variable = { name = un_sanctions_months add = 1 }
+		}
+		else = {
+			set_variable = { name = un_sanctions_months value = 0 }
+		}
+	}
+	if = {
+		limit = { NOT = { un_sanctions_regime_unrecorded = yes } }
+		every_country = {
+			limit = { has_modifier = un_sanctions_enforcer_modifier }
+			save_temporary_scope_as = un_sanctions_enforcer_check
+			if = {
+				limit = { un_sanctions_enforcer_idle = yes }
+				remove_modifier = un_sanctions_enforcer_modifier
+			}
+		}
+	}
+}
+
+# ============================================================================
 # THE OWNER'S HOOKS (un_charter_effects.txt)
 # ============================================================================
 
@@ -750,9 +895,11 @@ un_credentials_chamber_preview = {
 # un_representation_monthly_update, which notices the change. The court's
 # records on the parties are timed variables and lapse by themselves. A
 # referral before the Assembly whose state has merged away is pointed at a
-# living state of its region (un_court_referral_restate).
+# living state of its region (un_court_referral_restate). Every sanctions
+# regime is kept to its record (un_sanctions_regime_monthly_update).
 # Scope: none
 un_justice_monthly_update = {
+	un_sanctions_regime_monthly_update = yes
 	if = {
 		limit = {
 			has_global_variable = un_active_resolution
@@ -797,9 +944,15 @@ un_justice_monthly_update = {
 
 # The UN dissolves (un_dissolve, via un_charter_on_dissolve), after every
 # country has left: the embargoes lift, suspensions end, and the court's
-# records lapse with the court, its globals with them.
+# records lapse with the court, its globals with them. Each country's part
+# (un_dissolve_strip_country) has already ended the sanctions regimes; their
+# months go here.
 # Scope: none
 un_justice_on_dissolve = {
+	every_country = {
+		limit = { has_variable = un_sanctions_months }
+		remove_variable = un_sanctions_months
+	}
 	if = {
 		limit = { has_global_variable = un_court_tabled_odds }
 		remove_global_variable = un_court_tabled_odds

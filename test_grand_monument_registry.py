@@ -722,7 +722,7 @@ class NationalTests(unittest.TestCase):
     def test_totals_use_the_right_curves(self):
         body = squash(block(self.e, "gm_compute_totals"))
         self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing F = 5 }", body)
-        self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }", body)
+        self.assertIn("gm_set_steps_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
         # The monument policy (v2 §5) scales the steps after the curve, so the
@@ -834,8 +834,63 @@ class NationalTests(unittest.TestCase):
         text = read(CULTURAL)
         body = squash(block(text, "cultural_pull_from_grand_monuments"))
         self.assertIn("value = var:gm_s_culture", body)
-        self.assertIn("max = 5", body)
+        # No ceiling (owner, 2026-10-16): the curve is the diminishing return.
+        self.assertNotIn("max =", body)
         self.assertIsNone(block(text, "grand_monument_levels_in_state"))
+
+
+class OpenCurveTests(unittest.TestCase):
+    """gm_set_steps_open: the curve without its end, for cultural pull (owner,
+    2026-10-16: diminishing returns, no ceiling). Past the eighth step the
+    doubling carries on, each further step costing twice the grandeur of the
+    one before."""
+
+    def test_effect_shape(self):
+        body = squash(block(read(EFFECTS), "gm_set_steps_open"))
+        self.assertIsNotNone(body)
+        self.assertTrue(body.startswith("gm_set_steps = { IN = $IN$ OUT = $OUT$ NEXT = $NEXT$ F = $F$ } "
+                                        "if = { limit = { var:$IN$ >= var:$NEXT$ } "
+                                        "change_variable = { name = $NEXT$ multiply = 2 } "
+                                        "change_variable = { name = $NEXT$ add = $F$ } "
+                                        "while = { limit = { var:$IN$ >= var:$NEXT$ } "
+                                        "change_variable = { name = $OUT$ add = 1 } "
+                                        "change_variable = { name = $NEXT$ multiply = 2 } "
+                                        "change_variable = { name = $NEXT$ add = $F$ } }"), body)
+        self.assertIn("change_variable = { name = $OUT$ add = { value = var:$IN$ multiply = 2 "
+                      "subtract = var:$NEXT$ add = $F$ divide = { value = var:$NEXT$ add = $F$ } } }", body)
+
+    @staticmethod
+    def steps(g, f=10):
+        """The effect, transcribed: gm_curve_steps_f / gm_curve_next_f (pinned
+        to curve_terms by CurveTests), then the open tail."""
+        s = sum(min(max((g - start) / size, 0), 1) for start, size in curve_terms(f))
+        ends = [f * (2 ** n - 1) for n in range(1, 9)]
+        n = next((e for e in ends if g < e), ends[-1])
+        if g >= n:
+            n = 2 * n + f
+            while g >= n:
+                s += 1
+                n = 2 * n + f
+            s += (2 * g - n + f) / (n + f)
+        return s, n
+
+    def test_steps_keep_doubling_past_the_curve(self):
+        f = 10
+        for k in range(1, 16):
+            start, end = f * (2 ** (k - 1) - 1), f * (2 ** k - 1)
+            s, n = self.steps(end)
+            self.assertAlmostEqual(s, k, msg=end)
+            self.assertEqual(n, 2 * end + f if k >= 8 else f * (2 ** (k + 1) - 1), end)
+            self.assertAlmostEqual(self.steps((start + end) / 2)[0], k - 0.5, msg=end)
+            self.assertAlmostEqual(self.steps(end - 1e-6)[0], k, places=4, msg=end)
+
+    def test_no_ceiling(self):
+        self.assertGreater(self.steps(10 ** 6)[0], 16)
+        prev = 0
+        for g in range(0, 30000, 37):
+            s, _ = self.steps(g)
+            self.assertGreaterEqual(s, prev, g)
+            prev = s
 
 
 # ---- Task 6: contested monuments -----------------------------------------------------
@@ -1600,23 +1655,23 @@ class LocFixTests(unittest.TestCase):
             self.assertNotIn(key, L)
         self.assertIn("ScriptValue('gm_disp_count_contested')", read(WIDGET))
 
-    def test_culture_line_hides_next_step_at_cap(self):
-        # Deferred item (2026-09-27): gm_display_culture caps at +5, but the
-        # F=10 curve keeps advancing past it, so "next step at" would keep
-        # showing after there is no more benefit to reach. gm_display_n_culture
-        # returns 0 at the cap and the loc line drops the clause when it does,
-        # the same "hide via SelectLocalization + EqualTo_CFixedPoint" shape
-        # TE_HOMELAND_REMOVAL_THRESHOLD_TT uses for its own _ZERO clause.
-        v = squash(block(read(VALUES), "gm_display_n_culture"))
-        self.assertIn("has_variable = gm_n_culture var:gm_s_culture < 5", v)
-        # Since the style pass (2026-09-29) the clause is in the Cultural Pull
-        # row's tooltip, and the cap has words of its own instead of ''.
+    def test_culture_line_has_no_cap(self):
+        # Cultural pull from monuments had a +5 cap until 2026-10-16, when the
+        # owner swapped it for diminishing returns alone (gm_set_steps_open).
+        # Nothing on the culture row may still stop at a cap: the value, the
+        # next step, the bar and the tooltip.
+        values = read(VALUES)
+        self.assertNotIn("max =", squash(block(values, "gm_display_culture")))
+        self.assertEqual("value = 0 if = { limit = { has_variable = gm_n_culture } value = var:gm_n_culture }",
+                         squash(block(values, "gm_display_n_culture")))
+        self.assertNotIn("gm_s_culture", squash(block(values, "gm_disp_frac_culture")))
         L = loc()
-        self.assertIn("SelectLocalization(EqualTo_CFixedPoint("
-                      "JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), "
-                      "'(CFixedPoint)0'), 'gm_je_tt_culture_cap', 'gm_je_tt_culture_next')", L["gm_je_tt_culture"])
-        self.assertIn("next step at", L["gm_je_tt_culture_next"])
-        self.assertNotIn("next step", L["gm_je_tt_culture_cap"])
+        self.assertNotIn("gm_je_tt_culture_cap", L)
+        self.assertNotIn("gm_je_tt_culture_next", L)
+        tt = L["gm_je_tt_culture"]
+        self.assertIn("Next step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!", tt)
+        self.assertNotIn("at most", tt)
+        self.assertNotIn("+5", L["gm_je_how_grandeur"])
         self.assertIn('tooltip = "gm_je_tt_culture"', read(WIDGET))
 
 

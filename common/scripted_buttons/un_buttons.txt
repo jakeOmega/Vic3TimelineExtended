@@ -505,9 +505,16 @@ un_lift_sanctions_button = {
 			# (un_membership_end_effect drops the enforcer modifier), died, or
 			# won or lost a revolution (the winner inherits no modifiers), or
 			# the regime is from a save made before the target recorded its
-			# enforcer, so it names nobody. Another live enforcer's regime is
-			# spared. The UN's record below names the country whose sanctions
-			# we lift: ours, else the orphan when there is only one; with
+			# enforcer, so it names nobody. An orphan that names its enforcer
+			# also lapses by itself at the next monthly update
+			# (un_sanctions_regime_monthly_update, un_justice_effects.txt), and
+			# the Assembly can lift any regime on its target's petition
+			# (un_lift_sanctions_on_carried), which ends the regime the way
+			# un_sanctions_lift_regime does; that helper is not called here
+			# because gen_un_button_descs.py lists the effects in this block.
+			# Another live enforcer's regime is spared. The UN's record below
+			# names the country whose sanctions we lift: ours, else the orphan
+			# when there is only one; with
 			# several orphans and none of ours it books the entry with no
 			# subject, and the log prints the plain line. One booking either
 			# way: gen_un_button_descs.py prints a line for every booking it
@@ -557,6 +564,10 @@ un_lift_sanctions_button = {
 				if = {
 					limit = { has_variable = un_sanctions_enforced_by }
 					remove_variable = un_sanctions_enforced_by
+				}
+				if = {
+					limit = { has_variable = un_sanctions_months }
+					remove_variable = un_sanctions_months
 				}
 				# The embargoes the Assembly imposed go with the regime
 				# (redesign phase 5, un_teeth_effects.txt).
@@ -1287,4 +1298,21 @@ un_propose_referendum_button = {
 	}
 
 	effect = { un_propose_referendum_effect = yes }
+}
+
+# The sanctioned country's petition to lift its sanctions (§0.12a): the AI's
+# path; a human tables it from the chamber.
+un_propose_lift_sanctions_button = {
+	name = "UN_PROPOSE_LIFT_SANCTIONS"
+	desc = "UN_PROPOSE_LIFT_SANCTIONS_DESC"
+
+	visible = { un_propose_lift_sanctions_available = yes }
+
+	possible = { un_propose_lift_sanctions_possible = yes }
+
+	ai_chance = {
+		value = un_lift_sanctions_ai_chance
+	}
+
+	effect = { un_propose_lift_sanctions_effect = yes }
 }

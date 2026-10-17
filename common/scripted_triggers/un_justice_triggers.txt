@@ -1,9 +1,10 @@
 ﻿# ============================================================================
 # THE CHARTER'S NEW BUSINESS — JUSTICE: THE TESTS (redesign phase 7)
 # ============================================================================
-# docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4. The writers and
-# the state they keep are in common/scripted_effects/un_justice_effects.txt,
-# the figures in common/script_values/un_justice_values.txt.
+# docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4, and the petition
+# to lift sanctions (§0.12a). The writers and the state they keep are in
+# common/scripted_effects/un_justice_effects.txt, the figures in
+# common/script_values/un_justice_values.txt.
 #
 # Each topic's un_<key>_case_exists asks the same pool its selector picks
 # from (un_<key>_select_target), so the chamber's "no case" line and the pick
@@ -247,5 +248,79 @@ un_credentials_can_table = {
 	custom_tooltip = {
 		text = un_credentials_standing_tt
 		un_standing_at_least = { VALUE = un_credentials_standing_floor }
+	}
+}
+
+# ---- Lift the Sanctions Against Us ---------------------------------------------------
+
+# The scoped country is under a full sanctions regime (un_vote.2), not the
+# voluntary measures a veto leaves, which lapse in five years by themselves.
+# Scope: country
+un_sanctions_regime_on = {
+	has_modifier = un_sanctions_target_modifier
+}
+
+# The regime on the scoped country names an enforcer that no longer enforces
+# it: the enforcer left the UN (un_membership_end_effect drops its modifier),
+# ceased to exist, or won or lost a revolution (the winner inherits no
+# modifiers). A regime from a save made before the target recorded its
+# enforcer names nobody and is not orphaned by this test: nothing tells
+# whether its enforcer still stands.
+# Scope: country
+un_sanctions_regime_orphaned = {
+	has_variable = un_sanctions_enforced_by
+	NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
+}
+
+# Some regime names no enforcer: it is from a save made before the target
+# recorded one. While one stands, no enforcer can be told idle, because that
+# regime may be its own.
+# Scope: any
+un_sanctions_regime_unrecorded = {
+	any_country = {
+		un_sanctions_regime_on = yes
+		NOT = { has_variable = un_sanctions_enforced_by }
+	}
+}
+
+# No country records scope:un_sanctions_enforcer_check as its enforcer: the
+# regime it enforced is gone (its target was annexed) without the record
+# seeing it end.
+# Scope: any; expects scope:un_sanctions_enforcer_check
+un_sanctions_enforcer_idle = {
+	NOT = {
+		any_country = {
+			var:un_sanctions_enforced_by ?= scope:un_sanctions_enforcer_check
+		}
+	}
+}
+
+# The voter still dislikes the country petitioning to lift its sanctions: a
+# rival, or relations Cold or worse. Only such a member stands by the regime it
+# enforces (un_lean_interests_lift_sanctions) or vetoes the petition
+# (un_vote_ai_should_veto); one that has made its peace votes on the rest.
+# Scope: the voter (= ROOT); expects scope:un_vote_target
+un_lift_sanctions_ill_disposed = {
+	scope:un_vote_target ?= {
+		OR = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+			relations:root <= relations_threshold:cold
+		}
+	}
+}
+
+# There is a case: we are under sanctions. MIRRORS the target the petition
+# names (ourselves, un_propose_lift_sanctions_effect).
+# Scope: the prospective proposer
+un_lift_sanctions_case_exists = {
+	un_sanctions_regime_on = yes
+}
+
+# The petition's own gates.
+# Scope: the prospective proposer
+un_lift_sanctions_can_table = {
+	custom_tooltip = {
+		text = un_lift_sanctions_grounds_tt
+		un_lift_sanctions_case_exists = yes
 	}
 }
