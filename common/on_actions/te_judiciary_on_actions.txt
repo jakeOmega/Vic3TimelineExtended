@@ -22,7 +22,12 @@ te_jud_on_game_started = {
 
 # Root = Country. A country with no score yet (every 1836 country on the
 # first pulse, a new country mid-game) gets one from the law it holds; its
-# law isn't changed. Then the refresh, the scaled modifiers' only writer.
+# law isn't changed. Revolutionaries are never seeded: a revolution's winner
+# keeps its own variables where both sides hold one, so a seeded rebel would
+# replace the nation's score when it won, and unseeded it inherits the score
+# (scripting_best_practices.md § "What a Civil War's Winner Inherits").
+# Secessionists are seeded: a secession that wins is a new nation. Then the
+# refresh, the scaled modifiers' only writer.
 on_monthly_pulse_country = {
 	on_actions = {
 		te_jud_monthly
@@ -35,6 +40,11 @@ te_jud_monthly = {
 			limit = {
 				has_global_variable = te_jud_world_seeded
 				NOT = { has_variable = te_jud_seeded }
+				NOT = { is_revolutionary = yes }
+				# Every country holds a court law, so a ceiling of 0 means the
+				# laws' modifier sums aren't in place yet: the 30-day pulse can
+				# fall on 1 January.
+				te_jud_ceiling > 0
 			}
 			te_jud_seed_score = yes
 		}

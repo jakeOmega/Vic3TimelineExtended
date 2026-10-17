@@ -302,6 +302,11 @@ class ScoreDefinitionsTest(unittest.TestCase):
         self.assertEqual(self._value("te_jud_court_overhaul", "country_risk_premium_add"), "0.02")
         self.assertEqual(self._value("te_jud_court_overhaul", "country_legitimacy_base_add"), "-10")
 
+    def test_concept_names_entrenchment(self):
+        # Spec § 3.4: the concept is one of the three places a player reads it.
+        desc = _loc_lines()["concept_judicial_independence_desc"]
+        self.assertIn("enactment success", desc)
+
     def test_loc(self):
         keys = _loc_keys()
         for key in ("concept_judicial_independence", "te_judicial_independence", "te_jud_votes_legitimacy",
@@ -370,6 +375,18 @@ class ScoreScriptTest(unittest.TestCase):
         monthly = _block(_read(ON_ACTIONS), "te_jud_monthly")
         self.assertIn("has_global_variable = te_jud_world_seeded", monthly)
         self.assertNotIn("te_jud_assign_court_by_rule", monthly, "a new country keeps its law")
+
+    def test_rebels_are_not_seeded(self):
+        # A revolution's winner keeps its own variables where both sides hold
+        # one, so rebels seeded during the war would replace the nation's score.
+        limit = _block(_read(ON_ACTIONS), "te_jud_monthly").split("te_jud_seed_score = yes")[0]
+        self.assertIn("NOT = { is_revolutionary = yes }", limit)
+
+    def test_seeding_waits_for_the_sums(self):
+        # Every country holds a court law, so a ceiling of 0 means the laws'
+        # modifier sums aren't in place yet (a first pulse on 1 January).
+        limit = _block(_read(ON_ACTIONS), "te_jud_monthly").split("te_jud_seed_score = yes")[0]
+        self.assertIn("te_jud_ceiling > 0", limit)
 
     def test_old_save_seeding_is_a_marked_repair(self):
         text = _read(REPAIRS)
@@ -471,6 +488,18 @@ class ShockTest(unittest.TestCase):
         self.assertIn("is_decaying = yes", event)
         self.assertIn("years = 5", event)
 
+    def test_a_second_shock_replaces_the_first(self):
+        # A same-name add_modifier stacks a copy, and every copy re-reads the
+        # multiplier: a new shock removes the running one, and comes only when
+        # the gap is larger than the one being paid for.
+        event = _block(_read(EVENTS), "te_judiciary_events.1")
+        trigger = event[event.index("\ttrigger = {"):event.index("\timmediate = {")]
+        immediate = event[event.index("\timmediate = {"):]
+        self.assertIn("NOT = { has_modifier = te_jud_court_overhaul }", trigger)
+        self.assertIn("te_jud_overhaul_mult_value > var:te_jud_overhaul_mult", trigger)
+        self.assertLess(immediate.index("remove_modifier = te_jud_court_overhaul"),
+                        immediate.index("add_modifier = {"))
+
     def test_shock_needs_seeding(self):
         event = _block(_read(EVENTS), "te_judiciary_events.1")
         trigger = event[event.index("\ttrigger = {"):event.index("\timmediate = {")]
@@ -493,6 +522,17 @@ class SpendTest(unittest.TestCase):
             self.assertRegex(by_name[name],
                              r"custom_tooltip = \{\s*text = %s\s*te_jud_spend = \{ AMOUNT = %d \}" % (key, amount), name)
         self.assertNotIn("te_jud_spend", by_name["minor_events_timelineextended.2.a"])
+
+    def test_guide_says_the_cost_does_not_fade(self):
+        # The table's last column fades over five years; the score's cost
+        # doesn't, so it is a sentence of its own.
+        guide = _read(os.path.join(REPO, "docs", "player_guide", "06-politics.md"))
+        rows = [line for line in guide.splitlines()
+                if line.startswith(("| Expedite", "| Push the law", "| Force the law"))]
+        self.assertEqual(len(rows), 3)
+        for row in rows:
+            self.assertNotIn("Judicial Independence", row)
+        self.assertIn("lowers Judicial Independence by 5, 10 or 20", guide)
 
     def test_tax_force_through_spends(self):
         block = _block(_read(TAX_OFFER), "te_tax_force_into")

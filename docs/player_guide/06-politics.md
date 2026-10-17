@@ -447,9 +447,12 @@ stronger option also needs authority income above its own cost.
 
 | Option | Needs capacity | Authority cost | Effect on the law | Lasting cost (fades over 5 years) |
 |---|---|---|---|---|
-| Expedite the process with minimal intervention | 0 | 250 | +10 amenability, +5% enactment success, a quarter fewer stalls | Interest groups in opposition −1 approval, capacity −1; Judicial Independence −5 |
-| Push the law forward decisively | 2 | 500 | +25 amenability, +15% success, half the stalls, one more setback allowed, 20% faster | Opposition −3 approval, −5 legitimacy, movements radicalize more, capacity −2; Judicial Independence −10 |
-| Force the law through, consequences be damned | 4 | 750 | +50 amenability, +25% success, three quarters fewer stalls, two more setbacks, 35% faster, jumps one enactment phase | Opposition −5 approval, −10 legitimacy, more radicals, some upper-strata radicals at once, capacity −3; Judicial Independence −20 |
+| Expedite the process with minimal intervention | 0 | 250 | +10 amenability, +5% enactment success, a quarter fewer stalls | Interest groups in opposition −1 approval, capacity −1 |
+| Push the law forward decisively | 2 | 500 | +25 amenability, +15% success, half the stalls, one more setback allowed, 20% faster | Opposition −3 approval, −5 legitimacy, movements radicalize more, capacity −2 |
+| Force the law through, consequences be damned | 4 | 750 | +50 amenability, +25% success, three quarters fewer stalls, two more setbacks, 35% faster, jumps one enactment phase | Opposition −5 approval, −10 legitimacy, more radicals, some upper-strata radicals at once, capacity −3 |
+
+Each option also lowers Judicial Independence by 5, 10 or 20. That loss
+doesn't fade: the score climbs back at its usual 4 a year.
 
 The authority cost fades out over five years too. More capacity makes it
 cheaper: a few percent off from 2 (about 9% at 4), then 20% at 5 and half at 8.

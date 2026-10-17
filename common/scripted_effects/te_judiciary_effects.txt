@@ -2,8 +2,9 @@
 #  JUDICIARY — scripted effects (country scope)
 #  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
 #  The score lives in var:te_judicial_independence (0-100) and nowhere else,
-#  so a revolution's winner inherits it and te_jud_refresh rebuilds the
-#  modifiers.
+#  so a revolution's winner inherits it (te_jud_monthly never seeds the
+#  rebels, whose own score would win the merge) and te_jud_refresh rebuilds
+#  the modifiers.
 # ======================================================================
 
 # An unset score starts at half the ceiling (spec § 5); history sets some
