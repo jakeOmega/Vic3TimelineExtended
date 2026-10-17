@@ -313,7 +313,7 @@
  lawgroup_antitrust:0 "Antitrust & Market Structure"
  lawgroup_antitrust_desc:0 "Regulates market concentration, monopolies, mergers, and access to essential networks, balancing scale with contestability and consumer welfare."
  lawgroup_criminal_justice:0 "Criminal Justice"
- lawgroup_criminal_justice_desc:0 "The form and function of the criminal justice system, including laws, courts, and law enforcement agencies."
+ lawgroup_criminal_justice_desc:0 "The form and function of the criminal justice system: what follows a conviction, and how offenders are punished or rehabilitated."
  lawgroup_electoral_finance:0 "Electoral Finance"
  lawgroup_electoral_finance_desc:0 "Regulates the influence of money in political campaigns."
  lawgroup_family_reproductive_policy:0 "Family & Reproductive Policy"
