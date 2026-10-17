@@ -196,6 +196,67 @@ class CountryPanelTest(unittest.TestCase):
         self.assertTrue(gen.PANEL_OUT.name.startswith("00_"))
 
 
+class TabLayoutTest(unittest.TestCase):
+    """gui/te_nation_tab.gui: the sections in the spec's order, each list and
+    row line on its generated filter, each list gated on its count, and every
+    key the tab prints defined."""
+
+    TAB = ROOT / "gui" / "te_nation_tab.gui"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(cls.TAB)
+
+    def test_the_window_mounts_the_tab(self):
+        window = _read(ROOT / "gui" / "te_systems_window.gui")
+        self.assertIn("te_nation_tab_sections = {}", window)
+        self.assertTrue(self.TAB.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_sections_in_order(self):
+        body = self.gui[self.gui.index("type te_nation_tab_sections"):]
+        order = re.findall(r"^\t\t(te_nation_\w+) = \{\}", body, re.M)
+        self.assertEqual(order, ["te_nation_overview_panel"]
+                         + [f"te_nation_section_{s}" for s in gen.SECTIONS] + ["te_nation_how_panel"])
+
+    def test_every_filter_is_used_once_and_lists_are_gated(self):
+        for section in gen.SECTIONS:
+            with self.subTest(section=section):
+                self.assertEqual(self.gui.count(f"using = te_nation_list_{section}\n"), 1)
+                # the list, or the section holding nothing else, shows on its count
+                body = self.gui[self.gui.index(f"type te_nation_section_{section} = "):]
+                body = body[:body.index("\n\t}\n")]
+                self.assertIn(f"ScriptValue('te_nation_list_{section}_count'), '(CFixedPoint)0' )", body)
+        for row in gen.ROWS:
+            with self.subTest(row=row):
+                self.assertEqual(self.gui.count(f"using = te_nation_row_{row}\n"), 1)
+
+    def test_a_list_item_has_one_visible(self):
+        # The filter is the item's only `visible` (gotcha #17).
+        body = self.gui[self.gui.index("type te_nation_list = "):self.gui.index("type te_nation_target_bar")]
+        item = body[body.index("item = {"):]
+        self.assertNotIn("visible", item)
+        self.assertIn('block "filter" {}', item)
+        self.assertIn("ignoreinvisible = yes", body)
+
+    def test_every_key_exists(self):
+        loc = _loc()
+        keys = set(re.findall(r'\b(?:text|tooltip) = "(te_nation_\w+)"', self.gui))
+        # SelectLocalization's keys in the loc ("( 'key'" or ", 'key'"; ScriptValue('x') has no space)
+        keys |= set(re.findall(r"[(,] '(te_nation_\w+)'", " ".join(loc.values())))
+        self.assertGreater(len(keys), 30)
+        missing = sorted(k for k in keys if k not in loc)
+        self.assertFalse(missing, missing)
+
+    def test_every_script_value_exists(self):
+        values = _read(ROOT / "common" / "script_values" / "te_nation_values.txt")
+        values += _read(gen.VALUES_OUT)
+        defined = set(re.findall(r"^(\w+) = \{", values, re.M))
+        text = self.gui + "\n".join(_loc().values())
+        used = set(re.findall(r"ScriptValue\('(te_nation_\w+)'\)", text))
+        self.assertTrue(used)
+        self.assertLessEqual(used, defined)
+
+
 class FixtureTest(unittest.TestCase):
     def test_the_fixture_is_the_installed_file(self):
         base = os.environ.get("VIC3_BASE_GAME")
