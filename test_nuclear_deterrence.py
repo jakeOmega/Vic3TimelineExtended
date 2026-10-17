@@ -1919,6 +1919,86 @@ class TestBudapestPath(unittest.TestCase):
         self.assertIn("has_variable = nd_bp_refused", block(articles, "nuclear_disarmament"))
 
 
+def enclosing_block(text, needle):
+    """The `{ ... }` body of the innermost block around `needle`'s line: for a
+    `limit = { … }` line, the `if` it gates."""
+    start = text.rfind("\n", 0, text.index(needle)) + 1
+    depth, i = 1, start
+    while depth:
+        i -= 1
+        depth += text[i] == "}"
+        depth -= text[i] == "{"
+    depth, j = 1, i + 1
+    while depth:
+        depth += text[j] == "{"
+        depth -= text[j] == "}"
+        j += 1
+    return text[i + 1:j - 1]
+
+
+class TestNuclearArticleAIDemands(unittest.TestCase):
+    """The AI demands a freeze or a disarmament only of a country the article
+    would stop. An AI India pressed a freeze as a war goal on insignificant
+    Mekong, which had the nuclear_weapons tech and no standing to build
+    (2026-10-16)."""
+
+    ARTICLES = {
+        "nuclear_program_pause": ("nuclear_program_freeze_matters", "nuclear_program_pause_ai_demand_weight"),
+        "nuclear_disarmament": ("nuclear_disarmament_matters", "nuclear_disarmament_ai_demand_weight"),
+    }
+
+    def setUp(self):
+        self.articles = strip_comments(read(ROOT / "common/treaty_articles/extra_treaty_articles.txt"))
+        self.values = strip_comments(read(ROOT / "common/script_values/extra_script_values.txt"))
+        self.triggers = strip_comments(read(NUKE_TRIGGERS))
+
+    def test_a_freeze_matters_only_with_a_programme_or_major_rank(self):
+        freeze = block(self.triggers, "nuclear_program_freeze_matters")
+        self.assertIn("nuclear_program_has_programme = yes", freeze)
+        self.assertIn("country_rank >= rank_value:major_power", freeze)
+        self.assertNotIn("minor_power", freeze)
+        disarm = block(self.triggers, "nuclear_disarmament_matters")
+        self.assertIn("nd_believed_armed = yes", disarm)
+        self.assertIn("nuclear_program_freeze_matters = yes", disarm)
+
+    def test_both_demand_fields_read_the_weight(self):
+        for article, (_, weight) in self.ARTICLES.items():
+            ai = block(block(self.articles, article), "ai")
+            for field in ("proposal_weight", "wargoal_score_multiplier"):
+                self.assertIn(f"{field} = {{ value = {weight} }}", ai, f"{article} {field}")
+
+    def test_the_weight_is_zero_unless_the_article_matters(self):
+        for article, (matters, weight) in self.ARTICLES.items():
+            body = block(self.values, weight)
+            self.assertTrue(body.strip().startswith("value = 0"), weight)
+            # The last branch, the weakest positive one, is the matters gate,
+            # and there is no bare `else`: anything that fails it keeps the 0.
+            last = body[body.rindex("else_if = {"):]
+            self.assertIn(f"limit = {{ scope:source_country = {{ {matters} = yes }} }}", last, weight)
+            self.assertNotIn("else =", body, weight)
+
+    def test_requester_interest_counts_only_when_the_article_matters(self):
+        for article, (matters, _) in self.ARTICLES.items():
+            accept = block(block(self.articles, article), "inherent_accept_score")
+            # The requester's branch. (nuclear_disarmament's bonus against a
+            # Budapest refuser sits after it, and the refuser keeps its warheads,
+            # so the world believes it armed: disarming it matters.)
+            requester = enclosing_block(accept, "limit = { scope:target_country = this }")
+            gated = enclosing_block(requester, f"scope:source_country = {{ {matters} = yes }}")
+            for desc in ("AI_IS_RIVAL", "AI_HOSTILE_ATTITUDE", "AI_BELLIGERENT_ATTITUDE",
+                         "AI_ANTAGONISTIC_ATTITUDE", "AI_WARY_ATTITUDE"):
+                self.assertEqual(requester.count(f'"{desc}"'), 1, f"{article} {desc}")
+                self.assertEqual(gated.count(f'"{desc}"'), 1, f"{article} {desc}")
+            self.assertNotIn('"AI_IS_ALLY"', gated, article)
+            self.assertIn('"AI_IS_ALLY"', requester, article)
+
+    def test_aid_is_offered_only_to_a_country_with_the_tech(self):
+        ai = block(block(self.articles, "nuclear_program_aid"), "ai")
+        self.assertIn("proposal_weight = { value = nuclear_program_aid_ai_offer_weight }", ai)
+        self.assertIn("scope:target_country = { has_technology_researched = nuclear_weapons }",
+                      block(self.values, "nuclear_program_aid_ai_offer_weight"))
+
+
 class TestLooseWarheads(unittest.TestCase):
     """Step 5 (spec §3): the pool's plots, the attribution roll that keeps the
     truth apart from what the victim learns, and the reckoning."""
