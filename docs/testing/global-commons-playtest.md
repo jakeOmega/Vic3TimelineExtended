@@ -242,6 +242,16 @@ navy, and says BROKEN only when all of them read 0.
     `blockade_level` is documented only as a comparison trigger, so if it can't be read as a value
     step the multiplier through an `if` chain (`blockade_level >= 0.25`, `0.5`, `0.75`, `1`).
     If (b) fails alone, keep the port and look for a mesh-free `city_type`.
+29. **The rush, announced** (seabed claims spec § 7; three feed notifications,
+    `common/messages/te_global_commons_seabed_messages.txt`). (a) A new game, the month the first
+    coastal country researches Abyssal Plain Mining: every country gets "The Seabed Rush Begins",
+    naming it (players also get the older headline for the same research, which says nothing of
+    licences); an old save past its first sharing gets nothing. (b) A later country's first share in
+    a basin where we have one: "A New Claimant in the <Basin> Ocean", naming it; nothing at the
+    game's first sharing, nor when a country wins back a share it lost. When two countries win their
+    first share at one sharing, check each notice names its own country (the scope is saved again
+    for each). (c) A basin's licences all held: "The <Basin> Ocean Is Fully Licensed" to each
+    country with a share there, once; destroy or downsize a level and refill it for the second.
 
 ### Engine facts the build assumes, unverified
 
@@ -274,6 +284,9 @@ navy, and says BROKEN only when all of them read 0.
   day later the lessee's `every_scope_treaty` / `every_scope_article` walk finds the article with
   `target_country = scope:x` and reads `input_quantity` (self-check `seabed_lease_entry`).
 - `quantity_max_value` reads ROOT as the source, as vanilla Money Transfer's `fixed_income` does.
+- A notification keeps the saved scopes as they were when it was posted, so
+  `te_seabed_claimant_notice`, which saves `te_seabed_newcomer` again for each newcomer of a
+  sharing, names the right one in each (item 29 b).
 - `city_type = port` is what makes a building blockade-affected (item 28). The defines speak of
   "buildings affected by blockades (such as fisheries and shipyards)"; the six vanilla
   `city_type = port` buildings include both, across four building groups.

@@ -306,6 +306,11 @@ twentieth of that naval term, so you can claim far from home, but only a small
 share. Power projection rather than fleet size counts, so a modern fleet
 outweighs a larger obsolete one.
 
+The game tells every country when the first coastal country researches Abyssal
+Plain Mining, tells you when a country wins its first share in a basin where
+you have one, and tells everyone with a share when a basin's licences are all
+held.
+
 A licence is held by a level, built or queued, and stays with it for good. It
 belongs to the state the mine stands in and passes with it: conquer a mined
 state and its licences come with it. Built levels are never taken away. If your

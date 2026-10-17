@@ -1,0 +1,94 @@
+﻿# ============================================================================
+# THE GLOBAL COMMONS: THE SEABED RUSH, ANNOUNCED — NOTIFICATIONS
+# ============================================================================
+# docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md § 7,
+# posted from te_global_commons_seabed_effects.txt. Loc:
+# notification_<message>_name/_desc/_tooltip, which organize_loc files in
+# localization/english/te_notifications_l_english.yml. One message per basin,
+# so each title names its basin.
+# ============================================================================
+
+# The first country that can claim the seabed (te_seabed_global_monthly): to
+# every country but the decentralized.
+te_seabed_rush_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# A sharing first gives a country a share in the basin (te_seabed_claimant_notice):
+# to every other country with a share there since an earlier sharing.
+
+te_seabed_new_claimant_notice_pacific = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+te_seabed_new_claimant_notice_atlantic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+te_seabed_new_claimant_notice_indian = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+te_seabed_new_claimant_notice_arctic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+te_seabed_new_claimant_notice_southern = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+# The world's licences reach the basin's pool (te_seabed_world_totals): to every
+# country with a share there, once each time it fills.
+
+te_seabed_basin_full_notice_pacific = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_seabed_basin_full_notice_atlantic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_seabed_basin_full_notice_indian = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_seabed_basin_full_notice_arctic = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_seabed_basin_full_notice_southern = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}

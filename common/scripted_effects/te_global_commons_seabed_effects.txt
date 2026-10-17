@@ -68,10 +68,15 @@
 #            te_seabed_last_sharing_month the panel's "as of"
 #            te_seabed_country            flag: has been recorded
 #            te_seabed_shared             flag: took part in a sharing
+#            te_seabed_claimed_<basin>    flag: has had a share there (the
+#                                         new-claimant notice)
 #   global   te_seabed_regime             1 Open, 2 Regulated, 3 Scramble
 #                                         (the UN hook writes it)
 #            te_seabed_records_<basin>    the world's records (yearly)
 #            te_seabed_world_w_<basin>    the world's claim weight (yearly)
+#            te_seabed_rush_announced,    flags: the rush notice told; the
+#            te_seabed_full_<basin>,      basin told it is fully licensed;
+#            te_seabed_claimed_seeded     the claimed marks seeded
 #
 # ONE DEPARTURE FROM THE SPEC'S WORDING: a level is recorded as soon as it is
 # queued (its building's level_after_queued_constructions), not when it is
@@ -95,8 +100,9 @@
 #   treaty article    a Lease <Basin> Seabed Claims article's entry
 #                     (122_seabed_lease.txt): te_seabed_lease_start, then the
 #                     hidden te_seabed.1 a day later (te_seabed_events.txt)
-#   monthly global    te_seabed_global_monthly: the yearly sharing when due
-#                     (te_seabed_yearly_pass), the follow-state self-check
+#   monthly global    te_seabed_global_monthly: the rush notice, the yearly
+#                     sharing when due (te_seabed_yearly_pass), the
+#                     follow-state self-check
 #   yearly country    te_seabed_ai_choose_policy (AI countries only)
 # ============================================================================
 
@@ -636,8 +642,8 @@ te_seabed_on_state_owner_change = {
 # The yearly sharing (model: yearly_pass)
 # ============================================================================
 
-# No scope (on_monthly_pulse). Runs the sharing when due (te_seabed_pass_due),
-# and the second half of the follow-state self-check.
+# No scope (on_monthly_pulse). The rush notice, once a game; the sharing when
+# due (te_seabed_pass_due); the second half of the follow-state self-check.
 te_seabed_global_monthly = {
 	# The rule switched off after the system ran, then on again: levels built
 	# while it was off take a licence like an old save's (§ 2.9), so the
@@ -662,6 +668,29 @@ te_seabed_global_monthly = {
 			every_scope_state = {
 				limit = { has_variable = te_seabed_holder }
 				remove_variable = te_seabed_holder
+			}
+		}
+	}
+	# The rush, announced (seabed claims spec § 7), once a game: the first month
+	# a country can claim, before its first sharing runs (which sets
+	# te_seabed_pass_year this same month). A game already past its first
+	# sharing, an old save, sets the flag without a notice.
+	if = {
+		limit = {
+			te_global_commons_enabled = yes
+			NOT = { has_global_variable = te_seabed_rush_announced }
+			any_country = { te_seabed_is_claimant = yes }
+		}
+		set_global_variable = te_seabed_rush_announced
+		if = {
+			limit = { NOT = { has_global_variable = te_seabed_pass_year } }
+			random_country = {
+				limit = { te_seabed_is_claimant = yes }
+				save_scope_as = te_seabed_first_claimant
+			}
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				post_notification = te_seabed_rush_notice
 			}
 		}
 	}
@@ -774,6 +803,9 @@ te_seabed_yearly_pass = {
 	# subjects under Administer Seabed Claims pass their claims again.
 	te_seabed_settle_leases = yes
 	te_seabed_pass_subject_claims = yes
+	# 7c. The rush's newcomers: a country this sharing first gave a share in a
+	# basin, told to the countries already there (seabed claims spec § 7).
+	te_seabed_claimant_notices = yes
 	# 8. A policy that holds influence for a country that can no longer claim.
 	every_country = {
 		limit = {
@@ -2845,6 +2877,89 @@ te_seabed_world_totals = {
 	}
 	set_global_variable = { name = te_seabed_noshare_$B$ value = 0 }
 	set_global_variable = { name = te_seabed_cap_stamped_noshare value = 0 }
+	# The basin fully licensed (seabed claims spec § 7): told to every country
+	# with a share there once each time the world's licences reach the pool,
+	# and re-armed only when they fall below it.
+	if = {
+		limit = { global_var:te_seabed_records_$B$ >= te_seabed_pool_$B$ }
+		if = {
+			limit = { NOT = { has_global_variable = te_seabed_full_$B$ } }
+			set_global_variable = te_seabed_full_$B$
+			every_country = {
+				limit = {
+					NOT = { is_country_type = decentralized }
+					has_variable = te_seabed_shared
+					has_variable = te_seabed_ent_$B$
+					var:te_seabed_ent_$B$ > 0
+				}
+				post_notification = te_seabed_basin_full_notice_$B$
+			}
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = te_seabed_full_$B$ }
+		remove_global_variable = te_seabed_full_$B$
+	}
+}
+
+# No scope, after the sharing's leases and pacts (seabed claims spec § 7): in
+# each basin, a country this sharing first gives a share (te_seabed_ent above
+# 0 and no te_seabed_claimed mark yet) is told to every other country with a
+# share there since an earlier sharing; then every country with a share is
+# marked, for good, so one that loses its share and wins it back isn't new.
+# The first sharing this runs, a new game's first or an old save's first since
+# the notices came in, only marks: every share is new then.
+te_seabed_claimant_notices = {
+	if = {
+		limit = { has_global_variable = te_seabed_claimed_seeded }
+		te_seabed_claimant_notice = { B = pacific }
+		te_seabed_claimant_notice = { B = atlantic }
+		te_seabed_claimant_notice = { B = indian }
+		te_seabed_claimant_notice = { B = arctic }
+		te_seabed_claimant_notice = { B = southern }
+	}
+	te_seabed_mark_claimed = { B = pacific }
+	te_seabed_mark_claimed = { B = atlantic }
+	te_seabed_mark_claimed = { B = indian }
+	te_seabed_mark_claimed = { B = arctic }
+	te_seabed_mark_claimed = { B = southern }
+	set_global_variable = te_seabed_claimed_seeded
+}
+
+# No scope. Each newcomer in basin $B$ in turn is saved as te_seabed_newcomer,
+# the scope its notice names; two newcomers of one sharing aren't told of
+# each other.
+te_seabed_claimant_notice = {
+	every_country = {
+		limit = {
+			has_variable = te_seabed_ent_$B$
+			var:te_seabed_ent_$B$ > 0
+			NOT = { has_variable = te_seabed_claimed_$B$ }
+		}
+		save_scope_as = te_seabed_newcomer
+		every_country = {
+			limit = {
+				NOT = { this = scope:te_seabed_newcomer }
+				NOT = { is_country_type = decentralized }
+				has_variable = te_seabed_claimed_$B$
+				has_variable = te_seabed_ent_$B$
+				var:te_seabed_ent_$B$ > 0
+			}
+			post_notification = te_seabed_new_claimant_notice_$B$
+		}
+	}
+}
+
+# No scope: every country with a share in basin $B$ now has had one.
+te_seabed_mark_claimed = {
+	every_country = {
+		limit = {
+			has_variable = te_seabed_ent_$B$
+			var:te_seabed_ent_$B$ > 0
+			NOT = { has_variable = te_seabed_claimed_$B$ }
+		}
+		set_variable = te_seabed_claimed_$B$
+	}
 }
 
 # ============================================================================
