@@ -93,13 +93,22 @@ York's Civilian Complaint Review Board, 1953 and 1966).
 | `parent` | `law_guaranteed_liberties` |
 | `allowed_laws` | Local Police Force, Dedicated Police Force, Private Policing. Not Militarized: a force built to carry out the government's will does not answer to the public |
 | `possible` | `civil_rights_movement` (era 7) |
-| `modifier` | Police institution cost +10%, Civil Rights Movement pop attraction −15%, Legislative Override Capacity −0.5 |
+| `modifier` | Police institution cost +10%, Legislative Override Capacity −0.5, radicalism increases −10% for Second-Rate Citizen and Open Prejudice pops, turmoil effects −5% |
+| `sponsor_modifier` | +10% political strength (Corporate Security Powers' value) |
 | `would_sponsor` | The Intelligentsia, or any IG approving the parent |
 
 Distinct from Guaranteed Liberties (what home affairs may investigate; −2 override), Dedicated Police (a professional
 force; radicals from movements) and Restorative Justice (what follows a conviction; loyalists from movements): this is
-who the street-level force answers to. The civil-rights lever is the political movement's pop attraction
-(`movement_civil_rights`), not the Civil Rights journal entry's support bar.
+who the street-level force answers to.
+
+**Rebalance (2026-10-17).** As first built, the only upside was Civil Rights Movement pop attraction −15%, which
+worked against the governments that adopt it: its sponsors approve of Guaranteed Liberties, and its petition fires
+while a civil rights movement agitates, so the country taking it usually wants that movement's reforms. The −0.5
+override cost barely touches those countries either, since Universal Suffrage and Guaranteed Liberties already put
+them below the Forced a Law Through event's threshold of 0. The attraction cut was replaced with a slower
+radicalism increase for the statuses whose complaints a board would hear (Second-Rate Citizen, Open Prejudice; the
+mirror of Militarized Police's suppression of the harsher statuses), a turmoil-effects cut (half a level of the
+police institution) and the sibling amendment's sponsor clout. The cost side is unchanged.
 
 ## 4. Descriptions and the group's name
 
