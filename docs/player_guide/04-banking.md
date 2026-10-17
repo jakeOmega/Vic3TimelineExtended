@@ -60,7 +60,7 @@ and up); the two outer bands are past the ends of the momentum bar. Bubble press
 reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
 (75 and up).
 
-Under the phase, momentum and bubble pressure icons, a third line gives how far
+Beside the phase, momentum and bubble pressure icons, a third line gives how far
 the cycle value, momentum and bubble pressure can move at the next monthly
 update, as a range such as −1.1 to +2.2. It is worked out from what the panels
 show: the bands, your modifiers, your policy stance and the random nudge. The
@@ -201,24 +201,24 @@ more radicals.
 
 The journal entry and the Budget panel's Banking tab show the same overview and
 sections, in the same order. The overview at the top is always shown: the four
-bars, then two rows of icons, each with a caption above it and a word beside
-it. Hover a caption for what the term means, and hover the icon or its word for
-the reading in detail; the first row's tooltips also list what pushes the cycle
-each month. Under the first row's words, a third line gives next month's range
-for the cycle value, momentum and bubble pressure (see [Cycle value, momentum
-and bubble pressure](#cycle-value-momentum-and-bubble-pressure)). With
-momentum Overheating the range has no top for the cycle value, which reads "+4.2
-or more", and no bottom for momentum; with momentum in Freefall it is the
-reverse.
+bars, then six boxes, two to a row, each with its icon on the left and three
+lines beside it: a caption, a word and a figure. Hover a caption for what the
+term means, and hover the box for the reading in detail; the cycle's tooltips
+also list what pushes it each month. For the cycle value, momentum and bubble
+pressure, the third line is next month's range (see [Cycle value, momentum and
+bubble pressure](#cycle-value-momentum-and-bubble-pressure)), with a tooltip
+of its own. With momentum Overheating the range has no top for the cycle value,
+which reads "+4.2 or more", and no bottom for momentum; with momentum in
+Freefall it is the reverse.
 
-| Caption | Icon | Word |
-|---|---|---|
-| Cycle Phase | A bank front with a mark: arrows down in a Panic or Downturn, a level bar in Stagnation or Stable, arrows up from Expansion, and the bank gilded in a Boom or Frenzy | The phase |
-| Momentum | An arrow, doubled from Collapsing and Surging outward | The momentum band |
-| Bubble Pressure | Coins inside a bubble that grows band by band, its rim going from green to red, cracked at Severe | The bubble band |
-| Policy Stance | A tap: the more coins fall from it, the looser the stance, and a padlock at Very Tight | Very Loose, Loose, Neutral, Tight or Very Tight |
-| Inflation | A price tag marked for the band, from a blue arrow down at Deflation to a flame at Very high; a wheelbarrow of banknotes at Hyperinflation | The price band, or Foreign money once you dollarize, or Set by plan in a command economy |
-| Budget | A stack of gold tokens | How many intervention points are free |
+| Caption | Icon | Word | Third line |
+|---|---|---|---|
+| Cycle Phase | A bank front with a mark: arrows down in a Panic or Downturn, a level bar in Stagnation or Stable, arrows up from Expansion, and the bank gilded in a Boom or Frenzy | The phase | Next month's range for the cycle value |
+| Momentum | An arrow, doubled from Collapsing and Surging outward | The momentum band | Next month's range for momentum |
+| Bubble Pressure | Coins inside a bubble that grows band by band, its rim going from green to red, cracked at Severe | The bubble band | Next month's range for bubble pressure |
+| Budget | A stack of gold tokens | How many intervention points your active policies hold | How many are free |
+| Policy Stance | A tap: the more coins fall from it, the looser the stance, and a padlock at Very Tight | Very Loose, Loose, Neutral, Tight or Very Tight | The policy rate |
+| Inflation | A price tag marked for the band, from a blue arrow down at Deflation to a flame at Very high; a wheelbarrow of banknotes at Hyperinflation | The price band, or Foreign money once you dollarize, or Set by plan in a command economy | Inflation over the past year |
 
 Policy Stance appears only once you hold a dial, and Inflation only under the
 full Banking System. A warning mark on the bubble means a crash is at its most
@@ -255,8 +255,9 @@ tables in this chapter use the full names.
 
 The intervention budget is the pool of points your active policies hold. Your
 financial regulation law gives 1 to 7 points, National Bank Established 1 more,
-and a power bloc's banking union 1 more. The overview's Budget icon shows how
-many are free, and the journal entry repeats it as Free Intervention Points: a
+and a power bloc's banking union 1 more. The overview's Budget box shows how
+many are in use and how many are free, and the journal entry repeats the free
+points as Free Intervention Points: a
 command economy calls it the Free Planning Budget and a cooperative the Free
 Council Mandate Points.
 
@@ -535,8 +536,8 @@ are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
 Costs and Prices. Hover a row's label for what the term means and the row for
-the detail behind its figure. Your Policy Stance and price band are icons in
-the overview.
+the detail behind its figure. Your Policy Stance and price band are in the
+overview, with the policy rate and the past year's inflation under them.
 
 ![The Monetary Policy block of the banking dashboard: the rates and the Rate Target stepper, the exchange rate, what borrowing costs, prices, and the central bank's stance, delegation and mandate.](images/banking_rate.png)
 

@@ -281,16 +281,16 @@ CELLS = [
     ("banking_dash_phase_tt", "banking_dash_phase_label", "banking_dash_phase_"),
     ("banking_dash_momentum_tt", "banking_dash_momentum_label", "banking_disp_momentum_band_code"),
     ("banking_dash_bubble_tt", "banking_dash_bubble_label", "banking_disp_bubble_band_code"),
+    ("banking_dash_budget_tt", "banking_dash_budget_label", None),
     ("banking_dash_mon_stance_tt", "banking_dash_mon_stance_label", "banking_disp_stance_band_code"),
     ("banking_dash_mon_band_tt", "banking_dash_mon_inflation_label", "banking_disp_price_band_code"),
-    ("banking_dash_budget_tt", "banking_dash_budget_label", None),
 ]
 DOC_SECTIONS = {
     "banking_dash_phase_": "Overview row 1: cycle phase",
     "banking_disp_momentum_band_code": "Overview row 1: momentum",
-    "banking_disp_bubble_band_code": "Overview row 1: bubble pressure",
-    "banking_disp_stance_band_code": "Overview row 2: policy stance",
-    "banking_disp_price_band_code": "Overview row 2: inflation (the price band)",
+    "banking_disp_bubble_band_code": "Overview row 2: bubble pressure",
+    "banking_disp_stance_band_code": "Overview row 3: policy stance",
+    "banking_disp_price_band_code": "Overview row 3: inflation (the price band)",
     None: "Overview row 2: intervention budget; tool rows: point cost",
 }
 
@@ -391,33 +391,33 @@ class OverviewTest(unittest.TestCase):
         self.assertIn("banking_dash_ov_crash_risk_tt", _loc())
 
     def test_the_overview_is_as_wide_as_the_sections(self):
-        """The medium type needs cells of different widths (a caption such as
-        "Bubble Pressure" is 142 wide), so each instance sets its own: a row of
-        cells, or of the change lines under them, sums to at most the bars' 480,
-        and the change lines are as wide as the cells above them."""
+        """Two boxed cells to a row (the owner, 2026-10-17: three looked
+        crowded in the overview's type), and each instance sets its size: a row
+        sums to at most the bars' 480. A cell with a third line is 70 high, one
+        without 50."""
         dash = _read(DASH)
         body = _type_body(dash, "te_banking_overview_panel")
         self.assertRegex(body, r"(?m)^\t\tmargin = \{ 10 8 \}")   # 10 + 480 bars + 10 = 500
         header = _type_body(dash, "banking_dash_category_header")
         self.assertIn("size = { 500 32 }", header)
         rows = []
-        for m in re.finditer(r"flowcontainer = \{\s*direction = horizontal", body):
+        for m in re.finditer(r"flowcontainer = \{\s*(?:visible = [^\n]*\s*)?direction = horizontal", body):
             row = _block_from(body, m.start())
-            kinds = re.findall(r"te_banking_ov_(cell|change) = \{\s*(?:visible = [^\n]*\s*)?(?:tooltip = [^\n]*\s*)?"
+            sizes = re.findall(r"te_banking_ov_cell = \{\s*(?:visible = [^\n]*\s*)?(?:tooltip = [^\n]*\s*)?"
                                r"size = \{ (\d+) (\d+) \}", row)
-            if not kinds:
+            if not sizes:
                 continue
+            self.assertEqual(len(sizes), row.count("te_banking_ov_cell = {"), "every instance sets its size")
             spacing = int(re.search(r"spacing = (\d+)", row).group(1))
-            widths = [int(w) for _, w, _ in kinds]
-            self.assertEqual({k for k, _, _ in kinds}, {kinds[0][0]}, "a row is cells or change lines")
-            self.assertEqual(len(kinds), len(re.findall(r"te_banking_ov_(?:cell|change) = \{", row)),
-                             "every instance sets its width")
+            widths = [int(w) for w, _ in sizes]
             self.assertLessEqual(sum(widths) + (len(widths) - 1) * spacing, 480, row[:80])
-            rows.append((kinds[0][0], widths))
-        # the readings, their changes, what the player sets
-        self.assertEqual([k for k, _ in rows], ["cell", "change", "cell"])
-        self.assertEqual(rows[0][1], rows[1][1])     # a change line is as wide as its cell
-        self.assertEqual(len(rows[2][1]), 3)
+            for m2, (_, height) in zip(re.finditer(r"te_banking_ov_cell = \{", row), sizes):
+                third = 'blockoverride "third_line"' in _block_from(row, m2.end() - 1)
+                self.assertEqual(int(height), 70 if third else 50)
+            rows.append(widths)
+        # phase and momentum, bubble pressure and the budget, the stance and
+        # the price band
+        self.assertEqual([len(w) for w in rows], [2, 2, 2])
 
 
 class BandCodeTest(unittest.TestCase):
@@ -468,7 +468,7 @@ class IconsDocTest(unittest.TestCase):
         block = [b for tip, _, _, b in _cells() if tip == "banking_dash_bubble_tt"][0]
         badge = _badge(_read(DASH), _block_from(block, block.index('blockoverride "badge" {')))
         tex = re.search(r'texture = "([^"]+)"', badge).group(1)
-        self.assertEqual(self.doc["Overview row 1: bubble pressure"].get("crash risk"), tex)
+        self.assertEqual(self.doc["Overview row 2: bubble pressure"].get("crash risk"), tex)
 
     def test_the_cost_icon_is_listed(self):
         """Play-test round 3: the compact point-cost cell of every tool row."""
@@ -480,7 +480,7 @@ class IconsDocTest(unittest.TestCase):
     def test_no_row_names_a_state_the_overview_lacks(self):
         listed = {(s, k) for s, rows in self.doc.items() for k in rows}
         drawn = {(DOC_SECTIONS[p], k) for _, _, found, _ in _cells() for p, k, _ in found}
-        drawn.add(("Overview row 1: bubble pressure", "crash risk"))
+        drawn.add(("Overview row 2: bubble pressure", "crash risk"))
         drawn.add((DOC_SECTIONS[None], "cost"))
         self.assertEqual(listed, drawn)
 
@@ -676,6 +676,16 @@ class ShortPanelTest(unittest.TestCase):
 UNITS = {"large": 10.0, "medium": 8.6,
          # not measured: the medium/large ratio (0.86) applied once more
          "small": 7.4}
+# The panel's own sizes (the banking_dash_fontsize_* templates at the head of
+# the dashboard file), scaled from measured ones: the serif face at 10 a
+# character in 20, and the overview's tooltip face at 8.6 in 16, measured from
+# the owner's screenshot of 2026-10-17 at 1.5 px a unit. Its long lines ran
+# 7.1 to 8.5 a character ("Bubble Pressure" 128 units, the widest); short
+# words run wider ("Momentum" 11.5) but sit in columns with room to spare.
+_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template banking_dash_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(DASH))}
+UNITS.update(row=10.0 / 20 * _SIZES["row"], heading=10.0 / 20 * _SIZES["heading"],
+             overview=8.6 / 16 * _SIZES["overview"])
 MARGIN = 1.1
 CUSTOM_LOC_DIR = os.path.join(REPO, "common", "customizable_localization")
 # The longest a number printed in a cell can be, named per cell. Rates and
@@ -755,7 +765,7 @@ class WidthBudgetTest(unittest.TestCase):
         tb = _block_from(text, start + len("textbox = "))
         self.assertIn(anchor, tb)
         width = int(re.search(r"max_width = (\d+)", tb).group(1))
-        font = re.search(r"using = fontsize_(small|medium|large)", tb).group(1)
+        font = re.search(r"using = (?:banking_dash_)?fontsize_(\w+)", tb).group(1)
         return width, font
 
     def type_box(self, typ, block):
@@ -770,7 +780,7 @@ class WidthBudgetTest(unittest.TestCase):
         names = self.texts("row_label")
         self.assertGreaterEqual(len(names), 40)
         cell = self.type_box("banking_dash_policy_row", "row_label")
-        self.assertEqual(cell, (320, "large"))
+        self.assertEqual(cell, (320, "row"))
         for key in names:
             with self.subTest(name=key):
                 self.fits(key, cell)
@@ -811,7 +821,7 @@ class WidthBudgetTest(unittest.TestCase):
         # The right half of a pair row is the narrower cell (144): hold its
         # labels, and only its labels, to it.
         right = self.type_box("banking_dash_pair_right", "pair_label")
-        self.assertEqual(right, (144, "large"))
+        self.assertEqual(right, (144, "row"))
         rights = set()
         for m in re.finditer(r'blockoverride "pair_right" \{\s*banking_dash_pair_right = \{', self.dash):
             cell_block = _block_from(self.dash, m.end() - 1)
@@ -844,7 +854,7 @@ class WidthBudgetTest(unittest.TestCase):
         value = self.dash[self.dash.index("type banking_dash_condition_value = textbox {"):]
         value = _block_from(value, value.index("{"))
         cell = (int(re.search(r"max_width = (\d+)", value).group(1)),
-                re.search(r"using = fontsize_(\w+)", value).group(1))
+                re.search(r"using = (?:banking_dash_)?fontsize_(\w+)", value).group(1))
         # the Budget tab's read-only readout shares the type and the cell
         for where in (body, _type_body(self.dash, "te_banking_mon_readout")):
             for m in re.finditer(r"banking_dash_condition_value = \{", where):
@@ -857,51 +867,58 @@ class WidthBudgetTest(unittest.TestCase):
 
     def test_overview_cells(self):
         """Each cell's caption and words fit the column its own width leaves
-        (width - 34, beside the icon), in the medium type. The type's word box
-        is as wide as the widest column, so no cell's word is cut by it."""
+        beside the icon (width - the lines' x - 6 of padding), in the
+        overview's type. The type's word box is as wide as the widest column,
+        so no cell's word is cut by it."""
         cap = _type_body(self.dash, "te_banking_ov_cell")
-        self.assertIn("using = fontsize_medium", cap)
+        self.assertIn("using = banking_dash_fontsize_overview", cap)
+        x = int(re.search(r"position = \{ (\d+) 2 \}", cap).group(1))
         word = _type_body(self.dash, "te_banking_ov_word")
-        self.assertIn("using = fontsize_medium", word)
+        self.assertIn("using = banking_dash_fontsize_overview", word)
+        self.assertIn("position = { %d 24 }" % x, word)
         widest = int(re.search(r"max_width = (\d+)", word).group(1))
         words, columns = set(), []
         for tip, caption, _, block in _cells():
-            width = int(re.search(r"size = \{ (\d+) 46 \}", block).group(1))
-            column = width - 34
+            width = int(re.search(r"size = \{ (\d+) \d+ \}", block).group(1))
+            column = width - x - 6
             columns.append(column)
             declared = re.search(r'blockoverride "caption_width" \{\s*max_width = (\d+)', block)
             self.assertEqual(int(declared.group(1)), column, tip)
             with self.subTest(caption=caption):
-                self.fits(caption, (column, "medium"))
-            for key in re.findall(r'te_banking_ov_word = \{[^{}]*?text = "(\w+)"', block):
+                self.fits(caption, (column, "overview"))
+            for key in re.findall(r'te_banking_ov_word = \{(?:[^{}]|\{[^{}]*\})*?text = "(\w+)"', block):
                 words.add(key)
                 with self.subTest(word=key):
-                    self.fits(key, (column, "medium"))
-        self.assertEqual(len(words), 12)   # seven phase words and five readings
+                    self.fits(key, (column, "overview"))
+        self.assertEqual(len(words), 15)   # seven phase words, five readings and three third lines
         self.assertEqual(widest, max(columns))
         # the longest band word, named: the price band's
         self.assertEqual(self.shown("banking_dash_mon_band_value"), "Hyperinflation")
 
     def test_overview_change_lines(self):
-        """The ranges under the first row (test_banking_monthly_change.py).
+        """The ranges on the cycle cells' third line (test_banking_monthly_change.py).
         The cycle value and bubble pressure print one decimal; momentum
         prints two, and its monthly change stays well inside +/-10 (a tenth of
         momentum decays, and the pushes come to a few points at most)."""
         body = _type_body(self.dash, "te_banking_overview_panel")
         box = _type_body(self.dash, "te_banking_ov_change_text")
-        font = re.search(r"using = fontsize_(\w+)", box).group(1)
-        self.assertEqual(font, "medium")
+        font = re.search(r"using = (?:banking_dash_)?fontsize_(\w+)", box).group(1)
+        self.assertEqual(font, "overview")
         reach = int(re.search(r"max_width = (\d+)", box).group(1))
-        start = int(re.search(r"position = \{ (\d+) 0 \}", box).group(1))
+        line = _type_body(self.dash, "te_banking_ov_change")
+        x, y = map(int, re.search(r"position = \{ (\d+) (\d+) \}", line).groups())
+        width = int(re.search(r"size = \{ (\d+) 22 \}", line).group(1))
+        self.assertEqual(y, 46)                           # the third line, under the word
+        self.assertLessEqual(reach, width)                # the text stays inside the line
+        self.assertLessEqual(x + width, 238 - 6)          # and the line inside its box
         keys = set()
         for m in re.finditer(r"te_banking_ov_change = \{", body):
             block = _block_from(body, m.end() - 1)
-            width = int(re.search(r"size = \{ (\d+) 22 \}", block).group(1))
-            self.assertLessEqual(start + reach, width)      # the type's box stays inside the cell
+            self.assertNotIn("size =", block.split("blockoverride")[0])   # the type's size
             for key in re.findall(r'te_banking_ov_change_text = \{[^{}]*?text = "(\w+)"', block):
                 keys.add(key)
                 with self.subTest(line=key):
-                    self.fits(key, (width - start, font), "-9.99" if "_momentum_" in key else NUMBER)
+                    self.fits(key, (width, font), "-9.99" if "_momentum_" in key else NUMBER)
         self.assertEqual(len(keys), 10)   # four shapes each for value and momentum, two for bubble
 
     def test_buttons(self):
@@ -909,7 +926,7 @@ class WidthBudgetTest(unittest.TestCase):
         states_panel.gui and power_bloc_panel.gui do beside default_button_action)."""
         types = {"banking_dash_mon_button": 140, "banking_dash_action_button": 90}
         for typ in types:
-            self.assertIn("using = fontsize_large", _type_body(self.dash, typ))
+            self.assertIn("using = banking_dash_fontsize_row", _type_body(self.dash, typ))
         for typ, default in types.items():
             for m in re.finditer(r"\b%s = \{" % typ, self.dash):
                 block = _block_from(self.dash, m.end() - 1)
@@ -918,10 +935,36 @@ class WidthBudgetTest(unittest.TestCase):
                 if key is None:          # the type's own block slots
                     continue
                 with self.subTest(button=key.group(1)):
-                    self.fits(key.group(1), (int(size.group(1)) if size else default, "large"))
+                    self.fits(key.group(1), (int(size.group(1)) if size else default, "row"))
         for key in ("banking_dash_btn_enable", "banking_dash_btn_disable", "banking_dash_btn_execute"):
-            self.fits(key, (90, "large"))
+            self.fits(key, (90, "row"))
 
+
+
+class BudgetPointsTest(unittest.TestCase):
+    """The budget cell's "used" line is banking_display_points_total less the
+    points free, so the total must list every grant of the budget, at its
+    value (a law's modifier block, or a static modifier's)."""
+
+    def test_the_total_lists_every_grant(self):
+        sv = _read(os.path.join(REPO, "common", "script_values", "extra_script_values.txt"))
+        start = sv.index("banking_display_points_total = {")
+        total = _block_from(sv, sv.index("{", start))
+        listed = dict(re.findall(r"has_law = law_type:(\w+) \} add = (\d+)", total))
+        listed.update(re.findall(r"te_mon_mod_has = \{ NAME = (\w+) \} \} add = (\d+)", total))
+        grants = {}
+        for sub in ("laws", "static_modifiers"):
+            folder = os.path.join(REPO, "common", sub)
+            for name in sorted(os.listdir(folder)):
+                text = _read(os.path.join(folder, name))
+                for m in re.finditer(r"(?m)^country_banking_intervention_max_add|"
+                                     r"^\t+country_banking_intervention_max_add = \+?([1-9]\d*)", text):
+                    if m.group(1) is None:
+                        continue
+                    owner = re.findall(r"(?m)^(\w+) = \{", text[:m.start()])[-1]
+                    grants[owner] = m.group(1)
+        self.assertGreaterEqual(len(grants), 9)
+        self.assertEqual(listed, grants)
 
 if __name__ == "__main__":
     unittest.main()

@@ -44,7 +44,7 @@ Vanilla's arrows, kept, with a red triple arrow of the mod's own at each end. 32
 
 **The triple arrows.** Vanilla has no arrow past the double, so Freefall and Overheating have their own: three heads stacked, faceted as vanilla's are (a lit left face, a shaded right one, a dark rim), in red. They are drawn, not rendered: the icon pipeline's `banking_state` entries `momentum_freefall` and `momentum_overheating`, a `trend` mark on a bare canvas (`icon_render.trend_arrow`). Vanilla's five beside them are not one set either (a bronze double chevron, orange and lime heads, a yellow dot, a green double), so the red pair reads as the extremes rather than as strangers. If they look out of place in game, all seven can move to drawn arrows together.
 
-## Overview row 1: bubble pressure
+## Overview row 2: bubble pressure
 
 One emblem, a stack of gold coins inside a bubble that grows band by band, its rim changing colour. 32 px, the band word beside it. Code: `banking_disp_bubble_band_code`.
 
@@ -64,7 +64,7 @@ The list asked for the bubble resting on a coin stack. A small bubble on a tall 
 |---|---|---|
 | crash risk | vanilla's warning mark, kept | `gfx/interface/icons/generic_icons/warning.dds` |
 
-## Overview row 2: policy stance
+## Overview row 3: policy stance
 
 One emblem, a brass tap with a red handwheel; the coins falling from it count the stance. 32 px, the band word beside it, only for a country with a dial once the monetary layer has reported. Code: `banking_disp_stance_band_code`.
 
@@ -78,7 +78,7 @@ One emblem, a brass tap with a red handwheel; the coins falling from it count th
 
 The list asked for a valve wheel at five angles. A wheel's angle does not read at 32 px, and the coin count does.
 
-## Overview row 2: inflation (the price band)
+## Overview row 3: inflation (the price band)
 
 One emblem, a paper price tag on a string, with a mark on it. 32 px, the band word beside it, only while the monetary layer is on and has reported. Code: `banking_disp_price_band_code`.
 

@@ -268,7 +268,8 @@ class ReuseTest(unittest.TestCase):
 
     def test_the_phase_instances_the_overviews_icon_type(self):
         overview = _type_body(self.dash, "te_banking_overview_panel")
-        self.assertRegex(overview, r'blockoverride "icons" \{\s*te_banking_phase_icons = \{\}')
+        # (sized there to fill the overview cell's 48 x 48 icon widget)
+        self.assertRegex(overview, r'blockoverride "icons" \{\s*te_banking_phase_icons = \{\s*size = \{ 100% 100% \}\s*\}')
 
     def test_only_the_phase(self):
         body = self.r.body + _type_body(self.dash, "te_banking_topbar_gate")
