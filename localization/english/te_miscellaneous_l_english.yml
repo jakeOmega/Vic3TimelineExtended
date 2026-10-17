@@ -7116,6 +7116,7 @@
  te_seabed_gate_next_distant_tt:0 "The next level here takes another basin's licence, at #R -25%#! throughput (Long-Haul Seabed Operations) until a local one frees up"
  te_seabed_gate_next_local_tt:0 "The next level here takes a licence from this state's own basin"
  te_seabed_gate_room_tt:0 "[concept_seabed_licence]s to spare: #v [GetPlayer.MakeScope.ScriptValue('te_seabed_room_shown')|0]#! (unbuilt: Pacific [GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0], Atlantic [GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0], Indian [GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0], Arctic [GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0], Southern [GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0])"
+ te_seabed_holding_fee_modifier:0 "Seabed Holding Fee"
  te_seabed_how_distant:0 "A level takes its own basin's licence first. When that share is used up it takes one from the basin where we have the most to spare, at #R -[GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! throughput (Long-Haul Seabed Operations), and swaps to a local licence as soon as one frees up."
  te_seabed_how_header:0 "How Seabed Licences Work"
  te_seabed_how_licences:0 "A licence belongs to the level, not the country. It is recorded on the state the mine stands in and passes with it: a conquered mine keeps its licences, and the conqueror holds them. Levels that are downsized or destroyed give their licences back to their owner's share."

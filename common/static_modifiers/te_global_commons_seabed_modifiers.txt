@@ -15,6 +15,18 @@ te_seabed_long_haul = {
 	building_ocean_mine_throughput_add = -0.25
 }
 
+# The holding fee (seabed claims spec § 2.1): money a week per licence on a
+# Deep-Sea Mine level unbuilt since the year's first sharing before last. A
+# unit country modifier, applied with multiplier = the fee a week
+# (var:te_seabed_fee_cached); its one refresh site is te_seabed_fee_refresh.
+# Counted in the Budget Breakdown under United Nations beside the royalty
+# (scripts/generators/gen_budget_breakdown.py).
+te_seabed_holding_fee_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
+}
+
 # The seabed policy's influence, held while the policy stands (§ 2.5), flat as
 # the UN's stances and programmes hold theirs. Literal values, never applied
 # with a multiplier; te_seabed_influence_sponsor / _unilateral restate them

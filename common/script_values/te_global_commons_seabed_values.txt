@@ -84,6 +84,12 @@ te_seabed_unilateral_relations_half = {
 # this much of its claims in each basin (model: FLOOR_KEEP, set_floors).
 te_seabed_floor_keep = 0.75
 
+# ---- The holding fee (seabed claims spec § 2.1) ----
+# A week, on each licence whose level has stayed unbuilt since the year's
+# first sharing before last: this share of a level's base output value
+# (te_seabed_level_output_value), half the royalty (model: FEE_RATE).
+te_seabed_fee_rate = 0.02
+
 # ---- Long-haul (§ 2.4) ----
 # Display figure: te_seabed_long_haul (te_global_commons_seabed_modifiers.txt)
 # carries building_ocean_mine_throughput_add = -0.25 at multiplier 1.
@@ -153,6 +159,52 @@ te_seabed_state_levels = {
 	every_scope_building = {
 		limit = { is_building_type = building_ocean_mine }
 		add = level_after_queued_constructions
+	}
+}
+
+# Finished Deep-Sea Mine levels in the state (model: State.built), and those
+# under construction (model: State.queued).
+te_seabed_state_built_levels = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_ocean_mine }
+		add = level
+	}
+}
+
+te_seabed_state_queued_levels = {
+	value = te_seabed_state_levels
+	subtract = te_seabed_state_built_levels
+	min = 0
+}
+
+# Licences on the state's queued levels (model: unbuilt_licences). Built
+# levels are licensed first, so a shortfall falls on queued levels, and
+# licences above the levels (a demolition not yet returned) are on none.
+te_seabed_state_unbuilt_lic = {
+	value = te_seabed_state_records
+	subtract = te_seabed_state_built_levels
+	max = te_seabed_state_queued_levels
+	min = 0
+}
+
+# The state's holding-fee base (model: fee_base_state): licences on levels
+# already unbuilt at the last two first-sharings of a year, the smallest of
+# the count now and its two snapshots (te_seabed_take_snapshots). A state
+# without both snapshots (an old save, a split, a revolution's first year)
+# pays nothing yet. The snapshots are state variables, so they pass with the
+# state.
+te_seabed_state_fee_base = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_unb_snap1
+			has_variable = te_seabed_unb_snap2
+		}
+		value = te_seabed_state_unbuilt_lic
+		max = var:te_seabed_unb_snap1
+		max = var:te_seabed_unb_snap2
+		min = 0
 	}
 }
 
@@ -345,6 +397,56 @@ te_seabed_distant_total = {
 	every_scope_state = {
 		limit = { is_coastal = yes }
 		add = te_seabed_state_distant_records
+	}
+}
+
+# ---- The holding fee (seabed claims spec § 2.1) ----
+
+# Model: fee_base. The licences the country pays the fee on.
+te_seabed_fee_base = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			has_variable = te_seabed_unb_snap2
+		}
+		add = te_seabed_state_fee_base
+	}
+}
+
+# Licences on the country's queued levels, all of them.
+te_seabed_unbuilt_lic_total = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			has_variable = te_seabed_lic_pacific
+		}
+		add = te_seabed_state_unbuilt_lic
+	}
+}
+
+# The fee a week: te_seabed_holding_fee_modifier's multiplier, cached as
+# var:te_seabed_fee_cached by te_seabed_fee_refresh.
+te_seabed_fee_weekly_value = {
+	value = te_seabed_fee_base
+	multiply = te_seabed_level_output_value
+	multiply = te_seabed_fee_rate
+}
+
+# Display: licences on queued levels still in their grace (they pay nothing yet).
+te_seabed_fee_grace_disp = {
+	value = te_seabed_unbuilt_lic_total
+	subtract = te_seabed_fee_base
+	min = 0
+}
+
+# Display: the fee a week, 0 when none is charged.
+te_seabed_fee_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_fee_cached }
+		value = var:te_seabed_fee_cached
 	}
 }
 

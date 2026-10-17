@@ -336,6 +336,68 @@ class RelinquishScriptTest(unittest.TestCase):
             self.assertIn(f" {key}:", loc)
 
 
+class FeeScriptTest(unittest.TestCase):
+    """Model: take_snapshots, fee_base_state, fee_base (seabed claims spec § 2.1)."""
+
+    UN_VALUES = "common/script_values/te_global_commons_un_values.txt"
+
+    def test_rate(self):
+        self.assertEqual(literal(read(VALUES), "te_seabed_fee_rate"), m.FEE_RATE)
+        self.assertEqual(m.FEE_RATE, 0.02)
+
+    def test_base_is_the_smallest_of_now_and_two_snapshots(self):
+        values = strip_comments(read(VALUES))
+        state = block(values, "te_seabed_state_fee_base")
+        for v in ("te_seabed_unb_snap1", "te_seabed_unb_snap2", "te_seabed_state_unbuilt_lic"):
+            self.assertIn(v, state)
+        self.assertIn("min = 0", state)
+        lic = block(values, "te_seabed_state_unbuilt_lic")
+        self.assertIn("subtract = te_seabed_state_built_levels", lic)
+        self.assertIn("max = te_seabed_state_queued_levels", lic)
+        self.assertIn("add = level\n", block(values, "te_seabed_state_built_levels"))
+        self.assertIn("te_seabed_state_fee_base", block(values, "te_seabed_fee_base"))
+        weekly = block(values, "te_seabed_fee_weekly_value")
+        for v in ("te_seabed_fee_base", "te_seabed_level_output_value", "te_seabed_fee_rate"):
+            self.assertIn(v, weekly)
+
+    def test_snapshots_at_the_years_first_sharing_after_recording(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        at = body.index("te_seabed_take_snapshots = yes")
+        self.assertLess(body.index("te_seabed_record_country"), at)
+        self.assertLess(at, body.index("te_seabed_compute_held"))
+        guard = body.rindex("if = {", 0, at)
+        self.assertIn("has_global_variable = te_seabed_first_of_year", body[guard:at])
+        snap = strip_comments(block(read(EFFECTS), "te_seabed_take_snapshots"))
+        self.assertLess(snap.index("name = te_seabed_unb_snap2"), snap.index("name = te_seabed_unb_snap1"))
+
+    def test_one_refresh_site(self):
+        effects = strip_comments(read(EFFECTS))
+        self.assertEqual(effects.count("name = te_seabed_holding_fee_modifier"), 1)
+        self.assertIn("multiplier = var:te_seabed_fee_cached", block(effects, "te_seabed_fee_refresh"))
+        monthly = block(effects, "te_seabed_monthly_country")
+        self.assertEqual(monthly.count("te_seabed_fee_refresh = yes"), 2)     # with the rule off it comes off
+
+    def test_the_modifier_and_its_breakdown_category(self):
+        body = block(read(MODIFIERS), "te_seabed_holding_fee_modifier")
+        self.assertIn("country_expenses_add = 1", body)
+        self.assertIn("country_te_budget_expense_un_add = 1", body)
+        with open(os.path.join(REPO, "scripts", "generators", "gen_budget_breakdown.py"), encoding="utf-8") as f:
+            self.assertIn('"te_seabed_holding_fee_modifier"', f.read())
+
+    def test_fee_joins_royalties_under_regulation(self):
+        total = strip_comments(block(read(self.UN_VALUES), "te_seabed_royalties_total_value"))
+        self.assertIn("te_seabed_fee_cached", total)
+        fee = total[total.index("te_seabed_holding_fee_modifier") - 300:]
+        self.assertIn("te_seabed_regime_is_regulated = yes", fee)
+        self.assertIn("te_seabed_itlos_party = yes", fee)
+
+    def test_loc_states_the_rate(self):
+        loc = english_loc()
+        self.assertIn(" te_seabed_holding_fee_modifier:", loc)
+        desc = re.search(r'^ te_seabed_holding_fee_modifier_desc:0 "(.*)"$', loc, re.M).group(1)
+        self.assertIn(f"{m.FEE_RATE * 100:g}% of a level's base output value a week", desc)
+
+
 class GateTest(unittest.TestCase):
     def test_the_deep_sea_mine_reads_the_gate(self):
         building = block(read(BUILDINGS), "REPLACE_OR_CREATE:building_ocean_mine")

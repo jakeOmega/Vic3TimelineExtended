@@ -13,6 +13,9 @@
 #            te_seabed_lic_<basin>        licences recorded on its Deep-Sea
 #                                         Mine levels (built or queued)
 #            te_seabed_holder             its owner when last recorded
+#            te_seabed_unb_snap1/2        licences on its unbuilt levels at
+#                                         the last two first-sharings of a
+#                                         year (the holding fee's grace)
 #   country  te_seabed_unbuilt_<basin>    entitled and unused
 #            te_seabed_held_<basin>       records in its states (yearly)
 #            te_seabed_ent_<basin>        entitlement (yearly)
@@ -28,6 +31,8 @@
 #                                         max(held, floor), scaled to fit
 #            te_seabed_relinq_<basin>     flag: relinquished, weight 0 there
 #                                         until Claim Again
+#            te_seabed_fee_cached         the holding fee a week, the
+#                                         modifier's multiplier
 #            te_seabed_country            flag: has been recorded
 #            te_seabed_shared             flag: took part in a sharing
 #   global   te_seabed_regime             1 Open, 2 Regulated, 3 Scramble
@@ -50,7 +55,8 @@
 # holder gone when its state changes hands. Model: seabed_model.py's header.
 #
 # PULSES (te_global_commons_seabed_on_actions.txt):
-#   monthly country   te_seabed_monthly_country: record (te_seabed_record_country)
+#   monthly country   te_seabed_monthly_country: record (te_seabed_record_country),
+#                     the holding fee (te_seabed_fee_refresh)
 #   monthly state     te_seabed_refresh_long_haul: Long-Haul Seabed Operations
 #   owner change      te_seabed_on_state_owner_change
 #   monthly global    te_seabed_global_monthly: the yearly sharing when due
@@ -581,6 +587,20 @@ te_seabed_yearly_pass = {
 		te_seabed_record_country = yes
 	}
 	te_seabed_cap_check = yes
+	# 3b. The holding fee's snapshots, at the year's first sharing.
+	if = {
+		limit = { has_global_variable = te_seabed_first_of_year }
+		every_country = {
+			limit = { has_variable = te_seabed_part }
+			every_scope_state = {
+				limit = {
+					is_coastal = yes
+					has_variable = te_seabed_lic_pacific
+				}
+				te_seabed_take_snapshots = yes
+			}
+		}
+	}
 	# 4-5. Held licences, the floors (the year's first sharing only; a
 	# mid-year one honours January's) and weights.
 	every_country = {
@@ -1412,6 +1432,7 @@ te_seabed_monthly_country = {
 		}
 		te_seabed_record_country = yes
 		te_seabed_policy_cost_check = yes
+		te_seabed_fee_refresh = yes
 		if = {
 			limit = {
 				te_seabed_is_claimant = yes
@@ -1424,6 +1445,61 @@ te_seabed_monthly_country = {
 	else_if = {
 		limit = { has_variable = te_seabed_country }
 		te_seabed_policy_cost_check = yes
+		te_seabed_fee_refresh = yes
+	}
+}
+
+# ---- The holding fee (seabed claims spec § 2.1) ----
+
+# State scope (the yearly pass, the year's first sharing, after recording).
+# Model: take_snapshots. The state keeps its last two counts of licences on
+# unbuilt levels.
+te_seabed_take_snapshots = {
+	if = {
+		limit = { has_variable = te_seabed_unb_snap1 }
+		set_variable = { name = te_seabed_unb_snap2 value = var:te_seabed_unb_snap1 }
+	}
+	else = {
+		set_variable = { name = te_seabed_unb_snap2 value = 0 }
+	}
+	set_variable = { name = te_seabed_unb_snap1 value = te_seabed_state_unbuilt_lic }
+}
+
+# Country scope (te_seabed_monthly_country): te_seabed_holding_fee_modifier's
+# one refresh site, re-priced from the fee base; off with the rule off or
+# nothing to pay. The cached figure is a variable, so a revolution's winner
+# pays from its next pulse. While the country pays royalties' way (a Law of
+# the Sea party under the Regulated regime) te_seabed_royalties_total_value
+# sends the fee with them.
+te_seabed_fee_refresh = {
+	if = {
+		limit = { te_global_commons_enabled = yes }
+		set_local_variable = { name = te_sb_fee value = te_seabed_fee_weekly_value }
+	}
+	else = {
+		set_local_variable = { name = te_sb_fee value = 0 }
+	}
+	if = {
+		limit = { local_var:te_sb_fee > 0 }
+		set_variable = { name = te_seabed_fee_cached value = local_var:te_sb_fee }
+		if = {
+			limit = { has_modifier = te_seabed_holding_fee_modifier }
+			remove_modifier = te_seabed_holding_fee_modifier
+		}
+		add_modifier = {
+			name = te_seabed_holding_fee_modifier
+			multiplier = var:te_seabed_fee_cached
+		}
+	}
+	else = {
+		if = {
+			limit = { has_modifier = te_seabed_holding_fee_modifier }
+			remove_modifier = te_seabed_holding_fee_modifier
+		}
+		if = {
+			limit = { has_variable = te_seabed_fee_cached }
+			remove_variable = te_seabed_fee_cached
+		}
 	}
 }
 

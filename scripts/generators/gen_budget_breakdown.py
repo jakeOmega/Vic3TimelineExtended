@@ -39,6 +39,9 @@ SOURCES = {
             "un_development_contributor_cost", "un_humanitarian_aid_cost", "un_humanitarian_token_cost",
             "un_observer_mission_cost", "un_peacekeeping_deployment_cost", "un_mission_service_cost",
             "un_dues_modifier", "un_loan_repayment_modifier", "te_seabed_royalty_modifier",
+            # Paid to the UN only by a Law of the Sea party under regulation;
+            # beside the royalty it is closest to (no category of its own).
+            "te_seabed_holding_fee_modifier",
         )),
         "nuclear": ("Nuclear Program", ("nd_upkeep_cost", "nd_exercise_cost")),
         "nuclear_taboo": ("Nuclear Civil Defence", ("nd_taboo_civil_defence",)),

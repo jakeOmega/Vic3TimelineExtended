@@ -108,6 +108,7 @@ DISTANT_NAVY_SHARE = 0.05
 STATION_WEIGHT = 5
 ASSERTIVE_NAVY_MULT = 2
 FLOOR_KEEP = 0.75                    # te_seabed_floor_keep: Sponsor keeps at least this much of its claims
+FEE_RATE = 0.02                      # te_seabed_fee_rate: the holding fee, of a level's base output value a week
 
 
 def fx(x: float) -> float:
