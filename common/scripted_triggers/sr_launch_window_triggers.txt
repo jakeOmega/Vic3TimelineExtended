@@ -1,0 +1,88 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — launch windows: who may launch where, now
+# ============================================================================
+# Global Commons spec § 5.2 and § 5.2a. The windows themselves are generated
+# (scripts/generators/gen_launch_windows.py: sr_window_open_<body>,
+# sr_window_body_in_play_<body>, the cache readers sr_window_wait_months_<body>
+# and sr_window_premium_now_<body>, and per body sr_launch_cost_<body>, which
+# calls the two triggers below). This file holds the rule; the generated files
+# hold the sky.
+#
+# The three steps of propulsion, for one country:
+#   chemical          (no Asteroid Mining) a body's sites depart only in its window
+#   propellant depots (asteroid_mining)     outside a window too, at the premium,
+#                                           when the approach's test passes
+#   fusion drives     (compact_fusion_reactors) any month, free: no windows
+# The Moon, Mercury and the probes are never gated. Players and the AI run the
+# same rule: the AI keeps funding and its approach decides off-window launches.
+#
+# $BODY$ is a window body's token (mars, ceres, vesta, psyche, pallas, hygiea,
+# jupiter, venus, saturn, uranus, neptune, kuiper). Country scope throughout.
+# ============================================================================
+
+sr_launch_has_fusion = {
+	has_technology_researched = compact_fusion_reactors
+}
+
+sr_launch_has_depots = {
+	has_technology_researched = asteroid_mining
+}
+
+# Launch windows bind this country: the space race rule is on and it has no
+# fusion drives.
+sr_launch_windows_apply = {
+	has_game_rule = space_race_enabled
+	NOT = { sr_launch_has_fusion = yes }
+}
+
+# A fleet can leave for the body now at no premium: its window is open (the
+# cache the global monthly pulse keeps), or windows don't bind this country.
+sr_launch_departs_free = {
+	sr_window_body_in_play_$BODY$ = yes
+	OR = {
+		NOT = { sr_launch_windows_apply = yes }
+		has_global_variable = sr_window_is_open_$BODY$
+	}
+}
+
+# A fleet can leave for the body now outside its window, at the premium: the
+# country has propellant depots, its approach is not Safe, and the months the
+# premium costs every later colony (goal x premium / pace) are at most the
+# months it saves this one, weighted by the approach (sr_launch_months_allowed).
+sr_launch_departs_paid = {
+	sr_window_body_in_play_$BODY$ = yes
+	sr_launch_windows_apply = yes
+	NOT = { has_global_variable = sr_window_is_open_$BODY$ }
+	sr_launch_has_depots = yes
+	NOT = { has_variable = sr_safe_solar_colonization }
+	sr_launch_months_cost_$BODY$ <= sr_launch_months_allowed
+}
+
+# The colony draw (sr_establish_colony_effect): a site of this body may be
+# drawn when a fleet can leave for it and no unclaimed site is cheaper. With
+# sr_launch_best_cost at sr_launch_never nothing can depart and no site passes,
+# so the draw can never found a site whose body is closed to this country.
+sr_launch_site_departs = {
+	sr_launch_best_cost < sr_launch_never
+	sr_launch_cost_$BODY$ <= sr_launch_best_cost
+}
+
+# Mercury is never gated: drawn whenever the cheapest launch is free.
+sr_launch_mercury_departs = {
+	sr_launch_best_cost <= 0
+}
+
+# The month's colony fleet is ready: staged progress covers goal x (1 +
+# premium) for the cheapest site that can depart. Read by the journal entry's
+# monthly pulse after sr_launch_windows_ensure_cache.
+sr_launch_fleet_ready = {
+	has_variable = sr_progress_solar_colonization
+	sr_launch_best_cost < sr_launch_never
+	var:sr_progress_solar_colonization >= sr_launch_fleet_cost
+}
+
+# The window cache was filled this month (sr_launch_windows_refresh_cache).
+sr_launch_window_cache_current = {
+	has_global_variable = sr_window_cache_month
+	global_var:sr_window_cache_month = te_history_month_index
+}

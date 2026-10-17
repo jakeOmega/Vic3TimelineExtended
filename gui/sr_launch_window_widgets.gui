@@ -1,0 +1,53 @@
+﻿### Solar System Colonization's launch windows (docs/superpowers/specs/
+### 2026-10-16-global-commons-design.md § 5.4). Types only, composed in
+### journal_entry_widgets/space_race_widget.gui:
+###   te_sr_ov_staged    the overview's "Staged in Orbit: N fleets" line, while a
+###                      full bar waits (te_sr_solar_colonization_overview, in
+###                      its sr_extra_rows)
+###   te_sr_sec_windows  Mission Control's Next Windows block, solar
+###                      colonization only (te_sr_sec_control's control_extra,
+###                      passed by te_sr_status_sections)
+### The datacontext is the milestone's scripted GUI, under the journal entry, as
+### for every space race section. The numbers are script values
+### (common/script_values/sr_launch_window_values.txt, and the per-body readers
+### in sr_launch_windows_generated.txt); the destination lines are printed by
+### sr_launch_windows_sgui (common/scripted_guis/sr_launch_window_sguis.txt),
+### one custom_tooltip line each, because a stage lists only the bodies with a
+### site left and .gui has no list of them.
+
+types sr_launch_window_types
+{
+	### "Staged in Orbit: 1.4 fleets": progress past the goal, in goals, while
+	### no fleet can leave. Hover for each destination's next window, how the
+	### fleets depart and what ends the waiting.
+	type te_sr_ov_staged = te_sr_value_row {
+		parentanchor = hcenter
+		visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_shown'), '(CFixedPoint)0' )]"
+		tooltip = "[GetScriptedGui('sr_launch_windows_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+		blockoverride "row_label" {
+			text = "je_space_race_widget_ov_staged_label"
+		}
+		blockoverride "row_value" {
+			text = "je_space_race_widget_ov_staged_value"
+		}
+	}
+
+	### Next Windows: one line per destination of the stage with a site left.
+	### Gated, as Mission Control's controls are, on the scripted GUI's
+	### is_shown, so a finished or idle programme lists nothing.
+	type te_sr_sec_windows = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+
+		te_sr_subheader = {
+			tooltip = "je_space_race_widget_windows_header_tt"
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_windows_header"
+			}
+		}
+		te_sr_text = {
+			text = "[GetScriptedGui('sr_launch_windows_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		}
+	}
+}

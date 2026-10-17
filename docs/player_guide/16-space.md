@@ -163,8 +163,13 @@ them.
 
 Solar System Colonization's overview shows its stage (Stage: 2 of 5) in place
 of the first, and its bar is Next Colony, the progress toward your next colony.
-Under the bar, the Worlds pie counts the 34 worlds: gold for your colonies, red
-for other powers' and grey for the worlds no one holds; hover it for the counts.
+While a full bar waits for a launch window, Staged in Orbit gives the progress
+built so far in colony fleets ("1.4 fleets"); hover it for each destination's
+next window. Under the bar, the Worlds pie counts the 34 worlds: gold for your
+colonies, red for other powers' and grey for the worlds no one holds; hover it
+for the counts. Its Mission Control adds Next Windows, the destinations of the
+stage with a world left and the months to each window (see [Launch
+windows](#launch-windows)).
 While the program isn't running, because every world is claimed or your Space
 Program no longer runs the method it needs, the approach reads Idle, the risk
 and progress rows are hidden, and Mission Control shows only the Mission
@@ -300,7 +305,8 @@ On a Safe or Standard approach you get a minor setback: missing parts, bad weath
 scandal, a quarrel with a foreign supplier. It costs 15% of the milestone's
 progress plus a few points, with no lasting modifier and no safety period. A few
 setbacks, on any approach, also cut the Space Program's throughput for some
-months.
+months. In Solar System Colonization the 25% or 15% is of one colony's progress
+at most, so fleets staged in orbit are never lost to a setback.
 
 A setback never ends a milestone; it only costs time. Two things do: dropping
 below major power, or losing the production method or building the milestone
@@ -353,8 +359,9 @@ confirms its discovery; the reward is the same.
 
 ## Colonizing the solar system
 
-Solar System Colonization is repeatable. Each time its bar fills, you found a
-colony on a random unclaimed world in the current stage. Each world can be
+Solar System Colonization is repeatable. Each time its bar fills, a colony fleet
+founds a colony on a random unclaimed world in the current stage that it can
+reach that month (see [Launch windows](#launch-windows)). Each world can be
 claimed once, by anyone, so every other country racing for colonies competes for
 the same 34 sites. A stage opens for everyone once every world in the one before
 it has been claimed, and each stage needs more progress per colony.
@@ -386,6 +393,45 @@ Colonization finishes within a month for every country that holds a colony,
 whoever took the last world and whether or not its program is running.
 Finishing grants Interplanetary Trade Networks: +10% prestige, +5% research
 speed, +10% influence and +15% cultural pull.
+
+### Launch windows
+
+Every world but Mercury is reached on a transfer orbit that lines up only once
+in a while. A world's launch window is the month of its best departure and the
+month on either side. The windows are worked out from the planets' and
+asteroids' real orbits: Mars opens one every 26 months or so, each asteroid
+every 15 to 17, Venus every 19, Jupiter every 13, and Saturn, Uranus, Neptune
+and the Kuiper Belt about once a year. Next Windows in Mission Control lists the
+stage's destinations with the months to each.
+
+While no destination with a world left is open, the program keeps building.
+Progress past a colony's goal is fleets staged in orbit, shown on the overview
+as Staged in Orbit. When a window opens, one fleet departs each month it stays
+open while staged progress covers a colony, so a three-month window can send
+three. What is left waits for the next window. It carries on to the next stage
+if rivals take the stage's last worlds, and is lost only when the last of the 34
+worlds is claimed. Cutting funding while you wait gains nothing: whatever you
+build now leaves in a later window.
+
+Propulsion technology loosens the windows in three steps:
+
+| Technology | Launches |
+|---|---|
+| Directed Energy Weapons (opens colonization) | In a window only. |
+| Asteroid Mining | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
+| Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
+
+The premium is the extra propellant an off-window transfer needs, so it climbs
+fast away from the window: on Mars, about +40% the month after a window closes
+and +150% the month after that. With Asteroid Mining, Next Windows shows
+today's figure for each closed destination. A fleet leaves outside a window, for the cheapest
+destination, when the months it saves (until the stage's next window) are worth
+the months its premium costs (the goal times the premium, at your monthly pace).
+Standard launches when it saves at least as many months as it costs, Ambitious
+when it saves at least half as many, and Safe always waits for a window. A fleet
+that leaves outside a window spends the goal plus the premium. In practice a fast
+program launches just after a window closes rather than wait two years for Mars,
+and almost never just before one, when waiting is cheap.
 
 ### Rare colony discoveries
 
@@ -554,7 +600,9 @@ out. Such an AI winds its funding down to 0 and pays nothing for the approach
 it has chosen until it climbs back into the top three. AI great powers prefer
 the Ambitious approach, more so when another country is running the same
 milestone; AI major powers lean toward Safe. The AI raises funding while it has
-innovation to spare and cuts it when innovation runs short.
+innovation to spare and cuts it when innovation runs short. Launch windows bind
+the AI as they bind you, and its approach decides its launches outside a window
+the same way.
 
 A revolution's winner continues the old country's program, with its progress
 (except progress toward a first colony) and its rewards, and rebels can't start
