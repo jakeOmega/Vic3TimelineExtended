@@ -375,7 +375,13 @@ always shown. Columns, at 520 units (fit to the width budget, § 3.7):
 | **+1 licence** | "+X" (navy needed; the unit is in the header's hover), or "full" when nothing is left to share, or "—" when we claim nothing | "+X navy, or +1 coastal state here ≈ +K licences" (§ 3.5) |
 
 Rivals' claims are the part a buildup can win, so the bar's legend says so: "rivals' claims (up
-for grabs)". On Sponsor, part of a rival's claims are protected; the bar does not split them (my
+for grabs)".
+
+Our queued licences per basin come from the monthly recording, which already walks every coastal
+state: a state's queued levels (`level_after_queued_constructions − level`) count against its
+distant licences first, then its own basin's. That is exact wherever a state's licences all come
+from one basin, the usual case; a level takes a distant licence only once the local share is gone,
+so distant licences are normally the newest (my call). Only the bar's shading rests on it. On Sponsor, part of a rival's claims are protected; the bar does not split them (my
 call: too fine for the bar), the hover gives the figure.
 
 ### 3.4 Rivals

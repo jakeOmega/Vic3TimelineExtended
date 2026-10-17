@@ -175,7 +175,7 @@ class RelinquishTest(unittest.TestCase):
 **Files:** Modify `scripts/analysis/seabed_model.py`; Test `test_seabed_allocation.py` (class `FeeTest`)
 
 **Interfaces:**
-- Produces: `State.snap1: int = 0`, `State.snap2: int = 0` (script `te_seabed_unb_snap1/2`); `State.built` property (`levels − queued`); `take_snapshots(world) -> None` (`te_seabed_take_snapshots`, run at the year's first sharing after recording); `fee_base_state(s) -> int` and `fee_base(world, cid) -> int` (`te_seabed_fee_base`).
+- Produces: `State.snap1: int = 0`, `State.snap2: int = 0` (script `te_seabed_unb_snap1/2`); `State.built` property (`levels − queued`); `take_snapshots(world) -> None` (`te_seabed_take_snapshots`, run at the year's first sharing after recording); `fee_base_state(s) -> int` and `fee_base(world, cid) -> int` (`te_seabed_fee_base`); `queued_by_basin(world, cid) -> dict` (basin → licences held by the country's queued levels; script `te_seabed_queued_<b>`, written by the monthly recording).
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -191,6 +191,17 @@ class FeeTest(unittest.TestCase):
         self.assertEqual(m.fee_base(w, 0), 1)
 
     def test_no_snapshots_no_fee(self): ...               # old save: fee_base == 0 whatever is queued
+
+    def test_queued_by_basin(self):
+        # an Atlantic state with 5 levels, 2 queued, licences atlantic 3 + arctic 2:
+        # the 2 queued count against the distant (Arctic) licences first
+        s = m.State(0, "atlantic", 0, levels=5, queued=2); s.lic["atlantic"] = 3; s.lic["arctic"] = 2
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.queued_by_basin(w, 0), {**dict.fromkeys(m.BASINS, 0), "arctic": 2})
+        s.queued = 4                                           # then the state's own basin
+        self.assertEqual(m.queued_by_basin(w, 0)["atlantic"], 2)
+        # random worlds: sum over basins == sum over states of min(queued, records), every month
+        ...
 
     def test_fee_base_bounds_under_conquest(self):
         # random worlds (annex and split on), take_snapshots at each pass:
@@ -434,7 +445,8 @@ In `test_global_commons_un.py`: the defection stores the month (`name = te_seabe
 - Produces (all read by Task 11's panel):
   - country vars `te_seabed_need_navy_<b>` (whole units; `-1` = full) written in `te_seabed_share_round` by `te_seabed_readout = { B }` before the active flags are removed; display `te_seabed_need_navy_disp_<b>`. The navy conversion needs the coast counts `te_seabed_compute_weights` keeps only in locals today: `te_seabed_weight_set` also stores `te_seabed_coast_<b>` (n) and `te_seabed_coast_all` (N) on the country.
   - `te_seabed_weight_pct_disp_<b>` (country: `w ÷ global_var:te_seabed_world_w_<b> × 100`).
-  - pool-bar cumulative fractions per basin, 0..1: `te_seabed_bar_<b>_1` (our licences), `_2` (+ our claims), `_3` (+ rivals' licences); the bar's background is rivals' claims. (Four segments, not the mockup's five: the queued split per basin isn't tracked; the overview shows the queued count.)
+  - country vars `te_seabed_queued_<b>`, written by `te_seabed_record_country`'s state walk (model `queued_by_basin`: a state's queued levels count against its distant licences first, basin order, then its own).
+  - pool-bar cumulative fractions per basin, 0..1: `te_seabed_bar_<b>_1` (our built licences), `_2` (+ our queued licences), `_3` (+ our claims), `_4` (+ rivals' licences); the bar's background is rivals' claims. The mockup's five segments.
   - `te_seabed_ent_value_<b>` (country: `var:te_seabed_ent_<b>`, guarded; the `order_by` for the ranking, as `te_seabed_frac_value_$B$` is for the rounding).
   - `te_seabed_jan_loss_disp` (country: at most what next January can take, Σ claims − floor-protected part; equals all claims off Sponsor); `te_seabed_last_sharing_month` (global, month index of the last sharing) for "as of".
   - effect `te_seabed_rank_basin = { B }` (no scope, step 10): globals `te_seabed_rk_<b>_<n>` (n = 1..6, by entitlement, `ordered_country` with `position = n−1` and `order_by = te_seabed_ent_value_<b>`), stale ranks removed; `te_seabed_rk_more_<b>` = claimants beyond six; on every `is_player = yes` country with `te_seabed_shared`, `te_seabed_rkcap_<b>_<n>` = that country's capital.
@@ -465,8 +477,11 @@ class PanelDataTest(unittest.TestCase):
     def test_bar_values_exist(self):
         v = read(VALUES)
         for b in m.BASINS:
-            for k in (1, 2, 3):
+            for k in (1, 2, 3, 4):
                 block(v, f"te_seabed_bar_{b}_{k}")
+
+    def test_recording_writes_queued_per_basin(self):
+        self.assertIn("te_seabed_queued_", block(read(EFFECTS), "te_seabed_record_country"))
 ```
 
 - [ ] **Step 2: Run** — `FAILED`.
@@ -556,7 +571,7 @@ class SeabedPanelTest(unittest.TestCase):
 Fill the `...` bodies from `test_banking_layout.py`'s `WidthBudgetTest`, the same assertions with this file's cells.
 
 - [ ] **Step 2: Run** `.venv/bin/python -m unittest test_seabed_layout -v` — Expected: FAIL (the types don't exist; the buttons overflow).
-- [ ] **Step 3: Build the panel** to spec § 3 and the mockup (`docs/superpowers/specs/assets/2026-10-17-seabed-panel-layouts.html`, option A): overview 2×3 grid; three short policy buttons centred; Ocean Basins with "as of"; five rows each with a chevron toggling its rivals (six `te_seabed_rival_row` instances with `op` 10×basin+n, the "us" row with Relinquish/Claim Again, "and N others"; each rival row's `visible`, flag included, is the same `te_seabed_rival_row_sgui` `IsShown` its text uses, so an unfilled slot reads no missing `te_seabed_rkcap_*` variable); the stacked pool bar as three overlaid `progressbar`s over a rivals'-claims background (stacked-bar precedent: `gui/te_budget_generated_charts.gui`); How Seabed Licences Work collapsed at the bottom. Icons: existing vanilla textures only.
+- [ ] **Step 3: Build the panel** to spec § 3 and the mockup (`docs/superpowers/specs/assets/2026-10-17-seabed-panel-layouts.html`, option A): overview 2×3 grid; three short policy buttons centred; Ocean Basins with "as of"; five rows each with a chevron toggling its rivals (six `te_seabed_rival_row` instances with `op` 10×basin+n, the "us" row with Relinquish/Claim Again, "and N others"; each rival row's `visible`, flag included, is the same `te_seabed_rival_row_sgui` `IsShown` its text uses, so an unfilled slot reads no missing `te_seabed_rkcap_*` variable); the stacked pool bar as four overlaid `progressbar`s over a rivals'-claims background, the queued segment hatched or a lighter shade of ours (stacked-bar precedent: `gui/te_budget_generated_charts.gui`); How Seabed Licences Work collapsed at the bottom. Icons: existing vanilla textures only.
 - [ ] **Step 4: Verify**: `test_seabed_layout`, `test_te_systems_window` → `OK`; `python3 scripts/analysis/check_gui_lint.py` → no errors; `python3 gui_reference_audit.py --strict` → exit 0.
 - [ ] **Step 5: Commit** — `"Seabed panel: layout A"`
 
