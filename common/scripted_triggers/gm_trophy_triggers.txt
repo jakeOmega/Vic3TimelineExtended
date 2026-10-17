@@ -124,17 +124,17 @@ gm_state_tr_can_take_tt = {
 # ---- A trophy (container scope) -----------------------------------------------
 # Its site's owner is $WHO$.
 gm_tr_held_by = {
-	var:gm_tr_site ?= { owner = $WHO$ }
+	var:gm_tr_site ?= { owner ?= $WHO$ }
 }
 
 # Its origin's owner is $WHO$.
 gm_tr_claimed_by = {
-	var:gm_tr_origin ?= { owner = $WHO$ }
+	var:gm_tr_origin ?= { owner ?= $WHO$ }
 }
 
 # Its holder owns its origin: it can come home without a treaty.
 gm_tr_holder_owns_origin = {
-	var:gm_tr_site ?= { owner = { save_temporary_scope_as = gm_tmp_tr_holder } }
+	var:gm_tr_site ?= { owner ?= { save_temporary_scope_as = gm_tmp_tr_holder } }
 	gm_tr_claimed_by = { WHO = scope:gm_tmp_tr_holder }
 }
 
