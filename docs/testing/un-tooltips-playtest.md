@@ -43,3 +43,17 @@ The same PR fixed seven things the terms audit found the script doing against it
 | **Sanctions against us.** Be the target of sanctions and vote for them. | When they carry, the proposer gets no Sanctions Enforcer modifier and can table sanctions again. | An enforcer modifier means `un_res_target_accepted` was not set on the resolution: check `un_vote_cast_yes`. |
 | **Expulsion, mandate or referral against us.** Vote for it as its target. | The option reads as an ordinary vote in favour, and no Self-Corrected modifier appears. | "We accept the resolution." means `un_vote.1` option A's name does not read `un_resolution_target_may_accept`. |
 | **Decolonization pressure.** Hold an overseas colony when the declaration carries, having cracked down on intellectuals beforehand. | Both Anti-Colonial Backlash and Decolonisation Declaration: International Pressure, each with its own description. | Backlash alone means `un_vote.2` still reads the crackdown's modifier. |
+
+## Lifting sanctions (2026-10-16)
+
+The petition to lift sanctions and the regime's monthly upkeep (docs/systems/un_redesign_design.md §0.12a). Found the
+UN with `event te_debug_un.1`, then have a major power table International Sanctions against a rival whose case
+strength is 50 or more, and let it carry.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The row.** Under sanctions, open Propose a Resolution. | Lift the Sanctions Against Us shows the enforcer's name and the months in force, and tables. Not under sanctions, it says No Case. | A blank name: `je_un_chamber_propose_preview_lift_sanctions` lost `scope:un_lift_sanctions_enforcer`; check `un_lift_sanctions_chamber_preview`. |
+| **A carried petition.** Let one carry. | The modifier and the Assembly's embargoes are gone, and the enforcer's Propose Sanctions row opens again. | The enforcer still blocked: `un_sanctions_lift_regime` did not reach `var:un_sanctions_enforced_by`. |
+| **A veto.** Petition against an AI permanent-member enforcer, once while it is your rival and once after the rivalry has ended and relations are above Cold. | It vetoes the first and not the second; a vetoed petition says it was blocked and the sanctions stay. | A veto in the second case: `un_lift_sanctions_ill_disposed` is missing from `un_vote_ai_should_veto`. |
+| **An orphaned regime.** Have the enforcer leave the UN. | The next month the sanctions lapse, with The Sanctions on Us Lapse in the feed. | Still sanctioned: check `un_sanctions_regime_orphaned` on the target. |
+| **A revolution.** Let a revolution win in a sanctioned country. | The winner is under the sanctions again within a month. | |

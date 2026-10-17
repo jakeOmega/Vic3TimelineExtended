@@ -610,10 +610,27 @@ un_propose_referendum_possible = {
 	un_referendum_can_table = yes
 }
 
+# Lift the Sanctions Against Us — binding (blocked if vetoed), simple majority; needs no reform (§0.12a, 2026-10-16). Tabled by the sanctioned country, which is its own target.
+# Scope: the proposing country
+un_propose_lift_sanctions_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_lift_sanctions_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_lift_sanctions_possible = {
+	un_propose_own_motion_possible = yes
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = lift_sanctions } }
+	}
+	un_lift_sanctions_can_table = yes
+}
+
 # ============================================================================
 # THE SIXTEEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-19 and 29-31 of
+# Tabled on our own motion from the chamber (ops 7-19, 29, 31 and 32 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.

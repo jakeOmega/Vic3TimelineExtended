@@ -17,6 +17,10 @@
 #   missions   standing_force,                 un_mission_*.txt (the mission system
 #              observer_request                itself), un_force_*.txt
 #
+# The sanctioned country's petition to lift its sanctions (lift_sanctions,
+# §0.12a, 2026-10-16) needs no reform, but is a decision of the same shape and
+# uses the same hooks; justice owns it.
+#
 # Each decision topic <key> provides, in its owner's files:
 #   un_<key>_case_exists       trigger, proposer scope: there is something to
 #                              table (the row's "no case" line when it fails)
@@ -80,6 +84,10 @@ un_charter_on_carried = {
 	else_if = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 		un_referendum_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
+		un_lift_sanctions_on_carried = yes
 	}
 }
 

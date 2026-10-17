@@ -154,12 +154,12 @@ types un_layout_widget_types
 						# icons, under their own names, so new art drops in.
 						icon = {
 							size = { 40 40 }
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)30' )]"
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)31' )]"
 							texture = "gfx/interface/icons/un_icons/topic_antarctic.dds"
 						}
 						icon = {
 							size = { 40 40 }
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)31' )]"
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)32' )]"
 							texture = "gfx/interface/icons/un_icons/topic_asat.dds"
 						}
 						# Phase 7 (§0.12): each topic's icon is, for now, a copy of its
@@ -218,6 +218,13 @@ types un_layout_widget_types
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)28' )]"
 							texture = "gfx/interface/icons/un_icons/topic_referendum.dds"
+						}
+						# §0.12a: for now a copy of International Sanctions' icon, under
+						# its own name, so new art drops in.
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)30' )]"
+							texture = "gfx/interface/icons/un_icons/topic_lift_sanctions.dds"
 						}
 					}
 

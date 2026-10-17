@@ -138,11 +138,11 @@ CONVENTIONS = (
     # §4 and §6.5). Both are raised by a situation only: a country's first
     # Antarctic research station, and a destructive anti-satellite strike.
     Convention("antarctic", "un_agency_ats", "un_antarctic_treaty_modifier", "country",
-               30, 40, 1401, "un_antarctic_refusal_modifier",
+               31, 40, 1401, "un_antarctic_refusal_modifier",
                ("un_regime_antarctic_station_modifier",),
                ("global_commons_enabled", "un_chamber_global_commons_rule_sgui"), False),
     Convention("asat", "un_agency_unoda", "un_asat_moratorium_modifier", "country",
-               31, 41, 1411, "un_asat_refusal_modifier",
+               32, 41, 1411, "un_asat_refusal_modifier",
                (), ("space_race_enabled", "un_chamber_space_race_rule_sgui"), False),
 )
 
@@ -164,12 +164,13 @@ FIRST_MEMBER_PROPOSE_KEYS = {"condemn", "sanctions", "expulsion", "mandate", "pe
 FIRST_CONVENTION_OP = len(FIRST_MEMBER_PROPOSE_KEYS)
 
 # Redesign phase 7 (docs/systems/un_redesign_design.md §0.12): nine more
-# decisions, requests and institutions, at ops 20-28 after the conventions.
-# Tag and propose key are the same word for each.
+# decisions, requests and institutions, at ops 20-28 after the conventions,
+# and the petition to lift sanctions (§0.12a) at op 30, after the narcotics
+# convention's 29. Tag and propose key are the same word for each.
 CHARTER_DECISION_OPS = {
     20: "court_referral", 21: "arms_embargo", 22: "credentials", 23: "standing_force",
     24: "observer_request", 25: "food_reserve", 26: "ceasefire", 27: "development_fund",
-    28: "referendum",
+    28: "referendum", 30: "lift_sanctions",
 }
 
 # Every topic that is not a convention: the lists that name every topic name

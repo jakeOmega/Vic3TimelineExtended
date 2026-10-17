@@ -39,3 +39,12 @@ un_court_bar_notice = {
 	notification_type = feed
 	color = bad
 }
+
+# The sanctions regime on us has lapsed: no member enforces it any more
+# (un_sanctions_regime_monthly_update, un_justice_effects.txt).
+un_sanctions_lapsed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}

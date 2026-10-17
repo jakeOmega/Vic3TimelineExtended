@@ -20,17 +20,19 @@ un_resolution_topic_on_cooldown = {
 	}
 }
 
-# Whether the resolution is *binding* (vetoable). The 11 binding topics are
+# Whether the resolution is *binding* (vetoable). The 12 binding topics are
 # sanctions, peacekeeping_request, icc, condemn, reform and military_mandate,
-# and since redesign phase 7 (§0.12) court_referral, arms_embargo,
-# standing_force, ceasefire and referendum; all others are recommendatory and
-# cannot be vetoed.
+# since redesign phase 7 (§0.12) court_referral, arms_embargo,
+# standing_force, ceasefire and referendum, and since §0.12a lift_sanctions,
+# which undoes a binding regime; all others are recommendatory and cannot be
+# vetoed.
 #
-# military_mandate, reform, standing_force and referendum are the four with NO
-# graduated form: a veto blocks each outright, because there is no coherent
-# weaker version of "you may go to war over this", of a charter amendment, of
-# a standing force or of a supervised vote (un_vote.2 applies no effect for
-# any of them). See docs/systems/journal_entry_systems.md § Military mandates.
+# military_mandate, reform, standing_force, referendum and lift_sanctions are
+# the five with NO graduated form: a veto blocks each outright, because there
+# is no coherent weaker version of "you may go to war over this", of a charter
+# amendment, of a standing force, of a supervised vote or of ending a regime
+# (un_vote.2 applies no effect for any of them). See
+# docs/systems/journal_entry_systems.md § Military mandates.
 # Scope: resolution container
 un_resolution_is_binding = {
 	OR = {
@@ -45,6 +47,7 @@ un_resolution_is_binding = {
 		has_tag = un_topic_standing_force
 		has_tag = un_topic_ceasefire
 		has_tag = un_topic_referendum
+		has_tag = un_topic_lift_sanctions
 	}
 }
 
@@ -57,6 +60,7 @@ un_resolution_veto_blocks = {
 		has_tag = un_topic_military_mandate
 		has_tag = un_topic_standing_force
 		has_tag = un_topic_referendum
+		has_tag = un_topic_lift_sanctions
 	}
 }
 
@@ -211,13 +215,15 @@ un_veto_would_change_outcome = {
 # at: a request for aid or peacekeepers names the requester as its target.
 # Anything that reasons "the target is my rival, so I like this" must exclude
 # these, or a rival of the requester counts as eager to help it. A request for
-# electoral observers (phase 7) names its requester too.
+# electoral observers (phase 7) names its requester too, and so does a
+# petition to lift the sanctions on its proposer (§0.12a).
 # Scope: resolution container
 un_resolution_target_is_beneficiary = {
 	OR = {
 		has_tag = un_topic_aid_request
 		has_tag = un_topic_peacekeeping_request
 		has_tag = un_topic_observer_request
+		has_tag = un_topic_lift_sanctions
 	}
 }
 
@@ -275,11 +281,13 @@ un_resolution_kind_is_decision = {
 # peacekeepers, which the members who vote for it staff and pay for. A request
 # for electoral observers (phase 7) names its requester as beneficiary too, but
 # the UN's budget pays the observers and no member is asked for anything, so it
-# is a decision of the Assembly in un_vote.3.
+# is a decision of the Assembly in un_vote.3. A petition to lift sanctions
+# asks nothing of the members either.
 # Scope: resolution container
 un_resolution_asks_pledges = {
 	un_resolution_target_is_beneficiary = yes
 	NOT = { has_tag = un_topic_observer_request }
+	NOT = { has_tag = un_topic_lift_sanctions }
 }
 
 # Whether ROOT voted against scope:un_resolution, the resolution carried, and

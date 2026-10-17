@@ -526,8 +526,11 @@ un_dissolve_strip_country = {
 # benefits, NPT disarmament, any seat, every programme and its cost, our own
 # sanctions enforcement, and every convention we were bound by. Sanctions
 # AGAINST us are deliberately not here: they are the members' measure, not a
-# membership obligation, so walking out must not shed them (only
-# un_lift_sanctions_button or a dissolution ends a regime).
+# membership obligation, so walking out must not shed them (a regime ends when
+# its enforcer lifts it, the Assembly carries its target's petition, it lapses
+# with its enforcer, or the UN dissolves). Our own enforcement ending here
+# lapses the regime we enforced at the next monthly update
+# (un_sanctions_regime_monthly_update).
 # Called from un_leave_button (inside its tooltip) and un_dissolve_strip_country.
 # Scope: country
 un_membership_end_effect = {
@@ -701,7 +704,8 @@ un_leave_organisation = {
 		# enforcement and every convention we were bound by
 		# (un_membership_end_effect, un_ladder_effects.txt). Sanctions
 		# AGAINST us stay: they are the members' measure, not a membership
-		# obligation. Only un_lift_sanctions_button lifts a regime.
+		# obligation. Leaving does not lift them; the regime we enforce
+		# lapses at the next monthly update.
 		un_membership_end_effect = yes
 		# If we host the HQ, it moves to another member and our HQ building
 		# is demolished, so the new host can build the only one

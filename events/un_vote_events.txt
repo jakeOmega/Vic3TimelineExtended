@@ -52,6 +52,9 @@
 #                           un_res_mandate_beneficiary; carrying it un-vetoed
 #                           creates the mandate container
 #                           (common/scripted_effects/un_mandate_effects.txt).
+#   lift_sanctions        - Lift the sanctions on the proposer, which is its
+#                           own target (§0.12a; chamber / button). Binding and
+#                           vetoable, blocked outright by a veto.
 # ============================================================================
 
 # ---- Phase 1: All UN members vote on the proposed resolution ----
@@ -195,6 +198,10 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.t_referendum
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_lift_sanctions
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
 			}
 			desc = un_vote.1.t
 		}
@@ -397,6 +404,19 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_referendum
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+			}
+			# §0.12a: the petitioner is the target; the enforcer of the regime
+			# it petitions against reads it from its own side.
+			triggered_desc = {
+				desc = un_vote.1.d_lift_sanctions_enforcer
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_lift_sanctions }
+					scope:un_vote_target ?= { var:un_sanctions_enforced_by ?= ROOT }
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_lift_sanctions
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
 			}
 			desc = un_vote.1.d
 		}
@@ -1017,6 +1037,24 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 				desc = un_vote.2.d_referendum_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_lift_sanctions
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_lift_sanctions_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions has_tag = un_res_passed } }
+				desc = un_vote.2.d_lift_sanctions_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
+				desc = un_vote.2.d_lift_sanctions_failed
 			}
 			# Generic fallback
 			triggered_desc = {
@@ -2130,6 +2168,10 @@ un_vote.3 = {
 		# overlord alone, which answers for it in un_referendum.1 (holding the
 		# vote pays standing, refusing books standing and defiance).
 		#
+		# lift_sanctions (§0.12a) asks nothing of the members: it releases
+		# them from the regime, so there is nothing to comply with, and
+		# denouncing it defies nothing (option C).
+		#
 		# A veto that held leaves nothing binding to comply with: it blocks a
 		# reform, a mandate, a standing force, a referendum or the ICC outright
 		# (un_vote_effects.txt applies none of them), and softens the rest into
@@ -2142,6 +2184,7 @@ un_vote.3 = {
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
 			}
 			custom_tooltip = {
 				text = un_standing_complied_tt
@@ -2247,7 +2290,8 @@ un_vote.3 = {
 		# court is booked when the holder defies it (un_court_defy), so
 		# denouncing the referral costs only the relations and infamy above.
 		# A supervised referendum likewise: the overlord's refusal is booked
-		# in un_referendum.1.
+		# in un_referendum.1. A petition to lift sanctions asks nothing of
+		# the members (option B's note).
 		# A vetoed resolution binds no one (option B's note), so denouncing it
 		# defies nothing.
 		if = {
@@ -2256,6 +2300,7 @@ un_vote.3 = {
 				NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
 			}
 			custom_tooltip = {
 				text = un_standing_defied_tt

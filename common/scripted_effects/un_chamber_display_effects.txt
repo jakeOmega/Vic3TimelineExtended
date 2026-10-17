@@ -190,6 +190,10 @@ un_chamber_topic_line = {
 		limit = { has_tag = un_topic_referendum }
 		custom_tooltip_no_bullet = je_un_chamber_topic_referendum
 	}
+	else_if = {
+		limit = { has_tag = un_topic_lift_sanctions }
+		custom_tooltip_no_bullet = je_un_chamber_topic_lift_sanctions
+	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_topic_unknown
 	}
@@ -620,6 +624,16 @@ un_chamber_consequences_line = {
 			custom_tooltip_no_bullet = je_un_chamber_conseq_referendum
 		}
 	}
+	else_if = {
+		limit = { has_tag = un_topic_lift_sanctions }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_lift_sanctions_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_lift_sanctions
+		}
+	}
 	if = {
 		limit = { has_tag = un_topic_expulsion }
 		custom_tooltip_no_bullet = je_un_chamber_conseq_fail_expulsion
@@ -660,7 +674,7 @@ un_chamber_outcome_line = {
 		custom_tooltip_no_bullet = je_un_chamber_outcome_passed_vetoed_mandate
 	}
 	# Phase 7 (§0.12): the Standing Force and a supervised referendum have no
-	# graduated form either.
+	# graduated form either, nor (§0.12a) a petition to lift sanctions.
 	else_if = {
 		limit = {
 			has_tag = un_res_passed
@@ -1508,7 +1522,23 @@ un_chamber_propose_referendum_row = {
 	}
 }
 
-# The sixteen conventions and declarations (ops 7-19 and 29-31). The docket raises them for
+# Lift the Sanctions Against Us (§0.12a; no reform needed).
+# Scope: country
+un_chamber_propose_lift_sanctions_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_lift_sanctions
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	if = {
+		limit = { un_propose_lift_sanctions_available = yes }
+		un_lift_sanctions_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_lift_sanctions_available
+		NO_CASE = je_un_chamber_propose_no_case_lift_sanctions
+	}
+}
+
+# The sixteen conventions and declarations (ops 7-19, 29, 31 and 32). The docket raises them for
 # everyone (redesign phase 4, un_docket_effects.txt), and a member may table
 # one on its own motion. Each row says what the topic is, whether it binds,
 # its passage rule (when the docket raises it anyway is on hover over the
