@@ -4,13 +4,14 @@
 
 # ---- Restructuring -------------------------------------------------------------
 
-# Who sees the Restructure the Public Debt decision: a banking-system country
+# Who sees the Restructure the Public Debt decision: a country whose financial
+# cycle has started (every country holds the entry, dormant until then)
 # whose debt the markets price (banking_sovereign_debt_is_priced, where the
 # debt-load premium starts), or one already in default, which the deep haircut
 # is for. The rebels of a running revolution owe nothing yet: the winner
 # continues the nation (#460-#465), and the nation's debt with it.
 banking_restructuring_shown = {
-	has_journal_entry = je_banking_cycle
+	te_banking_cycle_running = yes
 	is_revolutionary = no
 	OR = {
 		banking_sovereign_debt_is_priced = yes

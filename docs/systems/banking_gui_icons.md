@@ -28,6 +28,8 @@ One emblem, a columned bank front, with a mark beside it. 32 px, the phase's col
 
 The list asked for Panic as a crowd-dark doorway with an arrow crashing through the steps, and for Frenzy's coins spilling from its arrow. At 32 px the doorway and steps were specks, so Panic got the double down arrow, the mirror of Frenzy's; Frenzy's coins lie at the bank's foot.
 
+**Not Started (2026-10-17, placeholder).** Before a country's financial cycle starts, the overview draws one cell in row 1's place (`banking_dash_cycle_dormant`), with `phase_stable.dds` at alpha 0.4: dimmed, as style guide rule 4 has a thing that doesn't exist yet. Final art, if it gets its own: the bank front in plain stone with its doors shut and no mark beside it, at `gfx/interface/icons/banking_icons/phase_not_started.dds`.
+
 ## Overview row 1: momentum
 
 Vanilla's arrows, kept, with a red triple arrow of the mod's own at each end. 32 px, the band word beside it. Code: `banking_disp_momentum_band_code`. The double arrows mark the two bands the old table tagged "(contracting)" and "(overheating)". Seven bands since 2026-10-07: Freefall and Overheating are momentum past the bar's ends (±5), where the next-month ranges under the overview have no outer edge.

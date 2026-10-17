@@ -308,7 +308,11 @@ banking_effect_cb_bank_holiday = {
 	custom_tooltip = {
 		text = banking_bank_holiday_momentum_tt
 		if = {
-			limit = { var:finance_cycle_momentum < 0 }
+			limit = {
+				# Rendered in a dormant entry's greyed button too, which has no momentum.
+				has_variable = finance_cycle_momentum
+				var:finance_cycle_momentum < 0
+			}
 			set_variable = { name = finance_cycle_momentum value = 0 }
 		}
 	}

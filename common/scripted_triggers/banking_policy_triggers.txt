@@ -27,12 +27,14 @@ te_banking_system_on = {
 	}
 }
 
-# What a country needs, besides the rule above, before je_banking_cycle
-# activates. The entry's `possible` is `always = yes`, so it activates as soon
-# as its is_shown_when_inactive (the rule plus this) holds. Also the checklist in
-# the Budget panel's greyed Banking tab (te_budget_banking_tab_unlock_sgui's
-# is_valid), which is why the building test carries its own tooltip line.
-te_banking_entry_unlocked = {
+# What a country needs before its financial cycle starts
+# (docs/superpowers/specs/2026-10-17-banking-always-on-design.md). Every country
+# under the rule holds je_banking_cycle from the start of the game; this is what
+# turns the cycle on, from the entry's `immediate` or its monthly pulse
+# (banking_cycle_start). Also the checklist on the dormant entry's overview and
+# in the Budget panel (te_budget_banking_tab_unlock_sgui's is_valid), which is
+# why the building test carries its own tooltip line.
+te_banking_cycle_unlocked = {
 	has_technology_researched = stock_exchange
 	custom_tooltip = {
 		text = te_banking_unlock_urban_center_tt
@@ -40,6 +42,56 @@ te_banking_entry_unlocked = {
 			any_scope_building = { is_building_type = building_urban_center level >= 5 }
 		}
 	}
+}
+
+# Should this country hold je_banking_cycle? Every country under the rule but
+# a decentralized nation, which has no financial sector to start a cycle in (the
+# mod's other every-country entries leave them out too), and the rebels of a
+# running revolution (the entry's is_shown_when_inactive says why). The entry's
+# own gate, and the test the yearly safety net (te_banking_entry_net,
+# te_banking_entry_on_actions.txt) and its self-check count against.
+te_banking_entry_expected = {
+	te_banking_system_on = yes
+	NOT = { is_country_type = decentralized }
+	is_revolutionary = no
+}
+
+# Has this country's financial cycle started? The latch is finance_cycle_value:
+# banking_cycle_start seeds it, and every other writer of the cycle's three
+# variables asks this trigger first (banking_change_*, the crash and contagion
+# effects), so the variable exists exactly when a cycle runs. A revolution's
+# winner gets it with the loser's variables. has_journal_entry first: for a
+# moment after a revolution the variables can arrive before the entry
+# (banking_cycle_post_event_refresh), and every caller then reads the entry.
+#
+# THE ENTRY IS NOT THE SYSTEM. je_banking_cycle is held by every country under
+# the rule, dormant until te_banking_cycle_unlocked; ask this, never
+# has_journal_entry, for "does this country have a banking cycle".
+te_banking_cycle_running = {
+	has_journal_entry = je_banking_cycle
+	has_variable = finance_cycle_value
+}
+
+# The same test, rendered as a ticked or crossed condition: the first line of
+# every banking_possible_* helper and of banking_mon_control_sgui's is_valid,
+# so a dormant entry's controls are greyed with the reason on hover.
+te_banking_cycle_started_tt = {
+	custom_tooltip = {
+		text = te_banking_cycle_started_tt
+		te_banking_cycle_running = yes
+	}
+}
+
+# May this country use the Monetary Policy section's controls (the dial,
+# delegation, mandate, monetisation, recapitalisation)? Only once its cycle has
+# started: before that the section is read-only and a bank runs the Dual Mandate,
+# or its act's mandate (owner, 2026-10-17). Its own trigger so the controls can
+# open earlier without touching the cycle's readers. Read by the mandate
+# branches of te_monetary_update_target, te_mon_mandate_runs_bank, the peg
+# events' tooltip switches and banking_mon_control_sgui's is_valid (under
+# te_banking_cycle_started_tt's line).
+te_banking_controls_open = {
+	te_banking_cycle_running = yes
 }
 
 # The "Raise Policy Rate" eligibility trigger used to sit above this one, and
@@ -84,6 +136,7 @@ te_banking_entry_unlocked = {
 # answer. The guard lives inside te_mon_policy_rate_at_floor
 # (common/scripted_triggers/te_monetary_triggers.txt).
 banking_possible_cb_open_market_ops = {
+	te_banking_cycle_started_tt = yes
 	modifier:country_can_use_open_market_ops_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_4
@@ -118,6 +171,7 @@ banking_possible_cb_open_market_ops = {
 }
 
 banking_possible_cb_moral_suasion = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_1
 		modifier:country_banking_intervention_max_add >= 1
@@ -125,6 +179,7 @@ banking_possible_cb_moral_suasion = {
 }
 
 banking_possible_cb_countercyclical_buffer = {
+	te_banking_cycle_started_tt = yes
 	modifier:country_can_use_countercyclical_buffer_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_2
@@ -133,6 +188,7 @@ banking_possible_cb_countercyclical_buffer = {
 }
 
 banking_possible_cb_raise_margin_requirements = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -140,6 +196,7 @@ banking_possible_cb_raise_margin_requirements = {
 }
 
 banking_possible_cb_expand_deposit_guarantee = {
+	te_banking_cycle_started_tt = yes
 	modifier:country_can_use_deposit_guarantee_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_4
@@ -161,6 +218,7 @@ banking_possible_cb_expand_deposit_guarantee = {
 # player's click and it can never overspend; how eager it is to press is its
 # ai_chance weight.
 banking_possible_cb_directed_credit_infrastructure = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_3
 		modifier:country_banking_intervention_max_add >= 3
@@ -176,6 +234,7 @@ banking_possible_cb_directed_credit_infrastructure = {
 }
 
 banking_possible_cb_directed_credit_heavy_industry = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
@@ -191,6 +250,7 @@ banking_possible_cb_directed_credit_heavy_industry = {
 }
 
 banking_possible_cb_directed_credit_agriculture = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -206,6 +266,7 @@ banking_possible_cb_directed_credit_agriculture = {
 }
 
 banking_possible_cb_directed_credit_armaments = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_3
 		modifier:country_banking_intervention_max_add >= 3
@@ -221,6 +282,7 @@ banking_possible_cb_directed_credit_armaments = {
 }
 
 banking_possible_cb_directed_credit_electrification = {
+	te_banking_cycle_started_tt = yes
 	modifier:country_can_use_directed_credit_electrification_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_1
@@ -237,6 +299,7 @@ banking_possible_cb_directed_credit_electrification = {
 }
 
 banking_possible_cb_export_credit_facility = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -249,6 +312,7 @@ banking_possible_cb_export_credit_facility = {
 }
 
 banking_possible_cb_capital_controls_outflow = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -268,18 +332,24 @@ banking_possible_cb_capital_controls_outflow = {
 # to the risk premium. It closes itself once the crisis is over
 # (banking_cycle_eliq_wind_down).
 banking_possible_cb_emergency_liquidity_program = {
+	te_banking_cycle_started_tt = yes
 	modifier:country_can_use_emergency_liquidity_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
 	}
+	# te_banking_cycle_running first: a dormant entry's greyed button reads
+	# this every frame, and banking_cycle_is_recession reads the cycle's
+	# variables unguarded.
 	custom_tooltip = {
 		text = banking_eliq_phase_tt
+		te_banking_cycle_running = yes
 		banking_cycle_is_recession = yes
 	}
 }
 
 banking_possible_cb_asset_relief_program = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_5
 		modifier:country_banking_intervention_max_add >= 5
@@ -296,6 +366,7 @@ banking_possible_cb_asset_relief_program = {
 }
 
 banking_possible_cb_reserve_requirements = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -306,12 +377,17 @@ banking_possible_cb_reserve_requirements = {
 # five-year cooldown (days = 1825, set by banking_effect_cb_bank_holiday) keeps
 # it an emergency measure rather than a standing crash shield.
 banking_possible_cb_bank_holiday = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
 	}
+	# te_banking_cycle_running first: a dormant entry's greyed button reads
+	# this every frame, and banking_cycle_is_recession reads the cycle's
+	# variables unguarded.
 	custom_tooltip = {
 		text = banking_bank_holiday_phase_tt
+		te_banking_cycle_running = yes
 		banking_cycle_is_recession = yes
 	}
 	custom_tooltip = {
@@ -324,6 +400,7 @@ banking_possible_cb_bank_holiday = {
 # bank) is below the cost already, and State-Owned Banking never reaches the
 # market dashboard.
 banking_possible_cb_bail_in_regime = {
+	te_banking_cycle_started_tt = yes
 	modifier:country_can_use_bail_in_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_3
@@ -336,6 +413,7 @@ banking_possible_cb_bail_in_regime = {
 }
 
 banking_possible_ce_plan_revision = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_3
 		modifier:country_banking_intervention_max_add >= 3
@@ -343,6 +421,7 @@ banking_possible_ce_plan_revision = {
 }
 
 banking_possible_ce_target_reduction = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -350,6 +429,7 @@ banking_possible_ce_target_reduction = {
 }
 
 banking_possible_ce_consolidation_order = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -357,6 +437,7 @@ banking_possible_ce_consolidation_order = {
 }
 
 banking_possible_ce_emergency_allocation = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_3
 		modifier:country_banking_intervention_max_add >= 3
@@ -364,6 +445,7 @@ banking_possible_ce_emergency_allocation = {
 }
 
 banking_possible_ce_strategic_stockpile = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -371,6 +453,7 @@ banking_possible_ce_strategic_stockpile = {
 }
 
 banking_possible_ce_distribution_upgrade = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
@@ -378,6 +461,7 @@ banking_possible_ce_distribution_upgrade = {
 }
 
 banking_possible_ce_admin_campaign = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_3
 		modifier:country_banking_intervention_max_add >= 3
@@ -385,6 +469,7 @@ banking_possible_ce_admin_campaign = {
 }
 
 banking_possible_ce_coordination_protocol = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = PLANNING_POINTS_1
 		modifier:country_banking_intervention_max_add >= 1
@@ -392,10 +477,12 @@ banking_possible_ce_coordination_protocol = {
 }
 
 banking_possible_ce_invest_pool_inject = {
+	te_banking_cycle_started_tt = yes
 	always = yes
 }
 
 banking_possible_ce_invest_pool_withdraw = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = CE_WITHDRAW_POSSIBLE_TT
 		investment_pool > 0
@@ -403,6 +490,7 @@ banking_possible_ce_invest_pool_withdraw = {
 }
 
 banking_possible_cw_dividend_restraint = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -410,6 +498,7 @@ banking_possible_cw_dividend_restraint = {
 }
 
 banking_possible_cw_mutual_aid_fund = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
@@ -417,6 +506,7 @@ banking_possible_cw_mutual_aid_fund = {
 }
 
 banking_possible_cw_capital_plan = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
@@ -424,6 +514,7 @@ banking_possible_cw_capital_plan = {
 }
 
 banking_possible_cw_credit_expansion = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_3
 		modifier:country_banking_intervention_max_add >= 3
@@ -431,6 +522,7 @@ banking_possible_cw_credit_expansion = {
 }
 
 banking_possible_cw_council_directive = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_1
 		modifier:country_banking_intervention_max_add >= 1
@@ -438,6 +530,7 @@ banking_possible_cw_council_directive = {
 }
 
 banking_possible_cw_consumption_ceiling = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_2
 		modifier:country_banking_intervention_max_add >= 2
@@ -445,6 +538,7 @@ banking_possible_cw_consumption_ceiling = {
 }
 
 banking_possible_cw_solidarity_campaign = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_1
 		modifier:country_banking_intervention_max_add >= 1
@@ -452,6 +546,7 @@ banking_possible_cw_solidarity_campaign = {
 }
 
 banking_possible_cw_worker_buyout = {
+	te_banking_cycle_started_tt = yes
 	custom_tooltip = {
 		text = COUNCIL_POINTS_3
 		modifier:country_banking_intervention_max_add >= 3
@@ -1071,7 +1166,7 @@ banking_contagion_own_roll_crashed = {
 banking_external_available = {
 	te_mon_full_system = yes
 	banking_is_market_economy = yes
-	has_journal_entry = je_banking_cycle
+	te_banking_cycle_running = yes
 }
 banking_cycle_is_expansion_or_boom = {
 	has_variable = finance_cycle_value
@@ -1087,6 +1182,7 @@ banking_external_eligible_restrict_inflows = {
 	}
 }
 banking_possible_cb_restrict_inflows = {
+	te_banking_cycle_started_tt = yes
 	banking_external_eligible_restrict_inflows = yes
 	banking_tool_restrict_inflows_active = no
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
@@ -1101,6 +1197,7 @@ banking_external_eligible_sterilize_inflows = {
 	te_mon_has_gold_flows = yes
 }
 banking_possible_cb_sterilize_inflows = {
+	te_banking_cycle_started_tt = yes
 	banking_external_eligible_sterilize_inflows = yes
 	banking_tool_sterilize_inflows_active = no
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
@@ -1116,6 +1213,7 @@ banking_external_eligible_foreign_borrowing_limits = {
 	has_law_or_variant = law_type:law_national_bank
 }
 banking_possible_cb_foreign_borrowing_limits = {
+	te_banking_cycle_started_tt = yes
 	banking_external_eligible_foreign_borrowing_limits = yes
 	banking_tool_foreign_borrowing_limits_active = no
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
@@ -1133,6 +1231,7 @@ banking_external_eligible_fx_surrender = {
 	}
 }
 banking_possible_cb_fx_surrender = {
+	te_banking_cycle_started_tt = yes
 	banking_external_eligible_fx_surrender = yes
 	banking_tool_fx_surrender_active = no
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
@@ -1150,6 +1249,7 @@ banking_external_eligible_emergency_import_financing = {
 	has_law_or_variant = law_type:law_national_bank
 }
 banking_possible_cb_emergency_import_financing = {
+	te_banking_cycle_started_tt = yes
 	banking_external_eligible_emergency_import_financing = yes
 	banking_tool_emergency_import_financing_active = no
 	custom_tooltip = { text = BANKING_POINTS_3 modifier:country_banking_intervention_max_add >= 3 }

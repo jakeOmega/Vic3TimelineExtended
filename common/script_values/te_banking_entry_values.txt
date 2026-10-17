@@ -1,0 +1,23 @@
+﻿# The banking entry's self-check (te_debug_banking.1,
+# common/on_actions/te_banking_entry_on_actions.txt).
+
+# Countries that should hold je_banking_cycle and don't, right now.
+te_banking_entry_missing_count = {
+	value = 0
+	every_country = {
+		limit = {
+			te_banking_entry_expected = yes
+			NOT = { has_journal_entry = je_banking_cycle }
+		}
+		add = 1
+	}
+}
+
+# How many entries the yearly safety net has added this game.
+te_banking_entry_net_added_g = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_banking_entry_net_added }
+		value = global_var:te_banking_entry_net_added
+	}
+}

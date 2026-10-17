@@ -683,10 +683,10 @@ types te_banking_history_types
 	### banking_dash_history_closed. Until then the journal had a collapsed
 	### shell of its own.
 	type te_banking_history_panel = flowcontainer {
-		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
-		# country whose entry has not activated yet and therefore has none of the
-		# cycle variables. Draw nothing until the journal entry is running.
-		visible = "[JournalEntry.IsActive]"
+		# Every country holds je_banking_cycle, dormant until its financial cycle
+		# starts, and nothing is sampled before then
+		# (te_history_record_banking_samples). Draw nothing until the cycle runs.
+		visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes

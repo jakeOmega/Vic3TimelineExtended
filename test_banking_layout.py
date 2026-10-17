@@ -318,10 +318,24 @@ def _badge(dash, block):
     return block
 
 
+DORMANT_ROW = re.compile(r"flowcontainer = \{\s*visible = \"\[GetScriptedGui\('banking_dash_cycle_dormant'\)")
+
+
+def _dormant_row(body):
+    """The dormant entry's row: its one Not Started cell, drawn in place of the
+    cycle's rows until the cycle starts (the banking always-on spec,
+    2026-10-17)."""
+    m = DORMANT_ROW.search(body)
+    assert m, "no dormant row"
+    return _block_from(body, m.start())
+
+
 def _cells():
-    """(tooltip, caption, [(picker, key, texture)], block) per overview cell."""
+    """(tooltip, caption, [(picker, key, texture)], block) per overview cell
+    of a running cycle: the dormant row's cell is not one of them."""
     dash = _read(DASH)
     body = _type_body(dash, "te_banking_overview_panel")
+    body = body.replace(_dormant_row(body), "")
     out = []
     for m in re.finditer(r"te_banking_ov_cell = \{", body):
         block = _block_from(body, m.end() - 1)
@@ -415,9 +429,9 @@ class OverviewTest(unittest.TestCase):
                 third = 'blockoverride "third_line"' in _block_from(row, m2.end() - 1)
                 self.assertEqual(int(height), 70 if third else 50)
             rows.append(widths)
-        # phase and momentum, bubble pressure and the budget, the stance and
-        # the price band
-        self.assertEqual([len(w) for w in rows], [2, 2, 2])
+        # the dormant entry's Not Started cell; then phase and momentum,
+        # bubble pressure and the budget, the stance and the price band
+        self.assertEqual([len(w) for w in rows], [1, 2, 2, 2])
 
 
 class BandCodeTest(unittest.TestCase):
@@ -658,14 +672,14 @@ class ShortPanelTest(unittest.TestCase):
     def test_status_text_is_empty_while_active(self):
         """The overview shows all it said: the readings as icons, and the
         three monthly modifier totals in the tooltips of the ranges under them
-        (test_banking_monthly_change.py). One line remains for the entry
-        before it starts, when the overview draws nothing."""
+        (test_banking_monthly_change.py). The line the entry kept before its
+        cycle started went too: every country holds the entry, and the dormant
+        one's overview draws a Not Started cell with the conditions on hover
+        (the banking always-on spec, 2026-10-17)."""
         je = _read(JE)
-        status = _block_from(je, je.index("status_desc = {"))
-        self.assertEqual(re.findall(r"desc = (\w+)", status), ["banking_cycle_status_not_started"])
-        self.assertIn("NOT = { has_variable = finance_cycle_value }", status)
+        self.assertNotIn("status_desc = {", je)
         self.assertNotIn("BANKING_CURR_MODIFIERS", _concept_loc())
-        self.assertIn("banking_cycle_status_not_started", _loc())
+        self.assertNotIn("banking_cycle_status_not_started", _loc())
 
 
 # ---------------------------------------------------------------------------
@@ -892,6 +906,14 @@ class WidthBudgetTest(unittest.TestCase):
                     self.fits(key, (column, "overview"))
         self.assertEqual(len(words), 15)   # seven phase words, five readings and three third lines
         self.assertEqual(widest, max(columns))
+        # The dormant entry's cell: the same column, its word and third line.
+        dormant = _dormant_row(_type_body(self.dash, "te_banking_overview_panel"))
+        width = int(re.search(r"size = \{ (\d+) \d+ \}", dormant).group(1))
+        keys = re.findall(r'te_banking_ov_word = \{(?:[^{}]|\{[^{}]*\})*?text = "(\w+)"', dormant)
+        self.assertEqual(keys, ["banking_dash_not_started_value", "banking_dash_not_started_conditions"])
+        for key in keys:
+            with self.subTest(word=key):
+                self.fits(key, (width - x - 6, "overview"))
         # the longest band word, named: the price band's
         self.assertEqual(self.shown("banking_dash_mon_band_value"), "Hyperinflation")
 

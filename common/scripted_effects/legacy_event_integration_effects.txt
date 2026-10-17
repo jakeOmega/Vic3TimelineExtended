@@ -1,7 +1,7 @@
 ﻿# Law-induced bank runs can start in any phase. Never seed a disabled system.
 banking_enactment_run_shock = {
 	if = {
-		limit = { has_journal_entry = je_banking_cycle }
+		limit = { te_banking_cycle_running = yes }
 		change_variable = { name = finance_cycle_value add = -5 }
 		change_variable = { name = finance_cycle_momentum add = -1 }
 		banking_cycle_post_event_refresh = yes

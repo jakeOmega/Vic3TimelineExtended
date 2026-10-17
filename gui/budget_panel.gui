@@ -148,19 +148,23 @@ types budget
 				# A fourth tab showing the banking journal entry's own panels (the
 				# content block at the foot of scrollarea_content). On the strip
 				# whenever the banking rule is on (te_budget_banking_tab_unlock_sgui),
-				# greyed until the entry runs (te_budget_banking_tab_sgui); the greyed
-				# tab's tooltip lists the unlock conditions with ticks. tab_buttons
+				# greyed until the entry runs (te_budget_banking_tab_sgui). Every
+				# country holds the entry from the game's first weeks, dormant until
+				# its financial cycle starts, so the tab is greyed only before then
+				# and for the rebels of a running revolution; the greyed tab's
+				# tooltip says so, and the cycle's own checklist is on the dormant
+				# entry's overview (te_banking_overview_panel). tab_buttons
 				# defaults both halves of an unused tab to `visible = no`, so each
 				# visibility block below tests the gate as well as the tab.
 				# EXCEPTION (#805): a country with a monetary stance but no entry
 				# (te_budget_banking_readout_sgui) gets the tab enabled, read-only,
-				# with the monetary readout; its tooltip still lists the conditions.
+				# with the monetary readout.
 				blockoverride "fourth_button"
 				{
 					text = "te_budget_tab_banking"
 				}
 				blockoverride "fourth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( SelectLocalization( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )]"
 				}
 				blockoverride "fourth_button_click"
 				{

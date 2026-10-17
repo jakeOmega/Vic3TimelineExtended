@@ -19,7 +19,7 @@
 ce_plan_revision = {
 	name = "CE_PLAN_REVISION"
 	desc = "CE_PLAN_REVISION_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_plan_revision_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_plan_revision_active = no }
 	ai_chance = {
 		value = 0
 		# Core: high friction (bubble) calls for revision
@@ -61,7 +61,7 @@ ce_disable_plan_revision = {
 ce_emergency_allocation = {
 	name = "CE_EMERGENCY_ALLOCATION"
 	desc = "CE_EMERGENCY_ALLOCATION_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_allocation_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_allocation_active = no }
 	ai_chance = {
 		value = 0
 		# Core: use in panic/downturn to restore coordination flow
@@ -102,7 +102,7 @@ ce_disable_emergency_allocation = {
 ce_target_reduction = {
 	name = "CE_TARGET_REDUCTION"
 	desc = "CE_TARGET_REDUCTION_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_target_cut_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_target_cut_active = no }
 	ai_chance = {
 		value = 0
 		# Core: boom/frenzy to prevent cascade
@@ -142,7 +142,7 @@ ce_disable_target_reduction = {
 ce_strategic_stockpile = {
 	name = "CE_STRATEGIC_STOCKPILE"
 	desc = "CE_STRATEGIC_STOCKPILE_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_stockpile_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_stockpile_active = no }
 	ai_chance = {
 		value = 0
 		# Core: mid-range friction; defensive posture
@@ -180,7 +180,7 @@ ce_disable_strategic_stockpile = {
 ce_distribution_upgrade = {
 	name = "CE_DISTRIBUTION_UPGRADE"
 	desc = "CE_DISTRIBUTION_UPGRADE_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_distribution_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_distribution_active = no }
 	ai_chance = {
 		value = 0
 		# Core: stagnation/downturn after stabilisation
@@ -220,7 +220,7 @@ ce_disable_distribution_upgrade = {
 ce_admin_campaign = {
 	name = "CE_ADMIN_CAMPAIGN"
 	desc = "CE_ADMIN_CAMPAIGN_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_admin_campaign_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_admin_campaign_active = no }
 	ai_chance = {
 		value = 0
 		# Core: very high bubble; drastic action needed
@@ -257,7 +257,7 @@ ce_disable_admin_campaign = {
 ce_coordination_protocol = {
 	name = "CE_COORDINATION_PROTOCOL"
 	desc = "CE_COORDINATION_PROTOCOL_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_coordination_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_coordination_active = no }
 	ai_chance = {
 		value = 0
 		# General-purpose: use in mild to moderate friction
@@ -294,7 +294,7 @@ ce_disable_coordination_protocol = {
 ce_consolidation_order = {
 	name = "CE_CONSOLIDATION_ORDER"
 	desc = "CE_CONSOLIDATION_ORDER_DESC"
-	visible = { is_ai = yes banking_is_command_economy = yes banking_tool_ce_consolidation_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_command_economy = yes banking_tool_ce_consolidation_active = no }
 	ai_chance = {
 		value = 0
 		# Core: stable or mild expansion; long-term structural tool
@@ -336,6 +336,7 @@ ce_invest_pool_inject = {
 	desc = "CE_INVEST_POOL_INJECT_DESC"
 	visible = {
 		is_ai = yes
+		te_banking_cycle_running = yes
 		banking_is_command_economy = yes
 	}
 	ai_chance = {
@@ -360,6 +361,7 @@ ce_invest_pool_withdraw = {
 	desc = "CE_INVEST_POOL_WITHDRAW_DESC"
 	visible = {
 		is_ai = yes
+		te_banking_cycle_running = yes
 		banking_is_command_economy = yes
 	}
 	ai_chance = {
@@ -385,7 +387,7 @@ ce_invest_pool_withdraw = {
 cw_dividend_restraint = {
 	name = "CW_DIVIDEND_RESTRAINT"
 	desc = "CW_DIVIDEND_RESTRAINT_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_dividend_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_dividend_active = no }
 	ai_chance = {
 		value = 0
 		# Core: high consumption pressure (bubble)
@@ -425,7 +427,7 @@ cw_disable_dividend_restraint = {
 cw_mutual_aid_fund = {
 	name = "CW_MUTUAL_AID_FUND"
 	desc = "CW_MUTUAL_AID_FUND_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_mutual_aid_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_mutual_aid_active = no }
 	ai_chance = {
 		value = 0
 		# Core: panic and deep downturn
@@ -463,7 +465,7 @@ cw_disable_mutual_aid_fund = {
 cw_capital_plan = {
 	name = "CW_CAPITAL_PLAN"
 	desc = "CW_CAPITAL_PLAN_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_capital_plan_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_capital_plan_active = no }
 	ai_chance = {
 		value = 0
 		# Core: stagnation/downturn: invest out of the dip
@@ -502,7 +504,7 @@ cw_disable_capital_plan = {
 cw_solidarity_campaign = {
 	name = "CW_SOLIDARITY_CAMPAIGN"
 	desc = "CW_SOLIDARITY_CAMPAIGN_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_solidarity_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_solidarity_active = no }
 	ai_chance = {
 		value = 0
 		# General-purpose; use when bubble is rising but not critical
@@ -539,7 +541,7 @@ cw_disable_solidarity_campaign = {
 cw_credit_expansion = {
 	name = "CW_CREDIT_EXPANSION"
 	desc = "CW_CREDIT_EXPANSION_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_credit_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_credit_active = no }
 	ai_chance = {
 		value = 0
 		# Core: panic/downturn: provide liquidity
@@ -582,7 +584,7 @@ cw_disable_credit_expansion = {
 cw_consumption_ceiling = {
 	name = "CW_CONSUMPTION_CEILING"
 	desc = "CW_CONSUMPTION_CEILING_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_ceiling_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_ceiling_active = no }
 	ai_chance = {
 		value = 0
 		# Core: very high bubble; drastic action
@@ -619,7 +621,7 @@ cw_disable_consumption_ceiling = {
 cw_council_directive = {
 	name = "CW_COUNCIL_DIRECTIVE"
 	desc = "CW_COUNCIL_DIRECTIVE_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_directive_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_directive_active = no }
 	ai_chance = {
 		value = 0
 		# General-purpose; slight preference for mild heat
@@ -656,7 +658,7 @@ cw_disable_council_directive = {
 cw_worker_buyout = {
 	name = "CW_WORKER_BUYOUT"
 	desc = "CW_WORKER_BUYOUT_DESC"
-	visible = { is_ai = yes banking_is_cooperative_economy = yes banking_tool_cw_buyout_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_cooperative_economy = yes banking_tool_cw_buyout_active = no }
 	ai_chance = {
 		value = 0
 		# Core: downturn/panic to prevent insolvency cascade

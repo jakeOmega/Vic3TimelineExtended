@@ -11,6 +11,58 @@
 # purely so the widget can ask script a yes/no question.
 
 # ---------------------------------------------------------------------------
+# The cycle's two states. Every country holds je_banking_cycle, dormant until
+# its cycle starts (docs/superpowers/specs/2026-10-17-banking-always-on-design.md),
+# so JournalEntry.IsActive no longer says there are readings to draw. Every
+# part of the panels that reads the cycle asks the first; the dormant state's
+# own pieces (the overview's Not Started cell, the notes over the greyed
+# controls) ask the second, and render the start test's checklist through the
+# greyed tab's own handler, te_budget_banking_tab_unlock_sgui
+# (te_system_tab_sguis.txt).
+# ---------------------------------------------------------------------------
+banking_dash_cycle_running = {
+	scope = country
+	is_shown = { te_banking_cycle_running = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_dash_cycle_dormant = {
+	scope = country
+	is_shown = { te_banking_cycle_running = no }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Does the Monetary Policy section carry controls a dormant entry greys? The
+# dial block's (a dial, under the full system) or, under
+# banking_system_simplified, open-market operations' fallback row. Shows the
+# section's one note over them (style guide rule 6) while
+# te_banking_controls_open is false; a country with no control there gets no
+# note, since starting the cycle would give it none.
+banking_dash_monetary_dormant_note = {
+	scope = country
+	is_shown = {
+		te_banking_controls_open = no
+		OR = {
+			AND = {
+				te_mon_full_system = yes
+				te_mon_has_dial = yes
+			}
+			AND = {
+				te_mon_full_system = no
+				banking_is_market_economy = yes
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
 # Economic-system gates — decide which intervention sections are shown.
 # ---------------------------------------------------------------------------
 banking_dash_system_market = {

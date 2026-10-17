@@ -24,6 +24,13 @@
 
 # ---------------------------------------------------------------------------
 # Banking: Budget panel (gui/budget_panel.gui), je_banking_cycle.
+# Every country under the rule holds the entry from the start of the game
+# (docs/superpowers/specs/2026-10-17-banking-always-on-design.md), so the tab is
+# greyed only before the entry's first activation (the game's first fortnight)
+# and for the rebels of a running revolution, who hold none. What the unlock
+# test now opens is the financial cycle: te_banking_cycle_unlocked is the
+# dormant entry's checklist (the overview's Not Started cell and the notes over
+# its greyed controls) as well as the greyed tab's.
 # ---------------------------------------------------------------------------
 te_budget_banking_tab_sgui = {
 	scope = country
@@ -40,13 +47,15 @@ te_budget_banking_tab_unlock_sgui = {
 	scope = country
 	is_shown = { te_banking_system_on = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_banking_entry_unlocked = yes }
+	is_valid = { te_banking_cycle_unlocked = yes }
 	effect = { }
 }
 
 # The one exception to "greyed until the entry runs" (#805). A country can hold
-# a monetary stance without the entry: a central bank dial needs only a national
-# bank (te_mon_has_dial), and a treaty peg, a common currency or a currency
+# a monetary stance without the entry (since every country holds it, only in
+# the first fortnight and as the rebels of a running revolution, whom a player
+# can join): a central bank dial needs only a national bank
+# (te_mon_has_dial), and a treaty peg, a common currency or a currency
 # board ties its money to another's (te_mon_is_anchored). Its bank sets a rate,
 # runs a mandate and can meet a peg crisis (te_peg.1/.2/.3), so the tab opens
 # read-only for it: the monetary readout (te_banking_mon_readout in
