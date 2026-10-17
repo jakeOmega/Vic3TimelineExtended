@@ -500,7 +500,7 @@ P09b or P09c passed and a customs follow-up kept them, the customs probe's regis
 (`events/te_tax_debug_events.txt`, `te_tax_debug.*`) is not harness and stays.
 
 Its hooks in production files must change with it: the Tax Probes tab in
-`gui/te_systems_window.gui` and `te_window_launcher_sgui` (`te_system_tab_sguis.txt`); the
+`gui/te_systems_window.gui`; the
 `te_tp_observe_controls` calls in `banking_policy_effects.txt` and
 `te_monetary_arrangement_effects.txt`; the `te_tp_lock` test in both gates of
 `common/scripted_guis/te_tax_native_sguis.txt`; `organize_loc.py`'s `DEBUG_TAX` category and its

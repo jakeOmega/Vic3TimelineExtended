@@ -1,0 +1,746 @@
+﻿### The Nation tab of the Timeline Extended window (gui/te_systems_window.gui
+### instances te_nation_tab_sections): what the country carries for good, in
+### one place. Spec: docs/superpowers/specs/2026-10-17-national-modifiers-tab-design.md
+### § 2. An overview of boxes, two to a row; five sections, open, each its
+### score rows and then its list; How the Nation Works, collapsed. House
+### style: docs/guides/gui_style_guide.md.
+###
+### DATA. No journal entry and no gate: everything reads the player's country
+### through GetPlayer. The rows read script values
+### (common/script_values/te_nation_values.txt) and the engine's modifier sums.
+### A list is the country's own timed modifiers filtered by name
+### (te_nation_list_<section>, and te_nation_row_<row> under a row, both
+### generated in gui/te_nation_generated.gui), each with its own tooltip, so
+### the engine renders the effects at their current scale. The country panel's
+### list hides the same names (gui/00_te_country_panel_information.gui).
+###
+### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
+### overview 16 (te_nation_fontsize_*; rule 3).
+
+template te_nation_fontsize_row {
+	fontsize = 17
+}
+
+template te_nation_fontsize_heading {
+	fontsize = 20
+}
+
+template te_nation_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
+
+types te_nation_widget_types
+{
+	type te_nation_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+		minimumsize = { 520 -1 }
+		spacing = 4
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	### A section's heading, centred over its panel (rule 7).
+	type te_nation_header = default_header {
+		using = default_list_position
+	}
+
+	### A heading inside How the Nation Works, with a faint rule under it.
+	type te_nation_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		margin_top = 6
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = te_nation_fontsize_heading
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	type te_nation_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_nation_fontsize_row
+		default_format = "#lore"
+	}
+
+	### A row: "Label: value", the detail on hover (rule 3).
+	type te_nation_row = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_nation_fontsize_row
+	}
+
+	### ----------------------------------------------------------------------
+	### The overview's box (rule 4; te_banking_ov_cell's shape): the icon in an
+	### inset box down the left, and beside it the caption, the word and a
+	### figure, in a 154 column at 16. Two to a row: 238 + 4 + 238 = 480.
+	### ----------------------------------------------------------------------
+	type te_nation_ov_cell = widget {
+		size = { 238 70 }
+
+		background = {
+			using = entry_bg_simple
+		}
+
+		widget = {
+			size = { 52 52 }
+			position = { 6 0 }
+			parentanchor = left|vcenter
+
+			background = {
+				using = dark_area
+				alpha = 0.3
+			}
+
+			icon = {
+				size = { 44 44 }
+				parentanchor = center
+				block "icon" {}
+			}
+		}
+		textbox = {
+			position = { 78 2 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_nation_fontsize_overview
+			default_format = "#tooltippable"
+			block "caption" {}
+		}
+		textbox = {
+			position = { 78 24 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_nation_fontsize_overview
+			block "word" {}
+		}
+		textbox = {
+			position = { 78 46 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_nation_fontsize_overview
+			block "fig" {}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### A list of the country's own modifiers: icon and name, the modifier's
+	### own tooltip on hover. block "filter" takes the generated name filter
+	### (te_nation_list_<section> or te_nation_row_<row>), the item's only
+	### `visible`; the list ignores the items it hides.
+	### ----------------------------------------------------------------------
+	type te_nation_list = flowcontainer {
+		datamodel = "[GetPlayer.GetTimedModifiers]"
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+		margin_top = 2
+
+		item = {
+			flowcontainer = {
+				block "filter" {}
+				spacing = 10
+				minimumsize = { 480 -1 }
+				tooltip = "[TimedModifier.GetTooltip]"
+
+				icon = {
+					texture = "[TimedModifier.GetIcon]"
+					size = { 25 25 }
+				}
+				textbox = {
+					text = "[TimedModifier.GetName]"
+					autoresize = yes
+					align = nobaseline
+					parentanchor = vcenter
+					using = te_nation_fontsize_row
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### A score heading for its target (rule 5): the solid fill runs to the
+	### lower of the two, a translucent segment to the higher. 480 x 14.
+	### block "high" and block "low" take the two values; "range" the max.
+	### ----------------------------------------------------------------------
+	type te_nation_target_bar = widget {
+		size = { 480 14 }
+		parentanchor = hcenter
+
+		default_progressbar_horizontal = {
+			size = { 100% 100% }
+			blockoverride "values" {
+				value = 0
+				min = 0
+				max = 1
+			}
+		}
+		widget = {
+			size = { 100% 100% }
+			alpha = 0.4
+
+			default_progressbar_horizontal = {
+				size = { 100% 100% }
+				blockoverride "background" {}
+				blockoverride "frame" {}
+				blockoverride "values" {
+					block "high" {}
+					min = 0
+					max = 100
+				}
+			}
+		}
+		default_progressbar_horizontal = {
+			size = { 100% 100% }
+			blockoverride "background" {}
+			blockoverride "frame" {}
+			blockoverride "values" {
+				block "low" {}
+				min = 0
+				max = 100
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The overview: always shown (rule 1).
+	### ----------------------------------------------------------------------
+	type te_nation_overview_panel = te_nation_panel {
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			te_nation_ov_cell = {
+				tooltip = "te_nation_ov_override_tt"
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/topbar/authority_icon.dds"
+				}
+				blockoverride "caption" {
+					text = "te_nation_ov_override_cap"
+				}
+				blockoverride "word" {
+					text = "te_nation_ov_override_word"
+				}
+				blockoverride "fig" {
+					text = "te_nation_ov_override_fig"
+				}
+			}
+			te_nation_ov_cell = {
+				tooltip = "te_nation_ov_wc_tt"
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/generic_icons/gdp.dds"
+				}
+				blockoverride "caption" {
+					text = "te_nation_ov_wc_cap"
+				}
+				blockoverride "word" {
+					text = "te_nation_ov_wc_word"
+				}
+				blockoverride "fig" {
+					text = "te_nation_ov_wc_fig"
+				}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			te_nation_ov_cell = {
+				tooltip = "te_nation_ov_construction_tt"
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
+				}
+				blockoverride "caption" {
+					text = "te_nation_ov_construction_cap"
+				}
+				blockoverride "word" {
+					text = "te_nation_ov_construction_word"
+				}
+				blockoverride "fig" {
+					text = "te_nation_ov_construction_fig"
+				}
+			}
+			te_nation_ov_cell = {
+				tooltip = "te_nation_ov_tech_tt"
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/generic_icons/literacy.dds"
+				}
+				blockoverride "caption" {
+					text = "te_nation_ov_tech_cap"
+				}
+				blockoverride "word" {
+					text = "te_nation_ov_tech_word"
+				}
+				blockoverride "fig" {
+					text = "te_nation_ov_tech_fig"
+				}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			te_nation_ov_cell = {
+				tooltip = "te_nation_ov_jud_tt"
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+				}
+				blockoverride "caption" {
+					text = "te_nation_ov_jud_cap"
+				}
+				blockoverride "word" {
+					text = "te_nation_ov_jud_word"
+				}
+				blockoverride "fig" {
+					text = "te_nation_ov_jud_fig"
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### GOVERNANCE: Legislative Override Capacity, the Algorithmic Mandate, and
+	### the list (the armed forces' training, heir education).
+	### ----------------------------------------------------------------------
+	type te_nation_section_governance = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_nation_header = {
+			blockoverride "text" {
+				text = "te_nation_sec_governance"
+			}
+		}
+		te_nation_panel = {
+			### Legislative Override Capacity: the value with the engine's
+			### breakdown on hover, a bar from -6 to +8 with a line at each
+			### Forceful Legislation threshold, and the strongest option open.
+			te_nation_row = {
+				text = "te_nation_override_row"
+			}
+			widget = {
+				size = { 480 14 }
+				parentanchor = hcenter
+
+				default_progressbar_horizontal = {
+					size = { 100% 100% }
+					blockoverride "values" {
+						value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_nation_override_bar') )]"
+						min = 0
+						max = 1
+					}
+				}
+				### The thresholds at 0, 2 and 4: (t + 6) / 14 of 480.
+				icon = {
+					size = { 2 18 }
+					position = { 205 -2 }
+					texture = "gfx/interface/backgrounds/white.dds"
+					color = { 0.96 0.90 0.72 0.9 }
+					tooltip = "te_nation_override_line_0_tt"
+				}
+				icon = {
+					size = { 2 18 }
+					position = { 274 -2 }
+					texture = "gfx/interface/backgrounds/white.dds"
+					color = { 0.96 0.90 0.72 0.9 }
+					tooltip = "te_nation_override_line_2_tt"
+				}
+				icon = {
+					size = { 2 18 }
+					position = { 342 -2 }
+					texture = "gfx/interface/backgrounds/white.dds"
+					color = { 0.96 0.90 0.72 0.9 }
+					tooltip = "te_nation_override_line_4_tt"
+				}
+			}
+			te_nation_row = {
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)0' )]"
+				text = "te_nation_override_tier_0"
+			}
+			te_nation_row = {
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)1' )]"
+				text = "te_nation_override_tier_1"
+			}
+			te_nation_row = {
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)2' )]"
+				text = "te_nation_override_tier_2"
+			}
+			te_nation_row = {
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)3' )]"
+				text = "te_nation_override_tier_3"
+			}
+			### While authority produced, not capacity, holds it there.
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
+				text = "te_nation_override_short"
+			}
+
+			### Judicial Independence (the Judiciary, spec § 2.2 / § 7 phase 3),
+			### once the score is seeded (the first monthly pulse): the score heading
+			### for its ceiling, the ceiling's sources (the court law's line, and the
+			### paper court's under a government that can ignore its courts), and
+			### the courts' own modifiers under it.
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_judiciary_on'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				margin_top = 6
+				spacing = 4
+
+				te_nation_row = {
+					text = "te_nation_jud_row"
+					tooltip = "te_nation_jud_row_tt"
+				}
+				te_nation_target_bar = {
+					blockoverride "high" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+					}
+					blockoverride "low" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+					}
+				}
+				te_nation_row = {
+					visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ) )]"
+					text = "te_nation_jud_ceiling_row"
+				}
+				te_nation_row = {
+					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' )]"
+					text = "te_nation_jud_ceiling_paper_row"
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_row_judicial_independence
+					}
+				}
+			}
+
+			### The Algorithmic Mandate, under Algorithmic Governance only.
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_mandate_on'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				margin_top = 6
+
+				te_nation_row = {
+					text = "te_nation_mandate_row"
+					tooltip = "te_nation_mandate_row_tt"
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_row_algorithmic_mandate
+					}
+				}
+			}
+
+			te_nation_list = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_governance_count'), '(CFixedPoint)0' )]"
+				blockoverride "filter" {
+					using = te_nation_list_governance
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### SOCIETY: Wealth Concentration, and the list (demographic policies,
+	### living-standard expectations, civil rights, resettlement).
+	### ----------------------------------------------------------------------
+	type te_nation_section_society = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_nation_header = {
+			blockoverride "text" {
+				text = "te_nation_sec_society"
+			}
+		}
+		te_nation_panel = {
+			te_nation_row = {
+				text = "te_nation_wc_row"
+				### The Population panel's Demographics tab is there only under the
+				### Demographics rule (te_pops_demog_tab_sgui).
+				tooltip = "[SelectLocalization( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_nation_wc_row_demog_tt', 'te_nation_wc_row_tt' )]"
+			}
+			te_nation_target_bar = {
+				blockoverride "high" {
+					value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+				}
+				blockoverride "low" {
+					value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+				}
+			}
+			te_nation_list = {
+				blockoverride "filter" {
+					using = te_nation_row_wealth_concentration
+				}
+			}
+			te_nation_list = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_society_count'), '(CFixedPoint)0' )]"
+				blockoverride "filter" {
+					using = te_nation_list_society
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### ECONOMY: Construction Cost, Private Construction while in force, and
+	### the list (agricultural diffusion, the private share, the tax code's
+	### reactions and relief, monetary bands, colonial programmes).
+	### ----------------------------------------------------------------------
+	type te_nation_section_economy = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_nation_header = {
+			blockoverride "text" {
+				text = "te_nation_sec_economy"
+			}
+		}
+		te_nation_panel = {
+			te_nation_row = {
+				text = "te_nation_construction_row"
+				tooltip = "te_nation_construction_row_tt"
+			}
+			te_nation_list = {
+				blockoverride "filter" {
+					using = te_nation_row_construction_cost
+				}
+			}
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_private_construction'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				margin_top = 6
+
+				te_nation_row = {
+					text = "te_nation_private_row"
+					tooltip = "te_nation_private_row_tt"
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_row_private_construction
+					}
+				}
+			}
+			te_nation_list = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_economy_count'), '(CFixedPoint)0' )]"
+				blockoverride "filter" {
+					using = te_nation_list_economy
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### SCIENCE AND SPACE: Global Technological Development while above zero,
+	### and the list (space race rewards, debris, Antarctica, the seabed).
+	### Drawn only with something to show (rule 8).
+	### ----------------------------------------------------------------------
+	type te_nation_section_science_and_space = flowcontainer {
+		visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' ) )]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_nation_header = {
+			blockoverride "text" {
+				text = "te_nation_sec_science_and_space"
+			}
+		}
+		te_nation_panel = {
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_nation_row = {
+					text = "te_nation_tech_row"
+					tooltip = "te_nation_tech_row_tt"
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_row_global_tech
+					}
+				}
+			}
+			te_nation_list = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' )]"
+				blockoverride "filter" {
+					using = te_nation_list_science_and_space
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### INTERNATIONAL: the list only (UN conventions and regime terms,
+	### sanctions, intelligence sharing, the nuclear taboo, an overlord in
+	### decline). Drawn only with something to show (rule 8).
+	### ----------------------------------------------------------------------
+	type te_nation_section_international = flowcontainer {
+		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_international_count'), '(CFixedPoint)0' )]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_nation_header = {
+			blockoverride "text" {
+				text = "te_nation_sec_international"
+			}
+		}
+		te_nation_panel = {
+			te_nation_list = {
+				blockoverride "filter" {
+					using = te_nation_list_international
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### How the Nation Works: collapsed (te_nation_how_open).
+	### ----------------------------------------------------------------------
+	type te_nation_how_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		section_header_button = {
+			blockoverride "layout" {
+				parentanchor = hcenter
+				size = { 520 38 }
+			}
+			blockoverride "left_text" {
+				text = "te_nation_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_nation_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_nation_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_nation_how_open')]"
+			}
+		}
+
+		te_nation_panel = {
+			visible = "[GetVariableSystem.Exists('te_nation_how_open')]"
+
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_tab"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_tab"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_override"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_override"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_jud"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_jud"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_mandate"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_mandate"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_wc"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_wc"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_construction"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_construction"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_tech"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_tech"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_lists"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_lists"
+			}
+		}
+	}
+
+	### The whole tab, in the spec's order (owner, 2026-10-17).
+	type te_nation_tab_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 10
+
+		te_nation_overview_panel = {}
+		te_nation_section_governance = {}
+		te_nation_section_society = {}
+		te_nation_section_economy = {}
+		te_nation_section_science_and_space = {}
+		te_nation_section_international = {}
+		te_nation_how_panel = {}
+	}
+}

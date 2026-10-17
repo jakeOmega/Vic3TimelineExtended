@@ -1,7 +1,7 @@
 """The Timeline Extended window (gui/te_systems_window.gui): the mod's own
-window for the systems with no vanilla home, a tab each for the Space Race, the
-Colonial Empire and Grand Monuments, and the Seabed (Global Commons) on a strip
-of its own, opened from a button under the sidebar
+window. The first strip: Nation (always open), the Space Race and Grand
+Monuments; the second: the Colonial Empire and the Seabed (Global Commons).
+Opened from a button under the sidebar
 (docs/systems/system_panels_feasibility.md §3.1, §3.5, §3.6; style guide rule 9).
 
 These tests hold the registration to the file, the launcher's and the window's
@@ -24,20 +24,21 @@ WIDGETS = os.path.join(REPO, "gui", "journal_entry_widgets")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 ICON_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md")
 
-# (tab key, the rule its gates read, its slot on the strip)
-TABS = [("space_race", "has_game_rule = space_race_enabled", "first"),
-        ("colonial_empire", "has_game_rule = decolonization_enabled", "second"),
+# The system tabs: (tab key, the rule its gates read, its slot on its strip).
+# The first strip: Nation (always open, no rule), then these two.
+TABS = [("space_race", "has_game_rule = space_race_enabled", "second"),
         ("grand_monuments", "gm_system_enabled = yes", "third")]
-# The Seabed tab: the first slot of a strip of its own under the three, so
-# their full names keep their width (a fourth on one strip leaves 115 each).
-SEABED = ("seabed", "te_global_commons_enabled = yes", "first")
-SEABED_STRIP = "te_systems_window_seabed_strip"
-ALL_TABS = TABS + [SEABED]
+# The second strip, so the first's full names keep their width (a fourth on
+# one strip leaves 115 each).
+SECOND = [("colonial_empire", "has_game_rule = decolonization_enabled", "first"),
+          ("seabed", "te_global_commons_enabled = yes", "second")]
+SECOND_STRIP = "te_systems_window_second_strip"
+ALL_TABS = TABS + SECOND
 SR = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
       "interstellar_probe", "interstellar_results", "solar_colonization"]   # je_space_race.txt order
 # The systems' full names, and the width a tab's name gets: three tabs share
 # about 540, less tab_text_properties' 10 px margin each side (no icon).
-FULL_NAMES = {"space_race": "Space Race", "colonial_empire": "Colonial Empire",
+FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire": "Colonial Empire",
               "grand_monuments": "Grand Monuments", "seabed": "Seabed"}
 NAME_WIDTH = 540 / 3 - 2 * 10
 # Tab labels are budgeted at the medium rate, 8.6 units a character plus 10%,
@@ -180,8 +181,8 @@ class RegistrationTest(unittest.TestCase):
 
 
 class LauncherTest(unittest.TestCase):
-    """The button under Map List: for a played country, on the HUD, while any
-    of the three systems' rules is on."""
+    """The button under Map List: for a played country, on the HUD. No rule
+    gates it: the Nation tab is always open."""
 
     @classmethod
     def setUpClass(cls):
@@ -195,15 +196,12 @@ class LauncherTest(unittest.TestCase):
         self.assertIn("position = { 0 825 }", head)
         self.assertIn("size = { 42 40 }", head)
 
-    def test_the_button_is_on_the_hud_and_gated_on_the_rules(self):
+    def test_the_button_is_on_the_hud_with_no_rule_gate(self):
         hud = self.root.index("using = hud_visibility")
         button = _named(self.gui, "te_systems_window_launcher_button")
         self.assertLess(hud, self.root.index(button))
-        self.assertIn(f'visible = "[{_gate("te_window_launcher_sgui")}]"', button)
-        sgui = _txt_block(_read(TAB_SGUIS), "te_window_launcher_sgui")
-        for _, rule, _ in ALL_TABS:
-            self.assertIn(rule, sgui)
-        self.assertIn("OR = {", sgui)
+        self.assertNotIn("te_window_launcher_sgui", self.gui)
+        self.assertNotIn("te_window_launcher_sgui", _read(TAB_SGUIS))
 
     def test_it_opens_and_closes_the_window(self):
         button = _named(self.gui, "te_systems_window_launcher_button")
@@ -324,15 +322,16 @@ class WindowTest(unittest.TestCase):
 
 
 class SelectionTest(unittest.TestCase):
-    """The tab shown: the last one chosen while it is open, otherwise the first
-    open one. Every combination of open tabs and stored choice."""
+    """The tab shown: the last one chosen while it is open, otherwise Nation,
+    which always is. Every combination of open tabs and stored choice."""
 
     @classmethod
     def setUpClass(cls):
         gui = _read(GUI)
-        cls.sel = {t: _template(gui, f"te_systems_window_{t}_selected") for t, _, _ in ALL_TABS}
-        cls.unsel = {t: _template(gui, f"te_systems_window_{t}_unselected") for t, _, _ in ALL_TABS}
-        cls.none = _template(gui, "te_systems_window_none_open")
+        tabs = ["nation"] + [t for t, _, _ in ALL_TABS]
+        cls.sel = {t: _template(gui, f"te_systems_window_{t}_selected") for t in tabs}
+        cls.unsel = {t: _template(gui, f"te_systems_window_{t}_unselected") for t in tabs}
+        cls.gui = gui
 
     def _cases(self):
         order = [t for t, _, _ in ALL_TABS]
@@ -340,31 +339,31 @@ class SelectionTest(unittest.TestCase):
             for on_strip in itertools.product([False, True], repeat=len(order)):
                 if any(o and not s for o, s in zip(opened, on_strip)):
                     continue    # a tab opens only while its rule is on
-                for stored in [None] + order:
+                for stored in [None, "nation"] + order:
                     shown = {f"te_window_{t}_tab_sgui" for t, o in zip(order, opened) if o}
                     shown |= {f"te_window_{t}_tab_unlock_sgui" for t, s in zip(order, on_strip) if s}
                     yield dict(zip(order, opened)), dict(zip(order, on_strip)), stored, shown
 
     def test_exactly_the_right_tab_is_shown(self):
-        order = [t for t, _, _ in ALL_TABS]
         for opened, _, stored, shown in self._cases():
-            if stored and opened[stored]:
-                expected = stored
-            else:
-                expected = next((t for t in order if opened[t]), None)
-            for t in order:
+            expected = stored if stored in opened and opened[stored] else "nation"
+            for t in self.sel:
                 with self.subTest(opened=opened, stored=stored, tab=t):
                     self.assertEqual(_evaluate(self.sel[t], shown, stored), t == expected)
-            self.assertEqual(_evaluate(self.none, shown, stored), expected is None)
 
     def test_a_tab_on_the_strip_shows_one_half(self):
         for opened, on_strip, stored, shown in self._cases():
-            for t in opened:
+            for t in self.sel:
                 with self.subTest(opened=opened, on_strip=on_strip, stored=stored, tab=t):
                     selected = _evaluate(self.sel[t], shown, stored)
                     unselected = _evaluate(self.unsel[t], shown, stored)
                     self.assertFalse(selected and unselected)
-                    self.assertEqual(selected or unselected, on_strip[t])
+                    # Nation is always on the strip
+                    self.assertEqual(selected or unselected, t == "nation" or on_strip[t])
+
+    def test_nothing_is_left_for_an_empty_window(self):
+        self.assertNotIn("te_systems_window_none_open", self.gui)
+        self.assertNotIn("te_systems_window_none", _all_loc())
 
 
 class StripTest(unittest.TestCase):
@@ -384,9 +383,9 @@ class StripTest(unittest.TestCase):
         return text[m.end():_close(text, m.end() - 1)]
 
     def test_each_tab_is_greyed_until_open_and_stores_the_choice(self):
-        seabed_strip = _named(self.gui, SEABED_STRIP)
+        second = _named(self.gui, SECOND_STRIP)
         for tab, _, slot in ALL_TABS:
-            within = seabed_strip if tab == "seabed" else None
+            within = second if (tab, _, slot) in SECOND else None
             with self.subTest(tab=tab):
                 click = self._override(f"{slot}_button_click", within)
                 self.assertIn(f'enabled = "[{_gate(f"te_window_{tab}_tab_sgui")}]"', click)
@@ -402,12 +401,25 @@ class StripTest(unittest.TestCase):
                 for half in (f"{slot}_button", f"{slot}_button_selected"):
                     self.assertIn(f'text = "te_window_tab_{tab}"', self._override(half, within))
 
-    def test_the_seabed_strip_is_up_while_the_rule_is_on(self):
-        strip = _named(self.gui, SEABED_STRIP)
-        self.assertIn(f'visible = "[{_gate("te_window_seabed_tab_unlock_sgui")}]"', strip.split("\n\n")[0])
-        # under the three-tab strip, above the developer strip
-        self.assertLess(self.panel.index('blockoverride "third_button_selected"'), self.panel.index(SEABED_STRIP))
-        self.assertLess(self.panel.index(SEABED_STRIP), self.panel.index("te_tp_tab_sgui"))
+    def test_nation_is_first_and_always_open(self):
+        first = self.panel[self.panel.index("tab_buttons = {"):self.panel.index(SECOND_STRIP)]
+        self.assertLess(first.index('blockoverride "first_button" {\n\t\t\t\t\t\ttext = "te_window_tab_nation"'),
+                        first.index('text = "te_window_tab_space_race"'))
+        click = self._override("first_button_click", first)
+        self.assertNotIn("enabled =", click)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'nation')]\"", click)
+        self.assertIn('tooltip = "te_window_tab_nation_tt"', self._override("first_button_tooltip", first))
+        self.assertIn("using = te_systems_window_nation_selected", self._override("first_button_visibility", first))
+        self.assertIn("using = te_systems_window_nation_unselected",
+                      self._override("first_button_visibility_checked", first))
+
+    def test_the_second_strip_is_up_while_either_rule_is_on(self):
+        strip = _named(self.gui, SECOND_STRIP)
+        gates = ", ".join(_gate(f"te_window_{t}_tab_unlock_sgui") for t, _, _ in SECOND)
+        self.assertIn(f'visible = "[Or( {gates} )]"', strip.split("\n\n")[0])
+        # under the first strip, above the developer strip
+        self.assertLess(self.panel.index('blockoverride "third_button_selected"'), self.panel.index(SECOND_STRIP))
+        self.assertLess(self.panel.index(SECOND_STRIP), self.panel.index("te_tp_tab_sgui"))
 
     def test_the_gates_read_the_rule_and_the_entries(self):
         for tab, rule, _ in ALL_TABS:
@@ -639,10 +651,14 @@ class SeabedTabTest(unittest.TestCase):
         with open(os.path.join(REPO, "gui", "te_seabed_widgets.gui"), "rb") as f:
             self.assertEqual(f.read(3), b"\xef\xbb\xbf")
 
-    def test_the_tabs_order_after_the_monuments(self):
+    def test_the_tabs_content_in_the_strips_order(self):
         gui = _read(GUI)
-        self.assertLess(gui.index('name = "te_systems_window_grand_monuments_tab"'),
-                        gui.index('name = "te_systems_window_seabed_tab"'))
+        at = [gui.index(f'name = "te_systems_window_{t}_tab"')
+              for t in ("nation", "space_race", "grand_monuments", "colonial_empire", "seabed")]
+        self.assertEqual(at, sorted(at))
+        nation = _named(gui, "te_systems_window_nation_tab")
+        self.assertIn("using = te_systems_window_nation_selected", nation.split("\n\n")[0])
+        self.assertIn("te_nation_tab_sections = {}", nation)
 
 
 class LocTest(unittest.TestCase):

@@ -64,6 +64,8 @@ The actual failure mode is narrow: a **time field set to a boolean**. `set_varia
 
 **`game_date` used as a value is a day count**, so a stored one gives elapsed days by subtraction. `value = game_date` (`set_variable = { name = X value = game_date }`, a script value's `value = game_date subtract = var:X`) is days since year 0 with 365-day years: a save made on 1 March 2069 held the construction market's `te_construction_market_last_pulse_date` as 755244 = 2069 × 365 + 59, and three consecutive autosaves differed by 28 and 31 days (decoded from the binary saves with `scripts/analysis/check_save_history_order.py`'s `read_gamestate`, 2026-10-02). The tax code's debate clock (`te_tax_debate_days_elapsed`, `common/script_values/te_tax_support_values.txt`) relies on it. Where a month is enough, `te_history_month_index` is simpler.
 
+**A duration of `-1` is forever.** `add_modifier = { name = X days = -1 }` (vanilla writes `months = -1 # FOREVER`, `00_turtle_island.txt`) adds a permanent modifier, like one with no duration field; the decolonization endings and the Imperial Federation and Mandate System decisions use it. A tool that sorts modifiers into timed and permanent by looking for a duration field must not count `= -1`: `gen_nation_tab.py`'s finder did, and missed five permanent country rewards until review (`(?!\s*-)` after the `=`; `\s*=\s*(?!-)` backtracks past the space and still matches).
+
 ## Modifier Design: Don't Borrow Modifiers from Other Systems
 
 Each mod system should define its own modifiers. Do NOT reuse modifiers from another system (e.g. using `intelligence_capacity_defense` from covert warfare in a cultural hegemony event). Cross-system modifier sharing:

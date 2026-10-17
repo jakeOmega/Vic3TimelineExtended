@@ -61,6 +61,22 @@ institution and modifier-type snapshots and mod definitions, and writes:
 This generator runs explicitly; it is not a post-load regenerator. The localization
 organizer preserves its BUDGET family and output format.
 
+## Nation tab (explicit regeneration)
+
+Run `python3 scripts/generators/gen_nation_tab.py` after changing its registry
+(`SECTIONS`, `ROWS`, `KEEP_IN_LIST`, `NOT_ON_COUNTRY`), the budget catalogue
+above (its sources are hidden from the country panel's list), or vanilla's
+`country_panel.gui` fixture. `test_nation_tab.py` fails while a permanent
+country modifier has no registry line or a file below is stale. It writes:
+
+| File | Owner script | Input |
+|---|---|---|
+| `gui/te_nation_generated.gui` | `scripts/generators/gen_nation_tab.py` | The registry, resolved against every static modifier script adds without a duration: the country panel's filter and the tab's list and row filters |
+| `common/script_values/te_nation_generated_values.txt` | `scripts/generators/gen_nation_tab.py` | The same names, as `has_modifier` counts (`gui_country_hidden_modifier_count`, `te_nation_list_<section>_count`) |
+| `gui/00_te_country_panel_information.gui` | `scripts/generators/gen_nation_tab.py` | `test_fixtures/vanilla_gui/country_panel.gui` (vanilla, byte for byte): its `country_panel_information_content` type with three `### MOD: Nation tab` blocks |
+
+This generator runs explicitly; it is not a post-load regenerator.
+
 ## Tooling data
 
 | File / glob | Owner script | Input | Notes |

@@ -303,8 +303,8 @@ te_pops_demog_tab_unlock_sgui = {
 	effect = { }
 }
 # The Timeline Extended window (gui/te_systems_window.gui) uses the same pair
-# per tab, named te_window_<system>_tab_sgui / _tab_unlock_sgui, plus a gate for
-# its launcher and one per Space Race entry (at the foot of this file).
+# per system tab, named te_window_<system>_tab_sgui / _tab_unlock_sgui, plus one
+# per Space Race entry (at the foot of this file). Its Nation tab has none.
 #
 
 # ===========================================================================
@@ -312,24 +312,8 @@ te_pops_demog_tab_unlock_sgui = {
 # vanilla home, one tab each (docs/systems/system_panels_feasibility.md §9).
 # ===========================================================================
 
-# The launcher under the sidebar shows while any of the three systems' game
-# rules is on.
-te_window_launcher_sgui = {
-	scope = country
-	is_shown = {
-		OR = {
-			has_variable = te_tp_armed # TEMPORARY PR 585: developer-only tax tab
-
-			has_game_rule = space_race_enabled
-			has_game_rule = decolonization_enabled
-			gm_system_enabled = yes
-			te_global_commons_enabled = yes
-		}
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
+# The launcher has no gate of its own: the Nation tab is always open, so the
+# window is up for every played country (gui/te_systems_window.gui).
 
 # ---------------------------------------------------------------------------
 # Space Race: the nine je_space_race_* entries (je_space_race.txt). The tab

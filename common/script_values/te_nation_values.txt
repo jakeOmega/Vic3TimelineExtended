@@ -1,0 +1,149 @@
+﻿# The Nation tab's rows (gui/te_nation_tab.gui). Country scope, read through
+# GetPlayer.MakeScope. Each is safe before its system has first run. The
+# lists' counts are generated (te_nation_generated_values.txt).
+
+# Legislative Override Capacity, the raw modifier sum (its sources:
+# concept_legislative_override_capacity).
+te_nation_override_capacity = {
+	value = modifier:country_legislative_override_capacity_add
+}
+
+# Its bar: -6 to +8 as 0 to 1.
+te_nation_override_bar = {
+	value = te_nation_override_capacity
+	add = 6
+	divide = 14
+	min = 0
+	max = 1
+}
+
+# The strongest Forceful Legislation option the capacity alone opens
+# (minor_events_timelineextended.2 in events/minor_events.txt): 0 none (below
+# 0), 1 expedite, 2 push decisively (at 2), 3 force it through (at 4).
+te_nation_override_cap_tier = {
+	value = 0
+	if = {
+		limit = { te_nation_override_capacity >= 4 }
+		value = 3
+	}
+	else_if = {
+		limit = { te_nation_override_capacity >= 2 }
+		value = 2
+	}
+	else_if = {
+		limit = { te_nation_override_capacity >= 0 }
+		value = 1
+	}
+}
+
+# The strongest option open now: the event also needs more authority
+# produced than each option costs (its trigger and options' triggers).
+te_nation_override_tier = {
+	value = 0
+	if = {
+		limit = {
+			te_nation_override_capacity >= 4
+			produced_authority > forced_law_through_event_authority_cost_large
+		}
+		value = 3
+	}
+	else_if = {
+		limit = {
+			te_nation_override_capacity >= 2
+			produced_authority > forced_law_through_event_authority_cost_medium
+		}
+		value = 2
+	}
+	else_if = {
+		limit = {
+			te_nation_override_capacity >= 0
+			produced_authority > forced_law_through_event_authority_cost_small
+		}
+		value = 1
+	}
+}
+
+# The authority the next option needs, while authority, not capacity, holds
+# the tier below what the capacity opens; 0 otherwise.
+te_nation_override_next_cost = {
+	value = 0
+	if = {
+		limit = { te_nation_override_cap_tier > te_nation_override_tier }
+		if = {
+			limit = { te_nation_override_tier = 0 }
+			value = forced_law_through_event_authority_cost_small
+		}
+		else_if = {
+			limit = { te_nation_override_tier = 1 }
+			value = forced_law_through_event_authority_cost_medium
+		}
+		else = {
+			value = forced_law_through_event_authority_cost_large
+		}
+	}
+}
+
+# Global Technological Development: the technology spread the yearly pulse
+# last applied (tech_spread_on_action), 0 before it. Never the sweep itself
+# (global_tech_spread_script_value), which the GUI would rerun every frame.
+te_nation_tech_spread = {
+	value = 0
+	if = {
+		limit = { has_variable = te_global_tech_spread_applied }
+		value = var:te_global_tech_spread_applied
+	}
+}
+
+# Judicial Independence (te_judiciary_values.txt): 1 once the score is
+# seeded (the first monthly pulse; an old save's second), whose row shows
+# te_jud_display heading for te_jud_ceiling.
+te_nation_judiciary_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_judicial_independence }
+		value = 1
+	}
+}
+
+# 1 while a paper court's line (a government that can ignore its courts)
+# cuts the ceiling, so the row names both of the ceiling's sources.
+te_nation_jud_paper = {
+	value = 0
+	if = {
+		limit = { "modifier:country_judicial_independence_ceiling_mult" < 0 }
+		value = 1
+	}
+}
+
+# 1 under Algorithmic Governance, whose mandate the row shows.
+te_nation_mandate_on = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_algorithmic_governance }
+		value = 1
+	}
+}
+
+# Construction cost scaling: the multiplier the yearly pulse last applied
+# (construction_cost_scaling_on_action, either rule's branch), 0 before it.
+te_nation_construction_cost = {
+	value = 0
+	if = {
+		limit = { has_variable = prior_construction_scaling }
+		value = var:prior_construction_scaling
+	}
+}
+
+# 1 while excess private construction or Overinvestment is in force.
+te_nation_private_construction = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_modifier = too_much_private_construction
+				has_modifier = overinvestment_modifier
+			}
+		}
+		value = 1
+	}
+}

@@ -9,11 +9,10 @@ a United Nations, a space race, cultural and covert competition between powers,
 and social movements. Most of these systems have their own journal entry, and
 most can be switched off with a game rule.
 
-The mod adds one button to the sidebar, under Map List. It opens the Timeline
-Extended window, which has a tab each for the space race, your colonial empire
-and your Grand Monuments: the same panels as their journal entries, in one
-place. The button shows while at least one of those three systems is switched
-on.
+The mod adds one button to the sidebar, under Map List, in every game. It opens
+the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
+tab each for the space race, your Grand Monuments and your colonial empire, the
+same panels as their journal entries, and one for the seabed.
 
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
@@ -136,6 +135,32 @@ The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and
 refunds offset each other inside that group. Open
 How the Breakdown Works at the bottom for the accounting details.
+
+## The Nation tab
+
+The Timeline Extended window opens on its Nation tab, unless the tab you last
+chose is open. The Nation tab gathers what your country carries for good, and it
+is open in every game from the first day.
+
+At the top, five boxes: Legislative Override Capacity, Wealth Concentration and
+the score it is heading for, Construction Cost, Global Technology, and Judicial
+Independence and its ceiling. The first names the strongest Forceful Legislation
+option open to you, which also depends on the authority you produce.
+
+Below them are five sections: Governance, Society, Economy, Science and Space,
+and International. Each starts with its scores, if it has any, then lists the
+permanent effects the mod's systems have given your country, such as
+agricultural diffusion, space race milestones, demographic policies and the UN
+conventions you are bound by. Hover an effect to see what it does at its current
+size. Legislative Override Capacity's figure names every source on hover, and
+the lines on its bar mark where Forceful Legislation's options open, at 0, 2 and
+4.
+
+The Modifiers list in the country panel's Information tab leaves these effects
+out. It keeps the timed ones, such as what an event has just done to you, and a
+few others: Nuclear Power, and what a foreign operation is doing to you. A
+system's weekly costs are in the Budget panel's Breakdown tab. Tooltips that
+break down a figure, such as legitimacy, still name every source.
 
 ## How the guide is organized
 

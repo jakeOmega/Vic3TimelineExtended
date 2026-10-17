@@ -1,7 +1,8 @@
 ﻿### Timeline Extended: the mod's own window, for the systems with no vanilla
-### home (docs/systems/system_panels_feasibility.md §9, item 3): one tab each
-### for the Space Race, the Colonial Empire and Grand Monuments, and the
-### Seabed (Global Commons, on a strip of its own below them). Additive: a
+### home (docs/systems/system_panels_feasibility.md §9, item 3). The first
+### strip: Nation (what the country carries for good, always open;
+### gui/te_nation_tab.gui), the Space Race and Grand Monuments. The second: the
+### Colonial Empire and the Seabed (Global Commons). Additive: a
 ### scripted widget (gui/scripted_widgets/te_systems_window.txt registers the
 ### two roots at the foot of this file), so no vanilla file is replaced.
 ###
@@ -16,10 +17,10 @@
 ###       Community Mod Framework's (system_panels_feasibility.md §7.5, item 3):
 ###       with CMF enabled, its own clearing closes this window along with its
 ###       own; without CMF nothing else reads the key.
-###   te_systems_window_tab = space_race | colonial_empire | grand_monuments
-###       | seabed
+###   te_systems_window_tab = nation | space_race | grand_monuments
+###       | colonial_empire | seabed
 ###       the tab the player last chose. The tab shown is that one while it is
-###       open, otherwise the first open tab (the te_systems_window_*_selected
+###       open, otherwise Nation, which always is (the te_systems_window_*_selected
 ###       templates below; test_te_systems_window.py checks them against every
 ###       case).
 ### Set from outside this file too: the state view's Grand Monument card
@@ -35,8 +36,7 @@
 ###
 ### GATES, outermost first, so nothing inside a closed one is evaluated:
 ###   the played country (GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, and
-###   not observer mode, where GetPlayer is empty); then, for the launcher, a
-###   game rule of the three (te_window_launcher_sgui); for the window, its open
+###   not observer mode, where GetPlayer is empty); then, for the window, its open
 ###   state on the root and each tab's content only while that tab is shown
 ###   (§8 test 3, whether a hidden scripted widget stops updating, is untested);
 ###   then per system the scope-free gate on a parent and the
@@ -50,42 +50,53 @@
 ### Which tab is shown. U = the tab is open (te_window_<system>_tab_sgui: its
 ### rule on and an entry running), R = the tab is on the strip
 ### (te_window_<system>_tab_unlock_sgui: its rule on), S = the player last chose
-### it (te_systems_window_tab). With V = "the tab last chosen is open":
-###   Space Race       U_sr and (S_sr or not V)
-###   Colonial Empire  U_ce and (S_ce or (not V and not U_sr))
-###   Grand Monuments  U_gm and (S_gm or (not V and not U_sr and not U_ce))
-###   Seabed           U_sb and (S_sb or (not V and none of the three open))
-### so exactly one tab is shown whenever any is open. A tab's unselected half
-### shows while it is on the strip and not shown. The Seabed tab has no
-### journal entry: it is open (te_window_seabed_tab_sgui) once the country has
-### taken part in a seabed sharing.
+### it (te_systems_window_tab), T = the developer tax tab is chosen and armed.
+### With V = "a system tab last chosen is open" (S and U for one of the four):
+###   Nation       not T and not V
+###   a system t   not T and S_t and U_t
+### so exactly one tab is shown: Nation unless an open system tab was the last
+### choice. A system tab's unselected half shows while it is on the strip and
+### not shown, Nation's while another tab is. The Seabed tab has no journal
+### entry: it is open (te_window_seabed_tab_sgui) once the country has taken
+### part in a seabed sharing.
+template te_systems_window_nation_selected {
+	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), Not( Or( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) )]"
+}
+
+template te_systems_window_nation_unselected {
+	visible = "[Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
+}
+
 template te_systems_window_space_race_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ) ) ) )]"
+	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 }
+
 template te_systems_window_space_race_unselected {
-	visible = "[Or( And( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ) ) ) ) ) ) )]"
+	visible = "[And( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
 }
-template te_systems_window_colonial_empire_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), And( Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ), Not( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) )]"
-}
-template te_systems_window_colonial_empire_unselected {
-	visible = "[Or( And( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), And( Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ), Not( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ) ) ) )]"
-}
+
 template te_systems_window_grand_monuments_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), And( Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ), And( Not( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Not( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ) )]"
+	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 }
+
 template te_systems_window_grand_monuments_unselected {
-	visible = "[Or( And( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), And( Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ), And( Not( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Not( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ) ) ) ) )]"
+	visible = "[And( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
 }
+
+template te_systems_window_colonial_empire_selected {
+	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+}
+
+template te_systems_window_colonial_empire_unselected {
+	visible = "[And( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
+}
+
 template te_systems_window_seabed_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), And( Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ), And( Not( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Not( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ) ) )]"
+	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 }
+
 template te_systems_window_seabed_unselected {
-	visible = "[Or( And( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), And( Not( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ), And( Not( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Not( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) ) ) ) ) ) )]"
-}
-### No tab open: none of the four is open.
-template te_systems_window_none_open {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( Not( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( Not( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Not( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) )]"
+	visible = "[And( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
 }
 
 template te_systems_window_tax_probes_selected {
@@ -144,46 +155,46 @@ types te_systems_window_types
 				### 10%), which fits vanilla's tab text (EB Garamond 17, measured at about
 				### 7.7 a character bold in PR #593).
 				tab_buttons = {
-					### Space Race
+					### Nation: always open (no journal entry, no game rule), so never
+					### greyed and never a checklist (style rule 9's exception).
 					blockoverride "first_button" {
-						text = "te_window_tab_space_race"
+						text = "te_window_tab_nation"
 					}
 					blockoverride "first_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "te_window_tab_nation_tt"
 					}
 					blockoverride "first_button_click" {
+						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'nation')]"
+					}
+					blockoverride "first_button_visibility" {
+						using = te_systems_window_nation_selected
+					}
+					blockoverride "first_button_visibility_checked" {
+						using = te_systems_window_nation_unselected
+					}
+					blockoverride "first_button_selected" {
+						text = "te_window_tab_nation"
+					}
+
+					### Space Race
+					blockoverride "second_button" {
+						text = "te_window_tab_space_race"
+					}
+					blockoverride "second_button_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+					}
+					blockoverride "second_button_click" {
 						enabled = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'space_race')]"
 					}
-					blockoverride "first_button_visibility" {
+					blockoverride "second_button_visibility" {
 						using = te_systems_window_space_race_selected
 					}
-					blockoverride "first_button_visibility_checked" {
+					blockoverride "second_button_visibility_checked" {
 						using = te_systems_window_space_race_unselected
 					}
-					blockoverride "first_button_selected" {
-						text = "te_window_tab_space_race"
-					}
-
-					### Colonial Empire
-					blockoverride "second_button" {
-						text = "te_window_tab_colonial_empire"
-					}
-					blockoverride "second_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
-					}
-					blockoverride "second_button_click" {
-						enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'colonial_empire')]"
-					}
-					blockoverride "second_button_visibility" {
-						using = te_systems_window_colonial_empire_selected
-					}
-					blockoverride "second_button_visibility_checked" {
-						using = te_systems_window_colonial_empire_unselected
-					}
 					blockoverride "second_button_selected" {
-						text = "te_window_tab_colonial_empire"
+						text = "te_window_tab_space_race"
 					}
 
 					### Grand Monuments
@@ -209,36 +220,57 @@ types te_systems_window_types
 				}
 
 
-				### Seabed (Global Commons): a strip of its own under the three, so
-				### their full names keep their width: four tabs on one strip
-				### would leave each name about 115, and "Colonial Empire" and
-				### "Grand Monuments" need 142. Greyed until the country has taken
-				### part in a seabed sharing (te_window_seabed_tab_sgui).
+				### The second strip: the Colonial Empire and the Seabed (Global Commons),
+				### so the first strip's names keep their width (four tabs on one strip
+				### would leave each name about 115, and "Colonial Empire" and "Grand
+				### Monuments" need 142). Up while either rule is on.
 				tab_buttons = {
-					name = "te_systems_window_seabed_strip"
-					visible = "[GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					name = "te_systems_window_second_strip"
+					visible = "[Or( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					### Colonial Empire
 					blockoverride "first_button" {
-						text = "te_window_tab_seabed"
+						text = "te_window_tab_colonial_empire"
 					}
 					blockoverride "first_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
 					blockoverride "first_button_click" {
+						enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'colonial_empire')]"
+					}
+					blockoverride "first_button_visibility" {
+						using = te_systems_window_colonial_empire_selected
+					}
+					blockoverride "first_button_visibility_checked" {
+						using = te_systems_window_colonial_empire_unselected
+					}
+					blockoverride "first_button_selected" {
+						text = "te_window_tab_colonial_empire"
+					}
+
+					### Seabed
+					blockoverride "second_button" {
+						text = "te_window_tab_seabed"
+					}
+					blockoverride "second_button_tooltip" {
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+					}
+					blockoverride "second_button_click" {
 						enabled = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'seabed')]"
 					}
-					blockoverride "first_button_visibility" {
+					blockoverride "second_button_visibility" {
 						using = te_systems_window_seabed_selected
 					}
-					blockoverride "first_button_visibility_checked" {
+					blockoverride "second_button_visibility_checked" {
 						using = te_systems_window_seabed_unselected
 					}
-					blockoverride "first_button_selected" {
+					blockoverride "second_button_selected" {
 						text = "te_window_tab_seabed"
 					}
 				}
 
-				# TEMPORARY: second strip avoids shrinking the three full system labels.
+				# TEMPORARY: a strip of its own (the third) avoids shrinking the system tabs' full names.
 				tab_buttons = {
 					visible = "[GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					blockoverride "first_button" { text = "te_tp_tab" }
@@ -265,24 +297,27 @@ types te_systems_window_types
 					using = te_systems_window_tax_probes_selected
 				}
 
-				### No tab open yet.
-				textbox = {
-					using = te_systems_window_none_open
-					parentanchor = hcenter
-					autoresize = yes
-					multiline = yes
-					minimumsize = { 480 -1 }
-					maximumsize = { 480 -1 }
-					margin_top = 20
-					align = hcenter|nobaseline
-					using = fontsize_medium
-					default_format = "#lore"
-					text = "te_systems_window_none"
-				}
-
 				### The tabs' content, in the strip's order. Each is up only while
 				### its tab is shown (the *_selected templates), so a closed tab's
 				### panels are never built.
+
+				### ------------------------------------------------------------------
+				### TAB: NATION (spec 2026-10-17-national-modifiers-tab-design.md; the
+				### types are in gui/te_nation_tab.gui). No journal entry and no gate: the
+				### sections read the player's country through GetPlayer, each gated on
+				### its own data.
+				flowcontainer = {
+					name = "te_systems_window_nation_tab"
+					using = te_systems_window_nation_selected
+					using = default_fade_in_out
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+					margin_top = 10
+					margin_bottom = 15
+
+					te_nation_tab_sections = {}
+				}
 
 				### ------------------------------------------------------------------
 				### TAB: SPACE RACE (the nine je_space_race_* entries;
@@ -671,66 +706,6 @@ types te_systems_window_types
 				}
 
 				### ------------------------------------------------------------------
-				### TAB: COLONIAL EMPIRE (je_colonial_empire;
-				### gui/journal_entry_widgets/colonial_empire_widget.gui). The three
-				### composers the entry's roots wrap, in its order: the overview (which
-				### draws the stability bar, so the entry mounts the bars-on-top marker
-				### and nothing here draws a bar), the live sections (why stability is
-				### moving, international pressure, the programmes, the decisions), the
-				### history charts and How the Colonial Empire Works. Then Open Journal
-				### Entry. Not drawn: the status line (empty while the entry runs: the
-				### overview says it) and the nine scripted buttons (the AI's: every
-				### one's `visible` carries is_ai = yes; the programme and decision rows
-				### carry the same actions for a human).
-				flowcontainer = {
-					name = "te_systems_window_colonial_empire_tab"
-					using = te_systems_window_colonial_empire_selected
-					using = default_fade_in_out
-					parentanchor = hcenter
-					direction = vertical
-					spacing = 10
-					margin_top = 10
-					margin_bottom = 15
-
-					default_header = {
-						using = default_list_position
-						blockoverride "text" {
-							text = "je_colonial_empire"
-						}
-					}
-
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_ce_overview_panel = {}
-							te_ce_status_sections = {}
-							te_ce_reference_sections = {}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_colonial_empire_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-				}
-
-				### ------------------------------------------------------------------
 				### TAB: GRAND MONUMENTS (je_grand_monuments;
 				### gui/journal_entry_widgets/grand_monuments_widget.gui). The three
 				### composers the entry's roots wrap, in its order: the overview, the
@@ -786,6 +761,66 @@ types te_systems_window_types
 								size = { 480 32 }
 								text = "te_system_tab_open_journal"
 								tooltip = "te_window_grand_monuments_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+				}
+
+				### ------------------------------------------------------------------
+				### TAB: COLONIAL EMPIRE (je_colonial_empire;
+				### gui/journal_entry_widgets/colonial_empire_widget.gui). The three
+				### composers the entry's roots wrap, in its order: the overview (which
+				### draws the stability bar, so the entry mounts the bars-on-top marker
+				### and nothing here draws a bar), the live sections (why stability is
+				### moving, international pressure, the programmes, the decisions), the
+				### history charts and How the Colonial Empire Works. Then Open Journal
+				### Entry. Not drawn: the status line (empty while the entry runs: the
+				### overview says it) and the nine scripted buttons (the AI's: every
+				### one's `visible` carries is_ai = yes; the programme and decision rows
+				### carry the same actions for a human).
+				flowcontainer = {
+					name = "te_systems_window_colonial_empire_tab"
+					using = te_systems_window_colonial_empire_selected
+					using = default_fade_in_out
+					parentanchor = hcenter
+					direction = vertical
+					spacing = 10
+					margin_top = 10
+					margin_bottom = 15
+
+					default_header = {
+						using = default_list_position
+						blockoverride "text" {
+							text = "je_colonial_empire"
+						}
+					}
+
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_ce_overview_panel = {}
+							te_ce_status_sections = {}
+							te_ce_reference_sections = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_colonial_empire_open_journal_tt"
 								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 							}
 						}
@@ -892,7 +927,6 @@ widget = {
 		widget = {
 			name = "te_systems_window_launcher_button"
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('te_window_launcher_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 
 			### The dark strip behind the label: vanilla's, sized for one row
 			### (the bar's is as tall as the whole sidebar). Its right margin

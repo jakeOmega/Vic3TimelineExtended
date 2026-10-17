@@ -45,12 +45,11 @@ class TaxProbeSafetyTest(unittest.TestCase):
             if ".Execute(" in line:
                 self.assertIn("onclick =", line)
 
-    def test_four_tab_selection_is_exclusive_and_stale_debug_choice_falls_back(self):
+    def test_tab_selection_is_exclusive_and_stale_debug_choice_falls_back(self):
         gui = read("gui/te_systems_window.gui")
         normal = ["space_race", "colonial_empire", "grand_monuments"]
-        names = normal + ["tax_probes"]
+        names = ["nation"] + normal + ["tax_probes"]
         expressions = {n: _template(gui, f"te_systems_window_{n}_selected") for n in names}
-        empty = _template(gui, "te_systems_window_none_open")
         for mask in itertools.product((False, True), repeat=4):
             shown = {f"te_window_{n}_tab_sgui" for n, yes in zip(normal, mask[:3]) if yes}
             if mask[3]:
@@ -62,9 +61,8 @@ class TaxProbeSafetyTest(unittest.TestCase):
                 elif stored in normal and mask[normal.index(stored)]:
                     expected = [stored]
                 else:
-                    expected = next(([n] for n, yes in zip(normal, mask[:3]) if yes), [])
+                    expected = ["nation"]    # always open
                 self.assertEqual(selected, expected, (mask, stored))
-                self.assertEqual(_evaluate(empty, shown, stored), not expected)
 
     def test_normal_tabs_remain_clickable_while_debug_tab_is_selected(self):
         gui = read("gui/te_systems_window.gui")

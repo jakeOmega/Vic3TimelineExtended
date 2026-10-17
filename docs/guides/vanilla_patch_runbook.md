@@ -186,6 +186,8 @@ find gui -name "*.gui" -type f | while read rel; do
 done
 ```
 
+**A type redefinition is not a same-path override**, so the loop can't see it. `gui/00_te_country_panel_information.gui` redefines one type of vanilla's `country_panel.gui`: when vanilla changed that file, replace `test_fixtures/vanilla_gui/country_panel.gui` with the new one and run `python3 scripts/generators/gen_nation_tab.py`. The generator raises if vanilla moved a line its blocks hook onto, and `test_nation_tab.py` fails while the fixture differs from the installed game.
+
 In the 1.13.5 migration, an exploration agent reported 2 at-risk GUI files; the shell loop above found 5. The missed three included `military_formation_panel.gui`, whose unrebased override silently broke the move-formation button because vanilla renamed `ToggleArmyMovement` → `ToggleArmyAdditionalActions` and `MOVE_MILITARY_FORMATION` → `ADDITIONAL_ACTIONS_MILITARY_FORMATION` in the onclick handler.
 
 For each at-risk file, run a 3-way merge with vanilla's pre- and post-patch versions. See `docs/guides/gui_modding_guide.md` § "GUI 3-way merge across vanilla patches" for the exact `git merge-file` command. In the 1.13 migration this resolved 14 of 17 GUI overrides cleanly with 5 manual conflicts.

@@ -112,7 +112,8 @@ the enactment success of the constitutional law groups by 10% and 15%, and
 Judicial Supremacy that of the rights laws too; each law's tooltip lists what
 it does. Cutting the courts to a ceiling 20 or more below the score raises your
 risk premium and costs legitimacy for five years. Religious Courts need an
-established religion.
+established religion. The [Nation tab](01-introduction.md#the-nation-tab) shows
+the score heading for its ceiling, and what the courts give you now.
 
 ### The rules of war
 
@@ -428,6 +429,7 @@ When you start enacting any law, the **Forceful Legislation** event offers to
 bypass the legislature, if your authority income covers the cheapest option.
 What it allows depends on your **Legislative Override Capacity**, summed from
 your laws, your institutions and a few technologies and power bloc principles.
+The [Nation tab](01-introduction.md#the-nation-tab) shows it with every source.
 Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
 2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
 take away 3, and Guaranteed Liberties, Devolved Administration and Communal
