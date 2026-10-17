@@ -154,8 +154,8 @@ te_seabed_gate = {
 }
 
 # Country scope (yearly sharing): shares a home basin with scope:te_seabed_uni,
-# both having incorporated coastal states there (te_seabed_home_<basin>, set
-# by te_seabed_compute_weights).
+# both having coastal states there, unincorporated ones included
+# (te_seabed_home_<basin>, set by te_seabed_compute_weights).
 te_seabed_shares_home_basin_with_uni = {
 	OR = {
 		AND = {
@@ -345,8 +345,8 @@ te_seabed_unilateral_answer_open = {
 	}
 }
 
-# Country scope: shares a home basin with ROOT, both having incorporated
-# coastal states there (te_seabed_home_<basin>).
+# Country scope: shares a home basin with ROOT, both having coastal states
+# there, unincorporated ones included (te_seabed_home_<basin>).
 te_seabed_shares_home_basin_with_root = {
 	OR = {
 		AND = {

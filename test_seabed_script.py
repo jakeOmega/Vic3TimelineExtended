@@ -96,6 +96,7 @@ class ConstantsTest(unittest.TestCase):
         self.assertEqual(literal(self.values, "te_seabed_distant_navy_share"), m.DISTANT_NAVY_SHARE)
         self.assertEqual(literal(self.values, "te_seabed_station_weight"), m.STATION_WEIGHT)
         self.assertEqual(literal(self.values, "te_seabed_assertive_navy_mult"), m.ASSERTIVE_NAVY_MULT)
+        self.assertEqual(literal(self.values, "te_seabed_uninc_coast"), m.UNINCORPORATED_COAST)
         for policy, key in ((m.SURVEY, "survey"), (m.SPONSOR, "sponsor"), (m.UNILATERAL, "unilateral")):
             self.assertEqual(literal(self.values, f"te_seabed_policy_factor_{key}"), m.POLICY_FACTOR[policy], key)
 
@@ -146,6 +147,38 @@ class ModelNamesTest(unittest.TestCase):
                       | defined("diplomatic_actions"))
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
         self.assertEqual(missing, [])
+
+
+class UnincorporatedCoastTest(unittest.TestCase):
+    """Seabed claims spec § 5.1 (model: compute_weights' _coast): every coastal
+    state counts toward the coast term and the navy's spread, unincorporated
+    ones at te_seabed_uninc_coast; ports count in full."""
+
+    def test_the_walk_takes_every_coastal_state(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_compute_weights"))
+        self.assertNotIn("is_incorporated = yes", body)
+        self.assertIn("te_seabed_uninc_coast", body)
+
+    def test_the_tally_counts_unincorporated_at_half(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_weight_tally"))
+        self.assertIn("add = local_var:te_sb_wc", body)
+        self.assertIn("te_sb_wi_$B$", body)               # the incorporated count, for the Build-in hover
+        walk = strip_comments(block(read(EFFECTS), "te_seabed_compute_weights"))
+        self.assertIn("change_local_variable = { name = te_sb_wn_all add = local_var:te_sb_wc }", walk)
+
+    def test_the_build_in_hover_counts_incorporated_states(self):
+        values = read(VALUES)
+        for b in m.BASINS:
+            self.assertIn(f"te_seabed_coast_inc_{b}", block(values, f"te_seabed_build_more_{b}"))
+
+    def test_counted_coast_shows_a_decimal(self):
+        loc = english_loc()
+        for b in m.BASINS:
+            line = re.search(rf"(?m)^ te_seabed_weight_home_{b}:0 \"(.*)\"$", loc).group(1)
+            self.assertIn(f"ScriptValue('te_seabed_coast_disp_{b}')|1]", line)
+            self.assertNotIn(f"ScriptValue('te_seabed_coast_disp_{b}')|0]", line)
+        how = re.search(r"(?m)^ te_seabed_how_weight:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("unincorporated", how)
 
 
 class YearlyPassOrderTest(unittest.TestCase):
