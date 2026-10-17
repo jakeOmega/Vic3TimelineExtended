@@ -449,5 +449,34 @@ class EntrenchmentTest(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK BROKEN judiciary_enacting_law_scope", block)
 
 
+EVENTS = os.path.join(REPO, "events", "te_judiciary_events.txt")
+CEILING_LAWS = set(COURT_LAWS) | set(PAPER_COURT_LAWS)
+
+
+class ShockTest(unittest.TestCase):
+    def test_every_ceiling_law_fires_the_check(self):
+        block = _block(_read(ON_ACTIONS), "te_jud_law_activated")
+        self.assertEqual(set(re.findall(r"type = law_type:(\w+)", block)), CEILING_LAWS)
+        self.assertIn("owner = {", block)
+        # The new law's modifier sums may lag the change.
+        self.assertIn("trigger_event = { id = te_judiciary_events.1 days = 7 }", block)
+        self.assertNotIn("multiplier", block, "ROOT is the law here")
+        self.assertNotIn("var:", block, "has_variable fails on law scopes")
+
+    def test_shock_runs_in_a_country_event(self):
+        event = _block(_read(EVENTS), "te_judiciary_events.1")
+        self.assertIn("type = country_event", event)
+        self.assertIn("hidden = yes", event)
+        self.assertIn("multiplier = var:te_jud_overhaul_mult", event)
+        self.assertIn("is_decaying = yes", event)
+        self.assertIn("years = 5", event)
+
+    def test_shock_needs_seeding(self):
+        event = _block(_read(EVENTS), "te_judiciary_events.1")
+        trigger = event[event.index("\ttrigger = {"):event.index("\timmediate = {")]
+        self.assertIn("has_variable = te_jud_seeded", trigger)
+        self.assertIn("te_jud_overhaul_gap >= 20", trigger)
+
+
 if __name__ == "__main__":
     unittest.main()

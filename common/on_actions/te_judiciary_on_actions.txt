@@ -101,3 +101,39 @@ te_jud_enactment_started = {
 		te_jud_selfcheck_enacting_scope = yes
 	}
 }
+
+# ROOT = the law (scripting_best_practices.md § "Checking the Type of the Law
+# in on_law_activated"). Script values that read country variables fail on a
+# law scope, so this only matches the type of every law that moves the
+# ceiling and leaves the arithmetic to te_judiciary_events.1 on the owner,
+# a week later, once the new law's modifier sums are in place.
+on_law_activated = {
+	on_actions = {
+		te_jud_law_activated
+	}
+}
+
+te_jud_law_activated = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					type = law_type:law_executive_tribunals
+					type = law_type:law_religious_courts
+					type = law_type:law_statutory_courts
+					type = law_type:law_constitutional_review
+					type = law_type:law_judicial_supremacy
+					type = law_type:law_algorithmic_jurisprudence
+					type = law_type:law_autocracy
+					type = law_type:law_bakufu
+					type = law_type:law_neo_absolutism
+					type = law_type:law_single_party_state
+					type = law_type:law_algorithmic_governance
+				}
+			}
+			owner = {
+				trigger_event = { id = te_judiciary_events.1 days = 7 }
+			}
+		}
+	}
+}
