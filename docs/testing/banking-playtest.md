@@ -86,3 +86,21 @@ event died with the loser.
 10. **The mark goes.** After a wave, `save_country_probe.py --var '^banking_contagion_'` on a country that answered
     its contagion event shows no `banking_contagion_pending`. After a rebel win during a wave, the winner shows
     none either.
+
+## Scare only for a year; the origin counted once (2026-10-17)
+
+The owner's calls. **"Scare only for a year":** a crash zeroes bubble pressure, but the contagion roll still weighs a
+crash at 5 to 30 points of the origin's severity against 100 for a scare, about 5 to 23% at zero bubble in a market
+economy. Every crash, an origin's or a contagion's, now sets `banking_crashed_last_year` for 365 days where it is
+decided, beside `banking_recent_crash`, and while it is set the contagion roll is skipped: the event plays as a scare
+and marks the country `banking_crisis_wave_scared`. A country with a low bubble that has not crashed keeps the 5 to 30
+floor. **The origin is counted once:** `banking_crisis_wave_init` marks the origin `banking_crisis_wave_counted`, so a
+contagion event it still holds from an earlier wave cannot count it a second time toward the Great Depression.
+
+11. **A crash shelters a country for a year.** A country that crashed, at home or by contagion, and is reached again
+    within the year gets "Contagion from Abroad" (or "Financial Contagion" after a severe crash) with only "Close the
+    gates" and "Maintain open markets", whatever its bubble. `save_country_probe.py --var '^banking_crashed_last_year'`
+    shows the marker on it.
+12. **No contagion crash within a year of a crash.** On any country's history chart, a contagion crash marker never
+    comes less than twelve months after another crash marker, its own or contagion's. After the year, contagion can
+    crash it again. The rule is contagion's only: a country's own crash still depends on its bubble alone.

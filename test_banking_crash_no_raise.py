@@ -120,7 +120,7 @@ TRIGGERS = definitions("common/scripted_triggers/banking_policy_triggers.txt")
 
 class Interp:
     def __init__(self, variables, laws=(), scopes=(), global_vars=(), overrides=None, values=None,
-                 global_values=None):
+                 global_values=None, picks=None, others=None, trigger_values=None):
         self.vars = dict(variables)
         self.laws = set(laws)
         self.globals = set(global_vars)
@@ -138,10 +138,22 @@ class Interp:
         self.values = dict(values or {})
         self.global_values = dict(global_values or {})
         self.events = []  # every trigger_event, as {field: value}
+        # random_list: the entry each one takes, by position, in order; a random_list with no pick
+        # left fails, so a test states every roll it expects.
+        self.picks = picks if picks is not None else []
+        # Variables of the other countries a `scope:x = { ... }` trigger reads, by saved-scope name.
+        self.others = dict(others or {})
+        # Scripted triggers from outside banking_policy_triggers.txt that a test pins, name -> bool.
+        self.trigger_values = dict(trigger_values or {})
 
     def num(self, token):
-        if isinstance(token, list):
-            raise AssertionError("script-value blocks are not modelled")
+        if isinstance(token, list):  # an inline script value: value, then arithmetic in order
+            n = 0.0
+            for op, _, arg in token:
+                x = self.num(arg)
+                n = {"value": x, "add": n + x, "subtract": n - x, "multiply": n * x,
+                     "divide": n / x if x else n, "min": max(n, x), "max": min(n, x)}[op]
+            return n
         if token.startswith("var:"):
             return float(self.vars.get(token[4:], 0))  # an unrecorded var: reads 0
         if token in self.values:
@@ -163,6 +175,10 @@ class Interp:
                 answer = val.removeprefix("scope:") in self.scopes
             elif key in ("root", "ROOT") and val.startswith("scope:"):
                 answer = self.scopes.get(val.removeprefix("scope:")) == "ROOT"
+            elif key.startswith("scope:") and isinstance(val, list):
+                answer = Interp(self.others.get(key.removeprefix("scope:"), {})).check(val)
+            elif key in self.trigger_values:
+                answer = self.trigger_values[key] == (val == "yes")
             elif key in TRIGGERS and val == "yes":
                 answer = self.check(TRIGGERS[key])
             elif key.startswith("var:"):
@@ -219,6 +235,11 @@ class Interp:
                 self.scopes[val] = "ROOT"  # every save modelled here is of the event's own country
             elif key == "trigger_event":
                 self.events.append({k: v for k, _, v in val})
+            elif key == "random_list":
+                if not self.picks:
+                    raise AssertionError("a random_list ran with no pick given")
+                entry = [body for _, _, body in val][self.picks.pop(0)]
+                self.execute([item for item in entry if item[0] != "modifier"])
             elif key == "debug_log":
                 self.logs.append(val)
             elif key in INERT_EFFECTS:
@@ -662,6 +683,116 @@ class ContagionSelfCheckTest(unittest.TestCase):
         self.assertNotIn("debug_log", repr(after))
 
 
+class ContagionScareOnlyTest(unittest.TestCase):
+    """Scare only for a year (owner, 2026-10-17): a country that crashed, at home or by contagion,
+    takes only a scare from contagion for the next year.
+
+    A crash zeroes bubble pressure, but banking_contagion_crash_check still weighs a crash at 5 to
+    30 points of the origin's severity against 100 for a scare. Every crash now sets
+    banking_crashed_last_year (365 days) where it is decided, and while it is set the contagion roll
+    is skipped. These run the real roll, with the random_list entries picked and the script values
+    pinned.
+    """
+    EVENT = "minor_events_timelineextended.7"
+    VALUES = {"banking_crash_severity_scale_value": 0.55, "banking_contagion_severity_economy_mult": 1,
+              "banking_crash_severity_economy_mult": 1, "this_country_gdp_value": 1}
+    ORIGIN = {"banking_crash_origin_country": {"crash_severity": 50}}
+    PINNED = {"te_mon_has_effective_backstop": False}
+    # The history chart's marker and the demographic wealth shock: neither touches the roll.
+    ASIDE = {"te_history_record_banking_marker": None, "te_demog_wc_shock": None}
+
+    def run_effect(self, body, variables, picks, overrides=None):
+        it = Interp(variables, values=self.VALUES, picks=list(picks), others=self.ORIGIN,
+                    trigger_values=self.PINNED, overrides={**self.ASIDE, **(overrides or {})})
+        it.execute(copy.deepcopy(body))
+        return it
+
+    def test_a_country_that_crashed_within_the_year_only_takes_a_scare(self):
+        for bubble, picks in itertools.product((0, 40, 100), ([0, 2], [1])):
+            with self.subTest(bubble=bubble, picks=picks):
+                it = self.run_effect(EFFECTS["banking_contagion_crash_check"],
+                                     {"bubble_pressure": bubble, "banking_crashed_last_year": 1}, picks)
+                self.assertEqual(it.vars["contagion_crash"], 0)
+                self.assertIn("banking_crisis_wave_scared", it.vars)  # a survivor, for the Great Depression
+                for name in ("banking_crisis_wave_crashed", "crash_severity", "banking_recent_crash"):
+                    self.assertNotIn(name, it.vars)
+                self.assertEqual(it.picks, picks)  # no roll was made
+
+    def test_without_the_gate_a_recent_crash_crashes_again(self):
+        # The mutation: the roll without its scare-only branch. The marker is then ignored, and the
+        # crash entry crashes a country whose bubble its last crash zeroed.
+        check = EFFECTS["banking_contagion_crash_check"]
+        gate = check[0]
+        self.assertEqual(field(gate[2], "limit"), [("banking_contagion_scare_only", "=", "yes")])
+        ungated = field(check, "else") + check[2:]
+        it = self.run_effect(ungated, {"bubble_pressure": 0, "banking_crashed_last_year": 1}, [0, 2])
+        self.assertEqual(it.vars["contagion_crash"], 1)
+        self.assertIn("banking_crisis_wave_crashed", it.vars)
+
+    def test_past_the_year_the_roll_decides(self):
+        crash = self.run_effect(EFFECTS["banking_contagion_crash_check"], {"bubble_pressure": 40}, [0, 2])
+        self.assertEqual(crash.vars["contagion_crash"], 1)
+        self.assertIn("banking_crisis_wave_crashed", crash.vars)
+        self.assertAlmostEqual(crash.vars["crash_severity"], 40 * 0.55 + 10)  # an origin at 50: +10
+        self.assertIn("banking_recent_crash", crash.vars)
+        self.assertIn("banking_crashed_last_year", crash.vars)  # and its own year starts
+        self.assertEqual(crash.picks, [])
+        scare = self.run_effect(EFFECTS["banking_contagion_crash_check"], {"bubble_pressure": 40}, [1])
+        self.assertEqual(scare.vars["contagion_crash"], 0)
+        self.assertIn("banking_crisis_wave_scared", scare.vars)
+        self.assertNotIn("banking_crashed_last_year", scare.vars)  # a scare starts no year
+
+    def test_an_origin_crash_starts_the_year(self):
+        stubs = {"banking_crisis_wave_init": None, "banking_cycle_spread_contagion": None}
+        body = EFFECTS["banking_cycle_check_and_execute_crash"]
+        crash = self.run_effect(body, {"bubble_pressure": 60, "finance_cycle_value": 80}, [0, 2], overrides=stubs)
+        self.assertEqual(crash.vars["crash"], 1)
+        self.assertIn("banking_crashed_last_year", crash.vars)
+        self.assertIn("banking_recent_crash", crash.vars)
+        self.assertEqual([name for name in crash.ran if name in stubs],
+                         ["banking_crisis_wave_init", "banking_cycle_spread_contagion"])
+        calm = self.run_effect(body, {"bubble_pressure": 60, "finance_cycle_value": 80}, [1], overrides=stubs)
+        self.assertNotIn("banking_crashed_last_year", calm.vars)
+
+    def test_the_year_is_a_year_and_set_where_each_crash_is_decided(self):
+        mark = field(EFFECTS["banking_mark_crashed_last_year"], "set_variable")
+        self.assertEqual((field(mark, "name"), field(mark, "days")), ("banking_crashed_last_year", "365"))
+
+        def calls(body):
+            for key, _, val in body:
+                if key == "banking_mark_crashed_last_year":
+                    yield body
+                elif isinstance(val, list):
+                    yield from calls(val)
+        for name in ("banking_contagion_crash_check", "banking_cycle_check_and_execute_crash"):
+            with self.subTest(effect=name):
+                sites = list(calls(EFFECTS[name]))
+                self.assertEqual(len(sites), 1)
+                self.assertIn("banking_recent_crash", repr(sites[0]))  # the branch that decided a crash
+        # not where the bubble is zeroed: that runs in the options, months later, and in their tooltips
+        self.assertNotIn("banking_crashed_last_year", repr(EFFECTS["apply_banking_crash_origin_effects"]))
+        self.assertNotIn("banking_mark_crashed_last_year", repr(EFFECTS["apply_banking_crash_origin_effects"]))
+
+    def test_the_event_plays_a_forced_scare_as_a_scare(self):
+        event = MINOR_EVENTS[self.EVENT]
+        it = self.run_effect(field(event, "immediate"), {"bubble_pressure": 90, "banking_crashed_last_year": 1}, [])
+        self.assertEqual(it.vars["contagion_crash"], 0)
+        self.assertNotIn("contagion_crashed", it.scopes)
+        own = [("banking_contagion_own_roll_crashed", "=", "yes")]
+        self.assertFalse(Interp(it.vars, scopes=it.scopes).check(own))
+        # The crash text and the crash-only options all ask for its own crash
+        # (ContagionRollScopeTest); the two ungated options are the scare's.
+        ungated = [field(val, "name") for key, _, val in event
+                   if key == "option" and not any(k == "trigger" for k, _, _ in val)]
+        self.assertEqual(ungated, [f"{self.EVENT}.a", f"{self.EVENT}.b"])
+        for name, body in option_bodies(self.EVENT)[:2]:
+            with self.subTest(option=name):
+                end = run_option(body, {"finance_cycle_value": 50, "finance_cycle_momentum": 0,
+                                        "bubble_pressure": 90, "contagion_crash": 0}, (), it.scopes).vars
+                self.assertEqual((end["finance_cycle_value"], end["finance_cycle_momentum"]), (47, -1))
+                self.assertEqual(end["bubble_pressure"], 90)  # a scare leaves the bubble
+
+
 # Event .7's roll, for the block's tests: banking_contagion_crash_check is a random_list over script
 # values, so it is replaced by its outcome, with the wave marks it sets (ContagionBlockTest checks the
 # real effect sets the same two marks).
@@ -1088,9 +1219,12 @@ class ContagionBlockTest(unittest.TestCase):
 
     def test_the_roll_sets_the_marks_the_stub_sets(self):
         check = EFFECTS["banking_contagion_crash_check"]
-        crash = next(val for key, _, val in check if key == "if")
+        at = next(i for i, (key, _, val) in enumerate(check)
+                  if key == "if" and field(val, "limit") == [("var:contagion_crash", ">", "0")])
+        crash = check[at][2]
         self.assertIn(("set_variable", "=", [("name", "=", "banking_crisis_wave_crashed"), ("value", "=", "1")]), crash)
-        scare = field(check, "else")
+        self.assertEqual(check[at + 1][0], "else")
+        scare = check[at + 1][2]
         self.assertIn(("set_variable", "=", [("name", "=", "banking_crisis_wave_scared"), ("value", "=", "1")]), scare)
 
     def test_a_revolution_clears_the_mark(self):

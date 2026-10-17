@@ -995,6 +995,18 @@ banking_had_recent_crash = {
 	has_variable = banking_recent_crash
 }
 
+# Has this country's banking system crashed, at home or by contagion, in the
+# last year? Then a contagion roll can only be a scare (owner, 2026-10-17:
+# "Scare only for a year"; banking_contagion_crash_check). Its crash zeroed its
+# bubble pressure, but the roll still weighs a crash at 5 to 30 points of the
+# origin's severity against 100 for a scare, so banks that had just failed
+# could fail again within weeks. banking_crashed_last_year is a timed variable
+# (365 days), set beside banking_recent_crash where each crash is decided
+# (banking_mark_crashed_last_year).
+banking_contagion_scare_only = {
+	has_variable = banking_crashed_last_year
+}
+
 # banking_cycle_events.16 (market branch: the central bank governor pushes back
 # on politicians who want cheaper money). There has to be a central bank whose
 # rate is not the government's to set. Under the full monetary system that is a

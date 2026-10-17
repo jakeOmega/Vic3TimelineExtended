@@ -1580,42 +1580,62 @@ banking_crash_check_overdrawn_interventions = {
 	}
 }
 
+# A banking crash is decided here: the next year's contagion rolls are scares
+# (banking_contagion_scare_only). Called where each crash is decided, beside
+# banking_recent_crash: the origin roll in banking_cycle_check_and_execute_crash
+# (the monthly pulse) and the contagion roll below (event .7's immediate). Not in
+# apply_banking_crash_origin_effects, which zeroes the bubble: it runs in the
+# crash events' options, up to their three-month duration later, so a contagion
+# event could still roll a second crash in between, and option effects are also
+# walked for the tooltips.
+banking_mark_crashed_last_year = {
+	set_variable = { name = banking_crashed_last_year value = 1 days = 365 }
+}
+
 # Run contagion crash check in event .7 immediate block.
 # Probability based on TARGET's own bubble pressure, elevated by origin crash severity.
 # Countries with low bubble pressure are mostly immune; high bubble = very vulnerable.
 # Sets contagion_crash = 1 (crash) or 0 (scare).
 # If crash: calculates crash_severity from target's bubble + origin boost + random multiplier.
+# A country that crashed in the last year only takes a scare (banking_contagion_scare_only): no roll, so
+# contagion_crash = 0 and the event plays its scare text and options, marked banking_crisis_wave_scared.
 banking_contagion_crash_check = {
-	random_list = {
-		0 = {
-			modifier = {
-				# Target's own bubble pressure is the primary crash factor
-				add = var:bubble_pressure
-				# Boost from origin crash severity — even responsible countries
-				# face elevated risk from a severe foreign collapse
-				if = {
-					limit = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } }
-					add = 30
+	if = {
+		limit = { banking_contagion_scare_only = yes }
+		set_variable = { name = contagion_crash value = 0 }
+	}
+	else = {
+		random_list = {
+			0 = {
+				modifier = {
+					# Target's own bubble pressure is the primary crash factor
+					add = var:bubble_pressure
+					# Boost from origin crash severity — even responsible countries
+					# face elevated risk from a severe foreign collapse
+					if = {
+						limit = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } }
+						add = 30
+					}
+					else_if = {
+						limit = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
+						add = 20
+					}
+					else_if = {
+						limit = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } }
+						add = 10
+					}
+					else = {
+						add = 5
+					}
+					multiply = banking_contagion_chance_economy_mult
+					multiply = banking_crash_chance_multiplier_value
+					min = 0
 				}
-				else_if = {
-					limit = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
-					add = 20
-				}
-				else_if = {
-					limit = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } }
-					add = 10
-				}
-				else = {
-					add = 5
-				}
-				multiply = banking_contagion_chance_economy_mult
-				multiply = banking_crash_chance_multiplier_value
-				min = 0
+				set_variable = { name = contagion_crash value = 1 }
 			}
-			set_variable = { name = contagion_crash value = 1 }
-		}
-		100 = {
-			set_variable = { name = contagion_crash value = 0 }
+			100 = {
+				set_variable = { name = contagion_crash value = 0 }
+			}
 		}
 	}
 
@@ -1633,6 +1653,8 @@ banking_contagion_crash_check = {
 		te_demog_wc_shock = { AMOUNT = -5 }
 		# Five years of "recent banking failures" (banking_had_recent_crash).
 		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
+		# And a year in which contagion can only scare it.
+		banking_mark_crashed_last_year = yes
 		# Crash severity = target's own bubble pressure (scaled as for an origin
 		# crash — banking_crash_severity_scale_value) + boost from origin severity
 		set_variable = {
@@ -2338,6 +2360,8 @@ banking_cycle_check_and_execute_crash = {
 		te_history_record_banking_marker = { MARK = crash }
 		# Five years of "recent banking failures" (banking_had_recent_crash).
 		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
+		# And a year in which contagion can only scare it.
+		banking_mark_crashed_last_year = yes
 
 		# Severity scales with bubble pressure (random multiplier 0.5–2.0).
 		# Seeded from banking_crash_severity_scale_value x bubble, not bubble
