@@ -1241,8 +1241,12 @@ gm_seed_landmark_beside = {
 # whose state is gone is an ORPHAN, and the state that now holds its region's
 # ground adopts it (gm_state_adopt_orphans): a building no record describes
 # takes it as its own monument, a recorded one whose building holds levels
-# its records don't account for takes it beside its own, and with neither it
-# is lost. That runs before anything reads the building's levels as new ones:
+# its records don't account for takes it beside its own, a monument that
+# lacked levels when last seen (a revolt split its state, and the orphan is
+# its piece coming home: gm_sh_rejoin, found 2026-10-17) takes back its
+# levels, and with none of these it is lost. Each shadow notes what its
+# building lacks of its records (gm_sh_short). That runs before anything
+# reads the building's levels as new ones:
 # monument_events.1, .29, the refresh and gm_state_changed_hands ask
 # gm_state_merge_pending first. A shadow is written only by the pass and a
 # raise; the refresh, which tooltips walk, only asks the hidden event.
@@ -1349,7 +1353,17 @@ gm_state_write_shadow = {
 		if = {
 			limit = { exists = scope:gm_sh_new }
 			set_variable = { name = gm_sh_levels value = gm_state_shadow_levels }
+			set_variable = { name = gm_sh_short_now value = gm_state_levels_short }
 			scope:gm_sh_new = {
+				# What its building lacks of its records: a revolt's split took
+				# them, and a piece that comes home finds them missing here.
+				if = {
+					limit = { scope:gm_tr_state.var:gm_sh_short_now >= 1 }
+					set_variable = { name = gm_sh_short value = scope:gm_tr_state.var:gm_sh_short_now }
+				}
+				else = {
+					gm_remove_state_var = { VAR = gm_sh_short }
+				}
 				set_variable = { name = gm_tr_origin value = scope:gm_tr_state }
 				set_variable = { name = gm_tr_origin_region value = scope:gm_tr_state.state_region }
 				set_variable = { name = gm_tr_site value = scope:gm_tr_state }
@@ -1383,6 +1397,7 @@ gm_state_write_shadow = {
 				set_variable = gm_tr_seen
 			}
 			remove_variable = gm_sh_levels
+			remove_variable = gm_sh_short_now
 		}
 	}
 }
@@ -1513,7 +1528,8 @@ gm_sh_settle_region = {
 		gm_sh_try_raise = yes
 	}
 	# Every other orphan stands beside the recorded monument whose building
-	# holds the most levels its records don't account for, or is lost.
+	# holds the most levels its records don't account for, rejoins the one it
+	# was split from, or is lost.
 	every_in_global_list = {
 		variable = gm_shadows
 		limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
@@ -1530,45 +1546,78 @@ gm_sh_settle_region = {
 # unaccounted for, if there is one (not a new monument of 1 level that happens
 # to stand in another part of the region, when the merge brought a taller one).
 gm_sh_try_raise = {
-	save_scope_as = gm_sh_pick
-	clear_saved_scope = gm_sh_target
-	scope:gm_sh_region = {
-		ordered_scope_state = {
-			limit = {
-				gm_state_unrecorded = yes
-				gm_state_unexplained_levels > 0
-			}
-			order_by = gm_state_unexplained_levels
-			position = 0
-			check_range_bounds = no
-			save_scope_as = gm_sh_target
-		}
-	}
+	# Still an orphan: the refresh a raise before it ran may have settled it.
 	if = {
-		limit = { exists = scope:gm_sh_target }
-		scope:gm_sh_target = { gm_state_raise_orphan = yes }
+		limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
+		save_scope_as = gm_sh_pick
+		clear_saved_scope = gm_sh_target
+		scope:gm_sh_region = {
+			ordered_scope_state = {
+				limit = {
+					gm_state_unrecorded = yes
+					gm_state_unexplained_levels > 0
+				}
+				order_by = gm_state_unexplained_levels
+				position = 0
+				check_range_bounds = no
+				save_scope_as = gm_sh_target
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_sh_target }
+			scope:gm_sh_target = { gm_state_raise_orphan = yes }
+		}
 	}
 }
 
-# Container scope, an orphaned shadow (scope:gm_sh_region its region).
+# Container scope, an orphaned shadow (scope:gm_sh_region its region). Still an
+# orphan when its turn comes (an event run by an earlier one may have settled
+# it), and not while a piece put back today rebuilds a building here: it is
+# settled tomorrow (gm_sh_rejoin sends monument_events.31).
 gm_sh_settle_one = {
-	clear_saved_scope = gm_sh_target
-	scope:gm_sh_region = {
-		ordered_scope_state = {
-			limit = { gm_state_takes_orphan_beside = yes }
-			order_by = gm_state_unexplained_levels
-			position = 0
-			check_range_bounds = no
-			save_scope_as = gm_sh_target
-		}
-	}
 	if = {
-		limit = { exists = scope:gm_sh_target }
-		gm_sh_adopt_beside = yes
-		debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for"
-	}
-	else = {
-		gm_sh_lost = yes
+		limit = {
+			gm_sh_orphan_of = { REGION = scope:gm_sh_region }
+			NOT = {
+				scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
+			}
+		}
+		clear_saved_scope = gm_sh_target
+		scope:gm_sh_region = {
+			ordered_scope_state = {
+				limit = { gm_state_takes_orphan_beside = yes }
+				order_by = gm_state_unexplained_levels
+				position = 0
+				check_range_bounds = no
+				save_scope_as = gm_sh_target
+			}
+		}
+		if = {
+			limit = { exists = scope:gm_sh_target }
+			gm_sh_adopt_beside = yes
+			debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for"
+		}
+		else = {
+			# No building holds levels nothing records. A monument here that
+			# lacked levels when last seen was split by a revolt, and this is
+			# its piece coming home (found 2026-10-17, gm_sh_rejoin).
+			scope:gm_sh_region = {
+				ordered_scope_state = {
+					limit = { gm_state_was_split = yes }
+					order_by = gm_state_split_short
+					position = 0
+					check_range_bounds = no
+					save_scope_as = gm_sh_target
+				}
+			}
+			if = {
+				limit = { exists = scope:gm_sh_target }
+				gm_sh_rejoin = yes
+			}
+			else = {
+				gm_sh_lost = yes
+			}
+		}
 	}
 }
 
@@ -1599,6 +1648,8 @@ gm_sh_adopt_beside = {
 	set_global_variable = gm_mon_lists_written
 	remove_tag = gm_shadow
 	add_tag = gm_monument
+	# A shadow's own note, not a monument's record.
+	gm_remove_state_var = { VAR = gm_sh_short }
 	set_variable = { name = gm_tr_origin value = scope:gm_sh_target }
 	set_variable = { name = gm_tr_origin_region value = scope:gm_sh_target.state_region }
 	set_variable = { name = gm_tr_site value = scope:gm_sh_target }
@@ -1642,6 +1693,79 @@ gm_sh_lost = {
 	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region is lost, no building there holding levels nothing records: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings in its region"
 	gm_monument_merge_self_check = yes
 	gm_sh_drop = yes
+}
+
+# Container scope, an orphaned shadow no building takes, with scope:gm_sh_target
+# a monument of its region that lacked levels when last seen
+# (gm_state_was_split; scope:gm_sh_region the region). A revolt took part of
+# that monument's state: the new part's building held a share of its levels,
+# which the refresh recorded as a new monument, and this orphan is that piece,
+# whose part has merged back. The monument's records, frozen before the split,
+# count it already, so it does not stand beside: its levels go back on the
+# building, no more than the building lacks now (none when they came back with
+# the merge), and the piece goes. Found 2026-10-17 (Tuscany 1877, the Paris
+# Commune 1887: the Arc de Triomphe stood at 11 levels on records of 15).
+# It is no orphan before the rebuild, which runs monument_events.1 and the
+# refresh from inside this effect; the rest of the region waits a day.
+gm_sh_rejoin = {
+	save_scope_as = gm_sh_moving
+	gm_sh_log_numbers = yes
+	scope:gm_sh_target = {
+		set_variable = { name = gm_sh_lacked value = gm_state_split_short }
+		set_variable = { name = gm_sh_lacking value = gm_state_levels_short }
+	}
+	set_global_variable = { name = gm_sh_log_piece_now value = gm_mon_levels }
+	set_global_variable = { name = gm_sh_log_lacked_now value = scope:gm_sh_target.var:gm_sh_lacked }
+	set_global_variable = { name = gm_sh_log_lacking_now value = scope:gm_sh_target.var:gm_sh_lacking }
+	# What goes back: the piece's levels, no more than its monument lacks now.
+	set_variable = {
+		name = gm_tr_levels
+		value = {
+			value = gm_mon_levels
+			max = scope:gm_sh_target.var:gm_sh_lacking
+		}
+	}
+	set_global_variable = { name = gm_sh_log_put_back_now value = var:gm_tr_levels }
+	# Out of the list and its region forgotten: no orphan for an event below.
+	remove_list_global_variable = { name = gm_shadows target = scope:gm_sh_moving }
+	remove_tag = gm_shadow
+	remove_variable = gm_tr_origin_region
+	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region was a piece a revolt split from the monument there, and rejoins it: [SCOPE.ScriptValue('gm_sh_log_piece')|0] levels recorded; the monument lacked [SCOPE.ScriptValue('gm_sh_log_lacked')|0] when last seen and [SCOPE.ScriptValue('gm_sh_log_lacking')|0] now, [SCOPE.ScriptValue('gm_sh_log_put_back')|0] put back"
+	gm_monument_split_self_check = yes
+	scope:gm_sh_target = {
+		# The monument's note keeps only what is still missing once this piece
+		# is settled, so a second piece claims no more (the next shadow, which
+		# waits out the rebuild, measures it again).
+		set_variable = {
+			name = gm_sh_lacking
+			value = {
+				value = var:gm_sh_lacking
+				subtract = scope:gm_sh_moving.var:gm_tr_levels
+				min = 0
+			}
+		}
+		var:gm_shadow ?= {
+			if = {
+				limit = { scope:gm_sh_target.var:gm_sh_lacking >= 1 }
+				set_variable = { name = gm_sh_short value = scope:gm_sh_target.var:gm_sh_lacking }
+			}
+			else = {
+				gm_remove_state_var = { VAR = gm_sh_short }
+			}
+		}
+		remove_variable = gm_sh_lacked
+		remove_variable = gm_sh_lacking
+	}
+	if = {
+		limit = { var:gm_tr_levels >= 1 }
+		clear_saved_scope = gm_tr_moving
+		save_scope_as = gm_tr_moving
+		scope:gm_sh_target = {
+			gm_state_tr_add_levels = yes
+			trigger_event = { id = monument_events.31 days = 1 }
+		}
+	}
+	destroy_container = yes
 }
 
 # Container scope, an orphaned shadow (scope:gm_sh_region its region), before it
@@ -1722,6 +1846,31 @@ gm_monument_merge_self_check = {
 		}
 		else = {
 			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings stand in the region, none holding levels its records lack, so its levels did not join the building there; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded; see docs/testing/grand-monuments-ageing-playtest.md)"
+		}
+	}
+}
+
+# ---- Self-check: a revolt's split piece rejoins its monument (issue #936) ------------
+# Any scope (the globals gm_sh_rejoin wrote), the first time a game settles a
+# split piece: whether the orphan is the share of levels its monument lacked
+# (the rule gm_sh_rejoin rests on), and whether the merge brought those levels
+# back or the rebuild had to. No verdict with no levels recorded on the piece,
+# or none lacking when the monument was last seen.
+gm_monument_split_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_split_self_checked }
+			has_global_variable = gm_sh_log_piece_now
+			global_var:gm_sh_log_piece_now >= 1
+			global_var:gm_sh_log_lacked_now >= 1
+		}
+		set_global_variable = gm_split_self_checked
+		if = {
+			limit = { global_var:gm_sh_log_piece_now <= global_var:gm_sh_log_lacked_now }
+			debug_log = "TE_SELF_CHECK OK monument_split_rejoined (a piece a revolt split from a monument came home with no more levels than the monument lacked: [SCOPE.ScriptValue('gm_sh_log_piece')|0] levels recorded on it, [SCOPE.ScriptValue('gm_sh_log_lacked')|0] lacking when the monument was last seen, [SCOPE.ScriptValue('gm_sh_log_lacking')|0] now, so the merge brought back the difference; [SCOPE.ScriptValue('gm_sh_log_put_back')|0] put back by a rebuild)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN monument_split_rejoined (a piece came home with more levels than its monument lacked: [SCOPE.ScriptValue('gm_sh_log_piece')|0] levels recorded on it, [SCOPE.ScriptValue('gm_sh_log_lacked')|0] lacking when the monument was last seen, [SCOPE.ScriptValue('gm_sh_log_lacking')|0] now, [SCOPE.ScriptValue('gm_sh_log_put_back')|0] put back; the rest were not the monument's and are gone; see docs/testing/grand-monuments-ageing-playtest.md)"
 		}
 	}
 }

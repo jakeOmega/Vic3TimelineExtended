@@ -1687,6 +1687,109 @@ banking_contagion_crash_check = {
 	}
 }
 
+# TE_SELF_CHECK contagion_roll_scope (docs/testing/banking-playtest.md). Event .7 keeps its roll twice: in its
+# own saved scope (scope:contagion_crashed, the country, saved on a crash), which its text, options, effects
+# and cascade read, and in the country variable contagion_crash, which this check compares it with. Two copies
+# of the event can be open for one country at once: a second origin crashing in the same pulse re-runs
+# banking_crisis_wave_init, which clears every reached mark, so both waves reach the country. The variable is
+# the country's, so the later copy's roll overwrites the earlier one's, and every BROKEN line of the
+# 2026-10-17 observer run (five, both directions) was that: each copy's options had followed its own roll. So
+# the check counts the copies open (banking_contagion_open) and judges a copy only when it was alone: the
+# count is 1 at its `after` and contagion_crash is still set (every `after` removes it, so a copy that opened
+# and closed in the meantime leaves it unset). Keep that removal unconditional, and never reset the count
+# because contagion_crash is unset at an `immediate`: another copy can still be open, its value removed by a
+# third copy's `after`, and either change lets a copy be judged on another's roll. A copy whose `after` never
+# runs (its country annexed first) leaves the count high, and the country unjudged from then on: a verdict
+# skipped, never a false one. The event removes contagion_crash at the end of its `after`, and nothing
+# between this verdict and that removal may write it or run another copy's `immediate` (a trigger_event with
+# no delay there would run one inside the `after`).
+
+# Event .7's immediate, before its roll: one more copy open, and whether a roll came in with the event (a
+# saved scope rides into the events an `after` triggers, so a cascade's target arrives holding the upstream
+# country as contagion_crashed).
+banking_contagion_selfcheck_open = {
+	if = {
+		limit = { has_variable = banking_contagion_open }
+		change_variable = { name = banking_contagion_open add = 1 }
+	}
+	else = {
+		set_variable = { name = banking_contagion_open value = 1 }
+	}
+	if = {
+		limit = { exists = scope:contagion_crashed }
+		set_variable = { name = banking_contagion_roll_inherited value = 1 }
+	}
+}
+
+# Event .7's after, before the cascade: the verdict, then one copy fewer. BROKEN and OK only for a copy that
+# was alone; a disagreement while another copy is open is NO_VERDICT, every time (they explain the old BROKEN
+# lines). OK is once a game, from the first cascade target whose own roll crashed: only there does the
+# event's save have to replace the upstream country's scope. Its flag is new, because the check before
+# 2026-10-17 also judged copies that were not alone, so an older save's OK proves nothing.
+banking_contagion_selfcheck_close = {
+	if = {
+		limit = { has_variable = contagion_crash }
+		if = {
+			limit = {
+				has_variable = banking_contagion_open
+				var:banking_contagion_open < 2
+			}
+			if = {
+				limit = {
+					var:contagion_crash > 0
+					NOT = { banking_contagion_own_roll_crashed = yes }
+				}
+				debug_log = "TE_SELF_CHECK BROKEN contagion_roll_scope country=[THIS.GetCountry.GetTagName] roll=crash read=scare open=1 (the event was alone, so the variable is its own roll: its save did not replace an inherited scope, and a cascade target's crash plays as a scare and spreads nothing; take the fallback in docs/testing/banking-playtest.md)"
+			}
+			else_if = {
+				limit = {
+					var:contagion_crash < 1
+					banking_contagion_own_roll_crashed = yes
+				}
+				debug_log = "TE_SELF_CHECK BROKEN contagion_roll_scope country=[THIS.GetCountry.GetTagName] roll=scare read=crash open=1 (the event was alone, so the variable is its own roll: a scare took the crash options and cascade, the 2026-10-16 bug; take the fallback in docs/testing/banking-playtest.md)"
+			}
+			else_if = {
+				limit = {
+					var:contagion_crash > 0
+					has_variable = banking_contagion_roll_inherited
+					NOT = { has_global_variable = te_selfcheck_contagion_roll_alone_ok }
+				}
+				set_global_variable = { name = te_selfcheck_contagion_roll_alone_ok value = yes }
+				debug_log = "TE_SELF_CHECK OK contagion_roll_scope country=[THIS.GetCountry.GetTagName] open=1 (the event was alone, and a cascade target's own crash replaced the inherited scope)"
+			}
+		}
+		else_if = {
+			limit = {
+				var:contagion_crash > 0
+				NOT = { banking_contagion_own_roll_crashed = yes }
+			}
+			debug_log = "TE_SELF_CHECK NO_VERDICT contagion_roll_scope country=[THIS.GetCountry.GetTagName] var=crash read=scare open=[THIS.Var('banking_contagion_open').GetValue|0] (another copy of the event is open for this country and rolled after this one: contagion_crash holds its roll, and this copy's options followed its own)"
+		}
+		else_if = {
+			limit = {
+				var:contagion_crash < 1
+				banking_contagion_own_roll_crashed = yes
+			}
+			debug_log = "TE_SELF_CHECK NO_VERDICT contagion_roll_scope country=[THIS.GetCountry.GetTagName] var=scare read=crash open=[THIS.Var('banking_contagion_open').GetValue|0] (another copy of the event is open for this country and rolled after this one: contagion_crash holds its roll, and this copy's options followed its own)"
+		}
+	}
+	if = {
+		limit = {
+			has_variable = banking_contagion_open
+			var:banking_contagion_open > 1
+		}
+		change_variable = { name = banking_contagion_open add = -1 }
+	}
+	else_if = {
+		limit = { has_variable = banking_contagion_open }
+		remove_variable = banking_contagion_open
+	}
+	if = {
+		limit = { has_variable = banking_contagion_roll_inherited }
+		remove_variable = banking_contagion_roll_inherited
+	}
+}
+
 # Apply contagion effects to a country hit by financial contagion (event .7).
 # Checks banking_contagion_own_roll_crashed: event .7's own roll (banking_contagion_crash_check, saved in its
 # immediate as scope:contagion_crashed), not one the event inherited from an upstream crash.

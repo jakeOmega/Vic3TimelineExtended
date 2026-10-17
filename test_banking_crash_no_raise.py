@@ -119,9 +119,11 @@ TRIGGERS = definitions("common/scripted_triggers/banking_policy_triggers.txt")
 
 
 class Interp:
-    def __init__(self, variables, laws=(), scopes=()):
+    def __init__(self, variables, laws=(), scopes=(), global_vars=()):
         self.vars = dict(variables)
         self.laws = set(laws)
+        self.globals = set(global_vars)
+        self.logs = []
         # Saved scopes, name -> the scope saved: "ROOT" for the event's own country, any other
         # name for another country. Event .7 saves its own roll as contagion_crashed = ROOT; a
         # cascade's target inherits the upstream country's. A bare name means ROOT.
@@ -142,6 +144,8 @@ class Interp:
                 answer = self.check(val, key)
             elif key == "has_variable":
                 answer = val in self.vars
+            elif key == "has_global_variable":
+                answer = val in self.globals
             elif key == "has_law":
                 answer = val.removeprefix("law_type:") in self.laws
             elif key == "exists" and val.startswith("scope:"):
@@ -191,6 +195,10 @@ class Interp:
                 self.vars[name] = n
             elif key == "remove_variable":
                 self.vars.pop(val, None)
+            elif key == "set_global_variable":
+                self.globals.add(field(val, "name"))
+            elif key == "debug_log":
+                self.logs.append(val)
             elif key in INERT_EFFECTS:
                 continue
             elif key in REGISTRY:
@@ -442,6 +450,169 @@ class ContagionRollScopeTest(unittest.TestCase):
         for key, _, val in MINOR_EVENTS[self.EVENT]:
             if key == "option":
                 self.assertNotIn("var:contagion_crash", repr(val))
+
+    def test_the_text_reads_its_own_roll(self):
+        # A second copy's roll overwrites contagion_crash, so the text would read the other copy's outcome.
+        for part in ("title", "desc", "flavor"):
+            with self.subTest(part=part):
+                block = self.block(part)
+                self.assertNotIn("var:contagion_crash", repr(block))
+                self.assertNotIn("'contagion_crash'", repr(block))
+                descs = field(block, "first_valid")
+                cascade = [field(val, "trigger") for _, _, val in descs
+                           if "_cascade" in field(val, "desc")]
+                self.assertTrue(cascade)
+                for trigger in cascade:
+                    own = trigger[:1]
+                    self.assertEqual(own, [("banking_contagion_own_roll_crashed", "=", "yes")])
+                    self.assertTrue(Interp({}, scopes=self.OWN).check(own))
+                    # queued, or a scare: no saved scope yet, or the upstream country's
+                    self.assertFalse(Interp({"contagion_crash": 1}, scopes=self.INHERITED).check(own))
+                    self.assertFalse(Interp({"contagion_crash": 1}).check(own))
+
+
+class ContagionSelfCheckTest(unittest.TestCase):
+    """TE_SELF_CHECK contagion_roll_scope judges a copy of event .7 only when it was alone.
+
+    Two copies can be open for one country at once (a second origin crashing in the same pulse
+    clears the reached marks), and contagion_crash is the country's, so the later copy's roll
+    overwrites the earlier one's. The check used to compare each copy's own saved scope with it,
+    and logged five BROKEN lines in the 2026-10-17 observer run, both directions, with every
+    copy's options following its own roll. Now it counts the copies open and judges a copy only
+    when the count is 1 at its `after` and the variable is still set; a disagreement while
+    another copy is open is NO_VERDICT.
+    """
+    EVENT = "minor_events_timelineextended.7"
+
+    def setUp(self):
+        self.vars, self.globals, self.logs = {}, set(), []
+
+    def _run(self, effect, scopes):
+        it = Interp(self.vars, scopes=scopes, global_vars=self.globals)
+        it.execute(copy.deepcopy(EFFECTS[effect]))
+        self.vars, self.globals = it.vars, it.globals
+        self.logs += it.logs
+
+    def open(self, crashed, inherited=False, saved="ROOT"):
+        """A copy's immediate: the count, then its roll and its save. Returns the copy's own saved scopes.
+
+        ``saved`` is what the copy's crash leaves in contagion_crashed: ROOT when the save replaced an
+        inherited scope, UPSTREAM when it did not (a genuine failure the check must still catch).
+        """
+        scopes = {"contagion_crashed": "UPSTREAM"} if inherited else {}
+        self._run("banking_contagion_selfcheck_open", scopes)
+        self.vars["contagion_crash"] = 1 if crashed else 0
+        if crashed:
+            scopes["contagion_crashed"] = saved
+        return scopes
+
+    def close(self, scopes):
+        """A copy's after: the verdict and count, then the unconditional remove_variable."""
+        self._run("banking_contagion_selfcheck_close", scopes)
+        self.vars.pop("contagion_crash", None)
+
+    def lines(self, word):
+        return [line for line in self.logs if line.startswith(f"TE_SELF_CHECK {word} contagion_roll_scope")]
+
+    def test_a_copy_alone_whose_roll_agrees_logs_nothing_bad(self):
+        for crashed, inherited in itertools.product((0, 1), repeat=2):
+            with self.subTest(crashed=crashed, inherited=inherited):
+                self.setUp()
+                self.close(self.open(crashed, inherited))
+                self.assertEqual(self.lines("BROKEN") + self.lines("NO_VERDICT"), [])
+                self.assertEqual(len(self.lines("OK")), int(crashed and inherited))
+                self.assertNotIn("banking_contagion_open", self.vars)
+                self.assertNotIn("banking_contagion_roll_inherited", self.vars)
+
+    def test_ok_is_once_a_game(self):
+        for _ in range(3):
+            self.close(self.open(1, inherited=True))
+        self.assertEqual(len(self.lines("OK")), 1)
+
+    def test_a_copy_alone_still_catches_a_save_that_did_not_replace(self):
+        self.close(self.open(1, inherited=True, saved="UPSTREAM"))
+        self.assertEqual(len(self.lines("BROKEN")), 1)
+        self.assertIn("roll=crash read=scare", self.lines("BROKEN")[0])
+        self.assertEqual(self.lines("OK"), [])
+
+    def test_a_copy_alone_still_catches_a_scare_read_as_a_crash(self):
+        scopes = self.open(0)
+        scopes["contagion_crashed"] = "ROOT"  # an inherited scope naming this country
+        self.close(scopes)
+        self.assertEqual(len(self.lines("BROKEN")), 1)
+        self.assertIn("roll=scare read=crash", self.lines("BROKEN")[0])
+
+    def test_the_observer_runs_lines_are_no_verdict(self):
+        # SIC, GBR, SAR, PAP: a copy that crashed closes after a second copy rolled a scare.
+        a = self.open(1)
+        b = self.open(0)
+        self.close(a)
+        self.close(b)
+        # NOR: the mirror, a scare closing after a second copy crashed.
+        c = self.open(0, inherited=True)
+        d = self.open(1, inherited=True)
+        self.close(c)
+        self.close(d)
+        self.assertEqual(self.lines("BROKEN"), [])
+        self.assertEqual(self.lines("OK"), [])
+        self.assertEqual(len(self.lines("NO_VERDICT")), 2)
+        self.assertIn("var=scare read=crash", self.lines("NO_VERDICT")[0])
+        self.assertIn("var=crash read=scare", self.lines("NO_VERDICT")[1])
+        self.assertNotIn("banking_contagion_open", self.vars)
+
+    def test_no_interleaving_of_three_copies_is_judged_on_another_copys_roll(self):
+        # Every order of three copies' immediates and afters (each opens before it closes), every roll
+        # and every inheritance: the save always replaces, so a BROKEN or an OK would be a false verdict
+        # unless it came from a copy whose own roll matched the variable. Never BROKEN; OK only when
+        # a copy was alone and its own crash was inherited.
+        def orders(opened, done):
+            if len(done) == 3:
+                yield []
+                return
+            for i in range(3):
+                if i not in opened:
+                    for rest in orders(opened | {i}, done):
+                        yield [("open", i), *rest]
+                elif i not in done:
+                    for rest in orders(opened, done | {i}):
+                        yield [("close", i), *rest]
+        sequences = list(orders(frozenset(), frozenset()))
+        self.assertEqual(len(sequences), 90)
+        for rolls in itertools.product((0, 1), repeat=3):
+            for inherited in itertools.product((False, True), repeat=3):
+                for seq in sequences:
+                    self.setUp()
+                    scopes = {}
+                    for step, i in seq:
+                        if step == "open":
+                            scopes[i] = self.open(rolls[i], inherited[i])
+                        else:
+                            self.close(scopes[i])
+                    with self.subTest(rolls=rolls, inherited=inherited, seq=seq):
+                        self.assertEqual(self.lines("BROKEN"), [])
+                        self.assertLessEqual(len(self.lines("OK")), 1)
+                        self.assertNotIn("banking_contagion_open", self.vars)
+                        if seq[:2] == [("open", 0), ("close", 0)] and rolls[0] and inherited[0]:
+                            # copy 0 was alone, inherited a scope and crashed: the case OK is for
+                            self.assertEqual(len(self.lines("OK")), 1)
+
+    def test_a_copy_that_never_closes_suppresses_verdicts_but_fakes_none(self):
+        self.open(1)  # its country annexed before its after ran
+        self.close(self.open(1, inherited=True, saved="UPSTREAM"))
+        self.close(self.open(1, inherited=True))
+        self.assertEqual(self.lines("BROKEN") + self.lines("OK"), [])
+
+    def test_the_event_counts_before_its_roll_and_judges_before_its_cascade(self):
+        event = MINOR_EVENTS[self.EVENT]
+        immediate = [key for key, _, _ in field(event, "immediate")]
+        self.assertLess(immediate.index("banking_contagion_selfcheck_open"),
+                        immediate.index("banking_contagion_crash_check"))
+        after = field(event, "after")
+        keys = [key for key, _, _ in after]
+        self.assertEqual(keys[0], "banking_contagion_selfcheck_close")
+        # unconditional, at the top level of `after`: the check reads a missing value as "a copy closed"
+        self.assertIn(("remove_variable", "=", "contagion_crash"), after)
+        self.assertNotIn("debug_log", repr(after))
 
 
 class LocTest(unittest.TestCase):
