@@ -2040,7 +2040,7 @@ IMAGES = {
     "law_of_sea_maritime": {
         "prompt": "A maritime law conference: legal experts examining nautical charts with drawn boundaries, delegations arguing over exclusive economic zones. Ship models on the table. The carving up of the world's oceans by bureaucratic fiat.",
         "style": "oil painting, academic art, institutional grandeur",
-        "events": ["un_events.21"],
+        "events": ["un_events.21", "te_seabed.3"],
     },
 
     # =========================================================================

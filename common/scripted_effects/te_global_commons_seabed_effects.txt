@@ -74,7 +74,8 @@
 #                                         (the UN hook writes it)
 #            te_seabed_records_<basin>    the world's records (yearly)
 #            te_seabed_world_w_<basin>    the world's claim weight (yearly)
-#            te_seabed_rush_announced,    flags: the rush notice told; the
+#            te_seabed_first_claimant     the country the rush event names
+#            te_seabed_rush_announced,    flags: the rush event sent; the
 #            te_seabed_full_<basin>,      basin told it is fully licensed;
 #            te_seabed_claimed_seeded     the claimed marks seeded
 #
@@ -100,7 +101,7 @@
 #   treaty article    a Lease <Basin> Seabed Claims article's entry
 #                     (122_seabed_lease.txt): te_seabed_lease_start, then the
 #                     hidden te_seabed.1 a day later (te_seabed_events.txt)
-#   monthly global    te_seabed_global_monthly: the rush notice, the yearly
+#   monthly global    te_seabed_global_monthly: the rush event, the yearly
 #                     sharing when due (te_seabed_yearly_pass), the
 #                     follow-state self-check
 #   yearly country    te_seabed_ai_choose_policy (AI countries only)
@@ -642,7 +643,7 @@ te_seabed_on_state_owner_change = {
 # The yearly sharing (model: yearly_pass)
 # ============================================================================
 
-# No scope (on_monthly_pulse). The rush notice, once a game; the sharing when
+# No scope (on_monthly_pulse). The rush event, once a game; the sharing when
 # due (te_seabed_pass_due); the second half of the follow-state self-check.
 te_seabed_global_monthly = {
 	# The rule switched off after the system ran, then on again: levels built
@@ -671,10 +672,14 @@ te_seabed_global_monthly = {
 			}
 		}
 	}
-	# The rush, announced (seabed claims spec § 7), once a game: the first month
-	# a country can claim, before its first sharing runs (which sets
-	# te_seabed_pass_year this same month). A game already past its first
-	# sharing, an old save, sets the flag without a notice.
+	# The rush, announced (seabed claims spec § 7; an event, owner 2026-10-17),
+	# once a game: the first month a country can claim, before its first
+	# sharing runs (which sets te_seabed_pass_year this same month), to every
+	# player (the event is news, with nothing for an AI to choose). A game
+	# already past its first sharing, an old save, sets the flag without it.
+	# The first claimant is also kept in a global variable, which te_seabed.3
+	# reads back. With the rule on, the research's headline stands down
+	# (common/on_actions/headlines.txt).
 	if = {
 		limit = {
 			te_global_commons_enabled = yes
@@ -688,9 +693,10 @@ te_seabed_global_monthly = {
 				limit = { te_seabed_is_claimant = yes }
 				save_scope_as = te_seabed_first_claimant
 			}
+			set_global_variable = { name = te_seabed_first_claimant value = scope:te_seabed_first_claimant }
 			every_country = {
-				limit = { NOT = { is_country_type = decentralized } }
-				post_notification = te_seabed_rush_notice
+				limit = { is_ai = no }
+				trigger_event = { id = te_seabed.3 popup = yes }
 			}
 		}
 	}

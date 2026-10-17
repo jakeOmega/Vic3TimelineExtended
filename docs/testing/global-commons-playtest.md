@@ -242,11 +242,13 @@ navy, and says BROKEN only when all of them read 0.
     `blockade_level` is documented only as a comparison trigger, so if it can't be read as a value
     step the multiplier through an `if` chain (`blockade_level >= 0.25`, `0.5`, `0.75`, `1`).
     If (b) fails alone, keep the port and look for a mesh-free `city_type`.
-29. **The rush, announced** (seabed claims spec § 7; three feed notifications,
-    `common/messages/te_global_commons_seabed_messages.txt`). (a) A new game, the month the first
-    coastal country researches Abyssal Plain Mining: every country gets "The Seabed Rush Begins",
-    naming it (players also get the older headline for the same research, which says nothing of
-    licences); an old save past its first sharing gets nothing. (b) A later country's first share in
+29. **The rush, announced** (seabed claims spec § 7: an event, `te_seabed.3`, then two feed
+    notifications, `common/messages/te_global_commons_seabed_messages.txt`). (a) A new game, the
+    month after the first coastal country researches Abyssal Plain Mining: every player gets "The
+    Seabed Rush Begins" as a pop-up, naming that country (that country's own text if it is us; a
+    landlocked country's if we have no coast), and no "turning to the ocean floor" headline for the
+    research. With the Global Commons rule off the headline comes as before and no event. An old
+    save past its first sharing gets nothing. (b) A later country's first share in
     a basin where we have one: "A New Claimant in the <Basin> Ocean", naming it; nothing at the
     game's first sharing, nor when a country wins back a share it lost. When two countries win their
     first share at one sharing, check each notice names its own country (the scope is saved again

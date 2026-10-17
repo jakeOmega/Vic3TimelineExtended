@@ -1,6 +1,7 @@
-"""The seabed rush, announced (seabed claims spec § 7): three notifications,
-no events. "The Seabed Rush Begins" once a game, when the first country can
-claim; "A New Claimant in the <Basin>" when a sharing first gives a country a
+"""The seabed rush, announced (seabed claims spec § 7). "The Seabed Rush
+Begins" is an event (owner, 2026-10-17), once a game, to every player when
+the first country can claim, and the research's headline stands down while
+the Global Commons rule is on; two notifications follow: "A New Claimant in the <Basin>" when a sharing first gives a country a
 share where the receiver already has one; "The <Basin> Is Fully Licensed"
 once each time the world's licences reach a basin's pool.
 """
@@ -12,14 +13,17 @@ import seabed_model as m
 
 MESSAGES = "common/messages/te_global_commons_seabed_messages.txt"
 NOTIF_LOC = "localization/english/te_notifications_l_english.yml"
+EVENTS = "events/te_seabed_events.txt"
+HEADLINES = "common/on_actions/headlines.txt"
+IMAGES = "scripts/image_pipeline/event_image_prompts.py"
 
 
 def rush_block():
     """te_seabed_global_monthly from the rush flag's first mention to its
-    notice."""
+    event."""
     body = strip_comments(block(read(EFFECTS), "te_seabed_global_monthly"))
     start = body.index("te_seabed_rush_announced")
-    end = body.index("post_notification = te_seabed_rush_notice")
+    end = body.index("trigger_event = { id = te_seabed.3")
     return body, body[body.rfind("if = {", 0, start):end]
 
 
@@ -27,7 +31,8 @@ class SeabedNoticeTest(unittest.TestCase):
     def test_rush_notice_once(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_global_monthly"))
         self.assertIn("te_seabed_rush_announced", body)
-        self.assertIn("post_notification = te_seabed_rush_notice", body)
+        self.assertIn("trigger_event = { id = te_seabed.3 popup = yes }", body)
+        self.assertNotIn("te_seabed_rush_notice", body)
         self.assertIn("set_global_variable = te_seabed_rush_announced", body)
 
     def test_rush_notice_skips_old_saves(self):
@@ -47,7 +52,8 @@ class SeabedNoticeTest(unittest.TestCase):
         self.assertIn("te_global_commons_enabled = yes", rush)
         self.assertIn("te_seabed_is_claimant = yes", rush)
         self.assertIn("save_scope_as = te_seabed_first_claimant", rush)
-        self.assertIn("NOT = { is_country_type = decentralized }", rush)
+        self.assertIn("name = te_seabed_first_claimant value = scope:te_seabed_first_claimant", rush)
+        self.assertIn("is_ai = no", rush)
 
     def test_new_claimant_notice_only_to_sharers(self):
         body = strip_comments(read(EFFECTS))
@@ -101,7 +107,8 @@ class SeabedNoticeTest(unittest.TestCase):
 
     def test_messages(self):
         text = read(MESSAGES)
-        names = ["te_seabed_rush_notice"] + [f"te_seabed_{k}_notice_{b}" for k in ("new_claimant", "basin_full")
+        self.assertNotIn("te_seabed_rush_notice", text)
+        names = [f"te_seabed_{k}_notice_{b}" for k in ("new_claimant", "basin_full")
                                              for b in m.BASINS]
         for name in names:
             body = block(text, name)
@@ -110,7 +117,8 @@ class SeabedNoticeTest(unittest.TestCase):
 
     def test_loc(self):
         loc = read(NOTIF_LOC)
-        keys = ["te_seabed_rush_notice"] + [f"te_seabed_{k}_notice_{b}" for k in ("new_claimant", "basin_full")
+        self.assertNotIn("te_seabed_rush_notice", loc)
+        keys = [f"te_seabed_{k}_notice_{b}" for k in ("new_claimant", "basin_full")
                                             for b in m.BASINS]
         for k in keys:
             for part in ("name", "desc", "tooltip"):
@@ -121,8 +129,55 @@ class SeabedNoticeTest(unittest.TestCase):
                 self.assertIn(f"$te_seabed_basin_{b}$", name)
             desc = re.search(rf"^ notification_te_seabed_new_claimant_notice_{b}_desc:0 \"(.*)\"$", loc, re.M).group(1)
             self.assertIn("[SCOPE.sCountry('te_seabed_newcomer').GetName]", desc)
-        rush = re.search(r"^ notification_te_seabed_rush_notice_desc:0 \"(.*)\"$", loc, re.M).group(1)
-        self.assertIn("[SCOPE.sCountry('te_seabed_first_claimant').GetName]", rush)
+
+
+class RushEventTest(unittest.TestCase):
+    """te_seabed.3, The Seabed Rush Begins: news, so its one option only
+    points to the Seabed tab; three descriptions (we are the first, a coastal
+    country, a landlocked one); the first claimant read back from a global
+    variable in case the saved scope doesn't survive the dispatch."""
+
+    def event(self):
+        return strip_comments(block(read(EVENTS), "te_seabed.3"))
+
+    def test_visible_with_art(self):
+        ev = self.event()
+        self.assertNotIn("hidden = yes", ev)
+        self.assertIn('event_image = { texture = "gfx/event_pictures/law_of_sea_maritime.dds" }', ev)
+        self.assertIn("title = te_seabed.3.t", ev)
+        self.assertIn("flavor = te_seabed.3.f", ev)
+        for d in ("te_seabed.3.d_first", "te_seabed.3.d_coastal", "te_seabed.3.d_landlocked"):
+            self.assertIn(f"desc = {d}", ev)
+
+    def test_first_claimant_read_back(self):
+        ev = self.event()
+        imm = ev[ev.index("immediate = {"):]
+        self.assertIn("global_var:te_seabed_first_claimant ?= { save_scope_as = te_seabed_first_claimant }", imm)
+
+    def test_one_option_pointing_to_the_tab(self):
+        ev = self.event()
+        self.assertEqual(ev.count("option = {"), 1)
+        self.assertIn("custom_tooltip = te_seabed.3.a.tt", ev)
+
+    def test_loc(self):
+        loc = read("localization/english/te_events_l_english.yml")
+        for k in ("t", "d_first", "d_coastal", "d_landlocked", "f", "a", "a_first", "a.tt"):
+            self.assertRegex(loc, re.compile(rf"^ te_seabed\.3\.{re.escape(k)}:\d+ \"", re.M), k)
+        coastal = re.search(r"^ te_seabed\.3\.d_coastal:\d+ \"(.*)\"$", loc, re.M).group(1)
+        self.assertIn("[SCOPE.sCountry('te_seabed_first_claimant').GetName]", coastal)
+
+    def test_registered_with_its_picture(self):
+        reg = read(IMAGES)
+        entry = reg[reg.index('"law_of_sea_maritime": {'):]
+        entry = entry[:entry.index("},")]
+        self.assertIn('"te_seabed.3"', entry)
+
+    def test_headline_stands_down_under_the_rule(self):
+        """headlines_tech_abyssal_plain_mining tells players the same news;
+        with the Global Commons rule on the event tells it instead."""
+        body = strip_comments(block(read(HEADLINES), "extra_headlines_tech"))
+        self.assertRegex(body, r"limit = \{ NOT = \{ te_global_commons_enabled = yes \} \}\s*"
+                               r"headlines_tech_announce_effect = \{ TECH = abyssal_plain_mining \}")
 
 
 if __name__ == "__main__":
