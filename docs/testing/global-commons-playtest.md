@@ -243,7 +243,7 @@ audits) and this is what only the game can show. A fixed item is struck through 
 - **Console.** `event te_debug_launch_windows.1`: a stages two and a half colony fleets (the bar at 2.5 × the goal); b writes
   every body's cached window, the date's own answer, the premium and our cost to `debug.log` (`TE_LAUNCH_WINDOWS` lines); c lets
   the self-checks log again.
-- **Logs.** Read `debug.log`; grep `TE_SELF_CHECK` and `TE_LAUNCH_WINDOWS`.
+- **Logs.** Read `debug.log`; grep `TE_SELF_CHECK` and `TE_LAUNCH_WINDOWS`. The self-check lines name the body by its number (`body=1` is Mars; the line spells out the key), because a debug line can't print a script parameter; `TE_LAUNCH_WINDOWS` lines name it.
 - **Reference.** `docs/engine/launch_windows_report.md` lists every body's premium curve, the Mars windows of 2030–2060 and the
   historical launches the method is checked against. Mars windows: 2030.12–2031.02, 2033.02–2033.04, 2035.06–2035.08,
   2037.07–2037.09, 2039.08–2039.10, 2041.09–2041.11, 2043.10–2043.12, 2045.11–2046.01, 2048.01–2048.03.
@@ -283,6 +283,10 @@ Logged once a game each. Nothing logged means the premise never came up (no chem
 6. **Stage change with fleets staged.** Let a rival take the stage's last world while fleets are staged: the staged progress
    carries into the next stage, whose goal is higher, and leaves in that stage's windows. When the last of the 34 worlds goes,
    any staged progress is gone and the entry finishes.
+   **A programme with no colony that stops while fleets are staged** (review L2): with 2.5 fleets staged and no colony held,
+   switch the Space Program off Solar Colonization (the entry fails) and back on. The entry reopens with an empty bar; on its
+   first running month the bar holds 2 goals (the half-built colony is gone). The same after a revolution's winner inherits
+   the programme, and after dropping below major power and back.
 7. **Mercury.** In stage 3 with Mercury unclaimed and Saturn closed, a full bar founds Mercury at once; Saturn's sites wait for
    their window.
 8. **The AI.** An AI power in the top three running colonization founds colonies only in windows before Asteroid Mining (check

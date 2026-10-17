@@ -4813,6 +4813,8 @@ sr_launch_premium_kuiper = {
 }
 
 # ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
+# sr_window_body_code_<body>    the body's number in BODIES order, for debug
+#                               lines, which can't name a $BODY$ (BODY_CODE_LEGEND)
 # sr_window_wait_months_<body>  months to its next window, cached (0 if none yet)
 # sr_window_premium_now_<body>  this month's premium, cached (0 if none yet)
 # sr_launch_cost_<body>         country: the premium it launches there at now, 0
@@ -4826,6 +4828,7 @@ sr_launch_premium_kuiper = {
 #                               0 it waits, 2 Safe (never off-window)
 
 # Mars
+sr_window_body_code_mars = { value = 1 }
 sr_window_wait_months_mars = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_mars } value = global_var:sr_window_wait_mars }
@@ -4850,6 +4853,7 @@ sr_window_disp_verdict_mars = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = mars } } value = 1 }
 }
 # Ceres
+sr_window_body_code_ceres = { value = 2 }
 sr_window_wait_months_ceres = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_ceres } value = global_var:sr_window_wait_ceres }
@@ -4874,6 +4878,7 @@ sr_window_disp_verdict_ceres = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = ceres } } value = 1 }
 }
 # Vesta
+sr_window_body_code_vesta = { value = 3 }
 sr_window_wait_months_vesta = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_vesta } value = global_var:sr_window_wait_vesta }
@@ -4898,6 +4903,7 @@ sr_window_disp_verdict_vesta = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = vesta } } value = 1 }
 }
 # Psyche
+sr_window_body_code_psyche = { value = 4 }
 sr_window_wait_months_psyche = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_psyche } value = global_var:sr_window_wait_psyche }
@@ -4922,6 +4928,7 @@ sr_window_disp_verdict_psyche = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = psyche } } value = 1 }
 }
 # Pallas
+sr_window_body_code_pallas = { value = 5 }
 sr_window_wait_months_pallas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_pallas } value = global_var:sr_window_wait_pallas }
@@ -4946,6 +4953,7 @@ sr_window_disp_verdict_pallas = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = pallas } } value = 1 }
 }
 # Hygiea
+sr_window_body_code_hygiea = { value = 6 }
 sr_window_wait_months_hygiea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_hygiea } value = global_var:sr_window_wait_hygiea }
@@ -4970,6 +4978,7 @@ sr_window_disp_verdict_hygiea = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = hygiea } } value = 1 }
 }
 # Jupiter system
+sr_window_body_code_jupiter = { value = 7 }
 sr_window_wait_months_jupiter = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_jupiter } value = global_var:sr_window_wait_jupiter }
@@ -4994,6 +5003,7 @@ sr_window_disp_verdict_jupiter = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = jupiter } } value = 1 }
 }
 # Venus
+sr_window_body_code_venus = { value = 8 }
 sr_window_wait_months_venus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_venus } value = global_var:sr_window_wait_venus }
@@ -5018,6 +5028,7 @@ sr_window_disp_verdict_venus = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = venus } } value = 1 }
 }
 # Saturn system
+sr_window_body_code_saturn = { value = 9 }
 sr_window_wait_months_saturn = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_saturn } value = global_var:sr_window_wait_saturn }
@@ -5042,6 +5053,7 @@ sr_window_disp_verdict_saturn = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = saturn } } value = 1 }
 }
 # Uranus system
+sr_window_body_code_uranus = { value = 10 }
 sr_window_wait_months_uranus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_uranus } value = global_var:sr_window_wait_uranus }
@@ -5066,6 +5078,7 @@ sr_window_disp_verdict_uranus = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = uranus } } value = 1 }
 }
 # Neptune system
+sr_window_body_code_neptune = { value = 11 }
 sr_window_wait_months_neptune = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_neptune } value = global_var:sr_window_wait_neptune }
@@ -5090,6 +5103,7 @@ sr_window_disp_verdict_neptune = {
 	else_if = { limit = { sr_launch_departs_paid = { BODY = neptune } } value = 1 }
 }
 # Kuiper Belt
+sr_window_body_code_kuiper = { value = 12 }
 sr_window_wait_months_kuiper = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_wait_kuiper } value = global_var:sr_window_wait_kuiper }

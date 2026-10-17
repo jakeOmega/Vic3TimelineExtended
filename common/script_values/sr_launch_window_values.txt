@@ -42,6 +42,13 @@ sr_launch_months_allowed = {
 	multiply = sr_launch_approach_weight
 }
 
+# Whole fleets staged: progress in goals, rounded down (sr_launch_bank_staged_fleets).
+sr_launch_staged_whole_fleets = {
+	value = sr_progress_solar_colonization_value
+	divide = sr_solar_colonization_goal
+	floor = yes
+}
+
 # What the month's fleet costs: goal x (1 + the cheapest premium). Read only
 # while sr_launch_best_cost is below sr_launch_never (sr_launch_fleet_ready).
 sr_launch_fleet_cost = {

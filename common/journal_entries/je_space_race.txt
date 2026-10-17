@@ -1334,7 +1334,9 @@ je_space_race_solar_colonization = {
 			# bar's baseline; this bar restarts at every colony, so it would
 			# read negative for the rest of the game. So a colony-less
 			# programme restarts, as it always did, and a revolution costs it
-			# the progress towards its first colony.
+			# the progress towards its first colony. The whole fleets it had
+			# staged in orbit are kept apart first and come back with its next
+			# launch month (sr_launch_bank_staged_fleets, Global Commons § 5.2).
 			if = { # REVIEWED 2026-09-26: deliberate reset of a bar input, see above
 				limit = {
 					OR = {
@@ -1342,6 +1344,7 @@ je_space_race_solar_colonization = {
 						NOT = { sr_has_space_colony = yes }
 					}
 				}
+				sr_launch_bank_staged_fleets = yes
 				set_variable = { name = sr_progress_solar_colonization value = 0 }
 			}
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
@@ -1418,6 +1421,8 @@ je_space_race_solar_colonization = {
 		sr_report_program_loss = { MILESTONE = solar_colonization }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
+			# Fleets staged in orbit wait for the programme to restart.
+			sr_launch_bank_staged_fleets = yes
 			sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
 		}
 	}

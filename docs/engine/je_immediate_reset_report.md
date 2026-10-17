@@ -30,6 +30,7 @@ _None._
 can_revolution_inherit: yes; can_deactivate: unset (= no)
 
 - `set_variable` `te_mon_stance_band_applied` = `0` at `common/journal_entries/je_banking.txt` — **2026-09-26**: reset on purpose; a fresh or inherited entry holds no stance band, so the tracker must say none (civil_war_inheritance_audit.md F7)
+- `remove_variable` `banking_bank_holiday_reopening` at `common/journal_entries/je_banking.txt` — only a positive existence test of `banking_bank_holiday_reopening` encloses it, so it destroys what is there — **2026-10-05**: cleared on purpose; the holiday this marker belongs to did not survive the revolution, so no reopening bounce is owed
 
 ### `je_heir_education` (`common/journal_entries/je_heir_education.txt`)
 
@@ -121,6 +122,12 @@ can_revolution_inherit: yes; can_deactivate: no
 
 - `remove_variable` `un_regime_stamp` at `common/scripted_effects/un_state_effects.txt` via `un_state_restore_all` (common/journal_entries/je_united_nations.txt) — only a positive existence test of `un_regime_stamp` encloses it, so it destroys what is there — **2026-09-26**: dropping the regime stamp is the point: the next ordinary pulse re-reads the regime terms the merge dropped (§0.9)
 
+### `je_portugal_regeneration` (`common/journal_entries/te_tax_vanilla_je_overrides.txt`)
+
+can_revolution_inherit: unset (= yes); can_deactivate: unset (= no); a mod `REPLACE:` of a vanilla entry
+
+- 2 writes of `surplus_time_var`, `je_age_in_months_var`, first at `common/journal_entries/te_tax_vanilla_je_overrides.txt` — **2026-10-02**: vanilla 1.14.5's own immediate, copied verbatim so the rule-off entry stays vanilla's; a revolution resets it in vanilla too
+
 ## Not Failing
 
 ### Progress-bar inputs (follow-up candidates)
@@ -138,7 +145,7 @@ activation"). Not failing yet.
 - `je_heir_education` (can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)): `set_variable` `heir_ed_total` = `0` at `common/journal_entries/je_heir_education.txt` — the entry's `current_value` reads it; goal not pinned (+23 more writes) — reviewed **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 - `je_nuclear_program` (can_revolution_inherit: no; can_deactivate: yes): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt:147` — the entry's `current_value` reads it; goal not pinned
 - `je_space_race_solar_colonization` (can_revolution_inherit: yes; can_deactivate: yes): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-09-26**: deliberate reset of a bar input, see above
-- `je_state_collapse` (can_revolution_inherit: unset (= yes); can_deactivate: yes): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:16` — the entry's `current_value` reads it; goal not pinned
+- `je_state_collapse` (can_revolution_inherit: unset (= yes); can_deactivate: yes): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:23` — the entry's `current_value` reads it; goal not pinned
 
 ### Pulse refreshes
 
@@ -148,6 +155,7 @@ next pulse would make anyway, not a reset. One line per entry and
 outermost refresh effect.
 
 - `je_colonial_empire` (inherited): `colonial_empire_refresh_display` — 22 variables: `colonial_empire_tier`, `colonial_empire_next_boundary`, `colonial_empire_bar_bucket`, `colonial_empire_d_overreach`, `colonial_empire_d_gp`, `colonial_empire_d_acceptance`, +16 more
+- `je_colonial_empire` (inherited): `colonial_programmes_refresh_cost_base` — 1 variables: `colonial_dev_colonial_gdp`
 - `je_nuclear_program` (not inherited): `nuclear_program_refresh_state_effect` — 1 variables: `nuclear_program_last_status`
 - `je_space_race_interstellar_probe` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_interstellar_probe_last_status`, `sr_interstellar_probe_setbacks`
 - `je_space_race_mars_landing` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_mars_landing_last_status`, `sr_mars_landing_setbacks`
@@ -187,14 +195,15 @@ removed while this variable was kept.
 - `je_nuclear_program` (not inherited): `set_variable` `nd_readiness_transition` = `0` at `common/scripted_effects/nuclear_deterrence_effects.txt:73` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_readiness` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:69`)
 - `je_nuclear_program` (not inherited): `set_variable` `nd_authority_months` = `nd_authority_tenure_months` at `common/scripted_effects/nuclear_deterrence_effects.txt:82` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_authority` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:80`)
 - `je_nuclear_program` (not inherited): `set_variable` `nd_estimate_year` = `year` at `common/scripted_effects/nuclear_deterrence_effects.txt:125` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_public_estimate` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:123`)
+- `je_space_race_solar_colonization` (inherited): `change_variable` `sr_launch_banked_fleets` at `common/scripted_effects/sr_launch_window_effects.txt:129` via `sr_launch_bank_staged_fleets` (common/journal_entries/je_space_race.txt:1347) — runs only while `sr_all_colonies_complete` is missing (`common/scripted_effects/sr_launch_window_effects.txt:120`)
 
 ## Coverage
 
 - counts are writes per entry, so a helper several entries call counts
   once for each; distinct (line, variable) pairs are in brackets
 - unreviewed: 0 (0)
-- exempted: 611 (199)
+- exempted: 614 (202)
 - progress-bar inputs: 27 (27)
-- pulse refreshes: 370 (370)
-- guarded by another variable: 20 (20)
+- pulse refreshes: 371 (371)
+- guarded by another variable: 21 (21)
 

@@ -161,6 +161,11 @@ BODIES = (
 )
 UNGATED_SITES = {"mercury": 3}  # site -> stage
 
+# The debug lines' key to sr_window_body_code_<body>: a parameter can't be
+# printed inside a debug_log string (scripting_best_practices.md, "No $PARAM$
+# inside the string"), so the lines print the code and spell this out.
+BODY_CODE_LEGEND = ", ".join(f"{i} {b.name}" for i, b in enumerate(BODIES, start=1))
+
 # Cycles the premium curve is averaged over (evenly spread across the span),
 # departure days sampled in each month, and the transfer-time search.
 PREMIUM_CYCLES = 16
@@ -737,10 +742,11 @@ def render_readers(plans: list[BodyPlan]) -> list[str]:
     """Per-body readers of the window cache and the stage's minima: the body
     list's boilerplate, so a window body is added in one place (BODIES)."""
     out = [READERS_PREAMBLE]
-    for plan in plans:
+    for code, plan in enumerate(plans, start=1):
         k = plan.body.key
         out += [
             f"# {plan.body.name}",
+            f"sr_window_body_code_{k} = {{ value = {code} }}",
             f"sr_window_wait_months_{k} = {{",
             "\tvalue = 0",
             f"\tif = {{ limit = {{ has_global_variable = sr_window_wait_{k} }} value = global_var:sr_window_wait_{k} }}",
@@ -814,6 +820,8 @@ IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body is in the curren
 """
 
 READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
+# sr_window_body_code_<body>    the body's number in BODIES order, for debug
+#                               lines, which can't name a $BODY$ (BODY_CODE_LEGEND)
 # sr_window_wait_months_<body>  months to its next window, cached (0 if none yet)
 # sr_window_premium_now_<body>  this month's premium, cached (0 if none yet)
 # sr_launch_cost_<body>         country: the premium it launches there at now, 0

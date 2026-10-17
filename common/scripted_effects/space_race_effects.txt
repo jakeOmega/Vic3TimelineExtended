@@ -121,6 +121,12 @@ sr_cleanup_inactive_space_race_milestones = {
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_base          }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = mars_landing       }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = interstellar_probe }
+	# Solar colonization's fleets staged in orbit wait for a deactivated
+	# programme to restart (sr_launch_bank_staged_fleets, sr_launch_window_effects.txt).
+	if = {
+		limit = { NOT = { has_journal_entry = je_space_race_solar_colonization } }
+		sr_launch_bank_staged_fleets = yes
+	}
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = solar_colonization }
 	# interstellar_results uses a different variable set (only sr_active_interstellar_results
 	# and sr_interstellar_transit_progress) — cannot share the standard 5-var base.

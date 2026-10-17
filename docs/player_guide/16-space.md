@@ -409,9 +409,16 @@ Progress past a colony's goal is fleets staged in orbit, shown on the overview
 as Staged in Orbit. When a window opens, one fleet departs each month it stays
 open while staged progress covers a colony, so a three-month window can send
 three. What is left waits for the next window. It carries on to the next stage
-if rivals take the stage's last worlds, and is lost only when the last of the 34
+if rivals take the stage's last worlds, and is lost when the last of the 34
 worlds is claimed. Cutting funding while you wait gains nothing: whatever you
 build now leaves in a later window.
+
+Until you hold a colony, the program starts over whenever it stops: when your
+Space Program leaves the Solar Colonization method, when you fall below major
+power, or after a revolution. The colony being readied is lost, as an
+unfinished bar always is, but whole fleets already staged stay in orbit and
+are back on the bar in the program's first month once it runs again. Once you
+hold a colony, the program never stops this way and keeps all its progress.
 
 Propulsion technology loosens the windows in three steps:
 
