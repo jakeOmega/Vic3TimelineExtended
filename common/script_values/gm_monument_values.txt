@@ -282,11 +282,17 @@ gm_state_levels_short = {
 	}
 }
 
-# State scope. What this state's monument lacked when its shadow was last
-# written (gm_sh_short on it, gm_state_write_shadow), or 0.
+# State scope. What this state's monument lacked at its revolt's split, when
+# its piece took the monument's identity (gm_split_short, gm_monument_effects.txt
+# § "A revolt's split piece"), else when its shadow was last written
+# (gm_sh_short on it, gm_state_write_shadow), or 0.
 gm_state_split_short = {
 	value = 0
 	if = {
+		limit = { has_variable = gm_split_short }
+		value = var:gm_split_short
+	}
+	else_if = {
 		limit = {
 			has_variable = gm_shadow
 			var:gm_shadow ?= { has_variable = gm_sh_short }
@@ -357,5 +363,32 @@ gm_sh_log_put_back = {
 	if = {
 		limit = { has_global_variable = gm_sh_log_put_back_now }
 		value = global_var:gm_sh_log_put_back_now
+	}
+}
+
+# What a revolt's split piece prints (gm_monument_effects.txt § "A revolt's
+# split piece"): the piece's levels, what its monument lacked at the split, and
+# the monument's records when the piece takes them.
+gm_split_log_piece = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_split_log_piece_now }
+		value = global_var:gm_split_log_piece_now
+	}
+}
+
+gm_split_log_short = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_split_log_short_now }
+		value = global_var:gm_split_log_short_now
+	}
+}
+
+gm_split_log_records = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_split_log_records_now }
+		value = global_var:gm_split_log_records_now
 	}
 }
