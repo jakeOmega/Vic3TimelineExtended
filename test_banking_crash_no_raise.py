@@ -683,15 +683,18 @@ class Country:
 
     Run by Interp with only the roll (CRASH_ROLL) and the after's cascade internals (its own spread,
     the Great Depression check, the post-event refresh) replaced; ``mutations`` replaces more, for
-    the tests that show the checks bite. It is never the wave's origin.
+    the tests that show the checks bite. A wave usually starts elsewhere (``new_wave``); in
+    ``become_origin`` the country's own crash starts one.
     """
     EVENT = "minor_events_timelineextended.7"
     STUBS = {"banking_cycle_spread_contagion": None,
              "banking_crisis_wave_check_great_depression": None,
              "banking_cycle_post_event_refresh": None}
 
-    def __init__(self, mutations=None, immediate=None, after=None):
+    def __init__(self, mutations=None, immediate=None, after=None, init=None):
         self.vars, self.globals, self.gvals, self.logs = {}, set(), {}, []
+        self.init = init if init is not None else EFFECTS["banking_crisis_wave_init"]
+        self.origin = False       # the wave now running is this country's own crash
         self.queued, self.open = [], []  # the copies of the event, each its saved scopes
         self.overrides = {**self.STUBS, **(mutations or {})}
         self.immediate = immediate if immediate is not None else field(MINOR_EVENTS[self.EVENT], "immediate")
@@ -716,10 +719,17 @@ class Country:
 
     def new_wave(self):
         """An origin crashes elsewhere: banking_crisis_wave_init as it reaches this country."""
-        init = EFFECTS["banking_crisis_wave_init"]
-        body = [("if", "=", field(init, "every_country"))]  # its limit, then the removals
-        body += [item for item in init if item[0] == "set_global_variable"]
+        body = [("if", "=", field(self.init, "every_country"))]  # its limit, then the removals
+        body += [item for item in self.init if item[0] == "set_global_variable"]
         self.run(body)
+        self.origin = False
+
+    def become_origin(self):
+        """This country's own crash starts a wave: all of banking_crisis_wave_init, run here (its
+        every_country clears this country's marks too, then it marks itself)."""
+        body = [("if", "=", val) if key == "every_country" else (key, op, val) for key, op, val in self.init]
+        self.run(body)
+        self.origin = True
 
     def spread(self):
         """A spread whose roll for this country came up: the wave test of its every_country limit
@@ -776,7 +786,10 @@ class Country:
         decided = {"banking_crisis_wave_crashed", "banking_crisis_wave_scared"} & set(self.vars)
         if "banking_crisis_wave_hit" in self.vars and not decided and not self.queued:
             found.append("reached but undecided, with no roll to come (#428)")
-        if self.gvals.get("great_depression_wave_count", 1) != 1 + ("banking_crisis_wave_counted" in self.vars):
+        # The wave's count starts at 1, its origin; this country adds 1 when its own crash is counted,
+        # unless it is that origin.
+        counted = "banking_crisis_wave_counted" in self.vars and not self.origin
+        if self.gvals.get("great_depression_wave_count", 1) != 1 + counted:
             found.append("the wave counted this country other than once for its crash")
         if self.rolls != self.sent - len(self.queued):
             found.append("a roll for a copy never sent")
@@ -895,12 +908,39 @@ class ContagionBlockTest(unittest.TestCase):
         c.new_wave()
         self.assertEqual(c.spread(), "sent")
 
+    def test_an_origin_is_counted_once_in_its_own_wave(self):
+        # The country's contagion event, from an earlier wave, has rolled a crash; before it is
+        # answered, the country's own crash starts a wave. The wave's count of 1 is the country, so the
+        # event's `after` must not count it again (banking_crisis_wave_init marks the origin counted).
+        c = Country()
+        c.new_wave()
+        c.spread()
+        c.fire(1)
+        c.become_origin()
+        self.assertEqual(c.gvals["great_depression_wave_count"], 1)
+        c.close()
+        self.assertEqual(c.gvals["great_depression_wave_count"], 1)
+        self.assertEqual(c.problems(), [])
+        # without the mark, the event's crash counted the origin twice
+        init = [item for item in EFFECTS["banking_crisis_wave_init"]
+                if item != ("set_variable", "=", [("name", "=", "banking_crisis_wave_counted"), ("value", "=", "1")])]
+        self.assertEqual(len(init), len(EFFECTS["banking_crisis_wave_init"]) - 1)
+        c = Country(init=init)
+        c.new_wave()
+        c.spread()
+        c.fire(1)
+        c.become_origin()
+        c.close()
+        self.assertEqual(c.gvals["great_depression_wave_count"], 2)
+        self.assertIn("the wave counted this country other than once for its crash", c.problems())
+
     def explore(self, depth=6, **mutation):
         """Every sequence of up to ``depth`` steps from a first wave reaching the country: another
-        wave reaching it, a wave starting elsewhere (init only), a later tier of the wave reaching it,
+        wave reaching it, a wave starting elsewhere (init only), its own crash starting one, a later
+        tier of the wave reaching it,
         the copy held firing (a crash or a scare), answering, or being lost; then each copy still held
         fires and answers. Returns (sequences run, the problems found with their steps)."""
-        actions = ("wave", "elsewhere", "tier", "crash", "scare", "close", "lose")
+        actions = ("wave", "elsewhere", "origin", "tier", "crash", "scare", "close", "lose")
         found, runs = [], 0
 
         def step(c, action):
@@ -909,6 +949,8 @@ class ContagionBlockTest(unittest.TestCase):
                 c.spread()
             elif action == "elsewhere":
                 c.new_wave()
+            elif action == "origin":
+                c.become_origin()
             elif action == "tier":
                 c.spread()
             elif action in ("crash", "scare"):
@@ -962,7 +1004,7 @@ class ContagionBlockTest(unittest.TestCase):
         self.assertEqual(found[:5], [])
 
     def test_the_checks_bite(self):
-        # Each mutation breaks one part of the block; the exploration must catch every one.
+        # Each mutation breaks one part of the block or the wave's count; the exploration must catch every one.
         reach = EFFECTS["banking_contagion_reach"]
         send_always = field(reach, "else")
         no_outcome = copy.deepcopy(reach)
@@ -979,6 +1021,9 @@ class ContagionBlockTest(unittest.TestCase):
             "a turned-away reach records no outcome": {"mutations": {"banking_contagion_reach": no_outcome}},
             "a new copy keeps a lost one's leftovers": {"mutations": {"banking_contagion_reach": no_clear}},
             "after keeps the mark": {"after": no_release},
+            "an origin is not marked counted": {"init": [
+                item for item in EFFECTS["banking_crisis_wave_init"]
+                if item[0] == "every_country" or "banking_crisis_wave_counted" not in repr(item)]},
         }
         for name, mutation in mutations.items():
             with self.subTest(mutation=name):
