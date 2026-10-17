@@ -1535,6 +1535,11 @@ te_seabed_lease_enter = {
 				}
 				scope:te_sb_lessor = {
 					change_variable = { name = te_seabed_unbuilt_$B$ subtract = local_var:te_sb_lk }
+					if = {
+						limit = { NOT = { has_variable = te_seabed_leased_out_$B$ } }
+						set_variable = { name = te_seabed_leased_out_$B$ value = 0 }
+					}
+					change_variable = { name = te_seabed_leased_out_$B$ add = local_var:te_sb_lk }
 				}
 				change_variable = { name = te_seabed_unbuilt_$B$ add = local_var:te_sb_lk }
 				set_variable = { name = te_seabed_lease_unused_$B$ value = local_var:te_sb_lk }
@@ -1665,6 +1670,13 @@ te_seabed_lease_shift_held = {
 		set_variable = { name = te_seabed_shleft_indian value = var:te_seabed_held_indian }
 		set_variable = { name = te_seabed_shleft_arctic value = var:te_seabed_held_arctic }
 		set_variable = { name = te_seabed_shleft_southern value = var:te_seabed_held_southern }
+		# The panel's: licences others built on our claims, counted against our
+		# share (review I5).
+		set_variable = { name = te_seabed_charged_pacific value = 0 }
+		set_variable = { name = te_seabed_charged_atlantic value = 0 }
+		set_variable = { name = te_seabed_charged_indian value = 0 }
+		set_variable = { name = te_seabed_charged_arctic value = 0 }
+		set_variable = { name = te_seabed_charged_southern value = 0 }
 	}
 	every_country = {
 		limit = { has_variable = te_seabed_part }
@@ -1824,6 +1836,7 @@ te_seabed_lease_shift_basin = {
 			change_variable = { name = te_seabed_shleft_$B$ subtract = local_var:te_sb_ls }
 			scope:te_sb_lessor = {
 				change_variable = { name = te_seabed_sh_$B$ add = local_var:te_sb_ls }
+				change_variable = { name = te_seabed_charged_$B$ add = local_var:te_sb_ls }
 			}
 		}
 	}
@@ -1832,6 +1845,16 @@ te_seabed_lease_shift_basin = {
 # No scope, the yearly pass after the sharing and the stale shares. Model:
 # settle_leases.
 te_seabed_settle_leases = {
+	# The panel's: each lessor's claims now at its lessees (review I5), summed
+	# as the standing leases are topped up.
+	every_country = {
+		limit = { has_variable = te_seabed_country }
+		set_variable = { name = te_seabed_leased_out_pacific value = 0 }
+		set_variable = { name = te_seabed_leased_out_atlantic value = 0 }
+		set_variable = { name = te_seabed_leased_out_indian value = 0 }
+		set_variable = { name = te_seabed_leased_out_arctic value = 0 }
+		set_variable = { name = te_seabed_leased_out_southern value = 0 }
+	}
 	every_country = {
 		limit = { has_variable = te_seabed_country }
 		te_seabed_settle_lease = { B = pacific }
@@ -1919,6 +1942,10 @@ te_seabed_settle_lease = {
 					}
 					change_variable = { name = te_seabed_unbuilt_$B$ add = local_var:te_sb_lt }
 					change_variable = { name = te_seabed_lease_unused_$B$ add = local_var:te_sb_lt }
+				}
+				set_local_variable = { name = te_sb_lu value = var:te_seabed_lease_unused_$B$ }
+				var:te_seabed_lease_src_$B$ = {
+					change_variable = { name = te_seabed_leased_out_$B$ add = local_var:te_sb_lu }
 				}
 			}
 		}
@@ -2068,6 +2095,7 @@ te_seabed_pact_shift_basin = {
 			}
 		}
 		change_variable = { name = te_seabed_sh_$B$ add = local_var:te_sb_ps }
+		change_variable = { name = te_seabed_charged_$B$ add = local_var:te_sb_ps }
 		scope:te_sb_over = {
 			change_variable = { name = te_seabed_sh_$B$ subtract = local_var:te_sb_ps }
 			change_variable = { name = te_seabed_shleft_$B$ subtract = local_var:te_sb_ps }

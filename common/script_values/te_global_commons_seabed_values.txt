@@ -1815,6 +1815,64 @@ te_seabed_lease_built_disp = {
 		add = var:te_seabed_lease_built_southern
 	}
 }
+# Country scope (the overview's claims hover, review I5): our claims at our
+# lessees, as of the last sharing or lease.
+te_seabed_leased_out_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_leased_out_pacific }
+		add = var:te_seabed_leased_out_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_atlantic }
+		add = var:te_seabed_leased_out_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_indian }
+		add = var:te_seabed_leased_out_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_arctic }
+		add = var:te_seabed_leased_out_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_southern }
+		add = var:te_seabed_leased_out_southern
+	}
+}
+
+# Licences others built on our leased or passed claims, counted against our
+# share at the last sharing.
+te_seabed_charged_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_charged_pacific }
+		add = var:te_seabed_charged_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_atlantic }
+		add = var:te_seabed_charged_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_indian }
+		add = var:te_seabed_charged_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_arctic }
+		add = var:te_seabed_charged_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_southern }
+		add = var:te_seabed_charged_southern
+	}
+}
+
+# Either: the claims hover's line on what we have lent.
+te_seabed_lent_disp = {
+	value = te_seabed_leased_out_disp
+	add = te_seabed_charged_disp
+}
+
 te_seabed_built_total_disp = {
 	value = te_seabed_lic_total_disp
 	subtract = te_seabed_queued_total_disp

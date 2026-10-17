@@ -293,6 +293,28 @@ class LeasePanelTest(unittest.TestCase):
             self.assertIn(f"te_seabed_subj_unused_{b}", block(values, "te_seabed_passed_claims_disp"))
             self.assertIn(f"te_seabed_lease_built_{b}", block(values, "te_seabed_lease_built_disp"))
 
+    def test_a_lessor_sees_what_it_lent(self):
+        """Review I5: a lessor's (or former subject's) claims shrink at each
+        sharing by what its leases take and what others built on its claims;
+        the claims hover says so when either is above 0."""
+        loc = english_loc()
+        claims = re.search(r"(?m)^ te_seabed_ov_claims_tt:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("'te_seabed_ov_claims_lent'", claims)
+        lent = re.search(r"(?m)^ te_seabed_ov_claims_lent:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("te_seabed_leased_out_disp", lent)
+        self.assertIn("te_seabed_charged_disp", lent)
+        values = read(VALUES)
+        for b in m.BASINS:
+            self.assertIn(f"te_seabed_leased_out_{b}", block(values, "te_seabed_leased_out_disp"))
+            self.assertIn(f"te_seabed_charged_{b}", block(values, "te_seabed_charged_disp"))
+        effects = strip_comments(read(EFFECTS))
+        self.assertIn("te_seabed_leased_out_pacific", block(effects, "te_seabed_settle_leases"))
+        self.assertIn("te_seabed_leased_out_$B$", block(effects, "te_seabed_settle_lease"))
+        self.assertIn("te_seabed_leased_out_$B$", block(effects, "te_seabed_lease_enter"))
+        self.assertIn("te_seabed_charged_$B$", block(effects, "te_seabed_lease_shift_basin"))
+        self.assertIn("te_seabed_charged_$B$", block(effects, "te_seabed_pact_shift_basin"))
+        self.assertIn("te_seabed_charged_pacific", block(effects, "te_seabed_lease_shift_held"))
+
     def test_how_section(self):
         gui = read("gui/te_seabed_widgets.gui")
         self.assertLess(gui.index('"te_seabed_how_claims"'), gui.index('"te_seabed_how_sub_leases"'))
