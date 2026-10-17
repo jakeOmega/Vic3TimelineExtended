@@ -1,0 +1,149 @@
+﻿# ======================================================================
+#  JUDICIARY — on actions
+#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Effects: common/scripted_effects/te_judiciary_effects.txt.
+# ======================================================================
+
+# A new game: history has set every court. The scores are seeded at the
+# first monthly pulse (te_jud_monthly), where the laws' modifier sums are
+# certainly in place; this only marks the world as seeded, so the old-save
+# repair (te_old_save_repairs.txt) never runs.
+on_game_started = {
+	on_actions = {
+		te_jud_on_game_started
+	}
+}
+
+te_jud_on_game_started = {
+	effect = {
+		set_global_variable = te_jud_world_seeded
+	}
+}
+
+# Root = Country. A country with no score yet (every 1836 country on the
+# first pulse, a new country mid-game) gets one from the law it holds; its
+# law isn't changed. Revolutionaries are never seeded: a revolution's winner
+# keeps its own variables where both sides hold one, so a seeded rebel would
+# replace the nation's score when it won, and unseeded it inherits the score
+# (scripting_best_practices.md § "What a Civil War's Winner Inherits").
+# Secessionists are seeded: a secession that wins is a new nation. Then the
+# refresh, the scaled modifiers' only writer.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_jud_monthly
+	}
+}
+
+te_jud_monthly = {
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = te_jud_world_seeded
+				NOT = { has_variable = te_jud_seeded }
+				NOT = { is_revolutionary = yes }
+				# Every country holds a court law, so a ceiling of 0 means the
+				# laws' modifier sums aren't in place yet: the 30-day pulse can
+				# fall on 1 January.
+				te_jud_ceiling > 0
+			}
+			te_jud_seed_score = yes
+		}
+		te_jud_refresh = yes
+	}
+}
+
+on_yearly_pulse_country = {
+	on_actions = {
+		te_jud_yearly
+	}
+}
+
+te_jud_yearly = {
+	effect = {
+		te_jud_yearly_update = yes
+	}
+}
+
+# Root = Country. Entrenchment (spec § 3.4): the laws' tooltip lines say how
+# much a court challenges each kind of law; the engine needs a named
+# enactment modifier, so the line picks one of two tiers (test_judiciary.py
+# holds every line to a tier). A paper court challenges nothing.
+on_law_enactment_started = {
+	on_actions = {
+		te_jud_enactment_started
+	}
+}
+
+te_jud_enactment_started = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { te_jud_paper_court = yes }
+				OR = {
+					AND = {
+						te_jud_enacting_core_law = yes
+						modifier:country_constitutional_law_enactment_success_add <= -0.15
+					}
+					AND = {
+						te_jud_enacting_rights_law = yes
+						modifier:country_rights_law_enactment_success_add <= -0.15
+					}
+				}
+			}
+			add_enactment_modifier = { name = te_jud_supremacy_challenge }
+		}
+		else_if = {
+			limit = {
+				NOT = { te_jud_paper_court = yes }
+				OR = {
+					AND = {
+						te_jud_enacting_core_law = yes
+						modifier:country_constitutional_law_enactment_success_add < 0
+					}
+					AND = {
+						te_jud_enacting_rights_law = yes
+						modifier:country_rights_law_enactment_success_add < 0
+					}
+				}
+			}
+			add_enactment_modifier = { name = te_jud_constitutional_challenge }
+		}
+		te_jud_selfcheck_enacting_scope = yes
+	}
+}
+
+# ROOT = the law (scripting_best_practices.md § "Checking the Type of the Law
+# in on_law_activated"). Script values that read country variables fail on a
+# law scope, so this only matches the type of every law that moves the
+# ceiling and leaves the arithmetic to te_judiciary_events.1 on the owner,
+# a week later, once the new law's modifier sums are in place.
+on_law_activated = {
+	on_actions = {
+		te_jud_law_activated
+	}
+}
+
+te_jud_law_activated = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					type = law_type:law_executive_tribunals
+					type = law_type:law_religious_courts
+					type = law_type:law_statutory_courts
+					type = law_type:law_constitutional_review
+					type = law_type:law_judicial_supremacy
+					type = law_type:law_algorithmic_jurisprudence
+					type = law_type:law_autocracy
+					type = law_type:law_bakufu
+					type = law_type:law_neo_absolutism
+					type = law_type:law_single_party_state
+					type = law_type:law_algorithmic_governance
+				}
+			}
+			owner = {
+				trigger_event = { id = te_judiciary_events.1 days = 7 }
+			}
+		}
+	}
+}

@@ -100,6 +100,8 @@ LAWGROUP_PRIORITY = [
     "lawgroup_internal_security",
     "lawgroup_policing",
     "lawgroup_state_power",
+    # After Church and State, whose change can disallow Religious Courts.
+    "lawgroup_judiciary",
     "lawgroup_trade_policy",
     "lawgroup_taxation",
     "lawgroup_land_reform",

@@ -1061,6 +1061,13 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": 3},
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
+        # Judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md)
+        "law_executive_tribunals": {"subject": "a royal crown resting on top of a closed leather-bound law book", "seed": None},
+        "law_religious_courts": {"subject": "a thick holy book lying open on a carved wooden lectern, a string of prayer beads draped across its pages", "seed": None},
+        "law_statutory_courts": {"subject": "a stack of three thick bound law codes with a judge's curled white wig resting on top", "seed": None},
+        "law_constitutional_review": {"subject": "a long parchment charter unrolled and pinned flat by two brass weights, a large red wax seal at its foot", "seed": None},
+        "law_judicial_supremacy": {"subject": "a pair of large brass balance scales on a marble pedestal, one pan holding a small rolled scroll and sitting lower than the other", "seed": None},
+        "law_algorithmic_jurisprudence": {"subject": "a pair of brass balance scales whose central pillar is a computer chip with glowing circuit traces running out along the beam", "seed": None},
         # The ministries all shared national_bank.dds's picture (spec, mod placeholders audit).
         "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": 1},
         "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": 1},

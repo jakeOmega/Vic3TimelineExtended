@@ -756,6 +756,91 @@ navy_jingoist = [
 ]
 
 
+# --- lawgroup_judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md § 7) ---
+# Every list names all six laws, in file order (the ideology_lawgroup audit;
+# test_judiciary.py). Applied to the vanilla ideologies in JUDICIARY_STANCES by
+# the loop after `modifications`; the mod's own ideologies carry the same
+# lists by hand in extra_ideologies.txt.
+_JUDICIARY_LAWS = (
+    "law_executive_tribunals",
+    "law_religious_courts",
+    "law_statutory_courts",
+    "law_constitutional_review",
+    "law_judicial_supremacy",
+    "law_algorithmic_jurisprudence",
+)
+_STANCE_CODES = {
+    "++": "strongly_approve",
+    "+": "approve",
+    "0": "neutral",
+    "-": "disapprove",
+    "--": "strongly_disapprove",
+}
+
+
+def judiciary_constructor(*codes):
+    """Six stance codes, in _JUDICIARY_LAWS order, as (law, stance) pairs."""
+    assert len(codes) == len(_JUDICIARY_LAWS)
+    return [(law, _STANCE_CODES[code]) for law, code in zip(_JUDICIARY_LAWS, codes)]
+
+
+JUDICIARY_LISTS = {
+    #                                    Exec  Rel   Stat  Const Supr  Algo
+    "absolutist": judiciary_constructor("++", "0", "-", "--", "--", "0"),
+    "traditional": judiciary_constructor("+", "0", "+", "-", "--", "-"),
+    "religious": judiciary_constructor("0", "++", "-", "-", "--", "--"),
+    "liberal": judiciary_constructor("--", "-", "+", "++", "0", "-"),
+    "anticlerical": judiciary_constructor("--", "--", "+", "++", "0", "-"),
+    "market": judiciary_constructor("-", "-", "+", "++", "-", "+"),
+    "rights": judiciary_constructor("--", "--", "0", "+", "++", "-"),
+    # Taff Vale, Lochner and the labour injunctions: wary of strong courts.
+    "labour": judiciary_constructor("-", "-", "++", "0", "-", "0"),
+    # The people's representatives have the last word (Jackson and
+    # Worcester v. Georgia, 1832).
+    "populist": judiciary_constructor("0", "0", "++", "-", "--", "-"),
+    "vanguard": judiciary_constructor("++", "--", "-", "--", "--", "+"),
+    "technocratic": judiciary_constructor("-", "--", "+", "+", "-", "++"),
+}
+
+JUDICIARY_STANCES = {
+    **{k: "absolutist" for k in (
+        "ideology_loyalist", "ideology_authoritarian", "ideology_military_absolutist",
+        "ideology_reactionary", "ideology_reactionary_movement", "ideology_royalist_movement",
+        "ideology_absolutist_movement",
+    )},
+    **{k: "traditional" for k in (
+        "ideology_paternalistic", "ideology_hierarchic", "ideology_patriarchal", "ideology_patriotic",
+        "ideology_jingoist", "ideology_royalist", "ideology_legitimist", "ideology_bonapartist",
+    )},
+    **{k: "religious" for k in (
+        "ideology_pious", "ideology_moralist", "ideology_theocrat", "ideology_papal_paternalistic",
+        "ideology_buddhist_moralist", "ideology_hindu_moralist", "ideology_hindu_moralist_british_india",
+        "ideology_sikh_moralist", "ideology_shinto_moralist", "ideology_papal_moralist",
+        "ideology_montenegrin_moralist", "ideology_orthodox_patriarch",
+        "ideology_oriental_orthodox_patriarch", "ideology_russian_patriarch",
+    )},
+    **{k: "liberal" for k in (
+        "ideology_liberal", "ideology_liberal_leader", "ideology_republican", "ideology_republican_leader",
+        "ideology_individualist", "ideology_constitutionalist", "ideology_liberal_movement",
+    )},
+    "ideology_anti_clerical": "anticlerical",
+    **{k: "market" for k in ("ideology_laissez_faire", "ideology_plutocratic", "ideology_market_liberal")},
+    **{k: "rights" for k in (
+        "ideology_liberal_modern", "ideology_egalitarian_modern", "ideology_humanitarian", "ideology_feminist",
+    )},
+    **{k: "labour" for k in (
+        "ideology_proletarian", "ideology_egalitarian", "ideology_socialist", "ideology_social_democrat",
+        "ideology_socialist_movement",
+    )},
+    **{k: "populist" for k in ("ideology_populist", "ideology_agrarian", "ideology_jacksonian_democrat")},
+    **{k: "vanguard" for k in (
+        "ideology_communist", "ideology_communist_movement", "ideology_vanguardist",
+        "ideology_vanguardist_movement", "ideology_fascist", "ideology_fascist_movement",
+    )},
+    **{k: "technocratic" for k in ("ideology_technocratic", "ideology_positivist", "ideology_meritocratic")},
+}
+
+
 modifications = {
     "ideology_paternalistic": {
         "lawgroup_monetary_policy": simple_currency,
@@ -3826,3 +3911,6 @@ modifications = {
         ],
     },
 }
+
+for _ideology, _list in JUDICIARY_STANCES.items():
+    modifications.setdefault(_ideology, {})["lawgroup_judiciary"] = JUDICIARY_LISTS[_list]

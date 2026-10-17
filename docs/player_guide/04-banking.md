@@ -684,7 +684,8 @@ inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
 
 Credit standing is what your country is: rank, finance technologies and a stock
-exchange, institutions and currency credibility. It cannot go below 0.5 points
+exchange, institutions, your courts (the Judiciary law and Judicial
+Independence) and currency credibility. It cannot go below 0.5 points
 (0.25 under Central Bank Independence). Risk premium is what is happening: the
 cycle phase, crisis tools, banking events, bankruptcy, a debt load past a
 quarter of your credit limit (up to +4 points at the limit), expectations that

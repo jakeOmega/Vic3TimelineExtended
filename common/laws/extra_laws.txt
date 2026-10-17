@@ -4827,6 +4827,11 @@ law_algorithmic_governance = {
 		interest_group_ig_intelligentsia_pol_str_mult = 0.10
 
 		country_legislative_override_capacity_add = 2
+
+		# A paper court (Judiciary spec § 3.1): te_judiciary_law_injections.txt
+		# gives the other executive-only laws the same two lines.
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
 	}
 
 	ai_will_do = {

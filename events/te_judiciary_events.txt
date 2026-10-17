@@ -1,0 +1,51 @@
+﻿namespace = te_judiciary_events
+
+# The court overhaul (spec § 3.5). Fired a week after a ceiling law changes
+# (te_jud_law_activated), on the country, so ROOT is the country and the
+# multiplier resolves here, and the new law's modifier sums are in place. The
+# gap is stored once: a script value would drift as the score decays. A
+# same-name add_modifier would stack a second copy, and every copy re-reads
+# the multiplier, so a second shock replaces the first, and only for a deeper
+# cut than the one being paid for: a sideways or upward move during a shock
+# adds nothing.
+te_judiciary_events.1 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = te_jud_seeded
+		has_variable = te_judicial_independence
+		te_jud_overhaul_gap >= 20
+		OR = {
+			NOT = { has_modifier = te_jud_court_overhaul }
+			AND = {
+				has_variable = te_jud_overhaul_mult
+				te_jud_overhaul_mult_value > var:te_jud_overhaul_mult
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_modifier = te_jud_court_overhaul }
+			remove_modifier = te_jud_court_overhaul
+		}
+		set_variable = {
+			name = te_jud_overhaul_mult
+			value = te_jud_overhaul_mult_value
+		}
+		add_modifier = {
+			name = te_jud_court_overhaul
+			years = 5
+			is_decaying = yes
+			multiplier = var:te_jud_overhaul_mult
+		}
+		if = {
+			limit = { te_jud_overhaul_gap >= 40 }
+			add_radicals = {
+				value = small_radicals
+				strata = middle
+			}
+		}
+	}
+}

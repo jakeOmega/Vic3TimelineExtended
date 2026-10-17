@@ -84,6 +84,7 @@ debate](07-social-movements.md#the-augmentation-debate).
 | Law group | Laws | What it governs |
 |---|---|---|
 | State Power | Traditional Vassalage, Unitary State, Federal System, Devolved Administration | Centralization: authority, incorporation, decree costs, separatism. |
+| Judiciary | Executive Tribunals, Religious Courts, Statutory Courts, Constitutional Review, Judicial Supremacy, Algorithmic Jurisprudence | Who checks the government: authority and override capacity against legitimacy and credit. Stronger courts earn their benefits through Judicial Independence, which grows over decades. |
 | Inheritance Laws | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation, State as Universal Heir, Possession by Use | Who inherits an estate: the concentration of wealth, and birth rates and migration on the land. See [Who inherits](#who-inherits). |
 | Electoral Finance | No Campaign Finance Laws, Unregulated Donations, Donation Limits, Publicly Funded Elections | Money in elections. The first is only for countries without a voting franchise; the other three need one. |
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
@@ -96,6 +97,22 @@ Federal System makes decrees 25% cheaper and calms movements but lowers tax
 capacity by 10%. Devolved Administration cuts the bureaucracy cost of
 institutions by 20%, slows assimilation and resists separatism and coups.
 Traditional Vassalage strengthens the aristocrats and costs authority.
+
+In Judiciary, each law sets a ceiling for **Judicial Independence**, a score
+from 0 to 100: 10 for Executive Tribunals, 40 for Religious Courts, 60 for
+Algorithmic Jurisprudence, 70 for Statutory Courts and 100 for Constitutional
+Review and Judicial Supremacy, halved under Autocracy, Single-Party State and
+Algorithmic Governance. The score rises 4 a year toward the ceiling and falls
+10 a year above it. At 100 it gives +10 legitimacy, half a point off credit
+standing, 10% more Capitalist investment and calmer losers of law changes.
+Executive Tribunals give authority and override capacity. Statutory Courts give
+an elected government legitimacy from votes and an unelected one authority.
+Constitutional Review and Judicial Supremacy cost override capacity and lower
+the enactment success of the constitutional law groups by 10% and 15%, and
+Judicial Supremacy that of the rights laws too; each law's tooltip lists what
+it does. Cutting the courts to a ceiling 20 or more below the score raises your
+risk premium and costs legitimacy for five years. Religious Courts need an
+established religion.
 
 ### The rules of war
 
@@ -415,7 +432,9 @@ The [Nation tab](01-introduction.md#the-nation-tab) shows it with every source.
 Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
 2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
 take away 3, and Guaranteed Liberties, Devolved Administration and Communal
-Administration 2.
+Administration 2. Among the courts, Executive Tribunals give 1 and Algorithmic
+Jurisprudence 2 under Algorithmic Governance; Constitutional Review takes away
+2 and Judicial Supremacy 3.
 Establishing the Ministry of Thought Control adds 2, and the ministries of
 Propaganda and of Intelligence and Security 1 each. The Policing laws count
 too, from −0.5 for No Police and Private Policing to +1 for a Militarized
@@ -432,6 +451,9 @@ stronger option also needs authority income above its own cost.
 | Expedite the process with minimal intervention | 0 | 250 | +10 amenability, +5% enactment success, a quarter fewer stalls | Interest groups in opposition −1 approval, capacity −1 |
 | Push the law forward decisively | 2 | 500 | +25 amenability, +15% success, half the stalls, one more setback allowed, 20% faster | Opposition −3 approval, −5 legitimacy, movements radicalize more, capacity −2 |
 | Force the law through, consequences be damned | 4 | 750 | +50 amenability, +25% success, three quarters fewer stalls, two more setbacks, 35% faster, jumps one enactment phase | Opposition −5 approval, −10 legitimacy, more radicals, some upper-strata radicals at once, capacity −3 |
+
+Each option also lowers Judicial Independence by 5, 10 or 20. That loss
+doesn't fade: the score climbs back at its usual 4 a year.
 
 The authority cost fades out over five years too. More capacity makes it
 cheaper: a few percent off from 2 (about 9% at 4), then 20% at 5 and half at 8.
