@@ -27,6 +27,21 @@ queued levels recorded, the water-filling sees them as held and never
 shares below them. A cancelled construction gives its licence back at the
 next recording, like a demolished level.
 
+A LEVEL THE OWNER QUEUED PAST ITS ROOM STAYS UNRECORDED (review H1). The gate
+has the Solar Power Receiver's second branch: a state with a level under
+construction passes at room 0, so construction under way is not halted by its
+own queued level. That branch can't tell re-checking a queued level from
+queueing one more, so at room 0 it lets one extra level in. Recorded against
+no share, such a level would leave room at 0 and the branch open, and the
+basin would grow by a level a month for as long as a construction ran (the
+review's 124 Arctic records against a pool of 100 in 24 months). So the
+shortfall of a recording by the state's own stamped owner is left unrecorded
+("pending"): room stays below 0, both branches shut, and the level is recorded
+when a share pays for it. Only the three cases of § 2.4 are recorded against no
+share: an old save's first recording or a split's new state (no stamp), and a
+holder gone by the time its state changes hands (annexed whole). A holder that
+exists but can't pay leaves the level pending with the new owner.
+
 HOW THE REGULATED REGIME SPLITS A POOL (decided by the builder; § 3.2 says
 "step 2 runs once per half"). Each pool is a reserved half (rounded down)
 and an open half. Both halves are water-filled TOGETHER, in one loop: a
@@ -40,6 +55,8 @@ pool. Licences carry no half: a record is a record. This keeps the invariant
 (Σ entitlements = the pool, or the frozen holdings if they exceed it) with
 no attribution to store, and a party that holds more than its reserved
 share spills into the open half instead of starving the other parties.
+A reserved half that no active claimant is eligible for joins the open half
+(review L1), so each pool is always fully shared.
 """
 
 from __future__ import annotations
@@ -92,6 +109,7 @@ class State:
     incorporated: bool = True
     ports: int = 0                   # building_port levels
     levels: int = 0                  # Deep-Sea Mine level_after_queued_constructions
+    queued: int = 0                  # of which under construction (is_under_construction)
     lic: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
     holder: int | None = None        # te_seabed_holder
 
@@ -113,6 +131,16 @@ class World:
     regime: int = OPEN
     fixed: bool = False              # emulate the engine's 1e-5 truncation
     no_share: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))  # te_seabed_noshare_<b>
+    # The review's control: True restores the pre-fix rule (an owner's own
+    # shortfall recorded against no share), which leaks through the gate's
+    # second branch.
+    shortfall_no_share: bool = False
+    # te_seabed_cap_stamped_noshare: levels a monthly recording put against
+    # no share in a state that carried a stamp. Legitimately always 0 (a
+    # stamped owner's shortfall waits; another country's stamp means the
+    # owner-change hook didn't run), so seabed_cap logs BROKEN above 0: the
+    # signature of the H1 leak, which the no-share counter otherwise absorbs.
+    stamped_no_share: int = 0
     iterations: dict = field(default_factory=dict)   # water-filling passes, last sharing, per basin
 
     def owned(self, cid):
@@ -147,10 +175,22 @@ def room(world: World, cid) -> int:
     return sum(c.unbuilt.values()) - sum(unrecorded(s) for s in world.owned(cid) if s.coastal)
 
 
+def pending(world: World, cid) -> int:
+    """Levels in the country's coastal states with no licence (te_seabed_unrecorded_total
+    after its recording): what it queued past its room."""
+    return sum(unrecorded(s) for s in world.owned(cid) if s.coastal)
+
+
+def gate_open(r: int, s: State) -> bool:
+    """te_seabed_gate's two branches for a state, given its owner's room r:
+    room > 0, or room >= 0 in a state with a level under construction."""
+    return r > 0 or (s.queued > 0 and r >= 0)
+
+
 def can_build(world: World, cid, s: State) -> bool:
     """building_ocean_mine possible, with the rule on (te_seabed_gate)."""
     c = world.countries[cid]
-    return s.coastal and c.tech and s.owner == cid and room(world, cid) > 0
+    return s.coastal and c.tech and s.owner == cid and gate_open(room(world, cid), s)
 
 
 # ---------------------------------------------------------------------------
@@ -187,12 +227,14 @@ def _argmax_unbuilt(c: Country):
     return best
 
 
-def state_record_new(world: World, s: State, payer) -> int:
+def state_record_new(world: World, s: State, payer, *, pend: bool = False, monthly: bool = False) -> int:
     """te_seabed_state_record_new: each level without a record takes a licence
     from the payer's unbuilt share, the state's own basin first, then the
-    basin with the most. Levels the payer can't cover (no payer, or no share
-    left) are recorded in the state's own basin against no share
-    (grandfathered, § 2.4 "What can still go over"). Returns that count."""
+    basin with the most. Levels the payer can't cover stay unrecorded when
+    `pend` (local te_sb_pend: the payer is the state's own stamped owner, or a
+    holder that exists), else are recorded in the state's own basin against no
+    share (grandfathered, § 2.4 "What can still go over"). Returns the count
+    not covered."""
     n = s.levels - s.records()
     if n <= 0:
         return 0
@@ -210,9 +252,11 @@ def state_record_new(world: World, s: State, payer) -> int:
             c.unbuilt[b] -= k
             s.lic[b] += k
             n -= k
-    if n > 0:
+    if n > 0 and not pend:
         s.lic[s.basin] += n
         world.no_share[s.basin] += n
+        if monthly and s.holder is not None:
+            world.stamped_no_share += n
     return n
 
 
@@ -241,7 +285,8 @@ def record_country(world: World, cid) -> None:
     for s in states:
         state_return_excess(world, s)
     for s in states:
-        state_record_new(world, s, cid)
+        own = s.holder == cid and not world.shortfall_no_share
+        state_record_new(world, s, cid, pend=own, monthly=True)
         state_swap_local(world, s)
     for s in states:
         s.holder = cid
@@ -250,10 +295,13 @@ def record_country(world: World, cid) -> None:
 def on_state_owner_change(world: World, s: State, new_owner) -> None:
     """te_seabed_on_state_owner_change (on_state_owner_change, ROOT = the state
     under its new owner): unrecorded levels are recorded against the stamped
-    holder's shares (none if it no longer exists), then the records stay on the
-    state and the new owner holds them; its own shares are untouched."""
+    holder's shares; against no share if the state has no stamp or the holder
+    no longer exists, and left pending (for the new owner's share) if the
+    holder exists but can't pay. Then the records stay on the state and the new
+    owner holds them; its own shares are untouched."""
     if s.coastal:
-        state_record_new(world, s, s.holder)
+        payer = s.holder if s.holder is not None and world.alive(s.holder) else None
+        state_record_new(world, s, payer, pend=payer is not None and not world.shortfall_no_share)
     s.owner = new_owner
     s.holder = new_owner
 
@@ -311,6 +359,14 @@ def share_basin(world: World, b: str, part: list) -> dict:
     active = set(part)                                               # te_seabed_act_<b>
     frozen_h = 0
 
+    def fold_unclaimed():
+        """te_seabed_share_fold_unclaimed: a reserved half no active claimant
+        is eligible for joins the open half (review L1)."""
+        nonlocal rem_res, rem_open
+        if rem_res > 0 and not any(elig[i] and w[i] > 0 for i in active):
+            rem_open = v(rem_open + rem_res)
+            rem_res = 0.0
+
     def tentative(cid):
         wr = sum(w[i] for i in active if elig[i])                    # te_seabed_wsum_res_<b>
         wa = sum(w[i] for i in active)                               # te_seabed_wsum_all_<b>
@@ -321,6 +377,7 @@ def share_basin(world: World, b: str, part: list) -> dict:
     passes = 0
     while True:
         passes += 1
+        fold_unclaimed()
         tent = {cid: tentative(cid) for cid in active}
         newly = [cid for cid in sorted(active) if h[cid] >= tent[cid][1]]
         if not newly:
@@ -340,6 +397,7 @@ def share_basin(world: World, b: str, part: list) -> dict:
             rem_open = 0.0
 
     world.iterations[b] = passes
+    fold_unclaimed()
     ent = {cid: h[cid] for cid in part if cid not in active}
     total = max(0, pool - frozen_h)                                  # te_seabed_left_<b> before the floors
     frac = {}
@@ -425,10 +483,14 @@ def random_world(rng: random.Random, *, n_countries=8, n_states=48, regime=OPEN,
 
 
 def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05,
-               annex=0.004, split=0.01) -> None:
-    """One month: building (each country fills some of its room), demolition,
-    a conquest landing between building and recording, the odd annexation and
-    split, then each country's monthly recording in random order."""
+               annex=0.004, split=0.01, complete=0.5, cancel=0.02) -> None:
+    """One month: building, which queues a level wherever the gate is open
+    (both branches, so a builder queues one more in a state already under
+    construction at room 0, as the AI and private investment do), construction
+    finishing or being cancelled, demolition of finished levels, a conquest
+    landing between building and recording (its construction cancelled before
+    the hook, after it, or not at all), the odd annexation and split, then each
+    country's monthly recording in random order."""
     alive = [cid for cid in world.countries if world.alive(cid)]
     for cid in alive:
         if not world.countries[cid].tech:
@@ -436,17 +498,39 @@ def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05
         coastal = [s for s in world.owned(cid) if s.coastal]
         free = room(world, cid)
         for _ in range(rng.randrange(4)):
-            if coastal and free > 0:          # the gate: room > 0 (can_build)
-                rng.choice(coastal).levels += 1
-                free -= 1
-    for s in list(world.states.values()):
-        if s.levels > 0 and rng.random() < demolish:
-            s.levels -= rng.randint(1, s.levels)
+            options = [s for s in coastal if gate_open(free, s)]
+            if not options:
+                break
+            s = rng.choice(options)
+            s.levels += 1
+            s.queued += 1
+            free -= 1
+    for s in world.states.values():
+        for _ in range(s.queued):
+            if rng.random() < complete:
+                s.queued -= 1
+            elif rng.random() < cancel:
+                s.queued -= 1
+                s.levels -= 1
+        built = s.levels - s.queued
+        if built > 0 and rng.random() < demolish:
+            s.levels -= rng.randint(1, built)
+
+    def change_owner(s, new_owner):
+        when = rng.random()
+        if when < 1 / 3:                     # construction cancelled before the hook
+            s.levels -= s.queued
+            s.queued = 0
+        on_state_owner_change(world, s, new_owner)
+        if 1 / 3 <= when < 2 / 3:            # ...or after it
+            s.levels -= s.queued
+            s.queued = 0
+
     for s in list(world.states.values()):
         if rng.random() < conquest:
             others = [cid for cid in alive if cid != s.owner]
             if others:
-                on_state_owner_change(world, s, rng.choice(others))
+                change_owner(s, rng.choice(others))
     if rng.random() < annex and len(alive) > 2:
         loser, winner = rng.sample(alive, 2)
         # Whether the loser still exists when its last states' hooks fire is
@@ -455,17 +539,17 @@ def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05
         if dies_first:
             world.countries[loser].alive = False
         for s in world.owned(loser):
-            on_state_owner_change(world, s, winner)
+            change_owner(s, winner)
         world.countries[loser].alive = False
     if rng.random() < split:
-        coastal = [s for s in world.states.values() if s.coastal and s.levels > 0]
+        coastal = [s for s in world.states.values() if s.coastal and s.levels > s.queued]
         if coastal:
             parent = rng.choice(coastal)
             new_id = max(world.states) + 1
             # a split makes a new state scope with no variables; it brings
-            # some levels with it (the records stay with the parent and come
-            # back to its owner at the next recording)
-            moved = rng.randint(0, parent.levels)
+            # some finished levels with it (the records stay with the parent
+            # and come back to its owner at the next recording)
+            moved = rng.randint(0, parent.levels - parent.queued)
             parent.levels -= moved
             world.states[new_id] = State(new_id, parent.basin, rng.choice(alive), levels=moved)
     order = list(alive)
