@@ -693,5 +693,100 @@ class RelinquishTest(unittest.TestCase):
         self.assertGreater(worse, 0)
 
 
+class FeeTest(unittest.TestCase):
+    """The holding fee's base (seabed claims spec § 2.1): licences on levels
+    unbuilt at the year's first sharing twice running, and the queued
+    licences per basin the pool bar shows."""
+
+    def test_grace_then_fee(self):
+        s = m.State(0, "pacific", 0, levels=4, queued=4)
+        s.lic["pacific"] = 4
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.fee_base(w, 0), 0)                 # no snapshots
+        m.take_snapshots(w)
+        self.assertEqual(m.fee_base(w, 0), 0)                 # one January
+        m.take_snapshots(w)
+        self.assertEqual(m.fee_base(w, 0), 4)                 # two Januaries
+        s.queued = 1                                           # three finished
+        self.assertEqual(m.fee_base(w, 0), 1)
+
+    def test_no_snapshots_no_fee(self):
+        # an old save, or a revolution's winner before its first January
+        s = m.State(0, "pacific", 0, levels=9, queued=6)
+        s.lic["pacific"] = 9
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.fee_base(w, 0), 0)
+
+    def test_the_years_first_sharing_takes_the_snapshots(self):
+        s = m.State(0, "pacific", 0)
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10)}, {0: s})
+        m.yearly_pass(w)
+        s.levels = s.queued = 3
+        m.record_country(w, 0)
+        m.yearly_pass(w)
+        m.yearly_pass(w, first_of_year=False)                 # a mid-year sharing takes none
+        self.assertEqual((s.snap1, s.snap2), (3, 0))
+        m.yearly_pass(w)
+        self.assertEqual((s.snap1, s.snap2), (3, 3))
+        self.assertEqual(m.fee_base(w, 0), 3)
+
+    def test_a_pending_level_pays_nothing(self):
+        # five levels, two queued, four licences: the unlicensed level is a queued one
+        s = m.State(0, "pacific", 0, levels=5, queued=2)
+        s.lic["pacific"] = 4
+        s.snap1 = s.snap2 = 2
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.fee_base(w, 0), 1)
+        self.assertEqual(m.queued_by_basin(w, 0)["pacific"], 1)
+
+    def test_queued_by_basin(self):
+        # an Atlantic state with 5 levels, 2 queued, licences atlantic 3 + arctic 2:
+        # the 2 queued count against the distant (Arctic) licences first
+        s = m.State(0, "atlantic", 0, levels=5, queued=2)
+        s.lic["atlantic"] = 3
+        s.lic["arctic"] = 2
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.queued_by_basin(w, 0), {**dict.fromkeys(m.BASINS, 0), "arctic": 2})
+        s.queued = 4                                           # then the state's own basin
+        self.assertEqual(m.queued_by_basin(w, 0)["atlantic"], 2)
+        self.assertEqual(m.queued_by_basin(w, 0)["arctic"], 2)
+
+    def test_queued_by_basin_in_random_worlds(self):
+        for i in range(WORLDS // 2):
+            rng = random.Random(9700 + i)
+            world = m.random_world(rng)
+
+            def check(world, when):
+                for cid in world.countries:
+                    q = m.queued_by_basin(world, cid)
+                    states = [s for s in world.owned(cid) if s.coastal]
+                    self.assertEqual(sum(q.values()), sum(m.unbuilt_licences(s) for s in states), cid)
+                    for b in m.BASINS:
+                        self.assertLessEqual(q[b], sum(s.lic[b] for s in states), (cid, b))
+                        self.assertGreaterEqual(q[b], 0)
+            run(world, rng, YEARS // 2, check=check, annex=0.02, split=0.03)
+
+    def test_fee_base_bounds_under_conquest(self):
+        """Snapshots travel with their state; the base never exceeds the
+        licences on the state's unbuilt levels and is never negative."""
+        for i in range(WORLDS // 2):
+            rng = random.Random(9800 + i)
+            world = m.random_world(rng)
+            paid = 0
+
+            def check(world, when):
+                nonlocal paid
+                for s in world.states.values():
+                    if not s.coastal:
+                        continue
+                    base = m.fee_base_state(s)
+                    self.assertGreaterEqual(base, 0)
+                    self.assertLessEqual(base, max(0, s.records() - s.built), s.sid)
+                    self.assertLessEqual(base, s.queued, s.sid)
+                    paid += base
+            run(world, rng, YEARS, check=check, annex=0.02, split=0.03, complete=0.05)
+            self.assertGreater(paid, 0)
+
+
 if __name__ == "__main__":
     unittest.main()

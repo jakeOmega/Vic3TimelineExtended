@@ -18,6 +18,15 @@ THE STATE (as the script keeps it)
   te_seabed_relinq_<basin> (1 = relinquished: weight 0 there until Claim Again).
 - Global: te_seabed_regime (1 Open, 2 Regulated, 3 Scramble).
 
+THE HOLDING FEE (seabed claims spec § 2.1). At the year's first sharing every
+coastal state keeps its count of licences on unbuilt levels, and the one
+before (te_seabed_unb_snap1, te_seabed_unb_snap2; te_seabed_take_snapshots).
+A state's fee base is the smallest of the count now and the two snapshots, so
+a level pays only once it was already unbuilt at the year's first sharing
+before last; te_seabed_fee_base sums it over a country's coastal states. The
+snapshots are state variables, so they pass with the state, and a state
+without them (an old save, a split) pays nothing until it has two.
+
 ONE DEPARTURE FROM THE SPEC'S WORDING (decided by the builder): a level is
 recorded as soon as it is QUEUED, not when it is finished. The spec's room
 already counts queued levels against the share (§ 2.4, "built or queued"),
@@ -134,10 +143,16 @@ class State:
     queued: int = 0                  # of which under construction (is_under_construction)
     lic: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
     holder: int | None = None        # te_seabed_holder
+    snap1: int = 0                   # te_seabed_unb_snap1: licences on unbuilt levels, the year's first sharing
+    snap2: int = 0                   # te_seabed_unb_snap2: the same, a year before
 
     @property
     def coastal(self) -> bool:
         return self.basin is not None
+
+    @property
+    def built(self) -> int:          # the Deep-Sea Mine's level
+        return self.levels - self.queued
 
     def records(self) -> int:        # te_seabed_state_records
         return sum(self.lic.values())
@@ -329,6 +344,60 @@ def on_state_owner_change(world: World, s: State, new_owner) -> None:
 
 
 # ---------------------------------------------------------------------------
+# The holding fee's base (seabed claims spec § 2.1) and queued licences
+# ---------------------------------------------------------------------------
+
+def unbuilt_licences(s: State) -> int:
+    """te_seabed_state_unbuilt_lic: licences on the state's queued levels.
+    Built levels are licensed first (a level is recorded when queued), so a
+    shortfall falls on queued levels, and licences above the levels (a
+    demolition not yet recorded) are on none."""
+    return max(0, min(s.queued, s.records() - s.built))
+
+
+def take_snapshots(world: World) -> None:
+    """te_seabed_take_snapshots (the year's first sharing, after recording):
+    every coastal state keeps its last two counts of licences on unbuilt
+    levels. A split's new state starts at 0 and 0."""
+    for s in world.states.values():
+        if s.coastal:
+            s.snap2 = s.snap1
+            s.snap1 = unbuilt_licences(s)
+
+
+def fee_base_state(s: State) -> int:
+    """te_seabed_state_fee_base: licences on levels that were already unbuilt
+    at the last two first-sharings of a year, assuming levels finish in the
+    order they were queued: a grace of 12 to 24 months."""
+    return max(0, min(unbuilt_licences(s), s.snap1, s.snap2))
+
+
+def fee_base(world: World, cid) -> int:
+    """te_seabed_fee_base: fee_base_state over the country's coastal states."""
+    return sum(fee_base_state(s) for s in world.owned(cid) if s.coastal)
+
+
+def queued_by_basin(world: World, cid) -> dict:
+    """te_seabed_queued_<basin>, written by the monthly recording: the
+    licences the country's queued levels hold, by basin. A state's queued
+    licences count against its distant licences first (basin order), then
+    its own basin's: a level takes a distant licence only once the local
+    share is gone, so distant ones are normally the newest."""
+    q = dict.fromkeys(BASINS, 0)
+    for s in world.owned(cid):
+        if not s.coastal:
+            continue
+        n = unbuilt_licences(s)
+        for b in _distant_order(s) + [s.basin]:
+            k = min(n, s.lic[b])
+            q[b] += k
+            n -= k
+            if n == 0:
+                break
+    return q
+
+
+# ---------------------------------------------------------------------------
 # The yearly pass (te_seabed_yearly_pass)
 # ---------------------------------------------------------------------------
 
@@ -513,8 +582,9 @@ def fit_floors(world: World, b: str, part: list) -> dict:
 def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
     """te_seabed_yearly_pass: (1) state basins (the generator's table, fixed in
     the model); (2) te_seabed_un_update_regime (the caller sets world.regime);
-    (3) every participant records; (4) held, and at the year's first sharing
-    the floors (te_seabed_set_floors); (5) weights; (6) sharing; (7) unbuilt =
+    (3) every participant records, and at the year's first sharing every
+    coastal state takes its fee snapshots (te_seabed_take_snapshots); (4) held,
+    and at the year's first sharing the floors (te_seabed_set_floors); (5) weights; (6) sharing; (7) unbuilt =
     entitlement - held, and every country that takes no part loses any stale
     share and floor."""
     holders = {s.owner for s in world.states.values() if s.records() > 0 or s.levels > 0}
@@ -522,6 +592,8 @@ def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
                   if world.alive(cid) and (is_claimant(world, cid) or cid in holders))
     for cid in part:
         record_country(world, cid)
+    if first_of_year:
+        take_snapshots(world)
     for cid in part:
         c = world.countries[cid]
         for b in BASINS:
