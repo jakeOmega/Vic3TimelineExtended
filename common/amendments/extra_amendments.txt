@@ -1839,6 +1839,10 @@ amendment_undivided_farm_succession = {
 		law_partible
 	}
 
+	modifier = {
+		state_late_marriage_farms_add = 0.15	# the census's Late Marriage, as Primogeniture's: one heir takes the farm (late-marriage spec call 6)
+	}
+
 	possible = {
 		always = yes
 	}

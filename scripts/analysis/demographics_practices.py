@@ -63,8 +63,9 @@ def practice_states(path, carriers, regions=None, save=None):
     The model's inputs are the census's stored ones where the save holds them all (H.census_inputs, as `history`
     reads them since #916), else the save's techs, laws and modifiers. `stored` holds the save's own shares
     (te_dg_pr_*) where it has them all. The women's job share is the walk's
-    te_dg_fjob_share where the save holds it (a game with the census running), else 0; Undivided Farm Succession
-    isn't read from saves, so only Primogeniture counts as impartible here (the script reads both)."""
+    te_dg_fjob_share where the save holds it (a game with the census running), else 0. Impartible inheritance is the
+    laws' P.LM_FARMS_TYPE line in the inputs' mods; amendments aren't read from saves, so Undivided Farm Succession's
+    is missing here (the script reads both)."""
     regions = R.strategic_region_of() if regions is None else regions
     sections, svars = read_save(path) if save is None else save
     state_region = S.state_regions(sections)
@@ -73,8 +74,7 @@ def practice_states(path, carriers, regions=None, save=None):
         for sid, st, inc in sts:
             v = svars.get(sid, {}).get("vars", {})
             inp = replace(H.census_inputs(H.inputs_for(st, carriers, incorporated=inc), v),
-                          agrarian_share=st.agrarian_share, female_job_share=v.get("te_dg_fjob_share", 0.0),
-                          impartible=bool(set(P.IMPARTIBLE_LAWS) & st.laws))
+                          agrarian_share=st.agrarian_share, female_job_share=v.get("te_dg_fjob_share", 0.0))
             bands = tuple((v.get(f"te_dg_bf{b}", 0.0), v.get(f"te_dg_bm{b}", 0.0)) for b in range(P.BANDS))
             sr = state_region.get(sid, "")
             stored = H.saved_shares({sid: v}).get(sid, {})

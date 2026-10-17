@@ -207,6 +207,51 @@ class TestLateGameScript(unittest.TestCase):
         self.check(eng, ring, out)
         self.work(eng, ring, inp)
 
+    def ubi_late_step(self, blend):
+        """A late step under UBI from a state whose last late step left the blend `blend` (te_dg_old_age, with the
+        untreated's te_dg_old_age_c beside it), both sides checked against each other, the work figures at that blend."""
+        inp = _inp()
+        inp = dataclasses.replace(inp, laws=inp.laws | {"law_universal_basic_income"})
+        ring = _ring(inp)
+        ring.lx_out = {"blend": {"old_age": blend}, "untreated": {"old_age": 80.0}}
+        pop = ring.total * 1.004
+        eng = _engine(ring, inp, pop)
+        eng.vars.update(te_dg_old_age=blend, te_dg_old_age_c=80.0)
+        qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        self.assertEqual(M.working_ages_old_age(ring, qf, qm), blend)
+        eng.call("te_demog_step")
+        out = M.step(ring, inp, YEAR + 1, engine_pop=pop)
+        self.check(eng, ring, out)
+        want = M.work_figures(ring, inp, blend)
+        for name in ("wa_share", "at_work", "pensioners", "need", "past"):
+            self.close(eng.vars["te_dg_wk_past" if name == "past" else f"te_dg_{name}"], want[name], 1e-5, name)
+        return eng, ring, inp, want
+
+    def test_ubi_ends_the_working_ages_at_the_states_blend(self):
+        """Under UBI the working ages end at the state's old-age threshold (phase 2 spec §1.2): after a late step the blend
+        that step left in te_dg_old_age, not the untreated's figure this year's plain life table writes over it before
+        te_demog_work_setup reads it (an EU state in 2041: everyone past 84 counted as past the working ages, for 128)."""
+        eng, ring, inp, want = self.ubi_late_step(110.0)
+        qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        self.assertLess(M.work_figures(ring, inp, M.old_age(qf, qm))["wa_share"], want["wa_share"] - 0.01)
+
+    def test_ubi_with_no_old_age_has_no_end_to_the_working_ages(self):
+        """A blend at or past LX_OLD_AGE_NONE is the panel's Old age from: None (no age has fifteen years of life left).
+        Under UBI the working ages then have no upper end, as with no pension law: nobody, the pool included, counts as
+        past them, where an end at the blend would put everyone past it at the after-pension share."""
+        blend = float(P.LX_OLD_AGE_NONE + 2)
+        ubi = dataclasses.replace(_inp(), laws=_inp().laws | {"law_universal_basic_income"})
+        self.assertEqual(M.working_ages_end(ubi, blend)[0], P.NO_WORKING_AGE_END)
+        eng = self.ubi_late_step(blend)[0]
+        self.assertEqual(eng.vars["te_dg_wk_past"], 0)
+
+    def test_before_a_late_step_the_working_ages_end_at_this_years_table(self):
+        """A ring no late step has run on (a seed's) has no blend: this year's plain table, as before phase 3."""
+        inp = _inp()
+        ring = _ring(inp)
+        qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        self.assertEqual(M.working_ages_old_age(ring, qf, qm), M.old_age(qf, qm))
+
     def test_artificial_wombs(self):
         """Ectogenesis (§3.5): a share of planned births from women and men alike, with no maternal death."""
         inp = dataclasses.replace(_inp(), ecto_levels=3.0)

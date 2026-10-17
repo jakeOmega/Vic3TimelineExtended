@@ -154,14 +154,21 @@ class MappingTableTest(unittest.TestCase):
                         self.assertIn(instrument.step * indices[instrument.key], instrument.vanilla)
 
     def test_the_mod_does_not_change_the_vanilla_tax_rates(self):
-        # So the effective rate a country collects before migration is vanilla's.
+        # So the effective rate a country collects before migration is vanilla's. A
+        # modifier line of a script-only type is allowed: the engine never applies
+        # one (Graduated Taxation's Wealth Concentration term, 2026-10-17).
+        types = ROOT / "common/modifier_type_definitions"
+        script_only = {name for path in types.glob("*.txt")
+                       for name, body in re.findall(r"(?m)^(\w+) = \{([^}]*)\}", path.read_text(encoding="utf-8-sig"))
+                       if re.search(r"^\s*script_only = yes", body, re.M)}
+        self.assertIn("country_wealth_concentration_tax_add", script_only)
         for path in sorted((ROOT / "common/laws").glob("*.txt")):
             for key, body in load(path.relative_to(ROOT).as_posix()).items():
                 name = key.rpartition(":")[2]
                 if name in VANILLA_TAX_LAWS and isinstance(body, dict):
                     with self.subTest(path=path.name, key=key):
                         self.assertFalse([field for field in body if field.startswith("tax_modifier_")])
-                        self.assertNotIn("modifier", body)
+                        self.assertEqual(set(body.get("modifier") or {}) - script_only, set())
 
     def test_installed_game_matches_the_table_when_present(self):
         base = os.environ.get("VIC3_BASE_GAME", "")

@@ -135,7 +135,7 @@ the sex's rate.
 
 | Table | Starting value | Source |
 |---|---|---|
-| Working-age start (calendar), ages 10–14 | Child Labor Allowed 0.3, Restricted Child Labor 0.1, Compulsory Primary School 0; 1 from 15 | parent §7 |
+| Working-age start (calendar), ages 10–14 | Child Labor Allowed 0.3, Restricted Child Labor 0.1, Compulsory Primary School 0; 1 from 15 (since 2026-10-17 a census-only line on the laws, `state_child_labor_participation_add`) | parent §7 |
 | Capacity (biological) | 1 to 59, 0.95 at 60–64, 0.85 at 65–69, 0.7 at 70–74, 0.5 at 75–79, 0.3 at 80–84, 0.1 from 85 | late-game §2.1 |
 | After-pension share | 0.15, × capacity | late-game §2.1 |
 | Men's rate | 0.92 | late-game §2.1 |

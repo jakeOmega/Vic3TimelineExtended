@@ -42,7 +42,6 @@ class Inputs:
     medicine: dict | None = None         # the drifted access and treatments the step holds; None = at the targets
     practices: dict = field(default_factory=dict)   # {practice: share 0-1}: lm Late Marriage, bs Birth Spacing
     agrarian_share: float = 0.0          # Peasants and Farmers over the state's people (the walk's te_dg_agr_share)
-    impartible: bool = False             # the owner holds Primogeniture or Undivided Farm Succession
     low_share: float = 0.0               # the lower strata's share of people (te_dg_low_share, from the walk)
     pension_age: float | None = None     # the owner's pension age under Old Age Pension; None = the Standard position
     birth_limit: float = 0.0             # Birth Limit's part of P.DESIRED_TYPE (its modifier's line: 0, -0.3 or -0.45;
@@ -344,11 +343,11 @@ def practice_erosion(practice, inp):
 
 def practice_target(practice, inp, start):
     """Where a practice's share drifts (§4.2, §4.3; te_demog_pr_target_<P>): the start less its erosion, plus Late
-    Marriage's drivers, impartible inheritance on the farms and women's paid work, within 0-1."""
+    Marriage's drivers, impartible inheritance on the farms (the laws' P.LM_FARMS_TYPE line x the agrarian share:
+    Primogeniture, Undivided Farm Succession) and women's paid work, within 0-1."""
     target = start * (1 - practice_erosion(practice, inp))
     if practice == "lm":
-        if inp.impartible:
-            target += P.LM_INHERITANCE * inp.agrarian_share
+        target += inp.mods.get(P.LM_FARMS_TYPE, 0.0) * inp.agrarian_share
         target += P.LM_WOMENS_WORK * inp.female_job_share * female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
     return clamp(target, 0.0, 1.0)
 
@@ -396,23 +395,20 @@ def people_mean(pairs):
     return sum(p * v for p, v in held) / people if people > 0 else None
 
 
-def fl_church(laws):
-    """The church law's weight on Family Limitation's literacy term (P.FL_CHURCH; a State Religion variant is a
-    State Religion)."""
-    for law, weight in P.FL_CHURCH.items():
-        if law in laws:
-            return weight
-    if {"law_millet_system", "law_people_of_the_book"} & set(laws):
-        return P.FL_CHURCH["law_state_religion"]
-    return P.FL_CHURCH_DEFAULT
+def fl_church(literacy_mult):
+    """The church laws' weight on Family Limitation's literacy term (te_demog_fl_church): 1 + their P.FL_LITERACY_TYPE
+    total (State Religion and its variants -0.5, Total Separation and State Atheism +0.5), at least 0."""
+    return max(0.0, 1 + literacy_mult)
 
 
-def fl_target(agrarian_share, literacy, laws, undivided=False):
+def fl_target(agrarian_share, literacy, laws, undivided=False, literacy_mult=0.0):
     """Where a country's Family Limitation rises (te_demog_fl_target): smallholders under Forced Heirship (FL_HEIRSHIP x
     the agrarian share, not with Undivided Farm Succession: the rural cut it folds in), plus literacy above
-    FL_LITERACY_FROM read through the church law, within 0-1. Its people-weighted farm share and literacy."""
+    FL_LITERACY_FROM read through the church laws (literacy_mult, their P.FL_LITERACY_TYPE total), within 0-1. Its
+    people-weighted farm share and literacy."""
     heirship = P.FL_HEIRSHIP * agrarian_share if "law_equal_inheritance" in laws and not undivided else 0.0
-    lit = P.FL_LITERACY * clamp((literacy - P.FL_LITERACY_FROM) / P.FL_LITERACY_SPAN, 0.0, 1.0) * fl_church(laws)
+    lit = (P.FL_LITERACY * clamp((literacy - P.FL_LITERACY_FROM) / P.FL_LITERACY_SPAN, 0.0, 1.0)
+           * fl_church(literacy_mult))
     return clamp(heirship + lit, 0.0, 1.0)
 
 
@@ -499,11 +495,8 @@ def band_value(table, age):
 
 
 def child_work_share(inp):
-    """The 10-14s' participation by the childrens'-rights law (te_demog_child_work)."""
-    for law, share in P.CHILD_WORK_SHARE.items():
-        if law in inp.laws:
-            return share
-    return P.CHILD_WORK_SHARE_DEFAULT
+    """The 10-14s' participation, the childrens'-rights laws' P.CHILD_WORK_TYPE line within 0-1 (te_demog_child_work)."""
+    return clamp(inp.mods.get(P.CHILD_WORK_TYPE, 0.0), 0.0, 1.0)
 
 
 def start_factor(inp, age):
@@ -635,8 +628,17 @@ def working_ages_end(inp, old_age):
     if kind == 1:
         return (P.PENSION_AGE["standard"] if inp.pension_age is None else inp.pension_age), True, True
     if kind == 2:
-        return old_age, True, False
+        # an old age at or past LX_OLD_AGE_NONE is the panel's None: no age has fifteen years left, so no end
+        return (old_age if old_age < P.LX_OLD_AGE_NONE else float(P.NO_WORKING_AGE_END)), True, False
     return float(P.NO_WORKING_AGE_END), False, False
+
+
+def working_ages_old_age(ring, qf, qm):
+    """The old-age threshold UBI and Post-Scarcity end the working ages at (te_demog_work_setup), read before the step:
+    after a late step the state's blend it left (ring.lx_out; te_dg_old_age, kept from te_demog_prepare's plain table,
+    which writes the untreated's figure over it), otherwise this year's plain table."""
+    blend = (ring.lx_out or {}).get("blend")
+    return blend["old_age"] if blend else old_age(qf, qm)
 
 
 def work_figures(ring, inp, old_age):

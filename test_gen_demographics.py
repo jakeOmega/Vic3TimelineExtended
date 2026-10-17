@@ -66,13 +66,15 @@ class TestGenerated(unittest.TestCase):
         self.assertIn("value = 475", self.values)      # 0.00475 a month x 100,000
         self.assertIn("value = 80", self.values)       # 0.00080 at SoL 35+
 
-    def test_land_tenure_variants_take_their_parents_value(self):
-        values = gen.land_tenure_values(ROOT)
-        self.assertEqual(len(values), 9)
-        self.assertEqual(values["law_manorialism"], values["law_serfdom"])
-        self.assertEqual(values["law_latifundias"], values["law_tenant_farmers"])
-        self.assertEqual(values["law_expanded_latifundias"], values["law_tenant_farmers"])
-        self.assertEqual(values["law_homesteading"], values["law_peasant_proprietorship"])
+    def test_no_law_term_is_generated(self):
+        """Since 2026-10-17 the laws carry their census and Wealth Concentration terms as modifier lines, so the
+        generated values read modifier:, never has_law (the land term is hand-written in te_demog_values.txt;
+        test_demographics_modifiers pins the lines on the laws)."""
+        self.assertNotIn("te_demog_wc_land_term = {", self.values)
+        for name, typ in (("te_demog_child_work", P.CHILD_WORK_TYPE), ("te_demog_pr_target_lm", P.LM_FARMS_TYPE)):
+            body = self.values.split(f"{name} = {{", 1)[1].split("\n}\n", 1)[0]
+            self.assertIn(f"modifier:{typ}", body, name)
+            self.assertNotIn("has_law", body, name)
 
     def test_means_read_the_modifier(self):
         body = self.values.split("te_demog_means = {", 1)[1].split("\n}\n", 1)[0]
@@ -273,8 +275,7 @@ class TestGenerated(unittest.TestCase):
             self.assertIn(f"value = te_demog_pr_seed_{p}", self.values.split(f"te_demog_pr_target_{p} = {{", 1)[1])
             self.assertIn(f"multiply = te_demog_pr_term_{p}", self.values.split("te_demog_pr_terms = {", 1)[1])
         lm = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertIn("te_inh_has_undivided_farms = yes", lm)
-        self.assertIn("has_law = law_type:law_primogeniture", lm)
+        self.assertIn(f"add = {{ value = var:te_dg_agr_share multiply = modifier:{P.LM_FARMS_TYPE} }}", lm)
         erosion_lm = self.values.split("te_demog_pr_erosion_lm = {", 1)[1].split("\n}\n", 1)[0]
         self.assertNotIn("te_dg_acc", erosion_lm, "health care erodes Birth Spacing only")
         erosion_bs = self.values.split("te_demog_pr_erosion_bs = {", 1)[1].split("\n}\n", 1)[0]
@@ -283,31 +284,14 @@ class TestGenerated(unittest.TestCase):
         self.assertNotIn(f"modifier:{P.ACCESS_TYPE}", erosion_bs)
         self.assertIn(f"te_demog_k_practice_rate = {{ value = {gen.lit(P.PRACTICE_RATE)} }}", self.values)
 
-    @staticmethod
-    def _owner_block_holds(target, conditions):
-        """(inside, outside): whether every condition sits in the limit's owner = { } block, and whether any appears
-        outside it. Brace matching, so a nested OR stays inside."""
-        limit = target[target.index("limit = {"):]
-        start = limit.index("owner = {")
-        depth, i = 0, start
-        while True:
-            depth += {"{": 1, "}": -1}.get(limit[i], 0)
-            i += 1
-            if depth == 0 and limit[i - 1] == "}":
-                break
-        inner, outer = limit[start:i], target.replace(limit[start:i], "")
-        return all(c in inner for c in conditions), any(c in outer for c in conditions)
-
-    def test_late_marriages_inheritance_reads_the_owner(self):
-        """Stop B, M1: te_inh_has_undivided_farms reads a country link (active_law:lawgroup_inheritance), so both of
-        the inheritance conditions must sit inside te_demog_pr_target_lm's owner = { } block. _OwnerEngine reads owner
-        and state alike, so only this static check catches a slip."""
-        conditions = ("has_law = law_type:law_primogeniture", "te_inh_has_undivided_farms = yes")
+    def test_late_marriages_inheritance_reads_the_states_line(self):
+        """Stop B, M1 read the inheritance conditions inside an owner = { } block, since te_inh_has_undivided_farms
+        reads a country link. Since 2026-10-17 Primogeniture and Undivided Farm Succession carry a state type, which
+        reaches the state from the country: the target reads it in state scope, with no owner link and no law test."""
         target = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertEqual(self._owner_block_holds(target, conditions), (True, False))
-        slipped = ("limit = {\n\tOR = {\n\t\towner = { has_law = law_type:law_primogeniture }\n"
-                   "\t\tte_inh_has_undivided_farms = yes\n\t}\n}")
-        self.assertNotEqual(self._owner_block_holds(slipped, conditions), (True, False), "the check catches a slip")
+        self.assertIn(f"multiply = modifier:{P.LM_FARMS_TYPE}", target)
+        for gone in ("owner", "has_law", "te_inh_has_undivided_farms"):
+            self.assertNotIn(gone, target)
 
     def test_the_start_ladders_give_every_state_its_start(self):
         """Each ladder, read in order as the engine reads it (a later if wins), gives every land state region the

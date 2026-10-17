@@ -271,7 +271,7 @@ Census: Deaths.
 
 Under Full the census also sets each state's workforce, from who is of working
 age and how many of them work. The working ages run from 15 (children of 10 to
-14 work at a share under the child labor laws) to the pension age, or with no
+14 work at a share each child labor law lists among its modifiers) to the pension age, or with no
 pension law for as long as people's health allows. Men of working age mostly
 work; how many women work depends on the women's rights laws, the technologies
 that free women's time and the state's lower strata, whose women work under any
@@ -347,7 +347,7 @@ them, and some break the figure down for your capital.
 | Section | What it shows |
 |---|---|
 | Overview | Median age, children per woman (its tooltip gives the mean age at childbirth), life expectancy (100+ past 100), the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left; None when no age has), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short; once longevity care exists, Living to 100 and the mean biological age beside the calendar one. |
-| Work and Retirement | The workforce as the working-age share times the share at work, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age with the conscription they give. |
+| Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age with the conscription they give. |
 | Longevity | Once longevity care exists: the share of people within its reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Population pyramid | People by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |

@@ -627,6 +627,8 @@ The panel shows the target's terms as bars (style guide rule 5), and will show a
 | Economic laws (owner, 2026-10-09) | national | Laissez-Faire +10, Extraction Economy +5, Interventionism −5; Guilds and Chartered Monopolies and Freedom of Contract +5, Antitrust Enforcement (`law_trust_busting`) and Regulated Utilities −5; others 0; capped ±15 | how freely capital compounds and combines: top-decile wealth shares rose to about 1910 under laissez-faire and fell to the 1970s under regulation, which the other terms alone ran backwards |
 | Return on capital against growth (later phase) | national | from the banking system's policy rate against GDP growth | Piketty's r > g; only where the banking system runs |
 
+**Built as law modifiers (2026-10-17).** The land tenure, taxes on wealth and economic laws rows sit on the laws as script-only types (`state_wealth_concentration_land_add`, `country_wealth_concentration_tax_add`, `country_wealth_concentration_economy_add`), each variant carrying its parent's value, so a law's tooltip says what it does. They are not census inputs (Wealth Concentration runs whatever the Demographics rule), so a release keeps them. No group holds two of the laws, so no figure moves.
+
 **Shocks** jump the score instead of moving its target. They follow Scheidel's four levellers (*The Great Leveler*,
 2017):
 - **War** (every state): each year of total mobilisation −1, up to −10 a war; capitulation −5.
@@ -1127,7 +1129,9 @@ to be sane.
   neighbours', as the decline spread from France to Wallonia, Switzerland and Catalonia. Forced Heirship's rural
   birth cut (`inh_forced_heirship_rural`, −15% × the agrarian share) tells the same story, so the two should be
   folded together when this is built. Late Marriage and Birth Spacing, two practices on the same machinery, per
-  state: `2026-10-10-demographics-late-marriage-design.md`.
+  state: `2026-10-10-demographics-late-marriage-design.md`. (Built 2026-10-12; since 2026-10-17 the church law's
+  weight is a census-only line on the laws, `country_family_limitation_literacy_mult`: State Religion and its
+  variants −0.5, Total Separation and State Atheism +0.5.)
   **Built in phase 3 (2026-10-12; owner: build it as proposed, national).** Under Full only, so France keeps history's
   +0.6 outside it. Two choices the proposal left open: the share rises only (toward its target and toward its
   neighbours'), since a practice once learned isn't unlearned and France's would otherwise leak to its neighbours'

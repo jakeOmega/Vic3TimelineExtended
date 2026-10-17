@@ -34,6 +34,18 @@ and the urban planning institution acts through crowding tolerance rather than a
 The tax code's dividend term stays in script: it is a rate, not a law. Women's-rights work share gets its own type:
 vanilla's `state_working_adult_ratio_add` on Women in the Workplace is a different quantity.
 
+**Stage 3, built in part (2026-10-17).** The land tenure, Graduated Taxation and economic laws rows are three types,
+not two: `state_wealth_concentration_land_add` (state scope, x the agrarian share, read in the state's term),
+`country_wealth_concentration_tax_add` and `country_wealth_concentration_economy_add`, because the Wealth panel shows
+taxes and the economic laws as separate bars. They sit in `demographics_wealth_concentration_types.txt`, not this
+design's census file: Wealth Concentration runs whatever the Demographics rule, and the release script comments out
+every type of the census file. The same day the childrens'-rights laws' 10-14s at work, impartible inheritance's Late
+Marriage (on Primogeniture and the Undivided Farm Succession amendment, check e's answer) and the church laws' weight on
+Family Limitation became census types. Not built: `FEMALE_WORK_SHARE` (since phase 2 step 2 the census's own count of
+women at work splits work deaths under Full, so a law line would state a share the census no longer uses there),
+`FAMILY_TRANSPORT_TECHS` (technologies, not laws) and #822's inheritance targets (the inheritance laws' own tooltips
+already give their target).
+
 ## Ruling: every type in state scope (owner, 2026-10-10)
 
 All eight types are `state_*`, one for each term (seven from stages 1–2, and phase 2 step 4's natural fertility), and the census reads each with `modifier:` in state scope.

@@ -3,10 +3,10 @@
 Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md, Decision 2:
 the values sit beside the techs, laws and institutions that carry them, and the model takes
 modifier totals. load_carriers() reads every carrier from a narrow ModState (technologies,
-laws and institutions; vanilla from the committed vanilla_parsed/ snapshot, so no game is
-needed). totals() sums what one state reads, given its owner's techs, laws and institution
-investment levels:
-    a technology's or law's `modifier`      every state the country owns (states inherit it)
+laws, institutions and amendments; vanilla from the committed vanilla_parsed/ snapshot, so no
+game is needed). totals() sums what one state reads, given its owner's techs, laws, amendments
+and institution investment levels:
+    a technology's, law's or amendment's `modifier`   every state the country owns (states inherit it)
     a law's `institution_modifier`          per level of the law's institution, incorporated states
     an institution's own `modifier`         per level, incorporated states
 """
@@ -25,8 +25,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import demographics_params as P  # noqa: E402
 
 # ModState entity type -> directory under common/.
-ENTITY_TYPES = {"Technologies": "technology/technologies", "Laws": "laws", "Institutions": "institutions"}
-KINDS = ("technology", "law", "law_institution", "institution")
+ENTITY_TYPES = {"Technologies": "technology/technologies", "Laws": "laws", "Institutions": "institutions",
+                "Amendments": "amendments"}
+KINDS = ("technology", "law", "law_institution", "institution", "amendment")
 
 
 @dataclass(frozen=True)
@@ -74,7 +75,8 @@ def _lines(block, types):
 
 
 def load_carriers(root=ROOT, types=P.DEMOG_TYPES):
-    """Every line that carries one of `types`, from techs, laws and institutions."""
+    """Every line that carries one of `types`, from techs, laws, institutions and amendments (Undivided Farm
+    Succession's Late Marriage line, 2026-10-17)."""
     types = set(types)
     ms = _state(root)
     out = []
@@ -91,23 +93,26 @@ def load_carriers(root=ROOT, types=P.DEMOG_TYPES):
     for key, entry in ms.get_data("Institutions").items():
         for t, v in _lines(_u(entry).get("modifier"), types):
             out.append(Carrier("institution", key, t, v, key))
+    for key, entry in ms.get_data("Amendments").items():
+        for t, v in _lines(_u(entry).get("modifier"), types):
+            out.append(Carrier("amendment", key, t, v))
     return out
 
 
 def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_TYPES,
-           institution_impact=1.0):
-    """{type: total} that one state reads: its owner's techs and laws and, in an incorporated
+           institution_impact=1.0, amendments=()):
+    """{type: total} that one state reads: its owner's techs, laws and amendments and, in an incorporated
     state, each institution line times the owner's investment level in that institution, times the
     state's Impact of Institutions (1 + state_institution_impact_add, at least 0: Local Vernacular's -0.05,
     obstinance's -1.0 x its share; the probe session, 2026-10-11)."""
-    techs, laws, levels = set(techs), set(laws), institutions or {}
+    techs, laws, levels, amendments = set(techs), set(laws), institutions or {}, set(amendments)
     out = {t: 0.0 for t in types}
     for c in carriers:
         if c.type not in out:
             continue
         if c.kind == "technology" and c.key in techs:
             out[c.type] += c.value
-        elif c.kind == "law" and c.key in laws:
+        elif (c.kind == "law" and c.key in laws) or (c.kind == "amendment" and c.key in amendments):
             out[c.type] += c.value
         elif c.kind == "law_institution" and c.key in laws and incorporated:
             out[c.type] += c.value * levels.get(c.institution, 0) * institution_impact

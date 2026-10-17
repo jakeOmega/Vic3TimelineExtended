@@ -588,5 +588,41 @@ class TestPanelGates(unittest.TestCase):
             self.assertIn("te_demog_figure_row", _gui_type(gui, name), name)
 
 
+class TestWorkforceRow(unittest.TestCase):
+    """The Workforce row adds up: working age x the working ages' own share at work + the workers past their end =
+    te_demog_wk_share, the middle term at most 100% (an EU state in 2041 read "49% × 100% = 63%", its stored share at
+    work 127% with the workers past the end counted in it)."""
+
+    def test_working_age_times_at_work_plus_past_the_end(self):
+        for wa, at, past in ((0.5, 1.274, 0.141), (0.62, 0.8, 0.02), (0.7, 0.5, 0.0), (0.4, 0.9, 0.004)):
+            eng = _state(wa=wa, at=at)
+            eng.vars["te_dg_wk_past"] = past
+            shown = eng.value("te_demog_wk_at_work_shown")
+            self.assertLessEqual(shown, 1.0, (wa, at, past))
+            self.assertAlmostEqual(wa * shown + past, eng.value("te_demog_wk_share"), places=5, msg=(wa, at, past))
+            self.assertEqual(eng.value("te_demog_wk_past_pct"), round(100 * past), (wa, at, past))
+
+    def test_a_state_with_no_past_figure_yet(self):
+        """An old save's state, before its first count under phase 2 step 2: no te_dg_wk_past, no third term."""
+        eng = _state(wa=0.6, at=0.9)
+        self.assertAlmostEqual(eng.value("te_demog_wk_at_work_shown"), 0.9, places=5)
+        self.assertEqual(eng.value("te_demog_wk_past_pct"), 0)
+
+    def test_the_loc_shows_the_third_term_only_when_there_is_one(self):
+        loc = _text(ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml")
+        for key, scope in (("te_demog_wk_workforce_value", "GetPlayer"), ("te_demog_st_wk_workforce_value", "State")):
+            line = next(x for x in loc.splitlines() if x.startswith(f" {key}:"))
+            self.assertIn("te_demog_wk_at_work_shown", line, key)
+            self.assertIn(f"GreaterThan_CFixedPoint( {scope}.MakeScope.ScriptValue('te_demog_wk_past_pct'), "
+                          "'(CFixedPoint)0' )", line, key)
+
+    def test_the_pops_base(self):
+        """The hover's base under the workforce term: the walk's people-weighted pop bases, else the define's."""
+        self.assertAlmostEqual(_state(wbase=0.27).value("te_demog_wf_pop_base"), 0.27, places=5)
+        eng = _state()
+        del eng.vars["te_dg_wbase"]
+        self.assertAlmostEqual(eng.value("te_demog_wf_pop_base"), P.WORKING_ADULT_BASE, places=5)
+
+
 if __name__ == "__main__":
     unittest.main()
