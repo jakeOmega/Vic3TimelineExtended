@@ -302,34 +302,79 @@ counts those states twice, their port levels, and your navy in proportion to the
 coast you have there. In any other basin it is a twentieth of your navy, so you
 can claim far from home, but only a small share.
 
-A licence belongs to the level, not to the country. It is recorded on the state
-the mine stands in and passes with it: conquer a mined state and its licences
-come with it. Built levels are never taken away. If your share in a basin falls
-below what you hold there, you keep every level and can't take more licences
-from that basin until you are back under it; levels you downsize, or that are
-destroyed, give their licences back to your share. A new level
-takes its own basin's licence first. Once your share there is used up it takes
-one from another basin and works at -25% throughput (Long-Haul Seabed
-Operations), until a local licence frees up and replaces it on its own. The
-building's requirements list how many licences you have to spare and which kind
-the next level would take.
+A licence is held by a level, built or queued, and stays with it for good. It
+belongs to the state the mine stands in and passes with it: conquer a mined
+state and its licences come with it. Built levels are never taken away. If your
+share in a basin falls below what you hold there, you keep every level and
+can't take more licences from that basin until you are back under it; levels
+you downsize, or that are destroyed, give their licences back. A new level
+takes its own basin's licence first. Once your claims there are used up it
+takes one from another basin and works at -25% throughput (Long-Haul Seabed
+Operations), until a local claim frees up and replaces it on its own. The
+building's requirements list how many licences you have to spare and which
+kind the next level would take.
 
-The Seabed tab of the Timeline Extended window shows your licences, your room to
-build and a row for each basin you claim in, and sets your seabed policy. A
-Seabed Licences tile on every coastal state's panel shows the same national
-figures.
+#### Claims, protection and the holding fee
+
+What your share entitles you to and no level holds yet are your seabed claims.
+Each January divides them again, so a rival's naval buildup can take them. On
+Sponsor Contractors the January sharing leaves you at least three quarters of
+each basin's claims, so they fade by a quarter a year at most; on the other
+policies they are divided again in full. A sharing in the middle of the year,
+when a new claimant appears, honours January's protection without adding to it.
+A Scramble ends all protection. When the Law of the Sea comes into force after
+open years, protected claims can come out of the reserved half, as the real
+convention's pioneer investors kept the sites they had registered; they fade by
+a quarter a year like any other, so the reserved half refills.
+
+Queueing a level turns a claim into a licence at once, so you can hold a
+basin's claims by queueing far ahead. That costs a holding fee: a licence on a
+level still unbuilt a year after it was queued pays 2% of a level's base output
+value a week (about 900), half the royalty, until the level is built. Building
+at a normal pace never pays it, whoever queued the level. Under the Regulated
+regime a party's fee goes to the same place as its royalties; anyone else's is
+simply an expense. The Budget Breakdown lists it under United Nations.
+
+You can Relinquish a basin's claims from your own row in that basin's list of
+claimants: they are gone at once, so Sponsor Contractors' influence falls with
+them, and the next sharing divides them among the other claimants. You claim
+nothing there until you press Claim Again, which counts from the sharing after.
+Licences on your levels are untouched.
+
+#### The Seabed tab
+
+The Seabed tab of the Timeline Extended window answers four questions. Its
+overview says how many more Deep-Sea Mines you can queue (and how many at home,
+without the long-haul penalty), your licences and any holding fee, your
+long-haul levels, your unused claims and what next January can take of them,
+your policy and when it can next change, and the regime. The Ocean Basins table
+has a row for each basin: Free is your claims there, green where you have coast
+to build on at full throughput; Pool is a bar of the whole pool, from your
+mines and claims to rivals' mines and the rivals' claims a buildup could win;
+Weight is your share of the basin's claim weight; +1 licence is about how much
+more navy would win you one more licence at the next sharing, a figure that is
+enough and often more than needed. Click a basin to see its claimants, largest
+share first, with your own row and its Relinquish button. A Seabed Licences
+tile on every coastal state's panel shows the same national figures.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
 | Scientific Survey (default) | none | ×0.25 | You aren't building Deep-Sea Mines yet. |
-| Sponsor Contractors | 50 | ×1 | You want licences: the lawful route under the Law of the Sea. |
-| Unilateral Licensing | 150 | ×1, navy counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
+| Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licences, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
+| Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, navy counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 
 A new policy holds its influence from the day you choose it; its weight counts
-from the next January sharing. AI countries take up Sponsor Contractors when it
-would bring them a licence and Tech-Critical Metals sell above base price. A few
-great powers, mostly those with poor UN standing or a rival claimant, choose
-Unilateral Licensing.
+from the next sharing. Any change holds your policy for five years, whichever
+way you change. Two changes are open sooner: Unilateral Licensing, once a rival
+in one of your home basins has switched to it since your last change, and
+Scientific Survey, while your influence is in deficit. Sponsor Contractors'
+cost has no cap, so claiming a whole basin is expensive; to cut it, build on
+the claims, relinquish a basin, or drop to Scientific Survey when you can. AI
+countries take up Sponsor Contractors when it would bring them a licence and
+Tech-Critical Metals sell above base price, and more readily the more unused
+claims they hold. A few great powers, mostly those with poor UN standing or a
+rival claimant, choose Unilateral Licensing. The AI keeps to the five-year lock
+too.
 
 ### New industries
 
