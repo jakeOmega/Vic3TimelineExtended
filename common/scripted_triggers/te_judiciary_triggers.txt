@@ -1,0 +1,35 @@
+﻿# ======================================================================
+#  JUDICIARY — scripted triggers (country scope)
+#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+# ======================================================================
+
+# A regime whose executive answers to nobody: its courts challenge nothing
+# (spec § 3.4). The line sits on Autocracy, its variants, Single-Party State
+# and Algorithmic Governance (te_judiciary_law_injections.txt).
+te_jud_paper_court = {
+	modifier:country_court_challenges_ignored_bool = yes
+}
+
+# An elected government (Statutory Courts' two lines, spec § 2.3): a voting
+# law, or Anarchy, which the mod counts as electoral
+# (te_tradition_of_free_elections.txt).
+te_jud_elected_government = {
+	OR = {
+		has_law = law_type:law_landed_voting
+		has_law = law_type:law_wealth_voting
+		has_law = law_type:law_census_voting
+		has_law = law_type:law_universal_suffrage
+		has_law = law_type:law_anarchy
+	}
+}
+
+# A Sunni, Shia or Ibadi state religion: the three religions with
+# heritage_islamic (extra_history.txt tests the same way for Islamic
+# inheritance).
+te_jud_is_islamic_state = {
+	OR = {
+		country_has_state_religion = rel:sunni
+		country_has_state_religion = rel:shiite
+		country_has_state_religion = rel:ibadi
+	}
+}

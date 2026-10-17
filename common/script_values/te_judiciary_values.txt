@@ -1,0 +1,68 @@
+﻿# ======================================================================
+#  JUDICIARY — script values (country scope)
+#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md § 3
+# ======================================================================
+
+# The ceiling Judicial Independence moves toward (spec § 3.1): the court
+# law's tooltip line, times the paper court's (-50%). Read from the modifier
+# sums, so a later law or amendment moves it without a script edit. A sum
+# can lag a law change by a tick: te_judiciary_events.1 waits a week, and the
+# score is first seeded at a monthly pulse.
+te_jud_ceiling = {
+	value = modifier:country_judicial_independence_ceiling_add
+	multiply = {
+		value = 1
+		add = modifier:country_judicial_independence_ceiling_mult
+	}
+	min = 0
+	max = 100
+}
+
+# Where an unset score starts (spec § 5).
+te_jud_seed_value = {
+	value = te_jud_ceiling
+	multiply = 0.5
+}
+
+# The scaled modifier's multiplier: score / 100. Stored in
+# var:te_jud_modifier_mult by te_jud_refresh, never removed.
+te_jud_modifier_mult_value = {
+	value = var:te_judicial_independence
+	divide = 100
+}
+
+# The conditional lines' multipliers (te_jud_refresh): each unit modifier
+# times the law's tooltip line.
+te_jud_votes_mult_value = {
+	value = modifier:country_legitimacy_from_votes_if_elected_add
+}
+
+te_jud_authority_mult_value = {
+	value = modifier:country_authority_if_unelected_add
+}
+
+te_jud_capture_mult_value = {
+	value = modifier:country_override_with_algorithmic_governance_add
+}
+
+# How far the score stands above the ceiling (spec § 3.5). Read only where
+# the score exists (te_judiciary_events.1's trigger).
+te_jud_overhaul_gap = {
+	value = var:te_judicial_independence
+	subtract = te_jud_ceiling
+}
+
+te_jud_overhaul_mult_value = {
+	value = te_jud_overhaul_gap
+	divide = 100
+}
+
+# The score for loc, 0 where there is none yet (the concept, the modifier's
+# description).
+te_jud_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_judicial_independence }
+		value = var:te_judicial_independence
+	}
+}

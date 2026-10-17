@@ -1,0 +1,53 @@
+﻿# ======================================================================
+#  JUDICIARY — static modifiers
+#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+# ======================================================================
+
+# Judicial Independence at 100 (spec § 3.2). te_jud_refresh, its only
+# writer, applies it with multiplier score / 100.
+te_judicial_independence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 10
+	country_credit_standing_add = -0.005
+	state_capitalists_investment_pool_efficiency_mult = 0.1
+	political_movement_radicalism_from_enactment_disapproval_mult = -0.2
+}
+
+# Statutory Courts' two conditional lines (spec § 2.3), one unit each;
+# te_jud_refresh applies whichever holds, with multiplier = the law's line.
+te_jud_votes_legitimacy = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_votes_add = 1
+}
+
+te_jud_unelected_authority = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_authority_add = 1
+}
+
+# Algorithmic Jurisprudence under Algorithmic Governance (spec § 2.6), one
+# unit; te_jud_refresh applies it with multiplier = the law's line.
+te_jud_algorithmic_capture = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legislative_override_capacity_add = 1
+}
+
+# The overhaul shock at a gap of 100 (spec § 3.5); te_judiciary_events.1
+# applies it for 5 years, decaying, with multiplier gap / 100.
+te_jud_court_overhaul = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_risk_premium_add = 0.02
+	country_legitimacy_base_add = -10
+}
+
+# Entrenchment (spec § 3.4): enactment modifiers, the two tiers the laws'
+# tooltip lines name, added at on_law_enactment_started.
+te_jud_constitutional_challenge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.1
+}
+
+te_jud_supremacy_challenge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_law_enactment_success_add = -0.15
+}

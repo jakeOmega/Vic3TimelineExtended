@@ -232,6 +232,7 @@ concept_ministry_system = {}
 
 # Government & Lawmaking
 concept_legislative_override_capacity = {}
+concept_judicial_independence = {}
 
 # Strategic Reserve
 concept_st_res_rate_setting = {}

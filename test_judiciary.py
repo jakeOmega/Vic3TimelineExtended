@@ -29,6 +29,9 @@ INJECTIONS = os.path.join(REPO, "common", "laws", "te_judiciary_law_injections.t
 EXTRA_LAWS = os.path.join(REPO, "common", "laws", "extra_laws.txt")
 GROUPS = os.path.join(REPO, "common", "law_groups", "extra_law_groups.txt")
 TYPES = os.path.join(REPO, "common", "modifier_type_definitions", "judiciary_modifier_types.txt")
+VALUES = os.path.join(REPO, "common", "script_values", "te_judiciary_values.txt")
+TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "te_judiciary_triggers.txt")
+MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "te_judiciary_modifiers.txt")
 
 COURT_LAWS = (
     "law_executive_tribunals",
@@ -129,6 +132,14 @@ SPEC_LAWS = {
     },
 }
 
+
+# Spec § 3.2: the score's modifier at 100.
+SCORE_MODIFIER = {
+    "country_legitimacy_base_add": "10",
+    "country_credit_standing_add": "-0.005",
+    "state_capitalists_investment_pool_efficiency_mult": "0.1",
+    "political_movement_radicalism_from_enactment_disapproval_mult": "-0.2",
+}
 
 def _parse(path):
     parser = ParadoxFileParser()
@@ -240,6 +251,64 @@ class LawsTest(unittest.TestCase):
         # The owner's requirement (spec Decisions): otherwise it would be a
         # Distribution of Power law.
         self.assertIn("the government still governs", _loc_lines()["law_judicial_supremacy_desc"])
+
+
+class ScoreDefinitionsTest(unittest.TestCase):
+    def setUp(self):
+        self.mods = {k: _body(v) for k, v in _parse(MODIFIERS).items()}
+
+    def _value(self, modifier, key):
+        return _body(self.mods[modifier][key])
+
+    def test_ceiling_reads_the_laws_lines(self):
+        block = _block(_read(VALUES), "te_jud_ceiling")
+        self.assertIn("value = modifier:country_judicial_independence_ceiling_add", block)
+        self.assertIn("add = modifier:country_judicial_independence_ceiling_mult", block)
+        self.assertNotIn("has_law", block, "the ceiling is the tooltip's number, not a law check")
+
+    def test_paper_court_reads_its_line(self):
+        block = _block(_read(TRIGGERS), "te_jud_paper_court")
+        self.assertIn("modifier:country_court_challenges_ignored_bool = yes", block)
+
+    def test_score_modifier_matches_spec(self):
+        body = {k: _body(v) for k, v in self.mods["te_judicial_independence"].items() if k != "icon"}
+        self.assertEqual(body, SCORE_MODIFIER)
+
+    def test_unit_modifiers(self):
+        # Each is applied with multiplier = the law's tooltip line.
+        self.assertEqual(self._value("te_jud_votes_legitimacy", "country_legitimacy_govt_total_votes_add"), "1")
+        self.assertEqual(self._value("te_jud_unelected_authority", "country_authority_add"), "1")
+        self.assertEqual(self._value("te_jud_algorithmic_capture", "country_legislative_override_capacity_add"), "1")
+        values = _read(VALUES)
+        for name, line in (("te_jud_votes_mult_value", "country_legitimacy_from_votes_if_elected_add"),
+                           ("te_jud_authority_mult_value", "country_authority_if_unelected_add"),
+                           ("te_jud_capture_mult_value", "country_override_with_algorithmic_governance_add")):
+            self.assertIn("value = modifier:" + line, _block(values, name))
+
+    def test_challenge_tiers_match_the_laws(self):
+        # The engine needs a named enactment modifier, so the laws' lines pick
+        # one of two tiers (te_jud_enactment_started). Every line must be a tier.
+        self.assertEqual(self._value("te_jud_constitutional_challenge", "country_law_enactment_success_add"), "-0.1")
+        self.assertEqual(self._value("te_jud_supremacy_challenge", "country_law_enactment_success_add"), "-0.15")
+        lines = set()
+        for body in _parse(LAWS).values():
+            modifier = _modifier(_body(body))
+            for key in ("country_constitutional_law_enactment_success_add", "country_rights_law_enactment_success_add"):
+                if key in modifier:
+                    lines.add(modifier[key])
+        self.assertLessEqual(lines, {"-0.1", "-0.15"})
+
+    def test_overhaul(self):
+        self.assertEqual(self._value("te_jud_court_overhaul", "country_risk_premium_add"), "0.02")
+        self.assertEqual(self._value("te_jud_court_overhaul", "country_legitimacy_base_add"), "-10")
+
+    def test_loc(self):
+        keys = _loc_keys()
+        for key in ("concept_judicial_independence", "te_judicial_independence", "te_jud_votes_legitimacy",
+                    "te_jud_unelected_authority", "te_jud_algorithmic_capture", "te_jud_court_overhaul",
+                    "te_jud_constitutional_challenge", "te_jud_supremacy_challenge"):
+            self.assertIn(key, keys)
+            self.assertIn(key + "_desc", keys)
 
 
 if __name__ == "__main__":
