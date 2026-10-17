@@ -4,7 +4,9 @@
 # ============================================================================
 # The policy buttons call te_seabed_set_policy, the one policy change. The AI
 # chooses its policy in script, yearly (te_seabed_ai_choose_policy), so none
-# of these is the AI's: ai_is_valid = no.
+# of these is the AI's: ai_is_valid = no. Relinquish and Claim Again sit in
+# each basin's own row of the rivals list (seabed claims spec § 2.5); the AI
+# doesn't relinquish.
 # ============================================================================
 
 te_seabed_policy_1_sgui = {
@@ -52,6 +54,221 @@ te_seabed_policy_3_sgui = {
 			custom_tooltip = te_seabed_defection_infamy_tt
 			custom_tooltip = te_seabed_defection_standing_tt
 			custom_tooltip = te_seabed_defection_case_tt
+		}
+	}
+}
+
+te_seabed_relinquish_pacific_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		NOT = { has_variable = te_seabed_relinq_pacific }
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_has_claims_tt
+			has_variable = te_seabed_unbuilt_pacific
+			var:te_seabed_unbuilt_pacific > 0
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_tt
+			te_seabed_relinquish = { B = pacific }
+		}
+	}
+}
+
+te_seabed_claim_again_pacific_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_relinq_pacific
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_relinquished_tt
+			has_variable = te_seabed_relinq_pacific
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_tt
+			te_seabed_claim_again = { B = pacific }
+		}
+	}
+}
+
+te_seabed_relinquish_atlantic_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		NOT = { has_variable = te_seabed_relinq_atlantic }
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_has_claims_tt
+			has_variable = te_seabed_unbuilt_atlantic
+			var:te_seabed_unbuilt_atlantic > 0
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_tt
+			te_seabed_relinquish = { B = atlantic }
+		}
+	}
+}
+
+te_seabed_claim_again_atlantic_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_relinq_atlantic
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_relinquished_tt
+			has_variable = te_seabed_relinq_atlantic
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_tt
+			te_seabed_claim_again = { B = atlantic }
+		}
+	}
+}
+
+te_seabed_relinquish_indian_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		NOT = { has_variable = te_seabed_relinq_indian }
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_has_claims_tt
+			has_variable = te_seabed_unbuilt_indian
+			var:te_seabed_unbuilt_indian > 0
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_tt
+			te_seabed_relinquish = { B = indian }
+		}
+	}
+}
+
+te_seabed_claim_again_indian_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_relinq_indian
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_relinquished_tt
+			has_variable = te_seabed_relinq_indian
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_tt
+			te_seabed_claim_again = { B = indian }
+		}
+	}
+}
+
+te_seabed_relinquish_arctic_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		NOT = { has_variable = te_seabed_relinq_arctic }
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_has_claims_tt
+			has_variable = te_seabed_unbuilt_arctic
+			var:te_seabed_unbuilt_arctic > 0
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_tt
+			te_seabed_relinquish = { B = arctic }
+		}
+	}
+}
+
+te_seabed_claim_again_arctic_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_relinq_arctic
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_relinquished_tt
+			has_variable = te_seabed_relinq_arctic
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_tt
+			te_seabed_claim_again = { B = arctic }
+		}
+	}
+}
+
+te_seabed_relinquish_southern_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		NOT = { has_variable = te_seabed_relinq_southern }
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_has_claims_tt
+			has_variable = te_seabed_unbuilt_southern
+			var:te_seabed_unbuilt_southern > 0
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_relinquish_tt
+			te_seabed_relinquish = { B = southern }
+		}
+	}
+}
+
+te_seabed_claim_again_southern_sgui = {
+	scope = country
+	is_shown = {
+		te_global_commons_enabled = yes
+		has_variable = te_seabed_relinq_southern
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_relinquished_tt
+			has_variable = te_seabed_relinq_southern
+		}
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_seabed_claim_again_tt
+			te_seabed_claim_again = { B = southern }
 		}
 	}
 }

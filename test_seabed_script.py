@@ -61,6 +61,14 @@ def literal(text, name):
     return float(mt.group(1))
 
 
+def english_loc():
+    """Every English loc file, joined: organize_loc files a key by where it
+    is used, so a test shouldn't name the file."""
+    folder = os.path.join(REPO, "localization", "english")
+    return "\n".join(read(os.path.join("localization", "english", f)) for f in sorted(os.listdir(folder))
+                     if f.endswith(".yml"))
+
+
 def defined(kind_dir):
     names = set()
     for root, _, files in os.walk(os.path.join(REPO, "common", kind_dir)):
@@ -127,7 +135,7 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_wsum_res", "te_seabed_wsum_all", "te_seabed_left", "te_seabed_pool",
                   "te_seabed_policy_factor_", "te_seabed_coast_weight", "te_seabed_distant_navy_share",
                   "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare",
-                  "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare"}
+                  "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare", "te_seabed_relinq"}
         named = {n.rstrip("_") for n in named}
         everything = defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
@@ -287,6 +295,45 @@ class FloorScriptTest(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK OK seabed_floor_fits", check)
         self.assertIn("TE_SELF_CHECK BROKEN seabed_floor_fits", check)
         self.assertIn("te_seabed_floor_check = yes", block(effects, "te_seabed_yearly_pass"))
+
+
+class RelinquishScriptTest(unittest.TestCase):
+    """Model: relinquish, claim_again (seabed claims spec § 2.5)."""
+
+    SGUIS = "common/scripted_guis/te_global_commons_seabed_sguis.txt"
+
+    def test_relinquish_never_reshares(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_relinquish"))
+        self.assertIn("te_seabed_relinq_$B$", body)
+        self.assertIn("set_variable = { name = te_seabed_unbuilt_$B$ value = 0 }", body)
+        self.assertIn("set_variable = { name = te_seabed_floor_$B$ value = 0 }", body)
+        self.assertNotIn("te_seabed_reshare", body)
+        self.assertIn("remove_variable = te_seabed_relinq_$B$", strip_comments(block(read(EFFECTS), "te_seabed_claim_again")))
+
+    def test_weight_is_zero_while_relinquished(self):
+        effects = strip_comments(read(EFFECTS))
+        self.assertIn("te_seabed_relinq_$B$", block(effects, "te_seabed_weight_set"))
+        weights = block(effects, "te_seabed_compute_weights")
+        station = weights[weights.index("has_variable = te_antarctic_station") - 120:weights.index("te_seabed_station_weight")]
+        self.assertIn("te_seabed_relinq_southern", station)
+
+    def test_buttons(self):
+        sguis = strip_comments(read(self.SGUIS))
+        for b in m.BASINS:
+            rel = block(sguis, f"te_seabed_relinquish_{b}_sgui")
+            again = block(sguis, f"te_seabed_claim_again_{b}_sgui")
+            self.assertIn(f"te_seabed_relinquish = {{ B = {b} }}", rel)
+            self.assertIn(f"te_seabed_claim_again = {{ B = {b} }}", again)
+            for body in (rel, again):
+                self.assertIn("ai_is_valid = { always = no }", body)
+            self.assertIn(f"te_seabed_unbuilt_{b} > 0", rel)
+            self.assertIn(f"has_variable = te_seabed_relinq_{b}", again)
+
+    def test_loc(self):
+        loc = english_loc()
+        for key in ("te_seabed_relinquish_btn", "te_seabed_claim_again_btn", "te_seabed_relinquish_tt",
+                    "te_seabed_claim_again_tt", "te_seabed_relinquish_has_claims_tt", "te_seabed_claim_again_relinquished_tt"):
+            self.assertIn(f" {key}:", loc)
 
 
 class GateTest(unittest.TestCase):

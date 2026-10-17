@@ -26,6 +26,8 @@
 #                                         sharing sets it; absent = none)
 #            te_seabed_fz_<basin>         what the sharing freezes it at:
 #                                         max(held, floor), scaled to fit
+#            te_seabed_relinq_<basin>     flag: relinquished, weight 0 there
+#                                         until Claim Again
 #            te_seabed_country            flag: has been recorded
 #            te_seabed_shared             flag: took part in a sharing
 #   global   te_seabed_regime             1 Open, 2 Regulated, 3 Scramble
@@ -710,7 +712,10 @@ te_seabed_compute_weights = {
 	te_seabed_weight_set = { B = arctic }
 	te_seabed_weight_set = { B = southern }
 	if = {
-		limit = { has_variable = te_antarctic_station }
+		limit = {
+			has_variable = te_antarctic_station
+			NOT = { has_variable = te_seabed_relinq_southern }
+		}
 		change_variable = { name = te_seabed_w_southern add = te_seabed_station_weight }
 	}
 	if = {
@@ -734,7 +739,8 @@ te_seabed_weight_tally = {
 }
 
 # Country scope. Home: (2n + ports + navy × n ÷ N) × factor; distant:
-# 0.05 × navy × factor.
+# 0.05 × navy × factor; 0 where the country relinquished its claims (the home
+# flag stays, so the coast still counts as home).
 te_seabed_weight_set = {
 	if = {
 		limit = { local_var:te_sb_wn_$B$ > 0 }
@@ -767,6 +773,10 @@ te_seabed_weight_set = {
 				multiply = local_var:te_sb_factor
 			}
 		}
+	}
+	if = {
+		limit = { has_variable = te_seabed_relinq_$B$ }
+		set_variable = { name = te_seabed_w_$B$ value = 0 }
 	}
 }
 
@@ -918,6 +928,25 @@ te_seabed_set_floor = {
 			add = var:te_seabed_held_$B$
 		}
 	}
+}
+
+# Country scope (the basin's Relinquish button). Model: relinquish (seabed
+# claims spec § 2.5). The claims in basin $B$ go at once, the floor with them,
+# and the weight there is 0 at every sharing until Claim Again. Licences on
+# its levels stay. Never sets te_seabed_reshare: a mid-year sharing honours
+# January's floors, so a Sponsor country could otherwise relinquish one claim
+# and take its rivals' unprotected claims months early. The freed claims wait
+# for the next sharing something else brings about.
+te_seabed_relinquish = {
+	set_variable = { name = te_seabed_unbuilt_$B$ value = 0 }
+	set_variable = { name = te_seabed_floor_$B$ value = 0 }
+	set_variable = te_seabed_relinq_$B$
+}
+
+# Country scope (the basin's Claim Again button). Model: claim_again. The
+# weight counts again from the next sharing; nothing comes back before it.
+te_seabed_claim_again = {
+	remove_variable = te_seabed_relinq_$B$
 }
 
 # No scope, before te_seabed_share_basin. Model: fit_floors. Each
