@@ -3063,3 +3063,34 @@ gm_com_time_words = {
 		localization_key = gm_com_time_15_years
 	}
 }
+
+# A revolt's split piece (owner's call 2026-10-17; gm_monument_effects.txt § "A
+# revolt's split piece"): where the other part stands, for the row's and the
+# card's line (gm_row_piece, gm_row_split). Its state, and its owner when that
+# is another country (gm_state_piece_whole_abroad), read from the link as the
+# trophy rows read theirs (gm_tr_row_held_by).
+gm_piece_where = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_piece_whole_abroad = yes }
+		localization_key = gm_piece_where_abroad
+	}
+	text = {
+		localization_key = gm_piece_where_home
+	}
+}
+
+gm_split_where = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_split_piece_abroad = yes }
+		localization_key = gm_split_where_abroad
+	}
+	text = {
+		localization_key = gm_split_where_home
+	}
+}

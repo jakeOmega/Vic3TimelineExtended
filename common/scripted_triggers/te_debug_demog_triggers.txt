@@ -47,14 +47,12 @@ te_debug_demog_fr_armed = {
 	}
 }
 
-# THIS = a building: a mine (the walk's gate for bg_mining) in a state that isn't its country's capital (the growth probe
-# of 2026-10-09 read the capital only).
+# THIS = a building: a mine of bg_mining itself, the group whose key the check reads (not the mod's
+# bg_discoverable_mining under it), where working conditions apply at half their size or more
+# (te_debug_demog_wc_mine_scale: Workplace Safety below three), so a table switched off can't read as OK.
 te_debug_demog_wc_mine = {
-	OR = {
-		is_building_group = bg_mining
-		is_building_group = bg_discoverable_mining
-	}
-	state = { is_capital = no }
+	is_building_group = bg_mining
+	te_debug_demog_wc_mine_scale >= 0.5
 }
 
 # THIS = a state in a state region the map files give the mild malaria trait (te_demog_malaria_level_listed 1), the trait

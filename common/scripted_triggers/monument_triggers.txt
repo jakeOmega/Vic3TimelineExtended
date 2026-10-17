@@ -276,7 +276,11 @@ gm_state_is_contested = {
 
 # Levels built on a finished monument (spec 2026-10-16 §3.2): its own levels
 # above those recorded when its construction stopped. Not while script is
-# rebuilding it or putting its method back, nor while a ceremony asks.
+# rebuilding it or putting its method back, nor while a ceremony asks. Not on
+# a revolt's piece of a monument (gm_piece_of, gm_monument_effects.txt § "A
+# revolt's split piece"): what is built on a piece stays part of it until it
+# settles with its monument, and the levels a merge brings it are the
+# monument's.
 gm_state_has_new_levels = {
 	gm_state_is_dedicated = yes
 	has_variable = gm_seen
@@ -285,6 +289,7 @@ gm_state_has_new_levels = {
 	NOT = { has_variable = gm_restore_pm }
 	NOT = { has_variable = gm_rebuilding }
 	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_piece_of }
 }
 
 # A monument founded beside another (gm_newcomer, spec 2026-10-16 §3.2) is

@@ -402,6 +402,11 @@ gm_clear_state = {
 	# Its shadow (issue #936, gm_monument_effects.txt): the pass writes the next
 	# monument's once it is recorded.
 	gm_state_drop_shadow = yes
+	# A revolt's split piece and its monument stop being each other's
+	# (gm_monument_effects.txt § "A revolt's split piece"), and a building once
+	# judged no piece is forgotten with the rest.
+	gm_state_forget_split = yes
+	gm_remove_state_var = { VAR = gm_split_rejected }
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -414,6 +419,7 @@ gm_state_monthly = {
 	gm_state_restore_dedication = yes
 	gm_monument_rebuild_self_check = yes
 	gm_tr_occupation_read_self_check = yes
+	gm_monument_split_identity_self_check = yes
 	if = {
 		limit = { has_building = building_grand_monument }
 		# A month older (spec 2026-10-16 §2), before this month's steps read it.
@@ -483,12 +489,19 @@ gm_state_monthly = {
 					gm_state_is_landmark = yes
 				}
 			}
+			# Its building went into its revolt's piece's state with a merge
+			# (gm_monument_effects.txt § "A revolt's split piece"): the piece is
+			# the monument itself, before this state forgets it.
+			if = {
+				limit = { gm_state_whole_merged_into_piece = yes }
+				var:gm_split_piece = { gm_state_piece_takes_whole = yes }
+			}
 			# Gone without the Tear Down button: a contested monument counts
 			# as torn down (plan decision 6). The building is not downsizeable,
 			# so the building panel can no longer demolish one; this stays as
 			# the net for a save that did, or any other removal.
 			# Not one carried off as a trophy (gm_carried_off).
-			if = {
+			else_if = {
 				limit = {
 					gm_state_is_contested = yes
 					NOT = { has_variable = gm_carried_off }
@@ -725,6 +738,20 @@ gm_country_refresh = {
 		# copy, a first sight or new levels until it has.
 		if = {
 			limit = { gm_state_merge_pending = yes }
+			trigger_event = { id = monument_events.29 }
+		}
+		# A revolt's piece of a monument in another part of the region: it
+		# takes that monument's identity, never a ceremony; or the piece and
+		# its monument have merged back into one state. The hidden event
+		# settles it first (gm_monument_effects.txt § "A revolt's split piece").
+		else_if = {
+			limit = {
+				OR = {
+					gm_state_split_pending = yes
+					gm_state_piece_whole_gone = yes
+					gm_state_split_piece_gone = yes
+				}
+			}
 			trigger_event = { id = monument_events.29 }
 		}
 		else = {
@@ -1340,8 +1367,12 @@ gm_state_changed_hands = {
 				is_revolutionary = no
 			}
 			gm_state_raised_by_owner = no
-			# Not a building still waiting to be adopted (a rebuild in its region).
+			# Not a building still waiting to be adopted (a rebuild in its region),
+			# nor a revolt's piece of a monument, which takes that monument's
+			# identity from the refresh this sends (gm_monument_effects.txt § "A
+			# revolt's split piece").
 			gm_state_merge_pending = no
+			gm_state_split_pending = no
 		}
 		set_variable = gm_seen
 		if = {

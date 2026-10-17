@@ -627,6 +627,17 @@ gm_state_takes_orphan_beside = {
 	gm_state_unexplained_levels > 0
 }
 
+# State scope. A frozen primary here lacked levels when its shadow was last
+# written (gm_state_split_short): a revolt took part of its state, and the new
+# part's building a share of its levels. An orphan that no building takes is
+# that piece coming home (gm_sh_rejoin), not a monument of its own.
+gm_state_was_split = {
+	has_building = building_grand_monument
+	has_variable = gm_seen
+	has_variable = gm_levels
+	gm_state_split_short >= 1
+}
+
 # State scope. Its building's levels are told apart exactly: nothing records
 # it, or its primary is frozen (gm_levels). The merge self-check gives a
 # verdict only for a region whose every building is so.
@@ -636,6 +647,247 @@ gm_state_levels_readable = {
 		AND = {
 			has_variable = gm_seen
 			has_variable = gm_levels
+		}
+	}
+}
+
+# ---- A revolt's split piece (owner's call 2026-10-17; gm_monument_effects.txt § "A revolt's split piece") ----
+# State scope. A building no record describes, finished (it came with its
+# levels: a split shares a building out, construction builds one up), in a
+# part of a region whose recorded monument stands in another part and lacks
+# levels its records count (gm_state_split_whole): a revolt took part of that
+# monument's state, and this is its piece. It takes the monument's identity at
+# first sight (gm_state_take_split_identity, monument_events.29), never a
+# ceremony of its own. A new monument the rebels build is under construction
+# until its first level, whose monument_events.1 asks the ceremony at once. The
+# cheap reads first: the refresh asks it of every monument.
+gm_state_split_pending = {
+	gm_state_unrecorded = yes
+	NOT = { has_variable = gm_split_rejected }
+	b:building_grand_monument ?= { is_under_construction = no }
+	exists = owner
+	save_temporary_scope_as = gm_tmp_split_piece
+	owner = { save_temporary_scope_as = gm_tmp_split_owner }
+	state_region = {
+		any_scope_state = { gm_state_split_whole = yes }
+	}
+}
+
+# State scope, a state of scope:gm_tmp_split_piece's region (owned by
+# scope:gm_tmp_split_owner). A recorded, frozen primary that a split has just
+# taken levels from: short now, with its shadow (whose records the piece
+# takes), no piece of its own standing yet, in another country's part, and
+# split by that country's civil war (the engine's civil_war_origin_country,
+# readable from the uprising's first day) or short only since the last
+# monthly pass at most (gm_sh_short_passes; the Paris Commune is a country a
+# vanilla event creates, not a civil war). A monument short for longer is
+# short for another reason.
+gm_state_split_whole = {
+	has_building = building_grand_monument
+	has_variable = gm_seen
+	has_variable = gm_levels
+	gm_state_levels_short >= 1
+	var:gm_shadow ?= { has_tag = gm_shadow }
+	NOT = { var:gm_split_piece ?= { has_variable = gm_piece_of } }
+	exists = owner
+	NOT = { owner = scope:gm_tmp_split_owner }
+	owner = { save_temporary_scope_as = gm_tmp_split_whole_owner }
+	OR = {
+		scope:gm_tmp_split_owner = {
+			# As vanilla reads the link: only on a civil war's country.
+			OR = {
+				is_revolutionary = yes
+				is_secessionist = yes
+			}
+			civil_war_origin_country ?= { this = scope:gm_tmp_split_whole_owner }
+		}
+		var:gm_shadow ?= {
+			NOT = {
+				has_variable = gm_sh_short_passes
+				var:gm_sh_short_passes >= 2
+			}
+		}
+	}
+}
+
+# State scope. A revolt's piece (gm_piece_of) whose monument no longer stands
+# apart from it: the monument's state is gone (the merge after the revolt took
+# it into this one, or the engine points the record here), its owner is dead,
+# or it holds no recorded monument. The piece stands as the monument itself
+# (gm_state_piece_takes_whole), so levels the merge brought are its own, not new
+# levels to found a monument beside.
+gm_state_piece_whole_gone = {
+	has_variable = gm_piece_of
+	has_building = building_grand_monument
+	save_temporary_scope_as = gm_tmp_split_piece
+	NOT = {
+		var:gm_piece_of ?= {
+			NOT = { this = scope:gm_tmp_split_piece }
+			has_variable = gm_seen
+			OR = {
+				has_building = building_grand_monument
+				has_variable = gm_rebuilding
+			}
+			owner ?= { is_country_alive = yes }
+		}
+	}
+}
+
+# State scope. A monument whose revolt's piece (gm_split_piece) has come home:
+# the piece's state is gone (merged into this one, or the record points here)
+# or its owner is dead. Its levels go back on this building
+# (gm_state_split_piece_home), as the piece's orphaned shadow would bring them.
+gm_state_split_piece_gone = {
+	has_variable = gm_split_piece
+	has_variable = gm_seen
+	has_variable = gm_levels
+	has_building = building_grand_monument
+	save_temporary_scope_as = gm_tmp_split_whole
+	NOT = {
+		var:gm_split_piece ?= {
+			NOT = { this = scope:gm_tmp_split_whole }
+			owner ?= { is_country_alive = yes }
+		}
+	}
+}
+
+# State scope, a monument with no building left, whose revolt's piece
+# (gm_split_piece) stands in its region with a building and still names it:
+# the merge after the revolt moved this state's levels into the piece's and
+# left this state behind, and gm_state_monthly hands the monument to the piece
+# before it forgets it. Not one carried off whole (gm_carried_off).
+gm_state_whole_merged_into_piece = {
+	NOT = { has_building = building_grand_monument }
+	NOT = { has_variable = gm_carried_off }
+	has_variable = gm_split_piece
+	save_temporary_scope_as = gm_tmp_split_whole
+	var:gm_split_piece ?= {
+		NOT = { this = scope:gm_tmp_split_whole }
+		has_building = building_grand_monument
+		var:gm_piece_of ?= { this = scope:gm_tmp_split_whole }
+	}
+}
+
+# State scope, for the row's and card's line (gm_piece_where, gm_split_where):
+# the other part of a revolt's split stands in another country, so the line
+# names its owner too. In practice always: one country's two parts of a region
+# merge into one state.
+gm_state_piece_whole_abroad = {
+	has_variable = gm_piece_of
+	exists = owner
+	owner = { save_temporary_scope_as = gm_tmp_split_here_owner }
+	var:gm_piece_of ?= {
+		exists = owner
+		NOT = { owner = scope:gm_tmp_split_here_owner }
+	}
+}
+
+gm_state_split_piece_abroad = {
+	has_variable = gm_split_piece
+	exists = owner
+	owner = { save_temporary_scope_as = gm_tmp_split_here_owner }
+	var:gm_split_piece ?= {
+		exists = owner
+		NOT = { owner = scope:gm_tmp_split_here_owner }
+	}
+}
+
+# Container scope, an orphaned shadow (scope:gm_sh_region its region). It is a
+# revolt's piece (gm_tr_piece_of) and the monument it is a piece of stands in
+# its region: it rejoins that monument (gm_sh_rejoin), whatever else the
+# region's buildings hold.
+gm_sh_piece_home = {
+	var:gm_tr_piece_of ?= {
+		has_building = building_grand_monument
+		has_variable = gm_seen
+		has_variable = gm_levels
+		state_region = scope:gm_sh_region
+	}
+}
+
+# Container scope, an orphaned shadow (scope:gm_sh_region its region). Its
+# monument's revolt's piece (gm_tr_split_piece) still stands in its region: the
+# piece takes it, as the monument itself (gm_sh_piece_takes_whole).
+gm_sh_whole_of_piece = {
+	var:gm_tr_split_piece ?= {
+		has_building = building_grand_monument
+		has_variable = gm_piece_of
+		state_region = scope:gm_sh_region
+	}
+}
+
+# ---- The one-off repair of a monument short of a piece long gone (owner's call 2026-10-17) ----
+# OLD-SAVE REPAIR (#936): remove after 2026-12-17 or at vanilla 1.15, whichever comes first.
+# State scope. A recorded monument whose building lacks levels its records
+# count (gm_state_levels_short), with no explanation that lasts: no revolt's
+# piece of it stands (no split's link, and no other part of its region holds a
+# Grand Monument: a piece recorded as a monument of its own before 2026-10-17
+# may), not repaired already, and below the combined level's cap of 200. A
+# trophy's piece and a Pull Down beside it take their levels out of the
+# records (gm_state_tr_remove_piece, gm_state_tr_shrink_by), so they leave no
+# shortfall.
+gm_state_short_unexplained = {
+	has_building = building_grand_monument
+	has_variable = gm_seen
+	has_variable = gm_levels
+	gm_state_levels_short >= 1
+	NOT = { has_variable = gm_short_repaired }
+	NOT = { has_variable = gm_split_piece }
+	NOT = { has_variable = gm_piece_of }
+	gm_state_level < 200
+	save_temporary_scope_as = gm_tmp_short_state
+	state_region = {
+		NOT = {
+			any_scope_state = {
+				NOT = { this = scope:gm_tmp_short_state }
+				has_building = building_grand_monument
+			}
+		}
+	}
+}
+
+# State scope. Nothing under way that explains a shortfall for now: no rebuild,
+# restore, ceremony, gift, carrying off or construction, no Pull Down ordered
+# beside it, no orphan waiting in its region for gm_sh_rejoin, and its owner at
+# peace (no occupier's taking under way) and in no civil war. A monument that
+# fails this waits for the next month's pass.
+gm_state_short_ready = {
+	b:building_grand_monument ?= { is_under_construction = no }
+	NOT = { has_variable = gm_rebuilding }
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_gift }
+	NOT = { has_variable = gm_carried_off }
+	owner = {
+		is_at_war = no
+		NOT = { has_variable = te_cw_role }
+	}
+	NOT = {
+		AND = {
+			has_variable_list = gm_monuments_here
+			any_in_list = {
+				variable = gm_monuments_here
+				has_variable = gm_mon_order
+			}
+		}
+	}
+	state_region = { save_temporary_scope_as = gm_tmp_short_region }
+	NOT = {
+		AND = {
+			has_global_variable_list = gm_shadows
+			any_in_global_list = {
+				variable = gm_shadows
+				gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }
+			}
+		}
+	}
+	NOT = {
+		AND = {
+			has_global_variable_list = gm_monuments
+			any_in_global_list = {
+				variable = gm_monuments
+				gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }
+			}
 		}
 	}
 }

@@ -186,24 +186,25 @@ te_demog_conscription_down = {
 
 # ---- The youth bulge (§4.3) -------------------------------------------------------------------------------------------
 
-# State scope: the engine's unemployment rate, 0-1 (vanilla reads it as a value: mon_unemployment_estimate). The
-# self-check unemployment_rate_read tests that scale (docs/testing/demographics-playtest.md). Effects only: read from a
-# scripted GUI it returns none (the panel reads te_demog_unemployment_census instead).
+# State scope: the unemployment the census stored at the state's last census walk (te_dg_unemp, te_demog_work_walk_store):
+# te_state_unemployment_share then, the share of the workforce with no work that every mod reader takes
+# (te_unemployment_values.txt), 0-1, 0 before one. The youth bulge, the event wave, the pension AI and the panel read
+# this. The harness counts the same share from a save's pops (demographics_save_inputs.state_unemployment); the
+# conversion equals it where the engine's figure is per person, as the self-checks unemployment_rate_read and
+# unemployment_share_read test. Not the engine's state_unemployment_rate bare: it read 0.048 where the pops' share was
+# 0.195 (2026-10-17), the idle workforce over all the state's people. And a scripted GUI reads it as none, so the
+# figure is stored from an effect and read from the variable.
 te_demog_unemployment = {
-	value = state_unemployment_rate
-	min = 0
-}
-
-# State scope: the unemployment the state's last census read (te_dg_unemp, te_demog_consequences_refresh), 0 before one.
-# The panel's youth bulge reads this. A scripted GUI's is_shown reading state_unemployment_rate gets none: the Youth
-# row's gate logged it thousands of times a session and never showed (2026-10-16), while the census's reads of the same
-# value in effects logged nothing.
-te_demog_unemployment_census = {
 	value = 0
 	if = {
 		limit = { has_variable = te_dg_unemp }
 		value = var:te_dg_unemp
 	}
+}
+
+# State scope: the same, for the panel's youth bulge (the Youth row's gate and figures read this name).
+te_demog_unemployment_census = {
+	value = te_demog_unemployment
 }
 
 # State scope: the youth bulge's multiplier now, y = clamp((the share aged 20-29 - te_demog_k_youth_from) / the span,

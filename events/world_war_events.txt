@@ -163,9 +163,9 @@ world_war_events.2 = {
 	cooldown = { days = normal_modifier_time }
 
 	immediate = {
-		random_country = {
+		# The trigger's own iterator, so the rival it found is always picked.
+		random_rival_country = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:great_power
 				is_adjacent_to_country = ROOT
 				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
@@ -453,9 +453,9 @@ world_war_events.4 = {
 
 	immediate = {
 		save_scope_as = ideological_rival
-		random_country = {
+		# The trigger's own iterator, so the rival it found is always picked.
+		random_rival_country = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:great_power
 				has_journal_entry = je_world_war
 				NOT = { has_variable = ww_active_phase }
@@ -543,10 +543,12 @@ world_war_events.5 = {
 	immediate = {
 		# Find the primary rival for the war. It must hold the journal entry, whose
 		# pulse latches and clears its side variables (world_war_conditions_met
-		# checks the same, so one always exists)
-		random_country = {
+		# checks the same with any_rival_country, so one always exists). The
+		# iterator must be the same too: random_country with a candidate-side
+		# has_diplomatic_pact rivalry check can find none where any_rival_country
+		# found one (international_relations_events.5, 2026-10-17).
+		random_rival_country = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:great_power
 				has_journal_entry = je_world_war
 				NOT = { has_variable = ww_peace_concluded }

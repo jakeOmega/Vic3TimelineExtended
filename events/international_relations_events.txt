@@ -193,9 +193,10 @@ international_relations_events.2 = {
 
 	immediate = {
 		save_scope_as = proxy_instigator
-		random_country = {
+		# The trigger's own iterator, so a rival it found is always picked
+		# (see .5: a candidate-side rivalry pact check can find none).
+		random_rival_country = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:major_power
 				any_subject_or_below = { always = yes }
 			}
@@ -510,9 +511,15 @@ international_relations_events.5 = {
 
 	immediate = {
 		save_scope_as = embargo_instigator
-		random_country = {
+		# The trigger's own iterator, a country we rival. The old pick,
+		# random_country with has_diplomatic_pact = { who = ROOT type = rivalry }
+		# in the candidate's scope, sometimes found none where the trigger had
+		# found a rival: the options then ran on an unset scope:embargo_rival
+		# (five firings in the 2026-10-10/12 observer runs, each a has_attitude
+		# error at option b's ai_chance, three with the engine's "create
+		# relations for invalid countries" assertion).
+		random_rival_country = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:major_power
 			}
 			save_scope_as = embargo_rival
