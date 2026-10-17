@@ -73,6 +73,7 @@ sr_launch_windows_ensure_cache = {
 # next month) and is lost only when the last world is claimed, as an unfinished
 # bar always was (the entry's completion branch removes it).
 sr_launch_month = {
+	sr_launch_restore_banked_fleets = yes
 	sr_launch_windows_ensure_cache = yes
 	if = {
 		limit = { sr_launch_fleet_ready = yes }
@@ -99,6 +100,53 @@ sr_launch_month = {
 			set_variable = { name = sr_launch_held_months value = 0 }
 		}
 		change_variable = { name = sr_launch_held_months add = 1 }
+	}
+}
+
+# ---- Fleets staged before a first colony survive the programme's stop ----------
+# Country scope. A programme holding no colony loses its progress when its
+# entry fails (its Space Program off Solar Colonization: on_fail's cleanup),
+# deactivates (no longer a great or major power: the monthly cleanup) or runs
+# `immediate` again (re-activation, or a revolution's winner): the bar
+# restarts, as an unfinished bar always did, because progress carried into an
+# activation would become the journal bar's baseline. The whole fleets staged
+# in orbit are kept apart first (sr_launch_banked_fleets, a count of goals) and
+# put back by the programme's next launch month; only the colony being readied,
+# the remainder below a goal, is lost. Additive, so a second call after the
+# reset adds nothing. Not once every world is claimed: staged progress is lost
+# then (spec § 5.2), and the entry can't come back to use it.
+sr_launch_bank_staged_fleets = {
+	if = {
+		limit = {
+			has_variable = sr_progress_solar_colonization
+			sr_launch_staged_whole_fleets >= 1
+			NOT = { has_global_variable = sr_all_colonies_complete }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_launch_banked_fleets } }
+			set_variable = { name = sr_launch_banked_fleets value = 0 }
+		}
+		change_variable = { name = sr_launch_banked_fleets add = sr_launch_staged_whole_fleets }
+	}
+}
+
+# From sr_launch_month, the running programme's pulse: the banked fleets back
+# into progress, at the current stage's goal (a stage that moved on while the
+# programme was stopped takes them as it would staged progress).
+sr_launch_restore_banked_fleets = {
+	if = {
+		limit = { has_variable = sr_launch_banked_fleets }
+		if = {
+			limit = { NOT = { has_global_variable = sr_all_colonies_complete } }
+			if = {
+				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
+				set_variable = { name = sr_progress_solar_colonization value = 0 }
+			}
+			set_local_variable = { name = sr_launch_restored value = var:sr_launch_banked_fleets }
+			change_local_variable = { name = sr_launch_restored multiply = sr_solar_colonization_goal }
+			change_variable = { name = sr_progress_solar_colonization add = local_var:sr_launch_restored }
+		}
+		remove_variable = sr_launch_banked_fleets
 	}
 }
 

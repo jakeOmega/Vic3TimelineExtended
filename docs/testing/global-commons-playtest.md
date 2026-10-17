@@ -283,6 +283,10 @@ Logged once a game each. Nothing logged means the premise never came up (no chem
 6. **Stage change with fleets staged.** Let a rival take the stage's last world while fleets are staged: the staged progress
    carries into the next stage, whose goal is higher, and leaves in that stage's windows. When the last of the 34 worlds goes,
    any staged progress is gone and the entry finishes.
+   **A programme with no colony that stops while fleets are staged** (review L2): with 2.5 fleets staged and no colony held,
+   switch the Space Program off Solar Colonization (the entry fails) and back on. The entry reopens with an empty bar; on its
+   first running month the bar holds 2 goals (the half-built colony is gone). The same after a revolution's winner inherits
+   the programme, and after dropping below major power and back.
 7. **Mercury.** In stage 3 with Mercury unclaimed and Saturn closed, a full bar founds Mercury at once; Saturn's sites wait for
    their window.
 8. **The AI.** An AI power in the top three running colonization founds colonies only in windows before Asteroid Mining (check

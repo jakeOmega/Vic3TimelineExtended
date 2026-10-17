@@ -518,3 +518,45 @@ class DebugLineTest(unittest.TestCase):
             for name in re.findall(r"GetGlobalVariable\('(sr_window_log_\w+_now)'\)", _raw(*parts)):
                 with self.subTest(file=parts[-1], name=name):
                     self.assertIn(name, copied)
+
+
+class StagedBankTest(unittest.TestCase):
+    """A programme with no colony restarts its bar when it stops (its entry fails, deactivates or runs
+    `immediate` again); the whole fleets it had staged are kept apart and come back (review L2)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        cls.entry = _block(je, "je_space_race_solar_colonization")
+
+    def test_every_stop_banks_before_it_clears(self):
+        immediate = _block(self.entry, "\timmediate")
+        self.assertLess(immediate.index("sr_launch_bank_staged_fleets = yes"),
+                        immediate.index("set_variable = { name = sr_progress_solar_colonization value = 0 }"))
+        on_fail = _block(self.entry, "\ton_fail")
+        self.assertLess(on_fail.index("sr_launch_bank_staged_fleets = yes"),
+                        on_fail.index("sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }"))
+        effects = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))
+        cleanup = _block(effects, "sr_cleanup_inactive_space_race_milestones")
+        self.assertLess(cleanup.index("sr_launch_bank_staged_fleets = yes"),
+                        cleanup.index("sr_cleanup_milestone_if_inactive_base = { MILESTONE = solar_colonization }"))
+
+    def test_the_launch_month_restores_first(self):
+        month = _block(self.windows, "sr_launch_month")
+        self.assertLess(month.index("sr_launch_restore_banked_fleets = yes"), month.index("sr_launch_fleet_ready"))
+
+    def test_banking_keeps_whole_fleets_and_adds_up(self):
+        bank = _block(self.windows, "sr_launch_bank_staged_fleets")
+        self.assertIn("sr_launch_staged_whole_fleets >= 1", bank)
+        self.assertIn("NOT = { has_global_variable = sr_all_colonies_complete }", bank)
+        self.assertIn("change_variable = { name = sr_launch_banked_fleets add = sr_launch_staged_whole_fleets }", bank)
+        self.assertNotIn("set_variable = { name = sr_launch_banked_fleets value = sr_", bank)
+        values = _strip(_raw("common", "script_values", "sr_launch_window_values.txt"))
+        whole = _block(values, "sr_launch_staged_whole_fleets")
+        self.assertEqual(re.findall(r"(value|divide|floor) = (\S+)", whole),
+                         [("value", "sr_progress_solar_colonization_value"), ("divide", "sr_solar_colonization_goal"),
+                          ("floor", "yes")])
+        restore = _block(self.windows, "sr_launch_restore_banked_fleets")
+        self.assertIn("change_local_variable = { name = sr_launch_restored multiply = sr_solar_colonization_goal }", restore)
+        self.assertIn("remove_variable = sr_launch_banked_fleets", restore)
