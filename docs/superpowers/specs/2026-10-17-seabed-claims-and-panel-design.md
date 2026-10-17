@@ -66,12 +66,30 @@ In this order:
 - **Unincorporated coastal states count toward claim weight**, at a fraction (§ 5.1).
 - **Subjects' claims can count toward their overlord**, through an optional overlord action like
   Raise Payments (§ 5.2).
-- **Blockades cut Deep-Sea Mine output**, through vanilla's blockade throughput rule (§ 6). The
+- **Blockades cut Deep-Sea Mine output**, through vanilla's blockade throughput rule (§ 6.2). The
   owner pointed out that fishing, whaling and ports already lose throughput to blockades.
 - **The rush is announced**: the first country with the technology, a new rival in your basin, a
   basin fully licensed (§ 7).
 - **Deferred to v2:** Seabed Sabotage, a covert operation that disables a rival's mines in one
   state for some months (§ 11).
+
+Second round (owner, 2026-10-17, on the reviewer's questions):
+
+- **A year's grace before the fee.** The fee starts only on a licence whose level has stayed
+  unbuilt through a full year, so honest building, private investors' included, never pays it
+  (§ 2.1).
+- **Sponsor's cost scales with claims, uncapped**: "claiming the whole basin should be expensive".
+  A country may drop to Scientific Survey at any time while its influence is in deficit (§§ 2.3,
+  2.4).
+- **A way to give claims up**: "maybe we add a revoke claims option?" (§ 2.5).
+- **Protection may take from the reserved half** when the Law of the Sea comes into force, as the
+  real convention's pioneer investors kept their registered sites (§ 2.2).
+- **Naval power projection, not navy size**, counts toward claim weight, if script can read it as
+  a number (§ 6.1).
+- **Pooling a subject's claims is an automatic lease** to the overlord, and only ever the
+  overlord's choice: "as long as you don't have to take your subject's claims" (§ 5.2).
+- **A defection lasts 5 years in all**: the Law of the Sea's rejoin clock starts at the defection
+  (§ 2.4).
 
 ## Goals
 
@@ -93,8 +111,8 @@ In this order:
 ## Anti-goals (would make this a failure even if it technically works)
 
 - **Anything a player reads ends in "…" or overflows its box.** This is how the review started.
-- **A number is stale without saying so.** Figures fixed at the January sharing carry "as of
-  January 19xx".
+- **A number is stale without saying so.** Figures fixed at a sharing carry "as of <month
+  year>".
 - **A queued or built mine loses its licence.** The fee and the protection must never strip one.
 - **Switching policy pays.** Nobody gains by flipping to Sponsor Contractors just before January,
   or by flipping away to stop paying.
@@ -162,8 +180,15 @@ In this order:
 
 ### 2.1 Holding fee on licences of unbuilt levels
 
-- **Base**: per state, the licences recorded on it minus its Deep-Sea Mine's built `level`. That
-  is the licences held by queued levels. Summed over the owner's coastal states.
+- **Base**: per state, the licences held by levels that have stayed unbuilt through a full year.
+  Each January the state stores its unbuilt licences (records minus its Deep-Sea Mine's built
+  `level`), keeping the last two snapshots. The base is the smallest of the unbuilt licences now
+  and the two snapshots, so a level pays only once it was already unbuilt at the January before
+  last: a grace of 12 to 24 months (owner). Summed over the owner's coastal states. The snapshots
+  are state variables, so they pass with the state.
+- **Who queued it doesn't matter.** Private investors queue Deep-Sea Mines too, and the player may
+  not be able to cancel those. The grace keeps their building, and any honest building, from
+  paying; a level that waits a year in the queue pays whoever queued it.
 - **Rate** (my call, first estimate): **half the royalty**, 2% of a level's base output value a
   week, about @money!900 a level at the base method (the royalty is 4%, about 1,800,
   `te_seabed_royalty_per_level`). A year of holding 100 unbuilt licences then costs about 4.7
@@ -175,8 +200,9 @@ In this order:
   Development Fund while it stands, else the UN budget); under Open or Scramble it is simply an
   expense (my call). Royalties apply to built levels only, so a level pays the fee while queued and
   royalties once built, never both.
-- **Display**: the overview's licences box shows the fee in red beside the queued count (§ 3.1);
-  the gate tooltip says the next level's licence will cost the fee until built.
+- **Display**: the overview's licences box shows the fee in red beside the queued count (§ 3.1),
+  and its hover how many queued licences pay and how many are still in their grace. The gate
+  tooltip says a licence costs the fee if its level is still unbuilt after its grace.
 
 ### 2.2 Sponsor Contractors protects claims
 
@@ -191,6 +217,13 @@ going into the sharing (`te_seabed_unbuilt_<basin>`). The water-filling freezes 
 `max(held, floor)` instead of `held`. Its stored claims after the sharing are `share − held`. So
 on Sponsor a claim fades by at most a quarter a year: 100 → 75 → 56 → 42.
 
+- **The floor is fixed in January.** The script also shares mid-year, the month after a new
+  claimant appears or a recorded country wins a civil war (`te_seabed_reshare`,
+  `te_seabed_pass_due`). The January sharing stores each basin's floor on the country, and a
+  mid-year sharing honours the stored floor without recomputing it, so protection never compounds
+  within a year (my call). A country that moves onto Sponsor mid-year gets its floor from the next
+  January.
+
 - **Floors never exceed a pool.** Last year's shares summed to the pool, and a floor is at most
   last year's share, so floors only overflow where something else did: grandfathered over-pool
   holdings, or a rule that zeroes a share. If the floors' protected parts (`floor − held`) don't
@@ -200,25 +233,36 @@ on Sponsor a claim fades by at most a quarter a year: 100 → 75 → 56 → 42.
   holdings only.
 - **A Scramble voids it** (my call): while the regime is Scramble, nobody has a floor. "Nobody's
   contracts are honoured" is what a scramble means.
-- **A subject pooled with its overlord** (§ 5.2) has no floor of its own; its claims go into the
-  sharing.
-- **Leased claims** (§ 4) count toward the lessee's floor and not the lessor's while the lease
-  stands.
+- **Protection may take from the reserved half** (owner). When the Law of the Sea comes into
+  force after Open years, rich countries' floors can exceed the open half; the deficit then comes
+  out of the reserved half, as the water-filling already moves a half's deficit to the other. The
+  real convention did the same: its pioneer investors (France, Japan, India, the USSR) kept the
+  sites they registered before it came into force. Floors fade by a quarter a year, so the
+  reserved half refills within a few years, and the model needs no floors by half. The player
+  guide says so.
+- **A subject's claims leased to its overlord** (§ 5.2) follow the lease rule below.
+- **Leased claims** (§ 4) are kept apart from own claims: the lease tops them up, so no floor
+  protects them, and the lessor's floor counts only the claims it has not leased out.
 - **Display**: the overview's claims box shows "January: lose at most N" on Sponsor and "January:
   all re-divided" otherwise; each basin row's hover gives that basin's figure.
 
 ### 2.3 Sponsor Contractors' cost
 
-The owner: 50 influence "is pretty much a token cost". Proposal (my call, numbers to tune):
+The owner: 50 influence "is pretty much a token cost", and the cost is **uncapped**: "claiming
+the whole basin should be expensive". Rates are my call, first estimates to tune:
 
 - **Sponsor Contractors**: 50 + 0.5 influence per claim it protects (its unused claims across all
-  basins, refreshed monthly). The owner's screenshot (125 claims) would pay about 112.
+  basins, refreshed monthly). The owner's screenshot (125 claims) would pay about 112; a first
+  claimant handed the whole Pacific (300) about 200.
 - **Unilateral Licensing**: stays above Sponsor for the same claims: 1.5 × Sponsor's figure, and
   at least 150.
-- **Before fixing the numbers**, the builder tabulates a typical great, major and minor power's
-  influence budget at eras 10–12 from observer-run saves, per the mod's
-  evidence-based tuning practice, and sets the per-claim rate so a great power's full protection
-  costs a noticeable but affordable slice.
+- **Two ways out of a cost a country can't carry**: give up a basin's claims (§ 2.5), which cuts
+  the cost from the next monthly refresh, or drop to Scientific Survey while influence is in
+  deficit (§ 2.4).
+- **No save covers eras 10–12 yet**: the observer runs stop near 2015, with the AI at eras 7–8.
+  Ship the first estimates and tune them in the play-test, from the owner's late-game saves where
+  there are any (my call). The tuning aim: a great power's full protection costs a noticeable but
+  affordable slice of its influence.
 - The cost tooltip (the policy buttons and `te_seabed_policy_effect_2_tt` / `_3_tt`) states the
   formula and today's figure.
 
@@ -228,25 +272,48 @@ The owner: 50 influence "is pretty much a token cost". Proposal (my call, number
   the country holds the date of the last change, so a revolution's winner inherits the lock.
   Dropping to Scientific Survey is locked too; otherwise a player could pay for Sponsor only
   around January.
-- **Carve-out**: a country may switch to Unilateral Licensing at once if, since its own last
-  change, a country it shares a home basin with switched to Unilateral Licensing. Reuse
-  `te_seabed_shares_home_basin_with_uni` for "shares a home basin"; the rival's switch date comes
-  from the same variable.
+- **Carve-outs**:
+  - a country may switch to Unilateral Licensing at once if, since its own last change, a country
+    it shares a home basin with switched to Unilateral Licensing. Reuse
+    `te_seabed_shares_home_basin_with_uni` for "shares a home basin"; the rival's switch date comes
+    from the same variable;
+  - a country may drop to Scientific Survey at any time while its influence is in deficit (owner).
+    Nothing is gained by it: the country loses its protection and its weight falls to a quarter.
 - **The first choice is free.** A country that has never changed policy (no variable) is unlocked.
   Old saves start unlocked.
-- **Interaction with the Law of the Sea**: a party that defects pays today's costs and is a party
-  again 5 years after leaving Unilateral Licensing. With the lock, leaving can't happen sooner
-  than 5 years after defecting, so a defection keeps a country out of the Law of the Sea for at
-  least 10 years. See § 12.
+- **Interaction with the Law of the Sea** (owner): a defecting party is a party again **5 years
+  after it defected**, once it has left Unilateral Licensing; today the clock starts when it
+  leaves. With the lock, it can't leave sooner than 5 years after defecting, so a country that
+  returns as soon as the lock lets it is a party again at once. Update `te_seabed_party_cooldown_left`,
+  `te_seabed_party_cooldown_tt` and the Law of the Sea's terms text.
 - **The buttons** grey out while locked; the tooltip gives the unlock year and the carve-out
   (`IsValidTooltip`, gotcha #16 of the GUI guide). The overview's policy box shows "next change
   19xx".
 - **The AI's yearly choice** (`te_seabed_ai_choose_policy`) obeys the lock and the carve-out.
 
-### 2.5 The model comes first
+### 2.5 Giving claims up
 
-Each rule above (fee base, floors and their scaling, the Antarctic and Scramble overrides,
-subject pooling, leases) goes into `scripts/analysis/seabed_model.py` before the script.
+The owner asked for a way to revoke claims. Design (my calls on the details):
+
+- **"Relinquish"**, one button per basin, in that basin's open rivals rows beside our own row (rule
+  6: beside the item it acts on). It gives up all our claims in the basin at once and stops us
+  claiming there: our weight there counts as 0 at every sharing until we press **"Claim Again"**,
+  which takes effect at the next sharing.
+- The relinquished claims are shared out among the other claimants at a sharing the next month
+  (set `te_seabed_reshare`, the existing mid-year trigger).
+- Licences on built and queued levels are untouched. Our floor there becomes our holdings, and
+  the influence cost falls from the next monthly refresh.
+- It is not a policy change, so the lock doesn't apply. Nothing is gained by relinquishing and
+  claiming again: the claims are gone until the next sharing gives some back by weight.
+- The real seabed contracts have the same idea: a contractor must relinquish parts of its area it
+  does not work.
+- AI: an AI in influence deficit drops to Survey (§ 2.4); it does not relinquish (my call, the
+  simplest rule).
+
+### 2.6 The model comes first
+
+Each rule above (fee base and grace, floors and their scaling, the reserved-half spill, the
+Antarctic and Scramble overrides, relinquishing, subject pooling, leases) goes into `scripts/analysis/seabed_model.py` before the script.
 `test_seabed_allocation.py` re-proves the invariants over random worlds: no basin's records rise
 above its pool, no recorded licence is taken away, floors never push a basin's shares above its
 pool, and leases never create licences. `test_seabed_script.py` keeps the script's names,
@@ -283,7 +350,7 @@ influence and the lock are on hover (rule 3, option 2). Centred under the subhea
 
 ### 3.3 Ocean Basins table
 
-Subheading "Ocean Basins" with "as of January 19xx" on its right. One row per basin, all five
+Subheading "Ocean Basins" with "as of <month year>", the last sharing, on its right. One row per basin, all five
 always shown. Columns, at 520 units (fit to the width budget, § 3.7):
 
 | Column | Shows | Hover |
@@ -311,6 +378,7 @@ their weight share. Sorted by share, largest first.
   `te_seabed_unbuilt_<basin>` and `te_seabed_w_<basin>` over the world total.
 - **Cap** (my call): the first 6 rows, then "and N others"; the player's own row always shows,
   marked "us", whether or not it is in the six.
+- **Our own row carries the basin's "Relinquish" or "Claim Again" button** (§ 2.5).
 - Collapsed by default (rule 1 treats a live list as open, but five open lists would push the
   explanation off the panel; the table row already carries the headline). Collapse flags follow
   rule 7's naming (`_open`).
@@ -334,7 +402,8 @@ Computed at the January sharing, stored per country per basin, and shown as "abo
   show the smaller `Δw`.
 - **Weight to navy**: at home, `Δnavy = Δw ÷ (policy factor × navy multiplier × coastal states in
   the basin ÷ all coastal states)`; distant, `Δw ÷ (0.05 × policy factor × navy multiplier)`.
-  Round up to a whole unit. "Navy" is whatever the weight counts (`navy_size` today; § 12).
+  Round up to a whole unit. "Navy" is whatever the weight counts: naval power projection, or
+  `navy_size` if that can't be read (§ 6.1).
 - **A coastal state** adds about `2 × policy factor` weight plus its ports, and shifts the navy's
   spread; the hover gives "≈ +K licences" from `R·Δw/W`, rounded down.
 - `seabed_model.py` gets the exact answer (re-run the sharing with only that country's weight
@@ -366,13 +435,18 @@ template if the builder prefers; the existing generators show how.
 
 - **Kind** `directed`. The **source** leases N of its claims in the basin to the **target**.
   `required_inputs = { quantity }`, minimum 1, maximum the source's claims there at the time.
-- **While the article stands**, at every sharing N licences of the source's share in that basin
-  count as the target's: the sharing runs as usual, then moves N (or as many as the source's share
-  allows) from the source's claims to the target's. At entry into force, up to N of the source's
-  current claims move at once, so the lessee can build before January.
+- **N is the lease's total** (my call). The licences the lessee has built on the lease plus its
+  unused leased claims never exceed N. At entry into force, up to N of the source's current claims
+  move at once, so the lessee can build before January. At every sharing after, the sharing runs
+  as usual and then tops the lessee's unused leased claims back up to `N − built on the lease`,
+  from the source's share in that basin, as far as that share goes.
+- **Each lease keeps two counters**, its built and unused leased claims, apart from the lessee's
+  own claims (variables on the lessee per basin and source, or a list; builder's choice). A level
+  the lessee records takes its own claims first, then leased ones, so a lease is only drawn on
+  when needed.
 - **Licences built on leased claims are the lessee's for good.** A licence belongs to its level
-  (the earlier design's § 2.4). When the lease ends, only the lessee's unused leased claims return
-  to the lessor, at the next sharing.
+  (the earlier design's § 2.4). When the lease ends, its unused leased claims return to the
+  source at the next sharing; its built licences stay.
 - **Flags**: `can_be_enforced`, `can_be_renegotiated`, `giftable`. `can_be_enforced` makes "take
   their seabed claims" a war goal. Usage limit `once_per_treaty` per basin article.
 - **Price**: the usual pairing is a Money Transfer the other way, in the same treaty. The article
@@ -397,23 +471,51 @@ fraction), as overseas islands give real powers their economic zones. Ports in t
 The navy's spread over the coast (`navy × coastal states in this basin ÷ all coastal states`)
 counts them at the same half. A basin with only unincorporated coast is still "home".
 
-### 5.2 Subjects pool with their overlord
+### 5.2 Subjects lease their claims to their overlord
 
 An overlord diplomatic action, **"Administer Seabed Claims"** (my working name), modelled on Raise
-Payments:
+Payments. It is **an automatic lease** (owner): it reuses § 4's machinery instead of adding
+weight rules.
 
 - Overlord → direct subject; no approval; not for protectorates or personal unions (as Raise
   Payments); no DLC gate.
-- **While it stands**: at the sharing, the subject's claim weight in each basin is added to the
-  overlord's, and the subject's own weight is 0. The subject's licences stay its own (they belong
-  to its levels); its unused claims go into the sharing.
+- **Only ever the overlord's choice** (owner: "as long as you don't have to take your subject's
+  claims"). Nothing pools without the action, and the overlord can end it at any time.
+- **While it stands**: the subject still claims by its own weight. At entry and at every sharing,
+  its unused claims in every basin pass to the overlord as leased claims (§ 4's counters, with N
+  = the subject's unused claims at that sharing). The subject's licences stay its own; they
+  belong to its levels.
+- **Where the overlord can use them**: in its own states only. In a basin where it has no coast,
+  its levels on those claims are long-haul at −25% (owner: acceptable). Building in the subject's
+  waters would change the gate and recording, and is out of scope.
 - **Cost**: liberty desire rises while it stands, at Raise Payments' rate (my call), and the
   subject's opinion of the overlord falls.
-- **Ends** when the overlord revokes it (any time), or the subject is no longer its subject.
-- **AI**: an overlord uses it when the subject has seabed weight and its liberty desire is low.
+- **Ends** when the overlord ends it, or the subject is no longer its subject; unused leased
+  claims return to the subject at the next sharing, as for a lease.
+- **AI**: an overlord uses it when the subject has unused claims and its liberty desire is low.
 - Add a line to the player guide's diplomacy chapter where subject actions are listed.
 
-## 6. Navies: blockades cut seabed output
+## 6. Navies
+
+### 6.1 Naval power projection counts toward claim weight
+
+- The navy term of claim weight (`te_seabed_navy_effective`, now `navy_size`, "number of
+  flotillas") becomes the country's **naval power projection** (owner), so a modern fleet
+  outweighs a large obsolete one.
+- **Unverified as a number.** `docs/engine/triggers_parsed.txt` documents
+  `naval_power_projection` only as a comparison, and `event_targets_summary.txt` lists
+  `navy_size` but not it. Vanilla does read it as the right-hand side of comparisons
+  (`c:JAP.naval_power_projection`, `ryukyu_rivalry_buttons.txt:403`;
+  `scope:other_country.naval_power_projection`, `static_treaty_acceptance.txt:270`), which
+  suggests a value link. Check offline first (`/engine-docs`), then ship with a once-a-game
+  `TE_SELF_CHECK OK|BROKEN seabed_power_projection` line logging it beside `navy_size`. The
+  fallback is `navy_size`, and the readout says "+X navy".
+- **Scale.** Power projection runs on a different scale from flotillas. Divide it by a constant
+  so a typical fleet's term matches today's flotilla term, keeping the coast and port terms'
+  balance; set the constant from a save and record it in the values file.
+- The readout (§ 3.5) then reads "+X naval power projection".
+
+### 6.2 Blockades cut seabed output
 
 - Set `building_ocean_mine` to **`city_type = port`**, the field every blockade-affected vanilla
   building shares (§ Engine facts). Then a blockade cuts its throughput by up to 75% at full
@@ -457,9 +559,10 @@ Notifications (the `te_notifications_l_english.yml` pattern), no events:
   width budget (§ 3.7), and the existing seabed tests updated.
 - **Self-check**: extend `te_seabed_cap_check` to log `TE_SELF_CHECK OK|BROKEN seabed_floor_fits`
   with the figures, the first January a floor is applied.
-- **Play-test list**: blockade enrolment (§ 6); the rivals list renders and opens; the fee shows
-  in the budget; a lease moves claims at entry into force and at the sharing; an enforced lease
-  from a war; the lock greys the buttons and the carve-out frees them.
+- **Play-test list**: blockade enrolment (§ 6.2); the power-projection self-check (§ 6.1); the
+  rivals list renders and opens; the fee shows in the budget after the grace; relinquishing frees
+  claims for others the next month; a lease moves claims at entry into force and at the sharing;
+  an enforced lease from a war; the lock greys the buttons and both carve-outs free them.
 
 ## 10. Phasing
 
@@ -467,7 +570,7 @@ Notifications (the `te_notifications_l_english.yml` pattern), no events:
 |---|---|---|
 | 1 | Words (§ 1), fee, protection, cost, lock (§ 2), the panel (§ 3), the model and tests, guide | — |
 | 2 | Leases (§ 4), unincorporated coast and subjects (§ 5) | 1 (floors, the sharing's hooks) |
-| 3 | Blockades (§ 6), the rush notifications (§ 7) | — (independent) |
+| 3 | Power projection and blockades (§ 6), the rush notifications (§ 7) | — (independent) |
 
 Phase 3 can run beside phase 1.
 
@@ -481,12 +584,17 @@ Phase 3 can run beside phase 1.
 
 ## 12. My calls, for the owner to check
 
-1. The fee rate: half the royalty (§ 2.1), and where it goes outside the Regulated regime.
-2. Protection lapses in a Scramble (§ 2.2).
-3. Sponsor's cost scales with the claims it protects; Unilateral at 1.5× and at least 150 (§ 2.3).
-4. The lock covers dropping to Survey; with the Law of the Sea's 5-year rejoin wait, a defection
-   keeps a country out for at least 10 years (§ 2.4).
-5. Five per-basin lease articles rather than one with a state input (§ 4).
+1. The fee rate: half the royalty (§ 2.1), and where it goes outside the Regulated regime. The
+   grace is measured from two January snapshots per state, assuming levels finish in the order
+   they were queued.
+2. The per-claim cost rate (0.5 influence) and Unilateral at 1.5× and at least 150 (§ 2.3).
+3. Protection lapses in a Scramble (§ 2.2), and the floor is fixed in January, not recomputed by
+   a mid-year sharing.
+4. Relinquishing is all of a basin's claims at once, reversed by "Claim Again" from the next
+   sharing; the AI doesn't use it (§ 2.5).
+5. Five per-basin lease articles rather than one with a state input; a lease's N is its total,
+   built plus unused (§ 4).
 6. Unincorporated coast at half (§ 5.1); the subject action's cost at Raise Payments' rate (§ 5.2).
 7. Rivals: first six and "us", collapsed by default (§ 3.4).
 8. Notifications, not events, for the rush (§ 7).
+9. Power projection scaled by a constant to today's flotilla term (§ 6.1).
