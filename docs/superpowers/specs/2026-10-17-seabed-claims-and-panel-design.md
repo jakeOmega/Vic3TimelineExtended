@@ -148,8 +148,13 @@ Second round (owner, 2026-10-17, on the reviewer's questions):
   overlord action with `requires_approval = no` and a pact. Its `potential` excludes protectorates
   and personal unions. Its `selectable` requires the DLC feature `subject_and_bloc_actions`; the
   seabed action must not.
-- **`GetGlobalList` works in `.gui`.** A global-list datamodel was checked in game on 2026-09-28
-  (12 entries). It is not in `docs/guides/gui_modding_guide.md` yet; write it up with this work.
+- **A country can't be read straight out of a GUI list** (`docs/guides/gui_modding_guide.md`,
+  gotcha #15). A datamodel of countries and `Scope.GetCountry` are unproven in `.gui`. Two routes
+  work: a scripted GUI's `ExecuteTooltip` in fixed rows whose effect enters
+  `global_var:<rank>` and prints `[THIS.GetCountry.GetName]` (the Cultural Hegemony leaderboard,
+  `ch_board_row_sgui`), and a country variable holding a state, read as
+  `….Var('x').GetState.GetCountry` for a `flag` widget (the Cultural Hegemony leader flags,
+  `ch_leader_seat_N`).
 - **The policy's influence** is a static modifier, `te_seabed_policy_sponsor_cost` /
   `_unilateral_cost`, rebuilt from the policy variable by `te_seabed_refresh_policy_cost`. A
   scaled cost becomes `add_modifier = { name = … multiplier = … }` from the same monthly country
@@ -376,13 +381,15 @@ call: too fine for the bar), the hover gives the figure.
 ### 3.4 Rivals
 
 Each basin row has a chevron. Open, it lists that basin's claimants under the row: vanilla's
-`flag` widget (name on hover, opens the country on click), then their mines, their claims and
-their weight share. Sorted by share, largest first.
+`flag` widget (name on hover, opens the country on click), then one line of their mines, their
+claims and their weight share. Sorted by share, largest first.
 
-- Data: at the sharing, `te_seabed_yearly_pass` fills five global variable lists,
-  `te_seabed_claimants_<basin>`, with every country whose share there is above 0, in descending
-  order of share (an `ordered_country` pass). The panel reads them through a `GetGlobalList`
-  datamodel. Per-country figures are the existing `te_seabed_held_<basin>`,
+- Data, by the two proven routes of § Engine facts (gotcha #15): at the sharing,
+  `te_seabed_yearly_pass` writes the six largest shares in each basin to global variables
+  `te_seabed_rk_<basin>_<n>` (n = 1..6, an `ordered_country` pass per rank), and writes each
+  ranked country's capital to `te_seabed_rkcap_<basin>_<n>` on every player country, for the flag.
+  The row's text is a scripted GUI's `ExecuteTooltip`, as `ch_board_row_sgui` prints a
+  leaderboard row. Per-country figures are the existing `te_seabed_held_<basin>`,
   `te_seabed_unbuilt_<basin>` and `te_seabed_w_<basin>` over the world total.
 - **Cap** (my call): the first 6 rows, then "and N others"; the player's own row always shows,
   marked "us", whether or not it is in the six.
@@ -562,8 +569,7 @@ Notifications (the `te_notifications_l_english.yml` pattern), no events:
   leases, blockades, islands, the panel); `17-reference.md`'s glossary rows (Seabed licence; add
   Seabed claim); the treaty article list in `09-diplomacy.md`; the subject action. Rebuild the
   PDF.
-- **System docs**: `docs/systems/mod_systems.md` § Global Commons and the state-tile row;
-  `docs/guides/gui_modding_guide.md` gets the `GetGlobalList` datamodel recipe (a CRLF file).
+- **System docs**: `docs/systems/mod_systems.md` § Global Commons and the state-tile row.
 - **Tests**: the model and its random-world invariants (§ 2.5), the readout check (§ 3.5), the
   width budget (§ 3.7), and the existing seabed tests updated.
 - **Self-check**: extend `te_seabed_cap_check` to log `TE_SELF_CHECK OK|BROKEN seabed_floor_fits`
