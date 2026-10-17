@@ -1044,7 +1044,12 @@ banking_crisis_wave_reached = {
 # clear_saved_scope did not remove the inherited one (2026-10-16 save: the
 # European Union rolled a scare, banking_crisis_wave_scared, and took the crash
 # options and cascade anyway). The upstream country is never ROOT, since
-# banking_cycle_spread_contagion leaves out the origin.
+# banking_cycle_spread_contagion leaves out the origin. The event's own
+# save_scope_as does replace an inherited scope: in the 2026-10-17 observer
+# run's autosave, targets two and three tiers out (contagion events on the 14th
+# and 21st of a month) had taken options this trigger gates. The event's text
+# reads it too, so a second copy open for the same country at once, which
+# overwrites the variable contagion_crash, cannot retitle this one.
 banking_contagion_own_roll_crashed = {
 	exists = scope:contagion_crashed
 	root = scope:contagion_crashed
