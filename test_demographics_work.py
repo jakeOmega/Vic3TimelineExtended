@@ -543,6 +543,35 @@ class TestWorkTermSelfChecks(unittest.TestCase):
         self.assertIn("set_variable = { name = te_dg_wft_e0 value = var:te_dg_wf_engine }", landing)
         self.assertIn("divide = { value = te_demog_wf_set add = 1", _block(values, "te_debug_demog_wf_per_dependents"))
 
+    def _follows(self, e0, engine, read, wbase=0.25):
+        """The follows check's figures in a capital whose pops are set to wbase + read now, its engine figure engine
+        now and e0 when W landed."""
+        eng = _Engine({FIELD: read})
+        eng.values.update(_raw_blocks([DEBUG_VALUES]))
+        eng.vars.update(te_dg_wbase=wbase, te_dg_wf_engine=engine, te_dg_wft_e0=e0)
+        return {name: eng.value(eng._tree(eng.values, f"te_debug_demog_wft_{name}"))
+                for name in ("needed", "moved", "engine_moved", "half_move", "min_move")}
+
+    def test_the_follows_check_asks_for_the_move_to_the_set_ratio(self):
+        """2026-10-17, Braunschweig's capital: W landed from the moved lines' pair (0.039) with the engine at 0.249,
+        about 0.04 below the 0.289 its pops were set to, and fell to 0.002 by 1842, the engine then at 0.252 beside a
+        set ratio of 0.252. W's rule asked half of W's 0.037 fall (0.018) of a move down and read BROKEN. The move due
+        was 0.003 up, under the 0.03 the check waits for: no verdict."""
+        f = self._follows(e0=0.249, engine=0.252, read=0.002)
+        self.assertAlmostEqual(f["needed"], 0.003)
+        self.assertLess(f["moved"], f["min_move"])
+        # a fast pull after a W that rose 0.04 from the engine's figure: OK
+        f = self._follows(e0=0.25, engine=0.285, read=0.04)
+        self.assertGreaterEqual(f["moved"], f["min_move"])
+        self.assertGreaterEqual(f["engine_moved"], f["half_move"])
+        # a slow pull, the same W: BROKEN
+        f = self._follows(e0=0.25, engine=0.255, read=0.04)
+        self.assertLess(f["engine_moved"], f["half_move"])
+        # a fall the engine follows down: OK, signed the move's way
+        f = self._follows(e0=0.29, engine=0.258, read=0.0)
+        self.assertAlmostEqual(f["needed"], -0.04)
+        self.assertGreaterEqual(f["engine_moved"], f["half_move"])
+
     def test_they_read_before_the_refresh_moves_anything(self):
         body = _block(_text(WORK_EFFECTS), "te_demog_workforce_refresh")
         self.assertLess(body.index("te_debug_demog_wf_term_checks = yes"), body.index("set_variable"))

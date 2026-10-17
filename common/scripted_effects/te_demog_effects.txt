@@ -111,8 +111,11 @@
 #   te_dg_mw, te_dg_wf_rem  phase 2 step 2's workforce term and the lines on top of it (te_demog_work_effects.txt)
 #   te_dg_mc, te_dg_yb  phase 2 step 4, under Full only (te_demog_consequence_effects.txt): the conscription term and
 #                       the youth bulge's multiplier the state's modifiers carry
-#   te_dg_unemp         the unemployment the census read (te_demog_consequences_refresh, both settings), for the
-#                       panel's youth bulge: a scripted GUI reads state_unemployment_rate as none
+#   te_dg_unemp         the walk's unemployment, under the cohorts only (te_demog_work_walk_store): the workforce of
+#                       pops with no workplace over all the workforce, which the youth bulge, the event wave, the
+#                       pension AI and the panel read (te_demog_unemployment). Not the engine's state_unemployment_rate:
+#                       that read 0.048 where the pops' share was 0.195, about the idle workforce over all the state's
+#                       people (the self-check unemployment_rate_read, 2026-10-17), and a scripted GUI reads it as none
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -1022,10 +1025,11 @@ te_demog_work_walk_init = {
 	set_local_variable = { name = te_dg_w_low value = 0 }
 	set_local_variable = { name = te_dg_w_wbase value = 0 }
 	set_local_variable = { name = te_dg_w_wf value = 0 }
+	set_local_variable = { name = te_dg_w_un value = 0 }
 }
 
-# Pop scope, the walk's last line per pop: the lower strata, the pop's own working-adult ratio and the engine's
-# workforce (triggers.log: workforce, strata), under the cohorts only.
+# Pop scope, the walk's last line per pop: the lower strata, the pop's own working-adult ratio, the engine's
+# workforce and the workforce of a pop with no workplace (triggers.log: workforce, strata), under the cohorts only.
 te_demog_work_walk_pop = {
 	if = {
 		limit = { local_var:te_dg_w_on > 0 }
@@ -1035,16 +1039,22 @@ te_demog_work_walk_pop = {
 			limit = { strata = lower }
 			change_local_variable = { name = te_dg_w_low add = total_size }
 		}
+		if = {
+			limit = { NOT = { exists = workplace } }
+			change_local_variable = { name = te_dg_w_un add = workforce }
+		}
 	}
 }
 
-# THIS = a state, after the walk's Gini store: the three shares, under the cohorts only.
+# THIS = a state, after the walk's Gini store: the three shares, and the unemployment over the workforce (te_dg_unemp,
+# the harness's demographics_save_inputs.state_unemployment), under the cohorts only.
 te_demog_work_walk_store = {
 	if = {
 		limit = { local_var:te_dg_w_on > 0 }
 		set_variable = { name = te_dg_low_share value = { value = local_var:te_dg_w_low divide = { value = local_var:te_dg_w_pop min = 1 } } }
 		set_variable = { name = te_dg_wbase value = { value = local_var:te_dg_w_wbase divide = { value = local_var:te_dg_w_pop min = 1 } } }
 		set_variable = { name = te_dg_wf_engine value = { value = local_var:te_dg_w_wf divide = { value = local_var:te_dg_w_pop min = 1 } } }
+		set_variable = { name = te_dg_unemp value = { value = local_var:te_dg_w_un divide = { value = local_var:te_dg_w_wf min = 1 } } }
 	}
 }
 

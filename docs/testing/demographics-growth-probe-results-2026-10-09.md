@@ -115,6 +115,13 @@ engine applies working conditions where a building read can't see them, and the 
 table, by the workplace's group and its ancestors. Building reads of production-method keys
 (`building_laborers_mortality_mult`) do work.
 
+**Corrected 2026-10-17.** The reads were 0 because France held Workplace Safety at five in this save (investment 5),
+and the code modifier applies to each building × (1 + `building_working_conditions_mult`), −0.2 a Workplace Safety
+level: the table was at 0 in the capital, for the engine too. A Walloon mine read the table's 0.1 in January 1836 (the
+self-check `working_conditions_read`), so a building's read carries the table, and the census's constants counted it
+twice. They are gone; the walk reads the group keys alone. The fit's 1.027 to 1.024 above was the constants' +1.0%
+nudging an under-prediction, not evidence that the engine applies the table on top of the reads.
+
 ## Before the fix, measured three ways
 
 - **Census lines** (run 2's game after #833, 1912–1916): net migration per 1,000 a year was −6.1 under

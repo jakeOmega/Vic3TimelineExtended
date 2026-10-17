@@ -100,8 +100,8 @@ te_demog_wave_greying_bar = {
 	}
 }
 
-# Unemployment over the country's states, by people, through the census's state read (te_demog_unemployment), so the
-# self-check unemployment_rate_read's fallback (a percentage: divide by 100 there) reaches this too.
+# Unemployment over the country's states, by people, through the census's state count (te_demog_unemployment, the walk's
+# workforce with no workplace over the workforce at each state's last census).
 te_demog_wave_unemployment = {
 	value = 0
 	every_scope_state = {

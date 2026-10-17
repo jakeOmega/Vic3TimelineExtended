@@ -986,8 +986,9 @@ def engine_curves(o, d):
 # a state's modifier:state_*_mult read holds only the state-wide part:
 #   births: + literacy_penalty x the pop's literacy, + the starvation penalties
 #   deaths: + its class's state_<type>_mortality_mult, its workplace's building_<type>_ and
-#           building_group_<group>[_<type>]_mortality_mult, working_conditions by workplace
-#           group, the starvation penalties, and non-homeland mortality.
+#           building_group_<group>[_<type>]_mortality_mult (which carry working_conditions, scaled by the
+#           building's building_working_conditions_mult: self-check working_conditions_read, 2026-10-17),
+#           the starvation penalties, and non-homeland mortality.
 # Both starvation penalties apply x the pop's starvation value, clamp((0.4 - food security) x 2.5, 0, 1): mild's
 # up to 0.5, severe's 0.5 to 1 (the famine probe, 2026-10-11; the walk took severe flat until then, and its famine
 # deaths ran 1.5-1.7x the engine's). The walk reads both in 0.05 steps of food security.
@@ -1269,7 +1270,7 @@ def engine_rate_terms(o, root):
     conditions = static_modifier(root, "working_conditions")
     parents = building_group_parents(root)
     types = sorted(_snapshot(root, "pop_types"))
-    pairs = {}   # (group, pop type or None) -> what applies: registered keys and the working_conditions value
+    pairs = set()   # (group, pop type or None) for every registered building-group mortality key the walk reads
     for key in sorted(reg):
         m = re.fullmatch(r"building_group_(\w+?)_mortality_mult", key)
         if not m:
@@ -1279,14 +1280,13 @@ def engine_rate_terms(o, root):
             if group.endswith("_" + t):
                 group, ptype = group[: -len(t) - 1], t
         if group in parents:
-            pairs.setdefault((group, ptype), {"read": False, "table": 0.0})["read"] = True
-    for key, value in conditions.items():
-        m = re.fullmatch(r"building_group_(\w+?)_mortality_mult", key)
-        group, ptype = m.group(1), None
-        for t in types:
-            if group.endswith("_" + t):
-                group, ptype = group[: -len(t) - 1], t
-        pairs.setdefault((group, ptype), {"read": False, "table": 0.0})["table"] = value
+            pairs.add((group, ptype))
+    # working_conditions reaches the pops through these reads: the engine applies the code static modifier to each
+    # building at x (1 + building_working_conditions_mult), Workplace Safety's -0.2 a level taking it to 0 at five
+    # (Wallonia's mine read the table's 0.1 in 1836; the growth probe's 1949 capital read 0 under Workplace Safety
+    # at five). The walk took the table as constants on top until 2026-10-17, counting it twice.
+    unread = sorted(k for k in conditions if k not in reg)
+    assert not unread, f"working_conditions rows the walk can't read: {unread}"
 
     o("# Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult")
     o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties (each x the pop's")
@@ -1301,8 +1301,8 @@ def engine_rate_terms(o, root):
     o("}")
     o("")
     o("# Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult")
-    o("# + its class's, its workplace's and its workplace's groups' mortality modifiers + working_conditions")
-    o("# (the building-group reads do not carry it: the probe's buildings read 0 where the table gave 0.1)")
+    o("# + its class's, its workplace's and its workplace's groups' mortality modifiers (the group reads carry")
+    o("# working_conditions at the building's scale, so the table is not added again: working_conditions_read)")
     o("# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are")
     o("# left out: their scaling is unknown and the probe measured both at about 0.")
     o("te_demog_pop_death_mult = {")
@@ -1317,13 +1317,8 @@ def engine_rate_terms(o, root):
         for g in groups:
             adds = []
             for pt in (None, t):
-                term = pairs.get((g, pt))
-                if not term:
-                    continue
-                if term["read"]:
+                if (g, pt) in pairs:
                     adds.append(f"add = workplace.modifier:building_group_{g}{'_' + pt if pt else ''}_mortality_mult")
-                if term["table"]:
-                    adds.append(f"add = {lit(term['table'])}")
             if adds:
                 gated.append((g, adds))
         if not (own or work or gated):
