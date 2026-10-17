@@ -414,6 +414,35 @@ class WeightTest(unittest.TestCase):
         self.assertGreater(far, 0)
         self.assertLess(far, min(home) / 3)
 
+    def test_unincorporated_coast_counts_half(self):
+        # one incorporated and two unincorporated Pacific states, no ports, navy 0
+        c = m.Country(0, policy=m.SPONSOR)
+        states = {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 0, incorporated=False),
+                  2: m.State(2, "pacific", 0, incorporated=False)}
+        w = m.compute_weights(m.World({0: c}, states), 0)
+        self.assertAlmostEqual(w["pacific"], 2 * (1 + m.UNINCORPORATED_COAST * 2))
+        self.assertEqual(m.UNINCORPORATED_COAST, 0.5)
+        # a basin with only unincorporated coast is home, its ports count in full,
+        # and the navy spreads over the coast with those states at half
+        c = m.Country(0, policy=m.SPONSOR, navy=30)
+        states = {0: m.State(0, "pacific", 0), 1: m.State(1, "atlantic", 0, incorporated=False, ports=3)}
+        world = m.World({0: c}, states)
+        w = m.compute_weights(world, 0)
+        self.assertAlmostEqual(w["atlantic"], 2 * 0.5 + 3 + 30 * 0.5 / 1.5)
+        self.assertAlmostEqual(w["pacific"], 2 + 30 * 1 / 1.5)
+        self.assertAlmostEqual(w["indian"], 0.05 * 30)
+
+    def test_unincorporated_coast_in_the_readout(self):
+        """need_navy converts weight to navy with the same half-counted spread."""
+        countries = {0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)}
+        states = {0: m.State(0, "pacific", 0), 1: m.State(1, "atlantic", 0, incorporated=False),
+                  2: m.State(2, "pacific", 1)}
+        world = m.World(countries, states)
+        m.yearly_pass(world)
+        x = m.need_weight(world, "atlantic", 0)
+        self.assertIsNotNone(x)
+        self.assertEqual(m.need_navy(world, 0, "atlantic"), math.ceil(x / (0.5 / 1.5)))
+
     def test_barred_countries_hold_only_what_they_held(self):
         countries = {0: m.Country(0, policy=m.SPONSOR, navy=100, barred=True, station=True),
                      1: m.Country(1, policy=m.SPONSOR, navy=20)}
@@ -927,6 +956,126 @@ class LeaseTest(unittest.TestCase):
         m.yearly_pass(w)
         self.assertEqual(w.countries[1].lease_unused["pacific"], 0)
         self._assert_pool(w)
+
+
+class SubjectTest(unittest.TestCase):
+    """Administer Seabed Claims (seabed claims spec § 5.2): while the pact
+    stands, the subject's unused claims pass to its overlord at entry and after
+    every sharing, with no total; the licences the overlord builds on them count
+    as the subject's holdings at the sharing; nothing pools without the pact,
+    and an ended pact's claims return at the next sharing."""
+
+    def _world(self, pact=True, overlord_policy=m.SPONSOR):
+        # 0 overlord, 1 its subject, 2 a third party: one Pacific state each
+        countries = {0: m.Country(0, policy=overlord_policy, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10),
+                     2: m.Country(2, policy=m.SPONSOR, navy=10)}
+        countries[1].overlord = 0
+        w = m.World(countries, {cid: m.State(cid, "pacific", cid) for cid in range(3)})
+        m.yearly_pass(w)
+        if pact:
+            m.start_pact(w, 0, 1)
+        return w
+
+    def test_entry_passes_the_claims_at_once(self):
+        w = self._world(pact=False)
+        claims = dict(w.countries[1].unbuilt)
+        overlord = dict(w.countries[0].unbuilt)
+        m.start_pact(w, 0, 1)
+        for b in m.BASINS:
+            self.assertEqual(w.countries[1].unbuilt[b], 0, b)
+            self.assertEqual(w.countries[0].subj_unused[b], claims[b], b)
+            self.assertEqual(w.countries[0].unbuilt[b], overlord[b] + claims[b], b)
+            self.assertEqual(w.countries[1].pass_unused[b], claims[b], b)
+
+    def test_subject_claims_pass_every_sharing(self):
+        w = self._world()
+        m.yearly_pass(w)
+        sub, over = w.countries[1], w.countries[0]
+        for b in m.BASINS:
+            self.assertEqual(sub.unbuilt[b], 0, b)
+            self.assertGreater(over.subj_unused[b], 0, b)
+            self.assertEqual(over.subj_unused[b], sub.ent[b] - sub.sh[b], b)
+
+    def test_no_pooling_without_the_pact(self):
+        w = self._world(pact=False)
+        m.yearly_pass(w)
+        self.assertGreater(w.countries[1].unbuilt["pacific"], 0)
+        self.assertEqual(w.countries[0].subj_unused["pacific"], 0)
+
+    def test_overlord_builds_subject_claims_last_and_they_count_as_the_subjects(self):
+        w = self._world()
+        own = m.own_claims(w.countries[0], "pacific")
+        w.states[0].levels += own + 7
+        m.record_country(w, 0)
+        self.assertEqual(w.countries[1].pass_built["pacific"], 7)
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[1].sh["pacific"], 7)
+        self.assertEqual(w.countries[0].sh["pacific"], own)
+
+    def test_a_pact_never_squeezes_a_third_party(self):
+        """Three equal claimants; the overlord builds every claim it has, its
+        subject's included, for five years. The third party's share stays a
+        third: the subject's weight pays for the licences built on its claims."""
+        w = self._world()
+        third = w.countries[2].ent["pacific"]
+        for _ in range(5):
+            w.states[0].levels += w.countries[0].unbuilt["pacific"]
+            m.record_country(w, 0)
+            m.yearly_pass(w)
+            self.assertGreaterEqual(w.countries[2].ent["pacific"], third)
+
+    def test_pact_ends_mid_year(self):
+        w = self._world()
+        m.yearly_pass(w)
+        passed = w.countries[0].subj_unused["pacific"]
+        m.end_pact(w, 0, 1)
+        self.assertEqual(w.countries[0].subj_unused["pacific"], passed)       # kept until the sharing
+        m.yearly_pass(w, first_of_year=False)
+        sub, over = w.countries[1], w.countries[0]
+        self.assertEqual(over.subj_unused["pacific"], 0)
+        self.assertGreater(sub.unbuilt["pacific"], 0)
+        self.assertEqual(sub.unbuilt["pacific"], sub.ent["pacific"] - sub.sh["pacific"])
+
+    def test_overlord_floor_excludes_subject_claims(self):
+        w = self._world()
+        over = w.countries[0]
+        own = m.own_claims(over, "pacific")
+        self.assertGreater(over.subj_unused["pacific"], 0)
+        m.yearly_pass(w)                                                    # January: the floor is set first
+        self.assertEqual(over.floor_prot["pacific"], math.floor(m.FLOOR_KEEP * own))
+
+    def test_relinquish_drops_subject_claims_without_building(self):
+        w = self._world()
+        m.relinquish(w, 0, "pacific")
+        self.assertEqual(w.countries[0].subj_unused["pacific"], 0)
+        self.assertEqual(w.countries[1].pass_built["pacific"], 0)
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].subj_unused["pacific"], 0)          # none pass into a relinquished basin
+        self.assertGreater(w.countries[0].subj_unused["atlantic"], 0)
+
+    def test_random_worlds_with_pacts(self):
+        """random_world makes subjects and pacts; pacts start and end at
+        random; the pools hold and the counters stay consistent."""
+        check = PoolsHoldTest._check
+        made = 0
+        for i in range(WORLDS):
+            rng = random.Random(8800 + i)
+            world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
+            made += len(world.administer)
+            for _ in range(YEARS):
+                for _ in range(12):
+                    m.step_leases(world, rng)
+                    m.step_pacts(world, rng)
+                    m.step_month(world, rng, annex=0, split=0)
+                    check(self, world, "month")
+                    for c in world.countries.values():
+                        if c.alive:
+                            for b in m.BASINS:
+                                self.assertLessEqual(c.lease_unused[b] + c.subj_unused[b], c.unbuilt[b])
+                                self.assertGreaterEqual(c.pass_built[b], 0)
+                m.yearly_pass(world)
+                check(self, world, "pass")
+        self.assertGreater(made, 0)
 
 
 class FeeTest(unittest.TestCase):
