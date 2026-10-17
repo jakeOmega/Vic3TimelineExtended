@@ -63,10 +63,12 @@ import tech_unlocks_lib
 import vanilla_parsed
 
 # Also loaded by name in POST_LOAD_AUDITS; imported here so
-# /scripted-helpers/unresolved and /script-args can call them directly
-# (#288, #732).
+# /scripted-helpers/unresolved, /script-args and /pm-employment can call them
+# directly (#288, #732, #990).
 import effect_trigger_validity_audit
+import pm_employment_audit
 import script_argument_audit
+import variable_usage
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -1485,6 +1487,25 @@ def _get_script_args_result():
         result = script_argument_audit.audit(mod_path=mod_path)
         _script_args_cache = (gen, result)
         return result
+
+
+# /variable-usage (#973): one variable_usage scan of the mod (a few seconds),
+# reused until the next reload bumps _call_index_generation.
+# (generation, Index) or None.
+_variable_usage_cache: tuple | None = None
+_variable_usage_lock = threading.Lock()
+
+
+def _get_variable_usage_index():
+    global _variable_usage_cache
+    with _variable_usage_lock:
+        gen = _call_index_generation
+        cached = _variable_usage_cache
+        if cached is not None and cached[0] == gen:
+            return cached[1]
+        index = variable_usage.build_index(mod_path)
+        _variable_usage_cache = (gen, index)
+        return index
 
 
 def _get_call_index() -> dict:
@@ -5867,6 +5888,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "event-context-audit": lambda: self._event_context_audit(params),
             "institutions": lambda: self._institutions(rest),
             "production-methods": lambda: self._production_methods(rest, params),
+            # Employment per valid PM combination, by profession (#990)
+            "pm-employment": lambda: self._pm_employment(rest, params),
             "journal-entries": lambda: self._journal_entries(rest),
             "treaty-articles": lambda: self._treaty_articles(rest),
             "diplomatic-actions": lambda: self._diplomatic_actions(rest),
@@ -5878,6 +5901,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "scripted-helpers": lambda: self._scripted_helpers(rest, params),
             # Calls whose arguments don't match the callee's $X$ names (#732)
             "script-args": lambda: self._script_args(rest, params),
+            # How each site uses a variable or variable list (#973)
+            "variable-usage": lambda: self._variable_usage(rest, params),
             "decrees": lambda: self._decrees(rest),
             "principles": lambda: self._principles(rest),
             "amendments": lambda: self._amendments(rest),
@@ -5973,12 +5998,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
                 {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
+                {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
                 {"path": "/treaty-articles/<id?>[/loc-keys]", "desc": "Treaty articles catalog; /<id>/loc-keys returns the article's loc-key family."},
                 {"path": "/diplomatic-actions/<id?>", "desc": "Diplomatic-action catalog with category (subject_relation/power_bloc/general) + pact metadata."},
                 {"path": "/decisions/<id?>", "desc": "Decisions catalog."},
                 {"path": "/script-values/<id?>", "desc": "Script value definitions."},
                 {"path": "/script-args/<helper?>", "desc": "Scripted effect/trigger calls whose arguments don't match the callee's $X$ names (#732); with a helper, its params and every caller's unknown/missing args."},
+                {"path": "/variable-usage/<name?>?kind=var|list&store=scope|global|local&unfiltered_by=<trigger>&patterns=false", "desc": "Every mod site that writes, reads or iterates a variable or variable list, with file:line, entity, op, scope hint and an iterator's limit (#973). unfiltered_by keeps the iterations whose limit names neither the trigger nor a scripted trigger that names it. Bare: every name with its counts (?prefix=)."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
                 {"path": "/on-actions/<id?>", "desc": "On-action wiring (mod-only)."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
@@ -8737,6 +8764,28 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "stale_tags": [{"file": t.file, "line": t.line} for t in result.stale_tags],
         }
 
+    def _variable_usage(self, parts, params):
+        """GET /variable-usage[/<name>] — how each mod site uses a variable or
+        variable list (#973), from variable_usage's index."""
+        def one(key):
+            return (params.get(key) or [None])[0] or None
+        kind, store = one("kind"), one("store")
+        if kind not in (None, "var", "list"):
+            raise BadRequest(f"kind must be var or list, not {kind!r}")
+        if store not in (None, "scope", "global", "local"):
+            raise BadRequest(f"store must be scope, global or local, not {store!r}")
+        index = _get_variable_usage_index()
+        if not parts:
+            return variable_usage.names(index, one("prefix"), kind)
+        if len(parts) > 1:
+            raise NotFound("/variable-usage/" + "/".join(parts))
+        patterns = (one("patterns") or "true").lower() != "false"
+        out = variable_usage.usage(index, parts[0], kind, store, one("unfiltered_by"),
+                                   patterns)
+        if out is None:
+            raise NotFound(parts[0])
+        return out
+
     def _scripted_helper(self, etype, parts):
         data = ms.get_data(etype)
         if not data:
@@ -8756,6 +8805,49 @@ class ModStateHandler(BaseHTTPRequestHandler):
             {"type": etype, "id": hid, "parameters": _extract_parameters(raw)}
             for hid, raw in data.items()
         ]
+
+    # ---- PM combination employment (#990) ----------------------------------
+    def _pm_employment(self, parts, params):
+        """GET /pm-employment/<building>[?select=&bucket=&limit=],
+        GET /pm-employment?select=<pm|glob>[,...]"""
+        buildings = ms.get_data("Buildings")
+        if not buildings:
+            raise DataNotLoaded("Buildings")
+        pmg_data = ms.get_data("PM Groups") or {}
+        pm_data = ms.get_data("PMs") or {}
+        select = [s.strip() for v in params.get("select", []) for s in v.split(",") if s.strip()]
+        bucket_args = [b.strip() for v in params.get("bucket", []) for b in v.split(",") if b.strip()]
+        if not bucket_args or "all" in bucket_args:
+            buckets = pm_employment_audit.BUCKETS
+        else:
+            unknown = [b for b in bucket_args if b not in pm_employment_audit.BUCKETS]
+            if unknown:
+                raise BadRequest(f"unknown bucket {unknown[0]!r}; use "
+                                 + ", ".join(pm_employment_audit.BUCKETS) + " or all")
+            buckets = tuple(b for b in pm_employment_audit.BUCKETS if b in bucket_args)
+        limit_arg = (params.get("limit") or ["50"])[0]
+        try:
+            limit = int(limit_arg)
+        except ValueError:
+            raise BadRequest(f"limit must be an integer, not {limit_arg!r}")
+        if limit < 0:
+            raise BadRequest("limit must be 0 (no limit) or more")
+        if len(parts) > 1:
+            raise NotFound("/pm-employment/" + "/".join(parts))
+        if not parts:
+            if not select:
+                raise BadRequest("Pass a building (/pm-employment/building_x) "
+                                 "or ?select=<pm or glob>[,...]")
+            return pm_employment_audit.employment_by_select(
+                select, buildings, pmg_data, pm_data, buckets, limit)
+        out = pm_employment_audit.employment_combinations(
+            parts[0], buildings, pmg_data, pm_data, select, buckets, limit)
+        if out is None:
+            raise NotFound(parts[0])
+        if select and not out["select_matched"]:
+            raise BadRequest(f"no production method of {parts[0]} matches "
+                             f"select={','.join(select)}")
+        return out
 
     # ---- structured: decrees ----------------------------------------------
     def _decrees(self, parts):

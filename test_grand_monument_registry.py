@@ -2348,6 +2348,17 @@ class GiftTests(unittest.TestCase):
         self.assertIn("immediate = { gm_state_gift_grandeur = yes gm_state_hist_take = yes gm_state_sig_take_grant = yes }",
                       squash(strip_comments(raw_block_at(self.events, r"(?m)^monument_events\.26\s*=\s*\{"))))
 
+    def test_the_gift_fires_after_the_record_closes(self):
+        """A trigger_event with no delay runs the event inside gm_com_fulfil,
+        and the gift's refresh (monument_events.20) asks gm_com_check_progress
+        again: fired before gm_com_close, it found the opportunity still open
+        and seized it again without end (two stack-overflow crashes,
+        2026-10-17)."""
+        fulfil = squash(strip_comments(block(self.e, "gm_com_fulfil")))
+        gift = "scope:gm_com_named_state ?= { trigger_event = { id = monument_events.26 } }"
+        self.assertEqual(fulfil.count("monument_events.26"), 1)
+        self.assertLess(fulfil.index("gm_com_close = yes"), fulfil.index(gift))
+
     def test_the_gift_is_age(self):
         # Ageing rework (spec 2026-10-16 §5; owner): +5 grandeur, no rebuild.
         gift = squash(block(self.e, "gm_state_gift_grandeur"))
