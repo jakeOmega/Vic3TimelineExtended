@@ -618,3 +618,23 @@ Succession), is the `workforce_amendment_type` self-check's.
    10-14s still work at 30%. A Forced Heirship country that takes Undivided Farm Succession (The Last Division, or the
    console) has its farming states' marriage age rise at the next counts, as under Primogeniture; a State Religion
    country's Family Limitation rises half as fast with literacy as a Freedom of Conscience one's.
+
+## UBI's working ages in the late game, and the Workforce row (2026-10-17)
+
+Under UBI and Post-Scarcity a late-game state's working ages end at its blended old-age threshold, the one the
+Demographics tab's Old age from row shows, no longer at the untreated's (`docs/systems/mod_systems.md` § Phase 2 step
+1). A threshold of None ends them nowhere. The Workforce row and its hover now add up and name their scales. Pure
+script order and loc, pinned by `test_demographics_late.py` and `test_demographics_work.py`, so no self-check.
+
+1. **The EU test game (Full, UBI, longevity care).** Load `european union_2042_04_04` and pass a state's next census
+   step (31 December). In the state of the report (save id 456, Old age from 128), the Workforce hover's working age
+   reads about 99% of people where it read 50%, at work at most 100% where it read 127%, and workers past the end about
+   0%; Census: Workforce is heading for about the term it has (+42%) rather than +19%.
+2. **None (Full, UBI).** A state whose Old age from reads None counts nobody as past the working ages: its Workforce
+   hover's "Past the working ages and still at work" reads 0.0%.
+3. **The Workforce row adds up (country tab and state subtab).** Where people work past the working ages the row
+   reads three terms, e.g. "50% × 99% + 14% = 64%", the middle one never above 100%; where nobody does (no pension
+   law), two. The `+` term shows no stray space before it and nothing at all when it rounds to 0%.
+4. **The state hover's scales.** The game's line names ×0.70 and the census's aim; the Full line's base plus "now"
+   equals the "its pops are set to" figure, and its base plus "heading for" equals the aim (25% + 42% = 67%, 25% + 19%
+   = 44% in the report's state before this fix).
