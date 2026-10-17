@@ -1,7 +1,7 @@
 ﻿# Evaluated on a candidate recipient; ROOT is the donor event/pulse country.
 banking_is_bailout_recipient = {
 	NOT = { this = root }
-	has_journal_entry = je_banking_cycle
+	te_banking_cycle_running = yes
 	has_diplomatic_relevance = root
 	NOT = { has_war_with = root }
 	# The rescuer must be the larger economy: a donor smaller than the country
@@ -24,7 +24,7 @@ banking_is_bailout_recipient = {
 }
 
 banking_can_offer_bailout = {
-	has_journal_entry = je_banking_cycle
+	te_banking_cycle_running = yes
 	has_technology_researched = keynesian_economics
 	var:finance_cycle_value >= 40
 	NOT = { in_default = yes }

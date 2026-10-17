@@ -18,7 +18,7 @@
 cb_open_market_ops = {
 	name = "CB_OPEN_MARKET_OPS"
 	desc = "CB_OPEN_MARKET_OPS_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_omo_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_omo_active = no }
 
 	# `possible` now gates this on the policy rate sitting at its floor
 	# (banking_possible_cb_open_market_ops, monetary_policy_design.md §11), so
@@ -135,7 +135,7 @@ cb_disable_open_market_ops = {
 cb_countercyclical_buffer = {
 	name = "CB_COUNTERCYCLICAL_BUFFER"
 	desc = "CB_COUNTERCYCLICAL_BUFFER_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_buffer_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_buffer_active = no }
 
 	ai_chance = {
 		value = 0
@@ -184,7 +184,7 @@ cb_disable_countercyclical_buffer = {
 cb_expand_deposit_guarantee = {
 	name = "CB_EXPAND_DEPOSIT_GUARANTEE"
 	desc = "CB_EXPAND_DEPOSIT_GUARANTEE_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_deposit_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_deposit_active = no }
 
 	ai_chance = {
 		value = 0
@@ -234,7 +234,7 @@ cb_disable_expand_deposit_guarantee = {
 cb_directed_credit_infrastructure = {
 	name = "CB_DIRECTED_CREDIT_INFRA"
 	desc = "CB_DIRECTED_CREDIT_INFRA_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_directed_active = no }
 
 	# The weight every directed-credit sector shares (banking_dc_ai_weight in
 	# extra_script_values.txt — this button's own ai_chance until 2026-09-23).
@@ -283,7 +283,7 @@ cb_disable_directed_credit_infrastructure = {
 cb_emergency_liquidity_program = {
 	name = "CB_EMERGENCY_LIQUIDITY"
 	desc = "CB_EMERGENCY_LIQUIDITY_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_eliq_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_eliq_active = no }
 
 	ai_chance = {
 		value = 0
@@ -332,7 +332,7 @@ cb_disable_emergency_liquidity_program = {
 cb_moral_suasion = {
 	name = "CB_MORAL_SUASION"
 	desc = "CB_MORAL_SUASION_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_moral_suasion_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_moral_suasion_active = no }
 
 	ai_chance = {
 		value = 0
@@ -379,7 +379,7 @@ cb_disable_moral_suasion = {
 cb_raise_margin_requirements = {
 	name = "CB_RAISE_MARGIN_REQ"
 	desc = "CB_RAISE_MARGIN_REQ_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_margin_req_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_margin_req_active = no }
 
 	ai_chance = {
 		value = 0
@@ -436,7 +436,7 @@ cb_disable_raise_margin_requirements = {
 cb_capital_controls_outflow = {
 	name = "CB_CAPITAL_CONTROLS_OUT"
 	desc = "CB_CAPITAL_CONTROLS_OUT_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_capital_controls_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_capital_controls_active = no }
 
 	ai_chance = {
 		value = 0
@@ -548,7 +548,7 @@ cb_disable_capital_controls_outflow = {
 cb_export_credit_facility = {
 	name = "CB_EXPORT_CREDIT"
 	desc = "CB_EXPORT_CREDIT_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_export_credit_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_export_credit_active = no }
 
 	ai_chance = {
 		value = 0
@@ -600,7 +600,7 @@ cb_disable_export_credit_facility = {
 cb_asset_relief_program = {
 	name = "CB_ASSET_RELIEF"
 	desc = "CB_ASSET_RELIEF_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_asset_relief_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_asset_relief_active = no }
 
 	ai_chance = {
 		value = 0
@@ -654,7 +654,7 @@ cb_disable_asset_relief_program = {
 cb_directed_credit_heavy_industry = {
 	name = "CB_DIRECTED_CREDIT_HEAVY"
 	desc = "CB_DIRECTED_CREDIT_HEAVY_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_heavy_industry_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_directed_credit_heavy_industry_active = no }
 
 	# Its share of banking_dc_ai_weight, only while the Industrialists are in government.
 	ai_chance = {
@@ -693,7 +693,7 @@ cb_disable_directed_credit_heavy_industry = {
 cb_directed_credit_agriculture = {
 	name = "CB_DIRECTED_CREDIT_AGRI"
 	desc = "CB_DIRECTED_CREDIT_AGRI_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_agriculture_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_directed_credit_agriculture_active = no }
 
 	# Its share of banking_dc_ai_weight, only while the Landowners or the Rural Folk are in government.
 	ai_chance = {
@@ -732,7 +732,7 @@ cb_disable_directed_credit_agriculture = {
 cb_directed_credit_armaments = {
 	name = "CB_DIRECTED_CREDIT_ARMS"
 	desc = "CB_DIRECTED_CREDIT_ARMS_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_armaments_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_directed_credit_armaments_active = no }
 
 	# Its share of banking_dc_ai_weight, only while at war, or while the Armed Forces are in government.
 	ai_chance = {
@@ -771,7 +771,7 @@ cb_disable_directed_credit_armaments = {
 cb_directed_credit_electrification = {
 	name = "CB_DIRECTED_CREDIT_ELEC"
 	desc = "CB_DIRECTED_CREDIT_ELEC_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_electrification_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_directed_credit_electrification_active = no }
 
 	# Its share of banking_dc_ai_weight, only while the Intelligentsia are in government.
 	ai_chance = {
@@ -810,7 +810,7 @@ cb_disable_directed_credit_electrification = {
 cb_reserve_requirements = {
 	name = "CB_RESERVE_REQUIREMENTS"
 	desc = "CB_RESERVE_REQUIREMENTS_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_reserve_requirements_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_reserve_requirements_active = no }
 
 	ai_chance = {
 		value = 0
@@ -875,7 +875,7 @@ cb_disable_reserve_requirements = {
 cb_bank_holiday = {
 	name = "CB_BANK_HOLIDAY"
 	desc = "CB_BANK_HOLIDAY_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_bank_holiday_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_bank_holiday_active = no }
 
 	ai_chance = {
 		value = 0
@@ -917,7 +917,7 @@ cb_disable_bank_holiday = {
 cb_bail_in_regime = {
 	name = "CB_BAIL_IN"
 	desc = "CB_BAIL_IN_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_bail_in_regime_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_is_market_economy = yes banking_tool_bail_in_regime_active = no }
 
 	ai_chance = {
 		value = 0
@@ -5879,7 +5879,7 @@ create_new_religion = {
 cb_restrict_inflows = {
 	name = "CB_RESTRICT_INFLOWS"
 	desc = "CB_RESTRICT_INFLOWS_DESC"
-	visible = { is_ai = yes banking_external_available = yes banking_tool_restrict_inflows_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_external_available = yes banking_tool_restrict_inflows_active = no }
 	possible = { banking_possible_cb_restrict_inflows = yes }
 	effect = { banking_effect_cb_restrict_inflows = yes }
 	ai_chance = { value = 0 if = { limit = { banking_ai_core_cb_restrict_inflows = yes } add = 30 } }
@@ -5896,7 +5896,7 @@ cb_disable_restrict_inflows = {
 cb_sterilize_inflows = {
 	name = "CB_STERILIZE_INFLOWS"
 	desc = "CB_STERILIZE_INFLOWS_DESC"
-	visible = { is_ai = yes banking_external_available = yes banking_tool_sterilize_inflows_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_external_available = yes banking_tool_sterilize_inflows_active = no }
 	possible = { banking_possible_cb_sterilize_inflows = yes }
 	effect = { banking_effect_cb_sterilize_inflows = yes }
 	ai_chance = { value = 0 if = { limit = { banking_ai_core_cb_sterilize_inflows = yes } add = 30 } }
@@ -5913,7 +5913,7 @@ cb_disable_sterilize_inflows = {
 cb_foreign_borrowing_limits = {
 	name = "CB_FOREIGN_BORROWING_LIMITS"
 	desc = "CB_FOREIGN_BORROWING_LIMITS_DESC"
-	visible = { is_ai = yes banking_external_available = yes banking_tool_foreign_borrowing_limits_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_external_available = yes banking_tool_foreign_borrowing_limits_active = no }
 	possible = { banking_possible_cb_foreign_borrowing_limits = yes }
 	effect = { banking_effect_cb_foreign_borrowing_limits = yes }
 	ai_chance = { value = 0 if = { limit = { banking_ai_core_cb_foreign_borrowing_limits = yes } add = 30 } }
@@ -5930,7 +5930,7 @@ cb_disable_foreign_borrowing_limits = {
 cb_fx_surrender = {
 	name = "CB_FX_SURRENDER"
 	desc = "CB_FX_SURRENDER_DESC"
-	visible = { is_ai = yes banking_external_available = yes banking_tool_fx_surrender_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_external_available = yes banking_tool_fx_surrender_active = no }
 	possible = { banking_possible_cb_fx_surrender = yes }
 	effect = { banking_effect_cb_fx_surrender = yes }
 	ai_chance = { value = 0 if = { limit = { banking_ai_core_cb_fx_surrender = yes } add = 30 } }
@@ -5947,7 +5947,7 @@ cb_disable_fx_surrender = {
 cb_emergency_import_financing = {
 	name = "CB_EMERGENCY_IMPORT_FINANCING"
 	desc = "CB_EMERGENCY_IMPORT_FINANCING_DESC"
-	visible = { is_ai = yes banking_external_available = yes banking_tool_emergency_import_financing_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_external_available = yes banking_tool_emergency_import_financing_active = no }
 	possible = { banking_possible_cb_emergency_import_financing = yes }
 	effect = { banking_effect_cb_emergency_import_financing = yes }
 	ai_chance = { value = 0 if = { limit = { banking_ai_core_cb_emergency_import_financing = yes } add = 30 } }

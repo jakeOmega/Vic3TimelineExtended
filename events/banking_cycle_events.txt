@@ -4314,7 +4314,7 @@ banking_cycle_events.68 = {
 
 	trigger = {
 		exists = scope:bailout_donor
-		has_journal_entry = je_banking_cycle
+		te_banking_cycle_running = yes
 		OR = {
 			banking_cycle_is_downturn = yes
 			banking_cycle_is_panic = yes

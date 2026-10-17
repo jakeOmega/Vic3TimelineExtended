@@ -65,7 +65,18 @@ class ImmediateTests(unittest.TestCase):
         self.assertRegex(je, r"can_revolution_inherit\s*=\s*yes")
 
     def test_cycle_sets_are_has_variable_guarded(self):
-        _, body = _immediate()
+        # Since the banking always-on spec (2026-10-17) the seeds live in
+        # banking_cycle_start, which immediate calls only for a country with no
+        # cycle that meets the start test; the monthly pulse calls it too.
+        _, immediate = _immediate()
+        self.assertRegex(
+            immediate,
+            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*has_variable\s*=\s*finance_cycle_value\s*\}"
+            r"\s*te_banking_cycle_unlocked\s*=\s*yes\s*\}\s*banking_cycle_start\s*=\s*yes\s*\}")
+        for name in CYCLE_VARS:
+            with self.subTest(variable=name, block="immediate"):
+                self.assertNotRegex(immediate, r"(set|change)_variable\s*=\s*\{\s*name\s*=\s*%s\b" % name)
+        body = _block(_read(EFFECTS), r"^banking_cycle_start")
         for name in CYCLE_VARS:
             with self.subTest(variable=name):
                 sets = re.findall(

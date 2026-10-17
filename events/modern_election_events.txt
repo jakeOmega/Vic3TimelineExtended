@@ -1358,9 +1358,9 @@ modern_election_events.15 = {
 		# A boom story: with the banking cycle running, only in its expansion,
 		# boom or frenzy phases; never announce a boom in the middle of a panic.
 		OR = {
-			NOT = { has_journal_entry = je_banking_cycle }
+			te_banking_cycle_running = no
 			AND = {
-				has_variable = finance_cycle_value
+				te_banking_cycle_running = yes
 				OR = {
 					banking_cycle_is_expansion = yes
 					banking_cycle_is_boom = yes

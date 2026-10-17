@@ -28,14 +28,14 @@ rule, and the rebels of a running revolution until they win. For them:
 - a player with a National Bank can't touch the dial: the bank runs the Dual Mandate (`te_monetary_effects.txt`, the
   `NOT = { has_journal_entry = je_banking_cycle }` branches; `te_mon_mandate_runs_bank`).
 
-## Decisions to take
+## Decisions (owner, 2026-10-17)
 
-| Question | Recommendation |
+| Question | Decision |
 |---|---|
 | What "activates" means | **The cycle starts.** The condition is today's unlock test, unchanged: Stock Exchange and an Urban Center of level 5 (§ 1) |
 | Does the cycle move before it starts? | **No.** A dormant entry holds no cycle readings: no phase, crashes, events or contagion, as today. The alternative, a cycle that runs from 1836 with the tools locked, is § 9 |
-| What works before the start | The **Monetary Policy section**, controls included, for a country whose bank holds a dial. Nothing in it needs the cycle, and the monetary layer already runs for these countries. Everything else waits (§ 3) |
-| Rebels | **No entry while revolutionary.** The winner inherits the loser's entry, the path #465 fixed (§ 5) |
+| What works before the start | **Nothing: the Monetary Policy section is read-only.** Its readings show (Rate You Pay, Credit Standing, the dial's rate), its controls are greyed, and a bank keeps running the Dual Mandate as it does today. Every interaction waits for the cycle (§ 3) |
+| Rebels | **No entry while revolutionary.** The winner inherits the loser's entry, the path #465 fixed (§ 5). Decentralized nations get none either, as with the mod's other every-country entries |
 
 ## 1. What "activates" means
 
@@ -59,8 +59,7 @@ its three readings, its phase modifiers, crashes, events, contagion and the tool
 
 ```
 is_shown_when_inactive = {
-	te_banking_system_on = yes
-	is_revolutionary = no
+	te_banking_entry_expected = yes   # the rule on, not decentralized, not revolutionary
 }
 possible = { always = yes }
 ```
@@ -87,12 +86,12 @@ possible = { always = yes }
 | Restructure the Public Debt, bailouts, the UN emergency loan, the UN grant into the pool | Not offered | `banking_restructuring_shown`, `banking_is_bailout_recipient` / `banking_can_offer_bailout`, `un_docket_loan_candidate`, `un_dev_fund_pays_into_pool` |
 | History charts | Not sampled, section hidden | `te_history_record_banking_samples` / `_marker` |
 | The phase icon in the top bar | Hidden | `te_banking_topbar_gate` |
-| **Monetary Policy: the dial, delegation, mandate, monetisation, recapitalisation** | **Works**, for a country holding a dial | unchanged: these ask `has_journal_entry`, which now means "has the dashboard" |
+| Monetary Policy's controls: the dial, delegation, mandate, monetisation, recapitalisation | Greyed; the bank runs the Dual Mandate (or its act's mandate under Central Bank Independence), as without the entry today | `banking_mon_control_sgui`'s `is_valid` opens with `te_banking_cycle_started_tt`; the mandate branches in `te_monetary_update_target` and `te_mon_mandate_runs_bank` ask `te_banking_controls_open` |
 | **Monetary Policy's readings: Rate You Pay, Credit Standing, Risk Premium, prices, exchange rate, gold and peg** | **Shown** (Enabled rule) | unchanged |
 
-A player whose bank holds a dial gains it at once: the bank stops being pinned to the Dual Mandate and starts
-delegated with the Dual Mandate it was already running (the seed in `te_monetary_update_target`), and `te_mandate.1` asks for an act
-under Central Bank Independence as it does for any dashboard holder.
+`te_banking_controls_open` is its own trigger, today the same test as `te_banking_cycle_running`, so opening the
+monetary controls before the cycle later is a one-line change. `te_mandate.1` (an act for an independent bank) asks
+any country, entry or not, as it does now.
 
 ## 4. Panels
 
@@ -101,18 +100,22 @@ history panel and the top bar. Each moves to a scripted GUI on `te_banking_cycle
 (`banking_dash_cycle_running`), and a twin (`banking_dash_cycle_dormant`) draws the dormant state:
 
 - **Overview** (always shown, rule 1): the bars and the cycle's cells (phase, momentum, bubble, budget) only once the
-  cycle runs. Before that, one cell in the overview's shape (rule 4): caption *Financial Cycle*, word *Not Started*,
-  third line *Conditions: 1 of 2*, the checklist with ticks on hover (`te_budget_banking_tab_unlock_sgui`'s
-  `IsValidTooltip`). The monetary row (Policy Stance, prices) shows as it does now.
+  cycle runs. Before that, one cell in the overview's shape (rule 4): caption *Cycle Phase*, word *Not Started*, the
+  Stable icon dimmed, third line *1 of 2 met* (`banking_disp_unlock_met`), the checklist with ticks on hover
+  (`te_budget_banking_tab_unlock_sgui`'s `IsValidTooltip`, asked `IsValid` first for the month between meeting the
+  test and the pulse that starts the cycle). The monetary row (Policy Stance, prices) shows as it does now.
 - **Active Policies**: hidden while dormant (rule 7: content for one state only).
-- **Monetary Policy**: unchanged.
+- **Monetary Policy**: every reading as now; each control greyed, its tooltip's first line crossed (rule 6). The
+  reason is said once, at the top of the section, for a country with a control there
+  (`banking_dash_monetary_dormant_note`: a dial, or under Simplified the Open-Market Operations row).
 - **Available Interventions**: every row as now, its Enable greyed, the tooltip's first line crossed (rule 6). The
   reason is said once, under the heading: *The financial cycle has not started* (rule 6: "said once, above the
   rows"), with the checklist on hover.
 - **History**: hidden while dormant. **How Banking Works**: shown, with a line on when the cycle starts.
 - **The Banking tab** opens whenever the entry is held (`te_budget_banking_tab_sgui` unchanged). Its greyed state and
   the #805 readout remain for a country without the entry: the first fortnight of a game, and the rebels of a running
-  revolution, whom a player can switch to.
+  revolution, whom a player can switch to. The greyed tab's tooltip no longer lists the start test, which is not what
+  opens it: it says the tab opens with the entry.
 - **Style guide rule 9.** Banking stops being the exception: the tab is greyed only until the entry is active, and
   every country holds it. The rule gains a line for an entry whose system starts later: the entry and the tab open
   first, and the system's controls carry the start condition.
@@ -125,10 +128,13 @@ history panel and the top bar. Each moves to a scripted GUI on `te_banking_cycle
   inactive record a type gets from game start, and the wider `is_shown_when_inactive` activates it (dormant: it
   didn't meet the test, or it would hold the entry already).
 - **Safety net.** Whether an inactive record exists in every old save, and for every released country, is unread.
-  `on_yearly_pulse_country` adds the entry (`add_journal_entry`) to a country under the rule, not revolutionary,
-  without it. Once a game, the first January pulse logs `TE_SELF_CHECK OK|BROKEN banking_entry_everywhere
-  missing=<n>` (CLAUDE.md's self-check pattern; `n` counted before the net adds any). BROKEN means the engine left
-  records out and the net carried them; it goes in the play-test list's Self-checks table.
+  `te_banking_entry_net` (`on_yearly_pulse_country`) adds the entry (`add_journal_entry`) to a country that should
+  hold it (`te_banking_entry_expected`: the rule on, not a decentralized nation, not revolutionary) and doesn't, and
+  counts the adds. Once a game
+  the first yearly pulse arms `te_debug_banking.1` for 30 days on, which logs `TE_SELF_CHECK OK|BROKEN
+  banking_entry_everywhere missing=<n> added_by_net=<m>` (CLAUDE.md's self-check pattern). OK needs both at 0, so the
+  net can't hide a gap; BROKEN means the engine left records out and the net carried them. The row is in
+  `docs/testing/banking-playtest.md`'s Self-checks table.
 - **New countries** (releases, formables by `change_tag`, which keeps entries) get the entry like any other country,
   and start on `immediate` if they meet the test.
 - **Revolutions.** `is_revolutionary = no` keeps the rebels out of the entry. Today unlocked rebels would get their
@@ -160,10 +166,11 @@ entry's gate breaks every `has_journal_entry = X`"):
 | Means | Sites | Change |
 |---|---|---|
 | **The cycle runs** | `banking_change_*` (3), `banking_enactment_run_shock`, `banking_cycle_spread_contagion`, `banking_crisis_wave_check_great_depression`, `banking_cycle_post_event_refresh`, `te_history_record_banking_samples` / `_marker`, `banking_is_bailout_recipient`, `banking_can_offer_bailout`, `banking_restructuring_shown`, `un_dev_fund_pays_into_pool`, `un_docket_loan_candidate`, `te_ap_economy_faltering`, `banking_external_available`, `banking_cycle_events.68`, `society_technology_events.30`'s `after`, `modern_election_events.15` (the boom story), `extra_law_events.62` (the panic desc), `un_events.35` | `te_banking_cycle_running` |
-| **Has the dashboard** | `banking_mon_control_sgui`, the two mandate branches in `te_monetary_effects.txt`, `te_mon_mandate_runs_bank`, the eight `te_peg` tooltip switches, the tab gates (`te_budget_banking_tab_sgui`, `_readout_sgui`) | keep |
+| **Has the controls** | `banking_mon_control_sgui`, the two mandate branches in `te_monetary_update_target`, `te_mon_mandate_runs_bank`, the eight `te_peg` tooltip switches (their `.tt` texts name controls a dormant country can't use) | `te_banking_controls_open` |
+| **Has the panel** | the tab gates (`te_budget_banking_tab_sgui`, `_readout_sgui`) | keep |
 | **The entry object** (its modifiers) | `te_monetary_settle_modifier_home`, `te_mon_mod_strip`, `te_mon_mod_has`, the FX and swap-line migrations, the two law cleanups in `extra_on_actions.txt`, the 38 `banking_tool_*_active` checks | keep |
 
-A test holds every reader to one of the three rows, so a new one has to choose.
+A test holds every reader to one of the four rows, so a new one has to choose.
 
 ## 9. Not recommended: the cycle runs from 1836
 
@@ -198,8 +205,8 @@ unlock test), with a simulator pass before shipping.
 
 - `test_banking_always_on.py`: the entry's gate (the rule and `is_revolutionary` only); the pulses' running branch and
   start branch; `immediate`'s start guard; the first line of every `banking_possible_*`; every enable button's
-  `visible`; every reader in one row of § 8; every cycle gate in the banking GUIs on `banking_dash_cycle_running`,
-  none on `JournalEntry.IsActive`.
+  `visible`; every reader in one row of § 8; every cycle gate in the banking GUIs on `banking_dash_cycle_running`, and
+  `JournalEntry.IsActive` on the containers only; the safety net and its self-check.
 - The strict audits, `organize_loc.py`, the GUI lint, the suite.
 - The player guide: `04-banking.md` (the entry's start, the tab, "holds the journal entry" in contagion, the Great
   Depression, the UN loan and restructuring), and the guide's reference chapter where it says the same.

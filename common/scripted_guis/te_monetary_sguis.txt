@@ -75,7 +75,17 @@ banking_mon_control_sgui = {
 	# `exists = scope:op` guards the first branch so a missing scope falls
 	# through to `trigger_else = { always = no }` — every control greys out
 	# rather than acting on the wrong op.
+	#
+	# Every op first needs the financial cycle to have started: every country
+	# holds the entry, and until its cycle starts the Monetary Policy section is
+	# read-only (owner, 2026-10-17). The condition is te_banking_controls_open,
+	# which the mandate branches of te_monetary_update_target read too, shown
+	# with the cycle's line.
 	is_valid = {
+		custom_tooltip = {
+			text = te_banking_cycle_started_tt
+			te_banking_controls_open = yes
+		}
 		# --- 0 / 1: the target stepper (§5.2) ---
 		# A dial needs a national bank and a discretionary regime; independence
 		# binds the target to the mandate; delegation does the same by choice.

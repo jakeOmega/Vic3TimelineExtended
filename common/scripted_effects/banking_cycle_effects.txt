@@ -1853,10 +1853,10 @@ banking_crisis_wave_check_great_depression = {
 			}
 		}
 		set_global_variable = { name = great_depression_occurred value = yes }
-		# Fire Great Depression event for all countries with banking journals
+		# Fire Great Depression event for every country whose cycle runs
 		every_country = {
 			limit = {
-				has_journal_entry = je_banking_cycle
+				te_banking_cycle_running = yes
 			}
 			trigger_event = { id = minor_events_timelineextended.8 days = 3 }
 		}
@@ -1873,14 +1873,16 @@ banking_crisis_wave_check_great_depression = {
 #   banking_change_momentum        = { ADD = 1  TEXT = MOMENTUM_1_DESC }
 #   banking_change_cycle_value     = { ADD = 5  TEXT = CYCLE_VALUE_5_DESC }
 #
-# The tooltip line shows, and the variable moves, only for a country that holds
-# the banking journal entry — the only place the cycle's bars are drawn. For
-# any other country both are skipped: it has no cycle, and must not be handed
-# the start of one. The entry's `immediate` seeds each of the three variables
-# only when it is absent (so a revolution's winner keeps the cycle it
-# inherits), so a write here would survive into the cycle the country starts
-# with when it gains the entry, instead of 50 / 0 / 0. Almost every caller can
-# only reach a holder already (the events fire from the entry's own pulse);
+# The tooltip line shows, and the variable moves, only for a country whose
+# cycle has started (te_banking_cycle_running). For any other country both are
+# skipped: it has no cycle, and must not be handed the start of one. The
+# variables are the latch (te_banking_cycle_running asks finance_cycle_value),
+# and banking_cycle_start seeds each only when it is absent (so a revolution's
+# winner keeps the cycle it inherits), so a write here would start the cycle
+# early, or survive into the one the country starts with, instead of
+# 50 / 0 / 0. Every country holds the entry, dormant until its cycle starts, so
+# has_journal_entry is not the test. Almost every caller can only reach a
+# running cycle already (the events fire from the entry's own pulse);
 # society_technology_events.30 fires from a technology on-action and reaches
 # every country.
 #
@@ -1889,7 +1891,7 @@ banking_crisis_wave_check_great_depression = {
 # Scope: country
 banking_change_bubble_pressure = {
 	if = {
-		limit = { has_journal_entry = je_banking_cycle }
+		limit = { te_banking_cycle_running = yes }
 		custom_tooltip = {
 			text = $TEXT$
 			change_variable = { name = bubble_pressure add = $ADD$ }
@@ -1899,7 +1901,7 @@ banking_change_bubble_pressure = {
 
 banking_change_momentum = {
 	if = {
-		limit = { has_journal_entry = je_banking_cycle }
+		limit = { te_banking_cycle_running = yes }
 		custom_tooltip = {
 			text = $TEXT$
 			change_variable = { name = finance_cycle_momentum add = $ADD$ }
@@ -1909,7 +1911,7 @@ banking_change_momentum = {
 
 banking_change_cycle_value = {
 	if = {
-		limit = { has_journal_entry = je_banking_cycle }
+		limit = { te_banking_cycle_running = yes }
 		custom_tooltip = {
 			text = $TEXT$
 			change_variable = { name = finance_cycle_value add = $ADD$ }
@@ -1931,6 +1933,31 @@ banking_partial_default_write_off = {
 		text = banking_partial_default_write_off_tt
 		clear_scaled_debt = banking_partial_default_haircut
 	}
+}
+
+# 0. Start the financial cycle (docs/superpowers/specs/2026-10-17-banking-always-on-design.md
+#    § 1). Every country under the rule holds je_banking_cycle; its cycle starts
+#    here, at Stable with no momentum and no bubble, once te_banking_cycle_unlocked
+#    holds: from the entry's `immediate` (a new game's founders, a released country,
+#    a revolution's winner whose loser ran none) or from its monthly pulse, which
+#    also posts banking_cycle_started_notice to a human player. Seeding
+#    finance_cycle_value is what makes te_banking_cycle_running true. Each variable
+#    is seeded only when absent, as `immediate` always did (#465). Needs
+#    scope:journal_entry, which both callers have.
+banking_cycle_start = {
+	if = {
+		limit = { NOT = { has_variable = finance_cycle_value } }
+		set_variable = { name = finance_cycle_value value = 50 } # 0..100
+	}
+	if = {
+		limit = { NOT = { has_variable = finance_cycle_momentum } }
+		set_variable = { name = finance_cycle_momentum value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = bubble_pressure } }
+		set_variable = { name = bubble_pressure value = 0 }
+	}
+	banking_cycle_update_progress_bars = yes
 }
 
 # 0. Weekly effects
@@ -2172,7 +2199,7 @@ banking_cycle_spread_contagion = {
 				NOT = { THIS = scope:banking_crash_origin_country }
 				# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
 				NOT = { banking_crisis_wave_reached = yes }
-				has_journal_entry = je_banking_cycle
+				te_banking_cycle_running = yes
 				# Trade-reachable
 				OR = {
 					this.market = scope:banking_crash_origin_country.market
@@ -2602,7 +2629,7 @@ banking_cycle_post_event_refresh = {
 		if = { limit = { ROOT.var:bubble_pressure < 0 }       ROOT = { set_variable = { name = bubble_pressure value = 0 } } }
 		if = { limit = { ROOT.var:bubble_pressure > 100 }     ROOT = { set_variable = { name = bubble_pressure value = 100 } } }
 		if = {
-			limit = { ROOT = { has_journal_entry = je_banking_cycle } }
+			limit = { ROOT = { te_banking_cycle_running = yes } }
 			banking_cycle_apply_phase_modifiers = yes
 			je:je_banking_cycle = {
 				set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }

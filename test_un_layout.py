@@ -563,7 +563,7 @@ class DebugLogHygieneTest(unittest.TestCase):
 
 
 UNLOCK_TRIGGERS = {   # the tab gates' is_valid (te_system_tab_sguis.txt), and the file each lives in
-    "te_banking_entry_unlocked": "banking_policy_triggers.txt",
+    "te_banking_cycle_unlocked": "banking_policy_triggers.txt",
     "ch_entry_unlocked": "cultural_hegemony_triggers.txt",
     "un_entry_unlocked": "un_membership_triggers.txt",
     "nuclear_program_entry_unlocked": "nuke_triggers.txt",
@@ -604,9 +604,11 @@ class TabUnlockTooltipTest(unittest.TestCase):
                         self.assertIn("GetScriptedGui('%s').IsValid(" % sgui, line)
                         self.assertIn("'te_system_tab_met_tt'", line)
                         self.assertLess(line.index("'te_system_tab_met_tt'"), line.index(".IsValidTooltip("))
-        # Banking, Tax Code, Hegemony, UN, Nuclear, Covert, Demographics, and
-        # the Banking tab's monetary readout note (#805)
-        self.assertEqual(found, 8)
+        # Tax Code, Hegemony, UN, Nuclear, Covert, Demographics, and the
+        # Banking tab's monetary readout note (#805). The Banking tab itself
+        # opens with its entry, which every country holds, so its tooltip
+        # lists no conditions (the banking always-on spec, 2026-10-17).
+        self.assertEqual(found, 7)
 
     def test_no_bare_or(self):
         for name in UNLOCK_TRIGGERS:

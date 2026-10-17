@@ -557,3 +557,23 @@ banking_disp_bubble_change_shape = {
 		value = 4
 	}
 }
+
+# How many of the financial cycle's two start conditions hold
+# (te_banking_cycle_unlocked: Stock Exchange, an Urban Center of level 5), for
+# the dormant entry's Not Started cell. Its two tests, restated; test_banking_always_on
+# holds them to the trigger.
+banking_disp_unlock_met = {
+	value = 0
+	if = {
+		limit = { has_technology_researched = stock_exchange }
+		add = 1
+	}
+	if = {
+		limit = {
+			any_scope_state = {
+				any_scope_building = { is_building_type = building_urban_center level >= 5 }
+			}
+		}
+		add = 1
+	}
+}

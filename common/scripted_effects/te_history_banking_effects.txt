@@ -33,7 +33,8 @@
 #   crash                        this country's own banking crash began
 #   crash_contagion              a crash arrived through financial contagion
 #
-# Both helpers re-check the game rule and the journal entry. THE RULE CHECK IS
+# Both helpers re-check the game rule and that the cycle runs (every country
+# holds the entry, dormant until its cycle starts). THE RULE CHECK IS
 # te_banking_system_on, not `banking_system_enabled`: the simplified setting
 # keeps the cycle and its charts, and drops only the monetary series that have
 # nothing to say under it (see the sampling block below). The sampling call
@@ -50,7 +51,7 @@ te_history_record_banking_samples = {
 	if = {
 		limit = {
 			te_banking_system_on = yes
-			has_journal_entry = je_banking_cycle
+			te_banking_cycle_running = yes
 		}
 		te_history_record_sample = { METRIC = bank_value    VALUE = var:finance_cycle_value }
 		te_history_record_sample = { METRIC = bank_momentum VALUE = var:finance_cycle_momentum }
@@ -101,7 +102,7 @@ te_history_record_banking_marker = {
 	if = {
 		limit = {
 			te_banking_system_on = yes
-			has_journal_entry = je_banking_cycle
+			te_banking_cycle_running = yes
 		}
 		te_history_record_marker = { MARK = $MARK$ }
 	}

@@ -43,7 +43,7 @@ un_docket_loan_candidate = {
 	# §0.8: the docket offers nothing to a member whose representation is
 	# suspended.
 	NOT = { un_representation_suspended = yes }
-	has_journal_entry = je_banking_cycle
+	te_banking_cycle_running = yes
 	OR = {
 		in_default = yes
 		banking_cycle_is_panic = yes

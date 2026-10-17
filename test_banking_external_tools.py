@@ -49,7 +49,7 @@ class Script:
         self.tools = set()
         self.inputs = dict(gdp=1e6, gold_reserves=cash, export_reliance=.2,
                            te_mon_full_system=True, banking_is_market_economy=True,
-                           journal=True, bank=True, dial=True, gold=True, crisis=True,
+                           journal=True, cycle=True, bank=True, dial=True, gold=True, crisis=True,
                            at_war=False, controls_locked=False, points=10)
         self.inputs.update(inputs)
         self.deferred = deferred
@@ -109,6 +109,10 @@ class Script:
                 answer = val == 'market'
             elif key == 'has_journal_entry':
                 answer = self.inputs['journal']
+            elif key == 'te_banking_cycle_running':
+                # Every country holds the entry, dormant until its cycle starts
+                # (the banking always-on spec, 2026-10-17): `cycle` is the latch.
+                answer = (self.inputs['journal'] and self.inputs['cycle']) == (val == 'yes')
             elif key == 'has_law_or_variant':
                 assert val == 'law_type:law_national_bank', val
                 answer = self.inputs['bank']
@@ -208,6 +212,11 @@ class Script:
 class ExternalPolicyScenarios(unittest.TestCase):
     def test_no_monetary_tools_in_simplified_mode(self):
         s = Script(te_mon_full_system=False)
+        for tool in TOOLS:
+            self.assertFalse(s.check(s.triggers['banking_possible_cb_'+tool]))
+
+    def test_no_external_tool_before_the_cycle_starts(self):
+        s = Script(cycle=False)
         for tool in TOOLS:
             self.assertFalse(s.check(s.triggers['banking_possible_cb_'+tool]))
 

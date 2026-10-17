@@ -236,7 +236,9 @@ class RestructuringLadderTests(unittest.TestCase):
         self.assertIn("#b a year#!", _loc("te_decision_tt_restructure_debt"))
         self.assertIn("ai_chance", decision)
         shown = _top(DEBT_TRIGGERS, "banking_restructuring_shown")
-        for clause in ("has_journal_entry = je_banking_cycle", "is_revolutionary = no",
+        # A running cycle, not the entry: every country holds the entry, dormant
+        # until its cycle starts (the banking always-on spec, 2026-10-17).
+        for clause in ("te_banking_cycle_running = yes", "is_revolutionary = no",
                        "banking_sovereign_debt_is_priced = yes", "in_default = yes"):
             self.assertIn(clause, shown)
         possible = _top(DEBT_TRIGGERS, "banking_restructuring_possible")

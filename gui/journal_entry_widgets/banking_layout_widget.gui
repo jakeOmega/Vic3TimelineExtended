@@ -78,6 +78,9 @@ types banking_layout_widget_types
 			banking_dash_note = {
 				text = "banking_dash_how_cycle_moves"
 			}
+			banking_dash_note = {
+				text = "banking_dash_how_start"
+			}
 
 			banking_dash_subheader = {
 				blockoverride "subheader_text" {
@@ -146,9 +149,10 @@ types banking_layout_widget_types
 ### ==========================================================================
 ### JOURNAL ENTRY ROOTS (je_banking.txt). Bare wrappers that repeat the
 ### composers' IsActive gate: je_banking_cycle has is_shown_when_inactive, so
-### the panel can open for a country whose entry has not activated yet and
-### therefore has none of the cycle variables, and an inactive entry's
-### containers must collapse.
+### the panel can open for a country whose entry has not activated yet, and an
+### inactive entry's containers must collapse. An active entry may still be
+### dormant, its financial cycle not started: the sections that read the cycle
+### carry their own banking_dash_cycle_running gate.
 ### ==========================================================================
 flowcontainer = {
 	name = "widget_je_banking_overview"

@@ -350,7 +350,8 @@ te_mon_mandate_binds = {
 
 # Does a mandate formula set this country's target this month? The condition of
 # step 2's formula branch: delegated, independent, run by the AI, or a national
-# bank without the journal entry (which has no dashboard to take the dial on).
+# bank without the monetary controls (its cycle has not started,
+# te_banking_controls_open), which has no dial to take.
 # Read by te_mon_mandate_cred_target, so a dial held by hand earns no
 # credibility from a mandate it is not running.
 te_mon_mandate_runs_bank = {
@@ -358,7 +359,7 @@ te_mon_mandate_runs_bank = {
 	OR = {
 		te_mon_mandate_binds = yes
 		is_player = no
-		NOT = { has_journal_entry = je_banking_cycle }
+		te_banking_controls_open = no
 	}
 }
 

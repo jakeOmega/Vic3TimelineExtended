@@ -2,13 +2,28 @@
 	icon    = "gfx/interface/icons/event_icons/je_banking_cycle.dds"
 	group = je_group_internal_affairs
 
+	# EVERY COUNTRY HOLDS THIS ENTRY, from the first days of the game
+	# (docs/superpowers/specs/2026-10-17-banking-always-on-design.md). What
+	# starts later is the financial cycle, once te_banking_cycle_unlocked holds
+	# (banking_cycle_start, from `immediate` or the monthly pulse). Until then
+	# the entry is dormant: no cycle readings, no tools, and the Monetary Policy
+	# section read-only. Ask te_banking_cycle_running, never has_journal_entry,
+	# for "has a banking cycle".
+	#
 	# te_banking_system_on, not `has_game_rule = banking_system_enabled`: the
 	# entry is shown under the simplified setting too, which keeps the cycle and
 	# drops only the monetary layer on top of it
 	# (common/scripted_triggers/banking_policy_triggers.txt).
+	#
+	# te_banking_entry_expected (banking_policy_triggers.txt) is the rule, not a
+	# decentralized nation, and not the rebels of a running revolution. Without
+	# an entry of their own the rebels inherit the loser's when they win, and its
+	# `immediate` finds the nation's cycle running (#465). With one they could
+	# start a fresh 50 / 0 / 0 cycle of their own, and a winner's own values take
+	# precedence over the loser's (scripting_best_practices.md, "What a Civil
+	# War's Winner Inherits").
 	is_shown_when_inactive = {
-		te_banking_system_on = yes
-		te_banking_entry_unlocked = yes
+		te_banking_entry_expected = yes
 	}
 
 	scripted_progress_bar = banking_cycle_value_bar
@@ -161,24 +176,20 @@
 	# War's Winner Inherits"; docs/audits/civil_war_inheritance_audit.md E1,
 	# E3). The entry cannot deactivate, so nothing else re-runs it.
 	immediate = {
-		# Cycle state. Each variable is seeded only when it is absent, so a
-		# revolution's winner carries on the cycle it inherits. Until 2026-09-26
-		# these three sets were unguarded, and winning a revolution turned a
-		# panic (or a boom) into a stable 50 with no momentum and no bubble
-		# (audit F6). On a first activation all three are absent: every writer
-		# of them is reached only through this entry (the header above
-		# banking_change_bubble_pressure says why), so 50 / 0 / 0 it is.
+		# Cycle state. A country that meets the start test now starts its cycle
+		# here (a new game's founders, a released country, a revolution's winner
+		# whose loser had none running); the rest stay dormant until the
+		# monthly pulse finds them unlocked. A winner that inherits a running
+		# cycle already holds finance_cycle_value, so this is skipped and the
+		# cycle carries on (#465, audit F6: these sets were once unguarded and
+		# turned a panic into a stable 50). banking_cycle_start guards each of
+		# the three variables itself.
 		if = {
-			limit = { NOT = { has_variable = finance_cycle_value } }
-			set_variable = { name = finance_cycle_value value = 50 } # 0..100
-		}
-		if = {
-			limit = { NOT = { has_variable = finance_cycle_momentum } }
-			set_variable = { name = finance_cycle_momentum value = 0 }
-		}
-		if = {
-			limit = { NOT = { has_variable = bubble_pressure } }
-			set_variable = { name = bubble_pressure value = 0 }
+			limit = {
+				NOT = { has_variable = finance_cycle_value }
+				te_banking_cycle_unlocked = yes
+			}
+			banking_cycle_start = yes
 		}
 
 		# Deliberately UNGUARDED. te_mon_stance_band_applied records which
@@ -207,7 +218,11 @@
 		# monetary system's te_mon_stance_bar_pos). On an inherited copy the
 		# saves showed the loser's bar values surviving whatever this block
 		# wrote (audit E3); either way the bars now agree with the variables.
-		banking_cycle_update_progress_bars = yes
+		# A dormant entry has no readings, and draws no bars.
+		if = {
+			limit = { te_banking_cycle_running = yes }
+			banking_cycle_update_progress_bars = yes
+		}
 	}
 
 	# Progress bar: shows remaining points as % of initial allowance at activation.
@@ -229,77 +244,88 @@
 		}
 	}
 
-	# No status text while the entry is active: the overview shows everything
-	# it said (the owner's rule: status text that repeats the overview is
-	# removed). The phase, momentum and bubble pressure are its icons since
-	# play-test round 2, and the three monthly modifier totals, each with the
-	# engine's breakdown on hover, moved into the tooltips of the ranges under
-	# them (banking_dash_*_change_tt), which the Budget tab shows too. The entry
-	# can show before it starts (is_shown_when_inactive), when there are no
-	# readings yet and the overview draws nothing, so that state keeps one line;
-	# finance_cycle_value is set on the first activation, and a revolution's
-	# winner inherits it.
-	status_desc = {
-		triggered_desc = {
-			desc = banking_cycle_status_not_started
-			trigger = { NOT = { has_variable = finance_cycle_value } }
-		}
-	}
+	# No status text: the overview shows everything it said (the owner's rule:
+	# status text that repeats the overview is removed). The phase, momentum and
+	# bubble pressure are its icons since play-test round 2, and the three
+	# monthly modifier totals, each with the engine's breakdown on hover, moved
+	# into the tooltips of the ranges under them (banking_dash_*_change_tt),
+	# which the Budget tab shows too. A dormant entry's overview says the cycle
+	# has not started, with what it needs on hover, so it needs no line either.
 
+	# A dormant entry's pulses do one thing: the monthly one starts the cycle
+	# once te_banking_cycle_unlocked holds (the technology is its first test, so
+	# most dormant countries never reach the building scan), and posts the start
+	# to a human player. Everything else runs only while the cycle does.
 	on_monthly_pulse = {
 		effect = {
-			# SAVE MIGRATION — added 2026-09-19, remove after one release.
-			# The "Raise Policy Rate" tool was deleted (monetary_policy_design.md
-			# §18) and with it the button that switched it off. A save carrying
-			# the modifier would otherwise reserve 2 intervention points forever,
-			# so strip it here.
-			#
-			# The points do not come back until next month: add_modifier and
-			# remove_modifier results are not visible inside the effect block that
-			# issues them, so every `modifier:country_banking_intervention_max_add`
-			# read later in THIS pulse still sees the stale -2. The one such read is
-			# banking_crash_check_overdrawn_interventions at the end of the block,
-			# and the stale -2 makes it MORE likely to shed a tool this month, not
-			# less — a one-off cost on the single migrating month, on a save that
-			# was already two points down. Nothing else in the pulse reads the
-			# modifier, so the position of this block within it is cosmetic.
-			#
-			# The eventual removal of the static modifier itself is tracked in
-			# common/scripted_effects/legacy_modifier_cleanup.txt.
 			if = {
-				limit = { je:je_banking_cycle ?= { has_modifier = banking_policy_rate_hike } }
-				je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
+				limit = { te_banking_cycle_running = no }
+				if = {
+					limit = { te_banking_cycle_unlocked = yes }
+					banking_cycle_start = yes
+					if = {
+						limit = { is_ai = no }
+						post_notification = banking_cycle_started_notice
+					}
+				}
 			}
+			else = {
+				# SAVE MIGRATION — added 2026-09-19, remove after one release.
+				# The "Raise Policy Rate" tool was deleted (monetary_policy_design.md
+				# §18) and with it the button that switched it off. A save carrying
+				# the modifier would otherwise reserve 2 intervention points forever,
+				# so strip it here.
+				#
+				# The points do not come back until next month: add_modifier and
+				# remove_modifier results are not visible inside the effect block that
+				# issues them, so every `modifier:country_banking_intervention_max_add`
+				# read later in THIS pulse still sees the stale -2. The one such read is
+				# banking_crash_check_overdrawn_interventions at the end of the block,
+				# and the stale -2 makes it MORE likely to shed a tool this month, not
+				# less — a one-off cost on the single migrating month, on a save that
+				# was already two points down. Nothing else in the pulse reads the
+				# modifier, so the position of this block within it is cosmetic.
+				#
+				# The eventual removal of the static modifier itself is tracked in
+				# common/scripted_effects/legacy_modifier_cleanup.txt.
+				if = {
+					limit = { je:je_banking_cycle ?= { has_modifier = banking_policy_rate_hike } }
+					je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
+				}
 
-			banking_cycle_update_fiscal_policy = yes
-			banking_cycle_bank_holiday_reopen = yes
-			banking_cycle_advance_variables = yes
-			banking_cycle_check_and_execute_crash = yes
-			banking_cycle_eliq_wind_down = yes
-			# A conditional rescue's reviews (#800, banking_debt_effects.txt).
-			banking_rescue_programme_monthly = yes
+				banking_cycle_update_fiscal_policy = yes
+				banking_cycle_bank_holiday_reopen = yes
+				banking_cycle_advance_variables = yes
+				banking_cycle_check_and_execute_crash = yes
+				banking_cycle_eliq_wind_down = yes
+				# A conditional rescue's reviews (#800, banking_debt_effects.txt).
+				banking_rescue_programme_monthly = yes
 
-			# Sample the month's settled cycle state for the history charts.
-			# Runs after the crash check so a crash month's bar shows the
-			# post-crash values next to its crash marker.
-			te_history_record_banking_samples = yes
+				# Sample the month's settled cycle state for the history charts.
+				# Runs after the crash check so a crash month's bar shows the
+				# post-crash values next to its crash marker.
+				te_history_record_banking_samples = yes
 
-			set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
+				set_variable = { name = banking_points_max_from_law value = banking_law_base_points_value }
 
-			banking_cycle_random_event_effect = yes
-			banking_cycle_apply_phase_modifiers = yes
-			banking_cycle_apply_stance_band = yes
-			banking_cycle_update_progress_bars = yes
-			banking_cycle_cleanup_capital_controls = yes
-			banking_directed_credit_enforce_cap = yes
-			banking_cycle_update_ce_pool_balance = yes
-			banking_crash_check_overdrawn_interventions = yes
+				banking_cycle_random_event_effect = yes
+				banking_cycle_apply_phase_modifiers = yes
+				banking_cycle_apply_stance_band = yes
+				banking_cycle_update_progress_bars = yes
+				banking_cycle_cleanup_capital_controls = yes
+				banking_directed_credit_enforce_cap = yes
+				banking_cycle_update_ce_pool_balance = yes
+				banking_crash_check_overdrawn_interventions = yes
+			}
 		}
 	}
 
 	on_weekly_pulse = {
 		effect = {
-			banking_cycle_weekly_effects = yes
+			if = {
+				limit = { te_banking_cycle_running = yes }
+				banking_cycle_weekly_effects = yes
+			}
 		}
 	}
 }
