@@ -371,6 +371,14 @@ The sweep is a fallback only for a swap the hook missed. If the hook fired and t
 - **Tuning:** `migration_crowding_density_reference` (10000), `migration_crowding_floor_ratio` (1x), `migration_crowding_ceiling_ratio` (10x knee).
 - **Split states:** Arable-land-derived threshold and tooltip breakdown values subtract the same-owner regional `arable_land_added` cache, so fully owned split states do not undercount geographic base land.
 
+## Unemployment as a Share of the Workforce
+
+- **Why:** the engine's `state_unemployment_rate` is the idle workforce over all the state's people, dependents included (Demographics' self-check `unemployment_rate_read`, 2026-10-17: 0.048 where the pops held 0.195 of their workforce with no workplace). A threshold written as a share of the workforce bit at about four times that.
+- **The conversion:** `te_state_unemployment_share` (state scope, `common/script_values/te_unemployment_values.txt`) = the engine's figure, read live, ÷ `te_state_workforce_share`, the workforce's share of the people from the state's last walk (`te_unemp_wf_share`; 0.25 before the first, at least 0.05), clamped 0–1. Unemployment moves in months and the workforce share in years, so only the slow part is cached.
+- **The walk:** `te_unemp_share_refresh` (`common/scripted_effects/te_unemployment_effects.txt`) sums each pop's `total_size`, its `workforce`, and the workforce of pops with no workplace, and stores `te_unemp_wf_share` and `te_unemp_share_exact` (the walk's own idle share, the self-check's fallback). Yearly from `on_yearly_pulse_state`; monthly only for a state with no walk yet (`common/on_actions/te_unemployment_on_actions.txt`). It runs whatever the rules, beside the Demographics walk, which counts the workforce only under the census.
+- **Readers:** the Settlement Authority's `ai_value` (5%), the Greenest Grass Campaign's and Recruitment Drive's `ai_weight` (10%), and `migration_attraction_script_value` (10%, the mass-migration destination). The Demographics census reads its own count (`te_dg_unemp`), and vanilla's own readers (Greener Grass, the Spanish flu, cultural communities) still read the engine's figure. Not for a scripted GUI or loc, which read the trigger as none (`scripting_best_practices.md` § The op slots).
+- **Self-check:** `unemployment_share_read` (`docs/testing/ai-economy-playtest.md` § Unemployment as a share of the workforce).
+
 ## Dynamic Homeland Progress
 
 - **Parallel per-culture tracks:** each eligible culture gets its own script container and progress bar. All eligible homelands can form or decay simultaneously. A new candidate begins at zero and cannot inherit another culture's progress. Containers are parented to the state, kept in separate creation/removal lists, and removed from the list before destruction.
@@ -1921,7 +1929,7 @@ The authoritarian end of `lawgroup_criminal_justice` (`common/laws/extra_laws.tx
 
 ## On-Actions Reference
 
-The mod uses 54 on-action files under `common/on_actions/`; the index below lists the main ones. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
+The mod uses 55 on-action files under `common/on_actions/`; the index below lists the main ones. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
 
 ### File Index
 
@@ -1940,6 +1948,7 @@ The mod uses 54 on-action files under `common/on_actions/`; the index below list
 | `social_tensions_on_actions.txt` | Social/political tension yearly events | Pulse |
 | `space_race_on_actions.txt` | Space race in-progress and cross-system yearly events | Pulse |
 | `te_monetary_on_actions.txt` | Monetary policy: world reference rate and (phase 3) the world rate, the monthly country update, the yearly growth snapshot, the country-creation hooks (see **Monetary Policy (phase 1)**), and — phase 5 — the anchored-GDP refresh on the global pulse, the yearly arrangement scan + seigniorage re-sum, `on_country_default` (the guarantee is called) and `on_become_subject` (currency boards) | Mixed |
+| `te_unemployment_on_actions.txt` | Each state's yearly walk for its workforce share, which `te_state_unemployment_share` divides the engine's unemployment by (§ Unemployment as a Share of the Workforce), a monthly fill for a state with none yet, and the self-check `unemployment_share_read` | Pulse |
 | `te_region_area_on_actions.txt` | Writes each state region's land area once per save (`te_region_area_generated.txt`) | Mixed |
 | `un_on_actions.txt` | UN formation and recurring member events | Pulse (monthly) |
 | `wonder_events_on_actions.txt` | Wonder building narrative events | Pulse (monthly) |

@@ -55,14 +55,16 @@ building_resettlement_colony = {
 	ai_value = {
 		value = 0
 
-		# A frontier to fill, and somewhere at home that needs relief.
+		# A frontier to fill, and somewhere at home that needs relief: more than 5%
+		# of a state's workforce without work (te_state_unemployment_share, not the
+		# engine's per-person state_unemployment_rate), or crowding.
 		if = {
 			limit = {
 				resettlement_state_is_open_frontier = yes
 				owner = {
 					any_scope_state = {
 						OR = {
-							state_unemployment_rate > 0.05
+							te_state_unemployment_share > 0.05
 							migration_crowding_mult > 0
 						}
 					}

@@ -64,3 +64,48 @@ after 3½ months (slow stripping, or a case where the AI keeps one), and how uns
 | **Subsidies.** A few years after the change, count AI power plants with `subsidized=yes` in a plain-text save (or read big AI countries' power plants in game). | Near none outside countries with no administrative strategy; the 19% left after 3½ months has fallen. Railways and ports unchanged (about 99%). | A share that stays near 19%: find which countries keep the subsidy and what they share (strategy, budget, electricity shortage). |
 | **Plants without a subsidy.** The same save: power plants' `staffing` against `previous_staffing`, `cash_reserves`, and the electricity price where plants lost their subsidy. | Retooling or loss-making plants cut wages and shed some staff; electricity's price rises until plants cover their costs. No state left without power. | Plants emptying out and electricity shortages spreading to factories mean the AI needs the subsidy: drop `te_power_plant_subsidy_strategies.txt` and lean on the base group's `most_productive` alone. |
 | **Budgets.** Subsidies as a share of income and the bankrupt share of people (the fast-mode note's §4), against the section above. | Lower than with `most_productive` alone. | No change means the subsidy flag wasn't the bill: keep `most_productive`, and reconsider the strategies. |
+
+## Unemployment as a share of the workforce (log triage 2026-10-17)
+
+The engine's `state_unemployment_rate` reads the idle workforce over all the state's people, not over the workforce: in
+Mecklenburg-Strelitz in January 1836 it read 0.048 where the pops held 0.195 of their workforce with no workplace
+(Demographics' `unemployment_rate_read`, `docs/testing/demographics-playtest.md` § Log triage 2026-10-17). Owner's call:
+fix it. Every mod reader outside the Demographics census now reads `te_state_unemployment_share`: the engine's figure,
+read live, over the workforce's share of the state's people, which a yearly walk of each state's pops counts
+(`common/script_values/te_unemployment_values.txt`; § Unemployment as a Share of the Workforce in `mod_systems.md`).
+Their thresholds are unchanged and now mean a share of the workforce, so each bites at about a quarter of the
+unemployment it did. The census keeps its own count (`te_dg_unemp`).
+
+| Reader | Threshold | Effect |
+|---|---|---|
+| Settlement Authority `ai_value` (`common/buildings/resettlement.txt`) | any of the AI's states above 5% | +300 on an open frontier |
+| Greenest Grass Campaign `ai_weight` (`common/decrees/extra_decrees.txt`) | 10% or more | × 0 |
+| Recruitment Drive `ai_weight` (the same file) | above 10% | +50 |
+| `migration_attraction_script_value` (`common/script_values/extra_script_values.txt`), the mass-migration destination's order | above 10% | × 0 |
+
+**How much more often.** The 1898 observer autosave (2026-10-17, Full) holds the engine's figure, as the census stored
+it then, and the walk's workforce share for 826 census states. The workforce was still a quarter of the people
+(median 0.251, 0.18 to 0.50). Taking the figure over that share:
+
+| | Old reading (the engine's figure) | Share of the workforce |
+|---|---|---|
+| States above 5% | 14% of states, 43% of people | 40% of states, 69% of people |
+| States above 10% | 1% of states, almost no people | 31% of states, 62% of people |
+| Countries with a state above 5% | 46 of 203 | 108 of 203 |
+
+China's and Bengal's large states carry most of the people: a fifth to a third of their workforce idle.
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … unemployment_share_read` | any rule: once a game, the first state at its yearly walk (`te_unemp_share_yearly`) with a workforce of at least 10,000 and at least 2% of it with no workplace | `conv` (`te_state_unemployment_share`, read after the walk) is within a quarter below or a third above `exact` (the walk's workforce with no workplace over its workforce). Equivalently `read` ≈ `per_people`: the engine's figure is the idle workforce over all the state's people, so the conversion is the share the readers mean. `prev_wf_share` is the share readers held before the walk (0.25: none yet) | `conv` about 4 × `exact` (`read` ≈ `exact`): the figure is already per worker, and the conversion counts it four times. Any other ratio: the figure is something else again | about 4 ×: take the division out of `te_state_unemployment_share` (the figure as it is). Otherwise have it read `var:te_unemp_share_exact`, the walk's own count, up to a year old (`te_state_workforce_share`'s `has_variable` pattern), and correct the notes in `scripting_best_practices.md` § The op slots |
+
+No line after a few years means no state with a workforce of 10,000 had 2% of it idle at its yearly walk; compare the
+state panel's unemployed in a state with visibly idle workers.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Settlement Authorities.** An observer run with internal resettlement on: how many AI countries with an open frontier found one by 1870, against an earlier run. | More than before: the +300 now holds wherever one of the AI's states has 5% of its workforce idle, which 1898 shows for about half the countries. Still at most three new ones each. | Authorities in nearly every country with a frontier, or a frontier filled faster than its region can take, mean 5% is now too low a bar: the owner's call (raise it, or count only states the Authority can recruit from). |
+| **Greenest Grass and the Recruitment Drive.** Which states AI countries issue them in (a plain-text save's decrees, or the state panel). | Greenest Grass in fewer states with idle workers than before (its × 0 now bites at a tenth of the workforce); the Recruitment Drive in more of the AI's crowded or idle states. | Greenest Grass almost never issued by an AI with a frontier: 10% bites too often; the owner's call. |
+| **Mass migration.** A violence-against-minorities mass migration (`trigger_mass_migration`): where the people land. | A state with under a tenth of its workforce idle. Where every candidate is above it, all score 0 and the pick among them is arbitrary. | Migrants sent into a state with mass unemployment: check `te_state_unemployment_share` there with the console (`te_unemp_wf_share` on the state). |

@@ -1,0 +1,32 @@
+﻿# Unemployment as a share of the workforce (common/script_values/te_unemployment_values.txt): each state's walk of
+# its pops for the workforce's share of its people, which te_state_unemployment_share divides the engine's figure by.
+#
+# Root = State. Yearly, a different day per state across the year: the walk and the once-a-game self-check
+# unemployment_share_read. Monthly, only a state with no walk yet (the first month of a new game, a save from before
+# this, a state just split off), so the 0.25 fallback stands for a month at most.
+on_yearly_pulse_state = {
+	on_actions = {
+		te_unemp_share_yearly_on_action
+	}
+}
+
+on_monthly_pulse_state = {
+	on_actions = {
+		te_unemp_share_monthly_on_action
+	}
+}
+
+te_unemp_share_yearly_on_action = {
+	effect = {
+		te_unemp_share_yearly = yes
+	}
+}
+
+te_unemp_share_monthly_on_action = {
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = te_unemp_wf_share } }
+			te_unemp_share_refresh = yes
+		}
+	}
+}
