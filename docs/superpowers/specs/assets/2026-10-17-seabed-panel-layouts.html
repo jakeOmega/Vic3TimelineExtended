@@ -1,0 +1,189 @@
+<style>
+  .v3 { width: 540px; background: #2b3236; border: 1px solid #556066; color: #d8d0bf; font-family: "EB Garamond", Garamond, Georgia, serif; font-size: 17px; padding: 0 0 10px; box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+  .v3 .band { background: linear-gradient(#5b2228, #44191e); color: #e8dcc0; text-align: center; padding: 6px; font-size: 19px; }
+  .v3 .box { margin: 8px 10px; border: 1px solid #4e5a60; background: #262c30; padding: 6px 8px; }
+  .v3 .sub { color: #bdb39d; font-size: 18px; border-bottom: 1px solid #4e5a60; margin-bottom: 4px; padding-bottom: 2px; display:flex; justify-content:space-between; align-items:baseline;}
+  .v3 .sub small { font-size: 13px; color:#8f8a7c; font-family: system-ui, sans-serif; }
+  .v3 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .v3 .cell { display: flex; gap: 6px; background: #30383c; border: 1px solid #4e5a60; padding: 4px; }
+  .v3 .ico { width: 34px; min-height: 46px; background: rgba(0,0,0,.3); display:flex; align-items:center; justify-content:center; font-size: 18px; }
+  .v3 .cap { font-family: system-ui, sans-serif; font-size: 12px; color: #9a958a; }
+  .v3 .word { font-size: 18px; color: #f0e6cc; line-height: 1.1; }
+  .v3 .fig { font-family: system-ui, sans-serif; font-size: 12px; color: #c5bfae; }
+  .v3 .G { color: #7cc36a; } .v3 .R { color: #e0675d; } .v3 .Y { color: #e3c25a; }
+  .v3 .u { text-decoration: underline; text-decoration-color: #8f8a7c; }
+  .v3 table { width: 100%; border-collapse: collapse; }
+  .v3 th { font-family: system-ui, sans-serif; font-size: 12px; color: #9a958a; text-align: left; font-weight: normal; padding: 2px 3px; }
+  .v3 td { padding: 3px 3px; vertical-align: middle; }
+  .v3 td.n, .v3 th.n { text-align: right; }
+  .v3 .bar { display: flex; height: 13px; width: 100%; border: 1px solid #5d686e; background:#1f2427; }
+  .v3 .bar span { display:block; height: 100%; }
+  .v3 .b-built { background: #c9a548; }
+  .v3 .b-queued { background: repeating-linear-gradient(45deg,#c9a548 0 3px,#8a7333 3px 6px); }
+  .v3 .b-mine { background: #6f5f2f; }
+  .v3 .b-rmine { background: #8d979c; }
+  .v3 .b-run { background: #4a555a; }
+  .v3 .legend { font-family: system-ui, sans-serif; font-size: 11px; color:#9a958a; display:flex; flex-wrap: wrap; gap: 8px; margin-top: 4px;}
+  .v3 .legend i { display:inline-block; width:10px; height:10px; margin-right:3px; vertical-align:-1px; }
+  .v3 .btns { display: flex; gap: 6px; justify-content: center; }
+  .v3 .btn { flex: 1; text-align: center; background: linear-gradient(#3a5550,#2c403c); border: 1px solid #5f7b74; padding: 4px 2px; font-size: 17px; }
+  .v3 .btn.on { background: linear-gradient(#5a5446,#403b31); border-color: #a99a6e; color:#f3e7c4; }
+  .v3 .note { font-family: system-ui, sans-serif; font-size: 12px; color:#9a958a; text-align:center; margin-top:4px; }
+  .v3 .how { margin: 8px 10px 0; color:#a49c88; font-size: 17px; }
+  .v3 .flag { display:inline-block; width: 22px; height: 14px; vertical-align: -2px; margin-right: 4px; border:1px solid #222; }
+  .v3 .rival td { font-size: 15px; color:#c9c2b0; }
+  .v3 .rival td:first-child { padding-left: 18px; }
+  .v3 .chev { color:#c9a548; font-size: 13px; }
+  .v3 .card { border: 1px solid #4e5a60; background:#30383c; padding: 5px 7px; margin-bottom: 6px; }
+  .v3 .card h4 { margin: 0 0 3px; font-weight: normal; font-size: 18px; display:flex; justify-content:space-between; }
+  .v3 .card .line { font-family: system-ui, sans-serif; font-size: 12px; color:#c5bfae; margin-top: 3px;}
+  .v3 .tabs { display:flex; gap:4px; }
+  .v3 .tab { flex:1; text-align:center; border:1px solid #4e5a60; background:#30383c; padding: 3px 0; }
+  .v3 .tab.on { border-color:#a99a6e; background:#403b31; }
+  .v3 .tab .cap { display:block; }
+  .wrapm { display:flex; gap: 18px; align-items:flex-start; flex-wrap: wrap; }
+  .notes { max-width: 300px; font-size: 0.85rem; color: var(--text-secondary); }
+  .notes li { margin-bottom: .4rem; }
+</style>
+
+<h2>Seabed panel: which layout?</h2>
+<p class="subtitle">All three use the same overview at the top (rule 4 of the GUI style guide: boxes two to a row). They differ in how the five basins and the rivals are shown. Numbers are your screenshot's; rivals are made up. Click the one that feels right — or tell me what to mix.</p>
+
+<div class="options">
+
+<!-- ===================== A ===================== -->
+<div class="option" data-choice="a" onclick="toggleSelect(this)">
+  <div class="letter">A</div>
+  <div class="content">
+    <h3>Table with expandable rivals</h3>
+    <p>All five basins visible at once in one table; click a basin to open its rivals underneath.</p>
+    <div class="wrapm" style="margin-top:10px">
+    <div class="v3">
+      <div class="band">Seabed Licences</div>
+
+      <div class="box">
+        <div class="grid">
+          <div class="cell"><div class="ico">⚓</div><div><div class="cap">Room to build</div><div class="word">125 mines</div><div class="fig">Pacific 85 · Southern 39 · Indian 1</div></div></div>
+          <div class="cell"><div class="ico">⛏</div><div><div class="cap">Our licences</div><div class="word">304</div><div class="fig">285 built · 19 queued <span class="R">−¤4.1k/wk</span></div></div></div>
+          <div class="cell"><div class="ico">⚠</div><div><div class="cap">Long-haul</div><div class="word R">55 mines</div><div class="fig">at −25% · swap when local frees</div></div></div>
+          <div class="cell"><div class="ico">🛡</div><div><div class="cap">Unused claims</div><div class="word">125</div><div class="fig">January: lose at most <span class="Y">31</span></div></div></div>
+          <div class="cell"><div class="ico">📜</div><div><div class="cap">Policy</div><div class="word">Sponsor</div><div class="fig">next change 1972</div></div></div>
+          <div class="cell"><div class="ico">⚖</div><div><div class="cap">Regime</div><div class="word">Regulated</div><div class="fig">ITLOS party <span class="G">✓</span> · royalties ¤1.8k/mine</div></div></div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="sub">Seabed Policy</div>
+        <div class="btns"><div class="btn">Survey</div><div class="btn on">Sponsor</div><div class="btn">Unilateral</div></div>
+        <div class="note">Full names, costs and the 5-year lock on hover</div>
+      </div>
+
+      <div class="box">
+        <div class="sub">Ocean Basins <small>as of January 1965</small></div>
+        <table>
+          <tr><th>Basin</th><th class="n">Free here</th><th style="width:170px">Pool</th><th class="n">Our weight</th><th class="n">+1 licence</th></tr>
+          <tr><td><span class="chev">▾</span> <span class="u">Pacific</span></td><td class="n G">85</td><td><div class="bar"><span class="b-mine" style="width:28%"></span><span class="b-run" style="width:72%"></span></div></td><td class="n">28%</td><td class="n">+3 navy</td></tr>
+          <tr class="rival"><td><span class="flag" style="background:linear-gradient(#b22 0 50%,#fff 50%)"></span>United States</td><td class="n">0 mines</td><td>95 claims</td><td class="n">32%</td><td></td></tr>
+          <tr class="rival"><td><span class="flag" style="background:radial-gradient(circle,#c22 30%,#fff 32%)"></span>Japan</td><td class="n">0 mines</td><td>120 claims</td><td class="n">40%</td><td></td></tr>
+          <tr><td><span class="chev">▸</span> <span class="u">Atlantic</span></td><td class="n">0</td><td><div class="bar"><span class="b-built" style="width:92%"></span><span class="b-queued" style="width:7.6%"></span><span class="b-rmine" style="width:.4%"></span></div></td><td class="n">96%</td><td class="n">full</td></tr>
+          <tr><td><span class="chev">▸</span> <span class="u">Indian</span></td><td class="n G">1</td><td><div class="bar"><span class="b-mine" style="width:.5%"></span><span class="b-rmine" style="width:30%"></span><span class="b-run" style="width:69.5%"></span></div></td><td class="n">1%</td><td class="n">+40 navy</td></tr>
+          <tr><td><span class="chev">▸</span> <span class="u">Arctic</span></td><td class="n">0</td><td><div class="bar"><span class="b-built" style="width:55%"></span><span class="b-rmine" style="width:20%"></span><span class="b-run" style="width:25%"></span></div></td><td class="n">55%</td><td class="n">+6 navy</td></tr>
+          <tr><td><span class="chev">▸</span> <span class="u">Southern</span></td><td class="n G">39</td><td><div class="bar"><span class="b-mine" style="width:26%"></span><span class="b-run" style="width:74%"></span></div></td><td class="n">26%</td><td class="n">+2 navy</td></tr>
+        </table>
+        <div class="legend"><span><i class="b-built"></i>our mines</span><span><i class="b-queued"></i>queued</span><span><i class="b-mine"></i>our unused claims</span><span><i class="b-rmine"></i>rivals' mines</span><span><i class="b-run"></i>rivals' unused (up for grabs)</span></div>
+      </div>
+      <div class="how">▸ How Seabed Licences Work</div>
+    </div>
+    <ul class="notes">
+      <li><b>Q1</b> is the first box. <b>Q2</b> is the "Free here" column (green = room on that coast, no −25%).</li>
+      <li><b>Q3</b> is the pool bar + "+1 licence" (hover: "+3 flotillas, or +1 coastal state here ≈ +2").</li>
+      <li><b>Q4</b> opens per basin. Long lists stay short: only claimants in that basin.</li>
+      <li>Tightest on width: five columns at 520 units.</li>
+    </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== B ===================== -->
+<div class="option" data-choice="b" onclick="toggleSelect(this)">
+  <div class="letter">B</div>
+  <div class="content">
+    <h3>One card per basin</h3>
+    <p>Each basin is its own card: pool bar, our figures, what a buildup would win, and rival flags inline. Always open; longer to scroll.</p>
+    <div class="wrapm" style="margin-top:10px">
+    <div class="v3">
+      <div class="band">Seabed Licences</div>
+      <div class="box"><div class="cap" style="text-align:center">(same overview and policy boxes as A)</div></div>
+      <div class="box">
+        <div class="sub">Ocean Basins <small>as of January 1965</small></div>
+        <div class="card">
+          <h4><span class="u">Pacific</span><span class="G" style="font-size:16px">85 free here</span></h4>
+          <div class="bar"><span class="b-mine" style="width:28%"></span><span class="b-run" style="width:72%"></span></div>
+          <div class="line">Our weight <b>28%</b> · one more licence: <b>+3 navy</b> or <b>+1 coastal state</b> · January: lose at most <span class="Y">21</span></div>
+          <div class="line"><span class="flag" style="background:linear-gradient(#b22 0 50%,#fff 50%)"></span>0 mines, 95 claims &nbsp; <span class="flag" style="background:radial-gradient(circle,#c22 30%,#fff 32%)"></span>0 mines, 120 claims</div>
+        </div>
+        <div class="card">
+          <h4><span class="u">Atlantic</span><span style="font-size:16px">full</span></h4>
+          <div class="bar"><span class="b-built" style="width:92%"></span><span class="b-queued" style="width:7.6%"></span><span class="b-rmine" style="width:.4%"></span></div>
+          <div class="line">Our weight <b>96%</b> · 249 licences (19 queued) · nothing left to win</div>
+          <div class="line"><span class="flag" style="background:linear-gradient(90deg,#126 0 33%,#fff 33% 66%,#c22 66%)"></span>1 mine</div>
+        </div>
+        <div class="card">
+          <h4><span class="u">Southern</span><span class="G" style="font-size:16px">39 free here</span></h4>
+          <div class="bar"><span class="b-mine" style="width:26%"></span><span class="b-run" style="width:74%"></span></div>
+          <div class="line">Our weight <b>26%</b> · one more licence: <b>+2 navy</b> · January: lose at most <span class="Y">9</span></div>
+          <div class="line"><span class="flag" style="background:linear-gradient(#037 0 60%,#fff 60%)"></span>0 mines, 70 claims &nbsp; <span class="flag" style="background:linear-gradient(90deg,#7ad 0 33%,#fff 33% 66%,#7ad 66%)"></span>0 mines, 41 claims</div>
+        </div>
+        <div class="cap" style="text-align:center">… Indian, Arctic …</div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>Answers Q3 and Q4 without a click, and has room for the January risk per basin.</li>
+      <li>Q2 needs a scan down the cards' right-hand corners.</li>
+      <li>Roughly twice A's height.</li>
+    </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== C ===================== -->
+<div class="option" data-choice="c" onclick="toggleSelect(this)">
+  <div class="letter">C</div>
+  <div class="content">
+    <h3>Basin tabs with one detail card</h3>
+    <p>Five small tabs show each basin's free room; the chosen basin gets a full card with a rivals table.</p>
+    <div class="wrapm" style="margin-top:10px">
+    <div class="v3">
+      <div class="band">Seabed Licences</div>
+      <div class="box"><div class="cap" style="text-align:center">(same overview and policy boxes as A)</div></div>
+      <div class="box">
+        <div class="sub">Ocean Basins <small>as of January 1965</small></div>
+        <div class="tabs">
+          <div class="tab on">Pacific<span class="cap G">85 free</span></div>
+          <div class="tab">Atlantic<span class="cap">full</span></div>
+          <div class="tab">Indian<span class="cap G">1 free</span></div>
+          <div class="tab">Arctic<span class="cap">full</span></div>
+          <div class="tab">Southern<span class="cap G">39 free</span></div>
+        </div>
+        <div class="card" style="margin-top:6px">
+          <div class="bar"><span class="b-mine" style="width:28%"></span><span class="b-run" style="width:72%"></span></div>
+          <div class="line">Pool 300 · our weight <b>28%</b> · one more licence: <b>+3 navy</b> or <b>+1 coastal state</b> · January: lose at most <span class="Y">21</span></div>
+          <table style="margin-top:4px">
+            <tr><th>Claimant</th><th class="n">Mines</th><th class="n">Unused</th><th class="n">Weight</th></tr>
+            <tr class="rival"><td style="padding-left:3px"><span class="flag" style="background:radial-gradient(circle,#c22 30%,#fff 32%)"></span>Japan</td><td class="n">0</td><td class="n">120</td><td class="n">40%</td></tr>
+            <tr class="rival"><td style="padding-left:3px"><span class="flag" style="background:linear-gradient(#b22 0 50%,#fff 50%)"></span>United States</td><td class="n">0</td><td class="n">95</td><td class="n">32%</td></tr>
+            <tr class="rival"><td style="padding-left:3px"><b>Us</b></td><td class="n">0</td><td class="n">85</td><td class="n">28%</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>Shortest panel; the rivals table has room for every claimant.</li>
+      <li>Q2 sits in the tabs. Q3/Q4 need a click per basin.</li>
+      <li>Needs a "chosen basin" scripted-GUI toggle, which the mod has no precedent for yet.</li>
+    </ul>
+    </div>
+  </div>
+</div>
+
+</div>
