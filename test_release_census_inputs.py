@@ -86,6 +86,20 @@ class ReleaseCensusInputsTest(unittest.TestCase):
         self.assertIn("te_demog_lines_apply = {", triggers)
         self.assertNotIn(TAG + "te_demog_lines_apply", triggers)
 
+    def test_wealth_concentrations_law_lines_ship(self):
+        """Wealth Concentration runs whatever the Demographics rule, so its law terms (on the laws since 2026-10-17) are
+        not census inputs: their types sit outside the census's types file and every line stays live in a release."""
+        wc = ("state_wealth_concentration_land_add", "country_wealth_concentration_tax_add",
+              "country_wealth_concentration_economy_add")
+        self.assertFalse(set(wc) & set(self.types))
+        for rel in ("common/modifier_type_definitions/demographics_wealth_concentration_types.txt",
+                    "common/laws/te_demog_wealth_law_injections.txt"):
+            self.assertNotIn(self.root / rel, self.changed, rel)
+        live = re.compile(rf"^\s*({'|'.join(wc)})\s*=")
+        lines = [line for path in self.root.joinpath("common", "laws").glob("*.txt")
+                 for line in path.read_text(encoding="utf-8-sig").split("\n") if live.match(line)]
+        self.assertEqual(len(lines), 16, "8 land laws, Graduated Taxation, 3 economic systems, 4 antitrust laws")
+
     def test_it_found_the_carriers(self):
         # the types sat on 39 lines on 2026-10-11; the Causes of Death plan adds the six technologies' and
         # Medical Outreach's spread of medicine; more later, never fewer

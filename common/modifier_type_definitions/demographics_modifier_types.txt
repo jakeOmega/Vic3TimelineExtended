@@ -240,3 +240,34 @@ country_longevity_care_price_fall_mult = {
 	decimals = 0
 	script_only = yes
 }
+
+# The laws' other census terms (2026-10-17, so each law's tooltip says what the census does with it; they were has_law
+# lookups). Read only by the census:
+#   state_child_labor_participation_add       the share of the 10-14s at work, within 0-1 (te_demog_child_work: Child
+#                                              Labor Allowed 0.3, Restricted Child Labor 0.1)
+#   state_late_marriage_farms_add             Late Marriage's target, + it x the state's agrarian share
+#                                              (te_demog_pr_target_lm: Primogeniture and Undivided Farm Succession 0.15,
+#                                              impartible inheritance on the farms)
+#   country_family_limitation_literacy_mult   Family Limitation's literacy term x (1 + it), at least 0 (te_demog_fl_church:
+#                                              State Religion and its two variants -0.5, Total Separation and State
+#                                              Atheism +0.5)
+# Wealth Concentration's law terms run whatever the Demographics rule, so they are not census inputs and sit in
+# demographics_wealth_concentration_types.txt, which a release keeps.
+state_child_labor_participation_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_late_marriage_farms_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+country_family_limitation_literacy_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}

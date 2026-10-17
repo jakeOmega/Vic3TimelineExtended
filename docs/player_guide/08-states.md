@@ -271,7 +271,7 @@ Census: Deaths.
 
 Under Full the census also sets each state's workforce, from who is of working
 age and how many of them work. The working ages run from 15 (children of 10 to
-14 work at a share under the child labor laws) to the pension age, or with no
+14 work at a share each child labor law lists among its modifiers) to the pension age, or with no
 pension law for as long as people's health allows. Men of working age mostly
 work; how many women work depends on the women's rights laws, the technologies
 that free women's time and the state's lower strata, whose women work under any

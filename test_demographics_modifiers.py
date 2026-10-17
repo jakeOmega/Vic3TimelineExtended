@@ -51,6 +51,15 @@ class TestTotals(unittest.TestCase):
         t = DM.totals(self.CARRIERS, institutions=self.LEVELS)
         self.assertEqual(t["state_health_care_access_add"], 0.0)
 
+    def test_an_amendment_line_counts_while_the_amendment_is_held(self):
+        """Undivided Farm Succession's Late Marriage line (2026-10-17): an amendment's modifier, flat, like a law's."""
+        lines = [C("amendment", "amendment_undivided_farm_succession", P.LM_FARMS_TYPE, 0.15)]
+        self.assertEqual(DM.totals(lines)[P.LM_FARMS_TYPE], 0.0)
+        self.assertEqual(DM.totals(lines, laws={"amendment_undivided_farm_succession"})[P.LM_FARMS_TYPE], 0.0,
+                         "an amendment is not a law")
+        self.assertAlmostEqual(DM.totals(lines, amendments={"amendment_undivided_farm_succession"},
+                                         incorporated=False)[P.LM_FARMS_TYPE], 0.15)
+
 
 class TestCarriersInTheGameFiles(unittest.TestCase):
     @classmethod
@@ -75,8 +84,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
                    P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"},
                    # call 3's participation inputs (phase 2 step 1): the criminal-justice laws and State Eugenics'
-                   # flat lines, the Ministries of Labour per level
-                   P.MALE_PARTICIPATION_TYPE: {"law"}, P.PARTICIPATION_TYPE: {"law_institution"},
+                   # flat lines, the Ministries of Labour per level; Community Service and Mandatory Minimums are
+                   # amendments (read since 2026-10-17, when load_carriers took amendments in)
+                   P.MALE_PARTICIPATION_TYPE: {"law", "amendment"}, P.PARTICIPATION_TYPE: {"law_institution"},
                    P.CAPACITY_TYPE: {"law"},
                    # calibration step 3: Malaria Prevention's control
                    P.MALARIA_CONTROL_TYPE: {"technology"},
@@ -85,7 +95,11 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    # phase 3, the late game: the ageing ladder and the pull sit on the era 10-12 technologies
                    P.AGEING_RATE_TYPE: {"technology"}, P.REJUVENATION_TYPE: {"technology"},
                    # and who longevity care reaches on the health and augmentation laws (2026-10-17)
-                   **{t: {"law"} for t in P.LX_LAW_TYPES}}
+                   **{t: {"law"} for t in P.LX_LAW_TYPES},
+                   # the laws' other terms (2026-10-17): the childrens'-rights laws' 10-14s at work, the church laws'
+                   # weight on Family Limitation, impartible inheritance's Late Marriage (Undivided Farm Succession is
+                   # an amendment)
+                   P.CHILD_WORK_TYPE: {"law"}, P.FL_LITERACY_TYPE: {"law"}, P.LM_FARMS_TYPE: {"law", "amendment"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
@@ -121,6 +135,55 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             P.LX_REACH_TYPE: {"law_unrestricted_augmentation": 20.0},
             P.LX_BAN_TYPE: {"law_human_purity": 1.0},
             P.LX_PRICE_FALL_TYPE: {"law_private_health_insurance": 1.0, "law_regulated_augmentation_market": 0.5}})
+
+    def test_the_laws_other_census_terms_sit_on_their_laws(self):
+        """Each was a has_law lookup until 2026-10-17; now the law carries its value, so its tooltip says what the census
+        does with it. A variant carries its parent's (the Millet System and People of the Book, State Religion's)."""
+        types = (P.CHILD_WORK_TYPE, P.LM_FARMS_TYPE, P.FL_LITERACY_TYPE)
+        carried = {}
+        for c in self.carriers:
+            if c.type in types:
+                carried.setdefault(c.type, {})[c.key] = c.value
+        self.assertEqual(carried, {
+            P.CHILD_WORK_TYPE: {"law_child_labor_allowed": 0.3, "law_restricted_child_labor": 0.1},
+            P.LM_FARMS_TYPE: {"law_primogeniture": 0.15, "amendment_undivided_farm_succession": 0.15},
+            P.FL_LITERACY_TYPE: {"law_state_religion": -0.5, "law_millet_system": -0.5, "law_people_of_the_book": -0.5,
+                                 "law_total_separation": 0.5, "law_state_atheism": 0.5}})
+
+    def test_late_marriages_two_carriers_never_meet(self):
+        """Primogeniture's and Undivided Farm Succession's lines add as modifiers do, where the script's OR counted them
+        once: the amendment's allowed laws must leave Primogeniture out, or a country holding both would read 0.30."""
+        amendment = DM._u(DM._state(DM.ROOT).get_data("Amendments")["amendment_undivided_farm_succession"])
+        allowed = DM._u(amendment.get("allowed_laws"))
+        allowed = set(allowed if isinstance(allowed, (list, tuple, set)) else [allowed])
+        self.assertTrue(allowed, "the amendment's allowed laws were read")
+        self.assertNotIn("law_primogeniture", allowed)
+
+    def test_wealth_concentration_sits_on_the_land_tax_and_economic_laws(self):
+        """Spec §4.2's law terms (on the laws since 2026-10-17; not census inputs, so not in P.DEMOG_TYPES). Every
+        land-reform law carries its line, a variant at its parent's value, Commercialized Agriculture none."""
+        lines = DM.load_carriers(types=P.WC_LAW_TYPES)
+        self.assertTrue(all(c.kind == "law" for c in lines), lines)
+        carried = {}
+        for c in lines:
+            carried.setdefault(c.type, {})[c.key] = c.value
+        self.assertEqual(carried[P.WC_TAX_TYPE], {"law_graduated_taxation": -5.0})
+        self.assertEqual(carried[P.WC_ECONOMY_TYPE], {
+            "law_laissez_faire": 10.0, "law_extraction_economy": 5.0, "law_interventionism": -5.0,
+            "law_guilds_chartered_monopolies": 5.0, "law_freedom_of_contract": 5.0, "law_trust_busting": -5.0,
+            "law_regulated_utilities": -5.0})
+        base = {"law_serfdom": 15.0, "law_tenant_farmers": 5.0, "law_peasant_proprietorship": -10.0,
+                "law_collectivized_agriculture": -20.0}
+        land = carried[P.WC_LAND_TYPE]
+        laws = DM._state(DM.ROOT).get_data("Laws")
+        group = [k for k, v in laws.items() if DM._u(DM._u(v).get("group")) == "lawgroup_land_reform"]
+        self.assertEqual(len(group), 9, group)
+        for law in group:
+            parent = DM._u(DM._u(laws[law]).get("parent")) or law
+            with self.subTest(law=law):
+                self.assertEqual(land.get(law), base.get(parent), parent)
+        self.assertEqual(set(land), {k for k in group if base.get(DM._u(DM._u(laws[k]).get("parent")) or k)})
+        self.assertFalse(set(P.WC_LAW_TYPES) & set(P.DEMOG_TYPES))
 
     def test_malaria_prevention_alone_controls_malaria(self):
         """Calibration step 3 (the spec's §2.2): the malaria factor ends with Malaria Prevention, not quinine (it protected

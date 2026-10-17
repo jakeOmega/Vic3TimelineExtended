@@ -13,6 +13,7 @@ from dataclasses import dataclass, replace
 
 import demographics_harness as H
 import demographics_model as M
+import demographics_params as P
 
 # The check (the brief, 2026-10-12): France's, Belgium's and Switzerland's decline. The rest are controls.
 CHECK = ("France", "Belgium", "Switzerland")
@@ -29,6 +30,7 @@ class Country:
     erosion: float         # people-weighted contraception erosion (M.contraception_erosion)
     laws: frozenset
     history_modifier: bool  # it holds te_demog_family_limitation (the save's timed modifiers: France)
+    church: float = 0.0     # its church laws' P.FL_LITERACY_TYPE total (a country line: every state reads the same)
 
 
 def countries(states):
@@ -37,14 +39,16 @@ def countries(states):
     for s in states:
         if s.people <= 0:
             continue
-        a = acc.setdefault(s.tag, [0.0, 0.0, 0.0, 0.0, frozenset(), False])
+        a = acc.setdefault(s.tag, [0.0, 0.0, 0.0, 0.0, frozenset(), False, 0.0])
         a[0] += s.people
         a[1] += s.people * s.inp.agrarian_share
         a[2] += s.people * s.inp.literacy
         a[3] += s.people * M.contraception_erosion(s.inp)
         a[4] = frozenset(s.inp.laws)
         a[5] = a[5] or s.inp.means_add > 0
-    return {t: Country(t, p, ag / p, li / p, er / p, laws, hist) for t, (p, ag, li, er, laws, hist) in acc.items()}
+        a[6] = s.inp.mods.get(P.FL_LITERACY_TYPE, 0.0)
+    return {t: Country(t, p, ag / p, li / p, er / p, laws, hist, church)
+            for t, (p, ag, li, er, laws, hist, church) in acc.items()}
 
 
 def border_states(states, adjacency):
@@ -84,7 +88,7 @@ def replay(loaded, adjacency):
         for tag, c in cs.items():
             if tag not in shares:
                 continue
-            target = M.fl_target(c.agrarian, c.literacy, c.laws)
+            target = M.fl_target(c.agrarian, c.literacy, c.laws, literacy_mult=c.church)
             new[tag] = M.fl_step(shares[tag], target, _neighbour_mean(borders.get(tag, ()), shares))
         shares.update(new)
 
@@ -98,7 +102,8 @@ def replay(loaded, adjacency):
             shares.setdefault(tag, M.fl_seed(c.history_modifier))
         if prev is not None:
             step(cs, borders)
-        out[year] = {tag: {"share": shares[tag], "target": M.fl_target(c.agrarian, c.literacy, c.laws),
+        out[year] = {tag: {"share": shares[tag], "target": M.fl_target(c.agrarian, c.literacy, c.laws,
+                                                                         literacy_mult=c.church),
                            "neighbours": _neighbour_mean(borders.get(tag, ()), shares),
                            "line": M.fl_line(shares[tag], c.erosion), "people": c.people,
                            "agrarian": c.agrarian, "literacy": c.literacy, "erosion": c.erosion,

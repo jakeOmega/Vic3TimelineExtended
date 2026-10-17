@@ -1549,51 +1549,6 @@ def multipliers(o):
     o("")
 
 
-def land_tenure_values(root):
-    """{law: Wealth Concentration term} for every land-reform law, variants at their parent's value."""
-    import json
-    from paradox_file_parser import ParadoxFileParser
-
-    def field(body, key):
-        v = body.get(key) if isinstance(body, dict) else None
-        v = v[-1] if isinstance(v, (list, tuple)) else v
-        return v[-1] if isinstance(v, (list, tuple)) else v
-
-    laws = {}
-    data = json.loads((root / "vanilla_parsed" / "common" / "laws.json").read_text(encoding="utf-8"))
-    for name, body in data.get("data", data).items():
-        laws[name] = body[1] if isinstance(body, list) and len(body) == 2 and body[0] == "=" else body
-    for path in sorted((root / "common" / "laws").glob("*.txt")):
-        parser = ParadoxFileParser()
-        parser.parse_file(str(path), apply_directives=False)
-        for name, body in parser.data.items():
-            if ":" in name and not name.startswith("REPLACE:"):
-                continue   # INJECT: adds fields to a vanilla law; its group and parent stay vanilla's
-            laws[name.split(":")[-1]] = body[1] if isinstance(body, tuple) else body
-    out = {}
-    for name, body in sorted(laws.items()):
-        if field(body, "group") != "lawgroup_land_reform":
-            continue
-        base = field(body, "parent") or name
-        if base not in P.LAND_TENURE:
-            raise KeyError(f"{name}: no LAND_TENURE value for {base} (demographics_params.py)")
-        out[name] = P.LAND_TENURE[base]
-    return out
-
-
-def land_term(o, root):
-    o("# State scope: the land-tenure term of Wealth Concentration's target (spec 4.2), weighted by")
-    o("# the state's agrarian share. Variant laws take their parent's value.")
-    o("te_demog_wc_land_term = {")
-    o("value = 0")
-    for law, value in land_tenure_values(root).items():
-        if value:
-            o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} value = {lit(value)} }}")
-    o("multiply = var:te_dg_agr_share")
-    o("}")
-    o("")
-
-
 def constants(o):
     o("# Constants the hand-written script reads (demographics_params.py).")
     k = {
@@ -1718,12 +1673,13 @@ def consequence_values(o):
 
 
 def work_values(o):
-    o("# State scope (phase 2 step 1): the 10-14s' participation by the owner's childrens'-rights law")
-    o("# (demographics_model.child_work_share).")
+    o("# State scope (phase 2 step 1): the 10-14s' participation, the childrens'-rights laws' line, within 0-1")
+    o(f"# ({P.CHILD_WORK_TYPE}: Child Labor Allowed 0.3, Restricted Child Labor 0.1;")
+    o("# demographics_model.child_work_share).")
     o("te_demog_child_work = {")
-    o(f"value = {lit(P.CHILD_WORK_SHARE_DEFAULT)}")
-    for law, share in P.CHILD_WORK_SHARE.items():
-        o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} value = {lit(share)} }}")
+    o(f"value = modifier:{P.CHILD_WORK_TYPE}")
+    o("min = 0")
+    o("max = 1")
     o("}")
     o("# Pop scope: the pop's own working-adult ratio (vanilla pop_types; the define for the rest).")
     o("te_demog_pop_base_ratio = {")
@@ -1827,7 +1783,8 @@ def practices(o):
     o("# base (te_dg_acc, which drifts toward its target since the Causes of Death plan; set before any practice reads")
     o("# it, by te_demog_medicine_at_target at a seed and te_demog_medicine_drift at a step). The seed with no sibling")
     o("# holding a share is the start less it (practice_seed; review I2), and the target adds Late Marriage's drivers")
-    o("# to that (practice_target): impartible inheritance on the farms and women's paid work. Read after the walk.")
+    o("# to that (practice_target): impartible inheritance on the farms (the laws' line, Primogeniture's and Undivided")
+    o(f"# Farm Succession's {P.LM_FARMS_TYPE}, x the agrarian share) and women's paid work. Read after the walk.")
     for p in P.PRACTICES:
         o(f"te_demog_pr_erosion_{p} = {{")
         o("value = te_demog_pr_erosion_contraception")
@@ -1845,18 +1802,7 @@ def practices(o):
         o(f"te_demog_pr_target_{p} = {{")
         o(f"value = te_demog_pr_seed_{p}")
         if p == "lm":
-            o("if = {")
-            o("limit = {")
-            o("owner = {")
-            o("OR = {")
-            for law in P.IMPARTIBLE_LAWS:
-                o(f"has_law = law_type:{law}")
-            o("te_inh_has_undivided_farms = yes")
-            o("}")
-            o("}")
-            o("}")
-            o(f"add = {{ value = var:te_dg_agr_share multiply = {lit(P.LM_INHERITANCE)} }}")
-            o("}")
+            o(f"add = {{ value = var:te_dg_agr_share multiply = modifier:{P.LM_FARMS_TYPE} }}")
             o(f"add = {{ value = var:te_dg_fjob_share multiply = te_demog_female_work_share "
               f"multiply = {lit(P.LM_WOMENS_WORK / P.FULL_FEMALE_WORK_SHARE)} }}")
         o("min = 0")
@@ -2015,7 +1961,6 @@ def render_values(root):
     malaria_values(o, root)
     multipliers(o)
     practices(o)
-    land_term(o, root)
     constants(o)
     migrant_booking_values(o)
     work_values(o)
@@ -2241,18 +2186,13 @@ def render_spread_values():
                         ("ch_high", 1 + P.CH_CAP), ("ch_benchmark_max", P.CH_BENCHMARK_MAX)):
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
     o("")
-    o("# Country scope: the church law's weight on Family Limitation's literacy term (demographics_model.fl_church). A")
-    o("# State Religion variant (the millet system, people of the book) takes State Religion's.")
+    o("# Country scope: the church laws' weight on Family Limitation's literacy term, 1 + their line, at least 0")
+    o(f"# ({P.FL_LITERACY_TYPE}: State Religion and its two variants -0.5, Total Separation and State")
+    o("# Atheism +0.5; demographics_model.fl_church).")
     o("te_demog_fl_church = {")
-    o(f"value = {lit(P.FL_CHURCH_DEFAULT)}")
-    first = True
-    for law, weight in P.FL_CHURCH.items():
-        o("if = {" if first else "else_if = {")
-        first = False
-        test = "has_law_or_variant" if law == "law_state_religion" else "has_law"
-        o(f"limit = {{ {test} = law_type:{law} }}")
-        o(f"value = {lit(weight)}")
-        o("}")
+    o("value = 1")
+    o(f"add = modifier:{P.FL_LITERACY_TYPE}")
+    o("min = 0")
     o("}")
     o("")
     o("# Country scope, after its census stored te_dg_fl_agr and te_dg_fl_lit (te_demog_fl_country_store): where its")

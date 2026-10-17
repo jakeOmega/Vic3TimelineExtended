@@ -535,6 +535,7 @@ law_primogeniture = {
 	modifier = {
 		state_tax_capacity_mult = -0.1
 		state_bureaucracy_population_base_cost_factor_mult = -0.1
+		state_late_marriage_farms_add = 0.15	# the census's Late Marriage: the heirs who don't inherit marry late (late-marriage spec call 6)
 	}
 }
 
@@ -3371,6 +3372,7 @@ law_guilds_chartered_monopolies = {
 
 	modifier = {
 		country_company_throughput_bonus_add = -0.1 # premodern monopolies are inefficient
+		country_wealth_concentration_economy_add = 5	# Wealth Concentration's economic laws term (spec §4.2)
 	}
 }
 
@@ -3396,6 +3398,7 @@ law_freedom_of_contract = {
 		interest_group_ig_trade_unions_pop_attraction_mult = 0.20       # workers angry about exploitative contracts; political weight gated by labor laws
 		building_minimum_wage_mult = -0.05                              # employers can negotiate wage floors down
 		state_bureaucracy_population_base_cost_factor_mult = -0.05      # less labor-regulation paperwork
+		country_wealth_concentration_economy_add = 5                    # Wealth Concentration's economic laws term (spec §4.2)
 	}
 }
 
@@ -3418,6 +3421,7 @@ law_trust_busting = {
 		country_company_construction_efficiency_bonus_add = -0.2    # cartel rents trimmed
 		country_company_throughput_bonus_add = 0.1                  # competitive gains
 		country_max_companies_add = 1                               # more firms
+		country_wealth_concentration_economy_add = -5               # Wealth Concentration's economic laws term (spec §4.2)
 	}
 }
 
@@ -3435,7 +3439,7 @@ law_regulated_utilities = {
 		country_company_throughput_bonus_add = 0.1                          # competitive gains
 		building_company_government_dividends_add = 0.10                    # stable utility revenues
 		building_group_bg_infrastructure_construction_efficiency_add = 0.25 # infrastructure is more efficient with centralized planning
-
+		country_wealth_concentration_economy_add = -5                       # Wealth Concentration's economic laws term (spec §4.2)
 	}
 }
 

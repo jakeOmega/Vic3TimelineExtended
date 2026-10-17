@@ -8,8 +8,12 @@
 # -2% a level, Dedicated and Militarized -3% (Private Policing's -2% is in extra_laws.txt). The health laws' access
 # lines sit inside their existing blocks in modified_health_system.txt; the women's-rights laws'
 # natural fertility (phase 2 step 4) inside their INJECTs in extra_laws.txt, except Women Own
-# Property's, which has no other INJECT. The health laws' longevity care lines (late game §4.2) are
-# at the end of this file.
+# Property's, which has no other INJECT. The health laws' longevity care lines (late game §4.2) and the
+# church laws' weight on Family Limitation (phase 3) are at the end of this file; Child Labor Allowed and
+# Restricted Child Labor carry the 10-14s' share at work (phase 2 step 1) beside their other lines.
+# Primogeniture's and Undivided Farm Succession's Late Marriage lines sit in their own definitions
+# (extra_laws.txt, extra_amendments.txt). Wealth Concentration's law lines are not census inputs:
+# te_demog_wealth_law_injections.txt.
 
 INJECT:law_local_police = {
 	institution_modifier = {
@@ -32,6 +36,13 @@ INJECT:law_militarized_police = {
 INJECT:law_child_labor_allowed = {
 	modifier = {
 		state_work_mortality_mult = 0.1
+		state_child_labor_participation_add = 0.3	# the census's 10-14s at work (phase 2 step 1)
+	}
+}
+
+INJECT:law_restricted_child_labor = {
+	modifier = {
+		state_child_labor_participation_add = 0.1	# the census's 10-14s at work (phase 2 step 1)
 	}
 }
 
@@ -77,5 +88,38 @@ INJECT:law_charitable_health_system = {
 INJECT:law_private_health_insurance = {
 	modifier = {
 		country_longevity_care_price_fall_mult = 1
+	}
+}
+
+# Family Limitation's literacy term (phase 3; parent spec section 13; on the laws since 2026-10-17): a secular, literate
+# society limits births, a church-run one less. x (1 + it): State Religion and its two variants -50%, Total Separation and
+# State Atheism +50%, Freedom of Conscience none. A variant carries its parent's.
+INJECT:law_state_religion = {
+	modifier = {
+		country_family_limitation_literacy_mult = -0.5
+	}
+}
+
+INJECT:law_millet_system = {
+	modifier = {
+		country_family_limitation_literacy_mult = -0.5
+	}
+}
+
+INJECT:law_people_of_the_book = {
+	modifier = {
+		country_family_limitation_literacy_mult = -0.5
+	}
+}
+
+INJECT:law_total_separation = {
+	modifier = {
+		country_family_limitation_literacy_mult = 0.5
+	}
+}
+
+INJECT:law_state_atheism = {
+	modifier = {
+		country_family_limitation_literacy_mult = 0.5
 	}
 }

@@ -11,6 +11,12 @@
 # activate_law, which ignores can_enact; those call sites are patched separately.
 # A country already holding one of these laws keeps it until the migration moves
 # it onto law_te_tax_code.
+#
+# Graduated Taxation also carries Wealth Concentration's tax term (spec §4.2 of
+# docs/superpowers/specs/2026-10-08-demographics-design.md; on the law since
+# 2026-10-17, so its tooltip says it): a script-only type, which changes no tax
+# rate (test_tax_code_migration allows script-only lines and nothing else). It
+# sits here because this is the one file that may INJECT these laws.
 
 INJECT:law_consumption_based_taxation = {
 	can_enact = {
@@ -73,6 +79,9 @@ INJECT:law_proportional_taxation = {
 }
 
 INJECT:law_graduated_taxation = {
+	modifier = {
+		country_wealth_concentration_tax_add = -5	# Wealth Concentration's taxes on wealth (te_demog_wc_tax_term)
+	}
 	can_enact = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced

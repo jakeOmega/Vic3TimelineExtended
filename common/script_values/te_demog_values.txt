@@ -444,9 +444,11 @@ te_demog_neg_city_rank = {
 
 # ============================================================================
 # Wealth Concentration (spec 4.2; plan Task 11). Each state's score, te_dg_wc (0-100),
-# drifts 3% a year toward its own target, a sum of terms around 50. The land term,
-# te_demog_wc_land_term, is generated (te_demog_generated_values.txt). The proposals are
-# the Decisions table's, starting points for the balance pass.
+# drifts 3% a year toward its own target, a sum of terms around 50. The proposals are
+# the Decisions table's, starting points for the balance pass. The land, tax and economic
+# laws' parts sit on the laws as script-only types (demographics_wealth_concentration_types.txt,
+# since 2026-10-17, so each law's tooltip says what it does): not census inputs, since
+# Wealth Concentration runs whatever the Demographics rule.
 # ============================================================================
 
 # State scope: the target. #822's law and amendments (0-100, centred on 50), land tenure
@@ -469,6 +471,15 @@ te_demog_wc_target = {
 		}
 		value = var:te_dg_wc
 	}
+}
+
+# State scope: the land-tenure term, the owner's land law's line (Serfdom and Manorialism
+# +15, Tenant Farmers and its Latifundias +5, Peasant Proprietorship and Homesteading -10,
+# Collectivized Agriculture -20: te_demog_wealth_law_injections.txt), weighted by the
+# state's agrarian share.
+te_demog_wc_land_term = {
+	value = modifier:state_wealth_concentration_land_add
+	multiply = var:te_dg_agr_share
 }
 
 # State scope: the walk's capital levels, in private, cooperative and state hands.
@@ -529,14 +540,10 @@ te_demog_wc_law_term = {
 	subtract = 50
 }
 
-# Country scope: the tax term. Graduated Taxation -5; the legislated tax code's dividend
-# rate x 20 when that rule is on (a 25% dividend tax -5); at most -10 in all.
+# Country scope: the tax term. The laws' line (Graduated Taxation -5); the legislated tax
+# code's dividend rate x 20 when that rule is on (a 25% dividend tax -5); at most -10 in all.
 te_demog_wc_tax_term = {
-	value = 0
-	if = {
-		limit = { has_law = law_type:law_graduated_taxation }
-		add = -5
-	}
+	value = modifier:country_wealth_concentration_tax_add
 	if = {
 		limit = { te_tax_code_full = yes }
 		subtract = { value = te_tax_view_en_div_rate multiply = 20 }
@@ -547,43 +554,14 @@ te_demog_wc_tax_term = {
 # Country scope: the economic laws term (owner, 2026-10-09). How freely capital compounds and
 # combines: Laissez-Faire +10 and Extraction Economy +5 against Interventionism -5; Guilds and
 # Chartered Monopolies and Freedom of Contract +5 each against Antitrust Enforcement
-# (law_trust_busting) and Regulated Utilities -5. Traditionalism, Agrarianism, Industry Banned,
+# (law_trust_busting) and Regulated Utilities -5, each the law's own line
+# (country_wealth_concentration_economy_add). Traditionalism, Agrarianism, Industry Banned,
 # Dirigisme and the command and cooperative laws are 0: every 1836 country holds a 0 or +5 law
 # in each group, and state and cooperative property already count in the ownership term.
 # National, like the tax term, so te_inh_concentration_target and the panel read it live. At
 # most 15 either way.
 te_demog_wc_econ_term = {
-	value = 0
-	if = {
-		limit = { has_law = law_type:law_laissez_faire }
-		add = 10
-	}
-	if = {
-		limit = { has_law = law_type:law_extraction_economy }
-		add = 5
-	}
-	if = {
-		limit = { has_law = law_type:law_interventionism }
-		add = -5
-	}
-	if = {
-		limit = {
-			OR = {
-				has_law = law_type:law_guilds_chartered_monopolies
-				has_law = law_type:law_freedom_of_contract
-			}
-		}
-		add = 5
-	}
-	if = {
-		limit = {
-			OR = {
-				has_law = law_type:law_trust_busting
-				has_law = law_type:law_regulated_utilities
-			}
-		}
-		add = -5
-	}
+	value = modifier:country_wealth_concentration_economy_add
 	min = -15
 	max = 15
 }
