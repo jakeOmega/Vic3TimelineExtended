@@ -139,9 +139,10 @@ Suppression / Crackdown. They never switch a policy off.
 ## Debates settled by law
 
 The other four journal entries share a simpler shape. Each applies a modifier
-while it runs and has up to a one-in-five chance each month of one of its five
-events, whose options run from paying for reform to a hard-line response. It
-ends when you enact the settling law, or times out with radicals and a penalty.
+while it runs and has up to a one-in-five chance each month (one in nine for
+Digital Rights) of one of its five events, whose options run from paying for
+reform to a hard-line response. It ends when you enact the settling law, or
+times out with radicals and a penalty.
 Outcome modifiers decay over ten years.
 
 | Journal entry | While active | Success | Failure | Time-out |
@@ -166,9 +167,10 @@ workplace discrimination, augmented crime and religious condemnation.
 The entry opens in era 9, but Strong Privacy Rights needs Universal Digital
 Identity from era 11 and the Guaranteed Liberties law, and you have 15 years.
 The events bring a whistleblower, a data breach, hackers, predictive policing
-and foreign cyber-espionage; with Covert Warfare on, the last follows only when
-your counterintelligence exposes a foreign espionage operation (see [What the
-target learns](11-influence.md#what-the-target-learns)).
+and foreign cyber-espionage. The first three are leaks, and no two of them
+come within two years of each other. With Covert Warfare on, the last follows
+only when your counterintelligence exposes a foreign espionage operation (see
+[What the target learns](11-influence.md#what-the-target-learns)).
 
 ### The mental health debate
 

@@ -45,6 +45,9 @@ conquests and colonies) are the second, and a treaty article, which a war goal c
   Occupation is therefore read from the provinces: `any_province = { percent >= 0.5 controller = X }` (state scope).
   The province link reads the occupier, and half the provinces is the rule the base game uses for war-goal control
   since 1.13.9. The occupier is found as the controller of a province the owner doesn't control (`random_province`).
+  *(Corrected 2026-10-16: the engine registers the province iterators from a province, so neither ran from a state and
+  no occupier was ever found. A script value's `every_province` reads the share instead, and the occupier is found among
+  the owner's enemies: `scripting_best_practices.md`, "Who occupies a state".)*
 - **`on_state_owner_change` gives only the state** (`scripting_best_practices.md`). The former owner is stamped on the
   state monthly (`gm_holder`) and compared on the change, as the Strategic Reserve hub does.
 - **Conquered states restart incorporation** (`vanilla_states_reference.md` §2), except a primary-culture homeland

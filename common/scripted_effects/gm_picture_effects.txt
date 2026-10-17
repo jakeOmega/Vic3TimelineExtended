@@ -170,7 +170,7 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = rosetta_stone CODE = 1000032 }
 	gm_state_picture_landmark = { KEY = temple_of_dendera CODE = 1000033 }
 	gm_state_picture_landmark = { KEY = luxor_obelisk CODE = 1000034 }
-	gm_state_picture_landmark = { KEY = venus_de_milo CODE = 13 }
+	gm_state_picture_landmark = { KEY = venus_de_milo CODE = 1000035 }
 	gm_state_picture_landmark = { KEY = piraeus_lion CODE = 1000036 }
 	gm_state_picture_landmark = { KEY = horses_of_saint_mark CODE = 1000037 }
 	gm_state_picture_landmark = { KEY = tipus_tiger CODE = 1000038 }
@@ -222,7 +222,13 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = sidon_necropolis CODE = 1000084 }
 	gm_state_picture_landmark = { KEY = villa_of_the_papyri CODE = 1000085 }
 	gm_state_picture_landmark = { KEY = tomb_of_alexander CODE = 1000086 }
-	gm_state_picture_landmark = { KEY = pompeii CODE = 102 }
+	gm_state_picture_landmark = { KEY = pompeii CODE = 1000087 }
+	gm_state_picture_landmark = { KEY = walhalla CODE = 220 }
+	gm_state_picture_landmark = { KEY = bunker_hill_monument CODE = 12 }
+	gm_state_picture_landmark = { KEY = obelisk_of_the_second_of_may CODE = 12 }
+	gm_state_picture_landmark = { KEY = muhammad_ali_mosque CODE = 304 }
+	gm_state_picture_landmark = { KEY = nelsons_column CODE = 10 }
+	gm_state_picture_landmark = { KEY = washington_monument CODE = 12 }
 }
 
 gm_state_picture_landmark = {
@@ -330,6 +336,7 @@ gm_tr_picture_trophies = {
 	gm_tr_picture_trophy = { KEY = sidon_necropolis CODE = 2000084 }
 	gm_tr_picture_trophy = { KEY = villa_of_the_papyri CODE = 2000085 }
 	gm_tr_picture_trophy = { KEY = tomb_of_alexander CODE = 2000086 }
+	gm_tr_picture_trophy = { KEY = pompeii CODE = 2000087 }
 }
 
 gm_tr_picture_trophy = {
@@ -836,6 +843,10 @@ gm_debug_next_picture = {
 	}
 	else_if = {
 		limit = { var:gm_picture_code = 1000034 }
+		set_variable = { name = gm_picture_code value = 1000035 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000035 }
 		set_variable = { name = gm_picture_code value = 1000036 }
 	}
 	else_if = {
@@ -1040,6 +1051,10 @@ gm_debug_next_picture = {
 	}
 	else_if = {
 		limit = { var:gm_picture_code = 1000086 }
+		set_variable = { name = gm_picture_code value = 1000087 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000087 }
 		set_variable = { name = gm_picture_code value = 1 }
 	}
 	else = {

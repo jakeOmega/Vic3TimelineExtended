@@ -1631,9 +1631,10 @@ GetParticipantWithLowestLeaderRelations
 GetParticipantWithHighestLibertyDesire
 GetParticipantWithLowestEconomicDependence
 GetParticipantWithLowestEconomicDependenceOnLeader
+GetParticipantWithHighestLeaderLawProgressivenessDifference
 ```
 
-Vanilla power-bloc UI loc reads `GetPowerBloc.GetParticipantWith{LowestLeaderRelations,HighestLibertyDesire,LowestEconomicDependence,LowestEconomicDependenceOnLeader}.GetName` (the last two from vanilla `cohesion_levels_l_english.yml`), but the participant promote returns null when the bloc has no qualifying member (e.g. a single-member bloc, or none meeting the relation/liberty-desire/economic-dependence criterion). Same `pdx_data_callstack.cpp:52` source as the `interest_group_top` entry; the four `GetParticipant*` signatures disambiguate. Cosmetic.
+Vanilla power-bloc UI loc reads `GetPowerBloc.GetParticipantWith{LowestLeaderRelations,HighestLibertyDesire,LowestEconomicDependence,LowestEconomicDependenceOnLeader}.GetName` (the last two from vanilla `cohesion_levels_l_english.yml`), but the participant promote returns null when the bloc has no qualifying member (e.g. a single-member bloc, or none meeting the relation/liberty-desire/economic-dependence criterion). Same `pdx_data_callstack.cpp:52` source as the `interest_group_top` entry; the five `GetParticipant*` signatures disambiguate. Cosmetic. The fifth, `GetParticipantWithHighestLeaderLawProgressivenessDifference`, is the Ideological Union's cohesion line (`POWER_BLOC_COHESION_WORST_PROGRESSIVENESS_DIFFERENCE`, vanilla's 00_power_bloc_identities.txt, whose cohesion value the mod leaves alone: its override file only INJECTs a `leader_modifier`). On 2026-10-16 one hover logged the line's three reads through it (the member's name and two of its laws) 94 times each within two seconds, in both `debug.log` and `error.log`.
 
 ### `pdx_data_factory.cpp:1466`/`:1092` — vanilla `relevant_ig` custom-loc `GetFullName`
 - source: `pdx_data_factory.cpp:1466`

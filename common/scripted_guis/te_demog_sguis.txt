@@ -509,8 +509,8 @@ te_demog_state_pool_sgui = {
 	effect = { }
 }
 
-# The state has a youth bulge (te_demog_youth_bulge_shown above 0: the one in force under Full, what it would be now
-# under Display only). The subtab's Youth row shows only then.
+# The state has a youth bulge (te_demog_youth_bulge_shown above 0: the one in force under Full, what the census's reads
+# make it under Display only). The subtab's Youth row shows only then.
 te_demog_state_youth_sgui = {
 	scope = state
 	is_shown = { te_demog_youth_bulge_shown > 0 }

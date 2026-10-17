@@ -57,6 +57,7 @@ INJECT:pmg_automation_building_tooling_workshop = {
 		pm_advanced_assembly_lines_building_tooling_workshop
 		pm_robotic_assembly_lines_building_tooling_workshop
 		pm_ai_managed_building_tooling_workshop
+		pm_ai_managed_building_tooling_workshop_handling
 	}
 }
 INJECT:pmg_base_building_glassworks = {
@@ -152,6 +153,7 @@ INJECT:pmg_automation_building_motor_industry = {
 		pm_advanced_assembly_lines_building_motor_industry
 		pm_robotic_assembly_lines_building_motor_industry
 		pm_ai_managed_building_motor_industry
+		pm_ai_managed_building_motor_industry_turbine
 	}
 }
 INJECT:pmg_base_building_shipyard = {
@@ -213,6 +215,7 @@ INJECT:pmg_automation_building_arms_industry = {
 	production_methods = {
 		pm_advanced_assembly_lines_building_arms_industry
 		pm_ai_managed_building_arms_industry
+		pm_ai_managed_building_artillery_foundry
 	}
 }
 INJECT:pmg_base_building_munition_plant = {
@@ -228,6 +231,7 @@ INJECT:pmg_automation_building_munition_plant = {
 	production_methods = {
 		pm_advanced_assembly_lines_building_munition_plant
 		pm_ai_managed_building_munition_plant
+		pm_ai_managed_building_munition_plant_shells
 	}
 }
 INJECT:pmg_base_building_rye_farm = {
@@ -872,6 +876,8 @@ REPLACE_OR_CREATE:pmg_power_automation = {
 		pm_power_centralized_control_systems
 		pm_power_integrated_smart_systems
 		pm_ai_managed_power_plant
+		pm_ai_managed_power_plant_reactor
+		pm_ai_managed_power_plant_hydro
 	}
 }
 REPLACE_OR_CREATE:pmg_base_building_hydro_power = {

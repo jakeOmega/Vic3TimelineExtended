@@ -794,6 +794,11 @@ types grand_monuments_widget_types
 			texture = "gfx/interface/icons/gm_pictures/landmark_luxor_obelisk__obelisk.dds"
 		}
 		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)1000035' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_venus_de_milo__statue.dds"
+		}
+		icon = {
 			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)1000036' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_piraeus_lion__statue.dds"
@@ -1047,6 +1052,11 @@ types grand_monuments_widget_types
 			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)1000086' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_alexander__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)1000087' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pompeii__forum.dds"
 		}
 		### Its grandeur frame over it (spec §3.5): none below the first step.
 		icon = {
@@ -1825,6 +1835,203 @@ types grand_monuments_widget_types
 				}
 			}
 
+			# ---- Unique dedications (signatures spec §8): one row per signature in force,
+			# after the dedications' and before approval; a one-off's flourish its own ----
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_antiquity'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_antiquity"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_antiquity"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_antiquity') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_antiquity"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_archive'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_archive"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_archive"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_archive') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_archive"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_throne'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_throne"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_throne"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_throne') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_throne"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_royal_pantheon'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_royal_pantheon"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_royal_pantheon"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_royal_pantheon') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_royal_pantheon"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_martial_glory'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_martial_glory"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_martial_glory"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_martial_glory') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_martial_glory"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_liberty'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_liberty"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_liberty"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_liberty') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_liberty"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_grande_armee'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_grande_armee"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_grande_armee"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_grande_armee') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_grande_armee"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_mandate_of_heaven'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_mandate_of_heaven"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_mandate_of_heaven"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_mandate_of_heaven') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_mandate_of_heaven"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_glory_of_athens'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_glory_of_athens"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_glory_of_athens"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_glory_of_athens') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_glory_of_athens"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_to_victory'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_to_victory"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_to_victory"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_to_victory') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_to_victory"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_unknown_soldier'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_unknown_soldier"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_unknown_soldier"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_unknown_soldier') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_unknown_soldier"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_concert_of_nations'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_concert_of_nations"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_concert_of_nations"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_concert_of_nations') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_concert_of_nations"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_conquerors_of_space'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_conquerors_of_space"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_conquerors_of_space"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_conquerors_of_space') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_conquerors_of_space"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_olympic'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_olympic"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_olympic"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_olympic') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_olympic"
+				}
+			}
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_heroes'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_heroes"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_heroes"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_sig_heroes') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_heroes"
+				}
+			}
 			# ---- Interest group approval: one row per group with a total ----
 			gm_subheader = {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' )]"
@@ -2087,6 +2294,57 @@ types grand_monuments_widget_types
 					text = "gm_je_val_boon_tech_naturalist"
 				}
 			}
+			# Specials held for the next monument of their dedication (signatures spec §8).
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_sig_held_to_victory'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_held_to_victory"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_held_to_victory"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_held_to_victory"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_sig_held_unknown_soldier'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_held_unknown_soldier"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_held_unknown_soldier"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_held_unknown_soldier"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_sig_held_concert_of_nations'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_held_concert_of_nations"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_held_concert_of_nations"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_held_concert_of_nations"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_sig_held_conquerors_of_space'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_held_conquerors_of_space"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_held_conquerors_of_space"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_held_conquerors_of_space"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_sig_held_olympic'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_sig_held_olympic"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_sig_held_olympic"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_sig_held_olympic"
+				}
+			}
 
 			# ---- The monument policy (v2 §5): one button each, two to a row ----
 			gm_subheader = {
@@ -2275,6 +2533,17 @@ types grand_monuments_widget_types
 			}
 			gm_note = {
 				text = "gm_je_how_counts_other"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_signatures"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_signatures"
+			}
+			gm_note = {
+				text = "gm_je_how_signatures_specials"
 			}
 			gm_subheader = {
 				blockoverride "subheader_text" {

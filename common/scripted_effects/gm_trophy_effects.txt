@@ -175,6 +175,10 @@ gm_state_tr_make_trophy = {
 			gm_tr_copy_from_state = { FROM = gm_name TO = gm_tr_name }
 			gm_tr_copy_from_state = { FROM = gm_honoree TO = gm_tr_honoree }
 			gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
+			# Its unique dedication, a piece's too: it counts for whoever holds it,
+			# at the trophy's grandeur (signatures spec §2.4, §7).
+			gm_tr_copy_from_state = { FROM = gm_signature TO = gm_tr_signature }
+			gm_tr_copy_from_state = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
 			gm_tr_update_picture = yes
 		}
 	}
@@ -636,6 +640,8 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_heritage TO = gm_heritage }
 	gm_tr_copy_to_state = { FROM = gm_tr_base_ig TO = gm_base_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
+	gm_tr_copy_to_state = { FROM = gm_tr_signature TO = gm_signature }
+	gm_tr_copy_to_state = { FROM = gm_tr_sig_parent TO = gm_sig_parent }
 	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1).
 	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = gm_seen
@@ -808,16 +814,52 @@ gm_state_tr_monthly = {
 	}
 }
 
-# State scope. The controller of a province the owner does not control, as
-# scope:gm_tr_occupier (the caller clears it first and checks
-# gm_state_tr_occupied_by: one province is not an occupation).
+# State scope. An enemy of the owner that occupies the state, as
+# scope:gm_tr_occupier (the caller clears it first). Found among the owner's
+# enemies in its wars, not from the provinces: random_province can't run from a
+# state (gm_trophy_values.txt, Occupation), and only an enemy can occupy.
 gm_state_tr_find_occupier = {
-	owner = { save_scope_as = gm_tr_site_owner }
-	random_province = {
-		limit = {
-			NOT = { controller = scope:gm_tr_site_owner }
+	save_temporary_scope_as = gm_tmp_tr_site
+	owner = {
+		random_enemy_in_war = {
+			limit = {
+				save_temporary_scope_as = gm_tmp_tr_enemy
+				scope:gm_tmp_tr_site = {
+					gm_state_tr_occupied_by = { WHO = scope:gm_tmp_tr_enemy }
+				}
+			}
+			save_scope_as = gm_tr_occupier
 		}
-		controller = { save_scope_as = gm_tr_occupier }
+	}
+}
+
+# ---- Self-check (once a game) -------------------------------------------------------
+# State scope, from gm_state_monthly. The first monument state whose owner is
+# at peace: its owner holds every one of its provinces, so the occupation read
+# (gm_state_tr_holds_half, a script value over the provinces) must count at
+# least one and find the owner holding half. Runs in a save already under way.
+gm_tr_occupation_read_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_occupation_read_checked }
+			has_building = building_grand_monument
+			owner = { is_at_war = no }
+		}
+		set_global_variable = gm_occupation_read_checked
+		if = {
+			limit = {
+				gm_state_province_count >= 1
+				gm_state_tr_holds_half = { WHO = owner }
+			}
+			debug_log = "TE_SELF_CHECK OK gm_occupation_read (a state at peace counts [SCOPE.ScriptValue('gm_state_province_count')|0] provinces and its owner holds half of them, so an occupier can be found)"
+		}
+		else_if = {
+			limit = { gm_state_province_count >= 1 }
+			debug_log = "TE_SELF_CHECK BROKEN gm_occupation_read (a state at peace counts [SCOPE.ScriptValue('gm_state_province_count')|0] provinces but its owner holds under half: the province count can't see the saved country; see docs/testing/grand-monuments-multiple-playtest.md)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN gm_occupation_read (a state counts no provinces: a script value can't iterate a state's provinces either, so no state reads as occupied; see docs/testing/grand-monuments-multiple-playtest.md)"
+		}
 	}
 }
 
@@ -859,6 +901,9 @@ gm_trophy_monthly = {
 			variable = gm_trophies
 			gm_tr_repair_places = yes
 			gm_tr_update_picture = yes
+			# A trophy of 1836, or one from a save older than signatures, takes
+			# its landmark's unique dedication (signatures spec §4.4).
+			gm_tr_sig_backfill = yes
 		}
 		# Returns that waited for a rebuild (gm_tr_return_home): one to each
 		# state now; another bound for the same state waits again.
@@ -1279,6 +1324,7 @@ gm_seed_trophy = {
 				set_variable = { name = gm_tr_form value = flag:$FORM$ }
 				set_variable = { name = gm_tr_landmark value = flag:$LANDMARK$ }
 				set_variable = { name = gm_tr_namesake value = flag:landmark }
+				gm_tr_sig_backfill = yes
 				gm_tr_update_picture = yes
 			}
 			debug_log = "TE_MONUMENTS: trophy $LANDMARK$ placed: from $ORIGIN_TAG$'s part of $ORIGIN$, standing in $SITE_TAG$'s part of $SITE$, $LEVELS$ levels"

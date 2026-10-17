@@ -588,11 +588,11 @@ These sections follow:
 |---|---|---|
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
-| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
+| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. The four monument policy buttons are at the foot. |
 | Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
-| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, names, the monument policy and trophies. |
+| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, unique dedications, names, the monument policy and trophies. |
 
 Every monument, whatever it honors, gives:
 
@@ -600,7 +600,8 @@ Every monument, whatever it honors, gives:
   is not contested.
 - +25% Tourism Industry throughput in its state for each step of its own
   grandeur, so its first five levels match one of the base game's monuments.
-- +1 cultural pull for each step of standing grandeur (steps of 10), up to +5.
+- +1 cultural pull for each step of standing grandeur (steps of 10), with no
+  ceiling: past the eighth step, at 2,550 grandeur, the steps keep doubling.
 
 ### A finished monument and its age
 
@@ -695,6 +696,68 @@ still fits. Each interest group's approval counts the grandeur of the monuments
 it approves of, minus those it objects to, and moves by 1 per step either way.
 No number of monuments can buy a group outright: each group has one total.
 
+### Unique dedications
+
+Most historical monuments carry a **unique dedication** of their own on top of
+the dedication they stand on. The Temple of Heaven stands To the Crown and
+carries The Mandate of Heaven. A unique dedication does everything its
+dedication does and adds an effect of its own. Its name shows in place of the
+dedication's in the monument's row, on its state card and on its trophy; hover
+the name for the dedication it was given on, what it adds and whether it counts
+now.
+
+It counts only while the monument stands on the dedication it was given on:
+
+| The monument | What its unique dedication gives |
+|---|---|
+| Upheld | Its national effect, its effect in its state, and its group's approval |
+| Contested or kept as heritage | Its effect in its state only |
+| Rededicated to another dedication | Nothing, and the row shows the new dedication's name; it counts again if the monument is rededicated back |
+| A trophy abroad | Its national effect, for whoever holds the trophy, at the trophy's grandeur |
+
+National effects count every monument that carries the same unique dedication
+together, in steps of 5 like the dedications' own, and each in force has its own
+row in National Effects. Mothballed halves them. Monuments of one kind share one:
+
+| Unique dedication | Carried by | Per step |
+|---|---|---|
+| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, at most +3, on top of the monuments' own pull, and +10% Tourism Industry throughput in its state; the Intelligentsia approve |
+| Epigraphic Archive | Inscriptions and lost libraries: the Rosetta Stone, the Temple of Dendera, the Mesha Stele, the Library of Ashurbanipal, the Dead Sea Scrolls and 10 more | +2 innovation cap and +2% technology spread, and +10% University throughput in its state; the Intelligentsia approve |
+| Seat of the Throne | Royal palaces: Topkapı Palace, the Red Fort, Sans-Souci Palace, the Royal Palace of Benin and 6 more | +3% authority |
+| Royal Pantheon | Royal tombs and statues: the Alexander Column, the Basilica of Superga, Nikkō Tōshō-gū and 4 more | +5% loyalists from high legitimacy |
+| Martial Glory | Monuments to victories: the Brandenburg Gate, the Lion Monument, Tipu's Tiger, Baba Merzoug and 2 more, and three [historical opportunities](#historical-opportunities) | +5% morale recovery |
+| Liberty | Baltimore's Washington Monument, the Liberty Column, the Lion of Saint Mark, and the Washington Monument | +3% migration pull |
+| Heroes of the Nation | Walhalla | +5% assimilation |
+
+Four monuments have one of their own, which counts as their kind's as well and
+adds a little more: The Mandate of Heaven (the Temple of Heaven, Seat of the
+Throne and +1 legitimacy), To the Grande Armée (the Arc de Triomphe, Martial
+Glory and +3% prestige), The Glory of Athens (the Parthenon, Ancestral
+Antiquity and +2% influence) and The First Emperor's Army (the Terracotta Army,
+Ancestral Antiquity and +25% Tourism Industry throughput in its state). La
+Scala, the Teatro di San Carlo, the Jantar Mantar, the Shalimar Gardens, the
+Jardim Botânico and the Muhammad Ali Mosque have none.
+
+Some [opportunities](#monument-opportunities) give the monument that completes
+them a unique dedication, worth a fifth of the opportunity's boon for each step,
+for as long as it stands:
+
+| Unique dedication | On | National, per step | From |
+|---|---|---|---|
+| To Victory | War Memorial | +2% prestige | Victory |
+| To the Unknown Soldier | War Memorial | −5% radicals from low legitimacy | Defeat |
+| To the Concert of Nations | To the Nation | +2% influence | Among the Great Powers |
+| To the Conquerors of Space | To the Nation | +2% innovation; the Intelligentsia approve | A space race first |
+| Olympic | Grand Stadium | −1% mortality | Television Broadcasting researched |
+
+Each completion gives one monument, so each Victory completed raises another
+memorial To Victory. A monument that already carries a unique dedication keeps its own,
+and then you hold the new one instead, shown as Held in National Effects: the
+dedication ceremony of your next monument of that dedication offers it, and
+nothing else does. The AI always takes a held one. Pull the monument down or
+rededicate it and its unique dedication is gone for good; carried off as a
+trophy, it goes with the trophy and comes home with it.
+
 ### Monument opportunities
 
 Moments in your country's history bring **opportunities** to raise a
@@ -717,21 +780,21 @@ Pass closes the opportunity. A monument that counts toward it is marked Counts
 toward the opportunity in its row under Our Monuments and on its state card. A
 year before time runs out, a notice reminds you.
 
-| Moment | Who asks | For | Where | Boon for ten years |
+| Moment | Who asks | For | Where | Boon for ten years, and unique dedication |
 |---|---|---|---|---|
 | A New Reign: a new ruler takes power | Landowners, or the new leader's own group | To the Crown when the ruler is crowned, otherwise To the Leader under Autocracy or a Single-Party State, named for the new ruler; under any other government, such as a democratic republic electing its president, none | Anywhere | +10% authority |
 | A New Order: a new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere | +25% loyalists from high legitimacy |
-| Among the Great Powers: you become a great power for the first time | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital | +10% influence |
-| Victory: you end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere | +10% prestige |
-| Defeat: you end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere | −25% radicals from low legitimacy |
+| Among the Great Powers: you become a great power for the first time | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital | +10% influence; To the Concert of Nations |
+| Victory: you end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere | +10% prestige; To Victory |
+| Defeat: you end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere | −25% radicals from low legitimacy; To the Unknown Soldier |
 | A Centenary: the 100th or 200th year since your founding | Petty Bourgeoisie, or the strongest group in government | A column To the Nation | The capital | +25% assimilation |
 | A Reign Remembered: a ruler who reigned 15 years or more dies | The late ruler's group | A mausoleum To the Nation, named for them | The capital | +5 legitimacy |
-| A space race first: First into Orbit, First on the Moon, First Lunar Colony, First on Mars or First Interstellar Probe | Intelligentsia | An obelisk To the Nation | The capital | +10% innovation |
+| A space race first: First into Orbit, First on the Moon, First Lunar Colony, First on Mars or First Interstellar Probe | Intelligentsia | An obelisk To the Nation | The capital | +10% innovation; To the Conquerors of Space |
 | A New Faith: your state religion changes | Devout | A Grand Shrine | Anywhere | +25% conversion |
 | Romanticism researched | Intelligentsia | A Grand Opera House | Anywhere | +10% Arts Academy throughput |
 | Empiricism researched | Intelligentsia | A Grand Observatory | Anywhere | +10% technology spread |
 | Marketing Research researched | Industrialists | A Great Exhibition Hall | Anywhere | +5% Manufacturing Industries throughput |
-| Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality |
+| Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality; Olympic |
 | The Environmental Movement researched | Rural Folk | Botanical Gardens | Anywhere | +25% pollution health effects reduction |
 
 An opportunity asks for 5 levels of its dedication within 60 months in a
@@ -756,15 +819,44 @@ formed or released in play is founded the year it appears. Other countries of
 
 | Outcome | What follows |
 |---|---|
-| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it gains 5 grandeur at no cost. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
+| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it gains 5 grandeur at no cost. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name, and its [unique dedication](#unique-dedications) where the table above names one. |
 | Let it pass, or time runs out | Nothing. The next moment can bring another. |
 | Lapsed | Nothing. An opportunity lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
 
-A second boon of the same kind restarts its ten years.
+A second boon of the same kind restarts its ten years. An offer that brings a
+unique dedication names it, and for a moment that comes once, says that letting
+it pass loses it for good.
 
 The AI gets the same offers. It seizes one unless it is below a major power, at
 war, in hard times, has more than a year of government construction queued or
 is in debt, and then queues the five levels itself.
+
+#### Historical opportunities
+
+Six monuments that history raised in the game's early years come as
+opportunities of their own. Each is offered once a game, to whoever holds its
+state, at any rank, from the year shown for forty years, while its holder
+matches the Holder column. When another opportunity is open or on offer, it waits
+and comes once that one closes, if its years have not run out.
+
+| Monument | State | From | Who asks | For | Levels | Holder |
+|---|---|---|---|---|---|---|
+| Walhalla | Bavaria | 1836 | Petty Bourgeoisie | To the Nation | 5 | German-speaking culture |
+| Bunker Hill Monument | Massachusetts | 1836 | Armed Forces | War Memorial | 5 | Anyone |
+| Obelisk of the Second of May | New Castile | 1836 | Armed Forces | War Memorial | 5 | Anyone |
+| Muhammad Ali Mosque | Lower Egypt | 1836 | Devout | Grand Shrine | 10 | Sunni state religion |
+| Nelson's Column | Home Counties | 1840 | Armed Forces | War Memorial | 5 | Anyone |
+| Washington Monument | District of Columbia | 1848 | Intelligentsia | To the Republic | 10 | Republic |
+
+It asks for its levels in the state within the usual months, twice as long for
+10 levels. It brings no boon: the monument that completes it becomes the
+historical monument, with its name, look and picture, and the unique dedication
+it carries (Heroes of the Nation for Walhalla, Martial Glory for the three war
+memorials, Liberty for the Washington Monument), on top of the 5 grandeur and
+the approval of any opportunity. It lapses when you lose the state or stop
+matching its Holder column, as when the republic falls. Letting it pass or
+running out of time costs nothing, but it does not come again. The AI decides as it does for
+any opportunity.
 
 ### Monument names and forms
 
@@ -887,7 +979,10 @@ off, rounded up, in the standing grandeur that gives prestige and cultural pull,
 and the Armed Forces approve of it. Whoever holds that capital's state holds the
 trophy, so conquering the state takes its trophies too. A trophy keeps its
 monument's name and picture, and a piece is named for what was taken, such as
-the Brandenburg Gate's Quadriga, shown with the Gate.
+the Brandenburg Gate's Quadriga, shown with the Gate. A trophy keeps its
+monument's [unique dedication](#unique-dedications) too, and its holder counts
+it at the trophy's grandeur, whatever its government; the monument a piece was
+taken from keeps its own at its smaller size.
 
 | Taken | You pay | The other side |
 |---|---|---|

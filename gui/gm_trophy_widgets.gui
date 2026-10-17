@@ -692,6 +692,11 @@ types gm_trophy_widget_types
 			texture = "gfx/interface/icons/gm_pictures/landmark_luxor_obelisk__obelisk.dds"
 		}
 		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000035' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_venus_de_milo__statue.dds"
+		}
+		icon = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000036' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_piraeus_lion__statue.dds"
@@ -945,6 +950,11 @@ types gm_trophy_widget_types
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000086' )]"
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_tomb_of_alexander__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000087' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pompeii__forum.dds"
 		}
 	}
 
@@ -1389,6 +1399,11 @@ types gm_trophy_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/trophy_tomb_of_alexander.dds"
 		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000087' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_pompeii.dds"
+		}
 	}
 
 	### A trophy we hold: its name, what it was and where from, what it counts
@@ -1417,6 +1432,14 @@ types gm_trophy_widget_types
 				}
 				gm_tr_line = {
 					text = "gm_tr_row_detail"
+				}
+				### Its unique dedication (signatures spec §3): the parent named on
+				### its own line, what it gives on hover.
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_sig_tt"
+					text = "gm_tr_row_sig"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
@@ -1475,6 +1498,14 @@ types gm_trophy_widget_types
 			gm_tr_line = {
 				text = "gm_tr_row_detail"
 			}
+			### Its unique dedication (signatures spec §3): the parent named on
+			### its own line, what it gives on hover.
+			gm_tr_line = {
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+				default_format = "#tooltippable"
+				tooltip = "gm_tr_sig_tt"
+				text = "gm_tr_row_sig"
+			}
 			gm_tr_line = {
 				visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
 				default_format = "#tooltippable"
@@ -1515,6 +1546,14 @@ types gm_trophy_widget_types
 				}
 				gm_tr_line = {
 					text = "gm_tr_row_detail"
+				}
+				### Its unique dedication (signatures spec §3): the parent named on
+				### its own line, what it gives on hover.
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_sig_tt"
+					text = "gm_tr_row_sig"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
@@ -1899,6 +1938,14 @@ types gm_trophy_widget_types
 				}
 				gm_tr_line = {
 					text = "gm_mon_row_detail"
+				}
+				### Its unique dedication (signatures spec §3): the parent named on
+				### its own line, what it gives on hover.
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_sig_tt"
+					text = "gm_tr_row_sig"
 				}
 				### Its status (ageing spec 2026-10-16 §4.3), a code each.
 				gm_tr_line = {

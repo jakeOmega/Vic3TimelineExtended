@@ -4,7 +4,7 @@ import os
 import tempfile
 import unittest
 
-from bom_normalizer import BOM, normalize_bom
+from bom_normalizer import BOM, _iter_script_files, normalize_bom
 
 
 class NormalizeBomTests(unittest.TestCase):
@@ -120,6 +120,18 @@ class RepoHasNoDoubledBomTests(unittest.TestCase):
                         if fh.read(6) == BOM + BOM:
                             doubled.append(os.path.relpath(path, repo))
         self.assertEqual(doubled, [], "files starting with two UTF-8 BOMs (run bom_normalizer.py)")
+
+    def test_every_script_file_starts_with_a_bom(self):
+        # A missing BOM still loads, but the engine logs it at every launch. #950
+        # dropped two Grand Monument files' BOMs from a branch, and the game logged
+        # them until a triage three days later (2026-10-16).
+        repo = os.path.dirname(os.path.abspath(__file__))
+        missing = []
+        for path in _iter_script_files(repo):
+            with open(path, "rb") as fh:
+                if fh.read(3) != BOM:
+                    missing.append(os.path.relpath(path, repo))
+        self.assertEqual(missing, [], "script files with no UTF-8 BOM (run bom_normalizer.py)")
 
 
 if __name__ == "__main__":

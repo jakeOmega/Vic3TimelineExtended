@@ -11,7 +11,7 @@
 # which runs this hook every frame with scope:article_options unbound.
 # =================================================================
 return_cultural_property = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/cultural_exchange_program.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/return_cultural_property.dds"
 	kind = directed
 	cost = 50
 

@@ -17,7 +17,7 @@
 # test_state_treaty_article_sync.py).
 # =================================================================
 archaeological_concession = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/science_aid.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/archaeological_concession.dds"
 	kind = directed
 	cost = 75
 

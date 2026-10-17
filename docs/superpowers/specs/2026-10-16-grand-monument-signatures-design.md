@@ -102,7 +102,8 @@ the multiplier its step count, as the dedications' are (`gm_national_<key>`, `gm
   `gm_remove_national_modifiers`.
 - Antiquity's national effect is cultural pull, which is a script value, not a modifier: `cultural_pull_from_antiquity`
   (its steps × 1, at most +3), added to `cultural_pull_from_monuments` beside `cultural_pull_from_grand_monuments`, whose
-  +5 cap it does not share.
+  steps it does not share. (That one lost its +5 cap on 2026-10-16, owner: monument cultural pull has diminishing
+  returns, not a ceiling. Whether this +3 cap goes the same way is open.)
 
 ### 2.2 Local
 

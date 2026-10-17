@@ -54,6 +54,8 @@ te_demog_sex_births_store = {
 te_demog_consequences_refresh = {
 	# the self-check unemployment_rate_read (te_debug_demog_effects.txt): once a game, where the census runs
 	te_debug_demog_unemployment_selfcheck = yes
+	# under both settings, for the panel's youth bulge (te_demog_unemployment_census: a scripted GUI can't read it live)
+	set_variable = { name = te_dg_unemp value = te_demog_unemployment }
 	if = {
 		limit = {
 			te_demog_effects_run = yes
