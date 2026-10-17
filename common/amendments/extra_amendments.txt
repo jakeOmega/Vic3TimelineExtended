@@ -926,10 +926,22 @@ amendment_civilian_police_oversight = {
 	modifier = {
 		# Boards, investigators and hearings.
 		country_institution_cost_institution_police_mult = 0.1
-		# Grievances against the police get a hearing instead of a movement.
-		state_pop_support_movement_civil_rights_mult = -0.15
 		# Officers answer to the boards as well as to their superiors.
 		country_legislative_override_capacity_add = -0.5
+		# The complainants with standing get a hearing, so their grievances
+		# radicalize them more slowly. Not the movement's attraction: the
+		# governments that adopt this usually want its reforms. Violent
+		# Hostility and Cultural Erasure have no standing before a board.
+		country_radicalism_increases_second_rate_citizen_mult = -0.1
+		country_radicalism_increases_open_prejudice_mult = -0.1
+		# Policing by consent: half a level of the police institution's -0.1.
+		state_turmoil_effects_mult = -0.05
+	}
+
+	# Lawyers and academics sit on the boards; Corporate Security Powers'
+	# value, so each policing amendment strengthens the group that wins it.
+	sponsor_modifier = {
+		interest_group_pol_str_mult = 0.1
 	}
 
 	possible = {
