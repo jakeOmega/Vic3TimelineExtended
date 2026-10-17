@@ -64,6 +64,7 @@ te_ops_value = {
 	value = var:te_ops_count
 	add = scope:actor.var:te_ops_count
 	add = global_var:te_ops_count
+	add = var:te_ops_holder.var:te_ops_count
 }
 """
 
@@ -163,20 +164,22 @@ class VariableUsageTests(unittest.TestCase):
         self.assertEqual(seen["scope_hint"], "every_in_list(te_ops)")
         reads = [s for s in self.sites("te_ops_count") if s["op"] == "var_read"]
         hints = sorted(str(s["scope_hint"]) for s in reads)
-        self.assertEqual(hints, ["None", "scope:actor"])
+        self.assertEqual(hints, ["None", "scope:actor", "var:te_ops_holder"])
 
     def test_var_reads_and_data_functions(self):
         rows = self.sites("te_ops_count")
         ops = sorted(s["op"] for s in rows)
         self.assertEqual(ops, sorted([
             "set_variable", "change_variable", "set_local_variable",
-            "var_read", "var_read", "global_var_read",
+            "var_read", "var_read", "var_read", "global_var_read",
             "gui_GetGlobalVariable", "loc_Var",
         ]))
         loc = [s for s in rows if s["op"] == "loc_Var"][0]
         self.assertEqual(loc["entity"], "te_ops_label")
         self.assertEqual(loc["entity_type"], "Localization")
         self.assertEqual(loc["line"], 2)
+        holder = self.sites("te_ops_holder")
+        self.assertEqual([(s["op"], s["scope_hint"]) for s in holder], [("var_read", None)])
         step = self.sites("te_ops_step")
         self.assertEqual([(s["op"], s["entity"]) for s in step], [("var_read", "te_ops_create")])
 
@@ -212,7 +215,7 @@ class VariableUsageTests(unittest.TestCase):
     def test_names_listing(self):
         out = vu.names(self.index, prefix="te_ops")
         names = [r["name"] for r in out["names"]]
-        self.assertEqual(names, ["te_ops", "te_ops_count", "te_ops_step"])
+        self.assertEqual(names, ["te_ops", "te_ops_count", "te_ops_holder", "te_ops_step"])
         ops = [r for r in out["names"] if r["name"] == "te_ops"][0]
         self.assertEqual(ops["kinds"], ["list"])
         self.assertEqual(ops["stores"], ["global", "scope"])

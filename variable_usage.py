@@ -99,13 +99,9 @@ _TOKEN_RE = re.compile(
     r"(?:(?P<open>\{)|(?P<value>[A-Za-z0-9_.:@$\-]+))?)?"
 )
 _QUOTED_RE = re.compile(r'"([^"\n]*)"')
-# `scope:actor.var:x`, `var:x.owner`, `global_var:x`. The chain is what comes
-# before the read.
-_VAR_READ_RE = re.compile(
-    r"(?<![A-Za-z0-9_])(?P<chain>(?:[A-Za-z0-9_@$]+:)?[A-Za-z0-9_@$]+"
-    r"(?:\.(?:[A-Za-z0-9_@$]+:)?[A-Za-z0-9_@$]+)*\.)?"
-    r"(?P<pfx>global_var|local_var|var):(?P<name>[A-Za-z0-9_$]+)"
-)
+# One `.`-separated link of a token that reads a variable: `var:x` in
+# `scope:actor.var:x`, both reads in `var:a.var:b`, `global_var:x`.
+_VAR_LINK_RE = re.compile(r"(?P<pfx>global_var|local_var|var):(?P<name>[A-Za-z0-9_$]+)")
 # Data functions in GUI and loc text: `Var('x')`, `GetList('x')`,
 # `HasVariable('x')`, `GetGlobalVariable('x')`, ...
 _DATA_FN_RE = re.compile(
@@ -258,13 +254,17 @@ def scan_script(text: str, rel: str, links: set[str],
 
         value_at = m.start("value") if m.group("value") else m.end()
         for tok, at in ((key, m.start("key")), (value, value_at)):
-            if tok and ":" in tok:
-                for r in _VAR_READ_RE.finditer(tok):
-                    chain = r.group("chain")
-                    sites.append(Site(
-                        rel, line_of(starts, at), entity, etype, r.group("pfx") + "_read",
-                        "read", "var", _VAR_READ_STORE[r.group("pfx")], r.group("name"),
-                        chain[:-1] if chain else scope_hint()))
+            if not tok or ":" not in tok:
+                continue
+            links_ = tok.split(".")
+            for i, link in enumerate(links_):
+                r = _VAR_LINK_RE.match(link)
+                if not r:
+                    continue
+                sites.append(Site(
+                    rel, line_of(starts, at), entity, etype, r.group("pfx") + "_read",
+                    "read", "var", _VAR_READ_STORE[r.group("pfx")], r.group("name"),
+                    ".".join(links_[:i]) if i else scope_hint()))
 
         if parent is None:
             if m.group("open"):
