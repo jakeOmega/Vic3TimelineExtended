@@ -69,6 +69,8 @@ class EndingScript:
                 return self.reference(value, country) is not None
             if key == 'is_country_alive':
                 return country.alive == (value == 'yes')
+            if key == 'any_country':
+                return any(other.alive and self.condition(value, other) for other in self.countries)
             if key == 'is_country_type':
                 return value == 'recognized'
             actual = self.reference(key, country)
@@ -160,7 +162,9 @@ class ConcurrentEndingsTest(unittest.TestCase):
         self.assertIs(self.other.variables['te_cw_origin'], self.other)
         s.effect('te_civil_war_clear', self.first)
         self.assertNotIn('te_cw_origin', self.first.variables)
-        self.assertNotIn('te_cw_role', self.first.variables)
+        # The second and third uprisings now point at it: it stays a side, as
+        # their government, until they end (2026-10-17).
+        self.assertEqual(self.first.variables['te_cw_role'], '1')
         self.assertNotIn('te_cw_government_won', self.first.variables)
         self.assertEqual(s.globals, {})
 
@@ -212,6 +216,27 @@ class ConcurrentEndingsTest(unittest.TestCase):
         self.assertEqual(self.original.variables['te_cw_rebels_won'], '0')
         self.assertEqual(self.original.variables['te_cw_government_won'], '1')
         self.assertIs(self.script.scopes['te_cw_loser'], self.first)
+
+    def test_government_stays_a_side_until_its_last_uprising_ends(self):
+        # Portugal, 2026-10-17: it won one of two uprisings and lost its role
+        # for the rest of the other. Now it keeps te_cw_role = 1 while an
+        # uprising still points at it, and loses it with the last one.
+        s = self.script
+        self.third.alive = False
+        s.merge(self.original, self.first, reported_origin=self.original, rebel=self.first)
+        s.effect('te_civil_war_clear', self.original)
+        self.assertEqual(self.original.variables['te_cw_role'], '1')
+        s.merge(self.original, self.second, reported_origin=self.original, rebel=self.second)
+        self.assertEqual(self.original.variables['te_cw_role'], '1', "not the dead rebels' 2")
+        self.assertEqual(self.original.variables['te_cw_government_won'], '1')
+        s.effect('te_civil_war_clear', self.original)
+        self.assertNotIn('te_cw_role', self.original.variables)
+
+    def test_single_war_clear_removes_the_role(self):
+        self.second.alive = self.third.alive = False
+        self.script.merge(self.original, self.first, reported_origin=self.original, rebel=self.first)
+        self.script.effect('te_civil_war_clear', self.original)
+        self.assertNotIn('te_cw_role', self.original.variables)
 
     def test_single_war_rebel_without_pointer_falls_back_to_pair(self):
         self.first.variables.pop('te_cw_origin')
