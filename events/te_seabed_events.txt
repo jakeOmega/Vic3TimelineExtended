@@ -1,10 +1,11 @@
 ﻿namespace = te_seabed
 
 # ============================================================================
-# SEABED LICENCES — HIDDEN EVENTS
+# SEABED LICENCES — EVENTS
 # ============================================================================
-# common/scripted_effects/te_global_commons_seabed_effects.txt § Leases;
-# docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md § 4.
+# common/scripted_effects/te_global_commons_seabed_effects.txt § Leases and
+# te_seabed_global_monthly; docs/superpowers/specs/
+# 2026-10-17-seabed-claims-and-panel-design.md §§ 4 and 7.
 # ============================================================================
 
 # A Lease <Basin> Seabed Claims article came into force a day ago with this
@@ -48,5 +49,57 @@ te_seabed.2 = {
 				debug_log_scopes = yes
 			}
 		}
+	}
+}
+
+# The Seabed Rush Begins (seabed claims spec § 7; an event, not a notification,
+# owner 2026-10-17): news, once a game, to every player the month the first
+# country can claim (te_seabed_global_monthly), told three ways: to that
+# country, to a coastal one and to a landlocked one. With the Global Commons
+# rule on it stands in for the research's headline
+# (headlines_tech_abyssal_plain_mining, common/on_actions/headlines.txt). The
+# first claimant is read back from its global variable in case the saved
+# scope doesn't survive the dispatch.
+te_seabed.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_seabed.3.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = te_seabed.3.d_first
+				trigger = { scope:te_seabed_first_claimant ?= this }
+			}
+			triggered_desc = {
+				desc = te_seabed.3.d_coastal
+				trigger = { any_scope_state = { is_coastal = yes } }
+			}
+			desc = te_seabed.3.d_landlocked
+		}
+	}
+	flavor = te_seabed.3.f
+
+	event_image = { texture = "gfx/event_pictures/law_of_sea_maritime.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	duration = 3
+
+	immediate = {
+		global_var:te_seabed_first_claimant ?= { save_scope_as = te_seabed_first_claimant }
+	}
+
+	option = {
+		name = {
+			trigger = { scope:te_seabed_first_claimant ?= this }
+			text = te_seabed.3.a_first
+		}
+		name = {
+			trigger = { NOT = { scope:te_seabed_first_claimant ?= this } }
+			text = te_seabed.3.a
+		}
+		default_option = yes
+		custom_tooltip = te_seabed.3.a.tt
 	}
 }
