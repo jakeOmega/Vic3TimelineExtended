@@ -788,5 +788,129 @@ class FeeTest(unittest.TestCase):
             self.assertGreater(paid, 0)
 
 
+class ReadoutTest(unittest.TestCase):
+    """The "+1 licence" readout (seabed claims spec § 3.5): the closed form
+    against the exact answer from re-running the sharing."""
+
+    def test_closed_form_matches_exact_in_open_worlds(self):
+        rng = random.Random(77)
+        for _ in range(40):
+            w = m.random_world(rng, regime=m.OPEN)
+            m.yearly_pass(w)
+            for cid, c in w.countries.items():
+                for b in m.BASINS:
+                    if c.weight[b] <= 0:
+                        continue
+                    self._check_bound(w, b, cid)
+
+    def _check_bound(self, w, b, cid, lower_bound=True):
+        """The closed form ignores largest-remainder rounding, which can hand
+        the licence over sooner: the exact need lies between the closed form
+        for the entitlement itself and for one more, None reading as no
+        amount. So "full" (None) means no licence for certain: the rounding
+        may still hand the last one over, at a high weight."""
+        exact, closed = m.exact_need_weight(w, b, cid), m.need_weight(w, b, cid)
+        if exact is None:
+            self.assertIsNone(closed, (cid, b))
+            return
+        if closed is not None:
+            self.assertGreaterEqual(closed - exact, -0.01, (cid, b))
+        if not lower_bound:
+            return
+        lower = m.need_weight(w, b, cid, step=0)
+        self.assertIsNotNone(lower, (cid, b))
+        self.assertGreaterEqual(exact - lower, -0.01, (cid, b))
+
+    @staticmethod
+    def _assumption_holds(w, b, cid):
+        """need_weight's assumption at its own answer: no other active
+        country falls to its holdings or floor."""
+        f = w.final[b]
+        x = m.need_weight(w, b, cid)
+        me = w.countries[cid]
+        me_elig = w.regime == m.REGULATED and me.eligible
+        for j in f["active"]:
+            if j == cid:
+                continue
+            c = w.countries[j]
+            j_res = w.regime == m.REGULATED and c.eligible and f["wsum_res"] > 0
+            if x is None:
+                # "full": as our weight grows without bound a rival keeps only
+                # a reserved share our weight doesn't reach
+                share = f["rem_res"] * c.weight[b] / f["wsum_res"] if j_res and not me_elig else 0.0
+            else:
+                extra = x + (0 if cid in f["active"] else me.weight[b])
+                share = f["rem_open"] * c.weight[b] / (f["wsum_all"] + extra)
+                if j_res:
+                    share += f["rem_res"] * c.weight[b] / (f["wsum_res"] + (extra if me_elig else 0))
+            if share < f["h"][j]:
+                return False
+        return True
+
+    def test_closed_form_bounds_exact_after_years(self):
+        """Holdings, floors and the reserved half, five years in: the closed
+        form never understates wherever its assumption holds, and it fails
+        rarely. Under the Regulated regime the halves can make it overstate by
+        more than one licence, so the lower bound is the Open regime's."""
+        rng = random.Random(78)
+        checked = skipped = under = 0
+        for i in range(30):
+            w = m.random_world(rng, regime=(m.OPEN, m.REGULATED)[i % 2])
+            run(w, rng, 5, annex=0, split=0)
+            for cid, c in w.countries.items():
+                for b in m.BASINS:
+                    if c.weight[b] <= 0:
+                        continue
+                    if self._assumption_holds(w, b, cid):
+                        checked += 1
+                        self._check_bound(w, b, cid, lower_bound=w.regime == m.OPEN)
+                        continue
+                    # a rival pushed to its holdings or floor: the readout may understate
+                    skipped += 1
+                    exact, closed = m.exact_need_weight(w, b, cid), m.need_weight(w, b, cid)
+                    if closed is not None and (exact is None or closed < exact - 0.01):
+                        under += 1
+        self.assertGreater(checked, 500)
+        self.assertLess(skipped, 0.15 * (checked + skipped))
+        self.assertLess(under, 0.01 * (checked + skipped))
+
+    def test_full_basin_reads_none(self):
+        # the whole Arctic held by country 0: nothing is left to share
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "arctic", 0, levels=100), 1: m.State(1, "arctic", 1)})
+        m.yearly_pass(w)
+        self.assertIsNone(m.need_weight(w, "arctic", 1))
+        self.assertIsNone(m.exact_need_weight(w, "arctic", 1))
+        self.assertIsNone(m.need_navy(w, 1, "arctic"))
+
+    def test_frozen_country_needs_its_holdings_plus_one(self):
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0, levels=200), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].ent["pacific"], 200)              # frozen at its holdings
+        closed, exact = m.need_weight(w, "pacific", 0), m.exact_need_weight(w, "pacific", 0)
+        self.assertIsNotNone(exact)
+        self.assertGreaterEqual(closed - exact, -0.01)
+        self.assertLessEqual(closed - exact, max(0.25 * exact, 1.0))
+
+    def test_navy_conversion(self):
+        # home basin, 1 of 2 coastal states there, Sponsor, navy multiplier 1
+        c = m.Country(0, policy=m.SPONSOR, navy=10)
+        w = m.World({0: c, 1: m.Country(1, policy=m.SPONSOR, navy=40)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "atlantic", 0), 2: m.State(2, "pacific", 1)})
+        m.yearly_pass(w)
+        self.assertEqual(m.need_navy(w, 0, "pacific"), math.ceil(m.need_weight(w, "pacific", 0) / (1.0 * 1 * 1 / 2)))
+        self.assertEqual(m.need_navy(w, 0, "indian"), math.ceil(m.need_weight(w, "indian", 0) / (0.05 * 1.0 * 1)))
+        c.policy = m.UNILATERAL                                           # the navy counts double
+        m.yearly_pass(w)
+        self.assertEqual(m.need_navy(w, 0, "indian"), math.ceil(m.need_weight(w, "indian", 0) / (0.05 * 1.0 * 2)))
+
+    def test_no_claim_reads_none(self):
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10, barred=True), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        self.assertIsNone(m.need_navy(w, 0, "southern"))
+
+
 if __name__ == "__main__":
     unittest.main()

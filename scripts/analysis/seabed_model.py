@@ -89,6 +89,7 @@ A reserved half that no active claimant is eligible for joins the open half
 
 from __future__ import annotations
 
+import copy
 import math
 import random
 from dataclasses import dataclass, field
@@ -179,6 +180,12 @@ class World:
     # signature of the H1 leak, which the no-share counter otherwise absorbs.
     stamped_no_share: int = 0
     iterations: dict = field(default_factory=dict)   # water-filling passes, last sharing, per basin
+    # The last sharing's final round, per basin, for the readout: rem_res,
+    # rem_open, wsum_res, wsum_all (the te_seabed_*_<basin> globals), the
+    # active set, frozen_at (cid -> what it was frozen at), frozen_res (the
+    # reserved-half part of it), h (every participant's max(held, floor)) and
+    # the participants.
+    final: dict = field(default_factory=dict)
 
     def owned(self, cid):
         return [s for s in self.states.values() if s.owner == cid]
@@ -470,6 +477,7 @@ def share_basin(world: World, b: str, part: list) -> dict:
     rem_open = pool - rem_res                                        # te_seabed_rem_open_<b>
     active = set(part)                                               # te_seabed_act_<b>
     frozen_h = 0
+    frozen_res = {}                                                  # te_seabed_dr_<b>: its reserved-half debit
 
     def fold_unclaimed():
         """te_seabed_share_fold_unclaimed: a reserved half no active claimant
@@ -497,6 +505,7 @@ def share_basin(world: World, b: str, part: list) -> dict:
         for cid in newly:
             er, e = tent[cid]
             dr = v(v(h[cid] * er) / e) if e > 0 else 0.0
+            frozen_res[cid] = dr
             rem_res = v(rem_res - dr)
             rem_open = v(rem_open - (h[cid] - dr))
             frozen_h += h[cid]
@@ -510,6 +519,12 @@ def share_basin(world: World, b: str, part: list) -> dict:
 
     world.iterations[b] = passes
     fold_unclaimed()
+    world.final[b] = {
+        "rem_res": rem_res, "rem_open": rem_open,
+        "wsum_res": sum(w[i] for i in active if elig[i]), "wsum_all": sum(w[i] for i in active),
+        "active": set(active), "frozen_at": {cid: h[cid] for cid in part if cid not in active},
+        "frozen_res": dict(frozen_res), "h": dict(h), "part": list(part),
+    }
     ent = {cid: h[cid] for cid in part if cid not in active}
     total = max(0, pool - frozen_h)                                  # te_seabed_left_<b> before the floors
     frac = {}
@@ -535,6 +550,109 @@ def share_basin(world: World, b: str, part: list) -> dict:
             ent[cid] -= 1
             left += 1
     return ent
+
+
+def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
+    """te_seabed_readout (seabed claims spec § 3.5): about how much more claim
+    weight the country needs in basin b for one more licence, from the last
+    sharing's final round. With R licences left to the active set and W its
+    weight, a country of weight w and tentative share e = R·w/W needs, for a
+    target t, d = t - e more: Δw = d·W / (R - e - d), which for a country
+    sharing one half is (t·W - R·w) / (R - t). An active country's target is
+    its entitlement + 1; a frozen one's what it was frozen at + 1, with its
+    holdings put back in the halves they came off and its weight back in the
+    active set. An eligible party under the Regulated regime takes the smaller
+    Δw of its two halves (both rise, so the true need is a little less). None
+    where no half has a licence left for it ("full"), or the country has no
+    weight here.
+
+    It is a sufficient figure, not a lottery: the sharing's largest-remainder
+    rounding may hand the licence over sooner, so the exact need lies between
+    this form for the entitlement itself (step=0) and for one more (Open
+    regime; under the Regulated regime the halves can make it overstate by
+    more). "Full" means no licence for certain; the rounding may still hand
+    the last one over, at a high weight. It assumes
+    no rival is pushed down to its holdings or floor by our growth, and under
+    the Regulated regime that no frozen party is eligible (its holdings come
+    off the halves by shares our weight moves); where either fails it can
+    understate (test_seabed_allocation's ReadoutTest counts how rarely)."""
+    f = world.final.get(b)
+    c = world.countries[cid]
+    if f is None or cid not in f["part"] or c.weight[b] <= 0:
+        return None
+    w = c.weight[b]
+    elig = world.regime == REGULATED and c.eligible
+    r_res, r_open, w_res, w_all = f["rem_res"], f["rem_open"], f["wsum_res"], f["wsum_all"]
+    if cid in f["active"]:
+        t = c.ent[b] + step
+    else:
+        fa = f["frozen_at"][cid]
+        dr = f["frozen_res"].get(cid, 0.0)
+        t = fa + step
+        r_res += dr
+        r_open += fa - dr
+        w_all += w
+        if elig:
+            w_res += w
+    halves = [(r_open, w_all)]
+    if elig and r_res > 0 and w_res > 0:
+        halves.append((r_res, w_res))
+    shares = [R * w / W for R, W in halves]
+    d = max(0.0, t - sum(shares))
+    best = None
+    for (R, W), e in zip(halves, shares):
+        if R - e - d > 1e-6:                     # at 0 the licence is never certain: "full"
+            x = d * W / (R - e - d)
+            best = x if best is None else min(best, x)
+    return best
+
+
+def need_navy(world: World, cid, b: str) -> int | None:
+    """te_seabed_need_navy_<basin>: need_weight in units of navy. At home the
+    navy counts in proportion to the country's coastal states there
+    (factor × navy multiplier × n_b ÷ N); far away at DISTANT_NAVY_SHARE
+    (0.05 × factor × navy multiplier). Rounded up; None passes through."""
+    x = need_weight(world, b, cid)
+    if x is None:
+        return None
+    c = world.countries[cid]
+    factor = POLICY_FACTOR[c.policy]
+    mult = ASSERTIVE_NAVY_MULT if (c.policy == UNILATERAL or world.regime == SCRAMBLE) else 1
+    home = [s for s in world.owned(cid) if s.coastal and s.incorporated]
+    n = sum(1 for s in home if s.basin == b)
+    per = factor * mult * n / len(home) if n > 0 else DISTANT_NAVY_SHARE * factor * mult
+    return math.ceil(x / per)
+
+
+def exact_need_weight(world: World, b: str, cid, *, tol: float = 0.01, cap: float = 1e6) -> float | None:
+    """Test reference for need_weight: the least extra weight, to within
+    `tol`, at which re-running the last sharing of basin b on a copy gives the
+    country one licence more; None if no weight up to `cap` does."""
+    f = world.final.get(b)
+    c = world.countries[cid]
+    if f is None or cid not in f["part"] or c.weight[b] <= 0:
+        return None
+    target = c.ent[b] + 1
+    sim = copy.deepcopy(world)
+    base = c.weight[b]
+
+    def gets(x):
+        sim.countries[cid].weight[b] = base + x
+        return share_basin(sim, b, f["part"])[cid] >= target
+
+    hi = 1.0
+    while not gets(hi):
+        hi *= 2
+        if hi > cap:
+            return None
+    lo = 0.0
+    while hi - lo > tol:
+        mid = (lo + hi) / 2
+        if gets(mid):
+            hi = mid
+        else:
+            lo = mid
+    return hi
 
 
 def floor_in_force(world: World, c: Country, b: str) -> int:
