@@ -37,10 +37,12 @@ what only the game can show.
 
 ## Seabed licences (§ 2)
 
-Spec: `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 2. System doc:
+Spec: `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 2, and for the claims, the
+holding fee, Sponsor's protection, the policy lock and the panel
+`docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md` (phase 1). System doc:
 `docs/systems/mod_systems.md` § Global Commons. The offline gate is `test_seabed_basins.py`,
-`test_seabed_allocation.py` (the model) and `test_seabed_script.py`; this list is what only the
-game can show.
+`test_seabed_allocation.py` (the model), `test_seabed_script.py`, `test_seabed_loc.py` and
+`test_seabed_layout.py`; this list is what only the game can show.
 
 ### Self-checks (every game with `global_commons_rule` on)
 
@@ -48,10 +50,12 @@ game can show.
 |---|---|---|---|---|
 | `TE_SELF_CHECK … seabed_cap` | each yearly sharing after the first (the global monthly pulse of a new year), after every participant has recorded. OK logs once a game, and only with licences recorded somewhere; BROKEN every year it fails | every basin's records are within last year's ceiling (its pool, or its grandfathered records if more) plus what has been recorded against no share since (`slack` ≥ 0 for all five); no monthly recording grandfathered a state that carries a stamp (`stamped_noshare=0`); no participant leaves a level unlicensed while it still holds unbuilt share (`escaped=0`). `pending` counts levels waiting for a licence because their owner queued past its room (the gate's under-construction branch): expected, not BROKEN | `stamped_noshare` above 0: a stamped state's levels went against no share, the review's H1 leak (a level a month through the gate's second branch), which the no-share count in `slack` would absorb. `escaped` above 0: a level escaped recording although its owner had share (a state without a basin variable, or a building the walk can't see). A negative `slack`: a basin's records grew past its ceiling some other way | read the basin's states in the variable inspector: which states hold records beyond their levels, and whose shares went negative. The model (`scripts/analysis/seabed_model.py`) is the reference; reproduce the case there first (`UnderConstructionBranchTest` is the H1 case) |
 | `TE_SELF_CHECK START/OK/BROKEN seabed_licence_follows_state` | once a game: `START` when the first state that held licences at a recording changes owner (inside `on_state_owner_change`), the verdict at the first global monthly pulse a month or more later | the state's `te_seabed_lic_*` and `te_seabed_holder` read back inside the hook and again a month later: a state keeps its variables when it changes owner (the engine fact § 2.4 rests on; Grand Monuments relies on it too) | `BROKEN` at once: the hook found a watched state with no records or no stamp, so the variables were gone before the hook ran. `BROKEN` a month later: they read back in the hook but were gone after | keep the records in **global variables per coastal state region**, with the holder stamp beside them: `gen_seabed_basins.py` emits, per coastal region, a branch that reads and writes `te_seabed_lic_<basin>_<REGION>` and `te_seabed_holder_<REGION>` (an `if` chain on `state_region = s:STATE_X`, as the basin effect is), and the state steps of `te_seabed_record_country` and `te_seabed_on_state_owner_change` call it in place of the state variables. A region split between two owners then shares one record, charged to the larger part's owner. Not implemented |
+| `TE_SELF_CHECK … seabed_floor_fits` | after each sharing in which a Sponsor Contractors floor protected something (`protected` above 0 in some basin); OK once a game, BROKEN every sharing it fails | every basin's entitlements stay within its pool, or its holdings if more, after the floors are fitted (`te_seabed_fit_floors` scaled the protected parts down where they didn't fit) | `over` above 0: a basin's unbuilt claims exceed what its pool leaves beyond its licences, so a floor pushed shares past the pool | reproduce the basin in the model (`FloorTest.test_floors_scale_down_to_fit`); read each participant's `te_seabed_fz_<basin>` and `te_seabed_floor_<basin>` in the variable inspector |
 
-Both checks exclude the degenerate case: `seabed_cap` waits for a previous sharing (the ceilings) and
+The checks exclude the degenerate case: `seabed_cap` waits for a previous sharing (the ceilings) and
 logs OK only with records in the world; `seabed_licence_follows_state` watches only states the
-monthly recording saw holding licences (a global list kept apart from the states' own variables).
+monthly recording saw holding licences (a global list kept apart from the states' own variables);
+`seabed_floor_fits` runs only after a sharing in which some floor protected a claim.
 
 ### Play-test list
 
@@ -76,7 +80,7 @@ monthly recording saw holding licences (a global list kept apart from the states
    unlicensed** (the tile's In use doesn't count it, Room to build reads 0, and the button stays grey
    everywhere, branch 2 included) until a share pays for it, never be recorded against no share. Check
    that the same state can't take a third level the month after, and that the Arctic (or whichever
-   basin) never shows more records than its pool in the Seabed tab's World column.
+   basin) never shows more licences than its pool in the Seabed tab's pool bar (its hover).
 3. **A level on a distant licence, the penalty and the swap.** Use up a basin's share (or build in
    a basin where the country has only a distant claim): the next level records another basin's
    licence, and within a month the state carries **Long-Haul Seabed Operations** at -25% × the
@@ -100,17 +104,21 @@ monthly recording saw holding licences (a global list kept apart from the states
    it falls back under. No error in `debug.log` from the pass (`while`, `ordered_country`,
    `change_relations`). A new claimant's mid-year sharing re-divides every pool, but charges no
    Unilateral relations (they fall on the year's first sharing only).
-7. **The Seabed tab.** The Timeline Extended window shows a Seabed tab on a strip of its own under
-   Space Race, Colonial Empire and Grand Monuments, greyed (with its checklist) until the country has
-   taken part in a sharing. Choosing it shows the overview (Policy, Regime, ITLOS party while the UN
-   rule is on, Licences, From other basins while any, Room to build), the three policy buttons, a row
-   per basin where the country has weight or holdings (Home or Distant, weight, share, the world's
-   records of the pool) and How Seabed Licences Work, collapsed. Check that switching tabs keeps
-   exactly one tab shown, and that no label ends in "…".
-8. **The policy buttons and influence.** Sponsor Contractors needs 50 available influence and holds
-   50 while it stands (the country's influence breakdown lists "Seabed Policy: Sponsor
-   Contractors"); Unilateral Licensing 150. The current policy's button is greyed with "This is not
-   already our policy" crossed. The new policy's weight shows at the next January sharing. Under
+7. **The Seabed tab (layout A).** The Timeline Extended window shows a Seabed tab on a strip of its
+   own under Space Race, Colonial Empire and Grand Monuments, greyed (with its checklist) until the
+   country has taken part in a sharing. Choosing it shows the overview's six boxes two to a row (Room
+   to build, Our licences, Long-haul, Unused claims, Policy, Regime), each with its icon in an inset,
+   the three short policy buttons (Survey, Sponsor, Unilateral), the Ocean Basins table with "as of
+   <month year>" (all five basins: Free, the pool bar, Weight, +1 licence) and its legend, and How
+   Seabed Licences Work, collapsed. Check that switching tabs keeps exactly one tab shown. **At
+   1080p, no label ends in "…" or overflows its box**, the buttons and the overview's third lines
+   included; hover every cell and check each figure against the variable inspector. The pool bar's
+   five segments read left to right: our built mines (gold), queued (lighter gold), our claims
+   (green), rivals' mines (red), rivals' claims (the dark background).
+8. **The policy buttons and influence.** Sponsor Contractors needs and holds 50 influence plus 0.5
+   per unused claim (the country's influence breakdown lists "Seabed Policy: Sponsor Contractors" at
+   that figure, and it follows the claims month by month); Unilateral Licensing 1.5 times that, at
+   least 150. The current policy's button is greyed with "This is not already our policy" crossed. The new policy's weight shows at the next January sharing. Under
    Unilateral Licensing, two claimants that both have coast in a basin lose 10 relations a year with each other
    (−5 from each side of the pair: check that `change_relations` from each side moves the one
    figure, so the year's loss is 10, not 20 or 5).
@@ -132,6 +140,49 @@ monthly recording saw holding licences (a global list kept apart from the states
     so the winner's unbuilt shares are the nation's again, not the rebel claimant's.
 12. **Rule off.** A new game with `global_commons_disabled`: the Deep-Sea Mine builds without limit,
     no tile, no Seabed tab, no Long-Haul modifier.
+13. **The rivals.** Click a basin's chevron: its claimants open under the row, largest share first,
+    each with a tiny flag (hover: the country's name; click: it opens) and a line of mines, claims
+    and weight share; six at most, then "and N other claimants"; our own row last with Relinquish
+    (or Claim Again). The rows fill at the first sharing after the update and change at each
+    sharing. No "Failed to fetch variable" while the list is open, in a basin with fewer than six
+    claimants (the empty rows hide, and their flags read no seat). Close it again: the flag is
+    `te_seabed_rivals_<basin>_open`, so every basin starts collapsed.
+14. **The holding fee after its grace.** Queue a Deep-Sea Mine level and keep it unbuilt (pause the
+    construction, or queue past your construction speed) across two January sharings: no fee after
+    the first, the fee from the month after the second (Our licences' third line turns red,
+    "−¤N.Nk a week"; the budget's expenses list "Seabed Holding Fee" and the Budget Breakdown counts
+    it under United Nations). Let the level finish: the fee stops at the next monthly pulse. A party
+    under the Regulated regime: its fee joins the World Development Fund's (or the UN budget's)
+    weekly total with its royalties.
+15. **Sponsor's protection.** On Sponsor Contractors, with unused claims in a basin a rival's
+    buildup is about to take: the next January leaves you at least three quarters of them (rounded
+    down); the overview's "Jan: lose ≤N" said so beforehand. Off Sponsor, they are divided again in
+    full ("Jan: re-divided"). A new claimant's mid-year sharing leaves a Sponsor country's January
+    figure unchanged. In a Scramble, protection lapses.
+16. **Relinquish and Claim Again.** Relinquish a basin from our own row: our claims there read 0 at
+    once, Sponsor Contractors' influence falls at the next monthly pulse, nothing is shared before
+    the next sharing (no mid-year sharing starts), and at that sharing the other claimants divide
+    them. Claim Again: our weight there counts from the sharing after; the licences on our levels
+    there are untouched throughout.
+17. **The five-year lock and its carve-outs.** Change policy: every other policy button greys with
+    "Five years have passed since we last changed our seabed policy" crossed and the year changes
+    are allowed from; the overview's Policy box reads "next change <year>". Then (a) let a rival
+    with coast in one of our home basins switch to Unilateral Licensing: our Unilateral button opens
+    at once; (b) run the influence into deficit: our Survey button opens. A revolution's winner
+    inherits the lock (the variable). The AI's yearly choice keeps to it.
+18. **The "+1 licence" readout and the Free hover.** In a basin where we claim, "+N" (navy) under +1
+    licence; build that much navy (or note a rival's change) and check the next sharing gives at least
+    one more licence there, all else equal. "full" in a basin with nothing left to win, "—" where we
+    claim nothing. Hover a basin's Free figure: "Build at full throughput in:" and up to five of our
+    incorporated coastal states there by name, then "and N more" (no stray header line, no state
+    listed twice), or the no-coast line where we have none.
+19. **AI holding fees, observer run.** Over a few decades of an observer game past era 11, read the
+    AI countries' Seabed Holding Fee (budget, or `te_seabed_fee_cached`): it should stay small. The
+    engine's builder knows nothing of the fee, so if AIs queue far ahead of their construction and pay
+    much, lower the rate or lengthen the grace, never add an `is_ai` rule (spec § 8).
+20. **Sponsor's cost at scale.** In a late-game save, a great power on Sponsor Contractors with most
+    of a basin's claims: its influence bill (50 + 0.5 a claim) should be noticeable but affordable;
+    tune `te_seabed_influence_per_claim` from the figures.
 
 ### Engine facts the build assumes, unverified
 
@@ -151,6 +202,17 @@ monthly recording saw holding licences (a global list kept apart from the states
   the gate's second branch is needed at all.
 - `is_revolutionary` reads true for a revolution's side in a civil war (the AI's policy choice skips
   it).
+- The rivals list rests on four reads nothing in the mod has shown for this shape: an
+  `ordered_country` with `check_range_bounds = no` and no `max` visits every match (Cultural
+  Hegemony's leaderboard relies on it); a custom tooltip printed in a ranked country's scope reads
+  that country's figures through `THIS.GetCountry.MakeScope.ScriptValue` (the Space Race launch
+  windows' lines use it); `var:x > root.var:x` compares two countries' variables in a trigger (the
+  Unilateral carve-out); and a state saved with `save_temporary_scope_as` inside a tooltip-only
+  `ordered_scope_state` prints through `SCOPE.sState(...)` (the UN mission list's pattern, used for
+  countries). Items 13, 17 and 18 test them.
+- The policy cost's multiplier, `var:te_seabed_policy_cost_cached`, reads the variable on ROOT, and
+  every caller that adds the modifier has ROOT = the country (item 8: the figure in the influence
+  breakdown).
 
 ## The UN layer: the Law of the Sea, the Antarctic Treaty and the anti-satellite moratorium (§ 3, § 4, § 6.5)
 

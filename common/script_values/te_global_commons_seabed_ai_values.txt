@@ -33,6 +33,9 @@ te_seabed_ai_will_survey = 20
 te_seabed_ai_stay_bonus = 10
 te_seabed_ai_influence_spare = 100
 te_seabed_ai_influence_deficit_pull = 50
+# Sponsor Contractors' pull per unused claim it would protect, and its cap.
+te_seabed_ai_protect_per_claim = 0.1
+te_seabed_ai_protect_max = 20
 
 # ---- The licence test: what Sponsor Contractors would bring ----
 # Σ over basins of pool × w' ÷ (W − w + w'), w' = w × r: the country's weight
@@ -183,6 +186,16 @@ te_seabed_ai_will_sponsor = {
 			max = 20
 		}
 	}
+	# Protection (seabed claims spec § 2.2): the more unused claims, the more
+	# Sponsor Contractors keeps of them each January.
+	if = {
+		limit = { te_seabed_ai_projected >= 1 }
+		add = {
+			value = te_seabed_unbuilt_total
+			multiply = te_seabed_ai_protect_per_claim
+			max = te_seabed_ai_protect_max
+		}
+	}
 }
 
 te_seabed_ai_will_unilateral = {
@@ -244,12 +257,12 @@ te_seabed_ai_will_unilateral = {
 
 # Influence an AI must have to take up a policy that holds it.
 te_seabed_ai_sponsor_influence_start = {
-	value = te_seabed_influence_sponsor
+	value = te_seabed_sponsor_cost_value
 	add = te_seabed_ai_influence_spare
 }
 
 te_seabed_ai_unilateral_influence_start = {
-	value = te_seabed_influence_unilateral
+	value = te_seabed_unilateral_cost_value
 	add = te_seabed_ai_influence_spare
 }
 

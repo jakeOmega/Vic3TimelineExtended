@@ -844,7 +844,7 @@ the seabed policies).
 |---|---|---|
 | Open | The convention is not in force, or the United Nations rule is off | By weight among all claimants. |
 | Regulated | The convention is in force | Half of each basin, the reserved half, by weight among the parties whose GDP per head is below the members' average (the World Development Fund's yardstick). The other half by weight among all claimants. While no such party claims in a basin, its reserved half is shared with the open half. |
-| Scramble | Two or more great powers on Unilateral Licensing while Regulated | The whole basin among all claimants, every navy counting double. It is Regulated again two years after fewer than two great powers remain on Unilateral Licensing. |
+| Scramble | Two or more great powers on Unilateral Licensing while Regulated | The whole basin among all claimants, every navy counting double, and Sponsor Contractors protects no one's claims. It is Regulated again two years after fewer than two great powers remain on Unilateral Licensing. |
 
 While the seabed is Regulated, a party pays royalties each week: 4% of its
 Deep-Sea Mines' base output value, about 1,800 a level. The money goes to the
@@ -852,8 +852,8 @@ World Development Fund while it stands, otherwise to the UN budget. A party
 that switches to Unilateral Licensing while the convention governs the seabed
 defects: 10 infamy once, 5 standing and 10 case strength. It loses its place in
 the reserved half and pays no royalties. It becomes a party again five years
-after it leaves Unilateral Licensing for Sponsor Contractors or Scientific
-Survey. A member that refused the convention, or a country outside the UN,
+after it defected, once it has left Unilateral Licensing for Sponsor
+Contractors or Scientific Survey. A member that refused the convention, or a country outside the UN,
 claims in the open half only and pays nothing. Unilateral Licensing costs it
 nothing extra. The AI weighs the seabed terms when it votes on the convention:
 poorer coastal members lean for it, great powers with Deep-Sea Mines against.

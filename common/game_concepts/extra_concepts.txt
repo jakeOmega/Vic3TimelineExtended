@@ -176,6 +176,10 @@ concept_antimatter_facility = {
 concept_seabed_licence = {
 	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
 }
+# An unused share of a basin (seabed claims spec § 1).
+concept_seabed_claim = {
+	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+}
 
 # Military & Diplomacy
 concept_combined_arms = {}

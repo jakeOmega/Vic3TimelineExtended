@@ -21,6 +21,7 @@ What must hold:
 Set SEABED_MODEL_WORLDS (and SEABED_MODEL_YEARS) for a longer run; the spec's
 claim was 2,000 worlds of 60 years.
 """
+import math
 import os
 import random
 import sys
@@ -427,16 +428,24 @@ class RegulatedTest(unittest.TestCase):
 
     def test_a_minor_party_keeps_a_share(self):
         """The anti-goal: early movers must not lock a basin. A minor eligible
-        party next to a great power holding most of the open half."""
-        countries = {0: m.Country(0, policy=m.SPONSOR, navy=300), 1: m.Country(1, policy=m.SPONSOR, navy=2, eligible=True)}
-        states = {0: m.State(0, "pacific", 0, levels=0), 1: m.State(1, "pacific", 1)}
-        world = m.World(countries, states, regime=m.OPEN)
-        m.yearly_pass(world)
-        open_minor = world.countries[1].ent["pacific"]
-        world.regime = m.REGULATED
-        m.yearly_pass(world)
-        self.assertGreater(world.countries[1].ent["pacific"], open_minor)
-        self.assertGreaterEqual(world.countries[1].ent["pacific"], m.POOLS["pacific"] // 2)
+        party next to a great power holding most of the open half. On Sponsor
+        Contractors the great power's floor may take from the reserved half
+        when the Law of the Sea comes into force (the pioneer investors, seabed
+        claims spec § 2.2); the floor fades by a quarter a year, so the minor
+        party has its reserved half back within three sharings."""
+        for policy, sharings in ((m.SURVEY, 1), (m.SPONSOR, 3)):
+            countries = {0: m.Country(0, policy=policy, navy=300),
+                         1: m.Country(1, policy=m.SPONSOR, navy=2, eligible=True)}
+            states = {0: m.State(0, "pacific", 0, levels=0), 1: m.State(1, "pacific", 1)}
+            world = m.World(countries, states, regime=m.OPEN)
+            m.yearly_pass(world)
+            open_minor = world.countries[1].ent["pacific"]
+            world.regime = m.REGULATED
+            m.yearly_pass(world)
+            self.assertGreater(world.countries[1].ent["pacific"], open_minor, policy)
+            for _ in range(sharings - 1):
+                m.yearly_pass(world)
+            self.assertGreaterEqual(world.countries[1].ent["pacific"], m.POOLS["pacific"] // 2, policy)
 
     def test_a_party_over_its_reserved_share_spills_into_the_open_half(self):
         countries = {cid: m.Country(cid, policy=m.SPONSOR, navy=10, eligible=True) for cid in range(3)}
@@ -475,6 +484,473 @@ class WaterFillingTest(unittest.TestCase):
         m.yearly_pass(world)
         self.assertEqual([world.countries[c].ent["pacific"] for c in range(3)], [150, 75, 75])
         self.assertEqual(world.countries[0].unbuilt["pacific"], 0)
+
+
+class FloorTest(unittest.TestCase):
+    """Sponsor Contractors' floors (seabed claims spec § 2.2): a Sponsor
+    country's claims fade by at most a quarter at the year's first sharing;
+    a mid-year sharing honours January's floor; a Scramble voids floors; the
+    Antarctic bar leaves a Southern floor at holdings; floors that don't fit
+    scale down."""
+
+    def _one_basin_world(self, policy=m.SPONSOR):
+        # two claimants on the Pacific; country 0 on `policy`
+        w = m.World({0: m.Country(0, policy=policy, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        return w
+
+    def test_sponsor_claims_fade_by_a_quarter_at_most(self):
+        w = self._one_basin_world()
+        before = w.countries[0].unbuilt["pacific"]            # 150
+        w.countries[1].navy = 1000                            # a rival's buildup
+        m.yearly_pass(w)
+        self.assertGreaterEqual(w.countries[0].unbuilt["pacific"], math.floor(0.75 * before))
+
+    def test_survey_claims_are_fully_re_divided(self):
+        w = self._one_basin_world(policy=m.SURVEY)
+        w.countries[1].navy = 1000
+        m.yearly_pass(w)
+        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+
+    def test_mid_year_sharing_honours_the_stored_floor(self):
+        w = self._one_basin_world()
+        w.countries[1].navy = 1000
+        m.yearly_pass(w)                                      # floor fixed: 112
+        kept = w.countries[0].unbuilt["pacific"]
+        m.yearly_pass(w, first_of_year=False)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], kept)   # no 0.75 x 0.75
+
+    def test_leaving_sponsor_mid_year_drops_the_floor(self):
+        w = self._one_basin_world()
+        w.countries[1].navy = 1000
+        m.yearly_pass(w)
+        w.countries[0].policy = m.SURVEY
+        m.yearly_pass(w, first_of_year=False)
+        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+
+    def test_scramble_voids_floors(self):
+        w = self._one_basin_world()
+        w.regime = m.SCRAMBLE
+        w.countries[1].navy = 1000
+        m.yearly_pass(w)
+        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+
+    def test_barred_southern_floor_is_holdings(self):
+        # country 0 has a Southern coast, claims and five levels there; then the bar
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1), 2: m.State(2, "southern", 0)})
+        m.yearly_pass(w)
+        w.states[2].levels = 5
+        m.record_country(w, 0)
+        self.assertGreater(w.countries[0].unbuilt["southern"], 0)
+        w.countries[0].barred = True
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].floor["southern"], 5)
+        self.assertEqual(w.countries[0].ent["southern"], 5)
+        self.assertEqual(w.countries[0].unbuilt["southern"], 0)
+
+    def test_floors_scale_down_to_fit(self):
+        # country 1 holds 280 grandfathered Pacific licences; country 0's floor (112) can't fit beside them
+        w = self._one_basin_world()
+        w.states[1].levels = 280
+        w.states[1].lic["pacific"] = 280
+        w.countries[1].unbuilt["pacific"] = 0                  # grandfathered: no claims of its own left
+        m.yearly_pass(w)
+        ent = {cid: w.countries[cid].ent["pacific"] for cid in (0, 1)}
+        held = sum(w.countries[cid].held["pacific"] for cid in (0, 1))
+        self.assertLessEqual(sum(ent.values()), max(m.POOLS["pacific"], held))
+        self.assertGreaterEqual(ent[1], 280)
+        self.assertEqual(ent[0], m.POOLS["pacific"] - 280)
+
+    def test_fit_floors_leaves_holdings_alone(self):
+        w = self._one_basin_world()
+        w.states[1].levels = 320                               # over the pool on its own
+        w.states[1].lic["pacific"] = 320
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[1].ent["pacific"], 320)
+        self.assertEqual(w.countries[0].ent["pacific"], 0)
+
+    def test_a_non_participant_keeps_no_floor(self):
+        w = self._one_basin_world()
+        m.yearly_pass(w)                                       # a floor is stored from 150 claims
+        self.assertGreater(w.countries[0].floor["pacific"], 0)
+        w.countries[0].tech = False
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].floor["pacific"], 0)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
+
+    def test_a_holder_without_the_technology_keeps_no_floor(self):
+        # still a participant through its licences, but no longer a claimant
+        w = self._one_basin_world()
+        w.states[0].levels = 4
+        m.record_country(w, 0)
+        m.yearly_pass(w)
+        w.countries[0].tech = False
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].floor["pacific"], 0)
+        self.assertEqual(w.countries[0].ent["pacific"], 4)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
+
+    def test_missing_floor_is_no_floor(self):
+        w = self._one_basin_world()
+        w.countries[0].floor = dict.fromkeys(m.BASINS, 0)      # an old save
+        w.countries[1].navy = 1000
+        m.yearly_pass(w, first_of_year=False)
+        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+
+    def test_a_lost_state_adds_no_protection(self):
+        """Review I3: country 0 holds 100 Pacific licences and claims; its January
+        floor protects the claims, not the licences, so losing the mined state
+        before a mid-year sharing leaves it at most January's protected part."""
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1), 2: m.State(2, "pacific", 0)})
+        m.yearly_pass(w)
+        w.states[2].levels = 100
+        m.record_country(w, 0)
+        m.yearly_pass(w)                                      # January: held 100, claims protected
+        protected = w.countries[0].floor["pacific"] - w.countries[0].held["pacific"]
+        self.assertGreater(protected, 0)
+        m.on_state_owner_change(w, w.states[2], 1)
+        w.countries[1].navy = 1000
+        m.yearly_pass(w, first_of_year=False)
+        self.assertEqual(w.countries[0].held["pacific"], 0)
+        self.assertLessEqual(w.countries[0].unbuilt["pacific"], protected)
+
+    def test_building_on_claims_mid_year_keeps_the_floor(self):
+        w = self._one_basin_world()
+        m.yearly_pass(w)                                      # floor 112 from 150 claims
+        floor = w.countries[0].floor["pacific"]
+        w.states[0].levels = 30
+        m.record_country(w, 0)
+        w.countries[1].navy = 1000
+        m.yearly_pass(w, first_of_year=False)
+        self.assertEqual(w.countries[0].ent["pacific"], floor)
+
+    def test_random_worlds_with_mid_year_sharings(self):
+        """The pools hold with floors stored in January and honoured by
+        mid-year sharings, while countries change policy between them."""
+        check = PoolsHoldTest._check
+        for i in range(WORLDS // 2):
+            rng = random.Random(9100 + i)
+            world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
+            for year in range(YEARS):
+                for month in range(12):
+                    m.step_month(world, rng, annex=0, split=0)
+                    check(self, world, "month")
+                    if month == 6 and rng.random() < 0.5:
+                        for c in world.countries.values():
+                            if rng.random() < 0.2:
+                                c.policy = rng.choice((m.SURVEY, m.SPONSOR, m.UNILATERAL))
+                        m.yearly_pass(world, first_of_year=False)
+                        check(self, world, "pass")
+                m.yearly_pass(world)
+                check(self, world, "pass")
+
+
+class RelinquishTest(unittest.TestCase):
+    """Relinquish and Claim Again (seabed claims spec § 2.5)."""
+
+    def _world(self):
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        w.states[0].levels = 3
+        m.record_country(w, 0)
+        m.yearly_pass(w)                                        # a floor is stored
+        return w
+
+    def test_relinquish_drops_claims_now_and_keeps_licences(self):
+        w = self._world()
+        self.assertGreater(w.countries[0].unbuilt["pacific"], 0)
+        self.assertGreater(w.countries[0].floor["pacific"], 3)
+        m.relinquish(w, 0, "pacific")
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
+        self.assertEqual(w.basin_records("pacific"), 3)
+        self.assertEqual(w.countries[0].floor["pacific"], 0)
+        self.assertGreater(w.countries[0].unbuilt["atlantic"], 0)      # other basins untouched
+
+    def test_no_weight_until_claim_again(self):
+        w = self._world()
+        m.relinquish(w, 0, "pacific")
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].weight["pacific"], 0)
+        self.assertEqual(w.countries[0].ent["pacific"], w.countries[0].held["pacific"])
+        self.assertGreater(w.countries[0].weight["atlantic"], 0)
+        m.claim_again(w, 0, "pacific")
+        m.yearly_pass(w)
+        self.assertGreater(w.countries[0].weight["pacific"], 0)
+        self.assertGreater(w.countries[0].unbuilt["pacific"], 0)
+
+    def test_relinquish_licenses_queued_levels_first(self):
+        """Review I1: levels queued this month, not yet licensed by the monthly
+        recording, take their basin's licences before the claims go."""
+        w = self._world()
+        w.states[0].levels += 4
+        w.states[0].queued += 4
+        m.relinquish(w, 0, "pacific")
+        m.record_country(w, 0)
+        self.assertEqual(m.pending(w, 0), 0)
+        self.assertEqual(w.states[0].lic["pacific"], 7)
+        self.assertEqual(w.states[0].distant(), 0)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
+
+    def test_the_freed_claims_wait_for_the_next_sharing(self):
+        w = self._world()
+        rival = w.countries[1].unbuilt["pacific"]
+        m.relinquish(w, 0, "pacific")
+        m.record_country(w, 1)
+        self.assertEqual(w.countries[1].unbuilt["pacific"], rival)
+        m.yearly_pass(w)
+        self.assertGreater(w.countries[1].unbuilt["pacific"], rival)
+
+    def test_relinquish_never_pays(self):
+        """Two copies of a world, driven by generators seeded alike, differ
+        only in that one country relinquishes a basin and claims it again
+        before the next sharing (January's or a mid-year one): it never ends
+        that sharing with more."""
+        import copy
+        worse = 0
+        for i in range(200):
+            rng = random.Random(9500 + i)
+            world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
+            run(world, rng, 1, annex=0, split=0)
+            other = copy.deepcopy(world)
+            ra, rb = random.Random(i), random.Random(i)
+            for _ in range(12):
+                m.step_month(world, ra, annex=0, split=0)
+                m.step_month(other, rb, annex=0, split=0)
+            cid = rng.randrange(len(world.countries))
+            b = rng.choice(m.BASINS)
+            m.relinquish(world, cid, b)
+            m.claim_again(world, cid, b)
+            first = i % 2 == 0
+            m.yearly_pass(world, first_of_year=first)
+            m.yearly_pass(other, first_of_year=first)
+            mine, theirs = world.countries[cid], other.countries[cid]
+            self.assertLessEqual(mine.ent[b], theirs.ent[b], (i, cid, b))
+            self.assertLessEqual(sum(mine.ent.values()), sum(theirs.ent.values()), (i, cid, b))
+            worse += mine.ent[b] < theirs.ent[b]
+        self.assertGreater(worse, 0)
+
+
+class FeeTest(unittest.TestCase):
+    """The holding fee's base (seabed claims spec § 2.1): licences on levels
+    unbuilt at the year's first sharing twice running, and the queued
+    licences per basin the pool bar shows."""
+
+    def test_grace_then_fee(self):
+        s = m.State(0, "pacific", 0, levels=4, queued=4)
+        s.lic["pacific"] = 4
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.fee_base(w, 0), 0)                 # no snapshots
+        m.take_snapshots(w)
+        self.assertEqual(m.fee_base(w, 0), 0)                 # one January
+        m.take_snapshots(w)
+        self.assertEqual(m.fee_base(w, 0), 4)                 # two Januaries
+        s.queued = 1                                           # three finished
+        self.assertEqual(m.fee_base(w, 0), 1)
+
+    def test_no_snapshots_no_fee(self):
+        # an old save, or a revolution's winner before its first January
+        s = m.State(0, "pacific", 0, levels=9, queued=6)
+        s.lic["pacific"] = 9
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.fee_base(w, 0), 0)
+
+    def test_the_years_first_sharing_takes_the_snapshots(self):
+        s = m.State(0, "pacific", 0)
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10)}, {0: s})
+        m.yearly_pass(w)
+        s.levels = s.queued = 3
+        m.record_country(w, 0)
+        m.yearly_pass(w)
+        m.yearly_pass(w, first_of_year=False)                 # a mid-year sharing takes none
+        self.assertEqual((s.snap1, s.snap2), (3, 0))
+        m.yearly_pass(w)
+        self.assertEqual((s.snap1, s.snap2), (3, 3))
+        self.assertEqual(m.fee_base(w, 0), 3)
+
+    def test_a_pending_level_pays_nothing(self):
+        # five levels, two queued, four licences: the unlicensed level is a queued one
+        s = m.State(0, "pacific", 0, levels=5, queued=2)
+        s.lic["pacific"] = 4
+        s.snap1 = s.snap2 = 2
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.fee_base(w, 0), 1)
+        self.assertEqual(m.queued_by_basin(w, 0)["pacific"], 1)
+
+    def test_queued_by_basin(self):
+        # an Atlantic state with 5 levels, 2 queued, licences atlantic 3 + arctic 2:
+        # the 2 queued count against the distant (Arctic) licences first
+        s = m.State(0, "atlantic", 0, levels=5, queued=2)
+        s.lic["atlantic"] = 3
+        s.lic["arctic"] = 2
+        w = m.World({0: m.Country(0)}, {0: s})
+        self.assertEqual(m.queued_by_basin(w, 0), {**dict.fromkeys(m.BASINS, 0), "arctic": 2})
+        s.queued = 4                                           # then the state's own basin
+        self.assertEqual(m.queued_by_basin(w, 0)["atlantic"], 2)
+        self.assertEqual(m.queued_by_basin(w, 0)["arctic"], 2)
+
+    def test_queued_by_basin_in_random_worlds(self):
+        for i in range(WORLDS // 2):
+            rng = random.Random(9700 + i)
+            world = m.random_world(rng)
+
+            def check(world, when):
+                for cid in world.countries:
+                    q = m.queued_by_basin(world, cid)
+                    states = [s for s in world.owned(cid) if s.coastal]
+                    self.assertEqual(sum(q.values()), sum(m.unbuilt_licences(s) for s in states), cid)
+                    for b in m.BASINS:
+                        self.assertLessEqual(q[b], sum(s.lic[b] for s in states), (cid, b))
+                        self.assertGreaterEqual(q[b], 0)
+            run(world, rng, YEARS // 2, check=check, annex=0.02, split=0.03)
+
+    def test_fee_base_bounds_under_conquest(self):
+        """Snapshots travel with their state; the base never exceeds the
+        licences on the state's unbuilt levels and is never negative."""
+        for i in range(WORLDS // 2):
+            rng = random.Random(9800 + i)
+            world = m.random_world(rng)
+            paid = 0
+
+            def check(world, when):
+                nonlocal paid
+                for s in world.states.values():
+                    if not s.coastal:
+                        continue
+                    base = m.fee_base_state(s)
+                    self.assertGreaterEqual(base, 0)
+                    self.assertLessEqual(base, max(0, s.records() - s.built), s.sid)
+                    self.assertLessEqual(base, s.queued, s.sid)
+                    paid += base
+            run(world, rng, YEARS, check=check, annex=0.02, split=0.03, complete=0.05)
+            self.assertGreater(paid, 0)
+
+
+class ReadoutTest(unittest.TestCase):
+    """The "+1 licence" readout (seabed claims spec § 3.5): the closed form
+    against the exact answer from re-running the sharing."""
+
+    def test_closed_form_matches_exact_in_open_worlds(self):
+        rng = random.Random(77)
+        for _ in range(40):
+            w = m.random_world(rng, regime=m.OPEN)
+            m.yearly_pass(w)
+            for cid, c in w.countries.items():
+                for b in m.BASINS:
+                    if c.weight[b] <= 0:
+                        continue
+                    self._check_bound(w, b, cid)
+
+    def _check_bound(self, w, b, cid, lower_bound=True):
+        """The closed form ignores largest-remainder rounding, which can hand
+        the licence over sooner: the exact need lies between the closed form
+        for the entitlement itself and for one more, None reading as no
+        amount. So "full" (None) means no licence for certain: the rounding
+        may still hand the last one over, at a high weight."""
+        exact, closed = m.exact_need_weight(w, b, cid), m.need_weight(w, b, cid)
+        if exact is None:
+            self.assertIsNone(closed, (cid, b))
+            return
+        if closed is not None:
+            self.assertGreaterEqual(closed - exact, -0.01, (cid, b))
+        if not lower_bound:
+            return
+        lower = m.need_weight(w, b, cid, step=0)
+        self.assertIsNotNone(lower, (cid, b))
+        self.assertGreaterEqual(exact - lower, -0.01, (cid, b))
+
+    @staticmethod
+    def _assumption_holds(w, b, cid):
+        """need_weight's assumption at its own answer: no other active
+        country falls to its holdings or floor."""
+        f = w.final[b]
+        x = m.need_weight(w, b, cid)
+        me = w.countries[cid]
+        me_elig = w.regime == m.REGULATED and me.eligible
+        for j in f["active"]:
+            if j == cid:
+                continue
+            c = w.countries[j]
+            j_res = w.regime == m.REGULATED and c.eligible and f["wsum_res"] > 0
+            if x is None:
+                # "full": as our weight grows without bound a rival keeps only
+                # a reserved share our weight doesn't reach
+                share = f["rem_res"] * c.weight[b] / f["wsum_res"] if j_res and not me_elig else 0.0
+            else:
+                extra = x + (0 if cid in f["active"] else me.weight[b])
+                share = f["rem_open"] * c.weight[b] / (f["wsum_all"] + extra)
+                if j_res:
+                    share += f["rem_res"] * c.weight[b] / (f["wsum_res"] + (extra if me_elig else 0))
+            if share < f["h"][j]:
+                return False
+        return True
+
+    def test_closed_form_bounds_exact_after_years(self):
+        """Holdings, floors and the reserved half, five years in: the closed
+        form never understates wherever its assumption holds, and it fails
+        rarely. Under the Regulated regime the halves can make it overstate by
+        more than one licence, so the lower bound is the Open regime's."""
+        rng = random.Random(78)
+        checked = skipped = under = 0
+        for i in range(30):
+            w = m.random_world(rng, regime=(m.OPEN, m.REGULATED)[i % 2])
+            run(w, rng, 5, annex=0, split=0)
+            for cid, c in w.countries.items():
+                for b in m.BASINS:
+                    if c.weight[b] <= 0:
+                        continue
+                    if self._assumption_holds(w, b, cid):
+                        checked += 1
+                        self._check_bound(w, b, cid, lower_bound=w.regime == m.OPEN)
+                        continue
+                    # a rival pushed to its holdings or floor: the readout may understate
+                    skipped += 1
+                    exact, closed = m.exact_need_weight(w, b, cid), m.need_weight(w, b, cid)
+                    if closed is not None and (exact is None or closed < exact - 0.01):
+                        under += 1
+        self.assertGreater(checked, 500)
+        self.assertLess(skipped, 0.15 * (checked + skipped))
+        self.assertLess(under, 0.01 * (checked + skipped))
+
+    def test_full_basin_reads_none(self):
+        # the whole Arctic held by country 0: nothing is left to share
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "arctic", 0, levels=100), 1: m.State(1, "arctic", 1)})
+        m.yearly_pass(w)
+        self.assertIsNone(m.need_weight(w, "arctic", 1))
+        self.assertIsNone(m.exact_need_weight(w, "arctic", 1))
+        self.assertIsNone(m.need_navy(w, 1, "arctic"))
+
+    def test_frozen_country_needs_its_holdings_plus_one(self):
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0, levels=200), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[0].ent["pacific"], 200)              # frozen at its holdings
+        closed, exact = m.need_weight(w, "pacific", 0), m.exact_need_weight(w, "pacific", 0)
+        self.assertIsNotNone(exact)
+        self.assertGreaterEqual(closed - exact, -0.01)
+        self.assertLessEqual(closed - exact, max(0.25 * exact, 1.0))
+
+    def test_navy_conversion(self):
+        # home basin, 1 of 2 coastal states there, Sponsor, navy multiplier 1
+        c = m.Country(0, policy=m.SPONSOR, navy=10)
+        w = m.World({0: c, 1: m.Country(1, policy=m.SPONSOR, navy=40)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "atlantic", 0), 2: m.State(2, "pacific", 1)})
+        m.yearly_pass(w)
+        self.assertEqual(m.need_navy(w, 0, "pacific"), math.ceil(m.need_weight(w, "pacific", 0) / (1.0 * 1 * 1 / 2)))
+        self.assertEqual(m.need_navy(w, 0, "indian"), math.ceil(m.need_weight(w, "indian", 0) / (0.05 * 1.0 * 1)))
+        c.policy = m.UNILATERAL                                           # the navy counts double
+        m.yearly_pass(w)
+        self.assertEqual(m.need_navy(w, 0, "indian"), math.ceil(m.need_weight(w, "indian", 0) / (0.05 * 1.0 * 2)))
+
+    def test_no_claim_reads_none(self):
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10, barred=True), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        self.assertIsNone(m.need_navy(w, 0, "southern"))
 
 
 if __name__ == "__main__":

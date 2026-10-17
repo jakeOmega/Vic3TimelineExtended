@@ -198,7 +198,7 @@ class HandTypedFiguresTest(unittest.TestCase):
         years = _value("te_seabed_party_cooldown_months") / 12
         seabed = LOC["je_un_terms_law_of_sea_seabed"]
         self.assertIn(f"#R {infamy:g}#! infamy, #R {standing:g}#! standing and #R {case:g}#! to the case", seabed)
-        self.assertIn(f"#v {years:g}#! years after it leaves Unilateral Licensing", seabed)
+        self.assertIn(f"#v {years:g}#! years after it defected", seabed)
         self.assertIn(f"International Standing: −{standing:g}#!", LOC["te_seabed_defection_standing_tt"])
         self.assertIn(f"+{case:g} to the case", LOC["te_seabed_defection_case_tt"])
         for key in ("te_seabed_defection_tt", "te_seabed_party_cooldown_tt"):
@@ -207,6 +207,21 @@ class HandTypedFiguresTest(unittest.TestCase):
         self.assertEqual(scramble_years, 2)
         self.assertIn("two years after fewer than two remain", seabed)
         self.assertEqual(_value("te_seabed_scramble_threshold"), 2)
+
+    def test_the_return_counts_from_the_defection(self):
+        """Seabed claims spec § 2.4: the defection stores its month, and the
+        five years run from it; an old save's flag (below 12) keeps the old
+        rule, five years from leaving."""
+        hooks = _strip(_read("common", "scripted_effects", "te_seabed_un_hooks.txt"))
+        body = _block(hooks, "te_seabed_un_on_policy_change")
+        self.assertIn("name = te_seabed_defected value = te_history_month_index", body)
+        leave = body[body.index("remove_variable = te_seabed_defected") - 600:]
+        self.assertIn("var:te_seabed_defected < 12", leave)
+        self.assertIn("te_seabed_party_return_month_value > te_history_month_index", leave)
+        values = _strip(_read("common", "script_values", "te_global_commons_un_values.txt"))
+        ret = _block(values, "te_seabed_party_return_month_value")
+        self.assertIn("var:te_seabed_defected", ret)
+        self.assertIn("add = te_seabed_party_cooldown_months", ret)
 
     def test_the_denunciation(self):
         infamy, standing, case = (_value(f"te_antarctic_denounce_{k}") for k in ("infamy", "standing", "case"))

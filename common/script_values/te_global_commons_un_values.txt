@@ -73,6 +73,18 @@ te_seabed_royalties_total_value = {
 		}
 		add = var:te_seabed_royalty_cached
 	}
+	# The holding fee goes the royalties' way from the countries that would pay
+	# them, levels or not (seabed claims spec § 2.1); anyone else's is simply an
+	# expense.
+	every_country = {
+		limit = {
+			te_seabed_regime_is_regulated = yes
+			te_seabed_itlos_party = yes
+			has_modifier = te_seabed_holding_fee_modifier
+			has_variable = te_seabed_fee_cached
+		}
+		add = var:te_seabed_fee_cached
+	}
 }
 
 # ---- The seabed regimes (§3.2) ------------------------------------------------------
@@ -121,6 +133,17 @@ te_seabed_party_cooldown_months = { value = 60 }
 te_seabed_party_cooldown_end_value = {
 	value = te_history_month_index
 	add = te_seabed_party_cooldown_months
+}
+
+# The month a defector is a party again, counted from its defection (seabed
+# claims spec § 2.4); 0 without one. Scope: country
+te_seabed_party_return_month_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_defected }
+		value = var:te_seabed_defected
+		add = te_seabed_party_cooldown_months
+	}
 }
 
 # The months until a cooling defector is a party again (display). Scope: country

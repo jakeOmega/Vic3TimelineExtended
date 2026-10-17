@@ -198,6 +198,54 @@ te_seabed_pass_due = {
 	any_country = { te_seabed_is_claimant = yes }
 }
 
+# No scope: the sharing about to run is the year's first (seabed claims spec
+# § 2.2): January's, or the first mid-year one of a year with no January pass.
+# Read before te_seabed_yearly_pass sets te_seabed_pass_year, which caches it
+# as the global flag te_seabed_first_of_year for its own steps.
+te_seabed_first_sharing_of_year = {
+	OR = {
+		NOT = { has_global_variable = te_seabed_pass_year }
+		AND = {
+			has_global_variable = te_seabed_pass_year
+			global_var:te_seabed_pass_year < te_history_current_year
+		}
+	}
+}
+
+# Country scope. Model: floor_in_force. A stored floor counts for nothing off
+# Sponsor Contractors, in a Scramble, or for a country no longer a claimant;
+# in the Southern Ocean also where the Antarctic Treaty bars it.
+te_seabed_floor_void = {
+	OR = {
+		NOT = { te_seabed_policy_sponsor = yes }
+		te_seabed_regime_scramble = yes
+		NOT = { te_seabed_is_claimant = yes }
+	}
+}
+
+te_seabed_floor_void_pacific = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_atlantic = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_indian = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_arctic = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_southern = {
+	OR = {
+		te_seabed_floor_void = yes
+		te_seabed_southern_barred = yes
+	}
+}
+
 # Country scope: the Seabed tab's checklist (te_window_seabed_tab_unlock_sgui),
 # te_seabed_is_claimant with a line per condition. The tab opens at the next
 # sharing after both hold.
@@ -215,11 +263,23 @@ te_seabed_tab_unlocked = {
 # Country scope: the Seabed tab's policy buttons (te_global_commons_seabed_sguis.txt).
 # A claimant may change to a policy it doesn't hold; one that holds influence
 # needs that much available, as the UN's stances do.
+# The five-year lock (seabed claims spec § 2.4): any change holds the policy
+# for te_seabed_policy_lock_months. Scientific Survey stays open while our
+# influence is in deficit; Unilateral Licensing while a rival in a home basin
+# has switched to it since our last change. ROOT = the country choosing (the
+# button's country, or the AI's yearly pulse).
 te_seabed_can_choose_survey = {
 	te_seabed_policy_buttons_open = yes
 	custom_tooltip = {
 		text = te_seabed_policy_not_current_tt
 		NOT = { te_seabed_policy_survey = yes }
+	}
+	custom_tooltip = {
+		text = te_seabed_policy_deficit_tt
+		OR = {
+			NOT = { te_seabed_policy_locked = yes }
+			te_seabed_influence_deficit = yes
+		}
 	}
 }
 
@@ -230,8 +290,12 @@ te_seabed_can_choose_sponsor = {
 		NOT = { te_seabed_policy_sponsor = yes }
 	}
 	custom_tooltip = {
+		text = te_seabed_policy_locked_tt
+		NOT = { te_seabed_policy_locked = yes }
+	}
+	custom_tooltip = {
 		text = te_seabed_policy_influence_2_tt
-		influence >= te_seabed_influence_sponsor
+		influence >= te_seabed_sponsor_cost_value
 	}
 }
 
@@ -242,8 +306,69 @@ te_seabed_can_choose_unilateral = {
 		NOT = { te_seabed_policy_unilateral = yes }
 	}
 	custom_tooltip = {
+		text = te_seabed_policy_answer_tt
+		OR = {
+			NOT = { te_seabed_policy_locked = yes }
+			te_seabed_unilateral_answer_open = yes
+		}
+	}
+	custom_tooltip = {
 		text = te_seabed_policy_influence_3_tt
-		influence >= te_seabed_influence_unilateral
+		influence >= te_seabed_unilateral_cost_value
+	}
+}
+
+# Country scope: changed policy less than te_seabed_policy_lock_months ago. A
+# country that never changed (no date: the first choice, an old save) is free.
+te_seabed_policy_locked = {
+	has_variable = te_seabed_policy_changed
+	te_seabed_policy_unlock_month_value > te_history_month_index
+}
+
+# Country scope: influence in deficit, the way out of a cost it can't carry.
+te_seabed_influence_deficit = {
+	influence < 0
+}
+
+# Country scope (ROOT = the same country): a country sharing a home basin with
+# ROOT switched to Unilateral Licensing after ROOT's own last change, and
+# holds it.
+te_seabed_unilateral_answer_open = {
+	has_variable = te_seabed_policy_changed
+	any_country = {
+		NOT = { this = root }
+		has_variable = te_seabed_shared
+		te_seabed_policy_unilateral = yes
+		has_variable = te_seabed_policy_changed
+		var:te_seabed_policy_changed > root.var:te_seabed_policy_changed
+		te_seabed_shares_home_basin_with_root = yes
+	}
+}
+
+# Country scope: shares a home basin with ROOT, both having incorporated
+# coastal states there (te_seabed_home_<basin>).
+te_seabed_shares_home_basin_with_root = {
+	OR = {
+		AND = {
+			has_variable = te_seabed_home_pacific
+			root = { has_variable = te_seabed_home_pacific }
+		}
+		AND = {
+			has_variable = te_seabed_home_atlantic
+			root = { has_variable = te_seabed_home_atlantic }
+		}
+		AND = {
+			has_variable = te_seabed_home_indian
+			root = { has_variable = te_seabed_home_indian }
+		}
+		AND = {
+			has_variable = te_seabed_home_arctic
+			root = { has_variable = te_seabed_home_arctic }
+		}
+		AND = {
+			has_variable = te_seabed_home_southern
+			root = { has_variable = te_seabed_home_southern }
+		}
 	}
 }
 
