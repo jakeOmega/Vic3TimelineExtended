@@ -154,12 +154,13 @@ FIRST_MEMBER_PROPOSE_KEYS = {"condemn", "sanctions", "expulsion", "mandate", "pe
 FIRST_CONVENTION_OP = len(FIRST_MEMBER_PROPOSE_KEYS)
 
 # Redesign phase 7 (docs/systems/un_redesign_design.md §0.12): nine more
-# decisions, requests and institutions, at ops 20-28 after the conventions.
-# Tag and propose key are the same word for each.
+# decisions, requests and institutions, at ops 20-28 after the conventions,
+# and the petition to lift sanctions (§0.12a) at op 30, after the narcotics
+# convention's 29. Tag and propose key are the same word for each.
 CHARTER_DECISION_OPS = {
     20: "court_referral", 21: "arms_embargo", 22: "credentials", 23: "standing_force",
     24: "observer_request", 25: "food_reserve", 26: "ceasefire", 27: "development_fund",
-    28: "referendum",
+    28: "referendum", 30: "lift_sanctions",
 }
 
 # Every topic that is not a convention: the lists that name every topic name

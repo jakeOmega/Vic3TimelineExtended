@@ -9,7 +9,8 @@
 
 # ---- The lean ------------------------------------------------------------------
 
-# OUR INTERESTS on the nine phase 7 decisions, requests and institutions
+# OUR INTERESTS on the nine phase 7 decisions, requests and institutions, and
+# the petition to lift sanctions (§0.12a)
 # (un_lean_interests adds it). Each topic weighs its own: un_lean_interests_<key>,
 # in its owner's values file. The two phase 7 conventions are weighed in
 # un_lean_interests itself, like the other conventions.
@@ -51,6 +52,10 @@ un_lean_charter_interests = {
 	else_if = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 		add = un_lean_interests_referendum
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
+		add = un_lean_interests_lift_sanctions
 	}
 }
 

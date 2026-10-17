@@ -10,6 +10,7 @@
 > Read
 > [§0.14](#014-development-programs-sizes-what-a-contributor-gets-and-lobbying-effectiveness),
 > [§0.13](#013-the-ai-weighs-what-the-un-costs-and-brings),
+> [§0.12a](#012a-lifting-sanctions-the-targets-petition-and-the-regimes-upkeep),
 > [§0.12](#012-phase-7-the-charters-new-business),
 > [§0.11](#011-the-first-policy-grants),
 > [§0.10](#010-the-policy-pillar-and-a-slower-credibility-ledger),
@@ -469,6 +470,125 @@ terms, the money term and the Fund prospect as a percentage of GDP).
     shows +10% in its armies' Weekly Experience Gain tooltip. The programme's comes from a modifier
     on the journal entry; if it does not show there, arms control's unit modifiers (kill rate,
     devastation) do not reach the army either, and both belong on the country.
+
+---
+
+## 0.12a Lifting sanctions: the target's petition and the regime's upkeep
+
+Asked for by the mod owner on 2026-10-16 **(decided: the petition and the fix)**: before it, a
+sanctions regime ended only when its enforcer pressed Lift Sanctions or the UN dissolved, so the
+sanctioned country had no way out of its own, and a regime whose enforcer left the UN stood until
+some other enforcer happened to press Lift Sanctions, which might never happen. Everything below
+the two decisions is **(proposed)**: a first shape to tune. Not yet seen in a running game.
+
+### The petition (`lift_sanctions`, no reform)
+
+| Op | Key | Needs | Binding | Passes by | Kind | Grounds | Target |
+|---|---|---|---|---|---|---|---|
+| 30 | `lift_sanctions` | — | yes: blocked if vetoed | majority | decision | — | the petitioner |
+
+- **Tabling.** A member under a full sanctions regime (`un_sanctions_target_modifier`). The
+  voluntary sanctions a veto leaves cannot be petitioned against: they lapse in five years.
+  Tabled on our own motion, so it takes the ordinary sponsor's cost (not the punitive one: it
+  punishes no one), `un_ga_resolution_modifier` and the ten-year `un_request_cooldown`, plus the
+  topic's five-year cooldown once it closes.
+- **The framework.** It is shaped like a phase 7 decision and uses the same hooks
+  (`un_charter_on_carried`, `un_lean_charter_interests`, the chamber's op switches, the AI button);
+  justice owns it (`un_justice_*.txt`). Like an observer request its proposer is its target and
+  its beneficiary (`un_resolution_target_is_beneficiary`), so a rival of the petitioner is not
+  counted as eager to help it; it asks the members for nothing (`un_resolution_asks_pledges`
+  leaves it out).
+- **Carried.** The regime on the petitioner ends (`un_sanctions_lift_regime`): the modifier, its
+  record, its months, the embargoes the Assembly imposed with it, and the enforcer's role, so the
+  enforcer may table sanctions again. Credibility +1, as for any carried resolution. Moot, still
+  +1, if the regime had already ended by the vote.
+- **Vetoed.** Blocked outright: there is no lesser form of ending a regime. An AI permanent
+  member vetoes it only while it still dislikes the petitioner (`un_lift_sanctions_ill_disposed`
+  in `un_vote_ai_should_veto`): a veto is a hostile act, so a member that has made its peace
+  votes against at most **(owner, 2026-10-16)**. An enforcer that is still the petitioner's rival
+  takes the rivalry, the relations and its own term together, which puts it well past the veto
+  line, so one with a seat vetoes, at the veto's usual cost.
+- **Members who voted against.** In `un_vote.3` accepting earns no compliance standing and
+  denouncing books no defiance: the lift asks nothing of them. Refusing still costs the relations
+  and infamy it costs on every resolution.
+
+### The lean (`un_lean_interests_lift_sanctions`)
+
+The petitioner's ties reach every member through `un_lean_proposer`, so allies and blocmates
+lean for it and rivals against. On top of that:
+
+| Term | Lean |
+|---|---|
+| The regime's enforcer, while it still dislikes the petitioner (a rival, or relations Cold or worse: `un_lift_sanctions_ill_disposed`) | −30 |
+| A member whose embargo the Assembly imposed (`un_embargo_by`) | −10 |
+| The grounds: (50 − the petitioner's case) × 0.5 | −20 to +20 |
+| A regime that has stood fewer than five years: −0.4 a month short | −24 to 0 |
+| Free Trade / Isolationism | +10 each |
+
+With the consensus term (+10) a member with no ties votes against a regime a year old whose
+target's case is still near 50, and for one five years old whose case has fallen to 25. The
+AI tables a petition (`un_lift_sanctions_ai_chance`) only once its case is below 50 and the regime
+has stood two years: +20, +15 more below a case of 30, +10 more from the fifth year.
+
+### The regime's upkeep (`un_sanctions_regime_monthly_update`)
+
+Each month, from `un_justice_monthly_update`, every regime is kept to its record,
+`un_sanctions_enforced_by` on the target:
+
+1. **A regime whose enforcer no longer enforces it lapses** (`un_sanctions_regime_orphaned`): the
+   enforcer left the UN (`un_membership_end_effect` drops its modifier), ceased to exist, or won
+   or lost a revolution. A human target gets `un_sanctions_lapsed_notice`. This is the fix.
+2. **A recorded regime whose modifier is missing gets it back**, × E: a revolution's winner
+   inherits the record and not the modifier (§0.9). Before, a revolution that won in the
+   sanctioned country shed its sanctions as a side effect.
+3. **Each regime counts its months** (`un_sanctions_months`), which the lean's fresh-regime term
+   reads. A regime is counted from the first month it is seen.
+4. **An enforcer that no regime names any more is released** (`un_sanctions_enforcer_idle`): its
+   target was annexed. It no longer has to pay credibility to lift nothing before it may table
+   sanctions again.
+
+A regime from a save made before the target recorded its enforcer names no one. Steps 1 and 2
+leave it alone, and step 4 waits while one stands, since it may be any enforcer's. The enforcer's
+button still lifts it, and so does the target's petition.
+
+### Files
+
+- `common/scripted_effects/un_justice_effects.txt`: `un_sanctions_lift_regime`,
+  `un_lift_sanctions_on_carried`, `un_lift_sanctions_chamber_preview`,
+  `un_sanctions_regime_monthly_update`.
+- `common/scripted_triggers/un_justice_triggers.txt`: the regime's tests and the petition's gates.
+- `common/script_values/un_justice_values.txt`: the lean, the AI's weight, the months display.
+- The shared sites a charter topic touches: `un_propose_triggers.txt`, `un_propose_effects.txt`,
+  `un_resolution_triggers.txt`, `un_charter_effects.txt`, `un_charter_values.txt`,
+  `un_buttons.txt`, `je_united_nations.txt`, `un_chamber_sguis.txt`,
+  `un_chamber_display_effects.txt`, `un_authority_display_effects.txt`,
+  `un_overview_display_values.txt`, `un_chamber_widget.gui`, `un_layout_widget.gui`,
+  `events/un_vote_events.txt`, `un_justice_messages.txt`.
+- Tests: `test_un_lift_sanctions.py`, and the topic's rows in `test_un_charter_business.py`,
+  `test_un_convention_registry.py`, `test_un_layout.py`, `test_un_overview_data.py` and
+  `test_un_terms_tooltips.py`.
+
+### Known roughnesses
+
+- The topic cooldown is the Assembly's, not the petitioner's: one country's petition bars every
+  other sanctioned country's for five years, as with every other topic.
+- The embargoes a revolution's winner lost are not rebuilt with its modifier: `un_embargo_by` is
+  a list, which the winner does not inherit.
+- Whether an embargo pact itself survives a revolution is untested.
+- `topic_lift_sanctions.dds` is a copy of `topic_sanctions.dds` until it has its own art.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.12a)
+
+- [ ] Under sanctions, the Lift the Sanctions Against Us row in Propose a Resolution shows the enforcer and the months,
+      and tables; not under sanctions, it says No Case.
+- [ ] A carried petition removes the modifier and the Assembly's embargoes, and the enforcer's
+      Propose Sanctions row opens again.
+- [ ] A vetoed petition leaves the sanctions in place. An AI permanent-member enforcer that is
+      no longer the petitioner's rival, with relations above Cold, does not veto.
+- [ ] An enforcer that leaves the UN: the regime it enforced lapses the next month, with the
+      notice to a human target.
+- [ ] A revolution that wins in a sanctioned country: the sanctions are back on the winner within
+      a month.
 
 ---
 

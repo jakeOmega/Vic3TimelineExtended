@@ -10,7 +10,9 @@
 #   un_condemned_restraint_modifier      the same
 #   embargo pacts, un_embargo_by (list   un_teeth_sanctions_embargo (un_vote.2);
 #     on the sanctioned country)         lifted by un_teeth_lift_embargoes (the
-#                                        lift button, a dissolution); busting
+#                                        lift button, a dissolution, and
+#                                        un_sanctions_lift_regime: a carried
+#                                        petition, a lapsed regime); busting
 #                                        found by un_teeth_monthly_update
 #   the war-goal surcharge (infamy)      un_teeth_war_goal_surcharge
 #                                        (un_mandate_on_wargoal_added, after the
@@ -90,7 +92,9 @@ un_teeth_sanctions_embargo = {
 }
 
 # Lift every embargo the Assembly imposed on this country, and forget them.
-# Called when the regime ends: un_lift_sanctions_button, a dissolution.
+# Called when the regime ends: un_lift_sanctions_button, a dissolution, and
+# un_sanctions_lift_regime (a carried petition, a regime lapsed with its
+# enforcer; un_justice_effects.txt).
 # Scope: the sanctioned country
 un_teeth_lift_embargoes = {
 	if = {

@@ -356,8 +356,9 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   pledges and defiance records. **Handled 2026-09-26:** by ruling, a new regime's pledges lapse, and the custody
   settlement removes the dead owner from its partners' lists while it still resolves (`nuclear_custody_effects.txt`). The counterparties still list the dead loser in their own lists, which
   become one-sided. `un_embargo_by` (`un_teeth_effects.txt:80, 212`) is on the sanctions target: a sanctioned
-  loser's enforcer list is dropped. That's arguably fine, since the sanctions modifier is a country modifier
-  and is lost too.
+  loser's enforcer list is dropped. The sanctions modifier is a country modifier and is lost too, but since
+  2026-10-16 `un_sanctions_regime_monthly_update` re-applies it from the inherited `un_sanctions_enforced_by`
+  (un_redesign_design.md §0.12a); the embargo list is still not rebuilt.
 - Evidence: CODE-INFERRED (lists absent in these saves).
 
 ### F16. Regime continuity (H6): what a new regime inherits or loses wholesale. LOW, for design review

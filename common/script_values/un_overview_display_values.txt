@@ -582,7 +582,8 @@ un_disp_res_supermajority = {
 # 16 law_of_sea, 17 physical_protection, and phase 7's 18 cultural_diversity,
 # 19 nuclear_ban, 20 court_referral, 21 arms_embargo, 22 credentials,
 # 23 standing_force, 24 observer_request, 25 food_reserve, 26 ceasefire,
-# 27 development_fund, 28 referendum. -1 with nothing in session.
+# 27 development_fund, 28 referendum, then 29 narcotics and (§0.12a)
+# 30 lift_sanctions. -1 with nothing in session.
 un_disp_res_topic_code = {
 	value = -1
 	if = { limit = { un_session_topic_is = { TOPIC = condemn } } value = 0 }
@@ -615,6 +616,7 @@ un_disp_res_topic_code = {
 	if = { limit = { un_session_topic_is = { TOPIC = ceasefire } } value = 26 }
 	if = { limit = { un_session_topic_is = { TOPIC = development_fund } } value = 27 }
 	if = { limit = { un_session_topic_is = { TOPIC = referendum } } value = 28 }
+	if = { limit = { un_session_topic_is = { TOPIC = lift_sanctions } } value = 30 }
 }
 
 un_disp_agency_incb = {

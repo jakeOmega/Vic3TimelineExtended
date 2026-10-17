@@ -302,7 +302,8 @@ un_charter_reform_open = {
 # ============================================================================
 # THE CHARTER'S NEW BUSINESS (redesign phase 7, §0.12)
 # ============================================================================
-# Nine decisions, requests and institutions; the two phase 7 conventions are
+# Nine decisions, requests and institutions, and since §0.12a the petition to
+# lift sanctions, which uses the same hooks; the two phase 7 conventions are
 # with the others below. Tabling one costs what tabling a convention on our own
 # motion costs (un_propose_own_motion_costs, shown), or the punitive sponsor's
 # cost for the three that punish a member (court referral, arms embargo,
@@ -417,6 +418,17 @@ un_propose_referendum_effect = {
 		scope:un_referendum_pick ?= { save_scope_as = un_vote_target }
 		un_resolution_open = { TOPIC = referendum }
 		un_referendum_on_tabled = yes
+	}
+}
+
+# Lift the Sanctions Against Us — binding (blocked if vetoed), simple majority; needs no reform (§0.12a, 2026-10-16). The petitioner is also the resolution's target, as a request's is.
+# Scope: the proposing country
+un_propose_lift_sanctions_effect = {
+	custom_tooltip = UN_PROPOSE_LIFT_SANCTIONS_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		save_scope_as = un_vote_target
+		un_resolution_open = { TOPIC = lift_sanctions }
 	}
 }
 

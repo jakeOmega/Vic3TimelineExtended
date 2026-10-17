@@ -54,11 +54,18 @@ un_may_table_now = {
 # term is left out so that a pledge against (−100) never makes a veto the
 # member would not have cast, and never prevents one it would have (spec §4).
 # Deterministic: the noise moves only the yes/no choice.
+# A petition to lift sanctions (§0.12a) is vetoed only by a member that still
+# dislikes the petitioner (un_lift_sanctions_ill_disposed): a veto is a hostile
+# act, and any other member at most votes against it.
 # Scope: the voter (= ROOT, un_vote.4), after un_lean_snapshot
 un_vote_ai_should_veto = {
 	is_un_permanent_member = yes
 	scope:un_resolution ?= { un_resolution_is_binding = yes }
 	NOT = { un_lobby_holds_pending_commitment = yes }
+	OR = {
+		NOT = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } }
+		un_lift_sanctions_ill_disposed = yes
+	}
 	has_variable = un_lean_veto_basis
 	OR = {
 		AND = {
