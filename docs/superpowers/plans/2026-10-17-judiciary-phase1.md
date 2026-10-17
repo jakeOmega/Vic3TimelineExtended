@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add the Judiciary law group: six court laws, the Judicial Independence score that turns a court's ceiling into legitimacy and credit over decades, entrenchment of constitutional law groups under strong courts, the overhaul shock when courts are cut down, the score's cost on Forceful Legislation and the tax Force Through, 1836 starting laws, ideology stances, and the docs and player guide.
+**Goal:** Add the Judiciary law group: six court laws whose tooltips state every rule a player plans around, the Judicial Independence score that turns a court's ceiling into legitimacy and credit over decades, entrenchment of constitutional law groups under strong courts, the overhaul shock when courts are cut down, the score's cost on Forceful Legislation and the tax Force Through, 1836 starting laws, ideology stances, and the docs and player guide.
 
-**Architecture:** Laws in a new `common/laws/te_judiciary_laws.txt`, Executive Tribunals first. One score, `var:te_judicial_independence`, moved yearly toward the court law's ceiling (`te_jud_ceiling`) and spent by override. One scaled modifier, `te_judicial_independence`, written only by `te_jud_refresh` from the monthly country pulse. Entrenchment is an enactment modifier added at `on_law_enactment_started`. The shock is a hidden country event fired from `on_law_activated`, whose ROOT is the law. Stances come from named lists in `ideology_modifications.py`. A Python test file pins every value against the spec.
+**Architecture:** Laws in a new `common/laws/te_judiciary_laws.txt`, Executive Tribunals first. Every rule is a script-only modifier line on the law that carries it (the ceiling, the paper court, entrenchment, Statutory Courts' two conditional lines, the capture), so the law's tooltip states it; script reads the sums (the banking dials' pattern). One score, `var:te_judicial_independence`, moved yearly toward `te_jud_ceiling` and spent by override. The scaled modifiers are written only by `te_jud_refresh` from the monthly country pulse. Entrenchment is an enactment modifier added at `on_law_enactment_started`. The shock is a hidden country event fired a week after a ceiling law changes, from `on_law_activated`, whose ROOT is the law. Stances come from named lists in `ideology_modifications.py`. A Python test file pins every value against the spec.
 
 **Tech Stack:** Victoria 3 Paradox script (`common/`, `events/`), localization YAML, Python 3.11/3.12 `unittest`.
 
@@ -12,10 +12,12 @@
 
 ## Global Constraints
 
-- **Values (spec).** Ceilings: Executive 10, Religious 40, Statutory 70, Constitutional 100, Supremacy 100, Algorithmic 60, halved under a paper court (Autocracy or a variant, Single-Party State, Algorithmic Governance). Score: +4 a year below the ceiling, −10 a year above it, clamped to the ceiling either way; starts at half the ceiling unless history sets it. Spending: 5 / 10 / 20 (Forceful Legislation b / c / e), 10 (tax Force Through), floored at 0. Shock at a gap of 20 or more, 5 years decaying, multiplier gap ÷ 100; radicals at 40 or more. Entrenchment: −10% (Constitutional Review), −15% (Judicial Supremacy).
-- **If the owner rules differently on a § 12 question before a task starts, that task follows the ruling.** The proposals as written here are: Supremacy legitimacy −3, the score shown by a concept and the modifier (no journal entry), floor −0.1pp at 100, Constitutional Review on `human_rights`, and Supremacy only from Constitutional Review.
+- **Values (spec).** Ceilings: Executive 10, Religious 40, Statutory 70, Constitutional 100, Supremacy 100, Algorithmic 60, halved under a paper court (Autocracy and its variants, Single-Party State, Algorithmic Governance). Score: +4 a year below the ceiling, −10 a year above it, clamped to the ceiling either way; starts at half the ceiling unless history sets it. Spending: 5 / 10 / 20 (Forceful Legislation b / c / e), 10 (tax Force Through), floored at 0. Shock at a gap of 20 or more, 5 years decaying, multiplier gap ÷ 100; radicals at 40 or more. Entrenchment: −10% (Constitutional Review), −15% (Judicial Supremacy). Statutory Courts: +10 legitimacy from votes with an elected government, +25 authority without.
+- **Owner's rulings (2026-10-17, second round):** no credit floor term; Constitutional Review on `human_rights`; Judicial Supremacy reachable from any court, with legitimacy −5, movement radicalism −10% and pop attraction +10%; Statutory Courts' conditional bonus; every rule on the law's tooltip as a script-only line. The country-modifier tab is a separate spec (spec § 13).
+- **A rule is a tooltip line, and script reads the line.** Each lives on the law as a `script_only` modifier type (`judiciary_modifier_types.txt`). Where the engine needs a named modifier (the enactment modifiers), the line picks a tier and `test_judiciary.py` holds every line to a tier.
+- **Modifier sums lag a law change.** `te_jud_ceiling` reads them, so the score is first seeded at the monthly pulse (not `on_game_started`), the old-save repair waits a month between assigning courts and seeding scores, and the shock event waits a week.
 - **ROOT.** `add_modifier { multiplier = var:X }` resolves against ROOT (`scripting_best_practices.md` § "add_modifier { multiplier = var:X } Resolves Against ROOT"). Only two places apply a multiplier: `te_jud_refresh` (from `on_monthly_pulse_country`, ROOT = the country) and `te_judiciary_events.1` (a country event). `on_law_activated` has ROOT = the law, so it only matches the law type and fires the event on `owner`. `on_game_started` has ROOT = none, so it only sets variables there.
-- **One refresh site.** `te_jud_refresh` is the only writer of `te_judicial_independence` and `te_jud_algorithmic_capture`, and only `te_jud_monthly` calls it. Never `remove_variable` a variable a live modifier's multiplier reads (`te_jud_modifier_mult`, `te_jud_overhaul_mult`).
+- **One refresh site.** `te_jud_refresh` is the only writer of the four scaled modifiers (`te_judicial_independence`, `te_jud_votes_legitimacy`, `te_jud_unelected_authority`, `te_jud_algorithmic_capture`), and only `te_jud_monthly` calls it. Never `remove_variable` a variable a live modifier's multiplier reads (`te_jud_modifier_mult`, `te_jud_votes_mult`, `te_jud_authority_mult`, `te_jud_capture_mult`, `te_jud_overhaul_mult`).
 - **Variables, not modifiers, hold state** (a revolution's winner inherits variables only).
 - **Clamp with `if` + `set_variable`**, never `min`/`max` inside `change_variable` (`change_variable_clamp_audit`).
 - **Every option that changes the score says so** in `custom_tooltip = { text = … <effect> }` (`silent_variable_audit`).
@@ -24,32 +26,37 @@
 - **Python must run on 3.11**: no PEP 701 f-strings (`grep -nE "f\"[^\"]*\{[^}\"]*\"|f'[^']*\{[^}']*'" <files>`).
 - **Tests** need the dummy env in a game-less checkout: `VIC3_BASE_GAME=/nonexistent VIC3_MOD_DEPLOY_TARGET=/nonexistent VIC3_VANILLA_REPO=/nonexistent VIC3_VANILLA_DOCS_RUNTIME=/nonexistent VIC3_GAME_LOGS=/nonexistent`. Use the venv Python (`.venv/bin/python`). Read results with `grep -E '^(Ran |OK|FAILED)'`.
 - Never `POST /reload` from a worktree. Per task run `test_judiciary.py` and `ruff`; Task 12 runs everything CI runs.
-- **Dry run (2026-10-17).** Tasks 1–7's code, applied verbatim to a scratch worktree, passes `test_judiciary.py`
-  (34 tests), every `--strict` audit CI runs, `effect_trigger_validity_audit` (no new flags), `organize_loc --check`
-  after one run, the offline ideology regeneration and its `--check`. Across the full suite, the only failures were
-  the ones the steps below fix (the consistency file before Step 7, the repair's name).
+- **Dry run (2026-10-17, after the owner's second review).** Tasks 1–7's code, applied verbatim to a scratch
+  worktree, passes `test_judiciary.py` (38 tests), every `--strict` audit CI runs, `effect_trigger_validity_audit` (no
+  flags), `modifier_visibility_audit`, `organize_loc --check` after one run, the offline ideology regeneration and its
+  `--check`, and the full unit suite (7,628 tests). The runs found three things the steps now cover: the consistency file needs regenerating in Task 1, the
+  old-save repair must be named `te_repair_*`, and a modifier name needs `’` rather than a straight apostrophe.
 
 ## Review Focus
 
 1. **The shock's multiplier**: applied only inside `te_judiciary_events.1`, from a stored variable, never from `on_law_activated`'s law scope. Test: Task 5 `test_shock_runs_in_a_country_event`.
-2. **Seeding never shocks** a new game or an old save, and a new country mid-game keeps its law. Test: Task 3 `test_old_save_seeding_is_a_marked_repair`, Task 5 `test_shock_needs_seeding`.
+2. **Seeding never shocks** a new game or an old save, a new country mid-game keeps its law, and no score is seeded before the laws' modifier sums are in place. Test: Task 3 `test_seeding_waits_for_the_monthly_pulse`, `test_old_save_seeding_is_a_marked_repair`, Task 5 `test_shock_needs_seeding`.
 3. **Secularizing drops Religious Courts to Statutory Courts** when Rationalism is researched, else Executive Tribunals. Test: Task 7 `test_religious_courts_fall_to_statutory`.
-4. **One writer**: no other file adds or removes `te_judicial_independence`. Test: Task 3 `test_one_refresh_site`.
-5. **Entrenchment hits the right groups**: each representative law is in the group the spec names. Test: Task 4 `test_protected_groups_match_spec`.
-6. **The concept's live value** renders (`loc_render_audit`), and the description of Judicial Supremacy says the courts do not govern (the owner's requirement).
+4. **One writer**: no other file adds or removes the four scaled modifiers. Test: Task 3 `test_one_refresh_site`.
+5. **The tooltip is the rule**: the ceiling and entrenchment read the laws' lines, never `has_law`. Test: Task 2 `test_ceiling_reads_the_laws_lines`, Task 4 `test_the_laws_lines_pick_the_tier`.
+6. **Entrenchment hits the right groups**: each representative law is in the group the spec names. Test: Task 4 `test_protected_groups_match_spec`.
+7. **The concept's live value** renders (`loc_render_audit`), and the description of Judicial Supremacy says the courts do not govern (the owner's requirement).
 
 ---
 
-### Task 1: The law group and the six laws
+### Task 1: The law group, the six laws and their tooltip lines
 
 **Files:**
+- Create: `common/modifier_type_definitions/judiciary_modifier_types.txt`
 - Modify: `common/law_groups/extra_law_groups.txt`
 - Create: `common/laws/te_judiciary_laws.txt`
-- Modify: `localization/english/te_laws_l_english.yml`
+- Create: `common/laws/te_judiciary_law_injections.txt`
+- Modify: `common/laws/extra_laws.txt` (`law_algorithmic_governance`'s `modifier` block)
+- Modify: `localization/english/te_laws_l_english.yml`, `localization/english/te_miscellaneous_l_english.yml`
 - Create: `test_judiciary.py`
 
 **Interfaces:**
-- Produces: `lawgroup_judiciary`; `law_executive_tribunals`, `law_religious_courts`, `law_statutory_courts`, `law_constitutional_review`, `law_judicial_supremacy`, `law_algorithmic_jurisprudence`; loc keys `te_jud_ceiling_tt_<short>` for `executive`, `religious`, `statutory`, `constitutional`, `supremacy`, `algorithmic`, plus `te_jud_entrenchment_tt_constitutional`, `te_jud_entrenchment_tt_supremacy`, `te_jud_capture_tt` (written in Task 2, read here by `on_enact`).
+- Produces: `lawgroup_judiciary`; `law_executive_tribunals`, `law_religious_courts`, `law_statutory_courts`, `law_constitutional_review`, `law_judicial_supremacy`, `law_algorithmic_jurisprudence`; the display types `country_judicial_independence_ceiling_add`, `country_judicial_independence_ceiling_mult`, `country_court_challenges_ignored_bool`, `country_constitutional_law_enactment_success_add`, `country_rights_law_enactment_success_add`, `country_legitimacy_from_votes_if_elected_add`, `country_authority_if_unelected_add`, `country_override_with_algorithmic_governance_add` (spec § 2.7).
 
 - [ ] **Step 1: Write the failing tests** (`test_judiciary.py`)
 
@@ -60,11 +67,12 @@ What the engine would never report:
 
 - A law whose values drift from the spec, or a law out of order: the first law
   in the file is what an unseeded country and an old save get.
+- A rule a player plans around that the law's tooltip doesn't show: every one
+  is a display line on the law (a script_only modifier type) that script reads.
 - An ideology with a Judiciary block that leaves a law out: the group backs the
   law it omits as if neutral.
-- A second writer of the scaled Judicial Independence modifier, or a
-  multiplier applied where ROOT is not the country (the engine substitutes 1.0
-  silently).
+- A second writer of a scaled modifier, or a multiplier applied where ROOT is
+  not the country (the engine substitutes 1.0 silently).
 - A Forceful Legislation option that spends the score without saying so.
 
 No game install needed.
@@ -80,7 +88,10 @@ from paradox_file_parser import ParadoxFileParser
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 LAWS = os.path.join(REPO, "common", "laws", "te_judiciary_laws.txt")
+INJECTIONS = os.path.join(REPO, "common", "laws", "te_judiciary_law_injections.txt")
+EXTRA_LAWS = os.path.join(REPO, "common", "laws", "extra_laws.txt")
 GROUPS = os.path.join(REPO, "common", "law_groups", "extra_law_groups.txt")
+TYPES = os.path.join(REPO, "common", "modifier_type_definitions", "judiciary_modifier_types.txt")
 
 COURT_LAWS = (
     "law_executive_tribunals",
@@ -90,13 +101,31 @@ COURT_LAWS = (
     "law_judicial_supremacy",
     "law_algorithmic_jurisprudence",
 )
+PAPER_COURT_LAWS = (
+    "law_autocracy",
+    "law_bakufu",
+    "law_neo_absolutism",
+    "law_single_party_state",
+    "law_algorithmic_governance",
+)
+DISPLAY_TYPES = (
+    "country_judicial_independence_ceiling_add",
+    "country_judicial_independence_ceiling_mult",
+    "country_court_challenges_ignored_bool",
+    "country_constitutional_law_enactment_success_add",
+    "country_rights_law_enactment_success_add",
+    "country_legitimacy_from_votes_if_elected_add",
+    "country_authority_if_unelected_add",
+    "country_override_with_algorithmic_governance_add",
+)
 
-# Spec § 2. Values as written in the file.
+# Spec § 2 and § 2.7. Values as written in the file.
 SPEC_LAWS = {
     "law_executive_tribunals": {
         "progressiveness": "-50",
         "tech": [],
         "modifier": {
+            "country_judicial_independence_ceiling_add": "10",
             "country_legislative_override_capacity_add": "1",
             "country_authority_add": "50",
             "country_suppression_cost_mult": "-0.1",
@@ -107,6 +136,7 @@ SPEC_LAWS = {
         "progressiveness": "-20",
         "tech": [],
         "modifier": {
+            "country_judicial_independence_ceiling_add": "40",
             "interest_group_ig_devout_pol_str_mult": "0.15",
             "state_bureaucracy_population_base_cost_factor_mult": "-0.05",
             "country_credit_standing_add": "0.005",
@@ -116,38 +146,48 @@ SPEC_LAWS = {
         "progressiveness": "0",
         "tech": ["rationalism"],
         "modifier": {
+            "country_judicial_independence_ceiling_add": "70",
             "country_suppression_cost_mult": "0.1",
             "state_bureaucracy_population_base_cost_factor_mult": "0.05",
+            "country_legitimacy_from_votes_if_elected_add": "10",
+            "country_authority_if_unelected_add": "25",
         },
     },
     "law_constitutional_review": {
         "progressiveness": "50",
         "tech": ["human_rights"],
         "modifier": {
+            "country_judicial_independence_ceiling_add": "100",
             "country_legislative_override_capacity_add": "-2",
             "country_suppression_cost_mult": "0.25",
             "state_bureaucracy_population_base_cost_factor_mult": "0.05",
+            "country_constitutional_law_enactment_success_add": "-0.1",
         },
     },
     "law_judicial_supremacy": {
         "progressiveness": "75",
         "tech": ["civil_rights_movement"],
         "modifier": {
+            "country_judicial_independence_ceiling_add": "100",
             "country_legislative_override_capacity_add": "-3",
             "country_suppression_cost_mult": "0.4",
             "state_bureaucracy_population_base_cost_factor_mult": "0.05",
-            "country_legitimacy_base_add": "-3",
+            "country_legitimacy_base_add": "-5",
             "country_credit_standing_add": "0.003",
             "country_legitimacy_ideological_incoherence_mult": "-0.25",
-            "political_movement_radicalism_add": "-0.05",
-            "political_movement_pop_attraction_mult": "0.05",
+            "political_movement_radicalism_add": "-0.1",
+            "political_movement_pop_attraction_mult": "0.1",
+            "country_constitutional_law_enactment_success_add": "-0.15",
+            "country_rights_law_enactment_success_add": "-0.15",
         },
     },
     "law_algorithmic_jurisprudence": {
         "progressiveness": "25",
         "tech": ["generative_ai"],
         "modifier": {
+            "country_judicial_independence_ceiling_add": "60",
             "state_bureaucracy_population_base_cost_factor_mult": "-0.1",
+            "country_override_with_algorithmic_governance_add": "2",
         },
     },
 }
@@ -200,6 +240,10 @@ def _loc_keys():
     return set(_loc_lines())
 
 
+def _modifier(body):
+    return {k: _body(v) for k, v in _body(body["modifier"]).items()}
+
+
 class LawsTest(unittest.TestCase):
     def setUp(self):
         self.laws = _parse(LAWS)
@@ -220,29 +264,40 @@ class LawsTest(unittest.TestCase):
                 self.assertEqual(_body(body["group"]), "lawgroup_judiciary")
                 self.assertEqual(_body(body["progressiveness"]), spec["progressiveness"])
                 self.assertEqual(_body(body.get("unlocking_technologies", ("=", []))), spec["tech"])
-                modifier = {k: _body(v) for k, v in _body(body["modifier"]).items()}
-                self.assertEqual(modifier, spec["modifier"])
+                self.assertEqual(_modifier(body), spec["modifier"])
 
     def test_religious_courts_need_a_church(self):
         body = _body(self.laws["law_religious_courts"])
         self.assertEqual(_body(body["disallowing_laws"]), ["law_total_separation", "law_state_atheism"])
 
-    def test_supremacy_only_from_review(self):
-        body = _body(self.laws["law_judicial_supremacy"])
-        self.assertEqual(_body(body["unlocking_laws"]), ["law_constitutional_review"])
-
-    def test_only_supremacy_has_a_law_gate(self):
+    def test_no_law_gates(self):
+        # The owner (2026-10-17): Judicial Supremacy is reachable from any court.
         for law in COURT_LAWS:
-            if law != "law_judicial_supremacy":
-                self.assertNotIn("unlocking_laws", _body(self.laws[law]), law)
+            self.assertNotIn("unlocking_laws", _body(self.laws[law]), law)
+
+    def test_display_types_are_script_only(self):
+        types = {k: _body(v) for k, v in _parse(TYPES).items()}
+        self.assertEqual(set(types), set(DISPLAY_TYPES))
+        for name, body in types.items():
+            if name.endswith("_bool"):
+                self.assertEqual(_body(body["boolean"]), "yes", name)
+            else:
+                self.assertEqual(_body(body["script_only"]), "yes", name)
+
+    def test_paper_courts_carry_both_lines(self):
+        injected = _parse(INJECTIONS)
+        bodies = {law: _body(injected["INJECT:" + law]) for law in PAPER_COURT_LAWS[:-1]}
+        bodies["law_algorithmic_governance"] = _body(_parse(EXTRA_LAWS)["law_algorithmic_governance"])
+        for law, body in bodies.items():
+            modifier = _modifier(body)
+            self.assertEqual(modifier.get("country_judicial_independence_ceiling_mult"), "-0.5", law)
+            self.assertEqual(modifier.get("country_court_challenges_ignored_bool"), "yes", law)
 
     def test_names_and_descriptions(self):
         keys = _loc_keys()
-        for law in COURT_LAWS:
-            self.assertIn(law, keys)
-            self.assertIn(law + "_desc", keys)
-        self.assertIn("lawgroup_judiciary", keys)
-        self.assertIn("lawgroup_judiciary_desc", keys)
+        for key in COURT_LAWS + DISPLAY_TYPES + ("lawgroup_judiciary",):
+            self.assertIn(key, keys)
+            self.assertIn(key + "_desc", keys)
 
     def test_supremacy_says_the_courts_do_not_govern(self):
         # The owner's requirement (spec Decisions): otherwise it would be a
@@ -259,7 +314,85 @@ if __name__ == "__main__":
 Run: `.venv/bin/python test_judiciary.py 2>&1 | grep -E '^(Ran |OK|FAILED)'`
 Expected: FAILED (no `te_judiciary_laws.txt`).
 
-- [ ] **Step 3: Add the group** at the end of the power-structure entries in `common/law_groups/extra_law_groups.txt`, after `lawgroup_state_power`:
+- [ ] **Step 3: The display types**, `common/modifier_type_definitions/judiciary_modifier_types.txt` (UTF-8 with one BOM, tabs):
+
+```
+# ======================================================================
+#  JUDICIARY — tooltip lines (spec § 2.7)
+#  The banking dials' pattern (banking_cycle_modifier_types.txt): the law
+#  carries the number, so its tooltip states the rule and the engine renders
+#  the breakdown. Script reads the sum (te_judiciary_values.txt,
+#  te_judiciary_effects.txt, te_judiciary_on_actions.txt) and applies the
+#  effect; the engine applies none of these itself.
+# ======================================================================
+
+# The highest Judicial Independence the courts can earn. Each court law.
+country_judicial_independence_ceiling_add = {
+	color = good
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# A regime whose executive answers to nobody earns its courts less trust:
+# Autocracy and its variants, Single-Party State, Algorithmic Governance.
+country_judicial_independence_ceiling_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# ... and its courts challenge no change to the constitution (§ 3.4). Read by
+# te_jud_paper_court.
+country_court_challenges_ignored_bool = { color = bad  boolean = yes }
+
+# Enactment success of a law in a protected group (§ 3.4). Read at
+# on_law_enactment_started to pick the enactment modifier.
+country_constitutional_law_enactment_success_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+country_rights_law_enactment_success_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Statutory Courts (§ 2.3): legitimacy from votes under an elected
+# government, authority without one. te_jud_refresh applies whichever holds.
+country_legitimacy_from_votes_if_elected_add = {
+	color = good
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+country_authority_if_unelected_add = {
+	color = good
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Algorithmic Jurisprudence's capture (§ 2.6): override capacity while
+# Algorithmic Governance is in force. te_jud_refresh applies it.
+country_override_with_algorithmic_governance_add = {
+	color = neutral
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+```
+
+- [ ] **Step 4: Add the group** at the end of the power-structure entries in `common/law_groups/extra_law_groups.txt`, after `lawgroup_state_power`:
 
 ```
 # Judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md): who checks
@@ -272,7 +405,7 @@ lawgroup_judiciary = {
 }
 ```
 
-- [ ] **Step 4: Write `common/laws/te_judiciary_laws.txt`** (UTF-8 with one BOM, tabs). Icons are placeholders (Task 8).
+- [ ] **Step 5: Write `common/laws/te_judiciary_laws.txt`** (UTF-8 with one BOM, tabs). Icons are placeholders (Task 8). The display lines go first in each `modifier` block, so the tooltip opens with the ceiling.
 
 ```
 # ======================================================================
@@ -280,7 +413,8 @@ lawgroup_judiciary = {
 #  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
 #  The laws carry what the courts can do. Judicial Independence
 #  (te_judiciary_effects.txt) carries how far they are trusted, up to the
-#  ceiling each law sets (te_jud_law_ceiling, te_judiciary_values.txt).
+#  ceiling each law's tooltip shows. Every rule a player plans around is a
+#  line in the law's modifier block (judiciary_modifier_types.txt).
 #  Executive Tribunals stays FIRST: the first law in the file is what an
 #  unseeded country and an old save get.
 #  Placeholder icons: docs/systems/mod_systems.md § Judiciary.
@@ -293,11 +427,8 @@ law_executive_tribunals = {
 	# No gate: the consistency walk's terminal fallback for the group.
 	progressiveness = -50
 
-	on_enact = {
-		custom_tooltip = te_jud_ceiling_tt_executive
-	}
-
 	modifier = {
+		country_judicial_independence_ceiling_add = 10
 		country_legislative_override_capacity_add = 1
 		country_authority_add = 50
 		# Nobody frees a dissident on a writ.
@@ -330,11 +461,8 @@ law_religious_courts = {
 		law_state_atheism
 	}
 
-	on_enact = {
-		custom_tooltip = te_jud_ceiling_tt_religious
-	}
-
 	modifier = {
+		country_judicial_independence_ceiling_add = 40
 		interest_group_ig_devout_pol_str_mult = 0.15
 		# Clergy staff the courts, paid from fees and endowments.
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
@@ -363,13 +491,15 @@ law_statutory_courts = {
 		rationalism
 	}
 
-	on_enact = {
-		custom_tooltip = te_jud_ceiling_tt_statutory
-	}
-
 	modifier = {
+		country_judicial_independence_ceiling_add = 70
 		country_suppression_cost_mult = 0.1
 		state_bureaucracy_population_base_cost_factor_mult = 0.05
+		# Whoever makes the law has the last word (spec § 2.3): an elected
+		# legislature gains standing (Presidential Republic's +10), a crown
+		# gains authority. te_jud_refresh applies whichever holds.
+		country_legitimacy_from_votes_if_elected_add = 10
+		country_authority_if_unelected_add = 25
 	}
 
 	ai_enact_weight_modifier = {
@@ -388,20 +518,19 @@ law_constitutional_review = {
 	progressiveness = 50
 
 	# The theory of rights held against the majority. The United States holds
-	# the law from history (Marbury v. Madison, 1803), which ignores this.
+	# the law from history (Marbury v. Madison, 1803), which ignores this, as
+	# other laws are held before their technology.
 	unlocking_technologies = {
 		human_rights
 	}
 
-	on_enact = {
-		custom_tooltip = te_jud_ceiling_tt_constitutional
-		custom_tooltip = te_jud_entrenchment_tt_constitutional
-	}
-
 	modifier = {
+		country_judicial_independence_ceiling_add = 100
 		country_legislative_override_capacity_add = -2
 		country_suppression_cost_mult = 0.25
 		state_bureaucracy_population_base_cost_factor_mult = 0.05
+		# Entrenchment (spec § 3.4), read at on_law_enactment_started.
+		country_constitutional_law_enactment_success_add = -0.1
 	}
 
 	ai_enact_weight_modifier = {
@@ -419,36 +548,29 @@ law_judicial_supremacy = {
 
 	progressiveness = 75
 
-	# The Warren Court (1953-69).
+	# The Warren Court (1953-69). Reachable from any court: from Statutory
+	# Courts it is a legislature legislating itself out of supremacy.
 	unlocking_technologies = {
 		civil_rights_movement
 	}
 
-	# A transition gate from the group's own law: enacted only from
-	# Constitutional Review. gen_law_consistency never counts an own-group
-	# entry as a standing requirement (the Legacy Slavery precedent).
-	unlocking_laws = {
-		law_constitutional_review
-	}
-
-	on_enact = {
-		custom_tooltip = te_jud_ceiling_tt_supremacy
-		custom_tooltip = te_jud_entrenchment_tt_supremacy
-	}
-
 	modifier = {
+		country_judicial_independence_ceiling_add = 100
 		country_legislative_override_capacity_add = -3
 		country_suppression_cost_mult = 0.4
 		state_bureaucracy_population_base_cost_factor_mult = 0.05
 		# A contested court: legitimacy peaks at Constitutional Review (spec § 2.5).
-		country_legitimacy_base_add = -3
+		country_legitimacy_base_add = -5
 		# Lenders can't predict policy made by rulings.
 		country_credit_standing_add = 0.003
 		# Divisive questions go to the court, so coalitions hold (Graber, 1993).
 		country_legitimacy_ideological_incoherence_mult = -0.25
 		# Movements litigate: they win more and riot less.
-		political_movement_radicalism_add = -0.05
-		political_movement_pop_attraction_mult = 0.05
+		political_movement_radicalism_add = -0.1
+		political_movement_pop_attraction_mult = 0.1
+		# Entrenchment (spec § 3.4), read at on_law_enactment_started.
+		country_constitutional_law_enactment_success_add = -0.15
+		country_rights_law_enactment_success_add = -0.15
 	}
 
 	ai_enact_weight_modifier = {
@@ -470,15 +592,12 @@ law_algorithmic_jurisprudence = {
 		generative_ai
 	}
 
-	# The capture (+2 override under Algorithmic Governance) is a separate
-	# modifier, te_jud_algorithmic_capture, written by te_jud_refresh.
-	on_enact = {
-		custom_tooltip = te_jud_ceiling_tt_algorithmic
-		custom_tooltip = te_jud_capture_tt
-	}
-
 	modifier = {
+		country_judicial_independence_ceiling_add = 60
 		state_bureaucracy_population_base_cost_factor_mult = -0.1
+		# The capture (spec § 2.6): te_jud_refresh applies it while
+		# Algorithmic Governance is in force.
+		country_override_with_algorithmic_governance_add = 2
 	}
 
 	ai_enact_weight_modifier = {
@@ -491,7 +610,58 @@ law_algorithmic_jurisprudence = {
 }
 ```
 
-- [ ] **Step 5: Names and descriptions** in `localization/english/te_laws_l_english.yml`, beside `lawgroup_criminal_justice`. Descriptions are flavour with no figures (the enactment popup's box does not scroll); the figures are the `on_enact` lines (Task 2).
+- [ ] **Step 6: The paper courts.** `common/laws/te_judiciary_law_injections.txt` (UTF-8 with one BOM). An INJECTed `modifier` block on a law adds to the law's own (`scripting_best_practices.md`; `law_laissez_faire` carries three).
+
+```
+# ======================================================================
+#  JUDICIARY — paper courts (spec § 3.1, § 3.4)
+#  A regime whose executive answers to nobody: its courts earn half the
+#  trust and challenge nothing. The lines show on the law's own tooltip.
+#  Variants carry their own modifier blocks, so Bakufu and Neo-Absolutism
+#  are injected as well as Autocracy. Algorithmic Governance, a mod law,
+#  carries the same two lines inline (extra_laws.txt).
+# ======================================================================
+
+INJECT:law_autocracy = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}
+
+INJECT:law_bakufu = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}
+
+INJECT:law_neo_absolutism = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}
+
+INJECT:law_single_party_state = {
+	modifier = {
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+	}
+}
+```
+
+In `law_algorithmic_governance`'s `modifier` block (`common/laws/extra_laws.txt`), after `country_legislative_override_capacity_add = 2`:
+
+```
+
+		# A paper court (Judiciary spec § 3.1): te_judiciary_law_injections.txt
+		# gives the other executive-only laws the same two lines.
+		country_judicial_independence_ceiling_mult = -0.5
+		country_court_challenges_ignored_bool = yes
+```
+
+- [ ] **Step 7: Names and descriptions.** Laws and group in `localization/english/te_laws_l_english.yml`, beside `lawgroup_criminal_justice`. Descriptions are flavour with no figures (the enactment popup's box does not scroll); the figures are the tooltip lines.
 
 ```yaml
  lawgroup_judiciary:0 "Judiciary"
@@ -510,27 +680,48 @@ law_algorithmic_jurisprudence = {
  law_algorithmic_jurisprudence_desc:0 "Models decide routine cases and draft judgments for the rest, and human judges sign them. The rulings are fast and consistent, and as impartial as whoever trains the models."
 ```
 
-- [ ] **Step 6: Format, run the tests, see them pass**
+The display types in `localization/english/te_miscellaneous_l_english.yml` (`organize_loc.py` files them). A modifier name takes `’` (U+2019), never a straight apostrophe, which breaks the engine's quoted tooltip argument (`loc_render_audit`):
 
-Run: `python3 scripts/format_paradox_tabs.py common/laws/te_judiciary_laws.txt common/law_groups/extra_law_groups.txt && .venv/bin/python test_judiciary.py 2>&1 | grep -E '^(Ran |OK|FAILED)'`
-Expected: OK.
+```yaml
+ country_judicial_independence_ceiling_add:0 "[Concept('concept_judicial_independence','Judicial Independence')] Ceiling"
+ country_judicial_independence_ceiling_add_desc:0 "The highest [concept_judicial_independence] the courts can earn. The score rises by 4 a year toward it and falls by 10 a year above it."
+ country_judicial_independence_ceiling_mult:0 "[Concept('concept_judicial_independence','Judicial Independence')] Ceiling"
+ country_judicial_independence_ceiling_mult_desc:0 "The executive can ignore its courts, so they earn less trust."
+ country_court_challenges_ignored_bool:0 "Courts Can’t Challenge the Government"
+ country_court_challenges_ignored_bool_desc:0 "No court challenges a change to the constitution, whatever the Judiciary law."
+ country_constitutional_law_enactment_success_add:0 "Enactment Success of Constitutional Laws"
+ country_constitutional_law_enactment_success_add_desc:0 "For laws on Distribution of Power, Governance Principles, Church and State, Citizenship, Free Speech, Internal Security, State Power and the Judiciary: the courts hear challenges to them. Not while the courts can't challenge the government (Autocracy, Single-Party State, Algorithmic Governance)."
+ country_rights_law_enactment_success_add:0 "Enactment Success of Rights Laws"
+ country_rights_law_enactment_success_add_desc:0 "For laws on Rights of Women, Slavery, Minority Rights, LGBTQ+ Rights and Privacy Rights. Not while the courts can't challenge the government."
+ country_legitimacy_from_votes_if_elected_add:0 "[concept_legitimacy] from Votes, with an Elected Government"
+ country_legitimacy_from_votes_if_elected_add_desc:0 "Under Landed, Wealth or Census Voting, Universal Suffrage or Anarchy: the legislature's law has the last word, and the government elected to make it gains standing."
+ country_authority_if_unelected_add:0 "[concept_authority], without an Elected Government"
+ country_authority_if_unelected_add_desc:0 "Under any other Distribution of Power law: the crown's law has the last word."
+ country_override_with_algorithmic_governance_add:0 "[Concept('concept_legislative_override_capacity','Legislative Override Capacity')] under Algorithmic Governance"
+ country_override_with_algorithmic_governance_add_desc:0 "With Algorithmic Governance, the system that writes the law also judges it."
+```
 
-- [ ] **Step 7: Regenerate the consistency file.** Religious Courts' `disallowing_laws` adds a cascade, so
+- [ ] **Step 8: Format, run the tests, see them pass**
+
+Run: `python3 scripts/format_paradox_tabs.py common/laws/te_judiciary_laws.txt common/laws/te_judiciary_law_injections.txt common/modifier_type_definitions/judiciary_modifier_types.txt common/law_groups/extra_law_groups.txt common/laws/extra_laws.txt && .venv/bin/python test_judiciary.py 2>&1 | grep -E '^(Ran |OK|FAILED)'`
+Expected: OK. (`concept_judicial_independence` arrives in Task 2; `concept_reference_audit` waits for it.)
+
+- [ ] **Step 9: Regenerate the consistency file.** Religious Courts' `disallowing_laws` adds a cascade, so
   `test_gen_law_consistency` fails until `common/scripted_effects/extra_law_consistency_generated.txt` is rewritten:
   `.venv/bin/python gen_law_consistency.py` (it reads parsed vanilla, so it runs without the game). The new
   `te_fix_inconsistent_lawgroup_judiciary` moves Religious Courts to Statutory Courts with Rationalism, else to
   Executive Tribunals (dry run, 2026-10-17). Task 7 rewrites the file again once the stances exist.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
-git add common/law_groups/extra_law_groups.txt common/laws/te_judiciary_laws.txt localization/english/te_laws_l_english.yml common/scripted_effects/extra_law_consistency_generated.txt test_judiciary.py
-git commit -m "Judiciary: the law group and its six laws"
+git add common/modifier_type_definitions/judiciary_modifier_types.txt common/law_groups/extra_law_groups.txt common/laws/te_judiciary_laws.txt common/laws/te_judiciary_law_injections.txt common/laws/extra_laws.txt common/scripted_effects/extra_law_consistency_generated.txt localization/english/ test_judiciary.py
+git commit -m "Judiciary: the law group, its six laws and their tooltip lines"
 ```
 
 ---
 
-### Task 2: Ceilings, triggers, modifiers and the concept
+### Task 2: The ceiling, triggers, modifiers and the concept
 
 **Files:**
 - Create: `common/script_values/te_judiciary_values.txt`
@@ -541,7 +732,7 @@ git commit -m "Judiciary: the law group and its six laws"
 - Test: `test_judiciary.py` (class `ScoreDefinitionsTest`)
 
 **Interfaces:**
-- Produces: script values `te_jud_law_ceiling`, `te_jud_ceiling`, `te_jud_seed_value`, `te_jud_modifier_mult_value`, `te_jud_overhaul_gap`, `te_jud_overhaul_mult_value`, `te_jud_display`; triggers `te_jud_paper_court`, `te_jud_is_islamic_state`; static modifiers `te_judicial_independence`, `te_jud_algorithmic_capture`, `te_jud_court_overhaul`, `te_jud_constitutional_challenge`, `te_jud_supremacy_challenge`; concept `concept_judicial_independence`.
+- Produces: script values `te_jud_ceiling`, `te_jud_seed_value`, `te_jud_modifier_mult_value`, `te_jud_votes_mult_value`, `te_jud_authority_mult_value`, `te_jud_capture_mult_value`, `te_jud_overhaul_gap`, `te_jud_overhaul_mult_value`, `te_jud_display`; triggers `te_jud_paper_court`, `te_jud_elected_government`, `te_jud_is_islamic_state`; static modifiers `te_judicial_independence`, `te_jud_votes_legitimacy`, `te_jud_unelected_authority`, `te_jud_algorithmic_capture`, `te_jud_court_overhaul`, `te_jud_constitutional_challenge`, `te_jud_supremacy_challenge`; concept `concept_judicial_independence`.
 
 - [ ] **Step 1: Write the failing tests** (add to `test_judiciary.py`)
 
@@ -550,67 +741,71 @@ VALUES = os.path.join(REPO, "common", "script_values", "te_judiciary_values.txt"
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "te_judiciary_triggers.txt")
 MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "te_judiciary_modifiers.txt")
 
-# Spec § 2 (ceilings) and § 3.2 (the score's modifier at 100).
-CEILINGS = {
-    "law_religious_courts": "40",
-    "law_statutory_courts": "70",
-    "law_constitutional_review": "100",
-    "law_judicial_supremacy": "100",
-    "law_algorithmic_jurisprudence": "60",
-}
+# Spec § 3.2: the score's modifier at 100.
 SCORE_MODIFIER = {
     "country_legitimacy_base_add": "10",
     "country_credit_standing_add": "-0.005",
-    "country_credit_standing_floor_add": "-0.001",
     "state_capitalists_investment_pool_efficiency_mult": "0.1",
     "political_movement_radicalism_from_enactment_disapproval_mult": "-0.2",
 }
 
 
 class ScoreDefinitionsTest(unittest.TestCase):
-    def test_every_court_law_has_its_ceiling(self):
-        block = _block(_read(VALUES), "te_jud_law_ceiling")
-        self.assertRegex(block, re.compile(r"^\tvalue = 10$", re.M), "Executive Tribunals' 10 is the default")
-        for law, ceiling in CEILINGS.items():
-            pattern = r"limit = \{ has_law = law_type:%s \}\s*value = %s\b" % (law, ceiling)
-            self.assertRegex(block, pattern, law)
+    def setUp(self):
+        self.mods = {k: _body(v) for k, v in _parse(MODIFIERS).items()}
 
-    def test_paper_court_halves(self):
+    def _value(self, modifier, key):
+        return _body(self.mods[modifier][key])
+
+    def test_ceiling_reads_the_laws_lines(self):
         block = _block(_read(VALUES), "te_jud_ceiling")
-        self.assertIn("te_jud_paper_court = yes", block)
-        self.assertIn("multiply = 0.5", block)
-        paper = _block(_read(TRIGGERS), "te_jud_paper_court")
-        for law in ("has_law_or_variant = law_type:law_autocracy",
-                    "has_law = law_type:law_single_party_state",
-                    "has_law = law_type:law_algorithmic_governance"):
-            self.assertIn(law, paper)
+        self.assertIn("value = modifier:country_judicial_independence_ceiling_add", block)
+        self.assertIn("add = modifier:country_judicial_independence_ceiling_mult", block)
+        self.assertNotIn("has_law", block, "the ceiling is the tooltip's number, not a law check")
+
+    def test_paper_court_reads_its_line(self):
+        block = _block(_read(TRIGGERS), "te_jud_paper_court")
+        self.assertIn("modifier:country_court_challenges_ignored_bool = yes", block)
 
     def test_score_modifier_matches_spec(self):
-        mods = _parse(MODIFIERS)
-        body = {k: _body(v) for k, v in _body(mods["te_judicial_independence"]).items() if k != "icon"}
+        body = {k: _body(v) for k, v in self.mods["te_judicial_independence"].items() if k != "icon"}
         self.assertEqual(body, SCORE_MODIFIER)
 
-    def test_other_modifiers(self):
-        mods = {k: _body(v) for k, v in _parse(MODIFIERS).items()}
-        self.assertEqual(_body(mods["te_jud_algorithmic_capture"]["country_legislative_override_capacity_add"]), "2")
-        self.assertEqual(_body(mods["te_jud_court_overhaul"]["country_risk_premium_add"]), "0.02")
-        self.assertEqual(_body(mods["te_jud_court_overhaul"]["country_legitimacy_base_add"]), "-10")
-        self.assertEqual(_body(mods["te_jud_constitutional_challenge"]["country_law_enactment_success_add"]), "-0.1")
-        self.assertEqual(_body(mods["te_jud_supremacy_challenge"]["country_law_enactment_success_add"]), "-0.15")
+    def test_unit_modifiers(self):
+        # Each is applied with multiplier = the law's tooltip line.
+        self.assertEqual(self._value("te_jud_votes_legitimacy", "country_legitimacy_govt_total_votes_add"), "1")
+        self.assertEqual(self._value("te_jud_unelected_authority", "country_authority_add"), "1")
+        self.assertEqual(self._value("te_jud_algorithmic_capture", "country_legislative_override_capacity_add"), "1")
+        values = _read(VALUES)
+        for name, line in (("te_jud_votes_mult_value", "country_legitimacy_from_votes_if_elected_add"),
+                           ("te_jud_authority_mult_value", "country_authority_if_unelected_add"),
+                           ("te_jud_capture_mult_value", "country_override_with_algorithmic_governance_add")):
+            self.assertIn("value = modifier:" + line, _block(values, name))
+
+    def test_challenge_tiers_match_the_laws(self):
+        # The engine needs a named enactment modifier, so the laws' lines pick
+        # one of two tiers (te_jud_enactment_started). Every line must be a tier.
+        self.assertEqual(self._value("te_jud_constitutional_challenge", "country_law_enactment_success_add"), "-0.1")
+        self.assertEqual(self._value("te_jud_supremacy_challenge", "country_law_enactment_success_add"), "-0.15")
+        lines = set()
+        for body in _parse(LAWS).values():
+            modifier = _modifier(_body(body))
+            for key in ("country_constitutional_law_enactment_success_add", "country_rights_law_enactment_success_add"):
+                if key in modifier:
+                    lines.add(modifier[key])
+        self.assertLessEqual(lines, {"-0.1", "-0.15"})
+
+    def test_overhaul(self):
+        self.assertEqual(self._value("te_jud_court_overhaul", "country_risk_premium_add"), "0.02")
+        self.assertEqual(self._value("te_jud_court_overhaul", "country_legitimacy_base_add"), "-10")
 
     def test_loc(self):
         keys = _loc_keys()
-        for key in ("concept_judicial_independence", "concept_judicial_independence_desc",
-                    "te_judicial_independence", "te_judicial_independence_desc",
-                    "te_jud_algorithmic_capture", "te_jud_algorithmic_capture_desc",
-                    "te_jud_court_overhaul", "te_jud_court_overhaul_desc",
-                    "te_jud_constitutional_challenge", "te_jud_constitutional_challenge_desc",
-                    "te_jud_supremacy_challenge", "te_jud_supremacy_challenge_desc",
-                    "te_jud_entrenchment_tt_constitutional", "te_jud_entrenchment_tt_supremacy",
-                    "te_jud_capture_tt"):
+        for key in ("concept_judicial_independence", "te_judicial_independence", "te_jud_votes_legitimacy",
+                    "te_jud_unelected_authority", "te_jud_algorithmic_capture", "te_jud_court_overhaul",
+                    "te_jud_constitutional_challenge", "te_jud_supremacy_challenge"):
             self.assertIn(key, keys)
-        for short in ("executive", "religious", "statutory", "constitutional", "supremacy", "algorithmic"):
-            self.assertIn("te_jud_ceiling_tt_" + short, keys)
+            self.assertIn(key + "_desc", keys)
 ```
 
 - [ ] **Step 2: Run them and see them fail.** Expected: FAILED (files missing).
@@ -623,40 +818,19 @@ class ScoreDefinitionsTest(unittest.TestCase):
 #  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md § 3
 # ======================================================================
 
-# The ceiling Judicial Independence grows toward under the court law in
-# force, before the paper-court halving (spec § 2). One branch per law, so
-# test_judiciary.py can read each ceiling.
-te_jud_law_ceiling = {
-	value = 10
-	if = {
-		limit = { has_law = law_type:law_religious_courts }
-		value = 40
-	}
-	else_if = {
-		limit = { has_law = law_type:law_statutory_courts }
-		value = 70
-	}
-	else_if = {
-		limit = { has_law = law_type:law_constitutional_review }
-		value = 100
-	}
-	else_if = {
-		limit = { has_law = law_type:law_judicial_supremacy }
-		value = 100
-	}
-	else_if = {
-		limit = { has_law = law_type:law_algorithmic_jurisprudence }
-		value = 60
-	}
-}
-
-# A court the executive can ignore earns half the trust (spec § 3.1).
+# The ceiling Judicial Independence moves toward (spec § 3.1): the court
+# law's tooltip line, times the paper court's (-50%). Read from the modifier
+# sums, so a later law or amendment moves it without a script edit. A sum
+# can lag a law change by a tick: te_judiciary_events.1 waits a week, and the
+# score is first seeded at a monthly pulse.
 te_jud_ceiling = {
-	value = te_jud_law_ceiling
-	if = {
-		limit = { te_jud_paper_court = yes }
-		multiply = 0.5
+	value = modifier:country_judicial_independence_ceiling_add
+	multiply = {
+		value = 1
+		add = modifier:country_judicial_independence_ceiling_mult
 	}
+	min = 0
+	max = 100
 }
 
 # Where an unset score starts (spec § 5).
@@ -670,6 +844,20 @@ te_jud_seed_value = {
 te_jud_modifier_mult_value = {
 	value = var:te_judicial_independence
 	divide = 100
+}
+
+# The conditional lines' multipliers (te_jud_refresh): each unit modifier
+# times the law's tooltip line.
+te_jud_votes_mult_value = {
+	value = modifier:country_legitimacy_from_votes_if_elected_add
+}
+
+te_jud_authority_mult_value = {
+	value = modifier:country_authority_if_unelected_add
+}
+
+te_jud_capture_mult_value = {
+	value = modifier:country_override_with_algorithmic_governance_add
 }
 
 # How far the score stands above the ceiling (spec § 3.5). Read only where
@@ -703,14 +891,23 @@ te_jud_display = {
 #  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
 # ======================================================================
 
-# A regime whose executive answers to nobody: its courts earn half the trust
-# and challenge nothing (spec § 3.1, § 3.4). Bakufu and Neo-Absolutism are
-# Autocracy's variants.
+# A regime whose executive answers to nobody: its courts challenge nothing
+# (spec § 3.4). The line sits on Autocracy, its variants, Single-Party State
+# and Algorithmic Governance (te_judiciary_law_injections.txt).
 te_jud_paper_court = {
+	modifier:country_court_challenges_ignored_bool = yes
+}
+
+# An elected government (Statutory Courts' two lines, spec § 2.3): a voting
+# law, or Anarchy, which the mod counts as electoral
+# (te_tradition_of_free_elections.txt).
+te_jud_elected_government = {
 	OR = {
-		has_law_or_variant = law_type:law_autocracy
-		has_law = law_type:law_single_party_state
-		has_law = law_type:law_algorithmic_governance
+		has_law = law_type:law_landed_voting
+		has_law = law_type:law_wealth_voting
+		has_law = law_type:law_census_voting
+		has_law = law_type:law_universal_suffrage
+		has_law = law_type:law_anarchy
 	}
 }
 
@@ -740,16 +937,27 @@ te_judicial_independence = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_legitimacy_base_add = 10
 	country_credit_standing_add = -0.005
-	country_credit_standing_floor_add = -0.001
 	state_capitalists_investment_pool_efficiency_mult = 0.1
 	political_movement_radicalism_from_enactment_disapproval_mult = -0.2
 }
 
-# Algorithmic Jurisprudence under Algorithmic Governance (spec § 2.6):
-# the system that writes the law judges it. Written by te_jud_refresh.
+# Statutory Courts' two conditional lines (spec § 2.3), one unit each;
+# te_jud_refresh applies whichever holds, with multiplier = the law's line.
+te_jud_votes_legitimacy = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_govt_total_votes_add = 1
+}
+
+te_jud_unelected_authority = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_authority_add = 1
+}
+
+# Algorithmic Jurisprudence under Algorithmic Governance (spec § 2.6), one
+# unit; te_jud_refresh applies it with multiplier = the law's line.
 te_jud_algorithmic_capture = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_legislative_override_capacity_add = 2
+	country_legislative_override_capacity_add = 1
 }
 
 # The overhaul shock at a gap of 100 (spec § 3.5); te_judiciary_events.1
@@ -760,8 +968,8 @@ te_jud_court_overhaul = {
 	country_legitimacy_base_add = -10
 }
 
-# Entrenchment (spec § 3.4): enactment modifiers, added at
-# on_law_enactment_started.
+# Entrenchment (spec § 3.4): enactment modifiers, the two tiers the laws'
+# tooltip lines name, added at on_law_enactment_started.
 te_jud_constitutional_challenge = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_law_enactment_success_add = -0.1
@@ -779,9 +987,13 @@ te_jud_supremacy_challenge = {
 
 ```yaml
  concept_judicial_independence:0 "Judicial Independence"
- concept_judicial_independence_desc:0 "How far the courts are trusted to rule without fear of the government, from 0 to 100. Each Judiciary law sets a ceiling: Executive Tribunals 10, Religious Courts 40, Algorithmic Jurisprudence 60, Statutory Courts 70, Constitutional Review and Judicial Supremacy 100. Under Autocracy, Single-Party State or Algorithmic Governance the ceiling is halved, since the executive can ignore its courts. The score rises by 4 a year toward the ceiling and falls by 10 a year above it.\n\nIn proportion to the score, the courts add [concept_legitimacy], lower the [concept_banking_credit_standing] premium and its floor, make Capitalists invest more and calm movements that lose a law change. Forcing a law through spends the score, and a change that leaves it far above the new ceiling unsettles lenders and costs legitimacy for some years.\n\nNow #v [GetPlayer.MakeScope.ScriptValue('te_jud_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_jud_ceiling')|0]#!."
+ concept_judicial_independence_desc:0 "How far the courts are trusted to rule without fear of the government, from 0 to 100. Each Judiciary law sets a ceiling: Executive Tribunals 10, Religious Courts 40, Algorithmic Jurisprudence 60, Statutory Courts 70, Constitutional Review and Judicial Supremacy 100. Under Autocracy, Single-Party State or Algorithmic Governance the ceiling is halved, since the executive can ignore its courts. The score rises by 4 a year toward the ceiling and falls by 10 a year above it.\n\nIn proportion to the score, the courts add [concept_legitimacy], lower the [concept_banking_credit_standing] premium, make Capitalists invest more and calm movements that lose a law change. Forcing a law through spends the score, and a change that leaves it far above the new ceiling unsettles lenders and costs legitimacy for some years.\n\nNow #v [GetPlayer.MakeScope.ScriptValue('te_jud_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_jud_ceiling')|0]#!."
  te_judicial_independence:0 "Judicial Independence"
  te_judicial_independence_desc:0 "The courts' standing with the public and with lenders, in proportion to our [concept_judicial_independence] (now #v [GetPlayer.MakeScope.ScriptValue('te_jud_display')|0]#!)."
+ te_jud_votes_legitimacy:0 "Supremacy of Statute"
+ te_jud_votes_legitimacy_desc:0 "Our courts apply the law our elected legislature makes, and nothing overrides it."
+ te_jud_unelected_authority:0 "Supremacy of Statute"
+ te_jud_unelected_authority_desc:0 "Our courts apply the law the crown makes, and nothing overrides it."
  te_jud_algorithmic_capture:0 "Captured Court"
  te_jud_algorithmic_capture_desc:0 "The system that drafts our laws also judges them, so no court stands in the way of a law the government wants."
  te_jud_court_overhaul:0 "Court Overhaul"
@@ -790,20 +1002,11 @@ te_jud_supremacy_challenge = {
  te_jud_constitutional_challenge_desc:0 "The law touches the constitution's core, and the courts will hear challenges to it."
  te_jud_supremacy_challenge:0 "Judicial Review"
  te_jud_supremacy_challenge_desc:0 "The courts have the last word on the constitution and the rights it protects, and this law falls within their reach."
- te_jud_ceiling_tt_executive:0 "[concept_judicial_independence] ceiling: #v 10#!, halved under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_ceiling_tt_religious:0 "[concept_judicial_independence] ceiling: #v 40#!, halved under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_ceiling_tt_statutory:0 "[concept_judicial_independence] ceiling: #v 70#!, halved under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_ceiling_tt_constitutional:0 "[concept_judicial_independence] ceiling: #v 100#!, halved under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_ceiling_tt_supremacy:0 "[concept_judicial_independence] ceiling: #v 100#!, halved under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_ceiling_tt_algorithmic:0 "[concept_judicial_independence] ceiling: #v 60#!, halved under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_entrenchment_tt_constitutional:0 "Enacting a law on Distribution of Power, Governance Principles, Church and State, Citizenship, Free Speech, Internal Security, State Power or the Judiciary: #N -10%#! enactment success, unless the courts are ignored under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_entrenchment_tt_supremacy:0 "Enacting a law on Distribution of Power, Governance Principles, Church and State, Citizenship, Free Speech, Internal Security, State Power, the Judiciary, Rights of Women, Slavery, Minority Rights, LGBTQ+ Rights or Privacy Rights: #N -15%#! enactment success, unless the courts are ignored under Autocracy, Single-Party State or Algorithmic Governance"
- te_jud_capture_tt:0 "With Algorithmic Governance: #N +2#! [concept_legislative_override_capacity]"
 ```
 
-- [ ] **Step 8: Run `python3 organize_loc.py`, format the new `.txt` files, run the tests.** Expected: OK. Then check the concept and modifier loc render: `.venv/bin/python loc_render_audit.py --strict` (with the dummy env) reports nothing for `te_jud_*` or `concept_judicial_independence`.
+- [ ] **Step 8: Run `python3 organize_loc.py`, format the new `.txt` files, run the tests.** Expected: OK. Then `loc_render_audit.py --strict` and `concept_reference_audit.py --strict` (with the dummy env) report nothing new.
 
-- [ ] **Step 9: Commit** everything, including what `organize_loc.py` moved: `git commit -m "Judiciary: ceilings, the score's modifiers and the concept"`.
+- [ ] **Step 9: Commit** everything, including what `organize_loc.py` moved: `git commit -m "Judiciary: the ceiling, the score's modifiers and the concept"`.
 
 ---
 
@@ -818,7 +1021,7 @@ te_jud_supremacy_challenge = {
 
 **Interfaces:**
 - Consumes: Task 2's values, triggers and modifiers.
-- Produces: effects `te_jud_seed_score`, `te_jud_yearly_update`, `te_jud_refresh`, `te_jud_spend = { AMOUNT }`, `te_jud_assign_court_by_rule`; on-actions `te_jud_on_game_started`, `te_jud_monthly`, `te_jud_yearly`, `te_repair_judiciary_seed`; variables `te_judicial_independence`, `te_jud_modifier_mult`, `te_jud_seeded`; global `te_jud_world_seeded`.
+- Produces: effects `te_jud_seed_score`, `te_jud_yearly_update`, `te_jud_refresh`, `te_jud_spend = { AMOUNT }`, `te_jud_assign_court_by_rule`; on-actions `te_jud_on_game_started`, `te_jud_monthly`, `te_jud_yearly`, `te_repair_judiciary_seed`; variables `te_judicial_independence`, `te_jud_modifier_mult`, `te_jud_votes_mult`, `te_jud_authority_mult`, `te_jud_capture_mult`, `te_jud_seeded`; globals `te_jud_world_seeded`, `te_jud_courts_assigned`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -827,6 +1030,10 @@ EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_judiciary_effects
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "te_judiciary_on_actions.txt")
 REPAIRS = os.path.join(REPO, "common", "on_actions", "te_old_save_repairs.txt")
 HISTORY = os.path.join(REPO, "common", "history", "extra_history.txt")
+SCALED = ("te_judicial_independence", "te_jud_votes_legitimacy", "te_jud_unelected_authority",
+          "te_jud_algorithmic_capture")
+MULT_VARS = ("te_jud_modifier_mult", "te_jud_votes_mult", "te_jud_authority_mult", "te_jud_capture_mult",
+             "te_jud_overhaul_mult")
 
 
 def _script_files():
@@ -837,8 +1044,7 @@ def _script_files():
 
 class ScoreScriptTest(unittest.TestCase):
     def test_one_refresh_site(self):
-        write = re.compile(r"(?:add_modifier = \{\s*name = |remove_modifier = )"
-                           r"(?:te_judicial_independence|te_jud_algorithmic_capture)\b")
+        write = re.compile(r"(?:add_modifier = \{\s*name = |remove_modifier = )(?:%s)\b" % "|".join(SCALED))
         writers, callers = set(), []
         for path in _script_files():
             text = _read(path)
@@ -849,10 +1055,16 @@ class ScoreScriptTest(unittest.TestCase):
         self.assertEqual(callers, ["common/on_actions/te_judiciary_on_actions.txt"])
         self.assertIn("te_jud_refresh = yes", _block(_read(ON_ACTIONS), "te_jud_monthly"))
 
-    def test_multiplier_variable_is_never_removed(self):
+    def test_multiplier_variables_are_never_removed(self):
         for path in _script_files():
-            self.assertNotIn("remove_variable = te_jud_modifier_mult", _read(path), path)
-            self.assertNotIn("remove_variable = te_jud_overhaul_mult", _read(path), path)
+            for name in MULT_VARS:
+                self.assertNotIn("remove_variable = " + name, _read(path), path)
+
+    def test_refresh_reads_the_conditions(self):
+        block = _block(_read(EFFECTS), "te_jud_refresh")
+        self.assertIn("te_jud_elected_government = yes", block)
+        self.assertIn("NOT = { te_jud_elected_government = yes }", block)
+        self.assertIn("has_law = law_type:law_algorithmic_governance", block)
 
     def test_yearly_step(self):
         block = _block(_read(EFFECTS), "te_jud_yearly_update")
@@ -865,18 +1077,25 @@ class ScoreScriptTest(unittest.TestCase):
         self.assertIn("subtract = $AMOUNT$", block)
         self.assertIn("var:te_judicial_independence < 0", block)
 
+    def test_seeding_waits_for_the_monthly_pulse(self):
+        # Modifier sums may not be in place at on_game_started.
+        start = _block(_read(ON_ACTIONS), "te_jud_on_game_started")
+        self.assertNotIn("te_jud_seed_score", start)
+        self.assertIn("set_global_variable = te_jud_world_seeded", start)
+        monthly = _block(_read(ON_ACTIONS), "te_jud_monthly")
+        self.assertIn("has_global_variable = te_jud_world_seeded", monthly)
+        self.assertNotIn("te_jud_assign_court_by_rule", monthly, "a new country keeps its law")
+
     def test_old_save_seeding_is_a_marked_repair(self):
         text = _read(REPAIRS)
         self.assertIn("te_repair_judiciary_seed", _block(text, "on_monthly_pulse"))
         block = _block(text, "te_repair_judiciary_seed")
         self.assertIn("NOT = { has_global_variable = te_jud_world_seeded }", block)
         self.assertIn("te_jud_assign_court_by_rule = yes", block)
+        # The score is released a month after the courts change, once their
+        # modifiers are in place.
+        self.assertIn("has_global_variable = te_jud_courts_assigned", block)
         self.assertRegex(text, r"# OLD-SAVE REPAIR \(#\d+\): remove after \d{4}-\d{2}-\d{2}[^\n]*\n(#[^\n]*\n)*te_repair_judiciary_seed")
-
-    def test_new_country_keeps_its_law(self):
-        block = _block(_read(ON_ACTIONS), "te_jud_monthly")
-        self.assertNotIn("te_jud_assign_court_by_rule", block)
-        self.assertIn("has_global_variable = te_jud_world_seeded", block)
 
     def test_history(self):
         text = _read(HISTORY)
@@ -898,12 +1117,12 @@ class ScoreScriptTest(unittest.TestCase):
 #  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
 #  The score lives in var:te_judicial_independence (0-100) and nowhere else,
 #  so a revolution's winner inherits it and te_jud_refresh rebuilds the
-#  modifier.
+#  modifiers.
 # ======================================================================
 
 # An unset score starts at half the ceiling (spec § 5); history sets some
-# first. No modifier here: on_game_started has ROOT = none, and the first
-# monthly refresh applies it.
+# first. Called from the monthly pulse only, where the laws' modifier sums
+# are in place.
 te_jud_seed_score = {
 	if = {
 		limit = { NOT = { has_variable = te_judicial_independence } }
@@ -972,9 +1191,10 @@ te_jud_spend = {
 }
 
 # ROOT the country (te_jud_monthly, on_monthly_pulse_country). The ONLY
-# writer of te_judicial_independence and te_jud_algorithmic_capture. The
-# multiplier variable is kept, never removed: the engine re-reads it.
+# writer of the four scaled modifiers. Their multiplier variables are kept,
+# never removed: the engine re-reads them.
 te_jud_refresh = {
+	# The score (spec § 3.2).
 	if = {
 		limit = { has_variable = te_judicial_independence }
 		set_variable = {
@@ -993,25 +1213,69 @@ te_jud_refresh = {
 			}
 		}
 	}
+	# Statutory Courts' two lines (spec § 2.3): legitimacy from votes under an
+	# elected government, authority without one. Each multiplier is the law's
+	# tooltip line, so 0 under any other court.
+	set_variable = {
+		name = te_jud_votes_mult
+		value = te_jud_votes_mult_value
+	}
+	set_variable = {
+		name = te_jud_authority_mult
+		value = te_jud_authority_mult_value
+	}
+	if = {
+		limit = { has_modifier = te_jud_votes_legitimacy }
+		remove_modifier = te_jud_votes_legitimacy
+	}
+	if = {
+		limit = { has_modifier = te_jud_unelected_authority }
+		remove_modifier = te_jud_unelected_authority
+	}
 	if = {
 		limit = {
-			has_law = law_type:law_algorithmic_jurisprudence
-			has_law = law_type:law_algorithmic_governance
+			te_jud_elected_government = yes
+			var:te_jud_votes_mult > 0
 		}
-		if = {
-			limit = { NOT = { has_modifier = te_jud_algorithmic_capture } }
-			add_modifier = { name = te_jud_algorithmic_capture }
+		add_modifier = {
+			name = te_jud_votes_legitimacy
+			multiplier = var:te_jud_votes_mult
 		}
 	}
 	else_if = {
+		limit = {
+			NOT = { te_jud_elected_government = yes }
+			var:te_jud_authority_mult > 0
+		}
+		add_modifier = {
+			name = te_jud_unelected_authority
+			multiplier = var:te_jud_authority_mult
+		}
+	}
+	# Algorithmic Jurisprudence's capture (spec § 2.6).
+	set_variable = {
+		name = te_jud_capture_mult
+		value = te_jud_capture_mult_value
+	}
+	if = {
 		limit = { has_modifier = te_jud_algorithmic_capture }
 		remove_modifier = te_jud_algorithmic_capture
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_algorithmic_governance
+			var:te_jud_capture_mult > 0
+		}
+		add_modifier = {
+			name = te_jud_algorithmic_capture
+			multiplier = var:te_jud_capture_mult
+		}
 	}
 }
 
 # The starting court by rule (spec § 5): history, and an old save's one-time
-# seeding (te_repair_judiciary_seed). activate_law ignores unlock technologies,
-# as history does.
+# seeding (te_repair_judiciary_seed). activate_law ignores unlock
+# technologies, as history does.
 te_jud_assign_court_by_rule = {
 	if = {
 		limit = {
@@ -1054,8 +1318,10 @@ te_jud_assign_court_by_rule = {
 #  Effects: common/scripted_effects/te_judiciary_effects.txt.
 # ======================================================================
 
-# Every 1836 country's score: half its ceiling unless history set it. ROOT is
-# none here, so nothing applies a multiplier (the refresh is monthly).
+# A new game: history has set every court. The scores are seeded at the
+# first monthly pulse (te_jud_monthly), where the laws' modifier sums are
+# certainly in place; this only marks the world as seeded, so the old-save
+# repair (te_old_save_repairs.txt) never runs.
 on_game_started = {
 	on_actions = {
 		te_jud_on_game_started
@@ -1064,16 +1330,13 @@ on_game_started = {
 
 te_jud_on_game_started = {
 	effect = {
-		every_country = {
-			te_jud_seed_score = yes
-		}
 		set_global_variable = te_jud_world_seeded
 	}
 }
 
-# Root = Country. A new country mid-game (release, secession) gets a score
-# from the law it holds; its law isn't changed. Then the refresh, the
-# modifiers' only writer.
+# Root = Country. A country with no score yet (every 1836 country on the
+# first pulse, a new country mid-game) gets one from the law it holds; its
+# law isn't changed. Then the refresh, the scaled modifiers' only writer.
 on_monthly_pulse_country = {
 	on_actions = {
 		te_jud_monthly
@@ -1106,27 +1369,33 @@ te_jud_yearly = {
 }
 ```
 
-- [ ] **Step 5: The old-save repair** in `common/on_actions/te_old_save_repairs.txt`: add `te_repair_judiciary_seed` to its `on_monthly_pulse` list and this block. Use the phase 1 PR's number and a date six weeks after its merge, as the file's other repairs do.
+- [ ] **Step 5: The old-save repair** in `common/on_actions/te_old_save_repairs.txt`: add `te_repair_judiciary_seed` to its `on_monthly_pulse` list and this block. Use the phase 1 PR's number and a date six weeks after its merge, as the file's other repairs do, and schedule the removal reminder the file's header describes.
 
 ```
 # OLD-SAVE REPAIR (#<PR>): remove after <YYYY-MM-DD> or at vanilla 1.15, whichever comes first.
 #
 # The Judiciary group (docs/superpowers/specs/2026-10-17-judiciary-design.md
 # § 6) is new, so a save from before it gives every country Executive
-# Tribunals, the first law in te_judiciary_laws.txt, and no score. Once, on
-# the first monthly pulse: the starting court by rule, then the score. A new
-# game sets te_jud_world_seeded at on_game_started and never runs this. The
-# laws it activates never shock (te_judiciary_events.1 needs te_jud_seeded,
-# or finds the score at half the new ceiling).
+# Tribunals, the first law in te_judiciary_laws.txt, and no score. First
+# month: the starting court by rule. Second month: te_jud_world_seeded, which
+# lets te_jud_monthly seed each score from the new law's ceiling, its
+# modifier sums by then in place. A new game sets te_jud_world_seeded at
+# on_game_started and never runs this. The laws it activates never shock:
+# te_judiciary_events.1 needs te_jud_seeded.
 te_repair_judiciary_seed = {
 	effect = {
 		if = {
 			limit = { NOT = { has_global_variable = te_jud_world_seeded } }
-			every_country = {
-				te_jud_assign_court_by_rule = yes
-				te_jud_seed_score = yes
+			if = {
+				limit = { has_global_variable = te_jud_courts_assigned }
+				set_global_variable = te_jud_world_seeded
 			}
-			set_global_variable = te_jud_world_seeded
+			else = {
+				every_country = {
+					te_jud_assign_court_by_rule = yes
+				}
+				set_global_variable = te_jud_courts_assigned
+			}
 		}
 	}
 }
@@ -1161,7 +1430,7 @@ For example, in `c:USA`:
 		set_variable = { name = te_judicial_independence value = 60 }
 ```
 
-- [ ] **Step 7: Format, run the tests.** Expected: OK. Also `.venv/bin/python script_argument_audit.py --strict` (the `te_jud_spend` signature) and `.venv/bin/python change_variable_clamp_audit.py --strict`.
+- [ ] **Step 7: Format, run the tests.** Expected: OK. Also `.venv/bin/python script_argument_audit.py --strict` (the `te_jud_spend` signature), `.venv/bin/python change_variable_clamp_audit.py --strict` and `.venv/bin/python modifier_multiplier_var_audit.py --strict`.
 
 - [ ] **Step 8: Commit**: `git commit -m "Judiciary: Judicial Independence, its refresh and the starting courts"`.
 
@@ -1220,11 +1489,15 @@ class EntrenchmentTest(unittest.TestCase):
         self.assertEqual(set(core), CORE_GROUPS)
         self.assertEqual(set(rights), RIGHTS_GROUPS)
 
-    def test_paper_courts_challenge_nothing(self):
+    def test_the_laws_lines_pick_the_tier(self):
         block = _block(_read(ON_ACTIONS), "te_jud_enactment_started")
         self.assertEqual(block.count("NOT = { te_jud_paper_court = yes }"), 2)
+        self.assertIn("modifier:country_constitutional_law_enactment_success_add <= -0.15", block)
+        self.assertIn("modifier:country_rights_law_enactment_success_add <= -0.15", block)
+        self.assertIn("modifier:country_constitutional_law_enactment_success_add < 0", block)
         self.assertIn("add_enactment_modifier = { name = te_jud_supremacy_challenge }", block)
         self.assertIn("add_enactment_modifier = { name = te_jud_constitutional_challenge }", block)
+        self.assertNotIn("has_law", block, "the tooltip's numbers decide, not a law check")
 
     def test_self_check_is_once_a_game_and_excludes_no_enactment(self):
         block = _block(_read(EFFECTS), "te_jud_selfcheck_enacting_scope")
@@ -1262,8 +1535,8 @@ te_jud_enacting_core_law = {
 	}
 }
 
-# Judicial Supremacy's wider reach: Rights of Women, Slavery, Minority Rights,
-# LGBTQ+ Rights, Privacy Rights.
+# The rights groups (Judicial Supremacy's wider reach): Rights of Women,
+# Slavery, Minority Rights, LGBTQ+ Rights, Privacy Rights.
 te_jud_enacting_rights_law = {
 	currently_enacting_law ?= {
 		type = {
@@ -1284,7 +1557,7 @@ te_jud_enacting_rights_law = {
 ```
 # Once a game (spec § 9; CLAUDE.md "In-game checks"): does
 # currently_enacting_law resolve at on_law_enactment_started? Only a country
-# under a reviewing court, and only while an enactment runs, so a missing link
+# whose court challenges, and only while an enactment runs, so a missing link
 # can't read as OK. No line at all after such an enactment means the hook's
 # ROOT isn't the country.
 te_jud_selfcheck_enacting_scope = {
@@ -1292,10 +1565,8 @@ te_jud_selfcheck_enacting_scope = {
 		limit = {
 			NOT = { has_global_variable = te_jud_selfcheck_enacting_done }
 			enacting_any_law = yes
-			OR = {
-				has_law = law_type:law_constitutional_review
-				has_law = law_type:law_judicial_supremacy
-			}
+			modifier:country_constitutional_law_enactment_success_add < 0
+			NOT = { te_jud_paper_court = yes }
 		}
 		set_global_variable = te_jud_selfcheck_enacting_done
 		if = {
@@ -1312,8 +1583,10 @@ te_jud_selfcheck_enacting_scope = {
 - [ ] **Step 5: The on-action** (append to `te_judiciary_on_actions.txt`). The Forceful Legislation event fires from the same hook and calls `add_enactment_modifier` the same way.
 
 ```
-# Root = Country. Entrenchment (spec § 3.4): a reviewing court that isn't a
-# paper court challenges laws in its protected groups.
+# Root = Country. Entrenchment (spec § 3.4): the laws' tooltip lines say how
+# much a court challenges each kind of law; the engine needs a named
+# enactment modifier, so the line picks one of two tiers (test_judiciary.py
+# holds every line to a tier). A paper court challenges nothing.
 on_law_enactment_started = {
 	on_actions = {
 		te_jud_enactment_started
@@ -1324,20 +1597,33 @@ te_jud_enactment_started = {
 	effect = {
 		if = {
 			limit = {
-				has_law = law_type:law_judicial_supremacy
 				NOT = { te_jud_paper_court = yes }
 				OR = {
-					te_jud_enacting_core_law = yes
-					te_jud_enacting_rights_law = yes
+					AND = {
+						te_jud_enacting_core_law = yes
+						modifier:country_constitutional_law_enactment_success_add <= -0.15
+					}
+					AND = {
+						te_jud_enacting_rights_law = yes
+						modifier:country_rights_law_enactment_success_add <= -0.15
+					}
 				}
 			}
 			add_enactment_modifier = { name = te_jud_supremacy_challenge }
 		}
 		else_if = {
 			limit = {
-				has_law = law_type:law_constitutional_review
 				NOT = { te_jud_paper_court = yes }
-				te_jud_enacting_core_law = yes
+				OR = {
+					AND = {
+						te_jud_enacting_core_law = yes
+						modifier:country_constitutional_law_enactment_success_add < 0
+					}
+					AND = {
+						te_jud_enacting_rights_law = yes
+						modifier:country_rights_law_enactment_success_add < 0
+					}
+				}
 			}
 			add_enactment_modifier = { name = te_jud_constitutional_challenge }
 		}
@@ -1346,7 +1632,7 @@ te_jud_enactment_started = {
 }
 ```
 
-- [ ] **Step 6: Format, run the tests**, plus `.venv/bin/python effect_trigger_validity_audit.py` on the new files (it knows `currently_enacting_law`, `is_same_law_group_as`, `add_enactment_modifier`). Expected: OK, no new flags.
+- [ ] **Step 6: Format, run the tests**, plus `.venv/bin/python effect_trigger_validity_audit.py` (it knows `currently_enacting_law`, `is_same_law_group_as`, `add_enactment_modifier`). Expected: OK, no new flags.
 
 - [ ] **Step 7: Commit**: `git commit -m "Judiciary: entrenchment under reviewing courts, with its self-check"`.
 
@@ -1366,9 +1652,7 @@ te_jud_enactment_started = {
 
 ```python
 EVENTS = os.path.join(REPO, "events", "te_judiciary_events.txt")
-CEILING_LAWS = set(COURT_LAWS) | {
-    "law_autocracy", "law_bakufu", "law_neo_absolutism", "law_single_party_state", "law_algorithmic_governance",
-}
+CEILING_LAWS = set(COURT_LAWS) | set(PAPER_COURT_LAWS)
 
 
 class ShockTest(unittest.TestCase):
@@ -1376,6 +1660,8 @@ class ShockTest(unittest.TestCase):
         block = _block(_read(ON_ACTIONS), "te_jud_law_activated")
         self.assertEqual(set(re.findall(r"type = law_type:(\w+)", block)), CEILING_LAWS)
         self.assertIn("owner = {", block)
+        # The new law's modifier sums may lag the change.
+        self.assertIn("trigger_event = { id = te_judiciary_events.1 days = 7 }", block)
         self.assertNotIn("multiplier", block, "ROOT is the law here")
         self.assertNotIn("var:", block, "has_variable fails on law scopes")
 
@@ -1401,10 +1687,11 @@ class ShockTest(unittest.TestCase):
 ```
 namespace = te_judiciary_events
 
-# The court overhaul (spec § 3.5). Fired by te_jud_law_activated on the
-# country, so ROOT is the country and the multiplier resolves here. The gap
-# is stored once: a script value would drift as the score decays. A second
-# shock replaces the first.
+# The court overhaul (spec § 3.5). Fired a week after a ceiling law changes
+# (te_jud_law_activated), on the country, so ROOT is the country and the
+# multiplier resolves here, and the new law's modifier sums are in place. The
+# gap is stored once: a script value would drift as the score decays. A
+# second shock replaces the first.
 te_judiciary_events.1 = {
 	type = country_event
 	hidden = yes
@@ -1442,8 +1729,9 @@ te_judiciary_events.1 = {
 ```
 # ROOT = the law (scripting_best_practices.md § "Checking the Type of the Law
 # in on_law_activated"). Script values that read country variables fail on a
-# law scope, so this only matches the type of every law that sets the
-# ceiling and leaves the arithmetic to te_judiciary_events.1 on the owner.
+# law scope, so this only matches the type of every law that moves the
+# ceiling and leaves the arithmetic to te_judiciary_events.1 on the owner,
+# a week later, once the new law's modifier sums are in place.
 on_law_activated = {
 	on_actions = {
 		te_jud_law_activated
@@ -1469,7 +1757,7 @@ te_jud_law_activated = {
 				}
 			}
 			owner = {
-				trigger_event = { id = te_judiciary_events.1 }
+				trigger_event = { id = te_judiciary_events.1 days = 7 }
 			}
 		}
 	}
@@ -1808,7 +2096,7 @@ Match the depth of the peers (`CLAUDE.md` § "Keep the player guide current"): a
 | Judiciary | Executive Tribunals, Religious Courts, Statutory Courts, Constitutional Review, Judicial Supremacy, Algorithmic Jurisprudence | Who checks the government: authority and override capacity against legitimacy and credit. Stronger courts earn their benefits through Judicial Independence, which grows over decades. |
 ```
 
-Then a paragraph after the State Power paragraph: each court law sets a ceiling for **Judicial Independence** (0–100), which rises 4 a year toward it and falls 10 a year above it, halved under Autocracy, Single-Party State and Algorithmic Governance. At 100 it gives +10 legitimacy, −0.5pp credit standing, 10% more Capitalist investment and calmer losers of law changes. Constitutional Review and Judicial Supremacy slow changes to the constitutional law groups, by 10% and 15% enactment success. Cutting the courts far below the score shakes lenders and costs legitimacy for five years. Religious Courts need an established religion.
+Then a paragraph after the State Power paragraph: each court law sets a ceiling for **Judicial Independence** (0–100), which rises 4 a year toward it and falls 10 a year above it, halved under Autocracy, Single-Party State and Algorithmic Governance. At 100 it gives +10 legitimacy, −0.5pp credit standing, 10% more Capitalist investment and calmer losers of law changes. Statutory Courts give an elected government legitimacy from votes and an unelected one authority. Constitutional Review and Judicial Supremacy slow changes to the constitutional law groups, by 10% and 15% enactment success, and Judicial Supremacy the rights laws too; each law's tooltip lists what it does. Cutting the courts far below the score shakes lenders and costs legitimacy for five years. Religious Courts need an established religion.
 
 - [ ] **Step 2: `06-politics.md`, § "Forceful Legislation"**: add the court laws to the sources sentence (Executive Tribunals +1; Constitutional Review −2, Judicial Supremacy −3; Algorithmic Jurisprudence +2 under Algorithmic Governance), and to the table's "Lasting cost" column, "Judicial Independence −5 / −10 / −20".
 
@@ -1828,12 +2116,13 @@ Then a paragraph after the State Power paragraph: each court law sets a ceiling 
 - [ ] **Step 1: Write it**, in the shape of `docs/testing/demographics-playtest.md`: a Self-checks table (name, what OK and BROKEN mean, the fallback) and a checklist:
   - **Self-check** `judiciary_enacting_law_scope`: OK means entrenchment can see the law. BROKEN, or no line at all after a reviewing court's enactment, means move the work into a hidden event fired from `on_law_enactment_started` (Forceful Legislation's route).
   - **Lobby (1836):** the United States shows Constitutional Review, Persia and the Ottoman Empire Religious Courts, Britain, France and Prussia Statutory Courts, Russia and Qing Executive Tribunals (the scripted effect ran from history).
-  - **February 1836:** the Judicial Independence modifier shows in Britain's modifiers with the scaled values; the concept reads "Now 70, heading for 70".
+  - **February 1836:** the Judicial Independence modifier shows in Britain's modifiers with the scaled values; the concept reads "Now 70, heading for 70". Britain (an elected government) shows Supremacy of Statute as legitimacy from votes; Prussia, if it has no voting law, as +25 authority.
+  - **Tooltips:** each court law's tooltip lists its ceiling and its other lines; Autocracy's lists "Judicial Independence Ceiling −50%" and "Courts Can’t Challenge the Government"; the country panel's Modifiers tab shows the ceiling's breakdown.
   - **Entrenchment:** as the United States, start Universal Suffrage; the enactment shows "Constitutional Challenge".
   - **Spending:** Forceful Legislation's options show the score's cost; next month the modifier is smaller.
-  - **Shock:** as the United States, enact Executive Tribunals (console); a hidden event applies Court Overhaul, decaying over 5 years, with middle-strata radicals.
+  - **Shock:** as the United States, enact Executive Tribunals (console); a week later a hidden event applies Court Overhaul, decaying over 5 years, with middle-strata radicals.
   - **Secularizing:** as the Ottoman Empire with Rationalism, enact Total Separation; the courts become Statutory Courts.
-  - **Old save:** load a save from before the group; within a month each country holds its rule-based court and a score.
+  - **Old save:** load a save from before the group; within a month each country holds its rule-based court, and within two a score at half its ceiling.
   - **AI:** over 50 years, count court-law changes per country: flip-flopping is a red flag.
 
 - [ ] **Step 2: Commit**: `git commit -m "Judiciary: play-test list"`.

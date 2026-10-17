@@ -19,11 +19,11 @@ Three existing mechanics take the group's effects with no new plumbing:
   (`minor_events_timelineextended.2`, fired from `on_law_enactment_started`) offers its options at 0, 2 and 4; the tax
   code's Force Through needs 2 (`te_tax_can_force_through`). A court law adds or subtracts like any other source.
 - **Credit standing** (`country_credit_standing_add`, `common/modifier_type_definitions/banking_cycle_modifier_types.txt`).
-  A **positive** value raises the structural risk premium. The premium is floored at 0.5pp (`te_mon_standing_floor`),
-  moved by `country_credit_standing_floor_add` (Central Bank Independence −0.25pp). Rank alone adds +0.5pp for a great
-  power, +2pp for a minor power, +8pp for an unrecognized power and +10pp for a decentralized one
-  (`common/country_ranks/te_monetary_rank_injections.txt`), so a great power already sits on the floor and standing
-  earned below it is wasted (§ 4.3). For scale: the gold standard is −1pp and Central Bank Independence −0.5pp.
+  A **positive** value raises the structural risk premium. The premium is floored at 0.5pp (`te_mon_standing_floor`).
+  Rank alone adds +0.5pp for a great power, +2pp for a minor power, +8pp for an unrecognized power and +10pp for a
+  decentralized one (`common/country_ranks/te_monetary_rank_injections.txt`), so a great power already sits on the
+  floor and standing earned below it is wasted (§ 4.3). For scale: the gold standard is −1pp and Central Bank
+  Independence −0.5pp.
 - **Legitimacy.** Vanilla's distribution-of-power laws grant tens of points through `country_legitimacy_headofstate_add`
   and the clout and vote terms. The mod's laws and amendments use ±5 to ±10 of `country_legitimacy_base_add`.
 
@@ -34,18 +34,22 @@ Three existing mechanics take the group's effects with no new plumbing:
 | Laws | Six: Executive Tribunals, **Religious Courts** (added to the original five for the 1836 Islamic world), Statutory Courts, Constitutional Review, Judicial Supremacy, Algorithmic Jurisprudence |
 | Names | **Judicial Supremacy**, not "Judicial Activism", which is a partisan label (interest groups may still say "activism" in event text). **Statutory Courts**, not "Legislative Supremacy", which implies a legislature: the name covers Prussia's code-bound judges under a king as well as Britain's under Parliament |
 | Judicial Supremacy's description | Must make clear that the courts don't take day-to-day decisions. They decide the cases brought to them. If they governed, it would be a Distribution of Power law |
+| Judicial Supremacy's numbers | Legitimacy −5 (+5 net at full independence, against Constitutional Review's +10); movement radicalism −10%, pop attraction +10% |
+| Judicial Supremacy's gate | **None.** From Statutory Courts it is a legislature legislating itself out of supremacy. Had it to follow Constitutional Review only, it would be an amendment to that law instead |
+| Statutory Courts | A small thematic bonus, by who makes the law: legitimacy from votes under an elected government, authority without one (§ 2.3) |
+| Tooltips | Every rule a player plans around is on the law's tooltip, as a script-only modifier line the script reads (§ 2.7). No player should be surprised that a law is hard to change under Constitutional Review |
+| Constitutional Review's technology | Human Rights (era 3). The United States holds the law from history before it has the technology, a pattern the mod already has |
+| Credit floor | **No.** The score doesn't move the floor; the credit benefit goes to the countries below it (§ 4.3) |
 | Judicial Independence | A slowly built score patterned on the Tradition of Free Elections (§ 3) |
 | Effects kept | Less radicalism from enactment disapproval and dearer suppression (owner: yes). Capitalist investment (owner: maybe), kept because it scales by itself with how much of the economy is in private hands, so the courts matter more in a market economy (§ 3.2) |
 | Effects left out | A pro-minority radicalism effect: a constitution can as easily thwart protections as extend them (Dred Scott, 1857; the Civil Rights Cases, 1883), so the courts' rights effect is neutral entrenchment instead (§ 3.4). Migration attraction: the owner is unsure, so it stays out of v1 |
 | Defying the court; the overhaul shock | In: the shock in phase 1 (§ 3.5), the court challenge in phase 2 (§ 10) |
 | Landmark cases | v2. Each case's trigger must be keyed to game state, never a date or a tag, since the alternate timeline may lack the context by the 20th century |
 | Amendments | In, phase 3 (§ 10) |
+| A tab for national modifiers | The owner wants one: a Timeline Extended window tab for scores such as Judicial Independence and Legislative Override Capacity, with the country panel's modifier list hiding them. A separate spec (§ 13) |
 | First PR | This spec and the phase 1 plan only |
 
-**Awaiting the owner.** Five proposals in this spec have not been ruled on: Judicial Supremacy's legitimacy (§ 2.5),
-how Judicial Independence is shown (§ 3.6), the credit floor (§ 4.3), Constitutional Review's technology and Judicial
-Supremacy's transition gate (§ 2.4, § 2.5). § 12 lists them. The values throughout are first proposals, to be tuned in
-the phase 1 play-test.
+The values throughout are first proposals, to be tuned in the phase 1 play-test.
 
 ## 1. The law group
 
@@ -68,24 +72,25 @@ file is what an unseeded country and an old save get (`docs/systems/mod_systems.
 
 The laws carry what the courts **can do** (their powers); Judicial Independence (§ 3) carries how far they are
 **trusted**. A law's flat modifiers hold override capacity, entrenchment, suppression cost, authority, staffing,
-interest-group clout and the credit cost of arbitrary justice. The legitimacy, the credit standing and its floor,
-capitalist investment and the radicalism damping all scale with the score. Each law sets the score's **ceiling**.
+interest-group clout and the credit cost of arbitrary justice. The legitimacy, the credit standing, capitalist
+investment and the radicalism damping all scale with the score. Each law sets the score's **ceiling**. Every
+conditional rule is a tooltip line (§ 2.7).
 
 | Law | Key | Progressiveness | Unlock and gates | Ceiling | Flat modifiers |
 |---|---|---|---|---|---|
 | Executive Tribunals | `law_executive_tribunals` | −50 | None; first in file | 10 | Override +1; authority +50; suppression cost −10%; credit standing +1pp |
 | Religious Courts | `law_religious_courts` | −20 | Not under Total Separation or State Atheism (`disallowing_laws`) | 40 | Devout +15% political strength; population bureaucracy cost −5%; credit standing +0.5pp |
-| Statutory Courts | `law_statutory_courts` | 0 | `rationalism` | 70 | Suppression cost +10%; population bureaucracy cost +5% |
-| Constitutional Review | `law_constitutional_review` | 50 | `human_rights` (proposal, § 2.4) | 100 | Override −2; suppression cost +25%; population bureaucracy cost +5%; entrenchment (§ 3.4) |
-| Judicial Supremacy | `law_judicial_supremacy` | 75 | `civil_rights_movement`; from Constitutional Review only (proposal, § 2.5) | 100 | Override −3; suppression cost +40%; population bureaucracy cost +5%; wider entrenchment; legitimacy −3; credit standing +0.3pp; ideological incoherence penalty −25%; movement radicalism −5%, movement pop attraction +5% |
+| Statutory Courts | `law_statutory_courts` | 0 | `rationalism` | 70 | Suppression cost +10%; population bureaucracy cost +5%; with an elected government +10 legitimacy from votes, without one +25 authority |
+| Constitutional Review | `law_constitutional_review` | 50 | `human_rights` | 100 | Override −2; suppression cost +25%; population bureaucracy cost +5%; constitutional laws' enactment success −10% (§ 3.4) |
+| Judicial Supremacy | `law_judicial_supremacy` | 75 | `civil_rights_movement` | 100 | Override −3; suppression cost +40%; population bureaucracy cost +5%; constitutional and rights laws' enactment success −15%; legitimacy −5; credit standing +0.3pp; ideological incoherence penalty −25%; movement radicalism −10%, movement pop attraction +10% |
 | Algorithmic Jurisprudence | `law_algorithmic_jurisprudence` | 25 | `generative_ai` | 60 | Population bureaucracy cost −10%; override +2 while Algorithmic Governance is in force (§ 2.6) |
 
 Modifier keys: `country_legislative_override_capacity_add`, `country_authority_add`, `country_suppression_cost_mult`,
 `country_credit_standing_add` (0.01 = 1pp; the modifier displays one decimal place), `interest_group_ig_devout_pol_str_mult`,
 `state_bureaucracy_population_base_cost_factor_mult` (the privacy laws' lever, ±0.05 to ±0.1),
 `country_legitimacy_base_add`, `country_legitimacy_ideological_incoherence_mult` (vanilla uses −0.25 to +0.5),
-`political_movement_radicalism_add`, `political_movement_pop_attraction_mult`. All are vanilla or already registered by
-the mod.
+`political_movement_radicalism_add`, `political_movement_pop_attraction_mult`, and the script-only lines of § 2.7. All
+are vanilla, already registered by the mod, or registered by this group.
 
 Progressiveness orders the consistency walk (`gen_law_consistency.py`: the nearest valid law by progressiveness
 replaces an invalid one). A country holding Religious Courts that enacts Total Separation or State Atheism drops to
@@ -129,16 +134,21 @@ are still judges in Berlin"), the Netherlands, Belgium, Sweden. Taff Vale (1901)
 strike losses and Parliament reversed them by statute in 1906, is the law's whole idea. It costs no override and buys a
 ceiling of 70.
 
+**The bonus follows whoever makes the law** (owner). Under an elected government (a voting law or Anarchy, which the
+mod counts as electoral) the legislature's word is final, and the government elected to make it gains standing: +10
+legitimacy from votes (`country_legitimacy_govt_total_votes_add`, Presidential Republic's figure). Without one, the
+crown's word is final: +25 authority, half of Executive Tribunals' +50, which keeps its override and cheap
+suppression. Both show on the law's tooltip as conditional lines (§ 2.7); `te_jud_refresh` applies whichever holds.
+
 ### 2.4 Constitutional Review
 
 Courts may strike down laws that breach a written constitution. 1836: the United States (Marbury v. Madison, 1803).
 Later adopters: Mexico's *amparo* (1847), Norway (1866), Austria's Constitutional Court (1920), West Germany (1951),
 Italy (1956). Override −2, dearer suppression and entrenchment (§ 3.4) pay for the highest ceiling.
 
-**Proposal: unlock at Human Rights (era 3), not Democracy (era 1).** The obstacle in 19th-century Europe was the
-doctrine of parliamentary sovereignty, not technology. At era 1, Britain and France would have it from day one and the
-AI's liberal groups would push it in the 1840s. The United States holds it from history, which ignores unlock
-technologies.
+It unlocks at **Human Rights** (era 3, owner). The obstacle in 19th-century Europe was the doctrine of parliamentary
+sovereignty, not technology: at Democracy (era 1), Britain and France would have it from day one and the AI's liberal
+groups would push it in the 1840s. The United States holds it from history, which ignores unlock technologies.
 
 ### 2.5 Judicial Supremacy
 
@@ -147,27 +157,26 @@ sometimes rule on constitutional amendments themselves (India's basic structure 
 Other examples: the Warren Court (1953–69), Israel's "constitutional revolution" (1992–95), Colombia's court after
 1991.
 
-**Description requirement (owner).** The law's description must say the courts do not govern. A draft:
+**Description requirement (owner).** The law's description must say the courts do not govern:
 
 > The courts decide only the cases brought before them, and the government still governs. But the courts' reading of
 > the constitution binds the legislature, reaches rights the text does not name, and no ordinary law can overturn it.
 
-**Does overriding parliament make courts more legitimate? Proposal: no, so legitimacy peaks at Constitutional Review.**
-Research on public support for courts finds that it rests on the court being seen as a legal body rather than a
-political one. It falls when rulings look partisan: confidence in the US Supreme Court fell to 25% in Gallup's 2022
-poll after Dobbs. So Judicial Supremacy keeps the full ceiling (an old, independent court is still trusted) but pays a
-flat −3 legitimacy as a contested court, netting +7 at full independence against Constitutional Review's +10.
+**Legitimacy peaks at Constitutional Review.** Research on public support for courts finds that it rests on the court
+being seen as a legal body rather than a political one, and it falls when rulings look partisan: confidence in the US
+Supreme Court fell to 25% in Gallup's 2022 poll after Dobbs. Judicial Supremacy keeps the full ceiling (an old,
+independent court is still trusted) but pays a flat −5 legitimacy as a contested court, netting +5 at full
+independence against Constitutional Review's +10 (owner).
 
 What it offers instead is the reason politicians empower such courts. Divisive questions go to the court, so a
 coalition of groups that disagree can govern (Mark Graber, "The Nonmajoritarian Difficulty", 1993). That is a −25%
-ideological incoherence penalty. Movements litigate: radicalism −5%, pop attraction +5%. They win more in court and
-riot less. The costs are override −3, the widest entrenchment, suppression +40% and +0.3pp credit standing, since
-lenders can't predict policy made by rulings.
+ideological incoherence penalty. Movements litigate: radicalism −10%, pop attraction +10% (owner). They win more in
+court and riot less. The costs are override −3, the widest entrenchment, suppression +40% and +0.3pp credit standing,
+since lenders can't predict policy made by rulings.
 
-**Proposal: enacted only from Constitutional Review** (`unlocking_laws = { law_constitutional_review }`). This is a
-transition gate from the law's own group, which the consistency walk treats as a gate, not a standing requirement
-(the Legacy Slavery precedent in `gen_law_consistency.py`). Supremacy grows out of review. It is not a leap from
-magistrates' courts.
+**Reachable from any court** (owner). From Statutory Courts it is a legislature legislating itself out of supremacy,
+as Israel's Knesset did with its 1992 Basic Laws. Had it to follow Constitutional Review only, it would be an amendment
+to that law rather than a law of its own.
 
 ### 2.6 Algorithmic Jurisprudence
 
@@ -176,26 +185,58 @@ Court (2017) are the start of it. Risk-scoring tools such as COMPAS (ProPublica,
 The machine can't be leaned on case by case, but whoever trains it decides what it rules. It is cheap: population
 bureaucracy cost −10%.
 
-**The capture.** With Algorithmic Governance also in force, the same system writes the law and judges it: override +2,
-from a separate modifier (`te_jud_algorithmic_capture`, § 3.2's refresh). That's on top of the paper-court halving of
-the ceiling (§ 3.1, 60 → 30). Combined, the two algorithmic laws become an override tool rather than a check.
+**The capture.** With Algorithmic Governance also in force, the same system writes the law and judges it: override +2.
+That's on top of the paper-court halving of the ceiling (§ 3.1, 60 → 30). Combined, the two algorithmic laws become an
+override tool rather than a check.
+
+### 2.7 Every rule on the tooltip
+
+The owner's rule: a player must be able to read every rule they plan around from the tooltips. The banking dials are
+the pattern (`banking_cycle_modifier_types.txt`): the law carries the number as a `script_only` modifier line, so its
+own tooltip states the rule and the engine renders the breakdown, and script reads the sum and applies the effect.
+A later law, technology or amendment moves the same dial without a script edit.
+
+| Line (`common/modifier_type_definitions/judiciary_modifier_types.txt`) | On | Read by |
+|---|---|---|
+| `country_judicial_independence_ceiling_add` | Each court law: 10, 40, 70, 100, 100, 60 | `te_jud_ceiling` |
+| `country_judicial_independence_ceiling_mult` | The paper courts (§ 3.1): −50% | `te_jud_ceiling` |
+| `country_court_challenges_ignored_bool` | The paper courts | `te_jud_paper_court` (§ 3.4) |
+| `country_constitutional_law_enactment_success_add` | Constitutional Review −10%, Judicial Supremacy −15% | `te_jud_enactment_started` (§ 3.4) |
+| `country_rights_law_enactment_success_add` | Judicial Supremacy −15% | `te_jud_enactment_started` |
+| `country_legitimacy_from_votes_if_elected_add` | Statutory Courts +10 | `te_jud_refresh` (§ 2.3) |
+| `country_authority_if_unelected_add` | Statutory Courts +25 | `te_jud_refresh` |
+| `country_override_with_algorithmic_governance_add` | Algorithmic Jurisprudence +2 | `te_jud_refresh` (§ 2.6) |
+
+Each line's name says when it applies ("Legitimacy from Votes, with an Elected Government") and its description lists
+the law groups or laws involved. So Constitutional Review's tooltip shows "Enactment Success of Constitutional Laws
+−10%" before the player enacts it, and Autocracy's shows "Judicial Independence Ceiling −50%" and "Courts Can’t
+Challenge the Government". The paper-court lines are INJECTed into Autocracy, Bakufu, Neo-Absolutism and Single-Party
+State (`common/laws/te_judiciary_law_injections.txt`; INJECTed modifier blocks add to a law's own) and written inline in
+Algorithmic Governance.
+
+Where the engine needs a named modifier, the line picks it. Entrenchment's enactment modifiers come in two tiers, −10%
+and −15%, and every enactment-success line must be one of them (`test_judiciary.py`). The ceiling and the conditional
+lines need no tiers: they are read as numbers.
 
 ## 3. Judicial Independence
 
 ### 3.1 The score
 
 - `var:te_judicial_independence` on the country, 0–100.
-- **Ceiling**: the law's (§ 2), halved under a **paper court**, a regime whose executive answers to nobody:
-  Autocracy and its variants (`has_law_or_variant = law_type:law_autocracy`), Single-Party State and Algorithmic
-  Governance. This is the soft cap for strong courts under autocracy. Constitutional Review stays enactable there,
-  but a court the autocrat can ignore earns half the trust.
-- **Yearly** (`on_yearly_pulse_country`): below the ceiling +4, stopping at it; above the ceiling −10, stopping at it. From
-  0, a Constitutional Review court reaches 100 in 25 years. A court that moved up from Statutory (70) gets there in 8.
+- **Ceiling** (`te_jud_ceiling`): the court law's ceiling line times the paper court's. A **paper court** is a regime
+  whose executive answers to nobody: Autocracy and its variants, Single-Party State and Algorithmic Governance. They
+  carry −50% on the ceiling. This is the soft cap for strong courts under autocracy: Constitutional Review stays
+  enactable there, but a court the autocrat can ignore earns half the trust.
+- **Yearly** (`on_yearly_pulse_country`): below the ceiling +4, stopping at it; above the ceiling −10, stopping at it.
+  From 0, a Constitutional Review court reaches 100 in 25 years. A court that moved up from Statutory (70) gets there in
+  8.
 - Patterned on the Tradition of Free Elections: earned slowly, and carried across a change of law. A country that leaves
   a strong court keeps its score above the new ceiling, losing 10 a year, so coming back within a few years recovers
   most of it (the owner's no-micromanagement default: progress isn't erased the moment the law changes).
-- State lives in variables only, so a revolution's winner inherits the score and the refresh rebuilds the modifier
+- State lives in variables only, so a revolution's winner inherits the score and the refresh rebuilds the modifiers
   (`scripting_best_practices.md` § "What a Civil War's Winner Inherits").
+- **Modifier sums lag a law change.** The ceiling is read from them, so nothing reads it on the day a law changes:
+  scores are first seeded at a monthly pulse (§ 6), and the shock waits a week (§ 3.5).
 
 ### 3.2 What it does
 
@@ -206,14 +247,13 @@ the variable is kept, never removed, since the engine re-reads it). Values at 10
 |---|---|---|
 | `country_legitimacy_base_add` | +10 | Trusted courts lend the state their authority |
 | `country_credit_standing_add` | −0.005 (−0.5pp) | Contracts and debts are enforced (North and Weingast, "Constitutions and Commitment", 1989) |
-| `country_credit_standing_floor_add` | −0.001 (−0.1pp) | Proposal, § 4.3 |
 | `state_capitalists_investment_pool_efficiency_mult` | +0.10 | Property is safe. Under Command Economy the investment pool is disabled (vanilla `country_disable_investment_pool_bool`), so this is worth nothing there; it is worth most where capitalists hold most of the wealth (Laissez-Faire). No condition is needed for courts to matter more in a market economy |
 | `political_movement_radicalism_from_enactment_disapproval_mult` | −0.20 | Losers accept an outcome a trusted court can review ("losers' consent", Anderson et al., 2005) |
 
-**Refresh.** One writer: `te_jud_refresh`, from `on_monthly_pulse_country` (ROOT = the country), the modifier's
-only refresh site. It sets the multiplier variable, removes and re-adds the modifier, and adds or removes
-`te_jud_algorithmic_capture`. The score changes yearly and when spent (§ 3.3), so the modifier lags a change by at most
-a month.
+**Refresh.** One writer: `te_jud_refresh`, from `on_monthly_pulse_country` (ROOT = the country), the only refresh site
+of the four scaled modifiers: the score's, Statutory Courts' two conditional ones (`te_jud_votes_legitimacy`,
+`te_jud_unelected_authority`, one unit each times the law's line) and the capture (`te_jud_algorithmic_capture`). The
+score changes yearly and when spent (§ 3.3), so the modifier lags a change by at most a month.
 
 ### 3.3 Spending it
 
@@ -230,8 +270,8 @@ under every court law: under Executive Tribunals the score is near 0, so they co
 
 ### 3.4 Entrenchment
 
-Under Constitutional Review or Judicial Supremacy, and not under a paper court, starting the enactment of a law in a
-**protected group** adds an enactment modifier (`add_enactment_modifier`, at `on_law_enactment_started`; the
+Under a court whose tooltip carries an enactment-success line, and not under a paper court, starting the enactment of
+a law in a **protected group** adds an enactment modifier (`add_enactment_modifier`, at `on_law_enactment_started`; the
 Forceful Legislation event uses the same call at the same hook):
 
 | Court | Protected groups | Enactment modifier |
@@ -245,6 +285,9 @@ as a reactionary one. Dred Scott and Brown v. Board both came from courts. The J
 reason to pack instead. Constitutional Review's rule also stands in for the vanilla per-law modifiers
 (`country_enactment_success_chance_law_autocracy_add` and its siblings) for every group at once.
 
+The player reads it in three places: the court law's tooltip before enacting it (§ 2.7), the enactment's own modifier
+list once a protected law is under way, and the concept.
+
 **Trigger.** `currently_enacting_law ?= { type = { OR = { is_same_law_group_as = law_type:<one law per group> … } } }`
 (`currently_enacting_law` is a country → law link, `type` a law → law type link, `is_same_law_group_as` a law type
 trigger: `docs/engine/event_targets_summary.txt`, `triggers_summary.txt`). Whether the link resolves at this hook is
@@ -252,9 +295,9 @@ unread. The once-a-game self-check (§ 9) reports it.
 
 ### 3.5 The overhaul shock
 
-When any law that sets the ceiling is activated (the six court laws, Autocracy and its variants, Single-Party State,
-Algorithmic Governance), a hidden country event checks the gap between the score and the new ceiling. At 20 or more it
-applies `te_jud_court_overhaul` for 5 years, decaying, with `multiplier` = gap ÷ 100:
+When any law that moves the ceiling is activated (the six court laws, Autocracy and its variants, Single-Party State,
+Algorithmic Governance), a hidden country event checks the gap between the score and the new ceiling a week later. At
+20 or more it applies `te_jud_court_overhaul` for 5 years, decaying, with `multiplier` = gap ÷ 100:
 
 | Modifier | At a gap of 100 |
 |---|---|
@@ -268,42 +311,41 @@ Historical anchors: Moody's lowered Israel's outlook in April 2023, citing the j
 from Poland over its 2015–23 court changes.
 
 `on_law_activated` runs with ROOT = the law, and script values that read country variables fail there
-(`scripting_best_practices.md`). The on-action only matches the law type and fires `te_judiciary_events.1` on `owner`.
-The event does the arithmetic with ROOT = the country, so the multiplier resolves correctly. It needs `te_jud_seeded`,
-so seeding (§ 6) never shocks. A revolution's winner doesn't inherit the shock (no modifiers are inherited); that's
-accepted.
+(`scripting_best_practices.md`). The on-action only matches the law type and fires `te_judiciary_events.1` on `owner`,
+seven days on, once the new law's modifier sums are in place. The event does the arithmetic with ROOT = the country, so
+the multiplier resolves correctly. It needs `te_jud_seeded`, so seeding (§ 6) never shocks. A revolution's winner
+doesn't inherit the shock (no modifiers are inherited); that's accepted.
 
-### 3.6 How it is shown (proposal)
+### 3.6 How it is shown
 
-The owner is torn. **Proposal: visible, without a journal entry.** The score is something the player invests in for
-decades and spends at decision time ("Judicial Independence −10" must mean something when it's offered), and the house
-style puts dynamic content in the open (`docs/guides/gui_style_guide.md` rule 1). But a journal entry is for a system
-the player works through, and phase 1 has nothing to press. The Inheritance concentration score is the precedent:
+Phase 1 shows the score without a journal entry, the Inheritance concentration score's way:
 
 - a game concept, `concept_judicial_independence`, whose description explains the score and ends with
   "Now #v X#!, heading for #v Y#!." (`te_jud_display`, `te_jud_ceiling`), as `concept_inheritance_concentration_desc`
   does;
 - the scaled `te_judicial_independence` modifier in the country's modifier list, showing what the score buys now;
-- each court law's `on_enact` tooltip naming its ceiling;
+- each court law's tooltip lines (§ 2.7);
 - each spending option naming its cost.
 
-If phase 2's court challenges make the score something the player manages, a small section in an existing panel can
-follow.
+The national modifiers tab (§ 13) then gives the score a row of its own and takes the modifier out of the country
+panel's list.
 
 ## 4. Balance
 
 ### 4.1 At full independence, with no paper court
 
-| Law | Score | Legitimacy | Credit standing | Floor | Override | Other |
-|---|---|---|---|---|---|---|
-| Executive Tribunals | 10 | +1 | +0.95pp | −0.01pp | +1 | Authority +50, cheaper suppression |
-| Religious Courts | 40 | +4 | +0.30pp | −0.04pp | 0 | Devout clout, cheaper administration |
-| Statutory Courts | 70 | +7 | −0.35pp | −0.07pp | 0 | — |
-| Constitutional Review | 100 | +10 | −0.50pp | −0.10pp | −2 | Entrenchment, suppression +25% |
-| Judicial Supremacy | 100 | +7 | −0.20pp | −0.10pp | −3 | Incoherence −25%, wider entrenchment, suppression +40% |
-| Algorithmic Jurisprudence | 60 | +6 | −0.30pp | −0.06pp | 0 (+2) | Administration −10% |
+| Law | Score | Legitimacy | Credit standing | Override | Other |
+|---|---|---|---|---|---|
+| Executive Tribunals | 10 | +1 | +0.95pp | +1 | Authority +50, cheaper suppression |
+| Religious Courts | 40 | +4 | +0.30pp | 0 | Devout clout, cheaper administration |
+| Statutory Courts | 70 | +7, and +10 from votes if elected | −0.35pp | 0 | +25 authority if unelected |
+| Constitutional Review | 100 | +10 | −0.50pp | −2 | Entrenchment, suppression +25% |
+| Judicial Supremacy | 100 | +5 | −0.20pp | −3 | Incoherence −25%, movements calmer but stronger, wider entrenchment, suppression +40% |
+| Algorithmic Jurisprudence | 60 | +6 | −0.30pp | 0 (+2) | Administration −10% |
 
-Investment efficiency and the radicalism damping scale with the score the same way (+10% and −20% at 100).
+Investment efficiency and the radicalism damping scale with the score the same way (+10% and −20% at 100). The votes
+term is a coefficient on the government's share of the vote, as vanilla's voting laws' are, so it pays a government
+with a strong mandate more.
 
 ### 4.2 Why each law gets chosen
 
@@ -311,19 +353,18 @@ The table is deliberately not monotone, so there is no "just climb":
 
 - **Executive Tribunals:** authority and override are what a consolidating ruler is short of in 1836.
 - **Religious Courts:** the Devout's price, with cheap administration. The Islamic world's status quo.
-- **Statutory Courts:** most of the trust at no cost in override. The 19th-century liberal default.
+- **Statutory Courts:** most of the trust at no cost in override, plus a mandate for whoever makes the law. The
+  19th-century liberal default, and a codifying monarch's.
 - **Constitutional Review:** the most legitimacy and credit, paid for in override (no medium Forceful Legislation tier,
   no tax Force Through), dearer suppression and slower constitutional change.
-- **Judicial Supremacy:** broad coalitions and quieter movements, for less legitimacy than Review.
+- **Judicial Supremacy:** broad coalitions and quieter movements, for half the legitimacy of Review.
 - **Algorithmic Jurisprudence:** cheap and middling on its own; with Algorithmic Governance, a captured court.
 
-### 4.3 Credit standing and the floor (proposal)
+### 4.3 Credit standing and the floor
 
 A great power's rank puts it on the 0.5pp floor already, so the −0.5pp of a trusted court is invisible to Britain or
 France. It matters to minor and unrecognized countries, which is historically apt: small states bought cheap credit
-with credible institutions. **Proposal:** the score also moves the floor, up to −0.1pp at 100. That is a quarter of
-Central Bank Independence's −0.25pp and stacks with it (`te_mon_standing_floor` clamps at 0). A great power then
-feels its courts, but only after decades. The alternative is to leave the floor alone and let the benefit go to the
+with credible institutions. The owner ruled against moving the floor (2026-10-17), so the benefit stays with the
 smaller countries.
 
 ### 4.4 Override totals
@@ -335,7 +376,7 @@ the shortcuts a constitutional court exists to stop.
 ## 5. Starting laws (1836)
 
 In `common/history/extra_history.txt`, after vanilla history, through one scripted effect,
-`te_jud_assign_court_by_rule`, which § 6's old-save seeding also calls (history already calls scripted effects:
+`te_jud_assign_court_by_rule`, which § 6's old-save repair also calls (history already calls scripted effects:
 `gm_com_seed`):
 
 1. **Religious Courts:** Theocracy; or a Sunni, Shia or Ibadi state religion (`country_has_state_religion`; the three
@@ -347,20 +388,19 @@ In `common/history/extra_history.txt`, after vanilla history, through one script
 Then, in the country blocks history already has: the United States → Constitutional Review; Britain, France, Prussia,
 the Netherlands, Sweden and Belgium → Statutory Courts, whatever their 1836 franchise.
 
-**Starting score:** half the effective ceiling, set at game start (§ 6), except where history sets it first:
-Britain 70, the United States 60, the Netherlands 50, Sweden 50, Belgium 40, Prussia 35, France 35.
+**Starting score:** half the effective ceiling, set at the first monthly pulse (§ 6), except where history sets it
+first: Britain 70, the United States 60, the Netherlands 50, Sweden 50, Belgium 40, Prussia 35, France 35.
 
 ## 6. Seeding, old saves and new countries
 
-- **New game:** `on_game_started` runs `te_jud_seed_score` on every country: the score is half the ceiling unless
-  history set it, and `te_jud_seeded` is set. It applies no modifier, so ROOT = none there does no harm (the
-  inheritance system needs an event only because it applies multipliers); the first monthly refresh adds the
-  modifier. It also sets the global `te_jud_world_seeded`.
-- **Old save** (no `te_jud_world_seeded`): every country holds Executive Tribunals, the first law in the file. On the
-  first `on_monthly_pulse`, every country runs `te_jud_assign_court_by_rule` once, then the score's seeding, and the
-  global is set. Laws activated there don't shock: the shock event either runs before `te_jud_seeded` is set or finds
-  the score at half the new ceiling.
-  This is an old-save repair (`common/on_actions/te_old_save_repairs.txt`, with its removal marker).
+- **New game:** `on_game_started` only sets the global `te_jud_world_seeded`. The first monthly pulse seeds each
+  country's score (`te_jud_seed_score`: half the ceiling unless history set it, then `te_jud_seeded`), by when the
+  laws' modifier sums are certainly in place, and the refresh adds the modifiers.
+- **Old save** (no `te_jud_world_seeded`): every country holds Executive Tribunals, the first law in the file. An
+  old-save repair (`common/on_actions/te_old_save_repairs.txt`, with its removal marker) runs on `on_monthly_pulse`: in
+  the first month every country runs `te_jud_assign_court_by_rule`; in the second the repair sets
+  `te_jud_world_seeded`, and the monthly pulse seeds each score from the new law's ceiling. The laws it activates
+  never shock, since the shock event needs `te_jud_seeded`.
 - **A new country mid-game** (release, secession) without `te_jud_seeded`: the monthly pulse seeds its score from the
   law it holds. Its law isn't changed.
 - **A revolution's winner** inherits the variables, so nothing is reseeded.
@@ -368,10 +408,10 @@ Britain 70, the United States 60, the Netherlands 50, Sweden 50, Belgium 40, Pru
 ## 7. Ideology stances
 
 The stances live in named lists in `ideology_modifications.py` (`JUDICIARY_LISTS`, keyed by the names below, and
-`JUDICIARY_STANCES`, ideology → list). Every list names all six laws, as the
-`ideology_lawgroup` audit requires. `apply_ideologies.py` writes the vanilla ideologies (an INJECT, since vanilla has no
-block for the group, which `scripts/generators/regen_ideologies_offline.py` can produce without the game). The mod's
-own ideologies get hand-written blocks in `common/ideologies/extra_ideologies.txt`.
+`JUDICIARY_STANCES`, ideology → list). Every list names all six laws, as the `ideology_lawgroup` audit requires.
+`apply_ideologies.py` writes the vanilla ideologies (an INJECT, since vanilla has no block for the group, which
+`scripts/generators/regen_ideologies_offline.py` can produce without the game). The mod's own ideologies get
+hand-written blocks in `common/ideologies/extra_ideologies.txt`.
 
 | List | Executive | Religious | Statutory | Constitutional | Supremacy | Algorithmic |
 |---|---|---|---|---|---|---|
@@ -425,9 +465,10 @@ the rest for the play-test (`docs/testing/judiciary-playtest.md`, new).
 
 | Fact | Check |
 |---|---|
-| `currently_enacting_law` resolves at `on_law_enactment_started` | `TE_SELF_CHECK OK judiciary_enacting_law_scope` (or `BROKEN`), once a game, logged the first time any country under Constitutional Review or Judicial Supremacy starts an enactment (`enacting_any_law = yes` holds, so a missing link can't pass as OK) |
+| `currently_enacting_law` resolves at `on_law_enactment_started` | `TE_SELF_CHECK OK judiciary_enacting_law_scope` (or `BROKEN`), once a game, logged the first time a country whose court challenges starts an enactment (`enacting_any_law = yes` holds, so a missing link can't pass as OK) |
 | `add_enactment_modifier` from an on-action effect applies | Play-test: the enactment panel lists "Constitutional Challenge" for a Distribution of Power law under Constitutional Review. Fallback: move the call into a hidden event, as Forceful Legislation runs |
 | A scripted effect runs from history | Play-test: the lobby shows the United States with Constitutional Review and Persia with Religious Courts |
+| The laws' modifier sums are in place a month after game start and a week after a law change | Play-test: the concept reads Britain's ceiling as 70 in February 1836; a court downgrade's shock is sized by the new ceiling |
 | The concept renders the live score | `loc_render_audit` offline; play-test reads it |
 
 ## 10. Later phases
@@ -444,7 +485,8 @@ behaves.
   The open engine question is whether a variable can hold the replaced law's type, so that compliance can restore it.
   If not, compliance costs the forced law's legitimacy instead of reversing it. An overhaul-protest event replaces the
   bare radicals of § 3.5.
-- **Phase 3: amendments.** Every amendment has a scripted way in (an event or a petition), per the mod's rule:
+- **Phase 3: amendments.** Every amendment has a scripted way in (an event or a petition), per the mod's rule, and
+  moves the § 2.7 lines where it changes a rule (Judicial Elections lowering the ceiling, for one):
   - **Suspension of Habeas Corpus** (Statutory or Constitutional; an Armed Forces petition in wartime, with a sunset;
     Lincoln, 1861);
   - **Judicial Elections** (Statutory or Constitutional; Jacksonian Democrats; Mississippi 1832, New York 1846);
@@ -466,17 +508,37 @@ behaves.
 
 - `lawgroup_criminal_justice_desc` (`localization/english/te_laws_l_english.yml`): drop "courts".
 - `concept_legislative_override_capacity_desc`: name the court laws among the sources.
+- `law_algorithmic_governance` (`common/laws/extra_laws.txt`): the two paper-court lines (§ 2.7).
 - `docs/guides/scripting_best_practices.md` (the override sources list) and `docs/systems/tax_code_schema.md` § 7.4
   (Force Through's costs).
 - `docs/systems/mod_systems.md`: a new § Judiciary.
 - Player guide: `06-politics.md` (the law group table, the Forceful Legislation sources and costs, a short paragraph on
   Judicial Independence) and `04-banking.md` (a credit standing source), at the depth of their peers; rebuild the PDF.
 
-## 12. Open questions for the owner
+## 12. Rulings
 
-1. **Judicial Supremacy's legitimacy** (§ 2.5): −3 flat, so it nets +7 against Constitutional Review's +10, with
-   incoherence −25% as its draw?
-2. **Showing the score** (§ 3.6): a concept with the live value plus the scaled modifier, no journal entry?
-3. **The credit floor** (§ 4.3): −0.1pp at full independence, or leave the floor alone?
-4. **Constitutional Review's technology** (§ 2.4): Human Rights (era 3) or Democracy (era 1)?
-5. **Judicial Supremacy only from Constitutional Review** (§ 2.5)?
+The five proposals of the first draft were ruled on in the owner's second review (2026-10-17): Judicial Supremacy's
+legitimacy went further down, to +5 net, with stronger movement terms; the credit floor stays where it is;
+Constitutional Review unlocks at Human Rights; Judicial Supremacy has no gate; and how the score is shown moves to the
+national modifiers tab (§ 13), with phase 1's concept and modifier in the meantime. The review also added Statutory
+Courts' conditional bonus and the rule that every rule shows on a tooltip (§ 2.3, § 2.7).
+
+## 13. Hand-off: a tab for national modifiers
+
+The owner wants a Timeline Extended window tab for the national scores the mod tracks in modifiers and variables
+(Judicial Independence, Legislative Override Capacity and their like), seen and explained in one place, with the
+country panel's modifier list hiding them as the state panel already hides its bookkeeping modifiers. It is
+cross-cutting, so it gets its own spec. What this spec settles for it:
+
+- The Judiciary needs nothing from the tab to work, and phase 1 doesn't wait for it. The tab then takes over: a
+  Judicial Independence row (score, ceiling, what it buys), and `te_judicial_independence` hidden from the list.
+- Where the list is: vanilla's `country_panel.gui` (owner's upload, 2026-10-17). The country panel's Information tab
+  (`country_panel_information_content`) ends with a "MODIFIERS" header and a `flowcontainer` over
+  `Country.GetTimedModifiers` (icon, name, remaining duration), shown for the local player. Its Modifiers tab
+  (`modifier_list`) is a different view, the summed modifier types with their breakdowns, where the § 2.7 lines
+  belong and should stay. Hiding works as in `gui/states_panel.gui` (`gui_modding_guide.md` gotcha #40): match
+  `TimedModifier.GetName` against `Localize('<key>')`, with `ignoreinvisible = yes` on the flowcontainer, and a count
+  script value for the header's `IsDataModelEmpty` test.
+- Hidden is not gone: the breakdown tooltips (legitimacy's, the Modifiers tab's) still name the source.
+- Only standing scores move to the tab. A timed consequence with a duration (the Court Overhaul) stays in the list,
+  where the player expects to find what just happened to them.
