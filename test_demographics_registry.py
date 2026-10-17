@@ -380,11 +380,11 @@ WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pe
 # sex ratio at birth, Birth Limit's part of desired fertility), 0 unless a test gives them (_family_fixtures).
 FAMILY_DEFAULTS = {**{f"modifier:{t}": 0.0 for t in P.MEASURE_TYPES}, "te_demog_srb_add": 0.0,
                    "te_demog_ms_birth_limit_part": 0.0}
-# Phase 3's owner reads (the health law's cover, the augmentation laws, the owner's market threshold) and its two types,
-# for engines that don't give them (_lx_fixtures gives them from the model's inputs).
-LX_DEFAULTS = {"te_demog_lx_cover": P.LX_COVER_DEFAULT, "te_demog_lx_banned": 0.0, "te_demog_lx_mandatory": 0.0,
-               "te_demog_lx_unrestricted": 0.0, "te_demog_lx_owner_w": float(P.LX_MARKET_START),
-               **{f"modifier:{t}": 0.0 for t in P.LATE_TYPES},
+# Phase 3's owner reads (Human Purity's ban, read from the owner's modifier; the owner's market threshold) and its types,
+# the ageing pair and the laws' longevity care types (the cover, floor and reach the script reads in state scope), for
+# engines that don't give them (_lx_fixtures and _mod_fixtures give them from the model's inputs).
+LX_DEFAULTS = {"te_demog_lx_banned": 0.0, "te_demog_lx_owner_w": float(P.LX_MARKET_START),
+               **{f"modifier:{t}": 0.0 for t in P.LATE_TYPES + P.LX_LAW_TYPES},
                # the country's carrier reads has_technology_researched (te_demog_lx_market_step, the yearly pulse); the
                # state's ectogenesis levels walk its buildings
                "te_demog_lx_country_carrier": 0.0, "te_demog_lx_ecto_levels": 0.0,
@@ -714,12 +714,10 @@ def _mod_fixtures(inp):
 
 
 def _lx_fixtures(inp):
-    """Phase 3's owner reads from the model's inputs (demographics_model.lx_public, lx_threshold): the health law's cover,
-    the augmentation laws and the owner's market threshold."""
-    return {"te_demog_lx_cover": next((v for law, v in P.LX_COVER.items() if law in inp.laws), P.LX_COVER_DEFAULT),
-            "te_demog_lx_banned": 1.0 if P.LX_BAN_LAW in inp.laws else 0.0,
-            "te_demog_lx_mandatory": 1.0 if P.LX_MANDATORY_LAW in inp.laws else 0.0,
-            "te_demog_lx_unrestricted": 1.0 if P.LX_UNRESTRICTED_LAW in inp.laws else 0.0,
+    """Phase 3's owner reads from the model's inputs (demographics_model.lx_banned, lx_threshold): Human Purity's ban (the
+    owner's modifier, which the interpreter can't read from a state) and the owner's market threshold. The laws' cover,
+    floor and reach are state reads of their types (_mod_fixtures)."""
+    return {"te_demog_lx_banned": 1.0 if demographics_model.lx_banned(inp) else 0.0,
             "te_demog_lx_owner_w": float(P.LX_MARKET_START if inp.lx_w is None else inp.lx_w),
             "te_demog_lx_ecto_levels": float(inp.ecto_levels)}
 

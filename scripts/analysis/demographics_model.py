@@ -1338,23 +1338,24 @@ def lx_band(k):
     return k // P.LX_BAND_WIDTH
 
 
+def lx_banned(inp):
+    """No longevity care at all: the owner's laws carry the ban (Human Purity; te_demog_lx_banned)."""
+    return inp.mods.get(P.LX_BAN_TYPE, 0.0) > 0
+
+
 def lx_threshold(inp):
     """The market threshold this state's people meet (§4.2): the owner's W (LX_MARKET_START before its first year), less
-    LX_UNRESTRICTED_OFFSET under Unrestricted Augmentation (te_demog_lx_threshold)."""
+    the laws' market reach (Unrestricted Augmentation; te_demog_lx_threshold)."""
     w = P.LX_MARKET_START if inp.lx_w is None else inp.lx_w
-    if P.LX_UNRESTRICTED_LAW in inp.laws:
-        w -= P.LX_UNRESTRICTED_OFFSET
-    return w
+    return w - inp.mods.get(P.LX_REACH_TYPE, 0.0)
 
 
 def lx_public(inp):
-    """The public route's reach (§4.2): the drifted health-care access x the health law's cover; at least
-    LX_MANDATORY_FLOOR under Mandatory Augmentation (te_demog_lx_public)."""
+    """The public route's reach (§4.2): the drifted health-care access x the laws' cover, 0-1; at least the laws' floor,
+    0-1 (Mandatory Augmentation; te_demog_lx_public)."""
     acc = (inp.medicine if inp.medicine is not None else medicine_targets(inp))["access"]
-    if P.LX_MANDATORY_LAW in inp.laws:
-        return max(acc, P.LX_MANDATORY_FLOOR)
-    cover = next((v for law, v in P.LX_COVER.items() if law in inp.laws), P.LX_COVER_DEFAULT)
-    return acc * cover
+    cover = clamp(inp.mods.get(P.LX_COVER_TYPE, 0.0), 0.0, 1.0)
+    return max(acc * cover, clamp(inp.mods.get(P.LX_FLOOR_TYPE, 0.0), 0.0, 1.0))
 
 
 def lx_market(wealth, w):
@@ -1366,7 +1367,7 @@ def lx_targets(inp):
     """(eligibility's target, the share on the public route): access people-weighted over the walk's wealth bands, each
     band the larger of the two routes (te_demog_lx_access). No carrier, or Human Purity: none. No bands: the public
     route alone."""
-    if not lx_carrier(inp) or P.LX_BAN_LAW in inp.laws:
+    if not lx_carrier(inp) or lx_banned(inp):
         return 0.0, 0.0
     pub = lx_public(inp)
     bands = {k: n for k, n in (inp.wealth_bands or {}).items() if n > 0}
@@ -1378,16 +1379,14 @@ def lx_targets(inp):
     return reach / max(people, 0.00001), pub
 
 
-def lx_market_next(w, laws=frozenset(), diffusion_add=0.0):
+def lx_market_next(w, price_fall=0.0, diffusion_add=0.0):
     """The owner's market threshold a year on (te_demog_lx_market_fall; the country's yearly census): None (no carrier
-    yet) starts at LX_MARKET_START; it falls LX_MARKET_FALL a year x the laws' factor x (1 + LX_MARKET_DIFFUSION x the
-    capital's diffusion type), to LX_MARKET_FLOOR."""
+    yet) starts at LX_MARKET_START; it falls LX_MARKET_FALL a year x the laws' factor (1 + price_fall, their
+    LX_PRICE_FALL_TYPE total, at least 0; te_demog_lx_market_laws) x (1 + LX_MARKET_DIFFUSION x the capital's diffusion
+    type), to LX_MARKET_FLOOR."""
     if w is None:
         return float(P.LX_MARKET_START)
-    factor = 1.0
-    for law, x in P.LX_MARKET_FALL_LAWS.items():
-        if law in laws:
-            factor *= x
+    factor = max(0.0, 1 + price_fall)
     return max(P.LX_MARKET_FLOOR, w - P.LX_MARKET_FALL * factor * (1 + P.LX_MARKET_DIFFUSION * diffusion_add))
 
 

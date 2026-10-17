@@ -34,44 +34,41 @@ te_demog_lx_carrier_on = {
 	}
 }
 
-# State scope, the owner's laws (§4.2): Human Purity bans longevity care; Mandatory Augmentation covers everyone the
-# health system reaches and at least te_demog_k_lx_mandatory_floor; Unrestricted Augmentation lowers the market threshold.
+# State scope, the owner's laws (§4.2), read from the census-only types they carry (demographics_modifier_types.txt;
+# since 2026-10-17, so each law's tooltip says what it does): Human Purity's ban; the health system's cover (Public
+# Health Insurance 1, Charitable 0.25, Mandatory Augmentation 1); the floor on the public route (Mandatory Augmentation
+# 0.9); the market's reach below the owner's threshold (Unrestricted Augmentation 20).
 te_demog_lx_banned = {
 	value = 0
 	if = {
-		limit = { owner = { has_law = law_type:law_human_purity } }
+		limit = { owner = { modifier:country_longevity_care_banned_bool = yes } }
 		value = 1
 	}
 }
-te_demog_lx_mandatory = {
-	value = 0
-	if = {
-		limit = { owner = { has_law = law_type:law_mandatory_augmentation } }
-		value = 1
-	}
+te_demog_lx_cover = {
+	value = modifier:state_longevity_care_cover_add
+	min = 0
+	max = 1
 }
-te_demog_lx_unrestricted = {
-	value = 0
-	if = {
-		limit = { owner = { has_law = law_type:law_unrestricted_augmentation } }
-		value = 1
-	}
+te_demog_lx_floor = {
+	value = modifier:state_longevity_care_floor_add
+	min = 0
+	max = 1
+}
+te_demog_lx_market_reach = {
+	value = modifier:state_longevity_care_market_reach_add
 }
 
-# State scope: the public route's reach (demographics_model.lx_public): the drifted health-care access x the health law's
-# cover (te_demog_lx_cover, generated), at least the mandatory floor under Mandatory Augmentation.
+# State scope: the public route's reach (demographics_model.lx_public): the drifted health-care access x the health
+# system's cover, at least the floor.
 te_demog_lx_public = {
 	value = var:te_dg_acc
 	multiply = te_demog_lx_cover
-	if = {
-		limit = { te_demog_lx_mandatory > 0 }
-		value = var:te_dg_acc
-		min = te_demog_k_lx_mandatory_floor
-	}
+	min = te_demog_lx_floor
 }
 
 # State scope: the owner's market threshold (te_dg_lx_w, the country's yearly census; te_demog_k_lx_market_start before
-# its first), less the Unrestricted offset (demographics_model.lx_threshold).
+# its first), less the market's reach (demographics_model.lx_threshold).
 te_demog_lx_owner_w = {
 	value = te_demog_k_lx_market_start
 	if = {
@@ -81,10 +78,15 @@ te_demog_lx_owner_w = {
 }
 te_demog_lx_threshold = {
 	value = te_demog_lx_owner_w
-	subtract = {
-		value = te_demog_lx_unrestricted
-		multiply = te_demog_k_lx_unrestricted_offset
-	}
+	subtract = te_demog_lx_market_reach
+}
+
+# Country scope: the laws' factor on the market threshold's fall, 1 + their price fall (Private Health Insurance's
+# insurers pool the price, +100%; the Regulated Augmentation Market +50%).
+te_demog_lx_market_laws = {
+	value = 1
+	add = modifier:country_longevity_care_price_fall_mult
+	min = 0
 }
 
 # Country scope: the market threshold's fall this year (demographics_model.lx_market_next): te_demog_k_lx_market_fall x the

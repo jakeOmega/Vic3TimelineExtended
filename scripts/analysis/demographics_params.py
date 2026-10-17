@@ -821,22 +821,26 @@ LX_PULL_TO = 35
 # Eligibility E drifts toward its target at the medical diffusion rate (DIFFUSION_BASE + state_medical_diffusion_add),
 # both ways, and takes the target within this of it (as medicine does).
 LX_SNAP = 0.005
-# Access by wealth band (§4.2, call 12): the larger of a public route (the drifted health-care access x the health law's
-# cover for longevity care) and a market route (a ramp from 0 at LX_MARKET_RAMP below the threshold W to 1 as far above
-# it). W is one country variable (te_dg_lx_w): LX_MARKET_START when the country's first carrier arrives, falling
-# LX_MARKET_FALL a year x the laws' factor x (1 + LX_MARKET_DIFFUSION x the capital's state_medical_diffusion_add).
-LX_COVER = {"law_public_health_insurance": 1.0, "law_private_health_insurance": 0.0,
-            "law_charitable_health_system": 0.25, "law_no_health_system": 0.0}
-LX_COVER_DEFAULT = 0.0
-LX_BAN_LAW = "law_human_purity"                      # the Devout's law: no longevity care at all
-LX_MANDATORY_LAW = "law_mandatory_augmentation"      # public cover 1, access at least LX_MANDATORY_FLOOR
-LX_MANDATORY_FLOOR = 0.9
-LX_UNRESTRICTED_LAW = "law_unrestricted_augmentation"   # the market threshold starts LX_UNRESTRICTED_OFFSET lower
-LX_UNRESTRICTED_OFFSET = 20
+# Access by wealth band (§4.2, call 12): the larger of a public route (the drifted health-care access x the health
+# system's cover for longevity care, at least a floor) and a market route (a ramp from 0 at LX_MARKET_RAMP below the
+# threshold W less the market's reach, to 1 as far above it). W is one country variable (te_dg_lx_w): LX_MARKET_START
+# when the country's first carrier arrives, falling LX_MARKET_FALL a year x (1 + the laws' price fall) x (1 +
+# LX_MARKET_DIFFUSION x the capital's state_medical_diffusion_add).
+# The laws' parts are census-only types on the laws (demographics_modifier_types.txt; since 2026-10-17, so a law's tooltip
+# says what it does, as the ageing ladder's techs do). The values sit on the laws (Decision 2 of the modifier-types
+# design): the health laws' INJECTs in te_demog_law_injections.txt, the augmentation laws' lines in extra_laws.txt.
+LX_COVER_TYPE = "state_longevity_care_cover_add"        # the public route's cover, 0-1: Public Health Insurance 1,
+                                                        # Charitable 0.25, Mandatory Augmentation 1
+LX_FLOOR_TYPE = "state_longevity_care_floor_add"        # the public route at least this, 0-1: Mandatory Augmentation 0.9
+LX_REACH_TYPE = "state_longevity_care_market_reach_add"  # the market threshold this much lower: Unrestricted 20
+LX_BAN_TYPE = "country_longevity_care_banned_bool"      # no longevity care at all: Human Purity (the Devout's law)
+LX_PRICE_FALL_TYPE = "country_longevity_care_price_fall_mult"   # W's fall x (1 + it): Private Health Insurance 1 (its
+                                                                # insurers pool the price), Regulated Market 0.5
+LX_LAW_TYPES = (LX_COVER_TYPE, LX_FLOOR_TYPE, LX_REACH_TYPE, LX_BAN_TYPE, LX_PRICE_FALL_TYPE)
+DEMOG_TYPES = DEMOG_TYPES + LX_LAW_TYPES
 LX_MARKET_START = 80
 LX_MARKET_FLOOR = -20                                # W stops falling here: everyone is within reach well before
 LX_MARKET_FALL = 1.0
-LX_MARKET_FALL_LAWS = {"law_private_health_insurance": 2.0, "law_regulated_augmentation_market": 1.5}
 LX_MARKET_DIFFUSION = 1.0
 LX_MARKET_RAMP = 10
 # The wealth band's wealth for access (te_dg_gn<k>, GINI_BAND_KNOTS): the middle of its levels.

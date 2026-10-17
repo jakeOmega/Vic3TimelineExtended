@@ -2099,6 +2099,7 @@
  country_can_use_open_market_ops_bool:0 "Enables #bold Open Market Operations#!"
  country_combined_arms_bonus_enabled_bool:0 "[concept_combined_arms] Doctrine"
  country_homelands_can_change_bool:0 "Homelands Can Change"
+ country_longevity_care_banned_bool:0 "Longevity Care Banned"
  country_nuclear_disarmament_bool:0 "Nuclear Disarmament"
  country_nuclear_program_pause_bool:0 "Nuclear Program Freeze"
  country_receiving_nuclear_program_aid_bool:0 "Receiving [concept_nuclear_program] Aid"

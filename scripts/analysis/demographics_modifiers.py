@@ -63,12 +63,14 @@ def _state(root):
 
 
 def _lines(block, types):
+    """(type, value) for each line of `types` in a modifier block; a boolean type's `yes` counts 1 (Human Purity's ban)."""
     body = _u(block)
     if not isinstance(body, dict):
         return
     for k, v in body.items():
         if k in types:
-            yield k, float(_u(v))
+            v = _u(v)
+            yield k, 1.0 if v == "yes" else float(v)
 
 
 def load_carriers(root=ROOT, types=P.DEMOG_TYPES):

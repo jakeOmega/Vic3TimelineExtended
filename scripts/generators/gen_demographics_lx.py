@@ -534,7 +534,6 @@ def render_lx_values():
          "lx_snap": P.LX_SNAP, "lx_snap_neg": -P.LX_SNAP, "lx_market_start": P.LX_MARKET_START,
          "lx_market_floor": P.LX_MARKET_FLOOR, "lx_market_fall": P.LX_MARKET_FALL,
          "lx_market_diffusion": P.LX_MARKET_DIFFUSION, "lx_market_ramp": P.LX_MARKET_RAMP,
-         "lx_unrestricted_offset": P.LX_UNRESTRICTED_OFFSET, "lx_mandatory_floor": P.LX_MANDATORY_FLOOR,
          "lx_public_health_weight": P.LX_PUBLIC_HEALTH_WEIGHT, "lx_old_age_none": P.LX_OLD_AGE_NONE,
          "lx_ecto_per_level": P.LX_ECTO_PER_LEVEL, "lx_ecto_max": P.LX_ECTO_MAX,
          "lx_politics": 1 if P.LONGEVITY_POLITICS else 0, "lx_politics_approval": P.LX_POLITICS_APPROVAL,
@@ -565,14 +564,6 @@ def render_lx_values():
         o(f"if = {{ limit = {{ has_technology_researched = {tech} }} add = {_lit(v)} }}")
     o("}")
     o("")
-    o("# Country scope: the laws' factor on the market threshold's fall (Private Health Insurance's insurers pool the price,")
-    o("# the Regulated Augmentation Market speeds it).")
-    o("te_demog_lx_market_laws = {")
-    o("value = 1")
-    for law, x in P.LX_MARKET_FALL_LAWS.items():
-        o(f"if = {{ limit = {{ has_law = law_type:{law} }} multiply = {_lit(x)} }}")
-    o("}")
-    o("")
     o("# State scope (late-game §3.5): State Youth Centers' levels on the ectogenesis method, once the owner has its")
     o("# technology (the buildings aren't walked before).")
     o("te_demog_lx_ecto_levels = {")
@@ -587,13 +578,6 @@ def render_lx_values():
     o("add = level")
     o("}")
     o("}")
-    o("}")
-    o("")
-    o("# State scope: the owner's health law's cover for longevity care (the public route).")
-    o("te_demog_lx_cover = {")
-    o(f"value = {_lit(P.LX_COVER_DEFAULT)}")
-    for law, v in P.LX_COVER.items():
-        o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} value = {_lit(v)} }}")
     o("}")
     o("")
     return o.text()

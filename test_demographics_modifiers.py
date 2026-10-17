@@ -83,7 +83,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    # modern safety (2026-10-16): the era 7-9 technologies
                    **{t: {"technology"} for t in P.SAFETY_TYPES.values()},
                    # phase 3, the late game: the ageing ladder and the pull sit on the era 10-12 technologies
-                   P.AGEING_RATE_TYPE: {"technology"}, P.REJUVENATION_TYPE: {"technology"}}
+                   P.AGEING_RATE_TYPE: {"technology"}, P.REJUVENATION_TYPE: {"technology"},
+                   # and who longevity care reaches on the health and augmentation laws (2026-10-17)
+                   **{t: {"law"} for t in P.LX_LAW_TYPES}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
@@ -102,6 +104,23 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
         pull = [c.value for c in self.carriers if c.type == P.REJUVENATION_TYPE]
         self.assertTrue(pull and all(v > 0 for v in pull), pull)
         self.assertEqual(color(P.REJUVENATION_TYPE), "good")
+
+    def test_longevity_care_sits_on_the_health_and_augmentation_laws(self):
+        """Late game §4.2 (on the laws since 2026-10-17, so each law's tooltip says what it does): the health laws' cover
+        (Private and No Health System none), Mandatory Augmentation's full cover and floor, Unrestricted Augmentation's
+        reach, Human Purity's ban, and the market's price falling faster under Private Health Insurance and the
+        Regulated Augmentation Market."""
+        carried = {}
+        for c in self.carriers:
+            if c.type in P.LX_LAW_TYPES:
+                carried.setdefault(c.type, {})[c.key] = c.value
+        self.assertEqual(carried, {
+            P.LX_COVER_TYPE: {"law_public_health_insurance": 1.0, "law_charitable_health_system": 0.25,
+                              "law_mandatory_augmentation": 1.0},
+            P.LX_FLOOR_TYPE: {"law_mandatory_augmentation": 0.9},
+            P.LX_REACH_TYPE: {"law_unrestricted_augmentation": 20.0},
+            P.LX_BAN_TYPE: {"law_human_purity": 1.0},
+            P.LX_PRICE_FALL_TYPE: {"law_private_health_insurance": 1.0, "law_regulated_augmentation_market": 0.5}})
 
     def test_malaria_prevention_alone_controls_malaria(self):
         """Calibration step 3 (the spec's §2.2): the malaria factor ends with Malaria Prevention, not quinine (it protected

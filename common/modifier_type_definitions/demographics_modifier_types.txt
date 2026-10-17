@@ -199,3 +199,44 @@ state_rejuvenation_add = {
 	decimals = 0
 	script_only = yes
 }
+
+# Who longevity care reaches, by law (late-game §4.2, call 12; on the laws since 2026-10-17, so each law's tooltip says
+# what it does). Read only by the census (te_demog_lx_values.txt):
+#   state_longevity_care_cover_add          the health system's cover, within 0-1: the public route is the drifted
+#                                           health-care access x it (Public Health Insurance 1, Charitable 0.25,
+#                                           Mandatory Augmentation 1)
+#   state_longevity_care_floor_add          the public route at least this, within 0-1 (Mandatory Augmentation 0.9)
+#   state_longevity_care_market_reach_add   the market threshold this many levels of wealth lower (Unrestricted
+#                                           Augmentation 20)
+#   country_longevity_care_banned_bool      no longevity care at all (Human Purity)
+#   country_longevity_care_price_fall_mult  the market threshold's yearly fall x (1 + it) (Private Health Insurance 1,
+#                                           the Regulated Augmentation Market 0.5)
+state_longevity_care_cover_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_longevity_care_floor_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_longevity_care_market_reach_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+}
+country_longevity_care_banned_bool = {
+	color = bad
+	boolean = yes
+	script_only = yes
+}
+country_longevity_care_price_fall_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}

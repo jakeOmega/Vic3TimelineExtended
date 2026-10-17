@@ -499,16 +499,17 @@ Therapeutics, seven-tenths once Personalized Medicine, Genetic Engineering and
 Synthetic Biology follow, and not at all with Biological Immortality, under which bodies older than
 35 also wind back toward 35. Children are never treated: people join at 25.
 
-Who is in care depends on your laws and your people's wealth.
+Who is in care depends on your laws and your people's wealth. Each law below
+lists its part among its modifiers.
 
 | Law | Longevity care |
 |---|---|
 | Public Health Insurance | Everyone the health system reaches. |
-| Charitable Health System | A quarter of those it reaches. |
+| Charity Hospitals | A quarter of those it reaches. |
 | Private Health Insurance, No Health System | The market alone; Private Health Insurance brings its price down twice as fast. |
 | Mandatory Augmentation | At least nine in ten people. |
 | Unrestricted Augmentation | The market reaches 20 levels of wealth further down. |
-| Regulated Augmentation Market | The market's price falls half again as fast. |
+| Regulated Augmentation Market | The market's price falls half again as fast; with Private Health Insurance, two and a half times as fast. |
 | Human Purity | None. |
 
 The market reaches the rich first: from your first ageing technology, people
