@@ -155,9 +155,10 @@ class RelinquishTest(unittest.TestCase):
         self.assertGreater(w.countries[0].weight["pacific"], 0)
 
     def test_relinquish_never_pays(self):
-        # 200 random worlds: copy the world, relinquish then claim_again in one copy
+        # 200 random worlds: deep-copy the world, relinquish then claim_again in one copy
         # between two passes; after the second pass the relinquisher's
-        # sum(ent) is <= the untouched copy's.
+        # sum(ent) is <= the untouched copy's. Drive each copy's months with its own
+        # random.Random seeded alike, so the copies differ only by the relinquishing.
         ...
 ```
 
@@ -333,6 +334,7 @@ class RelinquishScriptTest(unittest.TestCase):
 
 **Interfaces:**
 - Consumes: Task 3's model.
+- Routing: the fee joins the World Development Fund's (or the UN budget's) weekly total only for countries that would pay royalties, i.e. Law of the Sea parties under the Regulated regime (`te_seabed_royalty_payer`'s party and regime tests, without its "has levels" test); for everyone else it is a plain expense.
 - Produces: values `te_seabed_fee_rate = 0.02`, `te_seabed_fee_base` (country), `te_seabed_fee_weekly_value` (country: base × `te_seabed_level_output_value` × rate), `te_seabed_fee_grace_disp` (country: licences on unbuilt levels still in grace); variable `te_seabed_fee_cached` (country); static modifier `te_seabed_holding_fee_modifier` (`country_expenses_add = 1`, plus the budget-category key the royalty modifier carries if `docs/systems/budget_breakdown.md` needs one).
 
 - [ ] **Step 1: Write the failing tests**
@@ -433,6 +435,7 @@ In `test_global_commons_un.py`: the defection stores the month (`name = te_seabe
   - country vars `te_seabed_need_navy_<b>` (whole units; `-1` = full) written in `te_seabed_share_round` by `te_seabed_readout = { B }` before the active flags are removed; display `te_seabed_need_navy_disp_<b>`. The navy conversion needs the coast counts `te_seabed_compute_weights` keeps only in locals today: `te_seabed_weight_set` also stores `te_seabed_coast_<b>` (n) and `te_seabed_coast_all` (N) on the country.
   - `te_seabed_weight_pct_disp_<b>` (country: `w ÷ global_var:te_seabed_world_w_<b> × 100`).
   - pool-bar cumulative fractions per basin, 0..1: `te_seabed_bar_<b>_1` (our licences), `_2` (+ our claims), `_3` (+ rivals' licences); the bar's background is rivals' claims. (Four segments, not the mockup's five: the queued split per basin isn't tracked; the overview shows the queued count.)
+  - `te_seabed_ent_value_<b>` (country: `var:te_seabed_ent_<b>`, guarded; the `order_by` for the ranking, as `te_seabed_frac_value_$B$` is for the rounding).
   - `te_seabed_jan_loss_disp` (country: at most what next January can take, Σ claims − floor-protected part; equals all claims off Sponsor); `te_seabed_last_sharing_month` (global, month index of the last sharing) for "as of".
   - effect `te_seabed_rank_basin = { B }` (no scope, step 10): globals `te_seabed_rk_<b>_<n>` (n = 1..6, by entitlement, `ordered_country` with `position = n−1` and `order_by = te_seabed_ent_value_<b>`), stale ranks removed; `te_seabed_rk_more_<b>` = claimants beyond six; on every `is_player = yes` country with `te_seabed_shared`, `te_seabed_rkcap_<b>_<n>` = that country's capital.
   - scripted GUI `te_seabed_rival_row_sgui` (`saved_scopes = { op }`, op = 10 × basin index + n; pattern `ch_board_row_sgui`): `is_shown` = slot filled; effect enters `global_var:te_seabed_rk_<b>_<n> ?=` and prints `te_seabed_rival_row_<b>` with `custom_tooltip_no_bullet`.
@@ -525,9 +528,11 @@ class SeabedWordsTest(unittest.TestCase):
 
 ```python
 import re, unittest
+import os
 from test_banking_layout import _all_loc, _custom_options, _read, _block_from, UNITS, MARGIN, NUMBER
 
-GUI = "gui/te_seabed_widgets.gui"
+REPO = os.path.dirname(os.path.abspath(__file__))
+GUI = os.path.join(REPO, "gui", "te_seabed_widgets.gui")   # _read opens the path as given
 
 class SeabedWidthTest(unittest.TestCase):
     """Every fixed-width seabed cell fits its longest text (spec § 3.7)."""
@@ -551,7 +556,7 @@ class SeabedPanelTest(unittest.TestCase):
 Fill the `...` bodies from `test_banking_layout.py`'s `WidthBudgetTest`, the same assertions with this file's cells.
 
 - [ ] **Step 2: Run** `.venv/bin/python -m unittest test_seabed_layout -v` — Expected: FAIL (the types don't exist; the buttons overflow).
-- [ ] **Step 3: Build the panel** to spec § 3 and the mockup (`docs/superpowers/specs/assets/2026-10-17-seabed-panel-layouts.html`, option A): overview 2×3 grid; three short policy buttons centred; Ocean Basins with "as of"; five rows each with a chevron toggling its rivals (six `te_seabed_rival_row` instances with `op` 10×basin+n, the "us" row with Relinquish/Claim Again, "and N others"); the stacked pool bar as three overlaid `progressbar`s over a rivals'-claims background (stacked-bar precedent: `gui/te_budget_generated_charts.gui`); How Seabed Licences Work collapsed at the bottom. Icons: existing vanilla textures only.
+- [ ] **Step 3: Build the panel** to spec § 3 and the mockup (`docs/superpowers/specs/assets/2026-10-17-seabed-panel-layouts.html`, option A): overview 2×3 grid; three short policy buttons centred; Ocean Basins with "as of"; five rows each with a chevron toggling its rivals (six `te_seabed_rival_row` instances with `op` 10×basin+n, the "us" row with Relinquish/Claim Again, "and N others"; each rival row's `visible`, flag included, is the same `te_seabed_rival_row_sgui` `IsShown` its text uses, so an unfilled slot reads no missing `te_seabed_rkcap_*` variable); the stacked pool bar as three overlaid `progressbar`s over a rivals'-claims background (stacked-bar precedent: `gui/te_budget_generated_charts.gui`); How Seabed Licences Work collapsed at the bottom. Icons: existing vanilla textures only.
 - [ ] **Step 4: Verify**: `test_seabed_layout`, `test_te_systems_window` → `OK`; `python3 scripts/analysis/check_gui_lint.py` → no errors; `python3 gui_reference_audit.py --strict` → exit 0.
 - [ ] **Step 5: Commit** — `"Seabed panel: layout A"`
 
