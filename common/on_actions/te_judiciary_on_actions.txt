@@ -1,0 +1,55 @@
+﻿# ======================================================================
+#  JUDICIARY — on actions
+#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Effects: common/scripted_effects/te_judiciary_effects.txt.
+# ======================================================================
+
+# A new game: history has set every court. The scores are seeded at the
+# first monthly pulse (te_jud_monthly), where the laws' modifier sums are
+# certainly in place; this only marks the world as seeded, so the old-save
+# repair (te_old_save_repairs.txt) never runs.
+on_game_started = {
+	on_actions = {
+		te_jud_on_game_started
+	}
+}
+
+te_jud_on_game_started = {
+	effect = {
+		set_global_variable = te_jud_world_seeded
+	}
+}
+
+# Root = Country. A country with no score yet (every 1836 country on the
+# first pulse, a new country mid-game) gets one from the law it holds; its
+# law isn't changed. Then the refresh, the scaled modifiers' only writer.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_jud_monthly
+	}
+}
+
+te_jud_monthly = {
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = te_jud_world_seeded
+				NOT = { has_variable = te_jud_seeded }
+			}
+			te_jud_seed_score = yes
+		}
+		te_jud_refresh = yes
+	}
+}
+
+on_yearly_pulse_country = {
+	on_actions = {
+		te_jud_yearly
+	}
+}
+
+te_jud_yearly = {
+	effect = {
+		te_jud_yearly_update = yes
+	}
+}

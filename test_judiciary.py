@@ -311,5 +311,86 @@ class ScoreDefinitionsTest(unittest.TestCase):
             self.assertIn(key + "_desc", keys)
 
 
+EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_judiciary_effects.txt")
+ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "te_judiciary_on_actions.txt")
+REPAIRS = os.path.join(REPO, "common", "on_actions", "te_old_save_repairs.txt")
+HISTORY = os.path.join(REPO, "common", "history", "extra_history.txt")
+SCALED = ("te_judicial_independence", "te_jud_votes_legitimacy", "te_jud_unelected_authority",
+          "te_jud_algorithmic_capture")
+MULT_VARS = ("te_jud_modifier_mult", "te_jud_votes_mult", "te_jud_authority_mult", "te_jud_capture_mult",
+             "te_jud_overhaul_mult")
+
+
+def _script_files():
+    for sub in ("common", "events"):
+        for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
+            yield path
+
+
+class ScoreScriptTest(unittest.TestCase):
+    def test_one_refresh_site(self):
+        write = re.compile(r"(?:add_modifier = \{\s*name = |remove_modifier = )(?:%s)\b" % "|".join(SCALED))
+        writers, callers = set(), []
+        for path in _script_files():
+            text = _read(path)
+            if write.search(text):
+                writers.add(os.path.relpath(path, REPO))
+            callers += [os.path.relpath(path, REPO)] * len(re.findall(r"\bte_jud_refresh = yes", text))
+        self.assertEqual(writers, {"common/scripted_effects/te_judiciary_effects.txt"})
+        self.assertEqual(callers, ["common/on_actions/te_judiciary_on_actions.txt"])
+        self.assertIn("te_jud_refresh = yes", _block(_read(ON_ACTIONS), "te_jud_monthly"))
+
+    def test_multiplier_variables_are_never_removed(self):
+        for path in _script_files():
+            for name in MULT_VARS:
+                self.assertNotIn("remove_variable = " + name, _read(path), path)
+
+    def test_refresh_reads_the_conditions(self):
+        block = _block(_read(EFFECTS), "te_jud_refresh")
+        self.assertIn("te_jud_elected_government = yes", block)
+        self.assertIn("NOT = { te_jud_elected_government = yes }", block)
+        self.assertIn("has_law = law_type:law_algorithmic_governance", block)
+
+    def test_yearly_step(self):
+        block = _block(_read(EFFECTS), "te_jud_yearly_update")
+        self.assertIn("add = 4", block)
+        self.assertIn("subtract = 10", block)
+        self.assertEqual(block.count("value = te_jud_ceiling"), 2, "both directions stop at the ceiling")
+
+    def test_spend_floors_at_zero(self):
+        block = _block(_read(EFFECTS), "te_jud_spend")
+        self.assertIn("subtract = $AMOUNT$", block)
+        self.assertIn("var:te_judicial_independence < 0", block)
+
+    def test_seeding_waits_for_the_monthly_pulse(self):
+        # Modifier sums may not be in place at on_game_started.
+        start = _block(_read(ON_ACTIONS), "te_jud_on_game_started")
+        self.assertNotIn("te_jud_seed_score", start)
+        self.assertIn("set_global_variable = te_jud_world_seeded", start)
+        monthly = _block(_read(ON_ACTIONS), "te_jud_monthly")
+        self.assertIn("has_global_variable = te_jud_world_seeded", monthly)
+        self.assertNotIn("te_jud_assign_court_by_rule", monthly, "a new country keeps its law")
+
+    def test_old_save_seeding_is_a_marked_repair(self):
+        text = _read(REPAIRS)
+        self.assertIn("te_repair_judiciary_seed", _block(text, "on_monthly_pulse"))
+        block = _block(text, "te_repair_judiciary_seed")
+        self.assertIn("NOT = { has_global_variable = te_jud_world_seeded }", block)
+        self.assertIn("te_jud_assign_court_by_rule = yes", block)
+        # The score is released a month after the courts change, once their
+        # modifiers are in place.
+        self.assertIn("has_global_variable = te_jud_courts_assigned", block)
+        self.assertRegex(text, r"# OLD-SAVE REPAIR \(#\d+\): remove after \d{4}-\d{2}-\d{2}[^\n]*\n(#[^\n]*\n)*te_repair_judiciary_seed")
+
+    def test_history(self):
+        text = _read(HISTORY)
+        self.assertIn("te_jud_assign_court_by_rule = yes", _block(text.replace("\n\tevery_country = {", "\nevery_country = {", 1), "every_country"))
+        # A country block: `c:TAG = {`, then text and one-level blocks only.
+        inside = r"c:%s = \{(?:[^{}]|\{[^{}]*\})*?"
+        self.assertRegex(text, inside % "USA" + r"activate_law = law_type:law_constitutional_review")
+        for tag, score in (("GBR", 70), ("USA", 60), ("NET", 50), ("SWE", 50), ("BEL", 40), ("PRU", 35), ("FRA", 35)):
+            self.assertRegex(text, inside % tag + r"set_variable = \{ name = te_judicial_independence value = %d \}" % score, tag)
+
+
 if __name__ == "__main__":
     unittest.main()
