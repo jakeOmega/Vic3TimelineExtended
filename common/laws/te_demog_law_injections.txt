@@ -8,7 +8,8 @@
 # -2% a level, Dedicated and Militarized -3% (Private Policing's -2% is in extra_laws.txt). The health laws' access
 # lines sit inside their existing blocks in modified_health_system.txt; the women's-rights laws'
 # natural fertility (phase 2 step 4) inside their INJECTs in extra_laws.txt, except Women Own
-# Property's, which has no other INJECT.
+# Property's, which has no other INJECT. The health laws' longevity care lines (late game §4.2) are
+# at the end of this file.
 
 INJECT:law_local_police = {
 	institution_modifier = {
@@ -55,5 +56,26 @@ INJECT:law_regulatory_bodies = {
 INJECT:law_worker_protections = {
 	institution_modifier = {
 		state_work_mortality_mult = -0.1
+	}
+}
+
+# Longevity care (late game §4.2; on the laws since 2026-10-17). The health laws' cover for it: the share of the people
+# the health system reaches who are within reach of longevity care through it. Private Health Insurance's insurers pool
+# the price, so the market brings it down twice as fast. The augmentation laws' lines sit in extra_laws.txt.
+INJECT:law_public_health_insurance = {
+	modifier = {
+		state_longevity_care_cover_add = 1
+	}
+}
+
+INJECT:law_charitable_health_system = {
+	modifier = {
+		state_longevity_care_cover_add = 0.25
+	}
+}
+
+INJECT:law_private_health_insurance = {
+	modifier = {
+		country_longevity_care_price_fall_mult = 1
 	}
 }

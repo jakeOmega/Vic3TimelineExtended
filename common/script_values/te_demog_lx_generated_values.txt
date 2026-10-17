@@ -13,8 +13,6 @@ te_demog_k_lx_market_floor = { value = -20 }
 te_demog_k_lx_market_fall = { value = 1 }
 te_demog_k_lx_market_diffusion = { value = 1 }
 te_demog_k_lx_market_ramp = { value = 10 }
-te_demog_k_lx_unrestricted_offset = { value = 20 }
-te_demog_k_lx_mandatory_floor = { value = 0.9 }
 te_demog_k_lx_public_health_weight = { value = 0.5 }
 te_demog_k_lx_old_age_none = { value = 130 }
 te_demog_k_lx_ecto_per_level = { value = 1000 }
@@ -55,14 +53,6 @@ te_demog_lx_market_diffusion = {
 	if = { limit = { has_technology_researched = world_wide_web } add = 0.05 }
 }
 
-# Country scope: the laws' factor on the market threshold's fall (Private Health Insurance's insurers pool the price,
-# the Regulated Augmentation Market speeds it).
-te_demog_lx_market_laws = {
-	value = 1
-	if = { limit = { has_law = law_type:law_private_health_insurance } multiply = 2 }
-	if = { limit = { has_law = law_type:law_regulated_augmentation_market } multiply = 1.5 }
-}
-
 # State scope (late-game §3.5): State Youth Centers' levels on the ectogenesis method, once the owner has its
 # technology (the buildings aren't walked before).
 te_demog_lx_ecto_levels = {
@@ -77,13 +67,4 @@ te_demog_lx_ecto_levels = {
 			add = level
 		}
 	}
-}
-
-# State scope: the owner's health law's cover for longevity care (the public route).
-te_demog_lx_cover = {
-	value = 0
-	if = { limit = { owner = { has_law = law_type:law_public_health_insurance } } value = 1 }
-	if = { limit = { owner = { has_law = law_type:law_private_health_insurance } } value = 0 }
-	if = { limit = { owner = { has_law = law_type:law_charitable_health_system } } value = 0.25 }
-	if = { limit = { owner = { has_law = law_type:law_no_health_system } } value = 0 }
 }

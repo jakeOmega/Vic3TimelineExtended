@@ -626,6 +626,8 @@ mean.
 | Medical Augmentation Only | no change (longevity care is medicine) |
 | Mandatory Augmentation | public cover 1, and access at least 0.9 |
 
+**Built as law modifiers (2026-10-17).** Each row's effect is a census-only type on the law's own `modifier` block (`state_longevity_care_cover_add`, `_floor_add`, `_market_reach_add`, `country_longevity_care_banned_bool`, `country_longevity_care_price_fall_mult`), so the law's tooltip says what it does and the census and its Python twin read the lines rather than `has_law`. Unrestricted Augmentation's start at 60 is the threshold 20 lower throughout. The two faster falls add as modifiers do: Private Health Insurance +100% and the Regulated Augmentation Market +50%, ×2.5 together where the factors multiplied to ×3.
+
 The augmentation laws already sort the strata this way (Unrestricted gives the upper strata SoL +5 and the lower −1),
 so access needs no new law group. Alternative considered: a new law group for longevity care; rejected, since the
 health and augmentation laws already say who gets medicine and enhancements.

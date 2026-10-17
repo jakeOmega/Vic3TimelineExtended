@@ -20,24 +20,40 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 
 import demographics_model as M  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
 from test_demographics_registry import (  # noqa: E402
     EFFECTS, LX_EFFECTS, WORK_EFFECTS, _block, _CountryEngine, _Engine, _engine_for, _raw_blocks, _text)
 
 N = P.RING_YEARS
 YEAR, POP = 2100, 250000.0
-# a state with an ageing carrier and the pull, Public Health Insurance (the public route), people at three wealth bands
+# a state with an ageing carrier and the pull, Public Health Insurance (the public route: its cover for longevity care),
+# people at three wealth bands
 BASE = M.Inputs(sol=30, literacy=0.95, urban_share=0.7, techs=frozenset({"medical_degrees"}),
                 laws=frozenset({"law_protected_class", "law_public_health_insurance"}),
                 wealth_bands={6: 30000.0, 10: 50000.0, 15: 20000.0}, lx_w=55.0)
 LATE = {P.AGEING_RATE_TYPE: -0.25, P.REJUVENATION_TYPE: 0.0, P.ACCESS_TYPE: 0.3, P.DIFFUSION_TYPE: 0.2,
-        "state_chronic_treatment_add": 0.4, "state_infection_treatment_add": 0.5}
+        "state_chronic_treatment_add": 0.4, "state_infection_treatment_add": 0.5, P.LX_COVER_TYPE: 1.0}
+PHI, PRIVATE = "law_public_health_insurance", "law_private_health_insurance"
 
 
 def _inp(**mods):
     inp = dataclasses.replace(BASE)
     inp.mods = {**LATE, **mods}
     return inp
+
+
+@functools.lru_cache(maxsize=None)
+def _law_lines():
+    """The longevity care types the game files' laws carry (the health laws' INJECTs, the augmentation laws)."""
+    return tuple(DM.load_carriers(types=P.LX_LAW_TYPES))
+
+
+def _with_laws(inp, add=(), drop=()):
+    """inp under other laws: its law set, and the longevity care types its laws carry in the game files."""
+    laws = (inp.laws | set(add)) - set(drop)
+    mods = {**inp.mods, **DM.totals(_law_lines(), laws=laws, types=P.LX_LAW_TYPES)}
+    return dataclasses.replace(inp, laws=frozenset(laws), mods=mods)
 
 
 def _ring(inp, seed=1, pool=(30.0, 20.0), late=True):
@@ -223,7 +239,7 @@ class TestLateGameScript(unittest.TestCase):
 
     def test_eligibility_falling_and_rising(self):
         """Cover falls with eligibility (a ban: Human Purity) and returns before anyone new joins (§1.2)."""
-        banned = dataclasses.replace(_inp(), laws=BASE.laws | {P.LX_BAN_LAW})
+        banned = _with_laws(_inp(), add={"law_human_purity"})
         eng, ring, out = self.step_both(banned)
         self.check(eng, ring, out)
         self.assertLess(out["lx"]["cover"], 0.8)
@@ -245,10 +261,14 @@ class TestLateGameScript(unittest.TestCase):
         self.assertGreater(sum(1 for s in ring.lx_s if s), 15)   # the adult bands with people
 
     def test_mandatory_and_unrestricted(self):
-        for law in (P.LX_MANDATORY_LAW, P.LX_UNRESTRICTED_LAW):
-            inp = dataclasses.replace(_inp(), laws=BASE.laws | {law})
-            eng, ring, out = self.step_both(inp)
-            self.check(eng, ring, out)
+        """The laws' longevity care types (§4.2): the floor and full cover, the market's reach, a quarter's cover, and
+        Mandatory Augmentation over Private Health Insurance's none."""
+        for add, drop in (({"law_mandatory_augmentation"}, ()), ({"law_unrestricted_augmentation"}, ()),
+                          ({"law_charitable_health_system"}, {PHI}),
+                          ({"law_mandatory_augmentation", PRIVATE}, {PHI})):
+            with self.subTest(add=sorted(add)):
+                eng, ring, out = self.step_both(_with_laws(_inp(), add, drop))
+                self.check(eng, ring, out)
 
     def test_the_seed(self):
         """A seed once ageing is slowed (§1.2): its adults survive with the treated at the rate's steady biological age,
@@ -305,7 +325,7 @@ class TestLateGameScript(unittest.TestCase):
     def test_fixed_point_late_steps(self):
         """The late steps above, in the engine's fixed point (test_fixed_point_births)."""
         cases = [_inp(), _inp(**{P.AGEING_RATE_TYPE: -1.0, P.REJUVENATION_TYPE: 0.03}),
-                 dataclasses.replace(_inp(), laws=BASE.laws | {P.LX_BAN_LAW}),
+                 _with_laws(_inp(), add={"law_human_purity"}),
                  dataclasses.replace(_inp(), wealth_bands={30: 100000.0}, lx_w=20.0)]
         for i, inp in enumerate(cases):
             with self.subTest(case=i):
@@ -358,7 +378,7 @@ class TestLateGameModel(unittest.TestCase):
         ring, _ = self.run_years(inp, 30)
         j = M.lx_band((ring.year - 70) % N)
         before = ring.lx_d[j]
-        banned = dataclasses.replace(inp, laws=inp.laws | {P.LX_BAN_LAW})
+        banned = _with_laws(inp, add={"law_human_purity"})
         ring, out = self.run_years(banned, 5, ring)
         self.assertLess(out["lx"]["cover"], 1.0)
         self.assertGreater(ring.lx_d[j], before * 0.9)
@@ -387,18 +407,25 @@ class TestLateGameModel(unittest.TestCase):
         target, pub = M.lx_targets(inp)
         self.assertAlmostEqual(pub, acc)
         self.assertAlmostEqual(target, 0.5 * acc + 0.5 * max(acc, M.lx_market(P.LX_BAND_WEALTH[21], 80.0)))
-        private = dataclasses.replace(inp, laws=frozenset({"law_private_health_insurance"}))
+        private = _with_laws(inp, add={PRIVATE}, drop={PHI})
         self.assertEqual(M.lx_targets(private)[1], 0.0)
-        self.assertEqual(M.lx_targets(dataclasses.replace(inp, laws=inp.laws | {P.LX_BAN_LAW})), (0.0, 0.0))
-        self.assertGreaterEqual(M.lx_targets(dataclasses.replace(inp, laws=inp.laws | {P.LX_MANDATORY_LAW}))[0],
-                                P.LX_MANDATORY_FLOOR)
-        self.assertGreater(M.lx_targets(dataclasses.replace(inp, laws=inp.laws | {P.LX_UNRESTRICTED_LAW}))[0],
-                           M.lx_targets(private)[0])
+        self.assertEqual(M.lx_targets(_with_laws(inp, add={"law_human_purity"})), (0.0, 0.0))
+        # Mandatory Augmentation: everyone the health system reaches, at least its floor, whatever the health law
+        mandatory = _with_laws(private, add={"law_mandatory_augmentation"})
+        self.assertGreater(mandatory.mods[P.LX_FLOOR_TYPE], acc)
+        self.assertEqual(M.lx_targets(mandatory)[1], mandatory.mods[P.LX_FLOOR_TYPE])
+        # Unrestricted Augmentation: the market reaches the poorer band (wealth 3.5) at a threshold of 15, which it
+        # otherwise misses by more than the ramp
+        late = dataclasses.replace(private, lx_w=15.0)
+        unrestricted = _with_laws(late, add={"law_unrestricted_augmentation"})
+        self.assertEqual(M.lx_threshold(unrestricted), 15.0 - unrestricted.mods[P.LX_REACH_TYPE])
+        self.assertGreater(M.lx_targets(unrestricted)[0], M.lx_targets(late)[0])
 
     def test_the_market_threshold_falls(self):
         self.assertEqual(M.lx_market_next(None), P.LX_MARKET_START)
         self.assertEqual(M.lx_market_next(80.0), 80.0 - P.LX_MARKET_FALL)
-        self.assertEqual(M.lx_market_next(80.0, laws={"law_private_health_insurance"}), 78.0)
+        self.assertEqual(M.lx_market_next(80.0, price_fall=1.0), 78.0)
+        self.assertEqual(M.lx_market_next(80.0, price_fall=1.5), 77.5)   # with the Regulated Augmentation Market
         self.assertEqual(M.lx_market_next(P.LX_MARKET_FLOOR), P.LX_MARKET_FLOOR)
 
 
@@ -455,12 +482,12 @@ class TestWealthSlope(unittest.TestCase):
 
     def test_the_model_slope(self):
         """A rich minority within reach: its multiplier is rho's share lower, so the slope is negative."""
-        inp = dataclasses.replace(_inp(), laws=frozenset({"law_private_health_insurance"}),
+        inp = dataclasses.replace(_with_laws(_inp(), add={PRIVATE}, drop=BASE.laws),
                                   wealth_bands={2: 800.0, 30: 200.0}, lx_w=100.0)
         slope, mbar = M.lx_wealth_slope(inp, 0.2, 0.25)
         self.assertLess(slope, 0)
         self.assertAlmostEqual(mbar, 0.8 * 1 + 0.2 * 0.25)
-        self.assertEqual(M.lx_wealth_slope(dataclasses.replace(inp, laws=inp.laws | {P.LX_BAN_LAW}), 0.2, 0.25),
+        self.assertEqual(M.lx_wealth_slope(_with_laws(inp, add={"law_human_purity"}), 0.2, 0.25),
                          (0.0, 1.0))
 
 
@@ -631,12 +658,12 @@ class TestLateGameCountry(unittest.TestCase):
 
     def test_the_market_threshold(self):
         eng = _Engine({"te_demog_lx_country_carrier": 1.0, "te_demog_lx_market_diffusion": 0.2,
-                       "te_demog_lx_market_laws": 2.0}, triggers={})
+                       f"modifier:{P.LX_PRICE_FALL_TYPE}": 1.0}, triggers={})
         eng.call("te_demog_lx_market_step")
         self.assertEqual(eng.vars["te_dg_lx_w"], P.LX_MARKET_START)
         eng.call("te_demog_lx_market_step")
         self.assertAlmostEqual(eng.vars["te_dg_lx_w"],
-                               M.lx_market_next(float(P.LX_MARKET_START), {"law_private_health_insurance"}, 0.2))
+                               M.lx_market_next(float(P.LX_MARKET_START), 1.0, 0.2))
         eng.fixtures["te_demog_lx_country_carrier"] = 0.0
         eng.vars["te_dg_lx_w"] = 10.0
         eng.call("te_demog_lx_market_step")
