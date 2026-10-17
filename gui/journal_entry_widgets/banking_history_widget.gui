@@ -227,7 +227,7 @@ types te_banking_history_types
 			multiline = yes
 			max_width = 480
 			align = hcenter|nobaseline
-			using = fontsize_large
+			using = banking_dash_fontsize_row
 			text = "te_hist_since"
 		}
 
@@ -246,7 +246,7 @@ types te_banking_history_types
 		### ---- Cycle value (0-100 index) --------------------------------
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium
@@ -275,7 +275,7 @@ types te_banking_history_types
 		### ---- Momentum (signed monthly delta) --------------------------
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium
@@ -331,7 +331,7 @@ types te_banking_history_types
 		### ---- Bubble pressure (0-100 index) ----------------------------
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium
@@ -389,7 +389,7 @@ types te_banking_history_types
 		### Everyone except a digital currency: the axis starts at 0.
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium
@@ -432,7 +432,7 @@ types te_banking_history_types
 		### number here that cannot be checked from the files.
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium
@@ -496,7 +496,7 @@ types te_banking_history_types
 		### started this.
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium
@@ -566,7 +566,7 @@ types te_banking_history_types
 		### samples are not taken either (te_history_banking_effects.txt).
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium
@@ -629,7 +629,7 @@ types te_banking_history_types
 		### samples are not taken either (te_history_banking_effects.txt).
 		te_history_chart = {
 			blockoverride "chart_title_font" {
-				using = fontsize_xl
+				using = banking_dash_fontsize_heading
 			}
 			blockoverride "chart_legend_font" {
 				using = fontsize_medium

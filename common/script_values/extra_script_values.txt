@@ -3154,6 +3154,31 @@ banking_display_points_free = {
 	value = modifier:country_banking_intervention_max_add
 }
 
+# The intervention budget before any tool holds a point: every grant of
+# country_banking_intervention_max_add, the banking laws' and the banking
+# union's. Every negative one is a tool's cost (the policy, planning,
+# cooperative and crash-intervention modifiers), so what the tools hold is
+# this less what is free; while the budget is overdrawn, free is negative and
+# used is more than the total. The overview's budget cell shows both.
+# test_banking_layout holds this list to every positive grant in common/.
+banking_display_points_total = {
+	value = 0
+	if = { limit = { has_law = law_type:law_unregulated_banking } add = 1 }
+	if = { limit = { has_law = law_type:law_free_mutual_banking } add = 3 }
+	if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 4 }
+	if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 7 }
+	if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 5 }
+	if = { limit = { has_law = law_type:law_state_owned_banking } add = 7 }
+	if = { limit = { has_law = law_type:law_central_bank_independence } add = 7 }
+	if = { limit = { has_law = law_type:law_national_bank } add = 1 }
+	if = { limit = { te_mon_mod_has = { NAME = te_mon_union_banking_union } } add = 1 }
+}
+
+banking_display_points_used = {
+	value = banking_display_points_total
+	subtract = banking_display_points_free
+}
+
 # Extra repeal weight the AI gives a button that ends a programme costing
 # authority, while the country's available authority is negative. Low authority
 # cuts bureaucracy, which can tip a country into a bankruptcy cycle, so an AI in
