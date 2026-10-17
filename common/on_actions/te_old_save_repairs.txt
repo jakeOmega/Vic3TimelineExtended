@@ -246,7 +246,7 @@ te_repair_double_inheritance_law = {
 	}
 }
 
-# OLD-SAVE REPAIR (#1022): remove after 2026-11-28 or at vanilla 1.15, whichever comes first.
+# OLD-SAVE REPAIR (#1022): remove after 2026-10-22 or at vanilla 1.15, whichever comes first.
 #
 # The Judiciary group (docs/superpowers/specs/2026-10-17-judiciary-design.md
 # § 6) is new, so a save from before it gives every country Executive
