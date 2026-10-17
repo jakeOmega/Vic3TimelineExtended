@@ -329,7 +329,8 @@ Override Capacity of at least 2, committed groups holding at least 35% of the
 clout, enough authority to pay for it, and every other condition for passage.
 It costs authority and 5
 legitimacy, angers the opposition and spends override capacity, as forcing a
-law through does, with the effects fading over five years.
+law through does, with the effects fading over five years. It also lowers
+Judicial Independence by 10.
 
 ## Promises to interest groups
 
