@@ -295,18 +295,19 @@ pool of licences. A coastal state belongs to the basin its sea lane opens onto.
 | Arctic | 100 | the Barents Sea, Greenland and Hudson Bay |
 
 Every January the pools are shared out by claim weight among the countries with
-Abyssal Plain Mining; a country that has just researched it gets its share the
-month after. In a basin where you have incorporated coastal states, your weight
+Abyssal Plain Mining. A country that has just researched it gets its share the
+month after, and that sharing divides every pool again, so your own share can
+move in the middle of a year. In a basin where you have incorporated coastal states, your weight
 counts those states twice, their port levels, and your navy in proportion to the
 coast you have there. In any other basin it is a twentieth of your navy, so you
 can claim far from home, but only a small share.
 
 A licence belongs to the level, not to the country. It is recorded on the state
 the mine stands in and passes with it: conquer a mined state and its licences
-come with it. Built levels are never taken away. If your share falls below what
-you hold, you keep every level and can't build more until you are back under it;
-levels you downsize, or that are destroyed, give their licences back to your
-share. A new level
+come with it. Built levels are never taken away. If your share in a basin falls
+below what you hold there, you keep every level and can't take more licences
+from that basin until you are back under it; levels you downsize, or that are
+destroyed, give their licences back to your share. A new level
 takes its own basin's licence first. Once your share there is used up it takes
 one from another basin and works at -25% throughput (Long-Haul Seabed
 Operations), until a local licence frees up and replaces it on its own. The
@@ -322,7 +323,7 @@ figures.
 |---|---|---|---|
 | Scientific Survey (default) | none | ×0.25 | You aren't building Deep-Sea Mines yet. |
 | Sponsor Contractors | 50 | ×1 | You want licences: the lawful route under the Law of the Sea. |
-| Unilateral Licensing | 150 | ×1, navy counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin you share, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
+| Unilateral Licensing | 150 | ×1, navy counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 
 A new policy holds its influence from the day you choose it; its weight counts
 from the next January sharing. AI countries take up Sponsor Contractors when it

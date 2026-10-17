@@ -829,7 +829,7 @@ the seabed policies).
 | Regime | When | How each basin's licences are shared |
 |---|---|---|
 | Open | The convention is not in force, or the United Nations rule is off | By weight among all claimants. |
-| Regulated | The convention is in force | Half of each basin, the reserved half, by weight among the parties whose GDP per head is below the members' average (the World Development Fund's yardstick). The other half by weight among all claimants. |
+| Regulated | The convention is in force | Half of each basin, the reserved half, by weight among the parties whose GDP per head is below the members' average (the World Development Fund's yardstick). The other half by weight among all claimants. While no such party claims in a basin, its reserved half is shared with the open half. |
 | Scramble | Two or more great powers on Unilateral Licensing while Regulated | The whole basin among all claimants, every navy counting double. It is Regulated again two years after fewer than two great powers remain on Unilateral Licensing. |
 
 While the seabed is Regulated, a party pays royalties each week: 4% of its
