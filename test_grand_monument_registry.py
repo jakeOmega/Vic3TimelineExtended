@@ -4977,7 +4977,7 @@ class MergeShadowTests(unittest.TestCase):
     SHADOW_EFFECTS = ("gm_shadow_monthly", "gm_state_write_shadow", "gm_state_drop_shadow", "gm_sh_drop",
                       "gm_state_adopt_orphans", "gm_sh_settle_region", "gm_sh_try_raise", "gm_sh_settle_one", "gm_sh_adopt_beside",
                       "gm_state_raise_orphan", "gm_sh_lost", "gm_sh_log_numbers", "gm_sh_mirror", "gm_mon_repair_origin",
-                      "gm_monument_merge_self_check")
+                      "gm_monument_merge_self_check", "gm_sh_rejoin", "gm_monument_split_self_check")
 
     def setUp(self):
         self.m = read(MON_EFFECTS)
@@ -5184,7 +5184,8 @@ class MergeShadowTests(unittest.TestCase):
                   "add_to_variable_list = { name = gm_monuments_held target = scope:gm_sh_moving }",
                   "gm_tr_update_picture = yes"):
             self.assertIn(s, beside)
-        # The levels are already in the building: no rebuild.
+        # The levels are already in the building: no rebuild. (A split piece
+        # coming home is the one path that rebuilds, gm_sh_rejoin, below.)
         for name in ("gm_sh_adopt_beside", "gm_state_raise_orphan", "gm_sh_settle_region", "gm_sh_try_raise", "gm_sh_settle_one"):
             b = self.body(name)
             for s in ("remove_building", "te_construction_market_build_specified_level", "gm_state_tr_add_levels"):
@@ -5195,6 +5196,89 @@ class MergeShadowTests(unittest.TestCase):
         self.assertIn("TE_MONUMENTS:", lost)
         self.assertTrue(lost.endswith("gm_sh_drop = yes"), lost)
         self.assertIn("gm_monument_merge_self_check = yes", lost)
+
+    # ---- a revolt's split piece (found 2026-10-17) ------------------------------------
+    # Both of the 1836 observer run's losses (Tuscany 1878, the Paris Commune 1887)
+    # were a revolt's piece of the monument standing there: a split gives the new
+    # part's building a share of the levels, the refresh records it as a new
+    # monument, and at the merge back the old monument's records, frozen before the
+    # split, count it already. Paris's Arc stood at 11 levels on records of 15.
+    def test_the_shadow_notes_what_its_building_lacks(self):
+        write = self.body("gm_state_write_shadow")
+        self.assertIn("set_variable = { name = gm_sh_short_now value = gm_state_levels_short }", write)
+        self.assertIn("if = { limit = { scope:gm_tr_state.var:gm_sh_short_now >= 1 } set_variable = { name = gm_sh_short "
+                      "value = scope:gm_tr_state.var:gm_sh_short_now } } else = { gm_remove_state_var = { VAR = gm_sh_short } }",
+                      write)
+        self.assertIn("remove_variable = gm_sh_short_now", write)
+        short = self.body("gm_state_levels_short", self.v)
+        for s in ("has_variable = gm_seen has_variable = gm_levels", "value = var:gm_levels",
+                  "add = gm_state_secondary_levels", "subtract = gm_state_level", "min = 0"):
+            self.assertIn(s, short)
+        self.assertIn("value = var:gm_shadow.var:gm_sh_short", self.body("gm_state_split_short", self.v))
+        self.assertEqual(self.body("gm_state_was_split", self.t),
+                         "has_building = building_grand_monument has_variable = gm_seen has_variable = gm_levels "
+                         "gm_state_split_short >= 1")
+        # A shadow that becomes a monument drops the note.
+        self.assertIn("remove_tag = gm_shadow add_tag = gm_monument gm_remove_state_var = { VAR = gm_sh_short }",
+                      self.body("gm_sh_adopt_beside"))
+
+    def test_an_orphan_no_building_takes_rejoins_the_monument_it_was_split_from(self):
+        one = self.body("gm_sh_settle_one")
+        # Settled once, and not while a piece put back today rebuilds a building here.
+        self.assertTrue(one.startswith("if = { limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } NOT = { "
+                                       "scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } } } }"),
+                        one[:200])
+        self.assertIn("limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }", self.body("gm_sh_try_raise"))
+        beside, split, lost = (one.find("gm_sh_adopt_beside = yes"), one.find("gm_sh_rejoin = yes"),
+                               one.find("gm_sh_lost = yes"))
+        self.assertTrue(0 < beside < split < lost, (beside, split, lost))
+        self.assertIn("ordered_scope_state = { limit = { gm_state_was_split = yes } order_by = gm_state_split_short "
+                      "position = 0", one)
+        rejoin = self.body("gm_sh_rejoin")
+        # The numbers first, then no more levels back than the monument lacks now.
+        self.assertLess(rejoin.find("gm_sh_log_numbers = yes"), rejoin.find("name = gm_tr_levels"))
+        self.assertIn("value = { value = gm_mon_levels max = scope:gm_sh_target.var:gm_sh_lacking }", rejoin)
+        self.assertIn("set_variable = { name = gm_sh_lacked value = gm_state_split_short }", rejoin)
+        self.assertIn("set_variable = { name = gm_sh_lacking value = gm_state_levels_short }", rejoin)
+        # No orphan before the rebuild, which runs monument_events.1 and the refresh
+        # inside this effect: out of the list, untagged, its region forgotten.
+        rebuild = rejoin.find("gm_state_tr_add_levels = yes")
+        for s in ("remove_list_global_variable = { name = gm_shadows target = scope:gm_sh_moving }",
+                  "remove_tag = gm_shadow", "remove_variable = gm_tr_origin_region",
+                  "value = { value = var:gm_sh_lacking subtract = scope:gm_sh_moving.var:gm_tr_levels min = 0 }",
+                  "var:gm_shadow ?= { if = { limit = { scope:gm_sh_target.var:gm_sh_lacking >= 1 } set_variable = { "
+                  "name = gm_sh_short value = scope:gm_sh_target.var:gm_sh_lacking } } else = { "
+                  "gm_remove_state_var = { VAR = gm_sh_short } } }"):
+            self.assertNotEqual(rejoin.find(s), -1, s)
+            self.assertLess(rejoin.find(s), rebuild, s)
+        self.assertIn("if = { limit = { var:gm_tr_levels >= 1 } clear_saved_scope = gm_tr_moving "
+                      "save_scope_as = gm_tr_moving scope:gm_sh_target = { gm_state_tr_add_levels = yes "
+                      "trigger_event = { id = monument_events.31 days = 1 } } }", rejoin)
+        # The only undelayed work after it is the rebuild's own; the piece goes last.
+        self.assertNotRegex(rejoin, r"trigger_event = \{ id = [\w.]+ \}")
+        self.assertTrue(rejoin.endswith("destroy_container = yes"), rejoin[-80:])
+        self.assertIn("TE_MONUMENTS:", rejoin)
+        self.assertIn("gm_monument_split_self_check = yes", rejoin)
+        self.assertNotIn("gm_monument_merge_self_check", rejoin)
+
+    def test_the_split_self_check(self):
+        check = self.body("gm_monument_split_self_check")
+        self.assertIn("TE_SELF_CHECK OK monument_split_rejoined", check)
+        self.assertEqual(check.count("TE_SELF_CHECK BROKEN monument_split_rejoined"), 1)
+        self.assertIn("NOT = { has_global_variable = gm_split_self_checked }", check)
+        self.assertIn("set_global_variable = gm_split_self_checked", check)
+        # Degenerate inputs give no verdict: no levels on the piece, or none lacking.
+        self.assertIn("global_var:gm_sh_log_piece_now >= 1", check)
+        self.assertIn("global_var:gm_sh_log_lacked_now >= 1", check)
+        self.assertIn("limit = { global_var:gm_sh_log_piece_now <= global_var:gm_sh_log_lacked_now }", check)
+        for sv in ("gm_sh_log_piece", "gm_sh_log_lacked", "gm_sh_log_lacking", "gm_sh_log_put_back"):
+            self.assertIn(f"[SCOPE.ScriptValue('{sv}')|0]", check)
+            self.assertIn(f"value = global_var:{sv}_now", self.body(sv, self.v))
+        self.assertIn("docs/testing/grand-monuments-ageing-playtest.md", check)
+        rejoin = self.body("gm_sh_rejoin")
+        for g in ("gm_sh_log_piece_now", "gm_sh_log_lacked_now", "gm_sh_log_lacking_now", "gm_sh_log_put_back_now"):
+            self.assertIn(f"set_global_variable = {{ name = {g} ", rejoin)
+            self.assertLess(rejoin.find(f"name = {g} "), rejoin.find("gm_monument_split_self_check = yes"), g)
 
     # ---- before the building is read ----------------------------------------------
     def test_adoption_comes_before_founding_beside(self):
@@ -5267,6 +5351,7 @@ class MergeShadowTests(unittest.TestCase):
     def test_the_play_test_list_and_docs(self):
         playtest = (ROOT / "docs/testing/grand-monuments-ageing-playtest.md").read_text(encoding="utf-8")
         self.assertIn("monument_merge_kept", playtest)
+        self.assertIn("monument_split_rejoined", playtest)
         self.assertIn("Mughal", playtest)
         systems = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
         self.assertIn("gm_shadow", systems)

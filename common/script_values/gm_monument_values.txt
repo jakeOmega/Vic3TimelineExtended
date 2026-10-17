@@ -261,6 +261,40 @@ gm_state_unexplained_levels = {
 	min = 0
 }
 
+# State scope. Levels this state's frozen primary and its secondaries count that
+# its building no longer holds: gm_state_unexplained_levels the other way round.
+# A revolt that takes part of a state splits it, and the new part's building
+# takes a share of the levels while the records stay here (issue #936, found
+# 2026-10-17: the Paris Commune's piece of the Arc de Triomphe). 0 with no
+# frozen primary.
+gm_state_levels_short = {
+	value = 0
+	if = {
+		limit = {
+			has_building = building_grand_monument
+			has_variable = gm_seen
+			has_variable = gm_levels
+		}
+		value = var:gm_levels
+		add = gm_state_secondary_levels
+		subtract = gm_state_level
+		min = 0
+	}
+}
+
+# State scope. What this state's monument lacked when its shadow was last
+# written (gm_sh_short on it, gm_state_write_shadow), or 0.
+gm_state_split_short = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_shadow
+			var:gm_shadow ?= { has_variable = gm_sh_short }
+		}
+		value = var:gm_shadow.var:gm_sh_short
+	}
+}
+
 # What the merge's log lines and self-check print (gm_sh_log_numbers): copied
 # into global variables first, as nd_log_context does, because a ScriptValue
 # read inside debug_log evaluates against ROOT and cannot see a saved scope
@@ -288,5 +322,40 @@ gm_sh_log_buildings = {
 	if = {
 		limit = { has_global_variable = gm_sh_log_buildings_now }
 		value = global_var:gm_sh_log_buildings_now
+	}
+}
+
+# What a split piece's rejoining prints (gm_sh_rejoin): the piece's levels, what
+# its monument lacked when last seen and lacks now, and what went back on the
+# building.
+gm_sh_log_piece = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_piece_now }
+		value = global_var:gm_sh_log_piece_now
+	}
+}
+
+gm_sh_log_lacked = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_lacked_now }
+		value = global_var:gm_sh_log_lacked_now
+	}
+}
+
+gm_sh_log_lacking = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_lacking_now }
+		value = global_var:gm_sh_log_lacking_now
+	}
+}
+
+gm_sh_log_put_back = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_put_back_now }
+		value = global_var:gm_sh_log_put_back_now
 	}
 }

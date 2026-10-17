@@ -627,6 +627,17 @@ gm_state_takes_orphan_beside = {
 	gm_state_unexplained_levels > 0
 }
 
+# State scope. A frozen primary here lacked levels when its shadow was last
+# written (gm_state_split_short): a revolt took part of its state, and the new
+# part's building a share of its levels. An orphan that no building takes is
+# that piece coming home (gm_sh_rejoin), not a monument of its own.
+gm_state_was_split = {
+	has_building = building_grand_monument
+	has_variable = gm_seen
+	has_variable = gm_levels
+	gm_state_split_short >= 1
+}
+
 # State scope. Its building's levels are told apart exactly: nothing records
 # it, or its primary is frozen (gm_levels). The merge self-check gives a
 # verdict only for a region whose every building is so.
