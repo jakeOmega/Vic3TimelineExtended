@@ -4,7 +4,7 @@
 # enable = {} trigger for whether laws in this group should be possible at all
 
 lawgroup_privacy_rights = {
-	law_group_category = power_structure
+	law_group_category = human_rights
 	ideological_opinion_impact = 0.25
 	affected_by_regime_change = yes
 }
