@@ -72,6 +72,38 @@ class LeaseArticleTest(unittest.TestCase):
             self.assertIn(f"custom_tooltip_no_bullet = te_seabed_lease_{b}_effects_desc", article(b))
 
 
+class WargoalTest(unittest.TestCase):
+    """Review C1: an enforceable article is pressed through vanilla's
+    enforce_treaty_article war goal, whose maneuvers and infamy are 0 and leave
+    the figures to the article's own wargoal block. Every can_be_enforced
+    article in the mod carries one, as every vanilla one does."""
+
+    def test_every_enforceable_article_has_a_wargoal(self):
+        folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "common", "treaty_articles")
+        missing = []
+        for f in sorted(os.listdir(folder)):
+            if not f.endswith(".txt"):
+                continue
+            text = read(os.path.join("common", "treaty_articles", f))
+            for name in re.findall(r"^(\w+) = \{", text, re.M):
+                body = strip_comments(block(text, name))
+                if "can_be_enforced" in body and "wargoal = {" not in body:
+                    missing.append(f"{f}: {name}")
+        self.assertEqual(missing, [])
+
+    def test_the_lease_war_goal_scales_with_the_claims(self):
+        loc = english_loc()
+        for b in m.BASINS:
+            war = strip_comments(block(article(b), "\twargoal"))
+            self.assertIn("contestion_type =", war)
+            self.assertIn("execution_priority =", war)
+            for part in ("maneuvers", "infamy"):
+                self.assertIn("scope:quantity", block(war, f"\t\t{part}"), (b, part))
+            for key in re.findall(r'desc = "(\w+)"', war):
+                if key.startswith("te_"):
+                    self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
+
+
 class LeaseStartTest(unittest.TestCase):
     def test_start_dispatches_a_hidden_event(self):
         """The hook only marks the lessee and dispatches; the event a day later

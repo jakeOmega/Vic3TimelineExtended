@@ -7169,6 +7169,7 @@
  te_seabed_lease_lessor_tt:0 "The lessor has researched $abyssal_plain_mining$ and has a coastal state"
  te_seabed_lease_maintain_tt:0 "Both countries have researched $abyssal_plain_mining$ and have a coastal state"
  te_seabed_lease_one_tt:0 "The lessee holds no lease in this basin from another country, nor licences built on one that still count against that country's share"
+ te_seabed_lease_war_claims:0 "Seabed claims demanded"
  te_seabed_legend_claims:0 "our claims"
  te_seabed_legend_ours:0 "our mines"
  te_seabed_legend_queued:0 "queued"

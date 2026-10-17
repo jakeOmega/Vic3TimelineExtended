@@ -167,6 +167,53 @@ te_seabed_lease_pacific = {
 			}
 		}
 	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
 }
 
 te_seabed_lease_atlantic = {
@@ -316,6 +363,53 @@ te_seabed_lease_atlantic = {
 					te_seabed_ai_lease_request_value_atlantic > 0
 				}
 				value = 1
+			}
+		}
+	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
 			}
 		}
 	}
@@ -471,6 +565,53 @@ te_seabed_lease_indian = {
 			}
 		}
 	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
 }
 
 te_seabed_lease_arctic = {
@@ -623,6 +764,53 @@ te_seabed_lease_arctic = {
 			}
 		}
 	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
 }
 
 te_seabed_lease_southern = {
@@ -772,6 +960,53 @@ te_seabed_lease_southern = {
 					te_seabed_ai_lease_request_value_southern > 0
 				}
 				value = 1
+			}
+		}
+	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
 			}
 		}
 	}
