@@ -63,13 +63,21 @@ te_seabed_policy_factor_survey = 0.25
 te_seabed_policy_factor_sponsor = 1
 te_seabed_policy_factor_unilateral = 1
 
-# ---- Policy (§ 2.5) ----
-# Influence held while the policy stands, as country_influence_cost_add on
-# te_seabed_policy_sponsor_cost / te_seabed_policy_unilateral_cost
-# (te_global_commons_seabed_modifiers.txt), which restate these figures;
-# test_seabed_script.py pins the pair.
+# ---- Policy (§ 2.5; seabed claims spec §§ 2.3-2.4) ----
+# Influence held while the policy stands: unit modifiers
+# (te_seabed_policy_sponsor_cost / te_seabed_policy_unilateral_cost) applied
+# with the cost as multiplier (te_seabed_refresh_policy_cost). Sponsor
+# Contractors: the base plus so much per claim it protects, uncapped
+# ("claiming the whole basin should be expensive"). Unilateral Licensing:
+# Sponsor's figure × the multiplier, and at least its own base. First
+# estimates, to tune in the play-test.
 te_seabed_influence_sponsor = 50
+te_seabed_influence_per_claim = 0.5
 te_seabed_influence_unilateral = 150
+te_seabed_unilateral_cost_mult = 1.5
+# Any change of policy holds it this many months (the AI's too); the first
+# choice is free.
+te_seabed_policy_lock_months = 60
 # Relations a year with each other Unilateral claimant sharing a home basin.
 # Applied as half from each side (te_seabed_unilateral_relations), since
 # relations are one figure for the pair.
@@ -127,6 +135,56 @@ te_seabed_regime_value = {
 		limit = { has_global_variable = te_seabed_regime }
 		value = global_var:te_seabed_regime
 	}
+}
+
+# Country scope: the claims Sponsor Contractors protects, its unused claims in
+# every basin (a relinquished basin's are 0).
+te_seabed_protected_claims = {
+	value = te_seabed_unbuilt_total
+}
+
+# Country scope: the influence each policy holds now.
+te_seabed_sponsor_cost_value = {
+	value = te_seabed_protected_claims
+	multiply = te_seabed_influence_per_claim
+	add = te_seabed_influence_sponsor
+}
+
+te_seabed_unilateral_cost_value = {
+	value = te_seabed_sponsor_cost_value
+	multiply = te_seabed_unilateral_cost_mult
+	min = te_seabed_influence_unilateral
+}
+
+# Country scope: what the current policy holds (0 on Scientific Survey).
+te_seabed_policy_cost_value = {
+	value = 0
+	if = {
+		limit = { te_seabed_policy_sponsor = yes }
+		value = te_seabed_sponsor_cost_value
+	}
+	else_if = {
+		limit = { te_seabed_policy_unilateral = yes }
+		value = te_seabed_unilateral_cost_value
+	}
+}
+
+# Country scope: the month the policy may change again (0 = never changed).
+te_seabed_policy_unlock_month_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_policy_changed }
+		value = var:te_seabed_policy_changed
+		add = te_seabed_policy_lock_months
+	}
+}
+
+# Display: the year changes are allowed from, this year when they already are.
+te_seabed_policy_unlock_year_disp = {
+	value = te_seabed_policy_unlock_month_value
+	divide = 12
+	floor = yes
+	min = te_history_current_year
 }
 
 # Country scope: the policy factor.

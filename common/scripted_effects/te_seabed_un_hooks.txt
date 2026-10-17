@@ -18,8 +18,9 @@
 #     (global)                             regulation; set when fewer than two
 #                                          great powers remain on Unilateral
 #                                          Licensing, cleared when two are again
-#   te_seabed_defected (country)           a party that defected and still holds
-#                                          Unilateral Licensing
+#   te_seabed_defected (country)           the month a party defected, while it
+#                                          still holds Unilateral Licensing (an
+#                                          old save's has it as a flag, below 12)
 #   te_seabed_party_cooldown_end (country) the month a defector that left
 #                                          Unilateral Licensing is a party again
 #
@@ -127,10 +128,12 @@ te_seabed_un_clear_scramble_clock = {
 #     the reserved half and pays no royalties while it holds the policy
 #     (te_seabed_itlos_party reads the policy itself);
 #   - a defector that leaves Unilateral Licensing is a party again five years
-#     later (te_seabed_party_cooldown_months). The spec names the return to
-#     Sponsor Contractors; Scientific Survey is lawful under the convention
-#     too, so leaving for either starts the five years, and a later switch
-#     between the two never restarts them;
+#     after it defected (te_seabed_party_cooldown_months; seabed claims spec
+#     § 2.4): at once if the five years have run, as the policy lock lets it
+#     leave no sooner. An old save's defection, stored as a flag with no month,
+#     keeps the old rule, five years from leaving. Leaving for Scientific
+#     Survey or Sponsor Contractors counts alike, and a later switch between
+#     the two never restarts the clock;
 #   - a non-party (it refused the convention, or is outside the UN) pays
 #     nothing extra for Unilateral Licensing: the seabed's own relations
 #     penalty is all.
@@ -154,7 +157,7 @@ te_seabed_un_on_policy_change = {
 		}
 		custom_tooltip = te_seabed_defection_case_tt
 		un_dossier_record = { RECORD = defiance POINTS = te_seabed_defection_case }
-		set_variable = te_seabed_defected
+		set_variable = { name = te_seabed_defected value = te_history_month_index }
 		if = {
 			limit = { has_variable = te_seabed_party_cooldown_end }
 			remove_variable = te_seabed_party_cooldown_end
@@ -166,8 +169,19 @@ te_seabed_un_on_policy_change = {
 			te_seabed_was_unilateral = yes
 			has_variable = te_seabed_defected
 		}
+		if = {
+			limit = { var:te_seabed_defected < 12 }
+			set_variable = { name = te_seabed_party_cooldown_end value = te_seabed_party_cooldown_end_value }
+		}
+		else_if = {
+			limit = { te_seabed_party_return_month_value > te_history_month_index }
+			set_variable = { name = te_seabed_party_cooldown_end value = te_seabed_party_return_month_value }
+		}
+		else_if = {
+			limit = { has_variable = te_seabed_party_cooldown_end }
+			remove_variable = te_seabed_party_cooldown_end
+		}
 		remove_variable = te_seabed_defected
-		set_variable = { name = te_seabed_party_cooldown_end value = te_seabed_party_cooldown_end_value }
 		custom_tooltip = te_seabed_party_cooldown_tt
 	}
 }

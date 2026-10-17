@@ -27,17 +27,17 @@ te_seabed_holding_fee_modifier = {
 	country_te_budget_expense_un_add = 1
 }
 
-# The seabed policy's influence, held while the policy stands (§ 2.5), flat as
-# the UN's stances and programmes hold theirs. Literal values, never applied
-# with a multiplier; te_seabed_influence_sponsor / _unilateral restate them
-# (test_seabed_script.py pins the pairs). Rebuilt from te_seabed_policy by
-# te_seabed_policy_cost_check.
+# The seabed policy's influence, held while the policy stands (§ 2.5). Unit
+# modifiers applied with the cost as multiplier (te_seabed_sponsor_cost_value /
+# te_seabed_unilateral_cost_value, seabed claims spec § 2.3); their one
+# refresh site is te_seabed_refresh_policy_cost, from te_seabed_policy and
+# te_seabed_policy_cost_cached.
 te_seabed_policy_sponsor_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_influence_cost_add = 50
+	country_influence_cost_add = 1
 }
 
 te_seabed_policy_unilateral_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_influence_cost_add = 150
+	country_influence_cost_add = 1
 }

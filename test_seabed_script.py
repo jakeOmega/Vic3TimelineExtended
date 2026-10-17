@@ -99,12 +99,13 @@ class ConstantsTest(unittest.TestCase):
         for policy, key in ((m.SURVEY, "survey"), (m.SPONSOR, "sponsor"), (m.UNILATERAL, "unilateral")):
             self.assertEqual(literal(self.values, f"te_seabed_policy_factor_{key}"), m.POLICY_FACTOR[policy], key)
 
-    def test_influence_modifiers_restate_their_values(self):
+    def test_influence_modifiers_are_unit_modifiers(self):
+        """Seabed claims spec § 2.3: the cost scales with the claims, so each
+        policy modifier is a unit applied with the cost as its multiplier."""
         mods = read(MODIFIERS)
         for key in ("sponsor", "unilateral"):
             body = block(mods, f"te_seabed_policy_{key}_cost")
-            amount = float(re.search(r"country_influence_cost_add = (\d+)", body).group(1))
-            self.assertEqual(amount, literal(self.values, f"te_seabed_influence_{key}"), key)
+            self.assertEqual(re.findall(r"country_influence_cost_add = ([\d.]+)", body), ["1"], key)
         self.assertEqual(literal(self.values, "te_seabed_influence_sponsor"), 50)
         self.assertEqual(literal(self.values, "te_seabed_influence_unilateral"), 150)
 
@@ -396,6 +397,87 @@ class FeeScriptTest(unittest.TestCase):
         self.assertIn(" te_seabed_holding_fee_modifier:", loc)
         desc = re.search(r'^ te_seabed_holding_fee_modifier_desc:0 "(.*)"$', loc, re.M).group(1)
         self.assertIn(f"{m.FEE_RATE * 100:g}% of a level's base output value a week", desc)
+
+
+class LockTest(unittest.TestCase):
+    """Sponsor's scaled cost, the five-year lock and its carve-outs (seabed
+    claims spec §§ 2.3-2.4)."""
+
+    def test_constants(self):
+        v = read(VALUES)
+        self.assertEqual(literal(v, "te_seabed_influence_sponsor"), 50)
+        self.assertEqual(literal(v, "te_seabed_influence_per_claim"), 0.5)
+        self.assertEqual(literal(v, "te_seabed_unilateral_cost_mult"), 1.5)
+        self.assertEqual(literal(v, "te_seabed_influence_unilateral"), 150)
+        self.assertEqual(literal(v, "te_seabed_policy_lock_months"), 60)
+
+    def test_cost_formulas(self):
+        v = strip_comments(read(VALUES))
+        sponsor = block(v, "te_seabed_sponsor_cost_value")
+        for term in ("te_seabed_influence_sponsor", "te_seabed_influence_per_claim", "te_seabed_protected_claims"):
+            self.assertIn(term, sponsor)
+        uni = block(v, "te_seabed_unilateral_cost_value")
+        for term in ("te_seabed_sponsor_cost_value", "multiply = te_seabed_unilateral_cost_mult",
+                     "min = te_seabed_influence_unilateral"):
+            self.assertIn(term, uni)
+
+    def test_costs_are_unit_modifiers_with_a_multiplier(self):
+        mods = read(MODIFIERS)
+        for key in ("sponsor", "unilateral"):
+            self.assertIn("country_influence_cost_add = 1", block(mods, f"te_seabed_policy_{key}_cost"))
+        refresh = strip_comments(block(read(EFFECTS), "te_seabed_refresh_policy_cost"))
+        self.assertIn("value = te_seabed_sponsor_cost_value", refresh)
+        self.assertIn("value = te_seabed_unilateral_cost_value", refresh)
+        self.assertEqual(refresh.count("multiplier = var:te_seabed_policy_cost_cached"), 2)
+        effects = strip_comments(read(EFFECTS))
+        for key in ("sponsor", "unilateral"):
+            self.assertEqual(effects.count(f"name = te_seabed_policy_{key}_cost"), 1, key)
+
+    def test_the_cost_follows_the_claims_monthly(self):
+        check = strip_comments(block(read(EFFECTS), "te_seabed_policy_cost_check"))
+        self.assertIn("te_seabed_policy_cost_cached", check)
+        self.assertIn("te_seabed_policy_cost_value", check)
+
+    def test_set_policy_stamps_the_change(self):
+        self.assertIn("name = te_seabed_policy_changed value = te_history_month_index",
+                      block(read(EFFECTS), "te_seabed_set_policy"))
+
+    def test_the_forced_reset_leaves_the_lock_off(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        at = body.index("te_seabed_set_policy = { POLICY = 1 }")
+        self.assertIn("remove_variable = te_seabed_policy_changed", body[at:at + 200])
+
+    def test_buttons_obey_the_lock_and_carve_outs(self):
+        t = strip_comments(read(TRIGGERS))
+        self.assertIn("te_seabed_policy_locked", block(t, "te_seabed_can_choose_sponsor"))
+        self.assertIn("te_seabed_unilateral_answer_open", block(t, "te_seabed_can_choose_unilateral"))
+        self.assertIn("te_seabed_influence_deficit", block(t, "te_seabed_can_choose_survey"))
+        self.assertIn("influence >= te_seabed_sponsor_cost_value", block(t, "te_seabed_can_choose_sponsor"))
+        self.assertIn("influence >= te_seabed_unilateral_cost_value", block(t, "te_seabed_can_choose_unilateral"))
+        self.assertIn("influence < 0", block(t, "te_seabed_influence_deficit"))
+        answer = block(t, "te_seabed_unilateral_answer_open")
+        self.assertIn("te_seabed_policy_unilateral = yes", answer)
+        self.assertIn("var:te_seabed_policy_changed > root.var:te_seabed_policy_changed", answer)
+        self.assertIn("te_seabed_shares_home_basin_with_root = yes", answer)
+
+    def test_ai_obeys_the_lock(self):
+        body = block(read(EFFECTS), "te_seabed_ai_choose_policy")
+        for policy in ("survey", "sponsor", "unilateral"):
+            self.assertIn(f"te_seabed_can_choose_{policy} = yes", body)
+
+    def test_loc_states_the_lock(self):
+        years = literal(read(VALUES), "te_seabed_policy_lock_months") / 12
+        loc = english_loc()
+        for key in ("te_seabed_policy_effect_2_tt", "te_seabed_policy_effect_3_tt"):
+            text = re.search(rf'^ {key}:0 "(.*)"$', loc, re.M).group(1)
+            self.assertIn(f"holds for #v {years:g}#! years", text, key)
+        for key in ("te_seabed_policy_locked_tt", "te_seabed_policy_answer_tt", "te_seabed_policy_deficit_tt"):
+            self.assertIn(f" {key}:", loc)
+
+    def test_no_change_date_is_unlocked(self):
+        body = strip_comments(block(read(TRIGGERS), "te_seabed_policy_locked"))
+        self.assertIn("has_variable = te_seabed_policy_changed", body)
+        self.assertIn("te_seabed_policy_unlock_month_value > te_history_month_index", body)
 
 
 class GateTest(unittest.TestCase):

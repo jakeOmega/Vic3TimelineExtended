@@ -135,6 +135,17 @@ te_seabed_party_cooldown_end_value = {
 	add = te_seabed_party_cooldown_months
 }
 
+# The month a defector is a party again, counted from its defection (seabed
+# claims spec § 2.4); 0 without one. Scope: country
+te_seabed_party_return_month_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_defected }
+		value = var:te_seabed_defected
+		add = te_seabed_party_cooldown_months
+	}
+}
+
 # The months until a cooling defector is a party again (display). Scope: country
 te_seabed_party_cooldown_left = {
 	value = 0

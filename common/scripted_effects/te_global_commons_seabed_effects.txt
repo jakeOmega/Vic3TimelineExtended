@@ -33,6 +33,10 @@
 #                                         until Claim Again
 #            te_seabed_fee_cached         the holding fee a week, the
 #                                         modifier's multiplier
+#            te_seabed_policy_changed     month of the last policy change
+#                                         (the five-year lock; absent = free)
+#            te_seabed_policy_cost_cached the influence the policy holds,
+#                                         its modifier's multiplier
 #            te_seabed_country            flag: has been recorded
 #            te_seabed_shared             flag: took part in a sharing
 #   global   te_seabed_regime             1 Open, 2 Regulated, 3 Scramble
@@ -652,6 +656,8 @@ te_seabed_yearly_pass = {
 			NOT = { te_seabed_is_claimant = yes }
 		}
 		te_seabed_set_policy = { POLICY = 1 }
+		# A forced reset is no choice: it leaves the country free to choose.
+		remove_variable = te_seabed_policy_changed
 	}
 	# 9. Unilateral claimants sharing a basin: once a year, on the first
 	# sharing of the year, not on a new claimant's mid-year one (review M2).
@@ -1368,14 +1374,21 @@ te_seabed_refresh_long_haul = {
 te_seabed_set_policy = {
 	set_variable = { name = te_seabed_policy_prev value = te_seabed_policy_value }
 	set_variable = { name = te_seabed_policy value = $POLICY$ }
+	set_variable = { name = te_seabed_policy_changed value = te_history_month_index }
 	te_seabed_refresh_policy_cost = yes
 	te_seabed_un_on_policy_change = yes
 }
 
 # Country scope: the influence modifier the policy holds, rebuilt from the
-# variable (so a revolution's winner, which inherits variables and no
-# modifiers, pays from its next monthly pulse). Literal modifiers, no
-# multiplier, so the call site's ROOT doesn't matter.
+# variables (so a revolution's winner, which inherits variables and no
+# modifiers, pays from its next monthly pulse); the two modifiers' one refresh
+# site. Unit modifiers with the cost as multiplier (seabed claims spec § 2.3),
+# cached so the monthly check can tell when it moves (the cache stays on
+# Survey, as the royalty's does: a multiplier's variable is never removed
+# where its modifier is applied). A multiplier reads ROOT:
+# every caller that adds one has ROOT = this country (its monthly pulse, the
+# policy buttons, the AI's yearly pulse); the yearly pass's forced reset to
+# Survey only removes.
 te_seabed_refresh_policy_cost = {
 	remove_modifier = te_seabed_policy_sponsor_cost
 	remove_modifier = te_seabed_policy_unilateral_cost
@@ -1384,14 +1397,22 @@ te_seabed_refresh_policy_cost = {
 			te_global_commons_enabled = yes
 			te_seabed_policy_sponsor = yes
 		}
-		add_modifier = { name = te_seabed_policy_sponsor_cost }
+		set_variable = { name = te_seabed_policy_cost_cached value = te_seabed_sponsor_cost_value }
+		add_modifier = {
+			name = te_seabed_policy_sponsor_cost
+			multiplier = var:te_seabed_policy_cost_cached
+		}
 	}
 	else_if = {
 		limit = {
 			te_global_commons_enabled = yes
 			te_seabed_policy_unilateral = yes
 		}
-		add_modifier = { name = te_seabed_policy_unilateral_cost }
+		set_variable = { name = te_seabed_policy_cost_cached value = te_seabed_unilateral_cost_value }
+		add_modifier = {
+			name = te_seabed_policy_unilateral_cost
+			multiplier = var:te_seabed_policy_cost_cached
+		}
 	}
 }
 
@@ -1504,12 +1525,21 @@ te_seabed_fee_refresh = {
 }
 
 # Country scope: rebuild the policy's modifier only when it doesn't match the
-# variable (a revolution's winner, the rule switched, an old save), so a
-# standing policy isn't removed and re-added every month.
+# variable (a revolution's winner, the rule switched, an old save) or its cost
+# has moved with the claims, so a standing policy isn't removed and re-added
+# every month for nothing.
 te_seabed_policy_cost_check = {
 	if = {
 		limit = {
 			OR = {
+				AND = {
+					te_global_commons_enabled = yes
+					NOT = { te_seabed_policy_survey = yes }
+					OR = {
+						NOT = { has_variable = te_seabed_policy_cost_cached }
+						NOT = { var:te_seabed_policy_cost_cached = te_seabed_policy_cost_value }
+					}
+				}
 				AND = {
 					te_global_commons_enabled = yes
 					te_seabed_policy_sponsor = yes
@@ -1562,25 +1592,27 @@ te_seabed_ai_choose_policy = {
 		set_local_variable = { name = te_sb_ai_1 value = te_seabed_ai_score_survey }
 		set_local_variable = { name = te_sb_ai_2 value = te_seabed_ai_score_sponsor }
 		set_local_variable = { name = te_sb_ai_3 value = te_seabed_ai_score_unilateral }
+		# Only to a policy its buttons would allow: the five-year lock and its
+		# carve-outs bind the AI too (seabed claims spec § 2.4).
 		if = {
 			limit = {
 				local_var:te_sb_ai_3 > local_var:te_sb_ai_2
 				local_var:te_sb_ai_3 > local_var:te_sb_ai_1
 			}
 			if = {
-				limit = { NOT = { te_seabed_policy_unilateral = yes } }
+				limit = { te_seabed_can_choose_unilateral = yes }
 				te_seabed_set_policy = { POLICY = 3 }
 			}
 		}
 		else_if = {
 			limit = { local_var:te_sb_ai_2 > local_var:te_sb_ai_1 }
 			if = {
-				limit = { NOT = { te_seabed_policy_sponsor = yes } }
+				limit = { te_seabed_can_choose_sponsor = yes }
 				te_seabed_set_policy = { POLICY = 2 }
 			}
 		}
 		else_if = {
-			limit = { NOT = { te_seabed_policy_survey = yes } }
+			limit = { te_seabed_can_choose_survey = yes }
 			te_seabed_set_policy = { POLICY = 1 }
 		}
 	}
