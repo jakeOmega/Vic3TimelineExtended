@@ -688,6 +688,8 @@ What the next game should show:
 1. **`working_conditions_read`** OK, `read` ≈ `expected` = 0.1 at `scale=1.00` in 1836.
 2. **`unemployment_rate_read`** OK, `read` near `per_people`, `census` ≈ `walk`, and both four times or so `read` in 1836.
    `unemployment_share_read` (any rule, `docs/testing/ai-economy-playtest.md`) agrees: the same fact, read from its own walk.
+   **Once both have read OK in a game or two, remove `unemployment_rate_read` and the walk's own count behind it**
+   (`te_dg_unemp_walk`, option t's `unemp_walk=`; owner, 2026-10-17). `unemployment_share_read` stays as the one check.
 3. **The youth bulge (Full).** A state whose census counts more than a tenth of its workforce idle and whose 20-29
    share is above 0.18 shows the Youth row with an unemployment part about four times what it showed, and its modifier
    at that multiplier; option t's `unemp=` (the stored conversion) is about its `unemp_walk=` (the walk's own count).
