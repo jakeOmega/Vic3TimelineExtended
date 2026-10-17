@@ -33,3 +33,42 @@ te_jud_is_islamic_state = {
 		country_has_state_religion = rel:ibadi
 	}
 }
+
+# The law under enactment belongs to the constitution's core (spec § 3.4):
+# Distribution of Power, Governance Principles, Church and State, Citizenship,
+# Free Speech, Internal Security, State Power, Judiciary. currently_enacting_law
+# is a country -> law link, type a law -> law type link. Whether the link
+# resolves at on_law_enactment_started is unread: te_jud_selfcheck_enacting_scope
+# reports it once a game.
+te_jud_enacting_core_law = {
+	currently_enacting_law ?= {
+		type = {
+			OR = {
+				is_same_law_group_as = law_type:law_autocracy
+				is_same_law_group_as = law_type:law_monarchy
+				is_same_law_group_as = law_type:law_state_religion
+				is_same_law_group_as = law_type:law_subjecthood
+				is_same_law_group_as = law_type:law_censorship
+				is_same_law_group_as = law_type:law_secret_police
+				is_same_law_group_as = law_type:law_unitary_state
+				is_same_law_group_as = law_type:law_statutory_courts
+			}
+		}
+	}
+}
+
+# The rights groups (Judicial Supremacy's wider reach): Rights of Women,
+# Slavery, Minority Rights, LGBTQ+ Rights, Privacy Rights.
+te_jud_enacting_rights_law = {
+	currently_enacting_law ?= {
+		type = {
+			OR = {
+				is_same_law_group_as = law_type:law_no_womens_rights
+				is_same_law_group_as = law_type:law_slavery_banned
+				is_same_law_group_as = law_type:law_minority_rights_protection
+				is_same_law_group_as = law_type:law_legal_limbo
+				is_same_law_group_as = law_type:law_moderate_data_privacy
+			}
+		}
+	}
+}

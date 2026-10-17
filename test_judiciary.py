@@ -392,5 +392,62 @@ class ScoreScriptTest(unittest.TestCase):
             self.assertRegex(text, inside % tag + r"set_variable = \{ name = te_judicial_independence value = %d \}" % score, tag)
 
 
+VANILLA_LAWS = os.path.join(REPO, "vanilla_parsed", "common", "laws.json")
+
+# Spec § 3.4.
+CORE_GROUPS = {
+    "lawgroup_distribution_of_power", "lawgroup_governance_principles", "lawgroup_church_and_state",
+    "lawgroup_citizenship", "lawgroup_free_speech", "lawgroup_internal_security",
+    "lawgroup_state_power", "lawgroup_judiciary",
+}
+RIGHTS_GROUPS = {
+    "lawgroup_rights_of_women", "lawgroup_slavery", "lawgroup_minority_rights",
+    "lawgroup_LGBTQ_rights", "lawgroup_privacy_rights",
+}
+
+
+def _law_groups():
+    """{law: group} over vanilla (the snapshot) and every mod law file."""
+    with open(VANILLA_LAWS, encoding="utf-8") as fh:
+        groups = {k: v[1]["group"][1] for k, v in json.load(fh).items() if "group" in v[1]}
+    for path in glob.glob(os.path.join(REPO, "common", "laws", "*.txt")):
+        for key, node in _parse(path).items():
+            body = _body(node)
+            if isinstance(body, dict) and "group" in body:
+                groups[key] = _body(body["group"])
+    return groups
+
+
+class EntrenchmentTest(unittest.TestCase):
+    def _named_groups(self, trigger):
+        laws = re.findall(r"is_same_law_group_as = law_type:(\w+)", _block(_read(TRIGGERS), trigger))
+        groups = _law_groups()
+        return [groups[law] for law in laws]
+
+    def test_protected_groups_match_spec(self):
+        core = self._named_groups("te_jud_enacting_core_law")
+        rights = self._named_groups("te_jud_enacting_rights_law")
+        self.assertEqual(len(core), len(set(core)), "one law per group")
+        self.assertEqual(set(core), CORE_GROUPS)
+        self.assertEqual(set(rights), RIGHTS_GROUPS)
+
+    def test_the_laws_lines_pick_the_tier(self):
+        block = _block(_read(ON_ACTIONS), "te_jud_enactment_started")
+        self.assertEqual(block.count("NOT = { te_jud_paper_court = yes }"), 2)
+        self.assertIn("modifier:country_constitutional_law_enactment_success_add <= -0.15", block)
+        self.assertIn("modifier:country_rights_law_enactment_success_add <= -0.15", block)
+        self.assertIn("modifier:country_constitutional_law_enactment_success_add < 0", block)
+        self.assertIn("add_enactment_modifier = { name = te_jud_supremacy_challenge }", block)
+        self.assertIn("add_enactment_modifier = { name = te_jud_constitutional_challenge }", block)
+        self.assertNotIn("has_law", block, "the tooltip's numbers decide, not a law check")
+
+    def test_self_check_is_once_a_game_and_excludes_no_enactment(self):
+        block = _block(_read(EFFECTS), "te_jud_selfcheck_enacting_scope")
+        self.assertIn("enacting_any_law = yes", block)
+        self.assertIn("set_global_variable = te_jud_selfcheck_enacting_done", block)
+        self.assertIn("TE_SELF_CHECK OK judiciary_enacting_law_scope", block)
+        self.assertIn("TE_SELF_CHECK BROKEN judiciary_enacting_law_scope", block)
+
+
 if __name__ == "__main__":
     unittest.main()
