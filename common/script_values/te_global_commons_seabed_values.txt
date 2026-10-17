@@ -52,6 +52,9 @@ te_seabed_pool_reserved_southern = {
 # there + navy × its share of the country's incorporated coastal states)
 # × policy factor. Distant basin: distant navy share × navy × policy factor.
 te_seabed_coast_weight = 2
+# An unincorporated coastal state's count in the coast term and the navy's
+# spread (seabed claims spec § 5.1); its ports count in full.
+te_seabed_uninc_coast = 0.5
 te_seabed_distant_navy_share = 0.05
 # Added to Southern weight by an Antarctic research station (§ 4), after the
 # policy factor.
@@ -137,10 +140,25 @@ te_seabed_regime_value = {
 	}
 }
 
-# Country scope: the claims Sponsor Contractors protects, its unused claims in
-# every basin (a relinquished basin's are 0).
+# Country scope: its own unused claims, summed (Administer Seabed Claims' AI).
+te_seabed_own_claims_total = {
+	value = te_seabed_own_claims_pacific
+	add = te_seabed_own_claims_atlantic
+	add = te_seabed_own_claims_indian
+	add = te_seabed_own_claims_arctic
+	add = te_seabed_own_claims_southern
+}
+
+# Country scope: the claims Sponsor Contractors protects, its own unused claims
+# in every basin (a relinquished basin's are 0). Leased and subject-passed
+# claims are re-divided at every sharing and no floor protects them (seabed
+# claims spec § 2.2), so they cost nothing here.
 te_seabed_protected_claims = {
-	value = te_seabed_unbuilt_total
+	value = te_seabed_own_claims_pacific
+	add = te_seabed_own_claims_atlantic
+	add = te_seabed_own_claims_indian
+	add = te_seabed_own_claims_arctic
+	add = te_seabed_own_claims_southern
 }
 
 # Country scope: the influence each policy holds now.
@@ -411,6 +429,94 @@ te_seabed_unbuilt_total = {
 	}
 }
 
+# Country scope. Model: own_claims. Its claims in the basin less those it holds by
+# lease (te_seabed_lease_unused_<basin>) or its subjects passed it
+# (te_seabed_subj_unused_<basin>): only these can be leased out, passed on
+# or protected by a floor (seabed claims spec §§ 2.2, 4).
+te_seabed_own_claims_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_pacific }
+		value = var:te_seabed_unbuilt_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_pacific }
+		subtract = var:te_seabed_lease_unused_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_pacific }
+		subtract = var:te_seabed_subj_unused_pacific
+	}
+	min = 0
+}
+
+te_seabed_own_claims_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_atlantic }
+		value = var:te_seabed_unbuilt_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_atlantic }
+		subtract = var:te_seabed_lease_unused_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_atlantic }
+		subtract = var:te_seabed_subj_unused_atlantic
+	}
+	min = 0
+}
+
+te_seabed_own_claims_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_indian }
+		value = var:te_seabed_unbuilt_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_indian }
+		subtract = var:te_seabed_lease_unused_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_indian }
+		subtract = var:te_seabed_subj_unused_indian
+	}
+	min = 0
+}
+
+te_seabed_own_claims_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_arctic }
+		value = var:te_seabed_unbuilt_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_arctic }
+		subtract = var:te_seabed_lease_unused_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_arctic }
+		subtract = var:te_seabed_subj_unused_arctic
+	}
+	min = 0
+}
+
+te_seabed_own_claims_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_southern }
+		value = var:te_seabed_unbuilt_southern
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_southern }
+		subtract = var:te_seabed_lease_unused_southern
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_southern }
+		subtract = var:te_seabed_subj_unused_southern
+	}
+	min = 0
+}
 # Levels in the country's coastal states without a record, built or queued.
 te_seabed_unrecorded_total = {
 	value = 0
@@ -1628,6 +1734,145 @@ te_seabed_queued_total_disp = {
 	add = te_seabed_queued_disp_southern
 }
 
+# Country scope (the overview's claims hover, seabed claims spec § 4): unused
+# claims it holds by lease.
+te_seabed_leased_claims_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_pacific }
+		add = var:te_seabed_lease_unused_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_atlantic }
+		add = var:te_seabed_lease_unused_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_indian }
+		add = var:te_seabed_lease_unused_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_arctic }
+		add = var:te_seabed_lease_unused_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_southern }
+		add = var:te_seabed_lease_unused_southern
+	}
+}
+
+# Unused claims its subjects passed it (Administer Seabed Claims, § 5.2).
+te_seabed_passed_claims_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_pacific }
+		add = var:te_seabed_subj_unused_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_atlantic }
+		add = var:te_seabed_subj_unused_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_indian }
+		add = var:te_seabed_subj_unused_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_arctic }
+		add = var:te_seabed_subj_unused_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_southern }
+		add = var:te_seabed_subj_unused_southern
+	}
+}
+
+# Both: claims no policy protects, each sharing divides again.
+te_seabed_borrowed_claims_disp = {
+	value = te_seabed_leased_claims_disp
+	add = te_seabed_passed_claims_disp
+}
+
+# Licences built on its leases (the overview's licences hover).
+te_seabed_lease_built_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lease_built_pacific }
+		add = var:te_seabed_lease_built_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_atlantic }
+		add = var:te_seabed_lease_built_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_indian }
+		add = var:te_seabed_lease_built_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_arctic }
+		add = var:te_seabed_lease_built_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_southern }
+		add = var:te_seabed_lease_built_southern
+	}
+}
+# Country scope (the overview's claims hover, review I5): our claims at our
+# lessees, as of the last sharing or lease.
+te_seabed_leased_out_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_leased_out_pacific }
+		add = var:te_seabed_leased_out_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_atlantic }
+		add = var:te_seabed_leased_out_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_indian }
+		add = var:te_seabed_leased_out_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_arctic }
+		add = var:te_seabed_leased_out_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_leased_out_southern }
+		add = var:te_seabed_leased_out_southern
+	}
+}
+
+# Licences others built on our leased or passed claims, counted against our
+# share at the last sharing.
+te_seabed_charged_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_charged_pacific }
+		add = var:te_seabed_charged_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_atlantic }
+		add = var:te_seabed_charged_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_indian }
+		add = var:te_seabed_charged_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_arctic }
+		add = var:te_seabed_charged_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_charged_southern }
+		add = var:te_seabed_charged_southern
+	}
+}
+
+# Either: the claims hover's line on what we have lent.
+te_seabed_lent_disp = {
+	value = te_seabed_leased_out_disp
+	add = te_seabed_charged_disp
+}
+
 te_seabed_built_total_disp = {
 	value = te_seabed_lic_total_disp
 	subtract = te_seabed_queued_total_disp
@@ -1726,10 +1971,13 @@ te_seabed_coast_gain_pacific = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_pacific = {
-	value = te_seabed_coast_disp_pacific
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_states_pacific }
+		value = var:te_seabed_coast_states_pacific
+	}
 	subtract = 5
 	min = 0
 }
@@ -1796,10 +2044,13 @@ te_seabed_coast_gain_atlantic = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_atlantic = {
-	value = te_seabed_coast_disp_atlantic
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_states_atlantic }
+		value = var:te_seabed_coast_states_atlantic
+	}
 	subtract = 5
 	min = 0
 }
@@ -1866,10 +2117,13 @@ te_seabed_coast_gain_indian = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_indian = {
-	value = te_seabed_coast_disp_indian
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_states_indian }
+		value = var:te_seabed_coast_states_indian
+	}
 	subtract = 5
 	min = 0
 }
@@ -1936,10 +2190,13 @@ te_seabed_coast_gain_arctic = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_arctic = {
-	value = te_seabed_coast_disp_arctic
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_states_arctic }
+		value = var:te_seabed_coast_states_arctic
+	}
 	subtract = 5
 	min = 0
 }
@@ -2006,10 +2263,13 @@ te_seabed_coast_gain_southern = {
 	}
 }
 
-# Country scope: our incorporated coastal states here past the five the Free
-# hover names.
+# Country scope: our coastal states here past the five the Free hover names.
 te_seabed_build_more_southern = {
-	value = te_seabed_coast_disp_southern
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_states_southern }
+		value = var:te_seabed_coast_states_southern
+	}
 	subtract = 5
 	min = 0
 }

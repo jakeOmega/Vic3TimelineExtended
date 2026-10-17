@@ -6,8 +6,11 @@ import os
 import tempfile
 import unittest
 
+import pm_employment_audit
 from pm_employment_audit import (
     audit,
+    employment_by_select,
+    employment_combinations,
     render_report,
     _parse_reviewed,
     _pm_employment,
@@ -310,6 +313,115 @@ class StrictExitCodeTests(unittest.TestCase):
 
     def test_missing_coverage_key_passes(self):
         self.assertEqual(strict_exit_code(AuditResult(flags=[], coverage={})), 0)
+
+
+# ---------------------------------------------------------------------------
+class EmploymentCombinationTests(unittest.TestCase):
+    """employment_combinations / employment_by_select (#990)."""
+
+    def setUp(self):
+        self.pmgs = {
+            "pmg_base": {"production_methods": ["pm_low", "pm_high"]},
+            "pmg_auto": {"production_methods": ["pm_no_auto", "pm_ai_managed_x", "pm_gated"]},
+            "pmg_owner": {"production_methods": ["pm_own_a", "pm_own_b", "pm_own_c"]},
+        }
+        self.pms = {
+            "pm_low": _emp("level_scaled", engineers=10, shopkeepers=500),
+            "pm_high": _emp("level_scaled", engineers=10, shopkeepers=1500),
+            "pm_no_auto": {},
+            "pm_ai_managed_x": {"building_modifiers": {
+                "level_scaled": {"building_employment_shopkeepers_add": "-500"},
+                "unscaled": {"building_employment_engineers_add": "1000"},
+            }},
+            # Selectable only beside pm_high.
+            "pm_gated": {**_emp("level_scaled", engineers=-10),
+                         "unlocking_production_methods": ["pm_high"]},
+            "pm_own_a": {}, "pm_own_b": {},
+            # Employment-neutral, but only with pm_low.
+            "pm_own_c": {"unlocking_production_methods": ["pm_low"]},
+        }
+        self.buildings = {
+            "building_x": {"production_method_groups": ["pmg_base", "pmg_auto", "pmg_owner"]},
+            "building_y": {"production_method_groups": ["pmg_base"]},
+        }
+
+    def combos(self, building="building_x", **kw):
+        return employment_combinations(building, self.buildings, self.pmgs, self.pms, **kw)
+
+    @staticmethod
+    def by_totals(out):
+        return {(tuple(sorted(g["level_scaled"].items())), tuple(sorted(g["unscaled"].items()))):
+                g["count"] for g in out["groups"]}
+
+    def test_counts_honour_unlocking_and_fold_neutral_groups(self):
+        out = self.combos()
+        # pm_low: 2 auto PMs x 3 owners; pm_high: 3 auto PMs x 2 owners.
+        self.assertEqual(out["combinations"], 12)
+        self.assertEqual(sum(g["count"] for g in out["groups"]), 12)
+        totals = self.by_totals(out)
+        self.assertEqual(totals[((("engineers", 10), ("shopkeepers", 500)), ())], 3)
+        self.assertEqual(totals[((("engineers", 10),), (("engineers", 1000),))], 3)
+        self.assertEqual(totals[((("shopkeepers", 1500),), ())], 2)
+        self.assertEqual(out["groups_total"], 5)
+        self.assertEqual(out["min_total"]["level_scaled"], 10)
+        self.assertEqual(out["max_total"]["level_scaled"], 1510)
+        self.assertEqual(out["max_total"]["unscaled"], 1000)
+
+    def test_example_is_a_valid_full_combination(self):
+        for g in self.combos()["groups"]:
+            ex = g["example"]
+            self.assertEqual(len(ex), 3)
+            if "pm_gated" in ex:
+                self.assertIn("pm_high", ex)
+            if "pm_own_c" in ex:
+                self.assertIn("pm_low", ex)
+
+    def test_select_glob_restricts_its_group(self):
+        out = self.combos(select=["pm_ai_managed_*"])
+        self.assertEqual(out["select_matched"], ["pm_ai_managed_x"])
+        self.assertEqual(out["combinations"], 5)
+        self.assertEqual(self.by_totals(out), {
+            ((("engineers", 10),), (("engineers", 1000),)): 3,
+            ((("engineers", 10), ("shopkeepers", 1000)), (("engineers", 1000),)): 2,
+        })
+        selected = [g for g in out["pm_groups"] if "selected" in g]
+        self.assertEqual([g["group"] for g in selected], ["pmg_auto"])
+
+    def test_select_without_match_and_unknown_building(self):
+        out = self.combos(select=["pm_nope"])
+        self.assertEqual((out["combinations"], out["groups"]), (0, []))
+        self.assertIsNone(self.combos(building="building_nope"))
+
+    def test_bucket_filter(self):
+        out = self.combos(buckets=("unscaled",))
+        self.assertEqual(out["buckets"], ["unscaled"])
+        self.assertEqual(self.by_totals_unscaled(out), {(): 7, (("engineers", 1000),): 5})
+
+    @staticmethod
+    def by_totals_unscaled(out):
+        return {tuple(sorted(g["unscaled"].items())): g["count"] for g in out["groups"]}
+
+    def test_limit_truncates_groups_not_counts(self):
+        out = self.combos(limit=2)
+        self.assertEqual(len(out["groups"]), 2)
+        self.assertEqual(out["groups_total"], 5)
+        self.assertEqual(out["combinations"], 12)
+
+    def test_over_cap_is_skipped(self):
+        old = pm_employment_audit._COMBO_CAP
+        pm_employment_audit._COMBO_CAP = 4
+        try:
+            out = self.combos()
+        finally:
+            pm_employment_audit._COMBO_CAP = old
+        self.assertTrue(out["skipped_large"])
+        self.assertNotIn("groups", out)
+
+    def test_by_select_lists_matching_buildings(self):
+        out = employment_by_select(["pm_ai_managed_*", "pm_missing"],
+                                   self.buildings, self.pmgs, self.pms)
+        self.assertEqual([b["building"] for b in out["buildings"]], ["building_x"])
+        self.assertEqual(out["select_unmatched"], ["pm_missing"])
 
 
 if __name__ == "__main__":

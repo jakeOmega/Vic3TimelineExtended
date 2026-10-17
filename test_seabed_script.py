@@ -96,6 +96,7 @@ class ConstantsTest(unittest.TestCase):
         self.assertEqual(literal(self.values, "te_seabed_distant_navy_share"), m.DISTANT_NAVY_SHARE)
         self.assertEqual(literal(self.values, "te_seabed_station_weight"), m.STATION_WEIGHT)
         self.assertEqual(literal(self.values, "te_seabed_assertive_navy_mult"), m.ASSERTIVE_NAVY_MULT)
+        self.assertEqual(literal(self.values, "te_seabed_uninc_coast"), m.UNINCORPORATED_COAST)
         for policy, key in ((m.SURVEY, "survey"), (m.SPONSOR, "sponsor"), (m.UNILATERAL, "unilateral")):
             self.assertEqual(literal(self.values, f"te_seabed_policy_factor_{key}"), m.POLICY_FACTOR[policy], key)
 
@@ -137,11 +138,60 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_policy_factor_", "te_seabed_coast_weight", "te_seabed_distant_navy_share",
                   "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare",
                   "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare", "te_seabed_relinq",
-                  "te_seabed_dr", "te_seabed_need_navy", "te_seabed_queued", "te_seabed_fprot"}
+                  "te_seabed_dr", "te_seabed_need_navy", "te_seabed_queued", "te_seabed_fprot",
+                  "te_seabed_sh", "te_seabed_lease_src", "te_seabed_lease_n", "te_seabed_lease_built",
+                  "te_seabed_lease_unused", "te_seabed_subj_unused", "te_seabed_pass_built",
+                  "te_seabed_pass_unused", "te_seabed_own_claims", "te_seabed_lease_past",
+                  "te_seabed_pass_to", "te_seabed_part"}
         named = {n.rstrip("_") for n in named}
-        everything = defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
+        everything = (defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
+                      | defined("diplomatic_actions"))
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
         self.assertEqual(missing, [])
+
+
+class UnincorporatedCoastTest(unittest.TestCase):
+    """Seabed claims spec § 5.1 (model: compute_weights' _coast): every coastal
+    state counts toward the coast term and the navy's spread, unincorporated
+    ones at te_seabed_uninc_coast; ports count in full."""
+
+    def test_the_walk_takes_every_coastal_state(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_compute_weights"))
+        self.assertNotIn("is_incorporated = yes", body)
+        self.assertIn("te_seabed_uninc_coast", body)
+
+    def test_the_tally_counts_unincorporated_at_half(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_weight_tally"))
+        self.assertIn("add = local_var:te_sb_wc", body)
+        self.assertIn("te_sb_ws_$B$", body)               # every coastal state, for the Build-in hover (review I4)
+        walk = strip_comments(block(read(EFFECTS), "te_seabed_compute_weights"))
+        self.assertIn("change_local_variable = { name = te_sb_wn_all add = local_var:te_sb_wc }", walk)
+
+    def test_the_build_in_hover_lists_every_coastal_state(self):
+        """Review I4: a level in an unincorporated coastal state of its own basin
+        works at full throughput (the mine has no incorporation test, long-haul
+        goes by basin), so the Free hover lists every coastal state there and
+        counts them all."""
+        values = read(VALUES)
+        for b in m.BASINS:
+            self.assertIn(f"te_seabed_coast_states_{b}", block(values, f"te_seabed_build_more_{b}"))
+        effects = strip_comments(read(EFFECTS))
+        for name in ("te_seabed_build_in_list", "te_seabed_build_in_slot"):
+            self.assertNotIn("is_incorporated", block(effects, name), name)
+        self.assertIn("change_local_variable = { name = te_sb_ws_$B$ add = 1 }", block(effects, "te_seabed_weight_tally"))
+        loc = english_loc()
+        for b in m.BASINS:
+            line = re.search(rf"(?m)^ te_seabed_build_in_none_{b}:0 \"(.*)\"$", loc).group(1)
+            self.assertNotIn("incorporated", line)
+
+    def test_counted_coast_shows_a_decimal(self):
+        loc = english_loc()
+        for b in m.BASINS:
+            line = re.search(rf"(?m)^ te_seabed_weight_home_{b}:0 \"(.*)\"$", loc).group(1)
+            self.assertIn(f"ScriptValue('te_seabed_coast_disp_{b}')|1]", line)
+            self.assertNotIn(f"ScriptValue('te_seabed_coast_disp_{b}')|0]", line)
+        how = re.search(r"(?m)^ te_seabed_how_weight:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("unincorporated", how)
 
 
 class YearlyPassOrderTest(unittest.TestCase):
@@ -265,8 +315,9 @@ class FloorScriptTest(unittest.TestCase):
         rnd = strip_comments(block(read(EFFECTS), "te_seabed_share_round"))
         self.assertIn("set_variable = { name = te_seabed_ent_$B$ value = var:te_seabed_fz_$B$ }", rnd)
         self.assertIn("var:te_seabed_ent_$B$ > var:te_seabed_fz_$B$", rnd)
-        # unbuilt stays entitlement less holdings
-        self.assertIn("subtract = var:te_seabed_held_$B$", rnd)
+        # unbuilt stays entitlement less holdings, as the sharing counts them
+        # (after the leases' shift, seabed_model.share_held)
+        self.assertIn("subtract = var:te_seabed_sh_$B$", rnd)
 
     def test_scramble_and_bar(self):
         floors = strip_comments(block(read(EFFECTS), "te_seabed_set_floors"))
@@ -286,7 +337,7 @@ class FloorScriptTest(unittest.TestCase):
         self.assertIn("te_seabed_floor_void_$B$ = yes", fit)
         self.assertIn("divide = global_var:te_seabed_fz_prot_$B$", fit)
         self.assertIn("floor = yes", fit)
-        self.assertIn("change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_held_$B$ }", fit)
+        self.assertIn("change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_sh_$B$ }", fit)
 
     def test_every_participant_gets_a_fresh_frozen_amount(self):
         """Review C1: te_seabed_share_round gives a participant outside the

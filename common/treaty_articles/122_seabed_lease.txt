@@ -1,0 +1,1083 @@
+﻿# ============================================================================
+# TREATY ARTICLES: Lease <Basin> Seabed Claims (seabed claims, phase 2)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md
+# § 4; model: scripts/analysis/seabed_model.py § LEASES. One directed article
+# per ocean basin: the source leases N of its own claims there to the target.
+# N is the lease's total: the licences the target builds on it plus its
+# unused leased claims never exceed it. At entry into force up to N of the
+# source's claims move at once (te_seabed_lease_start, then the hidden
+# te_seabed.1 a day later); each sharing re-divides them and tops the lease
+# back up from the source's own claims; the licences built on it count as
+# the source's holdings in the sharing, and stay the target's when the lease
+# ends. The sharing reads the treaty itself (te_seabed_lease_shift_held), so
+# an article that ended for any reason ends its lease there.
+# Enforceable, so a war's winner can impose one: this is the earlier design's
+# Seize Seabed Claims war goal. The usual price is a Money Transfer the other
+# way; the article sets none. The five are one template, held alike by
+# test_seabed_leases.py.
+# ============================================================================
+te_seabed_lease_pacific = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_pacific
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = pacific }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = pacific }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_pacific_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = pacific }
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_pacific > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_pacific > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_pacific
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_pacific > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_pacific
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_pacific
+					max = 30
+				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_pacific
+						min = 0
+						multiply = 5
+					}
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_pacific
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_pacific > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_pacific > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_pacific > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_pacific > 0 }
+					te_seabed_ai_lease_request_value_pacific > 0
+				}
+				value = 1
+			}
+		}
+	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
+}
+
+te_seabed_lease_atlantic = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_atlantic
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = atlantic }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = atlantic }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_atlantic_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = atlantic }
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_atlantic > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_atlantic > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_atlantic
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_atlantic > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_atlantic
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_atlantic
+					max = 30
+				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_atlantic
+						min = 0
+						multiply = 5
+					}
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_atlantic
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_atlantic > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_atlantic > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_atlantic > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_atlantic > 0 }
+					te_seabed_ai_lease_request_value_atlantic > 0
+				}
+				value = 1
+			}
+		}
+	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
+}
+
+te_seabed_lease_indian = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_indian
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = indian }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = indian }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_indian_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = indian }
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_indian > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_indian > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_indian
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_indian > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_indian
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_indian
+					max = 30
+				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_indian
+						min = 0
+						multiply = 5
+					}
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_indian
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_indian > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_indian > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_indian > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_indian > 0 }
+					te_seabed_ai_lease_request_value_indian > 0
+				}
+				value = 1
+			}
+		}
+	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
+}
+
+te_seabed_lease_arctic = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_arctic
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = arctic }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = arctic }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_arctic_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = arctic }
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_arctic > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_arctic > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_arctic
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_arctic > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_arctic
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_arctic
+					max = 30
+				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_arctic
+						min = 0
+						multiply = 5
+					}
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_arctic
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_arctic > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_arctic > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_arctic > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_arctic > 0 }
+					te_seabed_ai_lease_request_value_arctic > 0
+				}
+				value = 1
+			}
+		}
+	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
+}
+
+te_seabed_lease_southern = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_southern
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = southern }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = southern }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_southern_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = southern }
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_southern > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_southern > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_southern
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_southern > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_southern
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_southern
+					max = 30
+				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_southern
+						min = 0
+						multiply = 5
+					}
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_southern
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_southern > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_southern > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_southern > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_southern > 0 }
+					te_seabed_ai_lease_request_value_southern > 0
+				}
+				value = 1
+			}
+		}
+	}
+
+	# Pressed in a play (vanilla enforce_treaty_article leaves its figures to
+	# the article, review C1): Money Transfer's contestion, and maneuvers and
+	# infamy that grow with the claims demanded.
+	wargoal = {
+		execution_priority = 21
+
+		contestion_type = control_any_target_incorporated_state
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 20
+					max = 10
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 5
+			}
+
+			if = {
+				limit = { exists = scope:quantity }
+				add = {
+					desc = "te_seabed_lease_war_claims"
+					value = scope:quantity
+					divide = 10
+					max = 15
+				}
+			}
+		}
+	}
+}

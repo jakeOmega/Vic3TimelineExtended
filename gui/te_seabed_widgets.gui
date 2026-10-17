@@ -1809,6 +1809,14 @@ types te_seabed_widget_types
 			}
 			te_seabed_subheader = {
 				blockoverride "subheader_text" {
+					text = "te_seabed_how_sub_leases"
+				}
+			}
+			te_seabed_note = {
+				text = "te_seabed_how_leases"
+			}
+			te_seabed_subheader = {
+				blockoverride "subheader_text" {
 					text = "te_seabed_how_sub_policy"
 				}
 			}

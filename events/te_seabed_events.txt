@@ -1,0 +1,52 @@
+﻿namespace = te_seabed
+
+# ============================================================================
+# SEABED LICENCES — HIDDEN EVENTS
+# ============================================================================
+# common/scripted_effects/te_global_commons_seabed_effects.txt § Leases;
+# docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md § 4.
+# ============================================================================
+
+# A Lease <Basin> Seabed Claims article came into force a day ago with this
+# country as the lessee (te_seabed_lease_start): each lease due starts from
+# its article in the country's treaties (te_seabed_lease_take_up).
+te_seabed.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_seabed_lease_take_up = yes
+	}
+}
+
+# Self-check seabed_pact_read (docs/testing/global-commons-playtest.md): a day
+# after its overlord took Administer Seabed Claims (te_seabed_pact_start),
+# the subject reads the pact from its own side, as every sharing does
+# (te_seabed_pact_stands). OK once a game; BROKEN each time it fails. A subject
+# no longer one gives no verdict.
+te_seabed.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { exists = overlord }
+			overlord = { save_scope_as = te_sb_over }
+			if = {
+				limit = {
+					has_diplomatic_pact = { who = scope:te_sb_over type = te_seabed_administer_claims }
+				}
+				if = {
+					limit = { NOT = { has_global_variable = te_seabed_selfcheck_pact_done } }
+					set_global_variable = te_seabed_selfcheck_pact_done
+					debug_log = "TE_SELF_CHECK OK seabed_pact_read subject=[THIS.GetNameNoFormatting] passed_pacific=[THIS.Var('te_seabed_pass_unused_pacific').GetValue|0] passed_atlantic=[THIS.Var('te_seabed_pass_unused_atlantic').GetValue|0] (the subject sees the pact a day after it began)"
+					debug_log_scopes = yes
+				}
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN seabed_pact_read subject=[THIS.GetNameNoFormatting] (a day after Administer Seabed Claims began, has_diplomatic_pact does not see it from the subject's side, or the overlord ended it within the day)"
+				debug_log_scopes = yes
+			}
+		}
+	}
+}

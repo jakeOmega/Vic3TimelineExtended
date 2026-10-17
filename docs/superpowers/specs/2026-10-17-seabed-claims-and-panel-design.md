@@ -470,7 +470,12 @@ template if the builder prefers; the existing generators show how.
   when needed.
 - **Licences built on leased claims are the lessee's for good.** A licence belongs to its level
   (the earlier design's § 2.4). When the lease ends, its unused leased claims return to the
-  source at the next sharing; its built licences stay.
+  source at the next sharing; its built licences stay. *Amended after the phase 2 review
+  (2026-10-17, builder's call on the owner's "switching off and on shouldn't pay" default):* the
+  built licences also go on counting against the source's share, not the lessee's, for as long
+  as both countries take part in the sharing, and while they do the lessee may lease that
+  basin's claims again only from the same source. Were they the lessee's own once the lease
+  ended, ending and re-signing a lease each year would move their cost onto third parties.
 - **Flags**: `can_be_enforced`, `can_be_renegotiated`, `giftable`. `can_be_enforced` makes "take
   their seabed claims" a war goal. Usage limit `once_per_treaty` per basin article.
 - **Price**: the usual pairing is a Money Transfer the other way, in the same treaty. The article
@@ -515,7 +520,10 @@ weight rules.
 - **Cost**: liberty desire rises while it stands, at Raise Payments' rate (my call), and the
   subject's opinion of the overlord falls.
 - **Ends** when the overlord ends it, or the subject is no longer its subject; unused leased
-  claims return to the subject at the next sharing, as for a lease.
+  claims return to the subject at the next sharing, as for a lease. *Amended after the phase 2
+  review (2026-10-17):* the licences the overlord built on them go on counting against the
+  subject's share while both take part, as for a lease, so ending the action and taking it again
+  moves nothing onto a third party; only an action by another overlord starts afresh.
 - **AI**: an overlord uses it when the subject has unused claims and its liberty desire is low.
 - Add a line to the player guide's diplomacy chapter where subject actions are listed.
 

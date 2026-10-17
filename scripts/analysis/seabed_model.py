@@ -15,7 +15,13 @@ THE STATE (as the script keeps it)
   te_seabed_w_<basin> (claim weight), te_seabed_ent_<basin> (entitlement),
   te_seabed_policy (1 Survey, 2 Sponsor, 3 Unilateral), te_seabed_floor_<basin>
   (the share a sharing may not go below, fixed at the year's first sharing),
-  te_seabed_relinq_<basin> (1 = relinquished: weight 0 there until Claim Again).
+  te_seabed_relinq_<basin> (1 = relinquished: weight 0 there until Claim Again),
+  te_seabed_lease_src_<basin> (the lessor of its lease there, a country) with
+  te_seabed_lease_n_<basin>, _built_<basin> and _unused_<basin>, and
+  te_seabed_sh_<basin> (its holdings as the sharing counts them),
+  te_seabed_subj_unused_<basin> (claims its subjects passed it, unused) and, on
+  a subject, te_seabed_pass_built_<basin> / te_seabed_pass_unused_<basin> (the
+  licences its overlord built on its passed claims / those still unused).
 - Global: te_seabed_regime (1 Open, 2 Regulated, 3 Scramble).
 
 THE HOLDING FEE (seabed claims spec § 2.1). At the year's first sharing every
@@ -73,6 +79,54 @@ floor may spill into a Regulated pool's reserved half, as a frozen holding does
 (the convention's pioneer investors); it fades by a quarter a year, so the half
 refills.
 
+LEASES (seabed claims spec § 4). A Lease <Basin> Seabed Claims treaty article
+(common/treaty_articles/122_seabed_lease.txt) leases N of the lessor's claims
+in one basin to the lessee; N is the lease's total, the licences built on it
+plus its unused claims. At entry into force (te_seabed_lease_start) up to N of
+the lessor's own claims move at once. Leased claims are part of the lessee's
+claims (unbuilt), kept apart by its counters, and a level it records takes
+its own claims first (te_seabed_lease_consume, at the end of
+te_seabed_record_country). A lease stands at a sharing while its article is in
+force and both sides are claimants (in the Southern Ocean, neither barred by
+the Antarctic Treaty). For the sharing, a standing lease's licences count as
+the lessor's holdings, not the lessee's (te_seabed_lease_shift_held, writing
+te_seabed_sh_<basin>), so the lessee's own share is untouched and the lessor's
+share pays for them. The sharing re-divides every claim, leased ones
+included; then te_seabed_settle_leases tops each standing lease back up to N
+less its licences, from the lessor's own claims, as far as they go. Only own
+claims can be leased, and no floor protects leased claims: a lessee's floor,
+and its lessor's, count only own claims.
+
+AN ENDED LEASE GOES ON CHARGING ITS LESSOR (review C2; the owner's default
+that switching off and on shouldn't pay). When the article ends, its unused
+claims return through the next sharing, but the licences built on it go on
+counting as the lessor's holdings (te_seabed_lease_past_<basin>) for as long
+as both countries take part in the sharing: they were the lessor's claims.
+Were they the lessee's own from then on, the lessee would freeze above its
+weight and a third party would pay, at every end and re-signing. The record
+clears only when one side stops taking part (gone, or no coast and no
+licences). While it stands the lessee can lease that basin's claims again
+from the same lessor only (te_seabed_can_lease).
+
+SUBJECTS (seabed claims spec § 5.2). Administer Seabed Claims
+(common/diplomatic_actions/te_seabed_administer_claims.txt), an overlord's
+pact with a direct subject, is a lease with no total that keeps the same two
+counters, on the subject. At entry and after every sharing
+(te_seabed_pass_subject_claims) the subject's own claims in every basin pass
+to the overlord, which records them after its own claims and before leased
+ones. At the sharing the licences the overlord built on them count as the
+subject's holdings, after its lease's, so the subject's weight pays for them
+once: without that the pair would take a third party's share year by year.
+The subject's counters name the overlord they are charged to
+(te_seabed_pass_to), and go on charging it after the pact ends, for as long
+as both take part, as an ended lease does; only a pact with another overlord
+starts them afresh. Ended, the unused passed claims return through the next
+sharing.
+
+UNINCORPORATED COAST (seabed claims spec § 5.1) counts at half
+(te_seabed_uninc_coast) in the coast term and the navy's spread; its ports
+count in full, and a basin with only unincorporated coast is home.
+
 HOW THE REGULATED REGIME SPLITS A POOL (decided by the builder; § 3.2 says
 "step 2 runs once per half"). Each pool is a reserved half (rounded down)
 and an open half. Both halves are water-filled TOGETHER, in one loop: a
@@ -113,6 +167,7 @@ ASSERTIVE_NAVY_MULT = 2
 FLOOR_KEEP = 0.75                    # te_seabed_floor_keep: Sponsor keeps at least this much of its claims
 FEE_RATE = 0.02                      # te_seabed_fee_rate: the holding fee, of a level's base output value a week
 READOUT_FULL_BELOW = 0.01            # te_seabed_readout: a half with less than this left for us reads "full"
+UNINCORPORATED_COAST = 0.5           # te_seabed_uninc_coast: an unincorporated coastal state's coast weight
 
 
 def fx(x: float) -> float:
@@ -137,6 +192,18 @@ class Country:
     floor: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))   # te_seabed_floor_<basin>; 0 = none
     relinquished: dict = field(default_factory=lambda: dict.fromkeys(BASINS, False))   # te_seabed_relinq_<basin>
     floor_prot: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))  # te_seabed_fprot_<basin>: the claims part
+    # Its treaty lease per basin, as the lessee (te_seabed_lease_src_<basin> etc.)
+    lease_src: dict = field(default_factory=lambda: dict.fromkeys(BASINS, None))    # the lessor
+    lease_n: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))         # its total
+    lease_built: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))     # licences built on it
+    lease_unused: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))    # its unused claims, in unbuilt
+    lease_past: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))      # built on ended leases from lease_src
+    sh: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))              # te_seabed_sh_<basin>
+    overlord: int | None = None      # its direct overlord (is_direct_subject_of)
+    subj_unused: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))     # passed it by subjects, in unbuilt
+    pass_built: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))      # as a subject: built on by its overlord
+    pass_unused: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))     # as a subject: at its overlord, unused
+    pass_to: int | None = None       # te_seabed_pass_to: the overlord its two counters are charged to
 
 
 @dataclass
@@ -192,6 +259,8 @@ class World:
     # reserved-half part of it), h (every participant's max(held, floor)) and
     # the participants.
     final: dict = field(default_factory=dict)
+    leases_ended: set = field(default_factory=set)   # (lessee, basin): its article ended; settled at the next sharing
+    administer: set = field(default_factory=set)     # (overlord, subject): the te_seabed_administer_claims pact
 
     def owned(self, cid):
         return [s for s in self.states.values() if s.owner == cid]
@@ -340,6 +409,7 @@ def record_country(world: World, cid) -> None:
         state_swap_local(world, s)
     for s in states:
         s.holder = cid
+    lease_consume(world, cid)
 
 
 def on_state_owner_change(world: World, s: State, new_owner) -> None:
@@ -420,21 +490,35 @@ def is_claimant(world: World, cid) -> bool:
     return c.alive and c.tech and any(s.coastal for s in world.owned(cid))
 
 
+def takes_part(world: World, cid) -> bool:
+    """te_seabed_takes_part (the sharing's te_seabed_part): alive, and a
+    claimant or a holder of licences or levels."""
+    return world.alive(cid) and (is_claimant(world, cid)
+                                 or any(s.records() > 0 or s.levels > 0 for s in world.owned(cid)))
+
+
+def _coast(s: State) -> float:
+    """te_seabed_weight_tally's count for a coastal state: 1, or
+    UNINCORPORATED_COAST unincorporated."""
+    return 1 if s.incorporated else UNINCORPORATED_COAST
+
+
 def compute_weights(world: World, cid) -> dict:
-    """te_seabed_compute_weights (§ 2.3). Home basin: (2 × incorporated coastal
-    states + port levels + navy × its share of coastal states) × policy factor;
+    """te_seabed_compute_weights (§ 2.3, spec § 5.1). Home basin: (2 × coastal
+    states + port levels + navy × its share of coastal states) × policy factor,
+    unincorporated states counting UNINCORPORATED_COAST in both counts;
     distant: 0.05 × navy × policy factor. Unilateral Licensing or the Scramble
     doubles the navy. +5 Southern with an Antarctic station; Southern 0 for a
     country the Antarctic Treaty bars."""
     c = world.countries[cid]
     v = world.v
-    home = [s for s in world.owned(cid) if s.coastal and s.incorporated]
-    total = len(home)
+    home = [s for s in world.owned(cid) if s.coastal]
+    total = sum(_coast(s) for s in home)
     navy = c.navy * (ASSERTIVE_NAVY_MULT if (c.policy == UNILATERAL or world.regime == SCRAMBLE) else 1)
     factor = POLICY_FACTOR[c.policy]
     w = {}
     for b in BASINS:
-        n = sum(1 for s in home if s.basin == b)
+        n = sum(_coast(s) for s in home if s.basin == b)
         if n > 0:
             ports = sum(s.ports for s in home if s.basin == b)
             raw = COAST_WEIGHT * n + ports + v(v(navy * n) / total)
@@ -462,6 +546,11 @@ def relinquish(world: World, cid, b: str) -> None:
     record_country(world, cid)       # levels queued since the last recording keep their licences (review I1)
     c = world.countries[cid]
     c.unbuilt[b] = 0
+    c.lease_unused[b] = 0            # leased and subject-passed claims go too, without counting as built
+    c.subj_unused[b] = 0
+    for sub in world.countries.values():
+        if sub.pass_to == cid:
+            sub.pass_unused[b] = 0
     c.floor[b] = 0
     c.floor_prot[b] = 0
     c.relinquished[b] = True
@@ -622,7 +711,7 @@ def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
 def need_navy(world: World, cid, b: str) -> int | None:
     """te_seabed_need_navy_<basin>: need_weight in units of navy. At home the
     navy counts in proportion to the country's coastal states there
-    (factor × navy multiplier × n_b ÷ N); far away at DISTANT_NAVY_SHARE
+    (factor × navy multiplier × n_b ÷ N, unincorporated ones at half); far away at DISTANT_NAVY_SHARE
     (0.05 × factor × navy multiplier). Rounded up; None passes through."""
     x = need_weight(world, b, cid)
     if x is None:
@@ -630,9 +719,9 @@ def need_navy(world: World, cid, b: str) -> int | None:
     c = world.countries[cid]
     factor = POLICY_FACTOR[c.policy]
     mult = ASSERTIVE_NAVY_MULT if (c.policy == UNILATERAL or world.regime == SCRAMBLE) else 1
-    home = [s for s in world.owned(cid) if s.coastal and s.incorporated]
-    n = sum(1 for s in home if s.basin == b)
-    per = factor * mult * n / len(home) if n > 0 else DISTANT_NAVY_SHARE * factor * mult
+    home = [s for s in world.owned(cid) if s.coastal]
+    n = sum(_coast(s) for s in home if s.basin == b)
+    per = factor * mult * n / sum(_coast(s) for s in home) if n > 0 else DISTANT_NAVY_SHARE * factor * mult
     return math.ceil(x / per)
 
 
@@ -682,8 +771,8 @@ def floor_in_force(world: World, c: Country, b: str) -> int:
 def set_floors(world: World, cid) -> None:
     """te_seabed_set_floors (the year's first sharing, after recording and
     held, before weights): on Sponsor Contractors, outside a Scramble, a
-    claimant's floor in each basin is its holdings plus FLOOR_KEEP of its
-    claims going into the sharing, rounded down; its Southern floor is its
+    claimant's floor in each basin is its holdings (sh) plus FLOOR_KEEP of its
+    own claims going into the sharing, rounded down; its Southern floor is its
     holdings where the Antarctic Treaty bars it. Otherwise no floor."""
     c = world.countries[cid]
     if c.policy != SPONSOR or world.regime == SCRAMBLE or not is_claimant(world, cid):
@@ -691,19 +780,20 @@ def set_floors(world: World, cid) -> None:
         c.floor_prot = dict.fromkeys(BASINS, 0)
         return
     for b in BASINS:
-        keep = 0 if (b == "southern" and c.barred) else math.floor(FLOOR_KEEP * c.unbuilt[b])
-        c.floor[b] = c.held[b] + keep
+        keep = 0 if (b == "southern" and c.barred) else math.floor(FLOOR_KEEP * own_claims(c, b))
+        c.floor[b] = c.sh[b] + keep
         c.floor_prot[b] = keep
 
 
 def fit_floors(world: World, b: str, part: list) -> dict:
     """te_seabed_fit_floors (te_seabed_fz_<basin>): what each participant is
-    frozen at, max(held, min(floor, held + protected claims)). Where those
+    frozen at, max(held, min(floor, held + protected claims)), held being its
+    holdings as the sharing counts them (sh, after the leases' shift). Where those
     exceed what the basin can share (its pool, or its holdings if more), every
     protected part is scaled down by one factor, rounding down; holdings are
     never touched."""
     countries = world.countries
-    held = {cid: countries[cid].held[b] for cid in part}
+    held = {cid: countries[cid].sh[b] for cid in part}
 
     def protected(cid):
         c = countries[cid]
@@ -717,14 +807,267 @@ def fit_floors(world: World, b: str, part: list) -> dict:
     return {cid: held[cid] + prot[cid] for cid in part}
 
 
+# ---------------------------------------------------------------------------
+# Treaty leases (seabed claims spec § 4)
+# ---------------------------------------------------------------------------
+
+def own_claims(c: Country, b: str) -> int:
+    """te_seabed_own_claims: the country's claims in basin b less those it
+    holds by lease or its subjects passed it; only these can be leased out,
+    passed on or protected by a floor."""
+    return max(0, c.unbuilt[b] - c.lease_unused[b] - c.subj_unused[b])
+
+
+def can_lease(world: World, src, dst, b: str) -> bool:
+    """te_seabed_can_lease (the article's possible): two different claimants;
+    the lessor has own claims in basin b; the lessee has no lease standing
+    there, nor a record from another lessor (an ended lease still charging it),
+    and has not relinquished it; in the Southern Ocean, neither side barred by
+    the Antarctic Treaty."""
+    s, d = world.countries[src], world.countries[dst]
+    if src == dst or not (is_claimant(world, src) and is_claimant(world, dst)):
+        return False
+    if b == "southern" and (s.barred or d.barred):
+        return False
+    return (own_claims(s, b) > 0 and d.lease_n[b] == 0 and d.lease_src[b] in (None, src)
+            and not d.relinquished[b])
+
+
+def start_lease(world: World, src, dst, b: str, n: int) -> None:
+    """te_seabed_lease_start (the article's on_entry_into_force): up to n of
+    the lessor's own claims in basin b move to the lessee at once. A record of
+    an ended lease from the same lessor carries on; one from another lessor
+    (only an enforced lease can get past te_seabed_can_lease) is dropped, its
+    licences the lessee's own."""
+    s, d = world.countries[src], world.countries[dst]
+    if d.lease_src[b] not in (None, src):
+        _clear_lease(d, b)
+    k = min(n, own_claims(s, b))
+    s.unbuilt[b] -= k
+    d.unbuilt[b] += k
+    d.lease_src[b], d.lease_n[b], d.lease_built[b], d.lease_unused[b] = src, n, 0, k
+
+
+def end_lease(world: World, dst, b: str) -> None:
+    """The article ends (broken, renegotiated away, a party gone): nothing
+    moves until the next sharing, which finds it no longer in force."""
+    world.leases_ended.add((dst, b))
+
+
+def lease_consume(world: World, cid) -> None:
+    """te_seabed_lease_consume (the end of te_seabed_record_country): what the
+    recording took from the country's claims comes off its own claims first,
+    then off those its subjects passed it (booked in id order on each subject
+    whose counters charge it as built on its claims), and only then off its
+    leased ones, which become
+    licences built on the lease."""
+    c = world.countries[cid]
+    for b in BASINS:
+        left = max(0, c.unbuilt[b])
+        new = min(c.lease_unused[b], left)
+        c.lease_built[b] += c.lease_unused[b] - new
+        c.lease_unused[b] = new
+        new_subj = min(c.subj_unused[b], left - new)
+        used = c.subj_unused[b] - new_subj
+        c.subj_unused[b] = new_subj
+        for sub in sorted(world.countries.values(), key=lambda x: x.cid):
+            if used == 0:
+                break
+            if sub.pass_to == cid and sub.pass_unused[b] > 0:
+                k = min(used, sub.pass_unused[b])
+                sub.pass_unused[b] -= k
+                sub.pass_built[b] += k
+                used -= k
+
+
+def lease_stands(world: World, dst, b: str) -> bool:
+    """A lease stands at a sharing while its article is in force and both
+    sides are claimants; in the Southern Ocean, while neither is barred."""
+    d = world.countries[dst]
+    src = d.lease_src[b]
+    if src is None or d.lease_n[b] == 0 or (dst, b) in world.leases_ended:
+        return False
+    if not (is_claimant(world, dst) and is_claimant(world, src)):
+        return False
+    return not (b == "southern" and (d.barred or world.countries[src].barred))
+
+
+def lease_charged(world: World, dst, b: str) -> bool:
+    """A lease's licences, standing or ended, count as its lessor's while both
+    countries take part in the sharing."""
+    src = world.countries[dst].lease_src[b]
+    return src is not None and takes_part(world, dst) and takes_part(world, src)
+
+
+def pact_charged(world: World, sub) -> bool:
+    """A subject's counters charge their overlord while both take part."""
+    o = world.countries[sub].pass_to
+    return o is not None and takes_part(world, sub) and takes_part(world, o)
+
+
+def share_held(world: World, cid, b: str) -> int:
+    """te_seabed_sh_<basin> (te_seabed_lease_shift_held, after held): the
+    holdings the sharing counts. A lease's licences, standing or ended,
+    capped at the lessee's holdings, count as its lessor's instead of the
+    lessee's, and a pact's as the subject's instead of the overlord's, while
+    both sides take part (lease_charged, pact_charged)."""
+    c = world.countries[cid]
+    sh = c.held[b] - sum(_outflows(world, cid, b).values())
+    for d in world.countries.values():
+        if d.cid != cid:
+            sh += _outflows(world, d.cid, b).get(cid, 0)
+    return sh
+
+
+def _outflows(world: World, cid, b: str) -> dict:
+    """The part of a country's holdings in basin b that the sharing counts as
+    others': its lease's licences first (built on it and on ended leases from
+    the same lessor), then those it built on each subject's passed claims,
+    subjects in id order, each capped at what is left of its holdings.
+    {country: licences}."""
+    c = world.countries[cid]
+    left = c.held[b]
+    out = {}
+    if lease_charged(world, cid, b):
+        k = min(c.lease_built[b] + c.lease_past[b], left)
+        out[c.lease_src[b]] = k
+        left -= k
+    for sub in sorted(world.countries.values(), key=lambda x: x.cid):
+        if sub.pass_to == cid and pact_charged(world, sub.cid):
+            k = min(sub.pass_built[b], left)
+            out[sub.cid] = out.get(sub.cid, 0) + k
+            left -= k
+    return out
+
+
+def _clear_lease(c: Country, b: str) -> None:
+    c.lease_src[b] = None
+    c.lease_n[b] = c.lease_built[b] = c.lease_unused[b] = c.lease_past[b] = 0
+
+
+def settle_leases(world: World) -> None:
+    """te_seabed_settle_leases (after the five sharings). A record whose two
+    sides no longer both take part is cleared: its licences are the lessee's
+    own from now on. One whose lease has ended keeps charging the lessor with
+    what was built on it (te_seabed_lease_past_<basin>), and clears once that
+    is nothing. A standing one counts at most the lessee's holdings as built
+    on it (a demolished level gives the lease its room back) and, unless the
+    lessee has relinquished the basin, is topped back up to its total less its
+    licences, from the lessor's own claims, as far as they go."""
+    for d in sorted(world.countries.values(), key=lambda c: c.cid):
+        for b in BASINS:
+            if d.lease_src[b] is None:
+                continue
+            if not lease_charged(world, d.cid, b):
+                _clear_lease(d, b)
+                continue
+            d.lease_built[b] = min(d.lease_built[b], d.held[b])
+            d.lease_past[b] = min(d.lease_past[b], d.held[b] - d.lease_built[b])
+            if not lease_stands(world, d.cid, b):
+                d.lease_past[b] += d.lease_built[b]
+                d.lease_n[b] = d.lease_built[b] = d.lease_unused[b] = 0
+                if d.lease_past[b] == 0:
+                    _clear_lease(d, b)
+                continue
+            if d.relinquished[b]:
+                continue
+            s = world.countries[d.lease_src[b]]
+            k = max(0, min(d.lease_n[b] - d.lease_built[b] - d.lease_unused[b], own_claims(s, b)))
+            s.unbuilt[b] -= k
+            d.unbuilt[b] += k
+            d.lease_unused[b] += k
+    world.leases_ended.clear()
+
+
+# ---------------------------------------------------------------------------
+# Subjects: Administer Seabed Claims (seabed claims spec § 5.2)
+# ---------------------------------------------------------------------------
+
+def pact_stands(world: World, o, sub, b: str) -> bool:
+    """The pact stands in basin b while the overlord keeps it, the country is
+    still its direct subject and both are claimants; in the Southern Ocean,
+    while neither is barred by the Antarctic Treaty."""
+    s = world.countries[sub]
+    if (o, sub) not in world.administer or s.overlord != o:
+        return False
+    if not (is_claimant(world, o) and is_claimant(world, sub)):
+        return False
+    return not (b == "southern" and (s.barred or world.countries[o].barred))
+
+
+def _charge_to(s: Country, o) -> None:
+    """te_seabed_pass_to: the subject's counters charge overlord o; a record
+    charging another overlord is dropped (its licences are that overlord's
+    own)."""
+    if s.pass_to not in (None, o):
+        s.pass_built = dict.fromkeys(BASINS, 0)
+        s.pass_unused = dict.fromkeys(BASINS, 0)
+    s.pass_to = o
+
+
+def pass_claims(world: World, o, sub) -> None:
+    """One pact's pass: the subject's own claims in every basin where the pact
+    stands go to the overlord, unless the overlord relinquished the basin."""
+    s, ov = world.countries[sub], world.countries[o]
+    _charge_to(s, o)
+    for b in BASINS:
+        if ov.relinquished[b] or not pact_stands(world, o, sub, b):
+            continue
+        k = own_claims(s, b)
+        s.unbuilt[b] -= k
+        s.pass_unused[b] += k
+        ov.unbuilt[b] += k
+        ov.subj_unused[b] += k
+
+
+def start_pact(world: World, o, sub) -> None:
+    """te_seabed_administer_claims' start: counters charging another overlord
+    are dropped (the licences it built are its own); this overlord's carry on
+    (review C2: ending and taking the pact again must not orphan them). The
+    subject's claims pass at once."""
+    s = world.countries[sub]
+    _charge_to(s, o)
+    world.administer.add((o, sub))
+    pass_claims(world, o, sub)
+
+
+def end_pact(world: World, o, sub) -> None:
+    """The overlord ends the pact, or it breaks: nothing moves until the next
+    sharing, which re-divides the passed claims."""
+    world.administer.discard((o, sub))
+
+
+def pass_subject_claims(world: World) -> None:
+    """te_seabed_pass_subject_claims (after te_seabed_settle_leases): a
+    record whose two sides no longer both take part is cleared (its licences
+    are the overlord's own); otherwise at most the overlord's holdings count
+    as built on the subject's claims, pact or no pact. Where a pact stands, the
+    subject's claims pass again."""
+    for s in sorted(world.countries.values(), key=lambda x: x.cid):
+        if s.pass_to is None:
+            continue
+        if not pact_charged(world, s.cid):
+            s.pass_built = dict.fromkeys(BASINS, 0)
+            s.pass_unused = dict.fromkeys(BASINS, 0)
+            s.pass_to = None
+            continue
+        for b in BASINS:
+            s.pass_built[b] = min(s.pass_built[b], world.countries[s.pass_to].held[b])
+    for o, sub in sorted(world.administer):
+        if world.countries[sub].overlord == o:
+            pass_claims(world, o, sub)
+
+
 def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
     """te_seabed_yearly_pass: (1) state basins (the generator's table, fixed in
     the model); (2) te_seabed_un_update_regime (the caller sets world.regime);
     (3) every participant records, and at the year's first sharing every
     coastal state takes its fee snapshots (te_seabed_take_snapshots); (4) held,
-    and at the year's first sharing the floors (te_seabed_set_floors); (5) weights; (6) sharing; (7) unbuilt =
-    entitlement - held, and every country that takes no part loses any stale
-    share and floor."""
+    the leases' shift (te_seabed_lease_shift_held), and at the year's first
+    sharing the floors (te_seabed_set_floors); (5) weights; (6) sharing; (7)
+    unbuilt = entitlement - sh, and every country that takes no part loses any
+    stale share and floor; (8) te_seabed_settle_leases, then
+    te_seabed_pass_subject_claims."""
     holders = {s.owner for s in world.states.values() if s.records() > 0 or s.levels > 0}
     part = sorted(cid for cid in world.countries
                   if world.alive(cid) and (is_claimant(world, cid) or cid in holders))
@@ -736,23 +1079,37 @@ def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
         c = world.countries[cid]
         for b in BASINS:
             c.held[b] = sum(s.lic[b] for s in world.owned(cid))
+    for cid in part:                 # te_seabed_lease_shift_held
+        c = world.countries[cid]
+        for b in BASINS:
+            c.sh[b] = share_held(world, cid, b)
+    for cid in part:
+        c = world.countries[cid]
         if first_of_year:
             set_floors(world, cid)
         c.weight = compute_weights(world, cid) if is_claimant(world, cid) else dict.fromkeys(BASINS, 0.0)
     for b in BASINS:
         ent = share_basin(world, b, [cid for cid in part
-                                     if world.countries[cid].weight[b] > 0 or world.countries[cid].held[b] > 0])
+                                     if world.countries[cid].weight[b] > 0 or world.countries[cid].sh[b] > 0])
         for cid in part:
             c = world.countries[cid]
             c.ent[b] = ent.get(cid, 0)
-            c.unbuilt[b] = c.ent[b] - c.held[b]
+            c.unbuilt[b] = c.ent[b] - c.sh[b]
+            c.lease_unused[b] = 0    # the sharing re-divides leased and passed claims too
+            c.subj_unused[b] = 0
+            c.pass_unused[b] = 0
     for cid, c in world.countries.items():
         if cid not in part:
             c.unbuilt = dict.fromkeys(BASINS, 0)
             c.held = dict.fromkeys(BASINS, 0)
+            c.sh = dict.fromkeys(BASINS, 0)
             c.ent = dict.fromkeys(BASINS, 0)
             c.floor = dict.fromkeys(BASINS, 0)
             c.floor_prot = dict.fromkeys(BASINS, 0)
+            c.subj_unused = dict.fromkeys(BASINS, 0)
+            c.pass_unused = dict.fromkeys(BASINS, 0)
+    settle_leases(world)
+    pass_subject_claims(world)
 
 
 # ---------------------------------------------------------------------------
@@ -779,7 +1136,16 @@ def random_world(rng: random.Random, *, n_countries=8, n_states=48, regime=OPEN,
                             incorporated=rng.random() < 0.85, ports=rng.choice((0, 0, 1, 3, 8)))
         if old_save_levels and basin is not None and rng.random() < 0.5:
             states[sid].levels = rng.randrange(old_save_levels)
-    return World(countries, states, regime=regime, fixed=fixed)
+    world = World(countries, states, regime=regime, fixed=fixed)
+    # a fifth of the countries are subjects (no chains), half of them under the pact
+    for cid in countries:
+        if rng.random() < 0.2 and not any(c.overlord == cid for c in countries.values()):
+            lords = [o for o in countries if o != cid and countries[o].overlord is None]
+            if lords:
+                countries[cid].overlord = rng.choice(lords)
+                if rng.random() < 0.5:
+                    world.administer.add((countries[cid].overlord, cid))
+    return world
 
 
 def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05,
@@ -857,3 +1223,34 @@ def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05
     for cid in order:
         if world.alive(cid):
             record_country(world, cid)
+
+
+def step_pacts(world: World, rng: random.Random, *, start=0.03, end=0.03) -> None:
+    """Administer Seabed Claims for the random worlds: with probability `start`
+    a subject without the pact gets it, with `end` a pact ends."""
+    if rng.random() < start:
+        subs = [c.cid for c in world.countries.values() if c.alive and c.overlord is not None
+                and world.alive(c.overlord) and (c.overlord, c.cid) not in world.administer]
+        if subs:
+            sub = rng.choice(subs)
+            start_pact(world, world.countries[sub].overlord, sub)
+    if rng.random() < end and world.administer:
+        end_pact(world, *rng.choice(sorted(world.administer)))
+
+
+def step_leases(world: World, rng: random.Random, *, start=0.05, end=0.03) -> None:
+    """Treaty leases for the random worlds, after the month's recording: with
+    probability `start` two claimants try a lease of a random size in a random
+    basin (the article's possible), and with `end` a standing lease ends."""
+    if rng.random() < start:
+        claimants = [cid for cid in world.countries if is_claimant(world, cid)]
+        if len(claimants) >= 2:
+            src, dst = rng.sample(claimants, 2)
+            b = rng.choice(BASINS)
+            if can_lease(world, src, dst, b):
+                start_lease(world, src, dst, b, rng.randint(1, own_claims(world.countries[src], b)))
+    if rng.random() < end:
+        leases = [(c.cid, b) for c in world.countries.values() if c.alive for b in BASINS
+                  if c.lease_src[b] is not None and (c.cid, b) not in world.leases_ended]
+        if leases:
+            end_lease(world, *rng.choice(leases))

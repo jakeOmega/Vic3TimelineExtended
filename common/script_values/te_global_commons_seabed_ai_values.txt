@@ -186,12 +186,12 @@ te_seabed_ai_will_sponsor = {
 			max = 20
 		}
 	}
-	# Protection (seabed claims spec § 2.2): the more unused claims, the more
-	# Sponsor Contractors keeps of them each January.
+	# Protection (seabed claims spec § 2.2): the more unused claims of its own,
+	# the more Sponsor Contractors keeps of them each January.
 	if = {
 		limit = { te_seabed_ai_projected >= 1 }
 		add = {
-			value = te_seabed_unbuilt_total
+			value = te_seabed_protected_claims
 			multiply = te_seabed_ai_protect_per_claim
 			max = te_seabed_ai_protect_max
 		}
@@ -307,5 +307,213 @@ te_seabed_ai_score_unilateral = {
 			influence < te_seabed_ai_unilateral_influence_start
 		}
 		value = 0
+	}
+}
+
+# ============================================================================
+# Leases (seabed claims spec §§ 4, 8): Lease <Basin> Seabed Claims' AI
+# ============================================================================
+# Read by the articles' ai blocks (122_seabed_lease.txt). Scope: a country.
+#   spare     own claims in the basin above what its building will want: the
+#             levels it has queued now, as a year's pace (a level takes about
+#             te_seabed_ai_lease_build_months to build, so the queue turns over
+#             twice a year), plus a margin; with nothing queued, all but the
+#             margin (spec § 4: no levels queued, or claims well above its pace)
+#   offer     the spare, while the country isn't short of claims itself
+#   request   10, +40 per 100% Tech-Critical Metals stand above base (at most
+#             +20), in a home basin, while its room is at most the margin
+# ============================================================================
+
+te_seabed_ai_lease_pace_months = 12
+te_seabed_ai_lease_build_months = 6
+te_seabed_ai_lease_margin = 5
+
+te_seabed_ai_lease_spare_pacific = {
+	value = te_seabed_own_claims_pacific
+	subtract = {
+		value = te_seabed_queued_total_disp
+		multiply = te_seabed_ai_lease_pace_months
+		divide = te_seabed_ai_lease_build_months
+		add = te_seabed_ai_lease_margin
+	}
+	min = 0
+	floor = yes
+}
+
+te_seabed_ai_lease_offer_value_pacific = {
+	value = 0
+	if = {
+		limit = { te_seabed_room > te_seabed_ai_lease_margin }
+		value = te_seabed_ai_lease_spare_pacific
+	}
+}
+
+te_seabed_ai_lease_request_value_pacific = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_is_claimant = yes
+			has_variable = te_seabed_home_pacific
+			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
+			te_seabed_ai_tech_metals_premium > 0
+		}
+		value = 10
+		add = {
+			value = te_seabed_ai_tech_metals_premium
+			multiply = 40
+			max = 20
+		}
+	}
+}
+
+te_seabed_ai_lease_spare_atlantic = {
+	value = te_seabed_own_claims_atlantic
+	subtract = {
+		value = te_seabed_queued_total_disp
+		multiply = te_seabed_ai_lease_pace_months
+		divide = te_seabed_ai_lease_build_months
+		add = te_seabed_ai_lease_margin
+	}
+	min = 0
+	floor = yes
+}
+
+te_seabed_ai_lease_offer_value_atlantic = {
+	value = 0
+	if = {
+		limit = { te_seabed_room > te_seabed_ai_lease_margin }
+		value = te_seabed_ai_lease_spare_atlantic
+	}
+}
+
+te_seabed_ai_lease_request_value_atlantic = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_is_claimant = yes
+			has_variable = te_seabed_home_atlantic
+			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
+			te_seabed_ai_tech_metals_premium > 0
+		}
+		value = 10
+		add = {
+			value = te_seabed_ai_tech_metals_premium
+			multiply = 40
+			max = 20
+		}
+	}
+}
+
+te_seabed_ai_lease_spare_indian = {
+	value = te_seabed_own_claims_indian
+	subtract = {
+		value = te_seabed_queued_total_disp
+		multiply = te_seabed_ai_lease_pace_months
+		divide = te_seabed_ai_lease_build_months
+		add = te_seabed_ai_lease_margin
+	}
+	min = 0
+	floor = yes
+}
+
+te_seabed_ai_lease_offer_value_indian = {
+	value = 0
+	if = {
+		limit = { te_seabed_room > te_seabed_ai_lease_margin }
+		value = te_seabed_ai_lease_spare_indian
+	}
+}
+
+te_seabed_ai_lease_request_value_indian = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_is_claimant = yes
+			has_variable = te_seabed_home_indian
+			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
+			te_seabed_ai_tech_metals_premium > 0
+		}
+		value = 10
+		add = {
+			value = te_seabed_ai_tech_metals_premium
+			multiply = 40
+			max = 20
+		}
+	}
+}
+
+te_seabed_ai_lease_spare_arctic = {
+	value = te_seabed_own_claims_arctic
+	subtract = {
+		value = te_seabed_queued_total_disp
+		multiply = te_seabed_ai_lease_pace_months
+		divide = te_seabed_ai_lease_build_months
+		add = te_seabed_ai_lease_margin
+	}
+	min = 0
+	floor = yes
+}
+
+te_seabed_ai_lease_offer_value_arctic = {
+	value = 0
+	if = {
+		limit = { te_seabed_room > te_seabed_ai_lease_margin }
+		value = te_seabed_ai_lease_spare_arctic
+	}
+}
+
+te_seabed_ai_lease_request_value_arctic = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_is_claimant = yes
+			has_variable = te_seabed_home_arctic
+			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
+			te_seabed_ai_tech_metals_premium > 0
+		}
+		value = 10
+		add = {
+			value = te_seabed_ai_tech_metals_premium
+			multiply = 40
+			max = 20
+		}
+	}
+}
+
+te_seabed_ai_lease_spare_southern = {
+	value = te_seabed_own_claims_southern
+	subtract = {
+		value = te_seabed_queued_total_disp
+		multiply = te_seabed_ai_lease_pace_months
+		divide = te_seabed_ai_lease_build_months
+		add = te_seabed_ai_lease_margin
+	}
+	min = 0
+	floor = yes
+}
+
+te_seabed_ai_lease_offer_value_southern = {
+	value = 0
+	if = {
+		limit = { te_seabed_room > te_seabed_ai_lease_margin }
+		value = te_seabed_ai_lease_spare_southern
+	}
+}
+
+te_seabed_ai_lease_request_value_southern = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_is_claimant = yes
+			has_variable = te_seabed_home_southern
+			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
+			te_seabed_ai_tech_metals_premium > 0
+		}
+		value = 10
+		add = {
+			value = te_seabed_ai_tech_metals_premium
+			multiply = 40
+			max = 20
+		}
 	}
 }

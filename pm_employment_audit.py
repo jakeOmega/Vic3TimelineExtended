@@ -40,6 +40,10 @@ Note this is broad — a REVIEWED on a PM suppresses every building where that P
 is the worst contributor. The primary remedy is rebalancing the values so no
 valid combo goes negative; suppression is the escape hatch for deliberate cases.
 
+`employment_combinations` / `employment_by_select` enumerate the same valid
+combinations and report every one's per-profession totals rather than only
+the negative ones; `GET /pm-employment` serves them (#990).
+
 `python3 pm_employment_audit.py --strict` is the CI mode (the committed
 `vanilla_parsed/` snapshot stands in for the game). It exits 1 when a
 mod-relevant flag has no `# REVIEWED` exemption (vanilla-only flags never
@@ -47,6 +51,7 @@ count), and also when any building was skipped for exceeding the combo-count
 cap: a skipped building is unaudited, so a rise from 0 would otherwise pass in
 silence (#681 took it from 0 to 13, every mine type).
 """
+import fnmatch
 import itertools
 import os
 import re
@@ -370,6 +375,169 @@ def _audit_building(
             exemption=exemption,
         ))
     return flags, True, False
+
+
+BUCKETS = ("level_scaled", "workforce_scaled", "unscaled")
+
+
+def _num(v: float) -> float | int:
+    return int(v) if float(v).is_integer() else round(v, 4)
+
+
+def _select_matches(pm: str, select: list[str]) -> bool:
+    return any(fnmatch.fnmatchcase(pm, pat) for pat in select)
+
+
+def employment_combinations(
+    building: str,
+    buildings: dict,
+    pmg_data: dict,
+    pm_data: dict,
+    select: list[str] | None = None,
+    buckets: tuple[str, ...] = BUCKETS,
+    limit: int | None = None,
+) -> dict | None:
+    """Per-profession employment of every valid PM combination of one
+    building, grouped by identical totals (#990, `GET /pm-employment`).
+
+    Valid means what the audit enumerates: one PM per group, and a PM with
+    `unlocking_production_methods` only beside one of those PMs
+    (`unlocking_technologies` / `_principles` are ignored). `select` holds PM
+    names or fnmatch globs: a group with a PM that matches keeps only those
+    PMs, so the result covers the combinations that contain one of them in
+    each such group. `buckets` picks the scaling blocks reported. Returns None
+    for an unknown building, and `skipped_large` instead of groups over the
+    audit's combination cap.
+
+    A group whose PMs employ nobody and are required by no other PM can't
+    change a total, so it is folded out of the enumeration: each combination
+    of the rest counts once per PM of that group it can take (its
+    `unlocking_production_methods` can only point at PMs outside such groups).
+    The counts stay exact, and the example picks the first PM it can take."""
+    if building not in buildings:
+        return None
+    groups = _resolve_groups(buildings[building], pmg_data)
+    select = [s for s in (select or []) if s]
+    matched: list[str] = []
+    out_groups = []
+    restricted: list[tuple[str, list[str]]] = []
+    for gname, pms in groups:
+        hit = [pm for pm in pms if select and _select_matches(pm, select)]
+        matched += hit
+        out_groups.append({"group": gname, "production_methods": pms,
+                           **({"selected": hit} if hit else {})})
+        restricted.append((gname, hit or pms))
+    result: dict = {
+        "building": building,
+        "pm_groups": out_groups,
+        "buckets": list(buckets),
+    }
+    if select:
+        result["select"] = select
+        result["select_matched"] = matched
+        if not matched:
+            result.update(combinations=0, groups_total=0, groups=[])
+            return result
+
+    pm_emp: dict[str, dict[str, dict[str, float]]] = {}
+    pm_unlock: dict[str, list[str]] = {}
+    for _g, pms in groups:
+        for pm in pms:
+            if pm not in pm_emp:
+                body = pm_data.get(pm) if pm_data else None
+                emp = _pm_employment(body)
+                pm_emp[pm] = {b: v for b, v in emp.items() if b in buckets and v}
+                pm_unlock[pm] = _pm_unlock_pms(body)
+
+    required = {pm for reqs in pm_unlock.values() for pm in reqs}
+    kept = [(i, pms) for i, (_g, pms) in enumerate(restricted)
+            if any(pm_emp[pm] for pm in pms) or required.intersection(pms)]
+    folded = [(i, pms) for i, (_g, pms) in enumerate(restricted)
+              if not (any(pm_emp[pm] for pm in pms) or required.intersection(pms))]
+
+    product = 1
+    for _i, pms in kept:
+        product *= len(pms)
+    if product > _COMBO_CAP:
+        result.update(skipped_large=True, kept_product=product, combo_cap=_COMBO_CAP)
+        return result
+
+    keys = sorted({(b, p) for pm in pm_emp for b, profs in pm_emp[pm].items() for p in profs})
+    vec = {pm: tuple(pm_emp[pm].get(b, {}).get(p, 0.0) for b, p in keys) for pm in pm_emp}
+    zero = tuple(0.0 for _ in keys)
+
+    totals: dict[tuple, list] = {}  # totals vector -> [count, example]
+    combinations = 0
+    for combo in itertools.product(*(pms for _i, pms in kept)):
+        combo_set = set(combo)
+        if any(pm_unlock[pm] and not combo_set.intersection(pm_unlock[pm]) for pm in combo):
+            continue
+        mult = 1
+        picks = {}
+        for i, pms in folded:
+            ok = [pm for pm in pms if not pm_unlock[pm] or combo_set.intersection(pm_unlock[pm])]
+            mult *= len(ok)
+            if not ok:
+                break
+            picks[i] = ok[0]
+        if not mult:
+            continue
+        combinations += mult
+        total = zero
+        for pm in combo:
+            total = tuple(a + b for a, b in zip(total, vec[pm]))
+        entry = totals.get(total)
+        if entry is None:
+            example = dict(zip((i for i, _pms in kept), combo)) | picks
+            totals[total] = [mult, [example[i] for i in range(len(restricted))]]
+        else:
+            entry[0] += mult
+
+    rows = []
+    for total, (count, example) in totals.items():
+        row = {"count": count}
+        for b in buckets:
+            row[b] = {p: _num(v) for (bb, p), v in zip(keys, total) if bb == b and v}
+        row["example"] = example
+        rows.append(row)
+
+    def bucket_sum(row: dict, b: str) -> float:
+        return sum(row[b].values())
+
+    rows.sort(key=lambda r: (-r["count"], [-bucket_sum(r, b) for b in buckets]))
+    result["combinations"] = combinations
+    if rows:
+        result["min_total"] = {b: _num(min(bucket_sum(r, b) for r in rows)) for b in buckets}
+        result["max_total"] = {b: _num(max(bucket_sum(r, b) for r in rows)) for b in buckets}
+    result["groups_total"] = len(rows)
+    result["groups"] = rows[:limit] if limit else rows
+    return result
+
+
+def employment_by_select(
+    select: list[str],
+    buildings: dict,
+    pmg_data: dict,
+    pm_data: dict,
+    buckets: tuple[str, ...] = BUCKETS,
+    limit: int | None = None,
+) -> dict:
+    """`employment_combinations` for every building with a PM matching
+    `select` in one of its groups (#990, `GET /pm-employment?select=`)."""
+    rows = []
+    seen: set[str] = set()
+    for building in sorted(buildings):
+        groups = _resolve_groups(buildings[building], pmg_data)
+        hits = {pm for _g, pms in groups for pm in pms if _select_matches(pm, select)}
+        if not hits:
+            continue
+        seen |= hits
+        rows.append(employment_combinations(
+            building, buildings, pmg_data, pm_data, select, buckets, limit))
+    unmatched = [pat for pat in select
+                 if not any(fnmatch.fnmatchcase(pm, pat) for pm in seen)]
+    return {"select": select, "buckets": list(buckets), "count": len(rows),
+            "select_unmatched": unmatched, "buildings": rows}
 
 
 def audit(ms, mod_path: str | None = None) -> AuditResult:
