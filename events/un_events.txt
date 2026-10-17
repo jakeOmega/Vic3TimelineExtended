@@ -4034,7 +4034,7 @@ un_events.35 = {
 			days = 1825
 		}
 		if = {
-			limit = { has_journal_entry = je_banking_cycle }
+			limit = { te_banking_cycle_running = yes }
 			custom_tooltip = un_events.35.a_confidence_tt
 			hidden_effect = {
 				change_variable = { name = finance_cycle_value add = 10 }

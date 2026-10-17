@@ -311,13 +311,15 @@ class SuspensionEndEvent(unittest.TestCase):
 
     def test_every_option_explains_itself(self):
         # silent_variable: the writes are hidden, so each option says what it does,
-        # either directly or on both sides of the journal-entry split (#448: the
-        # dashboard's words for a holder, plain words for a country without it).
+        # either directly or on both sides of the controls split (#448: the
+        # dashboard's words for a country with the monetary controls, plain words
+        # for one without them; every country holds the entry since the banking
+        # always-on spec, so the split asks te_banking_controls_open).
         for option in self.options:
             keys = [key for key, _, _ in option]
             if 'custom_tooltip' in keys:
                 continue
-            split = ('limit', '=', [('has_journal_entry', '=', 'je_banking_cycle')])
+            split = ('limit', '=', [('te_banking_controls_open', '=', 'yes')])
             at = next(i for i, (key, _, val) in enumerate(option)
                       if key == 'if' and split in val)
             self.assertEqual(option[at + 1][0], 'else', option)

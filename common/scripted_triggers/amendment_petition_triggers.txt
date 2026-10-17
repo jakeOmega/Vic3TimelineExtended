@@ -383,14 +383,13 @@ te_ap_law_ok_undivided_farm_succession = {
 #  event adds its own (an election campaign, a war, low legitimacy).
 # ----------------------------------------------------------------------
 
-# Hard times: the banking cycle in panic or downturn (only while its journal
-# entry runs; banking_cycle_is_recession reads its variables), a slide down
+# Hard times: the banking cycle in panic or downturn (only once the cycle has
+# started; banking_cycle_is_recession reads its variables), a slide down
 # the power rankings, or a default.
 te_ap_economy_faltering = {
 	OR = {
 		AND = {
-			has_journal_entry = je_banking_cycle
-			has_variable = finance_cycle_value
+			te_banking_cycle_running = yes
 			banking_cycle_is_recession = yes
 		}
 		is_losing_power_rank = yes

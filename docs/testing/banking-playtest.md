@@ -19,6 +19,7 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 |---|---|---|---|---|
 | `TE_SELF_CHECK … contagion_one_open` | BROKEN once a game, when a contagion event opens for a country that already has one open. OK once a game, when a contagion event closes alone after a wave that reached its country while it was on its way or open was turned away (`turned_away=N`); a game with no such reach logs no OK | one contagion event per country at a time: the mark the spread sets when it sends the event (`banking_contagion_pending`) turned the second wave away, and the event answered for both | two contagion events open at once, so two rolls and two popups again; the line gives `date`, `open` and `turned_away`. Find both events for that country in `debug.log`. Within a week of loading a save made before the block, it can be a pair sent under the old rules: no fault. If the first had been open more than 120 days, the mark ran out under it. If both were sent while the mark stood, something sent the event past the spread, or removed the mark (a loyalist win re-running `je_banking_cycle`'s `immediate` would) | Mark ran out: raise `days` in `banking_contagion_mark_pending` above the event's real lifetime. Mark not seen or removed: make the mark untimed and count monthly passes instead, as `covert_open_event_stale_passes` does, or drop the revolution clear in `je_banking_cycle`'s `immediate` if a loyalist win caused it. The event `trigger` the owner sketched first (a mark set in `immediate`) is no fallback for the same-pulse case: both copies are sent before either opens |
 | `TE_SELF_CHECK … contagion_roll_scope` | Judged only for a contagion event that was alone: no other copy open for the same country between its roll and its answer (`open=1`), which since the block (`contagion_one_open`) is every one. OK once a game, when the first country a contagion cascade reached (a contagion crash spreading on, not an origin crash) has its own roll crash; BROKEN each time a lone event's options and its roll disagree. A copy open beside another is not judged: `contagion_one_open` reports that | the event's own `save_scope_as = contagion_crashed` replaced the upstream country's inherited one, so a cascade target's crash plays as a crash. The 2026-10-17 autosave already shows this: targets two and three tiers out had taken the crash-only options | `roll=crash read=scare open=1`: the save did not replace the inherited scope, so in a cascade only the first tier can crash. `roll=scare read=crash open=1`: a scare took the crash options, the 2026-10-16 bug. A country whose copy never resolved (annexed first) is not judged until the spread sends it the next one | A BROKEN with `open=1`: drop the saved scope and read the roll from `var:contagion_crash` in the text, options and cascade. With one contagion event at a time the variable is the event's own roll, so this no longer changes play. The old fallback, a saved scope *value* set on both outcomes, stays withdrawn: it needs the same replacement, and where that fails a scare inherits the upstream country's crash, the 2026-10-16 bug |
+| `TE_SELF_CHECK … banking_entry_everywhere` | Once a game, 30 days after the first yearly pulse (an old save's first after this change) | every country that should hold `je_banking_cycle` (under the rule, not decentralized, not a rebel) does, and the yearly safety net added none: the engine activated every record | `missing=` countries still without it, `added_by_net=` how many the net has added. The engine left records out (or, for `missing`, a country formed in the last two weeks); the net carries them, a year late at most | Add the entry from a monthly pulse instead of the yearly one (`te_banking_entry_net` in `te_banking_entry_on_actions.txt`), so a country waits a month at most |
 
 ## A contagion scare plays as a scare (2026-10-16)
 
@@ -104,3 +105,26 @@ contagion event it still holds from an earlier wave cannot count it a second tim
 12. **No contagion crash within a year of a crash.** On any country's history chart, a contagion crash marker never
     comes less than twelve months after another crash marker, its own or contagion's. After the year, contagion can
     crash it again. The rule is contagion's only: a country's own crash still depends on its bubble alone.
+
+## Every country holds the banking entry (2026-10-17)
+
+The entry is every country's from the first weeks of a game, dormant until its financial cycle starts: Stock Exchange and
+an Urban Center of level 5, the test that used to activate the entry
+(`docs/superpowers/specs/2026-10-17-banking-always-on-design.md`).
+
+13. **A new game.** Within two weeks every country's journal holds the entry, and the Banking tab opens for all of them.
+    A country without Stock Exchange or a level 5 Urban Center shows the Not Started cell (its hover the two conditions,
+    ticked or crossed), its Monetary Policy readings with every control greyed under the read-only note, and Available
+    Interventions with every Enable greyed under its note. No bars, no Active Policies, no history, no phase in the top
+    bar.
+14. **The start.** The month a country meets both conditions, its cycle appears at Stable with no momentum and no bubble,
+    the controls and tools open, and a human player gets the Banking Cycle Begins notice. A country that meets the test
+    in 1836 starts when its entry activates, with no notice.
+15. **An old save.** Countries that already ran the cycle carry on unchanged. The rest get a dormant entry within two
+    weeks, and the self-check line reads OK.
+16. **A dormant central bank.** A country with a National Bank but no running cycle keeps the Dual Mandate (or its act's
+    mandate under Central Bank Independence), and its dial can't be moved until the cycle starts.
+17. **Rebels.** During a revolution the rebels hold no banking entry. When they win, the nation's cycle carries on where
+    the loser left it.
+18. **No new errors.** `error.log` has no `Failed to fetch variable` for `finance_cycle_value`, `finance_cycle_momentum`
+    or `bubble_pressure` while a dormant entry's panels are open, or from the AI's banking buttons.

@@ -2798,7 +2798,7 @@ society_technology_events.30 = {
 
 	after = {
 		if = {
-			limit = { has_journal_entry = je_banking_cycle }
+			limit = { te_banking_cycle_running = yes }
 			banking_cycle_post_event_refresh = yes
 		}
 	}

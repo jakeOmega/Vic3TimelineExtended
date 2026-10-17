@@ -660,8 +660,11 @@ types banking_dashboard_widget_types
 
 	type te_banking_overview_panel = flowcontainer {
 		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
-		# country whose entry has not activated yet and therefore has none of the
-		# cycle variables. Draw nothing until the journal entry is running.
+		# country whose entry has not activated yet. Draw nothing until the
+		# journal entry is running. Every country holds it, dormant until its
+		# financial cycle starts: the bars and the cycle's rows wait for
+		# banking_dash_cycle_running, and the dormant entry draws the Not Started
+		# row in their place.
 		visible = "[JournalEntry.IsActive]"
 		direction = vertical
 		parentanchor = hcenter
@@ -682,8 +685,15 @@ types banking_dashboard_widget_types
 		### only the variants the mod's entries use. They are NOT drawn twice:
 		### je_banking.txt puts a marker widget in custom_widget_container_7, and
 		### the mod's journal_entry.gui override hides its own bar block for any
-		### entry that does.
-		te_je_scripted_bars = {}
+		### entry that does. A dormant entry has no readings, so no bars: the
+		### gate is a wrapper, since the type carries a visible of its own.
+		flowcontainer = {
+			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			parentanchor = hcenter
+			ignoreinvisible = yes
+
+			te_je_scripted_bars = {}
+		}
 
 		### Three rows of two cells, each a box 238 wide (238 + 4 + 238 = 480,
 		### the bars' width), with its icon in a box of its own down the left
@@ -698,8 +708,52 @@ types banking_dashboard_widget_types
 		### banking_disp_*_change_shape: 1 low to high, 2 low or more, 3 high or
 		### less, 4 one figure. The breakdown is on hover.
 
+		### Before the cycle starts: one cell in Row 1's place, the cycle Not
+		### Started, its icon the Stable phase's dimmed (style guide rule 4: what
+		### does not exist yet is dimmed), its third line how many of the start
+		### test's conditions hold (banking_disp_unlock_met). The checklist is on
+		### hover, through the greyed tab's own handler; IsValidTooltip renders
+		### nothing once the test holds, so that month asks IsValid first, as the
+		### tab's tooltip does. Row 2 waits too: its budget is for the tools.
+		flowcontainer = {
+			visible = "[GetScriptedGui('banking_dash_cycle_dormant').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_banking_ov_cell = {
+				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				size = { 238 70 }
+				blockoverride "caption_width" {
+					max_width = 154
+				}
+				blockoverride "caption" {
+					text = "banking_dash_phase_label"
+				}
+				blockoverride "icons" {
+					icon = {
+						size = { 100% 100% }
+						alpha = 0.4
+						texture = "gfx/interface/icons/banking_icons/phase_stable.dds"
+					}
+				}
+				blockoverride "word" {
+					te_banking_ov_word = {
+						text = "banking_dash_not_started_value"
+					}
+				}
+				blockoverride "third_line" {
+					te_banking_ov_word = {
+						position = { 78 46 }
+						text = "banking_dash_not_started_conditions"
+					}
+				}
+			}
+		}
+
 		### Row 1: the cycle's phase and momentum.
 		flowcontainer = {
+			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -821,8 +875,10 @@ types banking_dashboard_widget_types
 			}
 		}
 
-		### Row 2: bubble pressure and the intervention budget, both always shown.
+		### Row 2: bubble pressure and the intervention budget, both shown
+		### whenever the cycle runs.
 		flowcontainer = {
+			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -1072,8 +1128,10 @@ types banking_dashboard_widget_types
 	### a closed one is evaluated: not in observer mode (GetPlayer is empty there);
 	### the Budget tab's gate, te_budget_banking_tab_sgui (the rule on and the
 	### entry held), on the parent of the datacontext as budget_panel.gui has
-	### it; and the entry running (JournalEntry.IsActive), the overview's own
-	### gate. The instance puts the phase in "readings".
+	### it; the entry running (JournalEntry.IsActive), the overview's own
+	### gate; and its cycle started (banking_dash_cycle_running), since every
+	### country holds the entry, dormant until then, and a dormant one has no
+	### phase. The instance puts the phase in "readings".
 	type te_banking_topbar_gate = flowcontainer {
 		visible = "[Not( GetMetaPlayer.IsObserver )]"
 		ignoreinvisible = yes
@@ -1090,7 +1148,12 @@ types banking_dashboard_widget_types
 					visible = "[JournalEntry.IsActive]"
 					ignoreinvisible = yes
 
-					block "readings" {}
+					flowcontainer = {
+						visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						ignoreinvisible = yes
+
+						block "readings" {}
+					}
 				}
 			}
 		}
@@ -1111,11 +1174,14 @@ types banking_dashboard_widget_types
 	### What is in force, each with its Disable button. A row is drawn while its
 	### tool is on, whatever economic system enacted it, so a tool inherited from
 	### a repealed law keeps a working Disable here.
+	### Shown once the cycle runs: a dormant entry has no tool to put in force
+	### (style guide rule 7, content for one state only).
 	type te_banking_sec_active = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
+		visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 		banking_dash_category_header = {
 			blockoverride "left_text" {
@@ -1926,6 +1992,24 @@ types banking_dashboard_widget_types
 			parentanchor = hcenter
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_monetary_closed'))]"
+
+			### Before the cycle starts the section is read-only (owner,
+			### 2026-10-17): every control below is greyed, its tooltip's first
+			### line the cycle's (banking_mon_control_sgui, banking_possible_*).
+			### The reason is said once, here, above the rows (style guide rule 6),
+			### with the start test's checklist on hover.
+			textbox = {
+				visible = "[GetScriptedGui('banking_dash_monetary_dormant_note').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				text = "banking_dash_dormant_monetary_note"
+				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 480 -1 }
+				maximumsize = { 480 -1 }
+				align = left|nobaseline
+				using = banking_dash_fontsize_row
+				margin = { 6 4 }
+			}
 
 			### ---- The policy dial (monetary_policy_design.md §3) ----------
 			### Readouts for every country; the three interactive rows only for
@@ -3078,6 +3162,24 @@ types banking_dashboard_widget_types
 			parentanchor = hcenter
 			align = center|nobaseline
 			margin = { 4 6 }
+		}
+
+		### Before the cycle starts every tool below is greyed, its tooltip's
+		### first line the cycle's (te_banking_cycle_started_tt, the first line
+		### of each banking_possible_* helper). The reason is said once, here
+		### (style guide rule 6), with the start test's checklist on hover.
+		textbox = {
+			visible = "[GetScriptedGui('banking_dash_cycle_dormant').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "banking_dash_dormant_tools_note"
+			tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+			parentanchor = hcenter
+			align = center|nobaseline
+			using = banking_dash_fontsize_row
+			margin = { 6 4 }
 		}
 
 		### Prudential Regulation
