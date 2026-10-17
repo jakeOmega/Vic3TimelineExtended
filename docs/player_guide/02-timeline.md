@@ -349,9 +349,11 @@ country's own claims there to another, up to the number agreed. They pass at
 once, so the lessee can build before January. Each sharing divides them again,
 and the lease then takes them back from the lessor's new share, as far as it
 goes, until the licences built on the lease and its unused claims make up the
-number. Licences built on a lease are the lessee's for good; while the lease
-stands they count against the lessor's share, not the lessee's. When the lease
-ends, its unused claims go back at the next sharing. The usual price is a Money
+number. Licences built on a lease are the lessee's for good, but they count
+against the lessor's share, not the lessee's, even after the lease ends, for as
+long as both countries take part in the sharing; meanwhile the lessee can lease
+that basin's claims again only from the same lessor. When the lease ends, its
+unused claims go back at the next sharing. The usual price is a Money
 Transfer the other way. The article can be enforced, so a war's winner can take
 a rival's claims as a lease. No country barred by the Antarctic Treaty can lease
 Southern claims or receive them, and Sponsor Contractors protects no leased
@@ -363,8 +365,8 @@ An overlord can take its subject's unused claims with Administer Seabed Claims,
 an action like Raise Subject Payments: no approval, and not on a protectorate
 or a personal union. While it stands, the subject's claims pass to the overlord
 at once and after every sharing, with no limit, and the licences the overlord
-builds on them count against the subject's share. The subject keeps its own
-licences. Its liberty desire rises as under Raise Subject Payments, and
+builds on them count against the subject's share, even after the action ends,
+while both take part. The subject keeps its own licences. Its liberty desire rises as under Raise Subject Payments, and
 relations between the two fall. Only the overlord starts or ends it; when it
 ends, the subject's claims are its own again from the next sharing. AI
 overlords use it on subjects with claims to spare and liberty desire below 25,

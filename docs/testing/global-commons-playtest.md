@@ -196,14 +196,18 @@ gives no verdict for a country no longer a subject.
     loser's claims pass at once. An AI presses it only against a country with claims there, and
     only when it is short of claims itself.
 23. **A lease ends.** Break the treaty, or let it lapse: our unused leased claims stay until the
-    next sharing, then go back; the levels we built on it keep their licences. A lessor annexed by a
-    third country ends the lease at the next sharing too.
+    next sharing, then go back; the levels we built on it keep their licences, and the lessor's
+    share at that sharing still pays for them (a third party's share doesn't move). A new lease from
+    the same lessor is offered; one from another lessor in that basin is refused, with the tooltip
+    naming the old lease. A lessor annexed by a third country clears the record at the next
+    sharing.
 24. **Administer Seabed Claims.** As an overlord with Abyssal Plain Mining, take the action on a
     puppet or dominion that claims: its claims read 0 and ours rise by them, its liberty desire
     rises and relations fall. A protectorate or personal union isn't offered it; Raise Subject
     Payments' DLC isn't needed. Build on the passed claims: the subject's share at the next sharing
     pays for those licences. End it: the passed claims stay until the next sharing, then the
-    subject keeps its own.
+    subject keeps its own, less the licences built on them; take it again and nothing is lost or
+    gained.
 25. **Unincorporated coast.** A country whose only coast in a basin is unincorporated: the basin is
     home, its weight hover shows the coast at half ("1.5 coast" for one incorporated and one
     unincorporated state) with the ports in full, and the Free hover lists only the incorporated
@@ -211,7 +215,10 @@ gives no verdict for a country no longer a subject.
 26. **AI leases and pacts, observer run.** Over a few decades past era 11, AIs lease out claims they
     aren't using and ask for them when short; a lessor shouldn't lease away claims it then needs
     (if it does, raise `te_seabed_ai_lease_margin`). AI overlords take Administer Seabed Claims on
-    content subjects and end it as liberty desire climbs.
+    content subjects and end it as liberty desire climbs. Watch for an AI overlord taking and
+    returning it on the same subject year after year (will_propose below 25 liberty desire,
+    will_break at 50): it should now cost a third party nothing, but it churns. Watch, too, AIs
+    leasing out almost all their claims as soon as they have the technology (nothing queued yet).
 
 ### Engine facts the build assumes, unverified
 

@@ -131,6 +131,34 @@ class LeaseSharingTest(unittest.TestCase):
         self.assertIn("te_seabed_lease_ok_$B$", body)
         self.assertIn("te_seabed_lease_built_$B$", body)
 
+    def test_an_ended_lease_keeps_charging_its_lessor(self):
+        """Review C2 (model: lease_charged, settle_leases): the shift charges the
+        lessor with built + past while both take part; settle folds an ended
+        lease's licences into past and clears a record only when not charged."""
+        shift = strip_comments(block(read(EFFECTS), "te_seabed_lease_shift_basin"))
+        self.assertIn("te_seabed_lease_past_$B$", shift)
+        self.assertIn("set_variable = te_seabed_lease_chg_$B$", shift)
+        self.assertIn("scope:te_sb_lessor = { has_variable = te_seabed_part }", shift)
+        settle = strip_comments(block(read(EFFECTS), "te_seabed_settle_lease"))
+        self.assertIn("te_seabed_lease_chg_$B$", settle)
+        self.assertIn("te_seabed_lease_past_$B$", settle)
+        self.assertLess(settle.index("te_seabed_lease_chg_$B$"), settle.index("te_seabed_lease_ok_$B$"))
+
+    def test_an_article_never_taken_up_is_adopted(self):
+        """Review I1: at the sharing a participant with no record takes up an
+        in-force article naming it; one with a record reads its lessor's."""
+        shift = strip_comments(block(read(EFFECTS), "te_seabed_lease_shift_basin"))
+        self.assertIn("any_scope_treaty", shift)
+        self.assertIn("NOT = { exists = scope:te_sb_lessor }", shift)
+        self.assertIn("set_variable = { name = te_seabed_lease_src_$B$ value = scope:te_sb_lessor }", shift)
+        enter = strip_comments(block(read(EFFECTS), "te_seabed_lease_enter"))
+        self.assertIn("source_country = scope:te_sb_lessor", enter)   # a record admits only its own lessor
+
+    def test_the_one_lease_tooltip_names_the_record(self):
+        loc = english_loc()
+        line = re.search(r"(?m)^ te_seabed_lease_one_tt:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("licences built on", line)
+
     def test_settle_tops_up_from_own_claims(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_settle_lease"))
         for name in ("te_seabed_own_claims_$B$", "te_seabed_lease_n_$B$", "te_seabed_lease_ok_$B$",
@@ -257,8 +285,13 @@ class SubjectActionTest(unittest.TestCase):
         body = strip_comments(block(action(), "\taccept_effect"))
         self.assertIn("te_seabed_pact_start = yes", body)
         start = strip_comments(block(read(EFFECTS), "te_seabed_pact_start"))
-        self.assertIn("te_seabed_pass_built_", start)          # a former pact's counters go
+        self.assertIn("te_seabed_pact_charge_to = yes", start)
         self.assertIn("te_seabed_pass_basin", start)
+        # counters go only when they charge another overlord (review C2)
+        charge = strip_comments(block(read(EFFECTS), "te_seabed_pact_charge_to"))
+        self.assertIn("var:te_seabed_pass_to ?= { this = scope:te_sb_over }", charge)
+        self.assertIn("te_seabed_pass_built_pacific", charge)
+        self.assertIn("set_variable = { name = te_seabed_pass_to value = scope:te_sb_over }", charge)
 
     def test_claims_pass_after_the_leases_settle(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
@@ -289,18 +322,29 @@ class SubjectActionTest(unittest.TestCase):
         body = strip_comments(block(read(EFFECTS), "te_seabed_pact_shift_basin"))
         self.assertIn("te_seabed_pass_built_$B$", body)
         self.assertIn("te_seabed_shleft_$B$", body)
-        self.assertIn("te_seabed_pact_stands = { B = $B$ }", body)
+        # charged while both take part, pact or no pact (review C2)
+        self.assertNotIn("te_seabed_pact_stands", body)
+        walk = strip_comments(block(read(EFFECTS), "te_seabed_lease_shift_held"))
+        self.assertIn("var:te_seabed_pass_to ?= { save_scope_as = te_sb_over }", walk)
+        self.assertIn("set_variable = te_seabed_pass_chg", walk)
 
-    def test_settle_drops_a_former_pacts_licences(self):
-        body = strip_comments(block(read(EFFECTS), "te_seabed_pact_settle"))
-        self.assertIn("te_seabed_pact_stands = { B = $B$ }", body)
-        self.assertIn("te_seabed_pass_built_$B$", body)
-        self.assertIn("te_seabed_pass_basin = { B = $B$ }", body)
+    def test_settle_keeps_a_record_while_both_take_part(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_pass_subject_claims"))
+        self.assertIn("te_seabed_pass_chg", body)                  # set by the shift: both take part
+        self.assertIn("te_seabed_pact_clear = yes", body)           # cleared only when they don't
+        self.assertIn("remove_variable = te_seabed_pass_to", block(read(EFFECTS), "te_seabed_pact_clear"))
+        settle = strip_comments(block(read(EFFECTS), "te_seabed_pact_settle"))
+        self.assertIn("te_seabed_pact_stands = { B = $B$ }", settle)
+        self.assertIn("te_seabed_pact_charge_to = yes", settle)
+        self.assertIn("te_seabed_pass_basin = { B = $B$ }", settle)
 
     def test_consume_drains_subject_claims_before_leased(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_lease_consume_basin"))
         self.assertIn("te_seabed_subj_unused_$B$", body)
-        self.assertIn("every_direct_subject", body)
+        # booked on the subjects whose counters charge this country (review C2), not
+        # its direct subjects: a former subject's passed claims are still here
+        self.assertIn("var:te_seabed_pass_to ?= { this = scope:te_sb_cons }", body)
+        self.assertNotIn("every_direct_subject", body)
         self.assertIn("te_seabed_pass_built_$B$", body)
         # the lease keeps its claims longest: its part is settled first
         self.assertLess(body.index("te_seabed_lease_unused_$B$"), body.index("te_seabed_subj_unused_$B$"))
@@ -313,7 +357,7 @@ class SubjectActionTest(unittest.TestCase):
     def test_relinquish_drops_passed_claims(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_relinquish"))
         self.assertIn("te_seabed_subj_unused_$B$", body)
-        self.assertIn("every_direct_subject", body)
+        self.assertIn("te_seabed_pass_to", body)
 
     def test_ai(self):
         ai = strip_comments(block(action(), "\tai"))
@@ -338,10 +382,22 @@ class SelfCheckTest(unittest.TestCase):
     on get a once-a-game TE_SELF_CHECK line, listed in the play-test list."""
 
     def test_lease_entry(self):
-        body = block(read(EFFECTS), "te_seabed_lease_enter")
-        self.assertIn("TE_SELF_CHECK OK seabed_lease_entry", body)
-        self.assertIn("TE_SELF_CHECK BROKEN seabed_lease_entry", body)
+        """Review I2: logged by the caller with literal basin names ($B$ in a
+        debug_log string is mangled, scripting_best_practices.md), and OK only
+        for a quantity of at least 1."""
+        body = block(read(EFFECTS), "te_seabed_lease_take_up")
+        for b in m.BASINS:
+            self.assertIn(f"TE_SELF_CHECK OK seabed_lease_entry basin={b} ", body)
+            self.assertIn(f"TE_SELF_CHECK BROKEN seabed_lease_entry basin={b} ", body)
         self.assertIn("te_seabed_selfcheck_lease_done", body)          # OK once a game
+        enter = strip_comments(block(read(EFFECTS), "te_seabed_lease_enter"))
+        self.assertIn("scope:te_sb_found = { input_quantity > 0 }", enter)
+
+    def test_no_parameter_in_a_log_string(self):
+        for rel in (EFFECTS, EVENTS):
+            for line in read(rel).split("\n"):
+                if "debug_log =" in line:
+                    self.assertNotIn("$", line.split("=", 1)[1], line.strip()[:80])
 
     def test_pact_read(self):
         start = strip_comments(block(read(EFFECTS), "te_seabed_pact_start"))
