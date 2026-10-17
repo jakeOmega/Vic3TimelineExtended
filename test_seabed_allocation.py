@@ -69,12 +69,19 @@ class PoolsHoldTest(unittest.TestCase):
                 self.assertGreaterEqual(c.unbuilt[b], 0)
             if not c.alive:
                 continue
+            for b in m.BASINS:
+                # a lease's total holds, and its unused claims are part of the lessee's claims
+                self.assertLessEqual(c.lease_built[b] + c.lease_unused[b], c.lease_n[b], (c.cid, b, when))
+                self.assertGreaterEqual(c.lease_unused[b], 0)
+                self.assertLessEqual(c.lease_unused[b], c.unbuilt[b], (c.cid, b, when))
             if when == "month" and m.pending(world, c.cid) > 0:
                 # a level waits for a licence only while its owner has no share left
                 self.assertEqual(sum(c.unbuilt.values()), 0, f"country {c.cid} leaves a level unlicensed")
             if when == "pass":
                 for b in m.BASINS:
-                    self.assertGreaterEqual(c.ent[b], c.held[b], "a licence in use was taken away")
+                    # the sharing's holdings: a lease's licences count as its lessor's
+                    self.assertGreaterEqual(c.sh[b], 0)
+                    self.assertGreaterEqual(c.ent[b], c.sh[b], "a licence in use was taken away")
 
     def _worlds(self, regime, seed, fixed=False):
         for i in range(WORLDS):
@@ -123,6 +130,20 @@ class PoolsHoldTest(unittest.TestCase):
             rng = random.Random(6100 + i)
             world = m.random_world(rng)
             run(world, rng, YEARS, check=check, annex=0, split=0, conquest=0)
+
+    def test_leases(self):
+        """Treaty leases start and end at random between claimants, in every
+        regime: the pools hold and no lease goes over its total."""
+        for i in range(WORLDS):
+            rng = random.Random(7700 + i)
+            world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
+            for _ in range(YEARS):
+                for _ in range(12):
+                    m.step_leases(world, rng)                 # a treaty enters into force; the month's recording follows
+                    m.step_month(world, rng, annex=0, split=0)
+                    self._check(world, "month")
+                m.yearly_pass(world)
+                self._check(world, "pass")
 
     def test_pools_fill(self):
         """After a sharing with claimants, every pool is fully shared, under
@@ -732,6 +753,180 @@ class RelinquishTest(unittest.TestCase):
             self.assertLessEqual(sum(mine.ent.values()), sum(theirs.ent.values()), (i, cid, b))
             worse += mine.ent[b] < theirs.ent[b]
         self.assertGreater(worse, 0)
+
+
+class LeaseTest(unittest.TestCase):
+    """Treaty leases (seabed claims spec § 4): up to N of the lessor's claims
+    move at entry into force; each sharing re-divides them and then tops the
+    lease back up to N less the licences built on it, from the lessor's own
+    claims; those licences count as the lessor's holdings in the sharing, so
+    the lessee's own share is untouched; an ended lease's claims return at the
+    next sharing and its licences stay the lessee's."""
+
+    def _world(self, lessor_policy=m.SPONSOR, lessor_navy=10):
+        # country 0 (lessor) and 1 (lessee), each with one Pacific coastal state; one pass
+        w = m.World({0: m.Country(0, policy=lessor_policy, navy=lessor_navy),
+                     1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        return w
+
+    @staticmethod
+    def _build(w, sid, n):
+        """n more finished levels in state sid, recorded."""
+        w.states[sid].levels += n
+        m.record_country(w, w.states[sid].owner)
+
+    def _assert_pool(self, w, b="pacific"):
+        self.assertLessEqual(w.basin_records(b) + w.basin_unbuilt(b), m.POOLS[b])
+        for c in w.countries.values():
+            self.assertGreaterEqual(c.unbuilt[b], 0)
+            self.assertGreaterEqual(c.sh[b], 0)
+
+    def test_entry_moves_claims_at_once(self):
+        w = self._world()
+        before = w.countries[0].unbuilt["pacific"]
+        lessee = w.countries[1].unbuilt["pacific"]
+        self.assertTrue(m.can_lease(w, 0, 1, "pacific"))
+        m.start_lease(w, 0, 1, "pacific", 20)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], before - 20)
+        self.assertEqual(w.countries[1].lease_unused["pacific"], 20)
+        self.assertEqual(w.countries[1].unbuilt["pacific"], lessee + 20)
+        self.assertEqual(w.countries[1].lease_src["pacific"], 0)
+        self.assertEqual(w.countries[1].lease_n["pacific"], 20)
+
+    def test_own_claims_are_used_first(self):
+        w = self._world()
+        w.countries[1].unbuilt["pacific"] = 5
+        m.start_lease(w, 0, 1, "pacific", 20)
+        self._build(w, 1, 7)
+        self.assertEqual(w.countries[1].lease_built["pacific"], 2)
+        self.assertEqual(w.countries[1].lease_unused["pacific"], 18)
+        self.assertEqual(m.own_claims(w.countries[1], "pacific"), 0)
+
+    def test_lessee_share_is_untouched_by_the_lease(self):
+        """The lessee builds all its own claims and 10 on the lease; at the next
+        sharing its own claims are what they would be had it built only its own,
+        with no lease. A lessor this strong is never frozen, so both worlds
+        share alike."""
+        import copy
+        a = self._world(lessor_navy=300)
+        b = copy.deepcopy(a)
+        own = a.countries[1].unbuilt["pacific"]
+        m.start_lease(a, 0, 1, "pacific", 20)
+        self._build(a, 1, own + 10)
+        self._build(b, 1, own)
+        self.assertEqual(a.countries[1].lease_built["pacific"], 10)
+        m.yearly_pass(a)
+        m.yearly_pass(b)
+        self.assertEqual(a.countries[1].ent["pacific"], b.countries[1].ent["pacific"])
+        self.assertEqual(m.own_claims(a.countries[1], "pacific"), b.countries[1].unbuilt["pacific"])
+        self.assertEqual(a.countries[1].sh["pacific"], own)
+        self.assertEqual(a.countries[0].sh["pacific"], 10)
+        self.assertEqual(a.countries[1].lease_unused["pacific"], 10)          # topped back up to N - built
+        self._assert_pool(a)
+
+    def test_total_never_exceeds_n(self):
+        for i in range(50):
+            rng = random.Random(7300 + i)
+            w = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
+            for _ in range(8):
+                for _ in range(12):
+                    m.step_month(w, rng, annex=0.01, split=0)
+                    m.step_leases(w, rng, start=0.3, end=0.1)
+                    for c in w.countries.values():
+                        for b in m.BASINS:
+                            self.assertLessEqual(c.lease_built[b] + c.lease_unused[b], c.lease_n[b], (i, c.cid, b))
+                m.yearly_pass(w)
+
+    def test_partial_top_up(self):
+        # a weak lessor: about 12 Pacific claims a sharing
+        w = self._world(lessor_policy=m.SURVEY, lessor_navy=0)
+        w.countries[0].unbuilt["pacific"] = 3
+        m.start_lease(w, 0, 1, "pacific", 20)
+        self.assertEqual(w.countries[1].lease_unused["pacific"], 3)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
+        m.yearly_pass(w)
+        share = w.countries[0].ent["pacific"] - w.countries[0].sh["pacific"]
+        self.assertLess(share, 20)
+        self.assertEqual(w.countries[1].lease_unused["pacific"], share)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
+        self._assert_pool(w)
+
+    def test_lessor_annexed(self):
+        w = self._world()
+        own = w.countries[1].unbuilt["pacific"]
+        m.start_lease(w, 0, 1, "pacific", 20)
+        self._build(w, 1, own + 5)
+        w.countries[0].alive = False                     # annexed by the lessee
+        m.on_state_owner_change(w, w.states[0], 1)
+        m.yearly_pass(w)
+        c = w.countries[1]
+        self.assertIsNone(c.lease_src["pacific"])
+        self.assertEqual((c.lease_n["pacific"], c.lease_built["pacific"], c.lease_unused["pacific"]), (0, 0, 0))
+        self.assertEqual(w.states[1].lic["pacific"], own + 5)   # it keeps what it built
+        self.assertGreaterEqual(c.ent["pacific"], own + 5)
+        self.assertEqual(c.sh["pacific"], c.held["pacific"])
+        self._assert_pool(w)
+
+    def test_destroyed_lease_level(self):
+        w = self._world()
+        w.countries[1].unbuilt["pacific"] = 0            # every level it builds is on the lease
+        m.start_lease(w, 0, 1, "pacific", 20)
+        self._build(w, 1, 5)
+        self.assertEqual(w.countries[1].lease_built["pacific"], 5)
+        w.states[1].levels -= 3                          # demolished
+        m.record_country(w, 1)
+        self.assertEqual(m.own_claims(w.countries[1], "pacific"), 3)   # the licences come back as its own claims
+        m.yearly_pass(w)
+        c = w.countries[1]
+        self.assertLessEqual(c.lease_built["pacific"], c.held["pacific"])
+        self.assertGreaterEqual(c.sh["pacific"], 0)
+        self.assertEqual(c.lease_built["pacific"] + c.lease_unused["pacific"], 20)   # the lease has its room back
+        self._assert_pool(w)
+
+    def test_ended_lease_returns_unused_at_next_sharing(self):
+        w = self._world()
+        m.start_lease(w, 0, 1, "pacific", 20)
+        m.end_lease(w, 1, "pacific")
+        self.assertEqual(w.countries[1].lease_unused["pacific"], 20)          # kept until the sharing
+        m.yearly_pass(w)
+        for cid in (0, 1):
+            c = w.countries[cid]
+            self.assertEqual(c.unbuilt["pacific"], c.ent["pacific"] - c.held["pacific"], cid)
+        self.assertIsNone(w.countries[1].lease_src["pacific"])
+        self.assertEqual(w.countries[1].lease_unused["pacific"], 0)
+        self.assertTrue(m.can_lease(w, 0, 1, "pacific"))                    # a new lease may follow
+        self._assert_pool(w)
+
+    def test_one_lease_per_basin_per_lessee(self):
+        w = self._world()
+        m.start_lease(w, 0, 1, "pacific", 20)
+        self.assertFalse(m.can_lease(w, 0, 1, "pacific"))
+        self.assertTrue(m.can_lease(w, 0, 1, "atlantic"))
+        self.assertTrue(m.can_lease(w, 1, 0, "pacific"))
+
+    def test_antarctic_bar_on_both_sides(self):
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "southern", 0), 1: m.State(1, "southern", 1)})
+        m.yearly_pass(w)
+        self.assertTrue(m.can_lease(w, 0, 1, "southern"))
+        w.countries[1].barred = True
+        self.assertFalse(m.can_lease(w, 0, 1, "southern"))
+        self.assertFalse(m.can_lease(w, 1, 0, "southern"))
+        self.assertTrue(m.can_lease(w, 0, 1, "pacific"))
+
+    def test_relinquished_lessee_takes_no_top_up(self):
+        w = self._world()
+        m.start_lease(w, 0, 1, "pacific", 20)
+        m.relinquish(w, 1, "pacific")
+        self.assertEqual(w.countries[1].lease_unused["pacific"], 0)
+        self.assertEqual(w.countries[1].lease_built["pacific"], 0)          # not booked as built
+        m.relinquish(w, 1, "atlantic")
+        self.assertFalse(m.can_lease(w, 0, 1, "atlantic"))                   # no new lease into a relinquished basin
+        m.yearly_pass(w)
+        self.assertEqual(w.countries[1].lease_unused["pacific"], 0)
+        self._assert_pool(w)
 
 
 class FeeTest(unittest.TestCase):
