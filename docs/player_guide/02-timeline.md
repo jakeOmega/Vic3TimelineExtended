@@ -300,8 +300,9 @@ Abyssal Plain Mining. A country that has just researched it gets its share the
 month after, and that sharing divides every pool again, so your own share can
 move in the middle of a year. In a basin where you have coastal states, your
 weight counts those states twice, their port levels, and your naval power
-projection, divided by 300, in proportion to the coast you have there; an
-unincorporated state counts half, its ports in full. In any other basin it is a
+projection, scaled to about one unit a warship (the weight hover shows the
+divisor), in proportion to the coast you have there; an unincorporated state
+counts half, its ports in full. In any other basin it is a
 twentieth of that naval term, so you can claim far from home, but only a small
 share. Power projection rather than fleet size counts, so a modern fleet
 outweighs a larger obsolete one.
