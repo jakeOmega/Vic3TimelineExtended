@@ -53,14 +53,19 @@ class LegacyIntegrationTests(unittest.TestCase):
         cls.laws = parse('events/extra_law_events.txt')
         cls.banking = parse('events/banking_cycle_events.txt')
         cls.market = parse('common/scripted_triggers/market_triggers.txt')
+        # te_banking_cycle_running: every country holds the banking entry,
+        # dormant until its cycle starts, so "has a cycle" is the entry and the
+        # cycle's variable (the banking always-on spec, 2026-10-17).
+        cls.policy = parse('common/scripted_triggers/banking_policy_triggers.txt')
 
     def evaluate(self, block, current, donor, mode='AND'):
         answers = []
         for key, op, value in entries(block):
             if key in ('AND', 'OR', 'NOT', 'NOR'):
                 answer = self.evaluate(value, current, donor, key)
-            elif key in self.triggers or key.startswith('banking_cycle_is_'):
-                source = self.triggers if key in self.triggers else self.market
+            elif key in self.triggers or key.startswith('banking_cycle_is_') or key == 'te_banking_cycle_running':
+                source = (self.triggers if key in self.triggers else
+                          self.policy if key == 'te_banking_cycle_running' else self.market)
                 answer = self.evaluate(body(source, key), current, donor)
                 if value == 'no':
                     answer = not answer

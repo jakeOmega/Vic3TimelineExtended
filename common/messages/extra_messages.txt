@@ -2261,6 +2261,17 @@ gm_tr_site_reach_notice = {
 	color = neutral
 }
 
+# Banking: the country's financial cycle started (je_banking_cycle's monthly
+# pulse, the first month te_banking_cycle_unlocked holds; human only). The
+# entry is every country's from the start of the game, so this is the moment
+# its old activation used to announce.
+banking_cycle_started_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
 # Banking: the Emergency Liquidity Program closed itself once the cycle had held
 # at stable or above for twelve months, refunding 1% of GDP (to the country,
 # human only; banking_cycle_eliq_wind_down).

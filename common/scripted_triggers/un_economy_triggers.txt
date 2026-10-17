@@ -144,13 +144,13 @@ un_dev_fund_no_contributions = {
 }
 
 # The grant can go into our investment pool: our laws keep one, and the
-# banking system that moves a weekly pool grant into it is running here
+# banking cycle that moves a weekly pool grant into it is running here
 # (country_weekly_investment_pool_add is the mod's own modifier, read only by
 # the Banking Cycle entry's weekly pulse, banking_cycle_weekly_effects).
 # Otherwise the grant goes into the treasury.
 # Scope: country
 un_dev_fund_pays_into_pool = {
-	has_journal_entry = je_banking_cycle
+	te_banking_cycle_running = yes
 	NOT = { modifier:country_disable_investment_pool_bool = yes }
 }
 

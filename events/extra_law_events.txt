@@ -6267,8 +6267,7 @@ extra_law_events.62 = {
 						has_modifier = finreg_bank_panic_cautious
 						has_modifier = finreg_bank_panic_stall
 						AND = {
-							has_journal_entry = je_banking_cycle
-							has_variable = finance_cycle_value
+							te_banking_cycle_running = yes
 							banking_cycle_is_recession = yes
 						}
 					}

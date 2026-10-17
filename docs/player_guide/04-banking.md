@@ -24,19 +24,22 @@ Cooperative Ownership. Its description changes with the title and explains what
 the readings mean in that economy. The model is the same in all three; the phase
 effects and the tools differ.
 
-The entry appears once you have researched Stock Exchange and own an Urban
-Center of level 5 or higher. It starts at Stable with no momentum or bubble, and
-stays for the rest of the game. If a revolution succeeds, the new government
+Every country has the entry from the start of the game, but its financial
+cycle starts only once you have researched Stock Exchange and own an Urban
+Center of level 5 or higher. Until then the entry shows the cycle as Not
+Started, with the two conditions on hover. You see your Monetary Policy
+readings, Credit Standing and Rate You Pay among them, but the banking tools
+and the central bank's controls stay grayed, and nothing in the cycle happens:
+no crashes, banking events or contagion. When you meet both conditions during
+the game, a notice tells you the cycle has begun. It starts at Stable with no momentum or bubble,
+and keeps running for the rest of the game, even if the city later shrinks. If
+a revolution succeeds, the new government
 carries on the cycle and the central bank where the old one left them (see
 [After a revolution](06-politics.md#after-a-revolution)), but policies you had
 switched on are lost and must be enabled again.
 
 The same panels appear as a Banking tab in the Budget panel, and a change made
-in one shows in the other. The tab is grayed until the journal entry appears,
-unless your central bank already sets a rate or your currency is tied to
-another's: then it opens early with your monetary readings (see [Monetary
-policy under the full Banking System](#monetary-policy-under-the-full-banking-system)).
-Hover it for what you still need. It ends with an Open Journal Entry button,
+in one shows in the other. The tab ends with an Open Journal Entry button,
 which opens the entry with its description. [The banking
 panels](#the-banking-panels) describes what they show.
 
@@ -177,7 +180,7 @@ until the budget balances or none of those interventions remains.
 
 ### Banking contagion
 
-A crash can spread to any country that holds the banking journal entry and is
+A crash can spread to any country whose financial cycle has started and that is
 tied to the crashing one by a shared market, customs union, currency or border,
 economic dependence, or more than 1% of its market's trade, production or
 consumption. A country more than 20 times the crashing economy's size is
@@ -230,8 +233,15 @@ and white are safe, yellow and gold warn, and red marks an extreme (Panic,
 Frenzy, Freefall or Overheating momentum, Severe bubble pressure). A Boom reads
 blue.
 
+Before your financial cycle starts, the overview has one box in place of the
+bars, the cycle's three boxes and Budget: Cycle Phase reads Not Started, its
+third line says how many of the two conditions you meet, and its hover lists
+them with ticks. Active Policies and History wait for the cycle. Monetary Policy
+and Available Interventions show their rows with every control grayed, under a
+line that says why.
+
 The cycle's phase also shows in the top bar, as its icon right after your
-weekly balance, while the journal entry is running. Hover it for the phase's
+weekly balance, once your cycle has started. Hover it for the phase's
 word and the same tooltip, with a crash-risk warning while that risk is high,
 and click it to open the Banking tab.
 
@@ -523,18 +533,15 @@ and the United States with Free & Mutual Banking.
 
 ## Monetary policy under the full Banking System
 
-With the rule on Enabled, every country runs the monetary model whether or not
-it holds the journal entry. A dial needs a National Bank, not the entry, so you
-can have one, or a pegged currency, before the entry appears. Until then the
-Banking tab shows a read-only Monetary Policy readout: your Policy Rate beside
-the World Rate, the Mandate (with a dial) or the Monetary Anchor (when pegged),
-the Exchange Rate and, on a gold standard or a treaty peg, Peg Confidence with
-its bar. You can't change anything there: your central bank runs the Dual
-Mandate (under Central Bank Independence, the mandate its act names) until the
-entry gives you the controls.
+With the rule on Enabled, every country runs the monetary model from 1836,
+whether or not its financial cycle has started. A dial needs a National Bank,
+not the cycle, so you can have one, or a pegged currency, before the cycle
+starts. Until then the Monetary Policy section is read-only: it shows every
+reading, but its controls are grayed, and your central bank runs the Dual
+Mandate (under Central Bank Independence, the mandate its act names). The
+controls open when the cycle starts.
 
-Once you have the entry, the Monetary Policy section shows it all. Its rows
-are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
+The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
 Costs and Prices. Hover a row's label for what the term means and the row for
@@ -963,7 +970,7 @@ gold-standard crisis event, appears only under this setting. With the rule on
 
 Once your debt passes a quarter of your credit limit, or you are in default, the
 decision Restructure the Public Debt opens talks with your creditors. It needs
-the Banking Cycle journal entry. In Restructuring Talks you choose how much of
+a financial cycle that has started. In Restructuring Talks you choose how much of
 the debt they write off:
 
 | Option | Written off | What it costs |
@@ -1029,8 +1036,8 @@ you.
 
 Every crash that starts at home begins a new crisis wave, replacing any wave
 still running, and each contagion crash adds to it. If ten or more countries
-crash in one wave and together hold half of world GDP, every country with the
-banking journal entry gets The Great Depression three days later. It happens at
+crash in one wave and together hold half of world GDP, every country whose
+financial cycle has started gets The Great Depression three days later. It happens at
 most once per game.
 
 | Your situation | Modifier |
@@ -1041,8 +1048,8 @@ most once per game.
 
 ### The UN emergency loan
 
-A United Nations member with the banking journal entry that is in a Panic or in
-default can be offered An Emergency Lending Facility through the UN's docket
+A United Nations member whose financial cycle has started and that is in a
+Panic or in default can be offered An Emergency Lending Facility through the UN's docket
 (see [The UN docket](10-united-nations.md#the-un-docket)), once a crisis wave
 has reached it or while any country suffers the Great Depression. The offer
 comes at most once in ten years, and never while you are still repaying a UN

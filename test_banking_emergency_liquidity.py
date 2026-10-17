@@ -44,7 +44,10 @@ class EmergencyLiquidityTests(unittest.TestCase):
         )
         self.assertRegex(
             possible,
-            r"custom_tooltip = \{\s+text = banking_eliq_phase_tt\s+banking_cycle_is_recession = yes\s+\}",
+            # te_banking_cycle_running first: a dormant entry's greyed button
+            # evaluates the line, and the phase test reads the cycle unguarded.
+            r"custom_tooltip = \{\s+text = banking_eliq_phase_tt\s+te_banking_cycle_running = yes\s+"
+            r"banking_cycle_is_recession = yes\s+\}",
         )
 
     def test_the_announcement_lands_once_per_crisis(self):

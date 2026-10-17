@@ -1,0 +1,27 @@
+﻿# ============================================================================
+# BANKING SELF-CHECKS — hidden, fired by script only.
+# ============================================================================
+# .1 the second half of te_banking_entry_selfcheck
+#    (common/on_actions/te_banking_entry_on_actions.txt): did the engine give
+#    every country the banking entry? Logs once a game, 30 days after the first
+#    yearly pulse, so a record that activates in its two weeks has done so.
+# ============================================================================
+namespace = te_debug_banking
+
+te_debug_banking.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				te_banking_entry_missing_count < 1
+				te_banking_entry_net_added_g < 1
+			}
+			debug_log = "TE_SELF_CHECK OK banking_entry_everywhere (every country under the rule holds je_banking_cycle, none added by the safety net) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN banking_entry_everywhere missing=[SCOPE.ScriptValue('te_banking_entry_missing_count')|0] added_by_net=[SCOPE.ScriptValue('te_banking_entry_net_added_g')|0] (the engine left countries without the entry; the yearly net adds it, so their cycles start up to a year late; see docs/testing/banking-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}

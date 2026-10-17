@@ -1,0 +1,63 @@
+﻿# The banking entry for every country: the old-save safety net and its
+# once-a-game self-check (docs/superpowers/specs/2026-10-17-banking-always-on-design.md
+# § 5).
+#
+# Every country under the Banking System rule holds je_banking_cycle, dormant
+# until its cycle starts. The engine activates the entry itself: a new game's
+# countries, and an old save's countries without it, hold an inactive record
+# that activates within two weeks once is_shown_when_inactive holds. Whether
+# every country in an old save, and every released one, has such a record is
+# unread, so:
+#
+#   te_banking_entry_net       each country's yearly pulse adds the entry to a
+#                              country that should hold it and doesn't
+#                              (te_banking_entry_expected), and counts the adds
+#                              in te_banking_entry_net_added.
+#   te_banking_entry_selfcheck the first yearly pulse of a game (an old save's
+#                              first after this change) arms
+#                              te_debug_banking.1 for 30 days on, which logs
+#                              TE_SELF_CHECK OK|BROKEN banking_entry_everywhere
+#                              with the countries still without the entry and
+#                              the net's adds so far. OK: both 0, the engine
+#                              activated every record. BROKEN: it left some
+#                              out, and the net carried them (missing > 0 can
+#                              also be a country formed in the last two weeks,
+#                              whose record the engine had not reached yet).
+#
+# Play-test rows: docs/testing/banking-playtest.md, "Self-checks".
+on_yearly_pulse_country = {
+	on_actions = {
+		te_banking_entry_selfcheck
+		te_banking_entry_net
+	}
+}
+
+te_banking_entry_selfcheck = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_banking_entry_selfcheck_armed }
+				te_banking_system_on = yes
+			}
+			set_global_variable = te_banking_entry_selfcheck_armed
+			trigger_event = { id = te_debug_banking.1 days = 30 }
+		}
+	}
+}
+
+te_banking_entry_net = {
+	effect = {
+		if = {
+			limit = {
+				te_banking_entry_expected = yes
+				NOT = { has_journal_entry = je_banking_cycle }
+			}
+			add_journal_entry = { type = je_banking_cycle }
+			if = {
+				limit = { NOT = { has_global_variable = te_banking_entry_net_added } }
+				set_global_variable = { name = te_banking_entry_net_added value = 0 }
+			}
+			change_global_variable = { name = te_banking_entry_net_added add = 1 }
+		}
+	}
+}
