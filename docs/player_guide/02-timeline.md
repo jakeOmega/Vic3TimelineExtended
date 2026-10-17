@@ -297,9 +297,10 @@ pool of licences. A coastal state belongs to the basin its sea lane opens onto.
 Every January the pools are shared out by claim weight among the countries with
 Abyssal Plain Mining. A country that has just researched it gets its share the
 month after, and that sharing divides every pool again, so your own share can
-move in the middle of a year. In a basin where you have incorporated coastal states, your weight
-counts those states twice, their port levels, and your navy in proportion to the
-coast you have there. In any other basin it is a twentieth of your navy, so you
+move in the middle of a year. In a basin where you have coastal states, your
+weight counts those states twice, their port levels, and your navy in
+proportion to the coast you have there; an unincorporated state counts half,
+its ports in full. In any other basin it is a twentieth of your navy, so you
 can claim far from home, but only a small share.
 
 A licence is held by a level, built or queued, and stays with it for good. It
@@ -340,6 +341,34 @@ claimants: they are gone at once, so Sponsor Contractors' influence falls with
 them, and the next sharing divides them among the other claimants. You claim
 nothing there until you press Claim Again, which counts from the sharing after.
 Licences on your levels are untouched.
+
+#### Leasing seabed claims
+
+A Lease Seabed Claims treaty article, one for each basin, leases some of one
+country's own claims there to another, up to the number agreed. They pass at
+once, so the lessee can build before January. Each sharing divides them again,
+and the lease then takes them back from the lessor's new share, as far as it
+goes, until the licences built on the lease and its unused claims make up the
+number. Licences built on a lease are the lessee's for good; while the lease
+stands they count against the lessor's share, not the lessee's. When the lease
+ends, its unused claims go back at the next sharing. The usual price is a Money
+Transfer the other way. The article can be enforced, so a war's winner can take
+a rival's claims as a lease. No country barred by the Antarctic Treaty can lease
+Southern claims or receive them, and Sponsor Contractors protects no leased
+claims. AI countries offer claims they are unlikely to use soon, and ask for
+them when they are short of claims and Tech-Critical Metals sell above base
+price.
+
+An overlord can take its subject's unused claims with Administer Seabed Claims,
+an action like Raise Subject Payments: no approval, and not on a protectorate
+or a personal union. While it stands, the subject's claims pass to the overlord
+at once and after every sharing, with no limit, and the licences the overlord
+builds on them count against the subject's share. The subject keeps its own
+licences. Its liberty desire rises as under Raise Subject Payments, and
+relations between the two fall. Only the overlord starts or ends it; when it
+ends, the subject's claims are its own again from the next sharing. AI
+overlords use it on subjects with claims to spare and liberty desire below 25,
+and end it at 50.
 
 #### The Seabed tab
 

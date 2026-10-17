@@ -1734,6 +1734,87 @@ te_seabed_queued_total_disp = {
 	add = te_seabed_queued_disp_southern
 }
 
+# Country scope (the overview's claims hover, seabed claims spec § 4): unused
+# claims it holds by lease.
+te_seabed_leased_claims_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_pacific }
+		add = var:te_seabed_lease_unused_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_atlantic }
+		add = var:te_seabed_lease_unused_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_indian }
+		add = var:te_seabed_lease_unused_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_arctic }
+		add = var:te_seabed_lease_unused_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_southern }
+		add = var:te_seabed_lease_unused_southern
+	}
+}
+
+# Unused claims its subjects passed it (Administer Seabed Claims, § 5.2).
+te_seabed_passed_claims_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_pacific }
+		add = var:te_seabed_subj_unused_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_atlantic }
+		add = var:te_seabed_subj_unused_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_indian }
+		add = var:te_seabed_subj_unused_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_arctic }
+		add = var:te_seabed_subj_unused_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_southern }
+		add = var:te_seabed_subj_unused_southern
+	}
+}
+
+# Both: claims no policy protects, each sharing divides again.
+te_seabed_borrowed_claims_disp = {
+	value = te_seabed_leased_claims_disp
+	add = te_seabed_passed_claims_disp
+}
+
+# Licences built on its leases (the overview's licences hover).
+te_seabed_lease_built_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_lease_built_pacific }
+		add = var:te_seabed_lease_built_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_atlantic }
+		add = var:te_seabed_lease_built_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_indian }
+		add = var:te_seabed_lease_built_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_arctic }
+		add = var:te_seabed_lease_built_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_built_southern }
+		add = var:te_seabed_lease_built_southern
+	}
+}
 te_seabed_built_total_disp = {
 	value = te_seabed_lic_total_disp
 	subtract = te_seabed_queued_total_disp

@@ -160,6 +160,75 @@ class LeaseSharingTest(unittest.TestCase):
             self.assertIn("min = 0", body)
 
 
+class LeaseAiTest(unittest.TestCase):
+    """Spec §§ 4, 8: offer claims the source is unlikely to use, request when
+    the target's room is near 0 and Tech-Critical Metals sell above base."""
+
+    def test_ai_blocks(self):
+        loc = english_loc()
+        for b in m.BASINS:
+            ai = strip_comments(block(article(b), "\tai"))
+            self.assertRegex(ai, r"article_ai_usage = \{\s*offer request\s*\}")
+            chance = block(ai, "\t\tevaluation_chance")
+            self.assertIn(f"te_seabed_ai_lease_offer_value_{b}", chance)
+            self.assertIn(f"te_seabed_ai_lease_request_value_{b}", chance)
+            self.assertNotIn("scope:", chance)                 # root only (treaty_evaluation_scope_audit)
+            self.assertIn(f"te_seabed_ai_lease_spare_{b}", block(ai, "\t\tquantity_input_value"))
+            self.assertIn("proposal_weight", ai)
+            self.assertIn("wargoal_score_multiplier", ai)
+            descs = re.findall(r'desc = "(\w+)"', block(ai, "\t\tinherent_accept_score"))
+            self.assertGreaterEqual(len(descs), 3, b)
+            for key in descs:
+                self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
+
+    def test_offer_follows_the_spec(self):
+        """Claims it is unlikely to use: none queued, or claims well above its
+        construction pace (spec § 4)."""
+        values = read("common/script_values/te_global_commons_seabed_ai_values.txt")
+        for b in m.BASINS:
+            spare = block(values, f"te_seabed_ai_lease_spare_{b}")
+            self.assertIn(f"te_seabed_own_claims_{b}", spare)
+            self.assertIn("te_seabed_queued_total_disp", spare)
+            self.assertIn("te_seabed_ai_lease_pace_months", spare)
+            self.assertIn(f"te_seabed_ai_lease_spare_{b}", block(values, f"te_seabed_ai_lease_offer_value_{b}"))
+            request = block(values, f"te_seabed_ai_lease_request_value_{b}")
+            self.assertIn("te_seabed_room", request)
+            self.assertIn("te_seabed_ai_tech_metals_premium", request)
+            self.assertIn(f"te_seabed_home_{b}", request)
+
+    def test_sponsor_pull_counts_protected_claims(self):
+        values = read("common/script_values/te_global_commons_seabed_ai_values.txt")
+        self.assertIn("te_seabed_protected_claims", block(values, "te_seabed_ai_will_sponsor"))
+
+
+class LeasePanelTest(unittest.TestCase):
+    """The Seabed tab says what is leased, passed and built on leases."""
+
+    def test_overview_hovers(self):
+        loc = english_loc()
+        claims = re.search(r"(?m)^ te_seabed_ov_claims_tt:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("'te_seabed_ov_claims_borrowed'", claims)
+        borrowed = re.search(r"(?m)^ te_seabed_ov_claims_borrowed:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("te_seabed_leased_claims_disp", borrowed)
+        self.assertIn("te_seabed_passed_claims_disp", borrowed)
+        licences = re.search(r"(?m)^ te_seabed_ov_licences_tt:0 \"(.*)\"$", loc).group(1)
+        self.assertIn("'te_seabed_ov_licences_leased'", licences)
+        values = read(VALUES)
+        for b in m.BASINS:
+            self.assertIn(f"te_seabed_lease_unused_{b}", block(values, "te_seabed_leased_claims_disp"))
+            self.assertIn(f"te_seabed_subj_unused_{b}", block(values, "te_seabed_passed_claims_disp"))
+            self.assertIn(f"te_seabed_lease_built_{b}", block(values, "te_seabed_lease_built_disp"))
+
+    def test_how_section(self):
+        gui = read("gui/te_seabed_widgets.gui")
+        self.assertLess(gui.index('"te_seabed_how_claims"'), gui.index('"te_seabed_how_sub_leases"'))
+        self.assertLess(gui.index('"te_seabed_how_leases"'), gui.index('"te_seabed_how_sub_policy"'))
+        loc = english_loc()
+        how = re.search(r"(?m)^ te_seabed_how_leases:0 \"(.*)\"$", loc).group(1)
+        for word in ("Lease Seabed Claims", "Administer Seabed Claims", "war"):
+            self.assertIn(word, how)
+
+
 ACTION = "common/diplomatic_actions/te_seabed_administer_claims.txt"
 
 
@@ -262,6 +331,32 @@ class SubjectActionTest(unittest.TestCase):
         desc = re.search(r"(?m)^ te_seabed_administer_claims_desc:0 \"(.*)\"$", loc).group(1)
         self.assertIn("licence", desc)
         self.assertIn("long-haul", desc.lower())
+
+
+class SelfCheckTest(unittest.TestCase):
+    """CLAUDE.md, in-game checks: the engine reads the leases and the pact rest
+    on get a once-a-game TE_SELF_CHECK line, listed in the play-test list."""
+
+    def test_lease_entry(self):
+        body = block(read(EFFECTS), "te_seabed_lease_enter")
+        self.assertIn("TE_SELF_CHECK OK seabed_lease_entry", body)
+        self.assertIn("TE_SELF_CHECK BROKEN seabed_lease_entry", body)
+        self.assertIn("te_seabed_selfcheck_lease_done", body)          # OK once a game
+
+    def test_pact_read(self):
+        start = strip_comments(block(read(EFFECTS), "te_seabed_pact_start"))
+        self.assertRegex(start, r"trigger_event = \{ id = te_seabed\.2 days = 1 \}")
+        event = block(read(EVENTS), "te_seabed.2")
+        self.assertIn("hidden = yes", event)
+        self.assertIn("TE_SELF_CHECK OK seabed_pact_read", event)
+        self.assertIn("TE_SELF_CHECK BROKEN seabed_pact_read", event)
+        self.assertIn("has_diplomatic_pact = { who = scope:te_sb_over type = te_seabed_administer_claims }", event)
+        self.assertIn("te_seabed_selfcheck_pact_done", event)
+
+    def test_listed(self):
+        doc = read("docs/testing/global-commons-playtest.md")
+        for name in ("seabed_lease_entry", "seabed_pact_read"):
+            self.assertIn(f"TE_SELF_CHECK … {name}", doc)
 
 
 class EventFileTest(unittest.TestCase):

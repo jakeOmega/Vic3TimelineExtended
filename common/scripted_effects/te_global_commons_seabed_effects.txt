@@ -1410,6 +1410,18 @@ te_seabed_lease_enter = {
 				}
 				change_variable = { name = te_seabed_unbuilt_$B$ add = local_var:te_sb_lk }
 				set_variable = { name = te_seabed_lease_unused_$B$ value = local_var:te_sb_lk }
+				# Self-check: the article, its lessor and its quantity read a
+				# day after entry (docs/testing/global-commons-playtest.md).
+				if = {
+					limit = { NOT = { has_global_variable = te_seabed_selfcheck_lease_done } }
+					set_global_variable = te_seabed_selfcheck_lease_done
+					debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=$B$ lessee=[THIS.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_$B$').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_$B$').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
+					debug_log_scopes = yes
+				}
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=$B$ lessee=[THIS.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_$B$ article names this country as its target with a quantity: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
+				debug_log_scopes = yes
 			}
 		}
 	}
@@ -1721,6 +1733,10 @@ te_seabed_pact_start = {
 		te_seabed_pass_basin = { B = indian }
 		te_seabed_pass_basin = { B = arctic }
 		te_seabed_pass_basin = { B = southern }
+		# Self-check: the pact read from the subject's side a day later.
+		hidden_effect = {
+			trigger_event = { id = te_seabed.2 days = 1 }
+		}
 	}
 }
 

@@ -77,6 +77,96 @@ te_seabed_lease_pacific = {
 			te_seabed_lease_start = { B = pacific }
 		}
 	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_pacific > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_pacific > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_pacific
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_pacific > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_pacific
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_pacific
+					max = 30
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_pacific
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_pacific > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_pacific > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_pacific > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_pacific > 0 }
+					te_seabed_ai_lease_request_value_pacific > 0
+				}
+				value = 1
+			}
+		}
+	}
 }
 
 te_seabed_lease_atlantic = {
@@ -137,6 +227,96 @@ te_seabed_lease_atlantic = {
 				exists = scope:te_sb_lessee
 			}
 			te_seabed_lease_start = { B = atlantic }
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_atlantic > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_atlantic > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_atlantic
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_atlantic > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_atlantic
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_atlantic
+					max = 30
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_atlantic
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_atlantic > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_atlantic > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_atlantic > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_atlantic > 0 }
+					te_seabed_ai_lease_request_value_atlantic > 0
+				}
+				value = 1
+			}
 		}
 	}
 }
@@ -201,6 +381,96 @@ te_seabed_lease_indian = {
 			te_seabed_lease_start = { B = indian }
 		}
 	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_indian > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_indian > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_indian
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_indian > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_indian
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_indian
+					max = 30
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_indian
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_indian > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_indian > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_indian > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_indian > 0 }
+					te_seabed_ai_lease_request_value_indian > 0
+				}
+				value = 1
+			}
+		}
+	}
 }
 
 te_seabed_lease_arctic = {
@@ -263,6 +533,96 @@ te_seabed_lease_arctic = {
 			te_seabed_lease_start = { B = arctic }
 		}
 	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_arctic > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_arctic > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_arctic
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_arctic > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_arctic
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_arctic
+					max = 30
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_arctic
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_arctic > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_arctic > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_arctic > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_arctic > 0 }
+					te_seabed_ai_lease_request_value_arctic > 0
+				}
+				value = 1
+			}
+		}
+	}
 }
 
 te_seabed_lease_southern = {
@@ -323,6 +683,96 @@ te_seabed_lease_southern = {
 				exists = scope:te_sb_lessee
 			}
 			te_seabed_lease_start = { B = southern }
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		# Root only (treaty_evaluation_scope_audit): claims to spare, or a want
+		# of them; the partner's side is in acceptance.
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = { te_seabed_ai_lease_offer_value_southern > 0 }
+				add = 0.02
+			}
+			if = {
+				limit = { te_seabed_ai_lease_request_value_southern > 0 }
+				add = 0.02
+			}
+		}
+
+		# The source's spare claims: root's when it offers, else its partner's.
+		quantity_input_value = {
+			value = te_seabed_ai_lease_spare_southern
+			if = {
+				limit = {
+					NOT = { te_seabed_ai_lease_spare_southern > 0 }
+					exists = scope:other_country
+				}
+				value = scope:other_country.te_seabed_ai_lease_spare_southern
+			}
+			min = 1
+		}
+
+		inherent_accept_score = {
+			value = 0
+			# The lessor gives up claims, less reluctant the more it can spare.
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_give"
+					value = -20
+				}
+				add = {
+					desc = "te_seabed_ai_lease_spare"
+					value = te_seabed_ai_lease_spare_southern
+					max = 30
+				}
+			}
+			# The lessee gains claims, more so short of them and with metals dear.
+			else_if = {
+				limit = { scope:target_country ?= this }
+				add = {
+					desc = "te_seabed_ai_lease_take"
+					value = 10
+				}
+				add = {
+					desc = "te_seabed_ai_lease_wanted"
+					value = te_seabed_ai_lease_request_value_southern
+				}
+			}
+		}
+
+		# Worth putting in a treaty only when the lessor has claims to lease and
+		# one side's motive holds.
+		proposal_weight = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_southern > 0 }
+					OR = {
+						scope:source_country ?= { te_seabed_ai_lease_offer_value_southern > 0 }
+						scope:target_country ?= { te_seabed_ai_lease_request_value_southern > 0 }
+					}
+				}
+				value = 1
+			}
+		}
+
+		# Pressed in a play (ROOT the holder): it wants claims, the conceding
+		# side has some.
+		wargoal_score_multiplier = {
+			value = 0
+			if = {
+				limit = {
+					scope:source_country ?= { te_seabed_own_claims_southern > 0 }
+					te_seabed_ai_lease_request_value_southern > 0
+				}
+				value = 1
+			}
 		}
 	}
 }
