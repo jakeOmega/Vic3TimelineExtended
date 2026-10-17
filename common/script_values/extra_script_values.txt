@@ -548,6 +548,62 @@ nuclear_ai_desired_stockpile = {
 	round = yes
 }
 
+# How keen the AI is to demand a Nuclear Program Freeze from
+# scope:source_country, the country that would be frozen: the article's
+# proposal_weight (asking for it in a treaty) and wargoal_score_multiplier
+# (pressing it as an enforce war goal in a play). Both bind
+# scope:source_country; evaluation_chance has root only, so the check can't sit
+# there. 0 when the freeze would stop nothing (nuclear_program_freeze_matters),
+# half for a major power that could start a programme, and half again for one
+# funded right now (nuclear_program_is_proliferating, the test the nuclear
+# crisis's freeze dispute uses). Players are not bound.
+nuclear_program_pause_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:source_country = { nuclear_program_has_programme = yes } }
+		value = 1
+		if = {
+			limit = { scope:source_country = { nuclear_program_is_proliferating = yes } }
+			add = 0.5
+		}
+	}
+	else_if = {
+		limit = { scope:source_country = { nuclear_program_freeze_matters = yes } }
+		value = 0.5
+	}
+}
+
+# The same for a Nuclear Disarmament of scope:source_country. Taking a known
+# arsenal away is worth the most, then ending a programme, then pre-empting a
+# major power's.
+nuclear_disarmament_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:source_country = { nd_believed_armed = yes } }
+		value = 1.5
+	}
+	else_if = {
+		limit = { scope:source_country = { nuclear_program_has_programme = yes } }
+		value = 1
+	}
+	else_if = {
+		limit = { scope:source_country = { nuclear_disarmament_matters = yes } }
+		value = 0.5
+	}
+}
+
+# How keen the AI is to offer Nuclear Program Aid to scope:target_country, the
+# recipient: the article's proposal_weight. Without the nuclear_weapons tech the
+# recipient can't run a programme (nuclear_program_has_programme), so the aid
+# would buy nothing.
+nuclear_program_aid_ai_offer_weight = {
+	value = 0
+	if = {
+		limit = { scope:target_country = { has_technology_researched = nuclear_weapons } }
+		value = 1
+	}
+}
+
 # ============================================================================
 # NUCLEAR PROGRAMME — display-only values for the journal-entry widget
 # ============================================================================
