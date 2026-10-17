@@ -1,0 +1,70 @@
+﻿# ============================================================================
+# ALL-GOODS TARIFFS — conditions for the Market panel's "All Goods" rows
+# ============================================================================
+# The Trade tab of the Market panel (gui/te_bulk_tariff_widgets.gui) sets one
+# import or export level on every tradeable good at once. The engine's per-good
+# buttons check four things before a level change (vanilla loc
+# SET_TARIFF_LEVEL_*): the country owns the market, the trade policy or a
+# treaty allows the level, the good is off cooldown, and the level is not
+# already set. set_<direction>_tariff_level is a script effect and is not
+# known to make any of them (unverified, capability ledger row 15; vanilla's
+# no_tariffs and no_subventions articles call it to clear a level whatever the
+# cooldown, which suggests it skips them), so this file restates the first two,
+# and the rows keep a cooldown of their own (te_bulk_tariff_effects.txt).
+# Country scope throughout.
+# ============================================================================
+
+# The checks every level shares: the code does not legislate customs (the Tax
+# Code's customs option sets tariffs by bill; the GUI also ANDs the native
+# gate te_tax_native_tariff_controls_sgui, as the 14 per-good buttons do), the
+# country is its market's owner, and the row's own cooldown has run out or is
+# still in its week of grace. DIR = import | export.
+te_bulk_tariff_can_set = {
+	custom_tooltip = {
+		text = te_bulk_tariff_req_customs
+		NOT = { te_tax_customs_on = yes }
+	}
+	custom_tooltip = {
+		text = te_bulk_tariff_req_owner
+		te_tax_owns_market = yes
+	}
+	custom_tooltip = {
+		text = te_bulk_tariff_req_ready_$DIR$
+		OR = {
+			NOT = { has_variable = te_bulk_tariff_cd_$DIR$ }
+			has_variable = te_bulk_tariff_grace_$DIR$
+		}
+	}
+}
+
+# The trade policy allows the level (SET_TARIFF_LEVEL_NOT_ALLOWED): a law sets
+# the maximum rate of each tariff and subvention (state_tariff_import_add and
+# its three siblings, common/laws/01_trade_policy.txt; Free Trade has no
+# tariffs, Isolationism neither), and a level with no rate behind it collects
+# or pays nothing. Read in the capital, as a state's read includes the
+# country's modifiers (scripting_best_practices.md); a decree or a free port
+# there can lower it, which the per-good buttons, reading the law, ignore.
+# Not called for "no tariffs or subventions", which every policy allows.
+# DIR = import | export, KIND = tariff | subvention.
+te_bulk_tariff_policy_allows = {
+	custom_tooltip = {
+		text = te_bulk_tariff_req_policy_$KIND$_$DIR$
+		capital ?= { modifier:state_$KIND$_$DIR$_add > 0 }
+	}
+}
+
+# A treaty in force bars this country from the level on GOOD: vanilla's
+# no_tariffs and no_subventions articles (flags is_no_tariffs,
+# is_no_subventions) bind their source country, whose levels on the article's
+# good their on_entry_into_force clears. The form is vanilla's own duplicate
+# check in those articles' can_ratify. ARTICLE = no_tariffs | no_subventions.
+te_bulk_tariff_barred = {
+	save_temporary_scope_as = te_bt_country
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = $ARTICLE$
+			source_country = scope:te_bt_country
+			input_goods = g:$GOOD$
+		}
+	}
+}

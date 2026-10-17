@@ -22,8 +22,9 @@
 #
 # te_tax_native_tariff_controls_sgui: the 14 tariff and subvention buttons
 # (budget_panel.gui's two set_level_bar types, which the market, goods and
-# right-click views share). The plain rule option leaves tariffs native, so it
-# greys them only under the customs option.
+# right-click views share) and the 14 of the Market panel's All Goods rows
+# (gui/te_bulk_tariff_widgets.gui). The plain rule option leaves tariffs
+# native, so it greys them only under the customs option.
 #
 # With the rule off each is the probe gate it replaced, NOT te_tp_lock (the tax
 # probe harness, te_debug_tax_*): the controls behave exactly as before. The

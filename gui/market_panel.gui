@@ -1305,6 +1305,18 @@ types market_panel
 					using = default_fade_in_out
 					direction = vertical
 
+					### TE: All Goods tariffs (gui/te_bulk_tariff_widgets.gui) ###
+					# One import and one export level for every tradeable good,
+					# over the goods' own bars. Only on the player's own market,
+					# vanilla's test for its tariff buttons; a junior partner sees
+					# it greyed, with the market-owner condition on hover.
+					te_bulk_tariff_panel = {
+						visible = "[MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )]"
+						parentanchor = hcenter
+						margin_top = 8
+					}
+					### END TE ###
+
 					flowcontainer = {
 						datamodel = "[Market.AccessMarketGoods( MarketPanel.GetFilters )]"
 						direction = vertical

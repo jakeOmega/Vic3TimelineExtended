@@ -109,7 +109,8 @@ Tax 10%. The Taxation Level stays at Medium, because the code's rates are the
 whole tax. The base-game controls that would change a rate are grayed out: the
 tax level buttons, the add-consumption-tax menu, and the Tax and Untax toggles
 in the goods panel and the goods right-click menus. Under *Tax Code and Customs
-Enabled* the tariff and subsidy buttons are grayed too.
+Enabled* the tariff and subsidy buttons are grayed too, the Market panel's All
+Goods rows among them.
 
 On the 1st of every month the code puts its rates, taxed goods and relief back
 in place. A change made any other way, by an event or by an AI country's own

@@ -1,0 +1,193 @@
+﻿# ============================================================================
+# ALL-GOODS TARIFFS — the Market panel's "All Goods" rows
+# ============================================================================
+# One scripted GUI per direction and level, in the order of the per-good level
+# bars (budget_panel.gui's set_level_bar_import_tariffs and
+# set_level_bar_export_tariffs): maximum, high and low tariffs, none, then low,
+# high and maximum subventions. Each sets that level on every tradeable good
+# (te_bulk_tariff_apply, common/scripted_effects/te_bulk_tariff_effects.txt).
+# The row in gui/te_bulk_tariff_widgets.gui ANDs te_tax_native_tariff_controls_sgui
+# into each button's `enabled`, as the per-good buttons do, and shows
+# IsValidTooltip with ExecuteTooltip. Player-only: the AI sets its tariffs
+# through the engine.
+# ============================================================================
+
+te_bulk_tariff_import_max_tariffs_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = import }
+		te_bulk_tariff_policy_allows = { DIR = import KIND = tariff }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = import KIND = tariff LEVEL = max_tariffs }
+	}
+}
+
+te_bulk_tariff_import_high_tariffs_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = import }
+		te_bulk_tariff_policy_allows = { DIR = import KIND = tariff }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = import KIND = tariff LEVEL = high_tariffs }
+	}
+}
+
+te_bulk_tariff_import_low_tariffs_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = import }
+		te_bulk_tariff_policy_allows = { DIR = import KIND = tariff }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = import KIND = tariff LEVEL = low_tariffs }
+	}
+}
+
+te_bulk_tariff_import_no_tariffs_or_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = import }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = import KIND = none LEVEL = no_tariffs_or_subventions }
+	}
+}
+
+te_bulk_tariff_import_low_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = import }
+		te_bulk_tariff_policy_allows = { DIR = import KIND = subvention }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = import KIND = subvention LEVEL = low_subventions }
+	}
+}
+
+te_bulk_tariff_import_high_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = import }
+		te_bulk_tariff_policy_allows = { DIR = import KIND = subvention }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = import KIND = subvention LEVEL = high_subventions }
+	}
+}
+
+te_bulk_tariff_import_max_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = import }
+		te_bulk_tariff_policy_allows = { DIR = import KIND = subvention }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = import KIND = subvention LEVEL = max_subventions }
+	}
+}
+
+te_bulk_tariff_export_max_tariffs_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = export }
+		te_bulk_tariff_policy_allows = { DIR = export KIND = tariff }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = export KIND = tariff LEVEL = max_tariffs }
+	}
+}
+
+te_bulk_tariff_export_high_tariffs_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = export }
+		te_bulk_tariff_policy_allows = { DIR = export KIND = tariff }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = export KIND = tariff LEVEL = high_tariffs }
+	}
+}
+
+te_bulk_tariff_export_low_tariffs_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = export }
+		te_bulk_tariff_policy_allows = { DIR = export KIND = tariff }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = export KIND = tariff LEVEL = low_tariffs }
+	}
+}
+
+te_bulk_tariff_export_no_tariffs_or_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = export }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = export KIND = none LEVEL = no_tariffs_or_subventions }
+	}
+}
+
+te_bulk_tariff_export_low_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = export }
+		te_bulk_tariff_policy_allows = { DIR = export KIND = subvention }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = export KIND = subvention LEVEL = low_subventions }
+	}
+}
+
+te_bulk_tariff_export_high_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = export }
+		te_bulk_tariff_policy_allows = { DIR = export KIND = subvention }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = export KIND = subvention LEVEL = high_subventions }
+	}
+}
+
+te_bulk_tariff_export_max_subventions_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		te_bulk_tariff_can_set = { DIR = export }
+		te_bulk_tariff_policy_allows = { DIR = export KIND = subvention }
+	}
+	effect = {
+		te_bulk_tariff_apply = { DIR = export KIND = subvention LEVEL = max_subventions }
+	}
+}

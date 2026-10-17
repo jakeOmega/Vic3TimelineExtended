@@ -1739,7 +1739,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 40 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 13 additive files (marked below):
+Currently 41 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 14 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1755,7 +1755,7 @@ Currently 40 GUI files at the top of `gui/`: 27 full-file replacements of vanill
 | `goods_panel.gui` | Goods panel | The legislated tax code: one `### MOD: Tax Code` block ANDs `te_tax_native_controls_sgui` into the `enabled` of the type `consumption_tax_button_toggle`, which vanilla's `goods_state_panel.gui` and `custom_tooltip.gui` also instantiate, so the one edit greys the consumption-tax toggle in every goods view. Otherwise vanilla 1.14.5; its copy is `test_fixtures/vanilla_gui/goods_panel.gui`, and `test_tax_code_bypass.py` fails on any other change |
 | `goods_state_panel.gui` | Goods by state | Modified goods display; a building card's PM groups scroll sideways past five (gotcha #38) |
 | `journal_entry.gui` | Journal entry panel | Hides the bottom bar block and the goal bar for an entry that draws its own (`custom_widget_container_7` marker) |
-| `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts; a fifth and sixth tab, Climate and Reserve: the Global Warming and Strategic Reserve journal entries' panel types under `GetPlayerJournalEntry` (gotcha #29), greyed until each entry runs, Reserve on the player's own market only. The strip becomes `te_tab_buttons_six` |
+| `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts; a fifth and sixth tab, Climate and Reserve: the Global Warming and Strategic Reserve journal entries' panel types under `GetPlayerJournalEntry` (gotcha #29), greyed until each entry runs, Reserve on the player's own market only. The strip becomes `te_tab_buttons_six`. Above the Trade tab's goods list, on the player's own market, the All Goods rows (`te_bulk_tariff_panel`) |
 | `military_formation_panel.gui` | Military formation | Custom military info |
 | `panel_military.gui` | Military overview | Modified military overview; a fourth tab, Nuclear: the nuclear journal entry's panel types and its goal bar under `GetPlayerJournalEntry('je_nuclear_program')` (gotcha #29), greyed until the entry runs; a fifth tab, Covert: the covert journal entry's three composers under `GetPlayerJournalEntry('je_covert_warfare')`, greyed the same way |
 | `politics_panel_institutions.gui` | Institutions tab | Custom institution display |
@@ -1771,6 +1771,7 @@ Currently 40 GUI files at the top of `gui/`: 27 full-file replacements of vanill
 | `states_panel_buildings.gui` | State buildings tab | Enhanced building display |
 | `te_budget_breakdown.gui` | (additive, type library) | The Budget Breakdown tab's layout, shared category rows and collapsed explanation |
 | `te_budget_generated_charts.gui` | (additive, generated type library) | Budget income/expense pies, stacked bars and category lists; regenerate with `scripts/generators/gen_budget_breakdown.py` |
+| `te_bulk_tariff_widgets.gui` | (additive, type library) | The Market panel Trade tab's All Goods rows: an import and an export level bar built from vanilla's `set_level_bar_item` and icons, each button a scripted GUI that sets its level on every tradeable good (`common/scripted_guis/te_bulk_tariff_sguis.txt`), with `te_tax_native_tariff_controls_sgui` ANDed into `enabled` as on the 14 per-good buttons |
 | `te_debug_tax_widgets.gui` | (additive, temporary) | The tax probe harness's panel (`te_tp_panel`), shown only under the armed-country tab of the Timeline Extended window; removed before release (`docs/testing/tax-code-probes.md`) |
 | `te_demographics_widgets.gui` | (additive, type library) | The Population panel's Demographics tab as types: the overview, the population pyramid (a row type a state's pyramid reuses through its range and value blocks), Wealth, Where People Live, States, History and How Demographics Works, composed by `te_demog_tab_sections`; and the state panel's Demographics subtab (`te_state_demog_content`: figures, pyramid without the outline, Gini and Wealth Concentration, How Demographics Works). Every figure sits under a gate that asks script whether it exists (`common/scripted_guis/te_demog_sguis.txt`) |
 | `te_seabed_widgets.gui` | (additive, type library) | The Seabed tab's panels (Global Commons): the overview, the seabed policy buttons, the basins table and How Seabed Licences Work, instanced from `te_systems_window.gui` |

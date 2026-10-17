@@ -1,0 +1,346 @@
+﻿# ============================================================================
+# ALL-GOODS TARIFFS — the "All Goods" rows at the top of the Market panel's Trade tab
+# ============================================================================
+# gui/market_panel.gui places te_bulk_tariff_panel above the goods list, for the
+# player's own market only. Each row is a level bar like a good's own
+# (budget_panel.gui's set_level_bar_import_tariffs / _export_tariffs, built from
+# the same set_level_bar_item and icons), but a button sets that level on every
+# tradeable good through a scripted GUI (common/scripted_guis/te_bulk_tariff_sguis.txt).
+# No level shows as selected: the goods below show their own.
+#
+# Each `enabled` ANDs te_tax_native_tariff_controls_sgui, the gate the 14
+# per-good buttons carry (closed under the Tax Code's customs option and the
+# tax probe lock), with the button's own scripted GUI. The tooltip is the house
+# form (gui_modding_guide.md gotcha #16): the conditions, then what it does.
+# ============================================================================
+
+@panel_width = 540		# market_panel.gui's
+
+types te_bulk_tariffs
+{
+	### Imports, then exports, on the goods rows' background.
+	type te_bulk_tariff_panel = flowcontainer {
+		direction = vertical
+		minimumsize = { @panel_width -1 }
+		spacing = 5
+		margin_top = 5
+		margin_bottom = 7
+
+		background = {
+			using = entry_bg_simple
+		}
+
+		te_bulk_tariff_row = {}
+
+		te_bulk_tariff_row = {
+			blockoverride "direction_icon" {
+				texture = "gfx/interface/icons/trade_icons/exports.dds"
+			}
+			blockoverride "label" {
+				text = "te_bulk_tariff_label_export"
+				tooltip = "te_bulk_tariff_label_export_tt"
+			}
+			blockoverride "bar" {
+				te_bulk_tariff_bar_export = {}
+			}
+		}
+	}
+
+	### One direction's row, laid out as a good's import or export line below
+	### it (market_world_market_goods_list_item): the icon, then a label as wide
+	### as the amount, the partner flags and the spacer, so the bar sits over
+	### the goods' own bars.
+	type te_bulk_tariff_row = flowcontainer {
+		spacing = 5
+		margin_left = 10
+
+		icon = {
+			block "direction_icon" {
+				texture = "gfx/interface/icons/trade_icons/imports.dds"
+			}
+			size = { 23 23 }
+			parentanchor = vcenter
+		}
+
+		textbox = {
+			block "label" {
+				text = "te_bulk_tariff_label_import"
+				tooltip = "te_bulk_tariff_label_import_tt"
+			}
+			align = nobaseline
+			autoresize = yes
+			minimumsize = { 236 -1 }
+			maximumsize = { 236 -1 }
+			elide = right
+			parentanchor = vcenter
+		}
+
+		block "bar" {
+			te_bulk_tariff_bar_import = {}
+		}
+	}
+
+	### IMPORTS: one level for every tradeable good
+	type te_bulk_tariff_bar_import = flowcontainer {
+		using = set_level_bar_background
+
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_import_max_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_import_max_tariffs_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_import_max_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_import_max_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = decrease_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_import_max_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_import_high_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_import_high_tariffs_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/high_tariffs.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_import_high_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_import_high_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = decrease_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_import_high_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_import_low_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_import_low_tariffs_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/low_tariffs.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_import_low_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_import_low_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = decrease_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_import_low_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_import_no_tariffs_or_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_import_no_tariffs_or_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_import_no_tariffs_or_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_import_no_tariffs_or_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_import_no_tariffs_or_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_import_low_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_import_low_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/low_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_import_low_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_import_low_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_import_low_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_import_high_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_import_high_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/high_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_import_high_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_import_high_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_import_high_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_import_max_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_import_max_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/max_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_import_max_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_import_max_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_import_max_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+	}
+
+	### EXPORTS: one level for every tradeable good
+	type te_bulk_tariff_bar_export = flowcontainer {
+		using = set_level_bar_background
+
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_export_max_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_export_max_tariffs_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_export_max_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_export_max_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = decrease_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_export_max_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_export_high_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_export_high_tariffs_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/high_tariffs.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_export_high_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_export_high_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = decrease_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_export_high_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_export_low_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_export_low_tariffs_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/low_tariffs.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_export_low_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_export_low_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = decrease_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_export_low_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_export_no_tariffs_or_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_export_no_tariffs_or_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_export_no_tariffs_or_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_export_no_tariffs_or_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_export_no_tariffs_or_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_export_low_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_export_low_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/low_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_export_low_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_export_low_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_export_low_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_export_high_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_export_high_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/high_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_export_high_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_export_high_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_export_high_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		set_level_bar_item = {
+			tooltip = "[Concatenate( GetScriptedGui('te_bulk_tariff_export_max_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_bulk_tariff_export_max_subventions_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			blockoverride "button_texture" {
+				texture = "gfx/interface/icons/trade_icons/max_subvention.dds"
+			}
+			blockoverride "click" {
+				enabled = "[And( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_bulk_tariff_export_max_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_bulk_tariff_export_max_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = increase_button_sound
+			}
+			blockoverride "is_selected_visibility" {
+				visible = no
+			}
+			blockoverride "is_clickable_alpha" {
+				alpha = "[TransparentIfFalse( GetScriptedGui('te_bulk_tariff_export_max_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+	}
+}
