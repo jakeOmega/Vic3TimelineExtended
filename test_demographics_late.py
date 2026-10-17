@@ -207,6 +207,36 @@ class TestLateGameScript(unittest.TestCase):
         self.check(eng, ring, out)
         self.work(eng, ring, inp)
 
+    def test_ubi_ends_the_working_ages_at_the_states_blend(self):
+        """Under UBI the working ages end at the state's old-age threshold (phase 2 spec §1.2): after a late step the blend
+        that step left in te_dg_old_age, not the untreated's figure this year's plain life table writes over it before
+        te_demog_work_setup reads it (an EU state in 2041: everyone past 84 counted as past the working ages, for 128)."""
+        blend = 110.0
+        inp = _inp()
+        inp = dataclasses.replace(inp, laws=inp.laws | {"law_universal_basic_income"})
+        ring = _ring(inp)
+        ring.lx_out = {"blend": {"old_age": blend}, "untreated": {"old_age": 80.0}}
+        pop = ring.total * 1.004
+        eng = _engine(ring, inp, pop)
+        eng.vars.update(te_dg_old_age=blend, te_dg_old_age_c=80.0)
+        qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        self.assertEqual(M.working_ages_old_age(ring, qf, qm), blend)
+        eng.call("te_demog_step")
+        out = M.step(ring, inp, YEAR + 1, engine_pop=pop)
+        self.check(eng, ring, out)
+        want = M.work_figures(ring, inp, blend)
+        for name in ("wa_share", "at_work", "pensioners", "need"):
+            self.close(eng.vars[f"te_dg_{name}"], want[name], 1e-5, name)
+        qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        self.assertLess(M.work_figures(ring, inp, M.old_age(qf, qm))["wa_share"], want["wa_share"] - 0.01)
+
+    def test_before_a_late_step_the_working_ages_end_at_this_years_table(self):
+        """A ring no late step has run on (a seed's) has no blend: this year's plain table, as before phase 3."""
+        inp = _inp()
+        ring = _ring(inp)
+        qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
+        self.assertEqual(M.working_ages_old_age(ring, qf, qm), M.old_age(qf, qm))
+
     def test_artificial_wombs(self):
         """Ectogenesis (§3.5): a share of planned births from women and men alike, with no maternal death."""
         inp = dataclasses.replace(_inp(), ecto_levels=3.0)

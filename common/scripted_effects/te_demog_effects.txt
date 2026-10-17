@@ -506,6 +506,16 @@ te_demog_prepare = {
 	set_variable = { name = te_dg_m_chr value = local_var:te_dg_m_chr }
 	set_variable = { name = te_dg_m_mat value = local_var:te_dg_mmr }
 	set_variable = { name = te_dg_m_work value = te_demog_mult_work }
+	# the old-age threshold UBI ends the working ages at (te_demog_work_setup): after a late step the state's blend
+	# (te_demog_lx_tables, with te_dg_old_age_c), kept before the plain table writes the untreated's figure over it
+	set_local_variable = { name = te_dg_wa_oa value = -1 }
+	if = {
+		limit = {
+			has_variable = te_dg_old_age_c
+			has_variable = te_dg_old_age
+		}
+		set_local_variable = { name = te_dg_wa_oa value = var:te_dg_old_age }
+	}
 	te_demog_life_table = yes
 	set_variable = { name = te_dg_means value = te_demog_means }
 	# phase 2 step 3b: the family policy term and Family Housing's urban share, stored for the tooltips (generated)
@@ -984,6 +994,11 @@ te_demog_work_setup = {
 	else_if = {
 		limit = { local_var:te_dg_pkind = 2 }
 		set_local_variable = { name = te_dg_wa_end value = var:te_dg_old_age }
+		# after a late step the blend te_demog_prepare kept (demographics_model.working_ages_old_age)
+		if = {
+			limit = { local_var:te_dg_wa_oa >= 0 }
+			set_local_variable = { name = te_dg_wa_end value = local_var:te_dg_wa_oa }
+		}
 		set_local_variable = { name = te_dg_pens_on value = 1 }
 	}
 	# te_demog_slot_births's two-term form reads these (not while the schedules are one)

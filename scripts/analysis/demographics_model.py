@@ -639,6 +639,14 @@ def working_ages_end(inp, old_age):
     return float(P.NO_WORKING_AGE_END), False, False
 
 
+def working_ages_old_age(ring, qf, qm):
+    """The old-age threshold UBI and Post-Scarcity end the working ages at (te_demog_work_setup), read before the step:
+    after a late step the state's blend it left (ring.lx_out; te_dg_old_age, kept from te_demog_prepare's plain table,
+    which writes the untreated's figure over it), otherwise this year's plain table."""
+    blend = (ring.lx_out or {}).get("blend")
+    return blend["old_age"] if blend else old_age(qf, qm)
+
+
 def work_figures(ring, inp, old_age):
     """Phase 2 step 1's figures over ring.by_age() (ages after the step; the pool at 150): te_demog_work_slot and
     te_demog_work_finish. The biological age is the calendar one until phase 3."""

@@ -592,3 +592,14 @@ script-only type on a carrier the census already reads (#892's fact), so no self
    Outlawed Dissent with Honours on, then Censorship: Honours ends at once with its "Honours for Large Families Ended"
    notice, which names the government as a cause. Birth Limit and the Crash Campaign stay dimmed under every
    government.
+
+## UBI's working ages in the late game (2026-10-17)
+
+Under UBI and Post-Scarcity a late-game state's working ages end at its blended old-age threshold, the one the
+Demographics tab's Old age from row shows, no longer at the untreated's (`docs/systems/mod_systems.md` § Phase 2 step 1).
+Pure script order, pinned by `test_demographics_late.py`, so no self-check.
+
+1. **The EU test game (Full, UBI, longevity care).** Load `european union_2042_04_04` and pass a state's next census
+   step (31 December). In the state of the report (save id 456, Old age from 128), the Workforce hover's working age
+   reads about 99% of people where it read 50%, at work at most 100% where it read 127%, and workers past the end about
+   0%; Census: Workforce is heading for about the term it has (+42%) rather than +19%.
