@@ -21,11 +21,12 @@ The Judiciary (spec `2026-10-17-judiciary-design.md`, PR #1016) adds a score and
 § 13 hands this tab off. The state panel already hides the mod's bookkeeping modifiers from its rows by name
 (`gui_modding_guide.md` gotcha #40, `test_hidden_state_modifiers.py`). Countries have no equivalent.
 
-**Inventory (2026-10-17).** 367 static modifiers with country-level fields are added without a duration somewhere in
-script, 67 of them with a multiplier; parameterized names (`agdiff_$TECH$`, the space race's `$MILESTONE$` rewards) add
-more. Some of them land on a journal entry rather than the country (Grand Monuments' national modifiers, the space race's
-mission choices) and never reach the country panel's list. § 4's registry classifies every one, and a test keeps it
-complete.
+**Inventory (2026-10-17).** Script adds 695 static modifiers without a duration, counting the parameterized names
+(`agdiff_$TECH$`, the space race's `$MILESTONE$` rewards) expanded from their callers. 489 carry a country-level field;
+206 carry only state, building or goods fields. Fields don't say where a modifier lands: agricultural diffusion's
+`agdiff_*` carry only `state_arable_land_mult` and `overinvestment_modifier` only state fields, yet both are added to the
+country and sit in its list, while Grand Monuments' national modifiers land on a journal entry and never reach it. So
+§ 4's registry says where each of the 695 lands, and a test keeps it complete.
 
 ## Decisions (owner, 2026-10-17)
 
@@ -36,9 +37,12 @@ complete.
 | The country panel | Its modifier list hides what the tab shows, as the state panel hides its bookkeeping modifiers |
 | Money carriers | Hidden from the list, with no row: the budget panel itemizes them |
 | Credit Standing | No row: the Banking tab owns it. The owner's follow-up (separate work): run the banking cycle's entry always, with its interactions disabled until it activates |
-| Nuclear Power | No row. The `nuclear_power` modifier moves onto the Nuclear Program journal entry: it is odd as a country modifier (§ 6) |
+| Nuclear Power | No row. The `nuclear_power` modifier should move onto the Nuclear Program journal entry, where it belongs; **deferred** (owner), since about 60 checks across the mod use it as the "is a nuclear power" test (§ 6). Until then an override keeps it in the country's list |
 | Wealth Concentration | Hidden from the lists, nationally on a Nation row and per state in a new section of the state view (§ 5) |
 | A spec of its own | Yes: cross-cutting, so not part of the Judiciary |
+| Permanent event outcomes | On the tab by default, in the section of the system that granted them. Case by case, an **override** keeps a chosen modifier in the country's list (`KEEP_IN_LIST`, § 4) |
+| The space race's colonies | Hidden: the Space Race tab's Our Colonies lists them |
+| Section order | Governance, Society, Economy, Science and Space, International |
 
 ## 1. What goes where
 
@@ -51,8 +55,10 @@ A modifier the mod applies to a country with no duration goes to exactly one pla
 | A money carrier | The budget panel's breakdown | Hidden |
 | One a system panel already lists (the space race's colonies, in the Space Race tab's Our Colonies) | That panel | Hidden |
 | Timed (a duration), or applied to a journal entry or a state | Where it is today | Unchanged |
+| An override (`KEEP_IN_LIST`), chosen case by case | Where it is today | Unchanged |
 
-A **timed consequence** (Forceful Legislation's decaying penalty, the Judiciary's Court Overhaul) stays in the list,
+A permanent **event outcome** follows the same rule: by default it goes to the list of the section whose system granted
+it, unless an override keeps it in the country's list (owner). A **timed consequence** (Forceful Legislation's decaying penalty, the Judiciary's Court Overhaul) stays in the list,
 where a player looks for what just happened to them.
 
 ## 2. The tab
@@ -158,14 +164,16 @@ and the state panel's filter (§ 5). They come from one registry, as the tax cod
   - `BUDGET_CARRIERS`: hidden, no row;
   - `SHOWN_ELSEWHERE`: hidden, with the panel that shows each (the space race colonies);
   - `NOT_ON_COUNTRY`: candidates that land on a journal entry or a state, with where;
-  - `STAYS`: candidates kept in the list, each with its reason.
+  - `KEEP_IN_LIST`: the overrides, candidates kept in the country's list, each with its reason (owner: case by case).
 - **It writes** `gui/te_nation_generated.gui` (the `te_nation_hidden_filter` template and one filter template per
   section list) and `common/script_values/te_nation_generated_values.txt` (`gui_country_hidden_modifier_count`). Both
   are generated, never hand-edited (`docs/auto_generated_files.md`).
 - **`test_nation_tab.py`:**
   - the generated files match a fresh run;
-  - every candidate is classified exactly once: every static modifier with a country-level field that script adds
-    without a duration (parameterized names expanded from their callers);
+  - every candidate is classified exactly once: every static modifier script adds without a duration, whatever its
+    fields (parameterized names expanded from their callers). `NOT_ON_COUNTRY` takes the state, building and journal
+    entry ones, the state panel's hidden set (`test_hidden_state_modifiers.py`) among them. The registry may name a
+    family by a trailing `*` (`sr_discovery_*`), which the generator expands to the exact names the filters need;
   - every registry key is a static modifier;
   - the redefined type is vanilla's but for the three `# TE:` lines (diffed against a committed copy of vanilla's type,
     refreshed by the runbook; CI has no vanilla GUI).
@@ -190,27 +198,32 @@ and the state panel's filter (§ 5). They come from one registry, as the tax cod
 - **Nationally**, `inh_great_fortunes` and `inh_dispersed_wealth` are hidden from the country's list and shown by the
   Nation row (§ 2.2).
 
-## 6. Nuclear Power moves to its journal entry (owner)
+## 6. Nuclear Power: deferred (owner)
 
-`nuclear_power` is added to the country once the stockpile reaches a warhead (`je_nuclear_program.txt`, guarded by
-`NOT = { has_modifier = nuclear_power }`). It moves onto `je:je_nuclear_program`, where the rest of the programme's state
-already shows:
+`nuclear_power` belongs on the Nuclear Program journal entry rather than the country, where the rest of the programme's
+state already shows. The move is deferred because it is sizable next to this spec:
 
-- the guard reads the entry's modifier;
-- a journal entry's modifiers end when it closes, and a revolution's inherited copy arrives with none, so the entry's
-  pulse re-applies it (the guard already makes that safe), and `je_immediate_reset_audit` checks the entry's `immediate`;
-- a save from before keeps the country's copy, which an old-save repair removes once the entry carries its own.
+- **About 60 checks read `has_modifier = nuclear_power` as "is a nuclear power"**, many on another country (`nuke.txt`,
+  `un_regime_triggers.txt`, the war support values, the nuclear events). They first switch to one variable-backed
+  trigger (`nd_believed_armed` already wraps the check, but few use it), set where the modifier is granted and removed.
+- **Then the modifier moves** onto `je:je_nuclear_program`, re-applied by the entry's weekly pulse (its guard already
+  makes that safe), with an old-save repair to remove the country's copy.
+- **A decision first:** an entry closes when a country drops below `possible` (a great power losing rank), which would
+  take the modifier's prestige with it while the country is still armed. Either an armed country keeps its entry, or
+  the effects stop while it is closed.
 
-`nuclear_power` doesn't enter the registry: on the entry, it isn't a country modifier.
+Until then, the registry's `KEEP_IN_LIST` holds `nuclear_power`, with this section as its reason.
 
 ## 7. Phases
 
-1. **The tab and the hiding**: §§ 2–4, the Colonial Empire tab's move, and Nuclear Power's (§ 6).
+1. **The tab and the hiding**: §§ 2–4, and the Colonial Empire tab's move.
 2. **Wealth Concentration in the state view** (§ 5).
 3. **The Judiciary's rows**, in whichever of this and the Judiciary's phase 1 lands second: Judicial Independence's
    row; `te_judicial_independence`, `te_jud_votes_legitimacy`, `te_jud_unelected_authority` and
-   `te_jud_algorithmic_capture` into the registry (Governance); `te_jud_court_overhaul` into `STAYS` (timed).
+   `te_jud_algorithmic_capture` into the registry (Governance). `te_jud_court_overhaul` has a duration, so it is no
+   candidate.
 4. **Later**, as systems add standing modifiers: a registry line each. A later version could show the viewed country.
+   Nuclear Power's move (§ 6) is its own piece of work.
 
 ## 8. Engine facts to verify
 
@@ -221,9 +234,7 @@ already shows:
 | `GetValueWithBreakdownFor` lists every source of the override sum | Play-test: the hover lists the laws, institutions and the decaying penalty. The recipe is documented; the covert panel uses it for hovers only, so a failure loses a tooltip, not a number |
 | A template can carry a generated `visible` expression | Precedent: the window's own selection templates (`te_systems_window_*_selected`) |
 
-## 9. Questions for the owner
+## 9. Rulings
 
-1. **Permanent event outcomes.** A few events grant a modifier with no duration. By § 1 they go to the tab, in the
-   section of the system that granted them. Or keep them in the list as event outcomes?
-2. **The space race's colonies**: hidden, since the Space Race tab's Our Colonies lists them (§ 1)?
-3. **Section order**: Governance, Society, Economy, Science and Space, International?
+The owner answered the first draft's five questions and the revision's three (2026-10-17); the Decisions table
+records them. Nothing is open.
