@@ -30,6 +30,7 @@ def _path(*parts):
 JUSTICE_EFFECTS = _path("common", "scripted_effects", "un_justice_effects.txt")
 JUSTICE_TRIGGERS = _path("common", "scripted_triggers", "un_justice_triggers.txt")
 JUSTICE_VALUES = _path("common", "script_values", "un_justice_values.txt")
+DOSSIER_TRIGGERS = _path("common", "scripted_triggers", "un_dossier_triggers.txt")
 BUTTONS = _path("common", "scripted_buttons", "un_buttons.txt")
 LADDER = _path("common", "scripted_effects", "un_ladder_effects.txt")
 VOTE_EVENTS = _path("events", "un_vote_events.txt")
@@ -194,7 +195,9 @@ class LeanTests(unittest.TestCase):
         values = _read(JUSTICE_VALUES)
         body = _flat(_block(values, "un_lean_interests_lift_sanctions"))
         self.assertIn("limit = { NOT = { scope:un_vote_target ?= this } }", body)
-        self.assertIn("var:un_sanctions_enforced_by ?= ROOT } } add = un_lean_lift_enforcer", body)
+        # The enforcer stands by the regime only while it still dislikes the target.
+        self.assertIn("limit = { scope:un_vote_target ?= { var:un_sanctions_enforced_by ?= ROOT } "
+                      "un_lift_sanctions_ill_disposed = yes } add = un_lean_lift_enforcer", body)
         self.assertIn("is_target_in_variable_list = { name = un_embargo_by target = ROOT }", body)
         for term in ("un_lean_lift_sanctions_grounds", "un_lean_lift_sanctions_fresh"):
             self.assertIn(f"add = {term}", body)
@@ -204,6 +207,22 @@ class LeanTests(unittest.TestCase):
         fresh = _flat(_block(values, "un_lean_lift_sanctions_fresh"))
         self.assertIn("add = un_lift_fresh_months scope:un_vote_target = { subtract = un_disp_sanctions_months } "
                       "min = 0 multiply = un_lean_lift_fresh_per_month", fresh)
+
+
+class DislikeTests(unittest.TestCase):
+    """Only a member that still dislikes the petitioner (a rival, or relations
+    Cold or worse) stands by the regime it enforces or vetoes the petition
+    (owner, 2026-10-16)."""
+
+    def test_dislike_is_rivalry_or_cold_relations(self):
+        body = _flat(_block(_read(JUSTICE_TRIGGERS), "un_lift_sanctions_ill_disposed"))
+        self.assertIn("scope:un_vote_target ?= { OR = { has_diplomatic_pact = { who = ROOT type = rivalry } "
+                      "relations:root <= relations_threshold:cold } }", body)
+
+    def test_the_ai_vetoes_a_petition_only_from_dislike(self):
+        body = _flat(_block(_read(DOSSIER_TRIGGERS), "un_vote_ai_should_veto"))
+        self.assertIn("OR = { NOT = { scope:un_resolution ?= { has_tag = un_topic_lift_sanctions } } "
+                      "un_lift_sanctions_ill_disposed = yes }", body)
 
 
 class VoteThreeTests(unittest.TestCase):

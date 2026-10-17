@@ -380,8 +380,11 @@ un_lean_lift_free_trade = { value = 10 }
 un_lean_lift_isolationist = { value = 10 }
 
 # A petition to lift sanctions. Its proposer is its target, so the ties to it
-# reach every member through un_lean_proposer. The enforcer, and the members
-# whose embargo the Assembly imposed, stand by the regime. The room weighs
+# reach every member through un_lean_proposer. The enforcer stands by the
+# regime while it still dislikes the petitioner (un_lift_sanctions_ill_disposed:
+# a rival, or relations Cold or worse); one that has made its peace with it
+# does not. The members whose embargo the Assembly imposed stand by it too (an
+# embargo pact stands only while relations are Poor or worse). The room weighs
 # how far the target's record has fallen below the sanctions' grounds, and
 # does not lightly reverse a regime it imposed recently. Free traders and
 # isolationists never wanted it.
@@ -390,7 +393,10 @@ un_lean_interests_lift_sanctions = {
 	if = {
 		limit = { NOT = { scope:un_vote_target ?= this } }
 		if = {
-			limit = { scope:un_vote_target ?= { var:un_sanctions_enforced_by ?= ROOT } }
+			limit = {
+				scope:un_vote_target ?= { var:un_sanctions_enforced_by ?= ROOT }
+				un_lift_sanctions_ill_disposed = yes
+			}
 			add = un_lean_lift_enforcer
 		}
 		if = {

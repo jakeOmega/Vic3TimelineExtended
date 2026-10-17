@@ -318,8 +318,10 @@ maneuvers, more infamy) at Supranational.
 
 Members weigh a petition to lift sanctions by how far your case strength has
 fallen below the 50 that supports them, and are slow to lift sanctions that have
-stood less than five years. Their enforcer and the members embargoing you vote
-against it; your allies and bloc partners lean for it and your rivals against.
+stood less than five years. The members embargoing you vote against it, and so
+does the enforcer while it is still your rival or its relations with you are
+Cold or worse; only then will an AI permanent member veto it. Your allies and
+bloc partners lean for it and your rivals against.
 The Propose a Resolution row names the enforcer and how many months the
 sanctions have stood. A failed petition bars your next motion as any other does,
 so wait until your record has cleared.

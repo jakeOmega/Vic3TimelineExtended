@@ -54,6 +54,6 @@ strength is 50 or more, and let it carry.
 |---|---|---|
 | **The row.** Under sanctions, open Propose a Resolution. | Lift the Sanctions Against Us shows the enforcer's name and the months in force, and tables. Not under sanctions, it says No Case. | A blank name: `je_un_chamber_propose_preview_lift_sanctions` lost `scope:un_lift_sanctions_enforcer`; check `un_lift_sanctions_chamber_preview`. |
 | **A carried petition.** Let one carry. | The modifier and the Assembly's embargoes are gone, and the enforcer's Propose Sanctions row opens again. | The enforcer still blocked: `un_sanctions_lift_regime` did not reach `var:un_sanctions_enforced_by`. |
-| **A veto.** Have a permanent-member enforcer veto it. | The card says it was blocked; the sanctions stay. | |
+| **A veto.** Petition against an AI permanent-member enforcer, once while it is your rival and once after the rivalry has ended and relations are above Cold. | It vetoes the first and not the second; a vetoed petition says it was blocked and the sanctions stay. | A veto in the second case: `un_lift_sanctions_ill_disposed` is missing from `un_vote_ai_should_veto`. |
 | **An orphaned regime.** Have the enforcer leave the UN. | The next month the sanctions lapse, with The Sanctions on Us Lapse in the feed. | Still sanctioned: check `un_sanctions_regime_orphaned` on the target. |
 | **A revolution.** Let a revolution win in a sanctioned country. | The winner is under the sanctions again within a month. | |

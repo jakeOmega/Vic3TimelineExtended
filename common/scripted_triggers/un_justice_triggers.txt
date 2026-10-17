@@ -295,6 +295,20 @@ un_sanctions_enforcer_idle = {
 	}
 }
 
+# The voter still dislikes the country petitioning to lift its sanctions: a
+# rival, or relations Cold or worse. Only such a member stands by the regime it
+# enforces (un_lean_interests_lift_sanctions) or vetoes the petition
+# (un_vote_ai_should_veto); one that has made its peace votes on the rest.
+# Scope: the voter (= ROOT); expects scope:un_vote_target
+un_lift_sanctions_ill_disposed = {
+	scope:un_vote_target ?= {
+		OR = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+			relations:root <= relations_threshold:cold
+		}
+	}
+}
+
 # There is a case: we are under sanctions. MIRRORS the target the petition
 # names (ourselves, un_propose_lift_sanctions_effect).
 # Scope: the prospective proposer

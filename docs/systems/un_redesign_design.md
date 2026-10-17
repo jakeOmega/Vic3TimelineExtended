@@ -502,9 +502,12 @@ the two decisions is **(proposed)**: a first shape to tune. Not yet seen in a ru
   record, its months, the embargoes the Assembly imposed with it, and the enforcer's role, so the
   enforcer may table sanctions again. Credibility +1, as for any carried resolution. Moot, still
   +1, if the regime had already ended by the vote.
-- **Vetoed.** Blocked outright: there is no lesser form of ending a regime. The enforcer is
-  usually the petitioner's rival, so an enforcer that holds a permanent seat will veto it, at the
-  veto's usual cost.
+- **Vetoed.** Blocked outright: there is no lesser form of ending a regime. An AI permanent
+  member vetoes it only while it still dislikes the petitioner (`un_lift_sanctions_ill_disposed`
+  in `un_vote_ai_should_veto`): a veto is a hostile act, so a member that has made its peace
+  votes against at most **(owner, 2026-10-16)**. An enforcer that is still the petitioner's rival
+  takes the rivalry, the relations and its own term together, which puts it well past the veto
+  line, so one with a seat vetoes, at the veto's usual cost.
 - **Members who voted against.** In `un_vote.3` accepting earns no compliance standing and
   denouncing books no defiance: the lift asks nothing of them. Refusing still costs the relations
   and infamy it costs on every resolution.
@@ -516,7 +519,7 @@ lean for it and rivals against. On top of that:
 
 | Term | Lean |
 |---|---|
-| The regime's enforcer | −30 |
+| The regime's enforcer, while it still dislikes the petitioner (a rival, or relations Cold or worse: `un_lift_sanctions_ill_disposed`) | −30 |
 | A member whose embargo the Assembly imposed (`un_embargo_by`) | −10 |
 | The grounds: (50 − the petitioner's case) × 0.5 | −20 to +20 |
 | A regime that has stood fewer than five years: −0.4 a month short | −24 to 0 |
@@ -580,7 +583,8 @@ button still lifts it, and so does the target's petition.
       and tables; not under sanctions, it says No Case.
 - [ ] A carried petition removes the modifier and the Assembly's embargoes, and the enforcer's
       Propose Sanctions row opens again.
-- [ ] A vetoed petition leaves the sanctions in place.
+- [ ] A vetoed petition leaves the sanctions in place. An AI permanent-member enforcer that is
+      no longer the petitioner's rival, with relations above Cold, does not veto.
 - [ ] An enforcer that leaves the UN: the regime it enforced lapses the next month, with the
       notice to a human target.
 - [ ] A revolution that wins in a sanctioned country: the sanctions are back on the winner within
