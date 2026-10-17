@@ -1581,3 +1581,435 @@ te_seabed_bar_southern_4 = {
 	min = 0
 	max = 1
 }
+
+# ---- The overview's figures ----
+
+# Country scope: unused claims in basins where we have coast (te_seabed_home_<basin>).
+te_seabed_room_home_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_home_pacific }
+		add = te_seabed_unbuilt_disp_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_home_atlantic }
+		add = te_seabed_unbuilt_disp_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_home_indian }
+		add = te_seabed_unbuilt_disp_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_home_arctic }
+		add = te_seabed_unbuilt_disp_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_home_southern }
+		add = te_seabed_unbuilt_disp_southern
+	}
+}
+
+# Country scope: our licences, those on queued levels, and those built.
+te_seabed_lic_total_disp = {
+	value = 0
+	add = te_seabed_our_lic_pacific
+	add = te_seabed_our_lic_atlantic
+	add = te_seabed_our_lic_indian
+	add = te_seabed_our_lic_arctic
+	add = te_seabed_our_lic_southern
+}
+
+te_seabed_queued_total_disp = {
+	value = 0
+	add = te_seabed_queued_disp_pacific
+	add = te_seabed_queued_disp_atlantic
+	add = te_seabed_queued_disp_indian
+	add = te_seabed_queued_disp_arctic
+	add = te_seabed_queued_disp_southern
+}
+
+te_seabed_built_total_disp = {
+	value = te_seabed_lic_total_disp
+	subtract = te_seabed_queued_total_disp
+	min = 0
+}
+
+# The holding fee on one level a week, and the country's fee in thousands.
+te_seabed_fee_per_level = {
+	value = te_seabed_level_output_value
+	multiply = te_seabed_fee_rate
+}
+
+te_seabed_fee_k_disp = {
+	value = te_seabed_fee_disp
+	divide = 1000
+}
+
+# Country scope: 1 while Sponsor Contractors protects our claims (Sponsor,
+# outside a Scramble, a claimant), else 0.
+te_seabed_protected_disp = {
+	value = 0
+	if = {
+		limit = { NOT = { te_seabed_floor_void = yes } }
+		value = 1
+	}
+}
+
+# Country scope: the navy the claim weight counts, and our incorporated coast.
+te_seabed_coast_all_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_all }
+		value = var:te_seabed_coast_all
+	}
+}
+
+# ---- Pacific: the table's hovers ----
+
+te_seabed_built_disp_pacific = {
+	value = te_seabed_our_lic_pacific
+	subtract = te_seabed_queued_disp_pacific
+	min = 0
+}
+
+# Country scope: what is left of the pool for rivals' unused claims (and any
+# not yet shared): the pool bar's dark background.
+te_seabed_rival_claims_pacific = {
+	value = te_seabed_bar_pool_pacific
+	subtract = te_seabed_our_lic_pacific
+	subtract = te_seabed_unbuilt_disp_pacific
+	subtract = te_seabed_rival_lic_pacific
+	min = 0
+}
+
+te_seabed_coast_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_pacific }
+		value = var:te_seabed_coast_pacific
+	}
+}
+
+te_seabed_ports_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ports_pacific }
+		value = var:te_seabed_ports_pacific
+	}
+}
+
+# Any scope: the basin's claim weight at the last sharing.
+te_seabed_world_w_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_w_pacific }
+		value = global_var:te_seabed_world_w_pacific
+	}
+}
+
+# Country scope (spec § 3.5): about the licences one more incorporated coastal
+# state here would win, from its 2 × policy factor of weight at the last
+# sharing's final round (R·Δw/W, rounded down).
+te_seabed_coast_gain_pacific = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_seabed_wsum_all_pacific
+			global_var:te_seabed_wsum_all_pacific > 0
+		}
+		value = global_var:te_seabed_rem_open_pacific
+		multiply = te_seabed_coast_weight
+		multiply = te_seabed_policy_factor
+		divide = global_var:te_seabed_wsum_all_pacific
+		floor = yes
+		min = 0
+	}
+}
+
+# Country scope: our incorporated coastal states here past the five the Free
+# hover names.
+te_seabed_build_more_pacific = {
+	value = te_seabed_coast_disp_pacific
+	subtract = 5
+	min = 0
+}
+
+# ---- Atlantic: the table's hovers ----
+
+te_seabed_built_disp_atlantic = {
+	value = te_seabed_our_lic_atlantic
+	subtract = te_seabed_queued_disp_atlantic
+	min = 0
+}
+
+# Country scope: what is left of the pool for rivals' unused claims (and any
+# not yet shared): the pool bar's dark background.
+te_seabed_rival_claims_atlantic = {
+	value = te_seabed_bar_pool_atlantic
+	subtract = te_seabed_our_lic_atlantic
+	subtract = te_seabed_unbuilt_disp_atlantic
+	subtract = te_seabed_rival_lic_atlantic
+	min = 0
+}
+
+te_seabed_coast_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_atlantic }
+		value = var:te_seabed_coast_atlantic
+	}
+}
+
+te_seabed_ports_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ports_atlantic }
+		value = var:te_seabed_ports_atlantic
+	}
+}
+
+# Any scope: the basin's claim weight at the last sharing.
+te_seabed_world_w_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_w_atlantic }
+		value = global_var:te_seabed_world_w_atlantic
+	}
+}
+
+# Country scope (spec § 3.5): about the licences one more incorporated coastal
+# state here would win, from its 2 × policy factor of weight at the last
+# sharing's final round (R·Δw/W, rounded down).
+te_seabed_coast_gain_atlantic = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_seabed_wsum_all_atlantic
+			global_var:te_seabed_wsum_all_atlantic > 0
+		}
+		value = global_var:te_seabed_rem_open_atlantic
+		multiply = te_seabed_coast_weight
+		multiply = te_seabed_policy_factor
+		divide = global_var:te_seabed_wsum_all_atlantic
+		floor = yes
+		min = 0
+	}
+}
+
+# Country scope: our incorporated coastal states here past the five the Free
+# hover names.
+te_seabed_build_more_atlantic = {
+	value = te_seabed_coast_disp_atlantic
+	subtract = 5
+	min = 0
+}
+
+# ---- Indian: the table's hovers ----
+
+te_seabed_built_disp_indian = {
+	value = te_seabed_our_lic_indian
+	subtract = te_seabed_queued_disp_indian
+	min = 0
+}
+
+# Country scope: what is left of the pool for rivals' unused claims (and any
+# not yet shared): the pool bar's dark background.
+te_seabed_rival_claims_indian = {
+	value = te_seabed_bar_pool_indian
+	subtract = te_seabed_our_lic_indian
+	subtract = te_seabed_unbuilt_disp_indian
+	subtract = te_seabed_rival_lic_indian
+	min = 0
+}
+
+te_seabed_coast_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_indian }
+		value = var:te_seabed_coast_indian
+	}
+}
+
+te_seabed_ports_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ports_indian }
+		value = var:te_seabed_ports_indian
+	}
+}
+
+# Any scope: the basin's claim weight at the last sharing.
+te_seabed_world_w_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_w_indian }
+		value = global_var:te_seabed_world_w_indian
+	}
+}
+
+# Country scope (spec § 3.5): about the licences one more incorporated coastal
+# state here would win, from its 2 × policy factor of weight at the last
+# sharing's final round (R·Δw/W, rounded down).
+te_seabed_coast_gain_indian = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_seabed_wsum_all_indian
+			global_var:te_seabed_wsum_all_indian > 0
+		}
+		value = global_var:te_seabed_rem_open_indian
+		multiply = te_seabed_coast_weight
+		multiply = te_seabed_policy_factor
+		divide = global_var:te_seabed_wsum_all_indian
+		floor = yes
+		min = 0
+	}
+}
+
+# Country scope: our incorporated coastal states here past the five the Free
+# hover names.
+te_seabed_build_more_indian = {
+	value = te_seabed_coast_disp_indian
+	subtract = 5
+	min = 0
+}
+
+# ---- Arctic: the table's hovers ----
+
+te_seabed_built_disp_arctic = {
+	value = te_seabed_our_lic_arctic
+	subtract = te_seabed_queued_disp_arctic
+	min = 0
+}
+
+# Country scope: what is left of the pool for rivals' unused claims (and any
+# not yet shared): the pool bar's dark background.
+te_seabed_rival_claims_arctic = {
+	value = te_seabed_bar_pool_arctic
+	subtract = te_seabed_our_lic_arctic
+	subtract = te_seabed_unbuilt_disp_arctic
+	subtract = te_seabed_rival_lic_arctic
+	min = 0
+}
+
+te_seabed_coast_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_arctic }
+		value = var:te_seabed_coast_arctic
+	}
+}
+
+te_seabed_ports_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ports_arctic }
+		value = var:te_seabed_ports_arctic
+	}
+}
+
+# Any scope: the basin's claim weight at the last sharing.
+te_seabed_world_w_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_w_arctic }
+		value = global_var:te_seabed_world_w_arctic
+	}
+}
+
+# Country scope (spec § 3.5): about the licences one more incorporated coastal
+# state here would win, from its 2 × policy factor of weight at the last
+# sharing's final round (R·Δw/W, rounded down).
+te_seabed_coast_gain_arctic = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_seabed_wsum_all_arctic
+			global_var:te_seabed_wsum_all_arctic > 0
+		}
+		value = global_var:te_seabed_rem_open_arctic
+		multiply = te_seabed_coast_weight
+		multiply = te_seabed_policy_factor
+		divide = global_var:te_seabed_wsum_all_arctic
+		floor = yes
+		min = 0
+	}
+}
+
+# Country scope: our incorporated coastal states here past the five the Free
+# hover names.
+te_seabed_build_more_arctic = {
+	value = te_seabed_coast_disp_arctic
+	subtract = 5
+	min = 0
+}
+
+# ---- Southern: the table's hovers ----
+
+te_seabed_built_disp_southern = {
+	value = te_seabed_our_lic_southern
+	subtract = te_seabed_queued_disp_southern
+	min = 0
+}
+
+# Country scope: what is left of the pool for rivals' unused claims (and any
+# not yet shared): the pool bar's dark background.
+te_seabed_rival_claims_southern = {
+	value = te_seabed_bar_pool_southern
+	subtract = te_seabed_our_lic_southern
+	subtract = te_seabed_unbuilt_disp_southern
+	subtract = te_seabed_rival_lic_southern
+	min = 0
+}
+
+te_seabed_coast_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_coast_southern }
+		value = var:te_seabed_coast_southern
+	}
+}
+
+te_seabed_ports_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_ports_southern }
+		value = var:te_seabed_ports_southern
+	}
+}
+
+# Any scope: the basin's claim weight at the last sharing.
+te_seabed_world_w_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_w_southern }
+		value = global_var:te_seabed_world_w_southern
+	}
+}
+
+# Country scope (spec § 3.5): about the licences one more incorporated coastal
+# state here would win, from its 2 × policy factor of weight at the last
+# sharing's final round (R·Δw/W, rounded down).
+te_seabed_coast_gain_southern = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_seabed_wsum_all_southern
+			global_var:te_seabed_wsum_all_southern > 0
+		}
+		value = global_var:te_seabed_rem_open_southern
+		multiply = te_seabed_coast_weight
+		multiply = te_seabed_policy_factor
+		divide = global_var:te_seabed_wsum_all_southern
+		floor = yes
+		min = 0
+	}
+}
+
+# Country scope: our incorporated coastal states here past the five the Free
+# hover names.
+te_seabed_build_more_southern = {
+	value = te_seabed_coast_disp_southern
+	subtract = 5
+	min = 0
+}

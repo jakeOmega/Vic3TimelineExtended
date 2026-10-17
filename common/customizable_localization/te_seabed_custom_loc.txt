@@ -1,0 +1,101 @@
+﻿# ============================================================================
+# GLOBAL COMMONS — SEABED LICENCES: the Seabed panel's words
+# ============================================================================
+# The month of the last sharing (the Ocean Basins table's "as of", seabed
+# claims spec § 3.3, vanilla's month names), the policy's short name (the
+# overview's Policy box) and the regime's name (its Regime box).
+# ============================================================================
+
+te_seabed_asof_month = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_seabed_asof_month_disp < 1 }
+		localization_key = te_seabed_asof_none
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 1 }
+		localization_key = JANUARY
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 2 }
+		localization_key = FEBRUARY
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 3 }
+		localization_key = MARCH
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 4 }
+		localization_key = APRIL
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 5 }
+		localization_key = MAY
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 6 }
+		localization_key = JUNE
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 7 }
+		localization_key = JULY
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 8 }
+		localization_key = AUGUST
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 9 }
+		localization_key = SEPTEMBER
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 10 }
+		localization_key = OCTOBER
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 11 }
+		localization_key = NOVEMBER
+	}
+	text = {
+		trigger = { te_seabed_asof_month_disp = 12 }
+		localization_key = DECEMBER
+	}
+}
+
+te_seabed_policy_short = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_seabed_policy_value = 3 }
+		localization_key = te_seabed_policy_short_3
+	}
+	text = {
+		trigger = { te_seabed_policy_value = 2 }
+		localization_key = te_seabed_policy_short_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_seabed_policy_short_1
+	}
+}
+
+te_seabed_regime_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_seabed_regime_value = 3 }
+		localization_key = te_seabed_regime_name_3
+	}
+	text = {
+		trigger = { te_seabed_regime_value = 2 }
+		localization_key = te_seabed_regime_name_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_seabed_regime_name_1
+	}
+}

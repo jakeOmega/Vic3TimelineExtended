@@ -866,6 +866,7 @@ te_seabed_weight_tally = {
 # flag stays, so the coast still counts as home).
 te_seabed_weight_set = {
 	set_variable = { name = te_seabed_coast_$B$ value = local_var:te_sb_wn_$B$ }
+	set_variable = { name = te_seabed_ports_$B$ value = local_var:te_sb_wp_$B$ }
 	if = {
 		limit = { local_var:te_sb_wn_$B$ > 0 }
 		set_variable = te_seabed_home_$B$
