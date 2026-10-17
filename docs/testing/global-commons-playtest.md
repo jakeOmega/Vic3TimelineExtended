@@ -227,6 +227,21 @@ navy, and says BROKEN only when all of them read 0.
     Unilateral Licensing or a scramble), divided by the scale. The "+1 licence" cell reads in the
     same units. Build or modernise ships: the term rises at the next sharing; a large obsolete fleet
     should now weigh less than a smaller modern one. Read the `seabed_power_projection` lines first.
+28. **A blockade cuts the Deep-Sea Mine** (seabed claims spec § 6.2). The building is now
+    `city_type = port`, the field every blockade-affected vanilla building shares (fishing wharf,
+    whaling station, shipyard, port, the naval buildings); nothing documents that it is the switch.
+    (a) Blockade an enemy state with Deep-Sea Mine levels and read the building's throughput
+    breakdown: a blockade line up to −75% at blockade level 1 (`BLOCKADE_THROUGHPUT_IMPACT_SCALING`
+    = 0.75), as the state's fishing wharf shows. The state should also need more blockade strength
+    (`BLOCKADE_TARGET_STRENGTH_PER_PRODUCED_UNIT`). (b) The state's map look: port meshes, or
+    nothing new (`levels_per_mesh = -1`), on a coastal state are fine; a mesh out at sea or on an
+    inland city is not. **Fallback** if (a) shows no blockade line: put the field back to
+    `city_type = city` and add a unit state modifier `te_seabed_blockaded`
+    (`building_ocean_mine_throughput_add = -0.75`, already a registered type) applied from
+    `on_monthly_pulse_state` with `multiplier = blockade_level`, its one refresh site.
+    `blockade_level` is documented only as a comparison trigger, so if it can't be read as a value
+    step the multiplier through an `if` chain (`blockade_level >= 0.25`, `0.5`, `0.75`, `1`).
+    If (b) fails alone, keep the port and look for a mesh-free `city_type`.
 
 ### Engine facts the build assumes, unverified
 
@@ -259,6 +274,9 @@ navy, and says BROKEN only when all of them read 0.
   day later the lessee's `every_scope_treaty` / `every_scope_article` walk finds the article with
   `target_country = scope:x` and reads `input_quantity` (self-check `seabed_lease_entry`).
 - `quantity_max_value` reads ROOT as the source, as vanilla Money Transfer's `fixed_income` does.
+- `city_type = port` is what makes a building blockade-affected (item 28). The defines speak of
+  "buildings affected by blockades (such as fisheries and shipyards)"; the six vanilla
+  `city_type = port` buildings include both, across four building groups.
 - `naval_power_projection` reads as a number in a script value (`value = naval_power_projection`).
   The engine docs list it only as a comparison trigger (`docs/engine/triggers_parsed.txt`) and
   `event_targets_summary.txt` lists `navy_size` but not it; vanilla reads it only as a

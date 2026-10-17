@@ -783,5 +783,23 @@ class NavyMeasureTest(unittest.TestCase):
             self.assertIn("seabed_power_projection", f.read())
 
 
+class BlockadeTest(unittest.TestCase):
+    """Seabed claims spec § 6.2: city_type = port, the field every
+    blockade-affected vanilla building shares, so a blockade cuts the mine's
+    throughput; unverified, so the play-test list names the fallback."""
+
+    def test_the_deep_sea_mine_is_a_port_building(self):
+        body = block(read(BUILDINGS), "REPLACE_OR_CREATE:building_ocean_mine")
+        self.assertIn("city_type = port", body)
+        self.assertNotIn("city_type = city", body)
+        self.assertIn("levels_per_mesh = -1", body)
+
+    def test_fallback_is_named(self):
+        with open(os.path.join(REPO, "docs/testing/global-commons-playtest.md"), encoding="utf-8") as f:
+            text = f.read()
+        self.assertIn("te_seabed_blockaded", text)
+        self.assertIn("BLOCKADE_THROUGHPUT_IMPACT_SCALING", text)
+
+
 if __name__ == "__main__":
     unittest.main()

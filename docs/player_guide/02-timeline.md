@@ -263,7 +263,8 @@ mineral deposits](03-economy.md#new-mineral-deposits).
 
 Two late buildings mine several goods at once. The Deep-Sea Mine (Abyssal Plain
 Mining) can be built in any coastal state, and each level needs a seabed licence
-([Seabed licences](#seabed-licences)). The
+([Seabed licences](#seabed-licences)). Like a fishing wharf, it loses up to
+three quarters of its throughput while its state is blockaded. The
 Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
 mines metals and minerals, and after Space Colonization it can switch to the
 Resort Colony production method, which produces art and tourism instead.
