@@ -198,6 +198,54 @@ te_seabed_pass_due = {
 	any_country = { te_seabed_is_claimant = yes }
 }
 
+# No scope: the sharing about to run is the year's first (seabed claims spec
+# § 2.2): January's, or the first mid-year one of a year with no January pass.
+# Read before te_seabed_yearly_pass sets te_seabed_pass_year, which caches it
+# as the global flag te_seabed_first_of_year for its own steps.
+te_seabed_first_sharing_of_year = {
+	OR = {
+		NOT = { has_global_variable = te_seabed_pass_year }
+		AND = {
+			has_global_variable = te_seabed_pass_year
+			global_var:te_seabed_pass_year < te_history_current_year
+		}
+	}
+}
+
+# Country scope. Model: floor_in_force. A stored floor counts for nothing off
+# Sponsor Contractors, in a Scramble, or for a country no longer a claimant;
+# in the Southern Ocean also where the Antarctic Treaty bars it.
+te_seabed_floor_void = {
+	OR = {
+		NOT = { te_seabed_policy_sponsor = yes }
+		te_seabed_regime_scramble = yes
+		NOT = { te_seabed_is_claimant = yes }
+	}
+}
+
+te_seabed_floor_void_pacific = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_atlantic = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_indian = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_arctic = {
+	te_seabed_floor_void = yes
+}
+
+te_seabed_floor_void_southern = {
+	OR = {
+		te_seabed_floor_void = yes
+		te_seabed_southern_barred = yes
+	}
+}
+
 # Country scope: the Seabed tab's checklist (te_window_seabed_tab_unlock_sgui),
 # te_seabed_is_claimant with a line per condition. The tab opens at the next
 # sharing after both hold.

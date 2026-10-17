@@ -79,6 +79,11 @@ te_seabed_unilateral_relations_half = {
 	divide = 2
 }
 
+# ---- Sponsor Contractors' floors (seabed claims spec § 2.2) ----
+# At the year's first sharing a claimant on Sponsor Contractors keeps at least
+# this much of its claims in each basin (model: FLOOR_KEEP, set_floors).
+te_seabed_floor_keep = 0.75
+
 # ---- Long-haul (§ 2.4) ----
 # Display figure: te_seabed_long_haul (te_global_commons_seabed_modifiers.txt)
 # carries building_ocean_mine_throughput_add = -0.25 at multiplier 1.

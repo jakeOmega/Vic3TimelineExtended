@@ -21,6 +21,11 @@
 #            te_seabed_policy(_prev)      1 Survey, 2 Sponsor, 3 Unilateral
 #                                         (absent = 1; never seeded, so a
 #                                         revolution's winner inherits it)
+#            te_seabed_floor_<basin>      Sponsor's floor: the share a sharing
+#                                         may not go below (the year's first
+#                                         sharing sets it; absent = none)
+#            te_seabed_fz_<basin>         what the sharing freezes it at:
+#                                         max(held, floor), scaled to fit
 #            te_seabed_country            flag: has been recorded
 #            te_seabed_shared             flag: took part in a sharing
 #   global   te_seabed_regime             1 Open, 2 Regulated, 3 Scramble
@@ -545,8 +550,13 @@ te_seabed_global_monthly = {
 
 # No scope. Model: yearly_pass. The order is the spec's: state basins, the
 # regime (the UN hook), then each participant's recording, held licences,
-# weights, then the sharing of each pool.
+# Sponsor's floors at the year's first sharing, weights, then the sharing of
+# each pool, each after its floors are fitted.
 te_seabed_yearly_pass = {
+	if = {
+		limit = { te_seabed_first_sharing_of_year = yes }
+		set_global_variable = te_seabed_first_of_year
+	}
 	set_global_variable = { name = te_seabed_pass_year value = te_history_current_year }
 	if = {
 		limit = { has_global_variable = te_seabed_reshare }
@@ -569,10 +579,15 @@ te_seabed_yearly_pass = {
 		te_seabed_record_country = yes
 	}
 	te_seabed_cap_check = yes
-	# 4-5. Held licences and weights.
+	# 4-5. Held licences, the floors (the year's first sharing only; a
+	# mid-year one honours January's) and weights.
 	every_country = {
 		limit = { has_variable = te_seabed_part }
 		te_seabed_compute_held = yes
+		if = {
+			limit = { has_global_variable = te_seabed_first_of_year }
+			te_seabed_set_floors = yes
+		}
 		if = {
 			limit = { te_seabed_is_claimant = yes }
 			te_seabed_compute_weights = yes
@@ -581,11 +596,16 @@ te_seabed_yearly_pass = {
 			te_seabed_zero_weights = yes
 		}
 	}
-	# 6. Each pool.
+	# 6. Each pool, its floors fitted first.
+	te_seabed_fit_floors = { B = pacific }
 	te_seabed_share_basin = { B = pacific }
+	te_seabed_fit_floors = { B = atlantic }
 	te_seabed_share_basin = { B = atlantic }
+	te_seabed_fit_floors = { B = indian }
 	te_seabed_share_basin = { B = indian }
+	te_seabed_fit_floors = { B = arctic }
 	te_seabed_share_basin = { B = arctic }
+	te_seabed_fit_floors = { B = southern }
 	te_seabed_share_basin = { B = southern }
 	# 7. A country that takes no part loses any share it had (it lost its
 	# coast, or its records): its unbuilt share would otherwise stand beside
@@ -632,6 +652,11 @@ te_seabed_yearly_pass = {
 	te_seabed_world_totals = { B = indian }
 	te_seabed_world_totals = { B = arctic }
 	te_seabed_world_totals = { B = southern }
+	te_seabed_floor_check = yes
+	if = {
+		limit = { has_global_variable = te_seabed_first_of_year }
+		remove_global_variable = te_seabed_first_of_year
+	}
 }
 
 # Country scope. Model: yearly_pass, held = the records in its states.
@@ -774,6 +799,7 @@ te_seabed_clear_shares = {
 }
 
 te_seabed_clear_share = {
+	set_variable = { name = te_seabed_floor_$B$ value = 0 }
 	set_variable = { name = te_seabed_unbuilt_$B$ value = 0 }
 	set_variable = { name = te_seabed_held_$B$ value = 0 }
 	set_variable = { name = te_seabed_ent_$B$ value = 0 }
@@ -840,13 +866,175 @@ te_seabed_share_basin = {
 		every_country = {
 			limit = {
 				has_variable = te_seabed_act_$B$
-				var:te_seabed_held_$B$ >= var:te_seabed_e_$B$
+				var:te_seabed_fz_$B$ >= var:te_seabed_e_$B$
 			}
 			te_seabed_share_freeze = { B = $B$ }
 		}
 		te_seabed_share_rebalance = { B = $B$ }
 	}
 	te_seabed_share_round = { B = $B$ }
+}
+
+# ---- Sponsor Contractors' floors (seabed claims spec § 2.2) ----
+
+# Country scope (the yearly pass, the year's first sharing, after held).
+# Model: set_floors. On Sponsor Contractors, outside a Scramble, a claimant's
+# floor in each basin is its holdings plus te_seabed_floor_keep of its claims
+# going into the sharing, rounded down; its Southern floor is its holdings
+# where the Antarctic Treaty bars it. Otherwise no floor.
+te_seabed_set_floors = {
+	if = {
+		limit = {
+			te_seabed_policy_sponsor = yes
+			NOT = { te_seabed_regime_scramble = yes }
+			te_seabed_is_claimant = yes
+		}
+		te_seabed_set_floor = { B = pacific }
+		te_seabed_set_floor = { B = atlantic }
+		te_seabed_set_floor = { B = indian }
+		te_seabed_set_floor = { B = arctic }
+		te_seabed_set_floor = { B = southern }
+		if = {
+			limit = { te_seabed_southern_barred = yes }
+			set_variable = { name = te_seabed_floor_southern value = var:te_seabed_held_southern }
+		}
+	}
+	else = {
+		set_variable = { name = te_seabed_floor_pacific value = 0 }
+		set_variable = { name = te_seabed_floor_atlantic value = 0 }
+		set_variable = { name = te_seabed_floor_indian value = 0 }
+		set_variable = { name = te_seabed_floor_arctic value = 0 }
+		set_variable = { name = te_seabed_floor_southern value = 0 }
+	}
+}
+
+te_seabed_set_floor = {
+	set_variable = {
+		name = te_seabed_floor_$B$
+		value = {
+			value = var:te_seabed_unbuilt_$B$
+			multiply = te_seabed_floor_keep
+			floor = yes
+			add = var:te_seabed_held_$B$
+		}
+	}
+}
+
+# No scope, before te_seabed_share_basin. Model: fit_floors. Each
+# participant's te_seabed_fz_$B$ is what the sharing freezes it at: max(held,
+# floor), the stored floor counting for nothing where te_seabed_floor_void_$B$
+# holds (a mid-year sharing honours January's floor without recomputing it).
+# Where the protected parts (floor - held) exceed what the basin can share
+# beyond its holdings (the pool less the holdings, at least 0), each is scaled
+# down by one factor, rounding down; holdings are never touched.
+te_seabed_fit_floors = {
+	set_global_variable = { name = te_seabed_fz_held_$B$ value = 0 }
+	set_global_variable = { name = te_seabed_fz_prot_$B$ value = 0 }
+	every_country = {
+		limit = {
+			has_variable = te_seabed_part
+			OR = {
+				var:te_seabed_w_$B$ > 0
+				var:te_seabed_held_$B$ > 0
+			}
+		}
+		set_variable = { name = te_seabed_fz_$B$ value = 0 }
+		if = {
+			limit = {
+				has_variable = te_seabed_floor_$B$
+				NOT = { te_seabed_floor_void_$B$ = yes }
+				var:te_seabed_floor_$B$ > var:te_seabed_held_$B$
+			}
+			set_variable = {
+				name = te_seabed_fz_$B$
+				value = {
+					value = var:te_seabed_floor_$B$
+					subtract = var:te_seabed_held_$B$
+				}
+			}
+		}
+		change_global_variable = { name = te_seabed_fz_held_$B$ add = var:te_seabed_held_$B$ }
+		change_global_variable = { name = te_seabed_fz_prot_$B$ add = var:te_seabed_fz_$B$ }
+	}
+	set_local_variable = {
+		name = te_sb_fz_room
+		value = {
+			value = te_seabed_pool_$B$
+			subtract = global_var:te_seabed_fz_held_$B$
+			min = 0
+		}
+	}
+	if = {
+		limit = { global_var:te_seabed_fz_prot_$B$ > 0 }
+		set_global_variable = te_seabed_floor_applied
+	}
+	every_country = {
+		limit = {
+			has_variable = te_seabed_part
+			OR = {
+				var:te_seabed_w_$B$ > 0
+				var:te_seabed_held_$B$ > 0
+			}
+		}
+		if = {
+			limit = { global_var:te_seabed_fz_prot_$B$ > local_var:te_sb_fz_room }
+			set_variable = {
+				name = te_seabed_fz_$B$
+				value = {
+					value = var:te_seabed_fz_$B$
+					multiply = local_var:te_sb_fz_room
+					divide = global_var:te_seabed_fz_prot_$B$
+					floor = yes
+				}
+			}
+		}
+		change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_held_$B$ }
+	}
+}
+
+# No scope, the yearly pass's last step. Self-check (seabed claims spec § 9):
+# after a sharing in which a floor protected something, every basin's
+# entitlements stay within its pool, or its holdings if more (the model's
+# test_floors_scale_down_to_fit). OK once a game, BROKEN whenever it fails.
+te_seabed_floor_check = {
+	if = {
+		limit = { has_global_variable = te_seabed_floor_applied }
+		remove_global_variable = te_seabed_floor_applied
+		set_global_variable = { name = te_seabed_floor_over value = 0 }
+		te_seabed_floor_check_basin = { B = pacific }
+		te_seabed_floor_check_basin = { B = atlantic }
+		te_seabed_floor_check_basin = { B = indian }
+		te_seabed_floor_check_basin = { B = arctic }
+		te_seabed_floor_check_basin = { B = southern }
+		if = {
+			limit = { global_var:te_seabed_floor_over = 0 }
+			if = {
+				limit = { NOT = { has_global_variable = te_seabed_floor_ok_logged } }
+				set_global_variable = te_seabed_floor_ok_logged
+				debug_log = "TE_SELF_CHECK OK seabed_floor_fits protected pacific=[GetGlobalVariable('te_seabed_fz_prot_pacific').GetValue] atlantic=[GetGlobalVariable('te_seabed_fz_prot_atlantic').GetValue] indian=[GetGlobalVariable('te_seabed_fz_prot_indian').GetValue] arctic=[GetGlobalVariable('te_seabed_fz_prot_arctic').GetValue] southern=[GetGlobalVariable('te_seabed_fz_prot_southern').GetValue] (Sponsor floors applied, every basin's entitlements within its pool or its holdings)"
+			}
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN seabed_floor_fits over=[GetGlobalVariable('te_seabed_floor_over').GetValue] unbuilt pacific=[GetGlobalVariable('te_seabed_world_unbuilt_pacific').GetValue] atlantic=[GetGlobalVariable('te_seabed_world_unbuilt_atlantic').GetValue] indian=[GetGlobalVariable('te_seabed_world_unbuilt_indian').GetValue] arctic=[GetGlobalVariable('te_seabed_world_unbuilt_arctic').GetValue] southern=[GetGlobalVariable('te_seabed_world_unbuilt_southern').GetValue] (a basin's entitlements above its pool and its holdings after the floors: te_seabed_fit_floors' scaling; docs/testing/global-commons-playtest.md)"
+		}
+	}
+}
+
+# Entitlements = records + unbuilt (te_seabed_world_totals); over when the
+# unbuilt exceed what the pool leaves beyond the records.
+te_seabed_floor_check_basin = {
+	set_local_variable = {
+		name = te_sb_fl_room
+		value = {
+			value = te_seabed_pool_$B$
+			subtract = global_var:te_seabed_records_$B$
+			min = 0
+		}
+	}
+	if = {
+		limit = { global_var:te_seabed_world_unbuilt_$B$ > local_var:te_sb_fl_room }
+		change_global_variable = { name = te_seabed_floor_over add = 1 }
+	}
 }
 
 # No scope. Model: share_basin's fold_unclaimed. A reserved half no active
@@ -919,18 +1107,19 @@ te_seabed_share_tentative = {
 	}
 }
 
-# Country scope: frozen at what it holds. Its holdings come off the halves in
-# proportion to its tentative shares.
+# Country scope: frozen at what it holds, or its floor if more
+# (te_seabed_fz_$B$). That comes off the halves in proportion to its tentative
+# shares.
 te_seabed_share_freeze = {
 	remove_variable = te_seabed_act_$B$
 	change_global_variable = { name = te_seabed_newly_$B$ add = 1 }
-	change_global_variable = { name = te_seabed_frozen_$B$ add = var:te_seabed_held_$B$ }
+	change_global_variable = { name = te_seabed_frozen_$B$ add = var:te_seabed_fz_$B$ }
 	if = {
 		limit = { var:te_seabed_e_$B$ > 0 }
 		set_local_variable = {
 			name = te_sb_dr
 			value = {
-				value = var:te_seabed_held_$B$
+				value = var:te_seabed_fz_$B$
 				multiply = var:te_seabed_er_$B$
 				divide = var:te_seabed_e_$B$
 			}
@@ -940,7 +1129,7 @@ te_seabed_share_freeze = {
 		set_local_variable = { name = te_sb_dr value = 0 }
 	}
 	change_global_variable = { name = te_seabed_rem_res_$B$ subtract = local_var:te_sb_dr }
-	change_global_variable = { name = te_seabed_rem_open_$B$ subtract = var:te_seabed_held_$B$ }
+	change_global_variable = { name = te_seabed_rem_open_$B$ subtract = var:te_seabed_fz_$B$ }
 	change_global_variable = { name = te_seabed_rem_open_$B$ add = local_var:te_sb_dr }
 }
 
@@ -964,9 +1153,10 @@ te_seabed_share_rebalance = {
 }
 
 # No scope. Entitlements: the active countries' tentative shares rounded down,
-# the leftovers (the pool less the frozen holdings less the floors) one each
-# by largest remainder; a frozen country's is what it holds; and unbuilt =
-# entitlement - held for every participant.
+# the leftovers (the pool less the frozen amounts less the floors) one each
+# by largest remainder; a frozen country's is what it was frozen at (its
+# holdings or its floor); and unbuilt = entitlement - held for every
+# participant.
 te_seabed_share_round = {
 	te_seabed_share_fold_unclaimed = { B = $B$ }
 	te_seabed_share_tentative = { B = $B$ }
@@ -1017,21 +1207,21 @@ te_seabed_share_round = {
 		}
 	}
 	# The engine's truncation can leave the floors one over: take it back from
-	# the smallest remainders that stay at or above their holdings.
+	# the smallest remainders that stay at or above what they're frozen at.
 	while = {
 		limit = {
 			global_var:te_seabed_left_$B$ < 0
 			any_country = {
 				has_variable = te_seabed_act_$B$
 				NOT = { has_variable = te_seabed_cut_$B$ }
-				var:te_seabed_ent_$B$ > var:te_seabed_held_$B$
+				var:te_seabed_ent_$B$ > var:te_seabed_fz_$B$
 			}
 		}
 		ordered_country = {
 			limit = {
 				has_variable = te_seabed_act_$B$
 				NOT = { has_variable = te_seabed_cut_$B$ }
-				var:te_seabed_ent_$B$ > var:te_seabed_held_$B$
+				var:te_seabed_ent_$B$ > var:te_seabed_fz_$B$
 			}
 			order_by = te_seabed_frac_neg_value_$B$
 			position = 0
@@ -1044,7 +1234,7 @@ te_seabed_share_round = {
 		limit = { has_variable = te_seabed_part }
 		if = {
 			limit = { NOT = { has_variable = te_seabed_act_$B$ } }
-			set_variable = { name = te_seabed_ent_$B$ value = var:te_seabed_held_$B$ }
+			set_variable = { name = te_seabed_ent_$B$ value = var:te_seabed_fz_$B$ }
 		}
 		set_variable = {
 			name = te_seabed_unbuilt_$B$

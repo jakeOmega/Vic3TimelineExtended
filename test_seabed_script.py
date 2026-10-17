@@ -66,7 +66,7 @@ def defined(kind_dir):
     for root, _, files in os.walk(os.path.join(REPO, "common", kind_dir)):
         for f in files:
             if f.endswith(".txt"):
-                names |= set(re.findall(r"^(\w+) = \{", read(os.path.relpath(os.path.join(root, f), REPO)), re.M))
+                names |= set(re.findall(r"^(\w+) = (?:\{|-?\d)", read(os.path.relpath(os.path.join(root, f), REPO)), re.M))
     return names
 
 
@@ -126,7 +126,8 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_noshare", "te_seabed_rem_res", "te_seabed_rem_open", "te_seabed_act",
                   "te_seabed_wsum_res", "te_seabed_wsum_all", "te_seabed_left", "te_seabed_pool",
                   "te_seabed_policy_factor_", "te_seabed_coast_weight", "te_seabed_distant_navy_share",
-                  "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare"}
+                  "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare",
+                  "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare"}
         named = {n.rstrip("_") for n in named}
         everything = defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
@@ -140,7 +141,8 @@ class YearlyPassOrderTest(unittest.TestCase):
     def test_order(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
         steps = ["te_seabed_ensure_state_basin", "te_seabed_un_update_regime", "te_seabed_record_country",
-                 "te_seabed_compute_held", "te_seabed_compute_weights", "te_seabed_share_basin = { B = pacific }",
+                 "te_seabed_compute_held", "te_seabed_set_floors", "te_seabed_compute_weights",
+                 "te_seabed_fit_floors = { B = pacific }", "te_seabed_share_basin = { B = pacific }",
                  "te_seabed_share_basin = { B = southern }", "te_seabed_clear_shares", "te_seabed_world_totals"]
         at = [body.index(s) for s in steps]
         self.assertEqual(at, sorted(at))
@@ -216,6 +218,75 @@ class ReviewFixesTest(unittest.TestCase):
         self.assertIn("NOT = { is_revolutionary = yes }",
                       strip_comments(block(read(EFFECTS), "te_seabed_ai_choose_policy")))
         self.assertIn("te_seabed_reshare", strip_comments(read(ON_ACTIONS)))
+
+
+class FloorScriptTest(unittest.TestCase):
+    """Model: set_floors, fit_floors, floor_in_force (seabed claims spec § 2.2)."""
+
+    def test_constant(self):
+        self.assertEqual(literal(read(VALUES), "te_seabed_floor_keep"), m.FLOOR_KEEP)
+
+    def test_pass_order(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        order = ["te_seabed_first_of_year", "te_seabed_record_country",
+                 "te_seabed_compute_held", "te_seabed_set_floors", "te_seabed_compute_weights",
+                 "te_seabed_fit_floors = { B = pacific }", "te_seabed_share_basin = { B = pacific }"]
+        at = [body.index(s) for s in order]
+        self.assertEqual(at, sorted(at))
+        for b in m.BASINS:
+            self.assertLess(body.index(f"te_seabed_fit_floors = {{ B = {b} }}"),
+                            body.index(f"te_seabed_share_basin = {{ B = {b} }}"), b)
+
+    def test_floors_are_set_only_at_the_years_first_sharing(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        self.assertLess(body.index("te_seabed_first_sharing_of_year = yes"), body.index("name = te_seabed_pass_year"))
+        at = body.index("te_seabed_set_floors = yes")
+        guard = body.rindex("if = {", 0, at)
+        self.assertIn("has_global_variable = te_seabed_first_of_year", body[guard:at])
+        trig = strip_comments(block(read(TRIGGERS), "te_seabed_first_sharing_of_year"))
+        self.assertIn("global_var:te_seabed_pass_year < te_history_current_year", trig)
+
+    def test_freeze_reads_the_floor(self):
+        share = strip_comments(block(read(EFFECTS), "te_seabed_share_basin"))
+        self.assertIn("var:te_seabed_fz_$B$ >= var:te_seabed_e_$B$", share)
+        self.assertNotIn("var:te_seabed_held_$B$ >= var:te_seabed_e_$B$", share)
+        freeze = strip_comments(block(read(EFFECTS), "te_seabed_share_freeze"))
+        self.assertNotIn("te_seabed_held_$B$", freeze)
+        rnd = strip_comments(block(read(EFFECTS), "te_seabed_share_round"))
+        self.assertIn("set_variable = { name = te_seabed_ent_$B$ value = var:te_seabed_fz_$B$ }", rnd)
+        self.assertIn("var:te_seabed_ent_$B$ > var:te_seabed_fz_$B$", rnd)
+        # unbuilt stays entitlement less holdings
+        self.assertIn("subtract = var:te_seabed_held_$B$", rnd)
+
+    def test_scramble_and_bar(self):
+        floors = strip_comments(block(read(EFFECTS), "te_seabed_set_floors"))
+        self.assertIn("te_seabed_regime_scramble", floors)
+        self.assertIn("te_seabed_southern_barred", floors)
+        self.assertIn("te_seabed_is_claimant", floors)
+        triggers = strip_comments(read(TRIGGERS))
+        void = block(triggers, "te_seabed_floor_void")
+        for term in ("te_seabed_policy_sponsor", "te_seabed_regime_scramble", "te_seabed_is_claimant"):
+            self.assertIn(term, void)
+        self.assertIn("te_seabed_southern_barred = yes", block(triggers, "te_seabed_floor_void_southern"))
+        for b in m.BASINS:
+            self.assertIn("te_seabed_floor_void = yes", block(triggers, f"te_seabed_floor_void_{b}"))
+
+    def test_fit_floors_scales_protected_parts(self):
+        fit = strip_comments(block(read(EFFECTS), "te_seabed_fit_floors"))
+        self.assertIn("te_seabed_floor_void_$B$ = yes", fit)
+        self.assertIn("divide = global_var:te_seabed_fz_prot_$B$", fit)
+        self.assertIn("floor = yes", fit)
+        self.assertIn("change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_held_$B$ }", fit)
+
+    def test_clear_share_clears_the_floor(self):
+        self.assertIn("te_seabed_floor_$B$", block(read(EFFECTS), "te_seabed_clear_share"))
+
+    def test_self_check(self):
+        effects = strip_comments(read(EFFECTS))
+        check = block(effects, "te_seabed_floor_check")
+        self.assertIn("TE_SELF_CHECK OK seabed_floor_fits", check)
+        self.assertIn("TE_SELF_CHECK BROKEN seabed_floor_fits", check)
+        self.assertIn("te_seabed_floor_check = yes", block(effects, "te_seabed_yearly_pass"))
 
 
 class GateTest(unittest.TestCase):
