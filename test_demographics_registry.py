@@ -4787,10 +4787,19 @@ class TestWealth(unittest.TestCase):
         # owner's ruling on #830: only a loser a war goal was enforced against
         self.assertLess(lost.index("exists = scope:victim_of_wargoal"), lost.index("te_demog_wc_shock"))
         banking = _text(BANKING)
-        sites = [m.end() for m in re.finditer(r"set_variable = \{ name = banking_crisis_wave_crashed value = 1 \}", banking)]
+        # A reach turned away while the country's contagion event is open books that event's crash for the new
+        # wave (banking_contagion_reach, 2026-10-17): no second crash, so no second shock.
+        reach = _block(banking, "banking_contagion_reach")
+        self.assertIn("banking_crisis_wave_crashed", reach)
+        self.assertNotIn("te_demog_wc_shock", reach)
+        crashes = banking.replace(reach, "")
+        sites = re.findall(r"set_variable = \{ name = banking_crisis_wave_crashed value = 1 \}", crashes)
         self.assertEqual(len(sites), 2)
-        for end in sites:
-            self.assertIn("te_demog_wc_shock = { AMOUNT = -5 }", banking[end:end + 300])
+        # The two crashes: an origin's (the wave's start) and a contagion roll's. Each marks it, then shocks.
+        for name in ("banking_crisis_wave_init", "banking_contagion_crash_check"):
+            body = _block(banking, name)
+            self.assertLess(body.index("set_variable = { name = banking_crisis_wave_crashed value = 1 }"),
+                            body.index("te_demog_wc_shock = { AMOUNT = -5 }"), name)
 
     def test_a_won_left_revolution_reads_the_resolved_sides(self):
         """The repair runs between te_civil_war_resolve_sides and te_civil_war_clear (which removes
