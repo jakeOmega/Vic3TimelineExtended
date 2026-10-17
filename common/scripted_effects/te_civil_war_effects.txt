@@ -173,6 +173,10 @@ te_civil_war_resolve_sides = {
 				debug_log = "TE_CIVIL_WAR: the loser's variables read, but te_cw_role is neither 1 nor 2"
 			}
 		}
+		# Expected when the loser had already won a concurrent civil war:
+		# te_civil_war_clear removed its role then (2026-10-17: Portugal won
+		# one of two uprisings, then lost the other). The outcome flags above
+		# came from the end-hook pair, so the repairs still ran on the right side.
 		else = {
 			debug_log = "TE_CIVIL_WAR: the loser resolves but its te_cw_role does not read"
 		}

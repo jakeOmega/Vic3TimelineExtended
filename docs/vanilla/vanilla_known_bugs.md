@@ -1867,6 +1867,17 @@ Failed creating backing building for Building Type
 
 Engine assertions with no script frame, once each in a 300-year observer run (2026-10-10): a pop assigned to a building that does not list it, and a plantation the engine could not place in a state (Moluccas). The second is followed in the same second by the null-building `on_start_expanding_building` lines above. Not actionable from script.
 
+### `pdx_assert.cpp:641` — an occupied state whose occupier no longer exists
+- source: `pdx_assert.cpp:641`
+
+```
+Assertion failed: Attacker 'NULL_OBJ'
+```
+
+The engine's occupation check finds a state still occupied by a country that has been deleted, so the attacker prints as `NULL_OBJ (4294967295 (INVALID))`. No script frame, about once a session. Four times in the 2026-10-10 to 10-17 observer runs. Twice the state's owner was a revolt country during its civil war (`Italian Communist Revolt`, four seconds before that war ended, and `Siamese Fascist Revolt`). On 2026-10-17 (06:14:46, Denmark's state) it came in the same second as the engine creating the Hesse Uprising, before the mod's `on_revolution_start` line for it. Script can't set an occupation. The mod's annexations check that the target is not in a play or at war (subject annexation, voluntary unions, decentralized absorption, colonial collapse); only Operation Polo doesn't, and it runs for India alone. Not actionable from script.
+
+The variant with a named attacker (`Attacker 'Lucca' (58) is not at war with the State owner 'Two Sicilies'`, once on 2026-10-10) stays unregistered. A live occupier at peace with the owner is what a mod transfer of an occupied state (`set_state_owner` in the mod's irredentism events) would produce.
+
 ### `console.cpp:1175` — console commands and their results echoed to the log
 - source: `console.cpp:1175`
 - source: `console.cpp:1203`
