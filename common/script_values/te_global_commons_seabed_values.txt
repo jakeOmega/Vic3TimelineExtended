@@ -137,10 +137,16 @@ te_seabed_regime_value = {
 	}
 }
 
-# Country scope: the claims Sponsor Contractors protects, its unused claims in
-# every basin (a relinquished basin's are 0).
+# Country scope: the claims Sponsor Contractors protects, its own unused claims
+# in every basin (a relinquished basin's are 0). Leased and subject-passed
+# claims are re-divided at every sharing and no floor protects them (seabed
+# claims spec § 2.2), so they cost nothing here.
 te_seabed_protected_claims = {
-	value = te_seabed_unbuilt_total
+	value = te_seabed_own_claims_pacific
+	add = te_seabed_own_claims_atlantic
+	add = te_seabed_own_claims_indian
+	add = te_seabed_own_claims_arctic
+	add = te_seabed_own_claims_southern
 }
 
 # Country scope: the influence each policy holds now.
@@ -411,6 +417,94 @@ te_seabed_unbuilt_total = {
 	}
 }
 
+# Country scope. Model: own_claims. Its claims in the basin less those it holds by
+# lease (te_seabed_lease_unused_<basin>) or its subjects passed it
+# (te_seabed_subj_unused_<basin>): only these can be leased out, passed on
+# or protected by a floor (seabed claims spec §§ 2.2, 4).
+te_seabed_own_claims_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_pacific }
+		value = var:te_seabed_unbuilt_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_pacific }
+		subtract = var:te_seabed_lease_unused_pacific
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_pacific }
+		subtract = var:te_seabed_subj_unused_pacific
+	}
+	min = 0
+}
+
+te_seabed_own_claims_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_atlantic }
+		value = var:te_seabed_unbuilt_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_atlantic }
+		subtract = var:te_seabed_lease_unused_atlantic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_atlantic }
+		subtract = var:te_seabed_subj_unused_atlantic
+	}
+	min = 0
+}
+
+te_seabed_own_claims_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_indian }
+		value = var:te_seabed_unbuilt_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_indian }
+		subtract = var:te_seabed_lease_unused_indian
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_indian }
+		subtract = var:te_seabed_subj_unused_indian
+	}
+	min = 0
+}
+
+te_seabed_own_claims_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_arctic }
+		value = var:te_seabed_unbuilt_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_arctic }
+		subtract = var:te_seabed_lease_unused_arctic
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_arctic }
+		subtract = var:te_seabed_subj_unused_arctic
+	}
+	min = 0
+}
+
+te_seabed_own_claims_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_southern }
+		value = var:te_seabed_unbuilt_southern
+	}
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_southern }
+		subtract = var:te_seabed_lease_unused_southern
+	}
+	if = {
+		limit = { has_variable = te_seabed_subj_unused_southern }
+		subtract = var:te_seabed_subj_unused_southern
+	}
+	min = 0
+}
 # Levels in the country's coastal states without a record, built or queued.
 te_seabed_unrecorded_total = {
 	value = 0

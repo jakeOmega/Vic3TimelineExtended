@@ -378,3 +378,107 @@ te_seabed_policy_buttons_open = {
 		te_seabed_is_claimant = yes
 	}
 }
+
+# ---- Leases (seabed claims spec § 4) ----
+
+# Country scope, the article's possible (ROOT the lessor, scope:other_country
+# the lessee). Model: can_lease. Two claimants; the lessor has own claims in
+# basin $B$; the lessee holds no lease there but this lessor's (so a treaty
+# holding the lease can be renegotiated) and has not relinquished the basin;
+# in the Southern Ocean, neither side barred by the Antarctic Treaty.
+te_seabed_can_lease = {
+	custom_tooltip = {
+		text = te_seabed_lease_lessor_tt
+		te_seabed_is_claimant = yes
+	}
+	custom_tooltip = {
+		text = te_seabed_lease_claims_tt
+		te_seabed_own_claims_$B$ > 0
+	}
+	custom_tooltip = {
+		text = te_seabed_lease_lessee_tt
+		scope:other_country ?= {
+			te_seabed_is_claimant = yes
+			NOT = { has_variable = te_seabed_relinq_$B$ }
+		}
+	}
+	custom_tooltip = {
+		text = te_seabed_lease_one_tt
+		scope:other_country ?= {
+			OR = {
+				NOT = { has_variable = te_seabed_lease_src_$B$ }
+				var:te_seabed_lease_src_$B$ ?= { this = root }
+			}
+		}
+	}
+	trigger_if = {
+		limit = { te_seabed_is_southern_$B$ = yes }
+		custom_tooltip = {
+			text = te_seabed_lease_antarctic_tt
+			NOT = { te_seabed_southern_barred = yes }
+			scope:other_country ?= {
+				NOT = { te_seabed_southern_barred = yes }
+			}
+		}
+	}
+}
+
+# The article's requirement_to_maintain (ROOT the article): both sides still
+# claim, and in the Southern Ocean neither is barred. A lease whose article
+# breaks ends at the next sharing (te_seabed_lease_shift_basin).
+te_seabed_lease_maintained = {
+	custom_tooltip = {
+		text = te_seabed_lease_maintain_tt
+		scope:source_country ?= { te_seabed_is_claimant = yes }
+		scope:target_country ?= { te_seabed_is_claimant = yes }
+	}
+	trigger_if = {
+		limit = { te_seabed_is_southern_$B$ = yes }
+		custom_tooltip = {
+			text = te_seabed_lease_antarctic_tt
+			scope:source_country ?= {
+				NOT = { te_seabed_southern_barred = yes }
+			}
+			scope:target_country ?= {
+				NOT = { te_seabed_southern_barred = yes }
+			}
+		}
+	}
+}
+
+# Country scope, the lessee, its lessor saved as scope:te_sb_lessor
+# (te_seabed_lease_shift_basin). Model: lease_stands, less the article, which
+# the caller found: both sides claim; in the Southern Ocean neither is barred.
+te_seabed_lease_stands = {
+	te_seabed_is_claimant = yes
+	exists = scope:te_sb_lessor
+	scope:te_sb_lessor = { te_seabed_is_claimant = yes }
+	trigger_if = {
+		limit = { te_seabed_is_southern_$B$ = yes }
+		NOT = { te_seabed_southern_barred = yes }
+		scope:te_sb_lessor = {
+			NOT = { te_seabed_southern_barred = yes }
+		}
+	}
+}
+
+# No scope: the basin is the Southern Ocean, for the Antarctic Treaty's bar.
+te_seabed_is_southern_pacific = {
+	always = no
+}
+
+te_seabed_is_southern_atlantic = {
+	always = no
+}
+
+te_seabed_is_southern_indian = {
+	always = no
+}
+
+te_seabed_is_southern_arctic = {
+	always = no
+}
+
+te_seabed_is_southern_southern = {
+	always = yes
+}

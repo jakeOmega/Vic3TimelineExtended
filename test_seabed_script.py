@@ -137,9 +137,13 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_policy_factor_", "te_seabed_coast_weight", "te_seabed_distant_navy_share",
                   "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare",
                   "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare", "te_seabed_relinq",
-                  "te_seabed_dr", "te_seabed_need_navy", "te_seabed_queued", "te_seabed_fprot"}
+                  "te_seabed_dr", "te_seabed_need_navy", "te_seabed_queued", "te_seabed_fprot",
+                  "te_seabed_sh", "te_seabed_lease_src", "te_seabed_lease_n", "te_seabed_lease_built",
+                  "te_seabed_lease_unused", "te_seabed_subj_unused", "te_seabed_pass_built",
+                  "te_seabed_pass_unused", "te_seabed_own_claims"}
         named = {n.rstrip("_") for n in named}
-        everything = defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
+        everything = (defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
+                      | defined("diplomatic_actions"))
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
         self.assertEqual(missing, [])
 
@@ -265,8 +269,9 @@ class FloorScriptTest(unittest.TestCase):
         rnd = strip_comments(block(read(EFFECTS), "te_seabed_share_round"))
         self.assertIn("set_variable = { name = te_seabed_ent_$B$ value = var:te_seabed_fz_$B$ }", rnd)
         self.assertIn("var:te_seabed_ent_$B$ > var:te_seabed_fz_$B$", rnd)
-        # unbuilt stays entitlement less holdings
-        self.assertIn("subtract = var:te_seabed_held_$B$", rnd)
+        # unbuilt stays entitlement less holdings, as the sharing counts them
+        # (after the leases' shift, seabed_model.share_held)
+        self.assertIn("subtract = var:te_seabed_sh_$B$", rnd)
 
     def test_scramble_and_bar(self):
         floors = strip_comments(block(read(EFFECTS), "te_seabed_set_floors"))
@@ -286,7 +291,7 @@ class FloorScriptTest(unittest.TestCase):
         self.assertIn("te_seabed_floor_void_$B$ = yes", fit)
         self.assertIn("divide = global_var:te_seabed_fz_prot_$B$", fit)
         self.assertIn("floor = yes", fit)
-        self.assertIn("change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_held_$B$ }", fit)
+        self.assertIn("change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_sh_$B$ }", fit)
 
     def test_every_participant_gets_a_fresh_frozen_amount(self):
         """Review C1: te_seabed_share_round gives a participant outside the

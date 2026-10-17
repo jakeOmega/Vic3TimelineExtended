@@ -1,0 +1,328 @@
+﻿# ============================================================================
+# TREATY ARTICLES: Lease <Basin> Seabed Claims (seabed claims, phase 2)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md
+# § 4; model: scripts/analysis/seabed_model.py § LEASES. One directed article
+# per ocean basin: the source leases N of its own claims there to the target.
+# N is the lease's total: the licences the target builds on it plus its
+# unused leased claims never exceed it. At entry into force up to N of the
+# source's claims move at once (te_seabed_lease_start, then the hidden
+# te_seabed.1 a day later); each sharing re-divides them and tops the lease
+# back up from the source's own claims; the licences built on it count as
+# the source's holdings in the sharing, and stay the target's when the lease
+# ends. The sharing reads the treaty itself (te_seabed_lease_shift_held), so
+# an article that ended for any reason ends its lease there.
+# Enforceable, so a war's winner can impose one: this is the earlier design's
+# Seize Seabed Claims war goal. The usual price is a Money Transfer the other
+# way; the article sets none. The five are one template, held alike by
+# test_seabed_leases.py.
+# ============================================================================
+te_seabed_lease_pacific = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_pacific
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = pacific }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = pacific }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_pacific_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = pacific }
+		}
+	}
+}
+
+te_seabed_lease_atlantic = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_atlantic
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = atlantic }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = atlantic }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_atlantic_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = atlantic }
+		}
+	}
+}
+
+te_seabed_lease_indian = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_indian
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = indian }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = indian }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_indian_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = indian }
+		}
+	}
+}
+
+te_seabed_lease_arctic = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_arctic
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = arctic }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = arctic }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_arctic_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = arctic }
+		}
+	}
+}
+
+te_seabed_lease_southern = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	kind = directed
+	cost = 25
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		giftable
+	}
+
+	# The lessee gains the claims and pays the upkeep, as Money Transfer's
+	# receiver does.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	required_inputs = {
+		quantity
+	}
+
+	quantity_min_value = {
+		value = 1
+	}
+	# At most the lessor's own claims there (ROOT is the source).
+	quantity_max_value = {
+		value = te_seabed_own_claims_southern
+		min = 1
+	}
+
+	visible = {
+		te_global_commons_enabled = yes
+		has_technology_researched = abyssal_plain_mining
+	}
+
+	possible = {
+		te_seabed_can_lease = { B = southern }
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			te_seabed_lease_maintained = { B = southern }
+		}
+	}
+
+	# The designer re-walks this every frame with scope:article_options
+	# unbound: the call waits for both parties.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = te_seabed_lease_southern_effects_desc
+		scope:article_options = {
+			source_country = { save_scope_as = te_sb_lessor }
+			target_country = { save_scope_as = te_sb_lessee }
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_lessor
+				exists = scope:te_sb_lessee
+			}
+			te_seabed_lease_start = { B = southern }
+		}
+	}
+}

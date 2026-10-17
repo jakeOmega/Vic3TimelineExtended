@@ -33,6 +33,13 @@
 #                                         protected claims)), scaled to fit
 #            te_seabed_relinq_<basin>     flag: relinquished, weight 0 there
 #                                         until Claim Again
+#            te_seabed_sh_<basin>         held as the sharing counts it: a
+#                                         lease's licences go to its lessor
+#            te_seabed_lease_src_<basin>  its lease there: the lessor (a
+#                                         country), with te_seabed_lease_n_,
+#                                         _built_ and _unused_<basin> (its
+#                                         total, licences built on it, unused
+#                                         claims, part of unbuilt)
 #            te_seabed_fee_cached         the holding fee a week, the
 #                                         modifier's multiplier
 #            te_seabed_policy_changed     month of the last policy change
@@ -73,6 +80,9 @@
 #                     the holding fee (te_seabed_fee_refresh)
 #   monthly state     te_seabed_refresh_long_haul: Long-Haul Seabed Operations
 #   owner change      te_seabed_on_state_owner_change
+#   treaty article    a Lease <Basin> Seabed Claims article's entry
+#                     (122_seabed_lease.txt): te_seabed_lease_start, then the
+#                     hidden te_seabed.1 a day later (te_seabed_events.txt)
 #   monthly global    te_seabed_global_monthly: the yearly sharing when due
 #                     (te_seabed_yearly_pass), the follow-state self-check
 #   yearly country    te_seabed_ai_choose_policy (AI countries only)
@@ -146,7 +156,8 @@ te_seabed_ensure_state_basin = {
 # for every participant at the start of the yearly sharing. Returns first,
 # over every coastal state; then new levels and swaps; then the holder stamp
 # on every coastal state (so a level built since is charged to this country
-# if the state changes hands before the next recording).
+# if the state changes hands before the next recording); then what it took
+# comes off its own claims before its leased ones (te_seabed_lease_consume).
 te_seabed_record_country = {
 	te_seabed_init_country = yes
 	save_scope_as = te_seabed_payer
@@ -208,6 +219,7 @@ te_seabed_record_country = {
 		limit = { is_coastal = yes }
 		set_variable = { name = te_seabed_holder value = scope:te_seabed_payer }
 	}
+	te_seabed_lease_consume = yes
 }
 
 # State scope (te_seabed_record_country's third walk). Model: queued_by_basin.
@@ -652,9 +664,10 @@ te_seabed_global_monthly = {
 }
 
 # No scope. Model: yearly_pass. The order is the spec's: state basins, the
-# regime (the UN hook), then each participant's recording, held licences,
-# Sponsor's floors at the year's first sharing, weights, then the sharing of
-# each pool, each after its floors are fitted.
+# regime (the UN hook), then each participant's recording, held licences and
+# the leases' shift, Sponsor's floors at the year's first sharing, weights,
+# then the sharing of each pool, each after its floors are fitted, then the
+# leases' settling.
 te_seabed_yearly_pass = {
 	if = {
 		limit = { te_seabed_first_sharing_of_year = yes }
@@ -696,11 +709,17 @@ te_seabed_yearly_pass = {
 			}
 		}
 	}
-	# 4-5. Held licences, the floors (the year's first sharing only; a
-	# mid-year one honours January's) and weights.
+	# 4. Held licences, then the leases' shift: the sharing counts a lease's
+	# licences as its lessor's (te_seabed_sh_<basin>).
 	every_country = {
 		limit = { has_variable = te_seabed_part }
 		te_seabed_compute_held = yes
+	}
+	te_seabed_lease_shift_held = yes
+	# 5. The floors (the year's first sharing only; a mid-year one honours
+	# January's) and weights.
+	every_country = {
+		limit = { has_variable = te_seabed_part }
 		if = {
 			limit = { has_global_variable = te_seabed_first_of_year }
 			te_seabed_set_floors = yes
@@ -739,6 +758,8 @@ te_seabed_yearly_pass = {
 		set_variable = te_seabed_shared
 		remove_variable = te_seabed_part
 	}
+	# 7b. Leases: those no longer standing go, the rest are topped up.
+	te_seabed_settle_leases = yes
 	# 8. A policy that holds influence for a country that can no longer claim.
 	every_country = {
 		limit = {
@@ -939,6 +960,11 @@ te_seabed_clear_share = {
 	te_seabed_clear_floor = { B = $B$ }
 	set_variable = { name = te_seabed_unbuilt_$B$ value = 0 }
 	set_variable = { name = te_seabed_held_$B$ value = 0 }
+	set_variable = { name = te_seabed_sh_$B$ value = 0 }
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_$B$ }
+		set_variable = { name = te_seabed_lease_unused_$B$ value = 0 }
+	}
 	set_variable = { name = te_seabed_ent_$B$ value = 0 }
 	te_seabed_zero_weight = { B = $B$ }
 }
@@ -946,7 +972,8 @@ te_seabed_clear_share = {
 # ---- The water-filling (model: share_basin) ----
 
 # No scope. Water-fill pool $B$ (§ 2.4 step 2; § 3.2). Participants are the
-# countries marked te_seabed_part with weight or holdings here. Under the
+# countries marked te_seabed_part with weight or holdings here (te_seabed_sh_$B$,
+# after the leases' shift). Under the
 # Regulated regime the pool is a reserved half (eligible parties only) and an
 # open half (everyone), filled together: a country's tentative entitlement is
 # its share of each half it claims in, and it is frozen when its holdings
@@ -961,7 +988,7 @@ te_seabed_share_basin = {
 			has_variable = te_seabed_part
 			OR = {
 				var:te_seabed_w_$B$ > 0
-				var:te_seabed_held_$B$ > 0
+				var:te_seabed_sh_$B$ > 0
 			}
 		}
 		set_variable = te_seabed_act_$B$
@@ -1190,7 +1217,7 @@ te_seabed_set_floors = {
 		te_seabed_set_floor = { B = southern }
 		if = {
 			limit = { te_seabed_southern_barred = yes }
-			set_variable = { name = te_seabed_floor_southern value = var:te_seabed_held_southern }
+			set_variable = { name = te_seabed_floor_southern value = var:te_seabed_sh_southern }
 			set_variable = { name = te_seabed_fprot_southern value = 0 }
 		}
 	}
@@ -1203,11 +1230,13 @@ te_seabed_set_floors = {
 	}
 }
 
+# Own claims only: no floor protects leased or subject-passed claims (spec
+# § 2.2). Holdings as the sharing counts them, after the leases' shift.
 te_seabed_set_floor = {
 	set_variable = {
 		name = te_seabed_fprot_$B$
 		value = {
-			value = var:te_seabed_unbuilt_$B$
+			value = te_seabed_own_claims_$B$
 			multiply = te_seabed_floor_keep
 			floor = yes
 		}
@@ -1216,7 +1245,7 @@ te_seabed_set_floor = {
 		name = te_seabed_floor_$B$
 		value = {
 			value = var:te_seabed_fprot_$B$
-			add = var:te_seabed_held_$B$
+			add = var:te_seabed_sh_$B$
 		}
 	}
 }
@@ -1242,6 +1271,11 @@ te_seabed_relinquish = {
 	set_variable = { name = te_seabed_floor_$B$ value = 0 }
 	set_variable = { name = te_seabed_fprot_$B$ value = 0 }
 	set_variable = te_seabed_relinq_$B$
+	# Leased claims go too, without counting as built on the lease.
+	if = {
+		limit = { has_variable = te_seabed_lease_unused_$B$ }
+		set_variable = { name = te_seabed_lease_unused_$B$ value = 0 }
+	}
 }
 
 # Country scope (the basin's Claim Again button). Model: claim_again. The
@@ -1250,9 +1284,280 @@ te_seabed_claim_again = {
 	remove_variable = te_seabed_relinq_$B$
 }
 
+# ============================================================================
+# Leases (model: start_lease, lease_consume, share_held, settle_leases; seabed
+# claims spec § 4)
+# ============================================================================
+# A Lease <Basin> Seabed Claims article (122_seabed_lease.txt) leases N of
+# the lessor's own claims in a basin to the lessee, N being the lease's total:
+# the licences built on it plus its unused claims. The lessee keeps it in
+# te_seabed_lease_src_<basin> (the lessor), _n_, _built_ and _unused_<basin>;
+# the unused claims are part of its te_seabed_unbuilt_<basin>. The treaty is
+# the record: each sharing reads the in-force article again
+# (te_seabed_lease_shift_basin), so a lease ends there whatever ended its
+# article, annexation included.
+
+# No scope: an article's on_entry_into_force, the parties saved as
+# scope:te_sb_lessor and scope:te_sb_lessee. The hook only marks the lessee
+# and dispatches te_seabed.1 a day later, which reads the article from the
+# lessee's treaties (scripting_best_practices.md: a treaty hook dispatches a
+# country event, a day late when it walks treaties).
+te_seabed_lease_start = {
+	hidden_effect = {
+		scope:te_sb_lessee = {
+			set_variable = te_seabed_lease_due_$B$
+			trigger_event = { id = te_seabed.1 days = 1 }
+		}
+	}
+}
+
+# Country scope, the lessee (te_seabed.1, and the sharing's shift step for a
+# start still due): every basin with a lease due.
+te_seabed_lease_take_up = {
+	te_seabed_lease_enter = { B = pacific }
+	te_seabed_lease_enter = { B = atlantic }
+	te_seabed_lease_enter = { B = indian }
+	te_seabed_lease_enter = { B = arctic }
+	te_seabed_lease_enter = { B = southern }
+}
+
+# Country scope, the lessee. Model: start_lease. A lease due in basin $B$ and
+# not yet recorded starts from its in-force article: the lessor and N (the
+# article's quantity) are stored, and up to N of the lessor's own claims there
+# move at once, so the lessee can build before the next sharing.
+te_seabed_lease_enter = {
+	if = {
+		limit = { has_variable = te_seabed_lease_due_$B$ }
+		remove_variable = te_seabed_lease_due_$B$
+		if = {
+			limit = { NOT = { has_variable = te_seabed_lease_src_$B$ } }
+			save_scope_as = te_sb_lessee
+			if = {
+				limit = { exists = scope:te_sb_found }
+				clear_saved_scope = te_sb_found
+			}
+			every_scope_treaty = {
+				every_scope_article = {
+					limit = {
+						has_type = te_seabed_lease_$B$
+						target_country = scope:te_sb_lessee
+						exists = input_quantity
+					}
+					save_scope_as = te_sb_found
+				}
+			}
+			if = {
+				limit = { exists = scope:te_sb_found }
+				scope:te_sb_found = {
+					source_country = { save_scope_as = te_sb_lessor }
+				}
+				te_seabed_init_country = yes
+				scope:te_sb_lessor = { te_seabed_init_country = yes }
+				set_variable = { name = te_seabed_lease_src_$B$ value = scope:te_sb_lessor }
+				set_variable = { name = te_seabed_lease_n_$B$ value = scope:te_sb_found.input_quantity }
+				set_variable = { name = te_seabed_lease_built_$B$ value = 0 }
+				set_local_variable = {
+					name = te_sb_lk
+					value = {
+						value = var:te_seabed_lease_n_$B$
+						max = scope:te_sb_lessor.te_seabed_own_claims_$B$
+						min = 0
+					}
+				}
+				scope:te_sb_lessor = {
+					change_variable = { name = te_seabed_unbuilt_$B$ subtract = local_var:te_sb_lk }
+				}
+				change_variable = { name = te_seabed_unbuilt_$B$ add = local_var:te_sb_lk }
+				set_variable = { name = te_seabed_lease_unused_$B$ value = local_var:te_sb_lk }
+			}
+		}
+	}
+}
+
+# Country scope (the end of te_seabed_record_country). Model: lease_consume.
+# What the recording took comes off the country's own claims first, then off
+# its leased ones, which become licences built on the lease.
+te_seabed_lease_consume = {
+	te_seabed_lease_consume_basin = { B = pacific }
+	te_seabed_lease_consume_basin = { B = atlantic }
+	te_seabed_lease_consume_basin = { B = indian }
+	te_seabed_lease_consume_basin = { B = arctic }
+	te_seabed_lease_consume_basin = { B = southern }
+}
+
+te_seabed_lease_consume_basin = {
+	if = {
+		limit = {
+			has_variable = te_seabed_lease_unused_$B$
+			var:te_seabed_lease_unused_$B$ > var:te_seabed_unbuilt_$B$
+		}
+		set_local_variable = {
+			name = te_sb_lc
+			value = {
+				value = var:te_seabed_unbuilt_$B$
+				min = 0
+			}
+		}
+		set_variable = {
+			name = te_seabed_lease_built_$B$
+			value = {
+				value = var:te_seabed_lease_built_$B$
+				add = var:te_seabed_lease_unused_$B$
+				subtract = local_var:te_sb_lc
+			}
+		}
+		set_variable = { name = te_seabed_lease_unused_$B$ value = local_var:te_sb_lc }
+	}
+}
+
+# No scope, the yearly pass after every participant's held. Model: share_held.
+# Every participant's te_seabed_sh_<basin> starts at its held; then each
+# standing lease's licences, at most the lessee's holdings, count as its
+# lessor's instead.
+te_seabed_lease_shift_held = {
+	every_country = {
+		limit = { has_variable = te_seabed_part }
+		set_variable = { name = te_seabed_sh_pacific value = var:te_seabed_held_pacific }
+		set_variable = { name = te_seabed_sh_atlantic value = var:te_seabed_held_atlantic }
+		set_variable = { name = te_seabed_sh_indian value = var:te_seabed_held_indian }
+		set_variable = { name = te_seabed_sh_arctic value = var:te_seabed_held_arctic }
+		set_variable = { name = te_seabed_sh_southern value = var:te_seabed_held_southern }
+	}
+	every_country = {
+		limit = { has_variable = te_seabed_part }
+		te_seabed_lease_take_up = yes
+		te_seabed_lease_shift_basin = { B = pacific }
+		te_seabed_lease_shift_basin = { B = atlantic }
+		te_seabed_lease_shift_basin = { B = indian }
+		te_seabed_lease_shift_basin = { B = arctic }
+		te_seabed_lease_shift_basin = { B = southern }
+	}
+}
+
+# Country scope, a participant. Model: lease_stands. Its lease in basin $B$
+# stands while an in-force article from its recorded lessor names it and both
+# claim (te_seabed_lease_stands); the flag te_seabed_lease_ok_$B$ tells
+# te_seabed_settle_lease so. The article's quantity is read again, as a
+# renegotiation may change it.
+te_seabed_lease_shift_basin = {
+	if = {
+		limit = { has_variable = te_seabed_lease_src_$B$ }
+		if = {
+			limit = { has_variable = te_seabed_lease_ok_$B$ }
+			remove_variable = te_seabed_lease_ok_$B$
+		}
+		save_scope_as = te_sb_lessee
+		if = {
+			limit = { exists = scope:te_sb_lessor }
+			clear_saved_scope = te_sb_lessor
+		}
+		if = {
+			limit = { exists = scope:te_sb_found }
+			clear_saved_scope = te_sb_found
+		}
+		var:te_seabed_lease_src_$B$ ?= { save_scope_as = te_sb_lessor }
+		if = {
+			limit = { exists = scope:te_sb_lessor }
+			every_scope_treaty = {
+				every_scope_article = {
+					limit = {
+						has_type = te_seabed_lease_$B$
+						source_country = scope:te_sb_lessor
+						target_country = scope:te_sb_lessee
+						exists = input_quantity
+					}
+					save_scope_as = te_sb_found
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:te_sb_found
+				te_seabed_lease_stands = { B = $B$ }
+			}
+			set_variable = te_seabed_lease_ok_$B$
+			set_variable = { name = te_seabed_lease_n_$B$ value = scope:te_sb_found.input_quantity }
+			set_local_variable = {
+				name = te_sb_ls
+				value = {
+					value = var:te_seabed_lease_built_$B$
+					max = var:te_seabed_held_$B$
+					min = 0
+				}
+			}
+			change_variable = { name = te_seabed_sh_$B$ subtract = local_var:te_sb_ls }
+			scope:te_sb_lessor = {
+				change_variable = { name = te_seabed_sh_$B$ add = local_var:te_sb_ls }
+			}
+		}
+	}
+}
+
+# No scope, the yearly pass after the sharing and the stale shares. Model:
+# settle_leases.
+te_seabed_settle_leases = {
+	every_country = {
+		limit = { has_variable = te_seabed_country }
+		te_seabed_settle_lease = { B = pacific }
+		te_seabed_settle_lease = { B = atlantic }
+		te_seabed_settle_lease = { B = indian }
+		te_seabed_settle_lease = { B = arctic }
+		te_seabed_settle_lease = { B = southern }
+	}
+}
+
+# Country scope. A lease the shift step found no longer standing is cleared:
+# its licences are the lessee's own from now on, and its unused claims were
+# re-divided by the sharing. A standing one counts at most the lessee's
+# holdings as built on it (a demolished level gives the lease its room back)
+# and, unless the lessee relinquished the basin, is topped back up to N less
+# its licences from the lessor's own claims, as far as they go.
+te_seabed_settle_lease = {
+	if = {
+		limit = { has_variable = te_seabed_lease_src_$B$ }
+		if = {
+			limit = { NOT = { has_variable = te_seabed_lease_ok_$B$ } }
+			remove_variable = te_seabed_lease_src_$B$
+			remove_variable = te_seabed_lease_n_$B$
+			remove_variable = te_seabed_lease_built_$B$
+			remove_variable = te_seabed_lease_unused_$B$
+		}
+		else = {
+			remove_variable = te_seabed_lease_ok_$B$
+			set_variable = {
+				name = te_seabed_lease_built_$B$
+				value = {
+					value = var:te_seabed_lease_built_$B$
+					max = var:te_seabed_held_$B$
+				}
+			}
+			if = {
+				limit = { NOT = { has_variable = te_seabed_relinq_$B$ } }
+				var:te_seabed_lease_src_$B$ = { save_scope_as = te_sb_lessor }
+				set_local_variable = {
+					name = te_sb_lt
+					value = {
+						value = var:te_seabed_lease_n_$B$
+						subtract = var:te_seabed_lease_built_$B$
+						subtract = var:te_seabed_lease_unused_$B$
+						max = scope:te_sb_lessor.te_seabed_own_claims_$B$
+						min = 0
+					}
+				}
+				scope:te_sb_lessor = {
+					change_variable = { name = te_seabed_unbuilt_$B$ subtract = local_var:te_sb_lt }
+				}
+				change_variable = { name = te_seabed_unbuilt_$B$ add = local_var:te_sb_lt }
+				change_variable = { name = te_seabed_lease_unused_$B$ add = local_var:te_sb_lt }
+			}
+		}
+	}
+}
+
 # No scope, before te_seabed_share_basin. Model: fit_floors. Each
 # participant's te_seabed_fz_$B$ is what the sharing freezes it at:
-# max(held, min(floor, held + protected claims)), the stored floor counting for
+# max(held, min(floor, held + protected claims)), held being te_seabed_sh_$B$
+# (after the leases' shift), the stored floor counting for
 # nothing where te_seabed_floor_void_$B$ holds (a mid-year sharing honours
 # January's figures without recomputing them; a licence lost since adds no
 # protection, review I3). Every participant's is written first, 0 outside the
@@ -1273,7 +1578,7 @@ te_seabed_fit_floors = {
 			has_variable = te_seabed_part
 			OR = {
 				var:te_seabed_w_$B$ > 0
-				var:te_seabed_held_$B$ > 0
+				var:te_seabed_sh_$B$ > 0
 			}
 		}
 		if = {
@@ -1281,20 +1586,20 @@ te_seabed_fit_floors = {
 				has_variable = te_seabed_floor_$B$
 				has_variable = te_seabed_fprot_$B$
 				NOT = { te_seabed_floor_void_$B$ = yes }
-				var:te_seabed_floor_$B$ > var:te_seabed_held_$B$
+				var:te_seabed_floor_$B$ > var:te_seabed_sh_$B$
 			}
 			set_variable = {
 				name = te_seabed_fz_$B$
 				value = {
-					value = var:te_seabed_held_$B$
+					value = var:te_seabed_sh_$B$
 					add = var:te_seabed_fprot_$B$
 					max = var:te_seabed_floor_$B$
-					subtract = var:te_seabed_held_$B$
+					subtract = var:te_seabed_sh_$B$
 					min = 0
 				}
 			}
 		}
-		change_global_variable = { name = te_seabed_fz_held_$B$ add = var:te_seabed_held_$B$ }
+		change_global_variable = { name = te_seabed_fz_held_$B$ add = var:te_seabed_sh_$B$ }
 		change_global_variable = { name = te_seabed_fz_prot_$B$ add = var:te_seabed_fz_$B$ }
 	}
 	set_local_variable = {
@@ -1314,7 +1619,7 @@ te_seabed_fit_floors = {
 			has_variable = te_seabed_part
 			OR = {
 				var:te_seabed_w_$B$ > 0
-				var:te_seabed_held_$B$ > 0
+				var:te_seabed_sh_$B$ > 0
 			}
 		}
 		if = {
@@ -1329,7 +1634,7 @@ te_seabed_fit_floors = {
 				}
 			}
 		}
-		change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_held_$B$ }
+		change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_sh_$B$ }
 	}
 }
 
@@ -1497,8 +1802,8 @@ te_seabed_share_rebalance = {
 # No scope. Entitlements: the active countries' tentative shares rounded down,
 # the leftovers (the pool less the frozen amounts less the floors) one each
 # by largest remainder; a frozen country's is what it was frozen at (its
-# holdings or its floor); and unbuilt = entitlement - held for every
-# participant.
+# holdings or its floor); and unbuilt = entitlement - held (te_seabed_sh_$B$)
+# for every participant.
 te_seabed_share_round = {
 	te_seabed_share_fold_unclaimed = { B = $B$ }
 	te_seabed_share_tentative = { B = $B$ }
@@ -1583,9 +1888,15 @@ te_seabed_share_round = {
 			name = te_seabed_unbuilt_$B$
 			value = {
 				value = var:te_seabed_ent_$B$
-				subtract = var:te_seabed_held_$B$
+				subtract = var:te_seabed_sh_$B$
 				min = 0
 			}
+		}
+		# The sharing re-divides leased claims too; te_seabed_settle_leases
+		# tops each standing lease back up from its lessor's claims.
+		if = {
+			limit = { has_variable = te_seabed_lease_unused_$B$ }
+			set_variable = { name = te_seabed_lease_unused_$B$ value = 0 }
 		}
 		if = {
 			limit = { has_variable = te_seabed_act_$B$ }

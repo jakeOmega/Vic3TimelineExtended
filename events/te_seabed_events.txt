@@ -1,0 +1,20 @@
+﻿namespace = te_seabed
+
+# ============================================================================
+# SEABED LICENCES — HIDDEN EVENTS
+# ============================================================================
+# common/scripted_effects/te_global_commons_seabed_effects.txt § Leases;
+# docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md § 4.
+# ============================================================================
+
+# A Lease <Basin> Seabed Claims article came into force a day ago with this
+# country as the lessee (te_seabed_lease_start): each lease due starts from
+# its article in the country's treaties (te_seabed_lease_take_up).
+te_seabed.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_seabed_lease_take_up = yes
+	}
+}
