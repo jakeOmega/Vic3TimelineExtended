@@ -1144,17 +1144,32 @@ te_seabed_build_in_list = {
 	}
 }
 
+# Slot $K$ (position $P$) only when the basin has at least $K$ such states: a
+# position past the list's end clamps to its last state, which then filled
+# every slot after it, and logged "Given position was bigger than the list,
+# capping at list size" on each hover, check_range_bounds = no or not
+# (scripting_best_practices.md, ordered_scope_state clamping; 2026-10-17).
 te_seabed_build_in_slot = {
-	ordered_scope_state = {
+	if = {
 		limit = {
-			is_coastal = yes
-			has_variable = te_seabed_basin
-			var:te_seabed_basin = $N$
+			any_scope_state = {
+				is_coastal = yes
+				has_variable = te_seabed_basin
+				var:te_seabed_basin = $N$
+				count >= $K$
+			}
 		}
-		order_by = te_seabed_state_port_levels
-		position = $P$
-		check_range_bounds = no
-		save_temporary_scope_as = te_sb_build_$K$
+		ordered_scope_state = {
+			limit = {
+				is_coastal = yes
+				has_variable = te_seabed_basin
+				var:te_seabed_basin = $N$
+			}
+			order_by = te_seabed_state_port_levels
+			position = $P$
+			check_range_bounds = no
+			save_temporary_scope_as = te_sb_build_$K$
+		}
 	}
 	if = {
 		limit = { exists = scope:te_sb_build_$K$ }
@@ -1411,13 +1426,13 @@ te_seabed_lease_take_up = {
 		if = {
 			limit = { NOT = { has_global_variable = te_seabed_selfcheck_lease_done } }
 			set_global_variable = te_seabed_selfcheck_lease_done
-			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=pacific lessee=[THIS.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_pacific').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_pacific').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
+			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=pacific lessee=[THIS.GetCountry.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_pacific').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_pacific').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
 			debug_log_scopes = yes
 		}
 	}
 	else_if = {
 		limit = { local_var:te_sb_le = 2 }
-		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=pacific lessee=[THIS.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_pacific article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
+		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=pacific lessee=[THIS.GetCountry.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_pacific article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
 		debug_log_scopes = yes
 	}
 	set_local_variable = { name = te_sb_le value = 0 }
@@ -1427,13 +1442,13 @@ te_seabed_lease_take_up = {
 		if = {
 			limit = { NOT = { has_global_variable = te_seabed_selfcheck_lease_done } }
 			set_global_variable = te_seabed_selfcheck_lease_done
-			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=atlantic lessee=[THIS.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_atlantic').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_atlantic').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
+			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=atlantic lessee=[THIS.GetCountry.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_atlantic').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_atlantic').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
 			debug_log_scopes = yes
 		}
 	}
 	else_if = {
 		limit = { local_var:te_sb_le = 2 }
-		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=atlantic lessee=[THIS.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_atlantic article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
+		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=atlantic lessee=[THIS.GetCountry.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_atlantic article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
 		debug_log_scopes = yes
 	}
 	set_local_variable = { name = te_sb_le value = 0 }
@@ -1443,13 +1458,13 @@ te_seabed_lease_take_up = {
 		if = {
 			limit = { NOT = { has_global_variable = te_seabed_selfcheck_lease_done } }
 			set_global_variable = te_seabed_selfcheck_lease_done
-			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=indian lessee=[THIS.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_indian').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_indian').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
+			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=indian lessee=[THIS.GetCountry.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_indian').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_indian').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
 			debug_log_scopes = yes
 		}
 	}
 	else_if = {
 		limit = { local_var:te_sb_le = 2 }
-		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=indian lessee=[THIS.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_indian article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
+		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=indian lessee=[THIS.GetCountry.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_indian article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
 		debug_log_scopes = yes
 	}
 	set_local_variable = { name = te_sb_le value = 0 }
@@ -1459,13 +1474,13 @@ te_seabed_lease_take_up = {
 		if = {
 			limit = { NOT = { has_global_variable = te_seabed_selfcheck_lease_done } }
 			set_global_variable = te_seabed_selfcheck_lease_done
-			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=arctic lessee=[THIS.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_arctic').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_arctic').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
+			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=arctic lessee=[THIS.GetCountry.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_arctic').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_arctic').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
 			debug_log_scopes = yes
 		}
 	}
 	else_if = {
 		limit = { local_var:te_sb_le = 2 }
-		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=arctic lessee=[THIS.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_arctic article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
+		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=arctic lessee=[THIS.GetCountry.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_arctic article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
 		debug_log_scopes = yes
 	}
 	set_local_variable = { name = te_sb_le value = 0 }
@@ -1475,13 +1490,13 @@ te_seabed_lease_take_up = {
 		if = {
 			limit = { NOT = { has_global_variable = te_seabed_selfcheck_lease_done } }
 			set_global_variable = te_seabed_selfcheck_lease_done
-			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=southern lessee=[THIS.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_southern').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_southern').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
+			debug_log = "TE_SELF_CHECK OK seabed_lease_entry basin=southern lessee=[THIS.GetCountry.GetNameNoFormatting] n=[THIS.Var('te_seabed_lease_n_southern').GetValue|0] moved=[THIS.Var('te_seabed_lease_unused_southern').GetValue|0] (te_seabed.1 found the article a day after entry and read its quantity)"
 			debug_log_scopes = yes
 		}
 	}
 	else_if = {
 		limit = { local_var:te_sb_le = 2 }
-		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=southern lessee=[THIS.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_southern article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
+		debug_log = "TE_SELF_CHECK BROKEN seabed_lease_entry basin=southern lessee=[THIS.GetCountry.GetNameNoFormatting] (a day after entry no in-force te_seabed_lease_southern article from its recorded lessor, or from any lessor without a record, names this country with a quantity of at least 1: the treaty walk, target_country or input_quantity; docs/testing/global-commons-playtest.md)"
 		debug_log_scopes = yes
 	}
 }
@@ -2378,16 +2393,19 @@ te_seabed_floor_check = {
 # the read gives any of them power projection above 0, BROKEN when all read 0
 # (the read fails and the navy term is 0 for everyone: fall back to
 # navy_size). A fleet with no crews can read 0 honestly, so BROKEN needs all.
+# The marker is _v2 because the first run's INFO lines printed nothing: a
+# debug_log needs [THIS.GetCountry.GetNameNoFormatting], and a bare
+# [THIS.GetNameNoFormatting] drops the whole line (2026-10-17).
 te_seabed_power_projection_check = {
 	if = {
 		limit = {
-			NOT = { has_global_variable = te_seabed_npp_check_done }
+			NOT = { has_global_variable = te_seabed_npp_check_done_v2 }
 			any_country = {
 				te_seabed_is_claimant = yes
 				navy_size > 0
 			}
 		}
-		set_global_variable = te_seabed_npp_check_done
+		set_global_variable = te_seabed_npp_check_done_v2
 		set_global_variable = { name = te_seabed_npp_chk_n value = 0 }
 		set_global_variable = { name = te_seabed_npp_chk_ok value = 0 }
 		every_country = {
@@ -2400,7 +2418,7 @@ te_seabed_power_projection_check = {
 				limit = { te_seabed_npp_disp > 0 }
 				change_global_variable = { name = te_seabed_npp_chk_ok add = 1 }
 			}
-			debug_log = "TE_SELF_CHECK INFO seabed_power_projection country=[THIS.GetNameNoFormatting] npp=[THIS.ScriptValue('te_seabed_npp_disp')|1] navy_size=[THIS.ScriptValue('te_seabed_navy_size_disp')|0] ratio=[THIS.ScriptValue('te_seabed_npp_ratio_disp')|2]"
+			debug_log = "TE_SELF_CHECK INFO seabed_power_projection country=[THIS.GetCountry.GetNameNoFormatting] npp=[THIS.ScriptValue('te_seabed_npp_disp')|1] navy_size=[THIS.ScriptValue('te_seabed_navy_size_disp')|0] ratio=[THIS.ScriptValue('te_seabed_npp_ratio_disp')|2]"
 		}
 		if = {
 			limit = { global_var:te_seabed_npp_chk_ok > 0 }

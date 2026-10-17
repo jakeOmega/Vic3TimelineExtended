@@ -40,12 +40,12 @@ te_seabed.2 = {
 				if = {
 					limit = { NOT = { has_global_variable = te_seabed_selfcheck_pact_done } }
 					set_global_variable = te_seabed_selfcheck_pact_done
-					debug_log = "TE_SELF_CHECK OK seabed_pact_read subject=[THIS.GetNameNoFormatting] passed_pacific=[THIS.Var('te_seabed_pass_unused_pacific').GetValue|0] passed_atlantic=[THIS.Var('te_seabed_pass_unused_atlantic').GetValue|0] (the subject sees the pact a day after it began)"
+					debug_log = "TE_SELF_CHECK OK seabed_pact_read subject=[THIS.GetCountry.GetNameNoFormatting] passed_pacific=[THIS.Var('te_seabed_pass_unused_pacific').GetValue|0] passed_atlantic=[THIS.Var('te_seabed_pass_unused_atlantic').GetValue|0] (the subject sees the pact a day after it began)"
 					debug_log_scopes = yes
 				}
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN seabed_pact_read subject=[THIS.GetNameNoFormatting] (a day after Administer Seabed Claims began, has_diplomatic_pact does not see it from the subject's side, or the overlord ended it within the day)"
+				debug_log = "TE_SELF_CHECK BROKEN seabed_pact_read subject=[THIS.GetCountry.GetNameNoFormatting] (a day after Administer Seabed Claims began, has_diplomatic_pact does not see it from the subject's side, or the overlord ended it within the day)"
 				debug_log_scopes = yes
 			}
 		}

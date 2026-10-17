@@ -233,13 +233,21 @@ def _grant_call(tech: Tech) -> str:
 
 
 def render_steal(category: str, techs: list[Tech]) -> str:
-    """Current research first, then a random candidate, else nothing."""
+    """Current research first, then a random candidate, else nothing.
+
+    The current-research branch also asks that the technology isn't researched
+    yet, as vanilla guards add_technology_progress. Without it the grant logged
+    "You need to acquire the technology before adding progress", twice in one
+    second from two operations' phase branches (2026-10-17): most likely the
+    first completed the technology while is_researching_technology still held
+    for the second."""
     lines = [f"covert_tech_steal_{category} = {{"]
     for position, tech in enumerate(techs):
         lines += [
             f"\t{'if' if position == 0 else 'else_if'} = {{",
             "\t\tlimit = {",
             f"\t\t\tis_researching_technology = {tech.key}",
+            f"\t\t\tNOT = {{ has_technology_researched = {tech.key} }}",
             f"\t\t\tscope:iw_theft_target ?= {{ has_technology_researched = {tech.key} }}",
             "\t\t}",
             f"\t\t{_grant_call(tech)}",
