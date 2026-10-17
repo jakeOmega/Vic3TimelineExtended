@@ -142,10 +142,10 @@ The Timeline Extended window opens on its Nation tab, unless the tab you last
 chose is open. The Nation tab gathers what your country carries for good, and it
 is open in every game from the first day.
 
-At the top, four boxes: Legislative Override Capacity, Wealth Concentration and
-the score it is heading for, Construction Cost, and Global Technology. The first
-names the strongest Forceful Legislation option open to you, which also depends
-on the authority you produce.
+At the top, five boxes: Legislative Override Capacity, Wealth Concentration and
+the score it is heading for, Construction Cost, Global Technology, and Judicial
+Independence and its ceiling. The first names the strongest Forceful Legislation
+option open to you, which also depends on the authority you produce.
 
 Below them are five sections: Governance, Society, Economy, Science and Space,
 and International. Each starts with its scores, if it has any, then lists the

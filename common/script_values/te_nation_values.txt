@@ -94,6 +94,27 @@ te_nation_tech_spread = {
 	}
 }
 
+# Judicial Independence (te_judiciary_values.txt): 1 once the score is
+# seeded (the first monthly pulse; an old save's second), whose row shows
+# te_jud_display heading for te_jud_ceiling.
+te_nation_judiciary_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_judicial_independence }
+		value = 1
+	}
+}
+
+# 1 while a paper court's line (a government that can ignore its courts)
+# cuts the ceiling, so the row names both of the ceiling's sources.
+te_nation_jud_paper = {
+	value = 0
+	if = {
+		limit = { "modifier:country_judicial_independence_ceiling_mult" < 0 }
+		value = 1
+	}
+}
+
 # 1 under Algorithmic Governance, whose mandate the row shows.
 te_nation_mandate_on = {
 	value = 0

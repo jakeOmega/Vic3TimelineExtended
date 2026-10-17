@@ -292,6 +292,37 @@ class TabLayoutTest(unittest.TestCase):
         self.assertTrue(used)
         self.assertLessEqual(used, defined)
 
+    def test_the_judiciary_row(self):
+        """Spec § 2.2 and § 7 phase 3: Judicial Independence in Governance,
+        after Legislative Override Capacity and before the Algorithmic
+        Mandate, once the score exists; a bar heading for its ceiling, the
+        ceiling's sources, and the courts' modifiers under it. A fifth
+        overview box."""
+        self.assertEqual(gen.ROWS["judicial_independence"][0], "governance")
+        self.assertIn("te_judicial_independence", gen.ROWS["judicial_independence"][1])
+        gov = self.gui[self.gui.index("type te_nation_section_governance = "):
+                       self.gui.index("type te_nation_section_society = ")]
+        at = [gov.index(k) for k in ('"te_nation_override_row"', '"te_nation_jud_row"', '"te_nation_mandate_row"')]
+        self.assertEqual(at, sorted(at))
+        jud = gov[gov.rindex("flowcontainer = {", 0, at[1]):at[2]]
+        self.assertIn("ScriptValue('te_nation_judiciary_on')", jud.split("\n")[1])
+        for value in ("te_jud_display", "te_jud_ceiling"):
+            self.assertIn(f"ScriptValue('{value}')", jud)
+        self.assertIn("using = te_nation_row_judicial_independence", jud)
+        loc = _loc()
+        self.assertIn("country_judicial_independence_ceiling_add", loc["te_nation_jud_ceiling_row"])
+        self.assertIn("country_judicial_independence_ceiling_mult", loc["te_nation_jud_ceiling_paper_row"])
+        overview = self.gui[self.gui.index("type te_nation_overview_panel = "):
+                            self.gui.index("type te_nation_section_governance = ")]
+        self.assertEqual(overview.count("te_nation_ov_cell = {"), 5)
+        self.assertIn('text = "te_nation_ov_jud_cap"', overview)
+
+    def test_the_construction_hover_gives_the_curve(self):
+        # Spec § 2.2: GDP per capita against the curve's floor and ceiling.
+        tt = _loc()["te_nation_construction_row_tt"]
+        for value in ("country_gdp_per_capita", "construction_cost_gdppc_floor", "construction_cost_gdppc_ceiling"):
+            self.assertIn(f"ScriptValue('{value}')", tt)
+
     def _nation_loc(self):
         return {k: v for k, v in _loc().items() if k.startswith(("te_nation_", "te_window_tab_nation"))}
 

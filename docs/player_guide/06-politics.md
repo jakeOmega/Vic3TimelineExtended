@@ -112,7 +112,8 @@ the enactment success of the constitutional law groups by 10% and 15%, and
 Judicial Supremacy that of the rights laws too; each law's tooltip lists what
 it does. Cutting the courts to a ceiling 20 or more below the score raises your
 risk premium and costs legitimacy for five years. Religious Courts need an
-established religion.
+established religion. The [Nation tab](01-introduction.md#the-nation-tab) shows
+the score heading for its ceiling, and what the courts give you now.
 
 ### The rules of war
 

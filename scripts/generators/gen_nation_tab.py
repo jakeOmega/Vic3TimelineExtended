@@ -133,6 +133,11 @@ SECTIONS = {
 
 # Each row's modifiers: what the row's score gives now, on its hover.
 ROWS = {
+    # The courts' standing and the court law's scaled lines (te_jud_refresh):
+    # Statutory Courts' votes or authority line, Algorithmic Jurisprudence's
+    # capture of the override. The Court Overhaul is timed and stays in the list.
+    "judicial_independence": ("governance", ("te_judicial_independence", "te_jud_votes_legitimacy",
+                                             "te_jud_unelected_authority", "te_jud_algorithmic_capture")),
     "algorithmic_mandate": ("governance", ("algorithmic_mandate",)),
     "wealth_concentration": ("society", ("inh_great_fortunes", "inh_dispersed_wealth")),
     "construction_cost": ("economy", ("construction_cost_scaling*",)),

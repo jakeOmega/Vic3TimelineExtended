@@ -305,6 +305,26 @@ types te_nation_widget_types
 				}
 			}
 		}
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			te_nation_ov_cell = {
+				tooltip = "te_nation_ov_jud_tt"
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/law_icons/guaranteed_liberties.dds"
+				}
+				blockoverride "caption" {
+					text = "te_nation_ov_jud_cap"
+				}
+				blockoverride "word" {
+					text = "te_nation_ov_jud_word"
+				}
+				blockoverride "fig" {
+					text = "te_nation_ov_jud_fig"
+				}
+			}
+		}
 	}
 
 	### ----------------------------------------------------------------------
@@ -383,6 +403,45 @@ types te_nation_widget_types
 			te_nation_row = {
 				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
 				text = "te_nation_override_short"
+			}
+
+			### Judicial Independence (the Judiciary, spec § 2.2 / § 7 phase 3),
+			### once the score is seeded (the first monthly pulse): the score heading
+			### for its ceiling, the ceiling's sources (the court law's line, and the
+			### paper court's under a government that can ignore its courts), and
+			### the courts' own modifiers under it.
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_judiciary_on'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				margin_top = 6
+				spacing = 4
+
+				te_nation_row = {
+					text = "te_nation_jud_row"
+					tooltip = "te_nation_jud_row_tt"
+				}
+				te_nation_target_bar = {
+					blockoverride "high" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+					}
+					blockoverride "low" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+					}
+				}
+				te_nation_row = {
+					visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ) )]"
+					text = "te_nation_jud_ceiling_row"
+				}
+				te_nation_row = {
+					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' )]"
+					text = "te_nation_jud_ceiling_paper_row"
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_row_judicial_independence
+					}
+				}
 			}
 
 			### The Algorithmic Mandate, under Algorithmic Governance only.
@@ -617,6 +676,14 @@ types te_nation_widget_types
 			}
 			te_nation_note = {
 				text = "te_nation_how_override"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_jud"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_jud"
 			}
 			te_nation_subheader = {
 				blockoverride "subheader_text" {

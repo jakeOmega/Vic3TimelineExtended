@@ -465,6 +465,22 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_jud_algorithmic_capture }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_jud_unelected_authority }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_jud_votes_legitimacy }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_judicial_independence }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_mon_arrangement_provider }
 		add = 1
 	}
