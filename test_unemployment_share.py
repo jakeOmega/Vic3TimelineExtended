@@ -30,7 +30,7 @@ ENGINE_READERS = {
 
 # (file, the block that reads, the comparison it makes): the readers the conversion replaced, thresholds unchanged.
 READERS = [
-    ("common/buildings/resettlement.txt", "building_resettlement_colony", "te_state_unemployment_share > 0.05"),
+    ("common/buildings/resettlement.txt", "building_resettlement_colony", "te_state_unemployment_share > 0.1"),
     ("common/decrees/extra_decrees.txt", "decree_greenest_grass_campaign", "te_state_unemployment_share >= 0.1"),
     ("common/decrees/extra_decrees.txt", "decree_resettlement_recruitment_drive", "te_state_unemployment_share > 0.1"),
     ("common/script_values/extra_script_values.txt", "migration_attraction_script_value",

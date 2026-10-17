@@ -73,12 +73,12 @@ Mecklenburg-Strelitz in January 1836 it read 0.048 where the pops held 0.195 of 
 fix it. Every mod reader outside the Demographics census now reads `te_state_unemployment_share`: the engine's figure,
 read live, over the workforce's share of the state's people, which a yearly walk of each state's pops counts
 (`common/script_values/te_unemployment_values.txt`; § Unemployment as a Share of the Workforce in `mod_systems.md`).
-Their thresholds are unchanged and now mean a share of the workforce, so each bites at about a quarter of the
-unemployment it did. The census keeps its own count (`te_dg_unemp`).
+Their thresholds now mean a share of the workforce, so each bites at about a quarter of the unemployment it did. The
+Settlement Authority's was raised from 5% to 10% as well (owner, 2026-10-17). The census keeps its own count (`te_dg_unemp`).
 
 | Reader | Threshold | Effect |
 |---|---|---|
-| Settlement Authority `ai_value` (`common/buildings/resettlement.txt`) | any of the AI's states above 5% | +300 on an open frontier |
+| Settlement Authority `ai_value` (`common/buildings/resettlement.txt`) | any of the AI's states above 10% (5% until the owner raised it, 2026-10-17) | +300 on an open frontier |
 | Greenest Grass Campaign `ai_weight` (`common/decrees/extra_decrees.txt`) | 10% or more | × 0 |
 | Recruitment Drive `ai_weight` (the same file) | above 10% | +50 |
 | `migration_attraction_script_value` (`common/script_values/extra_script_values.txt`), the mass-migration destination's order | above 10% | × 0 |
@@ -92,6 +92,7 @@ it then, and the walk's workforce share for 826 census states. The workforce was
 | States above 5% | 14% of states, 43% of people | 40% of states, 69% of people |
 | States above 10% | 1% of states, almost no people | 31% of states, 62% of people |
 | Countries with a state above 5% | 46 of 203 | 108 of 203 |
+| Countries with a state above 10% | 8 of 203 | 88 of 203 |
 
 China's and Bengal's large states carry most of the people: a fifth to a third of their workforce idle.
 
@@ -106,6 +107,6 @@ state panel's unemployed in a state with visibly idle workers.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Settlement Authorities.** An observer run with internal resettlement on: how many AI countries with an open frontier found one by 1870, against an earlier run. | More than before: the +300 now holds wherever one of the AI's states has 5% of its workforce idle, which 1898 shows for about half the countries. Still at most three new ones each. | Authorities in nearly every country with a frontier, or a frontier filled faster than its region can take, mean 5% is now too low a bar: the owner's call (raise it, or count only states the Authority can recruit from). |
+| **Settlement Authorities.** An observer run with internal resettlement on: how many AI countries with an open frontier found one by 1870, against an earlier run. | More than before: the +300 now holds wherever one of the AI's states has a tenth of its workforce idle, which 1898 shows for 88 of 203 countries (the old 5% read held for 46). Still at most three new ones each. | Authorities in nearly every country with a frontier, or a frontier filled faster than its region can take, mean 10% is still too low a bar: the owner's call (raise it again, or count only states the Authority can recruit from). |
 | **Greenest Grass and the Recruitment Drive.** Which states AI countries issue them in (a plain-text save's decrees, or the state panel). | Greenest Grass in fewer states with idle workers than before (its × 0 now bites at a tenth of the workforce); the Recruitment Drive in more of the AI's crowded or idle states. | Greenest Grass almost never issued by an AI with a frontier: 10% bites too often; the owner's call. |
 | **Mass migration.** A violence-against-minorities mass migration (`trigger_mass_migration`): where the people land. | A state with under a tenth of its workforce idle. Where every candidate is above it, all score 0 and the pick among them is arbitrary. | Migrants sent into a state with mass unemployment: check `te_state_unemployment_share` there with the console (`te_unemp_wf_share` on the state). |
