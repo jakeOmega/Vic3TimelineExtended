@@ -241,6 +241,20 @@ class LeaseAiTest(unittest.TestCase):
             for key in descs:
                 self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
 
+    def test_the_lessor_weighs_the_quantity(self):
+        """Review I3: an AI lessor refuses to lease more than it can spare: the
+        claims asked above its spare cost 5 points each, so 10 over outweighs
+        the spare's largest pull (+30) and the base reluctance."""
+        loc = english_loc()
+        for b in m.BASINS:
+            score = strip_comments(block(block(article(b), "\tai"), "\t\tinherent_accept_score"))
+            giver = score[score.index("scope:source_country ?= this"):score.index("scope:target_country ?= this")]
+            self.assertIn("scope:article.input_quantity", giver)
+            self.assertIn(f"subtract = te_seabed_ai_lease_spare_{b}", giver)
+            self.assertIn('desc = "te_seabed_ai_lease_too_many"', giver)
+            self.assertIn("multiply = 5", giver)
+        self.assertRegex(loc, r'(?m)^ te_seabed_ai_lease_too_many:0 "')
+
     def test_offer_follows_the_spec(self):
         """Claims it is unlikely to use: none queued, or claims well above its
         construction pace (spec § 4)."""

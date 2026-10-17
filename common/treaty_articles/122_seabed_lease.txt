@@ -123,6 +123,20 @@ te_seabed_lease_pacific = {
 					value = te_seabed_ai_lease_spare_pacific
 					max = 30
 				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_pacific
+						min = 0
+						multiply = 5
+					}
+				}
 			}
 			# The lessee gains claims, more so short of them and with metals dear.
 			else_if = {
@@ -321,6 +335,20 @@ te_seabed_lease_atlantic = {
 					desc = "te_seabed_ai_lease_spare"
 					value = te_seabed_ai_lease_spare_atlantic
 					max = 30
+				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_atlantic
+						min = 0
+						multiply = 5
+					}
 				}
 			}
 			# The lessee gains claims, more so short of them and with metals dear.
@@ -521,6 +549,20 @@ te_seabed_lease_indian = {
 					value = te_seabed_ai_lease_spare_indian
 					max = 30
 				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_indian
+						min = 0
+						multiply = 5
+					}
+				}
 			}
 			# The lessee gains claims, more so short of them and with metals dear.
 			else_if = {
@@ -720,6 +762,20 @@ te_seabed_lease_arctic = {
 					value = te_seabed_ai_lease_spare_arctic
 					max = 30
 				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_arctic
+						min = 0
+						multiply = 5
+					}
+				}
 			}
 			# The lessee gains claims, more so short of them and with metals dear.
 			else_if = {
@@ -918,6 +974,20 @@ te_seabed_lease_southern = {
 					desc = "te_seabed_ai_lease_spare"
 					value = te_seabed_ai_lease_spare_southern
 					max = 30
+				}
+				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# never leases away the claims its own building will want.
+				if = {
+					limit = {
+						scope:article ?= { exists = input_quantity }
+					}
+					subtract = {
+						desc = "te_seabed_ai_lease_too_many"
+						value = scope:article.input_quantity
+						subtract = te_seabed_ai_lease_spare_southern
+						min = 0
+						multiply = 5
+					}
 				}
 			}
 			# The lessee gains claims, more so short of them and with metals dear.

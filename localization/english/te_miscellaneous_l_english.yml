@@ -7082,6 +7082,7 @@
  te_seabed_ai_lease_give:0 "Gives up seabed claims"
  te_seabed_ai_lease_spare:0 "Claims it is unlikely to use"
  te_seabed_ai_lease_take:0 "Gains seabed claims"
+ te_seabed_ai_lease_too_many:0 "Claims asked beyond what it can spare"
  te_seabed_ai_lease_wanted:0 "Short of seabed claims, with $tech_metals$ dear"
  te_seabed_basin_arctic:0 "Arctic"
  te_seabed_basin_atlantic:0 "Atlantic"
