@@ -291,7 +291,8 @@ depends on the Industrialists, who sponsor it whatever their leader; the Guards 
 Gate event offers it during the debate. Civilian Oversight sets up review boards for
 complaints against police officers and licensed firms, from the Civil Rights
 Movement technology on, and interest groups judge it as they judge Guaranteed
-Liberties; the Who Watches the Watchmen event offers it during the debate.
+Liberties; the Who Watches the Watchmen event offers it during the debate. It
+pays most where many pops are Second-Rate Citizens or face Open Prejudice.
 
 ### Who inherits
 
@@ -506,7 +507,7 @@ bills change them (see [Taxation (experimental)](05-tax-code.md)).
 | Inflation Targeting Act | Central Bank Independence | Sets the central bank's mandate to Inflation Targeting, 12 months after it passes. The What the Bank Is For event asks for it or the Dual Mandate Act while the law has neither; the Industrialists sponsor it. See [Rate target, delegation and mandates](04-banking.md#rate-target-delegation-and-mandates) |
 | Dual Mandate Act | Central Bank Independence | Sets the mandate to the Dual Mandate, 12 months after it passes. Offered by the same event and by the Central Bank Independence Debate; the Trade Unions sponsor it |
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
-| Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
+| Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Legislative Override Capacity −0.5; radicalism rises 10% slower for Second-Rate Citizen and Open Prejudice pops; −5% turmoil penalties; the sponsoring group gains 10% political strength. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
 | Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
 | Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
