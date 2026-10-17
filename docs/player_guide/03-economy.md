@@ -235,7 +235,9 @@ the same scaling raises the cost of the materials your construction uses
 instead.
 
 This is a catch-up mechanic: a rich country needs more construction for each
-building and each level of upkeep, while a poor country builds cheaply.
+building and each level of upkeep, while a poor country builds cheaply. The
+[Nation tab](01-introduction.md#the-nation-tab) shows the current scaling, and
+below it any excess private construction in force.
 
 ### Excess private construction
 
