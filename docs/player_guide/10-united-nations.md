@@ -853,8 +853,7 @@ that switches to Unilateral Licensing while the convention governs the seabed
 defects: 10 infamy once, 5 standing and 10 case strength. It loses its place in
 the reserved half and pays no royalties. It becomes a party again five years
 after it defected, once it has left Unilateral Licensing for Sponsor
-Contractors or Scientific Survey; since a policy change holds for five years,
-it is a party again as soon as it leaves. A member that refused the convention, or a country outside the UN,
+Contractors or Scientific Survey. A member that refused the convention, or a country outside the UN,
 claims in the open half only and pays nothing. Unilateral Licensing costs it
 nothing extra. The AI weighs the seabed terms when it votes on the convention:
 poorer coastal members lean for it, great powers with Deep-Sea Mines against.

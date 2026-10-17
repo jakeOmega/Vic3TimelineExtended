@@ -59,10 +59,13 @@ January, or the first mid-year sharing of a year with no January pass),
 te_seabed_set_floors stores on each claimant on Sponsor Contractors, outside a
 Scramble, a floor per basin: its holdings plus three quarters of its claims
 going into the sharing, rounded down (its Southern floor is its holdings where
-the Antarctic Treaty bars it). Every sharing in the year then freezes a country
-at max(held, floor) instead of held (te_seabed_fit_floors); a mid-year sharing
-honours the stored floor without recomputing it, so protection never compounds
-within a year, and treats it as 0 for a country no longer on Sponsor or no
+the Antarctic Treaty bars it), and beside it the protected claims alone
+(te_seabed_fprot_<basin>). Every sharing in the year then freezes a country at
+max(held, min(floor, held + protected claims)) instead of held
+(te_seabed_fit_floors): building on claims mid-year keeps January's floor, and a
+licence lost mid-year (conquest, demolition) doesn't come back as a protected
+claim (review I3). A mid-year sharing honours the stored figures without
+recomputing them, so protection never compounds within a year, and treats it as 0 for a country no longer on Sponsor or no
 longer a claimant, or in a Scramble. Where the frozen amounts exceed what the
 basin can share (its pool, or its holdings if more), every protected part is
 scaled down by one factor, rounding down, and holdings are never touched. A
@@ -133,6 +136,7 @@ class Country:
     weight: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0.0))
     floor: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))   # te_seabed_floor_<basin>; 0 = none
     relinquished: dict = field(default_factory=lambda: dict.fromkeys(BASINS, False))   # te_seabed_relinq_<basin>
+    floor_prot: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))  # te_seabed_fprot_<basin>: the claims part
 
 
 @dataclass
@@ -452,10 +456,14 @@ def relinquish(world: World, cid, b: str) -> None:
     § 2.5): the country's claims in basin b go at once, its floor there with
     them, and its weight there is 0 at every sharing until it claims again.
     Licences on its levels stay. It never sets te_seabed_reshare: the freed
-    claims wait for the next sharing something else brings about."""
+    claims wait for the next sharing something else brings about. It records
+    the country first, so levels queued since the monthly recording take their
+    licences before the claims go."""
+    record_country(world, cid)       # levels queued since the last recording keep their licences (review I1)
     c = world.countries[cid]
     c.unbuilt[b] = 0
     c.floor[b] = 0
+    c.floor_prot[b] = 0
     c.relinquished[b] = True
 
 
@@ -680,20 +688,28 @@ def set_floors(world: World, cid) -> None:
     c = world.countries[cid]
     if c.policy != SPONSOR or world.regime == SCRAMBLE or not is_claimant(world, cid):
         c.floor = dict.fromkeys(BASINS, 0)
+        c.floor_prot = dict.fromkeys(BASINS, 0)
         return
     for b in BASINS:
         keep = 0 if (b == "southern" and c.barred) else math.floor(FLOOR_KEEP * c.unbuilt[b])
         c.floor[b] = c.held[b] + keep
+        c.floor_prot[b] = keep
 
 
 def fit_floors(world: World, b: str, part: list) -> dict:
     """te_seabed_fit_floors (te_seabed_fz_<basin>): what each participant is
-    frozen at, max(held, floor). Where those exceed what the basin can share
-    (its pool, or its holdings if more), every protected part (floor - held)
-    is scaled down by one factor, rounding down; holdings are never touched."""
+    frozen at, max(held, min(floor, held + protected claims)). Where those
+    exceed what the basin can share (its pool, or its holdings if more), every
+    protected part is scaled down by one factor, rounding down; holdings are
+    never touched."""
     countries = world.countries
     held = {cid: countries[cid].held[b] for cid in part}
-    prot = {cid: max(0, floor_in_force(world, countries[cid], b) - held[cid]) for cid in part}
+
+    def protected(cid):
+        c = countries[cid]
+        f = floor_in_force(world, c, b)
+        return max(0, min(f, held[cid] + c.floor_prot[b]) - held[cid]) if f > 0 else 0
+    prot = {cid: protected(cid) for cid in part}
     room_left = max(POOLS[b], sum(held.values())) - sum(held.values())
     total = sum(prot.values())
     if total > room_left:
@@ -736,6 +752,7 @@ def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
             c.held = dict.fromkeys(BASINS, 0)
             c.ent = dict.fromkeys(BASINS, 0)
             c.floor = dict.fromkeys(BASINS, 0)
+            c.floor_prot = dict.fromkeys(BASINS, 0)
 
 
 # ---------------------------------------------------------------------------

@@ -227,7 +227,10 @@ on Sponsor a claim fades by at most a quarter a year: 100 → 75 → 56 → 42.
   `te_seabed_pass_due`). The January sharing stores each basin's floor on the country, and a
   mid-year sharing honours the stored floor without recomputing it, so protection never compounds
   within a year (my call). A country that moves onto Sponsor mid-year gets its floor from the next
-  January.
+  January. *Amended after the phase 1 review (2026-10-17, builder's call):* the sharing freezes a
+  country at `max(held, min(floor, held + P))`, with `P` January's protected claims stored beside
+  the floor, so building on claims mid-year keeps the floor but a licence lost mid-year (conquest,
+  demolition) doesn't come back as a protected claim.
 
 - **Floors never exceed a pool.** Last year's shares summed to the pool, and a floor is at most
   last year's share, so floors only overflow where something else did: grandfathered over-pool

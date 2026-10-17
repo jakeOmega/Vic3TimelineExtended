@@ -137,7 +137,7 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_policy_factor_", "te_seabed_coast_weight", "te_seabed_distant_navy_share",
                   "te_seabed_station_weight", "te_seabed_navy_assertive_mult", "te_seabed_cap_stamped_noshare",
                   "te_seabed_floor", "te_seabed_fz", "te_seabed_pass_year", "te_seabed_reshare", "te_seabed_relinq",
-                  "te_seabed_dr", "te_seabed_need_navy", "te_seabed_queued"}
+                  "te_seabed_dr", "te_seabed_need_navy", "te_seabed_queued", "te_seabed_fprot"}
         named = {n.rstrip("_") for n in named}
         everything = defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
         missing = sorted(n for n in named if n not in everything and not n.startswith("te_seabed_policy_factor"))
@@ -288,8 +288,30 @@ class FloorScriptTest(unittest.TestCase):
         self.assertIn("floor = yes", fit)
         self.assertIn("change_variable = { name = te_seabed_fz_$B$ add = var:te_seabed_held_$B$ }", fit)
 
+    def test_every_participant_gets_a_fresh_frozen_amount(self):
+        """Review C1: te_seabed_share_round gives a participant outside the
+        basin's set its te_seabed_fz_<b> as entitlement, so every participant's
+        is written each pass, 0 outside the set (the model's ent.get(cid, 0))."""
+        fit = strip_comments(block(read(EFFECTS), "te_seabed_fit_floors"))
+        first = fit.index("every_country = {")
+        self.assertRegex(fit[first:first + 200], r"every_country = \{\s*limit = \{ has_variable = te_seabed_part \}\s*"
+                                                  r"set_variable = \{ name = te_seabed_fz_\$B\$ value = 0 \}")
+
+    def test_the_floor_protects_claims_not_lost_licences(self):
+        """Review I3: frozen at max(held, min(floor, held + January's protected part))."""
+        effects = strip_comments(read(EFFECTS))
+        self.assertIn("name = te_seabed_fprot_$B$", block(effects, "te_seabed_set_floor"))
+        fit = block(effects, "te_seabed_fit_floors")
+        self.assertIn("var:te_seabed_fprot_$B$", fit)
+        self.assertIn("name = te_seabed_fprot_$B$ value = 0", block(effects, "te_seabed_relinquish"))
+        self.assertIn("name = te_seabed_fprot_$B$ value = 0", block(effects, "te_seabed_clear_floor"))
+
     def test_clear_share_clears_the_floor(self):
-        self.assertIn("te_seabed_floor_$B$", block(read(EFFECTS), "te_seabed_clear_share"))
+        effects = read(EFFECTS)
+        self.assertIn("te_seabed_clear_floor = { B = $B$ }", block(effects, "te_seabed_clear_share"))
+        floor = block(effects, "te_seabed_clear_floor")
+        for name in ("te_seabed_floor_$B$", "te_seabed_fprot_$B$"):
+            self.assertIn(f"name = {name} value = 0", floor)
 
     def test_self_check(self):
         effects = strip_comments(read(EFFECTS))
@@ -311,6 +333,13 @@ class RelinquishScriptTest(unittest.TestCase):
         self.assertIn("set_variable = { name = te_seabed_floor_$B$ value = 0 }", body)
         self.assertNotIn("te_seabed_reshare", body)
         self.assertIn("remove_variable = te_seabed_relinq_$B$", strip_comments(block(read(EFFECTS), "te_seabed_claim_again")))
+
+    def test_relinquish_records_first(self):
+        """Review I1: levels queued since the last recording take their licences
+        before the claims go."""
+        body = strip_comments(block(read(EFFECTS), "te_seabed_relinquish"))
+        self.assertLess(body.index("te_seabed_record_country = yes"),
+                        body.index("set_variable = { name = te_seabed_unbuilt_$B$ value = 0 }"))
 
     def test_weight_is_zero_while_relinquished(self):
         effects = strip_comments(read(EFFECTS))
@@ -538,6 +567,20 @@ class PanelDataTest(unittest.TestCase):
             for n in range(1, 7):
                 self.assertIn(f"scope:op = {10 * i + n} }}", body)
                 self.assertIn(f"global_var:te_seabed_rk_{b}_{n} ?= {{ custom_tooltip_no_bullet = te_seabed_rival_row_{b} }}", body)
+
+    def test_our_own_slot_is_not_a_rival(self):
+        """Review I2: the viewer shows once, in its own row: its ranked slot is
+        hidden, and "and N others" leaves it out when it ranks below six."""
+        body = block(read(self.SGUIS), "te_seabed_rival_row_sgui")
+        for b in m.BASINS:
+            for n in range(1, 7):
+                self.assertIn(f"NOT = {{ global_var:te_seabed_rk_{b}_{n} = {{ this = root }} }}", body)
+        rank = strip_comments(block(read(EFFECTS), "te_seabed_rank_basin"))
+        self.assertIn("name = te_seabed_rank_$B$ value = global_var:te_seabed_rk_idx", rank)
+        for b in m.BASINS:
+            more = strip_comments(block(read(VALUES), f"te_seabed_rk_more_disp_{b}"))
+            self.assertIn(f"var:te_seabed_rank_{b} > 6", more)
+            self.assertIn("subtract = 1", more)
 
     def test_bar_values_exist(self):
         v = strip_comments(read(VALUES))

@@ -27,8 +27,10 @@
 #            te_seabed_floor_<basin>      Sponsor's floor: the share a sharing
 #                                         may not go below (the year's first
 #                                         sharing sets it; absent = none)
+#            te_seabed_fprot_<basin>      the claims part of that floor
 #            te_seabed_fz_<basin>         what the sharing freezes it at:
-#                                         max(held, floor), scaled to fit
+#                                         max(held, min(floor, held +
+#                                         protected claims)), scaled to fit
 #            te_seabed_relinq_<basin>     flag: relinquished, weight 0 there
 #                                         until Claim Again
 #            te_seabed_fee_cached         the holding fee a week, the
@@ -934,7 +936,7 @@ te_seabed_clear_shares = {
 }
 
 te_seabed_clear_share = {
-	set_variable = { name = te_seabed_floor_$B$ value = 0 }
+	te_seabed_clear_floor = { B = $B$ }
 	set_variable = { name = te_seabed_unbuilt_$B$ value = 0 }
 	set_variable = { name = te_seabed_held_$B$ value = 0 }
 	set_variable = { name = te_seabed_ent_$B$ value = 0 }
@@ -1080,6 +1082,10 @@ te_seabed_rank_basin = {
 		limit = { has_global_variable = te_seabed_rk_$B$_6 }
 		remove_global_variable = te_seabed_rk_$B$_6
 	}
+	every_country = {
+		limit = { has_variable = te_seabed_rank_$B$ }
+		remove_variable = te_seabed_rank_$B$
+	}
 	set_global_variable = { name = te_seabed_rk_idx value = 0 }
 	ordered_country = {
 		limit = {
@@ -1090,6 +1096,9 @@ te_seabed_rank_basin = {
 		order_by = te_seabed_ent_value_$B$
 		check_range_bounds = no
 		change_global_variable = { name = te_seabed_rk_idx add = 1 }
+		# Its own place, so a viewer ranked below six isn't counted among
+		# "and N others" beside its own row (review I2).
+		set_variable = { name = te_seabed_rank_$B$ value = global_var:te_seabed_rk_idx }
 		te_seabed_rank_slot = { B = $B$ N = 1 }
 		te_seabed_rank_slot = { B = $B$ N = 2 }
 		te_seabed_rank_slot = { B = $B$ N = 3 }
@@ -1136,7 +1145,8 @@ te_seabed_rank_slot = {
 }
 
 # Country scope: a player. Seat $N$ holds rank $N$'s capital, for the flag (the
-# GUI reaches a country only through a stored state, as ch_leader_seat_N does),
+# GUI reaches a country only through a stored state, as Cultural Hegemony's
+# leader seats do),
 # when seats 1..$PREV$ are filled; te_seabed_rkcap_count_$B$ says how many are,
 # so the GUI never reads a seat that is not set.
 te_seabed_rank_seat = {
@@ -1163,8 +1173,9 @@ te_seabed_rank_seat = {
 # Country scope (the yearly pass, the year's first sharing, after held).
 # Model: set_floors. On Sponsor Contractors, outside a Scramble, a claimant's
 # floor in each basin is its holdings plus te_seabed_floor_keep of its claims
-# going into the sharing, rounded down; its Southern floor is its holdings
-# where the Antarctic Treaty bars it. Otherwise no floor.
+# going into the sharing, rounded down, and te_seabed_fprot_<basin> that
+# protected part alone; its Southern floor is its holdings where the Antarctic
+# Treaty bars it. Otherwise no floor.
 te_seabed_set_floors = {
 	if = {
 		limit = {
@@ -1180,39 +1191,56 @@ te_seabed_set_floors = {
 		if = {
 			limit = { te_seabed_southern_barred = yes }
 			set_variable = { name = te_seabed_floor_southern value = var:te_seabed_held_southern }
+			set_variable = { name = te_seabed_fprot_southern value = 0 }
 		}
 	}
 	else = {
-		set_variable = { name = te_seabed_floor_pacific value = 0 }
-		set_variable = { name = te_seabed_floor_atlantic value = 0 }
-		set_variable = { name = te_seabed_floor_indian value = 0 }
-		set_variable = { name = te_seabed_floor_arctic value = 0 }
-		set_variable = { name = te_seabed_floor_southern value = 0 }
+		te_seabed_clear_floor = { B = pacific }
+		te_seabed_clear_floor = { B = atlantic }
+		te_seabed_clear_floor = { B = indian }
+		te_seabed_clear_floor = { B = arctic }
+		te_seabed_clear_floor = { B = southern }
 	}
 }
 
 te_seabed_set_floor = {
 	set_variable = {
-		name = te_seabed_floor_$B$
+		name = te_seabed_fprot_$B$
 		value = {
 			value = var:te_seabed_unbuilt_$B$
 			multiply = te_seabed_floor_keep
 			floor = yes
+		}
+	}
+	set_variable = {
+		name = te_seabed_floor_$B$
+		value = {
+			value = var:te_seabed_fprot_$B$
 			add = var:te_seabed_held_$B$
 		}
 	}
 }
 
+te_seabed_clear_floor = {
+	set_variable = { name = te_seabed_floor_$B$ value = 0 }
+	set_variable = { name = te_seabed_fprot_$B$ value = 0 }
+}
+
 # Country scope (the basin's Relinquish button). Model: relinquish (seabed
 # claims spec § 2.5). The claims in basin $B$ go at once, the floor with them,
 # and the weight there is 0 at every sharing until Claim Again. Licences on
-# its levels stay. Never sets te_seabed_reshare: a mid-year sharing honours
+# its levels stay, those queued since the last recording included (it
+# records first). Never sets te_seabed_reshare: a mid-year sharing honours
 # January's floors, so a Sponsor country could otherwise relinquish one claim
 # and take its rivals' unprotected claims months early. The freed claims wait
 # for the next sharing something else brings about.
 te_seabed_relinquish = {
+	# Levels queued since the monthly recording take their licences first
+	# (review I1: they'd be left without one once the claims are gone).
+	te_seabed_record_country = yes
 	set_variable = { name = te_seabed_unbuilt_$B$ value = 0 }
 	set_variable = { name = te_seabed_floor_$B$ value = 0 }
+	set_variable = { name = te_seabed_fprot_$B$ value = 0 }
 	set_variable = te_seabed_relinq_$B$
 }
 
@@ -1223,15 +1251,23 @@ te_seabed_claim_again = {
 }
 
 # No scope, before te_seabed_share_basin. Model: fit_floors. Each
-# participant's te_seabed_fz_$B$ is what the sharing freezes it at: max(held,
-# floor), the stored floor counting for nothing where te_seabed_floor_void_$B$
-# holds (a mid-year sharing honours January's floor without recomputing it).
+# participant's te_seabed_fz_$B$ is what the sharing freezes it at:
+# max(held, min(floor, held + protected claims)), the stored floor counting for
+# nothing where te_seabed_floor_void_$B$ holds (a mid-year sharing honours
+# January's figures without recomputing them; a licence lost since adds no
+# protection, review I3). Every participant's is written first, 0 outside the
+# basin's set: te_seabed_share_round gives a participant that isn't active its
+# te_seabed_fz_$B$ as entitlement (review C1; the model's ent.get(cid, 0)).
 # Where the protected parts (floor - held) exceed what the basin can share
 # beyond its holdings (the pool less the holdings, at least 0), each is scaled
 # down by one factor, rounding down; holdings are never touched.
 te_seabed_fit_floors = {
 	set_global_variable = { name = te_seabed_fz_held_$B$ value = 0 }
 	set_global_variable = { name = te_seabed_fz_prot_$B$ value = 0 }
+	every_country = {
+		limit = { has_variable = te_seabed_part }
+		set_variable = { name = te_seabed_fz_$B$ value = 0 }
+	}
 	every_country = {
 		limit = {
 			has_variable = te_seabed_part
@@ -1240,18 +1276,21 @@ te_seabed_fit_floors = {
 				var:te_seabed_held_$B$ > 0
 			}
 		}
-		set_variable = { name = te_seabed_fz_$B$ value = 0 }
 		if = {
 			limit = {
 				has_variable = te_seabed_floor_$B$
+				has_variable = te_seabed_fprot_$B$
 				NOT = { te_seabed_floor_void_$B$ = yes }
 				var:te_seabed_floor_$B$ > var:te_seabed_held_$B$
 			}
 			set_variable = {
 				name = te_seabed_fz_$B$
 				value = {
-					value = var:te_seabed_floor_$B$
+					value = var:te_seabed_held_$B$
+					add = var:te_seabed_fprot_$B$
+					max = var:te_seabed_floor_$B$
 					subtract = var:te_seabed_held_$B$
+					min = 0
 				}
 			}
 		}

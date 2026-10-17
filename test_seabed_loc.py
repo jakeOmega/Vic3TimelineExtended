@@ -57,5 +57,16 @@ class SeabedWordsTest(unittest.TestCase):
         self.assertIn("enough", loc_values()["te_seabed_col_next_tt"])
 
 
+class GuideTest(unittest.TestCase):
+    def test_the_return_rule_counts_from_the_defection(self):
+        """The influence-deficit carve-out can bring a defector off Unilateral
+        Licensing inside the five years, so the guide mustn't say leaving makes
+        it a party at once."""
+        with open(os.path.join(REPO, "docs", "player_guide", "10-united-nations.md"), encoding="utf-8") as f:
+            text = " ".join(f.read().split())
+        self.assertIn("five years after it defected", text)
+        self.assertNotIn("as soon as it leaves", text)
+
+
 if __name__ == "__main__":
     unittest.main()

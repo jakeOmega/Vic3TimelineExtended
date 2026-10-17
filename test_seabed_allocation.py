@@ -599,6 +599,34 @@ class FloorTest(unittest.TestCase):
         m.yearly_pass(w, first_of_year=False)
         self.assertLess(w.countries[0].unbuilt["pacific"], 10)
 
+    def test_a_lost_state_adds_no_protection(self):
+        """Review I3: country 0 holds 100 Pacific licences and claims; its January
+        floor protects the claims, not the licences, so losing the mined state
+        before a mid-year sharing leaves it at most January's protected part."""
+        w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
+                    {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1), 2: m.State(2, "pacific", 0)})
+        m.yearly_pass(w)
+        w.states[2].levels = 100
+        m.record_country(w, 0)
+        m.yearly_pass(w)                                      # January: held 100, claims protected
+        protected = w.countries[0].floor["pacific"] - w.countries[0].held["pacific"]
+        self.assertGreater(protected, 0)
+        m.on_state_owner_change(w, w.states[2], 1)
+        w.countries[1].navy = 1000
+        m.yearly_pass(w, first_of_year=False)
+        self.assertEqual(w.countries[0].held["pacific"], 0)
+        self.assertLessEqual(w.countries[0].unbuilt["pacific"], protected)
+
+    def test_building_on_claims_mid_year_keeps_the_floor(self):
+        w = self._one_basin_world()
+        m.yearly_pass(w)                                      # floor 112 from 150 claims
+        floor = w.countries[0].floor["pacific"]
+        w.states[0].levels = 30
+        m.record_country(w, 0)
+        w.countries[1].navy = 1000
+        m.yearly_pass(w, first_of_year=False)
+        self.assertEqual(w.countries[0].ent["pacific"], floor)
+
     def test_random_worlds_with_mid_year_sharings(self):
         """The pools hold with floors stored in January and honoured by
         mid-year sharings, while countries change policy between them."""
@@ -653,6 +681,19 @@ class RelinquishTest(unittest.TestCase):
         m.yearly_pass(w)
         self.assertGreater(w.countries[0].weight["pacific"], 0)
         self.assertGreater(w.countries[0].unbuilt["pacific"], 0)
+
+    def test_relinquish_licenses_queued_levels_first(self):
+        """Review I1: levels queued this month, not yet licensed by the monthly
+        recording, take their basin's licences before the claims go."""
+        w = self._world()
+        w.states[0].levels += 4
+        w.states[0].queued += 4
+        m.relinquish(w, 0, "pacific")
+        m.record_country(w, 0)
+        self.assertEqual(m.pending(w, 0), 0)
+        self.assertEqual(w.states[0].lic["pacific"], 7)
+        self.assertEqual(w.states[0].distant(), 0)
+        self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
 
     def test_the_freed_claims_wait_for_the_next_sharing(self):
         w = self._world()

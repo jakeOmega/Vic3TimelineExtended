@@ -2026,7 +2026,8 @@ te_seabed_policy_locked_disp = {
 }
 
 # Country scope (Pacific): the rivals' flags filled on this player,
-# the claimants past the six shown, and whether our own row shows (we claim,
+# the claimants past the six shown (not counting us: our own row shows us),
+# and whether our own row shows (we claim,
 # hold or relinquished here).
 te_seabed_rkcap_count_disp_pacific = {
 	value = 0
@@ -2041,6 +2042,14 @@ te_seabed_rk_more_disp_pacific = {
 	if = {
 		limit = { has_global_variable = te_seabed_rk_more_pacific }
 		value = global_var:te_seabed_rk_more_pacific
+		if = {
+			limit = {
+				has_variable = te_seabed_rank_pacific
+				var:te_seabed_rank_pacific > 6
+			}
+			subtract = 1
+		}
+		min = 0
 	}
 }
 
@@ -2059,7 +2068,8 @@ te_seabed_us_shown_pacific = {
 }
 
 # Country scope (Atlantic): the rivals' flags filled on this player,
-# the claimants past the six shown, and whether our own row shows (we claim,
+# the claimants past the six shown (not counting us: our own row shows us),
+# and whether our own row shows (we claim,
 # hold or relinquished here).
 te_seabed_rkcap_count_disp_atlantic = {
 	value = 0
@@ -2074,6 +2084,14 @@ te_seabed_rk_more_disp_atlantic = {
 	if = {
 		limit = { has_global_variable = te_seabed_rk_more_atlantic }
 		value = global_var:te_seabed_rk_more_atlantic
+		if = {
+			limit = {
+				has_variable = te_seabed_rank_atlantic
+				var:te_seabed_rank_atlantic > 6
+			}
+			subtract = 1
+		}
+		min = 0
 	}
 }
 
@@ -2092,7 +2110,8 @@ te_seabed_us_shown_atlantic = {
 }
 
 # Country scope (Indian): the rivals' flags filled on this player,
-# the claimants past the six shown, and whether our own row shows (we claim,
+# the claimants past the six shown (not counting us: our own row shows us),
+# and whether our own row shows (we claim,
 # hold or relinquished here).
 te_seabed_rkcap_count_disp_indian = {
 	value = 0
@@ -2107,6 +2126,14 @@ te_seabed_rk_more_disp_indian = {
 	if = {
 		limit = { has_global_variable = te_seabed_rk_more_indian }
 		value = global_var:te_seabed_rk_more_indian
+		if = {
+			limit = {
+				has_variable = te_seabed_rank_indian
+				var:te_seabed_rank_indian > 6
+			}
+			subtract = 1
+		}
+		min = 0
 	}
 }
 
@@ -2125,7 +2152,8 @@ te_seabed_us_shown_indian = {
 }
 
 # Country scope (Arctic): the rivals' flags filled on this player,
-# the claimants past the six shown, and whether our own row shows (we claim,
+# the claimants past the six shown (not counting us: our own row shows us),
+# and whether our own row shows (we claim,
 # hold or relinquished here).
 te_seabed_rkcap_count_disp_arctic = {
 	value = 0
@@ -2140,6 +2168,14 @@ te_seabed_rk_more_disp_arctic = {
 	if = {
 		limit = { has_global_variable = te_seabed_rk_more_arctic }
 		value = global_var:te_seabed_rk_more_arctic
+		if = {
+			limit = {
+				has_variable = te_seabed_rank_arctic
+				var:te_seabed_rank_arctic > 6
+			}
+			subtract = 1
+		}
+		min = 0
 	}
 }
 
@@ -2158,7 +2194,8 @@ te_seabed_us_shown_arctic = {
 }
 
 # Country scope (Southern): the rivals' flags filled on this player,
-# the claimants past the six shown, and whether our own row shows (we claim,
+# the claimants past the six shown (not counting us: our own row shows us),
+# and whether our own row shows (we claim,
 # hold or relinquished here).
 te_seabed_rkcap_count_disp_southern = {
 	value = 0
@@ -2173,6 +2210,14 @@ te_seabed_rk_more_disp_southern = {
 	if = {
 		limit = { has_global_variable = te_seabed_rk_more_southern }
 		value = global_var:te_seabed_rk_more_southern
+		if = {
+			limit = {
+				has_variable = te_seabed_rank_southern
+				var:te_seabed_rank_southern > 6
+			}
+			subtract = 1
+		}
+		min = 0
 	}
 }
 
