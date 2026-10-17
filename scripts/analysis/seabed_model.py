@@ -181,7 +181,7 @@ class Country:
     alive: bool = True
     tech: bool = True                # has_technology_researched = abyssal_plain_mining
     policy: int = SURVEY
-    navy: float = 0.0                # navy_size
+    navy: float = 0.0                # naval power projection ÷ te_seabed_power_projection_scale
     eligible: bool = False           # te_seabed_reserved_half_eligible (hook)
     barred: bool = False             # te_seabed_southern_barred (hook)
     station: bool = False            # has_variable = te_antarctic_station
@@ -709,8 +709,10 @@ def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
 
 
 def need_navy(world: World, cid, b: str) -> int | None:
-    """te_seabed_need_navy_<basin>: need_weight in units of navy. At home the
-    navy counts in proportion to the country's coastal states there
+    """te_seabed_need_navy_<basin>: need_weight in units of navy (Country.navy,
+    the scaled power projection; the panel shows it × the scale,
+    te_seabed_power_projection_scale, as raw naval power projection). At home
+    the navy counts in proportion to the country's coastal states there
     (factor × navy multiplier × n_b ÷ N, unincorporated ones at half); far away at DISTANT_NAVY_SHARE
     (0.05 × factor × navy multiplier). Rounded up; None passes through."""
     x = need_weight(world, b, cid)

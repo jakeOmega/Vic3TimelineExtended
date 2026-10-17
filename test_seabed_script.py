@@ -732,5 +732,56 @@ class ContractTest(unittest.TestCase):
         self.assertIn("has_game_rule = global_commons_enabled", block(read(TRIGGERS), "te_global_commons_enabled"))
 
 
+class NavyMeasureTest(unittest.TestCase):
+    """Seabed claims spec § 6.1: the navy term is naval power projection,
+    scaled to the old flotilla term, behind a once-a-game self-check."""
+
+    def test_power_projection_is_the_navy_term(self):
+        body = strip_comments(block(read(VALUES), "te_seabed_navy_effective"))
+        self.assertIn("naval_power_projection", body)
+        self.assertIn("te_seabed_power_projection_scale", body)
+        self.assertNotIn("navy_size", body)
+
+    def test_scale_constant(self):
+        self.assertEqual(literal(read(VALUES), "te_seabed_power_projection_scale"), 5)
+
+    def test_self_check_excludes_no_navy(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_power_projection_check"))
+        self.assertIn("navy_size > 0", body)
+        self.assertIn("seabed_power_projection", body)
+
+    def test_self_check_runs_from_the_sharing_once(self):
+        body = strip_comments(block(read(EFFECTS), "te_seabed_yearly_pass"))
+        self.assertIn("te_seabed_power_projection_check = yes", body)
+        check = strip_comments(block(read(EFFECTS), "te_seabed_power_projection_check"))
+        self.assertIn("te_seabed_npp_check_done", check)
+        self.assertIn("TE_SELF_CHECK OK seabed_power_projection", check)
+        self.assertIn("TE_SELF_CHECK BROKEN seabed_power_projection", check)
+
+    def test_readout_shows_raw_power_projection(self):
+        """The stored readout is in the weight's navy units (the model's
+        need_navy); the cell shows it × the scale, the military panel's
+        figure. Only above 0: -1 (full) and -2 (no claim) are the cell's
+        sentinels."""
+        for b in m.BASINS:
+            body = strip_comments(block(read(VALUES), f"te_seabed_need_navy_disp_{b}"))
+            self.assertRegex(body, rf"limit = \{{ var:te_seabed_need_navy_{b} > 0 \}}\s*"
+                                   r"multiply = te_seabed_power_projection_scale")
+
+    def test_loc_names_power_projection(self):
+        loc = read("localization/english/te_miscellaneous_l_english.yml")
+        for key in ("te_seabed_how_weight", "te_seabed_col_next_tt",
+                    *(f"te_seabed_next_tt_{b}" for b in m.BASINS),
+                    *(f"te_seabed_weight_home_{b}" for b in m.BASINS),
+                    *(f"te_seabed_weight_far_{b}" for b in m.BASINS)):
+            line = re.search(rf"^ {key}:0 \"(.*)\"$", loc, re.M).group(1)
+            self.assertIn("naval power projection", line, key)
+            self.assertNotIn("flotilla", line, key)
+
+    def test_fallback_is_named(self):
+        with open(os.path.join(REPO, "docs/testing/global-commons-playtest.md"), encoding="utf-8") as f:
+            self.assertIn("seabed_power_projection", f.read())
+
+
 if __name__ == "__main__":
     unittest.main()

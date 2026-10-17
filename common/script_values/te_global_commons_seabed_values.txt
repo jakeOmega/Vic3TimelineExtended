@@ -61,6 +61,13 @@ te_seabed_distant_navy_share = 0.05
 te_seabed_station_weight = 5
 # Unilateral Licensing, or the Scramble regime for everyone: navy × this.
 te_seabed_assertive_navy_mult = 2
+# The navy term is naval power projection ÷ this (seabed claims spec § 6.1), so
+# a typical fleet's term stays near its old flotilla count beside the coast
+# and port terms. A first estimate: vanilla scales the navy's power
+# projection modifiers up to 1,000 (NAVY_POWER_PROJECTION_MODIFIER_MAX_SCALING).
+# Set it from the median ratio the seabed_power_projection self-check logs
+# (docs/testing/global-commons-playtest.md).
+te_seabed_power_projection_scale = 5
 # Policy factors (§ 2.5).
 te_seabed_policy_factor_survey = 0.25
 te_seabed_policy_factor_sponsor = 1
@@ -218,12 +225,43 @@ te_seabed_policy_factor = {
 	}
 }
 
-# Country scope: the navy that counts toward claims (model: compute_weights).
+# Country scope: the navy that counts toward claims (model: compute_weights,
+# Country.navy): naval power projection, scaled (seabed claims spec § 6.1).
+# Read as a value only here and in te_seabed_npp_disp, unproven: the
+# seabed_power_projection self-check; its fallback is navy_size.
 te_seabed_navy_effective = {
-	value = navy_size
+	value = naval_power_projection
+	divide = te_seabed_power_projection_scale
 	if = {
 		limit = { te_seabed_navy_assertive = yes }
 		multiply = te_seabed_assertive_navy_mult
+	}
+}
+
+# Country scope: our naval power projection, as the military panel shows it
+# (the self-check and the weight hovers), and as the weight counts it (twice
+# under Unilateral Licensing or a scramble) before the scale divides it.
+te_seabed_npp_disp = {
+	value = naval_power_projection
+}
+te_seabed_npp_counted_disp = {
+	value = te_seabed_npp_disp
+	if = {
+		limit = { te_seabed_navy_assertive = yes }
+		multiply = te_seabed_assertive_navy_mult
+	}
+}
+# Country scope, for the seabed_power_projection self-check's lines: the
+# flotillas the term counted before, and power projection per flotilla.
+te_seabed_navy_size_disp = {
+	value = navy_size
+}
+te_seabed_npp_ratio_disp = {
+	value = 0
+	if = {
+		limit = { navy_size > 0 }
+		value = te_seabed_npp_disp
+		divide = te_seabed_navy_size_disp
 	}
 }
 
@@ -1113,12 +1151,18 @@ te_seabed_ent_value_pacific = {
 	}
 }
 
-# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+# Country scope: the "+1 licence" readout: naval power projection needed
+# (the stored figure is in the weight's navy units, × the scale), -1 full,
+# -2 no claim.
 te_seabed_need_navy_disp_pacific = {
 	value = -2
 	if = {
 		limit = { has_variable = te_seabed_need_navy_pacific }
 		value = var:te_seabed_need_navy_pacific
+		if = {
+			limit = { var:te_seabed_need_navy_pacific > 0 }
+			multiply = te_seabed_power_projection_scale
+		}
 	}
 }
 
@@ -1236,12 +1280,18 @@ te_seabed_ent_value_atlantic = {
 	}
 }
 
-# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+# Country scope: the "+1 licence" readout: naval power projection needed
+# (the stored figure is in the weight's navy units, × the scale), -1 full,
+# -2 no claim.
 te_seabed_need_navy_disp_atlantic = {
 	value = -2
 	if = {
 		limit = { has_variable = te_seabed_need_navy_atlantic }
 		value = var:te_seabed_need_navy_atlantic
+		if = {
+			limit = { var:te_seabed_need_navy_atlantic > 0 }
+			multiply = te_seabed_power_projection_scale
+		}
 	}
 }
 
@@ -1359,12 +1409,18 @@ te_seabed_ent_value_indian = {
 	}
 }
 
-# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+# Country scope: the "+1 licence" readout: naval power projection needed
+# (the stored figure is in the weight's navy units, × the scale), -1 full,
+# -2 no claim.
 te_seabed_need_navy_disp_indian = {
 	value = -2
 	if = {
 		limit = { has_variable = te_seabed_need_navy_indian }
 		value = var:te_seabed_need_navy_indian
+		if = {
+			limit = { var:te_seabed_need_navy_indian > 0 }
+			multiply = te_seabed_power_projection_scale
+		}
 	}
 }
 
@@ -1482,12 +1538,18 @@ te_seabed_ent_value_arctic = {
 	}
 }
 
-# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+# Country scope: the "+1 licence" readout: naval power projection needed
+# (the stored figure is in the weight's navy units, × the scale), -1 full,
+# -2 no claim.
 te_seabed_need_navy_disp_arctic = {
 	value = -2
 	if = {
 		limit = { has_variable = te_seabed_need_navy_arctic }
 		value = var:te_seabed_need_navy_arctic
+		if = {
+			limit = { var:te_seabed_need_navy_arctic > 0 }
+			multiply = te_seabed_power_projection_scale
+		}
 	}
 }
 
@@ -1606,12 +1668,18 @@ te_seabed_ent_value_southern = {
 	}
 }
 
-# Country scope: the "+1 licence" readout: navy needed, -1 full, -2 no claim.
+# Country scope: the "+1 licence" readout: naval power projection needed
+# (the stored figure is in the weight's navy units, × the scale), -1 full,
+# -2 no claim.
 te_seabed_need_navy_disp_southern = {
 	value = -2
 	if = {
 		limit = { has_variable = te_seabed_need_navy_southern }
 		value = var:te_seabed_need_navy_southern
+		if = {
+			limit = { var:te_seabed_need_navy_southern > 0 }
+			multiply = te_seabed_power_projection_scale
+		}
 	}
 }
 

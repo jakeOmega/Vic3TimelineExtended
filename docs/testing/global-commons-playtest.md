@@ -53,12 +53,14 @@ holding fee, Sponsor's protection, the policy lock and the panel
 | `TE_SELF_CHECK … seabed_floor_fits` | after each sharing in which a Sponsor Contractors floor protected something (`protected` above 0 in some basin); OK once a game, BROKEN every sharing it fails | every basin's entitlements stay within its pool, or its holdings if more, after the floors are fitted (`te_seabed_fit_floors` scaled the protected parts down where they didn't fit) | `over` above 0: a basin's unbuilt claims exceed what its pool leaves beyond its licences, so a floor pushed shares past the pool | reproduce the basin in the model (`FloorTest.test_floors_scale_down_to_fit`); read each participant's `te_seabed_fz_<basin>` and `te_seabed_floor_<basin>` in the variable inspector |
 | `TE_SELF_CHECK … seabed_lease_entry` | a day after a Lease Seabed Claims article comes into force (`te_seabed.1`); OK once a game, BROKEN each time it fails | the start event found the in-force article naming the lessee, read its lessor and quantity (`n`), and moved up to that many of the lessor's own claims (`moved`) | no such article a day after entry: the lessee's `every_scope_treaty` walk, the article's `target_country` test or `input_quantity` doesn't read as assumed (or the treaty ended within the day) | read the quantity in the hook instead (`scope:article_options.input_quantity`, unproven), or start the lease at the next sharing, whose walk reads the same article (`te_seabed_lease_shift_basin`) |
 | `TE_SELF_CHECK … seabed_pact_read` | a day after an overlord takes Administer Seabed Claims (`te_seabed.2`); OK once a game, BROKEN each time it fails | the subject sees the pact from its own side (`has_diplomatic_pact`), as every sharing reads it (`te_seabed_pact_stands`) | the pact isn't seen from the subject's side, or the overlord ended it within the day: then no sharing passes claims or counts the licences built on them as the subject's | read the pact from the overlord's side (iterate its `every_direct_subject` in `te_seabed_pass_subject_claims` and `te_seabed_lease_shift_held`) |
+| `TE_SELF_CHECK INFO/OK/BROKEN seabed_power_projection` | once a game, at the end of the first sharing with a claimant that has a navy (`navy_size` > 0) | `naval_power_projection` reads as a number in a script value (`te_seabed_navy_effective`, `te_seabed_npp_disp`) for at least one of them. Each `INFO` line gives a claimant's `npp`, `navy_size` and their `ratio` | every claimant with a navy reads 0: the read isn't a value (vanilla only ever compares it), so the claim weight's navy term is 0 for everyone | BROKEN: revert `te_seabed_navy_effective` to `navy_size` (no scale) and the hovers' "naval power projection" to "navy". OK: before a release, set `te_seabed_power_projection_scale` to the median `ratio` of the `INFO` lines, so a typical fleet's term stays near its flotilla count; a scale left too low lets navies swamp the coast and port terms |
 
 The checks exclude the degenerate case: `seabed_cap` waits for a previous sharing (the ceilings) and
 logs OK only with records in the world; `seabed_licence_follows_state` watches only states the
 monthly recording saw holding licences (a global list kept apart from the states' own variables);
 `seabed_floor_fits` runs only after a sharing in which some floor protected a claim; `seabed_pact_read`
-gives no verdict for a country no longer a subject.
+gives no verdict for a country no longer a subject; `seabed_power_projection` reads only claimants with a
+navy, and says BROKEN only when all of them read 0.
 
 ### Play-test list
 
@@ -220,6 +222,11 @@ gives no verdict for a country no longer a subject.
     returning it on the same subject year after year (will_propose below 25 liberty desire,
     will_break at 50): it should now cost a third party nothing, but it churns. Watch, too, AIs
     leasing out almost all their claims as soon as they have the technology (nothing queued yet).
+27. **Naval power projection in the claim weight** (seabed claims spec § 6.1). Hover a home basin's
+    weight: the naval term's figure is the military panel's naval power projection (twice it under
+    Unilateral Licensing or a scramble), divided by the scale. The "+1 licence" cell reads in the
+    same units. Build or modernise ships: the term rises at the next sharing; a large obsolete fleet
+    should now weigh less than a smaller modern one. Read the `seabed_power_projection` lines first.
 
 ### Engine facts the build assumes, unverified
 
@@ -252,6 +259,12 @@ gives no verdict for a country no longer a subject.
   day later the lessee's `every_scope_treaty` / `every_scope_article` walk finds the article with
   `target_country = scope:x` and reads `input_quantity` (self-check `seabed_lease_entry`).
 - `quantity_max_value` reads ROOT as the source, as vanilla Money Transfer's `fixed_income` does.
+- `naval_power_projection` reads as a number in a script value (`value = naval_power_projection`).
+  The engine docs list it only as a comparison trigger (`docs/engine/triggers_parsed.txt`) and
+  `event_targets_summary.txt` lists `navy_size` but not it; vanilla reads it only as a
+  comparison's right-hand side (`naval_power_projection > root.naval_power_projection`,
+  `brazil_navy.txt`; `c:JAP.naval_power_projection`, `ryukyu_rivalry_buttons.txt`), which suggests
+  a value link (self-check `seabed_power_projection`).
 - A no-approval pact action's `accept_effect` runs with ROOT the overlord and
   `scope:target_country` the subject, as vanilla Rivalry's does, and `has_diplomatic_pact` sees the
   pact from the subject's side (self-check `seabed_pact_read`); `every_direct_subject` visits an
