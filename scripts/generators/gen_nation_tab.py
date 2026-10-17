@@ -85,7 +85,9 @@ SECTIONS = {
         # The tax code: interest groups' views and reactions, relief
         "te_tax_ig_view_*", "te_tax_light_react_*", "te_tax_light_relief_*", "te_tax_relief_*",
         # Monetary arrangements, inflation and exchange rate bands, while the
-        # banking cycle's entry isn't running (on the entry otherwise)
+        # country holds no banking entry (te_mon_mod_home; since #1020 only the
+        # game's first fortnight and a running revolution's rebels): on the
+        # entry otherwise, where the filter matches nothing
         "te_mon_*", "te_inflation_band_*", "te_fx_*", "te_monetary_rate_paid",
         "te_monetisation_minting", "te_capital_controls_fatigue",
         # Colonial programmes (the Colonial Empire entry's policy dials)
