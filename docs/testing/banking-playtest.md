@@ -17,7 +17,8 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … contagion_roll_scope` | Judged only for a contagion event that was alone: no other copy open for the same country between its roll and its answer (`open=1`). OK once a game, when the first country a contagion cascade reached (a contagion crash spreading on, not an origin crash) has its own roll crash; BROKEN each time a lone event's options and its roll disagree; NO_VERDICT each time they disagree while another copy is open (`open=2` or more) | the event's own `save_scope_as = contagion_crashed` replaced the upstream country's inherited one, so a cascade target's crash plays as a crash. The 2026-10-17 autosave already shows this: targets two and three tiers out had taken the crash-only options | `roll=crash read=scare open=1`: the save did not replace the inherited scope, so in a cascade only the first tier can crash. `roll=scare read=crash open=1`: a scare took the crash options, the 2026-10-16 bug. NO_VERDICT is no fault: two copies share `contagion_crash`, the later roll overwrote the earlier one's, and each copy's options followed its own (the five BROKEN lines of 2026-10-17 were this). A country whose copy never resolved (annexed first) is not judged again | A BROKEN with `open=1`: drop the saved scope. Mark a country as having a contagion event pending when the spread reaches it (skipped by the spread like `banking_crisis_wave_hit`, cleared in `after`), so only one copy is ever open, and read the roll from `var:contagion_crash` in the text, options and cascade. That changes play (a country two origins reach in one pulse gets one event, not two), so it is the owner's call. The old fallback, a saved scope *value* set on both outcomes, is withdrawn: it needs the same replacement, and where that fails a scare inherits the upstream country's crash, the 2026-10-16 bug |
+| `TE_SELF_CHECK … contagion_one_open` | BROKEN once a game, when a contagion event opens for a country that already has one open. OK once a game, when a contagion event closes alone after a wave that reached its country while it was on its way or open was turned away (`turned_away=N`); a game with no such reach logs no OK | one contagion event per country at a time: the mark the spread sets when it sends the event (`banking_contagion_pending`) turned the second wave away, and the event answered for both | two contagion events open at once, so two rolls and two popups again; the line gives `date`, `open` and `turned_away`. Find both events for that country in `debug.log`. Within a week of loading a save made before the block, it can be a pair sent under the old rules: no fault. If the first had been open more than 120 days, the mark ran out under it. If both were sent while the mark stood, something sent the event past the spread, or removed the mark (a loyalist win re-running `je_banking_cycle`'s `immediate` would) | Mark ran out: raise `days` in `banking_contagion_mark_pending` above the event's real lifetime. Mark not seen or removed: make the mark untimed and count monthly passes instead, as `covert_open_event_stale_passes` does, or drop the revolution clear in `je_banking_cycle`'s `immediate` if a loyalist win caused it. The event `trigger` the owner sketched first (a mark set in `immediate`) is no fallback for the same-pulse case: both copies are sent before either opens |
+| `TE_SELF_CHECK … contagion_roll_scope` | Judged only for a contagion event that was alone: no other copy open for the same country between its roll and its answer (`open=1`), which since the block (`contagion_one_open`) is every one. OK once a game, when the first country a contagion cascade reached (a contagion crash spreading on, not an origin crash) has its own roll crash; BROKEN each time a lone event's options and its roll disagree. A copy open beside another is not judged: `contagion_one_open` reports that | the event's own `save_scope_as = contagion_crashed` replaced the upstream country's inherited one, so a cascade target's crash plays as a crash. The 2026-10-17 autosave already shows this: targets two and three tiers out had taken the crash-only options | `roll=crash read=scare open=1`: the save did not replace the inherited scope, so in a cascade only the first tier can crash. `roll=scare read=crash open=1`: a scare took the crash options, the 2026-10-16 bug. A country whose copy never resolved (annexed first) is not judged until the spread sends it the next one | A BROKEN with `open=1`: drop the saved scope and read the roll from `var:contagion_crash` in the text, options and cascade. With one contagion event at a time the variable is the event's own roll, so this no longer changes play. The old fallback, a saved scope *value* set on both outcomes, stays withdrawn: it needs the same replacement, and where that fails a scare inherits the upstream country's crash, the 2026-10-16 bug |
 
 ## A contagion scare plays as a scare (2026-10-16)
 
@@ -60,11 +61,28 @@ compared its own roll with the other copy's. The options had followed each copy'
 the copies open (`banking_contagion_open`) and judges only a copy that was alone; the title, description and
 flavour read the event's own roll, as the options do.
 
-6. **No `contagion_roll_scope` BROKEN.** Expect NO_VERDICT lines about as often as the BROKEN ones came (five in
-   sixty years), each with `open=2` or more, and the OK once. A BROKEN with `open=1` is real: take the fallback in
-   the table.
+6. **No `contagion_roll_scope` BROKEN.** It judges every contagion event now, since one is open at a time
+   (below), and logs its OK once. The NO_VERDICT lines are gone: a second copy open is `contagion_one_open`'s
+   BROKEN. A BROKEN with `open=1` is real: take the fallback in the table.
 7. **The text matches the options.** A country whose own roll crashed reads "Cascading Financial Collapse" and the
    cascade description and sees the crash-only options where its laws and institutions allow; a scare reads
    "Contagion from Abroad" (or "Financial Contagion" after a severe crash) and gets only "Close the gates" and
-   "Maintain open markets". When two contagion events reach the player at once, each one's text matches its own
-   options.
+   "Maintain open markets". Two at once should no longer happen (item 8).
+
+## One contagion event at a time (2026-10-17)
+
+The owner's call on the double events above: "Ideally, only one." The spread now marks a country when it sends
+it the contagion event (`banking_contagion_pending`, 120 days), and turns away any later reach while the mark
+stands. The event sets the mark again when it opens, and its `after` removes it. `banking_crisis_wave_init` leaves
+the mark alone, so a second origin crashing in the same pulse no longer sends a country a second event. The
+turned-away wave marks the country reached, with the open event's outcome if it has rolled, and the event counts
+toward the Great Depression only through its own crash, once. A revolution's winner drops the mark, since the
+event died with the loser.
+
+8. **One popup.** When two crashes in one month reach the player's country, it gets one contagion event; while
+   that event is open, further crashes pass it by. Once it is answered, a later crash can reach it again.
+9. **`contagion_one_open`: no BROKEN, OK once.** The observer run of 2026-10-17 had about five double reaches in
+   sixty years, so a long observer game should log the OK, with `turned_away=1` or more.
+10. **The mark goes.** After a wave, `save_country_probe.py --var '^banking_contagion_'` on a country that answered
+    its contagion event shows no `banking_contagion_pending`. After a rebel win during a wave, the winner shows
+    none either.

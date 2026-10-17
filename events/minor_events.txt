@@ -614,6 +614,10 @@ minor_events_timelineextended.7 = {
 			limit = { var:contagion_crash > 0 }
 			save_scope_as = contagion_crashed
 		}
+		# One contagion event at a time (banking_contagion_mark_pending): the spread set the mark when it sent
+		# this event; set it again now it is open, which may restart its clock (it outlasts the event either
+		# way) and covers a copy an older build sent. `after` removes it.
+		banking_contagion_mark_pending = yes
 	}
 
 	duration = 3
@@ -817,8 +821,17 @@ minor_events_timelineextended.7 = {
 		}
 		banking_cycle_post_event_refresh = yes
 		# The outcome is this event's alone. Removed every time, even while another copy is open: the
-		# self-check takes a missing value to mean a copy opened and closed meanwhile.
-		remove_variable = contagion_crash
+		# self-check takes a missing value to mean a copy opened and closed meanwhile. Guarded: a copy sent
+		# while this one held no mark (an older build opened it) clears its leftovers (banking_contagion_clear_stale).
+		if = {
+			limit = { has_variable = contagion_crash }
+			remove_variable = contagion_crash
+		}
+		# Answered: the spread may send this country a contagion event again.
+		if = {
+			limit = { has_variable = banking_contagion_pending }
+			remove_variable = banking_contagion_pending
+		}
 	}
 }
 
