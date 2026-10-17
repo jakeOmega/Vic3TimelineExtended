@@ -299,10 +299,17 @@ The owner asked for a way to revoke claims. Design (my calls on the details):
   6: beside the item it acts on). It gives up all our claims in the basin at once and stops us
   claiming there: our weight there counts as 0 at every sharing until we press **"Claim Again"**,
   which takes effect at the next sharing.
-- The relinquished claims are shared out among the other claimants at a sharing the next month
-  (set `te_seabed_reshare`, the existing mid-year trigger).
-- Licences on built and queued levels are untouched. Our floor there becomes our holdings, and
-  the influence cost falls from the next monthly refresh.
+- **The relinquished claims wait for the next scheduled sharing.** Our claims go at once (the
+  influence cost falls from the next monthly refresh), but the freed licences stay unclaimed until
+  the next January sharing, or a mid-year one something else triggers. Relinquishing must **not**
+  set `te_seabed_reshare`: a mid-year sharing honours January's floors, so a Sponsor country whose
+  weight has grown since January could relinquish one claim and take every rival's unprotected
+  claims, in every basin, months early.
+- The existing mid-year triggers (a new claimant, a civil war's winner) carry the same asymmetry
+  once floors exist: Sponsor countries keep their floors and others are re-divided. That is
+  intended (protection is what Sponsor buys); don't remove the floors from mid-year sharings to
+  "fix" it.
+- Licences on built and queued levels are untouched. Our floor there becomes our holdings.
 - It is not a policy change, so the lock doesn't apply. Nothing is gained by relinquishing and
   claiming again: the claims are gone until the next sharing gives some back by weight.
 - The real seabed contracts have the same idea: a contractor must relinquish parts of its area it
@@ -316,7 +323,8 @@ Each rule above (fee base and grace, floors and their scaling, the reserved-half
 Antarctic and Scramble overrides, relinquishing, subject pooling, leases) goes into `scripts/analysis/seabed_model.py` before the script.
 `test_seabed_allocation.py` re-proves the invariants over random worlds: no basin's records rise
 above its pool, no recorded licence is taken away, floors never push a basin's shares above its
-pool, and leases never create licences. `test_seabed_script.py` keeps the script's names,
+pool, leases never create licences, and relinquishing then claiming again never leaves a country
+ahead of not relinquishing. `test_seabed_script.py` keeps the script's names,
 constants and call order matched to the model.
 
 ## 3. The panel (layout A)
@@ -359,7 +367,7 @@ always shown. Columns, at 520 units (fit to the width budget, § 3.7):
 | **Free here** | our claims in the basin, green when > 0 and we have coast there (building there has no long-haul penalty) | "Build in: <our coastal states in this basin>" (up to five, then "and N more") |
 | **Pool** | stacked bar of the whole pool: our built licences, our queued licences (hatched), our claims, rivals' licences, rivals' claims | the five figures and the pool size |
 | **Our weight** | our share of the basin's total claim weight, as a percentage | the weight breakdown (coast, ports, navy, policy factor) and the raw figures |
-| **+1 licence** | "+X navy", or "full" when nothing is left to share, or "—" when we claim nothing | "+X navy, or +1 coastal state here ≈ +K licences" (§ 3.5) |
+| **+1 licence** | "+X" (navy needed; the unit is in the header's hover), or "full" when nothing is left to share, or "—" when we claim nothing | "+X navy, or +1 coastal state here ≈ +K licences" (§ 3.5) |
 
 Rivals' claims are the part a buildup can win, so the bar's legend says so: "rivals' claims (up
 for grabs)". On Sponsor, part of a rival's claims are protected; the bar does not split them (my
@@ -482,9 +490,9 @@ weight rules.
 - **Only ever the overlord's choice** (owner: "as long as you don't have to take your subject's
   claims"). Nothing pools without the action, and the overlord can end it at any time.
 - **While it stands**: the subject still claims by its own weight. At entry and at every sharing,
-  its unused claims in every basin pass to the overlord as leased claims (§ 4's counters, with N
-  = the subject's unused claims at that sharing). The subject's licences stay its own; they
-  belong to its levels.
+  its unused claims in every basin pass to the overlord as leased claims, kept in § 4's counters.
+  Unlike a treaty lease it has **no total**: each sharing passes on whatever the subject has unused
+  then, with no cap. The subject's licences stay its own; they belong to its levels.
 - **Where the overlord can use them**: in its own states only. In a basin where it has no coast,
   its levels on those claims are long-haul at −25% (owner: acceptable). Building in the subject's
   waters would change the gate and recording, and is out of scope.
@@ -509,11 +517,12 @@ weight rules.
   `scope:other_country.naval_power_projection`, `static_treaty_acceptance.txt:270`), which
   suggests a value link. Check offline first (`/engine-docs`), then ship with a once-a-game
   `TE_SELF_CHECK OK|BROKEN seabed_power_projection` line logging it beside `navy_size`. The
-  fallback is `navy_size`, and the readout says "+X navy".
+  fallback is `navy_size`, and the header and hover say "navy".
 - **Scale.** Power projection runs on a different scale from flotillas. Divide it by a constant
   so a typical fleet's term matches today's flotilla term, keeping the coast and port terms'
   balance; set the constant from a save and record it in the values file.
-- The readout (§ 3.5) then reads "+X naval power projection".
+- The readout cell (§ 3.5) shows the figure only, "+X"; the column header and the hover name the
+  unit, so the cell never has to fit "naval power projection".
 
 ### 6.2 Blockades cut seabed output
 
