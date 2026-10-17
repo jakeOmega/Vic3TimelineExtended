@@ -1819,7 +1819,8 @@ te_demog_pr_erosion_contraception = {
 # base (te_dg_acc, which drifts toward its target since the Causes of Death plan; set before any practice reads
 # it, by te_demog_medicine_at_target at a seed and te_demog_medicine_drift at a step). The seed with no sibling
 # holding a share is the start less it (practice_seed; review I2), and the target adds Late Marriage's drivers
-# to that (practice_target): impartible inheritance on the farms and women's paid work. Read after the walk.
+# to that (practice_target): impartible inheritance on the farms (the laws' line, Primogeniture's and Undivided
+# Farm Succession's state_late_marriage_farms_add, x the agrarian share) and women's paid work. Read after the walk.
 te_demog_pr_erosion_lm = {
 	value = te_demog_pr_erosion_contraception
 	max = 1
@@ -1832,17 +1833,7 @@ te_demog_pr_seed_lm = {
 }
 te_demog_pr_target_lm = {
 	value = te_demog_pr_seed_lm
-	if = {
-		limit = {
-			owner = {
-				OR = {
-					has_law = law_type:law_primogeniture
-					te_inh_has_undivided_farms = yes
-				}
-			}
-		}
-		add = { value = var:te_dg_agr_share multiply = 0.15 }
-	}
+	add = { value = var:te_dg_agr_share multiply = modifier:state_late_marriage_farms_add }
 	add = { value = var:te_dg_fjob_share multiply = te_demog_female_work_share multiply = 0.625 }
 	min = 0
 	max = 1
@@ -1903,21 +1894,6 @@ te_demog_pr_share_bs = {
 	}
 }
 
-# State scope: the land-tenure term of Wealth Concentration's target (spec 4.2), weighted by
-# the state's agrarian share. Variant laws take their parent's value.
-te_demog_wc_land_term = {
-	value = 0
-	if = { limit = { owner = { has_law = law_type:law_collectivized_agriculture } } value = -20 }
-	if = { limit = { owner = { has_law = law_type:law_expanded_latifundias } } value = 5 }
-	if = { limit = { owner = { has_law = law_type:law_homesteading } } value = -10 }
-	if = { limit = { owner = { has_law = law_type:law_latifundias } } value = 5 }
-	if = { limit = { owner = { has_law = law_type:law_manorialism } } value = 15 }
-	if = { limit = { owner = { has_law = law_type:law_peasant_proprietorship } } value = -10 }
-	if = { limit = { owner = { has_law = law_type:law_serfdom } } value = 15 }
-	if = { limit = { owner = { has_law = law_type:law_tenant_farmers } } value = 5 }
-	multiply = var:te_dg_agr_share
-}
-
 # Constants the hand-written script reads (demographics_params.py).
 te_demog_k_female_births_per_100k = { value = 48780 }
 te_demog_k_male_births_per_100k = { value = 51220 }
@@ -1976,13 +1952,13 @@ te_demog_k_labour_low_full = { value = 91 }
 te_demog_k_labour_high_start = { value = 105 }
 te_demog_k_labour_high_full = { value = 115 }
 
-# State scope (phase 2 step 1): the 10-14s' participation by the owner's childrens'-rights law
-# (demographics_model.child_work_share).
+# State scope (phase 2 step 1): the 10-14s' participation, the childrens'-rights laws' line, within 0-1
+# (state_child_labor_participation_add: Child Labor Allowed 0.3, Restricted Child Labor 0.1;
+# demographics_model.child_work_share).
 te_demog_child_work = {
-	value = 0.3
-	if = { limit = { owner = { has_law = law_type:law_child_labor_allowed } } value = 0.3 }
-	if = { limit = { owner = { has_law = law_type:law_restricted_child_labor } } value = 0.1 }
-	if = { limit = { owner = { has_law = law_type:law_compulsory_primary_school } } value = 0 }
+	value = modifier:state_child_labor_participation_add
+	min = 0
+	max = 1
 }
 # Pop scope: the pop's own working-adult ratio (vanilla pop_types; the define for the rest).
 te_demog_pop_base_ratio = {

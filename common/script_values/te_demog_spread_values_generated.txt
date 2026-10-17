@@ -17,26 +17,13 @@ te_demog_k_ch_low = { value = 0.9 }
 te_demog_k_ch_high = { value = 1.1 }
 te_demog_k_ch_benchmark_max = { value = 3 }
 
-# Country scope: the church law's weight on Family Limitation's literacy term (demographics_model.fl_church). A
-# State Religion variant (the millet system, people of the book) takes State Religion's.
+# Country scope: the church laws' weight on Family Limitation's literacy term, 1 + their line, at least 0
+# (country_family_limitation_literacy_mult: State Religion and its two variants -0.5, Total Separation and State
+# Atheism +0.5; demographics_model.fl_church).
 te_demog_fl_church = {
 	value = 1
-	if = {
-		limit = { has_law_or_variant = law_type:law_state_religion }
-		value = 0.5
-	}
-	else_if = {
-		limit = { has_law = law_type:law_freedom_of_conscience }
-		value = 1
-	}
-	else_if = {
-		limit = { has_law = law_type:law_total_separation }
-		value = 1.5
-	}
-	else_if = {
-		limit = { has_law = law_type:law_state_atheism }
-		value = 1.5
-	}
+	add = modifier:country_family_limitation_literacy_mult
+	min = 0
 }
 
 # Country scope, after its census stored te_dg_fl_agr and te_dg_fl_lit (te_demog_fl_country_store): where its

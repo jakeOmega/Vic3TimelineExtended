@@ -903,15 +903,16 @@ class TestPractices(unittest.TestCase):
             self.assertLessEqual(set(P.PRACTICE_START_STATE[practice]), set(R.strategic_region_of()), practice)
 
     def test_late_marriage_target(self):
-        # 1836: nothing beyond traditional methods, No Women's Rights, Primogeniture on half-farming land
-        inp = M.Inputs(literacy=0.4, laws=frozenset({"law_no_womens_rights"}), agrarian_share=0.5,
-                       female_job_share=0.2, impartible=True)
+        # 1836: nothing beyond traditional methods, No Women's Rights, Primogeniture on half-farming land (its Late
+        # Marriage line, 0.15, from the game files)
+        inp = scenario(literacy=0.4, laws=frozenset({"law_no_womens_rights", "law_primogeniture"}), agrarian_share=0.5,
+                       female_job_share=0.2)
         work = P.LM_WOMENS_WORK * 0.2 * 0.1 / P.FULL_FEMALE_WORK_SHARE
-        self.assertAlmostEqual(M.practice_target("lm", inp, 0.0), P.LM_INHERITANCE * 0.5 + work)
+        self.assertAlmostEqual(M.practice_target("lm", inp, 0.0), 0.15 * 0.5 + work)
         self.assertEqual(M.practice_target("lm", inp, 1.0), 1.0, "clamped at 1")
-        # era 3's pair at literacy 0.75: the means beyond traditional methods are 0.35 x 0.825 = 0.289
-        late = dataclasses.replace(inp, literacy=0.75, impartible=False, female_job_share=0.0,
-                                   mods={P.CONTRACEPTION_TYPE: 0.35})
+        # era 3's pair at literacy 0.75: the means beyond traditional methods are 0.35 x 0.825 = 0.289 (and no
+        # impartible inheritance: mods holds no Late Marriage line)
+        late = dataclasses.replace(inp, literacy=0.75, female_job_share=0.0, mods={P.CONTRACEPTION_TYPE: 0.35})
         erosion = P.PRACTICE_EROSION_CONTRACEPTION * min(1.0, (0.35 * 0.825 - P.PRACTICE_EROSION_FROM)
                                                          / P.PRACTICE_EROSION_SPAN)
         self.assertAlmostEqual(M.practice_target("lm", late, 1.0), 1 - erosion)
@@ -924,7 +925,7 @@ class TestPractices(unittest.TestCase):
                                1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.25 / P.PRACTICE_ACCESS_SPAN)
         full = dataclasses.replace(inp, literacy=1.0, mods={P.ACCESS_TYPE: 1.0, P.CONTRACEPTION_TYPE: 0.5})
         self.assertEqual(M.practice_target("bs", full, 1.0), 0.0, "the erosion is at most 1")
-        self.assertEqual(M.practice_target("bs", M.Inputs(agrarian_share=1.0, impartible=True), 0.0), 0.0,
+        self.assertEqual(M.practice_target("bs", M.Inputs(agrarian_share=1.0, mods={P.LM_FARMS_TYPE: 0.15}), 0.0), 0.0,
                          "nothing builds Birth Spacing up")
 
     def test_birth_spacing_erodes_with_the_access_medicine_has_reached(self):
@@ -955,7 +956,7 @@ class TestPractices(unittest.TestCase):
         self.assertAlmostEqual(M.practice_seed("bs", M.Inputs(mods={P.ACCESS_TYPE: 0.25}), 1.0, []),
                                1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.5)
         drivers = M.Inputs(female_job_share=1.0, laws=frozenset({"law_protected_class"}), agrarian_share=1.0,
-                           impartible=True)
+                           mods={P.LM_FARMS_TYPE: 0.15})
         self.assertEqual(M.practice_seed("lm", drivers, 0.0, []), 0.0,
                          "the drivers stay out of the seed: Japan's Late Marriage starts at 0 (call 3)")
 
@@ -990,11 +991,13 @@ class TestPhase2Interfaces(unittest.TestCase):
         self.assertEqual(M.band_value(P.HEALTH_NEED, 14), 0.5)
 
     def test_the_working_age_start_follows_the_childrens_rights_law(self):
+        """The share is the laws' census line (2026-10-17), read from the game files."""
         for law, share in (("law_child_labor_allowed", 0.3), ("law_restricted_child_labor", 0.1),
                            ("law_compulsory_primary_school", 0.0)):
-            inp = M.Inputs(laws=frozenset({law}))
+            inp = scenario(laws=frozenset({law}))
             self.assertEqual([M.start_factor(inp, a) for a in (9, 10, 14, 15)], [0.0, share, share, 1.0], law)
-        self.assertEqual(M.child_work_share(M.Inputs()), P.CHILD_WORK_SHARE_DEFAULT)
+        self.assertEqual(M.child_work_share(M.Inputs()), 0.0, "no law carrying a line: no child at work")
+        self.assertEqual(M.child_work_share(M.Inputs(mods={P.CHILD_WORK_TYPE: 1.5})), 1.0, "at most all of them")
 
     def test_womens_rate_rises_with_the_family_and_the_lower_strata(self):
         none = M.Inputs()
@@ -1033,7 +1036,7 @@ class TestPhase2Interfaces(unittest.TestCase):
             k = (1900 - a) % M.N
             ring.f[k], ring.m[k] = float(f), float(m)
         ring.pool_f, ring.pool_m = 1.0, 1.0
-        inp = M.Inputs(laws=frozenset({"law_child_labor_allowed", "law_old_age_pension"}), low_share=0.5)
+        inp = scenario(laws=frozenset({"law_child_labor_allowed", "law_old_age_pension"}), low_share=0.5)
         rf = M.women_rate(inp)
         got = M.work_figures(ring, inp, 60.0)
         total = 200 + 100 + 400 + 70 + 2

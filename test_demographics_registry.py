@@ -369,9 +369,10 @@ def _raw_blocks(paths):
 
 FIXED_MAX = (2 ** 63 - 1) / 1e5   # the largest value script holds: an i64 in units of 1e-5
 
-# The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them; and phase
-# 2 step 4's engine read, the state's unemployment (te_demog_unemployment, the youth bulge).
-WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pension_kind": 0.0,
+# The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them (the 10-14s
+# at work: an owner whose laws carry no line, 2026-10-17); and phase 2 step 4's engine read, the state's unemployment
+# (te_demog_unemployment, the youth bulge).
+WORK_DEFAULTS = {"te_demog_child_work": 0.0, "te_demog_pension_kind": 0.0,
                  "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0,
                  **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES},
                  # phase 2 step 2: the workforce term's read of the state's working-adult field
@@ -3662,16 +3663,23 @@ class TestPracticesScript(unittest.TestCase):
                                      demographics_model.practice_start(p, state, region))
 
     def test_the_targets_match_the_model(self):
+        """Impartible inheritance is the laws' Late Marriage line since 2026-10-17: Primogeniture's, or Undivided Farm
+        Succession's on Forced Heirship, from the game files."""
+        lines = DM.load_carriers(types=(P.LM_FARMS_TYPE,))
         for laws, undivided, agr, fjob, lit, contra, access in (
                 ({"law_no_womens_rights"}, False, 0.6, 0.1, 0.2, 0.0, 0.0),
                 ({"law_primogeniture", "law_women_in_the_workplace"}, False, 0.5, 0.3, 0.6, 0.2, 0.18),
                 ({"law_equal_inheritance", "law_protected_class"}, True, 0.4, 0.4, 0.9, 0.35, 0.5),
                 ({"law_protected_class"}, False, 0.1, 0.5, 1.0, 0.45, 1.0)):
+            farms = DM.totals(lines, laws=laws, types=(P.LM_FARMS_TYPE,),
+                              amendments={"amendment_undivided_farm_succession"} if undivided else ())[P.LM_FARMS_TYPE]
+            self.assertEqual(farms, 0.15 if undivided or "law_primogeniture" in laws else 0.0, sorted(laws))
             inp = demographics_model.Inputs(literacy=lit, laws=frozenset(laws), agrarian_share=agr,
-                                            female_job_share=fjob, impartible=undivided or "law_primogeniture" in laws,
-                                            mods={P.CONTRACEPTION_TYPE: contra, P.ACCESS_TYPE: access})
-            eng = _OwnerEngine({f"modifier:{P.CONTRACEPTION_TYPE}": contra, f"modifier:{P.ACCESS_TYPE}": access},
-                               laws=laws, triggers={"te_inh_has_undivided_farms": undivided})
+                                            female_job_share=fjob,
+                                            mods={P.CONTRACEPTION_TYPE: contra, P.ACCESS_TYPE: access,
+                                                  P.LM_FARMS_TYPE: farms})
+            eng = _OwnerEngine({f"modifier:{P.CONTRACEPTION_TYPE}": contra, f"modifier:{P.ACCESS_TYPE}": access,
+                                f"modifier:{P.LM_FARMS_TYPE}": farms}, laws=laws)
             # the access medicine has reached, at its target here (a seed's): the model reads the same
             eng.vars.update(te_dg_lit=lit, te_dg_agr_share=agr, te_dg_fjob_share=fjob,
                             te_dg_acc=demographics_model.medicine_targets(inp)["access"])
@@ -5207,6 +5215,13 @@ class TestInheritanceBalance(unittest.TestCase):
     """The 2026-10-09 balance pass (owner's table): the economic laws term, the re-centred
     ownership term, the amendments, the laws and The Great Estates for Sale."""
 
+    @staticmethod
+    def _wc_lines(laws):
+        """The Wealth Concentration lines `laws` carry in the game files (on the laws since 2026-10-17), as the
+        modifier: reads the interpreter takes."""
+        lines = DM.load_carriers(types=P.WC_LAW_TYPES)
+        return {f"modifier:{t}": v for t, v in DM.totals(lines, laws=laws, types=P.WC_LAW_TYPES).items()}
+
     def test_the_economic_laws_term(self):
         cases = (
             ((), 0),
@@ -5218,8 +5233,23 @@ class TestInheritanceBalance(unittest.TestCase):
             (("law_interventionism", "law_regulated_utilities"), -10),
         )
         for laws, want in cases:
-            eng = _LawEngine(laws, fixtures={})
+            eng = _LawEngine(laws, fixtures=self._wc_lines(laws))
             self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_wc_econ_term")), want, laws)
+
+    def test_the_tax_and_land_terms_read_the_laws_lines(self):
+        """Graduated Taxation's -5 and the land laws' terms x the agrarian share, each the law's own line, a variant at
+        its parent's (2026-10-17)."""
+        for laws, want in (((), 0.0), (("law_graduated_taxation",), -5.0), (("law_proportional_taxation",), 0.0)):
+            eng = _LawEngine(laws, fixtures=self._wc_lines(laws), triggers={"te_tax_code_full": False})
+            self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_wc_tax_term")), want, laws)
+        for law, want in (("law_serfdom", 7.5), ("law_manorialism", 7.5), ("law_tenant_farmers", 2.5),
+                          ("law_expanded_latifundias", 2.5), ("law_commercialized_agriculture", 0.0),
+                          ("law_homesteading", -5.0), ("law_collectivized_agriculture", -10.0)):
+            eng = _LawEngine((law,), fixtures=self._wc_lines({law}))
+            eng.vars["te_dg_agr_share"] = 0.5
+            self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_wc_land_term")), want, msg=law)
+        for name in ("te_demog_wc_land_term", "te_demog_wc_tax_term", "te_demog_wc_econ_term"):
+            self.assertNotIn("has_law", _block(_text(VALUES), name), name)
 
     def test_the_economic_laws_term_is_wired_like_the_tax_term(self):
         self.assertIn("add = owner.te_demog_wc_econ_term", _block(_text(VALUES), "te_demog_wc_target"))

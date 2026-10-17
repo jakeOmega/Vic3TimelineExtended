@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 import demographics_adjacency as A  # noqa: E402
 import demographics_fl as F  # noqa: E402
 import demographics_model as M  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
 import demographics_practices as DP  # noqa: E402
 from test_demographics_registry import (  # noqa: E402  (helpers and paths only)
@@ -29,6 +30,13 @@ DEBUG_EVENTS = ROOT / "events" / "te_debug_demog_events.txt"
 HISTORY = ROOT / "common" / "history" / "extra_history.txt"
 DEMOG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt"
 PLAYTEST = ROOT / "docs" / "testing" / "demographics-playtest.md"
+# The church laws' weight on Family Limitation's literacy term, on the laws since 2026-10-17 (te_demog_law_injections.txt)
+CHURCH_LINES = DM.load_carriers(types=(P.FL_LITERACY_TYPE,))
+
+
+def _church(laws):
+    """The country's P.FL_LITERACY_TYPE total under `laws`, from the game files."""
+    return DM.totals(CHURCH_LINES, laws=laws, types=(P.FL_LITERACY_TYPE,))[P.FL_LITERACY_TYPE]
 
 
 class _CountryEngine(_OwnerEngine):
@@ -82,7 +90,8 @@ class _CountryEngine(_OwnerEngine):
 
 def _country(agr=0.7, lit=0.3, ero=0.0, laws=(), share=None, history_modifier=False, neighbours=(), exposure=0.0,
              hegemon=None, desired=None, ch=None, undivided=False):
-    eng = _CountryEngine({"te_demog_ch_exposure": exposure}, laws=laws, hegemon=hegemon)
+    eng = _CountryEngine({"te_demog_ch_exposure": exposure, f"modifier:{P.FL_LITERACY_TYPE}": _church(laws)},
+                         laws=laws, hegemon=hegemon)
     eng.trigger_fixtures["te_inh_has_undivided_farms"] = undivided
     eng.vars.update(te_dg_fl_agr=agr, te_dg_fl_lit=lit, te_dg_fl_ero=ero)
     if share is not None:
@@ -108,11 +117,16 @@ class TestFamilyLimitationModel(unittest.TestCase):
         self.assertAlmostEqual(M.fl_target(0.74, 0.3, heir), P.FL_HEIRSHIP * 0.74)
         self.assertEqual(M.fl_target(0.74, 0.3, heir, undivided=True), 0.0, "Undivided Farm Succession: no cut to fold")
         self.assertEqual(M.fl_target(0.74, 0.3, {"law_partible"}), 0.0, "1836's other countries start with no target")
-        full = M.fl_target(0.0, 1.0, {"law_total_separation"})
-        self.assertAlmostEqual(full, P.FL_LITERACY * P.FL_CHURCH["law_total_separation"])
-        self.assertAlmostEqual(M.fl_target(0.0, 1.0, {"law_millet_system"}),
-                               P.FL_LITERACY * P.FL_CHURCH["law_state_religion"], msg="a variant takes its parent's")
-        self.assertEqual(M.fl_target(1.0, 1.0, heir | {"law_total_separation"}), 1.0, "at most 1")
+        # the church laws' weight, 1 + their line (on the laws since 2026-10-17)
+        for laws, weight in (({"law_freedom_of_conscience"}, 1.0), ({"law_state_religion"}, 0.5),
+                             ({"law_total_separation"}, 1.5), ({"law_state_atheism"}, 1.5)):
+            with self.subTest(laws=sorted(laws)):
+                self.assertAlmostEqual(M.fl_target(0.0, 1.0, laws, literacy_mult=_church(laws)), P.FL_LITERACY * weight)
+        for variant in ("law_millet_system", "law_people_of_the_book"):
+            self.assertEqual(_church({variant}), _church({"law_state_religion"}), f"{variant} carries its parent's")
+        self.assertEqual(M.fl_church(-1.5), 0.0, "the weight is at least 0")
+        self.assertEqual(M.fl_target(1.0, 1.0, heir | {"law_total_separation"},
+                                     literacy_mult=_church({"law_total_separation"})), 1.0, "at most 1")
 
     def test_the_step_rises_only(self):
         self.assertEqual(M.fl_step(0.6, 0.0, 0.0), 0.6, "France keeps its share when its conditions fall")
@@ -150,7 +164,7 @@ class TestFamilyLimitationScript(unittest.TestCase):
                                           ({"law_state_atheism"}, 0.2, 0.85, False)):
             eng = _country(agr=agr, lit=lit, laws=laws, undivided=undivided)
             with self.subTest(laws=sorted(laws), lit=lit):
-                self.assertAlmostEqual(self._target(eng), M.fl_target(agr, lit, laws, undivided), places=9)
+                self.assertAlmostEqual(self._target(eng), M.fl_target(agr, lit, laws, undivided, _church(laws)), places=9)
 
     def test_france_seeds_at_historys_value_and_keeps_its_line(self):
         eng = _country(laws={"law_equal_inheritance"}, history_modifier=True)
@@ -177,7 +191,7 @@ class TestFamilyLimitationScript(unittest.TestCase):
             eng.call("te_demog_phase3_yearly")
             # the foreign states that hold a share (the country's own and one whose owner has none are left out)
             mean = M.people_mean([(3e6, 0.6), (1e6, 0.0)])
-            want = M.fl_step(share, M.fl_target(agr, lit, laws), mean)
+            want = M.fl_step(share, M.fl_target(agr, lit, laws, literacy_mult=_church(laws)), mean)
             with self.subTest(share=share, laws=sorted(laws)):
                 self.assertAlmostEqual(eng.vars["te_dg_pr_fl"], want, places=5)
                 self.assertAlmostEqual(eng.vars["te_dg_fl_nb"], mean, places=5)

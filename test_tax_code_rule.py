@@ -271,13 +271,16 @@ class VanillaLawGateTest(unittest.TestCase):
 
     def test_each_gets_exactly_the_two_negated_gates(self):
         # In a custom_tooltip (final review A-Minor 6): it evaluates the same, so a
-        # rule-off game is unchanged, and a tooltip prints one plain line.
+        # rule-off game is unchanged, and a tooltip prints one plain line. Graduated
+        # Taxation also carries Wealth Concentration's tax term, a script-only line
+        # that changes no rate (2026-10-17); nothing else rides on these INJECTs.
         gate = {"custom_tooltip": {"text": "te_tax_tt_vanilla_law_replaced", "NOT": {"te_tax_code_full": "yes"}}}
+        lines = {"law_graduated_taxation": {"country_wealth_concentration_tax_add": "-5"}}
         for law in VANILLA_TAX_LAWS:
             with self.subTest(law=law):
-                self.assertEqual(
-                    self.injects[f"INJECT:{law}"], {"can_enact": gate, "is_visible": gate}
-                )
+                body = dict(self.injects[f"INJECT:{law}"])
+                self.assertEqual(body.pop("modifier", None), lines.get(law))
+                self.assertEqual(body, {"can_enact": gate, "is_visible": gate})
 
     def test_vanilla_1_14_5_defines_neither_gate_on_these_laws(self):
         # An INJECT of a field the law already has would duplicate it. The
