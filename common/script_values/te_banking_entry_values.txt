@@ -13,7 +13,7 @@ te_banking_entry_missing_count = {
 	}
 }
 
-# How many entries the yearly safety net has added this game.
+# How many entries the monthly safety net has added this game.
 te_banking_entry_net_added_g = {
 	value = 0
 	if = {
