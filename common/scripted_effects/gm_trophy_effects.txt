@@ -625,6 +625,10 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_skin TO = gm_skin }
 	gm_tr_copy_to_state = { FROM = gm_tr_form TO = gm_form }
 	gm_tr_copy_to_state = { FROM = gm_tr_landmark TO = gm_landmark }
+	# Its picture too: gm_clear_state removed the state's, and the refresh
+	# redraws one only once the dedication is back (gm_restore_pm gone), so
+	# until then the card showed the undedicated drape (Troy, 2026-10-18).
+	gm_tr_copy_to_state = { FROM = gm_tr_picture_code TO = gm_picture_code }
 	gm_tr_copy_to_state = { FROM = gm_tr_namesake TO = gm_namesake }
 	gm_tr_copy_to_state = { FROM = gm_tr_name_year TO = gm_name_year }
 	gm_tr_copy_to_state = { FROM = gm_tr_name_char TO = gm_name_char }
