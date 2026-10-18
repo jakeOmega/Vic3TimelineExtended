@@ -274,14 +274,14 @@ The shape: shocks like state-SoL drops or post-war unemployment drop satisfactio
 
 ## 12. Hiring proportionality
 
-Buildings hire across professions roughly in proportion to their PM-required mix. The rule: no two professions in a building may differ in fill ratio by more than `EMPLOYMENT_PROPORTIONALITY_LIMIT` (0.1), so a building can't fill one profession far ahead of the others. Conversely, losing one profession's pool forces firings across the others to maintain ratio.
+Buildings hire across professions roughly in proportion to their PM-required mix. The rule: no two professions in a building may differ in fill ratio by more than a small gap (`EMPLOYMENT_PROPORTIONALITY_LIMIT` in the defines), so a building can't fill one profession far ahead of the others. Conversely, losing one profession's pool forces firings across the others to maintain ratio.
 
 Two exceptions:
 
 - **Ownership buildings** (Manor Houses, Financial Districts) ignore proportionality — Aristocrats and Capitalists can be hired solo.
-- **Officers, Servicemen, and Peasants** ignore proportionality — military and subsistence buildings staff their special professions independently.
+- **Officers, Servicemen, and Peasants** ignore proportionality — military and subsistence buildings staff their special professions independently. Their pop types set `ignores_employment_proportionality = yes` (`officers.txt`, `soldiers.txt` and `peasants.txt` in `common/pop_types/`); no other pop type does.
 
-The 0.1 gap is `EMPLOYMENT_PROPORTIONALITY_LIMIT` in the defines; peasants and soldiers ignore it (`peasants.txt`, `soldiers.txt`). This is the mechanism behind "factory not hiring despite jobs available" complaints — the missing profession is a non-officer non-serviceman one that proportionality demands before the building can fill its other slots.
+This is the mechanism behind "factory not hiring despite jobs available" complaints — the missing profession is a non-officer non-serviceman one that proportionality demands before the building can fill its other slots.
 
 ## 13. Cross-references
 
