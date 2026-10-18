@@ -443,7 +443,8 @@ one state, splits last year's deaths in a pie: infection and hunger, chronic
 illness and old age, accidents and violence, work, childbirth, people killed by
 events and the war dead, and under Full the deaths added on top of the census's
 own. The census counts deaths, not causes, so the five causes share out its own
-deaths by each cause's rate in each age band; the rest are counted as they are.
+deaths by each cause's rate in each age band, at the body's age for people in
+longevity care; the rest are counted as they are.
 Hover a cause for its rate against a poor country's without modern medicine,
 what makes it up and where medicine is heading. Below the pie is health care
 access. Under Full the Added on Top row's tooltip gives the deaths against the

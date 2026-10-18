@@ -10,8 +10,10 @@ two files beside its own, so `gen_demographics.py --check` covers them:
                                                 every age group's death rates into locals (the model's own, then with
                                                 the step's on-top scales), for the treated parts' lookups
         te_demog_lx_rates_at                    a treated part's rates at its biological rate age te_dg_lx_rb
+        te_demog_lx_causes_at                   a treated part's people into the step's deaths by cause there
         te_demog_lx_bio_band_at                 capacity and health need at a biological age te_dg_lx_ab
         te_demog_lx_group_flush                 the sweep's sums for the age group te_dg_g, for the life tables
+        te_demog_lx_cause_deaths                the year's deaths by cause, the treated at their biological ages
         te_demog_lx_tables                      the untreated, treated and blended life tables, the adults' rho
         te_demog_lx_old_age_pass                the old-age threshold of the table just run, into te_dg_lx_oa
         te_demog_lx_access                      eligibility's target over the walk's wealth bands
@@ -158,6 +160,74 @@ def group_flush(o):
     for name in GROUP_SUMS:
         for s in "fm":
             o(f"set_local_variable = {{ name = te_dg_lx_g{name}{s} value = 0 }}")
+    o("}")
+    o("")
+
+
+# the natural causes the late sweep counts (demographics_model.LX_CAUSE_SUMS but work's sexes): (short, base table)
+LX_CAUSES = (("inf", P.INFECTION), ("ext", P.EXTERNAL), ("chr", P.CHRONIC))
+
+
+def causes_at(o):
+    o("# THIS = a state, in the late sweep: a treated part (te_dg_lx_ft, te_dg_lx_mt) into the step's deaths by cause at its")
+    o("# biological rate age local_var:te_dg_lx_rb (demographics_model.lx_causes_at): its people x each cause's base rate")
+    o("# there, the multipliers left for te_demog_lx_cause_deaths; work's women and men apart.")
+    o("te_demog_lx_causes_at = {")
+
+    def leaf(o, g):
+        for short, table in LX_CAUSES:
+            rf, rm = table["f"][g], table["m"][g]
+            if rf or rm:
+                o(f"change_local_variable = {{ name = te_dg_lx_ce_{short} add = {{ value = local_var:te_dg_lx_ft "
+                  f"multiply = {_lit(rf)} add = {{ value = local_var:te_dg_lx_mt multiply = {_lit(rm)} }} }} }}")
+        w = P.WORK_BASE[g]
+        if w:
+            for s in "fm":
+                o(f"change_local_variable = {{ name = te_dg_lx_ce_w{s} add = {{ value = local_var:te_dg_lx_{s}t "
+                  f"multiply = {_lit(w)} }} }}")
+    _threshold_tree(o, "te_dg_lx_rb", STARTS, leaf)
+    o("}")
+    o("")
+
+
+def cause_deaths(o):
+    groups = range(len(P.GROUPS))
+    o("# THIS = a state after the late sweep (te_demog_lx_sweep_run, after te_demog_lx_finish's last flush): each natural cause's")
+    o("# deaths over the year (demographics_model.lx_cause_deaths), in place of te_demog_cause_deaths_estimate's, which counts")
+    o("# everyone at the calendar age: the untreated by their age group (the life tables' sums te_dg_lxa_u<f|m><group>, the")
+    o("# pool's in the last), the treated at their biological one (te_demog_lx_causes_at), x the step's multipliers. The")
+    o("# sweep's own deaths, so exact but for the 100,000 cap on a group's rate; te_demog_cause_deaths_store scales them.")
+    o("te_demog_lx_cause_deaths = {")
+    for short, table in LX_CAUSES:
+        o("set_local_variable = {")
+        o(f"name = te_dg_ce_{short}")
+        o("value = {")
+        o(f"value = local_var:te_dg_lx_ce_{short}")
+        for g in groups:
+            rf, rm = table["f"][g], table["m"][g]
+            if rf or rm:
+                o(f"add = {{ value = local_var:te_dg_lxa_uf{g} multiply = {_lit(rf)} "
+                  f"add = {{ value = local_var:te_dg_lxa_um{g} multiply = {_lit(rm)} }} }}")
+        o(f"multiply = local_var:te_dg_m_{short}")
+        o("divide = 100000")
+        o("}")
+        o("}")
+    o("set_local_variable = {")
+    o("name = te_dg_ce_work")
+    o("value = {")
+    for s in "fm":
+        if s == "m":
+            o("add = {")
+        o(f"value = local_var:te_dg_lx_ce_w{s}")
+        for g in groups:
+            if P.WORK_BASE[g]:
+                o(f"add = {{ value = local_var:te_dg_lxa_u{s}{g} multiply = {_lit(P.WORK_BASE[g])} }}")
+        o(f"multiply = local_var:te_dg_m_work_{s}")
+        if s == "m":
+            o("}")
+    o("divide = 100000")
+    o("}")
+    o("}")
     o("}")
     o("")
 
@@ -505,9 +575,11 @@ def render_lx_effects():
     lx_sweep(o)
     group_rates(o)
     rates_at(o)
+    causes_at(o)
     fert_at(o)
     bio_band_at(o)
     group_flush(o)
+    cause_deaths(o)
     old_age_pass(o)
     tables(o)
     access(o)

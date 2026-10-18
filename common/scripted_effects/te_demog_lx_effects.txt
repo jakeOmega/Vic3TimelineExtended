@@ -165,8 +165,8 @@ te_demog_lx_begin = {
 
 # THIS = a state, in te_demog_step_run in place of the plain sweep while te_dg_lx_on (te_demog_lx_begin): the age groups'
 # rates with the step's scales (which re-enters group 0 for the sweep), the sweep's late sums, the late sweep, then the
-# bands' and the tables' figures (te_demog_lx_finish). te_demog_reset_accumulators has set te_dg_lx_t to 0 for every
-# sweep; this one is the late sweep's.
+# bands' and the tables' figures (te_demog_lx_finish) and the year's deaths by cause (te_demog_lx_cause_deaths).
+# te_demog_reset_accumulators has set te_dg_lx_t to 0 for every sweep; this one is the late sweep's.
 te_demog_lx_sweep_run = {
 	te_demog_lx_group_rates_scaled = yes
 	set_local_variable = { name = te_dg_g value = 0 }
@@ -195,9 +195,17 @@ te_demog_lx_sweep_run = {
 	set_local_variable = { name = te_dg_lx_mcal value = 0 }
 	set_local_variable = { name = te_dg_lx_mdef value = 0 }
 	set_local_variable = { name = te_dg_lx_b50 value = 0 }
+	# the treated parts' deaths by cause at their biological ages (te_demog_lx_causes_at)
+	set_local_variable = { name = te_dg_lx_ce_inf value = 0 }
+	set_local_variable = { name = te_dg_lx_ce_ext value = 0 }
+	set_local_variable = { name = te_dg_lx_ce_chr value = 0 }
+	set_local_variable = { name = te_dg_lx_ce_wf value = 0 }
+	set_local_variable = { name = te_dg_lx_ce_wm value = 0 }
 	te_demog_lx_bio_init = yes
 	te_demog_lx_sweep = yes
 	te_demog_lx_finish = yes
+	# the year's deaths by cause, in place of te_demog_cause_deaths_estimate's calendar bands (generated)
+	te_demog_lx_cause_deaths = yes
 }
 
 # The late sweep's band calls (generated, te_demog_lx_sweep): $WHEN$ open or close, in pass 1 for a band all below the open
@@ -490,6 +498,7 @@ te_demog_lx_deaths = {
 		limit = { local_var:te_dg_lx_sk > 0 }
 		set_local_variable = { name = te_dg_lx_rb value = { value = local_var:te_dg_r subtract = local_var:te_dg_lx_bd } }
 		te_demog_lx_rates_at = yes
+		te_demog_lx_causes_at = yes
 		set_local_variable = {
 			name = te_dg_lx_t2f
 			value = {
@@ -701,6 +710,7 @@ te_demog_lx_fold_deaths = {
 		change_local_variable = { name = te_dg_lx_gtm add = local_var:te_dg_lx_mt }
 		change_local_variable = { name = te_dg_lx_gtqf add = { value = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_uqf } }
 		change_local_variable = { name = te_dg_lx_gtqm add = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_lx_uqm } }
+		te_demog_lx_causes_at = yes
 		set_local_variable = { name = te_dg_lx_alive value = { value = var:te_dg_pf add = var:te_dg_pm } }
 		set_variable = { name = te_dg_lx_ps value = 0 }
 		if = {

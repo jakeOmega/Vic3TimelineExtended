@@ -233,7 +233,9 @@ def life_table(q):
 # from them. Childbirth's deaths, the war dead, the people killed by events and, under Full, the deaths added on top are
 # counted as they are. Bands 1-16 each hold one age group, so their part is exact; 0-4 (the infants' group and the 1-4s')
 # and 85+ (thirteen groups and the pool) take their groups' rates weighted by the person-years a life table at the base
-# rates gives them, and a state under longevity care, whose treated die at their biological ages, is approximate too.
+# rates gives them. A state in the late game counts its own instead (lx_cause_deaths): its treated die at their biological
+# ages, which the calendar bands can't see, so in an immortal state they gave chronic illness nine-tenths of the deaths
+# against a quarter.
 CAUSE_DEATH_CAUSES = ("infection", "external", "chronic", "work")
 
 
@@ -1342,6 +1344,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     # the pool: last group's rates, ages a year
     if lx is not None:
         deaths += lx_pool_deaths(ring, lx, qf, qm, qf0, qm0)
+        # the late sweep counts its own deaths by cause, the treated at their biological ages (te_demog_lx_cause_deaths)
+        causes_raw = lx_cause_deaths(lx, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck)
     else:
         pq_f, pq_m = qf[-1] / 100000.0, qm[-1] / 100000.0
         deaths += ring.pool_f * pq_f + ring.pool_m * pq_m
@@ -1423,6 +1427,41 @@ def ageing_rate(inp):
 def rejuvenation(inp):
     """Biological Immortality's pull (§1.4): the share of a treated body's gap to LX_PULL_TO closed each year."""
     return clamp(inp.mods.get(P.REJUVENATION_TYPE, 0.0), 0.0, 1.0)
+
+
+# The late sweep's deaths by cause (te_demog_lx_cause_deaths): the treated parts' people x each cause's base rate at their
+# biological age group, summed over the step's slots and the pool (lx_causes_at); work's women and men apart, since the
+# multiplier splits by sex.
+LX_CAUSE_SUMS = ("infection", "external", "chronic", "work_f", "work_m")
+
+
+def lx_causes_at(lx, ft, mt, gt):
+    """A treated part's people at its biological age group gt into the step's cause sums (te_demog_lx_causes_at)."""
+    ce = lx["CE"]
+    for c, table in (("infection", P.INFECTION), ("external", P.EXTERNAL), ("chronic", P.CHRONIC)):
+        ce[c] += ft * table["f"][gt] + mt * table["m"][gt]
+    ce["work_f"] += ft * P.WORK_BASE[gt]
+    ce["work_m"] += mt * P.WORK_BASE[gt]
+
+
+def lx_cause_deaths(lx, mult, work_f, work_m):
+    """Each natural cause's deaths over the late sweep (te_demog_lx_cause_deaths), in place of cause_deaths_estimate's
+    calendar bands: the untreated by their age group (the life tables' sums, the pool's in the last), the treated at their
+    biological one (lx_causes_at), x the step's multipliers. The sweep's own deaths, so exact but for the 100,000 cap on
+    a group's rate."""
+    ce = lx["CE"]
+    out = {}
+    for c, table in (("infection", P.INFECTION), ("external", P.EXTERNAL), ("chronic", P.CHRONIC)):
+        x = ce[c]
+        for g in range(len(P.GROUPS)):
+            x += lx["U_f"][g] * table["f"][g] + lx["U_m"][g] * table["m"][g]
+        out[c] = x * mult[c] / 100000.0
+    xf, xm = ce["work_f"], ce["work_m"]
+    for g in range(len(P.GROUPS)):
+        xf += lx["U_f"][g] * P.WORK_BASE[g]
+        xm += lx["U_m"][g] * P.WORK_BASE[g]
+    out["work"] = (xf * work_f + xm * work_m) / 100000.0
+    return out
 
 
 def lx_carrier(inp):
@@ -1525,7 +1564,8 @@ def lx_begin(ring, inp):
             "pub": pub, "ecto": ecto_share(inp, ring.births),
             "T": {}, "A": {}, "J": {}, "TA": {}, "b50": 0.0,
             "U_f": [0.0] * groups, "T_f": [0.0] * groups, "TQ_f": [0.0] * groups,
-            "U_m": [0.0] * groups, "T_m": [0.0] * groups, "TQ_m": [0.0] * groups}
+            "U_m": [0.0] * groups, "T_m": [0.0] * groups, "TQ_m": [0.0] * groups,
+            "CE": dict.fromkeys(LX_CAUSE_SUMS, 0.0)}
 
 
 def ecto_share(inp, births_last):
@@ -1595,6 +1635,7 @@ def lx_slot(lx, ring, k, r, g, f, m, bm, mmr, qf, qm, qf0, qm0, war_f, war_m):
         gt = P.group_of(rb)
         t2f = ft * (1 - qf[gt] / 100000.0) - bt * mmr / 100000.0
         t2m = mt * (1 - qm[gt] / 100000.0)
+        lx_causes_at(lx, ft, mt, gt)
     dead = (f - u2f - t2f) + (m - u2m - t2m)
     if r >= P.POOL_FROM:
         if r <= P.POOL_TO:
@@ -1655,6 +1696,7 @@ def lx_pool_deaths(ring, lx, qf, qm, qf0, qm0):
         lx["T_m"][last] += tm
         lx["TQ_f"][last] += tf * qf0[gt]
         lx["TQ_m"][last] += tm * qm0[gt]
+        lx_causes_at(lx, tf, tm, gt)
     ring.pool_f, ring.pool_m = tf2 + uf2, tm2 + um2
     if ps > 0:
         alive = ring.pool_f + ring.pool_m

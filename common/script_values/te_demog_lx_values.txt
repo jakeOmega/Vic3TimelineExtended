@@ -135,3 +135,20 @@ te_demog_lx_gap_politics_x = {
 		max = 1
 	}
 }
+
+# Country or state scope: how much younger people's bodies are than their ages, the mean calendar age less the mean
+# biological one (te_dg_lx_age, te_dg_lx_bio), in years, over everyone (children and the untreated at 0; a country's
+# over its late-game states); 0 before the late game. Past half a year the chronic illness hovers say their rate is by
+# the body's age and give it (te_demog_cd_chr_lx, te_demog_st_chr_lx).
+te_demog_lx_body_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_lx_age
+			has_variable = te_dg_lx_bio
+		}
+		value = var:te_dg_lx_age
+		subtract = var:te_dg_lx_bio
+		min = 0
+	}
+}
