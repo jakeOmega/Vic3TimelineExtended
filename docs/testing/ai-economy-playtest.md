@@ -91,7 +91,7 @@ Where the bill went in the Budgets result:
 - **Railways:** most is Russia's, bankrupt throughout.
 - **Renewable Energy Plants:** £18–29M a week. The mod's Renewable Energy Investment policy in the Global Warming entry forces their subsidy (`renewable_investment_modifier`, held by about 99 of the 110 AI countries).
 
-Next step: the owner's call on #933.
+#933 was closed as done for power plants (owner, 2026-10-18). The displaced bill is #1050.
 
 ## Unemployment as a share of the workforce (log triage 2026-10-17)
 
