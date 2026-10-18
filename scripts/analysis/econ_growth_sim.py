@@ -614,7 +614,10 @@ AT_FLOOR = 1.000001                             # a wage this close above the fl
 TURN_JOBS_SHARE = 0.5                           # the turn: tier 1 pays in sectors holding this share of the jobs
 TAKEOFF_FALL = 0.05                             # take-off: the peasant share falls this much ...
 TAKEOFF_SPAN = 5                                # ... within this many years
+TAKEOFF_SLOP = 1e-9                             # (so a fall of exactly 5 points, 0.60 - 0.55, counts despite float error)
 TAKEOFF_WINDOW = 20                             # the catch-up growth is read over this many years from take-off
+CATCH_UP_SHARE = 0.10                           # catch-up: take-off to a peasant share under this (spec 2: 35 years)
+PEASANTS_GONE_SHARE = 0.05                      # "peasants close to zero": a share under this (spec 2)
 
 
 def _share(people: float, workforce: float) -> float:
@@ -649,25 +652,28 @@ def turn_year(records: list[YearRecord], md: D.ModData, sc: Scenario) -> int | N
     unlocking technology (era 0, farming's pm_tools) is pre-industrial and doesn't count; for
     farming tier 1 is the steam threshers. Its breakeven is the bare `econ_sim_data.breakeven`
     (R24 pairs it with the adoption year, which also pays the retooling charge and scales by
-    the calibration; so `sc` is only part of the interface). A sector qualifies when it has
-    such a tier and it cuts jobs. A negative breakeven (the tier saves goods as well)
-    qualifies at any wage, as a wage is never below 0. A level-bound sector without a
-    qualifying tier (infrastructure, `other`, no unlocked tier, a tier that cuts no jobs)
-    holds jobs but never qualifies. Each year is judged on its own jobs, `r.jobs_by_sector`;
-    a year with none is skipped. `records` are chronological, as `run` returns them.
+    the calibration; so `sc` is only part of the interface).
+
+    A sector qualifies in a year once the country's era (`r.era`) has reached its tier 1's
+    era (R30) and the wage has reached the breakeven. A negative breakeven (the tier saves
+    goods as well) qualifies at any wage, as a wage is never below 0. A level-bound sector
+    without a qualifying tier (infrastructure, `other`, no unlocked tier, a tier that cuts no
+    jobs), or one whose tier isn't unlocked yet, holds jobs but doesn't qualify: the half is
+    of all the year's level-bound jobs, `r.jobs_by_sector`. A year with none is skipped.
+    `records` are chronological, as `run` returns them.
     """
-    breakeven: dict[str, float] = {}
+    tier_one: dict[str, tuple[float, int]] = {}                 # sector -> (breakeven, era)
     for sector, ladder in md.ladders.items():
         tier1 = next((t for t in ladder.automation[1:] if t.era > 0), None)
         be = None if tier1 is None else D.breakeven(tier1)
         if be is not None:
-            breakeven[sector] = be
+            tier_one[sector] = (be, tier1.era)
     for r in records:
         total = sum(r.jobs_by_sector.values())
         if total <= 0:
             continue
         paying = sum(jobs for sector, jobs in r.jobs_by_sector.items()
-                     if sector in breakeven and r.wage >= breakeven[sector])
+                     if sector in tier_one and r.wage >= tier_one[sector][0] and r.era >= tier_one[sector][1])
         if paying >= TURN_JOBS_SHARE * total:
             return r.year
     return None
@@ -680,7 +686,7 @@ def takeoff_year(records: list[YearRecord]) -> int | None:
     share = {r.year: _share(r.peasants, r.workforce) for r in records}
     for r in records:
         later = share.get(r.year + TAKEOFF_SPAN)
-        if later is not None and share[r.year] - later >= TAKEOFF_FALL:
+        if later is not None and share[r.year] - later >= TAKEOFF_FALL - TAKEOFF_SLOP:
             return r.year
     return None
 
@@ -701,8 +707,9 @@ class Summary:
     """One run's row (spec 9). None means the run never got there (or ended first).
 
     setting, scenario     which run: the lever setting's label, the scenario's name
-    turn_year             first year wages reach tier 1's breakeven (the first tier a technology
-                          unlocks, R29) in sectors holding half the jobs
+    turn_year             first year wages reach tier 1's breakeven, once its technology is there
+                          (tier 1 is the first tier a technology unlocks, R29; the country's era must
+                          have reached its era, R30), in sectors holding half the jobs
     adoption_year         first year any sector is on an automation tier (R24), even if it later
                           goes back to none. Usually after the turn: the tier must also repay
                           its retooling charge, and the calibration scales its saving
@@ -773,7 +780,7 @@ def summarize(records: list[YearRecord], sc: Scenario, md: D.ModData, p: Params,
     to_10pct = None
     ratio = None
     if takeoff is not None:
-        below = first_year_below(records, 0.10, after=takeoff)
+        below = first_year_below(records, CATCH_UP_SHARE, after=takeoff)
         to_10pct = None if below is None else below - takeoff
         if reference is not None:
             ratio = _growth_ratio(records, reference, takeoff)
@@ -784,7 +791,7 @@ def summarize(records: list[YearRecord], sc: Scenario, md: D.ModData, p: Params,
         scenario=sc.name,
         turn_year=turn_year(records, md, sc),
         adoption_year=adoption,
-        peasants_below_5pct=first_year_below(records, 0.05),
+        peasants_below_5pct=first_year_below(records, PEASANTS_GONE_SHARE),
         slack_1950=slack_in(1950),
         slack_2000=slack_in(2000),
         slack_2045=slack_in(2045),

@@ -559,6 +559,13 @@ class TestTakeoff(unittest.TestCase):
         self.assertIsNone(G.takeoff_year(short))
         self.assertIsNone(G.takeoff_year([]))
 
+    def test_takeoff_tolerates_float_slop_at_exactly_five_points(self):
+        recs = [rec(year=1900, peasants=0.60), rec(year=1905, peasants=0.55)]
+        self.assertLess(0.60 - 0.55, 0.05)                                  # the float difference is just under 0.05
+        self.assertEqual(G.takeoff_year(recs), 1900)
+        recs = [rec(year=1900, peasants=0.60), rec(year=1905, peasants=0.551)]       # 4.9 points is not a take-off
+        self.assertIsNone(G.takeoff_year(recs))
+
     def test_takeoff_looks_five_years_on_by_year_not_by_position(self):
         gapped = [rec(year=1900, peasants=0.6), rec(year=1903, peasants=0.1), rec(year=1905, peasants=0.5)]
         self.assertEqual(G.takeoff_year(gapped), 1900)
@@ -640,13 +647,48 @@ class TestTurnYear(unittest.TestCase):
         threshers = _pm("toy_threshers", 3, -1000.0, goods_in=200.0)
         tractors = _pm("toy_tractors", 5, -1000.0, goods_in=300.0)
         md = _toy((tools, threshers, tractors))
-        recs = [rec(year=y, wage=w) for y, w in self._years()]
+        recs = [rec(year=y, wage=w, era=6.0) for y, w in self._years()]        # an era past every tier
         self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1870 + 15)           # 0.20 >= 0.20; 0.19 is not
         # A sector whose only tiers are era 0 has no tier that counts: it never qualifies.
         only_tools = _toy((tools,))
-        self.assertIsNone(G.turn_year([rec(year=1870 + i, wage=100.0) for i in range(5)], only_tools, toy_scenario()))
+        self.assertIsNone(G.turn_year([rec(year=1870 + i, wage=100.0, era=6.0) for i in range(5)], only_tools, toy_scenario()))
         # An unlocked tier 1 is unchanged (the brief's toy: era 1, breakeven 0.15).
         self.assertEqual(G.turn_year(recs, TOY, toy_scenario()), 1870 + 10)
+
+    def test_a_tier_waits_for_its_technology(self):
+        # R30. Tier 1 is unlocked in era 3. The wage is far past its breakeven (0.15) from the
+        # start, but the country is in era 2: no turn. Era 2.99 is still short, 3.0 is enough.
+        md = _toy((_pm("toy_late_tier", 3, -1000.0, goods_in=150.0),))
+        self.assertIsNone(G.turn_year([rec(year=1870 + i, wage=100.0, era=2.0) for i in range(5)], md, toy_scenario()))
+        self.assertIsNone(G.turn_year([rec(wage=100.0, era=2.99)], md, toy_scenario()))
+        self.assertEqual(G.turn_year([rec(year=1873, wage=100.0, era=3.0)], md, toy_scenario()), 1873)
+
+    def test_the_turn_is_the_first_year_wage_and_era_both_hold(self):
+        md = _toy((_pm("toy_late_tier", 3, -1000.0, goods_in=150.0),))           # breakeven 0.15, era 3
+        # The wage is past the breakeven from the start; the era arrives at i = 4 (1.0 + 0.5 x 4).
+        era_late = [rec(year=1870 + i, wage=1.0, era=1.0 + 0.5 * i) for i in range(12)]
+        self.assertEqual(G.turn_year(era_late, md, toy_scenario()), 1870 + 4)
+        # The era is there from the start; the wage reaches 0.15 at i = 10.
+        wage_late = [rec(year=y, wage=w, era=3.0) for y, w in self._years()]
+        self.assertEqual(G.turn_year(wage_late, md, toy_scenario()), 1870 + 10)
+        # Both late: the era reaches 3.0 at i = 8 (0.25 a year) and the wage 0.15 at i = 10; the turn is the later.
+        both = [rec(year=y, wage=w, era=1.0 + 0.25 * i) for i, (y, w) in enumerate(self._years())]
+        self.assertEqual(G.turn_year(both, md, toy_scenario()), 1870 + 10)
+        # A slow era (0.1 a year) reaches 3.0 at i = 20, long after the wage passes 0.15.
+        slow_era = [rec(year=y, wage=w, era=1.0 + 0.1 * i) for i, (y, w) in enumerate(self._years())]
+        self.assertEqual(G.turn_year(slow_era, md, toy_scenario()), 1870 + 20)
+
+    def test_each_sector_waits_for_its_own_technology_and_the_denominator_is_all_jobs(self):
+        # Light (breakeven 0.15, era 1) holds 40% of the jobs, heavy (0.10, era 4) 60%. The wage is high
+        # throughout. Light alone is under half the jobs, so the turn waits for heavy's era 4.
+        late_heavy = _pm("toy_heavy_late", 4, -1000.0, goods_in=100.0)
+        md = _with_sectors(heavy=late_heavy)
+        jobs = {"light": 40.0, "heavy": 60.0}
+        recs = [rec(year=1870 + i, wage=1.0, era=1.0 + 0.5 * i, jobs_by_sector=jobs) for i in range(12)]
+        self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1870 + 6)          # era 4.0 at i = 6
+        # With light at 60% it is enough from the start, whatever heavy's era.
+        recs = [rec(year=1870 + i, wage=1.0, era=1.0 + 0.5 * i, jobs_by_sector={"light": 60.0, "heavy": 40.0}) for i in range(12)]
+        self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1870)
 
     def test_none_when_never_reached_or_without_jobs(self):
         self.assertIsNone(G.turn_year([rec(year=1870 + i, wage=0.14) for i in range(5)], TOY, toy_scenario()))
@@ -774,7 +816,13 @@ class TestSummary(unittest.TestCase):
         s = G.summarize(recs, sc, TOY, p, "linear")
         self.assertEqual(s.scenario, "toy")
         self.assertLessEqual(s.mode1_years + s.mode2_years, len(recs))
-        self.assertEqual(s.money_years + s.cap_years + s.labour_years >= len(recs), True)    # a year can be cap- and labour-bound
+        self.assertEqual((len(recs), s.mode1_years, s.mode2_years), (184, 0, 0))
+        # The default toy economy is short of labour from 1870 (money-bound before); with
+        # almost all GDP invested through a tiny queue, the cap binds every year instead.
+        self.assertEqual((s.money_years, s.cap_years, s.labour_years), (3, 0, 181))
+        capped = G.Params(private_invest_share=0.9, queue_per_state=0.001)
+        c = G.summarize(G.run(sc, TOY, capped), sc, TOY, capped, "capped")
+        self.assertEqual((c.money_years, c.cap_years, c.labour_years), (0, 184, 0))
         self.assertEqual(s.slack_2045, (recs[2045 - 1867].peasants + recs[2045 - 1867].unemployed) / recs[2045 - 1867].workforce)
         self.assertEqual(s.gdppc_2045, recs[2045 - 1867].gdppc)
 
