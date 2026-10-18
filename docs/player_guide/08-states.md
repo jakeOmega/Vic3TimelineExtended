@@ -348,19 +348,21 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Median age, children per woman (its tooltip gives the mean age at childbirth), life expectancy (100+ past 100), the working-age share (its tooltip gives the dependency ratio), old age from (the age with fifteen years of life left; None when no age has), men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target; young adults where they are many while work is short; once longevity care exists, Living to 100 and the mean biological age beside the calendar one. |
-| Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages, and under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, and the men of fighting age with the conscription they give. |
-| Longevity | Once longevity care exists: the share of people within its reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
-| Population pyramid | People by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
+| Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (100+ past 100; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
+| Causes of Death | Last year's deaths per 1,000 people and a pie of those deaths by cause; see below. |
+| Population pyramid | Men per 100 women, then people by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
+| Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short. |
+| Longevity | Once longevity care exists: Living to 100, the mean biological age beside the calendar one, the share of people within the care's reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
+| History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Wealth Concentration. A mark over a year shows war dead, a famine or a demographic event. |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
-| States | Your 40 largest states, with people, median age, children per woman, men per 100 women, Gini and Wealth Concentration. |
-| History | Median age, children per woman and life expectancy by year, over 5, 20 or 100 years. |
+| States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
 | How Demographics Works | A collapsed section that explains the method. |
 
-The subtab shows one state's overview, causes of death, work and retirement
-(without the buttons), longevity, pyramid and wealth, for any state you open. The first count of a state comes from the age structure its own birth and
+The subtab shows one state's overview, causes of death, pyramid, work and
+retirement (without the buttons), longevity and wealth, in the tab's order, for
+any state you open, and says when the state is next counted. The first count of a state comes from the age structure its own birth and
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
 
@@ -434,12 +436,19 @@ violence, by half at full turmoil. Where the map marks a state with malaria
 (most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
 from infection run higher, more so with severe malaria, until Malaria
 Prevention; Quinine protected colonists, not the people who lived there, so it
-changes nothing here. The subtab's
-Causes of Death section shows a state's health care access and each cause's
-multiplier; hover a row for what makes it up and where medicine is heading.
-Under Full it also shows the deaths added on top of the census's own, in red
-from a quarter above it, split into effects on the whole state and effects on
-some of its people, such as severe starvation. The Landowners' Famine Reserves
+changes nothing here.
+
+The Causes of Death section, on the tab for your country and on the subtab for
+one state, splits last year's deaths in a pie: infection and hunger, chronic
+illness and old age, accidents and violence, work, childbirth, people killed by
+events and the war dead, and under Full the deaths added on top of the census's
+own. The census counts deaths, not causes, so the five causes share out its own
+deaths by each cause's rate in each age band; the rest are counted as they are.
+Hover a cause for its rate against a poor country's without modern medicine,
+what makes it up and where medicine is heading. Below the pie is health care
+access. Under Full the Added on Top row's tooltip gives the deaths against the
+census's own rate, in red from a quarter above it, split into effects on the
+whole state and effects on some of its people, such as severe starvation. The Landowners' Famine Reserves
 is the exception: under Full the census sets the farm workers' saved lives
 against the rest of the state, so it moves deaths within a state without
 lowering them.
