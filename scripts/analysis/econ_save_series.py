@@ -32,9 +32,12 @@ Country block (found with save_country_probe.country_headers):
 | 0x5720 | government_queue | { 0x567f construction_elements { {..} ... } } |
 | 0x5721 | private_queue | same |
 
-Trend ring buffer: one sample per week; `index` is the absolute week number
-(8499 on 1998.12.29, 4263 on 1917.10.2). When index >= count (5214, about 100
-years) it has wrapped: newest at (index - 1) % count, oldest at index % count.
+Trend ring buffer: one sample per week; `index` counts the samples since the
+country was created (8499 on 1998.12.29 and 4263 on 1917.10.2 for France, alive
+since 1836, where it equals the game week; a revolution winner's starts at 0:
+Great Britain's 1917 object reads 931). So compare samples of different
+countries by date, never by index. When index >= count (5214, about 100 years)
+it has wrapped: newest at (index - 1) % count, oldest at index % count.
 The trend's date is the save date; the GDP sample is the yearly-rate GDP.
 
 Budget 0x3171 (all fx / 1e5):
@@ -233,7 +236,7 @@ def dense(lst):
 def unwrap_ring(values, index, count):
     """A trend ring buffer in chronological order, newest last.
 
-    `index` is the absolute number of the next sample. Until the buffer fills
+    `index` is the number of samples taken so far (since the country was created). Until the buffer fills
     (an early save) the samples are already in order; once index >= count it
     has wrapped, and the newest sits at (index - 1) % count.
     """
