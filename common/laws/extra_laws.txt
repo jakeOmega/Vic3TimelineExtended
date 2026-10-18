@@ -316,6 +316,10 @@ law_universal_basic_income = {
 	# Below needed since this Law changes Politial Participation
 	on_activate = {
 		recalculate_pop_ig_support = yes
+		# The reset to level 1 (2 from above 5) is deliberate (owner, 2026-10-17):
+		# Social Security at level 1 pays as much welfare under this law as level
+		# 5 under Wage Subsidies, and level 2 more than level 9, so carrying the
+		# old level over would break the budget on enactment.
 		if = {
 			limit = {
 				institution_investment_level = {
@@ -372,6 +376,8 @@ law_post-scarcity = {
 	# Below needed since this Law changes Politial Participation
 	on_activate = {
 		recalculate_pop_ig_support = yes
+		# The same deliberate reset as Universal Basic Income's, for the same
+		# reason: this law's welfare is 4.8 a level.
 		if = {
 			limit = {
 				institution_investment_level = {
