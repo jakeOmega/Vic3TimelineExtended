@@ -262,10 +262,13 @@ un_mission_charges = {
 
 # The scoped mission is active and holds slot $SLOT$.
 # Scope: mission container
+# ?=, not has_variable beside the read: a tooltip that lays this trigger out
+# line by line (the Join control's unwrapped any_in_global_list) reads each
+# line on its own, so the read failed on the register's closed missions,
+# three errors each per frame (2026-10-18).
 un_mission_in_slot = {
 	has_tag = un_msn_active
-	has_variable = un_msn_slot
-	var:un_msn_slot = $SLOT$
+	var:un_msn_slot ?= $SLOT$
 }
 
 # Some active mission holds slot $SLOT$.

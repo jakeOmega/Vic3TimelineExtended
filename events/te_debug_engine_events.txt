@@ -1,0 +1,107 @@
+﻿# ============================================================================
+# ENGINE PROBES — fired only from the console: `event te_debug_engine.1`
+# ============================================================================
+# Nothing in the mod fires this event. It answers engine questions the docs
+# mark untested, and writes nothing a game keeps. Read the answers with
+# `/logs/debug?debug_log=only&q=TE_PROBE_ENGINE` and, for part 2, error.log.
+# scripting_best_practices.md § "Write `NOR` or `NAND`, Never a Multi-Child
+# `NOT`" says what each answer settles.
+# ============================================================================
+namespace = te_debug_engine
+
+te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event te_debug_engine.1`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		# The probes read te_dbg_eng_unset while it is unset. This never-run
+		# write keeps the load-time "used but never set" check quiet.
+		if = {
+			limit = { always = no }
+			set_variable = { name = te_dbg_eng_unset value = 1 }
+		}
+		if = {
+			limit = { has_variable = te_dbg_eng_unset }
+			remove_variable = te_dbg_eng_unset
+		}
+
+		# 1. What a two-child NOT means: it passes as NAND and fails as NOR.
+		if = {
+			limit = {
+				NOT = {
+					always = yes
+					always = no
+				}
+			}
+			debug_log = "TE_PROBE_ENGINE not_multi=NAND (a NOT of always = yes and always = no passed)"
+		}
+		else = {
+			debug_log = "TE_PROBE_ENGINE not_multi=NOR (a NOT of always = yes and always = no failed)"
+		}
+
+		# 2. Which blocks read a child after the one that settles them. Each
+		# block below reads te_dbg_eng_unset second, on a line of its own. A
+		# block that reads it logs "Failed to fetch variable for
+		# 'te_dbg_eng_unset'" in error.log at that line; one that stops first
+		# logs nothing. The AND is the control: it should log nothing.
+		debug_log = "TE_PROBE_ENGINE short_circuit start: error.log names the line of each block that read past its deciding child"
+		if = {
+			limit = {
+				AND = {
+					always = no
+					var:te_dbg_eng_unset > 0
+				}
+			}
+			debug_log = "TE_PROBE_ENGINE and passed (AND of always = no, then the unset variable)"
+		}
+		if = {
+			limit = {
+				OR = {
+					always = yes
+					var:te_dbg_eng_unset > 0
+				}
+			}
+			debug_log = "TE_PROBE_ENGINE or passed (OR of always = yes, then the unset variable)"
+		}
+		if = {
+			limit = {
+				NAND = {
+					always = no
+					var:te_dbg_eng_unset > 0
+				}
+			}
+			debug_log = "TE_PROBE_ENGINE nand passed (NAND of always = no, then the unset variable)"
+		}
+		if = {
+			limit = {
+				NOR = {
+					always = yes
+					var:te_dbg_eng_unset > 0
+				}
+			}
+			debug_log = "TE_PROBE_ENGINE nor passed (NOR of always = yes, then the unset variable)"
+		}
+		# The 2026-10-18 seabed log says a NOT reads past a false first child;
+		# this one repeats that. The next one reads past a true first child
+		# only if a NOT is not a short-circuiting NOR.
+		if = {
+			limit = {
+				NOT = {
+					always = no
+					var:te_dbg_eng_unset > 0
+				}
+			}
+			debug_log = "TE_PROBE_ENGINE not_false_first passed (NOT of always = no, then the unset variable)"
+		}
+		if = {
+			limit = {
+				NOT = {
+					always = yes
+					var:te_dbg_eng_unset > 0
+				}
+			}
+			debug_log = "TE_PROBE_ENGINE not_true_first passed (NOT of always = yes, then the unset variable)"
+		}
+		debug_log = "TE_PROBE_ENGINE short_circuit done"
+	}
+}

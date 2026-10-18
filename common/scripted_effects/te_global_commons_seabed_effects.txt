@@ -1563,11 +1563,15 @@ te_seabed_lease_enter = {
 				scope:te_sb_found = { input_quantity > 0 }
 			}
 			set_local_variable = { name = te_sb_le value = 1 }
+			# No lease running here: no record, or one an ended lease left at 0
+			# (te_seabed_settle_lease keeps it while licences built on it count). trigger_if, not a two-child NOT: a NOT read the var with
+			# has_variable false (2026-10-18 log), and as NOR it would turn the
+			# kept 0 away (scripting_best_practices.md, multi-child NOT).
 			if = {
 				limit = {
-					NOT = {
-						has_variable = te_seabed_lease_n_$B$
-						var:te_seabed_lease_n_$B$ > 0
+					trigger_if = {
+						limit = { has_variable = te_seabed_lease_n_$B$ }
+						NOT = { var:te_seabed_lease_n_$B$ > 0 }
 					}
 				}
 				te_seabed_init_country = yes

@@ -5420,10 +5420,12 @@ class SplitPieceTests(unittest.TestCase):
             self.assertIn(s, whole)
         # The split's timing: the uprising's own civil war (an engine link, there
         # from the first day), or a shortfall no more than one pass old (the
-        # Paris Commune is a country a vanilla event creates).
+        # Paris Commune is a country a vanilla event creates). A trigger_if, not a
+        # two-child NOT, which as NOR would turn a count of 1 away.
         self.assertIn("OR = { scope:gm_tmp_split_owner = { OR = { is_revolutionary = yes is_secessionist = yes } "
-                      "civil_war_origin_country ?= { this = scope:gm_tmp_split_whole_owner } } var:gm_shadow ?= { NOT = { "
-                      "has_variable = gm_sh_short_passes var:gm_sh_short_passes >= 2 } } }", whole)
+                      "civil_war_origin_country ?= { this = scope:gm_tmp_split_whole_owner } } var:gm_shadow ?= { "
+                      "trigger_if = { limit = { has_variable = gm_sh_short_passes } "
+                      "NOT = { var:gm_sh_short_passes >= 2 } } } }", whole)
         write = self.body("gm_state_write_shadow")
         self.assertIn("change_variable = { name = gm_sh_short_passes add = 1 }", write)
         self.assertIn("set_variable = { name = gm_sh_short_passes value = 1 }", write)
