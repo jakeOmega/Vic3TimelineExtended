@@ -21,6 +21,10 @@ This module holds:
                   (spec 5.3; the algorithm is spelled out on `step`).
   run             a scenario from its start year to its end year, inclusive, as
                   one YearRecord a year.
+  classify, turn_year, takeoff_year, first_year_below, Summary, summarize
+                  the diagnostics (spec 5.5, 9): each year's mode, the year wages
+                  first pass the first automation tier's breakeven, the catch-up
+                  measures, and one summary row per run.
 
 Every mod number arrives as an argument (`econ_sim_data.ModData`, a base price
 read from the goods data); nothing here is a copy of a script value. The three
@@ -600,3 +604,194 @@ def run(sc: Scenario, md: D.ModData, p: Params) -> list[YearRecord]:
     """Every year from sc.start_year to sc.end_year, inclusive."""
     state = initial_state(sc, md, p)
     return [step(state, sc, md, p) for _ in range(sc.start_year, sc.end_year + 1)]
+
+
+# --------------------------------------------------------------------------
+# Diagnostics and the summary row (spec 5.5, 9)
+# --------------------------------------------------------------------------
+
+AT_FLOOR = 1.000001                             # a wage this close above the floor is at the floor
+TURN_JOBS_SHARE = 0.5                           # the turn: tier 1 pays in sectors holding this share of the jobs
+TAKEOFF_FALL = 0.05                             # take-off: the peasant share falls this much ...
+TAKEOFF_SPAN = 5                                # ... within this many years
+TAKEOFF_WINDOW = 20                             # the catch-up growth is read over this many years from take-off
+
+
+def _share(people: float, workforce: float) -> float:
+    """`people` as a share of the workforce; 0 with no workforce (no one is slack)."""
+    return people / workforce if workforce > 0 else 0.0
+
+
+def classify(r: YearRecord, sc: Scenario, p: Params) -> str:
+    """The year's mode (spec 5.5): "mode1", "mode2" or "ok".
+
+    mode1 (too fast)  almost no slack (peasants + unemployed under p.mode1_slack of the
+                      workforce) while level-bound jobs go unfilled (labour_bound).
+    mode2 (too slow)  a rich country with idle workers: slack over p.mode2_slack, the wage
+                      at the floor, and rich, meaning GDP per head at p.rich_gdppc or more,
+                      or the scenario's rich_from_year reached. Both slack tests are strict.
+    """
+    slack = _share(r.peasants + r.unemployed, r.workforce)
+    if slack < p.mode1_slack and r.labour_bound:
+        return "mode1"
+    rich = r.gdppc >= p.rich_gdppc or (sc.rich_from_year is not None and r.year >= sc.rich_from_year)
+    if slack > p.mode2_slack and r.wage <= p.wage_floor * AT_FLOOR and rich:
+        return "mode2"
+    return "ok"
+
+
+def turn_year(records: list[YearRecord], md: D.ModData, sc: Scenario) -> int | None:
+    """The first year the wage reaches tier 1's breakeven in sectors that together hold at
+    least half of that year's level-bound jobs (spec 5.5, R5); None if no year does.
+
+    Tier 1 is `ladder.automation[1]`, the first tier of the sector's main automation group,
+    and its breakeven the bare `econ_sim_data.breakeven` (R24 pairs it with the adoption
+    year, which also pays the retooling charge and scales by the calibration; so `sc` is
+    only part of the interface). A sector qualifies when it has a tier 1 that cuts jobs. A
+    negative breakeven (the tier saves goods as well) qualifies at any wage, as a wage is
+    never below 0. A level-bound sector without a qualifying tier (infrastructure, `other`,
+    a tier that cuts no jobs) holds jobs but never qualifies. Each year is judged on its
+    own jobs, `r.jobs_by_sector`; a year with none is skipped. `records` are chronological,
+    as `run` returns them.
+    """
+    breakeven: dict[str, float] = {}
+    for sector, ladder in md.ladders.items():
+        if len(ladder.automation) > 1:
+            be = D.breakeven(ladder.automation[1])
+            if be is not None:
+                breakeven[sector] = be
+    for r in records:
+        total = sum(r.jobs_by_sector.values())
+        if total <= 0:
+            continue
+        paying = sum(jobs for sector, jobs in r.jobs_by_sector.items()
+                     if sector in breakeven and r.wage >= breakeven[sector])
+        if paying >= TURN_JOBS_SHARE * total:
+            return r.year
+    return None
+
+
+def takeoff_year(records: list[YearRecord]) -> int | None:
+    """The first year t whose peasant share (peasants / workforce) is at least 5 points above
+    the share five years later; None if no year is. A year with no record five years on
+    can't qualify, so a run needs at least six years."""
+    share = {r.year: _share(r.peasants, r.workforce) for r in records}
+    for r in records:
+        later = share.get(r.year + TAKEOFF_SPAN)
+        if later is not None and share[r.year] - later >= TAKEOFF_FALL:
+            return r.year
+    return None
+
+
+def first_year_below(records: list[YearRecord], share: float, after: int | None = None) -> int | None:
+    """The first year whose peasant share is strictly below `share`; with `after`, the first
+    such year from that year on (inclusive). None if there is none."""
+    for r in records:
+        if after is not None and r.year < after:
+            continue
+        if _share(r.peasants, r.workforce) < share:
+            return r.year
+    return None
+
+
+@dataclass
+class Summary:
+    """One run's row (spec 9). None means the run never got there (or ended first).
+
+    setting, scenario     which run: the lever setting's label, the scenario's name
+    turn_year             first year wages reach tier 1's breakeven in sectors holding half the jobs
+    adoption_year         first year any sector is on an automation tier (R24), even if it later
+                          goes back to none. Usually after the turn: the tier must also repay
+                          its retooling charge, and the calibration scales its saving
+    peasants_below_5pct   first year peasants are under 5% of the workforce
+    slack_1950 / _2000 / _2045   (peasants + unemployed) / workforce that year
+    mode1_years, mode2_years     years classified mode 1 ("too fast"), mode 2 ("too slow")
+    money_years, cap_years, labour_years   years each flag was set (cap and labour can both be)
+    gdppc_2045            GDP per head in 2045
+    takeoff_year          see `takeoff_year`
+    takeoff_to_10pct      years from take-off to the first year under 10% peasants
+    takeoff_growth_ratio  this run's mean yearly GDP-per-head growth over the 20 years after
+                          take-off, over the reference run's over the same years
+    """
+
+    setting: str
+    scenario: str
+    turn_year: int | None
+    adoption_year: int | None
+    peasants_below_5pct: int | None
+    slack_1950: float | None
+    slack_2000: float | None
+    slack_2045: float | None
+    mode1_years: int
+    mode2_years: int
+    money_years: int
+    cap_years: int
+    labour_years: int
+    gdppc_2045: float | None
+    takeoff_year: int | None
+    takeoff_to_10pct: int | None
+    takeoff_growth_ratio: float | None
+
+
+def _mean_growth(gdppc: dict[int, float], years: list[int]) -> float:
+    return sum(gdppc[y] / gdppc[y - 1] - 1.0 for y in years) / len(years)
+
+
+def _growth_ratio(records: list[YearRecord], reference: list[YearRecord], takeoff: int) -> float | None:
+    """Mean yearly GDP-per-head growth over the years after `takeoff` (up to 20 of them),
+    divided by the reference's over the same years: the years in that window that both runs
+    have, with the year before each. None with no such year, or a reference that doesn't grow."""
+    own = {r.year: r.gdppc for r in records}
+    ref = {r.year: r.gdppc for r in reference}
+    years = [y for y in range(takeoff + 1, takeoff + TAKEOFF_WINDOW + 1)
+             if y in own and y in ref and own.get(y - 1, 0.0) > 0 and ref.get(y - 1, 0.0) > 0]
+    if not years:
+        return None
+    ref_growth = _mean_growth(ref, years)
+    if ref_growth <= 0:
+        return None
+    return _mean_growth(own, years) / ref_growth
+
+
+def summarize(records: list[YearRecord], sc: Scenario, md: D.ModData, p: Params, setting: str,
+              reference: list[YearRecord] | None = None) -> Summary:
+    """The run's summary row. `reference` is the rich player run under the same lever setting;
+    it is only read for takeoff_growth_ratio."""
+    by_year = {r.year: r for r in records}
+    modes = [classify(r, sc, p) for r in records]
+
+    def slack_in(year: int) -> float | None:
+        r = by_year.get(year)
+        return None if r is None else _share(r.peasants + r.unemployed, r.workforce)
+
+    r2045 = by_year.get(2045)
+
+    takeoff = takeoff_year(records)
+    to_10pct = None
+    ratio = None
+    if takeoff is not None:
+        below = first_year_below(records, 0.10, after=takeoff)
+        to_10pct = None if below is None else below - takeoff
+        if reference is not None:
+            ratio = _growth_ratio(records, reference, takeoff)
+
+    adoption = next((r.year for r in records if any(t > 0 for t in r.auto_tiers.values())), None)
+    return Summary(
+        setting=setting,
+        scenario=sc.name,
+        turn_year=turn_year(records, md, sc),
+        adoption_year=adoption,
+        peasants_below_5pct=first_year_below(records, 0.05),
+        slack_1950=slack_in(1950),
+        slack_2000=slack_in(2000),
+        slack_2045=slack_in(2045),
+        mode1_years=modes.count("mode1"),
+        mode2_years=modes.count("mode2"),
+        money_years=sum(1 for r in records if r.money_bound),
+        cap_years=sum(1 for r in records if r.cap_bound),
+        labour_years=sum(1 for r in records if r.labour_bound),
+        gdppc_2045=None if r2045 is None else r2045.gdppc,
+        takeoff_year=takeoff,
+        takeoff_to_10pct=to_10pct,
+        takeoff_growth_ratio=ratio,
+    )

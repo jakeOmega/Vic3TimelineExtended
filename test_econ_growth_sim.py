@@ -84,6 +84,21 @@ def toy_scenario(**overrides):
     return SC.Scenario(**fields)
 
 
+def rec(**kw):
+    """A YearRecord with a workforce of 1 and neutral defaults: no slack, fully employed,
+    a wage above the floor, a poor country (gdppc 1) in a year before any rich_from_year
+    a test sets, money-bound. `jobs_by_sector` follows `jobs_level` unless given."""
+    fields = dict(
+        year=1900, era=1.0, population=2.0, workforce=1.0, peasants=0.0, unemployed=0.0, employed=1.0,
+        jobs_level=1.0, jobs_demand=0.0, vacancies=0.0, wage=0.1, gdp=1.0, gdppc=1.0, x=0.0, spend=0.0,
+        points=0.0, money_bound=True, cap_bound=False, labour_bound=False, auto_tiers={"light": 0},
+        levels={"light": 1.0},
+    )
+    fields.update(kw)
+    fields.setdefault("jobs_by_sector", {"light": fields["jobs_level"]})
+    return G.YearRecord(**fields)
+
+
 class TestParams(unittest.TestCase):
     def test_defaults(self):
         p = G.Params()
@@ -462,6 +477,290 @@ class TestStep(unittest.TestCase):
         late = _toy((TOY_LIGHT_TIER1,), light_base=(dataclasses.replace(TOY_LIGHT_BASE, era=8),))
         sc8 = toy_scenario(era_points=((1867, 8.0),))
         self.assertEqual(G.run(sc8, late, G.Params(late_employment_mult=0.5))[0].jobs_by_sector["light"], 100 * 2500.0)
+
+
+# --------------------------------------------------------------------------
+# Diagnostics and the summary row (Task 7)
+# --------------------------------------------------------------------------
+
+
+def _with_sectors(**tier1):
+    """TOY plus a ladder for each named sector: `sector=<PMFigures>` gives it that tier 1,
+    `sector=None` gives it a ladder with no automation tiers (like infrastructure)."""
+    ladders = dict(TOY.ladders)
+    for sector, tier in tier1.items():
+        automation = (TOY_NONE,) if tier is None else (TOY_NONE, tier)
+        ladders[sector] = D.Ladder(sector, "building_toy_" + sector, 0.0, (TOY_LIGHT_BASE,), automation)
+    return dataclasses.replace(TOY, ladders=ladders)
+
+
+# Tier-1 figures for a second sector: breakeven 0.305; a tier that cuts no jobs (no breakeven);
+# and a tier whose breakeven is -0.1 (it cuts jobs and adds goods).
+HEAVY_DEAR = _pm("toy_heavy_tier", 1, -1000.0, goods_in=305.0)
+HEAVY_NO_CUT = _pm("toy_heavy_goods", 1, 0.0, goods_in=100.0)
+HEAVY_PAYS_ITSELF = _pm("toy_heavy_cheap", 1, -1000.0, goods_in=100.0, goods_out=200.0)
+
+
+class TestClassify(unittest.TestCase):
+    def test_classify(self):
+        sc, p = toy_scenario(rich_from_year=1920), G.Params()
+        self.assertEqual(G.classify(rec(year=1950, peasants=0, unemployed=0.005, labour_bound=True), sc, p), "mode1")
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=p.wage_floor), sc, p), "mode2")
+        self.assertEqual(G.classify(rec(year=1900, peasants=0.2, wage=p.wage_floor, gdppc=1.0), sc, p), "ok")
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=2 * p.wage_floor), sc, p), "ok")
+
+    def test_mode1_needs_labour_to_bind_and_slack_under_the_threshold(self):
+        sc, p = toy_scenario(), G.Params()
+        self.assertEqual(G.classify(rec(unemployed=0.005, labour_bound=False), sc, p), "ok")
+        self.assertEqual(G.classify(rec(unemployed=0.01, labour_bound=True), sc, p), "ok")       # strictly under 1%
+        self.assertEqual(G.classify(rec(peasants=0.004, unemployed=0.004, labour_bound=True), sc, p), "mode1")
+
+    def test_mode2_counts_peasants_and_unemployed_and_a_wage_at_the_floor(self):
+        sc, p = toy_scenario(rich_from_year=1920), G.Params()
+        floor = p.wage_floor
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.06, unemployed=0.06, wage=floor), sc, p), "mode2")
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.1, wage=floor), sc, p), "ok")      # strictly over 10%
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=floor * 1.0000005), sc, p), "mode2")
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=floor * 1.00001), sc, p), "ok")
+
+    def test_rich_is_gdp_per_head_or_the_scenarios_year(self):
+        p = G.Params()
+        no_year = toy_scenario(rich_from_year=None)
+        self.assertEqual(G.classify(rec(year=2000, peasants=0.2, wage=p.wage_floor, gdppc=p.rich_gdppc - 0.01), no_year, p), "ok")
+        self.assertEqual(G.classify(rec(year=1900, peasants=0.2, wage=p.wage_floor, gdppc=p.rich_gdppc), no_year, p), "mode2")
+        dated = toy_scenario(rich_from_year=1920)
+        self.assertEqual(G.classify(rec(year=1919, peasants=0.2, wage=p.wage_floor), dated, p), "ok")
+        self.assertEqual(G.classify(rec(year=1920, peasants=0.2, wage=p.wage_floor), dated, p), "mode2")
+
+    def test_no_workforce_is_not_an_error(self):        # Review Focus 4: no ZeroDivisionError
+        sc, p = toy_scenario(rich_from_year=1900), G.Params()
+        self.assertEqual(G.classify(rec(workforce=0.0, peasants=0.0), sc, p), "ok")
+
+    def test_thresholds_are_parameters(self):
+        sc = toy_scenario(rich_from_year=1900)
+        r = rec(peasants=0.2, wage=G.Params().wage_floor)
+        self.assertEqual(G.classify(r, sc, G.Params()), "mode2")
+        self.assertEqual(G.classify(r, sc, G.Params(mode2_slack=0.25)), "ok")
+
+
+class TestTakeoff(unittest.TestCase):
+    def test_takeoff_and_years_to_10pct(self):
+        pct = [60] * 10 + [60 - 2 * i for i in range(1, 26)] + [8] * 5     # whole percents: exact floats
+        recs = [rec(year=1900 + i, peasants=s / 100) for i, s in enumerate(pct)]
+        self.assertEqual(G.takeoff_year(recs), 1907)                     # 0.60 - 0.54 >= 0.05
+        self.assertEqual(G.first_year_below(recs, 0.10, after=1907), 1935)   # strictly below 0.10
+
+    def test_takeoff_is_none_without_a_fall_or_a_later_year(self):
+        flat = [rec(year=1900 + i, peasants=0.6) for i in range(30)]
+        self.assertIsNone(G.takeoff_year(flat))
+        slow = [rec(year=1900 + i, peasants=0.6 - 0.005 * i) for i in range(30)]       # 2.5 points in five years
+        self.assertIsNone(G.takeoff_year(slow))
+        short = [rec(year=1900 + i, peasants=0.6 - 0.1 * i) for i in range(5)]         # no year has a t+5
+        self.assertIsNone(G.takeoff_year(short))
+        self.assertIsNone(G.takeoff_year([]))
+
+    def test_takeoff_looks_five_years_on_by_year_not_by_position(self):
+        gapped = [rec(year=1900, peasants=0.6), rec(year=1903, peasants=0.1), rec(year=1905, peasants=0.5)]
+        self.assertEqual(G.takeoff_year(gapped), 1900)
+
+    def test_first_year_below_edges(self):
+        recs = [rec(year=1900 + i, peasants=s) for i, s in enumerate((0.04, 0.5, 0.5, 0.04, 0.04))]
+        self.assertEqual(G.first_year_below(recs, 0.05), 1900)                 # the first, though it rises again
+        self.assertEqual(G.first_year_below(recs, 0.05, after=1901), 1903)     # `after` counts the year itself
+        self.assertEqual(G.first_year_below(recs, 0.05, after=1903), 1903)
+        self.assertIsNone(G.first_year_below(recs, 0.05, after=1905))
+        self.assertIsNone(G.first_year_below(recs, 0.01))
+        self.assertIsNone(G.first_year_below([], 0.05))
+        self.assertIsNone(G.first_year_below([rec(peasants=0.05)], 0.05))      # strictly below
+
+    def test_no_workforce_is_not_an_error(self):
+        self.assertIsNone(G.takeoff_year([rec(year=1900 + i, workforce=0.0, peasants=0.0) for i in range(8)]))
+        self.assertEqual(G.first_year_below([rec(workforce=0.0, peasants=0.0)], 0.05), 1900)
+
+
+class TestTurnYear(unittest.TestCase):
+    @staticmethod
+    def _years(n=40, start=1870):
+        return [(start + i, 0.05 + 0.01 * i) for i in range(n)]
+
+    def test_turn_year_uses_tier_one(self):
+        recs = [rec(year=1870 + i, wage=0.05 + 0.01 * i, jobs_level=1.0) for i in range(30)]
+        self.assertEqual(G.turn_year(recs, TOY, toy_scenario()), 1870 + 10)   # toy tier-1 breakeven 0.15
+
+    def test_turn_year_needs_sectors_holding_half_the_jobs(self):
+        # R5. Light's tier 1 pays at 0.15, heavy's at 0.305. With 40% of the jobs light isn't
+        # enough: the turn waits for heavy, whose jobs bring the cumulative share to 100%.
+        md = _with_sectors(heavy=HEAVY_DEAR)
+        few_light = [rec(year=y, wage=w, jobs_by_sector={"light": 40.0, "heavy": 60.0}) for y, w in self._years()]
+        self.assertEqual(G.turn_year(few_light, md, toy_scenario()), 1870 + 26)      # 0.31 >= 0.305; 0.30 is not
+        # With 60% of the jobs light is enough on its own.
+        most_light = [rec(year=y, wage=w, jobs_by_sector={"light": 60.0, "heavy": 40.0}) for y, w in self._years()]
+        self.assertEqual(G.turn_year(most_light, md, toy_scenario()), 1870 + 10)
+
+    def test_exactly_half_the_jobs_is_enough(self):
+        md = _with_sectors(heavy=HEAVY_DEAR)
+        halves = [rec(year=y, wage=w, jobs_by_sector={"light": 50.0, "heavy": 50.0}) for y, w in self._years()]
+        self.assertEqual(G.turn_year(halves, md, toy_scenario()), 1870 + 10)
+
+    def test_each_years_jobs_decide(self):
+        # Light holds 30% of the jobs until 1884 and 60% from 1885: the wage passes 0.15 in 1880, the turn is 1885.
+        md = _with_sectors(heavy=HEAVY_DEAR)
+        recs = []
+        for y, w in self._years():
+            light = 30.0 if y < 1885 else 60.0
+            recs.append(rec(year=y, wage=w, jobs_by_sector={"light": light, "heavy": 100.0 - light}))
+        self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1885)
+
+    def test_sectors_without_a_tier_one_or_a_ladder_hold_jobs_but_never_qualify(self):
+        md = _with_sectors(infrastructure=None)
+        jobs = {"light": 40.0, "infrastructure": 30.0, "other": 30.0}
+        recs = [rec(year=1870 + i, wage=100.0, jobs_by_sector=jobs) for i in range(5)]
+        self.assertIsNone(G.turn_year(recs, md, toy_scenario()))
+        jobs = {"light": 55.0, "infrastructure": 15.0, "other": 30.0}
+        recs = [rec(year=1870 + i, wage=100.0, jobs_by_sector=jobs) for i in range(5)]
+        self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1870)
+
+    def test_a_tier_that_cuts_no_jobs_never_qualifies(self):
+        md = _with_sectors(heavy=HEAVY_NO_CUT)
+        self.assertIsNone(D.breakeven(HEAVY_NO_CUT))
+        recs = [rec(year=1870 + i, wage=100.0, jobs_by_sector={"heavy": 1.0}) for i in range(5)]
+        self.assertIsNone(G.turn_year(recs, md, toy_scenario()))
+
+    def test_a_negative_breakeven_always_qualifies(self):
+        md = _with_sectors(heavy=HEAVY_PAYS_ITSELF)
+        self.assertLess(D.breakeven(HEAVY_PAYS_ITSELF), 0)
+        recs = [rec(year=1870 + i, wage=0.05, jobs_by_sector={"heavy": 1.0}) for i in range(5)]
+        self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1870)
+
+    def test_none_when_never_reached_or_without_jobs(self):
+        self.assertIsNone(G.turn_year([rec(year=1870 + i, wage=0.14) for i in range(5)], TOY, toy_scenario()))
+        self.assertIsNone(G.turn_year([], TOY, toy_scenario()))
+        # A year with no level-bound jobs holds half of nothing: it isn't a turn.
+        self.assertIsNone(G.turn_year([rec(wage=5.0, jobs_level=0.0)], TOY, toy_scenario()))
+
+
+class TestSummary(unittest.TestCase):
+    ADOPTED = {"light": 1}
+
+    def _flat(self, start=1900, end=2050, **kw):
+        return [rec(year=y, **kw) for y in range(start, end + 1)]
+
+    def test_fields(self):
+        self.assertEqual([f.name for f in dataclasses.fields(G.Summary)], [
+            "setting", "scenario", "turn_year", "adoption_year", "peasants_below_5pct",
+            "slack_1950", "slack_2000", "slack_2045", "mode1_years", "mode2_years",
+            "money_years", "cap_years", "labour_years", "gdppc_2045",
+            "takeoff_year", "takeoff_to_10pct", "takeoff_growth_ratio"])
+
+    def test_counts_modes_and_binding_years_and_reads_the_slack_dates(self):
+        sc, p = toy_scenario(rich_from_year=1920, name="the_run"), G.Params()
+        recs = self._flat()
+        by_year = {r.year: i for i, r in enumerate(recs)}
+        for y in range(1930, 1935):                                        # five years of mode 2
+            recs[by_year[y]] = rec(year=y, peasants=0.2, wage=p.wage_floor)
+        for y in range(1960, 1963):                                        # three years of mode 1, labour-bound
+            recs[by_year[y]] = rec(year=y, unemployed=0.005, labour_bound=True, money_bound=False)
+        for y in (1970, 1971):                                             # two years the cap binds
+            recs[by_year[y]] = rec(year=y, cap_bound=True, money_bound=False)
+        recs[by_year[1950]] = rec(year=1950, peasants=0.2, unemployed=0.05)
+        recs[by_year[2000]] = rec(year=2000, peasants=0.04)
+        recs[by_year[2045]] = rec(year=2045, unemployed=0.03, gdppc=42.0)
+        s = G.summarize(recs, sc, TOY, p, "my_setting")
+        self.assertEqual((s.setting, s.scenario), ("my_setting", "the_run"))
+        self.assertEqual((s.mode1_years, s.mode2_years), (3, 5))
+        self.assertEqual((s.money_years, s.cap_years, s.labour_years), (151 - 5, 2, 3))
+        self.assertAlmostEqual(s.slack_1950, 0.25)
+        self.assertAlmostEqual(s.slack_2000, 0.04)
+        self.assertAlmostEqual(s.slack_2045, 0.03)
+        self.assertEqual(s.gdppc_2045, 42.0)
+
+    def test_a_run_that_ends_early_has_no_figure_for_a_later_date(self):
+        s = G.summarize(self._flat(1867, 1990), toy_scenario(), TOY, G.Params(), "x")
+        self.assertEqual(s.slack_1950, 0.0)
+        self.assertIsNone(s.slack_2000)
+        self.assertIsNone(s.slack_2045)
+        self.assertIsNone(s.gdppc_2045)
+
+    def test_a_run_that_never_reaches_a_threshold_gives_none(self):
+        recs = self._flat(peasants=0.6, wage=0.05)
+        s = G.summarize(recs, toy_scenario(), TOY, G.Params(), "x", reference=self._flat())
+        self.assertIsNone(s.turn_year)
+        self.assertIsNone(s.adoption_year)
+        self.assertIsNone(s.peasants_below_5pct)
+        self.assertIsNone(s.takeoff_year)
+        self.assertIsNone(s.takeoff_to_10pct)
+        self.assertIsNone(s.takeoff_growth_ratio)
+
+    def test_an_empty_run_summarizes(self):
+        s = G.summarize([], toy_scenario(), TOY, G.Params(), "x")
+        self.assertEqual((s.mode1_years, s.mode2_years, s.money_years, s.cap_years, s.labour_years), (0, 0, 0, 0, 0))
+        self.assertTrue(all(getattr(s, n) is None for n in (
+            "turn_year", "adoption_year", "peasants_below_5pct", "slack_1950", "gdppc_2045", "takeoff_year")))
+
+    def test_turn_and_peasants_below_5pct_come_from_the_records(self):
+        recs = [rec(year=1870 + i, wage=0.05 + 0.01 * i, peasants=max(0.6 - 0.02 * i, 0.0)) for i in range(40)]
+        s = G.summarize(recs, toy_scenario(), TOY, G.Params(), "x")
+        self.assertEqual(s.turn_year, 1880)
+        self.assertEqual(s.peasants_below_5pct, 1870 + 28)                 # 0.6 - 0.56 = 0.04 < 0.05; 0.06 is not
+
+    def test_adoption_year_is_the_first_adoption_even_if_it_is_undone(self):
+        recs = [rec(year=1900 + i, auto_tiers={"light": t, "heavy": 0}) for i, t in enumerate((0, 0, 1, 0, 0))]
+        self.assertEqual(G.summarize(recs, toy_scenario(), TOY, G.Params(), "x").adoption_year, 1902)
+        recs = [rec(year=1900 + i, auto_tiers={"light": 0, "heavy": h}) for i, h in enumerate((0, 0, 0, 2))]
+        self.assertEqual(G.summarize(recs, toy_scenario(), TOY, G.Params(), "x").adoption_year, 1903)
+
+    def test_adoption_year_from_a_real_run(self):
+        p = G.Params()
+        high = G.summarize(G.run(toy_scenario(wage_start=1.0), TOY, p), toy_scenario(), TOY, p, "x")
+        self.assertEqual(high.adoption_year, 1867)
+        low = G.summarize(G.run(toy_scenario(), TOY, p), toy_scenario(), TOY, p, "x")     # wage at the floor, under 0.15
+        self.assertIsNone(low.adoption_year)
+
+    def test_takeoff_growth_ratio(self):
+        pct = [60] * 10 + [60 - 2 * i for i in range(1, 26)] + [8] * 5
+        peasants = [s / 100 for s in pct]
+        years = [1900 + i for i in range(len(pct))]
+
+        def gdppc_from(rates):                                  # rates[y] is the growth into year y
+            out, level = [], 1.0
+            for y in years:
+                level *= 1.0 + rates.get(y, 0.02)
+                out.append(level)
+            return out
+
+        # Take-off is 1907: the window is the growth into 1908 .. 1927. 1907's own growth and
+        # everything after 1927 are set apart so a misplaced window shows.
+        rates = {1907: 0.9, **{y: 0.10 for y in range(1908, 1918)}, **{y: 0.02 for y in range(1918, 1928)}, 1928: 0.5}
+        poor = [rec(year=y, peasants=s, gdppc=g) for y, s, g in zip(years, peasants, gdppc_from(rates))]
+        rich = [rec(year=y, gdppc=g) for y, g in zip(years, gdppc_from({y: 0.02 for y in years}))]
+        sc, p = toy_scenario(), G.Params()
+        s = G.summarize(poor, sc, TOY, p, "x", reference=rich)
+        self.assertEqual((s.takeoff_year, s.takeoff_to_10pct), (1907, 28))
+        self.assertAlmostEqual(s.takeoff_growth_ratio, 3.0)                # (10 x 0.10 + 10 x 0.02) / 20 over 0.02
+        self.assertIsNone(G.summarize(poor, sc, TOY, p, "x").takeoff_growth_ratio)             # no reference
+        # A reference that ends early is compared over the years both runs have.
+        short_rich = [r for r in rich if r.year <= 1917]
+        self.assertAlmostEqual(G.summarize(poor, sc, TOY, p, "x", reference=short_rich).takeoff_growth_ratio, 5.0)
+        # A reference that does not grow gives no ratio.
+        still = [rec(year=y, gdppc=1.0) for y in years]
+        self.assertIsNone(G.summarize(poor, sc, TOY, p, "x", reference=still).takeoff_growth_ratio)
+        shrinking = [rec(year=y, gdppc=2.0 - 0.01 * i) for i, y in enumerate(years)]
+        self.assertIsNone(G.summarize(poor, sc, TOY, p, "x", reference=shrinking).takeoff_growth_ratio)
+
+    def test_no_takeoff_gives_no_ratio_even_with_a_reference(self):
+        flat = self._flat(1900, 1950, peasants=0.6)
+        s = G.summarize(flat, toy_scenario(), TOY, G.Params(), "x", reference=self._flat(1900, 1950))
+        self.assertIsNone(s.takeoff_growth_ratio)
+
+    def test_summarizes_a_real_run(self):
+        sc, p = toy_scenario(end_year=2050), G.Params()
+        recs = G.run(sc, TOY, p)
+        s = G.summarize(recs, sc, TOY, p, "linear")
+        self.assertEqual(s.scenario, "toy")
+        self.assertLessEqual(s.mode1_years + s.mode2_years, len(recs))
+        self.assertEqual(s.money_years + s.cap_years + s.labour_years >= len(recs), True)    # a year can be cap- and labour-bound
+        self.assertEqual(s.slack_2045, (recs[2045 - 1867].peasants + recs[2045 - 1867].unemployed) / recs[2045 - 1867].workforce)
+        self.assertEqual(s.gdppc_2045, recs[2045 - 1867].gdppc)
 
 
 if __name__ == "__main__":
