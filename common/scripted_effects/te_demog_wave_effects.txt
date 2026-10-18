@@ -66,6 +66,7 @@ te_demog_wave_try = {
 		set_local_variable = { name = te_dg_wv_fired value = 1 }
 		te_demog_wave_hold = { EV = $EV$ }
 		trigger_event = { id = $EVENT$ }
+		te_demog_history_note_event = yes
 	}
 }
 
@@ -81,6 +82,7 @@ te_demog_wave_try_once = {
 		set_local_variable = { name = te_dg_wv_fired value = 1 }
 		set_variable = { name = te_dg_wv_$EV$ value = te_demog_ms_now }
 		trigger_event = { id = $EVENT$ }
+		te_demog_history_note_event = yes
 	}
 }
 
@@ -104,6 +106,7 @@ te_demog_wave_technology = {
 		}
 		set_variable = { name = te_dg_wv_immortal value = te_demog_ms_now }
 		trigger_event = { id = te_demog_wave.10 }
+		te_demog_history_note_event = yes
 	}
 }
 
@@ -151,6 +154,7 @@ te_demog_wave_war_monthly = {
 				}
 				te_demog_wave_hold = { EV = lost }
 				trigger_event = { id = te_demog_wave.3 }
+				te_demog_history_note_event = yes
 			}
 		}
 		else_if = {
@@ -162,6 +166,7 @@ te_demog_wave_war_monthly = {
 				}
 				te_demog_wave_hold = { EV = boom }
 				trigger_event = { id = te_demog_wave.2 }
+				te_demog_history_note_event = yes
 			}
 			te_demog_wave_war_clear = yes
 		}

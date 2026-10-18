@@ -45,6 +45,8 @@ te_demog_country_monthly_on_action = {
 		# phase 3's event wave: the war tracker for The Lost Generation and The Baby Boom (Full only;
 		# te_demog_wave_effects.txt)
 		te_demog_wave_war_monthly = yes
+		# the History charts' famine pip (te_demog_history_effects.txt; issue #1029)
+		te_demog_history_note_famine = yes
 	}
 }
 

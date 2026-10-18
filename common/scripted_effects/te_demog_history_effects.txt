@@ -18,7 +18,20 @@
 #   te_dg_h_median, te_dg_h_tfr, te_dg_h_e0, te_dg_h_gini, te_dg_h_wc
 #              median age, children per woman, life expectancy at birth, Gini
 #              and national Wealth Concentration as the census left them
-#   country    te_dg_hist (the list), te_dg_hist_year (the year last recorded)
+#   te_dg_h_cbr, te_dg_h_cdr, te_dg_h_mig  (issue #1029) births, deaths and net
+#              migration per 1,000 people, from a census with a step behind it
+#              only (a seed counts none: te_dg_stepped)
+#   te_dg_h_s<k>, te_dg_h_c<k>  (issue #1029) the year's deaths by cause: each
+#              slice's share and the shares summed through it, k = 1-8 in the
+#              pie's order (te_demog_cause_deaths_total's codes), from a census
+#              with deaths by cause (te_dg_dc_total above 0)
+#   te_dg_h_mk_war, te_dg_h_mk_famine, te_dg_h_mk_event  (issue #1029) the
+#              charts' marker pips, 1 when set: the states' last counts took war
+#              dead; a month of the year had a famine (te_dg_famine_year); a
+#              demographic event fired (te_dg_wv_year, te_demog_history_note_event,
+#              which marks a sample already stored too)
+#   country    te_dg_hist (the list), te_dg_hist_year (the year last recorded),
+#              te_dg_famine_year and te_dg_wv_year (the markers' years)
 #
 # ONE SAMPLE A YEAR. The census runs twice in 1836, at game start and on
 # 31 December, so a container is created only when te_dg_hist_year is not the
@@ -78,7 +91,122 @@ te_demog_history_record = {
 				te_demog_history_copy = { FROM = te_dg_e0 TO = te_dg_h_e0 }
 				te_demog_history_copy = { FROM = te_dg_gini TO = te_dg_h_gini }
 				te_demog_history_copy = { FROM = te_inh_concentration TO = te_dg_h_wc }
+				# issue #1029: the rates from a census a step stands behind (a seed's births and deaths are 0)
+				if = {
+					limit = {
+						scope:te_dg_hist_owner = {
+							has_variable = te_dg_stepped
+							var:te_dg_stepped > 0
+						}
+					}
+					te_demog_history_copy = { FROM = te_dg_cbr TO = te_dg_h_cbr }
+					te_demog_history_copy = { FROM = te_dg_cdr TO = te_dg_h_cdr }
+					te_demog_history_copy = { FROM = te_dg_mig_rate TO = te_dg_h_mig }
+				}
+				if = {
+					limit = {
+						scope:te_dg_hist_owner = {
+							has_variable = te_dg_dc_total
+							var:te_dg_dc_total > 0
+						}
+					}
+					te_demog_history_causes = yes
+				}
+				te_demog_history_markers = yes
 			}
+		}
+	}
+}
+
+# Scope: a sample container, with scope:te_dg_hist_owner the country, which holds deaths by cause (issue #1029): each
+# slice's share of the year's deaths and the shares summed through it, which the stacked chart's layers draw (largest
+# first, as the pie's: gui_modding_guide.md, "Pie charts of script-held data").
+te_demog_history_causes = {
+	te_demog_history_share = { K = 1 SLICE = inf }
+	te_demog_history_share = { K = 2 SLICE = chr }
+	te_demog_history_share = { K = 3 SLICE = ext }
+	te_demog_history_share = { K = 4 SLICE = work }
+	te_demog_history_share = { K = 5 SLICE = mat }
+	te_demog_history_share = { K = 6 SLICE = ontop }
+	te_demog_history_share = { K = 7 SLICE = kill }
+	te_demog_history_share = { K = 8 SLICE = war }
+	set_variable = { name = te_dg_h_c1 value = var:te_dg_h_s1 }
+	set_variable = { name = te_dg_h_c2 value = { value = var:te_dg_h_c1 add = var:te_dg_h_s2 } }
+	set_variable = { name = te_dg_h_c3 value = { value = var:te_dg_h_c2 add = var:te_dg_h_s3 } }
+	set_variable = { name = te_dg_h_c4 value = { value = var:te_dg_h_c3 add = var:te_dg_h_s4 } }
+	set_variable = { name = te_dg_h_c5 value = { value = var:te_dg_h_c4 add = var:te_dg_h_s5 } }
+	set_variable = { name = te_dg_h_c6 value = { value = var:te_dg_h_c5 add = var:te_dg_h_s6 } }
+	set_variable = { name = te_dg_h_c7 value = { value = var:te_dg_h_c6 add = var:te_dg_h_s7 } }
+	set_variable = { name = te_dg_h_c8 value = 1 }
+}
+
+# Scope: a sample container. Slice $SLICE$'s share of the country's deaths, as te_dg_h_s$K$.
+te_demog_history_share = {
+	set_variable = {
+		name = te_dg_h_s$K$
+		value = {
+			value = scope:te_dg_hist_owner.var:te_dg_dc_$SLICE$
+			divide = { value = scope:te_dg_hist_owner.var:te_dg_dc_total min = 1 }
+		}
+	}
+}
+
+# Scope: a sample container, with scope:te_dg_hist_owner the country (issue #1029): the year's marker pips. War dead in
+# the states' last counts; a famine in a month of the year (te_demog_history_note_famine); a demographic event
+# (te_demog_history_note_event). A pip once set stays for the year: the 31 December run only adds.
+te_demog_history_markers = {
+	if = {
+		limit = {
+			scope:te_dg_hist_owner = {
+				has_variable = te_dg_dc_war
+				var:te_dg_dc_war >= 1
+			}
+		}
+		set_variable = { name = te_dg_h_mk_war value = 1 }
+	}
+	if = {
+		limit = {
+			scope:te_dg_hist_owner = {
+				has_variable = te_dg_famine_year
+				var:te_dg_famine_year = te_demog_year
+			}
+		}
+		set_variable = { name = te_dg_h_mk_famine value = 1 }
+	}
+	if = {
+		limit = {
+			scope:te_dg_hist_owner = {
+				has_variable = te_dg_wv_year
+				var:te_dg_wv_year = te_demog_year
+			}
+		}
+		set_variable = { name = te_dg_h_mk_event value = 1 }
+	}
+}
+
+# Scope: a tracked country, on its monthly pulse (te_demog_country_monthly_on_action; issue #1029): a month with a
+# famine marks the year's history sample, which the census stores on 31 December.
+te_demog_history_note_famine = {
+	if = {
+		limit = {
+			te_history_country_is_tracked = yes
+			has_famine = yes
+		}
+		set_variable = { name = te_dg_famine_year value = te_demog_year }
+	}
+}
+
+# Scope: a country, as one of the event wave's events fires (te_demog_wave_effects.txt; issue #1029): the year's marker,
+# for the census's sample on 31 December, and on this year's sample at once where it is stored already (the yearly
+# events fire after the census).
+te_demog_history_note_event = {
+	set_variable = { name = te_dg_wv_year value = te_demog_year }
+	if = {
+		limit = { has_variable_list = te_dg_hist }
+		every_in_list = {
+			variable = te_dg_hist
+			limit = { var:te_hist_i = te_demog_year }
+			set_variable = { name = te_dg_h_mk_event value = 1 }
 		}
 	}
 }
