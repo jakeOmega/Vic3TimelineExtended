@@ -19,7 +19,7 @@ A `state_*` type does not need state-level sources. The mask is what the engine 
 
 The homeland system is the working precedent. `state_homeland_*` is granted by laws, amendments, techs and principles, and read per state in `common/script_values/extra_script_values.txt` (`modifier:state_homeland_change_speed_mult`).
 
-**Unverified:** whether a *country*-scope read of a `state_*` type (`modifier:state_X` from a country) returns the value its country modifiers contribute. Displays that sit on a country panel should read through `capital` or a chosen state until that is tested.
+**The country holds them too (owner, 2026-10-17).** The prefix is a naming convention: a country's own modifier holds the `state_*` fields its laws, technologies and static modifiers carry, so a country panel can read them directly. The country panel's Modifiers tab lists Arable Land with its technology and diffusion sources, and `GetPlayer.GetModifier.GetValueWithBreakdownFor('state_arable_land_mult')` gives the same figure (the Nation tab proposal, #1030). What it gives is the national contribution: a state's own decrees and buildings sit in that state's modifier only.
 
 ---
 

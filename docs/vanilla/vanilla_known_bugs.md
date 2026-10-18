@@ -1664,6 +1664,20 @@ data system function 'skie'
 
 New in 1.13.9: the shipping-lane/sea-node tooltip (vanilla `interfaces_l_english.yml`, "Ports connected via this Sea Node") builds a `ConcatIfNeitherEmpty('title …', 'tooltippable_name …')` data-function call with localized state names inlined into the single-quoted argument. A name containing an apostrophe (observed: dynamic "Russo-American Kuril'skie Ostrova") terminates the string early — "Expected ','" (`:43`), plus companion "Failed to convert statement" (`:1112`/`:1092`) and "Could not find data system function 'skie'" (`:1466`). Vanilla tooltip code + vanilla dynamic name; fires only while that tooltip renders. Cosmetic (tooltip truncates).
 
+### `pdx_data_statementparser.cpp:43` — government options break on an apostrophe in a party name
+- source: `pdx_data_statementparser.cpp:43`
+- source: `pdx_data_statementparser.cpp:230`
+- source: `pdx_data_factory.cpp:1112`
+- source: `pdx_data_factory.cpp:1092`
+- source: `pdx_data_factory.cpp:1462`
+
+```
+DATA_PARTY_NAME_TOOLTIP,PartyTooltip
+data system function 'Party!!'
+```
+
+The same kind of break as the sea-node entry above. Vanilla's `GOVERNMENT_OPTION_ENTRY` (`interfaces_l_english.yml:953`) is `[InterestGroup.GetName][AddTextIf(Not(StringIsEmpty('$PARTY$')),' ($PARTY$)')]`, so the party's tooltippable name is spliced into a single-quoted argument. Vanilla's own `party_peasants_party` ("Peasants' Party", `parties_l_english.yml:316`) ends the string at its apostrophe: "Expected ','" (`:43`), "Unexpected characters found at end of Statement" (`:230`), "Could not find data system function 'Party!!''" (`:1462`) and the companion "Failed to convert statement" lines (`:1112`/`:1092`). Eight lines once per render of the government options; the mod has no `AddTextIf` anywhere. Seen 2026-10-17 at 19:27 in the EU game. Cosmetic.
+
 ### `pdx_data_statementparser.cpp:230` — a vanilla loc string is missing a `.` before `GetCustom`
 - source: `pdx_data_statementparser.cpp:230`
 
