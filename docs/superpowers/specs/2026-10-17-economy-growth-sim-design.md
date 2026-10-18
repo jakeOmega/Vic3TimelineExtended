@@ -317,18 +317,22 @@ default.
 
 ## 6. Country types
 
-v1 runs four types. The first is calibrated; the others are plausible starts.
+v1 runs four types, all starting in 1867 from the calibration game's
+`french republic_1867.v3`, which holds every country (my call, made while
+planning). The AI countries in that game appear in every later save, so the
+AI types get calibration series of their own.
 
-1. **Player, rich start.** France, initial state from the playthrough's
-   earliest saves. Allocation shares and era arrival come from the same
-   playthrough.
-2. **Player, large poor start.** China- or India-like, initial state from an
-   1836 save (`ZeroBench.v3` or `great britain_temptst2.v3`, text). Same player
-   behaviour as type 1. My call: it uses type 1's era-arrival table, with a
-   lag parameter that defaults to 0, since a player pulls tech along.
-3. **AI, rich start.** GBR- or GER-like. Era arrival comes from the observer
-   runs (leaders 202 techs in 1972, 219 in 1988, 245 in 2015). Automation lags.
-4. **AI, mid or poor start.** As type 3, from a poorer 1836 country.
+1. **Player, rich start.** France (country id 4), on its core states.
+   Allocation shares and era arrival come from the same playthrough.
+2. **Player, large poor start.** China's 1867 state, run with player
+   behaviour: type 1's era-arrival table (a lag parameter defaults to 0,
+   since a player pulls tech along) and type 1's allocation shares.
+3. **AI, rich start.** AI Great Britain in the same game, with its own era
+   arrival, allocation and series. Automation lags.
+4. **AI, poor start.** AI China in the same game, likewise.
+
+The observer runs (leaders 202 techs in 1972, 219 in 1988, 245 in 2015)
+remain a cross-check on AI tech pace.
 
 Players and AI differ only in tech pace, automation lag and investment
 allocation. They don't differ in any rule.
