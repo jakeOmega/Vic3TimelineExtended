@@ -1420,12 +1420,14 @@ class SkinTests(unittest.TestCase):
         bodies = dict(options)
         for f in FAITHS:
             self.assertIn(f"highlighted_option = yes trigger = {{ hidden_trigger = {{ var:gm_skin_axis = flag:faith }} "
-                          f"owner = {{ religion = rel:{f} }} }}", bodies[f"faith_{f}"])
+                          f"custom_tooltip = {{ text = gm_skin_reason_faith_tt owner = {{ religion = rel:{f} }} }} }}",
+                          bodies[f"faith_{f}"])
             self.assertIn(f"gm_state_choose_skin = {{ SKIN = faith_{f} }}", bodies[f"faith_{f}"])
         for h in HERITAGES:
             skin = f"faith_{HERITAGE_AS_FAITH[h]}" if h in HERITAGE_AS_FAITH else f"heritage_{h}"
             self.assertIn(f"highlighted_option = yes trigger = {{ hidden_trigger = {{ var:gm_skin_axis = flag:heritage }} "
-                          f"owner = {{ te_heritage_{h} = yes }} }}", bodies[f"heritage_{h}"])
+                          f"custom_tooltip = {{ text = gm_skin_reason_{h}_tt owner = {{ te_heritage_{h} = yes }} }} }}",
+                          bodies[f"heritage_{h}"])
             self.assertIn(f"gm_state_choose_skin = {{ SKIN = {skin} }}", bodies[f"heritage_{h}"])
         self.assertNotIn("default_option", squash(strip_comments(self.event)))
         self.assertNotIn("highlighted_option", bodies["generic"])
@@ -1456,7 +1458,7 @@ class SkinTests(unittest.TestCase):
                 # (Task 3 review), so the option can't vanish if the engine
                 # hasn't applied the dedication's PM yet.
                 self.assertIn(f"hidden_trigger = {{ var:gm_skin_axis = flag:building_{key} }} "
-                              f"owner = {{ te_heritage_{h} = yes }}", body)
+                              f"custom_tooltip = {{ text = gm_skin_reason_{h}_tt owner = {{ te_heritage_{h} = yes }} }}", body)
                 self.assertNotIn("gm_state_has_pm", body)
                 self.assertIn(f"gm_state_choose_building_skin = {{ SKIN = heritage_{h} }}", body)
                 self.assertIn(f"monument_events.11.building_{key}_{h}", L)
@@ -2093,8 +2095,8 @@ class CommissionLifeTests(unittest.TestCase):
         # offered; "leave it undedicated" is the default otherwise. Two copies
         # with complementary triggers keep exactly one default valid
         # (scripting_best_practices.md: a failed default does not fall back).
-        self.assertIn("name = monument_events.2.opp trigger = { gm_state_ceremony_offers_opportunity = yes } "
-                      "default_option = yes ai_chance = { base = 0 } gm_state_dedicate_as_opportunity_asks = yes",
+        self.assertIn("name = monument_events.2.opp trigger = { custom_tooltip = { text = gm_ded_reason_opportunity_tt "
+                      "gm_state_ceremony_offers_opportunity = yes } } default_option = yes ai_chance = { base = 0 } gm_state_dedicate_as_opportunity_asks = yes",
                       squash(ev))
         self.assertIn("name = monument_events.2.a trigger = { gm_state_ceremony_offers_opportunity = no } "
                       "default_option = yes ai_chance = { base = 1 }", squash(ev))
@@ -6268,7 +6270,8 @@ class SignatureSpecialTests(unittest.TestCase):
         L = loc()
         for s in SPECIAL_SIGS:
             body = squash(strip_comments(options[f"sig_{s.key}"]))
-            self.assertIn(f"trigger = {{ gm_state_ceremony_offers_special = {{ SIG = {s.key} }}", body, s.key)
+            self.assertIn(f"trigger = {{ custom_tooltip = {{ text = gm_ded_reason_special_tt "
+                          f"gm_state_ceremony_offers_special = {{ SIG = {s.key} }} }}", body, s.key)
             self.assertNotIn("show_as_unavailable", body, "hidden, not greyed")
             self.assertIn(f"custom_tooltip = {{ text = monument_events.2.sig_{s.key}.tt "
                           f"gm_state_dedicate_sig_{s.key} = yes }}", body, s.key)
@@ -6418,3 +6421,79 @@ class SignatureDebugTests(unittest.TestCase):
         self.assertNotIn(".MakeScope", log, "debug_log's working form only")
         for k in SIG_NATIONAL:
             self.assertIn(f"gm_display_g_sig_{k}", log)
+
+
+class OptionReasonTests(unittest.TestCase):
+    """Every gated dedication (monument_events.2) and style (.11) says why it is
+    or isn't offered. Gates written as `owner = { <scripted trigger> = yes }`
+    drew nothing in the option's tooltip (2026-10-18): a greyed dedication had
+    no "not available because" at all, and a style printed the header over
+    nothing. So each gate sits in a custom_tooltip whose text names the reason."""
+
+    @staticmethod
+    def _own_trigger(body):
+        """The option's own `trigger = { }` (depth 0 in the option), or None:
+        ai_chance modifiers carry triggers of their own."""
+        depth = 0
+        for m in re.finditer(r"\{|\}|\btrigger\s*=\s*\{", body):
+            if m.group(0) == "{":
+                depth += 1
+            elif m.group(0) == "}":
+                depth -= 1
+            elif depth == 0:
+                return _match_brace(body, m.end())
+            else:
+                depth += 1
+        return None
+
+    def _options(self, eid):
+        ev = strip_comments(raw_block_at(read(EVENTS), rf"(?m)^{re.escape(eid)}\s*=\s*\{{"))
+        for m in re.finditer(r"(?m)^\toption\s*=\s*\{", ev):
+            body = _match_brace(ev, m.end())
+            yield re.search(r"\bname\s*=\s*(\S+)", body).group(1), self._own_trigger(body)
+
+    @staticmethod
+    def _reasons(trig):
+        """(text key, gate) per custom_tooltip, and what is left outside them and hidden_triggers."""
+        out, rest = [], trig
+        for opener in ("custom_tooltip", "hidden_trigger"):
+            for m in re.finditer(rf"\b{opener}\s*=\s*\{{", trig):
+                inner = _match_brace(trig, m.end())
+                rest = rest.replace(inner, "", 1)
+                if opener == "custom_tooltip":
+                    key = re.search(r"\btext\s*=\s*(\w+)", inner).group(1)
+                    out.append((key, squash(re.sub(r"\btext\s*=\s*\w+", "", inner))))
+        rest = re.sub(r"\b(custom_tooltip|hidden_trigger)\s*=\s*\{\s*\}", "", rest)
+        return out, squash(rest)
+
+    def test_every_gate_carries_a_reason(self):
+        L = loc()
+        gated = 0
+        for eid in ("monument_events.2", "monument_events.11"):
+            for name, trig in self._options(eid):
+                # "Leave it undedicated": its triggers only move the default.
+                if trig is None or name == "monument_events.2.a":
+                    continue
+                gated += 1
+                with self.subTest(option=name):
+                    reasons, rest = self._reasons(trig)
+                    self.assertEqual(rest, "", "a gate outside any custom_tooltip draws no reason")
+                    self.assertTrue(reasons)
+                    for key, _ in reasons:
+                        self.assertIn(key, L, key)
+        self.assertGreaterEqual(gated, 16 + 47)
+
+    def test_a_style_names_its_own_heritage(self):
+        heritages = re.findall(r"(?m)^te_heritage_(\w+)\s*=\s*\{",
+                               read("common/scripted_triggers/te_heritage_triggers.txt"))
+        L = loc()
+        for h in heritages:
+            if h != "any":
+                self.assertIn(f"gm_skin_reason_{h}_tt", L, h)
+        for name, trig in self._options("monument_events.11"):
+            if trig is None:
+                continue
+            for key, gate in self._reasons(trig)[0]:
+                with self.subTest(option=name):
+                    h = re.search(r"te_heritage_(\w+) = yes", gate)
+                    self.assertEqual(key, f"gm_skin_reason_{h.group(1)}_tt" if h else "gm_skin_reason_faith_tt", gate)
