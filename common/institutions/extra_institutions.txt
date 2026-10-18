@@ -86,7 +86,7 @@ institution_ministry_of_the_environment = {
 		building_group_bg_mining_throughput_add = -0.01
 		building_logging_camp_throughput_add = -0.01
 		building_group_bg_oil_extraction_throughput_add = -0.02
-		goods_input_construction_mult = 0.05
+		goods_input_construction_mult = 0.01
 		state_pollution_generation_mult = -0.05
 		state_building_national_park_max_level_add = 1
 		country_greenhouse_gas_emissions_mult = -0.05
@@ -155,7 +155,7 @@ institution_ministry_of_consumer_protection = {
 	background_texture = "gfx/interface/illustrations/institutions/institution_ministry_of_consumer_protection.dds"
 
 	modifier = {
-		goods_input_construction_mult = 0.05
+		goods_input_construction_mult = 0.01
 		state_demog_absorbed_mortality_mult = -0.01
 		# the census's deaths from violence and accidents, per level (demographics modifier types, stage 1)
 		state_external_mortality_mult = -0.08

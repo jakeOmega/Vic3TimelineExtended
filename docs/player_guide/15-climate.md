@@ -484,7 +484,7 @@ left after the flat cuts below.
 
 Each level of the Ministry of the Environment also cuts emissions by 5% and
 raises the National Park level cap by one. Each level costs 1% mining and
-logging throughput, 2% oil extraction throughput and 5% more construction goods.
+logging throughput, 2% oil extraction throughput and 1% more construction goods.
 
 Other sources take a fixed amount off a state's generated pollution. The
 pollution-control methods below and National Parks do it per level at full
