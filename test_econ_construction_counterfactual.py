@@ -18,7 +18,8 @@ REPO = Path(__file__).resolve().parent
 # (gdppc - 1) / (11 - 1) * 10 = gdppc - 1 on [1, 11], so gdppc 2.0 gives x_raw 1.0. The module
 # reads D.HISTORICAL_CURVE when it computes, so setUpModule swaps it for this one.
 CURVE = D.CurveConstants(reference=1.0, floor_ratio=1.0, ceiling_ratio=11.0, max_mult=10.0)
-# The mod's curve since #1034: +10 points per 1x of reference, capped at +100% from 11x.
+# A toy stand-in for the mod's curve with no slack band (#1034's +100% cap): +10 points per 1x
+# of reference, capped at +100% from 11x. Slack-band shapes are tested with `slack:`.
 CURRENT = D.CurveConstants(reference=1.0, floor_ratio=1.0, ceiling_ratio=11.0, max_mult=1.0)
 MD = SimpleNamespace(numbers=SimpleNamespace(curve=CURRENT))
 COSTS = {"building_mill": 100.0, "building_hq": None, "building_shop": 400.0}
@@ -64,6 +65,85 @@ def _one_interval(gdppc=2.0, prior=1.0, peasants=5000.0, unemployed=1000.0):
         _point("1910.1.1", gdppc, {"building_mill": _building(10)}, prior=prior,
                peasants=peasants, unemployed=unemployed),
     ]}
+
+
+def _zero_slack_interval():
+    """_one_interval with no peasants or unemployed at either end: 1000 points, 2 jobs a point,
+    x_raw 1.0 (gdppc 2.0), others 0 (prior = x_raw)."""
+    return {"points": [
+        _point("1900.1.1", 2.0, {"building_mill": _building(0)}, prior=1.0, peasants=0.0, unemployed=0.0),
+        _point("1910.1.1", 2.0, {"building_mill": _building(10)}, prior=1.0, peasants=0.0, unemployed=0.0),
+    ]}
+
+
+class TestSlackBand(unittest.TestCase):
+    def test_slack_shape_is_the_historical_line_with_a_band(self):
+        _p, c = CF._shape("slack:0.03:0.15:0.5", CURRENT)
+        self.assertEqual(c, D.CurveConstants(1.0, 1.0, 11.0, 10.0, 0.03, 0.15, 0.5))
+        _p, c = CF._shape("slack:0.03:0.15", CURRENT)
+        self.assertIsNone(c.slack_ease)
+        for bad in ("slack:0.15:0.03", "slack:a:b", "slack:0.03", "slack:0.03:0.15:0", "slack:0.03:0.15:0.5:1"):
+            with self.assertRaises(ValueError, msg=bad):
+                CF._shape(bad, CURRENT)
+
+    def test_a_band_has_a_path_not_a_ratio(self):
+        self.assertTrue(CF.has_slack_band("slack:0.03:0.15", CURRENT))
+        self.assertFalse(CF.has_slack_band("current", CURRENT))
+        with self.assertRaises(ValueError):
+            CF.shape_ratio("slack:0.03:0.15", 2.0, None, MD.numbers, None)
+
+    def test_all_slack_applies_none_of_the_line(self):
+        # 60% slack throughout, still 40% after the extra jobs: the share stays 0, as `none`.
+        series = _one_interval()
+        (band,) = CF.counterfactual(series, MD, "slack:0.03:0.15", WORLD, **LOOKUPS)
+        (none,) = CF.counterfactual(series, MD, "none", WORLD, **LOOKUPS)
+        self.assertAlmostEqual(band.cum_extra_jobs, none.cum_extra_jobs)
+        self.assertAlmostEqual(band.cum_extra_jobs, 2000.0)
+
+    def test_no_slack_applies_the_whole_line(self):
+        # With no slack and no easing the share is 1 from the first year: the historical curve.
+        (row,) = CF.counterfactual(_zero_slack_interval(), MD, "slack:0.03:0.15", WORLD, **LOOKUPS)
+        self.assertAlmostEqual(row.cum_extra_jobs, 0.0)
+
+    def test_the_share_eases_up_from_zero(self):
+        # Ten yearly steps of 100 points: the share is 1 - 0.5^k in step k, so the step's ratio
+        # is (1 + 1) / (1 + 1.0 x share), and each extra point makes 2 jobs.
+        (row,) = CF.counterfactual(_zero_slack_interval(), MD, "slack:0.03:0.15:0.5", WORLD, **LOOKUPS)
+        expected = sum(100.0 * (2.0 / (2.0 - 0.5 ** k) - 1.0) * 2.0 for k in range(1, 11))
+        self.assertAlmostEqual(row.cum_extra_jobs, expected)
+        self.assertAlmostEqual(row.vacancies_cf_share, expected / 10000.0)
+
+    def test_share_from_another_series(self):
+        # The core has no slack of its own, but the owner country's 60% keeps the share at 0: the core builds
+        # as under `none` (the script reads the owner's slack). Priced at its own share it gets the whole line.
+        core, owner = _zero_slack_interval(), _one_interval()
+        (borrowed,) = CF.counterfactual(core, MD, "slack:0.03:0.15", WORLD, **LOOKUPS, share_from=owner)
+        (none,) = CF.counterfactual(core, MD, "none", WORLD, **LOOKUPS)
+        (own,) = CF.counterfactual(core, MD, "slack:0.03:0.15", WORLD, **LOOKUPS)
+        self.assertAlmostEqual(borrowed.cum_extra_jobs, none.cum_extra_jobs)
+        self.assertAlmostEqual(own.cum_extra_jobs, 0.0)
+        # a shape with no band ignores it
+        (hist,) = CF.counterfactual(core, MD, "historical", WORLD, **LOOKUPS, share_from=owner)
+        self.assertEqual(hist.cum_extra_jobs, 0.0)
+
+    def test_share_from_needs_the_same_dates(self):
+        other = {"points": [
+            _point("1900.1.1", 2.0, {"building_mill": _building(0)}, prior=1.0),
+            _point("1911.1.1", 2.0, {"building_mill": _building(10)}, prior=1.0),
+        ]}
+        with self.assertRaises(ValueError):
+            CF.counterfactual(_one_interval(), MD, "slack:0.03:0.15", WORLD, **LOOKUPS, share_from=other)
+
+    def test_others_scale(self):
+        # others 1.0 at both ends (prior 2.0 on x_raw 1.0); at half the size the same money
+        # buys (1 + 1) / (1 + 0.5) times the points, under the historical curve too.
+        series = _one_interval(prior=2.0)
+        (row,) = CF.counterfactual(series, MD, "historical", WORLD, **LOOKUPS, others_scale=0.5)
+        self.assertAlmostEqual(row.cum_extra_jobs, 1000.0 * (2.0 / 1.5 - 1.0) * 2.0)
+        (band,) = CF.counterfactual(series, MD, "slack:0.03:0.15", WORLD, **LOOKUPS, others_scale=0.5)
+        self.assertAlmostEqual(band.cum_extra_jobs, 1000.0 * (2.0 * 2.0 / 1.5 - 1.0) * 2.0)
+        (same,) = CF.counterfactual(series, MD, "historical", WORLD, **LOOKUPS, others_scale=1.0)
+        self.assertEqual(same.cum_extra_jobs, 0.0)
 
 
 class TestCounterfactual(unittest.TestCase):
@@ -187,6 +267,8 @@ class TestCounterfactual(unittest.TestCase):
 
     def test_poor_country_untouched(self):
         for shape in (*CF.DEFAULT_SHAPES, "slope:2", "capped:0"):
+            if CF.has_slack_band(shape, MD.numbers.curve):
+                continue                                    # a path, not a ratio: the loop below covers it
             self.assertEqual(CF.shape_ratio(shape, 0.5, 0.0, MD.numbers, 10.0), 1.0, shape)
             self.assertEqual(CF.shape_ratio(shape, 0.5, None, MD.numbers, 10.0), 1.0, shape)
         series = _one_interval(gdppc=0.5, prior=None)
@@ -313,7 +395,8 @@ class TestCli(unittest.TestCase):
             # the historical shape reproduces the observed history, whatever the mod's curve is now
             self.assertIn("| " + series + " | historical | +0% |", out.stdout)
         self.assertIn("| FRA | current |", out.stdout)
-        self.assertIn("| FRA | capped:1.25 |", out.stdout)
+        self.assertIn("| FRA | capped:1 |", out.stdout)
+        self.assertIn("| FRA | slack:0.03:0.15 |", out.stdout)
         self.assertIn("| FRA | none |", out.stdout)
         self.assertIn("| CHI | none |", out.stdout)
 

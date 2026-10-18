@@ -247,19 +247,31 @@ def load_mod_state(repo: Path = REPO) -> ModState:
 
 @dataclass(frozen=True)
 class CurveConstants:
-    """The construction-cost curve: 0 at `reference*floor_ratio` GDP per capita,
-    `max_mult` at `reference*ceiling_ratio`."""
+    """The construction-cost curve: the GDP part is 0 at `reference*floor_ratio` GDP per
+    capita and `max_mult` at `reference*ceiling_ratio`. With a slack band, the share of it
+    that applies is 1 at slack (peasants + unemployed over the workforce) `slack_full` or less
+    and 0 at `slack_none` or more, and moves `slack_ease` of the way to that each year
+    (econ_growth_sim.slack_target, eased_slack_factor). None: no slack part, the whole GDP
+    part applies."""
 
     reference: float
     floor_ratio: float
     ceiling_ratio: float
     max_mult: float
+    slack_full: float | None = None
+    slack_none: float | None = None
+    slack_ease: float | None = None
+
+    @property
+    def has_slack_band(self) -> bool:
+        return self.slack_full is not None and self.slack_none is not None
 
 
-# The curve in force through the c480d386 playthrough, until #1034's change capped it at +100%
-# (ruling R37). The saved series (`econ_series_c480d386.json`) were priced under this one, so
-# the calibration and the counterfactual read the history through it, whatever the mod's
-# files hold now.
+# The curve in force through the c480d386 playthrough: the GDP part alone, +1000% at GBP 100,
+# with no slack part (ruling R37; #1034 then capped it at +100%, and the follow-up restored the
+# line with the slack part). The saved series (`econ_series_c480d386.json`) were priced under
+# this one, so the calibration and the counterfactual read the history through it, whatever
+# the mod's files hold now.
 HISTORICAL_CURVE = CurveConstants(1.0, 1.0, 100.0, 10.0)
 
 
@@ -316,6 +328,9 @@ def read_numbers(ms, repo: Path = REPO) -> ModNumbers:
         floor_ratio=script_number(ms, "construction_cost_floor_ratio"),
         ceiling_ratio=script_number(ms, "construction_cost_ceiling_ratio"),
         max_mult=script_number(ms, "construction_cost_max_mult"),
+        slack_full=script_number(ms, "construction_cost_slack_full"),
+        slack_none=script_number(ms, "construction_cost_slack_none"),
+        slack_ease=script_number(ms, "construction_cost_slack_ease"),
     )
 
     tier_names = set()

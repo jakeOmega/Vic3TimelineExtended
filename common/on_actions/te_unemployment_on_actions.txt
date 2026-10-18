@@ -3,7 +3,8 @@
 #
 # Root = State. Yearly, a different day per state across the year: the walk and the once-a-game self-check
 # unemployment_share_read. Monthly, only a state with no walk yet (the first month of a new game, a save from before
-# this, a state just split off), so the 0.25 fallback stands for a month at most.
+# this, a state just split off), so the 0.25 fallback stands for a month at most; a state walked before the walk
+# stored its counts (te_unemp_slack_count, Construction Cost Scaling's slack) is walked again too.
 on_yearly_pulse_state = {
 	on_actions = {
 		te_unemp_share_yearly_on_action
@@ -25,7 +26,12 @@ te_unemp_share_yearly_on_action = {
 te_unemp_share_monthly_on_action = {
 	effect = {
 		if = {
-			limit = { NOT = { has_variable = te_unemp_wf_share } }
+			limit = {
+				OR = {
+					NOT = { has_variable = te_unemp_wf_share }
+					NOT = { has_variable = te_unemp_slack_count }
+				}
+			}
 			te_unemp_share_refresh = yes
 		}
 	}

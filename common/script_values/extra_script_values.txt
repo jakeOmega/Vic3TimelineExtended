@@ -2373,10 +2373,15 @@ ce_treasury_pool_balance_multiplier_for_je = {
 # ====================================================================================
 # CONSTRUCTION COST SCALING
 # ====================================================================================
-# Makes construction more expensive for richer countries (GDP per capita based).
-# Prevents exponential growth and provides catchup for poorer nations.
-# Applied via on_yearly_pulse_country → construction_cost_scaling_on_action.
-# Modifier: construction_cost_scaling (country_construction_goods_cost_mult = 1, scaled by multiplier).
+# Makes construction more expensive for rich countries whose workforce is fully employed.
+# Two parts, multiplied: a GDP part (GDP per capita based) and the share of it that applies, which
+# falls as the country's slack (peasants and unemployed, as a share of the workforce) rises. A rich
+# country with idle labour builds cheaply until the labour is used; a rich country at full
+# employment pays the whole GDP part, which keeps it from outbuilding its population.
+# Applied via on_yearly_pulse_country → construction_cost_scaling_on_action, which first moves the
+# applying share (te_cc_yearly_update, te_construction_cost_effects.txt).
+# Modifier: construction_cost_scaling (goods_input_construction_mult = 1, scaled by multiplier).
+# Why: docs/systems/economy_growth_sim.md (#1034).
 #
 # TUNING GUIDE:
 # 1. Adjust construction_cost_gdppc_reference to match a "developed 1836 nation" GDP/c.
@@ -2384,10 +2389,13 @@ ce_treasury_pool_balance_multiplier_for_je = {
 #    should have GDP/c roughly equal to this value.
 # 2. floor_ratio and ceiling_ratio are multiples of the reference:
 #    - floor_ratio = 1 means no penalty at the reference level (a rich 1836 nation).
-#    - ceiling_ratio = 11 means max penalty at 11x the reference (a rich late-game economy), so with
-#      max_mult = 1 the cost rises 10 points per 1x of reference above the floor.
-# 3. max_mult is the maximum construction cost multiplier (1 = +100% cost at ceiling).
-# Capped at +100% (#1034): the steep late curve stalled rich economies; see docs/systems/economy_growth_sim.md
+#    - ceiling_ratio = 100 means the GDP part's maximum at 100x the reference (a very rich late-game economy).
+# 3. max_mult is the GDP part's maximum (10 = +1000% at ceiling).
+# 4. slack_full and slack_none set the applying share: all of the GDP part at slack_full or less,
+#    none at slack_none or more, a straight line between. slack_ease is how far the share moves toward
+#    that each year (1 = at once), so the cost doesn't swing with a year's hiring.
+# The scripts/analysis tools read every constant here (econ_sim_data.read_numbers): re-run
+# econ_construction_counterfactual.py after a change.
 #
 # GDP is in yearly terms. GDP/c = gdp / total_population (country scope).
 # ====================================================================================
@@ -2399,11 +2407,20 @@ construction_cost_gdppc_reference = 1
 # No construction penalty below this multiple of reference GDP/c
 construction_cost_floor_ratio = 1  # 1x reference = rich 1836 nation baseline
 
-# Maximum penalty reached at this multiple of reference GDP/c
-construction_cost_ceiling_ratio = 11  # 11x reference = rich late-game economy; the +100% cap is reached here (#1034)
+# The GDP part's maximum is reached at this multiple of reference GDP/c
+construction_cost_ceiling_ratio = 100  # 100x reference = a very rich late-game economy
 
-# Maximum construction cost multiplier at ceiling (1 = construction costs up to +100%; was 10 = +1000% before #1034)
-construction_cost_max_mult = 1
+# The GDP part's maximum (10 = +1000%). #1034 capped it at 1 (+100%) before the slack part existed.
+construction_cost_max_mult = 10
+
+# Slack (peasants and unemployed over the workforce) at or below which all of the GDP part applies
+construction_cost_slack_full = 0.03
+
+# Slack at or above which none of it applies
+construction_cost_slack_none = 0.15
+
+# How far the applying share moves toward its target each year (a third)
+construction_cost_slack_ease = 0.33333
 
 # Derived thresholds (do not edit - change the ratios above instead)
 construction_cost_gdppc_floor = {
@@ -2424,10 +2441,10 @@ country_gdp_per_capita = {
 	}
 }
 
-# Computed construction cost penalty: 0 at floor, max_mult at ceiling, linear interpolation.
+# The GDP part: 0 at floor, max_mult at ceiling, linear interpolation.
 # Formula: clamp(0, max_mult, (gdppc - floor) / (ceiling - floor) * max_mult)
-# With the current constants: 0 at £1 GDP/c, +10 points per £1, capped at 1 (+100%) from £11 (#1034).
-construction_cost_scaling_mult = {
+# With the current constants: 0 at £1 GDP/c, about +10 points per £1, +1000% from £100.
+construction_cost_scaling_gdp_mult = {
 	value = country_gdp_per_capita
 	subtract = construction_cost_gdppc_floor
 	min = 0  # poor countries: no penalty; also the lower half of the clamp documented above (everything downstream is non-negative)
@@ -2438,6 +2455,173 @@ construction_cost_scaling_mult = {
 	}
 	multiply = construction_cost_max_mult
 	max = construction_cost_max_mult
+}
+
+# The share of the GDP part that applies, 0-1, as the yearly pulse last moved it (var:te_cc_slack_factor).
+# Before the country's first pulse under this rule, the share that reproduces the scaling in force
+# (te_cc_slack_factor_carried): a save from before the rule keeps its old cost until the pulse, which then
+# moves the share a third of the way from there. A new game has none in force, so it starts from 0.
+te_cc_slack_factor_now = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cc_slack_factor }
+		value = var:te_cc_slack_factor
+	}
+	else_if = {
+		limit = { has_variable = prior_construction_scaling }
+		value = te_cc_slack_factor_carried
+	}
+}
+
+# The old modifier's raw X (var:prior_construction_scaling is it times one plus the other sources, as the
+# adjusted multipliers below set it) over today's GDP part, clamped 0-1. The GDP part times this is the X in force.
+te_cc_slack_factor_carried = {
+	value = var:prior_construction_scaling
+	divide = {
+		value = te_cc_other_sources
+		add = 1
+		multiply = construction_cost_scaling_gdp_mult
+		min = 0.001
+	}
+	max = 1
+	min = 0
+}
+
+# The country's slack at its last pulse (var:te_cc_slack, the sum te_country_slack_share), 0 before one.
+te_cc_slack_now = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cc_slack }
+		value = var:te_cc_slack
+	}
+}
+
+# Peasants over the workforce at the last pulse (var:te_cc_peasants), 0 before one.
+te_cc_peasants_now = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cc_peasants }
+		value = var:te_cc_peasants
+	}
+}
+
+# The unemployed part of the slack at the last pulse: slack less peasants.
+te_cc_unemployed_now = {
+	value = te_cc_slack_now
+	subtract = te_cc_peasants_now
+	min = 0
+}
+
+# Where the applying share is heading: 1 at slack_full or less, 0 at slack_none or more.
+te_cc_slack_target = {
+	value = construction_cost_slack_none
+	subtract = te_cc_slack_now
+	divide = {
+		value = construction_cost_slack_none
+		subtract = construction_cost_slack_full
+		min = 0.001
+	}
+	max = 1
+	min = 0
+}
+
+# The applying share after this year's move: now + (target - now) x ease.
+te_cc_slack_factor_eased = {
+	value = te_cc_slack_target
+	subtract = te_cc_slack_factor_now
+	multiply = construction_cost_slack_ease
+	add = te_cc_slack_factor_now
+	max = 1
+	min = 0
+}
+
+# The construction cost penalty X: the GDP part times the share of it that applies.
+# Every reader takes this (the construction market's goods per point and price, the adjusted multipliers below).
+construction_cost_scaling_mult = {
+	value = construction_cost_scaling_gdp_mult
+	multiply = te_cc_slack_factor_now
+}
+
+# ---- The Nation tab's breakdown (te_nation_construction_row_tt). GUI-read: stored figures only. ----
+
+# Every construction-cost modifier, summed: the modifier the rule's branch scales (the country's whole
+# goods_input_construction_mult, or country_construction_goods_cost_mult with free_market_construction_rule
+# disabled), this scaling's own contribution included. A point costs one plus this.
+te_cc_modifier_total = {
+	value = 0
+	if = {
+		limit = { te_free_market_construction_off = yes }
+		value = modifier:country_construction_goods_cost_mult
+	}
+	else = {
+		value = modifier:goods_input_construction_mult
+	}
+}
+
+# The other construction-cost modifiers: the total less this scaling's own contribution
+# (var:prior_construction_scaling), as the adjusted multipliers below take it.
+te_cc_other_sources = {
+	value = te_cc_modifier_total
+	if = {
+		limit = { has_variable = prior_construction_scaling }
+		subtract = var:prior_construction_scaling
+	}
+}
+
+# GDP per capita and the GDP part as the yearly pulse last read them (te_cc_yearly_update), so the tooltip shows the
+# scaling in force, not today's curve. Before the country's first reading under this rule, today's: the carried
+# share (te_cc_slack_factor_carried) is relative to today's GDP part.
+te_cc_gdppc_now = {
+	value = country_gdp_per_capita
+	if = {
+		limit = { has_variable = te_cc_slack_factor }
+		value = var:te_cc_gdppc
+	}
+}
+te_cc_gdp_part_now = {
+	value = construction_cost_scaling_gdp_mult
+	if = {
+		limit = { has_variable = te_cc_slack_factor }
+		value = var:te_cc_gdp_part
+	}
+}
+
+# A point's cost as a multiple of its base, in force now (one plus every construction-cost modifier), and its two
+# factors: the scaling (1 + the GDP part x the applying share, as the pulse set it; before the country's first
+# reading under this rule, today's GDP part x the carried share, the X in force), and the rest, their quotient. The pulse sets the scaling to multiply with
+# the other sources as they stood then, so after one of them changes the quotient is not exactly one plus them,
+# but the product is always the cost in force, and the engine's breakdown adds up to it less one.
+te_cc_total_factor = {
+	value = te_cc_modifier_total
+	add = 1
+	min = 0
+}
+te_cc_scaling_factor = {
+	value = te_cc_gdp_part_now
+	multiply = te_cc_slack_factor_now
+	add = 1
+}
+te_cc_others_factor = {
+	value = te_cc_total_factor
+	divide = { value = te_cc_scaling_factor min = 1 }
+}
+
+# 1 once the country's slack has been read at a pulse under this rule, for the tooltip's choice of sentence.
+te_cc_has_reading = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cc_slack }
+		value = 1
+	}
+}
+
+# 1 with free_market_construction_rule disabled, for the tooltip's choice of breakdown.
+te_cc_direct_rule = {
+	value = 0
+	if = {
+		limit = { te_free_market_construction_off = yes }
+		value = 1
+	}
 }
 
 # Adjusted construction cost scaling that combines MULTIPLICATIVELY with other
