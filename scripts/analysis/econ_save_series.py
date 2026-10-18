@@ -645,6 +645,9 @@ def core_states_from(path, country_ids):
 PLAYER_ID = 4          # playthrough c480d386: FRA, the French Commune, FRA, then EUN
 STOP_SHARE = 0.5       # a set's series ends once its owner holds less than this share of its people
 OWNER_FIELDS = ("gdp", "population", "acquired_techs", "investment_by_type", "land_law", "per_project_cap", "variables")
+# Pennies: the dataset keeps building money, staffing, investment and yearly GDP to 2 dp (fx holds 5), which
+# trims it by about 70 KB and changes nothing a calibration reads.
+DATASET_DP = 2
 
 
 def _lookup(mapping, cid):
@@ -674,7 +677,7 @@ def slice_summary(part):
             t["pms"][pm] = t["pms"].get(pm, 0) + b["levels"]
     for t in by_type.values():
         for f in ("staffing", "goods_sales", "goods_cost"):
-            t[f] = round(t[f], 5)
+            t[f] = round(t[f], DATASET_DP)
         t["pms"] = dict(sorted(t["pms"].items()))
     out["buildings_by_type"] = dict(sorted(by_type.items()))
     return out
@@ -689,6 +692,7 @@ def owner_summary(rec, slice_population=None):
     else:
         scale = _ratio(slice_population, population)
     out = {k: rec.get(k) for k in OWNER_FIELDS}
+    out["investment_by_type"] = {k: round(v, DATASET_DP) for k, v in (out["investment_by_type"] or {}).items()}
     out["gdppc"] = _ratio(gdp, population) if gdp is not None and population else None
     out["scale"] = scale
     out["points_weekly"] = {k: round(v * scale, 5) for k, v in (rec.get("points_weekly") or {}).items()}
@@ -712,15 +716,23 @@ def _year(hours):
     return hours // 24 // 365 - 5000
 
 
-def _merge_ring(weeks, rec, hours):
-    """Add a record's weekly GDP ring to {absolute week: (year, £/yr)}; later calls overwrite."""
-    values, index = rec.get("gdp_weekly") or [], rec.get("gdp_week_index")
-    if index is None:
-        return
+def _ring_since(rec, hours, after):
+    """[(year, £/yr)] for a record's weekly GDP samples dated after `after` (hours; None for all).
+
+    Samples are placed by date, not by ring index: a ring's index counts weeks
+    since its own country was created (France's, alive since 1836, matches the
+    game week; a revolution winner's starts at 0), so two owners' indices can't
+    be compared. The newest sample is the save date's; the ones before it are
+    a week apart (the ring's own date equals the save date: 1917.10.2).
+    """
+    values = rec.get("gdp_weekly") or []
     n = len(values)
-    # The newest sample is the save date's; the samples before it are a week apart.
+    out = []
     for j, v in enumerate(values):
-        weeks[index - n + j] = (_year(hours - (n - 1 - j) * 168), v)
+        at = hours - (n - 1 - j) * 168
+        if after is None or at > after:
+            out.append((_year(at), v))
+    return out
 
 
 def _point(date, owner_id, share, part, rec, scaled):
@@ -739,7 +751,8 @@ def build_dataset(raw, player_id=PLAYER_ID):
     first save whose owner is the player or holds less than STOP_SHARE of its
     people; the player's own set never ends. gdp_yearly is per series: the
     mean of each calendar year's weekly GDP samples of each point's owner,
-    merged by absolute week with later saves winning on overlap. Raises
+    each taken from the first point at or after it (so from the country that
+    held the set then; one owner's rings agree wherever they overlap). Raises
     ValueError on extracts from more than one playthrough, an undated
     extract, a set whose states differ between extracts, or a missing owner
     record.
@@ -751,7 +764,7 @@ def build_dataset(raw, player_id=PLAYER_ID):
     ids = {e.get("playthrough") for e in extracts} - {None}
     if len(ids) > 1:
         raise ValueError(f"extracts from more than one playthrough: {sorted(ids)}")
-    series, weeks, world, stopped = {}, {}, [], set()
+    series, samples, last, world, stopped = {}, {}, {}, [], set()
     union = {"points": []}
     for e in extracts:
         date, hours = e["date"], save_world_report.date_hours(e["date"])
@@ -772,20 +785,22 @@ def build_dataset(raw, player_id=PLAYER_ID):
                 raise ValueError(f"series {name}: {e.get('save')} has no record for owner {owner_id}")
             s["points"].append(_point(date, owner_id, share, core, rec, scaled=True))
             if rec:
-                _merge_ring(weeks.setdefault(name, {}), rec, hours)
+                samples.setdefault(name, []).extend(_ring_since(rec, hours, last.get(name)))
+            last[name] = hours
         rec, whole = _lookup(e["countries"], player_id), _lookup(e.get("whole"), player_id)
         if rec and whole:
             point = _point(date, player_id, 1.0, whole, rec, scaled=False)
             point["per_state"] = per_state(whole)
             union["points"].append(point)
-            _merge_ring(weeks.setdefault("union", {}), rec, hours)
+            samples.setdefault("union", []).extend(_ring_since(rec, hours, last.get("union")))
+            last["union"] = hours
     series["union"] = union
     gdp_yearly = {}
     for name in series:
         by_year = {}
-        for year, v in (weeks.get(name) or {}).values():
+        for year, v in samples.get(name) or []:
             by_year.setdefault(year, []).append(v)
-        gdp_yearly[name] = {str(y): round(sum(vs) / len(vs), 5) for y, vs in sorted(by_year.items())}
+        gdp_yearly[name] = {str(y): round(sum(vs) / len(vs), DATASET_DP) for y, vs in sorted(by_year.items())}
     playthrough = ids.pop()[:8] if ids else None
     return {"playthrough": playthrough, "series": series, "gdp_yearly": gdp_yearly, "world": world}
 

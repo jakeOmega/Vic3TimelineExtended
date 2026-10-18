@@ -508,18 +508,19 @@ class TestDataset(unittest.TestCase):
     """build_dataset on synthesized extracts (R16): series follow fixed state sets; the owner gives the country fields."""
 
     def setUp(self):
-        # Three saves. GBR's set is held by id 1, then by a new id 9 (a revolution winner), then by the player (4).
-        # FRA's ring covers weeks 0-3, 2-5 and 4-7; the later save's values win on overlap.
+        # Three saves four weeks apart. GBR's set is held by id 1, then by a new id 9 (a revolution winner, whose
+        # ring starts at index 0 at its creation), then by the player (4). FRA's rings overlap by two weeks;
+        # the overlap in the second save holds 999s, which must not be read twice.
         self.saves = [
             _extract("1900.1.29", {4: _owner("FRA", 8000, [10.0, 20.0, 30.0, 40.0], 4),
                                    1: _owner("GBR", 8000, [1.0, 1.0, 1.0, 1.0], 4)},
                      {4: ("FRA", 4, 1.0, _part(2000, 7)), 1: ("GBR", 1, 0.9, _part(2000, 20))},
                      whole=_part(2000, 7, extra_state=8)),
-            _extract("1900.2.26", {4: _owner("FRA", 8000, [300.0, 400.0, 50.0, 60.0], 6),
-                                   9: _owner("GBR", 4000, [2.0, 2.0, 2.0, 2.0], 6)},
+            _extract("1900.2.26", {4: _owner("FRA", 8000, [999.0, 999.0, 50.0, 60.0, 70.0, 80.0], 8),
+                                   9: _owner("GBR", 4000, [5.0, 5.0], 2)},
                      {4: ("FRA", 4, 1.0, _part(2000, 7)), 1: ("GBR", 9, 0.8, _part(1000, 20))},
                      whole=_part(2000, 7, extra_state=8)),
-            _extract("1900.3.26", {4: _owner("FRA", 9000, [50.0, 60.0, 70.0, 80.0], 8)},
+            _extract("1900.3.26", {4: _owner("FRA", 9000, [999.0, 999.0, 90.0, 100.0, 110.0, 120.0], 12)},
                      {4: ("FRA", 4, 1.0, _part(2000, 7)), 1: ("GBR", 4, 1.0, _part(1000, 20))},
                      whole=_part(3000, 7, extra_state=20)),
         ]
@@ -598,11 +599,13 @@ class TestDataset(unittest.TestCase):
         self.assertEqual(mill["pms"], {"pm_a": 5, "pm_b": 3, "pm_c": 2})
 
     def test_gdp_yearly_from_owner_rings(self):
+        """Each point's owner ring gives the weeks since the series' previous point, placed by date: a ring's
+        index counts from its country's creation, so two owners' indices can't be compared."""
         gdp = self.build()["gdp_yearly"]
-        self.assertEqual(gdp["FRA"], {"1900": (10 + 20 + 300 + 400 + 50 + 60 + 70 + 80) / 8})
+        self.assertEqual(gdp["FRA"], {"1900": (10 + 20 + 30 + 40 + 50 + 60 + 70 + 80 + 90 + 100 + 110 + 120) / 12})
         self.assertEqual(gdp["union"], gdp["FRA"])
-        # Owner 1's weeks 0-3, then owner 9's weeks 2-5; the third save (the player's) is past the stop.
-        self.assertAlmostEqual(gdp["GBR"]["1900"], (1 + 1 + 2 + 2 + 2 + 2) / 6, places=4)   # rounded to 5 dp
+        # Owner 1's four weeks, then owner 9's two (its ring is that short); the player's save is past the stop.
+        self.assertEqual(gdp["GBR"]["1900"], round((1 + 1 + 1 + 1 + 5 + 5) / 6, 2))
 
     def test_missing_owner_record_refused(self):
         del self.saves[0]["countries"]["1"]
