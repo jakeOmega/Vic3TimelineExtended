@@ -24,8 +24,10 @@ YEAR0, YEAR_END = 2020, 2300
 MILESTONES = (30, 50, 60, 100, YEAR_END - YEAR0)
 # today's rich state: the medicine scenarios' Rich today (health law, institutions) with the workforce scenarios' laws
 # (2026-10-16: with the Combustion Engine's traffic and modern safety's era 7-9 carriers, which a state of 2020 holds,
-# and the Ministry of Public Safety at 5, whose levels lower deaths from violence since the same day)
-_RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines", "antibiotic_mass_production",
+# and the Ministry of Public Safety at 5, whose levels lower deaths from violence since the same day; #1045: with
+# Pharmaceuticals, the era 2 technology every later medical one stands on, whose infection treatment it lacked)
+_RICH_TECHS = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
+                         "antibiotic_mass_production",
                          "contraceptive_pill", "modern_pharmaceuticals", "vulcanization", "feminism",
                          "second_wave_feminism", "personal_appliances", "telemedicine", "combustion_engine",
                          "prefabricated_construction", "modern_urban_planning", "robotics", "containerization",
@@ -37,7 +39,7 @@ _RICH_INSTITUTIONS = {"institution_health_system": 9, "institution_workplace_saf
                       "institution_police": 5}
 ERA10 = frozenset({"mrna_therapeutics"})
 ERA11 = ERA10 | {"personalized_medicine", "genetic_engineering", "synthetic_biology"}
-ERA12 = ERA11 | {"biological_immortality"}
+ERA12 = ERA11 | {"biological_immortality", "advanced_nanofabrication"}   # nanomedicine's infection line (#1045)
 # everyone within reach (the design's "everyone treated"): the public route at full access, a rich wealth band
 EVERYONE = dict(wealth_bands={30: 1.0}, lx_w=float(P.LX_MARKET_START))
 
@@ -168,19 +170,24 @@ def scenarios(carriers=None, lines=None):
 
 # §1.2's and §1.5's steady life tables (sketch; everyone treated, Rich-today medicine): e0, Living to 100, old age from
 # (women and men averaged). The census's own tables reach these at the steady state of the ladder's rates.
+# #1045 moved them: the rich state gained Pharmaceuticals' infection treatment (it had lacked it, so its infants died at
+# twice the Rich today anchor's rate), adults' infection fell to the rich world's, and eras 11-12 took infection below it.
+# Together about +2 years of e0 today and at eras 10-11 (Rich today 80.3, the rich world's 80-84), +3 at ageing 0.70,
+# and +0.05 of Living to 100 under immortality: the e0 bands move up 2 years, Ageing 0.70's 3, immortality's Living to
+# 100 0.05.
 STEADY = [  # (name, scenario, years, {figure: (lo, hi)})
-    ("Rich today", "No change", 60, {"e0": (75, 80), "l100": (0.05, 0.13), "old_age": (73, 77)}),
+    ("Rich today", "No change", 60, {"e0": (77, 82), "l100": (0.05, 0.13), "old_age": (73, 77)}),
     ("Era 10, ageing 0.9, everyone treated", "Era 10 (ageing 0.9)", 280,
-     {"e0": (79, 85), "l100": (0.17, 0.30), "old_age": (80, 85)}),
+     {"e0": (81, 87), "l100": (0.17, 0.30), "old_age": (80, 85)}),
     ("Era 11 medicine, no slowing", "Era 11 medicine, no slowing", 280,
-     {"e0": (84, 92), "l100": (0.28, 0.42), "old_age": (86, 92)}),
+     {"e0": (86, 94), "l100": (0.28, 0.42), "old_age": (86, 92)}),
     # the sketch's bands were for 0.75 (e0 103, Living to 100 67%, old age 117/110); era 11 reaches 0.70 since 2026-10-16
     # (Synthetic Biology), which moves the census's own tables by about +4.5 years of e0, +0.04 and +6 years: the bands
     # move with them
     ("Ageing 0.70", "Era 10 for 20 years, then era 11 (0.70)", 280,
-     {"e0": (101, 115), "l100": (0.59, 0.79), "old_age": (113, 126)}),
+     {"e0": (104, 118), "l100": (0.59, 0.79), "old_age": (113, 126)}),
     ("Immortality", "Immortality (pull 3%) from today", 280,
-     {"l100": (0.72, 0.88), "old_age": (P.LX_OLD_AGE_NONE, 150)}),
+     {"l100": (0.77, 0.93), "old_age": (P.LX_OLD_AGE_NONE, 150)}),
 ]
 # The design's 60-year projections (Context's table; sketch), at 60 years: people, the calendar 65+ share, the mean
 # biological age, health need, the workforce with a pension at 65 and with none. Wide bands: the sketch's workforce used
@@ -192,12 +199,13 @@ PROJECTION = [  # (scenario, {figure: (lo, hi)})
     ("Era 10 for 20 years, then era 11 (0.70)", {"people": (0.65, 0.85), "old65": (0.40, 0.56), "need": (1.6, 2.15)}),
     # the sketch's row timed every birth by the calendar (x1.19, 67% over 65); the census times unplanned births by the
     # body (call 5), which §3.3 puts at x1.30 in 50 years: more children, so more people and a younger calendar structure
-    ("Immortality (pull 3%) from today", {"people": (1.10, 1.55), "old65": (0.45, 0.75), "mean_bio": (26, 36),
+    # #1045's fewer deaths (STEADY's note) add about 0.06 to the people at 60 years and 0.05 at 50: the tops move with them
+    ("Immortality (pull 3%) from today", {"people": (1.10, 1.60), "old65": (0.45, 0.75), "mean_bio": (26, 36),
                                           "need": (0.65, 1.0), "wf_none": (0.65, 0.85)}),
 ]
 # §3.3: under immortality, everyone treated, 50 years from today's structure: people x1.17 (every birth by the calendar) to
 # x1.30 (the split at means 0.9); the women aged 100's children so far 1.6 to about 2.
-IMMORTAL_50 = {"people": (1.12, 1.40), "lifetime_100": (1.6, 2.1)}
+IMMORTAL_50 = {"people": (1.12, 1.45), "lifetime_100": (1.6, 2.1)}
 
 
 def judge(name, row, bands):
@@ -323,11 +331,12 @@ def adult_mortality_by_cause(carriers, lines):
     inp = inputs(carriers, lines)
     m = M.cause_multipliers(inp)
     work = dict(zip("fm", M.work_split(inp, m["work"])))
+    infection = _infection_rates(inp)
     out = {}
     for sx, name in (("f", "women"), ("m", "men")):
         groups = range(len(P.GROUPS))
         out[name] = {
-            "infection": _q35([P.INFECTION[sx][g] * m["infection"] for g in groups]),
+            "infection": _q35(infection[sx]),
             "work": _q35([P.WORK_BASE[g] * work[sx] for g in groups]),
             "accidents and violence": _q35([P.EXTERNAL[sx][g] * m["external"] for g in groups]),
             "chronic": _q35([P.CHRONIC[sx][g] * m["chronic"] for g in groups]),
@@ -335,9 +344,37 @@ def adult_mortality_by_cause(carriers, lines):
     return out
 
 
+def _infection_rates(inp):
+    """{sex: [infection deaths a year per 100,000 by age group]}: the multiplier, and the adults' factor on their ages."""
+    m, adult = M.cause_multipliers(inp)["infection"], M.infection_adult(inp)
+    return {sx: [P.INFECTION[sx][g] * m * (adult if g in M.INFECTION_ADULT_GROUPS else 1.0)
+                 for g in range(len(P.GROUPS))] for sx in "fm"}
+
+
+def young_adult_infection(inp):
+    """Infection deaths a year per 100,000 people aged 15-44, women's and men's averaged (#1045)."""
+    rates = _infection_rates(inp)
+    groups = [g for g, (start, _n) in enumerate(P.GROUPS) if 15 <= start < 45]
+    return sum(rates[sx][g] for sx in "fm" for g in groups) / (2 * len(groups))
+
+
 # 2000-2020 anchors for the rich world (Human Mortality Database, as summarised): 35q15 women about 0.02-0.035 (Japan,
 # Western Europe) to 0.045 (the United States), men about 0.035-0.06 to 0.09.
 ADULT_BANDS = {"women": (0.015, 0.045), "men": (0.03, 0.09)}
+# #1045 (owner, 2026-10-18: the rich world in eras 9-10, well below it after): infection deaths a year per 100,000 aged
+# 15-44, the rich state with each era's medicine, against the rich world's 3-6 (2000-2020) and below it
+INFECTION_ERAS = [  # (name, technologies, extra laws, (low, high))
+    ("Today (eras 9-10's medicine)", frozenset(), frozenset(), (3, 6)),
+    ("Era 10", ERA10, frozenset(), (3, 6)),
+    ("Era 11", ERA11, frozenset({"law_medical_augmentation_only"}), (1, 3)),
+    ("Era 12", ERA12, frozenset({"law_medical_augmentation_only"}), (0, 1)),
+]
+
+
+def infection_by_era(carriers, lines):
+    """[(name, 15-44s' infection deaths per 100,000, (low, high))] for INFECTION_ERAS."""
+    return [(name, young_adult_infection(inputs(carriers, lines, techs, laws=laws)), band)
+            for name, techs, laws, band in INFECTION_ERAS]
 
 
 def main(args):
@@ -394,9 +431,13 @@ def main(args):
         ok = lo <= v <= hi
         split = ", ".join(f"{c} {q:.3f}" for c, q in causes[sx].items())
         print(f"  {sx:6s} {v:.3f} [{lo:g}-{hi:g}]{'' if ok else ' OUT'}  ({split})")
-    # Modern safety (2026-10-16) brought work and accidents down; what is left over the women's band is adult infection
-    # and chronic deaths (the rich world's 15-49s: about 0.001 and 0.02), a medicine and schedule question left until the
-    # AI's insolvency (#933) is fixed and today's states are as rich as they should be (#894).
+    # Modern safety (2026-10-16) brought work and accidents down, and the adults' infection factor (#1045) adult infection
     print("  (rich-world 2000-2020 by cause, about: infection 0.001-0.002, work 0.001, accidents and violence 0.004-0.012 "
           "for women and 0.014-0.037 for men, chronic 0.02-0.03)")
+    print("\nInfection deaths a year per 100,000 aged 15-44 by era's medicine (#1045; the rich world's 3-6 in eras 9-10, "
+          "below after):")
+    for name, v, (lo, hi) in infection_by_era(carriers, lines):
+        ok = lo <= v <= hi
+        bad += not ok
+        print(f"  {name:30s} {v:5.2f} [{lo:g}-{hi:g}]{'' if ok else ' OUT'}")
     return 1 if bad else 0

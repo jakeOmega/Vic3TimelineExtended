@@ -188,20 +188,26 @@ def sweeps(o):
 
 
 def _rate(o, name, terms):
-    terms = [(m, v) for m, v in terms if v]
+    """A sum of terms, each a local (or a tuple of locals, multiplied) x a literal."""
+    terms = [(m if isinstance(m, tuple) else (m,), v) for m, v in terms if v]
     o("set_local_variable = {")
     o(f"name = {name}")
+
+    def term(ms, v):
+        o(f"value = local_var:{ms[0]}")
+        for m in ms[1:]:
+            o(f"multiply = local_var:{m}")
+        o(f"multiply = {lit(v)}")
+
     if not terms:
         o("value = 0")
     else:
         o("value = {")
         (m0, v0), rest = terms[0], terms[1:]
-        o(f"value = local_var:{m0}")
-        o(f"multiply = {lit(v0)}")
+        term(m0, v0)
         for m, v in rest:
             o("add = {")
-            o(f"value = local_var:{m}")
-            o(f"multiply = {lit(v)}")
+            term(m, v)
             o("}")
         o("max = 100000")
         o("}")
@@ -213,13 +219,15 @@ def enter_group(o):
     o("# te_dg_qf / te_dg_qm (death probability a year per 100,000), te_dg_asfr (share of a")
     o("# lifetime's births at each single age, per 100,000) and te_dg_next_group (the next")
     o("# group's first age) from the cause multipliers te_dg_m_inf, te_dg_m_work_f,")
-    o("# te_dg_m_work_m, te_dg_m_ext and te_dg_m_chr (te_demog_prepare).")
+    o("# te_dg_m_work_m, te_dg_m_ext and te_dg_m_chr and, on infection at the adults' ages, the")
+    o("# adults' infection factor te_dg_inf_ad (te_demog_prepare; demographics_model.rates_from_multipliers).")
     o("te_demog_enter_group = {")
 
     def leaf(o, g):
-        _rate(o, "te_dg_qf", [("te_dg_m_inf", P.INFECTION["f"][g]), ("te_dg_m_work_f", P.WORK_BASE[g]),
+        inf = ("te_dg_m_inf", "te_dg_inf_ad") if g in M.INFECTION_ADULT_GROUPS else "te_dg_m_inf"
+        _rate(o, "te_dg_qf", [(inf, P.INFECTION["f"][g]), ("te_dg_m_work_f", P.WORK_BASE[g]),
                               ("te_dg_m_ext", P.EXTERNAL["f"][g]), ("te_dg_m_chr", P.CHRONIC["f"][g])])
-        _rate(o, "te_dg_qm", [("te_dg_m_inf", P.INFECTION["m"][g]), ("te_dg_m_work_m", P.WORK_BASE[g]),
+        _rate(o, "te_dg_qm", [(inf, P.INFECTION["m"][g]), ("te_dg_m_work_m", P.WORK_BASE[g]),
                               ("te_dg_m_ext", P.EXTERNAL["m"][g]), ("te_dg_m_chr", P.CHRONIC["m"][g])])
         start = P.GROUPS[g][0]
         o(f"set_local_variable = {{ name = te_dg_asfr value = {lit(M.asfr_planned(start))} }}")
@@ -345,7 +353,8 @@ def cause_deaths_estimate(o):
     o("# from the people the sweep takes its dead from, by the band they had at the last count (te_dg_bf<b>, te_dg_bm<b>,")
     o("# whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at")
     o("# a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at")
-    o("# the base rates) x the step's multiplier, work's by sex. Exact in the bands of one age group; approximate in 0-4")
+    o("# the base rates) x the step's multiplier, work's by sex, and infection's at the adults' ages x te_dg_inf_ad too.")
+    o("# Exact in the bands of one age group; approximate in 0-4")
     o("# and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work, which")
     o("# te_demog_cause_deaths_store scales to the census's deaths; a state in the late game replaces them with the late")
     o("# sweep's own count, its treated at their biological ages (te_demog_lx_cause_deaths).")
@@ -359,11 +368,19 @@ def cause_deaths_estimate(o):
             o(f"add = {{ value = var:{v} multiply = {lit(x)} }}")
 
     for cause, short in (("infection", "inf"), ("external", "ext"), ("chronic", "chr")):
-        terms = [(f"te_dg_b{s}{b}", r[cause][s][b]) for b in range(P.BANDS) for s in "fm" if r[cause][s][b]]
+        def terms(bands):
+            return [(f"te_dg_b{s}{b}", r[cause][s][b]) for b in bands for s in "fm" if r[cause][s][b]]
         o("set_local_variable = {")
         o(f"name = te_dg_ce_{short}")
         o("value = {")
-        band_sum(terms)
+        if cause == "infection":
+            band_sum(terms([b for b in range(P.BANDS) if b not in M.INFECTION_ADULT_BANDS]))
+            o("add = {")
+            band_sum(terms(sorted(M.INFECTION_ADULT_BANDS)))
+            o("multiply = local_var:te_dg_inf_ad")
+            o("}")
+        else:
+            band_sum(terms(range(P.BANDS)))
         o(f"multiply = local_var:te_dg_m_{short}")
         o("divide = 100000")
         o("}")
@@ -1568,6 +1585,18 @@ def multipliers(o):
             o(f"multiply = {P.MATERNAL_PER_100K_BIRTHS}")
         o("}")
         o("")
+        if cause == "infection":
+            w = P.INFECTION_ADULT_MEDICINE
+            lo, hi = P.INFECTION_ADULT_AGES
+            o(f"# State scope: the adults' infection factor (#1045; demographics_model.infection_adult): infection at ages "
+              f"{lo}-{hi - 1}")
+            o(f"# takes medicine a second time at {lit(w)}, 1 - {lit(w)} x access x treatment, on top of its multiplier.")
+            o("te_demog_infection_adult = {")
+            o("value = te_demog_f_infection_medicine")
+            o(f"multiply = {lit(w)}")
+            o(f"add = {lit(1 - w)}")
+            o("}")
+            o("")
     o("# State scope: women's share of the workforce by the owner's women's-rights law.")
     o("te_demog_female_work_share = {")
     o(f"value = {lit(P.FEMALE_WORK_SHARE_DEFAULT)}")

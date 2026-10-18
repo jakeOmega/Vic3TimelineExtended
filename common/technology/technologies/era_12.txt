@@ -36,6 +36,9 @@ advanced_nanofabrication = {
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 		country_st_res_aeroplanes_decay_add = -0.006
 		country_st_res_fertilizer_decay_add = -0.0015
+		# the census's infection treatment (#1045): nanomedicine, machines in the blood that find and destroy pathogens;
+		# with Personalized Medicine's it reaches the cap, 0.99
+		state_infection_treatment_add = 0.02
 	}
 
 	ai_weight = {

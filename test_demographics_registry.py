@@ -769,6 +769,7 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
             "te_demog_mult_chronic": mult["chronic"],
             "te_demog_mult_work": mult["work"],
             "te_demog_mult_maternal": mult["maternal"] * P.MATERNAL_PER_100K_BIRTHS,
+            "te_demog_infection_adult": demographics_model.infection_adult(inp),
         })
     for p in P.PRACTICES:
         fixtures[f"te_demog_pr_target_{p}"] = (targets or {}).get(p, 0.0)
@@ -6212,6 +6213,10 @@ class TestCausesInTheStep(unittest.TestCase):
         for cause, var in (("infection", "te_dg_m_inf"), ("external", "te_dg_m_ext"), ("chronic", "te_dg_m_chr")):
             self.assertAlmostEqual(eng.vars[var], want[cause], places=9, msg=cause)
         self.assertAlmostEqual(eng.vars["te_dg_m_mat"], want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)
+        # #1045: the adults' infection factor reads the same drifted medicine
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_infection_adult")),
+                               demographics_model.infection_adult(drifted), places=9)
+        self.assertLess(demographics_model.infection_adult(drifted), 0.97, "a factor that moves the life table")
         qf, qm, _ = demographics_model.group_rates(drifted)
         e0 = (demographics_model.life_table(qf)["e0"] + demographics_model.life_table(qm)["e0"]) / 2
         self.assertAlmostEqual(eng.vars["te_dg_e0"], e0, places=6)
@@ -6986,8 +6991,8 @@ class TestSlotBirthsScript(unittest.TestCase):
             g = P.group_of(27)
             eng = _Engine({}, effects={n: _block(text, n) for n in ("te_demog_slot_births", "te_demog_enter_group")})
             eng.locals.update(te_dg_g=float(g), te_dg_f=1000.0, te_dg_tfr=4.0, te_dg_sh_pl=0.25, te_dg_sh_un=0.75,
-                              te_dg_m_inf=1.0, te_dg_m_work_f=1.0, te_dg_m_work_m=1.0, te_dg_m_ext=1.0,
-                              te_dg_m_chr=1.0)
+                              te_dg_m_inf=1.0, te_dg_inf_ad=1.0, te_dg_m_work_f=1.0, te_dg_m_work_m=1.0,
+                              te_dg_m_ext=1.0, te_dg_m_chr=1.0)
             eng.call("te_demog_enter_group")
             eng.call("te_demog_slot_births")
             want = demographics_model.slot_births(1000.0, 27, 27, 4.0, 0.25)

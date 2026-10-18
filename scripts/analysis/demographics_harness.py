@@ -216,7 +216,7 @@ DEFAULT_TOLERANCE = 0.001   # a fraction of the slot; a correct step's noise mea
 PRINT_STEP = 1e-5           # per mille: _fmt prints each slot to five decimals
 BEFORE_SUM_TOLERANCE = 0.01  # the before-state's slots and pool must sum to 1000 per mille within this
 HEAD_PEOPLE = ("pop_last", "pop", "war", "kills", "mig")
-HEAD_RATES = ("tfr", "mmr", "m_inf", "m_ext", "m_chr", "m_work_f", "m_work_m")
+HEAD_RATES = ("tfr", "mmr", "m_inf", "m_ext", "m_chr", "m_work_f", "m_work_m", "inf_ad")
 
 
 def _fmt(x):
@@ -380,7 +380,7 @@ def replay_block(b):
     M._refresh_denominators(ring)
     ring.total = ring.people()
     mult = {"infection": float(h["m_inf"]), "external": float(h["m_ext"]), "chronic": float(h["m_chr"])}
-    qf, qm = M.rates_from_multipliers(mult, float(h["m_work_f"]), float(h["m_work_m"]))
+    qf, qm = M.rates_from_multipliers(mult, float(h["m_work_f"]), float(h["m_work_m"]), float(h["inf_ad"]))
     shares = [float(x) for x in h["profile"].split(",")]
     n = len(P.MIGRANT_CLASSES)
     prof = {(c, "f"): shares[c] for c in range(n)} | {(c, "m"): shares[n + c] for c in range(n)}
@@ -663,7 +663,7 @@ def cmd_lag(_args):
 # docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md). (name, Inputs keywords, the lower
 # strata's share.) No amendment or IG trait is in these rows: DM.load_carriers walks laws, technologies and
 # institutions only, and no save reads them yet (each scenario that would hold one says so).
-_RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines",
+_RICH_TECHS = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
                          "antibiotic_mass_production", "contraceptive_pill", "modern_pharmaceuticals",
                          "vulcanization", "feminism", "second_wave_feminism", "personal_appliances"})
 _RICH_LAWS = frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",

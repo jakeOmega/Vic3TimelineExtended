@@ -29,7 +29,12 @@ pool's (te_dg_faw, te_dg_fam: calendar 20 and over, biological 39 and under), in
 te_demog_normalize_bands (STEP4_RENAMED); and its new names (STEP4_NEW_VARS). Its sex-balance terms leave these cases
 alone: their balances (94-100 men per 100 women) are above the threshold.
 
-The migrant booking (2026-10-12) rewrites te_demog_enter_class (BOOKING_DIGESTS) and changes no recorded number."""
+The migrant booking (2026-10-12) rewrites te_demog_enter_class (BOOKING_DIGESTS) and changes no recorded number.
+
+Adults' infection (#1045) changes the rich cases on purpose: medicine reaches infection at 15-64 a second time
+(te_demog_enter_group, ADULT_INFECTION_DIGESTS) and the infection treatment's cap rises to 0.99. The farm cases hold no
+medicine, so their factor is 1 and their numbers stay; the two rich cases (ADULT_INFECTION_CASES) were re-recorded on
+#1045's tree, so a later change to them still shows."""
 
 import functools
 import hashlib
@@ -143,6 +148,14 @@ WORKING_CONDITIONS_DIGESTS = {
     ("generated_values", "te_demog_pop_death_mult"):
         "153898ca4dea6c88b75e1a376403de78d040eb99b27fe0d56a91b8d22698a469",
 }
+# Adults' infection (#1045; the docstring): the life table's rates take te_dg_inf_ad on infection at 15-64, and the
+# infection treatment's target its new cap
+ADULT_INFECTION_DIGESTS = {
+    ("generated_effects", "te_demog_enter_group"): "ff843e90a65b32d61ead31fce28a9a48831e8c8e3fd4ef576c3145477de14930",
+    ("generated_values", "te_demog_treatment_target_infection"):
+        "769e4f31ff67c155a4ad351600e12595bdf5fa59f06f7dc76f9d1ce8390947f0",
+}
+ADULT_INFECTION_CASES = ("model_rich", "rich_full")
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -315,6 +328,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = LAW_LINE_DIGESTS.get((key, name), SAFETY_DIGESTS.get((key, name), PHASE3_DIGESTS.get(
                     (key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))))
                 want = WORKING_CONDITIONS_DIGESTS.get((key, name), want)
+                want = ADULT_INFECTION_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

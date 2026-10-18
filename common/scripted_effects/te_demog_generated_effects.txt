@@ -615,7 +615,8 @@ te_demog_seed_sweep = {
 # te_dg_qf / te_dg_qm (death probability a year per 100,000), te_dg_asfr (share of a
 # lifetime's births at each single age, per 100,000) and te_dg_next_group (the next
 # group's first age) from the cause multipliers te_dg_m_inf, te_dg_m_work_f,
-# te_dg_m_work_m, te_dg_m_ext and te_dg_m_chr (te_demog_prepare).
+# te_dg_m_work_m, te_dg_m_ext and te_dg_m_chr and, on infection at the adults' ages, the
+# adults' infection factor te_dg_inf_ad (te_demog_prepare; demographics_model.rates_from_multipliers).
 te_demog_enter_group = {
 	if = {
 		limit = { local_var:te_dg_g <= 15 }
@@ -768,6 +769,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -788,6 +790,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -812,6 +815,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -832,6 +836,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -859,6 +864,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -879,6 +885,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -903,6 +910,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -923,6 +931,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -956,6 +965,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -976,6 +986,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -1000,6 +1011,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -1020,6 +1032,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 750
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -1047,6 +1060,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 900
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -1067,6 +1081,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 950
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -1091,6 +1106,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 900
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -1111,6 +1127,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 950
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -1141,6 +1158,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 900
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -1161,6 +1179,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 950
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -1185,6 +1204,7 @@ te_demog_enter_group = {
 							name = te_dg_qf
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 900
 								add = {
 									value = local_var:te_dg_m_work_f
@@ -1205,6 +1225,7 @@ te_demog_enter_group = {
 							name = te_dg_qm
 							value = {
 								value = local_var:te_dg_m_inf
+								multiply = local_var:te_dg_inf_ad
 								multiply = 950
 								add = {
 									value = local_var:te_dg_m_work_m
@@ -7645,7 +7666,8 @@ te_demog_newborn_split = {
 # from the people the sweep takes its dead from, by the band they had at the last count (te_dg_bf<b>, te_dg_bm<b>,
 # whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at
 # a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at
-# the base rates) x the step's multiplier, work's by sex. Exact in the bands of one age group; approximate in 0-4
+# the base rates) x the step's multiplier, work's by sex, and infection's at the adults' ages x te_dg_inf_ad too.
+# Exact in the bands of one age group; approximate in 0-4
 # and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work, which
 # te_demog_cause_deaths_store scales to the census's deaths; a state in the late game replaces them with the late
 # sweep's own count, its treated at their biological ages (te_demog_lx_cause_deaths).
@@ -7660,26 +7682,6 @@ te_demog_cause_deaths_estimate = {
 			add = { value = var:te_dg_bm1 multiply = 1000 }
 			add = { value = var:te_dg_bf2 multiply = 550 }
 			add = { value = var:te_dg_bm2 multiply = 550 }
-			add = { value = var:te_dg_bf3 multiply = 750 }
-			add = { value = var:te_dg_bm3 multiply = 750 }
-			add = { value = var:te_dg_bf4 multiply = 750 }
-			add = { value = var:te_dg_bm4 multiply = 750 }
-			add = { value = var:te_dg_bf5 multiply = 750 }
-			add = { value = var:te_dg_bm5 multiply = 750 }
-			add = { value = var:te_dg_bf6 multiply = 750 }
-			add = { value = var:te_dg_bm6 multiply = 750 }
-			add = { value = var:te_dg_bf7 multiply = 750 }
-			add = { value = var:te_dg_bm7 multiply = 750 }
-			add = { value = var:te_dg_bf8 multiply = 750 }
-			add = { value = var:te_dg_bm8 multiply = 750 }
-			add = { value = var:te_dg_bf9 multiply = 900 }
-			add = { value = var:te_dg_bm9 multiply = 950 }
-			add = { value = var:te_dg_bf10 multiply = 900 }
-			add = { value = var:te_dg_bm10 multiply = 950 }
-			add = { value = var:te_dg_bf11 multiply = 900 }
-			add = { value = var:te_dg_bm11 multiply = 950 }
-			add = { value = var:te_dg_bf12 multiply = 900 }
-			add = { value = var:te_dg_bm12 multiply = 950 }
 			add = { value = var:te_dg_bf13 multiply = 1500 }
 			add = { value = var:te_dg_bm13 multiply = 1600 }
 			add = { value = var:te_dg_bf14 multiply = 1500 }
@@ -7690,6 +7692,30 @@ te_demog_cause_deaths_estimate = {
 			add = { value = var:te_dg_bm16 multiply = 2900 }
 			add = { value = var:te_dg_bf17 multiply = 2800 }
 			add = { value = var:te_dg_bm17 multiply = 2900 }
+			add = {
+				value = var:te_dg_bf3
+				multiply = 750
+				add = { value = var:te_dg_bm3 multiply = 750 }
+				add = { value = var:te_dg_bf4 multiply = 750 }
+				add = { value = var:te_dg_bm4 multiply = 750 }
+				add = { value = var:te_dg_bf5 multiply = 750 }
+				add = { value = var:te_dg_bm5 multiply = 750 }
+				add = { value = var:te_dg_bf6 multiply = 750 }
+				add = { value = var:te_dg_bm6 multiply = 750 }
+				add = { value = var:te_dg_bf7 multiply = 750 }
+				add = { value = var:te_dg_bm7 multiply = 750 }
+				add = { value = var:te_dg_bf8 multiply = 750 }
+				add = { value = var:te_dg_bm8 multiply = 750 }
+				add = { value = var:te_dg_bf9 multiply = 900 }
+				add = { value = var:te_dg_bm9 multiply = 950 }
+				add = { value = var:te_dg_bf10 multiply = 900 }
+				add = { value = var:te_dg_bm10 multiply = 950 }
+				add = { value = var:te_dg_bf11 multiply = 900 }
+				add = { value = var:te_dg_bm11 multiply = 950 }
+				add = { value = var:te_dg_bf12 multiply = 900 }
+				add = { value = var:te_dg_bm12 multiply = 950 }
+				multiply = local_var:te_dg_inf_ad
+			}
 			multiply = local_var:te_dg_m_inf
 			divide = 100000
 		}

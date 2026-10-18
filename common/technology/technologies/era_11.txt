@@ -395,8 +395,10 @@ personalized_medicine = {
 	}
 
 	modifier = {
-		# the census's medicine (demographics modifier types, stage 1)
+		# the census's medicine (demographics modifier types, stage 1); infection's since #1045: treatment matched to the
+		# patient and the pathogen, which with era 12's nanomedicine takes infection below the rich world of eras 9-10
 		state_chronic_treatment_add = 0.2
+		state_infection_treatment_add = 0.03
 		# the census's ageing rate for those in longevity care (demographics phase 3, the late-game design's call 3)
 		state_ageing_rate_add = -0.10
 		building_economy_of_scale_level_cap_add = 10

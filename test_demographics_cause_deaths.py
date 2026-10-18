@@ -8,6 +8,7 @@ multipliers, Health Care Access and childbirth's rate people- or births-weighted
 the script through test_demographics_registry's _Engine against the model.
 """
 
+import dataclasses
 import re
 import sys
 import unittest
@@ -139,6 +140,13 @@ class TestScript(unittest.TestCase):
         flows = dict(eb=0.0, ed=0.0, crisis=0.0, fjob_share=0.3, migration=0.0, war=400.0, kills=60.0)
         eng, _ring, figures, _pop = self.cohort.step_both(flows=flows)
         self.check(eng, figures, war=400.0, kills=60.0)
+
+    def test_adults_infection_takes_its_factor(self):
+        """#1045: with medicine, infection at 15-64 takes te_dg_inf_ad too, in the rates and in the estimate."""
+        inp = dataclasses.replace(R.TestCohortScript.INP, mods={P.ACCESS_TYPE: 0.5, P.TREATMENT_TYPE["infection"]: 0.9})
+        self.assertLess(M.infection_adult(inp), 0.7)
+        eng, _ring, figures, _pop = self.cohort.step_both(inp=inp)
+        self.check(eng, figures)
 
     def test_deaths_added_on_top_are_their_own_slice(self):
         eng, _ring, figures, _pop = self.cohort.step_both(on_top=(0.05, 0.12), full=True)

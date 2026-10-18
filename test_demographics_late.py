@@ -459,7 +459,8 @@ class TestLateGameModel(unittest.TestCase):
         self.assertAlmostEqual(four, out["deaths"] - out["maternal"], delta=1e-9 * out["deaths"])
         used = dataclasses.replace(inp, medicine=ring.medicine)
         mult = M.cause_multipliers(used)
-        calendar = M.cause_deaths_estimate(bands_f, bands_m, mult, *M.work_split(used, mult["work"]))
+        calendar = M.cause_deaths_estimate(bands_f, bands_m, mult, *M.work_split(used, mult["work"]),
+                                           M.infection_adult(used))
         cal_four = sum(calendar.values())
         self.assertGreater(calendar["chronic"] / cal_four, 2 * causes["chronic"] / four)
         self.assertLess(calendar["external"] / cal_four, 0.5 * causes["external"] / four)
