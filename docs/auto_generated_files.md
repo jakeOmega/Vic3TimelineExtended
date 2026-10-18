@@ -64,15 +64,18 @@ organizer preserves its BUDGET family and output format.
 ## Nation tab (explicit regeneration)
 
 Run `python3 scripts/generators/gen_nation_tab.py` after changing its registry
-(`SECTIONS`, `ROWS`, `KEEP_IN_LIST`, `NOT_ON_COUNTRY`), the budget catalogue
-above (its sources are hidden from the country panel's list), or vanilla's
-`country_panel.gui` fixture. `test_nation_tab.py` fails while a permanent
-country modifier has no registry line or a file below is stale. It writes:
+(`SECTIONS`, `ROWS`, `KEEP_IN_LIST`, `NOT_ON_COUNTRY`), its type registry
+(`TYPE_ROWS`, `STATUS_ROWS`, `NOT_A_ROW`), a static modifier the tab shows, the
+budget catalogue above (its sources are hidden from the country panel's list),
+or vanilla's `country_panel.gui` fixture. `test_nation_tab.py` fails while a
+permanent country modifier, or a modifier type one carries, has no registry
+line, or a file below is stale. It writes:
 
 | File | Owner script | Input |
 |---|---|---|
-| `gui/te_nation_generated.gui` | `scripts/generators/gen_nation_tab.py` | The registry, resolved against every static modifier script adds without a duration: the country panel's filter and the tab's list and row filters |
-| `common/script_values/te_nation_generated_values.txt` | `scripts/generators/gen_nation_tab.py` | The same names, as `has_modifier` counts (`gui_country_hidden_modifier_count`, `te_nation_list_<section>_count`) |
+| `gui/te_nation_generated.gui` | `scripts/generators/gen_nation_tab.py` | The registry, resolved against every static modifier script adds without a duration: the country panel's filter and the tab's list and row filters; and the type registry, resolved against those modifiers' fields: each section's type rows (`te_nation_types_<section>`) |
+| `common/script_values/te_nation_generated_values.txt` | `scripts/generators/gen_nation_tab.py` | The same names, as `has_modifier` counts (`gui_country_hidden_modifier_count`, `te_nation_list_<section>_count` and their sum `te_nation_lists_count`), and each type row's feeders (`te_nation_type_<type>_count`, `te_nation_group_<group>_count`, `te_nation_types_<section>_count`) |
+| `localization/english/te_nation_generated_l_english.yml` | `scripts/generators/gen_nation_tab.py` | The type rows' text and hovers (`te_nation_type_*`, `te_nation_status_*`), splicing each type's own name and `_desc`; `organize_loc.py` files the family as `NATION_GENERATED` and keeps the generator's format |
 | `gui/00_te_country_panel_information.gui` | `scripts/generators/gen_nation_tab.py` | `test_fixtures/vanilla_gui/country_panel.gui` (vanilla, byte for byte): its `country_panel_information_content` type with three `### MOD: Nation tab` blocks |
 
 This generator runs explicitly; it is not a post-load regenerator.

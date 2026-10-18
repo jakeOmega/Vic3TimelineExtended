@@ -12,9 +12,13 @@ What the engine would never report:
 - A hidden modifier whose display name another modifier on the country shares:
   the filter matches names (gotcha #40), so it would hide both.
 - A redefined vanilla type that differs from vanilla outside its marked blocks.
+- A modifier type the tab's modifiers carry that no type registry line places
+  (#1030): the type's row is missing, and a new field on a listed modifier
+  would go unshown.
 
 No game install needed; the fixture check skips without one.
 """
+import json
 import difflib
 import os
 import re
@@ -28,6 +32,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.generators import gen_nation_tab as gen  # noqa: E402
 
 LOC_DIR = ROOT / "localization" / "english"
+VANILLA_LOC = ROOT / "vanilla_parsed" / "localization_english.json"
 
 
 def _read(path):
@@ -40,6 +45,19 @@ def _loc():
         for m in re.finditer(r'^ ([\w.\-]+):\d* "(.*)"\s*$', _read(path), re.M):
             keys[m.group(1)] = m.group(2)
     return keys
+
+
+def _all_loc():
+    """The mod's loc over vanilla's (the committed snapshot)."""
+    keys = json.loads(VANILLA_LOC.read_text(encoding="utf-8"))
+    keys.update(_loc())
+    return keys
+
+
+def _counts(values):
+    """{script value: [the modifiers it counts]} from a generated values file."""
+    return {name: re.findall(r"has_modifier = (\w+)", body)
+            for name, body in re.findall(r"^(\w+) = \{\n(.*?)^\}", values, re.S | re.M)}
 
 
 def _names_in(expression):
@@ -127,19 +145,19 @@ class GeneratedTest(unittest.TestCase):
         for path, text in zip((gen.GUI_OUT, gen.VALUES_OUT, gen.PANEL_OUT), self.outputs):
             with self.subTest(path=path.name):
                 self.assertEqual(_read(path), text, "stale: run python3 scripts/generators/gen_nation_tab.py")
+        self.assertEqual(gen.LOC_OUT.read_bytes(), self.outputs[3],
+                         "stale: run python3 scripts/generators/gen_nation_tab.py")
 
     def test_one_bom_each(self):
-        for path in (gen.GUI_OUT, gen.VALUES_OUT, gen.PANEL_OUT):
+        for path in (gen.GUI_OUT, gen.VALUES_OUT, gen.PANEL_OUT, gen.LOC_OUT):
             raw = path.read_bytes()
             with self.subTest(path=path.name):
                 self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
                 self.assertFalse(raw[3:].startswith(b"\xef\xbb\xbf"))
 
     def test_the_filters_and_counts_name_the_same_modifiers(self):
-        gui, values, _ = self.outputs
-        counts = {}
-        for name, body in re.findall(r"^(\w+) = \{\n(.*?)^\}", values, re.S | re.M):
-            counts[name] = re.findall(r"has_modifier = (\w+)", body)
+        gui, values, _, _ = self.outputs
+        counts = _counts(values)
         hidden = _names_in(_template(gui, "te_nation_hidden_filter"))
         self.assertEqual(sorted(hidden), sorted(counts["gui_country_hidden_modifier_count"]))
         for section in gen.SECTIONS:
@@ -150,7 +168,7 @@ class GeneratedTest(unittest.TestCase):
 
     def test_the_filters_stay_shallow(self):
         # A balanced Or tree: depth grows with log2 of the names, not their count.
-        gui, _, _ = self.outputs
+        gui = self.outputs[0]
         for line in gui.splitlines():
             depth = deepest = 0
             for ch in line:
@@ -158,6 +176,129 @@ class GeneratedTest(unittest.TestCase):
                 depth -= ch == ")"
                 deepest = max(deepest, depth)
             self.assertLessEqual(deepest, 16, line[:80])
+
+
+class TypeRowsTest(unittest.TestCase):
+    """The type rows (#1030): every modifier type the tab's modifiers carry is
+    a row, a status line or a NOT_A_ROW line, and each row's gate counts
+    exactly the modifiers that feed it."""
+
+    @classmethod
+    def setUpClass(cls):
+        lists, rows, _ = gen.resolve(gen.candidates())
+        cls.statics = gen.static_modifiers()
+        cls.carried = gen.carried_types(lists, rows, cls.statics)
+        cls.placed = gen.classify_types(cls.carried)
+        cls.types = gen.type_rows(cls.carried)
+        cls.tab = {name for names in (*lists.values(), *rows.values()) for name in names}
+        cls.gui, cls.values, _, _ = gen.outputs()
+
+    def _rows(self):
+        return [(section, group, kind, row, feeders) for section, groups in self.types.items()
+                for group, items in groups for kind, row, feeders in items]
+
+    def test_the_inventory(self):
+        # The issue's count (2026-10-18): 149 types, 114 rows, 35 not rows
+        self.assertGreaterEqual(len(self.carried), 149)
+        self.assertGreaterEqual(len(self._rows()), 114)
+        self.assertIn("state_arable_land_mult", self.carried)
+        self.assertTrue({"agdiff_nitrogen_fixation", "agdiff_green_revolution"}
+                        <= set(self.carried["state_arable_land_mult"]))
+
+    def test_every_type_is_placed_once(self):
+        unplaced = sorted(kind for kind, lines in self.placed.items() if not lines)
+        self.assertFalse(unplaced, "modifier types the tab's modifiers carry with no TYPE_ROWS, STATUS_ROWS "
+                                   f"or NOT_A_ROW line in scripts/generators/gen_nation_tab.py: {unplaced}")
+        twice = {kind: [line[0] for line in lines] for kind, lines in self.placed.items() if len(lines) > 1}
+        self.assertFalse(twice, f"types two type registry lines match (an exact name wins): {twice}")
+
+    def test_every_line_places_a_type(self):
+        used = {line for lines in self.placed.values() for line in lines}
+        dead = [line[0] for line in gen.type_registry() if line not in used]
+        self.assertFalse(dead, f"type registry lines no modifier on the tab carries: {dead}")
+
+    def test_each_entry_once(self):
+        entries = [line[0] for line in gen.type_registry()]
+        self.assertEqual(sorted(set(entries)), sorted(entries))
+
+    def test_sections_and_groups(self):
+        for table in (gen.TYPE_ROWS, gen.STATUS_ROWS):
+            self.assertLessEqual(set(table), set(gen.SECTIONS))
+        self.assertEqual(list(gen.TYPE_ROWS), list(gen.SECTIONS))
+        groups = [group for table in (gen.TYPE_ROWS, gen.STATUS_ROWS) for groups in table.values()
+                  for group in groups]
+        sections_of = {}
+        for table in (gen.TYPE_ROWS, gen.STATUS_ROWS):
+            for section, groups_ in table.items():
+                for group in groups_:
+                    sections_of.setdefault(group, set()).add(section)
+        self.assertFalse({g: s for g, s in sections_of.items() if len(s) > 1}, "a group name in two sections")
+        loc = _loc()
+        missing = sorted(f"te_nation_grp_{g}" for g in set(groups) if f"te_nation_grp_{g}" not in loc)
+        self.assertFalse(missing, missing)
+
+    def test_bools_are_status_lines(self):
+        for section, group, kind, row, _ in self._rows():
+            with self.subTest(kind=kind):
+                self.assertEqual(row == "status", kind.endswith("_bool"))
+        self.assertIn("country_nuclear_program_pause_bool", [r[2] for r in self._rows() if r[3] == "status"])
+
+    def test_every_row_has_a_name_and_a_description(self):
+        loc = _all_loc()
+        for _, _, kind, _, _ in self._rows():
+            with self.subTest(kind=kind):
+                self.assertIn(kind, loc)
+                self.assertIn(f"{kind}_desc", loc)
+
+    def test_the_generated_loc_splices_what_exists(self):
+        loc = _all_loc()
+        generated = gen.generated_loc(self.types)
+        for key, value in generated.items():
+            for ref in re.findall(r"\$(\w+)\$", value):
+                with self.subTest(key=key, ref=ref):
+                    self.assertIn(ref, loc)
+        for _, _, kind, row, _ in self._rows():
+            with self.subTest(kind=kind):
+                key = gen.row_key(kind, row)
+                self.assertTrue(generated[key].startswith(f"${kind}$: "))
+                self.assertIn(f"${kind}_desc$", generated[key + "_tt"])
+                if row == "row":
+                    self.assertIn(f"GetValueWithBreakdownFor('{kind}')", generated[key])
+                else:
+                    self.assertIn(f"GetFullEntryDescFor('{kind}')", generated[key + "_tt"])
+                note = kind.startswith(("state_", "building_", "interest_group_", "character_"))
+                self.assertEqual(note, "$te_nation_note_" in generated[key + "_tt"])
+
+    def test_counts_name_each_rows_feeders(self):
+        counts = _counts(self.values)
+        for section, groups in self.types.items():
+            union = set()
+            for group, items in groups:
+                in_group = set()
+                for kind, _, feeders in items:
+                    with self.subTest(kind=kind):
+                        self.assertEqual(counts[gen.type_count(kind)], feeders)
+                        for name in feeders:
+                            self.assertIn(name, self.tab)
+                            self.assertIn(kind, self.statics[name])
+                    in_group |= set(feeders)
+                self.assertEqual(sorted(counts[gen.group_count(group)]), sorted(in_group), group)
+                union |= in_group
+            self.assertEqual(sorted(counts[gen.section_count(section)]), sorted(union), section)
+
+    def test_each_row_is_gated_on_its_own_count(self):
+        for section, groups in self.types.items():
+            body = self.gui[self.gui.index(f"\ttype te_nation_types_{section} = "):]
+            body = body[:body.index("\n\t}\n")]
+            self.assertIn(f"ScriptValue('{gen.section_count(section)}')", body.split("\n")[1])
+            for group, items in groups:
+                self.assertIn(f'text = "te_nation_grp_{group}"', body)
+                for kind, row, _ in items:
+                    with self.subTest(kind=kind):
+                        m = re.search(rf'\tte_nation_row = \{{\n\t+visible = "([^"]*)"\n\t+text = "{gen.row_key(kind, row)}"\n'
+                                      rf'\t+tooltip = "{gen.row_key(kind, row)}_tt"\n', body)
+                        self.assertTrue(m, kind)
+                        self.assertIn(f"ScriptValue('{gen.type_count(kind)}')", m.group(1))
 
 
 class CountryPanelTest(unittest.TestCase):
@@ -233,15 +374,16 @@ class PanelDriftTest(unittest.TestCase):
 
 
 class TabLayoutTest(unittest.TestCase):
-    """gui/te_nation_tab.gui: the sections in the spec's order, each list and
-    row line on its generated filter, each list gated on its count, and every
-    key the tab prints defined."""
+    """gui/te_nation_tab.gui: the sections in the spec's order, each section's
+    type rows mounted, each list and row line on its generated filter, each
+    list gated on its count, and every key the tab prints defined."""
 
     TAB = ROOT / "gui" / "te_nation_tab.gui"
 
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(cls.TAB)
+        cls.generated = _read(gen.GUI_OUT)
 
     def test_the_window_mounts_the_tab(self):
         window = _read(ROOT / "gui" / "te_systems_window.gui")
@@ -252,16 +394,42 @@ class TabLayoutTest(unittest.TestCase):
         body = self.gui[self.gui.index("type te_nation_tab_sections"):]
         order = re.findall(r"^\t\t(te_nation_\w+) = \{\}", body, re.M)
         self.assertEqual(order, ["te_nation_overview_panel"]
-                         + [f"te_nation_section_{s}" for s in gen.SECTIONS] + ["te_nation_how_panel"])
+                         + [f"te_nation_section_{s}" for s in gen.SECTIONS]
+                         + ["te_nation_sources_panel", "te_nation_how_panel"])
+
+    def _type(self, name):
+        body = self.gui[self.gui.index(f"type {name} = "):]
+        return body[:body.index("\n\t}\n")]
+
+    def test_each_section_mounts_its_type_rows(self):
+        # Score rows first, then the type rows (#1030); a section with no score
+        # row shows on its type rows' count (rule 8).
+        for section in gen.SECTIONS:
+            with self.subTest(section=section):
+                self.assertIn(f"\ttype te_nation_types_{section} = ", self.generated)
+                self.assertEqual(self.gui.count(f"te_nation_types_{section} = {{}}"), 1)
+                body = self._type(f"te_nation_section_{section}")
+                self.assertIn(f"te_nation_types_{section} = {{}}", body)
+                self.assertNotIn("te_nation_list_", body)
+        for section in ("science_and_space", "international"):
+            first = self._type(f"te_nation_section_{section}").split("\n")[1]
+            self.assertIn(f"ScriptValue('te_nation_types_{section}_count')", first)
 
     def test_every_filter_is_used_once_and_lists_are_gated(self):
+        # The lists live in Where These Come From, collapsed, each under its
+        # section's name and shown on its count; the panel on their sum.
+        sources = self._type("te_nation_sources_panel")
+        self.assertIn("ScriptValue('te_nation_lists_count')", sources.split("\n")[1])
+        self.assertIn("GetVariableSystem.Toggle('te_nation_sources_open')", sources)
         for section in gen.SECTIONS:
             with self.subTest(section=section):
                 self.assertEqual(self.gui.count(f"using = te_nation_list_{section}\n"), 1)
-                # the list, or the section holding nothing else, shows on its count
-                body = self.gui[self.gui.index(f"type te_nation_section_{section} = "):]
-                body = body[:body.index("\n\t}\n")]
-                self.assertIn(f"ScriptValue('te_nation_list_{section}_count'), '(CFixedPoint)0' )", body)
+                at = sources.index(f"using = te_nation_list_{section}\n")
+                block = sources[sources.rindex("flowcontainer = {", 0, at):at]
+                self.assertIn(f"ScriptValue('te_nation_list_{section}_count'), '(CFixedPoint)0' )", block)
+                self.assertIn(f'text = "te_nation_sec_{section}"', block)
+        lists = re.search(r"te_nation_lists_count = \{\n(.*?)^\}", _read(gen.VALUES_OUT), re.S | re.M).group(1)
+        self.assertEqual(re.findall(r"add = te_nation_list_(\w+)_count", lists), list(gen.SECTIONS))
         for row in gen.ROWS:
             with self.subTest(row=row):
                 self.assertEqual(self.gui.count(f"using = te_nation_row_{row}\n"), 1)
@@ -276,7 +444,7 @@ class TabLayoutTest(unittest.TestCase):
 
     def test_every_key_exists(self):
         loc = _loc()
-        keys = set(re.findall(r'\b(?:text|tooltip) = "(te_nation_\w+)"', self.gui))
+        keys = set(re.findall(r'\b(?:text|tooltip) = "(te_nation_\w+)"', self.gui + self.generated))
         # SelectLocalization's keys in the loc ("( 'key'" or ", 'key'"; ScriptValue('x') has no space)
         keys |= set(re.findall(r"[(,] '(te_nation_\w+)'", " ".join(loc.values())))
         self.assertGreater(len(keys), 30)
@@ -287,7 +455,7 @@ class TabLayoutTest(unittest.TestCase):
         values = _read(ROOT / "common" / "script_values" / "te_nation_values.txt")
         values += _read(gen.VALUES_OUT)
         defined = set(re.findall(r"^(\w+) = \{", values, re.M))
-        text = self.gui + "\n".join(_loc().values())
+        text = self.gui + self.generated + "\n".join(_loc().values())
         used = set(re.findall(r"ScriptValue\('(te_nation_\w+)'\)", text))
         self.assertTrue(used)
         self.assertLessEqual(used, defined)

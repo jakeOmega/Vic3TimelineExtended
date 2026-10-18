@@ -2,17 +2,20 @@
 ### instances te_nation_tab_sections): what the country carries for good, in
 ### one place. Spec: docs/superpowers/specs/2026-10-17-national-modifiers-tab-design.md
 ### § 2. An overview of boxes, two to a row; five sections, open, each its
-### score rows and then its list; How the Nation Works, collapsed. House
-### style: docs/guides/gui_style_guide.md.
+### score rows and then its type rows (#1030); Where These Come From and How
+### the Nation Works, collapsed. House style: docs/guides/gui_style_guide.md.
 ###
 ### DATA. No journal entry and no gate: everything reads the player's country
-### through GetPlayer. The rows read script values
+### through GetPlayer. The score rows read script values
 ### (common/script_values/te_nation_values.txt) and the engine's modifier sums.
-### A list is the country's own timed modifiers filtered by name
-### (te_nation_list_<section>, and te_nation_row_<row> under a row, both
-### generated in gui/te_nation_generated.gui), each with its own tooltip, so
-### the engine renders the effects at their current scale. The country panel's
-### list hides the same names (gui/00_te_country_panel_information.gui).
+### A section's type rows (te_nation_types_<section>, generated in
+### gui/te_nation_generated.gui) are modifier types' national totals, each
+### shown while one of the tab's modifiers feeds it. A list is the country's
+### own timed modifiers filtered by name (te_nation_list_<section> in Where
+### These Come From, and te_nation_row_<row> under a score row, both
+### generated), each with its own tooltip, so the engine renders the effects
+### at their current scale. The country panel's list hides the same names
+### (gui/00_te_country_panel_information.gui).
 ###
 ### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
 ### overview 16 (te_nation_fontsize_*; rule 3).
@@ -328,8 +331,9 @@ types te_nation_widget_types
 	}
 
 	### ----------------------------------------------------------------------
-	### GOVERNANCE: Legislative Override Capacity, the Algorithmic Mandate, and
-	### the list (the armed forces' training, heir education).
+	### GOVERNANCE: Legislative Override Capacity, Judicial Independence, the
+	### Algorithmic Mandate, and the type rows (authority and bureaucracy,
+	### legitimacy and laws, interest groups).
 	### ----------------------------------------------------------------------
 	type te_nation_section_governance = flowcontainer {
 		direction = vertical
@@ -465,18 +469,13 @@ types te_nation_widget_types
 				}
 			}
 
-			te_nation_list = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_governance_count'), '(CFixedPoint)0' )]"
-				blockoverride "filter" {
-					using = te_nation_list_governance
-				}
-			}
+			te_nation_types_governance = {}
 		}
 	}
 
 	### ----------------------------------------------------------------------
-	### SOCIETY: Wealth Concentration, and the list (demographic policies,
-	### living-standard expectations, civil rights, resettlement).
+	### SOCIETY: Wealth Concentration, and the type rows (living standards,
+	### acceptance, unrest, population, demography).
 	### ----------------------------------------------------------------------
 	type te_nation_section_society = flowcontainer {
 		direction = vertical
@@ -508,19 +507,14 @@ types te_nation_widget_types
 					using = te_nation_row_wealth_concentration
 				}
 			}
-			te_nation_list = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_society_count'), '(CFixedPoint)0' )]"
-				blockoverride "filter" {
-					using = te_nation_list_society
-				}
-			}
+			te_nation_types_society = {}
 		}
 	}
 
 	### ----------------------------------------------------------------------
 	### ECONOMY: Construction Cost, Private Construction while in force, and
-	### the list (agricultural diffusion, the private share, the tax code's
-	### reactions and relief, monetary bands, colonial programmes).
+	### the type rows (production, taxes and minting, investment and credit,
+	### trade).
 	### ----------------------------------------------------------------------
 	type te_nation_section_economy = flowcontainer {
 		direction = vertical
@@ -558,22 +552,17 @@ types te_nation_widget_types
 					}
 				}
 			}
-			te_nation_list = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_economy_count'), '(CFixedPoint)0' )]"
-				blockoverride "filter" {
-					using = te_nation_list_economy
-				}
-			}
+			te_nation_types_economy = {}
 		}
 	}
 
 	### ----------------------------------------------------------------------
 	### SCIENCE AND SPACE: Global Technological Development while above zero,
-	### and the list (space race rewards, debris, Antarctica, the seabed).
-	### Drawn only with something to show (rule 8).
+	### and the type rows (research, space and the seabed). Drawn only with
+	### something to show (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_science_and_space = flowcontainer {
-		visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' ) )]"
+		visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_types_science_and_space_count'), '(CFixedPoint)0' ) )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -599,22 +588,17 @@ types te_nation_widget_types
 					}
 				}
 			}
-			te_nation_list = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' )]"
-				blockoverride "filter" {
-					using = te_nation_list_science_and_space
-				}
-			}
+			te_nation_types_science_and_space = {}
 		}
 	}
 
 	### ----------------------------------------------------------------------
-	### INTERNATIONAL: the list only (UN conventions and regime terms,
-	### sanctions, intelligence sharing, the nuclear taboo, an overlord in
-	### decline). Drawn only with something to show (rule 8).
+	### INTERNATIONAL: the type rows only (standing abroad, covert defence,
+	### war support, nuclear, commitments). Drawn only with something to show
+	### (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_international = flowcontainer {
-		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_international_count'), '(CFixedPoint)0' )]"
+		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_types_international_count'), '(CFixedPoint)0' )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -625,9 +609,123 @@ types te_nation_widget_types
 			}
 		}
 		te_nation_panel = {
-			te_nation_list = {
-				blockoverride "filter" {
-					using = te_nation_list_international
+			te_nation_types_international = {}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### Where These Come From: collapsed (te_nation_sources_open). The tab's
+	### own modifiers, by the section whose systems grant them, each with its
+	### icon, name and tooltip (rule 2: the two that carry no effect, and each
+	### one's full effects, one click away). Drawn only with one to show.
+	### ----------------------------------------------------------------------
+	type te_nation_sources_panel = flowcontainer {
+		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		section_header_button = {
+			blockoverride "layout" {
+				parentanchor = hcenter
+				size = { 520 38 }
+			}
+			blockoverride "left_text" {
+				text = "te_nation_sources_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_nation_sources_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_nation_sources_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_nation_sources_open')]"
+			}
+		}
+
+		te_nation_panel = {
+			visible = "[GetVariableSystem.Exists('te_nation_sources_open')]"
+
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_governance_count'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_nation_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_nation_sec_governance"
+					}
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_list_governance
+					}
+				}
+			}
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_society_count'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_nation_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_nation_sec_society"
+					}
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_list_society
+					}
+				}
+			}
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_economy_count'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_nation_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_nation_sec_economy"
+					}
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_list_economy
+					}
+				}
+			}
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_nation_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_nation_sec_science_and_space"
+					}
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_list_science_and_space
+					}
+				}
+			}
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_international_count'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_nation_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_nation_sec_international"
+					}
+				}
+				te_nation_list = {
+					blockoverride "filter" {
+						using = te_nation_list_international
+					}
 				}
 			}
 		}
@@ -671,6 +769,14 @@ types te_nation_widget_types
 			}
 			te_nation_note = {
 				text = "te_nation_how_tab"
+			}
+			te_nation_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_nation_how_sub_rows"
+				}
+			}
+			te_nation_note = {
+				text = "te_nation_how_rows"
 			}
 			te_nation_subheader = {
 				blockoverride "subheader_text" {
@@ -744,6 +850,7 @@ types te_nation_widget_types
 		te_nation_section_economy = {}
 		te_nation_section_science_and_space = {}
 		te_nation_section_international = {}
+		te_nation_sources_panel = {}
 		te_nation_how_panel = {}
 	}
 }
