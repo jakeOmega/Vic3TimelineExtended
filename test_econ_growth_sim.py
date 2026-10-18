@@ -374,12 +374,22 @@ class TestStep(unittest.TestCase):
     def _no_growth_no_jobs(self, **kw):
         return G.Params(private_invest_share=0, gov_invest_share=0, g_max=0.0, g_min=0.0, **kw)
 
-    def test_welfare_above_subsistence_premium_keeps_the_unemployed_out(self):
+    def test_welfare_above_subsistence_over_the_premium_keeps_the_unemployed_out(self):
+        # Subsistence hires them only for 1.3 x what welfare pays: welfare just over income / 1.3 keeps them out.
         p = self._no_growth_no_jobs()
-        welfare = 1.3 * p.subsistence_income * 1.01
+        welfare = p.subsistence_income / 1.3 * 1.01
         for r in G.run(toy_scenario(unemployed=1e6, welfare=((1867, welfare),)), TOY, p):
             self.assertAlmostEqual(r.peasants, 3e6)
             self.assertAlmostEqual(r.unemployed, 1e6)
+
+    def test_welfare_under_subsistence_over_the_premium_lets_them_return(self):
+        # Just under income / 1.3, subsistence pays the premium, and they return; welfare at
+        # subsistence income itself (the old rule's side of the line) keeps them out.
+        p = self._no_growth_no_jobs()
+        recs = G.run(toy_scenario(unemployed=1e6, welfare=((1867, p.subsistence_income / 1.3 * 0.99),)), TOY, p)
+        self.assertAlmostEqual(recs[0].peasants, 3e6 + p.return_rate * 1e6)
+        recs = G.run(toy_scenario(unemployed=1e6, welfare=((1867, p.subsistence_income),)), TOY, p)
+        self.assertAlmostEqual(recs[0].peasants, 3e6)
 
     def test_no_welfare_lets_the_unemployed_return(self):
         p = self._no_growth_no_jobs()
@@ -388,9 +398,12 @@ class TestStep(unittest.TestCase):
         self.assertAlmostEqual(recs[0].unemployed, (1 - p.return_rate) * 1e6)
 
     def test_welfare_is_compared_in_base_prices(self):
-        # 0.03 nominal clears 1.3 x 0.02; at price level 2 it is 0.015 in base prices, and they return.
-        p = self._no_growth_no_jobs(price_level=2.0)
-        recs = G.run(toy_scenario(unemployed=1e6, welfare=((1867, 0.03),)), TOY, p)
+        # 0.03 nominal keeps them out (1.3 x 0.03 > 0.02); at price level 2 it is 0.015 in base
+        # prices, 1.3 x 0.015 = 0.0195 <= 0.02, and they return.
+        welfare = ((1867, 0.03),)
+        recs = G.run(toy_scenario(unemployed=1e6, welfare=welfare), TOY, self._no_growth_no_jobs())
+        self.assertAlmostEqual(recs[0].peasants, 3e6)
+        recs = G.run(toy_scenario(unemployed=1e6, welfare=welfare), TOY, self._no_growth_no_jobs(price_level=2.0))
         self.assertGreater(recs[0].peasants, 3e6)
 
     def test_returns_stop_at_subsistence_capacity(self):
@@ -1057,7 +1070,8 @@ class TestScenarios(unittest.TestCase):
 
 
 class TestCalibration(unittest.TestCase):
-    T0 = {"year": 1900.0, "peasant_share": 0.4, "unemployed_share": 0.1, "gdppc": 2.0, "population": 10.0,
+    # Record 1900 holds the stocks at the end of 1900, so it sits at 1901.0.
+    T0 = {"year": 1901.0, "peasant_share": 0.4, "unemployed_share": 0.1, "gdppc": 2.0, "population": 10.0,
           "points_week": 10.0, "wage": 1.0}
 
     def _recs(self):
@@ -1069,9 +1083,19 @@ class TestCalibration(unittest.TestCase):
         self.assertAlmostEqual(CAL.loss(self._recs(), [self.T0], G.Params(price_level=2.0)), 0.0)
 
     def test_loss_interpolates_to_the_target_year(self):
-        mid = {"year": 1900.5, "peasant_share": 0.3, "unemployed_share": 0.2, "gdppc": 5.0, "population": 15.0,
+        mid = {"year": 1901.5, "peasant_share": 0.3, "unemployed_share": 0.2, "gdppc": 5.0, "population": 15.0,
                "points_week": 25.0, "wage": 1.5}
         self.assertAlmostEqual(CAL.loss(self._recs(), [mid], G.Params(price_level=2.0)), 0.0)
+
+    def test_a_record_sits_at_the_end_of_its_year(self):
+        recs = self._recs()
+        # Record Y is Y's end-of-year stocks: a save on 1 January Y + 1 reads it exactly.
+        self.assertAlmostEqual(CAL.sim_at(recs, 1901.0)["population"], 10.0)
+        self.assertAlmostEqual(CAL.sim_at(recs, 1902.0)["population"], 20.0)
+        self.assertAlmostEqual(CAL.sim_at(recs, 1901.25)["population"], 12.5)
+        # Before the first record's end and after the last's, the figures are flat.
+        self.assertAlmostEqual(CAL.sim_at(recs, 1900.5)["population"], 10.0)
+        self.assertAlmostEqual(CAL.sim_at(recs, 1903.0)["population"], 20.0)
 
     def test_loss_weights_each_term_once(self):
         off = dict(self.T0, peasant_share=0.5, gdppc=2.0 * math.e)
@@ -1261,6 +1285,13 @@ class TestCli(unittest.TestCase):
         self.assertEqual(out.returncode, 0, out.stderr)
         self.assertIn("| linear |", out.stdout)
         self.assertIn("| none |", out.stdout)
+
+    def test_default_curves_parse_and_differ_from_linear(self):
+        # The mod's line stops at +100% (max_mult 1), so a default cap of 1 or more would repeat `linear`.
+        for spec in G.DEFAULT_CURVES.split(","):
+            fields = G.parse_curve(spec)
+            if fields["curve"] == "capped":
+                self.assertLess(fields["curve_cap"], 1.0, spec)
 
     def test_cli_run_prints_a_summary_and_writes_the_csv(self):
         path = Path(self.enterContext(tempfile.TemporaryDirectory())) / "run.csv"

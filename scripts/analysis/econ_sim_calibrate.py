@@ -29,7 +29,7 @@ to be widened to pass.
 
 USAGE
 -----
-    PY=/home/jakef/src/Vic3TimelineExtended/.venv/bin/python
+    PY=.venv/bin/python                         # from the repo root
     $PY scripts/analysis/econ_sim_calibrate.py fit \\
         --scenario player_rich --scenario ai_rich --scenario ai_poor \\
         --out scripts/analysis/econ_sim_params.json
@@ -128,16 +128,22 @@ def _figures(r: G.YearRecord) -> dict[str, float]:
     }
 
 
+RECORD_AT = 1.0                                 # a YearRecord's stocks are the end of its year: Y sits at Y + 1.0
+
+
 def sim_at(records: list[G.YearRecord], year: float) -> dict[str, float]:
-    """The FIGURES at a fractional `year`, linear between the records of the years either
-    side (records are consecutive years, as `run` returns them); flat past either end."""
-    if year <= records[0].year:
+    """The FIGURES at a fractional `year`, linear between the records either side; flat
+    past either end. A record holds its year's end-of-year stocks (`step` leaves them so),
+    so record Y sits at Y + RECORD_AT, the first of January of Y + 1, where a save dated
+    then would read them. Records are consecutive years, as `run` returns them."""
+    at = year - RECORD_AT                       # in record years
+    if at <= records[0].year:
         return _figures(records[0])
-    if year >= records[-1].year:
+    if at >= records[-1].year:
         return _figures(records[-1])
-    i = int(math.floor(year)) - records[0].year
+    i = int(math.floor(at)) - records[0].year
     a, b = _figures(records[i]), _figures(records[i + 1])
-    frac = year - records[i].year
+    frac = at - records[i].year
     return {k: a[k] + (b[k] - a[k]) * frac for k in FIGURES}
 
 

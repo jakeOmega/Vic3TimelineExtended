@@ -39,15 +39,16 @@ named constants below.
 
 USAGE
 -----
-    PY=/home/jakef/src/Vic3TimelineExtended/.venv/bin/python
-    $PY scripts/analysis/econ_growth_sim.py run --scenario player_rich --curve capped:3 \\
+    PY=.venv/bin/python                         # from the repo root
+    $PY scripts/analysis/econ_growth_sim.py run --scenario player_rich --curve capped:0.5 \\
         --set fill_rate=0.3 --end 2062 --csv out.csv
     $PY scripts/analysis/econ_growth_sim.py sweep --scenarios player_rich,ai_poor \\
-        --curves linear,capped:1,capped:3,slope:0.5,log,sqrt,world,none
+        --curves linear,capped:0.5,slope:0.5,slope:2,log,sqrt,world,none
 
 Both run on the fitted parameters (econ_sim_params.json), then `--set name=value`, then the
 curve. A curve is `linear` (the mod's), `capped:C` (the line held at C), `slope:K` (the line
-at K times the mod's steepness), `log`, `sqrt`, `world` or `none`.
+at K times the mod's steepness), `log`, `sqrt`, `world` or `none`. The mod's line stops at
++100% (#1034), so a cap of 1 or more is `linear` again.
 """
 
 from __future__ import annotations
@@ -90,7 +91,8 @@ LATE_ERA = 8                                    # late_employment_mult reaches P
 # copies: game/common/defines/00_defines.txt and game/common/buildings/12_subsistence.txt.
 WAGE_SHARE_OF_VA = 0.75                         # 1 - BUILDING_PROFIT_TARGET_TO_RAISE_WAGES (0.25)
 HIRE_PREMIUM = 1.1                              # 1 + MIN_RAISE_TO_HIRE (0.10)
-RETURN_PREMIUM = 1.3                            # 1 + the subsistence buildings' min_raise_to_hire (0.30)
+RETURN_PREMIUM = 1.3                            # 1 + the subsistence buildings' min_raise_to_hire (0.30):
+                                                # the unemployed return once subsistence pays 1.3 x their welfare
 
 
 @dataclass
@@ -391,8 +393,8 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
     11 wages         rise with vacancies (up to 0.75 of VA a worker), else drift to
                      the floor with slack
     12 population    growth falls with GDP per capita; the workforce follows; the
-                     unemployed return to subsistence when welfare is below its
-                     income x 1.3
+                     unemployed return to subsistence when its income is at least
+                     1.3 x their welfare (subsistence's min_raise_to_hire)
     13 flags         labour-, cap- or money-bound
     """
     nums = md.numbers
@@ -593,8 +595,10 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
     if state.peasants > capacity:
         state.unemployed += state.peasants - capacity
         state.peasants = capacity
+    # Subsistence hires an unemployed worker only for RETURN_PREMIUM x what welfare pays
+    # (the subsistence buildings' min_raise_to_hire); welfare is deflated to base prices.
     welfare = sc.welfare_at(year) / p.price_level
-    if welfare < RETURN_PREMIUM * p.subsistence_income and state.peasants < capacity:
+    if RETURN_PREMIUM * welfare <= p.subsistence_income and state.peasants < capacity:
         back = min(max(0.0, p.return_rate) * state.unemployed, capacity - state.peasants)
         state.unemployed -= back
         state.peasants += back
@@ -688,8 +692,8 @@ def classify(r: YearRecord, sc: Scenario, p: Params) -> str:
                       meaning GDP per head at p.rich_gdppc or more, or the scenario's
                       rich_from_year reached. Both slack tests are strict. The wage plays no
                       part (R34): the game shows mode-2 slack alongside rising wages (the
-                      jobs missing are the wrong kind, not wage-stuck), and the fitted wage
-                      floor is about 0, so a wage clause would zero the column.
+                      jobs missing are the wrong kind, not wage-stuck), and the fit can drive
+                      the wage floor to about 0, where a wage clause would zero the column.
     """
     slack = _share(r.peasants + r.unemployed, r.workforce)
     if slack < p.mode1_slack and r.labour_bound:
@@ -871,7 +875,7 @@ def summarize(records: list[YearRecord], sc: Scenario, md: D.ModData, p: Params,
 # --------------------------------------------------------------------------
 
 DEFAULT_SCENARIOS = "player_rich,player_poor,ai_rich,ai_poor"
-DEFAULT_CURVES = "linear,capped:3,log,sqrt,world,none"
+DEFAULT_CURVES = "linear,capped:0.5,slope:0.5,slope:2,none"   # a cap of 1 or more is `linear` (#1034)
 DASH = "—"
 TRACE_EVERY = 10                                # `run` prints a line each decade, and the first and last year
 COLUMNS = ("Setting", "Type", "Turn year", "Adoption year", "Peasants < 5%",
