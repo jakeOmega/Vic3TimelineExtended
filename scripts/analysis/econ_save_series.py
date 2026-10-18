@@ -503,32 +503,49 @@ def playthrough_id(blob):
 
 
 # ---------------------------------------------------------------- extract
-def extract_from_blob(blob, date, country_ids, core=None, headers=None):
+def _owner_of(states, pops, state_owner):
+    """(owner id or None, owner's share of the set's people, {owner id or None: people}).
+
+    The owner is the country whose state list holds the most of the set's
+    population (not the most of its states); ties go to the lower id.
+    """
+    by_owner = {}
+    for s in states:
+        owner = state_owner.get(s)
+        by_owner[owner] = by_owner.get(owner, 0) + pops.get(s, {}).get("population", 0)
+    held = {o: n for o, n in by_owner.items() if o is not None}
+    total = sum(by_owner.values())
+    owner = max(held, key=lambda o: (held[o], -o)) if held else None
+    share = held[owner] / total if owner is not None and total else 0.0
+    return owner, share, by_owner
+
+
+def extract_from_blob(blob, date, country_ids, core=None, headers=None, core_names=None):
     """One save's extract from its gamestate (see `extract`).
 
     headers: [(offset, id, tag, ...)] for the country blocks; default
     save_country_probe.country_headers(blob). A requested id with no block is
-    left out of countries, whole and core. The world sums run over every block.
+    left out of countries and whole. A core set is territory: it is sliced
+    whoever holds it, and its owner's record joins countries. The world sums
+    run over every block (a civil war splits a nation's pops between blocks,
+    one of which may hold no states).
     """
     warnings = []
     headers = save_country_probe.country_headers(blob) if headers is None else headers
     wanted = set(country_ids)
-    countries, world_gdp, world_pop = {}, 0.0, 0
+    countries, offsets, state_owner, world_gdp, world_pop = {}, {}, {}, 0.0, 0
     for head in headers:
         offset, cid = head[0], head[1]
         rec = country_record(blob, offset)
         world_gdp += rec["gdp"] or 0.0
         world_pop += rec["population"] or 0
+        offsets[cid] = offset
+        for s in rec["states"]:
+            state_owner[s] = cid
         if cid in wanted:
             countries[cid] = rec
-    if countries:
-        techs = {t["country"]: t["acquired"] for t in save_world_report.binary_techs(blob, warnings)}
-        land = land_laws(blob, warnings)
-        for cid, rec in countries.items():
-            rec["acquired_techs"] = sorted(techs.get(cid, []))
-            rec["land_law"] = land.get(cid)
     whole_sets = {cid: set(rec["states"]) for cid, rec in countries.items()}
-    core_sets = {cid: set(s) for cid, s in (core or {}).items() if cid in countries}
+    core_sets = {cid: set(s) for cid, s in (core or {}).items()}
     union = set().union(*whole_sets.values(), *core_sets.values())
     pops = pops_by_state(blob, union, warnings) if union else {}
     buildings = buildings_in(blob, union, warnings) if union else []
@@ -537,61 +554,102 @@ def extract_from_blob(blob, date, country_ids, core=None, headers=None):
         return {"states": {s: pops[s] for s in sorted(states) if s in pops},
                 "buildings": [b for b in buildings if b["state"] in states]}
 
+    core_out = {}
+    for cid, states in core_sets.items():
+        owner, share, by_owner = _owner_of(states, pops, state_owner)
+        if owner is not None and owner not in countries:
+            countries[owner] = country_record(blob, offsets[owner])
+        core_out[cid] = {"name": (core_names or {}).get(cid, str(cid)), "state_ids": sorted(states),
+                         "owner_id": owner, "owner_share": round(share, 6),
+                         "population_by_owner": {("none" if o is None else str(o)): n for o, n in by_owner.items()},
+                         **part(states)}
+    if countries:
+        techs = {t["country"]: t["acquired"] for t in save_world_report.binary_techs(blob, warnings)}
+        land = land_laws(blob, warnings)
+        for cid, rec in countries.items():
+            rec["acquired_techs"] = sorted(techs.get(cid, []))
+            rec["land_law"] = land.get(cid)
     return {
         "date": date,
         "playthrough": playthrough_id(blob),
         "countries": countries,
         "whole": {cid: part(s) for cid, s in whole_sets.items()},
-        "core": {cid: {"state_ids": sorted(s), **part(s)} for cid, s in core_sets.items()},
+        "core": core_out,
         "world": {"gdp": round(world_gdp, 5), "population": world_pop},
         "warnings": warnings,
     }
 
 
-def extract(path, country_ids, core=None):
+def extract(path, country_ids, core=None, core_names=None):
     """{save, date, version, playthrough, countries, whole, core, world, warnings} for one supported save.
 
-    countries: {id: country_record + acquired_techs + land_law}. whole: {id:
-    {states: pops_by_state, buildings: buildings_in}} over the country's own
-    states. core: the same over the given fixed state sets (plus their
-    state_ids), only for the ids `core` names. world: Σ newest gdp and Σ
-    population over every country block. Raises UnsupportedSave.
+    countries: {id: country_record + acquired_techs + land_law}, for the
+    requested ids and every core set's owner. whole: {id: {states:
+    pops_by_state, buildings: buildings_in}} over each requested country's own
+    states. core: {core id: {name, state_ids, owner_id, owner_share,
+    population_by_owner, states, buildings}} over each fixed state set.
+    world: Σ newest gdp and Σ population over every country block. Raises
+    UnsupportedSave.
     """
     check_supported(path)
     world = save_world_report.World(path)
     try:
-        out = extract_from_blob(world.source.blob, world.date, country_ids, core)
+        out = extract_from_blob(world.source.blob, world.date, country_ids, core, core_names=core_names)
     finally:
         world.close()
     return {"save": Path(path).name, "date": out.pop("date"), "version": save_version(path), **out}
 
 
 def core_states_from(path, country_ids):
-    """{id: set of state ids}: each country's states in `path`, a save or a JSON extract this tool wrote."""
+    """({id: set of state ids}, {id: series name}): each country's states and tag in `path`.
+
+    `path` is a save, or a JSON extract this tool wrote (its core entries
+    first, so a set fixed once keeps its states and name). A tag already used
+    becomes TAG#id.
+    """
     path = Path(path)
+    found = {}
     if path.suffix == ".json":
         data = json.loads(path.read_text(encoding="utf-8"))
-        countries = (data[0] if isinstance(data, list) else data)["countries"]
-        found = {cid: set(_lookup(countries, cid)["states"]) for cid in country_ids if _lookup(countries, cid)}
+        data = data[0] if isinstance(data, list) else data
+        for cid in country_ids:
+            core, rec = _lookup(data.get("core"), cid), _lookup(data["countries"], cid)
+            if core:
+                found[cid] = (core["name"], set(core["state_ids"]))
+            elif rec:
+                found[cid] = (rec["tag"], set(rec["states"]))
     else:
         check_supported(path)
         world = save_world_report.World(path)
         try:
             blob = world.source.blob
             heads = {h[1]: h[0] for h in save_country_probe.country_headers(blob)}
-            found = {cid: set(country_record(blob, heads[cid])["states"]) for cid in country_ids if cid in heads}
+            for cid in country_ids:
+                if cid in heads:
+                    rec = country_record(blob, heads[cid])
+                    found[cid] = (rec["tag"], set(rec["states"]))
         finally:
             world.close()
+    names, used = {}, set()
     for cid in country_ids:
         if cid not in found:
             print(f"warning: country {cid} is not in {path.name}; it gets no core slice", file=sys.stderr)
-    return found
+            continue
+        name = found[cid][0] or str(cid)
+        names[cid] = name if name not in used else f"{name}#{cid}"
+        used.add(names[cid])
+    return {cid: found[cid][1] for cid in names}, names
 
 
 # ---------------------------------------------------------------- dataset
+PLAYER_ID = 4          # playthrough c480d386: FRA, the French Commune, FRA, then EUN
+STOP_SHARE = 0.5       # a set's series ends once its owner holds less than this share of its people
+OWNER_FIELDS = ("gdp", "population", "acquired_techs", "investment_by_type", "land_law", "per_project_cap", "variables")
+
+
 def _lookup(mapping, cid):
     """A value keyed by a country or state id, as an int (fresh extract) or a string (JSON-loaded one)."""
-    if not mapping:
+    if not mapping or cid is None:
         return None
     return mapping.get(cid, mapping.get(str(cid)))
 
@@ -622,17 +680,69 @@ def slice_summary(part):
     return out
 
 
+def owner_summary(rec, slice_population=None):
+    """The owner-level fields of a point. With slice_population, the country-wide flows (points_weekly,
+    pool_spend_weekly) are scaled to the slice: × slice population / owner population. Without, unscaled."""
+    population, gdp = rec.get("population"), rec.get("gdp")
+    if slice_population is None:
+        scale = 1.0
+    else:
+        scale = _ratio(slice_population, population)
+    out = {k: rec.get(k) for k in OWNER_FIELDS}
+    out["gdppc"] = _ratio(gdp, population) if gdp is not None and population else None
+    out["scale"] = scale
+    out["points_weekly"] = {k: round(v * scale, 5) for k, v in (rec.get("points_weekly") or {}).items()}
+    spend = rec.get("pool_spend_weekly")
+    out["pool_spend_weekly"] = round(spend * scale, 5) if spend is not None else None
+    return out
+
+
+def per_state(part):
+    """{state id: [population, workforce, peasants, unemployed, building levels]} for a part."""
+    levels = {}
+    for b in part.get("buildings") or []:
+        levels[str(b["state"])] = levels.get(str(b["state"]), 0) + b["levels"]
+    pops = {str(s): p for s, p in (part.get("states") or {}).items()}
+    return {s: [pops[s]["population"], pops[s]["workforce"], pops[s]["peasants"], pops[s]["unemployed"],
+                levels.get(s, 0)] if s in pops else [0, 0, 0, 0, levels[s]]
+            for s in sorted(set(pops) | set(levels), key=int)}
+
+
 def _year(hours):
     return hours // 24 // 365 - 5000
 
 
-def build_dataset(raw):
+def _merge_ring(weeks, rec, hours):
+    """Add a record's weekly GDP ring to {absolute week: (year, £/yr)}; later calls overwrite."""
+    values, index = rec.get("gdp_weekly") or [], rec.get("gdp_week_index")
+    if index is None:
+        return
+    n = len(values)
+    # The newest sample is the save date's; the samples before it are a week apart.
+    for j, v in enumerate(values):
+        weeks[index - n + j] = (_year(hours - (n - 1 - j) * 168), v)
+
+
+def _point(date, owner_id, share, part, rec, scaled):
+    sl = slice_summary(part)
+    return {"date": date, "owner_id": owner_id, "owner_tag": rec["tag"] if rec else None, "owner_share": share,
+            "slice": sl, "owner": owner_summary(rec, sl["population"] if scaled else None) if rec else None}
+
+
+def build_dataset(raw, player_id=PLAYER_ID):
     """Merge per-save extracts into the calibration dataset (format in docs/systems/economy_growth_sim.md § Data).
 
-    Points are sorted by date. gdp_yearly is the mean of each calendar year's
-    weekly GDP samples, merged across saves by absolute week number with later
-    saves winning on overlap. A country's points end at the last save that has
-    it. Raises ValueError on extracts from more than one playthrough.
+    One series per fixed state set (named by its defining country's tag),
+    and a "union" series over the player's own states at each save. Each
+    point carries the slice (the set's pops and buildings) and its owner's
+    country fields, the flows scaled to the slice. A set's series ends at the
+    first save whose owner is the player or holds less than STOP_SHARE of its
+    people; the player's own set never ends. gdp_yearly is per series: the
+    mean of each calendar year's weekly GDP samples of each point's owner,
+    merged by absolute week with later saves winning on overlap. Raises
+    ValueError on extracts from more than one playthrough, an undated
+    extract, a set whose states differ between extracts, or a missing owner
+    record.
     """
     for e in raw:
         if save_world_report.date_hours(e.get("date")) is None:
@@ -641,38 +751,43 @@ def build_dataset(raw):
     ids = {e.get("playthrough") for e in extracts} - {None}
     if len(ids) > 1:
         raise ValueError(f"extracts from more than one playthrough: {sorted(ids)}")
-    countries, weeks, world, core_states = {}, {}, [], {}
+    series, weeks, world, stopped = {}, {}, [], set()
+    union = {"points": []}
     for e in extracts:
         date, hours = e["date"], save_world_report.date_hours(e["date"])
         world.append({"date": date, "gdp": e["world"]["gdp"], "population": e["world"]["population"]})
-        for cid, rec in e["countries"].items():
-            key = str(cid)
-            series = countries.setdefault(key, {"tag_by_date": {}, "gdp_yearly": {}, "points": []})
-            series["tag_by_date"][date] = rec["tag"]
-            values, index = rec.get("gdp_weekly") or [], rec.get("gdp_week_index")
-            if index is not None:
-                n = len(values)
-                # The newest sample is the save date's; the samples before it are a week apart.
-                for j, v in enumerate(values):
-                    weeks.setdefault(key, {})[index - n + j] = (_year(hours - (n - 1 - j) * 168), v)
-            point = {"date": date, **{k: v for k, v in rec.items() if k != "gdp_weekly"}}
-            core = _lookup(e.get("core"), cid)
-            if core:
-                point["core"] = slice_summary(core)
-                states = sorted(core["state_ids"])
-                if core_states.setdefault(key, states) != states:
-                    raise ValueError(f"country {key}: core states differ between extracts ({e.get('save')})")
-            whole = _lookup(e.get("whole"), cid)
-            if whole:
-                point["whole"] = slice_summary(whole)
-            series["points"].append(point)
-    for key, merged in weeks.items():
+        for key, core in (e.get("core") or {}).items():
+            name, core_id, states = core.get("name") or str(key), int(key), sorted(core["state_ids"])
+            s = series.setdefault(name, {"core_id": core_id, "core_states": states, "points": []})
+            if s["core_states"] != states:
+                raise ValueError(f"series {name}: core states differ between extracts ({e.get('save')})")
+            owner_id, share = core.get("owner_id"), core.get("owner_share") or 0.0
+            if name in stopped:
+                continue
+            if core_id != player_id and (owner_id is None or owner_id == player_id or share < STOP_SHARE):
+                stopped.add(name)
+                continue
+            rec = _lookup(e["countries"], owner_id)
+            if owner_id is not None and rec is None:
+                raise ValueError(f"series {name}: {e.get('save')} has no record for owner {owner_id}")
+            s["points"].append(_point(date, owner_id, share, core, rec, scaled=True))
+            if rec:
+                _merge_ring(weeks.setdefault(name, {}), rec, hours)
+        rec, whole = _lookup(e["countries"], player_id), _lookup(e.get("whole"), player_id)
+        if rec and whole:
+            point = _point(date, player_id, 1.0, whole, rec, scaled=False)
+            point["per_state"] = per_state(whole)
+            union["points"].append(point)
+            _merge_ring(weeks.setdefault("union", {}), rec, hours)
+    series["union"] = union
+    gdp_yearly = {}
+    for name in series:
         by_year = {}
-        for year, v in merged.values():
+        for year, v in (weeks.get(name) or {}).values():
             by_year.setdefault(year, []).append(v)
-        countries[key]["gdp_yearly"] = {str(y): round(sum(vs) / len(vs), 5) for y, vs in sorted(by_year.items())}
+        gdp_yearly[name] = {str(y): round(sum(vs) / len(vs), 5) for y, vs in sorted(by_year.items())}
     playthrough = ids.pop()[:8] if ids else None
-    return {"playthrough": playthrough, "countries": countries, "world": world, "core_states": core_states}
+    return {"playthrough": playthrough, "series": series, "gdp_yearly": gdp_yearly, "world": world}
 
 
 # ---------------------------------------------------------------- CLI
@@ -681,18 +796,24 @@ def main(argv=None):
         description="Extract the economy growth sim's calibration series from 1.14.5 binary saves (issue #1034).")
     parser.add_argument("inputs", nargs="+", help=".v3 saves to extract (copies, not the game's folder), "
                         "or .json extracts an earlier --out wrote")
-    parser.add_argument("--country-id", type=int, action="append", default=[], help="a country id to read; repeatable")
-    parser.add_argument("--core-from", help="a save (or JSON extract) whose state lists fix each core country's core")
+    parser.add_argument("--country-id", type=int, action="append", default=[],
+                        help="a country whose own states are read (the union series); repeatable")
+    parser.add_argument("--core-from", help="a save (or JSON extract) whose state lists fix the core sets")
     parser.add_argument("--core-id", type=int, action="append",
-                        help="a country that gets a core slice; repeatable; default every --country-id")
+                        help="a country whose states in --core-from form a fixed set; repeatable; "
+                             "default every --country-id")
     parser.add_argument("--out", help="write the per-save extracts (a JSON list) here")
     parser.add_argument("--dataset", help="write the merged dataset (build_dataset) here")
+    parser.add_argument("--player-id", type=int, default=PLAYER_ID,
+                        help=f"the player's country id, for the union series and the stop rule (default {PLAYER_ID})")
     args = parser.parse_args(argv)
     saves = [p for p in args.inputs if not p.endswith(".json")]
     if saves and not args.country_id:
         parser.error("--country-id is needed to extract a save")
+    core, names = None, None
     try:
-        core = core_states_from(args.core_from, args.core_id or args.country_id) if args.core_from else None
+        if args.core_from:
+            core, names = core_states_from(args.core_from, args.core_id or args.country_id)
     except UnsupportedSave as exc:
         parser.error(f"--core-from {Path(args.core_from).name}: {exc}")
     raws = []
@@ -702,13 +823,16 @@ def main(argv=None):
             raws.extend(data if isinstance(data, list) else [data])
             continue
         try:
-            raw = extract(name, args.country_id, core)
+            raw = extract(name, args.country_id, core, core_names=names)
         except UnsupportedSave as exc:
             print(f"skip {Path(name).name}: {exc}")
             continue
         missing = sorted(set(args.country_id) - set(raw["countries"]))
+        owners = [f"{c['name']} owner {(_lookup(raw['countries'], c['owner_id']) or {}).get('tag')} "
+                  f"({c['owner_id']}) {c['owner_share']:.2f}" for c in raw["core"].values()]
         print(f"read {raw['save']}: {raw['date']}, countries {sorted(raw['countries'])}"
-              + (f", absent {missing}" if missing else "") + "".join(f"\n  warning: {w}" for w in raw["warnings"]))
+              + (f", absent {missing}" if missing else "") + "".join(f"\n  {o}" for o in owners)
+              + "".join(f"\n  warning: {w}" for w in raw["warnings"]))
         raws.append(raw)
     if args.out:
         Path(args.out).write_text(json.dumps(raws, separators=(",", ":")), encoding="utf-8")
@@ -716,8 +840,8 @@ def main(argv=None):
         if not raws:
             print("no extracts to build a dataset from", file=sys.stderr)
             return 1
-        Path(args.dataset).write_text(json.dumps(build_dataset(raws), separators=(",", ":")) + "\n",
-                                      encoding="utf-8")
+        dataset = build_dataset(raws, player_id=args.player_id)
+        Path(args.dataset).write_text(json.dumps(dataset, separators=(",", ":")) + "\n", encoding="utf-8")
     return 0
 
 

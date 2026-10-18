@@ -328,21 +328,44 @@ def _run_cli(paths, *args):
     return rc, out.getvalue()
 
 
-def _extract(date, gdp_values, index, states=(7, 8), population=3820, cid=4, tag="FRA", core=True):
-    """A minimal per-save extract, the shape extract() writes (JSON-loaded: string keys)."""
-    pops = {"7": {"population": population, "workforce": 1500, "peasants": 1000, "employed": 300, "unemployed": 200,
-                  "wages_weekly": 30.0, "welfare_weekly": 0.0}}
-    buildings = [{"type": "building_textile_mill", "levels": 3, "state": 7, "staffing": 2.5, "employees": 300,
-                  "goods_sales": 900.0, "goods_cost": 400.0, "pms": ["pm_a", "pm_b"]},
-                 {"type": "building_textile_mill", "levels": 2, "state": 7, "staffing": 2.0, "employees": 100,
-                  "goods_sales": 500.0, "goods_cost": 200.0, "pms": ["pm_a", "pm_c"]}]
-    rec = {"tag": tag, "population": population, "gdp_weekly": list(gdp_values), "gdp": gdp_values[-1],
-           "gdp_week_index": index, "states": list(states), "points_weekly": {"government": 1.0, "private": 2.0}}
-    out = {"save": f"s_{date}.v3", "date": date, "version": "1.14.5", "playthrough": "c480d386-0000-0000-0000-000000000000",
-           "countries": {str(cid): rec}, "whole": {str(cid): {"states": pops, "buildings": buildings}},
-           "core": {}, "world": {"gdp": 10.0 * gdp_values[-1], "population": 10 * population}, "warnings": []}
-    if core:
-        out["core"][str(cid)] = {"state_ids": [7], "states": pops, "buildings": buildings[:1]}
+def _owner(tag, population, gdp_values, index, points=(30.0, 10.0), pool=8.0):
+    """An owner's country record, with the fields build_dataset reads, as a JSON-loaded extract holds it."""
+    return {"tag": tag, "population": population, "gdp_weekly": list(gdp_values), "gdp": gdp_values[-1],
+            "gdp_week_index": index, "states": [], "points_weekly": {"government": points[0], "private": points[1]},
+            "pool_spend_weekly": pool, "investment_by_type": {"building_textile_mill": 5.0}, "per_project_cap": 40.0,
+            "variables": {"prior_construction_scaling": 0.5, "te_mon_gdp_last_year": None},
+            "acquired_techs": ["t1", "t2"], "land_law": "law_serfdom", "base_wage": 1.0}
+
+
+def _mill(levels, state, pms, employees=100, sales=500.0, cost=200.0):
+    return {"type": "building_textile_mill", "levels": levels, "state": state, "staffing": float(levels),
+            "employees": employees, "goods_sales": sales, "goods_cost": cost, "pms": list(pms)}
+
+
+def _part(population=2000, state=7, extra_state=None):
+    """A slice part: one state's pops and two textile mills in it (and an empty second state if asked)."""
+    pops = {str(state): {"population": population, "workforce": 1500, "peasants": 1000, "employed": 300,
+                         "unemployed": 200, "wages_weekly": 30.0, "welfare_weekly": 0.0}}
+    if extra_state is not None:
+        pops[str(extra_state)] = {"population": 100, "workforce": 60, "peasants": 0, "employed": 50, "unemployed": 10,
+                                  "wages_weekly": 5.0, "welfare_weekly": 1.0}
+    return {"states": pops, "buildings": [_mill(3, state, ["pm_a", "pm_b"], 300, 900.0, 400.0),
+                                         _mill(2, state, ["pm_a", "pm_c"])]}
+
+
+def _extract(date, owners, cores, whole=None, playthrough="c480d386-0000-0000-0000-000000000000"):
+    """A per-save extract as extract() writes it, JSON-loaded (string keys).
+
+    owners: {id: country record}; cores: {core id: (name, owner id, owner share, part)}; whole: country 4's part.
+    """
+    out = {"save": f"s_{date}.v3", "date": date, "version": "1.14.5", "playthrough": playthrough,
+           "countries": {str(c): r for c, r in owners.items()}, "whole": {}, "core": {},
+           "world": {"gdp": 1000.0, "population": 99999}, "warnings": []}
+    for cid, (name, owner_id, share, part) in cores.items():
+        out["core"][str(cid)] = {"name": name, "state_ids": sorted(int(s) for s in part["states"]),
+                                 "owner_id": owner_id, "owner_share": share, **part}
+    if whole is not None:
+        out["whole"]["4"] = whole
     return out
 
 
@@ -417,6 +440,29 @@ class TestExtract(unittest.TestCase):
                   "law_monarchy": "lawgroup_governance_principles"}
         self.assertEqual(S.land_laws(laws, [], groups), {4: "law_serfdom"})
 
+    def test_core_owner_is_plurality_by_population(self):    # R16
+        """The owner holds the most of the set's people, not the most of its states."""
+        blob = (_synthetic_country(4, "FRA", states=(7, 8)) + _synthetic_country(5, "GBR", states=(9,))
+                + _pops([("peasants", 100, 0, 7), ("laborers", 100, 100, 8), ("laborers", 5000, 5000, 9)]))
+        out = S.extract_from_blob(blob, "1900.1.1", country_ids=[4], core={1: {7, 8, 9}}, core_names={1: "GBR"})
+        core = out["core"][1]
+        self.assertEqual((core["name"], core["owner_id"]), ("GBR", 5))
+        self.assertAlmostEqual(core["owner_share"], 5000 / 5200, places=5)   # rounded to 6 dp
+        self.assertEqual(core["population_by_owner"], {"4": 200, "5": 5000})
+        self.assertIn(5, out["countries"])                   # the owner's record comes along, techs and land law too
+        self.assertIn("land_law", out["countries"][5])
+        self.assertEqual(sorted(out["whole"]), [4])          # but no whole slice: it wasn't asked for
+
+    def test_core_of_a_vanished_country_is_still_sliced(self):
+        """A set is territory: it is read whoever holds it, even when the id that defined it is gone."""
+        out = S.extract_from_blob(_blob_with_countries([4]), "1900.1.1", country_ids=[4], core={1: {7, 9}})
+        core = out["core"][1]
+        self.assertEqual(core["name"], "1")
+        self.assertEqual(core["owner_id"], 4)
+        self.assertEqual(sorted(core["states"]), [7, 9])
+        self.assertAlmostEqual(core["owner_share"], 2000 / 2200, places=5)   # state 9's 200 laborers are held by nobody
+        self.assertEqual(core["population_by_owner"], {"4": 2000, "none": 200})
+
     def test_cli_skips_unsupported(self):                # Review Focus 1
         rc, out = _run_cli([_tmp_file(b"SAV0100" + b"0" * 17 + b"meta_data={")], "--country-id", "4")
         self.assertEqual(rc, 0)
@@ -444,71 +490,158 @@ class TestExtract(unittest.TestCase):
         self.assertNotIn("5", raw["core"])
 
 
+    def test_cli_core_names(self):
+        good = _tmp_binary_save(gamestate=_blob_with_countries([4, 5]))
+        first, second = Path(_TMP.name) / "names_a.json", Path(_TMP.name) / "names_b.json"
+        rc, out = _run_cli([good], "--country-id", "4", "--core-from", str(good), "--core-id", "4", "--core-id", "5",
+                           "--out", str(first))
+        self.assertEqual(rc, 0)
+        self.assertIn("FRA owner FRA (4)", out)
+        raw = json.loads(first.read_text())[0]
+        self.assertEqual((raw["core"]["4"]["name"], raw["core"]["5"]["name"]), ("FRA", "A01"))
+        self.assertEqual(raw["core"]["5"]["owner_id"], 5)
+        rc, _ = _run_cli([good], "--country-id", "4", "--core-from", str(first), "--core-id", "5", "--out", str(second))
+        self.assertEqual(json.loads(second.read_text())[0]["core"]["5"]["name"], "A01")
+
+
 class TestDataset(unittest.TestCase):
+    """build_dataset on synthesized extracts (R16): series follow fixed state sets; the owner gives the country fields."""
+
     def setUp(self):
-        # Weeks 0-3 in the first save, 2-5 in the second; the second's values for weeks 2-3 differ and must win.
-        self.early = _extract("1900.1.29", [10.0, 20.0, 30.0, 40.0], index=4)
-        self.late = _extract("1900.2.26", [300.0, 400.0, 50.0, 60.0], index=6, states=(7, 8, 9))
-        gbr = _extract("1900.1.29", [1.0, 1.0, 1.0, 1.0], index=4, cid=1, tag="GBR", core=False)
-        self.early["countries"]["1"] = gbr["countries"]["1"]
-        self.early["whole"]["1"] = gbr["whole"]["1"]
-        self.ds = S.build_dataset([self.late, self.early])
+        # Three saves. GBR's set is held by id 1, then by a new id 9 (a revolution winner), then by the player (4).
+        # FRA's ring covers weeks 0-3, 2-5 and 4-7; the later save's values win on overlap.
+        self.saves = [
+            _extract("1900.1.29", {4: _owner("FRA", 8000, [10.0, 20.0, 30.0, 40.0], 4),
+                                   1: _owner("GBR", 8000, [1.0, 1.0, 1.0, 1.0], 4)},
+                     {4: ("FRA", 4, 1.0, _part(2000, 7)), 1: ("GBR", 1, 0.9, _part(2000, 20))},
+                     whole=_part(2000, 7, extra_state=8)),
+            _extract("1900.2.26", {4: _owner("FRA", 8000, [300.0, 400.0, 50.0, 60.0], 6),
+                                   9: _owner("GBR", 4000, [2.0, 2.0, 2.0, 2.0], 6)},
+                     {4: ("FRA", 4, 1.0, _part(2000, 7)), 1: ("GBR", 9, 0.8, _part(1000, 20))},
+                     whole=_part(2000, 7, extra_state=8)),
+            _extract("1900.3.26", {4: _owner("FRA", 9000, [50.0, 60.0, 70.0, 80.0], 8)},
+                     {4: ("FRA", 4, 1.0, _part(2000, 7)), 1: ("GBR", 4, 1.0, _part(1000, 20))},
+                     whole=_part(3000, 7, extra_state=20)),
+        ]
 
-    def test_points_sorted_and_country_series_ends(self):   # Review Focus 2
-        fra = self.ds["countries"]["4"]
-        self.assertEqual([p["date"] for p in fra["points"]], ["1900.1.29", "1900.2.26"])
-        self.assertEqual(len(self.ds["countries"]["1"]["points"]), 1)
-        self.assertEqual(fra["tag_by_date"], {"1900.1.29": "FRA", "1900.2.26": "FRA"})
-        self.assertNotIn("gdp_weekly", fra["points"][0])
-        self.assertEqual(fra["points"][1]["states"], [7, 8, 9])
+    def build(self):
+        return S.build_dataset(list(reversed(self.saves)))   # input order doesn't matter
 
-    def test_gdp_yearly_later_save_wins(self):
-        self.assertEqual(self.ds["countries"]["4"]["gdp_yearly"], {"1900": (10 + 20 + 300 + 400 + 50 + 60) / 6})
+    def test_series_and_core_states(self):
+        ds = self.build()
+        self.assertEqual(list(ds["series"]), ["FRA", "GBR", "union"])
+        self.assertEqual(ds["series"]["FRA"]["core_states"], [7])
+        self.assertEqual(ds["series"]["GBR"]["core_states"], [20])
+        self.assertEqual(ds["series"]["GBR"]["core_id"], 1)
+        self.assertEqual(ds["playthrough"], "c480d386")
+        self.assertEqual([w["date"] for w in ds["world"]], ["1900.1.29", "1900.2.26", "1900.3.26"])
+
+    def test_owner_fields_scaled_by_population(self):
+        point = self.build()["series"]["GBR"]["points"][0]
+        self.assertEqual((point["owner_id"], point["owner_tag"], point["owner_share"]), (1, "GBR", 0.9))
+        owner = point["owner"]
+        self.assertEqual(owner["scale"], 0.25)                               # slice 2000 people / owner 8000
+        self.assertEqual(owner["points_weekly"], {"government": 7.5, "private": 2.5})
+        self.assertEqual(owner["pool_spend_weekly"], 2.0)
+        self.assertEqual((owner["gdp"], owner["population"]), (1.0, 8000))    # unscaled
+        self.assertAlmostEqual(owner["gdppc"], 1.0 / 8000)
+        self.assertEqual(owner["per_project_cap"], 40.0)
+        self.assertEqual(owner["investment_by_type"], {"building_textile_mill": 5.0})
+        self.assertEqual((owner["acquired_techs"], owner["land_law"]), (["t1", "t2"], "law_serfdom"))
+        self.assertEqual(owner["variables"]["prior_construction_scaling"], 0.5)
+        self.assertNotIn("base_wage", owner)
+
+    def test_series_follows_the_set_across_owner_ids(self):
+        point = self.build()["series"]["GBR"]["points"][1]
+        self.assertEqual((point["owner_id"], point["owner_share"]), (9, 0.8))
+        self.assertEqual(point["owner"]["scale"], 0.25)                      # 1000 / 4000
+        self.assertEqual(point["slice"]["population"], 1000)
+
+    def test_stops_when_the_player_takes_it(self):                           # R16 stop rule
+        ds = self.build()
+        self.assertEqual([p["date"] for p in ds["series"]["GBR"]["points"]], ["1900.1.29", "1900.2.26"])
+        self.assertEqual(len(ds["series"]["FRA"]["points"]), 3)
+
+    def test_stops_below_half_and_stays_stopped(self):
+        self.saves[1]["core"]["1"]["owner_share"] = 0.4
+        self.saves[2]["core"]["1"].update(owner_id=9, owner_share=0.9)       # back above half: no restart
+        self.saves[2]["countries"]["9"] = _owner("GBR", 4000, [2.0] * 4, 8)
+        self.assertEqual([p["date"] for p in self.build()["series"]["GBR"]["points"]], ["1900.1.29"])
+
+    def test_player_series_never_stops(self):
+        self.saves[1]["core"]["4"].update(owner_id=9, owner_share=0.3)       # someone else holds most of France
+        points = self.build()["series"]["FRA"]["points"]
+        self.assertEqual(len(points), 3)
+        self.assertEqual((points[1]["owner_tag"], points[1]["owner"]["scale"]), ("GBR", 0.5))
+
+    def test_union_unscaled_with_per_state(self):
+        points = self.build()["series"]["union"]["points"]
+        self.assertEqual(len(points), 3)
+        first = points[0]
+        self.assertEqual((first["owner_id"], first["owner_tag"], first["owner_share"]), (4, "FRA", 1.0))
+        self.assertEqual(first["owner"]["points_weekly"], {"government": 30.0, "private": 10.0})
+        self.assertEqual(first["owner"]["scale"], 1.0)
+        self.assertEqual(first["slice"]["population"], 2100)
+        # [population, workforce, peasants, unemployed, levels]; a state that appears later is an annexation.
+        self.assertEqual(first["per_state"], {"7": [2000, 1500, 1000, 200, 5], "8": [100, 60, 0, 10, 0]})
+        self.assertEqual(sorted(points[2]["per_state"]), ["20", "7"])
+        self.assertNotIn("per_state", self.build()["series"]["FRA"]["points"][0])
 
     def test_slices(self):
-        point = self.ds["countries"]["4"]["points"][0]
-        whole, core = point["whole"], point["core"]
-        self.assertEqual((whole["population"], whole["workforce"], whole["peasants"]), (3820, 1500, 1000))
-        self.assertAlmostEqual(whole["wage_per_worker"], 30.0 / 300)
-        self.assertEqual(whole["welfare_per_unemployed"], 0.0)
-        mill = whole["buildings_by_type"]["building_textile_mill"]
-        self.assertEqual(mill["levels"], 5)
-        self.assertEqual(mill["employees"], 400)
+        sl = self.build()["series"]["FRA"]["points"][0]["slice"]
+        self.assertEqual((sl["population"], sl["workforce"], sl["peasants"]), (2000, 1500, 1000))
+        self.assertAlmostEqual(sl["wage_per_worker"], 30.0 / 300)
+        self.assertEqual(sl["welfare_per_unemployed"], 0.0)
+        mill = sl["buildings_by_type"]["building_textile_mill"]
+        self.assertEqual((mill["levels"], mill["employees"]), (5, 400))
         self.assertAlmostEqual(mill["goods_sales"], 1400.0)
         self.assertEqual(mill["pms"], {"pm_a": 5, "pm_b": 3, "pm_c": 2})
-        self.assertEqual(core["buildings_by_type"]["building_textile_mill"]["pms"], {"pm_a": 3, "pm_b": 3})
-        self.assertNotIn("core", self.ds["countries"]["1"]["points"][0])
 
-    def test_world_core_states_and_playthrough(self):
-        self.assertEqual(self.ds["playthrough"], "c480d386")
-        self.assertEqual([w["date"] for w in self.ds["world"]], ["1900.1.29", "1900.2.26"])
-        self.assertEqual(self.ds["core_states"], {"4": [7]})
+    def test_gdp_yearly_from_owner_rings(self):
+        gdp = self.build()["gdp_yearly"]
+        self.assertEqual(gdp["FRA"], {"1900": (10 + 20 + 300 + 400 + 50 + 60 + 70 + 80) / 8})
+        self.assertEqual(gdp["union"], gdp["FRA"])
+        # Owner 1's weeks 0-3, then owner 9's weeks 2-5; the third save (the player's) is past the stop.
+        self.assertAlmostEqual(gdp["GBR"]["1900"], (1 + 1 + 2 + 2 + 2 + 2) / 6, places=4)   # rounded to 5 dp
+
+    def test_missing_owner_record_refused(self):
+        del self.saves[0]["countries"]["1"]
+        with self.assertRaises(ValueError):
+            self.build()
+
+    def test_core_states_must_match(self):
+        self.saves[1]["core"]["4"]["state_ids"] = [7, 99]
+        with self.assertRaises(ValueError):
+            self.build()
 
     def test_mixed_playthroughs_refused(self):
-        self.late["playthrough"] = "deadbeef-0000-0000-0000-000000000000"
+        self.saves[1]["playthrough"] = "deadbeef-0000-0000-0000-000000000000"
         with self.assertRaises(ValueError):
-            S.build_dataset([self.early, self.late])
+            self.build()
 
     def test_undated_extract_refused(self):
-        self.early["date"] = "?"
+        self.saves[0]["date"] = "?"
         with self.assertRaises(ValueError):
-            S.build_dataset([self.early, self.late])
+            self.build()
 
-    def test_zero_employed_and_unemployed_stay_finite(self):
-        for part in (self.early["whole"]["4"], self.early["core"]["4"]):
-            part["states"] = {"7": dict(part["states"]["7"], employed=0, unemployed=0, wages_weekly=0.0)}
-        point = S.build_dataset([self.early])["countries"]["4"]["points"][0]
-        self.assertEqual((point["whole"]["wage_per_worker"], point["whole"]["welfare_per_unemployed"]), (0.0, 0.0))
+    def test_zero_denominators_stay_finite(self):
+        part = self.saves[0]["core"]["4"]
+        part["states"] = {"7": dict(part["states"]["7"], population=0, employed=0, unemployed=0, wages_weekly=0.0)}
+        self.saves[0]["countries"]["4"]["population"] = 0
+        point = S.build_dataset([self.saves[0]])["series"]["FRA"]["points"][0]
+        self.assertEqual((point["slice"]["wage_per_worker"], point["slice"]["welfare_per_unemployed"]), (0.0, 0.0))
+        self.assertEqual(point["owner"]["scale"], 0.0)
+        self.assertIsNone(point["owner"]["gdppc"])
 
     def test_cli_dataset_from_extract_files(self):
         paths = []
-        for i, raw in enumerate((self.early, self.late)):
+        for i, raw in enumerate(self.saves):
             paths.append(Path(_TMP.name) / f"extract_{i}.json")
             paths[-1].write_text(json.dumps(raw))
         out_path = Path(_TMP.name) / "dataset.json"
         rc, _ = _run_cli(paths, "--dataset", str(out_path))
         self.assertEqual(rc, 0)
-        self.assertEqual(json.loads(out_path.read_text()), json.loads(json.dumps(self.ds)))
+        self.assertEqual(json.loads(out_path.read_text()), json.loads(json.dumps(self.build())))
 
 
 if __name__ == "__main__":
