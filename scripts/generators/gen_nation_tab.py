@@ -20,10 +20,23 @@ and an exact name wins over a family. test_nation_tab.py holds every candidate t
 one entry and every entry to at least one candidate, so a new permanent
 modifier fails the suite until it has a line here.
 
+A second registry places the modifier types those modifiers carry (#1030).
+Each section shows a row per type, "Arable Land: +45%", the engine's
+breakdown of every source on hover:
+
+- TYPE_ROWS: section -> group -> the types its rows show.
+- STATUS_ROWS: the same for `_bool` types, a status line each.
+- NOT_A_ROW: types a score row, the Banking tab or their own modifier shows.
+
+A type's feeders are the modifiers above (lists and rows) whose block carries
+it, and its row shows while the country holds one. The test holds every field
+of every such modifier to exactly one of these lines, the same way.
+
 Run after changing the registry:
     python3 scripts/generators/gen_nation_tab.py
 It writes gui/te_nation_generated.gui,
-common/script_values/te_nation_generated_values.txt and
+common/script_values/te_nation_generated_values.txt,
+localization/english/te_nation_generated_l_english.yml and
 gui/00_te_country_panel_information.gui (vanilla's Information tab type, copied
 from test_fixtures/vanilla_gui/country_panel.gui with the list's filter added);
 never hand-edit them. After a vanilla patch, replace the fixture with the new
@@ -38,11 +51,14 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from organize_loc import _render_loc_file, section_label  # noqa: E402
 from paradox_file_parser import ParadoxFileParser  # noqa: E402
 from scripts.generators.gen_budget_breakdown import SOURCES as BUDGET_SOURCES  # noqa: E402
 
 GUI_OUT = ROOT / "gui" / "te_nation_generated.gui"
 VALUES_OUT = ROOT / "common" / "script_values" / "te_nation_generated_values.txt"
+LOC_OUT = ROOT / "localization" / "english" / "te_nation_generated_l_english.yml"
+LOC_CATEGORY = "NATION_GENERATED"
 PANEL_OUT = ROOT / "gui" / "00_te_country_panel_information.gui"
 VANILLA_PANEL = ROOT / "test_fixtures" / "vanilla_gui" / "country_panel.gui"
 PANEL_TYPE = "country_panel_information_content"
@@ -218,6 +234,138 @@ NOT_ON_COUNTRY = {
     "resettlement_transit_deaths": "the destination's buildings", "resettlement_recruits": "states",
     "st_res_*_flow": "the reserve hub's building",
     "te_construction_market_capacity_modifier": "construction sites",
+}
+
+
+# ---------------------------------------------------------------------------
+# The type rows (#1030)
+# ---------------------------------------------------------------------------
+
+# Each section's rows, by what a type affects rather than which system grants
+# it: Prestige is International's even where a space milestone grants it, and
+# the milestone shows in Prestige's breakdown. A group is a subheading
+# (te_nation_grp_<group> in te_miscellaneous_l_english.yml); group names are
+# unique across sections. A family's types list alphabetically in its place.
+TYPE_ROWS = {
+    "governance": {
+        "authority": (
+            "country_authority_add", "country_authority_mult", "country_authority_cost_add",
+            "country_bureaucracy_mult", "country_institution_cost_institution_health_system_mult",
+            "country_institution_cost_institution_schools_mult",
+        ),
+        "legitimacy": (
+            "country_legitimacy_base_add", "country_legitimacy_ideological_incoherence_mult",
+            "country_law_enactment_success_add", "character_coup_strength_mult",
+        ),
+        "interest_groups": (
+            # The eight approvals: tax-code views, resettlement's politics,
+            # demographic measures, pension positions
+            "interest_group_ig_*_approval_add",
+            "interest_group_ig_armed_forces_pol_str_mult", "interest_group_ig_intelligentsia_pol_str_mult",
+            "interest_group_ig_trade_unions_pol_str_mult", "interest_group_ig_armed_forces_pop_attraction_mult",
+            "interest_group_in_government_attraction_mult",
+        ),
+    },
+    "society": {
+        "living_standards": (
+            "state_standard_of_living_add", "state_lower_strata_expected_sol_add",
+            "state_middle_strata_expected_sol_add", "state_upper_strata_expected_sol_add",
+            "country_sol_expectations_lower_offset_add",
+        ),
+        "acceptance": (
+            "country_acceptance_not_homeland_add", "state_assimilation_mult", "state_conversion_mult",
+            "state_homeland_removal_speed_mult",
+        ),
+        "unrest": (
+            "state_turmoil_effects_mult", "state_radicals_from_political_movements_mult",
+            "state_loyalists_from_political_movements_mult",
+        ),
+        "population": (
+            "state_migration_pull_mult", "state_migration_pull_unincorporated_mult", "state_pop_qualifications_mult",
+        ),
+        # Most only under the Demographics rule, whose measures carry them
+        "demography": (
+            "state_mortality_mult", "state_desired_fertility_mult", "state_fertility_means_add",
+            "state_means_literacy_add", "state_birth_limit_relief_add", "state_urban_fertility_relief_add",
+            "state_sex_ratio_at_birth_add", "state_maternal_mortality_mult", "state_demog_womens_work_ratio_add",
+            "state_pop_support_movement_feminist_mult",
+        ),
+    },
+    "economy": {
+        "production": (
+            "state_arable_land_mult", "state_construction_mult", "building_group_bg_agriculture_throughput_add",
+            "building_group_bg_extraction_throughput_add", "building_group_bg_heavy_industry_throughput_add",
+            "building_opium_plantation_throughput_add", "building_synthetics_plant_opium_throughput_add",
+            "building_tourism_industry_throughput_add",
+        ),
+        "taxes": (
+            "state_tax_collection_mult", "state_tax_waste_add", "building_group_bg_agriculture_tax_mult",
+            "tax_income_add", "tax_consumption_add", "tax_dividends_add", "tax_land_add", "tax_per_capita_add",
+            "country_minting_add", "country_minting_mult",
+        ),
+        "investment": (
+            "state_capitalists_investment_pool_efficiency_mult", "state_shopkeepers_investment_pool_efficiency_mult",
+            "country_private_construction_allocation_mult", "country_weekly_investment_pool_add",
+            "country_loan_interest_rate_add", "country_risk_premium_add",
+        ),
+        "trade": (
+            "state_trade_advantage_mult", "state_export_advantage_mult", "state_import_advantage_mult",
+            "country_military_goods_cost_mult", "country_port_connection_cost_mult",
+        ),
+    },
+    "science_and_space": {
+        "research": (
+            "country_tech_research_speed_mult", "country_weekly_innovation_max_add", "country_weekly_innovation_mult",
+        ),
+        "space_and_seabed": (
+            "country_space_race_progress_mult", "country_space_race_risk_mult", "building_space_mine_throughput_add",
+            "building_solar_receiver_throughput_add", "building_space_elevator_throughput_add",
+            "building_orbital_battlestation_throughput_add", "building_ocean_mine_throughput_add",
+        ),
+    },
+    "international": {
+        "standing": (
+            "country_prestige_add", "country_prestige_mult", "country_prestige_from_army_power_projection_mult",
+            "country_prestige_from_navy_power_projection_mult", "country_cultural_pull_add",
+            "country_cultural_pull_mult", "country_influence_mult", "country_influence_cost_add",
+            "country_diplomatic_reputation_add", "country_improve_relations_speed_mult",
+            "country_leverage_generation_mult", "country_infamy_generation_mult", "country_infamy_decay_mult",
+            "country_ideology_resistance_mult", "country_un_authority_target_add", "country_liberty_desire_add",
+        ),
+        "covert_defense": (
+            "country_covert_defense_economic_add", "country_covert_defense_ideological_add",
+            "country_covert_defense_military_add",
+        ),
+        "war_support": ("country_war_support_casualties_mult", "country_war_support_battles_decrease_mult"),
+        "nuclear": ("country_nuclear_program_progress_mult", "state_nuclear_weapon_defense_chance_add"),
+        "commitments": ("country_greenhouse_gas_emissions_mult", "country_colonial_stability_drift_add"),
+    },
+}
+
+# `_bool` types: GetValueWithBreakdownFor's form for a bool is unread, so a
+# status line ("in force") with the engine's sources on hover, as vanilla
+# shows country_disallow_law_no_schools_bool. After the group's value rows.
+STATUS_ROWS = {
+    "international": {
+        "nuclear": ("country_nuclear_disarmament_bool", "country_nuclear_program_pause_bool"),
+    },
+}
+
+# Types the tab's modifiers carry that get no row, each with what shows them.
+NOT_A_ROW = {
+    "country_aristocrats_pol_str_mult": "row: Wealth Concentration (Great Family Fortunes, Dispersed Wealth)",
+    "country_capitalists_pol_str_mult": "row: Wealth Concentration (Great Family Fortunes)",
+    "country_construction_goods_cost_mult": "row: Construction Cost",
+    "goods_input_construction_mult": "row: Construction Cost",
+    "country_legislative_override_capacity_add": "row: Legislative Override Capacity, the section's first",
+    "country_legitimacy_govt_total_votes_add": "row: Judicial Independence (Statutory Courts' votes line)",
+    "political_movement_radicalism_from_enactment_disapproval_mult": "row: Judicial Independence",
+    "country_max_weekly_construction_progress_add": "row: Private Construction",
+    "state_*_investment_pool_contribution_add": "row: Private Construction (Overinvestment's pool contributions)",
+    "country_tech_spread_add": "row: Global Technological Development",
+    "country_banking_*": "the Banking tab", "country_bubble_pressure_monthly_add": "the Banking tab",
+    "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",
+    "goods_trade_advantage_*_mult": "the arms embargo's own line in Where These Come From (seven goods)",
 }
 
 
@@ -407,6 +555,68 @@ def resolve(cands):
     return lists, rows, hidden
 
 
+def carried_types(lists, rows, statics=None):
+    """{type: sorted feeders}: every modifier type the blocks of the tab's
+    modifiers (its lists' and its rows') carry, and which carry it."""
+    statics = static_modifiers() if statics is None else statics
+    found = {}
+    for names in (*lists.values(), *rows.values()):
+        for name in names:
+            for field in statics.get(name, {}):
+                if field != "icon":
+                    found.setdefault(field, set()).add(name)
+    return {kind: sorted(names) for kind, names in sorted(found.items())}
+
+
+def type_registry():
+    """[(entry, kind, section, group)] for every line of the type registry;
+    a NOT_A_ROW line's section is its reason and its group None."""
+    out = []
+    for kind, table in (("row", TYPE_ROWS), ("status", STATUS_ROWS)):
+        for section, groups in table.items():
+            for group, entries in groups.items():
+                out += [(entry, kind, section, group) for entry in entries]
+    return out + [(entry, "none", reason, None) for entry, reason in NOT_A_ROW.items()]
+
+
+def classify_types(types):
+    """{type: [line]}: the type registry lines each type matches, an exact
+    name winning over a family."""
+    lines = type_registry()
+    out = {}
+    for kind in types:
+        matched = [line for line in lines if _matches(line[0], kind)]
+        out[kind] = [line for line in matched if line[0] == kind] or matched
+    return out
+
+
+def _groups(section):
+    """A section's groups in order: TYPE_ROWS', then any STATUS_ROWS adds."""
+    rows, status = TYPE_ROWS.get(section, {}), STATUS_ROWS.get(section, {})
+    return list(rows) + [group for group in status if group not in rows]
+
+
+def type_rows(carried):
+    """{section: [(group, [(type, kind, feeders)])]} in the registry's order:
+    the carried types one row or status line places, a family's members
+    alphabetically in its place. Sections and groups with none are left out."""
+    placed = classify_types(carried)
+    out = {}
+    for section in SECTIONS:
+        groups = []
+        for group in _groups(section):
+            items = []
+            for kind, table in (("row", TYPE_ROWS), ("status", STATUS_ROWS)):
+                for entry in table.get(section, {}).get(group, ()):
+                    line = (entry, kind, section, group)
+                    items += [(name, kind, feeders) for name, feeders in carried.items() if placed[name] == [line]]
+            if items:
+                groups.append((group, items))
+        if groups:
+            out[section] = groups
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Output
 # ---------------------------------------------------------------------------
@@ -420,11 +630,72 @@ def _any_of(names):
     return f"Or({_any_of(names[:mid])}, {_any_of(names[mid:])})"
 
 
-def generated_gui(lists, rows, hidden):
+def _shown(value):
+    """A `visible` that holds while a generated count is above zero."""
+    return f"visible = \"[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{value}'), '(CFixedPoint)0' )]\""
+
+
+def type_count(kind):
+    return f"te_nation_type_{kind}_count"
+
+
+def group_count(group):
+    return f"te_nation_group_{group}_count"
+
+
+def section_count(section):
+    return f"te_nation_types_{section}_count"
+
+
+def row_key(kind, row):
+    return f"te_nation_{'status' if row == 'status' else 'type'}_{kind}"
+
+
+def _type_widgets(section, groups):
+    """te_nation_types_<section>: a subheading per group and a row per type,
+    each gated on its count, the whole on the section's."""
+    lines = [
+        f"\t### The {section} section's type rows (TYPE_ROWS, STATUS_ROWS).",
+        f"\ttype te_nation_types_{section} = flowcontainer {{",
+        f"\t\t{_shown(section_count(section))}",
+        "\t\tdirection = vertical",
+        "\t\tignoreinvisible = yes",
+        "\t\tspacing = 4",
+    ]
+    for group, items in groups:
+        lines += [
+            "",
+            "\t\tflowcontainer = {",
+            f"\t\t\t{_shown(group_count(group))}",
+            "\t\t\tdirection = vertical",
+            "\t\t\tignoreinvisible = yes",
+            "\t\t\tspacing = 4",
+            "",
+            "\t\t\tte_nation_subheader = {",
+            "\t\t\t\tblockoverride \"subheader_text\" {",
+            f"\t\t\t\t\ttext = \"te_nation_grp_{group}\"",
+            "\t\t\t\t}",
+            "\t\t\t}",
+        ]
+        for kind, row, _ in items:
+            lines += [
+                "\t\t\tte_nation_row = {",
+                f"\t\t\t\t{_shown(type_count(kind))}",
+                f"\t\t\t\ttext = \"{row_key(kind, row)}\"",
+                f"\t\t\t\ttooltip = \"{row_key(kind, row)}_tt\"",
+                "\t\t\t}",
+            ]
+        lines.append("\t\t}")
+    return lines + ["\t}"]
+
+
+def generated_gui(lists, rows, hidden, types=None):
     parts = [
         f"### {HEADER}",
         "### The Nation tab's name filters (gui_modding_guide.md gotcha #40): a timed",
-        "### modifier is picked out by its localized name, in any language.",
+        "### modifier is picked out by its localized name, in any language. Then each",
+        "### section's type rows (#1030): a modifier type's national total, the engine's",
+        "### breakdown of its sources on hover, shown while one of the tab's modifiers feeds it.",
         "",
         "### The country panel's modifier list leaves these out (gui/00_te_country_panel_information.gui).",
         "template te_nation_hidden_filter {",
@@ -439,6 +710,11 @@ def generated_gui(lists, rows, hidden):
         if names:
             parts += ["", f"### What the {row} row's score gives now.", f"template te_nation_row_{row} {{",
                       f'\tvisible = "[{_any_of(names)}]"', "}"]
+    if types:
+        parts += ["", "types te_nation_generated_types", "{"]
+        for i, (section, groups) in enumerate(types.items()):
+            parts += ([""] if i else []) + _type_widgets(section, groups)
+        parts.append("}")
     return "\n".join(parts) + "\n"
 
 
@@ -449,7 +725,7 @@ def _count(name, names, used_by):
     return lines + ["}"]
 
 
-def generated_values(lists, rows, hidden):
+def generated_values(lists, rows, hidden, types=None):
     parts = [f"# {HEADER}", "# Country scope: how many of the country's modifiers each Nation filter matches.", ""]
     parts += _count("gui_country_hidden_modifier_count", hidden,
                     "Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count') (the country panel's list)")
@@ -457,7 +733,49 @@ def generated_values(lists, rows, hidden):
         if names:
             parts += [""] + _count(f"te_nation_list_{section}_count", names,
                                    f"the Nation tab's {section} list (gui/te_nation_tab.gui)")
+    shown = [section for section, names in lists.items() if names]
+    if shown:
+        parts += ["", "# Used by: the Nation tab's Where These Come From panel (gui/te_nation_tab.gui)",
+                  "te_nation_lists_count = {", "\tvalue = 0"]
+        parts += [f"\tadd = te_nation_list_{section}_count" for section in shown] + ["}"]
+    for section, groups in (types or {}).items():
+        feeders = sorted({name for _, items in groups for _, _, names in items for name in names})
+        parts += [""] + _count(section_count(section), feeders,
+                               f"the Nation tab's {section} type rows (te_nation_types_{section})")
+        for group, items in groups:
+            feeders = sorted({name for _, _, names in items for name in names})
+            parts += [""] + _count(group_count(group), feeders, f"the {group} subheading")
+            for kind, _, names in items:
+                parts += [""] + _count(type_count(kind), names, f"the {kind} row")
     return "\n".join(parts) + "\n"
+
+
+# Where a type's own sources show, by the scope its prefix names: a row is
+# only the country's contribution (te_miscellaneous_l_english.yml's notes).
+_NOTE_SCOPES = ("state", "building", "interest_group", "character")
+
+
+def generated_loc(types):
+    """{key: text} for every row and status line: the type's own name and
+    description spliced, so nothing is spelled twice."""
+    loc = {}
+    for groups in types.values():
+        for _, items in groups:
+            for kind, row, _ in items:
+                key = row_key(kind, row)
+                if row == "status":
+                    loc[key] = f"${kind}$: #v $te_nation_in_force$#!"
+                    loc[key + "_tt"] = f"${kind}_desc$\\n\\n[GetPlayer.GetModifier.GetFullEntryDescFor('{kind}')]"
+                else:
+                    loc[key] = f"${kind}$: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('{kind}')]#!"
+                    scope = next((s for s in _NOTE_SCOPES if kind.startswith(s + "_")), None)
+                    note = f"\\n\\n$te_nation_note_{scope}$" if scope else ""
+                    loc[key + "_tt"] = f"${kind}_desc${note}"
+    return dict(sorted(loc.items()))
+
+
+def generated_loc_file(types):
+    return _render_loc_file([(section_label(LOC_CATEGORY), {k: f'0 "{v}"' for k, v in generated_loc(types).items()})])
 
 
 _EMPTY = 'visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"'
@@ -535,14 +853,19 @@ def generated_panel(vanilla_text=None):
 
 
 def outputs():
+    """The GUI, the values and the country panel's type, as text without a
+    BOM, and the loc file as bytes."""
     lists, rows, hidden = resolve(candidates())
-    return generated_gui(lists, rows, hidden), generated_values(lists, rows, hidden), generated_panel()
+    types = type_rows(carried_types(lists, rows))
+    return (generated_gui(lists, rows, hidden, types), generated_values(lists, rows, hidden, types),
+            generated_panel(), generated_loc_file(types))
 
 
 def main():
-    gui, values, panel = outputs()
+    gui, values, panel, loc = outputs()
     for path, text in ((GUI_OUT, gui), (VALUES_OUT, values), (PANEL_OUT, panel)):
         path.write_text("\ufeff" + text, encoding="utf-8", newline="\n")
+    LOC_OUT.write_bytes(loc)
 
 
 if __name__ == "__main__":

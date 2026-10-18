@@ -148,13 +148,25 @@ Independence and its ceiling. The first names the strongest Forceful Legislation
 option open to you, which also depends on the authority you produce.
 
 Below them are five sections: Governance, Society, Economy, Science and Space,
-and International. Each starts with its scores, if it has any, then lists the
-permanent effects the mod's systems have given your country, such as
+and International. Each starts with its scores, if it has any. Legislative
+Override Capacity's figure names every source on hover, and the lines on its bar
+mark where Forceful Legislation's options open, at 0, 2 and 4.
+
+Under the scores, each section has a row for each kind of effect the mod's
+permanent effects give your country, grouped under small headings: "Arable
+Land: +45%" under Production, Prestige under Standing Abroad, each interest
+group's approval under Interest Groups. The figure is your country's whole
+total, and hovering it lists every source: the technologies, laws, institutions
+and principles that add to it as well as the mod's effects, such as
 agricultural diffusion, space race milestones, demographic policies and the UN
-conventions you are bound by. Hover an effect to see what it does at its current
-size. Legislative Override Capacity's figure names every source on hover, and
-the lines on its bar mark where Forceful Legislation's options open, at 0, 2 and
-4.
+conventions you are bound by. Hover the name for what the effect does. A row
+appears once one of those permanent effects adds to it. A state, building or
+interest group row is what your country gives each of them; their own panels add
+their local sources.
+
+Where These Come From, collapsed at the bottom, lists the permanent effects
+themselves under the section whose systems granted them. Hover one to see what
+it does at its current size.
 
 The Modifiers list in the country panel's Information tab leaves these effects
 out. It keeps the timed ones, such as what an event has just done to you, and a
