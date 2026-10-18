@@ -64,10 +64,17 @@ Construction element (0x567f entries): 0x00e1 type, 0x01b7 state, 0x00db
 identity, 0x2d93 construction_left, and only on elements progressing this week:
 0x2e77 construction_speed, 0x59a1 base_construction_speed.
 
-Pop record (`<u32 id> = { 0x00e1 = "<type>" ... }`): 0x2819 location (state
-id), 0x2fd5 workforce, 0x573a dependents, 0x573b employed workforce (raw ints in
-0x0167), 0x4eed the weekly budget (13 fx entries: 0 wages, 1 subsistence, 2
-dependent wages, 3 welfare, 4 dividends). A pop of 0 people omits the counts.
+Pop record (`<u32 id> = { 0x00e1 = "<type>" ... }`): 0x2fd5 workforce and 0x573a
+dependents (raw ints in 0x0167; written before the location, and omitted when
+0), 0x2819 location (state id), 0x330b workplace (a building id; absent on an
+unemployed pop), 0x4eed the weekly budget (13 fx entries: 0 wages, 1
+subsistence, 2 dependent wages, 3 welfare, 4 dividends). The game keeps a
+pop's employed and unemployed workers in separate pops, so a pop is employed
+when it has a workplace: on FRA 1917 the non-peasant pops with one hold
+28,676,702 workers (pop_statistics salaried: 28,676,621) and those without hold
+6,003,962 (unemployed: 6,001,809). 0x573b, called "employed" in
+scripts/pops.py, is not employment: pops with no workplace carry it too
+(5.37M of their 6.00M); it is some other count of the workforce (94% of it).
 
 Building record (`<id> = { 0x27f8 = "<type>" ... }`): 0x3a52 levels, 0x01b7
 state, 0x32ed staffing (fx / 1e5), 0x5607 previous_staffing (employees, a raw
@@ -81,7 +88,9 @@ Binary meta writes the version as token 0x00ee = "1.14.5".
 
 from __future__ import annotations
 
+import argparse
 import io
+import json
 import re
 import struct
 import sys
@@ -367,3 +376,350 @@ def country_record(blob, offset):
     rec["variables"] = {name: variables[name] if isinstance(variables.get(name), float) else None
                         for name in VARIABLES}
     return rec
+
+
+# ---------------------------------------------------------------- per-state slice
+POP_RE = re.compile(rb"\x14\x00(....)\x01\x00\x03\x00\xe1\x00\x01\x00(?:\x0f|\x17)\x00", re.S)
+KEY_POP_TYPE, KEY_LOCATION, KEY_POP_WORKFORCE, KEY_DEPENDENTS, KEY_WORKPLACE = 0x00E1, 0x2819, 0x2FD5, 0x573A, 0x330B
+KEY_POP_BUDGET, POP_BUDGET_WAGES, POP_BUDGET_WELFARE = 0x4EED, 0, 3
+KEY_BUILDING, KEY_LEVELS, KEY_BUILDING_STATE, KEY_PMS = 0x27F8, 0x3A52, 0x01B7, 0x5925
+BUILDING_FX = {"staffing": 0x32ED, "goods_sales": 0x5606, "goods_cost": 0x2D15}
+KEY_EMPLOYEES = 0x5607
+PARSE_ERRORS = (ValueError, StopIteration, struct.error, IndexError)
+_EQ_FX = b"\x01\x00\x67\x01"
+# Real pops write the workforce and dependents (each 14 bytes: key, '=', 0x0167, i64) before the location.
+_LEADING_COUNTS = (struct.pack("<H", KEY_POP_WORKFORCE), struct.pack("<H", KEY_DEPENDENTS))
+_LOCATION = struct.pack("<H", KEY_LOCATION) + b"\x01\x00"
+POP_FIELDS = ("population", "workforce", "peasants", "employed", "unemployed", "wages_weekly", "welfare_weekly")
+UUID_RE = re.compile(rb"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+LAND_LAW_GROUP = "lawgroup_land_reform"
+
+
+def _quick_location(blob, at):
+    """The pop's state id read straight from the bytes after its type string, or None when it isn't there."""
+    for key in _LEADING_COUNTS:
+        if blob[at: at + 2] == key and blob[at + 2: at + 6] == _EQ_FX:
+            at += 14
+    if blob[at: at + 4] != _LOCATION:
+        return None
+    kind = blob[at + 4: at + 6]
+    if kind == b"\x14\x00":
+        return struct.unpack_from("<I", blob, at + 6)[0]
+    if kind == b"\x0c\x00":
+        return struct.unpack_from("<i", blob, at + 6)[0]
+    return None
+
+
+def pops_by_state(blob, states, warnings=None):
+    """{state id: {population, workforce, peasants, employed, unemployed, wages_weekly, welfare_weekly}}.
+
+    Population is workforce plus dependents. Peasants are the workforce of
+    `peasants` pops. Every other pop's workforce is employed when it has a
+    workplace and unemployed when it has none (the game splits a laid-off part
+    into a pop of its own); its wages and welfare are slots 0 and 3 of its
+    weekly budget. Only states that hold a pop appear.
+    """
+    states = set(states)
+    sums, failed = {}, 0
+    for m in POP_RE.finditer(blob):
+        at = m.end()
+        n = struct.unpack_from("<H", blob, at)[0]
+        ptype = blob[at + 2: at + 2 + n].decode("latin1")
+        if ptype not in PROFESSIONS:
+            continue   # journal entries and other records open the same way
+        quick = _quick_location(blob, at + 2 + n)
+        if quick is not None and quick not in states:
+            continue
+        try:
+            items, _ = fx_parse_block(blob, m.start())
+        except PARSE_ERRORS:
+            failed += 1
+            continue
+        loc = count_value(get(items, KEY_LOCATION))
+        if loc not in states:
+            continue
+        wf = count_value(get(items, KEY_POP_WORKFORCE)) or 0
+        dep = count_value(get(items, KEY_DEPENDENTS)) or 0
+        s = sums.setdefault(loc, dict.fromkeys(POP_FIELDS, 0))
+        s["population"] += wf + dep
+        s["workforce"] += wf
+        if ptype == "peasants":
+            s["peasants"] += wf
+            continue
+        budget = [v for _, v in get(items, KEY_POP_BUDGET) or []]
+        s["employed" if get(items, KEY_WORKPLACE) is not None else "unemployed"] += wf
+        # Raw fx summed as integers; scaled once below, so the sums carry no float noise.
+        for field, slot in (("wages_weekly", POP_BUDGET_WAGES), ("welfare_weekly", POP_BUDGET_WELFARE)):
+            if slot < len(budget) and isinstance(budget[slot], tuple) and budget[slot][0] == "fx":
+                s[field] += budget[slot][1]
+    for s in sums.values():
+        s["wages_weekly"] /= FX_SCALE
+        s["welfare_weekly"] /= FX_SCALE
+    if failed and warnings is not None:
+        warnings.append(f"{failed} pop-like records failed to parse")
+    return sums
+
+
+def buildings_in(blob, states, warnings=None):
+    """[{type, levels, state, staffing, employees, goods_sales, goods_cost, pms}] for each building in `states`."""
+    states = set(states)
+    out, failed = [], 0
+    for m in save_world_report.BUILDING_RE.finditer(blob):
+        try:
+            items, _ = fx_parse_block(blob, m.start())
+        except PARSE_ERRORS:
+            failed += 1
+            continue
+        state, pms = count_value(get(items, KEY_BUILDING_STATE)), get(items, KEY_PMS)
+        if state not in states or not isinstance(pms, list):
+            continue
+        rec = {"type": str_value(get(items, KEY_BUILDING)), "levels": count_value(get(items, KEY_LEVELS)) or 0,
+               "state": state}
+        for name, key in BUILDING_FX.items():
+            rec[name] = fx_value(get(items, key)) or 0.0
+        rec["employees"] = count_value(get(items, KEY_EMPLOYEES)) or 0
+        rec = {k: rec[k] for k in ("type", "levels", "state", "staffing", "employees", "goods_sales", "goods_cost")}
+        rec["pms"] = [str_value(v) for k, v in pms if k is None and str_value(v)]
+        out.append(rec)
+    if failed and warnings is not None:
+        warnings.append(f"{failed} building-like records failed to parse")
+    return out
+
+
+def land_laws(blob, warnings, groups=None):
+    """{country id: its active law in lawgroup_land_reform}; groups defaults to save_country_probe.known_law_groups()."""
+    records, warning = save_country_probe.law_records(blob)
+    if warning:
+        warnings.append(warning)
+    if not records:
+        return {}
+    groups = save_country_probe.known_law_groups() if groups is None else groups
+    return {r["country"]: r["law"] for r in records if r["active"] and groups.get(r["law"]) == LAND_LAW_GROUP}
+
+
+def playthrough_id(blob):
+    m = UUID_RE.search(blob, 0, 200_000)
+    return m.group(0).decode() if m else None
+
+
+# ---------------------------------------------------------------- extract
+def extract_from_blob(blob, date, country_ids, core=None, headers=None):
+    """One save's extract from its gamestate (see `extract`).
+
+    headers: [(offset, id, tag, ...)] for the country blocks; default
+    save_country_probe.country_headers(blob). A requested id with no block is
+    left out of countries, whole and core. The world sums run over every block.
+    """
+    warnings = []
+    headers = save_country_probe.country_headers(blob) if headers is None else headers
+    wanted = set(country_ids)
+    countries, world_gdp, world_pop = {}, 0.0, 0
+    for head in headers:
+        offset, cid = head[0], head[1]
+        rec = country_record(blob, offset)
+        world_gdp += rec["gdp"] or 0.0
+        world_pop += rec["population"] or 0
+        if cid in wanted:
+            countries[cid] = rec
+    if countries:
+        techs = {t["country"]: t["acquired"] for t in save_world_report.binary_techs(blob, warnings)}
+        land = land_laws(blob, warnings)
+        for cid, rec in countries.items():
+            rec["acquired_techs"] = sorted(techs.get(cid, []))
+            rec["land_law"] = land.get(cid)
+    whole_sets = {cid: set(rec["states"]) for cid, rec in countries.items()}
+    core_sets = {cid: set(s) for cid, s in (core or {}).items() if cid in countries}
+    union = set().union(*whole_sets.values(), *core_sets.values())
+    pops = pops_by_state(blob, union, warnings) if union else {}
+    buildings = buildings_in(blob, union, warnings) if union else []
+
+    def part(states):
+        return {"states": {s: pops[s] for s in sorted(states) if s in pops},
+                "buildings": [b for b in buildings if b["state"] in states]}
+
+    return {
+        "date": date,
+        "playthrough": playthrough_id(blob),
+        "countries": countries,
+        "whole": {cid: part(s) for cid, s in whole_sets.items()},
+        "core": {cid: {"state_ids": sorted(s), **part(s)} for cid, s in core_sets.items()},
+        "world": {"gdp": round(world_gdp, 5), "population": world_pop},
+        "warnings": warnings,
+    }
+
+
+def extract(path, country_ids, core=None):
+    """{save, date, version, playthrough, countries, whole, core, world, warnings} for one supported save.
+
+    countries: {id: country_record + acquired_techs + land_law}. whole: {id:
+    {states: pops_by_state, buildings: buildings_in}} over the country's own
+    states. core: the same over the given fixed state sets (plus their
+    state_ids), only for the ids `core` names. world: Σ newest gdp and Σ
+    population over every country block. Raises UnsupportedSave.
+    """
+    check_supported(path)
+    world = save_world_report.World(path)
+    try:
+        out = extract_from_blob(world.source.blob, world.date, country_ids, core)
+    finally:
+        world.close()
+    return {"save": Path(path).name, "date": out.pop("date"), "version": save_version(path), **out}
+
+
+def core_states_from(path, country_ids):
+    """{id: set of state ids}: each country's states in `path`, a save or a JSON extract this tool wrote."""
+    path = Path(path)
+    if path.suffix == ".json":
+        data = json.loads(path.read_text(encoding="utf-8"))
+        countries = (data[0] if isinstance(data, list) else data)["countries"]
+        found = {cid: set(_lookup(countries, cid)["states"]) for cid in country_ids if _lookup(countries, cid)}
+    else:
+        check_supported(path)
+        world = save_world_report.World(path)
+        try:
+            blob = world.source.blob
+            heads = {h[1]: h[0] for h in save_country_probe.country_headers(blob)}
+            found = {cid: set(country_record(blob, heads[cid])["states"]) for cid in country_ids if cid in heads}
+        finally:
+            world.close()
+    for cid in country_ids:
+        if cid not in found:
+            print(f"warning: country {cid} is not in {path.name}; it gets no core slice", file=sys.stderr)
+    return found
+
+
+# ---------------------------------------------------------------- dataset
+def _lookup(mapping, cid):
+    """A value keyed by a country or state id, as an int (fresh extract) or a string (JSON-loaded one)."""
+    if not mapping:
+        return None
+    return mapping.get(cid, mapping.get(str(cid)))
+
+
+def _ratio(num, den):
+    return float("%.9g" % (num / den)) if den else 0.0
+
+
+def slice_summary(part):
+    """A whole or core extract part as the dataset's slice: pop sums, wage and welfare rates, buildings by type."""
+    pops = list((part.get("states") or {}).values())
+    out = {f: sum(p[f] for p in pops) for f in ("population", "workforce", "peasants", "employed", "unemployed")}
+    out["wage_per_worker"] = _ratio(sum(p["wages_weekly"] for p in pops), out["employed"])
+    out["welfare_per_unemployed"] = _ratio(sum(p["welfare_weekly"] for p in pops), out["unemployed"])
+    by_type = {}
+    for b in part.get("buildings") or []:
+        t = by_type.setdefault(b["type"], {"levels": 0, "staffing": 0.0, "employees": 0, "goods_sales": 0.0,
+                                           "goods_cost": 0.0, "pms": {}})
+        for f in ("levels", "staffing", "employees", "goods_sales", "goods_cost"):
+            t[f] += b[f]
+        for pm in b["pms"]:
+            t["pms"][pm] = t["pms"].get(pm, 0) + b["levels"]
+    for t in by_type.values():
+        for f in ("staffing", "goods_sales", "goods_cost"):
+            t[f] = round(t[f], 5)
+        t["pms"] = dict(sorted(t["pms"].items()))
+    out["buildings_by_type"] = dict(sorted(by_type.items()))
+    return out
+
+
+def _year(hours):
+    return hours // 24 // 365 - 5000
+
+
+def build_dataset(raw):
+    """Merge per-save extracts into the calibration dataset (format in docs/systems/economy_growth_sim.md § Data).
+
+    Points are sorted by date. gdp_yearly is the mean of each calendar year's
+    weekly GDP samples, merged across saves by absolute week number with later
+    saves winning on overlap. A country's points end at the last save that has
+    it. Raises ValueError on extracts from more than one playthrough.
+    """
+    for e in raw:
+        if save_world_report.date_hours(e.get("date")) is None:
+            raise ValueError(f"extract of {e.get('save')} has no readable date ({e.get('date')!r})")
+    extracts = sorted(raw, key=lambda e: save_world_report.date_hours(e["date"]))
+    ids = {e.get("playthrough") for e in extracts} - {None}
+    if len(ids) > 1:
+        raise ValueError(f"extracts from more than one playthrough: {sorted(ids)}")
+    countries, weeks, world, core_states = {}, {}, [], {}
+    for e in extracts:
+        date, hours = e["date"], save_world_report.date_hours(e["date"])
+        world.append({"date": date, "gdp": e["world"]["gdp"], "population": e["world"]["population"]})
+        for cid, rec in e["countries"].items():
+            key = str(cid)
+            series = countries.setdefault(key, {"tag_by_date": {}, "gdp_yearly": {}, "points": []})
+            series["tag_by_date"][date] = rec["tag"]
+            values, index = rec.get("gdp_weekly") or [], rec.get("gdp_week_index")
+            if index is not None:
+                n = len(values)
+                # The newest sample is the save date's; the samples before it are a week apart.
+                for j, v in enumerate(values):
+                    weeks.setdefault(key, {})[index - n + j] = (_year(hours - (n - 1 - j) * 168), v)
+            point = {"date": date, **{k: v for k, v in rec.items() if k != "gdp_weekly"}}
+            core = _lookup(e.get("core"), cid)
+            if core:
+                point["core"] = slice_summary(core)
+                states = sorted(core["state_ids"])
+                if core_states.setdefault(key, states) != states:
+                    raise ValueError(f"country {key}: core states differ between extracts ({e.get('save')})")
+            whole = _lookup(e.get("whole"), cid)
+            if whole:
+                point["whole"] = slice_summary(whole)
+            series["points"].append(point)
+    for key, merged in weeks.items():
+        by_year = {}
+        for year, v in merged.values():
+            by_year.setdefault(year, []).append(v)
+        countries[key]["gdp_yearly"] = {str(y): round(sum(vs) / len(vs), 5) for y, vs in sorted(by_year.items())}
+    playthrough = ids.pop()[:8] if ids else None
+    return {"playthrough": playthrough, "countries": countries, "world": world, "core_states": core_states}
+
+
+# ---------------------------------------------------------------- CLI
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Extract the economy growth sim's calibration series from 1.14.5 binary saves (issue #1034).")
+    parser.add_argument("inputs", nargs="+", help=".v3 saves to extract (copies, not the game's folder), "
+                        "or .json extracts an earlier --out wrote")
+    parser.add_argument("--country-id", type=int, action="append", default=[], help="a country id to read; repeatable")
+    parser.add_argument("--core-from", help="a save (or JSON extract) whose state lists fix each core country's core")
+    parser.add_argument("--core-id", type=int, action="append",
+                        help="a country that gets a core slice; repeatable; default every --country-id")
+    parser.add_argument("--out", help="write the per-save extracts (a JSON list) here")
+    parser.add_argument("--dataset", help="write the merged dataset (build_dataset) here")
+    args = parser.parse_args(argv)
+    saves = [p for p in args.inputs if not p.endswith(".json")]
+    if saves and not args.country_id:
+        parser.error("--country-id is needed to extract a save")
+    try:
+        core = core_states_from(args.core_from, args.core_id or args.country_id) if args.core_from else None
+    except UnsupportedSave as exc:
+        parser.error(f"--core-from {Path(args.core_from).name}: {exc}")
+    raws = []
+    for name in args.inputs:
+        if name.endswith(".json"):
+            data = json.loads(Path(name).read_text(encoding="utf-8"))
+            raws.extend(data if isinstance(data, list) else [data])
+            continue
+        try:
+            raw = extract(name, args.country_id, core)
+        except UnsupportedSave as exc:
+            print(f"skip {Path(name).name}: {exc}")
+            continue
+        missing = sorted(set(args.country_id) - set(raw["countries"]))
+        print(f"read {raw['save']}: {raw['date']}, countries {sorted(raw['countries'])}"
+              + (f", absent {missing}" if missing else "") + "".join(f"\n  warning: {w}" for w in raw["warnings"]))
+        raws.append(raw)
+    if args.out:
+        Path(args.out).write_text(json.dumps(raws, separators=(",", ":")), encoding="utf-8")
+    if args.dataset:
+        if not raws:
+            print("no extracts to build a dataset from", file=sys.stderr)
+            return 1
+        Path(args.dataset).write_text(json.dumps(build_dataset(raws), separators=(",", ":")) + "\n",
+                                      encoding="utf-8")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
