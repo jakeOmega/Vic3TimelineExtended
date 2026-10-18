@@ -1,12 +1,82 @@
-"""Cost curve shapes, point price and construction purchase for the growth sim (#1034)."""
+"""The growth sim (#1034): cost curve shapes, point price, construction purchase,
+and the yearly step on toy mod data."""
 import dataclasses
 import math
+import time
 import unittest
 
 from scripts.analysis import econ_growth_sim as G
 from scripts.analysis import econ_sim_data as D
+from scripts.analysis import econ_sim_scenarios as SC
 
 C = D.CurveConstants(1.0, 1.0, 100.0, 10.0)
+
+
+# --------------------------------------------------------------------------
+# Toy mod data for the yearly step: literal ladders, no ModState.
+# --------------------------------------------------------------------------
+
+
+def _pm(name, era, employment, crew=0.0, goods_in=0.0, goods_out=0.0, construction_out=0.0):
+    return D.PMFigures(name, era, employment, crew, goods_in, goods_out, construction_out)
+
+
+TOY_START_STAFF = 5000.0                                    # the toy light base PM's staff a level
+TOY_BASE_VA = 550.0
+TOY_NONE = _pm("toy_none", 0, 0.0)
+TOY_LIGHT_BASE = _pm("toy_bakery", 0, TOY_START_STAFF, goods_in=250.0, goods_out=800.0)
+TOY_LIGHT_TIER1 = _pm("toy_automated", 1, -1000.0, goods_in=150.0)      # R6: breakeven exactly 0.15
+
+
+def _toy(light_automation, maintenance=0.0, light_base=(TOY_LIGHT_BASE,)):
+    numbers = D.ModNumbers(
+        curve=C, cost_tiers={}, retool_mult=10.0, retool_weeks=260, prices={"construction": 1000.0},
+        base_project_cap=10.0, base_eos_cap=20.0, project_cap_steps=(), eos_cap_steps=(), tech_era={},
+    )
+    ladders = {
+        "light": D.Ladder("light", "building_toy_light", maintenance, tuple(light_base), (TOY_NONE, *light_automation)),
+        "construction": D.Ladder("construction", "building_toy_construction", 0.0,
+                                 (_pm("toy_wooden", 0, 6000.0, construction_out=1.0),), (TOY_NONE,)),
+    }
+    return D.ModData(numbers, ladders, None)
+
+
+TOY = _toy((TOY_LIGHT_TIER1,))
+# A crew-only tier, like pm_ai_managed_fab: its cut cancels the base's per-level staff
+# and leaves a fixed crew of 1000 a building. Breakeven 150/5000 = 0.03, under the wage
+# floor, so it is taken in the first year (Review Focus 4).
+TOY_WITH_CREW_TIER = _toy((_pm("toy_crew_fab", 1, -TOY_START_STAFF, crew=1000.0, goods_in=150.0),))
+# Two tiers in one PM group; tier 2 (breakeven 0.10) replaces tier 1, it does not add to it.
+TOY_TWO_TIERS = _toy((TOY_LIGHT_TIER1, _pm("toy_robotic", 1, -2000.0, goods_in=200.0)))
+
+
+def toy_scenario(**overrides):
+    """A 1867-1900 player scenario: one light sector, 1,000 states, wage start 0.05.
+
+    R11: the start is fully staffed (employed_level = the start level-bound jobs), and
+    the population defaults to the one whose workforce is exactly the start's people,
+    so the first year doesn't reconcile the workforce. Both can be overridden.
+    """
+    levels = overrides.pop("levels", {"light": 100.0})
+    peasants = overrides.pop("peasants", 3e6)
+    unemployed = overrides.pop("unemployed", 2e5)
+    employed_level = overrides.pop("employed_level", levels.get("light", 0.0) * TOY_START_STAFF)
+    employed_demand = overrides.pop("employed_demand", 0.0)
+    people = peasants + unemployed + employed_level + employed_demand
+    fields = dict(
+        name="toy", kind="player", series="", start_year=1867, end_year=1900,
+        population=people / G.Params().workforce_share, peasants=peasants, unemployed=unemployed,
+        subsistence_capacity=1.5 * peasants,
+        employed_level=employed_level, employed_demand=employed_demand,
+        gdp=52 * TOY_BASE_VA * levels.get("light", 0.0) * 1.3, points_week=0.0, wage_start=0.05,
+        n_states=1000, levels=levels,
+        k_emp={"light": 1.0}, k_va={"light": 1.0}, cost_points={"light": 100.0},
+        era_points=((1867, 5.0),), land_floor=((1867, 0.0),), welfare=((1867, 0.0),),
+        alloc=((1867, {"light": 1.0}),), world_gdppc=(),
+        automation_lag_years=0.0, rich_from_year=None, annexations=(),
+    )
+    fields.update(overrides)
+    return SC.Scenario(**fields)
 
 
 class TestParams(unittest.TestCase):
@@ -152,6 +222,210 @@ class TestPointsBought(unittest.TestCase):
         self.assertEqual(G.points_bought(0.0, 1000, 5000), (0.0, False))
         self.assertEqual(G.points_bought(-5.0, 1000, 5000), (0.0, False))
         self.assertEqual(G.points_bought(1e9, 1000, 0.0), (0.0, True))
+
+
+
+class TestScenario(unittest.TestCase):
+    def test_era_interpolates_and_holds_flat(self):
+        sc = toy_scenario(era_points=((1867, 1.0), (1900, 5.0)))
+        self.assertEqual(sc.era_at(1850), 1.0)
+        self.assertAlmostEqual(sc.era_at(1880), 1 + 4 * 13 / 33)
+        self.assertEqual(sc.era_at(1950), 5.0)
+
+    def test_step_schedules_hold_from_each_point(self):
+        sc = toy_scenario(land_floor=((1867, 0.5), (1890, 0.0)), welfare=((1867, 0.0), (1880, 2.0)),
+                          alloc=((1867, {"light": 1.0}), (1885, {"light": 0.5, "heavy": 0.5})))
+        self.assertEqual([sc.land_floor_at(y) for y in (1860, 1867, 1889, 1890, 1950)], [0.5, 0.5, 0.5, 0.0, 0.0])
+        self.assertEqual([sc.welfare_at(y) for y in (1867, 1879, 1880)], [0.0, 0.0, 2.0])
+        self.assertEqual(sc.alloc_at(1884), {"light": 1.0})
+        self.assertEqual(sc.alloc_at(1885), {"light": 0.5, "heavy": 0.5})
+
+    def test_world_gdppc_is_linear_and_none_without_points(self):
+        self.assertIsNone(toy_scenario().world_gdppc_at(1900))
+        sc = toy_scenario(world_gdppc=((1900, 2.0), (1910, 4.0)))
+        self.assertEqual([sc.world_gdppc_at(y) for y in (1890, 1905, 1920)], [2.0, 3.0, 4.0])
+
+    def test_wage_start_defaults_to_none(self):
+        fields = dataclasses.asdict(toy_scenario())
+        del fields["wage_start"]
+        self.assertIsNone(SC.Scenario(**fields).wage_start)
+
+
+class TestStep(unittest.TestCase):
+    def test_workforce_conserved(self):
+        for rec in G.run(toy_scenario(), TOY, G.Params()):
+            self.assertAlmostEqual(rec.peasants + rec.unemployed + rec.employed, rec.workforce, delta=1e-6 * rec.workforce)
+
+    def test_no_negative_stocks(self):
+        for rec in G.run(toy_scenario(), TOY, G.Params()):
+            self.assertTrue(min(rec.peasants, rec.unemployed, rec.employed, rec.wage) >= 0)
+
+    def test_peasant_floor_holds(self):
+        sc = toy_scenario(land_floor=((1867, 0.5),), levels={"light": 1e6})
+        start = sc.peasants
+        self.assertTrue(all(r.peasants >= 0.5 * start - 1e-6 for r in G.run(sc, TOY, G.Params(fill_rate=1.0))))
+
+    def test_wage_at_floor_with_slack(self):
+        recs = G.run(toy_scenario(peasants=9e6, levels={"light": 10}), TOY, G.Params(private_invest_share=0, gov_invest_share=0))
+        self.assertTrue(all(abs(r.wage - G.Params().wage_floor) < 1e-12 for r in recs))
+
+    def test_wage_rises_when_short_and_respects_margin(self):
+        recs = G.run(toy_scenario(population=2e5, peasants=0, levels={"light": 1000}), TOY, G.Params())
+        self.assertGreater(recs[-1].wage, recs[0].wage)
+        self.assertTrue(all(r.labour_bound for r in recs[1:]))
+        # The 0.25 margin: short of labour every year, the wage sits at 0.75 of VA a
+        # worker (550 / 5000 a week, x economy of scale on the levels the year began with).
+        for prev, r in zip(recs, recs[1:]):
+            eos = 0.01 * min(max(prev.levels["light"] / 1000 - 1, 0), 20)
+            self.assertAlmostEqual(r.wage, 0.75 * TOY_BASE_VA * (1 + eos) / TOY_START_STAFF)
+
+    def test_margin_stops_a_raise_but_doesnt_cut(self):
+        # Start at 1.0 a week, far past 0.75 x 0.11, with no slack and short of labour
+        # from the second year: the wage holds rather than dropping to the margin.
+        recs = G.run(toy_scenario(population=2e5, peasants=0, unemployed=0, levels={"light": 1000}, wage_start=1.0),
+                     TOY, G.Params())
+        self.assertTrue(all(r.labour_bound for r in recs[1:]))
+        self.assertTrue(all(r.wage == 1.0 for r in recs))
+
+    def test_ai_lags_player(self):
+        first = lambda kind: next(r.year for r in G.run(toy_scenario(kind=kind, automation_lag_years=5, wage_start=1.0), TOY, G.Params())
+                                  if r.auto_tiers["light"] > 0)
+        self.assertEqual(first("ai") - first("player"), 5)
+
+    def test_params_lag_overrides_the_scenario(self):      # R4
+        first = next(r.year for r in G.run(toy_scenario(kind="ai", automation_lag_years=5, wage_start=1.0), TOY,
+                                           G.Params(automation_lag_years=2)) if r.auto_tiers["light"] > 0)
+        self.assertEqual(first, 1869)
+
+    def test_cap_bound_flag(self):
+        recs = G.run(toy_scenario(), TOY, G.Params(private_invest_share=0.9, queue_per_state=0.001))
+        self.assertTrue(any(r.cap_bound for r in recs))
+
+    def test_extremes_finite(self):                 # Review Focus 4
+        for kw in ({"fill_rate": 0}, {"payback_years": 0}, {"curve": "capped", "curve_cap": 0}):
+            for r in G.run(toy_scenario(), TOY_WITH_CREW_TIER, G.Params(**kw)):
+                self.assertTrue(all(math.isfinite(v) for v in (r.gdp, r.gdppc, r.wage, r.points, r.x)))
+
+    def test_crew_only_tier_staffs_its_crew(self):  # Review Focus 4: 0 per-level staff, a crew a building
+        recs = G.run(toy_scenario(), TOY_WITH_CREW_TIER, G.Params())
+        self.assertEqual(recs[0].auto_tiers["light"], 1)
+        levels_1868 = recs[0].levels["light"]
+        self.assertAlmostEqual(recs[1].jobs_by_sector["light"], 1000.0 * levels_1868)     # under 1,000 states: a building a level
+        self.assertGreater(recs[1].gdp, 0)
+
+    def test_levers_apply(self):
+        base = G.run(toy_scenario(), TOY, G.Params())[-1].levels["light"]
+        dear = G.run(toy_scenario(), TOY, G.Params(cost_points_mult=2.0))[-1].levels["light"]
+        self.assertLess(dear, base)
+        eras = {r.year: r.era for r in G.run(toy_scenario(era_points=((1867, 1.0), (1900, 5.0))), TOY, G.Params(era_shift_years=10))}
+        self.assertAlmostEqual(eras[1890], 1 + 4 * 13 / 33)              # era_at(1880)
+
+    def test_run_speed(self):
+        t = time.perf_counter(); G.run(toy_scenario(end_year=2050), TOY, G.Params())
+        self.assertLess(time.perf_counter() - t, 1.0)
+
+    def test_run_covers_start_to_end_inclusive(self):
+        self.assertEqual([r.year for r in G.run(toy_scenario(), TOY, G.Params())], list(range(1867, 1901)))
+
+    # --- return to subsistence (step 12) ------------------------------------
+
+    def _no_growth_no_jobs(self, **kw):
+        return G.Params(private_invest_share=0, gov_invest_share=0, g_max=0.0, g_min=0.0, **kw)
+
+    def test_welfare_above_subsistence_premium_keeps_the_unemployed_out(self):
+        p = self._no_growth_no_jobs()
+        welfare = 1.3 * p.subsistence_income * 1.01
+        for r in G.run(toy_scenario(unemployed=1e6, welfare=((1867, welfare),)), TOY, p):
+            self.assertAlmostEqual(r.peasants, 3e6)
+            self.assertAlmostEqual(r.unemployed, 1e6)
+
+    def test_no_welfare_lets_the_unemployed_return(self):
+        p = self._no_growth_no_jobs()
+        recs = G.run(toy_scenario(unemployed=1e6, welfare=((1867, 0.0),)), TOY, p)
+        self.assertAlmostEqual(recs[0].peasants, 3e6 + p.return_rate * 1e6)
+        self.assertAlmostEqual(recs[0].unemployed, (1 - p.return_rate) * 1e6)
+
+    def test_welfare_is_compared_in_base_prices(self):
+        # 0.03 nominal clears 1.3 x 0.02; at price level 2 it is 0.015 in base prices, and they return.
+        p = self._no_growth_no_jobs(price_level=2.0)
+        recs = G.run(toy_scenario(unemployed=1e6, welfare=((1867, 0.03),)), TOY, p)
+        self.assertGreater(recs[0].peasants, 3e6)
+
+    def test_returns_stop_at_subsistence_capacity(self):
+        p = self._no_growth_no_jobs(return_rate=1.0)
+        recs = G.run(toy_scenario(unemployed=1e6, subsistence_capacity=3.4e6), TOY, p)
+        self.assertAlmostEqual(recs[-1].peasants, 3.4e6)
+        self.assertAlmostEqual(recs[-1].unemployed, 6e5)
+
+    # --- the step's choices -------------------------------------------------
+
+    def test_automation_tiers_replace_each_other(self):
+        # A PM group holds alternatives: at tier 2 the staff is base + tier 2 (5000 - 2000),
+        # not base + tier 1 + tier 2 (2000).
+        recs = G.run(toy_scenario(wage_start=1.0), TOY_TWO_TIERS, G.Params())
+        i = next(i for i, r in enumerate(recs) if r.auto_tiers["light"] == 2)
+        self.assertAlmostEqual(recs[i + 1].jobs_by_sector["light"], 3000.0 * recs[i].levels["light"])
+
+    def test_retooling_waits_and_adopts_one_tier_a_year(self):
+        recs = G.run(toy_scenario(wage_start=1.0), TOY_TWO_TIERS, G.Params())
+        tiers = {r.year: r.auto_tiers["light"] for r in recs}
+        self.assertEqual((tiers[1867], tiers[1871], tiers[1872]), (1, 1, 2))     # 260 weeks of retooling
+
+    def test_retooling_charge_comes_off_gdp(self):
+        md = _toy((TOY_LIGHT_TIER1,), maintenance=0.1)
+        full = G.run(toy_scenario(wage_start=1.0), md, G.Params())
+        half = G.run(toy_scenario(wage_start=1.0), md, G.Params(retool_charge_mult=0.5))
+        self.assertEqual((full[0].auto_tiers["light"], half[0].auto_tiers["light"]), (1, 1))
+        p = G.Params()
+        # A year's payment: levels x maintenance x 10 x point price at last year's x x 52, at price level and demand.
+        charge = full[0].levels["light"] * 0.1 * 10 * G.point_price(p, 1000.0, full[0].x) * 52 * (1 + p.demand_gdp_ratio)
+        self.assertAlmostEqual(half[1].gdp - full[1].gdp, 0.5 * charge, delta=1e-6 * charge)
+
+    def test_automation_sheds_jobs_to_the_unemployed(self):
+        # No hiring, growth or returns, so the unemployed move only by what is shed.
+        recs = G.run(toy_scenario(wage_start=1.0), TOY, G.Params(fill_rate=0, return_rate=0, g_max=0.0, g_min=0.0))
+        self.assertEqual(recs[0].auto_tiers["light"], 1)
+        jobs_1868 = (TOY_START_STAFF - 1000.0) * recs[0].levels["light"]
+        self.assertAlmostEqual(recs[1].jobs_by_sector["light"], jobs_1868)
+        self.assertAlmostEqual(recs[1].unemployed - recs[0].unemployed, 100 * TOY_START_STAFF - jobs_1868)
+
+    def test_annexation_adds_people_and_levels(self):
+        event = {"population": 2e6, "workforce": 1e6, "peasants": 6e5, "unemployed": 1e5, "levels": {"light": 50.0}}
+        recs = G.run(toy_scenario(annexations=((1870, event),)), TOY, G.Params())
+        by_year = {r.year: r for r in recs}
+        self.assertGreater(by_year[1870].levels["light"] - by_year[1869].levels["light"], 50.0)
+        self.assertGreater(by_year[1870].population - by_year[1869].population, 2e6)
+        for r in recs:
+            self.assertAlmostEqual(r.peasants + r.unemployed + r.employed, r.workforce, delta=1e-6 * r.workforce)
+
+    def test_sector_without_cost_points_gets_no_levels(self):      # R14
+        recs = G.run(toy_scenario(alloc=((1867, {"light": 0.5, "heavy": 0.5, "services": 0.2}),)), TOY, G.Params())
+        self.assertAlmostEqual(recs[0].levels["light"] - 100.0, recs[0].points * 0.5 / 100.0)
+        self.assertNotIn("heavy", recs[0].levels)
+
+    def test_mod_side_levers_scale_their_figure(self):
+        cap_bound = dict(private_invest_share=0.9, queue_per_state=0.001)
+        one = G.run(toy_scenario(), TOY, G.Params(**cap_bound))[0]
+        two = G.run(toy_scenario(), TOY, G.Params(project_cap_mult=2.0, **cap_bound))[0]
+        self.assertAlmostEqual(two.points, 2 * one.points)
+        # Construction jobs follow last year's points a week x workers a point (6000 / 1).
+        base = G.run(toy_scenario(points_week=10.0), TOY, G.Params())[0]
+        dear = G.run(toy_scenario(points_week=10.0), TOY, G.Params(construction_labour_mult=2.0))[0]
+        self.assertEqual((base.jobs_demand, dear.jobs_demand), (60000.0, 120000.0))
+        # Economy of scale: 1e5 levels over 1,000 states is past the cap of 20.
+        big = toy_scenario(levels={"light": 1e5})
+        eos1 = G.run(big, TOY, G.Params())[0].gdp
+        eos2 = G.run(big, TOY, G.Params(eos_cap_mult=2.0))[0].gdp
+        self.assertAlmostEqual(eos2 / eos1, 1.4 / 1.2)
+        # Maintenance: 0.1 goods a level a week at the construction price comes off VA.
+        md = _toy((TOY_LIGHT_TIER1,), maintenance=0.1)
+        kept = G.run(toy_scenario(), md, G.Params())[0].gdp
+        free = G.run(toy_scenario(), md, G.Params(maintenance_mult=0.0))[0].gdp
+        self.assertAlmostEqual(free - kept, 100 * 0.1 * 1000 * 0.93 * 52 * 1.3)
+        # Late PMs (era 8 and up): their staff scales.
+        late = _toy((TOY_LIGHT_TIER1,), light_base=(dataclasses.replace(TOY_LIGHT_BASE, era=8),))
+        sc8 = toy_scenario(era_points=((1867, 8.0),))
+        self.assertEqual(G.run(sc8, late, G.Params(late_employment_mult=0.5))[0].jobs_by_sector["light"], 100 * 2500.0)
 
 
 if __name__ == "__main__":
