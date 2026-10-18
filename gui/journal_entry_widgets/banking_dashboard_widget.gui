@@ -778,30 +778,44 @@ types banking_dashboard_widget_types
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_panic_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_downturn_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_stagnation_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_stable_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_expansion_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_boom_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_frenzy_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_phase_word_tt"
 					}
 				}
 				blockoverride "third_line" {
@@ -847,6 +861,8 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_momentum_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_momentum_word_tt"
 					}
 				}
 				blockoverride "third_line" {
@@ -902,6 +918,8 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_bubble_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_bubble_word_tt"
 					}
 				}
 				blockoverride "badge" {
@@ -946,12 +964,16 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_budget_used"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_budget_used_tt"
 					}
 				}
 				blockoverride "third_line" {
 					te_banking_ov_word = {
 						position = { 78 46 }
 						text = "banking_dash_budget_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_budget_free_tt"
 					}
 				}
 			}
@@ -1010,6 +1032,8 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_mon_stance_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_mon_stance_word_tt"
 					}
 				}
 				blockoverride "third_line" {
@@ -1077,6 +1101,8 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_mon_band_value"
+						default_format = "#tooltippable"
+						tooltip = "banking_dash_mon_band_word_tt"
 					}
 				}
 				blockoverride "third_line" {
