@@ -1,9 +1,14 @@
 """The growth sim (#1034): cost curve shapes, point price, construction purchase,
 the yearly step on toy mod data, and the scenarios and calibration code on the
 committed dataset."""
+import contextlib
+import csv
 import dataclasses
+import io
 import json
 import math
+import subprocess
+import sys
 import tempfile
 import time
 import unittest
@@ -14,6 +19,7 @@ from scripts.analysis import econ_sim_calibrate as CAL
 from scripts.analysis import econ_sim_data as D
 from scripts.analysis import econ_sim_scenarios as SC
 
+ROOT = Path(__file__).resolve().parent
 C = D.CurveConstants(1.0, 1.0, 100.0, 10.0)
 
 
@@ -109,6 +115,7 @@ class TestParams(unittest.TestCase):
         p = G.Params()
         self.assertEqual((p.curve, p.curve_cap, p.other_construction_mult, p.construction_good_price),
                          ("linear", None, 0.0, 0.93))
+        self.assertEqual(p.curve_slope, 1.0)
         self.assertEqual((p.private_invest_share, p.gov_invest_share, p.queue_per_state), (0.13, 0.05, 1.0))
         self.assertEqual((p.fill_rate, p.wage_floor, p.wage_step, p.wage_decay), (0.5, 0.05, 1.0, 0.2))
         self.assertEqual((p.vacancy_target, p.slack_target, p.subsistence_income, p.payback_years), (0.02, 0.03, 0.02, 10.0))
@@ -197,6 +204,15 @@ class TestCurve(unittest.TestCase):
         c = D.CurveConstants(50.0, 1.0, 100.0, 10.0)
         self.assertEqual(G.cost_mult(G.Params(), c, 50.0), 0.0)
         self.assertAlmostEqual(G.cost_mult(G.Params(), c, 5000.0), 10.0)
+
+    def test_slope_scales_the_linear_curve(self):          # R34: slope:k is the mod's line at max_mult x k
+        self.assertAlmostEqual(G.cost_mult(G.Params(curve_slope=0.5), C, 100), 5.0)
+        self.assertAlmostEqual(G.cost_mult(G.Params(curve_slope=0.5), C, 1000), 5.0)
+        self.assertAlmostEqual(G.cost_mult(G.Params(curve_slope=0.5), C, 25), 0.5 * 24 / 99 * 10)
+        self.assertAlmostEqual(G.cost_mult(G.Params(curve_slope=2.0), C, 100), 20.0)
+        self.assertEqual(G.cost_mult(G.Params(curve_slope=0.0), C, 100), 0.0)
+        for gdppc in (0.0, 25.0, 100.0):                    # the default leaves the mod's curve alone
+            self.assertEqual(G.cost_mult(G.Params(curve_slope=1.0), C, gdppc), G.cost_mult(G.Params(), C, gdppc))
 
     def test_capped_without_a_cap_is_an_error(self):
         with self.assertRaises(ValueError):
@@ -528,7 +544,14 @@ class TestClassify(unittest.TestCase):
         self.assertEqual(G.classify(rec(year=1950, peasants=0, unemployed=0.005, labour_bound=True), sc, p), "mode1")
         self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=p.wage_floor), sc, p), "mode2")
         self.assertEqual(G.classify(rec(year=1900, peasants=0.2, wage=p.wage_floor, gdppc=1.0), sc, p), "ok")
-        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=2 * p.wage_floor), sc, p), "ok")
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=2 * p.wage_floor), sc, p), "mode2")
+
+    def test_a_rich_slack_year_at_a_high_wage_is_mode2(self):          # R34: the wage plays no part
+        sc, p = toy_scenario(rich_from_year=1920), G.Params()
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=100 * p.wage_floor), sc, p), "mode2")
+        self.assertEqual(G.classify(rec(year=1950, unemployed=0.2, wage=50.0), sc, p), "mode2")
+        # ... and the same year in a country that isn't rich is not.
+        self.assertEqual(G.classify(rec(year=1900, peasants=0.2, wage=50.0), sc, p), "ok")
 
     def test_mode1_needs_labour_to_bind_and_slack_under_the_threshold(self):
         sc, p = toy_scenario(), G.Params()
@@ -536,22 +559,20 @@ class TestClassify(unittest.TestCase):
         self.assertEqual(G.classify(rec(unemployed=0.01, labour_bound=True), sc, p), "ok")       # strictly under 1%
         self.assertEqual(G.classify(rec(peasants=0.004, unemployed=0.004, labour_bound=True), sc, p), "mode1")
 
-    def test_mode2_counts_peasants_and_unemployed_and_a_wage_at_the_floor(self):
+    def test_mode2_counts_peasants_and_unemployed(self):
         sc, p = toy_scenario(rich_from_year=1920), G.Params()
-        floor = p.wage_floor
-        self.assertEqual(G.classify(rec(year=1950, peasants=0.06, unemployed=0.06, wage=floor), sc, p), "mode2")
-        self.assertEqual(G.classify(rec(year=1950, peasants=0.1, wage=floor), sc, p), "ok")      # strictly over 10%
-        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=floor * 1.0000005), sc, p), "mode2")
-        self.assertEqual(G.classify(rec(year=1950, peasants=0.2, wage=floor * 1.00001), sc, p), "ok")
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.06, unemployed=0.06), sc, p), "mode2")
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.1), sc, p), "ok")                  # strictly over 10%
+        self.assertEqual(G.classify(rec(year=1950, peasants=0.1000001), sc, p), "mode2")
 
     def test_rich_is_gdp_per_head_or_the_scenarios_year(self):
         p = G.Params()
         no_year = toy_scenario(rich_from_year=None)
-        self.assertEqual(G.classify(rec(year=2000, peasants=0.2, wage=p.wage_floor, gdppc=p.rich_gdppc - 0.01), no_year, p), "ok")
-        self.assertEqual(G.classify(rec(year=1900, peasants=0.2, wage=p.wage_floor, gdppc=p.rich_gdppc), no_year, p), "mode2")
+        self.assertEqual(G.classify(rec(year=2000, peasants=0.2, gdppc=p.rich_gdppc - 0.01), no_year, p), "ok")
+        self.assertEqual(G.classify(rec(year=1900, peasants=0.2, gdppc=p.rich_gdppc), no_year, p), "mode2")
         dated = toy_scenario(rich_from_year=1920)
-        self.assertEqual(G.classify(rec(year=1919, peasants=0.2, wage=p.wage_floor), dated, p), "ok")
-        self.assertEqual(G.classify(rec(year=1920, peasants=0.2, wage=p.wage_floor), dated, p), "mode2")
+        self.assertEqual(G.classify(rec(year=1919, peasants=0.2), dated, p), "ok")
+        self.assertEqual(G.classify(rec(year=1920, peasants=0.2), dated, p), "mode2")
 
     def test_no_workforce_is_not_an_error(self):        # Review Focus 4: no ZeroDivisionError
         sc, p = toy_scenario(rich_from_year=1900), G.Params()
@@ -559,7 +580,7 @@ class TestClassify(unittest.TestCase):
 
     def test_thresholds_are_parameters(self):
         sc = toy_scenario(rich_from_year=1900)
-        r = rec(peasants=0.2, wage=G.Params().wage_floor)
+        r = rec(peasants=0.2)
         self.assertEqual(G.classify(r, sc, G.Params()), "mode2")
         self.assertEqual(G.classify(r, sc, G.Params(mode2_slack=0.25)), "ok")
 
@@ -736,7 +757,7 @@ class TestSummary(unittest.TestCase):
         recs = self._flat()
         by_year = {r.year: i for i, r in enumerate(recs)}
         for y in range(1930, 1935):                                        # five years of mode 2
-            recs[by_year[y]] = rec(year=y, peasants=0.2, wage=p.wage_floor)
+            recs[by_year[y]] = rec(year=y, peasants=0.2)
         for y in range(1960, 1963):                                        # three years of mode 1, labour-bound
             recs[by_year[y]] = rec(year=y, unemployed=0.005, labour_bound=True, money_bound=False)
         for y in (1970, 1971):                                             # two years the cap binds
@@ -746,7 +767,7 @@ class TestSummary(unittest.TestCase):
         recs[by_year[2045]] = rec(year=2045, unemployed=0.03, gdppc=42.0)
         s = G.summarize(recs, sc, TOY, p, "my_setting")
         self.assertEqual((s.setting, s.scenario), ("my_setting", "the_run"))
-        self.assertEqual((s.mode1_years, s.mode2_years), (3, 5))
+        self.assertEqual((s.mode1_years, s.mode2_years), (3, 6))         # the five, and 1950's slack year (rich, any wage: R34)
         self.assertEqual((s.money_years, s.cap_years, s.labour_years), (151 - 5, 2, 3))
         self.assertAlmostEqual(s.slack_1950, 0.25)
         self.assertAlmostEqual(s.slack_2000, 0.04)
@@ -1042,6 +1063,222 @@ class TestCalibration(unittest.TestCase):
         path.write_text(json.dumps({"structural": {"no_such_param": 1.0}, "behaviour": {}}))
         with self.assertRaises(KeyError):
             G.params_for("player_rich", path)
+
+
+class TestParsing(unittest.TestCase):
+    def test_parse_sets_rejects_unknown(self):
+        with self.assertRaises(SystemExit) as cm:
+            G.parse_sets(["no_such_param=1"])
+        self.assertIn("fill_rate", str(cm.exception))             # names the valid ones
+
+    def test_parse_sets_coerces(self):
+        self.assertEqual(G.parse_sets(["fill_rate=0.3", "curve=log"]), {"fill_rate": 0.3, "curve": "log"})
+
+    def test_parse_sets_coerces_every_field_to_its_type(self):
+        for f in dataclasses.fields(G.Params):
+            text = "log" if f.name == "curve" else "2"
+            value = G.parse_sets([f.name + "=" + text])[f.name]
+            self.assertEqual(value, text if f.name == "curve" else 2.0, f.name)
+            self.assertIsInstance(dataclasses.replace(G.Params(), **{f.name: value}), G.Params)
+
+    def test_parse_sets_optional_fields_take_none(self):
+        self.assertEqual(G.parse_sets(["curve_cap=none", "automation_lag_years=None"]),
+                         {"curve_cap": None, "automation_lag_years": None})
+        self.assertEqual(G.parse_sets(["curve_cap=3"]), {"curve_cap": 3.0})
+
+    def test_parse_sets_rejects_malformed_items(self):
+        for bad in ("fill_rate", "=3", "fill_rate=abc", "fill_rate=", "fill_rate=nan", "curve=cubic", "curve_cap=x"):
+            with self.assertRaises(SystemExit, msg=bad):
+                G.parse_sets([bad])
+        with self.assertRaises(SystemExit):                       # a number that is not optional
+            G.parse_sets(["fill_rate=none"])
+
+    def test_parse_sets_later_item_wins(self):
+        self.assertEqual(G.parse_sets(["fill_rate=0.3", "fill_rate=0.4"]), {"fill_rate": 0.4})
+
+    def test_parse_curve(self):
+        self.assertEqual(G.parse_curve("capped:3"), {"curve": "capped", "curve_cap": 3.0})
+        self.assertEqual(G.parse_curve("log"), {"curve": "log"})
+        self.assertEqual(G.parse_curve("linear"), {"curve": "linear"})
+        self.assertEqual(G.parse_curve("world"), {"curve": "world"})
+        self.assertEqual(G.parse_curve("none"), {"curve": "none"})
+        self.assertEqual(G.parse_curve("slope:0.5"), {"curve": "linear", "curve_slope": 0.5})
+
+    def test_parse_curve_slope_gives_the_curve_params_a_half_line(self):
+        p = dataclasses.replace(G.Params(), **G.parse_curve("slope:0.5"))
+        self.assertAlmostEqual(G.cost_mult(p, C, 100), 5.0)
+
+    def test_parse_curve_rejects_bad_specs(self):
+        for bad in ("cubic", "", "capped", "capped:", "capped:x", "slope", "slope:x", "log:2", "capped:nan", "slope:inf",
+                    "capped:-1", "slope:-0.5"):
+            with self.assertRaises(SystemExit, msg=bad):
+                G.parse_curve(bad)
+        with self.assertRaises(SystemExit) as cm:
+            G.parse_curve("capped")
+        self.assertIn("capped", str(cm.exception))
+
+
+class TestSweep(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.md, cls.ds = D.load_mod_data(), SC.load_dataset()
+
+    def _expected(self, name, spec, sets=None):
+        """What a sweep row should be: built by hand, the same way, from the pieces."""
+        def params(scenario):
+            p = dataclasses.replace(G.params_for(scenario), **(sets or {}))
+            return dataclasses.replace(p, **G.parse_curve(spec))
+        rich = SC.scenario("player_rich", self.ds, self.md)
+        reference = G.run(rich, self.md, params("player_rich"))
+        sc = SC.scenario(name, self.ds, self.md)
+        p = params(name)
+        return G.summarize(G.run(sc, self.md, p), sc, self.md, p, spec, reference=reference)
+
+    def test_sweep_is_curve_by_scenario(self):
+        rows = G.sweep(["linear", "none"], ["player_rich", "ai_poor"], self.md, self.ds, {})
+        self.assertEqual([(r.setting, r.scenario) for r in rows],
+                         [("linear", "player_rich"), ("linear", "ai_poor"), ("none", "player_rich"), ("none", "ai_poor")])
+
+    def test_rows_use_the_fitted_params_and_the_rich_players_reference_under_the_same_curve(self):
+        rows = G.sweep(["capped:1", "none"], ["ai_poor"], self.md, self.ds, {})
+        self.assertEqual(rows, [self._expected("ai_poor", "capped:1"), self._expected("ai_poor", "none")])
+
+    def test_sets_apply_before_the_curve(self):
+        sets = {"fill_rate": 0.9, "curve_cap": 7.0}            # the sweep's capped:1 wins over a set cap
+        rows = G.sweep(["capped:1"], ["player_rich"], self.md, self.ds, sets)
+        self.assertEqual(rows, [self._expected("player_rich", "capped:1", sets)])
+        self.assertNotEqual(rows, G.sweep(["capped:1"], ["player_rich"], self.md, self.ds, {}))
+
+    def test_slope_and_capped_specs_run(self):
+        rows = G.sweep(["slope:0.5", "capped:3"], ["player_rich"], self.md, self.ds, {})
+        self.assertEqual([r.setting for r in rows], ["slope:0.5", "capped:3"])
+
+    def test_player_rich_is_its_own_reference(self):
+        row, = G.sweep(["linear"], ["player_rich"], self.md, self.ds, {})
+        if row.takeoff_growth_ratio is not None:
+            self.assertAlmostEqual(row.takeoff_growth_ratio, 1.0)
+
+    def test_unknown_scenario_or_curve_exits(self):
+        with self.assertRaises(SystemExit):
+            G.sweep(["linear"], ["nowhere"], self.md, self.ds, {})
+        with self.assertRaises(SystemExit):
+            G.sweep(["cubic"], ["player_rich"], self.md, self.ds, {})
+
+    def test_a_sweep_sets_the_curve_itself(self):
+        with self.assertRaises(SystemExit):
+            G.sweep(["linear"], ["player_rich"], self.md, self.ds, {"curve": "log"})
+
+
+class TestRenderTable(unittest.TestCase):
+    def _row(self, **kw):
+        fields = dict(setting="linear", scenario="player_rich", turn_year=1900, adoption_year=1910,
+                      peasants_below_5pct=1950, slack_1950=0.123, slack_2000=0.04, slack_2045=0.0,
+                      mode1_years=3, mode2_years=20, money_years=100, cap_years=30, labour_years=21,
+                      gdppc_2045=12.34, takeoff_year=1880, takeoff_to_10pct=35, takeoff_growth_ratio=3.456)
+        fields.update(kw)
+        return G.Summary(**fields)
+
+    def test_columns_and_a_row(self):
+        lines = G.render_table([self._row()]).splitlines()
+        header = [c.strip() for c in lines[0].strip("|").split("|")]
+        self.assertEqual(header[:5], ["Setting", "Type", "Turn year", "Adoption year", "Peasants < 5%"])
+        self.assertEqual(len(header), 12)
+        self.assertTrue(set(lines[1].replace("|", "")) <= set("-: "))
+        cells = [c.strip() for c in lines[2].strip("|").split("|")]
+        self.assertEqual(len(cells), 12)
+        self.assertEqual(cells[:5], ["linear", "player_rich", "1900", "1910", "1950"])
+        self.assertEqual(cells[5], "12.3% / 4.0% / 0.0%")
+        self.assertEqual(cells[6], "3 / 20")
+        self.assertEqual(cells[7], "100 / 30 / 21")
+        self.assertEqual(cells[8], "12.3")
+        self.assertEqual(cells[9:], ["1880", "35", "3.46"])
+        self.assertTrue(lines[2].startswith("| linear |"))
+
+    def test_none_shows_as_a_dash(self):
+        row = self._row(turn_year=None, adoption_year=None, peasants_below_5pct=None, slack_1950=None, slack_2000=None,
+                        slack_2045=None, gdppc_2045=None, takeoff_year=None, takeoff_to_10pct=None,
+                        takeoff_growth_ratio=None)
+        cells = [c.strip() for c in G.render_table([row]).splitlines()[2].strip("|").split("|")]
+        self.assertEqual(cells[2:5], ["—", "—", "—"])
+        self.assertEqual(cells[5], "— / — / —")
+        self.assertEqual(cells[8:], ["—", "—", "—", "—"])
+        part = [c.strip() for c in G.render_table([self._row(slack_2000=None)]).splitlines()[2].strip("|").split("|")]
+        self.assertEqual(part[5], "12.3% / — / 0.0%")
+
+    def test_zero_is_not_a_dash(self):
+        cells = [c.strip() for c in G.render_table([self._row(takeoff_to_10pct=0, mode1_years=0)]).splitlines()[2].strip("|").split("|")]
+        self.assertEqual((cells[6], cells[10]), ("0 / 20", "0"))
+
+    def test_no_rows_is_a_header_only(self):
+        self.assertEqual(len(G.render_table([]).splitlines()), 2)
+
+
+class TestCli(unittest.TestCase):
+    def _main(self, *argv):
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code = G.main(list(argv))
+        return code, out.getvalue()
+
+    def test_cli_run_and_sweep(self):
+        out = subprocess.run([sys.executable, "scripts/analysis/econ_growth_sim.py", "sweep",
+                              "--scenarios", "player_rich", "--curves", "linear,none"],
+                             capture_output=True, text=True, cwd=ROOT, timeout=120)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        self.assertIn("| linear |", out.stdout)
+        self.assertIn("| none |", out.stdout)
+
+    def test_cli_run_prints_a_summary_and_writes_the_csv(self):
+        path = Path(self.enterContext(tempfile.TemporaryDirectory())) / "run.csv"
+        code, out = self._main("run", "--scenario", "player_rich", "--end", "1900", "--curve", "slope:0.5",
+                               "--set", "fill_rate=0.3", "--csv", str(path))
+        self.assertEqual(code, 0)
+        self.assertIn("| slope:0.5 | player_rich |", out)
+        with open(path, newline="", encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
+        self.assertEqual([int(r["year"]) for r in rows], list(range(1867, 1901)))
+        for name in ("era", "population", "peasants", "unemployed", "wage", "gdp", "gdppc", "x", "points", "mode",
+                     "peasant_share", "slack_share", "money_bound", "cap_bound", "labour_bound"):
+            self.assertIn(name, rows[0], name)
+        self.assertTrue(any(k.startswith("levels_") for k in rows[0]))
+        self.assertTrue(any(k.startswith("tier_") for k in rows[0]))
+        self.assertTrue(all(math.isfinite(float(r["gdppc"])) for r in rows))
+
+    def test_cli_run_matches_the_library(self):
+        path = Path(self.enterContext(tempfile.TemporaryDirectory())) / "run.csv"
+        self._main("run", "--scenario", "ai_poor", "--end", "1950", "--curve", "capped:3", "--set", "fill_rate=0.3",
+                   "--csv", str(path))
+        md = D.load_mod_data()
+        sc = dataclasses.replace(SC.scenario("ai_poor", SC.load_dataset(), md), end_year=1950)
+        p = dataclasses.replace(G.params_for("ai_poor"), fill_rate=0.3, **G.parse_curve("capped:3"))
+        records = G.run(sc, md, p)
+        with open(path, newline="", encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
+        self.assertEqual(len(rows), len(records))
+        self.assertAlmostEqual(float(rows[-1]["gdppc"]), records[-1].gdppc, places=6)
+        self.assertAlmostEqual(float(rows[-1]["x"]), records[-1].x, places=6)
+
+    def test_cli_run_without_a_csv_writes_nothing_and_prints_a_trace(self):
+        code, out = self._main("run", "--scenario", "player_rich", "--end", "1900")
+        self.assertEqual(code, 0)
+        self.assertIn("| linear | player_rich |", out)
+
+    def test_cli_sweep_prints_a_row_per_curve_and_scenario(self):
+        code, out = self._main("sweep", "--scenarios", "player_rich,ai_poor", "--curves", "linear,slope:0.5,capped:3")
+        self.assertEqual(code, 0)
+        rows = [line for line in out.splitlines() if line.startswith("| ") and "Setting" not in line]
+        self.assertEqual(len(rows), 6)
+        self.assertIn("| slope:0.5 | ai_poor |", out)
+
+    def test_cli_rejects_bad_input(self):
+        for argv in (["run", "--scenario", "nowhere"], ["run"], ["run", "--scenario", "player_rich", "--set", "bogus=1"],
+                     ["run", "--scenario", "player_rich", "--curve", "capped"],
+                     ["run", "--scenario", "player_rich", "--set", "curve=capped"],
+                     ["run", "--scenario", "player_rich", "--end", "1800"],
+                     ["sweep", "--curves", "cubic"], ["sweep", "--scenarios", "nowhere"], ["sweep", "--curves", ""],
+                     ["sweep", "--set", "curve=capped"], []):
+            with self.assertRaises(SystemExit, msg=argv), contextlib.redirect_stderr(io.StringIO()):
+                G.main(argv)
 
 
 if __name__ == "__main__":

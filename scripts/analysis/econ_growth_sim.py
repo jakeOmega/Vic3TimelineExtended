@@ -27,16 +27,33 @@ This module holds:
                   the diagnostics (spec 5.5, 9): each year's mode, the year wages
                   first pass the first automation tier's breakeven, the catch-up
                   measures, and one summary row per run.
+  parse_sets, parse_curve, sweep, render_table, main
+                  the command line (spec 9): `run` one scenario, `sweep` cost-curve
+                  shapes across country types.
 
 Every mod number arrives as an argument (`econ_sim_data.ModData`, a base price
 read from the goods data); nothing here is a copy of a script value. The three
 labour rules of spec 4.2 (the 0.25 wage margin, the 10% raise to hire, the 30%
 subsistence premium) are vanilla defines the snapshot doesn't carry; they are the
 named constants below.
+
+USAGE
+-----
+    PY=/home/jakef/src/Vic3TimelineExtended/.venv/bin/python
+    $PY scripts/analysis/econ_growth_sim.py run --scenario player_rich --curve capped:3 \\
+        --set fill_rate=0.3 --end 2062 --csv out.csv
+    $PY scripts/analysis/econ_growth_sim.py sweep --scenarios player_rich,ai_poor \\
+        --curves linear,capped:1,capped:3,slope:0.5,log,sqrt,world,none
+
+Both run on the fitted parameters (econ_sim_params.json), then `--set name=value`, then the
+curve. A curve is `linear` (the mod's), `capped:C` (the line held at C), `slope:K` (the line
+at K times the mod's steepness), `log`, `sqrt`, `world` or `none`.
 """
 
 from __future__ import annotations
 
+import argparse
+import csv
 import dataclasses
 import json
 import math
@@ -81,6 +98,7 @@ class Params:
     # --- construction cost curve -------------------------------------------
     curve: str = "linear"                       # one of CURVES
     curve_cap: float | None = None              # the "capped" curve's ceiling in place of max_mult
+    curve_slope: float = 1.0                    # the "linear" curve's max_mult is scaled by this (CLI: slope:k)
     other_construction_mult: float = 0.0        # cost modifiers besides X (laws, techs, institutions)
     construction_good_price: float = 0.93       # market price of the construction good / its base price
 
@@ -158,7 +176,9 @@ def cost_mult(p: Params, c: D.CurveConstants, gdppc: float, world_gdppc: float |
     """X: the construction-cost multiplier at `gdppc` (GBP a head).
 
     With f = reference * floor_ratio and g = reference * ceiling_ratio:
-      linear  clamp((gdppc - f) / (g - f) * max_mult, 0, max_mult)   (the mod's curve)
+      linear  clamp((gdppc - f) / (g - f) * max_mult, 0, max_mult)   (the mod's curve);
+              `p.curve_slope` scales max_mult, so the same floor and ceiling with a
+              steeper or shallower line (the `slope:k` curve; negative counts as 0)
       capped  the linear line, held flat once it reaches `p.curve_cap` (the slope
               stays max_mult / (g - f); only the ceiling it clamps to changes)
       log     max_mult * ln(gdppc / f) / ln(g / f), 0 at or below f
@@ -171,7 +191,8 @@ def cost_mult(p: Params, c: D.CurveConstants, gdppc: float, world_gdppc: float |
         raise ValueError("unknown curve " + repr(p.curve) + "; expected one of " + ", ".join(CURVES))
     if p.curve == "none":
         return 0.0
-    ceiling = c.max_mult
+    max_mult = c.max_mult * max(0.0, p.curve_slope) if p.curve == "linear" else c.max_mult
+    ceiling = max_mult
     if p.curve == "capped":
         if p.curve_cap is None:
             raise ValueError("the capped curve needs curve_cap")
@@ -184,7 +205,7 @@ def cost_mult(p: Params, c: D.CurveConstants, gdppc: float, world_gdppc: float |
     else:
         x, lo, hi = gdppc, c.reference * c.floor_ratio, c.reference * c.ceiling_ratio
     shape = "linear" if p.curve in ("capped", "world") else p.curve
-    return min(ceiling, c.max_mult * _fraction(shape, x, lo, hi))
+    return min(ceiling, max_mult * _fraction(shape, x, lo, hi))
 
 
 def point_price(p: Params, base_price: float, x: float) -> float:
@@ -644,7 +665,6 @@ def params_for(scenario: str, path: Path | str = PARAMS) -> Params:
 # Diagnostics and the summary row (spec 5.5, 9)
 # --------------------------------------------------------------------------
 
-AT_FLOOR = 1.000001                             # a wage this close above the floor is at the floor
 TURN_JOBS_SHARE = 0.5                           # the turn: tier 1 pays in sectors holding this share of the jobs
 TAKEOFF_FALL = 0.05                             # take-off: the peasant share falls this much ...
 TAKEOFF_SPAN = 5                                # ... within this many years
@@ -664,15 +684,18 @@ def classify(r: YearRecord, sc: Scenario, p: Params) -> str:
 
     mode1 (too fast)  almost no slack (peasants + unemployed under p.mode1_slack of the
                       workforce) while level-bound jobs go unfilled (labour_bound).
-    mode2 (too slow)  a rich country with idle workers: slack over p.mode2_slack, the wage
-                      at the floor, and rich, meaning GDP per head at p.rich_gdppc or more,
-                      or the scenario's rich_from_year reached. Both slack tests are strict.
+    mode2 (too slow)  a rich country with idle workers: slack over p.mode2_slack, and rich,
+                      meaning GDP per head at p.rich_gdppc or more, or the scenario's
+                      rich_from_year reached. Both slack tests are strict. The wage plays no
+                      part (R34): the game shows mode-2 slack alongside rising wages (the
+                      jobs missing are the wrong kind, not wage-stuck), and the fitted wage
+                      floor is about 0, so a wage clause would zero the column.
     """
     slack = _share(r.peasants + r.unemployed, r.workforce)
     if slack < p.mode1_slack and r.labour_bound:
         return "mode1"
     rich = r.gdppc >= p.rich_gdppc or (sc.rich_from_year is not None and r.year >= sc.rich_from_year)
-    if slack > p.mode2_slack and r.wage <= p.wage_floor * AT_FLOOR and rich:
+    if slack > p.mode2_slack and rich:
         return "mode2"
     return "ok"
 
@@ -749,7 +772,9 @@ class Summary:
                           its retooling charge, and the calibration scales its saving
     peasants_below_5pct   first year peasants are under 5% of the workforce
     slack_1950 / _2000 / _2045   (peasants + unemployed) / workforce that year
-    mode1_years, mode2_years     years classified mode 1 ("too fast"), mode 2 ("too slow")
+    mode1_years, mode2_years     years classified mode 1 ("too fast": no slack and labour-bound),
+                          mode 2 ("too slow": a rich country with over 10% of its workforce idle,
+                          at any wage, R34); see `classify`
     money_years, cap_years, labour_years   years each flag was set (cap and labour can both be)
     gdppc_2045            GDP per head in 2045
     takeoff_year          see `takeoff_year`
@@ -839,3 +864,252 @@ def summarize(records: list[YearRecord], sc: Scenario, md: D.ModData, p: Params,
         takeoff_to_10pct=to_10pct,
         takeoff_growth_ratio=ratio,
     )
+
+
+# --------------------------------------------------------------------------
+# Command line (spec 9)
+# --------------------------------------------------------------------------
+
+DEFAULT_SCENARIOS = "player_rich,player_poor,ai_rich,ai_poor"
+DEFAULT_CURVES = "linear,capped:3,log,sqrt,world,none"
+DASH = "—"
+TRACE_EVERY = 10                                # `run` prints a line each decade, and the first and last year
+COLUMNS = ("Setting", "Type", "Turn year", "Adoption year", "Peasants < 5%",
+           "Peasants + unemployed 1950 / 2000 / 2045", "Years in mode 1 / mode 2", "Binding: money / cap / labour",
+           "GDP per capita 2045", "Take-off year", "Take-off to < 10% peasants (years)", "Growth vs type 1 (x)")
+
+
+def _coerce(name: str, text: str, type_name: str) -> object:
+    """`text` as the Params field `name` of annotation `type_name` ("float", "float | None", "str")."""
+    optional = type_name.endswith("| None")
+    base = type_name.removesuffix("| None").strip()
+    if optional and text.lower() == "none":
+        return None
+    try:
+        if base == "float":
+            value = float(text)
+            if math.isnan(value):
+                raise ValueError("nan")
+            return value
+        if base == "int":
+            return int(text)
+    except ValueError:
+        raise SystemExit("--set " + name + ": expected " + base + (" or none" if optional else "")
+                         + ", got " + repr(text)) from None
+    if base == "str":
+        if name == "curve" and text not in CURVES:
+            raise SystemExit("--set curve: unknown shape " + repr(text) + "; expected one of " + ", ".join(CURVES))
+        return text
+    raise SystemExit("--set " + name + ": a " + type_name + " can't be set from the command line")
+
+
+def parse_sets(items: list[str]) -> dict[str, object]:
+    """`name=value` items as a dict of Params overrides, each value coerced to its field's type
+    (a later item for the same name wins). An unknown name, a missing `=`, or a value that is
+    not that type raises SystemExit; `none` sets an optional field (curve_cap, ...) to None."""
+    types = {f.name: str(f.type) for f in dataclasses.fields(Params)}
+    out: dict[str, object] = {}
+    for item in items:
+        name, eq, text = item.partition("=")
+        name, text = name.strip(), text.strip()
+        if not eq or not name:
+            raise SystemExit("--set expects name=value, got " + repr(item))
+        if name not in types:
+            raise SystemExit("--set: unknown parameter " + repr(name) + "; valid names: " + ", ".join(types))
+        out[name] = _coerce(name, text, types[name])
+    return out
+
+
+def _curve_number(shape: str, text: str, spec: str) -> float:
+    try:
+        value = float(text)
+    except ValueError:
+        value = math.nan
+    if not math.isfinite(value) or value < 0:
+        raise SystemExit("curve " + repr(spec) + ": " + shape + " needs a number of 0 or more, as " + shape + ":<number>")
+    return value
+
+
+def parse_curve(spec: str) -> dict:
+    """A curve spec as the Params fields it sets. `capped:3` is {"curve": "capped", "curve_cap": 3.0};
+    `slope:0.5` is the mod's line at half the steepness, {"curve": "linear", "curve_slope": 0.5};
+    `linear`, `log`, `sqrt`, `world` and `none` set only the shape. An unknown shape, `capped` or
+    `slope` without a number, or a number on a shape that takes none, raises SystemExit."""
+    shape, colon, arg = spec.strip().partition(":")
+    if shape in ("capped", "slope"):
+        if not arg:
+            raise SystemExit("curve " + repr(spec) + ": " + shape + " needs a number, as " + shape + ":<number>")
+        value = _curve_number(shape, arg, spec)
+        return {"curve": "capped", "curve_cap": value} if shape == "capped" else {"curve": "linear", "curve_slope": value}
+    if shape not in CURVES:
+        raise SystemExit("unknown curve shape " + repr(spec) + "; expected one of " + ", ".join(CURVES)
+                         + " (capped:<cap>, slope:<k>)")
+    if colon:
+        raise SystemExit("curve " + repr(spec) + ": " + shape + " takes no number")
+    return {"curve": shape}
+
+
+def _params(scenario: str, sets: dict[str, object], curve: str | None) -> Params:
+    """The fitted parameters of `scenario`, then `sets`, then `curve` (a parse_curve spec) on top."""
+    p = dataclasses.replace(params_for(scenario), **sets)
+    if curve is not None:
+        p = dataclasses.replace(p, **parse_curve(curve))
+    if p.curve == "capped" and p.curve_cap is None:
+        raise SystemExit("the capped curve needs a cap: --curve capped:<cap> or --set curve_cap=<cap>")
+    return p
+
+
+def _known(names: list[str]) -> None:
+    """SystemExit unless every name is one of econ_sim_scenarios.SCENARIOS."""
+    from scripts.analysis import econ_sim_scenarios as SC
+
+    unknown = [name for name in names if name not in SC.SCENARIOS]
+    if unknown:
+        raise SystemExit("unknown scenario " + ", ".join(map(repr, unknown)) + "; expected one of " + ", ".join(SC.SCENARIOS))
+
+
+def sweep(curves: list[str], scenarios: list[str], md: D.ModData, dataset: dict, sets: dict) -> list[Summary]:
+    """One Summary per curve spec x scenario, curves outermost. Each run uses the scenario's fitted
+    parameters (`params_for`), `sets` over them, and the curve on top; the row's `setting` is the
+    spec. Its reference (the take-off growth ratio's denominator) is player_rich under the same
+    curve and sets. `sets` may not name `curve`: the sweep sets that itself."""
+    from scripts.analysis import econ_sim_scenarios as SC
+
+    _known(scenarios)
+    if "curve" in sets:
+        raise SystemExit("a sweep sets the curve itself: use --curves, not --set curve=")
+    for spec in curves:
+        parse_curve(spec)                                   # a bad spec stops the sweep before any run
+    built = {name: SC.scenario(name, dataset, md) for name in dict.fromkeys(["player_rich", *scenarios])}
+    rows: list[Summary] = []
+    for spec in curves:
+        records: dict[str, list[YearRecord]] = {}
+        params: dict[str, Params] = {}
+        for name in built:
+            params[name] = _params(name, sets, spec)
+            records[name] = run(built[name], md, params[name])
+        for name in scenarios:
+            rows.append(summarize(records[name], built[name], md, params[name], spec, reference=records["player_rich"]))
+    return rows
+
+
+def _percent(x: float | None) -> str:
+    return DASH if x is None else f"{100.0 * x:.1f}%"
+
+
+def _cell(x: object, fmt: str = "") -> str:
+    return DASH if x is None else format(x, fmt)
+
+
+def render_table(rows: list[Summary]) -> str:
+    """The sweep as a markdown table (spec 9's columns, the adoption year after the turn year, and the
+    three catch-up columns). A None shows as a dash."""
+    lines = ["| " + " | ".join(COLUMNS) + " |", "|" + "---|" * len(COLUMNS)]
+    for s in rows:
+        cells = [
+            s.setting, s.scenario, _cell(s.turn_year), _cell(s.adoption_year), _cell(s.peasants_below_5pct),
+            " / ".join(_percent(x) for x in (s.slack_1950, s.slack_2000, s.slack_2045)),
+            f"{s.mode1_years} / {s.mode2_years}",
+            f"{s.money_years} / {s.cap_years} / {s.labour_years}",
+            _cell(s.gdppc_2045, ".1f"),
+            _cell(s.takeoff_year), _cell(s.takeoff_to_10pct), _cell(s.takeoff_growth_ratio, ".2f"),
+        ]
+        lines.append("| " + " | ".join(cells) + " |")
+    return "\n".join(lines)
+
+
+def _trace(records: list[YearRecord], sc: Scenario, p: Params) -> str:
+    """A line a decade (and the first and last year): the run's shape at a glance."""
+    lines = ["| Year | Era | GDP per capita | Peasants | Unemployed | Wage | X | Mode |", "|---|---|---|---|---|---|---|---|"]
+    for r in records:
+        if r.year % TRACE_EVERY and r is not records[0] and r is not records[-1]:
+            continue
+        lines.append(f"| {r.year} | {r.era:.1f} | {r.gdppc:.2f} | {_percent(_share(r.peasants, r.workforce))} | "
+                     f"{_percent(_share(r.unemployed, r.workforce))} | {r.wage:.3f} | {r.x:.2f} | {classify(r, sc, p)} |")
+    return "\n".join(lines)
+
+
+def _write_csv(path: Path, records: list[YearRecord], sc: Scenario, p: Params) -> None:
+    """The yearly path: every YearRecord figure, the year's mode, the peasant and slack shares,
+    and a column per sector for its automation tier (`tier_`), levels (`levels_`) and level-bound
+    jobs (`jobs_`); a sector a year doesn't hold is 0."""
+    sectors = sorted({s for r in records for s in (*r.auto_tiers, *r.levels, *r.jobs_by_sector)})
+    scalar = [f.name for f in dataclasses.fields(YearRecord) if f.name not in ("auto_tiers", "levels", "jobs_by_sector")]
+    header = (scalar + ["mode", "peasant_share", "unemployed_share", "slack_share"]
+              + ["tier_" + s for s in sectors] + ["levels_" + s for s in sectors] + ["jobs_" + s for s in sectors])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", newline="", encoding="utf-8") as fh:
+        out = csv.writer(fh)
+        out.writerow(header)
+        for r in records:
+            row = [int(v) if isinstance(v, bool) else v for v in (getattr(r, n) for n in scalar)]
+            row += [classify(r, sc, p), _share(r.peasants, r.workforce), _share(r.unemployed, r.workforce),
+                    _share(r.peasants + r.unemployed, r.workforce)]
+            row += [r.auto_tiers.get(s, 0) for s in sectors]
+            row += [r.levels.get(s, 0.0) for s in sectors]
+            row += [r.jobs_by_sector.get(s, 0.0) for s in sectors]
+            out.writerow(row)
+
+
+def _run_main(args) -> int:
+    from scripts.analysis import econ_sim_scenarios as SC
+
+    _known([args.scenario])
+    sets = parse_sets(args.set or [])
+    p = _params(args.scenario, sets, args.curve)
+    md, dataset = D.load_mod_data(), SC.load_dataset()
+    sc = SC.scenario(args.scenario, dataset, md)
+    if args.end is not None:
+        if args.end < sc.start_year:
+            raise SystemExit(f"--end {args.end} is before the scenario's start, {sc.start_year}")
+        sc = dataclasses.replace(sc, end_year=args.end)
+    records = run(sc, md, p)
+    if args.scenario == "player_rich":
+        reference = records
+    else:
+        rich_p = _params("player_rich", sets, args.curve)
+        reference = run(SC.scenario("player_rich", dataset, md), md, rich_p)
+    summary = summarize(records, sc, md, p, args.curve or p.curve, reference=reference)
+    print(render_table([summary]) + "\n")
+    print(_trace(records, sc, p))
+    if args.csv:
+        _write_csv(Path(args.csv), records, sc, p)
+        print(f"\nwrote {args.csv}")
+    return 0
+
+
+def _sweep_main(args) -> int:
+    from scripts.analysis import econ_sim_scenarios as SC
+
+    md, dataset = D.load_mod_data(), SC.load_dataset()
+    scenarios = [x.strip() for x in args.scenarios.split(",")]
+    curves = [x.strip() for x in args.curves.split(",")]
+    print(render_table(sweep(curves, scenarios, md, dataset, parse_sets(args.set or []))))
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    sub = ap.add_subparsers(dest="command", required=True)
+    r = sub.add_parser("run", help="run one scenario: print its summary and a decade trace, optionally write the yearly CSV")
+    r.add_argument("--scenario", required=True, help="player_rich, player_poor, ai_rich, ai_poor or player_union")
+    r.add_argument("--set", action="append", metavar="NAME=VALUE", help="override a Params field (repeatable)")
+    r.add_argument("--curve", metavar="SPEC", help="the cost curve: linear, capped:C, slope:K, log, sqrt, world or none")
+    r.add_argument("--end", type=int, metavar="YEAR", help="run to this year instead of the scenario's own end")
+    r.add_argument("--csv", metavar="PATH", help="write the yearly path here")
+    w = sub.add_parser("sweep", help="print a table of curve shapes x country types")
+    w.add_argument("--scenarios", default=DEFAULT_SCENARIOS, help="comma list (default %(default)s)")
+    w.add_argument("--curves", default=DEFAULT_CURVES, help="comma list of curve specs (default %(default)s)")
+    w.add_argument("--set", action="append", metavar="NAME=VALUE", help="override a Params field in every run (repeatable)")
+    args = ap.parse_args(argv)
+    return _run_main(args) if args.command == "run" else _sweep_main(args)
+
+
+if __name__ == "__main__":
+    # Run the importable module, not this __main__ copy: econ_sim_scenarios imports it by
+    # name, and one module object keeps Params and YearRecord single classes.
+    from scripts.analysis import econ_growth_sim as _module
+
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")        # the table's dash
+    sys.exit(_module.main())
