@@ -34,6 +34,7 @@ with it Anarchy, Collectivized Agriculture and Possession by Use.
 | Minority Rights | Violent Hostility, Ghettoization, Discrimination, Cultural Assimilation, Indifference, Protection, Affirmative Action | How the state treats cultural and religious minorities. |
 | LGBTQ+ Rights | Active Persecution, Legal Limbo, Basic Protections, Anti-Discrimination Laws, Full Equality and Protection | Legal status of LGBTQ+ people. |
 | Criminal Justice | Penal Labor Camps, Punishment-Focused Criminal Justice, Restorative Justice, Rehabilitation-Focused Criminal Justice | Prisons, sentencing and reintegration; who polices is the base-game Policing group (see [Who polices](#who-polices)). |
+| Privacy Rights | Intrusive Surveillance System, Minimal Privacy Protection, Moderate Data Privacy, Strong Privacy Rights | Surveillance against technology spread and tourism. Intrusive Surveillance System needs Social Media or Automated Surveillance. |
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Policy, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
@@ -89,7 +90,6 @@ debate](07-social-movements.md#the-augmentation-debate).
 | Electoral Finance | No Campaign Finance Laws, Unregulated Donations, Donation Limits, Publicly Funded Elections | Money in elections. The first is only for countries without a voting franchise; the other three need one. |
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
 | Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | How you fight and what you promise the world: combat strength, occupation, war support, diplomatic standing and nuclear strikes. See [The rules of war](#the-rules-of-war). |
-| Privacy Rights | Intrusive Surveillance System, Minimal Privacy Protection, Moderate Data Privacy, Strong Privacy Rights | Surveillance against technology spread and tourism. Intrusive Surveillance System needs Social Media or Automated Surveillance. |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
 
 In State Power, Unitary State gives 200 authority and faster incorporation.
