@@ -2098,9 +2098,11 @@ class CommissionLifeTests(unittest.TestCase):
         self.assertIn("name = monument_events.2.opp trigger = { custom_tooltip = { text = gm_ded_reason_opportunity_tt "
                       "gm_state_ceremony_offers_opportunity = yes } } default_option = yes ai_chance = { base = 0 } gm_state_dedicate_as_opportunity_asks = yes",
                       squash(ev))
-        self.assertIn("name = monument_events.2.a trigger = { gm_state_ceremony_offers_opportunity = no } "
+        self.assertIn("name = monument_events.2.a trigger = { custom_tooltip = { text = gm_ded_reason_leave_tt "
+                      "gm_state_ceremony_offers_opportunity = no } } "
                       "default_option = yes ai_chance = { base = 1 }", squash(ev))
-        self.assertIn("name = monument_events.2.a trigger = { gm_state_ceremony_offers_opportunity = yes } "
+        self.assertIn("name = monument_events.2.a trigger = { custom_tooltip = { text = gm_ded_reason_leave_tt "
+                      "gm_state_ceremony_offers_opportunity = yes } } "
                       "ai_chance = { base = 1 modifier = { trigger = { gm_state_ceremony_answers_commission = yes } "
                       "factor = 0 } }", squash(ev), "the AI never leaves an opportunity's monument undedicated")
         self.assertEqual(squash(ev).count("default_option = yes"), 2)
@@ -6471,8 +6473,7 @@ class OptionReasonTests(unittest.TestCase):
         gated = 0
         for eid in ("monument_events.2", "monument_events.11"):
             for name, trig in self._options(eid):
-                # "Leave it undedicated": its triggers only move the default.
-                if trig is None or name == "monument_events.2.a":
+                if trig is None:
                     continue
                 gated += 1
                 with self.subTest(option=name):
@@ -6481,7 +6482,7 @@ class OptionReasonTests(unittest.TestCase):
                     self.assertTrue(reasons)
                     for key, _ in reasons:
                         self.assertIn(key, L, key)
-        self.assertGreaterEqual(gated, 16 + 47)
+        self.assertGreaterEqual(gated, 16 + 2 + 47)
 
     def test_a_style_names_its_own_heritage(self):
         heritages = re.findall(r"(?m)^te_heritage_(\w+)\s*=\s*\{",

@@ -2836,6 +2836,7 @@
  gm_ded_reason_crowned_tt:0 "Our government is crowned: $law_monarchy$, $law_social_monarchy$ or $law_chiefdom$."
  gm_ded_reason_industry_allowed_tt:0 "We have not enacted $law_industry_banned$."
  gm_ded_reason_leader_tt:0 "Our head of state rules under $law_autocracy$ or a $law_single_party_state$, and wears no crown."
+ gm_ded_reason_leave_tt:0 "A monument can always be left undedicated. The ceremony asks again at its next level."
  gm_ded_reason_no_state_atheism_tt:0 "We have not enacted $law_state_atheism$."
  gm_ded_reason_opportunity_tt:0 "An open opportunity asks for this dedication, and this monument can answer it."
  gm_ded_reason_republic_tt:0 "Our government is a republic: $law_presidential_republic$, $law_parliamentary_republic$, $law_council_republic$ or $law_direct_democracy$."

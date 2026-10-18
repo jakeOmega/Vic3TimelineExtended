@@ -202,7 +202,12 @@ monument_events.2 = {
 	# default unless an opportunity's dedication is offered above.
 	option = {
 		name = monument_events.2.a
-		trigger = { gm_state_ceremony_offers_opportunity = no }
+		trigger = {
+			custom_tooltip = {
+				text = gm_ded_reason_leave_tt
+				gm_state_ceremony_offers_opportunity = no
+			}
+		}
 		default_option = yes
 		ai_chance = { base = 1 }
 		custom_tooltip = monument_events.2.a.tt
@@ -216,7 +221,12 @@ monument_events.2 = {
 	# The same, when the opportunity's option above is the default.
 	option = {
 		name = monument_events.2.a
-		trigger = { gm_state_ceremony_offers_opportunity = yes }
+		trigger = {
+			custom_tooltip = {
+				text = gm_ded_reason_leave_tt
+				gm_state_ceremony_offers_opportunity = yes
+			}
+		}
 		ai_chance = {
 			base = 1
 			modifier = {
