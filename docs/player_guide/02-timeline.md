@@ -206,8 +206,8 @@ renames twelve base-game goods to fit a longer timeline.
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
 | Tourism | Luxury | Tourism Industry, National Park and others | The pops' Tourism need |
 | Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
-| Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations |
-| Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods |
+| Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations; the pops' Leisure need, as Steamers |
+| Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods; the Leisure need too |
 
 The Convenience and Tourism needs, which wealthier pops fill with these goods,
 are covered in [Pop consumption at high

@@ -220,7 +220,7 @@ class HandlerTest(unittest.TestCase):
                          | {f"te_tax_good_{good}_sgui" for good in gen.consumption_catalog()}
                          | {f"te_tax_relief_{key}_sgui" for key in RELIEF_KEYS}
                          | {f"te_tax_customs_{good}_sgui" for good in gen.customs_catalog()})
-        self.assertEqual(len(gen.consumption_catalog()), 39)
+        self.assertEqual(len(gen.consumption_catalog()), 41)
         self.assertIn(gen.HEADER, raw(GEN_SGUIS).splitlines()[:3])
 
     def test_display_gates_stay_inert(self):

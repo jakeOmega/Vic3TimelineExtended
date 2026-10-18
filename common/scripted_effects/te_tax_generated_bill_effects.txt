@@ -45,7 +45,9 @@ te_tax_gen_draft_init = {
 	set_variable = { name = te_tax_dr_g_liquor value = -1 }
 	set_variable = { name = te_tax_dr_g_luxury_clothes value = -1 }
 	set_variable = { name = te_tax_dr_g_luxury_furniture value = -1 }
+	set_variable = { name = te_tax_dr_g_magnetic_drive_ships value = -1 }
 	set_variable = { name = te_tax_dr_g_meat value = -1 }
+	set_variable = { name = te_tax_dr_g_motor_ships value = -1 }
 	set_variable = { name = te_tax_dr_g_oil value = -1 }
 	set_variable = { name = te_tax_dr_g_opium value = -1 }
 	set_variable = { name = te_tax_dr_g_paper value = -1 }
@@ -237,7 +239,9 @@ te_tax_gen_draft_from_bill = {
 	set_variable = { name = te_tax_dr_g_liquor value = var:te_tax_bl_g_liquor }
 	set_variable = { name = te_tax_dr_g_luxury_clothes value = var:te_tax_bl_g_luxury_clothes }
 	set_variable = { name = te_tax_dr_g_luxury_furniture value = var:te_tax_bl_g_luxury_furniture }
+	set_variable = { name = te_tax_dr_g_magnetic_drive_ships value = var:te_tax_bl_g_magnetic_drive_ships }
 	set_variable = { name = te_tax_dr_g_meat value = var:te_tax_bl_g_meat }
+	set_variable = { name = te_tax_dr_g_motor_ships value = var:te_tax_bl_g_motor_ships }
 	set_variable = { name = te_tax_dr_g_oil value = var:te_tax_bl_g_oil }
 	set_variable = { name = te_tax_dr_g_opium value = var:te_tax_bl_g_opium }
 	set_variable = { name = te_tax_dr_g_paper value = var:te_tax_bl_g_paper }
@@ -560,7 +564,9 @@ te_tax_gen_draft_clear = {
 	remove_variable = te_tax_dr_g_liquor
 	remove_variable = te_tax_dr_g_luxury_clothes
 	remove_variable = te_tax_dr_g_luxury_furniture
+	remove_variable = te_tax_dr_g_magnetic_drive_ships
 	remove_variable = te_tax_dr_g_meat
+	remove_variable = te_tax_dr_g_motor_ships
 	remove_variable = te_tax_dr_g_oil
 	remove_variable = te_tax_dr_g_opium
 	remove_variable = te_tax_dr_g_paper
@@ -752,7 +758,9 @@ te_tax_gen_bill_from_draft = {
 	set_variable = { name = te_tax_bl_g_liquor value = var:te_tax_dr_g_liquor }
 	set_variable = { name = te_tax_bl_g_luxury_clothes value = var:te_tax_dr_g_luxury_clothes }
 	set_variable = { name = te_tax_bl_g_luxury_furniture value = var:te_tax_dr_g_luxury_furniture }
+	set_variable = { name = te_tax_bl_g_magnetic_drive_ships value = var:te_tax_dr_g_magnetic_drive_ships }
 	set_variable = { name = te_tax_bl_g_meat value = var:te_tax_dr_g_meat }
+	set_variable = { name = te_tax_bl_g_motor_ships value = var:te_tax_dr_g_motor_ships }
 	set_variable = { name = te_tax_bl_g_oil value = var:te_tax_dr_g_oil }
 	set_variable = { name = te_tax_bl_g_opium value = var:te_tax_dr_g_opium }
 	set_variable = { name = te_tax_bl_g_paper value = var:te_tax_dr_g_paper }
@@ -997,7 +1005,9 @@ te_tax_gen_bill_clear = {
 	remove_variable = te_tax_bl_g_liquor
 	remove_variable = te_tax_bl_g_luxury_clothes
 	remove_variable = te_tax_bl_g_luxury_furniture
+	remove_variable = te_tax_bl_g_magnetic_drive_ships
 	remove_variable = te_tax_bl_g_meat
+	remove_variable = te_tax_bl_g_motor_ships
 	remove_variable = te_tax_bl_g_oil
 	remove_variable = te_tax_bl_g_opium
 	remove_variable = te_tax_bl_g_paper
@@ -1523,7 +1533,9 @@ te_tax_gen_supersede_a = {
 			if = { limit = { var:te_tax_bl_g_liquor >= 0 var:te_tax_pa_g_liquor >= 0 } set_variable = { name = te_tax_pa_g_liquor value = -1 } }
 			if = { limit = { var:te_tax_bl_g_luxury_clothes >= 0 var:te_tax_pa_g_luxury_clothes >= 0 } set_variable = { name = te_tax_pa_g_luxury_clothes value = -1 } }
 			if = { limit = { var:te_tax_bl_g_luxury_furniture >= 0 var:te_tax_pa_g_luxury_furniture >= 0 } set_variable = { name = te_tax_pa_g_luxury_furniture value = -1 } }
+			if = { limit = { var:te_tax_bl_g_magnetic_drive_ships >= 0 var:te_tax_pa_g_magnetic_drive_ships >= 0 } set_variable = { name = te_tax_pa_g_magnetic_drive_ships value = -1 } }
 			if = { limit = { var:te_tax_bl_g_meat >= 0 var:te_tax_pa_g_meat >= 0 } set_variable = { name = te_tax_pa_g_meat value = -1 } }
+			if = { limit = { var:te_tax_bl_g_motor_ships >= 0 var:te_tax_pa_g_motor_ships >= 0 } set_variable = { name = te_tax_pa_g_motor_ships value = -1 } }
 			if = { limit = { var:te_tax_bl_g_oil >= 0 var:te_tax_pa_g_oil >= 0 } set_variable = { name = te_tax_pa_g_oil value = -1 } }
 			if = { limit = { var:te_tax_bl_g_opium >= 0 var:te_tax_pa_g_opium >= 0 } set_variable = { name = te_tax_pa_g_opium value = -1 } }
 			if = { limit = { var:te_tax_bl_g_paper >= 0 var:te_tax_pa_g_paper >= 0 } set_variable = { name = te_tax_pa_g_paper value = -1 } }
@@ -1772,7 +1784,9 @@ te_tax_gen_supersede_b = {
 			if = { limit = { var:te_tax_bl_g_liquor >= 0 var:te_tax_pb_g_liquor >= 0 } set_variable = { name = te_tax_pb_g_liquor value = -1 } }
 			if = { limit = { var:te_tax_bl_g_luxury_clothes >= 0 var:te_tax_pb_g_luxury_clothes >= 0 } set_variable = { name = te_tax_pb_g_luxury_clothes value = -1 } }
 			if = { limit = { var:te_tax_bl_g_luxury_furniture >= 0 var:te_tax_pb_g_luxury_furniture >= 0 } set_variable = { name = te_tax_pb_g_luxury_furniture value = -1 } }
+			if = { limit = { var:te_tax_bl_g_magnetic_drive_ships >= 0 var:te_tax_pb_g_magnetic_drive_ships >= 0 } set_variable = { name = te_tax_pb_g_magnetic_drive_ships value = -1 } }
 			if = { limit = { var:te_tax_bl_g_meat >= 0 var:te_tax_pb_g_meat >= 0 } set_variable = { name = te_tax_pb_g_meat value = -1 } }
+			if = { limit = { var:te_tax_bl_g_motor_ships >= 0 var:te_tax_pb_g_motor_ships >= 0 } set_variable = { name = te_tax_pb_g_motor_ships value = -1 } }
 			if = { limit = { var:te_tax_bl_g_oil >= 0 var:te_tax_pb_g_oil >= 0 } set_variable = { name = te_tax_pb_g_oil value = -1 } }
 			if = { limit = { var:te_tax_bl_g_opium >= 0 var:te_tax_pb_g_opium >= 0 } set_variable = { name = te_tax_pb_g_opium value = -1 } }
 			if = { limit = { var:te_tax_bl_g_paper >= 0 var:te_tax_pb_g_paper >= 0 } set_variable = { name = te_tax_pb_g_paper value = -1 } }

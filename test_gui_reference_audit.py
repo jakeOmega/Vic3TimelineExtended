@@ -159,6 +159,17 @@ widget = { text = "[Localize('LABEL')] # { } \\"quoted\\""
         self.write(je, 'entry = { widget = { gui = "gui/no.gui" name = "root" } }')
         self.assertIn(('mount', 'gui/no.gui'), self.errors(self.run_audit()))
 
+    def test_inherited_vanilla_custom_loc_warns_offline_and_errors_with_vanilla(self):
+        self.gui('''widget = { custom = "[Law.GetCountry.GetCustom('enactment_phase_1')]"
+ typo = "[Law.GetCountry.GetCustom('enactment_phase_9')]"
+}''')
+        result = self.run_audit()
+        self.assertEqual([('custom_loc', 'enactment_phase_9')], self.errors(result))
+        self.assertEqual(2, len(result.flags))
+        vanilla = self.root.parent / 'vanilla'
+        (vanilla / 'game/common/customizable_localization').mkdir(parents=True)
+        self.assertIn(('custom_loc', 'enactment_phase_1'), self.errors(self.run_audit(vanilla)))
+
     def test_missing_types_warn_offline_error_with_vanilla(self):
         self.gui('types = { type Local = widget {} }\nLocal = {}\nTypo = {}')
         self.assertEqual([], self.errors(self.run_audit()))

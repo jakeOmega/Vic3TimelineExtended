@@ -173,7 +173,10 @@ gm_state_set_default_skin = {
 		gm_state_default_faith_skin = yes
 		# The mod's own religions have no faith skin: a heritage skin instead.
 		if = {
-			limit = { var:gm_skin = flag:generic }
+			limit = {
+				has_variable = gm_skin
+				var:gm_skin = flag:generic
+			}
 			gm_state_default_heritage_skin = yes
 		}
 	}
@@ -1939,8 +1942,16 @@ gm_state_offer_skins_none = {
 
 gm_state_offer_skins_faith = {
 	gm_state_default_faith_skin = yes
+	# has_variable first, in all four reads of gm_skin after the set_variable
+	# above them: an option's tooltip pass reads these limits without running
+	# that set_variable, so on a new monument the bare read logged three script
+	# errors per option per frame while the dedication event was open (about
+	# 2,200 in 20 s, 2026-10-18). When the effect runs, gm_skin is always set.
 	if = {
-		limit = { var:gm_skin = flag:generic }
+		limit = {
+			has_variable = gm_skin
+			var:gm_skin = flag:generic
+		}
 		# The mod's own religions have no faith skin: a heritage skin instead.
 		gm_state_offer_skins_heritage = yes
 	}
@@ -1957,6 +1968,7 @@ gm_state_offer_skins_heritage = {
 	gm_state_default_heritage_skin = yes
 	if = {
 		limit = {
+			has_variable = gm_skin
 			NOT = { var:gm_skin = flag:generic }
 			owner = { is_ai = no }
 		}
@@ -1980,6 +1992,7 @@ gm_state_offer_building_skins = {
 	gm_state_default_building_skin_$KEY$ = yes
 	if = {
 		limit = {
+			has_variable = gm_skin
 			NOT = { var:gm_skin = flag:generic }
 			owner = { is_ai = no }
 		}

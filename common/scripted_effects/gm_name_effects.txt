@@ -23,9 +23,13 @@
 #   gm_name_from_com   the name came from a commission
 #   gm_name            a typed name (gm_name_carrier, §3.5), printed over the rest
 # The name prints through gm_monument_name_row (the JE row, `State`) and
-# gm_monument_name_evt (events, `SCOPE.sState('monument_state')`):
-# customizable-localization targets inherit their caller's context, so a
-# pattern that reads data exists once per context (gm_custom_loc.txt).
+# gm_monument_name_evt (events, `ROOT.GetState`), one pattern per context
+# (gm_custom_loc.txt). Inside a customizable-localization target ROOT is the
+# object the custom loc was called on (vanilla's getPluralDemonym reads
+# ROOT.GetCulture, called from a country event's option), while a saved scope
+# comes back empty: `SCOPE.sState('monument_state')` printed "the
+# HUB_NAME__city" in an option name (#819) and in monument_events.24's
+# description (2026-10-18).
 
 # ---- Forms ---------------------------------------------------------------------------
 # State scope, with the dedication and skin set. The default form: the open
