@@ -473,7 +473,7 @@ A world GDP per capita of 0 or None makes the world curve fall back to 0.
 - Consumes: Task 4 (`ModData`, `Ladder`, `base_at`, `breakeven`) and Task 5.
 - Produces:
   - In `econ_sim_scenarios.py`: `@dataclass(frozen=True) Scenario`, with these fields:
-    - identity and timing: `name`, `kind` ("player" | "ai"), `country_id`, `start_year`, `end_year`;
+    - identity and timing: `name`, `kind` ("player" | "ai"), `series` (the dataset series it was built from: "FRA", "GBR", "CHI" or "union"; "" for toys), `start_year`, `end_year`;
     - people: `population`, `peasants`, `unemployed`, `subsistence_capacity`;
     - the start economy: `employed_level`, `employed_demand`, `gdp` (annual), `points_week`, `wage_start: float | None = None`;
     - territory and stock: `n_states`, `levels: dict[str, float]`;
@@ -677,32 +677,37 @@ class TestStep(unittest.TestCase):
   - `DATASET = Path(__file__).with_name("econ_series_c480d386.json")` and `load_dataset(path=DATASET) -> dict`.
   - `SCENARIOS = ("player_rich", "player_poor", "ai_rich", "ai_poor", "player_union")`. `player_union` is the whole-union check, not one of the four types.
   - `scenario(name: str, dataset: dict, md: ModData) -> Scenario`. Every type starts from the dataset's earliest point (1867).
-    - **player_rich**: country 4, core states only, `rich_from_year=1920`.
-    - **player_union**: country 4, whole country. Its annexations are the jumps between consecutive points: states present in the later point and not the earlier, with their population, peasants and levels from the later point. Also `rich_from_year=1920`.
-    - **ai_rich**: the GBR id, whole country, `kind="ai"`, `rich_from_year=1920`.
-    - **ai_poor**: the CHI id, `kind="ai"`, `rich_from_year=None`.
-    - **player_poor**: China's 1867 state with player_rich's `era_points` and `alloc`, `kind="player"`, `rich_from_year=None`.
+    The dataset is keyed by series (ledger ruling R16). A series follows a fixed set of 1867 states; each point has a `slice` over those states and the `owner` country's fields (owner-level `points_weekly` and `pool_spend_weekly` already scaled to the slice's population).
+    - **player_rich**: series "FRA", `rich_from_year=1920`.
+    - **player_union**: series "union" (country 4's own states at each point). Its annexations are the states in a point's `per_state` that weren't in the previous point's. Each adds its `[population, workforce, peasants, unemployed, levels]` at that point's year. Its levels are spread over sectors in the union's sector shares at that point. Also `rich_from_year=1920`.
+    - **ai_rich**: series "GBR", `kind="ai"`, `rich_from_year=1920`.
+    - **ai_poor**: series "CHI", `kind="ai"`, `rich_from_year=None`.
+    - **player_poor**: series "CHI"'s 1867 start, with player_rich's `era_points` and `alloc`, `kind="player"`, `rich_from_year=None`.
 
-    A series ends at the last point that still has the country (Review Focus 2).
+    `end_year` is 2050 if the series runs to the dataset's last save date, else its own last point's year (Review Focus 2: the extractor stops a GBR or CHI series once the player owns it or it splits).
 
-    The fields:
-    - `levels`: the start point's levels by `sector_of`.
-    - `k_emp[s]`: observed employees per staffed level in the start point (Σ employees / Σ staffing), divided by the ladder's start-era `emp_lvl`. For `other`, which has no ladder, `k_emp` is the observed figure itself.
-    - `k_va[s]`: observed VA per staffed level, Σ (goods_sales − goods_cost) / Σ staffing ÷ 52 (the save's figures are yearly; check against one building's weekly sales in the 1949 text save before trusting the ÷ 52), divided by the ladder's start-era VA. For `other`, it is the observed figure itself.
-    - the start economy: `employed_level` and `employed_demand` are the start point's employees in level-bound and demand-bound sectors; `gdp` is the newest weekly GDP sample as the engine keeps it (yearly terms, `country_gdp_per_capita`); `points_week` is the sum of `points_weekly`; `wage_start` is `wage_per_worker`.
-    - `welfare`: per point, `welfare_per_unemployed`.
-    - `cost_points`: `sector_cost_points` over the latest point's buildings.
-    - `era_points`: per point, the highest era e at which the country holds ≥ 50% of `tech_era`'s era-e techs.
-    - `alloc`: per point, `investment_by_type` summed by sector and normalised.
-    - `land_floor`: per point, 0.5 under `law_serfdom` or `law_manorialism`, else 0.
-    - `n_states`: the start point's state count (core states for player_rich).
+    The fields (slice = the point's `slice`, owner = the point's `owner`):
+    - `levels`: the start slice's levels by `sector_of`.
+    - `k_emp[s]`: observed employees per staffed level in the start slice (Σ employees / Σ staffing), divided by the ladder's start-era `emp_lvl`. For `other`, which has no ladder, `k_emp` is the observed figure itself.
+    - `k_va[s]`: observed VA per staffed level, Σ (goods_sales − goods_cost) / Σ staffing ÷ 52, divided by the ladder's start-era VA. The save's figures are yearly; check against one building's weekly sales in the 1949 text save before trusting the ÷ 52. For `other`, it is the observed figure itself.
+    - the start economy:
+      - `employed_level` and `employed_demand`: the start slice's employees in level-bound and demand-bound sectors;
+      - `gdp`: owner `gdppc` × slice population (yearly terms, as `country_gdp_per_capita` reads it);
+      - `points_week`: the sum of owner `points_weekly`;
+      - `wage_start`: slice `wage_per_worker`.
+    - `welfare`: per point, slice `welfare_per_unemployed`.
+    - `cost_points`: `sector_cost_points` over the latest slice's buildings. Every level-bound sector it leaves out takes its representative building's own `required_construction` tier (ledger R14).
+    - `era_points`: per point, the highest era e at which the owner holds ≥ 50% of `tech_era`'s era-e techs.
+    - `alloc`: per point, owner `investment_by_type` summed by sector and normalised.
+    - `land_floor`: per point, 0.5 when owner `land_law` is `law_serfdom` or `law_manorialism`, else 0.
+    - `n_states`: the series' state count (`core_states`, or the start `per_state` for union).
     - `subsistence_capacity`: 1.5 × the start peasants.
     - `world_gdppc`: per point, `world.gdp / world.population`.
     - `automation_lag_years`: 0 for players, 5 for the AI.
   - In `econ_sim_calibrate.py`. The rules are shared: players and the AI differ only in behaviour (spec §6).
     - `STRUCTURAL = ("fill_rate", "wage_step", "wage_decay", "vacancy_target", "wage_floor", "return_rate", "price_level", "services_jobs_per_gdp", "demand_gdp_ratio", "g_max", "g_slope", "workforce_share", "construction_good_price")`. Fitted on player_rich only, then shared by every scenario.
     - `BEHAVIOUR = ("private_invest_share", "gov_invest_share", "queue_per_state")`. Fitted per scenario with the structural values held, plus `automation_lag_years` for the AI scenarios. Make `automation_lag_years` a Params field that overrides the scenario's when set.
-    - `targets(sc, dataset) -> list[dict]`: per point after the start, `{year, peasant_share, unemployed_share, gdppc, population, points_week, wage}`, from the core slice for player_rich and `whole` otherwise.
+    - `targets(sc, dataset) -> list[dict]`: per point after the start, `{year, peasant_share, unemployed_share, gdppc, population, points_week, wage}`, from the point's slice (people, wage) and owner (`gdppc`, scaled `points_weekly`).
     - `loss(records, targets, p) -> float` = Σ over targets of the squared error in peasant share, unemployed share, ln gdppc, ln population, ln points per week, and ln(sim wage · `p.price_level`) against ln observed wage. Weight 1 each. Interpolate the records to the target year.
     - `fit(sc, dataset, md, p0: Params, names, rounds=4) -> Params`: coordinate descent. Each round tries each name at ×{0.5, 0.8, 1.25, 2.0} of its value and keeps any that lowers the loss.
     - `check(dataset, md, params_path=PARAMS) -> list[str]`: the hindcast bands (below), returning one line per miss. An empty list is a pass.
@@ -737,15 +742,15 @@ class TestScenarios(unittest.TestCase):
 
     def test_start_matches_dataset(self):
         sc = SC.scenario("player_rich", self.ds, self.md)
-        first = self.ds["countries"]["4"]["points"][0]["core"]
+        first = self.ds["series"]["FRA"]["points"][0]["slice"]
         self.assertAlmostEqual(sc.peasants, first["peasants"], delta=1)
         self.assertAlmostEqual(sc.wage_start, first["wage_per_worker"])
 
     def test_series_end_where_country_ends(self):     # Review Focus 2
-        last_save_year = max(int(p["date"][:4]) for c in self.ds["countries"].values() for p in c["points"])
+        last_save_year = max(int(p["date"][:4]) for c in self.ds["series"].values() for p in c["points"])
         for name in ("ai_rich", "ai_poor"):
             sc = SC.scenario(name, self.ds, self.md)
-            own_last = max(int(p["date"][:4]) for p in self.ds["countries"][str(sc.country_id)]["points"])
+            own_last = max(int(p["date"][:4]) for p in self.ds["series"][sc.series]["points"])
             self.assertEqual(sc.end_year, 2050 if own_last == last_save_year else own_last)
 
     def test_structural_params_shared(self):
