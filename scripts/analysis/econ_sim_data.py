@@ -125,6 +125,9 @@ SECTOR_BUILDINGS: dict[str, tuple[str, str, str | None]] = {
 # one that costs nothing; neither is the building's maintenance rate.
 NO_MAINTENANCE_PMS = ("pm_no_maintenance", "pm_maintenance_traditional")
 
+# PMs with this in their name need a power-bloc principle; ladders leave them out.
+PRINCIPLE_MARK = "_principle_"
+
 _EMPLOYMENT_KEY = re.compile(r"^building_employment_.+_add$")
 _GOODS_IN_KEY = re.compile(r"^goods_input_(.+)_add$")
 _GOODS_OUT_KEY = re.compile(r"^goods_output_(.+)_add$")
@@ -471,8 +474,14 @@ def ladder(ms, numbers: ModNumbers, sector: str) -> Ladder:
     if sector not in SECTOR_BUILDINGS:
         raise KeyError("SECTOR_BUILDINGS: " + sector)
     building, base_group, auto_group = SECTOR_BUILDINGS[sector]
-    base = tuple(pm_figures(ms, numbers, pm) for pm in _group_pms(ms, base_group))
-    auto = tuple(pm_figures(ms, numbers, pm) for pm in _group_pms(ms, auto_group)) if auto_group else ()
+    # A `_principle_` PM needs a power-bloc principle, not a technology, and shares its
+    # era with the plain PM beside it, so it would win every same-era tie in base_at.
+    base = tuple(pm_figures(ms, numbers, pm) for pm in _group_pms(ms, base_group) if PRINCIPLE_MARK not in pm)
+    auto = (
+        tuple(pm_figures(ms, numbers, pm) for pm in _group_pms(ms, auto_group) if PRINCIPLE_MARK not in pm)
+        if auto_group
+        else ()
+    )
     return Ladder(sector, building, _maintenance(ms, building), base, auto)
 
 

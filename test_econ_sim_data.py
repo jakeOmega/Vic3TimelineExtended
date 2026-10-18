@@ -158,6 +158,16 @@ class TestLadders(unittest.TestCase):
             self.assertEqual(bool(lad.automation), D.SECTOR_BUILDINGS[sector][2] is not None, sector)
         self.assertEqual(MD.ladders["mining"].automation[0].pm, "pm_no_steam_automation")
 
+    def test_ladders_skip_power_bloc_principle_pms(self):
+        infra = D.ladder(MS, N, "infrastructure")
+        self.assertFalse([t.pm for t in infra.base if "_principle_" in t.pm])
+        self.assertEqual(D.base_at(infra, 3).pm, "pm_steam_trains")
+        self.assertEqual(D.base_at(infra, 4).pm, "pm_electric_trains")
+        self.assertEqual(D.base_at(infra, 5).pm, "pm_diesel_trains")
+        for lad in MD.ladders.values():
+            for tier in lad.base + lad.automation:
+                self.assertNotIn("_principle_", tier.pm, lad.sector)
+
     def test_unknown_sector_raises(self):
         with self.assertRaises(KeyError):
             D.ladder(MS, N, "peasants")
