@@ -230,6 +230,31 @@ class TestCountryCauses(unittest.TestCase):
         self.assertLess(census.index("set_variable = { name = te_dg_m_inf value ="),
                         census.index("set_local_variable = { name = te_dg_m_inf value = var:te_dg_m_inf }"))
 
+    def test_the_adults_infection_factor_is_weighted_and_reaches_the_outline(self):
+        """#1045: the country's te_dg_inf_ad is its states' factor by people, over the states that hold medicine (1 with
+        none), and the player's outline reads it: with it the outline's adults die less."""
+        def outline(trt_a, trt_b):
+            a, b = self.states()
+            a["te_dg_trt_inf"], b["te_dg_trt_inf"] = trt_a, trt_b
+            eng = _CountryEngine(states=[a, b], fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+                                 triggers={"is_ai": False, "te_demog_cohorts_run": True})
+            eng.call("te_demog_country_census")
+            return eng.vars
+        w = P.INFECTION_ADULT_MEDICINE
+        v = outline(0.9, 0.3)
+        self.assertAlmostEqual(v["te_dg_inf_ad"], (4 * (1 - w * 0.6 * 0.9) + 1 * (1 - w * 0.2 * 0.3)) / 5, places=4)
+        plain = outline(0.0, 0.0)
+        self.assertAlmostEqual(plain["te_dg_inf_ad"], 1.0, places=6)
+        adults = [k for k in v if re.fullmatch(r"te_dg_pj[fm]\d+", k)]
+        self.assertTrue(adults, "the outline ran")
+        self.assertGreater(sum(v[k] for k in adults), sum(plain[k] for k in adults))
+        a, b = self.states()
+        del a["te_dg_acc"], b["te_dg_acc"]
+        none = _CountryEngine(states=[a, b], fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+                              triggers={"is_ai": True, "te_demog_cohorts_run": True})
+        none.call("te_demog_country_census")
+        self.assertEqual(none.vars["te_dg_inf_ad"], 1.0)
+
 
 class TestSelfCheck(unittest.TestCase):
     """TE_SELF_CHECK cause_deaths_estimate (the interpreter has no globals or debug_log, so this reads the text)."""
