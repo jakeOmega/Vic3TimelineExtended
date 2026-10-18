@@ -13,6 +13,7 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from scripts.analysis import econ_growth_sim as G
 from scripts.analysis import econ_sim_calibrate as CAL
@@ -899,6 +900,38 @@ class TestScenarios(unittest.TestCase):
         for name in CAL.STRUCTURAL:
             self.assertEqual(len({getattr(p, name) for p in ps.values()}), 1, name)
 
+    def test_calibration_runs_use_the_historical_curve(self):
+        # The saves were played under D.HISTORICAL_CURVE; the mod's own curve now differs, and
+        # `run` and `sweep` keep using it, but every run `fit`, `starts` and `check` make
+        # simulates the history under the old one.
+        self.assertNotEqual(self.md.numbers.curve, D.HISTORICAL_CURVE)
+        pinned = CAL.historical_md(self.md)
+        self.assertEqual(pinned.numbers.curve, D.HISTORICAL_CURVE)
+        self.assertIsNot(pinned, self.md)
+        self.assertNotEqual(self.md.numbers.curve, D.HISTORICAL_CURVE)          # md itself is untouched
+        self.assertEqual(dataclasses.replace(pinned.numbers, curve=self.md.numbers.curve), self.md.numbers)
+        seen = []
+        real_run = G.run
+
+        def spy(sc, md, p):
+            seen.append(md.numbers.curve)
+            return real_run(sc, md, p)
+
+        sc = SC.scenario("player_rich", self.ds, self.md)
+        with mock.patch.object(G, "run", spy):
+            CAL.check(self.ds, self.md)
+            checked = len(seen)
+            CAL.starts(sc, self.md)
+            CAL.fit(sc, self.ds, self.md, G.Params(), ("price_level",), rounds=1)
+        self.assertGreaterEqual(checked, 4)                                      # three scenarios and the union
+        self.assertGreater(len(seen), checked)
+        self.assertEqual(set(seen), {D.HISTORICAL_CURVE})
+        # ... while the sim's own entry points take the md they are given, the mod's curve.
+        seen.clear()
+        with mock.patch.object(G, "run", spy):
+            G.run(sc, self.md, G.params_for("player_rich"))
+        self.assertEqual(set(seen), {self.md.numbers.curve})
+
     def test_check_reports_a_miss(self):
         md, ds = self.md, self.ds
         bad = Path(self.enterContext(tempfile.TemporaryDirectory())) / "p.json"
@@ -1016,7 +1049,8 @@ class TestScenarios(unittest.TestCase):
         t = CAL.targets(sc, self.ds)
         p0 = G.Params()
         p1 = CAL.fit(sc, self.ds, self.md, p0, ("price_level", "fill_rate"), rounds=1)
-        self.assertLessEqual(CAL.loss(G.run(sc, self.md, p1), t, p1), CAL.loss(G.run(sc, self.md, p0), t, p0))
+        md = CAL.historical_md(self.md)                             # the curve the fit simulates under
+        self.assertLessEqual(CAL.loss(G.run(sc, md, p1), t, p1), CAL.loss(G.run(sc, md, p0), t, p0))
         moved = {f.name for f in dataclasses.fields(G.Params) if getattr(p1, f.name) != getattr(p0, f.name)}
         self.assertLessEqual(moved, {"price_level", "fill_rate"})
         self.assertEqual(p0, G.Params())                            # p0 untouched

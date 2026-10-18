@@ -22,6 +22,8 @@ its interval merging into the next, as `econ_sim_scenarios.realised_alloc` does)
                x_adj is the script's prior_construction_scaling, x_adj' the same
                figure under the shape, and the other cost sources carry over:
                others = (1 + x_adj) / (1 + x_raw) - 1, x_adj' = (1 + x_raw')(1 + others) - 1
+               (x_raw is X under econ_sim_data.HISTORICAL_CURVE, the curve the
+               playthrough ran under, not the mod's current one)
   extra jobs   points x (ratio - 1) x jobs_per_point, summed over the intervals so far
 
 and at each kept save after the first, slack_cf = max(0, slack - extra jobs) and
@@ -38,7 +40,23 @@ Two points the definitions leave open, decided from the data:
     largest.
   * The other sources cancel out of the ratio: (1 + x_adj) / (1 + x_adj') is
     (1 + x_raw) / (1 + x_raw') whenever x_raw > 0, whatever the prior. The ratio is
-    computed in that form, so the linear curve gives exactly 1.
+    computed in that form, so the `historical` shape gives exactly 1.
+
+THE SHAPES
+----------
+  historical   the curve the playthrough ran under (HISTORICAL_CURVE: +1000% at GBP 100,
+               ruling R37): the baseline, which reproduces the observed history exactly
+  current      the mod's curve as its files hold it now (since #1034 capped at +100% from
+               GBP 11); `linear` is the same curve under its older name
+  capped:c     the historical line held at +c (the slope kept; `capped:1` is `current`
+               to within a percent)
+  slope:k      the historical line at k times the steepness
+  log, sqrt, world, none
+               as econ_growth_sim.cost_mult defines them, on the historical constants
+
+All are priced against the historical baseline. The shapes other than `current` and
+`linear` are built on the historical constants, not the mod's: a `capped:2` built on the
+current ones would stay at +100%, because that line already stops there.
 
 STATED LIMITS
 -------------
@@ -48,7 +66,7 @@ aren't re-priced; population and migration are held at observed. The first three
 understate a cheaper curve's effect; holding population ignores migration toward new
 jobs, which would offset some of it.
 
-    econ_construction_counterfactual.py [--series FRA,union,GBR,CHI] [--curves linear,none,...]
+    econ_construction_counterfactual.py [--series FRA,union,GBR,CHI] [--curves historical,current,none,...]
 """
 
 from __future__ import annotations
@@ -69,7 +87,9 @@ from scripts.analysis import econ_sim_data as D  # noqa: E402
 from scripts.analysis import econ_sim_scenarios as S  # noqa: E402
 
 DEFAULT_SERIES = ("FRA", "union", "GBR", "CHI")
-DEFAULT_SHAPES = ("linear", "capped:1", "capped:2", "capped:3", "slope:0.5", "log", "sqrt", "world", "none")
+DEFAULT_SHAPES = ("historical", "current", "capped:1.25", "capped:1.5", "capped:2", "slope:0.5", "log", "sqrt",
+                  "world", "none")
+OWN_SHAPES = ("historical", "current")          # shape names of this tool, beside econ_growth_sim.CURVES
 SUMMARY_YEARS = (1917, 1954, 1976, 1998, 2023, 2045)
 NEAREST_WITHIN = 3.0                            # years: a summary year with no point this close is None
 VACANCY_ONSET = 0.01                            # vacancies over this share of the workforce: mode 1
@@ -84,10 +104,19 @@ SectorOf = Callable[[str], "str | None"]
 # --------------------------------------------------------------------------
 
 
-def _shape(shape: str, curve: D.CurveConstants) -> tuple[G.Params, D.CurveConstants]:
-    """The Params and curve constants a shape name stands for: a name in
-    econ_growth_sim.CURVES (bar "capped"), "capped:c" (the linear line held at c), or
-    "slope:k" (the linear curve with max_mult x k)."""
+def _shape(shape: str, current: D.CurveConstants) -> tuple[G.Params, D.CurveConstants]:
+    """The Params and curve constants a shape name stands for.
+
+    "historical" is the curve the playthrough ran under; "current" (and "linear", the same
+    curve under its older name) is `current`, the mod's constants as its files hold them.
+    Every other shape is built on the historical constants: a name in
+    econ_growth_sim.CURVES (bar "capped" and "linear"), "capped:c" (the historical line held
+    at c), or "slope:k" (the historical line with max_mult x k)."""
+    curve = D.HISTORICAL_CURVE
+    if shape == "historical":
+        return G.Params(curve="linear"), curve
+    if shape in ("current", "linear"):
+        return G.Params(curve="linear"), current
     if ":" in shape:
         kind, _, arg = shape.partition(":")
         try:
@@ -102,19 +131,20 @@ def _shape(shape: str, curve: D.CurveConstants) -> tuple[G.Params, D.CurveConsta
     if shape == "capped":
         raise ValueError("the capped shape needs its cap: capped:<c>")
     if shape not in G.CURVES:
-        raise ValueError("unknown shape " + repr(shape) + "; expected one of " + ", ".join(G.CURVES)
+        raise ValueError("unknown shape " + repr(shape) + "; expected one of "
+                         + ", ".join(OWN_SHAPES + tuple(c for c in G.CURVES if c != "linear"))
                          + ", capped:<c> or slope:<k>")
     return G.Params(curve=shape), curve
 
 
-def x_raw_of(gdppc: float, curve: D.CurveConstants) -> float:
-    """X on the mod's own (linear) curve at `gdppc`."""
-    return G.cost_mult(G.Params(curve="linear"), curve, gdppc)
+def x_raw_of(gdppc: float) -> float:
+    """X at `gdppc` on the curve the playthrough ran under (D.HISTORICAL_CURVE)."""
+    return G.cost_mult(G.Params(curve="linear"), D.HISTORICAL_CURVE, gdppc)
 
 
-def x_under(shape: str, gdppc: float, curve: D.CurveConstants, world_gdppc: float | None) -> float:
-    """x_raw': the shape's X at `gdppc`."""
-    p, c = _shape(shape, curve)
+def x_under(shape: str, gdppc: float, current: D.CurveConstants, world_gdppc: float | None) -> float:
+    """x_raw': the shape's X at `gdppc`; `current` is the mod's constants as read from its files."""
+    p, c = _shape(shape, current)
     return G.cost_mult(p, c, gdppc, world_gdppc)
 
 
@@ -125,7 +155,7 @@ def others_of(x_raw: float, x_adj: float) -> float:
 
 def x_adj_under(shape: str, gdppc: float, x_adj: float | None, numbers, world_gdppc: float | None) -> float:
     """x_adj': the shape's X at `gdppc`, combined with the same other sources."""
-    x_raw = x_raw_of(gdppc, numbers.curve)
+    x_raw = x_raw_of(gdppc)
     others = others_of(x_raw, x_raw if x_adj is None else x_adj)
     return (1.0 + x_under(shape, gdppc, numbers.curve, world_gdppc)) * (1.0 + others) - 1.0
 
@@ -135,8 +165,8 @@ def shape_ratio(shape: str, gdppc: float, x_adj: float | None, numbers, world_gd
     `shape`. `x_adj` None means the script hadn't set one, so it is x_raw.
 
     With x_raw > 0 the other sources cancel and this is (1 + x_raw) / (1 + x_raw'),
-    the form computed here (exactly 1 for the linear curve)."""
-    x_raw = x_raw_of(gdppc, numbers.curve)
+    the form computed here (exactly 1 for the historical shape)."""
+    x_raw = x_raw_of(gdppc)
     x_new = x_under(shape, gdppc, numbers.curve, world_gdppc)
     if x_raw > 0:
         return (1.0 + x_raw) / (1.0 + x_new)
@@ -215,7 +245,6 @@ def _x_adj(owner: dict, x_raw: float) -> float:
 def intervals(series: dict, md, cost_of: CostOf | None = None, sector_of: SectorOf | None = None) -> list[Interval]:
     """One Interval per pair of consecutive kept points of `series` (a dataset series)."""
     cost_of, sector_of = _lookups(md, cost_of, sector_of)
-    curve = md.numbers.curve
     kept = kept_points(series["points"])
     out: list[Interval] = []
     for a, b in zip(kept, kept[1:]):
@@ -244,7 +273,7 @@ def intervals(series: dict, md, cost_of: CostOf | None = None, sector_of: Sector
         ends = []
         for pt in (a, b):
             gdppc = pt["owner"]["gdppc"]
-            x_raw = x_raw_of(gdppc, curve)
+            x_raw = x_raw_of(gdppc)
             x_adj = _x_adj(pt["owner"], x_raw)
             ends.append((gdppc, x_raw, x_adj, others_of(x_raw, x_adj)))
         (g_a, xr_a, xa_a, o_a), (g_b, xr_b, xa_b, o_b) = ends
@@ -440,8 +469,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--series", default=",".join(DEFAULT_SERIES),
                     help="comma-separated dataset series (default %(default)s)")
     ap.add_argument("--curves", default=",".join(DEFAULT_SHAPES),
-                    help="comma-separated shapes: " + ", ".join(c for c in G.CURVES if c != "capped")
-                    + ", capped:<c>, slope:<k> (default %(default)s)")
+                    help="comma-separated shapes: " + ", ".join(OWN_SHAPES) + ", "
+                    + ", ".join(c for c in G.CURVES if c not in ("capped", "linear"))
+                    + ", capped:<c>, slope:<k>; linear is current (default %(default)s)")
     args = ap.parse_args(argv)
     names = [s for s in args.series.split(",") if s]
     shapes = [s for s in args.curves.split(",") if s]

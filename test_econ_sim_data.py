@@ -30,7 +30,12 @@ class FakeMS:
 
 class TestNumbers(unittest.TestCase):
     def test_curve_constants(self):
-        self.assertEqual(N.curve, D.CurveConstants(1.0, 1.0, 100.0, 10.0))
+        # Capped at +100% from GBP 11, the slope kept (#1034).
+        self.assertEqual(N.curve, D.CurveConstants(1.0, 1.0, 11.0, 1.0))
+
+    def test_historical_curve_is_the_pre_cap_one(self):
+        # The curve the c480d386 playthrough ran under (ruling R37): +1000% at GBP 100.
+        self.assertEqual(D.HISTORICAL_CURVE, D.CurveConstants(1.0, 1.0, 100.0, 10.0))
 
     def test_cost_tiers(self):
         t = N.cost_tiers

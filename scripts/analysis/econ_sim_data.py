@@ -256,6 +256,13 @@ class CurveConstants:
     max_mult: float
 
 
+# The curve in force through the c480d386 playthrough, until #1034's change capped it at +100%
+# (ruling R37). The saved series (`econ_series_c480d386.json`) were priced under this one, so
+# the calibration and the counterfactual read the history through it, whatever the mod's
+# files hold now.
+HISTORICAL_CURVE = CurveConstants(1.0, 1.0, 100.0, 10.0)
+
+
 @dataclass(frozen=True)
 class ModNumbers:
     curve: CurveConstants

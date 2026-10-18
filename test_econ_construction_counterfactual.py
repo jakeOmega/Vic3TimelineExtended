@@ -7,19 +7,33 @@ import sys
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 from scripts.analysis import econ_construction_counterfactual as CF
 from scripts.analysis import econ_sim_data as D
 
 REPO = Path(__file__).resolve().parent
 
-# x_raw = (gdppc - 1) / (11 - 1) * 10 = gdppc - 1 on [1, 11], so gdppc 2.0 gives x_raw 1.0.
+# A toy historical curve (the one the observed history was priced under): x_raw =
+# (gdppc - 1) / (11 - 1) * 10 = gdppc - 1 on [1, 11], so gdppc 2.0 gives x_raw 1.0. The module
+# reads D.HISTORICAL_CURVE when it computes, so setUpModule swaps it for this one.
 CURVE = D.CurveConstants(reference=1.0, floor_ratio=1.0, ceiling_ratio=11.0, max_mult=10.0)
-MD = SimpleNamespace(numbers=SimpleNamespace(curve=CURVE))
+# The mod's curve since #1034: +10 points per 1x of reference, capped at +100% from 11x.
+CURRENT = D.CurveConstants(reference=1.0, floor_ratio=1.0, ceiling_ratio=11.0, max_mult=1.0)
+MD = SimpleNamespace(numbers=SimpleNamespace(curve=CURRENT))
 COSTS = {"building_mill": 100.0, "building_hq": None, "building_shop": 400.0}
 SECTORS = {"building_mill": "heavy", "building_hq": "other", "building_shop": "services"}
 LOOKUPS = {"cost_of": COSTS.get, "sector_of": SECTORS.get}
 WORLD = [{"date": "1900.1.1", "gdp": 1.0e9, "population": 1.0e8}]          # world gdppc 10
+_HISTORICAL = mock.patch.object(D, "HISTORICAL_CURVE", CURVE)
+
+
+def setUpModule():
+    _HISTORICAL.start()
+
+
+def tearDownModule():
+    _HISTORICAL.stop()
 
 
 def _building(levels, staff_a_level=200.0, staffing=None):
@@ -50,19 +64,43 @@ def _one_interval(gdppc=2.0, prior=1.0, peasants=5000.0, unemployed=1000.0):
 
 
 class TestCounterfactual(unittest.TestCase):
-    def test_linear_reproduces_observed(self):
+    def test_historical_reproduces_observed(self):
         series = {"points": [
             _point("1900.1.1", 1.5, {"building_mill": _building(0)}, prior=None),
             _point("1905.1.1", 3.0, {"building_mill": _building(20)}, prior=2.7),     # stale prior, others > 0
             _point("1912.6.1", 7.3, {"building_mill": _building(50)}, prior=4.1),     # others < 0
             _point("1920.1.1", 0.5, {"building_mill": _building(55)}, prior=0.0),     # under the floor
         ]}
-        rows = CF.counterfactual(series, MD, "linear", WORLD, **LOOKUPS)
+        rows = CF.counterfactual(series, MD, "historical", WORLD, **LOOKUPS)
         self.assertEqual(len(rows), 3)
         for row in rows:
             self.assertEqual(row.cum_extra_jobs, 0.0)
             self.assertEqual(row.slack_cf_share, row.slack_obs_share)
             self.assertEqual(row.vacancies_cf_share, 0.0)
+        # The mod's curve now is not the one the history ran under: it prices the same
+        # money below the historical curve, so it buys more points.
+        current = CF.summarize("TOY", series, MD, "current", WORLD, **LOOKUPS)
+        self.assertGreater(current.extra_points_pct, 0.0)
+        self.assertEqual(CF.summarize("TOY", series, MD, "historical", WORLD, **LOOKUPS).extra_points_pct, 0.0)
+
+    def test_current_is_the_mods_curve(self):
+        # Under the +100% cap: 0 at 1, +10 points a 1x of reference, 1.0 from 11 on.
+        for shape in ("current", "linear"):
+            self.assertEqual(CF.x_under(shape, 25.0, MD.numbers.curve, None), 1.0, shape)
+            self.assertAlmostEqual(CF.x_under(shape, 6.0, MD.numbers.curve, None), 0.5, msg=shape)
+            self.assertEqual(CF.x_under(shape, 0.5, MD.numbers.curve, None), 0.0, shape)
+        # ... priced against the historical baseline, here the toy curve (10.0 at its ceiling).
+        self.assertEqual(CF.x_raw_of(25.0), 10.0)
+        self.assertAlmostEqual(CF.shape_ratio("current", 25.0, None, MD.numbers, None), 11.0 / 2.0)
+        self.assertEqual(CF.shape_ratio("linear", 25.0, None, MD.numbers, None),
+                         CF.shape_ratio("current", 25.0, None, MD.numbers, None))
+        self.assertEqual(CF.shape_ratio("historical", 25.0, None, MD.numbers, None), 1.0)
+
+    def test_other_shapes_are_built_on_the_historical_constants(self):
+        # A capped:2 on the current constants would stay at 1.0, as that line stops there already.
+        self.assertEqual(CF.x_under("capped:2", 25.0, MD.numbers.curve, None), 2.0)
+        self.assertAlmostEqual(CF.x_under("slope:0.5", 6.0, MD.numbers.curve, None), 2.5)
+        self.assertEqual(CF.x_under("none", 25.0, MD.numbers.curve, None), 0.0)
 
     def test_cheaper_curve_buys_more_points(self):
         series = _one_interval()
@@ -189,7 +227,7 @@ class TestIntervalFigures(unittest.TestCase):
             _point("1916.1.1", 2.0, {"building_mill": _building(10)}, prior=1.0),
             _point("1960.1.1", 2.0, {"building_mill": _building(20)}, prior=1.0),
         ]}
-        summary = CF.summarize("TOY", series, MD, "linear", WORLD, **LOOKUPS)
+        summary = CF.summarize("TOY", series, MD, "historical", WORLD, **LOOKUPS)
         self.assertAlmostEqual(summary.slack_1917, 0.6)
         self.assertIsNone(summary.slack_1954)
         self.assertIsNone(summary.slack_2045)
@@ -208,7 +246,11 @@ class TestCli(unittest.TestCase):
         out = subprocess.run([sys.executable, str(script), "--series", "FRA,union,GBR,CHI"],
                              cwd=REPO, capture_output=True, text=True, timeout=120)
         self.assertEqual(out.returncode, 0, out.stderr)
-        self.assertIn("| FRA | linear |", out.stdout)
+        for series in ("FRA", "union", "GBR", "CHI"):
+            # the historical shape reproduces the observed history, whatever the mod's curve is now
+            self.assertIn("| " + series + " | historical | +0% |", out.stdout)
+        self.assertIn("| FRA | current |", out.stdout)
+        self.assertIn("| FRA | capped:1.25 |", out.stdout)
         self.assertIn("| FRA | none |", out.stdout)
         self.assertIn("| CHI | none |", out.stdout)
 

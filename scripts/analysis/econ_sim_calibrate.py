@@ -17,6 +17,11 @@ weight 1 each, at every save after the start: peasant share, unemployed share, l
 head, ln population, ln construction points a week, and ln wage (the sim's base-price wage
 x price_level against the saves' nominal one).
 
+The saves were played under the construction cost curve of the time (D.HISTORICAL_CURVE,
+ruling R37), not the mod's current one, so every run here simulates the history under it:
+`historical_md` swaps it into the ModData that `fit`, `starts` and `check` run with. What
+`econ_growth_sim.py run` and `sweep` use is the mod's own curve, unchanged.
+
 The hindcast is a manual check, not a unit test: it runs on live mod values, so a PR that
 retunes a PM, a cost tier or a cap technology could move it. Run `check` after a mod change
 worth re-checking. A miss is a finding about the model, for the owner; the bands are not
@@ -73,6 +78,17 @@ RATIO_BAND = (0.5, 2.0)                         # population, GDP per head and w
 UNION_BAND = 0.10                               # player_union: the last point's peasant share
 
 FIGURES = ("peasant_share", "unemployed_share", "gdppc", "population", "points_week", "wage")
+
+
+# --------------------------------------------------------------------------
+# The curve the history ran under
+# --------------------------------------------------------------------------
+
+
+def historical_md(md: D.ModData) -> D.ModData:
+    """`md` with the construction cost curve of the playthrough (D.HISTORICAL_CURVE), for
+    simulating the history; every other number stays the mod's. `md` isn't changed."""
+    return dataclasses.replace(md, numbers=dataclasses.replace(md.numbers, curve=D.HISTORICAL_CURVE))
 
 
 # --------------------------------------------------------------------------
@@ -154,7 +170,8 @@ def fit(sc: SC.Scenario, dataset: dict, md: D.ModData, p0: G.Params, names, roun
     value at x STEPS (capped at UPPER) and keeps the best candidate if it lowers the loss.
     Stops early after a round that changes nothing. A value of 0 can't move (seed it
     first); None raises ValueError. `p0` isn't changed. `log`, if given, is called with each
-    round's (round, loss)."""
+    round's (round, loss). The runs use the historical curve (`historical_md`)."""
+    md = historical_md(md)
     t = targets(sc, dataset)
 
     def score(p: G.Params) -> float:
@@ -195,7 +212,10 @@ def starts(sc: SC.Scenario, md: D.ModData) -> dict[str, G.Params]:
       gap_in_demand_ratio  the same, with the gap between the start's GDP and a one-year run's
                            carried by demand_gdp_ratio
       gap_in_price_level   ... carried by price_level instead (which also deflates the wage)
+
+    The one-year run uses the historical curve (`historical_md`).
     """
+    md = historical_md(md)
     p = G.Params()
     gdp_level = sc.gdp / (1.0 + p.demand_gdp_ratio)
     p = dataclasses.replace(p, services_jobs_per_gdp=sc.employed_demand / gdp_level if gdp_level > 0 else 0.0)
@@ -259,8 +279,9 @@ def check(dataset: dict, md: D.ModData, params_path: Path | str = PARAMS) -> lis
     At every target of player_rich, ai_rich and ai_poor: peasant or unemployed share off by
     more than SHARE_BAND (AI_SHARE_BAND for the AI), or population, GDP per head or the
     nominal wage outside RATIO_BAND of the saves'. For player_union: the last point's
-    peasant share within UNION_BAND.
+    peasant share within UNION_BAND. The runs use the historical curve (`historical_md`).
     """
+    md = historical_md(md)
     misses = []
     for name in FITTED:
         sc = SC.scenario(name, dataset, md)
@@ -308,7 +329,7 @@ def _fit_main(args) -> int:
     order alone doesn't reach. Each other scenario: its behaviour (and, for the AI, the
     automation lag) with the structural values held, from the defaults and from
     player_rich's behaviour, the lowest loss kept."""
-    md, ds = D.load_mod_data(), SC.load_dataset()
+    md, ds = historical_md(D.load_mod_data()), SC.load_dataset()
     names = args.scenario or list(FITTED)
     out = Path(args.out)
     existing = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}
