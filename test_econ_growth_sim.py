@@ -48,6 +48,11 @@ TOY = _toy((TOY_LIGHT_TIER1,))
 TOY_WITH_CREW_TIER = _toy((_pm("toy_crew_fab", 1, -TOY_START_STAFF, crew=1000.0, goods_in=150.0),))
 # Two tiers in one PM group; tier 2 (breakeven 0.10) replaces tier 1, it does not add to it.
 TOY_TWO_TIERS = _toy((TOY_LIGHT_TIER1, _pm("toy_robotic", 1, -2000.0, goods_in=200.0)))
+# The same tier 2, unlocked only at era 6.
+TOY_LATE_TIER2 = _toy((TOY_LIGHT_TIER1, _pm("toy_robotic", 6, -2000.0, goods_in=200.0)))
+# The reviewer's case (R25): tier 2 pays against none from 0.225 a week, but against
+# tier 1 only from 0.30 (300 more goods for 1000 more jobs).
+TOY_DEAR_TIER2 = _toy((TOY_LIGHT_TIER1, _pm("toy_dear_robotic", 1, -2000.0, goods_in=450.0)))
 
 
 def toy_scenario(**overrides):
@@ -367,9 +372,40 @@ class TestStep(unittest.TestCase):
         self.assertAlmostEqual(recs[i + 1].jobs_by_sector["light"], 3000.0 * recs[i].levels["light"])
 
     def test_retooling_waits_and_adopts_one_tier_a_year(self):
-        recs = G.run(toy_scenario(wage_start=1.0), TOY_TWO_TIERS, G.Params())
-        tiers = {r.year: r.auto_tiers["light"] for r in recs}
-        self.assertEqual((tiers[1867], tiers[1871], tiers[1872]), (1, 1, 2))     # 260 weeks of retooling
+        # Tier 2 unlocks in 1869 and beats tier 1, but tier 1's 260 weeks of retooling run to 1872.
+        sc = toy_scenario(wage_start=1.0, era_points=((1867, 5.0), (1869, 6.0)))
+        tiers = {r.year: r.auto_tiers["light"] for r in G.run(sc, TOY_LATE_TIER2, G.Params())}
+        self.assertEqual((tiers[1867], tiers[1869], tiers[1871], tiers[1872]), (1, 1, 1, 2))
+
+    # --- automation is a best response against the tier in use (R25) -----------
+
+    def test_next_tier_is_judged_against_the_current_one(self):
+        # At 0.25 a week tier 1 saves 100 a level and tier 2 only 50: tier 1, never tier 2
+        # (tier 2 is past its breakeven against none, 0.225, but not against tier 1, 0.30).
+        p = G.Params(wage_floor=0.25, private_invest_share=0, gov_invest_share=0)
+        recs = G.run(toy_scenario(wage_start=0.25), TOY_DEAR_TIER2, p)
+        self.assertTrue(all(r.wage == 0.25 for r in recs))
+        self.assertEqual({r.auto_tiers["light"] for r in recs}, {1})
+
+    def test_a_sector_can_skip_a_tier(self):
+        # At 1.0 a week tier 2 saves 1,550 a level against tier 1's 850: straight from none
+        # to 2 in the first year, and (the wage held there) never through tier 1.
+        recs = G.run(toy_scenario(wage_start=1.0), TOY_DEAR_TIER2, G.Params(wage_floor=1.0))
+        self.assertEqual({r.auto_tiers["light"] for r in recs}, {2})
+
+    def test_a_falling_wage_brings_a_sector_down_a_tier(self):
+        # Tier 2 at 1.0; the wage then drifts to a floor of 0.25, where tier 1 saves more (below 0.30).
+        recs = G.run(toy_scenario(wage_start=1.0), TOY_DEAR_TIER2, G.Params(wage_floor=0.25))
+        tiers = [r.auto_tiers["light"] for r in recs]
+        self.assertEqual((tiers[0], tiers[-1]), (2, 1))
+        down = tiers.index(1)
+        self.assertLess(recs[down].wage, 0.30 + 1e-9)
+
+    def test_no_payback_horizon_takes_no_tier(self):
+        # payback 0 with no maintenance: a zero gain doesn't clear a zero charge (both tests are strict).
+        for wage_start in (0.05, 1.0):                  # below and above the tier's 0.15 breakeven
+            recs = G.run(toy_scenario(wage_start=wage_start), TOY, G.Params(payback_years=0))
+            self.assertEqual({r.auto_tiers["light"] for r in recs}, {0}, wage_start)
 
     def test_retooling_charge_comes_off_gdp(self):
         md = _toy((TOY_LIGHT_TIER1,), maintenance=0.1)
@@ -390,7 +426,7 @@ class TestStep(unittest.TestCase):
         self.assertAlmostEqual(recs[1].unemployed - recs[0].unemployed, 100 * TOY_START_STAFF - jobs_1868)
 
     def test_annexation_adds_people_and_levels(self):
-        event = {"population": 2e6, "workforce": 1e6, "peasants": 6e5, "unemployed": 1e5, "levels": {"light": 50.0}}
+        event = {"population": 2e6, "peasants": 6e5, "unemployed": 1e5, "levels": {"light": 50.0}}
         recs = G.run(toy_scenario(annexations=((1870, event),)), TOY, G.Params())
         by_year = {r.year: r for r in recs}
         self.assertGreater(by_year[1870].levels["light"] - by_year[1869].levels["light"], 50.0)

@@ -56,10 +56,11 @@ DEMAND_BOUND = ("services", "construction")
 NO_EOS = ("infrastructure",)                    # its building group has no economy of scale (spec 4.3)
 LATE_ERA = 8                                    # late_employment_mult reaches PMs of this era and later
 
-# Spec 4.2, vanilla labour rules (the defines are not in vanilla_parsed/).
-WAGE_SHARE_OF_VA = 0.75                         # a building raises wages only at a margin of 0.25 or more
-HIRE_PREMIUM = 1.1                              # peasants leave subsistence for 10% over its income
-RETURN_PREMIUM = 1.3                            # subsistence takes the unemployed back only at 30% over welfare
+# Spec 4.2, vanilla labour rules. vanilla_parsed/ carries neither file, so these are
+# copies: game/common/defines/00_defines.txt and game/common/buildings/12_subsistence.txt.
+WAGE_SHARE_OF_VA = 0.75                         # 1 - BUILDING_PROFIT_TARGET_TO_RAISE_WAGES (0.25)
+HIRE_PREMIUM = 1.1                              # 1 + MIN_RAISE_TO_HIRE (0.10)
+RETURN_PREMIUM = 1.3                            # 1 + the subsistence buildings' min_raise_to_hire (0.30)
 
 
 @dataclass
@@ -204,7 +205,8 @@ class SectorState:
     levels: float
     auto_tier: int = 0                          # index into the ladder's automation tuple; 0 is "none"
     retool_left: float = 0.0                    # years of retooling still to pay
-    ready_since: float | None = None            # AI: the year the next tier first paid, in an unbroken run
+    ready_since: float | None = None            # AI: the year ready_tier first paid, in an unbroken run
+    ready_tier: int | None = None               # AI: the tier it is waiting to switch to
 
 
 @dataclass
@@ -275,6 +277,14 @@ def _late(pm: D.PMFigures, p: Params) -> D.PMFigures:
     return pm
 
 
+def _saving(tier: D.PMFigures, wage: float, k_emp: float, k_va: float) -> float:
+    """GBP a level a week `tier` saves against "none" at `wage` (base prices): the
+    wages of the jobs it cuts, less the goods it adds. Calibrated like the sector's
+    staff and VA. A tier that cuts no jobs can still save goods. A tier's fixed crew
+    (a building's, not a level's) isn't counted (R25)."""
+    return wage * k_emp * (-tier.employment) - k_va * (tier.goods_in - tier.goods_out)
+
+
 def _cap_with_steps(base: float, steps: tuple[tuple[int, str, float], ...], era: float) -> float:
     return base + sum(add for step_era, _tech, add in steps if step_era <= era)
 
@@ -336,8 +346,10 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
      8 GDP           staffed levels x VA x (1 + EoS), less retooling payments; X
      9 construction  investment buys points (point price at X, the per-project cap);
                      new levels arrive at the end of the year by allocation share
-    10 automation    the next tier, when its saved wages over the payback horizon
-                     cover the retooling charge; the AI waits its lag; one a year
+    10 automation    a best response: the tier that saves most at this year's wage,
+                     when its saving over the tier in use, over the payback horizon,
+                     beats the retooling charge; tiers can be skipped or undone; the
+                     AI waits its lag; one switch a year (R25)
     11 wages         rise with vacancies (up to 0.75 of VA a worker), else drift to
                      the floor with slack
     12 population    growth falls with GDP per capita; the workforce follows; the
@@ -466,33 +478,36 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
         if s in LEVEL_BOUND and cost > 0:
             new_levels[s] = points * share / cost
 
-    # 10. Automation. The wage is the one the year started with; the charge is at this year's X.
+    # 10. Automation, a best response against the tier in use (R25). Among the tiers
+    # the era allows (tier 0 is "none", saving 0), the candidate saves most a level a
+    # week. A sector switches to it when that beats its current tier by more than 0,
+    # and by more than the retooling charge over the payback horizon. The wage is the
+    # one the year started with; the charge is at this year's X.
     lag = p.automation_lag_years if p.automation_lag_years is not None else sc.automation_lag_years
     for s, (_staff, _crew, _va, _eos, maint) in figs.items():
         ss = sectors[s]
         lad = md.ladders.get(s)
-        nxt = ss.auto_tier + 1
-        if lad is None or nxt >= len(lad.automation) or ss.retool_left > 0:
-            ss.ready_since = None
+        if lad is None or len(lad.automation) < 2 or ss.retool_left > 0:
+            ss.ready_since = ss.ready_tier = None
             continue
-        tier = _late(lad.automation[nxt], p)
-        be = D.breakeven(tier)
-        if tier.era > era or be is None:
-            ss.ready_since = None
-            continue
-        gain = (state.wage - be) * (-tier.employment) * 52.0 * p.payback_years
+        k_emp, k_va = sc.k_emp.get(s, 1.0), sc.k_va.get(s, 1.0)
+        current = ss.auto_tier
+        options = [i for i, t in enumerate(lad.automation) if t.era <= era or i == current]
+        saving = {i: _saving(_late(lad.automation[i], p), state.wage, k_emp, k_va) for i in options}
+        candidate = max(options, key=saving.__getitem__)
+        gain = saving[candidate] - saving[current]
         charge = maint * nums.retool_mult * point_price(p, construction_price, x) * nums.retool_weeks * p.retool_charge_mult
-        if gain < charge:
-            ss.ready_since = None
+        if not (gain > 0 and gain * 52.0 * p.payback_years > charge):
+            ss.ready_since = ss.ready_tier = None
             continue
         if sc.kind == "ai":
-            if ss.ready_since is None:
-                ss.ready_since = year
+            if ss.ready_tier != candidate or ss.ready_since is None:
+                ss.ready_since, ss.ready_tier = year, candidate
             if year - ss.ready_since < lag:
                 continue
-        ss.auto_tier = nxt
+        ss.auto_tier = candidate
         ss.retool_left = retool_years
-        ss.ready_since = None
+        ss.ready_since = ss.ready_tier = None
 
     # 11. Wages.
     vac = (jobs_level - state.employed_level) / jobs_level if jobs_level > 0 else 0.0
@@ -502,7 +517,8 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
         # 0.75 of VA a worker: staffed VA / employed, which is VA a job when every
         # sector is staffed at the same share (and stays defined when nobody is).
         # The margin stops a raise; it doesn't cut a wage already past it (spec 4.2:
-        # buildings cut only at a margin of 0.15, which the model leaves out).
+        # buildings cut only at BUILDING_PROFIT_TARGET_TO_LOWER_WAGES, a margin of 0.15,
+        # which the model leaves out).
         margin_cap = WAGE_SHARE_OF_VA * va_capacity_week / jobs_level
         raised = state.wage * (1.0 + p.wage_step * (vac - p.vacancy_target))
         state.wage = min(raised, max(state.wage, margin_cap))
