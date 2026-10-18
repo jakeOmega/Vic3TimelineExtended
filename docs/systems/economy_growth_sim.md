@@ -13,43 +13,51 @@ Land nearer mode 2 than vanilla does, with neither happening often.
 
 ## Findings (2026-10-18)
 
-1. **The current curve explains most of the late stall.** France's core (its 33 states of 1867) never got its slack (peasants plus unemployed) below 26% of the workforce. Slack rose to about 50% after 2011.
-   - In those years each construction point cost 4.4–11× its base price under Construction Cost Scaling, and up to 21× with the country's other construction-cost modifiers.
-   - The data counterfactual (below) re-prices the points France actually bought: the same money under a curve capped at +100% buys enough to absorb that slack by about 2042.
-2. **The early period isn't the curve's doing.** Before 1954 the penalty was under +130%. Even with no penalty at all, France's core would still have held 27% slack in 1917 and 10% in 1954.
+1. **By the counterfactual's arithmetic, the curve the playthrough ran under accounts for much of the late stall.** France's core (its 33 states of 1867) never got its slack (peasants plus unemployed) below 26% of the workforce. Slack rose to about 50% after 2011.
+   - In those years each construction point cost 4.4–11× its base price under Construction Cost Scaling, and about 22× with the country's other construction-cost modifiers by 2045: (1 + 10) × (1 + 0.995).
+   - The data counterfactual (below) re-prices the points France actually bought. By its arithmetic, the same money under a curve capped at +100% buys enough to absorb that slack by about 2042.
+   - A parallel cause: service jobs collapsed. France's core held 79M of them in 1998 and 93M in 2004, then 41–64M from 2023, while GDP kept rising (see "What the model lacks").
+2. **The early period isn't the curve's doing.** Before 1954 the penalty was under +130%. By the counterfactual's arithmetic, even with no penalty at all France's core would still have held 27% slack in 1917 and 10% in 1954.
    - The owner's "peasants near zero by the 1950s" needs other levers: early construction volume, set by the construction sector's labour per point (about 12× vanilla's), the investment share and the land laws.
 3. **Jobs per construction point fell about sevenfold,** from 7 in 1867–1917 to about 1 from 1990 on, as late buildings cost more points and employ fewer people a level. That fall is designed into the PM ladders (spec § 4.3). It's why the same penalty bites harder late.
 4. **Other construction-cost modifiers double the curve for this player.** They compound with it: the Ministries of the Environment and of Consumer Protection at +5% a level each, global warming and green building codes added +82% in 1998 and +100% in 2045. Under the +100% cap, a rich player with both ministries still pays about 4× per point.
 5. **The curve barely touches poor countries.** AI China's raw penalty stays under +30% until 2004 and peaks at +147%. Its slack, 85% in 1917 falling to 27% in 2045, isn't the curve's. AI Britain stays under +66%. The catch-up problem lies elsewhere.
-6. **The structural sim can't reproduce the playthrough yet** (154 hindcast misses). Its fit removes all the slack to match France's wages and GDP. Four things it lacks are named under "The structural sim". Until they're built, its sweep tables show the model's mechanics, not forecasts.
+6. **The structural sim can't reproduce the playthrough yet** (157 hindcast misses). Its fit removes all the slack from the late 1950s to match France's wages, and still falls behind France's GDP per head after 2011. Four things it lacks are named under "The structural sim". Until they're built, its sweep tables show the model's mechanics, not forecasts.
 7. **Wages rose 44× (nominal) in France while a third of the workforce sat idle.** The model's premise was "labour scarcity raises wages, and rising wages make automation pay". That doesn't describe this playthrough's aggregate wage. The building-level picture differs: steel and motor workers earned £0.1 a week against £1.75–3.9 of value added each in 2045 (issue #1034). See the open questions.
 
 ## Recommendation (shipped in this change)
 
 **Construction Cost Scaling stops at +100%, keeping its slope:** 10 points per £1 of GDP per capita above £1, flat from £11. In the script, `construction_cost_max_mult` 10 → 1 and `construction_cost_ceiling_ratio` 100 → 11.
 
-Against the playthrough's data (the counterfactual below):
+Against the playthrough's data (the counterfactual below; the whole EU's figures leave out the levels its annexed states brought):
 
 | Curve | France's core, 2045 slack | first under 5% | Labour shortage (vacancies over 1%) | Whole EU, 2045 slack | China, 2045 slack |
 |---|---|---|---|---|---|
 | Before (+1,000% at £100) | 48.7% | never | never | 63.1% | 27.4% |
-| **+100% cap (shipped)** | **0% (1.7% vacancies)** | **2042** | **2043, 1.7%** | **13.1%** | **26.9%** |
-| +125% cap (ceiling ratio 13.5) | 7.4% | never | never | 21.9% | 27.3% |
-| +150% cap (ceiling ratio 16) | 14.4% | never | never | 28.7% | 27.4% |
-| +200% cap | 24.2% | never | never | 38.6% | 27.4% |
-| No penalty (vanilla) | 0%, 86.7% vacancies | 1959 | 1976 | 0%, 67.5% vacancies | 9.5% |
+| **+100% cap (shipped)** | **0% (1.7% vacancies)** | **2042** | **2043, 1.7%** | **19.4%** | **26.9%** |
+| +125% cap (ceiling ratio 13.5) | 7.4% | never | never | 26.9% | 27.3% |
+| +150% cap (ceiling ratio 16) | 14.4% | never | never | 32.7% | 27.4% |
+| +200% cap | 24.2% | never | never | 41.1% | 27.4% |
+| No penalty (vanilla) | 0%, 86.7% vacancies | 1959 | 1976 | 0%, 48.8% vacancies | 9.5% |
 
 Why +100%:
-- A rich core's slack falls to a few percent by the 2040s, and the labour shortage arrives only at the very end, at 1.7%. That figure is an upper bound: no wage response, no capacity limit.
-- The whole union, carrying its annexed poor regions, stays at 13%. That's nearer mode 2 than vanilla, with neither mode lasting long.
-- It's a plain rule: construction never costs a rich country more than twice what a poor one pays.
+- A rich core's slack falls to a few percent by the 2040s, and the labour shortage arrives only at the very end, at 1.7%.
+- The trade-off: on the central estimate, +100% reaches the vacancy proxy (vacancies over 1% of the workforce) in 2043, and +125% never does. +125% leaves France's core at 7.4% slack in 2045 instead.
+- The whole union, carrying its annexed poor regions, stays at 19%. That's nearer mode 2 than vanilla, with neither mode lasting long.
+- It's a plain rule: this scaling never more than doubles the construction a point needs (other modifiers still apply).
 
 If play shows mode 1, the softer caps are one constant each (the table above, and `docs/testing/ai-economy-playtest.md`).
 
-What the recommendation doesn't rest on:
-- The counterfactual is arithmetic on the saves, not a calibrated sim.
-- It ignores compounding (more levels → more GDP → more construction) and the services demand a larger economy buys. Both understate a cheaper curve's effect.
-- It also ignores migration into new jobs and any floor that holds peasants in place (France's core kept 15–19% peasants from 1986 under collectivized agriculture). Both would slow the absorption.
+**Which way the counterfactual leans.** It's arithmetic on the saves, not a calibrated sim, and its omissions pull both ways.
+- **Understates a cheaper curve's effect:**
+  - no compounding (more levels → more GDP → more construction);
+  - no extra services demand from a larger economy;
+  - maintenance and retooling, which X also raises, aren't re-priced.
+- **Overstates it:**
+  - no ceiling on goods demand: building 5.5× the levels late in the game (the old cap's price over the new one's, (1 + 10) / (1 + 1)) would lower prices and profits, and with them the pool's inflow and construction;
+  - no migration into the new jobs (population is held as observed);
+  - no floor holding the last peasants (France's core kept 15–19% peasants from 1986 under collectivized agriculture).
+- **The vacancy figure is an upper bound:** no per-project cap or construction-supply limit, and no wage response.
 
 ## Data
 
@@ -204,35 +212,38 @@ population: the scan's population equals `pop_statistics` at every point but 186
 doesn't depend on population at all. Nor is it a defect in the adjusted multiplier: both saves hold one
 `construction_cost_scaling` modifier, whose stored multiplier equals the variable, and in 1998 it was applied on
 the save's own date. A model of the penalty therefore needs the ministries' levels, not only GDP per capita.
+The counterfactual's diagnostics derive the other sources the same way, prior / raw − 1: 0.82 in 1998 and 1.02 in
+2045, against the 0.816 and 0.995 summed from the saves' modifiers. A point's whole cost multiplier is then
+(1 + raw) × (1 + others): about 22× in 2045.
 
 ## The construction counterfactual (from data)
 
 `scripts/analysis/econ_construction_counterfactual.py` answers the curve question without the structural model.
 
 **Method.** For each interval between a series' saves:
-1. It counts the points actually built: each level-bound building type's levels gained, times that type's own `required_construction`.
+1. It counts the points actually built: each level-bound building type's levels gained, times that type's own `required_construction`. For the union, it takes out the levels that came with states annexed in the interval, at the end point's share of costed level-bound levels.
 2. It counts the jobs they created: those levels times the type's staff per staffed level at the interval's end. Dividing gives jobs per point.
 3. Under another curve, the same money buys (1 + X_then) / (1 + X_shape) times the points, with the country's other construction-cost modifiers held as they were.
 4. The extra jobs, accumulated over the intervals, come out of the observed slack.
 
 Population, the workforce and demand-bound jobs (urban centres, construction sector) stay as observed. Where extra jobs exceed the slack, the excess reads as vacancies, the mode-1 proxy. The baseline `historical` is the curve in force during the playthrough (`econ_sim_data.HISTORICAL_CURVE`), and `current` is the mod's curve now.
 
-**France's core, per interval** (jobs per point, and the penalty X the country paid):
+**France's core, per interval** (jobs per point, and the penalty X the country paid). "X raw" is the curve alone. "X with other modifiers" is what the script applied, `prior_construction_scaling` = raw × (1 + others):
 
-| interval | points built | jobs a point | GDP per head | X raw → with other modifiers |
-|---|---:|---:|---|---|
-| 1867–1917 | 1.66M | 7.08 | 0.9 → 7.8 | 0 → 0.67 |
-| 1917–1954 | 5.93M | 3.90 | 7.8 → 13.7 | 0.68 → 1.21 |
-| 1959–1976 | 4.12M | 4.48 | 17.0 → 25.3 | 1.61 → 4.00 |
-| 1976–1986 | 4.14M | 2.01 | 25.3 → 25.7 | 2.46 → 4.97 |
-| 1990–1998 | 6.30M | 0.85 | 33.7 → 25.0 | 3.31 → 4.41 |
-| 2011–2023 | 18.18M | 1.05 | 34.8 → 58.8 | 3.41 → 10.94 |
-| 2023–2033 | 8.25M | 2.28 | 58.8 → 82.4 | 5.83 → 13.38 |
-| 2036–2045 | 10.27M | 0.78–1.14 | 93 → 150 | 9.31–10 → 16.9–20.2 |
+| interval | points built | jobs a point | GDP per head | X raw (start → end) | X with other modifiers (start → end) |
+|---|---:|---:|---|---|---|
+| 1867–1917 | 1.66M | 7.08 | 0.9 → 7.8 | 0 → 0.68 | 0 → 0.67 |
+| 1917–1954 | 5.93M | 3.90 | 7.8 → 13.7 | 0.68 → 1.28 | 0.67 → 1.21 |
+| 1959–1976 | 4.12M | 4.48 | 17.0 → 25.3 | 1.61 → 2.46 | 1.78 → 4.00 |
+| 1976–1986 | 4.14M | 2.01 | 25.3 → 25.7 | 2.46 → 2.49 | 4.00 → 4.97 |
+| 1990–1998 | 6.30M | 0.85 | 33.7 → 25.0 | 3.31 → 2.43 | 5.82 → 4.41 |
+| 2011–2023 | 18.18M | 1.05 | 34.8 → 58.8 | 3.41 → 5.83 | 6.28 → 10.94 |
+| 2023–2033 | 8.25M | 2.28 | 58.8 → 82.4 | 5.83 → 8.22 | 10.94 → 13.38 |
+| 2036–2045 | 10.27M | 0.78–1.14 | 93 → 150 | 9.31 → 10.00 | 16.87 → 20.16 |
 
-Realised points run at about 72% of the observed weekly rate (rebuilt levels and projects in progress aren't counted), so the counterfactual is conservative by about that much.
+Realised points run at about 72% of the observed weekly rate. Part of the gap is by design: demand-bound builds (construction sectors and services, about 8.2M of FRA's 78.8M costed realised points) are left out, since their jobs stay as observed. The rest, about a fifth of the observed rate, is rebuilt levels and projects still in progress, which aren't counted. The counterfactual is conservative by at most that fifth, not by the whole 28%.
 
-**France's core, slack by curve** (counterfactual share of the workforce; "vac" = vacancies):
+**France's core, slack by curve** (counterfactual share of the workforce; "vac" = vacancies). The caps are the historical line held at +125%, +150% and +200%. `slope ×0.5` halves the historical line, to 5 points per £1 and +500% at £100; the sweep's `slope:0.5` below halves the current line instead.
 
 | date | observed | +100% cap (shipped) | +125% | +150% | +200% | slope ×0.5 | none |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -253,7 +264,7 @@ The concave shapes the issue suggested make things worse at this playthrough's G
 - **Sectors.** Seven level-bound sectors, each a representative building: wheat farm, coal mine, food industry, steel mill, semiconductors, railway, and `other`. Two demand-bound ones: urban centres and the construction sector.
 - **Construction.** It's bought at the cost curve, and its levels follow the playthrough's realised allocation.
 - **Automation.** Each sector picks a tier as a best response: the tier that saves most at the current wage, taken once its saving over the current tier repays the five-year retooling charge. That charge is itself multiplied by the cost penalty, and it raises the wage at which a tier is taken to 2.3–2.5× its breakeven at X = 0 and 7–8× at X = 4.
-- **Labour.** Hiring draws from the unemployed, then from peasants above the land law's floor. Wages rise with vacancies and are capped by the 0.25 margin. The unemployed return to subsistence only while welfare pays less than it does.
+- **Labour.** Hiring draws from the unemployed, then from peasants above the land law's floor. Wages rise with vacancies and are capped by the 0.25 margin. The unemployed return to subsistence only when it pays at least 1.3 times their welfare (subsistence buildings' `min_raise_to_hire`).
 - **Diagnostics.** Mode 1 and mode 2 (thresholds are parameters; mode 2 no longer requires wages at the floor), the turn year (wages reach the first technology-unlocked automation tier's breakeven in sectors holding half the jobs), the first adoption year, and catch-up measures.
 
 Every mod number is read from the files at load.
@@ -262,19 +273,21 @@ Every mod number is read from the files at load.
 
 | scenario | loss | targets |
 |---|---|---|
-| France's core | 11.0 | 22 |
-| AI Britain (to 1990) | 33.9 | 8 |
-| AI China | 108.5 | 22 |
-| whole union (not fitted) | 77.4 | 22 |
+| France's core | 12.5 | 22 |
+| AI Britain (to 1990) | 20.7 | 8 |
+| AI China | 105.6 | 22 |
+| whole union (not fitted) | 109.5 | 22 |
 
-**The hindcast fails: `econ_sim_calibrate.py check` reports 154 misses.**
-- The fitted France matches the playthrough's wage path, points a week and GDP per head to 2023, but only with no slack at all: peasants are gone by 1976 and unemployment sits at about 1%, mode 1 from about 1960. The saves hold 15–30% peasants and 3–36% unemployed throughout.
-- Some fitted values are compensations, not estimates of the game. The wage floor is driven to about 0, the workforce share is 0.25 against 0.50–0.61 observed, and the construction-good price is 0.60 against 0.91–0.95.
+A sim record holds its year's end-of-year stocks, so the loss and the check read record Y at Y + 1.0, where a save on 1 January would.
+
+**The hindcast fails: `econ_sim_calibrate.py check` reports 157 misses.**
+- The fitted France matches the playthrough's wage path, and its GDP per head and points a week to about 2004, but only with no slack at all: peasants are gone by 1958 and unemployment sits at about 1% from then. By 2045 its GDP per head is 68 against 155. It's in mode 2 from 1920 to 1955 and in mode 1 for 23 years from 2024. The saves hold 15–30% peasants and 3–36% unemployed throughout.
+- Some fitted values are compensations, not estimates of the game. The workforce share is 0.32 against 0.50–0.61 observed, and the construction-good price is 0.74 against 0.91–0.95. AI China's fit invests 100% of GDP privately and 80% through the government, though it's cap-bound either way, and AI Britain's automation lag is 80 years.
 
 **What the model lacks**, in order of weight. Each is a design choice, so none was added overnight.
 1. **A ceiling on demand-bound jobs.** Service jobs follow GDP with no price or profit gate, so they absorb every idle worker. In the saves, France's service employment rose to 79M in 1998 and fell to 41–64M from 2023 while GDP kept rising: the urban-centre price collapse (spec § 4.4). A services price that falls as capacity outruns demand is the missing piece.
 2. **Something that holds peasants.** In the sim, peasants leave for any job paying 1.1 × subsistence, while France's core kept 15–19% peasants from 1986 to 2045 under collectivized agriculture, a law with no employment floor.
-3. **Population per country.** One growth rule fitted on France gives China 7.4 billion people (×6.25) and Britain 4.5× too many. France's core grew 12.5× (46.8M to 584M), probably through migration into the player's rich core, which the spec makes a non-goal.
+3. **Population per country.** One growth rule fitted on France gives China 7.0 billion people (×5.9) and Britain 5.4× too many. France's core grew 12.5× (46.8M to 584M), probably through migration into the player's rich core, which the spec makes a non-goal.
 4. **Wages that rise without a shortage**, and a price index. The sim's wage rises only with vacancies, while the game's nominal wage rose 44× under 30% unemployment. The SoL-expectations push and price drift would cover it. With one constant price level, the fit can't follow both slack and wages.
 
 Smaller limits:
@@ -282,6 +295,7 @@ Smaller limits:
 - `price_level` does two jobs.
 - The observed value added used for `k_va` is net of maintenance, which `step` subtracts again (about 8% for light industry).
 - `other`'s staffing is frozen at its 1867 figure.
+- The automation choice (R25) leaves a tier's fixed crew wage out of its saving (`pm_ai_managed_fab`, era 12), so that tier looks cheaper than it is.
 - Annexations add people and levels to the union but no new ownership.
 
 Build-time departures from the plan, each on evidence:
@@ -291,28 +305,28 @@ Build-time departures from the plan, each on evidence:
 
 ## First sweep (uncalibrated model, mechanics only)
 
-`econ_growth_sim.py sweep`, run on the fitted parameters. `linear` is the mod's curve as shipped, capped at +100%. `slope:0.5` halves its slope, and `none` removes it. A cap above +100% equals `linear` now.
+`econ_growth_sim.py sweep`, run on the fitted parameters. `linear` is the mod's curve as shipped, capped at +100%. `slope:0.5` halves its slope, to 5 points per £1 and at most +50% (the counterfactual's `slope ×0.5` halves the historical line instead). `none` removes it. A cap of +100% or more equals `linear` now.
 
 **Read these rows as the model's mechanics, not the game.**
-- The fitted model is labour-bound from about 1960 (mode 1 for 75 years), unlike the playthrough, so curve shapes barely move it.
-- The mode-2 years come from the years before it turns.
+- The fitted rich player runs out of slack in the 1950s and holds about 1% from then, unlike the playthrough. The curve moves how early that happens (1950 slack 28% under `linear`, 7% at half the slope, 1% with none) and the mode-1 years (23, 38, 48), not the late picture.
+- The rich player's mode-2 years are the ones before it runs out of slack.
 - The poor types are cap-bound most years: the per-project cap ladder, not the curve, limits them.
-- The AI series stop where the game's AI Britain was absorbed (1990), and the AI's schedules are held flat after its last point.
+- The AI series stop where the game's AI Britain was absorbed (1990), and the AI's schedules are held flat after its last point. AI Britain's fitted 80-year automation lag means it never automates.
 
 | Setting | Type | Turn year | Adoption year | Peasants < 5% | Peasants + unemployed 1950 / 2000 / 2045 | Years in mode 1 / mode 2 | Binding: money / cap / labour | GDP per capita 2045 | Take-off year | Take-off to < 10% peasants (years) | Growth vs type 1 (x) |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| linear | player_rich | 1973 | 1927 | 1960 | 31.3% / 0.8% / 0.5% | 75 / 39 | 0 / 94 / 182 | 93.5 | 1892 | 67 | 1.00 |
-| linear | player_poor | — | — | — | 80.4% / 77.0% / 64.3% | 0 / 39 | 2 / 127 / 131 | 10.8 | 1876 | 128 | 1.07 |
-| linear | ai_rich | — | — | — | 46.6% / — / — | 0 / 71 | 0 / 100 / 116 | — | 1882 | — | 1.02 |
-| linear | ai_poor | 1937 | 1947 | — | 47.8% / 29.7% / 29.3% | 0 / 91 | 1 / 163 / 140 | 13.2 | 1880 | 141 | 1.92 |
-| slope:0.5 | player_rich | 1966 | 1925 | 1956 | 18.4% / 0.8% / 0.5% | 79 / 36 | 0 / 97 / 180 | 94.8 | 1892 | 63 | 1.00 |
-| slope:0.5 | player_poor | — | — | — | 80.4% / 76.9% / 64.1% | 0 / 39 | 2 / 128 / 131 | 10.9 | 1876 | 128 | 1.06 |
-| slope:0.5 | ai_rich | — | — | — | 46.1% / — / — | 0 / 71 | 0 / 101 / 116 | — | 1882 | — | 1.01 |
-| slope:0.5 | ai_poor | 1937 | 1947 | — | 47.7% / 29.5% / 29.0% | 0 / 91 | 1 / 163 / 140 | 13.3 | 1880 | 141 | 1.89 |
-| none | player_rich | 1958 | 1922 | 1947 | 1.2% / 0.8% / 0.5% | 94 / 24 | 0 / 110 / 182 | 99.8 | 1892 | 52 | 1.00 |
-| none | player_poor | — | — | — | 80.4% / 76.9% / 63.9% | 0 / 39 | 2 / 128 / 131 | 10.9 | 1876 | 128 | 1.05 |
-| none | ai_rich | — | — | — | 45.7% / — / — | 0 / 71 | 0 / 102 / 116 | — | 1882 | — | 1.01 |
-| none | ai_poor | 1937 | 1947 | — | 47.7% / 29.3% / 28.1% | 0 / 91 | 1 / 163 / 139 | 13.5 | 1880 | 141 | 1.86 |
+| linear | player_rich | 1970 | 1918 | 1956 | 28.2% / 1.1% / 0.9% | 23 / 36 | 90 / 93 / 85 | 77.4 | 1875 | 81 | 1.00 |
+| linear | player_poor | — | 1893 | 2038 | 80.3% / 74.1% / 54.4% | 0 / 69 | 54 / 130 / 0 | 11.9 | 1869 | 121 | 0.92 |
+| linear | ai_rich | — | — | — | 69.5% / — / — | 0 / 71 | 0 / 124 / 0 | — | — | — | — |
+| linear | ai_poor | 1937 | 1950 | — | 28.9% / 30.5% / 31.3% | 0 / 114 | 0 / 184 / 8 | 14.2 | 1867 | 139 | 4.89 |
+| slope:0.5 | player_rich | 1969 | 1918 | 1951 | 6.8% / 1.0% / 0.8% | 38 / 29 | 85 / 98 / 87 | 87.2 | 1875 | 73 | 1.00 |
+| slope:0.5 | player_poor | — | 1893 | 2038 | 80.3% / 74.0% / 54.0% | 0 / 72 | 53 / 131 / 0 | 12.0 | 1869 | 122 | 0.91 |
+| slope:0.5 | ai_rich | — | — | — | 69.3% / — / — | 0 / 71 | 0 / 124 / 0 | — | — | — | — |
+| slope:0.5 | ai_poor | 1937 | 1950 | — | 28.7% / 30.1% / 30.8% | 0 / 114 | 0 / 184 / 8 | 14.3 | 1867 | 139 | 4.87 |
+| none | player_rich | 1956 | 1918 | 1936 | 1.3% / 1.0% / 0.8% | 48 / 14 | 69 / 114 / 103 | 91.3 | 1875 | 59 | 1.00 |
+| none | player_poor | — | 1893 | 2038 | 80.2% / 73.9% / 53.7% | 0 / 74 | 53 / 131 / 0 | 12.1 | 1869 | 122 | 0.90 |
+| none | ai_rich | — | — | — | 69.2% / — / — | 0 / 71 | 0 / 124 / 0 | — | — | — | — |
+| none | ai_poor | 1937 | 1950 | — | 28.6% / 29.7% / 30.3% | 0 / 114 | 0 / 184 / 8 | 14.5 | 1867 | 139 | 4.85 |
 
 ## Open questions for the owner
 
@@ -329,9 +343,9 @@ Build-time departures from the plan, each on evidence:
 ## How to run
 
 ```bash
-PY=/home/jakef/src/Vic3TimelineExtended/.venv/bin/python   # the venv; standard library only, but run from the repo root
+PY=.venv/bin/python   # the venv; standard library only, but run from the repo root
 $PY scripts/analysis/econ_construction_counterfactual.py --series FRA,union,GBR,CHI --curves historical,current,capped:1.25,none
-$PY scripts/analysis/econ_growth_sim.py sweep --scenarios player_rich,player_poor,ai_rich,ai_poor --curves linear,capped:1.25,slope:0.5,none
+$PY scripts/analysis/econ_growth_sim.py sweep --scenarios player_rich,player_poor,ai_rich,ai_poor --curves linear,slope:0.5,none
 $PY scripts/analysis/econ_growth_sim.py run --scenario player_rich --set fill_rate=0.3 --csv /tmp/run.csv
 $PY scripts/analysis/econ_sim_calibrate.py check      # after a change to PMs, cost tiers or construction techs
 $PY scripts/analysis/econ_sim_calibrate.py fit --out scripts/analysis/econ_sim_params.json
