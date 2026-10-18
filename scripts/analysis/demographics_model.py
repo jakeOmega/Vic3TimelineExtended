@@ -226,6 +226,89 @@ def life_table(q):
     return {"e0": e_total, "e65": py_from_65 / l65 if l65 else 0.0, "q0_per_1000": q[0] / 100.0}
 
 
+# ---- Deaths by cause (issue #1029's estimate, its method a) ----------------------------------------------------------
+# The sweep counts one total of deaths. The Causes of Death section splits it: each natural cause's deaths over the year
+# at the step's rates, from the bands at the start of the step (the people the sweep takes its dead from, by the age they
+# had at the last count, which is the rate age they die at now), scaled so the four add up to the census's own deaths
+# from them. Childbirth's deaths, the war dead, the people killed by events and, under Full, the deaths added on top are
+# counted as they are. Bands 1-16 each hold one age group, so their part is exact; 0-4 (the infants' group and the 1-4s')
+# and 85+ (thirteen groups and the pool) take their groups' rates weighted by the person-years a life table at the base
+# rates gives them, and a state under longevity care, whose treated die at their biological ages, is approximate too.
+CAUSE_DEATH_CAUSES = ("infection", "external", "chronic", "work")
+
+
+def band_groups(b):
+    """The age groups (indexes into P.GROUPS) that start inside five-year band b (0-4 ... 80-84, then 85 and over)."""
+    lo = 5 * b
+    hi = 5 * b + 5 if b < P.BANDS - 1 else N + 1
+    return [g for g, (start, _n) in enumerate(P.GROUPS) if lo <= start < hi]
+
+
+def band_cause_rates():
+    """{cause: {"f": [rate per band], "m": [...]}}: each natural cause's yearly deaths per 100,000 people of each band at
+    a multiplier of 1, its groups' rates weighted by their person-years in a life table at those base rates (work at the
+    rate before the sexes' split, P.WORK_BASE). Rounded to the script's five decimals: the generator writes this table
+    into te_demog_cause_deaths_estimate."""
+    tables = {"infection": P.INFECTION, "external": P.EXTERNAL, "chronic": P.CHRONIC,
+              "work": {"f": P.WORK_BASE, "m": P.WORK_BASE}}
+    out = {c: {"f": [], "m": []} for c in CAUSE_DEATH_CAUSES}
+    for s in "fm":
+        py, survivors = [], 1.0
+        for g, (_start, n) in enumerate(P.GROUPS):
+            qq = min(100000.0, P.INFECTION[s][g] + P.WORK_BASE[g] + P.EXTERNAL[s][g] + P.CHRONIC[s][g]) / 100000.0
+            pn = (1 - qq) ** n
+            py.append(survivors * n if qq == 0 else survivors * (1 - qq / 2) * (1 - pn) / qq)
+            survivors *= pn
+        for b in range(P.BANDS):
+            groups = band_groups(b)
+            weight = sum(py[g] for g in groups)
+            for c in CAUSE_DEATH_CAUSES:
+                out[c][s].append(round(sum(py[g] * tables[c][s][g] for g in groups) / weight, 5))
+    return out
+
+
+def band_sums(ring):
+    """(women, men) by five-year band, people, as the census's te_dg_bf<b> and te_dg_bm<b> hold them after a count: the
+    pool in 85 and over."""
+    bf, bm = [0.0] * P.BANDS, [0.0] * P.BANDS
+    for a, f, m in ring.by_age():
+        b = min(a // 5, P.BANDS - 1)
+        bf[b] += f
+        bm[b] += m
+    return bf, bm
+
+
+def cause_deaths_estimate(bands_f, bands_m, mult, work_f, work_m, rates=None):
+    """Each natural cause's deaths over a year at the step's multipliers (mult: infection, external, chronic; work_f and
+    work_m the work multiplier with each sex's split, as the sweep takes them), from people by band: the script's
+    te_demog_cause_deaths_estimate."""
+    r = rates or band_cause_rates()
+    out = {}
+    for c in ("infection", "external", "chronic"):
+        out[c] = sum(bands_f[b] * r[c]["f"][b] + bands_m[b] * r[c]["m"][b] for b in range(P.BANDS)) * mult[c] / 100000.0
+    out["work"] = (sum(bands_f[b] * r["work"]["f"][b] for b in range(P.BANDS)) * work_f
+                   + sum(bands_m[b] * r["work"]["m"][b] for b in range(P.BANDS)) * work_m) / 100000.0
+    return out
+
+
+def cause_deaths(raw, deaths, maternal, deaths_scale=0.0, war_dead=0.0, kills=0.0):
+    """Last year's deaths by cause, people (the script's te_dg_dc_*, te_demog_cause_deaths_store): the four natural
+    causes' estimates (raw) scaled to the census's own deaths from them, its deaths less childbirth's and, under Full,
+    less what the on-top scale added (deaths_scale, te_dg_dz, when above 0: below 0 the game took deaths away, which no
+    slice shows); childbirth's, the deaths added on top, the war dead and the people killed by events as counted.
+    "total" is the slices' sum, the census's deaths with the war dead and the killed; "fit" the estimate over the deaths
+    from the four causes before the on-top split, 1 when the estimate matches the sweep."""
+    natural = max(deaths - maternal, 0.0)
+    on_top = natural * deaths_scale / (1 + deaths_scale) if deaths_scale > 0 else 0.0
+    est = sum(raw[c] for c in CAUSE_DEATH_CAUSES)
+    k = (natural - on_top) / est if est > 0 else 0.0
+    out = {c: raw[c] * k for c in CAUSE_DEATH_CAUSES}
+    out.update(maternal=maternal, on_top=on_top, war=war_dead, kills=kills)
+    out["total"] = sum(out.values())
+    out["fit"] = est / max(natural, 1.0)
+    return out
+
+
 def means(inp):
     """The share of the gap to desired fertility a population can close (§2.3; stage 2's types)."""
     tier = clamp(P.TRADITIONAL_MEANS + inp.mods.get(P.CONTRACEPTION_TYPE, 0.0), 0.0, 1.0)
@@ -1179,6 +1262,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     lx = lx_begin(ring, inp) if rates is None else None
     ring.lx_slot = {}
     tfr = tfr * (1 + births_scale)
+    # the people the sweep takes its dead from, by band (issue #1029's estimate, cause_deaths_estimate below)
+    bands_f, bands_m = band_sums(ring)
     if deaths_scale:
         if rates is None:
             mult = cause_multipliers(inp)
@@ -1188,6 +1273,14 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         else:
             qf = [min(100000.0, q * (1 + deaths_scale)) for q in qf]
             qm = [min(100000.0, q * (1 + deaths_scale)) for q in qm]
+    # issue #1029: each natural cause's deaths at the year's rates, with the on-top scale the sweep's rates carry (a
+    # replay's logged rates carry no multipliers, so it has none)
+    causes_raw = None
+    if rates is None:
+        cm = cause_multipliers(inp)
+        cwf, cwm = work_split(inp, cm["work"])
+        ck = 1 + deaths_scale
+        causes_raw = cause_deaths_estimate(bands_f, bands_m, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck)
     maternal = 0.0
     s = ring.scale
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
@@ -1274,6 +1367,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": q0_model,
             "fertility": fert, "raw": raw,
             "tfr_shown": tfr, "maternal": maternal,
+            "causes": None if causes_raw is None else cause_deaths(causes_raw, deaths, maternal, deaths_scale,
+                                                                   war_dead, kills),
             "births_model": births / (1 + births_scale),
             "deaths_model": (deaths - maternal) / (1 + deaths_scale) + maternal / (1 + births_scale)}
 

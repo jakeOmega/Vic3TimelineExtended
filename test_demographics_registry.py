@@ -423,9 +423,14 @@ def ALL_OFF(f):
 SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": "",
                     # phase 3's (te_debug_demog_effects.txt): they read the capital, s:STATE_ULSTER and debug_log
                     "te_debug_demog_fl_selfcheck_start": "", "te_debug_demog_fl_neighbours_check": "",
-                    "te_debug_demog_neighbours_selfcheck": ""}
+                    "te_debug_demog_neighbours_selfcheck": "",
+                    # issue #1029's (it reads debug_log and the state's name): TestCauseDeaths reads its text
+                    "te_debug_demog_cause_deaths_selfcheck": ""}
 # Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
 PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
+# Issue #1029: the month a state's count is taken (te_dg_count_mi, the subtab's next count), te_history_month_index, which
+# reads the calendar's month: the start of 1836's year unless a test says.
+PANEL_DEFAULTS = {"te_history_month_index": 1836.0 * 12}
 
 
 class _Engine:
@@ -466,7 +471,7 @@ class _Engine:
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **fixtures}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -959,6 +964,9 @@ class TestCohortScript(unittest.TestCase):
         if stub_flows:
             prof = demographics_model.migrant_profile(inp)
             locals_ = {
+                # the people, which the Causes of Death slices take (issue #1029), then the rates the sweep reads
+                "te_dg_war": war_dead,
+                "te_dg_kills": kills,
                 "te_dg_war_ff": min(0.5, war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw),
                 "te_dg_war_fm": min(0.5, war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam),
                 "te_dg_kill": min(0.9, kills / ring.total),
@@ -999,6 +1007,9 @@ class TestCohortScript(unittest.TestCase):
             eng.vars.update(te_dg_faw=ring.faw, te_dg_fam=ring.fam)
         for c in range(len(P.MIGRANT_CLASSES)):
             eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
+        # the last count's bands, which the deaths-by-cause estimate reads (issue #1029)
+        for b, (bf, bm) in enumerate(zip(*demographics_model.band_sums(ring))):
+            eng.vars[f"te_dg_bf{b}"], eng.vars[f"te_dg_bm{b}"] = bf, bm
         if flows is not None:
             eng.vars.update(te_dg_pop_last=ring.total, te_dg_eb=flows["eb"], te_dg_ed=flows["ed"],
                             te_dg_fjob_share=flows["fjob_share"])
@@ -4046,7 +4057,8 @@ class TestFlows(unittest.TestCase):
         self.assertRegex(flows, r"(?m)^\tte_demog_set_profile = yes$", "the profile is set unconditionally")
         self.assertRegex(flows, r"(?m)^\tte_demog_migrant_rates = yes$", "the booking's rates are set unconditionally")
         names = re.findall(r"name = (te_dg_\w+) value", _block(_text(EFFECTS), "te_demog_no_flows"))
-        self.assertEqual(len(names), 16)
+        # 16, and the war dead and the people killed the Causes of Death slices take (issue #1029)
+        self.assertEqual(len(names), 18)
         for name in names:
             self.assertIsNotNone(re.search(rf"^\tset_local_variable = \{{\s+name = {name}\s+value", body, re.M), name)
 
@@ -5522,6 +5534,8 @@ class _ConsoleEngine(_Engine):
         self.effects.update(blocks)
         self.effects["te_demog_debug_log_ring_before"] = "debug_log = RING_BEFORE"
         self.effects["te_demog_debug_log_ring_after"] = "debug_log = RING_AFTER"
+        # the step's own once-a-game self-check (issue #1029) reads a global variable the interpreter doesn't know
+        self.effects["te_debug_demog_cause_deaths_selfcheck"] = ""
         self.logs = []
 
     def run(self, items):
@@ -6376,9 +6390,11 @@ class TestCausesDisplay(unittest.TestCase):
     def test_every_key_the_section_names_exists(self):
         # in any English file: organize_loc files a key no .gui names yet (until Task 9) in te_unused_l_english.yml
         loc = "\n".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*_l_english.yml")))
-        rows = ("acc", "inf", "ext", "chr", "work", "mat", "ontop")
-        keys = ["te_demog_sec_causes", "te_demog_st_causes_pending"]
-        keys += [f"te_demog_st_{r}{s}" for r in rows for s in ("", "_value", "_tt")]
+        # issue #1029: the pie's legend rows, a name a slice (shared with the country tab) and a hover each
+        slices = ("inf", "ext", "chr", "work", "mat", "ontop", "kill", "war")
+        keys = ["te_demog_sec_causes", "te_demog_st_dc_pending", "te_demog_st_acc", "te_demog_st_acc_value",
+                "te_demog_st_acc_tt", "te_demog_st_pie_tt", "te_demog_st_cdr_tt", "te_demog_st_cdr_value"]
+        keys += [f"te_demog_dc_{r}" for r in slices] + [f"te_demog_st_dc_{r}_tt" for r in slices]
         for key in keys:
             self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
 
@@ -6407,11 +6423,12 @@ class TestCausesSection(unittest.TestCase):
         cls.loc = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(MISC_LOC)))
 
     def test_it_sits_after_the_overview(self):
-        content = _gui_type(self.gui, "te_state_demog_content")
+        # issue #1029: the subtab takes the country tab's order (te_demographics_layout.gui), the pyramid after Causes
+        # of Death, then Work and Retirement and phase 3's Longevity (late-game §6.2)
+        content = _gui_type(_text(ROOT / "gui" / "te_demographics_layout.gui"), "te_state_demog_content")
         order = re.findall(r"(te_state_demog_\w+) = \{\}", content)
-        # phase 2 step 2's Work and Retirement follows it, then phase 3's Longevity (late-game §6.2)
-        self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_work",
-                                 "te_state_demog_longevity", "te_state_demog_pyramid", "te_state_demog_wealth",
+        self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid",
+                                 "te_state_demog_work", "te_state_demog_longevity", "te_state_demog_wealth",
                                  "te_state_demog_how"])
 
     def test_open_by_default(self):
@@ -6420,29 +6437,33 @@ class TestCausesSection(unittest.TestCase):
         self.assertNotIn("_open'", self.section)
 
     def test_every_read_sits_under_its_gate(self):
-        """Review Focus 1: a key that reads the step's inputs is reached only inside the causes gate's container, and
-        one that reads the measured split only through a SelectLocalization on the on-top gate."""
-        inner = self.section.split("te_demog_state_causes_sgui').IsShown", 2)[2]   # past the pending line's Not(...)
-        outer = self.section[: len(self.section) - len(inner)]
-        for key in re.findall(r'(?:text|tooltip) = "(te_demog_st_\w+)"', outer):
-            self.assertIn(key, ("te_demog_sec_causes", "te_demog_st_causes_pending"), key)
+        """Review Focus 1: the legend's rows, whose hovers read the step's inputs and its deaths by cause, sit only
+        inside the deaths-by-cause gate's container (a step since issue #1029, which stores both), Health Care Access
+        under the causes gate, and the measured split is reached only through a SelectLocalization on the on-top gate."""
+        inner = self.section.split("te_demog_state_dc_sgui').IsShown", 2)[2]   # past the pending line's Not(...)
+        inner = inner[:inner.index("te_demog_state_causes_sgui")]
+        outer = self.section.replace(inner, "")
+        for key in re.findall(r'tooltip = "(te_demog_st_dc_\w+)"', self.section):
+            self.assertIn(key, inner, key)
+            self.assertNotIn(key, outer, key)
+        acc = self.section[self.section.index("te_demog_state_causes_sgui"):]
+        self.assertIn('tooltip = "te_demog_st_acc_tt"', acc)
         split = re.compile(r"te_dg_ed_state|te_dg_ed_sev|te_dg_sev_share|te_dg_ed_clamp_d|te_demog_deaths_")
-        for key in ("te_demog_st_ontop_value", "te_demog_st_ontop_tt"):
-            self.assertIsNone(split.search(self.loc[key]), key)
-            self.assertIn("te_demog_state_on_top_sgui", self.loc[key])
+        self.assertIsNone(split.search(self.loc["te_demog_st_dc_ontop_tt"]))
+        self.assertIn("te_demog_state_on_top_sgui", self.loc["te_demog_st_dc_ontop_tt"])
 
     def test_the_on_top_row_is_full_only(self):
-        label = self.section.index('"te_demog_st_ontop"')
-        row = self.section[self.section.rindex("te_demog_figure_row", 0, label):label]
+        label = self.section.index('"te_demog_dc_ontop"')
+        row = self.section[self.section.rindex("te_demog_cause_row", 0, label):label]
         self.assertIn("te_demog_state_full_sgui", row)
         self.assertEqual(self.section.count("te_demog_state_full_sgui"), 1, "only the on-top row is Full-only")
 
     def test_names_are_spliced(self):
         """The review of #916 (panel I1): laws, institutions and techs by their loc keys, never typed (the game says
         "Workers' Protections"; the mod renames the Health System "Ministry of Health")."""
-        for key, names in (("te_demog_st_work_tt", ("$law_regulatory_bodies$", "$law_worker_protections$")),
+        for key, names in (("te_demog_st_dc_work_tt", ("$law_regulatory_bodies$", "$law_worker_protections$")),
                            ("te_demog_st_acc_tt", ("$institution_health_system$",)),
-                           ("te_demog_st_ext_tt", ("$institution_ministry_of_consumer_protection$", "$combustion_engine$",
+                           ("te_demog_st_dc_ext_tt", ("$institution_ministry_of_consumer_protection$", "$combustion_engine$",
                                                    "$institution_police$", "$autonomous_vehicles$"))):
             for name in names:
                 self.assertIn(name, self.loc[key], key)
@@ -6457,9 +6478,12 @@ class TestCausesSection(unittest.TestCase):
         # the access hover's two lines sum to where access is heading, not the row (panel M2)
         self.assertIn("Where it is heading:", self.loc["te_demog_st_acc_tt"])
 
-    def test_the_country_tab_keeps_its_todo(self):
-        tab = _gui_type(self.gui, "te_demog_tab_sections")
-        self.assertRegex(tab, r"### TODO \(#894\): .*Causes of Death")
+    def test_the_country_tab_has_its_own(self):
+        """Issue #1029 built the country tab's section where #894's TODO stood, straight after the overview."""
+        tab = _gui_type(_text(ROOT / "gui" / "te_demographics_layout.gui"), "te_demog_tab_sections")
+        self.assertNotIn("TODO", tab)
+        order = re.findall(r"(te_demog_\w+) = \{\}", tab)
+        self.assertEqual(order[:2], ["te_demog_overview", "te_demog_sec_causes"])
 
 
 class TestCauseFactorsScript(unittest.TestCase):

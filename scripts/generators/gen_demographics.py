@@ -50,6 +50,9 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_practices_seed, _step, _country_init, _country_add, _country_store
                                                 each practice's turn of te_demog_practice_effects.txt (Late
                                                 Marriage and Birth Spacing; the late-marriage plan)
+        te_demog_cause_deaths_estimate          each natural cause's deaths at the step's rates over the bands, the
+                                                Causes of Death section's estimate (issue #1029; demographics_model
+                                                .band_cause_rates)
     common/script_values/te_demog_generated_values.txt
         per-pop engine curves and wealth TFR; per-state cause multipliers (reads of the
         demographics modifier types: medicine as 1 - access x treatment), women's work share, the means and
@@ -329,6 +332,53 @@ def life_table(o):
         o(f"te_demog_lt_group = {{ N = {width} FERTILE = {'yes' if fertile else 'no'} }}")
     o("te_demog_lt_finish = yes")
     o("te_demog_old_age_pass = yes")
+    o("}")
+    o("")
+
+
+def cause_deaths_estimate(o):
+    """Issue #1029's estimate (demographics_model.cause_deaths_estimate, method a): each natural cause's deaths at the
+    step's rates, from the bands at the start of the step, at demographics_model.band_cause_rates' table."""
+    r = M.band_cause_rates()
+    o("# THIS = a state at its step, after te_demog_on_top_scales and before the sweep writes this count's bands (issue")
+    o("# #1029; demographics_model.cause_deaths_estimate): each natural cause's deaths over the year at the step's rates,")
+    o("# from the people the sweep takes its dead from, by the band they had at the last count (te_dg_bf<b>, te_dg_bm<b>,")
+    o("# whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at")
+    o("# a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at")
+    o("# the base rates) x the step's multiplier, work's by sex. Exact in the bands of one age group; approximate in 0-4")
+    o("# and 85+, and under longevity care. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work,")
+    o("# which te_demog_cause_deaths_store scales to the census's deaths.")
+    o("te_demog_cause_deaths_estimate = {")
+
+    def band_sum(terms):
+        (v0, x0), rest = terms[0], terms[1:]
+        o(f"value = var:{v0}")
+        o(f"multiply = {lit(x0)}")
+        for v, x in rest:
+            o(f"add = {{ value = var:{v} multiply = {lit(x)} }}")
+
+    for cause, short in (("infection", "inf"), ("external", "ext"), ("chronic", "chr")):
+        terms = [(f"te_dg_b{s}{b}", r[cause][s][b]) for b in range(P.BANDS) for s in "fm" if r[cause][s][b]]
+        o("set_local_variable = {")
+        o(f"name = te_dg_ce_{short}")
+        o("value = {")
+        band_sum(terms)
+        o(f"multiply = local_var:te_dg_m_{short}")
+        o("divide = 100000")
+        o("}")
+        o("}")
+    o("set_local_variable = {")
+    o("name = te_dg_ce_work")
+    o("value = {")
+    band_sum([(f"te_dg_bf{b}", r["work"]["f"][b]) for b in range(P.BANDS) if r["work"]["f"][b]])
+    o("multiply = local_var:te_dg_m_work_f")
+    o("add = {")
+    band_sum([(f"te_dg_bm{b}", r["work"]["m"][b]) for b in range(P.BANDS) if r["work"]["m"][b]])
+    o("multiply = local_var:te_dg_m_work_m")
+    o("}")
+    o("divide = 100000")
+    o("}")
+    o("}")
     o("}")
     o("")
 
@@ -933,6 +983,7 @@ def render_effects(root=ROOT):
     medicine_effects(o)
     practice_loops(o)
     family_policy_effects(o)
+    cause_deaths_estimate(o)
     debug_ring(o)
     return o.text()
 

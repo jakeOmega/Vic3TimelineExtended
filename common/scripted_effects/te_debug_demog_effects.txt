@@ -1094,6 +1094,54 @@ te_debug_demog_unemployment_selfcheck = {
 	}
 }
 
+# ---- The Causes of Death estimate (issue #1029): a once-a-game self-check -----------------------------------------------
+# The section's slices rest on an estimate (te_demog_cause_deaths_estimate: last count's bands at the step's rates) scaled
+# to the sweep's own deaths, so they always add up; what the estimate claims is that the bands at the step's start are the
+# people the sweep takes its dead from. Once a game, the first state to step with a thousand deaths or more from the four
+# natural causes and no one in longevity care (whose treated die at their biological ages, where the estimate is only
+# approximate) logs the estimate over those deaths (fit, 1 when it matches; 0.97 for a poor farm state, 1.00 for a rich
+# one in demographics_model) and the slices' sum against the census's deaths with the war dead and the killed. BROKEN:
+# the estimate is off by more than a tenth, or the slices don't add up; count the deaths by group in the sweep instead
+# (the issue's method b), docs/testing/demographics-playtest.md. THIS = a state, in te_demog_cause_deaths_store, with
+# its locals.
+te_debug_demog_cause_deaths_selfcheck = {
+	if = {
+		limit = {
+			te_debug_demog_selfchecks_run = yes
+			NOT = { has_global_variable = te_demog_selfcheck_cause_done }
+			local_var:te_dg_lx_on = 0
+			local_var:te_dg_dc_nat >= 1000
+		}
+		set_global_variable = { name = te_demog_selfcheck_cause_done value = yes }
+		set_local_variable = {
+			name = te_dg_dc_chk_gap
+			value = {
+				value = var:te_dg_dc_total
+				subtract = local_var:te_dg_deaths
+				subtract = local_var:te_dg_war
+				subtract = local_var:te_dg_kills
+			}
+		}
+		# the tolerance either side as locals: a comparison with an inline value block held for every state (the note in
+		# te_demog_state_census)
+		set_local_variable = { name = te_dg_dc_chk_tol value = { value = var:te_dg_dc_total multiply = 0.001 min = 1 } }
+		set_local_variable = { name = te_dg_dc_chk_neg value = { value = local_var:te_dg_dc_chk_tol multiply = -1 } }
+		if = {
+			limit = {
+				var:te_dg_dc_fit >= 0.9
+				var:te_dg_dc_fit <= 1.1
+				local_var:te_dg_dc_chk_gap <= local_var:te_dg_dc_chk_tol
+				local_var:te_dg_dc_chk_gap >= local_var:te_dg_dc_chk_neg
+			}
+			debug_log = "TE_SELF_CHECK OK cause_deaths_estimate state=[THIS.GetState.GetNameNoFormatting] fit=[THIS.Var('te_dg_dc_fit').GetValue|3] deaths=[THIS.Var('te_dg_deaths').GetValue|0] childbirth=[THIS.Var('te_dg_dc_mat').GetValue|0] on_top=[THIS.Var('te_dg_dc_ontop').GetValue|0] war=[THIS.Var('te_dg_dc_war').GetValue|0] killed=[THIS.Var('te_dg_dc_kill').GetValue|0] slices=[THIS.Var('te_dg_dc_total').GetValue|0] (the estimate over last count's bands matches the sweep's deaths, and the slices add up) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cause_deaths_estimate state=[THIS.GetState.GetNameNoFormatting] fit=[THIS.Var('te_dg_dc_fit').GetValue|3] deaths=[THIS.Var('te_dg_deaths').GetValue|0] childbirth=[THIS.Var('te_dg_dc_mat').GetValue|0] on_top=[THIS.Var('te_dg_dc_ontop').GetValue|0] war=[THIS.Var('te_dg_dc_war').GetValue|0] killed=[THIS.Var('te_dg_dc_kill').GetValue|0] slices=[THIS.Var('te_dg_dc_total').GetValue|0] (fit outside 0.9-1.1, or the slices don't add up to deaths + war + killed: count the deaths by age group in the sweep instead, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+	}
+}
+
 # ---- t: phase 2 step 4's figures (the consequences design §4) -------------------------------------------------------
 # THIS = ROOT = the player. The capital's pool, conscription term, youth bulge and sex-balance terms (TE_DEMOG_CONSEQ),
 # and the country's (TE_DEMOG_CONSEQ_COUNTRY): what the panel shows and what the four modifiers carry.

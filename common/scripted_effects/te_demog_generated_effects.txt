@@ -7640,6 +7640,179 @@ te_demog_newborn_split = {
 	}
 }
 
+# THIS = a state at its step, after te_demog_on_top_scales and before the sweep writes this count's bands (issue
+# #1029; demographics_model.cause_deaths_estimate): each natural cause's deaths over the year at the step's rates,
+# from the people the sweep takes its dead from, by the band they had at the last count (te_dg_bf<b>, te_dg_bm<b>,
+# whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at
+# a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at
+# the base rates) x the step's multiplier, work's by sex. Exact in the bands of one age group; approximate in 0-4
+# and 85+, and under longevity care. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work,
+# which te_demog_cause_deaths_store scales to the census's deaths.
+te_demog_cause_deaths_estimate = {
+	set_local_variable = {
+		name = te_dg_ce_inf
+		value = {
+			value = var:te_dg_bf0
+			multiply = 7653.9868
+			add = { value = var:te_dg_bm0 multiply = 8246.01327 }
+			add = { value = var:te_dg_bf1 multiply = 1000 }
+			add = { value = var:te_dg_bm1 multiply = 1000 }
+			add = { value = var:te_dg_bf2 multiply = 550 }
+			add = { value = var:te_dg_bm2 multiply = 550 }
+			add = { value = var:te_dg_bf3 multiply = 750 }
+			add = { value = var:te_dg_bm3 multiply = 750 }
+			add = { value = var:te_dg_bf4 multiply = 750 }
+			add = { value = var:te_dg_bm4 multiply = 750 }
+			add = { value = var:te_dg_bf5 multiply = 750 }
+			add = { value = var:te_dg_bm5 multiply = 750 }
+			add = { value = var:te_dg_bf6 multiply = 750 }
+			add = { value = var:te_dg_bm6 multiply = 750 }
+			add = { value = var:te_dg_bf7 multiply = 750 }
+			add = { value = var:te_dg_bm7 multiply = 750 }
+			add = { value = var:te_dg_bf8 multiply = 750 }
+			add = { value = var:te_dg_bm8 multiply = 750 }
+			add = { value = var:te_dg_bf9 multiply = 900 }
+			add = { value = var:te_dg_bm9 multiply = 950 }
+			add = { value = var:te_dg_bf10 multiply = 900 }
+			add = { value = var:te_dg_bm10 multiply = 950 }
+			add = { value = var:te_dg_bf11 multiply = 900 }
+			add = { value = var:te_dg_bm11 multiply = 950 }
+			add = { value = var:te_dg_bf12 multiply = 900 }
+			add = { value = var:te_dg_bm12 multiply = 950 }
+			add = { value = var:te_dg_bf13 multiply = 1500 }
+			add = { value = var:te_dg_bm13 multiply = 1600 }
+			add = { value = var:te_dg_bf14 multiply = 1500 }
+			add = { value = var:te_dg_bm14 multiply = 1600 }
+			add = { value = var:te_dg_bf15 multiply = 1500 }
+			add = { value = var:te_dg_bm15 multiply = 1600 }
+			add = { value = var:te_dg_bf16 multiply = 2800 }
+			add = { value = var:te_dg_bm16 multiply = 2900 }
+			add = { value = var:te_dg_bf17 multiply = 2800 }
+			add = { value = var:te_dg_bm17 multiply = 2900 }
+			multiply = local_var:te_dg_m_inf
+			divide = 100000
+		}
+	}
+	set_local_variable = {
+		name = te_dg_ce_ext
+		value = {
+			value = var:te_dg_bf0
+			multiply = 60
+			add = { value = var:te_dg_bm0 multiply = 70 }
+			add = { value = var:te_dg_bf1 multiply = 40 }
+			add = { value = var:te_dg_bm1 multiply = 50 }
+			add = { value = var:te_dg_bf2 multiply = 40 }
+			add = { value = var:te_dg_bm2 multiply = 50 }
+			add = { value = var:te_dg_bf3 multiply = 60 }
+			add = { value = var:te_dg_bm3 multiply = 180 }
+			add = { value = var:te_dg_bf4 multiply = 60 }
+			add = { value = var:te_dg_bm4 multiply = 180 }
+			add = { value = var:te_dg_bf5 multiply = 60 }
+			add = { value = var:te_dg_bm5 multiply = 180 }
+			add = { value = var:te_dg_bf6 multiply = 60 }
+			add = { value = var:te_dg_bm6 multiply = 180 }
+			add = { value = var:te_dg_bf7 multiply = 60 }
+			add = { value = var:te_dg_bm7 multiply = 180 }
+			add = { value = var:te_dg_bf8 multiply = 60 }
+			add = { value = var:te_dg_bm8 multiply = 180 }
+			add = { value = var:te_dg_bf9 multiply = 50 }
+			add = { value = var:te_dg_bm9 multiply = 110 }
+			add = { value = var:te_dg_bf10 multiply = 50 }
+			add = { value = var:te_dg_bm10 multiply = 110 }
+			add = { value = var:te_dg_bf11 multiply = 50 }
+			add = { value = var:te_dg_bm11 multiply = 110 }
+			add = { value = var:te_dg_bf12 multiply = 50 }
+			add = { value = var:te_dg_bm12 multiply = 110 }
+			add = { value = var:te_dg_bf13 multiply = 80 }
+			add = { value = var:te_dg_bm13 multiply = 110 }
+			add = { value = var:te_dg_bf14 multiply = 80 }
+			add = { value = var:te_dg_bm14 multiply = 110 }
+			add = { value = var:te_dg_bf15 multiply = 80 }
+			add = { value = var:te_dg_bm15 multiply = 110 }
+			add = { value = var:te_dg_bf16 multiply = 80 }
+			add = { value = var:te_dg_bm16 multiply = 110 }
+			add = { value = var:te_dg_bf17 multiply = 80 }
+			add = { value = var:te_dg_bm17 multiply = 110 }
+			multiply = local_var:te_dg_m_ext
+			divide = 100000
+		}
+	}
+	set_local_variable = {
+		name = te_dg_ce_chr
+		value = {
+			value = var:te_dg_bf1
+			multiply = 60
+			add = { value = var:te_dg_bm1 multiply = 78 }
+			add = { value = var:te_dg_bf2 multiply = 60 }
+			add = { value = var:te_dg_bm2 multiply = 78 }
+			add = { value = var:te_dg_bf3 multiply = 60 }
+			add = { value = var:te_dg_bm3 multiply = 78 }
+			add = { value = var:te_dg_bf4 multiply = 120 }
+			add = { value = var:te_dg_bm4 multiply = 156 }
+			add = { value = var:te_dg_bf5 multiply = 120 }
+			add = { value = var:te_dg_bm5 multiply = 156 }
+			add = { value = var:te_dg_bf6 multiply = 180 }
+			add = { value = var:te_dg_bm6 multiply = 234 }
+			add = { value = var:te_dg_bf7 multiply = 180 }
+			add = { value = var:te_dg_bm7 multiply = 234 }
+			add = { value = var:te_dg_bf8 multiply = 320 }
+			add = { value = var:te_dg_bm8 multiply = 416 }
+			add = { value = var:te_dg_bf9 multiply = 480 }
+			add = { value = var:te_dg_bm9 multiply = 624 }
+			add = { value = var:te_dg_bf10 multiply = 720 }
+			add = { value = var:te_dg_bm10 multiply = 936 }
+			add = { value = var:te_dg_bf11 multiply = 1100 }
+			add = { value = var:te_dg_bm11 multiply = 1430 }
+			add = { value = var:te_dg_bf12 multiply = 1700 }
+			add = { value = var:te_dg_bm12 multiply = 2210 }
+			add = { value = var:te_dg_bf13 multiply = 2600 }
+			add = { value = var:te_dg_bm13 multiply = 3380 }
+			add = { value = var:te_dg_bf14 multiply = 4000 }
+			add = { value = var:te_dg_bm14 multiply = 5200 }
+			add = { value = var:te_dg_bf15 multiply = 6200 }
+			add = { value = var:te_dg_bm15 multiply = 8060 }
+			add = { value = var:te_dg_bf16 multiply = 9600 }
+			add = { value = var:te_dg_bm16 multiply = 12480 }
+			add = { value = var:te_dg_bf17 multiply = 17293.50934 }
+			add = { value = var:te_dg_bm17 multiply = 21390.35319 }
+			multiply = local_var:te_dg_m_chr
+			divide = 100000
+		}
+	}
+	set_local_variable = {
+		name = te_dg_ce_work
+		value = {
+			value = var:te_dg_bf3
+			multiply = 160
+			add = { value = var:te_dg_bf4 multiply = 160 }
+			add = { value = var:te_dg_bf5 multiply = 160 }
+			add = { value = var:te_dg_bf6 multiply = 160 }
+			add = { value = var:te_dg_bf7 multiply = 160 }
+			add = { value = var:te_dg_bf8 multiply = 160 }
+			add = { value = var:te_dg_bf9 multiply = 160 }
+			add = { value = var:te_dg_bf10 multiply = 160 }
+			add = { value = var:te_dg_bf11 multiply = 160 }
+			add = { value = var:te_dg_bf12 multiply = 160 }
+			multiply = local_var:te_dg_m_work_f
+			add = {
+				value = var:te_dg_bm3
+				multiply = 160
+				add = { value = var:te_dg_bm4 multiply = 160 }
+				add = { value = var:te_dg_bm5 multiply = 160 }
+				add = { value = var:te_dg_bm6 multiply = 160 }
+				add = { value = var:te_dg_bm7 multiply = 160 }
+				add = { value = var:te_dg_bm8 multiply = 160 }
+				add = { value = var:te_dg_bm9 multiply = 160 }
+				add = { value = var:te_dg_bm10 multiply = 160 }
+				add = { value = var:te_dg_bm11 multiply = 160 }
+				add = { value = var:te_dg_bm12 multiply = 160 }
+				multiply = local_var:te_dg_m_work_m
+			}
+			divide = 100000
+		}
+	}
+}
+
 # THIS = a state: the ring as TE_DEMOG_REPLAY before lines (demographics_harness.format_replay).
 te_demog_debug_log_ring_before = {
 	debug_log = "TE_DEMOG_REPLAY before from=0 f=[THIS.ScriptValue('te_demog_dbg_f0')|5],[THIS.ScriptValue('te_demog_dbg_f1')|5],[THIS.ScriptValue('te_demog_dbg_f2')|5],[THIS.ScriptValue('te_demog_dbg_f3')|5],[THIS.ScriptValue('te_demog_dbg_f4')|5],[THIS.ScriptValue('te_demog_dbg_f5')|5],[THIS.ScriptValue('te_demog_dbg_f6')|5],[THIS.ScriptValue('te_demog_dbg_f7')|5],[THIS.ScriptValue('te_demog_dbg_f8')|5],[THIS.ScriptValue('te_demog_dbg_f9')|5] m=[THIS.ScriptValue('te_demog_dbg_m0')|5],[THIS.ScriptValue('te_demog_dbg_m1')|5],[THIS.ScriptValue('te_demog_dbg_m2')|5],[THIS.ScriptValue('te_demog_dbg_m3')|5],[THIS.ScriptValue('te_demog_dbg_m4')|5],[THIS.ScriptValue('te_demog_dbg_m5')|5],[THIS.ScriptValue('te_demog_dbg_m6')|5],[THIS.ScriptValue('te_demog_dbg_m7')|5],[THIS.ScriptValue('te_demog_dbg_m8')|5],[THIS.ScriptValue('te_demog_dbg_m9')|5] pool_f=[THIS.ScriptValue('te_demog_dbg_pool_f')|5] pool_m=[THIS.ScriptValue('te_demog_dbg_pool_m')|5] pool_age=[THIS.Var('te_dg_pa').GetValue|5]"

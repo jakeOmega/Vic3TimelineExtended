@@ -88,6 +88,10 @@
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
 #                       the country's TFR weight), each with last year's in
 #                       te_dg_prev_<name> from the second census on
+#   te_dg_dc_inf, _ext, _chr, _work, _mat, _ontop, _war, _kill, te_dg_dc_total, te_dg_dc_lead, te_dg_dc_fit
+#                       issue #1029: last step's deaths by cause, people, their sum and the largest's code, and the
+#                       estimate's fit (te_demog_cause_deaths_store, below); a seed sets them 0 and removes the fit
+#   te_dg_count_mi      the month of the state's last count (te_history_month_index), for its next count
 #   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
 #                       its outline), stored at the census for the panel's bars
 #   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model, te_dg_bz, te_dg_dz, te_dg_eb_target,
@@ -126,6 +130,8 @@
 #   te_dg_kills_in      state: people the mod's own script killed since the last
 #                       step (te_demog_note_kills), taken and removed the same way
 #   te_dg_net_migration state: last step's residual, people (signed; 0 inside the noise band)
+#   te_dg_mig_rate      state and country: te_dg_net_migration per 1,000 people (issue #1029, the overview's
+#                       Net Migration); a country's from its states' sums
 #   te_dg_mig_raw       state: the same residual before the noise band; the country's sum of it
 #                       (te_demog_country_census) is the census log's gate figure
 #   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
@@ -181,8 +187,16 @@
 #                       two names in case the engine keeps a variable and a list in one namespace.
 #   te_dg_prev_<name>   each of the figures above, as last year's (see the arrows)
 #   te_dg_pjf<b>, te_dg_pjm<b>  the player's bands twenty years ahead (te_demog_project)
+#   te_dg_dc_*          issue #1029: its states' deaths by cause summed over the states that have them (0 until one
+#                       does), with te_dg_dc_total and te_dg_dc_lead as a state's (te_demog_cause_deaths_country_store)
+#   te_dg_m_inf, _ext, _chr, _work, _mat, te_dg_acc  the cause multipliers and health-care access, its states'
+#                       weighted by people (maternal by births), for the legend's hovers
+#   te_dg_cdr_model     under Full, the census's own death rate across its states, weighted by people (the
+#                       Added on Top row's measure)
+#   te_dg_states_n      how many census states it has (the States section's Show All)
 # Variable lists on the country (state scopes, drawn by the panel):
 #   te_dg_states        its states with a census, the largest by people first, at most 40
+#   te_dg_states_top    the first ten of te_dg_states, the States section's rows until Show All
 #   te_dg_cities        its three census states of the largest cities, by state_city_size_rank
 # ============================================================================
 
@@ -688,6 +702,8 @@ te_demog_seed = {
 	set_local_variable = { name = te_dg_raw value = state_population }
 	set_variable = { name = te_dg_births value = 0 }
 	set_variable = { name = te_dg_deaths value = 0 }
+	# and no deaths by cause (issue #1029; te_demog_cause_deaths_store)
+	te_demog_cause_deaths_zero = yes
 	# phase 2 step 4 (te_demog_rate_effects.txt): a seed starts the census's target over. The model's
 	# rates from before it are another state's (a merge, a split) or years stale (a census gap), and would
 	# scale the next step's births and deaths by their ratio to today's; without them that step takes no
@@ -1254,12 +1270,17 @@ te_demog_set_scale = {
 	set_variable = { name = te_dg_people value = state_population }
 	set_variable = { name = te_dg_pop_last value = state_population }
 	set_variable = { name = te_dg_year value = te_demog_year }
+	# issue #1029: the month of this count (te_history_month_index), so the subtab can say when the next one falls
+	set_variable = { name = te_dg_count_mi value = te_history_month_index }
 	te_demog_state_figures = yes
 }
 
 # No war dead, kills or migrants this sweep (demographics_model.step with
 # war_dead, kills and migration 0): the seed's, which never flows.
 te_demog_no_flows = {
+	# the war dead and the people killed, people: the Causes of Death slices' (te_demog_cause_deaths_store)
+	set_local_variable = { name = te_dg_war value = 0 }
+	set_local_variable = { name = te_dg_kills value = 0 }
 	set_local_variable = { name = te_dg_war_ff value = 0 }
 	set_local_variable = { name = te_dg_war_fm value = 0 }
 	set_local_variable = { name = te_dg_kill value = 0 }
@@ -1556,6 +1577,24 @@ te_demog_country_lists = {
 		save_temporary_scope_as = te_dg_it
 		root = { add_to_variable_list = { name = te_dg_states target = scope:te_dg_it } }
 	}
+	# issue #1029: the ten largest, the States section's rows until Show All, and how many the full list holds
+	if = {
+		limit = { has_variable_list = te_dg_states_top }
+		clear_variable_list = te_dg_states_top
+	}
+	ordered_scope_state = {
+		limit = { te_demog_has_census = yes }
+		order_by = te_demog_census_people
+		max = 10
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		root = { add_to_variable_list = { name = te_dg_states_top target = scope:te_dg_it } }
+	}
+	set_variable = { name = te_dg_states_n value = 0 }
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		root = { change_variable = { name = te_dg_states_n add = 1 } }
+	}
 	if = {
 		limit = { has_variable_list = te_dg_cities }
 		clear_variable_list = te_dg_cities
@@ -1657,7 +1696,9 @@ te_demog_step = {
 # plan), the practices' drift toward their targets (te_demog_practices_step, Late Marriage and Birth
 # Spacing; it reads the drifted access), the year's rates into locals (te_demog_prepare), then the
 # flows, which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates
-# scaled to what the engine did over the window (te_demog_on_top_scales, phase 2 step 4).
+# scaled to what the engine did over the window (te_demog_on_top_scales, phase 2 step 4), then each
+# natural cause's deaths at those rates over last count's bands, before the sweep writes this count's
+# (te_demog_cause_deaths_estimate, issue #1029).
 te_demog_step_begin = {
 	# medicine moves its share of the gap, then the practices theirs, then the year's rates use them
 	te_demog_medicine_drift = yes
@@ -1672,6 +1713,7 @@ te_demog_step_begin = {
 	te_demog_lx_begin = yes
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes
+	te_demog_cause_deaths_estimate = yes
 }
 
 # The step's second half: the sweep over the ring with the locals te_demog_step_begin set,
@@ -1962,6 +2004,8 @@ te_demog_step_finish = {
 			divide = { value = state_population min = 1 }
 		}
 	}
+	# issue #1029: the year's deaths by cause, for the Causes of Death section
+	te_demog_cause_deaths_store = yes
 	# a step's figures, whatever its births (te_demog_set_trend)
 	set_local_variable = { name = te_dg_from_step value = 1 }
 	te_demog_set_scale = yes
@@ -1970,6 +2014,154 @@ te_demog_step_finish = {
 		limit = { local_var:te_dg_lx_t > 0 }
 		te_demog_lx_bio_bands_store = yes
 	}
+}
+
+# THIS = a state at the end of its step (te_demog_step_finish, with the step's locals): last year's deaths by cause,
+# people (issue #1029; demographics_model.cause_deaths), for the Causes of Death section and the country's census,
+# which sums them. The four natural causes are te_demog_cause_deaths_estimate's figures scaled to the census's own
+# deaths from them: its deaths less childbirth's (te_dg_mat) and, under Full, less what the on-top scale added
+# (te_dg_dz above 0; below 0 the game took deaths away, which no slice shows). Childbirth's, the deaths added on top, the
+# war dead (te_dg_war) and the people killed by events (te_dg_kills) as counted. Each scaled slice multiplies before it
+# divides, so a small one keeps its digits.
+#   te_dg_dc_inf, _ext, _chr, _work  infection and hunger, accidents and violence, chronic illness and old age, work
+#   te_dg_dc_mat, te_dg_dc_ontop, te_dg_dc_war, te_dg_dc_kill  childbirth, added on top, war, killed by events
+#   te_dg_dc_total  the slices' sum: te_dg_deaths with the war dead and the killed
+#   te_dg_dc_fit    the estimate over the census's deaths from the four causes before the on-top split: 1 when the
+#                   estimate matches the sweep (the self-check's figure; te_debug_demog_cause_deaths_selfcheck)
+te_demog_cause_deaths_store = {
+	set_local_variable = { name = te_dg_dc_nat value = { value = local_var:te_dg_deaths subtract = local_var:te_dg_mat min = 0 } }
+	set_local_variable = { name = te_dg_dc_top value = 0 }
+	if = {
+		limit = { local_var:te_dg_dz > 0 }
+		set_local_variable = {
+			name = te_dg_dc_top
+			value = { value = local_var:te_dg_dc_nat multiply = local_var:te_dg_dz divide = { value = local_var:te_dg_dz add = 1 min = 1 } }
+		}
+	}
+	set_local_variable = { name = te_dg_dc_own value = { value = local_var:te_dg_dc_nat subtract = local_var:te_dg_dc_top } }
+	set_local_variable = {
+		name = te_dg_dc_est
+		value = { value = local_var:te_dg_ce_inf add = local_var:te_dg_ce_ext add = local_var:te_dg_ce_chr add = local_var:te_dg_ce_work }
+	}
+	if = {
+		limit = { local_var:te_dg_dc_est > 0 }
+		set_variable = { name = te_dg_dc_inf value = { value = local_var:te_dg_ce_inf multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
+		set_variable = { name = te_dg_dc_ext value = { value = local_var:te_dg_ce_ext multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
+		set_variable = { name = te_dg_dc_chr value = { value = local_var:te_dg_ce_chr multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
+		set_variable = { name = te_dg_dc_work value = { value = local_var:te_dg_ce_work multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
+	}
+	else = {
+		set_variable = { name = te_dg_dc_inf value = 0 }
+		set_variable = { name = te_dg_dc_ext value = 0 }
+		set_variable = { name = te_dg_dc_chr value = 0 }
+		set_variable = { name = te_dg_dc_work value = 0 }
+	}
+	set_variable = { name = te_dg_dc_mat value = local_var:te_dg_mat }
+	set_variable = { name = te_dg_dc_ontop value = local_var:te_dg_dc_top }
+	set_variable = { name = te_dg_dc_war value = local_var:te_dg_war }
+	set_variable = { name = te_dg_dc_kill value = local_var:te_dg_kills }
+	te_demog_cause_deaths_total = yes
+	set_variable = { name = te_dg_dc_fit value = { value = local_var:te_dg_dc_est divide = { value = local_var:te_dg_dc_nat min = 1 } } }
+	# once a game: the estimate against the sweep (te_debug_demog_effects.txt)
+	te_debug_demog_cause_deaths_selfcheck = yes
+}
+
+# THIS = a state at its seed (issue #1029): a seed counts no deaths (te_dg_deaths 0), so it has none by cause, and no fit.
+te_demog_cause_deaths_zero = {
+	set_variable = { name = te_dg_dc_inf value = 0 }
+	set_variable = { name = te_dg_dc_ext value = 0 }
+	set_variable = { name = te_dg_dc_chr value = 0 }
+	set_variable = { name = te_dg_dc_work value = 0 }
+	set_variable = { name = te_dg_dc_mat value = 0 }
+	set_variable = { name = te_dg_dc_ontop value = 0 }
+	set_variable = { name = te_dg_dc_war value = 0 }
+	set_variable = { name = te_dg_dc_kill value = 0 }
+	set_variable = { name = te_dg_dc_total value = 0 }
+	set_variable = { name = te_dg_dc_lead value = 0 }
+	if = {
+		limit = { has_variable = te_dg_dc_fit }
+		remove_variable = te_dg_dc_fit
+	}
+}
+
+# THIS = a state or a country, once its te_dg_dc_* slices are written (issue #1029): their sum, the pie's whole, and the
+# largest slice, te_dg_dc_lead: its code in the pie's clockwise order (te_demog_dc_cum_*), 1 infection and hunger, 2
+# chronic illness and old age, 3 accidents and violence, 4 work, 5 childbirth, 6 added on top, 7 killed by events, 8
+# war; 0 with no deaths. The first of a tie takes it.
+te_demog_cause_deaths_total = {
+	set_variable = {
+		name = te_dg_dc_total
+		value = {
+			value = var:te_dg_dc_inf
+			add = var:te_dg_dc_ext
+			add = var:te_dg_dc_chr
+			add = var:te_dg_dc_work
+			add = var:te_dg_dc_mat
+			add = var:te_dg_dc_ontop
+			add = var:te_dg_dc_war
+			add = var:te_dg_dc_kill
+		}
+	}
+	set_variable = { name = te_dg_dc_lead value = 0 }
+	set_local_variable = { name = te_dg_dc_max value = 0 }
+	te_demog_cause_deaths_lead = { SLICE = inf CODE = 1 }
+	te_demog_cause_deaths_lead = { SLICE = chr CODE = 2 }
+	te_demog_cause_deaths_lead = { SLICE = ext CODE = 3 }
+	te_demog_cause_deaths_lead = { SLICE = work CODE = 4 }
+	te_demog_cause_deaths_lead = { SLICE = mat CODE = 5 }
+	te_demog_cause_deaths_lead = { SLICE = ontop CODE = 6 }
+	te_demog_cause_deaths_lead = { SLICE = kill CODE = 7 }
+	te_demog_cause_deaths_lead = { SLICE = war CODE = 8 }
+}
+
+# One slice for te_demog_cause_deaths_total's largest: $SLICE$ the te_dg_dc_ name, $CODE$ its place in the pie's order.
+te_demog_cause_deaths_lead = {
+	if = {
+		limit = { var:te_dg_dc_$SLICE$ > local_var:te_dg_dc_max }
+		set_local_variable = { name = te_dg_dc_max value = var:te_dg_dc_$SLICE$ }
+		set_variable = { name = te_dg_dc_lead value = $CODE$ }
+	}
+}
+
+# THIS = a country, in te_demog_country_census (issue #1029): the sums of its states' deaths by cause, locals
+# te_dg_c_dc_<slice>, over the states that have them (a census from before this build has none until its next step).
+te_demog_cause_deaths_country_init = {
+	set_local_variable = { name = te_dg_c_dc_inf value = 0 }
+	set_local_variable = { name = te_dg_c_dc_ext value = 0 }
+	set_local_variable = { name = te_dg_c_dc_chr value = 0 }
+	set_local_variable = { name = te_dg_c_dc_work value = 0 }
+	set_local_variable = { name = te_dg_c_dc_mat value = 0 }
+	set_local_variable = { name = te_dg_c_dc_ontop value = 0 }
+	set_local_variable = { name = te_dg_c_dc_war value = 0 }
+	set_local_variable = { name = te_dg_c_dc_kill value = 0 }
+}
+
+# THIS = a census state, in te_demog_country_census's walk (the locals are the country's effect's).
+te_demog_cause_deaths_country_add = {
+	if = {
+		limit = { has_variable = te_dg_dc_total }
+		change_local_variable = { name = te_dg_c_dc_inf add = var:te_dg_dc_inf }
+		change_local_variable = { name = te_dg_c_dc_ext add = var:te_dg_dc_ext }
+		change_local_variable = { name = te_dg_c_dc_chr add = var:te_dg_dc_chr }
+		change_local_variable = { name = te_dg_c_dc_work add = var:te_dg_dc_work }
+		change_local_variable = { name = te_dg_c_dc_mat add = var:te_dg_dc_mat }
+		change_local_variable = { name = te_dg_c_dc_ontop add = var:te_dg_dc_ontop }
+		change_local_variable = { name = te_dg_c_dc_war add = var:te_dg_dc_war }
+		change_local_variable = { name = te_dg_c_dc_kill add = var:te_dg_dc_kill }
+	}
+}
+
+# THIS = a country, after the walk: its deaths by cause, as a state's (te_demog_cause_deaths_store).
+te_demog_cause_deaths_country_store = {
+	set_variable = { name = te_dg_dc_inf value = local_var:te_dg_c_dc_inf }
+	set_variable = { name = te_dg_dc_ext value = local_var:te_dg_c_dc_ext }
+	set_variable = { name = te_dg_dc_chr value = local_var:te_dg_c_dc_chr }
+	set_variable = { name = te_dg_dc_work value = local_var:te_dg_c_dc_work }
+	set_variable = { name = te_dg_dc_mat value = local_var:te_dg_c_dc_mat }
+	set_variable = { name = te_dg_dc_ontop value = local_var:te_dg_c_dc_ontop }
+	set_variable = { name = te_dg_dc_war value = local_var:te_dg_c_dc_war }
+	set_variable = { name = te_dg_dc_kill value = local_var:te_dg_c_dc_kill }
+	te_demog_cause_deaths_total = yes
 }
 
 # THIS = a state, after its census (demographics_model.structure, by band): the
@@ -1983,6 +2175,11 @@ te_demog_state_figures = {
 	# births and deaths per 1,000 people
 	set_variable = { name = te_dg_cbr value = { value = var:te_dg_births divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
 	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
+	# issue #1029: net migration per 1,000 people, the overview's third line (0 after a seed, which books none)
+	if = {
+		limit = { has_variable = te_dg_net_migration }
+		set_variable = { name = te_dg_mig_rate value = { value = var:te_dg_net_migration divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
+	}
 	te_demog_set_trend = yes
 	# the state pyramid's scale, once here instead of in every bar's range each frame
 	set_variable = { name = te_dg_pyr_max value = te_demog_state_pyramid_max }
@@ -2079,6 +2276,15 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_ext_w value = 0 }
 	set_local_variable = { name = te_dg_c_chr_w value = 0 }
 	set_local_variable = { name = te_dg_c_work_w value = 0 }
+	# issue #1029: Health Care Access by people (over the states that hold it), childbirth's rate by births (by people
+	# while the census holds none), and the deaths by cause, summed
+	set_local_variable = { name = te_dg_c_acc_w value = 0 }
+	set_local_variable = { name = te_dg_c_acc_pm value = 0 }
+	set_local_variable = { name = te_dg_c_cdrm_w value = 0 }
+	set_local_variable = { name = te_dg_c_cdrm_pm value = 0 }
+	set_local_variable = { name = te_dg_c_mat_w value = 0 }
+	set_local_variable = { name = te_dg_c_mat_p value = 0 }
+	te_demog_cause_deaths_country_init = yes
 	te_demog_practices_country_init = yes
 	# phase 3: Family Limitation's and Cultural Hegemony's inputs (te_demog_fl_effects.txt)
 	te_demog_fl_country_init = yes
@@ -2144,6 +2350,22 @@ te_demog_country_census = {
 		change_local_variable = { name = te_dg_c_ext_w add = { value = var:te_dg_m_ext multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_chr_w add = { value = var:te_dg_m_chr multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_work_w add = { value = var:te_dg_m_work multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_mat_w add = { value = var:te_dg_m_mat multiply = var:te_dg_births } }
+		change_local_variable = { name = te_dg_c_mat_p add = { value = var:te_dg_m_mat multiply = local_var:te_dg_c_s_pm } }
+		# a census from before the Causes of Death plan has no access until its next step, and one from before issue
+		# #1029 no deaths by cause
+		if = {
+			limit = { has_variable = te_dg_acc }
+			change_local_variable = { name = te_dg_c_acc_w add = { value = var:te_dg_acc multiply = local_var:te_dg_c_s_pm } }
+			change_local_variable = { name = te_dg_c_acc_pm add = local_var:te_dg_c_s_pm }
+		}
+		# the census's own death rate under Full (phase 2 step 4; a state has it from its first Full step)
+		if = {
+			limit = { has_variable = te_dg_cdr_model }
+			change_local_variable = { name = te_dg_c_cdrm_w add = { value = var:te_dg_cdr_model multiply = local_var:te_dg_c_s_pm } }
+			change_local_variable = { name = te_dg_c_cdrm_pm add = local_var:te_dg_c_s_pm }
+		}
+		te_demog_cause_deaths_country_add = yes
 	}
 	if = {
 		limit = { local_var:te_dg_seeded > 0 }
@@ -2171,10 +2393,45 @@ te_demog_country_census = {
 		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_cdr value = { value = local_var:te_dg_c_deaths divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_net_migration value = local_var:te_dg_c_mig }
+		set_variable = { name = te_dg_mig_rate value = { value = local_var:te_dg_c_mig divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_mig_raw value = local_var:te_dg_c_mig_raw }
 		set_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_w divide = { value = local_var:te_dg_c_women min = 1 } } }
 		set_variable = { name = te_dg_e0 value = { value = local_var:te_dg_c_e0_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 		set_variable = { name = te_dg_e65 value = { value = local_var:te_dg_c_e65_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		# issue #1029: the Causes of Death section's figures. The cause multipliers by people, the census's own before
+		# famine, war and disasters, as the life table's are (the outline below takes them too); childbirth's deaths per
+		# 100,000 births by births, by people for a census of seeds; Health Care Access by people over the states that
+		# hold it; the deaths by cause, summed
+		set_variable = { name = te_dg_m_inf value = { value = local_var:te_dg_c_inf_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_m_ext value = { value = local_var:te_dg_c_ext_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_m_chr value = { value = local_var:te_dg_c_chr_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_m_work value = { value = local_var:te_dg_c_work_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		if = {
+			limit = { local_var:te_dg_c_births > 0 }
+			set_variable = { name = te_dg_m_mat value = { value = local_var:te_dg_c_mat_w divide = { value = local_var:te_dg_c_births min = 1 } } }
+		}
+		else = {
+			set_variable = { name = te_dg_m_mat value = { value = local_var:te_dg_c_mat_p divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		}
+		if = {
+			limit = { local_var:te_dg_c_acc_pm > 0 }
+			set_variable = { name = te_dg_acc value = { value = local_var:te_dg_c_acc_w divide = { value = local_var:te_dg_c_acc_pm min = 0.00001 } } }
+		}
+		else_if = {
+			limit = { has_variable = te_dg_acc }
+			remove_variable = te_dg_acc
+		}
+		te_demog_cause_deaths_country_store = yes
+		# the census's own deaths per 1,000 people under Full (the Causes of Death section's Added on Top hover), by
+		# people over the states that hold one
+		if = {
+			limit = { local_var:te_dg_c_cdrm_pm > 0 }
+			set_variable = { name = te_dg_cdr_model value = { value = local_var:te_dg_c_cdrm_w divide = { value = local_var:te_dg_c_cdrm_pm min = 0.00001 } } }
+		}
+		else_if = {
+			limit = { has_variable = te_dg_cdr_model }
+			remove_variable = te_dg_cdr_model
+		}
 		# by births; a census of seeds holds none (a seed writes 0), and then by people
 		if = {
 			limit = { local_var:te_dg_c_births > 0 }
@@ -2217,10 +2474,10 @@ te_demog_country_census = {
 		# the census's before famine, war and disasters, as its life table is (phase 2 step 4)
 		if = {
 			limit = { is_ai = no }
-			set_local_variable = { name = te_dg_m_inf value = { value = local_var:te_dg_c_inf_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
-			set_local_variable = { name = te_dg_m_ext value = { value = local_var:te_dg_c_ext_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
-			set_local_variable = { name = te_dg_m_chr value = { value = local_var:te_dg_c_chr_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
-			set_local_variable = { name = te_dg_c_work value = { value = local_var:te_dg_c_work_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+			set_local_variable = { name = te_dg_m_inf value = var:te_dg_m_inf }
+			set_local_variable = { name = te_dg_m_ext value = var:te_dg_m_ext }
+			set_local_variable = { name = te_dg_m_chr value = var:te_dg_m_chr }
+			set_local_variable = { name = te_dg_c_work value = var:te_dg_m_work }
 			set_local_variable = { name = te_dg_m_work_f value = { value = local_var:te_dg_c_work multiply = local_var:te_dg_fws multiply = 2 } }
 			set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = local_var:te_dg_c_work multiply = 2 } }
 			set_local_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_model_w divide = { value = local_var:te_dg_c_women min = 1 } } }

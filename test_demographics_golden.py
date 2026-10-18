@@ -118,6 +118,13 @@ SAFETY_DIGESTS = {
     ("generated_values", "te_demog_mult_work"): "20d60f152aa79ab820c226b8ddefd63053b58c552a68cc03b0f49d1899323155",
 }
 SAFETY_VARS = {"te_dg_in_saf_work", "te_dg_in_saf_ext"}
+# Deaths by cause (issue #1029): every count stores last year's deaths split by cause for the Causes of Death section
+# (te_demog_cause_deaths_store; a seed's are 0), from a new generated block (te_demog_cause_deaths_estimate) that reads the
+# step's rates and changes none of them, so every recorded number stays as it was
+CAUSE_DEATH_VARS = {f"te_dg_dc_{s}" for s in ("inf", "ext", "chr", "work", "mat", "ontop", "war", "kill", "total", "fit",
+                                               "lead")}
+# and two of the panel's figures: net migration per 1,000 people and the month of the count
+CAUSE_DEATH_VARS |= {"te_dg_mig_rate", "te_dg_count_mi"}
 # The laws' terms as modifier lines (2026-10-17, so each law's tooltip says what the census does with it): Late
 # Marriage's target reads Primogeniture's and Undivided Farm Succession's state_late_marriage_farms_add (0.15, the old
 # constant) instead of testing the law and the amendment, and the land-tenure term moved to the hand-written
@@ -279,7 +286,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
             self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS
-                             - SAFETY_VARS,
+                             - SAFETY_VARS - CAUSE_DEATH_VARS,
                              set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
