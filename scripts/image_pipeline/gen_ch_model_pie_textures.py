@@ -98,6 +98,18 @@ PANEL_PIES: tuple[tuple[str, str], ...] = (
     ("icons/space_race_icons/pie_unclaimed.dds", "#8c8474"),
     ("icons/space_race_icons/pie_claimed.dds", "#cf4a2a"),
     ("icons/space_race_icons/pie_ours.dds", "#ecc043"),
+    # Demographics' Causes of Death (issue #1029): eight slices in the pie's clockwise order, the dataviz reference's
+    # dark categorical eight, which pass every check in this order against the dark panel, the wrap-around (war beside
+    # infection) included (worst adjacent dE 8.4 protan, aqua-yellow; 19.3 normal). A ninth slice (the uploaded-minds
+    # design's §4) can't take a new hue: it takes the panels' muted grey for the rest, #8c8474.
+    ("icons/demographics_icons/pie_infection.dds", "#3987e5"),
+    ("icons/demographics_icons/pie_chronic.dds", "#d95926"),
+    ("icons/demographics_icons/pie_external.dds", "#199e70"),
+    ("icons/demographics_icons/pie_work.dds", "#c98500"),
+    ("icons/demographics_icons/pie_maternal.dds", "#d55181"),
+    ("icons/demographics_icons/pie_on_top.dds", "#008300"),
+    ("icons/demographics_icons/pie_killed.dds", "#9085e9"),
+    ("icons/demographics_icons/pie_war.dds", "#e66767"),
 )
 
 

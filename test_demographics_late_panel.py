@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 from test_demographics_registry import _gui_type, _text  # noqa: E402
 
 GUI = ROOT / "gui" / "te_demographics_widgets.gui"
+LAYOUT = ROOT / "gui" / "te_demographics_layout.gui"   # the two composers (issue #1029)
 LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
 SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_lx_sguis.txt"
 
@@ -25,13 +26,14 @@ class TestLatePanel(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.gui = _text(GUI)
+        cls.layout = _text(LAYOUT)
         cls.loc = _loc()
         cls.sguis = set(re.findall(r"(?m)^(te_demog_lx_\w+_sgui) = \{", _text(SGUIS)))
 
     def test_the_sections_sit_after_work_and_retirement(self):
-        tab = _gui_type(self.gui, "te_demog_tab_sections")
+        tab = _gui_type(self.layout, "te_demog_tab_sections")
         self.assertLess(tab.index("te_demog_sec_work = {}"), tab.index("te_demog_sec_longevity = {}"))
-        content = _gui_type(self.gui, "te_state_demog_content")
+        content = _gui_type(self.layout, "te_state_demog_content")
         self.assertLess(content.index("te_state_demog_work = {}"), content.index("te_state_demog_longevity = {}"))
 
     def test_the_sections_show_only_with_the_late_figures_and_start_open(self):
@@ -43,13 +45,15 @@ class TestLatePanel(unittest.TestCase):
         self.assertNotIn("GetPlayer", _gui_type(self.gui, "te_state_demog_longevity"), "the state's section reads the state")
 
     def test_the_late_rows_are_gated(self):
-        for name, gate in (("te_demog_overview", "te_demog_lx_ready_sgui"),
-                           ("te_state_demog_overview", "te_demog_lx_state_ready_sgui")):
-            body = _gui_type(self.gui, name)
+        """Living to 100 and Biological Age sit first in the Longevity sections (issue #1029 moved them from the
+        overviews), which show only with the late figures; the overviews no longer read them."""
+        for name, section, gate in (("te_demog_overview", "te_demog_sec_longevity", "te_demog_lx_ready_sgui"),
+                                    ("te_state_demog_overview", "te_state_demog_longevity", "te_demog_lx_state_ready_sgui")):
+            body = _gui_type(self.gui, section)
+            self.assertIn(f"GetScriptedGui('{gate}')", body.split("te_demog_section_header")[0], section)
             for key in ("_lx_l100_value", "_lx_bio_value"):
-                i = body.index(key)
-                row = body[body.rindex("te_demog_figure_row = {", 0, i):i]
-                self.assertIn(f"GetScriptedGui('{gate}')", row, (name, key))
+                self.assertLess(body.index(key), body.index("_lx_care_value"), (section, key))
+                self.assertNotIn(key, _gui_type(self.gui, name), name)
 
     def test_every_gate_exists_and_every_key_is_localized(self):
         types = ("te_demog_overview", "te_state_demog_overview", "te_demog_sec_longevity", "te_state_demog_longevity",

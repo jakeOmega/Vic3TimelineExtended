@@ -395,3 +395,163 @@ te_demog_deaths_other = {
 	value = var:te_dg_ed
 	divide = { value = var:te_dg_ed_state add = var:te_dg_ed_sev min = 1 }
 }
+
+# ============================================================================
+# Causes of Death's pie and legend, and the overview's grid (issue #1029). A state and a country keep the same names,
+# so these work in either scope; each is read only under its gate (te_demog_dc_ready_sgui, te_demog_state_dc_sgui:
+# te_dg_dc_total above 0).
+# ============================================================================
+# Each slice's share of last year's deaths (te_demog_cause_deaths_store; a country's: its states' sums).
+te_demog_dc_share_inf = {
+	value = var:te_dg_dc_inf
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+te_demog_dc_share_chr = {
+	value = var:te_dg_dc_chr
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+te_demog_dc_share_ext = {
+	value = var:te_dg_dc_ext
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+te_demog_dc_share_work = {
+	value = var:te_dg_dc_work
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+te_demog_dc_share_mat = {
+	value = var:te_dg_dc_mat
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+te_demog_dc_share_ontop = {
+	value = var:te_dg_dc_ontop
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+te_demog_dc_share_kill = {
+	value = var:te_dg_dc_kill
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+te_demog_dc_share_war = {
+	value = var:te_dg_dc_war
+	divide = { value = var:te_dg_dc_total min = 1 }
+}
+
+# The pie's layers: the shares summed through each slice, in its clockwise order from 12 o'clock (te_dg_dc_lead's
+# codes): infection and hunger, chronic illness and old age, accidents and violence, work, childbirth, added on top,
+# killed by events, war. The eighth layer is the whole disc (1). A slice the uploaded-minds design adds (its §4) is a
+# share, a layer here, a texture and a legend row.
+te_demog_dc_cum_1 = {
+	value = te_demog_dc_share_inf
+}
+te_demog_dc_cum_2 = {
+	value = te_demog_dc_cum_1
+	add = te_demog_dc_share_chr
+}
+te_demog_dc_cum_3 = {
+	value = te_demog_dc_cum_2
+	add = te_demog_dc_share_ext
+}
+te_demog_dc_cum_4 = {
+	value = te_demog_dc_cum_3
+	add = te_demog_dc_share_work
+}
+te_demog_dc_cum_5 = {
+	value = te_demog_dc_cum_4
+	add = te_demog_dc_share_mat
+}
+te_demog_dc_cum_6 = {
+	value = te_demog_dc_cum_5
+	add = te_demog_dc_share_ontop
+}
+te_demog_dc_cum_7 = {
+	value = te_demog_dc_cum_6
+	add = te_demog_dc_share_kill
+}
+
+# The largest slice's share (te_dg_dc_lead), the overview's Leading Cause cell; 0 with no deaths.
+te_demog_dc_lead_share = {
+	value = 0
+	if = {
+		limit = { var:te_dg_dc_lead = 1 }
+		value = te_demog_dc_share_inf
+	}
+	else_if = {
+		limit = { var:te_dg_dc_lead = 2 }
+		value = te_demog_dc_share_chr
+	}
+	else_if = {
+		limit = { var:te_dg_dc_lead = 3 }
+		value = te_demog_dc_share_ext
+	}
+	else_if = {
+		limit = { var:te_dg_dc_lead = 4 }
+		value = te_demog_dc_share_work
+	}
+	else_if = {
+		limit = { var:te_dg_dc_lead = 5 }
+		value = te_demog_dc_share_mat
+	}
+	else_if = {
+		limit = { var:te_dg_dc_lead = 6 }
+		value = te_demog_dc_share_ontop
+	}
+	else_if = {
+		limit = { var:te_dg_dc_lead = 7 }
+		value = te_demog_dc_share_kill
+	}
+	else_if = {
+		limit = { var:te_dg_dc_lead = 8 }
+		value = te_demog_dc_share_war
+	}
+}
+
+# Births less deaths per 1,000 people last year, the overview's Natural Change (read under a stepped census's gate).
+te_demog_natural_change = {
+	value = var:te_dg_cbr
+	subtract = var:te_dg_cdr
+}
+
+# Natural change's arrow, as the others above: a step of 0.2 per 1,000 against last year's births and deaths (te_dg_prev_cbr,
+# te_dg_prev_cdr, kept since Task 10 and read nowhere until now).
+te_demog_trend_natural = {
+	value = 2
+	if = {
+		limit = {
+			has_variable = te_dg_trend_ok
+			var:te_dg_trend_ok > 0
+			has_variable = te_dg_cbr
+			has_variable = te_dg_cdr
+			has_variable = te_dg_prev_cbr
+			has_variable = te_dg_prev_cdr
+		}
+		value = te_demog_natural_change
+		subtract = var:te_dg_prev_cbr
+		add = var:te_dg_prev_cdr
+		divide = 0.2
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+
+# State scope: whole months until the state's next count, a year after its last (te_dg_count_mi, the month it was
+# taken; each state is counted on a day of its own), 0 in its month. Read under te_demog_state_count_sgui.
+te_demog_next_count_months = {
+	value = 12
+	subtract = te_history_month_index
+	add = var:te_dg_count_mi
+	min = 0
+	max = 12
+}
+
+# Under Full, the country's deaths per 1,000 people against the census's own rate across its states (te_dg_cdr_model): the
+# Added on Top row's hover (read under te_demog_ontop_ready_sgui).
+te_demog_country_deaths_on_top = {
+	value = var:te_dg_cdr
+	divide = { value = var:te_dg_cdr_model min = 0.01 }
+}
+
+# Infant deaths as a share of births (te_dg_imr is per 1,000), the overview's Life Expectancy cell's third line.
+te_demog_imr_share = {
+	value = var:te_dg_imr
+	divide = 1000
+}
