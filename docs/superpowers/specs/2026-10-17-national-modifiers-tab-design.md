@@ -32,7 +32,7 @@ country and sit in its list, while Grand Monuments' national modifiers land on a
 
 | Question | Decision |
 |---|---|
-| Where | A tab in the Timeline Extended window named **Nation**, the **first tab**. Colonial Empire moves to the second strip, beside Seabed |
+| Where | A tab in the Timeline Extended window named **Nation**, the **first tab**. Colonial Empire moved to a second strip, beside Seabed; since the owner's play-test of 2026-10-17 all five tabs share one strip |
 | What goes on it | **Everything that would sit in the country's modifier list forever**: standing scores and dials, and the permanent rewards, memberships and policies. Named: Legislative Override Capacity, Judicial Independence, Wealth Concentration, arable land from agricultural diffusion, space race rewards not already in the journal, demographic policies, the Antarctic research station, UN conventions, global technological development, the armed forces' standing from training, the private share of construction |
 | The country panel | Its modifier list hides what the tab shows, as the state panel hides its bookkeeping modifiers |
 | Money carriers | Hidden from the list, with no row: the budget panel itemizes them |
@@ -97,7 +97,7 @@ The registry (§ 4) holds the exact names. The dry run (2026-10-17) found the sp
 
 ### 2.2 The rows
 
-- **Legislative Override Capacity: 2.5.** A bar from −6 to +8 with thin threshold lines at 0, 2 and 4 (rule 5), each
+- **Legislative Override Capacity: 2.5.** A bar from 0 to +30 (−6 to +8 until the owner's play-test of 2026-10-17: every value below 0 plays the same, so that stretch was wasted) with thin threshold lines at 0, 2 and 4 (rule 5), each
   with its own hover: at 0 the Forceful Legislation event appears, at 2 its decisive option and the tax code's Force
   Through, at 4 its strongest. Under the bar, "Forceful Legislation: Push decisively", naming the strongest option open,
   or "Not offered" below 0. Hover: every source with its contribution

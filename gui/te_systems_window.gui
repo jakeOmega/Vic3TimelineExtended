@@ -1,8 +1,8 @@
 ﻿### Timeline Extended: the mod's own window, for the systems with no vanilla
-### home (docs/systems/system_panels_feasibility.md §9, item 3). The first
-### strip: Nation (what the country carries for good, always open;
-### gui/te_nation_tab.gui), the Space Race and Grand Monuments. The second: the
-### Colonial Empire and the Seabed (Global Commons). Additive: a
+### home (docs/systems/system_panels_feasibility.md §9, item 3). One strip of
+### five tabs: Nation (what the country carries for good, always open;
+### gui/te_nation_tab.gui), the Space Race, Grand Monuments, the Colonial
+### Empire and the Seabed (Global Commons). Additive: a
 ### scripted widget (gui/scripted_widgets/te_systems_window.txt registers the
 ### two roots at the foot of this file), so no vanilla file is replaced.
 ###
@@ -149,11 +149,19 @@ types te_systems_window_types
 				###
 				### No tab carries an icon, as vanilla's tabs and the mod's other tabs
 				### don't (owner, 2026-09-30), so each tab shows the system's full name.
-				### Three tabs share about 540: a name gets about 160 inside the tab's
-				### 10 px margins, and the longest, "Colonial Empire" and "Grand
-				### Monuments", need 142 at the medium budget (8.6 units a character plus
-				### 10%), which fits vanilla's tab text (EB Garamond 17, measured at about
-				### 7.7 a character bold in PR #593).
+				### All five share one strip, as vanilla's Diplomacy panel puts its five
+				### (diplomatic_overview.gui: Overview, Subjects, Release Subject, Nation
+				### Formation, Countries) on plain tab_buttons in this same 540 window,
+				### with no size or height override. A slot is 104.8 wide ((540 - 2 x 3
+				### margin - 2 x 5 dividers) / 5), so a name gets 84.8 inside its 10 px
+				### margins. "Colonial Empire" and "Grand Monuments" are wider than that
+				### on one line at EB Garamond 17, as vanilla's "Release Subject" and
+				### "Nation Formation" are; vanilla's tab_text_properties wraps a name
+				### (multiline) and shrinks it down to fontsize_min = 12, so the two
+				### words stack. "Monuments" is no longer than vanilla's "Formation".
+				### Until 2026-10-17 the Colonial Empire and the Seabed sat on a second
+				### strip so the names kept one line (owner: two levels for five tabs
+				### was a bit silly when the other windows hold up to six on one).
 				tab_buttons = {
 					### Nation: always open (no journal entry, no game rule), so never
 					### greyed and never a checklist (style rule 9's exception).
@@ -217,60 +225,52 @@ types te_systems_window_types
 					blockoverride "third_button_selected" {
 						text = "te_window_tab_grand_monuments"
 					}
-				}
 
-
-				### The second strip: the Colonial Empire and the Seabed (Global Commons),
-				### so the first strip's names keep their width (four tabs on one strip
-				### would leave each name about 115, and "Colonial Empire" and "Grand
-				### Monuments" need 142). Up while either rule is on.
-				tab_buttons = {
-					name = "te_systems_window_second_strip"
-					visible = "[Or( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					### Colonial Empire
-					blockoverride "first_button" {
+					blockoverride "fourth_button" {
 						text = "te_window_tab_colonial_empire"
 					}
-					blockoverride "first_button_tooltip" {
+					blockoverride "fourth_button_tooltip" {
 						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
-					blockoverride "first_button_click" {
+					blockoverride "fourth_button_click" {
 						enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'colonial_empire')]"
 					}
-					blockoverride "first_button_visibility" {
+					blockoverride "fourth_button_visibility" {
 						using = te_systems_window_colonial_empire_selected
 					}
-					blockoverride "first_button_visibility_checked" {
+					blockoverride "fourth_button_visibility_checked" {
 						using = te_systems_window_colonial_empire_unselected
 					}
-					blockoverride "first_button_selected" {
+					blockoverride "fourth_button_selected" {
 						text = "te_window_tab_colonial_empire"
 					}
 
 					### Seabed
-					blockoverride "second_button" {
+					blockoverride "fifth_button" {
 						text = "te_window_tab_seabed"
 					}
-					blockoverride "second_button_tooltip" {
+					blockoverride "fifth_button_tooltip" {
 						tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
-					blockoverride "second_button_click" {
+					blockoverride "fifth_button_click" {
 						enabled = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'seabed')]"
 					}
-					blockoverride "second_button_visibility" {
+					blockoverride "fifth_button_visibility" {
 						using = te_systems_window_seabed_selected
 					}
-					blockoverride "second_button_visibility_checked" {
+					blockoverride "fifth_button_visibility_checked" {
 						using = te_systems_window_seabed_unselected
 					}
-					blockoverride "second_button_selected" {
+					blockoverride "fifth_button_selected" {
 						text = "te_window_tab_seabed"
 					}
 				}
 
-				# TEMPORARY: a strip of its own (the third) avoids shrinking the system tabs' full names.
+				# TEMPORARY: a strip of its own (the second) for the developer tax-probes tab, so
+				# arming the probes never shrinks the five system tabs.
 				tab_buttons = {
 					visible = "[GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					blockoverride "first_button" { text = "te_tp_tab" }
