@@ -2712,11 +2712,14 @@ class NameTests(unittest.TestCase):
                     self.assertIn(key, L, key)
             for key in (f"gm_name_custom_{ctx}", f"gm_name_skin_{ctx}"):
                 self.assertIn(f"localization_key = {key}", family)
-            obj = "State" if ctx == "row" else "SCOPE.sState('monument_state')"
+            # A target's ROOT is the state it was called on; a saved scope
+            # (SCOPE.sState('monument_state')) comes back empty inside one
+            # ("the HUB_NAME__city", monument_events.24, 2026-10-18).
+            obj = "State" if ctx == "row" else "ROOT.GetState"
             for patterns in NAMESAKES.values():
                 for pattern in patterns:
                     text = L[f"gm_name_{pattern}_{ctx}"]
-                    other = r"(?<![\w.])State\." if ctx == "evt" else r"SCOPE\."
+                    other = r"(?<![\w.])State\.|SCOPE\." if ctx == "evt" else r"SCOPE\."
                     self.assertNotRegex(text.replace(obj, ""), other, f"gm_name_{pattern}_{ctx} reads another context")
         ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.25\s*=\s*\{"))
         for namesake in ("city", "state", "ruler", "honours", "year"):
@@ -2735,11 +2738,13 @@ class NameTests(unittest.TestCase):
                       squash(raw_block_at(self.events, r"(?m)^monument_events\.25\s*=\s*\{")))
 
     def test_keep_the_name_spells_out_each_pattern(self):
-        # A customizable-localization target loses the event's saved scopes when
-        # an option name calls it (`SCOPE.sState(...)` is empty: "the
-        # HUB_NAME__city"). So .25's keep option carries one name per branch of
-        # gm_monument_name_evt, same triggers in the same order, each splicing
-        # that branch's key into the option name itself, where SCOPE resolves.
+        # A customizable-localization target loses the event's saved scopes
+        # (`SCOPE.sState(...)` is empty: "the HUB_NAME__city"), so #819 gave .25's
+        # keep option one name per branch of gm_monument_name_evt, same triggers
+        # in the same order, each splicing that branch's key into the option name
+        # itself. The targets now read ROOT.GetState and need no saved scope, but
+        # the splices stay: one name per branch also keeps the option's text in
+        # step with the family.
         L = loc()
         family = strip_comments(block(self.custom, "gm_monument_name_evt"))
         branches = []
@@ -3755,7 +3760,7 @@ class LandmarkNameTests(unittest.TestCase):
             self.assertIn(branch, family, ctx)
             self.assertLess(family.index(branch), family.index(f"gm_name_year_{ctx}"), "never a year")
         self.assertEqual(L["gm_name_landmark_row"], "[State.GetCustom('gm_skin_name')]")
-        self.assertEqual(L["gm_name_landmark_evt"], "[SCOPE.sState('monument_state').GetCustom('gm_landmark_name_evt')]")
+        self.assertEqual(L["gm_name_landmark_evt"], "[ROOT.GetState.GetCustom('gm_landmark_name_evt')]")
 
     def test_the_namesake_choice_offers_it_back(self):
         L = loc()

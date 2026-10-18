@@ -9616,16 +9616,16 @@
   "de": "Ein Monument wird im Umbenennungsfeld für Unternehmen benannt. Das Feld braucht ein Unternehmen, das diesen Platz belegt, bis die Benennung endet."
  },
  "gm_name_centenary_evt": {
-  "en": "the Centenary [SCOPE.sState('monument_state').GetCustom('gm_form_name')]",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] der Hundertjahrfeier"
+  "en": "the Centenary [ROOT.GetState.GetCustom('gm_form_name')]",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] der Hundertjahrfeier"
  },
  "gm_name_centenary_row": {
   "en": "The Centenary [State.GetCustom('gm_form_name')]",
   "de": "[State.GetCustom('gm_form_name')] der Hundertjahrfeier"
  },
  "gm_name_city_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCityHubName] [SCOPE.sState('monument_state').GetCustom('gm_form_name')]",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] von [SCOPE.sState('monument_state').GetCityHubName]"
+  "en": "the [ROOT.GetState.GetCityHubName] [ROOT.GetState.GetCustom('gm_form_name')]",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] von [ROOT.GetState.GetCityHubName]"
  },
  "gm_name_city_row": {
   "en": "The [State.GetCityHubName] [State.GetCustom('gm_form_name')]",
@@ -9636,8 +9636,8 @@
   "de": "Den von uns eingegebenen Namen verwerfen. Der Name, den es zuvor trug, erscheint wieder."
  },
  "gm_name_defeat_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCustom('gm_form_name')] to the Fallen of [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_name_year')|0]",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] für die Gefallenen von [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_name_year')|0]"
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] to the Fallen of [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] für die Gefallenen von [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]"
  },
  "gm_name_defeat_row": {
   "en": "The [State.GetCustom('gm_form_name')] to the Fallen of [State.MakeScope.ScriptValue('gm_state_name_year')|0]",
@@ -9648,8 +9648,8 @@
   "de": "Das Monument hat einen eigenen Namen"
  },
  "gm_name_honours_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of [SCOPE.sState('monument_state').GetCustom('gm_honours_name')]",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] [SCOPE.sState('monument_state').GetCustom('gm_honours_name')]"
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of [ROOT.GetState.GetCustom('gm_honours_name')]",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] [ROOT.GetState.GetCustom('gm_honours_name')]"
  },
  "gm_name_honours_row": {
   "en": "The [State.GetCustom('gm_form_name')] of [State.GetCustom('gm_honours_name')]",
@@ -9664,20 +9664,20 @@
   "de": "Neuer Name: #b [JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting]#!"
  },
  "gm_name_skin_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCustom('gm_skin_name')]",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_skin_name')]"
+  "en": "the [ROOT.GetState.GetCustom('gm_skin_name')]",
+  "de": "[ROOT.GetState.GetCustom('gm_skin_name')]"
  },
  "gm_name_space_moon_landing_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of the Moon Landing",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] der Mondlandung"
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Moon Landing",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] der Mondlandung"
  },
  "gm_name_space_moon_landing_row": {
   "en": "The [State.GetCustom('gm_form_name')] of the Moon Landing",
   "de": "[State.GetCustom('gm_form_name')] der Mondlandung"
  },
  "gm_name_space_orbital_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of the First Orbit",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] der ersten Umlaufbahn"
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the First Orbit",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] der ersten Umlaufbahn"
  },
  "gm_name_space_orbital_row": {
   "en": "The [State.GetCustom('gm_form_name')] of the First Orbit",
@@ -9688,8 +9688,8 @@
   "de": "Ein Feld öffnet sich, in das der Name des Monuments eingegeben wird. Wird er dort bestätigt, übernimmt das Monument ihn. Das Feld gehört zu einem Unternehmen, das nur während der Benennung besteht; sind Ihre Unternehmen am Limit, kann beim Öffnen und Schließen kurz eine Warnung aufleuchten."
  },
  "gm_name_state_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetNameNoFormatting] [SCOPE.sState('monument_state').GetCustom('gm_form_name')]",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] von [SCOPE.sState('monument_state').GetNameNoFormatting]"
+  "en": "the [ROOT.GetState.GetNameNoFormatting] [ROOT.GetState.GetCustom('gm_form_name')]",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] von [ROOT.GetState.GetNameNoFormatting]"
  },
  "gm_name_state_row": {
   "en": "The [State.GetNameNoFormatting] [State.GetCustom('gm_form_name')]",
@@ -9700,16 +9700,16 @@
   "de": "Das Monument übernimmt den im Feld eingegebenen Namen."
  },
  "gm_name_victory_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of the [SCOPE.sState('monument_state').MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting] War",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] des [SCOPE.sState('monument_state').MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting|l]en Krieges"
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the [ROOT.GetState.MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting] War",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] des [ROOT.GetState.MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting|l]en Krieges"
  },
  "gm_name_victory_row": {
   "en": "The [State.GetCustom('gm_form_name')] of the [State.MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting] War",
   "de": "[State.GetCustom('gm_form_name')] des [State.MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting|l]en Krieges"
  },
  "gm_name_year_evt": {
-  "en": "the [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_name_year')|0]",
-  "de": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] von [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_name_year')|0]"
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] von [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]"
  },
  "gm_name_year_row": {
   "en": "The [State.GetCustom('gm_form_name')] of [State.MakeScope.ScriptValue('gm_state_name_year')|0]",

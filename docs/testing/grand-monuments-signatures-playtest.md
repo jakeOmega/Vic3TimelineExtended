@@ -23,6 +23,14 @@ only the game can show. A fixed item is struck through with the commit that fixe
 | **A container's line.** A trophy row (London's Rosetta Stone) and a monument beside another. | The title shows the signature's name; a line under it reads "A unique dedication of …", with the effect on hover. This line is by design: a script container has no tooltip tag for an inline span. | No line: `gm_tr_row_sig` is hidden by `gm_tr_disp_has_sig` reading 0. |
 | **The state card rows.** Upper Egypt (the Obelisks of Karnak, Ancestral Antiquity) and any state with an Epigraphic Archive monument. | A Tourism Industry throughput row and a University throughput row, each with its breakdown on hover. | |
 
+## Event text (2026-10-18)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The name in a description.** A monument's form event (`monument_events.24`, "The Form It Takes"), and the anniversary events `.12`–`.15`, which are country events. | The monument's name reads in full (a city-named one as "the <city> <form>"), never "the HUB_NAME__city", and no double space before "in". The name targets now read `ROOT.GetState`; that `ROOT` is the called-on state for a `state` custom loc rests on vanilla's culture and interest-group targets. | `ROOT` there is the event's root, not the state: a country event's name breaks while `.24` (a state event) reads. Give each event context its own family, as the row has. |
+| **Keep the name.** `monument_events.25`'s first option. | "Keep the name: the … …", as before (#819). | The splice reads `ROOT.GetState` from the event's own root, which is the state: compare with `.24`. |
+| **No error flood.** Leave the dedication event (`monument_events.2`) open on a new monument for ten seconds. | `error.log` has no `gm_skin` lines (it had about 110 a second). | Another `var:gm_skin` read on the tooltip path: search the effects the options call for an unguarded one. |
+
 ## Counting
 
 | Check | Expect | If it fails |
