@@ -668,5 +668,53 @@ class StatesTest(unittest.TestCase):
             REPO, "common", "scripted_effects", "te_inheritance_effects.txt")))
 
 
+class StateWealthTermsTest(unittest.TestCase):
+    """Issue #894: the state's Wealth section shows its target term by term, as the country tab does. The rows read
+    te_demog_wc_target's own addends (the state's from State, the owner's through State.GetOwner), so a term added to
+    the target without a row fails here."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.section = _type_body(_read(WIDGETS), "te_state_demog_wealth")
+        cls.rows = _instances(cls.section, "te_demog_term_row")
+        values = _read(os.path.join(REPO, "common", "script_values", "te_demog_values.txt"))
+        target = _block_from(values, values.index("te_demog_wc_target = {"))
+        cls.addends = re.findall(r"(?m)^\t(?:value|add) = (owner\.)?(\w+)$", target)
+
+    def _reads(self, row):
+        return set(re.findall(r"(State(?:\.GetOwner)?)\.MakeScope\.ScriptValue\('(\w+)'\)", row))
+
+    def test_one_row_for_each_of_the_targets_terms(self):
+        # the law term is the owner's law target less 50 (te_demog_wc_law_term), so the six add up to the target less 50
+        want = {("State.GetOwner" if owner else "State",
+                 "te_demog_wc_law_term" if name == "te_inh_law_amendment_target" else name)
+                for owner, name in self.addends}
+        self.assertEqual(len(want), 6)
+        got = [self._reads(row) for row in self.rows]
+        self.assertTrue(all(len(reads) == 1 for reads in got), got)
+        self.assertEqual({next(iter(reads)) for reads in got}, want)
+        self.assertEqual(len(got), 6)
+
+    def test_never_the_players_figures(self):
+        for row in self.rows:
+            self.assertNotIn("GetPlayer", row)
+        self.assertNotIn("GetPlayer", self.section)
+
+    def test_the_rows_sit_under_the_scored_gate(self):
+        gate = "GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )"
+        container = next(block for block in _instances(self.section, "flowcontainer")
+                         if f'visible = "[{gate}]"' in block)
+        for row in self.rows:
+            self.assertIn(row, container)
+        self.assertIn("te_demog_wc_terms_head", container)
+        self.assertIn("te_demog_st_wc_pinned_note", container)
+
+    def test_the_state_keys_exist_and_read_the_state(self):
+        loc = _loc()
+        self.assertIn("te_dg_agr_share", loc["te_demog_st_wc_t_land_tt"])
+        self.assertNotIn("Averaged over the states", loc["te_demog_st_wc_t_land_tt"])
+        self.assertIn("te_demog_st_wc_pinned_note", loc)
+
+
 if __name__ == "__main__":
     unittest.main()
