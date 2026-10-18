@@ -2755,7 +2755,7 @@ types state_panel_types
 
 				### MOD: Demographics subtab (te_demog) ###
 				### A fourth subtab, the state's own census (te_state_demog_content in
-				### gui/te_demographics_widgets.gui). The three above shrink from 170 to
+				### gui/te_demographics_layout.gui). The three above shrink from 170 to
 				### 135 px to make room. It shows while the demographics rule runs the
 				### census (te_pops_demog_tab_sgui, the rule alone, the same gate as the
 				### Population panel's Demographics tab); while the rule hides it (the

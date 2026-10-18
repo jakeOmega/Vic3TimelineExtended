@@ -24,6 +24,7 @@ from test_demographics_registry import (  # noqa: E402  (helpers and paths only:
 DEBUG_VALUES = ROOT / "common" / "script_values" / "te_debug_demog_values.txt"
 SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
 GUI = ROOT / "gui" / "te_demographics_widgets.gui"
+LAYOUT = ROOT / "gui" / "te_demographics_layout.gui"   # the two composers (issue #1029)
 FIELD = f"modifier:{P.WORKING_ADULT_FIELD}"
 
 
@@ -603,9 +604,9 @@ class TestPanelGates(unittest.TestCase):
 
     def test_the_sections_exist_on_both_tabs(self):
         """The country tab's section carries the buttons; the state subtab's none (§10)."""
-        gui = _text(GUI)
-        self.assertIn("te_demog_sec_work = {}", _gui_type(gui, "te_demog_tab_sections"))
-        self.assertIn("te_state_demog_work = {}", _gui_type(gui, "te_state_demog_content"))
+        gui, layout = _text(GUI), _text(LAYOUT)
+        self.assertIn("te_demog_sec_work = {}", _gui_type(layout, "te_demog_tab_sections"))
+        self.assertIn("te_state_demog_work = {}", _gui_type(layout, "te_state_demog_content"))
         self.assertIn("te_demog_pension_button", _gui_type(gui, "te_demog_sec_work"))
         self.assertNotIn("te_demog_pension_button", _gui_type(gui, "te_state_demog_work"))
         self.assertNotIn("GetPlayer", _gui_type(gui, "te_state_demog_work"), "the state's section reads the state")

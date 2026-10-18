@@ -87,7 +87,9 @@ def _engine(ring, inp, pop, war_dead=0.0, kills=0.0, migration=0.0, truncate=Fal
     """The script's state with the ring's variables, its flows stubbed from the model's own formulas (the registry's
     TestCohortScript.step_both). truncate: the engine's fixed point (_Engine's truncate)."""
     prof = M.migrant_profile(inp)
-    locals_ = {"te_dg_war_ff": min(0.5, war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw),
+    # the people, which the Causes of Death slices take (issue #1029), then the rates the sweep reads
+    locals_ = {"te_dg_war": war_dead, "te_dg_kills": kills,
+               "te_dg_war_ff": min(0.5, war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw),
                "te_dg_war_fm": min(0.5, war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam),
                "te_dg_kill": min(0.9, kills / ring.total),
                "te_dg_mig_in": max(migration, 0.0), "te_dg_mig_out": max(-migration, 0.0)}
@@ -106,6 +108,9 @@ def _engine(ring, inp, pop, war_dead=0.0, kills=0.0, migration=0.0, truncate=Fal
                     te_dg_sex_balance=M.structure(ring)["men_per_100_women"], te_dg_faw=ring.faw, te_dg_fam=ring.fam)
     for c in range(len(P.MIGRANT_CLASSES)):
         eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
+    # the bands at the step's start, the people last counted, which the deaths-by-cause estimate reads (issue #1029)
+    for b, (bf, bm) in enumerate(zip(*M.band_sums(ring))):
+        eng.vars[f"te_dg_bf{b}"], eng.vars[f"te_dg_bm{b}"] = bf, bm
     for j in range(P.LX_BANDS):
         if ring.lx_s[j] is not None:
             eng.vars[f"te_dg_s{j}"], eng.vars[f"te_dg_d{j}"] = ring.lx_s[j], ring.lx_d[j]

@@ -518,3 +518,116 @@ te_demog_state_youth_sgui = {
 	is_valid = { always = no }
 	effect = { }
 }
+
+# ----------------------------------------------------------------------------
+# Issue #1029: the Causes of Death pie and the overview's grid, the States list's Show All and the next count.
+# ----------------------------------------------------------------------------
+
+# The country's deaths by cause: a stepped census with deaths by cause (te_demog_cause_deaths_country_store; a census of
+# seeds holds none, and a state from before this build has none until its next step).
+te_demog_dc_ready_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_stepped
+		var:te_dg_stepped > 0
+		has_variable = te_dg_dc_total
+		var:te_dg_dc_total > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's (te_demog_cause_deaths_store): a step since this build.
+te_demog_state_dc_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_stepped
+		var:te_dg_stepped > 0
+		has_variable = te_dg_dc_total
+		var:te_dg_dc_total > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The country's Health Care Access: one of its census states holds the drifted access (the Causes of Death plan).
+te_demog_acc_ready_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_acc }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Under Full, the census's own death rate across the country's states (te_dg_cdr_model): the Added on Top row's measure.
+te_demog_ontop_ready_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_cdr_model
+		var:te_dg_cdr_model > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The States section's Show All: more census states than its ten rows (te_dg_states_n); the second, more than the 40 the
+# full list keeps.
+te_demog_states_more_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_states_n
+		var:te_dg_states_n > 10
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+te_demog_states_over_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_states_n
+		var:te_dg_states_n > 40
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The month of the state's last count (te_dg_count_mi, written at every count since this build), for its next count.
+te_demog_state_count_sgui = {
+	scope = state
+	is_shown = { has_variable = te_dg_count_mi }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The country's life expectancy for women and for men (te_dg_e0f, te_dg_e0m), written at every country census since
+# issue #1029: an older census waits until 31 December. A state's are written with its te_dg_e0, so need no gate.
+te_demog_e0_sex_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_e0f }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Net migration per 1,000 people (te_dg_mig_rate), written at every count since issue #1029: an older census waits a count.
+te_demog_mig_rate_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_mig_rate }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+te_demog_state_mig_rate_sgui = {
+	scope = state
+	is_shown = { has_variable = te_dg_mig_rate }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

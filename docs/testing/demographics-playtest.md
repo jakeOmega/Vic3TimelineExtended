@@ -44,6 +44,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … fl_neighbours_read` | Full: once a game, at the first Family Limitation step (31 December 1836) of a country the state-scope test says has a foreign neighbour | `every_neighbouring_state` from country scope returns the states across its borders (`foreign` above 0). `own` above 0 says it returns the country's own states too, which the step leaves out either way | `foreign=0`: the practice never spreads | walk the country's own states and each one's `every_neighbouring_state` in `te_demog_fl_step` (a border state then counts once per own state it touches) |
 | `TE_SELF_CHECK … neighbouring_state_reads` | Full or Display only: once a game, at the first country census on 31 December | `every_neighbouring_state` from a state returns a land neighbour (Ulster sees Leinster): Late Marriage and Birth Spacing spread. `strait=1` says it crosses the Ulster–Lowlands strait too, so islands spread with their neighbours across the water; `strait=0`, only through their own conditions (the late-marriage spec 4.4 allows either) | `land=0`: the practices never spread | set `PRACTICE_SPREAD` to 0 in `demographics_params.py` and regenerate (`gen_demographics.py`), so the code says what the game does; with `strait=1`, run the harness's replays with `--straits` |
 | `TE_SELF_CHECK … wave_timed_country_type` | Full: once a game, `START` when the first of the event wave's four census-line options is chosen (Missing Girls' ban or payments, `code=1`; The Last Generation?'s licences or payments, `code=2`), the verdict a week later from the capital (`te_debug_demog.81`) | the capital's sum of the type (`state_sex_ratio_at_birth_add` or `state_desired_fertility_mult`) rose by the option's line plus any change in the Family Policy measures' lines of that type (`added` ≈ `expected`): a script-only state type on a timed country modifier reaches the state | `added` 0: the census never sees those four options' lines, so they change no birth, nor the women's-work lines the Baby Boom's and the Greying's options carry on the same kind of modifier; `NO_VERDICT` (a measure offset the line within the week) re-arms the check | add each of the four modifiers (and the three women's-work ones) without `days` and store its end date on the country (`te_dg_wv_<modifier>_until`); `te_demog_wave_yearly` removes it when the date passes and puts it back for a revolution's winner that holds the date (the measures' pattern, `te_demog_ms_keep_all`) |
+| `TE_SELF_CHECK … cause_deaths_estimate` | Display only or Full: once a game, at the first census step of a state with at least 1,000 deaths from natural causes and no late game (issue #1029) | the estimate the pie's shares come from, the four causes' rates over the bands last counted, matches the sweep's own deaths (`fit` 0.9–1.1; the model's states read 0.97–1.00), and the slices add up to the deaths, the war dead and the killed (`slices` = `deaths` + `war` + `killed`) | `fit` outside 0.9–1.1: the bands at the step's start aren't the people the sweep killed, so every pie leans; slices that don't add up: a slice read a stale figure | count deaths by cause in the sweep itself (issue #1029's method b): each age group's deaths split by its own causes' rates in `te_demog_sweep` (generated), summed into the eight slices, and drop the estimate and its fit |
 
 No `unemployment_rate_read` line after a few years under the census means no census state counted more than 2% of its workforce idle: option t's `unemp=` is the capital's stored conversion and `unemp_walk=` the walk's own count (since 2026-10-17); compare them with the state panel's unemployed in a state with visibly idle workers.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -695,3 +696,40 @@ What the next game should show:
    at that multiplier; option t's `unemp=` (the stored conversion) is about its `unemp_walk=` (the walk's own count).
 4. **`workforce_follows_target`** may not come in an 1836 game's first decades: it needs a capital whose set ratio
    moved 0.03 from its engine figure. Its OK or BROKEN, when it comes, is the pull's verdict for the ramp.
+
+## The panel on Banking's model (issue #1029)
+
+The Demographics tab and the state subtab rebuilt on the Banking panel's pattern: an overview of eight icon cells,
+Causes of Death with a pie at both levels, the pyramid, the levers, History's eight charts with pips, and States rows
+that open the state. The order, collapse flags, type sizes and widths are pinned offline by
+`test_demographics_layout.py`; deaths by cause by `test_demographics_cause_deaths.py` and its self-check, above. What
+only the game can show:
+
+1. **The overview (Display only or Full, both hosts).** Eight cells, two to a row, none cut off: the census year
+   above, then Natural Change and Net Migration, Life Expectancy and Leading Cause, Fertility and Median Age, Working
+   Age and Gini. Before the second count the stepped figures read "Next count" in grey; the arrows show from the
+   third. Each cell's hover is the old row's; Life Expectancy's adds women's and men's figures (on an old save, a grey
+   line until 31 December). The icons are placeholders (`docs/systems/demographics_gui_icons.md`):
+   note any that reads badly at 44 px.
+2. **The pie (Display only or Full, after the first step).** Causes of Death shows a ringed pie, slices clockwise from
+   12 o'clock in the legend's order, its colours matching the legend's swatches, and the slices' shares adding to
+   100%. A state with war dead shows a War slice. Under Full the Added on Top slice and row appear; under Display only
+   it stays 0. The country's pie is its states' summed. If the pie draws a single colour or nothing, the stacked
+   progresspie recipe fails here: `gui_modding_guide.md`, "Pie charts of script-held data", has the bar fallback.
+3. **The legend's hovers.** Each cause row's hover gives its rate against a poor country's, ×m, and its factors (the
+   state's own; the country's by people, with the capital's). The Deaths and Share columns hold their longest figures
+   without eliding.
+4. **History (a tracked country, a few decades in).** Eight charts: Births and Deaths per 1,000, Net Migration, Life
+   Expectancy, Children per Woman, Median Age, Deaths by Cause (stacked, in the pie's colours), Gini and Wealth
+   Concentration. A year with war dead shows a red pip over its bars, a famine month an amber one, a demographic event
+   (the event wave) a blue one, and the key under the charts names them. Hovering a bar names the year's marks.
+5. **States (the country tab).** Ten rows, largest first, each the state's name, people, life expectancy, median age,
+   children per woman and Gini; Show All appears with more than ten census states and shows them (up to 40; past 40
+   the button says so). A click on a row opens the state panel: note **which tab and subtab it opens on**. The row
+   sets the Population subtab to Demographics, but the state panel may open on another tab, in which case the click
+   lands one tab away from the census. Hovering a row highlights the state; a right click opens its menu.
+6. **The state subtab.** The census line names the next count ("Census of 1850, the next in 5 months", "in a month",
+   "this month"), a year after the state's last. The subtab's sections follow the country's order, less Family Policy, History, Where People Live and
+   States.
+7. **Type sizes.** Rows at 17, headings at 20, the overview at 16: nothing overlaps or elides at 1080p and at the UI
+   scale the owner plays at.

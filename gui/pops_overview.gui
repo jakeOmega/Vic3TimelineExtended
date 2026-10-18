@@ -159,8 +159,8 @@ types pops_overview
 
 				### MOD: Demographics tab (te_demog) ###
 				# A fifth tab showing the census (the content block at the foot of
-				# scrollarea_content; its sections are types in
-				# gui/te_demographics_widgets.gui). On the strip whenever the
+				# scrollarea_content; its order is gui/te_demographics_layout.gui's, its
+				# sections types in gui/te_demographics_widgets.gui). On the strip whenever the
 				# demographics rule runs the census (te_pops_demog_tab_sgui), greyed
 				# until the country's first census (te_pops_demog_tab_unlock_sgui's
 				# is_valid), whose checklist line the greyed tab's tooltip shows. The
@@ -598,8 +598,8 @@ types pops_overview
 			}
 
 			### MOD: Demographics tab (te_demog) ###
-			# The census: one instance of the sections' composer, whose types are in
-			# gui/te_demographics_widgets.gui (gui_style_guide.md rule 9). The gate on
+			# The census: one instance of the sections' composer, in
+			# gui/te_demographics_layout.gui (gui_style_guide.md rule 9). The gate on
 			# the rule sits on a parent of the instance; inside it, the composer shows
 			# the sections once the country has a census, and a pending line before.
 			flowcontainer = {
