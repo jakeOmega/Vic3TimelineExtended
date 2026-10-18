@@ -15,32 +15,45 @@ Per interval between kept saves (a save under a year after the last kept one is 
 its interval merging into the next, as `econ_sim_scenarios.realised_alloc` does):
 
   points       sum over level-bound types (econ_growth_sim.LEVEL_BOUND) of
-               max(0, levels gained) x the type's required_construction points
+               max(0, levels gained) x the type's required_construction points,
+               less the annexed share (below)
   gross_jobs   the same types' levels gained x staff a staffed level at the end
                (employees / staffing); jobs_per_point = gross_jobs / points
-  ratio        the mean over the two ends of (1 + x_adj) / (1 + x_adj'), where
-               x_adj is the script's prior_construction_scaling, x_adj' the same
-               figure under the shape, and the other cost sources carry over:
-               others = (1 + x_adj) / (1 + x_raw) - 1, x_adj' = (1 + x_raw')(1 + others) - 1
-               (x_raw is X under econ_sim_data.HISTORICAL_CURVE, the curve the
-               playthrough ran under, not the mod's current one)
+  ratio        the mean over the two ends of (1 + x_adj + others) / (1 + x_adj' + others),
+               the point's whole goods_input_construction_mult now and under the shape.
+               The script sets x_adj (its prior_construction_scaling) to x_raw x (1 + others),
+               others being every other goods_input_construction_mult source, so
+               others = x_adj / x_raw - 1 and x_adj' = x_raw' x (1 + others); the whole
+               multiplier is (1 + x_raw)(1 + others), and the ratio is
+               (1 + x_raw) / (1 + x_raw') (x_raw is X under econ_sim_data.HISTORICAL_CURVE,
+               the curve the playthrough ran under, not the mod's current one)
   extra jobs   points x (ratio - 1) x jobs_per_point, summed over the intervals so far
 
 and at each kept save after the first, slack_cf = max(0, slack - extra jobs) and
 vacancies_cf = max(0, extra jobs - slack), as shares of the slice's workforce.
 Population, the workforce and demand-bound jobs stay as observed.
 
-Two points the definitions leave open, decided from the data:
+Three points the definitions leave open, decided from the data:
 
+  * Annexed levels weren't bought. In a series with per-state figures (the union), the
+    states in the end point's per_state that the start's lacks were annexed in the
+    interval, and some of the levels gained came with them. The share of those levels
+    in costed level-bound types is taken as the end point's: annexed_costed = annexed
+    levels x (the level-bound costed types' levels / every type's levels), and the points
+    and gross_jobs are scaled by max(0, 1 - annexed_costed / costed levels gained),
+    costed levels gained being sum of max(0, levels gained) over those types.
+    points_observed (the queues' own rate) isn't scaled. FRA, GBR and CHI follow fixed
+    state sets, so nothing is annexed into them.
   * A level-bound type with no required_construction (company buildings, army and
     naval logistics centres, conscription centres) buys no points, and its levels
     aren't bought with points either, so its jobs don't count in gross_jobs. They are
     reported as `uncosted_jobs`. Late in the game they gain tens of thousands of levels
     an interval, which would otherwise inflate jobs_per_point where the ratios are
     largest.
-  * The other sources cancel out of the ratio: (1 + x_adj) / (1 + x_adj') is
-    (1 + x_raw) / (1 + x_raw') whenever x_raw > 0, whatever the prior. The ratio is
-    computed in that form, so the `historical` shape gives exactly 1.
+  * The other sources cancel out of the ratio, whatever the prior, so it is computed as
+    (1 + x_raw) / (1 + x_raw') and the `historical` shape gives exactly 1. Where x_raw
+    is 0 the script sets no scaling, and a prior left over from an earlier pulse is
+    stale: others is taken as 0 there, which the ratio doesn't need either.
 
 THE SHAPES
 ----------
@@ -60,11 +73,14 @@ current ones would stay at +100%, because that line already stops there.
 
 STATED LIMITS
 -------------
-No compounding (extra levels add GDP, which buys more construction later); no extra
-services demand from a bigger economy; maintenance and retooling, which X also raises,
-aren't re-priced; population and migration are held at observed. The first three
-understate a cheaper curve's effect; holding population ignores migration toward new
-jobs, which would offset some of it.
+Understating a cheaper curve's effect: no compounding (extra levels add GDP, which buys
+more construction later); no extra services demand from a bigger economy; maintenance
+and retooling, which X also raises, aren't re-priced.
+Overstating it: no ceiling on goods demand (many times the late levels would lower
+prices and profits, and with them the pool's inflow and construction); population is
+held at observed, so no migration into the new jobs; no floor holding the last peasants.
+The vacancy figure is an upper bound: no per-project cap or construction-supply limit,
+and no wage response.
 
     econ_construction_counterfactual.py [--series FRA,union,GBR,CHI] [--curves historical,current,none,...]
 """
@@ -149,28 +165,32 @@ def x_under(shape: str, gdppc: float, current: D.CurveConstants, world_gdppc: fl
 
 
 def others_of(x_raw: float, x_adj: float) -> float:
-    """The other goods_input_construction_mult sources the script folds into x_adj."""
-    return (1.0 + x_adj) / (1.0 + x_raw) - 1.0 if x_raw > 0 else 0.0
+    """The other goods_input_construction_mult sources the script folds into x_adj.
+
+    The script sets x_adj = x_raw x (1 + others), so others = x_adj / x_raw - 1. With
+    x_raw 0 the script sets no scaling and a prior is stale: others is 0 (no cost)."""
+    return x_adj / x_raw - 1.0 if x_raw > 0 else 0.0
 
 
 def x_adj_under(shape: str, gdppc: float, x_adj: float | None, numbers, world_gdppc: float | None) -> float:
-    """x_adj': the shape's X at `gdppc`, combined with the same other sources."""
+    """x_adj': what the script would set under the shape, x_raw' x (1 + others), with the
+    same other sources. `x_adj` None means the script hadn't set one, so it is x_raw."""
     x_raw = x_raw_of(gdppc)
     others = others_of(x_raw, x_raw if x_adj is None else x_adj)
-    return (1.0 + x_under(shape, gdppc, numbers.curve, world_gdppc)) * (1.0 + others) - 1.0
+    return x_under(shape, gdppc, numbers.curve, world_gdppc) * (1.0 + others)
 
 
 def shape_ratio(shape: str, gdppc: float, x_adj: float | None, numbers, world_gdppc: float | None) -> float:
-    """(1 + x_adj) / (1 + x_adj'): how many times the points the same money buys under
-    `shape`. `x_adj` None means the script hadn't set one, so it is x_raw.
+    """How many times the points the same money buys under `shape`: the point's whole
+    goods_input_construction_mult now over under the shape,
+    (1 + x_adj + others) / (1 + x_adj' + others) = (1 + x_raw)(1 + others) / ((1 + x_raw')(1 + others)).
 
-    With x_raw > 0 the other sources cancel and this is (1 + x_raw) / (1 + x_raw'),
-    the form computed here (exactly 1 for the historical shape)."""
+    The other sources cancel, so this is (1 + x_raw) / (1 + x_raw') whatever `x_adj` is
+    (exactly 1 for the historical shape). With x_raw 0 a prior is stale and others is 0,
+    which gives the same form. `x_adj` is kept for the signature's callers."""
     x_raw = x_raw_of(gdppc)
     x_new = x_under(shape, gdppc, numbers.curve, world_gdppc)
-    if x_raw > 0:
-        return (1.0 + x_raw) / (1.0 + x_new)
-    return (1.0 + (x_raw if x_adj is None else x_adj)) / (1.0 + x_new)
+    return (1.0 + x_raw) / (1.0 + x_new)
 
 
 def world_gdppc_at(world: list[dict], date: str) -> float | None:
@@ -205,6 +225,7 @@ class Interval:
     x_raw_end: float
     uncosted_jobs: float            # jobs in level-bound levels gained that cost no points
     annexed_levels: float           # levels in states new at the end (the union's per_state; else 0)
+    bought_share: float = 1.0       # the share of the costed levels gained that points bought (not annexed)
 
 
 def kept_points(points: list[dict]) -> list[dict]:
@@ -249,27 +270,37 @@ def intervals(series: dict, md, cost_of: CostOf | None = None, sector_of: Sector
     out: list[Interval] = []
     for a, b in zip(kept, kept[1:]):
         before, after = a["slice"]["buildings_by_type"], b["slice"]["buildings_by_type"]
-        points = gross = uncosted = 0.0
+        points = gross = uncosted = costed_gained = costed_levels = 0.0
         for btype, info in after.items():
             if sector_of(btype) not in G.LEVEL_BOUND:
                 continue
+            cost = cost_of(btype) or 0.0
+            if cost > 0:
+                costed_levels += info["levels"]
             gained = info["levels"] - before.get(btype, {}).get("levels", 0.0)
             if gained <= 0:
                 continue
             staff = info["employees"] / info["staffing"] if info["staffing"] > 0 else 0.0
-            cost = cost_of(btype) or 0.0
             if cost > 0:
                 points += gained * cost
                 gross += gained * staff
+                costed_gained += gained
             else:
                 uncosted += gained * staff
+        # Annexed levels weren't bought: take their costed share out of the levels gained.
+        new_states = set(b["per_state"]) - set(a["per_state"]) if "per_state" in a and "per_state" in b else set()
+        annexed = float(sum(b["per_state"][s][4] for s in new_states))
+        all_levels = sum(info["levels"] for info in after.values())
+        costed_share = costed_levels / all_levels if all_levels > 0 else 0.0
+        bought = max(0.0, 1.0 - annexed * costed_share / costed_gained) if costed_gained > 0 else 1.0
+        points *= bought
+        gross *= bought
 
         def employees(buildings: dict) -> float:
             return sum(i["employees"] for t, i in buildings.items() if sector_of(t) in G.LEVEL_BOUND)
 
         years = S.point_year(b["date"]) - S.point_year(a["date"])
         observed = (sum(a["owner"]["points_weekly"].values()) + sum(b["owner"]["points_weekly"].values())) / 2
-        new_states = set(b.get("per_state", {})) - set(a.get("per_state", {}))
         ends = []
         for pt in (a, b):
             gdppc = pt["owner"]["gdppc"]
@@ -285,7 +316,7 @@ def intervals(series: dict, md, cost_of: CostOf | None = None, sector_of: Sector
             gdppc_start=g_a, gdppc_end=g_b, x_adj_start=xa_a, x_adj_end=xa_b,
             others_start=o_a, others_end=o_b, x_raw_start=xr_a, x_raw_end=xr_b,
             uncosted_jobs=uncosted,
-            annexed_levels=float(sum(b["per_state"][s][4] for s in new_states)),
+            annexed_levels=annexed, bought_share=bought,
         ))
     return out
 
@@ -404,8 +435,8 @@ def _diagnostics(name: str, ivs: list[Interval]) -> list[str]:
         "### " + name,
         "",
         "| start | end | years | points | observed | pts/obs | gross jobs | jobs/pt | uncosted jobs"
-        " | net jobs change | gdppc | x_raw | x_adj | others | annexed levels |",
-        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|",
+        " | net jobs change | gdppc | x_raw | x_adj | others | annexed levels | bought share |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|---:|",
     ]
     for iv in ivs:
         ratio = iv.points / iv.points_observed if iv.points_observed > 0 else 0.0
@@ -418,7 +449,7 @@ def _diagnostics(name: str, ivs: list[Interval]) -> list[str]:
             format(iv.x_raw_start, ".2f") + " → " + format(iv.x_raw_end, ".2f"),
             format(iv.x_adj_start, ".2f") + " → " + format(iv.x_adj_end, ".2f"),
             format(iv.others_start, ".2f") + " → " + format(iv.others_end, ".2f"),
-            _num(iv.annexed_levels),
+            _num(iv.annexed_levels), format(iv.bought_share, ".2f"),
         ]) + " |")
     points, observed = sum(iv.points for iv in ivs), sum(iv.points_observed for iv in ivs)
     off = sum(1 for iv in ivs if iv.points_observed > 0

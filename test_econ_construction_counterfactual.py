@@ -43,8 +43,8 @@ def _building(levels, staff_a_level=200.0, staffing=None):
 
 
 def _point(date, gdppc, buildings, prior=None, peasants=5000.0, unemployed=1000.0,
-           workforce=10000.0, points_weekly=2.0):
-    return {
+           workforce=10000.0, points_weekly=2.0, per_state=None):
+    point = {
         "date": date,
         "slice": {"population": 2 * workforce, "workforce": workforce, "peasants": peasants,
                   "unemployed": unemployed, "employed": workforce - peasants - unemployed,
@@ -52,6 +52,9 @@ def _point(date, gdppc, buildings, prior=None, peasants=5000.0, unemployed=1000.
         "owner": {"gdppc": gdppc, "points_weekly": {"government": points_weekly / 2, "private": points_weekly / 2},
                   "variables": {"prior_construction_scaling": prior}},
     }
+    if per_state is not None:
+        point["per_state"] = per_state
+    return point
 
 
 def _one_interval(gdppc=2.0, prior=1.0, peasants=5000.0, unemployed=1000.0):
@@ -119,17 +122,38 @@ class TestCounterfactual(unittest.TestCase):
         self.assertAlmostEqual(summary.extra_points_pct, 100.0)
 
     def test_others_carry_over(self):
+        # The script sets prior = x_raw x (1 + others): x_raw 1.0 and prior 2.0 give others 1.0.
         series = _one_interval(gdppc=2.0, prior=2.0)
         (iv,) = CF.intervals(series, MD, **LOOKUPS)
-        self.assertAlmostEqual(iv.others_start, 0.5)
-        self.assertAlmostEqual(iv.others_end, 0.5)
-        self.assertAlmostEqual(CF.x_adj_under("none", 2.0, 2.0, MD.numbers, None), 0.5)
-        self.assertAlmostEqual(CF.shape_ratio("none", 2.0, 2.0, MD.numbers, None), 3.0 / 1.5)
+        self.assertAlmostEqual(iv.others_start, 1.0)
+        self.assertAlmostEqual(iv.others_end, 1.0)
+        # Under the shape the script would set x_raw' x (1 + others): 0 with no curve, 1.0 at half the X.
+        self.assertAlmostEqual(CF.x_adj_under("none", 2.0, 2.0, MD.numbers, None), 0.0)
+        self.assertAlmostEqual(CF.x_adj_under("capped:0.5", 2.0, 2.0, MD.numbers, None), 0.5 * 2.0)
+        # The whole multiplier, (1 + x_raw)(1 + others) = 4 now and 2 with no curve, halves.
+        self.assertAlmostEqual(CF.shape_ratio("none", 2.0, 2.0, MD.numbers, None), 2.0)
 
     def test_others_cancel_in_the_ratio(self):
-        # (1 + x_adj) / (1 + x_adj') reduces to (1 + x_raw) / (1 + x_raw') for any prior.
+        # (1 + x_adj + others) / (1 + x_adj' + others) reduces to (1 + x_raw) / (1 + x_raw') for any prior.
         for prior in (0.0, 0.4, 1.0, 2.0, 7.5):
             self.assertAlmostEqual(CF.shape_ratio("capped:0.5", 3.0, prior, MD.numbers, None), 3.0 / 1.5)
+            if prior == 0.0:
+                continue                # others -1: no cost at all, and the long form divides by 0
+            others = CF.others_of(2.0, prior)
+            x_adj_new = CF.x_adj_under("capped:0.5", 3.0, prior, MD.numbers, None)
+            self.assertAlmostEqual((1.0 + prior + others) / (1.0 + x_adj_new + others), 3.0 / 1.5)
+
+    def test_a_stale_prior_under_the_floor_costs_nothing(self):
+        # x_raw 0: the script sets no scaling, so a prior left from an earlier pulse is stale and others is 0.
+        self.assertEqual(CF.others_of(0.0, 2.0), 0.0)
+        self.assertEqual(CF.x_adj_under("none", 0.5, 2.0, MD.numbers, None), 0.0)
+        # The world curve charges a country far above a poor world: the ratio is 1 / (1 + x_raw'), not
+        # (1 + the stale prior) / (1 + x_raw').
+        x_new = CF.x_under("world", 0.5, MD.numbers.curve, 0.1)
+        self.assertGreater(x_new, 0.0)
+        self.assertAlmostEqual(CF.shape_ratio("world", 0.5, 2.0, MD.numbers, 0.1), 1.0 / (1.0 + x_new))
+        self.assertEqual(CF.shape_ratio("world", 0.5, 2.0, MD.numbers, 0.1),
+                         CF.shape_ratio("world", 0.5, None, MD.numbers, 0.1))
 
     def test_slack_floors_and_vacancies_appear(self):
         series = _one_interval(peasants=300.0, unemployed=200.0)
@@ -199,6 +223,45 @@ class TestIntervalFigures(unittest.TestCase):
         series["points"][1]["slice"]["buildings_by_type"]["building_mill"] = _building(20, staffing=0.0)
         (iv,) = CF.intervals(series, MD, **LOOKUPS)
         self.assertEqual((iv.gross_jobs, iv.jobs_per_point), (0.0, 0.0))
+
+    def test_annexed_levels_are_not_counted_as_bought(self):
+        # A union series: state 2 is new at the end, with 8 levels of its own. At the end the mill
+        # (level-bound, costed) holds 30 of the 50 levels, so 8 x 0.6 = 4.8 of the 20 mill levels
+        # gained came with the annexation: points and jobs keep 1 - 4.8 / 20 = 0.76 of their figures.
+        union = {"points": [
+            _point("1900.1.1", 2.0, {"building_mill": _building(10), "building_hq": _building(0),
+                                     "building_shop": _building(0)}, prior=1.0,
+                   per_state={"1": [20000, 10000, 5000, 1000, 10]}),
+            _point("1910.1.1", 2.0, {"building_mill": _building(30), "building_hq": _building(10),
+                                     "building_shop": _building(10)}, prior=1.0,
+                   per_state={"1": [20000, 10000, 5000, 1000, 42], "2": [3000, 1500, 900, 100, 8]}),
+        ]}
+        (iv,) = CF.intervals(union, MD, **LOOKUPS)
+        self.assertEqual(iv.annexed_levels, 8.0)
+        self.assertAlmostEqual(iv.bought_share, 0.76)
+        self.assertAlmostEqual(iv.points, 20 * 100.0 * 0.76)
+        self.assertAlmostEqual(iv.gross_jobs, 20 * 200.0 * 0.76)
+        self.assertAlmostEqual(iv.jobs_per_point, 2.0)
+        self.assertAlmostEqual(iv.points_observed, 2.0 * 52 * iv.years)          # the queues' rate: unscaled
+        self.assertEqual(iv.uncosted_jobs, 10 * 200.0)
+        (row,) = CF.counterfactual(union, MD, "none", WORLD, **LOOKUPS)
+        self.assertAlmostEqual(row.cum_extra_jobs, 20 * 100.0 * 0.76 * (2.0 - 1.0) * 2.0)
+        # The same levels with no per-state figures (a fixed state set) are all bought.
+        for pt in union["points"]:
+            del pt["per_state"]
+        (iv,) = CF.intervals(union, MD, **LOOKUPS)
+        self.assertEqual((iv.annexed_levels, iv.bought_share, iv.points), (0.0, 1.0, 2000.0))
+
+    def test_an_annexation_larger_than_the_gain_buys_nothing(self):
+        union = {"points": [
+            _point("1900.1.1", 2.0, {"building_mill": _building(10)}, prior=1.0, per_state={"1": [1, 1, 0, 0, 10]}),
+            _point("1910.1.1", 2.0, {"building_mill": _building(12)}, prior=1.0,
+                   per_state={"1": [1, 1, 0, 0, 10], "2": [1, 1, 0, 0, 5]}),
+        ]}
+        (iv,) = CF.intervals(union, MD, **LOOKUPS)
+        self.assertEqual((iv.bought_share, iv.points, iv.gross_jobs, iv.jobs_per_point), (0.0, 0.0, 0.0, 0.0))
+        (row,) = CF.counterfactual(union, MD, "none", WORLD, **LOOKUPS)
+        self.assertEqual(row.cum_extra_jobs, 0.0)
 
     def test_points_observed_is_the_mean_rate_over_the_interval(self):
         series = _one_interval()
