@@ -33,10 +33,23 @@ as vanilla gives the port and railway base groups. Baseline, Fast A before the c
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Base-group churn.** Diff two consecutive yearly saves late in the run (calendar 1900 on). | Base-group switches mostly upward (to a newly unlocked method) or away from a short input; few back down to Early Power Plant. Base switches well under the baseline's 70 a year. | Downgrades as frequent as before mean the engine isn't reading the INJECTed `ai_selection`: check `debug.log` for the group, then try a `REPLACE:` of the group. |
+| ~~**Base-group churn.**~~ (read 2026-10-18, below) Diff two consecutive yearly saves late in the run (calendar 1900 on). | Base-group switches mostly upward (to a newly unlocked method) or away from a short input; few back down to Early Power Plant. Base switches well under the baseline's 70 a year. | Downgrades as frequent as before mean the engine isn't reading the INJECTed `ai_selection`: check `debug.log` for the group, then try a `REPLACE:` of the group. |
 | **Retooling share.** Count power plants with `pm_retooling` in the 1904 and 1912 saves. | Well under 70%, nearer the railways' and ports' share. | If the base group is quiet but the share stays high, the automation and carbon-capture groups carry the churn: count their switches before choosing a lever. |
 | **Subsidy bill.** Power plants' share of `balance_subsidies`, and subsidies as a share of income (the note's §4 slot map). | Power plants' share well under 57%; fewer bankrupt countries than the baseline's. | A bill that stays high with little retooling means the non-retooling plants' losses grew: compare `goods_sales` with `goods_cost` on plants that aren't retooling (baseline: £54.9M against £58.6M). |
 | **Oil.** The oil price and the oil shortage on power plants (`input_goods_shortage`). | AI plants move toward Modern Oil-Fired (140 electricity against Modern Coal's 90). Oil may tighten, but plants shouldn't flip between coal and oil every year. | Coal–oil flips driven by oil shortage would want a look at oil supply, not at the group. |
+
+**Read 2026-10-18** in the owner's EU game, AI countries only (the EU is the player). The saves were 2033.12.21 and
+2034.9.13 before the change, and 2036.5.20 to 2051.1.1 with this section's change and the next section's. Plants were
+matched by building id. Other changes went into the same game in those years (#1037 and #1040 among them), so the late
+budget figures aren't #933's alone. The full figures are in #933's comment of that date, and the binary tokens in
+`scripting_best_practices.md` § "A Save's `subsidized=yes` Is Only the Chosen Flag".
+
+| Check | Result |
+|---|---|
+| Base-group churn | **Passed.** AI base-group switches fell from 54 a year (2033.12 → 2034.9) to 11–16 a year (2045.12 → 2050.12). Downgrades fell from 30 a year to 2–3 a year from 2048. There were 12 a year in 2045–48, mostly Modern Oil-Fired to Modern Coal-Fired or Oil-Fired. AI plants on Early Power Plant fell from 135 of 310 to 39 of 330. |
+| Retooling share | **Not met.** 71% of AI plants were retooling in 2034 and 60% in 2048–51, against 39% of railways and 37% of ports (25% and 24% in 2034). The fallback holds: the automation group carries the churn, both ways. World-wide from 2048.4 to 2051.1, 32 plants switched from Power Centralized Control Systems to Power Integrated Smart Systems and 30 switched back. Without a subsidy this churn costs the treasury nothing, but retooling still cuts the plants' output. |
+| Subsidy bill | Power plants' share **passed**, by the next section's change: 57% before, 0% after. Bankrupt countries **didn't fall**: 80 of 113 before, 83 of 110 after. See the next section's Budgets. |
+| Oil | **Mostly passed.** Most base-group switches go to Modern Oil-Fired. Moves from Modern Oil-Fired back to Modern Coal-Fired were 14 in 2045–48 and 1 in each window after. The oil price and shortage weren't read. |
 
 ## The AI doesn't subsidize coal and oil power plants (#933)
 
@@ -56,14 +69,29 @@ at 2034.9.13 and run to 2035.1.1 (2026-10-16):
 | 1 | The three with no vanilla `subsidies` block | Those three: 1% of 54. The other four, reached only by the default's INJECT: 99% of 256 | 98% |
 | 2 | All seven | The three: 1% of 54. The other four (a second `subsidies` block): 19% of 257 | 98% |
 
-No load error named a strategy file in either round. Still open: why 19% of the second group's plants stayed subsidized
-after 3½ months (slow stripping, or a case where the AI keeps one), and how unsubsidized plants fare.
+No load error named a strategy file in either round. The 19% of the second group still subsidized after 3½ months was
+slow stripping: 3 of 313 AI plants were subsidized in 2036.5.20, and none from 2040 on (read 2026-10-18, below).
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Subsidies.** A few years after the change, count AI power plants with `subsidized=yes` in a plain-text save (or read big AI countries' power plants in game). | Near none outside countries with no administrative strategy; the 19% left after 3½ months has fallen. Railways and ports unchanged (about 99%). | A share that stays near 19%: find which countries keep the subsidy and what they share (strategy, budget, electricity shortage). |
-| **Plants without a subsidy.** The same save: power plants' `staffing` against `previous_staffing`, `cash_reserves`, and the electricity price where plants lost their subsidy. | Retooling or loss-making plants cut wages and shed some staff; electricity's price rises until plants cover their costs. No state left without power. | Plants emptying out and electricity shortages spreading to factories mean the AI needs the subsidy: drop `te_power_plant_subsidy_strategies.txt` and lean on the base group's `most_productive` alone. |
-| **Budgets.** Subsidies as a share of income and the bankrupt share of people (the fast-mode note's §4), against the section above. | Lower than with `most_productive` alone. | No change means the subsidy flag wasn't the bill: keep `most_productive`, and reconsider the strategies. |
+| ~~**Subsidies.**~~ (read 2026-10-18, below) A few years after the change, count AI power plants with `subsidized=yes` in a plain-text save (or read big AI countries' power plants in game). | Near none outside countries with no administrative strategy; the 19% left after 3½ months has fallen. Railways and ports unchanged (about 99%). | A share that stays near 19%: find which countries keep the subsidy and what they share (strategy, budget, electricity shortage). |
+| ~~**Plants without a subsidy.**~~ (read 2026-10-18, below) The same save: power plants' `staffing` against `previous_staffing`, `cash_reserves`, and the electricity price where plants lost their subsidy. | Retooling or loss-making plants cut wages and shed some staff; electricity's price rises until plants cover their costs. No state left without power. | Plants emptying out and electricity shortages spreading to factories mean the AI needs the subsidy: drop `te_power_plant_subsidy_strategies.txt` and lean on the base group's `most_productive` alone. |
+| **Budgets.** Subsidies as a share of income and the bankrupt share of people (the fast-mode note's §4), against the section above. | Lower than with `most_productive` alone. | No change, with power plants still a large share of the bill, means the subsidy flag wasn't the bill: keep `most_productive`, and reconsider the strategies. No change with their share at 0 means the bill moved to other buildings: rank `balance_subsidies` by building type and country. |
+
+**Read 2026-10-18**, in the same saves as the section above.
+
+| Check | Result |
+|---|---|
+| Subsidies | **Passed.** AI power plants subsidized: 308 of 310 in 2034.9, 3 of 313 in 2036.5, and none from 2040 (0 of 329 in 2051.1). Their summed `balance_subsidies` is 0 too. Railways stayed 98–100% subsidized and ports 100%. Every AI country but at most one runs an administrative strategy. |
+| Plants without a subsidy | **Passed.** The plants shed staff: 957 workers a level in 2034, 259 in 2036 and 124 in 2051. 16,526 levels still stand (20,404 in 2034). Their sales per unit of electricity rose about a fifth (£22.2 to £27.2). AI electricity output fell 23% by 2036.5, but by 2051 it was 56% above 2034, as Renewable Energy Plants' output quadrupled. |
+| Budgets | **Failed, though not as the fallback expected: the flag was the bill, and the bill moved.** AI subsidies (summed `balance_subsidies`) went from £90.5M a week in 2034.9, 57% of it on power plants, to £34.9M in 2036.5. They then rose to £94–124M from 2045 to 2049, and stood at £97.8M in 2051, paid on ports, railways and Renewable Energy Plants. Subsidies as a share of income (budget slot 8) went from 48% to 17%, then back to 30–44%. Bankrupt AI countries went from 80 to 81–83. |
+
+Where the bill went in the Budgets result:
+- **Ports:** India's cost £1.2M a week in 2034 and £43M by 2048, and India went bankrupt in 2050.
+- **Railways:** most is Russia's, bankrupt throughout.
+- **Renewable Energy Plants:** £18–29M a week. The mod's Renewable Energy Investment policy in the Global Warming entry forces their subsidy (`renewable_investment_modifier`, held by about 99 of the 110 AI countries).
+
+Next step: the owner's call on #933.
 
 ## Unemployment as a share of the workforce (log triage 2026-10-17)
 
