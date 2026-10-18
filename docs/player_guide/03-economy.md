@@ -121,7 +121,7 @@ National Queue tab.
 | Your budget buys | Fixed Budget only: how many points a week your budget buys at today's price, which is where the government purchase is heading. |
 | Still moving toward it | Fixed Budget only, and only while the purchase has not yet reached what your budget buys: the share of the remaining gap that closes this week. Its tooltip explains why the purchase moves in steps. |
 | Private investors buy | Points investors bought this week and the share of construction going to private projects. |
-| Price | What one construction point costs now: the market price, raised in rich countries by Construction Cost Scaling. |
+| Price | What one construction point costs now: the market price, raised by Construction Cost Scaling in rich countries with few idle workers. |
 | Your market | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "shortage" marks demand above supply: the price rises, but you still get all the construction you buy. |
 
 ### Fixed quantity or fixed budget
@@ -223,22 +223,32 @@ every setting of the Free Market Construction rule.
 
 ### Construction Cost Scaling
 
-Once a year, the game compares your GDP per capita with a fixed curve. Above £1
-per person per year, the Development Cost Scaling modifier raises the
-construction each point requires. The increase rises in a straight line, 10
-percentage points for every £1, and stops at +100% from a GDP per capita of £11:
-this scaling never more than doubles the construction a point needs. It applies
-to every use of construction: the points your queues spend and the maintenance
-your buildings pay. It combines by multiplication with other
-construction-cost modifiers, so another modifier that cuts construction costs by
-20% still cuts 20% in a rich country. With Free Market Construction disabled,
-the same scaling raises the cost of the materials your construction uses
-instead.
+Once a year, the Development Cost Scaling modifier raises the construction each
+point requires in a rich country, by two parts multiplied together:
 
-This is a catch-up mechanic: a rich country needs more construction for each
-building and each level of upkeep, while a poor country builds cheaply. The
+- **The GDP part.** Above £1 of GDP per capita it rises in a straight line,
+  about 10 percentage points for every £1, to +1,000% at £100.
+- **The share of it that applies.** This depends on how much of your workforce
+  is idle: peasants and unemployed together. With 3% or less idle, all of the
+  GDP part applies. With 15% or more, none does. Between the two, the share
+  falls in a straight line. It moves a third of the way toward its new value
+  each year, so a year's hiring doesn't swing the price.
+
+A rich country with workers to spare builds cheaply until it has put them to
+work. One at full employment pays the whole GDP part, which keeps it from
+building faster than its population can staff. The scaling applies to every use
+of construction: the points your queues spend and the maintenance your
+buildings pay. It combines by multiplication with other construction-cost
+modifiers, so another modifier that cuts construction costs by 20% still cuts
+20% in a rich country. With Free Market Construction disabled, the same scaling
+raises the cost of the materials your construction uses instead.
+
+It is also a catch-up mechanic: a poor country, with many peasants and a low
+GDP per capita, builds cheaply. The
 [Nation tab](01-introduction.md#the-nation-tab) shows the current scaling, and
-below it any excess private construction in force.
+below it any excess private construction in force. Its tooltip gives the cost of
+a point as factors: the GDP part, the share that applies, your peasants and
+unemployed, and your other construction-cost modifiers.
 
 ### Excess private construction
 

@@ -2898,12 +2898,15 @@ society_technology_events_on_action = {
 }
 
 # ---- Construction Cost Scaling (country scope, yearly) ----
-# Applies goods_input_construction_mult penalty based on GDP per capita.
+# Applies goods_input_construction_mult penalty based on GDP per capita and
+# the country's slack (peasants and unemployed): te_cc_yearly_update first
+# reads the slack and moves the share of the GDP part that applies.
 # Uses adjusted multiplier that combines multiplicatively with other
 # sources of goods_input_construction_mult (ministry, laws, etc.).
 # See extra_script_values.txt for tuning constants.
 construction_cost_scaling_on_action = {
 	effect = {
+		te_cc_yearly_update = yes
 		# free_market_construction_rule disabled: there is no construction good
 		# to scale, so the scaling goes on vanilla's own lever for the cost of
 		# the goods construction consumes (construction_cost_scaling_direct).

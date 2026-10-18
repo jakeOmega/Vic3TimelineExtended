@@ -46,3 +46,41 @@ te_unemp_k_wf_share_fallback = { value = 0.25 }
 # THIS = a state: the engine's figure, for an effect to store (set_variable's value slot can't take the bare trigger
 # read: scripting_best_practices.md, "The op slots accept ...").
 te_unemp_engine_read = { value = state_unemployment_rate }
+
+# ---- A country's slack, summed from its states' walks (Construction Cost Scaling, docs/systems/mod_systems.md) ----
+# THIS = a country. Each state's counts are from its last walk (te_unemp_share_refresh: up to a year old). These iterate
+# every state, so read them from an effect, never from a GUI: the pulse stores what the tooltip shows (te_cc_slack,
+# te_cc_peasants).
+
+# The workforce of the country's walked states, people.
+te_country_walked_workforce = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = te_unemp_slack_count }
+		add = var:te_unemp_wf_count
+	}
+}
+
+# Slack, 0-1: peasants and every other worker with no workplace over the walked workforce.
+te_country_slack_share = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = te_unemp_slack_count }
+		add = var:te_unemp_slack_count
+	}
+	divide = { value = te_country_walked_workforce min = 1 }
+	max = 1
+	min = 0
+}
+
+# Peasants over the walked workforce, 0-1: the part of the slack outside the market economy.
+te_country_peasant_share = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = te_unemp_slack_count }
+		add = var:te_unemp_peasant_count
+	}
+	divide = { value = te_country_walked_workforce min = 1 }
+	max = 1
+	min = 0
+}

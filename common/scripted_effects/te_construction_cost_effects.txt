@@ -1,0 +1,83 @@
+﻿# Construction Cost Scaling's yearly reading of a country's slack, and its self-check.
+# Values and the constants: common/script_values/extra_script_values.txt (CONSTRUCTION COST SCALING). Wiring:
+# construction_cost_scaling_on_action (common/on_actions/extra_on_actions.txt), which calls te_cc_yearly_update
+# before it sets the modifier. Why: docs/systems/economy_growth_sim.md (#1034).
+
+# THIS = a country, its yearly pulse. Store its slack and peasants from its states' last walks (te_unemp_share_refresh)
+# and move the share of the GDP part that applies (var:te_cc_slack_factor) a third of the way toward its target. A
+# country none of whose states has been walked yet keeps the share it had (0 before its first reading). Then store
+# the GDP per capita and the GDP part the scaling uses this year, for the Nation tab's tooltip.
+te_cc_yearly_update = {
+	if = {
+		limit = { te_country_walked_workforce > 0 }
+		set_variable = { name = te_cc_slack value = te_country_slack_share }
+		set_variable = { name = te_cc_peasants value = te_country_peasant_share }
+		set_variable = { name = te_cc_slack_factor value = te_cc_slack_factor_eased }
+	}
+	set_variable = { name = te_cc_gdppc value = country_gdp_per_capita }
+	set_variable = { name = te_cc_gdp_part value = construction_cost_scaling_gdp_mult }
+	te_cc_slack_selfcheck = yes
+}
+
+# TE_SELF_CHECK construction_slack_read (docs/testing/ai-economy-playtest.md, Self-checks). Once a game, the first
+# country at its yearly pulse with a walked workforce of at least 100,000 and a slack between 2% and 98%: the slack
+# the pulse just stored (te_country_slack_share, summed from the states' stored counts) against a fresh walk of every
+# pop in the country, counted by the same rule (te_unemp_count_pop).
+#   OK      within 5 points: the states' counts are stored and summed as meant (each is up to a year old, which
+#           explains a point or two).
+#   BROKEN  anything else: the sum or the stored counts aren't what the walk counted. The fallback is in the
+#           playtest row.
+te_cc_slack_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cc_slack_check_done }
+			has_variable = te_cc_slack
+			te_country_walked_workforce >= 100000
+			var:te_cc_slack >= 0.02
+			var:te_cc_slack <= 0.98
+		}
+		set_global_variable = { name = te_cc_slack_check_done value = yes }
+		set_local_variable = { name = te_unemp_w_pop value = 0 }
+		set_local_variable = { name = te_unemp_w_wf value = 0 }
+		set_local_variable = { name = te_unemp_w_idle value = 0 }
+		set_local_variable = { name = te_unemp_w_slack value = 0 }
+		set_local_variable = { name = te_unemp_w_peasant value = 0 }
+		every_scope_state = {
+			every_scope_pop = {
+				te_unemp_count_pop = yes
+			}
+		}
+		set_variable = {
+			name = te_cc_chk_fresh
+			value = { value = local_var:te_unemp_w_slack divide = { value = local_var:te_unemp_w_wf min = 1 } }
+		}
+		set_variable = {
+			name = te_cc_chk_fresh_peasants
+			value = { value = local_var:te_unemp_w_peasant divide = { value = local_var:te_unemp_w_wf min = 1 } }
+		}
+		set_variable = { name = te_cc_chk_wf value = local_var:te_unemp_w_wf }
+		set_variable = { name = te_cc_chk_walked_wf value = te_country_walked_workforce }
+		set_variable = { name = te_cc_chk_target value = te_cc_slack_target }
+		set_variable = {
+			name = te_cc_chk_diff
+			value = { value = var:te_cc_slack subtract = var:te_cc_chk_fresh }
+		}
+		if = {
+			limit = {
+				var:te_cc_chk_diff <= 0.05
+				var:te_cc_chk_diff >= -0.05
+			}
+			debug_log = "TE_SELF_CHECK OK construction_slack_read country=[THIS.GetCountry.GetTagName] slack=[THIS.Var('te_cc_slack').GetValue|3] fresh=[THIS.Var('te_cc_chk_fresh').GetValue|3] peasants=[THIS.Var('te_cc_peasants').GetValue|3] fresh_peasants=[THIS.Var('te_cc_chk_fresh_peasants').GetValue|3] walked_wf=[THIS.Var('te_cc_chk_walked_wf').GetValue|0] fresh_wf=[THIS.Var('te_cc_chk_wf').GetValue|0] target=[THIS.Var('te_cc_chk_target').GetValue|3] factor=[THIS.Var('te_cc_slack_factor').GetValue|3] gdppc=[THIS.Var('te_cc_gdppc').GetValue|2] gdp_part=[THIS.Var('te_cc_gdp_part').GetValue|3] (the states' stored counts sum to the country's slack, so the scaling reads the slack it means) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN construction_slack_read country=[THIS.GetCountry.GetTagName] slack=[THIS.Var('te_cc_slack').GetValue|3] fresh=[THIS.Var('te_cc_chk_fresh').GetValue|3] peasants=[THIS.Var('te_cc_peasants').GetValue|3] fresh_peasants=[THIS.Var('te_cc_chk_fresh_peasants').GetValue|3] walked_wf=[THIS.Var('te_cc_chk_walked_wf').GetValue|0] fresh_wf=[THIS.Var('te_cc_chk_wf').GetValue|0] target=[THIS.Var('te_cc_chk_target').GetValue|3] factor=[THIS.Var('te_cc_slack_factor').GetValue|3] gdppc=[THIS.Var('te_cc_gdppc').GetValue|2] gdp_part=[THIS.Var('te_cc_gdp_part').GetValue|3] (the stored slack isn't the pops' own: take the fallback in docs/testing/ai-economy-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+		remove_variable = te_cc_chk_fresh
+		remove_variable = te_cc_chk_fresh_peasants
+		remove_variable = te_cc_chk_wf
+		remove_variable = te_cc_chk_walked_wf
+		remove_variable = te_cc_chk_target
+		remove_variable = te_cc_chk_diff
+	}
+}

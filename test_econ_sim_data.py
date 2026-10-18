@@ -30,12 +30,15 @@ class FakeMS:
 
 class TestNumbers(unittest.TestCase):
     def test_curve_constants(self):
-        # Capped at +100% from GBP 11, the slope kept (#1034).
-        self.assertEqual(N.curve, D.CurveConstants(1.0, 1.0, 11.0, 1.0))
+        # The GDP part +1000% at GBP 100, applying in full at 3% slack and not at all at 15%,
+        # moving a third of the way a year (#1034's follow-up).
+        self.assertEqual(N.curve, D.CurveConstants(1.0, 1.0, 100.0, 10.0, 0.03, 0.15, 0.33333))
+        self.assertTrue(N.curve.has_slack_band)
 
     def test_historical_curve_is_the_pre_cap_one(self):
-        # The curve the c480d386 playthrough ran under (ruling R37): +1000% at GBP 100.
+        # The curve the c480d386 playthrough ran under (ruling R37): +1000% at GBP 100, no slack part.
         self.assertEqual(D.HISTORICAL_CURVE, D.CurveConstants(1.0, 1.0, 100.0, 10.0))
+        self.assertFalse(D.HISTORICAL_CURVE.has_slack_band)
 
     def test_cost_tiers(self):
         t = N.cost_tiers

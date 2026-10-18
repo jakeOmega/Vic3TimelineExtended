@@ -33,6 +33,22 @@ and at each kept save after the first, slack_cf = max(0, slack - extra jobs) and
 vacancies_cf = max(0, extra jobs - slack), as shares of the slice's workforce.
 Population, the workforce and demand-bound jobs stay as observed.
 
+A shape with a slack band (`current`, `slack:...`) has no ratio of its own: the share of
+the GDP part that applies follows the counterfactual's own slack. Its path is yearly: each
+interval is cut into about yearly steps (round(years) of them), the observed workforce,
+slack, GDP per capita and other sources linear between the ends, the interval's points
+spread evenly and its jobs per point kept. Each step reads the slack the steps before it
+left, moves the applying share as the script's yearly pulse does
+(econ_growth_sim.eased_slack_factor; 0 before the first step, as the script's before its
+first pulse), and prices the step's points at the GDP part times that share. Where both
+paths apply (a shape with constant ratio) they agree; a percent or two otherwise.
+
+`--others-scale k` multiplies the other construction-cost sources the counterfactual holds
+at observed, as if they had been k times as large: each ratio gains (1 + others) /
+(1 + k x others). The playthrough ran with two ministries at +5% a level, about 85% of the
+others in the 1998 and 2045 saves; #1038 made them +1% a level, which k = 0.32 approximates
+(1 - 0.85 x 0.8).
+
 Three points the definitions leave open, decided from the data:
 
   * Annexed levels weren't bought. In a series with per-state figures (the union), the
@@ -59,10 +75,16 @@ THE SHAPES
 ----------
   historical   the curve the playthrough ran under (HISTORICAL_CURVE: +1000% at GBP 100,
                ruling R37): the baseline, which reproduces the observed history exactly
-  current      the mod's curve as its files hold it now (since #1034 capped at +100% from
-               GBP 11); `linear` is the same curve under its older name
-  capped:c     the historical line held at +c (the slope kept; `capped:1` is `current`
-               to within a percent)
+  current      the mod's curve as its files hold it now: the historical line times the
+               share that applies, from its slack band (full at 3% slack, none at 15%,
+               moving a third of the way a year); `linear` is the same curve under its
+               older name
+  capped:c     the historical line held at +c (the slope kept; `capped:1` is #1034's
+               +100% cap to within a percent)
+  slack:lo:hi[:ease]
+               the historical line times a share that applies in full at slack lo or less
+               and not at all at hi or more, moving `ease` of the way a year (at once
+               without it)
   slope:k      the historical line at k times the steepness
   log, sqrt, world, none
                as econ_growth_sim.cost_mult defines them, on the historical constants
@@ -83,6 +105,7 @@ The vacancy figure is an upper bound: no per-project cap or construction-supply 
 and no wage response.
 
     econ_construction_counterfactual.py [--series FRA,union,GBR,CHI] [--curves historical,current,none,...]
+                                        [--others-scale 0.32]
 """
 
 from __future__ import annotations
@@ -103,8 +126,8 @@ from scripts.analysis import econ_sim_data as D  # noqa: E402
 from scripts.analysis import econ_sim_scenarios as S  # noqa: E402
 
 DEFAULT_SERIES = ("FRA", "union", "GBR", "CHI")
-DEFAULT_SHAPES = ("historical", "current", "capped:1.25", "capped:1.5", "capped:2", "slope:0.5", "log", "sqrt",
-                  "world", "none")
+DEFAULT_SHAPES = ("historical", "current", "capped:1", "capped:2", "slack:0.03:0.15", "slack:0.03:0.2:0.33333",
+                  "slope:0.5", "log", "sqrt", "world", "none")
 OWN_SHAPES = ("historical", "current")          # shape names of this tool, beside econ_growth_sim.CURVES
 SUMMARY_YEARS = (1917, 1954, 1976, 1998, 2023, 2045)
 NEAREST_WITHIN = 3.0                            # years: a summary year with no point this close is None
@@ -124,15 +147,26 @@ def _shape(shape: str, current: D.CurveConstants) -> tuple[G.Params, D.CurveCons
     """The Params and curve constants a shape name stands for.
 
     "historical" is the curve the playthrough ran under; "current" (and "linear", the same
-    curve under its older name) is `current`, the mod's constants as its files hold them.
-    Every other shape is built on the historical constants: a name in
+    curve under its older name) is `current`, the mod's constants as its files hold them,
+    slack band and all. Every other shape is built on the historical constants: a name in
     econ_growth_sim.CURVES (bar "capped" and "linear"), "capped:c" (the historical line held
-    at c), or "slope:k" (the historical line with max_mult x k)."""
+    at c), "slope:k" (the historical line with max_mult x k), or "slack:lo:hi[:ease]" (the
+    historical line with that slack band)."""
     curve = D.HISTORICAL_CURVE
     if shape == "historical":
         return G.Params(curve="linear"), curve
     if shape in ("current", "linear"):
         return G.Params(curve="linear"), current
+    if shape.startswith("slack:"):
+        parts = shape.split(":")[1:]
+        try:
+            nums = [float(x) for x in parts]
+        except ValueError:
+            raise ValueError("shape " + repr(shape) + ": expected slack:<lo>:<hi>[:<ease>] numbers") from None
+        if len(nums) not in (2, 3) or not 0.0 <= nums[0] < nums[1] or (len(nums) == 3 and nums[2] <= 0.0):
+            raise ValueError("shape " + repr(shape) + ": expected slack:<lo>:<hi>[:<ease>], 0 <= lo < hi, ease > 0")
+        return G.Params(curve="linear"), dataclasses.replace(
+            curve, slack_full=nums[0], slack_none=nums[1], slack_ease=nums[2] if len(nums) == 3 else None)
     if ":" in shape:
         kind, _, arg = shape.partition(":")
         try:
@@ -143,13 +177,13 @@ def _shape(shape: str, current: D.CurveConstants) -> tuple[G.Params, D.CurveCons
             return G.Params(curve="capped", curve_cap=k), curve
         if kind == "slope":
             return G.Params(curve="linear"), dataclasses.replace(curve, max_mult=curve.max_mult * k)
-        raise ValueError("unknown shape " + repr(shape) + "; expected capped:<c> or slope:<k>")
+        raise ValueError("unknown shape " + repr(shape) + "; expected capped:<c>, slope:<k> or slack:<lo>:<hi>[:<ease>]")
     if shape == "capped":
         raise ValueError("the capped shape needs its cap: capped:<c>")
     if shape not in G.CURVES:
         raise ValueError("unknown shape " + repr(shape) + "; expected one of "
                          + ", ".join(OWN_SHAPES + tuple(c for c in G.CURVES if c != "linear"))
-                         + ", capped:<c> or slope:<k>")
+                         + ", capped:<c>, slope:<k> or slack:<lo>:<hi>[:<ease>]")
     return G.Params(curve=shape), curve
 
 
@@ -159,9 +193,15 @@ def x_raw_of(gdppc: float) -> float:
 
 
 def x_under(shape: str, gdppc: float, current: D.CurveConstants, world_gdppc: float | None) -> float:
-    """x_raw': the shape's X at `gdppc`; `current` is the mod's constants as read from its files."""
+    """x_raw': the shape's X at `gdppc` (its GDP part, before any slack share); `current` is
+    the mod's constants as read from its files."""
     p, c = _shape(shape, current)
     return G.cost_mult(p, c, gdppc, world_gdppc)
+
+
+def has_slack_band(shape: str, current: D.CurveConstants) -> bool:
+    """Whether the shape's X follows the slack (the feedback path), so it has no ratio of its own."""
+    return _shape(shape, current)[1].has_slack_band
 
 
 def others_of(x_raw: float, x_adj: float) -> float:
@@ -187,7 +227,10 @@ def shape_ratio(shape: str, gdppc: float, x_adj: float | None, numbers, world_gd
 
     The other sources cancel, so this is (1 + x_raw) / (1 + x_raw') whatever `x_adj` is
     (exactly 1 for the historical shape). With x_raw 0 a prior is stale and others is 0,
-    which gives the same form. `x_adj` is kept for the signature's callers."""
+    which gives the same form. `x_adj` is kept for the signature's callers. A shape with a
+    slack band has no ratio at a GDP per capita alone: it raises ValueError."""
+    if has_slack_band(shape, numbers.curve):
+        raise ValueError("shape " + repr(shape) + " follows the slack: it has a path, not a ratio")
     x_raw = x_raw_of(gdppc)
     x_new = x_under(shape, gdppc, numbers.curve, world_gdppc)
     return (1.0 + x_raw) / (1.0 + x_new)
@@ -196,8 +239,12 @@ def shape_ratio(shape: str, gdppc: float, x_adj: float | None, numbers, world_gd
 def world_gdppc_at(world: list[dict], date: str) -> float | None:
     """The world's GDP per head at `date`, linear between the dataset's world points and
     flat past either end; None with no usable point."""
+    return _world_at_year(world, S.point_year(date))
+
+
+def _world_at_year(world: list[dict], year: float) -> float | None:
     pts = [(S.point_year(w["date"]), w["gdp"] / w["population"]) for w in world if w["population"] > 0]
-    return S._linear(pts, S.point_year(date))
+    return S._linear(pts, year)
 
 
 # --------------------------------------------------------------------------
@@ -336,22 +383,65 @@ class Row:
     cum_extra_jobs: float
 
 
-def _interval_ratio(iv: Interval, shape: str, numbers, world: list[dict]) -> float:
+def others_ratio(others: float, others_scale: float) -> float:
+    """(1 + others) / (1 + others_scale x others): how many times the points the same money
+    buys with the other sources scaled (1 at others_scale 1)."""
+    return (1.0 + others) / max(1.0 + others_scale * others, 1e-9)
+
+
+def _interval_ratio(iv: Interval, shape: str, numbers, world: list[dict], others_scale: float = 1.0) -> float:
     return (shape_ratio(shape, iv.gdppc_start, iv.x_adj_start, numbers, world_gdppc_at(world, iv.start))
-            + shape_ratio(shape, iv.gdppc_end, iv.x_adj_end, numbers, world_gdppc_at(world, iv.end))) / 2.0
+            * others_ratio(iv.others_start, others_scale)
+            + shape_ratio(shape, iv.gdppc_end, iv.x_adj_end, numbers, world_gdppc_at(world, iv.end))
+            * others_ratio(iv.others_end, others_scale)) / 2.0
 
 
-def _paths(series: dict, md, shape: str, world: list[dict], cost_of, sector_of) -> tuple[list[Row], float, float]:
+def _feedback_extra(iv: Interval, a: dict, b: dict, shape: str, numbers, world: list[dict], others_scale: float,
+                    cum: float, factor: float) -> tuple[float, float, float]:
+    """One interval of a slack-band shape's yearly path: (extra points, cum, factor) after it.
+    `a` and `b` are the interval's end slices; `cum` and `factor` carry over from the last."""
+    p, c = _shape(shape, numbers.curve)
+    n = max(1, round(iv.years))
+    dt = iv.years / n
+    y0 = S.point_year(iv.start)
+    extra_points = 0.0
+    for k in range(n):
+        t = (k + 0.5) / n
+
+        def lerp(x0: float, x1: float) -> float:
+            return x0 + (x1 - x0) * t
+
+        workforce = lerp(a["workforce"], b["workforce"])
+        slack = lerp(a["peasants"] + a["unemployed"], b["peasants"] + b["unemployed"])
+        gdppc = lerp(iv.gdppc_start, iv.gdppc_end)
+        others = lerp(iv.others_start, iv.others_end)
+        slack_cf = max(0.0, slack - cum) / workforce if workforce > 0 else 0.0
+        factor = G.eased_slack_factor(c, factor, slack_cf, dt)
+        x_new = G.cost_mult(p, c, gdppc, _world_at_year(world, y0 + iv.years * t)) * factor
+        ratio = (1.0 + x_raw_of(gdppc)) / (1.0 + x_new) * others_ratio(others, others_scale)
+        extra = iv.points / n * (ratio - 1.0)
+        extra_points += extra
+        cum += extra * iv.jobs_per_point
+    return extra_points, cum, factor
+
+
+def _paths(series: dict, md, shape: str, world: list[dict], cost_of, sector_of,
+           others_scale: float = 1.0) -> tuple[list[Row], float, float]:
     """(rows, total extra points, total realised points)."""
-    _shape(shape, md.numbers.curve)                     # an unknown shape raises before any arithmetic
+    feedback = has_slack_band(shape, md.numbers.curve)  # an unknown shape raises before any arithmetic
     ivs = intervals(series, md, cost_of, sector_of)
     by_date = {pt["date"]: pt for pt in kept_points(series["points"])}
     rows: list[Row] = []
-    cum = extra_points = 0.0
+    cum = extra_points = factor = 0.0
     for iv in ivs:
-        extra = iv.points * (_interval_ratio(iv, shape, md.numbers, world) - 1.0)
-        extra_points += extra
-        cum += extra * iv.jobs_per_point
+        if feedback:
+            extra, cum, factor = _feedback_extra(iv, by_date[iv.start]["slice"], by_date[iv.end]["slice"], shape,
+                                                 md.numbers, world, others_scale, cum, factor)
+            extra_points += extra
+        else:
+            extra = iv.points * (_interval_ratio(iv, shape, md.numbers, world, others_scale) - 1.0)
+            extra_points += extra
+            cum += extra * iv.jobs_per_point
         slice_ = by_date[iv.end]["slice"]
         workforce = float(slice_["workforce"])
         slack = float(slice_["peasants"] + slice_["unemployed"])
@@ -370,9 +460,10 @@ def _paths(series: dict, md, shape: str, world: list[dict], cost_of, sector_of) 
 
 
 def counterfactual(series: dict, md, shape: str, world: list[dict],
-                   cost_of: CostOf | None = None, sector_of: SectorOf | None = None) -> list[Row]:
+                   cost_of: CostOf | None = None, sector_of: SectorOf | None = None,
+                   others_scale: float = 1.0) -> list[Row]:
     """The slack path under `shape`: one Row per kept point after the first."""
-    return _paths(series, md, shape, world, cost_of, sector_of)[0]
+    return _paths(series, md, shape, world, cost_of, sector_of, others_scale)[0]
 
 
 @dataclass(frozen=True)
@@ -403,8 +494,9 @@ def _first(rows: list[Row], test) -> int | None:
 
 
 def summarize(series_name: str, series: dict, md, shape: str, world: list[dict],
-              cost_of: CostOf | None = None, sector_of: SectorOf | None = None) -> Summary:
-    rows, extra, total = _paths(series, md, shape, world, cost_of, sector_of)
+              cost_of: CostOf | None = None, sector_of: SectorOf | None = None,
+              others_scale: float = 1.0) -> Summary:
+    rows, extra, total = _paths(series, md, shape, world, cost_of, sector_of, others_scale)
     near = [_nearest(rows, y) for y in SUMMARY_YEARS]
     return Summary(
         series=series_name, shape=shape,
@@ -502,12 +594,18 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--curves", default=",".join(DEFAULT_SHAPES),
                     help="comma-separated shapes: " + ", ".join(OWN_SHAPES) + ", "
                     + ", ".join(c for c in G.CURVES if c not in ("capped", "linear"))
-                    + ", capped:<c>, slope:<k>; linear is current (default %(default)s)")
+                    + ", capped:<c>, slope:<k>, slack:<lo>:<hi>[:<ease>]; linear is current (default %(default)s)")
+    ap.add_argument("--others-scale", type=float, default=1.0,
+                    help="scale the other construction-cost sources held at observed (0.32 ~ the ministries at"
+                    " +1%% a level, #1038; default %(default)s)")
     args = ap.parse_args(argv)
     names = [s for s in args.series.split(",") if s]
     shapes = [s for s in args.curves.split(",") if s]
     if not names or not shapes:
         print("error: --series and --curves each need at least one name", file=sys.stderr)
+        return 2
+    if args.others_scale < 0:
+        print("error: --others-scale must be 0 or more", file=sys.stderr)
         return 2
     probe = D.CurveConstants(1.0, 1.0, 2.0, 1.0)      # a syntax check only: no figure here is the mod's
     for shape in shapes:
@@ -529,13 +627,17 @@ def main(argv: list[str] | None = None) -> int:
     out = ["## Per-interval diagnostics", ""]
     for name in names:
         out += _diagnostics(name, intervals(dataset["series"][name], md, cost_of, sector_of))
-    out += ["## Summary", "", *_summary_table([
-        summarize(name, dataset["series"][name], md, shape, world, cost_of, sector_of)
-        for name in names for shape in shapes])]
+    k = args.others_scale
+    out += ["## Summary", ""]
+    if k != 1.0:
+        out += ["Other construction-cost sources scaled by " + format(k, "g") + ".", ""]
+    out += _summary_table([
+        summarize(name, dataset["series"][name], md, shape, world, cost_of, sector_of, k)
+        for name in names for shape in shapes])
     if "FRA" in names:
         fra = dataset["series"]["FRA"]
         out += ["## FRA slack path", "", *_path_table(
-            {shape: counterfactual(fra, md, shape, world, cost_of, sector_of) for shape in shapes})]
+            {shape: counterfactual(fra, md, shape, world, cost_of, sector_of, k) for shape in shapes})]
     print("\n".join(out))
     return 0
 

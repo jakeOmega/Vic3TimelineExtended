@@ -131,14 +131,13 @@ te_nation_mandate_on = {
 	}
 }
 
-# Construction cost scaling: the multiplier the yearly pulse last applied
-# (construction_cost_scaling_on_action, either rule's branch), 0 before it.
+# Construction cost scaling: what it adds to a point's cost on its own, as the yearly pulse last set it (the GDP
+# part x the share that applies, te_cc_scaling_factor - 1), 0 before it. Not the modifier's own value
+# (var:prior_construction_scaling), which is raised so that it multiplies with the other construction-cost
+# modifiers; the row's tooltip shows both factors.
 te_nation_construction_cost = {
-	value = 0
-	if = {
-		limit = { has_variable = prior_construction_scaling }
-		value = var:prior_construction_scaling
-	}
+	value = te_cc_scaling_factor
+	subtract = 1
 }
 
 # 1 while excess private construction or Overinvestment is in force.
