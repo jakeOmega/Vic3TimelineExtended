@@ -100,6 +100,26 @@ types te_state_panel_widget_types
 		}
 	}
 
+	### The tile row for a word rather than a number (a basin's name, "62 → 55"):
+	### 60 px of label, 96 px of value. "Southern" at fontsize_medium needs about
+	### 66 px (gui_style_guide.md rule 3's budget), past the number column's 60.
+	type te_state_tile_word_row = te_state_stat_row {
+		blockoverride "row_icon" {}
+
+		blockoverride "label_size" {
+			size = { 60 20 }
+		}
+		blockoverride "label_max_width" {
+			max_width = 60
+		}
+		blockoverride "value_size" {
+			size = { 96 20 }
+		}
+		blockoverride "value_max_width" {
+			max_width = 96
+		}
+	}
+
 	### A row with no icon whose label takes the icon's place, so it spans the
 	### full 250 px column — column headers and the card's footer.
 	type te_state_wide_row = te_state_stat_row {
@@ -1035,6 +1055,71 @@ types te_state_panel_widget_types
 				maximumsize = { 160 -1 }
 				multiline = yes
 				using = fontsize_small
+			}
+		}
+	}
+
+	### WEALTH CONCENTRATION
+	###
+	### The Wealth Concentration tile's extra_widget (Nation tab plan, Part 2):
+	### the state's score heading for its target once it has been scored, then
+	### the state modifiers wealth concentration and the inheritance law give
+	### it, each with its own tooltip. The tile shows while the state carries
+	### any of them (gui_state_wealth_modifier_count), whatever the Demographics
+	### rule, and both modifier rows in states_panel.gui leave the same six out
+	### (test_hidden_state_modifiers.py's SHOWN_ON_A_CARD_NAMES). The score row
+	### reads te_dg_wc only behind te_demog_state_wealth_sgui, as the
+	### Demographics subtab's Wealth section does, so an unscored state reads
+	### no missing variable.
+	type te_state_wealth_tile = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 3
+
+		te_state_tile_word_row = {
+			blockoverride "row_visible" {
+				visible = "[GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "TE_STATE_WEALTH_ROW_SCORE_TT"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_WEALTH_ROW_SCORE"
+			}
+			blockoverride "row_value" {
+				text = "te_demog_st_wc_value"
+			}
+		}
+
+		### Names wrap rather than elide (rule 3): "Cadet Sons Leave the Land"
+		### is wider than the 136 px beside its icon.
+		flowcontainer = {
+			datamodel = "[State.GetTimedModifiers]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 3
+
+			item = {
+				flowcontainer = {
+					visible = "[Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')))))))]"
+					spacing = 4
+					tooltip = "[TimedModifier.GetTooltip]"
+
+					icon = {
+						texture = "[TimedModifier.GetIcon]"
+						size = { 20 20 }
+						parentanchor = vcenter
+					}
+					textbox = {
+						text = "[TimedModifier.GetName]"
+						autoresize = yes
+						multiline = yes
+						maximumsize = { 136 -1 }
+						align = nobaseline
+						parentanchor = vcenter
+						using = fontsize_medium
+					}
+				}
 			}
 		}
 	}
