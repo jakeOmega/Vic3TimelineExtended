@@ -35,6 +35,9 @@ BASE = M.Inputs(sol=30, literacy=0.95, urban_share=0.7, techs=frozenset({"medica
 LATE = {P.AGEING_RATE_TYPE: -0.25, P.REJUVENATION_TYPE: 0.0, P.ACCESS_TYPE: 0.3, P.DIFFUSION_TYPE: 0.2,
         "state_chronic_treatment_add": 0.4, "state_infection_treatment_add": 0.5, P.LX_COVER_TYPE: 1.0}
 PHI, PRIVATE = "law_public_health_insurance", "law_private_health_insurance"
+# the Causes of Death slices (te_dg_dc_<short>) and the model's keys (test_demographics_cause_deaths.MODEL_KEY)
+DC_SLICES = {"inf": "infection", "ext": "external", "chr": "chronic", "work": "work", "mat": "maternal",
+             "ontop": "on_top", "war": "war", "kill": "kills"}
 
 
 def _inp(**mods):
@@ -192,6 +195,11 @@ class TestLateGameScript(unittest.TestCase):
         # the conscription pool's sums, before the new scale (the script's raw total leaves out the cohorts it dropped)
         self.close(eng.vars["te_dg_fam"] / eng.vars["te_dg_scale"], ring.fam / ring.scale, 1e-8, "the pool's men")
         self.close(eng.vars["te_dg_faw"] / eng.vars["te_dg_scale"], ring.faw / ring.scale, 1e-8, "the pool's women")
+        # deaths by cause: the late sweep's own count, the treated at their biological ages (te_demog_lx_cause_deaths)
+        for short, key in DC_SLICES.items():
+            self.close(eng.vars[f"te_dg_dc_{short}"], out["causes"][key], rel, f"deaths by cause: {short}")
+        self.close(eng.vars["te_dg_dc_fit"], out["causes"]["fit"], rel, "deaths by cause: fit")
+        self.close(eng.vars["te_dg_dc_fit"], 1.0, 1e-6, "deaths by cause: the late sweep's own count")
 
     def work(self, eng, ring, inp):
         qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
@@ -359,6 +367,8 @@ class TestLateGameScript(unittest.TestCase):
             if f"te_dg_f{k}" in eng.vars:
                 self.close(eng.vars[f"te_dg_f{k}"], ring.f[k], rel, f"women in slot {k}")
                 self.close(eng.vars[f"te_dg_m{k}"], ring.m[k], rel, f"men in slot {k}")
+        for short, key in DC_SLICES.items():
+            self.close(eng.vars[f"te_dg_dc_{short}"], out["causes"][key], rel, f"deaths by cause: {short}")
 
     def test_fixed_point_births(self):
         """The engine keeps five decimals (values in units of 1e-5), so a product of small factors comes out cut. Late
@@ -432,6 +442,27 @@ class TestLateGameModel(unittest.TestCase):
         ring, out = self.run_years(banned, 5, ring)
         self.assertLess(out["lx"]["cover"], 1.0)
         self.assertGreater(ring.lx_d[j], before * 0.9)
+
+    def test_deaths_by_cause_count_the_treated_at_their_bodies_ages(self):
+        """The late sweep splits its own deaths by cause, the treated at their biological ages (lx_cause_deaths), so the
+        four causes add up to its deaths from them (fit 1). The calendar bands (cause_deaths_estimate) put an immortal
+        state's young bodies at their old calendar ages: after 30 years of immortality they gave chronic illness several
+        times its share of deaths, and accidents and violence a fraction of theirs."""
+        inp = _inp(**{P.AGEING_RATE_TYPE: -1.0, P.REJUVENATION_TYPE: 0.03})
+        inp = dataclasses.replace(inp, wealth_bands={40: 1.0}, lx_w=0.0)
+        ring, _out = self.run_years(inp, 30)
+        bands_f, bands_m = M.band_sums(ring)
+        out = M.step(ring, inp, ring.year + 1)
+        causes = out["causes"]
+        self.assertAlmostEqual(causes["fit"], 1.0, delta=1e-9)
+        four = sum(causes[c] for c in M.CAUSE_DEATH_CAUSES)
+        self.assertAlmostEqual(four, out["deaths"] - out["maternal"], delta=1e-9 * out["deaths"])
+        used = dataclasses.replace(inp, medicine=ring.medicine)
+        mult = M.cause_multipliers(used)
+        calendar = M.cause_deaths_estimate(bands_f, bands_m, mult, *M.work_split(used, mult["work"]))
+        cal_four = sum(calendar.values())
+        self.assertGreater(calendar["chronic"] / cal_four, 2 * causes["chronic"] / four)
+        self.assertLess(calendar["external"] / cal_four, 0.5 * causes["external"] / four)
 
     def test_immortality_holds_the_body(self):
         """r = 0 with the pull: a treated band's biological age falls toward 35 and stays (§1.4)."""

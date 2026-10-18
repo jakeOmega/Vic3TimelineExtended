@@ -964,6 +964,273 @@ te_demog_lx_rates_at = {
 	}
 }
 
+# THIS = a state, in the late sweep: a treated part (te_dg_lx_ft, te_dg_lx_mt) into the step's deaths by cause at its
+# biological rate age local_var:te_dg_lx_rb (demographics_model.lx_causes_at): its people x each cause's base rate
+# there, the multipliers left for te_demog_lx_cause_deaths; work's women and men apart.
+te_demog_lx_causes_at = {
+	if = {
+		limit = { local_var:te_dg_lx_rb < 75 }
+		if = {
+			limit = { local_var:te_dg_lx_rb < 35 }
+			if = {
+				limit = { local_var:te_dg_lx_rb < 15 }
+				if = {
+					limit = { local_var:te_dg_lx_rb < 5 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 1 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 19000 add = { value = local_var:te_dg_lx_mt multiply = 21000 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 70 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 4200 add = { value = local_var:te_dg_lx_mt multiply = 4300 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 70 } } }
+					}
+				}
+				else = {
+					if = {
+						limit = { local_var:te_dg_lx_rb < 10 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 1000 add = { value = local_var:te_dg_lx_mt multiply = 1000 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 40 add = { value = local_var:te_dg_lx_mt multiply = 50 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 78 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 550 add = { value = local_var:te_dg_lx_mt multiply = 550 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 40 add = { value = local_var:te_dg_lx_mt multiply = 50 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 78 } } }
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { local_var:te_dg_lx_rb < 25 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 20 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 750 add = { value = local_var:te_dg_lx_mt multiply = 750 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 180 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 78 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 750 add = { value = local_var:te_dg_lx_mt multiply = 750 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 180 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 120 add = { value = local_var:te_dg_lx_mt multiply = 156 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+				}
+				else = {
+					if = {
+						limit = { local_var:te_dg_lx_rb < 30 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 750 add = { value = local_var:te_dg_lx_mt multiply = 750 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 180 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 120 add = { value = local_var:te_dg_lx_mt multiply = 156 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 750 add = { value = local_var:te_dg_lx_mt multiply = 750 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 180 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 180 add = { value = local_var:te_dg_lx_mt multiply = 234 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { local_var:te_dg_lx_rb < 55 }
+				if = {
+					limit = { local_var:te_dg_lx_rb < 45 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 40 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 750 add = { value = local_var:te_dg_lx_mt multiply = 750 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 180 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 180 add = { value = local_var:te_dg_lx_mt multiply = 234 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 750 add = { value = local_var:te_dg_lx_mt multiply = 750 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 60 add = { value = local_var:te_dg_lx_mt multiply = 180 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 320 add = { value = local_var:te_dg_lx_mt multiply = 416 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+				}
+				else = {
+					if = {
+						limit = { local_var:te_dg_lx_rb < 50 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 900 add = { value = local_var:te_dg_lx_mt multiply = 950 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 50 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 480 add = { value = local_var:te_dg_lx_mt multiply = 624 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 900 add = { value = local_var:te_dg_lx_mt multiply = 950 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 50 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 720 add = { value = local_var:te_dg_lx_mt multiply = 936 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { local_var:te_dg_lx_rb < 65 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 60 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 900 add = { value = local_var:te_dg_lx_mt multiply = 950 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 50 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 1100 add = { value = local_var:te_dg_lx_mt multiply = 1430 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 900 add = { value = local_var:te_dg_lx_mt multiply = 950 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 50 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 1700 add = { value = local_var:te_dg_lx_mt multiply = 2210 } } }
+						change_local_variable = { name = te_dg_lx_ce_wf add = { value = local_var:te_dg_lx_ft multiply = 160 } }
+						change_local_variable = { name = te_dg_lx_ce_wm add = { value = local_var:te_dg_lx_mt multiply = 160 } }
+					}
+				}
+				else = {
+					if = {
+						limit = { local_var:te_dg_lx_rb < 70 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 1500 add = { value = local_var:te_dg_lx_mt multiply = 1600 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 2600 add = { value = local_var:te_dg_lx_mt multiply = 3380 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 1500 add = { value = local_var:te_dg_lx_mt multiply = 1600 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 4000 add = { value = local_var:te_dg_lx_mt multiply = 5200 } } }
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { local_var:te_dg_lx_rb < 115 }
+			if = {
+				limit = { local_var:te_dg_lx_rb < 95 }
+				if = {
+					limit = { local_var:te_dg_lx_rb < 85 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 80 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 1500 add = { value = local_var:te_dg_lx_mt multiply = 1600 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 6200 add = { value = local_var:te_dg_lx_mt multiply = 8060 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 9600 add = { value = local_var:te_dg_lx_mt multiply = 12480 } } }
+					}
+				}
+				else = {
+					if = {
+						limit = { local_var:te_dg_lx_rb < 90 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 14800 add = { value = local_var:te_dg_lx_mt multiply = 19240 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 22000 add = { value = local_var:te_dg_lx_mt multiply = 28600 } } }
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { local_var:te_dg_lx_rb < 105 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 100 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 32000 add = { value = local_var:te_dg_lx_mt multiply = 41600 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 42000 add = { value = local_var:te_dg_lx_mt multiply = 54600 } } }
+					}
+				}
+				else = {
+					if = {
+						limit = { local_var:te_dg_lx_rb < 110 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 50000 add = { value = local_var:te_dg_lx_mt multiply = 65000 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { local_var:te_dg_lx_rb < 135 }
+				if = {
+					limit = { local_var:te_dg_lx_rb < 125 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 120 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+					}
+				}
+				else = {
+					if = {
+						limit = { local_var:te_dg_lx_rb < 130 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { local_var:te_dg_lx_rb < 145 }
+					if = {
+						limit = { local_var:te_dg_lx_rb < 140 }
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+						change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+						change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+					}
+				}
+				else = {
+					change_local_variable = { name = te_dg_lx_ce_inf add = { value = local_var:te_dg_lx_ft multiply = 2800 add = { value = local_var:te_dg_lx_mt multiply = 2900 } } }
+					change_local_variable = { name = te_dg_lx_ce_ext add = { value = local_var:te_dg_lx_ft multiply = 80 add = { value = local_var:te_dg_lx_mt multiply = 110 } } }
+					change_local_variable = { name = te_dg_lx_ce_chr add = { value = local_var:te_dg_lx_ft multiply = 56000 add = { value = local_var:te_dg_lx_mt multiply = 72800 } } }
+				}
+			}
+		}
+	}
+}
+
 # THIS = a state, in the late sweep: at an age local_var:te_dg_lx_fa, the unplanned schedule te_dg_lx_asfr (the body's),
 # fecundity te_dg_lx_fec (§3.2) and the planned schedule as intended te_dg_lx_int (today's shape over the fecundity it
 # carries; demographics_model.asfr_unplanned, fecundity, intended), each per single year, per 100,000.
@@ -1453,6 +1720,161 @@ te_demog_lx_group_flush = {
 	set_local_variable = { name = te_dg_lx_gtm value = 0 }
 	set_local_variable = { name = te_dg_lx_gtqf value = 0 }
 	set_local_variable = { name = te_dg_lx_gtqm value = 0 }
+}
+
+# THIS = a state after the late sweep (te_demog_lx_sweep_run, after te_demog_lx_finish's last flush): each natural cause's
+# deaths over the year (demographics_model.lx_cause_deaths), in place of te_demog_cause_deaths_estimate's, which counts
+# everyone at the calendar age: the untreated by their age group (the life tables' sums te_dg_lxa_u<f|m><group>, the
+# pool's in the last), the treated at their biological one (te_demog_lx_causes_at), x the step's multipliers. The
+# sweep's own deaths, so exact but for the 100,000 cap on a group's rate; te_demog_cause_deaths_store scales them.
+te_demog_lx_cause_deaths = {
+	set_local_variable = {
+		name = te_dg_ce_inf
+		value = {
+			value = local_var:te_dg_lx_ce_inf
+			add = { value = local_var:te_dg_lxa_uf0 multiply = 19000 add = { value = local_var:te_dg_lxa_um0 multiply = 21000 } }
+			add = { value = local_var:te_dg_lxa_uf1 multiply = 4200 add = { value = local_var:te_dg_lxa_um1 multiply = 4300 } }
+			add = { value = local_var:te_dg_lxa_uf2 multiply = 1000 add = { value = local_var:te_dg_lxa_um2 multiply = 1000 } }
+			add = { value = local_var:te_dg_lxa_uf3 multiply = 550 add = { value = local_var:te_dg_lxa_um3 multiply = 550 } }
+			add = { value = local_var:te_dg_lxa_uf4 multiply = 750 add = { value = local_var:te_dg_lxa_um4 multiply = 750 } }
+			add = { value = local_var:te_dg_lxa_uf5 multiply = 750 add = { value = local_var:te_dg_lxa_um5 multiply = 750 } }
+			add = { value = local_var:te_dg_lxa_uf6 multiply = 750 add = { value = local_var:te_dg_lxa_um6 multiply = 750 } }
+			add = { value = local_var:te_dg_lxa_uf7 multiply = 750 add = { value = local_var:te_dg_lxa_um7 multiply = 750 } }
+			add = { value = local_var:te_dg_lxa_uf8 multiply = 750 add = { value = local_var:te_dg_lxa_um8 multiply = 750 } }
+			add = { value = local_var:te_dg_lxa_uf9 multiply = 750 add = { value = local_var:te_dg_lxa_um9 multiply = 750 } }
+			add = { value = local_var:te_dg_lxa_uf10 multiply = 900 add = { value = local_var:te_dg_lxa_um10 multiply = 950 } }
+			add = { value = local_var:te_dg_lxa_uf11 multiply = 900 add = { value = local_var:te_dg_lxa_um11 multiply = 950 } }
+			add = { value = local_var:te_dg_lxa_uf12 multiply = 900 add = { value = local_var:te_dg_lxa_um12 multiply = 950 } }
+			add = { value = local_var:te_dg_lxa_uf13 multiply = 900 add = { value = local_var:te_dg_lxa_um13 multiply = 950 } }
+			add = { value = local_var:te_dg_lxa_uf14 multiply = 1500 add = { value = local_var:te_dg_lxa_um14 multiply = 1600 } }
+			add = { value = local_var:te_dg_lxa_uf15 multiply = 1500 add = { value = local_var:te_dg_lxa_um15 multiply = 1600 } }
+			add = { value = local_var:te_dg_lxa_uf16 multiply = 1500 add = { value = local_var:te_dg_lxa_um16 multiply = 1600 } }
+			add = { value = local_var:te_dg_lxa_uf17 multiply = 2800 add = { value = local_var:te_dg_lxa_um17 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf18 multiply = 2800 add = { value = local_var:te_dg_lxa_um18 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf19 multiply = 2800 add = { value = local_var:te_dg_lxa_um19 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf20 multiply = 2800 add = { value = local_var:te_dg_lxa_um20 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf21 multiply = 2800 add = { value = local_var:te_dg_lxa_um21 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf22 multiply = 2800 add = { value = local_var:te_dg_lxa_um22 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf23 multiply = 2800 add = { value = local_var:te_dg_lxa_um23 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf24 multiply = 2800 add = { value = local_var:te_dg_lxa_um24 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf25 multiply = 2800 add = { value = local_var:te_dg_lxa_um25 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf26 multiply = 2800 add = { value = local_var:te_dg_lxa_um26 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf27 multiply = 2800 add = { value = local_var:te_dg_lxa_um27 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf28 multiply = 2800 add = { value = local_var:te_dg_lxa_um28 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf29 multiply = 2800 add = { value = local_var:te_dg_lxa_um29 multiply = 2900 } }
+			add = { value = local_var:te_dg_lxa_uf30 multiply = 2800 add = { value = local_var:te_dg_lxa_um30 multiply = 2900 } }
+			multiply = local_var:te_dg_m_inf
+			divide = 100000
+		}
+	}
+	set_local_variable = {
+		name = te_dg_ce_ext
+		value = {
+			value = local_var:te_dg_lx_ce_ext
+			add = { value = local_var:te_dg_lxa_uf0 multiply = 60 add = { value = local_var:te_dg_lxa_um0 multiply = 70 } }
+			add = { value = local_var:te_dg_lxa_uf1 multiply = 60 add = { value = local_var:te_dg_lxa_um1 multiply = 70 } }
+			add = { value = local_var:te_dg_lxa_uf2 multiply = 40 add = { value = local_var:te_dg_lxa_um2 multiply = 50 } }
+			add = { value = local_var:te_dg_lxa_uf3 multiply = 40 add = { value = local_var:te_dg_lxa_um3 multiply = 50 } }
+			add = { value = local_var:te_dg_lxa_uf4 multiply = 60 add = { value = local_var:te_dg_lxa_um4 multiply = 180 } }
+			add = { value = local_var:te_dg_lxa_uf5 multiply = 60 add = { value = local_var:te_dg_lxa_um5 multiply = 180 } }
+			add = { value = local_var:te_dg_lxa_uf6 multiply = 60 add = { value = local_var:te_dg_lxa_um6 multiply = 180 } }
+			add = { value = local_var:te_dg_lxa_uf7 multiply = 60 add = { value = local_var:te_dg_lxa_um7 multiply = 180 } }
+			add = { value = local_var:te_dg_lxa_uf8 multiply = 60 add = { value = local_var:te_dg_lxa_um8 multiply = 180 } }
+			add = { value = local_var:te_dg_lxa_uf9 multiply = 60 add = { value = local_var:te_dg_lxa_um9 multiply = 180 } }
+			add = { value = local_var:te_dg_lxa_uf10 multiply = 50 add = { value = local_var:te_dg_lxa_um10 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf11 multiply = 50 add = { value = local_var:te_dg_lxa_um11 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf12 multiply = 50 add = { value = local_var:te_dg_lxa_um12 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf13 multiply = 50 add = { value = local_var:te_dg_lxa_um13 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf14 multiply = 80 add = { value = local_var:te_dg_lxa_um14 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf15 multiply = 80 add = { value = local_var:te_dg_lxa_um15 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf16 multiply = 80 add = { value = local_var:te_dg_lxa_um16 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf17 multiply = 80 add = { value = local_var:te_dg_lxa_um17 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf18 multiply = 80 add = { value = local_var:te_dg_lxa_um18 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf19 multiply = 80 add = { value = local_var:te_dg_lxa_um19 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf20 multiply = 80 add = { value = local_var:te_dg_lxa_um20 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf21 multiply = 80 add = { value = local_var:te_dg_lxa_um21 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf22 multiply = 80 add = { value = local_var:te_dg_lxa_um22 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf23 multiply = 80 add = { value = local_var:te_dg_lxa_um23 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf24 multiply = 80 add = { value = local_var:te_dg_lxa_um24 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf25 multiply = 80 add = { value = local_var:te_dg_lxa_um25 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf26 multiply = 80 add = { value = local_var:te_dg_lxa_um26 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf27 multiply = 80 add = { value = local_var:te_dg_lxa_um27 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf28 multiply = 80 add = { value = local_var:te_dg_lxa_um28 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf29 multiply = 80 add = { value = local_var:te_dg_lxa_um29 multiply = 110 } }
+			add = { value = local_var:te_dg_lxa_uf30 multiply = 80 add = { value = local_var:te_dg_lxa_um30 multiply = 110 } }
+			multiply = local_var:te_dg_m_ext
+			divide = 100000
+		}
+	}
+	set_local_variable = {
+		name = te_dg_ce_chr
+		value = {
+			value = local_var:te_dg_lx_ce_chr
+			add = { value = local_var:te_dg_lxa_uf2 multiply = 60 add = { value = local_var:te_dg_lxa_um2 multiply = 78 } }
+			add = { value = local_var:te_dg_lxa_uf3 multiply = 60 add = { value = local_var:te_dg_lxa_um3 multiply = 78 } }
+			add = { value = local_var:te_dg_lxa_uf4 multiply = 60 add = { value = local_var:te_dg_lxa_um4 multiply = 78 } }
+			add = { value = local_var:te_dg_lxa_uf5 multiply = 120 add = { value = local_var:te_dg_lxa_um5 multiply = 156 } }
+			add = { value = local_var:te_dg_lxa_uf6 multiply = 120 add = { value = local_var:te_dg_lxa_um6 multiply = 156 } }
+			add = { value = local_var:te_dg_lxa_uf7 multiply = 180 add = { value = local_var:te_dg_lxa_um7 multiply = 234 } }
+			add = { value = local_var:te_dg_lxa_uf8 multiply = 180 add = { value = local_var:te_dg_lxa_um8 multiply = 234 } }
+			add = { value = local_var:te_dg_lxa_uf9 multiply = 320 add = { value = local_var:te_dg_lxa_um9 multiply = 416 } }
+			add = { value = local_var:te_dg_lxa_uf10 multiply = 480 add = { value = local_var:te_dg_lxa_um10 multiply = 624 } }
+			add = { value = local_var:te_dg_lxa_uf11 multiply = 720 add = { value = local_var:te_dg_lxa_um11 multiply = 936 } }
+			add = { value = local_var:te_dg_lxa_uf12 multiply = 1100 add = { value = local_var:te_dg_lxa_um12 multiply = 1430 } }
+			add = { value = local_var:te_dg_lxa_uf13 multiply = 1700 add = { value = local_var:te_dg_lxa_um13 multiply = 2210 } }
+			add = { value = local_var:te_dg_lxa_uf14 multiply = 2600 add = { value = local_var:te_dg_lxa_um14 multiply = 3380 } }
+			add = { value = local_var:te_dg_lxa_uf15 multiply = 4000 add = { value = local_var:te_dg_lxa_um15 multiply = 5200 } }
+			add = { value = local_var:te_dg_lxa_uf16 multiply = 6200 add = { value = local_var:te_dg_lxa_um16 multiply = 8060 } }
+			add = { value = local_var:te_dg_lxa_uf17 multiply = 9600 add = { value = local_var:te_dg_lxa_um17 multiply = 12480 } }
+			add = { value = local_var:te_dg_lxa_uf18 multiply = 14800 add = { value = local_var:te_dg_lxa_um18 multiply = 19240 } }
+			add = { value = local_var:te_dg_lxa_uf19 multiply = 22000 add = { value = local_var:te_dg_lxa_um19 multiply = 28600 } }
+			add = { value = local_var:te_dg_lxa_uf20 multiply = 32000 add = { value = local_var:te_dg_lxa_um20 multiply = 41600 } }
+			add = { value = local_var:te_dg_lxa_uf21 multiply = 42000 add = { value = local_var:te_dg_lxa_um21 multiply = 54600 } }
+			add = { value = local_var:te_dg_lxa_uf22 multiply = 50000 add = { value = local_var:te_dg_lxa_um22 multiply = 65000 } }
+			add = { value = local_var:te_dg_lxa_uf23 multiply = 56000 add = { value = local_var:te_dg_lxa_um23 multiply = 72800 } }
+			add = { value = local_var:te_dg_lxa_uf24 multiply = 56000 add = { value = local_var:te_dg_lxa_um24 multiply = 72800 } }
+			add = { value = local_var:te_dg_lxa_uf25 multiply = 56000 add = { value = local_var:te_dg_lxa_um25 multiply = 72800 } }
+			add = { value = local_var:te_dg_lxa_uf26 multiply = 56000 add = { value = local_var:te_dg_lxa_um26 multiply = 72800 } }
+			add = { value = local_var:te_dg_lxa_uf27 multiply = 56000 add = { value = local_var:te_dg_lxa_um27 multiply = 72800 } }
+			add = { value = local_var:te_dg_lxa_uf28 multiply = 56000 add = { value = local_var:te_dg_lxa_um28 multiply = 72800 } }
+			add = { value = local_var:te_dg_lxa_uf29 multiply = 56000 add = { value = local_var:te_dg_lxa_um29 multiply = 72800 } }
+			add = { value = local_var:te_dg_lxa_uf30 multiply = 56000 add = { value = local_var:te_dg_lxa_um30 multiply = 72800 } }
+			multiply = local_var:te_dg_m_chr
+			divide = 100000
+		}
+	}
+	set_local_variable = {
+		name = te_dg_ce_work
+		value = {
+			value = local_var:te_dg_lx_ce_wf
+			add = { value = local_var:te_dg_lxa_uf4 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf5 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf6 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf7 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf8 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf9 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf10 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf11 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf12 multiply = 160 }
+			add = { value = local_var:te_dg_lxa_uf13 multiply = 160 }
+			multiply = local_var:te_dg_m_work_f
+			add = {
+				value = local_var:te_dg_lx_ce_wm
+				add = { value = local_var:te_dg_lxa_um4 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um5 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um6 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um7 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um8 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um9 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um10 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um11 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um12 multiply = 160 }
+				add = { value = local_var:te_dg_lxa_um13 multiply = 160 }
+				multiply = local_var:te_dg_m_work_m
+			}
+			divide = 100000
+		}
+	}
 }
 
 # THIS = a state, after a pass of te_demog_lx_tables: the age with this many years of life left, women's and men's

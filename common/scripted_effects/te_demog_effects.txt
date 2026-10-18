@@ -2019,11 +2019,11 @@ te_demog_step_finish = {
 
 # THIS = a state at the end of its step (te_demog_step_finish, with the step's locals): last year's deaths by cause,
 # people (issue #1029; demographics_model.cause_deaths), for the Causes of Death section and the country's census,
-# which sums them. The four natural causes are te_demog_cause_deaths_estimate's figures scaled to the census's own
-# deaths from them: its deaths less childbirth's (te_dg_mat) and, under Full, less what the on-top scale added
-# (te_dg_dz above 0; below 0 the game took deaths away, which no slice shows). Childbirth's, the deaths added on top, the
-# war dead (te_dg_war) and the people killed by events (te_dg_kills) as counted. Each scaled slice multiplies before it
-# divides, so a small one keeps its digits.
+# which sums them. The four natural causes are te_demog_cause_deaths_estimate's figures (in the late game the late
+# sweep's own, te_demog_lx_cause_deaths) scaled to the census's own deaths from them: its deaths less childbirth's
+# (te_dg_mat) and, under Full, less what the on-top scale added (te_dg_dz above 0; below 0 the game took deaths away,
+# which no slice shows). Childbirth's, the deaths added on top, the war dead (te_dg_war) and the people killed by
+# events (te_dg_kills) as counted. Each scaled slice multiplies before it divides, so a small one keeps its digits.
 #   te_dg_dc_inf, _ext, _chr, _work  infection and hunger, accidents and violence, chronic illness and old age, work
 #   te_dg_dc_mat, te_dg_dc_ontop, te_dg_dc_war, te_dg_dc_kill  childbirth, added on top, war, killed by events
 #   te_dg_dc_total  the slices' sum: te_dg_deaths with the war dead and the killed

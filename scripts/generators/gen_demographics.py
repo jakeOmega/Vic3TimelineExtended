@@ -346,8 +346,9 @@ def cause_deaths_estimate(o):
     o("# whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at")
     o("# a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at")
     o("# the base rates) x the step's multiplier, work's by sex. Exact in the bands of one age group; approximate in 0-4")
-    o("# and 85+, and under longevity care. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work,")
-    o("# which te_demog_cause_deaths_store scales to the census's deaths.")
+    o("# and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work, which")
+    o("# te_demog_cause_deaths_store scales to the census's deaths; a state in the late game replaces them with the late")
+    o("# sweep's own count, its treated at their biological ages (te_demog_lx_cause_deaths).")
     o("te_demog_cause_deaths_estimate = {")
 
     def band_sum(terms):

@@ -7646,8 +7646,9 @@ te_demog_newborn_split = {
 # whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at
 # a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at
 # the base rates) x the step's multiplier, work's by sex. Exact in the bands of one age group; approximate in 0-4
-# and 85+, and under longevity care. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work,
-# which te_demog_cause_deaths_store scales to the census's deaths.
+# and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work, which
+# te_demog_cause_deaths_store scales to the census's deaths; a state in the late game replaces them with the late
+# sweep's own count, its treated at their biological ages (te_demog_lx_cause_deaths).
 te_demog_cause_deaths_estimate = {
 	set_local_variable = {
 		name = te_dg_ce_inf
