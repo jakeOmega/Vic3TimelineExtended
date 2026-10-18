@@ -632,6 +632,22 @@ class TestTurnYear(unittest.TestCase):
         recs = [rec(year=1870 + i, wage=0.05, jobs_by_sector={"heavy": 1.0}) for i in range(5)]
         self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1870)
 
+    def test_tier_one_is_the_first_tier_a_technology_unlocks(self):
+        # R29. An era-0 tier (like farming's pm_tools) has no unlocking technology and is
+        # pre-industrial: the turn follows the first tier at era 1 or later, here tier 2
+        # (era 3, breakeven 0.20), not tier 1 (era 0, breakeven 0.05) nor tier 3 (era 5, 0.30).
+        tools = _pm("toy_tools", 0, -1000.0, goods_in=50.0)
+        threshers = _pm("toy_threshers", 3, -1000.0, goods_in=200.0)
+        tractors = _pm("toy_tractors", 5, -1000.0, goods_in=300.0)
+        md = _toy((tools, threshers, tractors))
+        recs = [rec(year=y, wage=w) for y, w in self._years()]
+        self.assertEqual(G.turn_year(recs, md, toy_scenario()), 1870 + 15)           # 0.20 >= 0.20; 0.19 is not
+        # A sector whose only tiers are era 0 has no tier that counts: it never qualifies.
+        only_tools = _toy((tools,))
+        self.assertIsNone(G.turn_year([rec(year=1870 + i, wage=100.0) for i in range(5)], only_tools, toy_scenario()))
+        # An unlocked tier 1 is unchanged (the brief's toy: era 1, breakeven 0.15).
+        self.assertEqual(G.turn_year(recs, TOY, toy_scenario()), 1870 + 10)
+
     def test_none_when_never_reached_or_without_jobs(self):
         self.assertIsNone(G.turn_year([rec(year=1870 + i, wage=0.14) for i in range(5)], TOY, toy_scenario()))
         self.assertIsNone(G.turn_year([], TOY, toy_scenario()))

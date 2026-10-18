@@ -644,22 +644,24 @@ def turn_year(records: list[YearRecord], md: D.ModData, sc: Scenario) -> int | N
     """The first year the wage reaches tier 1's breakeven in sectors that together hold at
     least half of that year's level-bound jobs (spec 5.5, R5); None if no year does.
 
-    Tier 1 is `ladder.automation[1]`, the first tier of the sector's main automation group,
-    and its breakeven the bare `econ_sim_data.breakeven` (R24 pairs it with the adoption
-    year, which also pays the retooling charge and scales by the calibration; so `sc` is
-    only part of the interface). A sector qualifies when it has a tier 1 that cuts jobs. A
-    negative breakeven (the tier saves goods as well) qualifies at any wage, as a wage is
-    never below 0. A level-bound sector without a qualifying tier (infrastructure, `other`,
-    a tier that cuts no jobs) holds jobs but never qualifies. Each year is judged on its
-    own jobs, `r.jobs_by_sector`; a year with none is skipped. `records` are chronological,
-    as `run` returns them.
+    A sector's tier 1 is the first tier of its automation group that a technology unlocks:
+    the first `ladder.automation[i]` with i >= 1 and `era > 0` (R29). A tier with no
+    unlocking technology (era 0, farming's pm_tools) is pre-industrial and doesn't count; for
+    farming tier 1 is the steam threshers. Its breakeven is the bare `econ_sim_data.breakeven`
+    (R24 pairs it with the adoption year, which also pays the retooling charge and scales by
+    the calibration; so `sc` is only part of the interface). A sector qualifies when it has
+    such a tier and it cuts jobs. A negative breakeven (the tier saves goods as well)
+    qualifies at any wage, as a wage is never below 0. A level-bound sector without a
+    qualifying tier (infrastructure, `other`, no unlocked tier, a tier that cuts no jobs)
+    holds jobs but never qualifies. Each year is judged on its own jobs, `r.jobs_by_sector`;
+    a year with none is skipped. `records` are chronological, as `run` returns them.
     """
     breakeven: dict[str, float] = {}
     for sector, ladder in md.ladders.items():
-        if len(ladder.automation) > 1:
-            be = D.breakeven(ladder.automation[1])
-            if be is not None:
-                breakeven[sector] = be
+        tier1 = next((t for t in ladder.automation[1:] if t.era > 0), None)
+        be = None if tier1 is None else D.breakeven(tier1)
+        if be is not None:
+            breakeven[sector] = be
     for r in records:
         total = sum(r.jobs_by_sector.values())
         if total <= 0:
@@ -699,7 +701,8 @@ class Summary:
     """One run's row (spec 9). None means the run never got there (or ended first).
 
     setting, scenario     which run: the lever setting's label, the scenario's name
-    turn_year             first year wages reach tier 1's breakeven in sectors holding half the jobs
+    turn_year             first year wages reach tier 1's breakeven (the first tier a technology
+                          unlocks, R29) in sectors holding half the jobs
     adoption_year         first year any sector is on an automation tier (R24), even if it later
                           goes back to none. Usually after the turn: the tier must also repay
                           its retooling charge, and the calibration scales its saving
