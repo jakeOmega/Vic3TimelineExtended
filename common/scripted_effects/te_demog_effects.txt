@@ -168,7 +168,8 @@
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share, te_dg_dependency,
 #   te_dg_sex_balance, te_dg_w1549  from those bands, as a state's (te_demog_store_figures)
 #   te_dg_tfr           the states' weighted by their women aged 15-49
-#   te_dg_e0, te_dg_e65 the states' weighted by people; te_dg_imr by births (by people while the
+#   te_dg_e0, te_dg_e65 the states' weighted by people, and te_dg_e0f, te_dg_e0m (women's and men's) the same way;
+#                       te_dg_imr by births (by people while the
 #                       census holds no births, as in a seed-only census, whose births are 0)
 #   te_dg_cbr, te_dg_cdr  births and deaths per 1,000 people; te_dg_net_migration and
 #                       te_dg_mig_raw the sums.
@@ -2265,6 +2266,8 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_tfr_model_w value = 0 }
 	set_local_variable = { name = te_dg_c_women value = 0 }
 	set_local_variable = { name = te_dg_c_e0_w value = 0 }
+	set_local_variable = { name = te_dg_c_e0f_w value = 0 }
+	set_local_variable = { name = te_dg_c_e0m_w value = 0 }
 	set_local_variable = { name = te_dg_c_e65_w value = 0 }
 	set_local_variable = { name = te_dg_c_imr_w value = 0 }
 	set_local_variable = { name = te_dg_c_imr_p value = 0 }
@@ -2336,6 +2339,8 @@ te_demog_country_census = {
 		}
 		change_local_variable = { name = te_dg_c_women add = var:te_dg_w1549 }
 		change_local_variable = { name = te_dg_c_e0_w add = { value = var:te_dg_e0 multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_e0f_w add = { value = var:te_dg_e0f multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_e0m_w add = { value = var:te_dg_e0m multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_e65_w add = { value = var:te_dg_e65 multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_imr_w add = { value = var:te_dg_imr multiply = var:te_dg_births } }
 		change_local_variable = { name = te_dg_c_imr_p add = { value = var:te_dg_imr multiply = local_var:te_dg_c_s_pm } }
@@ -2397,6 +2402,9 @@ te_demog_country_census = {
 		set_variable = { name = te_dg_mig_raw value = local_var:te_dg_c_mig_raw }
 		set_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_w divide = { value = local_var:te_dg_c_women min = 1 } } }
 		set_variable = { name = te_dg_e0 value = { value = local_var:te_dg_c_e0_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		# women's and men's, the same weights (issue #1029: the Life Expectancy hover)
+		set_variable = { name = te_dg_e0f value = { value = local_var:te_dg_c_e0f_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_e0m value = { value = local_var:te_dg_c_e0m_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 		set_variable = { name = te_dg_e65 value = { value = local_var:te_dg_c_e65_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 		# issue #1029: the Causes of Death section's figures. The cause multipliers by people, the census's own before
 		# famine, war and disasters, as the life table's are (the outline below takes them too); childbirth's deaths per

@@ -4452,6 +4452,9 @@ class TestCountry(unittest.TestCase):
         self.assertAlmostEqual(v["te_dg_e0"], sum(s["te_dg_e0"] * s["te_dg_people"] for s in states) / people, places=6)
         self.assertAlmostEqual(v["te_dg_e65"], sum(s["te_dg_e65"] * s["te_dg_people"] for s in states) / people,
                                places=6)
+        for sex in "fm":    # issue #1029: the Life Expectancy hover's women and men, by the same weights
+            self.assertAlmostEqual(v[f"te_dg_e0{sex}"],
+                                   sum(s[f"te_dg_e0{sex}"] * s["te_dg_people"] for s in states) / people, places=6)
         self.assertAlmostEqual(v["te_dg_imr"], sum(s["te_dg_imr"] * s["te_dg_births"] for s in states) / births,
                                places=6)
         self.assertAlmostEqual(v["te_dg_cbr"], births * 1000 / people, places=9)
@@ -5457,7 +5460,12 @@ class TestHistory(unittest.TestCase):
         copies = dict(re.findall(r"te_demog_history_copy = \{ FROM = (\w+) TO = (\w+) \}", body))
         self.assertEqual(copies, {"te_dg_median": "te_dg_h_median", "te_dg_tfr": "te_dg_h_tfr",
                                   "te_dg_e0": "te_dg_h_e0", "te_dg_gini": "te_dg_h_gini",
-                                  "te_inh_concentration": "te_dg_h_wc"})
+                                  "te_inh_concentration": "te_dg_h_wc",
+                                  # issue #1029: the rates, from a stepped census only
+                                  "te_dg_cbr": "te_dg_h_cbr", "te_dg_cdr": "te_dg_h_cdr",
+                                  "te_dg_mig_rate": "te_dg_h_mig"})
+        rates = body[body.index("FROM = te_dg_cbr") - 400:body.index("FROM = te_dg_cbr")]
+        self.assertIn("var:te_dg_stepped > 0", rates, "a seed's births and deaths are 0, so a seed's rates aren't kept")
 
     def test_each_read_is_guarded_by_has_variable(self):
         body = self.block("te_demog_history_copy")
