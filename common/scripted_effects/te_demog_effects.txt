@@ -192,6 +192,8 @@
 #                       does), with te_dg_dc_total and te_dg_dc_lead as a state's (te_demog_cause_deaths_country_store)
 #   te_dg_m_inf, _ext, _chr, _work, _mat, te_dg_acc  the cause multipliers and health-care access, its states'
 #                       weighted by people (maternal by births), for the legend's hovers
+#   te_dg_inf_ad        #1045: the adults' infection factor, its states' weighted by people x te_dg_m_inf (so with
+#                       te_dg_m_inf it gives their adults' infection exactly), for the outline
 #   te_dg_cdr_model     under Full, the census's own death rate across its states, weighted by people (the
 #                       Added on Top row's measure)
 #   te_dg_states_n      how many census states it has (the States section's Show All)
@@ -2366,8 +2368,15 @@ te_demog_country_census = {
 			limit = { has_variable = te_dg_acc }
 			change_local_variable = { name = te_dg_c_acc_w add = { value = var:te_dg_acc multiply = local_var:te_dg_c_s_pm } }
 			change_local_variable = { name = te_dg_c_acc_pm add = local_var:te_dg_c_s_pm }
-			# #1045: the adults' infection factor, which reads the same stored medicine, by the same people
-			change_local_variable = { name = te_dg_c_infad_w add = { value = te_demog_infection_adult multiply = local_var:te_dg_c_s_pm } }
+		}
+		# #1045: the adults' infection factor by people x the infection multiplier, so the country's pair multiplies to
+		# its states' adults' infection; a census from before the Causes of Death plan, with no medicine stored, at 1
+		if = {
+			limit = { has_variable = te_dg_acc }
+			change_local_variable = { name = te_dg_c_infad_w add = { value = te_demog_infection_adult multiply = var:te_dg_m_inf multiply = local_var:te_dg_c_s_pm } }
+		}
+		else = {
+			change_local_variable = { name = te_dg_c_infad_w add = { value = var:te_dg_m_inf multiply = local_var:te_dg_c_s_pm } }
 		}
 		# the census's own death rate under Full (phase 2 step 4; a state has it from its first Full step)
 		if = {
@@ -2429,15 +2438,17 @@ te_demog_country_census = {
 		if = {
 			limit = { local_var:te_dg_c_acc_pm > 0 }
 			set_variable = { name = te_dg_acc value = { value = local_var:te_dg_c_acc_w divide = { value = local_var:te_dg_c_acc_pm min = 0.00001 } } }
-			set_variable = { name = te_dg_inf_ad value = { value = local_var:te_dg_c_infad_w divide = { value = local_var:te_dg_c_acc_pm min = 0.00001 } } }
 		}
 		else_if = {
 			limit = { has_variable = te_dg_acc }
 			remove_variable = te_dg_acc
 		}
-		# the adults' infection factor (#1045) for the outline below and the Causes of Death hover: 1 with no state's medicine
+		# the adults' infection factor (#1045) for the outline below: 1 with no infection at all
 		if = {
-			limit = { local_var:te_dg_c_acc_pm <= 0 }
+			limit = { local_var:te_dg_c_inf_w > 0 }
+			set_variable = { name = te_dg_inf_ad value = { value = local_var:te_dg_c_infad_w divide = { value = local_var:te_dg_c_inf_w min = 0.00001 } } }
+		}
+		else = {
 			set_variable = { name = te_dg_inf_ad value = 1 }
 		}
 		te_demog_cause_deaths_country_store = yes

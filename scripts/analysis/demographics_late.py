@@ -431,7 +431,8 @@ def main(args):
         ok = lo <= v <= hi
         split = ", ".join(f"{c} {q:.3f}" for c, q in causes[sx].items())
         print(f"  {sx:6s} {v:.3f} [{lo:g}-{hi:g}]{'' if ok else ' OUT'}  ({split})")
-    # Modern safety (2026-10-16) brought work and accidents down, and the adults' infection factor (#1045) adult infection
+    # Modern safety (2026-10-16) brought work and accidents down, and the adults' infection factor (#1045) adult infection,
+    # to the rich world's
     print("  (rich-world 2000-2020 by cause, about: infection 0.001-0.002, work 0.001, accidents and violence 0.004-0.012 "
           "for women and 0.014-0.037 for men, chronic 0.02-0.03)")
     print("\nInfection deaths a year per 100,000 aged 15-44 by era's medicine (#1045; the rich world's 3-6 in eras 9-10, "

@@ -762,7 +762,7 @@ script value, as the other factors), so no self-check. What only the game can sh
 1. **The hover's line (Display only or Full).** In a state with antibiotics, the subtab's Infection and Hunger hover
    ends its factors with "Aged 15–64, a further ×0.xx"; a state with no infection treatment (an 1836 colony) shows no
    such line. A rich state reads about ×0.25; a state whose last count came before the change reads its stored
-   medicine, so the line is right at once.
+   medicine, so the line is right at once, while its life expectancy and deaths move only at its next count.
 2. **The pie (a rich country, Display only or Full).** Infection and Hunger's slice is smaller than before: today it
    should sit well under chronic illness and accidents and violence in a rich state.
 3. **The technologies' tooltips.** Personalized Medicine shows Treatment of Infection +3% beside its chronic line;

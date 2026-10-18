@@ -148,6 +148,13 @@ class TestScript(unittest.TestCase):
         eng, _ring, figures, _pop = self.cohort.step_both(inp=inp)
         self.check(eng, figures)
 
+    def test_the_hover_names_the_adults_ages(self):
+        """#1045: the state's infection hover names the ages P.INFECTION_ADULT_AGES gives."""
+        lo, hi = P.INFECTION_ADULT_AGES
+        line = re.search(r'(?m)^ te_demog_st_inf_adult_line:0 "(.*)"$', _text(R.MISC_LOC)).group(1)
+        self.assertIn(f"Aged {lo}–{hi - 1},", line)
+        self.assertIn("ScriptValue('te_demog_infection_adult')", line)
+
     def test_deaths_added_on_top_are_their_own_slice(self):
         eng, _ring, figures, _pop = self.cohort.step_both(on_top=(0.05, 0.12), full=True)
         self.check(eng, figures)
@@ -231,8 +238,9 @@ class TestCountryCauses(unittest.TestCase):
                         census.index("set_local_variable = { name = te_dg_m_inf value = var:te_dg_m_inf }"))
 
     def test_the_adults_infection_factor_is_weighted_and_reaches_the_outline(self):
-        """#1045: the country's te_dg_inf_ad is its states' factor by people, over the states that hold medicine (1 with
-        none), and the player's outline reads it: with it the outline's adults die less."""
+        """#1045: the country's te_dg_inf_ad is its states' factor by people x their infection multiplier, so the pair
+        multiplies to their adults' infection (a state with no medicine stored at 1), and the player's outline reads it:
+        with it the outline's adults die less."""
         def outline(trt_a, trt_b):
             a, b = self.states()
             a["te_dg_trt_inf"], b["te_dg_trt_inf"] = trt_a, trt_b
@@ -242,7 +250,9 @@ class TestCountryCauses(unittest.TestCase):
             return eng.vars
         w = P.INFECTION_ADULT_MEDICINE
         v = outline(0.9, 0.3)
-        self.assertAlmostEqual(v["te_dg_inf_ad"], (4 * (1 - w * 0.6 * 0.9) + 1 * (1 - w * 0.2 * 0.3)) / 5, places=4)
+        fa, fb = 1 - w * 0.6 * 0.9, 1 - w * 0.2 * 0.3
+        self.assertAlmostEqual(v["te_dg_inf_ad"], (4 * 0.5 * fa + 1 * 1.0 * fb) / (4 * 0.5 + 1 * 1.0), places=4)
+        self.assertAlmostEqual(v["te_dg_m_inf"] * v["te_dg_inf_ad"], (4 * 0.5 * fa + 1 * 1.0 * fb) / 5, places=4)
         plain = outline(0.0, 0.0)
         self.assertAlmostEqual(plain["te_dg_inf_ad"], 1.0, places=6)
         adults = [k for k in v if re.fullmatch(r"te_dg_pj[fm]\d+", k)]
