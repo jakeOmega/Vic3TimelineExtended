@@ -613,7 +613,7 @@ class ConsumptionCatalogTest(unittest.TestCase):
     def test_every_good_pops_buy_is_in_and_nothing_else(self):
         goods = set(catalog())
         self.assertEqual(goods, set(gen.pop_need_goods()))
-        self.assertEqual(len(goods), 39)
+        self.assertEqual(len(goods), 41)
         self.assertIn("digital_access", goods)   # local, no consumption_tax_cost: default cost 100
         for good in ("liquor", "coffee", "tobacco", "opium", "tourism", "telephones"):
             self.assertIn(good, goods)

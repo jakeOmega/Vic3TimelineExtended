@@ -376,6 +376,23 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_good_row = {
+			datacontext = "[GetScriptedGui('te_tax_good_magnetic_drive_ships_sgui')]"
+			blockoverride "good_name" {
+				text = "magnetic_drive_ships"
+				tooltip = "magnetic_drive_ships"
+			}
+			blockoverride "good_law" {
+				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships_base'), '(CFixedPoint)1' ), 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' )]"
+			}
+			blockoverride "good_draft" {
+				text = "[SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships_on'), '(CFixedPoint)0' ), SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships'), '(CFixedPoint)1' ), 'te_tax_wb_good_taxed_changed', 'te_tax_wb_good_untaxed_changed' ), SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships'), '(CFixedPoint)1' ), 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' ) )]"
+			}
+			blockoverride "good_button_text" {
+				text = "[SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships_on'), '(CFixedPoint)0' ), 'te_tax_wb_good_undo', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships_base'), '(CFixedPoint)1' ), 'te_tax_wb_good_untax', 'te_tax_wb_good_tax' ) )]"
+			}
+		}
+
+		te_tax_good_row = {
 			datacontext = "[GetScriptedGui('te_tax_good_meat_sgui')]"
 			blockoverride "good_name" {
 				text = "meat"
@@ -389,6 +406,23 @@ types te_tax_generated_rows_types
 			}
 			blockoverride "good_button_text" {
 				text = "[SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_meat_on'), '(CFixedPoint)0' ), 'te_tax_wb_good_undo', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_meat_base'), '(CFixedPoint)1' ), 'te_tax_wb_good_untax', 'te_tax_wb_good_tax' ) )]"
+			}
+		}
+
+		te_tax_good_row = {
+			datacontext = "[GetScriptedGui('te_tax_good_motor_ships_sgui')]"
+			blockoverride "good_name" {
+				text = "motor_ships"
+				tooltip = "motor_ships"
+			}
+			blockoverride "good_law" {
+				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships_base'), '(CFixedPoint)1' ), 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' )]"
+			}
+			blockoverride "good_draft" {
+				text = "[SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships_on'), '(CFixedPoint)0' ), SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships'), '(CFixedPoint)1' ), 'te_tax_wb_good_taxed_changed', 'te_tax_wb_good_untaxed_changed' ), SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships'), '(CFixedPoint)1' ), 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' ) )]"
+			}
+			blockoverride "good_button_text" {
+				text = "[SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships_on'), '(CFixedPoint)0' ), 'te_tax_wb_good_undo', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships_base'), '(CFixedPoint)1' ), 'te_tax_wb_good_untax', 'te_tax_wb_good_tax' ) )]"
 			}
 		}
 
@@ -920,6 +954,17 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_good_line = {
+			visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships_on'), '(CFixedPoint)0' )]"
+			blockoverride "line_label" {
+				text = "magnetic_drive_ships"
+				tooltip = "magnetic_drive_ships"
+			}
+			blockoverride "line_value" {
+				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_magnetic_drive_ships'), '(CFixedPoint)1' ), 'te_tax_rv_good_taxed', 'te_tax_rv_good_untaxed' )]"
+			}
+		}
+
+		te_tax_review_good_line = {
 			visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_meat_on'), '(CFixedPoint)0' )]"
 			blockoverride "line_label" {
 				text = "meat"
@@ -927,6 +972,17 @@ types te_tax_generated_rows_types
 			}
 			blockoverride "line_value" {
 				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_meat'), '(CFixedPoint)1' ), 'te_tax_rv_good_taxed', 'te_tax_rv_good_untaxed' )]"
+			}
+		}
+
+		te_tax_review_good_line = {
+			visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships_on'), '(CFixedPoint)0' )]"
+			blockoverride "line_label" {
+				text = "motor_ships"
+				tooltip = "motor_ships"
+			}
+			blockoverride "line_value" {
+				text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_g_motor_ships'), '(CFixedPoint)1' ), 'te_tax_rv_good_taxed', 'te_tax_rv_good_untaxed' )]"
 			}
 		}
 

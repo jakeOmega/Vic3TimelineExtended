@@ -342,7 +342,9 @@ te_tax_gen_goods_drift = {
 		OR = { AND = { var:te_tax_en_g_liquor = 1 NOT = { has_consumption_tax = g:liquor } } AND = { NOT = { var:te_tax_en_g_liquor = 1 } has_consumption_tax = g:liquor } }
 		OR = { AND = { var:te_tax_en_g_luxury_clothes = 1 NOT = { has_consumption_tax = g:luxury_clothes } } AND = { NOT = { var:te_tax_en_g_luxury_clothes = 1 } has_consumption_tax = g:luxury_clothes } }
 		OR = { AND = { var:te_tax_en_g_luxury_furniture = 1 NOT = { has_consumption_tax = g:luxury_furniture } } AND = { NOT = { var:te_tax_en_g_luxury_furniture = 1 } has_consumption_tax = g:luxury_furniture } }
+		OR = { AND = { var:te_tax_en_g_magnetic_drive_ships = 1 NOT = { has_consumption_tax = g:magnetic_drive_ships } } AND = { NOT = { var:te_tax_en_g_magnetic_drive_ships = 1 } has_consumption_tax = g:magnetic_drive_ships } }
 		OR = { AND = { var:te_tax_en_g_meat = 1 NOT = { has_consumption_tax = g:meat } } AND = { NOT = { var:te_tax_en_g_meat = 1 } has_consumption_tax = g:meat } }
+		OR = { AND = { var:te_tax_en_g_motor_ships = 1 NOT = { has_consumption_tax = g:motor_ships } } AND = { NOT = { var:te_tax_en_g_motor_ships = 1 } has_consumption_tax = g:motor_ships } }
 		OR = { AND = { var:te_tax_en_g_oil = 1 NOT = { has_consumption_tax = g:oil } } AND = { NOT = { var:te_tax_en_g_oil = 1 } has_consumption_tax = g:oil } }
 		OR = { AND = { var:te_tax_en_g_opium = 1 NOT = { has_consumption_tax = g:opium } } AND = { NOT = { var:te_tax_en_g_opium = 1 } has_consumption_tax = g:opium } }
 		OR = { AND = { var:te_tax_en_g_paper = 1 NOT = { has_consumption_tax = g:paper } } AND = { NOT = { var:te_tax_en_g_paper = 1 } has_consumption_tax = g:paper } }
@@ -375,10 +377,8 @@ te_tax_gen_goods_drift = {
 		has_consumption_tax = g:ironclads
 		has_consumption_tax = g:launch_capacity
 		has_consumption_tax = g:lead
-		has_consumption_tax = g:magnetic_drive_ships
 		has_consumption_tax = g:manowars
 		has_consumption_tax = g:merchant_marine
-		has_consumption_tax = g:motor_ships
 		has_consumption_tax = g:robotics
 		has_consumption_tax = g:rubber
 		has_consumption_tax = g:steel
@@ -868,7 +868,9 @@ te_tax_gen_package_touches_goods_a = {
 		var:te_tax_pa_g_liquor >= 0
 		var:te_tax_pa_g_luxury_clothes >= 0
 		var:te_tax_pa_g_luxury_furniture >= 0
+		var:te_tax_pa_g_magnetic_drive_ships >= 0
 		var:te_tax_pa_g_meat >= 0
+		var:te_tax_pa_g_motor_ships >= 0
 		var:te_tax_pa_g_oil >= 0
 		var:te_tax_pa_g_opium >= 0
 		var:te_tax_pa_g_paper >= 0
@@ -1082,7 +1084,9 @@ te_tax_gen_package_touches_goods_b = {
 		var:te_tax_pb_g_liquor >= 0
 		var:te_tax_pb_g_luxury_clothes >= 0
 		var:te_tax_pb_g_luxury_furniture >= 0
+		var:te_tax_pb_g_magnetic_drive_ships >= 0
 		var:te_tax_pb_g_meat >= 0
+		var:te_tax_pb_g_motor_ships >= 0
 		var:te_tax_pb_g_oil >= 0
 		var:te_tax_pb_g_opium >= 0
 		var:te_tax_pb_g_paper >= 0
@@ -1347,7 +1351,9 @@ te_tax_gen_draft_touches_goods = {
 		var:te_tax_dr_g_liquor >= 0
 		var:te_tax_dr_g_luxury_clothes >= 0
 		var:te_tax_dr_g_luxury_furniture >= 0
+		var:te_tax_dr_g_magnetic_drive_ships >= 0
 		var:te_tax_dr_g_meat >= 0
+		var:te_tax_dr_g_motor_ships >= 0
 		var:te_tax_dr_g_oil >= 0
 		var:te_tax_dr_g_opium >= 0
 		var:te_tax_dr_g_paper >= 0
@@ -1520,7 +1526,9 @@ te_tax_gen_bill_touches_goods = {
 		var:te_tax_bl_g_liquor >= 0
 		var:te_tax_bl_g_luxury_clothes >= 0
 		var:te_tax_bl_g_luxury_furniture >= 0
+		var:te_tax_bl_g_magnetic_drive_ships >= 0
 		var:te_tax_bl_g_meat >= 0
+		var:te_tax_bl_g_motor_ships >= 0
 		var:te_tax_bl_g_oil >= 0
 		var:te_tax_bl_g_opium >= 0
 		var:te_tax_bl_g_paper >= 0
@@ -1742,7 +1750,9 @@ te_tax_gen_draft_differs_from_bill = {
 		NOT = { var:te_tax_dr_g_liquor = var:te_tax_bl_g_liquor }
 		NOT = { var:te_tax_dr_g_luxury_clothes = var:te_tax_bl_g_luxury_clothes }
 		NOT = { var:te_tax_dr_g_luxury_furniture = var:te_tax_bl_g_luxury_furniture }
+		NOT = { var:te_tax_dr_g_magnetic_drive_ships = var:te_tax_bl_g_magnetic_drive_ships }
 		NOT = { var:te_tax_dr_g_meat = var:te_tax_bl_g_meat }
+		NOT = { var:te_tax_dr_g_motor_ships = var:te_tax_bl_g_motor_ships }
 		NOT = { var:te_tax_dr_g_oil = var:te_tax_bl_g_oil }
 		NOT = { var:te_tax_dr_g_opium = var:te_tax_bl_g_opium }
 		NOT = { var:te_tax_dr_g_paper = var:te_tax_bl_g_paper }
@@ -1895,7 +1905,9 @@ te_tax_gen_bill_overlaps_a = {
 		AND = { var:te_tax_bl_g_liquor >= 0 var:te_tax_pa_g_liquor >= 0 }
 		AND = { var:te_tax_bl_g_luxury_clothes >= 0 var:te_tax_pa_g_luxury_clothes >= 0 }
 		AND = { var:te_tax_bl_g_luxury_furniture >= 0 var:te_tax_pa_g_luxury_furniture >= 0 }
+		AND = { var:te_tax_bl_g_magnetic_drive_ships >= 0 var:te_tax_pa_g_magnetic_drive_ships >= 0 }
 		AND = { var:te_tax_bl_g_meat >= 0 var:te_tax_pa_g_meat >= 0 }
+		AND = { var:te_tax_bl_g_motor_ships >= 0 var:te_tax_pa_g_motor_ships >= 0 }
 		AND = { var:te_tax_bl_g_oil >= 0 var:te_tax_pa_g_oil >= 0 }
 		AND = { var:te_tax_bl_g_opium >= 0 var:te_tax_pa_g_opium >= 0 }
 		AND = { var:te_tax_bl_g_paper >= 0 var:te_tax_pa_g_paper >= 0 }
@@ -1985,7 +1997,9 @@ te_tax_gen_package_empty_a = {
 	var:te_tax_pa_g_liquor < 0
 	var:te_tax_pa_g_luxury_clothes < 0
 	var:te_tax_pa_g_luxury_furniture < 0
+	var:te_tax_pa_g_magnetic_drive_ships < 0
 	var:te_tax_pa_g_meat < 0
+	var:te_tax_pa_g_motor_ships < 0
 	var:te_tax_pa_g_oil < 0
 	var:te_tax_pa_g_opium < 0
 	var:te_tax_pa_g_paper < 0
@@ -2037,7 +2051,9 @@ te_tax_gen_bill_overlaps_b = {
 		AND = { var:te_tax_bl_g_liquor >= 0 var:te_tax_pb_g_liquor >= 0 }
 		AND = { var:te_tax_bl_g_luxury_clothes >= 0 var:te_tax_pb_g_luxury_clothes >= 0 }
 		AND = { var:te_tax_bl_g_luxury_furniture >= 0 var:te_tax_pb_g_luxury_furniture >= 0 }
+		AND = { var:te_tax_bl_g_magnetic_drive_ships >= 0 var:te_tax_pb_g_magnetic_drive_ships >= 0 }
 		AND = { var:te_tax_bl_g_meat >= 0 var:te_tax_pb_g_meat >= 0 }
+		AND = { var:te_tax_bl_g_motor_ships >= 0 var:te_tax_pb_g_motor_ships >= 0 }
 		AND = { var:te_tax_bl_g_oil >= 0 var:te_tax_pb_g_oil >= 0 }
 		AND = { var:te_tax_bl_g_opium >= 0 var:te_tax_pb_g_opium >= 0 }
 		AND = { var:te_tax_bl_g_paper >= 0 var:te_tax_pb_g_paper >= 0 }
@@ -2127,7 +2143,9 @@ te_tax_gen_package_empty_b = {
 	var:te_tax_pb_g_liquor < 0
 	var:te_tax_pb_g_luxury_clothes < 0
 	var:te_tax_pb_g_luxury_furniture < 0
+	var:te_tax_pb_g_magnetic_drive_ships < 0
 	var:te_tax_pb_g_meat < 0
+	var:te_tax_pb_g_motor_ships < 0
 	var:te_tax_pb_g_oil < 0
 	var:te_tax_pb_g_opium < 0
 	var:te_tax_pb_g_paper < 0

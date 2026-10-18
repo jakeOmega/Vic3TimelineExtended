@@ -139,15 +139,16 @@ class NeedDefinition(unittest.TestCase):
 class LeisureWithoutDrugs(unittest.TestCase):
     """Leisure grows without limit with wealth; with Drugs in it, a market full
     of Pharmaceutical Industries' output would pull ever more of it into Drugs.
-    Rich pops buy their Drugs through Healthcare instead."""
+    Rich pops buy their Drugs through Healthcare instead. The rest is vanilla's,
+    plus the ships a shipyard's later methods make in place of steamers."""
 
-    VANILLA_REST = ["services", "fine_art", "small_arms", "aeroplanes", "automobiles",
-                    "radios", "clippers", "steamers"]
+    GOODS = ["services", "fine_art", "small_arms", "aeroplanes", "automobiles",
+             "radios", "clippers", "steamers", "motor_ships", "magnetic_drive_ships"]
 
     def test_replaced_without_drugs(self):
         block = _need_block("REPLACE:popneed_leisure")
         self.assertIsNotNone(block, "REPLACE:popneed_leisure missing from extra_pop_needs.txt")
-        self.assertEqual(re.findall(r"goods\s*=\s*(\w+)", block), self.VANILLA_REST)
+        self.assertEqual(re.findall(r"goods\s*=\s*(\w+)", block), self.GOODS)
         self.assertRegex(block, r"default\s*=\s*services\b")
 
 

@@ -535,12 +535,28 @@ te_tax_good_luxury_furniture_sgui = {
 	effect = { te_tax_cmd_draft_good = { GOOD = luxury_furniture } }
 }
 
+te_tax_good_magnetic_drive_ships_sgui = {
+	scope = country
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_tax_can_draft_good = { GOOD = magnetic_drive_ships } }
+	effect = { te_tax_cmd_draft_good = { GOOD = magnetic_drive_ships } }
+}
+
 te_tax_good_meat_sgui = {
 	scope = country
 	is_shown = { te_tax_code_in_force = yes }
 	ai_is_valid = { always = no }
 	is_valid = { te_tax_can_draft_good = { GOOD = meat } }
 	effect = { te_tax_cmd_draft_good = { GOOD = meat } }
+}
+
+te_tax_good_motor_ships_sgui = {
+	scope = country
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_tax_can_draft_good = { GOOD = motor_ships } }
+	effect = { te_tax_cmd_draft_good = { GOOD = motor_ships } }
 }
 
 te_tax_good_oil_sgui = {

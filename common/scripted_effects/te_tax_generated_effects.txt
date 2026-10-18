@@ -99,7 +99,9 @@ te_tax_gen_init_goods = {
 	if = { limit = { NOT = { has_variable = te_tax_en_g_liquor } } set_variable = { name = te_tax_en_g_liquor value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_luxury_clothes } } set_variable = { name = te_tax_en_g_luxury_clothes value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_luxury_furniture } } set_variable = { name = te_tax_en_g_luxury_furniture value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_en_g_magnetic_drive_ships } } set_variable = { name = te_tax_en_g_magnetic_drive_ships value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_meat } } set_variable = { name = te_tax_en_g_meat value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_en_g_motor_ships } } set_variable = { name = te_tax_en_g_motor_ships value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_oil } } set_variable = { name = te_tax_en_g_oil value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_opium } } set_variable = { name = te_tax_en_g_opium value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_paper } } set_variable = { name = te_tax_en_g_paper value = 0 } }
@@ -1618,12 +1620,28 @@ te_tax_gen_sync_goods = {
 		remove_taxed_goods = g:luxury_furniture
 	}
 	if = {
+		limit = { var:te_tax_en_g_magnetic_drive_ships = 1 NOT = { has_consumption_tax = g:magnetic_drive_ships } }
+		add_taxed_goods = g:magnetic_drive_ships
+	}
+	else_if = {
+		limit = { NOT = { var:te_tax_en_g_magnetic_drive_ships = 1 } has_consumption_tax = g:magnetic_drive_ships }
+		remove_taxed_goods = g:magnetic_drive_ships
+	}
+	if = {
 		limit = { var:te_tax_en_g_meat = 1 NOT = { has_consumption_tax = g:meat } }
 		add_taxed_goods = g:meat
 	}
 	else_if = {
 		limit = { NOT = { var:te_tax_en_g_meat = 1 } has_consumption_tax = g:meat }
 		remove_taxed_goods = g:meat
+	}
+	if = {
+		limit = { var:te_tax_en_g_motor_ships = 1 NOT = { has_consumption_tax = g:motor_ships } }
+		add_taxed_goods = g:motor_ships
+	}
+	else_if = {
+		limit = { NOT = { var:te_tax_en_g_motor_ships = 1 } has_consumption_tax = g:motor_ships }
+		remove_taxed_goods = g:motor_ships
 	}
 	if = {
 		limit = { var:te_tax_en_g_oil = 1 NOT = { has_consumption_tax = g:oil } }
@@ -1777,10 +1795,8 @@ te_tax_gen_sync_goods = {
 	if = { limit = { has_consumption_tax = g:ironclads } remove_taxed_goods = g:ironclads }
 	if = { limit = { has_consumption_tax = g:launch_capacity } remove_taxed_goods = g:launch_capacity }
 	if = { limit = { has_consumption_tax = g:lead } remove_taxed_goods = g:lead }
-	if = { limit = { has_consumption_tax = g:magnetic_drive_ships } remove_taxed_goods = g:magnetic_drive_ships }
 	if = { limit = { has_consumption_tax = g:manowars } remove_taxed_goods = g:manowars }
 	if = { limit = { has_consumption_tax = g:merchant_marine } remove_taxed_goods = g:merchant_marine }
-	if = { limit = { has_consumption_tax = g:motor_ships } remove_taxed_goods = g:motor_ships }
 	if = { limit = { has_consumption_tax = g:robotics } remove_taxed_goods = g:robotics }
 	if = { limit = { has_consumption_tax = g:rubber } remove_taxed_goods = g:rubber }
 	if = { limit = { has_consumption_tax = g:steel } remove_taxed_goods = g:steel }
@@ -1815,7 +1831,9 @@ te_tax_gen_count_goods_drift = {
 	if = { limit = { OR = { AND = { var:te_tax_en_g_liquor = 1 NOT = { has_consumption_tax = g:liquor } } AND = { NOT = { var:te_tax_en_g_liquor = 1 } has_consumption_tax = g:liquor } } } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { OR = { AND = { var:te_tax_en_g_luxury_clothes = 1 NOT = { has_consumption_tax = g:luxury_clothes } } AND = { NOT = { var:te_tax_en_g_luxury_clothes = 1 } has_consumption_tax = g:luxury_clothes } } } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { OR = { AND = { var:te_tax_en_g_luxury_furniture = 1 NOT = { has_consumption_tax = g:luxury_furniture } } AND = { NOT = { var:te_tax_en_g_luxury_furniture = 1 } has_consumption_tax = g:luxury_furniture } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_magnetic_drive_ships = 1 NOT = { has_consumption_tax = g:magnetic_drive_ships } } AND = { NOT = { var:te_tax_en_g_magnetic_drive_ships = 1 } has_consumption_tax = g:magnetic_drive_ships } } } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { OR = { AND = { var:te_tax_en_g_meat = 1 NOT = { has_consumption_tax = g:meat } } AND = { NOT = { var:te_tax_en_g_meat = 1 } has_consumption_tax = g:meat } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_motor_ships = 1 NOT = { has_consumption_tax = g:motor_ships } } AND = { NOT = { var:te_tax_en_g_motor_ships = 1 } has_consumption_tax = g:motor_ships } } } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { OR = { AND = { var:te_tax_en_g_oil = 1 NOT = { has_consumption_tax = g:oil } } AND = { NOT = { var:te_tax_en_g_oil = 1 } has_consumption_tax = g:oil } } } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { OR = { AND = { var:te_tax_en_g_opium = 1 NOT = { has_consumption_tax = g:opium } } AND = { NOT = { var:te_tax_en_g_opium = 1 } has_consumption_tax = g:opium } } } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { OR = { AND = { var:te_tax_en_g_paper = 1 NOT = { has_consumption_tax = g:paper } } AND = { NOT = { var:te_tax_en_g_paper = 1 } has_consumption_tax = g:paper } } } change_variable = { name = te_tax_drift_goods add = 1 } }
@@ -1848,10 +1866,8 @@ te_tax_gen_count_goods_drift = {
 	if = { limit = { has_consumption_tax = g:ironclads } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:launch_capacity } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:lead } change_variable = { name = te_tax_drift_goods add = 1 } }
-	if = { limit = { has_consumption_tax = g:magnetic_drive_ships } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:manowars } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:merchant_marine } change_variable = { name = te_tax_drift_goods add = 1 } }
-	if = { limit = { has_consumption_tax = g:motor_ships } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:robotics } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:rubber } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:steel } change_variable = { name = te_tax_drift_goods add = 1 } }
@@ -5299,7 +5315,9 @@ te_tax_gen_apply_a = {
 	if = { limit = { var:te_tax_pa_g_liquor >= 0 } set_variable = { name = te_tax_en_g_liquor value = var:te_tax_pa_g_liquor } }
 	if = { limit = { var:te_tax_pa_g_luxury_clothes >= 0 } set_variable = { name = te_tax_en_g_luxury_clothes value = var:te_tax_pa_g_luxury_clothes } }
 	if = { limit = { var:te_tax_pa_g_luxury_furniture >= 0 } set_variable = { name = te_tax_en_g_luxury_furniture value = var:te_tax_pa_g_luxury_furniture } }
+	if = { limit = { var:te_tax_pa_g_magnetic_drive_ships >= 0 } set_variable = { name = te_tax_en_g_magnetic_drive_ships value = var:te_tax_pa_g_magnetic_drive_ships } }
 	if = { limit = { var:te_tax_pa_g_meat >= 0 } set_variable = { name = te_tax_en_g_meat value = var:te_tax_pa_g_meat } }
+	if = { limit = { var:te_tax_pa_g_motor_ships >= 0 } set_variable = { name = te_tax_en_g_motor_ships value = var:te_tax_pa_g_motor_ships } }
 	if = { limit = { var:te_tax_pa_g_oil >= 0 } set_variable = { name = te_tax_en_g_oil value = var:te_tax_pa_g_oil } }
 	if = { limit = { var:te_tax_pa_g_opium >= 0 } set_variable = { name = te_tax_en_g_opium value = var:te_tax_pa_g_opium } }
 	if = { limit = { var:te_tax_pa_g_paper >= 0 } set_variable = { name = te_tax_en_g_paper value = var:te_tax_pa_g_paper } }
@@ -5714,7 +5732,9 @@ te_tax_gen_store_a = {
 	set_variable = { name = te_tax_pa_g_liquor value = var:te_tax_bl_g_liquor }
 	set_variable = { name = te_tax_pa_g_luxury_clothes value = var:te_tax_bl_g_luxury_clothes }
 	set_variable = { name = te_tax_pa_g_luxury_furniture value = var:te_tax_bl_g_luxury_furniture }
+	set_variable = { name = te_tax_pa_g_magnetic_drive_ships value = var:te_tax_bl_g_magnetic_drive_ships }
 	set_variable = { name = te_tax_pa_g_meat value = var:te_tax_bl_g_meat }
+	set_variable = { name = te_tax_pa_g_motor_ships value = var:te_tax_bl_g_motor_ships }
 	set_variable = { name = te_tax_pa_g_oil value = var:te_tax_bl_g_oil }
 	set_variable = { name = te_tax_pa_g_opium value = var:te_tax_bl_g_opium }
 	set_variable = { name = te_tax_pa_g_paper value = var:te_tax_bl_g_paper }
@@ -6087,7 +6107,9 @@ te_tax_gen_apply_b = {
 	if = { limit = { var:te_tax_pb_g_liquor >= 0 } set_variable = { name = te_tax_en_g_liquor value = var:te_tax_pb_g_liquor } }
 	if = { limit = { var:te_tax_pb_g_luxury_clothes >= 0 } set_variable = { name = te_tax_en_g_luxury_clothes value = var:te_tax_pb_g_luxury_clothes } }
 	if = { limit = { var:te_tax_pb_g_luxury_furniture >= 0 } set_variable = { name = te_tax_en_g_luxury_furniture value = var:te_tax_pb_g_luxury_furniture } }
+	if = { limit = { var:te_tax_pb_g_magnetic_drive_ships >= 0 } set_variable = { name = te_tax_en_g_magnetic_drive_ships value = var:te_tax_pb_g_magnetic_drive_ships } }
 	if = { limit = { var:te_tax_pb_g_meat >= 0 } set_variable = { name = te_tax_en_g_meat value = var:te_tax_pb_g_meat } }
+	if = { limit = { var:te_tax_pb_g_motor_ships >= 0 } set_variable = { name = te_tax_en_g_motor_ships value = var:te_tax_pb_g_motor_ships } }
 	if = { limit = { var:te_tax_pb_g_oil >= 0 } set_variable = { name = te_tax_en_g_oil value = var:te_tax_pb_g_oil } }
 	if = { limit = { var:te_tax_pb_g_opium >= 0 } set_variable = { name = te_tax_en_g_opium value = var:te_tax_pb_g_opium } }
 	if = { limit = { var:te_tax_pb_g_paper >= 0 } set_variable = { name = te_tax_en_g_paper value = var:te_tax_pb_g_paper } }
@@ -6502,7 +6524,9 @@ te_tax_gen_store_b = {
 	set_variable = { name = te_tax_pb_g_liquor value = var:te_tax_bl_g_liquor }
 	set_variable = { name = te_tax_pb_g_luxury_clothes value = var:te_tax_bl_g_luxury_clothes }
 	set_variable = { name = te_tax_pb_g_luxury_furniture value = var:te_tax_bl_g_luxury_furniture }
+	set_variable = { name = te_tax_pb_g_magnetic_drive_ships value = var:te_tax_bl_g_magnetic_drive_ships }
 	set_variable = { name = te_tax_pb_g_meat value = var:te_tax_bl_g_meat }
+	set_variable = { name = te_tax_pb_g_motor_ships value = var:te_tax_bl_g_motor_ships }
 	set_variable = { name = te_tax_pb_g_oil value = var:te_tax_bl_g_oil }
 	set_variable = { name = te_tax_pb_g_opium value = var:te_tax_bl_g_opium }
 	set_variable = { name = te_tax_pb_g_paper value = var:te_tax_bl_g_paper }
@@ -7116,8 +7140,12 @@ te_tax_gen_migrate_goods = {
 	else = { set_variable = { name = te_tax_en_g_luxury_clothes value = 0 } }
 	if = { limit = { has_consumption_tax = g:luxury_furniture } set_variable = { name = te_tax_en_g_luxury_furniture value = 1 } }
 	else = { set_variable = { name = te_tax_en_g_luxury_furniture value = 0 } }
+	if = { limit = { has_consumption_tax = g:magnetic_drive_ships } set_variable = { name = te_tax_en_g_magnetic_drive_ships value = 1 } }
+	else = { set_variable = { name = te_tax_en_g_magnetic_drive_ships value = 0 } }
 	if = { limit = { has_consumption_tax = g:meat } set_variable = { name = te_tax_en_g_meat value = 1 } }
 	else = { set_variable = { name = te_tax_en_g_meat value = 0 } }
+	if = { limit = { has_consumption_tax = g:motor_ships } set_variable = { name = te_tax_en_g_motor_ships value = 1 } }
+	else = { set_variable = { name = te_tax_en_g_motor_ships value = 0 } }
 	if = { limit = { has_consumption_tax = g:oil } set_variable = { name = te_tax_en_g_oil value = 1 } }
 	else = { set_variable = { name = te_tax_en_g_oil value = 0 } }
 	if = { limit = { has_consumption_tax = g:opium } set_variable = { name = te_tax_en_g_opium value = 1 } }
@@ -7354,7 +7382,9 @@ te_tax_gen_copy_code = {
 	te_tax_copy_token = { NAME = te_tax_en_g_liquor }
 	te_tax_copy_token = { NAME = te_tax_en_g_luxury_clothes }
 	te_tax_copy_token = { NAME = te_tax_en_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_en_g_magnetic_drive_ships }
 	te_tax_copy_token = { NAME = te_tax_en_g_meat }
+	te_tax_copy_token = { NAME = te_tax_en_g_motor_ships }
 	te_tax_copy_token = { NAME = te_tax_en_g_oil }
 	te_tax_copy_token = { NAME = te_tax_en_g_opium }
 	te_tax_copy_token = { NAME = te_tax_en_g_paper }
@@ -7736,7 +7766,9 @@ te_tax_gen_copy_slot_a = {
 	te_tax_copy_token = { NAME = te_tax_pa_g_liquor }
 	te_tax_copy_token = { NAME = te_tax_pa_g_luxury_clothes }
 	te_tax_copy_token = { NAME = te_tax_pa_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pa_g_magnetic_drive_ships }
 	te_tax_copy_token = { NAME = te_tax_pa_g_meat }
+	te_tax_copy_token = { NAME = te_tax_pa_g_motor_ships }
 	te_tax_copy_token = { NAME = te_tax_pa_g_oil }
 	te_tax_copy_token = { NAME = te_tax_pa_g_opium }
 	te_tax_copy_token = { NAME = te_tax_pa_g_paper }
@@ -7948,7 +7980,9 @@ te_tax_gen_copy_slot_b = {
 	te_tax_copy_token = { NAME = te_tax_pb_g_liquor }
 	te_tax_copy_token = { NAME = te_tax_pb_g_luxury_clothes }
 	te_tax_copy_token = { NAME = te_tax_pb_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pb_g_magnetic_drive_ships }
 	te_tax_copy_token = { NAME = te_tax_pb_g_meat }
+	te_tax_copy_token = { NAME = te_tax_pb_g_motor_ships }
 	te_tax_copy_token = { NAME = te_tax_pb_g_oil }
 	te_tax_copy_token = { NAME = te_tax_pb_g_opium }
 	te_tax_copy_token = { NAME = te_tax_pb_g_paper }
@@ -8158,7 +8192,9 @@ te_tax_gen_copy_enacted = {
 	te_tax_copy_token = { NAME = te_tax_en_g_liquor }
 	te_tax_copy_token = { NAME = te_tax_en_g_luxury_clothes }
 	te_tax_copy_token = { NAME = te_tax_en_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_en_g_magnetic_drive_ships }
 	te_tax_copy_token = { NAME = te_tax_en_g_meat }
+	te_tax_copy_token = { NAME = te_tax_en_g_motor_ships }
 	te_tax_copy_token = { NAME = te_tax_en_g_oil }
 	te_tax_copy_token = { NAME = te_tax_en_g_opium }
 	te_tax_copy_token = { NAME = te_tax_en_g_paper }
