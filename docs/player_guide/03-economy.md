@@ -225,9 +225,10 @@ every setting of the Free Market Construction rule.
 
 Once a year, the game compares your GDP per capita with a fixed curve. Above £1
 per person per year, the Development Cost Scaling modifier raises the
-construction each point requires. The increase rises in a straight line to
-+1,000% at a GDP per capita of £100, about 10 percentage points for every £1. It
-applies to every use of construction: the points your queues spend and the
+construction each point requires. The increase rises in a straight line, 10
+percentage points for every £1, and stops at +100% from a GDP per capita of £11:
+construction never costs a rich country more than twice what it costs a poor
+one. It applies to every use of construction: the points your queues spend and the
 maintenance your buildings pay. It combines by multiplication with other
 construction-cost modifiers, so another modifier that cuts construction costs by
 20% still cuts 20% in a rich country. With Free Market Construction disabled,
