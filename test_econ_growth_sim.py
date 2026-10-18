@@ -1,11 +1,16 @@
 """The growth sim (#1034): cost curve shapes, point price, construction purchase,
-and the yearly step on toy mod data."""
+the yearly step on toy mod data, and the scenarios and calibration code on the
+committed dataset."""
 import dataclasses
+import json
 import math
+import tempfile
 import time
 import unittest
+from pathlib import Path
 
 from scripts.analysis import econ_growth_sim as G
+from scripts.analysis import econ_sim_calibrate as CAL
 from scripts.analysis import econ_sim_data as D
 from scripts.analysis import econ_sim_scenarios as SC
 
@@ -449,6 +454,22 @@ class TestStep(unittest.TestCase):
         for r in recs:
             self.assertAlmostEqual(r.peasants + r.unemployed + r.employed, r.workforce, delta=1e-6 * r.workforce)
 
+    def test_annexation_adds_subsistence_capacity(self):          # R23
+        # No hiring, growth, returns or investment; the event's population brings exactly its
+        # own workforce (x 0.5), so the peasants move only by the event and the capacity.
+        p = G.Params(fill_rate=0, return_rate=0, g_max=0.0, g_min=0.0, private_invest_share=0, gov_invest_share=0)
+        event = {"population": 1.2e6, "peasants": 6e5, "unemployed": 0.0}
+        bare = {r.year: r for r in G.run(toy_scenario(subsistence_capacity=3e6, annexations=((1870, event),)), TOY, p)}
+        grown_event = dict(event, subsistence_capacity=9e5)
+        grown = {r.year: r for r in G.run(toy_scenario(subsistence_capacity=3e6, annexations=((1870, grown_event),)), TOY, p)}
+        # Without the event's capacity, the annexed peasants overflow into the unemployed.
+        self.assertAlmostEqual(bare[1870].peasants, 3e6)
+        self.assertAlmostEqual(bare[1870].unemployed - bare[1869].unemployed, 6e5)
+        # With it, they stay peasants, and stay so in later years.
+        self.assertAlmostEqual(grown[1870].peasants, 3.6e6)
+        self.assertAlmostEqual(grown[1880].peasants, 3.6e6)
+        self.assertAlmostEqual(grown[1870].unemployed, grown[1869].unemployed)
+
     def test_sector_without_cost_points_gets_no_levels(self):      # R14
         recs = G.run(toy_scenario(alloc=((1867, {"light": 0.5, "heavy": 0.5, "services": 0.2}),)), TOY, G.Params())
         self.assertAlmostEqual(recs[0].levels["light"] - 100.0, recs[0].points * 0.5 / 100.0)
@@ -825,6 +846,202 @@ class TestSummary(unittest.TestCase):
         self.assertEqual((c.money_years, c.cap_years, c.labour_years), (0, 184, 0))
         self.assertEqual(s.slack_2045, (recs[2045 - 1867].peasants + recs[2045 - 1867].unemployed) / recs[2045 - 1867].workforce)
         self.assertEqual(s.gdppc_2045, recs[2045 - 1867].gdppc)
+
+
+class TestScenarios(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.md, cls.ds = D.load_mod_data(), SC.load_dataset()
+
+    def test_scenarios_build_and_run_finite(self):
+        for name in SC.SCENARIOS:
+            sc = SC.scenario(name, self.ds, self.md)
+            self.assertEqual(sc.start_year, 1867, name)
+            last = G.run(sc, self.md, G.params_for(name))[-1]
+            self.assertTrue(all(math.isfinite(v) for v in (last.gdp, last.wage, last.points, last.peasants)), name)
+
+    def test_start_matches_dataset(self):
+        sc = SC.scenario("player_rich", self.ds, self.md)
+        first = self.ds["series"]["FRA"]["points"][0]["slice"]
+        self.assertAlmostEqual(sc.peasants, first["peasants"], delta=1)
+        self.assertAlmostEqual(sc.wage_start, first["wage_per_worker"])
+
+    def test_series_end_where_country_ends(self):     # Review Focus 2
+        last_save_year = max(int(p["date"][:4]) for c in self.ds["series"].values() for p in c["points"])
+        for name in ("ai_rich", "ai_poor"):
+            sc = SC.scenario(name, self.ds, self.md)
+            own_last = max(int(p["date"][:4]) for p in self.ds["series"][sc.series]["points"])
+            self.assertEqual(sc.end_year, 2050 if own_last == last_save_year else own_last)
+
+    def test_structural_params_shared(self):
+        ps = {n: G.params_for(n) for n in SC.SCENARIOS}
+        for name in CAL.STRUCTURAL:
+            self.assertEqual(len({getattr(p, name) for p in ps.values()}), 1, name)
+
+    def test_check_reports_a_miss(self):
+        md, ds = self.md, self.ds
+        bad = Path(self.enterContext(tempfile.TemporaryDirectory())) / "p.json"
+        bad.write_text(json.dumps({"structural": {"price_level": 100.0}, "behaviour": {}}))
+        self.assertTrue(CAL.check(ds, md, params_path=bad))
+
+    # --- beyond the brief's five ---------------------------------------------
+
+    def test_start_economy_and_schedules(self):
+        rich = SC.scenario("player_rich", self.ds, self.md)
+        first = self.ds["series"]["FRA"]["points"][0]
+        self.assertAlmostEqual(rich.gdp, first["owner"]["gdppc"] * first["slice"]["population"])
+        self.assertAlmostEqual(rich.points_week, sum(first["owner"]["points_weekly"].values()))
+        self.assertEqual(rich.subsistence_capacity, 1.5 * rich.peasants)
+        self.assertEqual((rich.kind, rich.automation_lag_years, rich.rich_from_year, rich.n_states), ("player", 0.0, 1920, 33))
+        self.assertEqual(len(rich.era_points), len(self.ds["series"]["FRA"]["points"]))
+        # Employed people split between level-bound and demand-bound sectors; peasants are neither.
+        self.assertAlmostEqual(rich.employed_level + rich.employed_demand, first["slice"]["employed"], delta=0.02 * first["slice"]["employed"])
+        ai_poor = SC.scenario("ai_poor", self.ds, self.md)
+        self.assertEqual((ai_poor.kind, ai_poor.series, ai_poor.rich_from_year, ai_poor.automation_lag_years), ("ai", "CHI", None, 5.0))
+        self.assertEqual(ai_poor.land_floor_at(1867), 0.5)              # CHI 1867: serfdom
+        self.assertEqual(rich.land_floor_at(1867), 0.0)                 # FRA 1867: peasant proprietorship
+        poor = SC.scenario("player_poor", self.ds, self.md)
+        self.assertEqual((poor.kind, poor.series, poor.automation_lag_years, poor.rich_from_year), ("player", "CHI", 0.0, None))
+        self.assertEqual((poor.era_points, poor.alloc), (rich.era_points, rich.alloc))
+        self.assertEqual((poor.peasants, poor.levels, poor.land_floor), (ai_poor.peasants, ai_poor.levels, ai_poor.land_floor))
+
+    def test_every_level_bound_sector_has_a_cost(self):              # R14
+        for name in SC.SCENARIOS:
+            sc = SC.scenario(name, self.ds, self.md)
+            for s in G.LEVEL_BOUND:
+                if s != "other":
+                    self.assertGreater(sc.cost_points.get(s, 0.0), 0.0, (name, s))
+
+    def test_union_annexations_come_from_new_states(self):
+        sc = SC.scenario("player_union", self.ds, self.md)
+        pts = self.ds["series"]["union"]["points"]
+        self.assertEqual(sc.n_states, len(pts[0]["per_state"]))
+        grows = [(a, b) for a, b in zip(pts, pts[1:]) if set(b["per_state"]) - set(a["per_state"])]
+        self.assertEqual(len(sc.annexations), len(grows))
+        for (year, event), (a, b) in zip(sc.annexations, grows):
+            new = set(b["per_state"]) - set(a["per_state"])
+            self.assertEqual(year, int(b["date"][:4]))
+            self.assertAlmostEqual(event["population"], sum(b["per_state"][s][0] for s in new))
+            self.assertAlmostEqual(event["peasants"], sum(b["per_state"][s][2] for s in new))
+            self.assertAlmostEqual(event["unemployed"], sum(b["per_state"][s][3] for s in new))
+            self.assertAlmostEqual(event["subsistence_capacity"], 1.5 * event["peasants"])     # R23
+            self.assertAlmostEqual(sum(event["levels"].values()), sum(b["per_state"][s][4] for s in new))
+
+    def test_alloc_is_the_realised_construction(self):
+        def point(date, **levels):
+            return {"date": date, "slice": {"buildings_by_type": {b: {"levels": n} for b, n in levels.items()}}}
+
+        buildings = self.md.ms.get_data("Buildings")
+
+        def cost(b):
+            return self.md.numbers.cost_tiers[D.val(D.val(buildings[b])["required_construction"])]
+
+        points = [
+            point("1900.1.1", building_wheat_farm=10, building_coal_mine=5, building_urban_center=100),
+            point("1900.3.1", building_wheat_farm=11, building_coal_mine=5, building_urban_center=100),  # under a year on
+            point("1910.1.1", building_wheat_farm=20, building_coal_mine=3, building_urban_center=300,
+                  building_tourism_industry=2),
+            point("1920.1.1", building_wheat_farm=20, building_coal_mine=13, building_urban_center=300,
+                  building_tourism_industry=2),
+        ]
+        alloc = dict(SC.realised_alloc(points, self.md))
+        self.assertEqual(sorted(alloc), [1900.0, 1910.0, 1920.0])
+        farm, tourism = 10 * cost("building_wheat_farm"), 2 * cost("building_tourism_industry")
+        # Urban centres have no construction cost (they grow by urbanization); lost levels don't count.
+        self.assertEqual(set(alloc[1900.0]), {"farming", "services"})
+        self.assertAlmostEqual(alloc[1900.0]["farming"], farm / (farm + tourism))
+        self.assertAlmostEqual(alloc[1900.0]["services"], tourism / (farm + tourism))
+        self.assertEqual(alloc[1910.0], {"mining": 1.0})
+        self.assertEqual(alloc[1920.0], alloc[1910.0])              # the last point repeats the last interval
+
+    def test_calibration_is_observed_over_the_ladder(self):
+        b = D.base_at(self.md.ladders["light"], 2)
+        slice_ = {"buildings_by_type": {
+            "building_food_industry": {"levels": 4, "staffing": 2.0, "employees": 12000,
+                                       "goods_sales": 2 * (1.5 * b.va + 100), "goods_cost": 200.0},
+            "building_railway": {"levels": 3, "staffing": 3.0, "employees": 3000, "goods_sales": 100.0, "goods_cost": 400.0},
+            "building_barrack": {"levels": 10, "staffing": 5.0, "employees": 2500, "goods_sales": 0.0, "goods_cost": 50.0},
+            "building_subsistence_farms": {"levels": 9, "staffing": 9.0, "employees": 45000, "goods_sales": 9.0, "goods_cost": 0.0},
+        }}
+        k_emp, k_va = SC.sector_calibration(slice_, self.md, 2)
+        self.assertAlmostEqual(k_emp["light"], 6000 / b.employment)
+        self.assertAlmostEqual(k_va["light"], 1.5)                  # weekly figures, no / 52
+        self.assertEqual(k_va["infrastructure"], 1.0)               # VA -100 a staffed level: no information
+        self.assertAlmostEqual(k_emp["infrastructure"], 1000 / D.base_at(self.md.ladders["infrastructure"], 2).employment)
+        self.assertEqual((k_emp["other"], k_va["other"]), (500.0, -10.0))     # other: the observed figures themselves
+        self.assertNotIn("peasants", k_emp)
+
+    def test_era_is_the_highest_with_half_its_techs(self):
+        te = {"a": 1, "b": 1, "c": 2, "d": 2, "e": 3, "f": 3, "g": 3}
+        self.assertEqual(SC.era_reached({"a", "c"}, te), 2)
+        self.assertEqual(SC.era_reached({"a"}, te), 1)
+        self.assertEqual(SC.era_reached({"e", "f", "unknown_tech"}, te), 3)
+        self.assertEqual(SC.era_reached(set(), te), 0)
+
+    def test_targets_are_every_point_after_the_start(self):
+        sc = SC.scenario("ai_rich", self.ds, self.md)
+        pts = self.ds["series"]["GBR"]["points"]
+        t = CAL.targets(sc, self.ds)
+        self.assertEqual(len(t), len(pts) - 1)
+        self.assertEqual(set(t[0]), {"year", "peasant_share", "unemployed_share", "gdppc", "population", "points_week", "wage"})
+        self.assertGreater(t[0]["year"], sc.start_year + 1)
+        last = pts[-1]
+        self.assertAlmostEqual(t[-1]["peasant_share"], last["slice"]["peasants"] / last["slice"]["workforce"])
+        self.assertAlmostEqual(t[-1]["points_week"], sum(last["owner"]["points_weekly"].values()))
+        self.assertAlmostEqual(t[-1]["wage"], last["slice"]["wage_per_worker"])
+
+    def test_fit_never_raises_the_loss_and_moves_only_named_fields(self):
+        sc = SC.scenario("player_rich", self.ds, self.md)
+        t = CAL.targets(sc, self.ds)
+        p0 = G.Params()
+        p1 = CAL.fit(sc, self.ds, self.md, p0, ("price_level", "fill_rate"), rounds=1)
+        self.assertLessEqual(CAL.loss(G.run(sc, self.md, p1), t, p1), CAL.loss(G.run(sc, self.md, p0), t, p0))
+        moved = {f.name for f in dataclasses.fields(G.Params) if getattr(p1, f.name) != getattr(p0, f.name)}
+        self.assertLessEqual(moved, {"price_level", "fill_rate"})
+        self.assertEqual(p0, G.Params())                            # p0 untouched
+
+
+class TestCalibration(unittest.TestCase):
+    T0 = {"year": 1900.0, "peasant_share": 0.4, "unemployed_share": 0.1, "gdppc": 2.0, "population": 10.0,
+          "points_week": 10.0, "wage": 1.0}
+
+    def _recs(self):
+        return [rec(year=1900, workforce=1.0, peasants=0.4, unemployed=0.1, population=10.0, gdppc=2.0, points=52 * 10.0, wage=0.5),
+                rec(year=1901, workforce=1.0, peasants=0.2, unemployed=0.3, population=20.0, gdppc=8.0, points=52 * 40.0, wage=1.0)]
+
+    def test_loss_is_zero_on_matching_records(self):
+        # The sim's wage is in base prices: 0.5 x price level 2 is the observed 1.0.
+        self.assertAlmostEqual(CAL.loss(self._recs(), [self.T0], G.Params(price_level=2.0)), 0.0)
+
+    def test_loss_interpolates_to_the_target_year(self):
+        mid = {"year": 1900.5, "peasant_share": 0.3, "unemployed_share": 0.2, "gdppc": 5.0, "population": 15.0,
+               "points_week": 25.0, "wage": 1.5}
+        self.assertAlmostEqual(CAL.loss(self._recs(), [mid], G.Params(price_level=2.0)), 0.0)
+
+    def test_loss_weights_each_term_once(self):
+        off = dict(self.T0, peasant_share=0.5, gdppc=2.0 * math.e)
+        self.assertAlmostEqual(CAL.loss(self._recs(), [off], G.Params(price_level=2.0)), 0.1 ** 2 + 1.0)
+
+    def test_loss_stays_finite_on_a_collapsed_economy(self):
+        collapsed = [rec(year=1900, gdppc=-1.0, points=0.0)]
+        self.assertTrue(math.isfinite(CAL.loss(collapsed, [self.T0], G.Params())))
+
+    def test_params_for_layers_structural_then_behaviour(self):
+        path = Path(self.enterContext(tempfile.TemporaryDirectory())) / "p.json"
+        path.write_text(json.dumps({"structural": {"fill_rate": 0.3, "price_level": 2.0},
+                                    "behaviour": {"player_rich": {"private_invest_share": 0.2},
+                                                  "ai_rich": {"automation_lag_years": 3.0}}}))
+        rich = G.params_for("player_rich", path)
+        self.assertEqual((rich.fill_rate, rich.price_level, rich.private_invest_share), (0.3, 2.0, 0.2))
+        self.assertEqual(G.params_for("player_poor", path).private_invest_share, 0.2)
+        self.assertEqual(G.params_for("player_union", path).private_invest_share, 0.2)
+        self.assertEqual(G.params_for("ai_rich", path).automation_lag_years, 3.0)
+        ai_poor = G.params_for("ai_poor", path)                     # no behaviour entry: the defaults
+        self.assertEqual((ai_poor.fill_rate, ai_poor.private_invest_share, ai_poor.automation_lag_years),
+                         (0.3, G.Params().private_invest_share, None))
+        path.write_text(json.dumps({"structural": {"no_such_param": 1.0}, "behaviour": {}}))
+        with self.assertRaises(KeyError):
+            G.params_for("player_rich", path)
 
 
 if __name__ == "__main__":

@@ -21,6 +21,8 @@ This module holds:
                   (spec 5.3; the algorithm is spelled out on `step`).
   run             a scenario from its start year to its end year, inclusive, as
                   one YearRecord a year.
+  params_for      the calibrated Params of a scenario, from econ_sim_params.json
+                  (written by econ_sim_calibrate.py fit).
   classify, turn_year, takeoff_year, first_year_below, Summary, summarize
                   the diagnostics (spec 5.5, 9): each year's mode, the year wages
                   first pass the first automation tier's breakeven, the catch-up
@@ -36,6 +38,7 @@ named constants below.
 from __future__ import annotations
 
 import dataclasses
+import json
 import math
 import sys
 from dataclasses import dataclass
@@ -52,6 +55,12 @@ if TYPE_CHECKING:
     from scripts.analysis.econ_sim_scenarios import Scenario
 
 CURVES = ("linear", "capped", "log", "sqrt", "world", "none")
+
+# The calibrated parameters (econ_sim_calibrate.py fit). Two scenarios have no behaviour
+# of their own: player_poor is China played by the player, player_union the player's whole
+# union, so both behave as player_rich does.
+PARAMS = Path(__file__).with_name("econ_sim_params.json")
+BEHAVIOUR_FROM = {"player_poor": "player_rich", "player_union": "player_rich"}
 
 # Level-bound sectors: jobs are levels x staff a level. `other` has no ladder.
 LEVEL_BOUND = ("farming", "mining", "light", "heavy", "hightech", "infrastructure", "other")
@@ -217,7 +226,8 @@ class SectorState:
 class State:
     """One country's stocks between years. `workforce` is always peasants +
     unemployed + employed_level + employed_demand; `wage` is in base prices
-    (nominal / price_level); `gdp` is annual and nominal."""
+    (nominal / price_level); `gdp` is annual and nominal. `subsistence_capacity`
+    starts as the scenario's and grows with annexations (R23)."""
 
     year: int                                   # the year the next step runs
     population: float
@@ -230,6 +240,7 @@ class State:
     gdp: float
     points_week: float
     sectors: dict[str, SectorState]
+    subsistence_capacity: float
     x: float = 0.0                              # last year's cost multiplier; 0 before the first step
 
 
@@ -325,6 +336,7 @@ def initial_state(sc: Scenario, md: D.ModData, p: Params) -> State:
         gdp=float(sc.gdp),
         points_week=float(sc.points_week),
         sectors=sectors,
+        subsistence_capacity=float(sc.subsistence_capacity),
     )
 
 
@@ -334,6 +346,7 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
     The thirteen stages, in order (spec 5.3; numbers as in the plan's Task 6):
 
      1 annexations   this year's events add population, peasants, unemployed, levels
+                     and subsistence capacity (R23)
      2 era           sc.era_at(year - era_shift_years)
      3 per sector    staff, crew and VA a level from the base PM at the era plus the
                      sector's current automation tier. A PM group's tiers are
@@ -372,6 +385,7 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
         # The event's employed aren't added: its levels' jobs hire from the workforce
         # the population stage reconciles to population x workforce_share.
         state.population += event.get("population", 0.0)
+        state.subsistence_capacity += event.get("subsistence_capacity", 0.0)
         state.peasants += event.get("peasants", 0.0)
         state.unemployed += event.get("unemployed", 0.0)
         state.workforce += event.get("peasants", 0.0) + event.get("unemployed", 0.0)
@@ -554,7 +568,7 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
             state.employed_level *= keep
             state.employed_demand *= keep
     state.workforce = workforce
-    capacity = sc.subsistence_capacity
+    capacity = state.subsistence_capacity
     if state.peasants > capacity:
         state.unemployed += state.peasants - capacity
         state.peasants = capacity
@@ -604,6 +618,26 @@ def run(sc: Scenario, md: D.ModData, p: Params) -> list[YearRecord]:
     """Every year from sc.start_year to sc.end_year, inclusive."""
     state = initial_state(sc, md, p)
     return [step(state, sc, md, p) for _ in range(sc.start_year, sc.end_year + 1)]
+
+
+def params_for(scenario: str, path: Path | str = PARAMS) -> Params:
+    """The Params a scenario runs with: the defaults, then the file's structural values
+    (shared by every scenario), then the scenario's behaviour values. player_poor and
+    player_union take player_rich's behaviour (BEHAVIOUR_FROM); a scenario with no
+    behaviour entry keeps the defaults. A name that isn't a Params field raises KeyError.
+
+    The file is {"structural": {name: value}, "behaviour": {scenario: {name: value}}}.
+    """
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    fields = {f.name for f in dataclasses.fields(Params)}
+    behaviour = data.get("behaviour", {}).get(BEHAVIOUR_FROM.get(scenario, scenario), {})
+    p = Params()
+    for where, values in (("structural", data.get("structural", {})), ("behaviour " + scenario, behaviour)):
+        unknown = sorted(set(values) - fields)
+        if unknown:
+            raise KeyError(str(path) + " " + where + ": not a Params field: " + ", ".join(unknown))
+        p = dataclasses.replace(p, **values)
+    return p
 
 
 # --------------------------------------------------------------------------

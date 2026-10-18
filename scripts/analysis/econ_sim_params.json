@@ -1,0 +1,36 @@
+{
+  "behaviour": {
+    "ai_poor": {
+      "automation_lag_years": 10.0,
+      "gov_invest_share": 0.078125,
+      "private_invest_share": 0.208,
+      "queue_per_state": 4.0
+    },
+    "ai_rich": {
+      "automation_lag_years": 5.0,
+      "gov_invest_share": 0.0488281,
+      "private_invest_share": 0.08125,
+      "queue_per_state": 0.3125
+    },
+    "player_rich": {
+      "gov_invest_share": 0.05,
+      "private_invest_share": 0.104,
+      "queue_per_state": 4.88281
+    }
+  },
+  "structural": {
+    "construction_good_price": 0.5952,
+    "demand_gdp_ratio": 0.384,
+    "fill_rate": 0.15625,
+    "g_max": 0.02,
+    "g_slope": 0.0032,
+    "price_level": 2.0,
+    "return_rate": 0.8,
+    "services_jobs_per_gdp": 0.0185241,
+    "vacancy_target": 0.0625,
+    "wage_decay": 0.025,
+    "wage_floor": 1.81899e-15,
+    "wage_step": 0.2,
+    "workforce_share": 0.25
+  }
+}
