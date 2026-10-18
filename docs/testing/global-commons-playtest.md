@@ -72,10 +72,26 @@ even in that save, and the scale comes from those lines.
 
 1. **The State Panel tile.** A coastal state of a country with Abyssal Plain Mining, the month after
    the research (the first sharing): a **Seabed Licences** tile beside the Solar Collector and
-   Antimatter Facility tiles, reading In use / Our share, and Distant while any level works on
-   another basin's licence. Hover: this state's records, each basin's held, unbuilt, weight and the
-   world's records against the pool, and the room. No "Failed to fetch variable" in `debug.log` while
-   hovering, on a coastal state that never had a mine.
+   Antimatter Facility tiles. Its rows are this state's (2026-10-17): Basin (its ocean by name; check
+   a Pacific, an Arctic and a Southern state against the Seabed tab's Free hover, which lists each
+   basin's states), Licences (the licences on its Deep-Sea Mine levels), Long-haul in red while any
+   of them is another basin's, Claims (our unused claims in its basin, the Seabed tab's Free figure
+   for that basin) and Weight. Each row's hover: the levels built and queued with local and distant
+   licences, and a "wait for a licence" line only when a level has none; the long-haul penalty
+   (matching Long-Haul Seabed Operations on the state); the weight's coast (2, or 1 unincorporated),
+   port levels, naval share and policy factor, with our weight in the basin at the last sharing.
+   Check the basin's name renders in the Basin, Claims and Weight hovers (they splice it in), and
+   that the "wait for a licence" line renders its number (it reads the state inside a key named by
+   `AddLocalizationIf`, as the Grand Monument card's lines do). The Weight rows of our coastal states in a
+   basin should add up to about our weight there in the tile's hover (the basin line's "weight"), less
+   an Antarctic station's 5 in the Southern, and about the Weight row's own last line; under Unilateral Licensing or a scramble the naval share doubles. A
+   relinquished basin, or the Southern for an Antarctic Treaty party, reads 0 with a red line saying
+   why. A state just conquered has no basin until the next monthly update: Basin, Claims and Weight
+   are hidden until then. Tile hover: the country's licences in use, its share and long-haul ones,
+   each basin's held, unbuilt, weight and the world's licences in use against the pool, and the room.
+   No "Failed to fetch variable" in `debug.log` while hovering, on a coastal state that never had a
+   mine. **At 1080p no row ends in "…"**: "Southern" in the Basin row's 96 px value column, "Long-haul"
+   in the 96 px label column.
 2. **The gate.** Build a Deep-Sea Mine in a coastal state: the building's requirements list
    "Seabed Licences to spare: N (unbuilt: …)" with a tick, and a second line saying whether the next
    level takes the state's own basin's licence or another's at -25%. Queue levels until the room is

@@ -32,3 +32,17 @@ next time the game is up.
 | 8 | Parsing | No GUI parse error for `te_nation_generated.gui`, whose country-panel filter is a single `visible` of about 20,000 characters. | Split the filter: move names to `KEEP_IN_LIST`, or break the template into two `visible`s on nested widgets. |
 | 9 | Performance | No stutter with the Information tab open on a late-game country, nor with the Nation tab open, early in a game and late. | The country panel's filter is 240 comparisons a row: move names to `KEEP_IN_LIST` until it is smooth. On the Nation tab, look first at the script values its rows read every frame (`te_nation_override_tier` and `te_nation_override_next_cost`, the concentration pair); Global Technological Development already reads a variable the yearly pulse sets. |
 | 10 | The layout | The overview's four boxes read in full in their 154 columns at 100% UI scale and at the largest you play at ("Construction" is the widest caption, "Force it through" the widest word; `test_the_overview_fits_its_column` holds them to the house budget). The two short captions, Override and Wealth, show their concept on hover. Science and Space and International draw nothing when they have nothing to show. How the Nation Works opens and closes. | Shorten the text (`te_nation_ov_*`), with the full name on hover. |
+
+## Phase 2: the state's Wealth Concentration tile
+
+The plan (`docs/superpowers/plans/2026-10-17-nation-tab.md`, Task 8) put the state's six `inh_` modifiers in the state
+view's Demographics subtab. That subtab is gone while the Demographics rule is off, its default, and Wealth
+Concentration runs regardless, so the list became a tile of its own in the state panel's status grid, after Arable
+Land. Offline: `test_hidden_state_modifiers.py`, the GUI lint and the audits. Run these **with the Demographics rule
+off** (the default) and once with it on.
+
+| # | Check | What to look for | If it fails |
+|---|---|---|---|
+| 11 | The tile and the rows | A state above 50 shows a Wealth Concentration tile listing Concentrated Property and, in a farming state, Land Hunger; a state below 50 lists Dispersed Property. Under Forced Heirship or Primogeniture & Entail (or with Undivided Farm Succession) the law's rural modifier is listed too. None of the six shows among the state's modifier icons over its picture, nor in the condensed view's modifier box. Hovering a name shows that modifier's own tooltip at its current scale. | No tile on a state that carries one: `gui_state_wealth_modifier_count` and the filter disagree, or `TimedModifier.GetName` doesn't match `Localize('inh_…')` for these keys. Names listed twice or the list empty: the `visible` on the item. |
+| 12 | The score row | With the Demographics rule off, a scored state shows Score "62 → 55", its score and its target; the Demographics subtab (rule on) shows the same pair. A state not yet scored (a new colony) shows the tile without the row, and `debug.log` logs no "Failed to fetch variable" for `te_dg_wc` while hovering it. | The row reads `te_dg_wc` behind `te_demog_state_wealth_sgui`; if the warning logs, the hidden row still evaluates its text, so move the value into a script value with a 0 default. |
+| 13 | The layout | "Cadet Sons Leave the Land" wraps to a second line beside its icon rather than ending in "…". The tile sits in the grid like its neighbours, two to a row, and the condensed view's modifier box fades when the six and the bookkeeping modifiers are all a state carries. | Shorten the modifier's name, or let the tile's list drop the icon. |

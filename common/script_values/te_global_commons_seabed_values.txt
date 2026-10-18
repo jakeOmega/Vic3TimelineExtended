@@ -1061,12 +1061,178 @@ te_seabed_tile_shown = {
 	}
 }
 
-# State scope, for the tile's hover: the state's basin, 0 when it has none yet.
+# State scope, the tile's Basin row: the state's basin, 0 when it has none yet
+# (a state scope newer than its owner's last monthly recording).
 te_seabed_state_basin_disp = {
 	value = 0
 	if = {
 		limit = { has_variable = te_seabed_basin }
 		value = var:te_seabed_basin
+	}
+}
+
+# ---- The tile's state rows (state scope; reads only, no new variables) ----
+
+# The Long-haul row's hover: the throughput Long-Haul Seabed Operations takes
+# here, in percent (te_seabed_long_haul at te_seabed_long_haul_mult).
+te_seabed_state_long_haul_pct_disp = {
+	value = te_seabed_long_haul_mult
+	multiply = te_seabed_long_haul_penalty_pct
+}
+
+# The state's count in its basin's coast term, as te_seabed_compute_weights
+# walks it: 1, an unincorporated state te_seabed_uninc_coast; 0 without a
+# basin.
+te_seabed_state_coast_count = {
+	value = 0
+	if = {
+		limit = {
+			is_coastal = yes
+			has_variable = te_seabed_basin
+		}
+		value = 1
+		if = {
+			limit = { is_incorporated = no }
+			value = te_seabed_uninc_coast
+		}
+	}
+}
+
+# 1 where the owner's weight in this state's basin counts, 0 where
+# te_seabed_compute_weights gives it none there: no claimant
+# (te_seabed_zero_weights), the basin relinquished (te_seabed_weight_set), or
+# the Southern under the Antarctic Treaty (te_seabed_southern_barred).
+te_seabed_state_weight_counts = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_seabed_basin
+			owner = { te_seabed_is_claimant = yes }
+		}
+		value = 1
+		if = {
+			limit = {
+				var:te_seabed_basin = 1
+				owner = { has_variable = te_seabed_relinq_pacific }
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				var:te_seabed_basin = 2
+				owner = { has_variable = te_seabed_relinq_atlantic }
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				var:te_seabed_basin = 3
+				owner = { has_variable = te_seabed_relinq_indian }
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				var:te_seabed_basin = 4
+				owner = { has_variable = te_seabed_relinq_arctic }
+			}
+			value = 0
+		}
+		else_if = {
+			limit = {
+				var:te_seabed_basin = 5
+				owner = {
+					OR = {
+						has_variable = te_seabed_relinq_southern
+						te_seabed_southern_barred = yes
+					}
+				}
+			}
+			value = 0
+		}
+	}
+}
+
+# The owner's policy factor and its coast at the last sharing
+# (te_seabed_coast_all), read from the state.
+te_seabed_state_owner_factor_disp = {
+	value = 0
+	owner = { add = te_seabed_policy_factor }
+}
+
+te_seabed_state_owner_coast_all_disp = {
+	value = 0
+	owner = { add = te_seabed_coast_all_disp }
+}
+
+# The coast term: te_seabed_coast_weight x the coast count.
+te_seabed_state_coast_term_disp = {
+	value = te_seabed_state_coast_count
+	multiply = te_seabed_coast_weight
+}
+
+# The part of the owner's naval term this state carries: the navy is spread
+# over the coast in proportion to each state's count (te_seabed_weight_set's
+# navy x n / N), here over the coast at the last sharing, so a state gained
+# since reads a little high until the next one.
+te_seabed_state_navy_share_disp = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_state_coast_count > 0
+			te_seabed_state_owner_coast_all_disp > 0
+		}
+		owner = { add = te_seabed_navy_effective }
+		multiply = te_seabed_state_coast_count
+		divide = te_seabed_state_owner_coast_all_disp
+	}
+}
+
+# The tile's Weight row: what this state adds to its owner's claim weight in
+# its basin now, te_seabed_compute_weights' terms for one state: (coast term +
+# its port levels + its share of the naval term) x the policy factor. The
+# country's weight in a basin is the sum over its coastal states there, plus
+# an Antarctic research station's te_seabed_station_weight in the Southern.
+te_seabed_state_weight_disp = {
+	value = 0
+	if = {
+		limit = {
+			te_seabed_state_coast_count > 0
+			te_seabed_state_weight_counts > 0
+		}
+		value = te_seabed_state_coast_term_disp
+		add = te_seabed_state_port_levels
+		add = te_seabed_state_navy_share_disp
+		multiply = te_seabed_state_owner_factor_disp
+	}
+}
+
+# The Weight row's hover: the owner's claim weight in this state's basin at
+# the last sharing.
+te_seabed_state_basin_weight_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_basin }
+		if = {
+			limit = { var:te_seabed_basin = 1 }
+			owner = { add = te_seabed_w_disp_pacific }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 2 }
+			owner = { add = te_seabed_w_disp_atlantic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 3 }
+			owner = { add = te_seabed_w_disp_indian }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 4 }
+			owner = { add = te_seabed_w_disp_arctic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 5 }
+			owner = { add = te_seabed_w_disp_southern }
+		}
 	}
 }
 

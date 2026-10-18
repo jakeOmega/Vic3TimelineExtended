@@ -5,7 +5,9 @@ or step: tourism, pollution, migration crowding, the free port's tariffs, and
 the demographics census's corrections to birth and death rates. They carry the
 mod's blank icon, modifier_system.dds. Others are shown by a card of their own
 in the state panel and keep their icon: a Grand Monument's tourism and local
-effect (gm_local_*), which its card lists. Both kinds are hidden from the rows.
+effect (gm_local_*), which its card lists, and the six modifiers wealth
+concentration and the inheritance law give a state, which the Wealth
+Concentration tile lists. Both kinds are hidden from the rows.
 A GUI can't read a timed modifier's key
 (`TimedModifier` has no GetKey), and its icon can't be compared:
 `EqualTo_string(TimedModifier.GetIcon, ...)` fails at runtime with "FetchData
@@ -48,6 +50,19 @@ HIDDEN_ICONS = (
 SHOWN_ON_A_CARD_PREFIXES = (
     "gm_local_",
 )
+
+# State modifiers the state panel's Wealth Concentration tile lists by name
+# (te_state_wealth_tile, gui/te_state_panel_widgets.gui): what wealth
+# concentration and the inheritance law do in the state. By name, not by an
+# `inh_` prefix, which would also catch the country's own inheritance
+# modifiers. The tile shows whenever the state carries one, whatever the
+# Demographics rule (gui_state_wealth_modifier_count), so hiding them from the
+# rows never hides them from the player.
+SHOWN_ON_A_CARD_NAMES = (
+    "inh_concentrated_property", "inh_dispersed_property", "inh_land_hunger",
+    "inh_forced_heirship_rural", "inh_primogeniture_rural", "inh_undivided_farm_rural",
+)
+WEALTH_COUNT = "gui_state_wealth_modifier_count"
 
 DATAMODEL = 'datamodel = "[State.GetTimedModifiers]"'
 
@@ -172,14 +187,14 @@ def _hidden_modifiers():
     ones a card already shows."""
     return {name for name, icons in _static_modifiers().items()
             if any(icon in HIDDEN_ICONS for icon in icons)
-            or name.startswith(SHOWN_ON_A_CARD_PREFIXES)}
+            or name.startswith(SHOWN_ON_A_CARD_PREFIXES) or name in SHOWN_ON_A_CARD_NAMES}
 
 
-def _count_terms():
+def _count_terms(count=COUNT):
     """{modifier: add} for each `if = { limit = { has_modifier = X } add = N }`."""
     tree = dict((k, v) for k, _, v in _entries(_parse(COUNT_FILE)))
     terms = {}
-    for key, _, value in _entries(tree[COUNT]):
+    for key, _, value in _entries(tree[count]):
         if key != "if":
             continue
         fields = dict((k, v) for k, _, v in _entries(value))
@@ -190,7 +205,11 @@ def _count_terms():
 
 class HiddenStateModifierTest(unittest.TestCase):
     def setUp(self):
-        self.sites = _sites()
+        # A card's own list picks its modifiers out (`visible = "[Or(...)]"`);
+        # the rows leave the hidden ones out (`visible = "[Not(...)]"`).
+        sites = _sites()
+        self.cards = [s for s in sites if not re.search(r'visible\s*=\s*"\[Not\(', s["item"])]
+        self.sites = [s for s in sites if s not in self.cards]
 
     def test_both_state_panel_rows_are_found(self):
         # The full view's row over the state's picture and the condensed view's box.
@@ -204,6 +223,39 @@ class HiddenStateModifierTest(unittest.TestCase):
             with self.subTest(prefix=prefix):
                 self.assertTrue([name for name in hidden if name.startswith(prefix)])
         self.assertIn("gm_local_tourism", hidden)
+        statics = _static_modifiers()
+        for name in SHOWN_ON_A_CARD_NAMES:
+            self.assertIn(name, statics)
+            self.assertIn(name, hidden)
+
+    def test_card_lists_pick_out_only_card_modifiers(self):
+        # te_state_wealth_tile lists the six by name, and takes no space for the rest
+        self.assertEqual(len(self.cards), 1, [s["where"] for s in self.cards])
+        for site in self.cards:
+            with self.subTest(site=site["where"]):
+                self.assertTrue(site["where"].startswith("gui/te_state_panel_widgets.gui:"))
+                visible = re.findall(r'visible\s*=\s*"([^"]*)"', site["item"])
+                self.assertEqual(len(visible), 1)
+                self.assertTrue(visible[0].startswith("[Or("))
+                named = set(re.findall(r"EqualTo_string\(TimedModifier\.GetName, Localize\('(\w+)'\)\)", visible[0]))
+                self.assertEqual(named, set(SHOWN_ON_A_CARD_NAMES))
+                self.assertEqual(site["container"], "flowcontainer")
+                self.assertRegex(site["own"], r"\bignoreinvisible\s*=\s*yes\b")
+
+    def test_the_wealth_tile_shows_whenever_a_card_modifier_is_there(self):
+        # Hidden from the rows, so the tile must show whenever the state has one,
+        # whatever the Demographics rule: its gate counts exactly the six.
+        terms = _count_terms(WEALTH_COUNT)
+        self.assertEqual(set(terms), set(SHOWN_ON_A_CARD_NAMES))
+        self.assertEqual(set(terms.values()), {"1"})
+        with open(os.path.join(GUI, "states_panel.gui"), encoding="utf-8-sig") as f:
+            panel = _strip_comments(f.read())
+        tile = panel.index("te_state_wealth_tile = {}")
+        opener, start, end = _block_around(panel, panel.rfind('blockoverride "extra_widget"', 0, tile) - 1)
+        self.assertEqual(opener, "state_panel_status_item_small")
+        own = _own_lines(panel[start:end])
+        gates = re.findall(r'visible\s*=\s*"([^"]*)"', own)
+        self.assertEqual(gates, [f"[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('{WEALTH_COUNT}'), '(CFixedPoint)0')]"])
 
     def test_every_row_hides_every_hidden_modifier_by_name(self):
         hidden = _hidden_modifiers()

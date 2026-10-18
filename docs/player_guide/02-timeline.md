@@ -396,7 +396,10 @@ Weight is your share of the basin's claim weight; +1 licence is about how much
 more naval power projection would win you one more licence at the next sharing,
 a figure that is enough and often more than needed. Click a basin to see its claimants, largest
 share first, with your own row and its Relinquish button. A Seabed Licences
-tile on every coastal state's panel shows the same national figures.
+tile on every coastal state's panel shows that state's basin, the licences its
+mines hold and how many are long-haul, your unused claims in its basin (what a
+new level there would take at full throughput) and what the state adds to your
+claim weight there. The tile's tooltip has the national figures.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
