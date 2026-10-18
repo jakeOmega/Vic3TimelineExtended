@@ -366,7 +366,9 @@ that moves the scores reaches them within a year. A capital full of Financial
 Districts can carry Concentrated Property while your country as a whole sits
 below 50. The Inheritance group's description shows the score and where it is
 heading, and the Wealth section of the [Demographics tab](08-states.md#demographics)
-shows what sets the target. With the census off (the default, and the only
+shows what sets the target. A state's Wealth Concentration tile, on the state
+panel, shows its own score and the modifiers it carries from it and from the
+inheritance law. With the census off (the default, and the only
 choice in released versions) the tab is gone, but Wealth Concentration and all
 its effects still run and the group's description still shows the score.
 

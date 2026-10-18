@@ -2530,6 +2530,11 @@ git commit -m "Nation tab: the play-test list"
 
 ## Part 2 (phase 2, its own PR): Wealth Concentration in the state view
 
+> Built 2026-10-17 (branch `feat/state-panel-seabed-wealth`) as a tile of its own in the state panel's status
+> grid, `te_state_wealth_tile`, gated on `gui_state_wealth_modifier_count`, not in the Demographics subtab's Wealth
+> section: that subtab is gone while the Demographics rule is off (its default), and the six run regardless, so
+> Task 8's list there would have hidden them from the player. Task 8's test and filter steps were followed.
+
 ### Task 8: The state's inheritance modifiers in its Wealth section
 
 **Files:**
