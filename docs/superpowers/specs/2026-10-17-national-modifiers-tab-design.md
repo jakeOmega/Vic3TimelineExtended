@@ -43,6 +43,7 @@ country and sit in its list, while Grand Monuments' national modifiers land on a
 | Permanent event outcomes | On the tab by default, in the section of the system that granted them. Case by case, an **override** keeps a chosen modifier in the country's list (`KEEP_IN_LIST`, § 4) |
 | The space race's colonies | Hidden (owner). The dry run found them already on the Solar Colonization entry, never the country, so nothing changes: the Space Race tab's Our Colonies lists them |
 | Section order | Governance, Society, Economy, Science and Space, International |
+| Modifier types, not modifiers (2026-10-18, #1030) | Each section's list becomes rows of the modifier types its modifiers carry, "Arable Land: +45%" with every source on hover; the lists move, collapsed, to the bottom. The owner took the issue's eight recommendations (§ 10) |
 
 ## 1. What goes where
 
@@ -79,7 +80,7 @@ where a player looks for what just happened to them.
   caption, a word and a figure: Override Capacity (the Forceful Legislation tier open, and the value), Wealth
   Concentration ("Concentrating", "62 → 68"), Construction Cost ("Scaled by wealth", "+35%") and Global Technology
   ("Spreading", "+60 spread"). Judicial Independence makes a fifth once it exists.
-- **Five sections, open** (rule 1), each its score **rows** first, then its **list**. Each list is the country's own
+- **Five sections, open** (rule 1), each its score **rows** first, then its **list** (since #1030 its **type rows**, and the lists collapsed at the bottom: § 10). Each list is the country's own
   timed modifiers filtered to the section's names: icon, name, and `TimedModifier.GetTooltip` on hover, so the engine
   renders the effects at their current scale (§ 8). A row's own modifiers ("what it gives now") are a one-line list of
   the same kind under it. An empty list draws nothing, and a section with nothing to show draws nothing (rule 8).
@@ -93,7 +94,7 @@ where a player looks for what just happened to them.
 | Science and Space | Global Technological Development | Space race milestones (`sr_first_<m>`, `sr_<m>`), the probe's data, the commercial space dividend; orbital debris and its clearance's prestige; the Antarctic research station and the Antarctic regime; seabed policy's costs and the long haul |
 | International | — | UN conventions the country is bound by outside the organisation's entry, membership benefits and non-member penalties, regime terms, embargoes, sanctions, mandates, development grants and electoral observers; intelligence sharing; the nuclear taboo; a colonial subject's overlord in decline |
 
-The registry (§ 4) holds the exact names. The dry run (2026-10-17) found the space race's discoveries and colonies, the UN's own conventions and standing, Grand Monuments' and the banking cycle's modifiers on their journal entries, never the country, and kept the covert operations' effects on a target in its list (`KEEP_IN_LIST`): what a foreign operation is doing to a country belongs where a player looks for what just happened, and one shares its display name with a timed modifier.
+The List column is the section's systems; since #1030 the lists sit under these names in Where These Come From, and § 10's table says which rows each section shows. The registry (§ 4) holds the exact names. The dry run (2026-10-17) found the space race's discoveries and colonies, the UN's own conventions and standing, Grand Monuments' and the banking cycle's modifiers on their journal entries, never the country, and kept the covert operations' effects on a target in its list (`KEEP_IN_LIST`): what a foreign operation is doing to a country belongs where a player looks for what just happened, and one shares its display name with a timed modifier.
 
 ### 2.2 The rows
 
@@ -249,3 +250,69 @@ The owner answered the first draft's five questions and the revision's three (20
 records them. Nothing is open. The implementation plan (`docs/superpowers/plans/2026-10-17-nation-tab.md`) was dry-run
 against the repository the same day; its findings are folded in above (the colonies already off the country, covert
 effects kept in the list, the budget's sources as the carriers, the state view's Wealth section already there).
+
+## 10. Type rows (#1030, 2026-10-18)
+
+The owner's play-test (2026-10-17): "It would be better to have the modifier types listed in the Nation tab rather
+than the modifiers themselves. For example — Arable Land, with a breakdown of tech, spread modifiers, etc. As is, it is
+not clear to a new player where or why these modifiers are there." "Green Revolution Diffusion" says nothing about what
+it does or why the player has it; **Arable Land: +45%**, with a hover listing Intensive Agriculture, Nitrogen Fixation
+and Green Revolution Diffusion, answers both.
+
+**Engine fact, settled** (owner, 2026-10-17): the country's own modifier holds the `state_` fields its modifiers carry,
+so `GetPlayer.GetModifier.GetValueWithBreakdownFor('state_arable_land_mult')` reads Arable Land with its sources, as the
+country panel's Modifiers tab does (`docs/systems/modifier_scope_reference.md`).
+
+**Rulings** (owner, 2026-10-18: the issue's recommendations, all eight):
+
+| Question | Ruling |
+|---|---|
+| Replace the per-modifier lists? | Keep them, collapsed, in one panel at the bottom, **Where These Come From**, under each section's name (rule 2: the two modifiers that carry no field, `cr_cooptation_expired` and `te_inflation_band_comfort`, and each modifier's full effects stay one click away) |
+| Re-cut the sections by what a type affects? | Yes: one national total can't repeat in up to four sections. Prestige is International's even where a space milestone grants it, and the milestone shows in its breakdown. The section names stay |
+| Every type, or a curated handful? | Every type the tab's modifiers carry, gated, but for 35 `NOT_A_ROW` exclusions. Demote by one registry line if the play-test finds a section long |
+| When does a row show? | While the country holds one of the tab's own modifiers (its lists' or its score rows') that carries the type, not whenever the total is non-zero, which would make the tab a copy of the Modifiers tab. Vanilla sources still appear in the breakdown |
+| Interest-group approval | Rows in Governance (79 of the 212 listed modifiers carry an approval line, and the Interest Group panel shows one group at a time). An icon strip of the eight groups is a later refinement |
+| State-level rows | The national contribution, with a note on hover that a state's own sources are in its panel (the capital's total would mix in that state's decrees and buildings). The same note for building, interest-group and character rows |
+| Score rows' "what it gives now" | Unchanged: there the modifier's scaled tooltip is exactly what the score gives |
+| `_bool` types | Status lines: "Nuclear Program Freeze: In force", `GetFullEntryDescFor` on hover, as vanilla shows `country_disallow_law_no_schools_bool` |
+
+**Layout.** Each section: its score rows (unchanged), then its type rows under small subheadings (`te_nation_subheader`).
+A row reads "**Label:** value": the label is the type's own loc name (`$state_arable_land_mult$`), the value
+`GetValueWithBreakdownFor` (the engine's format; its hover lists every source: technologies, laws, institutions,
+principles, timed modifiers and the tab's own, a scaled one with its multiplier). The row's hover is the type's `_desc`,
+plus the scope note for a `state_`, `building_`, `interest_group_` or `character_` type. A subheading shows over its
+rows only; International draws nothing without one, Science and Space nothing without a row or a technology spread.
+
+| Section | Rows | Groups |
+|---|---|---|
+| Governance | 23 | Authority and Bureaucracy; Legitimacy and Laws; Interest Groups (the eight approvals, three political strengths, two attractions) |
+| Society | 25 | Living Standards; Acceptance and Assimilation; Unrest; Population; Demography (most under the Demographics rule) |
+| Economy | 29 | Production (Arable Land, throughputs, construction efficiency); Taxes and Minting; Investment and Credit; Trade |
+| Science and Space | 10 | Research; Space and the Seabed |
+| International | 27 | Standing Abroad; Covert Defense; War Support; Nuclear Weapons (two status lines); Commitments |
+| Not rows | 35 | A score row's: Wealth Concentration's political strengths, Construction Cost's two, Legislative Override Capacity, Judicial Independence's votes and radicalism lines, Overinvestment's 13 pool contributions and weekly construction cap under Private Construction, the technology spread. The Banking tab's six. The arms embargo's seven goods trade advantages, folded into its own line |
+
+**Registry** (`gen_nation_tab.py`, beside § 4's): `TYPE_ROWS` (section → group → types; a family with one `*`, such as
+`interest_group_ig_*_approval_add`, lists its types alphabetically in its place), `STATUS_ROWS` (the bools, same shape)
+and `NOT_A_ROW` (type or family → what shows it). A type's feeders are the tab's modifiers whose static block carries it
+(`carried_types`). `test_nation_tab.py`'s `TypeRowsTest` holds every carried type to exactly one line, an exact name
+winning over a family, and every line to at least one type; bools only to status lines; every row to a loc name and a
+`_desc`, mod or vanilla; and each generated count to its row's feeders.
+
+**Generated.** `gui/te_nation_generated.gui` gains `te_nation_types_<section>`. The values file gains
+`te_nation_type_<type>_count` (the row's feeders), `te_nation_group_<group>_count` and `te_nation_types_<section>_count`
+(the unions under them, so a hidden group or section evaluates no row), and `te_nation_lists_count` (Where These Come
+From's gate). `localization/english/te_nation_generated_l_english.yml` holds each row's text and hover, splicing the
+type's name and `_desc` (organize_loc's `NATION_GENERATED`); the group names and the scope notes are hand-written, in
+`te_miscellaneous_l_english.yml`.
+
+**Edge cases.** A `state_` row is the national contribution, not a state's total: they agree for Arable Land, whose
+sources are all national, and not for Migration Attraction, which decrees and production methods also feed. Feeders of
+opposite sign can leave a row at 0 with a non-empty breakdown; it shows anyway. The totals include timed modifiers, so a
+row can show more than the tab's own sources. Four names repeat (Prestige, Authority, Minting and Cultural Pull each have
+an `_add` and a `_mult` row), told apart by their format, as the Modifiers tab does.
+
+**Engine facts to verify** (play-test list, checks 14–21): the generated types resolving `te_nation_row` from
+`te_nation_tab.gui`, which loads after them; the figure's breakdown hover winning over the row's own tooltip; the
+longest breakdown (Maximum Innovation Investment, fed by more than 80 technologies) fitting on screen;
+`GetFullEntryDescFor` on a bool; no stutter with about 30 rows.
