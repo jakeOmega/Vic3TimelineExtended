@@ -1,6 +1,6 @@
 # Economy growth sim: design (#1034)
 
-Status: draft for the owner's review, 2026-10-17.
+Status: for the owner's review, 2026-10-17 (builder check done, owner answers in).
 
 ## 1. Intent
 
@@ -43,6 +43,28 @@ is a guide, not the only consideration.
   takes the automation ladder ends with a few percent unemployed, and could
   have none by not taking it.
 - **Player economies first, AI economies too.**
+- **Poor starts follow real catch-up growth** (owner, 2026-10-17): the Asian
+  tigers, China and the like. Peasants are people outside the national market
+  economy, not everyone who farms, so the share should fall faster than
+  historical farm employment did. My reading of history, for the owner to
+  correct:
+  - South Korea's farm share of jobs fell from about 63% in 1963 to 18% in
+    1990, and Taiwan's from about 50% in 1960 to 13% in 1990. China's fell
+    from about 70% in 1978 to about 25% by 2020, while far more of its
+    farmers joined the market economy.
+  - In those take-offs, GDP per head grew 6–9% a year while the rich frontier
+    grew about 2%.
+  - **So the target:** once a poor country takes off (it has the techs, the
+    laws and the investment), its peasant share halves about every 15 years
+    or faster. It goes from over half to under 10% within about 35 years of
+    take-off, and its GDP per capita grows several times faster than the rich
+    country's meanwhile.
+  - The same applies to a poor region joined to a rich country, counted from
+    when it joins: for example, the EU's Balkans should be under 10% peasants
+    about 35 years after joining.
+  - The AI may be slower than a player but should show the same shape. A
+    curve that leaves a poor country flat is failing its catch-up purpose, as
+    stated in the script's own header.
 - **Qualifications don't bind** past the first couple of decades. The sim
   assumes a qualified workforce throughout.
 
@@ -190,9 +212,14 @@ end year (default 2050).
 
 ### 5.1 State
 
-- **Workforce** split into peasants, unemployed and employed. The working-age
-  path comes from the scenario (§ 6); a defines-based growth curve driven by a
-  SoL proxy is an option.
+- **Population and workforce**, with the workforce split into peasants,
+  unemployed and employed. Owner (2026-10-17): Demographics on is the ideal,
+  but a simplified model is fine, and populations within about a factor of 2
+  of the game's are good enough. So the population model is a yearly growth
+  rate as a function of income per head and era, fitted to the calibration
+  game's population path, which ran with Demographics on. The workforce share
+  of the population is fitted the same way. No cohort model. Reusing
+  `demographics_model.py` is an option if the fit fails the factor-of-2 test.
 - **Subsistence capacity**: the peasant slots arable land holds, with the land
   law's floor and reserved share.
 - **Sectors**, each with: levels; the PM tier in use and the tier the
@@ -387,6 +414,13 @@ A sweep prints one row per lever setting × country type:
 | Setting | Type | Turn year | Peasants < 5% | Peasants + unemployed 1950 / 2000 / 2045 | Years in mode 1 / mode 2 | Binding: money / cap / labour | GDP per capita 2045 |
 |---|---|---|---|---|---|---|---|
 
+For the poor types (2 and 4), and for the union's annexed regions in the
+whole-union check, three more columns test catch-up (§ 2):
+- the take-off year;
+- years from take-off to under 10% peasants;
+- GDP per capita growth over the take-off against type 1's over the same
+  years.
+
 A single run can also write its yearly path as CSV. The first deliverable
 sweep covers the cost-curve shapes for all four types, with a short written
 read of which shapes land in the target band.
@@ -424,6 +458,23 @@ These ship with this work or a follow-up:
 - `docs/vanilla/vanilla_pops_reference.md:277,284` frames proportional hiring
   as "90%"; it is a 0.1 gap in fill ratio between professions.
 
-## 12. Open questions
+## 12. Decisions
 
-To be filled from the builder check.
+**The owner's** (2026-10-17): the targets in § 2, including the catch-up
+model for poor starts; the two failure modes and landing nearer mode 2 than
+vanilla; most levers in scope with vanilla values allowed; the cost-curve
+shape first; player economies first; qualifications not modelled; urban
+centres and Construction Sectors are limited by demand (§ 4.4); a simplified
+population model within a factor of 2.
+
+**Mine, for the owner to check:**
+- the yearly step and the sector set (§ 5.1);
+- fitted wage and fill rules in place of the engine's weekly rules (§ 3, § 5.3);
+- allocation from the saves' investment shares, not optimised (§ 5.3);
+- the mode thresholds (§ 5.5) and the turn-year definition, with breakevens
+  computed from PM blocks (§ 5.5);
+- calibrating on France's core states, with the union as a second check (§ 7);
+- using the recorded workforce despite the late-births bug (§ 7);
+- type 2 sharing type 1's tech pace (§ 6);
+- a fixed world path for the world-relative curve (§ 8);
+- no script change in this issue; the curve change is a follow-up (§ 3).
