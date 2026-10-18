@@ -267,8 +267,17 @@ sweep table reports binding years per constraint, so the owner can see that.
 - **Mode 2**: the country is rich (GDP per capita ≥ a threshold, or the year is
   past the target turn), and peasants + unemployed > 10% of the workforce, and
   the wage index sits at the floor.
-- Otherwise healthy. The turn year is the first year the wage index passes
-  the first automation tier's breakeven.
+- Otherwise healthy.
+
+**The turn year** (my call) is the first year the wage index passes the
+tier-1 breakeven of the sectors holding half of the level-bound jobs. Tier 1
+is the first tier of each sector's main automation group: steam donkey for
+mines, mechanized looms for textiles, watertube boilers for motor industry,
+and so on. Side groups such as mine rail transport (breakeven 0.03) don't
+count. The sim computes every breakeven itself from the PM blocks: vanilla's
+from `vanilla_parsed/`, which carries no cost comments, and the mod's from its
+files. The computed breakevens include fixed crews, which the `pm_costs.py`
+comments leave out (§ 4.3).
 
 ### 5.6 Price level
 
@@ -288,7 +297,8 @@ v1 runs four types. The first is calibrated; the others are plausible starts.
    playthrough.
 2. **Player, large poor start.** China- or India-like, initial state from an
    1836 save (`ZeroBench.v3` or `great britain_temptst2.v3`, text). Same player
-   behaviour as type 1.
+   behaviour as type 1. My call: it uses type 1's era-arrival table, with a
+   lag parameter that defaults to 0, since a player pulls tech along.
 3. **AI, rich start.** GBR- or GER-like. Era arrival comes from the observer
    runs (leaders 202 techs in 1972, 219 in 1988, 245 in 2015). Automation lags.
 4. **AI, mid or poor start.** As type 3, from a poorer 1836 country.
@@ -312,7 +322,24 @@ then FRA, then EUN. About 25 saves (1867, 1917, 1949, 1954–1976, 1986, 1990,
 - the variables, including `prior_construction_scaling`.
 
 Each save also holds the engine's **weekly** GDP history for the past 100
-years, so GDP is weekly from 1836. The token map and probe scripts are in
+years, so GDP is weekly from 1836.
+
+**Territory changes** (my call). The country grows from 91M people as FRA in
+1917 to 1.2B as EUN in 1998. In 2045, peasants are 20% of Western Europe's
+people but 51% of Eastern Europe's and 67% of the Balkans'. Much of the 36%
+headline comes from annexing poor regions. So the hindcast runs on France's
+core: the states the country held in 1867, a constant territory. It reads
+those states' pops and buildings, not the country totals. The whole union
+is a second check, with annexations entered as outside events that add
+people, peasants and levels. Western Europe's 20% is still far from the
+target, so the problem doesn't go away on the core.
+
+**Population in the series** (my call). The calibration game runs the
+`demographics_full` rule. The late-births bug fixed by #964 zeroed births in
+late-game states before 2026-10-16, which covers the saves from about 2011 to
+2036. It touched under-fives and the cohorts reaching working age after about
+2025, a small share of the workforce, so the hindcast uses the workforce as
+recorded and checks how sensitive the result is to it. The token map and probe scripts are in
 `~/src/vic3te-save-analysis-2026-10-17/series_probe/`. AI comparisons use the
 observer runs and `Baseline.v3` (2062).
 
@@ -341,7 +368,10 @@ All are overridable; each defaults to the mod's current value.
   it is linear in GDP per capita: 0 at 1× reference (1), +1000% at 100×
   (`construction_cost_scaling_mult`). Shapes to try: a lower ceiling or cap;
   concave (log or square root); relative to the world's GDP per capita (from
-  all countries' GDP rings); none (vanilla).
+  all countries' GDP rings); none (vanilla). For the world-relative shape, the
+  world path is fixed, taken from the calibration game (my call). Changing the
+  curve for every country would move the world path too, which needs several
+  coupled countries; the doc states that limit.
 - Cost tiers of late buildings (2,000–10,000).
 - The per-project cap ladder.
 - Construction-sector labour per point.
