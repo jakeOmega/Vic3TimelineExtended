@@ -137,8 +137,8 @@ git commit -m "Econ sim (#1034): fixed-point country record from binary saves"
 **Interfaces:**
 - Consumes: Task 1; `save_world_report.World(path)` (`.source.blob`, `.source.techs(warnings)`, `.source.buildings(warnings)`, `.date`); `save_country_probe.law_records(blob)`.
 - Produces:
-  - `pops_by_state(blob: bytes, states: set[int]) -> dict[int, dict]`, giving per state `{population, workforce, peasants, employed, unemployed}`. Pop tokens come from `~/src/vic3te-save-analysis-2026-10-17/scripts/pops.py`: type 0x00e1, workforce 0x2fd5, dependents 0x573a, employed 0x573b, location 0x2819. Peasants = the workforce of pops of type `peasants`. For other pops, employed = Σ emp and unemployed = Σ (wf − emp).
-  - `buildings_in(blob: bytes, states: set[int]) -> list[dict]`, giving `{type, levels, state, staffing, employees, pms}`. Tokens come from `scripts/buildings.py` in the same folder: staffing 0x32ed /1e5, employees 0x5607 raw.
+  - `pops_by_state(blob: bytes, states: set[int]) -> dict[int, dict]`, giving per state `{population, workforce, peasants, employed, unemployed, wages_weekly, welfare_weekly}`. Pop tokens come from `~/src/vic3te-save-analysis-2026-10-17/scripts/pops.py`: type 0x00e1, workforce 0x2fd5, dependents 0x573a, employed 0x573b, location 0x2819, and the weekly budget 0x4eed (slot 0 wages, slot 3 welfare, both /1e5). Peasants = the workforce of pops of type `peasants`. For other pops, employed = Σ emp, unemployed = Σ (wf − emp), wages_weekly = Σ slot 0 and welfare_weekly = Σ slot 3.
+  - `buildings_in(blob: bytes, states: set[int]) -> list[dict]`, giving `{type, levels, state, staffing, employees, goods_sales, goods_cost, pms}`. Tokens come from `scripts/buildings.py` in the same folder: staffing 0x32ed /1e5, employees 0x5607 raw, goods_sales 0x5606 /1e5, goods_cost 0x2d15 /1e5.
   - `extract(path: Path, country_ids: list[int], core: dict[int, set[int]] | None = None) -> dict`, giving:
     ```
     {"save", "date", "version",
@@ -203,11 +203,17 @@ git commit -m "Econ sim (#1034): per-state slice, techs, laws, extract CLI"
                            "gdp_yearly": {year: £/yr},
                            "points": [{date, country record minus gdp_weekly,
                                        "core": {population, workforce, peasants, employed, unemployed,
-                                                buildings_by_type: {type: {levels, staffing, employees, pms: {pm: levels}}}}}]}},
+                                                wage_per_worker, welfare_per_unemployed,
+                                                buildings_by_type: {type: {levels, staffing, employees, goods_sales, goods_cost,
+                                                                           pms: {pm: levels}}}},
+                                       "whole": {same keys as core, over all the country's states}}]}},
    "world": [{date, gdp, population}],
    "core_states": {"<id>": [state ids]}}
   ```
-  Here `gdp_yearly` is the mean of each calendar year's weekly samples, merged across saves, with later saves winning on overlap.
+  Here `gdp_yearly` is the mean of each calendar year's weekly samples, merged across saves, with later saves winning on overlap. The slices are built as follows:
+  - `wage_per_worker` = Σ wages_weekly / Σ employed, over non-peasant pops;
+  - `welfare_per_unemployed` = Σ welfare_weekly / Σ unemployed (0 when there are none);
+  - `whole` is the same slice over the country's own `states` at that save. Run `--core-from` once per country so each gets both slices; GBR and CHI use `whole` only.
 
 - [ ] **Step 1: Copy the series** into `<scratchpad>/econ_saves/`. These are every save whose `save_world_report.World(path)` playthrough is `c480d386`: `french republic_1867`, `french commune_*` (binary only), `france_1986`, `france_1990`, and `european union_*`. List them first with `~/src/vic3te-save-analysis-2026-10-17/series_probe/save_inventory.py`.
 
@@ -228,7 +234,8 @@ Expected: a `skip` line for each text save, and no traceback.
 - [ ] **Step 5: Verify against the probe numbers.**
   - FRA 1917.10.2: population 91.07M (±0.1%), workforce 45.55M, subsisting 10.87M, unemployed 6.00M, points per week 1,954 (±1).
   - EUN 1998.12.29: population 1,198.0M, subsisting 208.3M, unemployed 94.1M, points 22,614.
-  - For each save, the core slice's workforce is ≤ the country's.
+  - FRA 1917 `whole.wage_per_worker` ≈ £0.092 (the probe's pop scan).
+  - For each save, the core slice's workforce is ≤ the country's, and `whole`'s workforce is within 1% of `pop_statistics`.
 
   Record any miss and fix the extractor before going on.
 
@@ -468,12 +475,14 @@ A world GDP per capita of 0 or None makes the world curve fall back to 0.
   - In `econ_sim_scenarios.py`: `@dataclass(frozen=True) Scenario`, with these fields:
     - identity and timing: `name`, `kind` ("player" | "ai"), `country_id`, `start_year`, `end_year`;
     - people: `population`, `peasants`, `unemployed`, `subsistence_capacity`;
+    - the start economy: `employed_level`, `employed_demand`, `gdp` (annual), `points_week`, `wage_start: float | None = None`;
     - territory and stock: `n_states`, `levels: dict[str, float]`;
-    - per-sector calibration: `k_emp: dict[str, float]`, `k_va: dict[str, float]`, `cost_points: dict[str, float]`;
-    - schedules: `era_points: tuple[tuple[int, float], ...]`, `land_floor: tuple[tuple[int, float], ...]`, `alloc: tuple[tuple[int, dict[str, float]], ...]`, `world_gdppc: tuple[tuple[int, float], ...]`;
+    - per-sector calibration: `k_emp: dict[str, float]`, `k_va: dict[str, float]`, `cost_points: dict[str, float]`. A sector with no buildings at the start defaults `k_emp` and `k_va` to 1.0.
+    - schedules: `era_points: tuple[tuple[int, float], ...]`, `land_floor: tuple[tuple[int, float], ...]`, `welfare: tuple[tuple[int, float], ...]` (welfare per unemployed worker, £/week, nominal), `alloc: tuple[tuple[int, dict[str, float]], ...]`, `world_gdppc: tuple[tuple[int, float], ...]`;
     - behaviour and events: `automation_lag_years: float`, `rich_from_year: int | None`, `annexations: tuple[tuple[int, dict], ...]`.
 
-    Its methods: `era_at(year)` (linear interpolation, held flat past either end), `land_floor_at(year)` and `alloc_at(year)` (piecewise constant from each point on), and `world_gdppc_at(year)` (linear).
+    Its methods: `era_at(year)` (linear interpolation, held flat past either end), `land_floor_at(year)`, `welfare_at(year)` and `alloc_at(year)` (piecewise constant from each point on), and `world_gdppc_at(year)` (linear).
+  - `initial_state(sc, md, p)` takes people and the start economy straight from the scenario. The wage is `sc.wage_start / p.price_level` (the observed nominal wage in base-price terms), or `p.wage_floor` when None. Each sector starts at tier 0.
   - In `econ_growth_sim.py`:
     - `@dataclass SectorState(levels: float, auto_tier: int = 0, retool_left: float = 0.0, ready_since: float | None = None)`
     - `@dataclass State(year, population, workforce, peasants, unemployed, employed_level, employed_demand, wage, gdp, points_week, sectors: dict[str, SectorState])`
@@ -534,6 +543,8 @@ Say both in the doc's § Limits (Task 10).
     - `workforce = population · p.workforce_share`.
 
     Split a rise in workforce over peasants and the unemployed in proportion to the current peasant share. A fall comes out of the unemployed first, then peasants, then employed. Peasants above `sc.subsistence_capacity` move to the unemployed.
+
+    **Return to subsistence.** Welfare is pop income, not a building wage floor; the engine's wage target discounts it (§4.2). So it enters the model only here. While `sc.welfare_at(year) / p.price_level < 1.3 · p.subsistence_income` and peasants are below `sc.subsistence_capacity`, `p.return_rate` (new Params field, default 0.1) of the unemployed go back to subsistence each year. Subsistence takes only the unemployed, at a 30% premium (§4.2). Under UBI the welfare exceeds that, so nobody returns.
 13. **Flags.**
     - `labour_bound = vac > p.labour_bind_vacancy`;
     - `money_bound = not cap_bound and not labour_bound`.
@@ -592,7 +603,7 @@ class TestStep(unittest.TestCase):
         self.assertLess(time.perf_counter() - t, 1.0)
 ```
 
-`toy_scenario(**overrides)` returns a 1867–1900 `Scenario`: one light sector, 1,000 states, wage start 0.05, kind "player". `wage_start` is an `initial_state` override exposed through the scenario as `wage_start: float | None = None` (default `p.wage_floor`). Add that field to `Scenario`.
+`toy_scenario(**overrides)` returns a 1867–1900 `Scenario`: one light sector, 1,000 states, wage start 0.05, kind "player". Add a test that a welfare above 1.3× subsistence income keeps every unemployed worker out of subsistence, and that a welfare of 0 lets them return.
 
 - [ ] **Step 2: Run them and see them fail.**
 - [ ] **Step 3: Implement `SectorState`, `State`, `YearRecord`, `initial_state`, `step` and `run`.**
@@ -658,7 +669,7 @@ class TestStep(unittest.TestCase):
 - Modify: `scripts/analysis/econ_sim_scenarios.py`
 - Create: `scripts/analysis/econ_sim_calibrate.py`
 - Create: `scripts/analysis/econ_sim_params.json` (fitted, committed)
-- Test: `test_econ_growth_sim.py` (class `TestHindcast`)
+- Test: `test_econ_growth_sim.py` (class `TestScenarios`)
 
 **Interfaces:**
 - Consumes: the dataset (Task 3), `ModData`/`sector_of`/`sector_cost_points` (Task 4), and `run`/`Params` (Tasks 5–6).
@@ -676,8 +687,10 @@ class TestStep(unittest.TestCase):
 
     The fields:
     - `levels`: the start point's levels by `sector_of`.
-    - `k_emp[s]`: observed employees per staffed level in the start point (Σ employees / Σ staffing), divided by the ladder's start-era `emp_lvl`.
-    - `k_va[s]`: chosen so that Σ VA matches the start GDP with `price_level` 1. One common factor for all sectors; per-sector VA isn't in the save.
+    - `k_emp[s]`: observed employees per staffed level in the start point (Σ employees / Σ staffing), divided by the ladder's start-era `emp_lvl`. For `other`, which has no ladder, `k_emp` is the observed figure itself.
+    - `k_va[s]`: observed VA per staffed level, Σ (goods_sales − goods_cost) / Σ staffing ÷ 52 (the save's figures are yearly; check against one building's weekly sales in the 1949 text save before trusting the ÷ 52), divided by the ladder's start-era VA. For `other`, it is the observed figure itself.
+    - the start economy: `employed_level` and `employed_demand` are the start point's employees in level-bound and demand-bound sectors; `gdp` is the newest weekly GDP sample as the engine keeps it (yearly terms, `country_gdp_per_capita`); `points_week` is the sum of `points_weekly`; `wage_start` is `wage_per_worker`.
+    - `welfare`: per point, `welfare_per_unemployed`.
     - `cost_points`: `sector_cost_points` over the latest point's buildings.
     - `era_points`: per point, the highest era e at which the country holds ≥ 50% of `tech_era`'s era-e techs.
     - `alloc`: per point, `investment_by_type` summed by sector and normalised.
@@ -686,45 +699,47 @@ class TestStep(unittest.TestCase):
     - `subsistence_capacity`: 1.5 × the start peasants.
     - `world_gdppc`: per point, `world.gdp / world.population`.
     - `automation_lag_years`: 0 for players, 5 for the AI.
-  - In `econ_sim_calibrate.py`:
-    - `FIT = ("private_invest_share", "gov_invest_share", "fill_rate", "wage_step", "price_level", "services_jobs_per_gdp", "demand_gdp_ratio", "g_max", "g_slope", "workforce_share", "queue_per_state", "construction_good_price")`
-    - `targets(sc, dataset) -> list[dict]`: per point after the start, `{year, peasant_share, unemployed_share, gdppc, population, points_week}`, from the core slice for player_rich and the country otherwise.
-    - `loss(records, targets) -> float` = Σ over targets of the squared error in peasant share, unemployed share, ln gdppc, ln population and ln points per week, with weight 1 each. Interpolate the records to the target year.
-    - `fit(sc, dataset, md, p0: Params, names=FIT, rounds=4) -> Params`: coordinate descent. Each round tries each name at ×{0.5, 0.8, 1.25, 2.0} of its value and keeps any that lowers the loss.
-    - `main(argv)`: `econ_sim_calibrate.py --scenario player_rich [--scenario ai_rich ...] --out scripts/analysis/econ_sim_params.json`. It writes `{scenario: {param: value}}` and prints each scenario's loss and a target-versus-sim table.
-  - In `econ_growth_sim.py`: `params_for(scenario: str, path=PARAMS) -> Params`. It applies the scenario's fitted values over the defaults. player_poor takes player_rich's fit, and player_union takes player_rich's.
+  - In `econ_sim_calibrate.py`. The rules are shared: players and the AI differ only in behaviour (spec §6).
+    - `STRUCTURAL = ("fill_rate", "wage_step", "wage_decay", "vacancy_target", "wage_floor", "return_rate", "price_level", "services_jobs_per_gdp", "demand_gdp_ratio", "g_max", "g_slope", "workforce_share", "construction_good_price")`. Fitted on player_rich only, then shared by every scenario.
+    - `BEHAVIOUR = ("private_invest_share", "gov_invest_share", "queue_per_state")`. Fitted per scenario with the structural values held, plus `automation_lag_years` for the AI scenarios. Make `automation_lag_years` a Params field that overrides the scenario's when set.
+    - `targets(sc, dataset) -> list[dict]`: per point after the start, `{year, peasant_share, unemployed_share, gdppc, population, points_week, wage}`, from the core slice for player_rich and `whole` otherwise.
+    - `loss(records, targets, p) -> float` = Σ over targets of the squared error in peasant share, unemployed share, ln gdppc, ln population, ln points per week, and ln(sim wage · `p.price_level`) against ln observed wage. Weight 1 each. Interpolate the records to the target year.
+    - `fit(sc, dataset, md, p0: Params, names, rounds=4) -> Params`: coordinate descent. Each round tries each name at ×{0.5, 0.8, 1.25, 2.0} of its value and keeps any that lowers the loss.
+    - `check(dataset, md, params_path=PARAMS) -> list[str]`: the hindcast bands (below), returning one line per miss. An empty list is a pass.
+    - `main(argv)`, with two forms:
+      - `econ_sim_calibrate.py fit [--scenario ...] --out scripts/analysis/econ_sim_params.json` writes `{"structural": {...}, "behaviour": {scenario: {...}}}` and prints each scenario's loss and a target-versus-sim table;
+      - `econ_sim_calibrate.py check` prints the misses and exits 1 if there are any.
+  - In `econ_growth_sim.py`: `params_for(scenario: str, path=PARAMS) -> Params`. It applies the structural values, then the scenario's behaviour values, over the defaults. player_poor and player_union take player_rich's behaviour.
 
-- [ ] **Step 1: Write the failing hindcast tests** (spec §7 step 3, bands from §3 goal 4 and the owner's factor of 2):
+**The hindcast is a manual check, not a unit test** (my call; the owner can overrule at plan review). It runs on live mod values, so in CI any PR that retunes a PM, a cost tier or a cap tech could turn it red. It runs as `econ_sim_calibrate.py check`, documented in `python_tools.md`, after a mod change worth re-checking. The unit tests keep only what code changes can break.
+
+**The hindcast bands for `check`** (spec §7 step 3; bands from §3 goal 4 and the owner's factor of 2). At every target of player_rich, a miss is any of:
+- peasant share or unemployed share off by more than 0.10 (0.15 for ai_rich and ai_poor);
+- population or GDP per capita outside ×[0.5, 2];
+- the wage outside ×[0.5, 2].
+
+For player_union, the check is the last point's peasant share, within 0.10.
+
+- [ ] **Step 1: Write the failing tests.** These are the CI part: they check the code, not the fit.
 
 ```python
-class TestHindcast(unittest.TestCase):
+class TestScenarios(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.md, cls.ds = D.load_mod_data(), SC.load_dataset()
 
-    def check(self, name, share_band):
-        sc = SC.scenario(name, self.ds, self.md)
-        recs = {r.year: r for r in G.run(sc, self.md, G.params_for(name))}
-        for t in CAL.targets(sc, self.ds):
-            r = recs[t["year"]]
-            self.assertLessEqual(abs(r.peasants / r.workforce - t["peasant_share"]), share_band, t["year"])
-            self.assertLessEqual(abs(r.unemployed / r.workforce - t["unemployed_share"]), share_band, t["year"])
-            self.assertTrue(0.5 <= r.population / t["population"] <= 2.0, t["year"])
-            self.assertTrue(0.5 <= r.gdppc / t["gdppc"] <= 2.0, t["year"])
+    def test_scenarios_build_and_run_finite(self):
+        for name in SC.SCENARIOS:
+            sc = SC.scenario(name, self.ds, self.md)
+            self.assertEqual(sc.start_year, 1867, name)
+            last = G.run(sc, self.md, G.params_for(name))[-1]
+            self.assertTrue(all(math.isfinite(v) for v in (last.gdp, last.wage, last.points, last.peasants)), name)
 
-    def test_player_rich(self):
-        self.check("player_rich", 0.10)
-
-    def test_ai_rich(self):
-        self.check("ai_rich", 0.15)
-
-    def test_union_last_point_peasants(self):
-        sc = SC.scenario("player_union", self.ds, self.md)
-        last_point = self.ds["countries"]["4"]["points"][-1]
-        want = last_point["subsisting"] / last_point["workforce"]
-        year = int(last_point["date"][:4])
-        got = {r.year: r for r in G.run(sc, self.md, G.params_for("player_union"))}[year]
-        self.assertAlmostEqual(got.peasants / got.workforce, want, delta=0.10)
+    def test_start_matches_dataset(self):
+        sc = SC.scenario("player_rich", self.ds, self.md)
+        first = self.ds["countries"]["4"]["points"][0]["core"]
+        self.assertAlmostEqual(sc.peasants, first["peasants"], delta=1)
+        self.assertAlmostEqual(sc.wage_start, first["wage_per_worker"])
 
     def test_series_end_where_country_ends(self):     # Review Focus 2
         last_save_year = max(int(p["date"][:4]) for c in self.ds["countries"].values() for p in c["points"])
@@ -732,26 +747,44 @@ class TestHindcast(unittest.TestCase):
             sc = SC.scenario(name, self.ds, self.md)
             own_last = max(int(p["date"][:4]) for p in self.ds["countries"][str(sc.country_id)]["points"])
             self.assertEqual(sc.end_year, 2050 if own_last == last_save_year else own_last)
+
+    def test_structural_params_shared(self):
+        ps = {n: G.params_for(n) for n in SC.SCENARIOS}
+        for name in CAL.STRUCTURAL:
+            self.assertEqual(len({getattr(p, name) for p in ps.values()}), 1, name)
+
+    def test_check_reports_a_miss(self):
+        md, ds = self.md, self.ds
+        bad = Path(self.enterContext(tempfile.TemporaryDirectory())) / "p.json"
+        bad.write_text(json.dumps({"structural": {"price_level": 100.0}, "behaviour": {}}))
+        self.assertTrue(CAL.check(ds, md, params_path=bad))
 ```
 
-- [ ] **Step 2: Implement the scenario builders and see the tests fail** on the loss: the params file doesn't exist yet. `params_for` with no file returns defaults, and the bands fail.
+- [ ] **Step 2: Run them and see them fail** (`ModuleNotFoundError` for the calibrate module, or AttributeError for `scenario`).
 
-- [ ] **Step 3: Implement `econ_sim_calibrate.py` and fit.**
+- [ ] **Step 3: Implement the scenario builders, `econ_sim_calibrate.py` and `params_for`, then fit.**
 
 ```bash
-/home/jakef/src/Vic3TimelineExtended/.venv/bin/python scripts/analysis/econ_sim_calibrate.py \
+/home/jakef/src/Vic3TimelineExtended/.venv/bin/python scripts/analysis/econ_sim_calibrate.py fit \
   --scenario player_rich --scenario ai_rich --scenario ai_poor --out scripts/analysis/econ_sim_params.json
 ```
 
-Expected: a target-versus-sim table per scenario, with the loss falling each round.
+Expected: a target-versus-sim table per scenario, with the loss falling each round. Structural values are fitted on player_rich first, then each scenario's behaviour values.
 
-- [ ] **Step 4: Run the hindcast tests.** If a band fails after fitting, don't widen it. Report to the controller which target and year miss, and by how much. The miss is a finding about the model, for the owner, and decides whether the model needs another mechanism.
+- [ ] **Step 4: Run the tests and the check.**
+
+```bash
+/home/jakef/src/Vic3TimelineExtended/.venv/bin/python -m unittest test_econ_growth_sim 2> /tmp/u.txt; grep -E '^(Ran |OK|FAILED)' /tmp/u.txt
+/home/jakef/src/Vic3TimelineExtended/.venv/bin/python scripts/analysis/econ_sim_calibrate.py check
+```
+
+Expected: `OK`, and `check` exits 0. If `check` reports misses after fitting, don't widen a band. Report to the controller which target and year miss, and by how much. The miss is a finding about the model, for the owner, and decides whether the model needs another mechanism.
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add scripts/analysis/econ_sim_scenarios.py scripts/analysis/econ_sim_calibrate.py scripts/analysis/econ_sim_params.json test_econ_growth_sim.py scripts/analysis/econ_growth_sim.py
-git commit -m "Econ sim (#1034): scenarios from the playthrough, calibration and hindcast"
+git commit -m "Econ sim (#1034): scenarios from the playthrough, calibration and hindcast check"
 ```
 
 ### Task 9: CLI, sweep and the first sweep
@@ -820,7 +853,7 @@ Expected: a 24-row table in ≤ 60 s.
 
 **Files:**
 - Modify: `docs/systems/economy_growth_sim.md` (complete it)
-- Modify: `docs/guides/python_tools.md` (two entries: `econ_save_series.py`, `econ_growth_sim.py` + `econ_sim_calibrate.py`)
+- Modify: `docs/guides/python_tools.md` (two entries: `econ_save_series.py`; `econ_growth_sim.py` with `econ_sim_calibrate.py fit` and `check`, saying to run `check` after a mod change that touches PMs, cost tiers or construction techs)
 - Modify: `docs/README.md` (one index line)
 - Modify: `docs/vanilla/vanilla_economy_reference.md`: the four fixes in spec §11 at :109, :233, :347 and :417. Re-check the line numbers first.
 - Modify: `docs/vanilla/vanilla_pops_reference.md:277,284` (proportional hiring is a 0.1 gap in fill ratio).
