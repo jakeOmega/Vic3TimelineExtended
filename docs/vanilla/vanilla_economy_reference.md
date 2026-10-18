@@ -106,7 +106,8 @@ Each level of a building announces a desired employment per profession (`level_s
 
 - Pops with higher *qualifications* for the profession (see § 5.5) are preferred.
 - Buildings paying higher base wages outcompete buildings paying lower wages — this is what makes urban factories drain peasants out of subsistence.
-- Hiring rate is capped per tick by a defines default (`DEFAULT_MIN_HIRING_RATE` / `DEFAULT_MAX_HIRING_RATE`) plus per-building overrides (e.g. subsistence farms set `min_raise_to_hire = 0.30`).
+- Hiring rate is capped per tick by a defines default (`DEFAULT_MIN_HIRING_RATE` / `DEFAULT_MAX_HIRING_RATE`).
+- An employed pop moves to another building only for a wage at least `MIN_RAISE_TO_HIRE` (10%) above its current one. A building's own `min_raise_to_hire` overrides that premium for moving *into* it: subsistence buildings set 0.30, so the unemployed return to subsistence only for 30% over what they have.
 
 When the labor pool is too thin to fill all desired employment, the building runs understaffed and `workforce_scaled` outputs scale down. Unemployment is *not* always near zero — it becomes common once industrialization has eliminated subsistence farms (no buffer left) and especially when minimum-wage modifiers push base wages above what marginal buildings can profitably pay. In those regimes there are unemployed pops *and* unfilled vacancies simultaneously, with the wage-vs-profitability gap as the bottleneck.
 
@@ -230,7 +231,7 @@ Pops drift toward their `working_adult_ratio` *slowly*, on the order of years �
 
 ### 6.6 Government and military wages
 
-Bureaucrats and clergy are paid via `law_government_wages_*`; soldiers and officers via `law_military_wages_*`. These wage-level laws don't set absolute pay — they shift government/military pay *relative to the country's normal wage*. "High government wages" gives state employees a premium over the private sector; "low" puts them below.
+Government buildings pay the country's normal wage. There are no government-wage laws: the government and military wage levels are budget settings that multiply pay *relative to the normal wage*. A high level gives state employees a premium over the private sector, a low one puts them below.
 
 ### 6.7 Subsistence wages
 
@@ -344,7 +345,7 @@ Each combination of culture and country has a small weekly chance of triggering 
 
 ### 9.1 Vanilla vs this mod
 
-In **vanilla**, "Construction" is not a market good. Each country has a base **+10** construction points (rulers with the *engineer* trait grant another +5), with more added by Construction Sector buildings.
+In **vanilla**, "Construction" is not a market good. Each country gets free construction from the `country_gdp_construction` static modifier, 10 × (0.2 + 0.8 × GDP / 2M) capped at 10, so 2 to 10 points a week (rulers with the *engineer* trait grant another +5), with more added by Construction Sector buildings. The mod removes the free points (`REPLACE:country_gdp_construction = {}` in `common/static_modifiers/extra_modifiers.txt`).
 
 This **mod** turns Construction into a market good — built and consumed like any other. The sections below describe vanilla's behavior; for the mod's variant see `docs/systems/mod_systems.md`.
 
@@ -414,7 +415,7 @@ Ownership shifts via privatization (state → owner-building) and nationalizatio
 
 A second treasury fed by **a fraction of dividend income** from owner-class pops. The principal feeders:
 
-- **Capitalists** — primary source. Their pop type is configured `paid_private_wage = no` — all their income is dividends, not wages. Roughly 20% of capitalist dividends flow into IP at base; this rate is shifted by per-state per-pop-type modifiers like `state_capitalists_investment_pool_contribution_add` (e.g. +0.05 → ~25% — a meaningful change at scale).
+- **Capitalists** — primary source. Their pop type is configured `paid_private_wage = no` — all their income is dividends, not wages. 30% of capitalist dividends flow into IP at base in 1.14 (`base_values` in `00_code_static_modifiers.txt`); this rate is shifted by per-state per-pop-type modifiers like `state_capitalists_investment_pool_contribution_add` (e.g. +0.05 → ~25% — a meaningful change at scale).
 - **Aristocrats** — secondary source, also via the +20%-base / per-state-modifier pattern.
 - **Shopkeepers** — feed indirectly via certain ownership types on smaller buildings.
 - **Academics** — *do not contribute at baseline* in vanilla. The lever exists (`state_academics_investment_pool_contribution_add`), but it sits at 0 by default; only laws or events that move it positive opt academics in. Easy one to get wrong because the modifier exists in the catalog and looks symmetric with the capitalist lever — but symmetric existence ≠ symmetric activation.

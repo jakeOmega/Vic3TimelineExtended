@@ -289,11 +289,14 @@ sweep table reports binding years per constraint, so the owner can see that.
 
 ### 5.5 Mode classification (thresholds are parameters)
 
-- **Mode 1**: peasants + unemployed < 1% of the workforce, and labour binds,
-  and investment goes unspent (or would, with the queue full).
+- **Mode 1**: peasants + unemployed < 1% of the workforce, and labour binds.
+  The draft's third condition, investment going unspent, isn't modelled: the
+  sim spends all investment up to the cap (build-time ruling R28).
 - **Mode 2**: the country is rich (GDP per capita ≥ a threshold, or the year is
-  past the target turn), and peasants + unemployed > 10% of the workforce, and
-  the wage index sits at the floor.
+  past the target turn), and peasants + unemployed > 10% of the workforce. The
+  draft also required the wage index to sit at the floor. The calibration
+  series showed mode-2 slack alongside wages that rose 44× (build-time ruling
+  R34), so that condition is dropped.
 - Otherwise healthy.
 
 **The turn year** (my call) is the first year the wage index passes the
