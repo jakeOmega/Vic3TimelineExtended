@@ -631,7 +631,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--share-from", default=None, metavar="SERIES",
                     help="also price each other series' slack-band shapes at this series' share (rows marked"
                     " shape@SERIES): the script reads the owner country's slack, so a slice such as FRA builds at"
-                    " the owner's share (union)")
+                    " the owner's share (union). Meaningful only for slices of SERIES: choose them with --series")
     ap.add_argument("--others-scale", type=float, default=1.0,
                     help="scale the other construction-cost sources held at observed (0.32 ~ the ministries at"
                     " +1%% a level, #1038; default %(default)s)")

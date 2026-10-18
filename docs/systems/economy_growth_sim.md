@@ -17,7 +17,7 @@ Land nearer mode 2 than vanilla does, with neither happening often.
    - In those years each construction point cost 4.4–11× its base price under Construction Cost Scaling, and about 22× with the country's other construction-cost modifiers by 2045: (1 + 10) × (1 + 0.995).
    - The data counterfactual (below) re-prices the points France actually bought. By its arithmetic, the same money under a curve capped at +100% buys enough to absorb that slack by about 2042.
    - A parallel cause: service jobs collapsed. France's core held 79M of them in 1998 and 93M in 2004, then 41–64M from 2023, while GDP kept rising (see "What the model lacks").
-2. **The early period isn't the curve's doing.** Before 1954 the penalty was under +130%. By the counterfactual's arithmetic, even with no penalty at all France's core would still have held 27% slack in 1917 and 10% in 1954.
+2. **The early period isn't the curve's doing.** Before 1954 the penalty was under +130%. By the counterfactual's arithmetic, even with no penalty at all France's core would still have held 27% slack in 1917 and 10% in 1954 (with the other construction-cost sources as played; 27.7% and 11.6% with the ministries at +1% a level).
    - The owner's "peasants near zero by the 1950s" needs other levers: early construction volume, set by the construction sector's labour per point (about 12× vanilla's), the investment share and the land laws.
 3. **Jobs per construction point fell about sevenfold,** from 7 in 1867–1917 to about 1 from 1990 on, as late buildings cost more points and employ fewer people a level. That fall is designed into the PM ladders (spec § 4.3). It's why the same penalty bites harder late.
 4. **Other construction-cost modifiers double the curve for this player.** They compound with it: the Ministries of the Environment and of Consumer Protection at +5% a level each when the playthrough ran, global warming and green building codes added +82% in 1998 and +100% in 2045. Under the +100% cap, that player would still pay about 4× per point. The ministries now carry +1% a level (a follow-up to this change): both at level 9 add 18%, about 2.4× per point with nothing else.
@@ -54,7 +54,7 @@ Figures are against the playthrough's data, with the other construction-cost sou
 | +100% cap (#1037) | 32.6% | 16.8% | 20.2% | 14.9% | short 33.5% | 2033 | short 8.0% | 25.0% |
 | +200% cap | 34.0% | 23.5% | 29.6% | 33.8% | 3.0% | never | 22.8% | 25.4% |
 | **Slack part (shipped): the EU's slack** | **11.6%** | **1.2%** | **short 0.8%** | **short 22.5%** | **short 30.7%** | **2004** | **3.5%** | **8.2%** |
-| Slack part, if each read its own slack | 12.5% | 5.6% | 10.0% | 8.0% | 1.6% | never | 28.8% | 8.2% |
+| Slack part, if the brake followed the core's slack | 12.5% | 5.6% | 10.0% | 8.0% | 1.6% | never | 28.8% | 8.2% |
 
 - **Reading the shipped row:**
   - The EU as a whole ends at 3.5% slack, with no shortage. That counts its slack wherever it is, so it holds if workers move to where the jobs are.
@@ -90,7 +90,7 @@ This arithmetic flatters any rule aimed at a band of slack: points become jobs i
 - how far the price moves;
 - how much hangs on where the slack is read.
 
-**Open: where to read the slack.** The owner decides. Keeping the country-wide read relies on internal migration. Weighting each state's slack by its GDP or building levels would make the brake follow the economic core. Counting only incorporated states would leave colonies out but keep annexed regions. A play-test of a rich core with poor annexed or colonial states settles it.
+**Where to read the slack: country-wide (owner, 2026-10-18).** It relies on internal migration toward the core's wages, and it also gives a poor periphery cheap construction. A play-test of a rich core with poor annexed or colonial states checks it. If the core runs short of labour while the periphery idles, the next step is to weight each state's slack by its GDP or building levels, so the brake follows the economic core. Counting only incorporated states, which drops colonies but keeps annexed regions, is the other option.
 
 The Nation tab's Construction Cost row breaks the cost of a point into factors:
 - the scaling: its GDP part, the share that applies, the slack, peasants and unemployed;

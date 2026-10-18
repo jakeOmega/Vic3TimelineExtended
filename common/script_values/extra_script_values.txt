@@ -2568,26 +2568,27 @@ te_cc_other_sources = {
 	}
 }
 
-# GDP per capita and the GDP part as the yearly pulse last read them (te_cc_yearly_update), 0 before one: the
-# tooltip shows the scaling in force, not today's curve.
+# GDP per capita and the GDP part as the yearly pulse last read them (te_cc_yearly_update), so the tooltip shows the
+# scaling in force, not today's curve. Before the country's first reading under this rule, today's: the carried
+# share (te_cc_slack_factor_carried) is relative to today's GDP part.
 te_cc_gdppc_now = {
-	value = 0
+	value = country_gdp_per_capita
 	if = {
-		limit = { has_variable = te_cc_gdppc }
+		limit = { has_variable = te_cc_slack_factor }
 		value = var:te_cc_gdppc
 	}
 }
 te_cc_gdp_part_now = {
-	value = 0
+	value = construction_cost_scaling_gdp_mult
 	if = {
-		limit = { has_variable = te_cc_gdp_part }
+		limit = { has_variable = te_cc_slack_factor }
 		value = var:te_cc_gdp_part
 	}
 }
 
 # A point's cost as a multiple of its base, in force now (one plus every construction-cost modifier), and its two
 # factors: the scaling (1 + the GDP part x the applying share, as the pulse set it; before the country's first
-# pulse under this rule, the X in force), and the rest, their quotient. The pulse sets the scaling to multiply with
+# reading under this rule, today's GDP part x the carried share, the X in force), and the rest, their quotient. The pulse sets the scaling to multiply with
 # the other sources as they stood then, so after one of them changes the quotient is not exactly one plus them,
 # but the product is always the cost in force, and the engine's breakdown adds up to it less one.
 te_cc_total_factor = {
@@ -2596,17 +2597,9 @@ te_cc_total_factor = {
 	min = 0
 }
 te_cc_scaling_factor = {
-	value = 1
-	if = {
-		limit = { has_variable = te_cc_gdp_part }
-		add = {
-			value = var:te_cc_gdp_part
-			multiply = te_cc_slack_factor_now
-		}
-	}
-	else = {
-		add = construction_cost_scaling_mult
-	}
+	value = te_cc_gdp_part_now
+	multiply = te_cc_slack_factor_now
+	add = 1
 }
 te_cc_others_factor = {
 	value = te_cc_total_factor

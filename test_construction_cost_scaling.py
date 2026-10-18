@@ -51,6 +51,13 @@ class TheArithmetic(unittest.TestCase):
         self.assertEqual(_value(self.values, "te_cc_others_factor"),
                          "value = te_cc_total_factor divide = { value = te_cc_scaling_factor min = 1 }")
         self.assertIn("modifier:country_construction_goods_cost_mult", _value(self.values, "te_cc_modifier_total"))
+        # the scaling as the pulse set it; before the first reading, today's GDP part x the carried share (the X in force)
+        self.assertEqual(_value(self.values, "te_cc_scaling_factor"),
+                         "value = te_cc_gdp_part_now multiply = te_cc_slack_factor_now add = 1")
+        for name, var, live in (("te_cc_gdp_part_now", "te_cc_gdp_part", "construction_cost_scaling_gdp_mult"),
+                                ("te_cc_gdppc_now", "te_cc_gdppc", "country_gdp_per_capita")):
+            self.assertEqual(_value(self.values, name), "value = " + live + " if = { limit = { has_variable = "
+                             "te_cc_slack_factor } value = var:" + var + " }")
         self.assertIn("modifier:goods_input_construction_mult", _value(self.values, "te_cc_modifier_total"))
 
     def test_target_and_easing(self):
