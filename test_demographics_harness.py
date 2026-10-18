@@ -423,13 +423,35 @@ class TestHarness(unittest.TestCase):
                rates=(qf, qm, mmr, tfr, prof))
         head = {"pop": 2_010_000, "war": 500, "kills": 0, "mig": -3000, "tfr": tfr, "mmr": mmr,
                 "m_inf": mult["infection"], "m_ext": mult["external"], "m_chr": mult["chronic"],
-                "m_work_f": work_f, "m_work_m": work_m, "profile": prof}
+                "m_work_f": work_f, "m_work_m": work_m, "inf_ad": M.infection_adult(inp), "profile": prof}
         lines = H.format_replay("TEST", 1837, before, head, after)
         self.assertEqual(len(lines), 31)
         self.assertIn("pop=2_10_0", lines[0])
         blocks = H.parse_replay(lines)
         self.assertEqual(len(blocks), 1)
         self.assertLess(H.replay_block(blocks[0]), 0.001)
+
+    def test_replay_reads_the_adults_infection_factor(self):
+        """#1045: a state with medicine logs its adults' infection factor, and a replay that took it as 1 is off. A poor
+        state half reached by medicine, where the factor moves the most deaths in a year (a few per thousand at 45-64)."""
+        inp = M.Inputs(sol=5, literacy=0.0, urban_share=0.1,
+                       mods={P.ACCESS_TYPE: 0.625 - P.BASE_ACCESS, P.TREATMENT_TYPE["infection"]: 0.8})
+        self.assertAlmostEqual(M.infection_adult(inp), 0.6)
+        before = M.seed(inp, 1836, 2_000_000)
+        after = copy.deepcopy(before)
+        qf, qm, mmr = M.group_rates(inp)
+        mult = M.cause_multipliers(inp)
+        work_f, work_m = M.work_split(inp, mult["work"])
+        tfr = M.fertility(inp, 40)["tfr"]
+        prof = M.migrant_profile(inp)
+        M.step(after, inp, 1837, engine_pop=2_000_000, rates=(qf, qm, mmr, tfr, prof))
+        head = {"pop": 2_000_000, "war": 0, "kills": 0, "mig": 0, "tfr": tfr, "mmr": mmr,
+                "m_inf": mult["infection"], "m_ext": mult["external"], "m_chr": mult["chronic"],
+                "m_work_f": work_f, "m_work_m": work_m, "inf_ad": M.infection_adult(inp), "profile": prof}
+        self.assertLess(H.replay_block(H.parse_replay(H.format_replay("TEST", 1837, before, head, after))[0]), 0.001)
+        head["inf_ad"] = 1.0
+        self.assertGreater(H.replay_block(H.parse_replay(H.format_replay("TEST", 1837, before, head, after))[0]),
+                           H.DEFAULT_TOLERANCE)
 
     def test_replay_catches_a_wrong_step(self):
         inp = M.Inputs()
@@ -442,7 +464,7 @@ class TestHarness(unittest.TestCase):
         work_f, work_m = M.work_split(inp, mult["work"])
         head = {"pop": 1_000_000, "war": 0, "kills": 0, "mig": 0, "tfr": M.fertility(inp, 40)["tfr"],
                 "mmr": mmr, "m_inf": mult["infection"], "m_ext": mult["external"], "m_chr": mult["chronic"],
-                "m_work_f": work_f, "m_work_m": work_m, "profile": M.migrant_profile(inp)}
+                "m_work_f": work_f, "m_work_m": work_m, "inf_ad": M.infection_adult(inp), "profile": M.migrant_profile(inp)}
         blocks = H.parse_replay(H.format_replay("TEST", 1837, before, head, after))
         self.assertGreater(H.replay_block(blocks[0]), 0.2)
 
@@ -471,7 +493,7 @@ class TestHarness(unittest.TestCase):
                rates=(qf, qm, mmr if logged_mmr else 0.0, tfr, prof))
         head = {"pop": pop_after, "war": war, "kills": kills, "mig": mig, "tfr": tfr, "mmr": mmr,
                 "m_inf": mult["infection"], "m_ext": mult["external"], "m_chr": mult["chronic"],
-                "m_work_f": work_f, "m_work_m": work_m, "profile": prof}
+                "m_work_f": work_f, "m_work_m": work_m, "inf_ad": M.infection_adult(inp), "profile": prof}
         return before, head, after
 
     def _step_lines(self, pop=2_000_000, pop_after=2_010_000, war=500, mig=-3000, logged_mmr=True,

@@ -1399,7 +1399,7 @@ te_demog_access_target = {
 te_demog_treatment_target_infection = {
 	value = modifier:state_infection_treatment_add
 	min = 0
-	max = 0.95
+	max = 0.99
 }
 te_demog_treatment_target_maternal = {
 	value = modifier:state_maternal_treatment_add
@@ -1485,6 +1485,14 @@ te_demog_mult_infection = {
 	multiply = te_demog_f_infection_literacy
 	multiply = te_demog_f_infection_crowding
 	multiply = te_demog_f_infection_malaria
+}
+
+# State scope: the adults' infection factor (#1045; demographics_model.infection_adult): infection at ages 15-64
+# takes medicine a second time at 0.8, 1 - 0.8 x access x treatment, on top of its multiplier.
+te_demog_infection_adult = {
+	value = te_demog_f_infection_medicine
+	multiply = 0.8
+	add = 0.2
 }
 
 # State scope: work's laws factor (demographics_model.cause_factors), on the step's stored inputs.

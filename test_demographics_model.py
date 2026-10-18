@@ -266,6 +266,36 @@ class TestMedicine(unittest.TestCase):
         mods = {P.ACCESS_TYPE: 5.0, P.TREATMENT_TYPE["chronic"]: 5.0}
         self.assertAlmostEqual(M.medicine(M.Inputs(mods=mods), "chronic"), 1 - P.TREATMENT_CAP["chronic"])
 
+    def test_adults_infection_takes_medicine_twice(self):
+        """#1045: infection at 15-64 x (1 - weight x access x treatment) more; infants, children and the old, and every
+        other cause, keep their rates; with no treatment the factor is 1."""
+        self.assertEqual(M.infection_adult(M.Inputs(sol=11, literacy=0.35)), 1.0)
+        mods = {P.ACCESS_TYPE: 1.0, P.TREATMENT_TYPE["infection"]: 0.9}
+        inp = M.Inputs(sol=40, literacy=0.99, mods=mods)
+        adult = M.infection_adult(inp)
+        self.assertAlmostEqual(adult, 1 - P.INFECTION_ADULT_MEDICINE * 0.9)
+        m = M.cause_multipliers(inp)
+        work_f, work_m = M.work_split(inp, m["work"])
+        with_f, with_m = M.rates_from_multipliers(m, work_f, work_m, adult)
+        plain_f, plain_m = M.rates_from_multipliers(m, work_f, work_m, 1.0)
+        lo, hi = P.INFECTION_ADULT_AGES
+        for g, (start, _n) in enumerate(P.GROUPS):
+            for sx, got, plain in (("f", with_f, plain_f), ("m", with_m, plain_m)):
+                cut = (1 - adult) * P.INFECTION[sx][g] * m["infection"] if lo <= start < hi else 0.0
+                self.assertAlmostEqual(plain[g] - got[g], cut, places=9, msg=f"{sx} {start}")
+        self.assertEqual(M.INFECTION_ADULT_GROUPS, frozenset(range(P.group_of(lo), P.group_of(hi))))
+        self.assertEqual(M.INFECTION_ADULT_BANDS, frozenset(range(lo // 5, hi // 5)))
+
+    def test_infection_treatment_reaches_its_cap_by_era_12(self):
+        """#1045 (owner, 2026-10-18): the base game's carriers stop at 0.94 by era 7, the rich world of eras 9-10; era 11's
+        and 12's lines take infection's treatment to the cap."""
+        early = {"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
+                 "antibiotic_mass_production"}
+        late = early | {"personalized_medicine", "advanced_nanofabrication"}
+        t = P.TREATMENT_TYPE["infection"]
+        self.assertAlmostEqual(DM.totals(CARRIERS, early, (), {})[t], 0.94)
+        self.assertAlmostEqual(DM.totals(CARRIERS, late, (), {})[t], P.TREATMENT_CAP["infection"])
+
     def test_plain_terms_are_floored(self):
         inp = M.Inputs(mods={"state_work_mortality_mult": -0.9})
         self.assertEqual(M.plain_multiplier(inp, "work"), P.MORTALITY_MULT_FLOOR)

@@ -197,6 +197,7 @@ te_demog_lx_sweep_run = {
 	set_local_variable = { name = te_dg_lx_b50 value = 0 }
 	# the treated parts' deaths by cause at their biological ages (te_demog_lx_causes_at)
 	set_local_variable = { name = te_dg_lx_ce_inf value = 0 }
+	set_local_variable = { name = te_dg_lx_ce_infa value = 0 }
 	set_local_variable = { name = te_dg_lx_ce_ext value = 0 }
 	set_local_variable = { name = te_dg_lx_ce_chr value = 0 }
 	set_local_variable = { name = te_dg_lx_ce_wf value = 0 }

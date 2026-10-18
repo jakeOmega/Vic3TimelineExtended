@@ -20,6 +20,11 @@ except ImportError:  # pragma: no cover
 
 N = P.RING_YEARS
 assert P.COHORT_WIDTH == 1, "only one-year cohorts are built (spec §1, §13)"
+# #1045: the age groups, and the five-year bands of the Causes of Death estimate, whose infection takes the adults' factor
+_ADULT_FROM, _ADULT_TO = P.INFECTION_ADULT_AGES
+assert _ADULT_FROM % 5 == 0 and _ADULT_TO % 5 == 0 and 5 <= _ADULT_FROM < _ADULT_TO <= 5 * (P.BANDS - 1)
+INFECTION_ADULT_GROUPS = frozenset(g for g, (start, _n) in enumerate(P.GROUPS) if _ADULT_FROM <= start < _ADULT_TO)
+INFECTION_ADULT_BANDS = frozenset(range(_ADULT_FROM // 5, _ADULT_TO // 5))
 
 
 @dataclass
@@ -149,6 +154,14 @@ def cause_factors(inp):
     return {cause: {f: one(f, cause) for f in factors} for cause, factors in P.CAUSE_FACTORS.items()}
 
 
+def infection_adult(inp):
+    """The adults' infection factor (#1045): medicine a second time at P.INFECTION_ADULT_MEDICINE, 1 - weight x access x
+    treatment, on top of the infection multiplier in INFECTION_ADULT_GROUPS (the script's te_demog_infection_adult, which
+    computes it as the medicine factor x the weight + 1 - the weight)."""
+    w = P.INFECTION_ADULT_MEDICINE
+    return medicine(inp, "infection") * w + (1 - w)
+
+
 def cause_multipliers(inp):
     """One multiplier per cause from the state's inputs; 1.0 at the base (§2.4): the product of its factors, in
     P.CAUSE_FACTORS' order, as the script's te_demog_mult_<cause> computes it."""
@@ -169,18 +182,20 @@ def poverty_infection(sol):
     return 1 + (P.POVERTY_INFECTION_AT_FLOOR - 1) * t
 
 
-def rates_from_multipliers(mult, work_f, work_m):
+def rates_from_multipliers(mult, work_f, work_m, adult):
     """Yearly death probability per 100k for each age group, women and men.
 
     mult: cause -> multiplier (infection, external, chronic; work is folded into
-    work_f / work_m, which already carry the split between the sexes). The script's
+    work_f / work_m, which already carry the split between the sexes). adult: the adults'
+    infection factor (infection_adult), on infection in INFECTION_ADULT_GROUPS. The script's
     te_demog_enter_group computes the same sum.
     """
     qf, qm = [], []
     for g in range(len(P.GROUPS)):
-        qf.append(min(100000.0, P.INFECTION["f"][g] * mult["infection"] + P.WORK_BASE[g] * work_f
+        inf = mult["infection"] * adult if g in INFECTION_ADULT_GROUPS else mult["infection"]
+        qf.append(min(100000.0, P.INFECTION["f"][g] * inf + P.WORK_BASE[g] * work_f
                       + P.EXTERNAL["f"][g] * mult["external"] + P.CHRONIC["f"][g] * mult["chronic"]))
-        qm.append(min(100000.0, P.INFECTION["m"][g] * mult["infection"] + P.WORK_BASE[g] * work_m
+        qm.append(min(100000.0, P.INFECTION["m"][g] * inf + P.WORK_BASE[g] * work_m
                       + P.EXTERNAL["m"][g] * mult["external"] + P.CHRONIC["m"][g] * mult["chronic"]))
     return qf, qm
 
@@ -201,7 +216,7 @@ def group_rates(inp):
     """Group rates for women and men, and maternal deaths per 100k births."""
     m = cause_multipliers(inp)
     work_f, work_m = work_split(inp, m["work"])
-    qf, qm = rates_from_multipliers(m, work_f, work_m)
+    qf, qm = rates_from_multipliers(m, work_f, work_m, infection_adult(inp))
     return qf, qm, m["maternal"] * P.MATERNAL_PER_100K_BIRTHS
 
 
@@ -280,14 +295,22 @@ def band_sums(ring):
     return bf, bm
 
 
-def cause_deaths_estimate(bands_f, bands_m, mult, work_f, work_m, rates=None):
+def cause_deaths_estimate(bands_f, bands_m, mult, work_f, work_m, adult, rates=None):
     """Each natural cause's deaths over a year at the step's multipliers (mult: infection, external, chronic; work_f and
-    work_m the work multiplier with each sex's split, as the sweep takes them), from people by band: the script's
+    work_m the work multiplier with each sex's split, as the sweep takes them; adult the adults' infection factor on
+    INFECTION_ADULT_BANDS, which hold whole age groups), from people by band: the script's
     te_demog_cause_deaths_estimate."""
     r = rates or band_cause_rates()
     out = {}
     for c in ("infection", "external", "chronic"):
-        out[c] = sum(bands_f[b] * r[c]["f"][b] + bands_m[b] * r[c]["m"][b] for b in range(P.BANDS)) * mult[c] / 100000.0
+        def part(bands):
+            return sum(bands_f[b] * r[c]["f"][b] + bands_m[b] * r[c]["m"][b] for b in bands)
+        if c == "infection":
+            rest = [b for b in range(P.BANDS) if b not in INFECTION_ADULT_BANDS]
+            x = part(rest) + part(sorted(INFECTION_ADULT_BANDS)) * adult
+        else:
+            x = part(range(P.BANDS))
+        out[c] = x * mult[c] / 100000.0
     out["work"] = (sum(bands_f[b] * r["work"]["f"][b] for b in range(P.BANDS)) * work_f
                    + sum(bands_m[b] * r["work"]["m"][b] for b in range(P.BANDS)) * work_m) / 100000.0
     return out
@@ -1271,7 +1294,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             mult = cause_multipliers(inp)
             work_f, work_m = work_split(inp, mult["work"])
             k = 1 + deaths_scale
-            qf, qm = rates_from_multipliers({c: v * k for c, v in mult.items()}, work_f * k, work_m * k)
+            qf, qm = rates_from_multipliers({c: v * k for c, v in mult.items()}, work_f * k, work_m * k,
+                                            infection_adult(inp))
         else:
             qf = [min(100000.0, q * (1 + deaths_scale)) for q in qf]
             qm = [min(100000.0, q * (1 + deaths_scale)) for q in qm]
@@ -1282,7 +1306,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         cm = cause_multipliers(inp)
         cwf, cwm = work_split(inp, cm["work"])
         ck = 1 + deaths_scale
-        causes_raw = cause_deaths_estimate(bands_f, bands_m, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck)
+        causes_raw = cause_deaths_estimate(bands_f, bands_m, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck,
+                                           infection_adult(inp))
     maternal = 0.0
     s = ring.scale
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
@@ -1345,7 +1370,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     if lx is not None:
         deaths += lx_pool_deaths(ring, lx, qf, qm, qf0, qm0)
         # the late sweep counts its own deaths by cause, the treated at their biological ages (te_demog_lx_cause_deaths)
-        causes_raw = lx_cause_deaths(lx, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck)
+        causes_raw = lx_cause_deaths(lx, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck, infection_adult(inp))
     else:
         pq_f, pq_m = qf[-1] / 100000.0, qm[-1] / 100000.0
         deaths += ring.pool_f * pq_f + ring.pool_m * pq_m
@@ -1431,30 +1456,37 @@ def rejuvenation(inp):
 
 # The late sweep's deaths by cause (te_demog_lx_cause_deaths): the treated parts' people x each cause's base rate at their
 # biological age group, summed over the step's slots and the pool (lx_causes_at); work's women and men apart, since the
-# multiplier splits by sex.
-LX_CAUSE_SUMS = ("infection", "external", "chronic", "work_f", "work_m")
+# multiplier splits by sex, and the adults' infection apart from the rest (#1045), since it takes the adults' factor.
+LX_CAUSE_SUMS = ("infection", "infection_adult", "external", "chronic", "work_f", "work_m")
 
 
 def lx_causes_at(lx, ft, mt, gt):
     """A treated part's people at its biological age group gt into the step's cause sums (te_demog_lx_causes_at)."""
     ce = lx["CE"]
     for c, table in (("infection", P.INFECTION), ("external", P.EXTERNAL), ("chronic", P.CHRONIC)):
-        ce[c] += ft * table["f"][gt] + mt * table["m"][gt]
+        key = "infection_adult" if c == "infection" and gt in INFECTION_ADULT_GROUPS else c
+        ce[key] += ft * table["f"][gt] + mt * table["m"][gt]
     ce["work_f"] += ft * P.WORK_BASE[gt]
     ce["work_m"] += mt * P.WORK_BASE[gt]
 
 
-def lx_cause_deaths(lx, mult, work_f, work_m):
+def lx_cause_deaths(lx, mult, work_f, work_m, adult):
     """Each natural cause's deaths over the late sweep (te_demog_lx_cause_deaths), in place of cause_deaths_estimate's
     calendar bands: the untreated by their age group (the life tables' sums, the pool's in the last), the treated at their
-    biological one (lx_causes_at), x the step's multipliers. The sweep's own deaths, so exact but for the 100,000 cap on
-    a group's rate."""
+    biological one (lx_causes_at), x the step's multipliers, the adults' infection x adult too. The sweep's own deaths,
+    so exact but for the 100,000 cap on a group's rate."""
     ce = lx["CE"]
     out = {}
     for c, table in (("infection", P.INFECTION), ("external", P.EXTERNAL), ("chronic", P.CHRONIC)):
-        x = ce[c]
+        x, xa = ce[c], 0.0
         for g in range(len(P.GROUPS)):
-            x += lx["U_f"][g] * table["f"][g] + lx["U_m"][g] * table["m"][g]
+            u = lx["U_f"][g] * table["f"][g] + lx["U_m"][g] * table["m"][g]
+            if c == "infection" and g in INFECTION_ADULT_GROUPS:
+                xa += u
+            else:
+                x += u
+        if c == "infection":
+            x += (ce["infection_adult"] + xa) * adult
         out[c] = x * mult[c] / 100000.0
     xf, xm = ce["work_f"], ce["work_m"]
     for g in range(len(P.GROUPS)):

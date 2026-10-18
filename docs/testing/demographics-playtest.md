@@ -749,3 +749,25 @@ ownership and inequality are the state's own; the law, tax and economic terms ar
    owner's laws, not yours.
 3. **Land Tenure's hover** gives the state's share of peasants and farmers as a percentage (`te_dg_agr_share`).
 4. **Continuity of Title.** While it holds (`inheritance_events.6`), the note under the rows shows.
+
+## Adults' infection and the late carriers (#1045, 2026-10-18)
+
+Infection at ages 15-64 takes medicine a second time (`te_demog_infection_adult`, the local `te_dg_inf_ad`), so a rich
+state's adults die of infection at the rich world's rate in eras 9-10, and Personalized Medicine (era 11) and Advanced
+Nanofabrication (era 12) take infection treatment to its new cap, 0.99. `test_demographics_registry` and
+`test_demographics_cause_deaths` hold the life table, the Causes of Death estimate and the late sweep's count to the
+model; `demographics_harness.py lategame` prints the 15-44s' infection deaths by era. No new engine fact (a local and a
+script value, as the other factors), so no self-check. What only the game can show:
+
+1. **The hover's line (Display only or Full).** In a state with antibiotics, the subtab's Infection and Hunger hover
+   ends its factors with "Aged 15–64, a further ×0.xx"; a state with no infection treatment (an 1836 colony) shows no
+   such line. A rich state reads about ×0.25; a state whose last count came before the change reads its stored
+   medicine, so the line is right at once, while its life expectancy and deaths move only at its next count.
+2. **The pie (a rich country, Display only or Full).** Infection and Hunger's slice is smaller than before: today it
+   should sit well under chronic illness and accidents and violence in a rich state.
+3. **The technologies' tooltips.** Personalized Medicine shows Treatment of Infection +3% beside its chronic line;
+   Advanced Nanofabrication +2%.
+4. **Immortals (Full or Display only, a country with Biological Immortality and everyone in care).** The state's
+   Leading Cause is Accidents and Violence, and infection is a sliver (the harness: 3% of deaths at 50 years).
+5. **The outline.** The Demographics tab's twenty-year outline moves with the state figures (the country's factor,
+   `te_dg_inf_ad`, set at each count beside access).

@@ -490,7 +490,12 @@ BASE_ACCESS = 0.4
 # chronic 0.85: phase 2 step 4 (augmentation; the modifier-types design note). Headroom: it binds nowhere today, since
 # the most chronic treatment reachable is 0.80 (telemedicine 0.2, personalized_medicine 0.2, modern_pharmaceuticals 0.3,
 # Medical Augmentation Only 0.10), within the old 0.8 (final review m6, batch 3 m3).
-TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.85}
+# infection 0.99 (#1045; was 0.95): the base game's carriers reach 0.94 by era 7 (medical_degrees 0.03, pharmaceuticals
+# 0.07, modern_nursing 0.08, antibiotics 0.4, modern_vaccines 0.25, antibiotic_mass_production 0.11), which matches the
+# rich world of eras 9-10; the late carriers take the rest (personalized_medicine 0.03 in era 11, advanced_nanofabrication
+# 0.02 in era 12), so infection's medicine halves by era 11 and falls to a sixth by era 12 (owner, 2026-10-18: match the
+# rich world in eras 9-10, well below it after).
+TREATMENT_CAP = {"infection": 0.99, "maternal": 0.99, "chronic": 0.85}
 # Every other law, technology or institution term is 1 + its types' sum, at least this.
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
@@ -507,6 +512,17 @@ POVERTY_INFECTION_FLOOR_SOL = 5    # POVERTY_INFECTION_AT_FLOOR at and below
 POVERTY_INFECTION_AT_FLOOR = 1.75
 SOL_CHRONIC_AT_HIGH = 0.85
 LITERACY_INFECTION_WEIGHT = 0.3   # mothers' literacy: infection x (1 - 0.3 x literacy)
+# Adults' infection (#1045): medicine reaches the infection deaths of the ages INFECTION_ADULT_AGES (from, to) a second
+# time, at this weight, so there infection is x (1 - INFECTION_ADULT_MEDICINE x access x treatment) more than its
+# multiplier. The 1836 schedule's adult deaths (750 a year per 100,000 at 15-44) are mostly tuberculosis, typhoid and
+# pneumonia, which antibiotics and vaccines all but ended, so the one multiplier that fits the infants' anchor left the
+# rich state's 15-44s at 19 per 100,000 against the rich world's 3-6 (and as the top killer of immortals, whose bodies
+# sit at those ages). Infants keep the plain multiplier (their rate also carries the perinatal deaths, and the infant
+# anchors are fitted to it), and so do the old (pneumonia still kills the rich world's old). Fitted on
+# demographics_late.py's rich state today: 15-44s' infection deaths 4.7 per 100,000 a year, 35q15 from infection 0.0017
+# (the rich world's 0.001-0.002). The bounds sit on the age groups' and the bands' five-year edges.
+INFECTION_ADULT_AGES = (15, 65)
+INFECTION_ADULT_MEDICINE = 0.8
 # Crowding (owner, 2026-10-10: a function of how crowded the state is, not a switch): infection rises by the
 # state's migration penalty from crowding. migration_crowding takes state_migration_pull_mult -0.1 a unit of its
 # multiplier (extra_modifiers.txt), which is 4.5 r^2 below ten times the floor density and linear above

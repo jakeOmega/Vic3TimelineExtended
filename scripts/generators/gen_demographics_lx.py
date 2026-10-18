@@ -168,17 +168,23 @@ def group_flush(o):
 LX_CAUSES = (("inf", P.INFECTION), ("ext", P.EXTERNAL), ("chr", P.CHRONIC))
 
 
+def _sum_name(short, g):
+    """The cause's sum a group's deaths go to: the adults' infection apart (#1045), since it takes te_dg_inf_ad too."""
+    return "infa" if short == "inf" and g in M.INFECTION_ADULT_GROUPS else short
+
+
 def causes_at(o):
     o("# THIS = a state, in the late sweep: a treated part (te_dg_lx_ft, te_dg_lx_mt) into the step's deaths by cause at its")
     o("# biological rate age local_var:te_dg_lx_rb (demographics_model.lx_causes_at): its people x each cause's base rate")
-    o("# there, the multipliers left for te_demog_lx_cause_deaths; work's women and men apart.")
+    o("# there, the multipliers left for te_demog_lx_cause_deaths; work's women and men apart, and infection at the adults'")
+    o("# ages (te_dg_lx_ce_infa) apart from the rest.")
     o("te_demog_lx_causes_at = {")
 
     def leaf(o, g):
         for short, table in LX_CAUSES:
             rf, rm = table["f"][g], table["m"][g]
             if rf or rm:
-                o(f"change_local_variable = {{ name = te_dg_lx_ce_{short} add = {{ value = local_var:te_dg_lx_ft "
+                o(f"change_local_variable = {{ name = te_dg_lx_ce_{_sum_name(short, g)} add = {{ value = local_var:te_dg_lx_ft "
                   f"multiply = {_lit(rf)} add = {{ value = local_var:te_dg_lx_mt multiply = {_lit(rm)} }} }} }}")
         w = P.WORK_BASE[g]
         if w:
@@ -195,19 +201,30 @@ def cause_deaths(o):
     o("# THIS = a state after the late sweep (te_demog_lx_sweep_run, after te_demog_lx_finish's last flush): each natural cause's")
     o("# deaths over the year (demographics_model.lx_cause_deaths), in place of te_demog_cause_deaths_estimate's, which counts")
     o("# everyone at the calendar age: the untreated by their age group (the life tables' sums te_dg_lxa_u<f|m><group>, the")
-    o("# pool's in the last), the treated at their biological one (te_demog_lx_causes_at), x the step's multipliers. The")
+    o("# pool's in the last), the treated at their biological one (te_demog_lx_causes_at), x the step's multipliers, infection")
+    o("# at the adults' ages x te_dg_inf_ad too. The")
     o("# sweep's own deaths, so exact but for the 100,000 cap on a group's rate; te_demog_cause_deaths_store scales them.")
     o("te_demog_lx_cause_deaths = {")
+
+    def group_terms(short, table, keep):
+        for g in groups:
+            rf, rm = table["f"][g], table["m"][g]
+            if (rf or rm) and keep(_sum_name(short, g)):
+                o(f"add = {{ value = local_var:te_dg_lxa_uf{g} multiply = {_lit(rf)} "
+                  f"add = {{ value = local_var:te_dg_lxa_um{g} multiply = {_lit(rm)} }} }}")
+
     for short, table in LX_CAUSES:
         o("set_local_variable = {")
         o(f"name = te_dg_ce_{short}")
         o("value = {")
         o(f"value = local_var:te_dg_lx_ce_{short}")
-        for g in groups:
-            rf, rm = table["f"][g], table["m"][g]
-            if rf or rm:
-                o(f"add = {{ value = local_var:te_dg_lxa_uf{g} multiply = {_lit(rf)} "
-                  f"add = {{ value = local_var:te_dg_lxa_um{g} multiply = {_lit(rm)} }} }}")
+        group_terms(short, table, lambda name: name == short)
+        if short == "inf":
+            o("add = {")
+            o("value = local_var:te_dg_lx_ce_infa")
+            group_terms(short, table, lambda name: name == "infa")
+            o("multiply = local_var:te_dg_inf_ad")
+            o("}")
         o(f"multiply = local_var:te_dg_m_{short}")
         o("divide = 100000")
         o("}")

@@ -8,6 +8,7 @@ multipliers, Health Care Access and childbirth's rate people- or births-weighted
 the script through test_demographics_registry's _Engine against the model.
 """
 
+import dataclasses
 import re
 import sys
 import unittest
@@ -140,6 +141,20 @@ class TestScript(unittest.TestCase):
         eng, _ring, figures, _pop = self.cohort.step_both(flows=flows)
         self.check(eng, figures, war=400.0, kills=60.0)
 
+    def test_adults_infection_takes_its_factor(self):
+        """#1045: with medicine, infection at 15-64 takes te_dg_inf_ad too, in the rates and in the estimate."""
+        inp = dataclasses.replace(R.TestCohortScript.INP, mods={P.ACCESS_TYPE: 0.5, P.TREATMENT_TYPE["infection"]: 0.9})
+        self.assertLess(M.infection_adult(inp), 0.7)
+        eng, _ring, figures, _pop = self.cohort.step_both(inp=inp)
+        self.check(eng, figures)
+
+    def test_the_hover_names_the_adults_ages(self):
+        """#1045: the state's infection hover names the ages P.INFECTION_ADULT_AGES gives."""
+        lo, hi = P.INFECTION_ADULT_AGES
+        line = re.search(r'(?m)^ te_demog_st_inf_adult_line:0 "(.*)"$', _text(R.MISC_LOC)).group(1)
+        self.assertIn(f"Aged {lo}–{hi - 1},", line)
+        self.assertIn("ScriptValue('te_demog_infection_adult')", line)
+
     def test_deaths_added_on_top_are_their_own_slice(self):
         eng, _ring, figures, _pop = self.cohort.step_both(on_top=(0.05, 0.12), full=True)
         self.check(eng, figures)
@@ -221,6 +236,34 @@ class TestCountryCauses(unittest.TestCase):
         self.assertIn("set_local_variable = { name = te_dg_m_inf value = var:te_dg_m_inf }", census)
         self.assertLess(census.index("set_variable = { name = te_dg_m_inf value ="),
                         census.index("set_local_variable = { name = te_dg_m_inf value = var:te_dg_m_inf }"))
+
+    def test_the_adults_infection_factor_is_weighted_and_reaches_the_outline(self):
+        """#1045: the country's te_dg_inf_ad is its states' factor by people x their infection multiplier, so the pair
+        multiplies to their adults' infection (a state with no medicine stored at 1), and the player's outline reads it:
+        with it the outline's adults die less."""
+        def outline(trt_a, trt_b):
+            a, b = self.states()
+            a["te_dg_trt_inf"], b["te_dg_trt_inf"] = trt_a, trt_b
+            eng = _CountryEngine(states=[a, b], fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+                                 triggers={"is_ai": False, "te_demog_cohorts_run": True})
+            eng.call("te_demog_country_census")
+            return eng.vars
+        w = P.INFECTION_ADULT_MEDICINE
+        v = outline(0.9, 0.3)
+        fa, fb = 1 - w * 0.6 * 0.9, 1 - w * 0.2 * 0.3
+        self.assertAlmostEqual(v["te_dg_inf_ad"], (4 * 0.5 * fa + 1 * 1.0 * fb) / (4 * 0.5 + 1 * 1.0), places=4)
+        self.assertAlmostEqual(v["te_dg_m_inf"] * v["te_dg_inf_ad"], (4 * 0.5 * fa + 1 * 1.0 * fb) / 5, places=4)
+        plain = outline(0.0, 0.0)
+        self.assertAlmostEqual(plain["te_dg_inf_ad"], 1.0, places=6)
+        adults = [k for k in v if re.fullmatch(r"te_dg_pj[fm]\d+", k)]
+        self.assertTrue(adults, "the outline ran")
+        self.assertGreater(sum(v[k] for k in adults), sum(plain[k] for k in adults))
+        a, b = self.states()
+        del a["te_dg_acc"], b["te_dg_acc"]
+        none = _CountryEngine(states=[a, b], fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+                              triggers={"is_ai": True, "te_demog_cohorts_run": True})
+        none.call("te_demog_country_census")
+        self.assertEqual(none.vars["te_dg_inf_ad"], 1.0)
 
 
 class TestSelfCheck(unittest.TestCase):
