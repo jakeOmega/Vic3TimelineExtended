@@ -113,6 +113,27 @@ class TestSlackBand(unittest.TestCase):
         self.assertAlmostEqual(row.cum_extra_jobs, expected)
         self.assertAlmostEqual(row.vacancies_cf_share, expected / 10000.0)
 
+    def test_share_from_another_series(self):
+        # The core has no slack of its own, but the owner country's 60% keeps the share at 0: the core builds
+        # as under `none` (the script reads the owner's slack). Priced at its own share it gets the whole line.
+        core, owner = _zero_slack_interval(), _one_interval()
+        (borrowed,) = CF.counterfactual(core, MD, "slack:0.03:0.15", WORLD, **LOOKUPS, share_from=owner)
+        (none,) = CF.counterfactual(core, MD, "none", WORLD, **LOOKUPS)
+        (own,) = CF.counterfactual(core, MD, "slack:0.03:0.15", WORLD, **LOOKUPS)
+        self.assertAlmostEqual(borrowed.cum_extra_jobs, none.cum_extra_jobs)
+        self.assertAlmostEqual(own.cum_extra_jobs, 0.0)
+        # a shape with no band ignores it
+        (hist,) = CF.counterfactual(core, MD, "historical", WORLD, **LOOKUPS, share_from=owner)
+        self.assertEqual(hist.cum_extra_jobs, 0.0)
+
+    def test_share_from_needs_the_same_dates(self):
+        other = {"points": [
+            _point("1900.1.1", 2.0, {"building_mill": _building(0)}, prior=1.0),
+            _point("1911.1.1", 2.0, {"building_mill": _building(10)}, prior=1.0),
+        ]}
+        with self.assertRaises(ValueError):
+            CF.counterfactual(_one_interval(), MD, "slack:0.03:0.15", WORLD, **LOOKUPS, share_from=other)
+
     def test_others_scale(self):
         # others 1.0 at both ends (prior 2.0 on x_raw 1.0); at half the size the same money
         # buys (1 + 1) / (1 + 0.5) times the points, under the historical curve too.

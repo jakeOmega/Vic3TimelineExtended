@@ -252,8 +252,10 @@ class TestSlackFactor(unittest.TestCase):
         self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0), 1 / 3)
         self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.3, 0.09), 0.3 + (0.5 - 0.3) / 3)
         self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.9, 0.6), 0.6)
-        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0, years=2.0), 2 / 3)
-        self.assertEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0, years=6.0), 1.0)      # never past the target
+        # compounded over a longer step, as two or six pulses would move it, never past the target
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0, years=2.0), 1 - (2 / 3) ** 2)
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0, years=6.0), 1 - (2 / 3) ** 6)
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.2, 0.15, years=50.0), 0.0)
         self.assertEqual(G.eased_slack_factor(dataclasses.replace(C_BAND, slack_ease=None), 0.2, 0.0), 1.0)
         self.assertEqual(G.eased_slack_factor(C, 0.0, 0.6), 1.0)
 

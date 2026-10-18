@@ -33,10 +33,25 @@ class TheArithmetic(unittest.TestCase):
         self.assertEqual(_value(self.values, "construction_cost_scaling_mult"),
                          "value = construction_cost_scaling_gdp_mult multiply = te_cc_slack_factor_now")
 
-    def test_the_share_starts_at_zero(self):
-        # Before a country's first pulse under the rule: none of the GDP part, so an old save doesn't jump to it.
+    def test_before_the_first_reading_the_share_carries_the_scaling_in_force(self):
+        # A save from before the rule keeps its old X until the pulse (GDP part x carried share = old raw X);
+        # a new game has no prior_construction_scaling, so it starts from 0.
         self.assertEqual(_value(self.values, "te_cc_slack_factor_now"),
-                         "value = 0 if = { limit = { has_variable = te_cc_slack_factor } value = var:te_cc_slack_factor }")
+                         "value = 0 if = { limit = { has_variable = te_cc_slack_factor } value = var:te_cc_slack_factor }"
+                         " else_if = { limit = { has_variable = prior_construction_scaling } "
+                         "value = te_cc_slack_factor_carried }")
+        self.assertEqual(_value(self.values, "te_cc_slack_factor_carried"),
+                         "value = var:prior_construction_scaling divide = { value = te_cc_other_sources add = 1 "
+                         "multiply = construction_cost_scaling_gdp_mult min = 0.001 } max = 1 min = 0")
+
+    def test_the_tooltip_total_is_the_cost_in_force(self):
+        # One plus every construction-cost modifier, this scaling included; the other factor is the quotient,
+        # so the product always equals the cost in force and the engine's breakdown adds up to it less one.
+        self.assertEqual(_value(self.values, "te_cc_total_factor"), "value = te_cc_modifier_total add = 1 min = 0")
+        self.assertEqual(_value(self.values, "te_cc_others_factor"),
+                         "value = te_cc_total_factor divide = { value = te_cc_scaling_factor min = 1 }")
+        self.assertIn("modifier:country_construction_goods_cost_mult", _value(self.values, "te_cc_modifier_total"))
+        self.assertIn("modifier:goods_input_construction_mult", _value(self.values, "te_cc_modifier_total"))
 
     def test_target_and_easing(self):
         self.assertEqual(_value(self.values, "te_cc_slack_target"),
@@ -88,7 +103,8 @@ class TheWiring(unittest.TestCase):
         values = _read(VALUES)
         for name in ("te_cc_slack_now", "te_cc_peasants_now", "te_cc_unemployed_now", "te_cc_slack_target",
                      "te_cc_gdppc_now", "te_cc_gdp_part_now", "te_cc_scaling_factor", "te_cc_others_factor",
-                     "te_cc_total_factor", "te_cc_other_sources", "te_cc_direct_rule"):
+                     "te_cc_total_factor", "te_cc_modifier_total", "te_cc_other_sources", "te_cc_direct_rule",
+                     "te_cc_has_reading", "te_cc_slack_factor_now", "te_cc_slack_factor_carried"):
             body = _value(values, name)
             self.assertNotIn("every_", body, name)
             self.assertNotIn("te_country_", body, name)
@@ -100,13 +116,20 @@ class TheSelfCheck(unittest.TestCase):
 
     def test_once_a_game_and_only_where_it_can_tell(self):
         self.assertIn("NOT = { has_global_variable = te_cc_slack_check_done }", self.body)
+        # a reading at an earlier pulse: every state walked at least once, so an old save's first year can't spend it
+        self.assertIn("has_local_variable = te_cc_had_reading", self.body)
+        update = _squash(_top_blocks(_read(EFFECTS))["te_cc_yearly_update"])
+        self.assertTrue(update.startswith("if = { limit = { has_variable = te_cc_slack } "
+                                          "set_local_variable = { name = te_cc_had_reading value = 1 } }"), update[:120])
         self.assertIn("te_country_walked_workforce >= 100000", self.body)
         self.assertIn("var:te_cc_slack >= 0.02", self.body)
         self.assertIn("var:te_cc_slack <= 0.98", self.body)
 
     def test_it_recounts_by_the_walks_own_rule(self):
         self.assertIn("every_scope_state = { every_scope_pop = { te_unemp_count_pop = yes } }", self.body)
-        self.assertIn("var:te_cc_chk_diff <= 0.05 var:te_cc_chk_diff >= -0.05", self.body)
+        # a peasant count of 0 reads BROKEN: the recount shares the walk's rule, so only this catches a dead branch
+        self.assertIn("var:te_cc_chk_diff <= 0.05 var:te_cc_chk_diff >= -0.05 var:te_cc_chk_fresh_peasants > 0",
+                      self.body)
         self.assertIn("TE_SELF_CHECK OK construction_slack_read", self.body)
         self.assertIn("TE_SELF_CHECK BROKEN construction_slack_read", self.body)
 

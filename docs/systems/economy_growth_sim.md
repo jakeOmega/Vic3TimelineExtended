@@ -33,46 +33,68 @@ Land nearer mode 2 than vanilla does, with neither happening often.
   - all of it at 3% slack or less;
   - none at 15% or more;
   - a straight line between.
-- **Easing:** the share moves a third of the way toward that each year, from 0 before a country's first reading.
+- **Easing:** the share moves a third of the remaining way toward that each year. Before a country's first reading it is the share that reproduces the scaling already in force: 0 in a new game, the old X on a save from before the rule.
 - **Constants** in `extra_script_values.txt`:
   - `construction_cost_ceiling_ratio` 100 and `construction_cost_max_mult` 10, the line;
   - `construction_cost_slack_full` 0.03, `construction_cost_slack_none` 0.15 and `construction_cost_slack_ease` 0.33333.
-- **Where the slack comes from:** the yearly state walk of `te_unemployment_effects.txt`, which now also counts each state's workforce, peasants and slack. The country's yearly pulse sums them (`te_cc_yearly_update`).
+- **Where the slack comes from:** the yearly state walk of `te_unemployment_effects.txt`, which now also counts each state's workforce, peasants and slack. The country's yearly pulse sums them over **every state the country owns** (`te_cc_yearly_update`).
 
-Against the playthrough's data, with the other construction-cost sources scaled to the ministries' +1% a level (#1038; `--others-scale 0.32`, see the counterfactual). "Short" is vacancies over 1% of the workforce, the mode-1 proxy.
+**The country-wide read matters for this playthrough.** The script reads one slack for the owner country. That country was much bigger than France's core: France with its colonies (769M people against the core's 454M in 1990), then the EU (1,619M against 533M in 2023). Its slack ran well above the core's (67% against 52% in 2023). So the brake stays off for the core until the whole country's slack falls.
 
-| Rule | France's core 1954 | 1976 | 1998 | 2023 | 2045 | Short from | Whole EU 2045 | China 2045 |
+The counterfactual gives two bounds for the core. Neither models migration within the country.
+- **At the owner's share** (`--share-from union`), the core builds at the EU's share. That is the rule as scripted, with nobody moving into the core's new jobs.
+- **At its own share**, the brake follows the core alone. That is what a rule weighted toward the economic core would do.
+
+Figures are against the playthrough's data, with the other construction-cost sources scaled to the ministries' +1% a level (#1038; `--others-scale 0.32`). "Short" is vacancies over 1% of the workforce, the mode-1 proxy.
+
+| Rule | France's core 1954 | 1976 | 1998 | 2023 | 2045 | Core short from | Whole EU 2045 | China 2045 |
 |---|---|---|---|---|---|---|---|---|
 | As played (old line, ministries +5%) | 33.3% | 26.2% | 35.5% | 51.8% | 48.7% | never | 63.1% | 27.4% |
 | Old line alone | 34.0% | 24.5% | 32.0% | 44.9% | 38.4% | never | 54.6% | 25.4% |
 | +100% cap (#1037) | 32.6% | 16.8% | 20.2% | 14.9% | short 33.5% | 2033 | short 8.0% | 25.0% |
 | +200% cap | 34.0% | 23.5% | 29.6% | 33.8% | 3.0% | never | 22.8% | 25.4% |
-| **Old line × slack part, eased (shipped)** | **12.5%** | **5.6%** | **10.0%** | **8.0%** | **1.6%** | **never** | **3.5%** | **8.2%** |
-| Old line × slack part, not eased | 12.8% | 6.0% | 10.1% | 8.9% | 2.3% | never | 4.0% | 8.4% |
+| **Slack part (shipped): the EU's slack** | **11.6%** | **1.2%** | **short 0.8%** | **short 22.5%** | **short 30.7%** | **2004** | **3.5%** | **8.2%** |
+| Slack part, if each read its own slack | 12.5% | 5.6% | 10.0% | 8.0% | 1.6% | never | 28.8% | 8.2% |
 
-Why this rule:
+- **Reading the shipped row:**
+  - The EU as a whole ends at 3.5% slack, with no shortage. That counts its slack wherever it is, so it holds if workers move to where the jobs are.
+  - The core's column holds if none do. Then it runs short of labour from 2004, while the periphery's slack goes unused.
+- **The last row** is the brake following the core. The core ends at 1.6%, but the EU keeps 29% slack, because the periphery's construction stays dear once the core is employed.
+- **The truth lies between,** set by how fast internal migration moves the periphery's peasants and unemployed to the core. The play-test list has a check for it.
+- **China's slice** is 95–99% of its owner country, so its own read is close to the rule as scripted: 8.2% in 2045.
+
+Why the slack part rather than a cap:
 - **It aims at the outcome, not a proxy for it.**
   - A rich country with idle labour builds cheaply until the labour is used.
   - One at full employment pays the whole GDP part, which keeps it from outbuilding its population (mode 1).
-  - It needs no retuning when another construction-cost modifier moves. The cap did: with the ministries at +1% a level, the +100% cap runs France's core short of labour from 2033.
+  - It needs no retuning when another construction-cost modifier moves. The cap did: with the ministries at +1% a level, the +100% cap runs France's core short of labour from 2033, and the EU too by 2043.
 - **It counts peasants, not just the unemployed.**
   - France's core had 3.5–6% unemployment from 1954 to 1976 while 20–30% of its workforce were peasants, so an unemployment-only share would have read full employment there.
   - In the same arithmetic (scratch, not in the tool), an unemployment-only share leaves France's core at 18% and the EU at 37% in 2045, and China barely moves.
   - The owner's 2048 screenshots show peasants "Looking for better Employment" as the unemployed are: labour a new building can hire.
-- **It needs the steep line back.** The GDP part is the brake on a fully employed rich country. Held at +100% with the slack part on top, France's core runs short of labour from the 2020s. Held at +500%, it still runs 3–4% short by 2045.
-- **It reaches the early period too.** Before 1954 slack was over 15%, so none of the GDP part applies: France's core has 27% slack in 1917 and 12.5% in 1954, against 37% and 33% as played. That is about the floor of what any construction-cost curve can do (no penalty at all gives 27% and 10%).
-- **It reaches poor countries.** China's slack is high, so its penalty goes: 8% slack in 2045, against 25–27% under a cap.
+- **It needs the steep line back.** The GDP part is the brake on a fully employed rich country.
+  - Held at +100% with the slack part on top, France's core runs short of labour from 2023, even at its own share.
+  - Held at +500%, it is about 4% short by 2045. Both are scratch probes, since the tool's `slack:` shapes use the historical line.
+- **It reaches the early period too.** Before 1954 slack was over 15% under either read, so none of the GDP part applies.
+  - France's core has 28% slack in 1917 and 12% in 1954, against 37% and 34% under the old line.
+  - That is about the floor of what any construction-cost curve can do: no penalty at all gives 27.7% and 11.6%.
+- **It reaches poor countries.** China's slack is high, so its penalty goes: 8% slack in 2045, against 25% under a cap.
 - **Easing keeps the price steadier.**
-  - Without it, France's cost per point would swing between 1.3× and 15× its base from 1976 on, moving up to 62% in a year.
-  - Eased, the range is 1.5–14× and the largest yearly move 23%, with little change to the outcomes.
-  - In the game, construction takes years to turn into jobs, so the swings would be larger than this arithmetic shows. The band and the easing are starting values for a play-test.
+  - Without it, France's cost per point would swing between 1.3× and 15× its base from 1976 on (at its own share), moving up to 62% in a year.
+  - Eased, the range is 1.5–14× and the largest yearly move 23%, with little change to the outcomes. At the EU's share it is 1.2–12.5×, at most 21% a year.
+  - In the game, construction takes years to turn into jobs, and the script reads counts up to a year old. So the swings would be larger than this arithmetic shows. The band and the easing are starting values for a play-test.
 
-This arithmetic flatters any rule aimed at a band of slack: points become jobs in a straight line, so the end figures land in the band almost by definition. It does show three things:
+This arithmetic flatters any rule aimed at a band of slack: points become jobs in a straight line, so the end figures land in the band almost by definition. It does show four things:
 - an unemployment-only share fails;
 - a cap can't brake once the slack part is added;
-- how far the price moves.
+- how far the price moves;
+- how much hangs on where the slack is read.
 
-The Nation tab's Construction Cost row breaks the cost of a point into factors: the scaling (its GDP part, the share that applies, the slack, peasants and unemployed) times the other construction-cost modifiers, with the engine's per-source list.
+**Open: where to read the slack.** The owner decides. Keeping the country-wide read relies on internal migration. Weighting each state's slack by its GDP or building levels would make the brake follow the economic core. Counting only incorporated states would leave colonies out but keep annexed regions. A play-test of a rich core with poor annexed or colonial states settles it.
+
+The Nation tab's Construction Cost row breaks the cost of a point into factors:
+- the scaling: its GDP part, the share that applies, the slack, peasants and unemployed;
+- times the other construction-cost modifiers, with the engine's per-source list.
 
 **Which way the counterfactual leans.** It's arithmetic on the saves, not a calibrated sim, and its omissions pull both ways.
 - **Understates a cheaper curve's effect:**
@@ -256,7 +278,8 @@ Population, the workforce and demand-bound jobs (urban centres, construction sec
 
 **Shapes with a slack part** (`current`, and `slack:lo:hi[:ease]` on the historical line) have no ratio of their own, since the share that applies follows the counterfactual's own slack.
 - Their path is yearly. Each interval is cut into about yearly steps, with the observed figures linear between its ends and its points spread evenly.
-- Each step reads the slack the steps before it left and moves the share as the script's pulse does (`econ_growth_sim.eased_slack_factor`).
+- Each step reads the slack the steps before it left and moves the share as the script's pulse does (`econ_growth_sim.eased_slack_factor`, compounded over a step's length).
+- With `--share-from SERIES`, a slice takes SERIES' share at each step instead of its own. The two series must have the same kept dates. The script reads the owner country's slack, so `FRA --share-from union` is France's core under the rule as scripted, with no migration into it.
 
 **`--others-scale k`** scales the other construction-cost sources, held as observed otherwise. The playthrough ran with the ministries at +5% a level, about 85% of those sources in the 1998 and 2045 saves; at +1% a level (#1038), k ≈ 1 − 0.85 × 0.8 = 0.32.
 
@@ -275,20 +298,20 @@ Population, the workforce and demand-bound jobs (urban centres, construction sec
 
 Realised points run at about 72% of the observed weekly rate. Part of the gap is by design: demand-bound builds (construction sectors and services, about 8.2M of FRA's 78.8M costed realised points) are left out, since their jobs stay as observed. The rest, about a fifth of the observed rate, is rebuilt levels and projects still in progress, which aren't counted. The counterfactual is conservative by at most that fifth, not by the whole 28%.
 
-**France's core, slack by curve** (counterfactual share of the workforce; "vac" = vacancies), with the other sources as played (ministries at +5% a level). The caps are the historical line held at +100% (#1037), +125%, +150% and +200%. `slope ×0.5` halves the historical line, to 5 points per £1 and +500% at £100.
+**France's core, slack by curve** (counterfactual share of the workforce; "vac" = vacancies), with the other sources as played (ministries at +5% a level). The slack part is shown at the EU's share (`--share-from union`, the rule as scripted, no migration) and at the core's own. The caps are the historical line held at +100% (#1037), +125%, +150% and +200%. `slope ×0.5` halves the historical line, to 5 points per £1 and +500% at £100.
 
-| date | observed | slack part (shipped) | +100% cap | +125% | +150% | +200% | slope ×0.5 | none |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1917 | 36.5% | 27.4% | 36.5% | 36.5% | 36.5% | 36.5% | 33.1% | 27.3% |
-| 1954 | 33.3% | 11.9% | 31.8% | 33.2% | 33.3% | 33.3% | 25.6% | 10.3% |
-| 1976 | 26.2% | 7.6% | 19.8% | 22.5% | 24.1% | 25.5% | 15.8% | vac 10.6% |
-| 1998 | 35.5% | 13.0% | 26.5% | 29.6% | 31.6% | 33.8% | 25.1% | vac 4.8% |
-| 2023 | 51.8% | 10.3% | 30.4% | 35.5% | 39.2% | 44.1% | 37.0% | vac 19.0% |
-| 2045 | 48.7% | 5.3% | vac 1.7% | 7.4% | 14.4% | 24.2% | 28.1% | vac 86.7% |
+| date | observed | slack part, EU's share | slack part, own share | +100% cap | +125% | +150% | +200% | slope ×0.5 | none |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1917 | 36.5% | 27.4% | 27.4% | 36.5% | 36.5% | 36.5% | 36.5% | 33.1% | 27.3% |
+| 1954 | 33.3% | 10.3% | 12.0% | 31.9% | 33.2% | 33.3% | 33.3% | 25.6% | 10.3% |
+| 1976 | 26.2% | 3.1% | 7.6% | 19.8% | 22.5% | 24.1% | 25.5% | 15.8% | vac 10.6% |
+| 1998 | 35.5% | 6.9% | 13.0% | 26.6% | 29.6% | 31.6% | 33.8% | 25.1% | vac 4.8% |
+| 2023 | 51.8% | vac 8.9% | 10.4% | 30.4% | 35.5% | 39.2% | 44.1% | 37.0% | vac 19.0% |
+| 2045 | 48.7% | vac 25.5% | 5.3% | vac 1.6% | 7.4% | 14.4% | 24.2% | 28.1% | vac 86.7% |
 
 The concave shapes the issue suggested make things worse at this playthrough's GDP per head. `log` and `sqrt` rise steeply just above £1: at £25, X is 7.0 (log) and 4.9 (sqrt) against 2.5. They leave France at 66% and 61% slack and cut China's points by 63% and 49%. A world-relative curve (X from GDP per head over the world's) gives France almost nothing to pay, since it sits at 2.2–2.4× the world average, and runs into vacancies from 2033.
 
-`python3 scripts/analysis/econ_construction_counterfactual.py --series FRA,union,GBR,CHI` prints every series and shape, and the per-interval checks; add `--others-scale 0.32` for the ministries at +1% a level.
+`python3 scripts/analysis/econ_construction_counterfactual.py --series FRA,union,GBR,CHI` prints every series and shape, and the per-interval checks; add `--others-scale 0.32` for the ministries at +1% a level, and `--share-from union` to price a slice (`FRA`) at its owner's share too (meaningful only for slices of that series).
 
 ## The structural sim
 
@@ -337,7 +360,7 @@ Build-time departures from the plan, each on evidence:
 
 ## First sweep (uncalibrated model, mechanics only)
 
-Run under #1037's +100% cap, before the slack part; `step` now applies the slack part whenever the mod's curve has one, so a rerun reads differently. `econ_growth_sim.py sweep`, run on the fitted parameters. `linear` was the mod's curve then, capped at +100%. `slope:0.5` halves its slope, to 5 points per £1 and at most +50% (the counterfactual's `slope ×0.5` halves the historical line instead). `none` removes it. A cap of +100% or more equals `linear` now.
+Run under #1037's +100% cap, before the slack part; `step` now applies the slack part whenever the mod's curve has one, so a rerun reads differently. `econ_growth_sim.py sweep`, run on the fitted parameters. `linear` was the mod's curve then, capped at +100%. `slope:0.5` halves its slope, to 5 points per £1 and at most +50% (the counterfactual's `slope ×0.5` halves the historical line instead). `none` removes it.
 
 **Read these rows as the model's mechanics, not the game.**
 - The fitted rich player runs out of slack in the 1950s and holds about 1% from then, unlike the playthrough. The curve moves how early that happens (1950 slack 28% under `linear`, 7% at half the slope, 1% with none) and the mode-1 years (23, 38, 48), not the late picture.
@@ -383,7 +406,7 @@ The owner's answers (2026-10-18) follow each question.
 
 ```bash
 PY=.venv/bin/python   # the venv; standard library only, but run from the repo root
-$PY scripts/analysis/econ_construction_counterfactual.py --series FRA,union,GBR,CHI --curves historical,current,capped:1,slack:0.03:0.2:0.33333,none --others-scale 0.32
+$PY scripts/analysis/econ_construction_counterfactual.py --series FRA,union --curves historical,current,capped:1,slack:0.03:0.2:0.33333,none --others-scale 0.32 --share-from union
 $PY scripts/analysis/econ_growth_sim.py sweep --scenarios player_rich,player_poor,ai_rich,ai_poor --curves linear,slope:0.5,none
 $PY scripts/analysis/econ_growth_sim.py run --scenario player_rich --set fill_rate=0.3 --csv /tmp/run.csv
 $PY scripts/analysis/econ_sim_calibrate.py check      # after a change to PMs, cost tiers or construction techs

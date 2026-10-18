@@ -222,11 +222,13 @@ def slack_target(c: D.CurveConstants, slack: float) -> float:
 
 def eased_slack_factor(c: D.CurveConstants, prev: float, slack: float, years: float = 1.0) -> float:
     """The applying share after `years` (one yearly pulse at 1.0): `prev` moved
-    c.slack_ease of the way toward slack_target(c, slack) a year, at most all the way
-    (the script's te_cc_slack_factor_eased). With no band, 1; with no ease, the target."""
+    c.slack_ease of the remaining way toward slack_target(c, slack) a year, compounded
+    over `years` (1 - (1 - ease)^years, as the script's pulses do; te_cc_slack_factor_eased).
+    With no band, 1; with no ease, the target."""
     if not c.has_slack_band:
         return 1.0
-    step = 1.0 if c.slack_ease is None else min(1.0, max(0.0, c.slack_ease) * years)
+    ease = 1.0 if c.slack_ease is None else _clamp(c.slack_ease, 0.0, 1.0)
+    step = 1.0 - (1.0 - ease) ** max(0.0, years)
     return _clamp(prev + (slack_target(c, slack) - prev) * step, 0.0, 1.0)
 
 
@@ -903,7 +905,7 @@ def summarize(records: list[YearRecord], sc: Scenario, md: D.ModData, p: Params,
 # --------------------------------------------------------------------------
 
 DEFAULT_SCENARIOS = "player_rich,player_poor,ai_rich,ai_poor"
-DEFAULT_CURVES = "linear,capped:1,slope:0.5,slope:2,none"   # capped:1 is #1034's +100% cap; a cap of max_mult or more is `linear`
+DEFAULT_CURVES = "linear,capped:1,slope:0.5,slope:2,none"   # each times the mod's slack share; capped:1 holds the line at +100%; a cap of max_mult or more is `linear`
 DASH = "—"
 TRACE_EVERY = 10                                # `run` prints a line each decade, and the first and last year
 COLUMNS = ("Setting", "Type", "Turn year", "Adoption year", "Peasants < 5%",

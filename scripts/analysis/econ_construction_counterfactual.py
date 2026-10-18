@@ -43,6 +43,12 @@ left, moves the applying share as the script's yearly pulse does
 first pulse), and prices the step's points at the GDP part times that share. Where both
 paths apply (a shape with constant ratio) they agree; a percent or two otherwise.
 
+`--share-from SERIES` prices the other series' slack-band shapes at SERIES' share at each step as
+well (rows `shape@SERIES`). The script reads one slack for the whole owner country, so a slice of it
+builds at the owner's share: France's core inside France with its colonies, then the EU, is
+`FRA` at `union`'s share. That assumes no migration into the slice; its own share assumes the
+owner's labour pools perfectly. The two series must have the same kept dates.
+
 `--others-scale k` multiplies the other construction-cost sources the counterfactual holds
 at observed, as if they had been k times as large: each ratio gains (1 + others) /
 (1 + k x others). The playthrough ran with two ministries at +5% a level, about 85% of the
@@ -90,8 +96,8 @@ THE SHAPES
                as econ_growth_sim.cost_mult defines them, on the historical constants
 
 All are priced against the historical baseline. The shapes other than `current` and
-`linear` are built on the historical constants, not the mod's: a `capped:2` built on the
-current ones would stay at +100%, because that line already stops there.
+`linear` are built on the historical constants, not the mod's, so they carry no slack band
+unless they name one (`slack:`).
 
 STATED LIMITS
 -------------
@@ -105,7 +111,7 @@ The vacancy figure is an upper bound: no per-project cap or construction-supply 
 and no wage response.
 
     econ_construction_counterfactual.py [--series FRA,union,GBR,CHI] [--curves historical,current,none,...]
-                                        [--others-scale 0.32]
+                                        [--others-scale 0.32] [--share-from union]
 """
 
 from __future__ import annotations
@@ -397,14 +403,20 @@ def _interval_ratio(iv: Interval, shape: str, numbers, world: list[dict], others
 
 
 def _feedback_extra(iv: Interval, a: dict, b: dict, shape: str, numbers, world: list[dict], others_scale: float,
-                    cum: float, factor: float) -> tuple[float, float, float]:
-    """One interval of a slack-band shape's yearly path: (extra points, cum, factor) after it.
-    `a` and `b` are the interval's end slices; `cum` and `factor` carry over from the last."""
+                    cum: float, factor: float, shares: list[float] | None = None
+                    ) -> tuple[float, float, float, list[float]]:
+    """One interval of a slack-band shape's yearly path: (extra points, cum, factor, the shares used) after it.
+    `a` and `b` are the interval's end slices; `cum` and `factor` carry over from the last. With `shares`
+    (another series' shares for the same steps), each step uses those instead of moving its own."""
     p, c = _shape(shape, numbers.curve)
     n = max(1, round(iv.years))
+    if shares is not None and len(shares) != n:
+        raise ValueError("interval " + iv.start + " to " + iv.end + ": " + str(len(shares)) + " shares for "
+                         + str(n) + " steps")
     dt = iv.years / n
     y0 = S.point_year(iv.start)
     extra_points = 0.0
+    used: list[float] = []
     for k in range(n):
         t = (k + 0.5) / n
 
@@ -416,27 +428,47 @@ def _feedback_extra(iv: Interval, a: dict, b: dict, shape: str, numbers, world: 
         gdppc = lerp(iv.gdppc_start, iv.gdppc_end)
         others = lerp(iv.others_start, iv.others_end)
         slack_cf = max(0.0, slack - cum) / workforce if workforce > 0 else 0.0
-        factor = G.eased_slack_factor(c, factor, slack_cf, dt)
+        factor = G.eased_slack_factor(c, factor, slack_cf, dt) if shares is None else shares[k]
+        used.append(factor)
         x_new = G.cost_mult(p, c, gdppc, _world_at_year(world, y0 + iv.years * t)) * factor
         ratio = (1.0 + x_raw_of(gdppc)) / (1.0 + x_new) * others_ratio(others, others_scale)
         extra = iv.points / n * (ratio - 1.0)
         extra_points += extra
         cum += extra * iv.jobs_per_point
-    return extra_points, cum, factor
+    return extra_points, cum, factor, used
+
+
+@dataclass(frozen=True)
+class Path:
+    rows: list[Row]
+    extra_points: float
+    points: float
+    shares: tuple[tuple[float, ...], ...] = ()      # a slack-band shape's share at each yearly step, by interval
 
 
 def _paths(series: dict, md, shape: str, world: list[dict], cost_of, sector_of,
-           others_scale: float = 1.0) -> tuple[list[Row], float, float]:
-    """(rows, total extra points, total realised points)."""
+           others_scale: float = 1.0, share_from: dict | None = None) -> Path:
+    """The path under `shape`. With `share_from` (another series, with the same kept dates), a slack-band
+    shape takes that series' share at each step instead of moving its own: the script reads one slack for
+    the whole owner country, so a slice of it (France's core) builds at the owner's share."""
     feedback = has_slack_band(shape, md.numbers.curve)  # an unknown shape raises before any arithmetic
     ivs = intervals(series, md, cost_of, sector_of)
+    source: tuple[tuple[float, ...], ...] | None = None
+    if feedback and share_from is not None:
+        source_ivs = intervals(share_from, md, cost_of, sector_of)
+        if [(iv.start, iv.end) for iv in source_ivs] != [(iv.start, iv.end) for iv in ivs]:
+            raise ValueError("--share-from: the series' kept dates differ, so their steps don't line up")
+        source = _paths(share_from, md, shape, world, cost_of, sector_of, others_scale).shares
     by_date = {pt["date"]: pt for pt in kept_points(series["points"])}
     rows: list[Row] = []
+    shares: list[tuple[float, ...]] = []
     cum = extra_points = factor = 0.0
-    for iv in ivs:
+    for i, iv in enumerate(ivs):
         if feedback:
-            extra, cum, factor = _feedback_extra(iv, by_date[iv.start]["slice"], by_date[iv.end]["slice"], shape,
-                                                 md.numbers, world, others_scale, cum, factor)
+            extra, cum, factor, used = _feedback_extra(
+                iv, by_date[iv.start]["slice"], by_date[iv.end]["slice"], shape, md.numbers, world, others_scale,
+                cum, factor, None if source is None else list(source[i]))
+            shares.append(tuple(used))
             extra_points += extra
         else:
             extra = iv.points * (_interval_ratio(iv, shape, md.numbers, world, others_scale) - 1.0)
@@ -456,14 +488,14 @@ def _paths(series: dict, md, shape: str, world: list[dict], cost_of, sector_of,
             vacancies_cf_share=share(max(0.0, cum - slack)),
             cum_extra_jobs=cum,
         ))
-    return rows, extra_points, sum(iv.points for iv in ivs)
+    return Path(rows, extra_points, sum(iv.points for iv in ivs), tuple(shares))
 
 
 def counterfactual(series: dict, md, shape: str, world: list[dict],
                    cost_of: CostOf | None = None, sector_of: SectorOf | None = None,
-                   others_scale: float = 1.0) -> list[Row]:
+                   others_scale: float = 1.0, share_from: dict | None = None) -> list[Row]:
     """The slack path under `shape`: one Row per kept point after the first."""
-    return _paths(series, md, shape, world, cost_of, sector_of, others_scale)[0]
+    return _paths(series, md, shape, world, cost_of, sector_of, others_scale, share_from).rows
 
 
 @dataclass(frozen=True)
@@ -495,11 +527,12 @@ def _first(rows: list[Row], test) -> int | None:
 
 def summarize(series_name: str, series: dict, md, shape: str, world: list[dict],
               cost_of: CostOf | None = None, sector_of: SectorOf | None = None,
-              others_scale: float = 1.0) -> Summary:
-    rows, extra, total = _paths(series, md, shape, world, cost_of, sector_of, others_scale)
+              others_scale: float = 1.0, share_from: dict | None = None, label: str | None = None) -> Summary:
+    path = _paths(series, md, shape, world, cost_of, sector_of, others_scale, share_from)
+    rows, extra, total = path.rows, path.extra_points, path.points
     near = [_nearest(rows, y) for y in SUMMARY_YEARS]
     return Summary(
-        series=series_name, shape=shape,
+        series=series_name, shape=shape if label is None else label,
         extra_points_pct=extra / total * 100.0 if total > 0 else 0.0,
         **{"slack_" + str(y): None if r is None else r.slack_cf_share for y, r in zip(SUMMARY_YEARS, near)},
         first_below_10pct=_first(rows, lambda r: r.slack_cf_share < 0.10),
@@ -595,6 +628,10 @@ def main(argv: list[str] | None = None) -> int:
                     help="comma-separated shapes: " + ", ".join(OWN_SHAPES) + ", "
                     + ", ".join(c for c in G.CURVES if c not in ("capped", "linear"))
                     + ", capped:<c>, slope:<k>, slack:<lo>:<hi>[:<ease>]; linear is current (default %(default)s)")
+    ap.add_argument("--share-from", default=None, metavar="SERIES",
+                    help="also price each other series' slack-band shapes at this series' share (rows marked"
+                    " shape@SERIES): the script reads the owner country's slack, so a slice such as FRA builds at"
+                    " the owner's share (union)")
     ap.add_argument("--others-scale", type=float, default=1.0,
                     help="scale the other construction-cost sources held at observed (0.32 ~ the ministries at"
                     " +1%% a level, #1038; default %(default)s)")
@@ -615,7 +652,7 @@ def main(argv: list[str] | None = None) -> int:
             print("error: " + str(exc), file=sys.stderr)
             return 2
     dataset = S.load_dataset()
-    unknown = [n for n in names if n not in dataset["series"]]
+    unknown = [n for n in names + ([args.share_from] if args.share_from else []) if n not in dataset["series"]]
     if unknown:
         print("error: unknown series " + ", ".join(unknown) + "; the dataset has "
               + ", ".join(dataset["series"]), file=sys.stderr)
@@ -631,13 +668,29 @@ def main(argv: list[str] | None = None) -> int:
     out += ["## Summary", ""]
     if k != 1.0:
         out += ["Other construction-cost sources scaled by " + format(k, "g") + ".", ""]
-    out += _summary_table([
-        summarize(name, dataset["series"][name], md, shape, world, cost_of, sector_of, k)
-        for name in names for shape in shapes])
+    src_name = args.share_from
+    source = dataset["series"][src_name] if src_name else None
+
+    def borrowed(name: str, shape: str) -> bool:
+        return source is not None and name != src_name and has_slack_band(shape, md.numbers.curve)
+
+    summaries = []
+    for name in names:
+        for shape in shapes:
+            summaries.append(summarize(name, dataset["series"][name], md, shape, world, cost_of, sector_of, k))
+            if borrowed(name, shape):
+                summaries.append(summarize(name, dataset["series"][name], md, shape, world, cost_of, sector_of, k,
+                                           share_from=source, label=shape + "@" + src_name))
+    out += _summary_table(summaries)
     if "FRA" in names:
         fra = dataset["series"]["FRA"]
-        out += ["## FRA slack path", "", *_path_table(
-            {shape: counterfactual(fra, md, shape, world, cost_of, sector_of, k) for shape in shapes})]
+        paths = {}
+        for shape in shapes:
+            paths[shape] = counterfactual(fra, md, shape, world, cost_of, sector_of, k)
+            if borrowed("FRA", shape):
+                paths[shape + "@" + src_name] = counterfactual(fra, md, shape, world, cost_of, sector_of, k,
+                                                               share_from=source)
+        out += ["## FRA slack path", "", *_path_table(paths)]
     print("\n".join(out))
     return 0
 

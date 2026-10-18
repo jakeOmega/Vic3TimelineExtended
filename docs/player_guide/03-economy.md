@@ -231,8 +231,9 @@ point requires in a rich country, by two parts multiplied together:
 - **The share of it that applies.** This depends on how much of your workforce
   is idle: peasants and unemployed together. With 3% or less idle, all of the
   GDP part applies. With 15% or more, none does. Between the two, the share
-  falls in a straight line. It moves a third of the way toward its new value
-  each year, so a year's hiring doesn't swing the price.
+  falls in a straight line. It moves a third of the remaining way toward its
+  new value each year, so the price follows your hiring over a few years rather
+  than at once.
 
 A rich country with workers to spare builds cheaply until it has put them to
 work. One at full employment pays the whole GDP part, which keeps it from

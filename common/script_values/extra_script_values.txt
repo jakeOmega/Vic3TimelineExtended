@@ -2458,15 +2458,33 @@ construction_cost_scaling_gdp_mult = {
 }
 
 # The share of the GDP part that applies, 0-1, as the yearly pulse last moved it (var:te_cc_slack_factor).
-# 0 before the country's first pulse under this rule: a country starts with none of the GDP part and moves
-# a third of the way toward its target each year from there, so a save from before it doesn't jump to the
-# whole GDP part at once.
+# Before the country's first pulse under this rule, the share that reproduces the scaling in force
+# (te_cc_slack_factor_carried): a save from before the rule keeps its old cost until the pulse, which then
+# moves the share a third of the way from there. A new game has none in force, so it starts from 0.
 te_cc_slack_factor_now = {
 	value = 0
 	if = {
 		limit = { has_variable = te_cc_slack_factor }
 		value = var:te_cc_slack_factor
 	}
+	else_if = {
+		limit = { has_variable = prior_construction_scaling }
+		value = te_cc_slack_factor_carried
+	}
+}
+
+# The old modifier's raw X (var:prior_construction_scaling is it times one plus the other sources, as the
+# adjusted multipliers below set it) over today's GDP part, clamped 0-1. The GDP part times this is the X in force.
+te_cc_slack_factor_carried = {
+	value = var:prior_construction_scaling
+	divide = {
+		value = te_cc_other_sources
+		add = 1
+		multiply = construction_cost_scaling_gdp_mult
+		min = 0.001
+	}
+	max = 1
+	min = 0
 }
 
 # The country's slack at its last pulse (var:te_cc_slack, the sum te_country_slack_share), 0 before one.
@@ -2526,11 +2544,10 @@ construction_cost_scaling_mult = {
 
 # ---- The Nation tab's breakdown (te_nation_construction_row_tt). GUI-read: stored figures only. ----
 
-# The other construction-cost modifiers, summed: the modifier the rule's branch scales (the country's whole
+# Every construction-cost modifier, summed: the modifier the rule's branch scales (the country's whole
 # goods_input_construction_mult, or country_construction_goods_cost_mult with free_market_construction_rule
-# disabled) less this scaling's own contribution (var:prior_construction_scaling), as the adjusted multipliers
-# below take it.
-te_cc_other_sources = {
+# disabled), this scaling's own contribution included. A point costs one plus this.
+te_cc_modifier_total = {
 	value = 0
 	if = {
 		limit = { te_free_market_construction_off = yes }
@@ -2539,6 +2556,12 @@ te_cc_other_sources = {
 	else = {
 		value = modifier:goods_input_construction_mult
 	}
+}
+
+# The other construction-cost modifiers: the total less this scaling's own contribution
+# (var:prior_construction_scaling), as the adjusted multipliers below take it.
+te_cc_other_sources = {
+	value = te_cc_modifier_total
 	if = {
 		limit = { has_variable = prior_construction_scaling }
 		subtract = var:prior_construction_scaling
@@ -2562,21 +2585,41 @@ te_cc_gdp_part_now = {
 	}
 }
 
-# Each factor of a point's cost as a multiple of its base: the scaling in force (1 + the GDP part x the applying
-# share, as the pulse set it), the other sources (1 + them), and their product.
-te_cc_scaling_factor = {
-	value = te_cc_gdp_part_now
-	multiply = te_cc_slack_factor_now
+# A point's cost as a multiple of its base, in force now (one plus every construction-cost modifier), and its two
+# factors: the scaling (1 + the GDP part x the applying share, as the pulse set it; before the country's first
+# pulse under this rule, the X in force), and the rest, their quotient. The pulse sets the scaling to multiply with
+# the other sources as they stood then, so after one of them changes the quotient is not exactly one plus them,
+# but the product is always the cost in force, and the engine's breakdown adds up to it less one.
+te_cc_total_factor = {
+	value = te_cc_modifier_total
 	add = 1
-}
-te_cc_others_factor = {
-	value = 1
-	add = te_cc_other_sources
 	min = 0
 }
-te_cc_total_factor = {
-	value = te_cc_scaling_factor
-	multiply = te_cc_others_factor
+te_cc_scaling_factor = {
+	value = 1
+	if = {
+		limit = { has_variable = te_cc_gdp_part }
+		add = {
+			value = var:te_cc_gdp_part
+			multiply = te_cc_slack_factor_now
+		}
+	}
+	else = {
+		add = construction_cost_scaling_mult
+	}
+}
+te_cc_others_factor = {
+	value = te_cc_total_factor
+	divide = { value = te_cc_scaling_factor min = 1 }
+}
+
+# 1 once the country's slack has been read at a pulse under this rule, for the tooltip's choice of sentence.
+te_cc_has_reading = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cc_slack }
+		value = 1
+	}
 }
 
 # 1 with free_market_construction_rule disabled, for the tooltip's choice of breakdown.

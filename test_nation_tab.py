@@ -324,10 +324,14 @@ class TabLayoutTest(unittest.TestCase):
         tt = loc["te_nation_construction_row_tt"]
         for value in ("te_cc_gdppc_now", "construction_cost_gdppc_floor", "construction_cost_gdppc_ceiling",
                       "construction_cost_max_mult", "te_cc_gdp_part_now", "te_cc_slack_factor_now",
-                      "construction_cost_slack_full", "construction_cost_slack_none", "te_cc_slack_now",
-                      "te_cc_peasants_now", "te_cc_unemployed_now", "te_cc_slack_target", "construction_cost_slack_ease",
-                      "te_cc_total_factor", "te_cc_scaling_factor", "te_cc_others_factor", "te_cc_direct_rule"):
+                      "construction_cost_slack_full", "construction_cost_slack_none", "construction_cost_slack_ease",
+                      "te_cc_total_factor", "te_cc_scaling_factor", "te_cc_others_factor", "te_cc_direct_rule",
+                      "te_cc_has_reading"):
             self.assertIn(f"ScriptValue('{value}')", tt)
+        # the slack, once read; before the first reading, a sentence saying so
+        self.assertIn("'te_nation_construction_slack_read', 'te_nation_construction_slack_unread'", tt)
+        for value in ("te_cc_slack_now", "te_cc_peasants_now", "te_cc_unemployed_now", "te_cc_slack_target"):
+            self.assertIn(f"ScriptValue('{value}')", loc["te_nation_construction_slack_read"])
         for key, modifier in (("te_nation_construction_breakdown", "goods_input_construction_mult"),
                               ("te_nation_construction_breakdown_direct", "country_construction_goods_cost_mult")):
             self.assertIn(f"'{key}'", tt)
