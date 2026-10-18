@@ -247,6 +247,8 @@ ENTRY_OBJECT_READERS = {
     ("common/on_actions/extra_on_actions.txt", "te_banking_economy_law_cleanup"),
     ("common/on_actions/te_banking_entry_on_actions.txt", "te_banking_entry_net"),
     ("common/script_values/te_banking_entry_values.txt", "te_banking_entry_missing_count"),
+    # the self-check names the countries te_banking_entry_missing_count counts
+    ("events/te_debug_banking_events.txt", "te_debug_banking.1"),
 }
 
 # Readers that mean "the cycle runs" and must ask te_banking_cycle_running.
@@ -398,8 +400,10 @@ class SafetyNetTest(unittest.TestCase):
 
     def test_the_net_adds_the_entry_where_it_should_be(self):
         text = _strip_comments(_read(NET))
-        self.assertIn(_norm("on_yearly_pulse_country = { on_actions = { te_banking_entry_selfcheck "
-                            "te_banking_entry_net } }"), _norm(text))
+        # The self-check arms on the yearly pulse; the net runs monthly since the
+        # owner's EU game read BROKEN missing=3 (2026-10-17).
+        self.assertIn(_norm("on_yearly_pulse_country = { on_actions = { te_banking_entry_selfcheck } }"), _norm(text))
+        self.assertIn(_norm("on_monthly_pulse_country = { on_actions = { te_banking_entry_net } }"), _norm(text))
         net = _norm(_top_block(text, "te_banking_entry_net"))
         self.assertIn("limit = { te_banking_entry_expected = yes NOT = { has_journal_entry = je_banking_cycle } } "
                       "add_journal_entry = { type = je_banking_cycle }", net)
@@ -416,6 +420,8 @@ class SafetyNetTest(unittest.TestCase):
         # would otherwise hide an engine that left records out.
         self.assertIn("te_banking_entry_missing_count < 1 te_banking_entry_net_added_g < 1", _norm(event))
         self.assertIn("banking_entry_everywhere", _read(PLAYTEST))
+        # BROKEN names the countries still missing, one line each.
+        self.assertIn("TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting]", event)
 
 
 if __name__ == "__main__":

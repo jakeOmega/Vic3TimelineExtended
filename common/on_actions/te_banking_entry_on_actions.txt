@@ -9,10 +9,16 @@
 # every country in an old save, and every released one, has such a record is
 # unread, so:
 #
-#   te_banking_entry_net       each country's yearly pulse adds the entry to a
+#   te_banking_entry_net       each country's monthly pulse adds the entry to a
 #                              country that should hold it and doesn't
-#                              (te_banking_entry_expected), and counts the adds
-#                              in te_banking_entry_net_added.
+#                              (te_banking_entry_expected), counts the adds in
+#                              te_banking_entry_net_added and logs each by
+#                              name. Monthly, not yearly, since 2026-10-17: the
+#                              owner's EU game read BROKEN missing=3
+#                              added_by_net=0, so the engine does leave records
+#                              out, and on a yearly net those countries waited
+#                              up to a year for their cycle (the self-check
+#                              row's fallback).
 #   te_banking_entry_selfcheck the first yearly pulse of a game (an old save's
 #                              first after this change) arms
 #                              te_debug_banking.1 for 30 days on, which logs
@@ -23,11 +29,18 @@
 #                              out, and the net carried them (missing > 0 can
 #                              also be a country formed in the last two weeks,
 #                              whose record the engine had not reached yet).
+#                              The BROKEN line is followed by one INFO line per
+#                              country still missing, by name.
 #
 # Play-test rows: docs/testing/banking-playtest.md, "Self-checks".
 on_yearly_pulse_country = {
 	on_actions = {
 		te_banking_entry_selfcheck
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
 		te_banking_entry_net
 	}
 }
@@ -53,6 +66,7 @@ te_banking_entry_net = {
 				NOT = { has_journal_entry = je_banking_cycle }
 			}
 			add_journal_entry = { type = je_banking_cycle }
+			debug_log = "TE_BANKING: the safety net added je_banking_cycle to [THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 			if = {
 				limit = { NOT = { has_global_variable = te_banking_entry_net_added } }
 				set_global_variable = { name = te_banking_entry_net_added value = 0 }

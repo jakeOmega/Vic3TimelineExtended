@@ -135,6 +135,8 @@ history panel and the top bar. Each moves to a scripted GUI on `te_banking_cycle
   banking_entry_everywhere missing=<n> added_by_net=<m>` (CLAUDE.md's self-check pattern). OK needs both at 0, so the
   net can't hide a gap; BROKEN means the engine left records out and the net carried them. The row is in
   `docs/testing/banking-playtest.md`'s Self-checks table.
+  *Since 2026-10-17 the net runs on `on_monthly_pulse_country`, the row's fallback: the owner's EU game read BROKEN
+  `missing=3 added_by_net=0`, so the engine does leave records out. The BROKEN line now names the countries missing.*
 - **New countries** (releases, formables by `change_tag`, which keeps entries) get the entry like any other country,
   and start on `immediate` if they meet the test.
 - **Revolutions.** `is_revolutionary = no` keeps the rebels out of the entry. Today unlocked rebels would get their
