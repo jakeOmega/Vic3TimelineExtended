@@ -35,6 +35,14 @@ VANILLA_SCRIPTED_GUIS = {
     "debug_movement_activism_down_sgui",
     "je_meiji_restoration_get_faction_sgui",
 }
+# Inherited custom localization in vanilla types the mod redefines (the
+# change-law panel's enactment phases, gui/00_te_law_effects.gui). Same
+# contract: unresolved warnings offline, errors once a live vanilla
+# customizable_localization directory is read and doesn't define them.
+VANILLA_CUSTOM_LOC = {
+    "enactment_phase_1",
+    "enactment_phase_2",
+}
 DIRS = {
     "scripted_guis": "scripted_guis",
     "script_values": "script_values",
@@ -129,6 +137,7 @@ class Index:
         self.keys = {kind: set() for kind in (*DIRS, "loc_keys", "gui_types")}
         self.complete = {kind: False for kind in self.keys}
         self.complete["custom_loc"] = True  # mod-only custom localization contract
+        self.vanilla_read = set()
         self.saved = {}
         self.shown = []
         self.gui_files = {}
@@ -139,6 +148,7 @@ class Index:
                 folder = base / "common" / directory
                 if base == self.vanilla and folder.is_dir():
                     self.complete[kind] = True
+                    self.vanilla_read.add(kind)
                 for path in sorted(folder.rglob("*.txt")):
                     text = read(path)
                     code, syntax = masks(text)
@@ -228,6 +238,8 @@ def audit(mod_path: str | Path | None = None, vanilla_path: str | Path | None = 
         result.references[file].setdefault(kind, []).append({"name": name, "line": line, "resolved": resolved})
         if not resolved:
             complete = index.complete[kind] or (kind == "scripted_guis" and name not in VANILLA_SCRIPTED_GUIS)
+            if kind == "custom_loc" and name in VANILLA_CUSTOM_LOC and kind not in index.vanilla_read:
+                complete = False
             severity = "error" if complete else "warn"
             flag(file, line, kind, name, severity, "unresolved" if severity == "error" else "unresolved; vanilla category unavailable")
 

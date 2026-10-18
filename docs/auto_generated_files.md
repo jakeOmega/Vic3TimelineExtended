@@ -80,6 +80,21 @@ line, or a file below is stale. It writes:
 
 This generator runs explicitly; it is not a post-load regenerator.
 
+## Law effects (explicit regeneration)
+
+Run `python3 scripts/generators/gen_law_effects_gui.py` after a vanilla patch,
+with `test_fixtures/vanilla_gui/custom_tooltip.gui` and
+`politics_panel_change_law.gui` replaced by the new vanilla files.
+`test_law_effects_gui.py` fails while the file below is stale, and the
+generator raises, naming what moved, if vanilla moves the effects widgets it
+hooks onto. It writes:
+
+| File | Owner script | Input |
+|---|---|---|
+| `gui/00_te_law_effects.gui` | `scripts/generators/gen_law_effects_gui.py` | The two fixtures (vanilla, byte for byte): the law tooltips `FancyTooltip_Law` and `FancyTooltip_LawWithCountryContext` and the change-law panel's `politics_panel_change_law` and `selected_or_enacting_law_content`, each with two `### MOD: Tax law effects` blocks that put a taxation law's effects text behind a hover |
+
+This generator runs explicitly; it is not a post-load regenerator.
+
 ## Tooling data
 
 | File / glob | Owner script | Input | Notes |

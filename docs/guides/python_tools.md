@@ -939,7 +939,8 @@ properties. Comments and quoted braces/hashes do not count as structure.
 Vanilla lookups use the configured base game (install root or `game/`) and
 the committed script-value, static-modifier and English-localization snapshots when available.
 Unavailable vanilla categories warn, including four explicit inherited
-scripted-GUI names in vanilla panel overrides; other missing scripted GUIs
+scripted-GUI names in vanilla panel overrides and two custom-localization
+names (`VANILLA_CUSTOM_LOC`) in redefined vanilla types; other missing scripted GUIs
 and missing custom-localization entries are errors. `--strict` fails only on errors. Dynamic `ScriptedGui` datacontexts
 cannot always be bound through overridable GUI types, so their saved-scope
 checks warn instead of claiming resolution. Reads of saved scopes in
