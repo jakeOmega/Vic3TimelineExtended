@@ -2643,8 +2643,9 @@ space_race_events.52 = {
 	}
 }
 
-# Event 53: Extraplanetary Base Connection (after moon base or mars landing)
-# Links space_mine building to space race progress
+# Event 53: Off-World Industry Meets the Space Program (Solar Colonization, 50+ progress)
+# Links space_mine building to space race progress. Integrate: more progress,
+# research and prestige. Stay commercial: Extraplanetary Base throughput.
 space_race_events.53 = {
 	type = country_event
 	placement = root
@@ -2692,12 +2693,20 @@ space_race_events.53 = {
 	option = {
 		name = space_race_events.53.b
 		ai_chance = { base = 3 }
-		# Keep mining operations and the space program separate
+		# Keep mining operations commercial: Extraplanetary Base throughput and
+		# advanced materials instead of the integration's progress, research and
+		# prestige. Upper-strata loyalists instead of academics.
 		custom_tooltip = SR_PROGRESS_ADD_5_TT
 		change_variable = {
 			name = sr_progress_solar_colonization
 			add = 5
 		}
+		add_modifier = {
+			name = sr_extraplanetary_commercial
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_loyalists = { value = medium_radicals strata = upper }
 	}
 }
 

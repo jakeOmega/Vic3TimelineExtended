@@ -2479,6 +2479,8 @@
  sr_engineering_breakthrough_desc:0 "A fundamental innovation in propulsion engineering has dramatically improved the program's capabilities."
  sr_equatorial_plain:0 "Equatorial Landing Success"
  sr_equatorial_plain_desc:0 "A successful landing at the well-mapped Equatorial Plain provides a stable foundation for future missions."
+ sr_extraplanetary_commercial:0 "Commercial Off-World Industry"
+ sr_extraplanetary_commercial_desc:0 "Extraplanetary mining operations stay a commercial enterprise, selling their output to the market instead of the space program, which lifts Extraplanetary Base output and advanced materials production."
  sr_extraplanetary_integration:0 "Integrated Off-World Industry"
  sr_extraplanetary_integration_desc:0 "Extraplanetary mining operations supply the space program with materials, reducing costs and accelerating progress."
  sr_facility_fire_damage_desc:0 "Fire damage to clean rooms and sensitive equipment has reduced the facility's operational capacity."
