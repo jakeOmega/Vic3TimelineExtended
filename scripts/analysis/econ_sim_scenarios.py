@@ -307,7 +307,7 @@ def _annexations(points: list[dict], md: D.ModData) -> tuple[tuple[int, dict], .
     previous point's, added in that point's year. Their levels are spread over the sectors
     in the union's level shares at that point; the event also adds subsistence capacity,
     SUBSISTENCE_HEADROOM x the annexed peasants (R23). States the union loses aren't
-    modelled (four in 1954, 1.0% of its people; one each in 2023 and 2033)."""
+    modelled (four in 1954, 0.7% of its people; one each in 2023 and 2033)."""
     events = []
     for a, b in zip(points, points[1:]):
         new = sorted(set(b["per_state"]) - set(a["per_state"]))
