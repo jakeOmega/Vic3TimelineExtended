@@ -2384,8 +2384,10 @@ ce_treasury_pool_balance_multiplier_for_je = {
 #    should have GDP/c roughly equal to this value.
 # 2. floor_ratio and ceiling_ratio are multiples of the reference:
 #    - floor_ratio = 1 means no penalty at the reference level (a rich 1836 nation).
-#    - ceiling_ratio = 100 means max penalty at 100x the reference (very rich late-game economy).
-# 3. max_mult is the maximum construction cost multiplier (10 = +1000% cost at ceiling).
+#    - ceiling_ratio = 11 means max penalty at 11x the reference (a rich late-game economy), so with
+#      max_mult = 1 the cost rises 10 points per 1x of reference above the floor.
+# 3. max_mult is the maximum construction cost multiplier (1 = +100% cost at ceiling).
+# Capped at +100% (#1034): the steep late curve stalled rich economies; see docs/systems/economy_growth_sim.md
 #
 # GDP is in yearly terms. GDP/c = gdp / total_population (country scope).
 # ====================================================================================
@@ -2398,10 +2400,10 @@ construction_cost_gdppc_reference = 1
 construction_cost_floor_ratio = 1  # 1x reference = rich 1836 nation baseline
 
 # Maximum penalty reached at this multiple of reference GDP/c
-construction_cost_ceiling_ratio = 100  # 100x reference = very rich late-game economy
+construction_cost_ceiling_ratio = 11  # 11x reference = rich late-game economy; the +100% cap is reached here (#1034)
 
-# Maximum construction cost multiplier at ceiling (10 = construction costs up to +1000%)
-construction_cost_max_mult = 10
+# Maximum construction cost multiplier at ceiling (1 = construction costs up to +100%; was 10 = +1000% before #1034)
+construction_cost_max_mult = 1
 
 # Derived thresholds (do not edit - change the ratios above instead)
 construction_cost_gdppc_floor = {
@@ -2424,6 +2426,7 @@ country_gdp_per_capita = {
 
 # Computed construction cost penalty: 0 at floor, max_mult at ceiling, linear interpolation.
 # Formula: clamp(0, max_mult, (gdppc - floor) / (ceiling - floor) * max_mult)
+# With the current constants: 0 at £1 GDP/c, +10 points per £1, capped at 1 (+100%) from £11 (#1034).
 construction_cost_scaling_mult = {
 	value = country_gdp_per_capita
 	subtract = construction_cost_gdppc_floor

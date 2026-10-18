@@ -147,8 +147,8 @@ Spec: `docs/superpowers/specs/2026-10-17-judiciary-design.md`. Phase 1 (this sec
 - **Modifier:** `construction_cost_scaling` in `common/static_modifiers/extra_modifiers.txt` — `goods_input_construction_mult = 1`.
 - **Script values:** `common/script_values/extra_script_values.txt` — search for `CONSTRUCTION COST SCALING`.
 - **On action:** `construction_cost_scaling_on_action` in `common/on_actions/extra_on_actions.txt`, wired to `on_yearly_pulse_country`.
-- **Tuning:** `construction_cost_gdppc_reference`, `construction_cost_floor_ratio` (1x), `construction_cost_ceiling_ratio` (100x), `construction_cost_max_mult` (10 = +1000%).
-- **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling.
+- **Tuning:** `construction_cost_gdppc_reference`, `construction_cost_floor_ratio` (1x), `construction_cost_ceiling_ratio` (11x), `construction_cost_max_mult` (1 = +100%).
+- **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling: 10 points per £1 of GDP per capita above £1, capped at +100% from £11. Until #1034 (2026-10-18) the ceiling was 100x and the cap +1000%. By the arithmetic of the economy growth sim's data counterfactual (`docs/systems/economy_growth_sim.md`), that curve's late steepness, up to 11x the price of a point, accounts for much of the late stall in rich economies, which kept a third of their workforce idle; a collapse in service jobs (79M in France's core in 1998, 41–64M from 2023) ran alongside it. By the same arithmetic the +100% cap would have absorbed France's slack in the owner's playthrough by about 2042.
 - `goods_input_construction_mult` affects both construction project costs AND ongoing building maintenance.
 - With `free_market_construction_rule` disabled there is no construction good to scale, so the on_action applies `construction_cost_scaling_direct` (`country_construction_goods_cost_mult = 1`, adjusted by `construction_cost_scaling_direct_adjusted_mult`) instead. See § Free Market Construction off.
 
