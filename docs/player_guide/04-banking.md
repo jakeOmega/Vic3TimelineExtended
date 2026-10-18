@@ -209,12 +209,16 @@ sections, in the same order. The overview at the top is always shown: the four
 bars, then six boxes, two to a row, each with its icon on the left and three
 lines beside it: a caption, a word and a figure. Hover a caption for what the
 term means, and hover the box for the reading in detail; the cycle's tooltips
-also list what pushes it each month. For the cycle value, momentum and bubble
-pressure, the third line is next month's range (see [Cycle value, momentum and
-bubble pressure](#cycle-value-momentum-and-bubble-pressure)), with a tooltip
-of its own. With momentum Overheating the range has no top for the cycle value,
-which reads "+4.2 or more", and no bottom for momentum; with momentum in
-Freefall it is the reverse.
+also list what pushes it each month. Hover the word for what that reading does:
+the phase's monthly modifiers (they differ for a market, a command and a
+cooperative economy) and its crash risk, what a band of momentum or bubble
+pressure means for the cycle and the crash roll, what the stance and the price
+band put on your country, and what holds the budget's points. For the cycle
+value, momentum and bubble pressure, the third line is next month's range (see
+[Cycle value, momentum and bubble pressure](#cycle-value-momentum-and-bubble-pressure)),
+with a tooltip of its own. With momentum Overheating the range has no top for
+the cycle value, which reads "+4.2 or more", and no bottom for momentum; with
+momentum in Freefall it is the reverse.
 
 | Caption | Icon | Word | Third line |
 |---|---|---|---|

@@ -128,3 +128,32 @@ an Urban Center of level 5, the test that used to activate the entry
     the loser left it.
 18. **No new errors.** `error.log` has no `Failed to fetch variable` for `finance_cycle_value`, `finance_cycle_momentum`
     or `bubble_pressure` while a dormant entry's panels are open, or from the AI's banking buttons.
+
+## Hover on the overview's readings (2026-10-18)
+
+The word under each overview caption (and both words of the Budget cell) has a tooltip of its own, saying what that
+reading does. The cell's old tooltip is unchanged and still shows over the caption, the icon and the cell's blank
+space. Two engine facts rest on the pattern's other uses and have not been seen in this arrangement: a
+`[GetStaticModifier('x').GetDesc]` inside a key that `GetCustom` returns, and the underline of `#tooltippable` under a
+coloured word (`#green Expansion#!`).
+
+19. **Each word is hoverable.** Underlined, six cells: Cycle Phase, Momentum, Bubble Pressure, Budget (the used line and
+    the free line separately), Policy Stance (needs a dial) and Inflation (full Banking System). Hovering the word shows
+    its own tooltip; hovering the caption or the icon still shows the cell's. *Fallback if the coloured words lose their
+    underline:* the hover still works; drop `default_format` from the coloured words (phase, momentum, bubble) only.
+20. **The phase shows its own economy's modifiers.** In a market economy, Expansion reads "Financial Cycle: Expansion"
+    and lists services output, manufacturing, the investment pool, bubble pressure and momentum; under Command Economy
+    it reads "Planning Cycle: Expansion" with construction and bureaucracy; under Cooperative Ownership "Cooperative
+    Cycle: Expansion" with the investment pool. The figures equal the ones in the journal entry's modifier list for the
+    phase. Stable lists no modifier. Panic, Downturn and Stagnation call a crash all but impossible; Frenzy the highest
+    risk. *Fallback if the effect list is blank or shows raw text:* move the economy choice into the `.gui`
+    (`SelectLocalization` over three tooltip keys per word) so `GetStaticModifier` is in the tooltip's own key.
+21. **Momentum and bubble pressure.** Momentum's first line gives the band's range ("Rising: momentum is +1 to +3 …");
+    in a Boom or Frenzy, Surging and Overheating match the crash-risk warning on the bubble icon. Bubble pressure's
+    text changes with the band and the first line names it.
+22. **Policy stance and the price band.** The stance's tooltip repeats the cell's momentum and bubble pushes and adds
+    the stance modifier (Neutral: "None"). The price band's tooltip gives the band's prose and, under "Modifiers on your
+    country", the figures that match the country's modifier list; Stable prices and a command economy say they
+    cost nothing, and a dollarised country shows Foreign money's minting penalty.
+23. **The Budget words.** "N used" names the total and sends the player to Active Policies; "N free" explains that an
+    Enable button needs its cost to fit in the free points. The numbers equal the cell's.
