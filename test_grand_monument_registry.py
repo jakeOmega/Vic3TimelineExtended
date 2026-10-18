@@ -4738,6 +4738,10 @@ class SwapTests(unittest.TestCase):
                 continue
             self.assertIn(f"gm_tr_copy_to_state = {{ FROM = {to} TO = {frm} }}", take, frm)
         self.assertIn("gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }", take)
+        # The picture, outside CONTAINER_RECORDS (gm_tr_update_picture writes the
+        # container's): the refresh redraws the state's only once gm_restore_pm
+        # is gone, so without this a swapped-back monument showed the drape.
+        self.assertIn("gm_tr_copy_to_state = { FROM = gm_tr_picture_code TO = gm_picture_code }", take)
         rebuild = squash(block(read(self.TR), "gm_state_tr_rebuild_from_moving"))
         self.assertIn("gm_state_tr_take_records_from_moving = yes", rebuild)
         self.assertLess(rebuild.find("te_construction_market_build_specified_level"),
