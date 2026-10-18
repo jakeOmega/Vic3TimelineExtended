@@ -733,3 +733,18 @@ only the game can show:
    States.
 7. **Type sizes.** Rows at 17, headings at 20, the overview at 16: nothing overlaps or elides at 1080p and at the UI
    scale the owner plays at.
+
+## The state's Wealth Concentration terms (2026-10-18)
+
+The state subtab's Wealth section lists What Sets the Target under the score's bar, as the country tab does: the
+Inheritance law, land tenure, who owns capital, income inequality, taxes on wealth and the economic laws. Land tenure,
+ownership and inequality are the state's own; the law, tax and economic terms are its owner's, read through
+`State.GetOwner.MakeScope` (a new read in this file, though `states_panel.gui` uses it). What only the game can show:
+
+1. **The rows render (Display only or Full, a scored state).** Six pillars, each with a bar and a signed figure, none
+   blank. 50 plus the six figures is the target in the score row (`te_demog_st_wc_value`), unless the target is at 0
+   or 100, or Continuity of Title holds.
+2. **The owner's terms.** Open a foreign state on its Demographics subtab: the law, tax and economic rows show its
+   owner's laws, not yours.
+3. **Land Tenure's hover** gives the state's share of peasants and farmers as a percentage (`te_dg_agr_share`).
+4. **Continuity of Title.** While it holds (`inheritance_events.6`), the note under the rows shows.
