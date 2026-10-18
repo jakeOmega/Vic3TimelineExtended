@@ -1141,3 +1141,289 @@ te_mon_ro_fx_state = {
 		localization_key = banking_dash_ro_fx_state_float
 	}
 }
+
+
+# ----------------------------------------------------------------------------
+# Hover on the overview's readings (the word under each cell's caption)
+# ----------------------------------------------------------------------------
+# The cell's own tooltip explains the reading and lists what pushes it; the
+# word has a tooltip of its own, saying what THIS reading does to the country.
+# One block per cell, each choosing a loc key by the same tests as the block
+# that names the band, in the same order (test_banking_word_tooltips.py
+# compares them), so a word and the effect under it cannot disagree.
+
+# The cycle phase: the phase's modifier, in the economy's own variant (the
+# market, command and cooperative economies each have six), as
+# banking_cycle_apply_phase_modifiers chooses it, with the phase's crash risk.
+# Stable carries no modifier in any economy. The effect list is
+# [GetStaticModifier(...).GetDesc], so no figure is retyped here.
+banking_dash_phase_effects = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = finance_cycle_value } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { banking_cycle_is_stable = yes }
+		localization_key = banking_dash_phase_fx_stable
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_command_economy
+			banking_cycle_is_panic = yes
+		}
+		localization_key = banking_dash_phase_fx_panic_cmd
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_command_economy
+			banking_cycle_is_downturn = yes
+		}
+		localization_key = banking_dash_phase_fx_downturn_cmd
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_command_economy
+			banking_cycle_is_stagnation = yes
+		}
+		localization_key = banking_dash_phase_fx_stagnation_cmd
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_command_economy
+			banking_cycle_is_expansion = yes
+		}
+		localization_key = banking_dash_phase_fx_expansion_cmd
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_command_economy
+			banking_cycle_is_boom = yes
+		}
+		localization_key = banking_dash_phase_fx_boom_cmd
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_command_economy
+			banking_cycle_is_frenzy = yes
+		}
+		localization_key = banking_dash_phase_fx_frenzy_cmd
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_cooperative_ownership
+			banking_cycle_is_panic = yes
+		}
+		localization_key = banking_dash_phase_fx_panic_coop
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_cooperative_ownership
+			banking_cycle_is_downturn = yes
+		}
+		localization_key = banking_dash_phase_fx_downturn_coop
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_cooperative_ownership
+			banking_cycle_is_stagnation = yes
+		}
+		localization_key = banking_dash_phase_fx_stagnation_coop
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_cooperative_ownership
+			banking_cycle_is_expansion = yes
+		}
+		localization_key = banking_dash_phase_fx_expansion_coop
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_cooperative_ownership
+			banking_cycle_is_boom = yes
+		}
+		localization_key = banking_dash_phase_fx_boom_coop
+	}
+	text = {
+		trigger = {
+			has_law = law_type:law_cooperative_ownership
+			banking_cycle_is_frenzy = yes
+		}
+		localization_key = banking_dash_phase_fx_frenzy_coop
+	}
+	text = {
+		trigger = { banking_cycle_is_panic = yes }
+		localization_key = banking_dash_phase_fx_panic
+	}
+	text = {
+		trigger = { banking_cycle_is_downturn = yes }
+		localization_key = banking_dash_phase_fx_downturn
+	}
+	text = {
+		trigger = { banking_cycle_is_stagnation = yes }
+		localization_key = banking_dash_phase_fx_stagnation
+	}
+	text = {
+		trigger = { banking_cycle_is_expansion = yes }
+		localization_key = banking_dash_phase_fx_expansion
+	}
+	text = {
+		trigger = { banking_cycle_is_boom = yes }
+		localization_key = banking_dash_phase_fx_boom
+	}
+	text = {
+		trigger = { banking_cycle_is_frenzy = yes }
+		localization_key = banking_dash_phase_fx_frenzy
+	}
+}
+
+# Momentum: what the band does to the cycle value, with the band's own range
+# (banking_dash_momentum_band_edges) in the tooltip's first line.
+banking_dash_momentum_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = finance_cycle_momentum } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 5 }
+		localization_key = banking_dash_momentum_fx_overheating
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 3 }
+		localization_key = banking_dash_momentum_fx_surging
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 1 }
+		localization_key = banking_dash_momentum_fx_rising
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -1 }
+		localization_key = banking_dash_momentum_fx_steady
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -3 }
+		localization_key = banking_dash_momentum_fx_falling
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -5 }
+		localization_key = banking_dash_momentum_fx_collapsing
+	}
+	text = {
+		localization_key = banking_dash_momentum_fx_freefall
+	}
+}
+
+# Bubble pressure: what the band does to the crash roll and, in a market
+# economy, to momentum (the crash thresholds are in
+# banking_cycle_check_and_execute_crash; the momentum push is
+# bubble_inertia_multiplier_script_value).
+banking_dash_bubble_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = bubble_pressure } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:bubble_pressure < 15 }
+		localization_key = banking_dash_bubble_fx_low
+	}
+	text = {
+		trigger = { var:bubble_pressure < 30 }
+		localization_key = banking_dash_bubble_fx_building
+	}
+	text = {
+		trigger = { var:bubble_pressure < 50 }
+		localization_key = banking_dash_bubble_fx_elevated
+	}
+	text = {
+		trigger = { var:bubble_pressure < 75 }
+		localization_key = banking_dash_bubble_fx_high
+	}
+	text = {
+		localization_key = banking_dash_bubble_fx_severe
+	}
+}
+
+# Policy stance: the investment-pool modifier the band puts on the journal
+# entry (banking_stance_band_1..5, applied by banking_cycle_apply_stance_band).
+# The momentum and bubble pushes come from te_mon_stance_momentum_effect and
+# te_mon_stance_bubble_effect, which the stance cell's own tooltip uses too.
+banking_dash_stance_pool_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_stance_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 1 }
+		localization_key = banking_dash_stance_pool_very_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 2 }
+		localization_key = banking_dash_stance_pool_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 3 }
+		localization_key = banking_dash_stance_pool_neutral
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 4 }
+		localization_key = banking_dash_stance_pool_tight
+	}
+	text = {
+		localization_key = banking_dash_stance_pool_very_tight
+	}
+}
+
+# Price band: the band's modifier on the country, numbers and all. The prose
+# is te_mon_inflation_band_cost; the branches here are its, in its order, so
+# the sentence and the modifier list under it always describe the same band.
+banking_dash_price_band_effects = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_inflation_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { te_mon_is_dollarised = yes }
+		localization_key = banking_dash_price_band_fx_dollarised
+	}
+	text = {
+		trigger = { te_mon_has_inflation = no }
+		localization_key = banking_dash_price_band_fx_command
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 1 }
+		localization_key = banking_dash_price_band_fx_deflation
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 2 }
+		localization_key = banking_dash_price_band_fx_comfort
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 3 }
+		localization_key = banking_dash_price_band_fx_elevated
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 4 }
+		localization_key = banking_dash_price_band_fx_high
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 5 }
+		localization_key = banking_dash_price_band_fx_very_high
+	}
+	text = {
+		localization_key = banking_dash_price_band_fx_hyper
+	}
+}
