@@ -177,10 +177,27 @@ class TheWalk(unittest.TestCase):
 
     def test_it_counts_the_workforce_with_no_workplace(self):
         walk = _squash(_body(self.effects["te_unemp_share_refresh"], "every_scope_pop"))
-        self.assertIn("change_local_variable = { name = te_unemp_w_pop add = total_size }", walk)
-        self.assertIn("change_local_variable = { name = te_unemp_w_wf add = workforce }", walk)
+        self.assertEqual(walk, "te_unemp_count_pop = yes")              # one rule, shared with the cost self-check
+        count = _squash(self.effects["te_unemp_count_pop"])
+        self.assertIn("change_local_variable = { name = te_unemp_w_pop add = total_size }", count)
+        self.assertIn("change_local_variable = { name = te_unemp_w_wf add = workforce }", count)
         self.assertIn("if = { limit = { NOT = { exists = workplace } } "
-                      "change_local_variable = { name = te_unemp_w_idle add = workforce } }", walk)
+                      "change_local_variable = { name = te_unemp_w_idle add = workforce } }", count)
+
+    def test_it_counts_slack_as_the_dataset_does(self):
+        # Construction Cost Scaling's slack: every peasant's workforce, and every other pop's with no workplace
+        # (econ_save_series.pops_by_state), so a peasant with no workplace isn't counted twice.
+        count = _squash(self.effects["te_unemp_count_pop"])
+        self.assertIn("if = { limit = { is_pop_type = peasants } "
+                      "change_local_variable = { name = te_unemp_w_slack add = workforce } "
+                      "change_local_variable = { name = te_unemp_w_peasant add = workforce } } "
+                      "else_if = { limit = { NOT = { exists = workplace } } "
+                      "change_local_variable = { name = te_unemp_w_slack add = workforce } }", count)
+        body = _squash(self.effects["te_unemp_share_refresh"])
+        for name, local in (("te_unemp_wf_count", "te_unemp_w_wf"), ("te_unemp_slack_count", "te_unemp_w_slack"),
+                            ("te_unemp_peasant_count", "te_unemp_w_peasant")):
+            self.assertIn("set_local_variable = { name = " + local + " value = 0 }", body)
+            self.assertIn("set_variable = { name = " + name + " value = local_var:" + local + " }", body)
 
     def test_it_stores_the_share_and_its_own_count(self):
         body = _squash(self.effects["te_unemp_share_refresh"])
@@ -196,8 +213,9 @@ class TheWalk(unittest.TestCase):
         self.assertIn("te_unemp_share_monthly_on_action", _body(on_actions, "on_monthly_pulse_state"))
         self.assertIn("te_unemp_share_yearly = yes", _body(on_actions, "te_unemp_share_yearly_on_action"))
         monthly = _squash(_body(on_actions, "te_unemp_share_monthly_on_action"))
-        self.assertIn("if = { limit = { NOT = { has_variable = te_unemp_wf_share } } te_unemp_share_refresh = yes }",
-                      monthly)
+        # a state with no walk yet, or none since the walk stored Construction Cost Scaling's counts
+        self.assertIn("if = { limit = { OR = { NOT = { has_variable = te_unemp_wf_share } "
+                      "NOT = { has_variable = te_unemp_slack_count } } } te_unemp_share_refresh = yes }", monthly)
         self.assertNotIn("selfcheck", monthly)
         yearly = _squash(self.effects["te_unemp_share_yearly"])
         # the share readers held is taken before the walk replaces it, and the check reads the walk's locals after

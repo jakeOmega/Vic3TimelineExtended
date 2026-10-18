@@ -40,9 +40,9 @@ TOY_LIGHT_BASE = _pm("toy_bakery", 0, TOY_START_STAFF, goods_in=250.0, goods_out
 TOY_LIGHT_TIER1 = _pm("toy_automated", 1, -1000.0, goods_in=150.0)      # R6: breakeven exactly 0.15
 
 
-def _toy(light_automation, maintenance=0.0, light_base=(TOY_LIGHT_BASE,)):
+def _toy(light_automation, maintenance=0.0, light_base=(TOY_LIGHT_BASE,), curve=C):
     numbers = D.ModNumbers(
-        curve=C, cost_tiers={}, retool_mult=10.0, retool_weeks=260, prices={"construction": 1000.0},
+        curve=curve, cost_tiers={}, retool_mult=10.0, retool_weeks=260, prices={"construction": 1000.0},
         base_project_cap=10.0, base_eos_cap=20.0, project_cap_steps=(), eos_cap_steps=(), tech_era={},
     )
     ladders = {
@@ -54,6 +54,10 @@ def _toy(light_automation, maintenance=0.0, light_base=(TOY_LIGHT_BASE,)):
 
 
 TOY = _toy((TOY_LIGHT_TIER1,))
+# The mod's slack band on the toy's line: all of X at 3% slack or less, none at 15% or more,
+# a third of the way a year.
+C_BAND = dataclasses.replace(C, slack_full=0.03, slack_none=0.15, slack_ease=1 / 3)
+TOY_BAND = _toy((TOY_LIGHT_TIER1,), curve=C_BAND)
 # A crew-only tier, like pm_ai_managed_fab: its cut cancels the base's per-level staff
 # and leaves a fixed crew of 1000 a building. Breakeven 150/5000 = 0.03, under the wage
 # floor, so it is taken in the first year (Review Focus 4).
@@ -233,6 +237,38 @@ class TestCurve(unittest.TestCase):
     def test_log_with_a_zero_floor_is_an_error(self):
         with self.assertRaises(ValueError):
             G.cost_mult(G.Params(curve="log"), D.CurveConstants(1.0, 0.0, 100.0, 10.0), 5.0)
+
+
+class TestSlackFactor(unittest.TestCase):
+    def test_target_is_a_line_between_the_band(self):
+        self.assertEqual(G.slack_target(C_BAND, 0.0), 1.0)
+        self.assertEqual(G.slack_target(C_BAND, 0.03), 1.0)
+        self.assertAlmostEqual(G.slack_target(C_BAND, 0.09), 0.5)
+        self.assertEqual(G.slack_target(C_BAND, 0.15), 0.0)
+        self.assertEqual(G.slack_target(C_BAND, 0.6), 0.0)
+        self.assertEqual(G.slack_target(C, 0.6), 1.0)                  # no band: the whole GDP part
+
+    def test_eases_a_third_of_the_way_a_year(self):
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0), 1 / 3)
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.3, 0.09), 0.3 + (0.5 - 0.3) / 3)
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.9, 0.6), 0.6)
+        # compounded over a longer step, as two or six pulses would move it, never past the target
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0, years=2.0), 1 - (2 / 3) ** 2)
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.0, 0.0, years=6.0), 1 - (2 / 3) ** 6)
+        self.assertAlmostEqual(G.eased_slack_factor(C_BAND, 0.2, 0.15, years=50.0), 0.0)
+        self.assertEqual(G.eased_slack_factor(dataclasses.replace(C_BAND, slack_ease=None), 0.2, 0.0), 1.0)
+        self.assertEqual(G.eased_slack_factor(C, 0.0, 0.6), 1.0)
+
+    def test_step_scales_x_by_the_eased_share(self):
+        # X from the line is 5 here; with no slack the share starts at 0 and moves a third of
+        # the way in the first year, and with all the workforce slack it stays at 0.
+        with mock.patch.object(G, "cost_mult", return_value=5.0):
+            (first,) = G.run(toy_scenario(peasants=0, unemployed=0, end_year=1867), TOY_BAND, G.Params())
+            (idle,) = G.run(toy_scenario(peasants=9e6, end_year=1867), TOY_BAND, G.Params())
+            (plain,) = G.run(toy_scenario(peasants=9e6, end_year=1867), TOY, G.Params())
+        self.assertAlmostEqual(first.x, 5.0 / 3)
+        self.assertEqual(idle.x, 0.0)
+        self.assertEqual(plain.x, 5.0)
 
 
 class TestPointPrice(unittest.TestCase):
@@ -1287,11 +1323,12 @@ class TestCli(unittest.TestCase):
         self.assertIn("| none |", out.stdout)
 
     def test_default_curves_parse_and_differ_from_linear(self):
-        # The mod's line stops at +100% (max_mult 1), so a default cap of 1 or more would repeat `linear`.
+        # The mod's line reaches +1000% (construction_cost_max_mult 10), so a default cap of 10 or
+        # more would repeat `linear`.
         for spec in G.DEFAULT_CURVES.split(","):
             fields = G.parse_curve(spec)
             if fields["curve"] == "capped":
-                self.assertLess(fields["curve_cap"], 1.0, spec)
+                self.assertLess(fields["curve_cap"], 10.0, spec)
 
     def test_cli_run_prints_a_summary_and_writes_the_csv(self):
         path = Path(self.enterContext(tempfile.TemporaryDirectory())) / "run.csv"

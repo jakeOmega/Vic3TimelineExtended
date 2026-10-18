@@ -10,21 +10,19 @@ te_unemp_share_yearly = {
 	te_unemp_share_selfcheck = yes
 }
 
-# THIS = a state: walk its pops once and store the workforce's share of its people (te_unemp_wf_share) and the share
-# of its workforce with no workplace (te_unemp_share_exact). The census's walk counts the same workforce
-# (te_demog_work_walk_pop), but only where the census runs, and Demographics is off by default. Leaves its sums in
-# locals for te_unemp_share_selfcheck. A state with no people keeps what it had.
+# THIS = a state: walk its pops once and store the workforce's share of its people (te_unemp_wf_share), the share
+# of its workforce with no workplace (te_unemp_share_exact), and the counts Construction Cost Scaling sums over a
+# country (te_unemp_wf_count, te_unemp_slack_count, te_unemp_peasant_count: people). The census's walk counts the same
+# workforce (te_demog_work_walk_pop), but only where the census runs, and Demographics is off by default. Leaves its
+# sums in locals for te_unemp_share_selfcheck. A state with no people keeps what it had.
 te_unemp_share_refresh = {
 	set_local_variable = { name = te_unemp_w_pop value = 0 }
 	set_local_variable = { name = te_unemp_w_wf value = 0 }
 	set_local_variable = { name = te_unemp_w_idle value = 0 }
+	set_local_variable = { name = te_unemp_w_slack value = 0 }
+	set_local_variable = { name = te_unemp_w_peasant value = 0 }
 	every_scope_pop = {
-		change_local_variable = { name = te_unemp_w_pop add = total_size }
-		change_local_variable = { name = te_unemp_w_wf add = workforce }
-		if = {
-			limit = { NOT = { exists = workplace } }
-			change_local_variable = { name = te_unemp_w_idle add = workforce }
-		}
+		te_unemp_count_pop = yes
 	}
 	if = {
 		limit = { local_var:te_unemp_w_pop > 0 }
@@ -36,6 +34,31 @@ te_unemp_share_refresh = {
 			name = te_unemp_share_exact
 			value = { value = local_var:te_unemp_w_idle divide = { value = local_var:te_unemp_w_wf min = 1 } }
 		}
+		set_variable = { name = te_unemp_wf_count value = local_var:te_unemp_w_wf }
+		set_variable = { name = te_unemp_slack_count value = local_var:te_unemp_w_slack }
+		set_variable = { name = te_unemp_peasant_count value = local_var:te_unemp_w_peasant }
+	}
+}
+
+# THIS = a pop: add it to the walk's sums (te_unemp_share_refresh, and te_cc_slack_selfcheck's recount of a whole
+# country). Slack is the workforce outside paid work: every peasant's (the dataset's rule,
+# econ_save_series.pops_by_state) and every other pop's with no workplace. Idle counts any pop with no workplace, for
+# te_unemp_share_exact as before.
+te_unemp_count_pop = {
+	change_local_variable = { name = te_unemp_w_pop add = total_size }
+	change_local_variable = { name = te_unemp_w_wf add = workforce }
+	if = {
+		limit = { NOT = { exists = workplace } }
+		change_local_variable = { name = te_unemp_w_idle add = workforce }
+	}
+	if = {
+		limit = { is_pop_type = peasants }
+		change_local_variable = { name = te_unemp_w_slack add = workforce }
+		change_local_variable = { name = te_unemp_w_peasant add = workforce }
+	}
+	else_if = {
+		limit = { NOT = { exists = workplace } }
+		change_local_variable = { name = te_unemp_w_slack add = workforce }
 	}
 }
 

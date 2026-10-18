@@ -210,6 +210,28 @@ def cost_mult(p: Params, c: D.CurveConstants, gdppc: float, world_gdppc: float |
     return min(ceiling, max_mult * _fraction(shape, x, lo, hi))
 
 
+def slack_target(c: D.CurveConstants, slack: float) -> float:
+    """The share of the GDP part that applies at `slack` (peasants + unemployed over the
+    workforce): 1 at c.slack_full or less, 0 at c.slack_none or more, a straight line
+    between (the script's te_cc_slack_target). 1 when `c` has no slack band."""
+    if not c.has_slack_band:
+        return 1.0
+    span = max(c.slack_none - c.slack_full, 0.001)       # the script's divisor floor
+    return _clamp((c.slack_none - slack) / span, 0.0, 1.0)
+
+
+def eased_slack_factor(c: D.CurveConstants, prev: float, slack: float, years: float = 1.0) -> float:
+    """The applying share after `years` (one yearly pulse at 1.0): `prev` moved
+    c.slack_ease of the remaining way toward slack_target(c, slack) a year, compounded
+    over `years` (1 - (1 - ease)^years, as the script's pulses do; te_cc_slack_factor_eased).
+    With no band, 1; with no ease, the target."""
+    if not c.has_slack_band:
+        return 1.0
+    ease = 1.0 if c.slack_ease is None else _clamp(c.slack_ease, 0.0, 1.0)
+    step = 1.0 - (1.0 - ease) ** max(0.0, years)
+    return _clamp(prev + (slack_target(c, slack) - prev) * step, 0.0, 1.0)
+
+
 def point_price(p: Params, base_price: float, x: float) -> float:
     """GBP per construction point: the construction good's base price, its market
     price level, the cost multiplier X, and any other cost modifiers (spec 4.1)."""
@@ -265,6 +287,8 @@ class State:
     sectors: dict[str, SectorState]
     subsistence_capacity: float
     x: float = 0.0                              # last year's cost multiplier; 0 before the first step
+    slack_factor: float = 0.0                   # the share of the GDP part that applies (a slack band only);
+                                                # 0 before the first step, as the script's before its first pulse
 
 
 @dataclass
@@ -383,7 +407,9 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
      6 shedding      jobs gone take their workers to the unemployed
      7 hiring        fill_rate of the open jobs, from the unemployed, then peasants
                      above the land floor while the wage beats subsistence by 10%
-     8 GDP           staffed levels x VA x (1 + EoS), less retooling payments; X
+     8 GDP           staffed levels x VA x (1 + EoS), less retooling payments; X, times
+                     the applying share eased toward the slack after hiring when the
+                     curve has a slack band
      9 construction  investment buys points (point price at X, the per-project cap);
                      new levels arrive at the end of the year by allocation share
     10 automation    a best response: the tier that saves most at this year's wage,
@@ -505,6 +531,10 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
     gdp = gdp_level * (1.0 + p.demand_gdp_ratio)
     gdppc = gdp / state.population if state.population > 0 else 0.0
     x = cost_mult(p, nums.curve, gdppc, sc.world_gdppc_at(year))
+    if nums.curve.has_slack_band:
+        state.slack_factor = eased_slack_factor(nums.curve, state.slack_factor,
+                                                _share(state.peasants + state.unemployed, state.workforce))
+        x *= state.slack_factor
 
     # 9. Construction.
     spend = (p.private_invest_share + p.gov_invest_share) * gdp
@@ -875,7 +905,7 @@ def summarize(records: list[YearRecord], sc: Scenario, md: D.ModData, p: Params,
 # --------------------------------------------------------------------------
 
 DEFAULT_SCENARIOS = "player_rich,player_poor,ai_rich,ai_poor"
-DEFAULT_CURVES = "linear,capped:0.5,slope:0.5,slope:2,none"   # a cap of 1 or more is `linear` (#1034)
+DEFAULT_CURVES = "linear,capped:1,slope:0.5,slope:2,none"   # each times the mod's slack share; capped:1 holds the line at +100%; a cap of max_mult or more is `linear`
 DASH = "—"
 TRACE_EVERY = 10                                # `run` prints a line each decade, and the first and last year
 COLUMNS = ("Setting", "Type", "Turn year", "Adoption year", "Peasants < 5%",
