@@ -14,15 +14,41 @@ te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event t
 	hidden = yes
 
 	immediate = {
-		# The probes read te_dbg_eng_unset while it is unset. This never-run
-		# write keeps the load-time "used but never set" check quiet.
+		# Part 2's blocks each read their own te_dbg_eng_unset_<block> while it
+		# is unset. This never-run write keeps the load-time "used but never
+		# set" check quiet.
 		if = {
 			limit = { always = no }
-			set_variable = { name = te_dbg_eng_unset value = 1 }
+			set_variable = { name = te_dbg_eng_unset_and value = 1 }
+			set_variable = { name = te_dbg_eng_unset_or value = 1 }
+			set_variable = { name = te_dbg_eng_unset_nand value = 1 }
+			set_variable = { name = te_dbg_eng_unset_nor value = 1 }
+			set_variable = { name = te_dbg_eng_unset_not_f value = 1 }
+			set_variable = { name = te_dbg_eng_unset_not_t value = 1 }
 		}
 		if = {
-			limit = { has_variable = te_dbg_eng_unset }
-			remove_variable = te_dbg_eng_unset
+			limit = { has_variable = te_dbg_eng_unset_and }
+			remove_variable = te_dbg_eng_unset_and
+		}
+		if = {
+			limit = { has_variable = te_dbg_eng_unset_or }
+			remove_variable = te_dbg_eng_unset_or
+		}
+		if = {
+			limit = { has_variable = te_dbg_eng_unset_nand }
+			remove_variable = te_dbg_eng_unset_nand
+		}
+		if = {
+			limit = { has_variable = te_dbg_eng_unset_nor }
+			remove_variable = te_dbg_eng_unset_nor
+		}
+		if = {
+			limit = { has_variable = te_dbg_eng_unset_not_f }
+			remove_variable = te_dbg_eng_unset_not_f
+		}
+		if = {
+			limit = { has_variable = te_dbg_eng_unset_not_t }
+			remove_variable = te_dbg_eng_unset_not_t
 		}
 
 		# 1. What a two-child NOT means: it passes as NAND and fails as NOR.
@@ -40,16 +66,17 @@ te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event t
 		}
 
 		# 2. Which blocks read a child after the one that settles them. Each
-		# block below reads te_dbg_eng_unset second, on a line of its own. A
-		# block that reads it logs "Failed to fetch variable for
-		# 'te_dbg_eng_unset'" in error.log at that line; one that stops first
-		# logs nothing. The AND is the control: it should log nothing.
-		debug_log = "TE_PROBE_ENGINE short_circuit start: error.log names the line of each block that read past its deciding child"
+		# block below reads its own unset variable second. A block that reads
+		# it logs "Failed to fetch variable for 'te_dbg_eng_unset_<block>'" in
+		# error.log; one that stops first logs nothing. The variable names the
+		# block, as error.log's line numbers can be off by several lines. The
+		# AND is the control: it should log nothing.
+		debug_log = "TE_PROBE_ENGINE short_circuit start: error.log names the te_dbg_eng_unset_ variable of each block that read past its deciding child"
 		if = {
 			limit = {
 				AND = {
 					always = no
-					var:te_dbg_eng_unset > 0
+					var:te_dbg_eng_unset_and > 0
 				}
 			}
 			debug_log = "TE_PROBE_ENGINE and passed (AND of always = no, then the unset variable)"
@@ -58,7 +85,7 @@ te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event t
 			limit = {
 				OR = {
 					always = yes
-					var:te_dbg_eng_unset > 0
+					var:te_dbg_eng_unset_or > 0
 				}
 			}
 			debug_log = "TE_PROBE_ENGINE or passed (OR of always = yes, then the unset variable)"
@@ -67,7 +94,7 @@ te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event t
 			limit = {
 				NAND = {
 					always = no
-					var:te_dbg_eng_unset > 0
+					var:te_dbg_eng_unset_nand > 0
 				}
 			}
 			debug_log = "TE_PROBE_ENGINE nand passed (NAND of always = no, then the unset variable)"
@@ -76,7 +103,7 @@ te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event t
 			limit = {
 				NOR = {
 					always = yes
-					var:te_dbg_eng_unset > 0
+					var:te_dbg_eng_unset_nor > 0
 				}
 			}
 			debug_log = "TE_PROBE_ENGINE nor passed (NOR of always = yes, then the unset variable)"
@@ -88,7 +115,7 @@ te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event t
 			limit = {
 				NOT = {
 					always = no
-					var:te_dbg_eng_unset > 0
+					var:te_dbg_eng_unset_not_f > 0
 				}
 			}
 			debug_log = "TE_PROBE_ENGINE not_false_first passed (NOT of always = no, then the unset variable)"
@@ -97,7 +124,7 @@ te_debug_engine.1 = { # REVIEWED 2026-10-18: console-only engine probe (`event t
 			limit = {
 				NOT = {
 					always = yes
-					var:te_dbg_eng_unset > 0
+					var:te_dbg_eng_unset_not_t > 0
 				}
 			}
 			debug_log = "TE_PROBE_ENGINE not_true_first passed (NOT of always = yes, then the unset variable)"
