@@ -115,8 +115,8 @@ even in that save, and the scale comes from those lines.
    it falls back under. No error in `debug.log` from the pass (`while`, `ordered_country`,
    `change_relations`). A new claimant's mid-year sharing re-divides every pool, but charges no
    Unilateral relations (they fall on the year's first sharing only).
-7. **The Seabed tab (layout A).** The Timeline Extended window shows a Seabed tab on its second strip,
-   beside the Colonial Empire, greyed (with its checklist) until the
+7. **The Seabed tab (layout A).** The Timeline Extended window shows a Seabed tab, the strip's fifth,
+   after the Colonial Empire, greyed (with its checklist) until the
    country has taken part in a sharing. Choosing it shows the overview's six boxes two to a row (Room
    to build, Our licences, Long-haul, Unused claims, Policy, Regime), each with its icon in an inset,
    the three short policy buttons (Survey, Sponsor, Unilateral), the Ocean Basins table with "as of

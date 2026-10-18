@@ -376,6 +376,32 @@ class TabLayoutTest(unittest.TestCase):
         for size in ("small", "medium", "large"):
             self.assertIn(f"produced_authority > forced_law_through_event_authority_cost_{size}", tier)
 
+    def test_the_override_bar_starts_where_capacity_first_counts(self):
+        """Owner, 2026-10-17: every capacity below 0 plays the same, so the
+        bar spends no width on it. It starts at the event's own gate (no
+        `add`), and each threshold line stands at t / top of the 480 bar,
+        for the thresholds the event's trigger and options read."""
+        values = _read(ROOT / "common" / "script_values" / "te_nation_values.txt")
+        bar = values[values.index("te_nation_override_bar = {"):]
+        bar = bar[:bar.index("\n}\n")]
+        self.assertNotRegex(bar, r"\b(add|subtract) =")
+        top = float(re.search(r"\bdivide = ([\d.]+)", bar).group(1))
+        event = _read(ROOT / "events" / "minor_events.txt")
+        event = event[event.index("minor_events_timelineextended.2 = {"):]
+        event = event[:event.index("\n}\n")]
+        gates = sorted({int(g) for g in re.findall(
+            r'"modifier:country_legislative_override_capacity_add" >= (\d+)', event)})
+        self.assertEqual(gates, [0, 2, 4])
+        self.assertGreater(top, gates[-1])
+        gov = self.gui[self.gui.index("type te_nation_section_governance = "):
+                       self.gui.index("type te_nation_section_society = ")]
+        for t in gates:
+            with self.subTest(threshold=t):
+                m = re.search(r"position = \{ (\d+) -2 \}\s*texture = \S+\s*color = [^\n]+\s*"
+                              rf'tooltip = "te_nation_override_line_{t}_tt"', gov)
+                self.assertTrue(m, t)
+                self.assertEqual(int(m.group(1)), int(t / top * 480))
+
     def test_the_demographics_pointer_needs_the_tab(self):
         # The Population panel's Demographics tab is off by default
         # (demographics_rule): point to it only while it is there.

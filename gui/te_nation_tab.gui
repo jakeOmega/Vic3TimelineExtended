@@ -343,8 +343,10 @@ types te_nation_widget_types
 		}
 		te_nation_panel = {
 			### Legislative Override Capacity: the value with the engine's
-			### breakdown on hover, a bar from -6 to +8 with a line at each
+			### breakdown on hover, a bar from 0 to +30 with a line at each
 			### Forceful Legislation threshold, and the strongest option open.
+			### The bar starts at 0 because every value below it plays the same
+			### (te_nation_override_bar); the figure still shows a negative one.
 			te_nation_row = {
 				text = "te_nation_override_row"
 			}
@@ -360,24 +362,25 @@ types te_nation_widget_types
 						max = 1
 					}
 				}
-				### The thresholds at 0, 2 and 4: (t + 6) / 14 of 480.
+				### The thresholds at 0, 2 and 4: t / 30 of 480. The line at 0 is
+				### the bar's left edge, kept for its hover.
 				icon = {
 					size = { 2 18 }
-					position = { 205 -2 }
+					position = { 0 -2 }
 					texture = "gfx/interface/backgrounds/white.dds"
 					color = { 0.96 0.90 0.72 0.9 }
 					tooltip = "te_nation_override_line_0_tt"
 				}
 				icon = {
 					size = { 2 18 }
-					position = { 274 -2 }
+					position = { 32 -2 }
 					texture = "gfx/interface/backgrounds/white.dds"
 					color = { 0.96 0.90 0.72 0.9 }
 					tooltip = "te_nation_override_line_2_tt"
 				}
 				icon = {
 					size = { 2 18 }
-					position = { 342 -2 }
+					position = { 64 -2 }
 					texture = "gfx/interface/backgrounds/white.dds"
 					color = { 0.96 0.90 0.72 0.9 }
 					tooltip = "te_nation_override_line_4_tt"

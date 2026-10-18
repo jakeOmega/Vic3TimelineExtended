@@ -8,11 +8,18 @@ te_nation_override_capacity = {
 	value = modifier:country_legislative_override_capacity_add
 }
 
-# Its bar: -6 to +8 as 0 to 1.
+# Its bar: 0 to +30 as 0 to 1. Every value below 0 plays the same: the
+# Forceful Legislation event needs 0 (minor_events_timelineextended.2), its
+# options and the tax code's Force Through need 2 or 4, and the authority
+# discount (forced_law_through_event_capacity_discount) starts at 2. So the
+# bar starts at 0, empty there and below, and the row's figure keeps the true
+# number (owner, 2026-10-17: the sub-zero stretch was wasted space). 30 is
+# about the most a country holds at once: the strongest law of each of the 15
+# groups that carry it (20), the three institutions at full investment (3.5),
+# Creative Legislature V (4) and the two surveillance technologies (2).
 te_nation_override_bar = {
 	value = te_nation_override_capacity
-	add = 6
-	divide = 14
+	divide = 30
 	min = 0
 	max = 1
 }

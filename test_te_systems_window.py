@@ -1,6 +1,6 @@
 """The Timeline Extended window (gui/te_systems_window.gui): the mod's own
-window. The first strip: Nation (always open), the Space Race and Grand
-Monuments; the second: the Colonial Empire and the Seabed (Global Commons).
+window. One strip of five tabs: Nation (always open), the Space Race, Grand
+Monuments, the Colonial Empire and the Seabed (Global Commons).
 Opened from a button under the sidebar
 (docs/systems/system_panels_feasibility.md §3.1, §3.5, §3.6; style guide rule 9).
 
@@ -24,23 +24,27 @@ WIDGETS = os.path.join(REPO, "gui", "journal_entry_widgets")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 ICON_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md")
 
-# The system tabs: (tab key, the rule its gates read, its slot on its strip).
-# The first strip: Nation (always open, no rule), then these two.
-TABS = [("space_race", "has_game_rule = space_race_enabled", "second"),
-        ("grand_monuments", "gm_system_enabled = yes", "third")]
-# The second strip, so the first's full names keep their width (a fourth on
-# one strip leaves 115 each).
-SECOND = [("colonial_empire", "has_game_rule = decolonization_enabled", "first"),
-          ("seabed", "te_global_commons_enabled = yes", "second")]
-SECOND_STRIP = "te_systems_window_second_strip"
-ALL_TABS = TABS + SECOND
+# The system tabs: (tab key, the rule its gates read, its slot on the strip).
+# One strip, as vanilla's Diplomacy panel holds its five: Nation (always open,
+# no rule) in the first slot, then these four.
+ALL_TABS = [("space_race", "has_game_rule = space_race_enabled", "second"),
+            ("grand_monuments", "gm_system_enabled = yes", "third"),
+            ("colonial_empire", "has_game_rule = decolonization_enabled", "fourth"),
+            ("seabed", "te_global_commons_enabled = yes", "fifth")]
 SR = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
       "interstellar_probe", "interstellar_results", "solar_colonization"]   # je_space_race.txt order
-# The systems' full names, and the width a tab's name gets: three tabs share
-# about 540, less tab_text_properties' 10 px margin each side (no icon).
+# The systems' full names, and the width a tab's name gets: five slots share
+# 540 less vanilla tab_buttons' 3 px margins and two 5 px dividers, 104.8 each,
+# less tab_text_properties' 10 px margin each side (no icon): 84.8.
 FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire": "Colonial Empire",
               "grand_monuments": "Grand Monuments", "seabed": "Seabed"}
-NAME_WIDTH = 540 / 3 - 2 * 10
+NAME_WIDTH = (540 - 2 * 3 - 2 * 5) / 5 - 2 * 10
+# tab_text_properties wraps a name (multiline = yes) and shrinks it from the
+# tab font's 17 down to fontsize_min = 12 before it elides.
+TAB_FONT, TAB_FONT_MIN = 17, 12
+# The longest name vanilla puts on its own five-slot strip in this same 540
+# window (diplomatic_overview.gui, plain tab_buttons, no size override).
+VANILLA_FIVE_SLOT_NAME = "Nation Formation"
 # Tab labels are budgeted at the medium rate, 8.6 units a character plus 10%,
 # not the large row font's 10. Vanilla's tab text is the default EB Garamond 17
 # (tab_text_properties; #title unselected, #variable bold selected), and the
@@ -376,6 +380,10 @@ class StripTest(unittest.TestCase):
         cls.panel = _type_body(cls.gui, "te_systems_window_panel")
         cls.sguis = _read(TAB_SGUIS)
 
+    def _strip(self):
+        """The system tabs' strip: the panel's first tab_buttons."""
+        return _block_at(self.panel, self.panel.index("tab_buttons = {"))
+
     def _override(self, name, within=None):
         text = within or self.panel
         m = re.search(rf'blockoverride "{name}" \{{', text)
@@ -383,9 +391,8 @@ class StripTest(unittest.TestCase):
         return text[m.end():_close(text, m.end() - 1)]
 
     def test_each_tab_is_greyed_until_open_and_stores_the_choice(self):
-        second = _named(self.gui, SECOND_STRIP)
+        within = self._strip()
         for tab, _, slot in ALL_TABS:
-            within = second if (tab, _, slot) in SECOND else None
             with self.subTest(tab=tab):
                 click = self._override(f"{slot}_button_click", within)
                 self.assertIn(f'enabled = "[{_gate(f"te_window_{tab}_tab_sgui")}]"', click)
@@ -402,7 +409,7 @@ class StripTest(unittest.TestCase):
                     self.assertIn(f'text = "te_window_tab_{tab}"', self._override(half, within))
 
     def test_nation_is_first_and_always_open(self):
-        first = self.panel[self.panel.index("tab_buttons = {"):self.panel.index(SECOND_STRIP)]
+        first = self._strip()
         self.assertLess(first.index('blockoverride "first_button" {\n\t\t\t\t\t\ttext = "te_window_tab_nation"'),
                         first.index('text = "te_window_tab_space_race"'))
         click = self._override("first_button_click", first)
@@ -413,13 +420,24 @@ class StripTest(unittest.TestCase):
         self.assertIn("using = te_systems_window_nation_unselected",
                       self._override("first_button_visibility_checked", first))
 
-    def test_the_second_strip_is_up_while_either_rule_is_on(self):
-        strip = _named(self.gui, SECOND_STRIP)
-        gates = ", ".join(_gate(f"te_window_{t}_tab_unlock_sgui") for t, _, _ in SECOND)
-        self.assertIn(f'visible = "[Or( {gates} )]"', strip.split("\n\n")[0])
-        # under the first strip, above the developer strip
-        self.assertLess(self.panel.index('blockoverride "third_button_selected"'), self.panel.index(SECOND_STRIP))
-        self.assertLess(self.panel.index(SECOND_STRIP), self.panel.index("te_tp_tab_sgui"))
+    def test_one_strip_holds_all_five_tabs(self):
+        """Owner, 2026-10-17: two levels for five tabs was a bit silly, when
+        the other windows hold up to six on one strip. Vanilla's tab_buttons
+        has five slots, so the five system tabs fill it in the windows' order
+        and the strip itself carries no gate (Nation always shows). Only the
+        developer tax-probes tab keeps a strip of its own, after it."""
+        strip = self._strip()
+        self.assertNotIn("visible =", strip.split("blockoverride")[0])
+        at = [strip.index(f'text = "te_window_tab_{t}"') for t in ["nation"] + [t for t, _, _ in ALL_TABS]]
+        self.assertEqual(at, sorted(at))
+        for slot in ("first", "second", "third", "fourth", "fifth"):
+            self.assertIn(f'blockoverride "{slot}_button"', strip)
+        self.assertNotIn("sixth_button", strip)
+        rest = self.panel[self.panel.index(strip) + len(strip):]
+        self.assertNotIn("te_window_tab_", rest.split("scrollarea_content")[0])
+        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.panel))), 2)
+        self.assertIn("te_tp_tab_sgui", rest.split("scrollarea_content")[0])
+        self.assertNotIn("second_strip", self.gui)
 
     def test_the_gates_read_the_rule_and_the_entries(self):
         for tab, rule, _ in ALL_TABS:
@@ -677,15 +695,27 @@ class LocTest(unittest.TestCase):
             self.assertIn(key, loc)
 
     def test_each_tab_shows_its_full_name(self):
-        """The tabs carry no icon, so a name gets its tab less
-        tab_text_properties' 10 px margins: three tabs share about 540. Each
-        tab shows the system's full name, which fits at the medium budget."""
+        """The tabs carry no icon, so a name gets its slot less
+        tab_text_properties' 10 px margins: 84.8 with five on the strip. A
+        two-word name such as "Colonial Empire" is wider than that on one line
+        at 17, as vanilla's "Release Subject" and "Nation Formation" are on
+        its own five-slot Diplomacy strip in this window; tab_text_properties
+        wraps it and shrinks it toward 12. So each word fits one line at
+        fontsize_min (the medium budget), no name runs to a third line, and
+        none is longer, or has a longer word, than vanilla's longest."""
         loc = _all_loc()
+        per_char = TAB_UNITS_PER_CHAR * 1.1 * TAB_FONT_MIN / TAB_FONT
+        vanilla_word = max(len(w) for w in VANILLA_FIVE_SLOT_NAME.split())
         for tab, full in FULL_NAMES.items():
             with self.subTest(tab=tab):
                 name = loc[f"te_window_tab_{tab}"]
                 self.assertEqual(name, full)
-                self.assertLessEqual(len(name) * TAB_UNITS_PER_CHAR * 1.1, NAME_WIDTH, name)
+                words = name.split()
+                self.assertLessEqual(len(words), 2, name)
+                for word in words:
+                    self.assertLessEqual(len(word) * per_char, NAME_WIDTH, word)
+                self.assertLessEqual(len(name), len(VANILLA_FIVE_SLOT_NAME), name)
+                self.assertLessEqual(max(len(w) for w in words), vanilla_word, name)
 
 
 class IconsTest(unittest.TestCase):
