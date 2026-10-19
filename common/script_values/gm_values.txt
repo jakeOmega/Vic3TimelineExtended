@@ -1678,6 +1678,12 @@ gm_world_rate_value = {
 	}
 }
 
+# How many times richer the world is than in 1836, for the panel's hover.
+gm_world_wealth_factor = {
+	value = 1
+	divide = gm_world_rate_value
+}
+
 # The band the self-check gm_world_base reads a new game's world GDP in.
 gm_world_gdp_1836_low = {
 	value = gm_world_gdp_1836

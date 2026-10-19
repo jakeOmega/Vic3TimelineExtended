@@ -303,8 +303,12 @@ class StateGatedTest(unittest.TestCase):
         # National Effects opens on its empty-state line when nothing is in
         # force (test_the_empty_state_covers_every_row holds the gate).
         panel = _squash(_strip_comments(_type_body(gui, "te_gm_sec_national")).split("gm_panel = {", 1)[1])
+        # The world-wealth rate's line first, always shown (Plan B), then the
+        # empty-state line.
         self.assertTrue(panel.startswith('visible = "[Not(GetVariableSystem.Exists(\'gm_national_closed\'))]" '
-                                         'spacing = 2 gm_text = { visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry'
+                                         'spacing = 2 gm_text = { default_format = "#tooltippable" '
+                                         'tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate" } '
+                                         'gm_text = { visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry'
                                          '.MakeScope.ScriptValue(\'gm_disp_national_any\'), \'(CFixedPoint)0\' )]" '
                                          'text = "gm_je_national_none" }'), panel[:300])
         # Our Monuments: the empty-state line shows exactly when the list is empty.

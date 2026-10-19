@@ -6408,6 +6408,41 @@ class MeaningCountsGrandeurTests(unittest.TestCase):
                          "value = gm_mon_start multiply = 0.1 min = 1")
 
 
+class RateDisplayTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.2 (Plan B): the player sees what a level is
+    worth before building: on the site's card and row, in National Effects
+    and in the build menu; and grandeur, often fractional now, prints with a
+    decimal (Review Focus 5)."""
+
+    RATE = "ScriptValue('gm_world_rate_value')|2"
+
+    def test_the_four_places(self):
+        L = loc()
+        card = squash(strip_comments(read("gui/te_state_panel_widgets.gui")))
+        self.assertIn('text = "gm_site_card_rate_lbl"', card)
+        self.assertIn('text = "gm_site_card_rate"', card)
+        self.assertIn(self.RATE, L["gm_site_card_rate"])
+        widget = squash(strip_comments(read(WIDGET)))
+        self.assertIn('text = "gm_site_row_rate"', widget)
+        self.assertIn(self.RATE, L["gm_site_row_rate"])
+        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', widget)
+        self.assertIn(self.RATE, L["gm_je_world_rate"])
+        self.assertIn("ScriptValue('gm_world_wealth_factor')|1", L["gm_je_world_rate_tt"])
+        self.assertEqual(squash(block(read(VALUES), "gm_world_wealth_factor")),
+                         "value = 1 divide = gm_world_rate_value")
+        possible = squash(block(read(SITE_BUILDING), "possible"))
+        self.assertIn("custom_tooltip = { text = gm_site_rate_tt always = yes }", possible)
+        self.assertIn("[SCOPE.ScriptValue('gm_world_rate_value')|2]", L["gm_site_rate_tt"])
+
+    def test_grandeur_prints_a_decimal(self):
+        L = loc()
+        for key, value in (("gm_row_detail", "gm_state_primary_grandeur"), ("gm_state_val_grandeur", "gm_state_grandeur"),
+                           ("gm_state_grandeur_tt_one", "gm_state_grandeur"),
+                           ("gm_state_grandeur_tt_many", "gm_state_grandeur")):
+            self.assertIn(f"ScriptValue('{value}')|1", L[key], key)
+        self.assertIn("ScriptValue('gm_state_primary_start')|1", L["gm_state_grandeur_tt_one"])
+
+
 class RecordWriterTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's
     size keeps its starting grandeur in step with its levels."""

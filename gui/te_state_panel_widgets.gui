@@ -617,6 +617,18 @@ types te_state_panel_widget_types
 								text = "gm_site_card_grandeur"
 							}
 						}
+						### What a level finished now adds (Plan B: the world-wealth rate).
+						te_state_gm_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+							}
+							blockoverride "row_label" {
+								text = "gm_site_card_rate_lbl"
+							}
+							blockoverride "row_value" {
+								text = "gm_site_card_rate"
+							}
+						}
 						textbox = {
 							visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_site_building'), '(CFixedPoint)1')]"
 							autoresize = yes
