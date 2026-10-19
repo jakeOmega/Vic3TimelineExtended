@@ -19,7 +19,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    LANDMARKS, ROOT, block, loc, raw_block_at, read, squash, strip_comments,
+    BUILT, LANDMARKS, ROOT, block, loc, raw_block_at, read, squash, strip_comments,
 )
 
 EFFECTS = "common/scripted_effects/gm_archaeology_effects.txt"
@@ -115,7 +115,7 @@ def state_regions():
 
 def seed_call(lm, site):
     return (f"gm_arch_seed_site = {{ KEY = {lm.key} STATE = {lm.state} TECH = {flag(site.tech)} "
-            f"VECTOR = {site.vector} FORM = {lm.form} LEVEL = {lm.level} }}")
+            f"VECTOR = {site.vector} FORM = {lm.form} LEVEL = {lm.level} BUILT = {BUILT[lm.key]} }}")
 
 
 class TableTests(unittest.TestCase):
@@ -213,8 +213,21 @@ class SeedTests(unittest.TestCase):
                       "gm_arch_seed_rounds } gm_arch_seed_sites = yes }", body)
         self.assertLess(body.index("gm_arch_self_check = yes"), body.index("global_var:gm_arch_seed_round <"),
                         "the self-check stays once a game")
-        self.assertEqual(squash(block(read(VALUES), "gm_arch_seed_rounds")), "value = 2",
+        self.assertEqual(squash(block(read(VALUES), "gm_arch_seed_rounds")), "value = 3",
                          "raise it with every row added to ARCH_SITES after a game may have been seeded")
+
+    def test_a_site_records_its_year(self):
+        """The year it was built, for the split when it is unearthed (owner,
+        2026-10-19); round 3 gives it to a site seeded before, still buried."""
+        seed = squash(block(self.e, "gm_arch_seed_site"))
+        self.assertIn("set_variable = { name = gm_tr_built value = $BUILT$ }", seed)
+        self.assertIn("else_if = { limit = { has_global_variable_list = gm_arch_sites } every_in_global_list = { "
+                      "variable = gm_arch_sites limit = { has_variable = gm_tr_landmark var:gm_tr_landmark = "
+                      "flag:$KEY$ NOT = { has_variable = gm_tr_built } } set_variable = { name = gm_tr_built "
+                      "value = $BUILT$ } } }", seed)
+        # A site that never learned it counts as built the year it is found.
+        self.assertEqual(squash(block(read(VALUES), "gm_mon_built")),
+                         "value = gm_this_year if = { limit = { has_variable = gm_tr_built } value = var:gm_tr_built }")
 
     def test_a_site_being_dug_in_1836_starts_as_a_dig(self):
         excavating = [s.key for s in ARCH_SITES if s.vector == "excavating"]
@@ -988,14 +1001,17 @@ class ForeignTests(unittest.TestCase):
                        "name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region",
                        "name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece",
                        "name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur",
-                       # A find counts at the 1836 rate (owner, 2026-10-19).
-                       "name = gm_tr_start_grandeur value = { value = scope:gm_arch_partage_site.var:gm_site_piece "
-                       "multiply = gm_level_grandeur_1836 }",
                        "name = gm_tr_taken_by value = scope:gm_arch_sponsor",
                        "name = gm_tr_share value = flag:piece",
                        "name = gm_tr_landmark value = scope:gm_arch_partage_site.var:gm_tr_landmark"):
             self.assertIn(f"set_variable = {{ {record} }}", body, record)
         self.assertIn("gm_tr_update_picture = yes", body)
+        # A find counts at the 1836 rate (owner, 2026-10-19), split by its years:
+        # the piece takes the site's year and its share of them.
+        self.assertIn("if = { limit = { scope:gm_arch_partage_site = { has_variable = gm_tr_built } } "
+                      "set_variable = { name = gm_tr_built value = scope:gm_arch_partage_site.var:gm_tr_built } } "
+                      "gm_set_historical_grandeur = { LEVELS = scope:gm_arch_partage_site.var:gm_site_piece "
+                      "BUILT = gm_mon_built START = gm_tr_start_grandeur AGE = gm_tr_age }", body)
         self.assertIn("change_variable = { name = gm_tr_levels subtract = var:gm_site_piece }", body,
                       "the host keeps the rest")
         v = read(VALUES)
@@ -1006,15 +1022,17 @@ class ForeignTests(unittest.TestCase):
         # What the host keeps standing counts at the 1836 rate too: its levels
         # once settled and shared, before it stands beside or alone.
         place = squash(strip_comments(block(self.e, "gm_arch_place")))
-        start = ("set_variable = { name = gm_tr_start_grandeur value = { value = var:gm_tr_levels "
-                 "multiply = gm_level_grandeur_1836 } }")
+        start = ("gm_set_historical_grandeur = { LEVELS = var:gm_tr_levels BUILT = gm_mon_built "
+                 "START = gm_tr_start_grandeur AGE = gm_tr_age }")
         self.assertIn(start, place)
         self.assertLess(place.index(start), place.index("gm_arch_stand_beside = yes"))
         self.assertLess(place.index(start), place.index("gm_state_tr_receive = yes"))
-        # Every record a trophy made from a state carries, this one carries.
+        # Every record a trophy made from a state carries, this one carries:
+        # set directly, or as the historical split's START or AGE.
         made = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_state_tr_make_trophy"))
         for record in re.findall(r"set_variable = \{ name = (gm_tr_\w+) value", made):
-            self.assertIn(f"name = {record} value", body, record)
+            self.assertTrue(f"name = {record} value" in body or f"START = {record} " in body
+                            or f"AGE = {record} " in body, record)
 
     def test_the_grant_refreshes_the_sponsor(self):
         ev = squash(raw_block_at(strip_comments(read(EVENTS)), r"(?m)^arch_events\.12\s*=\s*\{"))

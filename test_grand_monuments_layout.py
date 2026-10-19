@@ -521,19 +521,29 @@ class DisplayValuesTest(unittest.TestCase):
         self.assertIn("gm_state_is_contested = yes", _squash(_block(self.values, "gm_disp_count_contested")))
 
     def test_each_bar_follows_its_curve(self):
-        """A bar's first step f and variables must be its gm_set_steps call's
-        (gm_set_steps_open's for cultural pull, whose partial step is the same
-        formula)."""
+        """A bar's first step f and variables must be its gm_set_steps call's;
+        a total on the 1/n curve (gm_set_steps_lin_open: prestige and cultural
+        pull) reads the step's width instead, (G - N + W) / W."""
         totals = _squash(_block(_read(EFFECTS), "gm_compute_totals"))
         calls = {m.group(3): (m.group(1), int(m.group(4))) for m in re.finditer(
-            r"gm_set_steps(?:_open)? = \{ IN = (gm_\w+) OUT = gm_s_(\w+) NEXT = gm_n_(\w+) F = (\d+) \}", totals)}
+            r"gm_set_steps = \{ IN = (gm_\w+) OUT = gm_s_(\w+) NEXT = gm_n_(\w+) F = (\d+) \}", totals)}
+        lin = {m.group(3): (m.group(1), m.group(4)) for m in re.finditer(
+            r"gm_set_steps_lin_open = \{ IN = (gm_\w+) OUT = gm_s_(\w+) NEXT = gm_n_(\w+) "
+            r"WIDTH = (gm_w_\w+) F = \d+ \}", totals)}
+        self.assertEqual(set(lin), {"standing", "culture"})
         gui = _gui()
         for row, suffix in FRACS.items():
             self.assertIn(f"ScriptValue('gm_disp_frac_{row}')", gui, row)
-            source, f = calls[suffix]
             body = _squash(_block(self.values, f"gm_disp_frac_{row}"))
-            self.assertIn(f"value = var:{source} multiply = 2 subtract = var:gm_n_{suffix} add = {f} "
-                          f"divide = {{ value = var:gm_n_{suffix} add = {f} }}", body, row)
+            if suffix in lin:
+                source, width = lin[suffix]
+                self.assertIn(f"has_variable = {width}", body, row)
+                self.assertIn(f"value = var:{source} subtract = var:gm_n_{suffix} add = var:{width} "
+                              f"divide = var:{width}", body, row)
+            else:
+                source, f = calls[suffix]
+                self.assertIn(f"value = var:{source} multiply = 2 subtract = var:gm_n_{suffix} add = {f} "
+                              f"divide = {{ value = var:gm_n_{suffix} add = {f} }}", body, row)
             self.assertTrue(body.endswith("min = 0 max = 1"), row)
 
     def test_the_bar_formula_matches_the_curve(self):
@@ -864,18 +874,45 @@ class StateCardTest(unittest.TestCase):
                 self.assertIn(f"has_variable = {var}", body, f"{name} reads var:{var} unguarded")
 
     def test_the_step_bar_follows_the_local_curve(self):
-        """The local effects step on gm_curve_steps_f5, so the bar is f = 5 and
-        its next step is gm_curve_next_f5's, read from the live level."""
+        """The local effects step on the 1/n curve (gm_curve_steps_lin_f5,
+        owner 2026-10-19), so the card counts the same steps from the live
+        level: the next step is the one after the whole steps done, ending at
+        5 * n(n+1) / 2, and the bar is the fraction of the step count."""
         values = _read(VALUES)
         # Each dedication's local effect (ageing spec 2026-10-16 §4.2).
         monthly = _squash(_block(_read(EFFECTS), "gm_state_local_steps_one"))
-        self.assertIn("value = gm_curve_steps_f5 multiply = gm_policy_factor_local", monthly)
-        curve = _squash(_block(values, "gm_curve_next_f5"))
-        nxt = _squash(_block(values, "gm_state_disp_next_step"))
-        self.assertEqual(nxt, curve.replace("var:gm_curve_in", "gm_state_grandeur"))
+        self.assertIn("value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local", monthly)
+        curve = _squash(_block(values, "gm_curve_steps_lin_f5"))
+        steps = _squash(_block(values, "gm_state_disp_steps"))
+        self.assertEqual(steps, curve.replace("var:gm_curve_in", "gm_state_grandeur"))
+        self.assertEqual(_squash(_block(values, "gm_state_disp_step_n")),
+                         "value = gm_state_disp_steps floor = yes add = 1 max = gm_curve_lin_steps")
+        self.assertEqual(_squash(_block(values, "gm_state_disp_next_step")),
+                         "value = gm_state_disp_step_n multiply = { value = gm_state_disp_step_n add = 1 } "
+                         "multiply = 2.5")
         pct = _squash(_block(values, "gm_state_disp_step_pct"))
-        self.assertEqual(pct, "value = gm_state_grandeur multiply = 2 subtract = gm_state_disp_next_step add = 5 "
-                              "divide = { value = gm_state_disp_next_step add = 5 } multiply = 100 min = 0 max = 100")
+        self.assertEqual(pct, "value = gm_state_disp_steps subtract = { value = gm_state_disp_steps floor = yes } "
+                              "multiply = 100 if = { limit = { gm_state_disp_steps >= gm_curve_lin_steps } "
+                              "value = 100 } min = 0 max = 100")
+
+    def test_the_card_formulas_match_the_curve(self):
+        """The card's next step and bar, transcribed, at a step's start, its
+        middle and just short of its end, and past the curve's last step."""
+        def steps(g):
+            return sum(min(max((g - 5 * k * (k - 1) / 2) / (5 * k), 0), 1) for k in range(1, 31))
+
+        def card(g):
+            s = steps(g)
+            n = min(int(s) + 1, 30)
+            pct = 100 if s >= 30 else (s - int(s)) * 100
+            return n * (n + 1) * 2.5, pct
+        for k in range(1, 31):
+            start, end = 5 * k * (k - 1) / 2, 5 * k * (k + 1) / 2
+            self.assertEqual(card(start)[0], end, k)
+            self.assertAlmostEqual(card(start)[1], 0.0, msg=k)
+            self.assertAlmostEqual(card((start + end) / 2), (end, 50.0), msg=k)
+            self.assertAlmostEqual(card(end - 1e-9)[1], 100.0, places=4, msg=k)
+        self.assertEqual(card(5000), (2325, 100))
 
 
 class StateCardLabelBudgetTest(LabelBudgetTest):
@@ -978,10 +1015,18 @@ class SignatureRowsTest(unittest.TestCase):
         values = _read(SIG_VALUES)
         steps = _squash(_block(_read(SIG_EFFECTS), "gm_sig_set_steps"))
         self.assertIn("gm_set_steps = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ NEXT = gm_n_sig_$SIG$ F = 5 }", steps)
+        sums = _squash(_block(_read(SIG_EFFECTS), "gm_sig_compute_sums"))
         for k in SIG_ROWS:
             body = _squash(_block(values, f"gm_disp_frac_sig_{k}"))
-            self.assertIn(f"value = var:gm_g_sig_{k} multiply = 2 subtract = var:gm_n_sig_{k} add = 5 "
-                          f"divide = {{ value = var:gm_n_sig_{k} add = 5 }}", body, k)
+            if k == "antiquity":
+                # Cultural pull, on the 1/n curve with no end (owner, 2026-10-19).
+                self.assertIn("gm_sig_set_steps_lin_open = { SIG = antiquity }", sums)
+                self.assertIn(f"value = var:gm_g_sig_{k} subtract = var:gm_n_sig_{k} add = var:gm_w_sig_{k} "
+                              f"divide = var:gm_w_sig_{k}", body, k)
+            else:
+                self.assertIn(f"gm_sig_set_steps = {{ SIG = {k} }}", sums, k)
+                self.assertIn(f"value = var:gm_g_sig_{k} multiply = 2 subtract = var:gm_n_sig_{k} add = 5 "
+                              f"divide = {{ value = var:gm_n_sig_{k} add = 5 }}", body, k)
             self.assertTrue(body.endswith("min = 0 max = 1"), k)
 
     def test_held_specials_under_the_boons(self):

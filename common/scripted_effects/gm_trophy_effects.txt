@@ -1198,16 +1198,16 @@ gm_tr_remove_national = {
 # test_grand_monument_trophies.py, in its order. Taken before the game began,
 # so no infamy, relations or notices: only the records.
 gm_seed_trophies = {
-	gm_seed_trophy = { LANDMARK = parthenon ORIGIN = STATE_ATTICA ORIGIN_TAG = GRE SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = pantheon SHARE = piece LEVELS = 5 YEAR = 1801 }
-	gm_seed_trophy = { LANDMARK = rosetta_stone ORIGIN = STATE_LOWER_EGYPT ORIGIN_TAG = EGY SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = stele SHARE = whole LEVELS = 3 YEAR = 1801 }
-	gm_seed_trophy = { LANDMARK = tipus_tiger ORIGIN = STATE_MYSORE ORIGIN_TAG = MYS SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = statue SHARE = whole LEVELS = 2 YEAR = 1799 }
-	gm_seed_trophy = { LANDMARK = royal_palace_of_kandy ORIGIN = STATE_CEYLON ORIGIN_TAG = BCE SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = hall SHARE = piece LEVELS = 2 YEAR = 1815 }
-	gm_seed_trophy = { LANDMARK = temple_of_dendera ORIGIN = STATE_UPPER_EGYPT ORIGIN_TAG = EGY SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = colonnade SHARE = piece LEVELS = 2 YEAR = 1821 }
-	gm_seed_trophy = { LANDMARK = luxor_obelisk ORIGIN = STATE_UPPER_EGYPT ORIGIN_TAG = EGY SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = obelisk SHARE = whole LEVELS = 5 YEAR = 1831 }
-	gm_seed_trophy = { LANDMARK = venus_de_milo ORIGIN = STATE_WEST_AEGEAN_ISLANDS ORIGIN_TAG = GRE SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = statue SHARE = whole LEVELS = 3 YEAR = 1820 }
-	gm_seed_trophy = { LANDMARK = baba_merzoug ORIGIN = STATE_ALGIERS ORIGIN_TAG = MAS SITE = STATE_BRITTANY SITE_TAG = FRA DEDICATION = war_memorial FORM = column SHARE = whole LEVELS = 2 YEAR = 1830 }
-	gm_seed_trophy = { LANDMARK = piraeus_lion ORIGIN = STATE_ATTICA ORIGIN_TAG = GRE SITE = STATE_VENETIA SITE_TAG = AUS DEDICATION = civic FORM = statue SHARE = whole LEVELS = 2 YEAR = 1687 }
-	gm_seed_trophy = { LANDMARK = horses_of_saint_mark ORIGIN = STATE_EASTERN_THRACE ORIGIN_TAG = TUR SITE = STATE_VENETIA SITE_TAG = AUS DEDICATION = civic FORM = statue SHARE = whole LEVELS = 5 YEAR = 1204 }
+	gm_seed_trophy = { LANDMARK = parthenon ORIGIN = STATE_ATTICA ORIGIN_TAG = GRE SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = pantheon SHARE = piece LEVELS = 5 YEAR = 1801 BUILT = -432 }
+	gm_seed_trophy = { LANDMARK = rosetta_stone ORIGIN = STATE_LOWER_EGYPT ORIGIN_TAG = EGY SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = stele SHARE = whole LEVELS = 3 YEAR = 1801 BUILT = -196 }
+	gm_seed_trophy = { LANDMARK = tipus_tiger ORIGIN = STATE_MYSORE ORIGIN_TAG = MYS SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = statue SHARE = whole LEVELS = 2 YEAR = 1799 BUILT = 1795 }
+	gm_seed_trophy = { LANDMARK = royal_palace_of_kandy ORIGIN = STATE_CEYLON ORIGIN_TAG = BCE SITE = STATE_HOME_COUNTIES SITE_TAG = GBR DEDICATION = civic FORM = hall SHARE = piece LEVELS = 2 YEAR = 1815 BUILT = 1600 }
+	gm_seed_trophy = { LANDMARK = temple_of_dendera ORIGIN = STATE_UPPER_EGYPT ORIGIN_TAG = EGY SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = colonnade SHARE = piece LEVELS = 2 YEAR = 1821 BUILT = -50 }
+	gm_seed_trophy = { LANDMARK = luxor_obelisk ORIGIN = STATE_UPPER_EGYPT ORIGIN_TAG = EGY SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = obelisk SHARE = whole LEVELS = 5 YEAR = 1831 BUILT = -1250 }
+	gm_seed_trophy = { LANDMARK = venus_de_milo ORIGIN = STATE_WEST_AEGEAN_ISLANDS ORIGIN_TAG = GRE SITE = STATE_ILE_DE_FRANCE SITE_TAG = FRA DEDICATION = civic FORM = statue SHARE = whole LEVELS = 3 YEAR = 1820 BUILT = -130 }
+	gm_seed_trophy = { LANDMARK = baba_merzoug ORIGIN = STATE_ALGIERS ORIGIN_TAG = MAS SITE = STATE_BRITTANY SITE_TAG = FRA DEDICATION = war_memorial FORM = column SHARE = whole LEVELS = 2 YEAR = 1830 BUILT = 1542 }
+	gm_seed_trophy = { LANDMARK = piraeus_lion ORIGIN = STATE_ATTICA ORIGIN_TAG = GRE SITE = STATE_VENETIA SITE_TAG = AUS DEDICATION = civic FORM = statue SHARE = whole LEVELS = 2 YEAR = 1687 BUILT = -360 }
+	gm_seed_trophy = { LANDMARK = horses_of_saint_mark ORIGIN = STATE_EASTERN_THRACE ORIGIN_TAG = TUR SITE = STATE_VENETIA SITE_TAG = AUS DEDICATION = civic FORM = statue SHARE = whole LEVELS = 5 YEAR = 1204 BUILT = 200 }
 	# The lists, then each holder's and claimant's refresh, which opens its
 	# journal entry.
 	gm_trophy_pass = yes
@@ -1269,16 +1269,10 @@ gm_seed_trophy = {
 				set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
 				set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
 				set_variable = { name = gm_tr_levels value = $LEVELS$ }
-				# The 1836 rate, as the landmarks are seeded at
-				# (gm_seed_landmark); abroad, half of it, rounded up
-				# (gm_state_tr_value).
-				set_variable = {
-					name = gm_tr_start_grandeur
-					value = {
-						value = $LEVELS$
-						multiply = gm_level_grandeur_1836
-					}
-				}
+				# The 1836 rate split by its years, as the landmarks are seeded
+				# at (gm_seed_landmark); abroad, half of it, rounded up
+				# (gm_state_tr_value). Home again, both parts rejoin it.
+				gm_set_historical_grandeur = { LEVELS = $LEVELS$ BUILT = $BUILT$ START = gm_tr_start_grandeur AGE = gm_tr_age }
 				set_variable = {
 					name = gm_tr_grandeur
 					value = {

@@ -70,7 +70,7 @@ DEDICATIONS = (
     Dedication("civic", "timeless", "petty_bourgeoisie", None,
                "state_loyalists_from_political_movements_mult", 0.10, None, None, 3),
     Dedication("war_memorial", "timeless", "armed_forces", None,
-               "state_conscription_rate_add", 0.05,
+               "state_conscription_rate_add", 0.01,
                "country_war_support_casualties_mult", -0.03, 5),
     Dedication("artistic", "timeless", "intelligentsia", None,
                "building_art_academy_throughput_add", 0.10,
@@ -286,6 +286,18 @@ def curve_terms(f):
     return [(f * (2 ** k - 1), f * 2 ** k) for k in range(8)]
 
 
+def lin_curve_terms(f, n=30):
+    """(start, size) of the first n steps of the 1/n curve with first step f:
+    step k takes k * f (owner, 2026-10-19)."""
+    return [(f * k * (k - 1) // 2, f * k) for k in range(1, n + 1)]
+
+
+# The local effects that stop short of the 1/n curve's end (owner, 2026-10-19):
+# dedication -> (its CAP script value, the steps it stops at).
+LOCAL_CAPS = {"war_memorial": ("gm_local_cap_war_memorial", 10),
+              "athletic": ("gm_local_cap_athletic", 5)}
+
+
 class CurveTests(unittest.TestCase):
     def _terms(self, name):
         body = squash(block(read(VALUES), name))
@@ -297,6 +309,22 @@ class CurveTests(unittest.TestCase):
         for f in (5, 10):
             terms = [(int(s or 0), int(d)) for s, d in self._terms(f"gm_curve_steps_f{f}")]
             self.assertEqual(terms, curve_terms(f), f)
+
+    def test_lin_steps_grow_by_one_first_step(self):
+        """The 1/n curve: thirty steps, step k taking k first steps."""
+        terms = [(int(s or 0), int(d)) for s, d in self._terms("gm_curve_steps_lin_f5")]
+        self.assertEqual(terms, lin_curve_terms(5))
+        self.assertRegex(strip_comments(read(VALUES)), r"(?m)^gm_curve_lin_steps = 30\s*$")
+        # Each step is worth 1/k of the first a point of grandeur.
+        for k, (_, size) in enumerate(lin_curve_terms(5), start=1):
+            self.assertEqual(size, 5 * k)
+
+    def test_local_caps(self):
+        values = strip_comments(read(VALUES))
+        for key, (name, cap) in LOCAL_CAPS.items():
+            self.assertRegex(values, r"(?m)^" + name + r" = " + str(cap) + r"\s*$", key)
+            self.assertEqual(squash(block(read(VALUES), f"gm_local_max_{key}")),
+                             f"value = {name} multiply = gm_step_local_{key}", key)
 
     def test_next_thresholds(self):
         for f in (5, 10):
@@ -613,13 +641,14 @@ class LocalPulseTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
         # The monument policy (v2 §5) scales the steps: tourism and the local
         # effect separately (each dedication's, SecondaryFitTests).
-        self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_f5 "
+        self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_lin_f5 "
                       "multiply = gm_policy_factor_tourism } }", body)
         self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
         # Upkeep by the records (UpkeepTests).
         self.assertIn("add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult }", body)
         for d in DEDICATIONS:
-            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} }}", body)
+            cap = LOCAL_CAPS.get(d.key, ("gm_curve_lin_steps",))[0]
+            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} CAP = {cap} }}", body)
 
     def test_backing_variable_is_never_removed(self):
         self.assertNotRegex(strip_comments(self.e), r"remove_variable = gm_local_steps")
@@ -720,8 +749,13 @@ class NationalTests(unittest.TestCase):
 
     def test_totals_use_the_right_curves(self):
         body = squash(block(self.e, "gm_compute_totals"))
-        self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing F = 5 }", body)
-        self.assertIn("gm_set_steps_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }", body)
+        # Prestige and cultural pull on the 1/n curve with no end (owner,
+        # 2026-10-19); every other national total keeps the doubling curve.
+        self.assertIn("gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing "
+                      "WIDTH = gm_w_standing F = 5 }", body)
+        self.assertIn("gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture "
+                      "WIDTH = gm_w_culture F = 10 }", body)
+        self.assertEqual(body.count("gm_set_steps_lin_open"), 2)
         self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
         # The monument policy (v2 §5) scales the steps after the curve, so the
@@ -839,55 +873,58 @@ class NationalTests(unittest.TestCase):
 
 
 class OpenCurveTests(unittest.TestCase):
-    """gm_set_steps_open: the curve without its end, for cultural pull (owner,
-    2026-10-16: diminishing returns, no ceiling). Past the eighth step the
-    doubling carries on, each further step costing twice the grandeur of the
-    one before."""
+    """gm_set_steps_lin_open: the 1/n curve with no end, for prestige and
+    cultural pull (owner, 2026-10-19). Step k takes k first steps, so each is
+    worth 1/k of the first a point of grandeur and the effect never stops
+    growing."""
 
     def test_effect_shape(self):
-        body = squash(block(read(EFFECTS), "gm_set_steps_open"))
+        body = squash(block(read(EFFECTS), "gm_set_steps_lin_open"))
         self.assertIsNotNone(body)
-        self.assertTrue(body.startswith("gm_set_steps = { IN = $IN$ OUT = $OUT$ NEXT = $NEXT$ F = $F$ } "
-                                        "if = { limit = { var:$IN$ >= var:$NEXT$ } "
-                                        "change_variable = { name = $NEXT$ multiply = 2 } "
-                                        "change_variable = { name = $NEXT$ add = $F$ } "
-                                        "while = { limit = { var:$IN$ >= var:$NEXT$ } "
-                                        "change_variable = { name = $OUT$ add = 1 } "
-                                        "change_variable = { name = $NEXT$ multiply = 2 } "
-                                        "change_variable = { name = $NEXT$ add = $F$ } }"), body)
-        self.assertIn("change_variable = { name = $OUT$ add = { value = var:$IN$ multiply = 2 "
-                      "subtract = var:$NEXT$ add = $F$ divide = { value = var:$NEXT$ add = $F$ } } }", body)
+        self.assertEqual(body,
+                         "set_variable = { name = $OUT$ value = 0 } "
+                         "set_variable = { name = $WIDTH$ value = $F$ } "
+                         "set_variable = { name = $NEXT$ value = $F$ } "
+                         "while = { limit = { var:$IN$ >= var:$NEXT$ } "
+                         "change_variable = { name = $OUT$ add = 1 } "
+                         "change_variable = { name = $WIDTH$ add = $F$ } "
+                         "change_variable = { name = $NEXT$ add = var:$WIDTH$ } } "
+                         "change_variable = { name = $OUT$ add = { value = var:$IN$ subtract = var:$NEXT$ "
+                         "add = var:$WIDTH$ divide = var:$WIDTH$ min = 0 } }")
+        # The doubling curve's open form went with cultural pull's move.
+        self.assertIsNone(block(read(EFFECTS), "gm_set_steps_open"))
 
     @staticmethod
     def steps(g, f=10):
-        """The effect, transcribed: gm_curve_steps_f / gm_curve_next_f (pinned
-        to curve_terms by CurveTests), then the open tail."""
-        s = sum(min(max((g - start) / size, 0), 1) for start, size in curve_terms(f))
-        ends = [f * (2 ** n - 1) for n in range(1, 9)]
-        n = next((e for e in ends if g < e), ends[-1])
-        if g >= n:
-            n = 2 * n + f
-            while g >= n:
-                s += 1
-                n = 2 * n + f
-            s += (2 * g - n + f) / (n + f)
-        return s, n
+        """The effect, transcribed."""
+        s, width, nxt = 0, f, f
+        while g >= nxt:
+            s += 1
+            width += f
+            nxt += width
+        s += max((g - nxt + width) / width, 0)
+        return s, nxt, width
 
-    def test_steps_keep_doubling_past_the_curve(self):
+    def test_matches_the_fixed_curve(self):
+        """Inside the fixed curve's thirty steps the open form agrees with it."""
+        for g in range(0, 2326, 7):
+            fixed = sum(min(max((g - start) / size, 0), 1) for start, size in lin_curve_terms(5))
+            self.assertAlmostEqual(self.steps(g, 5)[0], fixed, msg=g)
+
+    def test_step_k_ends_at_k_triangle(self):
         f = 10
-        for k in range(1, 16):
-            start, end = f * (2 ** (k - 1) - 1), f * (2 ** k - 1)
-            s, n = self.steps(end)
+        for k in range(1, 60):
+            end = f * k * (k + 1) // 2
+            s, nxt, width = self.steps(end)
             self.assertAlmostEqual(s, k, msg=end)
-            self.assertEqual(n, 2 * end + f if k >= 8 else f * (2 ** (k + 1) - 1), end)
-            self.assertAlmostEqual(self.steps((start + end) / 2)[0], k - 0.5, msg=end)
-            self.assertAlmostEqual(self.steps(end - 1e-6)[0], k, places=4, msg=end)
+            self.assertEqual((nxt, width), (end + f * (k + 1), f * (k + 1)), end)
+            self.assertAlmostEqual(self.steps(end - f * k / 2)[0], k - 0.5, msg=end)
 
     def test_no_ceiling(self):
-        self.assertGreater(self.steps(10 ** 6)[0], 16)
+        self.assertGreater(self.steps(10 ** 6)[0], 400)
         prev = 0
         for g in range(0, 30000, 37):
-            s, _ = self.steps(g)
+            s = self.steps(g)[0]
             self.assertGreaterEqual(s, prev, g)
             prev = s
 
@@ -1188,12 +1225,17 @@ LANDMARKS = (
     # Kumasi is in Asante's part of the Gold Coast, the Red Fort in the Mughal
     # emperor's one province of Delhi (its city hub).
     Landmark("parthenon", "STATE_ATTICA", "GRE", "civic", "pantheon", ("heritage_greek", "pantheon"), 10),
-    Landmark("obelisks_of_karnak", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), 5),
+    # Persepolis, Baalbek and Karnak at 10 (owner, 2026-10-19): the great
+    # ancient sites, beside the 10-level digs (the Pergamon Altar, Olympia,
+    # Delphi), and Karnak's obelisks above the one Luxor obelisk in Paris (5); a
+    # monument a century old in 1836 has finished ageing, so what it starts with
+    # is what it keeps.
+    Landmark("obelisks_of_karnak", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), 10),
     Landmark("royal_palace_of_benin", "STATE_BENIN", "BEN", "crown", "hall", ("generic", "hall"), 5),
     Landmark("royal_palace_of_kumasi", "STATE_GOLD_COAST", "ASH", "crown", "hall", ("generic", "hall"), 5),
     Landmark("bukgwan_victory_stele", "STATE_SARIWON", "KOR", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
     Landmark("imperial_city_of_hue", "STATE_ANNAM", "DAI", "crown", "gate", ("heritage_chinese", "gate"), 10),
-    Landmark("persepolis", "STATE_FARS", "PER", "civic", "hall", ("heritage_avestan", "hall"), 5),
+    Landmark("persepolis", "STATE_FARS", "PER", "civic", "hall", ("heritage_avestan", "hall"), 10),
     Landmark("red_fort", "STATE_DELHI", "MUG", "crown", "gate", ("heritage_avestan", "gate"), 10),
     # Never placed: the trophies of 1836 with no standing monument of their own.
     Landmark("rosetta_stone", "STATE_LOWER_EGYPT", "EGY", "civic", "stele", ("heritage_geez", "stele"), None, False),
@@ -1220,7 +1262,8 @@ LANDMARKS = (
     Landmark("uffizi_gallery", "STATE_TUSCANY", "TUS", "civic", "hall", ("generic", "hall"), 10),
     Landmark("capitoline_museums", "STATE_LAZIO", "PAP", "civic", "forum", ("heritage_latin", "forum"), 5),
     Landmark("bodrum_castle", "STATE_AYDIN", "TUR", "war_memorial", "tower", ("heritage_gothic", "tower"), 5),
-    Landmark("temples_of_baalbek", "STATE_LEBANON", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
+    Landmark("temples_of_baalbek", "STATE_LEBANON", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"),
+             10),
     # Added 2026-10-12: heritage sites with no weight in 1836, which the
     # owner's revised rule admits at lower priority. Single-owner states only
     # (owner): Palmyra in Syria (Homs is its nearest hub), Xanthos in Konya
@@ -1287,6 +1330,48 @@ LANDMARKS = (
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
+
+# The year each historical monument was finished, negative before Christ
+# (owner, 2026-10-19): its grandeur at the 1836 rate is split into starting
+# grandeur and the years since, as if it had aged in the game from then
+# (gm_set_historical_grandeur). Every row placed at the start, every trophy
+# abroad in 1836 and every dig; none for a historical opportunity's, which the
+# game builds.
+BUILT = {
+    # Standing in 1836.
+    "arc_de_triomphe": 1836, "alexander_column": 1834, "brandenburg_gate": 1791,
+    "washington_monument_baltimore": 1829, "la_scala": 1778, "teatro_di_san_carlo": 1817, "jantar_mantar": 1734,
+    "shalimar_gardens": 1642, "jardim_botanico": 1808, "stelae_of_aksum": 330, "liberty_column": 1797,
+    "lion_monument": 1821, "temple_of_heaven": 1420, "topkapi_palace": 1478, "golestan_palace": 1779,
+    "basilica_of_superga": 1731, "tomb_of_william_the_silent": 1623, "cenotaph_of_maximilian": 1584,
+    "arco_de_santa_maria": 1553, "statue_of_louis_xiv": 1825, "lion_of_saint_mark": 1293, "sans_souci_palace": 1813,
+    "nikko_toshogu": 1636, "parthenon": -432, "obelisks_of_karnak": -1457, "royal_palace_of_benin": 1440,
+    "royal_palace_of_kumasi": 1822, "bukgwan_victory_stele": 1709, "imperial_city_of_hue": 1833, "persepolis": -500,
+    "red_fort": 1648, "great_zimbabwe": 1300, "royal_palaces_of_abomey": 1645, "klungkung_palace": 1686,
+    "uffizi_gallery": 1581, "capitoline_museums": 1734, "bodrum_castle": 1437, "temples_of_baalbek": 150,
+    "palmyra": 32, "xanthos": -390, "mesha_stele": -840, "arch_of_ctesiphon": 540,
+    # Trophies abroad in 1836 with no standing monument of their own.
+    "rosetta_stone": -196, "temple_of_dendera": -50, "luxor_obelisk": -1250, "venus_de_milo": -130,
+    "piraeus_lion": -360, "horses_of_saint_mark": 200, "tipus_tiger": 1795, "baba_merzoug": 1542,
+    "royal_palace_of_kandy": 1600,
+    # Buried until the game.
+    "nineveh_library": -650, "winged_victory_of_samothrace": -190, "vindolanda_tablets": 100,
+    "troy_hisarlik": -1250, "mycenae_grave_circle": -1600, "pergamon_altar": -165, "deir_el_bahari_cache": -935,
+    "ishtar_gate_babylon": -575, "palace_of_knossos": -1700, "antikythera_mechanism": -100, "oseberg_ship": 834,
+    "machu_picchu": 1450, "bust_of_nefertiti": -1345, "mohenjo_daro": -2500, "tomb_of_tutankhamun": -1323,
+    "royal_cemetery_at_ur": -2600, "sanxingdui_pits": -1200, "sutton_hoo": 625, "lascaux_caves": -15000,
+    "nag_hammadi_library": 350, "dead_sea_scrolls": -100, "tomb_of_pakal": 683, "mawangdui_tombs": -168,
+    "terracotta_army": -210, "tomb_of_philip_ii": -336, "tomb_of_marquis_yi": -433, "royal_tombs_of_sipan": 250,
+    "otzi_the_iceman": -3300, "caral_supe": -2600, "gobekli_tepe": -9500, "olympia": -456, "delphi": -330,
+    "sidon_necropolis": -330, "villa_of_the_papyri": -50, "tomb_of_alexander": -320, "pompeii": 79,
+}
+
+
+def historical_split(levels, built, year=1836):
+    """gm_set_historical_grandeur, transcribed: (starting grandeur, age)."""
+    total = levels * 5
+    start = total / max(min(year - built, 100) * 2 / 100 + 1, 1)
+    return start, max(total - start, 0)
 
 
 def ceremony_options():
@@ -3508,12 +3593,12 @@ class PictureTests(unittest.TestCase):
     def test_frame_tier_follows_the_grandeur_steps(self):
         # Spec §3.5: the frame shows the step the monument's effects have
         # reached, on the state card's own step list.
+        # The local effects' 1/n curve (owner, 2026-10-19): its first five ends.
         values = read(VALUES)
-        steps = sorted(int(n) for n in re.findall(r"gm_state_grandeur < (\d+) \} value = \1",
-                                                  squash(block(values, "gm_state_disp_next_step"))))
-        self.assertEqual(steps[:5], [5, 15, 35, 75, 155])
+        steps = [start + size for start, size in lin_curve_terms(5, 5)]
+        self.assertEqual(steps, [5, 15, 30, 50, 75])
         expected = "value = 0 " + " ".join(f"if = {{ limit = {{ gm_state_grandeur >= {g} }} value = {i + 1} }}"
-                                          for i, g in enumerate(steps[:5]))
+                                          for i, g in enumerate(steps))
         self.assertEqual(squash(block(values, "gm_disp_frame_tier")), expected)
 
     def test_frames_draw_over_the_pictures(self):
@@ -3540,7 +3625,7 @@ LANDMARK_EFFECTS = "common/scripted_effects/gm_landmark_effects.txt"
 
 def landmark_seed_call(lm):
     return (f"gm_seed_landmark = {{ KEY = {lm.key} STATE = {lm.state} TAG = {lm.tag} "
-            f"DEDICATION = {lm.dedication} FORM = {lm.form} LEVEL = {lm.level} }}")
+            f"DEDICATION = {lm.dedication} FORM = {lm.form} LEVEL = {lm.level} BUILT = {BUILT[lm.key]} }}")
 
 
 def vanilla_monuments():
@@ -4043,7 +4128,7 @@ class ColocatedLandmarkTests(unittest.TestCase):
         self.assertIn("else_if = { limit = { s:$STATE$.region_state:$TAG$ ?= { has_building = building_grand_monument "
                       "NOT = { gm_state_has_landmark = { KEY = $KEY$ } } } } "
                       "s:$STATE$.region_state:$TAG$ = { gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ "
-                      "DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ } } }", body)
+                      "DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ BUILT = $BUILT$ } } }", body)
         # The old else is still the one that says nothing was placed.
         self.assertIn('else = { debug_log = "TE_MONUMENTS: landmark $KEY$ not placed', body)
 
@@ -4356,10 +4441,32 @@ class AgeingTests(unittest.TestCase):
                          "value = 1 if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } "
                          "value = 0.5 }")
         self.assertEqual(squash(block(values, "gm_state_age_step")),
-                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age")
+                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age "
+                         "max = gm_state_age_room")
         self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_age_step")),
                          "value = gm_mon_start multiply = 2 divide = 1200 if = { limit = { var:gm_tr_origin ?= { "
-                         "owner = { gm_policy_is = { P = mothballed STANDARD = no } } } } multiply = 0.5 }")
+                         "owner = { gm_policy_is = { P = mothballed STANDARD = no } } } } multiply = 0.5 } "
+                         "max = gm_mon_age_room")
+
+    def test_a_century_then_it_stands(self):
+        """Owner, 2026-10-19: ageing stops at a century's worth, twice the
+        starting grandeur, so a monument grows to three times what it was
+        dedicated with. Gifts are not capped (they go through gm_*_add_age)."""
+        values = read(VALUES)
+        self.assertRegex(strip_comments(values), r"(?m)^gm_age_cap_years = 100\s*$")
+        self.assertEqual(squash(block(values, "gm_state_age_room")),
+                         "value = gm_state_primary_start multiply = gm_age_cap_years multiply = 2 divide = 100 "
+                         "subtract = gm_state_primary_age min = 0")
+        self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_age_room")),
+                         "value = gm_mon_start multiply = gm_age_cap_years multiply = 2 divide = 100 "
+                         "subtract = gm_mon_age min = 0")
+        # Transcribed: a month at a time, the step clamped to the room left.
+        start, age = 75.0, 0.0
+        for month in range(12 * 150):
+            age += min(start * 2 / 1200, max(start * 100 * 2 / 100 - age, 0))
+            if month == 12 * 50 - 1:
+                self.assertAlmostEqual(start + age, 150)
+        self.assertAlmostEqual(start + age, 225)
 
     def test_what_ages(self):
         ages = squash(block(read(TRIGGERS), "gm_state_ages"))
@@ -4527,12 +4634,16 @@ class SecondaryFitTests(unittest.TestCase):
     def test_local_effects_by_dedication(self):
         monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
         for d in DEDICATIONS:
-            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} }}", monthly, d.key)
+            cap = LOCAL_CAPS.get(d.key, ("gm_curve_lin_steps",))[0]
+            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} CAP = {cap} }}", monthly, d.key)
         one = squash(strip_comments(block(read(EFFECTS), "gm_state_local_steps_one")))
+        # The 1/n curve, the policy, then the dedication's ceiling (owner,
+        # 2026-10-19): a cap on the effect, so it holds under every policy.
         for s in ("gm_state_has_pm = { PM = pm_monument_$KEY$ } } add = gm_state_primary_grandeur",
                   "every_in_list = { variable = gm_monuments_here limit = { gm_mon_is = { KEY = $KEY$ } } "
                   "add = gm_mon_grandeur }",
-                  "name = gm_local_steps_$KEY$ value = { value = gm_curve_steps_f5 multiply = gm_policy_factor_local }",
+                  "name = gm_local_steps_$KEY$ value = { value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local "
+                  "max = $CAP$ }",
                   "add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps_$KEY$ }"):
             self.assertIn(s, one)
 
@@ -5037,10 +5148,11 @@ class SignatureTableTests(unittest.TestCase):
     def test_antiquitys_cultural_pull(self):
         body = squash(block(read(CULTURAL), "cultural_pull_from_antiquity"))
         self.assertIn("value = var:gm_s_sig_antiquity multiply = gm_step_sig_antiquity", body)
-        self.assertTrue(body.endswith("max = gm_sig_antiquity_cap"))
-        self.assertRegex(strip_comments(read(SIG_VALUES)), r"(?m)^gm_sig_antiquity_cap = 3\s*$")
+        # No ceiling (owner, 2026-10-19): its monuments are a fixed list.
+        self.assertNotIn("max =", body)
+        self.assertNotIn("gm_sig_antiquity_cap", strip_comments(read(SIG_VALUES)))
         self.assertIn("add = cultural_pull_from_antiquity", squash(block(read(CULTURAL), "cultural_pull_from_monuments")))
-        self.assertTrue(squash(block(read(SIG_VALUES), "gm_display_sig_antiquity")).endswith("max = gm_sig_antiquity_cap"))
+        self.assertNotIn("max =", squash(block(read(SIG_VALUES), "gm_display_sig_antiquity")))
 
     def test_loc(self):
         L = loc()
@@ -5156,9 +5268,17 @@ class SignatureEffectTests(unittest.TestCase):
             self.assertIn(f"gm_state_sig_add_to_sum = {{ SIG = {k} }}", sums, k)
             self.assertIn(f"gm_mon_sig_add_to_sum = {{ SIG = {k} G = gm_tr_g }}", sums, k)
             self.assertIn(f"gm_mon_sig_add_to_sum = {{ SIG = {k} G = gm_tr_grandeur }}", sums, k)
-            self.assertIn(f"gm_sig_set_steps = {{ SIG = {k} }}", sums, k)
+            # Antiquity's cultural pull on the 1/n curve with no end, as the
+            # monuments' own pull; the rest on the doubling curve (owner,
+            # 2026-10-19).
+            call = "gm_sig_set_steps_lin_open" if k == "antiquity" else "gm_sig_set_steps"
+            self.assertIn(f"{call} = {{ SIG = {k} }}", sums, k)
         steps = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps"))
         self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }", steps)
+        lin = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
+        self.assertEqual(lin, "gm_set_steps_lin_open = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ "
+                              "NEXT = gm_n_sig_$SIG$ WIDTH = gm_w_sig_$SIG$ F = 5 } "
+                              "gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }")
         self.assertIn("gm_sig_compute_sums = yes", squash(block(read(EFFECTS), "gm_compute_totals")))
 
     def test_national_hooks_from_root(self):
@@ -5186,7 +5306,7 @@ class SignatureEffectTests(unittest.TestCase):
         for s_ in ("gm_state_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_signature }",
                    "add = gm_state_primary_grandeur", "variable = gm_monuments_here",
                    "gm_mon_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_tr_signature }",
-                   "multiply = gm_policy_factor_local",
+                   "value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local",
                    "add_modifier = { name = gm_local_sig_$SIG$ multiplier = var:gm_sig_local_steps_$SIG$ }"):
             self.assertIn(s_, one)
         self.assertNotIn("remove_variable", one, "zeroed, never removed")
@@ -6519,11 +6639,55 @@ class RecordWriterTests(unittest.TestCase):
     def test_a_landmark_is_recorded_at_its_levels(self):
         body = self.body(LANDMARK_EFFECTS, "gm_seed_landmark")
         self.assertIn("set_variable = { name = gm_levels value = $LEVEL$ }", body)
-        # Its grandeur at the 1836 rate (owner, 2026-10-19), alone or beside another.
-        at_1836 = "value = { value = $LEVEL$ multiply = gm_level_grandeur_1836 }"
-        self.assertIn(f"set_variable = {{ name = gm_start_grandeur {at_1836} }}", body)
+        # Its grandeur at the 1836 rate (owner, 2026-10-19), alone or beside
+        # another, split by the years since it was built (HistoricalGrandeurTests).
+        self.assertIn("gm_set_historical_grandeur = { LEVELS = $LEVEL$ BUILT = $BUILT$ START = gm_start_grandeur "
+                      "AGE = gm_age }", body)
         beside = self.body("common/scripted_effects/gm_monument_effects.txt", "gm_seed_landmark_beside")
-        self.assertIn(f"set_variable = {{ name = gm_tr_start_grandeur {at_1836} }}", beside)
+        self.assertIn("gm_set_historical_grandeur = { LEVELS = $LEVEL$ BUILT = $BUILT$ START = gm_tr_start_grandeur "
+                      "AGE = gm_tr_age }", beside)
+        self.assertNotIn("gm_start_grandeur", beside.replace("gm_tr_start_grandeur", ""))
+
+
+class HistoricalGrandeurTests(unittest.TestCase):
+    """A historical monument's grandeur, split as if it had aged in the game
+    since it was built (owner, 2026-10-19): the same grandeur in 1836, but the
+    Parthenon is nearly all years and barely ages further."""
+
+    def test_the_helper(self):
+        body = squash(block(read(EFFECTS), "gm_set_historical_grandeur"))
+        self.assertEqual(body,
+                         "set_variable = { name = $START$ value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
+                         "divide = { value = gm_this_year subtract = $BUILT$ max = gm_age_cap_years multiply = 2 "
+                         "divide = 100 add = 1 min = 1 } } } "
+                         "set_variable = { name = $AGE$ value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
+                         "subtract = var:$START$ min = 0 } }")
+        # The same 2% of starting grandeur a year, for at most a century, that
+        # ageing adds in the game.
+        self.assertTrue(squash(block(read(VALUES), "gm_state_age_step")).startswith(
+            "value = gm_state_primary_start multiply = 2 divide = 1200"))
+
+    def test_every_historical_row_has_a_year(self):
+        historical = {lm.key for lm in LANDMARKS if lm.year is None}
+        self.assertEqual(set(BUILT), historical)
+        for key, year in BUILT.items():
+            self.assertIsInstance(year, int, key)
+            self.assertLessEqual(year, 1836, key)
+
+    def test_the_split_keeps_the_grandeur(self):
+        for key, built in BUILT.items():
+            start, age = historical_split(10, built)
+            self.assertAlmostEqual(start + age, 50, msg=key)
+            # Aged at 2% of its start a year since, for at most a century, it
+            # comes to what it has.
+            self.assertAlmostEqual(start * (1 + 0.02 * min(1836 - built, 100)), 50, msg=key)
+        self.assertEqual(historical_split(15, BUILT["arc_de_triomphe"]), (75, 0))
+        # A century old or more: a third and two thirds, and no further ageing.
+        start, age = historical_split(10, BUILT["parthenon"])
+        self.assertAlmostEqual(start, 50 / 3)
+        self.assertAlmostEqual(age, 2 * start)
+        start, age = historical_split(10, BUILT["brandenburg_gate"])
+        self.assertAlmostEqual(start, 50 / 1.9)
 
 
 class DedicateButtonTests(unittest.TestCase):

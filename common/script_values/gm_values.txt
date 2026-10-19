@@ -62,10 +62,65 @@ gm_curve_next_f10 = {
 	if = { limit = { var:gm_curve_in < 10 } value = 10 }
 }
 
+# ---- The 1/n curve (owner, 2026-10-19) ---------------------------------------
+# Local effects, prestige and cultural pull: step n takes n times the grandeur
+# of the first, so each step is worth 1/n as much a point of grandeur as the
+# first (1, 1/2, 1/3, ... where the doubling curve's are 1, 1/2, 1/4, ...) and
+# the effect grows about as the square root of grandeur. With a first step of
+# f, step n completes at f * n(n+1) / 2: for f = 5, at 5, 15, 30, 50, 75 ...
+# and 2325 for the thirtieth. Grandeur being priced by world wealth (sites spec
+# 2026-10-18), it no longer needs the doubling curve's steep taper there;
+# approval and the other national effects keep it.
+#
+# The fixed form, for the local effects (state scope, gm_state_monthly): input
+# var:gm_curve_in as above, output the fractional number of steps, 0-30. Thirty
+# steps outlast a game: a monument ages by 2% of its starting grandeur a year,
+# so a 50-level monument of the 1840s reaches about 1,700 by 2136. Prestige and cultural pull
+# count every monument a country has and take gm_set_steps_lin_open instead,
+# which has no end.
+gm_curve_lin_steps = 30
+
+gm_curve_steps_lin_f5 = {
+	value = 0
+	add = { value = var:gm_curve_in divide = 5 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 5 divide = 10 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 15 divide = 15 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 30 divide = 20 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 50 divide = 25 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 75 divide = 30 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 105 divide = 35 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 140 divide = 40 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 180 divide = 45 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 225 divide = 50 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 275 divide = 55 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 330 divide = 60 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 390 divide = 65 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 455 divide = 70 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 525 divide = 75 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 600 divide = 80 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 680 divide = 85 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 765 divide = 90 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 855 divide = 95 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 950 divide = 100 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1050 divide = 105 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1155 divide = 110 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1265 divide = 115 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1380 divide = 120 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1500 divide = 125 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1625 divide = 130 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1755 divide = 135 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 1890 divide = 140 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 2030 divide = 145 min = 0 max = 1 }
+	add = { value = var:gm_curve_in subtract = 2175 divide = 150 min = 0 max = 1 }
+}
+
 # ---- Per-step values (§9) ------------------------------------------------------
 # Mirrors of the static modifiers in gm_modifiers.txt, each of which carries
 # exactly one step (the multiplier is the step count). Loc reads these; the
 # registry test pins every pair equal.
+# Prestige: on the 1/n curve, the 1836 landmarks give up to about +180
+# (Egypt). Not too much (owner, 2026-10-19): leading the world in one
+# prestige good gives more, and an unrecognized power cannot be a great power.
 gm_step_prestige = 25
 gm_step_legitimacy = 2
 gm_step_ig = 1
@@ -80,12 +135,29 @@ gm_step_local_revolution = 0.10
 gm_step_local_leader = 0.10
 gm_step_local_religious = 0.10
 gm_step_local_civic = 0.10
-gm_step_local_war_memorial = 0.05
+gm_step_local_war_memorial = 0.01
 gm_step_local_artistic = 0.10
 gm_step_local_naturalist = -5000
 gm_step_local_scientific = 0.00025
 gm_step_local_industrial = 0.10
 gm_step_local_athletic = -0.10
+
+# The steps a local effect stops at (owner, 2026-10-19): on the 1/n curve the
+# rest run on to its end (gm_curve_lin_steps), but conscription and turmoil
+# effects need a ceiling, at +10% and -50%. gm_state_local_steps_one's CAP.
+gm_local_cap_war_memorial = 10
+gm_local_cap_athletic = 5
+
+# What those ceilings come to, for the dedication ceremony's tooltips.
+gm_local_max_war_memorial = {
+	value = gm_local_cap_war_memorial
+	multiply = gm_step_local_war_memorial
+}
+
+gm_local_max_athletic = {
+	value = gm_local_cap_athletic
+	multiply = gm_step_local_athletic
+}
 
 gm_step_national_leader = 25
 gm_step_national_religious = 0.05
@@ -201,14 +273,14 @@ gm_disp_is_landmark = {
 
 # The picture's grandeur frame (spec 2026-10-11 §3.5): the step the monument's
 # own effects have reached, 0 (plain) to 5 (five steps and more), read from the
-# live level on gm_state_disp_next_step's thresholds.
+# live level on the first five ends of gm_curve_steps_lin_f5.
 gm_disp_frame_tier = {
 	value = 0
 	if = { limit = { gm_state_grandeur >= 5 } value = 1 }
 	if = { limit = { gm_state_grandeur >= 15 } value = 2 }
-	if = { limit = { gm_state_grandeur >= 35 } value = 3 }
-	if = { limit = { gm_state_grandeur >= 75 } value = 4 }
-	if = { limit = { gm_state_grandeur >= 155 } value = 5 }
+	if = { limit = { gm_state_grandeur >= 30 } value = 3 }
+	if = { limit = { gm_state_grandeur >= 50 } value = 4 }
+	if = { limit = { gm_state_grandeur >= 75 } value = 5 }
 }
 
 # The monument's picture (gm_picture_effects.txt), for the gm_picture type: the
@@ -261,34 +333,77 @@ gm_state_can_rename = {
 # State scope. The card shows from the day the building stands, before the
 # first monthly pulse has written gm_local_steps, so every read is guarded.
 
-# Where this monument's own next step completes, on the curve of its local
-# effects (first step 5: gm_curve_steps_f5 in gm_state_monthly). The ends of
-# gm_curve_next_f5, read from the live level rather than var:gm_curve_in, which
-# only the monthly pulse writes (test_grand_monuments_layout.StateCardTest
-# pins the two lists equal).
-gm_state_disp_next_step = {
-	value = 1275
-	if = { limit = { gm_state_grandeur < 635 } value = 635 }
-	if = { limit = { gm_state_grandeur < 315 } value = 315 }
-	if = { limit = { gm_state_grandeur < 155 } value = 155 }
-	if = { limit = { gm_state_grandeur < 75 } value = 75 }
-	if = { limit = { gm_state_grandeur < 35 } value = 35 }
-	if = { limit = { gm_state_grandeur < 15 } value = 15 }
-	if = { limit = { gm_state_grandeur < 5 } value = 5 }
+# The steps of everything standing here on the curve of its local effects (the
+# 1/n curve, first step 5: gm_curve_steps_lin_f5 in gm_state_monthly), read
+# from the live grandeur rather than var:gm_curve_in, which only the monthly
+# pulse writes (test_grand_monuments_layout.StateCardTest pins the two lists
+# equal).
+gm_state_disp_steps = {
+	value = 0
+	add = { value = gm_state_grandeur divide = 5 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 5 divide = 10 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 15 divide = 15 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 30 divide = 20 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 50 divide = 25 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 75 divide = 30 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 105 divide = 35 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 140 divide = 40 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 180 divide = 45 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 225 divide = 50 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 275 divide = 55 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 330 divide = 60 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 390 divide = 65 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 455 divide = 70 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 525 divide = 75 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 600 divide = 80 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 680 divide = 85 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 765 divide = 90 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 855 divide = 95 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 950 divide = 100 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1050 divide = 105 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1155 divide = 110 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1265 divide = 115 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1380 divide = 120 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1500 divide = 125 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1625 divide = 130 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1755 divide = 135 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 1890 divide = 140 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 2030 divide = 145 min = 0 max = 1 }
+	add = { value = gm_state_grandeur subtract = 2175 divide = 150 min = 0 max = 1 }
 }
 
-# The card's step bar, 0-100: (2G - N + 5) / (N + 5), as the journal entry's
-# gm_disp_frac_* with f = 5. Full past the curve's last step.
+# The step now being filled, 1-30: the whole steps done, plus one.
+gm_state_disp_step_n = {
+	value = gm_state_disp_steps
+	floor = yes
+	add = 1
+	max = gm_curve_lin_steps
+}
+
+# Where that step completes: step n of the 1/n curve with first step 5 ends at
+# 5 * n(n+1) / 2; the curve's last end once it is complete.
+gm_state_disp_next_step = {
+	value = gm_state_disp_step_n
+	multiply = {
+		value = gm_state_disp_step_n
+		add = 1
+	}
+	multiply = 2.5
+}
+
+# The card's step bar, 0-100: the share of that step filled, the fraction of
+# the step count. Full past the curve's last step.
 gm_state_disp_step_pct = {
-	value = gm_state_grandeur
-	multiply = 2
-	subtract = gm_state_disp_next_step
-	add = 5
-	divide = {
-		value = gm_state_disp_next_step
-		add = 5
+	value = gm_state_disp_steps
+	subtract = {
+		value = gm_state_disp_steps
+		floor = yes
 	}
 	multiply = 100
+	if = {
+		limit = { gm_state_disp_steps >= gm_curve_lin_steps }
+		value = 100
+	}
 	min = 0
 	max = 100
 }
@@ -434,15 +549,34 @@ gm_policy_factor_age = {
 	}
 }
 
+# The years a monument ages for (owner, 2026-10-19): a century at 2% a year,
+# so its age grandeur stops at twice its starting grandeur and the monument at
+# three times what it was dedicated with. Nothing is grander for being older
+# than that. An anniversary's or an opportunity's gift still adds beyond it.
+gm_age_cap_years = 100
+
+# State scope. The age grandeur the primary may still gain from its years:
+# twice its starting grandeur less the age it has, at least 0.
+gm_state_age_room = {
+	value = gm_state_primary_start
+	multiply = gm_age_cap_years
+	multiply = 2
+	divide = 100
+	subtract = gm_state_primary_age
+	min = 0
+}
+
 # State scope. What a month adds to the primary's age grandeur: 2% of its
 # starting grandeur a year (owner, 2026-10-16: it doubles in fifty years;
 # sites spec 2026-10-18 §3.2: of the starting grandeur, not compounding), as
-# two whole numbers (no six-decimal literal, scripting_best_practices.md).
+# two whole numbers (no six-decimal literal, scripting_best_practices.md),
+# until a century's worth is reached (gm_state_age_room).
 gm_state_age_step = {
 	value = gm_state_primary_start
 	multiply = 2
 	divide = 1200
 	multiply = gm_policy_factor_age
+	max = gm_state_age_room
 }
 
 # State scope. 1 while the primary is finished (gm_levels, ageing spec
@@ -810,7 +944,7 @@ gm_display_culture = {
 	}
 }
 
-# Cultural pull has no ceiling (gm_set_steps_open), so there is always a next step.
+# Cultural pull has no ceiling (gm_set_steps_lin_open), so there is always a next step.
 gm_display_n_culture = {
 	value = 0
 	if = {
@@ -1414,21 +1548,21 @@ gm_disp_national_any = {
 # it is (2G - N + f) / (N + f) full. Past the curve's last step the result
 # exceeds 1 and the clamp holds the bar full. Each value's f must match its
 # gm_set_steps call in gm_compute_totals (test_grand_monuments_layout.py).
+# Prestige and cultural pull are on the 1/n curve (gm_set_steps_lin_open),
+# which records the step's width W (gm_w_*): it began at N - W, so it is
+# (G - N + W) / W full, and with no end the bar is never held full.
 gm_disp_frac_prestige = {
 	value = 0
 	if = {
 		limit = {
 			has_variable = gm_g_standing
 			has_variable = gm_n_standing
+			has_variable = gm_w_standing
 		}
 		value = var:gm_g_standing
-		multiply = 2
 		subtract = var:gm_n_standing
-		add = 5
-		divide = {
-			value = var:gm_n_standing
-			add = 5
-		}
+		add = var:gm_w_standing
+		divide = var:gm_w_standing
 	}
 	min = 0
 	max = 1
@@ -1454,23 +1588,21 @@ gm_disp_frac_legitimacy = {
 	max = 1
 }
 
-# Cultural pull's curve has no end (gm_set_steps_open): gm_n_culture is always
-# the end of a step still to fill, so the clamp never holds this bar full.
+# Cultural pull's curve has no end (gm_set_steps_lin_open): gm_n_culture is
+# always the end of a step still to fill, so the clamp never holds this bar
+# full.
 gm_disp_frac_culture = {
 	value = 0
 	if = {
 		limit = {
 			has_variable = gm_g_standing
 			has_variable = gm_n_culture
+			has_variable = gm_w_culture
 		}
 		value = var:gm_g_standing
-		multiply = 2
 		subtract = var:gm_n_culture
-		add = 10
-		divide = {
-			value = var:gm_n_culture
-			add = 10
-		}
+		add = var:gm_w_culture
+		divide = var:gm_w_culture
 	}
 	min = 0
 	max = 1

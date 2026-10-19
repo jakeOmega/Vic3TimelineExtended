@@ -2,8 +2,9 @@
 # GRAND MONUMENTS — static modifiers
 # ============================================================================
 # Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
-# Each carries ONE STEP of the doubling curve (§2.2); the multiplier is the
-# step count. gm_values.txt mirrors every value as gm_step_*; change both.
+# Each carries ONE STEP of its curve (§2.2: the doubling curve, or the 1/n
+# curve for the local effects, prestige and cultural pull); the multiplier is
+# the step count. gm_values.txt mirrors every value as gm_step_*; change both.
 
 # ---- National totals (§2.4): on je:je_grand_monuments ------------------------
 # Refreshed by gm_apply_national_modifiers (gm_effects.txt), ROOT = country.
@@ -312,7 +313,7 @@ gm_local_civic = {
 
 gm_local_war_memorial = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	state_conscription_rate_add = 0.05
+	state_conscription_rate_add = 0.01
 }
 
 gm_local_artistic = {

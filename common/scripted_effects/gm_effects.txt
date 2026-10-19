@@ -301,6 +301,42 @@ gm_state_add_age = {
 	}
 }
 
+# Any scope: a historical monument's records (a landmark, a trophy abroad in
+# 1836, a dig). Its $LEVELS$ at the 1836 rate, the grandeur it has today, split
+# as if it had been built in $BUILT$ (a year, negative before Christ) and aged
+# since at 2% of its starting grandeur a year for at most a century
+# (gm_age_cap_years; owner, 2026-10-19): starting grandeur
+# $START$ = G / (1 + 0.02 x min(years, 100)) and age $AGE$ = the rest. So the
+# Parthenon is a third starting grandeur and two thirds years and ages no
+# further, and a monument finished this year is all starting grandeur.
+gm_set_historical_grandeur = {
+	set_variable = {
+		name = $START$
+		value = {
+			value = $LEVELS$
+			multiply = gm_level_grandeur_1836
+			divide = {
+				value = gm_this_year
+				subtract = $BUILT$
+				max = gm_age_cap_years
+				multiply = 2
+				divide = 100
+				add = 1
+				min = 1
+			}
+		}
+	}
+	set_variable = {
+		name = $AGE$
+		value = {
+			value = $LEVELS$
+			multiply = gm_level_grandeur_1836
+			subtract = var:$START$
+			min = 0
+		}
+	}
+}
+
 gm_remove_state_var = {
 	if = {
 		limit = { has_variable = $VAR$ }
@@ -383,7 +419,7 @@ gm_clear_state = {
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
 # Tourism Industry throughput for every monument; the dedication's own local
 # effect for every dedicated one (fits, heritage or contested, §2.3). Both on
-# the curve over this monument's own level.
+# the 1/n curve (gm_curve_steps_lin_f5) over the grandeur standing here.
 gm_state_monthly = {
 	# The construction site's new levels, into its records (sites spec
 	# 2026-10-18 §3.2): real execution only, never the walked refresh.
@@ -412,7 +448,7 @@ gm_state_monthly = {
 		set_variable = {
 			name = gm_local_tourism_steps
 			value = {
-				value = gm_curve_steps_f5
+				value = gm_curve_steps_lin_f5
 				multiply = gm_policy_factor_tourism
 			}
 		}
@@ -428,18 +464,18 @@ gm_state_monthly = {
 		# standing here, the primary's and those beside it (spec 2026-10-16
 		# §4.2); gm_local_steps keeps the primary's for the card.
 		set_variable = { name = gm_local_steps value = 0 }
-		gm_state_local_steps_one = { KEY = crown }
-		gm_state_local_steps_one = { KEY = republic }
-		gm_state_local_steps_one = { KEY = revolution }
-		gm_state_local_steps_one = { KEY = leader }
-		gm_state_local_steps_one = { KEY = religious }
-		gm_state_local_steps_one = { KEY = civic }
-		gm_state_local_steps_one = { KEY = war_memorial }
-		gm_state_local_steps_one = { KEY = artistic }
-		gm_state_local_steps_one = { KEY = naturalist }
-		gm_state_local_steps_one = { KEY = scientific }
-		gm_state_local_steps_one = { KEY = industrial }
-		gm_state_local_steps_one = { KEY = athletic }
+		gm_state_local_steps_one = { KEY = crown CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = republic CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = revolution CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = leader CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = religious CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = civic CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = war_memorial CAP = gm_local_cap_war_memorial }
+		gm_state_local_steps_one = { KEY = artistic CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = naturalist CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = scientific CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = industrial CAP = gm_curve_lin_steps }
+		gm_state_local_steps_one = { KEY = athletic CAP = gm_local_cap_athletic }
 		# And each unique dedication's (signatures spec §2.2), counted the same
 		# way, beside its parent's.
 		gm_state_sig_local_steps_one = { SIG = antiquity }
@@ -497,9 +533,10 @@ gm_state_monthly = {
 }
 
 # State scope, from gm_state_monthly. Dedication $KEY$'s local effect here: the
-# curve over the grandeur of every monument of that dedication standing here,
-# a dedicated primary's (fits, heritage or contested alike, §2.3) and each
-# secondary's. Its multiplier variable is zeroed, never removed.
+# 1/n curve over the grandeur of every monument of that dedication standing
+# here, a dedicated primary's (fits, heritage or contested alike, §2.3) and each
+# secondary's, at most $CAP$ steps (gm_curve_lin_steps where the curve's own end
+# is the only one). Its multiplier variable is zeroed, never removed.
 gm_state_local_steps_one = {
 	set_variable = {
 		name = gm_curve_in
@@ -525,8 +562,9 @@ gm_state_local_steps_one = {
 	set_variable = {
 		name = gm_local_steps_$KEY$
 		value = {
-			value = gm_curve_steps_f5
+			value = gm_curve_steps_lin_f5
 			multiply = gm_policy_factor_local
+			max = $CAP$
 		}
 	}
 	if = {
@@ -858,36 +896,29 @@ gm_set_steps = {
 	set_variable = { name = $NEXT$ value = gm_curve_next_f$F$ }
 }
 
-# Country scope. gm_set_steps without the curve's end: past its eighth step
-# the doubling carries on, so the effect keeps growing, each step costing
-# twice the grandeur of the one before. The step that completes at N is
-# followed by one that completes at 2N + $F$; the partial step is the bar's
-# (2G - N + F) / (N + F) (gm_disp_frac_*). Cultural pull's: diminishing
-# returns, no ceiling (owner, 2026-10-16).
-gm_set_steps_open = {
-	gm_set_steps = { IN = $IN$ OUT = $OUT$ NEXT = $NEXT$ F = $F$ }
-	if = {
+# Country scope. Grandeur -> step count and next step along the 1/n curve
+# (gm_values.txt) with first step $F$, with no end: step n takes n * $F$, so the
+# step being filled, $WIDTH$ wide, completes at $NEXT$. Prestige and cultural
+# pull, which count every monument a country has (owner, 2026-10-19). The
+# National Effects bar is that step's share filled, (G - N + W) / W.
+gm_set_steps_lin_open = {
+	set_variable = { name = $OUT$ value = 0 }
+	set_variable = { name = $WIDTH$ value = $F$ }
+	set_variable = { name = $NEXT$ value = $F$ }
+	while = {
 		limit = { var:$IN$ >= var:$NEXT$ }
-		change_variable = { name = $NEXT$ multiply = 2 }
-		change_variable = { name = $NEXT$ add = $F$ }
-		while = {
-			limit = { var:$IN$ >= var:$NEXT$ }
-			change_variable = { name = $OUT$ add = 1 }
-			change_variable = { name = $NEXT$ multiply = 2 }
-			change_variable = { name = $NEXT$ add = $F$ }
-		}
-		change_variable = {
-			name = $OUT$
-			add = {
-				value = var:$IN$
-				multiply = 2
-				subtract = var:$NEXT$
-				add = $F$
-				divide = {
-					value = var:$NEXT$
-					add = $F$
-				}
-			}
+		change_variable = { name = $OUT$ add = 1 }
+		change_variable = { name = $WIDTH$ add = $F$ }
+		change_variable = { name = $NEXT$ add = var:$WIDTH$ }
+	}
+	change_variable = {
+		name = $OUT$
+		add = {
+			value = var:$IN$
+			subtract = var:$NEXT$
+			add = var:$WIDTH$
+			divide = var:$WIDTH$
+			min = 0
 		}
 	}
 }
@@ -901,8 +932,8 @@ gm_compute_totals = {
 	set_variable = { name = gm_g_artistic value = gm_sum_artistic }
 	set_variable = { name = gm_g_scientific value = gm_sum_scientific }
 	set_variable = { name = gm_g_industrial value = gm_sum_industrial }
-	gm_set_steps = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing F = 5 }
-	gm_set_steps_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }
+	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing WIDTH = gm_w_standing F = 5 }
+	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture WIDTH = gm_w_culture F = 10 }
 	gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
 	gm_set_steps = { IN = gm_g_leader OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
 	gm_set_steps = { IN = gm_g_religious OUT = gm_s_religious NEXT = gm_n_religious F = 5 }

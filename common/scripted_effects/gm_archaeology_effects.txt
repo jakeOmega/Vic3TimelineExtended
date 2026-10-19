@@ -103,42 +103,42 @@ gm_arch_monthly = {
 # ---- Seeding (once a game) ---------------------------------------------------------------------
 # No scope. One call per site.
 gm_arch_seed_sites = {
-	gm_arch_seed_site = { KEY = nineveh_library STATE = STATE_MOSUL TECH = romanticism VECTOR = survey FORM = hall LEVEL = 10 }
-	gm_arch_seed_site = { KEY = winged_victory_of_samothrace STATE = STATE_WESTERN_THRACE TECH = romanticism VECTOR = survey FORM = statue LEVEL = 5 }
-	gm_arch_seed_site = { KEY = vindolanda_tablets STATE = STATE_YORKSHIRE TECH = empiricism VECTOR = incidental FORM = hall LEVEL = 5 }
-	gm_arch_seed_site = { KEY = troy_hisarlik STATE = STATE_HUDAVENDIGAR TECH = empiricism VECTOR = survey FORM = gate LEVEL = 10 }
-	gm_arch_seed_site = { KEY = mycenae_grave_circle STATE = STATE_PELOPONNESE TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 10 }
-	gm_arch_seed_site = { KEY = pergamon_altar STATE = STATE_AYDIN TECH = empiricism VECTOR = survey FORM = pantheon LEVEL = 10 }
-	gm_arch_seed_site = { KEY = deir_el_bahari_cache STATE = STATE_UPPER_EGYPT TECH = empiricism VECTOR = incidental FORM = rock_cut LEVEL = 5 }
-	gm_arch_seed_site = { KEY = ishtar_gate_babylon STATE = STATE_BAGHDAD TECH = civilizing_mission VECTOR = survey FORM = gate LEVEL = 10 }
-	gm_arch_seed_site = { KEY = palace_of_knossos STATE = STATE_CRETE TECH = pan_nationalism VECTOR = survey FORM = hall LEVEL = 10 }
-	gm_arch_seed_site = { KEY = antikythera_mechanism STATE = STATE_PELOPONNESE TECH = steam_donkey VECTOR = incidental FORM = statue LEVEL = 5 }
-	gm_arch_seed_site = { KEY = oseberg_ship STATE = STATE_EASTERN_NORWAY TECH = pan_nationalism VECTOR = incidental FORM = statue LEVEL = 5 }
-	gm_arch_seed_site = { KEY = machu_picchu STATE = STATE_ICA TECH = mass_propaganda VECTOR = survey FORM = gate LEVEL = 15 }
-	gm_arch_seed_site = { KEY = bust_of_nefertiti STATE = STATE_MIDDLE_EGYPT TECH = mass_propaganda VECTOR = survey FORM = statue LEVEL = 5 }
-	gm_arch_seed_site = { KEY = mohenjo_daro STATE = STATE_SINDH TECH = modern_materials VECTOR = incidental FORM = forum LEVEL = 10 }
-	gm_arch_seed_site = { KEY = tomb_of_tutankhamun STATE = STATE_UPPER_EGYPT TECH = mass_media VECTOR = survey FORM = mausoleum LEVEL = 15 }
-	gm_arch_seed_site = { KEY = royal_cemetery_at_ur STATE = STATE_BASRA TECH = mass_media VECTOR = survey FORM = mausoleum LEVEL = 10 }
-	gm_arch_seed_site = { KEY = sanxingdui_pits STATE = STATE_SICHUAN TECH = public_works_programs VECTOR = incidental FORM = hall LEVEL = 10 }
-	gm_arch_seed_site = { KEY = sutton_hoo STATE = STATE_EAST_ANGLIA TECH = combined_arms VECTOR = incidental FORM = mausoleum LEVEL = 5 }
-	gm_arch_seed_site = { KEY = lascaux_caves STATE = STATE_AQUITAINE TECH = public_works_programs VECTOR = incidental FORM = rock_cut LEVEL = 10 }
-	gm_arch_seed_site = { KEY = nag_hammadi_library STATE = STATE_UPPER_EGYPT TECH = nuclear_energy VECTOR = incidental FORM = stele LEVEL = 5 }
-	gm_arch_seed_site = { KEY = dead_sea_scrolls STATE = STATE_PALESTINE TECH = jet_engine_technology VECTOR = incidental FORM = stele LEVEL = 10 }
-	gm_arch_seed_site = { KEY = tomb_of_pakal STATE = STATE_CHIAPAS TECH = television_broadcasting VECTOR = survey FORM = pyramid LEVEL = 10 }
-	gm_arch_seed_site = { KEY = mawangdui_tombs STATE = STATE_HUNAN TECH = modern_pharmaceuticals VECTOR = incidental FORM = mausoleum LEVEL = 10 }
-	gm_arch_seed_site = { KEY = terracotta_army STATE = STATE_XIAN TECH = containerization VECTOR = incidental FORM = mausoleum LEVEL = 15 }
-	gm_arch_seed_site = { KEY = tomb_of_philip_ii STATE = STATE_MACEDONIA TECH = microprocessor VECTOR = survey FORM = mausoleum LEVEL = 10 }
-	gm_arch_seed_site = { KEY = tomb_of_marquis_yi STATE = STATE_EASTERN_HUBEI TECH = barcodes_and_scanners VECTOR = incidental FORM = hall LEVEL = 10 }
-	gm_arch_seed_site = { KEY = royal_tombs_of_sipan STATE = STATE_CAJAMARCA TECH = personal_computers VECTOR = incidental FORM = pyramid LEVEL = 10 }
-	gm_arch_seed_site = { KEY = otzi_the_iceman STATE = STATE_SOUTH_TYROL TECH = world_wide_web VECTOR = incidental FORM = statue LEVEL = 5 }
-	gm_arch_seed_site = { KEY = caral_supe STATE = STATE_LIMA TECH = digital_telecommunications VECTOR = survey FORM = pyramid LEVEL = 10 }
-	gm_arch_seed_site = { KEY = gobekli_tepe STATE = STATE_DIYARBAKIR TECH = e_commerce VECTOR = survey FORM = colonnade LEVEL = 15 }
-	gm_arch_seed_site = { KEY = olympia STATE = STATE_PELOPONNESE TECH = empiricism VECTOR = survey FORM = pantheon LEVEL = 10 }
-	gm_arch_seed_site = { KEY = delphi STATE = STATE_ATTICA TECH = civilizing_mission VECTOR = survey FORM = stoa LEVEL = 10 }
-	gm_arch_seed_site = { KEY = sidon_necropolis STATE = STATE_LEBANON TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 5 }
-	gm_arch_seed_site = { KEY = villa_of_the_papyri STATE = STATE_CAMPANIA TECH = microprocessor VECTOR = survey FORM = hall LEVEL = 10 }
-	gm_arch_seed_site = { KEY = tomb_of_alexander STATE = STATE_LOWER_EGYPT TECH = mainframe_computers VECTOR = survey FORM = mausoleum LEVEL = 15 }
-	gm_arch_seed_site = { KEY = pompeii STATE = STATE_CAMPANIA TECH = romanticism VECTOR = excavating FORM = forum LEVEL = 15 }
+	gm_arch_seed_site = { KEY = nineveh_library STATE = STATE_MOSUL TECH = romanticism VECTOR = survey FORM = hall LEVEL = 10 BUILT = -650 }
+	gm_arch_seed_site = { KEY = winged_victory_of_samothrace STATE = STATE_WESTERN_THRACE TECH = romanticism VECTOR = survey FORM = statue LEVEL = 5 BUILT = -190 }
+	gm_arch_seed_site = { KEY = vindolanda_tablets STATE = STATE_YORKSHIRE TECH = empiricism VECTOR = incidental FORM = hall LEVEL = 5 BUILT = 100 }
+	gm_arch_seed_site = { KEY = troy_hisarlik STATE = STATE_HUDAVENDIGAR TECH = empiricism VECTOR = survey FORM = gate LEVEL = 10 BUILT = -1250 }
+	gm_arch_seed_site = { KEY = mycenae_grave_circle STATE = STATE_PELOPONNESE TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 10 BUILT = -1600 }
+	gm_arch_seed_site = { KEY = pergamon_altar STATE = STATE_AYDIN TECH = empiricism VECTOR = survey FORM = pantheon LEVEL = 10 BUILT = -165 }
+	gm_arch_seed_site = { KEY = deir_el_bahari_cache STATE = STATE_UPPER_EGYPT TECH = empiricism VECTOR = incidental FORM = rock_cut LEVEL = 5 BUILT = -935 }
+	gm_arch_seed_site = { KEY = ishtar_gate_babylon STATE = STATE_BAGHDAD TECH = civilizing_mission VECTOR = survey FORM = gate LEVEL = 10 BUILT = -575 }
+	gm_arch_seed_site = { KEY = palace_of_knossos STATE = STATE_CRETE TECH = pan_nationalism VECTOR = survey FORM = hall LEVEL = 10 BUILT = -1700 }
+	gm_arch_seed_site = { KEY = antikythera_mechanism STATE = STATE_PELOPONNESE TECH = steam_donkey VECTOR = incidental FORM = statue LEVEL = 5 BUILT = -100 }
+	gm_arch_seed_site = { KEY = oseberg_ship STATE = STATE_EASTERN_NORWAY TECH = pan_nationalism VECTOR = incidental FORM = statue LEVEL = 5 BUILT = 834 }
+	gm_arch_seed_site = { KEY = machu_picchu STATE = STATE_ICA TECH = mass_propaganda VECTOR = survey FORM = gate LEVEL = 15 BUILT = 1450 }
+	gm_arch_seed_site = { KEY = bust_of_nefertiti STATE = STATE_MIDDLE_EGYPT TECH = mass_propaganda VECTOR = survey FORM = statue LEVEL = 5 BUILT = -1345 }
+	gm_arch_seed_site = { KEY = mohenjo_daro STATE = STATE_SINDH TECH = modern_materials VECTOR = incidental FORM = forum LEVEL = 10 BUILT = -2500 }
+	gm_arch_seed_site = { KEY = tomb_of_tutankhamun STATE = STATE_UPPER_EGYPT TECH = mass_media VECTOR = survey FORM = mausoleum LEVEL = 15 BUILT = -1323 }
+	gm_arch_seed_site = { KEY = royal_cemetery_at_ur STATE = STATE_BASRA TECH = mass_media VECTOR = survey FORM = mausoleum LEVEL = 10 BUILT = -2600 }
+	gm_arch_seed_site = { KEY = sanxingdui_pits STATE = STATE_SICHUAN TECH = public_works_programs VECTOR = incidental FORM = hall LEVEL = 10 BUILT = -1200 }
+	gm_arch_seed_site = { KEY = sutton_hoo STATE = STATE_EAST_ANGLIA TECH = combined_arms VECTOR = incidental FORM = mausoleum LEVEL = 5 BUILT = 625 }
+	gm_arch_seed_site = { KEY = lascaux_caves STATE = STATE_AQUITAINE TECH = public_works_programs VECTOR = incidental FORM = rock_cut LEVEL = 10 BUILT = -15000 }
+	gm_arch_seed_site = { KEY = nag_hammadi_library STATE = STATE_UPPER_EGYPT TECH = nuclear_energy VECTOR = incidental FORM = stele LEVEL = 5 BUILT = 350 }
+	gm_arch_seed_site = { KEY = dead_sea_scrolls STATE = STATE_PALESTINE TECH = jet_engine_technology VECTOR = incidental FORM = stele LEVEL = 10 BUILT = -100 }
+	gm_arch_seed_site = { KEY = tomb_of_pakal STATE = STATE_CHIAPAS TECH = television_broadcasting VECTOR = survey FORM = pyramid LEVEL = 10 BUILT = 683 }
+	gm_arch_seed_site = { KEY = mawangdui_tombs STATE = STATE_HUNAN TECH = modern_pharmaceuticals VECTOR = incidental FORM = mausoleum LEVEL = 10 BUILT = -168 }
+	gm_arch_seed_site = { KEY = terracotta_army STATE = STATE_XIAN TECH = containerization VECTOR = incidental FORM = mausoleum LEVEL = 15 BUILT = -210 }
+	gm_arch_seed_site = { KEY = tomb_of_philip_ii STATE = STATE_MACEDONIA TECH = microprocessor VECTOR = survey FORM = mausoleum LEVEL = 10 BUILT = -336 }
+	gm_arch_seed_site = { KEY = tomb_of_marquis_yi STATE = STATE_EASTERN_HUBEI TECH = barcodes_and_scanners VECTOR = incidental FORM = hall LEVEL = 10 BUILT = -433 }
+	gm_arch_seed_site = { KEY = royal_tombs_of_sipan STATE = STATE_CAJAMARCA TECH = personal_computers VECTOR = incidental FORM = pyramid LEVEL = 10 BUILT = 250 }
+	gm_arch_seed_site = { KEY = otzi_the_iceman STATE = STATE_SOUTH_TYROL TECH = world_wide_web VECTOR = incidental FORM = statue LEVEL = 5 BUILT = -3300 }
+	gm_arch_seed_site = { KEY = caral_supe STATE = STATE_LIMA TECH = digital_telecommunications VECTOR = survey FORM = pyramid LEVEL = 10 BUILT = -2600 }
+	gm_arch_seed_site = { KEY = gobekli_tepe STATE = STATE_DIYARBAKIR TECH = e_commerce VECTOR = survey FORM = colonnade LEVEL = 15 BUILT = -9500 }
+	gm_arch_seed_site = { KEY = olympia STATE = STATE_PELOPONNESE TECH = empiricism VECTOR = survey FORM = pantheon LEVEL = 10 BUILT = -456 }
+	gm_arch_seed_site = { KEY = delphi STATE = STATE_ATTICA TECH = civilizing_mission VECTOR = survey FORM = stoa LEVEL = 10 BUILT = -330 }
+	gm_arch_seed_site = { KEY = sidon_necropolis STATE = STATE_LEBANON TECH = empiricism VECTOR = survey FORM = mausoleum LEVEL = 5 BUILT = -330 }
+	gm_arch_seed_site = { KEY = villa_of_the_papyri STATE = STATE_CAMPANIA TECH = microprocessor VECTOR = survey FORM = hall LEVEL = 10 BUILT = -50 }
+	gm_arch_seed_site = { KEY = tomb_of_alexander STATE = STATE_LOWER_EGYPT TECH = mainframe_computers VECTOR = survey FORM = mausoleum LEVEL = 15 BUILT = -320 }
+	gm_arch_seed_site = { KEY = pompeii STATE = STATE_CAMPANIA TECH = romanticism VECTOR = excavating FORM = forum LEVEL = 15 BUILT = 79 }
 }
 
 # No scope, once a game after the seeding. The one engine fact nobody has seen
@@ -245,6 +245,9 @@ gm_arch_seed_site = {
 				set_variable = { name = gm_tr_skin value = flag:landmark_$KEY$ }
 				set_variable = { name = gm_tr_form value = flag:$FORM$ }
 				set_variable = { name = gm_tr_levels value = $LEVEL$ }
+				# When it was built, for the years its grandeur carries once it
+				# is unearthed (gm_arch_place).
+				set_variable = { name = gm_tr_built value = $BUILT$ }
 				set_variable = { name = gm_tr_dedication value = flag:civic }
 				set_variable = { name = gm_tr_namesake value = flag:landmark }
 				# A whole landmark: its title is its name, with no part's.
@@ -259,6 +262,19 @@ gm_arch_seed_site = {
 					gm_arch_seed_dig = yes
 				}
 			}
+		}
+	}
+	# Round 3: a site seeded before it still buried, learning its year.
+	else_if = {
+		limit = { has_global_variable_list = gm_arch_sites }
+		every_in_global_list = {
+			variable = gm_arch_sites
+			limit = {
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = flag:$KEY$
+				NOT = { has_variable = gm_tr_built }
+			}
+			set_variable = { name = gm_tr_built value = $BUILT$ }
 		}
 	}
 }
@@ -604,18 +620,21 @@ gm_arch_partage = {
 			set_variable = { name = gm_tr_site value = scope:gm_arch_partage_home }
 			set_variable = { name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece }
-			# A find counts at the 1836 rate (sites spec 2026-10-18 §3.6).
-			set_variable = {
-				name = gm_tr_start_grandeur
-				value = {
-					value = scope:gm_arch_partage_site.var:gm_site_piece
-					multiply = gm_level_grandeur_1836
-				}
+			# A find counts at the 1836 rate (sites spec 2026-10-18 §3.6), split
+			# by the years since it was built (owner, 2026-10-19), as the rest
+			# of the monument is in gm_arch_place: a taken piece carries its
+			# share of the monument's years (ageing spec 2026-10-16 §5).
+			if = {
+				limit = { scope:gm_arch_partage_site = { has_variable = gm_tr_built } }
+				set_variable = { name = gm_tr_built value = scope:gm_arch_partage_site.var:gm_tr_built }
+			}
+			gm_set_historical_grandeur = {
+				LEVELS = scope:gm_arch_partage_site.var:gm_site_piece
+				BUILT = gm_mon_built
+				START = gm_tr_start_grandeur
+				AGE = gm_tr_age
 			}
 			set_variable = { name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur }
-			# A taken piece carries its share of the monument's years (ageing
-			# spec 2026-10-16 §5); a site just unearthed has none.
-			set_variable = { name = gm_tr_age value = 0 }
 			set_variable = { name = gm_tr_year value = gm_this_year }
 			set_variable = { name = gm_tr_taken_by value = scope:gm_arch_sponsor }
 			set_variable = { name = gm_tr_share value = flag:piece }
@@ -655,14 +674,9 @@ gm_arch_place = {
 	set_variable = { name = gm_tr_site_region value = var:gm_tr_origin_region }
 	set_variable = { name = gm_tr_year value = gm_this_year }
 	# Its levels count at the 1836 rate (sites spec 2026-10-18 §3.6): what the
-	# method and any partage left of them, once settled.
-	set_variable = {
-		name = gm_tr_start_grandeur
-		value = {
-			value = var:gm_tr_levels
-			multiply = gm_level_grandeur_1836
-		}
-	}
+	# method and any partage left of them, once settled, split into starting
+	# grandeur and the years since it was built (owner, 2026-10-19).
+	gm_set_historical_grandeur = { LEVELS = var:gm_tr_levels BUILT = gm_mon_built START = gm_tr_start_grandeur AGE = gm_tr_age }
 	# Its unique dedication (signatures spec §4.4), so the monument it becomes
 	# has it from the day it stands.
 	gm_tr_sig_backfill = yes

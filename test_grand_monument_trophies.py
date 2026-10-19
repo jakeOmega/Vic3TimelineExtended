@@ -17,7 +17,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILDING_FORMS, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
+    BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
     TROPHY_PICTURES, block, committed, loc, picture_key, raw_block_at, read, squash, strip_comments,
 )
 
@@ -792,7 +792,7 @@ def trophy_seed_call(tr):
     lm = {lm.key: lm for lm in LANDMARKS}[tr.landmark]
     return (f"gm_seed_trophy = {{ LANDMARK = {tr.landmark} ORIGIN = {tr.origin} ORIGIN_TAG = {tr.origin_tag} "
             f"SITE = {tr.site} SITE_TAG = {tr.site_tag} DEDICATION = {lm.dedication} FORM = {lm.form} "
-            f"SHARE = {tr.share} LEVELS = {tr.levels} YEAR = {tr.year} }}")
+            f"SHARE = {tr.share} LEVELS = {tr.levels} YEAR = {tr.year} BUILT = {BUILT[tr.landmark]} }}")
 
 
 class Trophies1836Tests(unittest.TestCase):
@@ -847,7 +847,6 @@ class Trophies1836Tests(unittest.TestCase):
                        "name = gm_tr_site_region value = scope:gm_tr_site_state.state_region",
                        "name = gm_tr_levels value = $LEVELS$",
                        # The 1836 rate (owner, 2026-10-19), half of it abroad.
-                       "name = gm_tr_start_grandeur value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 }",
                        "name = gm_tr_grandeur value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
                        "divide = 2 ceiling = yes }",
                        "name = gm_tr_year value = $YEAR$", "name = gm_tr_taken_by value = scope:gm_tr_seed_holder",
@@ -856,6 +855,10 @@ class Trophies1836Tests(unittest.TestCase):
                        "name = gm_tr_skin value = flag:landmark_$LANDMARK$", "name = gm_tr_form value = flag:$FORM$",
                        "name = gm_tr_landmark value = flag:$LANDMARK$", "name = gm_tr_namesake value = flag:landmark"):
             self.assertIn(f"set_variable = {{ {record} }}", body, record)
+        # Split by the years since it was built (owner, 2026-10-19); both
+        # parts rejoin its monument when it goes home.
+        self.assertIn("gm_set_historical_grandeur = { LEVELS = $LEVELS$ BUILT = $BUILT$ START = gm_tr_start_grandeur "
+                      "AGE = gm_tr_age }", body)
         # Taken before the game began: none of a taking's consequences.
         for line in ("change_infamy", "change_relations", "post_notification", "add_war_war_support"):
             self.assertNotIn(line, body, line)
@@ -925,11 +928,11 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
             self.assertEqual(kinds[key], "rebuild", key)
 
     def test_the_levels_a_state_of_1836_comes_to(self):
-        # Upper Egypt with both home: Karnak 5 + Luxor 5 + Dendera's piece 2.
+        # Upper Egypt with both home: Karnak 10 + Luxor 5 + Dendera's piece 2.
         by_key = {lm.key: lm for lm in LANDMARKS}
         total = by_key["obelisks_of_karnak"].level + sum(
             tr.levels for tr in TROPHIES_1836 if tr.origin == "STATE_UPPER_EGYPT")
-        self.assertEqual(total, 12)
+        self.assertEqual(total, 17)
 
     def test_a_return_chooses_one_of_three_ways(self):
         home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
