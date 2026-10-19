@@ -489,7 +489,7 @@ class PanelTests(unittest.TestCase):
                                                                     r"(?m)^\ttype gm_monument_row = flowcontainer \{")))
         self.assertIn("gm_tr_take_button = {}", squash(raw_block_at(read(STATE_WIDGETS),
                                                                     r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))
-        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", squash(strip_comments(read(STATES_PANEL))))
+        self.assertIn("te_state_gm_card = {} te_state_gm_site_card = {} te_state_gm_trophy_card = {}", squash(strip_comments(read(STATES_PANEL))))
 
     def test_flags_say_their_default(self):
         gui = strip_comments(read(TR_GUI))
@@ -1176,7 +1176,7 @@ class AlsoStandingHereTests(unittest.TestCase):
 
     def test_one_card_holds_the_primary_and_the_rest(self):
         panel = squash(strip_comments(read(STATES_PANEL)))
-        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", panel)
+        self.assertIn("te_state_gm_card = {} te_state_gm_site_card = {} te_state_gm_trophy_card = {}", panel)
         self.assertNotIn("te_state_gm_monument_card", panel)
         self.assertNotIn("te_state_gm_monument_card", strip_comments(self.gui))
         card = squash(strip_comments(raw_block_at(read(STATE_WIDGETS), r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))

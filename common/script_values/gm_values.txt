@@ -1114,15 +1114,11 @@ gm_disp_count_heritage = {
 	}
 }
 
+# The overview's first cell (sites spec 2026-10-18): our construction sites.
 gm_disp_count_undedicated = {
 	value = 0
 	every_scope_state = {
-		limit = {
-			has_building = building_grand_monument
-			gm_state_is_dedicated = no
-			gm_state_is_heritage = no
-			gm_state_is_contested = no
-		}
+		limit = { gm_state_has_site = yes }
 		add = 1
 	}
 }
@@ -1140,8 +1136,45 @@ gm_disp_count_awaiting = {
 
 gm_disp_count_listed = {
 	value = gm_sum_monuments
-	subtract = gm_disp_count_awaiting
-	min = 0
+}
+
+# State scope. 1 while a finished monument stands here: its row is in Our
+# Monuments (a construction site's is in Awaiting Dedication).
+gm_state_disp_listed = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = 1
+	}
+}
+
+# State scope, the construction site's card and row (sites spec 2026-10-18
+# §3.1): one stands here; the grandeur its counted levels come to; levels of
+# it still being built (Dedicate waits for them).
+gm_state_disp_site = {
+	value = 0
+	if = {
+		limit = { gm_state_has_site = yes }
+		value = 1
+	}
+}
+
+gm_state_disp_site_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_site_grandeur }
+		value = var:gm_site_grandeur
+	}
+}
+
+gm_state_disp_site_building = {
+	value = 0
+	if = {
+		limit = {
+			b:building_grand_monument_site ?= { is_under_construction = yes }
+		}
+		value = 1
+	}
 }
 
 # State scope. 1 while this monument waits for its Dedicate button: its row is

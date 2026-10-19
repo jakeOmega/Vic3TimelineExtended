@@ -508,12 +508,12 @@ class DisplayValuesTest(unittest.TestCase):
                 self.assertIn(f"has_variable = {var}", body, f"{name} reads var:{var} unguarded")
 
     def test_status_counts_follow_the_status_codes_precedence(self):
-        for name in ("gm_disp_count_upheld", "gm_disp_count_heritage", "gm_disp_count_undedicated"):
+        for name in ("gm_disp_count_upheld", "gm_disp_count_heritage"):
             self.assertIn("gm_state_is_contested = no", _squash(_block(self.values, name)), name)
-        for name in ("gm_disp_count_upheld", "gm_disp_count_undedicated"):
-            self.assertIn("gm_state_is_heritage = no", _squash(_block(self.values, name)), name)
+        self.assertIn("gm_state_is_heritage = no", _squash(_block(self.values, "gm_disp_count_upheld")))
         self.assertIn("gm_state_is_dedicated = yes", _squash(_block(self.values, "gm_disp_count_upheld")))
-        self.assertIn("gm_state_is_dedicated = no", _squash(_block(self.values, "gm_disp_count_undedicated")))
+        # The first cell counts construction sites (sites spec 2026-10-18).
+        self.assertIn("gm_state_has_site = yes", _squash(_block(self.values, "gm_disp_count_undedicated")))
         self.assertIn("gm_state_is_contested = yes", _squash(_block(self.values, "gm_disp_count_contested")))
 
     def test_each_bar_follows_its_curve(self):
@@ -929,7 +929,7 @@ class AgeingPanelTests(unittest.TestCase):
             self.assertIn('tooltip = "gm_row_frozen_tt"', body)
             self.assertIn('text = "gm_row_frozen"', body)
         self.assertIn("gm_state_primary_age", loc["gm_row_frozen"])
-        self.assertIn("2% of its levels a year", loc["gm_row_frozen_tt"])
+        self.assertIn("2% of its starting grandeur a year", loc["gm_row_frozen_tt"])
         self.assertIn("gm_state_primary_age", loc["gm_state_grandeur_tt_one"])
 
     def test_a_secondarys_row(self):

@@ -1572,7 +1572,7 @@ class WidgetTests(unittest.TestCase):
             self.assertIn(f'name = "{name}" visible = "[JournalEntry.IsActive]"', g, name)
         self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
         self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[EqualTo_CFixedPoint( '
-                      'State.MakeScope.ScriptValue(\'gm_state_disp_awaiting\'), \'(CFixedPoint)0\' )]" }', g)
+                      'State.MakeScope.ScriptValue(\'gm_state_disp_listed\'), \'(CFixedPoint)1\' )]" }', g)
 
     def _shown_text(self):
         """The widget and the loc of every key it renders, followed through
@@ -6174,6 +6174,74 @@ class UpkeepTests(unittest.TestCase):
             self.assertIn(f"remove_modifier = {name}", remove)
 
 
+class SitePanelTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.1: a construction site has its own card in the
+    state view and its own row under Awaiting Dedication; Our Monuments lists
+    the finished ones; the overview's first cell counts sites."""
+
+    STATE_WIDGETS = "gui/te_state_panel_widgets.gui"
+
+    def type_body(self, path, name):
+        raw = strip_comments(read(path))
+        m = re.search(r"type " + re.escape(name) + r" = \w+ \{", raw)
+        self.assertIsNotNone(m, name)
+        return squash(_match_brace(raw, m.end()))
+
+    def test_the_values(self):
+        values = read(VALUES)
+        self.assertEqual(squash(block(values, "gm_state_disp_site")),
+                         "value = 0 if = { limit = { gm_state_has_site = yes } value = 1 }")
+        self.assertEqual(squash(block(values, "gm_state_disp_site_grandeur")),
+                         "value = 0 if = { limit = { has_variable = gm_site_grandeur } value = var:gm_site_grandeur }")
+        self.assertEqual(squash(block(values, "gm_state_disp_site_building")),
+                         "value = 0 if = { limit = { b:building_grand_monument_site ?= { is_under_construction = yes } } "
+                         "value = 1 }")
+        self.assertEqual(squash(block(values, "gm_state_disp_listed")),
+                         "value = 0 if = { limit = { has_building = building_grand_monument } value = 1 }")
+        self.assertEqual(squash(block(values, "gm_disp_count_listed")), "value = gm_sum_monuments")
+        self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_disp_count_undedicated")))
+
+    def test_the_site_row(self):
+        row = self.type_body(WIDGET, "gm_site_row")
+        for key in ("gm_site_row_title", "gm_site_row_detail", "gm_site_row_detail_tt", "gm_site_row_building",
+                    "gm_site_row_ready"):
+            self.assertIn(f'"{key}"', row)
+            self.assertIn(key, loc(), key)
+        sec = squash(strip_comments(read(WIDGET).split("type te_gm_sec_awaiting = flowcontainer {", 1)[1]
+                                    .split("type te_gm_sec_monuments", 1)[0]))
+        self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
+        mon = squash(strip_comments(read(WIDGET).split("type te_gm_sec_monuments = flowcontainer {", 1)[1]))
+        self.assertIn("visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), "
+                      "'(CFixedPoint)1' )]\"", mon)
+
+    def test_the_site_card(self):
+        card = self.type_body(self.STATE_WIDGETS, "te_state_gm_site_card")
+        self.assertIn("visible = \"[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_site'), "
+                      "'(CFixedPoint)1')]\"", card)
+        self.assertIn("gm_dedicate_button = {}", card)
+        for s in ("onclick", "ScriptedGui.Execute", "JournalEntry"):
+            self.assertNotIn(s, card)
+        for key in ("gm_site_card_title", "gm_site_card_levels", "gm_site_card_grandeur"):
+            self.assertIn(key, loc(), key)
+        self.assertNotIn("gm_dedicate_button", self.type_body(self.STATE_WIDGETS, "te_state_gm_card"))
+        panel = squash(strip_comments(read("gui/states_panel.gui")))
+        self.assertIn("te_state_gm_card = {}", panel)
+        self.assertLess(panel.find("te_state_gm_card = {}"), panel.find("te_state_gm_site_card = {}"))
+
+    def test_the_overview_counts_sites(self):
+        self.assertTrue(loc()["gm_je_ov_undedicated"].startswith("Being Built "))
+        self.assertIn("gm_je_ov_building_tt", read(WIDGET))
+        self.assertIn("gm_je_ov_building_tt", loc())
+
+    def test_a_site_opens_the_entry(self):
+        site = "any_scope_state = { has_building = building_grand_monument_site }"
+        self.assertIn(site, squash(block(read(TRIGGERS), "gm_entry_unlocked")))
+        self.assertIn(site, squash(block(read(JE), "is_shown_when_inactive")))
+        refresh = squash(block(read(EFFECTS), "gm_country_refresh"))
+        self.assertIn("NOT = { has_journal_entry = je_grand_monuments } OR = { any_scope_state = { "
+                      "has_building = building_grand_monument } " + site, refresh)
+
+
 class RecordWriterTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's
     size keeps its starting grandeur in step with its levels."""
@@ -6339,7 +6407,8 @@ class DedicateButtonTests(unittest.TestCase):
         self.assertIn("gm_button_dedicate", loc())
         self.assertIn("gm_button_dedicate_tooltip", loc())
         card = squash(strip_comments(read("gui/te_state_panel_widgets.gui")))
-        self.assertIn("gm_dedicate_button = {} gm_tr_take_button = {}", card)
+        # On the site's card (SitePanelTests).
+        self.assertIn("gm_dedicate_button = {}", card)
         sec = squash(strip_comments(read(WIDGET).split("type te_gm_sec_awaiting = flowcontainer {", 1)[1]
                                     .split("type te_gm_sec_monuments", 1)[0]))
         self.assertIn("visible = \"[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
@@ -6347,13 +6416,13 @@ class DedicateButtonTests(unittest.TestCase):
         self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]\"", sec)
         self.assertIn("datacontext = \"[Scope.GetState]\" visible = \"[EqualTo_CFixedPoint( State.MakeScope"
                       ".ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' )]\"", sec)
-        self.assertIn("gm_monument_row = {} gm_dedicate_button = {}", sec)
+        self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
         # The section's gate and its rows read the same trigger.
         values = read(VALUES)
         self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_disp_count_awaiting")))
         self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_state_disp_awaiting")))
-        self.assertEqual(squash(block(values, "gm_disp_count_listed")),
-                         "value = gm_sum_monuments subtract = gm_disp_count_awaiting min = 0")
+        # Sites are not monuments yet: Our Monuments lists every finished one.
+        self.assertEqual(squash(block(values, "gm_disp_count_listed")), "value = gm_sum_monuments")
 
     def test_the_answer_finishes_it_at_the_levels_built(self):
         dedicate = squash(block(read(EFFECTS), "gm_state_dedicate"))

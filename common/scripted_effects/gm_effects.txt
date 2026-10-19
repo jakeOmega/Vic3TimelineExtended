@@ -688,6 +688,7 @@ gm_country_refresh = {
 			NOT = { has_journal_entry = je_grand_monuments }
 			OR = {
 				any_scope_state = { has_building = building_grand_monument }
+				any_scope_state = { has_building = building_grand_monument_site }
 				has_variable = gm_com_open
 				has_variable = gm_com_offered
 				gm_tr_country_has_any = yes
