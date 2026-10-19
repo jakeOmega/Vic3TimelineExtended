@@ -433,7 +433,7 @@ class BuildingTests(unittest.TestCase):
         self.assertIn("gm_possible_rule_tt", loc())
 
     def test_ai_avoids_hard_times_and_war(self):
-        ai = squash(block(read(BUILDING), "ai_value"))
+        ai = squash(block(read(SITE_BUILDING), "ai_value"))
         # owner ?= : the AI can ask while a state's owner is briefly invalid.
         self.assertIn("owner ?= { gm_country_hard_times = yes } } add = -100", ai)
         self.assertIn("owner ?= { is_at_war = yes } } add = -100", ai)
@@ -609,7 +609,7 @@ class LocalPulseTests(unittest.TestCase):
 
     def test_pulse_applies_the_curve(self):
         body = squash(block(self.e, "gm_state_monthly"))
-        self.assertTrue(body.startswith("gm_remove_local_modifiers = yes"))
+        self.assertTrue(body.startswith("gm_state_count_site_levels = yes gm_remove_local_modifiers = yes"))
         self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
         # The monument policy (v2 §5) scales the steps: tourism and the local
         # effect separately (each dedication's, SecondaryFitTests).
@@ -1529,11 +1529,8 @@ class VanityTests(unittest.TestCase):
     def test_level_finished_hook(self):
         ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
         self.assertIn("type = building_event hidden = yes", ev)
-        # Minor 3: a Rededicate rebuild's own on_building_built must not
-        # backlash on a level it did not earn (gm_state_rededicate sets
-        # gm_rebuilding for one day around the rebuild).
-        self.assertIn("owner = { gm_country_hard_times = yes } NOT = { has_variable = gm_rebuilding } } "
-                      "gm_state_vanity_backlash = yes", ev)
+        # Vanity is the construction site's monthly count's (SiteBuildingTests).
+        self.assertNotIn("gm_state_vanity_backlash", ev)
         # A player's monument waits for its Dedicate button (owner, 2026-10-18);
         # the AI's ceremony asks once nothing more is queued.
         self.assertIn("gm_state_is_dedicated = no NOT = { has_variable = gm_rebuilding } "
@@ -1547,9 +1544,9 @@ class VanityTests(unittest.TestCase):
         self.assertLess(rededicate.find("gm_rebuilding"), rededicate.find("remove_building = building_grand_monument"))
 
     def test_backlash(self):
-        body = squash(block(read(EFFECTS), "gm_state_vanity_backlash"))
+        body = squash(block(read(EFFECTS), "gm_state_vanity_backlash_for"))
         self.assertIn("add_radicals_in_state = { value = 0.005 }", body)
-        self.assertIn("change_variable = { name = gm_vanity_ledger add = 1 }", body)
+        self.assertIn("change_variable = { name = gm_vanity_ledger add = $AMOUNT$ }", body)
         self.assertIn("post_notification = gm_vanity_backlash_notice", body)
 
     def test_notice(self):
@@ -2233,11 +2230,11 @@ class CommissionLifeTests(unittest.TestCase):
             self.assertIn(s_, accept)
         queue = squash(block(self.e, "gm_com_queue_levels"))
         self.assertIn("while = { limit = { var:gm_com_queued < var:gm_com_raise_levels } scope:gm_com_build_state = "
-                      "{ start_building_construction = building_grand_monument }", queue)
+                      "{ start_building_construction = building_grand_monument_site }", queue)
         self.assertNotIn("create_building", queue, "the country pays for its levels")
         ai = squash(block(self.e, "gm_com_ai_queue"))
         self.assertIn("gm_com_pick_build_state = yes if = { limit = { exists = scope:gm_com_build_state } "
-                      "set_variable = { name = gm_com_raise_levels value = var:gm_com_target } gm_com_queue_levels = yes", ai)
+                      "set_variable = { name = gm_com_raise_levels value = gm_com_levels_to_go } gm_com_queue_levels = yes", ai)
 
     def test_progress_floors_at_zero(self):
         body = squash(block(read(COM_VALUES), "gm_com_progress"))
@@ -2393,9 +2390,8 @@ class GiftTests(unittest.TestCase):
         self.assertIn("every_scope_state = { limit = { has_building = building_grand_monument } "
                       "gm_state_restore_dedication = yes", refresh)
         monthly = squash(block(e, "gm_state_monthly"))
-        self.assertTrue(monthly.startswith("gm_remove_local_modifiers = yes gm_state_restore_dedication = yes"))
-        ev1 = squash(raw_block_at(self.events, r"(?m)^monument_events\.1\s*=\s*\{"))
-        self.assertLess(ev1.find("gm_state_restore_dedication = yes"), ev1.find("gm_state_vanity_backlash = yes"))
+        self.assertTrue(monthly.startswith("gm_state_count_site_levels = yes gm_remove_local_modifiers = yes "
+                                           "gm_state_restore_dedication = yes"))
 
     def test_nothing_judges_the_method_meanwhile(self):
         e = read(EFFECTS)
@@ -2426,7 +2422,7 @@ class UsabilityTests(unittest.TestCase):
                    "has_variable = gm_com_build_where"):
             self.assertIn(s_, can)
         self.assertEqual(squash(block(self.t, "gm_com_monument_under_construction")),
-                         "any_scope_building = { is_building_type = building_grand_monument is_under_construction = yes }")
+                         "any_scope_building = { is_building_type = building_grand_monument_site is_under_construction = yes }")
         ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.27\s*=\s*\{"))
         self.assertIn("type = country_event hidden = yes", ev)
         self.assertIn("immediate = { gm_com_raise = yes }", ev)
@@ -4606,16 +4602,6 @@ class FreezeTests(unittest.TestCase):
         rebuild = squash(block(read(self.TR), "gm_state_tr_take_records_from_moving"))
         self.assertIn("set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }", rebuild)
 
-    def test_the_expansion_gate(self):
-        gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
-        for key in ("gm_expand_contested_tt", "gm_expand_pending_tt", "gm_expand_rebuilding_tt", "gm_expand_full_tt"):
-            self.assertIn(f"text = {key}", gate)
-            self.assertIn(key, loc())
-        self.assertIn("gm_state_monument_count < 6", gate)
-        building = squash(block(read(BUILDING), "building_grand_monument"))
-        self.assertIn("can_build_government = { gm_state_can_expand = yes }", building)
-        self.assertIn("can_build_private = { gm_state_can_expand = yes }", building)
-        self.assertIn("add = { value = gm_state_monument_count multiply = -25 }", building)
 
 
 class SecondaryFitTests(unittest.TestCase):
@@ -4888,7 +4874,7 @@ class OpportunityLevelTests(unittest.TestCase):
 
     def test_raise_it_builds_only_where_it_may(self):
         pick = squash(strip_comments(block(read(self.COM_E), "gm_com_pick_build_state")))
-        self.assertGreaterEqual(pick.count("gm_state_can_expand = yes"), 5)
+        self.assertGreaterEqual(pick.count("gm_state_can_build_site = yes"), 4)
 
     def test_the_gift_is_age(self):
         gift = squash(strip_comments(block(read(self.COM_E), "gm_state_gift_grandeur")))
@@ -4971,18 +4957,6 @@ class RebuildGateTests(unittest.TestCase):
     can_build_government (unverified), so the expansion gate stands open while
     script rebuilds a monument, and a self-check reads the rebuilt level."""
 
-    def test_the_gate_is_open_while_script_rebuilds(self):
-        gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
-        self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } "), gate)
-        for path in ("common/scripted_effects/gm_trophy_effects.txt", MON_EFFECTS, EFFECTS):
-            body = strip_comments(read(path))
-            for m in re.finditer(r"te_construction_market_build_specified_level\s*=\s*\{\s*SPEC_TYPE\s*=\s*"
-                                 r"building_grand_monument", body):
-                before = body[max(0, m.start() - 1600):m.start()]
-                self.assertIn("name = gm_rebuilding days = 1", before, path)
-                after = body[m.end():m.end() + 200]
-                self.assertIn("name = gm_rebuild_asked value = var:gm_rebuild_level", after, path)
-
     def test_the_rebuild_self_check(self):
         body = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_rebuild_self_check")))
         self.assertIn("TE_SELF_CHECK OK monument_rebuild_ungated", body)
@@ -4991,22 +4965,12 @@ class RebuildGateTests(unittest.TestCase):
         self.assertIn("gm_state_level >= var:gm_rebuild_asked", body)
         self.assertNotIn("GetName", body)
         self.assertTrue(squash(block(read(EFFECTS), "gm_state_monthly")).startswith(
-            "gm_remove_local_modifiers = yes gm_state_restore_dedication = yes gm_monument_rebuild_self_check = yes"))
+            "gm_state_count_site_levels = yes gm_remove_local_modifiers = yes gm_state_restore_dedication = yes "
+            "gm_monument_rebuild_self_check = yes"))
 
 
 class FinalReviewFixTests(unittest.TestCase):
     """The whole-branch review of the ageing rework (2026-10-16)."""
-
-    def test_the_gate_holds_only_a_frozen_monument(self):
-        # Important 1: a monument still being built takes its queued levels
-        # whatever is pending; only a finished one founds beside.
-        gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
-        # Since the Dedicate button (owner, 2026-10-18) a monument can be
-        # finished with levels still queued: the gate holds only once nothing
-        # is under construction, so it never closes on them.
-        self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } "
-                                        "has_variable = gm_levels "
-                                        "b:building_grand_monument ?= { is_under_construction = no } }"), gate)
 
     def test_the_notice_counts_monuments_beside_another(self):
         # Important 2.
@@ -6628,6 +6592,118 @@ class OptionReasonTests(unittest.TestCase):
 
 
 # ---- Dedicate (owner, 2026-10-18) -------------------------------------------------------
+
+SITE_BUILDING = "common/buildings/grand_monument_site.txt"
+
+
+class SiteBuildingTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.1: a player builds and expands a construction
+    site; the finished monument is a level-1 building only script makes."""
+
+    def test_the_finished_type(self):
+        body = squash(block(read(BUILDING), "building_grand_monument"))
+        for s in ("buildable = no", "expandable = no", "downsizeable = no", "building_group = bg_grand_monuments",
+                  "pmg_monument_dedication pmg_maintenance", "gm_system_enabled = yes"):
+            self.assertIn(s, body)
+        for s in ("ai_value", "can_build_government", "can_build_private", "unlocking_technologies"):
+            self.assertNotIn(s, body)
+
+    def test_the_site_type(self):
+        body = squash(block(read(SITE_BUILDING), "building_grand_monument_site"))
+        for s in ("building_group = bg_grand_monuments", "expandable = yes", "downsizeable = yes",
+                  "production_method_groups = { pmg_grand_monument_site }",
+                  "required_construction = construction_cost_grand_monument",
+                  "can_build_government = { gm_state_can_build_site = yes }",
+                  "can_build_private = { gm_state_can_build_site = yes }",
+                  "gm_system_enabled = yes", "value = gm_state_monument_count multiply = -25",
+                  "gm_country_hard_times = yes"):
+            self.assertIn(s, body)
+        self.assertNotIn("buildable = no", body)
+
+    def test_the_site_method_does_nothing(self):
+        self.assertEqual(squash(block(read(PMG), "pmg_grand_monument_site")).split("production_methods = ")[1],
+                         "{ pm_grand_monument_site }")
+        pm = squash(block(read(PMS), "pm_grand_monument_site"))
+        for s in ("building_modifiers", "state_modifiers", "country_modifiers", "goods_"):
+            self.assertNotIn(s, pm)
+        for key in ("building_grand_monument_site", "building_grand_monument_site_desc",
+                    "pmg_grand_monument_site", "pm_grand_monument_site"):
+            self.assertIn(key, loc(), key)
+
+    def test_the_gate(self):
+        gate = squash(block(read(MON_TRIGGERS), "gm_state_can_build_site"))
+        self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } "
+                                        "NOT = { b:building_grand_monument_site ?= { is_under_construction = yes } } }"))
+        for s in ("NOT = { gm_state_is_contested = yes }", "NOT = { has_variable = gm_ceremony_pending }",
+                  "NOT = { has_variable = gm_unveil_pending }", "NOT = { has_variable = gm_name_choice_open }",
+                  "NOT = { has_variable = gm_being_named }", "NOT = { has_variable = gm_restore_pm }",
+                  "NOT = { has_variable = gm_gift }", "gm_state_monument_count < 6"):
+            self.assertIn(s, gate)
+        self.assertIsNone(block(read(MON_TRIGGERS), "gm_state_can_expand"))
+
+    def test_presence(self):
+        mon = read(MON_VALUES)
+        self.assertEqual(squash(block(read(VALUES), "gm_state_site_level")),
+                         "value = 0 if = { limit = { has_building = building_grand_monument_site } "
+                         "value = b:building_grand_monument_site.level }")
+        self.assertEqual(squash(block(read(TRIGGERS), "gm_state_has_site")),
+                         "has_building = building_grand_monument_site")
+        self.assertIn("if = { limit = { has_building = building_grand_monument_site } add = 1 }",
+                      squash(block(mon, "gm_state_monument_count")))
+
+    def test_the_pulse_reaches_a_site(self):
+        on_action = squash(block(read(ON_ACTIONS), "gm_state_on_action"))
+        self.assertIn("has_building = building_grand_monument_site", on_action)
+        monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
+        self.assertIn("gm_state_count_site_levels = yes", monthly)
+        self.assertLess(monthly.find("gm_state_count_site_levels = yes"),
+                        monthly.find("if = { limit = { has_building = building_grand_monument }"))
+
+    def test_the_tracker(self):
+        body = squash(strip_comments(block(read(EFFECTS), "gm_state_count_site_levels")))
+        for s in ("limit = { gm_state_site_level > var:gm_site_counted }",
+                  "change_variable = { name = gm_site_grandeur add = var:gm_site_new }",
+                  "gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_new }",
+                  "set_variable = { name = gm_site_counted value = gm_state_site_level }",
+                  "limit = { gm_state_site_level < var:gm_site_counted }",
+                  "remove_variable = gm_site_counted", "remove_variable = gm_site_grandeur"):
+            self.assertIn(s, body)
+        vanity = squash(block(read(EFFECTS), "gm_state_vanity_backlash_for"))
+        self.assertIn("change_variable = { name = gm_vanity_ledger add = $AMOUNT$ }", vanity)
+        self.assertIn("add_radicals_in_state = { value = 0.005 }", vanity)
+
+    def test_vanity_left_the_level_hook(self):
+        ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
+        self.assertNotIn("gm_state_vanity_backlash", ev1)
+        self.assertNotIn("gm_state_count_site_levels", squash(strip_comments(block(read(EFFECTS),
+                                                                                  "gm_country_refresh"))))
+
+
+class SiteConstructionTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.1, §4: the finished type can no longer be
+    built, so everything that queues or reads monument construction names
+    the site."""
+
+    def test_the_queue_builds_a_site(self):
+        com = read(COM_EFFECTS)
+        queue = squash(block(com, "gm_com_queue_levels"))
+        self.assertIn("start_building_construction = building_grand_monument_site", queue)
+        self.assertNotIn("start_building_construction = building_grand_monument ", queue + " ")
+        ai = squash(block(com, "gm_com_ai_queue"))
+        self.assertIn("set_variable = { name = gm_com_raise_levels value = gm_com_levels_to_go }", ai)
+
+    def test_the_picker(self):
+        pick = squash(strip_comments(block(read(COM_EFFECTS), "gm_com_pick_build_state")))
+        self.assertNotIn("gm_state_can_expand", pick)
+        self.assertIn("gm_state_can_build_site = yes", pick)
+        self.assertIn("gm_state_has_site = yes", pick)
+        self.assertLess(pick.find("gm_state_has_site = yes"), pick.find("capital"))
+
+    def test_under_construction_is_the_site(self):
+        self.assertEqual(squash(block(read(COM_TRIGGERS), "gm_com_monument_under_construction")),
+                         "any_scope_building = { is_building_type = building_grand_monument_site "
+                         "is_under_construction = yes }")
+
 
 class RecordWriterTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's

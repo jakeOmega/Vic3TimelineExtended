@@ -425,6 +425,9 @@ gm_clear_state = {
 # effect for every dedicated one (fits, heritage or contested, §2.3). Both on
 # the curve over this monument's own level.
 gm_state_monthly = {
+	# The construction site's new levels, into its records (sites spec
+	# 2026-10-18 §3.2): real execution only, never the walked refresh.
+	gm_state_count_site_levels = yes
 	gm_remove_local_modifiers = yes
 	# A gifted monument's dedication back (opportunities spec §3.1).
 	gm_state_restore_dedication = yes
@@ -2118,16 +2121,74 @@ gm_state_choose_building_skin = {
 }
 
 # ---- Vanity backlash (§5) --------------------------------------------------------
-# State scope. A level finished while the country is in default, famine or
-# recession: radicals in the state, and one more unit on the vanity ledger,
+# State scope. Levels finished while the country is in default, famine or
+# recession: radicals in the state, and $AMOUNT$ more on the vanity ledger,
 # which takes legitimacy linearly (gm_national_vanity) and fades over about
 # two years. The journal entry warns beforehand (gm_hard_times_sgui, Task 9).
-gm_state_vanity_backlash = {
+# From the construction site's monthly count (gm_state_count_site_levels), so
+# the radicals come once a month however many levels finished.
+gm_state_vanity_backlash_for = {
 	add_radicals_in_state = { value = 0.005 }
 	owner = {
 		gm_init_ledgers = yes
-		change_variable = { name = gm_vanity_ledger add = 1 }
+		change_variable = { name = gm_vanity_ledger add = $AMOUNT$ }
 		post_notification = gm_vanity_backlash_notice
+	}
+}
+
+# One level's (the debug event).
+gm_state_vanity_backlash = {
+	gm_state_vanity_backlash_for = { AMOUNT = 1 }
+}
+
+# ---- The construction site's count (sites spec 2026-10-18 §3.2) ------------------
+# State scope, from gm_state_monthly (real execution, never the walked
+# refresh) and at the start of every dedication. Levels the site has finished
+# above those counted (gm_site_counted) join its starting grandeur so far
+# (gm_site_grandeur), one each until the world-wealth rate (Plan B), and draw
+# the vanity backlash in hard times. Fewer levels than counted (downsized, or
+# lost) take their share of the grandeur with them. A site gone takes its
+# records with it; a dedication reads them first.
+gm_state_count_site_levels = {
+	if = {
+		limit = { has_building = building_grand_monument_site }
+		if = {
+			limit = { NOT = { has_variable = gm_site_counted } }
+			set_variable = { name = gm_site_counted value = 0 }
+			set_variable = { name = gm_site_grandeur value = 0 }
+		}
+		if = {
+			limit = { gm_state_site_level > var:gm_site_counted }
+			set_variable = { name = gm_site_new value = gm_state_site_level }
+			change_variable = { name = gm_site_new subtract = var:gm_site_counted }
+			change_variable = { name = gm_site_grandeur add = var:gm_site_new }
+			if = {
+				limit = {
+					owner = { gm_country_hard_times = yes }
+					NOT = { has_variable = gm_rebuilding }
+				}
+				gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_new }
+			}
+			set_variable = { name = gm_site_counted value = gm_state_site_level }
+			remove_variable = gm_site_new
+		}
+		else_if = {
+			limit = { gm_state_site_level < var:gm_site_counted }
+			set_variable = {
+				name = gm_site_grandeur
+				value = {
+					value = var:gm_site_grandeur
+					multiply = gm_state_site_level
+					divide = var:gm_site_counted
+				}
+			}
+			set_variable = { name = gm_site_counted value = gm_state_site_level }
+		}
+	}
+	else_if = {
+		limit = { has_variable = gm_site_counted }
+		remove_variable = gm_site_counted
+		remove_variable = gm_site_grandeur
 	}
 }
 

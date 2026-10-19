@@ -155,11 +155,16 @@ gm_state_primary_grandeur = {
 	add = gm_state_primary_age
 }
 
-# State scope. How many monuments stand here: the primary and its secondaries.
+# State scope. How many monuments stand here: the primary, its secondaries and
+# a construction site (sites spec 2026-10-18 §5: a site counts toward six).
 gm_state_monument_count = {
 	value = 0
 	if = {
 		limit = { has_building = building_grand_monument }
+		add = 1
+	}
+	if = {
+		limit = { has_building = building_grand_monument_site }
 		add = 1
 	}
 	if = {

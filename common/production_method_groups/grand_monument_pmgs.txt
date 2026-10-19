@@ -4,6 +4,15 @@
 # See common/production_methods/grand_monument_pms.txt for the one-way "ratchet"
 # that makes a dedication permanent once chosen.
 
+# The construction site (sites spec 2026-10-18 §3.1): one method that does
+# nothing; the site has no upkeep and no effects.
+pmg_grand_monument_site = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_grand_monument_site
+	}
+}
+
 pmg_monument_dedication = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive

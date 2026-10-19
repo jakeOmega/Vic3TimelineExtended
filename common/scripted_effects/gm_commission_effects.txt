@@ -241,18 +241,20 @@ gm_com_decline = {
 }
 
 # ---- Building it: the AI's queue and Raise It (v2 §2.6; usability §1) -------------------
-# Country scope. Where an opportunity's levels go, as scope:gm_com_build_state:
-# the first of the opportunity's state; the tallest fitting monument of its
-# dedication; an undedicated monument (the ceremony then offers the
-# opportunity's dedication first); the capital, if it has no monument; the most
-# populous incorporated state without one. None of these, no scope.
+# Country scope. Where an opportunity's missing levels go (sites spec
+# 2026-10-18 §3.1: always onto a construction site, which the dedication
+# makes the monument): the opportunity's state, if it has one; a state where
+# a site already stands (its ceremony then offers the opportunity's
+# dedication first); the capital; the most populous incorporated state. Each
+# only where a site may be built or expanded (gm_state_can_build_site). None
+# of these, no scope.
 gm_com_pick_build_state = {
 	clear_saved_scope = gm_com_build_state
 	if = {
 		limit = { has_variable = gm_com_state }
 		var:gm_com_state ?= {
 			if = {
-				limit = { gm_state_can_expand = yes }
+				limit = { gm_state_can_build_site = yes }
 				save_scope_as = gm_com_build_state
 			}
 		}
@@ -260,18 +262,16 @@ gm_com_pick_build_state = {
 	else_if = {
 		limit = {
 			any_scope_state = {
-				gm_state_status_fits = yes
-				gm_state_has_dedication_flag = { VAR = gm_com_dedication }
-				gm_state_can_expand = yes
+				gm_state_has_site = yes
+				gm_state_can_build_site = yes
 			}
 		}
 		ordered_scope_state = {
 			limit = {
-				gm_state_status_fits = yes
-				gm_state_has_dedication_flag = { VAR = gm_com_dedication }
-				gm_state_can_expand = yes
+				gm_state_has_site = yes
+				gm_state_can_build_site = yes
 			}
-			order_by = gm_state_grandeur
+			order_by = gm_state_site_level
 			position = 0
 			check_range_bounds = no
 			save_scope_as = gm_com_build_state
@@ -279,27 +279,7 @@ gm_com_pick_build_state = {
 	}
 	else_if = {
 		limit = {
-			any_scope_state = {
-				has_building = building_grand_monument
-				gm_state_is_dedicated = no
-				gm_state_can_expand = yes
-			}
-		}
-		random_scope_state = {
-			limit = {
-				has_building = building_grand_monument
-				gm_state_is_dedicated = no
-				gm_state_can_expand = yes
-			}
-			save_scope_as = gm_com_build_state
-		}
-	}
-	else_if = {
-		limit = {
-			capital ?= {
-				NOT = { has_building = building_grand_monument }
-				gm_state_can_expand = yes
-			}
+			capital ?= { gm_state_can_build_site = yes }
 		}
 		capital = { save_scope_as = gm_com_build_state }
 	}
@@ -307,15 +287,13 @@ gm_com_pick_build_state = {
 		limit = {
 			any_scope_state = {
 				is_incorporated = yes
-				NOT = { has_building = building_grand_monument }
-				gm_state_can_expand = yes
+				gm_state_can_build_site = yes
 			}
 		}
 		ordered_scope_state = {
 			limit = {
 				is_incorporated = yes
-				NOT = { has_building = building_grand_monument }
-				gm_state_can_expand = yes
+				gm_state_can_build_site = yes
 			}
 			order_by = state_population
 			position = 0
@@ -335,19 +313,19 @@ gm_com_queue_levels = {
 	while = {
 		limit = { var:gm_com_queued < var:gm_com_raise_levels }
 		scope:gm_com_build_state = {
-			start_building_construction = building_grand_monument
+			start_building_construction = building_grand_monument_site
 		}
 		change_variable = { name = gm_com_queued add = 1 }
 	}
 	remove_variable = gm_com_queued
 }
 
-# Country scope, AI only, on seizing: the whole target.
+# Country scope, AI only, on seizing: the levels still missing.
 gm_com_ai_queue = {
 	gm_com_pick_build_state = yes
 	if = {
 		limit = { exists = scope:gm_com_build_state }
-		set_variable = { name = gm_com_raise_levels value = var:gm_com_target }
+		set_variable = { name = gm_com_raise_levels value = gm_com_levels_to_go }
 		gm_com_queue_levels = yes
 		remove_variable = gm_com_raise_levels
 	}

@@ -290,3 +290,8 @@ pm_monument_athletic = {
 		}
 	}
 }
+
+# The construction site (grand_monument_site.txt): nothing in, nothing out.
+pm_grand_monument_site = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+}

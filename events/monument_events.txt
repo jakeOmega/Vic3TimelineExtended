@@ -52,18 +52,9 @@ monument_events.1 = {
 					# A gifted monument's dedication back (opportunities spec
 					# §3.1), before anything reads it.
 					gm_state_restore_dedication = yes
-					# Minor 3: skip backlash for a Rededicate rebuild's own
-					# on_building_built (gm_state_rededicate sets gm_rebuilding
-					# for one day around the rebuild); the tooltip never
-					# mentions this cost, and rededicating is plausible right
-					# in the hard times that would otherwise trigger it.
-					if = {
-						limit = {
-							owner = { gm_country_hard_times = yes }
-							NOT = { has_variable = gm_rebuilding }
-						}
-						gm_state_vanity_backlash = yes
-					}
+					# Vanity backlash is the construction site's monthly count's
+					# (gm_state_count_site_levels, sites spec 2026-10-18): this
+					# hook missed levels that finished on the same day.
 					# A part of this region merged into this state (issue #936):
 					# the monuments that stood there are adopted first, so their
 					# levels found no monument beside and start no ceremony.

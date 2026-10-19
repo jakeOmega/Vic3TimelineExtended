@@ -119,6 +119,16 @@ gm_state_level = {
 	}
 }
 
+# The construction site's level, or 0 (sites spec 2026-10-18 §3.1): the levels
+# of the monument being built, finished so far.
+gm_state_site_level = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument_site }
+		value = b:building_grand_monument_site.level
+	}
+}
+
 # The grandeur of everything standing here: the primary's levels and age and
 # every secondary's (gm_monument_values.txt), or 0. What tourism, the card and
 # the frame read; the building's level is gm_state_level.

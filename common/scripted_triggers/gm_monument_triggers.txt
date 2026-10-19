@@ -269,33 +269,23 @@ gm_mon_ages = {
 	NOT = { has_variable = gm_tr_contested }
 }
 
-# State scope. More levels may be built here (spec 2026-10-16 §3.2): on a
-# finished monument they found a new one beside it. The building's
-# can_build_government / can_build_private, so each reason shows in the
-# build tooltip. Not while the monument here is contested (decide first: a
-# level would move the contest into a monument beside), while a ceremony,
-# unveiling or naming is under way, while script is rebuilding it or putting
-# its method back, or once six monuments stand on a finished one (returns and
-# archaeology may pass six; construction may not). Only once nothing is under
-# construction here (2026-10-18): a level queued while a ceremony asked, or
-# after the dedication, is the monument beside it, and closing the gate on it
-# while the unveiling or naming runs could cancel or stall it.
-# Open while script rebuilds it (gm_rebuilding, one day, set before every
-# rebuild's create_building): since 1.13.9 create_building checks some of a
-# building's requirements, and whether that includes can_build_government is
-# unverified (scripting_best_practices.md; the te_cm_placing_site pattern), so
-# a rebuild must never meet a closed gate. gm_monument_rebuild_self_check
-# reads whether rebuilds come back at the level asked.
-gm_state_can_expand = {
+# State scope. A construction site may be started or expanded here (sites spec
+# 2026-10-18 §3.1): the site's can_build_government / can_build_private, so
+# each reason shows in the build tooltip. Not while the monument here is
+# contested (decide first), while a ceremony, unveiling or naming is under way
+# (a ceremony removes the site), while script puts a method back, or once six
+# monuments stand, the site among them (returns and archaeology may pass six;
+# construction may not). Open while levels of the site are being built:
+# closing the gate on them could cancel or stall them. Open while script
+# creates or removes a monument's building (gm_rebuilding, one day): since
+# 1.13.9 create_building checks some of a building's requirements, and whether
+# that includes can_build_government is unverified (scripting_best_practices.md;
+# the te_cm_placing_site pattern).
+gm_state_can_build_site = {
 	trigger_if = {
 		limit = {
 			NOT = { has_variable = gm_rebuilding }
-			# Only a finished monument founds beside; one still being built
-			# takes its queued levels whatever is pending (a ceremony asking, a
-			# restore after a return), and closing the gate then could cancel or
-			# stall them.
-			has_variable = gm_levels
-			b:building_grand_monument ?= { is_under_construction = no }
+			NOT = { b:building_grand_monument_site ?= { is_under_construction = yes } }
 		}
 		custom_tooltip = {
 			text = gm_expand_contested_tt

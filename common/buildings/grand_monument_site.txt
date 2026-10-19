@@ -1,0 +1,104 @@
+﻿#==================================================
+# Grand Monuments: the construction site
+#==================================================
+# Sites spec docs/superpowers/specs/2026-10-18-grand-monument-sites-and-world-wealth-design.md
+# §3.1. What a player builds and expands: its levels are the monument being
+# built, counted each month into its records (gm_state_count_site_levels,
+# gm_effects.txt). It has no upkeep and no effects. Dedicate (gm_dedicate_sgui)
+# removes it, and a finished building_grand_monument stands at level 1 with the
+# monument's size in its records (grand_monuments.txt). One per state.
+#
+# Group bg_grand_monuments, so monument_events.1 sees its levels finish; NOT
+# bg_monuments (extra_building_groups.txt).
+
+building_grand_monument_site = {
+	building_group = bg_grand_monuments
+	icon = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	expandable = yes
+	# A player may take levels off what is still being built; what is lost
+	# takes its share of the grandeur counted so far (gm_state_count_site_levels).
+	downsizeable = yes
+	unique = no
+	ai_nationalization_desire = 0
+
+	production_method_groups = {
+		pmg_grand_monument_site
+	}
+
+	required_construction = construction_cost_grand_monument
+
+	# Not while the monument here is contested (decide first), while a
+	# ceremony, unveiling or naming is under way, while script puts a method
+	# back, or once six monuments stand (gm_state_can_build_site, state scope).
+	can_build_government = {
+		gm_state_can_build_site = yes
+	}
+	can_build_private = {
+		gm_state_can_build_site = yes
+	}
+
+	# The game rule (spec §7).
+	possible = {
+		custom_tooltip = {
+			text = gm_possible_rule_tt
+			gm_system_enabled = yes
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	# Evaluated in STATE scope: ROOT is the state, owner reaches the country.
+	# owner ?= : the AI can ask while a state's owner is briefly invalid
+	# ("Event target link 'owner' returned an invalid object").
+	ai_value = {
+		value = 0
+
+		# Only interesting to countries with money to spare.
+		if = {
+			limit = {
+				owner ?= { is_great_or_major_power = yes }
+			}
+			add = 25
+		}
+
+		# The Tourism Industry throughput pays off where one exists.
+		if = {
+			limit = { has_building = building_tourism_industry }
+			add = 50
+		}
+
+		# A regime short of legitimacy is the one that raises monuments (§7).
+		if = {
+			limit = {
+				owner ?= { government_legitimacy < 40 }
+			}
+			add = 25
+		}
+
+		# Never at the expense of the war effort.
+		if = {
+			limit = {
+				owner ?= { is_at_war = yes }
+			}
+			add = -100
+		}
+
+		# Every monument already standing here: found new ones elsewhere first
+		# (spec 2026-10-16 §3.2).
+		add = {
+			value = gm_state_monument_count
+			multiply = -25
+		}
+
+		# Never in hard times: a level finished then costs legitimacy (§5).
+		if = {
+			limit = {
+				owner ?= { gm_country_hard_times = yes }
+			}
+			add = -100
+		}
+	}
+}

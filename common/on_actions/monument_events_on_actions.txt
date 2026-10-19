@@ -153,6 +153,9 @@ gm_state_on_action = {
 			limit = {
 				OR = {
 					has_building = building_grand_monument
+					# A construction site, and its records once it goes.
+					has_building = building_grand_monument_site
+					has_variable = gm_site_counted
 					has_variable = gm_seen
 					AND = {
 						has_variable = gm_local_steps

@@ -574,3 +574,8 @@ gm_state_holds_anniversary = {
 	gm_state_has_pm = { PM = $PM$ }
 	gm_state_primary_grandeur >= 3
 }
+
+# State scope. A construction site stands here (sites spec 2026-10-18 §3.1).
+gm_state_has_site = {
+	has_building = building_grand_monument_site
+}
