@@ -66,7 +66,7 @@
  notification_gm_com_lapsed_notice_name:0 "An Opportunity Lapses"
  notification_gm_com_missed_notice_desc:0 "The time for the monument has run out. The moment has passed, and no one holds it against us."
  notification_gm_com_missed_notice_name:0 "An Opportunity Passes"
- notification_gm_com_reminder_notice_desc:0 "The monument we were asked for has a year left to be raised. Raise It on the Grand Monuments tab queues the missing levels."
+ notification_gm_com_reminder_notice_desc:0 "The monument we were asked for has a year left to be raised. Raise It on the Grand Monuments tab queues the missing levels, which count once their monument is dedicated."
  notification_gm_com_reminder_notice_name:0 "A Year Left on the Opportunity"
  notification_gm_tr_home_reach_notice_desc:0 "We now hold a trophy taken from our own lands. Bring It Home, on its row under Trophies, rebuilds it where it stood."
  notification_gm_tr_home_reach_notice_name:0 "A Trophy Within Reach"

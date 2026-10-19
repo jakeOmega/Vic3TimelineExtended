@@ -1023,7 +1023,7 @@ class ContestTests(unittest.TestCase):
         asked about, so leaving a monument undedicated waits for its next level."""
         sweep = squash(block(self.e, "gm_state_offer_missed_ceremony"))
         self.assertIn("if = { limit = { gm_system_enabled = yes gm_state_is_dedicated = no "
-                      "NOT = { has_variable = gm_ceremony_pending } "
+                      "gm_state_ai_dedicates_now = yes NOT = { has_variable = gm_ceremony_pending } "
                       "OR = { NOT = { has_variable = gm_ceremony_level } "
                       "AND = { has_variable = gm_ceremony_level var:gm_ceremony_level < gm_state_primary_levels } } } "
                       "gm_state_start_ceremony = yes }", sweep)
@@ -1534,8 +1534,10 @@ class VanityTests(unittest.TestCase):
         # gm_rebuilding for one day around the rebuild).
         self.assertIn("owner = { gm_country_hard_times = yes } NOT = { has_variable = gm_rebuilding } } "
                       "gm_state_vanity_backlash = yes", ev)
-        self.assertIn("gm_state_is_dedicated = no NOT = { has_variable = gm_rebuilding } } "
-                      "gm_state_start_ceremony = yes", ev)
+        # A player's monument waits for its Dedicate button (owner, 2026-10-18);
+        # the AI's ceremony asks once nothing more is queued.
+        self.assertIn("gm_state_is_dedicated = no NOT = { has_variable = gm_rebuilding } "
+                      "gm_state_ai_dedicates_now = yes } gm_state_start_ceremony = yes", ev)
         self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", ev)
         self.assertNotIn("add_modifier", ev, "ROOT is the building here: no multiplier modifiers")
 
@@ -1585,7 +1587,8 @@ class WidgetTests(unittest.TestCase):
         for name, _ in self.ROOTS:
             self.assertIn(f'name = "{name}" visible = "[JournalEntry.IsActive]"', g, name)
         self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
-        self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" }', g)
+        self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[EqualTo_CFixedPoint( '
+                      'State.MakeScope.ScriptValue(\'gm_state_disp_awaiting\'), \'(CFixedPoint)0\' )]" }', g)
 
     def _shown_text(self):
         """The widget and the loc of every key it renders, followed through
@@ -3012,9 +3015,19 @@ class CopiedDedicationTests(unittest.TestCase):
         self.assertEqual(body, "gm_state_is_dedicated = yes NOT = { has_variable = gm_seen } "
                                "NOT = { has_variable = gm_ceremony_level } "
                                "NOT = { has_variable = gm_ceremony_pending }")
-        reset = squash(block(self.e, "gm_state_reset_copied_dedication"))
-        self.assertEqual(reset, "if = { limit = { gm_system_enabled = yes gm_state_has_copied_dedication = yes } "
-                                "gm_state_start_ceremony = yes }")
+        # Since the Dedicate button (owner, 2026-10-18) no ceremony replaces
+        # the copy: it goes back to Undedicated through the restore path, which
+        # reads as undedicated at once, and script has seen the monument.
+        reset = squash(strip_comments(block(self.e, "gm_state_reset_copied_dedication")))
+        self.assertEqual(reset, "if = { limit = { gm_system_enabled = yes } if = { limit = { "
+                                "gm_state_has_copied_dedication = yes } set_variable = { name = gm_restore_pm "
+                                "value = flag:undedicated } set_variable = { name = gm_picture_code value = 1 } "
+                                "gm_state_picture_landmarks = yes } gm_state_mark_awaiting = yes }")
+        self.assertNotIn("activate_production_method", reset)
+        mark = squash(block(self.e, "gm_state_mark_awaiting"))
+        self.assertEqual(mark, "if = { limit = { NOT = { has_variable = gm_seen } "
+                               "NOT = { has_variable = gm_ceremony_level } } "
+                               "set_variable = { name = gm_ceremony_level value = 0 } }")
 
     def test_reset_runs_before_first_sight_and_in_the_level_hook(self):
         refresh = squash(block(self.e, "gm_country_refresh"))
@@ -3026,7 +3039,8 @@ class CopiedDedicationTests(unittest.TestCase):
         self.assertEqual(positions, sorted(positions))
         ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
         self.assertIn("gm_state_reset_copied_dedication = yes if = { limit = { gm_state_is_dedicated = no "
-                      "NOT = { has_variable = gm_rebuilding } } gm_state_start_ceremony = yes }", ev1)
+                      "NOT = { has_variable = gm_rebuilding } gm_state_ai_dedicates_now = yes } "
+                      "gm_state_start_ceremony = yes }", ev1)
 
     def test_the_answer_is_the_one_switch(self):
         self.assertNotIn("activate_production_method", squash(block(self.e, "gm_state_start_ceremony")))
@@ -4912,8 +4926,12 @@ class FinalReviewFixTests(unittest.TestCase):
         # Important 1: a monument still being built takes its queued levels
         # whatever is pending; only a finished one founds beside.
         gate = squash(block(read(MON_TRIGGERS), "gm_state_can_expand"))
+        # Since the Dedicate button (owner, 2026-10-18) a monument can be
+        # finished with levels still queued: the gate holds only once nothing
+        # is under construction, so it never closes on them.
         self.assertTrue(gate.startswith("trigger_if = { limit = { NOT = { has_variable = gm_rebuilding } "
-                                        "has_variable = gm_levels }"), gate)
+                                        "has_variable = gm_levels "
+                                        "b:building_grand_monument ?= { is_under_construction = no } }"), gate)
 
     def test_the_notice_counts_monuments_beside_another(self):
         # Important 2.
@@ -6532,3 +6550,140 @@ class OptionReasonTests(unittest.TestCase):
                                       "a greyed option must not claim a reason it doesn't meet")
                     else:
                         self.assertIn(lines, flat)
+
+
+# ---- Dedicate (owner, 2026-10-18) -------------------------------------------------------
+
+class DedicateButtonTests(unittest.TestCase):
+    """A monument waits undedicated while it is built, as long as its owner
+    likes; its Dedicate button opens the ceremony once none of its levels are
+    under construction (owner: pausing is fine, building in parallel is not),
+    and the answer finishes it at the levels built, so levels built after it
+    raise a new monument beside it. The AI has no button: its ceremony asks
+    once nothing more is queued."""
+
+    def test_the_ceremony_starts_only_where_it_should(self):
+        """A player's ceremony comes from the button, Rededicate or a panel pick
+        the ceremony must check; every other start is the AI's, once nothing is
+        queued. A new start needs a row here."""
+        allowed = {
+            ("common/scripted_effects/gm_effects.txt", "gm_state_first_sight"): None,
+            ("common/scripted_effects/gm_effects.txt", "gm_state_rededicate"): None,
+            ("common/scripted_effects/gm_effects.txt", "gm_state_offer_missed_ceremony"): "gm_state_ai_dedicates_now = yes",
+            (MON_EFFECTS, "gm_state_found_beside"): "if = { limit = { gm_state_ai_dedicates_now = yes } "
+                                                    "gm_state_start_ceremony = yes }",
+            (SGUIS, "gm_dedicate_sgui"): None,
+            (EVENTS, "monument_events.1"): "gm_state_ai_dedicates_now = yes } gm_state_start_ceremony = yes",
+        }
+        found = set()
+        for path in ("common/scripted_effects/gm_effects.txt", MON_EFFECTS, SGUIS, EVENTS,
+                     "common/scripted_effects/gm_commission_effects.txt",
+                     "common/scripted_effects/gm_trophy_effects.txt",
+                     "common/scripted_effects/gm_landmark_effects.txt",
+                     "common/scripted_effects/gm_signature_effects.txt",
+                     "common/scripted_effects/gm_archaeology_effects.txt",
+                     "common/scripted_effects/gm_name_effects.txt"):
+            for name, body in top_level_blocks(read(path)):
+                if "gm_state_start_ceremony = yes" in body and name != "gm_state_start_ceremony":
+                    found.add((path, name))
+                    self.assertIn((path, name), allowed, f"{name} in {path} starts a ceremony")
+                    if allowed[(path, name)]:
+                        self.assertIn(allowed[(path, name)], squash(body), name)
+        self.assertEqual(found, set(allowed))
+        ai = squash(block(read(TRIGGERS), "gm_state_ai_dedicates_now"))
+        self.assertEqual(ai, "owner = { is_ai = yes } b:building_grand_monument ?= { is_under_construction = no }")
+
+    def test_the_button(self):
+        sgui = squash(block(read(SGUIS), "gm_dedicate_sgui"))
+        self.assertIn("scope = country saved_scopes = { gm_state }", sgui)
+        # Visibility never rests on the saved scope reaching is_shown (gui
+        # gotcha #22): the button reads the state's value and owner, and
+        # is_valid fails closed.
+        self.assertIn("is_shown = { always = yes }", sgui)
+        self.assertIn("is_valid = { exists = scope:gm_state scope:gm_state = { owner = root "
+                      "gm_state_awaits_dedication = yes", sgui)
+        for gate in ("gm_state_level >= 1", "b:building_grand_monument ?= { is_under_construction = no }",
+                     "NOT = { has_variable = gm_ceremony_pending }",
+                     "NOT = { has_variable = gm_restore_pm }", "NOT = { has_variable = gm_rebuilding }"):
+            self.assertIn(gate, sgui.split("is_valid", 1)[1].split("effect", 1)[0])
+        self.assertIn("effect = { scope:gm_state = { custom_tooltip = { text = gm_dedicate_effect_tt "
+                      "gm_state_start_ceremony = yes } } }", sgui)
+        self.assertIn("ai_is_valid = { always = no }", sgui)
+        for key in re.findall(r"text = (gm_\w+)", sgui):
+            self.assertIn(key, loc(), key)
+        # The ceremony's own trigger, on a monument script has seen: a building
+        # a merge or a split brought waits for the refresh first.
+        awaits = squash(block(read(TRIGGERS), "gm_state_awaits_dedication"))
+        self.assertEqual(awaits, "gm_system_enabled = yes has_building = building_grand_monument "
+                                 "gm_state_is_dedicated = no NOT = { has_variable = gm_seen } "
+                                 "has_variable = gm_ceremony_level")
+        self.assertIn("NOT = { has_variable = gm_seen }",
+                      squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{"))))
+
+    def test_mounted_on_the_card_and_the_awaiting_rows(self):
+        widget = squash(strip_comments(read(WIDGET)))
+        self.assertIn("type gm_dedicate_button = button {", widget)
+        self.assertIn("datacontext = \"[GetScriptedGui('gm_dedicate_sgui')]\"", widget)
+        self.assertIn("visible = \"[And( ObjectsEqual( State.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( "
+                      "State.MakeScope.ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' ) )]\"", widget)
+        self.assertNotIn("ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', "
+                         "State.MakeScope ).End )]\" enabled = \"[ScriptedGui.IsValid( GuiScope.SetRoot( "
+                         "GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\" onclick = \"["
+                         "ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', "
+                         "State.MakeScope ).End )]\" tooltip = \"gm_button_dedicate_tooltip\"", widget)
+        for verb in ("IsValid", "Execute"):
+            self.assertIn(f"ScriptedGui.{verb}( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', "
+                          f"State.MakeScope ).End )", widget)
+        self.assertIn("gm_button_dedicate", loc())
+        self.assertIn("gm_button_dedicate_tooltip", loc())
+        card = squash(strip_comments(read("gui/te_state_panel_widgets.gui")))
+        self.assertIn("gm_dedicate_button = {} gm_tr_take_button = {}", card)
+        sec = squash(strip_comments(read(WIDGET).split("type te_gm_sec_awaiting = flowcontainer {", 1)[1]
+                                    .split("type te_gm_sec_monuments", 1)[0]))
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                      "'gm_disp_count_awaiting'), '(CFixedPoint)0' )]\"", sec)
+        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]\"", sec)
+        self.assertIn("datacontext = \"[Scope.GetState]\" visible = \"[EqualTo_CFixedPoint( State.MakeScope"
+                      ".ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' )]\"", sec)
+        self.assertIn("gm_monument_row = {} gm_dedicate_button = {}", sec)
+        # The section's gate and its rows read the same trigger.
+        values = read(VALUES)
+        self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_disp_count_awaiting")))
+        self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_state_disp_awaiting")))
+        self.assertEqual(squash(block(values, "gm_disp_count_listed")),
+                         "value = gm_sum_monuments subtract = gm_disp_count_awaiting min = 0")
+
+    def test_the_answer_finishes_it_at_the_levels_built(self):
+        dedicate = squash(block(read(EFFECTS), "gm_state_dedicate"))
+        self.assertLess(dedicate.find("set_variable = gm_seen"),
+                        dedicate.find("set_variable = { name = gm_levels value = gm_state_primary_levels }"))
+        self.assertNotEqual(dedicate.find("set_variable = { name = gm_levels value = gm_state_primary_levels }"), -1)
+        # A pick in the building panel (recorded at first sight), a landmark
+        # and one dedicated before the button are finished once their
+        # construction stops, their queued levels joining them.
+        self.assertNotIn("gm_levels", squash(block(read(EFFECTS), "gm_state_first_sight")))
+        self.assertIn("b:building_grand_monument ?= { is_under_construction = no }",
+                      squash(block(read(EFFECTS), "gm_state_record_frozen_levels")))
+        # Levels queued at the answer wait for the unveiling, skin and name
+        # before they found the monument beside it.
+        new = squash(block(read(TRIGGERS), "gm_state_has_new_levels"))
+        for flag in ("gm_unveil_pending", "gm_skin_axis", "gm_name_choice_open", "gm_being_named"):
+            self.assertIn(f"NOT = {{ has_variable = {flag} }}", new, flag)
+        # The newcomer is marked seen in the effect that switched its method.
+        beside = squash(block(read(MON_EFFECTS), "gm_state_found_beside"))
+        self.assertLess(beside.find("gm_state_undedicate = yes"), beside.find("gm_state_mark_awaiting = yes"))
+
+    def test_words(self):
+        L = loc()
+        self.assertNotIn("asks again", L["gm_ded_reason_leave_tt"])
+        self.assertNotIn("asks again", L["gm_je_status_undedicated_tt"])
+        self.assertNotIn("asks again", L["gm_je_how_counts_other"])
+        self.assertIn("Dedicate button", L["gm_je_how_grandeur"])
+        self.assertIn("Dedicate button", L["monument_events.2.a.tt"])
+        self.assertNotIn("once its last stone is laid", L["monument_events.2.d"])
+        # The button can't press mid-construction, so no text promises that
+        # levels under construction become a monument beside it.
+        for key in ("gm_dedicate_effect_tt", "gm_je_how_grandeur", "gm_row_frozen_tt", "monument_events.2.d"):
+            self.assertNotIn("still under construction", L[key], key)
+            self.assertNotIn("still being built", L[key], key)
+        self.assertIn("under construction", L["gm_sgui_dedicate_building_tt"])

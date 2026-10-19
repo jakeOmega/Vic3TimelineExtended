@@ -292,15 +292,22 @@ gm_state_pull_down_ordered = {
 # State scope, real execution only (monument_events.1 and .29; never the
 # refresh, which tooltips walk). Levels were built on a finished monument:
 # it moves into a container beside the levels' new monument, which stands as
-# the state's primary, undedicated, and is asked its dedication at once. Its
-# remaining queued levels join it until its own construction stops.
-# gm_newcomer marks it for the settle check (gm_state_settle_newcomer).
+# the state's primary, undedicated, waiting for its Dedicate button (owner,
+# 2026-10-18), which asks once nothing here is under construction, as the
+# AI's ceremony does. Its remaining queued levels join it. gm_newcomer marks it
+# for the settle check (gm_state_settle_newcomer). Marked as seen at once
+# (gm_state_mark_awaiting): its method was switched in this effect, so a
+# reading of the old dedication must not pass for the engine's copy.
 gm_state_found_beside = {
 	set_variable = { name = gm_demote_levels value = var:gm_levels }
 	gm_state_demote_primary = yes
 	set_variable = gm_newcomer
 	gm_state_undedicate = yes
-	gm_state_start_ceremony = yes
+	gm_state_mark_awaiting = yes
+	if = {
+		limit = { gm_state_ai_dedicates_now = yes }
+		gm_state_start_ceremony = yes
+	}
 	debug_log = "TE_MONUMENTS: new levels founded a monument beside the one standing; the building stands at [SCOPE.ScriptValue('gm_state_level')|0] levels, [SCOPE.ScriptValue('gm_state_monument_count')|0] monuments"
 	owner = { trigger_event = { id = monument_events.20 } }
 }

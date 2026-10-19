@@ -5,8 +5,10 @@
 # ============================================================================
 # Event 1       - a level finished (hidden building_event, fires from
 #                 on_building_built): vanity backlash in hard times, the
-#                 ceremony for a monument not yet dedicated, then Event 20.
-# Event 2       - the dedication ceremony (state event); Event 11 - the skin,
+#                 AI's ceremony for a monument not yet dedicated, then Event 20.
+# Event 2       - the dedication ceremony (state event): a player's from the
+#                 Dedicate button (gm_dedicate_sgui, owner 2026-10-18), the
+#                 AI's once nothing more is queued; Event 11 - the skin,
 #                 players only (§1.1).
 # Events 3-10,
 # 12-15         - recurring anniversary flavour, dispatched from
@@ -32,8 +34,8 @@
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
 # nothing here adds a multiplier modifier: it hops to the state for vanity
-# backlash (§5) and the ceremony, then refreshes the nation through the hidden
-# country event.
+# backlash (§5) and the AI's ceremony, then refreshes the nation through the
+# hidden country event.
 monument_events.1 = {
 	type = building_event
 	hidden = yes
@@ -75,8 +77,9 @@ monument_events.1 = {
 						# is the monument itself: the merge's levels are its own
 						# (gm_monument_effects.txt § "A revolt's split piece").
 						# Otherwise levels built on a finished monument found a
-						# new one beside it (spec 2026-10-16 §3.2); the last level
-						# of a monument's construction freezes it.
+						# new one beside it (spec 2026-10-16 §3.2); a monument
+						# dedicated before the Dedicate button freezes at the last
+						# level of its construction.
 						if = {
 							limit = { gm_state_piece_whole_gone = yes }
 							gm_state_piece_takes_whole = yes
@@ -87,16 +90,21 @@ monument_events.1 = {
 						}
 						gm_state_record_frozen_levels = yes
 						# A new monument stands on its siblings' dedication
-						# (gm_state_has_copied_dedication): the ceremony replaces it.
+						# (gm_state_has_copied_dedication): it goes back to
+						# Undedicated, and script has seen it.
 						gm_state_reset_copied_dedication = yes
-						# Not for a script's rebuild (gm_rebuilding, one day): its
-						# monument has not grown, and a ceremony asked at this level
-						# already (gm_state_offer_missed_ceremony asks again only
-						# above gm_ceremony_level). Rededicate starts its own.
+						# A player's monument waits for its Dedicate button (owner,
+						# 2026-10-18); the AI's ceremony asks once nothing more is
+						# queued. Not for a script's rebuild (gm_rebuilding, one
+						# day): its monument has not grown, and a ceremony asked at
+						# this level already (gm_state_offer_missed_ceremony asks
+						# again only above gm_ceremony_level). Rededicate starts its
+						# own.
 						if = {
 							limit = {
 								gm_state_is_dedicated = no
 								NOT = { has_variable = gm_rebuilding }
+								gm_state_ai_dedicates_now = yes
 							}
 							gm_state_start_ceremony = yes
 						}
@@ -114,8 +122,12 @@ monument_events.1 = {
 # Event 2: The Dedication (§3). A STATE event placed on the monument's state;
 # ROOT is that state, and every country-level gate goes through `owner`. Each
 # option dedicates through a gm_state_dedicate_* wrapper (gm_effects.txt),
-# which writes the records, offers the skins that fit (Event 11) and refreshes
-# the nation (Event 20).
+# which writes the records, finishes the monument at the levels built
+# (gm_levels: a level queued while it asks raises a monument beside it),
+# offers the skins that fit (Event 11) and refreshes the nation (Event 20). A
+# player's opens from the monument's Dedicate button (gm_dedicate_sgui), only
+# with nothing under construction, or from Rededicate; the AI's once nothing
+# more is queued.
 #
 # OPTION GATING: a `trigger` hides a dedication the country cannot raise (a
 # crown it does not wear, a faith under State Atheism, an untaught technology);
@@ -200,8 +212,9 @@ monument_events.2 = {
 		gm_state_dedicate_as_opportunity_asks = yes
 	}
 
-	# Leave it undedicated; the ceremony asks again at the next level. The
-	# default unless an opportunity's dedication is offered above.
+	# Not yet: it stays undedicated, and the Dedicate button asks again (the
+	# AI's ceremony at its next level). The default unless an opportunity's
+	# dedication is offered above.
 	option = {
 		name = monument_events.2.a
 		trigger = {

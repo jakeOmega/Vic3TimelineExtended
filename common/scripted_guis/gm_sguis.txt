@@ -95,6 +95,66 @@ gm_preserve_sgui = {
 	}
 }
 
+# ---- Dedicate (owner, 2026-10-18) ------------------------------------------------
+# A monument waits undedicated while it is built, as long as we like
+# (gm_state_awaits_dedication); this opens its dedication ceremony
+# (monument_events.2), whose answer finishes it at the levels built. Not while
+# any of its levels are under construction (owner: pausing is fine, building
+# in parallel is not): dedicate once they finish or are cancelled. Levels
+# built after the dedication, a level queued while the ceremony asks among
+# them, raise a new monument beside it. On the state view's monument card and
+# on the rows of Awaiting Dedication (gm_dedicate_button), which shows it on
+# our own monument while gm_state_disp_awaiting holds: its visibility never
+# rests on the saved scope reaching is_shown (gui gotcha #22), and is_valid
+# fails closed as this file's others do. The AI's ceremony asks by itself once
+# nothing more is queued.
+gm_dedicate_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			gm_state_awaits_dedication = yes
+			custom_tooltip = {
+				text = gm_sgui_dedicate_built_tt
+				gm_state_level >= 1
+			}
+			custom_tooltip = {
+				text = gm_sgui_dedicate_building_tt
+				b:building_grand_monument ?= { is_under_construction = no }
+			}
+			custom_tooltip = {
+				text = gm_sgui_dedicate_asking_tt
+				NOT = { has_variable = gm_ceremony_pending }
+			}
+			custom_tooltip = {
+				text = gm_sgui_dedicate_rebuilding_tt
+				NOT = { has_variable = gm_restore_pm }
+				NOT = { has_variable = gm_rebuilding }
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			custom_tooltip = {
+				text = gm_dedicate_effect_tt
+				gm_state_start_ceremony = yes
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
 # YES/NO: would a level finished now cause vanity backlash (§5)? Read-only,
 # scope-free (gotcha #22): the overview's Hard Times cell shows while it holds.
 gm_hard_times_sgui = {

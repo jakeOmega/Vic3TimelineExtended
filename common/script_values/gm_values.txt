@@ -1152,6 +1152,33 @@ gm_disp_count_undedicated = {
 	}
 }
 
+# Awaiting Dedication (owner, 2026-10-18): our monuments waiting undedicated
+# for their Dedicate button, the section's gate; and the rows Our Monuments
+# keeps, so its line can say when every monument is in the section above.
+gm_disp_count_awaiting = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_awaits_dedication = yes }
+		add = 1
+	}
+}
+
+gm_disp_count_listed = {
+	value = gm_sum_monuments
+	subtract = gm_disp_count_awaiting
+	min = 0
+}
+
+# State scope. 1 while this monument waits for its Dedicate button: its row is
+# in Awaiting Dedication, not in Our Monuments.
+gm_state_disp_awaiting = {
+	value = 0
+	if = {
+		limit = { gm_state_awaits_dedication = yes }
+		value = 1
+	}
+}
+
 gm_disp_count_contested = {
 	value = 0
 	every_scope_state = {

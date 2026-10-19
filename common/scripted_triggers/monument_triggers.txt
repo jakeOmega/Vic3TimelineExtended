@@ -136,13 +136,39 @@ gm_state_is_dedicated = {
 # A dedication no ceremony gave it and no pulse has recorded. A new building
 # starts on the production methods most of its owner's buildings of that type
 # use, so a second monument stands on its sibling's dedication before any
-# script runs (grand_monument_pms.txt). A pick in the panel before any
-# ceremony asked reads the same, and the ceremony replaces it too.
+# script runs (grand_monument_pms.txt). A pick in the panel before script
+# first saw the monument (gm_state_mark_awaiting) reads the same, and goes
+# back to Undedicated too (gm_state_reset_copied_dedication).
 gm_state_has_copied_dedication = {
 	gm_state_is_dedicated = yes
 	NOT = { has_variable = gm_seen }
 	NOT = { has_variable = gm_ceremony_level }
 	NOT = { has_variable = gm_ceremony_pending }
+}
+
+# Dedicate (owner, 2026-10-18): a monument waits undedicated while it is built,
+# as long as its owner likes, and its Dedicate button (gm_dedicate_sgui) opens
+# the ceremony. The ceremony's own trigger (monument_events.2: no gm_seen), on
+# a monument script has seen (gm_ceremony_level, gm_state_mark_awaiting), so a
+# building a merge or a revolt's split brought, which no record describes yet
+# (gm_state_unrecorded), waits for the refresh to settle it first.
+gm_state_awaits_dedication = {
+	gm_system_enabled = yes
+	has_building = building_grand_monument
+	gm_state_is_dedicated = no
+	NOT = { has_variable = gm_seen }
+	has_variable = gm_ceremony_level
+}
+
+# The AI has no button: its ceremony asks once nothing more is queued here,
+# when its monuments were finished before the button (so its queued levels
+# join the monument they were queued for). Whether the building still reads
+# under construction inside its last level's on_building_built is untested;
+# the refresh's check (gm_state_offer_missed_ceremony) asks within the month
+# either way.
+gm_state_ai_dedicates_now = {
+	owner = { is_ai = yes }
+	b:building_grand_monument ?= { is_under_construction = no }
 }
 
 # A dedication the building panel offered without its technology: the Grand
@@ -275,8 +301,13 @@ gm_state_is_contested = {
 }
 
 # Levels built on a finished monument (spec 2026-10-16 §3.2): its own levels
-# above those recorded when its construction stopped. Not while script is
-# rebuilding it or putting its method back, nor while a ceremony asks. Not on
+# above those recorded at its dedication (gm_levels; once its construction
+# stopped, for a pick in the panel or one dedicated before 2026-10-18). Not
+# while script is rebuilding it or putting its method back, nor while a
+# ceremony, its unveiling, its skin or its name is under way: a level queued
+# while the ceremony asked can finish while the naming event is open, and
+# would move that event's monument (the refresh founds beside once they are
+# done). Not on
 # a revolt's piece of a monument (gm_piece_of, gm_monument_effects.txt § "A
 # revolt's split piece"): what is built on a piece stays part of it until it
 # settles with its monument, and the levels a merge brings it are the
@@ -289,6 +320,10 @@ gm_state_has_new_levels = {
 	NOT = { has_variable = gm_restore_pm }
 	NOT = { has_variable = gm_rebuilding }
 	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_unveil_pending }
+	NOT = { has_variable = gm_skin_axis }
+	NOT = { has_variable = gm_name_choice_open }
+	NOT = { has_variable = gm_being_named }
 	NOT = { has_variable = gm_piece_of }
 }
 

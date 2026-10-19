@@ -15,8 +15,10 @@
 ###     National Effects (open): a bar per stepped total, then interest group
 ###     approval, the fading ledgers, the opportunity boons in force (with
 ###     their months left) and the monument policy's four buttons
-###     (v2 §5; the overview's last line names the policy in force). Our
-###     Monuments (open): one row per
+###     (v2 §5; the overview's last line names the policy in force).
+###     Awaiting Dedication (open; owner, 2026-10-18), only while one of our
+###     monuments waits for its Dedicate button: its row with the button under
+###     it. Our Monuments (open): one row per other
 ###     monument, from the country's gm_states list (rebuilt by every
 ###     gm_country_refresh); a contested row carries three buttons.
 ###   widget_je_gm_reference  custom_widget_container_3
@@ -1145,6 +1147,35 @@ types grand_monuments_widget_types
 			elide = right
 			using = fontsize_small
 			block "choice_text" {}
+		}
+	}
+
+	### Dedicate (owner, 2026-10-18): opens the ceremony of a monument of ours
+	### waiting undedicated (gm_dedicate_sgui), under its row in Awaiting
+	### Dedication and on the state view's card. Rooted at the player, as Carry
+	### It Off (gui/gm_trophy_widgets.gui), so it reads the same in a datamodel
+	### row and on the card (gotcha #24). Shown from the state's own value and
+	### owner, not from is_shown: whether a saved scope reaches is_shown is
+	### thinly evidenced (gotcha #22), and this is the only way to dedicate.
+	type gm_dedicate_button = button {
+		using = default_button_action
+		size = { 200 26 }
+		parentanchor = hcenter
+		margin_top = 4
+		datacontext = "[GetScriptedGui('gm_dedicate_sgui')]"
+		visible = "[And( ObjectsEqual( State.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' ) )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		tooltip = "gm_button_dedicate_tooltip"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 190
+			elide = right
+			using = fontsize_small
+			text = "gm_button_dedicate"
 		}
 	}
 
@@ -2402,8 +2433,60 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### Our Monuments (open): one row per monument. The entry can outlive its
-	### last monument while a ledger fades; the panel then says so.
+	### Awaiting Dedication (open; owner, 2026-10-18): only while a monument of
+	### ours waits undedicated for its Dedicate button (gm_disp_count_awaiting),
+	### above the rest: its row, then the button. Our Monuments leaves these
+	### rows out (gm_state_disp_awaiting).
+	type te_gm_sec_awaiting = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_awaiting'), '(CFixedPoint)0' )]"
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_awaiting_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_awaiting_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_awaiting_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_awaiting_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_awaiting_closed'))]"
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]"
+
+				item = {
+					flowcontainer = {
+						datacontext = "[Scope.GetState]"
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' )]"
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 4
+
+						gm_monument_row = {}
+						gm_dedicate_button = {}
+					}
+				}
+			}
+		}
+	}
+
+	### Our Monuments (open): one row per monument, those awaiting dedication
+	### left to the section above. The entry can outlive its last monument
+	### while a ledger fades; the panel then says so.
 	type te_gm_sec_monuments = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2432,6 +2515,11 @@ types grand_monuments_widget_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_count'), '(CFixedPoint)0' )]"
 				text = "gm_je_monuments_none"
 			}
+			# Every monument we have awaits its dedication, above.
+			gm_text = {
+				visible = "[And( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_count'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_listed'), '(CFixedPoint)0' ) )]"
+				text = "gm_je_monuments_all_awaiting"
+			}
 
 			flowcontainer = {
 				direction = vertical
@@ -2440,7 +2528,10 @@ types grand_monuments_widget_types
 				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]"
 
 				item = {
-					gm_monument_row = { datacontext = "[Scope.GetState]" }
+					gm_monument_row = {
+						datacontext = "[Scope.GetState]"
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)0' )]"
+					}
 				}
 			}
 
@@ -2637,6 +2728,9 @@ types grand_monuments_widget_types
 		# run and the sites open to us.
 		te_gm_sec_archaeology = {}
 		te_gm_sec_national = {}
+		# Awaiting Dedication (owner, 2026-10-18): the monuments a Dedicate
+		# button finishes, above the others.
+		te_gm_sec_awaiting = {}
 		te_gm_sec_monuments = {}
 		# Trophies (gui/gm_trophy_widgets.gui): ours, and ours held abroad.
 		te_gm_sec_trophies = {}
