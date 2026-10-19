@@ -4,8 +4,8 @@
 # GRAND MONUMENTS
 # ============================================================================
 # Event 1       - a level finished (hidden building_event, fires from
-#                 on_building_built): vanity backlash in hard times, the
-#                 AI's ceremony for a monument not yet dedicated, then Event 20.
+#                 on_building_built): on a construction site, the AI's
+#                 ceremony once nothing more is queued, then Event 20.
 # Event 2       - the dedication ceremony (state event): a player's from the
 #                 Dedicate button (gm_dedicate_sgui, owner 2026-10-18), the
 #                 AI's once nothing more is queued; Event 11 - the skin,
@@ -41,9 +41,37 @@ monument_events.1 = {
 	hidden = yes
 
 	immediate = {
+		# A construction site's level (sites spec 2026-10-18 §3.1): the AI's
+		# ceremony once nothing more is queued (a player's waits for its
+		# Dedicate button), then a refresh. Not for script's own building
+		# (gm_rebuilding, one day).
 		if = {
 			limit = {
-				is_building_group = bg_grand_monuments
+				is_building_type = building_grand_monument_site
+				exists = owner
+			}
+			state = {
+				if = {
+					limit = {
+						gm_system_enabled = yes
+						NOT = { has_variable = gm_rebuilding }
+					}
+					if = {
+						limit = {
+							gm_state_ai_dedicates_now = yes
+							NOT = { has_variable = gm_ceremony_pending }
+						}
+						gm_state_start_ceremony = yes
+					}
+					owner = { trigger_event = { id = monument_events.20 } }
+				}
+			}
+		}
+		# A finished monument's building: script makes it at level 1 (under
+		# gm_rebuilding); an older save's may still be finishing queued levels.
+		else_if = {
+			limit = {
+				is_building_type = building_grand_monument
 				exists = owner
 			}
 			state = {
@@ -84,21 +112,6 @@ monument_events.1 = {
 						# (gm_state_has_copied_dedication): it goes back to
 						# Undedicated, and script has seen it.
 						gm_state_reset_copied_dedication = yes
-						# A player's monument waits for its Dedicate button (owner,
-						# 2026-10-18); the AI's ceremony asks once nothing more is
-						# queued. Not for a script's rebuild (gm_rebuilding, one
-						# day): its monument has not grown, and a ceremony asked at
-						# this level already (gm_state_offer_missed_ceremony asks
-						# again only above gm_ceremony_level). Rededicate starts its
-						# own.
-						if = {
-							limit = {
-								gm_state_is_dedicated = no
-								NOT = { has_variable = gm_rebuilding }
-								gm_state_ai_dedicates_now = yes
-							}
-							gm_state_start_ceremony = yes
-						}
 					}
 					# The monument an opportunity completed by this level names
 					# (opportunities spec §3).
@@ -141,6 +154,14 @@ monument_events.2 = {
 	# dedication stand in for listing it first.
 	desc = {
 		first_valid = {
+			# Rededicate's question (sites spec 2026-10-18 §5).
+			triggered_desc = {
+				trigger = {
+					has_variable = gm_ceremony_mode
+					var:gm_ceremony_mode = flag:rededicate
+				}
+				desc = monument_events.2.d_rededicate
+			}
 			triggered_desc = {
 				trigger = {
 					owner = { has_variable = gm_com_open }
@@ -156,24 +177,34 @@ monument_events.2 = {
 
 	duration = 3
 
-	# Only for a monument whose dedication no ceremony or pulse has recorded
-	# (gm_seen). `has_building` alone would re-open the question every time an
-	# existing monument gains a level. Not "on Undedicated": a new or rebuilt
-	# monument may stand on its siblings' dedication, which the answer replaces
-	# (gm_state_has_copied_dedication).
+	# What it asks about (gm_ceremony_mode, gm_state_start_ceremony; sites spec
+	# 2026-10-18 §3.1, §5): a construction site standing here, Rededicate on
+	# the finished monument here, or, in an older save before its migration,
+	# a monument whose dedication no ceremony or pulse has recorded (gm_seen).
 	trigger = {
 		gm_system_enabled = yes
-		any_scope_building = {
-			is_building_type = building_grand_monument
+		OR = {
+			AND = {
+				has_variable = gm_ceremony_mode
+				var:gm_ceremony_mode = flag:site
+				has_building = building_grand_monument_site
+			}
+			AND = {
+				has_variable = gm_ceremony_mode
+				var:gm_ceremony_mode = flag:rededicate
+				has_building = building_grand_monument
+				has_variable = gm_seen
+			}
+			AND = {
+				NOT = { has_variable = gm_ceremony_mode }
+				has_building = building_grand_monument
+				NOT = { has_variable = gm_seen }
+			}
 		}
-		NOT = { has_variable = gm_seen }
 	}
 
 	# Named in the description and in every option tooltip.
 	immediate = {
-		# The grandeur this ceremony asks at (gm_state_start_ceremony), again
-		# now: a Rededicate rebuild's level may not have been readable then.
-		set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		save_scope_as = monument_state
 		owner = {
 			save_scope_as = gm_com_country
@@ -211,6 +242,12 @@ monument_events.2 = {
 	option = {
 		name = monument_events.2.a
 		trigger = {
+			hidden_trigger = {
+				NOT = {
+					has_variable = gm_ceremony_mode
+					var:gm_ceremony_mode = flag:rededicate
+				}
+			}
 			custom_tooltip = {
 				text = gm_ded_reason_leave_tt
 				gm_state_ceremony_offers_opportunity = no
@@ -220,9 +257,7 @@ monument_events.2 = {
 		ai_chance = { base = 0 }
 		custom_tooltip = monument_events.2.a.tt
 		hidden_effect = {
-			gm_remove_state_var = { VAR = gm_ceremony_pending }
-			# A copy of a sibling's dedication goes back to Undedicated.
-			gm_state_undedicate = yes
+			gm_state_ceremony_not_yet = yes
 		}
 	}
 
@@ -230,6 +265,12 @@ monument_events.2 = {
 	option = {
 		name = monument_events.2.a
 		trigger = {
+			hidden_trigger = {
+				NOT = {
+					has_variable = gm_ceremony_mode
+					var:gm_ceremony_mode = flag:rededicate
+				}
+			}
 			custom_tooltip = {
 				text = gm_ded_reason_leave_tt
 				gm_state_ceremony_offers_opportunity = yes
@@ -238,9 +279,52 @@ monument_events.2 = {
 		ai_chance = { base = 0 }
 		custom_tooltip = monument_events.2.a.tt
 		hidden_effect = {
+			gm_state_ceremony_not_yet = yes
+		}
+	}
+
+	# Rededicate's question (sites spec 2026-10-18 §5): keep it as it is, and
+	# nothing is paid or changed. The default unless an opportunity's
+	# dedication is offered above; never the AI's, which asked to rededicate.
+	option = {
+		name = monument_events.2.keep
+		trigger = {
+			hidden_trigger = {
+				has_variable = gm_ceremony_mode
+				var:gm_ceremony_mode = flag:rededicate
+			}
+			custom_tooltip = {
+				text = gm_ded_reason_keep_tt
+				gm_state_ceremony_offers_opportunity = no
+			}
+		}
+		default_option = yes
+		ai_chance = { base = 0 }
+		custom_tooltip = monument_events.2.keep.tt
+		hidden_effect = {
 			gm_remove_state_var = { VAR = gm_ceremony_pending }
-			# A copy of a sibling's dedication goes back to Undedicated.
-			gm_state_undedicate = yes
+			gm_remove_state_var = { VAR = gm_ceremony_mode }
+		}
+	}
+
+	# The same, when the opportunity's option above is the default.
+	option = {
+		name = monument_events.2.keep
+		trigger = {
+			hidden_trigger = {
+				has_variable = gm_ceremony_mode
+				var:gm_ceremony_mode = flag:rededicate
+			}
+			custom_tooltip = {
+				text = gm_ded_reason_keep_tt
+				gm_state_ceremony_offers_opportunity = yes
+			}
+		}
+		ai_chance = { base = 0 }
+		custom_tooltip = monument_events.2.keep.tt
+		hidden_effect = {
+			gm_remove_state_var = { VAR = gm_ceremony_pending }
+			gm_remove_state_var = { VAR = gm_ceremony_mode }
 		}
 	}
 

@@ -123,11 +123,11 @@ gm_dedicate_sgui = {
 			gm_state_awaits_dedication = yes
 			custom_tooltip = {
 				text = gm_sgui_dedicate_built_tt
-				gm_state_level >= 1
+				gm_state_site_level >= 1
 			}
 			custom_tooltip = {
 				text = gm_sgui_dedicate_building_tt
-				b:building_grand_monument ?= { is_under_construction = no }
+				b:building_grand_monument_site ?= { is_under_construction = no }
 			}
 			custom_tooltip = {
 				text = gm_sgui_dedicate_asking_tt
@@ -137,6 +137,14 @@ gm_dedicate_sgui = {
 				text = gm_sgui_dedicate_rebuilding_tt
 				NOT = { has_variable = gm_restore_pm }
 				NOT = { has_variable = gm_rebuilding }
+			}
+			# The monument standing here moves beside the new one: not while
+			# its unveiling or naming runs (gm_state_finish_site).
+			custom_tooltip = {
+				text = gm_sgui_dedicate_naming_tt
+				NOT = { has_variable = gm_unveil_pending }
+				NOT = { has_variable = gm_name_choice_open }
+				NOT = { has_variable = gm_being_named }
 			}
 		}
 	}
