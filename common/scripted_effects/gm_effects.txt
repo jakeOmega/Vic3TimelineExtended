@@ -18,15 +18,18 @@
 # dedicated. One script has not seen is the engine's copy, which
 # gm_state_reset_copied_dedication sends back to Undedicated first.
 gm_state_first_sight = {
-	# A panel pick without its technology goes to the ceremony, which asks for
-	# it (phase 4 §6): its answer replaces the pick, as for the engine's copy.
+	# A panel pick without its technology goes back to Undedicated, as the
+	# engine's copy does (phase 4 §6 checks the technology in the ceremony);
+	# its Dedicate button asks for it, so no ceremony opens by itself for a
+	# player (owner, 2026-10-18), nor mid-construction.
 	if = {
 		limit = {
 			gm_state_lacks_dedication_tech = yes
 			NOT = { has_variable = gm_seen }
 			NOT = { has_variable = gm_ceremony_pending }
+			NOT = { has_variable = gm_restore_pm }
 		}
-		gm_state_start_ceremony = yes
+		gm_state_return_to_undedicated = yes
 	}
 	else_if = {
 		limit = {
@@ -1714,13 +1717,24 @@ gm_state_reset_copied_dedication = {
 		limit = { gm_system_enabled = yes }
 		if = {
 			limit = { gm_state_has_copied_dedication = yes }
-			set_variable = { name = gm_restore_pm value = flag:undedicated }
-			# Draped at once: the picture is not read while the method is put back.
-			set_variable = { name = gm_picture_code value = 1 }
-			gm_state_picture_landmarks = yes
+			gm_state_return_to_undedicated = yes
 		}
 		gm_state_mark_awaiting = yes
 	}
+}
+
+# State scope. Back to Undedicated through the restore path
+# (gm_state_restore_dedication, which switches the method from a later effect):
+# gm_state_is_dedicated reads it as undedicated at once, so nothing that runs
+# before the switch reads back (a refresh's first sight, sum or contest) takes
+# the method it stands on for a dedication, and no effect switches it twice.
+# Draped at once: the picture is not read while the method is put back. For
+# the engine's copy, a panel pick without its technology and a monument
+# founded beside another (gm_state_found_beside).
+gm_state_return_to_undedicated = {
+	set_variable = { name = gm_restore_pm value = flag:undedicated }
+	set_variable = { name = gm_picture_code value = 1 }
+	gm_state_picture_landmarks = yes
 }
 
 # State scope. Script has seen this monument undedicated: from now on a

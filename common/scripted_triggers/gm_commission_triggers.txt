@@ -150,7 +150,11 @@ gm_state_can_host_commission = {
 # scripting_best_practices.md § "What a Civil War's Winner Inherits"), and a
 # country that can build. Not while a gifted monument's dedication is being
 # put back (gm_restore_pm, spec §3.1): its method may read as another
-# dedication for a month, and a baseline taken then would miscount.
+# dedication for a month, and a baseline taken then would miscount. A return
+# to Undedicated (flag:undedicated: the engine's copy, a monument founded
+# beside another, a rebuilt undedicated one) does not hold it: such a monument
+# reads as undedicated throughout (gm_state_is_dedicated), so it counts toward
+# no baseline before the switch or after.
 gm_com_can_offer = {
 	gm_system_enabled = yes
 	NOT = { has_variable = gm_com_offered }
@@ -160,7 +164,10 @@ gm_com_can_offer = {
 	NOT = { is_country_type = decentralized }
 	any_scope_state = { is_incorporated = yes }
 	NOT = {
-		any_scope_state = { has_variable = gm_restore_pm }
+		any_scope_state = {
+			has_variable = gm_restore_pm
+			NOT = { var:gm_restore_pm = flag:undedicated }
+		}
 	}
 }
 

@@ -725,10 +725,11 @@ down throws its years away with its stone, and rededicating it halves both, so
 an old monument is worth more than a new one of the same size.
 
 More levels built in the state of a finished monument raise a **new monument
-beside it**, with its own Dedicate button, name and picture, as below. The
-building can't be expanded while the monument there is contested, while a
-dedication, unveiling or naming is under way, or once six monuments stand
-there; the build tooltip names the reason. The AI raises new monuments in other
+beside it**, with its own Dedicate button, name and picture, as below. Once
+nothing is under construction there, a finished monument's building can't be
+expanded while the monument is contested, while its unveiling or naming is
+under way, or once six monuments stand there; the build tooltip names the
+reason. A monument awaiting its dedication can always be expanded. The AI raises new monuments in other
 states before it builds beside one.
 
 ### Several monuments in one state

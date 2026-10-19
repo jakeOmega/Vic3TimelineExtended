@@ -1941,7 +1941,8 @@ class CommissionSourceTests(unittest.TestCase):
             "gm_remove_state_var = { VAR = gm_com_cooldown }", ""))
         can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
         for s_ in ("NOT = { has_variable = gm_com_offered }", "NOT = { has_variable = gm_com_open }",
-                   "NOT = { any_scope_state = { has_variable = gm_restore_pm } }"):
+                   "NOT = { any_scope_state = { has_variable = gm_restore_pm "
+                   "NOT = { var:gm_restore_pm = flag:undedicated } } }"):
             self.assertIn(s_, can)
 
     def test_every_rank_and_the_ai_gate(self):
@@ -2105,11 +2106,10 @@ class CommissionLifeTests(unittest.TestCase):
                       squash(ev))
         self.assertIn("name = monument_events.2.a trigger = { custom_tooltip = { text = gm_ded_reason_leave_tt "
                       "gm_state_ceremony_offers_opportunity = no } } "
-                      "default_option = yes ai_chance = { base = 1 }", squash(ev))
+                      "default_option = yes ai_chance = { base = 0 }", squash(ev))
         self.assertIn("name = monument_events.2.a trigger = { custom_tooltip = { text = gm_ded_reason_leave_tt "
                       "gm_state_ceremony_offers_opportunity = yes } } "
-                      "ai_chance = { base = 1 modifier = { trigger = { gm_state_ceremony_answers_commission = yes } "
-                      "factor = 0 } }", squash(ev), "the AI never leaves an opportunity's monument undedicated")
+                      "ai_chance = { base = 0 }", squash(ev), "the AI never leaves its monument undedicated")
         self.assertEqual(squash(ev).count("default_option = yes"), 2)
         self.assertLess(squash(ev).find("name = monument_events.2.opp"), squash(ev).find("name = monument_events.2.a"))
         offers = squash(block(self.t, "gm_state_ceremony_offers_opportunity"))
@@ -3020,9 +3020,8 @@ class CopiedDedicationTests(unittest.TestCase):
         # reads as undedicated at once, and script has seen the monument.
         reset = squash(strip_comments(block(self.e, "gm_state_reset_copied_dedication")))
         self.assertEqual(reset, "if = { limit = { gm_system_enabled = yes } if = { limit = { "
-                                "gm_state_has_copied_dedication = yes } set_variable = { name = gm_restore_pm "
-                                "value = flag:undedicated } set_variable = { name = gm_picture_code value = 1 } "
-                                "gm_state_picture_landmarks = yes } gm_state_mark_awaiting = yes }")
+                                "gm_state_has_copied_dedication = yes } gm_state_return_to_undedicated = yes } "
+                                "gm_state_mark_awaiting = yes }")
         self.assertNotIn("activate_production_method", reset)
         mark = squash(block(self.e, "gm_state_mark_awaiting"))
         self.assertEqual(mark, "if = { limit = { NOT = { has_variable = gm_seen } "
@@ -3838,11 +3837,13 @@ class LandmarkTechTests(unittest.TestCase):
         for k in moved:
             self.assertIn(f"AND = {{ gm_state_has_pm = {{ PM = pm_monument_{k} }} "
                           f"owner = {{ NOT = {{ has_technology_researched = {TECH_GATES[k]} }} }} }}", t, k)
+        # Since the Dedicate button (2026-10-18) the pick goes back to
+        # Undedicated, and the button's ceremony asks for the technology.
         first = squash(block(read(EFFECTS), "gm_state_first_sight"))
         self.assertTrue(first.startswith(
             "if = { limit = { gm_state_lacks_dedication_tech = yes NOT = { has_variable = gm_seen } "
-            "NOT = { has_variable = gm_ceremony_pending } } gm_state_start_ceremony = yes } else_if = { "
-            "limit = { gm_state_is_dedicated = yes"), first)
+            "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } } "
+            "gm_state_return_to_undedicated = yes } else_if = { limit = { gm_state_is_dedicated = yes"), first)
 
 
 class LandmarkLineTests(unittest.TestCase):
@@ -4487,7 +4488,8 @@ class FreezeTests(unittest.TestCase):
     def test_founding_beside_demotes_then_asks(self):
         body = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_found_beside")))
         order = ["set_variable = { name = gm_demote_levels value = var:gm_levels }", "gm_state_demote_primary = yes",
-                 "set_variable = gm_newcomer", "gm_state_undedicate = yes", "gm_state_start_ceremony = yes"]
+                 "set_variable = gm_newcomer", "gm_state_return_to_undedicated = yes",
+                 "gm_state_start_ceremony = yes"]
         positions = [body.find(x) for x in order]
         self.assertNotIn(-1, positions, dict(zip(order, positions)))
         self.assertEqual(positions, sorted(positions))
@@ -6563,11 +6565,11 @@ class DedicateButtonTests(unittest.TestCase):
     once nothing more is queued."""
 
     def test_the_ceremony_starts_only_where_it_should(self):
-        """A player's ceremony comes from the button, Rededicate or a panel pick
-        the ceremony must check; every other start is the AI's, once nothing is
-        queued. A new start needs a row here."""
+        """A player's ceremony comes from the button or Rededicate; every other
+        start is the AI's, once nothing is queued. Every file under common/ and
+        events/ is read, so a new start, or a direct trigger of the ceremony
+        event, fails here until it gets a row. The debug events are exempt."""
         allowed = {
-            ("common/scripted_effects/gm_effects.txt", "gm_state_first_sight"): None,
             ("common/scripted_effects/gm_effects.txt", "gm_state_rededicate"): None,
             ("common/scripted_effects/gm_effects.txt", "gm_state_offer_missed_ceremony"): "gm_state_ai_dedicates_now = yes",
             (MON_EFFECTS, "gm_state_found_beside"): "if = { limit = { gm_state_ai_dedicates_now = yes } "
@@ -6575,23 +6577,68 @@ class DedicateButtonTests(unittest.TestCase):
             (SGUIS, "gm_dedicate_sgui"): None,
             (EVENTS, "monument_events.1"): "gm_state_ai_dedicates_now = yes } gm_state_start_ceremony = yes",
         }
-        found = set()
-        for path in ("common/scripted_effects/gm_effects.txt", MON_EFFECTS, SGUIS, EVENTS,
-                     "common/scripted_effects/gm_commission_effects.txt",
-                     "common/scripted_effects/gm_trophy_effects.txt",
-                     "common/scripted_effects/gm_landmark_effects.txt",
-                     "common/scripted_effects/gm_signature_effects.txt",
-                     "common/scripted_effects/gm_archaeology_effects.txt",
-                     "common/scripted_effects/gm_name_effects.txt"):
-            for name, body in top_level_blocks(read(path)):
-                if "gm_state_start_ceremony = yes" in body and name != "gm_state_start_ceremony":
-                    found.add((path, name))
-                    self.assertIn((path, name), allowed, f"{name} in {path} starts a ceremony")
-                    if allowed[(path, name)]:
-                        self.assertIn(allowed[(path, name)], squash(body), name)
+        direct = re.compile(r"monument_events\.2(?![\w.])")
+        found, triggers = set(), set()
+        paths = sorted(ROOT.glob("common/**/*.txt")) + sorted(ROOT.glob("events/*.txt"))
+        self.assertGreater(len(paths), 100)
+        for path in paths:
+            rel = path.relative_to(ROOT).as_posix()
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+            if "gm_state_start_ceremony = yes" not in text and not direct.search(text):
+                continue
+            for name, body in top_level_blocks(text):
+                if rel.startswith("events/te_debug_"):
+                    continue
+                flat = squash(body)
+                if re.search(r"trigger_event\s*=\s*\{\s*id\s*=\s*monument_events\.2(?![\w.])", flat):
+                    triggers.add((rel, name))
+                if "gm_state_start_ceremony = yes" in flat and name != "gm_state_start_ceremony":
+                    found.add((rel, name))
+                    self.assertIn((rel, name), allowed, f"{name} in {rel} starts a ceremony")
+                    if allowed[(rel, name)]:
+                        self.assertIn(allowed[(rel, name)], flat, name)
         self.assertEqual(found, set(allowed))
+        self.assertEqual(triggers, {("common/scripted_effects/gm_effects.txt", "gm_state_start_ceremony")},
+                         "the ceremony event is triggered only by gm_state_start_ceremony")
         ai = squash(block(read(TRIGGERS), "gm_state_ai_dedicates_now"))
         self.assertEqual(ai, "owner = { is_ai = yes } b:building_grand_monument ?= { is_under_construction = no }")
+        # A panel pick without its technology goes back to Undedicated, as a
+        # copy does: no ceremony opens by itself.
+        first = squash(block(read(EFFECTS), "gm_state_first_sight"))
+        self.assertTrue(first.startswith(
+            "if = { limit = { gm_state_lacks_dedication_tech = yes NOT = { has_variable = gm_seen } "
+            "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } } "
+            "gm_state_return_to_undedicated = yes } else_if = {"), first)
+
+    def test_back_to_undedicated_through_the_restore_path(self):
+        """The copy, an untaught panel pick and a newcomer founded beside are
+        switched from a later effect (gm_state_restore_dedication): no refresh
+        in between reads their method as a dedication, nothing switches twice."""
+        e = read(EFFECTS)
+        self.assertEqual(squash(block(e, "gm_state_return_to_undedicated")),
+                         "set_variable = { name = gm_restore_pm value = flag:undedicated } "
+                         "set_variable = { name = gm_picture_code value = 1 } gm_state_picture_landmarks = yes")
+        self.assertIn("gm_state_return_to_undedicated = yes", squash(block(e, "gm_state_reset_copied_dedication")))
+        beside = squash(block(read(MON_EFFECTS), "gm_state_found_beside"))
+        self.assertNotIn("gm_state_undedicate = yes", beside)
+        self.assertNotIn("activate_production_method", beside)
+        self.assertLess(beside.find("gm_state_demote_primary = yes"), beside.find("gm_state_return_to_undedicated = yes"))
+        self.assertLess(beside.find("gm_state_return_to_undedicated = yes"), beside.find("gm_state_mark_awaiting = yes"))
+        # The restore reads flag:undedicated back as Undedicated.
+        self.assertIn("gm_state_restore_dedication_one = { KEY = undedicated }",
+                      squash(block(read(COM_EFFECTS), "gm_state_restore_dedication")))
+        # Such a return does not hold opportunities back: it counts toward no
+        # baseline before the switch or after.
+        can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
+        self.assertIn("NOT = { any_scope_state = { has_variable = gm_restore_pm "
+                      "NOT = { var:gm_restore_pm = flag:undedicated } } }", can)
+
+    def test_the_ai_never_leaves_its_monument_undedicated(self):
+        """Its ceremony asks once, when its construction stops; a monument it
+        left would not be asked again until it grew."""
+        ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{")))
+        leaves = re.findall(r"name = monument_events\.2\.a .*?ai_chance = \{ base = (\d+) \}", ev)
+        self.assertEqual(leaves, ["0", "0"])
 
     def test_the_button(self):
         sgui = squash(block(read(SGUIS), "gm_dedicate_sgui"))
@@ -6626,11 +6673,12 @@ class DedicateButtonTests(unittest.TestCase):
         self.assertIn("datacontext = \"[GetScriptedGui('gm_dedicate_sgui')]\"", widget)
         self.assertIn("visible = \"[And( ObjectsEqual( State.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( "
                       "State.MakeScope.ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' ) )]\"", widget)
-        self.assertNotIn("ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', "
-                         "State.MakeScope ).End )]\" enabled = \"[ScriptedGui.IsValid( GuiScope.SetRoot( "
-                         "GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\" onclick = \"["
-                         "ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', "
-                         "State.MakeScope ).End )]\" tooltip = \"gm_button_dedicate_tooltip\"", widget)
+        raw = strip_comments(read(WIDGET))
+        m = re.search(r"type gm_dedicate_button = button \{", raw)
+        button = squash(_match_brace(raw, m.end()))
+        self.assertNotIn("IsShown", button, "visibility must not rest on is_shown's saved scope")
+        self.assertIn("visible = \"[And( ObjectsEqual( State.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( "
+                      "State.MakeScope.ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' ) )]\"", button)
         for verb in ("IsValid", "Execute"):
             self.assertIn(f"ScriptedGui.{verb}( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', "
                           f"State.MakeScope ).End )", widget)
@@ -6669,9 +6717,6 @@ class DedicateButtonTests(unittest.TestCase):
         new = squash(block(read(TRIGGERS), "gm_state_has_new_levels"))
         for flag in ("gm_unveil_pending", "gm_skin_axis", "gm_name_choice_open", "gm_being_named"):
             self.assertIn(f"NOT = {{ has_variable = {flag} }}", new, flag)
-        # The newcomer is marked seen in the effect that switched its method.
-        beside = squash(block(read(MON_EFFECTS), "gm_state_found_beside"))
-        self.assertLess(beside.find("gm_state_undedicate = yes"), beside.find("gm_state_mark_awaiting = yes"))
 
     def test_words(self):
         L = loc()

@@ -2848,7 +2848,7 @@
  gm_ded_reason_tech_marketing_research_tt:0 "We have researched $marketing_research$."
  gm_ded_reason_tech_romanticism_tt:0 "We have researched $romanticism$."
  gm_ded_reason_tech_television_broadcasting_tt:0 "We have researched $television_broadcasting$."
- gm_dedicate_effect_tt:0 "Hold its dedication ceremony and say what it honours. Dedicated, it is finished at its #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels and grows grander with age; more levels built here raise a new monument beside it. Not yet keeps it undedicated."
+ gm_dedicate_effect_tt:0 "Hold its dedication ceremony and say what it honours. Dedicated, it is finished at its #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels and grows grander with age; more levels built here raise a new monument beside it. #b $monument_events.2.a$#! keeps it undedicated."
  gm_evt_artists_defended:0 "Artists Defended"
  gm_evt_artists_defended_desc:0 "The government stood by the opera house's scandalous season."
  gm_evt_citizens_assembly:0 "A Citizens’ Assembly"

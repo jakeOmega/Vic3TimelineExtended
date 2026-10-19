@@ -212,9 +212,11 @@ monument_events.2 = {
 		gm_state_dedicate_as_opportunity_asks = yes
 	}
 
-	# Not yet: it stays undedicated, and the Dedicate button asks again (the
-	# AI's ceremony at its next level). The default unless an opportunity's
-	# dedication is offered above.
+	# Not yet: it stays undedicated, and the Dedicate button asks again. The
+	# default unless an opportunity's dedication is offered above. Never the
+	# AI's (2026-10-18): its ceremony asks once, when its construction stops,
+	# and a monument it left undedicated would not be asked again until it
+	# grew.
 	option = {
 		name = monument_events.2.a
 		trigger = {
@@ -224,7 +226,7 @@ monument_events.2 = {
 			}
 		}
 		default_option = yes
-		ai_chance = { base = 1 }
+		ai_chance = { base = 0 }
 		custom_tooltip = monument_events.2.a.tt
 		hidden_effect = {
 			gm_remove_state_var = { VAR = gm_ceremony_pending }
@@ -242,13 +244,7 @@ monument_events.2 = {
 				gm_state_ceremony_offers_opportunity = yes
 			}
 		}
-		ai_chance = {
-			base = 1
-			modifier = {
-				trigger = { gm_state_ceremony_answers_commission = yes }
-				factor = 0
-			}
-		}
+		ai_chance = { base = 0 }
 		custom_tooltip = monument_events.2.a.tt
 		hidden_effect = {
 			gm_remove_state_var = { VAR = gm_ceremony_pending }
