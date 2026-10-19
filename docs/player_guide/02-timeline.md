@@ -606,9 +606,18 @@ Monument (Under Construction)**: each level costs 1,000 construction, and while
 it is being built it has no upkeep and no effects. Dedicating it finishes it: a
 Grand Monument stands in its place at level 1, keeping the levels it was built
 with, and needs only maintenance for those levels and a small caretaker staff.
-A monument's **grandeur** starts at its levels and grows as the monument ages
-(see [A finished monument and its age](#a-finished-monument-and-its-age)). The
-Grand Monuments game rule can switch the system off.
+A monument's **grandeur** starts at what its levels were worth when they were
+built and grows as the monument ages (see [A finished monument and its
+age](#a-finished-monument-and-its-age)). The Grand Monuments game rule can
+switch the system off.
+
+A monument is impressive for what it cost its time. Each level's grandeur is
+the world's GDP in 1836 divided by the world's GDP when the level is finished,
+updated each January: in 1836 a level adds 1 grandeur, and in a world ten times
+as rich it adds a tenth, so the same share of the world's wealth buys the same
+grandeur in any era. The rate shows at the top of National Effects, on a
+construction site's card and in the build menu before you build. The monuments
+standing in 1836, dug up or brought home count at the 1836 rate.
 
 Everything a monument gives grows with grandeur in steps. The first step takes 5
 grandeur and each further step takes twice as much as the one before, so steps
@@ -716,7 +725,7 @@ A finished monument grows grander with the years: by 2% of the grandeur it was
 dedicated with a year, so it doubles its grandeur in fifty years and triples it
 in a hundred.
 
-| Levels | +25 years | +50 years | +100 years |
+| Grandeur at dedication | +25 years | +50 years | +100 years |
 |---|---|---|---|
 | 5 | 7.5 | 10 | 15 |
 | 10 | 15 | 20 | 30 |
@@ -725,7 +734,7 @@ in a hundred.
 It ages while its message stands or while it is kept as heritage, at half the
 rate under Mothballed, and not at all while it is contested. A
 trophy abroad does not age; it starts again once home. Each anniversary's first
-option adds a tenth of the monument's levels to its grandeur, at least 1, and
+option adds a tenth of the grandeur it was dedicated with, at least 1, and
 completing an [opportunity](#monument-opportunities) adds 5. Pulling a monument
 down throws its years away with its stone, and rededicating it halves its
 levels and its years, so
@@ -901,10 +910,12 @@ year before time runs out, a notice reminds you.
 | Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality; Olympic |
 | The Environmental Movement researched | Rural Folk | Botanical Gardens | Anywhere | +25% pollution health effects reduction |
 
-An opportunity asks for 5 levels of its dedication within 60 months in a
-great power, 120 in a major power and 180 in any other. Levels you build in fitting monuments of the dedication
-count, in a new monument or one raised beside a finished one; years of age do
-not. An opportunity for the capital counts only the capital's monuments. One for the
+An opportunity asks for 5 grandeur of its dedication within 60 months in a
+great power, 120 in a major power and 180 in any other. Monuments of the
+dedication you finish count for the grandeur they were dedicated with, a new
+one or one raised beside a finished one; years of age do not. Late in the game
+that takes many more levels than 5, and Raise It queues what it takes at
+today's rate, at most 100 levels a press. An opportunity for the capital counts only the capital's monuments. One for the
 capital can be met anywhere when the capital already holds a monument of
 another dedication. A monument that becomes contested stops counting. Its
 levels count once it is dedicated, so press its Dedicate button before the
@@ -1093,7 +1104,7 @@ taken from keeps its own at its smaller size.
 
 | Taken | You pay | The other side |
 |---|---|---|
-| In a war | 2 infamy, plus 1 for every 5 levels, at most 8; doubled once the UN's Cultural Heritage Program (UNESCO) is in force. Relations −30. | +10 war support in the war |
+| In a war | 2 infamy, plus 1 for every 5 grandeur carried off, at most 8; doubled once the UN's Cultural Heritage Program (UNESCO) is in force. Relations −30. | +10 war support in the war |
 | From your own unincorporated state | A tenth of the state's people turn radical. Relations −30 with the country you took the state from, if it still exists. | |
 | By treaty | Relations −30 | |
 
@@ -1224,9 +1235,10 @@ now and then.
 
 ### Vanity backlash
 
-Finishing a monument level while the country is in default, in famine or in
+Finishing monument levels while the country is in default, in famine or in
 recession angers people: 0.5% of the state's pops turn radical, and legitimacy
-falls by 1 for each such level, fading over about two years. While this would
+falls by 1 for each point of grandeur the levels add, fading over about two
+years. While this would
 happen, the journal entry shows a red Hard Times under its overview, so you can
 pause construction first.
 

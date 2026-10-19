@@ -22,6 +22,7 @@ A fixed item is struck through with the commit that fixed it.
 |---|---|---|
 | `TE_SELF_CHECK OK/BROKEN monument_created_on_dedication` | The first restore after a construction site's dedication made its finished building: OK when `create_building`'s `activate_production_methods` put the dedication on it; BROKEN when the engine's copy won and `gm_restore_pm` had to switch it. | Nothing to do for play: the restore is the fallback. If it is BROKEN, the switch is a second one in the building's first days; drop `activate_production_methods` from `gm_state_finish_site` and rely on the restore alone. |
 | `TE_SELF_CHECK OK/BROKEN monument_migrated` | Once a game, a month after an older save's dedicated monument was migrated (`monument_events.32`: records written, building reset to level 1), its grandeur is within 1% below and 5% above what it was. | BROKEN: the records missed its size (`gm_levels` from the old arithmetic) or a reader still reads the building's level; compare its state card with the save before loading. |
+| `TE_SELF_CHECK OK/BROKEN gm_world_base` | Once, on a new game's first pass (before 1836.3.1): world GDP is within a tenth of the 1836 constant the world-wealth rate is measured against (`gm_world_gdp_1836`, 334,000,000). | Set `gm_world_gdp_1836` to the figure the line prints. |
 | `TE_SELF_CHECK OK/BROKEN monument_merge_kept` | The first time a game settles a monument whose state merged into another part of its region (issue #936): OK when its shadow was adopted (onto a building nothing recorded, beside the monument there, or raised into a new one); BROKEN when no part of its region took it. | Lost: note which state survived the merge and who owned it; the orphan looks for its last owner's part (`gm_sh_owner`). |
 
 ## Ageing
@@ -45,6 +46,15 @@ A fixed item is struck through with the commit that fixed it.
 | **A lost building.** Strike a state with a finished monument with a nuclear weapon, or remove its building with the console. | Within a month the building is back at level 1 on its dedication; the monument's levels and grandeur are unchanged. | Gone for good: `gm_state_lost_building` (needs `gm_migrated`, `gm_dedication`). |
 | **The AI.** Watch an AI country with a monument for a decade. | It builds sites in other states before it builds beside one, and dedicates each once nothing more is queued. | |
 | **An older save.** Load a save from before construction sites with a dedicated monument of 15 levels, an undedicated one, and one with levels queued. | Within a month: the dedicated one's building is at level 1 with its grandeur unchanged (`monument_migrated`); the undedicated one is a site at its levels with a Dedicate button; the queued one waits until its levels finish, then migrates. | |
+
+## World wealth (sites plan B)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The rate in three places.** In 1836, open National Effects, a site's card, and the build menu's Grand Monument (Under Construction) tooltip. | Each says a level finished now adds about 1.00 grandeur. In a late save (2000 on), a few hundredths; National Effects' hover says how many times richer the world is. | The build tooltip shows no line: the build menu does not render `possible` custom tooltips that pass; the card and the panel still show it. |
+| **A site across January.** Build levels on a site in December and January of a late save. | The site's grandeur grows by the December rate for December's levels and the new rate for January's. | |
+| **A late opportunity.** Seize one in a late save and press Raise It. | It queues many more than 5 levels (at most 100), and its cost line says so. Completing it needs the grandeur, not the levels. | Raise It queues 5: `gm_com_levels_to_go` ignored the rate. |
+| **Vanity in hard times.** Finish levels in a late save during a recession. | The legitimacy hit is the grandeur they add, a fraction of a point a level. | |
 
 ## A merged state (issue #936)
 
