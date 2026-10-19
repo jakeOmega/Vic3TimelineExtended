@@ -4,7 +4,7 @@
 # Spec: docs/systems/monetary_policy_design.md §0.1 (rulings R1/R3), §7.2, §16.1.
 # Owner decision 2026-09-19 (PR #335): cancel these engine-side, do NOT
 # compensate in script. This SUPERSEDES plan ruling R3
-# (docs/superpowers/plans/2026-09-19-monetary-policy-phase1.md), whose
+# (docs/superpowers/archive/plans/2026-09-19-monetary-policy-phase1.md), whose
 # te_mon_vanilla_tech_offset script value has been deleted along with the
 # on_acquired_technology hook that existed only to keep it in step.
 #

@@ -8,7 +8,7 @@ commit that fixed it.
 ## How to run
 
 - **The run.** The late game's subsidy bill needs the late technologies, so use the 4× fast run from
-  `docs/superpowers/specs/2026-10-12-demographics-fast-mode-revenue.md` §4: a new 1836 game, observed, `event
+  `docs/superpowers/archive/specs/2026-10-12-demographics-fast-mode-revenue.md` §4: a new 1836 game, observed, `event
   te_debug_demog.1` option h on day 1, plain-text yearly autosaves (debug mode), to about calendar 1905. A normal-speed
   observer run reaches the same buildings between 1990 and 2030.
 - **Reading a save.** Each record under `building_manager` carries `building=`, `production_methods={ … }`,

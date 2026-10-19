@@ -564,7 +564,7 @@ te_debug_demog.4 = {
 
 # The Primogeniture self-check's second half (te_debug_demog_pr_selfcheck_start): runs once a game, in every game, a
 # week after the first fresh Primogeniture line. OK: the engine summed the script-only type scaled by the agrarian
-# share. BROKEN: swap Primogeniture to Plan B (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Task 9).
+# share. BROKEN: swap Primogeniture to Plan B (docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md, Task 9).
 te_debug_demog.5 = {
 	type = state_event
 	hidden = yes

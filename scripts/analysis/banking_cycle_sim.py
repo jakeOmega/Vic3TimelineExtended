@@ -430,7 +430,7 @@ TOOL_MODIFIER_NAMES = {
     "capital_controls": "banking_capital_controls_out",
     "eliq": "banking_emergency_liquidity_program",
     "asset_relief": "banking_asset_relief_program",
-    # 2026-09-23 expansion (docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md)
+    # 2026-09-23 expansion (docs/superpowers/archive/specs/2026-09-23-banking-tools-expansion-design.md)
     "dc_heavy": "banking_directed_credit_heavy_industry",
     "dc_agri": "banking_directed_credit_agriculture",
     "dc_arms": "banking_directed_credit_armaments",

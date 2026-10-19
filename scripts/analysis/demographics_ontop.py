@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Calibration step 3 in the harness: the deaths on top of the census by state-year, and #904's peacetime births less
-deaths projected to the step's build (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md §3).
+deaths projected to the step's build (docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md §3).
 
 The subcommand is demographics_harness.py's ontop-fit. Its inputs:
 - #904's state-years (regional-rates/analyze.py --json: step year, group, peace, reasons, births, deaths, people,

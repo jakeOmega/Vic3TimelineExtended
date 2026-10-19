@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE GLOBAL COMMONS: THE ANTARCTIC DECISIONS
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §4. The writers
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §4. The writers
 # are in common/scripted_effects/te_global_commons_un_effects.txt, the figures
 # in common/script_values/te_global_commons_un_values.txt.
 #

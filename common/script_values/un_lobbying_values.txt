@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # UN VOTES — LATE BALLOTS, VISIBLE LEANS, LOBBYING
 # ============================================================================
-# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md. The writers
+# docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md. The writers
 # are in common/scripted_effects/un_dossier_effects.txt (the ballot) and
 # common/scripted_effects/un_lobby_effects.txt (pledges and campaigns).
 # ============================================================================

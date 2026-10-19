@@ -3,7 +3,7 @@
 Opened 2026-10-02 from the UK first pass ([results](tax-code-probe-results-2026-10-02.md)) and a
 static read of the vanilla 1.14.5 install. One row per engine capability that the legislated tax
 code ([spec](../superpowers/specs/2026-09-29-legislated-tax-code-design.md), [plan](../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md);
-the AI and the release: [spec](../superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md), [plan](../superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md))
+the AI and the release: [spec](../superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md), [plan](../superpowers/archive/plans/2026-10-03-tax-code-ai-and-release-tasks.md))
 depends on. A row that is not `verified` limits what the first playable may promise, so read it
 before widening the catalog. Later tasks update a row when they produce new evidence.
 

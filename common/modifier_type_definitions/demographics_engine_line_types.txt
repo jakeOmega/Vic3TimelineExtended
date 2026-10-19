@@ -1,6 +1,6 @@
 ﻿# demographics_engine_line_types.txt
 #
-# Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth
+# Owner, 2026-10-11 (docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth
 # and mortality lines on laws, technologies and institutions, carried as script-only types the engine sums but
 # doesn't apply. The mod re-applies both families while the census doesn't set a state's births and deaths
 # (te_demog_lines_refresh); under Full the census models the absorbed family and applies the on-top one at its rate

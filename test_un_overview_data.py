@@ -1,6 +1,6 @@
 """Static checks for the UN overview's script data.
 
-Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md, section 4.
+Spec: docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md, section 4.
 """
 import glob
 import os

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: scripted triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939),
+# Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939),
 # reworked by 2026-10-16-grand-monument-archaeology-rework-design.md (foreign
 # digs by treaty: gm_arch_may_dig_ground, gm_arch_state_conceded_to).
 # A buried site is a script container tagged gm_site (gm_archaeology_effects.txt).

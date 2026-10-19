@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS PHASE 3 — the late game's values (biological age, who gets life extension)
-# docs/superpowers/specs/2026-10-11-demographics-late-game-design.md; the twin is demographics_model.py's late-game
+# docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md; the twin is demographics_model.py's late-game
 # section. The effects are te_demog_lx_effects.txt; the generated ones te_demog_lx_generated_effects.txt and
 # te_demog_lx_generated_values.txt (scripts/generators/gen_demographics_lx.py).
 # ============================================================================

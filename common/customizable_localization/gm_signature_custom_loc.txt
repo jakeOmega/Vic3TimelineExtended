@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — unique dedications (signatures): customizable localization
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md §3.
+# Design: docs/superpowers/archive/specs/2026-10-16-grand-monument-signatures-design.md §3.
 # State scope (the primary) or container scope (a monument beside another, a
 # trophy), first valid entry wins. The names are plain keys, so they serve
 # events and tooltips alike; gm_dedication_name and gm_tr_dedication_name

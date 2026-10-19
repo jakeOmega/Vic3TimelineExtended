@@ -1,6 +1,6 @@
 # Demographics: the model's law, technology and institution inputs as modifier types — design
 
-Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Stage 2 (fertility) is built (plan `docs/superpowers/plans/2026-10-10-demographics-modifier-types-stage2.md`, fit below). Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
+Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/archive/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Stage 2 (fertility) is built (plan `docs/superpowers/archive/plans/2026-10-10-demographics-modifier-types-stage2.md`, fit below). Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
 §4.2, §8.4). Built after fast mode (#848), which is the in-game loop for the recalibration below.
 
 ## The rule
@@ -211,7 +211,7 @@ each shows one in its tooltip. It ranked by distance outside the bands, then by 
 - **Phase 2's double counting. Decided in phase 2 step 4 (owner, 2026-10-10, amended):** every line stays on its
   carrier, the mod's flat cuts (§8.4) and vanilla's health-law, child-labour and women's-rights lines alike, so nothing
   changes outside Full. Under Full the census's term M cancels each one where the engine applies it
-  (`demographics_modifiers.absorbed_carriers`; `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`,
+  (`demographics_modifiers.absorbed_carriers`; `docs/superpowers/archive/plans/2026-10-10-demographics-phase2-engine-rates.md`,
   the amendment). Step 4's first build cancelled them with inverse INJECTs under every setting instead.
 - **Save compatibility.** A game saved before a stage reads the new modifiers on load, and its rates move once at the
   next step. No migration.

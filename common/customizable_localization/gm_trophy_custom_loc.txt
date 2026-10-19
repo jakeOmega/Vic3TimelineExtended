@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — trophies: customizable localization
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §1.
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md §1.
 # A trophy keeps the name of the monument it came from: the state's name family
 # (gm_monument_name_row, gm_custom_loc.txt) read from the trophy's own records
 # (gm_tr_*, gm_trophy_effects.txt). Customizable-localization targets inherit

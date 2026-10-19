@@ -1,6 +1,6 @@
 # Demographics: Late Marriage and Birth Spacing, the fit (2026-10-12)
 
-The harness half of the late-marriage plan (`docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`, Task 6;
+The harness half of the late-marriage plan (`docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md`, Task 6;
 spec `docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md`). It fits the wealth curve's raise, the
 two cuts, the two held Birth Spacing shares, step 1's poverty term and base infection, and the era-3 means pair on the
 normal-speed run's saves, and judges them by the owner's regional growth gate (plan D12, D13).

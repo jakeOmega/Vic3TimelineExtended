@@ -271,7 +271,7 @@ te_demog_state_pyramid_max = {
 }
 
 # ============================================================================
-# Causes of Death (the state subtab; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md). State scope,
+# Causes of Death (the state subtab; docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md). State scope,
 # read under te_demog_state_causes_sgui (the step's inputs exist) or te_demog_state_on_top_sgui (a measured scale
 # under Full). The factors themselves are generated (te_demog_f_<cause>_<factor>, te_demog_generated_values.txt).
 # ============================================================================

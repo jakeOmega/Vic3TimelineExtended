@@ -210,7 +210,7 @@ un_lean_snapshot = {
 }
 
 # An AI member's casting month and misreading on scope:un_resolution, drawn
-# once per resolution (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md
+# once per resolution (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md
 # §1). It votes at the monthly pulse of its month, by the lean it has then; the
 # chamber shows the other members its lean plus the misreading, as a band.
 # Drawn at its first un_vote.4 of the session: on the day the resolution opens

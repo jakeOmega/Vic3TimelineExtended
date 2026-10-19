@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE GLOBAL COMMONS: THE UN LAYER — EVERY FIGURE
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
 # One place per number; the writers are in
 # common/scripted_effects/te_global_commons_un_effects.txt and the hook files
 # (te_seabed_un_hooks.txt, te_asat_un_hooks.txt), the tests in

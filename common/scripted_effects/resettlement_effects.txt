@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # INTERNAL RESETTLEMENT — the monthly pulse
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md §2.
+# Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md §2.
 #
 # One country pulse computes everything, in this order, so several
 # destinations can share a source within a month:

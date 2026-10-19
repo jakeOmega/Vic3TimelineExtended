@@ -11,7 +11,7 @@ law with no amendment, or with the wrong government name. EXPRESSIONS is the
 single list; each test checks one site against it. To add a Distribution of
 Power law, add it to its row (or add a row) and follow the failures.
 
-Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+Spec: docs/superpowers/archive/specs/2026-09-26-collective-governance-design.md
 
 Run: python3 -m unittest test_collective_governance -v
 """

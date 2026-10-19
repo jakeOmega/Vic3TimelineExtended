@@ -660,7 +660,7 @@ def cmd_lag(_args):
 
 # ---- workforce: phase 2's participation figures and step 2's fit (§5) ------------------------------------------
 # The participation figures on the census's own structures (the design §1.8's sketch,
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md). (name, Inputs keywords, the lower
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md). (name, Inputs keywords, the lower
 # strata's share.) No amendment or IG trait is in these rows: DM.load_carriers walks laws, technologies and
 # institutions only, and no save reads them yet (each scenario that would hold one says so).
 _RICH_TECHS = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
@@ -973,7 +973,7 @@ def cmd_pensions(args):
     return out
 
 
-# ---- consequences: phase 2 step 4's bands (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+# ---- consequences: phase 2 step 4's bands (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md
 # §4 and §5) ----------------------------------------------------------------------------------------------------------
 # The census's own bands from a save made under Full or Display only (te_dg_b<s><b>), with its people and sex balance.
 CENSUS_BAND_VARS = (tuple(f"te_dg_b{s}{b}" for s in "fm" for b in range(P.BANDS))
@@ -1699,7 +1699,7 @@ def cmd_history(args):
     return 0
 
 
-# ---- Late Marriage and Birth Spacing (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md) ----------
+# ---- Late Marriage and Birth Spacing (docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md) ----------
 # demographics_practices imports this module, so the commands import it inside.
 def cmd_practices_replay(args):
     import demographics_adjacency as A
@@ -1915,7 +1915,7 @@ def cmd_practices_fit(args):
     return 0
 
 
-# ---- ontop-fit: calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md §3) ----
+# ---- ontop-fit: calibration step 3 (docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md §3) ----
 
 def _region_e0(fit_by_year, group_of):
     """{group: people-weighted model life expectancy over every fit save} (group_of: {state id: #904 group})."""

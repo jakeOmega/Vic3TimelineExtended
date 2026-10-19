@@ -31,7 +31,7 @@ x1.6-x1.65. The upper end is that no-catastrophe estimate: a run that grows fast
 with none of its catastrophes. The lower end is history as it happened, since a game can have catastrophes
 of its own. The old band, x1.3-x1.7, let a run with no catastrophes pass at x1.7.
 
---work (phase 2 step 2; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6) reads
+--work (phase 2 step 2; docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6) reads
 the TE_DEMOG_WORKC lines the census log writes beside each TE_DEMOG_CENSUS line under this build, and checks the
 observer gate's three items for countries of WORK_BIG people or more: the game's own workforce share within
 WORK_FOLLOW_TOLERANCE of the ratio the census sets (the pull's lag; the saves show 0.01-0.03 in steady state), no state's set ratio past WORK_SET_BAND, and the

@@ -2,7 +2,7 @@
 trophy's name, the monthly pass, the totals, the ways home and the panels,
 pinned against the registry's tables.
 
-Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md.
 Adding a form to FORMS (test_grand_monument_registry.py) fails here until it
 has a share in TROPHY_SHARES, its branch in the share triggers and, for a
 piece or token, its part name. Adding a landmark fails until the trophy's

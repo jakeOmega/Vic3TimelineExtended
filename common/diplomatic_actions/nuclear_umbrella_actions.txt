@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # NUCLEAR UMBRELLA — withdrawing it from a subject
 # ============================================================================
-# docs/superpowers/specs/2026-09-25-nuclear-umbrella-recessed-dead-hand-design.md
+# docs/superpowers/archive/specs/2026-09-25-nuclear-umbrella-recessed-dead-hand-design.md
 # §1.3. An armed overlord's direct subjects are under its nuclear umbrella by
 # default (nd_under_an_umbrella, nuclear_deterrence_triggers.txt): covered as
 # if it had signed them a nuclear_guarantee. This pact is the withdrawal.

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE NUCLEAR TABOO — scripted triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md; values and
+# Design: docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md; values and
 # thresholds in common/script_values/nuclear_taboo_values.txt.
 # ============================================================================
 

@@ -6,7 +6,7 @@ Playthrough saves show GDP growth stalling once a country is rich. The sim model
 the loop that produces it -- investment buys construction points, points become
 building levels, levels need workers, wages and automation follow -- so a lever
 (the cost curve, the project cap, automation costs) can be swept before any script
-changes. Design: docs/superpowers/specs/2026-10-17-economy-growth-sim-design.md.
+changes. Design: docs/superpowers/archive/specs/2026-10-17-economy-growth-sim-design.md.
 
 This module holds:
 

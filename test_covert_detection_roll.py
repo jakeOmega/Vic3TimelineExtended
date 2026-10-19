@@ -1,5 +1,5 @@
 """Structural regression test for the covert per-operation detection roll
-(spec: docs/superpowers/specs/2026-09-22-covert-warfare-expansion-design.md,
+(spec: docs/superpowers/archive/specs/2026-09-22-covert-warfare-expansion-design.md,
 slice 1).
 
 The engine cannot be run in CI, so these tests pin the *shape* of the script

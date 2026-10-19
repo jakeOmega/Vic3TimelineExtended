@@ -1,8 +1,8 @@
 # Economy growth sim (#1034)
 
 Tools to tune how fast a country's economy changes shape: how fast peasants and the unemployed find jobs, and when labour runs short. They are tuned against one playthrough, the owner's France → EU game, 1867–2045.
-- Design: `docs/superpowers/specs/2026-10-17-economy-growth-sim-design.md`.
-- Plan: `docs/superpowers/plans/2026-10-17-economy-growth-sim.md`.
+- Design: `docs/superpowers/archive/specs/2026-10-17-economy-growth-sim-design.md`.
+- Plan: `docs/superpowers/archive/plans/2026-10-17-economy-growth-sim.md`.
 - Commands: `docs/guides/python_tools.md` (Balance & Analysis).
 
 The target sits between two failure modes the owner named:

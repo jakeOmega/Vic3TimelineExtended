@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE NUCLEAR TABOO — static modifiers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md. Writers:
+# Design: docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md. Writers:
 #   nd_taboo_possession_cost   nd_taboo_refresh_possession (je_nuclear_program
 #                              scope, multiplier = root.var:nd_taboo_burden_cached)
 #   nd_taboo_renounced               nd_taboo_dismantle_complete, rebuilt by

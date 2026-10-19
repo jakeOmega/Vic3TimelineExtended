@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """The tax code's AI layer (plan 2026-10-03, Tasks 18-22). Structural tests.
 
-Spec: docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md §2.
+Spec: docs/superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md §2.
 Task 18 lays down the AI's state and signals and the dispatch:
 
 * every te_tax_ai_* token is a schema token: in the schema table with its

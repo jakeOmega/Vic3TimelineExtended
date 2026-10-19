@@ -1660,7 +1660,7 @@ class TestProtectorsAndProteges(unittest.TestCase):
 
 class TestCustody(unittest.TestCase):
     """Nuclear custody (nuclear_crisis_design.md §0.10, spec
-    docs/superpowers/specs/2026-09-26-nuclear-custody-design.md): the
+    docs/superpowers/archive/specs/2026-09-26-nuclear-custody-design.md): the
     settlement is one idempotent helper, so every hook where an arsenal's
     owner can end must call it, and the invariants that keep the civil-war
     merge from counting a transfer twice live in a few specific blocks."""
@@ -1798,7 +1798,7 @@ class TestCustody(unittest.TestCase):
 
 
 class TestCustodyLosingAndWatching(unittest.TestCase):
-    """Step 3's rest (spec docs/superpowers/specs/2026-09-26-nuclear-loose-
+    """Step 3's rest (spec docs/superpowers/archive/specs/2026-09-26-nuclear-loose-
     warheads-design.md §1): "Deny Them the Bomb" for a government losing a
     revolution, the watching powers' event, and secured custody, which halves
     what goes missing whenever warheads change hands."""

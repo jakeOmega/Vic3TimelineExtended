@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — conscription, the youth bulge and sex balance (phase 2 step 4)
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4
 # ============================================================================
 # What the census's pool, its young adults and its sex balance do to the game, under Full only. Four state modifiers
 # (te_demog_consequence_modifiers.txt), one refresh site each (te_demog_consequences_apply), refreshed straight after

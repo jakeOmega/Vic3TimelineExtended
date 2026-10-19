@@ -782,7 +782,7 @@ Under the customs option a draft, a bill and a package carry a field per tradeab
 
 ## AI legislation
 
-Package 6 (spec `docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md` §2; plan `docs/superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md`, Tasks 18 to 22). An AI country legislates through the same commands the player's buttons run, each inside its own `te_tax_can_<c>`, and never writes native fiscal state. Its state is the [AI rows](#ai-rows) of the schema. Files: `common/scripted_effects/te_tax_ai_effects.txt`, `common/scripted_triggers/te_tax_ai_triggers.txt`, `common/script_values/te_tax_ai_values.txt`. Everything is gated on `te_tax_code_full`; `test_tax_code_ai.py` pins it. The subsections below say what the step does.
+Package 6 (spec `docs/superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md` §2; plan `docs/superpowers/archive/plans/2026-10-03-tax-code-ai-and-release-tasks.md`, Tasks 18 to 22). An AI country legislates through the same commands the player's buttons run, each inside its own `te_tax_can_<c>`, and never writes native fiscal state. Its state is the [AI rows](#ai-rows) of the schema. Files: `common/scripted_effects/te_tax_ai_effects.txt`, `common/scripted_triggers/te_tax_ai_triggers.txt`, `common/script_values/te_tax_ai_values.txt`. Everything is gated on `te_tax_code_full`; `test_tax_code_ai.py` pins it. The subsections below say what the step does.
 
 ### Signals
 
@@ -933,7 +933,7 @@ Three console events (`events/te_tax_debug_events.txt`, plan Task 22) drive the 
 
 ## Light code
 
-The rule's fourth setting, `te_tax_code_light` (design: `docs/superpowers/specs/2026-10-09-tax-code-light-design.md`). The vanilla taxation law stays enacted and bounds each rate between its very-low and very-high values (`MIGRATION` in `gen_tax_code.py`); inside that range the country moves each rate one step at a time and the change applies at once. None of the legislated code runs: no carrier, amendments, bills, offers, promises, packages, relief provisions, history, estimates or customs, because every one of them is gated on `te_tax_code_full` or on `te_tax_code_in_force`, which needs it.
+The rule's fourth setting, `te_tax_code_light` (design: `docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md`). The vanilla taxation law stays enacted and bounds each rate between its very-low and very-high values (`MIGRATION` in `gen_tax_code.py`); inside that range the country moves each rate one step at a time and the change applies at once. None of the legislated code runs: no carrier, amendments, bills, offers, promises, packages, relief provisions, history, estimates or customs, because every one of them is gated on `te_tax_code_full` or on `te_tax_code_in_force`, which needs it.
 
 ### Gates
 

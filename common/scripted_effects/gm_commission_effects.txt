@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — opportunities: scripted effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md,
-# which reworks v2's commissions (docs/superpowers/specs/2026-10-05-grand-
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-opportunities-design.md,
+# which reworks v2's commissions (docs/superpowers/archive/specs/2026-10-05-grand-
 # monuments-v2-design.md §2). Players read "opportunity"; the script keeps v2's
 # gm_com_* names, because a save carries an open commission in them.
 #

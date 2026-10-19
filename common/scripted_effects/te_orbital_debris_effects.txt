@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # ORBITAL DEBRIS AND THE ANTI-SATELLITE STRIKE — effects (Global Commons § 6)
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6; the figures
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 6; the figures
 # in common/script_values/te_orbital_debris_values.txt, the tests in
 # common/scripted_triggers/te_orbital_debris_triggers.txt.
 #

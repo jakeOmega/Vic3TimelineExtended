@@ -1394,7 +1394,7 @@ types te_demographics_widgets
 		}
 	}
 
-	### Fighting-Age Men (phase 2 step 4; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+	### Fighting-Age Men (phase 2 step 4; docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md
 	### §4.5): the pool, men aged 20 to 39, as a share of the men, and the conscription multiplier it gives, with the
 	### pool and the term on hover (while te_demog_k_conscription_effects is 0, "not applied yet"). The last row of step 2's Work
 	### and Retirement section, te_demog_sec_work and te_state_demog_work. A census from before step 4 shows the pending
@@ -4417,7 +4417,7 @@ types te_demographics_widgets
 		}
 	}
 
-	### Work and Retirement (phase 2 step 2; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+	### Work and Retirement (phase 2 step 2; docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md
 	### §2.6, late-game §6.2): open by default (rule 1), flag te_demog_work_closed. The workforce as the working-age
 	### share times the share at work; under Old Age Pension the pension age with its five buttons beside it (rule 6),
 	### the pensioners and, under Full, the pension bill; health need. Every figure sits under te_demog_work_ready_sgui

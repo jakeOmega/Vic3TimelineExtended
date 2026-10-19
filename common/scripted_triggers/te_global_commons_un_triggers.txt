@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE GLOBAL COMMONS: THE UN LAYER — TRIGGERS
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
 # The three seabed hooks the seabed allocation reads are in
 # te_seabed_un_hooks.txt and the anti-satellite one in te_asat_un_hooks.txt;
 # this file holds the tests they and the UN layer share. Every read of a

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — several monuments in one state: script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-13-multiple-monuments-per-state-design.md.
 # One building_grand_monument stands in a state, at the level of everything
 # standing there (the engine allows one). The PRIMARY monument is the one the
 # state's own variables describe (gm_skin, gm_form, gm_name, ...); every other

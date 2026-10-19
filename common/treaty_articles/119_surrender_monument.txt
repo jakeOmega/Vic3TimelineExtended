@@ -2,7 +2,7 @@
 # TREATY ARTICLE: surrender_monument
 # The source surrenders the Grand Monument in a state it owns: the target
 # carries it off as a trophy, the share its form allows (a column whole, a
-# piece of a gate, a token of a hall). gm_trophy_effects.txt; docs/superpowers/
+# piece of a gate, a token of a hall). gm_trophy_effects.txt; docs/superpowers/archive/
 # specs/2026-10-12-grand-monument-trophies-design.md §2.3.
 # Historical: the Treaty of Lahore (1849) made the Punjab surrender the
 # Koh-i-Noor.

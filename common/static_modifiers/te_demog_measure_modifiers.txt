@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the Family Policy measures (phase 2 steps 3a and 3b)
-# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.5 (the catalogue's
+# Spec: docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.5 (the catalogue's
 # starting values, which step 3b's harness fitted to §5's band: demographics_harness.py measures, which reads this
 # file). Logic: te_demog_measure_effects.txt.
 # ============================================================================

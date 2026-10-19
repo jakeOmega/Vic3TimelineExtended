@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS PHASE 3 — the late game: biological age, who gets life extension, Biological Immortality
-# docs/superpowers/specs/2026-10-11-demographics-late-game-design.md (approved by the owner 2026-10-11). The twin is
+# docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md (approved by the owner 2026-10-11). The twin is
 # scripts/analysis/demographics_model.py's late-game section (lx_begin, lx_slot, lx_fold, lx_pool_deaths,
 # lx_close_bands, lx_tables, lx_finish, lx_seed); test_demographics_registry.TestLateGameScript runs this file against it.
 #

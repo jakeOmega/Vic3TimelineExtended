@@ -1,5 +1,5 @@
 """Demographics phase 2 step 2: the workforce, pensions and health costs
-(docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2).
+(docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2).
 
 The script (te_demog_work_effects.txt, te_demog_work_values.txt and the hooks in te_demog_effects.txt) run by the
 census's interpreter (test_demographics_registry._Engine) against demographics_model's twins: the workforce term W with

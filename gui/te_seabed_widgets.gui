@@ -1,6 +1,6 @@
 ﻿### Global Commons: the Seabed tab of the Timeline Extended window
 ### (gui/te_systems_window.gui instances the four panels). Layout A of the
-### seabed claims spec (docs/superpowers/specs/2026-10-17-seabed-claims-and-
+### seabed claims spec (docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-
 ### panel-design.md § 3): an overview of six boxes, two to a row; the three
 ### policy buttons; the Ocean Basins table, each basin opening onto its
 ### claimants; How Seabed Licences Work, collapsed. House style:

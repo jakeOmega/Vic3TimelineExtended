@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — static modifiers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md.
 # Each carries ONE STEP of its curve (§2.2: the doubling curve, or the 1/n
 # curve for the local effects, prestige and cultural pull); the multiplier is
 # the step count. gm_values.txt mirrors every value as gm_step_*; change both.

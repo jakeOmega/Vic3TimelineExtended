@@ -56,7 +56,7 @@ Full only, and edits no engine birth or mortality line). Step 5, the retune of t
 ## Step 2: fertility against history
 
 **Built (2026-10-12): Late Marriage and Birth Spacing** (spec `docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md`;
-plan `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`; fit
+plan `docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md`; fit
 `docs/testing/demographics-late-marriage-2026-10-12.md`). No raise of the wealth curve passes the owner's regional
 growth gate, and at Stop A the owner kept today's mortality: s = 1.00, cuts 0.10 and 0.20, Birth Spacing at 1 in
 Japan and 0.06 in China, Korea and Manchuria. India, Africa, the USA and Canada, the Middle East, South America and
@@ -99,7 +99,7 @@ history has them at 4.5 against 7.1.
 
 **Decided (owner, 2026-10-10 and 2026-10-11):** two practices, Late Marriage and Birth Spacing, combined as a product
 (spec `docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md`, #862; all nine of its calls approved
-2026-10-11, Birth Spacing's cut at 0.35). Plan: `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`,
+2026-10-11, Birth Spacing's cut at 0.35). Plan: `docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md`,
 which also refits step 1's mortality with them (the spec's call 8).
 
 Before the owner's call, the fit can still:
@@ -134,7 +134,7 @@ Before the owner's call, the fit can still:
 
 ## Step 4: how the census sets the engine's births and deaths
 
-**Built:** `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md` (PR #869), with the owner's rulings
+**Built:** `docs/superpowers/archive/plans/2026-10-10-demographics-phase2-engine-rates.md` (PR #869), with the owner's rulings
 of 2026-10-10:
 - **(a) What the census absorbs:** standing law and technology lines it models at matching size (the health laws,
   except Private Health Insurance's wealth mortality, on top for now pending probe P6 (owner, 2026-10-10);

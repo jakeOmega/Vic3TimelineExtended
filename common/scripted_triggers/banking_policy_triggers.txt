@@ -28,7 +28,7 @@ te_banking_system_on = {
 }
 
 # What a country needs before its financial cycle starts
-# (docs/superpowers/specs/2026-10-17-banking-always-on-design.md). Every country
+# (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md). Every country
 # under the rule holds je_banking_cycle from the start of the game; this is what
 # turns the cycle on, from the entry's `immediate` or its monthly pulse
 # (banking_cycle_start). Also the checklist on the dormant entry's overview and

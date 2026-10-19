@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GLOBAL COMMONS — SEABED LICENCES: static modifiers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md §§ 2.4-2.5.
+# Design: docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §§ 2.4-2.5.
 # ============================================================================
 
 # Long-Haul Seabed Operations (§ 2.4): a Deep-Sea Mine level on a distant

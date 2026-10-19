@@ -1,5 +1,5 @@
 """Demographics phase 2 step 3a: the Family Policy measures
-(docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.7).
+(docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.7).
 
 Static checks on the catalogue (each measure's modifier carries its census types and interest groups, the laws-allow
 table is §3.4's, every button sits under the rule's wrapper) and the measures' effects run through

@@ -2193,7 +2193,7 @@ un_representation_restored_notice = {
 	color = good
 }
 
-# Grand Monuments: vanity backlash (docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md §5)
+# Grand Monuments: vanity backlash (docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md §5)
 gm_vanity_backlash_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
@@ -2201,7 +2201,7 @@ gm_vanity_backlash_notice = {
 	color = bad
 }
 
-# Grand Monuments: an opportunity's notices (docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md)
+# Grand Monuments: an opportunity's notices (docs/superpowers/archive/specs/2026-10-12-grand-monument-opportunities-design.md)
 # A year left on an open opportunity not yet met (opportunities usability §5).
 # Its completion is an event (monument_events.28), not a notice.
 gm_com_reminder_notice = {
@@ -2225,7 +2225,7 @@ gm_com_lapsed_notice = {
 	color = neutral
 }
 
-# Grand Monuments: trophies (docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §6)
+# Grand Monuments: trophies (docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md §6)
 gm_tr_taken_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/buildings.dds"

@@ -8,7 +8,7 @@ like any other type's. This file pins what makes it different: who may run it
 covert_op_add_scaled_modifier), and everything it must stay out of, because
 the network, Tradecraft, detection and AI machinery treats any running
 operation as hostile unless told otherwise (spec
-docs/superpowers/specs/2026-10-16-covert-counterintel-backlash-design.md § C,
+docs/superpowers/archive/specs/2026-10-16-covert-counterintel-backlash-design.md § C,
 anti-goal "Counterintelligence Support quietly planting a network inside the
 ally").
 

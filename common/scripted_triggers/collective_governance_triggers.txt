@@ -8,7 +8,7 @@
 # modern_election_events.33). At most one is true. Autocracy and anything
 # else outside these six cannot hold the law.
 #
-# Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+# Spec: docs/superpowers/archive/specs/2026-09-26-collective-governance-design.md
 # Pinned by test_collective_governance.py (EXPRESSIONS).
 
 collective_governance_is_popular = {

@@ -1,5 +1,5 @@
 ﻿# The engine's birth and mortality lines on vanilla's laws, moved to script-only types (owner, 2026-10-11;
-# docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md). Each field is cancelled by its
+# docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md). Each field is cancelled by its
 # negative, which the engine sums to 0 and the tooltip drops, and its family's type carries the value at the same
 # scaling; te_demog_lines_refresh re-applies it while the census doesn't set the state's births and deaths. And,
 # since phase 2 step 1, the working-adult lines' women's-work and replaced families, re-applied by

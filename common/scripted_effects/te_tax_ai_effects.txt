@@ -2,7 +2,7 @@
 # LEGISLATED TAX CODE — the AI layer
 # ============================================================================
 # Plan 2026-10-03, Tasks 18-22; spec
-# docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md §2;
+# docs/superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md §2;
 # docs/systems/tax_code_schema.md, "AI legislation".
 #
 #   STREAKS   te_tax_ai_update_streaks, processor rule 1b, every migrated

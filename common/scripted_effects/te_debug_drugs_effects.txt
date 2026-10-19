@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # DRUGS WEALTH PROBE — console-only (`event te_debug_drugs.1`)
 # ============================================================================
-# Drugs phase 2 § 1 (docs/superpowers/plans/2026-10-02-drugs-phase-2-healthcare-
+# Drugs phase 2 § 1 (docs/superpowers/archive/plans/2026-10-02-drugs-phase-2-healthcare-
 # demand.md). Every country gets its population and the share of it living in
 # pops at wealth 10, 15, 20, 25, 30, 35, 40 and 50 or more, its Drugs buildings,
 # its market's Drugs price and whether it bans Drugs. The observer (ROOT) also

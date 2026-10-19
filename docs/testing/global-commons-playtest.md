@@ -1,12 +1,12 @@
 # Global Commons play-test checklist
 
-What the next play-test of the Global Commons (`docs/superpowers/specs/2026-10-16-global-commons-design.md`) should look at. In-game checks don't gate the merge (CLAUDE.md, "In-game checks"): where the build rests on an engine fact nobody has verified, it ships the preferred version with a `TE_SELF_CHECK OK|BROKEN <name>` line in `debug.log` and names its fallback below. Grep `debug.log` for `TE_SELF_CHECK` first.
+What the next play-test of the Global Commons (`docs/superpowers/archive/specs/2026-10-16-global-commons-design.md`) should look at. In-game checks don't gate the merge (CLAUDE.md, "In-game checks"): where the build rests on an engine fact nobody has verified, it ships the preferred version with a `TE_SELF_CHECK OK|BROKEN <name>` line in `debug.log` and names its fallback below. Grep `debug.log` for `TE_SELF_CHECK` first.
 
 The seabed and the UN layer need the Global Commons rule (on by default in a new game; a save from before the rule existed has it off until it is switched on). Launch windows and orbital debris follow the Space Race rule.
 
 ## Deep-Sea Mine rebalance and Extraplanetary Base logistics (§ 1)
 
-What the next play-test should look at for spec § 1 (`docs/superpowers/specs/2026-10-16-global-commons-design.md`).
+What the next play-test should look at for spec § 1 (`docs/superpowers/archive/specs/2026-10-16-global-commons-design.md`).
 The offline gate is `test_deep_sea_rebalance.py` (orderings at base prices, read from the files); these rows are
 what only the game can show.
 
@@ -37,9 +37,9 @@ what only the game can show.
 
 ## Seabed licences (§ 2)
 
-Spec: `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 2, and for the claims, the
+Spec: `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 2, and for the claims, the
 holding fee, Sponsor's protection, the policy lock and the panel
-`docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md` (phase 1). System doc:
+`docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-panel-design.md` (phase 1). System doc:
 `docs/systems/mod_systems.md` § Global Commons. The offline gate is `test_seabed_basins.py`,
 `test_seabed_allocation.py` (the model), `test_seabed_script.py`, `test_seabed_loc.py` and
 `test_seabed_layout.py`; this list is what only the game can show.
@@ -332,7 +332,7 @@ even in that save, and the scale comes from those lines.
 
 ## The UN layer: the Law of the Sea, the Antarctic Treaty and the anti-satellite moratorium (§ 3, § 4, § 6.5)
 
-The UN's part of the Global Commons (`docs/superpowers/specs/2026-10-16-global-commons-design.md`
+The UN's part of the Global Commons (`docs/superpowers/archive/specs/2026-10-16-global-commons-design.md`
 §3, §4, §6.5; `docs/systems/mod_systems.md` § Global Commons: the UN layer). In-game checks
 don't gate the merge (CLAUDE.md, "In-game checks"); the play-test before a release works through
 this list.
@@ -430,7 +430,7 @@ types, and every trigger, docket item and vote follows a pattern already seen in
 ## Launch windows (§ 5)
 
 What the next play-test should look at for Solar System Colonization's launch windows (spec
-`docs/superpowers/specs/2026-10-16-global-commons-design.md` § 5 and § 8). In-game checks do not gate a merge (CLAUDE.md,
+`docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 5 and § 8). In-game checks do not gate a merge (CLAUDE.md,
 "In-game checks: self-checks and the play-test list"): the change lands on the offline gate (`test_launch_windows.py`, the
 audits) and this is what only the game can show. A fixed item is struck through with the commit that fixed it.
 
@@ -508,7 +508,7 @@ Logged once a game each. Nothing logged means the premise never came up (no chem
 
 ## Orbital debris and the anti-satellite strike (§ 6)
 
-Spec: `docs/superpowers/specs/2026-10-16-global-commons-design.md` § 6.1–6.4 and § 7's
+Spec: `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 6.1–6.4 and § 7's
 event `.31`. Systems doc: `docs/systems/mod_systems.md` → Space Race → *Orbital debris*.
 In-game checks don't gate the merge (CLAUDE.md § "In-game checks"); the play-test before a
 release works through this list. The console harness is `event te_debug_orbital_debris.1`:

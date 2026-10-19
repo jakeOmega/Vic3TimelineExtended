@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — the landmarks standing in 1836 (phase 4)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monuments-landmarks-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monuments-landmarks-design.md.
 # A landmark is an ordinary Grand Monument with five records on its state:
 #   gm_landmark        flag: its key. Locks the skin and form (gm_state_is_landmark,
 #                      monument_triggers.txt) while the monument stands

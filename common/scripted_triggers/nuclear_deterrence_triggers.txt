@@ -123,7 +123,7 @@ nd_readiness_high_alert = {
 	var:nd_readiness = 3
 }
 
-# Recessed (docs/superpowers/specs/2026-09-25-nuclear-umbrella-recessed-dead-
+# Recessed (docs/superpowers/archive/specs/2026-09-25-nuclear-umbrella-recessed-dead-
 # hand-design.md §2): warheads stored apart from their delivery systems.
 # Level 0, below Routine.
 nd_readiness_recessed = {

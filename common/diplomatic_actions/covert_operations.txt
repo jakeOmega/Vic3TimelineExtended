@@ -2590,7 +2590,7 @@ covert_secure_material_action = {
 
 # ----------------------------------------------------------------------------
 # COUNTERINTELLIGENCE SUPPORT (2026-10-16, spec
-# docs/superpowers/specs/2026-10-16-covert-counterintel-backlash-design.md § C)
+# docs/superpowers/archive/specs/2026-10-16-covert-counterintel-backlash-design.md § C)
 # ----------------------------------------------------------------------------
 # The one operation that works FOR its target: our officers and analysts lent
 # to a friend's counterintelligence, raising its three covert defences

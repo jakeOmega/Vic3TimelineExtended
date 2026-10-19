@@ -482,7 +482,7 @@ decree_subsidize_immigration = {
 	}
 }
 
-# Internal resettlement (docs/superpowers/specs/2026-09-26-internal-resettlement-design.md
+# Internal resettlement (docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md
 # §2): every Settlement Authority walks the states under this decree first, and
 # may take up to 4% of each eligible pop a month here instead of 2%. It changes
 # where settlers come from, never who is eligible. Valid only while the owner

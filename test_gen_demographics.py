@@ -477,7 +477,7 @@ class TestPhase2Generated(unittest.TestCase):
 
 
 class TestCalibrationStep3Generated(unittest.TestCase):
-    """Calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md; owner calls 1-2,
+    """Calibration step 3 (docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md; owner calls 1-2,
     2026-10-12): the country-scope absorbed lines and the malaria factor's inputs."""
 
     @classmethod

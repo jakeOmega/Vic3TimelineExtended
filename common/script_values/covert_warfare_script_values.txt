@@ -233,7 +233,7 @@ covert_tradecraft_net_gain_per_tier = 0.15
 # by commander strength minus coup resistance). Vanilla's coup events nudge it
 # by 15; this is a steady third of that. Most of the operation's pull on a
 # coup comes through coup resistance, not this push (plan table:
-# docs/superpowers/plans/2026-09-23-covert-new-operations.md).
+# docs/superpowers/archive/plans/2026-09-23-covert-new-operations.md).
 covert_regime_change_coup_push = 5
 # Cultivate assets: a network with one running against its target grows this
 # much faster. Stacks with the extra-operation factor and with Tradecraft.

@@ -2,7 +2,7 @@
 # CIVIL WARS — shared bookkeeping for every system's repair
 # ============================================================================
 # The cross-cutting repair site docs/audits/civil_war_inheritance_audit.md
-# proposed, built once (docs/superpowers/specs/2026-09-26-nuclear-custody-design.md
+# proposed, built once (docs/superpowers/archive/specs/2026-09-26-nuclear-custody-design.md
 # §3.1). The hooks are in common/on_actions/te_civil_war_on_actions.txt. A
 # system that must repair what a revolution's winner loses (#460–#465) adds
 # its call to te_civil_war_on_won there, beside nd_custody_on_civil_war_won,

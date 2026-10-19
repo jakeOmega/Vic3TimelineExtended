@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — trophies: scripted triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md.
 # A trophy is a script container (gm_trophy_effects.txt). The holder is the
 # owner of its site (var:gm_tr_site), the claimant the owner of its origin
 # (var:gm_tr_origin): both are read live.

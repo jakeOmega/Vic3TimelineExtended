@@ -732,7 +732,7 @@ pmc_strongly_disapprove = [("law_private_military_contractors", "strongly_disapp
 # neutral. The left opposes a force hired by property owners, paternalists the
 # local notables' constabularies it displaces, nationalists and militarists any
 # force outside the state's monopoly
-# (docs/superpowers/specs/2026-10-04-policing-laws-design.md). An ideology the
+# (docs/superpowers/archive/specs/2026-10-04-policing-laws-design.md). An ideology the
 # Policing block is new to also states the four base-game police laws.
 private_policing_disapprove = [("law_private_policing", "disapprove")]
 private_policing_strongly_disapprove = [("law_private_policing", "strongly_disapprove")]

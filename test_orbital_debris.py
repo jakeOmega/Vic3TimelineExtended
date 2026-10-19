@@ -1,6 +1,6 @@
 """Orbital debris and the anti-satellite strike (Global Commons § 6).
 
-docs/superpowers/specs/2026-10-16-global-commons-design.md § 6. The system
+docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 6. The system
 keeps several numbers twice: a static modifier or a production method must
 carry a literal, and the panel or the AI reads a script value mirroring it.
 It also extends hand-kept lists elsewhere (the UN dossier's records), names

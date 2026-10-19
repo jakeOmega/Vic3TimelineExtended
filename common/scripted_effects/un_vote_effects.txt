@@ -41,7 +41,7 @@
 # campaigns end when it closes (un_lobby_campaigns_close, in
 # un_resolution_archive).
 #
-# The late ballots (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md)
+# The late ballots (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md)
 # add un_res_last_call (every AI member still without a vote casts now; see
 # un_vote.6), un_res_deferred (human members that chose to decide later) and
 # the chamber's Delegations rows (un_res_delegates, un_deleg_row_0..23 and
@@ -123,7 +123,7 @@ un_resolution_open = {
 		remove_global_variable = un_vote_reservation
 	}
 	# The ballot (redesign phase 3; late ballots,
-	# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md). Human
+	# docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md). Human
 	# members get un_vote.1 in thirty days. Every member gets its un_vote.4 at
 	# once, and every month from then on (un_resolutions_monthly_update): a
 	# human member sees its own lean, term by term, and every member sees each

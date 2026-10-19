@@ -1,4 +1,4 @@
-﻿# Demographics phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4):
+﻿# Demographics phase 2 step 4 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4):
 # conscription, the youth bulge and sex balance. State modifiers, under Full only, applied by the census at multipliers
 # from 0 to 1 (te_demog_consequence_effects.txt); each field's size is demographics_params' (a test pins them). The
 # youth bulge and the sex balance's pair show in a state's modifier list: they are effects the player plans around.

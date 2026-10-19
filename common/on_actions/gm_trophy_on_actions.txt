@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — trophies: the monthly pass
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §4.
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md §4.
 # One global pass a month (gm_trophy_monthly, gm_trophy_effects.txt): repair
 # each trophy's places, the AI's returns and takings from a site, a player's
 # notes, then every country's and state's lists and totals. The state side

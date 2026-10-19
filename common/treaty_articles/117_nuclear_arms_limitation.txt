@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # TREATY ARTICLE: nuclear_arms_limitation (the nuclear taboo, phase 2)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md §7.1.
+# Design: docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md §7.1.
 # Mutual: while it is in force each party holds at most `quantity` warheads.
 # The ceiling is read monthly by nd_taboo_refresh_treaty_ceiling
 # (nuclear_taboo_effects.txt): warheads above it retire, a tenth of the excess

@@ -1,7 +1,7 @@
 ﻿# =================================================================
 # Settlement Authority production methods
 # =================================================================
-# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md.
 # Every PM sits on the DESTINATION building, so its state_modifiers land on
 # the destination state. What happens at the source is script-applied by the
 # pulse (resettlement_effects.txt).

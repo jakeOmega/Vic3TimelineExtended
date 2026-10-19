@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: the technology gate
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939).
+# Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939).
 
 # Container scope. $WHO$ (a country) has the technology that opens the site. A site
 # stores its technology as a flag (gm_site_tech) with the hyphen written as an

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — unique dedications (signatures): script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-16-grand-monument-signatures-design.md.
 # The sums are written by gm_sig_compute_sums (gm_signature_effects.txt); these
 # read them for the panels, every read guarded (a save older than signatures
 # has none of these variables until its first refresh).

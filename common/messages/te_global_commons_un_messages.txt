@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE GLOBAL COMMONS: THE UN LAYER — NOTIFICATIONS
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3.2 and §4.
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §3.2 and §4.
 # ============================================================================
 
 # The seabed regime has changed (te_seabed_un_set_regime): to every country

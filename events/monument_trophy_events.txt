@@ -3,7 +3,7 @@
 # ============================================================================
 # GRAND MONUMENTS — trophies
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md.
 # .1 is the one event a player reads: our armies hold a state with a monument.
 # .10-.13 are hidden: they do the work a scripted GUI, an event option or a
 # treaty has ordered (gm_trophy_effects.txt), outside any tooltip's walk.

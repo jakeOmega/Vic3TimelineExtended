@@ -41,7 +41,7 @@ HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_
 # The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5).
 FADING = ("teardown", "vanity")
 # The opportunity boons under National Effects' Opportunities Seized
-# (docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md §3.2):
+# (docs/superpowers/archive/specs/2026-10-12-grand-monument-opportunities-design.md §3.2):
 # one row each, shown while its months run.
 BOONS = ("reign", "regime", "great_power", "victory", "defeat", "centenary", "ruler_death", "space", "faith",
          "tech_artistic", "tech_scientific", "tech_industrial", "tech_athletic", "tech_naturalist")

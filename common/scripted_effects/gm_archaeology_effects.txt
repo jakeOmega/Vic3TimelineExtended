@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: scripted effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939),
+# Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md (issue #939),
 # reworked by 2026-10-16-grand-monument-archaeology-rework-design.md: costs by the
 # site, sized digs, events that name the place, the find and its history, and
 # foreign digs by treaty (an Excavation Concession, with partage, or a Permit).

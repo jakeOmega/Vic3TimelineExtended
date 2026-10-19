@@ -3,7 +3,7 @@
 	group = je_group_internal_affairs
 
 	# EVERY COUNTRY HOLDS THIS ENTRY, from the first days of the game
-	# (docs/superpowers/specs/2026-10-17-banking-always-on-design.md). What
+	# (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md). What
 	# starts later is the financial cycle, once te_banking_cycle_unlocked holds
 	# (banking_cycle_start, from `immediate` or the monthly pulse). Until then
 	# the entry is dormant: no cycle readings, no tools, and the Monetary Policy
@@ -93,7 +93,7 @@
 	scripted_button = cb_disable_export_credit_facility
 	scripted_button = cb_asset_relief_program
 	scripted_button = cb_disable_asset_relief_program
-	# 2026-09-23 expansion (docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md)
+	# 2026-09-23 expansion (docs/superpowers/archive/specs/2026-09-23-banking-tools-expansion-design.md)
 	scripted_button = cb_directed_credit_heavy_industry
 	scripted_button = cb_disable_directed_credit_heavy_industry
 	scripted_button = cb_directed_credit_agriculture

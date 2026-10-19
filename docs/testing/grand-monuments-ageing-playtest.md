@@ -1,10 +1,10 @@
 # Grand Monuments: ageing, construction sites and recorded size, play-test checklist
 
 What the next play-test should look at for the ageing rework (spec
-`docs/superpowers/specs/2026-10-16-grand-monument-ageing-design.md`, plan
-`docs/superpowers/plans/2026-10-16-grand-monument-ageing.md`) and for construction sites with the size in records (spec
-`docs/superpowers/specs/2026-10-18-grand-monument-sites-and-world-wealth-design.md`, plan
-`docs/superpowers/plans/2026-10-18-grand-monument-sites-plan-a.md`). In-game checks do not gate a merge (CLAUDE.md, "In-game
+`docs/superpowers/archive/specs/2026-10-16-grand-monument-ageing-design.md`, plan
+`docs/superpowers/archive/plans/2026-10-16-grand-monument-ageing.md`) and for construction sites with the size in records (spec
+`docs/superpowers/archive/specs/2026-10-18-grand-monument-sites-and-world-wealth-design.md`, plan
+`docs/superpowers/archive/plans/2026-10-18-grand-monument-sites-plan-a.md`). In-game checks do not gate a merge (CLAUDE.md, "In-game
 checks: self-checks and the play-test list"): the PR lands on the offline gate and this is what only the game can show.
 A fixed item is struck through with the commit that fixed it.
 

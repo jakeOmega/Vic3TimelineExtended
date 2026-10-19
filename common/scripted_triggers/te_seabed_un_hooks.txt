@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE SEABED UNDER THE LAW OF THE SEA — THE UN'S ANSWERS TO THE ALLOCATION
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3 and §4. The
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §3 and §4. The
 # seabed allocation (the yearly sharing of each basin's pool, and the building
 # gate) asks these three questions; the UN layer answers them.
 #

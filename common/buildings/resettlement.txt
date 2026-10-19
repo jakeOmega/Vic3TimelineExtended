@@ -1,7 +1,7 @@
 ﻿# =================================================================
 # Settlement Authority
 # =================================================================
-# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md.
 # One building, in the DESTINATION state. Its Programme PM decides who is
 # recruited across the country and how (§3), Settlement what the settlers
 # build (§5), Transport how many can be carried (§4). The monthly transfer is

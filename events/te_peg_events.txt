@@ -40,7 +40,7 @@
 # buttons, the bank's gold reserve and the banking tools. te_peg.2 and
 # te_peg.3 follow the same rule. Every country now holds the entry, its
 # Monetary Policy section read-only until its cycle starts
-# (docs/superpowers/specs/2026-10-17-banking-always-on-design.md), so the
+# (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md), so the
 # switch asks te_banking_controls_open: a dormant country sees the gauges but
 # has none of the controls, and the .no_je_tt says nothing it can't see. The old event's flavour text lives on as
 # te_peg.1.f.

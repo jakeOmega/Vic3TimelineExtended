@@ -789,7 +789,7 @@ amendment_religious_exemption = {
 # amendment_preserved_bureaucratic_caste (sponsor +15% political strength).
 # Distinct from decree_political_patronage, a state decree that doubles the
 # state's pop political strength.
-# Spec: docs/superpowers/specs/2026-10-01-bureaucracy-laws-design.md
+# Spec: docs/superpowers/archive/specs/2026-10-01-bureaucracy-laws-design.md
 amendment_spoils_system = {
 	parent = law_appointed_bureaucrats
 
@@ -835,7 +835,7 @@ amendment_spoils_system = {
 
 # ======================================================================
 #  POLICING
-#  Spec: docs/superpowers/specs/2026-10-04-policing-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-04-policing-laws-design.md
 # ======================================================================
 
 # Corporate Security Powers - companies police their own mines, mills and
@@ -1495,7 +1495,7 @@ amendment_langreform_national_focus = {
 #  not script removal respects can_repeal, and the player cannot repeal
 #  the amendment their Distribution of Power calls for.
 #  No parent: IG stance would count the law's approval a second time.
-#  Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+#  Spec: docs/superpowers/archive/specs/2026-09-26-collective-governance-design.md
 # ======================================================================
 
 # Direct Democracy and Free Federation: movements decide, but softly. Both

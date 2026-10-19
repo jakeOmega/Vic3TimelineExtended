@@ -4,7 +4,7 @@
 # condition that every find stays where it was found: the monument stands in
 # the state at its full levels, and the target gains Foreign Scholarship
 # (gm_arch_settle_terms).
-# docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md § 3.
+# docs/superpowers/archive/specs/2026-10-16-grand-monument-archaeology-rework-design.md § 3.
 # Historical: the antiquities laws that ended the export of finds (Ottoman
 # 1884, Egypt after the Tutankhamun excavation, Iraq 1934), under which the
 # foreign schools still dig by licence.

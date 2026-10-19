@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE GLOBAL COMMONS: THE UN LAYER — STATIC MODIFIERS
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3 (the seabed
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §3 (the seabed
 # under the Law of the Sea), §4 (the Antarctic Treaty) and §6.5 (the
 # Moratorium on Destructive Anti-Satellite Tests). The writers are in
 # common/scripted_effects/te_global_commons_un_effects.txt; every figure a

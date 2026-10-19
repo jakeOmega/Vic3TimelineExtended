@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The Global Commons' UN layer (docs/superpowers/specs/2026-10-16-global-commons-design.md
+"""The Global Commons' UN layer (docs/superpowers/archive/specs/2026-10-16-global-commons-design.md
 §3, §4 and §6.5): the hooks the seabed allocation and the anti-satellite strike call,
 the reads of the variables those systems write, and the figures the player is told.
 
@@ -96,7 +96,7 @@ UN_FILES = (
 
 
 class HookContractTest(unittest.TestCase):
-    """docs/superpowers/specs/2026-10-16-global-commons-design.md and the branches'
+    """docs/superpowers/archive/specs/2026-10-16-global-commons-design.md and the branches'
     interface contract: same names, same scopes as the stubs."""
 
     CONTRACT = {

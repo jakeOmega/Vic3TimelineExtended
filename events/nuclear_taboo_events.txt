@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE NUCLEAR TABOO — events
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md.
 #   .1-.4   the taboo hardens through 30 / 50 / 70 / 90 (nd_taboo_band_check)
 #   .5-.8   it erodes through 90 / 70 / 50 / 30
 #   .20     the last warhead taken apart (nd_taboo_dismantle_complete)

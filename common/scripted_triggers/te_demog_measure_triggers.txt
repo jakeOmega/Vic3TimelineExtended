@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the Family Policy measures: triggers (phase 2 step 3a)
-# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3, §3.4, §3.6.
+# Spec: docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3, §3.4, §3.6.
 # Effects: te_demog_measure_effects.txt; values: te_demog_measure_values.txt.
 # ============================================================================
 

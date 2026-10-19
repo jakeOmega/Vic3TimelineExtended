@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the Family Policy measures: script values (phase 2 step 3a)
-# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.6.
+# Spec: docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.6.
 # All country scope. The panel reads the per-measure values here, never a measure's variable (a GUI read of a
 # variable that doesn't exist logs every frame: gui_modding_guide.md gotchas #14 and #23).
 # ============================================================================

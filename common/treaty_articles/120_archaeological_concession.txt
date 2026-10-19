@@ -5,7 +5,7 @@
 # half its levels go to the target's capital as a trophy and the rest stand in
 # the state as its monument (the partage, gm_arch_partage). A rock-cut site has
 # nothing to carry, and the target gains Foreign Scholarship instead.
-# docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md § 3.
+# docs/superpowers/archive/specs/2026-10-16-grand-monument-archaeology-rework-design.md § 3.
 # Historical: the Ottoman firmans that let Layard dig Nimrud, Humann Pergamon
 # and Koldewey Babylon; France's monopoly on excavation in Persia (1895-1927);
 # the division of finds in Egypt that sent Nefertiti's bust to Berlin (1913).

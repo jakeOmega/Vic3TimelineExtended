@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GLOBAL COMMONS — SEABED LICENCES: on-actions
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md § 2.
+# Design: docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 2.
 # Effects: common/scripted_effects/te_global_commons_seabed_effects.txt.
 #
 #   on_monthly_pulse_country  record the country's levels (monthly recording)

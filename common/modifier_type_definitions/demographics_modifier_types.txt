@@ -84,7 +84,7 @@ state_medical_diffusion_add = {
 	decimals = 0
 	script_only = yes
 }
-# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7; the owner's call 3):
+# Phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7; the owner's call 3):
 # the census's participation inputs, carried beside the replaced family's flat lines. Census-only: a release comments
 # their lines out.
 state_male_labor_participation_add = {
@@ -105,7 +105,7 @@ state_work_capacity_mult = {
 	decimals = 0
 	script_only = yes
 }
-# Calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md §2.2; owner,
+# Calibration step 3 (docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md §2.2; owner,
 # 2026-10-12): how far malaria's toll on the people who live with it is under control, 0 to 1. The census's malaria
 # factor on infection is 1 + the state trait's excess x (1 - it). On Malaria Prevention at 1 (te_demog_tech_injections.txt).
 # Read only by the census; a release comments its carriers out (scripts/release/comment_out_census_inputs.py).
@@ -131,7 +131,7 @@ state_external_safety_add = {
 	script_only = yes
 }
 
-# Family Policy measures (phase 2 step 3a: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+# Family Policy measures (phase 2 step 3a: docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md
 # §3.5). Carried by the measures' country modifiers (te_demog_measure_modifiers.txt); a state's read includes its
 # country's modifiers; Pro-Natalist Policy carries a desired line of its own. The census reads them since step 3b
 # (demographics_model.policy_term, urban_term, means, newborn_split; the generated te_demog_tfr_policy and kin). A
@@ -179,7 +179,7 @@ state_sex_ratio_at_birth_add = {
 	script_only = yes
 }
 
-# The late game (demographics phase 3; docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §1.2, §1.4).
+# The late game (demographics phase 3; docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md §1.2, §1.4).
 # Read only by the census (te_demog_lx_begin):
 #   state_ageing_rate_add     the biological years a calendar year of those in longevity care, 1 + it, within 0-1
 #                             (mRNA Therapeutics -0.10, Personalized Medicine -0.10, Genetic Engineering -0.05,

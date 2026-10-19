@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # INTERNAL RESETTLEMENT — script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md.
 # The monthly pulse is resettlement_country_monthly (resettlement_effects.txt).
 
 # ---- The frontier (§6) -----------------------------------------------------

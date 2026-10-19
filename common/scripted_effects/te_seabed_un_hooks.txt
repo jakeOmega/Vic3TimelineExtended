@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE SEABED UNDER THE LAW OF THE SEA — THE UN'S HOOKS IN THE ALLOCATION
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3. Called by
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §3. Called by
 # the seabed allocation and policy (te_global_commons_seabed_effects.txt).
 #
 #   te_seabed_un_update_regime      no scope needed. Called once a year at the

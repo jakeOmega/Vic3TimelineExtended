@@ -1,4 +1,4 @@
-"""Demographics phase 3's panel (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §6): the late rows,
+"""Demographics phase 3's panel (docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md §6): the late rows,
 the Longevity sections, the pyramid's Calendar / Biological toggle and their loc, static checks only (the engine draws
 them; docs/testing/demographics-playtest.md has the in-game list)."""
 

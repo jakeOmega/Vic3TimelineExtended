@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — opportunities: script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-opportunities-design.md
 # (v2's commissions, reworked; the script keeps their gm_com_* names).
 # Country scope throughout. Every var: read is guarded: the widget renders these
 # for countries that have never had an opportunity.

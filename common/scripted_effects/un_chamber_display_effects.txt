@@ -2650,7 +2650,7 @@ un_chamber_mission_contributor_at = {
 }
 
 # ============================================================================
-# DELEGATIONS (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md §6)
+# DELEGATIONS (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md §6)
 # ============================================================================
 # How the AI members stand on the resolution in session, as bands rather than
 # numbers, each in its own GUI row (un_chamber_deleg_row_sgui, op = the row):

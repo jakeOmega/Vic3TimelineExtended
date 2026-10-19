@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # ORBITAL DEBRIS AND THE ANTI-SATELLITE STRIKE — script values (Global Commons § 6)
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6.
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 6.
 #
 # STATE. Two global variables, because real debris splits by altitude:
 #   orbital_debris_low    below ~600 km; drag clears it in years

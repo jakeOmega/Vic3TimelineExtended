@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — trophies: scripted GUIs
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §6.
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md §6.
 # gui/gm_trophy_widgets.gui (the journal entry's Trophies and Held Abroad, the
 # state card's Trophies on Display) and the monument rows and card
 # (grand_monuments_widget.gui, te_state_panel_widgets.gui). ROOT is the

@@ -110,7 +110,7 @@ contagion event it still holds from an earlier wave cannot count it a second tim
 
 The entry is every country's from the first weeks of a game, dormant until its financial cycle starts: Stock Exchange and
 an Urban Center of level 5, the test that used to activate the entry
-(`docs/superpowers/specs/2026-10-17-banking-always-on-design.md`).
+(`docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md`).
 
 13. **A new game.** Within two weeks every country's journal holds the entry, and the Banking tab opens for all of them.
     A country without Stock Exchange or a level 5 Urban Center shows the Not Started cell (its hover the two conditions,

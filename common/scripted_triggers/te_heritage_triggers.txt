@@ -7,7 +7,7 @@
 # primary culture's language, and for Hebrew, Sanskrit, Pali and Coptic on the
 # state religion. Shared by language reform (which revival it offers) and the
 # Grand Monuments (which heritage skins a monument may take, spec
-# docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md §1.1), so
+# docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md §1.1), so
 # the two cannot drift apart. test_grand_monument_registry.py pins the list and
 # that extra_law_events.25 calls these.
 

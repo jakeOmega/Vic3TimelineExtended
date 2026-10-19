@@ -1,7 +1,7 @@
 """The internal resettlement registry: every programme in one table, pinned
 against every site that lists programmes by hand.
 
-Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md.
 Adding a programme touches the PM, its loc, the recruitment rule's branch, the
 programme-code switch, the transit-mortality table, the volume counter, the
 politics modifier, the law gates, the Declaration line and the docs. Nothing in

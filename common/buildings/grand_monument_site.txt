@@ -1,7 +1,7 @@
 ﻿#==================================================
 # Grand Monuments: the construction site
 #==================================================
-# Sites spec docs/superpowers/specs/2026-10-18-grand-monument-sites-and-world-wealth-design.md
+# Sites spec docs/superpowers/archive/specs/2026-10-18-grand-monument-sites-and-world-wealth-design.md
 # §3.1. What a player builds and expands: its levels are the monument being
 # built, counted each month into its records (gm_state_count_site_levels,
 # gm_effects.txt). It has no upkeep and no effects. Dedicate (gm_dedicate_sgui)

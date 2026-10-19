@@ -161,7 +161,7 @@ TRADITIONAL_MEANS = 0.4
 MEANS_ACCESS_BASE = 0.3
 
 # ---- Phase 2 step 1: the interfaces -----------------------------------------------------------------------------
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1. The census computes these figures
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1. The census computes these figures
 # at every seed and step and applies none of them until step 2, whose harness fits the numbers (owner, 2026-10-12).
 # Participation (late-game §2.1; #894): people x start(calendar age) x [below the end of the working ages ? 1 : the
 # after-pension share] x capacity(biological age) x the sex's rate.
@@ -215,7 +215,7 @@ DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
                + (MALARIA_CONTROL_TYPE, CHILD_WORK_TYPE))
 
 # ---- Phase 2 step 2: the workforce, pensions and health costs ------------------------------------------------------
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2 and §5. Everything here acts under
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2 and §5. Everything here acts under
 # Full only (te_demog_work_effects.txt). The harness fits the numbers (demographics_harness.py workforce, pensions).
 # The workforce term W = te_demog_wf_target - the define's base (call 4), on a fixed-sign state pair. It moves toward
 # that target by at most WF_RAMP_STEP a census step: the engine's own pull toward a pop's ratio has not been measured
@@ -280,7 +280,7 @@ PENSION_AI_UNEMPLOYMENT = 0.1
 PENSION_AI_UNEMPLOYMENT_LOW = 0.05
 
 # ---- Phase 2 step 4: conscription, the youth bulge and sex balance ----------------------------------------------
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4 and §5. The figures are the census's
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4 and §5. The figures are the census's
 # (Full and Display only); the four state modifiers act under Full only. `demographics_harness.py consequences` checks
 # every band against the model's structures and the saves given.
 # The pool (late-game call 21): men of calendar age POOL_FROM or more and biological age POOL_TO or less, summed in the
@@ -346,7 +346,7 @@ SEX_RADICALS = 0.10            # state_radicals_from_political_movements_mult at
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of
-# its section 7 calls; Birth Spacing's cut at 0.35); plan docs/superpowers/plans/2026-10-11-demographics-late-marriage.md.
+# its section 7 calls; Birth Spacing's cut at 0.35); plan docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md.
 # Two customs, each a share of a state's people (0-1): children per woman x (1 - cut x share) for each, outside the
 # means. Every value is a starting proposal the harness fits (plan Task 6), rounded to neat figures. The short names
 # key the script (te_dg_pr_<P>, te_demog_pr_*_<P>); phase 3 adds Family Limitation to the same machinery.
@@ -533,7 +533,7 @@ MIGRATION_CROWDING_PULL_PER_MULT = 0.1   # the modifier's pull penalty a unit of
 CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls
 CROWDING_INFECTION_MAX = 0.5             # at most +50%, just past ten times the floor density (a guess)
 
-# ---- Causes of Death (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md) ----
+# ---- Causes of Death (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md) ----
 # Each cause's multiplier is the product of these factors, in this order. The generator writes one script value per
 # factor (te_demog_f_<cause>_<factor>) and each te_demog_mult_<cause> as their product; the state subtab's Causes of
 # Death section reads the same values, so the display and the census can't disagree.
@@ -561,7 +561,7 @@ SAFETY_MAX = 0.95
 DEMOG_TYPES = DEMOG_TYPES + tuple(SAFETY_TYPES.values())
 
 # ---- Calibration step 3: the regional mortality gap (owner, 2026-10-12; #894) ----------------------------------------
-# docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md. Owner calls 1-3 approved 2026-10-12.
+# docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md. Owner calls 1-3 approved 2026-10-12.
 # The malaria factor (§2.2, call 2): infection x (1 + the excess) in a state with one of vanilla's malaria traits, the
 # only geographic input that reaches a region needing more deaths (Africa) and nothing that needs fewer. The factor is
 # 1 + the trait's excess x (1 - the state's MALARIA_CONTROL_TYPE, 0 to 1). The trait's level (0 none,
@@ -634,7 +634,7 @@ STARVATION_VALUE_MAX = 1.0  # the define's clamp
 STARVATION_BUCKET = 0.05   # both penalties are read in food-security steps this wide, at each step's middle
 
 # ---- phase 2 step 4: the census sets the engine's births and deaths --------------------------
-# docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2. The engine adds every term
+# docs/superpowers/archive/plans/2026-10-10-demographics-phase2-engine-rates.md §2. The engine adds every term
 # into one (1 + total) per pop, linear from -0.9 (growth probe) to far above +1.0 (the 12x fast run), floored
 # at 0. Owner, 2026-10-10: the poverty term replaces the curve's starving slope below SoL 4, and deaths added
 # on top fall by the model's age pattern (the step's deaths scale).
@@ -648,7 +648,7 @@ ON_TOP_SCALE_MAX = 4.0
 # a famine starts or ends inside the window and lags a one-off by half a window (demographics_model.window_events).
 WINDOW_START_WEIGHT = 0.5
 LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
-# Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth and
+# Owner, 2026-10-11 (docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth and
 # mortality lines on laws, technologies and institutions move to script-only types, one per field and family
 # (demographics_engine_line_types.txt). The mod re-applies both families while the census doesn't set a state's births
 # and deaths (te_demog_lines_refresh); under Full the census models the absorbed family and applies the on-top one.
@@ -800,7 +800,7 @@ BAND_WIDTH = 5
 BANDS = 18          # 0-4 ... 80-84, then 85+
 
 # ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5. Six script-only state types
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5. Six script-only state types
 # (demographics_modifier_types.txt), carried by the measures' country modifiers (te_demog_measure_modifiers.txt) and,
 # for desired fertility, Pro-Natalist Policy. Not in DEMOG_TYPES: apart from that law's line they sit on static
 # modifiers, which load_carriers doesn't walk (demographics_modifiers.measure_lines reads them).
@@ -824,7 +824,7 @@ PRENATAL_SEXING_TECH = "microprocessor"
 PRO_NATALIST_LAW = "law_pro_natalist_subsidies"
 
 # ---- Phase 3: the late game ----------------------------------------------------------------------------------------
-# docs/superpowers/specs/2026-10-11-demographics-late-game-design.md (approved by the owner 2026-10-11, every call in its
+# docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md (approved by the owner 2026-10-11, every call in its
 # §9). Biological age, who gets life extension, Biological Immortality, fertility under the late eras and their display.
 # Everything here is inert before the first ageing carrier (era 10): a state with no carrier and no treated people
 # runs the census exactly as before (test_demographics_golden.py), and outside Full nothing reaches the engine.

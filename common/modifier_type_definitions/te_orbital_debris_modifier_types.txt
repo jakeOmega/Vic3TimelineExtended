@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # ORBITAL DEBRIS — modifier types (Global Commons § 6)
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6.
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 6.
 #
 # country_orbital_debris_removal_add   points of debris a month this country
 #                                      removes: the Space Program's debris

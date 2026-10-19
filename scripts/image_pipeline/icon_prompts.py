@@ -103,7 +103,7 @@ When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
 
-Design, inventory and decisions: docs/superpowers/specs/2026-09-26-icon-pipeline-design.md.
+Design, inventory and decisions: docs/superpowers/archive/specs/2026-09-26-icon-pipeline-design.md.
 
 Usage:
     python3 icon_prompts.py --validate   # registry vs the mod's files; exit 1 on errors

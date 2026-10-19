@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # DIPLOMATIC ACTION: Administer Seabed Claims (seabed claims, phase 2)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md
+# Design: docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-panel-design.md
 # § 5.2; model: scripts/analysis/seabed_model.py § SUBJECTS. An overlord's
 # pact with a direct subject, modelled on vanilla raise_payments without its
 # DLC gate. While it stands the subject's unused seabed claims pass to the

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Late Marriage and Birth Spacing in the harness (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md).
+"""Late Marriage and Birth Spacing in the harness (docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md).
 
 A save's states with what the practices read (their state and strategic regions, people, incorporation and the model's
 inputs, with the walk's women's job share where the save holds one), the drift replay over a run's saves (Task 4), the

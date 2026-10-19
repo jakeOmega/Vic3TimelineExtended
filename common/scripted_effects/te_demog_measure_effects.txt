@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the Family Policy measures (phase 2 step 3a)
-# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3 (how one works), §3.4 (the
+# Spec: docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3 (how one works), §3.4 (the
 # catalogue), §3.6 (AI). A measure is a policy choice within a Family & Reproductive Policy law, switched on and off by
 # its button in the Demographics tab's Family Policy section (te_demog_measure_sguis.txt, te_demog_sec_family). Full
 # only: every button and the AI pulse sit under te_demog_effects_run, which a release sets to always = no, so the

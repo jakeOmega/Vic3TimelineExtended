@@ -581,7 +581,7 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
 
     if key in technology_keys:
         return "TECHNOLOGIES"
-    # Grand Monuments (docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md).
+    # Grand Monuments (docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md).
     # Every loc-bearing key the system adds carries the gm_ prefix: modifiers
     # (some end in _add-like tokens), skin names ("gm_skin_faith_*", which would
     # otherwise match "religion"-style rules), JE lines and tooltips. Tested
@@ -738,7 +738,7 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # longer siblings stay in MISCELLANEOUS.
     if key.startswith("TE_HOMELAND_"):
         return "MISCELLANEOUS"
-    # The nuclear taboo (docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md).
+    # The nuclear taboo (docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md).
     # Every loc-bearing key it adds — static modifiers, the decision, event
     # options, tooltips, the panel's breakdown lines — carries the nd_taboo_
     # prefix. Four-token bases (`nd_taboo_possession_cost`) would otherwise land

@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — phase 2 step 2: the workforce, pensions and health costs
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2 (late-game §2.1, §2.2, §5)
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2 (late-game §2.1, §2.2, §5)
 # ============================================================================
 # Everything here acts under Full only (te_demog_effects_run). Display only shows the figures, and its pension buttons
 # are greyed with the reason; under Display only and Disabled every term here clears at the state's next census step or

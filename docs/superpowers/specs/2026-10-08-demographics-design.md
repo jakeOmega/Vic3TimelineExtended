@@ -6,7 +6,7 @@
 > rounds of questions (Decisions, below). §13 lists what is still open. §14's engine checks were run in game on
 > 2026-10-08; each answer is written into the section that uses it, with the evidence in
 > `docs/testing/demographics-probe-results-2026-10-08.md`.
-> The plan for phases 0 and 1 is `docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md`. Its research
+> The plan for phases 0 and 1 is `docs/superpowers/archive/plans/2026-10-08-demographics-phases-0-1.md`. Its research
 > corrected the places where this draft assumed something the code doesn't have (rule names, map modes, sorted lists,
 > cohort storage, urban population, land tenure and France's start); each is fixed in place.
 > Phase 0 (the model, its harness and these corrections) is built in PR 1 (#828); phase 1 (the census, both panels,
@@ -17,7 +17,7 @@
 > rule 3, §7, §8.2, §8.3, §10 and §13.
 > Phase 2's consequences (workforce, pensions and health costs, the Family Policy measures, conscription, the youth
 > bulge and sex balance) are designed in `2026-10-12-demographics-phase2-consequences-design.md` (draft, 2026-10-12),
-> which amends §7, §8.1 and §8.2; its step 1 is planned in `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`.
+> which amends §7, §8.1 and §8.2; its step 1 is planned in `docs/superpowers/archive/plans/2026-10-12-demographics-phase2-interfaces.md`.
 > Numbers are starting proposals for the calibration harness (§12), not decisions.
 
 ## Context
@@ -328,7 +328,7 @@ means" view of the fertility transition.
 **Age structure.** Births come from the cohorts of women aged 15–49 (§2.1), so the share of women of childbearing age
 moves the birth rate by construction.
 
-**Applied as** (phase 2 step 4; `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`) one births
+**Applied as** (phase 2 step 4; `docs/superpowers/archive/plans/2026-10-10-demographics-phase2-engine-rates.md`) one births
 term per state, refreshed at each census step: the engine gives each pop its curve × max(0, 1 + every term added
 together) (the growth probe, `docs/testing/demographics-growth-probe-results-2026-10-09.md`), so the census's term is
 M = the model's births ÷ the bare curve's − 1 − the births the census absorbs ÷ the bare births, each absorbed term at
@@ -903,7 +903,7 @@ pension law, participation stays at 0.5: people work until they can't.
 These stand in for an age, fertility or survival effect the model now produces. Under Full the census's term M
 cancels them, so nothing is counted twice; they stay on their carriers, so nothing changes outside Full (owner,
 2026-10-10, amending step 4's first build, which took them off). Built in step 4
-(`docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`):
+(`docs/superpowers/archive/plans/2026-10-10-demographics-phase2-engine-rates.md`):
 - the Pill's −10% birth (now a means tier);
 - State-Sponsored Family Planning's −5% birth (Fertility Control carries it);
 - the Ministry of Consumer Protection's flat −1% mortality (now external causes);

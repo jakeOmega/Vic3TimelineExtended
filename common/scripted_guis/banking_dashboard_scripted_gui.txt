@@ -12,7 +12,7 @@
 
 # ---------------------------------------------------------------------------
 # The cycle's two states. Every country holds je_banking_cycle, dormant until
-# its cycle starts (docs/superpowers/specs/2026-10-17-banking-always-on-design.md),
+# its cycle starts (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md),
 # so JournalEntry.IsActive no longer says there are readings to draw. Every
 # part of the panels that reads the cycle asks the first; the dormant state's
 # own pieces (the overview's Not Started cell, the notes over the greyed

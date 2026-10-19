@@ -2,7 +2,7 @@
 #
 # pm_ai_managed_fab cancels its base method's per-level workforce exactly and
 # adds a fixed crew of 1,000 engineers in `unscaled`
-# (docs/superpowers/specs/2026-10-16-ai-managed-flat-staff-design.md).
+# (docs/superpowers/archive/specs/2026-10-16-ai-managed-flat-staff-design.md).
 #
 # ai_managed_flat_staff: is an `unscaled` employment add summed once per
 # building? The first yearly pulse of a country with a fab building of level 5

@@ -1,6 +1,6 @@
 """The light tax code (te_tax_code_rule = te_tax_code_light).
 
-Design: docs/superpowers/specs/2026-10-09-tax-code-light-design.md; schema:
+Design: docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md; schema:
 docs/systems/tax_code_schema.md, "Light code". Structural checks on the
 committed script and property checks on the generator's tables (no game install
 needed):

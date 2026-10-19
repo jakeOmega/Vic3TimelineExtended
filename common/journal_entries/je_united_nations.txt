@@ -3,7 +3,7 @@
 
 	group = je_group_foreign_affairs
 
-	# The UN's panels (docs/superpowers/specs/2026-09-28-un-gui-pass-design.md).
+	# The UN's panels (docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md).
 	# The order lives in gui/journal_entry_widgets/un_layout_widget.gui, which the
 	# Diplomacy panel's UN tab also instances: the dynamic sections above the
 	# button grid, the chart, the record and the explanations below it.

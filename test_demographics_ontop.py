@@ -1,5 +1,5 @@
 """scripts/analysis/demographics_ontop.py and the widened gate: calibration step 3's harness
-(docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md §3; owner calls 1-3, 2026-10-12)."""
+(docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md §3; owner calls 1-3, 2026-10-12)."""
 
 import json
 import sys

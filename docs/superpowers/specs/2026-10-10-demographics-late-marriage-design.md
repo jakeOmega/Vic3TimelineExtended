@@ -2,7 +2,7 @@
 
 > **Status: approved (owner, 2026-10-11).** All nine calls in §7 are approved as recommended, with one change: Birth
 > Spacing's cut starts at 0.35, not 0.34. The harness refits every value jointly (§5.1) and rounds the results to neat
-> figures. Plan: `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`.
+> figures. Plan: `docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md`.
 >
 > **Design draft, 2026-10-10, second round.** It answers the owner call in step 2 of the phase 2 calibration
 > plan (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`, on PR #857): the census's children

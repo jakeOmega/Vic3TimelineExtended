@@ -1,4 +1,4 @@
-"""Demographics phase 1 wiring (docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md).
+"""Demographics phase 1 wiring (docs/superpowers/archive/plans/2026-10-08-demographics-phases-0-1.md).
 
 Static checks on the script: the rule's settings and wrappers, guarded divisions, the
 pulse wiring, the gates around every cohort entry point. Later tasks add tests here.
@@ -61,7 +61,7 @@ DEMOG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt
 CONSEQ_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_consequence_effects.txt"
 CONSEQ_VALUES = ROOT / "common" / "script_values" / "te_demog_consequence_values.txt"
 CONSEQ_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_consequence_modifiers.txt"
-# phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md)
+# phase 3, the late game (docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md)
 LX_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_lx_effects.txt"
 LX_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_lx_generated_effects.txt"
 LX_VALUES = ROOT / "common" / "script_values" / "te_demog_lx_values.txt"
@@ -1549,7 +1549,7 @@ class TestWorkWalk(unittest.TestCase):
 
 
 class TestEngineLineTypes(unittest.TestCase):
-    """Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): every engine birth
+    """Owner, 2026-10-11 (docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): every engine birth
     and mortality line on a law, tech or institution is carried on a script-only type, named like the vanilla field it
     replaces, with vanilla's format and ai_value."""
 
@@ -1639,7 +1639,7 @@ class TestEngineLinesMoved(unittest.TestCase):
 
     def test_no_carrier_applies_an_engine_birth_or_mortality_line(self):
         live = {k: v for k, v in self.lines.items() if abs(v) > 1e-9 and DM.is_engine_rate_field(k[3])}
-        self.assertEqual(live, {}, "move each to its type (docs/superpowers/plans/2026-10-11-...)")
+        self.assertEqual(live, {}, "move each to its type (docs/superpowers/archive/plans/2026-10-11-...)")
 
     def test_each_line_sits_on_its_familys_type_at_its_old_value(self):
         got = DM.engine_lines()
@@ -3687,7 +3687,7 @@ class TestNaturalFertilityScript(unittest.TestCase):
 
 class TestPracticesScript(unittest.TestCase):
     """Late Marriage and Birth Spacing (te_demog_practice_effects.txt and the generated values) against the model:
-    docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Task 8."""
+    docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md, Task 8."""
 
     INP = demographics_model.Inputs(sol=9.0, literacy=0.3, urban_share=0.2, laws=frozenset({"law_no_womens_rights"}))
 
@@ -7032,7 +7032,7 @@ class TestPensionAge(unittest.TestCase):
 
 
 class TestConsequencesScript(unittest.TestCase):
-    """Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4): the four state
+    """Phase 2 step 4 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4): the four state
     modifiers' refresh (te_demog_consequence_effects.txt) against demographics_model, under Full and outside it."""
 
     def _state(self, fam=11000.0, people=100000.0, balance=94.0, youth=(8000.0, 8100.0, 7900.0, 7950.0),

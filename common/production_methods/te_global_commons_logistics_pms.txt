@@ -1,5 +1,5 @@
 ﻿# Extraplanetary Base logistics (Global Commons § 1.2,
-# docs/superpowers/specs/2026-10-16-global-commons-design.md).
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md).
 #
 # Asteroid mining is a launch-cost business: Launch Capacity is 80-86% of building_space_mine's
 # input bill. Era 12's two propulsion tracks each cut it, through two secondary groups

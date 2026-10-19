@@ -1,6 +1,6 @@
 """The Nation tab: its registry, the generated filters and counts, and the
 country panel's filtered modifier list (spec
-docs/superpowers/specs/2026-10-17-national-modifiers-tab-design.md §§ 2-4).
+docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md §§ 2-4).
 
 What the engine would never report:
 

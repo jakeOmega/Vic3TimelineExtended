@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — several monuments in one state: scripted effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-13-multiple-monuments-per-state-design.md.
 #
 # A SECONDARY monument is a script container tagged gm_monument, with no parent
 # (it outlives every country), in the global list gm_monuments. It is a

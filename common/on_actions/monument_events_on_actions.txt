@@ -257,7 +257,7 @@ gm_state_owner_change_on_action = {
 }
 
 # ============================================================================
-# Opportunities (docs/superpowers/specs/2026-10-12-grand-monument-
+# Opportunities (docs/superpowers/archive/specs/2026-10-12-grand-monument-
 # opportunities-design.md): the world pass and the moments it cannot poll
 # ============================================================================
 # Every country, every month: the moment trackers (gm_com_world_monthly,

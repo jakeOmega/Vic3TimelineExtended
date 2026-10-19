@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE MORATORIUM ON DESTRUCTIVE ANTI-SATELLITE TESTS — THE UN'S ANSWER
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §6.5. The
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §6.5. The
 # anti-satellite strike asks whether the striker is a party; a party's strike
 # costs twice the infamy and twice the case strength.
 # ============================================================================

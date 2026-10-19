@@ -2172,7 +2172,7 @@ banking_partial_default_write_off = {
 	}
 }
 
-# 0. Start the financial cycle (docs/superpowers/specs/2026-10-17-banking-always-on-design.md
+# 0. Start the financial cycle (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md
 #    § 1). Every country under the rule holds je_banking_cycle; its cycle starts
 #    here, at Stable with no momentum and no bubble, once te_banking_cycle_unlocked
 #    holds: from the entry's `immediate` (a new game's founders, a released country,

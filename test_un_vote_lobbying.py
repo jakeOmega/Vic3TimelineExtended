@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """UN votes: late AI ballots, visible leans and lobbying
-(docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md).
+(docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md).
 
 The engine checks none of this at load: a casting gate that lost its
 condition, a veto that reads the pledged lean, or a row that passes the wrong

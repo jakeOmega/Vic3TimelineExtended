@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — unique dedications (signatures): scripted triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-16-grand-monument-signatures-design.md.
 # A signature is a parent dedication plus a record, as a law variant is its
 # parent plus a skin. Two flags on the monument:
 #   gm_signature / gm_tr_signature     the effect group: a family (§4.1), a

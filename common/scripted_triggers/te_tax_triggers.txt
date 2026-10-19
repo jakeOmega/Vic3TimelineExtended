@@ -5,7 +5,7 @@
 # pulse, event, effect entry point, GUI root and AI path of the full code (the
 # carrier law, bills, offers, promises, packages, customs) asks
 # te_tax_code_full; customs legislation asks te_tax_customs_on as well. The
-# light code (docs/superpowers/specs/2026-10-09-tax-code-light-design.md,
+# light code (docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md,
 # te_tax_light_effects.txt) asks te_tax_code_light_on. te_tax_code_on is either
 # one: what both settings share (the journal entry, the Budget tab, the greyed
 # tax-level buttons).
