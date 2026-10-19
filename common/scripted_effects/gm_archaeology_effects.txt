@@ -721,9 +721,9 @@ gm_arch_tell_finished = {
 }
 
 # Container scope (scope:gm_tr_moving is this container, var:gm_tr_origin its
-# state). A monument already stands there: the levels go on the building, which
-# records the primary's dedication to put back first (gm_state_tr_add_levels),
-# and this container becomes a monument of its own, retagged, in the
+# state). A monument already stands there: this container becomes a monument
+# of its own with its levels in its records (sites spec 2026-10-18 §3.3: the
+# building is not rebuilt), retagged, in the
 # state's and the owner's lists, as a landmark seeded beside another is
 # (gm_seed_landmark_beside, gm_monument_effects.txt).
 gm_arch_stand_beside = {
@@ -733,7 +733,6 @@ gm_arch_stand_beside = {
 	remove_tag = gm_site
 	add_tag = gm_monument
 	var:gm_tr_origin = {
-		gm_state_tr_add_levels = yes
 		add_to_variable_list = { name = gm_monuments_here target = scope:gm_tr_moving }
 		gm_tr_count_add = { VAR = gm_mon_here_count ADD = 1 }
 		owner = {

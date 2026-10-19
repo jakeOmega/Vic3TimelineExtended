@@ -19,18 +19,18 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 	desc = te_debug_monuments.1.desc
 	flavor = te_debug_monuments.1.flavor
 
-	# Raise a level-20 monument in the capital and hold the ceremony.
+	# Raise a 20-level construction site in the capital (sites spec
+	# 2026-10-18): its Dedicate button holds the ceremony.
 	option = {
 		name = te_debug_monuments.1.a
 		default_option = yes
 		capital = {
 			if = {
 				limit = {
-					NOT = { has_building = building_grand_monument }
+					NOT = { has_building = building_grand_monument_site }
 				}
-				create_building = { building = building_grand_monument level = 20 }
+				create_building = { building = building_grand_monument_site level = 20 }
 			}
-			gm_state_start_ceremony = yes
 		}
 	}
 
@@ -248,14 +248,10 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-12: console-only test event (`event 
 # ============================================================================
 # RE-OPEN A DEDICATION — console test event: `event te_debug_monuments.3`
 # ============================================================================
-# Each option re-opens one of our three tallest monuments: its records go and
-# the ceremony asks again. For a monument that kept a sibling's dedication
-# (the engine's copy, grand_monument_pms.txt) before
-# gm_state_reset_copied_dedication existed. The records are cleared out of
-# the tooltip: previewing gm_clear_state's remove_modifier lines logged an
-# error for every modifier the monument lacks. Option a of an earlier version
-# answered whether activate_production_method passes the dedication lock (it
-# does, 2026-10-08).
+# Each option asks to rededicate one of our three tallest monuments (sites spec
+# 2026-10-18 §5: the answer pays and halves, Keep it as it is changes nothing).
+# Option a of an earlier version answered whether activate_production_method
+# passes the dedication lock (it does, 2026-10-08).
 te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event te_debug_monuments.3`); never fired by script on purpose
 	type = country_event
 	placement = ROOT
@@ -298,8 +294,7 @@ te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event 
 		default_option = yes
 		trigger = { exists = scope:gm_dbg_m1 }
 		scope:gm_dbg_m1 = {
-			hidden_effect = { gm_clear_state = { KEEP_LANDMARK = no } }
-			gm_state_start_ceremony = yes
+			gm_state_rededicate = yes
 		}
 		trigger_event = { id = monument_events.20 }
 	}
@@ -308,8 +303,7 @@ te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event 
 		name = te_debug_monuments.3.b
 		trigger = { exists = scope:gm_dbg_m2 }
 		scope:gm_dbg_m2 = {
-			hidden_effect = { gm_clear_state = { KEEP_LANDMARK = no } }
-			gm_state_start_ceremony = yes
+			gm_state_rededicate = yes
 		}
 		trigger_event = { id = monument_events.20 }
 	}
@@ -318,8 +312,7 @@ te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event 
 		name = te_debug_monuments.3.c
 		trigger = { exists = scope:gm_dbg_m3 }
 		scope:gm_dbg_m3 = {
-			hidden_effect = { gm_clear_state = { KEEP_LANDMARK = no } }
-			gm_state_start_ceremony = yes
+			gm_state_rededicate = yes
 		}
 		trigger_event = { id = monument_events.20 }
 	}

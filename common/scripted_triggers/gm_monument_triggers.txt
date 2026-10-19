@@ -445,7 +445,14 @@ gm_tr_rejoins_secondary = {
 # the trophy is not a piece of it: it comes home as a monument of its own (the
 # Luxor Obelisk beside the Obelisks of Karnak).
 gm_tr_stands_apart = {
-	var:gm_tr_origin ?= { has_building = building_grand_monument }
+	# A building raised there today (gm_rebuilding) stands, whether or not it
+	# reads back yet (sites spec 2026-10-18 §3.3).
+	var:gm_tr_origin ?= {
+		OR = {
+			has_building = building_grand_monument
+			has_variable = gm_rebuilding
+		}
+	}
 	NOT = { gm_tr_rejoins_primary = yes }
 	NOT = { gm_tr_rejoins_secondary = yes }
 }

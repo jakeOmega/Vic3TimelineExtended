@@ -1725,7 +1725,8 @@ class DebugTests(unittest.TestCase):
         self.assertIn("namespace = te_debug_monuments", text)
         self.assertRegex(text, r"(?m)^te_debug_monuments\.1 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
         body = squash(strip_comments(raw_block_at(text, r"(?m)^te_debug_monuments\.1\s*=\s*\{")))
-        for s in ("gm_state_start_ceremony = yes", "gm_country_monthly = yes", "gm_state_contest = yes",
+        for s in ("create_building = { building = building_grand_monument_site level = 20 }",
+                  "gm_country_monthly = yes", "gm_state_contest = yes",
                   "gm_state_vanity_backlash = yes", "gm_debug_log = yes"):
             self.assertIn(s, body)
         # Option c (Minor 1): gm_country_refresh would re-run gm_check_contests
@@ -2997,35 +2998,6 @@ class CopiedDedicationTests(unittest.TestCase):
         self.e = read(EFFECTS)
         self.t = read(TRIGGERS)
 
-    def test_a_copy_is_a_dedication_nothing_recorded(self):
-        body = squash(block(self.t, "gm_state_has_copied_dedication"))
-        self.assertEqual(body, "gm_state_is_dedicated = yes NOT = { has_variable = gm_seen } "
-                               "NOT = { has_variable = gm_ceremony_level } "
-                               "NOT = { has_variable = gm_ceremony_pending }")
-        # Since the Dedicate button (owner, 2026-10-18) no ceremony replaces
-        # the copy: it goes back to Undedicated through the restore path, which
-        # reads as undedicated at once, and script has seen the monument.
-        reset = squash(strip_comments(block(self.e, "gm_state_reset_copied_dedication")))
-        self.assertEqual(reset, "if = { limit = { gm_system_enabled = yes } if = { limit = { "
-                                "gm_state_has_copied_dedication = yes } gm_state_return_to_undedicated = yes } "
-                                "gm_state_mark_awaiting = yes }")
-        self.assertNotIn("activate_production_method", reset)
-        mark = squash(block(self.e, "gm_state_mark_awaiting"))
-        self.assertEqual(mark, "if = { limit = { NOT = { has_variable = gm_seen } "
-                               "NOT = { has_variable = gm_ceremony_level } } "
-                               "set_variable = { name = gm_ceremony_level value = 0 } }")
-
-    def test_reset_runs_before_first_sight_and_in_the_level_hook(self):
-        refresh = squash(block(self.e, "gm_country_refresh"))
-        order = ["set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }",
-                 "gm_state_reset_copied_dedication = yes", "gm_state_first_sight = yes",
-                 "gm_state_offer_missed_ceremony = yes"]
-        positions = [refresh.find(x) for x in order]
-        self.assertNotIn(-1, positions, dict(zip(order, positions)))
-        self.assertEqual(positions, sorted(positions))
-        ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
-        self.assertIn("gm_state_reset_copied_dedication = yes", ev1)
-
     def test_the_answer_is_the_one_switch(self):
         self.assertNotIn("activate_production_method", squash(block(self.e, "gm_state_start_ceremony")))
         ev2 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{")))
@@ -3066,7 +3038,7 @@ class CopiedDedicationTests(unittest.TestCase):
         for n, o in ((1, "a"), (2, "b"), (3, "c")):
             self.assertIn(f"name = te_debug_monuments.3.{o} ", ev3)
             self.assertIn(f"trigger = {{ exists = scope:gm_dbg_m{n} }} scope:gm_dbg_m{n} = {{ "
-                          f"hidden_effect = {{ gm_clear_state = {{ KEEP_LANDMARK = no }} }} gm_state_start_ceremony = yes }}", ev3)
+                          f"gm_state_rededicate = yes }}", ev3)
         # The re-open options are .3's alone (#817); .4 is the picture sweep (2026-10-11).
         ev4 = raw_block_at(text, r"(?m)^te_debug_monuments\.4\s*=\s*\{")
         self.assertNotIn("gm_clear_state", squash(strip_comments(ev4 or "")))
@@ -3642,7 +3614,8 @@ class LandmarkTests(unittest.TestCase):
         body = squash(block(self.e, "gm_seed_landmark"))
         self.assertIn("limit = { s:$STATE$.region_state:$TAG$ ?= { NOT = { has_building = building_grand_monument } } }",
                       body, "an owner that proves wrong, or a monument already there, places nothing")
-        self.assertIn("create_building = { building = building_grand_monument level = $LEVEL$ "
+        # At level 1, its size in its records (sites spec 2026-10-18 §3.5).
+        self.assertIn("create_building = { building = building_grand_monument level = 1 "
                       "activate_production_methods = { pm_monument_$DEDICATION$ } }", body)
         for record in ("name = gm_landmark value = flag:$KEY$", "name = gm_skin value = flag:landmark_$KEY$",
                        "name = gm_form value = flag:$FORM$", "name = gm_namesake value = flag:landmark",
@@ -3816,21 +3789,6 @@ class LandmarkPictureTests(unittest.TestCase):
 class LandmarkTechTests(unittest.TestCase):
     """Phase 4 §6: three dedications' technologies leave the production method."""
 
-    def test_first_sight_sends_an_untaught_pick_to_the_ceremony(self):
-        t = squash(block(read(TRIGGERS), "gm_state_lacks_dedication_tech"))
-        self.assertTrue(t.startswith("gm_state_is_landmark = no OR = {"), "a landmark is exempt")
-        moved = [k for k in TECH_GATES if k not in PM_TECH_GATES]
-        self.assertEqual(moved, ["artistic", "naturalist", "scientific"])
-        for k in moved:
-            self.assertIn(f"AND = {{ gm_state_has_pm = {{ PM = pm_monument_{k} }} "
-                          f"owner = {{ NOT = {{ has_technology_researched = {TECH_GATES[k]} }} }} }}", t, k)
-        # Since the Dedicate button (2026-10-18) the pick goes back to
-        # Undedicated, and the button's ceremony asks for the technology.
-        first = squash(block(read(EFFECTS), "gm_state_first_sight"))
-        self.assertTrue(first.startswith(
-            "if = { limit = { gm_state_lacks_dedication_tech = yes NOT = { has_variable = gm_seen } "
-            "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } } "
-            "gm_state_return_to_undedicated = yes } else_if = { limit = { gm_state_is_dedicated = yes"), first)
 
 
 class LandmarkLineTests(unittest.TestCase):
@@ -3893,11 +3851,13 @@ class LandmarkReviewFixTests(unittest.TestCase):
         monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
         # (A revolt's piece takes a monument whose building merged into it
         # first, SplitPieceTests.)
+        # (A building lost with its records standing is put back, LostBuildingTests.)
         self.assertIn("else = { if = { limit = { OR = { has_variable = gm_seen gm_state_is_landmark = yes } } "
-                      "if = { limit = { gm_state_whole_merged_into_piece = yes } var:gm_split_piece = { "
+                      "if = { limit = { gm_state_lost_building = yes } trigger_event = { id = monument_events.29 } } "
+                      "else = { if = { limit = { gm_state_whole_merged_into_piece = yes } var:gm_split_piece = { "
                       "gm_state_piece_takes_whole = yes } } "
                       "else_if = { limit = { gm_state_is_contested = yes NOT = { has_variable = gm_carried_off } } "
-                      "gm_state_record_teardown = yes } gm_clear_state = { KEEP_LANDMARK = no } }", monthly)
+                      "gm_state_record_teardown = yes } gm_clear_state = { KEEP_LANDMARK = no } } }", monthly)
 
     def test_the_seed_writes_its_records_before_the_building(self):
         # I3: if create_building fires on_building_built at once, monument_events.1
@@ -4026,13 +3986,6 @@ class MultiMonumentLevelTests(unittest.TestCase):
             self.assertNotIn("name = gm_grandeur value = gm_state_grandeur", text, rel)
             self.assertNotIn("name = gm_ceremony_level value = gm_state_grandeur", text, rel)
 
-    def test_a_piece_taken_or_a_rededication_keeps_the_secondaries(self):
-        piece = squash(block(self.tr, "gm_state_tr_remove_piece"))
-        self.assertIn("set_variable = { name = gm_rebuild_level value = { value = var:gm_tr_take_left "
-                      "add = gm_state_secondary_levels max = 200 } }", piece)
-        # Rededicate halves the primary's records only (gm_state_apply_rededicate).
-        self.assertNotIn("gm_state_secondary", squash(block(self.e, "gm_state_apply_rededicate")))
-
     def test_the_gift_lands_on_the_primarys_age(self):
         gift = squash(block(read("common/scripted_effects/gm_commission_effects.txt"), "gm_state_gift_grandeur"))
         self.assertIn("gm_state_add_age = { AGE = gm_com_gift }", gift)
@@ -4041,10 +3994,11 @@ class MultiMonumentLevelTests(unittest.TestCase):
         for name, body in (("gm_state_tear_down", block(self.e, "gm_state_tear_down")),
                            ("gm_state_tr_remove_whole", block(self.tr, "gm_state_tr_remove_whole"))):
             body = squash(body)
-            self.assertIn("if = { limit = { gm_state_has_secondary = yes } gm_state_promote_secondary = yes }",
-                          body, name)
-            self.assertLess(body.find("remove_building = building_grand_monument"),
-                            body.find("gm_state_promote_secondary = yes"), name)
+            # The building stays for the monument that rises (NoRebuildTests).
+            self.assertIn("if = { limit = { gm_state_has_secondary = yes } gm_state_promote_secondary = yes } "
+                          "else = {", body, name)
+            self.assertLess(body.find("gm_state_promote_secondary = yes"),
+                            body.find("remove_building = building_grand_monument"), name)
 
     def test_promotion_builds_the_largest_at_all_that_remains(self):
         body = squash(block(read(MON_EFFECTS), "gm_state_promote_secondary"))
@@ -4053,9 +4007,7 @@ class MultiMonumentLevelTests(unittest.TestCase):
                                         "remove_variable = gm_promote_click"))
         self.assertIn("ordered_in_list = { variable = gm_monuments_here order_by = gm_mon_grandeur position = 0 "
                       "check_range_bounds = no save_scope_as = gm_mon_promoted }", body)
-        # The level is read before the promoted one leaves the list.
-        self.assertIn("name = gm_rebuild_level value = { value = gm_state_secondary_levels max = 200 }", body)
-        self.assertLess(body.find("gm_rebuild_level value"), body.find("remove_list_variable = { name = gm_monuments_here"))
+        self.assertNotIn("gm_rebuild_level", body)
         self.assertIn("remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_promoted }", body)
         self.assertLess(body.find("remove_list_global_variable"), body.find("destroy_container = yes"))
         # It is rebuilt as a return with no building is: its records onto the state.
@@ -4070,7 +4022,8 @@ class MultiMonumentLevelTests(unittest.TestCase):
 
     def test_a_return_adds_levels_where_a_building_stands_and_rebuilds_where_none(self):
         body = squash(block(self.tr, "gm_state_tr_receive"))
-        self.assertIn("if = { limit = { has_building = building_grand_monument } gm_state_tr_add_levels = yes ", body)
+        self.assertIn("if = { limit = { has_building = building_grand_monument } ", body)
+        self.assertNotIn("gm_state_tr_add_levels", body)
         self.assertIn("else = { gm_state_tr_rebuild_from_moving = yes }", body)
         self.assertTrue(body.endswith("owner = { trigger_event = { id = monument_events.20 } }"))
 
@@ -4179,26 +4132,6 @@ class ReviewFixes20261016Tests(unittest.TestCase):
     ARCH = "common/scripted_effects/gm_archaeology_effects.txt"
     COM = "common/scripted_effects/gm_commission_effects.txt"
 
-    def test_a_second_return_the_same_day_waits_for_the_pass(self):
-        # Finding 1: whether a rebuilt building reads back later in the same
-        # effect is unread, so a return to a state rebuilt today is queued.
-        home = squash(strip_comments(block(read(self.TR), "gm_tr_return_home")))
-        self.assertIn("if = { limit = { exists = scope:gm_tr_receiver var:gm_tr_origin ?= { "
-                      "has_variable = gm_rebuilding } } set_variable = gm_tr_return_queued", home)
-        self.assertIn("else_if = { limit = { exists = scope:gm_tr_receiver } "
-                      "gm_remove_state_var = { VAR = gm_tr_return_queued } "
-                      "gm_remove_state_var = { VAR = gm_tr_return_relations }", home)
-        monthly = squash(strip_comments(block(read(self.TR), "gm_trophy_monthly")))
-        self.assertIn("limit = { has_variable = gm_tr_return_queued } add_to_temporary_list = gm_tr_queued_home", monthly)
-        self.assertIn("if = { limit = { has_variable = gm_tr_return_relations } "
-                      "gm_tr_return_home = { RELATIONS = yes } } else = { gm_tr_return_home = { RELATIONS = no } }",
-                      monthly)
-        # A queued trophy makes no AI decision of its own meanwhile.
-        self.assertIn("limit = { NOT = { has_variable = gm_tr_return_queued } } gm_tr_monthly_one = yes", monthly)
-        # Every rebuild a return takes marks the state for the day.
-        for name in ("gm_state_tr_add_levels", "gm_state_tr_rebuild_from_moving"):
-            self.assertIn("set_variable = { name = gm_rebuilding days = 1 }", squash(block(read(self.TR), name)), name)
-
     def test_a_dig_in_a_state_rebuilt_today_waits_a_month(self):
         finish = squash(strip_comments(block(read(self.ARCH), "gm_arch_finish")))
         # The terms (#965's partage) wait with it, so a piece is shipped once.
@@ -4215,19 +4148,6 @@ class ReviewFixes20261016Tests(unittest.TestCase):
         # The player's offer names the primary: only while it can go.
         self.assertIn("else_if = { limit = { gm_state_tr_takeable = yes NOT = { has_variable = gm_tr_offered_to", monthly)
 
-    def test_an_undedicated_monument_keeps_its_method_through_a_rebuild(self):
-        # Finding 3: the engine's copy would otherwise make it dedicated.
-        mark = squash(block(read(self.COM), "gm_state_mark_restore_pm"))
-        self.assertTrue(mark.startswith("gm_state_mark_restore_pm_one = { KEY = undedicated }"), mark)
-        restore = squash(block(read(self.COM), "gm_state_restore_dedication"))
-        self.assertIn("gm_state_restore_dedication_one = { KEY = undedicated }", restore)
-        dedicated = squash(block(read(TRIGGERS), "gm_state_is_dedicated"))
-        self.assertIn("NOT = { AND = { has_variable = gm_restore_pm var:gm_restore_pm = flag:undedicated } }",
-                      dedicated)
-        shrink = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_tr_shrink_by")))
-        self.assertIn("limit = { NOT = { has_variable = gm_restore_pm } "
-                      "NOT = { has_variable = gm_ceremony_pending } } gm_state_mark_restore_pm = yes", shrink)
-
     def test_the_ceremonys_answer_clears_a_restore(self):
         # Finding 4.
         for name in ("gm_state_dedicate", "gm_state_undedicate"):
@@ -4236,11 +4156,6 @@ class ReviewFixes20261016Tests(unittest.TestCase):
     def test_the_primary_row_shows_its_own_grandeur(self):
         # Finding 5.
         self.assertIn("ScriptValue('gm_state_primary_grandeur')", loc()["gm_row_detail"])
-
-    def test_a_rebuild_with_no_level_given_keeps_the_secondaries(self):
-        # Finding 6.
-        body = squash(block(read(self.TR), "gm_state_tr_rebuild_from_moving"))
-        self.assertIn("value = scope:gm_tr_moving.var:gm_tr_levels add = gm_state_secondary_levels max = 200", body)
 
     def test_a_change_of_owner_lists_the_secondaries_again(self):
         # Finding 7.
@@ -4323,22 +4238,6 @@ class LevelsApartTests(unittest.TestCase):
                         or (name == "gm_state_level" and rel == VALUES):
                     found.add((rel, name))
         self.assertEqual(found - allowed, set())
-
-    def test_rebuilds_read_levels(self):
-        sites = (
-            (self.TR, "gm_state_tr_add_levels"),
-            (self.TR, "gm_state_tr_remove_piece"),
-            (self.TR, "gm_state_tr_rebuild_from_moving"),
-            (MON_EFFECTS, "gm_state_tr_shrink_by"),
-            (MON_EFFECTS, "gm_state_promote_secondary"),
-        )
-        for path, name in sites:
-            body = squash(strip_comments(block(read(path), name)))
-            start = body.find("name = gm_rebuild_level")
-            self.assertNotEqual(start, -1, name)
-            level = body[start:body.find("}", body.find("value = {", start)) + 1]
-            self.assertNotRegex(level, r"gm_state_(primary_|secondary_)?grandeur", name)
-            self.assertRegex(level, r"gm_state_(level|primary_levels|secondary_levels)\b", name)
 
     def test_shares_cost_and_ceremony_read_levels(self):
         trv = read(self.TR_VALUES)
@@ -4523,33 +4422,6 @@ class FreezeTests(unittest.TestCase):
 
     TR = "common/scripted_effects/gm_trophy_effects.txt"
 
-    def test_the_freeze_waits_for_the_construction(self):
-        body = squash(strip_comments(block(read(EFFECTS), "gm_state_record_frozen_levels")))
-        for s in ("gm_state_is_dedicated = yes", "has_variable = gm_seen", "NOT = { has_variable = gm_levels }",
-                  "NOT = { has_variable = gm_restore_pm }", "NOT = { has_variable = gm_ceremony_pending }",
-                  "b:building_grand_monument ?= { is_under_construction = no }"):
-            self.assertIn(s, body)
-        self.assertIn("set_variable = { name = gm_levels value = gm_state_primary_levels }", body)
-        clear = squash(block(read(EFFECTS), "gm_clear_state"))
-        self.assertIn("gm_remove_state_var = { VAR = gm_levels }", clear)
-        self.assertIn("gm_remove_state_var = { VAR = gm_newcomer }", clear)
-
-    def test_new_levels_are_read_only_on_a_frozen_monument(self):
-        new = squash(block(read(TRIGGERS), "gm_state_has_new_levels"))
-        for s in ("gm_state_is_dedicated = yes", "has_variable = gm_seen", "has_variable = gm_levels",
-                  "gm_state_built_levels > var:gm_levels", "NOT = { has_variable = gm_restore_pm }",
-                  "NOT = { has_variable = gm_rebuilding }", "NOT = { has_variable = gm_ceremony_pending }"):
-            self.assertIn(s, new)
-
-    def test_founding_beside_demotes_then_asks(self):
-        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_found_beside")))
-        order = ["set_variable = { name = gm_demote_levels value = var:gm_levels }", "gm_state_demote_primary = yes",
-                 "set_variable = gm_newcomer", "gm_state_return_to_undedicated = yes",
-                 "gm_state_start_ceremony = yes"]
-        positions = [body.find(x) for x in order]
-        self.assertNotIn(-1, positions, dict(zip(order, positions)))
-        self.assertEqual(positions, sorted(positions))
-
     def test_demotion_keeps_every_record(self):
         body = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_demote_primary")))
         self.assertIn("create_container = { tags = { gm_monument }", body)
@@ -4567,25 +4439,19 @@ class FreezeTests(unittest.TestCase):
 
     def test_the_refresh_only_asks_the_hidden_event(self):
         refresh = squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
-        for s in ("create_container", "destroy_container", "remove_building", "gm_state_found_beside"):
+        for s in ("create_container", "destroy_container", "remove_building", "create_building"):
             self.assertNotIn(s, refresh)
-        self.assertIn("gm_state_record_frozen_levels = yes", refresh)
-        self.assertIn("if = { limit = { gm_state_has_new_levels = yes } trigger_event = { id = monument_events.29 } }",
+        self.assertIn("if = { limit = { gm_state_newcomer_settled = yes } trigger_event = { id = monument_events.29 } }",
                       refresh)
         ev29 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.29\s*=\s*\{")))
         self.assertIn("type = state_event hidden = yes", ev29)
-        self.assertIn("if = { limit = { gm_state_has_new_levels = yes } gm_state_found_beside = yes }", ev29)
-        ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
-        self.assertIn("if = { limit = { gm_state_has_new_levels = yes } gm_state_found_beside = yes }", ev1)
-        self.assertIn("gm_state_record_frozen_levels = yes", ev1)
+        self.assertIn("limit = { gm_state_newcomer_settled = yes } gm_state_settle_newcomer = yes", ev29)
 
     def test_script_keeps_the_frozen_levels(self):
         receive = squash(strip_comments(block(read(self.TR), "gm_state_tr_receive")))
-        self.assertIn("if = { limit = { has_variable = gm_levels } change_variable = { name = gm_levels "
-                      "add = scope:gm_tr_moving.var:gm_tr_levels } }", receive)
+        self.assertIn("change_variable = { name = gm_levels add = scope:gm_tr_moving.var:gm_tr_levels }", receive)
         piece = squash(strip_comments(block(read(self.TR), "gm_state_tr_remove_piece")))
-        self.assertIn("if = { limit = { has_variable = gm_levels } set_variable = { name = gm_levels "
-                      "value = var:gm_tr_take_left } }", piece)
+        self.assertIn("set_variable = { name = gm_levels value = var:gm_tr_take_left }", piece)
         rebuild = squash(block(read(self.TR), "gm_state_tr_take_records_from_moving"))
         self.assertIn("set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }", rebuild)
 
@@ -4746,10 +4612,9 @@ class SecondaryContestTests(unittest.TestCase):
         self.assertIn("type = state_event hidden = yes", ev30)
         self.assertIn("gm_state_run_mon_orders = yes", ev30)
         run = squash(strip_comments(block(self.m, "gm_state_run_mon_orders")))
-        # A state rebuilt today waits a day; every tear-down is one shrink.
-        self.assertIn("if = { limit = { has_variable = gm_rebuilding } trigger_event = { id = monument_events.30 days = 1 } }",
-                      run)
-        self.assertEqual(run.count("gm_state_tr_shrink_by = yes"), 1)
+        # No rebuild, no wait (sites spec 2026-10-18 §3.3): every tear-down at once.
+        self.assertNotIn("gm_rebuilding", run)
+        self.assertNotIn("shrink", run)
         self.assertIn("add_to_temporary_list = gm_mon_tearing", run)
         self.assertIn("gm_state_swap_primary = yes gm_state_rededicate = yes", run)
 
@@ -4939,23 +4804,6 @@ class AnniversaryAgeTests(unittest.TestCase):
             self.assertIn("the monument standing beside", L[f"monument_events.{n}.d_beside"], n)
 
 
-class RebuildGateTests(unittest.TestCase):
-    """Ageing rework (spec 2026-10-16 §8): create_building may check
-    can_build_government (unverified), so the expansion gate stands open while
-    script rebuilds a monument, and a self-check reads the rebuilt level."""
-
-    def test_the_rebuild_self_check(self):
-        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_rebuild_self_check")))
-        self.assertIn("TE_SELF_CHECK OK monument_rebuild_ungated", body)
-        self.assertIn("TE_SELF_CHECK BROKEN monument_rebuild_ungated", body)
-        self.assertIn("NOT = { has_global_variable = gm_rebuild_self_checked }", body)
-        self.assertIn("gm_state_level >= var:gm_rebuild_asked", body)
-        self.assertNotIn("GetName", body)
-        self.assertTrue(squash(block(read(EFFECTS), "gm_state_monthly")).startswith(
-            "gm_state_count_site_levels = yes gm_remove_local_modifiers = yes gm_state_restore_dedication = yes "
-            "gm_monument_rebuild_self_check = yes"))
-
-
 class FinalReviewFixTests(unittest.TestCase):
     """The whole-branch review of the ageing rework (2026-10-16)."""
 
@@ -4972,10 +4820,6 @@ class FinalReviewFixTests(unittest.TestCase):
         for key in ("gm_tr_row_site_value_tt", "gm_tr_row_value_tt", "gm_mon_take_tt"):
             self.assertNotIn("half the levels", L[key], key)
             self.assertNotIn("half its levels", L[key], key)
-
-    def test_the_rebuild_check_allows_levels_built_since(self):
-        body = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_rebuild_self_check")))
-        self.assertIn("gm_state_level >= var:gm_rebuild_asked", body)
 
     def test_a_stale_order_is_run_again(self):
         monthly = squash(strip_comments(block(read(MON_EFFECTS), "gm_monument_monthly")))
@@ -5003,7 +4847,6 @@ class FinalReviewFixTests(unittest.TestCase):
         promote = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_promote_secondary")))
         self.assertIn("gm_state_pull_down_ordered = yes", promote)
         self.assertLess(promote.index("gm_state_pull_down_ordered = yes"), promote.index("ordered_in_list"))
-        self.assertLess(promote.index("gm_state_pull_down_ordered = yes"), promote.index("name = gm_rebuild_level"))
         pull = squash(strip_comments(block(read(MON_EFFECTS), "gm_state_pull_down_ordered")))
         # The filter gm_state_run_mon_orders keeps an order by.
         for cond in ("var:gm_mon_order = flag:tear_down", "gm_mon_is_contested = yes",
@@ -5356,15 +5199,9 @@ class MergeShadowTests(unittest.TestCase):
         adopt = "if = { limit = { gm_state_merge_pending = yes } gm_state_adopt_orphans = yes }"
         for n in (1, 29):
             ev = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.%d\s*=\s*\{" % n)))
-            self.assertIn(adopt, ev, n)
-            guarded = ev[ev.find("if = { limit = { gm_state_merge_pending = no }"):]
-            self.assertTrue(guarded, n)
-            self.assertLess(ev.find(adopt), ev.find("if = { limit = { gm_state_merge_pending = no }"), n)
-            self.assertIn("gm_state_found_beside = yes", guarded, n)
-        ev1 = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.1\s*=\s*\{")))
-        guarded = ev1[ev1.find("if = { limit = { gm_state_merge_pending = no }"):]
-        for s in ("gm_state_record_frozen_levels = yes", "gm_state_reset_copied_dedication = yes"):
-            self.assertIn(s, guarded)
+            self.assertIn("limit = { gm_state_merge_pending = yes } gm_state_adopt_orphans = yes }", ev, n)
+            self.assertLess(ev.find("limit = { gm_state_merge_pending = yes } gm_state_adopt_orphans = yes }"),
+                            ev.find("if = { limit = { gm_state_merge_pending = no }"), n)
         # The refresh only asks the hidden event, and reads nothing as a copy, a
         # first sight or new levels meanwhile.
         refresh = squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
@@ -5373,9 +5210,8 @@ class MergeShadowTests(unittest.TestCase):
                "gm_state_split_piece_gone = yes } } trigger_event = { id = monument_events.29 } } else = {")
         self.assertIn(ask, refresh)
         rest = refresh[refresh.find(ask):]
-        for s in ("gm_state_reset_copied_dedication = yes", "gm_state_first_sight = yes",
-                  "gm_state_name_if_unnamed = yes", "gm_state_offer_missed_ceremony = yes",
-                  "gm_state_record_frozen_levels = yes", "gm_state_has_new_levels = yes"):
+        for s in ("gm_state_first_sight = yes", "gm_state_name_if_unnamed = yes",
+                  "gm_state_offer_missed_ceremony = yes"):
             self.assertIn(s, rest)
         # A change of owner adopts first, and does not record a building it waits on.
         hands = squash(strip_comments(block(read(EFFECTS), "gm_state_changed_hands")))
@@ -5491,26 +5327,22 @@ class SplitPieceTests(unittest.TestCase):
                              "gm_state_split_piece_gone = yes } } trigger_event = { id = monument_events.29 }")
         self.assertTrue(0 < merge < split, (merge, split))
         rest = refresh[split:]
-        for s in ("gm_state_reset_copied_dedication = yes", "gm_state_first_sight = yes",
-                  "gm_state_offer_missed_ceremony = yes", "gm_state_has_new_levels = yes"):
+        for s in ("gm_state_first_sight = yes", "gm_state_offer_missed_ceremony = yes"):
             self.assertGreater(rest.find(s), rest.find("else = {"), s)
         ev29 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.29\s*=\s*\{")))
-        order = ["if = { limit = { gm_state_merge_pending = yes } gm_state_adopt_orphans = yes }",
+        order = ["limit = { gm_state_merge_pending = yes } gm_state_adopt_orphans = yes }",
                  "limit = { gm_state_split_pending = yes } gm_state_take_split_identity = yes",
                  "limit = { gm_state_split_piece_gone = yes } gm_state_split_piece_home = yes",
-                 "limit = { gm_state_piece_whole_gone = yes } gm_state_piece_takes_whole = yes",
-                 "limit = { gm_state_has_new_levels = yes } gm_state_found_beside = yes"]
+                 "limit = { gm_state_piece_whole_gone = yes } gm_state_piece_takes_whole = yes"]
         positions = [ev29.find(s) for s in order]
         self.assertNotIn(-1, positions, dict(zip(order, positions)))
         self.assertEqual(positions, sorted(positions))
         ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
-        self.assertIn("if = { limit = { gm_state_piece_whole_gone = yes } gm_state_piece_takes_whole = yes } "
-                      "else_if = { limit = { gm_state_has_new_levels = yes } gm_state_found_beside = yes }", ev1)
+        self.assertIn("if = { limit = { gm_state_piece_whole_gone = yes } gm_state_piece_takes_whole = yes }", ev1)
         # A change of owner records no piece (the refresh it sends settles it).
         hands = squash(strip_comments(block(self.e, "gm_state_changed_hands")))
         self.assertIn("gm_state_split_pending = no } set_variable = gm_seen", hands)
         # A piece founds nothing beside: the levels a merge brings it are its monument's.
-        self.assertIn("NOT = { has_variable = gm_piece_of }", self.body("gm_state_has_new_levels", read(TRIGGERS)))
 
     # ---- the identity -------------------------------------------------------------------
     def test_the_piece_takes_its_monuments_records_from_its_shadow_as_a_trophy_does(self):
@@ -6829,6 +6661,127 @@ class RededicateTests(unittest.TestCase):
             self.assertNotIn(s, body)
 
 
+class NoRebuildTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.3: a finished monument's size is its records;
+    nothing rebuilds its building. The split pieces and the one-off repair
+    (Task 7) are the last to use gm_state_tr_add_levels."""
+
+    GM_FILES = ("common/scripted_effects/gm_*.txt", "common/scripted_triggers/*monument*.txt",
+                "common/scripted_triggers/gm_*.txt", "common/script_values/gm_*.txt", "events/monument*.txt")
+
+    # The split pieces and the one-off repair still rebuild, through
+    # gm_state_tr_add_levels; Task 7 deletes them all.
+    UNTIL_TASK_7 = {"gm_state_tr_add_levels", "gm_sh_rejoin", "gm_sh_piece_takes_whole", "gm_state_short_repair",
+                    "gm_short_repair_monthly", "gm_state_short_unexplained", "gm_monument_short_repair_self_check"}
+
+    def texts(self):
+        for pattern in self.GM_FILES:
+            for path in sorted(ROOT.glob(pattern)):
+                yield path.relative_to(ROOT).as_posix(), strip_comments(read(path.relative_to(ROOT).as_posix()))
+
+    def test_no_monument_rebuild(self):
+        gone = ("gm_state_tr_shrink_by", "gm_rebuild_level", "gm_rebuild_asked", "gm_monument_rebuild_self_check",
+                "gm_disp_rebuild_asked", "gm_state_record_frozen_levels", "gm_state_has_new_levels",
+                "gm_state_found_beside", "gm_state_has_copied_dedication", "gm_state_reset_copied_dedication",
+                "gm_state_return_to_undedicated", "gm_state_lacks_dedication_tech")
+        for rel, text in self.texts():
+            for block_name, body in top_level_blocks(text):
+                if block_name in self.UNTIL_TASK_7:
+                    continue
+                for name in gone:
+                    self.assertNotRegex(body, rf"\b{name}\b", f"{name} in {rel} {block_name}")
+                self.assertNotRegex(body, r"SPEC_TYPE = building_grand_monument\b(?!_)", f"{rel} {block_name}")
+                self.assertNotIn("max = 200", body, f"{rel} {block_name}")
+        self.assertNotIn("set_variable = gm_tr_return_queued",
+                         squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_tr_return_home")))
+
+    def test_add_levels_is_left_to_the_split_pieces(self):
+        callers = set()
+        for rel, text in self.texts():
+            for name, body in top_level_blocks(text):
+                if re.search(r"\bgm_state_tr_add_levels = yes", body):
+                    callers.add(name)
+        self.assertLessEqual(callers, {"gm_sh_rejoin", "gm_sh_piece_takes_whole", "gm_state_short_repair"})
+
+    def test_the_finished_building_is_made_and_unmade_in_few_places(self):
+        made, unmade = set(), set()
+        for rel, text in self.texts():
+            for name, body in top_level_blocks(text):
+                if re.search(r"create_building = \{\s*building = building_grand_monument\s", body):
+                    made.add(name)
+                if re.search(r"remove_building = building_grand_monument\s", body):
+                    unmade.add(name)
+        landmark = squash(block(read(LANDMARK_EFFECTS), "gm_seed_landmark"))
+        self.assertIn("create_building = { building = building_grand_monument level = 1 ", landmark)
+        self.assertLessEqual(made, {"gm_state_finish_site", "gm_state_put_back_building",
+                                    "gm_state_tr_rebuild_from_moving", "gm_seed_landmark"})
+        self.assertLessEqual(unmade, {"gm_state_tear_down", "gm_state_tr_remove_whole", "gm_sh_adopt_beside",
+                                      "gm_sh_rejoin", "gm_sh_piece_takes_whole", "gm_state_short_repair",
+                                      "gm_state_tr_add_levels", "monument_events.32"})
+
+    def test_a_monument_beside_rises_into_the_standing_building(self):
+        for path, name in ((EFFECTS, "gm_state_tear_down"),
+                           ("common/scripted_effects/gm_trophy_effects.txt", "gm_state_tr_remove_whole")):
+            body = squash(strip_comments(block(read(path), name)))
+            self.assertIn("if = { limit = { gm_state_has_secondary = yes } gm_state_promote_secondary = yes } "
+                          "else = { set_variable = { name = gm_rebuilding days = 1 } "
+                          "remove_building = building_grand_monument }", body, name)
+        rise = squash(strip_comments(block(read("common/scripted_effects/gm_trophy_effects.txt"),
+                                           "gm_state_tr_rebuild_from_moving")))
+        self.assertIn("if = { limit = { NOT = { has_building = building_grand_monument } } "
+                      "set_variable = { name = gm_rebuilding days = 1 } "
+                      "create_building = { building = building_grand_monument level = 1 } }", rise)
+        self.assertLess(rise.find("gm_clear_state = { KEEP_LANDMARK = no }"),
+                        rise.find("gm_state_tr_take_records_from_moving = yes"))
+
+    def test_a_piece_carried_off_or_home_changes_the_records(self):
+        tr = read("common/scripted_effects/gm_trophy_effects.txt")
+        piece = squash(strip_comments(block(tr, "gm_state_tr_remove_piece")))
+        self.assertIn("set_variable = { name = gm_levels value = var:gm_tr_take_left }", piece)
+        for s in ("remove_building", "gm_rebuilding", "gm_state_mark_restore_pm"):
+            self.assertNotIn(s, piece)
+        receive = squash(strip_comments(block(tr, "gm_state_tr_receive")))
+        self.assertIn("change_variable = { name = gm_levels add = scope:gm_tr_moving.var:gm_tr_levels }", receive)
+        self.assertNotIn("gm_state_tr_add_levels", receive)
+        # A monument just raised here today (gm_rebuilding) stands: a second
+        # trophy home the same day stands beside it.
+        self.assertIn("var:gm_tr_origin ?= { OR = { has_building = building_grand_monument "
+                      "has_variable = gm_rebuilding } }",
+                      squash(block(read(MON_TRIGGERS), "gm_tr_stands_apart")))
+
+
+class LostBuildingTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.7: a finished monument's building that goes
+    while its records stand is put back at level 1 on its dedication; Pull
+    Down and a taking clear the records or raise another first."""
+
+    def test_the_dedication_is_recorded(self):
+        monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
+        self.assertIn("gm_state_record_dedication = yes", monthly)
+        rec = squash(block(read(EFFECTS), "gm_state_record_dedication_one"))
+        self.assertIn("limit = { gm_state_has_pm = { PM = pm_monument_$KEY$ } NOT = { has_variable = gm_restore_pm } }",
+                      rec)
+        self.assertIn("set_variable = { name = gm_dedication value = flag:$KEY$ }", rec)
+        self.assertIn("gm_remove_state_var = { VAR = gm_dedication }", squash(block(read(EFFECTS), "gm_clear_state")))
+
+    def test_lost_is_put_back(self):
+        lost = squash(block(read(TRIGGERS), "gm_state_lost_building"))
+        self.assertEqual(lost, "NOT = { has_building = building_grand_monument } has_variable = gm_seen "
+                               "has_variable = gm_levels has_variable = gm_dedication "
+                               "NOT = { has_variable = gm_carried_off } NOT = { has_variable = gm_rebuilding }")
+        monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
+        branch = monthly[monthly.find("else = {"):]
+        # Exclusive: its records must stand for the hidden event.
+        self.assertIn("if = { limit = { gm_state_lost_building = yes } trigger_event = { id = monument_events.29 } } "
+                      "else = {", branch)
+        ev29 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.29\s*=\s*\{")))
+        self.assertIn("limit = { gm_state_lost_building = yes } gm_state_put_back_building = yes", ev29)
+        put = squash(block(read(EFFECTS), "gm_state_put_back_building"))
+        self.assertEqual(put, "set_variable = { name = gm_rebuilding days = 1 } "
+                              "create_building = { building = building_grand_monument level = 1 } "
+                              "set_variable = { name = gm_restore_pm value = var:gm_dedication }")
+
+
 class RecordWriterTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's
     size keeps its starting grandeur in step with its levels."""
@@ -6910,8 +6863,6 @@ class DedicateButtonTests(unittest.TestCase):
         allowed = {
             ("common/scripted_effects/gm_effects.txt", "gm_state_rededicate"): None,
             ("common/scripted_effects/gm_effects.txt", "gm_state_offer_missed_ceremony"): "gm_state_ai_dedicates_now = yes",
-            (MON_EFFECTS, "gm_state_found_beside"): "if = { limit = { gm_state_ai_dedicates_now = yes } "
-                                                    "gm_state_start_ceremony = yes }",
             (SGUIS, "gm_dedicate_sgui"): None,
             (EVENTS, "monument_events.1"): "gm_state_ai_dedicates_now = yes NOT = { has_variable = gm_ceremony_pending } } "
                                            "gm_state_start_ceremony = yes",
@@ -6942,36 +6893,10 @@ class DedicateButtonTests(unittest.TestCase):
         ai = squash(block(read(TRIGGERS), "gm_state_ai_dedicates_now"))
         self.assertEqual(ai, "owner = { is_ai = yes } gm_state_has_site = yes gm_state_site_level >= 1 "
                              "b:building_grand_monument_site ?= { is_under_construction = no }")
-        # A panel pick without its technology goes back to Undedicated, as a
-        # copy does: no ceremony opens by itself.
+        # A finished building is created on its dedication and locked to it:
+        # first sight only records an older save's monument, and opens nothing.
         first = squash(block(read(EFFECTS), "gm_state_first_sight"))
-        self.assertTrue(first.startswith(
-            "if = { limit = { gm_state_lacks_dedication_tech = yes NOT = { has_variable = gm_seen } "
-            "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } } "
-            "gm_state_return_to_undedicated = yes } else_if = {"), first)
-
-    def test_back_to_undedicated_through_the_restore_path(self):
-        """The copy, an untaught panel pick and a newcomer founded beside are
-        switched from a later effect (gm_state_restore_dedication): no refresh
-        in between reads their method as a dedication, nothing switches twice."""
-        e = read(EFFECTS)
-        self.assertEqual(squash(block(e, "gm_state_return_to_undedicated")),
-                         "set_variable = { name = gm_restore_pm value = flag:undedicated } "
-                         "set_variable = { name = gm_picture_code value = 1 } gm_state_picture_landmarks = yes")
-        self.assertIn("gm_state_return_to_undedicated = yes", squash(block(e, "gm_state_reset_copied_dedication")))
-        beside = squash(block(read(MON_EFFECTS), "gm_state_found_beside"))
-        self.assertNotIn("gm_state_undedicate = yes", beside)
-        self.assertNotIn("activate_production_method", beside)
-        self.assertLess(beside.find("gm_state_demote_primary = yes"), beside.find("gm_state_return_to_undedicated = yes"))
-        self.assertLess(beside.find("gm_state_return_to_undedicated = yes"), beside.find("gm_state_mark_awaiting = yes"))
-        # The restore reads flag:undedicated back as Undedicated.
-        self.assertIn("gm_state_restore_dedication_one = { KEY = undedicated }",
-                      squash(block(read(COM_EFFECTS), "gm_state_restore_dedication")))
-        # Such a return does not hold opportunities back: it counts toward no
-        # baseline before the switch or after.
-        can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
-        self.assertIn("NOT = { any_scope_state = { has_variable = gm_restore_pm "
-                      "NOT = { var:gm_restore_pm = flag:undedicated } } }", can)
+        self.assertNotIn("gm_state_start_ceremony", first)
 
     def test_the_ai_never_leaves_its_monument_undedicated(self):
         """Its ceremony asks once, when its construction stops; a monument it
@@ -7040,20 +6965,9 @@ class DedicateButtonTests(unittest.TestCase):
 
     def test_the_answer_finishes_it_at_the_levels_built(self):
         dedicate = squash(block(read(EFFECTS), "gm_state_dedicate"))
+        # The site's levels (gm_state_finish_site), or an older save's.
         self.assertLess(dedicate.find("set_variable = gm_seen"),
                         dedicate.find("set_variable = { name = gm_levels value = gm_state_primary_levels }"))
-        self.assertNotEqual(dedicate.find("set_variable = { name = gm_levels value = gm_state_primary_levels }"), -1)
-        # A pick in the building panel (recorded at first sight), a landmark
-        # and one dedicated before the button are finished once their
-        # construction stops, their queued levels joining them.
-        self.assertNotIn("gm_levels", squash(block(read(EFFECTS), "gm_state_first_sight")))
-        self.assertIn("b:building_grand_monument ?= { is_under_construction = no }",
-                      squash(block(read(EFFECTS), "gm_state_record_frozen_levels")))
-        # Levels queued at the answer wait for the unveiling, skin and name
-        # before they found the monument beside it.
-        new = squash(block(read(TRIGGERS), "gm_state_has_new_levels"))
-        for flag in ("gm_unveil_pending", "gm_skin_axis", "gm_name_choice_open", "gm_being_named"):
-            self.assertIn(f"NOT = {{ has_variable = {flag} }}", new, flag)
 
     def test_words(self):
         L = loc()

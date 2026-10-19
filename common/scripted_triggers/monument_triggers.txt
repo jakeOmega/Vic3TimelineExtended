@@ -133,19 +133,6 @@ gm_state_is_dedicated = {
 	}
 }
 
-# A dedication no ceremony gave it and no pulse has recorded. A new building
-# starts on the production methods most of its owner's buildings of that type
-# use, so a second monument stands on its sibling's dedication before any
-# script runs (grand_monument_pms.txt). A pick in the panel before script
-# first saw the monument (gm_state_mark_awaiting) reads the same, and goes
-# back to Undedicated too (gm_state_reset_copied_dedication).
-gm_state_has_copied_dedication = {
-	gm_state_is_dedicated = yes
-	NOT = { has_variable = gm_seen }
-	NOT = { has_variable = gm_ceremony_level }
-	NOT = { has_variable = gm_ceremony_pending }
-}
-
 # Dedicate (owner, 2026-10-18): a construction site waits as long as its owner
 # likes, and its Dedicate button (gm_dedicate_sgui) opens the ceremony (sites
 # spec 2026-10-18 §3.1).
@@ -164,29 +151,6 @@ gm_state_ai_dedicates_now = {
 	gm_state_has_site = yes
 	gm_state_site_level >= 1
 	b:building_grand_monument_site ?= { is_under_construction = no }
-}
-
-# A dedication the building panel offered without its technology: the Grand
-# Opera House, Botanical Gardens and Grand Observatory have their technology
-# checked in the ceremony, not on the production method (phase 4 §6;
-# grand_monument_pms.txt). A landmark is exempt: it stands on its historical
-# dedication whatever its owner has researched.
-gm_state_lacks_dedication_tech = {
-	gm_state_is_landmark = no
-	OR = {
-		AND = {
-			gm_state_has_pm = { PM = pm_monument_artistic }
-			owner = { NOT = { has_technology_researched = romanticism } }
-		}
-		AND = {
-			gm_state_has_pm = { PM = pm_monument_naturalist }
-			owner = { NOT = { has_technology_researched = romanticism } }
-		}
-		AND = {
-			gm_state_has_pm = { PM = pm_monument_scientific }
-			owner = { NOT = { has_technology_researched = empiricism } }
-		}
-	}
 }
 
 # ---- Landmarks (phase 4, spec 2026-10-12 §3.2) ----------------------------------
@@ -293,33 +257,6 @@ gm_state_message_fits = {
 
 gm_state_is_contested = {
 	has_variable = gm_contested
-}
-
-# Levels built on a finished monument (spec 2026-10-16 §3.2): its own levels
-# above those recorded at its dedication (gm_levels; once its construction
-# stopped, for a pick in the panel or one dedicated before 2026-10-18). Not
-# while script is rebuilding it or putting its method back, nor while a
-# ceremony, its unveiling, its skin or its name is under way: a level queued
-# while the ceremony asked can finish while the naming event is open, and
-# would move that event's monument (the refresh founds beside once they are
-# done). Not on
-# a revolt's piece of a monument (gm_piece_of, gm_monument_effects.txt § "A
-# revolt's split piece"): what is built on a piece stays part of it until it
-# settles with its monument, and the levels a merge brings it are the
-# monument's.
-gm_state_has_new_levels = {
-	gm_state_is_dedicated = yes
-	has_variable = gm_seen
-	has_variable = gm_levels
-	gm_state_built_levels > var:gm_levels
-	NOT = { has_variable = gm_restore_pm }
-	NOT = { has_variable = gm_rebuilding }
-	NOT = { has_variable = gm_ceremony_pending }
-	NOT = { has_variable = gm_unveil_pending }
-	NOT = { has_variable = gm_skin_axis }
-	NOT = { has_variable = gm_name_choice_open }
-	NOT = { has_variable = gm_being_named }
-	NOT = { has_variable = gm_piece_of }
 }
 
 # A monument founded beside another (gm_newcomer, spec 2026-10-16 §3.2) is
@@ -573,4 +510,18 @@ gm_state_holds_anniversary = {
 # State scope. A construction site stands here (sites spec 2026-10-18 §3.1).
 gm_state_has_site = {
 	has_building = building_grand_monument_site
+}
+
+# State scope. A finished monument's building went while its records stand
+# (sites spec 2026-10-18 §3.7): not carried off (gm_carried_off), not script's
+# own removal today (gm_rebuilding). Pull Down and a whole taking with nothing
+# beside clear the records or mark them first; one with a monument beside
+# raises it into the building that stays.
+gm_state_lost_building = {
+	NOT = { has_building = building_grand_monument }
+	has_variable = gm_seen
+	has_variable = gm_levels
+	has_variable = gm_dedication
+	NOT = { has_variable = gm_carried_off }
+	NOT = { has_variable = gm_rebuilding }
 }

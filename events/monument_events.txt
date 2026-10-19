@@ -95,23 +95,10 @@ monument_events.1 = {
 						# A revolt's piece whose monument merged into its state
 						# is the monument itself: the merge's levels are its own
 						# (gm_monument_effects.txt § "A revolt's split piece").
-						# Otherwise levels built on a finished monument found a
-						# new one beside it (spec 2026-10-16 §3.2); a monument
-						# dedicated before the Dedicate button freezes at the last
-						# level of its construction.
 						if = {
 							limit = { gm_state_piece_whole_gone = yes }
 							gm_state_piece_takes_whole = yes
 						}
-						else_if = {
-							limit = { gm_state_has_new_levels = yes }
-							gm_state_found_beside = yes
-						}
-						gm_state_record_frozen_levels = yes
-						# A new monument stands on its siblings' dedication
-						# (gm_state_has_copied_dedication): it goes back to
-						# Undedicated, and script has seen it.
-						gm_state_reset_copied_dedication = yes
 					}
 					# The monument an opportunity completed by this level names
 					# (opportunities spec §3).
@@ -1698,10 +1685,11 @@ monument_events.26 = {
 # Event 29: a monument's own work (ageing spec 2026-10-16 §3)
 # ============================================================================
 # Hidden plumbing, a state event from the refresh (gm_country_refresh), which
-# tooltips walk without writing: levels built on a finished monument found a
-# new one beside it (gm_state_found_beside), and a newcomer that has settled
-# gives the state's first place back to a grander monument beside it
-# (gm_state_settle_newcomer). Each reads back what it writes. A merge's
+# tooltips walk without writing, and from the state pulse: a finished
+# monument's lost building put back (gm_state_put_back_building, sites spec
+# 2026-10-18 §3.7), and a newcomer that has settled gives the state's first
+# place back to a grander monument beside it (gm_state_settle_newcomer). Each
+# reads back what it writes. A merge's
 # monuments are adopted first (issue #936), so their levels found nothing, and
 # a revolt's split piece is settled next (owner's call 2026-10-17): it takes
 # its monument's identity at first sight, and after the merge back rejoins it
@@ -1712,11 +1700,18 @@ monument_events.29 = {
 
 	trigger = {
 		gm_system_enabled = yes
-		has_building = building_grand_monument
+		OR = {
+			has_building = building_grand_monument
+			gm_state_lost_building = yes
+		}
 	}
 
 	immediate = {
 		if = {
+			limit = { gm_state_lost_building = yes }
+			gm_state_put_back_building = yes
+		}
+		else_if = {
 			limit = { gm_state_merge_pending = yes }
 			gm_state_adopt_orphans = yes
 		}
@@ -1738,10 +1733,6 @@ monument_events.29 = {
 			else_if = {
 				limit = { gm_state_piece_whole_gone = yes }
 				gm_state_piece_takes_whole = yes
-			}
-			else_if = {
-				limit = { gm_state_has_new_levels = yes }
-				gm_state_found_beside = yes
 			}
 			else_if = {
 				limit = { gm_state_newcomer_settled = yes }
