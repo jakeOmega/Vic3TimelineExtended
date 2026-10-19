@@ -1166,14 +1166,9 @@ gm_seed_landmark_beside = {
 		limit = { exists = scope:gm_tr_moving }
 		scope:gm_tr_moving = {
 			set_variable = { name = gm_tr_levels value = $LEVEL$ }
-			# The 1836 rate, as gm_seed_landmark records one standing alone.
-			set_variable = {
-				name = gm_tr_start_grandeur
-				value = {
-					value = $LEVEL$
-					multiply = gm_level_grandeur_1836
-				}
-			}
+			# The 1836 rate split by its years, as gm_seed_landmark records one
+			# standing alone.
+			gm_set_historical_grandeur = { LEVELS = $LEVEL$ BUILT = $BUILT$ START = gm_tr_start_grandeur AGE = gm_tr_age }
 			set_variable = { name = gm_tr_dedication value = flag:$DEDICATION$ }
 			set_variable = { name = gm_tr_skin value = flag:landmark_$KEY$ }
 			set_variable = { name = gm_tr_form value = flag:$FORM$ }

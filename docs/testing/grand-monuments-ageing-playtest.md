@@ -30,7 +30,8 @@ A fixed item is struck through with the commit that fixed it.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **A year on.** Note the Arc de Triomphe's Grandeur on Paris's state card, then wait a year. | Its Grandeur rises by about 0.3 (15 levels × 2%), and its Finished line shows Age +0.3. | No change: `gm_state_ages` fails for it (dedicated, `gm_seen`, not contested). |
+| **A year on.** Note the Arc de Triomphe's Grandeur on Paris's state card, then wait a year. | Its Grandeur rises by 1.5 (75 × 2%), and its Finished line shows Age +1.5. | No change: `gm_state_ages` fails for it (dedicated, `gm_seen`, not contested). |
+| **Historical years (owner, 2026-10-19).** A new game: hover the Parthenon's and the Brandenburg Gate's Grandeur on their state cards, and wait a year. | The Parthenon reads about 1.1 from its 10 levels and 48.9 from its years, the Gate 26.3 and 23.7, the Arc de Triomphe 75 and 0; a year on the Parthenon gains about 0.02, the Gate about 0.53. A dig found later reads the same way, split by the years since its site was built. | All from levels: `gm_set_historical_grandeur` did not run, or `gm_this_year` read 0. A dig all from levels in an older save: the site has no `gm_tr_built` (seed round 3). |
 | **A contested one does not age.** Watch the Lion of Saint Mark in Venice. | Its age stays at 0 while it is contested. | |
 | **Mothballed.** Switch to Mothballed for a year. | Ageing halves. | |
 | **A trophy abroad.** The Luxor Obelisk in Paris. | Its worth on the Trophies row stays the same from year to year. | |

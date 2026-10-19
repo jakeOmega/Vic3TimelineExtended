@@ -1325,6 +1325,48 @@ LANDMARKS = (
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
 
+# The year each historical monument was finished, negative before Christ
+# (owner, 2026-10-19): its grandeur at the 1836 rate is split into starting
+# grandeur and the years since, as if it had aged in the game from then
+# (gm_set_historical_grandeur). Every row placed at the start, every trophy
+# abroad in 1836 and every dig; none for a historical opportunity's, which the
+# game builds.
+BUILT = {
+    # Standing in 1836.
+    "arc_de_triomphe": 1836, "alexander_column": 1834, "brandenburg_gate": 1791,
+    "washington_monument_baltimore": 1829, "la_scala": 1778, "teatro_di_san_carlo": 1817, "jantar_mantar": 1734,
+    "shalimar_gardens": 1642, "jardim_botanico": 1808, "stelae_of_aksum": 330, "liberty_column": 1797,
+    "lion_monument": 1821, "temple_of_heaven": 1420, "topkapi_palace": 1478, "golestan_palace": 1779,
+    "basilica_of_superga": 1731, "tomb_of_william_the_silent": 1623, "cenotaph_of_maximilian": 1584,
+    "arco_de_santa_maria": 1553, "statue_of_louis_xiv": 1825, "lion_of_saint_mark": 1293, "sans_souci_palace": 1813,
+    "nikko_toshogu": 1636, "parthenon": -432, "obelisks_of_karnak": -1457, "royal_palace_of_benin": 1440,
+    "royal_palace_of_kumasi": 1822, "bukgwan_victory_stele": 1709, "imperial_city_of_hue": 1833, "persepolis": -500,
+    "red_fort": 1648, "great_zimbabwe": 1300, "royal_palaces_of_abomey": 1645, "klungkung_palace": 1686,
+    "uffizi_gallery": 1581, "capitoline_museums": 1734, "bodrum_castle": 1437, "temples_of_baalbek": 150,
+    "palmyra": 32, "xanthos": -390, "mesha_stele": -840, "arch_of_ctesiphon": 540,
+    # Trophies abroad in 1836 with no standing monument of their own.
+    "rosetta_stone": -196, "temple_of_dendera": -50, "luxor_obelisk": -1250, "venus_de_milo": -130,
+    "piraeus_lion": -360, "horses_of_saint_mark": 200, "tipus_tiger": 1795, "baba_merzoug": 1542,
+    "royal_palace_of_kandy": 1600,
+    # Buried until the game.
+    "nineveh_library": -650, "winged_victory_of_samothrace": -190, "vindolanda_tablets": 100,
+    "troy_hisarlik": -1250, "mycenae_grave_circle": -1600, "pergamon_altar": -165, "deir_el_bahari_cache": -935,
+    "ishtar_gate_babylon": -575, "palace_of_knossos": -1700, "antikythera_mechanism": -100, "oseberg_ship": 834,
+    "machu_picchu": 1450, "bust_of_nefertiti": -1345, "mohenjo_daro": -2500, "tomb_of_tutankhamun": -1323,
+    "royal_cemetery_at_ur": -2600, "sanxingdui_pits": -1200, "sutton_hoo": 625, "lascaux_caves": -15000,
+    "nag_hammadi_library": 350, "dead_sea_scrolls": -100, "tomb_of_pakal": 683, "mawangdui_tombs": -168,
+    "terracotta_army": -210, "tomb_of_philip_ii": -336, "tomb_of_marquis_yi": -433, "royal_tombs_of_sipan": 250,
+    "otzi_the_iceman": -3300, "caral_supe": -2600, "gobekli_tepe": -9500, "olympia": -456, "delphi": -330,
+    "sidon_necropolis": -330, "villa_of_the_papyri": -50, "tomb_of_alexander": -320, "pompeii": 79,
+}
+
+
+def historical_split(levels, built, year=1836):
+    """gm_set_historical_grandeur, transcribed: (starting grandeur, age)."""
+    total = levels * 5
+    start = total / max((year - built) * 2 / 100 + 1, 1)
+    return start, max(total - start, 0)
+
 
 def ceremony_options():
     event = raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{")
@@ -3577,7 +3619,7 @@ LANDMARK_EFFECTS = "common/scripted_effects/gm_landmark_effects.txt"
 
 def landmark_seed_call(lm):
     return (f"gm_seed_landmark = {{ KEY = {lm.key} STATE = {lm.state} TAG = {lm.tag} "
-            f"DEDICATION = {lm.dedication} FORM = {lm.form} LEVEL = {lm.level} }}")
+            f"DEDICATION = {lm.dedication} FORM = {lm.form} LEVEL = {lm.level} BUILT = {BUILT[lm.key]} }}")
 
 
 def vanilla_monuments():
@@ -4080,7 +4122,7 @@ class ColocatedLandmarkTests(unittest.TestCase):
         self.assertIn("else_if = { limit = { s:$STATE$.region_state:$TAG$ ?= { has_building = building_grand_monument "
                       "NOT = { gm_state_has_landmark = { KEY = $KEY$ } } } } "
                       "s:$STATE$.region_state:$TAG$ = { gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ "
-                      "DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ } } }", body)
+                      "DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ BUILT = $BUILT$ } } }", body)
         # The old else is still the one that says nothing was placed.
         self.assertIn('else = { debug_log = "TE_MONUMENTS: landmark $KEY$ not placed', body)
 
@@ -6569,11 +6611,50 @@ class RecordWriterTests(unittest.TestCase):
     def test_a_landmark_is_recorded_at_its_levels(self):
         body = self.body(LANDMARK_EFFECTS, "gm_seed_landmark")
         self.assertIn("set_variable = { name = gm_levels value = $LEVEL$ }", body)
-        # Its grandeur at the 1836 rate (owner, 2026-10-19), alone or beside another.
-        at_1836 = "value = { value = $LEVEL$ multiply = gm_level_grandeur_1836 }"
-        self.assertIn(f"set_variable = {{ name = gm_start_grandeur {at_1836} }}", body)
+        # Its grandeur at the 1836 rate (owner, 2026-10-19), alone or beside
+        # another, split by the years since it was built (HistoricalGrandeurTests).
+        self.assertIn("gm_set_historical_grandeur = { LEVELS = $LEVEL$ BUILT = $BUILT$ START = gm_start_grandeur "
+                      "AGE = gm_age }", body)
         beside = self.body("common/scripted_effects/gm_monument_effects.txt", "gm_seed_landmark_beside")
-        self.assertIn(f"set_variable = {{ name = gm_tr_start_grandeur {at_1836} }}", beside)
+        self.assertIn("gm_set_historical_grandeur = { LEVELS = $LEVEL$ BUILT = $BUILT$ START = gm_tr_start_grandeur "
+                      "AGE = gm_tr_age }", beside)
+        self.assertNotIn("gm_start_grandeur", beside.replace("gm_tr_start_grandeur", ""))
+
+
+class HistoricalGrandeurTests(unittest.TestCase):
+    """A historical monument's grandeur, split as if it had aged in the game
+    since it was built (owner, 2026-10-19): the same grandeur in 1836, but the
+    Parthenon is nearly all years and barely ages further."""
+
+    def test_the_helper(self):
+        body = squash(block(read(EFFECTS), "gm_set_historical_grandeur"))
+        self.assertEqual(body,
+                         "set_variable = { name = $START$ value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
+                         "divide = { value = gm_this_year subtract = $BUILT$ multiply = 2 divide = 100 add = 1 "
+                         "min = 1 } } } "
+                         "set_variable = { name = $AGE$ value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
+                         "subtract = var:$START$ min = 0 } }")
+        # The same 2% of starting grandeur a year that ageing adds in the game.
+        self.assertEqual(squash(block(read(VALUES), "gm_state_age_step")),
+                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age")
+
+    def test_every_historical_row_has_a_year(self):
+        historical = {lm.key for lm in LANDMARKS if lm.year is None}
+        self.assertEqual(set(BUILT), historical)
+        for key, year in BUILT.items():
+            self.assertIsInstance(year, int, key)
+            self.assertLessEqual(year, 1836, key)
+
+    def test_the_split_keeps_the_grandeur(self):
+        for key, built in BUILT.items():
+            start, age = historical_split(10, built)
+            self.assertAlmostEqual(start + age, 50, msg=key)
+            # Aged at 2% of its start a year since, it comes to what it has.
+            self.assertAlmostEqual(start * (1 + 0.02 * (1836 - built)), 50, msg=key)
+        self.assertEqual(historical_split(15, BUILT["arc_de_triomphe"]), (75, 0))
+        start, age = historical_split(10, BUILT["parthenon"])
+        self.assertAlmostEqual(start, 1.0785, places=4)
+        self.assertAlmostEqual(age, 48.9215, places=4)
 
 
 class DedicateButtonTests(unittest.TestCase):

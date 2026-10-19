@@ -20,48 +20,48 @@
 # No root scope: once per game, from on_game_started_after_lobby
 # (gm_landmarks_on_game_started_after_lobby), when the game rules are final.
 gm_seed_landmarks = {
-	gm_seed_landmark = { KEY = arc_de_triomphe STATE = STATE_ILE_DE_FRANCE TAG = FRA DEDICATION = war_memorial FORM = arch LEVEL = 15 }
-	gm_seed_landmark = { KEY = alexander_column STATE = STATE_INGRIA TAG = RUS DEDICATION = crown FORM = column LEVEL = 10 }
-	gm_seed_landmark = { KEY = brandenburg_gate STATE = STATE_BRANDENBURG TAG = PRU DEDICATION = civic FORM = gate LEVEL = 10 }
-	gm_seed_landmark = { KEY = washington_monument_baltimore STATE = STATE_MARYLAND TAG = USA DEDICATION = republic FORM = column LEVEL = 5 }
-	gm_seed_landmark = { KEY = la_scala STATE = STATE_LOMBARDY TAG = AUS DEDICATION = artistic FORM = opera_house LEVEL = 10 }
-	gm_seed_landmark = { KEY = teatro_di_san_carlo STATE = STATE_CAMPANIA TAG = SIC DEDICATION = artistic FORM = opera_house LEVEL = 5 }
-	gm_seed_landmark = { KEY = jantar_mantar STATE = STATE_RAJPUTANA TAG = JAI DEDICATION = scientific FORM = observatory LEVEL = 5 }
-	gm_seed_landmark = { KEY = shalimar_gardens STATE = STATE_PUNJAB TAG = PAN DEDICATION = naturalist FORM = gardens LEVEL = 5 }
-	gm_seed_landmark = { KEY = jardim_botanico STATE = STATE_RIO_DE_JANEIRO TAG = BRZ DEDICATION = naturalist FORM = gardens LEVEL = 5 }
-	gm_seed_landmark = { KEY = stelae_of_aksum STATE = STATE_GONDER TAG = TGR DEDICATION = civic FORM = stele LEVEL = 5 }
-	gm_seed_landmark = { KEY = liberty_column STATE = STATE_ZEALAND TAG = DEN DEDICATION = civic FORM = obelisk LEVEL = 5 }
-	gm_seed_landmark = { KEY = lion_monument STATE = STATE_EAST_SWITZERLAND TAG = SWI DEDICATION = war_memorial FORM = statue LEVEL = 5 }
-	gm_seed_landmark = { KEY = temple_of_heaven STATE = STATE_BEIJING TAG = CHI DEDICATION = crown FORM = hall LEVEL = 10 }
-	gm_seed_landmark = { KEY = topkapi_palace STATE = STATE_EASTERN_THRACE TAG = TUR DEDICATION = crown FORM = gate LEVEL = 10 }
-	gm_seed_landmark = { KEY = golestan_palace STATE = STATE_IRAKAJEMI TAG = PER DEDICATION = crown FORM = hall LEVEL = 5 }
-	gm_seed_landmark = { KEY = basilica_of_superga STATE = STATE_PIEDMONT TAG = SAR DEDICATION = crown FORM = mausoleum LEVEL = 5 }
-	gm_seed_landmark = { KEY = tomb_of_william_the_silent STATE = STATE_HOLLAND TAG = NET DEDICATION = crown FORM = mausoleum LEVEL = 5 }
-	gm_seed_landmark = { KEY = cenotaph_of_maximilian STATE = STATE_TYROL TAG = AUS DEDICATION = crown FORM = mausoleum LEVEL = 5 }
-	gm_seed_landmark = { KEY = arco_de_santa_maria STATE = STATE_OLD_CASTILE TAG = SPA DEDICATION = crown FORM = gate LEVEL = 5 }
-	gm_seed_landmark = { KEY = statue_of_louis_xiv STATE = STATE_RHONE TAG = FRA DEDICATION = crown FORM = statue LEVEL = 5 }
-	gm_seed_landmark = { KEY = lion_of_saint_mark STATE = STATE_VENETIA TAG = AUS DEDICATION = republic FORM = column LEVEL = 5 }
-	gm_seed_landmark = { KEY = sans_souci_palace STATE = STATE_HAITI TAG = HAI DEDICATION = crown FORM = hall LEVEL = 5 }
-	gm_seed_landmark = { KEY = nikko_toshogu STATE = STATE_KANTO TAG = JAP DEDICATION = crown FORM = gate LEVEL = 5 }
-	gm_seed_landmark = { KEY = parthenon STATE = STATE_ATTICA TAG = GRE DEDICATION = civic FORM = pantheon LEVEL = 10 }
-	gm_seed_landmark = { KEY = obelisks_of_karnak STATE = STATE_UPPER_EGYPT TAG = EGY DEDICATION = civic FORM = obelisk LEVEL = 5 }
-	gm_seed_landmark = { KEY = royal_palace_of_benin STATE = STATE_BENIN TAG = BEN DEDICATION = crown FORM = hall LEVEL = 5 }
-	gm_seed_landmark = { KEY = royal_palace_of_kumasi STATE = STATE_GOLD_COAST TAG = ASH DEDICATION = crown FORM = hall LEVEL = 5 }
-	gm_seed_landmark = { KEY = bukgwan_victory_stele STATE = STATE_SARIWON TAG = KOR DEDICATION = war_memorial FORM = stele LEVEL = 5 }
-	gm_seed_landmark = { KEY = imperial_city_of_hue STATE = STATE_ANNAM TAG = DAI DEDICATION = crown FORM = gate LEVEL = 10 }
-	gm_seed_landmark = { KEY = persepolis STATE = STATE_FARS TAG = PER DEDICATION = civic FORM = hall LEVEL = 5 }
-	gm_seed_landmark = { KEY = red_fort STATE = STATE_DELHI TAG = MUG DEDICATION = crown FORM = gate LEVEL = 10 }
-	gm_seed_landmark = { KEY = great_zimbabwe STATE = STATE_ZAMBEZI TAG = MSH DEDICATION = civic FORM = round_tower LEVEL = 5 }
-	gm_seed_landmark = { KEY = royal_palaces_of_abomey STATE = STATE_DAHOMEY TAG = DAH DEDICATION = crown FORM = hall LEVEL = 5 }
-	gm_seed_landmark = { KEY = klungkung_palace STATE = STATE_SUNDA_ISLANDS TAG = BAL DEDICATION = crown FORM = gate LEVEL = 5 }
-	gm_seed_landmark = { KEY = uffizi_gallery STATE = STATE_TUSCANY TAG = TUS DEDICATION = civic FORM = hall LEVEL = 10 }
-	gm_seed_landmark = { KEY = capitoline_museums STATE = STATE_LAZIO TAG = PAP DEDICATION = civic FORM = forum LEVEL = 5 }
-	gm_seed_landmark = { KEY = bodrum_castle STATE = STATE_AYDIN TAG = TUR DEDICATION = war_memorial FORM = tower LEVEL = 5 }
-	gm_seed_landmark = { KEY = temples_of_baalbek STATE = STATE_LEBANON TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 }
-	gm_seed_landmark = { KEY = palmyra STATE = STATE_SYRIA TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 }
-	gm_seed_landmark = { KEY = xanthos STATE = STATE_KONYA TAG = TUR DEDICATION = civic FORM = rock_cut LEVEL = 5 }
-	gm_seed_landmark = { KEY = mesha_stele STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = war_memorial FORM = stele LEVEL = 5 }
-	gm_seed_landmark = { KEY = arch_of_ctesiphon STATE = STATE_BAGHDAD TAG = TUR DEDICATION = civic FORM = arch LEVEL = 5 }
+	gm_seed_landmark = { KEY = arc_de_triomphe STATE = STATE_ILE_DE_FRANCE TAG = FRA DEDICATION = war_memorial FORM = arch LEVEL = 15 BUILT = 1836 }
+	gm_seed_landmark = { KEY = alexander_column STATE = STATE_INGRIA TAG = RUS DEDICATION = crown FORM = column LEVEL = 10 BUILT = 1834 }
+	gm_seed_landmark = { KEY = brandenburg_gate STATE = STATE_BRANDENBURG TAG = PRU DEDICATION = civic FORM = gate LEVEL = 10 BUILT = 1791 }
+	gm_seed_landmark = { KEY = washington_monument_baltimore STATE = STATE_MARYLAND TAG = USA DEDICATION = republic FORM = column LEVEL = 5 BUILT = 1829 }
+	gm_seed_landmark = { KEY = la_scala STATE = STATE_LOMBARDY TAG = AUS DEDICATION = artistic FORM = opera_house LEVEL = 10 BUILT = 1778 }
+	gm_seed_landmark = { KEY = teatro_di_san_carlo STATE = STATE_CAMPANIA TAG = SIC DEDICATION = artistic FORM = opera_house LEVEL = 5 BUILT = 1817 }
+	gm_seed_landmark = { KEY = jantar_mantar STATE = STATE_RAJPUTANA TAG = JAI DEDICATION = scientific FORM = observatory LEVEL = 5 BUILT = 1734 }
+	gm_seed_landmark = { KEY = shalimar_gardens STATE = STATE_PUNJAB TAG = PAN DEDICATION = naturalist FORM = gardens LEVEL = 5 BUILT = 1642 }
+	gm_seed_landmark = { KEY = jardim_botanico STATE = STATE_RIO_DE_JANEIRO TAG = BRZ DEDICATION = naturalist FORM = gardens LEVEL = 5 BUILT = 1808 }
+	gm_seed_landmark = { KEY = stelae_of_aksum STATE = STATE_GONDER TAG = TGR DEDICATION = civic FORM = stele LEVEL = 5 BUILT = 330 }
+	gm_seed_landmark = { KEY = liberty_column STATE = STATE_ZEALAND TAG = DEN DEDICATION = civic FORM = obelisk LEVEL = 5 BUILT = 1797 }
+	gm_seed_landmark = { KEY = lion_monument STATE = STATE_EAST_SWITZERLAND TAG = SWI DEDICATION = war_memorial FORM = statue LEVEL = 5 BUILT = 1821 }
+	gm_seed_landmark = { KEY = temple_of_heaven STATE = STATE_BEIJING TAG = CHI DEDICATION = crown FORM = hall LEVEL = 10 BUILT = 1420 }
+	gm_seed_landmark = { KEY = topkapi_palace STATE = STATE_EASTERN_THRACE TAG = TUR DEDICATION = crown FORM = gate LEVEL = 10 BUILT = 1478 }
+	gm_seed_landmark = { KEY = golestan_palace STATE = STATE_IRAKAJEMI TAG = PER DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1779 }
+	gm_seed_landmark = { KEY = basilica_of_superga STATE = STATE_PIEDMONT TAG = SAR DEDICATION = crown FORM = mausoleum LEVEL = 5 BUILT = 1731 }
+	gm_seed_landmark = { KEY = tomb_of_william_the_silent STATE = STATE_HOLLAND TAG = NET DEDICATION = crown FORM = mausoleum LEVEL = 5 BUILT = 1623 }
+	gm_seed_landmark = { KEY = cenotaph_of_maximilian STATE = STATE_TYROL TAG = AUS DEDICATION = crown FORM = mausoleum LEVEL = 5 BUILT = 1584 }
+	gm_seed_landmark = { KEY = arco_de_santa_maria STATE = STATE_OLD_CASTILE TAG = SPA DEDICATION = crown FORM = gate LEVEL = 5 BUILT = 1553 }
+	gm_seed_landmark = { KEY = statue_of_louis_xiv STATE = STATE_RHONE TAG = FRA DEDICATION = crown FORM = statue LEVEL = 5 BUILT = 1825 }
+	gm_seed_landmark = { KEY = lion_of_saint_mark STATE = STATE_VENETIA TAG = AUS DEDICATION = republic FORM = column LEVEL = 5 BUILT = 1293 }
+	gm_seed_landmark = { KEY = sans_souci_palace STATE = STATE_HAITI TAG = HAI DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1813 }
+	gm_seed_landmark = { KEY = nikko_toshogu STATE = STATE_KANTO TAG = JAP DEDICATION = crown FORM = gate LEVEL = 5 BUILT = 1636 }
+	gm_seed_landmark = { KEY = parthenon STATE = STATE_ATTICA TAG = GRE DEDICATION = civic FORM = pantheon LEVEL = 10 BUILT = -432 }
+	gm_seed_landmark = { KEY = obelisks_of_karnak STATE = STATE_UPPER_EGYPT TAG = EGY DEDICATION = civic FORM = obelisk LEVEL = 5 BUILT = -1457 }
+	gm_seed_landmark = { KEY = royal_palace_of_benin STATE = STATE_BENIN TAG = BEN DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1440 }
+	gm_seed_landmark = { KEY = royal_palace_of_kumasi STATE = STATE_GOLD_COAST TAG = ASH DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1822 }
+	gm_seed_landmark = { KEY = bukgwan_victory_stele STATE = STATE_SARIWON TAG = KOR DEDICATION = war_memorial FORM = stele LEVEL = 5 BUILT = 1709 }
+	gm_seed_landmark = { KEY = imperial_city_of_hue STATE = STATE_ANNAM TAG = DAI DEDICATION = crown FORM = gate LEVEL = 10 BUILT = 1833 }
+	gm_seed_landmark = { KEY = persepolis STATE = STATE_FARS TAG = PER DEDICATION = civic FORM = hall LEVEL = 5 BUILT = -500 }
+	gm_seed_landmark = { KEY = red_fort STATE = STATE_DELHI TAG = MUG DEDICATION = crown FORM = gate LEVEL = 10 BUILT = 1648 }
+	gm_seed_landmark = { KEY = great_zimbabwe STATE = STATE_ZAMBEZI TAG = MSH DEDICATION = civic FORM = round_tower LEVEL = 5 BUILT = 1300 }
+	gm_seed_landmark = { KEY = royal_palaces_of_abomey STATE = STATE_DAHOMEY TAG = DAH DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1645 }
+	gm_seed_landmark = { KEY = klungkung_palace STATE = STATE_SUNDA_ISLANDS TAG = BAL DEDICATION = crown FORM = gate LEVEL = 5 BUILT = 1686 }
+	gm_seed_landmark = { KEY = uffizi_gallery STATE = STATE_TUSCANY TAG = TUS DEDICATION = civic FORM = hall LEVEL = 10 BUILT = 1581 }
+	gm_seed_landmark = { KEY = capitoline_museums STATE = STATE_LAZIO TAG = PAP DEDICATION = civic FORM = forum LEVEL = 5 BUILT = 1734 }
+	gm_seed_landmark = { KEY = bodrum_castle STATE = STATE_AYDIN TAG = TUR DEDICATION = war_memorial FORM = tower LEVEL = 5 BUILT = 1437 }
+	gm_seed_landmark = { KEY = temples_of_baalbek STATE = STATE_LEBANON TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 BUILT = 150 }
+	gm_seed_landmark = { KEY = palmyra STATE = STATE_SYRIA TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 BUILT = 32 }
+	gm_seed_landmark = { KEY = xanthos STATE = STATE_KONYA TAG = TUR DEDICATION = civic FORM = rock_cut LEVEL = 5 BUILT = -390 }
+	gm_seed_landmark = { KEY = mesha_stele STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = war_memorial FORM = stele LEVEL = 5 BUILT = -840 }
+	gm_seed_landmark = { KEY = arch_of_ctesiphon STATE = STATE_BAGHDAD TAG = TUR DEDICATION = civic FORM = arch LEVEL = 5 BUILT = 540 }
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
@@ -86,15 +86,11 @@ gm_seed_landmark = {
 			set_variable = { name = gm_form value = flag:$FORM$ }
 			set_variable = { name = gm_namesake value = flag:landmark }
 			set_variable = { name = gm_ceremony_level value = $LEVEL$ }
-			# Its size, recorded (sites spec 2026-10-18 §3.5): the 1836 rate.
+			# Its size, recorded (sites spec 2026-10-18 §3.5): the 1836 rate,
+			# split into starting grandeur and the years since it was built
+			# (owner, 2026-10-19).
 			set_variable = { name = gm_levels value = $LEVEL$ }
-			set_variable = {
-				name = gm_start_grandeur
-				value = {
-					value = $LEVEL$
-					multiply = gm_level_grandeur_1836
-				}
-			}
+			gm_set_historical_grandeur = { LEVELS = $LEVEL$ BUILT = $BUILT$ START = gm_start_grandeur AGE = gm_age }
 			set_variable = gm_migrated
 			# Its unique dedication (signatures spec §4.4), on its historical one.
 			gm_state_sig_backfill = yes
@@ -122,7 +118,7 @@ gm_seed_landmark = {
 			}
 		}
 		s:$STATE$.region_state:$TAG$ = {
-			gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ }
+			gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ BUILT = $BUILT$ }
 		}
 	}
 	else = {
