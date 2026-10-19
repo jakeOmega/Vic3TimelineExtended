@@ -1166,6 +1166,14 @@ gm_seed_landmark_beside = {
 		limit = { exists = scope:gm_tr_moving }
 		scope:gm_tr_moving = {
 			set_variable = { name = gm_tr_levels value = $LEVEL$ }
+			# The 1836 rate, as gm_seed_landmark records one standing alone.
+			set_variable = {
+				name = gm_tr_start_grandeur
+				value = {
+					value = $LEVEL$
+					multiply = gm_level_grandeur_1836
+				}
+			}
 			set_variable = { name = gm_tr_dedication value = flag:$DEDICATION$ }
 			set_variable = { name = gm_tr_skin value = flag:landmark_$KEY$ }
 			set_variable = { name = gm_tr_form value = flag:$FORM$ }

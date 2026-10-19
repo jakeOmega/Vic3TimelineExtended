@@ -71,6 +71,12 @@ building splits in two.
 - **The rate:** a level's grandeur is world GDP in 1836 divided by world GDP when it is built
   (`global_gdp_script_value`, `common/script_values/extra_script_values.txt`, already defined). A world ten times
   richer gives each level a tenth.
+- **Five a level in 1836** (owner, 2026-10-19, after a 2055 save counted 100 levels at 0.04): the rate is
+  `gm_level_grandeur_1836` (5) times that ratio, to the nearest 0.001 and at least 0.001, applied where the rate is
+  read (`gm_world_rate_value`), so a save's stored ratio takes it at once. The 1836 landmarks, the trophies abroad in
+  1836 and dug-up monuments count at 5 a level too; records already written keep their grandeur. Everything priced
+  in grandeur (the effect steps, an opportunity's 5, vanity backlash, trophy infamy) is unchanged, so a level goes
+  five times as far toward each.
 - **Per level, at the rate of the year it finishes.** Building over decades is rare, so the fallback, the whole
   monument at the rate of its dedication day, is acceptable if per-level tracking proves fiddly.
 - **Ageing** adds 2% of *starting* grandeur a year (×0.5 while mothballed, as today), linear, not compounding.
@@ -122,8 +128,8 @@ The rule: **what a monument costs to build or keep up counts levels; what it mea
   level finished in hard times draws outrage in proportion to the grandeur it adds, so a project of the same share of
   the world's wealth draws the same outrage in any era; the panel's Hard Times warning follows), **trophy infamy** (on
   the grandeur taken, not its levels), and every share a taking or return moves.
-- **Archaeology:** a dug-up monument was built in the ancient world, so its levels count at the 1836 rate (one
-  grandeur a level), like the 1836 landmarks.
+- **Archaeology:** a dug-up monument was built in the ancient world, so its levels count at the 1836 rate
+  (`gm_level_grandeur_1836`, five a level since 2026-10-19), like the 1836 landmarks.
 
 ### 3.7 Merges, revolts, a lost building
 
