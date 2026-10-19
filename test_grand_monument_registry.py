@@ -4746,7 +4746,7 @@ class AnniversaryAgeTests(unittest.TestCase):
 
     def test_the_public_option_adds_age(self):
         self.assertEqual(squash(block(read(VALUES), "gm_evt_grandeur")),
-                         "value = gm_state_primary_levels multiply = 0.1 min = 1")
+                         "value = gm_state_primary_start multiply = 0.1 min = 1")
         events = read(EVENTS)
         for n in ANNIVERSARIES:
             ev = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.%d\s*=\s*\{" % n)))
@@ -5648,7 +5648,7 @@ class SiteBuildingTests(unittest.TestCase):
         body = squash(strip_comments(block(read(EFFECTS), "gm_state_count_site_levels")))
         for s in ("limit = { gm_state_site_level > var:gm_site_counted }",
                   "change_variable = { name = gm_site_grandeur add = var:gm_site_add }",
-                  "gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_new }",
+                  "gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_add }",
                   "set_variable = { name = gm_site_counted value = gm_state_site_level }",
                   "limit = { gm_state_site_level < var:gm_site_counted }",
                   "remove_variable = gm_site_counted", "remove_variable = gm_site_grandeur"):
@@ -6372,6 +6372,40 @@ class OpportunityGrandeurTests(unittest.TestCase):
                          "divide = gm_world_rate_value ceiling = yes max = 100 }")
         self.assertEqual(self.body("gm_disp_com_accept_cost"),
                          "value = gm_com_target_levels multiply = construction_cost_grand_monument")
+
+
+class MeaningCountsGrandeurTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.6 (Plan B): what a monument means counts its
+    grandeur: the vanity backlash of levels finished in hard times, the
+    infamy of carrying one off, an anniversary's gift."""
+
+    TR_V = "common/script_values/gm_trophy_values.txt"
+    TR_E = "common/scripted_effects/gm_trophy_effects.txt"
+
+    def test_vanity_is_the_grandeur_counted(self):
+        count = squash(strip_comments(block(read(EFFECTS), "gm_state_count_site_levels")))
+        self.assertIn("gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_add }", count)
+        self.assertLess(count.find("name = gm_site_add"), count.find("gm_state_vanity_backlash_for"))
+        self.assertIn("for each point of grandeur", loc()["gm_je_how_hard_times"])
+
+    def test_infamy_is_the_grandeur_taken(self):
+        self.assertEqual(squash(block(read(self.TR_V), "gm_tr_infamy")),
+                         "value = var:gm_tr_tmp_grandeur divide = 5 add = 2 max = 8 "
+                         "if = { limit = { has_global_variable = un_agency_unesco } multiply = 2 }")
+        self.assertEqual(squash(block(read(self.TR_V), "gm_state_tr_infamy")),
+                         "value = gm_state_tr_start add = gm_state_tr_age divide = 5 add = 2 max = 8 "
+                         "if = { limit = { has_global_variable = un_agency_unesco } multiply = 2 }")
+        self.assertIsNone(block(read(self.TR_V), "gm_tr_infamy_of_trophy"))
+        effects = squash(strip_comments(read(self.TR_E)))
+        self.assertEqual(effects.count("change_infamy = gm_tr_infamy"), 2)
+        self.assertEqual(effects.count("set_variable = { name = gm_tr_tmp_g value = gm_mon_grandeur }"), 2)
+        self.assertNotIn("gm_tr_tmp_levels", effects)
+
+    def test_an_anniversary_adds_a_tenth_of_the_starting_grandeur(self):
+        self.assertEqual(squash(block(read(VALUES), "gm_evt_grandeur")),
+                         "value = gm_state_primary_start multiply = 0.1 min = 1")
+        self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_evt_grandeur")),
+                         "value = gm_mon_start multiply = 0.1 min = 1")
 
 
 class RecordWriterTests(unittest.TestCase):

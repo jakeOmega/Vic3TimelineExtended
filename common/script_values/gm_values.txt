@@ -459,9 +459,10 @@ gm_state_disp_frozen = {
 }
 
 # State scope. What an anniversary's public option adds to the monument's age
-# grandeur (ageing spec 2026-10-16 §5): a tenth of its levels, at least 1.
+# grandeur (ageing spec 2026-10-16 §5): a tenth of its starting grandeur, at
+# least 1 (sites spec 2026-10-18 §3.6).
 gm_evt_grandeur = {
-	value = gm_state_primary_levels
+	value = gm_state_primary_start
 	multiply = 0.1
 	min = 1
 }

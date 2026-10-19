@@ -2277,7 +2277,9 @@ gm_state_choose_building_skin = {
 
 # ---- Vanity backlash (§5) --------------------------------------------------------
 # State scope. Levels finished while the country is in default, famine or
-# recession: radicals in the state, and $AMOUNT$ more on the vanity ledger,
+# recession: radicals in the state, and $AMOUNT$ more on the vanity ledger (the
+# grandeur they add: the same share of the world's wealth draws the same
+# outrage in any era, sites spec 2026-10-18 §3.6),
 # which takes legitimacy linearly (gm_national_vanity) and fades over about
 # two years. The journal entry warns beforehand (gm_hard_times_sgui, Task 9).
 # From the construction site's monthly count (gm_state_count_site_levels), so
@@ -2342,7 +2344,7 @@ gm_state_count_site_levels = {
 					owner = { gm_country_hard_times = yes }
 					NOT = { has_variable = gm_rebuilding }
 				}
-				gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_new }
+				gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_add }
 			}
 			set_variable = { name = gm_site_counted value = gm_state_site_level }
 			remove_variable = gm_site_new

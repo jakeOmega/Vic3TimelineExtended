@@ -310,10 +310,12 @@ gm_state_tr_remove_piece = {
 # ---- Consequences (spec §3), state scope (scope:gm_tr_state) ---------------------------
 # In a war: infamy, the owner's anger, and its people's resolve.
 gm_state_tr_consequences_occupation = {
+	scope:gm_tr_new = { set_variable = { name = gm_tr_tmp_g value = gm_mon_grandeur } }
 	scope:gm_tr_taker = {
-		set_variable = { name = gm_tr_tmp_levels value = scope:gm_tr_new.var:gm_tr_levels }
+		set_variable = { name = gm_tr_tmp_grandeur value = scope:gm_tr_new.var:gm_tr_tmp_g }
 		change_infamy = gm_tr_infamy
-		remove_variable = gm_tr_tmp_levels
+		remove_variable = gm_tr_tmp_grandeur
+		scope:gm_tr_new = { remove_variable = gm_tr_tmp_g }
 		change_relations = { country = scope:gm_tr_victim value = gm_tr_relations_taken }
 		every_scope_war = {
 			limit = { is_war_participant = scope:gm_tr_victim }
@@ -392,11 +394,13 @@ gm_tr_take_from_site = {
 			exists = scope:gm_tr_victim
 			scope:gm_tr_taker = { exists = capital }
 		}
+		scope:gm_tr_moving = { set_variable = { name = gm_tr_tmp_g value = gm_mon_grandeur } }
 		scope:gm_tr_taker = {
 			capital = { save_scope_as = gm_tr_site_state }
-			set_variable = { name = gm_tr_tmp_levels value = scope:gm_tr_moving.var:gm_tr_levels }
+			set_variable = { name = gm_tr_tmp_grandeur value = scope:gm_tr_moving.var:gm_tr_tmp_g }
 			change_infamy = gm_tr_infamy
-			remove_variable = gm_tr_tmp_levels
+			remove_variable = gm_tr_tmp_grandeur
+			scope:gm_tr_moving = { remove_variable = gm_tr_tmp_g }
 			change_relations = { country = scope:gm_tr_victim value = gm_tr_relations_taken }
 			every_scope_war = {
 				limit = { is_war_participant = scope:gm_tr_victim }

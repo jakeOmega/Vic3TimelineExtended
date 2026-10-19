@@ -105,10 +105,11 @@ gm_state_tr_who_province_share = {
 }
 
 # ---- Consequences (spec §3) --------------------------------------------------------
-# Country scope, the taker, with the levels taken in var:gm_tr_tmp_levels: 2,
-# plus 1 per 5 levels, at most 8; doubled once UNESCO is in force.
+# Country scope, the taker, with the grandeur taken in var:gm_tr_tmp_grandeur
+# (sites spec 2026-10-18 §3.6: its meaning, not its size): 2, plus 1 per 5
+# grandeur, at most 8; doubled once UNESCO is in force.
 gm_tr_infamy = {
-	value = var:gm_tr_tmp_levels
+	value = var:gm_tr_tmp_grandeur
 	divide = 5
 	add = 2
 	max = 8
@@ -121,19 +122,8 @@ gm_tr_infamy = {
 # State scope: the infamy carrying this monument off would cost, for the
 # tooltips.
 gm_state_tr_infamy = {
-	value = gm_state_tr_levels
-	divide = 5
-	add = 2
-	max = 8
-	if = {
-		limit = { has_global_variable = un_agency_unesco }
-		multiply = 2
-	}
-}
-
-# Container scope: the same for a trophy on display.
-gm_tr_infamy_of_trophy = {
-	value = var:gm_tr_levels
+	value = gm_state_tr_start
+	add = gm_state_tr_age
 	divide = 5
 	add = 2
 	max = 8

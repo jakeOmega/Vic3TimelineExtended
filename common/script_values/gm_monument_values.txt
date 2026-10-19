@@ -257,9 +257,9 @@ gm_mon_status_code = {
 }
 
 # Container scope. What an anniversary's public option adds to a secondary's
-# age (gm_evt_grandeur's twin): a tenth of its levels, at least 1.
+# age (gm_evt_grandeur's twin): a tenth of its starting grandeur, at least 1.
 gm_mon_evt_grandeur = {
-	value = gm_mon_levels
+	value = gm_mon_start
 	multiply = 0.1
 	min = 1
 }
