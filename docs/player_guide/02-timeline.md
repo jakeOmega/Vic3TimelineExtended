@@ -622,7 +622,7 @@ abroad in 1836 and the monuments dug up count at the 1836 rate, 5 grandeur a
 level, split as if each had been dedicated in the year it was built and had aged
 ever since (see [A finished monument and its age](#a-finished-monument-and-its-age)).
 The Brandenburg Gate (1791) starts with about half of its 50 grandeur in
-years, the Parthenon with nearly all of it.
+years, the Parthenon, like anything a century old, with two thirds of it.
 
 Everything a monument gives grows with grandeur in steps, and each step takes
 more grandeur than the one before. Inside a step every point counts. There are
@@ -738,10 +738,10 @@ Age: +3.2". Damage to its building never shrinks it.
 
 A finished monument grows grander with the years: by 2% of the grandeur it was
 dedicated with a year, so it doubles its grandeur in fifty years and triples it
-in a hundred. A historical monument's earlier years are already counted, so the
-oldest have little left to gain: the Parthenon adds about 1 grandeur in fifty
-years, the Brandenburg Gate about 26, and the Arc de Triomphe, finished in 1836,
-the full 75.
+in a hundred, and then it stops. A historical monument's earlier years are
+already counted: the Parthenon has finished ageing, the Brandenburg Gate grows
+for another 55 years to 79, and the Arc de Triomphe, finished in 1836, grows
+from 75 to 225 by 1936.
 
 | Grandeur at dedication | +25 years | +50 years | +100 years |
 |---|---|---|---|

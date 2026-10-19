@@ -118,6 +118,9 @@ gm_curve_steps_lin_f5 = {
 # Mirrors of the static modifiers in gm_modifiers.txt, each of which carries
 # exactly one step (the multiplier is the step count). Loc reads these; the
 # registry test pins every pair equal.
+# Prestige: on the 1/n curve, the 1836 landmarks give up to about +180
+# (Egypt). Not too much (owner, 2026-10-19): leading the world in one
+# prestige good gives more, and an unrecognized power cannot be a great power.
 gm_step_prestige = 25
 gm_step_legitimacy = 2
 gm_step_ig = 1
@@ -546,15 +549,34 @@ gm_policy_factor_age = {
 	}
 }
 
+# The years a monument ages for (owner, 2026-10-19): a century at 2% a year,
+# so its age grandeur stops at twice its starting grandeur and the monument at
+# three times what it was dedicated with. Nothing is grander for being older
+# than that. An anniversary's or an opportunity's gift still adds beyond it.
+gm_age_cap_years = 100
+
+# State scope. The age grandeur the primary may still gain from its years:
+# twice its starting grandeur less the age it has, at least 0.
+gm_state_age_room = {
+	value = gm_state_primary_start
+	multiply = gm_age_cap_years
+	multiply = 2
+	divide = 100
+	subtract = gm_state_primary_age
+	min = 0
+}
+
 # State scope. What a month adds to the primary's age grandeur: 2% of its
 # starting grandeur a year (owner, 2026-10-16: it doubles in fifty years;
 # sites spec 2026-10-18 §3.2: of the starting grandeur, not compounding), as
-# two whole numbers (no six-decimal literal, scripting_best_practices.md).
+# two whole numbers (no six-decimal literal, scripting_best_practices.md),
+# until a century's worth is reached (gm_state_age_room).
 gm_state_age_step = {
 	value = gm_state_primary_start
 	multiply = 2
 	divide = 1200
 	multiply = gm_policy_factor_age
+	max = gm_state_age_room
 }
 
 # State scope. 1 while the primary is finished (gm_levels, ageing spec

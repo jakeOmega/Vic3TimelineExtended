@@ -304,10 +304,11 @@ gm_state_add_age = {
 # Any scope: a historical monument's records (a landmark, a trophy abroad in
 # 1836, a dig). Its $LEVELS$ at the 1836 rate, the grandeur it has today, split
 # as if it had been built in $BUILT$ (a year, negative before Christ) and aged
-# since at 2% of its starting grandeur a year (owner, 2026-10-19): starting
-# grandeur $START$ = G / (1 + 0.02 x years) and age $AGE$ = the rest. So the
-# Parthenon is mostly years and barely ages further, and a monument finished
-# this year is all starting grandeur.
+# since at 2% of its starting grandeur a year for at most a century
+# (gm_age_cap_years; owner, 2026-10-19): starting grandeur
+# $START$ = G / (1 + 0.02 x min(years, 100)) and age $AGE$ = the rest. So the
+# Parthenon is a third starting grandeur and two thirds years and ages no
+# further, and a monument finished this year is all starting grandeur.
 gm_set_historical_grandeur = {
 	set_variable = {
 		name = $START$
@@ -317,6 +318,7 @@ gm_set_historical_grandeur = {
 			divide = {
 				value = gm_this_year
 				subtract = $BUILT$
+				max = gm_age_cap_years
 				multiply = 2
 				divide = 100
 				add = 1

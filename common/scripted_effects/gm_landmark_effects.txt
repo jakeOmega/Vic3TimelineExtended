@@ -44,7 +44,7 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = sans_souci_palace STATE = STATE_HAITI TAG = HAI DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1813 }
 	gm_seed_landmark = { KEY = nikko_toshogu STATE = STATE_KANTO TAG = JAP DEDICATION = crown FORM = gate LEVEL = 5 BUILT = 1636 }
 	gm_seed_landmark = { KEY = parthenon STATE = STATE_ATTICA TAG = GRE DEDICATION = civic FORM = pantheon LEVEL = 10 BUILT = -432 }
-	gm_seed_landmark = { KEY = obelisks_of_karnak STATE = STATE_UPPER_EGYPT TAG = EGY DEDICATION = civic FORM = obelisk LEVEL = 5 BUILT = -1457 }
+	gm_seed_landmark = { KEY = obelisks_of_karnak STATE = STATE_UPPER_EGYPT TAG = EGY DEDICATION = civic FORM = obelisk LEVEL = 10 BUILT = -1457 }
 	gm_seed_landmark = { KEY = royal_palace_of_benin STATE = STATE_BENIN TAG = BEN DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1440 }
 	gm_seed_landmark = { KEY = royal_palace_of_kumasi STATE = STATE_GOLD_COAST TAG = ASH DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1822 }
 	gm_seed_landmark = { KEY = bukgwan_victory_stele STATE = STATE_SARIWON TAG = KOR DEDICATION = war_memorial FORM = stele LEVEL = 5 BUILT = 1709 }

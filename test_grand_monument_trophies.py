@@ -928,11 +928,11 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
             self.assertEqual(kinds[key], "rebuild", key)
 
     def test_the_levels_a_state_of_1836_comes_to(self):
-        # Upper Egypt with both home: Karnak 5 + Luxor 5 + Dendera's piece 2.
+        # Upper Egypt with both home: Karnak 10 + Luxor 5 + Dendera's piece 2.
         by_key = {lm.key: lm for lm in LANDMARKS}
         total = by_key["obelisks_of_karnak"].level + sum(
             tr.levels for tr in TROPHIES_1836 if tr.origin == "STATE_UPPER_EGYPT")
-        self.assertEqual(total, 12)
+        self.assertEqual(total, 17)
 
     def test_a_return_chooses_one_of_three_ways(self):
         home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))

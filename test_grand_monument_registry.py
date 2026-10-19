@@ -1225,14 +1225,16 @@ LANDMARKS = (
     # Kumasi is in Asante's part of the Gold Coast, the Red Fort in the Mughal
     # emperor's one province of Delhi (its city hub).
     Landmark("parthenon", "STATE_ATTICA", "GRE", "civic", "pantheon", ("heritage_greek", "pantheon"), 10),
-    Landmark("obelisks_of_karnak", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), 5),
+    # Persepolis, Baalbek and Karnak at 10 (owner, 2026-10-19): the great
+    # ancient sites, beside the 10-level digs (the Pergamon Altar, Olympia,
+    # Delphi), and Karnak's obelisks above the one Luxor obelisk in Paris (5); a
+    # monument a century old in 1836 has finished ageing, so what it starts with
+    # is what it keeps.
+    Landmark("obelisks_of_karnak", "STATE_UPPER_EGYPT", "EGY", "civic", "obelisk", ("generic", "obelisk"), 10),
     Landmark("royal_palace_of_benin", "STATE_BENIN", "BEN", "crown", "hall", ("generic", "hall"), 5),
     Landmark("royal_palace_of_kumasi", "STATE_GOLD_COAST", "ASH", "crown", "hall", ("generic", "hall"), 5),
     Landmark("bukgwan_victory_stele", "STATE_SARIWON", "KOR", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
     Landmark("imperial_city_of_hue", "STATE_ANNAM", "DAI", "crown", "gate", ("heritage_chinese", "gate"), 10),
-    # Persepolis and Baalbek at 10 (owner, 2026-10-19): the great ancient sites,
-    # beside the 10-level digs (the Pergamon Altar, Olympia, Delphi); an ancient
-    # monument barely ages, so what it starts with is about what it keeps.
     Landmark("persepolis", "STATE_FARS", "PER", "civic", "hall", ("heritage_avestan", "hall"), 10),
     Landmark("red_fort", "STATE_DELHI", "MUG", "crown", "gate", ("heritage_avestan", "gate"), 10),
     # Never placed: the trophies of 1836 with no standing monument of their own.
@@ -1368,7 +1370,7 @@ BUILT = {
 def historical_split(levels, built, year=1836):
     """gm_set_historical_grandeur, transcribed: (starting grandeur, age)."""
     total = levels * 5
-    start = total / max((year - built) * 2 / 100 + 1, 1)
+    start = total / max(min(year - built, 100) * 2 / 100 + 1, 1)
     return start, max(total - start, 0)
 
 
@@ -4439,10 +4441,32 @@ class AgeingTests(unittest.TestCase):
                          "value = 1 if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } "
                          "value = 0.5 }")
         self.assertEqual(squash(block(values, "gm_state_age_step")),
-                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age")
+                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age "
+                         "max = gm_state_age_room")
         self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_age_step")),
                          "value = gm_mon_start multiply = 2 divide = 1200 if = { limit = { var:gm_tr_origin ?= { "
-                         "owner = { gm_policy_is = { P = mothballed STANDARD = no } } } } multiply = 0.5 }")
+                         "owner = { gm_policy_is = { P = mothballed STANDARD = no } } } } multiply = 0.5 } "
+                         "max = gm_mon_age_room")
+
+    def test_a_century_then_it_stands(self):
+        """Owner, 2026-10-19: ageing stops at a century's worth, twice the
+        starting grandeur, so a monument grows to three times what it was
+        dedicated with. Gifts are not capped (they go through gm_*_add_age)."""
+        values = read(VALUES)
+        self.assertRegex(strip_comments(values), r"(?m)^gm_age_cap_years = 100\s*$")
+        self.assertEqual(squash(block(values, "gm_state_age_room")),
+                         "value = gm_state_primary_start multiply = gm_age_cap_years multiply = 2 divide = 100 "
+                         "subtract = gm_state_primary_age min = 0")
+        self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_age_room")),
+                         "value = gm_mon_start multiply = gm_age_cap_years multiply = 2 divide = 100 "
+                         "subtract = gm_mon_age min = 0")
+        # Transcribed: a month at a time, the step clamped to the room left.
+        start, age = 75.0, 0.0
+        for month in range(12 * 150):
+            age += min(start * 2 / 1200, max(start * 100 * 2 / 100 - age, 0))
+            if month == 12 * 50 - 1:
+                self.assertAlmostEqual(start + age, 150)
+        self.assertAlmostEqual(start + age, 225)
 
     def test_what_ages(self):
         ages = squash(block(read(TRIGGERS), "gm_state_ages"))
@@ -6634,13 +6658,14 @@ class HistoricalGrandeurTests(unittest.TestCase):
         body = squash(block(read(EFFECTS), "gm_set_historical_grandeur"))
         self.assertEqual(body,
                          "set_variable = { name = $START$ value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
-                         "divide = { value = gm_this_year subtract = $BUILT$ multiply = 2 divide = 100 add = 1 "
-                         "min = 1 } } } "
+                         "divide = { value = gm_this_year subtract = $BUILT$ max = gm_age_cap_years multiply = 2 "
+                         "divide = 100 add = 1 min = 1 } } } "
                          "set_variable = { name = $AGE$ value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
                          "subtract = var:$START$ min = 0 } }")
-        # The same 2% of starting grandeur a year that ageing adds in the game.
-        self.assertEqual(squash(block(read(VALUES), "gm_state_age_step")),
-                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age")
+        # The same 2% of starting grandeur a year, for at most a century, that
+        # ageing adds in the game.
+        self.assertTrue(squash(block(read(VALUES), "gm_state_age_step")).startswith(
+            "value = gm_state_primary_start multiply = 2 divide = 1200"))
 
     def test_every_historical_row_has_a_year(self):
         historical = {lm.key for lm in LANDMARKS if lm.year is None}
@@ -6653,12 +6678,16 @@ class HistoricalGrandeurTests(unittest.TestCase):
         for key, built in BUILT.items():
             start, age = historical_split(10, built)
             self.assertAlmostEqual(start + age, 50, msg=key)
-            # Aged at 2% of its start a year since, it comes to what it has.
-            self.assertAlmostEqual(start * (1 + 0.02 * (1836 - built)), 50, msg=key)
+            # Aged at 2% of its start a year since, for at most a century, it
+            # comes to what it has.
+            self.assertAlmostEqual(start * (1 + 0.02 * min(1836 - built, 100)), 50, msg=key)
         self.assertEqual(historical_split(15, BUILT["arc_de_triomphe"]), (75, 0))
+        # A century old or more: a third and two thirds, and no further ageing.
         start, age = historical_split(10, BUILT["parthenon"])
-        self.assertAlmostEqual(start, 1.0785, places=4)
-        self.assertAlmostEqual(age, 48.9215, places=4)
+        self.assertAlmostEqual(start, 50 / 3)
+        self.assertAlmostEqual(age, 2 * start)
+        start, age = historical_split(10, BUILT["brandenburg_gate"])
+        self.assertAlmostEqual(start, 50 / 1.9)
 
 
 class DedicateButtonTests(unittest.TestCase):
