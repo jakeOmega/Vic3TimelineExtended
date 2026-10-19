@@ -517,11 +517,14 @@ types te_state_panel_widget_types
 	### gm_local_effect_label / _value. Under them, while contested, who wants it
 	### kept and who resents it, then the inscription (empty when none).
 	###
-	### Display only: Pull Down, Rededicate, Keep as Heritage and the names are
-	### the journal entry's, so a state of the player's own carries a goto
-	### button instead, to the Grand Monuments tab of the Timeline Extended
-	### window (te_systems_window.gui), which shows the entry's own panels. The
-	### title column stops short of it.
+	### Display only but for Dedicate and Carry It Off: Pull Down, Rededicate,
+	### Keep as Heritage and the names are the journal entry's, so a state of
+	### the player's own carries a goto button instead, to the Grand Monuments
+	### tab of the Timeline Extended window (te_systems_window.gui), which shows
+	### the entry's own panels. The title column stops short of it. Our own
+	### monument waiting undedicated has its Dedicate button here too (owner,
+	### 2026-10-18; gm_dedicate_button, grand_monuments_widget.gui), as under
+	### its row in the tab's Awaiting Dedication.
 	###
 	### Under the picture and details, full width, the monuments that stand beside
 	### this one (te_state_gm_beside, gui/gm_trophy_widgets.gui): a row each, only
@@ -841,6 +844,10 @@ types te_state_panel_widget_types
 							using = fontsize_medium
 							text = "gm_row_inscription"
 						}
+
+						### DEDICATE — our own monument waiting undedicated: holds
+						### its ceremony (gm_dedicate_sgui).
+						gm_dedicate_button = {}
 
 						### CARRY IT OFF — while our armies hold the state, or it
 						### is our own unincorporated state and we did not raise

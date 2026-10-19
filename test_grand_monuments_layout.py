@@ -24,16 +24,16 @@ CONCEPT_LOC = os.path.join(REPO, "localization", "english", "te_concepts_l_engli
 # Trophies and Held Abroad are types in gui/gm_trophy_widgets.gui
 # (test_grand_monument_trophies.py holds their flags and gates).
 # Archaeological Expeditions is a type in gui/gm_archaeology_widgets.gui.
-STATUS = ["te_gm_sec_commission", "te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_monuments",
-          "te_gm_sec_trophies", "te_gm_sec_abroad"]
+STATUS = ["te_gm_sec_commission", "te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_awaiting",
+          "te_gm_sec_monuments", "te_gm_sec_trophies", "te_gm_sec_abroad"]
 REFERENCE = ["te_gm_sec_how"]
 # root -> (container, what it wraps)
 ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_panel"),
          "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections"),
          "widget_je_gm_reference": ("custom_widget_container_3", "te_gm_reference_sections")}
-FLAGS = {"gm_commission_closed", "gm_national_closed", "gm_monuments_closed", "gm_how_open"}
-LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_national", "te_gm_sec_monuments",
-                 "gm_monument_row"]
+FLAGS = {"gm_commission_closed", "gm_national_closed", "gm_awaiting_closed", "gm_monuments_closed", "gm_how_open"}
+LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_national", "te_gm_sec_awaiting",
+                 "te_gm_sec_monuments", "gm_monument_row"]
 HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_national", "gm_je_how_counts",
             "gm_je_how_counts_other", "gm_je_how_contested", "gm_je_how_choices",
             "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
@@ -178,6 +178,7 @@ class FlagTest(unittest.TestCase):
     def test_each_section_owns_its_flag(self):
         gui = _gui()
         for sec, flag in (("te_gm_sec_national", "gm_national_closed"),
+                          ("te_gm_sec_awaiting", "gm_awaiting_closed"),
                           ("te_gm_sec_monuments", "gm_monuments_closed"),
                           ("te_gm_sec_how", "gm_how_open")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(gui, sec), sec)

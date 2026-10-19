@@ -276,7 +276,10 @@ gm_mon_ages = {
 # level would move the contest into a monument beside), while a ceremony,
 # unveiling or naming is under way, while script is rebuilding it or putting
 # its method back, or once six monuments stand on a finished one (returns and
-# archaeology may pass six; construction may not).
+# archaeology may pass six; construction may not). Only once nothing is under
+# construction here (2026-10-18): a level queued while a ceremony asked, or
+# after the dedication, is the monument beside it, and closing the gate on it
+# while the unveiling or naming runs could cancel or stall it.
 # Open while script rebuilds it (gm_rebuilding, one day, set before every
 # rebuild's create_building): since 1.13.9 create_building checks some of a
 # building's requirements, and whether that includes can_build_government is
@@ -288,10 +291,11 @@ gm_state_can_expand = {
 		limit = {
 			NOT = { has_variable = gm_rebuilding }
 			# Only a finished monument founds beside; one still being built
-			# takes its queued levels whatever is pending (a ceremony asking at
-			# its first level, a restore after a return), and closing the gate
-			# then could cancel or stall them.
+			# takes its queued levels whatever is pending (a ceremony asking, a
+			# restore after a return), and closing the gate then could cancel or
+			# stall them.
 			has_variable = gm_levels
+			b:building_grand_monument ?= { is_under_construction = no }
 		}
 		custom_tooltip = {
 			text = gm_expand_contested_tt

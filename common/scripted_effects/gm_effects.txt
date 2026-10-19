@@ -12,21 +12,24 @@
 
 # ---- Records (§3) ------------------------------------------------------------
 # State scope. A dedicated monument the pulse finds without records (a pick
-# made in the building panel after a ceremony asked, or a monument from a save
-# older than this system) gets them from its current owner, once. The
-# ceremony writes them itself, so this does nothing for a monument it
-# dedicated. One no ceremony has asked about is the engine's copy, which
-# gm_state_reset_copied_dedication sends to the ceremony first.
+# made in the building panel once script has seen the monument, or a monument
+# from a save older than this system) gets them from its current owner, once.
+# The ceremony writes them itself, so this does nothing for a monument it
+# dedicated. One script has not seen is the engine's copy, which
+# gm_state_reset_copied_dedication sends back to Undedicated first.
 gm_state_first_sight = {
-	# A panel pick without its technology goes to the ceremony, which asks for
-	# it (phase 4 §6): its answer replaces the pick, as for the engine's copy.
+	# A panel pick without its technology goes back to Undedicated, as the
+	# engine's copy does (phase 4 §6 checks the technology in the ceremony);
+	# its Dedicate button asks for it, so no ceremony opens by itself for a
+	# player (owner, 2026-10-18), nor mid-construction.
 	if = {
 		limit = {
 			gm_state_lacks_dedication_tech = yes
 			NOT = { has_variable = gm_seen }
 			NOT = { has_variable = gm_ceremony_pending }
+			NOT = { has_variable = gm_restore_pm }
 		}
-		gm_state_start_ceremony = yes
+		gm_state_return_to_undedicated = yes
 	}
 	else_if = {
 		limit = {
@@ -299,13 +302,16 @@ gm_remove_local_modifiers = {
 	}
 }
 
-# ---- The freeze (spec 2026-10-16 §3.1) ----------------------------------------
-# State scope, from the refresh and monument_events.1. A dedicated monument is
-# finished once its construction stops: its levels then are recorded
-# (gm_levels), and levels built after that found a new monument beside it
-# (gm_state_found_beside, gm_monument_effects.txt). Levels still queued when
-# the ceremony asked join it first; so do levels a player queued before this
-# rule existed (an older save's monument is frozen the same way).
+# ---- The freeze (spec 2026-10-16 §3.1; Dedicate, owner 2026-10-18) ---------------
+# A monument is finished at its dedication: the ceremony's answer records its
+# levels then (gm_levels, gm_state_dedicate), and levels built after that found
+# a new monument beside it (gm_state_found_beside, gm_monument_effects.txt).
+# The Dedicate button and the AI's ceremony ask only once nothing is under
+# construction (owner: pausing is fine, building in parallel is not).
+# State scope, from the refresh and monument_events.1: a monument dedicated
+# some other way is finished once its construction stops, its queued levels
+# joining it: a pick in the building panel (recorded at first sight), a
+# landmark, and one dedicated before the Dedicate button.
 gm_state_record_frozen_levels = {
 	if = {
 		limit = {
@@ -1641,18 +1647,21 @@ gm_state_start_ceremony = {
 	}
 }
 
-# State scope, from gm_country_refresh. The ceremony for an undedicated
-# monument that has grown since one last asked, or that no ceremony ever asked
-# about. monument_events.1 is the immediate path, but on_building_built did
-# not fire when five queued levels of a new monument finished on the same day
-# (owner's game, 2026-10-07; one level at a time it did), and whether it fires
-# for levels after the first is untested. Asking once per new grandeur keeps
-# the ceremony's promise that "leave it undedicated" waits for the next level.
+# State scope, from gm_country_refresh. The AI's ceremony for an undedicated
+# monument with nothing more queued (gm_state_ai_dedicates_now) that has grown
+# since one last asked, or that no ceremony ever asked about (gm_ceremony_level
+# 0, gm_state_mark_awaiting). A player's waits for its Dedicate button (owner,
+# 2026-10-18). monument_events.1 is the immediate path, but on_building_built
+# did not fire when five queued levels of a new monument finished on the same
+# day (owner's game, 2026-10-07; one level at a time it did), and whether it
+# fires for levels after the first is untested. Asking once per new level
+# keeps the AI's "leave it undedicated" until its next level.
 gm_state_offer_missed_ceremony = {
 	if = {
 		limit = {
 			gm_system_enabled = yes
 			gm_state_is_dedicated = no
+			gm_state_ai_dedicates_now = yes
 			NOT = { has_variable = gm_ceremony_pending }
 			OR = {
 				NOT = { has_variable = gm_ceremony_level }
@@ -1697,14 +1706,51 @@ gm_state_undedicate = {
 }
 
 # State scope, from gm_country_refresh and monument_events.1. A monument on a
-# dedication no ceremony gave it and no pulse recorded gets the ceremony.
+# dedication no ceremony gave it and no pulse recorded (the engine's copy)
+# goes back to Undedicated to wait for its Dedicate button (owner,
+# 2026-10-18), through the restore path (gm_state_restore_dedication):
+# gm_state_is_dedicated reads it as undedicated at once, so no first sight,
+# sum or contest takes the copy for a dedication while the switch reads back.
+# Then script has seen it (gm_state_mark_awaiting).
 gm_state_reset_copied_dedication = {
 	if = {
-		limit = {
-			gm_system_enabled = yes
-			gm_state_has_copied_dedication = yes
+		limit = { gm_system_enabled = yes }
+		if = {
+			limit = { gm_state_has_copied_dedication = yes }
+			gm_state_return_to_undedicated = yes
 		}
-		gm_state_start_ceremony = yes
+		gm_state_mark_awaiting = yes
+	}
+}
+
+# State scope. Back to Undedicated through the restore path
+# (gm_state_restore_dedication, which switches the method from a later effect):
+# gm_state_is_dedicated reads it as undedicated at once, so nothing that runs
+# before the switch reads back (a refresh's first sight, sum or contest) takes
+# the method it stands on for a dedication, and no effect switches it twice.
+# Draped at once: the picture is not read while the method is put back. For
+# the engine's copy, a panel pick without its technology and a monument
+# founded beside another (gm_state_found_beside).
+gm_state_return_to_undedicated = {
+	set_variable = { name = gm_restore_pm value = flag:undedicated }
+	set_variable = { name = gm_picture_code value = 1 }
+	gm_state_picture_landmarks = yes
+}
+
+# State scope. Script has seen this monument undedicated: from now on a
+# dedication picked in its building panel counts (gm_state_first_sight),
+# where one picked before reads as the engine's copy
+# (gm_state_has_copied_dedication), and its Dedicate button shows
+# (gm_state_awaits_dedication). gm_ceremony_level 0: no ceremony has asked, so
+# the AI's asks once its construction stops (gm_state_offer_missed_ceremony);
+# the ceremony records the level it asks at.
+gm_state_mark_awaiting = {
+	if = {
+		limit = {
+			NOT = { has_variable = gm_seen }
+			NOT = { has_variable = gm_ceremony_level }
+		}
+		set_variable = { name = gm_ceremony_level value = 0 }
 	}
 }
 
@@ -1874,6 +1920,12 @@ gm_state_dedicate = {
 	# (a return during the ceremony) must not put another back.
 	gm_remove_state_var = { VAR = gm_restore_pm }
 	set_variable = gm_seen
+	# Finished at the levels built (owner, 2026-10-18): levels built later
+	# raise a new monument beside it (gm_state_found_beside), a level queued
+	# while the ceremony asked among them (the button and the AI ask only with
+	# nothing under construction). Read as levels, not the method just
+	# activated.
+	set_variable = { name = gm_levels value = gm_state_primary_levels }
 	gm_state_record_builder = yes
 	# The monument a commission met by this dedication names (v2 §2.3).
 	owner = { set_variable = { name = gm_com_last_state value = prev } }
