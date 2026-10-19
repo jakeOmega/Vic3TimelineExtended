@@ -264,10 +264,10 @@ gm_state_offer_name_choice = {
 			gm_state_has_form_choice = yes
 			gm_state_is_landmark = no
 		}
-		trigger_event = { id = monument_events.24 }
+		trigger_event = { id = monument_events.24 popup = yes }
 	}
 	else = {
-		trigger_event = { id = monument_events.25 }
+		trigger_event = { id = monument_events.25 popup = yes }
 	}
 }
 

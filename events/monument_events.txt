@@ -33,6 +33,15 @@
 # Event 32      - an older save's monument migrated to records and a level-1
 #                 building, or made a construction site (hidden, sites spec
 #                 2026-10-18 §3.5).
+#
+# POPUPS (owner, 2026-10-19): the dedication's own chain -- the ceremony (2),
+# the style (11), the form (24), the namesake (25) and the seized
+# opportunity's notice (28) -- opens at once instead of waiting in the
+# notification list: each defines `is_popup = yes` and every trigger_event
+# that fires one carries `popup = yes`. A player who pressed Dedicate is
+# standing at the monument; a card to click first was a step too many.
+# Anniversaries (3-10, 12-15) and offers (21) stay quiet cards. How and why:
+# docs/guides/event_creation_guide.md § "Making an Event Open at Once".
 # ============================================================================
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
@@ -156,6 +165,7 @@ monument_events.2 = {
 	flavor = monument_events.2.f
 
 	duration = 3
+	is_popup = yes
 
 	# What it asks about (gm_ceremony_mode, gm_state_start_ceremony; sites spec
 	# 2026-10-18 §3.1, §5): a construction site standing here, Rededicate on
@@ -1881,6 +1891,7 @@ monument_events.28 = {
 	flavor = monument_events.28.f
 
 	duration = 3
+	is_popup = yes
 
 	trigger = {
 		gm_system_enabled = yes
@@ -2229,6 +2240,7 @@ monument_events.11 = {
 	flavor = monument_events.11.f
 
 	duration = 3
+	is_popup = yes
 
 	trigger = {
 		has_variable = gm_skin_axis
@@ -2932,6 +2944,7 @@ monument_events.24 = {
 	flavor = monument_events.24.f
 
 	duration = 3
+	is_popup = yes
 
 	trigger = {
 		gm_state_is_dedicated = yes
@@ -2949,7 +2962,7 @@ monument_events.24 = {
 		name = monument_events.24.keep
 		default_option = yes
 		custom_tooltip = gm_form_keep_tt
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -2961,7 +2974,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = column }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -2973,7 +2986,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = arch }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -2985,7 +2998,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = obelisk }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -2997,7 +3010,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = statue }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3009,7 +3022,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = gate }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3021,7 +3034,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = hall }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3033,7 +3046,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = tower }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3045,7 +3058,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = mausoleum }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3057,7 +3070,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = forum }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3069,7 +3082,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pantheon }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3081,7 +3094,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = stoa }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3093,7 +3106,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = court }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3105,7 +3118,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pillar }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3117,7 +3130,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = stele }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3129,7 +3142,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = memorial_church }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3141,7 +3154,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pagoda }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3153,7 +3166,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = round_tower }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3165,7 +3178,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = high_cross }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3177,7 +3190,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pyramid }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3189,7 +3202,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = rune_stone }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3201,7 +3214,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = hall_of_fame }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3213,7 +3226,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = hill_shrine }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3225,7 +3238,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = rock_cut }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3237,7 +3250,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = menorah }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3249,7 +3262,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = bell_tower }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3261,7 +3274,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = rock_hewn_church }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3273,7 +3286,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = sun_stone }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3285,7 +3298,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = stela }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3297,7 +3310,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = sacred_oak }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 
 	option = {
@@ -3309,7 +3322,7 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = colonnade }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
+		hidden_effect = { trigger_event = { id = monument_events.25 popup = yes } }
 	}
 }
 
@@ -3326,6 +3339,7 @@ monument_events.25 = {
 	flavor = monument_events.25.f
 
 	duration = 3
+	is_popup = yes
 
 	trigger = {
 		gm_state_is_dedicated = yes
