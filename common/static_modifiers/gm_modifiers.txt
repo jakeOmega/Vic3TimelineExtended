@@ -375,6 +375,16 @@ gm_name_carrier_slot = {
 # own pm_retooling does. On the building, not the state, so no other building
 # pays it. pm_no_maintenance is off under the default construction market rule,
 # so upkeep cannot move by switching methods.
+# The finished building's upkeep (sites spec 2026-10-18 §3.4): one modifier,
+# its multiplier the levels its monuments record times the policy's factor,
+# less the one level the building stands at (gm_state_upkeep_mult). The two
+# policy modifiers below are no longer added; they stay for older saves, whose
+# pulse removes them.
+gm_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	goods_input_construction_mult = 1
+}
+
 gm_policy_upkeep_open = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	goods_input_construction_mult = 0.5

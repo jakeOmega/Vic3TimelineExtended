@@ -284,6 +284,7 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_sig_archive
 	remove_modifier = gm_local_sig_first_emperor
 	b:building_grand_monument ?= {
+		remove_modifier = gm_upkeep
 		remove_modifier = gm_policy_upkeep_open
 		remove_modifier = gm_policy_upkeep_mothballed
 	}
@@ -415,20 +416,13 @@ gm_state_monthly = {
 			}
 		}
 		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
-		# Upkeep on the building itself: a fixed modifier per policy, so no
-		# multiplier has to resolve in building scope.
-		if = {
-			limit = {
-				owner = { gm_policy_is = { P = open STANDARD = no } }
-			}
-			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_open } }
-		}
-		else_if = {
-			limit = {
-				owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-			}
-			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_mothballed } }
-		}
+		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): the levels
+		# its monuments record, at pm_maintenance's 0.1 a level, through one
+		# modifier whose multiplier reads ROOT, this state, by name
+		# (scripting_best_practices.md). Its variable is overwritten, never
+		# removed.
+		set_variable = { name = gm_upkeep_mult value = gm_state_upkeep_mult }
+		b:building_grand_monument ?= { add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult } }
 		# Each dedication's own effect counts the grandeur of that dedication
 		# standing here, the primary's and those beside it (spec 2026-10-16
 		# §4.2); gm_local_steps keeps the primary's for the card.

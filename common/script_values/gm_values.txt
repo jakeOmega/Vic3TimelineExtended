@@ -1582,3 +1582,33 @@ gm_state_mig_high = {
 	value = gm_state_mig_was
 	multiply = 1.05
 }
+
+# ---- Upkeep (sites spec 2026-10-18 §3.4) -------------------------------------------
+# State scope, the owner's policy: Open pays half again, Mothballed nothing
+# (owner, 2026-10-18: "it is weak now"), every other policy the levels' due.
+gm_policy_factor_upkeep = {
+	value = 1
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = open STANDARD = no } }
+		}
+		value = 1.5
+	}
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+		}
+		value = 0
+	}
+}
+
+# State scope. The multiplier on gm_upkeep: the finished building stands at
+# level 1, and pm_maintenance charges for that one, so the rest of the levels
+# the monuments here record, by the policy, less that one. -1 (Mothballed) is
+# no upkeep at all.
+gm_state_upkeep_mult = {
+	value = gm_state_primary_levels
+	add = gm_state_secondary_levels
+	multiply = gm_policy_factor_upkeep
+	subtract = 1
+}

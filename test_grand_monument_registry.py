@@ -616,9 +616,8 @@ class LocalPulseTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_f5 "
                       "multiply = gm_policy_factor_tourism } }", body)
         self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
-        for policy in ("open", "mothballed"):
-            self.assertIn(f"b:building_grand_monument ?= {{ add_modifier = {{ name = gm_policy_upkeep_{policy} }} }}",
-                          body)
+        # Upkeep by the records (UpkeepTests).
+        self.assertIn("add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult }", body)
         for d in DEDICATIONS:
             self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} }}", body)
 
@@ -2871,7 +2870,7 @@ class PolicyTests(unittest.TestCase):
             self.assertAlmostEqual(number(body, "goods_input_construction_mult"), factors["upkeep"] * 0.5, msg=policy)
         self.assertNotIn("building_grand_monument_throughput_add", strip_comments(mods))
         local = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
-        self.assertIn("b:building_grand_monument ?= { remove_modifier = gm_policy_upkeep_open "
+        self.assertIn("b:building_grand_monument ?= { remove_modifier = gm_upkeep remove_modifier = gm_policy_upkeep_open "
                       "remove_modifier = gm_policy_upkeep_mothballed }", local)
         clear = squash(block(read(EFFECTS), "gm_clear_state"))
         self.assertIn("set_variable = { name = gm_local_tourism_steps value = 0 }", clear)
@@ -6141,6 +6140,38 @@ class MergeRecordTests(unittest.TestCase):
                   "NOT = { has_global_variable = gm_merge_self_checked }"):
             self.assertIn(s, check)
         self.assertNotIn("found", check)
+
+
+class UpkeepTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.4: a level-1 finished building pays the upkeep
+    of the levels its monuments record (0.1 construction a level, as
+    pm_maintenance), x1.5 Open, nothing Mothballed (owner, 2026-10-18)."""
+
+    def test_one_modifier_sized_by_the_records(self):
+        self.assertEqual(squash(block(read(MODIFIERS), "gm_upkeep")).split("icon = ")[1].split(" ", 1)[1],
+                         "goods_input_construction_mult = 1")
+        self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")),
+                         "value = gm_state_primary_levels add = gm_state_secondary_levels "
+                         "multiply = gm_policy_factor_upkeep subtract = 1")
+        self.assertEqual(squash(block(read(VALUES), "gm_policy_factor_upkeep")),
+                         "value = 1 if = { limit = { owner = { gm_policy_is = { P = open STANDARD = no } } } value = 1.5 } "
+                         "if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } value = 0 }")
+        self.assertIn("gm_upkeep", loc())
+
+    def test_the_state_pulse_is_its_one_refresh(self):
+        monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
+        self.assertIn("set_variable = { name = gm_upkeep_mult value = gm_state_upkeep_mult } "
+                      "b:building_grand_monument ?= { add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult } }",
+                      monthly)
+        for old in ("add_modifier = { name = gm_policy_upkeep_open }", "add_modifier = { name = gm_policy_upkeep_mothballed }"):
+            self.assertNotIn(old, monthly)
+        callers = [name for path in sorted(ROOT.glob("common/**/*.txt"))
+                   for name, body in top_level_blocks(read(path.relative_to(ROOT).as_posix()))
+                   if "name = gm_upkeep " in squash(body)]
+        self.assertEqual(callers, ["gm_state_monthly"])
+        remove = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
+        for name in ("gm_upkeep", "gm_policy_upkeep_open", "gm_policy_upkeep_mothballed"):
+            self.assertIn(f"remove_modifier = {name}", remove)
 
 
 class RecordWriterTests(unittest.TestCase):
