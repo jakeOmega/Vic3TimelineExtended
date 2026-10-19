@@ -1,4 +1,4 @@
-"""Dump or diff per-country script state in a Victoria 3 save: variables, modifiers, journal entries, laws.
+"""Dump or diff per-country script state in a Victoria 3 save: variables, modifiers, journal entries, laws; states too.
 
 Read-only, and needs nothing but the .v3 file, except for law groups (below).
 Built for questions a save answers at once and a running game answers slowly;
@@ -13,6 +13,9 @@ Usage:
     save_country_probe.py [save.v3] --law-conflicts
     save_country_probe.py --diff before.v3 after.v3 --tag GER
     save_country_probe.py --diff before.v3 after.v3 --var '^nd_'
+    save_country_probe.py [save.v3] --states --var '^gm_' --owner EUN
+    save_country_probe.py [save.v3] --state 456 --state STATE_SUEZ
+    save_country_probe.py --diff before.v3 after.v3 --states --var '^gm_(premigration|migrated)$'
 
 With no save named, the newest in the save folder is read. A country is shown if
 it matches every filter given: --tag (repeatable), --var / --modifier (a regex; it
@@ -33,6 +36,18 @@ with counts by group, by law pair and by the date the newer law became active.
 assert: a save made before law_penal_labor_camps existed (PR #520), loaded after,
 came back with 115 countries holding it beside
 law_punishment_focused_criminal_justice, every one activated on the same day.
+
+--states reads states instead of countries: each state's id, region, owner,
+variables, variable lists and modifiers. A state is shown if it matches every
+filter given: --owner (a tag, repeatable), --state (an id or a region name,
+STATE_ optional, repeatable; a region split between owners is several states)
+and --var / --modifier as for countries. --owner or --state alone implies
+--states. With --diff, a state is compared if it matches in either save, by
+id, in the parts the filters print; an owner change is a line of its own.
+Built for #1061: three sessions had rebuilt a throwaway scanner to read state
+variables (demographics late births, the census cohort slots, Grand Monuments'
+migration of older saves). On a 2055 save of 758 states, a read takes 2-3 s
+when the filters name few of them (56 held a gm_ variable) and 7 s for all.
 
 Law groups are not in the save. They come from the `group =` of each law
 definition, read with brace depth tracked: vanilla's common/laws (the game
@@ -78,16 +93,27 @@ check_save_history_order.py).
             Kind 0x02d2 is a script value: i64 fixed point, value * 1e5, and
             exactly 0 is saved with no 0x00db at all. Kind 0x333c is a country
             reference (the value is its id), printed as country#<id>(<TAG>), or
-            (gone) when no country block has that id. Other kinds print raw.
+            (gone) when no country block has that id. Kind 0x0384 (the token of
+            the name key itself) is a flag, `value = flag:x`, and keeps its text
+            under 0x0384 instead of 0x00db: printed flag:x. Kind 0x0500 is a bool:
+            a bare `set_variable = gm_seen` writes it, and all 1,022 on one
+            2055 save's states held 1, printed yes. Kinds 0x0360, 0x01b7 and
+            0x3345 (worked out 2026-10-19) are references, printed as
+            container#<id>, state#<id> and character#<id>: gm_shadow holds a
+            container, gm_name_char a character (one of three ids it held had a
+            live character record; the script guards it with `exists`, as a
+            monument's namesake can be dead). An entry with no 0x00f0 at all
+            (event names such as rubber_events.1, beside a 0x0385 integer) prints
+            flag. Other kinds print raw, 0x....:<value>.
 
   variable lists (in the same 0x0555 block, beside the variable data; worked out 2026-10-03 on a 1.14.5 save)
             0x0555 = { 0x00f0 = { ... }  0x0351 = { { 0x001b = "<name>"
                          0x0352 = { 0x00e1 = <kind> 0x00db = <id> }  ... 0x006d = { <n> ... } } ... }
                        0x0583 = { ... } }
             Items keep their saved order. Item kinds are the variables' own: 0x0360 a script container,
-            0x01b7 a state, 0x333c a country; any other prints as `0x....#<id>`. 0x0583 holds the maps
-            (not decoded). A state id is the state's slot; the state database is not decoded, so a list
-            of states prints `state#<id>`.
+            0x01b7 a state, 0x333c a country, 0x3345 a character; any other prints as `0x....#<id>`.
+            0x0583 holds the maps (not decoded). A state id is the id of the state's record (below);
+            a country's list of states prints `state#<id>`, and --state <id> reads one.
 
   modifiers (a direct child of the country block)
             0x333b = { 0x0d00 = { { 0x000b = u32:<instance>  0x0c1f = "<name>"
@@ -137,6 +163,28 @@ check_save_history_order.py).
             check: the gamestate's count of `0x2b0a = "<string>"` must equal
             the records decoded (40542 of 40542); a mismatch, or no database
             at all, is reported as a WARNING.
+
+  states    (worked out 2026-10-19 on one 1.14.5 save of 758 states)
+            0x09cd = { 0x05ab = { u32:<id> = { 0x27f3 = <int>  0x2840 = u32:<owner country id>
+                                               ...  0x0555 = { <variables, laid out as a country's> }
+                                               0x06bc = "<region, e.g. STATE_ILE_DE_FRANCE>"  ...
+                                               0x333b = { <modifier list, laid out as a country's> } ... }
+                                  u32:<id> = 0x0165 ... }  0x3360 = { ... }  0x3194 = ... }
+            Verified: 0x06bc is the region (Paris, the European Union's
+            capital, is state 456, STATE_ILE_DE_FRANCE), and 0x2840 is the
+            owner: all 758 named a country block, Paris's the EU's. A region
+            split between owners is one record each
+            (STATE_MALAYA three times). Ids carry a reuse counter in the top
+            byte, as countries' do. 0x27f3, always the first key, is not the
+            region; meaning unknown. 0x57b4 is a tag string on 452 records and
+            0x57b3 a country id on 372, but the tag matched 0x57b3's on only 17
+            of 320, so neither is decoded. A record is found by its opening
+            bytes, 14 00 <id> 01 00 03 00 f3 27, after the database header, and
+            read to the next one; byte filters skip the rest unparsed, as for
+            countries. Coverage check: every record of that shape in the
+            gamestate is inside the database, and the last one's block is
+            followed by the database's closing brace (758 of 758); otherwise,
+            or with no database at all, a WARNING.
 
   interest groups (not decoded by this tool; worked out 2026-10-07 on one 1.14.5
             save of 313 countries, 2503 records)
@@ -192,8 +240,10 @@ KEY_DEF, KEY_VARS, KEY_DATA, KEY_NAME, KEY_VAL, KEY_KIND = 0x07DD, 0x0555, 0x00F
 KEY_MODS, KEY_MODLIST, KEY_MODNAME = 0x333B, 0x0D00, 0x0C1F
 # Variable lists: a sibling of the variable data, `0x0351 = { { 0x001b = "name" (0x0352 = { kind id })... 0x006d = {n} } }`.
 KEY_LIST, KEY_LIST_NAME, KEY_LIST_ITEM = 0x0351, 0x001B, 0x0352
-LIST_KINDS = {0x0360: "container", 0x01B7: "state", 0x333C: "country"}
-KIND_VALUE, KIND_COUNTRY = 0x02D2, 0x333C
+# Reference kinds, shared by list items and variables (a country variable keeps its own form, for the tag).
+LIST_KINDS = {0x0360: "container", 0x01B7: "state", 0x333C: "country", 0x3345: "character"}
+KIND_VALUE, KIND_COUNTRY, KIND_BOOL = 0x02D2, 0x333C, 0x0500
+KIND_FLAG = KEY_NAME  # a `flag:x` value: its text sits under the name key's own token
 FLAG_TAG_HOLDER, FLAG_REVOLUTIONARY = 0x538B, 0x4386
 FLAG_GUESSES = {FLAG_TAG_HOLDER: "tag holder?", FLAG_REVOLUTIONARY: "revolutionary?"}
 # Every mod journal entry and all but these vanilla ones (1.14) start with je_.
@@ -205,11 +255,17 @@ JE_TYPE_RE = re.compile(rb"\xe1\x00\x01\x00(?:\x0f|\x17)\x00(..)", re.S)
 JE_OWNER = b"\x40\x28\x01\x00\x14\x00"
 JE_ACTIVE = b"\xb2\x2a\x01\x00\x0e\x00"
 MONTHS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+DATE_KEY = b"\x45\x32\x01\x00\x0c\x00"  # 0x3245 = i32: the game date in hours (meta, and the gamestate's head)
 # Laws (BINARY LAYOUT § laws). The owner and active keys are the journal entries' ones.
 KEY_LAW_DB, KEY_DATABASE, KEY_LAW_TYPE, KEY_OWNER, KEY_ACTIVE = 0x5705, 0x05AB, 0x2B0A, 0x2840, 0x2AB2
 KEY_LAW_SINCE, KEY_LAW_REPLACED, KEY_LAW_ENACTING = 0x2A86, 0x0632, 0x56FC
 LAW_DB_HDR = struct.pack("<H", KEY_LAW_DB) + b"\x01\x00\x03\x00" + struct.pack("<H", KEY_DATABASE) + b"\x01\x00\x03\x00"
 LAW_TYPE_RE = re.compile(re.escape(struct.pack("<H", KEY_LAW_TYPE)) + rb"\x01\x00(?:\x0f|\x17)\x00")
+# States (BINARY LAYOUT § states).
+KEY_STATE_DB, KEY_REGION, KEY_STATE_FIRST = 0x09CD, 0x06BC, 0x27F3
+STATE_DB_HDR = struct.pack("<H", KEY_STATE_DB) + b"\x01\x00\x03\x00" + struct.pack("<H", KEY_DATABASE) + b"\x01\x00\x03\x00"
+STATE_HDR_RE = re.compile(rb"\x14\x00(....)\x01\x00\x03\x00" + re.escape(struct.pack("<H", KEY_STATE_FIRST)), re.S)
+CLOSE_BYTES = b"\x04\x00"
 # Law definition text: a quoted string, a comment (dropped), a brace or '=', or a bare word.
 SCRIPT_TOKEN_RE = re.compile(r'"[^"]*"|#[^\n]*|[{}=]|[^\s{}=#"]+')
 DIRECTIVE_RE = re.compile(r"^[A-Z_]+:")  # INJECT:, REPLACE:, TRY_INJECT:, ...
@@ -324,7 +380,7 @@ def country_headers(b):
 
 
 def read_variables(items):
-    """{name: value}: floats for script values, ("country", id) for country refs, else raw text."""
+    """{name: value}: floats for script values, ("country", id) for country refs, else text (BINARY LAYOUT § variables)."""
     out = {}
     block = get(items, KEY_VARS)
     data = get(block, KEY_DATA) if isinstance(block, list) else None
@@ -337,12 +393,19 @@ def read_variables(items):
         wrap = get(entry, KEY_DATA)
         kind = get(wrap, KEY_KIND) if isinstance(wrap, list) else None
         val = get(wrap, KEY_VAL) if isinstance(wrap, list) else None
+        flag = get(wrap, KIND_FLAG) if isinstance(wrap, list) else None
         if kind == ("tok", KIND_VALUE):
             out[name[1]] = round(val[1] / FIXED, 3) if val and val[0] == "int" else 0.0
+        elif kind == ("tok", KIND_FLAG) and flag and flag[0] == "str":
+            out[name[1]] = f"flag:{flag[1]}"
         elif kind == ("tok", KIND_COUNTRY) and val and val[0] == "int":
             out[name[1]] = ("country", val[1])
         elif val is None:
             out[name[1]] = "flag"
+        elif kind == ("tok", KIND_BOOL) and val in (("int", 0), ("int", 1)):
+            out[name[1]] = "yes" if val[1] else "no"
+        elif kind and kind[0] == "tok" and kind[1] in LIST_KINDS and val[0] == "int":
+            out[name[1]] = f"{LIST_KINDS[kind[1]]}#{val[1]}"
         else:
             kind_text = f"0x{kind[1]:04x}" if kind and kind[0] == "tok" else str(kind)
             out[name[1]] = f"{kind_text}:{val[1] if not isinstance(val, list) else '{...}'}"
@@ -447,6 +510,32 @@ def law_records(b):
             )
         return out, warning
     return [], "no law database (0x5705 = { 0x05ab = { ... } }) in the gamestate; laws not decoded"
+
+
+def state_headers(b):
+    """([(offset, id), ...] for every state record in file order, the last record's end, warning or None).
+
+    Records are found by their opening bytes after the database header; the last
+    one is parsed to find where the database closes (BINARY LAYOUT § states).
+    """
+    at = b.find(STATE_DB_HDR)
+    if at == -1:
+        return [], None, "no state database (0x09cd = { 0x05ab = { ... } }) in the gamestate; states not decoded"
+    found = [(m.start(), struct.unpack("<I", m.group(1))[0]) for m in STATE_HDR_RE.finditer(b)]
+    heads = [h for h in found if h[0] > at]
+    if not heads:
+        return [], None, f"a state database at 0x{at:x} but no state records in it; states not decoded"
+    try:
+        end = parse_block(b, heads[-1][0])[1]
+    except (ValueError, StopIteration, struct.error):
+        return heads, None, f"the last state record (at 0x{heads[-1][0]:x}) does not parse; it is skipped"
+    warnings = []
+    if len(heads) != len(found):
+        warnings.append(f"{len(found) - len(heads)} state-shaped records before the database at 0x{at:x}")
+    if b[end : end + 2] != CLOSE_BYTES:
+        warnings.append(f"the last state record (id {heads[-1][1]}) is not followed by the database's closing brace;"
+                        " a record of another kind may have been read as a state")
+    return heads, end, "; ".join(warnings) or None
 
 
 def top_level_fields(text, field):
@@ -561,14 +650,16 @@ def fmt_hours(hours):
     return f"{year}.{month + 1}.{day + 1}"
 
 
-def save_date(save_path):
+def save_date(save_path, blob=None):
+    """The game date from meta; an autosave has none, so then from the gamestate (`blob`), when given."""
     raw = Path(save_path).read_bytes()
     with zipfile.ZipFile(io.BytesIO(raw[raw.find(b"PK\x03\x04") :])) as archive:
         meta = archive.read("meta") if "meta" in archive.namelist() else b""
-    at = meta.find(b"\x45\x32\x01\x00\x0c\x00")
-    if at == -1:
-        return "?"
-    return fmt_hours(struct.unpack_from("<i", meta, at + 6)[0])
+    at = meta.find(DATE_KEY)
+    if at != -1:
+        return fmt_hours(struct.unpack_from("<i", meta, at + 6)[0])
+    at = blob.find(DATE_KEY, 0, 4096) if blob is not None else -1  # ~30 bytes in (save_world_report.gamestate_hours)
+    return fmt_hours(struct.unpack_from("<i", blob, at + 6)[0]) if at != -1 else "?"
 
 
 # ---------------------------------------------------------------- selection
@@ -605,6 +696,10 @@ class Filters:
         """Cheap test before decoding a block; False only when the country cannot match."""
         if self.tags and tag not in self.tags:
             return False
+        return self.probes_pass(segment)
+
+    def probes_pass(self, segment):
+        """False only when a --var / --modifier pattern can match no name in the raw block."""
         for regex in (self.var, self.modifier):
             probe_re = self._bytes_probe(regex.pattern) if regex else None
             if probe_re and not probe_re.search(segment):
@@ -646,6 +741,90 @@ class Filters:
         if part == "laws":
             return bool(self.laws or self.law)
         return {"vars": self.var, "modifiers": self.modifier, "journal": self.je}[part] is not None
+
+
+def region_name(text):
+    """STATE_ILE_DE_FRANCE from STATE_ILE_DE_FRANCE, state_ile_de_france or ile_de_france."""
+    name = text.upper()
+    return name if name.startswith("STATE_") else "STATE_" + name
+
+
+class StateFilters(Filters):
+    """--states: --owner (tags) and --state (ids or region names) in place of --tag; --var and --modifier as for countries."""
+
+    def __init__(self, owners=(), states=(), var=None, modifier=None):
+        super().__init__(owners, var, modifier)
+        states = [str(x) for x in states]
+        self.ids = {int(x) for x in states if x.isdigit()}
+        self.regions = {region_name(x) for x in states if not x.isdigit()}
+
+    def prefilter(self, segment, sid):
+        """Cheap test before decoding a record; False only when the state cannot match."""
+        if (self.ids or self.regions) and not (
+            sid in self.ids or any(r.encode("latin1") in segment for r in self.regions)
+        ):
+            return False
+        return self.probes_pass(segment)
+
+    def wants(self, rec):
+        """The tests the bytes could not settle: the owner, and a region named (an id is exact already)."""
+        if self.tags and rec["tag"] not in self.tags:
+            return False
+        if (self.ids or self.regions) and rec["id"] not in self.ids and rec["region"] not in self.regions:
+            return False
+        return self.matches(rec)
+
+    def trim(self, rec):
+        if self.var:
+            rec["vars"] = {k: v for k, v in rec["vars"].items() if self.var.search(k)}
+            rec["lists"] = {k: v for k, v in rec["lists"].items() if self.var.search(k)}
+        if self.modifier:
+            rec["modifiers"] = [m for m in rec["modifiers"] if self.modifier.search(m)]
+        return rec
+
+
+class StateSave:
+    """One save's state records, read only where the filters can match (BINARY LAYOUT § states)."""
+
+    def __init__(self, path, filters):
+        self.path = Path(path)
+        self.filters = filters
+        self.blob = read_gamestate(path)
+        self.tags = {cid: tag for _, cid, tag, _ in country_headers(self.blob)}
+        heads, last_end, self.warning = state_headers(self.blob)
+        self.extent = {}
+        for pos, (start, sid) in enumerate(heads):
+            nxt = heads[pos + 1][0] if pos + 1 < len(heads) else last_end
+            if nxt is not None:
+                self.extent[sid] = (start, nxt)
+
+    def record(self, sid):
+        start, nxt = self.extent[sid]
+        items, end = parse_block(self.blob, start)
+        owner, region = get(items, KEY_OWNER), get(items, KEY_REGION)
+        oid = owner[1] if owner and owner[0] == "int" else None
+        rec = {
+            "id": sid,
+            "region": region[1] if region and region[0] == "str" else None,
+            "owner": oid,
+            "tag": self.tags.get(oid, "gone") if oid is not None else "none",
+            "vars": read_variables(items),
+            "lists": read_lists(items),
+            "modifiers": read_modifiers(items),
+            "warning": f"block ends at 0x{end:x}, past the next record at 0x{nxt:x}" if end > nxt else None,
+        }
+        return self.filters.trim(rec)
+
+    def select(self):
+        """{id: record} for every state that matches the filters."""
+        out = {}
+        for sid, (start, nxt) in self.extent.items():
+            if not self.filters.prefilter(self.blob[start:nxt], sid):
+                continue
+            rec = self.record(sid)
+            if self.filters.wants(rec):
+                out[sid] = rec
+        return out
 
 
 class Save:
@@ -763,6 +942,33 @@ def law_lines(laws, indent):
     return lines
 
 
+def script_lines(rec, tags, filters, indent):
+    """A country's or a state's modifiers, variables and variable lists, as far as the filters show them."""
+    lines = []
+    if filters.shows("modifiers"):
+        lines.append(f"{indent}  modifiers ({len(rec['modifiers'])}): {', '.join(rec['modifiers']) or '-'}")
+    if filters.shows("vars"):
+        lines.append(f"{indent}  variables ({len(rec['vars'])}):")
+        lines += [f"{indent}    {k} = {fmt_value(v, tags)}" for k, v in sorted(rec["vars"].items())]
+        if rec["lists"]:
+            lines.append(f"{indent}  variable lists ({len(rec['lists'])}):")
+            lines += [f"{indent}    {k} = {' '.join(v) or '(empty)'}" for k, v in sorted(rec["lists"].items())]
+    return lines
+
+
+def state_title(rec, tags):
+    """`state#456 STATE_ILE_DE_FRANCE, owner country#4(EUN)`: a region can hold several states, so the id leads."""
+    owner = fmt_value(("country", rec["owner"]), tags) if rec["owner"] is not None else "none"
+    return f"state#{rec['id']} {rec['region'] or '(no region)'}, owner {owner}"
+
+
+def describe_state(rec, tags, filters, indent="  "):
+    lines = [f"{indent}{state_title(rec, tags)}"]
+    if rec["warning"]:
+        lines.append(f"{indent}  WARNING: {rec['warning']}")
+    return "\n".join(lines + script_lines(rec, tags, filters, indent))
+
+
 def describe(rec, tags, filters, indent="  "):
     lines = [f"{indent}{rec['tag']} id={rec['id']} (slot {rec['id'] & 0xFFFFFF})  flags: {fmt_flags(rec['flags'])}"]
     if rec["warning"]:
@@ -773,14 +979,7 @@ def describe(rec, tags, filters, indent="  "):
         for t, mods in sorted(rec["journal_modifiers"].items()):
             if mods:
                 lines.append(f"{indent}    {t} modifiers ({len(mods)}): {', '.join(sorted(mods))}")
-    if filters.shows("modifiers"):
-        lines.append(f"{indent}  modifiers ({len(rec['modifiers'])}): {', '.join(rec['modifiers']) or '-'}")
-    if filters.shows("vars"):
-        lines.append(f"{indent}  variables ({len(rec['vars'])}):")
-        lines += [f"{indent}    {k} = {fmt_value(v, tags)}" for k, v in sorted(rec["vars"].items())]
-        if rec["lists"]:
-            lines.append(f"{indent}  variable lists ({len(rec['lists'])}):")
-            lines += [f"{indent}    {k} = {' '.join(v) or '(empty)'}" for k, v in sorted(rec["lists"].items())]
+    lines += script_lines(rec, tags, filters, indent)
     if filters.shows("laws"):
         label = "laws, active and matching" if filters.law else "laws, active"
         lines.append(f"{indent}  {label} ({len(rec['laws'])}):")
@@ -794,11 +993,25 @@ def describe(rec, tags, filters, indent="  "):
 def report(save_path, filters, groups=None):
     save = Save(save_path, filters, groups)
     recs = save.select()
-    print(f"{save_path}  [{save_date(save_path)}]  {len(save.tags)} country blocks, {len(recs)} shown")
+    print(f"{save_path}  [{save_date(save_path, save.blob)}]  {len(save.tags)} country blocks, {len(recs)} shown")
     if save.law_warning and filters.shows("laws"):
         print(f"  WARNING: {save.law_warning}")
     for rec in sorted(recs.values(), key=lambda r: (r["tag"], r["id"])):
         print(describe(rec, save.tags, filters))
+
+
+def state_order(rec):
+    return rec["tag"], rec["region"] or "", rec["id"]
+
+
+def report_states(save_path, filters):
+    save = StateSave(save_path, filters)
+    recs = save.select()
+    print(f"{save_path}  [{save_date(save_path, save.blob)}]  {len(save.extent)} state records, {len(recs)} shown")
+    if save.warning:
+        print(f"  WARNING: {save.warning}")
+    for rec in sorted(recs.values(), key=state_order):
+        print(describe_state(rec, save.tags, filters))
 
 
 def conflict_report(save_path, filters, groups=None):
@@ -808,7 +1021,7 @@ def conflict_report(save_path, filters, groups=None):
               if not filters.tags or save.tags.get(cid) in filters.tags}
     found = law_conflicts(active, save.groups)
     total = sum(len(recs) for recs in active.values())
-    print(f"{save_path}  [{save_date(save_path)}]  {len(active)} countries with active laws ({total} laws),"
+    print(f"{save_path}  [{save_date(save_path, save.blob)}]  {len(active)} countries with active laws ({total} laws),"
           f" {len(found)} with two or more active in one group")
     if save.law_warning:
         print(f"  WARNING: {save.law_warning}")
@@ -884,6 +1097,68 @@ def civil_war_outcome(ra, rz):
     return None
 
 
+def script_changes(p, q, tags_p, tags_q, filters=None):
+    """What changed between two records of one country or state: variables, variable lists, modifiers.
+
+    With filters, only the parts they print are compared (the state diff); the
+    country diff passes none and compares every part, as it always has.
+    """
+    ch = []
+    if filters is None or filters.shows("vars"):
+        ch += variable_changes(p, q, tags_p, tags_q)
+    if filters is None or filters.shows("modifiers"):
+        ch += [f"+modifier {m}" for m in q["modifiers"] if m not in p["modifiers"]]
+        ch += [f"-modifier {m}" for m in p["modifiers"] if m not in q["modifiers"]]
+    return ch
+
+
+def variable_changes(p, q, tags_p, tags_q):
+    ch = [
+        f"{k}: {fmt_value(p['vars'].get(k, '-'), tags_p)} -> {fmt_value(q['vars'].get(k, '-'), tags_q)}"
+        for k in sorted(set(p["vars"]) | set(q["vars"]))
+        if p["vars"].get(k) != q["vars"].get(k)
+    ]
+    ch += [
+        f"list {k}: {' '.join(p['lists'].get(k, ['-']))} -> {' '.join(q['lists'].get(k, ['-']))}"
+        for k in sorted(set(p["lists"]) | set(q["lists"]))
+        if p["lists"].get(k) != q["lists"].get(k)
+    ]
+    return ch
+
+
+def diff_states(before, after, filters):
+    """Per state id: gone, new, or what changed on it (its owner, variables, variable lists, modifiers)."""
+    a, z = StateSave(before, filters), StateSave(after, filters)
+    # A state is in if it matches in either save; then it is compared in both.
+    wanted = set(a.select()) | set(z.select())
+    print(f"BEFORE {before}  [{save_date(before, a.blob)}]\nAFTER  {after}  [{save_date(after, z.blob)}]\n")
+    for label, save in (("BEFORE", a), ("AFTER", z)):
+        if save.warning:
+            print(f"WARNING ({label}): {save.warning}\n")
+    recs = {sid: (a.record(sid) if sid in a.extent else None, z.record(sid) if sid in z.extent else None)
+            for sid in wanted}
+    changed = 0
+    for sid, (p, q) in sorted(recs.items(), key=lambda kv: state_order(kv[1][1] or kv[1][0])):
+        if q is None:
+            print(f"== {state_title(p, a.tags)}\n   gone (no longer in the save)\n")
+            changed += 1
+            continue
+        if p is None:
+            print("\n".join([f"== {state_title(q, z.tags)}", "   new:", *script_lines(q, z.tags, filters, "   ")]) + "\n")
+            changed += 1
+            continue
+        ch = []
+        if p["owner"] != q["owner"]:
+            ch.append(f"owner: {fmt_value(('country', p['owner']), a.tags)} -> {fmt_value(('country', q['owner']), z.tags)}")
+        if p["region"] != q["region"]:
+            ch.append(f"region: {p['region']} -> {q['region']}")
+        ch += script_changes(p, q, a.tags, z.tags, filters)
+        if ch:
+            changed += 1
+            print(f"== {state_title(q, z.tags)}\n" + "\n".join(f"     {c}" for c in ch) + "\n")
+    print(f"{len(wanted)} states compared, {changed} changed")
+
+
 def diff(before, after, filters, groups=None):
     """Per tag: objects gone and new, and what changed on each that survived."""
     a, z = Save(before, filters, groups), Save(after, filters, groups)
@@ -891,7 +1166,7 @@ def diff(before, after, filters, groups=None):
     # objects are compared, so a civil war's two sides stay together even when
     # only one of them holds what the filters ask for.
     wanted = {r["tag"] for r in a.select().values()} | {r["tag"] for r in z.select().values()}
-    print(f"BEFORE {before}  [{save_date(before)}]\nAFTER  {after}  [{save_date(after)}]\n")
+    print(f"BEFORE {before}  [{save_date(before, a.blob)}]\nAFTER  {after}  [{save_date(after, z.blob)}]\n")
     for label, save in (("BEFORE", a), ("AFTER", z)):
         if save.law_warning:
             print(f"WARNING ({label}): {save.law_warning}\n")
@@ -905,18 +1180,7 @@ def diff(before, after, filters, groups=None):
             lines.append("   new:\n" + describe(rz[cid], z.tags, filters, "     "))
         for cid in sorted(set(ra) & set(rz)):
             p, q = ra[cid], rz[cid]
-            ch = [
-                f"{k}: {fmt_value(p['vars'].get(k, '-'), a.tags)} -> {fmt_value(q['vars'].get(k, '-'), z.tags)}"
-                for k in sorted(set(p["vars"]) | set(q["vars"]))
-                if p["vars"].get(k) != q["vars"].get(k)
-            ]
-            ch += [
-                f"list {k}: {' '.join(p['lists'].get(k, ['-']))} -> {' '.join(q['lists'].get(k, ['-']))}"
-                for k in sorted(set(p["lists"]) | set(q["lists"]))
-                if p["lists"].get(k) != q["lists"].get(k)
-            ]
-            ch += [f"+modifier {m}" for m in q["modifiers"] if m not in p["modifiers"]]
-            ch += [f"-modifier {m}" for m in p["modifiers"] if m not in q["modifiers"]]
+            ch = script_changes(p, q, a.tags, z.tags)
             p_laws, q_laws = {x["law"]: x for x in p["laws"]}, {x["law"]: x for x in q["laws"]}
             ch += [f"+law {fmt_law(q_laws[k])} [{q_laws[k]['group'] or '?'}]" for k in sorted(set(q_laws) - set(p_laws))]
             ch += [f"-law {k} [{p_laws[k]['group'] or '?'}]" for k in sorted(set(p_laws) - set(q_laws))]
@@ -954,6 +1218,10 @@ def main(argv):
     parser.add_argument("--law", help="regex over active law names and their law group names")
     parser.add_argument("--law-conflicts", action="store_true",
                         help="list countries with two or more active laws in one group (--tag narrows it)")
+    parser.add_argument("--states", action="store_true", help="read states instead of countries")
+    parser.add_argument("--owner", action="append", default=[], help="with --states: owner tag (repeatable)")
+    parser.add_argument("--state", action="append", default=[],
+                        help="with --states: a state id or region name, STATE_ optional (repeatable)")
     args = parser.parse_args(argv)
     try:
         return run_args(args, parser)
@@ -963,6 +1231,8 @@ def main(argv):
 
 
 def run_args(args, parser):
+    if args.states or args.owner or args.state:
+        return run_states(args, parser)
     filters = Filters(args.tag, args.var, args.modifier, args.je, args.laws, args.law)
     if args.law_conflicts and (args.diff or args.var or args.modifier or args.je or args.laws or args.law):
         parser.error("--law-conflicts takes only --tag")
@@ -979,6 +1249,24 @@ def run_args(args, parser):
         return 1 if sum(conflict_report(save, filters) for save in saves) else 0
     for save in saves:
         report(save, filters)
+    return 0
+
+
+def run_states(args, parser):
+    if args.tag or args.je or args.laws or args.law or args.law_conflicts:
+        parser.error("--states takes --owner, --state, --var, --modifier and --diff")
+    filters = StateFilters(args.owner, args.state, args.var, args.modifier)
+    if args.diff:
+        if len(args.saves) != 2:
+            parser.error("--diff takes exactly two saves: before after")
+        diff_states(*args.saves, filters)
+        return 0
+    saves = args.saves or find_saves()[:1]
+    if not saves:
+        print("no save found")
+        return 1
+    for save in saves:
+        report_states(save, filters)
     return 0
 
 
