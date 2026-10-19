@@ -2311,8 +2311,8 @@ gm_world_rate_ensure = {
 # State scope, from gm_state_monthly (real execution, never the walked
 # refresh) and at the start of every dedication. Levels the site has finished
 # above those counted (gm_site_counted) join its starting grandeur so far
-# (gm_site_grandeur), one each until the world-wealth rate (Plan B), and draw
-# the vanity backlash in hard times. Fewer levels than counted (downsized, or
+# (gm_site_grandeur), each at the world-wealth rate of the month it is counted
+# (gm_world_rate_value, Plan B), and draw the vanity backlash in hard times. Fewer levels than counted (downsized, or
 # lost) take their share of the grandeur with them. A site gone takes its
 # records with it; a dedication reads them first.
 gm_state_count_site_levels = {
@@ -2328,7 +2328,15 @@ gm_state_count_site_levels = {
 			limit = { gm_state_site_level > var:gm_site_counted }
 			set_variable = { name = gm_site_new value = gm_state_site_level }
 			change_variable = { name = gm_site_new subtract = var:gm_site_counted }
-			change_variable = { name = gm_site_grandeur add = var:gm_site_new }
+			# Each at the world-wealth rate of the month it is counted (Plan B).
+			set_variable = {
+				name = gm_site_add
+				value = {
+					value = var:gm_site_new
+					multiply = gm_world_rate_value
+				}
+			}
+			change_variable = { name = gm_site_grandeur add = var:gm_site_add }
 			if = {
 				limit = {
 					owner = { gm_country_hard_times = yes }
@@ -2338,6 +2346,7 @@ gm_state_count_site_levels = {
 			}
 			set_variable = { name = gm_site_counted value = gm_state_site_level }
 			remove_variable = gm_site_new
+			remove_variable = gm_site_add
 		}
 		else_if = {
 			limit = { gm_state_site_level < var:gm_site_counted }

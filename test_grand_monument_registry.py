@@ -5644,7 +5644,7 @@ class SiteBuildingTests(unittest.TestCase):
     def test_the_tracker(self):
         body = squash(strip_comments(block(read(EFFECTS), "gm_state_count_site_levels")))
         for s in ("limit = { gm_state_site_level > var:gm_site_counted }",
-                  "change_variable = { name = gm_site_grandeur add = var:gm_site_new }",
+                  "change_variable = { name = gm_site_grandeur add = var:gm_site_add }",
                   "gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_new }",
                   "set_variable = { name = gm_site_counted value = gm_state_site_level }",
                   "limit = { gm_state_site_level < var:gm_site_counted }",
@@ -6321,6 +6321,17 @@ class RateTests(unittest.TestCase):
         monthly = self.body(MON_EFFECTS, "gm_monument_monthly")
         self.assertIn("gm_world_rate_ensure = yes if = { limit = { month = 0 } "
                       "set_global_variable = { name = gm_world_rate value = gm_world_rate_now } }", monthly)
+
+    def test_each_level_at_its_month(self):
+        """Review Focus 1 (Plan B): each level counts at the rate of the month
+        it is counted, not the dedication's."""
+        count = self.body(EFFECTS, "gm_state_count_site_levels")
+        self.assertIn("set_variable = { name = gm_site_add value = { value = var:gm_site_new "
+                      "multiply = gm_world_rate_value } } "
+                      "change_variable = { name = gm_site_grandeur add = var:gm_site_add }", count)
+        self.assertIn("remove_variable = gm_site_add", count)
+        self.assertNotIn("gm_world_rate", self.body(EFFECTS, "gm_state_finish_site").replace(
+            "gm_state_count_site_levels", ""))
 
     def test_the_base_self_check(self):
         check = self.body(MON_EFFECTS, "gm_world_base_self_check")
