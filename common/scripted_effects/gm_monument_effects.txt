@@ -26,6 +26,18 @@
 # No scope. Repair each secondary's state, then the lists. Nothing to do in a
 # game none has touched: gm_mon_lists_written stands while any list does.
 gm_monument_monthly = {
+	# The world-wealth rate (sites spec 2026-10-18 §3.2, Plan B): each January,
+	# and now if there is none; and once, a new game's world GDP beside the
+	# constant it is measured against.
+	if = {
+		limit = { gm_system_enabled = yes }
+		gm_world_rate_ensure = yes
+		if = {
+			limit = { month = 0 }
+			set_global_variable = { name = gm_world_rate value = gm_world_rate_now }
+		}
+		gm_world_base_self_check = yes
+	}
 	# An older save's finished monuments, marked once before any is migrated
 	# (sites spec 2026-10-18 §3.5): gm_state_needs_migration reads the mark, and
 	# a finished building with neither it nor gm_migrated is a stray
@@ -1466,10 +1478,13 @@ gm_sh_settle_region = {
 		list = gm_sh_left
 		gm_sh_settle_one = yes
 	}
+	# Not an older save's building before monument_events.32 records it: it
+	# stands at its full height until then (gm_migrated).
 	scope:gm_sh_region = {
 		every_scope_state = {
 			limit = {
 				has_building = building_grand_monument
+				has_variable = gm_migrated
 				gm_state_level > 1
 			}
 			gm_state_reset_building_level = yes
@@ -1621,10 +1636,18 @@ gm_sh_log_numbers = {
 }
 
 # State scope, a state of a merged region: its finished building stands taller
-# than 1 (the merge added two together) and goes back to level 1 on its method
-# (recorded first, as a return records it; a raise just recorded the orphan's).
+# than 1 (the merge added two together) and goes back to level 1 on its
+# recorded dedication (gm_dedication), not whatever method the merged building
+# kept; with none recorded, on its method now (recorded first, as a return
+# records it; a raise just recorded the orphan's). What the merge left it at
+# is kept for the self-check (gm_monument_merge_level_self_check).
 gm_state_reset_building_level = {
+	set_variable = { name = gm_merge_check value = gm_state_level }
 	if = {
+		limit = { has_variable = gm_dedication }
+		set_variable = { name = gm_restore_pm value = var:gm_dedication }
+	}
+	else_if = {
 		limit = { NOT = { has_variable = gm_restore_pm } }
 		gm_state_mark_restore_pm = yes
 	}
@@ -1633,6 +1656,38 @@ gm_state_reset_building_level = {
 	create_building = {
 		building = building_grand_monument
 		level = 1
+	}
+}
+
+# State scope, from gm_state_monthly: once a game, a day or more after a merge's
+# reset (gm_state_reset_building_level) and once the dedication is recorded,
+# whether the finished building stands at level 1 on its recorded dedication.
+# What a merge leaves a building at (two levels added together, and on which
+# method) is unread (sites plan A Task 7); the line prints the level it left.
+gm_monument_merge_level_self_check = {
+	if = {
+		limit = {
+			has_variable = gm_merge_check
+			has_variable = gm_dedication
+			has_building = building_grand_monument
+			NOT = { has_variable = gm_rebuilding }
+			NOT = { has_variable = gm_restore_pm }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = gm_merge_level_self_checked } }
+			set_global_variable = gm_merge_level_self_checked
+			if = {
+				limit = {
+					gm_state_level = 1
+					gm_state_stands_on_dedication = yes
+				}
+				debug_log = "TE_SELF_CHECK OK monument_merge_level1 (a merged region's finished Grand Monument, which the merge left at level [SCOPE.ScriptValue('gm_state_merge_check_was')|0], stands at level 1 on its recorded dedication)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN monument_merge_level1 (a merged region's finished Grand Monument, which the merge left at level [SCOPE.ScriptValue('gm_state_merge_check_was')|0], stands at level [SCOPE.ScriptValue('gm_state_level')|0] and not on its recorded dedication at level 1; see docs/testing/grand-monuments-ageing-playtest.md)"
+			}
+		}
+		remove_variable = gm_merge_check
 	}
 }
 
@@ -1679,6 +1734,30 @@ gm_monument_merge_self_check = {
 		}
 		else = {
 			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no part of its region took it; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings there; see docs/testing/grand-monuments-ageing-playtest.md)"
+		}
+	}
+}
+
+# ---- Self-check: the world-wealth baseline (Plan B) ------------------------------------
+# No scope, from gm_monument_monthly, once: on a game's first pass (before
+# 1836.3.1), whether world GDP is within a tenth of the constant the rate is
+# measured against (gm_world_gdp_1836). An older save never reads it.
+gm_world_base_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_world_base_checked }
+			game_date < 1836.3.1
+		}
+		set_global_variable = gm_world_base_checked
+		if = {
+			limit = {
+				global_gdp_script_value >= gm_world_gdp_1836_low
+				global_gdp_script_value <= gm_world_gdp_1836_high
+			}
+			debug_log = "TE_SELF_CHECK OK gm_world_base (world GDP [SCOPE.ScriptValue('global_gdp_script_value')|0] is within a tenth of the 1836 constant [SCOPE.ScriptValue('gm_world_gdp_1836')|0])"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN gm_world_base (world GDP [SCOPE.ScriptValue('global_gdp_script_value')|0] is not within a tenth of the 1836 constant [SCOPE.ScriptValue('gm_world_gdp_1836')|0]: set gm_world_gdp_1836 to it; see docs/testing/grand-monuments-ageing-playtest.md)"
 		}
 	}
 }

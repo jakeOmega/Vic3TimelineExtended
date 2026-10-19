@@ -1330,6 +1330,9 @@ types grand_monuments_widget_types
 				text = "gm_site_row_detail"
 			}
 			gm_row_line = {
+				text = "gm_site_row_rate"
+			}
+			gm_row_line = {
 				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_site_building'), '(CFixedPoint)1' )]"
 				text = "gm_site_row_building"
 			}
@@ -1784,6 +1787,13 @@ types grand_monuments_widget_types
 			visible = "[Not(GetVariableSystem.Exists('gm_national_closed'))]"
 			spacing = 2
 
+			# What a level built this year adds (sites spec 2026-10-18 §3.2,
+			# Plan B), why on hover.
+			gm_text = {
+				default_format = "#tooltippable"
+				tooltip = "gm_je_world_rate_tt"
+				text = "gm_je_world_rate"
+			}
 			# Nothing in force (every monument contested, say, or the month's
 			# count not yet run): one line, so the section never opens empty.
 			gm_text = {

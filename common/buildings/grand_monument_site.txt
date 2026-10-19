@@ -46,6 +46,12 @@ building_grand_monument_site = {
 			text = gm_possible_rule_tt
 			gm_system_enabled = yes
 		}
+		# What a level built now adds (Plan B): a line the build tooltip always
+		# shows, the proven way to put a live number there (resettlement.txt).
+		custom_tooltip = {
+			text = gm_site_rate_tt
+			always = yes
+		}
 	}
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"

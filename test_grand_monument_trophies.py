@@ -329,7 +329,7 @@ class ConsequenceTests(unittest.TestCase):
     def test_the_numbers(self):
         v = read(TR_VALUES)
         self.assertEqual(squash(block(v, "gm_tr_infamy")),
-                         "value = var:gm_tr_tmp_levels divide = 5 add = 2 max = 8 if = { limit = { "
+                         "value = var:gm_tr_tmp_grandeur divide = 5 add = 2 max = 8 if = { limit = { "
                          "has_global_variable = un_agency_unesco } multiply = 2 }")
         for name, value in (("gm_tr_relations_taken", "-30"), ("gm_tr_relations_returned", "40"),
                             ("gm_tr_war_support", "10"), ("gm_tr_ai_own_chance", "1"),

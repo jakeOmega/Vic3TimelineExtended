@@ -2425,7 +2425,8 @@ class UsabilityTests(unittest.TestCase):
         self.assertIn("gm_com_levels_to_go > 0", raise_)
         self.assertIn("set_variable = { name = gm_com_raise_levels value = gm_com_levels_to_go } gm_com_queue_levels = yes",
                       raise_)
-        self.assertEqual(squash(block(read(COM_VALUES), "gm_com_levels_to_go")),
+        # The grandeur missing, in levels at today's rate (OpportunityGrandeurTests).
+        self.assertEqual(squash(block(read(COM_VALUES), "gm_com_grandeur_to_go")),
                          "value = 0 if = { limit = { has_variable = gm_com_open has_variable = gm_com_target } "
                          "value = var:gm_com_target subtract = gm_com_progress min = 0 }")
         gui = read(WIDGET)
@@ -3976,7 +3977,8 @@ class MultiMonumentLevelTests(unittest.TestCase):
 
     def test_the_opportunity_counts_the_primarys_levels(self):
         body = squash(block(read("common/script_values/gm_commission_values.txt"), "gm_com_fit_grandeur"))
-        self.assertIn("add = gm_state_primary_levels", body)
+        # Its starting grandeur (Plan B), which reads its records.
+        self.assertIn("add = gm_state_primary_start", body)
 
     def test_no_record_of_a_level_reads_the_whole_building(self):
         for rel in (EFFECTS, "common/scripted_effects/gm_trophy_effects.txt",
@@ -4212,6 +4214,9 @@ class LevelsApartTests(unittest.TestCase):
             (VALUES, "gm_state_level"), (MON_VALUES, "gm_state_built_levels"),
             (MON_EFFECTS, "gm_sh_settle_region"), (MON_TRIGGERS, "gm_state_merge_pending"),
             (EFFECTS, "gm_state_migrate"),
+            # The merge's reset and its self-check (sites final review, I6).
+            (MON_EFFECTS, "gm_state_reset_building_level"),
+            (MON_EFFECTS, "gm_monument_merge_level_self_check"),
         }
         found = set()
         for path in sorted(ROOT.glob("common/**/*.txt")) + sorted(ROOT.glob("events/*.txt")):
@@ -4701,10 +4706,11 @@ class OpportunityLevelTests(unittest.TestCase):
 
     def test_progress_counts_levels(self):
         body = squash(block(read(self.COM_V), "gm_com_fit_grandeur"))
-        self.assertIn("limit = { gm_state_com_counts = yes } add = gm_state_primary_levels", body)
+        # Starting grandeur, never age (Plan B).
+        self.assertIn("limit = { gm_state_com_counts = yes } add = gm_state_primary_start", body)
         self.assertIn("every_in_list = { variable = gm_monuments_held limit = { gm_mon_com_counts = yes } "
-                      "add = gm_mon_levels }", body)
-        self.assertNotIn("grandeur", body.replace("gm_com_fit_grandeur", ""))
+                      "add = gm_mon_start }", body)
+        self.assertNotIn("age", body)
         counts = squash(block(read(MON_TRIGGERS), "gm_mon_com_counts"))
         self.assertIn("gm_mon_status_fits = yes", counts)
         self.assertIn("gm_mon_has_dedication_flag = { VAR = gm_com_dedication }", counts)
@@ -4743,7 +4749,7 @@ class AnniversaryAgeTests(unittest.TestCase):
 
     def test_the_public_option_adds_age(self):
         self.assertEqual(squash(block(read(VALUES), "gm_evt_grandeur")),
-                         "value = gm_state_primary_levels multiply = 0.1 min = 1")
+                         "value = gm_state_primary_start multiply = 0.1 min = 1")
         events = read(EVENTS)
         for n in ANNIVERSARIES:
             ev = squash(strip_comments(raw_block_at(events, r"(?m)^monument_events\.%d\s*=\s*\{" % n)))
@@ -5644,8 +5650,8 @@ class SiteBuildingTests(unittest.TestCase):
     def test_the_tracker(self):
         body = squash(strip_comments(block(read(EFFECTS), "gm_state_count_site_levels")))
         for s in ("limit = { gm_state_site_level > var:gm_site_counted }",
-                  "change_variable = { name = gm_site_grandeur add = var:gm_site_new }",
-                  "gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_new }",
+                  "change_variable = { name = gm_site_grandeur add = var:gm_site_add }",
+                  "gm_state_vanity_backlash_for = { AMOUNT = prev.var:gm_site_add }",
                   "set_variable = { name = gm_site_counted value = gm_state_site_level }",
                   "limit = { gm_state_site_level < var:gm_site_counted }",
                   "remove_variable = gm_site_counted", "remove_variable = gm_site_grandeur"):
@@ -6066,7 +6072,7 @@ class MergeRecordTests(unittest.TestCase):
     def test_a_merge_is_pending_from_the_records(self):
         self.assertEqual(self.body(MON_TRIGGERS, "gm_state_merge_pending"),
                          "has_building = building_grand_monument OR = { gm_state_unrecorded = yes "
-                         "gm_state_level > 1 } gm_state_orphan_in_region = yes")
+                         "AND = { has_variable = gm_migrated gm_state_level > 1 } } gm_state_orphan_in_region = yes")
         orphan = self.body(MON_TRIGGERS, "gm_state_orphan_in_region")
         self.assertIn("gm_sh_orphan_of = { REGION = scope:gm_tmp_sh_region }", orphan)
         self.assertIn("variable = gm_shadows", orphan)
@@ -6093,10 +6099,14 @@ class MergeRecordTests(unittest.TestCase):
 
     def test_the_survivor_stands_at_level_1(self):
         region = self.body(MON_EFFECTS, "gm_sh_settle_region")
-        self.assertIn("every_scope_state = { limit = { has_building = building_grand_monument gm_state_level > 1 } "
+        self.assertIn("every_scope_state = { limit = { has_building = building_grand_monument "
+                      "has_variable = gm_migrated gm_state_level > 1 } "
                       "gm_state_reset_building_level = yes }", region)
         reset = self.body(MON_EFFECTS, "gm_state_reset_building_level")
-        self.assertEqual(reset, "if = { limit = { NOT = { has_variable = gm_restore_pm } } gm_state_mark_restore_pm = yes } "
+        self.assertEqual(reset, "set_variable = { name = gm_merge_check value = gm_state_level } "
+                                "if = { limit = { has_variable = gm_dedication } "
+                                "set_variable = { name = gm_restore_pm value = var:gm_dedication } } "
+                                "else_if = { limit = { NOT = { has_variable = gm_restore_pm } } gm_state_mark_restore_pm = yes } "
                                 "set_variable = { name = gm_rebuilding days = 1 } "
                                 "remove_building = building_grand_monument "
                                 "create_building = { building = building_grand_monument level = 1 }")
@@ -6154,7 +6164,8 @@ class UpkeepTests(unittest.TestCase):
                          "goods_input_construction_mult = 1")
         self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")),
                          "value = gm_state_primary_levels add = gm_state_secondary_levels "
-                         "multiply = gm_policy_factor_upkeep subtract = 1")
+                         "multiply = gm_policy_factor_upkeep subtract = 1 "
+                         "if = { limit = { NOT = { has_variable = gm_migrated } } value = 0 }")
         self.assertEqual(squash(block(read(VALUES), "gm_policy_factor_upkeep")),
                          "value = 1 if = { limit = { owner = { gm_policy_is = { P = open STANDARD = no } } } value = 1.5 } "
                          "if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } value = 0 }")
@@ -6295,6 +6306,151 @@ class CreatedOnDedicationTests(unittest.TestCase):
             self.assertIn(s, one)
 
 
+class RateTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.2 (Plan B): a level's starting grandeur is
+    world GDP in 1836 over world GDP when it is counted. The 1836 figure is a
+    constant (spec §5): 334,465,286 summed from a Timeline Extended save of
+    1836.1.20, every country's latest GDP."""
+
+    def body(self, path, name):
+        return squash(strip_comments(block(read(path), name)))
+
+    def test_the_rate(self):
+        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 334000000")
+        self.assertEqual(self.body(VALUES, "gm_world_rate_now"),
+                         "value = 1 if = { limit = { global_gdp_script_value > 0 } value = gm_world_gdp_1836 "
+                         "divide = global_gdp_script_value min = 0.00001 }")
+        self.assertEqual(self.body(VALUES, "gm_world_rate_value"),
+                         "value = 1 if = { limit = { has_global_variable = gm_world_rate } "
+                         "value = global_var:gm_world_rate }")
+
+    def test_written_before_counting(self):
+        ensure = self.body(EFFECTS, "gm_world_rate_ensure")
+        self.assertEqual(ensure, "if = { limit = { NOT = { has_global_variable = gm_world_rate } } "
+                                 "set_global_variable = { name = gm_world_rate value = gm_world_rate_now } }")
+        self.assertTrue(self.body(EFFECTS, "gm_state_count_site_levels").startswith("gm_world_rate_ensure = yes"))
+        monthly = self.body(MON_EFFECTS, "gm_monument_monthly")
+        self.assertIn("gm_world_rate_ensure = yes if = { limit = { month = 0 } "
+                      "set_global_variable = { name = gm_world_rate value = gm_world_rate_now } }", monthly)
+
+    def test_each_level_at_its_month(self):
+        """Review Focus 1 (Plan B): each level counts at the rate of the month
+        it is counted, not the dedication's."""
+        count = self.body(EFFECTS, "gm_state_count_site_levels")
+        self.assertIn("set_variable = { name = gm_site_add value = { value = var:gm_site_new "
+                      "multiply = gm_world_rate_value } } "
+                      "change_variable = { name = gm_site_grandeur add = var:gm_site_add }", count)
+        self.assertIn("remove_variable = gm_site_add", count)
+        self.assertNotIn("gm_world_rate", self.body(EFFECTS, "gm_state_finish_site").replace(
+            "gm_state_count_site_levels", ""))
+
+    def test_the_base_self_check(self):
+        check = self.body(MON_EFFECTS, "gm_world_base_self_check")
+        for s in ("NOT = { has_global_variable = gm_world_base_checked }", "game_date < 1836.3.1",
+                  "TE_SELF_CHECK OK gm_world_base", "TE_SELF_CHECK BROKEN gm_world_base",
+                  "global_gdp_script_value >= gm_world_gdp_1836_low",
+                  "global_gdp_script_value <= gm_world_gdp_1836_high"):
+            self.assertIn(s, check)
+        self.assertIn("gm_world_base_self_check = yes", self.body(MON_EFFECTS, "gm_monument_monthly"))
+
+
+class OpportunityGrandeurTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.2 (Plan B): an opportunity asks for starting
+    grandeur, never age; Raise It queues what that takes at today's rate, at
+    most 100 levels a press (Review Focus 3)."""
+
+    def body(self, name):
+        return squash(strip_comments(block(read(COM_VALUES), name)))
+
+    def test_progress_counts_starting_grandeur(self):
+        fit = self.body("gm_com_fit_grandeur")
+        self.assertIn("add = gm_state_primary_start", fit)
+        self.assertIn("add = gm_mon_start", fit)
+        self.assertNotIn("_levels", fit)
+        self.assertNotIn("age", fit)
+
+    def test_the_levels_it_takes(self):
+        self.assertEqual(self.body("gm_com_grandeur_to_go"),
+                         "value = 0 if = { limit = { has_variable = gm_com_open has_variable = gm_com_target } "
+                         "value = var:gm_com_target subtract = gm_com_progress min = 0 }")
+        self.assertEqual(self.body("gm_com_levels_to_go"),
+                         "value = gm_com_grandeur_to_go divide = gm_world_rate_value ceiling = yes max = 100")
+        self.assertEqual(self.body("gm_com_target_levels"),
+                         "value = 0 if = { limit = { has_variable = gm_com_target } value = var:gm_com_target "
+                         "divide = gm_world_rate_value ceiling = yes max = 100 }")
+        self.assertEqual(self.body("gm_disp_com_accept_cost"),
+                         "value = gm_com_target_levels multiply = construction_cost_grand_monument")
+
+
+class MeaningCountsGrandeurTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.6 (Plan B): what a monument means counts its
+    grandeur: the vanity backlash of levels finished in hard times, the
+    infamy of carrying one off, an anniversary's gift."""
+
+    TR_V = "common/script_values/gm_trophy_values.txt"
+    TR_E = "common/scripted_effects/gm_trophy_effects.txt"
+
+    def test_vanity_is_the_grandeur_counted(self):
+        count = squash(strip_comments(block(read(EFFECTS), "gm_state_count_site_levels")))
+        self.assertIn("gm_state_vanity_backlash_for = { AMOUNT = prev.var:gm_site_add }", count)
+        self.assertLess(count.find("name = gm_site_add"), count.find("gm_state_vanity_backlash_for"))
+        self.assertIn("for each point of grandeur", loc()["gm_je_how_hard_times"])
+
+    def test_infamy_is_the_grandeur_taken(self):
+        self.assertEqual(squash(block(read(self.TR_V), "gm_tr_infamy")),
+                         "value = var:gm_tr_tmp_grandeur divide = 5 add = 2 max = 8 "
+                         "if = { limit = { has_global_variable = un_agency_unesco } multiply = 2 }")
+        self.assertEqual(squash(block(read(self.TR_V), "gm_state_tr_infamy")),
+                         "value = gm_state_tr_start add = gm_state_tr_age divide = 5 add = 2 max = 8 "
+                         "if = { limit = { has_global_variable = un_agency_unesco } multiply = 2 }")
+        self.assertIsNone(block(read(self.TR_V), "gm_tr_infamy_of_trophy"))
+        effects = squash(strip_comments(read(self.TR_E)))
+        self.assertEqual(effects.count("change_infamy = gm_tr_infamy"), 2)
+        self.assertEqual(effects.count("set_variable = { name = gm_tr_tmp_g value = gm_mon_grandeur }"), 2)
+        self.assertNotIn("gm_tr_tmp_levels", effects)
+
+    def test_an_anniversary_adds_a_tenth_of_the_starting_grandeur(self):
+        self.assertEqual(squash(block(read(VALUES), "gm_evt_grandeur")),
+                         "value = gm_state_primary_start multiply = 0.1 min = 1")
+        self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_evt_grandeur")),
+                         "value = gm_mon_start multiply = 0.1 min = 1")
+
+
+class RateDisplayTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.2 (Plan B): the player sees what a level is
+    worth before building: on the site's card and row, in National Effects
+    and in the build menu; and grandeur, often fractional now, prints with a
+    decimal (Review Focus 5)."""
+
+    RATE = "ScriptValue('gm_world_rate_value')|3"
+
+    def test_the_four_places(self):
+        L = loc()
+        card = squash(strip_comments(read("gui/te_state_panel_widgets.gui")))
+        self.assertIn('text = "gm_site_card_rate_lbl"', card)
+        self.assertIn('text = "gm_site_card_rate"', card)
+        self.assertIn(self.RATE, L["gm_site_card_rate"])
+        widget = squash(strip_comments(read(WIDGET)))
+        self.assertIn('text = "gm_site_row_rate"', widget)
+        self.assertIn(self.RATE, L["gm_site_row_rate"])
+        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', widget)
+        self.assertIn(self.RATE, L["gm_je_world_rate"])
+        self.assertIn("ScriptValue('gm_world_wealth_factor')|1", L["gm_je_world_rate_tt"])
+        self.assertEqual(squash(block(read(VALUES), "gm_world_wealth_factor")),
+                         "value = 1 divide = gm_world_rate_value")
+        possible = squash(block(read(SITE_BUILDING), "possible"))
+        self.assertIn("custom_tooltip = { text = gm_site_rate_tt always = yes }", possible)
+        self.assertIn("[SCOPE.ScriptValue('gm_world_rate_value')|3]", L["gm_site_rate_tt"])
+
+    def test_grandeur_prints_a_decimal(self):
+        L = loc()
+        for key, value in (("gm_row_detail", "gm_state_primary_grandeur"), ("gm_state_val_grandeur", "gm_state_grandeur"),
+                           ("gm_state_grandeur_tt_one", "gm_state_grandeur"),
+                           ("gm_state_grandeur_tt_many", "gm_state_grandeur")):
+            self.assertIn(f"ScriptValue('{value}')|1", L[key], key)
+        self.assertIn("ScriptValue('gm_state_primary_start')|1", L["gm_state_grandeur_tt_one"])
+
+
 class RecordWriterTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's
     size keeps its starting grandeur in step with its levels."""
@@ -6307,7 +6463,7 @@ class RecordWriterTests(unittest.TestCase):
     def test_dedication_writes_it_once(self):
         body = self.body(EFFECTS, "gm_state_dedicate")
         start = ("if = { limit = { NOT = { has_variable = gm_start_grandeur } } "
-                 "set_variable = { name = gm_start_grandeur value = var:gm_levels } }")
+                 "set_variable = { name = gm_start_grandeur value = gm_state_primary_levels } }")
         self.assertIn(start, body)
         self.assertLess(body.find("set_variable = { name = gm_levels"), body.find(start))
 
@@ -6497,3 +6653,163 @@ class DedicateButtonTests(unittest.TestCase):
             self.assertNotIn("still under construction", L[key], key)
             self.assertNotIn("still being built", L[key], key)
         self.assertIn("under construction", L["gm_sgui_dedicate_building_tt"])
+
+
+# ---- Final review of the sites branch (2026-10-19) ----------------------------------
+
+class SitesFinalReviewTests(unittest.TestCase):
+    """The whole-branch review's findings: each pins the behaviour the
+    structural pins above let through."""
+
+    def test_vanity_amount_is_read_on_the_state(self):
+        # C1: $AMOUNT$ expands inside owner = { }, so var:gm_site_add read
+        # there is the country's (none); prev is the state.
+        count = squash(block(read(EFFECTS), "gm_state_count_site_levels"))
+        self.assertIn("gm_state_vanity_backlash_for = { AMOUNT = prev.var:gm_site_add }", count)
+        helper = squash(block(read(EFFECTS), "gm_state_vanity_backlash_for"))
+        # prev must be the state when $AMOUNT$ is read: no call between.
+        self.assertIn("owner = { change_variable = { name = gm_vanity_ledger add = $AMOUNT$ }", helper)
+
+    def test_rededicate_asks_while_a_restore_stands(self):
+        # I1: Rededicate on a monument beside another swaps it in first, which
+        # sets gm_restore_pm; the ceremony must still ask.
+        body = squash(block(read(EFFECTS), "gm_state_start_ceremony"))
+        self.assertIn("OR = { has_variable = gm_rededicate_asking NOT = { has_variable = gm_restore_pm } }", body)
+
+    def test_migration_keeps_levels_above_the_record(self):
+        # I2: levels finished on a dedicated monument above its recorded size
+        # (queued before the update) become a construction site, not lost.
+        body = squash(block(read(EFFECTS), "gm_state_migrate"))
+        dedicated = body[:body.index("else = { set_variable = { name = gm_migrate_levels")]
+        self.assertIn("set_variable = { name = gm_mig_excess value = gm_state_built_levels }", dedicated)
+        self.assertIn("change_variable = { name = gm_mig_excess subtract = var:gm_levels }", dedicated)
+        self.assertIn("SPEC_TYPE = building_grand_monument_site SPEC_LEVEL = var:gm_mig_excess", dedicated)
+        self.assertIn("set_variable = { name = gm_site_counted value = var:gm_mig_excess }", dedicated)
+        self.assertIn("set_variable = { name = gm_site_grandeur value = var:gm_mig_excess }", dedicated)
+        # Measured before the building goes back to level 1.
+        self.assertLess(dedicated.index("gm_mig_excess value = gm_state_built_levels"),
+                        dedicated.index("remove_building = building_grand_monument"))
+
+    def test_merge_reset_waits_for_migration(self):
+        # Minor 7, re-graded: an older save's building stands at its full
+        # height until .32 records it; a merge must not reset it first.
+        pending = squash(block(read(MON_TRIGGERS), "gm_state_merge_pending"))
+        self.assertIn("AND = { has_variable = gm_migrated gm_state_level > 1 }", pending)
+        settle = squash(block(read(MON_EFFECTS), "gm_sh_settle_region"))
+        self.assertIn("has_building = building_grand_monument has_variable = gm_migrated gm_state_level > 1", settle)
+
+    def test_upkeep_waits_for_migration(self):
+        # I3: pm_maintenance is level-scaled, so the multiplier on an older
+        # save's full-height building would square its upkeep.
+        mult = squash(block(read(VALUES), "gm_state_upkeep_mult"))
+        self.assertIn("if = { limit = { NOT = { has_variable = gm_migrated } } value = 0 }", mult)
+        self.assertGreater(mult.index("NOT = { has_variable = gm_migrated }"), mult.index("subtract = 1"))
+
+    def test_every_finished_building_script_makes_is_migrated(self):
+        # The upkeep and merge gates rest on it: every create_building of the
+        # finished type sits in a body that sets gm_migrated.
+        # Two set it through what they call: a raised orphan takes its records
+        # (gm_state_raise_secondary → gm_state_tr_take_records_from_moving),
+        # and the merge's reset runs only where the record stands
+        # (test_merge_reset_waits_for_migration).
+        through = {"gm_state_raise_orphan": "gm_state_raise_secondary = yes",
+                   "gm_state_reset_building_level": None}
+        take = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"),
+                            "gm_state_tr_take_records_from_moving"))
+        self.assertIn("set_variable = gm_migrated", take)
+        self.assertIn("gm_state_tr_take_records_from_moving = yes",
+                      squash(block(read(MON_EFFECTS), "gm_state_raise_secondary")))
+        seen = set()
+        for rel in (EFFECTS, MON_EFFECTS, "common/scripted_effects/gm_trophy_effects.txt",
+                    LANDMARK_EFFECTS, "common/scripted_effects/gm_archaeology_effects.txt", EVENTS,
+                    COM_EFFECTS, DEBUG_EVENTS):
+            for name, body in top_level_blocks(read(rel)):
+                if re.search(r"create_building\s*=\s*\{\s*building\s*=\s*building_grand_monument\s", body):
+                    seen.add(name)
+                    if name in through:
+                        if through[name]:
+                            self.assertIn(through[name], squash(body), name)
+                    else:
+                        self.assertIn("gm_migrated", body, f"{rel}: {name}")
+        self.assertGreaterEqual(len(seen), 7, sorted(seen))
+
+    def test_opportunity_text_counts_grandeur(self):
+        # I4: the target is grandeur (Plan B); what is queued is levels.
+        L = loc()
+        head = L["gm_com_accept_head"]
+        self.assertIn("ScriptValue('gm_disp_com_target')|1]#! [concept_grandeur]", head)
+        self.assertNotIn("levels of monuments", head)
+        build = L["gm_com_accept_build_line"]
+        self.assertIn("ScriptValue('gm_disp_com_target_levels')|0]#! levels", build)
+        progress = L["gm_je_com_progress_tt"]
+        self.assertNotIn("Levels raised", progress)
+        self.assertIn("ScriptValue('gm_disp_com_progress')|1]", progress)
+        self.assertIn("ScriptValue('gm_disp_com_target')|1]", progress)
+        val = L["gm_je_com_val_progress"]
+        self.assertIn("ScriptValue('gm_disp_com_progress')|1]", val)
+        self.assertIn("ScriptValue('gm_disp_com_target')|1]", val)
+        self.assertNotIn("raised higher", L["gm_je_com_ask_tt"])
+        self.assertIn("gm_disp_com_target_levels = { value = gm_com_target_levels }",
+                      squash(strip_comments(read(COM_VALUES))))
+        guide = squash((ROOT / "docs/player_guide/02-timeline.md").read_text(encoding="utf-8"))
+        self.assertNotIn("queues its five levels", guide)
+
+    def test_rededicate_tooltip_has_no_rebuild(self):
+        # Minor 6, re-graded: Rededicate halves the records; nothing is rebuilt.
+        tt = loc()["gm_rededicate_tt"]
+        self.assertNotIn("Rebuild", tt)
+        self.assertNotIn("200 levels", tt)
+        self.assertIn("half its levels", tt)
+
+    def test_ai_tops_up_an_opportunity(self):
+        # I5: one queue on seizing is capped at 100 levels; past twenty times
+        # 1836's wealth the AI queues the rest once its site is dedicated.
+        body = squash(block(read(COM_EFFECTS), "gm_com_monthly"))
+        self.assertIn("if = { limit = { has_variable = gm_com_open is_ai = yes gm_com_levels_to_go > 0 "
+                      "NOT = { any_scope_state = { has_building = building_grand_monument_site } } } "
+                      "gm_com_ai_queue = yes }", body)
+
+    def test_merge_level1_self_check(self):
+        # I6: plan A Task 7's self-check, and the reset puts the recorded
+        # dedication back, not whatever the merged building kept.
+        reset = squash(block(read(MON_EFFECTS), "gm_state_reset_building_level"))
+        self.assertIn("set_variable = { name = gm_merge_check value = gm_state_level }", reset)
+        self.assertIn("if = { limit = { has_variable = gm_dedication } "
+                      "set_variable = { name = gm_restore_pm value = var:gm_dedication } }", reset)
+        self.assertLess(reset.index("gm_merge_check"), reset.index("remove_building"))
+        check = squash(block(read(MON_EFFECTS), "gm_monument_merge_level_self_check"))
+        self.assertIn("NOT = { has_variable = gm_rebuilding } NOT = { has_variable = gm_restore_pm }", check)
+        self.assertIn("gm_state_level = 1 gm_state_stands_on_dedication = yes", check)
+        self.assertIn("TE_SELF_CHECK OK monument_merge_level1", check)
+        self.assertIn("TE_SELF_CHECK BROKEN monument_merge_level1", check)
+        self.assertIn("gm_monument_merge_level_self_check = yes", squash(block(read(EFFECTS), "gm_state_monthly")))
+        stands = squash(block(read(TRIGGERS), "gm_state_stands_on_dedication"))
+        for d in DEDICATIONS:
+            self.assertIn(f"AND = {{ var:gm_dedication = flag:{d.key} gm_state_has_pm = {{ PM = pm_monument_{d.key} }} }}",
+                          stands, d.key)
+        playtest = (ROOT / "docs/testing/grand-monuments-ageing-playtest.md").read_text(encoding="utf-8")
+        self.assertIn("`TE_SELF_CHECK OK/BROKEN monument_merge_level1`", playtest)
+
+    def test_created_check_waits_a_day(self):
+        # I7: on the creation day the restore neither switches nor judges.
+        body = squash(block(read(COM_EFFECTS), "gm_state_restore_dedication"))
+        self.assertIn("NOT = { AND = { has_variable = gm_created_check has_variable = gm_rebuilding } }", body)
+
+    def test_dedicate_reads_no_walked_variable(self):
+        # Minor 4, re-graded: the options' tooltips walk gm_state_dedicate, and
+        # gm_levels is written above in the same walk (never, there).
+        body = squash(block(read(EFFECTS), "gm_state_dedicate"))
+        self.assertIn("if = { limit = { NOT = { has_variable = gm_start_grandeur } } "
+                      "set_variable = { name = gm_start_grandeur value = gm_state_primary_levels } }", body)
+        self.assertNotIn("value = var:gm_levels", body)
+
+    def test_rate_prints_small(self):
+        # Minor 5, re-graded: past 200 times 1836's wealth |2 reads 0.00.
+        L = loc()
+        for key in ("gm_je_world_rate", "gm_site_card_rate", "gm_site_rate_tt", "gm_site_row_rate"):
+            self.assertIn("ScriptValue('gm_world_rate_value')|3]", L[key], key)
+            self.assertNotIn("ScriptValue('gm_world_rate_value')|2]", L[key], key)
+        for key in ("gm_je_world_rate", "gm_site_rate_tt", "gm_site_row_rate"):
+            self.assertIn("ScriptValue('gm_world_wealth_factor')|0]#! levels", L[key], key)
+        # A floor, so the wealth factor never divides by zero.
+        self.assertIn("min = 0.00001", squash(block(read(VALUES), "gm_world_rate_now")))

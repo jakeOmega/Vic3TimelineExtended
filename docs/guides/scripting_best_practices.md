@@ -27,6 +27,8 @@ Calling `generic_wonder_construction_base = { WONDER = solar_collector MAX_LEVEL
 
 The same trick works for `MAX_LEVEL` in similar bounded chains. Don't try to do arithmetic on placeholders — there's no `$N$+1`, only direct text substitution. A placeholder can also name a *script value* rather than a literal (`chance = sr_risk_pct_$MILESTONE$` in `sr_monthly_progress_update_effect`), which is how a number the engine rolls against can be shared with a GUI that needs to display it — a numeric parameter copied into a proxy variable one statement before it is used is readable by nothing else.
 
+Because the substitution is textual, **an argument is read in whatever scope the callee puts `$X$`, not the caller's.** `AMOUNT = var:gm_site_add`, passed from state scope to an effect that writes `change_variable = { name = gm_vanity_ledger add = $AMOUNT$ }` inside `owner = { }`, reads `gm_site_add` on the country, where it doesn't exist; the Grand Monuments vanity backlash added nothing to its ledger that way until the 2026-10-19 review. Pass the read with its path (`AMOUNT = prev.var:gm_site_add`), and keep the callee's read at the top of its scope block with no call before it, so `prev` is still the caller's scope; a literal (`AMOUNT = 1`) works either way.
+
 ### Conventions
 
 - Use short, descriptive uppercase placeholder names such as `$GOOD$`, `$TYPE$`, or `$MODIFIER$`.

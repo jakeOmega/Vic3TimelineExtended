@@ -459,9 +459,10 @@ gm_state_disp_frozen = {
 }
 
 # State scope. What an anniversary's public option adds to the monument's age
-# grandeur (ageing spec 2026-10-16 §5): a tenth of its levels, at least 1.
+# grandeur (ageing spec 2026-10-16 §5): a tenth of its starting grandeur, at
+# least 1 (sites spec 2026-10-18 §3.6).
 gm_evt_grandeur = {
-	value = gm_state_primary_levels
+	value = gm_state_primary_start
 	multiply = 0.1
 	min = 1
 }
@@ -1644,4 +1645,72 @@ gm_state_upkeep_mult = {
 	add = gm_state_secondary_levels
 	multiply = gm_policy_factor_upkeep
 	subtract = 1
+	# An older save's building until monument_events.32 records it: it stands
+	# at its full height, and pm_maintenance is level-scaled, so its own levels
+	# already pay (any multiplier would square them).
+	if = {
+		limit = { NOT = { has_variable = gm_migrated } }
+		value = 0
+	}
+}
+
+# The level a merge left a finished building at (gm_merge_check), for the
+# self-check monument_merge_level1.
+gm_state_merge_check_was = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_merge_check }
+		value = var:gm_merge_check
+	}
+}
+
+# ---- World wealth (sites spec 2026-10-18 §3.2, Plan B) ------------------------------
+# A level's starting grandeur is world GDP in 1836 over world GDP when it is
+# counted (gm_state_count_site_levels), so the same share of the world's wealth
+# buys the same grandeur in any era. The 1836 figure is one constant for every
+# save (spec §5): every country's latest GDP summed from a Timeline Extended
+# save of 1836.1.20 came to 334,465,286 (TE_SELF_CHECK gm_world_base compares a
+# new game's first pass with it).
+gm_world_gdp_1836 = {
+	value = 334000000
+}
+
+# The rate now (no scope: world GDP, global_gdp_script_value), 1 with none.
+gm_world_rate_now = {
+	value = 1
+	if = {
+		limit = { global_gdp_script_value > 0 }
+		value = gm_world_gdp_1836
+		divide = global_gdp_script_value
+		# The smallest a script number holds: gm_world_wealth_factor and the
+		# opportunity's levels divide by it.
+		min = 0.00001
+	}
+}
+
+# The rate in force: written each January (gm_monument_monthly) and on any
+# pass that finds none (gm_world_rate_ensure); 1 before the first write.
+gm_world_rate_value = {
+	value = 1
+	if = {
+		limit = { has_global_variable = gm_world_rate }
+		value = global_var:gm_world_rate
+	}
+}
+
+# How many times richer the world is than in 1836, for the panel's hover.
+gm_world_wealth_factor = {
+	value = 1
+	divide = gm_world_rate_value
+}
+
+# The band the self-check gm_world_base reads a new game's world GDP in.
+gm_world_gdp_1836_low = {
+	value = gm_world_gdp_1836
+	multiply = 0.9
+}
+
+gm_world_gdp_1836_high = {
+	value = gm_world_gdp_1836
+	multiply = 1.1
 }

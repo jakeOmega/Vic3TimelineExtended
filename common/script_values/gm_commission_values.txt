@@ -18,14 +18,14 @@ gm_com_fit_grandeur = {
 		limit = { has_variable = gm_com_dedication }
 		every_scope_state = {
 			limit = { gm_state_com_counts = yes }
-			add = gm_state_primary_levels
+			add = gm_state_primary_start
 		}
 		if = {
 			limit = { has_variable_list = gm_monuments_held }
 			every_in_list = {
 				variable = gm_monuments_held
 				limit = { gm_mon_com_counts = yes }
-				add = gm_mon_levels
+				add = gm_mon_start
 			}
 		}
 	}
@@ -87,6 +87,9 @@ gm_disp_com_progress = {
 	value = gm_com_progress
 }
 
+# The levels the whole target takes at today's rate, for the offer's text.
+gm_disp_com_target_levels = { value = gm_com_target_levels }
+
 gm_disp_com_target = {
 	value = 0
 	if = {
@@ -132,8 +135,8 @@ gm_disp_com_fixed = {
 }
 
 # ---- Building it (usability §1, §4) ---------------------------------------------------
-# The levels still missing: the target less the progress, at least 0.
-gm_com_levels_to_go = {
+# The grandeur still missing: the target less the progress, at least 0.
+gm_com_grandeur_to_go = {
 	value = 0
 	if = {
 		limit = {
@@ -146,6 +149,28 @@ gm_com_levels_to_go = {
 	}
 }
 
+# The levels the grandeur still missing takes at today's world-wealth rate
+# (sites spec 2026-10-18 §3.2, Plan B), rounded up, at most 100 a press: one
+# `while` should queue no more.
+gm_com_levels_to_go = {
+	value = gm_com_grandeur_to_go
+	divide = gm_world_rate_value
+	ceiling = yes
+	max = 100
+}
+
+# The levels the whole target takes at today's rate (the offer's cost line).
+gm_com_target_levels = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_target }
+		value = var:gm_com_target
+		divide = gm_world_rate_value
+		ceiling = yes
+		max = 100
+	}
+}
+
 # What Raise It costs in construction: the missing levels at a level's price.
 gm_disp_com_raise_cost = {
 	value = gm_com_levels_to_go
@@ -154,12 +179,8 @@ gm_disp_com_raise_cost = {
 
 # What Seize It and Start Building costs, on the offer: the whole target.
 gm_disp_com_accept_cost = {
-	value = 0
-	if = {
-		limit = { has_variable = gm_com_target }
-		value = var:gm_com_target
-		multiply = construction_cost_grand_monument
-	}
+	value = gm_com_target_levels
+	multiply = construction_cost_grand_monument
 }
 
 # 1 while Raise It has a place to build (gm_com_build_where, refreshed by

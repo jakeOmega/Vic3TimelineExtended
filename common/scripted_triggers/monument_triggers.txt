@@ -513,6 +513,26 @@ gm_state_has_site = {
 	has_building = building_grand_monument_site
 }
 
+# State scope. The finished building stands on the dedication its records name
+# (gm_dedication): the merge self-check (gm_monument_merge_level_self_check).
+gm_state_stands_on_dedication = {
+	has_variable = gm_dedication
+	OR = {
+		AND = { var:gm_dedication = flag:crown gm_state_has_pm = { PM = pm_monument_crown } }
+		AND = { var:gm_dedication = flag:republic gm_state_has_pm = { PM = pm_monument_republic } }
+		AND = { var:gm_dedication = flag:revolution gm_state_has_pm = { PM = pm_monument_revolution } }
+		AND = { var:gm_dedication = flag:leader gm_state_has_pm = { PM = pm_monument_leader } }
+		AND = { var:gm_dedication = flag:religious gm_state_has_pm = { PM = pm_monument_religious } }
+		AND = { var:gm_dedication = flag:civic gm_state_has_pm = { PM = pm_monument_civic } }
+		AND = { var:gm_dedication = flag:war_memorial gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		AND = { var:gm_dedication = flag:artistic gm_state_has_pm = { PM = pm_monument_artistic } }
+		AND = { var:gm_dedication = flag:naturalist gm_state_has_pm = { PM = pm_monument_naturalist } }
+		AND = { var:gm_dedication = flag:scientific gm_state_has_pm = { PM = pm_monument_scientific } }
+		AND = { var:gm_dedication = flag:industrial gm_state_has_pm = { PM = pm_monument_industrial } }
+		AND = { var:gm_dedication = flag:athletic gm_state_has_pm = { PM = pm_monument_athletic } }
+	}
+}
+
 # State scope. A finished monument's building went while its records stand
 # (sites spec 2026-10-18 §3.7): not carried off (gm_carried_off), not script's
 # own removal today (gm_rebuilding). Pull Down and a whole taking with nothing
