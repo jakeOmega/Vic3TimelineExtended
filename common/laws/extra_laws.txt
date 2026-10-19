@@ -82,13 +82,13 @@ INJECT:law_closed_borders = {
 INJECT:law_womens_suffrage = {
 	modifier = {
 		country_cultural_pull_mult = 0.03
-		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
+		# RELEASE: 		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 INJECT:law_women_in_the_workplace = {
 	modifier = {
 		country_cultural_pull_mult = 0.01
-		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
+		# RELEASE: 		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 # law_women_own_property: deliberate neutral (no modifier); its census natural fertility
@@ -96,7 +96,7 @@ INJECT:law_women_in_the_workplace = {
 INJECT:law_women_in_the_fields = {
 	modifier = {
 		country_cultural_pull_mult = -0.01
-		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
+		# RELEASE: 		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 INJECT:law_no_womens_rights = {
@@ -541,7 +541,7 @@ law_primogeniture = {
 	modifier = {
 		state_tax_capacity_mult = -0.1
 		state_bureaucracy_population_base_cost_factor_mult = -0.1
-		state_late_marriage_farms_add = 0.15	# the census's Late Marriage: the heirs who don't inherit marry late (late-marriage spec call 6)
+		# RELEASE: 		state_late_marriage_farms_add = 0.15	# the census's Late Marriage: the heirs who don't inherit marry late (late-marriage spec call 6)
 	}
 }
 
@@ -1561,7 +1561,7 @@ law_penal_labor_camps = {
 		country_suppression_attraction_factor = -0.1
 		# the census's work deaths: forced labour in mines, forests and
 		# plantations with no safety at all, as Child Labor Allowed's +0.1
-		state_work_mortality_mult = 0.1
+		# RELEASE: 		state_work_mortality_mult = 0.1
 		state_pop_support_movement_civil_rights_mult = 0.1
 		building_group_bg_mining_throughput_add = 0.05
 		building_group_bg_logging_throughput_add = 0.05
@@ -1594,8 +1594,8 @@ law_restorative_justice = {
 		country_institution_cost_institution_police_mult = 0.25
 		state_loyalists_from_political_movements_mult = 0.1
 		state_demog_replaced_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_male_labor_participation_add = 0.02	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
-		state_external_mortality_mult = -0.04	# the census's deaths from violence: offenders who meet their victims reoffend less, violent ones most of all
+		# RELEASE: 		state_male_labor_participation_add = 0.02	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
+		# RELEASE: 		state_external_mortality_mult = -0.04	# the census's deaths from violence: offenders who meet their victims reoffend less, violent ones most of all
 	}
 }
 
@@ -1615,8 +1615,8 @@ law_rehabilitation_focused_criminal_justice = {
 		country_institution_cost_institution_police_mult = 0.5
 		state_loyalists_from_political_movements_mult = 0.2
 		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_male_labor_participation_add = 0.03	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
-		state_external_mortality_mult = -0.08	# the census's deaths from violence: treatment, schooling and work in prison cut violent reoffending
+		# RELEASE: 		state_male_labor_participation_add = 0.03	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
+		# RELEASE: 		state_external_mortality_mult = -0.08	# the census's deaths from violence: treatment, schooling and work in prison cut violent reoffending
 	}
 }
 
@@ -1736,8 +1736,8 @@ law_unrestricted_augmentation = {
 		state_upper_strata_standard_of_living_add = 5
 		state_radicals_from_political_movements_mult = 0.2
 		state_demog_absorbed_mortality_mult = -0.05
-		state_chronic_treatment_add = 0.05	# the census's chronic treatment (demographics phase 2 step 4)
-		state_longevity_care_market_reach_add = 20	# the census's longevity care: the market 20 levels of wealth lower (late game §4.2)
+		# RELEASE: 		state_chronic_treatment_add = 0.05	# the census's chronic treatment (demographics phase 2 step 4)
+		# RELEASE: 		state_longevity_care_market_reach_add = 20	# the census's longevity care: the market 20 levels of wealth lower (late game §4.2)
 		country_sol_expectations_target_add = 2
 		country_tech_research_speed_mult = 0.2
 		country_covert_operation_efficiency_mult = 0.05
@@ -1760,7 +1760,7 @@ law_human_purity = {
 		country_acceptance_state_religion_add = 5
 		country_sol_expectations_target_add = -1
 		state_pop_support_movement_transhumanist_mult = 0.2
-		country_longevity_care_banned_bool = yes	# the census's longevity care: none (late game §4.2)
+		# RELEASE: 		country_longevity_care_banned_bool = yes	# the census's longevity care: none (late game §4.2)
 	}
 }
 
@@ -1788,7 +1788,7 @@ law_medical_augmentation_only = {
 
 	modifier = {
 		state_pop_support_movement_transhumanist_mult = 0.1
-		state_chronic_treatment_add = 0.10	# the census's chronic treatment, flat (demographics phase 2 step 4)
+		# RELEASE: 		state_chronic_treatment_add = 0.10	# the census's chronic treatment, flat (demographics phase 2 step 4)
 	}
 
 	on_enact = {
@@ -1814,8 +1814,8 @@ law_regulated_augmentation_market = {
 		state_upper_strata_standard_of_living_add = 2
 		country_sol_expectations_target_add = 1
 		state_pop_support_movement_transhumanist_mult = 0.05
-		state_chronic_treatment_add = 0.05	# the census's chronic treatment, flat (demographics phase 2 step 4)
-		country_longevity_care_price_fall_mult = 0.5	# the census's longevity care: its market price falls faster (late game §4.2)
+		# RELEASE: 		state_chronic_treatment_add = 0.05	# the census's chronic treatment, flat (demographics phase 2 step 4)
+		# RELEASE: 		country_longevity_care_price_fall_mult = 0.5	# the census's longevity care: its market price falls faster (late game §4.2)
 	}
 
 	unlocking_laws = {
@@ -1850,9 +1850,9 @@ law_mandatory_augmentation = {
 		building_throughput_add = 0.2
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.10
-		state_chronic_treatment_add = 0.05	# the census's chronic treatment, flat (owner, 2026-10-10; phase 2 step 4)
-		state_longevity_care_cover_add = 1	# the census's longevity care: everyone the health system reaches,
-		state_longevity_care_floor_add = 0.9	# and at least 90% of people (late game §4.2)
+		# RELEASE: 		state_chronic_treatment_add = 0.05	# the census's chronic treatment, flat (owner, 2026-10-10; phase 2 step 4)
+		# RELEASE: 		state_longevity_care_cover_add = 1	# the census's longevity care: everyone the health system reaches,
+		# RELEASE: 		state_longevity_care_floor_add = 0.9	# and at least 90% of people (late game §4.2)
 	}
 
 	unlocking_laws = {
@@ -2754,7 +2754,7 @@ law_pro_natalist_subsidies = {
 	modifier = {
 		state_welfare_payments_mult = 0.10
 		state_demog_absorbed_birth_rate_mult = 0.10	# phase 2 step 3b: the census's own terms under Full (§3.2)
-		state_desired_fertility_mult = 0.05	# the census's desired family size (phase 2 step 3b, §3.2)
+		# RELEASE: 		state_desired_fertility_mult = 0.05	# the census's desired family size (phase 2 step 3b, §3.2)
 		state_dependent_wage_mult = 0.1	# family allowances raise dependents' income (owner, 2026-10-12)
 		state_demog_replaced_ratio_add = -0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 	}
@@ -2787,7 +2787,7 @@ law_state_sponsored_family_planning = {
 	unlocking_technologies = { second_wave_feminism }
 
 	modifier = {
-		state_fertility_means_add = 0.1	# the census's means (demographics modifier types, stage 2)
+		# RELEASE: 		state_fertility_means_add = 0.1	# the census's means (demographics modifier types, stage 2)
 		state_demog_absorbed_birth_rate_mult = -0.05
 		state_demog_womens_work_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_education_access_add = 0.05
@@ -3186,7 +3186,7 @@ law_state_eugenics_program = {
 	modifier = {
 		country_authority_add = 150
 		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_work_capacity_mult = 0.1	# the census's participation input (phase 2 step 1; the design §1.7): the law's claim to a fitter people, as fitness for work late in life
+		# RELEASE: 		state_work_capacity_mult = 0.1	# the census's participation input (phase 2 step 1; the design §1.7): the law's claim to a fitter people, as fitness for work late in life
 		state_demog_ontop_birth_rate_mult = 0.1
 	}
 }
@@ -3776,7 +3776,7 @@ law_pro_labor_ministry_of_labor = {
 	institution = institution_ministry_of_labor
 	institution_modifier = {
 		state_demog_replaced_ratio_add = 0.01	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_labor_participation_add = 0.005	# the census's participation input (phase 2 step 1; the design §1.7): placement and training bring the marginal into work
+		# RELEASE: 		state_labor_participation_add = 0.005	# the census's participation input (phase 2 step 1; the design §1.7): placement and training bring the marginal into work
 		building_company_worker_dividends_add = 0.01
 		state_political_strength_from_wealth_mult = -0.05
 	}
@@ -3800,7 +3800,7 @@ law_pro_capital_ministry_of_labor = {
 	institution = institution_ministry_of_labor
 	institution_modifier = {
 		state_demog_replaced_ratio_add = 0.02	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_labor_participation_add = 0.01	# the census's participation input (phase 2 step 1; the design §1.7): workfare and thin protections push more people into work
+		# RELEASE: 		state_labor_participation_add = 0.01	# the census's participation input (phase 2 step 1; the design §1.7): workfare and thin protections push more people into work
 		state_political_strength_from_wealth_mult = 0.05
 		state_radicals_from_political_movements_mult = 0.05
 		building_minimum_wage_mult = -0.05
@@ -4254,7 +4254,7 @@ law_protected_class = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		state_demog_womens_work_ratio_add = 0.2	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_demog_absorbed_birth_rate_mult = -0.1
-		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
+		# RELEASE: 		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 		state_dependent_political_participation_add = 0.5
 	}
 }
@@ -5166,7 +5166,7 @@ law_private_policing = {
 		# The census's deaths from violence and accidents: guarded districts,
 		# alarm networks and patrols where someone pays, as Local Police's -0.02
 		# a level, below a national force's -0.03 (te_demog_law_injections.txt)
-		state_external_mortality_mult = -0.02
+		# RELEASE: 		state_external_mortality_mult = -0.02
 		# Owners pay for their protection: the guards are service workers on
 		# shops', offices' and estates' payrolls, so Urban Center owners and
 		# Services buyers, mostly the better-off, bear the cost through prices.

@@ -15,111 +15,111 @@
 # (extra_laws.txt, extra_amendments.txt). Wealth Concentration's law lines are not census inputs:
 # te_demog_wealth_law_injections.txt.
 
-INJECT:law_local_police = {
-	institution_modifier = {
-		state_external_mortality_mult = -0.02
-	}
-}
+# RELEASE: INJECT:law_local_police = {
+# RELEASE: 	institution_modifier = {
+# RELEASE: 		state_external_mortality_mult = -0.02
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_dedicated_police = {
-	institution_modifier = {
-		state_external_mortality_mult = -0.03
-	}
-}
+# RELEASE: INJECT:law_dedicated_police = {
+# RELEASE: 	institution_modifier = {
+# RELEASE: 		state_external_mortality_mult = -0.03
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_militarized_police = {
-	institution_modifier = {
-		state_external_mortality_mult = -0.03
-	}
-}
+# RELEASE: INJECT:law_militarized_police = {
+# RELEASE: 	institution_modifier = {
+# RELEASE: 		state_external_mortality_mult = -0.03
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_child_labor_allowed = {
-	modifier = {
-		state_work_mortality_mult = 0.1
-		state_child_labor_participation_add = 0.3	# the census's 10-14s at work (phase 2 step 1)
-	}
-}
+# RELEASE: INJECT:law_child_labor_allowed = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_work_mortality_mult = 0.1
+# RELEASE: 		state_child_labor_participation_add = 0.3	# the census's 10-14s at work (phase 2 step 1)
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_restricted_child_labor = {
-	modifier = {
-		state_child_labor_participation_add = 0.1	# the census's 10-14s at work (phase 2 step 1)
-	}
-}
+# RELEASE: INJECT:law_restricted_child_labor = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_child_labor_participation_add = 0.1	# the census's 10-14s at work (phase 2 step 1)
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_women_own_property = {
-	modifier = {
-		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
-	}
-}
+# RELEASE: INJECT:law_women_own_property = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_old_age_pension = {
-	modifier = {
-		state_chronic_mortality_mult = -0.05
-	}
-}
+# RELEASE: INJECT:law_old_age_pension = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_chronic_mortality_mult = -0.05
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_regulatory_bodies = {
-	institution_modifier = {
-		state_work_mortality_mult = -0.1
-	}
-}
+# RELEASE: INJECT:law_regulatory_bodies = {
+# RELEASE: 	institution_modifier = {
+# RELEASE: 		state_work_mortality_mult = -0.1
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_worker_protections = {
-	institution_modifier = {
-		state_work_mortality_mult = -0.1
-	}
-}
+# RELEASE: INJECT:law_worker_protections = {
+# RELEASE: 	institution_modifier = {
+# RELEASE: 		state_work_mortality_mult = -0.1
+# RELEASE: 	}
+# RELEASE: }
 
 # Longevity care (late game §4.2; on the laws since 2026-10-17). The health laws' cover for it: the share of the people
 # the health system reaches who are within reach of longevity care through it. Private Health Insurance's insurers pool
 # the price, so the market brings it down twice as fast. The augmentation laws' lines sit in extra_laws.txt.
-INJECT:law_public_health_insurance = {
-	modifier = {
-		state_longevity_care_cover_add = 1
-	}
-}
+# RELEASE: INJECT:law_public_health_insurance = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_longevity_care_cover_add = 1
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_charitable_health_system = {
-	modifier = {
-		state_longevity_care_cover_add = 0.25
-	}
-}
+# RELEASE: INJECT:law_charitable_health_system = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_longevity_care_cover_add = 0.25
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_private_health_insurance = {
-	modifier = {
-		country_longevity_care_price_fall_mult = 1
-	}
-}
+# RELEASE: INJECT:law_private_health_insurance = {
+# RELEASE: 	modifier = {
+# RELEASE: 		country_longevity_care_price_fall_mult = 1
+# RELEASE: 	}
+# RELEASE: }
 
 # Family Limitation's literacy term (phase 3; parent spec section 13; on the laws since 2026-10-17): a secular, literate
 # society limits births, a church-run one less. x (1 + it): State Religion and its two variants -50%, Total Separation and
 # State Atheism +50%, Freedom of Conscience none. A variant carries its parent's.
-INJECT:law_state_religion = {
-	modifier = {
-		country_family_limitation_literacy_mult = -0.5
-	}
-}
+# RELEASE: INJECT:law_state_religion = {
+# RELEASE: 	modifier = {
+# RELEASE: 		country_family_limitation_literacy_mult = -0.5
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_millet_system = {
-	modifier = {
-		country_family_limitation_literacy_mult = -0.5
-	}
-}
+# RELEASE: INJECT:law_millet_system = {
+# RELEASE: 	modifier = {
+# RELEASE: 		country_family_limitation_literacy_mult = -0.5
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_people_of_the_book = {
-	modifier = {
-		country_family_limitation_literacy_mult = -0.5
-	}
-}
+# RELEASE: INJECT:law_people_of_the_book = {
+# RELEASE: 	modifier = {
+# RELEASE: 		country_family_limitation_literacy_mult = -0.5
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_total_separation = {
-	modifier = {
-		country_family_limitation_literacy_mult = 0.5
-	}
-}
+# RELEASE: INJECT:law_total_separation = {
+# RELEASE: 	modifier = {
+# RELEASE: 		country_family_limitation_literacy_mult = 0.5
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_state_atheism = {
-	modifier = {
-		country_family_limitation_literacy_mult = 0.5
-	}
-}
+# RELEASE: INJECT:law_state_atheism = {
+# RELEASE: 	modifier = {
+# RELEASE: 		country_family_limitation_literacy_mult = 0.5
+# RELEASE: 	}
+# RELEASE: }

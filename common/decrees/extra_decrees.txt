@@ -272,77 +272,77 @@ decree_natalism_initiative = {
 # (see state_trigger). The AI weighs it by the gap and the state's people. A release comments it out whole
 # (scripts/release/comment_out_census_inputs.py). The texture is a placeholder (vanilla Emergency Relief's); the final
 # art: a doctor's bag over a map pin.
-decree_medical_outreach = {
-	texture = "gfx/interface/icons/decree/decree_emergency_relief.dds"
-	modifier = {
-		state_medical_diffusion_add = 0.2
-	}
+# RELEASE: decree_medical_outreach = {
+# RELEASE: 	texture = "gfx/interface/icons/decree/decree_emergency_relief.dds"
+# RELEASE: 	modifier = {
+# RELEASE: 		state_medical_diffusion_add = 0.2
+# RELEASE: 	}
 
-	unlocking_technologies = {
-		medical_degrees
-	}
+# RELEASE: 	unlocking_technologies = {
+# RELEASE: 		medical_degrees
+# RELEASE: 	}
 
-	cost = 100
+# RELEASE: 	cost = 100
 
-	country_trigger = {
-		te_demog_effects_run = yes
-	}
+# RELEASE: 	country_trigger = {
+# RELEASE: 		te_demog_effects_run = yes
+# RELEASE: 	}
 
-	# Valid only while the state's medicine is behind its targets (more than the snap), with no has_decree escape: the
-	# engine re-checks it weekly and ends the decree once the state has caught up, as vanilla's Emergency Relief and
-	# Violent Suppression end. It is the AI's only way to give the decree up. The AI never revokes a decree itself, and
-	# an ai_weight of 0 only stops it issuing one (#894's observer run, 2026-10-12: with the escape, no AI ended a
-	# Medical Outreach in 1881-1901 except by losing the state, and 10-14 of the 22-24 held sat on states caught up).
-	state_trigger = {
-		custom_tooltip = {
-			text = decree_medical_outreach_behind_tt
-			te_demog_medicine_behind = yes
-		}
-	}
+# RELEASE: 	# Valid only while the state's medicine is behind its targets (more than the snap), with no has_decree escape: the
+# RELEASE: 	# engine re-checks it weekly and ends the decree once the state has caught up, as vanilla's Emergency Relief and
+# RELEASE: 	# Violent Suppression end. It is the AI's only way to give the decree up. The AI never revokes a decree itself, and
+# RELEASE: 	# an ai_weight of 0 only stops it issuing one (#894's observer run, 2026-10-12: with the escape, no AI ended a
+# RELEASE: 	# Medical Outreach in 1881-1901 except by losing the state, and 10-14 of the 22-24 held sat on states caught up).
+# RELEASE: 	state_trigger = {
+# RELEASE: 		custom_tooltip = {
+# RELEASE: 			text = decree_medical_outreach_behind_tt
+# RELEASE: 			te_demog_medicine_behind = yes
+# RELEASE: 		}
+# RELEASE: 	}
 
-	# The AI uses it where the player would (the shared-mechanics rule): by how far the state's medicine is behind,
-	# and not at all once it has caught up. The lower thresholds once issued are vanilla Road Maintenance's pattern,
-	# but the engine scores only states without the decree (the run's 1891 save: none of 442 decree candidates named a
-	# state holding it), so they don't come into play.
-	ai_weight = {
-		value = 0
-		if = {
-			limit = {
-				OR = {
-					te_demog_medicine_gap > 0.1
-					AND = {
-						has_decree = decree_medical_outreach
-						te_demog_medicine_gap > 0.05
-					}
-				}
-			}
-			add = 100
-		}
-		if = {
-			limit = {
-				OR = {
-					te_demog_medicine_gap > 0.3
-					AND = {
-						has_decree = decree_medical_outreach
-						te_demog_medicine_gap > 0.2
-					}
-				}
-			}
-			add = 100
-		}
-		# as vanilla weighs decrees, by the state's people: x1 at 250,000, from x0.2 to x2 (the review of #916)
-		multiply = {
-			value = state_population
-			divide = 250000
-			min = 0.2
-			max = 2
-		}
-		if = {
-			limit = { te_demog_medicine_behind = no }
-			multiply = 0
-		}
-	}
-}
+# RELEASE: 	# The AI uses it where the player would (the shared-mechanics rule): by how far the state's medicine is behind,
+# RELEASE: 	# and not at all once it has caught up. The lower thresholds once issued are vanilla Road Maintenance's pattern,
+# RELEASE: 	# but the engine scores only states without the decree (the run's 1891 save: none of 442 decree candidates named a
+# RELEASE: 	# state holding it), so they don't come into play.
+# RELEASE: 	ai_weight = {
+# RELEASE: 		value = 0
+# RELEASE: 		if = {
+# RELEASE: 			limit = {
+# RELEASE: 				OR = {
+# RELEASE: 					te_demog_medicine_gap > 0.1
+# RELEASE: 					AND = {
+# RELEASE: 						has_decree = decree_medical_outreach
+# RELEASE: 						te_demog_medicine_gap > 0.05
+# RELEASE: 					}
+# RELEASE: 				}
+# RELEASE: 			}
+# RELEASE: 			add = 100
+# RELEASE: 		}
+# RELEASE: 		if = {
+# RELEASE: 			limit = {
+# RELEASE: 				OR = {
+# RELEASE: 					te_demog_medicine_gap > 0.3
+# RELEASE: 					AND = {
+# RELEASE: 						has_decree = decree_medical_outreach
+# RELEASE: 						te_demog_medicine_gap > 0.2
+# RELEASE: 					}
+# RELEASE: 				}
+# RELEASE: 			}
+# RELEASE: 			add = 100
+# RELEASE: 		}
+# RELEASE: 		# as vanilla weighs decrees, by the state's people: x1 at 250,000, from x0.2 to x2 (the review of #916)
+# RELEASE: 		multiply = {
+# RELEASE: 			value = state_population
+# RELEASE: 			divide = 250000
+# RELEASE: 			min = 0.2
+# RELEASE: 			max = 2
+# RELEASE: 		}
+# RELEASE: 		if = {
+# RELEASE: 			limit = { te_demog_medicine_behind = no }
+# RELEASE: 			multiply = 0
+# RELEASE: 		}
+# RELEASE: 	}
+# RELEASE: }
 
 decree_tax_breaks = {
 	texture = "gfx/interface/icons/decree/decree_tax_breaks.dds"

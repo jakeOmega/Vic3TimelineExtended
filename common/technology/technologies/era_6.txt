@@ -426,7 +426,7 @@ modern_vaccines = {
 
 	modifier = {
 		# the census's medicine (demographics modifier types, stage 1)
-		state_infection_treatment_add = 0.25
+		# RELEASE: 		state_infection_treatment_add = 0.25
 		state_demog_absorbed_mortality_mult = -0.05
 		state_demog_absorbed_birth_rate_mult = 0.05
 		country_modern_vaccines_pb_principles_bool = yes
@@ -775,7 +775,7 @@ intergovernmental_organizations = {
 		country_te_pb_principle_slots_add = 1
 		country_can_join_united_nations_bool = yes
 		# the census's spread of medicine (the Causes of Death plan)
-		state_medical_diffusion_add = 0.05
+		# RELEASE: 		state_medical_diffusion_add = 0.05
 	}
 
 	unlocking_technologies = {

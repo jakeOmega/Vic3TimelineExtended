@@ -110,7 +110,7 @@ autonomous_vehicles = {
 		country_voting_power_mult = 0.2
 		# census only, modern safety (demographics_params.SAFETY_TYPES): cars that don't speed, drink or fall asleep end
 		# most of the traffic deaths the Combustion Engine brought
-		state_external_safety_add = 0.1
+		# RELEASE: 		state_external_safety_add = 0.1
 	}
 
 	ai_weight = {
@@ -134,7 +134,7 @@ genetic_engineering = {
 		state_arable_land_mult = 0.50
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 		# the census's ageing rate for those in longevity care (demographics phase 3, the late-game design's call 3)
-		state_ageing_rate_add = -0.05
+		# RELEASE: 		state_ageing_rate_add = -0.05
 	}
 
 	ai_weight = {
@@ -162,7 +162,7 @@ synthetic_biology = {
 		# the census's ageing rate for those in longevity care (demographics phase 3, the late-game design's call 3):
 		# engineered cells that repair their own damage; 0.05 of the ladder moved here from Biological Immortality
 		# (2026-10-16), so era 11 reaches 0.70
-		state_ageing_rate_add = -0.05
+		# RELEASE: 		state_ageing_rate_add = -0.05
 	}
 
 	ai_weight = {
@@ -397,10 +397,10 @@ personalized_medicine = {
 	modifier = {
 		# the census's medicine (demographics modifier types, stage 1); infection's since #1045: treatment matched to the
 		# patient and the pathogen, which with era 12's nanomedicine takes infection below the rich world of eras 9-10
-		state_chronic_treatment_add = 0.2
-		state_infection_treatment_add = 0.03
+		# RELEASE: 		state_chronic_treatment_add = 0.2
+		# RELEASE: 		state_infection_treatment_add = 0.03
 		# the census's ageing rate for those in longevity care (demographics phase 3, the late-game design's call 3)
-		state_ageing_rate_add = -0.10
+		# RELEASE: 		state_ageing_rate_add = -0.10
 		building_economy_of_scale_level_cap_add = 10
 		country_weekly_innovation_max_add = 100
 		country_institution_health_system_max_investment_add = 1

@@ -285,6 +285,6 @@ GLOBAL = {
 	# (te_demog_fl_effects.txt; phase 3). The only line in the demographics
 	# system that names a country.
 	c:FRA ?= {
-		add_modifier = { name = te_demog_family_limitation }
+		# RELEASE: 		add_modifier = { name = te_demog_family_limitation }
 	}
 }

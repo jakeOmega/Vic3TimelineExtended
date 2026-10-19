@@ -197,7 +197,7 @@ te_demog_fl_apply = {
 	}
 	if = {
 		limit = { var:te_dg_fl_line > 0 }
-		add_modifier = { name = te_demog_family_limitation multiplier = te_demog_fl_mult }
+		# RELEASE: 		add_modifier = { name = te_demog_family_limitation multiplier = te_demog_fl_mult }
 	}
 }
 

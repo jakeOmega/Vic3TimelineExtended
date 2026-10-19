@@ -404,21 +404,21 @@ grand_monuments_rule = {
 # 2026-10-10). Every check is written positively (te_demog_cohorts_run,
 # te_demog_effects_run name the settings that run), so a save from before the rule
 # existed, which stores no value for it, reads as Disabled.
-demographics_rule = {
-	default = demographics_disabled
+# RELEASE: demographics_rule = {
+# RELEASE: 	default = demographics_disabled
 
-	demographics_full = {
-		flag = demographics_full
-	}
+# RELEASE: 	demographics_full = {
+# RELEASE: 		flag = demographics_full
+# RELEASE: 	}
 
-	demographics_display_only = {
-		flag = demographics_display_only
-	}
+# RELEASE: 	demographics_display_only = {
+# RELEASE: 		flag = demographics_display_only
+# RELEASE: 	}
 
-	demographics_disabled = {
-		flag = demographics_disabled
-	}
-}
+# RELEASE: 	demographics_disabled = {
+# RELEASE: 		flag = demographics_disabled
+# RELEASE: 	}
+# RELEASE: }
 
 # Legislated tax code (docs/superpowers/specs/2026-09-29-legislated-tax-code-design.md).
 # Off by default: with it off, taxes work exactly as in the base game. The two

@@ -38,7 +38,7 @@ advanced_nanofabrication = {
 		country_st_res_fertilizer_decay_add = -0.0015
 		# the census's infection treatment (#1045): nanomedicine, machines in the blood that find and destroy pathogens;
 		# with Personalized Medicine's it reaches the cap, 0.99
-		state_infection_treatment_add = 0.02
+		# RELEASE: 		state_infection_treatment_add = 0.02
 	}
 
 	ai_weight = {
@@ -286,8 +286,8 @@ biological_immortality = {
 		state_demog_absorbed_mortality_mult = -0.2
 		# the census's ageing stops for those in longevity care and the body winds back toward 35 (demographics phase 3,
 		# the late-game design's calls 3 and 4; -0.75 until 2026-10-16, when Synthetic Biology took 0.05 of it)
-		state_ageing_rate_add = -0.70
-		state_rejuvenation_add = 0.03
+		# RELEASE: 		state_ageing_rate_add = -0.70
+		# RELEASE: 		state_rejuvenation_add = 0.03
 		character_health_add = 100
 		state_arable_land_mult = 0.25
 	}
@@ -363,8 +363,8 @@ mind_backups = {
 		# demographics phase 3 (the late-game design §8.4, call 19): under Full the census carries this line as half the
 		# deaths from accidents, violence and work (the backed-up are restored); outside Full the flat line stays
 		state_demog_absorbed_mortality_mult = -0.05
-		state_external_mortality_mult = -0.5
-		state_work_mortality_mult = -0.5
+		# RELEASE: 		state_external_mortality_mult = -0.5
+		# RELEASE: 		state_work_mortality_mult = -0.5
 		character_health_add = 10000
 		state_literacy_growth_add = 0.0001
 	}

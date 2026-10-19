@@ -100,7 +100,7 @@ world_wide_web = {
 		country_www_pb_principles_bool = yes
 		country_intelligence_capacity_add = 2
 		# the census's spread of medicine (the Causes of Death plan)
-		state_medical_diffusion_add = 0.05
+		# RELEASE: 		state_medical_diffusion_add = 0.05
 	}
 
 	ai_weight = {
@@ -504,7 +504,7 @@ knowledge_economy = {
 		# harder to suppress; international scrutiny rises.
 		country_colonial_stability_drift_add = -0.75
 		# census only, modern safety (demographics_params.SAFETY_TYPES): most work moves into offices
-		state_work_safety_add = 0.25
+		# RELEASE: 		state_work_safety_add = 0.25
 	}
 
 	ai_weight = {

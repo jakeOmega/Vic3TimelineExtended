@@ -193,7 +193,7 @@ te_demog_wave_youth_idle = {
 # 3b: the newborn split reads it at each state's step, floored at the natural ratio).
 te_demog_wave_srb_ban = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_sex_ratio_at_birth_add = -5
+	# RELEASE: 	state_sex_ratio_at_birth_add = -5
 	interest_group_ig_intelligentsia_approval_add = 1
 }
 
@@ -206,7 +206,7 @@ te_demog_wave_srb_ban_enforcement = {
 # Payments to families who raise daughters: three fewer boys per 100 girls for twenty years.
 te_demog_wave_srb_daughters = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	state_sex_ratio_at_birth_add = -3
+	# RELEASE: 	state_sex_ratio_at_birth_add = -3
 	interest_group_ig_rural_folk_approval_add = 1
 }
 
@@ -316,7 +316,7 @@ te_demog_wave_overspill_sprawl_politics = {
 # authority, and the churches and universities against it.
 te_demog_wave_immortal_licences = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	state_desired_fertility_mult = -0.3
+	# RELEASE: 	state_desired_fertility_mult = -0.3
 	country_authority_add = -50
 	interest_group_ig_devout_approval_add = -3
 	interest_group_ig_intelligentsia_approval_add = -2
@@ -332,6 +332,6 @@ te_demog_wave_immortal_right = {
 # Paying for the next generation: desired family size +10% (the census's type).
 te_demog_wave_immortal_heirs = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	state_desired_fertility_mult = 0.1
+	# RELEASE: 	state_desired_fertility_mult = 0.1
 	interest_group_ig_trade_unions_approval_add = 2
 }

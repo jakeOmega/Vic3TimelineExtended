@@ -10,22 +10,25 @@
 # tax code's rule, te_tax_triggers.txt, for the same reason). The only reads of
 # the rule; everything else calls these two.
 te_demog_cohorts_run = {
-	OR = {
-		has_game_rule = demographics_full
-		has_game_rule = demographics_display_only
-	}
+	# RELEASE: 	OR = {
+	# RELEASE: 		has_game_rule = demographics_full
+	# RELEASE: 		has_game_rule = demographics_display_only
+	# RELEASE: 	}
+	always = no
 }
 
 # The once-a-game self-checks (docs/testing/demographics-playtest.md, "Self-checks") that read census-only inputs:
 # on in every development build whatever the rule, since the inputs are there; a release sets it to always = no
 # (scripts/release/comment_out_census_inputs.py's GATES), where the inputs are commented out and would read 0.
 te_debug_demog_selfchecks_run = {
-	always = yes
+	# RELEASE: 	always = yes
+	always = no
 }
 
 # The model's effects (phase 2) apply only under Full.
 te_demog_effects_run = {
-	has_game_rule = demographics_full
+	# RELEASE: 	has_game_rule = demographics_full
+	always = no
 }
 
 # Any scope: fast mode's census clock runs (te_debug_demog.1 options h-k, console only).

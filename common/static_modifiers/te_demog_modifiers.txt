@@ -6,7 +6,7 @@
 # refresh site, te_demog_fl_effects.txt); outside Full only France's history copy.
 te_demog_family_limitation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_fertility_means_add = 0.6
+	# RELEASE: 	state_fertility_means_add = 0.6
 }
 
 # Phase 2 step 4 (te_demog_rate_effects.txt): the census sets each state's births and deaths.

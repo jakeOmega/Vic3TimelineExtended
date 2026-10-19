@@ -28,7 +28,7 @@
 # (step 3b's fit, demographics_harness.py measures: §3.4's +8% left the full package at +0.20 to +0.23 children).
 te_demog_ms_child_allowance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_desired_fertility_mult = 0.14
+	# RELEASE: 	state_desired_fertility_mult = 0.14
 	interest_group_ig_devout_approval_add = 1
 	interest_group_ig_trade_unions_approval_add = 1
 }
@@ -43,7 +43,7 @@ te_demog_ms_child_allowance_cost = {
 # Family Housing: Pro-Natalist Policy, State-Sponsored Family Planning. Half the urban term cancelled.
 te_demog_ms_family_housing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_urban_fertility_relief_add = 0.5
+	# RELEASE: 	state_urban_fertility_relief_add = 0.5
 	interest_group_ig_trade_unions_approval_add = 1
 }
 
@@ -57,7 +57,7 @@ te_demog_ms_family_housing_cost = {
 # Honours for Large Families: Traditional Family Structure, Pro-Natalist Policy. The Soviet "Mother Heroine" (1944).
 te_demog_ms_honours = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_desired_fertility_mult = 0.05	# step 3b's fit (§3.4: +3%)
+	# RELEASE: 	state_desired_fertility_mult = 0.05	# step 3b's fit (§3.4: +3%)
 	interest_group_ig_devout_approval_add = 1
 	country_authority_add = -50
 }
@@ -66,8 +66,8 @@ te_demog_ms_honours = {
 # (state_fertility_means_add); its maternal deaths are the maternal cause's family-policy factor.
 te_demog_ms_restricted_contraception = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	state_fertility_means_add = -0.2
-	state_maternal_mortality_mult = 0.25
+	# RELEASE: 	state_fertility_means_add = -0.2
+	# RELEASE: 	state_maternal_mortality_mult = 0.25
 	interest_group_ig_devout_approval_add = 2
 	interest_group_ig_intelligentsia_approval_add = -2
 	state_pop_support_movement_feminist_mult = 0.1
@@ -79,7 +79,7 @@ te_demog_ms_restricted_contraception = {
 # laws' lines) and step 2's participation model reads.
 te_demog_ms_parental_leave = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_desired_fertility_mult = 0.05
+	# RELEASE: 	state_desired_fertility_mult = 0.05
 	state_demog_womens_work_ratio_add = 0.02
 	interest_group_ig_trade_unions_approval_add = 1
 	interest_group_ig_industrialists_approval_add = -1
@@ -96,7 +96,7 @@ te_demog_ms_parental_leave_cost = {
 # type (state_fertility_means_add).
 te_demog_ms_free_contraception = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_fertility_means_add = 0.1
+	# RELEASE: 	state_fertility_means_add = 0.1
 	interest_group_ig_intelligentsia_approval_add = 1
 	interest_group_ig_devout_approval_add = -2
 }
@@ -111,7 +111,7 @@ te_demog_ms_free_contraception_cost = {
 # Sex Education: State-Sponsored Family Planning, Population Control Measures. Upkeep: the schools' bureaucracy cost.
 te_demog_ms_sex_education = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_means_literacy_add = 0.2
+	# RELEASE: 	state_means_literacy_add = 0.2
 	interest_group_ig_devout_approval_add = -1
 	country_institution_cost_institution_schools_mult = 0.1
 }
@@ -119,7 +119,7 @@ te_demog_ms_sex_education = {
 # Later, Longer, Fewer: State-Sponsored Family Planning, Population Control Measures. China's 1971-79 campaign.
 te_demog_ms_later_longer_fewer = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_desired_fertility_mult = -0.1
+	# RELEASE: 	state_desired_fertility_mult = -0.1
 	interest_group_ig_devout_approval_add = -1
 	interest_group_ig_rural_folk_approval_add = -1
 	country_authority_add = -150
@@ -129,8 +129,8 @@ te_demog_ms_later_longer_fewer = {
 # once prenatal sexing exists (Microprocessor): the step's newborns (te_demog_newborn_split).
 te_demog_ms_birth_limit = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	state_desired_fertility_mult = -0.3
-	state_sex_ratio_at_birth_add = 5
+	# RELEASE: 	state_desired_fertility_mult = -0.3
+	# RELEASE: 	state_sex_ratio_at_birth_add = 5
 	interest_group_ig_rural_folk_approval_add = -3
 	interest_group_ig_devout_approval_add = -2
 	country_authority_add = -300
@@ -139,8 +139,8 @@ te_demog_ms_birth_limit = {
 # Birth Limit, one child: the button's second press. Its upkeep replaces the two children's.
 te_demog_ms_birth_limit_one = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	state_desired_fertility_mult = -0.45
-	state_sex_ratio_at_birth_add = 10
+	# RELEASE: 	state_desired_fertility_mult = -0.45
+	# RELEASE: 	state_sex_ratio_at_birth_add = 10
 	interest_group_ig_rural_folk_approval_add = -3
 	interest_group_ig_devout_approval_add = -2
 	country_authority_add = -400
@@ -149,14 +149,14 @@ te_demog_ms_birth_limit_one = {
 # Rural Exemption: Population Control Measures, with Birth Limit on. China's "1.5-child" rule (1984). No upkeep.
 te_demog_ms_rural_exemption = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_birth_limit_relief_add = 0.5
+	# RELEASE: 	state_birth_limit_relief_add = 0.5
 	interest_group_ig_rural_folk_approval_add = 1
 }
 
 # Crash Campaign: Population Control Measures. India's Emergency (1975-77). Five years at most, then barred for ten.
 te_demog_ms_crash_campaign = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	state_desired_fertility_mult = -0.2
+	# RELEASE: 	state_desired_fertility_mult = -0.2
 	country_legitimacy_base_add = -10
 	state_radicals_from_political_movements_mult = 0.25
 	interest_group_ig_rural_folk_approval_add = -3
