@@ -32,14 +32,45 @@ gm_state_secondary_levels = {
 	}
 }
 
-# State scope. The primary's own levels: the building's less its secondaries',
-# at least 1; 0 with no building. Every reader that means "what was built"
-# (rebuild heights, trophy shares, Rededicate's cost, the ceremony's level)
-# reads this, never gm_state_primary_grandeur.
-gm_state_primary_levels = {
+# State scope. What the building holds for the primary: its level less the
+# secondaries', at least 1; 0 with no building. Read only where the building
+# itself is the question (an undedicated primary's size, building beside, the
+# merge arithmetic); sites spec 2026-10-18 §3.3.
+gm_state_built_levels = {
 	value = gm_state_level
 	subtract = gm_state_secondary_levels
 	min = 1
+	if = {
+		limit = { NOT = { has_building = building_grand_monument } }
+		value = 0
+	}
+}
+
+# State scope. The primary's own levels: its record (gm_levels) once it has
+# one, else what the building holds for it; 0 with no building. Every reader
+# that means "what was built" (rebuild heights, trophy shares, Rededicate's
+# cost, the ceremony's level) reads this, never gm_state_primary_grandeur.
+gm_state_primary_levels = {
+	value = gm_state_built_levels
+	if = {
+		limit = { has_variable = gm_levels }
+		value = var:gm_levels
+	}
+	if = {
+		limit = { NOT = { has_building = building_grand_monument } }
+		value = 0
+	}
+}
+
+# State scope. The primary's starting grandeur (sites spec 2026-10-18 §3.2):
+# its record, else its levels (an older save's monument, a trophy home, a
+# dig: the 1836 rate); 0 with no building.
+gm_state_primary_start = {
+	value = gm_state_primary_levels
+	if = {
+		limit = { has_variable = gm_start_grandeur }
+		value = var:gm_start_grandeur
+	}
 	if = {
 		limit = { NOT = { has_building = building_grand_monument } }
 		value = 0
@@ -56,10 +87,20 @@ gm_mon_age = {
 	}
 }
 
-# Container scope. What a month adds to a secondary's age grandeur: 2% of its
-# levels a year, half under its owner's Mothballed (gm_state_age_step).
-gm_mon_age_step = {
+# Container scope. Its starting grandeur: the record, else its levels.
+gm_mon_start = {
 	value = gm_mon_levels
+	if = {
+		limit = { has_variable = gm_tr_start_grandeur }
+		value = var:gm_tr_start_grandeur
+	}
+}
+
+# Container scope. What a month adds to a secondary's age grandeur: 2% of its
+# starting grandeur a year, half under its owner's Mothballed
+# (gm_state_age_step).
+gm_mon_age_step = {
+	value = gm_mon_start
 	multiply = 2
 	divide = 1200
 	if = {
@@ -72,10 +113,10 @@ gm_mon_age_step = {
 	}
 }
 
-# Container scope. The grandeur a secondary monument stands for: its levels and
-# its age.
+# Container scope. The grandeur a secondary monument stands for: its starting
+# grandeur and its age.
 gm_mon_grandeur = {
-	value = gm_mon_levels
+	value = gm_mon_start
 	add = gm_mon_age
 }
 
@@ -103,14 +144,14 @@ gm_state_primary_age = {
 	}
 }
 
-# State scope. What the primary monument stands for: its own levels and its
-# age; 0 with no building. Every reader that means "this monument's own
+# State scope. What the primary monument stands for: its starting grandeur and
+# its age; 0 with no building. Every reader that means "this monument's own
 # grandeur" (the dedication's national sums, the IG nets, the card) reads
 # this, so a returned artifact adds to the state's standing grandeur without
 # being counted as the primary's dedication. Level arithmetic reads
 # gm_state_primary_levels instead.
 gm_state_primary_grandeur = {
-	value = gm_state_primary_levels
+	value = gm_state_primary_start
 	add = gm_state_primary_age
 }
 
@@ -154,6 +195,17 @@ gm_mon_tr_levels = {
 	ceiling = yes
 	min = 1
 	max = gm_mon_levels
+}
+
+# Container scope. The starting grandeur a taking carries off with its levels:
+# all of it whole, else the levels' share of it.
+gm_mon_tr_start = {
+	value = gm_mon_start
+	if = {
+		limit = { gm_mon_tr_whole = 0 }
+		multiply = gm_mon_tr_levels
+		divide = gm_mon_levels
+	}
 }
 
 # Container scope. The age a taking carries off with its levels: all of it

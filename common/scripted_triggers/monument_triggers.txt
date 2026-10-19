@@ -316,7 +316,7 @@ gm_state_has_new_levels = {
 	gm_state_is_dedicated = yes
 	has_variable = gm_seen
 	has_variable = gm_levels
-	gm_state_primary_levels > var:gm_levels
+	gm_state_built_levels > var:gm_levels
 	NOT = { has_variable = gm_restore_pm }
 	NOT = { has_variable = gm_rebuilding }
 	NOT = { has_variable = gm_ceremony_pending }

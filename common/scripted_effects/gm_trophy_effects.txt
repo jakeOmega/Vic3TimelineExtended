@@ -94,6 +94,7 @@ gm_state_tr_take = {
 			set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 			set_variable = { name = gm_tr_take_levels value = gm_state_tr_levels }
 			set_variable = { name = gm_tr_take_age value = gm_state_tr_age }
+			set_variable = { name = gm_tr_take_start value = gm_state_tr_start }
 			set_variable = { name = gm_tr_take_value value = gm_state_tr_value }
 			set_variable = { name = gm_tr_take_whole value = gm_state_tr_whole }
 			set_variable = { name = gm_tr_take_left value = gm_state_tr_levels_left }
@@ -116,6 +117,7 @@ gm_state_tr_take = {
 		gm_remove_state_var = { VAR = gm_tr_take_target }
 		gm_remove_state_var = { VAR = gm_tr_take_levels }
 		gm_remove_state_var = { VAR = gm_tr_take_age }
+		gm_remove_state_var = { VAR = gm_tr_take_start }
 		gm_remove_state_var = { VAR = gm_tr_take_value }
 		gm_remove_state_var = { VAR = gm_tr_take_whole }
 		gm_remove_state_var = { VAR = gm_tr_take_left }
@@ -145,6 +147,7 @@ gm_state_tr_make_trophy = {
 			set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
 			set_variable = { name = gm_tr_age value = scope:gm_tr_state.var:gm_tr_take_age }
+			set_variable = { name = gm_tr_start_grandeur value = scope:gm_tr_state.var:gm_tr_take_start }
 			set_variable = { name = gm_tr_grandeur value = scope:gm_tr_state.var:gm_tr_take_value }
 			set_variable = { name = gm_tr_year value = gm_this_year }
 			set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }
@@ -304,19 +307,26 @@ gm_state_tr_remove_piece = {
 		limit = { has_variable = gm_levels }
 		set_variable = { name = gm_levels value = var:gm_tr_take_left }
 	}
-	# The age that stays with what stands (spec 2026-10-16 §5).
+	# The age and starting grandeur that stay with what stands (spec
+	# 2026-10-16 §5; sites spec 2026-10-18 §5).
 	if = {
 		limit = { has_variable = gm_age }
 		change_variable = { name = gm_age subtract = var:gm_tr_take_age }
 		clamp_variable = { name = gm_age min = 0 }
 	}
-	set_variable = {
-		name = gm_grandeur
-		value = {
-			value = var:gm_tr_take_left
-			add = gm_state_primary_age
-		}
+	if = {
+		limit = { has_variable = gm_start_grandeur }
+		change_variable = { name = gm_start_grandeur subtract = var:gm_tr_take_start }
+		clamp_variable = { name = gm_start_grandeur min = 0 }
 	}
+	# Its grandeur until the next pulse writes it, from the records: the
+	# rebuilt building may not read back within this effect.
+	set_variable = { name = gm_grandeur value = var:gm_tr_take_left }
+	if = {
+		limit = { has_variable = gm_start_grandeur }
+		set_variable = { name = gm_grandeur value = var:gm_start_grandeur }
+	}
+	change_variable = { name = gm_grandeur add = gm_state_primary_age }
 	remove_variable = gm_rebuild_level
 	set_variable = { name = gm_tr_cooldown days = 3650 }
 	# The refresh puts the dedication back once the rebuilt building reads.
@@ -538,16 +548,34 @@ gm_state_tr_receive = {
 			change_variable = { name = gm_levels add = scope:gm_tr_moving.var:gm_tr_levels }
 		}
 		# Its age comes back with its levels (spec 2026-10-16 §5); a trophy
-		# from an older save has none.
+		# from an older save has none. Its starting grandeur too.
 		if = {
 			limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } }
 			gm_state_add_age = { AGE = scope:gm_tr_moving.var:gm_tr_age }
 		}
+		gm_state_add_start_from_moving = yes
 	}
 	else = {
 		gm_state_tr_rebuild_from_moving = yes
 	}
 	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# State scope (scope:gm_tr_moving a trophy rejoining this primary). Its starting
+# grandeur joins the primary's record (sites spec 2026-10-18 §5): its own, or
+# its levels with none. A primary with no record reads its levels, which the
+# caller has already added to.
+gm_state_add_start_from_moving = {
+	if = {
+		limit = { has_variable = gm_start_grandeur }
+		if = {
+			limit = { scope:gm_tr_moving = { has_variable = gm_tr_start_grandeur } }
+			change_variable = { name = gm_start_grandeur add = scope:gm_tr_moving.var:gm_tr_start_grandeur }
+		}
+		else = {
+			change_variable = { name = gm_start_grandeur add = scope:gm_tr_moving.var:gm_tr_levels }
+		}
+	}
 }
 
 # State scope (scope:gm_tr_moving the trophy or monument). The standing building
@@ -639,6 +667,7 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
 	gm_tr_copy_to_state = { FROM = gm_tr_age TO = gm_age }
+	gm_tr_copy_to_state = { FROM = gm_tr_start_grandeur TO = gm_start_grandeur }
 	gm_tr_copy_to_state = { FROM = gm_tr_faith TO = gm_faith }
 	gm_tr_copy_to_state = { FROM = gm_tr_contested TO = gm_contested }
 	gm_tr_copy_to_state = { FROM = gm_tr_heritage TO = gm_heritage }
@@ -656,8 +685,13 @@ gm_state_tr_take_records_from_moving = {
 	else = {
 		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
 	}
-	# Its grandeur until the next pulse writes it: its levels and its age.
+	# Its grandeur until the next pulse writes it: its starting grandeur (its
+	# levels, with no record) and its age.
 	set_variable = { name = gm_g_cache value = scope:gm_tr_moving.var:gm_tr_levels }
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_start_grandeur } }
+		set_variable = { name = gm_g_cache value = scope:gm_tr_moving.var:gm_tr_start_grandeur }
+	}
 	if = {
 		limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } }
 		change_variable = { name = gm_g_cache add = scope:gm_tr_moving.var:gm_tr_age }

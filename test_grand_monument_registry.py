@@ -3938,7 +3938,7 @@ class MultiMonumentDataTests(unittest.TestCase):
 
     def test_a_secondarys_grandeur_is_its_levels_and_age(self):
         body = squash(block(read(MON_VALUES), "gm_mon_grandeur"))
-        self.assertEqual(body, "value = gm_mon_levels add = gm_mon_age")
+        self.assertEqual(body, "value = gm_mon_start add = gm_mon_age")
 
     def test_the_state_sums_its_secondaries_from_the_list(self):
         body = squash(block(read(MON_VALUES), "gm_state_secondary_grandeur"))
@@ -3946,7 +3946,7 @@ class MultiMonumentDataTests(unittest.TestCase):
                                "every_in_list = { variable = gm_monuments_here add = gm_mon_grandeur } }")
 
     def test_the_primary_is_what_the_building_holds_beyond_them(self):
-        body = squash(block(read(MON_VALUES), "gm_state_primary_levels"))
+        body = squash(block(read(MON_VALUES), "gm_state_built_levels"))
         self.assertIn("value = gm_state_level subtract = gm_state_secondary_levels min = 1", body)
         # No building, no monument: the floor of 1 must not invent one.
         self.assertIn("if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }", body)
@@ -4285,9 +4285,58 @@ class LevelsApartTests(unittest.TestCase):
         self.assertEqual(squash(block(mon, "gm_state_secondary_levels")),
                          "value = 0 if = { limit = { has_variable_list = gm_monuments_here } "
                          "every_in_list = { variable = gm_monuments_here add = gm_mon_levels } }")
-        self.assertEqual(squash(block(mon, "gm_state_primary_levels")),
+        # What the building holds for the primary (sites spec 2026-10-18 §3.3):
+        # read only where the building itself is the question.
+        self.assertEqual(squash(block(mon, "gm_state_built_levels")),
                          "value = gm_state_level subtract = gm_state_secondary_levels min = 1 "
                          "if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }")
+        # The size is the record once there is one.
+        self.assertEqual(squash(block(mon, "gm_state_primary_levels")),
+                         "value = gm_state_built_levels "
+                         "if = { limit = { has_variable = gm_levels } value = var:gm_levels } "
+                         "if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }")
+
+    def test_starting_grandeur(self):
+        """Sites spec 2026-10-18 §3.2: grandeur is starting grandeur + age; a
+        missing record reads as the levels (old saves, trophies, digs)."""
+        mon = read(MON_VALUES)
+        self.assertEqual(squash(block(mon, "gm_state_primary_start")),
+                         "value = gm_state_primary_levels "
+                         "if = { limit = { has_variable = gm_start_grandeur } value = var:gm_start_grandeur } "
+                         "if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }")
+        self.assertEqual(squash(block(mon, "gm_mon_start")),
+                         "value = gm_mon_levels "
+                         "if = { limit = { has_variable = gm_tr_start_grandeur } value = var:gm_tr_start_grandeur }")
+        self.assertEqual(squash(block(mon, "gm_state_primary_grandeur")),
+                         "value = gm_state_primary_start add = gm_state_primary_age")
+        self.assertEqual(squash(block(mon, "gm_mon_grandeur")), "value = gm_mon_start add = gm_mon_age")
+        self.assertIn(("gm_start_grandeur", "gm_tr_start_grandeur"), CONTAINER_RECORDS)
+        self.assertIn("gm_remove_state_var = { VAR = gm_start_grandeur }",
+                      squash(block(read(EFFECTS), "gm_clear_state")))
+
+    def test_only_named_readers_read_the_building(self):
+        """The building's level is read only where the building is the
+        question: what it holds for an undedicated primary, the merge and
+        split arithmetic and the rebuilds (until the sites plan's Task 5 and 7
+        retire them), the Dedicate button's first level, and the debug event."""
+        allowed = {
+            (VALUES, "gm_state_level"), (MON_VALUES, "gm_state_built_levels"),
+            (MON_VALUES, "gm_state_unexplained_levels"), (MON_VALUES, "gm_state_levels_short"),
+            (MON_EFFECTS, "gm_state_found_beside"), (MON_EFFECTS, "gm_state_tr_shrink_by"),
+            (MON_EFFECTS, "gm_state_short_repair"), (MON_EFFECTS, "gm_monument_rebuild_self_check"),
+            (self.TR, "gm_state_tr_add_levels"), (SGUIS, "gm_dedicate_sgui"),
+            ("common/scripted_triggers/gm_monument_triggers.txt", "gm_state_short_unexplained"),
+        }
+        found = set()
+        for path in sorted(ROOT.glob("common/**/*.txt")) + sorted(ROOT.glob("events/*.txt")):
+            rel = path.relative_to(ROOT).as_posix()
+            if rel == DEBUG_EVENTS:
+                continue
+            for name, body in top_level_blocks(read(rel)):
+                if re.search(r"(?<![\w:.])gm_state_level\b|building_grand_monument\.level", body) \
+                        or (name == "gm_state_level" and rel == VALUES):
+                    found.add((rel, name))
+        self.assertEqual(found - allowed, set())
 
     def test_rebuilds_read_levels(self):
         sites = (
@@ -4329,6 +4378,30 @@ class LevelsApartTests(unittest.TestCase):
             self.assertIn("ScriptValue('gm_state_primary_levels')", loc()[key], key)
 
 
+class StartGrandeurShareTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §5: a taking carries its share of the levels, of
+    the starting grandeur and of the age; what it counts for abroad is half
+    the starting grandeur and age it carries."""
+
+    TR_VALUES = "common/script_values/gm_trophy_values.txt"
+
+    def test_the_shares(self):
+        self.assertEqual(squash(block(read(self.TR_VALUES), "gm_state_tr_start")),
+                         "value = gm_state_primary_start if = { limit = { gm_state_tr_whole = 0 } "
+                         "multiply = gm_state_tr_levels divide = gm_state_primary_levels }")
+        self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_tr_start")),
+                         "value = gm_mon_start if = { limit = { gm_mon_tr_whole = 0 } "
+                         "multiply = gm_mon_tr_levels divide = gm_mon_levels }")
+        self.assertEqual(squash(block(read(self.TR_VALUES), "gm_state_tr_value")),
+                         "value = gm_state_tr_start add = gm_state_tr_age divide = 2 ceiling = yes")
+
+    def test_ageing_reads_starting_grandeur(self):
+        self.assertTrue(squash(block(read(VALUES), "gm_state_age_step")).startswith(
+            "value = gm_state_primary_start multiply = 2 divide = 1200"))
+        self.assertTrue(squash(block(read(MON_VALUES), "gm_mon_age_step")).startswith(
+            "value = gm_mon_start multiply = 2 divide = 1200"))
+
+
 class AgeTests(unittest.TestCase):
     """Ageing rework (spec 2026-10-16 §1, §5): grandeur = levels + age. Age
     goes where the levels go: a taking carries its share, a return brings it
@@ -4341,12 +4414,12 @@ class AgeTests(unittest.TestCase):
         mon = read(MON_VALUES)
         self.assertEqual(squash(block(mon, "gm_mon_age")),
                          "value = 0 if = { limit = { has_variable = gm_tr_age } value = var:gm_tr_age }")
-        self.assertEqual(squash(block(mon, "gm_mon_grandeur")), "value = gm_mon_levels add = gm_mon_age")
+        self.assertEqual(squash(block(mon, "gm_mon_grandeur")), "value = gm_mon_start add = gm_mon_age")
         self.assertEqual(squash(block(mon, "gm_state_primary_age")),
                          "value = 0 if = { limit = { has_building = building_grand_monument has_variable = gm_age } "
                          "value = var:gm_age }")
         self.assertEqual(squash(block(mon, "gm_state_primary_grandeur")),
-                         "value = gm_state_primary_levels add = gm_state_primary_age")
+                         "value = gm_state_primary_start add = gm_state_primary_age")
         self.assertEqual(squash(block(mon, "gm_state_secondary_grandeur")),
                          "value = 0 if = { limit = { has_variable_list = gm_monuments_here } "
                          "every_in_list = { variable = gm_monuments_here add = gm_mon_grandeur } }")
@@ -4361,7 +4434,7 @@ class AgeTests(unittest.TestCase):
                          "value = gm_state_primary_age if = { limit = { gm_state_tr_whole = 0 } "
                          "multiply = gm_state_tr_levels divide = gm_state_primary_levels }")
         self.assertEqual(squash(block(trv, "gm_state_tr_value")),
-                         "value = gm_state_tr_levels add = gm_state_tr_age divide = 2 ceiling = yes")
+                         "value = gm_state_tr_start add = gm_state_tr_age divide = 2 ceiling = yes")
         take = squash(strip_comments(block(read(self.TR), "gm_state_tr_take")))
         self.assertIn("set_variable = { name = gm_tr_take_age value = gm_state_tr_age }", take)
         self.assertLess(take.find("gm_tr_take_age value"), take.find("gm_state_tr_make_trophy = yes"))
@@ -4381,7 +4454,7 @@ class AgeTests(unittest.TestCase):
         piece = squash(strip_comments(block(read(MON_EFFECTS), "gm_mon_tr_take_piece")))
         self.assertIn("set_variable = { name = gm_tr_age value = scope:gm_tr_state.var:gm_tr_take_age }", piece)
         self.assertIn("change_variable = { name = gm_tr_age subtract = scope:gm_tr_state.var:gm_tr_take_age }", piece)
-        self.assertIn("value = { value = scope:gm_tr_state.var:gm_tr_take_levels "
+        self.assertIn("value = { value = scope:gm_tr_state.var:gm_tr_take_start "
                       "add = scope:gm_tr_state.var:gm_tr_take_age divide = 2 ceiling = yes }", piece)
         whole = squash(strip_comments(block(read(MON_EFFECTS), "gm_mon_tr_take_whole")))
         self.assertIn("name = gm_tr_grandeur value = { value = gm_mon_grandeur divide = 2 ceiling = yes }", whole)
@@ -4411,9 +4484,9 @@ class AgeingTests(unittest.TestCase):
                          "value = 1 if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } "
                          "value = 0.5 }")
         self.assertEqual(squash(block(values, "gm_state_age_step")),
-                         "value = gm_state_primary_levels multiply = 2 divide = 1200 multiply = gm_policy_factor_age")
+                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age")
         self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_age_step")),
-                         "value = gm_mon_levels multiply = 2 divide = 1200 if = { limit = { var:gm_tr_origin ?= { "
+                         "value = gm_mon_start multiply = 2 divide = 1200 if = { limit = { var:gm_tr_origin ?= { "
                          "owner = { gm_policy_is = { P = mothballed STANDARD = no } } } } multiply = 0.5 }")
 
     def test_what_ages(self):
@@ -4451,7 +4524,7 @@ CONTAINER_RECORDS = (
     ("gm_namesake", "gm_tr_namesake"), ("gm_name_year", "gm_tr_name_year"), ("gm_name_char", "gm_tr_name_char"),
     ("gm_name_occasion", "gm_tr_name_occasion"), ("gm_name_enemy_cap", "gm_tr_name_enemy_cap"),
     ("gm_name", "gm_tr_name"), ("gm_honoree", "gm_tr_honoree"), ("gm_honoree_ig", "gm_tr_honoree_ig"),
-    ("gm_age", "gm_tr_age"), ("gm_raised_by", "gm_tr_raised_by"), ("gm_faith", "gm_tr_faith"),
+    ("gm_age", "gm_tr_age"), ("gm_start_grandeur", "gm_tr_start_grandeur"), ("gm_raised_by", "gm_tr_raised_by"), ("gm_faith", "gm_tr_faith"),
     ("gm_built_by", "gm_tr_built_by"), ("gm_contested", "gm_tr_contested"), ("gm_heritage", "gm_tr_heritage"),
     ("gm_base_ig", "gm_tr_base_ig"), ("gm_supporter_ig", "gm_tr_supporter_ig"),
     ("gm_ceremony_level", "gm_tr_ceremony_level"),
@@ -4481,7 +4554,7 @@ class FreezeTests(unittest.TestCase):
     def test_new_levels_are_read_only_on_a_frozen_monument(self):
         new = squash(block(read(TRIGGERS), "gm_state_has_new_levels"))
         for s in ("gm_state_is_dedicated = yes", "has_variable = gm_seen", "has_variable = gm_levels",
-                  "gm_state_primary_levels > var:gm_levels", "NOT = { has_variable = gm_restore_pm }",
+                  "gm_state_built_levels > var:gm_levels", "NOT = { has_variable = gm_restore_pm }",
                   "NOT = { has_variable = gm_rebuilding }", "NOT = { has_variable = gm_ceremony_pending }"):
             self.assertIn(s, new)
 
@@ -6555,6 +6628,73 @@ class OptionReasonTests(unittest.TestCase):
 
 
 # ---- Dedicate (owner, 2026-10-18) -------------------------------------------------------
+
+class RecordWriterTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's
+    size keeps its starting grandeur in step with its levels."""
+
+    TR = "common/scripted_effects/gm_trophy_effects.txt"
+
+    def body(self, path, name):
+        return squash(strip_comments(block(read(path), name)))
+
+    def test_dedication_writes_it_once(self):
+        body = self.body(EFFECTS, "gm_state_dedicate")
+        start = ("if = { limit = { NOT = { has_variable = gm_start_grandeur } } "
+                 "set_variable = { name = gm_start_grandeur value = var:gm_levels } }")
+        self.assertIn(start, body)
+        self.assertLess(body.find("set_variable = { name = gm_levels"), body.find(start))
+
+    def test_a_piece_of_the_primary_carries_its_share(self):
+        take = self.body(self.TR, "gm_state_tr_take")
+        self.assertIn("set_variable = { name = gm_tr_take_start value = gm_state_tr_start }", take)
+        self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_start }", take)
+        trophy = self.body(self.TR, "gm_state_tr_make_trophy")
+        self.assertIn("set_variable = { name = gm_tr_start_grandeur value = scope:gm_tr_state.var:gm_tr_take_start }",
+                      trophy)
+        piece = self.body(self.TR, "gm_state_tr_remove_piece")
+        self.assertIn("if = { limit = { has_variable = gm_start_grandeur } "
+                      "change_variable = { name = gm_start_grandeur subtract = var:gm_tr_take_start } "
+                      "clamp_variable = { name = gm_start_grandeur min = 0 } }", piece)
+
+    def test_a_piece_of_a_monument_beside_carries_its_share(self):
+        take = self.body(MON_EFFECTS, "gm_mon_tr_take")
+        self.assertIn("set_variable = { name = gm_tr_take_start value = gm_mon_tr_start }", take)
+        self.assertIn("set_variable = { name = gm_tr_take_start value = scope:gm_mon_target.var:gm_tr_take_start }",
+                      take)
+        piece = self.body(MON_EFFECTS, "gm_mon_tr_take_piece")
+        self.assertIn("set_variable = { name = gm_tr_start_grandeur value = scope:gm_tr_state.var:gm_tr_take_start }",
+                      piece)
+        self.assertIn("if = { limit = { has_variable = gm_tr_start_grandeur } "
+                      "change_variable = { name = gm_tr_start_grandeur subtract = scope:gm_tr_state.var:gm_tr_take_start } "
+                      "clamp_variable = { name = gm_tr_start_grandeur min = 0 } }", piece)
+        # What it counts for abroad: half its starting grandeur and age.
+        self.assertIn("value = scope:gm_tr_state.var:gm_tr_take_start add = scope:gm_tr_state.var:gm_tr_take_age",
+                      piece)
+
+    def test_a_return_brings_it_back(self):
+        receive = self.body(self.TR, "gm_state_tr_receive")
+        self.assertIn("gm_state_add_start_from_moving = yes", receive)
+        add = self.body(self.TR, "gm_state_add_start_from_moving")
+        self.assertIn("limit = { has_variable = gm_start_grandeur }", add)
+        self.assertIn("change_variable = { name = gm_start_grandeur add = scope:gm_tr_moving.var:gm_tr_start_grandeur }",
+                      add)
+        self.assertIn("change_variable = { name = gm_start_grandeur add = scope:gm_tr_moving.var:gm_tr_levels }", add)
+
+    def test_rededicate_halves_it(self):
+        body = self.body(EFFECTS, "gm_state_rededicate")
+        save = "set_variable = { name = gm_rededicate_start value = { value = gm_state_primary_start divide = 2 } }"
+        self.assertIn(save, body)
+        self.assertLess(body.find(save), body.find("gm_clear_state = { KEEP_LANDMARK = yes }"))
+        put = "set_variable = { name = gm_start_grandeur value = var:gm_rededicate_start }"
+        self.assertLess(body.find("gm_clear_state = { KEEP_LANDMARK = yes }"), body.find(put))
+        self.assertIn("remove_variable = gm_rededicate_start", body)
+
+    def test_a_landmark_is_recorded_at_its_levels(self):
+        body = self.body(LANDMARK_EFFECTS, "gm_seed_landmark")
+        self.assertIn("set_variable = { name = gm_levels value = $LEVEL$ }", body)
+        self.assertIn("set_variable = { name = gm_start_grandeur value = $LEVEL$ }", body)
+
 
 class DedicateButtonTests(unittest.TestCase):
     """A monument waits undedicated while it is built, as long as its owner

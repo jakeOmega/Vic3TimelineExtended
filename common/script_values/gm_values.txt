@@ -451,10 +451,11 @@ gm_policy_factor_age = {
 }
 
 # State scope. What a month adds to the primary's age grandeur: 2% of its
-# levels a year (owner, 2026-10-16: it doubles in fifty years), as two whole
-# numbers (no six-decimal literal, scripting_best_practices.md).
+# starting grandeur a year (owner, 2026-10-16: it doubles in fifty years;
+# sites spec 2026-10-18 §3.2: of the starting grandeur, not compounding), as
+# two whole numbers (no six-decimal literal, scripting_best_practices.md).
 gm_state_age_step = {
-	value = gm_state_primary_levels
+	value = gm_state_primary_start
 	multiply = 2
 	divide = 1200
 	multiply = gm_policy_factor_age
