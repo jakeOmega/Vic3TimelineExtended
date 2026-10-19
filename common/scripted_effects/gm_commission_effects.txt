@@ -537,6 +537,19 @@ gm_com_monthly = {
 			post_notification = gm_com_reminder_notice
 		}
 	}
+	# The AI's next levels: one queue (on seizing, gm_com_ai_queue) takes at
+	# most 100, which past twenty times 1836's wealth is short of the target,
+	# so once its last site is dedicated and counted it queues what is still
+	# missing. A player presses Raise It again.
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			is_ai = yes
+			gm_com_levels_to_go > 0
+			NOT = { any_scope_state = { has_building = building_grand_monument_site } }
+		}
+		gm_com_ai_queue = yes
+	}
 }
 
 # Country scope. Seized and completed (spec §3). The monument whose level or
@@ -874,6 +887,16 @@ gm_state_restore_dedication = {
 		limit = {
 			has_variable = gm_restore_pm
 			has_building = building_grand_monument
+			# Not on the day a site's dedication created the building: its
+			# method may not read back yet, and a switch now would be its
+			# second this tick; the next day's restore says which (the
+			# self-check monument_created_on_dedication).
+			NOT = {
+				AND = {
+					has_variable = gm_created_check
+					has_variable = gm_rebuilding
+				}
+			}
 		}
 		gm_state_restore_dedication_one = { KEY = undedicated }
 		gm_state_restore_dedication_one = { KEY = crown }

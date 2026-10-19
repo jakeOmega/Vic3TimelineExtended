@@ -1645,6 +1645,23 @@ gm_state_upkeep_mult = {
 	add = gm_state_secondary_levels
 	multiply = gm_policy_factor_upkeep
 	subtract = 1
+	# An older save's building until monument_events.32 records it: it stands
+	# at its full height, and pm_maintenance is level-scaled, so its own levels
+	# already pay (any multiplier would square them).
+	if = {
+		limit = { NOT = { has_variable = gm_migrated } }
+		value = 0
+	}
+}
+
+# The level a merge left a finished building at (gm_merge_check), for the
+# self-check monument_merge_level1.
+gm_state_merge_check_was = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_merge_check }
+		value = var:gm_merge_check
+	}
 }
 
 # ---- World wealth (sites spec 2026-10-18 §3.2, Plan B) ------------------------------
@@ -1665,6 +1682,9 @@ gm_world_rate_now = {
 		limit = { global_gdp_script_value > 0 }
 		value = gm_world_gdp_1836
 		divide = global_gdp_script_value
+		# The smallest a script number holds: gm_world_wealth_factor and the
+		# opportunity's levels divide by it.
+		min = 0.00001
 	}
 }
 

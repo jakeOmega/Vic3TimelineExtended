@@ -705,7 +705,7 @@ Every monument, whatever it honors, gives:
 - +25 prestige for each step of standing grandeur, counting every monument that
   is not contested.
 - +25% Tourism Industry throughput in its state for each step of its own
-  grandeur, so its first five levels match one of the base game's monuments.
+  grandeur, so five grandeur matches one of the base game's monuments.
 - +1 cultural pull for each step of standing grandeur (steps of 10), with no
   ceiling: past the eighth step, at 2,550 grandeur, the steps keep doubling.
 
@@ -876,8 +876,9 @@ Moments in your country's history bring **opportunities** to raise a
 monument, whatever your rank. Each comes as an event, An Opportunity,
 titled for the moment that brought it, and names the interest group that wants
 it, the dedication, where it stands and what completing it gives. Seize the
-Opportunity opens it; Seize It and Start Building opens it and queues its five
-levels at once, as government construction, in the state its tooltip names; Let
+Opportunity opens it; Seize It and Start Building opens it and queues the levels
+its grandeur takes at today's rate at once, as government construction, in the
+state its tooltip names; Let
 It Pass closes it. Passing costs nothing, and an offer left unanswered is seized.
 Only one opportunity is open or on offer at a time; a moment that comes while
 one is open passes without one.
@@ -945,7 +946,8 @@ it pass loses it for good.
 
 The AI gets the same offers. It seizes one unless it is below a major power, at
 war, in hard times, has more than a year of government construction queued or
-is in debt, and then queues the five levels itself.
+is in debt, and then queues the levels itself, at most 100 at a time; once those
+are dedicated it queues what is still missing.
 
 #### Historical opportunities
 

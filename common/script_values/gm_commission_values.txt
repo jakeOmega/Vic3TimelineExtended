@@ -87,6 +87,9 @@ gm_disp_com_progress = {
 	value = gm_com_progress
 }
 
+# The levels the whole target takes at today's rate, for the offer's text.
+gm_disp_com_target_levels = { value = gm_com_target_levels }
+
 gm_disp_com_target = {
 	value = 0
 	if = {

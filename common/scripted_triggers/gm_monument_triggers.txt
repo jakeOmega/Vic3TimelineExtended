@@ -589,13 +589,18 @@ gm_sh_orphan_of = {
 # waiting to be adopted here (gm_state_adopt_orphans): an orphan in the region,
 # and here a finished building no record describes or one the merge made
 # taller than 1 (sites spec 2026-10-18 §3.7). Until it is settled nothing reads
-# this building as a new dedication. The cheap reads first: the refresh, which
+# this building as a new dedication. An older save's building stands at its
+# full height until monument_events.32 records it (gm_migrated), so its height
+# says nothing of a merge then. The cheap reads first: the refresh, which
 # tooltips walk, asks it of every monument.
 gm_state_merge_pending = {
 	has_building = building_grand_monument
 	OR = {
 		gm_state_unrecorded = yes
-		gm_state_level > 1
+		AND = {
+			has_variable = gm_migrated
+			gm_state_level > 1
+		}
 	}
 	gm_state_orphan_in_region = yes
 }

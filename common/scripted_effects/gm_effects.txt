@@ -405,6 +405,7 @@ gm_state_monthly = {
 		# 2026-10-18 §3.7: it is put back on it).
 		gm_state_record_dedication = yes
 		gm_monument_migration_self_check = yes
+		gm_monument_merge_level_self_check = yes
 		# Tourism counts everything standing here; the monument policy (v2 §5)
 		# scales it and each local effect.
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
@@ -1623,8 +1624,14 @@ gm_state_start_ceremony = {
 		limit = {
 			NOT = { has_variable = gm_ceremony_pending }
 			# A gifted monument is dedicated: a method that reads as
-			# Undedicated is the rebuild's, until it is put back.
-			NOT = { has_variable = gm_restore_pm }
+			# Undedicated is the rebuild's, until it is put back. Rededicate
+			# asks anyway: on a monument beside another the swap that raised
+			# it set the restore, and its answer switches the method itself
+			# (gm_state_dedicate drops the restore).
+			OR = {
+				has_variable = gm_rededicate_asking
+				NOT = { has_variable = gm_restore_pm }
+			}
 		}
 		if = {
 			limit = { has_variable = gm_rededicate_asking }
@@ -1895,9 +1902,11 @@ gm_state_dedicate = {
 	}
 	# Its starting grandeur (sites spec 2026-10-18 §3.2): its levels, unless
 	# Rededicate kept half its own.
+	# gm_state_primary_levels, not var:gm_levels: the options' tooltips walk
+	# this body writing nothing, so gm_levels set just above reads as unset.
 	if = {
 		limit = { NOT = { has_variable = gm_start_grandeur } }
-		set_variable = { name = gm_start_grandeur value = var:gm_levels }
+		set_variable = { name = gm_start_grandeur value = gm_state_primary_levels }
 	}
 	gm_state_record_builder = yes
 	# The monument a commission met by this dedication names (v2 §2.3).
@@ -1979,6 +1988,13 @@ gm_state_migrate = {
 			limit = { NOT = { has_variable = gm_levels } }
 			set_variable = { name = gm_levels value = gm_state_built_levels }
 		}
+		# Levels finished above its record (queued before construction sites,
+		# when they founded a monument beside it; the AI queued an
+		# opportunity's on its tallest): a construction site of that many,
+		# counted at the 1836 rate as an undedicated monument's are. Read
+		# before the building goes back to level 1.
+		set_variable = { name = gm_mig_excess value = gm_state_built_levels }
+		change_variable = { name = gm_mig_excess subtract = var:gm_levels }
 		gm_state_record_dedication = yes
 		if = {
 			limit = { gm_state_level > 1 }
@@ -1990,6 +2006,17 @@ gm_state_migrate = {
 				level = 1
 			}
 		}
+		if = {
+			limit = { var:gm_mig_excess > 0 }
+			te_construction_market_build_specified_level = {
+				SPEC_TYPE = building_grand_monument_site
+				SPEC_LEVEL = var:gm_mig_excess
+			}
+			set_variable = { name = gm_site_counted value = var:gm_mig_excess }
+			set_variable = { name = gm_site_grandeur value = var:gm_mig_excess }
+			owner = { trigger_event = { id = monument_events.20 } }
+		}
+		remove_variable = gm_mig_excess
 	}
 	else = {
 		set_variable = { name = gm_migrate_levels value = gm_state_built_levels }
@@ -2283,11 +2310,13 @@ gm_state_choose_building_skin = {
 # which takes legitimacy linearly (gm_national_vanity) and fades over about
 # two years. The journal entry warns beforehand (gm_hard_times_sgui, Task 9).
 # From the construction site's monthly count (gm_state_count_site_levels), so
-# the radicals come once a month however many levels finished.
+# the radicals come once a month however many levels finished. $AMOUNT$ is
+# read on the owner: a state's variable is passed as prev.var:, and nothing is
+# called between the owner block's opening and the read, so prev is the state.
 gm_state_vanity_backlash_for = {
 	add_radicals_in_state = { value = 0.005 }
+	owner = { gm_init_ledgers = yes }
 	owner = {
-		gm_init_ledgers = yes
 		change_variable = { name = gm_vanity_ledger add = $AMOUNT$ }
 		post_notification = gm_vanity_backlash_notice
 	}
@@ -2344,7 +2373,7 @@ gm_state_count_site_levels = {
 					owner = { gm_country_hard_times = yes }
 					NOT = { has_variable = gm_rebuilding }
 				}
-				gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_add }
+				gm_state_vanity_backlash_for = { AMOUNT = prev.var:gm_site_add }
 			}
 			set_variable = { name = gm_site_counted value = gm_state_site_level }
 			remove_variable = gm_site_new
