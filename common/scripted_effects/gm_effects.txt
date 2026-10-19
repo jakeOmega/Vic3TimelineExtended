@@ -2095,6 +2095,9 @@ gm_state_finish_site = {
 			}
 			set_variable = { name = gm_restore_pm value = flag:$KEY$ }
 			set_variable = gm_site_created
+			# The self-check monument_created_on_dedication
+			# (gm_state_restore_dedication_one).
+			set_variable = gm_created_check
 		}
 		else = {
 			remove_building = building_grand_monument_site

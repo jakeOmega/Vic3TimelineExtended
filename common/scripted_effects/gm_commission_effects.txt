@@ -891,6 +891,11 @@ gm_state_restore_dedication = {
 	}
 }
 
+# The first restore a day or more after a site's dedication made its finished
+# building (gm_created_check, sites plan A Task 10) says, once a game, whether
+# create_building's activate_production_methods put the dedication on it (OK)
+# or the engine's copy won and this restore has to switch it (BROKEN: the
+# fallback works; the switch is a second one).
 gm_state_restore_dedication_one = {
 	if = {
 		limit = {
@@ -899,9 +904,33 @@ gm_state_restore_dedication_one = {
 		}
 		if = {
 			limit = { gm_state_has_pm = { PM = pm_monument_$KEY$ } }
+			if = {
+				limit = {
+					has_variable = gm_created_check
+					NOT = { has_variable = gm_rebuilding }
+				}
+				if = {
+					limit = { NOT = { has_global_variable = gm_created_self_checked } }
+					set_global_variable = gm_created_self_checked
+					debug_log = "TE_SELF_CHECK OK monument_created_on_dedication (create_building put a site's dedication, pm_monument_$KEY$, on the finished Grand Monument it made)"
+				}
+				remove_variable = gm_created_check
+			}
 			remove_variable = gm_restore_pm
 		}
 		else = {
+			if = {
+				limit = {
+					has_variable = gm_created_check
+					NOT = { has_variable = gm_rebuilding }
+				}
+				if = {
+					limit = { NOT = { has_global_variable = gm_created_self_checked } }
+					set_global_variable = gm_created_self_checked
+					debug_log = "TE_SELF_CHECK BROKEN monument_created_on_dedication (the finished Grand Monument a site's dedication made stood on another method; gm_restore_pm switches it to pm_monument_$KEY$; see docs/testing/grand-monuments-ageing-playtest.md)"
+				}
+				remove_variable = gm_created_check
+			}
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_$KEY$

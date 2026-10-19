@@ -2372,10 +2372,12 @@ class GiftTests(unittest.TestCase):
         for d in DEDICATIONS:
             self.assertIn(f"gm_state_mark_restore_pm_one = {{ KEY = {d.key} }}", mark, d.key)
             self.assertIn(f"gm_state_restore_dedication_one = {{ KEY = {d.key} }}", restore, d.key)
-        one = squash(block(self.e, "gm_state_restore_dedication_one"))
-        self.assertIn("if = { limit = { gm_state_has_pm = { PM = pm_monument_$KEY$ } } remove_variable = gm_restore_pm } "
-                      "else = { activate_production_method = { building_type = building_grand_monument "
-                      "production_method = pm_monument_$KEY$ } }", one)
+        one = squash(strip_comments(block(self.e, "gm_state_restore_dedication_one")))
+        # Read back: the flag goes; else one switch (with the creation
+        # self-check around both, CreatedOnDedicationTests).
+        self.assertIn("remove_variable = gm_restore_pm } else = {", one)
+        self.assertTrue(one.endswith("activate_production_method = { building_type = building_grand_monument "
+                                     "production_method = pm_monument_$KEY$ } } }"), one[-200:])
         e = read(EFFECTS)
         refresh = squash(block(e, "gm_country_refresh"))
         # After an older save's migration ask (MigrationTests).
@@ -6240,6 +6242,57 @@ class SitePanelTests(unittest.TestCase):
         refresh = squash(block(read(EFFECTS), "gm_country_refresh"))
         self.assertIn("NOT = { has_journal_entry = je_grand_monuments } OR = { any_scope_state = { "
                       "has_building = building_grand_monument } " + site, refresh)
+
+
+class WalkedRefreshTests(unittest.TestCase):
+    """Sites plan A, Review Focus 5: gm_country_refresh runs inside tooltips,
+    which walk it writing nothing, so nothing it calls makes, removes or
+    swaps a building or a container: that work is the hidden events'
+    (monument_events.29, .31, .32). The one method switch it reaches is the
+    restore of a dedication script recorded (gm_state_restore_dedication),
+    which reads back nothing in the same effect."""
+
+    ALLOWED = {"gm_state_restore_dedication_one"}
+
+    def test_refresh_writes_nothing_structural(self):
+        effects = {}
+        for path in sorted(ROOT.glob("common/scripted_effects/*.txt")):
+            for name, body in top_level_blocks(read(path.relative_to(ROOT).as_posix())):
+                effects[name] = body
+        bad = re.compile(r"\b(create_building|remove_building|create_container|destroy_container|"
+                         r"activate_production_method|gm_state_demote_primary)\b")
+        seen, stack, hits = set(), ["gm_country_refresh"], {}
+        while stack:
+            name = stack.pop()
+            if name in seen:
+                continue
+            seen.add(name)
+            body = effects[name]
+            if name not in self.ALLOWED and bad.search(body):
+                hits[name] = sorted(set(bad.findall(body)))
+            for call in re.findall(r"\b([a-z_]\w*)\s*=\s*(?:yes|\{)", body):
+                if call in effects and call not in seen:
+                    stack.append(call)
+        self.assertGreater(len(seen), 50)
+        self.assertEqual(hits, {})
+
+
+class CreatedOnDedicationTests(unittest.TestCase):
+    """Sites plan A Task 10: whether create_building's activate_production_methods
+    puts the dedication on the finished building it makes, or the engine's copy
+    wins and gm_restore_pm has to switch it, is unread. Once a game, the first
+    restore after a site's dedication says which."""
+
+    def test_the_self_check(self):
+        finish = squash(strip_comments(block(read(EFFECTS), "gm_state_finish_site")))
+        self.assertIn("set_variable = gm_created_check", finish)
+        one = squash(strip_comments(block(read("common/scripted_effects/gm_commission_effects.txt"),
+                                          "gm_state_restore_dedication_one")))
+        for s in ("TE_SELF_CHECK OK monument_created_on_dedication",
+                  "TE_SELF_CHECK BROKEN monument_created_on_dedication",
+                  "has_variable = gm_created_check", "remove_variable = gm_created_check",
+                  "NOT = { has_global_variable = gm_created_self_checked }"):
+            self.assertIn(s, one)
 
 
 class RecordWriterTests(unittest.TestCase):
