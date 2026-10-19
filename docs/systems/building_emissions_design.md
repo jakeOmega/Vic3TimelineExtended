@@ -253,7 +253,7 @@ Follow-up after the first engine logs (2026-10-03):
 
 - **A new group per covered building, `pmg_carbon_capture_<building>`**, next to the unchanged `pmg_emissions_control`. Basic and Advanced stay pollution-only (answer 1). Separating them keeps the ministry's forced pollution choice apart from the capture choice, and keeps the per-fuel variants out of a group four buildings share. In fiction, amine capture needs the flue gas desulphurised first. The any-of gate can't also require Advanced Emissions Control, so that pre-treatment is part of the capture cost.
 - **Methods in each group:**
-  - `pm_no_carbon_capture_<building>`: the default, free. Disallowed under the mandate (§5.6), as is every Tier I variant.
+  - `pm_no_carbon_capture_<building>`: the default, free. Disallowed under the mandate (§5.6), as is every Tier I variant. In a group with a not-applicable method it is hidden and unlocked by the fuel-group methods that burn, so the group never offers both.
   - `pm_carbon_capture_na_<building>`: hidden, free, unlocked by the fuel-group methods that burn nothing (Microgravity Alloying; Artificial and Improved Fertilizers, Molecular Foundry). Under the mandate the group then always has a valid method. Power plants need none: every power-plant method burns.
   - `pm_carbon_capture_<tier>_<building>_<class>`: hidden; `unlocking_production_methods` = the methods of one fuel class; `unlocking_technologies` = the tier's technology; carries the cut and the cost.
 - **A fuel class** is the set of methods in the building's fuel group with the same coal and oil input. Grouping keeps the tier through a swap between equal burns. After the steel change (§7), Blister, Bessemer and Open Hearth burn 30 coal and Electric Arc and the two substitution processes 10. That is two classes, so an upgrade within either keeps the tier.
@@ -495,7 +495,7 @@ Make the market's gross Σ of a per-building add, read through a state mirror. E
 
 **In-game checks:**
 - The group shows only the current fuel's researched tiers.
-- A new building and an old save's building both start on "No Carbon Capture".
+- A new building and an old save's building both start on "No Carbon Capture", or on "Capture Not Applicable" when the source method burns nothing eligible (an automation group on `pm_automation_disabled`). An old save's building left on "No Carbon Capture" with such a method moves to "Capture Not Applicable" by itself.
 - The mandate moves AI buildings onto Tier II.
 - The method tooltip's capture line: per level or for the building.
 - How the technology tooltip lists the variants.
