@@ -26,6 +26,18 @@
 # No scope. Repair each secondary's state, then the lists. Nothing to do in a
 # game none has touched: gm_mon_lists_written stands while any list does.
 gm_monument_monthly = {
+	# The world-wealth rate (sites spec 2026-10-18 §3.2, Plan B): each January,
+	# and now if there is none; and once, a new game's world GDP beside the
+	# constant it is measured against.
+	if = {
+		limit = { gm_system_enabled = yes }
+		gm_world_rate_ensure = yes
+		if = {
+			limit = { month = 0 }
+			set_global_variable = { name = gm_world_rate value = gm_world_rate_now }
+		}
+		gm_world_base_self_check = yes
+	}
 	# An older save's finished monuments, marked once before any is migrated
 	# (sites spec 2026-10-18 §3.5): gm_state_needs_migration reads the mark, and
 	# a finished building with neither it nor gm_migrated is a stray
@@ -1679,6 +1691,30 @@ gm_monument_merge_self_check = {
 		}
 		else = {
 			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no part of its region took it; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings there; see docs/testing/grand-monuments-ageing-playtest.md)"
+		}
+	}
+}
+
+# ---- Self-check: the world-wealth baseline (Plan B) ------------------------------------
+# No scope, from gm_monument_monthly, once: on a game's first pass (before
+# 1836.3.1), whether world GDP is within a tenth of the constant the rate is
+# measured against (gm_world_gdp_1836). An older save never reads it.
+gm_world_base_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_world_base_checked }
+			game_date < 1836.3.1
+		}
+		set_global_variable = gm_world_base_checked
+		if = {
+			limit = {
+				global_gdp_script_value >= gm_world_gdp_1836_low
+				global_gdp_script_value <= gm_world_gdp_1836_high
+			}
+			debug_log = "TE_SELF_CHECK OK gm_world_base (world GDP [SCOPE.ScriptValue('global_gdp_script_value')|0] is within a tenth of the 1836 constant [SCOPE.ScriptValue('gm_world_gdp_1836')|0])"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN gm_world_base (world GDP [SCOPE.ScriptValue('global_gdp_script_value')|0] is not within a tenth of the 1836 constant [SCOPE.ScriptValue('gm_world_gdp_1836')|0]: set gm_world_gdp_1836 to it; see docs/testing/grand-monuments-ageing-playtest.md)"
 		}
 	}
 }

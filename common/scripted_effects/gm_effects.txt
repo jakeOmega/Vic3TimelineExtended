@@ -2296,6 +2296,17 @@ gm_state_vanity_backlash = {
 	gm_state_vanity_backlash_for = { AMOUNT = 1 }
 }
 
+# ---- World wealth (Plan B) ---------------------------------------------------------
+# Any scope. The rate written once if none is (an older save, or a game's first
+# count before its first January): the order of the global and the state
+# monthly pulses is unknown, so the count makes sure itself.
+gm_world_rate_ensure = {
+	if = {
+		limit = { NOT = { has_global_variable = gm_world_rate } }
+		set_global_variable = { name = gm_world_rate value = gm_world_rate_now }
+	}
+}
+
 # ---- The construction site's count (sites spec 2026-10-18 §3.2) ------------------
 # State scope, from gm_state_monthly (real execution, never the walked
 # refresh) and at the start of every dedication. Levels the site has finished
@@ -2305,6 +2316,7 @@ gm_state_vanity_backlash = {
 # lost) take their share of the grandeur with them. A site gone takes its
 # records with it; a dedication reads them first.
 gm_state_count_site_levels = {
+	gm_world_rate_ensure = yes
 	if = {
 		limit = { has_building = building_grand_monument_site }
 		if = {

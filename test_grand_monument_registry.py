@@ -6295,6 +6295,43 @@ class CreatedOnDedicationTests(unittest.TestCase):
             self.assertIn(s, one)
 
 
+class RateTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.2 (Plan B): a level's starting grandeur is
+    world GDP in 1836 over world GDP when it is counted. The 1836 figure is a
+    constant (spec §5): 334,465,286 summed from a Timeline Extended save of
+    1836.1.20, every country's latest GDP."""
+
+    def body(self, path, name):
+        return squash(strip_comments(block(read(path), name)))
+
+    def test_the_rate(self):
+        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 334000000")
+        self.assertEqual(self.body(VALUES, "gm_world_rate_now"),
+                         "value = 1 if = { limit = { global_gdp_script_value > 0 } value = gm_world_gdp_1836 "
+                         "divide = global_gdp_script_value }")
+        self.assertEqual(self.body(VALUES, "gm_world_rate_value"),
+                         "value = 1 if = { limit = { has_global_variable = gm_world_rate } "
+                         "value = global_var:gm_world_rate }")
+
+    def test_written_before_counting(self):
+        ensure = self.body(EFFECTS, "gm_world_rate_ensure")
+        self.assertEqual(ensure, "if = { limit = { NOT = { has_global_variable = gm_world_rate } } "
+                                 "set_global_variable = { name = gm_world_rate value = gm_world_rate_now } }")
+        self.assertTrue(self.body(EFFECTS, "gm_state_count_site_levels").startswith("gm_world_rate_ensure = yes"))
+        monthly = self.body(MON_EFFECTS, "gm_monument_monthly")
+        self.assertIn("gm_world_rate_ensure = yes if = { limit = { month = 0 } "
+                      "set_global_variable = { name = gm_world_rate value = gm_world_rate_now } }", monthly)
+
+    def test_the_base_self_check(self):
+        check = self.body(MON_EFFECTS, "gm_world_base_self_check")
+        for s in ("NOT = { has_global_variable = gm_world_base_checked }", "game_date < 1836.3.1",
+                  "TE_SELF_CHECK OK gm_world_base", "TE_SELF_CHECK BROKEN gm_world_base",
+                  "global_gdp_script_value >= gm_world_gdp_1836_low",
+                  "global_gdp_script_value <= gm_world_gdp_1836_high"):
+            self.assertIn(s, check)
+        self.assertIn("gm_world_base_self_check = yes", self.body(MON_EFFECTS, "gm_monument_monthly"))
+
+
 class RecordWriterTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's
     size keeps its starting grandeur in step with its levels."""
