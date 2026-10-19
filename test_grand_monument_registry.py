@@ -2095,8 +2095,10 @@ class CommissionLifeTests(unittest.TestCase):
         # offered; "leave it undedicated" is the default otherwise. Two copies
         # with complementary triggers keep exactly one default valid
         # (scripting_best_practices.md: a failed default does not fall back).
-        self.assertIn("name = monument_events.2.opp trigger = { custom_tooltip = { text = gm_ded_reason_opportunity_tt "
-                      "gm_state_ceremony_offers_opportunity = yes } } default_option = yes ai_chance = { base = 0 } gm_state_dedicate_as_opportunity_asks = yes",
+        self.assertIn("name = monument_events.2.opp highlighted_option = yes trigger = { custom_tooltip = { "
+                      "text = gm_ded_reason_opportunity_tt gm_state_ceremony_offers_opportunity = yes } } "
+                      "owner = { custom_tooltip = gm_ded_reason_opportunity_tt } default_option = yes "
+                      "ai_chance = { base = 0 } gm_state_dedicate_as_opportunity_asks = yes",
                       squash(ev))
         self.assertIn("name = monument_events.2.a trigger = { custom_tooltip = { text = gm_ded_reason_leave_tt "
                       "gm_state_ceremony_offers_opportunity = no } } "
@@ -6433,10 +6435,14 @@ class SignatureDebugTests(unittest.TestCase):
 
 class OptionReasonTests(unittest.TestCase):
     """Every gated dedication (monument_events.2) and style (.11) says why it is
-    or isn't offered. Gates written as `owner = { <scripted trigger> = yes }`
-    drew nothing in the option's tooltip (2026-10-18): a greyed dedication had
-    no "not available because" at all, and a style printed the header over
-    nothing. So each gate sits in a custom_tooltip whose text names the reason."""
+    or isn't offered (event_creation_guide.md, greyed options). The engine prints
+    an option's conditions only on a highlighted option, and only when it is
+    unavailable; an available highlighted option lists its effects under "This
+    option is available because:". So each gate sits in a custom_tooltip whose
+    text names the reason (shown when greyed), the dedication event's gated
+    options are highlighted, and each reason is repeated as the option's first
+    effect, in the owner's scope, behind the same gate when the option can be
+    greyed (shown when offered)."""
 
     @staticmethod
     def _own_trigger(body):
@@ -6504,3 +6510,25 @@ class OptionReasonTests(unittest.TestCase):
                 with self.subTest(option=name):
                     h = re.search(r"te_heritage_(\w+) = yes", gate)
                     self.assertEqual(key, f"gm_skin_reason_{h.group(1)}_tt" if h else "gm_skin_reason_faith_tt", gate)
+
+    def test_the_reason_shows_when_offered_too(self):
+        for eid in ("monument_events.2", "monument_events.11"):
+            ev = strip_comments(raw_block_at(read(EVENTS), rf"(?m)^{re.escape(eid)}\s*=\s*\{{"))
+            for m in re.finditer(r"(?m)^\toption\s*=\s*\{", ev):
+                body = _match_brace(ev, m.end())
+                name = re.search(r"\bname\s*=\s*(\S+)", body).group(1)
+                trig = self._own_trigger(body)
+                if trig is None or name == "monument_events.2.a":
+                    continue
+                reasons = self._reasons(trig)[0]
+                flat = squash(body)
+                with self.subTest(option=name):
+                    if eid == "monument_events.2":
+                        self.assertIn("highlighted_option = yes", flat)
+                    lines = " ".join(f"owner = {{ custom_tooltip = {key} }}" for key, _ in reasons)
+                    if "show_as_unavailable" in flat:
+                        gates = " ".join(gate for _, gate in reasons)
+                        self.assertIn(f"if = {{ limit = {{ {gates} }} {lines} }}", flat,
+                                      "a greyed option must not claim a reason it doesn't meet")
+                    else:
+                        self.assertIn(lines, flat)

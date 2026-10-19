@@ -187,12 +187,14 @@ monument_events.2 = {
 	# opportunity's dedication through the per-dedication weights instead.
 	option = {
 		name = monument_events.2.opp
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_opportunity_tt
 				gm_state_ceremony_offers_opportunity = yes
 			}
 		}
+		owner = { custom_tooltip = gm_ded_reason_opportunity_tt }
 		default_option = yes
 		ai_chance = { base = 0 }
 		gm_state_dedicate_as_opportunity_asks = yes
@@ -245,6 +247,7 @@ monument_events.2 = {
 	# To the Crown.
 	option = {
 		name = monument_events.2.l
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_crowned_tt
@@ -252,6 +255,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { monument_government_is_crowned = yes }
+			}
+			owner = { custom_tooltip = gm_ded_reason_crowned_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -281,6 +290,7 @@ monument_events.2 = {
 	# To the Republic.
 	option = {
 		name = monument_events.2.b
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_republic_tt
@@ -288,6 +298,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { monument_government_is_republican = yes }
+			}
+			owner = { custom_tooltip = gm_ded_reason_republic_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -317,6 +333,7 @@ monument_events.2 = {
 	# To the Revolution.
 	option = {
 		name = monument_events.2.n
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_revolution_tt
@@ -324,6 +341,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { gm_government_is_revolutionary = yes }
+			}
+			owner = { custom_tooltip = gm_ded_reason_revolution_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -353,6 +376,7 @@ monument_events.2 = {
 	# To the Leader: a personality cult.
 	option = {
 		name = monument_events.2.o
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_leader_tt
@@ -360,6 +384,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { gm_can_raise_leader_monument = yes }
+			}
+			owner = { custom_tooltip = gm_ded_reason_leader_tt }
+		}
 		ai_chance = {
 			base = 5
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -389,6 +419,7 @@ monument_events.2 = {
 	# A grand shrine. Hidden only under State Atheism.
 	option = {
 		name = monument_events.2.c
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_no_state_atheism_tt
@@ -398,6 +429,14 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = {
+					NOT = { has_law_or_variant = law_type:law_state_atheism }
+				}
+			}
+			owner = { custom_tooltip = gm_ded_reason_no_state_atheism_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -491,6 +530,7 @@ monument_events.2 = {
 	# Opera house.
 	option = {
 		name = monument_events.2.g
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_tech_romanticism_tt
@@ -498,6 +538,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { has_technology_researched = romanticism }
+			}
+			owner = { custom_tooltip = gm_ded_reason_tech_romanticism_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -521,6 +567,7 @@ monument_events.2 = {
 	# Botanical gardens.
 	option = {
 		name = monument_events.2.h
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_tech_romanticism_tt
@@ -528,6 +575,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { has_technology_researched = romanticism }
+			}
+			owner = { custom_tooltip = gm_ded_reason_tech_romanticism_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -558,6 +611,7 @@ monument_events.2 = {
 	# Observatory.
 	option = {
 		name = monument_events.2.i
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_tech_empiricism_tt
@@ -565,6 +619,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { has_technology_researched = empiricism }
+			}
+			owner = { custom_tooltip = gm_ded_reason_tech_empiricism_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -588,6 +648,7 @@ monument_events.2 = {
 	# Exhibition hall. Hidden where industry itself is outlawed.
 	option = {
 		name = monument_events.2.j
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_tech_marketing_research_tt
@@ -599,6 +660,14 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { has_technology_researched = marketing_research }
+				owner = { NOT = { has_law_or_variant = law_type:law_industry_banned } }
+			}
+			owner = { custom_tooltip = gm_ded_reason_tech_marketing_research_tt }
+			owner = { custom_tooltip = gm_ded_reason_industry_allowed_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -622,6 +691,7 @@ monument_events.2 = {
 	# Stadium.
 	option = {
 		name = monument_events.2.k
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_tech_television_broadcasting_tt
@@ -629,6 +699,12 @@ monument_events.2 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
+		if = {
+			limit = {
+				owner = { has_technology_researched = television_broadcasting }
+			}
+			owner = { custom_tooltip = gm_ded_reason_tech_television_broadcasting_tt }
+		}
 		ai_chance = {
 			base = 3
 			# The open opportunity's dedication (v2 §2.6): certain for a
@@ -652,12 +728,14 @@ monument_events.2 = {
 	# parent's own gate. Hidden, not greyed, while none is held.
 	option = {
 		name = monument_events.2.sig_to_victory
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_special_tt
 				gm_state_ceremony_offers_special = { SIG = to_victory }
 			}
 		}
+		owner = { custom_tooltip = gm_ded_reason_special_tt }
 		ai_chance = {
 			# The AI takes a held special whenever it is offered: holding one
 			# gains nothing. An open opportunity's dedication still comes first.
@@ -680,12 +758,14 @@ monument_events.2 = {
 	# parent's own gate. Hidden, not greyed, while none is held.
 	option = {
 		name = monument_events.2.sig_unknown_soldier
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_special_tt
 				gm_state_ceremony_offers_special = { SIG = unknown_soldier }
 			}
 		}
+		owner = { custom_tooltip = gm_ded_reason_special_tt }
 		ai_chance = {
 			# The AI takes a held special whenever it is offered: holding one
 			# gains nothing. An open opportunity's dedication still comes first.
@@ -708,12 +788,14 @@ monument_events.2 = {
 	# parent's own gate. Hidden, not greyed, while none is held.
 	option = {
 		name = monument_events.2.sig_concert_of_nations
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_special_tt
 				gm_state_ceremony_offers_special = { SIG = concert_of_nations }
 			}
 		}
+		owner = { custom_tooltip = gm_ded_reason_special_tt }
 		ai_chance = {
 			# The AI takes a held special whenever it is offered: holding one
 			# gains nothing. An open opportunity's dedication still comes first.
@@ -736,12 +818,14 @@ monument_events.2 = {
 	# parent's own gate. Hidden, not greyed, while none is held.
 	option = {
 		name = monument_events.2.sig_conquerors_of_space
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_special_tt
 				gm_state_ceremony_offers_special = { SIG = conquerors_of_space }
 			}
 		}
+		owner = { custom_tooltip = gm_ded_reason_special_tt }
 		ai_chance = {
 			# The AI takes a held special whenever it is offered: holding one
 			# gains nothing. An open opportunity's dedication still comes first.
@@ -764,6 +848,7 @@ monument_events.2 = {
 	# parent's own gate. Hidden, not greyed, while none is held.
 	option = {
 		name = monument_events.2.sig_olympic
+		highlighted_option = yes
 		trigger = {
 			custom_tooltip = {
 				text = gm_ded_reason_special_tt
@@ -774,6 +859,8 @@ monument_events.2 = {
 				owner = { has_technology_researched = television_broadcasting }
 			}
 		}
+		owner = { custom_tooltip = gm_ded_reason_special_tt }
+		owner = { custom_tooltip = gm_ded_reason_tech_television_broadcasting_tt }
 		ai_chance = {
 			# The AI takes a held special whenever it is offered: holding one
 			# gains nothing. An open opportunity's dedication still comes first.
@@ -2081,6 +2168,7 @@ monument_events.11 = {
 				owner = { religion = rel:catholic }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_catholic }
 	}
 
@@ -2094,6 +2182,7 @@ monument_events.11 = {
 				owner = { religion = rel:protestant }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_protestant }
 	}
 
@@ -2107,6 +2196,7 @@ monument_events.11 = {
 				owner = { religion = rel:orthodox }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_orthodox }
 	}
 
@@ -2120,6 +2210,7 @@ monument_events.11 = {
 				owner = { religion = rel:oriental_orthodox }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_oriental_orthodox }
 	}
 
@@ -2133,6 +2224,7 @@ monument_events.11 = {
 				owner = { religion = rel:sunni }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_sunni }
 	}
 
@@ -2146,6 +2238,7 @@ monument_events.11 = {
 				owner = { religion = rel:shiite }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_shiite }
 	}
 
@@ -2159,6 +2252,7 @@ monument_events.11 = {
 				owner = { religion = rel:ibadi }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_ibadi }
 	}
 
@@ -2172,6 +2266,7 @@ monument_events.11 = {
 				owner = { religion = rel:jewish }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_jewish }
 	}
 
@@ -2185,6 +2280,7 @@ monument_events.11 = {
 				owner = { religion = rel:mahayana }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_mahayana }
 	}
 
@@ -2198,6 +2294,7 @@ monument_events.11 = {
 				owner = { religion = rel:gelugpa }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_gelugpa }
 	}
 
@@ -2211,6 +2308,7 @@ monument_events.11 = {
 				owner = { religion = rel:theravada }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_theravada }
 	}
 
@@ -2224,6 +2322,7 @@ monument_events.11 = {
 				owner = { religion = rel:confucian }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_confucian }
 	}
 
@@ -2237,6 +2336,7 @@ monument_events.11 = {
 				owner = { religion = rel:hindu }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_hindu }
 	}
 
@@ -2250,6 +2350,7 @@ monument_events.11 = {
 				owner = { religion = rel:shinto }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_shinto }
 	}
 
@@ -2263,6 +2364,7 @@ monument_events.11 = {
 				owner = { religion = rel:sikh }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_sikh }
 	}
 
@@ -2276,6 +2378,7 @@ monument_events.11 = {
 				owner = { religion = rel:animist }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_faith_tt }
 		gm_state_choose_skin = { SKIN = faith_animist }
 	}
 
@@ -2289,6 +2392,7 @@ monument_events.11 = {
 				owner = { te_heritage_latin = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_latin_tt }
 		gm_state_choose_skin = { SKIN = heritage_latin }
 	}
 
@@ -2302,6 +2406,7 @@ monument_events.11 = {
 				owner = { te_heritage_sanskrit = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_sanskrit_tt }
 		gm_state_choose_skin = { SKIN = heritage_sanskrit }
 	}
 
@@ -2315,6 +2420,7 @@ monument_events.11 = {
 				owner = { te_heritage_geez = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_geez_tt }
 		gm_state_choose_skin = { SKIN = heritage_geez }
 	}
 
@@ -2328,6 +2434,7 @@ monument_events.11 = {
 				owner = { te_heritage_slavonic = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_slavonic_tt }
 		gm_state_choose_skin = { SKIN = heritage_slavonic }
 	}
 
@@ -2341,6 +2448,7 @@ monument_events.11 = {
 				owner = { te_heritage_pali = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_pali_tt }
 		gm_state_choose_skin = { SKIN = faith_theravada }
 	}
 
@@ -2354,6 +2462,7 @@ monument_events.11 = {
 				owner = { te_heritage_avestan = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_avestan_tt }
 		gm_state_choose_skin = { SKIN = heritage_avestan }
 	}
 
@@ -2367,6 +2476,7 @@ monument_events.11 = {
 				owner = { te_heritage_arabic = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_arabic_tt }
 		gm_state_choose_skin = { SKIN = heritage_arabic }
 	}
 
@@ -2380,6 +2490,7 @@ monument_events.11 = {
 				owner = { te_heritage_chinese = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_chinese_tt }
 		gm_state_choose_skin = { SKIN = heritage_chinese }
 	}
 
@@ -2393,6 +2504,7 @@ monument_events.11 = {
 				owner = { te_heritage_greek = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_greek_tt }
 		gm_state_choose_skin = { SKIN = heritage_greek }
 	}
 
@@ -2406,6 +2518,7 @@ monument_events.11 = {
 				owner = { te_heritage_irish = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_irish_tt }
 		gm_state_choose_skin = { SKIN = heritage_irish }
 	}
 
@@ -2419,6 +2532,7 @@ monument_events.11 = {
 				owner = { te_heritage_coptic = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_coptic_tt }
 		gm_state_choose_skin = { SKIN = faith_oriental_orthodox }
 	}
 
@@ -2432,6 +2546,7 @@ monument_events.11 = {
 				owner = { te_heritage_nahuatl = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_nahuatl_tt }
 		gm_state_choose_skin = { SKIN = heritage_nahuatl }
 	}
 
@@ -2445,6 +2560,7 @@ monument_events.11 = {
 				owner = { te_heritage_norse = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_norse_tt }
 		gm_state_choose_skin = { SKIN = heritage_norse }
 	}
 
@@ -2458,6 +2574,7 @@ monument_events.11 = {
 				owner = { te_heritage_gothic = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_gothic_tt }
 		gm_state_choose_skin = { SKIN = heritage_gothic }
 	}
 
@@ -2471,6 +2588,7 @@ monument_events.11 = {
 				owner = { te_heritage_mayan = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_mayan_tt }
 		gm_state_choose_skin = { SKIN = heritage_mayan }
 	}
 
@@ -2484,6 +2602,7 @@ monument_events.11 = {
 				owner = { te_heritage_prussian = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_prussian_tt }
 		gm_state_choose_skin = { SKIN = heritage_prussian }
 	}
 
@@ -2497,6 +2616,7 @@ monument_events.11 = {
 				owner = { te_heritage_aramaic = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_aramaic_tt }
 		gm_state_choose_skin = { SKIN = heritage_aramaic }
 	}
 
@@ -2516,6 +2636,7 @@ monument_events.11 = {
 				owner = { te_heritage_hebrew = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_hebrew_tt }
 		gm_state_choose_skin = { SKIN = heritage_hebrew }
 	}
 
@@ -2529,6 +2650,7 @@ monument_events.11 = {
 				owner = { te_heritage_chinese = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_chinese_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_chinese }
 	}
 
@@ -2542,6 +2664,7 @@ monument_events.11 = {
 				owner = { te_heritage_greek = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_greek_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_greek }
 	}
 
@@ -2555,6 +2678,7 @@ monument_events.11 = {
 				owner = { te_heritage_avestan = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_avestan_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_avestan }
 	}
 
@@ -2568,6 +2692,7 @@ monument_events.11 = {
 				owner = { te_heritage_arabic = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_arabic_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_arabic }
 	}
 
@@ -2581,6 +2706,7 @@ monument_events.11 = {
 				owner = { te_heritage_chinese = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_chinese_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_chinese }
 	}
 
@@ -2594,6 +2720,7 @@ monument_events.11 = {
 				owner = { te_heritage_sanskrit = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_sanskrit_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_sanskrit }
 	}
 
@@ -2607,6 +2734,7 @@ monument_events.11 = {
 				owner = { te_heritage_avestan = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_avestan_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_avestan }
 	}
 
@@ -2620,6 +2748,7 @@ monument_events.11 = {
 				owner = { te_heritage_chinese = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_chinese_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_chinese }
 	}
 
@@ -2633,6 +2762,7 @@ monument_events.11 = {
 				owner = { te_heritage_mayan = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_mayan_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_mayan }
 	}
 
@@ -2646,6 +2776,7 @@ monument_events.11 = {
 				owner = { te_heritage_latin = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_latin_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_latin }
 	}
 
@@ -2659,6 +2790,7 @@ monument_events.11 = {
 				owner = { te_heritage_greek = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_greek_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_greek }
 	}
 
@@ -2672,6 +2804,7 @@ monument_events.11 = {
 				owner = { te_heritage_nahuatl = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_nahuatl_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_nahuatl }
 	}
 
@@ -2685,6 +2818,7 @@ monument_events.11 = {
 				owner = { te_heritage_mayan = yes }
 			}
 		}
+		owner = { custom_tooltip = gm_skin_reason_mayan_tt }
 		gm_state_choose_building_skin = { SKIN = heritage_mayan }
 	}
 
