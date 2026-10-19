@@ -83,6 +83,21 @@ on_yearly_events = {
 ```
 The number before `=` is the relative weight. Higher weight = more likely to be picked when the event pool fires. `chance_to_happen = 65` means 65% chance each year.
 
+## Making an Event Open at Once (Popups)
+
+A player does not see a plain `trigger_event` open. It arrives as a small card in the notification list and waits to be clicked, which is right for flavour and wrong for the answer to something the player just did (a button, a decision) or a milestone. Two switches make an event open as a window straight away. Both need a human recipient to mean anything: an AI answers either way, and a hidden event shows nothing.
+
+- **On the call:** `trigger_event = { id = ns.N popup = yes }`. Vanilla's formation events use it, and it is the idiom most of the mod's popups use (the nuclear events, the banking crash events, `decisions`' `when_taken`, a journal entry's `on_complete`). It combines with a delay: `trigger_event = { id = ns.N popup = yes days = 7 }`. Guard it with `is_player = yes` or `is_ai = no` where only a human should be asked (`te_monetary_union_effects.txt`).
+- **On the event:** `is_popup = yes`, beside `duration`, so the event asks for a window whoever fires it. `minor_events_timelineextended.2` (the Forceful Legislation offer) relies on it alone: `on_law_enactment_started` fires it from an `events = { }` list, which has no place for `popup = yes`. `.6` and `.7` set both switches; `.8` is fired by an effect without `popup = yes`. No note in the repo records an in-game check that the flag alone is enough, so a system that must not drop to a card sets both.
+
+An on_action that has to open an event from its `events = { }` list can instead use `effect = { trigger_event = { id = ns.N popup = yes } }`, as `te_bespoke_formation_dispatcher` does.
+
+**A chain sets it on every link.** An option that fires the next event (the dedication ceremony's style, form and name events) passes its own `popup = yes`; nothing here relies on a popup carrying over to the event its option fires. The Grand Monument dedication chain (`monument_events.2`, `.11`, `.24`, `.25`, `.28`) sets both switches on all five, so a future caller that forgets `popup = yes` still gets a window.
+
+**Spend it sparingly.** A popup interrupts play. Use it for the result of the player's own click, a decision they must make now or a world-historical moment, and leave recurring flavour (the monument anniversaries) and offers they can take up later as cards.
+
+Only the game shows which one a recipient got, so a new popup belongs on the system's play-test list. The state events of the monument chain were the first to rely on `popup = yes` from a state scope (`docs/testing/grand-monuments-ageing-playtest.md`, § Dedicate).
+
 ## Localization for Events
 
 - Create a separate file per namespace: `localization/english/<namespace>_l_english.yml`

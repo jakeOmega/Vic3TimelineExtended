@@ -1649,7 +1649,7 @@ gm_state_start_ceremony = {
 			set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		trigger_event = { id = monument_events.2 }
+		trigger_event = { id = monument_events.2 popup = yes }
 	}
 	gm_remove_state_var = { VAR = gm_rededicate_asking }
 }
@@ -2214,7 +2214,7 @@ gm_state_offer_skins_faith = {
 		if = {
 			limit = { owner = { is_ai = no } }
 			set_variable = { name = gm_skin_axis value = flag:faith }
-			trigger_event = { id = monument_events.11 }
+			trigger_event = { id = monument_events.11 popup = yes }
 		}
 	}
 }
@@ -2228,7 +2228,7 @@ gm_state_offer_skins_heritage = {
 			owner = { is_ai = no }
 		}
 		set_variable = { name = gm_skin_axis value = flag:heritage }
-		trigger_event = { id = monument_events.11 }
+		trigger_event = { id = monument_events.11 popup = yes }
 	}
 }
 
@@ -2252,7 +2252,7 @@ gm_state_offer_building_skins = {
 			owner = { is_ai = no }
 		}
 		set_variable = { name = gm_skin_axis value = flag:building_$KEY$ }
-		trigger_event = { id = monument_events.11 }
+		trigger_event = { id = monument_events.11 popup = yes }
 	}
 }
 

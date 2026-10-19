@@ -699,7 +699,7 @@ gm_com_fulfil = {
 	set_variable = gm_active
 	if = {
 		limit = { is_ai = no }
-		trigger_event = { id = monument_events.28 }
+		trigger_event = { id = monument_events.28 popup = yes }
 	}
 	gm_com_close = yes
 	scope:gm_com_named_state ?= { trigger_event = { id = monument_events.26 } }

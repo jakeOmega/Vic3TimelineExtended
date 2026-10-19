@@ -1012,7 +1012,7 @@ class ContestTests(unittest.TestCase):
         self.assertIn("NOT = { has_variable = gm_ceremony_pending }", body)
         self.assertIn("set_variable = { name = gm_ceremony_pending days = 30 }", body)
         self.assertIn("set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }", body)
-        self.assertIn("trigger_event = { id = monument_events.2 }", body)
+        self.assertIn("trigger_event = { id = monument_events.2 popup = yes }", body)
 
     def test_the_refresh_asks_a_ceremony_the_hook_missed(self):
         """Five queued levels finishing on one day fired no on_building_built
@@ -1375,10 +1375,10 @@ class CeremonyTests(unittest.TestCase):
         # skin gm_state_default_faith_skin / gm_state_default_heritage_skin
         # already set, unasked (plan-mandated fix, Task 7 fix round 1).
         self.assertIn("limit = { owner = { is_ai = no } } set_variable = { name = gm_skin_axis value = flag:faith } "
-                      "trigger_event = { id = monument_events.11 }", faith_offer)
+                      "trigger_event = { id = monument_events.11 popup = yes }", faith_offer)
         heritage_offer = squash(block(e, "gm_state_offer_skins_heritage"))
         self.assertIn("owner = { is_ai = no } } set_variable = { name = gm_skin_axis value = flag:heritage } "
-                      "trigger_event = { id = monument_events.11 }", heritage_offer)
+                      "trigger_event = { id = monument_events.11 popup = yes }", heritage_offer)
 
 
 class SkinTests(unittest.TestCase):
@@ -1457,7 +1457,7 @@ class SkinTests(unittest.TestCase):
         shared = squash(block(e, "gm_state_offer_building_skins"))
         self.assertIn("gm_state_default_building_skin_$KEY$ = yes", shared)
         self.assertIn("set_variable = { name = gm_skin_axis value = flag:building_$KEY$ } "
-                      "trigger_event = { id = monument_events.11 }", shared)
+                      "trigger_event = { id = monument_events.11 popup = yes }", shared)
         choose = squash(block(e, "gm_state_choose_building_skin"))
         self.assertIn("text = gm_skin_choice_building_tt", choose)
         self.assertIn("gm_state_unveil = yes", choose)
@@ -2464,7 +2464,7 @@ class UsabilityTests(unittest.TestCase):
         fulfil = squash(block(self.e, "gm_com_fulfil"))
         self.assertIn("set_variable = { name = gm_com_seized_state value = scope:gm_com_named_state }", fulfil)
         self.assertIn("set_variable = { name = gm_com_seized_source value = var:gm_com_source }", fulfil)
-        self.assertIn("if = { limit = { is_ai = no } trigger_event = { id = monument_events.28 } }", fulfil)
+        self.assertIn("if = { limit = { is_ai = no } trigger_event = { id = monument_events.28 popup = yes } }", fulfil)
         self.assertNotIn("post_notification", fulfil)
         ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.28\s*=\s*\{"))
         self.assertIn("event_image", ev)
@@ -3682,7 +3682,7 @@ class LandmarkLockTests(unittest.TestCase):
                                           "gm_state_set_default_form = yes }"), unveil)
         offer = squash(block(self.names, "gm_state_offer_name_choice"))
         self.assertIn("limit = { gm_state_has_form_choice = yes gm_state_is_landmark = no } "
-                      "trigger_event = { id = monument_events.24 }", offer)
+                      "trigger_event = { id = monument_events.24 popup = yes }", offer)
         unnamed = squash(block(self.names, "gm_state_name_if_unnamed"))
         self.assertIn("limit = { NOT = { has_variable = gm_form } gm_state_is_landmark = no } "
                       "gm_state_set_default_form = yes", unnamed)
@@ -6813,3 +6813,48 @@ class SitesFinalReviewTests(unittest.TestCase):
             self.assertIn("ScriptValue('gm_world_wealth_factor')|0]#! levels", L[key], key)
         # A floor, so the wealth factor never divides by zero.
         self.assertIn("min = 0.00001", squash(block(read(VALUES), "gm_world_rate_now")))
+
+
+# ---- The dedication opens at once (owner, 2026-10-19) -------------------------------
+
+class DedicationPopupTests(unittest.TestCase):
+    """The dedication's chain opens as windows, not notification cards: the
+    ceremony (2), the style (11), the form (24), the namesake (25) and the seized
+    opportunity's notice (28). Each event says `is_popup = yes` and every call
+    that fires one says `popup = yes` (event_creation_guide.md § "Making an
+    Event Open at Once"). Only the game shows the window; this pins the script."""
+
+    CHAIN = ("2", "11", "24", "25", "28")
+
+    def test_each_event_in_the_chain_is_a_popup(self):
+        events = read(EVENTS)
+        for n in self.CHAIN:
+            ev = squash(strip_comments(raw_block_at(events, rf"(?m)^monument_events\.{n}\s*=\s*\{{")))
+            head = ev.split(" option = {")[0]
+            self.assertIn(" is_popup = yes ", head + " ", f"monument_events.{n} opens as a card")
+
+    def test_every_call_that_fires_one_asks_for_the_popup(self):
+        fire = re.compile(r"trigger_event\s*=\s*\{([^{}]*)\}")
+        chain = re.compile(r"id\s*=\s*monument_events\.(" + "|".join(self.CHAIN) + r")(?![\w.])")
+        paths = sorted(ROOT.glob("common/**/*.txt")) + sorted(ROOT.glob("events/*.txt"))
+        self.assertGreater(len(paths), 100)
+        seen = {}
+        for path in paths:
+            rel = path.relative_to(ROOT).as_posix()
+            text = strip_comments(path.read_text(encoding="utf-8-sig", errors="replace"))
+            for m in fire.finditer(text):
+                hit = chain.search(m.group(1))
+                if not hit:
+                    continue
+                seen[hit.group(1)] = seen.get(hit.group(1), 0) + 1
+                self.assertRegex(m.group(1), r"\bpopup\s*=\s*yes\b",
+                                 f"{rel}: trigger_event {squash(m.group(1))} opens a card")
+        self.assertEqual(set(seen), set(self.CHAIN), "a fire site went missing, so the pin read nothing")
+        # The form event's thirty-one options each fire the namesake event.
+        self.assertGreaterEqual(seen["25"], 32)
+
+    def test_anniversaries_and_offers_stay_cards(self):
+        events = read(EVENTS)
+        for n in ("3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "21"):
+            ev = squash(strip_comments(raw_block_at(events, rf"(?m)^monument_events\.{n}\s*=\s*\{{")))
+            self.assertNotIn("is_popup", ev, f"monument_events.{n}")
