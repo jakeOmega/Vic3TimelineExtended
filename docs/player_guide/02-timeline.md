@@ -656,8 +656,9 @@ and dedication, its grandeur with a bar toward its next step, its levels and age
 once finished, and the Tourism
 Industry throughput and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
-the Timeline Extended window, where the buttons are. While you can carry the
-monument off as a trophy, the card has a Carry It Off button. A state with more
+the Timeline Extended window, where the buttons are. While your monument there
+awaits its dedication, the card has a Dedicate button, and while you can carry
+the monument off as a trophy, a Carry It Off button. A state with more
 than one monument lists the others in the same card, under these details, and a
 state where trophies stand shows a Trophies on Display card under it.
 
@@ -679,7 +680,8 @@ These sections follow:
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. The four monument policy buttons are at the foot. |
-| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
+| Awaiting Dedication | Open | Only while one of your monuments stands undedicated: its row, as under Our Monuments, with a Dedicate button under it. |
+| Our Monuments | Open | A row for each monument not awaiting its dedication: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
 | How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, unique dedications, names, the monument policy and trophies. |
@@ -695,11 +697,15 @@ Every monument, whatever it honors, gives:
 
 ### A finished monument and its age
 
-A monument is **finished** once it is dedicated and the levels queued for it are
-built. Levels still queued when the dedication ceremony asks join it, so build a
-monument to the size you want before its construction runs out. After that its
-levels are fixed: the state card and its row under Our Monuments show
-"Finished: 15 levels · Age: +3.2".
+A monument is **finished** once it is dedicated. Until then it stands
+undedicated and every level built on it joins it, for as long as you like: you
+can pause its construction and come back to it decades later. Its **Dedicate**
+button, on its state card and under Awaiting Dedication, holds the dedication
+ceremony. The button is greyed while any of its levels are under construction:
+let them finish or cancel them first. After the ceremony its levels are fixed:
+the state card and its row under Our Monuments show "Finished: 15 levels ·
+Age: +3.2". A level you queue while the ceremony is open belongs to the next
+monument, as below.
 
 A finished monument grows grander with the years: by 2% of its levels a year, so
 it doubles its grandeur in fifty years and triples it in a hundred.
@@ -719,7 +725,7 @@ down throws its years away with its stone, and rededicating it halves both, so
 an old monument is worth more than a new one of the same size.
 
 More levels built in the state of a finished monument raise a **new monument
-beside it**, with its own dedication ceremony, name and picture, as below. The
+beside it**, with its own Dedicate button, name and picture, as below. The
 building can't be expanded while the monument there is contested, while a
 dedication, unveiling or naming is under way, or once six monuments stand
 there; the build tooltip names the reason. The AI raises new monuments in other
@@ -754,16 +760,15 @@ its place.
 
 ### Monument dedications
 
-When a level of an undedicated monument finishes, a dedication ceremony asks
-what it honors. A new monument gets the ceremony too: while it is under
-construction its building panel shows what your other monuments honor, and the
-ceremony's answer replaces that. The choice is permanent, and the ceremony's
-tooltips list each dedication's effects. The ceremony lists every dedication:
-one you can't raise yet is greyed out, with what it needs. An undedicated
-monument, draped until its unveiling, gives only the
-prestige, tourism and cultural pull above; the ceremony asks again at its next
-level. Dedicating a monument finishes it once its queued levels are built (see
-[A finished monument and its age](#a-finished-monument-and-its-age)).
+A monument's Dedicate button holds its dedication ceremony, which asks what it
+honors. The choice is permanent, and the ceremony's tooltips list each
+dedication's effects. The ceremony lists every dedication: one you can't raise
+yet is greyed out, with what it needs. Leaving it undedicated closes the
+ceremony and keeps the button for later. An undedicated monument, draped until its
+unveiling, gives only the prestige, tourism and cultural pull above.
+Dedicating a monument finishes it (see
+[A finished monument and its age](#a-finished-monument-and-its-age)). The AI
+dedicates its monuments once nothing more is queued for them.
 
 | Dedication | Requires | Approves / objects | National, per step | In its state, per step |
 |---|---|---|---|---|
@@ -892,10 +897,11 @@ great power, 120 in a major power and 180 in any other. Levels you build in fitt
 count, in a new monument or one raised beside a finished one; years of age do
 not. An opportunity for the capital counts only the capital's monuments. One for the
 capital can be met anywhere when the capital already holds a monument of
-another dedication. A monument that becomes contested stops counting. When a new
-monument's dedication ceremony could answer the open opportunity, its first
-choice is "As the opportunity asks", with its dedication, and that
-is what the ceremony picks if you let it pass.
+another dedication. A monument that becomes contested stops counting. Its
+levels count once it is dedicated, so press its Dedicate button before the
+deadline. When a new monument's dedication ceremony could answer the open
+opportunity, its first choice is "As the opportunity asks", with its
+dedication, and that is what the ceremony picks if you let it pass.
 
 Each moment that comes once comes once a game: the first time you are a great
 power, the space firsts, each technology. What you already have when a game

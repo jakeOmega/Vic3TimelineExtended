@@ -127,6 +127,13 @@ give the same national effects as one tall one" stays true).
   (The first draft made the ceremony wait instead, but a copy standing on a dedication while its levels build would
   then be read as dedicated, contested or recorded for weeks; switching it to Undedicated cannot be read back in the
   same effect.)
+- **Amended 2026-10-18 (owner): dedicate by button.** No ceremony asks by itself for a player's monument any more. It
+  stands undedicated, gaining every level built on it, until its Dedicate button opens the ceremony, which it can only
+  while none of its levels are under construction ("pausing is fine, building in parallel is not"). The answer records
+  `gm_levels` at once (`gm_state_dedicate`); a level queued while the ceremony asks founds beside. The AI's ceremony
+  asks once nothing is queued, so the AI's monuments still finish as above. A pick in the building panel, a landmark
+  and a monument dedicated before the button still freeze once their construction stops. Details:
+  `docs/systems/mod_systems.md` § Grand Monuments, "Dedicate".
 
 ### 3.2 New levels on a dedicated monument found a new one
 
