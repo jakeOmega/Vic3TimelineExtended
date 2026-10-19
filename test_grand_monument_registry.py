@@ -1230,7 +1230,10 @@ LANDMARKS = (
     Landmark("royal_palace_of_kumasi", "STATE_GOLD_COAST", "ASH", "crown", "hall", ("generic", "hall"), 5),
     Landmark("bukgwan_victory_stele", "STATE_SARIWON", "KOR", "war_memorial", "stele", ("heritage_geez", "stele"), 5),
     Landmark("imperial_city_of_hue", "STATE_ANNAM", "DAI", "crown", "gate", ("heritage_chinese", "gate"), 10),
-    Landmark("persepolis", "STATE_FARS", "PER", "civic", "hall", ("heritage_avestan", "hall"), 5),
+    # Persepolis and Baalbek at 10 (owner, 2026-10-19): the great ancient sites,
+    # beside the 10-level digs (the Pergamon Altar, Olympia, Delphi); an ancient
+    # monument barely ages, so what it starts with is about what it keeps.
+    Landmark("persepolis", "STATE_FARS", "PER", "civic", "hall", ("heritage_avestan", "hall"), 10),
     Landmark("red_fort", "STATE_DELHI", "MUG", "crown", "gate", ("heritage_avestan", "gate"), 10),
     # Never placed: the trophies of 1836 with no standing monument of their own.
     Landmark("rosetta_stone", "STATE_LOWER_EGYPT", "EGY", "civic", "stele", ("heritage_geez", "stele"), None, False),
@@ -1257,7 +1260,8 @@ LANDMARKS = (
     Landmark("uffizi_gallery", "STATE_TUSCANY", "TUS", "civic", "hall", ("generic", "hall"), 10),
     Landmark("capitoline_museums", "STATE_LAZIO", "PAP", "civic", "forum", ("heritage_latin", "forum"), 5),
     Landmark("bodrum_castle", "STATE_AYDIN", "TUR", "war_memorial", "tower", ("heritage_gothic", "tower"), 5),
-    Landmark("temples_of_baalbek", "STATE_LEBANON", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"), 5),
+    Landmark("temples_of_baalbek", "STATE_LEBANON", "EGY", "civic", "colonnade", ("heritage_aramaic", "colonnade"),
+             10),
     # Added 2026-10-12: heritage sites with no weight in 1836, which the
     # owner's revised rule admits at lower priority. Single-owner states only
     # (owner): Palmyra in Syria (Homs is its nearest hub), Xanthos in Konya

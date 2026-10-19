@@ -49,7 +49,7 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = royal_palace_of_kumasi STATE = STATE_GOLD_COAST TAG = ASH DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1822 }
 	gm_seed_landmark = { KEY = bukgwan_victory_stele STATE = STATE_SARIWON TAG = KOR DEDICATION = war_memorial FORM = stele LEVEL = 5 BUILT = 1709 }
 	gm_seed_landmark = { KEY = imperial_city_of_hue STATE = STATE_ANNAM TAG = DAI DEDICATION = crown FORM = gate LEVEL = 10 BUILT = 1833 }
-	gm_seed_landmark = { KEY = persepolis STATE = STATE_FARS TAG = PER DEDICATION = civic FORM = hall LEVEL = 5 BUILT = -500 }
+	gm_seed_landmark = { KEY = persepolis STATE = STATE_FARS TAG = PER DEDICATION = civic FORM = hall LEVEL = 10 BUILT = -500 }
 	gm_seed_landmark = { KEY = red_fort STATE = STATE_DELHI TAG = MUG DEDICATION = crown FORM = gate LEVEL = 10 BUILT = 1648 }
 	gm_seed_landmark = { KEY = great_zimbabwe STATE = STATE_ZAMBEZI TAG = MSH DEDICATION = civic FORM = round_tower LEVEL = 5 BUILT = 1300 }
 	gm_seed_landmark = { KEY = royal_palaces_of_abomey STATE = STATE_DAHOMEY TAG = DAH DEDICATION = crown FORM = hall LEVEL = 5 BUILT = 1645 }
@@ -57,7 +57,7 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = uffizi_gallery STATE = STATE_TUSCANY TAG = TUS DEDICATION = civic FORM = hall LEVEL = 10 BUILT = 1581 }
 	gm_seed_landmark = { KEY = capitoline_museums STATE = STATE_LAZIO TAG = PAP DEDICATION = civic FORM = forum LEVEL = 5 BUILT = 1734 }
 	gm_seed_landmark = { KEY = bodrum_castle STATE = STATE_AYDIN TAG = TUR DEDICATION = war_memorial FORM = tower LEVEL = 5 BUILT = 1437 }
-	gm_seed_landmark = { KEY = temples_of_baalbek STATE = STATE_LEBANON TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 BUILT = 150 }
+	gm_seed_landmark = { KEY = temples_of_baalbek STATE = STATE_LEBANON TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 10 BUILT = 150 }
 	gm_seed_landmark = { KEY = palmyra STATE = STATE_SYRIA TAG = EGY DEDICATION = civic FORM = colonnade LEVEL = 5 BUILT = 32 }
 	gm_seed_landmark = { KEY = xanthos STATE = STATE_KONYA TAG = TUR DEDICATION = civic FORM = rock_cut LEVEL = 5 BUILT = -390 }
 	gm_seed_landmark = { KEY = mesha_stele STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = war_memorial FORM = stele LEVEL = 5 BUILT = -840 }
