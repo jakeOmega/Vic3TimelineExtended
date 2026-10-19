@@ -986,12 +986,15 @@ gm_mon_tr_take = {
 		scope:gm_mon_target = {
 			set_variable = { name = gm_tr_take_levels value = gm_mon_tr_levels }
 			set_variable = { name = gm_tr_take_age value = gm_mon_tr_age }
+			set_variable = { name = gm_tr_take_start value = gm_mon_tr_start }
 		}
 		set_variable = { name = gm_tr_take_levels value = scope:gm_mon_target.var:gm_tr_take_levels }
 		set_variable = { name = gm_tr_take_age value = scope:gm_mon_target.var:gm_tr_take_age }
+		set_variable = { name = gm_tr_take_start value = scope:gm_mon_target.var:gm_tr_take_start }
 		scope:gm_mon_target = {
 			remove_variable = gm_tr_take_levels
 			remove_variable = gm_tr_take_age
+			remove_variable = gm_tr_take_start
 			if = {
 				limit = { gm_mon_tr_whole = 1 }
 				gm_mon_tr_take_whole = yes
@@ -1064,10 +1067,11 @@ gm_mon_tr_take_piece = {
 			set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_tr_take_levels }
 			set_variable = { name = gm_tr_age value = scope:gm_tr_state.var:gm_tr_take_age }
+			set_variable = { name = gm_tr_start_grandeur value = scope:gm_tr_state.var:gm_tr_take_start }
 			set_variable = {
 				name = gm_tr_grandeur
 				value = {
-					value = scope:gm_tr_state.var:gm_tr_take_levels
+					value = scope:gm_tr_state.var:gm_tr_take_start
 					add = scope:gm_tr_state.var:gm_tr_take_age
 					divide = 2
 					ceiling = yes
@@ -1105,6 +1109,11 @@ gm_mon_tr_take_piece = {
 			limit = { has_variable = gm_tr_age }
 			change_variable = { name = gm_tr_age subtract = scope:gm_tr_state.var:gm_tr_take_age }
 			clamp_variable = { name = gm_tr_age min = 0 }
+		}
+		if = {
+			limit = { has_variable = gm_tr_start_grandeur }
+			change_variable = { name = gm_tr_start_grandeur subtract = scope:gm_tr_state.var:gm_tr_take_start }
+			clamp_variable = { name = gm_tr_start_grandeur min = 0 }
 		}
 		scope:gm_tr_state = {
 			set_variable = { name = gm_tr_cooldown days = 3650 }

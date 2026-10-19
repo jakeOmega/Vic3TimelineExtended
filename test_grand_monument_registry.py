@@ -4454,7 +4454,7 @@ class AgeTests(unittest.TestCase):
         piece = squash(strip_comments(block(read(MON_EFFECTS), "gm_mon_tr_take_piece")))
         self.assertIn("set_variable = { name = gm_tr_age value = scope:gm_tr_state.var:gm_tr_take_age }", piece)
         self.assertIn("change_variable = { name = gm_tr_age subtract = scope:gm_tr_state.var:gm_tr_take_age }", piece)
-        self.assertIn("value = { value = scope:gm_tr_state.var:gm_tr_take_levels "
+        self.assertIn("value = { value = scope:gm_tr_state.var:gm_tr_take_start "
                       "add = scope:gm_tr_state.var:gm_tr_take_age divide = 2 ceiling = yes }", piece)
         whole = squash(strip_comments(block(read(MON_EFFECTS), "gm_mon_tr_take_whole")))
         self.assertIn("name = gm_tr_grandeur value = { value = gm_mon_grandeur divide = 2 ceiling = yes }", whole)
@@ -6628,6 +6628,73 @@ class OptionReasonTests(unittest.TestCase):
 
 
 # ---- Dedicate (owner, 2026-10-18) -------------------------------------------------------
+
+class RecordWriterTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.3, §5: every effect that changes a monument's
+    size keeps its starting grandeur in step with its levels."""
+
+    TR = "common/scripted_effects/gm_trophy_effects.txt"
+
+    def body(self, path, name):
+        return squash(strip_comments(block(read(path), name)))
+
+    def test_dedication_writes_it_once(self):
+        body = self.body(EFFECTS, "gm_state_dedicate")
+        start = ("if = { limit = { NOT = { has_variable = gm_start_grandeur } } "
+                 "set_variable = { name = gm_start_grandeur value = var:gm_levels } }")
+        self.assertIn(start, body)
+        self.assertLess(body.find("set_variable = { name = gm_levels"), body.find(start))
+
+    def test_a_piece_of_the_primary_carries_its_share(self):
+        take = self.body(self.TR, "gm_state_tr_take")
+        self.assertIn("set_variable = { name = gm_tr_take_start value = gm_state_tr_start }", take)
+        self.assertIn("gm_remove_state_var = { VAR = gm_tr_take_start }", take)
+        trophy = self.body(self.TR, "gm_state_tr_make_trophy")
+        self.assertIn("set_variable = { name = gm_tr_start_grandeur value = scope:gm_tr_state.var:gm_tr_take_start }",
+                      trophy)
+        piece = self.body(self.TR, "gm_state_tr_remove_piece")
+        self.assertIn("if = { limit = { has_variable = gm_start_grandeur } "
+                      "change_variable = { name = gm_start_grandeur subtract = var:gm_tr_take_start } "
+                      "clamp_variable = { name = gm_start_grandeur min = 0 } }", piece)
+
+    def test_a_piece_of_a_monument_beside_carries_its_share(self):
+        take = self.body(MON_EFFECTS, "gm_mon_tr_take")
+        self.assertIn("set_variable = { name = gm_tr_take_start value = gm_mon_tr_start }", take)
+        self.assertIn("set_variable = { name = gm_tr_take_start value = scope:gm_mon_target.var:gm_tr_take_start }",
+                      take)
+        piece = self.body(MON_EFFECTS, "gm_mon_tr_take_piece")
+        self.assertIn("set_variable = { name = gm_tr_start_grandeur value = scope:gm_tr_state.var:gm_tr_take_start }",
+                      piece)
+        self.assertIn("if = { limit = { has_variable = gm_tr_start_grandeur } "
+                      "change_variable = { name = gm_tr_start_grandeur subtract = scope:gm_tr_state.var:gm_tr_take_start } "
+                      "clamp_variable = { name = gm_tr_start_grandeur min = 0 } }", piece)
+        # What it counts for abroad: half its starting grandeur and age.
+        self.assertIn("value = scope:gm_tr_state.var:gm_tr_take_start add = scope:gm_tr_state.var:gm_tr_take_age",
+                      piece)
+
+    def test_a_return_brings_it_back(self):
+        receive = self.body(self.TR, "gm_state_tr_receive")
+        self.assertIn("gm_state_add_start_from_moving = yes", receive)
+        add = self.body(self.TR, "gm_state_add_start_from_moving")
+        self.assertIn("limit = { has_variable = gm_start_grandeur }", add)
+        self.assertIn("change_variable = { name = gm_start_grandeur add = scope:gm_tr_moving.var:gm_tr_start_grandeur }",
+                      add)
+        self.assertIn("change_variable = { name = gm_start_grandeur add = scope:gm_tr_moving.var:gm_tr_levels }", add)
+
+    def test_rededicate_halves_it(self):
+        body = self.body(EFFECTS, "gm_state_rededicate")
+        save = "set_variable = { name = gm_rededicate_start value = { value = gm_state_primary_start divide = 2 } }"
+        self.assertIn(save, body)
+        self.assertLess(body.find(save), body.find("gm_clear_state = { KEEP_LANDMARK = yes }"))
+        put = "set_variable = { name = gm_start_grandeur value = var:gm_rededicate_start }"
+        self.assertLess(body.find("gm_clear_state = { KEEP_LANDMARK = yes }"), body.find(put))
+        self.assertIn("remove_variable = gm_rededicate_start", body)
+
+    def test_a_landmark_is_recorded_at_its_levels(self):
+        body = self.body(LANDMARK_EFFECTS, "gm_seed_landmark")
+        self.assertIn("set_variable = { name = gm_levels value = $LEVEL$ }", body)
+        self.assertIn("set_variable = { name = gm_start_grandeur value = $LEVEL$ }", body)
+
 
 class DedicateButtonTests(unittest.TestCase):
     """A monument waits undedicated while it is built, as long as its owner

@@ -86,6 +86,9 @@ gm_seed_landmark = {
 			set_variable = { name = gm_form value = flag:$FORM$ }
 			set_variable = { name = gm_namesake value = flag:landmark }
 			set_variable = { name = gm_ceremony_level value = $LEVEL$ }
+			# Its size, recorded (sites spec 2026-10-18 §3.5): the 1836 rate.
+			set_variable = { name = gm_levels value = $LEVEL$ }
+			set_variable = { name = gm_start_grandeur value = $LEVEL$ }
 			# Its unique dedication (signatures spec §4.4), on its historical one.
 			gm_state_sig_backfill = yes
 			create_building = {
