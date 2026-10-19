@@ -2,6 +2,8 @@
 
 pm_no_carbon_capture_aeroplanes = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_aeroplane_production_2 pm_aeroplane_production_3 }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -206,6 +208,8 @@ pm_carbon_capture_3_altos_hornos_baracaldo_furnaces_coal15_oil0 = {
 
 pm_no_carbon_capture_automation_building_arms_industry = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_rotary_valve_engine_building_arms_industry pm_assembly_lines_building_arms_industry pm_advanced_assembly_lines_building_arms_industry pm_ai_managed_building_arms_industry pm_ai_managed_building_artillery_foundry }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -400,6 +404,8 @@ pm_carbon_capture_3_automation_building_arms_industry_coal15_oil0 = {
 
 pm_no_carbon_capture_automation_building_automotive_industry = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_assembly_lines_building_automotive_industry }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -472,6 +478,8 @@ pm_carbon_capture_3_automation_building_automotive_industry_coal0_oil5 = {
 
 pm_no_carbon_capture_automation_building_furniture_manufactory = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_watertube_boiler_building_furniture_manufactory pm_rotary_valve_engine_building_furniture_manufactory pm_assembly_lines_building_furniture_manufactory }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -666,6 +674,8 @@ pm_carbon_capture_3_automation_building_furniture_manufactory_coal10_oil0 = {
 
 pm_no_carbon_capture_automation_building_motor_industry = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_watertube_boiler_building_motor_industry pm_rotary_valve_engine_building_motor_industry pm_assembly_lines_building_motor_industry }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -860,6 +870,8 @@ pm_carbon_capture_3_automation_building_motor_industry_coal10_oil0 = {
 
 pm_no_carbon_capture_automation_building_munition_plant = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_rotary_valve_engine_building_munition_plant pm_assembly_lines_building_munition_plant pm_advanced_assembly_lines_building_munition_plant pm_ai_managed_building_munition_plant pm_ai_managed_building_munition_plant_shells }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -1054,6 +1066,8 @@ pm_carbon_capture_3_automation_building_munition_plant_coal15_oil0 = {
 
 pm_no_carbon_capture_automation_building_paper_mill = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_watertube_boiler_building_paper_mill pm_rotary_valve_engine_building_paper_mill }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -1187,6 +1201,8 @@ pm_carbon_capture_3_automation_building_paper_mill_coal10_oil0 = {
 
 pm_no_carbon_capture_automation_building_steel_mill = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_watertube_boiler_building_steel_mill pm_rotary_valve_engine_building_steel_mill }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -1320,6 +1336,8 @@ pm_carbon_capture_3_automation_building_steel_mill_coal10_oil0 = {
 
 pm_no_carbon_capture_automation_building_tooling_workshop = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_watertube_boiler_building_tooling_workshop pm_rotary_valve_engine_building_tooling_workshop pm_assembly_lines_building_tooling_workshop pm_advanced_assembly_lines_building_tooling_workshop pm_robotic_assembly_lines_building_tooling_workshop pm_ai_managed_building_tooling_workshop pm_ai_managed_building_tooling_workshop_handling }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -1575,6 +1593,8 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal15_oil0 = {
 
 pm_no_carbon_capture_automobile_production = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_automobile_production pm_mass_automobile_production pm_modern_automobile_production }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -1708,6 +1728,8 @@ pm_carbon_capture_3_automobile_production_coal0_oil10 = {
 
 pm_no_carbon_capture_base_building_motor_industry = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_diesel_engines pm_gas_turbine_engines pm_graphene_electric_motors }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -1902,6 +1924,8 @@ pm_carbon_capture_3_base_building_motor_industry_coal20_oil0 = {
 
 pm_no_carbon_capture_base_building_oil_rig = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_derricks }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -2284,6 +2308,8 @@ pm_carbon_capture_3_base_building_power_plant_coal25_oil0 = {
 
 pm_no_carbon_capture_base_building_shipyard = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_metal_shipbuilding pm_modular_shipbuilding pm_diesel_shipbuilding }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -2742,6 +2768,8 @@ pm_carbon_capture_3_calcutta_electric_victoria_house_coal15_oil0 = {
 
 pm_no_carbon_capture_canning = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_vacuum_canning pm_vacuum_canning_principle_3 pm_flexible_packaging }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -3210,6 +3238,8 @@ pm_carbon_capture_3_electricidad_caracas_power_house_coal15_oil0 = {
 
 pm_no_carbon_capture_explosives_building_chemical_plant = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_ammonium_nitrate_explosives }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -3279,6 +3309,8 @@ pm_carbon_capture_3_explosives_building_chemical_plant_coal30_oil0 = {
 
 pm_no_carbon_capture_fertilizer_production = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_nitrogen_fixation pm_catalytic_cracking pm_polymerization_processes pm_automated_chemical_reactors pm_flow_chemistry_production }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -3580,6 +3612,8 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil220 = {
 
 pm_no_carbon_capture_firearms_manufacturing = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_bolt_action_rifles pm_semiautomatic_rifles pm_networked_small_arms pm_programmable_matter_small_arms }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -3652,6 +3686,8 @@ pm_carbon_capture_3_firearms_manufacturing_coal0_oil10 = {
 
 pm_no_carbon_capture_foundries = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_recoiled_barrels pm_rocket_artillery pm_precision_guided_shells pm_electromagnetic_projectors pm_programmable_matter_artillery }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -4115,6 +4151,8 @@ pm_carbon_capture_3_generic_power_hub_coal20_oil0 = {
 
 pm_no_carbon_capture_glassblowing = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_automatic_bottle_blowers }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -4649,6 +4687,8 @@ pm_carbon_capture_3_mfo_oerlikon_works_coal10_oil0 = {
 
 pm_no_carbon_capture_mining_equipment_building_coal_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_coal_mine pm_condensing_engine_pump_building_coal_mine pm_diesel_pump_building_coal_mine pm_high_pressure_hydraulic_pump_building_coal_mine pm_continuous_miners_building_coal_mine pm_smart_miners_building_coal_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -4904,6 +4944,8 @@ pm_carbon_capture_3_mining_equipment_building_coal_mine_coal15_oil0 = {
 
 pm_no_carbon_capture_mining_equipment_building_gold_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_gold_mine pm_condensing_engine_pump_building_gold_mine pm_diesel_pump_building_gold_mine pm_high_pressure_hydraulic_pump_building_gold_mine pm_continuous_miners_building_gold_mine pm_smart_miners_building_gold_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -5159,6 +5201,8 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal15_oil0 = {
 
 pm_no_carbon_capture_mining_equipment_building_iron_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_iron_mine pm_condensing_engine_pump_building_iron_mine pm_diesel_pump_building_iron_mine pm_high_pressure_hydraulic_pump_building_iron_mine pm_continuous_miners_building_iron_mine pm_smart_miners_building_iron_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -5414,6 +5458,8 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal15_oil0 = {
 
 pm_no_carbon_capture_mining_equipment_building_lead_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_lead_mine pm_condensing_engine_pump_building_lead_mine pm_diesel_pump_building_lead_mine pm_high_pressure_hydraulic_pump_building_lead_mine pm_continuous_miners_building_lead_mine pm_smart_miners_building_lead_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -5669,6 +5715,8 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal15_oil0 = {
 
 pm_no_carbon_capture_mining_equipment_building_sulfur_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_sulfur_mine pm_condensing_engine_pump_building_sulfur_mine pm_diesel_pump_building_sulfur_mine pm_high_pressure_hydraulic_pump_building_sulfur_mine pm_continuous_miners_building_sulfur_mine pm_smart_miners_building_sulfur_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -5924,6 +5972,8 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 
 pm_no_carbon_capture_mining_equipment_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_diesel_pump_building_tech_metals_mine pm_high_pressure_hydraulic_pump_building_tech_metals_mine pm_continuous_miners_building_tech_metals_mine pm_smart_miners_building_tech_metals_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6123,6 +6173,8 @@ pm_carbon_capture_3_norsk_hydro_rjukan_plant_coal10_oil0 = {
 
 pm_no_carbon_capture_refinement_building_sugar_plantation = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { vacuum_pan_sugar steam_powered_evaporation_sugar centrifugal_machine_sugar }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6515,6 +6567,8 @@ pm_carbon_capture_3_siam_electric_wat_liab_station_coal15_oil0 = {
 
 pm_no_carbon_capture_steam_automation_building_coal_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_building_coal_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6587,6 +6641,8 @@ pm_carbon_capture_3_steam_automation_building_coal_mine_coal3_oil0 = {
 
 pm_no_carbon_capture_steam_automation_building_gold_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6659,6 +6715,8 @@ pm_carbon_capture_3_steam_automation_building_gold_mine_coal4_oil0 = {
 
 pm_no_carbon_capture_steam_automation_building_iron_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6731,6 +6789,8 @@ pm_carbon_capture_3_steam_automation_building_iron_mine_coal4_oil0 = {
 
 pm_no_carbon_capture_steam_automation_building_lead_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6803,6 +6863,8 @@ pm_carbon_capture_3_steam_automation_building_lead_mine_coal4_oil0 = {
 
 pm_no_carbon_capture_steam_automation_building_sulfur_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6875,6 +6937,8 @@ pm_carbon_capture_3_steam_automation_building_sulfur_mine_coal4_oil0 = {
 
 pm_no_carbon_capture_steam_automation_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -6947,6 +7011,8 @@ pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 
 pm_no_carbon_capture_steelmaking_process = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_blister_steel_process pm_bessemer_process pm_open_hearth_process pm_electric_arc_process pm_aluminum_substitution pm_chromium_substitution }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 
@@ -7146,6 +7212,8 @@ pm_carbon_capture_3_sumitomo_besshi_mine_coal10_oil0 = {
 
 pm_no_carbon_capture_synthetic_opium = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_pharma_synthetic_chemistry }
 	disallowing_laws = { law_managed_fossil_phaseout }
 }
 

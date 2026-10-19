@@ -35,27 +35,49 @@ class CaptureGeneratorTest(unittest.TestCase):
                             classes = self.catalog[group][0]
                             self.assertIn(pm, classes[capture.fuel_recipe(self.methods[pm], pm)])
 
+    def choices(self, source, pm, technologies, mandate=False):
+        """Capture controls a building running source method `pm` may select."""
+        group = capture.PREFIX + source.removeprefix("pmg_")
+        valid = []
+        for name in body(emissions.unwrap(self.groups[group]), "production_methods"):
+            method = emissions.unwrap(self.methods[name])
+            if mandate and capture.MANDATE in emissions.unwrap(method.get("disallowing_laws", [])):
+                continue
+            gate = body(method, "unlocking_production_methods") if "unlocking_production_methods" in method else []
+            needs = body(method, "unlocking_technologies") if "unlocking_technologies" in method else []
+            if (not gate or pm in gate) and set(needs) <= technologies:
+                valid.append(name)
+        return valid
+
     def test_every_source_method_has_a_valid_mandated_choice(self):
         # A Tier-II-researched owner must have a valid choice for every source
         # PM, including zero-fuel/feedstock variants and alternative boilers.
         for source, (classes, exempt, _, _) in self.catalog.items():
-            group = capture.PREFIX + source.removeprefix("pmg_")
-            controls = body(emissions.unwrap(self.groups[group]), "production_methods")
             source_pms = body(emissions.unwrap(self.groups[source]), "production_methods")
             for pm in source_pms:
-                valid = []
-                for name in controls:
-                    method = emissions.unwrap(self.methods[name])
-                    if capture.MANDATE in emissions.unwrap(method.get("disallowing_laws", [])):
-                        continue
-                    gate = body(method, "unlocking_production_methods") if "unlocking_production_methods" in method else []
-                    if not gate or pm in gate:
-                        if "unlocking_technologies" not in method or body(method, "unlocking_technologies") == ["carbon_capture_and_storage"]:
-                            valid.append(name)
-                with self.subTest(group=group, pm=pm):
+                valid = self.choices(source, pm, {"carbon_capture_and_storage"}, mandate=True)
+                with self.subTest(source=source, pm=pm):
                     self.assertEqual(len(valid), 1)
                     self.assertIn("_na_" if pm in exempt else "_2_", valid[0])
             self.assertEqual(set(source_pms), set(exempt) | {p for names in classes.values() for p in names})
+
+    def test_no_capture_and_not_applicable_are_never_offered_together(self):
+        # Without the mandate, an exempt source method offers only "Capture Not
+        # Applicable"; an eligible one offers "No Carbon Capture" and its tiers.
+        researched = {tech for _, _, _, tech in capture.TIERS}
+        for source, (_, exempt, _, _) in self.catalog.items():
+            token = source.removeprefix("pmg_")
+            none, na = "pm_no_carbon_capture_" + token, "pm_carbon_capture_na_" + token
+            for pm in body(emissions.unwrap(self.groups[source]), "production_methods"):
+                with self.subTest(source=source, pm=pm):
+                    for technologies in (set(), researched):
+                        valid = self.choices(source, pm, technologies)
+                        if pm in exempt:
+                            self.assertEqual(valid, [na])
+                        else:
+                            self.assertEqual(valid[0], none)
+                            self.assertEqual(len(valid), 1 + len(capture.TIERS) * bool(technologies))
+                            self.assertNotIn(na, valid)
 
     def test_automation_and_process_controls_are_independent(self):
         self.assertEqual(len(self.attachments["building_steel_mill"]), 2)
