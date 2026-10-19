@@ -275,10 +275,9 @@ class TakingTests(unittest.TestCase):
             self.assertIn(f"gm_tr_record_dedication_one = {{ KEY = {d.key} }}", record, d.key)
 
     def test_a_trophy_comes_home_whole_and_never_as_a_copy(self):
-        # A standing building takes the levels; none is built again with the
-        # trophy's records (gm_state_tr_receive picks).
-        add = squash(block(read(TR_EFFECTS), "gm_state_tr_add_levels"))
-        self.assertIn("add = scope:gm_tr_moving.var:gm_tr_levels max = 200", add)
+        # A standing monument takes the levels into its records; none is
+        # built again with the trophy's (gm_state_tr_receive picks).
+        self.assertIsNone(block(read(TR_EFFECTS), "gm_state_tr_add_levels"))
         rebuilt = (squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving")) + " "
                        + squash(block(read(TR_EFFECTS), "gm_state_tr_take_records_from_moving")))
         self.assertIn("gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }", rebuilt)
@@ -490,7 +489,7 @@ class PanelTests(unittest.TestCase):
                                                                     r"(?m)^\ttype gm_monument_row = flowcontainer \{")))
         self.assertIn("gm_tr_take_button = {}", squash(raw_block_at(read(STATE_WIDGETS),
                                                                     r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))
-        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", squash(strip_comments(read(STATES_PANEL))))
+        self.assertIn("te_state_gm_card = {} te_state_gm_site_card = {} te_state_gm_trophy_card = {}", squash(strip_comments(read(STATES_PANEL))))
 
     def test_flags_say_their_default(self):
         gui = strip_comments(read(TR_GUI))
@@ -957,7 +956,9 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
         self.assertIn("has_variable = gm_tr_share NOT = { var:gm_tr_share = flag:whole }", body)
         self.assertIn("gm_state_stands_for_moving = yes", body)
         apart = squash(block(read(MON_TRIGGERS), "gm_tr_stands_apart"))
-        self.assertIn("var:gm_tr_origin ?= { has_building = building_grand_monument }", apart)
+        # A building raised there today stands too (sites spec 2026-10-18 §3.3).
+        self.assertIn("var:gm_tr_origin ?= { OR = { has_building = building_grand_monument "
+                      "has_variable = gm_rebuilding } }", apart)
         self.assertIn("NOT = { gm_tr_rejoins_primary = yes }", apart)
         self.assertIn("NOT = { gm_tr_rejoins_secondary = yes }", apart)
 
@@ -970,15 +971,14 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
         self.assertIn("random_in_list = { variable = gm_monuments_here limit = { has_variable = gm_tr_landmark "
                       "var:gm_tr_landmark = scope:gm_tr_moving.var:gm_tr_landmark } save_scope_as = gm_mon_match }", eff)
         self.assertIn("change_variable = { name = gm_tr_levels add = scope:gm_tr_moving.var:gm_tr_levels }", eff)
-        self.assertIn("gm_state_tr_add_levels = yes", eff)
+        # Records only: the building is not rebuilt (sites spec 2026-10-18 §3.3).
+        self.assertNotIn("gm_state_tr_add_levels", eff)
         self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", eff)
 
     def test_a_distinct_monument_keeps_its_identity_and_the_primarys_dedication(self):
         body = squash(block(read(MON_EFFECTS), "gm_tr_become_monument"))
-        # The levels go on the building first (which records the primary's
-        # dedication to put back), then the container joins the state's list.
-        self.assertLess(body.find("gm_state_tr_add_levels = yes"),
-                        body.find("add_to_variable_list = { name = gm_monuments_here"))
+        # Its levels are its records; the building is not rebuilt.
+        self.assertNotIn("gm_state_tr_add_levels", body)
         for line in ("remove_list_global_variable = { name = gm_trophies target = scope:gm_tr_moving }",
                      "add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }",
                      "remove_tag = gm_trophy", "add_tag = gm_monument",
@@ -1068,10 +1068,9 @@ class LootingASecondaryTests(unittest.TestCase):
                      "add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }",
                      "remove_tag = gm_monument", "add_tag = gm_trophy",
                      "set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }",
-                     "set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }",
-                     "gm_state_tr_shrink_by = yes"):
+                     "set_variable = { name = gm_tr_taken_by value = scope:gm_tr_taker }"):
             self.assertIn(line, body)
-        self.assertLess(body.find("remove_list_variable"), body.find("gm_state_tr_shrink_by = yes"))
+        self.assertNotIn("shrink", body)
         # A piece it already was stays a piece; only a monument with no share
         # recorded (a co-located landmark) is a whole one.
         self.assertIn("if = { limit = { NOT = { has_variable = gm_tr_share } } "
@@ -1090,20 +1089,9 @@ class LootingASecondaryTests(unittest.TestCase):
             self.assertIn(f"gm_mon_copy_record = {{ KEY = {key} }}", body, key)
         self.assertIn("change_variable = { name = gm_tr_levels subtract = scope:gm_tr_state.var:gm_tr_take_levels }", body)
         self.assertIn("set_variable = { name = gm_tr_cooldown days = 3650 }", body)
-        self.assertIn("gm_state_tr_shrink_by = yes", body)
+        self.assertNotIn("shrink", body)
         self.assertIn("gm_tr_update_picture = yes", body)
         self.assertIn("add_to_global_variable_list = { name = gm_trophies target = scope:gm_tr_new }", body)
-
-    def test_shrinking_leaves_the_primary_and_the_rest_standing(self):
-        body = squash(block(read(MON_EFFECTS), "gm_state_tr_shrink_by"))
-        self.assertIn("gm_state_mark_restore_pm = yes", body)
-        self.assertIn("name = gm_rebuild_level value = { value = gm_state_level "
-                      "subtract = var:gm_tr_take_levels min = 1 max = 200 }", body)
-        self.assertLess(body.find("remove_building = building_grand_monument"),
-                        body.find("te_construction_market_build_specified_level"))
-        self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", body)
-        # Under a marker, as the other rebuilds are.
-        self.assertTrue(body.startswith("set_variable = gm_shrink_click if = { limit = { has_variable = gm_shrink_click }"))
 
     def test_the_ai_picks_one_monument_of_the_state_to_loot(self):
         pick = squash(block(read(MON_EFFECTS), "gm_state_tr_ai_choose_target"))
@@ -1188,7 +1176,7 @@ class AlsoStandingHereTests(unittest.TestCase):
 
     def test_one_card_holds_the_primary_and_the_rest(self):
         panel = squash(strip_comments(read(STATES_PANEL)))
-        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", panel)
+        self.assertIn("te_state_gm_card = {} te_state_gm_site_card = {} te_state_gm_trophy_card = {}", panel)
         self.assertNotIn("te_state_gm_monument_card", panel)
         self.assertNotIn("te_state_gm_monument_card", strip_comments(self.gui))
         card = squash(strip_comments(raw_block_at(read(STATE_WIDGETS), r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))

@@ -521,10 +521,9 @@ types te_state_panel_widget_types
 	### Keep as Heritage and the names are the journal entry's, so a state of
 	### the player's own carries a goto button instead, to the Grand Monuments
 	### tab of the Timeline Extended window (te_systems_window.gui), which shows
-	### the entry's own panels. The title column stops short of it. Our own
-	### monument waiting undedicated has its Dedicate button here too (owner,
-	### 2026-10-18; gm_dedicate_button, grand_monuments_widget.gui), as under
-	### its row in the tab's Awaiting Dedication.
+	### the entry's own panels. The title column stops short of it. A
+	### construction site here has its own card below (te_state_gm_site_card),
+	### with its Dedicate button.
 	###
 	### Under the picture and details, full width, the monuments that stand beside
 	### this one (te_state_gm_beside, gui/gm_trophy_widgets.gui): a row each, only
@@ -545,6 +544,106 @@ types te_state_panel_widget_types
 		}
 		blockoverride "value_max_width" {
 			max_width = 86
+		}
+	}
+
+	### A construction site (sites spec 2026-10-18 §3.1), a card of its own
+	### under the monument's, as its row is under Awaiting Dedication: what is
+	### being built, the levels built and the grandeur they come to, whether
+	### levels are still being built, and for our own the Dedicate button
+	### (gm_dedicate_button, grand_monuments_widget.gui). Display only but for
+	### that button. Rows: 20 icon + 4 + 266 label + 4 + 86 value = 380.
+	type te_state_gm_site_card = flowcontainer {
+		visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_site'), '(CFixedPoint)1')]"
+		direction = vertical
+		parentanchor = hcenter
+		margin_top = 10
+
+		container = {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				margin = { 10 8 }
+				spacing = 8
+				minimumsize = { 530 -1 }
+
+				background = {
+					using = entry_bg_simple
+				}
+
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 10
+
+					icon = {
+						size = { 120 120 }
+						texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
+					}
+
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 4
+
+						textbox = {
+							autoresize = yes
+							multiline = yes
+							minimumsize = { 380 -1 }
+							maximumsize = { 380 -1 }
+							align = left|nobaseline
+							using = fontsize_large
+							text = "gm_site_card_title"
+						}
+						te_state_gm_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+							}
+							blockoverride "row_label" {
+								text = "gm_site_card_levels_lbl"
+							}
+							blockoverride "row_value" {
+								text = "gm_site_card_levels"
+							}
+						}
+						te_state_gm_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+							}
+							blockoverride "row_label" {
+								text = "gm_site_card_grandeur_lbl"
+							}
+							blockoverride "row_value" {
+								text = "gm_site_card_grandeur"
+							}
+						}
+						textbox = {
+							visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_site_building'), '(CFixedPoint)1')]"
+							autoresize = yes
+							multiline = yes
+							minimumsize = { 380 -1 }
+							maximumsize = { 380 -1 }
+							align = left|nobaseline
+							using = fontsize_medium
+							text = "gm_site_row_building"
+						}
+						textbox = {
+							visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_site_building'), '(CFixedPoint)0')]"
+							autoresize = yes
+							multiline = yes
+							minimumsize = { 380 -1 }
+							maximumsize = { 380 -1 }
+							align = left|nobaseline
+							using = fontsize_medium
+							text = "gm_site_row_ready"
+						}
+
+						### DEDICATE — our own site: holds its ceremony
+						### (gm_dedicate_sgui).
+						gm_dedicate_button = {}
+					}
+				}
+			}
 		}
 	}
 
@@ -663,34 +762,6 @@ types te_state_panel_widget_types
 							default_format = "#tooltippable"
 							tooltip = "gm_row_landmark_tt"
 							text = "gm_row_landmark"
-						}
-
-						### A REVOLT'S SPLIT PIECE, and the monument whose piece stands
-						### in another part of its region (owner's call 2026-10-17):
-						### where the other part stands, why on hover.
-						textbox = {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_piece'), '(CFixedPoint)1' )]"
-							autoresize = yes
-							multiline = yes
-							minimumsize = { 350 -1 }
-							maximumsize = { 350 -1 }
-							align = left|nobaseline
-							using = fontsize_medium
-							default_format = "#tooltippable"
-							tooltip = "gm_row_piece_tt"
-							text = "gm_row_piece"
-						}
-						textbox = {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_has_piece'), '(CFixedPoint)1' )]"
-							autoresize = yes
-							multiline = yes
-							minimumsize = { 350 -1 }
-							maximumsize = { 350 -1 }
-							align = left|nobaseline
-							using = fontsize_medium
-							default_format = "#tooltippable"
-							tooltip = "gm_row_split_tt"
-							text = "gm_row_split"
 						}
 
 						### GRANDEUR and the step now being filled.
@@ -844,10 +915,6 @@ types te_state_panel_widget_types
 							using = fontsize_medium
 							text = "gm_row_inscription"
 						}
-
-						### DEDICATE — our own monument waiting undedicated: holds
-						### its ceremony (gm_dedicate_sgui).
-						gm_dedicate_button = {}
 
 						### CARRY IT OFF — while our armies hold the state, or it
 						### is our own unincorporated state and we did not raise

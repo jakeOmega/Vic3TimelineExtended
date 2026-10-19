@@ -89,14 +89,15 @@ gm_seed_landmark = {
 			# Its size, recorded (sites spec 2026-10-18 §3.5): the 1836 rate.
 			set_variable = { name = gm_levels value = $LEVEL$ }
 			set_variable = { name = gm_start_grandeur value = $LEVEL$ }
+			set_variable = gm_migrated
 			# Its unique dedication (signatures spec §4.4), on its historical one.
 			gm_state_sig_backfill = yes
 			create_building = {
 				building = building_grand_monument
-				level = $LEVEL$
+				level = 1
 				activate_production_methods = { pm_monument_$DEDICATION$ } # REVIEWED 2026-10-11: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
 			}
-			debug_log = "TE_MONUMENTS: landmark $KEY$ placed in $STATE$ for $TAG$: level $LEVEL$, pm_monument_$DEDICATION$, form $FORM$"
+			debug_log = "TE_MONUMENTS: landmark $KEY$ placed in $STATE$ for $TAG$: $LEVEL$ levels recorded, pm_monument_$DEDICATION$, form $FORM$"
 			# The refresh records it (gm_state_first_sight), opens the
 			# journal entry and sets its picture.
 			owner = { trigger_event = { id = monument_events.20 } }

@@ -1456,6 +1456,7 @@ types state_panel_types
 		### GRAND MONUMENT (TE) — a full-width card, only while one stands in
 		### this state; its markup lives in gui/te_state_panel_widgets.gui.
 		te_state_gm_card = {}
+		te_state_gm_site_card = {}
 
 		### TROPHIES ON DISPLAY (TE) — a full-width card, only while trophies
 		### stand in this state; its markup lives in gui/gm_trophy_widgets.gui.

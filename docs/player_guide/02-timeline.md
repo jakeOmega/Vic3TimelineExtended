@@ -599,11 +599,14 @@ war](13-military.md) and [Nuclear weapons](14-nuclear.md).
 
 ## Grand monuments
 
-The Grand Monument is a building you can raise in any state from the start of
-the game. A government raises one to what it stands for: its crown, its
-republic, its revolution, its leader, its faith or the nation. Each level costs
-1,000 construction and needs only maintenance and a small caretaker staff. A
-monument's **grandeur** starts at its levels and grows as the monument ages
+A Grand Monument can be raised in any state from the start of the game. A
+government raises one to what it stands for: its crown, its republic, its
+revolution, its leader, its faith or the nation. You build it as a **Grand
+Monument (Under Construction)**: each level costs 1,000 construction, and while
+it is being built it has no upkeep and no effects. Dedicating it finishes it: a
+Grand Monument stands in its place at level 1, keeping the levels it was built
+with, and needs only maintenance for those levels and a small caretaker staff.
+A monument's **grandeur** starts at its levels and grows as the monument ages
 (see [A finished monument and its age](#a-finished-monument-and-its-age)). The
 Grand Monuments game rule can switch the system off.
 
@@ -656,16 +659,18 @@ and dedication, its grandeur with a bar toward its next step, its levels and age
 once finished, and the Tourism
 Industry throughput and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
-the Timeline Extended window, where the buttons are. While your monument there
-awaits its dedication, the card has a Dedicate button, and while you can carry
-the monument off as a trophy, a Carry It Off button. A state with more
+the Timeline Extended window, where the buttons are. While you can carry the
+monument off as a trophy, the card has a Carry It Off button. A Grand Monument
+under construction has a card of its own under it: the levels built, the
+grandeur they come to, whether levels are still being built, and on your own
+state its Dedicate button. A state with more
 than one monument lists the others in the same card, under these details, and a
 state where trophies stand shows a Trophies on Display card under it.
 
 The overview at the top is always shown. It has an icon for each status a
 monument can hold, with the number of your monuments in that status beneath:
-Upheld (a gold wreath on the stone), Heritage (a railing in front), Undedicated
-(the bare stone) and Contested (cracked, and its word red while any monument is
+Upheld (a gold wreath on the stone), Heritage (a railing in front), Being Built
+(the bare stone: your monuments under construction) and Contested (cracked, and its word red while any monument is
 contested). An icon is dimmed while no monument holds its status. Hover an icon
 for what the status means; Heritage and Contested are also terms you can hover.
 While a finished level would cause [vanity backlash](#vanity-backlash), a red
@@ -680,8 +685,8 @@ These sections follow:
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. The four monument policy buttons are at the foot. |
-| Awaiting Dedication | Open | Only while one of your monuments stands undedicated: its row, as under Our Monuments, with a Dedicate button under it. |
-| Our Monuments | Open | A row for each monument not awaiting its dedication: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
+| Awaiting Dedication | Open | Only while one of your Grand Monuments is under construction: a row for each, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
+| Our Monuments | Open | A row for each finished monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
 | How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, unique dedications, names, the monument policy and trophies. |
@@ -697,18 +702,19 @@ Every monument, whatever it honors, gives:
 
 ### A finished monument and its age
 
-A monument is **finished** once it is dedicated. Until then it stands
-undedicated and every level built on it joins it, for as long as you like: you
+A monument is **finished** once it is dedicated. Until then it stands under
+construction and every level built on it joins it, for as long as you like: you
 can pause its construction and come back to it decades later. Its **Dedicate**
-button, on its state card and under Awaiting Dedication, holds the dedication
-ceremony. The button is greyed while any of its levels are under construction:
-let them finish or cancel them first. After the ceremony its levels are fixed:
-the state card and its row under Our Monuments show "Finished: 15 levels ·
-Age: +3.2". A level you queue while the ceremony is open belongs to the next
-monument, as below.
+button, on its card in the state view and under Awaiting Dedication, holds the
+dedication ceremony. The button is greyed while any of its levels are under
+construction: let them finish or cancel them first. The dedication finishes the
+monument at the levels built: a Grand Monument stands in its place at level 1,
+and the state card and its row under Our Monuments show "Finished: 15 levels ·
+Age: +3.2". Damage to its building never shrinks it.
 
-A finished monument grows grander with the years: by 2% of its levels a year, so
-it doubles its grandeur in fifty years and triples it in a hundred.
+A finished monument grows grander with the years: by 2% of the grandeur it was
+dedicated with a year, so it doubles its grandeur in fifty years and triples it
+in a hundred.
 
 | Levels | +25 years | +50 years | +100 years |
 |---|---|---|---|
@@ -717,20 +723,21 @@ it doubles its grandeur in fifty years and triples it in a hundred.
 | 25 | 37.5 | 50 | 75 |
 
 It ages while its message stands or while it is kept as heritage, at half the
-rate under Mothballed, and not at all while it is contested or undedicated. A
+rate under Mothballed, and not at all while it is contested. A
 trophy abroad does not age; it starts again once home. Each anniversary's first
 option adds a tenth of the monument's levels to its grandeur, at least 1, and
 completing an [opportunity](#monument-opportunities) adds 5. Pulling a monument
-down throws its years away with its stone, and rededicating it halves both, so
+down throws its years away with its stone, and rededicating it halves its
+levels and its years, so
 an old monument is worth more than a new one of the same size.
 
-More levels built in the state of a finished monument raise a **new monument
-beside it**, with its own Dedicate button, name and picture, as below. Once
-nothing is under construction there, a finished monument's building can't be
-expanded while the monument is contested, while its unveiling or naming is
-under way, or once six monuments stand there; the build tooltip names the
-reason. A monument awaiting its dedication can always be expanded. The AI raises new monuments in other
-states before it builds beside one.
+More building in the state of a finished monument is a new construction site,
+and once dedicated a **new monument beside it**, with its own name and picture,
+as below. A site can't be started there while the monument is contested, while
+a dedication, unveiling or naming is under way, or once six monuments stand
+there, the site among them; the build tooltip names the reason. Levels already
+under construction always go on. The AI raises new monuments in other states
+before it builds beside one.
 
 ### Several monuments in one state
 
@@ -741,8 +748,8 @@ monument already standing, such as the Luxor Obelisk coming back to Upper Egypt,
 where the Obelisks of Karnak stand, or a [buried site](#buried-sites) dug up
 where a monument stands. Each keeps its own name, picture and dedication.
 
-The building's level is every monument's levels together. Each monument counts
-on its own: its dedication gives its own effect in the state and in the nation
+The state's one Grand Monument building stands at level 1 whatever stands
+there; each monument keeps its own levels. Each monument counts on its own: its dedication gives its own effect in the state and in the nation
 while its message stands, its interest groups approve or object, and it ages and
 can be contested on its own. A civic obelisk beside a crown column adds to the
 Petty Bourgeoisie's approval, not to the crown's legitimacy, and Tourism
@@ -753,7 +760,7 @@ its dedication and name, the grander of the two stands first. Each of the others
 has its own row in the state's monument card, under the first one's details, and
 under Our Monuments, with its status and grandeur. A contested one's row under
 Our Monuments has Pull Down, Rededicate and Keep as Heritage; rededicating it
-makes it the state's first monument, rebuilt at half its levels. An army that
+makes it the state's first monument, at half its levels. An army that
 holds the state carries monuments off one at a time, with the Carry It Off on
 the first one's details or on another's row, and the rest stay. If the first
 monument is pulled down or carried off whole, the largest of the others takes
@@ -764,9 +771,9 @@ its place.
 A monument's Dedicate button holds its dedication ceremony, which asks what it
 honors. The choice is permanent, and the ceremony's tooltips list each
 dedication's effects. The ceremony lists every dedication: one you can't raise
-yet is greyed out, with what it needs. Leaving it undedicated closes the
-ceremony and keeps the button for later. An undedicated monument, draped until its
-unveiling, gives only the prestige, tourism and cultural pull above.
+yet is greyed out, with what it needs. Choosing to leave it as it is for now
+closes the ceremony and keeps the button for later; a monument under
+construction has no effects until it is dedicated.
 Dedicating a monument finishes it (see
 [A finished monument and its age](#a-finished-monument-and-its-age)). The AI
 dedicates its monuments once nothing more is queued for them.
@@ -868,8 +875,9 @@ one is open passes without one.
 
 While it is open it has its own section on the Grand Monuments tab: where it
 counts, the grandeur added, the months left and what completing it gives. Raise
-It queues the levels still missing in the state its tooltip names, at 1,000
-construction each; it is grayed while any of your Grand Monuments is under
+It queues the levels still missing on a Grand Monument under construction in
+the state its tooltip names, at 1,000 construction each, which count once it is
+dedicated; it is grayed while any of your Grand Monuments is under
 construction, so a second press can't queue them twice. Levels count only once
 they are finished, and the section says so while any are being built. Let It
 Pass closes the opportunity. A monument that counts toward it is marked Counts
@@ -1008,7 +1016,7 @@ choice starts no wait.
 | Standard | Nothing changes. | Nothing. | The default. |
 | Open to the Public | The Tourism Industry throughput each monument gives ×1.5, and anniversaries about twice as often. | Maintenance ×1.5. | Monuments that stand beside a Tourism Industry. |
 | State Ceremonial | Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5. | Tourism from each monument ×0.5. | Low legitimacy with regime monuments standing. |
-| Mothballed | Maintenance ×0.5. | Prestige and cultural pull from monuments, and each monument's tourism and local effect, ×0.5; no anniversaries. | Hard times or debt. |
+| Mothballed | No maintenance. | Prestige and cultural pull from monuments, and each monument's tourism and local effect, ×0.5; no anniversaries. | Hard times or debt. |
 
 The national effects change at once, and each monument's own at the start of
 the next month. The AI picks each January: Mothballed in hard times or in debt,
@@ -1033,7 +1041,7 @@ the Grand Monuments tab.
 | Choice | What happens |
 |---|---|
 | Pull Down | The monument and all its grandeur are gone. The new government gains legitimacy that fades over about five years. The group that objected to the old message approves and the group that raised it resents it, both fading. |
-| Rededicate | Costs 500 per level. The monument is rebuilt at half its levels, rounded up, keeps half its years, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
+| Rededicate | The ceremony asks first, under your current laws. Dedicating it again costs 500 per level, and it keeps half its levels, rounded up, and half its years; Keep It As It Is changes nothing. Its old supporters resent it a little. |
 | Keep as Heritage | The monument stays and its prestige returns, but under this government it lends no legitimacy and gives no approval. The group that objected resents it, less each year. |
 
 Pulling down many monuments at once gives what pulling down one of their
@@ -1044,12 +1052,8 @@ Pulling it down is the only permanent choice. A shrine in a state that another
 country takes becomes heritage at once and cannot be pulled down. After a civil
 war the winner inherits the monuments the loser raised, and they are contested
 only if its laws no longer fit them. A revolt that takes part of a monument's
-state takes a piece of it: the rebels' part shows the same monument, with its
-name and dedication, at the levels it took, and asks no ceremony. Its card and
-row say it is a piece and where the monument stands, and the monument's say
-where its piece is. When the two parts come under one country again the piece
-rejoins the monument, whichever side won, and any levels lost in between are
-rebuilt.
+state leaves the monument whole with the part that keeps it; the rebels' part
+gets none of it.
 
 A Grand Monument cannot be downsized or demolished from its building panel, by
 you or by the AI. Pull Down is the only way to remove one yourself.
@@ -1074,7 +1078,7 @@ monument that loses a piece is spared for ten years.
 | Form | What is carried off |
 |---|---|
 | Column, obelisk, statue, stele, pillar, high cross, rune stone, menorah, sun stone or stela | The whole monument |
-| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one, and the same share of its years. The monument is rebuilt smaller, keeping its name and dedication. |
+| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one, and the same share of its years. What stands keeps its name and dedication. |
 | Any other form: halls, a pantheon, forum, mausoleum, pyramid, pagoda or church, and the five civic-progress buildings | A tenth of its levels, at least one |
 
 A trophy stands in its taker's capital. It counts for half the grandeur carried
@@ -1115,7 +1119,7 @@ A trophy that comes home goes back where it was taken from, with all the levels
 and years carried off. A piece of the monument standing there rejoins it, as the Quadriga
 goes back on the Brandenburg Gate. Anything else stands beside the monument that
 is there, as [several monuments in one state](#several-monuments-in-one-state);
-with no monument standing, the monument is rebuilt with its name, style and
+with no monument standing, the monument stands again with its name, style and
 dedication. Its owner gains The Homecoming,
 +5 legitimacy for ten years, shown in the Trophies section, unless it carried
 the trophy off itself: bringing home what you took from your own colony only

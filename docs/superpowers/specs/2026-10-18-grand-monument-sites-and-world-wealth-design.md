@@ -149,6 +149,12 @@ The rule: **what a monument costs to build or keep up counts levels; what it mea
 
 ## 4. Constraints and known engine facts
 
+*Amended 2026-10-18 while building Plan A:* `create_building` does take `activate_production_methods` (the 1836
+landmarks already used it), and script does create a `buildable = no` building (vanilla's Manila cathedral ruins), so the
+finished type is `buildable = no` and the dedication creates it on its method, with `gm_restore_pm` as the fallback and
+`TE_SELF_CHECK monument_created_on_dedication` reading which one did the work. Where the points below call these
+unverified, read them as settled by that.
+
 - **One building of a type per state.** A state holds at most one site and one finished building. Monuments beside
   another stay containers (`gm_monument`, `gm_monuments`), as in the 2026-10-13 and 2026-10-16 specs.
 - **The site's building type is new; the finished one keeps `building_grand_monument`**, so an old save's buildings

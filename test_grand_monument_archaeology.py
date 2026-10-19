@@ -421,12 +421,12 @@ class PlacingTests(unittest.TestCase):
         self.assertIn("remove_list_global_variable = { name = gm_arch_sites target = scope:gm_tr_moving }", body)
         self.assertIn("add_to_global_variable_list = { name = gm_monuments target = scope:gm_tr_moving }", body)
         self.assertIn("remove_tag = gm_site add_tag = gm_monument", body)
-        self.assertIn("gm_state_tr_add_levels = yes", body)
+        self.assertNotIn("gm_state_tr_add_levels", body)
         self.assertIn("add_to_variable_list = { name = gm_monuments_here target = scope:gm_tr_moving }", body)
         self.assertIn("add_to_variable_list = { name = gm_monuments_held target = scope:gm_tr_moving }", body)
         # The same lists, in the same order, as the landmark seeded beside another.
         seeded = squash(block(read("common/scripted_effects/gm_monument_effects.txt"), "gm_seed_landmark_beside"))
-        for line in ("gm_state_tr_add_levels = yes", "add_to_variable_list = { name = gm_monuments_here",
+        for line in ("add_to_variable_list = { name = gm_monuments_here",
                      "add_to_variable_list = { name = gm_monuments_held", "set_variable = gm_mon_listed"):
             self.assertIn(line, seeded)
             self.assertIn(line, body)

@@ -119,6 +119,16 @@ gm_state_level = {
 	}
 }
 
+# The construction site's level, or 0 (sites spec 2026-10-18 §3.1): the levels
+# of the monument being built, finished so far.
+gm_state_site_level = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument_site }
+		value = b:building_grand_monument_site.level
+	}
+}
+
 # The grandeur of everything standing here: the primary's levels and age and
 # every secondary's (gm_monument_values.txt), or 0. What tourism, the card and
 # the frame read; the building's level is gm_state_level.
@@ -185,32 +195,6 @@ gm_disp_is_landmark = {
 	value = 0
 	if = {
 		limit = { gm_state_is_landmark = yes }
-		value = 1
-	}
-}
-
-# A revolt's split piece on the row and the card (owner's call 2026-10-17;
-# gm_monument_effects.txt § "A revolt's split piece"): 1 for a piece whose
-# monument's state stands (gm_piece_of), for gm_row_piece; 1 for a monument
-# whose piece still stands (gm_split_piece), for gm_row_split.
-gm_disp_is_piece = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = gm_piece_of
-			exists = var:gm_piece_of
-		}
-		value = 1
-	}
-}
-
-gm_disp_has_piece = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = gm_split_piece
-			var:gm_split_piece ?= { has_variable = gm_piece_of }
-		}
 		value = 1
 	}
 }
@@ -459,16 +443,6 @@ gm_state_age_step = {
 	multiply = 2
 	divide = 1200
 	multiply = gm_policy_factor_age
-}
-
-# State scope. The level the last rebuild asked for (gm_rebuild_asked), for
-# gm_monument_rebuild_self_check's line; 0 with none.
-gm_disp_rebuild_asked = {
-	value = 0
-	if = {
-		limit = { has_variable = gm_rebuild_asked }
-		value = var:gm_rebuild_asked
-	}
 }
 
 # State scope. 1 while the primary is finished (gm_levels, ageing spec
@@ -1140,15 +1114,11 @@ gm_disp_count_heritage = {
 	}
 }
 
+# The overview's first cell (sites spec 2026-10-18): our construction sites.
 gm_disp_count_undedicated = {
 	value = 0
 	every_scope_state = {
-		limit = {
-			has_building = building_grand_monument
-			gm_state_is_dedicated = no
-			gm_state_is_heritage = no
-			gm_state_is_contested = no
-		}
+		limit = { gm_state_has_site = yes }
 		add = 1
 	}
 }
@@ -1166,8 +1136,45 @@ gm_disp_count_awaiting = {
 
 gm_disp_count_listed = {
 	value = gm_sum_monuments
-	subtract = gm_disp_count_awaiting
-	min = 0
+}
+
+# State scope. 1 while a finished monument stands here: its row is in Our
+# Monuments (a construction site's is in Awaiting Dedication).
+gm_state_disp_listed = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		value = 1
+	}
+}
+
+# State scope, the construction site's card and row (sites spec 2026-10-18
+# §3.1): one stands here; the grandeur its counted levels come to; levels of
+# it still being built (Dedicate waits for them).
+gm_state_disp_site = {
+	value = 0
+	if = {
+		limit = { gm_state_has_site = yes }
+		value = 1
+	}
+}
+
+gm_state_disp_site_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_site_grandeur }
+		value = var:gm_site_grandeur
+	}
+}
+
+gm_state_disp_site_building = {
+	value = 0
+	if = {
+		limit = {
+			b:building_grand_monument_site ?= { is_under_construction = yes }
+		}
+		value = 1
+	}
 }
 
 # State scope. 1 while this monument waits for its Dedicate button: its row is
@@ -1586,4 +1593,55 @@ gm_disp_frac_industrial = {
 	}
 	min = 0
 	max = 1
+}
+
+# ---- Older saves' migration self-check (sites spec 2026-10-18 §3.5) --------------
+# State scope: the grandeur recorded before the migration, and the band the
+# grandeur after must fall in (a hundredth below, a twentieth above).
+gm_state_mig_was = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_mig_before }
+		value = var:gm_mig_before
+	}
+}
+
+gm_state_mig_low = {
+	value = gm_state_mig_was
+	multiply = 0.99
+}
+
+gm_state_mig_high = {
+	value = gm_state_mig_was
+	multiply = 1.05
+}
+
+# ---- Upkeep (sites spec 2026-10-18 §3.4) -------------------------------------------
+# State scope, the owner's policy: Open pays half again, Mothballed nothing
+# (owner, 2026-10-18: "it is weak now"), every other policy the levels' due.
+gm_policy_factor_upkeep = {
+	value = 1
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = open STANDARD = no } }
+		}
+		value = 1.5
+	}
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+		}
+		value = 0
+	}
+}
+
+# State scope. The multiplier on gm_upkeep: the finished building stands at
+# level 1, and pm_maintenance charges for that one, so the rest of the levels
+# the monuments here record, by the policy, less that one. -1 (Mothballed) is
+# no upkeep at all.
+gm_state_upkeep_mult = {
+	value = gm_state_primary_levels
+	add = gm_state_secondary_levels
+	multiply = gm_policy_factor_upkeep
+	subtract = 1
 }

@@ -1298,6 +1298,48 @@ types grand_monuments_widget_types
 		}
 	}
 
+	### A construction site (sites spec 2026-10-18 §3.1): the work, where it
+	### stands, the levels built and the grandeur they come to, and whether
+	### levels are still being built (Dedicate waits for them). Its Dedicate
+	### button follows it under Awaiting Dedication (96 + 8 + 376 = 480).
+	type gm_site_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 8
+
+		icon = {
+			size = { 96 96 }
+			texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
+		}
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			textbox = {
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 376 -1 }
+				maximumsize = { 376 -1 }
+				align = left|nobaseline
+				using = fontsize_large
+				text = "gm_site_row_title"
+			}
+			gm_row_line = {
+				default_format = "#tooltippable"
+				tooltip = "gm_site_row_detail_tt"
+				text = "gm_site_row_detail"
+			}
+			gm_row_line = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_site_building'), '(CFixedPoint)1' )]"
+				text = "gm_site_row_building"
+			}
+			gm_row_line = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_site_building'), '(CFixedPoint)0' )]"
+				text = "gm_site_row_ready"
+			}
+		}
+	}
+
 	### One monument: its status as an icon with the word beneath; its form
 	### and dedication; where it stands and its grandeur; while contested, who
 	### wants it kept and who resents it, and the three choices centred under
@@ -1382,21 +1424,6 @@ types grand_monuments_widget_types
 					default_format = "#tooltippable"
 					tooltip = "gm_row_landmark_tt"
 					text = "gm_row_landmark"
-				}
-				# A revolt's split piece, and the monument whose piece stands in
-				# another part of its region (owner's call 2026-10-17): where the
-				# other part stands, why on hover.
-				gm_row_line = {
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_piece'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
-					tooltip = "gm_row_piece_tt"
-					text = "gm_row_piece"
-				}
-				gm_row_line = {
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_has_piece'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
-					tooltip = "gm_row_split_tt"
-					text = "gm_row_split"
 				}
 				gm_row_line = {
 					default_format = "#tooltippable"
@@ -1543,7 +1570,7 @@ types grand_monuments_widget_types
 						}
 					}
 					gm_ov_cell = {
-						tooltip = "gm_je_status_undedicated_tt"
+						tooltip = "gm_je_ov_building_tt"
 						blockoverride "cell_texture" {
 							texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
 						}
@@ -2433,10 +2460,10 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### Awaiting Dedication (open; owner, 2026-10-18): only while a monument of
-	### ours waits undedicated for its Dedicate button (gm_disp_count_awaiting),
-	### above the rest: its row, then the button. Our Monuments leaves these
-	### rows out (gm_state_disp_awaiting).
+	### Awaiting Dedication (open; owner, 2026-10-18): only while a construction
+	### site of ours waits for its Dedicate button (gm_disp_count_awaiting),
+	### above the rest: its row (gm_site_row), then the button. Our Monuments
+	### lists the finished monuments (gm_state_disp_listed).
 	type te_gm_sec_awaiting = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2476,7 +2503,7 @@ types grand_monuments_widget_types
 						ignoreinvisible = yes
 						spacing = 4
 
-						gm_monument_row = {}
+						gm_site_row = {}
 						gm_dedicate_button = {}
 					}
 				}
@@ -2484,8 +2511,8 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### Our Monuments (open): one row per monument, those awaiting dedication
-	### left to the section above. The entry can outlive its last monument
+	### Our Monuments (open): one row per finished monument; construction sites
+	### are the section above's. The entry can outlive its last monument
 	### while a ledger fades; the panel then says so.
 	type te_gm_sec_monuments = flowcontainer {
 		direction = vertical
@@ -2530,7 +2557,7 @@ types grand_monuments_widget_types
 				item = {
 					gm_monument_row = {
 						datacontext = "[Scope.GetState]"
-						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), '(CFixedPoint)1' )]"
 					}
 				}
 			}

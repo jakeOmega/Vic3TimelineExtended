@@ -295,7 +295,7 @@ gm_com_source_is = {
 # would queue the same levels twice.
 gm_com_monument_under_construction = {
 	any_scope_building = {
-		is_building_type = building_grand_monument
+		is_building_type = building_grand_monument_site
 		is_under_construction = yes
 	}
 }

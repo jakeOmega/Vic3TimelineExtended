@@ -259,54 +259,37 @@ gm_tr_record_dedication_one = {
 	}
 }
 
-# State scope. Carried off whole: the building goes. Its records stay until
-# the state's next monthly pulse clears them (gm_state_monthly), so the
-# notices raised now can still name it; gm_carried_off keeps that pulse from
-# counting a contested monument as torn down.
+# State scope. Carried off whole. Another monument stood beside it: the
+# building is the largest's now (gm_state_promote_secondary,
+# gm_monument_effects.txt), which takes its records over the taken one's.
+# Otherwise the building goes; its records stay until the state's next
+# monthly pulse clears them (gm_state_monthly), so the notices raised now can
+# still name it, and gm_carried_off keeps that pulse from counting a contested
+# monument as torn down, or putting its building back.
 gm_state_tr_remove_whole = {
 	owner = {
 		remove_list_variable = { name = gm_states target = scope:gm_tr_state }
 	}
-	remove_building = building_grand_monument
 	set_variable = gm_carried_off
 	# Its shadow too, now: its records stay a month, but a merge must not raise
 	# a monument carried off (issue #936).
 	gm_state_drop_shadow = yes
-	# Another monument stood beside it: the building passes to the largest, at
-	# the levels of all that remain (gm_monument_effects.txt), which clears the
-	# taken one's records as a rebuild does.
 	if = {
 		limit = { gm_state_has_secondary = yes }
 		gm_state_promote_secondary = yes
 	}
+	else = {
+		set_variable = { name = gm_rebuilding days = 1 }
+		remove_building = building_grand_monument
+	}
 	owner = { trigger_event = { id = monument_events.20 } }
 }
 
-# State scope. A piece carried off: rebuilt smaller, keeping every record, as
-# the opportunities' gift rebuilds it taller (gm_state_gift_grandeur), and
-# spared for ten years.
+# State scope. A piece carried off: what stands keeps the rest of the records
+# (sites spec 2026-10-18 §3.3: no rebuild), and the state is spared for ten
+# years.
 gm_state_tr_remove_piece = {
-	gm_state_mark_restore_pm = yes
-	set_variable = { name = gm_rebuilding days = 1 }
-	set_variable = {
-		name = gm_rebuild_level
-		value = {
-			value = var:gm_tr_take_left
-			add = gm_state_secondary_levels
-			max = 200
-		}
-	}
-	remove_building = building_grand_monument
-	te_construction_market_build_specified_level = {
-		SPEC_TYPE = building_grand_monument
-		SPEC_LEVEL = var:gm_rebuild_level
-	}
-	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
-	# What stands is the frozen monument now (spec 2026-10-16 §3.1).
-	if = {
-		limit = { has_variable = gm_levels }
-		set_variable = { name = gm_levels value = var:gm_tr_take_left }
-	}
+	set_variable = { name = gm_levels value = var:gm_tr_take_left }
 	# The age and starting grandeur that stay with what stands (spec
 	# 2026-10-16 §5; sites spec 2026-10-18 §5).
 	if = {
@@ -319,17 +302,8 @@ gm_state_tr_remove_piece = {
 		change_variable = { name = gm_start_grandeur subtract = var:gm_tr_take_start }
 		clamp_variable = { name = gm_start_grandeur min = 0 }
 	}
-	# Its grandeur until the next pulse writes it, from the records: the
-	# rebuilt building may not read back within this effect.
-	set_variable = { name = gm_grandeur value = var:gm_tr_take_left }
-	if = {
-		limit = { has_variable = gm_start_grandeur }
-		set_variable = { name = gm_grandeur value = var:gm_start_grandeur }
-	}
-	change_variable = { name = gm_grandeur add = gm_state_primary_age }
-	remove_variable = gm_rebuild_level
+	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 	set_variable = { name = gm_tr_cooldown days = 3650 }
-	# The refresh puts the dedication back once the rebuilt building reads.
 	owner = { trigger_event = { id = monument_events.20 } }
 }
 
@@ -460,26 +434,12 @@ gm_tr_return_home = {
 	var:gm_tr_site ?= {
 		owner = { save_scope_as = gm_tr_giver }
 	}
-	# Its origin's building was rebuilt today (gm_rebuilding, one day): every way
-	# home rebuilds it again, and whether a rebuilt building reads back later in
-	# the same effect is unread (scripting_best_practices.md, "Building
-	# Lifecycle Effect Gotchas"), so a second return would read the first one's
-	# stale level, or no building at all (Return Cultural Property brings the
-	# Luxor Obelisk and the Dendera Zodiac home in one effect). It waits for the
-	# monthly pass instead (gm_tr_return_queued), which brings one home to each
-	# state at a time.
+	# No return waits any more (sites spec 2026-10-18 §3.3: records, no
+	# rebuild); one an older save queued (gm_tr_return_queued) comes home from
+	# the monthly pass. A building raised in its origin today (gm_rebuilding)
+	# counts as standing (gm_tr_stands_apart), so a second trophy home the same
+	# day stands beside the first.
 	if = {
-		limit = {
-			exists = scope:gm_tr_receiver
-			var:gm_tr_origin ?= { has_variable = gm_rebuilding }
-		}
-		set_variable = gm_tr_return_queued
-		if = {
-			limit = { always = $RELATIONS$ }
-			set_variable = gm_tr_return_relations
-		}
-	}
-	else_if = {
 		limit = { exists = scope:gm_tr_receiver }
 		gm_remove_state_var = { VAR = gm_tr_return_queued }
 		gm_remove_state_var = { VAR = gm_tr_return_relations }
@@ -534,19 +494,19 @@ gm_tr_return_home = {
 }
 
 # State scope (the origin state, scope:gm_tr_moving the trophy). A monument
-# standing here takes the levels, keeping its own records and dedication (the
-# Quadriga goes back on the Gate). With none, a new one is built with the
-# trophy's: its look, name, landmark and dedication, recorded as seen so it is
-# never read as the engine's copy, and raised by its new owner.
+# standing here takes the levels into its records, keeping its own and its
+# dedication (the Quadriga goes back on the Gate). With none, a new one stands
+# with the trophy's: its look, name, landmark and dedication, recorded as seen
+# so it is never read as the engine's copy, and raised by its new owner.
 gm_state_tr_receive = {
 	if = {
 		limit = { has_building = building_grand_monument }
-		gm_state_tr_add_levels = yes
-		# The piece is part of the monument again: its frozen levels too.
+		# The piece is part of the monument again (sites spec 2026-10-18 §3.3).
 		if = {
-			limit = { has_variable = gm_levels }
-			change_variable = { name = gm_levels add = scope:gm_tr_moving.var:gm_tr_levels }
+			limit = { NOT = { has_variable = gm_levels } }
+			set_variable = { name = gm_levels value = gm_state_primary_levels }
 		}
+		change_variable = { name = gm_levels add = scope:gm_tr_moving.var:gm_tr_levels }
 		# Its age comes back with its levels (spec 2026-10-16 §5); a trophy
 		# from an older save has none. Its starting grandeur too.
 		if = {
@@ -578,68 +538,25 @@ gm_state_add_start_from_moving = {
 	}
 }
 
-# State scope (scope:gm_tr_moving the trophy or monument). The standing building
-# takes the levels: removed and built again, the ladder's only way to add
-# levels (gm_state_gift_grandeur). The primary's method is recorded first,
-# Undedicated too, so the rebuilt building gets it back (gm_restore_pm) and
-# whatever else stands here keeps its place in the level (the building's
-# whole, plus these). Not while a ceremony asks: its answer sets the method,
-# and a recorded copy would be put back over it.
-gm_state_tr_add_levels = {
-	if = {
-		limit = {
-			NOT = { has_variable = gm_restore_pm }
-			NOT = { has_variable = gm_ceremony_pending }
-		}
-		gm_state_mark_restore_pm = yes
-	}
-	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-	set_variable = {
-		name = gm_rebuild_level
-		value = {
-			value = gm_state_level
-			add = scope:gm_tr_moving.var:gm_tr_levels
-			max = 200
-		}
-	}
-	set_variable = { name = gm_rebuilding days = 1 }
-	remove_building = building_grand_monument
-	te_construction_market_build_specified_level = {
-		SPEC_TYPE = building_grand_monument
-		SPEC_LEVEL = var:gm_rebuild_level
-	}
-	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
-	remove_variable = gm_rebuild_level
-}
-
 # State scope (scope:gm_tr_moving the trophy or monument to stand as this
-# state's primary monument; the state has no building, or just lost it). Built
-# at var:gm_rebuild_level when the caller set one, else at the moving
-# container's own levels plus those of any secondary still listed here (a
-# building lost before the monthly pass promoted one: a return or a dig
-# placed now must not leave them off the level), with its records. Whatever
-# the state recorded of an earlier monument is cleared first.
+# state's primary monument). Its records become the state's (sites spec
+# 2026-10-18 §3.3: the size is the records, no rebuild): the building that
+# stands keeps standing, its method put back to the moving monument's
+# dedication (gm_restore_pm, from gm_state_tr_take_records_from_moving); with
+# none, a finished building is made at level 1, on its owner's copy until the
+# same restore switches it.
 gm_state_tr_rebuild_from_moving = {
 	gm_clear_state = { KEEP_LANDMARK = no }
 	if = {
-		limit = { NOT = { has_variable = gm_rebuild_level } }
-		set_variable = {
-			name = gm_rebuild_level
-			value = {
-				value = scope:gm_tr_moving.var:gm_tr_levels
-				add = gm_state_secondary_levels
-				max = 200
-			}
+		limit = { NOT = { has_building = building_grand_monument } }
+		set_variable = { name = gm_rebuilding days = 1 }
+		create_building = {
+			building = building_grand_monument
+			level = 1
 		}
 	}
-	set_variable = { name = gm_rebuilding days = 1 }
-	te_construction_market_build_specified_level = {
-		SPEC_TYPE = building_grand_monument
-		SPEC_LEVEL = var:gm_rebuild_level
-	}
-	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
 	gm_state_tr_take_records_from_moving = yes
-	remove_variable = gm_rebuild_level
+	set_variable = gm_migrated
 }
 
 # State scope (scope:gm_tr_moving a trophy or a secondary monument). Its
@@ -675,9 +592,11 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_signature TO = gm_signature }
 	gm_tr_copy_to_state = { FROM = gm_tr_sig_parent TO = gm_sig_parent }
-	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1).
+	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1), and
+	# never an older save's monument to migrate (sites spec 2026-10-18 §3.5).
 	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = gm_seen
+	set_variable = gm_migrated
 	if = {
 		limit = { scope:gm_tr_moving = { has_variable = gm_tr_ceremony_level } }
 		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_ceremony_level }

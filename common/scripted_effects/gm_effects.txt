@@ -12,26 +12,13 @@
 
 # ---- Records (§3) ------------------------------------------------------------
 # State scope. A dedicated monument the pulse finds without records (a pick
-# made in the building panel once script has seen the monument, or a monument
-# from a save older than this system) gets them from its current owner, once.
-# The ceremony writes them itself, so this does nothing for a monument it
-# dedicated. One script has not seen is the engine's copy, which
-# gm_state_reset_copied_dedication sends back to Undedicated first.
+# made in the building panel before sites, or a monument from a save older
+# than this system) gets them from its current owner, once. The ceremony
+# writes them itself, so this does nothing for a monument it dedicated; a
+# finished building is created on its dedication and locked to it (sites spec
+# 2026-10-18 §3.1), so a panel pick can no longer reach one.
 gm_state_first_sight = {
-	# A panel pick without its technology goes back to Undedicated, as the
-	# engine's copy does (phase 4 §6 checks the technology in the ceremony);
-	# its Dedicate button asks for it, so no ceremony opens by itself for a
-	# player (owner, 2026-10-18), nor mid-construction.
 	if = {
-		limit = {
-			gm_state_lacks_dedication_tech = yes
-			NOT = { has_variable = gm_seen }
-			NOT = { has_variable = gm_ceremony_pending }
-			NOT = { has_variable = gm_restore_pm }
-		}
-		gm_state_return_to_undedicated = yes
-	}
-	else_if = {
 		limit = {
 			gm_state_is_dedicated = yes
 			NOT = { has_variable = gm_seen }
@@ -297,32 +284,9 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_sig_archive
 	remove_modifier = gm_local_sig_first_emperor
 	b:building_grand_monument ?= {
+		remove_modifier = gm_upkeep
 		remove_modifier = gm_policy_upkeep_open
 		remove_modifier = gm_policy_upkeep_mothballed
-	}
-}
-
-# ---- The freeze (spec 2026-10-16 §3.1; Dedicate, owner 2026-10-18) ---------------
-# A monument is finished at its dedication: the ceremony's answer records its
-# levels then (gm_levels, gm_state_dedicate), and levels built after that found
-# a new monument beside it (gm_state_found_beside, gm_monument_effects.txt).
-# The Dedicate button and the AI's ceremony ask only once nothing is under
-# construction (owner: pausing is fine, building in parallel is not).
-# State scope, from the refresh and monument_events.1: a monument dedicated
-# some other way is finished once its construction stops, its queued levels
-# joining it: a pick in the building panel (recorded at first sight), a
-# landmark, and one dedicated before the Dedicate button.
-gm_state_record_frozen_levels = {
-	if = {
-		limit = {
-			gm_state_is_dedicated = yes
-			has_variable = gm_seen
-			NOT = { has_variable = gm_levels }
-			NOT = { has_variable = gm_restore_pm }
-			NOT = { has_variable = gm_ceremony_pending }
-			b:building_grand_monument ?= { is_under_construction = no }
-		}
-		set_variable = { name = gm_levels value = gm_state_primary_levels }
 	}
 }
 
@@ -388,6 +352,7 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_age }
 	gm_remove_state_var = { VAR = gm_levels }
 	gm_remove_state_var = { VAR = gm_start_grandeur }
+	gm_remove_state_var = { VAR = gm_dedication }
 	gm_remove_state_var = { VAR = gm_newcomer }
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	gm_remove_state_var = { VAR = gm_ceremony_level }
@@ -413,11 +378,6 @@ gm_clear_state = {
 	# Its shadow (issue #936, gm_monument_effects.txt): the pass writes the next
 	# monument's once it is recorded.
 	gm_state_drop_shadow = yes
-	# A revolt's split piece and its monument stop being each other's
-	# (gm_monument_effects.txt § "A revolt's split piece"), and a building once
-	# judged no piece is forgotten with the rest.
-	gm_state_forget_split = yes
-	gm_remove_state_var = { VAR = gm_split_rejected }
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -425,12 +385,13 @@ gm_clear_state = {
 # effect for every dedicated one (fits, heritage or contested, §2.3). Both on
 # the curve over this monument's own level.
 gm_state_monthly = {
+	# The construction site's new levels, into its records (sites spec
+	# 2026-10-18 §3.2): real execution only, never the walked refresh.
+	gm_state_count_site_levels = yes
 	gm_remove_local_modifiers = yes
 	# A gifted monument's dedication back (opportunities spec §3.1).
 	gm_state_restore_dedication = yes
-	gm_monument_rebuild_self_check = yes
 	gm_tr_occupation_read_self_check = yes
-	gm_monument_split_identity_self_check = yes
 	if = {
 		limit = { has_building = building_grand_monument }
 		# A month older (spec 2026-10-16 §2), before this month's steps read it.
@@ -440,6 +401,10 @@ gm_state_monthly = {
 		}
 		# Last known level, read if the building disappears before the next pulse.
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
+		# Its dedication, read if the building disappears (sites spec
+		# 2026-10-18 §3.7: it is put back on it).
+		gm_state_record_dedication = yes
+		gm_monument_migration_self_check = yes
 		# Tourism counts everything standing here; the monument policy (v2 §5)
 		# scales it and each local effect.
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
@@ -451,20 +416,13 @@ gm_state_monthly = {
 			}
 		}
 		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
-		# Upkeep on the building itself: a fixed modifier per policy, so no
-		# multiplier has to resolve in building scope.
-		if = {
-			limit = {
-				owner = { gm_policy_is = { P = open STANDARD = no } }
-			}
-			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_open } }
-		}
-		else_if = {
-			limit = {
-				owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-			}
-			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_mothballed } }
-		}
+		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): the levels
+		# its monuments record, at pm_maintenance's 0.1 a level, through one
+		# modifier whose multiplier reads ROOT, this state, by name
+		# (scripting_best_practices.md). Its variable is overwritten, never
+		# removed.
+		set_variable = { name = gm_upkeep_mult value = gm_state_upkeep_mult }
+		b:building_grand_monument ?= { add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult } }
 		# Each dedication's own effect counts the grandeur of that dedication
 		# standing here, the primary's and those beside it (spec 2026-10-16
 		# §4.2); gm_local_steps keeps the primary's for the card.
@@ -500,26 +458,29 @@ gm_state_monthly = {
 					gm_state_is_landmark = yes
 				}
 			}
-			# Its building went into its revolt's piece's state with a merge
-			# (gm_monument_effects.txt § "A revolt's split piece"): the piece is
-			# the monument itself, before this state forgets it.
+			# The building went while its records stand (sites spec 2026-10-18
+			# §3.7: war damage and the like never shrink a monument): put back
+			# at level 1 on its dedication, from the hidden event (this pulse
+			# reads nothing back).
 			if = {
-				limit = { gm_state_whole_merged_into_piece = yes }
-				var:gm_split_piece = { gm_state_piece_takes_whole = yes }
+				limit = { gm_state_lost_building = yes }
+				trigger_event = { id = monument_events.29 }
 			}
-			# Gone without the Tear Down button: a contested monument counts
-			# as torn down (plan decision 6). The building is not downsizeable,
-			# so the building panel can no longer demolish one; this stays as
-			# the net for a save that did, or any other removal.
-			# Not one carried off as a trophy (gm_carried_off).
-			else_if = {
-				limit = {
-					gm_state_is_contested = yes
-					NOT = { has_variable = gm_carried_off }
+			else = {
+				# Gone without the Tear Down button: a contested monument counts
+				# as torn down (plan decision 6). The building is not downsizeable,
+				# so the building panel can no longer demolish one; this stays as
+				# the net for a save that did, or any other removal.
+				# Not one carried off as a trophy (gm_carried_off).
+				if = {
+					limit = {
+						gm_state_is_contested = yes
+						NOT = { has_variable = gm_carried_off }
+					}
+					gm_state_record_teardown = yes
 				}
-				gm_state_record_teardown = yes
+				gm_clear_state = { KEEP_LANDMARK = no }
 			}
-			gm_clear_state = { KEEP_LANDMARK = no }
 		}
 		if = {
 			limit = { has_variable = gm_local_steps }
@@ -727,6 +688,7 @@ gm_country_refresh = {
 			NOT = { has_journal_entry = je_grand_monuments }
 			OR = {
 				any_scope_state = { has_building = building_grand_monument }
+				any_scope_state = { has_building = building_grand_monument_site }
 				has_variable = gm_com_open
 				has_variable = gm_com_offered
 				gm_tr_country_has_any = yes
@@ -738,6 +700,12 @@ gm_country_refresh = {
 	clear_variable_list = gm_states
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
+		# An older save's monument, once (sites spec 2026-10-18 §3.5): the
+		# hidden event, never here.
+		if = {
+			limit = { gm_state_needs_migration = yes }
+			trigger_event = { id = monument_events.32 }
+		}
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
 		# A landmark's unique dedication (signatures spec §4.4).
@@ -751,24 +719,15 @@ gm_country_refresh = {
 			limit = { gm_state_merge_pending = yes }
 			trigger_event = { id = monument_events.29 }
 		}
-		# A revolt's piece of a monument in another part of the region: it
-		# takes that monument's identity, never a ceremony; or the piece and
-		# its monument have merged back into one state. The hidden event
-		# settles it first (gm_monument_effects.txt § "A revolt's split piece").
+		# A revolt's part of a monument's state: the engine's copy of its
+		# building, which nothing records and no orphan claims. The monument
+		# stays whole with the part that keeps its records (owner, 2026-10-18;
+		# sites spec §3.7): the hidden event removes it.
 		else_if = {
-			limit = {
-				OR = {
-					gm_state_split_pending = yes
-					gm_state_piece_whole_gone = yes
-					gm_state_split_piece_gone = yes
-				}
-			}
+			limit = { gm_state_stray_building = yes }
 			trigger_event = { id = monument_events.29 }
 		}
 		else = {
-			# A new monument copies its siblings' dedication: the ceremony
-			# replaces it.
-			gm_state_reset_copied_dedication = yes
 			gm_state_first_sight = yes
 			# A dedication's unveiling, deferred to here (gm_state_offer_skins);
 			# then a monument older than names, or one nobody named, takes the
@@ -788,19 +747,26 @@ gm_country_refresh = {
 			}
 			# A ceremony a finished level's hook missed.
 			gm_state_offer_missed_ceremony = yes
-			# Frozen once its construction stops; levels built after found a new
-			# monument beside it, from a hidden event (the refresh runs inside
-			# tooltips, which write nothing; the founding reads back what it writes).
-			gm_state_record_frozen_levels = yes
-			if = {
-				limit = { gm_state_has_new_levels = yes }
-				trigger_event = { id = monument_events.29 }
-			}
+			# A monument dedicated beside a grander one gives it first place
+			# back once settled (gm_state_settle_newcomer), from the hidden event.
 			if = {
 				limit = { gm_state_newcomer_settled = yes }
 				trigger_event = { id = monument_events.29 }
 			}
 		}
+		owner = {
+			add_to_variable_list = { name = gm_states target = prev }
+		}
+	}
+	# A construction site with no finished monument here (sites spec
+	# 2026-10-18 §3.1): listed for Awaiting Dedication, and the AI's ceremony
+	# once nothing more is queued.
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument_site
+			NOT = { has_building = building_grand_monument }
+		}
+		gm_state_offer_missed_ceremony = yes
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
 		}
@@ -1378,12 +1344,10 @@ gm_state_changed_hands = {
 				is_revolutionary = no
 			}
 			gm_state_raised_by_owner = no
-			# Not a building still waiting to be adopted (a rebuild in its region),
-			# nor a revolt's piece of a monument, which takes that monument's
-			# identity from the refresh this sends (gm_monument_effects.txt § "A
-			# revolt's split piece").
+			# Not a building still waiting to be adopted, nor a revolt's stray
+			# copy, which the refresh this sends removes.
 			gm_state_merge_pending = no
-			gm_state_split_pending = no
+			gm_state_stray_building = no
 		}
 		set_variable = gm_seen
 		if = {
@@ -1513,19 +1477,21 @@ gm_state_tear_down = {
 	owner = {
 		remove_list_variable = { name = gm_states target = prev }
 	}
-	remove_building = building_grand_monument
 	gm_clear_state = { KEEP_LANDMARK = no }
-	# Another monument stood beside it: the building passes to the largest, at
-	# the levels of all that remain (gm_monument_effects.txt).
+	# Another monument stood beside it: the building is the largest's now
+	# (gm_state_promote_secondary, gm_monument_effects.txt). Otherwise it goes.
 	if = {
 		limit = { gm_state_has_secondary = yes }
 		gm_state_promote_secondary = yes
 	}
+	else = {
+		set_variable = { name = gm_rebuilding days = 1 }
+		remove_building = building_grand_monument
+	}
 }
 
-# Rebuilt at half its level (rounded up, at most 200: the ladder's reach) and
-# dedicated again under current laws. No effect removes levels, so the old
-# building goes and a new one is built (nuclear_strike_halve_building's path).
+# Rededicate: asked first, the answer pays and halves the records
+# (gm_state_apply_rededicate below; sites spec 2026-10-18 §5).
 #
 # The work runs only under a marker set here: a button's or an option's
 # tooltip walks this body every frame it shows, testing each limit and writing
@@ -1540,40 +1506,44 @@ gm_state_rededicate = {
 	if = {
 		limit = { has_variable = gm_rededicate_click }
 		remove_variable = gm_rededicate_click
+		# Asked first (sites spec 2026-10-18 §5, a call for the owner): the
+		# ceremony's answer pays and halves (gm_state_apply_rededicate), and
+		# "Keep it as it is" changes nothing.
+		set_variable = gm_rededicate_asking
+		gm_state_start_ceremony = yes
+	}
+}
+
+# State scope, from gm_state_dedicate in Rededicate's answer (mode rededicate).
+# It pays (500 a level, gm_state_rededicate_cost), its supporters lose half its
+# grandeur's favour, and it keeps half its levels (rounded up), half its
+# starting grandeur and half its years: no rebuild, the records halve. A
+# landmark keeps its look and picture; the dedication, the unveiling and the
+# naming that follow give it a new meaning and a new name (phase 4 §3.3).
+gm_state_apply_rededicate = {
+	# Only when it runs: the option's tooltip walks this body writing nothing,
+	# and every read of a variable set above it would log an error a frame
+	# (gm_state_rededicate's note).
+	set_variable = gm_apply_click
+	if = {
+		limit = { has_variable = gm_apply_click }
+		remove_variable = gm_apply_click
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-		# Minor 3: guard the rebuild's own on_building_built (monument_events.1)
-		# against vanity backlash for a level it did not earn — the Rededicate
-		# tooltip never mentions that risk. A short flag, not a container, so
-		# container_timed_variable_audit does not apply.
-		set_variable = { name = gm_rebuilding days = 1 }
-		set_variable = { name = gm_rebuild_cost value = gm_state_rededicate_cost }
+		set_variable = { name = gm_rededicate_cost value = gm_state_rededicate_cost }
 		owner = {
 			add_treasury = {
-				value = prev.var:gm_rebuild_cost
+				value = prev.var:gm_rededicate_cost
 				multiply = -1
 			}
 			gm_init_ledgers = yes
 		}
 		gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -0.5 }
-		# Half the primary's own levels; what else stands here is not rededicated.
 		set_variable = {
-			name = gm_rebuild_level
+			name = gm_rededicate_levels
 			value = {
 				value = gm_state_primary_levels
 				divide = 2
 				ceiling = yes
-				add = gm_state_secondary_levels
-				max = 200
-			}
-		}
-		# Half its years too (ageing spec 2026-10-16 §5): its grandeur halves,
-		# and it ages again once the ceremony dedicates it. Half its starting
-		# grandeur with its levels (sites spec 2026-10-18 §5).
-		set_variable = {
-			name = gm_rededicate_age
-			value = {
-				value = gm_state_primary_age
-				divide = 2
 			}
 		}
 		set_variable = {
@@ -1583,25 +1553,24 @@ gm_state_rededicate = {
 				divide = 2
 			}
 		}
-		remove_building = building_grand_monument
-		# A landmark keeps its look and picture; the ceremony and the unveiling
-		# give it a new dedication and a new name (phase 4 §3.3).
-		gm_clear_state = { KEEP_LANDMARK = yes }
-		te_construction_market_build_specified_level = {
-			SPEC_TYPE = building_grand_monument
-			SPEC_LEVEL = var:gm_rebuild_level
+		set_variable = {
+			name = gm_rededicate_age
+			value = {
+				value = gm_state_primary_age
+				divide = 2
+			}
 		}
-		set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
+		gm_clear_state = { KEEP_LANDMARK = yes }
+		set_variable = { name = gm_levels value = var:gm_rededicate_levels }
+		set_variable = { name = gm_start_grandeur value = var:gm_rededicate_start }
 		if = {
 			limit = { var:gm_rededicate_age > 0 }
 			set_variable = { name = gm_age value = var:gm_rededicate_age }
 		}
-		set_variable = { name = gm_start_grandeur value = var:gm_rededicate_start }
-		remove_variable = gm_rededicate_age
+		remove_variable = gm_rededicate_levels
 		remove_variable = gm_rededicate_start
-		remove_variable = gm_rebuild_level
-		remove_variable = gm_rebuild_cost
-		gm_state_start_ceremony = yes
+		remove_variable = gm_rededicate_age
+		remove_variable = gm_rededicate_cost
 	}
 }
 
@@ -1645,6 +1614,10 @@ gm_state_choose_preserve = {
 # monument may stand on its siblings' dedication
 # (gm_state_has_copied_dedication); nothing switches it here, the ceremony's
 # answer does, once (gm_state_dedicate, gm_state_undedicate).
+# What it asks about (sites spec 2026-10-18 §3.1, gm_ceremony_mode): Rededicate's
+# question (gm_rededicate_asking, set by gm_state_rededicate) on the finished
+# monument here, else the construction site's dedication; with neither, an
+# older save's undedicated monument, until its migration makes it a site.
 gm_state_start_ceremony = {
 	if = {
 		limit = {
@@ -1653,35 +1626,39 @@ gm_state_start_ceremony = {
 			# Undedicated is the rebuild's, until it is put back.
 			NOT = { has_variable = gm_restore_pm }
 		}
+		if = {
+			limit = { has_variable = gm_rededicate_asking }
+			set_variable = { name = gm_ceremony_mode value = flag:rededicate }
+			remove_variable = gm_rededicate_asking
+			set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
+		}
+		else_if = {
+			limit = { has_building = building_grand_monument_site }
+			set_variable = { name = gm_ceremony_mode value = flag:site }
+			set_variable = { name = gm_ceremony_level value = gm_state_site_level }
+		}
+		else = {
+			gm_remove_state_var = { VAR = gm_ceremony_mode }
+			set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
+		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		trigger_event = { id = monument_events.2 }
 	}
+	gm_remove_state_var = { VAR = gm_rededicate_asking }
 }
 
-# State scope, from gm_country_refresh. The AI's ceremony for an undedicated
-# monument with nothing more queued (gm_state_ai_dedicates_now) that has grown
-# since one last asked, or that no ceremony ever asked about (gm_ceremony_level
-# 0, gm_state_mark_awaiting). A player's waits for its Dedicate button (owner,
-# 2026-10-18). monument_events.1 is the immediate path, but on_building_built
-# did not fire when five queued levels of a new monument finished on the same
-# day (owner's game, 2026-10-07; one level at a time it did), and whether it
-# fires for levels after the first is untested. Asking once per new level
-# keeps the AI's "leave it undedicated" until its next level.
+# State scope, from gm_country_refresh. The AI's ceremony for a construction
+# site with nothing more queued (gm_state_ai_dedicates_now); the AI never
+# leaves one standing (monument_events.2.a weighs 0 for it). A player's waits
+# for its Dedicate button (owner, 2026-10-18). monument_events.1 is the
+# immediate path, but on_building_built did not fire when five queued levels
+# of a new monument finished on the same day (owner's game, 2026-10-07).
 gm_state_offer_missed_ceremony = {
 	if = {
 		limit = {
 			gm_system_enabled = yes
-			gm_state_is_dedicated = no
 			gm_state_ai_dedicates_now = yes
 			NOT = { has_variable = gm_ceremony_pending }
-			OR = {
-				NOT = { has_variable = gm_ceremony_level }
-				AND = {
-					has_variable = gm_ceremony_level
-					var:gm_ceremony_level < gm_state_primary_levels
-				}
-			}
 		}
 		gm_state_start_ceremony = yes
 	}
@@ -1715,55 +1692,6 @@ gm_state_undedicate = {
 	# A landmark keeps its own picture (phase 4 §5.1).
 	set_variable = { name = gm_picture_code value = 1 }
 	gm_state_picture_landmarks = yes
-}
-
-# State scope, from gm_country_refresh and monument_events.1. A monument on a
-# dedication no ceremony gave it and no pulse recorded (the engine's copy)
-# goes back to Undedicated to wait for its Dedicate button (owner,
-# 2026-10-18), through the restore path (gm_state_restore_dedication):
-# gm_state_is_dedicated reads it as undedicated at once, so no first sight,
-# sum or contest takes the copy for a dedication while the switch reads back.
-# Then script has seen it (gm_state_mark_awaiting).
-gm_state_reset_copied_dedication = {
-	if = {
-		limit = { gm_system_enabled = yes }
-		if = {
-			limit = { gm_state_has_copied_dedication = yes }
-			gm_state_return_to_undedicated = yes
-		}
-		gm_state_mark_awaiting = yes
-	}
-}
-
-# State scope. Back to Undedicated through the restore path
-# (gm_state_restore_dedication, which switches the method from a later effect):
-# gm_state_is_dedicated reads it as undedicated at once, so nothing that runs
-# before the switch reads back (a refresh's first sight, sum or contest) takes
-# the method it stands on for a dedication, and no effect switches it twice.
-# Draped at once: the picture is not read while the method is put back. For
-# the engine's copy, a panel pick without its technology and a monument
-# founded beside another (gm_state_found_beside).
-gm_state_return_to_undedicated = {
-	set_variable = { name = gm_restore_pm value = flag:undedicated }
-	set_variable = { name = gm_picture_code value = 1 }
-	gm_state_picture_landmarks = yes
-}
-
-# State scope. Script has seen this monument undedicated: from now on a
-# dedication picked in its building panel counts (gm_state_first_sight),
-# where one picked before reads as the engine's copy
-# (gm_state_has_copied_dedication), and its Dedicate button shows
-# (gm_state_awaits_dedication). gm_ceremony_level 0: no ceremony has asked, so
-# the AI's asks once its construction stops (gm_state_offer_missed_ceremony);
-# the ceremony records the level it asks at.
-gm_state_mark_awaiting = {
-	if = {
-		limit = {
-			NOT = { has_variable = gm_seen }
-			NOT = { has_variable = gm_ceremony_level }
-		}
-		set_variable = { name = gm_ceremony_level value = 0 }
-	}
 }
 
 # ---- The AI and the notice (§4.5, §4.6) ----------------------------------------
@@ -1916,10 +1844,32 @@ gm_notify_new_contests = {
 # production method back: whether activate_production_method is visible within
 # the same effect is not established.
 gm_state_dedicate = {
-	# Past the lock when the monument stands on a sibling's dedication (the
-	# engine's copy); not at all when it already stands on this one.
+	# A construction site's answer: the site's records become the state's,
+	# a finished monument standing here moving beside first; or Rededicate's
+	# (sites spec 2026-10-18 §3.1, §5). Before anything below writes the
+	# state's records.
 	if = {
 		limit = {
+			has_variable = gm_ceremony_mode
+			var:gm_ceremony_mode = flag:site
+		}
+		gm_state_finish_site = { KEY = $KEY$ }
+	}
+	else_if = {
+		limit = {
+			has_variable = gm_ceremony_mode
+			var:gm_ceremony_mode = flag:rededicate
+		}
+		gm_state_apply_rededicate = yes
+	}
+	gm_remove_state_var = { VAR = gm_ceremony_mode }
+	# A finished building standing here switches once, past the lock, and not
+	# at all when it already stands on this one. One just created stands on it
+	# (create_building's activate_production_methods), with gm_restore_pm as
+	# the fallback.
+	if = {
+		limit = {
+			NOT = { has_variable = gm_site_created }
 			NOT = { gm_state_has_pm = { PM = pm_monument_$KEY$ } }
 		}
 		activate_production_method = {
@@ -1930,14 +1880,19 @@ gm_state_dedicate = {
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	# The ceremony's answer is the method now: a restore recorded before it
 	# (a return during the ceremony) must not put another back.
-	gm_remove_state_var = { VAR = gm_restore_pm }
+	if = {
+		limit = { NOT = { has_variable = gm_site_created } }
+		gm_remove_state_var = { VAR = gm_restore_pm }
+	}
+	gm_remove_state_var = { VAR = gm_site_created }
 	set_variable = gm_seen
-	# Finished at the levels built (owner, 2026-10-18): levels built later
-	# raise a new monument beside it (gm_state_found_beside), a level queued
-	# while the ceremony asked among them (the button and the AI ask only with
-	# nothing under construction). Read as levels, not the method just
-	# activated.
-	set_variable = { name = gm_levels value = gm_state_primary_levels }
+	# Finished at the levels built (owner, 2026-10-18): the site's, or what an
+	# older save's monument stands at. Not read back from a building created in
+	# this effect.
+	if = {
+		limit = { NOT = { has_variable = gm_levels } }
+		set_variable = { name = gm_levels value = gm_state_primary_levels }
+	}
 	# Its starting grandeur (sites spec 2026-10-18 §3.2): its levels, unless
 	# Rededicate kept half its own.
 	if = {
@@ -1947,6 +1902,209 @@ gm_state_dedicate = {
 	gm_state_record_builder = yes
 	# The monument a commission met by this dedication names (v2 §2.3).
 	owner = { set_variable = { name = gm_com_last_state value = prev } }
+}
+
+# State scope, the ceremony's "Not yet" (monument_events.2.a): the site stands
+# as it is and its Dedicate button asks again. In an older save's ceremony (no
+# mode), a copy of a sibling's dedication goes back to Undedicated; a site's
+# leaves the finished monument here alone.
+gm_state_ceremony_not_yet = {
+	gm_remove_state_var = { VAR = gm_ceremony_pending }
+	if = {
+		limit = { NOT = { has_variable = gm_ceremony_mode } }
+		gm_state_undedicate = yes
+	}
+	gm_remove_state_var = { VAR = gm_ceremony_mode }
+}
+
+# ---- A lost building (sites spec 2026-10-18 §3.7) ----------------------------------
+# State scope, from gm_state_monthly while the building stands: the primary's
+# dedication as a flag (gm_dedication), so a building that goes while its
+# records stand comes back on it. Not while a method is being put back.
+gm_state_record_dedication = {
+	gm_state_record_dedication_one = { KEY = crown }
+	gm_state_record_dedication_one = { KEY = republic }
+	gm_state_record_dedication_one = { KEY = revolution }
+	gm_state_record_dedication_one = { KEY = leader }
+	gm_state_record_dedication_one = { KEY = religious }
+	gm_state_record_dedication_one = { KEY = civic }
+	gm_state_record_dedication_one = { KEY = war_memorial }
+	gm_state_record_dedication_one = { KEY = artistic }
+	gm_state_record_dedication_one = { KEY = naturalist }
+	gm_state_record_dedication_one = { KEY = scientific }
+	gm_state_record_dedication_one = { KEY = industrial }
+	gm_state_record_dedication_one = { KEY = athletic }
+}
+
+gm_state_record_dedication_one = {
+	if = {
+		limit = {
+			gm_state_has_pm = { PM = pm_monument_$KEY$ }
+			NOT = { has_variable = gm_restore_pm }
+		}
+		set_variable = { name = gm_dedication value = flag:$KEY$ }
+	}
+}
+
+# State scope, from monument_events.29 (gm_state_lost_building). The building
+# back at level 1, on its owner's copy until gm_state_restore_dedication puts
+# the recorded dedication back; the records never moved.
+gm_state_put_back_building = {
+	set_variable = gm_migrated
+	set_variable = { name = gm_rebuilding days = 1 }
+	create_building = {
+		building = building_grand_monument
+		level = 1
+	}
+	set_variable = { name = gm_restore_pm value = var:gm_dedication }
+}
+
+# ---- Older saves (sites spec 2026-10-18 §3.5) -------------------------------------
+# State scope, from monument_events.32 once nothing is under construction here.
+# A dedicated monument keeps its size in its records (gm_levels, from the old
+# building arithmetic if it had none; its starting grandeur reads as its levels,
+# the 1836 rate) and its building goes back to level 1 on its method. An
+# undedicated one (left undedicated, or a ceremony that was open) becomes a
+# construction site at its level, counted at the 1836 rate; the largest
+# monument beside it, if any, takes the finished building.
+gm_state_migrate = {
+	set_variable = gm_migrated
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			has_variable = gm_seen
+		}
+		set_variable = { name = gm_mig_before value = gm_state_grandeur }
+		if = {
+			limit = { NOT = { has_variable = gm_levels } }
+			set_variable = { name = gm_levels value = gm_state_built_levels }
+		}
+		gm_state_record_dedication = yes
+		if = {
+			limit = { gm_state_level > 1 }
+			gm_state_mark_restore_pm = yes
+			set_variable = { name = gm_rebuilding days = 1 }
+			remove_building = building_grand_monument
+			create_building = {
+				building = building_grand_monument
+				level = 1
+			}
+		}
+	}
+	else = {
+		set_variable = { name = gm_migrate_levels value = gm_state_built_levels }
+		gm_remove_state_var = { VAR = gm_ceremony_pending }
+		gm_remove_state_var = { VAR = gm_ceremony_level }
+		gm_remove_state_var = { VAR = gm_ceremony_mode }
+		set_variable = { name = gm_rebuilding days = 1 }
+		if = {
+			limit = { gm_state_has_secondary = yes }
+			gm_state_promote_secondary = yes
+		}
+		else = {
+			gm_clear_state = { KEEP_LANDMARK = no }
+		}
+		remove_building = building_grand_monument
+		# The monument beside it that rose (its records: gm_seen) keeps the
+		# finished building, at level 1 on its method (gm_restore_pm).
+		if = {
+			limit = { has_variable = gm_seen }
+			create_building = {
+				building = building_grand_monument
+				level = 1
+			}
+		}
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = building_grand_monument_site
+			SPEC_LEVEL = var:gm_migrate_levels
+		}
+		set_variable = { name = gm_site_counted value = var:gm_migrate_levels }
+		set_variable = { name = gm_site_grandeur value = var:gm_migrate_levels }
+		remove_variable = gm_migrate_levels
+		owner = { trigger_event = { id = monument_events.20 } }
+	}
+}
+
+# State scope, from gm_state_monthly while the building stands: once a game, a
+# month or more after a dedicated monument's migration, whether it kept its
+# grandeur (Review Focus 1 of the plan): within a hundredth below and a
+# twentieth above (a month's ageing). Not the day script remade its building.
+gm_monument_migration_self_check = {
+	if = {
+		limit = {
+			has_variable = gm_mig_before
+			NOT = { has_variable = gm_rebuilding }
+			NOT = { has_variable = gm_restore_pm }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = gm_migration_self_checked } }
+			set_global_variable = gm_migration_self_checked
+			if = {
+				limit = {
+					gm_state_grandeur >= gm_state_mig_low
+					gm_state_grandeur <= gm_state_mig_high
+				}
+				debug_log = "TE_SELF_CHECK OK monument_migrated (an older save's Grand Monument kept its grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1])"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN monument_migrated (an older save's Grand Monument changed grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1]; see docs/testing/grand-monuments-ageing-playtest.md)"
+			}
+		}
+		remove_variable = gm_mig_before
+	}
+}
+
+# ---- A construction site's dedication (sites spec 2026-10-18 §3.1) ----------------
+# State scope, from gm_state_dedicate in the ceremony's answer (mode site; the
+# Dedicate button and the AI ask only with nothing under construction). The
+# levels counted to the last are the monument's records; a finished monument
+# standing here moves beside it first, and the grander stands first once the
+# newcomer is settled (gm_state_settle_newcomer from monument_events.29, a day
+# or more later: one method switch a tick). The site goes, and a finished
+# building stands at level 1 on the dedication: created here when none stands
+# (gm_site_created tells gm_state_dedicate), switched by it when one does.
+gm_state_finish_site = {
+	# Only when it runs: the option's tooltip walks this body writing nothing,
+	# and every read of a variable set above it would log an error a frame
+	# (gm_state_rededicate's note).
+	set_variable = gm_finish_click
+	if = {
+		limit = { has_variable = gm_finish_click }
+		remove_variable = gm_finish_click
+		gm_state_count_site_levels = yes
+		if = {
+			limit = {
+				has_building = building_grand_monument
+				has_variable = gm_seen
+			}
+			set_variable = { name = gm_demote_levels value = gm_state_primary_levels }
+			gm_state_demote_primary = yes
+			set_variable = gm_newcomer
+		}
+		set_variable = { name = gm_levels value = var:gm_site_counted }
+		set_variable = { name = gm_start_grandeur value = var:gm_site_grandeur }
+		set_variable = gm_migrated
+		set_variable = { name = gm_rebuilding days = 1 }
+		if = {
+			limit = { NOT = { has_building = building_grand_monument } }
+			remove_building = building_grand_monument_site
+			create_building = {
+				building = building_grand_monument
+				level = 1
+				activate_production_methods = { pm_monument_$KEY$ } # REVIEWED 2026-10-18: a create_building parameter (effects.log 1.14.5 § create_building), as the landmarks use it
+			}
+			set_variable = { name = gm_restore_pm value = flag:$KEY$ }
+			set_variable = gm_site_created
+			# The self-check monument_created_on_dedication
+			# (gm_state_restore_dedication_one).
+			set_variable = gm_created_check
+		}
+		else = {
+			remove_building = building_grand_monument_site
+		}
+		remove_variable = gm_site_counted
+		remove_variable = gm_site_grandeur
+	}
 }
 
 # AXIS: heritage (To the Nation, War Memorial) or building_<key> (the civic-progress five).
@@ -2118,16 +2276,74 @@ gm_state_choose_building_skin = {
 }
 
 # ---- Vanity backlash (§5) --------------------------------------------------------
-# State scope. A level finished while the country is in default, famine or
-# recession: radicals in the state, and one more unit on the vanity ledger,
+# State scope. Levels finished while the country is in default, famine or
+# recession: radicals in the state, and $AMOUNT$ more on the vanity ledger,
 # which takes legitimacy linearly (gm_national_vanity) and fades over about
 # two years. The journal entry warns beforehand (gm_hard_times_sgui, Task 9).
-gm_state_vanity_backlash = {
+# From the construction site's monthly count (gm_state_count_site_levels), so
+# the radicals come once a month however many levels finished.
+gm_state_vanity_backlash_for = {
 	add_radicals_in_state = { value = 0.005 }
 	owner = {
 		gm_init_ledgers = yes
-		change_variable = { name = gm_vanity_ledger add = 1 }
+		change_variable = { name = gm_vanity_ledger add = $AMOUNT$ }
 		post_notification = gm_vanity_backlash_notice
+	}
+}
+
+# One level's (the debug event).
+gm_state_vanity_backlash = {
+	gm_state_vanity_backlash_for = { AMOUNT = 1 }
+}
+
+# ---- The construction site's count (sites spec 2026-10-18 §3.2) ------------------
+# State scope, from gm_state_monthly (real execution, never the walked
+# refresh) and at the start of every dedication. Levels the site has finished
+# above those counted (gm_site_counted) join its starting grandeur so far
+# (gm_site_grandeur), one each until the world-wealth rate (Plan B), and draw
+# the vanity backlash in hard times. Fewer levels than counted (downsized, or
+# lost) take their share of the grandeur with them. A site gone takes its
+# records with it; a dedication reads them first.
+gm_state_count_site_levels = {
+	if = {
+		limit = { has_building = building_grand_monument_site }
+		if = {
+			limit = { NOT = { has_variable = gm_site_counted } }
+			set_variable = { name = gm_site_counted value = 0 }
+			set_variable = { name = gm_site_grandeur value = 0 }
+		}
+		if = {
+			limit = { gm_state_site_level > var:gm_site_counted }
+			set_variable = { name = gm_site_new value = gm_state_site_level }
+			change_variable = { name = gm_site_new subtract = var:gm_site_counted }
+			change_variable = { name = gm_site_grandeur add = var:gm_site_new }
+			if = {
+				limit = {
+					owner = { gm_country_hard_times = yes }
+					NOT = { has_variable = gm_rebuilding }
+				}
+				gm_state_vanity_backlash_for = { AMOUNT = var:gm_site_new }
+			}
+			set_variable = { name = gm_site_counted value = gm_state_site_level }
+			remove_variable = gm_site_new
+		}
+		else_if = {
+			limit = { gm_state_site_level < var:gm_site_counted }
+			set_variable = {
+				name = gm_site_grandeur
+				value = {
+					value = var:gm_site_grandeur
+					multiply = gm_state_site_level
+					divide = var:gm_site_counted
+				}
+			}
+			set_variable = { name = gm_site_counted value = gm_state_site_level }
+		}
+	}
+	else_if = {
+		limit = { has_variable = gm_site_counted }
+		remove_variable = gm_site_counted
+		remove_variable = gm_site_grandeur
 	}
 }
 
