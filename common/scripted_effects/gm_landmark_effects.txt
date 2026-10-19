@@ -89,6 +89,7 @@ gm_seed_landmark = {
 			# Its size, recorded (sites spec 2026-10-18 §3.5): the 1836 rate.
 			set_variable = { name = gm_levels value = $LEVEL$ }
 			set_variable = { name = gm_start_grandeur value = $LEVEL$ }
+			set_variable = gm_migrated
 			# Its unique dedication (signatures spec §4.4), on its historical one.
 			gm_state_sig_backfill = yes
 			create_building = {

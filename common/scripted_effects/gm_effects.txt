@@ -409,6 +409,7 @@ gm_state_monthly = {
 		# Its dedication, read if the building disappears (sites spec
 		# 2026-10-18 §3.7: it is put back on it).
 		gm_state_record_dedication = yes
+		gm_monument_migration_self_check = yes
 		# Tourism counts everything standing here; the monument policy (v2 §5)
 		# scales it and each local effect.
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
@@ -717,6 +718,12 @@ gm_country_refresh = {
 	clear_variable_list = gm_states
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
+		# An older save's monument, once (sites spec 2026-10-18 §3.5): the
+		# hidden event, never here.
+		if = {
+			limit = { gm_state_needs_migration = yes }
+			trigger_event = { id = monument_events.32 }
+		}
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
 		# A landmark's unique dedication (signatures spec §4.4).
@@ -1969,12 +1976,108 @@ gm_state_record_dedication_one = {
 # back at level 1, on its owner's copy until gm_state_restore_dedication puts
 # the recorded dedication back; the records never moved.
 gm_state_put_back_building = {
+	set_variable = gm_migrated
 	set_variable = { name = gm_rebuilding days = 1 }
 	create_building = {
 		building = building_grand_monument
 		level = 1
 	}
 	set_variable = { name = gm_restore_pm value = var:gm_dedication }
+}
+
+# ---- Older saves (sites spec 2026-10-18 §3.5) -------------------------------------
+# State scope, from monument_events.32 once nothing is under construction here.
+# A dedicated monument keeps its size in its records (gm_levels, from the old
+# building arithmetic if it had none; its starting grandeur reads as its levels,
+# the 1836 rate) and its building goes back to level 1 on its method. An
+# undedicated one (left undedicated, or a ceremony that was open) becomes a
+# construction site at its level, counted at the 1836 rate; the largest
+# monument beside it, if any, takes the finished building.
+gm_state_migrate = {
+	set_variable = gm_migrated
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			has_variable = gm_seen
+		}
+		set_variable = { name = gm_mig_before value = gm_state_grandeur }
+		if = {
+			limit = { NOT = { has_variable = gm_levels } }
+			set_variable = { name = gm_levels value = gm_state_built_levels }
+		}
+		gm_state_record_dedication = yes
+		if = {
+			limit = { gm_state_level > 1 }
+			gm_state_mark_restore_pm = yes
+			set_variable = { name = gm_rebuilding days = 1 }
+			remove_building = building_grand_monument
+			create_building = {
+				building = building_grand_monument
+				level = 1
+			}
+		}
+	}
+	else = {
+		set_variable = { name = gm_migrate_levels value = gm_state_built_levels }
+		gm_remove_state_var = { VAR = gm_ceremony_pending }
+		gm_remove_state_var = { VAR = gm_ceremony_level }
+		gm_remove_state_var = { VAR = gm_ceremony_mode }
+		set_variable = { name = gm_rebuilding days = 1 }
+		if = {
+			limit = { gm_state_has_secondary = yes }
+			gm_state_promote_secondary = yes
+		}
+		else = {
+			gm_clear_state = { KEEP_LANDMARK = no }
+		}
+		remove_building = building_grand_monument
+		# The monument beside it that rose (its records: gm_seen) keeps the
+		# finished building, at level 1 on its method (gm_restore_pm).
+		if = {
+			limit = { has_variable = gm_seen }
+			create_building = {
+				building = building_grand_monument
+				level = 1
+			}
+		}
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = building_grand_monument_site
+			SPEC_LEVEL = var:gm_migrate_levels
+		}
+		set_variable = { name = gm_site_counted value = var:gm_migrate_levels }
+		set_variable = { name = gm_site_grandeur value = var:gm_migrate_levels }
+		remove_variable = gm_migrate_levels
+		owner = { trigger_event = { id = monument_events.20 } }
+	}
+}
+
+# State scope, from gm_state_monthly while the building stands: once a game, a
+# month or more after a dedicated monument's migration, whether it kept its
+# grandeur (Review Focus 1 of the plan): within a hundredth below and a
+# twentieth above (a month's ageing). Not the day script remade its building.
+gm_monument_migration_self_check = {
+	if = {
+		limit = {
+			has_variable = gm_mig_before
+			NOT = { has_variable = gm_rebuilding }
+			NOT = { has_variable = gm_restore_pm }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = gm_migration_self_checked } }
+			set_global_variable = gm_migration_self_checked
+			if = {
+				limit = {
+					gm_state_grandeur >= gm_state_mig_low
+					gm_state_grandeur <= gm_state_mig_high
+				}
+				debug_log = "TE_SELF_CHECK OK monument_migrated (an older save's Grand Monument kept its grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1])"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN monument_migrated (an older save's Grand Monument changed grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1]; see docs/testing/grand-monuments-ageing-playtest.md)"
+			}
+		}
+		remove_variable = gm_mig_before
+	}
 }
 
 # ---- A construction site's dedication (sites spec 2026-10-18 §3.1) ----------------
@@ -2006,6 +2109,7 @@ gm_state_finish_site = {
 		}
 		set_variable = { name = gm_levels value = var:gm_site_counted }
 		set_variable = { name = gm_start_grandeur value = var:gm_site_grandeur }
+		set_variable = gm_migrated
 		set_variable = { name = gm_rebuilding days = 1 }
 		if = {
 			limit = { NOT = { has_building = building_grand_monument } }

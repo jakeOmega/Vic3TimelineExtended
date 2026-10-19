@@ -1587,3 +1587,24 @@ gm_disp_frac_industrial = {
 	min = 0
 	max = 1
 }
+
+# ---- Older saves' migration self-check (sites spec 2026-10-18 §3.5) --------------
+# State scope: the grandeur recorded before the migration, and the band the
+# grandeur after must fall in (a hundredth below, a twentieth above).
+gm_state_mig_was = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_mig_before }
+		value = var:gm_mig_before
+	}
+}
+
+gm_state_mig_low = {
+	value = gm_state_mig_was
+	multiply = 0.99
+}
+
+gm_state_mig_high = {
+	value = gm_state_mig_was
+	multiply = 1.05
+}

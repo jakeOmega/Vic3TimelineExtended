@@ -519,9 +519,23 @@ gm_state_has_site = {
 # raises it into the building that stays.
 gm_state_lost_building = {
 	NOT = { has_building = building_grand_monument }
+	has_variable = gm_migrated
 	has_variable = gm_seen
 	has_variable = gm_levels
 	has_variable = gm_dedication
 	NOT = { has_variable = gm_carried_off }
 	NOT = { has_variable = gm_rebuilding }
+}
+
+# State scope. An older save's finished monument, from before construction
+# sites (sites spec 2026-10-18 §3.5): monument_events.32 records it and resets
+# its building, or makes it a site. Every finished building script makes now
+# is marked gm_migrated. Not while script made or removed one today, puts a
+# method back, or a ceremony asks.
+gm_state_needs_migration = {
+	has_building = building_grand_monument
+	NOT = { has_variable = gm_migrated }
+	NOT = { has_variable = gm_rebuilding }
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
 }

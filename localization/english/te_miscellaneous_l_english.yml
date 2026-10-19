@@ -2897,6 +2897,7 @@
  gm_evt_works_closed_desc:0 "The government closed the opera house's scandalous works."
  gm_expand_contested_tt:0 "The Grand Monument here is not contested: decide what becomes of it first"
  gm_expand_full_tt:0 "Fewer than six Grand Monuments stand here, counting one under construction"
+ gm_expand_migrating_tt:0 "The Grand Monument here has settled into the new construction rules (within a month of loading an older save)"
  gm_expand_pending_tt:0 "No dedication, unveiling or naming is under way here"
  gm_expand_rebuilding_tt:0 "No Grand Monument here is waiting for its dedication to be put back"
  gm_form_arch:0 "Arch"

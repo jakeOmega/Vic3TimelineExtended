@@ -590,6 +590,7 @@ gm_state_tr_rebuild_from_moving = {
 		}
 	}
 	gm_state_tr_take_records_from_moving = yes
+	set_variable = gm_migrated
 }
 
 # State scope (scope:gm_tr_moving a trophy or a secondary monument). Its

@@ -68,13 +68,6 @@ gm_monument_monthly = {
 		}
 		gm_monument_pass = yes
 	}
-	# The one-off repair of monuments short of a piece long gone (owner's call
-	# 2026-10-17, § "One-off repair" below): before the shadows, which then
-	# note what it put back.
-	if = {
-		limit = { gm_system_enabled = yes }
-		gm_short_repair_monthly = yes
-	}
 	# Every recorded primary's shadow, in a game with no secondary too (issue
 	# #936, § "A merged state" below).
 	if = {
@@ -2122,107 +2115,6 @@ gm_sh_piece_takes_whole = {
 	destroy_container = yes
 }
 
-# ---- One-off repair: a monument short of a piece long gone (owner's call 2026-10-17) ----
-# OLD-SAVE REPAIR (#936): remove after 2026-12-17 or at vanilla 1.15, whichever comes first.
-#
-# Before 2026-10-17 a revolt's split piece was recorded as a monument of its
-# own, and when its part merged back before gm_sh_rejoin existed, its orphan
-# was lost: the monument's records, frozen before the split, still count the
-# piece's levels, and its building stands that much lower. In the 1898 crash
-# save (crash_2026-10-17_china_opportunity.v3) one monument is: the Arc de
-# Triomphe, 11 levels on records of 15, the Paris Commune's piece of 4 lost in
-# 1887. Each such monument gets its levels back by one rebuild
-# (gm_state_tr_add_levels, as gm_sh_rejoin), once a save. From the monthly
-# pass (gm_monument_monthly), never the refresh, which tooltips walk. A
-# shortfall with another explanation is left alone
-# (gm_state_short_unexplained, gm_monument_triggers.txt); one with something
-# under way (gm_state_short_ready) waits a month, for up to a year
-# (gm_short_repair_passes). Loop safety: the rebuild runs monument_events.1
-# and the refresh inside the effect, and neither calls this; each state is
-# marked repaired (gm_short_repaired) before its rebuild, which is its only
-# one. The verdict comes a pass later (gm_monument_short_repair_self_check).
-gm_short_repair_monthly = {
-	gm_monument_short_repair_self_check = yes
-	if = {
-		limit = { NOT = { has_global_variable = gm_short_repair_done } }
-		if = {
-			limit = { has_global_variable = gm_short_repair_passes }
-			change_global_variable = { name = gm_short_repair_passes add = 1 }
-		}
-		else = {
-			set_global_variable = { name = gm_short_repair_passes value = 1 }
-			set_global_variable = { name = gm_short_repair_n value = 0 }
-			set_global_variable = { name = gm_short_repair_levels value = 0 }
-		}
-		every_state = {
-			limit = {
-				gm_state_short_unexplained = yes
-				gm_state_short_ready = yes
-			}
-			add_to_temporary_list = gm_short_repairing
-		}
-		every_in_list = {
-			list = gm_short_repairing
-			gm_state_short_repair = yes
-		}
-		# Done once nothing waits, or after a year of waiting.
-		if = {
-			limit = {
-				OR = {
-					global_var:gm_short_repair_passes >= 12
-					NOT = { any_state = { gm_state_short_unexplained = yes } }
-				}
-			}
-			set_global_variable = gm_short_repair_done
-			set_global_variable = { name = gm_short_repair_left value = 0 }
-			every_state = {
-				limit = { gm_state_short_unexplained = yes }
-				change_global_variable = { name = gm_short_repair_left add = 1 }
-			}
-			debug_log = "TE_MONUMENTS: the one-off repair of monuments short of a piece long gone is done: [SCOPE.ScriptValue('gm_short_log_n')|0] repaired, [SCOPE.ScriptValue('gm_short_log_levels')|0] levels put back, [SCOPE.ScriptValue('gm_short_log_left')|0] still short and waiting"
-		}
-	}
-}
-
-# State scope, from gm_short_repair_monthly: a monument short of a piece long
-# gone. Marked repaired first; then the levels its building lacks go back on
-# it by one rebuild, through a stand-in that carries them as a piece would
-# (gm_state_tr_add_levels reads scope:gm_tr_moving), destroyed after under a
-# name of its own: the rebuild's monument_events.1 and refresh run inside this
-# effect, and what they run may save another container as gm_tr_moving.
-gm_state_short_repair = {
-	set_variable = gm_short_repaired
-	save_scope_as = gm_short_state
-	set_variable = { name = gm_short_put_back value = gm_state_levels_short }
-	set_global_variable = { name = gm_short_log_put_back_now value = var:gm_short_put_back }
-	set_global_variable = { name = gm_short_log_stood_now value = gm_state_level }
-	change_global_variable = { name = gm_short_repair_n add = 1 }
-	change_global_variable = { name = gm_short_repair_levels add = var:gm_short_put_back }
-	if = {
-		limit = { NOT = { has_global_variable = gm_short_repair_checked } }
-		set_global_variable = gm_short_repair_check_due
-	}
-	debug_log = "TE_MONUMENTS: the one-off repair puts back the levels of a piece long gone on the monument in [THIS.GetState.GetNameNoFormatting]: [SCOPE.ScriptValue('gm_short_log_put_back')|0] levels on the [SCOPE.ScriptValue('gm_short_log_stood')|0] standing"
-	clear_saved_scope = gm_short_standin
-	create_container = {
-		tags = { gm_repair }
-		save_scope_as = gm_short_standin
-		on_created = {
-			save_scope_as = gm_short_standin
-		}
-	}
-	if = {
-		limit = { exists = scope:gm_short_standin }
-		scope:gm_short_standin = {
-			set_variable = { name = gm_tr_levels value = scope:gm_short_state.var:gm_short_put_back }
-			save_scope_as = gm_tr_moving
-		}
-		gm_state_tr_add_levels = yes
-		scope:gm_short_standin = { destroy_container = yes }
-	}
-	remove_variable = gm_short_put_back
-}
-
 # ---- Self-check: a merge keeps its monument (issue #936) -------------------------------
 # Any scope (the globals gm_sh_log_numbers wrote), from gm_sh_adopt_beside and
 # gm_sh_lost, the first time a game settles an orphaned shadow: whether a
@@ -2341,55 +2233,6 @@ gm_monument_split_identity_self_check = {
 			remove_variable = gm_split_check_s
 			remove_variable = gm_split_check_n
 		}
-	}
-}
-
-# ---- Self-check: the one-off repair (owner's call 2026-10-17) -------------------------
-# OLD-SAVE REPAIR (#936): remove after 2026-12-17 or at vanilla 1.15, whichever comes first.
-# No scope, from gm_short_repair_monthly, the pass after the first that
-# repaired anything (the rebuild's day over): whether every monument repaired
-# so far stands at its records. No verdict before a repair. The marks stay
-# until the repair is done and its verdict read.
-gm_monument_short_repair_self_check = {
-	if = {
-		limit = { has_global_variable = gm_short_repair_check_due }
-		remove_global_variable = gm_short_repair_check_due
-		set_global_variable = gm_short_repair_checked
-		set_global_variable = { name = gm_short_check_n value = 0 }
-		set_global_variable = { name = gm_short_check_bad value = 0 }
-		every_state = {
-			limit = { has_variable = gm_short_repaired }
-			change_global_variable = { name = gm_short_check_n add = 1 }
-			if = {
-				limit = {
-					OR = {
-						NOT = { has_building = building_grand_monument }
-						gm_state_levels_short >= 1
-					}
-				}
-				change_global_variable = { name = gm_short_check_bad add = 1 }
-			}
-		}
-		if = {
-			limit = { global_var:gm_short_check_bad = 0 }
-			debug_log = "TE_SELF_CHECK OK monument_short_repair (the one-off repair put back the levels of pieces long gone: [SCOPE.ScriptValue('gm_short_log_n')|0] monuments, [SCOPE.ScriptValue('gm_short_log_levels')|0] levels, every one at its records a month on)"
-		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN monument_short_repair (the one-off repair put back the levels of pieces long gone, [SCOPE.ScriptValue('gm_short_log_n')|0] monuments, [SCOPE.ScriptValue('gm_short_log_levels')|0] levels, but [SCOPE.ScriptValue('gm_short_log_bad')|0] still stand short of their records a month on; see docs/testing/grand-monuments-ageing-playtest.md)"
-		}
-	}
-	else_if = {
-		limit = {
-			has_global_variable = gm_short_repair_done
-			has_global_variable = gm_short_repair_n
-		}
-		every_state = {
-			limit = { has_variable = gm_short_repaired }
-			remove_variable = gm_short_repaired
-		}
-		remove_global_variable = gm_short_repair_n
-		remove_global_variable = gm_short_repair_levels
-		remove_global_variable = gm_short_repair_passes
 	}
 }
 

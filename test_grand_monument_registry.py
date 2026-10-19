@@ -2379,7 +2379,9 @@ class GiftTests(unittest.TestCase):
                       "production_method = pm_monument_$KEY$ } }", one)
         e = read(EFFECTS)
         refresh = squash(block(e, "gm_country_refresh"))
+        # After an older save's migration ask (MigrationTests).
         self.assertIn("every_scope_state = { limit = { has_building = building_grand_monument } "
+                      "if = { limit = { gm_state_needs_migration = yes } trigger_event = { id = monument_events.32 } } "
                       "gm_state_restore_dedication = yes", refresh)
         monthly = squash(block(e, "gm_state_monthly"))
         self.assertTrue(monthly.startswith("gm_state_count_site_levels = yes gm_remove_local_modifiers = yes "
@@ -4226,7 +4228,7 @@ class LevelsApartTests(unittest.TestCase):
             (MON_EFFECTS, "gm_state_found_beside"), (MON_EFFECTS, "gm_state_tr_shrink_by"),
             (MON_EFFECTS, "gm_state_short_repair"), (MON_EFFECTS, "gm_monument_rebuild_self_check"),
             (self.TR, "gm_state_tr_add_levels"), (SGUIS, "gm_dedicate_sgui"),
-            ("common/scripted_triggers/gm_monument_triggers.txt", "gm_state_short_unexplained"),
+            (EFFECTS, "gm_state_migrate"),
         }
         found = set()
         for path in sorted(ROOT.glob("common/**/*.txt")) + sorted(ROOT.glob("events/*.txt")):
@@ -5591,113 +5593,6 @@ class SplitPieceLineTests(unittest.TestCase):
         self.assertIn("A piece's card and row", playtest)
 
 
-class ShortRepairTests(unittest.TestCase):
-    """Owner's call 2026-10-17: a one-off repair of monuments already short of a
-    piece long gone, as the 1898 crash save's Arc de Triomphe (11 levels on
-    records of 15, the Paris Commune's piece lost in 1887, before gm_sh_rejoin)."""
-
-    def setUp(self):
-        self.m = read(MON_EFFECTS)
-        self.t = read(MON_TRIGGERS)
-
-    def body(self, name, text=None):
-        b = block(text if text is not None else self.m, name)
-        self.assertIsNotNone(b, name)
-        return squash(b)
-
-    def test_it_runs_from_the_monthly_pass_and_carries_its_removal_date(self):
-        monthly = self.body("gm_monument_monthly")
-        call = "if = { limit = { gm_system_enabled = yes } gm_short_repair_monthly = yes }"
-        self.assertIn(call, monthly)
-        # Before the shadows, which then note what it put back.
-        self.assertLess(monthly.find(call), monthly.find("gm_shadow_monthly = yes"))
-        sites = [name for path in _mod_txt_files() for name, body in top_level_blocks(read(path.relative_to(ROOT)))
-                 if "gm_short_repair_monthly = yes" in body]
-        self.assertEqual(sites, ["gm_monument_monthly"])
-        refresh = squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
-        self.assertNotIn("gm_short_repair", refresh)
-        marker = "# OLD-SAVE REPAIR (#936): remove after 2026-12-17 or at vanilla 1.15, whichever comes first."
-        raw = (ROOT / MON_EFFECTS).read_text(encoding="utf-8-sig")
-        self.assertIn(marker + "\n#\n# Before 2026-10-17", raw)
-        self.assertIn(marker, (ROOT / MON_TRIGGERS).read_text(encoding="utf-8-sig"))
-
-    def test_once_a_save_with_a_year_for_what_waits(self):
-        body = self.body("gm_short_repair_monthly")
-        self.assertIn("if = { limit = { NOT = { has_global_variable = gm_short_repair_done } }", body)
-        self.assertIn("change_global_variable = { name = gm_short_repair_passes add = 1 }", body)
-        self.assertIn("limit = { gm_state_short_unexplained = yes gm_state_short_ready = yes } "
-                      "add_to_temporary_list = gm_short_repairing", body)
-        self.assertIn("every_in_list = { list = gm_short_repairing gm_state_short_repair = yes }", body)
-        self.assertIn("OR = { global_var:gm_short_repair_passes >= 12 NOT = { any_state = { "
-                      "gm_state_short_unexplained = yes } } } } set_global_variable = gm_short_repair_done", body)
-        self.assertIn("TE_MONUMENTS:", body)
-
-    def test_every_other_explanation_is_left_alone(self):
-        unexplained = self.body("gm_state_short_unexplained", self.t)
-        for s in ("has_variable = gm_seen", "has_variable = gm_levels", "gm_state_levels_short >= 1",
-                  "NOT = { has_variable = gm_short_repaired }",
-                  # A revolt's piece still out there.
-                  "NOT = { has_variable = gm_split_piece }", "NOT = { has_variable = gm_piece_of }",
-                  "state_region = { NOT = { any_scope_state = { NOT = { this = scope:gm_tmp_short_state } "
-                  "has_building = building_grand_monument } } }",
-                  # The combined level's cap.
-                  "gm_state_level < 200"):
-            self.assertIn(s, unexplained)
-        ready = self.body("gm_state_short_ready", self.t)
-        for s in ("b:building_grand_monument ?= { is_under_construction = no }",
-                  "NOT = { has_variable = gm_rebuilding }", "NOT = { has_variable = gm_restore_pm }",
-                  "NOT = { has_variable = gm_ceremony_pending }", "NOT = { has_variable = gm_gift }",
-                  "NOT = { has_variable = gm_carried_off }",
-                  "owner = { is_at_war = no NOT = { has_variable = te_cw_role } }",
-                  "has_variable = gm_mon_order",
-                  "variable = gm_shadows gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }",
-                  "variable = gm_monuments gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }"):
-            self.assertIn(s, ready)
-        # A trophy's piece and a Pull Down beside it take their levels out of the
-        # records, so they leave no shortfall to exclude.
-        tr = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_state_tr_remove_piece"))
-        self.assertIn("set_variable = { name = gm_levels value = var:gm_tr_take_left }", tr)
-        self.assertIn("change_variable = { name = gm_tr_levels subtract = scope:gm_tr_state.var:gm_tr_take_levels }",
-                      self.body("gm_mon_tr_take_piece"))
-
-    def test_one_rebuild_marked_first(self):
-        repair = self.body("gm_state_short_repair")
-        self.assertTrue(repair.startswith("set_variable = gm_short_repaired"), repair[:80])
-        order = ["set_variable = gm_short_repaired",
-                 "set_variable = { name = gm_short_put_back value = gm_state_levels_short }",
-                 "create_container = { tags = { gm_repair } save_scope_as = gm_short_standin",
-                 "set_variable = { name = gm_tr_levels value = scope:gm_short_state.var:gm_short_put_back } "
-                 "save_scope_as = gm_tr_moving",
-                 "gm_state_tr_add_levels = yes",
-                 # Under its own name: what the rebuild runs inside this effect
-                 # may save another container as gm_tr_moving.
-                 "scope:gm_short_standin = { destroy_container = yes }"]
-        positions = [repair.find(s) for s in order]
-        self.assertNotIn(-1, positions, dict(zip(order, positions)))
-        self.assertEqual(positions, sorted(positions))
-        self.assertEqual(repair.count("gm_state_tr_add_levels = yes"), 1)
-        self.assertNotIn("scope:gm_tr_moving = { destroy_container", repair)
-        self.assertNotRegex(repair, r"trigger_event")
-        self.assertIn("TE_MONUMENTS:", repair)
-
-    def test_the_self_check(self):
-        check = self.body("gm_monument_short_repair_self_check")
-        self.assertIn("TE_SELF_CHECK OK monument_short_repair", check)
-        self.assertEqual(check.count("TE_SELF_CHECK BROKEN monument_short_repair"), 1)
-        # Only after a repair, and once: the pass after the first that repaired.
-        self.assertTrue(check.startswith("if = { limit = { has_global_variable = gm_short_repair_check_due } "
-                                         "remove_global_variable = gm_short_repair_check_due "
-                                         "set_global_variable = gm_short_repair_checked"), check[:200])
-        self.assertIn("OR = { NOT = { has_building = building_grand_monument } gm_state_levels_short >= 1 }", check)
-        self.assertIn("if = { limit = { NOT = { has_global_variable = gm_short_repair_checked } } "
-                      "set_global_variable = gm_short_repair_check_due }", self.body("gm_state_short_repair"))
-        self.assertTrue(self.body("gm_short_repair_monthly").startswith("gm_monument_short_repair_self_check = yes"))
-        values = read(MON_VALUES)
-        for sv in ("gm_short_log_n", "gm_short_log_levels", "gm_short_log_bad"):
-            self.assertIn(f"[SCOPE.ScriptValue('{sv}')|0]", check)
-            self.assertIsNotNone(block(values, sv), sv)
-
-
 if __name__ == "__main__":
     unittest.main()
 
@@ -6714,10 +6609,10 @@ class NoRebuildTests(unittest.TestCase):
         landmark = squash(block(read(LANDMARK_EFFECTS), "gm_seed_landmark"))
         self.assertIn("create_building = { building = building_grand_monument level = 1 ", landmark)
         self.assertLessEqual(made, {"gm_state_finish_site", "gm_state_put_back_building",
-                                    "gm_state_tr_rebuild_from_moving", "gm_seed_landmark"})
+                                    "gm_state_tr_rebuild_from_moving", "gm_seed_landmark", "gm_state_migrate"})
         self.assertLessEqual(unmade, {"gm_state_tear_down", "gm_state_tr_remove_whole", "gm_sh_adopt_beside",
                                       "gm_sh_rejoin", "gm_sh_piece_takes_whole", "gm_state_short_repair",
-                                      "gm_state_tr_add_levels", "monument_events.32"})
+                                      "gm_state_tr_add_levels", "gm_state_migrate"})
 
     def test_a_monument_beside_rises_into_the_standing_building(self):
         for path, name in ((EFFECTS, "gm_state_tear_down"),
@@ -6766,7 +6661,8 @@ class LostBuildingTests(unittest.TestCase):
 
     def test_lost_is_put_back(self):
         lost = squash(block(read(TRIGGERS), "gm_state_lost_building"))
-        self.assertEqual(lost, "NOT = { has_building = building_grand_monument } has_variable = gm_seen "
+        self.assertEqual(lost, "NOT = { has_building = building_grand_monument } has_variable = gm_migrated "
+                               "has_variable = gm_seen "
                                "has_variable = gm_levels has_variable = gm_dedication "
                                "NOT = { has_variable = gm_carried_off } NOT = { has_variable = gm_rebuilding }")
         monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
@@ -6777,9 +6673,94 @@ class LostBuildingTests(unittest.TestCase):
         ev29 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.29\s*=\s*\{")))
         self.assertIn("limit = { gm_state_lost_building = yes } gm_state_put_back_building = yes", ev29)
         put = squash(block(read(EFFECTS), "gm_state_put_back_building"))
-        self.assertEqual(put, "set_variable = { name = gm_rebuilding days = 1 } "
+        self.assertEqual(put, "set_variable = gm_migrated set_variable = { name = gm_rebuilding days = 1 } "
                               "create_building = { building = building_grand_monument level = 1 } "
                               "set_variable = { name = gm_restore_pm value = var:gm_dedication }")
+
+
+class MigrationTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.5: an older save's monument is recorded and
+    its building reset once (a dedicated one), or becomes a construction site
+    at its level (an undedicated one, a ceremony open), from the hidden
+    monument_events.32; never inside the walked refresh."""
+
+    def body(self, path, name):
+        return squash(strip_comments(block(read(path), name)))
+
+    def ev32(self):
+        return squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.32\s*=\s*\{")))
+
+    def test_the_refresh_only_asks(self):
+        self.assertEqual(self.body(TRIGGERS, "gm_state_needs_migration"),
+                         "has_building = building_grand_monument NOT = { has_variable = gm_migrated } "
+                         "NOT = { has_variable = gm_rebuilding } NOT = { has_variable = gm_restore_pm } "
+                         "NOT = { has_variable = gm_ceremony_pending }")
+        refresh = self.body(EFFECTS, "gm_country_refresh")
+        self.assertIn("if = { limit = { gm_state_needs_migration = yes } trigger_event = { id = monument_events.32 } }",
+                      refresh)
+        self.assertNotIn("gm_state_migrate = yes", refresh)
+
+    def test_waits_for_construction(self):
+        ev = self.ev32()
+        self.assertIn("type = state_event hidden = yes", ev)
+        self.assertIn("trigger = { gm_system_enabled = yes gm_state_needs_migration = yes }", ev)
+        self.assertIn("if = { limit = { b:building_grand_monument ?= { is_under_construction = no } } "
+                      "gm_state_migrate = yes }", ev)
+
+    def test_a_dedicated_monument_is_recorded_then_reset(self):
+        body = self.body(EFFECTS, "gm_state_migrate")
+        order = ["set_variable = gm_migrated",
+                 "limit = { gm_state_is_dedicated = yes has_variable = gm_seen }",
+                 "set_variable = { name = gm_mig_before value = gm_state_grandeur }",
+                 "if = { limit = { NOT = { has_variable = gm_levels } } "
+                 "set_variable = { name = gm_levels value = gm_state_built_levels } }",
+                 "gm_state_record_dedication = yes",
+                 "limit = { gm_state_level > 1 }", "gm_state_mark_restore_pm = yes",
+                 "set_variable = { name = gm_rebuilding days = 1 }",
+                 "remove_building = building_grand_monument",
+                 "create_building = { building = building_grand_monument level = 1 }"]
+        positions = [body.find(s) for s in order]
+        self.assertNotIn(-1, positions, [s for s, p in zip(order, positions) if p == -1])
+        self.assertEqual(positions, sorted(positions))
+
+    def test_an_undedicated_one_becomes_a_site(self):
+        body = self.body(EFFECTS, "gm_state_migrate")
+        rest = body[body.find("else = {"):]
+        for s in ("set_variable = { name = gm_migrate_levels value = gm_state_built_levels }",
+                  "gm_remove_state_var = { VAR = gm_ceremony_level }",
+                  "if = { limit = { gm_state_has_secondary = yes } gm_state_promote_secondary = yes }",
+                  "SPEC_TYPE = building_grand_monument_site SPEC_LEVEL = var:gm_migrate_levels",
+                  "set_variable = { name = gm_site_counted value = var:gm_migrate_levels }",
+                  "set_variable = { name = gm_site_grandeur value = var:gm_migrate_levels }"):
+            self.assertIn(s, rest)
+
+    def test_new_monuments_are_never_migrated(self):
+        for path, name in ((EFFECTS, "gm_state_finish_site"), (EFFECTS, "gm_state_put_back_building"),
+                           ("common/scripted_effects/gm_trophy_effects.txt", "gm_state_tr_rebuild_from_moving"),
+                           (LANDMARK_EFFECTS, "gm_seed_landmark")):
+            self.assertIn("set_variable = gm_migrated", self.body(path, name), name)
+        self.assertIn("has_variable = gm_migrated", self.body(TRIGGERS, "gm_state_lost_building"))
+        gate = self.body(MON_TRIGGERS, "gm_state_can_build_site")
+        self.assertIn("text = gm_expand_migrating_tt OR = { NOT = { has_building = building_grand_monument } "
+                      "has_variable = gm_migrated }", gate)
+        self.assertIn("gm_expand_migrating_tt", loc())
+
+    def test_totals_survive(self):
+        """Review Focus 1: a dedicated monument's grandeur reads the same a
+        month after its migration (TE_SELF_CHECK monument_migrated)."""
+        check = self.body(EFFECTS, "gm_monument_migration_self_check")
+        for s in ("has_variable = gm_mig_before", "TE_SELF_CHECK OK monument_migrated",
+                  "TE_SELF_CHECK BROKEN monument_migrated", "remove_variable = gm_mig_before",
+                  "has_global_variable = gm_migration_self_checked"):
+            self.assertIn(s, check)
+        self.assertIn("gm_monument_migration_self_check = yes", self.body(EFFECTS, "gm_state_monthly"))
+
+    def test_the_one_off_repair_goes(self):
+        for pattern in ("common/scripted_effects/gm_*.txt", "common/scripted_triggers/*.txt",
+                        "common/script_values/gm_*.txt"):
+            for path in sorted(ROOT.glob(pattern)):
+                text = strip_comments(read(path.relative_to(ROOT).as_posix()))
+                self.assertNotRegex(text, r"gm_short_repair|gm_state_short_|gm_short_log_", path.name)
 
 
 class RecordWriterTests(unittest.TestCase):

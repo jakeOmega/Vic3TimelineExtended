@@ -307,6 +307,14 @@ gm_state_can_build_site = {
 			text = gm_expand_full_tt
 			gm_state_monument_count < 6
 		}
+		# An older save's monument here is migrated first (gm_state_migrate).
+		custom_tooltip = {
+			text = gm_expand_migrating_tt
+			OR = {
+				NOT = { has_building = building_grand_monument }
+				has_variable = gm_migrated
+			}
+		}
 	}
 }
 
@@ -817,81 +825,5 @@ gm_sh_whole_of_piece = {
 		has_building = building_grand_monument
 		has_variable = gm_piece_of
 		state_region = scope:gm_sh_region
-	}
-}
-
-# ---- The one-off repair of a monument short of a piece long gone (owner's call 2026-10-17) ----
-# OLD-SAVE REPAIR (#936): remove after 2026-12-17 or at vanilla 1.15, whichever comes first.
-# State scope. A recorded monument whose building lacks levels its records
-# count (gm_state_levels_short), with no explanation that lasts: no revolt's
-# piece of it stands (no split's link, and no other part of its region holds a
-# Grand Monument: a piece recorded as a monument of its own before 2026-10-17
-# may), not repaired already, and below the combined level's cap of 200. A
-# trophy's piece and a Pull Down beside it take their levels out of the
-# records (gm_state_tr_remove_piece, gm_state_tr_shrink_by), so they leave no
-# shortfall.
-gm_state_short_unexplained = {
-	has_building = building_grand_monument
-	has_variable = gm_seen
-	has_variable = gm_levels
-	gm_state_levels_short >= 1
-	NOT = { has_variable = gm_short_repaired }
-	NOT = { has_variable = gm_split_piece }
-	NOT = { has_variable = gm_piece_of }
-	gm_state_level < 200
-	save_temporary_scope_as = gm_tmp_short_state
-	state_region = {
-		NOT = {
-			any_scope_state = {
-				NOT = { this = scope:gm_tmp_short_state }
-				has_building = building_grand_monument
-			}
-		}
-	}
-}
-
-# State scope. Nothing under way that explains a shortfall for now: no rebuild,
-# restore, ceremony, gift, carrying off or construction, no Pull Down ordered
-# beside it, no orphan waiting in its region for gm_sh_rejoin, and its owner at
-# peace (no occupier's taking under way) and in no civil war. A monument that
-# fails this waits for the next month's pass.
-gm_state_short_ready = {
-	b:building_grand_monument ?= { is_under_construction = no }
-	NOT = { has_variable = gm_rebuilding }
-	NOT = { has_variable = gm_restore_pm }
-	NOT = { has_variable = gm_ceremony_pending }
-	NOT = { has_variable = gm_gift }
-	NOT = { has_variable = gm_carried_off }
-	owner = {
-		is_at_war = no
-		NOT = { has_variable = te_cw_role }
-	}
-	NOT = {
-		AND = {
-			has_variable_list = gm_monuments_here
-			any_in_list = {
-				variable = gm_monuments_here
-				has_variable = gm_mon_order
-			}
-		}
-	}
-	state_region = { save_temporary_scope_as = gm_tmp_short_region }
-	NOT = {
-		AND = {
-			has_global_variable_list = gm_shadows
-			any_in_global_list = {
-				variable = gm_shadows
-				gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }
-			}
-		}
-	}
-	NOT = {
-		AND = {
-			has_global_variable_list = gm_monuments
-			any_in_global_list = {
-				variable = gm_monuments
-				gm_sh_orphan_of = { REGION = scope:gm_tmp_short_region }
-			}
-		}
 	}
 }
