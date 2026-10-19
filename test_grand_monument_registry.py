@@ -6308,9 +6308,10 @@ class CreatedOnDedicationTests(unittest.TestCase):
 
 class RateTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.2 (Plan B): a level's starting grandeur is
-    world GDP in 1836 over world GDP when it is counted. The 1836 figure is a
-    constant (spec §5): 334,465,286 summed from a Timeline Extended save of
-    1836.1.20, every country's latest GDP."""
+    world GDP in 1836 over world GDP when it is counted, times the grandeur a
+    level adds in 1836 (owner, 2026-10-19: five), to the nearest thousandth and
+    at least 0.001. The 1836 figure is a constant (spec §5): 334,465,286 summed
+    from a Timeline Extended save of 1836.1.20, every country's latest GDP."""
 
     def body(self, path, name):
         return squash(strip_comments(block(read(path), name)))
@@ -6320,9 +6321,12 @@ class RateTests(unittest.TestCase):
         self.assertEqual(self.body(VALUES, "gm_world_rate_now"),
                          "value = 1 if = { limit = { global_gdp_script_value > 0 } value = gm_world_gdp_1836 "
                          "divide = global_gdp_script_value min = 0.00001 }")
+        self.assertEqual(self.body(VALUES, "gm_level_grandeur_1836"), "value = 5")
+        # Scaled on reading, so a save's stored ratio takes it before January.
         self.assertEqual(self.body(VALUES, "gm_world_rate_value"),
                          "value = 1 if = { limit = { has_global_variable = gm_world_rate } "
-                         "value = global_var:gm_world_rate }")
+                         "value = global_var:gm_world_rate } multiply = gm_level_grandeur_1836 "
+                         "multiply = 1000 round = yes divide = 1000 min = 0.001")
 
     def test_written_before_counting(self):
         ensure = self.body(EFFECTS, "gm_world_rate_ensure")
@@ -6436,8 +6440,10 @@ class RateDisplayTests(unittest.TestCase):
         self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', widget)
         self.assertIn(self.RATE, L["gm_je_world_rate"])
         self.assertIn("ScriptValue('gm_world_wealth_factor')|1", L["gm_je_world_rate_tt"])
+        # How many times richer: the stored ratio, not the scaled rate.
         self.assertEqual(squash(block(read(VALUES), "gm_world_wealth_factor")),
-                         "value = 1 divide = gm_world_rate_value")
+                         "value = 1 if = { limit = { has_global_variable = gm_world_rate } "
+                         "divide = global_var:gm_world_rate }")
         possible = squash(block(read(SITE_BUILDING), "possible"))
         self.assertIn("custom_tooltip = { text = gm_site_rate_tt always = yes }", possible)
         self.assertIn("[SCOPE.ScriptValue('gm_world_rate_value')|3]", L["gm_site_rate_tt"])
@@ -6513,7 +6519,11 @@ class RecordWriterTests(unittest.TestCase):
     def test_a_landmark_is_recorded_at_its_levels(self):
         body = self.body(LANDMARK_EFFECTS, "gm_seed_landmark")
         self.assertIn("set_variable = { name = gm_levels value = $LEVEL$ }", body)
-        self.assertIn("set_variable = { name = gm_start_grandeur value = $LEVEL$ }", body)
+        # Its grandeur at the 1836 rate (owner, 2026-10-19), alone or beside another.
+        at_1836 = "value = { value = $LEVEL$ multiply = gm_level_grandeur_1836 }"
+        self.assertIn(f"set_variable = {{ name = gm_start_grandeur {at_1836} }}", body)
+        beside = self.body("common/scripted_effects/gm_monument_effects.txt", "gm_seed_landmark_beside")
+        self.assertIn(f"set_variable = {{ name = gm_tr_start_grandeur {at_1836} }}", beside)
 
 
 class DedicateButtonTests(unittest.TestCase):
@@ -6809,8 +6819,14 @@ class SitesFinalReviewTests(unittest.TestCase):
         for key in ("gm_je_world_rate", "gm_site_card_rate", "gm_site_rate_tt", "gm_site_row_rate"):
             self.assertIn("ScriptValue('gm_world_rate_value')|3]", L[key], key)
             self.assertNotIn("ScriptValue('gm_world_rate_value')|2]", L[key], key)
-        for key in ("gm_je_world_rate", "gm_site_rate_tt", "gm_site_row_rate"):
-            self.assertIn("ScriptValue('gm_world_wealth_factor')|0]#! levels", L[key], key)
+        # What a level adds in 1836, spliced, not "N levels make one": the rate
+        # passes one in 1836 (owner, 2026-10-19).
+        for key in ("gm_je_world_rate", "gm_site_rate_tt", "gm_site_row_rate", "gm_je_world_rate_tt"):
+            self.assertIn("ScriptValue('gm_level_grandeur_1836')|0]#! in 1836", L[key], key)
+            self.assertNotIn("levels make one", L[key], key)
+        # How It Works reads nothing (test_grand_monuments_layout), so it states the figure.
+        self.assertEqual(squash(strip_comments(block(read(VALUES), "gm_level_grandeur_1836"))), "value = 5")
+        self.assertIn("(5 in 1836, and a tenth as much in a world ten times richer)", L["gm_je_how_grandeur"])
         # A floor, so the wealth factor never divides by zero.
         self.assertIn("min = 0.00001", squash(block(read(VALUES), "gm_world_rate_now")))
 

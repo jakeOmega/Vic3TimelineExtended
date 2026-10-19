@@ -603,6 +603,10 @@ class EntryTests(unittest.TestCase):
         # One variable on a container shared by every country that may dig it: the
         # last listed would name its state in everyone's row.
         self.assertNotIn("gm_site_view_state", loc()["gm_arch_row_open_detail"])
+        # Its levels and what they count for, at the 1836 rate (owner, 2026-10-19).
+        self.assertIn("ScriptValue('gm_arch_disp_grandeur')|0]#! [concept_grandeur]", loc()["gm_arch_row_open_detail"])
+        self.assertEqual(squash(block(read(VALUES), "gm_arch_disp_grandeur")),
+                         "value = gm_arch_disp_levels multiply = gm_level_grandeur_1836")
         pass_ = squash(block(read(EFFECTS), "gm_arch_list_one"))
         self.assertEqual(pass_.count("gm_site_view_state"), 1, "written for a dig, which has one sponsor")
         self.assertNotIn("is_target_in_variable_list", pass_)
@@ -984,6 +988,9 @@ class ForeignTests(unittest.TestCase):
                        "name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region",
                        "name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece",
                        "name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur",
+                       # A find counts at the 1836 rate (owner, 2026-10-19).
+                       "name = gm_tr_start_grandeur value = { value = scope:gm_arch_partage_site.var:gm_site_piece "
+                       "multiply = gm_level_grandeur_1836 }",
                        "name = gm_tr_taken_by value = scope:gm_arch_sponsor",
                        "name = gm_tr_share value = flag:piece",
                        "name = gm_tr_landmark value = scope:gm_arch_partage_site.var:gm_tr_landmark"):
@@ -995,7 +1002,15 @@ class ForeignTests(unittest.TestCase):
         self.assertEqual(squash(block(v, "gm_arch_partage_levels")),
                          "value = gm_arch_disp_levels divide = 2 floor = yes min = 1")
         self.assertEqual(squash(block(v, "gm_arch_partage_grandeur")),
-                         "value = gm_arch_partage_levels divide = 2 ceiling = yes")
+                         "value = gm_arch_partage_levels multiply = gm_level_grandeur_1836 divide = 2 ceiling = yes")
+        # What the host keeps standing counts at the 1836 rate too: its levels
+        # once settled and shared, before it stands beside or alone.
+        place = squash(strip_comments(block(self.e, "gm_arch_place")))
+        start = ("set_variable = { name = gm_tr_start_grandeur value = { value = var:gm_tr_levels "
+                 "multiply = gm_level_grandeur_1836 } }")
+        self.assertIn(start, place)
+        self.assertLess(place.index(start), place.index("gm_arch_stand_beside = yes"))
+        self.assertLess(place.index(start), place.index("gm_state_tr_receive = yes"))
         # Every record a trophy made from a state carries, this one carries.
         made = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_state_tr_make_trophy"))
         for record in re.findall(r"set_variable = \{ name = (gm_tr_\w+) value", made):

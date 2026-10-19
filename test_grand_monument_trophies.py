@@ -846,7 +846,10 @@ class Trophies1836Tests(unittest.TestCase):
                        "name = gm_tr_site value = scope:gm_tr_site_state",
                        "name = gm_tr_site_region value = scope:gm_tr_site_state.state_region",
                        "name = gm_tr_levels value = $LEVELS$",
-                       "name = gm_tr_grandeur value = { value = $LEVELS$ divide = 2 ceiling = yes }",
+                       # The 1836 rate (owner, 2026-10-19), half of it abroad.
+                       "name = gm_tr_start_grandeur value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 }",
+                       "name = gm_tr_grandeur value = { value = $LEVELS$ multiply = gm_level_grandeur_1836 "
+                       "divide = 2 ceiling = yes }",
                        "name = gm_tr_year value = $YEAR$", "name = gm_tr_taken_by value = scope:gm_tr_seed_holder",
                        "name = gm_tr_share value = flag:$SHARE$",
                        "name = gm_tr_dedication value = flag:$DEDICATION$",

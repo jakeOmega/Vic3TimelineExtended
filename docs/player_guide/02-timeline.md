@@ -611,13 +611,15 @@ built and grows as the monument ages (see [A finished monument and its
 age](#a-finished-monument-and-its-age)). The Grand Monuments game rule can
 switch the system off.
 
-A monument is impressive for what it cost its time. Each level's grandeur is
-the world's GDP in 1836 divided by the world's GDP when the level is finished,
-updated each January: in 1836 a level adds 1 grandeur, and in a world ten times
-as rich it adds a tenth, so the same share of the world's wealth buys the same
-grandeur in any era. The rate shows at the top of National Effects, on a
-construction site's card and in the build menu before you build. The monuments
-standing in 1836, dug up or brought home count at the 1836 rate.
+A monument is impressive for what it cost its time. In 1836 a level adds 5
+grandeur, and in a world ten times as rich it adds a tenth as much: 5 times the
+world's GDP in 1836, divided by the world's GDP when the level is finished,
+updated each January, to the nearest 0.001 and never less than 0.001. So the
+same share of the world's wealth buys the same grandeur in any era. The rate
+shows at the top of National Effects, on a construction site's card and in the
+build menu before you build. The monuments standing in 1836, the trophies
+abroad in 1836 and the monuments dug up count at the 1836 rate, 5 grandeur a
+level.
 
 Everything a monument gives grows with grandeur in steps. The first step takes 5
 grandeur and each further step takes twice as much as the one before, so steps
@@ -1226,8 +1228,8 @@ would at home, diverting the same innovation.
 | Excavation Concession | Romanticism | 75 | Half the levels, rounded down, go to your capital as a trophy; the rest stand in the host's state as its monument. A rock-cut site has nothing to carry: it stays whole, and you gain Foreign Scholarship. |
 | Excavation Permit | Empiricism | 40 | The monument stands in the host's state at its full levels, and you gain Foreign Scholarship: +10 prestige and +1 cultural pull for ten years. |
 
-A concession's trophy is like any other: it counts for half its levels in your
-grandeur, and the host can ask for it back with Return Cultural Property or
+A concession's trophy is like any other: it counts for half its grandeur in
+yours, and the host can ask for it back with Return Cultural Property or
 take it in a war. The host may still dig its own sites, and may end the treaty,
 which stops your dig with its progress kept; the host can then finish the dig
 itself. A war can enforce a concession but not a permit. An AI host signs a
