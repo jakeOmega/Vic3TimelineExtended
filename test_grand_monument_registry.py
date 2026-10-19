@@ -2425,7 +2425,8 @@ class UsabilityTests(unittest.TestCase):
         self.assertIn("gm_com_levels_to_go > 0", raise_)
         self.assertIn("set_variable = { name = gm_com_raise_levels value = gm_com_levels_to_go } gm_com_queue_levels = yes",
                       raise_)
-        self.assertEqual(squash(block(read(COM_VALUES), "gm_com_levels_to_go")),
+        # The grandeur missing, in levels at today's rate (OpportunityGrandeurTests).
+        self.assertEqual(squash(block(read(COM_VALUES), "gm_com_grandeur_to_go")),
                          "value = 0 if = { limit = { has_variable = gm_com_open has_variable = gm_com_target } "
                          "value = var:gm_com_target subtract = gm_com_progress min = 0 }")
         gui = read(WIDGET)
@@ -3976,7 +3977,8 @@ class MultiMonumentLevelTests(unittest.TestCase):
 
     def test_the_opportunity_counts_the_primarys_levels(self):
         body = squash(block(read("common/script_values/gm_commission_values.txt"), "gm_com_fit_grandeur"))
-        self.assertIn("add = gm_state_primary_levels", body)
+        # Its starting grandeur (Plan B), which reads its records.
+        self.assertIn("add = gm_state_primary_start", body)
 
     def test_no_record_of_a_level_reads_the_whole_building(self):
         for rel in (EFFECTS, "common/scripted_effects/gm_trophy_effects.txt",
@@ -4701,10 +4703,11 @@ class OpportunityLevelTests(unittest.TestCase):
 
     def test_progress_counts_levels(self):
         body = squash(block(read(self.COM_V), "gm_com_fit_grandeur"))
-        self.assertIn("limit = { gm_state_com_counts = yes } add = gm_state_primary_levels", body)
+        # Starting grandeur, never age (Plan B).
+        self.assertIn("limit = { gm_state_com_counts = yes } add = gm_state_primary_start", body)
         self.assertIn("every_in_list = { variable = gm_monuments_held limit = { gm_mon_com_counts = yes } "
-                      "add = gm_mon_levels }", body)
-        self.assertNotIn("grandeur", body.replace("gm_com_fit_grandeur", ""))
+                      "add = gm_mon_start }", body)
+        self.assertNotIn("age", body)
         counts = squash(block(read(MON_TRIGGERS), "gm_mon_com_counts"))
         self.assertIn("gm_mon_status_fits = yes", counts)
         self.assertIn("gm_mon_has_dedication_flag = { VAR = gm_com_dedication }", counts)
@@ -6341,6 +6344,34 @@ class RateTests(unittest.TestCase):
                   "global_gdp_script_value <= gm_world_gdp_1836_high"):
             self.assertIn(s, check)
         self.assertIn("gm_world_base_self_check = yes", self.body(MON_EFFECTS, "gm_monument_monthly"))
+
+
+class OpportunityGrandeurTests(unittest.TestCase):
+    """Sites spec 2026-10-18 §3.2 (Plan B): an opportunity asks for starting
+    grandeur, never age; Raise It queues what that takes at today's rate, at
+    most 100 levels a press (Review Focus 3)."""
+
+    def body(self, name):
+        return squash(strip_comments(block(read(COM_VALUES), name)))
+
+    def test_progress_counts_starting_grandeur(self):
+        fit = self.body("gm_com_fit_grandeur")
+        self.assertIn("add = gm_state_primary_start", fit)
+        self.assertIn("add = gm_mon_start", fit)
+        self.assertNotIn("_levels", fit)
+        self.assertNotIn("age", fit)
+
+    def test_the_levels_it_takes(self):
+        self.assertEqual(self.body("gm_com_grandeur_to_go"),
+                         "value = 0 if = { limit = { has_variable = gm_com_open has_variable = gm_com_target } "
+                         "value = var:gm_com_target subtract = gm_com_progress min = 0 }")
+        self.assertEqual(self.body("gm_com_levels_to_go"),
+                         "value = gm_com_grandeur_to_go divide = gm_world_rate_value ceiling = yes max = 100")
+        self.assertEqual(self.body("gm_com_target_levels"),
+                         "value = 0 if = { limit = { has_variable = gm_com_target } value = var:gm_com_target "
+                         "divide = gm_world_rate_value ceiling = yes max = 100 }")
+        self.assertEqual(self.body("gm_disp_com_accept_cost"),
+                         "value = gm_com_target_levels multiply = construction_cost_grand_monument")
 
 
 class RecordWriterTests(unittest.TestCase):
