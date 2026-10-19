@@ -408,9 +408,9 @@ cultural_pull_from_monuments = {
 }
 
 # Grand Monument pull: standing grandeur (every monument not contested) through
-# the doubling curve with a first step of 10, +1 a step. No ceiling: the curve
-# is the diminishing return, and past its eighth step it carries on doubling
-# (gm_set_steps_open; owner, 2026-10-16, replacing the old +5 cap).
+# the 1/n curve with a first step of 10, +1 a step: step n takes n times the
+# first. No ceiling: the curve is the diminishing return (gm_set_steps_lin_open;
+# owner, 2026-10-16, replacing the old +5 cap; 2026-10-19, the 1/n curve).
 # gm_s_culture is set by gm_country_refresh (gm_effects.txt); absent until a
 # country's first refresh. Spec
 # docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md §2.4.
@@ -425,9 +425,11 @@ cultural_pull_from_grand_monuments = {
 
 # Ancestral Antiquity's pull (Grand Monument signatures, spec
 # docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md §2.1):
-# the steps of the grandeur of the monuments and trophies that carry it, +1
-# each, with a cap of its own (+3); the monuments' pull above has none. gm_s_sig_antiquity
-# is set by gm_country_refresh (gm_signature_effects.txt).
+# the steps of the grandeur of the monuments and trophies that carry it, on the
+# 1/n curve with a first step of 5, +1 each, with no ceiling (owner,
+# 2026-10-19: its monuments are a fixed list, so it cannot be farmed; the +3
+# cap went). gm_s_sig_antiquity is set by gm_country_refresh
+# (gm_signature_effects.txt).
 cultural_pull_from_antiquity = {
 	value = 0
 	if = {
@@ -435,7 +437,6 @@ cultural_pull_from_antiquity = {
 		value = var:gm_s_sig_antiquity
 		multiply = gm_step_sig_antiquity
 	}
-	max = gm_sig_antiquity_cap
 }
 
 # Megaproject bonus: +1 per completed megaproject (not in bg_monuments)

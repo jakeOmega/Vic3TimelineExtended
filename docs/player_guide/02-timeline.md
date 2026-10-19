@@ -621,9 +621,19 @@ build menu before you build. The monuments standing in 1836, the trophies
 abroad in 1836 and the monuments dug up count at the 1836 rate, 5 grandeur a
 level.
 
-Everything a monument gives grows with grandeur in steps. The first step takes 5
-grandeur and each further step takes twice as much as the one before, so steps
-complete at 5, 15, 35, 75, 155 and so on. Inside a step every point counts.
+Everything a monument gives grows with grandeur in steps, and each step takes
+more grandeur than the one before. Inside a step every point counts. There are
+two kinds of step:
+
+- **Effects in the monument's own state, prestige and cultural pull** taper
+  slowly. The first step takes 5 grandeur, the second 10, the third 15 and so
+  on, so steps complete at 5, 15, 30, 50, 75 and so on. Effects in a state stop
+  at 30 steps, at 2,325 grandeur, and two stop sooner (see the table below).
+  Prestige and cultural pull never stop.
+- **The other national effects and interest group approval** taper fast. Each
+  step takes twice the grandeur of the one before, so steps complete at 5, 15,
+  35, 75, 155 and so on, up to the eighth at 1,275.
+
 Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
@@ -708,8 +718,8 @@ Every monument, whatever it honors, gives:
   is not contested.
 - +25% Tourism Industry throughput in its state for each step of its own
   grandeur, so five grandeur matches one of the base game's monuments.
-- +1 cultural pull for each step of standing grandeur (steps of 10), with no
-  ceiling: past the eighth step, at 2,550 grandeur, the steps keep doubling.
+- +1 cultural pull for each step of standing grandeur (steps of 10, 20, 30 and
+  so on), with no ceiling.
 
 ### A finished monument and its age
 
@@ -797,12 +807,12 @@ dedicates its monuments once nothing more is queued for them.
 | To the Leader | Autocracy or Single-Party State, not crowned | The ruler's own group / the strongest group outside the government | +2 legitimacy, +25 authority | +10% loyalists from movements |
 | Grand Shrine | No State Atheism | Devout | +5% Devout attraction | +10% conversion |
 | To the Nation | | Petty Bourgeoisie | | +10% loyalists from movements |
-| War Memorial | | Armed Forces | 3% less war support lost to casualties | +5% conscription rate |
+| War Memorial | | Armed Forces | 3% less war support lost to casualties | +1% conscription rate, up to +10% |
 | Grand Opera House | Romanticism | Intelligentsia | +5% Intelligentsia attraction | +10% Creative Industry throughput |
 | Botanical Gardens | Romanticism | Rural Folk | | 5,000 less pollution |
 | Grand Observatory | Empiricism | Intelligentsia | +3 innovation cap | Faster literacy growth |
 | Great Exhibition Hall | Marketing Research, no Industry Banned | Industrialists | +5% Industrialists attraction | +10% migration pull |
-| Grand Stadium | Television Broadcasting | Trade Unions | | 10% lower turmoil effects |
+| Grand Stadium | Television Broadcasting | Trade Unions | | 10% lower turmoil effects, up to 50% |
 
 Legitimacy counts the grandeur of all your monuments to the Crown, the Republic,
 the Revolution and the Leader together, in steps of 10, and only while each
@@ -831,11 +841,12 @@ It counts only while the monument stands on the dedication it was given on:
 
 National effects count every monument that carries the same unique dedication
 together, in steps of 5 like the dedications' own, and each in force has its own
-row in National Effects. Mothballed halves them. Monuments of one kind share one:
+row in National Effects. Ancestral Antiquity's cultural pull tapers slowly, like
+the monuments' own pull; the others taper fast. Mothballed halves them. Monuments of one kind share one:
 
 | Unique dedication | Carried by | Per step |
 |---|---|---|
-| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, at most +3, on top of the monuments' own pull, and +10% Tourism Industry throughput in its state; the Intelligentsia approve |
+| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, on top of the monuments' own pull and with no ceiling, and +10% Tourism Industry throughput in its state; the Intelligentsia approve |
 | Epigraphic Archive | Inscriptions and lost libraries: the Rosetta Stone, the Temple of Dendera, the Mesha Stele, the Library of Ashurbanipal, the Dead Sea Scrolls and 10 more | +2 innovation cap and +2% technology spread, and +10% University throughput in its state; the Intelligentsia approve |
 | Seat of the Throne | Royal palaces: Topkapı Palace, the Red Fort, Sans-Souci Palace, the Royal Palace of Benin and 6 more | +3% authority |
 | Royal Pantheon | Royal tombs and statues: the Alexander Column, the Basilica of Superga, Nikkō Tōshō-gū and 4 more | +5% loyalists from high legitimacy |

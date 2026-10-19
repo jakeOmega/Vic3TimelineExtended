@@ -60,6 +60,15 @@ A fixed item is struck through with the commit that fixed it.
 | **The AI tops up.** Watch an AI country seize an opportunity in a save past 1950 (observer). | It queues at most 100 levels, dedicates the site, then queues what is still missing until the opportunity is met or runs out. | It stops after the first site: `gm_com_monthly`'s top-up did not run. |
 | **Rededicate beside.** Rededicate a contested monument that stands beside another. | The ceremony asks; dedicated, it stands first at half its levels. | It stands first but nothing asks: `gm_state_start_ceremony` refused while the swap's restore stood. |
 
+## The 1/n curve (owner, 2026-10-19)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The Arc de Triomphe's card.** Start in 1836 as France and open Paris's state card. | Grandeur 75, exactly the end of the fifth step: the bar empty and the next step at 105; Tourism Industry throughput +125% (5 steps); the War Memorial line +5% conscription rate. Its picture's frame is the top tier. | Next step at 155 or +100%: the card still reads the doubling curve. A full bar and next step 75: the sum came out a hair under 5; harmless. |
+| **National Effects in 1836.** Same game, the Grand Monuments tab. | Prestige's hover gives standing grandeur G (the Arc, the statue of Louis XIV and half of each trophy France holds) and a next step N among 105, 140, 180 (5 grandeur more each step); the bar is (G − N + W) ÷ W full, W being that step's size (35, 40, 45); the prestige is 25 × the steps. Cultural Pull's next step is among 60, 100, 150 (10 more each step). Legitimacy and the IG approvals unchanged from before this change. | Next steps 75, 155: the doubling curve still runs. A bar that never moves: `gm_w_standing` is missing. |
+| **The ceilings.** Raise a War Memorial and a Grand Stadium past 275 and 75 grandeur in one state (console, or a late save). | Conscription stops at +10% and turmoil effects at −50%, under every monument policy. | Higher: `gm_state_local_steps_one`'s `CAP` did not apply. |
+| **Ancestral Antiquity.** As Egypt, or a country holding several Antiquity monuments, open National Effects. | Its cultural pull is above +3 once its grandeur passes 30 (steps of 5, 10, 15 …), and its bar moves. | Stuck at +3: the cap still applies somewhere. |
+
 ## A merged state (issue #936)
 
 Every check reads `TE_MONUMENTS:` and `TE_SELF_CHECK` lines in `debug.log`; note the state card and Our Monuments before

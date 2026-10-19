@@ -31,15 +31,12 @@ gm_step_sig_local_antiquity = 0.1
 gm_step_sig_local_archive = 0.1
 gm_step_sig_local_first_emperor = 0.25
 
-# Ancestral Antiquity's cultural pull has a cap of its own (§2.1);
-# cultural_pull_from_grand_monuments has none (owner, 2026-10-16).
-gm_sig_antiquity_cap = 3
-
 # ---- National Effects (country scope) ----------------------------------------------
 # Per signature with a national effect: what it gives (steps x step), the
 # grandeur behind it, where its next step completes and how many monuments
 # carry it, then the row's bar: (2G - N + 5) / (N + 5), as gm_disp_frac_* in
-# gm_values.txt on the curve with first step 5.
+# gm_values.txt on the curve with first step 5. Ancestral Antiquity's is on the
+# 1/n curve with no end (gm_sig_set_steps_lin_open): (G - N + W) / W.
 gm_display_sig_antiquity = {
 	value = 0
 	if = {
@@ -47,7 +44,6 @@ gm_display_sig_antiquity = {
 		value = var:gm_s_sig_antiquity
 		multiply = gm_step_sig_antiquity
 	}
-	max = gm_sig_antiquity_cap
 }
 
 gm_display_g_sig_antiquity = {
@@ -80,20 +76,12 @@ gm_disp_frac_sig_antiquity = {
 		limit = {
 			has_variable = gm_g_sig_antiquity
 			has_variable = gm_n_sig_antiquity
+			has_variable = gm_w_sig_antiquity
 		}
 		value = var:gm_g_sig_antiquity
-		multiply = 2
 		subtract = var:gm_n_sig_antiquity
-		add = 5
-		divide = {
-			value = var:gm_n_sig_antiquity
-			add = 5
-		}
-	}
-	# Full once its cultural pull is at its cap.
-	if = {
-		limit = { gm_display_sig_antiquity >= gm_sig_antiquity_cap }
-		value = 1
+		add = var:gm_w_sig_antiquity
+		divide = var:gm_w_sig_antiquity
 	}
 	min = 0
 	max = 1

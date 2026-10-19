@@ -70,7 +70,7 @@ DEDICATIONS = (
     Dedication("civic", "timeless", "petty_bourgeoisie", None,
                "state_loyalists_from_political_movements_mult", 0.10, None, None, 3),
     Dedication("war_memorial", "timeless", "armed_forces", None,
-               "state_conscription_rate_add", 0.05,
+               "state_conscription_rate_add", 0.01,
                "country_war_support_casualties_mult", -0.03, 5),
     Dedication("artistic", "timeless", "intelligentsia", None,
                "building_art_academy_throughput_add", 0.10,
@@ -286,6 +286,18 @@ def curve_terms(f):
     return [(f * (2 ** k - 1), f * 2 ** k) for k in range(8)]
 
 
+def lin_curve_terms(f, n=30):
+    """(start, size) of the first n steps of the 1/n curve with first step f:
+    step k takes k * f (owner, 2026-10-19)."""
+    return [(f * k * (k - 1) // 2, f * k) for k in range(1, n + 1)]
+
+
+# The local effects that stop short of the 1/n curve's end (owner, 2026-10-19):
+# dedication -> (its CAP script value, the steps it stops at).
+LOCAL_CAPS = {"war_memorial": ("gm_local_cap_war_memorial", 10),
+              "athletic": ("gm_local_cap_athletic", 5)}
+
+
 class CurveTests(unittest.TestCase):
     def _terms(self, name):
         body = squash(block(read(VALUES), name))
@@ -297,6 +309,22 @@ class CurveTests(unittest.TestCase):
         for f in (5, 10):
             terms = [(int(s or 0), int(d)) for s, d in self._terms(f"gm_curve_steps_f{f}")]
             self.assertEqual(terms, curve_terms(f), f)
+
+    def test_lin_steps_grow_by_one_first_step(self):
+        """The 1/n curve: thirty steps, step k taking k first steps."""
+        terms = [(int(s or 0), int(d)) for s, d in self._terms("gm_curve_steps_lin_f5")]
+        self.assertEqual(terms, lin_curve_terms(5))
+        self.assertRegex(strip_comments(read(VALUES)), r"(?m)^gm_curve_lin_steps = 30\s*$")
+        # Each step is worth 1/k of the first a point of grandeur.
+        for k, (_, size) in enumerate(lin_curve_terms(5), start=1):
+            self.assertEqual(size, 5 * k)
+
+    def test_local_caps(self):
+        values = strip_comments(read(VALUES))
+        for key, (name, cap) in LOCAL_CAPS.items():
+            self.assertRegex(values, r"(?m)^" + name + r" = " + str(cap) + r"\s*$", key)
+            self.assertEqual(squash(block(read(VALUES), f"gm_local_max_{key}")),
+                             f"value = {name} multiply = gm_step_local_{key}", key)
 
     def test_next_thresholds(self):
         for f in (5, 10):
@@ -613,13 +641,14 @@ class LocalPulseTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
         # The monument policy (v2 §5) scales the steps: tourism and the local
         # effect separately (each dedication's, SecondaryFitTests).
-        self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_f5 "
+        self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_lin_f5 "
                       "multiply = gm_policy_factor_tourism } }", body)
         self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
         # Upkeep by the records (UpkeepTests).
         self.assertIn("add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult }", body)
         for d in DEDICATIONS:
-            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} }}", body)
+            cap = LOCAL_CAPS.get(d.key, ("gm_curve_lin_steps",))[0]
+            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} CAP = {cap} }}", body)
 
     def test_backing_variable_is_never_removed(self):
         self.assertNotRegex(strip_comments(self.e), r"remove_variable = gm_local_steps")
@@ -720,8 +749,13 @@ class NationalTests(unittest.TestCase):
 
     def test_totals_use_the_right_curves(self):
         body = squash(block(self.e, "gm_compute_totals"))
-        self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing F = 5 }", body)
-        self.assertIn("gm_set_steps_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }", body)
+        # Prestige and cultural pull on the 1/n curve with no end (owner,
+        # 2026-10-19); every other national total keeps the doubling curve.
+        self.assertIn("gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing "
+                      "WIDTH = gm_w_standing F = 5 }", body)
+        self.assertIn("gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture "
+                      "WIDTH = gm_w_culture F = 10 }", body)
+        self.assertEqual(body.count("gm_set_steps_lin_open"), 2)
         self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
         # The monument policy (v2 §5) scales the steps after the curve, so the
@@ -839,55 +873,58 @@ class NationalTests(unittest.TestCase):
 
 
 class OpenCurveTests(unittest.TestCase):
-    """gm_set_steps_open: the curve without its end, for cultural pull (owner,
-    2026-10-16: diminishing returns, no ceiling). Past the eighth step the
-    doubling carries on, each further step costing twice the grandeur of the
-    one before."""
+    """gm_set_steps_lin_open: the 1/n curve with no end, for prestige and
+    cultural pull (owner, 2026-10-19). Step k takes k first steps, so each is
+    worth 1/k of the first a point of grandeur and the effect never stops
+    growing."""
 
     def test_effect_shape(self):
-        body = squash(block(read(EFFECTS), "gm_set_steps_open"))
+        body = squash(block(read(EFFECTS), "gm_set_steps_lin_open"))
         self.assertIsNotNone(body)
-        self.assertTrue(body.startswith("gm_set_steps = { IN = $IN$ OUT = $OUT$ NEXT = $NEXT$ F = $F$ } "
-                                        "if = { limit = { var:$IN$ >= var:$NEXT$ } "
-                                        "change_variable = { name = $NEXT$ multiply = 2 } "
-                                        "change_variable = { name = $NEXT$ add = $F$ } "
-                                        "while = { limit = { var:$IN$ >= var:$NEXT$ } "
-                                        "change_variable = { name = $OUT$ add = 1 } "
-                                        "change_variable = { name = $NEXT$ multiply = 2 } "
-                                        "change_variable = { name = $NEXT$ add = $F$ } }"), body)
-        self.assertIn("change_variable = { name = $OUT$ add = { value = var:$IN$ multiply = 2 "
-                      "subtract = var:$NEXT$ add = $F$ divide = { value = var:$NEXT$ add = $F$ } } }", body)
+        self.assertEqual(body,
+                         "set_variable = { name = $OUT$ value = 0 } "
+                         "set_variable = { name = $WIDTH$ value = $F$ } "
+                         "set_variable = { name = $NEXT$ value = $F$ } "
+                         "while = { limit = { var:$IN$ >= var:$NEXT$ } "
+                         "change_variable = { name = $OUT$ add = 1 } "
+                         "change_variable = { name = $WIDTH$ add = $F$ } "
+                         "change_variable = { name = $NEXT$ add = var:$WIDTH$ } } "
+                         "change_variable = { name = $OUT$ add = { value = var:$IN$ subtract = var:$NEXT$ "
+                         "add = var:$WIDTH$ divide = var:$WIDTH$ min = 0 } }")
+        # The doubling curve's open form went with cultural pull's move.
+        self.assertIsNone(block(read(EFFECTS), "gm_set_steps_open"))
 
     @staticmethod
     def steps(g, f=10):
-        """The effect, transcribed: gm_curve_steps_f / gm_curve_next_f (pinned
-        to curve_terms by CurveTests), then the open tail."""
-        s = sum(min(max((g - start) / size, 0), 1) for start, size in curve_terms(f))
-        ends = [f * (2 ** n - 1) for n in range(1, 9)]
-        n = next((e for e in ends if g < e), ends[-1])
-        if g >= n:
-            n = 2 * n + f
-            while g >= n:
-                s += 1
-                n = 2 * n + f
-            s += (2 * g - n + f) / (n + f)
-        return s, n
+        """The effect, transcribed."""
+        s, width, nxt = 0, f, f
+        while g >= nxt:
+            s += 1
+            width += f
+            nxt += width
+        s += max((g - nxt + width) / width, 0)
+        return s, nxt, width
 
-    def test_steps_keep_doubling_past_the_curve(self):
+    def test_matches_the_fixed_curve(self):
+        """Inside the fixed curve's thirty steps the open form agrees with it."""
+        for g in range(0, 2326, 7):
+            fixed = sum(min(max((g - start) / size, 0), 1) for start, size in lin_curve_terms(5))
+            self.assertAlmostEqual(self.steps(g, 5)[0], fixed, msg=g)
+
+    def test_step_k_ends_at_k_triangle(self):
         f = 10
-        for k in range(1, 16):
-            start, end = f * (2 ** (k - 1) - 1), f * (2 ** k - 1)
-            s, n = self.steps(end)
+        for k in range(1, 60):
+            end = f * k * (k + 1) // 2
+            s, nxt, width = self.steps(end)
             self.assertAlmostEqual(s, k, msg=end)
-            self.assertEqual(n, 2 * end + f if k >= 8 else f * (2 ** (k + 1) - 1), end)
-            self.assertAlmostEqual(self.steps((start + end) / 2)[0], k - 0.5, msg=end)
-            self.assertAlmostEqual(self.steps(end - 1e-6)[0], k, places=4, msg=end)
+            self.assertEqual((nxt, width), (end + f * (k + 1), f * (k + 1)), end)
+            self.assertAlmostEqual(self.steps(end - f * k / 2)[0], k - 0.5, msg=end)
 
     def test_no_ceiling(self):
-        self.assertGreater(self.steps(10 ** 6)[0], 16)
+        self.assertGreater(self.steps(10 ** 6)[0], 400)
         prev = 0
         for g in range(0, 30000, 37):
-            s, _ = self.steps(g)
+            s = self.steps(g)[0]
             self.assertGreaterEqual(s, prev, g)
             prev = s
 
@@ -3508,12 +3545,12 @@ class PictureTests(unittest.TestCase):
     def test_frame_tier_follows_the_grandeur_steps(self):
         # Spec §3.5: the frame shows the step the monument's effects have
         # reached, on the state card's own step list.
+        # The local effects' 1/n curve (owner, 2026-10-19): its first five ends.
         values = read(VALUES)
-        steps = sorted(int(n) for n in re.findall(r"gm_state_grandeur < (\d+) \} value = \1",
-                                                  squash(block(values, "gm_state_disp_next_step"))))
-        self.assertEqual(steps[:5], [5, 15, 35, 75, 155])
+        steps = [start + size for start, size in lin_curve_terms(5, 5)]
+        self.assertEqual(steps, [5, 15, 30, 50, 75])
         expected = "value = 0 " + " ".join(f"if = {{ limit = {{ gm_state_grandeur >= {g} }} value = {i + 1} }}"
-                                          for i, g in enumerate(steps[:5]))
+                                          for i, g in enumerate(steps))
         self.assertEqual(squash(block(values, "gm_disp_frame_tier")), expected)
 
     def test_frames_draw_over_the_pictures(self):
@@ -4527,12 +4564,16 @@ class SecondaryFitTests(unittest.TestCase):
     def test_local_effects_by_dedication(self):
         monthly = squash(strip_comments(block(read(EFFECTS), "gm_state_monthly")))
         for d in DEDICATIONS:
-            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} }}", monthly, d.key)
+            cap = LOCAL_CAPS.get(d.key, ("gm_curve_lin_steps",))[0]
+            self.assertIn(f"gm_state_local_steps_one = {{ KEY = {d.key} CAP = {cap} }}", monthly, d.key)
         one = squash(strip_comments(block(read(EFFECTS), "gm_state_local_steps_one")))
+        # The 1/n curve, the policy, then the dedication's ceiling (owner,
+        # 2026-10-19): a cap on the effect, so it holds under every policy.
         for s in ("gm_state_has_pm = { PM = pm_monument_$KEY$ } } add = gm_state_primary_grandeur",
                   "every_in_list = { variable = gm_monuments_here limit = { gm_mon_is = { KEY = $KEY$ } } "
                   "add = gm_mon_grandeur }",
-                  "name = gm_local_steps_$KEY$ value = { value = gm_curve_steps_f5 multiply = gm_policy_factor_local }",
+                  "name = gm_local_steps_$KEY$ value = { value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local "
+                  "max = $CAP$ }",
                   "add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps_$KEY$ }"):
             self.assertIn(s, one)
 
@@ -5037,10 +5078,11 @@ class SignatureTableTests(unittest.TestCase):
     def test_antiquitys_cultural_pull(self):
         body = squash(block(read(CULTURAL), "cultural_pull_from_antiquity"))
         self.assertIn("value = var:gm_s_sig_antiquity multiply = gm_step_sig_antiquity", body)
-        self.assertTrue(body.endswith("max = gm_sig_antiquity_cap"))
-        self.assertRegex(strip_comments(read(SIG_VALUES)), r"(?m)^gm_sig_antiquity_cap = 3\s*$")
+        # No ceiling (owner, 2026-10-19): its monuments are a fixed list.
+        self.assertNotIn("max =", body)
+        self.assertNotIn("gm_sig_antiquity_cap", strip_comments(read(SIG_VALUES)))
         self.assertIn("add = cultural_pull_from_antiquity", squash(block(read(CULTURAL), "cultural_pull_from_monuments")))
-        self.assertTrue(squash(block(read(SIG_VALUES), "gm_display_sig_antiquity")).endswith("max = gm_sig_antiquity_cap"))
+        self.assertNotIn("max =", squash(block(read(SIG_VALUES), "gm_display_sig_antiquity")))
 
     def test_loc(self):
         L = loc()
@@ -5156,9 +5198,17 @@ class SignatureEffectTests(unittest.TestCase):
             self.assertIn(f"gm_state_sig_add_to_sum = {{ SIG = {k} }}", sums, k)
             self.assertIn(f"gm_mon_sig_add_to_sum = {{ SIG = {k} G = gm_tr_g }}", sums, k)
             self.assertIn(f"gm_mon_sig_add_to_sum = {{ SIG = {k} G = gm_tr_grandeur }}", sums, k)
-            self.assertIn(f"gm_sig_set_steps = {{ SIG = {k} }}", sums, k)
+            # Antiquity's cultural pull on the 1/n curve with no end, as the
+            # monuments' own pull; the rest on the doubling curve (owner,
+            # 2026-10-19).
+            call = "gm_sig_set_steps_lin_open" if k == "antiquity" else "gm_sig_set_steps"
+            self.assertIn(f"{call} = {{ SIG = {k} }}", sums, k)
         steps = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps"))
         self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }", steps)
+        lin = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
+        self.assertEqual(lin, "gm_set_steps_lin_open = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ "
+                              "NEXT = gm_n_sig_$SIG$ WIDTH = gm_w_sig_$SIG$ F = 5 } "
+                              "gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }")
         self.assertIn("gm_sig_compute_sums = yes", squash(block(read(EFFECTS), "gm_compute_totals")))
 
     def test_national_hooks_from_root(self):
@@ -5186,7 +5236,7 @@ class SignatureEffectTests(unittest.TestCase):
         for s_ in ("gm_state_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_signature }",
                    "add = gm_state_primary_grandeur", "variable = gm_monuments_here",
                    "gm_mon_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_tr_signature }",
-                   "multiply = gm_policy_factor_local",
+                   "value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local",
                    "add_modifier = { name = gm_local_sig_$SIG$ multiplier = var:gm_sig_local_steps_$SIG$ }"):
             self.assertIn(s_, one)
         self.assertNotIn("remove_variable", one, "zeroed, never removed")
