@@ -13,6 +13,7 @@
 ## Global Constraints
 
 - **Finished type** `building_grand_monument` (key kept, so old saves' buildings are already it): `buildable = no`, `expandable = no`, `downsizeable = no`, no `unlocking_technologies`, keeps `possible` (the game rule) and both PM groups; always level 1. Script creates `buildable = no` buildings (vanilla's Manila cathedral ruins, inventory D §4).
+- **The building group's per-level effects shrink** (my call, for the owner's check): `bg_grand_monuments` gives 10 urbanization and uses 1 infrastructure a level, so a level-1 finished monument gives one level's worth. Accepted; nothing restores them.
 - **Site type** `building_grand_monument_site` (not `…_construction_site`: `te_construction_market_site` exists): one per state, `required_construction = construction_cost_grand_monument` (1000), `expandable = yes`, `downsizeable = yes`, group `bg_grand_monuments`, no upkeep, no dedication effects, no grandeur counted anywhere.
 - **Records.** Primary, on the state: `gm_levels`, `gm_start_grandeur`, `gm_age`. Beside, on its container: `gm_tr_levels`, `gm_tr_start_grandeur`, `gm_tr_age`. Site, on the state: `gm_site_counted` (levels counted), `gm_site_grandeur` (starting grandeur so far). A missing start grandeur reads as the levels (old saves, trophies, digs).
 - **Plan A's rate is 1:** every counted level adds 1 starting grandeur.
