@@ -9,6 +9,7 @@ the tool makes — recognising a civil war that has ended, whichever side won, a
 reporting what the survivor did with the loser's variables. Laws add a second
 failure mode that looks like an answer: a law put in the wrong group, which the
 depth-aware law-file reader exists to prevent, hides or invents a conflict.
+States (#1061) have a database of their own, read with the countries' readers.
 
 Run: .venv/bin/python test_save_country_probe.py
 """
@@ -18,6 +19,7 @@ import struct
 import sys
 import tempfile
 import unittest
+import unittest.mock
 import zipfile
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -47,12 +49,18 @@ def string(text):
 def variable(name, value):
     """One entry of a country's variable block.
 
-    value: a number (script value), ('country', id), 'flag', or 0 (saved with no value).
+    value: a number (script value), ('country', id), 'flag', or 0 (saved with no value); and, worked out
+    2026-10-19, 'flag:x' (a flag value), True (a bool) and ('container' | 'state' | 'character', id).
     """
     if value == 'flag':
         wrapper = tok(scp.KEY_KIND) + EQ + tok(0x0500)
+    elif isinstance(value, str) and value.startswith('flag:'):
+        wrapper = tok(scp.KEY_KIND) + EQ + tok(scp.KIND_FLAG) + tok(scp.KIND_FLAG) + EQ + string(value[5:])
+    elif value is True:
+        wrapper = tok(scp.KEY_KIND) + EQ + tok(scp.KIND_BOOL) + tok(scp.KEY_VAL) + EQ + I64 + struct.pack('<q', 1)
     elif isinstance(value, tuple):
-        wrapper = tok(scp.KEY_KIND) + EQ + tok(scp.KIND_COUNTRY) + tok(scp.KEY_VAL) + EQ + I64 + struct.pack('<q', value[1])
+        kind = {v: k for k, v in scp.LIST_KINDS.items()}[value[0]]
+        wrapper = tok(scp.KEY_KIND) + EQ + tok(kind) + tok(scp.KEY_VAL) + EQ + I64 + struct.pack('<q', value[1])
     elif value == 0:
         wrapper = tok(scp.KEY_KIND) + EQ + tok(scp.KIND_VALUE)
     else:
@@ -80,17 +88,23 @@ def variable_list(name, kind, ids):
     return OPEN + tok(scp.KEY_LIST_NAME) + EQ + string(name) + items + tok(0x006D) + EQ + OPEN + I32 + struct.pack('<i', 1) + CLOSE + CLOSE
 
 
+def variable_block(variables=None, lists=None):
+    """A country's or a state's 0x0555 block, or nothing when it has neither."""
+    if not (variables or lists):
+        return b''
+    body = tok(scp.KEY_VARS) + EQ + OPEN
+    if variables:
+        body += tok(scp.KEY_DATA) + EQ + OPEN + b''.join(variable(k, v) for k, v in variables.items()) + CLOSE
+    if lists:
+        body += tok(scp.KEY_LIST) + EQ + OPEN + b''.join(variable_list(k, *v) for k, v in lists.items()) + CLOSE
+    return body + CLOSE
+
+
 def country(cid, tag, flags=(), variables=None, modifiers=(), lists=None):
     """lists: {name: (kind, [ids])}; they sit in the variable block beside the data, as in real saves."""
     body = b''.join(tok(f) + EQ + BOOL + bytes([1]) for f in flags)
     body += tok(scp.KEY_DEF) + EQ + string(tag)
-    if variables or lists:
-        body += tok(scp.KEY_VARS) + EQ + OPEN
-        if variables:
-            body += tok(scp.KEY_DATA) + EQ + OPEN + b''.join(variable(k, v) for k, v in variables.items()) + CLOSE
-        if lists:
-            body += tok(scp.KEY_LIST) + EQ + OPEN + b''.join(variable_list(k, *v) for k, v in lists.items()) + CLOSE
-        body += CLOSE
+    body += variable_block(variables, lists)
     if modifiers:
         body += modifier_block(modifiers)
     return U32 + struct.pack('<I', cid) + EQ + OPEN + body + CLOSE
@@ -104,6 +118,26 @@ def modifier_block(modifiers):
         for i, m in enumerate(modifiers)
     )
     return tok(scp.KEY_MODS) + EQ + OPEN + tok(scp.KEY_MODLIST) + EQ + OPEN + entries + CLOSE + CLOSE
+
+
+def state(sid, region, owner, variables=None, modifiers=(), lists=None):
+    """One state record, its keys in a 1.14.5 save's order: 0x27f3 first, the owner, variables, region, modifiers."""
+    body = tok(scp.KEY_STATE_FIRST) + EQ + I32 + struct.pack('<i', 18924)
+    body += tok(scp.KEY_OWNER) + EQ + U32 + struct.pack('<I', owner)
+    body += tok(0x52BC) + EQ + I32 + struct.pack('<i', 236)  # undecoded, as in real saves
+    body += variable_block(variables, lists)
+    body += tok(scp.KEY_REGION) + EQ + string(region)
+    if modifiers:
+        body += modifier_block(modifiers)
+    return U32 + struct.pack('<I', sid) + EQ + OPEN + body + CLOSE
+
+
+def state_db(*states):
+    """The state database; a free slot sits among the records and two undecoded keys follow it, as in real saves."""
+    free = U32 + struct.pack('<I', 998) + EQ + tok(0x0165)
+    body = states[0] + free + b''.join(states[1:]) if states else free
+    tail = tok(0x3360) + EQ + OPEN + OPEN + I32 + struct.pack('<i', 133) + CLOSE + CLOSE
+    return tok(scp.KEY_STATE_DB) + EQ + OPEN + tok(scp.KEY_DATABASE) + EQ + OPEN + body + CLOSE + tail + CLOSE
 
 
 def record(rid, type_name, owner, active=None, modifiers=()):
@@ -146,11 +180,14 @@ def hours(year, month, day):
     return days * 24
 
 
-def write_save(countries, records=(), date=(2003, 11, 18)):
+def write_save(countries, records=(), date=(2003, 11, 18), meta=True):
+    """meta=False writes an autosave: no meta entry, the date at the head of the gamestate instead."""
     buf = io.BytesIO()
+    stamp = b'\x45\x32' + EQ + I32 + struct.pack('<i', hours(*date))
     with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr('gamestate', b''.join(countries) + b''.join(records))
-        archive.writestr('meta', b'\x45\x32' + EQ + I32 + struct.pack('<i', hours(*date)))
+        archive.writestr('gamestate', (b'' if meta else stamp) + b''.join(countries) + b''.join(records))
+        if meta:
+            archive.writestr('meta', stamp)
     handle = tempfile.NamedTemporaryFile(suffix='.v3', delete=False)
     handle.write(b'SAV01030deadbeef00005ba\n' + buf.getvalue())
     handle.close()
@@ -279,6 +316,131 @@ class VariableListTests(unittest.TestCase):
         with redirect_stdout(out):
             scp.diff(self.path, other, scp.Filters(tags=['GER']))
         self.assertIn('te_tax_en_relief_states', out.getvalue())
+
+
+class StateTests(unittest.TestCase):
+    """--states (#1061): the state database, worked out 2026-10-19 on a 1.14.5 save of 758 states."""
+
+    PARIS = state(456, 'STATE_ILE_DE_FRANCE', 4, modifiers=['gm_local_tourism', 'tourism_output'], variables={
+        'gm_levels': 3400,
+        'gm_form': 'flag:gardens',
+        'gm_seen': True,
+        'gm_shadow': ('container', 77),
+        'gm_name_char': ('character', 5),
+        'gm_holder': ('country', 4),
+        'te_dg_scale': 1,
+    }, lists={'gm_monuments_here': ('container', [1, 2])})
+
+    def setUp(self):
+        self.countries = [country(4, 'EUN'), country(9, 'TUR')]
+        self.path = self.write([
+            self.PARIS,
+            state(847, 'STATE_ANKARA', 4, variables={'gm_premigration': True}),
+            state(12, 'STATE_ANKARA', 9, variables={'te_dg_scale': 2}),
+            state(13, 'STATE_SMYRNA', 9),
+        ])
+
+    def write(self, states, extra=(), **kw):
+        path = write_save(self.countries, records=[*extra, state_db(*states)] if states is not None else extra, **kw)
+        self.addCleanup(Path(path).unlink)
+        return path
+
+    def select(self, path=None, **filters):
+        return scp.StateSave(path or self.path, scp.StateFilters(**filters)).select()
+
+    def run_main(self, *argv):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            code = scp.main(list(argv))
+        return code, out.getvalue()
+
+    def test_records_decode(self):
+        save = scp.StateSave(self.path, scp.StateFilters())
+        self.assertIsNone(save.warning)
+        recs = save.select()
+        self.assertEqual(set(recs), {456, 847, 12, 13}, 'the free slot is skipped')
+        paris = recs[456]
+        self.assertEqual((paris['region'], paris['owner'], paris['tag']), ('STATE_ILE_DE_FRANCE', 4, 'EUN'))
+        self.assertIsNone(paris['warning'], 'a record ends where the next begins')
+        self.assertEqual(paris['vars'], {
+            'gm_levels': 3400.0,
+            'gm_form': 'flag:gardens',
+            'gm_seen': 'yes',
+            'gm_shadow': 'container#77',
+            'gm_name_char': 'character#5',
+            'gm_holder': ('country', 4),
+            'te_dg_scale': 1.0,
+        })
+        self.assertEqual(paris['lists'], {'gm_monuments_here': ['container#1', 'container#2']})
+        self.assertEqual(paris['modifiers'], ['gm_local_tourism', 'tourism_output'])
+        self.assertEqual(recs[13]['vars'], {}, 'a state with no variable block')
+
+    def test_owner_state_and_var_filters(self):
+        self.assertEqual(set(self.select(owners=['TUR'])), {12, 13})
+        self.assertEqual(set(self.select(states=['ankara'])), {847, 12}, 'a region split between owners')
+        self.assertEqual(set(self.select(states=['456', 'STATE_SMYRNA'])), {456, 13})
+        self.assertEqual(set(self.select(owners=['TUR'], states=['STATE_ANKARA'])), {12}, 'filters combine')
+        recs = self.select(var='^gm_(levels|premigration)$')
+        self.assertEqual(set(recs), {456, 847})
+        self.assertEqual(recs[456]['vars'], {'gm_levels': 3400.0})
+        self.assertEqual(set(self.select(modifier='^tourism_')), {456})
+
+    def test_report(self):
+        code, text = self.run_main(self.path, '--state', '456', '--var', '^gm_(form|holder)$')
+        self.assertEqual(code, 0)
+        self.assertIn('[2003.11.18]  4 state records, 1 shown', text)
+        self.assertIn('state#456 STATE_ILE_DE_FRANCE, owner country#4(EUN)', text)
+        self.assertIn('gm_form = flag:gardens', text)
+        self.assertIn('gm_holder = country#4(EUN)', text)
+        self.assertNotIn('modifiers', text, '--var prints the variables part only')
+
+    def test_states_refuse_country_filters(self):
+        with redirect_stdout(io.StringIO()), self.assertRaises(SystemExit), \
+                unittest.mock.patch('sys.stderr', io.StringIO()):
+            scp.main([self.path, '--states', '--tag', 'TUR'])
+
+    def test_diff(self):
+        after = self.write([
+            state(456, 'STATE_ILE_DE_FRANCE', 4, modifiers=['gm_local_tourism'], variables={
+                'gm_levels': 3400, 'gm_form': 'flag:temple', 'gm_seen': True, 'gm_migrated': True,
+            }, lists={'gm_monuments_here': ('container', [1])}),
+            state(847, 'STATE_ANKARA', 9, variables={'gm_premigration': True}),
+            state(12, 'STATE_ANKARA', 9, variables={'te_dg_scale': 3}),
+            state(14, 'STATE_IZMIR', 9, variables={'gm_seen': True}),
+        ], date=(2003, 12, 1))
+        code, text = self.run_main('--diff', self.path, after, '--states', '--var', '^gm_')
+        self.assertEqual(code, 0)
+        self.assertIn('[2003.12.1]', text)
+        self.assertIn('gm_migrated: - -> yes', text)
+        self.assertIn('gm_form: flag:gardens -> flag:temple', text, 'a flag value that changed is a change')
+        self.assertIn('list gm_monuments_here: container#1 container#2 -> container#1', text)
+        self.assertIn('owner: country#4(EUN) -> country#9(TUR)', text)
+        self.assertIn('== state#14 STATE_IZMIR, owner country#9(TUR)\n   new:', text)
+        self.assertNotIn('te_dg_scale', text, 'state 12 holds no gm_ variable in either save')
+        self.assertNotIn('modifier', text, '--var compares variables only: Paris lost tourism_output')
+        self.assertIn('3 states compared, 3 changed', text)
+        code, text = self.run_main('--diff', self.path, after, '--state', '13', '--state', '456')
+        self.assertIn('== state#13 STATE_SMYRNA, owner country#9(TUR)\n   gone', text)
+        self.assertIn('-modifier tourism_output', text, 'with no --var or --modifier every part is compared')
+
+    def test_no_state_database_is_a_warning(self):
+        save = scp.StateSave(self.write(None), scp.StateFilters())
+        self.assertEqual(save.extent, {})
+        self.assertIn('no state database', save.warning)
+
+    def test_a_state_shaped_record_outside_the_database_is_a_warning(self):
+        before = scp.StateSave(self.write([self.PARIS], extra=[state(99, 'STATE_STRAY', 4)]), scp.StateFilters())
+        self.assertIn('1 state-shaped records before the database', before.warning)
+        self.assertEqual(set(before.extent), {456})
+        path = write_save(self.countries, records=[state_db(self.PARIS), state(98, 'STATE_STRAY', 4)])
+        self.addCleanup(Path(path).unlink)
+        self.assertIn("not followed by the database's closing brace", scp.StateSave(path, scp.StateFilters()).warning)
+
+    def test_an_autosave_takes_its_date_from_the_gamestate(self):
+        path = self.write([self.PARIS], meta=False, date=(2055, 2, 1))
+        self.assertEqual(scp.save_date(path), '?', 'no meta, no gamestate given')
+        self.assertEqual(scp.save_date(path, scp.read_gamestate(path)), '2055.2.1')
+        self.assertIn('[2055.2.1]', self.run_main(path, '--state', '456')[1])
 
 
 class JournalNameTests(unittest.TestCase):
