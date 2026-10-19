@@ -163,6 +163,7 @@ def _with_groups(block, desired):
 
 def plan_outputs(state, root):
     catalog, attachments, exceptions = capture_catalog(state)
+    source_groups = state.mod_parsers["PM Groups"].data
     parser = emissions.ParadoxFileParser()
     parser.parse_file(str(root / emissions.FACTORS))
     factors = {fuel: Decimal(u(parser.data[f"gw_emission_factor_{fuel}"])) for fuel in ("coal", "oil")}
@@ -185,8 +186,14 @@ def plan_outputs(state, root):
                 label = "$" + attached[0] + "$"
         loc.append(f' {group}:0 "Carbon Capture ({label})"')
         loc.append(f' {none}:0 "No Carbon Capture"')
-        methods.extend([f"{none} = {{", '\ttexture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"',
-                        f"\tdisallowing_laws = {{ {MANDATE} }}", "}", ""])
+        methods.extend([f"{none} = {{", '\ttexture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"'])
+        if exempt:
+            # Not-applicable unlocks on the exempt source methods; gate the
+            # default on the rest so the group never offers both.
+            eligible = [pm for pm in u(u(source_groups[source])["production_methods"]) if pm not in exempt]
+            methods.extend(["\tis_hidden_when_unavailable = yes",
+                            "\tunlocking_production_methods = { " + " ".join(eligible) + " }"])
+        methods.extend([f"\tdisallowing_laws = {{ {MANDATE} }}", "}", ""])
         if exempt:
             na = "pm_carbon_capture_na_" + token
             names.append(na)
