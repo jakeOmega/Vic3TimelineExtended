@@ -63,8 +63,8 @@ gm_state_primary_levels = {
 }
 
 # State scope. The primary's starting grandeur (sites spec 2026-10-18 §3.2):
-# its record, else its levels (an older save's monument, a trophy home, a
-# dig: the 1836 rate); 0 with no building.
+# its record, else its levels, one a level (an older save's monument, which
+# was counted so); 0 with no building.
 gm_state_primary_start = {
 	value = gm_state_primary_levels
 	if = {
@@ -87,7 +87,8 @@ gm_mon_age = {
 	}
 }
 
-# Container scope. Its starting grandeur: the record, else its levels.
+# Container scope. Its starting grandeur: the record, else its levels, one a
+# level (an older save's container, which was counted so).
 gm_mon_start = {
 	value = gm_mon_levels
 	if = {

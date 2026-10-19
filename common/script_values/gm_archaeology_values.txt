@@ -72,6 +72,12 @@ gm_arch_disp_levels = {
 	}
 }
 
+# The grandeur they will count for: the 1836 rate (gm_arch_place).
+gm_arch_disp_grandeur = {
+	value = gm_arch_disp_levels
+	multiply = gm_level_grandeur_1836
+}
+
 # ---- Methods: time ----------------------------------------------------------------------
 # Progress a month, in percent of the dig, for a site of 10 levels (25, 40 and
 # 29 months). A site's own rate is this times its size factor
@@ -186,10 +192,11 @@ gm_arch_partage_levels = {
 	min = 1
 }
 
-# What a partage trophy counts for abroad: half its levels, rounded up, as
-# every trophy does (gm_state_tr_value).
+# What a partage trophy counts for abroad: half its grandeur, its levels at the
+# 1836 rate, rounded up, as every trophy does (gm_state_tr_value).
 gm_arch_partage_grandeur = {
 	value = gm_arch_partage_levels
+	multiply = gm_level_grandeur_1836
 	divide = 2
 	ceiling = yes
 }

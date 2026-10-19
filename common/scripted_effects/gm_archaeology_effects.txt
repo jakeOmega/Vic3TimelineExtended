@@ -605,7 +605,13 @@ gm_arch_partage = {
 			set_variable = { name = gm_tr_site_region value = scope:gm_arch_partage_home.state_region }
 			set_variable = { name = gm_tr_levels value = scope:gm_arch_partage_site.var:gm_site_piece }
 			# A find counts at the 1836 rate (sites spec 2026-10-18 §3.6).
-			set_variable = { name = gm_tr_start_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece }
+			set_variable = {
+				name = gm_tr_start_grandeur
+				value = {
+					value = scope:gm_arch_partage_site.var:gm_site_piece
+					multiply = gm_level_grandeur_1836
+				}
+			}
 			set_variable = { name = gm_tr_grandeur value = scope:gm_arch_partage_site.var:gm_site_piece_grandeur }
 			# A taken piece carries its share of the monument's years (ageing
 			# spec 2026-10-16 §5); a site just unearthed has none.
@@ -648,6 +654,15 @@ gm_arch_place = {
 	set_variable = { name = gm_tr_site value = scope:gm_arch_dig_state }
 	set_variable = { name = gm_tr_site_region value = var:gm_tr_origin_region }
 	set_variable = { name = gm_tr_year value = gm_this_year }
+	# Its levels count at the 1836 rate (sites spec 2026-10-18 §3.6): what the
+	# method and any partage left of them, once settled.
+	set_variable = {
+		name = gm_tr_start_grandeur
+		value = {
+			value = var:gm_tr_levels
+			multiply = gm_level_grandeur_1836
+		}
+	}
 	# Its unique dedication (signatures spec §4.4), so the monument it becomes
 	# has it from the day it stands.
 	gm_tr_sig_backfill = yes

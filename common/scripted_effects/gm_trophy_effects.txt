@@ -1269,10 +1269,21 @@ gm_seed_trophy = {
 				set_variable = { name = gm_tr_site value = scope:gm_tr_site_state }
 				set_variable = { name = gm_tr_site_region value = scope:gm_tr_site_state.state_region }
 				set_variable = { name = gm_tr_levels value = $LEVELS$ }
+				# The 1836 rate, as the landmarks are seeded at
+				# (gm_seed_landmark); abroad, half of it, rounded up
+				# (gm_state_tr_value).
+				set_variable = {
+					name = gm_tr_start_grandeur
+					value = {
+						value = $LEVELS$
+						multiply = gm_level_grandeur_1836
+					}
+				}
 				set_variable = {
 					name = gm_tr_grandeur
 					value = {
 						value = $LEVELS$
+						multiply = gm_level_grandeur_1836
 						divide = 2
 						ceiling = yes
 					}
