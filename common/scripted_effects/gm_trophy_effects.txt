@@ -538,40 +538,6 @@ gm_state_add_start_from_moving = {
 	}
 }
 
-# State scope (scope:gm_tr_moving the trophy or monument). The standing building
-# takes the levels: removed and built again, the ladder's only way to add
-# levels (gm_state_gift_grandeur). The primary's method is recorded first,
-# Undedicated too, so the rebuilt building gets it back (gm_restore_pm) and
-# whatever else stands here keeps its place in the level (the building's
-# whole, plus these). Not while a ceremony asks: its answer sets the method,
-# and a recorded copy would be put back over it.
-gm_state_tr_add_levels = {
-	if = {
-		limit = {
-			NOT = { has_variable = gm_restore_pm }
-			NOT = { has_variable = gm_ceremony_pending }
-		}
-		gm_state_mark_restore_pm = yes
-	}
-	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-	set_variable = {
-		name = gm_rebuild_level
-		value = {
-			value = gm_state_level
-			add = scope:gm_tr_moving.var:gm_tr_levels
-			max = 200
-		}
-	}
-	set_variable = { name = gm_rebuilding days = 1 }
-	remove_building = building_grand_monument
-	te_construction_market_build_specified_level = {
-		SPEC_TYPE = building_grand_monument
-		SPEC_LEVEL = var:gm_rebuild_level
-	}
-	set_variable = { name = gm_rebuild_asked value = var:gm_rebuild_level }
-	remove_variable = gm_rebuild_level
-}
-
 # State scope (scope:gm_tr_moving the trophy or monument to stand as this
 # state's primary monument). Its records become the state's (sites spec
 # 2026-10-18 §3.3: the size is the records, no rebuild): the building that
@@ -626,9 +592,11 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_signature TO = gm_signature }
 	gm_tr_copy_to_state = { FROM = gm_tr_sig_parent TO = gm_sig_parent }
-	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1).
+	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1), and
+	# never an older save's monument to migrate (sites spec 2026-10-18 §3.5).
 	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
 	set_variable = gm_seen
+	set_variable = gm_migrated
 	if = {
 		limit = { scope:gm_tr_moving = { has_variable = gm_tr_ceremony_level } }
 		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_ceremony_level }

@@ -93,16 +93,6 @@ monument_events.1 = {
 						limit = { gm_state_merge_pending = yes }
 						gm_state_adopt_orphans = yes
 					}
-					if = {
-						limit = { gm_state_merge_pending = no }
-						# A revolt's piece whose monument merged into its state
-						# is the monument itself: the merge's levels are its own
-						# (gm_monument_effects.txt § "A revolt's split piece").
-						if = {
-							limit = { gm_state_piece_whole_gone = yes }
-							gm_state_piece_takes_whole = yes
-						}
-					}
 					# The monument an opportunity completed by this level names
 					# (opportunities spec §3).
 					owner = { set_variable = { name = gm_com_last_state value = prev } }
@@ -1690,13 +1680,10 @@ monument_events.26 = {
 # Hidden plumbing, a state event from the refresh (gm_country_refresh), which
 # tooltips walk without writing, and from the state pulse: a finished
 # monument's lost building put back (gm_state_put_back_building, sites spec
-# 2026-10-18 §3.7), and a newcomer that has settled gives the state's first
-# place back to a grander monument beside it (gm_state_settle_newcomer). Each
-# reads back what it writes. A merge's
-# monuments are adopted first (issue #936), so their levels found nothing, and
-# a revolt's split piece is settled next (owner's call 2026-10-17): it takes
-# its monument's identity at first sight, and after the merge back rejoins it
-# or stands as the monument itself.
+# 2026-10-18 §3.7), a merge's monuments adopted (issue #936), a revolt's stray
+# copy of a building removed, and a newcomer that has settled gives the
+# state's first place back to a grander monument beside it
+# (gm_state_settle_newcomer). Each reads back what it writes.
 monument_events.29 = {
 	type = state_event
 	hidden = yes
@@ -1718,29 +1705,17 @@ monument_events.29 = {
 			limit = { gm_state_merge_pending = yes }
 			gm_state_adopt_orphans = yes
 		}
-		if = {
-			limit = { gm_state_merge_pending = no }
-			# A revolt's split piece (gm_monument_effects.txt § "A revolt's
-			# split piece"): at first sight it takes its monument's identity;
-			# once a merge has made the two one state again, the piece's levels
-			# rejoin the monument, or the piece is the monument itself. Before
-			# new levels are read: a merge's levels found nothing beside.
-			if = {
-				limit = { gm_state_split_pending = yes }
-				gm_state_take_split_identity = yes
-			}
-			else_if = {
-				limit = { gm_state_split_piece_gone = yes }
-				gm_state_split_piece_home = yes
-			}
-			else_if = {
-				limit = { gm_state_piece_whole_gone = yes }
-				gm_state_piece_takes_whole = yes
-			}
-			else_if = {
-				limit = { gm_state_newcomer_settled = yes }
-				gm_state_settle_newcomer = yes
-			}
+		# A revolt's stray copy of a monument's building (gm_state_stray_building):
+		# the monument stays whole with the part that keeps its records.
+		else_if = {
+			limit = { gm_state_stray_building = yes }
+			set_variable = { name = gm_rebuilding days = 1 }
+			remove_building = building_grand_monument
+			debug_log = "TE_MONUMENTS: a Grand Monument building no record describes, with no monument of its region to take it (a revolt's part of a monument's state), is removed"
+		}
+		else_if = {
+			limit = { gm_state_newcomer_settled = yes }
+			gm_state_settle_newcomer = yes
 		}
 	}
 }

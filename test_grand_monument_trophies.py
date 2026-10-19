@@ -275,10 +275,9 @@ class TakingTests(unittest.TestCase):
             self.assertIn(f"gm_tr_record_dedication_one = {{ KEY = {d.key} }}", record, d.key)
 
     def test_a_trophy_comes_home_whole_and_never_as_a_copy(self):
-        # A standing building takes the levels; none is built again with the
-        # trophy's records (gm_state_tr_receive picks).
-        add = squash(block(read(TR_EFFECTS), "gm_state_tr_add_levels"))
-        self.assertIn("add = scope:gm_tr_moving.var:gm_tr_levels max = 200", add)
+        # A standing monument takes the levels into its records; none is
+        # built again with the trophy's (gm_state_tr_receive picks).
+        self.assertIsNone(block(read(TR_EFFECTS), "gm_state_tr_add_levels"))
         rebuilt = (squash(block(read(TR_EFFECTS), "gm_state_tr_rebuild_from_moving")) + " "
                        + squash(block(read(TR_EFFECTS), "gm_state_tr_take_records_from_moving")))
         self.assertIn("gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }", rebuilt)

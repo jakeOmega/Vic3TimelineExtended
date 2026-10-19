@@ -528,14 +528,31 @@ gm_state_lost_building = {
 }
 
 # State scope. An older save's finished monument, from before construction
-# sites (sites spec 2026-10-18 §3.5): monument_events.32 records it and resets
-# its building, or makes it a site. Every finished building script makes now
-# is marked gm_migrated. Not while script made or removed one today, puts a
+# sites (sites spec 2026-10-18 §3.5), marked on the save's first monthly pass
+# (gm_premigration, gm_monument_monthly): monument_events.32 records it and
+# resets its building, or makes it a site. Every finished building script
+# makes now is marked gm_migrated. Not while script made or removed one today, puts a
 # method back, or a ceremony asks.
 gm_state_needs_migration = {
 	has_building = building_grand_monument
+	has_variable = gm_premigration
 	NOT = { has_variable = gm_migrated }
 	NOT = { has_variable = gm_rebuilding }
 	NOT = { has_variable = gm_restore_pm }
 	NOT = { has_variable = gm_ceremony_pending }
+}
+
+# State scope. A finished building no record describes, from no older save and
+# made by no script (gm_migrated, gm_premigration), with no orphan in its
+# region to take it: the engine's copy in a revolt's part of a monument's
+# state. The monument stays whole with the part that keeps its records (owner,
+# 2026-10-18; sites spec §3.7), so monument_events.29 removes it. Only once
+# the save's first pass has marked an older save's monuments.
+gm_state_stray_building = {
+	has_global_variable = gm_sites_marked
+	has_building = building_grand_monument
+	NOT = { has_variable = gm_migrated }
+	NOT = { has_variable = gm_premigration }
+	NOT = { has_variable = gm_rebuilding }
+	gm_state_orphan_in_region = no
 }

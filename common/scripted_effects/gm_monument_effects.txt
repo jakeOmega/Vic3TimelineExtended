@@ -26,6 +26,24 @@
 # No scope. Repair each secondary's state, then the lists. Nothing to do in a
 # game none has touched: gm_mon_lists_written stands while any list does.
 gm_monument_monthly = {
+	# An older save's finished monuments, marked once before any is migrated
+	# (sites spec 2026-10-18 §3.5): gm_state_needs_migration reads the mark, and
+	# a finished building with neither it nor gm_migrated is a stray
+	# (gm_state_stray_building).
+	if = {
+		limit = {
+			gm_system_enabled = yes
+			NOT = { has_global_variable = gm_sites_marked }
+		}
+		set_global_variable = gm_sites_marked
+		every_state = {
+			limit = {
+				has_building = building_grand_monument
+				NOT = { has_variable = gm_migrated }
+			}
+			set_variable = gm_premigration
+		}
+	}
 	# Old saves' held specials, once a round (signatures spec §5.6).
 	if = {
 		limit = { gm_system_enabled = yes }
@@ -879,10 +897,8 @@ gm_tr_rejoin_secondary = {
 
 # Container scope, the returning trophy (scope:gm_tr_moving). It stands in its
 # origin as a monument beside the one there, and keeps everything it was: its
-# name, form, landmark, picture and dedication. Its levels go on the building,
-# which records the primary's dedication to put back first
-# (gm_state_tr_add_levels), then it joins the state's list at once, so no
-# reader sees the building taller than its primary and secondaries.
+# name, form, landmark, picture and dedication, its levels in its records
+# (sites spec 2026-10-18 §3.3), and it joins the state's list at once.
 # It is the same container, retagged (add_tag / remove_tag are the status
 # marks, scripting_best_practices.md) and moved from gm_trophies to
 # gm_monuments: the trophy names, parts and pictures read its gm_tr_* records.
@@ -1165,30 +1181,26 @@ gm_seed_landmark_beside = {
 	}
 }
 
-# ---- A merged state (issue #936; ageing spec 2026-10-16 §9) ------------------------
+# ---- A merged state (issue #936; sites spec 2026-10-18 §3.7) ------------------------
 # A state is a (region, owner) pair: when one country comes to hold two parts
 # of a state region the engine merges them, and the part absorbed takes its
-# variables with it, where a primary monument's records live (its skin, form,
-# landmark, name, raiser, age, contest). Its building may come along, levels
-# and all (unread: docs/testing/grand-monuments-ageing-playtest.md).
-# So each month the pass keeps a SHADOW of every recorded primary: a parentless
-# container tagged gm_shadow, in the global list gm_shadows, linked from its
-# state (gm_shadow) and back (gm_tr_origin, gm_tr_origin_region), with the
-# records a demotion copies (CONTAINER_RECORDS in
-# test_grand_monument_registry.py) and its levels (gm_tr_levels). A shadow
-# whose state is gone is an ORPHAN, and the state that now holds its region's
-# ground adopts it (gm_state_adopt_orphans): a building no record describes
-# takes it as its own monument, a recorded one whose building holds levels
-# its records don't account for takes it beside its own, a monument that
-# lacked levels when last seen (a revolt split its state, and the orphan is
-# its piece coming home: gm_sh_rejoin, found 2026-10-17) takes back its
-# levels, and with none of these it is lost. Each shadow notes what its
-# building lacks of its records (gm_sh_short). That runs before anything
-# reads the building's levels as new ones:
-# monument_events.1, .29, the refresh and gm_state_changed_hands ask
-# gm_state_merge_pending first. A shadow is written only by the pass and a
-# raise; the refresh, which tooltips walk, only asks the hidden event.
-# No timed variable on a shadow (container_timed_variable_audit).
+# variables with it, where a primary monument's records live (its size, skin,
+# form, landmark, name, raiser, age, contest). So each month the pass keeps a
+# SHADOW of every recorded primary: a parentless container tagged gm_shadow,
+# in the global list gm_shadows, linked from its state (gm_shadow) and back
+# (gm_tr_origin, gm_tr_origin_region), with the records a demotion copies
+# (CONTAINER_RECORDS in test_grand_monument_registry.py), its levels
+# (gm_tr_levels) and its owner (gm_sh_owner). A shadow whose state is gone is
+# an ORPHAN, and the part of its region its last owner holds adopts it from
+# the records alone (gm_sh_settle_one): onto a finished building there no
+# record describes, beside the monument there, or as the monument there,
+# raised into a new building, if none stands; with no such part, it is lost.
+# The finished building left standing is put back to level 1. That runs
+# before anything reads the building: monument_events.1, .29, the refresh and
+# gm_state_changed_hands ask gm_state_merge_pending first. A shadow is written
+# only by the pass and a raise; the refresh, which tooltips walk, only asks
+# the hidden event. No timed variable on a shadow
+# (container_timed_variable_audit).
 
 # No scope, from gm_monument_monthly. Orphans first, then stale shadows, then
 # every recorded primary's shadow written afresh.
@@ -1237,12 +1249,6 @@ gm_shadow_monthly = {
 						NOT = { var:gm_shadow ?= scope:gm_tmp_sh }
 					}
 				}
-				# Not a monument's shadow its revolt's piece is to take, nor a
-				# piece's its monument is to take back: after the merge the
-				# engine may still point the merged state's record somewhere
-				# (§ "A revolt's split piece").
-				NOT = { var:gm_tr_split_piece ?= { has_variable = gm_piece_of } }
-				NOT = { var:gm_tr_piece_of ?= { has_variable = gm_split_piece } }
 			}
 			add_to_temporary_list = gm_sh_stale
 		}
@@ -1259,7 +1265,7 @@ gm_shadow_monthly = {
 
 # State scope, from gm_shadow_monthly and gm_state_raise_orphan. A recorded
 # primary's shadow, made once and refreshed in place. Not while its method is
-# being put back, a ceremony asks or a rebuild is under way, when its
+# being put back, a ceremony asks or script made its building today, when its
 # dedication may read as the engine's copy: last month's stands meanwhile.
 gm_state_write_shadow = {
 	if = {
@@ -1296,33 +1302,14 @@ gm_state_write_shadow = {
 		}
 		if = {
 			limit = { exists = scope:gm_sh_new }
-			set_variable = { name = gm_sh_levels value = gm_state_shadow_levels }
-			set_variable = { name = gm_sh_short_now value = gm_state_levels_short }
+			set_variable = { name = gm_sh_levels value = gm_state_primary_levels }
 			scope:gm_sh_new = {
-				# What its building lacks of its records: a revolt's split took
-				# them, and a piece that comes home finds them missing here. The
-				# passes that have seen it short: a split's piece is recognized
-				# only while the shortfall is new (gm_state_split_whole).
-				if = {
-					limit = { scope:gm_tr_state.var:gm_sh_short_now >= 1 }
-					set_variable = { name = gm_sh_short value = scope:gm_tr_state.var:gm_sh_short_now }
-					if = {
-						limit = { has_variable = gm_sh_short_passes }
-						change_variable = { name = gm_sh_short_passes add = 1 }
-					}
-					else = {
-						set_variable = { name = gm_sh_short_passes value = 1 }
-					}
-				}
-				else = {
-					gm_remove_state_var = { VAR = gm_sh_short }
-					gm_remove_state_var = { VAR = gm_sh_short_passes }
-				}
 				set_variable = { name = gm_tr_origin value = scope:gm_tr_state }
 				set_variable = { name = gm_tr_origin_region value = scope:gm_tr_state.state_region }
 				set_variable = { name = gm_tr_site value = scope:gm_tr_state }
 				set_variable = { name = gm_tr_site_region value = scope:gm_tr_state.state_region }
 				set_variable = { name = gm_tr_levels value = scope:gm_tr_state.var:gm_sh_levels }
+				set_variable = { name = gm_sh_owner value = scope:gm_tr_state.owner }
 				set_variable = { name = gm_tr_share value = flag:whole }
 				gm_tr_record_dedication = yes
 				gm_sh_mirror = { FROM = gm_skin TO = gm_tr_skin }
@@ -1349,15 +1336,9 @@ gm_state_write_shadow = {
 				gm_sh_mirror = { FROM = gm_signature TO = gm_tr_signature }
 				gm_sh_mirror = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
 				gm_sh_mirror = { FROM = gm_picture_code TO = gm_tr_picture_code }
-				# A revolt's piece and its monument know each other (§ "A
-				# revolt's split piece"): whichever part's state the merge
-				# takes, the other finds it from the shadow left behind.
-				gm_sh_mirror = { FROM = gm_piece_of TO = gm_tr_piece_of }
-				gm_sh_mirror = { FROM = gm_split_piece TO = gm_tr_split_piece }
 				set_variable = gm_tr_seen
 			}
 			remove_variable = gm_sh_levels
-			remove_variable = gm_sh_short_now
 		}
 	}
 }
@@ -1410,8 +1391,8 @@ gm_state_drop_shadow = {
 
 # State scope, real execution only: monument_events.1, .29 and .31, and
 # gm_state_changed_hands. Adopt every orphan of this state's region. With a
-# building in the region rebuilt today (it may not read back yet: one rebuild
-# a state a day), it waits a day.
+# building in the region made or removed today (it may not read back yet), it
+# waits a day.
 gm_state_adopt_orphans = {
 	clear_saved_scope = gm_sh_region
 	state_region = { save_scope_as = gm_sh_region }
@@ -1422,8 +1403,8 @@ gm_state_adopt_orphans = {
 		trigger_event = { id = monument_events.31 days = 1 }
 	}
 	else = {
-		# The monuments that stood beside it come first: their levels are in the
-		# building too, and the lists must name them before a level is counted.
+		# The monuments that stood beside it come first: the lists must name
+		# them before an orphan is settled.
 		if = {
 			limit = {
 				has_global_variable_list = gm_monuments
@@ -1447,7 +1428,7 @@ gm_state_adopt_orphans = {
 					gm_sh_orphan_of = { REGION = scope:gm_sh_region }
 				}
 			}
-			# The pass may have promoted one onto a building that was lost: a rebuild.
+			# The pass may have made a building for one promoted onto a lost one.
 			if = {
 				limit = {
 					scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
@@ -1461,19 +1442,17 @@ gm_state_adopt_orphans = {
 	}
 }
 
-# State scope (scope:gm_sh_region saved), from gm_state_adopt_orphans.
+# State scope (scope:gm_sh_region saved), from gm_state_adopt_orphans. Each
+# orphan of the region, landmarks first (the issue's rule: a landmark's
+# identity wins), then the finished buildings left standing back at level 1.
 gm_sh_settle_region = {
-	# A building that no record describes came with the merge: each orphan,
-	# landmarks first (the issue's rule: a landmark's identity wins), takes the
-	# one in its region that holds the most levels unaccounted for as its own
-	# monument, while one is unclaimed.
 	every_in_global_list = {
 		variable = gm_shadows
 		limit = {
 			gm_sh_orphan_of = { REGION = scope:gm_sh_region }
 			has_variable = gm_tr_landmark
 		}
-		add_to_temporary_list = gm_sh_raising
+		add_to_temporary_list = gm_sh_left
 	}
 	every_in_global_list = {
 		variable = gm_shadows
@@ -1481,119 +1460,81 @@ gm_sh_settle_region = {
 			gm_sh_orphan_of = { REGION = scope:gm_sh_region }
 			NOT = { has_variable = gm_tr_landmark }
 		}
-		add_to_temporary_list = gm_sh_raising
-	}
-	every_in_list = {
-		list = gm_sh_raising
-		gm_sh_try_raise = yes
-	}
-	# Every other orphan stands beside the recorded monument whose building
-	# holds the most levels its records don't account for, rejoins the one it
-	# was split from, or is lost.
-	every_in_global_list = {
-		variable = gm_shadows
-		limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
 		add_to_temporary_list = gm_sh_left
 	}
 	every_in_list = {
 		list = gm_sh_left
 		gm_sh_settle_one = yes
 	}
-}
-
-# Container scope, an orphaned shadow (scope:gm_sh_region its region): raised
-# onto the unclaimed building no record describes that holds the most levels
-# unaccounted for, if there is one (not a new monument of 1 level that happens
-# to stand in another part of the region, when the merge brought a taller one).
-gm_sh_try_raise = {
-	# Still an orphan: the refresh a raise before it ran may have settled it.
-	if = {
-		limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
-		save_scope_as = gm_sh_pick
-		clear_saved_scope = gm_sh_target
-		scope:gm_sh_region = {
-			ordered_scope_state = {
-				limit = {
-					gm_state_unrecorded = yes
-					gm_state_unexplained_levels > 0
-				}
-				order_by = gm_state_unexplained_levels
-				position = 0
-				check_range_bounds = no
-				save_scope_as = gm_sh_target
+	scope:gm_sh_region = {
+		every_scope_state = {
+			limit = {
+				has_building = building_grand_monument
+				gm_state_level > 1
 			}
-		}
-		if = {
-			limit = { exists = scope:gm_sh_target }
-			scope:gm_sh_target = { gm_state_raise_orphan = yes }
+			gm_state_reset_building_level = yes
 		}
 	}
 }
 
-# Container scope, an orphaned shadow (scope:gm_sh_region its region). Still an
-# orphan when its turn comes (an event run by an earlier one may have settled
-# it), and not while a piece put back today rebuilds a building here: it is
-# settled tomorrow (gm_sh_rejoin sends monument_events.31). A revolt's piece
-# and its monument settle with each other first (§ "A revolt's split piece"):
-# a piece whose monument stands in its region rejoins it, and a monument whose
-# piece stands there is taken by it, whatever else the region's buildings hold.
+# Container scope, an orphaned shadow (scope:gm_sh_region its region), still an
+# orphan when its turn comes (an earlier one may have settled it). Its ground
+# went into the part of its region its last owner holds (gm_sh_owner): there it
+# takes a finished building no record describes as its own (the merge brought
+# it), stands beside the monument there, or, with no finished building there,
+# is raised as that part's monument into a new one. With no such part (it
+# changed hands as it merged), the most populous part of the region with a
+# finished building takes it beside its monument. Else it is lost.
 gm_sh_settle_one = {
 	if = {
-		limit = {
-			gm_sh_orphan_of = { REGION = scope:gm_sh_region }
-			NOT = {
-				scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
+		limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
+		save_scope_as = gm_sh_pick
+		clear_saved_scope = gm_sh_was_owner
+		clear_saved_scope = gm_sh_target
+		var:gm_sh_owner ?= { save_scope_as = gm_sh_was_owner }
+		if = {
+			limit = { exists = scope:gm_sh_was_owner }
+			scope:gm_sh_region = {
+				random_scope_state = {
+					limit = { exists = owner owner = scope:gm_sh_was_owner }
+					save_scope_as = gm_sh_target
+				}
 			}
 		}
-		clear_saved_scope = gm_sh_target
 		if = {
-			limit = { gm_sh_piece_home = yes }
-			var:gm_tr_piece_of = { save_scope_as = gm_sh_target }
-			gm_sh_rejoin = yes
-		}
-		else_if = {
-			limit = { gm_sh_whole_of_piece = yes }
-			var:gm_tr_split_piece = { save_scope_as = gm_sh_target }
-			gm_sh_piece_takes_whole = yes
-		}
-		else = {
+			limit = { NOT = { exists = scope:gm_sh_target } }
 			scope:gm_sh_region = {
 				ordered_scope_state = {
-					limit = { gm_state_takes_orphan_beside = yes }
-					order_by = gm_state_unexplained_levels
+					limit = {
+						has_building = building_grand_monument
+						has_variable = gm_seen
+					}
+					order_by = state_population
 					position = 0
 					check_range_bounds = no
 					save_scope_as = gm_sh_target
 				}
 			}
-			if = {
-				limit = { exists = scope:gm_sh_target }
-				gm_sh_adopt_beside = yes
-				debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for"
-			}
-			else = {
-				# No building holds levels nothing records. A monument here that
-				# lacked levels when last seen was split by a revolt, and this is
-				# its piece coming home (found 2026-10-17, gm_sh_rejoin): a piece
-				# recorded as a monument of its own, before the split's piece
-				# took its monument's identity (2026-10-17, owner's call).
-				scope:gm_sh_region = {
-					ordered_scope_state = {
-						limit = { gm_state_was_split = yes }
-						order_by = gm_state_split_short
-						position = 0
-						check_range_bounds = no
-						save_scope_as = gm_sh_target
-					}
-				}
-				if = {
-					limit = { exists = scope:gm_sh_target }
-					gm_sh_rejoin = yes
-				}
-				else = {
-					gm_sh_lost = yes
-				}
-			}
+		}
+		if = {
+			limit = { NOT = { exists = scope:gm_sh_target } }
+			gm_sh_lost = yes
+		}
+		else_if = {
+			limit = { scope:gm_sh_target = { gm_state_unrecorded = yes } }
+			scope:gm_sh_target = { gm_state_raise_orphan = yes }
+		}
+		else_if = {
+			limit = { scope:gm_sh_target = { has_building = building_grand_monument has_variable = gm_seen } }
+			gm_sh_adopt_beside = yes
+			debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded"
+		}
+		else_if = {
+			limit = { scope:gm_sh_target = { NOT = { has_building = building_grand_monument } } }
+			scope:gm_sh_target = { gm_state_raise_orphan = yes }
+		}
+		else = {
+			gm_sh_lost = yes
 		}
 	}
 }
@@ -1602,34 +1543,18 @@ gm_sh_settle_one = {
 # holds its region's ground (scope:gm_sh_region its region). It stands there as
 # a monument beside the one there, as a returned trophy does
 # (gm_tr_become_monument): the same container, retagged and moved from
-# gm_shadows to gm_monuments, in the state's and its owner's lists at once. No
-# rebuild: its levels are in the building already, and it counts no more of
-# them than the building holds unaccounted for (a piece carried off since its
-# shadow was written).
+# gm_shadows to gm_monuments, in the state's and its owner's lists at once, its
+# size its records (sites spec 2026-10-18 §3.3).
 gm_sh_adopt_beside = {
 	save_scope_as = gm_sh_moving
 	gm_sh_log_numbers = yes
-	scope:gm_sh_target = {
-		set_variable = { name = gm_sh_room value = gm_state_unexplained_levels }
-	}
-	set_variable = {
-		name = gm_tr_levels
-		value = {
-			value = var:gm_tr_levels
-			max = scope:gm_sh_target.var:gm_sh_room
-		}
-	}
-	scope:gm_sh_target = { remove_variable = gm_sh_room }
 	remove_list_global_variable = { name = gm_shadows target = scope:gm_sh_moving }
 	add_to_global_variable_list = { name = gm_monuments target = scope:gm_sh_moving }
 	set_global_variable = gm_mon_lists_written
 	remove_tag = gm_shadow
 	add_tag = gm_monument
-	# A shadow's own notes, not a monument's records.
-	gm_remove_state_var = { VAR = gm_sh_short }
-	gm_remove_state_var = { VAR = gm_sh_short_passes }
-	gm_remove_state_var = { VAR = gm_tr_piece_of }
-	gm_remove_state_var = { VAR = gm_tr_split_piece }
+	# A shadow's own note, not a monument's record.
+	gm_remove_state_var = { VAR = gm_sh_owner }
 	set_variable = { name = gm_tr_origin value = scope:gm_sh_target }
 	set_variable = { name = gm_tr_origin_region value = scope:gm_sh_target.state_region }
 	set_variable = { name = gm_tr_site value = scope:gm_sh_target }
@@ -1648,151 +1573,72 @@ gm_sh_adopt_beside = {
 	gm_monument_merge_self_check = yes
 }
 
-# State scope, a building no record describes (scope:gm_sh_target), with
-# scope:gm_sh_pick an orphaned shadow of its region: the building is that
-# monument's, come with the merge. It stands beside first (the lists), then is
-# raised onto the state's variables as a swap raises a secondary
-# (gm_state_raise_secondary): its records, its dedication put back through
-# gm_restore_pm, frozen at its levels. No rebuild. Its shadow again at once
-# when its method already reads back.
+# State scope (scope:gm_sh_target), with scope:gm_sh_pick an orphaned shadow of
+# its region: the monument there is that one, come with the merge, onto the
+# building no record describes, or into a new one at level 1 where none
+# stands. It stands beside first (the lists), then is raised onto the state's
+# variables as a swap raises a secondary (gm_state_raise_secondary): its
+# records, its dedication put back through gm_restore_pm. Its shadow again at
+# once when its method already reads back.
 gm_state_raise_orphan = {
+	if = {
+		limit = { NOT = { has_building = building_grand_monument } }
+		set_variable = { name = gm_rebuilding days = 1 }
+		create_building = {
+			building = building_grand_monument
+			level = 1
+		}
+	}
 	scope:gm_sh_pick = { gm_sh_adopt_beside = yes }
 	clear_saved_scope = gm_mon_raise
 	scope:gm_sh_pick = { save_scope_as = gm_mon_raise }
 	gm_state_raise_secondary = yes
-	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands again as the monument of the state that holds its building: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for"
+	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands again as the monument of the state that holds its ground: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded"
 	gm_state_restore_dedication = yes
 	gm_state_write_shadow = yes
 }
 
-# Container scope, an orphaned shadow no state in its region takes: its building
-# did not come with the merge, or holds none of its levels. Logged, then gone.
+# Container scope, an orphaned shadow no part of its region takes. Logged, then
+# gone.
 gm_sh_lost = {
 	gm_sh_log_numbers = yes
 	set_global_variable = { name = gm_sh_log_kept_now value = 0 }
-	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region is lost, no building there holding levels nothing records: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found unaccounted for, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings in its region"
+	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region is lost, no part of the region taking it: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in its region"
 	gm_monument_merge_self_check = yes
 	gm_sh_drop = yes
 }
 
-# Container scope, an orphaned shadow no building takes, with scope:gm_sh_target
-# a monument of its region that lacked levels when last seen
-# (gm_state_was_split; scope:gm_sh_region the region). A revolt took part of
-# that monument's state: the new part's building held a share of its levels,
-# which the refresh recorded as a new monument, and this orphan is that piece,
-# whose part has merged back. The monument's records, frozen before the split,
-# count it already, so it does not stand beside: its levels go back on the
-# building, no more than the building lacks now (none when they came back with
-# the merge), and the piece goes. Found 2026-10-17 (Tuscany 1877, the Paris
-# Commune 1887: the Arc de Triomphe stood at 11 levels on records of 15).
-# Since the split's piece takes its monument's identity (§ "A revolt's split
-# piece"), that piece's shadow (gm_tr_piece_of) comes here too, whatever else
-# the region holds, and so does a stand-in for one that never had a shadow
-# (gm_state_split_piece_home): its years come back with it.
-# It is no orphan before the rebuild, which runs monument_events.1 and the
-# refresh from inside this effect; the rest of the region waits a day.
-gm_sh_rejoin = {
-	save_scope_as = gm_sh_moving
-	gm_sh_log_numbers = yes
-	scope:gm_sh_target = {
-		set_variable = { name = gm_sh_lacked value = gm_state_split_short }
-		set_variable = { name = gm_sh_lacking value = gm_state_levels_short }
-	}
-	set_global_variable = { name = gm_sh_log_piece_now value = gm_mon_levels }
-	set_global_variable = { name = gm_sh_log_lacked_now value = scope:gm_sh_target.var:gm_sh_lacked }
-	set_global_variable = { name = gm_sh_log_lacking_now value = scope:gm_sh_target.var:gm_sh_lacking }
-	# A piece that carried its monument's identity: its years come back with
-	# it, and the monument forgets the split.
-	if = {
-		limit = { var:gm_tr_piece_of ?= scope:gm_sh_target }
-		scope:gm_sh_target = {
-			if = {
-				limit = { scope:gm_sh_moving = { has_variable = gm_tr_age } }
-				gm_state_add_age = { AGE = scope:gm_sh_moving.var:gm_tr_age }
-			}
-			gm_state_forget_split_notes = yes
-		}
-	}
-	# What goes back: the piece's levels, no more than its monument lacks now.
-	set_variable = {
-		name = gm_tr_levels
-		value = {
-			value = gm_mon_levels
-			max = scope:gm_sh_target.var:gm_sh_lacking
-		}
-	}
-	set_global_variable = { name = gm_sh_log_put_back_now value = var:gm_tr_levels }
-	# Out of the list and its region forgotten: no orphan for an event below.
-	remove_list_global_variable = { name = gm_shadows target = scope:gm_sh_moving }
-	remove_tag = gm_shadow
-	remove_variable = gm_tr_origin_region
-	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region was a piece a revolt split from the monument there, and rejoins it: [SCOPE.ScriptValue('gm_sh_log_piece')|0] levels recorded; the monument lacked [SCOPE.ScriptValue('gm_sh_log_lacked')|0] when last seen and [SCOPE.ScriptValue('gm_sh_log_lacking')|0] now, [SCOPE.ScriptValue('gm_sh_log_put_back')|0] put back"
-	gm_monument_split_self_check = yes
-	scope:gm_sh_target = {
-		# The monument's note keeps only what is still missing once this piece
-		# is settled, so a second piece claims no more (the next shadow, which
-		# waits out the rebuild, measures it again).
-		set_variable = {
-			name = gm_sh_lacking
-			value = {
-				value = var:gm_sh_lacking
-				subtract = scope:gm_sh_moving.var:gm_tr_levels
-				min = 0
-			}
-		}
-		var:gm_shadow ?= {
-			if = {
-				limit = { scope:gm_sh_target.var:gm_sh_lacking >= 1 }
-				set_variable = { name = gm_sh_short value = scope:gm_sh_target.var:gm_sh_lacking }
-			}
-			else = {
-				gm_remove_state_var = { VAR = gm_sh_short }
-				gm_remove_state_var = { VAR = gm_sh_short_passes }
-			}
-		}
-		remove_variable = gm_sh_lacked
-		remove_variable = gm_sh_lacking
-	}
-	if = {
-		limit = { var:gm_tr_levels >= 1 }
-		clear_saved_scope = gm_tr_moving
-		save_scope_as = gm_tr_moving
-		scope:gm_sh_target = {
-			gm_state_tr_add_levels = yes
-			trigger_event = { id = monument_events.31 days = 1 }
-		}
-	}
-	destroy_container = yes
-}
-
-# Container scope, an orphaned shadow (scope:gm_sh_region its region), before it
-# is adopted or lost: the numbers its log lines and the self-check print, as
-# global variables (gm_sh_log_levels and its siblings, gm_monument_values.txt).
+# Container scope, a shadow: what the log line and the self-check print.
 gm_sh_log_numbers = {
 	set_global_variable = { name = gm_sh_log_levels_now value = gm_mon_levels }
-	set_global_variable = { name = gm_sh_log_found_now value = 0 }
 	set_global_variable = { name = gm_sh_log_buildings_now value = 0 }
-	set_global_variable = { name = gm_sh_log_readable_now value = 1 }
 	scope:gm_sh_region = {
 		every_scope_state = {
 			limit = { has_building = building_grand_monument }
 			change_global_variable = { name = gm_sh_log_buildings_now add = 1 }
-			if = {
-				limit = { gm_state_unexplained_levels > global_var:gm_sh_log_found_now }
-				set_global_variable = { name = gm_sh_log_found_now value = gm_state_unexplained_levels }
-			}
-			if = {
-				limit = { gm_state_levels_readable = no }
-				set_global_variable = { name = gm_sh_log_readable_now value = 0 }
-			}
 		}
 	}
 }
 
+# State scope, a state of a merged region: its finished building stands taller
+# than 1 (the merge added two together) and goes back to level 1 on its method
+# (recorded first, as a return records it; a raise just recorded the orphan's).
+gm_state_reset_building_level = {
+	if = {
+		limit = { NOT = { has_variable = gm_restore_pm } }
+		gm_state_mark_restore_pm = yes
+	}
+	set_variable = { name = gm_rebuilding days = 1 }
+	remove_building = building_grand_monument
+	create_building = {
+		building = building_grand_monument
+		level = 1
+	}
+}
+
 # Container scope, a monument beside another whose state is gone, from
-# gm_tr_repair_places: its state again is the one in its region whose building
-# holds its levels unaccounted for, which after a merge need not be the most
-# populous; with none, gm_tr_repair_places's rule.
+# gm_tr_repair_places: its state again is the part of its region with a
+# recorded monument, the most populous; with none, gm_tr_repair_places's rule.
 gm_mon_repair_origin = {
 	save_scope_as = gm_mon_repairing
 	clear_saved_scope = gm_tr_repair_state
@@ -1800,9 +1646,9 @@ gm_mon_repair_origin = {
 		ordered_scope_state = {
 			limit = {
 				has_building = building_grand_monument
-				gm_state_unexplained_levels >= scope:gm_mon_repairing.var:gm_tr_levels
+				has_variable = gm_seen
 			}
-			order_by = gm_state_unexplained_levels
+			order_by = state_population
 			position = 0
 			check_range_bounds = no
 			save_scope_as = gm_tr_repair_state
@@ -1816,422 +1662,23 @@ gm_mon_repair_origin = {
 	}
 }
 
-# ---- A revolt's split piece (owner's call 2026-10-17) -------------------------------
-# A revolt that takes part of a monument's state gives the new part's building
-# a share of the levels (Tuscany 1877, Dahomey 1874; the Paris Commune of 1886,
-# a country a vanilla event creates). That piece is no new monument: at first
-# sight (gm_state_split_pending, monument_events.29) it takes the monument's
-# identity, as a returning trophy takes its records
-# (gm_state_tr_take_records_from_moving, from the monument's shadow): its name,
-# look, picture, landmark, dedication, raiser and contest, frozen at its own
-# levels, with those levels' share of the monument's years, which leave the
-# monument as a trophy's do (gm_state_tr_age). No ceremony asks. The monument's
-# records still count the piece's levels (gm_state_levels_short), so the two
-# settle when one owner holds both parts again and the engine merges them:
-#   the monument's state survives: the piece rejoins it (gm_sh_rejoin, from the
-#     piece's orphaned shadow, or gm_state_split_piece_home): what the building
-#     lacks of the records goes back by one rebuild, with the piece's years;
-#   the piece's state survives: the piece is the monument itself
-#     (gm_sh_piece_takes_whole, from the monument's orphaned shadow, or
-#     gm_state_piece_takes_whole): the monument's records and years, frozen at
-#     the records, what the building lacks of them put back.
-# Which side won does not matter. A revolution's winner continues the nation
-# and annexes the loser, so the parts merge, and gm_repair_after_civil_war
-# makes the monument the winner's. A secession's piece stays a piece of the
-# monument abroad until the parts merge. Links: gm_piece_of on the piece's
-# state, gm_split_piece on the monument's, with what the split took noted there
-# (gm_split_levels, gm_split_age, gm_split_short), mirrored on the shadows
-# (gm_tr_piece_of, gm_tr_split_piece); gm_clear_state breaks them
-# (gm_state_forget_split), and the other part then stands on its own.
-
-# State scope, the piece (monument_events.29, real execution only). The
-# monument it was split from (gm_state_split_whole) must lack at least the
-# piece's levels, as every split read so far did, the piece's exactly; else
-# the building is no split's piece and goes to the ceremony as before
-# (gm_split_rejected, a refresh tomorrow).
-gm_state_take_split_identity = {
-	save_scope_as = gm_split_piece_state
-	save_scope_as = gm_tmp_split_piece
-	owner = { save_scope_as = gm_tmp_split_owner }
-	clear_saved_scope = gm_split_whole
-	state_region = {
-		ordered_scope_state = {
-			limit = { gm_state_split_whole = yes }
-			order_by = gm_state_levels_short
-			position = 0
-			check_range_bounds = no
-			save_scope_as = gm_split_whole
-		}
-	}
-	set_variable = { name = gm_split_p value = gm_state_primary_levels }
-	if = {
-		limit = { exists = scope:gm_split_whole }
-		scope:gm_split_whole = {
-			set_variable = { name = gm_split_short value = gm_state_levels_short }
-		}
-	}
-	if = {
-		limit = {
-			exists = scope:gm_split_whole
-			var:gm_split_p >= 1
-			scope:gm_split_whole.var:gm_split_short >= var:gm_split_p
-		}
-		clear_saved_scope = gm_tr_moving
-		scope:gm_split_whole = {
-			var:gm_shadow = { save_scope_as = gm_tr_moving }
-			# What the split took, for the piece's return.
-			set_variable = { name = gm_split_piece value = scope:gm_split_piece_state }
-			set_variable = { name = gm_split_levels value = scope:gm_split_piece_state.var:gm_split_p }
-			set_variable = {
-				name = gm_split_age
-				value = {
-					value = 0
-					if = {
-						limit = { has_variable = gm_age }
-						value = var:gm_age
-						multiply = scope:gm_split_piece_state.var:gm_split_p
-						divide = var:gm_levels
-						max = var:gm_age
-					}
-				}
-			}
-			if = {
-				limit = { var:gm_split_age > 0 }
-				change_variable = { name = gm_age subtract = var:gm_split_age }
-				clamp_variable = { name = gm_age min = 0 }
-			}
-		}
-		gm_clear_state = { KEEP_LANDMARK = no }
-		gm_state_tr_take_records_from_moving = yes
-		gm_tr_copy_to_state = { FROM = gm_tr_picture_code TO = gm_picture_code }
-		# Its own levels and its share of the years, not the monument's.
-		set_variable = { name = gm_levels value = var:gm_split_p }
-		set_variable = { name = gm_ceremony_level value = var:gm_split_p }
-		gm_remove_state_var = { VAR = gm_age }
-		if = {
-			limit = { scope:gm_split_whole.var:gm_split_age > 0 }
-			set_variable = { name = gm_age value = scope:gm_split_whole.var:gm_split_age }
-		}
-		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
-		set_variable = { name = gm_piece_of value = scope:gm_split_whole }
-		# Its dedication now: the building may stand on any method.
-		gm_state_restore_dedication = yes
-		set_global_variable = { name = gm_split_log_piece_now value = var:gm_split_p }
-		set_global_variable = { name = gm_split_log_short_now value = scope:gm_split_whole.var:gm_split_short }
-		debug_log = "TE_MONUMENTS: a revolt took part of a monument's state, and the new part's piece of it takes the monument's identity, with no ceremony: [SCOPE.ScriptValue('gm_split_log_piece')|0] levels on the piece, the monument lacking [SCOPE.ScriptValue('gm_split_log_short')|0]"
-		# The first piece of a game is read back (gm_monument_split_identity_self_check).
-		if = {
-			limit = { NOT = { has_global_variable = gm_split_identity_checked } }
-			set_variable = { name = gm_split_check_p value = var:gm_split_p }
-			set_variable = { name = gm_split_check_s value = scope:gm_split_whole.var:gm_split_short }
-			set_variable = { name = gm_split_check_n value = 0 }
-		}
-	}
-	else = {
-		if = {
-			limit = { exists = scope:gm_split_whole }
-			set_global_variable = { name = gm_split_log_piece_now value = var:gm_split_p }
-			set_global_variable = { name = gm_split_log_short_now value = scope:gm_split_whole.var:gm_split_short }
-			gm_monument_split_gate_self_check = yes
-			scope:gm_split_whole = { remove_variable = gm_split_short }
-		}
-		set_variable = gm_split_rejected
-		owner = { trigger_event = { id = monument_events.20 days = 1 } }
-	}
-	remove_variable = gm_split_p
-}
-
-# State scope, from gm_clear_state: a primary forgotten breaks its split's
-# links both ways, and the other part stands on its own. A piece that is no
-# longer one (pulled down, carried off, rededicated) takes its levels out of
-# its monument's records for good, as a trophy's piece does
-# (gm_state_tr_remove_piece); a monument gone leaves its piece a monument of
-# its own, with its name.
-gm_state_forget_split = {
-	if = {
-		limit = { has_variable = gm_piece_of }
-		save_scope_as = gm_split_forgetting
-		var:gm_piece_of ?= {
-			if = {
-				limit = { var:gm_split_piece ?= scope:gm_split_forgetting }
-				if = {
-					limit = {
-						has_variable = gm_levels
-						has_variable = gm_split_levels
-					}
-					change_variable = { name = gm_levels subtract = var:gm_split_levels }
-					clamp_variable = { name = gm_levels min = 1 }
-				}
-				gm_state_forget_split_notes = yes
-			}
-		}
-		remove_variable = gm_piece_of
-	}
-	if = {
-		limit = { has_variable = gm_split_piece }
-		save_scope_as = gm_split_forgetting
-		var:gm_split_piece ?= {
-			if = {
-				limit = { var:gm_piece_of ?= scope:gm_split_forgetting }
-				remove_variable = gm_piece_of
-			}
-		}
-		gm_state_forget_split_notes = yes
-	}
-}
-
-# State scope, a monument: what it noted of its split.
-gm_state_forget_split_notes = {
-	gm_remove_state_var = { VAR = gm_split_piece }
-	gm_remove_state_var = { VAR = gm_split_levels }
-	gm_remove_state_var = { VAR = gm_split_age }
-	gm_remove_state_var = { VAR = gm_split_short }
-}
-
-# State scope, a monument whose revolt's piece has come home
-# (gm_state_split_piece_gone; monument_events.29, real execution only): the
-# piece's state merged into this one. Its shadow, if one is kept
-# (gm_tr_piece_of), rejoins as its orphan would (gm_sh_rejoin); a piece that
-# came home before the monthly pass wrote one rejoins through a stand-in
-# holding what the split took (gm_split_levels, gm_split_age).
-gm_state_split_piece_home = {
-	save_scope_as = gm_sh_target
-	clear_saved_scope = gm_sh_region
-	state_region = { save_scope_as = gm_sh_region }
-	clear_saved_scope = gm_sh_piece
-	if = {
-		limit = { has_global_variable_list = gm_shadows }
-		random_in_global_list = {
-			variable = gm_shadows
-			limit = { var:gm_tr_piece_of ?= scope:gm_sh_target }
-			save_scope_as = gm_sh_piece
-		}
-	}
-	if = {
-		limit = {
-			NOT = { exists = scope:gm_sh_piece }
-			has_variable = gm_split_levels
-		}
-		create_container = {
-			tags = { gm_shadow }
-			save_scope_as = gm_sh_piece
-			on_created = {
-				save_scope_as = gm_sh_piece
-			}
-		}
-		if = {
-			limit = { exists = scope:gm_sh_piece }
-			add_to_global_variable_list = { name = gm_shadows target = scope:gm_sh_piece }
-			scope:gm_sh_piece = {
-				set_variable = { name = gm_tr_piece_of value = scope:gm_sh_target }
-				set_variable = { name = gm_tr_origin_region value = scope:gm_sh_region }
-				set_variable = { name = gm_tr_levels value = scope:gm_sh_target.var:gm_split_levels }
-				if = {
-					limit = { scope:gm_sh_target.var:gm_split_age > 0 }
-					set_variable = { name = gm_tr_age value = scope:gm_sh_target.var:gm_split_age }
-				}
-			}
-		}
-	}
-	if = {
-		limit = { exists = scope:gm_sh_piece }
-		scope:gm_sh_piece = { gm_sh_rejoin = yes }
-	}
-	else = {
-		gm_state_forget_split_notes = yes
-	}
-}
-
-# State scope, a revolt's piece whose monument no longer stands apart from it
-# (gm_state_piece_whole_gone; monument_events.29 and .1, real execution only):
-# the merge after the revolt took the monument's state into this one. The
-# monument's shadow, if one is kept (gm_tr_split_piece), is taken as its orphan
-# would be (gm_sh_piece_takes_whole); with none, the piece is the monument
-# itself at the levels standing here.
-gm_state_piece_takes_whole = {
-	save_scope_as = gm_sh_target
-	clear_saved_scope = gm_sh_region
-	state_region = { save_scope_as = gm_sh_region }
-	clear_saved_scope = gm_sh_whole
-	if = {
-		limit = { has_global_variable_list = gm_shadows }
-		random_in_global_list = {
-			variable = gm_shadows
-			limit = { var:gm_tr_split_piece ?= scope:gm_sh_target }
-			save_scope_as = gm_sh_whole
-		}
-	}
-	if = {
-		limit = { exists = scope:gm_sh_whole }
-		scope:gm_sh_whole = { gm_sh_piece_takes_whole = yes }
-	}
-	else = {
-		remove_variable = gm_piece_of
-		set_variable = { name = gm_levels value = gm_state_primary_levels }
-		set_global_variable = { name = gm_split_log_piece_now value = var:gm_levels }
-		debug_log = "TE_MONUMENTS: a revolt's piece of a monument stands as the monument itself, the monument's state and its records gone: [SCOPE.ScriptValue('gm_split_log_piece')|0] levels stand"
-	}
-}
-
-# Container scope, the shadow of a monument whose revolt's piece stands in its
-# region (scope:gm_sh_target the piece's state, scope:gm_sh_region the region):
-# the monument's state merged into the piece's. The piece is the monument
-# itself: frozen at the monument's records, with its years added to the
-# piece's share, and what the building lacks of the records goes back by one
-# rebuild (gm_state_tr_add_levels, as gm_sh_rejoin). It is no shadow before
-# the rebuild, which runs monument_events.1 and the refresh from inside this
-# effect; the rest of the region waits a day.
-gm_sh_piece_takes_whole = {
-	save_scope_as = gm_sh_moving
-	set_global_variable = { name = gm_split_log_records_now value = var:gm_tr_levels }
-	scope:gm_sh_target = {
-		set_global_variable = { name = gm_split_log_piece_now value = var:gm_levels }
-		remove_variable = gm_piece_of
-		set_variable = { name = gm_levels value = scope:gm_sh_moving.var:gm_tr_levels }
-		if = {
-			limit = { scope:gm_sh_moving = { has_variable = gm_tr_age } }
-			gm_state_add_age = { AGE = scope:gm_sh_moving.var:gm_tr_age }
-		}
-		set_variable = { name = gm_sh_lacking value = gm_state_levels_short }
-	}
-	# What goes back: what the building lacks of the records.
-	set_variable = { name = gm_tr_levels value = scope:gm_sh_target.var:gm_sh_lacking }
-	set_global_variable = { name = gm_sh_log_put_back_now value = var:gm_tr_levels }
-	scope:gm_sh_target = { remove_variable = gm_sh_lacking }
-	# Out of the list and its region forgotten: no shadow for an event below.
-	remove_list_global_variable = { name = gm_shadows target = scope:gm_sh_moving }
-	remove_tag = gm_shadow
-	gm_remove_state_var = { VAR = gm_tr_origin_region }
-	debug_log = "TE_MONUMENTS: a revolt's piece of a monument stands as the monument itself, the monument's state merged into the piece's: [SCOPE.ScriptValue('gm_split_log_piece')|0] levels on the piece, [SCOPE.ScriptValue('gm_split_log_records')|0] on the monument's records, [SCOPE.ScriptValue('gm_sh_log_put_back')|0] put back"
-	if = {
-		limit = { var:gm_tr_levels >= 1 }
-		clear_saved_scope = gm_tr_moving
-		save_scope_as = gm_tr_moving
-		scope:gm_sh_target = {
-			gm_state_tr_add_levels = yes
-			trigger_event = { id = monument_events.31 days = 1 }
-		}
-	}
-	destroy_container = yes
-}
-
 # ---- Self-check: a merge keeps its monument (issue #936) -------------------------------
-# Any scope (the globals gm_sh_log_numbers wrote), from gm_sh_adopt_beside and
-# gm_sh_lost, the first time a game settles an orphaned shadow: whether a
-# monument's levels came with a merge into a building of its region, which
-# nobody has seen the engine do. No verdict with no levels recorded, or with a
-# building in the region whose levels its records cannot tell apart (a primary
-# still being built, or one a ceremony asked about and left undedicated), so
-# OK and BROKEN read only exact arithmetic.
+# Any scope (the globals gm_sh_log_numbers wrote), the first time a game
+# settles an orphan: whether it was kept (stands beside, or raised) or lost.
 gm_monument_merge_self_check = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = gm_merge_self_checked }
 			has_global_variable = gm_sh_log_levels_now
 			global_var:gm_sh_log_levels_now >= 1
-			global_var:gm_sh_log_readable_now = 1
 		}
 		set_global_variable = gm_merge_self_checked
 		if = {
 			limit = { global_var:gm_sh_log_kept_now = 1 }
-			debug_log = "TE_SELF_CHECK OK monument_merge_kept (a monument whose state merged into another part of its region stands again from its shadow: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_found')|0] found in a building there that its records lacked, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings in the region)"
-		}
-		else_if = {
-			limit = { global_var:gm_sh_log_buildings_now = 0 }
-			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no Grand Monument stands in the region, so its building did not survive the merge; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded; see docs/testing/grand-monuments-ageing-playtest.md)"
+			debug_log = "TE_SELF_CHECK OK monument_merge_kept (a monument whose state merged into another part of its region stands again from its shadow: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in the region)"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: [SCOPE.ScriptValue('gm_sh_log_buildings')|0] buildings stand in the region, none holding levels its records lack, so its levels did not join the building there; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded; see docs/testing/grand-monuments-ageing-playtest.md)"
-		}
-	}
-}
-
-# ---- Self-check: a revolt's split piece rejoins its monument (issue #936) ------------
-# Any scope (the globals gm_sh_rejoin wrote), the first time a game settles a
-# split piece: whether the orphan is the share of levels its monument lacked
-# (the rule gm_sh_rejoin rests on), and whether the merge brought those levels
-# back or the rebuild had to. No verdict with no levels recorded on the piece,
-# or none lacking when the monument was last seen.
-gm_monument_split_self_check = {
-	if = {
-		limit = {
-			NOT = { has_global_variable = gm_split_self_checked }
-			has_global_variable = gm_sh_log_piece_now
-			global_var:gm_sh_log_piece_now >= 1
-			global_var:gm_sh_log_lacked_now >= 1
-		}
-		set_global_variable = gm_split_self_checked
-		if = {
-			limit = { global_var:gm_sh_log_piece_now <= global_var:gm_sh_log_lacked_now }
-			debug_log = "TE_SELF_CHECK OK monument_split_rejoined (a piece a revolt split from a monument came home with no more levels than the monument lacked: [SCOPE.ScriptValue('gm_sh_log_piece')|0] levels recorded on it, [SCOPE.ScriptValue('gm_sh_log_lacked')|0] lacking when the monument was last seen, [SCOPE.ScriptValue('gm_sh_log_lacking')|0] now, so the merge brought back the difference; [SCOPE.ScriptValue('gm_sh_log_put_back')|0] put back by a rebuild)"
-		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN monument_split_rejoined (a piece came home with more levels than its monument lacked: [SCOPE.ScriptValue('gm_sh_log_piece')|0] levels recorded on it, [SCOPE.ScriptValue('gm_sh_log_lacked')|0] lacking when the monument was last seen, [SCOPE.ScriptValue('gm_sh_log_lacking')|0] now, [SCOPE.ScriptValue('gm_sh_log_put_back')|0] put back; the rest were not the monument's and are gone; see docs/testing/grand-monuments-ageing-playtest.md)"
-		}
-	}
-}
-
-# ---- Self-check: a revolt's split piece takes its monument's identity (owner's call 2026-10-17) ----
-# Once a game, the first verdict of two. Every split read so far gave the new
-# part exactly the levels its monument lost (Tuscany 2, the Paris Commune 4,
-# Dahomey 4), and the piece now takes the monument's identity on that premise.
-# Any scope (the globals gm_state_take_split_identity wrote): a building that
-# looked like a split's piece held more levels than its monument lacked, so it
-# was sent to a ceremony of its own. BROKEN: the split did not take the piece's
-# levels from the monument.
-gm_monument_split_gate_self_check = {
-	if = {
-		limit = {
-			NOT = { has_global_variable = gm_split_identity_checked }
-			global_var:gm_split_log_piece_now >= 1
-		}
-		set_global_variable = gm_split_identity_checked
-		debug_log = "TE_SELF_CHECK BROKEN monument_split_identity (a building that looked like a revolt's piece of a monument held more levels than the monument lacked, so it was given a ceremony of its own: [SCOPE.ScriptValue('gm_split_log_piece')|0] levels on it, [SCOPE.ScriptValue('gm_split_log_short')|0] lacking; see docs/testing/grand-monuments-ageing-playtest.md)"
-	}
-}
-
-# State scope, from gm_state_monthly: the first piece a game recognizes
-# (gm_split_check_*, written by gm_state_take_split_identity), once its
-# dedication has read back (gm_restore_pm gone) or after three pulses. OK when
-# it stands recorded and dedicated with no ceremony, unveiling or naming
-# asking; BROKEN when its dedication never read back or a ceremony asks. Its
-# marks go either way, and a piece merged away first leaves the verdict to the
-# next.
-gm_monument_split_identity_self_check = {
-	if = {
-		limit = { has_variable = gm_split_check_p }
-		change_variable = { name = gm_split_check_n add = 1 }
-		if = {
-			limit = {
-				OR = {
-					NOT = { has_variable = gm_restore_pm }
-					var:gm_split_check_n >= 3
-				}
-			}
-			if = {
-				limit = { NOT = { has_global_variable = gm_split_identity_checked } }
-				set_global_variable = gm_split_identity_checked
-				set_global_variable = { name = gm_split_log_piece_now value = var:gm_split_check_p }
-				set_global_variable = { name = gm_split_log_short_now value = var:gm_split_check_s }
-				if = {
-					limit = {
-						has_building = building_grand_monument
-						has_variable = gm_seen
-						gm_state_is_dedicated = yes
-						NOT = { has_variable = gm_restore_pm }
-						NOT = { has_variable = gm_ceremony_pending }
-						NOT = { has_variable = gm_unveil_pending }
-						NOT = { has_variable = gm_name_choice_open }
-					}
-					debug_log = "TE_SELF_CHECK OK monument_split_identity (a revolt's piece of a monument stands with the monument's identity and dedication, no ceremony asked: [SCOPE.ScriptValue('gm_split_log_piece')|0] levels on the piece, its monument lacking [SCOPE.ScriptValue('gm_split_log_short')|0] at the split)"
-				}
-				else = {
-					debug_log = "TE_SELF_CHECK BROKEN monument_split_identity (a revolt's piece of a monument took its identity, but its dedication did not read back within three months or a ceremony asks: [SCOPE.ScriptValue('gm_split_log_piece')|0] levels on the piece, its monument lacking [SCOPE.ScriptValue('gm_split_log_short')|0] at the split; see docs/testing/grand-monuments-ageing-playtest.md)"
-				}
-			}
-			remove_variable = gm_split_check_p
-			remove_variable = gm_split_check_s
-			remove_variable = gm_split_check_n
+			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no part of its region took it; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings there; see docs/testing/grand-monuments-ageing-playtest.md)"
 		}
 	}
 }

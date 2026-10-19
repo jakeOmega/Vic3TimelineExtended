@@ -1383,21 +1383,6 @@ types grand_monuments_widget_types
 					tooltip = "gm_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
-				# A revolt's split piece, and the monument whose piece stands in
-				# another part of its region (owner's call 2026-10-17): where the
-				# other part stands, why on hover.
-				gm_row_line = {
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_piece'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
-					tooltip = "gm_row_piece_tt"
-					text = "gm_row_piece"
-				}
-				gm_row_line = {
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_has_piece'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
-					tooltip = "gm_row_split_tt"
-					text = "gm_row_split"
-				}
 				gm_row_line = {
 					default_format = "#tooltippable"
 					tooltip = "gm_row_detail_tt"

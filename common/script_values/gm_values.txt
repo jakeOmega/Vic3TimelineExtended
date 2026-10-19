@@ -199,32 +199,6 @@ gm_disp_is_landmark = {
 	}
 }
 
-# A revolt's split piece on the row and the card (owner's call 2026-10-17;
-# gm_monument_effects.txt § "A revolt's split piece"): 1 for a piece whose
-# monument's state stands (gm_piece_of), for gm_row_piece; 1 for a monument
-# whose piece still stands (gm_split_piece), for gm_row_split.
-gm_disp_is_piece = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = gm_piece_of
-			exists = var:gm_piece_of
-		}
-		value = 1
-	}
-}
-
-gm_disp_has_piece = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = gm_split_piece
-			var:gm_split_piece ?= { has_variable = gm_piece_of }
-		}
-		value = 1
-	}
-}
-
 # The picture's grandeur frame (spec 2026-10-11 §3.5): the step the monument's
 # own effects have reached, 0 (plain) to 5 (five steps and more), read from the
 # live level on gm_state_disp_next_step's thresholds.
