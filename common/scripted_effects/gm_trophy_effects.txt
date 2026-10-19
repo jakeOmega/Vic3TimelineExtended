@@ -639,6 +639,7 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_honoree_ig TO = gm_honoree_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }
 	gm_tr_copy_to_state = { FROM = gm_tr_age TO = gm_age }
+	gm_tr_copy_to_state = { FROM = gm_tr_start_grandeur TO = gm_start_grandeur }
 	gm_tr_copy_to_state = { FROM = gm_tr_faith TO = gm_faith }
 	gm_tr_copy_to_state = { FROM = gm_tr_contested TO = gm_contested }
 	gm_tr_copy_to_state = { FROM = gm_tr_heritage TO = gm_heritage }
@@ -656,8 +657,13 @@ gm_state_tr_take_records_from_moving = {
 	else = {
 		set_variable = { name = gm_ceremony_level value = scope:gm_tr_moving.var:gm_tr_levels }
 	}
-	# Its grandeur until the next pulse writes it: its levels and its age.
+	# Its grandeur until the next pulse writes it: its starting grandeur (its
+	# levels, with no record) and its age.
 	set_variable = { name = gm_g_cache value = scope:gm_tr_moving.var:gm_tr_levels }
+	if = {
+		limit = { scope:gm_tr_moving = { has_variable = gm_tr_start_grandeur } }
+		set_variable = { name = gm_g_cache value = scope:gm_tr_moving.var:gm_tr_start_grandeur }
+	}
 	if = {
 		limit = { scope:gm_tr_moving = { has_variable = gm_tr_age } }
 		change_variable = { name = gm_g_cache add = scope:gm_tr_moving.var:gm_tr_age }

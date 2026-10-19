@@ -351,6 +351,7 @@ gm_state_demote_primary = {
 			gm_tr_copy_from_state = { FROM = gm_honoree TO = gm_tr_honoree }
 			gm_tr_copy_from_state = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
 			gm_tr_copy_from_state = { FROM = gm_age TO = gm_tr_age }
+			gm_tr_copy_from_state = { FROM = gm_start_grandeur TO = gm_tr_start_grandeur }
 			gm_tr_copy_from_state = { FROM = gm_raised_by TO = gm_tr_raised_by }
 			gm_tr_copy_from_state = { FROM = gm_faith TO = gm_tr_faith }
 			gm_tr_copy_from_state = { FROM = gm_built_by TO = gm_tr_built_by }
@@ -1415,6 +1416,7 @@ gm_state_write_shadow = {
 				gm_sh_mirror = { FROM = gm_honoree TO = gm_tr_honoree }
 				gm_sh_mirror = { FROM = gm_honoree_ig TO = gm_tr_honoree_ig }
 				gm_sh_mirror = { FROM = gm_age TO = gm_tr_age }
+				gm_sh_mirror = { FROM = gm_start_grandeur TO = gm_tr_start_grandeur }
 				gm_sh_mirror = { FROM = gm_raised_by TO = gm_tr_raised_by }
 				gm_sh_mirror = { FROM = gm_faith TO = gm_tr_faith }
 				gm_sh_mirror = { FROM = gm_built_by TO = gm_tr_built_by }

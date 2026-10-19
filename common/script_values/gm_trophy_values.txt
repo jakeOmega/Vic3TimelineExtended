@@ -40,10 +40,21 @@ gm_state_tr_age = {
 	}
 }
 
-# What they count for abroad: half their grandeur, levels and age, rounded up
-# (spec §1).
+# The starting grandeur a taking carries off with its levels (sites spec
+# 2026-10-18 §5): all of it whole, else the levels' share of it.
+gm_state_tr_start = {
+	value = gm_state_primary_start
+	if = {
+		limit = { gm_state_tr_whole = 0 }
+		multiply = gm_state_tr_levels
+		divide = gm_state_primary_levels
+	}
+}
+
+# What they count for abroad: half their grandeur, starting grandeur and age,
+# rounded up (spec §1).
 gm_state_tr_value = {
-	value = gm_state_tr_levels
+	value = gm_state_tr_start
 	add = gm_state_tr_age
 	divide = 2
 	ceiling = yes

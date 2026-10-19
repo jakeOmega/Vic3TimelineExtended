@@ -145,7 +145,7 @@ class ShareTests(unittest.TestCase):
                          "value = gm_state_primary_levels multiply = gm_state_tr_share ceiling = yes min = 1 "
                          "max = gm_state_primary_levels")
         self.assertEqual(squash(block(v, "gm_state_tr_value")),
-                         "value = gm_state_tr_levels add = gm_state_tr_age divide = 2 ceiling = yes")
+                         "value = gm_state_tr_start add = gm_state_tr_age divide = 2 ceiling = yes")
 
     def test_never_a_shrine_and_never_twice_in_ten_years(self):
         takeable = squash(block(read(TR_TRIGGERS), "gm_state_tr_takeable"))
