@@ -86,7 +86,10 @@ class TestGenerated(unittest.TestCase):
         body = self.values.split("te_demog_means = {", 1)[1].split("\n}\n", 1)[0]
         self.assertIn(f"add = modifier:{P.MEANS_SHIFT_TYPE}", body)
         self.assertNotIn("owner.modifier:", body)
-        self.assertLess(body.index(P.MEANS_SHIFT_TYPE), body.index("max = 0.95"))
+        # the cap after the shift: 1, a share's natural bound (owner, 2026-10-20; was 0.95)
+        self.assertEqual(P.MEANS_CAP, 1.0)
+        cap = re.findall(r"max = (\S+)", body.split(f"add = modifier:{P.MEANS_SHIFT_TYPE}", 1)[1])
+        self.assertEqual(cap, [gen.lit(P.MEANS_CAP)])
 
     def test_every_cause_has_a_multiplier(self):
         for cause in gen.CAUSES:

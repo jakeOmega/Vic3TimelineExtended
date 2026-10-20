@@ -665,7 +665,7 @@ te_demog_lt_tail = {
 			multiply = -0.5
 			add = 100000
 			multiply = local_var:te_dg_l$SEX$
-			divide = local_var:te_dg_ltq
+			divide = { value = local_var:te_dg_ltq min = te_demog_k_lt_tail_rate_min }
 		}
 	}
 }
