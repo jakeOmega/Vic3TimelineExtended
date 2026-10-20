@@ -4974,14 +4974,6 @@ def _mod_txt_files():
         yield from sorted((ROOT / sub).rglob("*.txt"))
 
 
-
-
-
-
-if __name__ == "__main__":
-    unittest.main()
-
-
 # ---- Unique dedications (signatures spec 2026-10-16) ----------------------------------
 
 Signature = namedtuple("Signature", "key kind family name national local ig parent source members")
@@ -7038,3 +7030,7 @@ class DedicationPopupTests(unittest.TestCase):
         for n in ("3", "4", "5", "6", "7", "8", "9", "10", "12", "13", "14", "15", "21"):
             ev = squash(strip_comments(raw_block_at(events, rf"(?m)^monument_events\.{n}\s*=\s*\{{")))
             self.assertNotIn("is_popup", ev, f"monument_events.{n}")
+
+
+if __name__ == "__main__":
+    unittest.main()
