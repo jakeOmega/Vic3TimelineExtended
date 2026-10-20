@@ -543,9 +543,12 @@ takes them out of the residual, which books only the rest:
     Missouri 128, Michigan 126, Arkansas 123 and Indiana 113; with no migration, 25 years on they sit at 98–105 and
     Wisconsin at 118. Under Full all seven start with Census: More Men (radicals from movements +10% in Wisconsin, +3–6%
     in the five between, +0.8% in Indiana) and a conscription term of +7% (Indiana) to +61% (Wisconsin), and Wisconsin's
-    20–29 share, 0.19, passes the youth bulge's 0.18 wherever work is short. The Old Southwest and Florida, as male
-    among their whites, are not the West and are left out (`demographics_params.FRONTIER_1836` takes a row each if
-    wanted).
+    20–29 share, 0.19, passes the youth bulge's 0.18 wherever work is short. **The Old Southwest and Florida were added
+    on 2026-10-20** (owner): every state the US holds in 1836 whose 1840 free white men per 100 women aged 15–49 were
+    110 or more, Mississippi (132), Alabama (116), Louisiana (156) and Florida Territory (177); the Compendium's rows
+    for every other state, read the same day, are all under 110 (Georgia 107 the highest). Their enslaved people make
+    the settlers' share lower, so they start at 144 (Florida), 134 (Louisiana), 127 (Mississippi) and 114 (Alabama) men
+    per 100 women aged 20–59, with More Men +1–9% and conscription +10–38%.
 - **A state with no variables** (a new state, a split state region, an old save) starts at its equilibrium. A split
   state could copy its sibling's cohorts instead, since it is the same people.
 - **Revolutions.** State variables stay on the states. The country's numbers are recomputed from them, so nothing is

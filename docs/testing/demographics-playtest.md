@@ -857,10 +857,12 @@ only nothing changes outside the census's own figures. **Under Full the census's
 structures** (phase 2 step 4: Census: More Men and Fewer Men, the conscription term, which has no ceiling by the owner's
 ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto what follows:
 
-- **The frontier at the 1836 seed** (harness stand-in): all seven states start with Census: More Men, radicals from
-  movements +10% in Wisconsin (178 men per 100 women aged 20-59, past the full 150), +5.9% Illinois (134), +4.9% Iowa
-  (130), +4.6% Missouri (128), +4.0% Michigan (126), +3.2% Arkansas (123) and +0.8% Indiana (113). Conscription +61%
-  Wisconsin, +26% Illinois, +24% Iowa, +20% Missouri, +16% Michigan and Arkansas, +7% Indiana. Wisconsin's 20-29
+- **The frontier at the 1836 seed** (harness stand-in): all eleven states (the Old Southwest and Florida since
+  2026-10-20) start with Census: More Men, radicals from movements +10% in Wisconsin (178 men per 100 women aged
+  20-59, past the full 150), +8.6% Florida (144), +6.1% Louisiana (134), +5.9% Illinois (134), +4.9% Iowa (130), +4.6%
+  Missouri (128), +4.3% Mississippi (127), +4.0% Michigan (126), +3.2% Arkansas (123), +1.1% Alabama (114) and +0.8%
+  Indiana (113). Conscription +61% Wisconsin, +38% Florida, +26% Illinois, +24% Iowa and Louisiana, +20% Missouri and
+  Mississippi, +16% Michigan and Arkansas, +10% Alabama, +7% Indiana. Wisconsin's 20-29
   share, 0.19, passes the youth bulge's 0.18: a youth bulge of 0.2 where a fifth of its workforce has no work. Ten
   years on Wisconsin still has full More Men and +25% conscription; after 25 years only Wisconsin keeps a little
   (+2% radicals).
@@ -874,11 +876,12 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
   call, put to the owner: the alternative books them through the caps).
 
 1. **The frontier starts male (Display only or Full, a new 1836 game as or beside the US).** Open Wisconsin, Iowa and
-   Illinois on their Demographics subtab: men per 100 women aged 20-59 about 178 (Wisconsin), 134 (Illinois), 130
-   (Iowa), 123-128 (Arkansas, Michigan, Missouri) and 113 (Indiana), with a pyramid whose men aged 20-59 stand well
-   past its women; Ohio and Kentucky as before (about 95). The state's people are the game's. Under Full, all seven
-   states' modifiers list "Census: More Men" (radicals from movements: at full from 150, Wisconsin) and their
-   conscription tooltips "Census: Fighting-Age Men" above ×1.
+   Illinois on their Demographics subtab: men per 100 women aged 20-59 about 178 (Wisconsin), 144 (Florida), 134
+   (Illinois, Louisiana), 130 (Iowa), 123-128 (Arkansas, Michigan, Mississippi, Missouri) and 113-114 (Indiana,
+   Alabama), with a pyramid whose men aged 20-59 stand well past its women; Ohio, Kentucky and Georgia as before
+   (about 95). The state's people are the game's. Under Full, all eleven states' modifiers list "Census: More Men"
+   (radicals from movements: at full from 150, Wisconsin) and their conscription tooltips "Census: Fighting-Age Men"
+   above ×1.
 2. **It fades as it ages.** Twenty-five years on, the frontier states sit near 98-105 and Wisconsin about 118 (the
    residual's own arrivals correct their sex split, `LABOUR_BALANCE_HIGH`).
 3. **A programme's destination (Display only or Full).** Run a Penal Transportation Authority for a few years: its
