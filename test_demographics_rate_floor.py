@@ -462,7 +462,10 @@ class TestTheTextIsTrue(unittest.TestCase):
             self.assertEqual(get[key], f"${base}$\\n$te_demog_st_ontop_phi$")
         note = get["te_demog_st_ontop_phi"]
         self.assertIn("$law_private_health_insurance$", note)
-        self.assertIn("no rate at all", note)
+        self.assertIn("stop dying altogether", note)
+        for row in ("Other effects on some of its people", "Effects on the whole state"):   # the rows the hover prints
+            self.assertIn(row, note)
+            self.assertIn(row, get["te_demog_st_ontop_tt_measured"])
         self.assertTrue(note.startswith("#lore") and note.endswith("#!"))
         sgui = " ".join(_block(_text(ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"),
                                "te_demog_state_phi_note_sgui").split())
