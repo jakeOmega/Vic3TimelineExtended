@@ -323,6 +323,8 @@ means" view of the fertility transition.
   spec's stage 2 (0.4 / 0.75 / 0.80 / 0.85 in research order).
   - **Access** multiplies the means: 0.3 + 0.7 × literacy.
   - **Laws and measures** shift it (§8.1) through `state_fertility_means_add`, after literacy. The cap is 0.95.
+    *(2026-10-20, owner: the cap is 1, the natural bound of a share; 0.95 had no reason written and held 221
+    states of the 2057 EU save. `docs/systems/mod_systems.md` § The safeguards pass.)*
 - **The fertility factor** = 1 − means × (1 − desired). Children per woman = wealth × natural × the fertility factor.
 
 **Age structure.** Births come from the cohorts of women aged 15–49 (§2.1), so the share of women of childbearing age
@@ -994,7 +996,8 @@ cancels them, so nothing is counted twice; they stay on their carriers, so nothi
 - the Ministry of Consumer Protection's flat −1% mortality (now external causes);
 - the mod's medical techs' flat mortality and birth lines (vaccines, antibiotics: now the cause each one acts on);
 - the augmentation laws' mortality, carried by flat chronic-treatment lines beside it (Medical Only +0.10, the other
-  three +0.05; chronic treatment's cap 0.85), which reach only as far as health-care access does.
+  three +0.05; chronic treatment's cap 0.85, 0.99 since 2026-10-20 with three era 11-12 technologies reaching it),
+  which reach only as far as health-care access does.
 
 Still to come:
 - the other family-policy laws' birth lines (Pro-Natalist Subsidies, Population Control Measures, Communal
