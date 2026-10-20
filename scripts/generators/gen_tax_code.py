@@ -4452,7 +4452,8 @@ def localization():
 # ---------------------------------------------------------------------------
 # The light code (te_tax_code_light_on; docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md,
 # docs/systems/tax_code_schema.md, "Light code"). The vanilla taxation law stays enacted and
-# bounds each rate between its very-low and very-high values (MIGRATION). Each rate sits on a
+# caps each rate at its very-high value (MIGRATION); a levied tax may go down to nothing
+# (LIGHT_FLOOR). Each rate sits on a
 # step of its law's ladder, the lowest native level whose rate is at least the code's; the
 # native tax level is the highest of those steps, and every tax below it carries a relief
 # static modifier, so the country collects the code's rates. Interest groups react to each
@@ -4482,15 +4483,22 @@ LIGHT_REACTION_FLOOR = Decimal("0.05")
 # tax levels (LEVEL_STEPS) of a tax they pay in full, of at least the first value gives the band.
 LIGHT_BANDS = ((2, 2), (1, 1))  # one level of relief on a tax the group pays in full: +1
 # The weights are written to five places, so a sum meant to reach a threshold may fall short by a
-# few hundred-thousandths (a third rounds down): compare against the threshold less this.
-LIGHT_BAND_TOLERANCE = Decimal("0.0001")
+# few ten-thousandths (a third rounds down, and a tax cut to nothing can carry its whole ladder of
+# relief steps: 40 for the rural assessment): compare against the threshold less this. The relief a
+# group gets is a whole multiple of the weights' common unit (1/60 of a level), so no sum that
+# misses a threshold misses it by this little.
+LIGHT_BAND_TOLERANCE = Decimal("0.0005")
 # The payers a step's tooltip names: groups with at least this exposure to the tax.
 LIGHT_PAYER_EXPOSURE = Decimal("0.5")
 # Scratch values of one sync or step, persistent so a tooltip pass never reads them unset.
 LIGHT_SCRATCH = ("te_tax_light_tgt", "te_tax_light_d", "te_tax_light_was", "te_tax_light_s", "te_tax_light_rlv")
-# te_tax_light_step_<key>_sgui's op table: 0 one step down, 1 one step up, 2 to the law's
-# very-low rate, 3 to its very-high rate (te_tax_light_cmd_step DIR).
+# te_tax_light_step_<key>_sgui's op table: 0 one step down, 1 one step up, 2 to the floor
+# (LIGHT_FLOOR, no tax), 3 to the law's very-high rate (te_tax_light_cmd_step DIR).
 LIGHT_OPS = (0, 1, 2, 3)
+# The lowest index of a levied tax under every law: no tax. (The first build floored each tax at
+# its law's very-low rate; changed 2026-10-20.) A rate below the very-low rate sits on the
+# very-low step and is collected through relief, like any rate below the tax level.
+LIGHT_FLOOR = 0
 
 
 def light_ladders():
@@ -4577,14 +4585,16 @@ def _light_values():
               for n, level in enumerate(NATIVE_LEVELS) if level != "medium"]
     lines.append("}")
     lines += ["", "# te_tax_light_idx_<key>_<n>: the index the active law sets at native level n (0 very low",
-              "# .. 4 very high); 0 for a tax it does not levy. _min_ and _max_ are its bounds."]
+              "# .. 4 very high); 0 for a tax it does not levy. _max_ is the law's ceiling for the tax,",
+              "# its very-high rate; _min_ is its floor, which is zero under every law: a levied tax may",
+              "# be cut to nothing (the law's very-low rate is only the bottom step of its ladder)."]
     for instrument in INSTRUMENTS:
         key = instrument.key
         for n in range(len(NATIVE_LEVELS)):
             lines += _law_chain(f"te_tax_light_idx_{key}_{n}",
                                 [(law, f"value = {ladders[law][key][n]}") for _id, law in light_laws()
                                  if ladders[law][key][n]])
-        lines += [f"te_tax_light_min_{key} = {{ value = te_tax_light_idx_{key}_0 }}",
+        lines += [f"te_tax_light_min_{key} = {{ value = {LIGHT_FLOOR} }}",
                   f"te_tax_light_max_{key} = {{ value = te_tax_light_idx_{key}_{len(NATIVE_LEVELS) - 1} }}"]
     lines += ["", "# te_tax_light_idx_<key>_native: the law's index at the country's native tax level.",
               "# te_tax_light_idx_<key>_at_level: at the level the code last set (te_tax_light_level),",
@@ -4712,6 +4722,17 @@ def light_triggers():
         laws = [law for _id, law in light_laws() if ladders[law][key][-1]]
         lines += [f"te_tax_light_levies_{key} = {{",
                   f"\tOR = {{ {' '.join(f'has_law = law_type:{law}' for law in laws)} }}", "}"]
+    lines += [
+        "",
+        "# The law the code was last carried into (te_tax_light_law, the id te_tax_light_law_id gives",
+        "# it) levied the tax. A levied tax may sit at 0, so a law change tells a tax the new law",
+        "# adds from a tax the player cut to nothing by this, not by the index.",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        ids = [n for n, law in light_laws() if ladders[law][key][-1]]
+        lines += [f"te_tax_light_old_levies_{key} = {{", "\thas_variable = te_tax_light_law",
+                  f"\tOR = {{ {' '.join(f'var:te_tax_light_law = {n}' for n in ids)} }}", "}"]
     lines += [
         "",
         "# A step's effect on the tax level, read before the step for its tooltip (the step itself",
@@ -4844,11 +4865,11 @@ def light_effects():
         "}",
         "",
         "# The active law changed (a player's country): a tax it does not levy goes to 0; one it",
-        "# newly levies (enacted index 0) starts at its rate for the tax level the code last set,",
-        "# as enacting the law gives in the base game; every other tax is clamped between the new",
-        "# law's floor and its rate at that tax level, so a law change never raises the tax level",
-        "# (Proportional's 20% wage tax would sit on Graduated's very-high step). No reaction: the",
-        "# law change's own approval covers it.",
+        "# newly levies (the previous law, te_tax_light_law, did not) starts at its rate for the tax",
+        "# level the code last set, as enacting the law gives in the base game; every other tax is",
+        "# clamped between 0 (a tax cut to nothing stays at nothing) and its rate at that tax level,",
+        "# so a law change never raises the tax level (Proportional's 20% wage tax would sit on",
+        "# Graduated's very-high step). No reaction: the law change's own approval covers it.",
         "te_tax_light_gen_clamp = {",
     ]
     for instrument in INSTRUMENTS:
@@ -4856,7 +4877,7 @@ def light_effects():
         en = f"te_tax_en_{key}"
         lines += [
             f"\tif = {{ limit = {{ NOT = {{ te_tax_light_levies_{key} = yes }} }} set_variable = {{ name = {en} value = 0 }} }}",
-            f"\telse_if = {{ limit = {{ var:{en} = 0 }} set_variable = {{ name = {en} value = te_tax_light_idx_{key}_at_level }} }}",
+            f"\telse_if = {{ limit = {{ NOT = {{ te_tax_light_old_levies_{key} = yes }} }} set_variable = {{ name = {en} value = te_tax_light_idx_{key}_at_level }} }}",
             f"\telse = {{ clamp_variable = {{ name = {en} min = te_tax_light_min_{key} "
             f"max = te_tax_light_idx_{key}_at_level }} }}",
         ]
@@ -5024,8 +5045,8 @@ def light_sguis():
     lines = [
         HEADER,
         "# The light code's step handlers (gui/journal_entry_widgets/te_tax_light_widget.gui), one",
-        "# per tax: op 0 one step down, 1 one step up, 2 to the law's very-low rate, 3 to its",
-        "# very-high rate. is_valid is the command's own trigger, so the button is enabled exactly",
+        "# per tax: op 0 one step down, 1 one step up, 2 to zero, 3 to the law's very-high",
+        "# rate. is_valid is the command's own trigger, so the button is enabled exactly",
         "# when the click would change the rate, and its tooltip lists what is missing.",
     ]
     for instrument in INSTRUMENTS:
@@ -5081,9 +5102,9 @@ def light_custom_localization():
 
 
 def light_range_text(instrument, ladder):
-    """A law's range for one tax as the rows print it: 10–30% for a rate, 0.4–1 with the money
+    """A law's range for one tax as the rows print it: 0–30% for a rate, 0–1 with the money
     icon for an amount, as the rows' rate cell prints it (te_tax_en_rate_<key>)."""
-    low, high = rate(instrument, ladder[0]), rate(instrument, ladder[-1])
+    low, high = rate(instrument, LIGHT_FLOOR), rate(instrument, ladder[-1])
     if instrument.percent:
         return f"#v {fmt(low * 100)}–{fmt(high * 100)}%#!"
     return f"@money!#v {fmt(low)}–{fmt(high)}#!"
