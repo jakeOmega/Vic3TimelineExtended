@@ -186,8 +186,9 @@ te_demog_history_markers = {
 }
 
 # Scope: a tracked country, on its monthly pulse (te_demog_country_monthly_on_action; issue #1029): a month with a
-# famine marks the year's history sample, which the census stores at the country's yearly pulse. Only a famine month
-# before that day of the calendar year reaches it: one later in the year sets a year whose sample is already stored.
+# famine marks the year's history sample, for the census's sample at the country's yearly pulse, and on this year's
+# sample at once where it is stored already. The pulse falls on the country's own day, so a famine month after it in
+# the calendar year would otherwise set a year whose sample is already stored (the event marker below does the same).
 te_demog_history_note_famine = {
 	if = {
 		limit = {
@@ -195,6 +196,14 @@ te_demog_history_note_famine = {
 			has_famine = yes
 		}
 		set_variable = { name = te_dg_famine_year value = te_demog_year }
+		if = {
+			limit = { has_variable_list = te_dg_hist }
+			every_in_list = {
+				variable = te_dg_hist
+				limit = { var:te_hist_i = te_demog_year }
+				set_variable = { name = te_dg_h_mk_famine value = 1 }
+			}
+		}
 	}
 }
 
