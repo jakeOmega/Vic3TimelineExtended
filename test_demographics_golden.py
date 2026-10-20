@@ -39,7 +39,7 @@ medicine, so their factor is 1 and their numbers stay; the two rich cases, model
 The participation rates in the game's units (2026-10-20: the old WORKFORCE_SCALE of 0.7 folded into the rates and the
 carriers' participation lines) move two figures of the Full cases on purpose, each x 0.7 within the interpreter's last
 place, and nothing else: te_dg_at_work (0.41443 to 0.2901, 0.53487 to 0.3744) and te_dg_wk_past (0.02866 to 0.02006).
-Those four numbers alone were rewritten; te_dg_fws_wk, which splits the work deaths, and every death and birth stay."""
+Those three numbers alone were rewritten; te_dg_fws_wk, which splits the work deaths, and every death and birth stay."""
 
 import functools
 import hashlib

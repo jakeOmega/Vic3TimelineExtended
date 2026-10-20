@@ -1006,7 +1006,7 @@ the engine reads no new fact.
 1. **Paris (or any capital), Full, a running game.** The Workforce row's result is about what the pops show: Paris
    read working age 0.985 × at work 0.977 = 96% against pops at 67% (base 0.25 + Census: Workforce 0.424) before; now
    its at-work term and result are 0.7 of those (0.985 × 0.684 = 67%), the pops' figure once Census: Workforce has
-   reached its aim. The hover's men's rate reads about 64% and women's below it.
+   reached its aim. An old save's state reads the old units until its next census step. The hover's men's rate reads about 64% and women's below it.
 2. **Nothing else moves (Full).** Census: Workforce (`w=` on option r's `TE_DEMOG_WF` line), `census_target=` and
    `set=` read as on `main` in the same save at the same date; the pension bill and the Family Policy expense line
    (Parental Leave) as well.

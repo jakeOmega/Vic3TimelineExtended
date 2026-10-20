@@ -207,7 +207,7 @@ class TestCatalogue(unittest.TestCase):
         self.assertIn("state_demog_womens_work_ratio_add = {", family)
         body = _block(_text(MS_VALUES), "te_demog_ms_women_at_work")
         self.assertIn("value = capital.te_demog_women_rate", body)
-        self.assertIn("divide = te_demog_k_rate_max", body, "the rate over its ceiling: the upkeep's share runs 0 to 1")
+        self.assertIn("divide = { value = te_demog_k_rate_max min = 0.01 }", body, "the rate over its ceiling: the upkeep's share runs 0 to 1")
         self.assertNotIn("has_law", body)
 
     def test_money_upkeep_sits_on_its_own_cost_modifier(self):

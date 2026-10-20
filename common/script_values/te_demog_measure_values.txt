@@ -412,7 +412,7 @@ te_demog_ms_women_at_work = {
 	if = {
 		limit = { exists = capital }
 		value = capital.te_demog_women_rate
-		divide = te_demog_k_rate_max
+		divide = { value = te_demog_k_rate_max min = 0.01 }
 	}
 }
 
