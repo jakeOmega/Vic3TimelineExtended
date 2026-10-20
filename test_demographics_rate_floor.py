@@ -23,6 +23,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 import demographics_harness as H  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
+import test_demographics_registry as R  # noqa: E402  (a module: its TestCases aren't collected here)
 from test_demographics_registry import (  # noqa: E402  (helpers only: no TestCase)
     EFFECTS, GENERATED_VALUES, MISC_LOC, RATE_EFFECTS, _block, _Engine, _find, _OwnerEngine, _raw_blocks, _text)
 
@@ -155,6 +156,51 @@ class TestRateBelowMeasured(unittest.TestCase):
         self.arm(eng)
         self.read(eng, mig=-0.5 * 480 - 170.0)
         self.assertEqual(self.verdict(eng), "BROKEN")
+
+    def test_a_stop_at_minus_0_9_never_reads_ok(self):
+        """The review of #1082: the OK band's low side takes a month of the old rate on top of half the deaths, so after a
+        big drop (an old window at 0.55 of the bare curve, a late medical leap) a stop at -0.9 would have read OK. The
+        arm now asks the deficit such a stop leaves to clear that low side by the baseline's quarter of the deaths: every
+        armed state reads BROKEN under a stop at -0.9, even with that quarter of migration the other way."""
+        armed = {}
+        for old in (0.2, 0.3, 0.4, 0.55, 0.8):
+            with self.subTest(old=old):
+                eng = self.engine()
+                self.arm(eng, mult_end=old, mult_start=old)
+                armed[old] = "te_dg_rbm_s1" in eng.vars
+                if armed[old]:
+                    gap = 0.1 * self.ED0 * 12 / 1e5 - 0.04 * self.ED0 * 12 / 1e5
+                    self.read(eng, mig=0.25 * 480 - gap)
+                    self.assertEqual(self.verdict(eng), "BROKEN")
+                else:
+                    self.assertNotIn("te_dg_rbm_r0", eng.vars)
+        self.assertEqual(armed, {0.2: True, 0.3: True, 0.4: False, 0.55: False, 0.8: False})
+
+    def test_above_the_band_is_migration_not_a_verdict(self):
+        """A stop at -0.9 only adds deaths, so it pushes the residual down. A residual above half the deaths is migration
+        the baseline missed: no line, the arm goes, and the once-a-game flag stays unspent for a later state."""
+        eng = self.engine()
+        self.arm(eng)
+        self.read(eng, mig=0.5 * 480 + 1.0)
+        self.assertEqual(eng.logs, [])
+        self.assertNotIn("te_demog_rbm_selfcheck_done", eng.globals)
+        for name in ("te_dg_rbm_s1", "te_dg_rbm_r0", "te_dg_rbm_lag"):
+            self.assertNotIn(name, eng.vars, name)
+
+    def test_the_console_replay_does_nothing_here(self):
+        """te_debug_demog.1's option a replays a step through te_demog_flows with no walk: the hook reads no walk local,
+        spends no flag and keeps an armed state's arm for its real step."""
+        eng = self.engine()
+        self.arm(eng)
+        armed = {k: eng.vars[k] for k in ("te_dg_rbm_s1", "te_dg_rbm_r0", "te_dg_rbm_lag")}
+        for name in ("te_dg_w_ed0", "te_dg_w_ed"):
+            eng.locals.pop(name)
+        eng.vars["te_dg_ed"] = 480.0
+        eng.locals["te_dg_mig"] = -5000.0
+        eng.call("te_demog_rbm_selfcheck_flows")
+        self.assertEqual(eng.logs, [])
+        self.assertNotIn("te_demog_rbm_selfcheck_done", eng.globals)
+        self.assertEqual({k: eng.vars[k] for k in armed}, armed)
 
     def test_no_arm_where_the_baseline_is_loud(self):
         """A residual over a quarter of the new window's deaths (120 here) is migration that could hide a bend."""
@@ -373,6 +419,20 @@ class TestTheWalkAppliesTheWealthLine(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_sr_d"], want, places=4)
         # the start's own lines leave the line out: none of the pops has a line of its own here
         self.assertAlmostEqual(eng.vars["te_dg_sp_d"], 0.0, places=4)
+
+
+    def test_fast_mode_swaps_in_the_new_line(self):
+        """Fast mode's term is (K - 1) x the walk's average with the census's new terms in it: the walk's average holds
+        the wealth line in force, so the census's new te_dg_w goes in for it, on the bare deaths x wealth it reaches, as
+        the start rate takes it (the review of #1082)."""
+        eng = R.TestFastMode()._eng_full()
+        old_line, ed0 = -0.0001, 430e3
+        eng.fixtures["modifier:state_mortality_wealth_mult"] = old_line
+        eng.locals["te_dg_w_edw"] = 40.0 * ed0
+        R.TestFastMode()._both(eng, eb=1.05 * 475e3, eb0=475e3, ed=(0.98 + old_line * 40.0) * ed0, ed0=ed0)
+        md, w = eng.vars["te_dg_md"], eng.vars["te_dg_w"]
+        self.assertEqual(w, 0.0)   # no line under Full here: the census applies none
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * (0.98 + md), places=5)
 
 
 class TestTheTextIsTrue(unittest.TestCase):

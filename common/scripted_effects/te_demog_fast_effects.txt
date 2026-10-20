@@ -138,6 +138,22 @@ te_demog_fast_refresh_rates = {
 				multiply = te_demog_fast_k_minus_1
 			}
 		}
+		# the walk's average holds the wealth line in force since 2026-10-20 (te_demog_pop_death_mult): the census's new one
+		# (te_dg_w, which the refresh just set) goes in for it, on the bare deaths x wealth it reaches, as the refresh's
+		# start rate takes it
+		set_local_variable = { name = te_dg_fast_wl value = 0 }
+		if = {
+			limit = { has_variable = te_dg_w }
+			set_local_variable = {
+				name = te_dg_fast_wl
+				value = {
+					value = var:te_dg_w
+					subtract = modifier:state_mortality_wealth_mult
+					multiply = local_var:te_dg_w_edw
+					divide = { value = local_var:te_dg_w_ed0 min = 0.00001 }
+				}
+			}
+		}
 		set_variable = {
 			name = te_dg_fast_fd
 			value = {
@@ -147,6 +163,7 @@ te_demog_fast_refresh_rates = {
 				subtract = local_var:te_dg_rate_prev_d
 				subtract = local_var:te_dg_rate_lines_d
 				add = local_var:te_dg_rate_new_d
+				add = local_var:te_dg_fast_wl
 				min = 0
 				multiply = te_demog_fast_k_minus_1
 			}

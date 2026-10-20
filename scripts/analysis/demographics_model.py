@@ -1333,8 +1333,11 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         cm = cause_multipliers(inp)
         cwf, cwm = work_split(inp, cm["work"])
         ck = 1 + deaths_scale
-        causes_raw = cause_deaths_estimate(bands_f, bands_m, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck,
-                                           infection_adult(inp))
+        # a late-game state's own count replaces the calendar estimate below (lx_cause_deaths), so it isn't made there, as
+        # in the script (te_demog_step_begin): calendar ages put an immortal state's deaths dozens of times too high
+        if lx is None:
+            causes_raw = cause_deaths_estimate(bands_f, bands_m, {c: v * ck for c, v in cm.items()}, cwf * ck,
+                                               cwm * ck, infection_adult(inp))
     maternal = 0.0
     s = ring.scale
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
