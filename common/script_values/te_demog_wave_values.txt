@@ -316,14 +316,6 @@ te_demog_wave_sex_balance = {
 	}
 }
 
-te_demog_wave_primacy = {
-	value = 0
-	if = {
-		limit = { has_variable = te_dg_primacy }
-		value = var:te_dg_primacy
-	}
-}
-
 # State: the census's median age.
 te_demog_wave_median = {
 	value = 0

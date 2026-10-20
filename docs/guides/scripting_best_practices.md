@@ -405,6 +405,10 @@ custom_tooltip = {
 ```
 The lock entries appear as red "Locks: …" lines in the modifier-block tooltip of whichever entity (law, tech, decree) sets them — making the *source* of the restriction visible — and the button-side `custom_tooltip` explains the greying. Beats inline `NOT = { has_law = … }` or sprawling `OR = { has_law = X, has_law = Y, … }` lists, which silently grey buttons with no player-readable explanation. Vanilla precedent: `country_disallow_law_*_bool` in `can_enact` blocks. Mod precedent: the seven `country_banking_lock_*_bool` modifiers in `banking_cycle_modifier_types.txt` (one per cb_* intervention tool).
 
+### `state_migration_crowding_density_mult` Is Capacity: More Crowding Is a Negative Value
+
+The mod's Migration Crowding measures density as people ÷ land ÷ (1 + `state_migration_crowding_density_mult`) (`state_population_density`, `extra_script_values.txt`), so a positive value lets a state hold more people before crowding starts, and a negative one makes it crowd sooner. "Raise crowding" is therefore a negative value: Green Belt is −0.1 ("fills up sooner"), Urban Sprawl +0.2 ("crowding later"), the Ministry of Urban Planning +0.1 a level, and the metropolitan share's Metropolis −0.1 (2026-10-19; the brief's "up with the share" meant the crowding, not the field). Check the sign against that division before writing a value that is meant to crowd a state.
+
 ### Mod-Added Political Movements Need Modifier Type Registration
 
 Vanilla auto-registers `state_pop_support_movement_<X>_(add|mult)` and `country_pop_support_movement_<X>_(add|mult)` for every vanilla movement (in `common/modifier_type_definitions/08_movement_modifier_types.txt`). **Mod-added movements** defined in `common/political_movements/` get no such treatment — their support modifiers must be registered explicitly, otherwise references in laws / techs / events produce `Unknown modifier type: state_pop_support_movement_<X>_mult` and silently no-op (per the same rule as `_bool` modifiers).

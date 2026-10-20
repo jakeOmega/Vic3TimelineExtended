@@ -352,6 +352,15 @@ te_demog_trend_mt = {
 		round = yes
 	}
 }
+# The share itself, 0 without one: the Overspill's description (te_demog_wave.9.d) reads it on the event's state,
+# which the console may pick without a share.
+te_demog_mt_shown_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mt }
+		value = var:te_dg_mt
+	}
+}
 # 1 under the Full rule (the effects act only there).
 te_demog_mt_rule_full = {
 	value = 0
