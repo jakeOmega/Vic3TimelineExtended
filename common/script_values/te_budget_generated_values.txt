@@ -1959,6 +1959,11 @@ te_budget_expense_archaeology = {
 	add = scope:archaeology_0
 }
 
+te_budget_expense_climate = {
+	value = 0
+	add = scope:climate_0
+}
+
 te_budget_expense_additional = {
 	value = 0
 	add = scope:additional_0
@@ -1974,6 +1979,7 @@ te_budget_expense_additional = {
 	subtract = te_budget_expense_family
 	subtract = te_budget_expense_pensions
 	subtract = te_budget_expense_archaeology
+	subtract = te_budget_expense_climate
 }
 
 te_budget_expense_other = {
@@ -2026,6 +2032,7 @@ te_budget_expense_other = {
 	subtract = te_budget_expense_family
 	subtract = te_budget_expense_pensions
 	subtract = te_budget_expense_archaeology
+	subtract = te_budget_expense_climate
 	subtract = te_budget_expense_additional
 }
 
@@ -3827,6 +3834,7 @@ te_budget_expense_programmes = {
 	add = te_budget_expense_family
 	add = te_budget_expense_pensions
 	add = te_budget_expense_archaeology
+	add = te_budget_expense_climate
 }
 
 te_budget_expense_programmes_positive = {
@@ -3843,6 +3851,7 @@ te_budget_expense_programmes_positive = {
 	add = te_budget_expense_family_positive
 	add = te_budget_expense_pensions_positive
 	add = te_budget_expense_archaeology_positive
+	add = te_budget_expense_climate_positive
 }
 
 te_budget_expense_programmes_active = {
@@ -3859,6 +3868,7 @@ te_budget_expense_programmes_active = {
 	add = te_budget_expense_family_active
 	add = te_budget_expense_pensions_active
 	add = te_budget_expense_archaeology_active
+	add = te_budget_expense_climate_active
 	max = 1
 }
 
@@ -3877,6 +3887,7 @@ te_budget_expense_programmes_subtree_rows = {
 		add = te_budget_expense_family_subtree_rows
 		add = te_budget_expense_pensions_subtree_rows
 		add = te_budget_expense_archaeology_subtree_rows
+		add = te_budget_expense_climate_subtree_rows
 	}
 }
 
@@ -4406,6 +4417,48 @@ te_budget_expense_archaeology_slice = {
 
 te_budget_expense_archaeology_share = {
 	value = te_budget_expense_archaeology_positive
+	divide = { value = scope:positive_total min = 0.001 }
+	min = 0
+	max = 1
+}
+
+te_budget_expense_climate_positive = {
+	value = te_budget_expense_climate
+	min = 0
+}
+
+te_budget_expense_climate_active = {
+	value = 0
+	if = { limit = { NOT = { te_budget_expense_climate = 0 } } value = 1 }
+}
+
+te_budget_expense_climate_subtree_rows = {
+	value = te_budget_expense_climate_active
+}
+
+te_budget_expense_climate_visible = {
+	value = 0
+	if = { limit = { scope:open_programmes = 1 } value = te_budget_expense_climate_active }
+}
+
+te_budget_expense_climate_cached_rank = {
+	value = scope:rank_climate
+}
+
+te_budget_expense_climate_cached_active = {
+	value = scope:active_climate
+}
+
+te_budget_expense_climate_slice = {
+	value = 0
+	if = {
+		limit = { scope:open_programmes = 1 }
+		value = scope:positive_expense_climate
+	}
+}
+
+te_budget_expense_climate_share = {
+	value = te_budget_expense_climate_positive
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -6217,6 +6270,7 @@ te_budget_expense_banking_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_banking } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_banking } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_banking } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_banking } add = scope:subtree_climate }
 }
 
 te_budget_expense_covert_display_rank = {
@@ -6245,6 +6299,7 @@ te_budget_expense_covert_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_covert } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_covert } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_covert } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_covert } add = scope:subtree_climate }
 }
 
 te_budget_expense_culture_display_rank = {
@@ -6273,6 +6328,7 @@ te_budget_expense_culture_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_culture } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_culture } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_culture } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_culture } add = scope:subtree_climate }
 }
 
 te_budget_expense_colonial_display_rank = {
@@ -6301,6 +6357,7 @@ te_budget_expense_colonial_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_colonial } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_colonial } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_colonial } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_colonial } add = scope:subtree_climate }
 }
 
 te_budget_expense_un_display_rank = {
@@ -6329,6 +6386,7 @@ te_budget_expense_un_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_un } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_un } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_un } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_un } add = scope:subtree_climate }
 }
 
 te_budget_expense_nuclear_display_rank = {
@@ -6357,6 +6415,7 @@ te_budget_expense_nuclear_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_nuclear } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_nuclear } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_nuclear } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_nuclear } add = scope:subtree_climate }
 }
 
 te_budget_expense_nuclear_taboo_display_rank = {
@@ -6385,6 +6444,7 @@ te_budget_expense_nuclear_taboo_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_nuclear_taboo } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_nuclear_taboo } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_nuclear_taboo } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_nuclear_taboo } add = scope:subtree_climate }
 }
 
 te_budget_expense_space_display_rank = {
@@ -6413,6 +6473,7 @@ te_budget_expense_space_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_space } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_space } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_space } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_space } add = scope:subtree_climate }
 }
 
 te_budget_expense_drugs_display_rank = {
@@ -6441,6 +6502,7 @@ te_budget_expense_drugs_display_rank = {
 	if = { limit = { scope:subtree_family > 0 scope:row_family > scope:row_drugs } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_drugs } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_drugs } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_drugs } add = scope:subtree_climate }
 }
 
 te_budget_expense_family_display_rank = {
@@ -6469,6 +6531,7 @@ te_budget_expense_family_display_rank = {
 	if = { limit = { scope:subtree_drugs > 0 scope:row_drugs >= scope:row_family } add = scope:subtree_drugs }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions > scope:row_family } add = scope:subtree_pensions }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_family } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_family } add = scope:subtree_climate }
 }
 
 te_budget_expense_pensions_display_rank = {
@@ -6497,6 +6560,7 @@ te_budget_expense_pensions_display_rank = {
 	if = { limit = { scope:subtree_drugs > 0 scope:row_drugs >= scope:row_pensions } add = scope:subtree_drugs }
 	if = { limit = { scope:subtree_family > 0 scope:row_family >= scope:row_pensions } add = scope:subtree_family }
 	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology > scope:row_pensions } add = scope:subtree_archaeology }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_pensions } add = scope:subtree_climate }
 }
 
 te_budget_expense_archaeology_display_rank = {
@@ -6525,6 +6589,36 @@ te_budget_expense_archaeology_display_rank = {
 	if = { limit = { scope:subtree_drugs > 0 scope:row_drugs >= scope:row_archaeology } add = scope:subtree_drugs }
 	if = { limit = { scope:subtree_family > 0 scope:row_family >= scope:row_archaeology } add = scope:subtree_family }
 	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions >= scope:row_archaeology } add = scope:subtree_pensions }
+	if = { limit = { scope:subtree_climate > 0 scope:row_climate > scope:row_archaeology } add = scope:subtree_climate }
+}
+
+te_budget_expense_climate_display_rank = {
+	value = 1
+	if = { limit = { scope:subtree_administration_group > 0 scope:row_administration_group >= scope:row_programmes } add = scope:subtree_administration_group }
+	if = { limit = { scope:subtree_military > 0 scope:row_military >= scope:row_programmes } add = scope:subtree_military }
+	if = { limit = { scope:subtree_shipping > 0 scope:row_shipping >= scope:row_programmes } add = scope:subtree_shipping }
+	if = { limit = { scope:subtree_diplomacy > 0 scope:row_diplomacy > scope:row_programmes } add = scope:subtree_diplomacy }
+	if = { limit = { scope:subtree_civil > 0 scope:row_civil > scope:row_programmes } add = scope:subtree_civil }
+	if = { limit = { scope:subtree_construction > 0 scope:row_construction > scope:row_programmes } add = scope:subtree_construction }
+	if = { limit = { scope:subtree_welfare > 0 scope:row_welfare > scope:row_programmes } add = scope:subtree_welfare }
+	if = { limit = { scope:subtree_subsidies > 0 scope:row_subsidies > scope:row_programmes } add = scope:subtree_subsidies }
+	if = { limit = { scope:subtree_subventions > 0 scope:row_subventions > scope:row_programmes } add = scope:subtree_subventions }
+	if = { limit = { scope:subtree_government_losses > 0 scope:row_government_losses > scope:row_programmes } add = scope:subtree_government_losses }
+	if = { limit = { scope:subtree_interest > 0 scope:row_interest > scope:row_programmes } add = scope:subtree_interest }
+	if = { limit = { scope:subtree_additional > 0 scope:row_additional > scope:row_programmes } add = scope:subtree_additional }
+	if = { limit = { scope:subtree_other > 0 scope:row_other > scope:row_programmes } add = scope:subtree_other }
+	if = { limit = { scope:subtree_banking > 0 scope:row_banking >= scope:row_climate } add = scope:subtree_banking }
+	if = { limit = { scope:subtree_covert > 0 scope:row_covert >= scope:row_climate } add = scope:subtree_covert }
+	if = { limit = { scope:subtree_culture > 0 scope:row_culture >= scope:row_climate } add = scope:subtree_culture }
+	if = { limit = { scope:subtree_colonial > 0 scope:row_colonial >= scope:row_climate } add = scope:subtree_colonial }
+	if = { limit = { scope:subtree_un > 0 scope:row_un >= scope:row_climate } add = scope:subtree_un }
+	if = { limit = { scope:subtree_nuclear > 0 scope:row_nuclear >= scope:row_climate } add = scope:subtree_nuclear }
+	if = { limit = { scope:subtree_nuclear_taboo > 0 scope:row_nuclear_taboo >= scope:row_climate } add = scope:subtree_nuclear_taboo }
+	if = { limit = { scope:subtree_space > 0 scope:row_space >= scope:row_climate } add = scope:subtree_space }
+	if = { limit = { scope:subtree_drugs > 0 scope:row_drugs >= scope:row_climate } add = scope:subtree_drugs }
+	if = { limit = { scope:subtree_family > 0 scope:row_family >= scope:row_climate } add = scope:subtree_family }
+	if = { limit = { scope:subtree_pensions > 0 scope:row_pensions >= scope:row_climate } add = scope:subtree_pensions }
+	if = { limit = { scope:subtree_archaeology > 0 scope:row_archaeology >= scope:row_climate } add = scope:subtree_archaeology }
 }
 
 te_budget_expense_diplomacy_display_rank = {
@@ -8487,7 +8581,7 @@ te_budget_expense_cum_51 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
-	add = te_budget_expense_diplomacy_slice
+	add = te_budget_expense_climate_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8546,8 +8640,8 @@ te_budget_expense_cum_52 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
-	add = te_budget_expense_pacts_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8606,9 +8700,9 @@ te_budget_expense_cum_53 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
-	add = te_budget_expense_treaties_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8667,10 +8761,10 @@ te_budget_expense_cum_54 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
-	add = te_budget_expense_civil_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8729,11 +8823,11 @@ te_budget_expense_cum_55 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
 	add = te_budget_expense_civil_slice
-	add = te_budget_expense_construction_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8792,12 +8886,12 @@ te_budget_expense_cum_56 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
 	add = te_budget_expense_civil_slice
 	add = te_budget_expense_construction_slice
-	add = te_budget_expense_welfare_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8856,13 +8950,13 @@ te_budget_expense_cum_57 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
 	add = te_budget_expense_civil_slice
 	add = te_budget_expense_construction_slice
 	add = te_budget_expense_welfare_slice
-	add = te_budget_expense_subsidies_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8921,6 +9015,7 @@ te_budget_expense_cum_58 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
@@ -8928,7 +9023,6 @@ te_budget_expense_cum_58 = {
 	add = te_budget_expense_construction_slice
 	add = te_budget_expense_welfare_slice
 	add = te_budget_expense_subsidies_slice
-	add = te_budget_expense_subventions_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -8987,6 +9081,7 @@ te_budget_expense_cum_59 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
@@ -8995,7 +9090,6 @@ te_budget_expense_cum_59 = {
 	add = te_budget_expense_welfare_slice
 	add = te_budget_expense_subsidies_slice
 	add = te_budget_expense_subventions_slice
-	add = te_budget_expense_government_losses_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -9054,6 +9148,7 @@ te_budget_expense_cum_60 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
@@ -9063,7 +9158,6 @@ te_budget_expense_cum_60 = {
 	add = te_budget_expense_subsidies_slice
 	add = te_budget_expense_subventions_slice
 	add = te_budget_expense_government_losses_slice
-	add = te_budget_expense_interest_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -9122,6 +9216,7 @@ te_budget_expense_cum_61 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice
@@ -9132,7 +9227,6 @@ te_budget_expense_cum_61 = {
 	add = te_budget_expense_subventions_slice
 	add = te_budget_expense_government_losses_slice
 	add = te_budget_expense_interest_slice
-	add = te_budget_expense_additional_slice
 	divide = { value = scope:positive_total min = 0.001 }
 	min = 0
 	max = 1
@@ -9191,6 +9285,77 @@ te_budget_expense_cum_62 = {
 	add = te_budget_expense_family_slice
 	add = te_budget_expense_pensions_slice
 	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
+	add = te_budget_expense_diplomacy_slice
+	add = te_budget_expense_pacts_slice
+	add = te_budget_expense_treaties_slice
+	add = te_budget_expense_civil_slice
+	add = te_budget_expense_construction_slice
+	add = te_budget_expense_welfare_slice
+	add = te_budget_expense_subsidies_slice
+	add = te_budget_expense_subventions_slice
+	add = te_budget_expense_government_losses_slice
+	add = te_budget_expense_interest_slice
+	add = te_budget_expense_additional_slice
+	divide = { value = scope:positive_total min = 0.001 }
+	min = 0
+	max = 1
+}
+
+te_budget_expense_cum_63 = {
+	value = 0
+	add = te_budget_expense_administration_group_slice
+	add = te_budget_expense_institution_colonial_affairs_slice
+	add = te_budget_expense_institution_health_system_slice
+	add = te_budget_expense_institution_home_affairs_slice
+	add = te_budget_expense_institution_migration_controls_slice
+	add = te_budget_expense_institution_ministry_of_commerce_slice
+	add = te_budget_expense_institution_ministry_of_consumer_protection_slice
+	add = te_budget_expense_institution_ministry_of_culture_slice
+	add = te_budget_expense_institution_ministry_of_foreign_affairs_slice
+	add = te_budget_expense_institution_ministry_of_intelligence_and_security_slice
+	add = te_budget_expense_institution_ministry_of_international_aid_slice
+	add = te_budget_expense_institution_ministry_of_labor_slice
+	add = te_budget_expense_institution_ministry_of_propaganda_slice
+	add = te_budget_expense_institution_ministry_of_refugee_affairs_slice
+	add = te_budget_expense_institution_ministry_of_religion_slice
+	add = te_budget_expense_institution_ministry_of_science_slice
+	add = te_budget_expense_institution_ministry_of_the_environment_slice
+	add = te_budget_expense_institution_ministry_of_thought_control_slice
+	add = te_budget_expense_institution_ministry_of_urban_planning_slice
+	add = te_budget_expense_institution_ministry_of_war_slice
+	add = te_budget_expense_institution_national_bank_slice
+	add = te_budget_expense_institution_police_slice
+	add = te_budget_expense_institution_schools_slice
+	add = te_budget_expense_institution_social_security_slice
+	add = te_budget_expense_institution_workplace_safety_slice
+	add = te_budget_expense_administration_slice
+	add = te_budget_expense_military_slice
+	add = te_budget_expense_army_slice
+	add = te_budget_expense_army_wages_slice
+	add = te_budget_expense_army_materials_slice
+	add = te_budget_expense_navy_slice
+	add = te_budget_expense_navy_wages_slice
+	add = te_budget_expense_navy_materials_slice
+	add = te_budget_expense_military_adjustment_slice
+	add = te_budget_expense_shipping_slice
+	add = te_budget_expense_supply_construction_slice
+	add = te_budget_expense_supply_maintenance_slice
+	add = te_budget_expense_port_connections_slice
+	add = te_budget_expense_programmes_slice
+	add = te_budget_expense_banking_slice
+	add = te_budget_expense_covert_slice
+	add = te_budget_expense_culture_slice
+	add = te_budget_expense_colonial_slice
+	add = te_budget_expense_un_slice
+	add = te_budget_expense_nuclear_slice
+	add = te_budget_expense_nuclear_taboo_slice
+	add = te_budget_expense_space_slice
+	add = te_budget_expense_drugs_slice
+	add = te_budget_expense_family_slice
+	add = te_budget_expense_pensions_slice
+	add = te_budget_expense_archaeology_slice
+	add = te_budget_expense_climate_slice
 	add = te_budget_expense_diplomacy_slice
 	add = te_budget_expense_pacts_slice
 	add = te_budget_expense_treaties_slice

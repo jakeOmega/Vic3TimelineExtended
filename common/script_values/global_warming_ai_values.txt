@@ -47,8 +47,8 @@
 #                       a state programme, not a market intervention.
 #   reforestation       agriculture throughput and drought/flood cover pay most
 #                       in farming economies, which run poorer.
-#   renewable_investment  subsidised renewables, -10% conventional power plant
-#                       throughput: costs money, cuts coal burn.
+#   renewable_investment  a standing cost of 0.5% of GDP a year, -10% conventional
+#                       power plant throughput: costs money, cuts coal burn.
 #   public_transit      -5% oil input, -25% automobile infrastructure use;
 #                       infrastructure, which laissez-faire minds least.
 #   green_building_codes  +5% construction input: a cost on builders.

@@ -271,7 +271,7 @@ fuels.
 |---|---|---|---|
 | Fossil-Fuel Tariffs | Market leader | 100 | Coal and oil import/export tariffs +2.5/+5/+10 percentage points at Low/High/Maximum Tariffs; No Tariffs or Subventions stays tariff-free. |
 | Carbon Tax | National | none | Industrial emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
-| Renewable Investment | National | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
+| Renewable Investment | National | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +10% throughput; conventional power plants −10% throughput; power buildings built 25% faster. Costs 0.5% of GDP a year, listed under Climate Policy in the Budget panel's Breakdown tab. |
 | Emission Standards | National | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |

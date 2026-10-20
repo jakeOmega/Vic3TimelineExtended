@@ -113,5 +113,58 @@ class NativeTariffPolicyTest(unittest.TestCase):
         self.assertEqual(pulse["gw_refresh_tariff_policies_effect"], "yes")
 
 
+class RenewableInvestmentCostTest(unittest.TestCase):
+    """Renewable Investment pays 0.5% of GDP a year, not forced plant subsidies (2026-10-20)."""
+
+    COST = "renewable_investment_cost_modifier"
+
+    def test_policy_modifier_keeps_its_bonuses_and_forces_no_subsidies(self):
+        modifier = load("common/static_modifiers/extra_modifiers.txt")["renewable_investment_modifier"]
+        self.assertNotIn("require_subsidies", str(modifier))
+        self.assertEqual(modifier["building_renewable_energy_plant_throughput_add"], "0.10")
+        self.assertEqual(modifier["building_group_bg_power_construction_efficiency_add"], "0.25")
+        self.assertNotIn("country_expenses_add", modifier)
+        # The retired bool has no definition and no loc left behind.
+        self.assertNotIn("country_building_renewable_energy_plant_require_subsidies_bool",
+                         load("common/modifier_type_definitions/global_warming_modifier_types.txt"))
+        from test_gw_top_emitters import _loc
+        with self.assertRaises(AssertionError):
+            _loc("country_building_renewable_energy_plant_require_subsidies_bool")
+
+    def test_cost_is_a_gdp_scaled_expense_mirrored_into_the_budget_breakdown(self):
+        modifier = load("common/static_modifiers/extra_modifiers.txt")[self.COST]
+        self.assertEqual(modifier["country_expenses_add"], "1")
+        self.assertEqual(modifier["country_te_budget_expense_climate_add"], "1")
+        # 0.5% of a year's GDP, paid weekly.
+        self.assertEqual(load("common/script_values/global_warming_cost_values.txt")["gw_renewable_investment_cost_value"],
+                         {"value": "gdp", "multiply": "0.005", "divide": "52", "min": "0"})
+        from test_gw_top_emitters import _loc
+        for key in (self.COST, self.COST + "_desc", "renewable_investment_modifier_desc"):
+            self.assertTrue(_loc(key), key)
+
+    def test_cost_goes_on_and_off_with_the_policy(self):
+        effects = load(EFFECTS)
+        adopt = effects["gw_effect_renewable_investment"]["custom_tooltip"]
+        repeal = effects["gw_effect_remove_renewable_investment"]["custom_tooltip"]
+        self.assertEqual(adopt["gw_renewable_investment_cost_apply"], "yes")
+        self.assertEqual(repeal["remove_modifier"], self.COST)
+        self.assertEqual(effects["gw_renewable_investment_cost_apply"],
+                         {"add_modifier": {"name": self.COST, "multiplier": "gw_renewable_investment_cost_value"}})
+        treaty = load("common/treaty_articles/109_enforce_emissions_reduction.txt")["enforce_emissions_reduction"]
+        self.assertIn("gw_renewable_investment_cost_apply", str(treaty["on_entry_into_force"]))
+
+    def test_monthly_sweep_follows_the_policy_with_the_climate_rule_on_or_off(self):
+        effects = load(EFFECTS)
+        sync = effects["gw_renewable_investment_cost_sync"]
+        self.assertEqual(sync["if"]["limit"], {"gw_policy_renewable_investment_active": "yes"})
+        self.assertEqual(sync["if"]["gw_renewable_investment_cost_apply"], "yes")
+        self.assertEqual(sync["else_if"]["remove_modifier"], self.COST)
+        sweep = effects["gw_refresh_policy_costs_effect"]["every_country"]
+        self.assertEqual(sweep["gw_renewable_investment_cost_sync"], "yes")
+        self.assertEqual(sweep["limit"]["OR"], {"has_journal_entry": "je_global_warming", "has_modifier": self.COST})
+        pulse = load("common/on_actions/extra_on_actions.txt")["global_warming_events_on_action"]["effect"]
+        self.assertEqual(pulse["gw_refresh_policy_costs_effect"], "yes")
+
+
 if __name__ == "__main__":
     unittest.main()

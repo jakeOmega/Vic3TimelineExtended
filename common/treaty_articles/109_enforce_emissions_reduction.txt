@@ -117,6 +117,9 @@ enforce_emissions_reduction = {
 				if = {
 					limit = { NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } } }
 					je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
+					# The policy's running cost goes on with it; the monthly sweep
+					# (gw_refresh_policy_costs_effect) keeps it in step afterwards.
+					gw_renewable_investment_cost_apply = yes
 				}
 				if = {
 					limit = { NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } } }

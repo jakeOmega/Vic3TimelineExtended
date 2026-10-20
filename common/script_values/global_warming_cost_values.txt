@@ -1,0 +1,26 @@
+﻿# ============================================================================
+# GLOBAL WARMING — policy running costs
+# ============================================================================
+# The money a climate policy takes from the treasury. Unlike
+# global_warming_values.txt, these have a gameplay effect.
+#
+# Each value is the multiplier on a cost modifier whose one money field is
+# country_expenses_add = 1, so it is the WEEKLY cost: gdp is a year's, so a
+# share of GDP a year is divided by 52 (scripting_best_practices.md, "Expense
+# Scaling with GDP"). Same shape as the Family Policy upkeep
+# (te_demog_ms_cost_*, te_demog_measure_values.txt).
+#
+# Scope: country.
+# ============================================================================
+
+# Renewable Investment (renewable_investment_cost_modifier): 0.5% of GDP a
+# year. It replaced the forced plant subsidies the policy used to carry, whose
+# bill moved with every plant's losses; this one is fixed and shows in the
+# Budget Breakdown under Climate Policy. In the range of the Family Policy
+# measures (0.1-0.5%), below a mid-size nuclear arsenal (up to 2%).
+gw_renewable_investment_cost_value = {
+	value = gdp
+	multiply = 0.005
+	divide = 52
+	min = 0
+}

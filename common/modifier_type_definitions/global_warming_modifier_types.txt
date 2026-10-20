@@ -64,14 +64,6 @@ country_enactment_success_chance_law_ministry_of_the_environment_add = {
 	percent = yes
 }
 
-country_building_renewable_energy_plant_require_subsidies_bool = {
-	color = bad
-	boolean = yes
-	game_data = {
-		ai_value = 0
-	}
-}
-
 country_building_synthetics_plant_coal_require_subsidies_bool = {
 	color = bad
 	boolean = yes

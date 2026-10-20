@@ -26,6 +26,7 @@ gw_effect_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_RENEWABLE_INVESTMENT_DESC"
 		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
+		gw_renewable_investment_cost_apply = yes
 	}
 }
 
@@ -33,6 +34,54 @@ gw_effect_remove_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
 		je:je_global_warming = { remove_modifier = renewable_investment_modifier }
+		remove_modifier = renewable_investment_cost_modifier
+	}
+}
+
+# Renewable Investment's running cost (renewable_investment_cost_modifier,
+# 0.5% of GDP a year). The policy modifier sits on the journal entry; the cost
+# sits on the country because its multiplier reads gdp, so the two are kept in
+# step here and by the monthly sweep below. Every way the policy goes on (the
+# button, the widget, treaty 109) applies the cost through
+# gw_renewable_investment_cost_apply; the sweep corrects whatever else added
+# or removed the policy modifier (the debug console, a lost entry).
+# Scope: country
+gw_renewable_investment_cost_apply = {
+	add_modifier = {
+		name = renewable_investment_cost_modifier
+		multiplier = gw_renewable_investment_cost_value
+	}
+}
+
+# Scope: country. Reads the policy's actual state, so it cannot be called from
+# the effect that has just added or removed the policy modifier: an
+# add_modifier is not visible in the same effect block.
+gw_renewable_investment_cost_sync = {
+	if = {
+		limit = { gw_policy_renewable_investment_active = yes }
+		gw_renewable_investment_cost_apply = yes
+	}
+	else_if = {
+		limit = { has_modifier = renewable_investment_cost_modifier }
+		remove_modifier = renewable_investment_cost_modifier
+	}
+}
+
+# Monthly, from global_warming_events_on_action's global scope: the single
+# refresh site for the policy running costs, so the weekly amount follows GDP.
+# Runs with the climate rule off too: a policy adopted earlier keeps its
+# bonuses, so it keeps its bill. The second limit clause reaches a country
+# that has lost its journal entry while still holding the cost.
+# Scope: any
+gw_refresh_policy_costs_effect = {
+	every_country = {
+		limit = {
+			OR = {
+				has_journal_entry = je_global_warming
+				has_modifier = renewable_investment_cost_modifier
+			}
+		}
+		gw_renewable_investment_cost_sync = yes
 	}
 }
 
