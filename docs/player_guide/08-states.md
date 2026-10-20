@@ -337,7 +337,11 @@ it is above 0.45 and raises radicals from movements, by up to 10% at 0.65.
 
 The census books migration as whole families once a state gains or loses many
 people in a year, so migration alone seldom carries a state's balance past 90
-or 110.
+or 110. Internal resettlement is the exception: settlers arrive as their program
+recruits them, so a penal colony fills with young men and a Land Grants frontier
+with families. The American West of 1836, from Michigan and Wisconsin to
+Missouri and Arkansas, also starts with the surplus of men the 1840 census found
+there.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,

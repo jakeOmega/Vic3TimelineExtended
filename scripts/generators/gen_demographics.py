@@ -72,6 +72,10 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         phase 3's spreading machinery: the practices' neighbour walk (te_demog_practices_neighbours), Family
         Limitation's target and church weight, Cultural Hegemony's exposure, and their constants; the hand-written
         logic is te_demog_fl_effects.txt and te_demog_practice_effects.txt
+    common/scripted_effects/te_demog_resettle_generated_effects.txt,
+    common/script_values/te_demog_resettle_generated_values.txt
+        Internal Resettlement's known moves and the US frontier's 1836 seed (gen_demographics_resettle.py, 2026-10-19);
+        the hand-written logic is te_demog_resettle_effects.txt
 """
 
 import argparse
@@ -2367,6 +2371,8 @@ def render_spread_effects():
 def plan_outputs(root=ROOT):
     # phase 3, the late game: its own two generated files (scripts/generators/gen_demographics_lx.py)
     import gen_demographics_lx as LX
+    # Internal Resettlement's known moves and the US frontier's 1836 seed (scripts/generators/gen_demographics_resettle.py)
+    import gen_demographics_resettle as RSG
     import gen_demographics_um as UM     # uploaded minds (2026-10-19): its own two generated files
     return {EFFECTS: render_effects(root), VALUES: render_values(root), LINE_MODIFIERS: render_line_modifiers(),
             LINE_VALUES: render_line_values(), LINE_EFFECTS: render_line_effects(),
@@ -2374,7 +2380,7 @@ def plan_outputs(root=ROOT):
             WORKFORCE_LINE_VALUES: render_workforce_line_values(),
             WORKFORCE_LINE_EFFECTS: render_workforce_line_effects(),
             SPREAD_VALUES: render_spread_values(), SPREAD_EFFECTS: render_spread_effects(),
-            **LX.plan_outputs(), **UM.plan_outputs()}
+            **LX.plan_outputs(), **RSG.plan_outputs(), **UM.plan_outputs()}
 
 
 def regenerate(root=ROOT, dry_run=False):

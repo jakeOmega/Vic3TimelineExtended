@@ -433,7 +433,8 @@ The engine moves and kills people; the model sees only the result. Each year:
    - Read the dead, not the casualties: casualties = dead + wounded.
 2. **Known kills.**
    - Nuclear strikes record their dead per state; they come from all ages and both sexes.
-   - Resettlement records its arrivals and departures, with its programme's profile.
+   - Resettlement records its arrivals and departures, with its programme's profile, and its deaths in transit as known
+     deaths at the source (built 2026-10-19: "Built (Internal Resettlement's known moves)" below).
    - Violent Hostility's kills come from all ages.
 3. **The residual**: the population change, less natural change, less (1) and (2). This is mostly migration.
    - Natural change here is the engine's: each pop's growth curves × the multiplier the engine applies to it. That
@@ -480,6 +481,47 @@ state's men per 100 women aged 20–59 fall from 95 to 91 or rise from 105 to 11
 older within the cap, but no state passes about 90–110 by migration alone, so the frontier fills with families, not
 young men: the price of phase 2's "under 2% of states at a sex-balance effect in peace".
 
+**Built (Internal Resettlement's known moves, 2026-10-19; owner calls of that day).** A Settlement Authority's moves
+are known, so the census books them by the programme's own profile, the same at the source and the destination, and
+takes them out of the residual, which books only the rest:
+
+| Programme | Who moves |
+|---|---|
+| Land Grants, Organized Colonization | families (the family kind) |
+| Military Colonies | half the labour kind at 80% men, half families |
+| Penal Transportation | mostly 15–35, 85% men (Australia's convicts: 15.4% women, average age about 25, a fifth under 20): 12% aged 15–17, 78% 18–35, 10% 36–59 (the class split is the controller's proposal, 2026-10-20, not yet confirmed by the owner) |
+| Special Settlements | whole families, all ages: the refugee kind |
+| Development Program | 60% families, 40% labour, the labour kind's women's share set by the destination's jobs as the residual's is (before its balance ramp) |
+| Rustication | ages 15–24, both sexes evenly, booked by single year (15–24 straddles the classes) |
+| Managed Retreat | the refugee kind with its 60+ weight doubled, renormalised |
+
+- **Counters.** While the census runs (Display only or Full), the monthly walk adds each move to counters on the
+  destination (arrivals) and the source (departures) by migrant class and sex, and Rustication's by the people aged
+  15–24. A state's census step takes what gathered since its last step, the months its population change covers, and
+  clears them; a seed clears them too. A census-off save holds none.
+- **Booking.** Each class and sex gains or loses its counted movers over its last-year people, with no cap: a known
+  move is a count, not an estimate. The sweep's own guard stays (a cohort gives at most half of what is left), and a
+  class with under one person passes its share to one flat rate over everyone, as the residual's leftover does. This is
+  the builder's call, put to the owner: the alternative books known moves through the residual's caps (5% in, 3% out a
+  class and sex a step) and its balance ramps, which would keep a programme's states near 90–111 men per 100 women as
+  the 2026-10-12 booking keeps every other state.
+- **The residual** is the change less natural change, war dead, kills and the known moves. The panel's net migration
+  counts the known moves; the re-seed test (a move over 25% in a year) leaves them out, since a frontier filling by
+  resettlement is migration, not a merge.
+- **Deaths in transit** (Penal Transportation, Special Settlements, Rustication) are known kills at the source
+  (`te_demog_note_kills`, the nuclear strikes' path; they leaked into the residual before), and they leave by the
+  programme's profile, not from every age.
+- **What it moves.** Under Display only, nothing outside the census's figures. Under Full, phase 2 step 4's
+  consequence modifiers read the new structures (Census: More Men and Fewer Men from the sex balance, the conscription
+  term with no ceiling, the youth bulge), so they move with them. On the harness's stand-in state
+  (`demographics_harness.py resettle`), ten years of 10,000 movers a year into 100,000 people take the destination's
+  men per 100 women aged 20–59 from 95 to 97 (families), 153 (Military Colonies, the Development Program) or 254
+  (Penal Transportation). The male destinations take full More Men (+10% radicals from movements) and conscription
+  +77% to +83%, Penal Transportation's +161%; Rustication's young destination +75%. A million-person source falls to 84
+  men per 100 women (Military Colonies, the Development Program; conscription −15%) or 69 (Penal Transportation: full
+  Fewer Men, children per woman ×0.80, conscription −32%). Movers join the destination's longevity-care mix as before
+  (the late-game spec §1.2).
+
 ### 2.6 Starting values and new states
 
 - **1836.** Each state starts at the equilibrium of its own inputs, taken from a lookup by fertility and life
@@ -487,7 +529,18 @@ young men: the price of phase 2's "under 2% of states at a sex-balance effect in
   - France starts with fertility well below its neighbours'. Its transition began around 1800. The head start is a
     modifier, Family Limitation (`state_fertility_means_add`, +0.6), which France starts with and other countries can
     be given. #822's Forced Heirship already pushes the same way.
-  - The US frontier states start young and male.
+  - The US frontier states start young and male (built 2026-10-19, as history data). History marks the states the US
+    holds in 1836 in Michigan, Indiana, Illinois, Missouri, Arkansas, Iowa and Wisconsin, and their 1836 seeds give
+    each age group from 15 the 1840 census's free white men per 100 women (the Compendium of the Sixth Census), weighted
+    by the settlers' share of the state's 1836 pops, since its Native and enslaved people were near even. The state's
+    people stay as seeded, children keep the seed's ratio, and the ring then ages normally. On the harness's stand-in
+    (`demographics_harness.py frontier`) Wisconsin starts at 178 men per 100 women aged 20–59, Illinois 134, Iowa 130,
+    Missouri 128, Michigan 126, Arkansas 123 and Indiana 113; with no migration, 25 years on they sit at 98–105 and
+    Wisconsin at 118. Under Full all seven start with Census: More Men (radicals from movements +10% in Wisconsin, +3–6%
+    in the five between, +0.8% in Indiana) and a conscription term of +7% (Indiana) to +61% (Wisconsin), and Wisconsin's
+    20–29 share, 0.19, passes the youth bulge's 0.18 wherever work is short. The Old Southwest and Florida, as male
+    among their whites, are not the West and are left out (`demographics_params.FRONTIER_1836` takes a row each if
+    wanted).
 - **A state with no variables** (a new state, a split state region, an old save) starts at its equilibrium. A split
   state could copy its sibling's cohorts instead, since it is the same people.
 - **Revolutions.** State variables stay on the states. The country's numbers are recomputed from them, so nothing is

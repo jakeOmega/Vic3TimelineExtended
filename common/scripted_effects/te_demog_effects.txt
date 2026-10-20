@@ -129,10 +129,18 @@
 #                       so they cover the same months as its population change
 #   te_dg_kills_in      state: people the mod's own script killed since the last
 #                       step (te_demog_note_kills), taken and removed the same way
-#   te_dg_net_migration state: last step's residual, people (signed; 0 inside the noise band)
+#                       (Internal Resettlement's transit dead among them since 2026-10-19)
+#   te_dg_rs_in, te_dg_rs_out, te_dg_rs_dead, te_dg_rs_i_*, te_dg_rs_o_*  state: Internal Resettlement's
+#                       moves and transit dead since the last step, by programme profile, taken and removed
+#                       the same way (te_demog_resettle_effects.txt)
+#   te_dg_frontier      state: history's mark on the US frontier, read by its 1836 seeds (the same file)
+#   te_dg_net_migration state: last step's net migration, people (signed): the residual's rest after the noise
+#                       band (0 inside it) plus Internal Resettlement's known moves (since 2026-10-19)
+#   te_dg_rs_net        state: those known moves, arrivals less departures, from a step that had them (removed by a
+#                       step or seed without them; te_demog_resettle_effects.txt), so tools can take them out
 #   te_dg_mig_rate      state and country: te_dg_net_migration per 1,000 people (issue #1029, the overview's
 #                       Net Migration); a country's from its states' sums
-#   te_dg_mig_raw       state: the same residual before the noise band; the country's sum of it
+#   te_dg_mig_raw       state: the whole residual before the noise band, known moves included; the country's sum of it
 #                       (te_demog_country_census) is the census log's gate figure
 #   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
 #   te_dg_war_seen      country: the dead of all its wars at the last monthly pulse
@@ -446,6 +454,10 @@ te_demog_state_census = {
 				name = te_dg_under
 				value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 0.75 } }
 			}
+			# Internal Resettlement's moves since the last census are migration, not a merge: left out of the test
+			# (te_demog_rs_known_change, 0 without them; te_demog_resettle_effects.txt)
+			change_local_variable = { name = te_dg_over subtract = te_demog_rs_known_change }
+			change_local_variable = { name = te_dg_under subtract = te_demog_rs_known_change }
 			if = {
 				limit = {
 					OR = {
@@ -488,6 +500,13 @@ te_demog_country_game_start = {
 		te_demog_country_census = yes
 		# phase 3, under Full: Family Limitation's seed and line (te_demog_fl_effects.txt)
 		te_demog_phase3_game_start = yes
+	}
+	# §2.6: with the census off no seed reads history's frontier mark (te_demog_resettle_effects.txt)
+	else = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_frontier }
+			remove_variable = te_dg_frontier
+		}
 	}
 }
 
@@ -640,6 +659,8 @@ te_demog_seed_off_pulse = {
 # births at each age, times the growth factor to the age's power, then scaled to
 # the state's population.
 te_demog_seed = {
+	# §2.6: the US frontier's 1836 seed, marked by history (te_demog_resettle_effects.txt), before te_dg_reseed goes
+	te_demog_frontier_begin = yes
 	if = {
 		limit = { has_variable = te_dg_reseed }
 		remove_variable = te_dg_reseed
@@ -688,6 +709,8 @@ te_demog_seed = {
 		limit = { has_variable = te_dg_kills_in }
 		remove_variable = te_dg_kills_in
 	}
+	# and Internal Resettlement's known moves (te_demog_resettle_effects.txt)
+	te_demog_rs_clear = yes
 	# no migration yet (only a step's flows write it): the country's census sums it over every state with a census
 	set_variable = { name = te_dg_net_migration value = 0 }
 	set_variable = { name = te_dg_mig_raw value = 0 }
@@ -791,6 +814,11 @@ te_demog_seed_slot = {
 		set_variable = {
 			name = te_dg_m$S$
 			value = { value = local_var:te_dg_lsm multiply = local_var:te_dg_dpow multiply = te_demog_k_male_births_per_100k divide = 100000 }
+		}
+		# §2.6: the US frontier's men at the 1840 census's ratio (generated; te_demog_resettle_effects.txt)
+		if = {
+			limit = { local_var:te_dg_fr_on > 0 }
+			te_demog_frontier_slot = { S = $S$ }
 		}
 		te_demog_accumulate_slot = { S = $S$ }
 	}
@@ -1357,7 +1385,10 @@ te_demog_flows = {
 		set_local_variable = { name = te_dg_kills value = var:te_dg_kills_in }
 		remove_variable = te_dg_kills_in
 	}
-	set_local_variable = { name = te_dg_kill value = { value = local_var:te_dg_kills divide = { value = var:te_dg_people min = 1 } max = 0.9 } }
+	# Internal Resettlement's known moves since the last step (te_demog_resettle_effects.txt): its transit dead are among
+	# the kills, but leave by their programme's profile, not from every age
+	te_demog_rs_take = yes
+	set_local_variable = { name = te_dg_kill value = { value = local_var:te_dg_kills subtract = local_var:te_dg_rs_dead divide = { value = var:te_dg_people min = 1 } min = 0 max = 0.9 } }
 	# the residual: the change less the engine's own births and deaths, war dead and kills
 	set_local_variable = {
 		name = te_dg_mig
@@ -1373,6 +1404,14 @@ te_demog_flows = {
 	# kept before the band for the census log: summed over a country, moves between its own
 	# states cancel here, where the band would zero a state's small loss and keep a city's gain
 	set_variable = { name = te_dg_mig_raw value = local_var:te_dg_mig }
+	# Internal Resettlement's moves are known: they come out of the residual, which books only the rest
+	# (te_demog_rs_enter_class books them by their programmes' profiles)
+	if = {
+		limit = { local_var:te_dg_rk_on > 0 }
+		change_local_variable = { name = te_dg_mig subtract = local_var:te_dg_rs_in }
+		change_local_variable = { name = te_dg_mig add = local_var:te_dg_rs_out }
+		te_demog_rs_selfcheck = yes
+	}
 	# a residual inside the noise band is model error, not migration
 	set_local_variable = { name = te_dg_noise value = { value = var:te_dg_people multiply = te_demog_k_residual_noise_share } }
 	set_local_variable = { name = te_dg_neg_noise value = { value = local_var:te_dg_noise multiply = -1 } }
@@ -1384,6 +1423,17 @@ te_demog_flows = {
 		set_local_variable = { name = te_dg_mig value = 0 }
 	}
 	set_variable = { name = te_dg_net_migration value = local_var:te_dg_mig }
+	# the panel's Net Migration counts the known moves too; te_dg_rs_net keeps them apart for the offline tools
+	# (demographics_rebook.py re-books only the rest)
+	if = {
+		limit = { local_var:te_dg_rk_on > 0 }
+		set_variable = { name = te_dg_rs_net value = { value = local_var:te_dg_rs_in subtract = local_var:te_dg_rs_out } }
+		change_variable = { name = te_dg_net_migration add = var:te_dg_rs_net }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_rs_net }
+		remove_variable = te_dg_rs_net
+	}
 	set_local_variable = { name = te_dg_mig_in value = { value = local_var:te_dg_mig min = 0 } }
 	set_local_variable = { name = te_dg_mig_out value = { value = local_var:te_dg_mig multiply = -1 min = 0 } }
 	if = {
@@ -1721,6 +1771,8 @@ te_demog_step_begin = {
 	# phase 3, the late game: eligibility, cover and the age groups' own rates once a carrier or treated people exist
 	# (te_demog_lx_effects.txt; local te_dg_lx_on)
 	te_demog_lx_begin = yes
+	# no known moves unless the flows find Internal Resettlement's counters (te_demog_rs_take; the sweep reads it)
+	set_local_variable = { name = te_dg_rk_on value = 0 }
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes
 	te_demog_cause_deaths_estimate = yes
@@ -1744,6 +1796,11 @@ te_demog_step_run = {
 	set_local_variable = { name = te_dg_acls value = 0 }
 	set_local_variable = { name = te_dg_next_aclass value = 15 }
 	te_demog_enter_class = yes
+	# Internal Resettlement's known moves, by their programmes' profiles (te_demog_resettle_effects.txt)
+	if = {
+		limit = { local_var:te_dg_rk_on > 0 }
+		te_demog_rs_enter_class = yes
+	}
 	# the war dead's window (phase 2 step 4): the pool's ages by rate age, the calendar one te_dg_r from
 	# te_demog_k_pool_from and the biological one to te_demog_k_pool_to. te_dg_ab is the biological age after the step,
 	# a year on from the rate age until phase 3 (which ages the treated more slowly and replaces this 1)
@@ -1806,6 +1863,15 @@ te_demog_slot = {
 			set_local_variable = { name = te_dg_next_aclass value = 999 }
 		}
 		te_demog_enter_class = yes
+		if = {
+			limit = { local_var:te_dg_rk_on > 0 }
+			te_demog_rs_enter_class = yes
+		}
+	}
+	# Rustication's ages start or end inside a class: the class's shares are taken again there (generated)
+	if = {
+		limit = { local_var:te_dg_rk_on > 0 }
+		te_demog_rs_youth_hook = yes
 	}
 	if = {
 		limit = { local_var:te_dg_age = 150 }

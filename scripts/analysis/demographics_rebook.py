@@ -9,7 +9,11 @@ seed where it has none), steps it at every save where the game stepped it, seeds
 books each step's residual by the booking in force in demographics_model, or by the profile alone (`booked=False`:
 no cap and no correction, the booking before 2026-10-12). The residual itself doesn't depend on the ring (it is the
 engine's population change less the walk's births and deaths), so it is the run's. Left out, as small next to the
-residual: the war dead (tens of thousands a year at most, 1836-1901) and the mod's kills. The natural rates come from
+residual: the war dead (tens of thousands a year at most, 1836-1901) and the mod's kills. Since 2026-10-19
+te_dg_net_migration also holds a state's Internal Resettlement moves, which the census booked by their programmes'
+profiles; the step stores them apart (te_dg_rs_net), and the re-walk re-books only the rest (booked_residual). The
+known moves themselves aren't re-booked (a save holds no counters by profile), so an Authority's states re-walk without
+them. The natural rates come from
 the walk's stored inputs (standard of living, literacy, urban share), not the run's full modifier totals, so the
 replay's own sex balance runs about +1 above the saves' (the 2026-10-12 run: median +0.2 to +1.4, 5th to 95th
 percentile -2 to +7).
@@ -31,7 +35,7 @@ import demographics_save_inputs as S
 
 STEP_VARS = ("te_dg_year", "te_dg_stepped", "te_dg_people", "te_dg_net_migration", "te_dg_inflow_years",
              "te_dg_sol", "te_dg_lit", "te_dg_urban_share", "te_dg_fjob_share", "te_dg_wtfr", "te_dg_agr_share",
-             "te_dg_in_turm")
+             "te_dg_in_turm", "te_dg_rs_net")
 BAND_VARS = tuple(f"te_dg_b{s}{b}" for s in "fm" for b in range(P.BANDS))
 RING_VARS = (("te_dg_scale", "te_dg_pf", "te_dg_pm", "te_dg_pa")
              + tuple(f"te_dg_{s}{k}" for s in "fm" for k in range(P.RING_YEARS)))
@@ -227,7 +231,7 @@ def walk(saves, booked=True):
                     inputs(rec, prev, country, year, known), census_year, v["te_dg_people"])
             elif census_year == ring.year + 1 and v.get("te_dg_stepped", 1) > 0:
                 M.step(ring, inputs(rec, prev, country, year, known), census_year, engine_pop=v["te_dg_people"],
-                       migration=v.get("te_dg_net_migration", 0.0))
+                       migration=booked_residual(v))
             elif census_year != ring.year:
                 ring = M.seed(inputs(rec, prev, country, year, known), census_year, v["te_dg_people"])
             res[year] = figures(ring)
@@ -235,6 +239,12 @@ def walk(saves, booked=True):
         if res:
             out[sid] = res
     return out
+
+
+def booked_residual(v):
+    """The residual a step booked by the residual's profile: its net migration less Internal Resettlement's known moves
+    (te_dg_rs_net, stored by a step that had them; demographics_resettle)."""
+    return v.get("te_dg_net_migration", 0.0) - v.get("te_dg_rs_net", 0.0)
 
 
 def band_summary(rows):
