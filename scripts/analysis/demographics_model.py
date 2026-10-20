@@ -1243,7 +1243,7 @@ def model_crude_rates(inp, year=1836):
 
 
 def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.0, rates=None,
-         births_scale=0.0, deaths_scale=0.0):
+         births_scale=0.0, deaths_scale=0.0, known=None):
     """One yearly step (§2.1), in the script's order: medicine drifts before the rates (te_demog_medicine_drift
     before te_demog_prepare). Returns the year's figures.
 
@@ -1256,6 +1256,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     year's children per woman and the cause multipliers, so the ring places the events the engine
     added on top of the model: newborns, and deaths by the model's age pattern. The life table,
     "tfr" and the *_model totals stay the model's own; "tfr_shown" is the scaled one.
+    known: Internal Resettlement's known moves (demographics_resettle.Known, 2026-10-19), booked beside the residual by
+    their programmes' profiles; its transit dead are among `kills` but leave by the profile, not from every age.
     """
     assert ring.year is not None and year == ring.year + 1, "one step per year"
     if rates is None:
@@ -1314,7 +1316,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     s = ring.scale
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
     war_f = clamp(war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw, 0, 0.5) if ring.faw else 0.0
-    kill = clamp(kills / ring.total, 0, 0.9) if ring.total else 0.0
+    kill = clamp((kills - (known.dead if known is not None else 0.0)) / ring.total, 0, 0.9) if ring.total else 0.0
     mig = migrant_rates(ring, prof, migration)
     births = deaths = 0.0
     birth_age = 0.0
@@ -1359,7 +1361,18 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         f2 -= f * kill
         m2 -= m * kill
         c = class_of(r)
-        if migration > 0:
+        if known is not None:
+            # Internal Resettlement's known moves beside the residual's (demographics_resettle.Known.rates)
+            (kgf, kdf), (kgm, kdm) = known.rates(c, r, "f"), known.rates(c, r, "m")
+            gf, gm = max(mig[(c, "f")], 0.0) + kgf, max(mig[(c, "m")], 0.0) + kgm
+            df, dm = max(-mig[(c, "f")], 0.0) + kdf, max(-mig[(c, "m")], 0.0) + kdm
+            f2 += f * gf
+            m2 += m * gm
+            if df > 0:
+                f2 -= min(max(f2, 0.0) * 0.5, f * df)
+            if dm > 0:
+                m2 -= min(max(m2, 0.0) * 0.5, m * dm)
+        elif migration > 0:
             f2 += f * mig[(c, "f")]
             m2 += m * mig[(c, "m")]
         elif migration < 0:

@@ -140,6 +140,11 @@ resettlement.3 = {
 	option = {
 		name = resettlement.3.b
 		scope:rs_event_state = {
+			# the census counts them as known deaths, not emigrants (te_demog_note_kills; the Demographics rule):
+			# census accounting, kept out of the option's tooltip
+			hidden_effect = {
+				te_demog_note_kills = { VALUE = 1000 }
+			}
 			kill_population_in_state = { value = 1000 strata = lower }
 			add_radicals_in_state = { value = medium_radicals strata = lower }
 			add_modifier = { name = resettlement_hard_winter days = 365 }
@@ -286,6 +291,12 @@ resettlement.6 = {
 	option = {
 		name = resettlement.6.b
 		scope:rs_event_state = {
+			# the census counts them as known deaths, not emigrants (te_demog_note_kills; the Demographics rule):
+			# census accounting, kept out of the option's tooltip
+			hidden_effect = {
+				# the kill can't take more farmers than the state holds
+				te_demog_note_kills = { VALUE = { value = 5000 max = resettlement_state_farmers } }
+			}
 			kill_population_in_state = { value = 5000 pop_type = farmers }
 			add_radicals_in_state = { value = large_radicals pop_type = farmers }
 		}

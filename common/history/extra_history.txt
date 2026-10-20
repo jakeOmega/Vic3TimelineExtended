@@ -282,9 +282,21 @@ GLOBAL = {
 	# any modern method, so it starts with Family Limitation. Under the
 	# Demographics rule's Full setting this is only its start: a general practice
 	# every country can gain from its own conditions and its neighbours'
-	# (te_demog_fl_effects.txt; phase 3). The only line in the demographics
-	# system that names a country.
+	# (te_demog_fl_effects.txt; phase 3). With the US frontier's mark below, one
+	# of the two lines in the demographics system that name a country.
 	c:FRA ?= {
 		add_modifier = { name = te_demog_family_limitation }
+	}
+	# Demographics §2.6: the US frontier starts young and male. The states the US
+	# holds in the frontier's state regions (Michigan, Indiana, Illinois,
+	# Missouri, Arkansas, Iowa, Wisconsin; te_demog_frontier_listed) are marked,
+	# and their 1836 census seed gives them the 1840 census's men per 100 women
+	# by age (demographics_params.FRONTIER_1836, te_demog_resettle_effects.txt).
+	# Only the census reads the mark, and its seeds take it off.
+	c:USA ?= {
+		every_scope_state = {
+			limit = { te_demog_frontier_listed > 0 }
+			set_variable = te_dg_frontier
+		}
 	}
 }

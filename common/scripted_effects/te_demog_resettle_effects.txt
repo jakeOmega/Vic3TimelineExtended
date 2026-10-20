@@ -1,0 +1,186 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — Internal Resettlement's known moves, and the US frontier's 1836 seed (2026-10-19)
+# ============================================================================
+# The master spec (docs/superpowers/specs/2026-10-08-demographics-design.md) §2.5 "Known kills" and §2.6;
+# docs/systems/mod_systems.md § Demographics, "Internal Resettlement in the census". The twin is
+# scripts/analysis/demographics_resettle.py; the generated half is te_demog_resettle_generated_effects.txt
+# (scripts/generators/gen_demographics_resettle.py, from demographics_params.RESETTLE_PROFILES and FRONTIER_1836).
+#
+# KNOWN MOVES. A Settlement Authority's monthly walk (resettlement_country_monthly, resettlement_effects.txt) moves
+# people with move_partial_pop and kills its coercive programmes' dead in transit at the source. While the census runs
+# (Display only or Full), each census state counts them since its last census step, by the programme's own profile:
+#   destination  te_dg_rs_in (people arrived), te_dg_rs_i_f<c>, _m<c> (by migrant class and sex), _yf, _ym
+#                (Rustication's ages, booked by single year)
+#   source       te_dg_rs_out (people moved away), te_dg_rs_dead (the transit dead), te_dg_rs_o_* (both, by profile)
+# Every add raises one of the three totals, so a state with none of them holds no counter. The census's step
+# (te_demog_flows) takes them (te_demog_rs_take): the transit dead are among the kills te_demog_note_kills noted, so
+# they come off the residual as known deaths but leave by the profile, not from every age; the moves come off the
+# residual (the rest is booked by the residual's own profile, under its caps) and are booked by their profiles, with
+# no cap: a known move is a count. Then the counters go. The counters cover the same months as the step's population
+# change: a state stepped in October takes what gathered since last October, and the next walk starts new counters
+# (the war dead's te_dg_war_in works the same way). A seed counts the people as they are and clears them. Nothing here
+# moves an engine number itself; under Full the census's consequence modifiers (Census: More Men and Fewer Men,
+# conscription, the youth bulge; te_demog_consequence_effects.txt) read the structures these moves give.
+# ============================================================================
+
+# THIS = a source, in resettlement_take_from_source once a destination's walk has taken from it (var:rs_taken_now
+# above 0). scope:rs_destination saved; local rs_moved_now = the people moved (the survivors; the dead are booked by
+# te_demog_rs_note_dead). Books the move at both ends that have a census.
+te_demog_rs_note_move = {
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			local_var:rs_moved_now > 0
+			scope:rs_destination = { has_variable = rs_programme }
+		}
+		te_demog_rs_locals = { AMOUNT = rs_moved_now }
+		if = {
+			limit = { te_demog_has_census = yes }
+			te_demog_rs_add = { SIDE = o }
+			te_demog_rs_total = { NAME = te_dg_rs_out }
+		}
+		scope:rs_destination = {
+			if = {
+				limit = { te_demog_has_census = yes }
+				te_demog_rs_add = { SIDE = i }
+				te_demog_rs_total = { NAME = te_dg_rs_in }
+			}
+		}
+	}
+}
+
+# THIS = a source, in resettlement_source_consequences after this month's transit dead are counted (local
+# rs_dead_people, a multiple of 100, killed below by the programme's kill_population_in_state). scope:rs_destination
+# saved. The census books them as known deaths here (te_demog_note_kills, as nuclear strikes and Violent Hostility do),
+# and by the programme's profile (the movers who died), not from every age.
+te_demog_rs_note_dead = {
+	if = {
+		limit = { local_var:rs_dead_people > 0 }
+		te_demog_note_kills = { VALUE = local_var:rs_dead_people }
+		if = {
+			limit = {
+				te_demog_cohorts_run = yes
+				te_demog_has_census = yes
+				scope:rs_destination = { has_variable = rs_programme }
+			}
+			te_demog_rs_locals = { AMOUNT = rs_dead_people }
+			te_demog_rs_add = { SIDE = o }
+			te_demog_rs_total = { NAME = te_dg_rs_dead }
+		}
+	}
+}
+
+# The locals te_demog_rs_add reads: the destination's programme, the people ($AMOUNT$, a local) and the destination's
+# jobs' women's share (the Development Program's labour kind; te_demog_rs_labour_f, read at the destination).
+te_demog_rs_locals = {
+	set_local_variable = { name = te_dg_rs_code value = scope:rs_destination.var:rs_programme }
+	set_local_variable = { name = te_dg_rs_amt value = local_var:$AMOUNT$ }
+	scope:rs_destination = {
+		set_local_variable = { name = te_dg_rs_lf value = te_demog_rs_labour_f }
+	}
+}
+
+# THIS = a state: local te_dg_rs_amt onto its total $NAME$.
+te_demog_rs_total = {
+	if = {
+		limit = { has_variable = $NAME$ }
+		change_variable = { name = $NAME$ add = local_var:te_dg_rs_amt }
+	}
+	else = {
+		set_variable = { name = $NAME$ value = local_var:te_dg_rs_amt }
+	}
+}
+
+# THIS = a state at its census step, in te_demog_flows before the kill rate and the residual. Sets the step's locals
+# te_dg_rs_in, te_dg_rs_out, te_dg_rs_dead (people, 0 without counters) and te_dg_rk_on (1 while it holds known moves:
+# te_demog_rs_enter_class and the youth's hook run in the sweep only then), the known rates (generated), and removes
+# the counters.
+te_demog_rs_take = {
+	set_local_variable = { name = te_dg_rs_in value = 0 }
+	set_local_variable = { name = te_dg_rs_out value = 0 }
+	set_local_variable = { name = te_dg_rs_dead value = 0 }
+	set_local_variable = { name = te_dg_rk_on value = 0 }
+	if = {
+		limit = {
+			OR = {
+				has_variable = te_dg_rs_in
+				has_variable = te_dg_rs_out
+				has_variable = te_dg_rs_dead
+			}
+		}
+		if = {
+			limit = { has_variable = te_dg_rs_in }
+			set_local_variable = { name = te_dg_rs_in value = var:te_dg_rs_in }
+		}
+		if = {
+			limit = { has_variable = te_dg_rs_out }
+			set_local_variable = { name = te_dg_rs_out value = var:te_dg_rs_out }
+		}
+		if = {
+			limit = { has_variable = te_dg_rs_dead }
+			set_local_variable = { name = te_dg_rs_dead value = var:te_dg_rs_dead }
+		}
+		set_local_variable = { name = te_dg_rk_on value = 1 }
+		te_demog_rs_known_rates = yes
+		te_demog_rs_clear = yes
+	}
+}
+
+# THIS = a state at its census step, in te_demog_flows once the residual (local te_dg_mig, before the noise band) has
+# had the known moves taken out (te_dg_mig_raw keeps it with them). The once-a-game self-check resettle_moves_booked
+# (docs/testing/demographics-playtest.md, Self-checks): at the first step of a destination whose known arrivals were
+# 5% of its people or more, the rest must not be far below zero. One-sided (review, 2026-10-20): every fault it is
+# for pushes the rest negative (moves counted but not in the population change: about minus the arrivals; counted
+# twice: about minus half of them), while the engine's own immigration, or counters that cover only part of the year on
+# a save continued across this build, push it positive and are harmless. BROKEN below -0.25 x the arrivals.
+te_demog_rs_selfcheck = {
+	if = {
+		limit = {
+			local_var:te_dg_rk_on > 0
+			NOT = { has_global_variable = te_demog_rs_selfcheck_done }
+		}
+		set_local_variable = { name = te_dg_rs_chk_min value = { value = var:te_dg_people multiply = 0.05 } }
+		if = {
+			limit = {
+				local_var:te_dg_rs_in >= local_var:te_dg_rs_chk_min
+				local_var:te_dg_rs_in >= 1000
+			}
+			set_global_variable = te_demog_rs_selfcheck_done
+			set_variable = { name = te_dg_rs_chk_in value = local_var:te_dg_rs_in }
+			set_variable = { name = te_dg_rs_chk_total value = var:te_dg_mig_raw }
+			set_variable = { name = te_dg_rs_chk_rest value = local_var:te_dg_mig }
+			set_local_variable = { name = te_dg_rs_chk_floor value = { value = local_var:te_dg_rs_in multiply = -0.25 } }
+			if = {
+				limit = { local_var:te_dg_mig >= local_var:te_dg_rs_chk_floor }
+				debug_log = "TE_SELF_CHECK OK resettle_moves_booked state=[THIS.GetState.GetNameNoFormatting] arrived=[THIS.Var('te_dg_rs_chk_in').GetValue|0] residual=[THIS.Var('te_dg_rs_chk_total').GetValue|0] rest=[THIS.Var('te_dg_rs_chk_rest').GetValue|0] people=[THIS.Var('te_dg_people').GetValue|0] (the walk's counted arrivals are in the state's population change: the rest is the engine's own migration, or the year's months before a continued save's counters began) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN resettle_moves_booked state=[THIS.GetState.GetNameNoFormatting] arrived=[THIS.Var('te_dg_rs_chk_in').GetValue|0] residual=[THIS.Var('te_dg_rs_chk_total').GetValue|0] rest=[THIS.Var('te_dg_rs_chk_rest').GetValue|0] people=[THIS.Var('te_dg_people').GetValue|0] (the rest is below minus a quarter of the counted arrivals: about minus arrived means the moves are counted but not in the population change, about minus half that they are counted twice; see docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_variable = te_dg_rs_chk_in
+			remove_variable = te_dg_rs_chk_total
+			remove_variable = te_dg_rs_chk_rest
+		}
+	}
+}
+
+# ---- The US frontier at the 1836 seed -----------------------------------------------------------------------------
+# History marks the states the US holds in 1836 in the frontier's state regions (te_dg_frontier,
+# common/history/extra_history.txt; demographics_params.FRONTIER_1836). Their 1836 seeds give each age group from 15
+# its 1840 census men per woman (te_demog_frontier_slot); the game start's seed and the first yearly pulse's (which
+# re-seeds it, te_dg_reseed) both do, and the second takes the mark off, so a later re-seed (a census gap, a merge)
+# starts at the state's own equilibrium. Census off: te_demog_country_game_start takes the mark off at once.
+
+# THIS = a state at the start of te_demog_seed, before it removes te_dg_reseed. Sets local te_dg_fr_on and the ratios.
+te_demog_frontier_begin = {
+	set_local_variable = { name = te_dg_fr_on value = 0 }
+	if = {
+		limit = { has_variable = te_dg_frontier }
+		set_local_variable = { name = te_dg_fr_on value = 1 }
+		te_demog_frontier_ratios = yes
+		if = {
+			limit = { has_variable = te_dg_reseed }
+			remove_variable = te_dg_frontier
+		}
+	}
+}
