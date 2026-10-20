@@ -1,6 +1,6 @@
 # Demographics: the model's law, technology and institution inputs as modifier types — design
 
-Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/archive/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Stage 2 (fertility) is built (plan `docs/superpowers/archive/plans/2026-10-10-demographics-modifier-types-stage2.md`, fit below). Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
+Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/archive/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Stage 2 (fertility) is built (plan `docs/superpowers/archive/plans/2026-10-10-demographics-modifier-types-stage2.md`, fit below). Stage 3 is built but for the parts the owner declined or left open (below, "Stage 3's last two types", 2026-10-19). Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
 §4.2, §8.4). Built after fast mode (#848), which is the in-game loop for the recalibration below.
 
 ## The rule
@@ -26,8 +26,8 @@ and the urban planning institution acts through crowding tolerance rather than a
 | `MEANS_TIERS` (vulcanization, the Pill, modern pharmaceuticals) | `state_contraception_add`: added to the traditional 0.4, the sum scaled by literacy | the techs' `modifier`, with feminism added (owner, 2026-10-10) | 2 |
 | `MEANS_LAW_SHIFT` (State-Sponsored Family Planning +0.1) | `state_fertility_means_add` (`country_fertility_means_add` renamed) | the law's `modifier`; Family Limitation's static modifier | 2 |
 | vanilla's women's-rights birth lines (the engine's; from phase 2 step 4 the census cancels them under Full) | `state_natural_fertility_mult`: multiplies the wealth term before the means, floored at 0.2 | the women's-rights laws' `modifier` (INJECT on the base game's, Women Own Property's in `te_demog_law_injections.txt`; in place on Protected Class), at vanilla's lines re-centred on No Women's Rights (owner call (d), 2026-10-10) | phase 2 step 4 |
-| `FEMALE_WORK_SHARE` by women's-rights law | `country_female_work_share_add` (the model's 0.1 plus the law's line) | the six laws' `modifier` | 3 |
-| `FAMILY_TRANSPORT_TECHS` | `country_family_migration_add` | the three techs' `modifier` | 3 |
+| `FEMALE_WORK_SHARE` by women's-rights law | `state_female_work_share_add` (the model's 0.1 plus the law's line; built 2026-10-19) | the laws' `modifier`: five, No Women's Rights carrying none | 3 |
+| `FAMILY_TRANSPORT_TECHS` | `state_family_migration_add` (built 2026-10-19) | the three techs' `modifier`, and the two aviation techs' (owner, 2026-10-19) | 3 |
 | `LAND_TENURE` (× the state's agrarian share) | `country_land_concentration_add` | the land reform laws, each variant with its own line (as the generator expands them today) | 3 |
 | Wealth Concentration's law terms, `te_demog_values.txt:208–270`: Graduated Taxation, economic laws; #822's inheritance laws and amendments (`te_inh_law_target`) | `country_wealth_concentration_add` | the laws' `modifier`; amendments too if they can carry one (check e) | 3 |
 
@@ -45,6 +45,28 @@ Family Limitation became census types. Not built: `FEMALE_WORK_SHARE` (since pha
 women at work splits work deaths under Full, so a law line would state a share the census no longer uses there),
 `FAMILY_TRANSPORT_TECHS` (technologies, not laws) and #822's inheritance targets (the inheritance laws' own tooltips
 already give their target).
+
+**Stage 3's last two types, built (2026-10-19).** The owner's calls of 2026-10-19 built both, state-scoped like every
+census type, so the spec's `country_` names gave way to `state_female_work_share_add` and `state_family_migration_add`,
+census-only types in `demographics_modifier_types.txt`.
+- **Women's share of the workforce** is 0.1 + the law's line, within 0–1 (`te_demog_female_work_share`). The lines are
+  the old table less 0.1: Women in the Fields +0.15, Women Own Property +0.20, Women in the Workplace +0.35, Women's
+  Suffrage +0.37 (INJECTs in `te_demog_law_injections.txt`) and Protected Class +0.38 (`extra_laws.txt`); No Women's
+  Rights carries none. Every reader sits in the census step: the labour migrants' women's share, the family kind's
+  weight, Late Marriage's women's-work term, and the work-death split outside Full (under Full the census's own count
+  of women at work splits them, as since phase 2 step 2). The tooltip line ("Women's Work Outside the Home") states the
+  part beyond the base, which its description says.
+- **Families among migrants** is the transport techs' line on the family kind's weight (`te_demog_family_transport`,
+  `FAMILY_BASE` unchanged): Paddle Steamer and Railways +0.10, Combustion Engine +0.15 (INJECTs in
+  `te_demog_tech_injections.txt`), and §2.5's aviation techs, which the table lacked: Commercial Aviation and Jet
+  Engine Technology +0.05 each (`era_6.txt`, `era_7.txt`; owner, 2026-10-19). The aviation lines move a late-game
+  state's migrant profile under Full and Display only, toward families; nothing else moves, since the other lines are
+  the old values.
+- `demographics_modifiers.py` resolves both; the params tables are gone, `FEMALE_WORK_SHARE_DEFAULT` (0.1) and
+  `FULL_FEMALE_WORK_SHARE` (0.48, the base plus Protected Class's line, which a test pins) stay as the model's constants.
+
+What stays open: issue #1010, whether the Wealth Concentration types belong in this design's census file, and owner call
+5, #822's inheritance laws and amendments, which the owner declined (their own tooltips already give the target).
 
 ## Ruling: every type in state scope (owner, 2026-10-10)
 
