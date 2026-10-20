@@ -609,7 +609,7 @@ REPLACE_OR_CREATE:building_network_infrastructure = {
 }
 
 REPLACE_OR_CREATE:building_hydro_plant = {
-	building_group = bg_power
+	building_group = bg_clean_power
 	icon = "gfx/interface/icons/building_icons/building_hydro_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -636,7 +636,7 @@ REPLACE_OR_CREATE:building_hydro_plant = {
 }
 
 REPLACE_OR_CREATE:building_nuclear_plant = {
-	building_group = bg_power
+	building_group = bg_clean_power
 	icon = "gfx/interface/icons/building_icons/building_nuclear_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -657,7 +657,7 @@ REPLACE_OR_CREATE:building_nuclear_plant = {
 }
 
 REPLACE_OR_CREATE:building_fusion_plant = {
-	building_group = bg_power
+	building_group = bg_clean_power
 	icon = "gfx/interface/icons/building_icons/building_fusion_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
@@ -678,7 +678,7 @@ REPLACE_OR_CREATE:building_fusion_plant = {
 }
 
 REPLACE_OR_CREATE:building_renewable_energy_plant = {
-	building_group = bg_power
+	building_group = bg_clean_power
 	icon = "gfx/interface/icons/building_icons/building_renewable_energy_plant.dds"
 	city_type = city
 	levels_per_mesh = -1

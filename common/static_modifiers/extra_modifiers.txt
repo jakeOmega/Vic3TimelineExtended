@@ -1385,9 +1385,9 @@ carbon_tax_modifier = {
 renewable_investment_modifier = {
 	country_household_greenhouse_gas_emissions_mult = -0.25 # Household heating transition
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	building_renewable_energy_plant_throughput_add = 0.10                     # direct boost to clean energy output
+	building_renewable_energy_plant_throughput_add = 0.20                     # direct boost to clean energy output
 	building_power_plant_throughput_add = -0.10                               # transition away from conventional power
-	building_group_bg_power_construction_efficiency_add = 0.25                # accelerates renewable construction, indirectly reducing emissions
+	building_group_bg_clean_power_construction_efficiency_add = 0.25          # hydro, nuclear, fusion and renewable plants only (bg_clean_power); the coal and oil plant is not sped up
 	country_greenhouse_gas_emissions_mult = -0.15                             # 15% direct emissions reduction
 }
 
