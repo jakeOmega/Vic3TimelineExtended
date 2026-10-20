@@ -45,8 +45,12 @@ gw_effect_remove_renewable_investment = {
 # button, the widget, treaty 109) applies the cost through
 # gw_renewable_investment_cost_apply; the sweep corrects whatever else added
 # or removed the policy modifier (the debug console, a lost entry).
+# A same-name add_modifier stacks, so the apply removes the copy it already
+# holds first: the monthly sweep runs it for every adopter every month, and
+# without the removal each pass would add another full-size weekly cost.
 # Scope: country
 gw_renewable_investment_cost_apply = {
+	remove_modifier_if_exists_effect = { MODIFIER = renewable_investment_cost_modifier }
 	add_modifier = {
 		name = renewable_investment_cost_modifier
 		multiplier = gw_renewable_investment_cost_value

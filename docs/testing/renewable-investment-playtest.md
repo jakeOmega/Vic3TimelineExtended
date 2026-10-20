@@ -22,6 +22,7 @@ Renewable Investment no longer forces subsidies on Renewable Energy Plants. It c
 | Check | Expect | If it fails |
 |---|---|---|
 | **Cost line.** Adopt the policy, then open the Budget panel's Breakdown tab. | A Climate Policy row under Programme Costs of about `GDP × 0.005 ÷ 52` a week, matching the sum in the modifier's tooltip. | No row: the budget mirror is missing. A different figure: `gw_renewable_investment_cost_value`. |
+| **No stacking.** Adopt the policy and let three or four monthly pulses pass (fast-forward), then reopen the Breakdown tab and the cost modifier's tooltip. | One cost modifier and a Climate Policy row that follows GDP only: the same figure month to month, not a multiple of it. | A row that grows by `GDP × 0.005 ÷ 52` each month means a second copy is being added: the apply's `remove_modifier_if_exists_effect` did not clear the held one (or `remove_modifier` takes one copy at a time). |
 | **Repeal.** End the policy. | The row goes at once. | A row that stays until the next month means `gw_effect_remove_renewable_investment` did not remove the cost. |
 | **Treaty 109.** Sign Enforce Emissions Reduction as the source. | The row appears (at once, or by the next monthly pulse). | A policy with no cost: `gw_renewable_investment_cost_apply` is not reached in the treaty's `on_entry_into_force`. |
 | **No forced subsidies.** Open a Renewable Energy Plant with the policy on. | No "require subsidies" line; the government pays its losses only if the player subsidizes it. | The retired bool still being applied, or a stale save. |

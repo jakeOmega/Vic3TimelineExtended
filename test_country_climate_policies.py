@@ -178,10 +178,56 @@ class RenewableInvestmentCostTest(unittest.TestCase):
         repeal = effects["gw_effect_remove_renewable_investment"]["custom_tooltip"]
         self.assertEqual(adopt["gw_renewable_investment_cost_apply"], "yes")
         self.assertEqual(repeal["remove_modifier"], self.COST)
-        self.assertEqual(effects["gw_renewable_investment_cost_apply"],
-                         {"add_modifier": {"name": self.COST, "multiplier": "gw_renewable_investment_cost_value"}})
+        # The removal comes first: after the add it would strip the fresh cost.
+        self.assertEqual(effects["gw_renewable_investment_cost_apply"], {
+            "remove_modifier_if_exists_effect": {"MODIFIER": self.COST},
+            "add_modifier": {"name": self.COST, "multiplier": "gw_renewable_investment_cost_value"}})
+        self.assertEqual(list(effects["gw_renewable_investment_cost_apply"]),
+                         ["remove_modifier_if_exists_effect", "add_modifier"])
         treaty = load("common/treaty_articles/109_enforce_emissions_reduction.txt")["enforce_emissions_reduction"]
         self.assertIn("gw_renewable_investment_cost_apply", str(treaty["on_entry_into_force"]))
+
+    def apply_cost(self, held):
+        """Run gw_renewable_investment_cost_apply once on a scope holding the modifier names in `held`.
+
+        The engine as the repo documents it: a same-name add_modifier stacks (it adds another copy), and
+        has_modifier reads the scope as it was before the effect, because adds and removes land after it
+        ends. A removal takes every copy of the name. Returns the scope's modifiers afterwards.
+        """
+        before = list(held)
+        queued = []
+        helper = load("common/scripted_effects/extra_effects.txt")["remove_modifier_if_exists_effect"]
+
+        def run(body, args):
+            for key, arg in body.items():
+                if key == "add_modifier":
+                    queued.append(("add", arg["name"]))
+                elif key == "remove_modifier":
+                    queued.append(("remove", args.get(arg, arg)))
+                elif key == "remove_modifier_if_exists_effect":
+                    run(helper, {"$MODIFIER$": arg["MODIFIER"]})
+                elif key == "if":
+                    if args.get(arg["limit"]["has_modifier"], arg["limit"]["has_modifier"]) in before:
+                        run({k: v for k, v in arg.items() if k != "limit"}, args)
+                else:
+                    self.fail(f"gw_renewable_investment_cost_apply uses {key}, which this model cannot run")
+
+        run(load(EFFECTS)["gw_renewable_investment_cost_apply"], {})
+        after = list(held)
+        for op, name in queued:
+            after = [m for m in after if m != name] if op == "remove" else after + [name]
+        return after
+
+    def test_reapplying_the_cost_replaces_it_instead_of_stacking(self):
+        """The monthly sweep re-applies the cost for every adopter; a pass must not add a second copy.
+
+        Before the fix the apply effect was a bare add_modifier, so each month stacked another
+        full-size weekly cost (2026-10-20).
+        """
+        held = []
+        for month in range(1, 13):
+            held = self.apply_cost(held)
+            self.assertEqual(held, [self.COST], f"after {month} monthly passes")
 
     def test_monthly_sweep_follows_the_policy_with_the_climate_rule_on_or_off(self):
         effects = load(EFFECTS)
